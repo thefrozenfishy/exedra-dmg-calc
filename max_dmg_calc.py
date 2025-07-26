@@ -17,6 +17,7 @@ from tqdm import tqdm
 
 max_break = 0
 amount_enemies = 0
+my_chars5 = {}
 
 
 def get_idx(obj: dict) -> int:

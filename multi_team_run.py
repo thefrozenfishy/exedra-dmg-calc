@@ -3,7 +3,7 @@ from max_dmg_calc import run
 run(
     magic_lvl=120,
     kioku_lvl=105,
-    use_my_team=True,
+    use_my_team=False,
     include_4star_attackers=False,
     include_4star_sustains=False,
     include_4star_supports=True,
