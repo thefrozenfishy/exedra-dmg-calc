@@ -30,7 +30,7 @@ def get_idx(obj: dict) -> int:
 
 def get_data(file: str, primary_id: str):
     with open(os.path.join("base_data", f"{file}.json"), encoding="utf-8") as f:
-        return {char[primary_id]: char for char in json.load(f)["payload"]["mstList"]}
+        return {char[primary_id]: char for char in json.load(f)}
 
 
 element_map = {1: "Flame", 2: "Aqua", 3: "Forest", 4: "Light", 5: "Dark", 6: "Void"}
