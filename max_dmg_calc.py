@@ -17,7 +17,9 @@ from tqdm import tqdm
 
 max_break = 0
 amount_enemies = 0
-my_chars5 = {}
+
+os.makedirs("results", exist_ok=True)
+os.makedirs("history", exist_ok=True)
 
 
 def get_idx(obj: dict) -> int:
@@ -697,18 +699,19 @@ dmg_pluss_portrait = {
 
 
 def find_best_team(
-    available_kioku,
-    old_res=None,
-    base_def=1500,
-    kioku_lvl=Kioku.max_lvl,
-    magic_lvl=Kioku.max_magic_lvl,
+    available_kioku: dict,
+    old_res: list,
+    base_def: int,
+    kioku_lvl: int,
+    magic_lvl: int,
+    include_4star_attackers: bool,
+    include_4star_sustains: bool,
+    include_4star_supports: bool,
+    use_my_team: bool,
+    my_chars5: dict,
+    sustains_to_consider=("Healer",),  # "Breaker" ,"Defender")
     heartphial_lvl=Kioku.max_heartphial_lvl,
     ascension=Kioku.max_ascension,
-    include_4star_attackers=False,
-    include_4star_sustains=False,
-    include_4star_supports=False,
-    use_my_team=False,
-    sustains_to_consider=("Healer",),  # "Breaker" ,"Defender")
 ):
     if not old_res:
         old_res = []
@@ -935,7 +938,8 @@ def find_best_team(
 
 def run(
     base_def: int,
-    max_break_mult: float,
+    max_break_mult: int,
+    enemies_on_stage: int,
     kioku_lvl: int,
     magic_lvl: int,
     use_my_team: bool,
@@ -949,7 +953,7 @@ def run(
         f"""\
 Running with config: 
 base_def = {base_def}
-max_break_mult = {max_break_mult}
+max_break_mult = {max_break_mult}%
 kioku_lvl = {kioku_lvl}
 magic_lvl = {magic_lvl}
 use_my_team = {use_my_team}
@@ -960,11 +964,29 @@ name = {name}
 stage_weak_elements = {stage_weak_elements}
 """
     )
+
+    with open(f"my_team{f"_{name}" if name else ""}.json", "r", encoding="utf-8") as f:
+        my_chars5: dict = json.load(f)
+    try:
+        with open(
+            os.path.join("history", f"prev_team{f"_{name}" if name else ""}.json"),
+            "r",
+            encoding="utf-8",
+        ) as f:
+            prev_chars5: dict = json.load(f)
+    except FileNotFoundError:
+        prev_chars5 = {}
+
+    remove_from_precomputed = [
+        k for k, v in my_chars5.items() if k in prev_chars5 and v != prev_chars5[k]
+    ]
+
     if magic_lvl < 120:
         print("WARNING: magic lvl below 120 not accounted for in ATK or ability levels")
     first = True
-    global max_break
-    max_break = max_break_mult
+    global max_break, amount_enemies
+    amount_enemies = enemies_on_stage
+    max_break = max_break_mult / 100
     available_kioku = find_available_kioku(dps_element=stage_weak_elements, sout=False)
     file_name = f"{name}_dmg_calc_{"custom_" if use_my_team else ""}def_{base_def}_break_{max_break_mult}_ml_{magic_lvl}_kl_{kioku_lvl}.json"
 
@@ -988,8 +1010,8 @@ stage_weak_elements = {stage_weak_elements}
 
     flip = True
     for res in find_best_team(
-        available_kioku,
-        res,
+        available_kioku=available_kioku,
+        old_res=res,
         base_def=base_def,
         kioku_lvl=kioku_lvl,
         magic_lvl=magic_lvl,
@@ -997,6 +1019,7 @@ stage_weak_elements = {stage_weak_elements}
         include_4star_sustains=include_4star_sustains,
         include_4star_supports=include_4star_supports,
         use_my_team=use_my_team,
+        my_chars5=my_chars5,
     ):
         flip = not flip
         with open(
@@ -1083,7 +1106,7 @@ Team: {sustain}, {kioku_data[supp1]["character_en"].split(" ", 1)[0]}{" w Tsurun
 def run_single(team: Team, base_def: int, max_break_mult: int, enemy_count: int):
     global max_break
     global amount_enemies
-    max_break = max_break_mult
+    max_break = max_break_mult / 100
     amount_enemies = enemy_count
 
     dmg, crit_rate = team.calculate_max_dmg(base_def=base_def)
@@ -1091,8 +1114,6 @@ def run_single(team: Team, base_def: int, max_break_mult: int, enemy_count: int)
 
 
 if __name__ == "__main__":
-    os.makedirs("results", exist_ok=True)
-    os.makedirs("history", exist_ok=True)
     parser = argparse.ArgumentParser(description="Run simulation on boss")
     parser.add_argument(
         "--custom",
@@ -1145,28 +1166,6 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    with open(
-        f"my_team{f"_{args.name}" if args.name else ""}.json", "r", encoding="utf-8"
-    ) as f:
-        my_chars5: dict = json.load(f)
-    try:
-        with open(
-            os.path.join(
-                "history", f"prev_team{f"_{args.name}" if args.name else ""}.json"
-            ),
-            "r",
-            encoding="utf-8",
-        ) as f:
-            prev_chars5: dict = json.load(f)
-    except FileNotFoundError:
-        prev_chars5 = {}
-
-    remove_from_precomputed = [
-        k for k, v in my_chars5.items() if k in prev_chars5 and v != prev_chars5[k]
-    ]
-
-    amount_enemies = args.enemies
-    max_break = args.maxbreak
     print(
         "WARNING: This is still very experimental, if the numbers seem way of please reach out to TFF. Also this only takes into account solo enemy bosses for now (Summer SA)"
     )
@@ -1179,6 +1178,7 @@ if __name__ == "__main__":
         include_4star_supports=args.supp,
         name=args.name,
         base_def=args.deff,
-        max_break_mult=args.maxbreak / 100,
+        max_break_mult=args.maxbreak,
+        enemies_on_stage=args.enemies,
         stage_weak_elements=args.weak,
     )

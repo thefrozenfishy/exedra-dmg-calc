@@ -67,7 +67,7 @@ team = Team(
 )
 
 stage_def = 1500  # Check wiki
-stage_max_break = 3  # 300% = 3
+stage_max_break = 300
 enemy_count = 1
 
 run_single(
