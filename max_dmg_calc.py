@@ -289,8 +289,12 @@ class Kioku:
         self.debuff_mult = 1
 
         for i in range(1, 1 + self.ascension):
-            if d := self.data.get(f"ascension_{i}_details_data_2", {}).values():
-                for sub_d in d:
+            if asc_id := self.data.get(f"ascension_{i}_effect_2_id"):
+                if not asc_id:
+                    continue
+                details = find_all_details(True, asc_id, is_unique=False)
+
+                for sub_d in details.values():
                     if sub_d["abilityEffectType"] == "UP_BUFF_EFFECT_VALUE":
                         self.buff_mult += sub_d["value1"] / 1000
                     elif sub_d["abilityEffectType"] == "UP_DEBUFF_EFFECT_VALUE":
@@ -309,8 +313,11 @@ class Kioku:
                 ## MULT addition done
                 self.add_effects(supp_eff, True, 10)
         for i in range(1, 1 + self.ascension):
-            if d := self.data.get(f"ascension_{i}_details_data_2"):
-                self.add_effects(d, True, 10)
+            if asc_id := self.data.get(f"ascension_{i}_effect_2_id"):
+                if not asc_id:
+                    continue
+                details = find_all_details(True, asc_id, is_unique=False)
+                self.add_effects(details, True, 10)
 
         if self.portrait:
             port_info = portraits[self.portrait]
@@ -979,7 +986,9 @@ stage_weak_elements = {stage_weak_elements}
 
     remove_from_precomputed = [
         k for k, v in my_chars5.items() if k in prev_chars5 and v != prev_chars5[k]
-    ]
+    ] + list(set(prev_chars5) - set(my_chars5))
+    if remove_from_precomputed:
+        print("Removing precomputed runs with:", remove_from_precomputed)
 
     if magic_lvl < 120:
         print("WARNING: magic lvl below 120 not accounted for in ATK or ability levels")
@@ -988,7 +997,7 @@ stage_weak_elements = {stage_weak_elements}
     amount_enemies = enemies_on_stage
     max_break = max_break_mult / 100
     available_kioku = find_available_kioku(dps_element=stage_weak_elements, sout=False)
-    file_name = f"{name}_dmg_calc_{"custom_" if use_my_team else ""}def_{base_def}_break_{max_break_mult}_ml_{magic_lvl}_kl_{kioku_lvl}.json"
+    file_name = f"{f"{name}_" if name else ""}dmg_calc_{"custom_" if use_my_team else ""}def_{base_def}_break_{max_break_mult}_ml_{magic_lvl}_kl_{kioku_lvl}.json"
 
     try:
         with open(
@@ -1104,8 +1113,7 @@ Team: {sustain}, {kioku_data[supp1]["character_en"].split(" ", 1)[0]}{" w Tsurun
 
 
 def run_single(team: Team, base_def: int, max_break_mult: int, enemy_count: int):
-    global max_break
-    global amount_enemies
+    global max_break, amount_enemies
     max_break = max_break_mult / 100
     amount_enemies = enemy_count
 
@@ -1146,8 +1154,8 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--maxbreak",
-        default=350,
-        type=float,
+        default=300,
+        type=int,
         help="Max break of the boss as a percentage",
     )
     parser.add_argument(
