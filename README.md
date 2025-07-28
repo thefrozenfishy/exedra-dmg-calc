@@ -1,8 +1,8 @@
 A little dmg calculator to find your best bet at beating Score Attack, or test your luck in Chaos mode
+Fyi, the script always assumes +60ATK & +10% Crit Dmg substats on all crystalis on the attacker, as these are the only dmg increasing substats
 
 ## Simple use
 There's 2 ways to use the script. The first is to check the max dmg of a single team. Do this in the ``single_team_test.py`` file. Simply set up your team, change the values that can be changed, and run, it'll print something like ``2,485,529 with 30% Crit rate``.  
-Fyi, the script assumes +45ATK & +10% Crit Dmg substats on all crystalis on the attacker.  
 The available crystalis abilities for attackers are ``["ATK%-25", "CD-20", "Elem-24", "Dmg-20", "ATK-125", "EX"]``,  ATK percent up, crit dmg, vs weak element dmg, dmg up when attacking element, flat atk+ and EX respectively. 
 
 ## Simulation use

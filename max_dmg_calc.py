@@ -785,6 +785,19 @@ def find_best_team(
     configs = [tuple(r) for r in old_res]
     print(f"Starts with {len(configs)} known permutations")
 
+    atk_len = max(len(s) for s in attackers)
+    atk_supp_len = len("The Universe's Edge")
+    port_len = max(
+        len(s)
+        for s in (
+            "A Dream of a Little Mermaid",
+            "The Savior's Apostle",
+            *dmg_pluss_portrait.keys(),
+        )
+    )
+    sus_len = max(len(s) for s in sustains)
+    supp_len = sum(sorted([len(s) for s, _ in supports])[-3:])
+
     def get_ascension(name) -> int:
         if use_my_team:
             return my_chars5.get(name, ascension)
@@ -801,8 +814,8 @@ def find_best_team(
             heartphial_lvl=heartphial_lvl,
         )
 
-    for attacker, atk_elem in (bar1 := tqdm(attackers)):
-        bar1.set_description_str("Attacker: " + attacker)
+    for attacker, atk_elem in (bar1 := tqdm(attackers, ascii=True)):
+        bar1.set_description_str(f"Attacker: {attacker:{atk_len}}")
         atk_supports = [
             i
             for i in {"The Universe's Edge", "Oracle Ray", "Fiore Finale"} - {attacker}
@@ -811,13 +824,10 @@ def find_best_team(
         if not atk_supports:
             atk_supports = ("Ryushin Spiral Fury",)
 
-        for attacker_support in (
-            bar2 := tqdm(
-                atk_supports,
-                leave=False,
+        for attacker_support in (bar2 := tqdm(atk_supports, leave=False, ascii=True)):
+            bar2.set_description_str(
+                f"Attacker Support: {attacker_support:{atk_supp_len}}"
             )
-        ):
-            bar2.set_description_str("Attacker Support: " + attacker_support)
             for attacker_portrait in (
                 bar3 := tqdm(
                     (
@@ -827,27 +837,27 @@ def find_best_team(
                     ),
                     desc="Portrait",
                     leave=False,
+                    ascii=True,
                 )
             ):
-                bar3.set_description_str("Portrait: " + attacker_portrait)
+                bar3.set_description_str(f"Portrait: {attacker_portrait:{port_len}}")
                 for sustain in (
-                    bar4 := tqdm(
-                        sustains,
-                        desc="Sustains",
-                        leave=False,
-                    )
+                    bar4 := tqdm(sustains, desc="Sustains", leave=False, ascii=True)
                 ):
                     something_new = False
-                    bar4.set_description_str("Sustain: " + sustain)
+                    bar4.set_description_str(f"Sustain: {sustain:{sus_len}}")
                     for support_list in (
                         bar5 := tqdm(
                             combinations(supports, 3),
                             leave=False,
                             total=comb(len(supports), 3),
+                            ascii=True,
                         )
                     ):
                         supp_list = [s for s, _ in support_list]
-                        bar5.set_description_str("Support:" + ", ".join(supp_list))
+                        bar5.set_description_str(
+                            f"Support: {', '.join(supp_list):{supp_len}}"
+                        )
 
                         if "Flame Waltz" in supp_list:
                             continue
@@ -991,7 +1001,7 @@ def run(
         f"def_{base_def}_break_{max_break_mult}_ml_{magic_lvl}_kl_{kioku_lvl}.json"
     )
     file_name = (
-        f"{(name + "_") if name else ""}dmg_calc_{"custom_" if use_my_team else ""}"
+        f"{(name + '_') if name else ''}dmg_calc_{'custom_' if use_my_team else ''}"
         + default_file_name
     )
 
@@ -1012,12 +1022,12 @@ stage_weak_elements = {stage_weak_elements}
     )
 
     with open(
-        f"my_team{("_" + name) if name else ""}.json", "r", encoding="utf-8"
+        f"my_team{('_' + name) if name else ''}.json", "r", encoding="utf-8"
     ) as f:
         my_chars5: dict = json.load(f)
     try:
         with open(
-            os.path.join("history", f"prev_team{("_" + name) if name else ""}.json"),
+            os.path.join("history", f"prev_team{('_' + name) if name else ''}.json"),
             "r",
             encoding="utf-8",
         ) as f:
@@ -1116,7 +1126,7 @@ stage_weak_elements = {stage_weak_elements}
             first = False
             with open(
                 os.path.join(
-                    "history", f"prev_team{("_" + name) if name else ""}.json"
+                    "history", f"prev_team{('_' + name) if name else ''}.json"
                 ),
                 "w",
                 encoding="utf-8",
@@ -1127,7 +1137,7 @@ stage_weak_elements = {stage_weak_elements}
     res = [i for i in res if i[8] not in ("Baldamente Fortissimo",)]
     # Filter sustain not wanted to be displayed
     print(
-        f"""Considered {len(res)} permutations dealing from {res[-1][0]:,.0f} to {res[0][0]:,.0f} dmg \
+        f"""Considered {len(res)} permutations using team {name} dealing from {res[-1][0]:,.0f} to {res[0][0]:,.0f} dmg \
 against an opponent with {base_def} def and in {max_break_mult:.0f}% break.
 Config: Kioku lvl={kioku_lvl}, Magic lvl={magic_lvl}, and 3 * CD+10% and ATK+60 crys stats on attacker. {"Custom Kioku selection with custom ascensions" if use_my_team else "All Kioku with A5"}"""
     )
@@ -1161,7 +1171,7 @@ Config: Kioku lvl={kioku_lvl}, Magic lvl={magic_lvl}, and 3 * CD+10% and ATK+60 
         ) in r:
             print(
                 f"{dmg:13,.0f} dmg {crit_rate:.0f}% CR: '{attacker:30}' w '{portrait:30}' port "
-                + f"+ '{atk_supp:20}' supp + '{attacker_crys1+"+"+attacker_crys2+"+"+attacker_crys3:25}' crys. Team: '{sustain:20}' as sustain, "
+                + f"+ '{atk_supp:20}' supp + '{attacker_crys1+'+'+attacker_crys2+'+'+attacker_crys3:25}' crys. Team: '{sustain:20}' as sustain, "
                 + f"'{supp1:22}' w '{supp1supp:8}', '{supp2:22}' w '{supp2supp:8}', '{supp3:22}' w '{supp3supp:8}'"
             )
         print()
@@ -1211,6 +1221,8 @@ Team: {kioku_data[sustain]["character_en"].split(" ", 1)[0]}, {kioku_data[supp1]
         ) as f:
             json.dump(res, f)
 
+    input("Press Enter to exit...")
+
 
 def run_single(team: Team, base_def: int, max_break_mult: int, enemy_count: int):
     global max_break, amount_enemies
@@ -1219,6 +1231,8 @@ def run_single(team: Team, base_def: int, max_break_mult: int, enemy_count: int)
 
     dmg, crit_rate = team.calculate_max_dmg(base_def=base_def)
     print(f"{dmg:,.0f} with {crit_rate*100:.0f}% Crit rate")
+
+    input("Press Enter to exit...")
 
 
 if __name__ == "__main__":
