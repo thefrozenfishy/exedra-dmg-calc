@@ -6,6 +6,7 @@ from itertools import combinations
 from math import comb
 from functools import lru_cache
 import json
+import gzip
 import os
 import argparse
 
@@ -160,6 +161,8 @@ class Kioku:
         "38": lambda: False,  # "HPが80%以上のとき",
         "773": lambda: max_break <= 3.5,
         # "ブレイク倍率が350%以上の敵に対して必殺技を発動したとき",
+        "331": lambda: max_break <= 2,
+        # "ブレイクボーナスが200%以上の敵に対して",
         "451": lambda: max_break <= 2,
         # "ブレイクボーナスが200%以上の敵に対して、必殺技の",
         "1178": lambda: False,  # "継続回復効果が付与されているとき",
@@ -364,6 +367,11 @@ class Kioku:
         return self.data["support_target"], skill_details
 
     def get_special_dmg(self):
+        # TODO: Make this work for multi targets (need to also make break gauge and def be different for each opponent)
+        #  range 1 == Target,
+        #  range 2 == proximity with value2 being the proximity dmg
+        #  range 3 == aoe
+        # TODO: Add "startConditionSetIdCsv" condition (Example Oriko dmg)
         return (
             sum(
                 (
@@ -743,8 +751,14 @@ def find_best_team(
         if not use_my_team or c in my_chars5
     ]
     if include_4star_sustains:
-        sustains = [
-            c for role in sustains_to_consider for c, _ in available_kioku[4][role]
+        sustains += [
+            c
+            for role in sustains_to_consider
+            for c, _ in available_kioku[4][role]
+            if c
+            not in (
+                "Circle Of Fire",  # Yuma and reira both do nothing, remove one of them
+            )
         ]
 
     supports = [
@@ -757,9 +771,12 @@ def find_best_team(
         if not use_my_team or c in my_chars5
     ]
     if include_4star_supports:
-        supports += [(c, True) for c, _ in available_kioku[4]["Buffer"]] + [
-            (c, False) for c, _ in available_kioku[4]["Debuffer"]
-        ]
+        supports += [
+            (c, True)
+            for c, _ in available_kioku[4]["Buffer"]
+            if c
+            not in ("Nightmare Stinger", "Meteor Punch")  # it's never mao or hanna...
+        ] + [(c, False) for c, _ in available_kioku[4]["Debuffer"]]
 
     print(
         f"Finding best team, considering {len(attackers)} attackers, {len(sustains)} sustains, and {len(supports)} supporting\n"
@@ -915,8 +932,8 @@ def find_best_team(
                                 )
                                 configs.append(
                                     (
-                                        dmg,
-                                        crit_rate,
+                                        int(dmg),
+                                        round(100 * crit_rate, 0),
                                         attacker,
                                         attacker_portrait,
                                         attacker_support,
@@ -955,7 +972,16 @@ def run(
     include_4star_supports: bool,
     name: str,
     stage_weak_elements: list,
+    overwrite_default=False,
 ):
+    default_file_name = (
+        f"def_{base_def}_break_{max_break_mult}_ml_{magic_lvl}_kl_{kioku_lvl}.json"
+    )
+    file_name = (
+        f"{(name + "_") if name else ""}dmg_calc_{"custom_" if use_my_team else ""}"
+        + default_file_name
+    )
+
     print(
         f"""\
 Running with config: 
@@ -972,23 +998,19 @@ stage_weak_elements = {stage_weak_elements}
 """
     )
 
-    with open(f"my_team{f"_{name}" if name else ""}.json", "r", encoding="utf-8") as f:
+    with open(
+        f"my_team{("_" + name) if name else ""}.json", "r", encoding="utf-8"
+    ) as f:
         my_chars5: dict = json.load(f)
     try:
         with open(
-            os.path.join("history", f"prev_team{f"_{name}" if name else ""}.json"),
+            os.path.join("history", f"prev_team{("_" + name) if name else ""}.json"),
             "r",
             encoding="utf-8",
         ) as f:
             prev_chars5: dict = json.load(f)
     except FileNotFoundError:
         prev_chars5 = {}
-
-    remove_from_precomputed = [
-        k for k, v in my_chars5.items() if k in prev_chars5 and v != prev_chars5[k]
-    ] + list(set(prev_chars5) - set(my_chars5))
-    if remove_from_precomputed:
-        print("Removing precomputed runs with:", remove_from_precomputed)
 
     if magic_lvl < 120:
         print("WARNING: magic lvl below 120 not accounted for in ATK or ability levels")
@@ -997,7 +1019,6 @@ stage_weak_elements = {stage_weak_elements}
     amount_enemies = enemies_on_stage
     max_break = max_break_mult / 100
     available_kioku = find_available_kioku(dps_element=stage_weak_elements, sout=False)
-    file_name = f"{f"{name}_" if name else ""}dmg_calc_{"custom_" if use_my_team else ""}def_{base_def}_break_{max_break_mult}_ml_{magic_lvl}_kl_{kioku_lvl}.json"
 
     try:
         with open(
@@ -1015,6 +1036,31 @@ stage_weak_elements = {stage_weak_elements}
         r2 = []
 
     res = r1 if len(r1) > len(r2) else r2
+    if not res:
+        print("Loading default data from", default_file_name)
+        try:
+            with gzip.open(
+                os.path.join("base_data", default_file_name),
+                "rt",
+                encoding="utf-8",
+            ) as f:
+                res = json.load(f)
+            with open(
+                os.path.join("base_data", "default_team.json"),
+                "r",
+                encoding="utf-8",
+            ) as f:
+                prev_chars5: dict = json.load(f)
+        except FileNotFoundError:
+            res = []
+            prev_chars5 = {}
+
+    remove_from_precomputed = [
+        k for k, v in my_chars5.items() if k in prev_chars5 and v != prev_chars5[k]
+    ] + list(set(prev_chars5) - set(my_chars5))
+    if remove_from_precomputed:
+        print("Removing precomputed runs with:", remove_from_precomputed)
+
     res = [r for r in res if all(rs not in remove_from_precomputed for rs in r)]
 
     flip = True
@@ -1040,7 +1086,9 @@ stage_weak_elements = {stage_weak_elements}
         if first:
             first = False
             with open(
-                os.path.join("history", f"prev_team{f"_{name}" if name else ""}.json"),
+                os.path.join(
+                    "history", f"prev_team{("_" + name) if name else ""}.json"
+                ),
                 "w",
                 encoding="utf-8",
                 newline="\n",
@@ -1051,12 +1099,13 @@ stage_weak_elements = {stage_weak_elements}
     # Filter sustain not wanted to be displayed
     print(
         f"""Considered {len(res)} permutations dealing from {res[-1][0]:,.0f} to {res[0][0]:,.0f} dmg \
-against an opponent with {base_def} def and in {max_break_mult * 100:.0f}% break.
+against an opponent with {base_def} def and in {max_break_mult:.0f}% break.
 Config: Kioku lvl={kioku_lvl}, Magic lvl={magic_lvl}, and 3 * CD+10% and ATK+60 crys stats on attacker. {"Custom Kioku selection with custom ascensions" if use_my_team else "All Kioku with A5"}"""
     )
     per_attacker_lists = (
         (a, [r for r in res if r[2] == a][:5])
         for a, _ in available_kioku[5]["Attacker"]
+        + (available_kioku[4]["Attacker"] if include_4star_attackers else [])
     )
     per_attacker_lists = [(t, r) for t, r in per_attacker_lists if r]
     for title, r in (
@@ -1082,8 +1131,8 @@ Config: Kioku lvl={kioku_lvl}, Magic lvl={magic_lvl}, and 3 * CD+10% and ATK+60 
             supp3supp,
         ) in r:
             print(
-                f"{dmg:13,.0f} dmg {crit_rate*100:.1f}% CR: '{attacker:30}' w '{portrait:30}' port "
-                + f"+ '{atk_supp:20}' supp + '{f"{attacker_crys1}+{attacker_crys2}+{attacker_crys3}":25}' crys. Team: '{sustain:20}' as sustain, "
+                f"{dmg:13,.0f} dmg {crit_rate:.0f}% CR: '{attacker:30}' w '{portrait:30}' port "
+                + f"+ '{atk_supp:20}' supp + '{attacker_crys1+"+"+attacker_crys2+"+"+attacker_crys3:25}' crys. Team: '{sustain:20}' as sustain, "
                 + f"'{supp1:22}' w '{supp1supp:8}', '{supp2:22}' w '{supp2supp:8}', '{supp3:22}' w '{supp3supp:8}'"
             )
         print()
@@ -1105,11 +1154,26 @@ Config: Kioku lvl={kioku_lvl}, Magic lvl={magic_lvl}, and 3 * CD+10% and ATK+60 
         supp3supp,
     ) = res[0]
     print(
-        f"""Best team:
-{kioku_data[attacker]["character_en"].split(" ", 1)[0]} w '{portrait}' portait & {kioku_data[atk_supp]["character_en"].split(" ", 1)[0]} as supp. {attacker_crys1}, {attacker_crys2}, {attacker_crys3} as crys. 
-Team: {sustain}, {kioku_data[supp1]["character_en"].split(" ", 1)[0]}{" w Tsuruno support" if supp1supp == "Tsuruno" else ""}, {kioku_data[supp2]["character_en"].split(" ", 1)[0]}{" w Tsuruno support" if supp2supp == "Tsuruno" else ""}, and {kioku_data[supp3]["character_en"].split(" ", 1)[0]}{" w Tsuruno support" if supp3supp == "Tsuruno" else ""}.
+        f"""Your Best team:
+{kioku_data[attacker]["character_en"].split(" ", 1)[0]} {crit_rate:.0f}% crit rate w '{portrait}' portait & {kioku_data[atk_supp]["character_en"].split(" ", 1)[0]} as supp. {attacker_crys1}, {attacker_crys2}, {attacker_crys3} as crys. 
+Team: {kioku_data[sustain]["character_en"].split(" ", 1)[0]}, {kioku_data[supp1]["character_en"].split(" ", 1)[0]}{" w Tsuruno support" if supp1supp == "Tsuruno" else ""}, {kioku_data[supp2]["character_en"].split(" ", 1)[0]}{" w Tsuruno support" if supp2supp == "Tsuruno" else ""}, and {kioku_data[supp3]["character_en"].split(" ", 1)[0]}{" w Tsuruno support" if supp3supp == "Tsuruno" else ""}.
 """
     )
+    if overwrite_default:
+        with gzip.open(
+            os.path.join("base_data", default_file_name + ".gz"),
+            "wt",
+            encoding="utf-8",
+        ) as f:
+            json.dump(res, f)
+
+        with open(
+            os.path.join("base_data", "default_team.json"),
+            "w",
+            encoding="utf-8",
+            newline="\n",
+        ) as f:
+            json.dump(my_chars5, f, indent=4, sort_keys=True, ensure_ascii=False)
 
 
 def run_single(team: Team, base_def: int, max_break_mult: int, enemy_count: int):
@@ -1172,6 +1236,12 @@ if __name__ == "__main__":
         type=list,
         help="The weakness of the stage (what attackers will be considered)",
     )
+    parser.add_argument(
+        "--default",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="For updating base_data, don't use",
+    )
     args = parser.parse_args()
 
     print(
@@ -1189,4 +1259,5 @@ if __name__ == "__main__":
         max_break_mult=args.maxbreak,
         enemies_on_stage=args.enemies,
         stage_weak_elements=args.weak,
+        overwrite_default=args.default,
     )
