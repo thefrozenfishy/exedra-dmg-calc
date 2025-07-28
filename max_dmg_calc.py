@@ -785,8 +785,7 @@ def find_best_team(
     )
 
     configs = [tuple(r) for r in old_res]
-    if configs:
-        print(f"Starts with {len(configs)} known permutations")
+    print(f"Starts with {len(configs)} known permutations")
 
     def get_ascension(name) -> int:
         if use_my_team:
