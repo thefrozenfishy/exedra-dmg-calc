@@ -801,8 +801,8 @@ def find_best_team(
             heartphial_lvl=heartphial_lvl,
         )
 
-    for attacker, atk_elem in (bar1 := tqdm(attackers, desc="Attackers")):
-        bar1.set_description_str(attacker)
+    for attacker, atk_elem in (bar1 := tqdm(attackers)):
+        bar1.set_description_str("Attacker: " + attacker)
         atk_supports = [
             i
             for i in {"The Universe's Edge", "Oracle Ray", "Fiore Finale"} - {attacker}
@@ -814,11 +814,10 @@ def find_best_team(
         for attacker_support in (
             bar2 := tqdm(
                 atk_supports,
-                desc="Attacker Supp",
                 leave=False,
             )
         ):
-            bar2.set_description_str(attacker_support)
+            bar2.set_description_str("Attacker Support: " + attacker_support)
             for attacker_portrait in (
                 bar3 := tqdm(
                     (
@@ -830,7 +829,7 @@ def find_best_team(
                     leave=False,
                 )
             ):
-                bar3.set_description_str(attacker_portrait)
+                bar3.set_description_str("Portrait: " + attacker_portrait)
                 for sustain in (
                     bar4 := tqdm(
                         sustains,
@@ -839,17 +838,16 @@ def find_best_team(
                     )
                 ):
                     something_new = False
-                    bar4.set_description_str(sustain)
+                    bar4.set_description_str("Sustain: " + sustain)
                     for support_list in (
                         bar5 := tqdm(
                             combinations(supports, 3),
-                            desc="Supports",
                             leave=False,
                             total=comb(len(supports), 3),
                         )
                     ):
                         supp_list = [s for s, _ in support_list]
-                        bar5.set_description_str(", ".join(supp_list))
+                        bar5.set_description_str("Support:" + ", ".join(supp_list))
 
                         if "Flame Waltz" in supp_list:
                             continue
@@ -1055,10 +1053,10 @@ stage_weak_elements = {stage_weak_elements}
 
     res = r1 if len(r1) > len(r2) else r2
     if not res:
-        print("Loading default data from", default_file_name)
+        print("Loading default data from", default_file_name + ".gz")
         try:
             with gzip.open(
-                os.path.join("base_data", default_file_name),
+                os.path.join("base_data", default_file_name + ".gz"),
                 "rt",
                 encoding="utf-8",
             ) as f:
