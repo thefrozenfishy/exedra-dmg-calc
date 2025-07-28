@@ -739,6 +739,8 @@ def find_best_team(
         a
         for a in available_kioku[5]["Attacker"]
         if not use_my_team or a[0] in my_chars5
+    ] + [
+        ("Flame Waltz", "Flame")  # Always include Tsuruno
     ]
 
     if include_4star_attackers:
@@ -838,6 +840,8 @@ def find_best_team(
                         total=comb(len(supports), 3),
                     ):
                         supp_list = [s for s, _ in support_list]
+                        if "Flame Waltz" in supp_list:
+                            continue
                         if (
                             attacker,
                             attacker_portrait,
@@ -848,7 +852,7 @@ def find_best_team(
                             continue
 
                         support_supports = []
-                        if "Flame Waltz" not in supp_list:
+                        if "Flame Waltz" not in [supp_list + [a[0] for a in attackers]]:
                             support_supports = [
                                 [tsuruno if j == i else None for j in range(3)]
                                 for i in range(3)
@@ -1010,6 +1014,7 @@ stage_weak_elements = {stage_weak_elements}
         ) as f:
             prev_chars5: dict = json.load(f)
     except FileNotFoundError:
+        print("Debug: No previous team found, using empty dict")
         prev_chars5 = {}
 
     if magic_lvl < 120:
@@ -1025,14 +1030,16 @@ stage_weak_elements = {stage_weak_elements}
             os.path.join("results", "a_" + file_name), "r", encoding="utf-8"
         ) as f:
             r1 = json.load(f)
-    except (FileNotFoundError, json.decoder.JSONDecodeError):
+    except (FileNotFoundError, json.decoder.JSONDecodeError) as e:
+        print("Debug: r1 failed", e)
         r1 = []
     try:
         with open(
             os.path.join("results", "b_" + file_name), "r", encoding="utf-8"
         ) as f:
             r2 = json.load(f)
-    except (FileNotFoundError, json.decoder.JSONDecodeError):
+    except (FileNotFoundError, json.decoder.JSONDecodeError) as e:
+        print("Debug: r2 failed", e)
         r2 = []
 
     res = r1 if len(r1) > len(r2) else r2
@@ -1051,7 +1058,8 @@ stage_weak_elements = {stage_weak_elements}
                 encoding="utf-8",
             ) as f:
                 prev_chars5: dict = json.load(f)
-        except FileNotFoundError:
+        except FileNotFoundError as e:
+            print("Debug: Failed load precomputed", e)
             res = []
             prev_chars5 = {}
 
@@ -1106,6 +1114,7 @@ Config: Kioku lvl={kioku_lvl}, Magic lvl={magic_lvl}, and 3 * CD+10% and ATK+60 
         (a, [r for r in res if r[2] == a][:5])
         for a, _ in available_kioku[5]["Attacker"]
         + (available_kioku[4]["Attacker"] if include_4star_attackers else [])
+        + [("Flame Waltz", "")]
     )
     per_attacker_lists = [(t, r) for t, r in per_attacker_lists if r]
     for title, r in (
