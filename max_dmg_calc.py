@@ -1052,6 +1052,18 @@ stage_weak_elements = {stage_weak_elements}
         r2 = []
 
     res = r1 if len(r1) > len(r2) else r2
+
+    if not use_my_team:
+        try:
+            with gzip.open(
+                os.path.join("base_data", "best_team.json.gz"),
+                "rt",
+                encoding="utf-8",
+            ) as f:
+                res = json.load(f)
+        except (FileNotFoundError, json.decoder.JSONDecodeError) as e:
+            print("Debug: No best team found", e)
+
     if not res:
         print("Loading default data from", default_file_name + ".gz")
         try:
@@ -1191,6 +1203,13 @@ Team: {kioku_data[sustain]["character_en"].split(" ", 1)[0]}, {kioku_data[supp1]
             newline="\n",
         ) as f:
             json.dump(my_chars5, f, indent=4, sort_keys=True, ensure_ascii=False)
+    if not use_my_team:
+        with gzip.open(
+            os.path.join("base_data", "best_team.json.gz"),
+            "wt",
+            encoding="utf-8",
+        ) as f:
+            json.dump(res, f)
 
 
 def run_single(team: Team, base_def: int, max_break_mult: int, enemy_count: int):
@@ -1205,10 +1224,10 @@ def run_single(team: Team, base_def: int, max_break_mult: int, enemy_count: int)
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run simulation on boss")
     parser.add_argument(
-        "--custom",
+        "--findbest",
         action=argparse.BooleanOptionalAction,
         default=False,
-        help="True to simulate using your team in ``my_team.json``, False to run all 5* as A5. This adds custom to the results filename",
+        help="True to run all 5* as A5. False to simulate using your team in ``my_team.json``, potentially with --name added",
     )
     parser.add_argument(
         "--atk",
@@ -1267,7 +1286,7 @@ if __name__ == "__main__":
     run(
         magic_lvl=args.magiclvl,
         kioku_lvl=args.kiokulvl,
-        use_my_team=args.custom,
+        use_my_team=not args.findbest,
         include_4star_attackers=args.atk,
         include_4star_sustains=args.sus,
         include_4star_supports=args.supp,

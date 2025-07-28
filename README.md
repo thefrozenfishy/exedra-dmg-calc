@@ -13,6 +13,8 @@ This will take some time, but it stores underway so you can cancel and it'll sta
 
 If you change the ascension of any of your team members in ``my_team.json`` it will rerun all simulations including that character
 
-Example run: ``python max_dmg_calc.py --custom --supp --name tff``
+Example run: ``python max_dmg_calc.py --supp --name tff``
 
 This is identical to going into ``multi_team_run.py`` where you can change the config directly, if this is preferable
+
+To find the best possible team (all kioku all A5) just run ``python max_dmg_calc.py --findbest``
