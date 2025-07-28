@@ -801,7 +801,8 @@ def find_best_team(
             heartphial_lvl=heartphial_lvl,
         )
 
-    for attacker, atk_elem in tqdm(attackers, desc="Attackers"):
+    for attacker, atk_elem in (bar1 := tqdm(attackers, desc="Attackers")):
+        bar1.set_description_str(attacker)
         atk_supports = [
             i
             for i in {"The Universe's Edge", "Oracle Ray", "Fiore Finale"} - {attacker}
@@ -810,33 +811,46 @@ def find_best_team(
         if not atk_supports:
             atk_supports = ("Ryushin Spiral Fury",)
 
-        for attacker_support in tqdm(
-            atk_supports,
-            desc=f"Attacker Supp ({attacker})",
-            leave=False,
-        ):
-            for attacker_portrait in tqdm(
-                (
-                    "A Dream of a Little Mermaid",
-                    "The Savior's Apostle",
-                    dmg_pluss_portrait[atk_elem],
-                ),
-                desc=f"Portrait ({attacker_support})",
+        for attacker_support in (
+            bar2 := tqdm(
+                atk_supports,
+                desc="Attacker Supp",
                 leave=False,
-            ):
-                for sustain in tqdm(
-                    sustains,
-                    desc=f"Sustains ({attacker_portrait})",
+            )
+        ):
+            bar2.set_description_str(attacker_support)
+            for attacker_portrait in (
+                bar3 := tqdm(
+                    (
+                        "A Dream of a Little Mermaid",
+                        "The Savior's Apostle",
+                        dmg_pluss_portrait[atk_elem],
+                    ),
+                    desc="Portrait",
                     leave=False,
+                )
+            ):
+                bar3.set_description_str(attacker_portrait)
+                for sustain in (
+                    bar4 := tqdm(
+                        sustains,
+                        desc="Sustains",
+                        leave=False,
+                    )
                 ):
                     something_new = False
-                    for support_list in tqdm(
-                        combinations(supports, 3),
-                        desc=f"Supports ({sustain})",
-                        leave=False,
-                        total=comb(len(supports), 3),
+                    bar4.set_description_str(sustain)
+                    for support_list in (
+                        bar5 := tqdm(
+                            combinations(supports, 3),
+                            desc="Supports",
+                            leave=False,
+                            total=comb(len(supports), 3),
+                        )
                     ):
                         supp_list = [s for s, _ in support_list]
+                        bar5.set_description_str(", ".join(supp_list))
+
                         if "Flame Waltz" in supp_list:
                             continue
                         if (
