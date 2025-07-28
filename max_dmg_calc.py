@@ -739,8 +739,6 @@ def find_best_team(
         a
         for a in available_kioku[5]["Attacker"]
         if not use_my_team or a[0] in my_chars5
-    ] + [
-        ("Flame Waltz", "Flame")  # Always include Tsuruno
     ]
 
     if include_4star_attackers:
@@ -851,7 +849,7 @@ def find_best_team(
                             continue
 
                         support_supports = []
-                        if "Flame Waltz" not in [supp_list + [a[0] for a in attackers]]:
+                        if "Flame Waltz" not in supp_list:
                             support_supports = [
                                 [tsuruno if j == i else None for j in range(3)]
                                 for i in range(3)
@@ -1113,7 +1111,6 @@ Config: Kioku lvl={kioku_lvl}, Magic lvl={magic_lvl}, and 3 * CD+10% and ATK+60 
         (a, [r for r in res if r[2] == a][:5])
         for a, _ in available_kioku[5]["Attacker"]
         + (available_kioku[4]["Attacker"] if include_4star_attackers else [])
-        + [("Flame Waltz", "")]
     )
     per_attacker_lists = [(t, r) for t, r in per_attacker_lists if r]
     for title, r in (
