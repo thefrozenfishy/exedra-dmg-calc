@@ -859,8 +859,6 @@ def find_best_team(
                             f"Support: {', '.join(supp_list):{supp_len}}"
                         )
 
-                        if "Flame Waltz" in supp_list:
-                            continue
                         if (
                             attacker,
                             attacker_portrait,
