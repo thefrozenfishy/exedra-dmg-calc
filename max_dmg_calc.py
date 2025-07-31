@@ -182,6 +182,7 @@ class Kioku:
         "1581": lambda: False,  # "自身が固有バフ(水着マミ)状態の場合+HP95%以上",
         "1545": lambda: False,  # "自身が固有バフ(水着マミ)状態の場合+HP100%",
         "337": lambda: False,  # "対象が「毒」のとき%",
+        "591": lambda: False,  # "【追撃】の",
     }
 
     max_lvl = 120
@@ -1167,10 +1168,20 @@ Config: Kioku lvl={kioku_lvl}, Magic lvl={magic_lvl},Heartphial=50, and full CD+
         supp3,
         supp3supp,
     ) = res[0]
+
+    dupes = defaultdict(list)
+    for kioku_name, data in kioku_data.items():
+        if data["rarity"] != 3:
+            dupes[data["character_en"]].append(kioku_name)
+    for kioku_name, data in dupes.items():
+        if len(data) > 1:
+            for kioku_name in data:
+                kioku_data[kioku_name]["character_en"] = f"{kioku_name} ."
+
     print(
         f"""Your Best team:
-{kioku_data[attacker]["character_en"].split(" ", 1)[0]} {crit_rate:.0f}% crit rate w '{portrait}' portait & {kioku_data[atk_supp]["character_en"].split(" ", 1)[0]} as supp. {attacker_crys1}, {attacker_crys2}, {attacker_crys3} as crys. 
-Team: {kioku_data[sustain]["character_en"].split(" ", 1)[0]}, {kioku_data[supp1]["character_en"].split(" ", 1)[0]}{" w Tsuruno support" if supp1supp == "Tsuruno" else ""}, {kioku_data[supp2]["character_en"].split(" ", 1)[0]}{" w Tsuruno support" if supp2supp == "Tsuruno" else ""}, and {kioku_data[supp3]["character_en"].split(" ", 1)[0]}{" w Tsuruno support" if supp3supp == "Tsuruno" else ""}.
+{kioku_data[attacker]["character_en"].rsplit(" ", 1)[0]} {crit_rate:.0f}% crit rate w '{portrait}' portait & {kioku_data[atk_supp]["character_en"].rsplit(" ", 1)[0]} as supp. {attacker_crys1}, {attacker_crys2}, {attacker_crys3} as crys. 
+Team: {kioku_data[sustain]["character_en"].rsplit(" ", 1)[0]}, {kioku_data[supp1]["character_en"].rsplit(" ", 1)[0]}{" w Tsuruno support" if supp1supp == "Tsuruno" else ""}, {kioku_data[supp2]["character_en"].rsplit(" ", 1)[0]}{" w Tsuruno support" if supp2supp == "Tsuruno" else ""}, and {kioku_data[supp3]["character_en"].rsplit(" ", 1)[0]}{" w Tsuruno support" if supp3supp == "Tsuruno" else ""}.
 """
     )
 
@@ -1257,9 +1268,9 @@ if __name__ == "__main__":
     parser.add_argument("--magiclvl", default=120, type=int, help="Magic level")
     parser.add_argument(
         "--weak",
-        default=["Aqua", "Forest", "Flame"],
-        type=list,
-        help="The weakness of the stage (what attackers will be considered)",
+        default=["Aqua", "Forest", "Flame", "Light", "Dark", "Void"],
+        type=lambda s: s.split(","),
+        help="The weakness of the stage (what attackers will be considered). Should be a comma separated list of elements, e.g. 'Aqua,Forest,Flame'. If empty all elements will be considered.",
     )
     parser.add_argument(
         "--mostlya5s",
