@@ -107,6 +107,7 @@ class Kioku:
     non_boosts = {
         "DWN_RCV_DMG_RATIO",
         "DMG_ATK",
+        "VORTEX_ATK",
         "UP_DEF_RATIO",
         "ADDITIONAL_TURN_UNIT_ACT",
         "GAIN_EP_RATIO",
@@ -137,6 +138,7 @@ class Kioku:
         "DWN_ATK_RATIO",
         "REFLECTION_RATIO",
         "UP_GIV_BREAK_POINT_DMG_FIXED",
+        "UP_RCV_BREAK_POINT_DMG_RATIO",
         "ADDITIONAL_SKILL_ACT",
         "UP_SPD_FIXED",
         "ADD_BUFF_TURN",
@@ -183,6 +185,7 @@ class Kioku:
         "1545": lambda: False,  # "自身が固有バフ(水着マミ)状態の場合+HP100%",
         "337": lambda: False,  # "対象が「毒」のとき%",
         "591": lambda: False,  # "【追撃】の",
+        "438": lambda: False,  # "自身にシールドが張られているとき",
     }
 
     max_lvl = 120
@@ -1201,6 +1204,9 @@ Team: {kioku_data[sustain]["character_en"].rsplit(" ", 1)[0]}, {kioku_data[supp1
         ) as f:
             json.dump(res, f)
 
+    print(
+        "Note: Summer Sayaka vortex dmg not included, unsure how to add it correctly without creating too many exceptions"
+    )
     input("Press Enter to exit...")
 
 

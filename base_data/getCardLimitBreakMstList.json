@@ -1056,6 +1056,30 @@
         "cardLimitBreakMstId": 42000265
     },
     {
+        "atk": 55,
+        "cardLimitBreakMstId": 42000270
+    },
+    {
+        "atk": 84,
+        "cardLimitBreakMstId": 42000271
+    },
+    {
+        "atk": 113,
+        "cardLimitBreakMstId": 42000272
+    },
+    {
+        "atk": 142,
+        "cardLimitBreakMstId": 42000273
+    },
+    {
+        "atk": 171,
+        "cardLimitBreakMstId": 42000274
+    },
+    {
+        "atk": 200,
+        "cardLimitBreakMstId": 42000275
+    },
+    {
         "atk": 24,
         "cardLimitBreakMstId": 43000010
     },

@@ -220,6 +220,11 @@
         "passiveSkill1": 4081
     },
     {
+        "cardMstId": 4200027,
+        "name": "Even This Will Someday Fade",
+        "passiveSkill1": 4083
+    },
+    {
         "cardMstId": 4300001,
         "name": "See You Around, Homura",
         "passiveSkill1": 4020

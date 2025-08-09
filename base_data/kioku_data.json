@@ -652,6 +652,25 @@
         "support_id": 93020,
         "support_target": "Aqua"
     },
+    "Melodia Appassionata": {
+        "ability_id": 15030,
+        "ascension_1_effect_2_id": 85007,
+        "ascension_2_effect_2_id": 85044,
+        "ascension_4_effect_2_id": 85008,
+        "atk100": 2124,
+        "attack_id": 1184,
+        "character_en": "Sayaka Miki",
+        "crystalis_id": 1150028,
+        "element": "Aqua",
+        "maxAtk": 3500,
+        "minAtk": 118,
+        "rarity": 5,
+        "role": "Debuffer",
+        "skill_id": 1185,
+        "special_id": 1186,
+        "support_id": 95029,
+        "support_target": "Debuffer"
+    },
     "Meteor Punch": {
         "ability_id": 14009,
         "ascension_1_effect_2_id": 84007,
@@ -847,6 +866,25 @@
         "special_id": 1076,
         "support_id": 95006,
         "support_target": "Attacker"
+    },
+    "Pluvia☆Clara": {
+        "ability_id": 15031,
+        "ascension_1_effect_2_id": 85009,
+        "ascension_2_effect_2_id": 85045,
+        "ascension_4_effect_2_id": 85010,
+        "atk100": 1462,
+        "attack_id": 1187,
+        "character_en": "Madoka Kaname",
+        "crystalis_id": 1150029,
+        "element": "Aqua",
+        "maxAtk": 2772,
+        "minAtk": 81,
+        "rarity": 5,
+        "role": "Healer",
+        "skill_id": 1188,
+        "special_id": 1189,
+        "support_id": 95030,
+        "support_target": "Healer"
     },
     "Pluvia☆Magica": {
         "ability_id": 15001,
