@@ -146,6 +146,7 @@ class Kioku:
         "UP_SPD_ACCUM_RATIO",
         "CURSE_ATK",
         "BURN_ATK",
+        "SWITCH_SKILL",
     }
     # Return true if should skip
     known_conditions = {
