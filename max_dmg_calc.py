@@ -186,6 +186,7 @@ class Kioku:
         "337": lambda: False,  # "対象が「毒」のとき%",
         "591": lambda: False,  # "【追撃】の",
         "438": lambda: False,  # "自身にシールドが張られているとき",
+        "319": lambda: False,  # 自身が行動可能で魔力が5のとき
     }
 
     max_lvl = 120
