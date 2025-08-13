@@ -188,6 +188,11 @@ class Kioku:
         "591": lambda: False,  # "【追撃】の",
         "438": lambda: False,  # "自身にシールドが張られているとき",
         "319": lambda: False,  # 自身が行動可能で魔力が5のとき
+        "1565": lambda: amount_enemies == 1,  # 敵が1体の場合
+        "1456": lambda: amount_enemies == 2,  # 敵が2体の場合
+        "1457": lambda: amount_enemies == 3,  # 敵が3体の場合
+        "1458": lambda: amount_enemies == 4,  # 敵が4体の場合
+        "1566": lambda: amount_enemies == 5,  # 敵が5体の場合
     }
 
     max_lvl = 120
