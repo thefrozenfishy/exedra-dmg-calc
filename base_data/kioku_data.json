@@ -1179,6 +1179,25 @@
         "support_id": 95010,
         "support_target": "Forest"
     },
+    "Tiro Finale Liberation": {
+        "ability_id": 15032,
+        "ascension_1_effect_2_id": 85001,
+        "ascension_2_effect_2_id": 85046,
+        "ascension_4_effect_2_id": 85002,
+        "atk100": 2277,
+        "attack_id": 1190,
+        "character_en": "Holy Mami",
+        "crystalis_id": 1150030,
+        "element": "Dark",
+        "maxAtk": 3668,
+        "minAtk": 127,
+        "rarity": 5,
+        "role": "Attacker",
+        "skill_id": 1191,
+        "special_id": 1192,
+        "support_id": 95031,
+        "support_target": "Dark"
+    },
     "Ultra Great Big Hammer": {
         "ability_id": 15018,
         "ascension_1_effect_2_id": 85007,

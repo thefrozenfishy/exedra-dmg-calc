@@ -100,6 +100,11 @@
         "passiveSkill1": 4082
     },
     {
+        "cardMstId": 4100021,
+        "name": "Dark Sand Depths",
+        "passiveSkill1": 4084
+    },
+    {
         "cardMstId": 4200001,
         "name": "Captivated by Where You Stand",
         "passiveSkill1": 4018
@@ -223,6 +228,16 @@
         "cardMstId": 4200027,
         "name": "Even This Will Someday Fade",
         "passiveSkill1": 4083
+    },
+    {
+        "cardMstId": 4200028,
+        "name": "Hot☆Corner Is Hyped!",
+        "passiveSkill1": 4085
+    },
+    {
+        "cardMstId": 4200029,
+        "name": "A Time That Will Never Return",
+        "passiveSkill1": 4086
     },
     {
         "cardMstId": 4300001,
@@ -570,6 +585,11 @@
         "passiveSkill1": 5050
     },
     {
+        "cardMstId": 5100032,
+        "name": "A Brief Treat",
+        "passiveSkill1": 5052
+    },
+    {
         "cardMstId": 5400001,
         "name": "Rose Garden Witch Minion",
         "passiveSkill1": 5028
@@ -668,6 +688,11 @@
         "cardMstId": 5400020,
         "name": "Bovine Witch",
         "passiveSkill1": 5051
+    },
+    {
+        "cardMstId": 5400021,
+        "name": "Blessed Witch",
+        "passiveSkill1": 5053
     },
     {
         "cardMstId": 9900001,

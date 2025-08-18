@@ -50,8 +50,8 @@ skill_details = get_data(
 )
 with open(
     os.path.join("base_data", "kioku_data.json"), "r", encoding="utf-8", newline="\n"
-) as f:
-    kioku_data = json.load(f)
+) as g:
+    kioku_data = json.load(g)
 
 
 def find_all_details(is_passive: bool, skill_id: int, is_unique) -> dict:
@@ -147,6 +147,12 @@ class Kioku:
         "CURSE_ATK",
         "BURN_ATK",
         "SWITCH_SKILL",
+        "UP_BUFF_EFFECT_VALUE",
+        "ADD_DEBUFF_TURN",
+        "GAIN_SP_FIXED",
+        "UP_ABNORMAL_HIT_RATE_RATIO",
+        "DMG_RANDOM",
+        "UP_GIV_VORTEX_DMG_RATIO",
     }
     # Return true if should skip
     known_conditions = {
@@ -156,9 +162,13 @@ class Kioku:
         "1563": lambda: True,  # "自身のHPが35%未満かつ11%以上のとき", # We take the lowest bonus and skip this
         "1564": lambda: False,  # "自身のHPが10%未満のとき",
         "330": lambda: amount_enemies < 2,  # "敵が2体以上のとき",
+        "1663": lambda: amount_enemies < 2,  # "敵が2体以上のとき(自ターン問わず)",
         "439": lambda: amount_enemies < 3,  # "敵が3体以上のとき",
+        "1664": lambda: amount_enemies < 2,  # "敵が3体以上のとき(自ターン問わず)",
         "440": lambda: amount_enemies < 4,  # "敵が4体以上のとき",
+        "1665": lambda: amount_enemies < 2,  # "敵が4体以上のとき(自ターン問わず)",
         "441": lambda: amount_enemies < 5,  # "敵が5体以上のとき",
+        "1666": lambda: amount_enemies < 2,  # "敵が5体以上のとき(自ターン問わず)",
         "1569": lambda: amount_enemies < 3,
         # "敵が3体以上+行動タイプは必殺技+行動者は自身",
         "1538": lambda: False,  # "自分にシールドが付与されているとき",
@@ -193,6 +203,10 @@ class Kioku:
         "1457": lambda: amount_enemies == 3,  # 敵が3体の場合
         "1458": lambda: amount_enemies == 4,  # 敵が4体の場合
         "1566": lambda: amount_enemies == 5,  # 敵が5体の場合
+        "352": lambda: False,  # "対象が裂傷状態のとき",
+        "1604": lambda: False,  # "水刃の敵が1体以上いるとき",
+        "939": lambda: False,  # "デバフが1個以上ある敵に対して",
+        "1568": lambda: False,  # "行動者のデバフが1以上+行動者は敵",
     }
 
     max_lvl = 120
@@ -371,34 +385,62 @@ class Kioku:
         supp_eff = find_all_details(
             is_passive=True, skill_id=self.data["support_id"], is_unique=False
         )
-        skill_details = {
+        lvl_details = {
             k: v
             for k, v in supp_eff.items()
             if int(str(get_idx(v))[-2:]) == self.support_lvl
         }
-        return self.data["support_target"], skill_details
+        return self.data["support_target"], lvl_details
 
     def get_special_dmg(self):
-        # TODO: Make this work for multi targets (need to also make break gauge and def be different for each opponent)
-        #  range 1 == Target,
-        #  range 2 == proximity with value2 being the proximity dmg
-        #  range 3 == aoe
-        # TODO: Add "startConditionSetIdCsv" condition (Example Oriko dmg)
-        return (
-            sum(
-                (
-                    v["value1"]
-                    for v in find_all_details(
-                        is_passive=False,
-                        skill_id=self.data["special_id"],
-                        is_unique=False,
-                    ).values()
-                    if int(str(get_idx(v))[-2:]) == self.actual_special_lvl
-                    and v["abilityEffectType"] in ("DMG_ATK", "DMG_DEF")
-                )
-            )
-            / 1000
-        )
+        # TODO: Add different break gauge and def for different enemies?
+        total_dmg = 0
+        for idx in range(amount_enemies):
+            for v in find_all_details(
+                is_passive=False,
+                skill_id=self.data["special_id"],
+                is_unique=False,
+            ).values():
+                if not (
+                    int(str(get_idx(v))[-2:]) == self.actual_special_lvl
+                    and v["abilityEffectType"].startswith("DMG_")
+                ):
+                    # Not dmg or incorrect lvl
+                    continue
+                cond_id = v["startConditionSetIdCsv"]
+                cond_id_int = int(cond_id or 0)
+                if cond_id == "" or cond_id_int not in battle_conditions:
+                    pass
+                else:
+                    try:
+                        if Kioku.known_conditions[cond_id]():
+                            continue
+                    except KeyError as exc:
+                        raise KeyError(
+                            "Unknown condition: ",
+                            (
+                                battle_conditions[cond_id_int]
+                                if cond_id_int in battle_conditions
+                                else cond_id_int
+                            ),
+                        ) from exc
+
+                if v["abilityEffectType"] == "DMG_RANDOM":
+                    total_dmg += v["value1"] * v["value2"]
+
+                elif v["range"] == 3:  # All
+                    total_dmg += v["value1"]
+
+                elif v["range"] == 2:  # Proximity in value2
+                    if idx == 1:
+                        total_dmg += v["value1"]
+                    elif idx <= 3:
+                        total_dmg += v["value2"]
+
+                elif v["range"] == 1 and idx == 1:  # Target only
+                    total_dmg += v["value1"]
+
+        return total_dmg / 1000
 
     def __repr__(self) -> str:
         return f"""{self.name} A{self.ascension}
@@ -411,13 +453,13 @@ class Kioku:
     def add_effects(self, details: dict, is_unique, lvl, ignore_buff_mult=False):
         conds = {}
 
-        skill_details = [
+        lvl_details = [
             v
             for v in details.values()
             if (is_unique or int(str(get_idx(v))[-2:]) == lvl)
             and (self.is_dps or v["range"] not in (-1,))
         ]
-        for skill in skill_details:
+        for skill in lvl_details:
             if not skill["activeConditionSetIdCsv"]:
                 continue
             start_cond = (
@@ -428,7 +470,7 @@ class Kioku:
             if conds.get(skill["activeConditionSetIdCsv"], 0) < start_cond:
                 conds[skill["activeConditionSetIdCsv"]] = start_cond
 
-        for skill in skill_details:
+        for skill in lvl_details:
             cond_id: str = skill["activeConditionSetIdCsv"]
             cond_id_int = int(cond_id or 0)
             if (
@@ -735,6 +777,7 @@ def find_best_team(
     include_4star_sustains: bool,
     include_4star_supports: bool,
     ssr_chars: dict,
+    extra_attackers: list[str],
     sustains_to_consider=("Healer",),  # "Breaker" ,"Defender")
 ):
     if not old_res:
@@ -745,6 +788,11 @@ def find_best_team(
     }
 
     attackers = [a for a in available_kioku[5]["Attacker"] if a[0] in ssr_chars]
+
+    for kiokus in available_kioku[5].values():
+        for kioku in kiokus:
+            if kioku[0] in extra_attackers:
+                attackers.append(kioku)
 
     if include_4star_attackers:
         attackers += available_kioku[4]["Attacker"]
@@ -840,6 +888,8 @@ def find_best_team(
                 for sustain in (
                     bar4 := tqdm(sustains, desc="Sustains", leave=False, ascii=True)
                 ):
+                    if sustain == attacker:
+                        continue
                     something_new = False
                     bar4.set_description_str(f"Sustain: {sustain:{sus_len}}")
                     for support_list in (
@@ -851,12 +901,14 @@ def find_best_team(
                         )
                     ):
                         supp_list = [s for s, _ in support_list]
+                        if attacker in supp_list:
+                            continue
                         bar5.set_description_str(
                             f"Support: {', '.join(supp_list):{supp_len}}"
                         )
 
                         support_supports = []
-                        if "Flame Waltz" not in supp_list:
+                        if "Flame Waltz" not in supp_list and attacker != "Flame Waltz":
                             support_supports = [
                                 [tsuruno if j == i else None for j in range(3)]
                                 for i in range(3)
@@ -992,6 +1044,7 @@ def run(
     mostlyA5s: bool,
     find_weakest: bool,
     find_strongest: bool,
+    extra_attackers: list[str],
 ):
     print(
         f"""\
@@ -1041,10 +1094,8 @@ find_strongest = {find_strongest}
         print("Debug: No previous team found, using empty dict")
         prev_chars5 = {}
 
-    default_file_name = (
-        f"def_{base_def}_break_{max_break_mult}_ml_{magic_lvl}_kl_{kioku_lvl}.json"
-    )
-    file_name = f"{name}_dmg_calc_{ default_file_name}"
+    default_file_name = f"def_{base_def}_break_{max_break_mult}_ml_{magic_lvl}_kl_{kioku_lvl}_en_{enemies_on_stage}.json"
+    file_name = f"{name}_dmg_calc_{default_file_name}"
 
     try:
         with open(
@@ -1104,6 +1155,7 @@ find_strongest = {find_strongest}
         include_4star_sustains=include_4star_sustains,
         include_4star_supports=include_4star_supports,
         ssr_chars=ssr_chars,
+        extra_attackers=extra_attackers,
     ):
         flip = not flip
         with open(
@@ -1131,6 +1183,7 @@ Config: Kioku lvl={kioku_lvl}, Magic lvl={magic_lvl},Heartphial=50, and full CD+
         (a, [r for r in res if r[2] == a][:5])
         for a, _ in available_kioku[5]["Attacker"]
         + (available_kioku[4]["Attacker"] if include_4star_attackers else [])
+        + [(a, "") for a in extra_attackers]
     )
     per_attacker_lists = [(t, r) for t, r in per_attacker_lists if r]
     for title, r in (
@@ -1291,6 +1344,12 @@ if __name__ == "__main__":
         default=False,
         help="Makes the precomuputed speed up if your team mostly contains A5, default assumes mostly A0",
     )
+    parser.add_argument(
+        "--extra-attackers",
+        default=[],
+        type=lambda s: s.split(","),
+        help="Extra attackers to consider, e.g. 'Flame Waltz,Soul Salvation'. If empty no extra attackers will be considered.",
+    )
     args = parser.parse_args()
 
     print(
@@ -1310,4 +1369,5 @@ if __name__ == "__main__":
         mostlyA5s=args.mostlya5s,
         find_weakest=args.findbase,
         find_strongest=args.findbest,
+        extra_attackers=args.extra_attackers,
     )
