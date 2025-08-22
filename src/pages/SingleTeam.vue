@@ -85,8 +85,8 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed, onMounted } from 'vue'
-import { useTeamStore, useEnemyStore } from '../store/SingleTeamStore'
+import { computed, onMounted } from 'vue'
+import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
 import CharacterSelector from '../components/CharacterSelector.vue'
 import StatInputs from '../components/StatInputs.vue'
 import { getKioku, KiokuGeneratorArgs } from '../Kioku'
