@@ -191,7 +191,7 @@ export class Kioku {
         this.crys = crys;
         this.data = kiokuData[name];
 
-        this.crys_sub = Array(3).fill([KiokuConstants.availableSubCrys.CD, KiokuConstants.availableSubCrys.ATK_FLAT]).flat()
+        this.crys_sub = Array(3).fill([KiokuConstants.availableSubCrys.CRIT_DMG, KiokuConstants.availableSubCrys.FLAT_ATK]).flat()
 
         this.supportKey = supportKey;
         this.support = supportKey ? Kioku.fromKey(supportKey) ?? null : null;
@@ -225,21 +225,21 @@ export class Kioku {
             if (cry === KiokuConstants.availableCrys.EX || !this.isDps) continue;
             const eff = parseInt(cry.split("-")[1]);
             switch (cry) {
-                case KiokuConstants.availableCrys.ATK_FLAT:
-                case KiokuConstants.availableSubCrys.ATK_FLAT:
+                case KiokuConstants.availableCrys.FLAT_ATK:
+                case KiokuConstants.availableSubCrys.FLAT_ATK:
                     this.atk_bonus_flat += eff;
                     break;
-                case KiokuConstants.availableCrys.ATK:
+                case KiokuConstants.availableCrys.ATK_25_PERCENT:
                     this.add_to_effects("UP_ATK_RATIO", 10 * eff);
                     break;
-                case KiokuConstants.availableCrys.CD:
-                case KiokuConstants.availableSubCrys.CD:
+                case KiokuConstants.availableCrys.CRIT_DMG:
+                case KiokuConstants.availableSubCrys.CRIT_DMG:
                     this.add_to_effects("UP_CTD_FIXED", 10 * eff);
                     break;
-                case KiokuConstants.availableCrys.WEAK:
+                case KiokuConstants.availableCrys.DMG_TO_WEAK_ELEMENT:
                     this.add_to_effects("UP_WEAK_ELEMENT_DMG_RATIO", 10 * eff);
                     break;
-                case KiokuConstants.availableCrys.DMG:
+                case KiokuConstants.availableCrys.ELEMENTAL_DMG:
                     this.add_to_effects("UP_GIV_DMG_RATIO", 10 * eff);
                     break;
             }
@@ -448,11 +448,22 @@ export class Kioku {
     }
 }
 
+const availableCrys = {
+    ATK_25_PERCENT: "ATK%-25",
+    CRIT_DMG: "CD-20",
+    DMG_TO_WEAK_ELEMENT: "Elem-24",
+    ELEMENTAL_DMG: "Dmg-20",
+    FLAT_ATK: "ATK-125",
+    EX: "EX"
+};
+const availableSubCrys = {
+    CRIT_DMG: "CD-10",
+    FLAT_ATK: "ATK-60"
+};
 
 export const KiokuConstants = {
-    availableCrys: { ATK: "ATK%-25", CD: "CD-20", WEAK: "Elem-24", DMG: "Dmg-20", EX: "EX" } as Record<string, string>,
-    // ATK_FLAT: "ATK-125", flat atk are technically dps crys, but it's so bad I don't see the point, just takes more time....
-    availableSubCrys: { CD: "CD-10", ATK_FLAT: "ATK-60" } as Record<string, string>,
+    availableCrys,
+    availableSubCrys,
     maxKiokuLvl: 120,
     maxMagicLvl: 130,
     maxAscension: 5,

@@ -34,6 +34,18 @@
               </option>
             </select>
           </label>
+          <label>
+            Crystalis:
+            <div>
+              <select v-for="i in 3" :key="i" :value="slot.main.crys?.[i - 1] ?? ''"
+                @change="e => onChangeCrys(i, e.target.value)">
+                <option value="">None</option>
+                <option v-for="k in cryKeys" :key="k" :value="KiokuConstants.availableCrys[k]">
+                  {{ k }}
+                </option>
+              </select>
+            </div>
+          </label>
         </div>
 
 
@@ -89,8 +101,29 @@ import { computed, onMounted } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
 import CharacterSelector from '../components/CharacterSelector.vue'
 import StatInputs from '../components/StatInputs.vue'
-import { getKioku, KiokuGeneratorArgs } from '../Kioku'
+import { getKioku, KiokuGeneratorArgs, KiokuConstants } from '../Kioku'
 import { Team } from '../Team'
+
+const cryKeys = Object.keys(KiokuConstants.availableCrys)
+
+function onChangeCrys(idx: number, rawValue: string) {
+  const main = team.slots[0].main
+  if (!main) return
+  const current = (main.crys ?? []).slice(0, 3)
+
+  // When user selects "None", remove that entry; otherwise set the constant value
+  if (!rawValue) {
+    current.splice(idx-1, 1) // compact the array by removing that position
+  } else {
+    // ensure array has 3 slots before setting
+    while (current.length < idx-1) current.push(undefined as any)
+    current[idx-1] = rawValue as any
+  }
+
+  // Keep only truthy values; max 3
+  const cleaned = current.filter(Boolean).slice(0, 3)
+  team.setMain(0, { ...main, crys: cleaned } as any)
+}
 
 const dmg_plus_portrait: Record<string, string> = {
   Flame: "A Reluctant Coach Steps Up",
