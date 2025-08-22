@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import GalleryPage from '../pages/GalleryPage.vue'
 import BestTeam from '../pages/BestTeam.vue'
 import SingleTeam from '../pages/SingleTeam.vue'
@@ -10,8 +10,8 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL), // <-- uses base from vite.config.ts
-    routes,
+    history: createWebHashHistory(),
+    routes
 })
 
 export default router
