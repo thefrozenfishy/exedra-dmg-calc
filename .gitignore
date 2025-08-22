@@ -1,7 +1,0 @@
-__pycache__
-.venv
-.vscode
-history
-results
-gather_data.py
-my_team_*.json
