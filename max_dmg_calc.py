@@ -432,12 +432,12 @@ class Kioku:
                     total_dmg += v["value1"]
 
                 elif v["range"] == 2:  # Proximity in value2
-                    if idx == 1:
+                    if idx == 0:
                         total_dmg += v["value1"]
-                    elif idx <= 3:
+                    elif idx <= 2:
                         total_dmg += v["value2"]
 
-                elif v["range"] == 1 and idx == 1:  # Target only
+                elif v["range"] == 1 and idx == 0:  # Target only
                     total_dmg += v["value1"]
 
         return total_dmg / 1000
