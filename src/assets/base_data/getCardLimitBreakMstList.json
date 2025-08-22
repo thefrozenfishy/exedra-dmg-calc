@@ -1,0 +1,3482 @@
+[
+    {
+        "atk": 23,
+        "cardLimitBreakMstId": 41000010
+    },
+    {
+        "atk": 38,
+        "cardLimitBreakMstId": 41000011
+    },
+    {
+        "atk": 52,
+        "cardLimitBreakMstId": 41000012
+    },
+    {
+        "atk": 67,
+        "cardLimitBreakMstId": 41000013
+    },
+    {
+        "atk": 81,
+        "cardLimitBreakMstId": 41000014
+    },
+    {
+        "atk": 96,
+        "cardLimitBreakMstId": 41000015
+    },
+    {
+        "atk": 28,
+        "cardLimitBreakMstId": 41000020
+    },
+    {
+        "atk": 45,
+        "cardLimitBreakMstId": 41000021
+    },
+    {
+        "atk": 62,
+        "cardLimitBreakMstId": 41000022
+    },
+    {
+        "atk": 79,
+        "cardLimitBreakMstId": 41000023
+    },
+    {
+        "atk": 96,
+        "cardLimitBreakMstId": 41000024
+    },
+    {
+        "atk": 114,
+        "cardLimitBreakMstId": 41000025
+    },
+    {
+        "atk": 31,
+        "cardLimitBreakMstId": 41000030
+    },
+    {
+        "atk": 50,
+        "cardLimitBreakMstId": 41000031
+    },
+    {
+        "atk": 70,
+        "cardLimitBreakMstId": 41000032
+    },
+    {
+        "atk": 90,
+        "cardLimitBreakMstId": 41000033
+    },
+    {
+        "atk": 109,
+        "cardLimitBreakMstId": 41000034
+    },
+    {
+        "atk": 129,
+        "cardLimitBreakMstId": 41000035
+    },
+    {
+        "atk": 33,
+        "cardLimitBreakMstId": 41000040
+    },
+    {
+        "atk": 53,
+        "cardLimitBreakMstId": 41000041
+    },
+    {
+        "atk": 73,
+        "cardLimitBreakMstId": 41000042
+    },
+    {
+        "atk": 93,
+        "cardLimitBreakMstId": 41000043
+    },
+    {
+        "atk": 113,
+        "cardLimitBreakMstId": 41000044
+    },
+    {
+        "atk": 134,
+        "cardLimitBreakMstId": 41000045
+    },
+    {
+        "atk": 28,
+        "cardLimitBreakMstId": 41000050
+    },
+    {
+        "atk": 45,
+        "cardLimitBreakMstId": 41000051
+    },
+    {
+        "atk": 63,
+        "cardLimitBreakMstId": 41000052
+    },
+    {
+        "atk": 80,
+        "cardLimitBreakMstId": 41000053
+    },
+    {
+        "atk": 98,
+        "cardLimitBreakMstId": 41000054
+    },
+    {
+        "atk": 116,
+        "cardLimitBreakMstId": 41000055
+    },
+    {
+        "atk": 31,
+        "cardLimitBreakMstId": 41000060
+    },
+    {
+        "atk": 50,
+        "cardLimitBreakMstId": 41000061
+    },
+    {
+        "atk": 69,
+        "cardLimitBreakMstId": 41000062
+    },
+    {
+        "atk": 88,
+        "cardLimitBreakMstId": 41000063
+    },
+    {
+        "atk": 107,
+        "cardLimitBreakMstId": 41000064
+    },
+    {
+        "atk": 127,
+        "cardLimitBreakMstId": 41000065
+    },
+    {
+        "atk": 35,
+        "cardLimitBreakMstId": 41000070
+    },
+    {
+        "atk": 56,
+        "cardLimitBreakMstId": 41000071
+    },
+    {
+        "atk": 77,
+        "cardLimitBreakMstId": 41000072
+    },
+    {
+        "atk": 99,
+        "cardLimitBreakMstId": 41000073
+    },
+    {
+        "atk": 120,
+        "cardLimitBreakMstId": 41000074
+    },
+    {
+        "atk": 142,
+        "cardLimitBreakMstId": 41000075
+    },
+    {
+        "atk": 29,
+        "cardLimitBreakMstId": 41000080
+    },
+    {
+        "atk": 47,
+        "cardLimitBreakMstId": 41000081
+    },
+    {
+        "atk": 65,
+        "cardLimitBreakMstId": 41000082
+    },
+    {
+        "atk": 84,
+        "cardLimitBreakMstId": 41000083
+    },
+    {
+        "atk": 101,
+        "cardLimitBreakMstId": 41000084
+    },
+    {
+        "atk": 120,
+        "cardLimitBreakMstId": 41000085
+    },
+    {
+        "atk": 25,
+        "cardLimitBreakMstId": 41000090
+    },
+    {
+        "atk": 41,
+        "cardLimitBreakMstId": 41000091
+    },
+    {
+        "atk": 56,
+        "cardLimitBreakMstId": 41000092
+    },
+    {
+        "atk": 72,
+        "cardLimitBreakMstId": 41000093
+    },
+    {
+        "atk": 87,
+        "cardLimitBreakMstId": 41000094
+    },
+    {
+        "atk": 103,
+        "cardLimitBreakMstId": 41000095
+    },
+    {
+        "atk": 35,
+        "cardLimitBreakMstId": 41000100
+    },
+    {
+        "atk": 56,
+        "cardLimitBreakMstId": 41000101
+    },
+    {
+        "atk": 77,
+        "cardLimitBreakMstId": 41000102
+    },
+    {
+        "atk": 99,
+        "cardLimitBreakMstId": 41000103
+    },
+    {
+        "atk": 120,
+        "cardLimitBreakMstId": 41000104
+    },
+    {
+        "atk": 142,
+        "cardLimitBreakMstId": 41000105
+    },
+    {
+        "atk": 29,
+        "cardLimitBreakMstId": 41000110
+    },
+    {
+        "atk": 46,
+        "cardLimitBreakMstId": 41000111
+    },
+    {
+        "atk": 64,
+        "cardLimitBreakMstId": 41000112
+    },
+    {
+        "atk": 82,
+        "cardLimitBreakMstId": 41000113
+    },
+    {
+        "atk": 99,
+        "cardLimitBreakMstId": 41000114
+    },
+    {
+        "atk": 118,
+        "cardLimitBreakMstId": 41000115
+    },
+    {
+        "atk": 29,
+        "cardLimitBreakMstId": 41000120
+    },
+    {
+        "atk": 47,
+        "cardLimitBreakMstId": 41000121
+    },
+    {
+        "atk": 65,
+        "cardLimitBreakMstId": 41000122
+    },
+    {
+        "atk": 84,
+        "cardLimitBreakMstId": 41000123
+    },
+    {
+        "atk": 102,
+        "cardLimitBreakMstId": 41000124
+    },
+    {
+        "atk": 120,
+        "cardLimitBreakMstId": 41000125
+    },
+    {
+        "atk": 30,
+        "cardLimitBreakMstId": 41000130
+    },
+    {
+        "atk": 49,
+        "cardLimitBreakMstId": 41000131
+    },
+    {
+        "atk": 67,
+        "cardLimitBreakMstId": 41000132
+    },
+    {
+        "atk": 86,
+        "cardLimitBreakMstId": 41000133
+    },
+    {
+        "atk": 105,
+        "cardLimitBreakMstId": 41000134
+    },
+    {
+        "atk": 124,
+        "cardLimitBreakMstId": 41000135
+    },
+    {
+        "atk": 38,
+        "cardLimitBreakMstId": 41000140
+    },
+    {
+        "atk": 61,
+        "cardLimitBreakMstId": 41000141
+    },
+    {
+        "atk": 84,
+        "cardLimitBreakMstId": 41000142
+    },
+    {
+        "atk": 108,
+        "cardLimitBreakMstId": 41000143
+    },
+    {
+        "atk": 132,
+        "cardLimitBreakMstId": 41000144
+    },
+    {
+        "atk": 156,
+        "cardLimitBreakMstId": 41000145
+    },
+    {
+        "atk": 30,
+        "cardLimitBreakMstId": 41000150
+    },
+    {
+        "atk": 49,
+        "cardLimitBreakMstId": 41000151
+    },
+    {
+        "atk": 67,
+        "cardLimitBreakMstId": 41000152
+    },
+    {
+        "atk": 87,
+        "cardLimitBreakMstId": 41000153
+    },
+    {
+        "atk": 105,
+        "cardLimitBreakMstId": 41000154
+    },
+    {
+        "atk": 125,
+        "cardLimitBreakMstId": 41000155
+    },
+    {
+        "atk": 42,
+        "cardLimitBreakMstId": 41000160
+    },
+    {
+        "atk": 67,
+        "cardLimitBreakMstId": 41000161
+    },
+    {
+        "atk": 92,
+        "cardLimitBreakMstId": 41000162
+    },
+    {
+        "atk": 118,
+        "cardLimitBreakMstId": 41000163
+    },
+    {
+        "atk": 144,
+        "cardLimitBreakMstId": 41000164
+    },
+    {
+        "atk": 170,
+        "cardLimitBreakMstId": 41000165
+    },
+    {
+        "atk": 32,
+        "cardLimitBreakMstId": 41000170
+    },
+    {
+        "atk": 52,
+        "cardLimitBreakMstId": 41000171
+    },
+    {
+        "atk": 72,
+        "cardLimitBreakMstId": 41000172
+    },
+    {
+        "atk": 92,
+        "cardLimitBreakMstId": 41000173
+    },
+    {
+        "atk": 112,
+        "cardLimitBreakMstId": 41000174
+    },
+    {
+        "atk": 132,
+        "cardLimitBreakMstId": 41000175
+    },
+    {
+        "atk": 21,
+        "cardLimitBreakMstId": 41000180
+    },
+    {
+        "atk": 34,
+        "cardLimitBreakMstId": 41000181
+    },
+    {
+        "atk": 47,
+        "cardLimitBreakMstId": 41000182
+    },
+    {
+        "atk": 60,
+        "cardLimitBreakMstId": 41000183
+    },
+    {
+        "atk": 73,
+        "cardLimitBreakMstId": 41000184
+    },
+    {
+        "atk": 86,
+        "cardLimitBreakMstId": 41000185
+    },
+    {
+        "atk": 28,
+        "cardLimitBreakMstId": 41000190
+    },
+    {
+        "atk": 46,
+        "cardLimitBreakMstId": 41000191
+    },
+    {
+        "atk": 63,
+        "cardLimitBreakMstId": 41000192
+    },
+    {
+        "atk": 81,
+        "cardLimitBreakMstId": 41000193
+    },
+    {
+        "atk": 99,
+        "cardLimitBreakMstId": 41000194
+    },
+    {
+        "atk": 117,
+        "cardLimitBreakMstId": 41000195
+    },
+    {
+        "atk": 28,
+        "cardLimitBreakMstId": 41000200
+    },
+    {
+        "atk": 46,
+        "cardLimitBreakMstId": 41000201
+    },
+    {
+        "atk": 63,
+        "cardLimitBreakMstId": 41000202
+    },
+    {
+        "atk": 81,
+        "cardLimitBreakMstId": 41000203
+    },
+    {
+        "atk": 98,
+        "cardLimitBreakMstId": 41000204
+    },
+    {
+        "atk": 117,
+        "cardLimitBreakMstId": 41000205
+    },
+    {
+        "atk": 55,
+        "cardLimitBreakMstId": 41000210
+    },
+    {
+        "atk": 88,
+        "cardLimitBreakMstId": 41000211
+    },
+    {
+        "atk": 121,
+        "cardLimitBreakMstId": 41000212
+    },
+    {
+        "atk": 156,
+        "cardLimitBreakMstId": 41000213
+    },
+    {
+        "atk": 189,
+        "cardLimitBreakMstId": 41000214
+    },
+    {
+        "atk": 224,
+        "cardLimitBreakMstId": 41000215
+    },
+    {
+        "atk": 51,
+        "cardLimitBreakMstId": 42000010
+    },
+    {
+        "atk": 78,
+        "cardLimitBreakMstId": 42000011
+    },
+    {
+        "atk": 105,
+        "cardLimitBreakMstId": 42000012
+    },
+    {
+        "atk": 131,
+        "cardLimitBreakMstId": 42000013
+    },
+    {
+        "atk": 158,
+        "cardLimitBreakMstId": 42000014
+    },
+    {
+        "atk": 185,
+        "cardLimitBreakMstId": 42000015
+    },
+    {
+        "atk": 53,
+        "cardLimitBreakMstId": 42000020
+    },
+    {
+        "atk": 80,
+        "cardLimitBreakMstId": 42000021
+    },
+    {
+        "atk": 108,
+        "cardLimitBreakMstId": 42000022
+    },
+    {
+        "atk": 135,
+        "cardLimitBreakMstId": 42000023
+    },
+    {
+        "atk": 163,
+        "cardLimitBreakMstId": 42000024
+    },
+    {
+        "atk": 191,
+        "cardLimitBreakMstId": 42000025
+    },
+    {
+        "atk": 76,
+        "cardLimitBreakMstId": 42000030
+    },
+    {
+        "atk": 116,
+        "cardLimitBreakMstId": 42000031
+    },
+    {
+        "atk": 156,
+        "cardLimitBreakMstId": 42000032
+    },
+    {
+        "atk": 196,
+        "cardLimitBreakMstId": 42000033
+    },
+    {
+        "atk": 236,
+        "cardLimitBreakMstId": 42000034
+    },
+    {
+        "atk": 276,
+        "cardLimitBreakMstId": 42000035
+    },
+    {
+        "atk": 79,
+        "cardLimitBreakMstId": 42000040
+    },
+    {
+        "atk": 120,
+        "cardLimitBreakMstId": 42000041
+    },
+    {
+        "atk": 161,
+        "cardLimitBreakMstId": 42000042
+    },
+    {
+        "atk": 202,
+        "cardLimitBreakMstId": 42000043
+    },
+    {
+        "atk": 243,
+        "cardLimitBreakMstId": 42000044
+    },
+    {
+        "atk": 284,
+        "cardLimitBreakMstId": 42000045
+    },
+    {
+        "atk": 54,
+        "cardLimitBreakMstId": 42000050
+    },
+    {
+        "atk": 82,
+        "cardLimitBreakMstId": 42000051
+    },
+    {
+        "atk": 110,
+        "cardLimitBreakMstId": 42000052
+    },
+    {
+        "atk": 138,
+        "cardLimitBreakMstId": 42000053
+    },
+    {
+        "atk": 166,
+        "cardLimitBreakMstId": 42000054
+    },
+    {
+        "atk": 194,
+        "cardLimitBreakMstId": 42000055
+    },
+    {
+        "atk": 47,
+        "cardLimitBreakMstId": 42000060
+    },
+    {
+        "atk": 72,
+        "cardLimitBreakMstId": 42000061
+    },
+    {
+        "atk": 96,
+        "cardLimitBreakMstId": 42000062
+    },
+    {
+        "atk": 121,
+        "cardLimitBreakMstId": 42000063
+    },
+    {
+        "atk": 146,
+        "cardLimitBreakMstId": 42000064
+    },
+    {
+        "atk": 170,
+        "cardLimitBreakMstId": 42000065
+    },
+    {
+        "atk": 59,
+        "cardLimitBreakMstId": 42000070
+    },
+    {
+        "atk": 89,
+        "cardLimitBreakMstId": 42000071
+    },
+    {
+        "atk": 120,
+        "cardLimitBreakMstId": 42000072
+    },
+    {
+        "atk": 151,
+        "cardLimitBreakMstId": 42000073
+    },
+    {
+        "atk": 181,
+        "cardLimitBreakMstId": 42000074
+    },
+    {
+        "atk": 212,
+        "cardLimitBreakMstId": 42000075
+    },
+    {
+        "atk": 60,
+        "cardLimitBreakMstId": 42000080
+    },
+    {
+        "atk": 92,
+        "cardLimitBreakMstId": 42000081
+    },
+    {
+        "atk": 124,
+        "cardLimitBreakMstId": 42000082
+    },
+    {
+        "atk": 155,
+        "cardLimitBreakMstId": 42000083
+    },
+    {
+        "atk": 187,
+        "cardLimitBreakMstId": 42000084
+    },
+    {
+        "atk": 218,
+        "cardLimitBreakMstId": 42000085
+    },
+    {
+        "atk": 53,
+        "cardLimitBreakMstId": 42000090
+    },
+    {
+        "atk": 81,
+        "cardLimitBreakMstId": 42000091
+    },
+    {
+        "atk": 109,
+        "cardLimitBreakMstId": 42000092
+    },
+    {
+        "atk": 137,
+        "cardLimitBreakMstId": 42000093
+    },
+    {
+        "atk": 165,
+        "cardLimitBreakMstId": 42000094
+    },
+    {
+        "atk": 192,
+        "cardLimitBreakMstId": 42000095
+    },
+    {
+        "atk": 52,
+        "cardLimitBreakMstId": 42000100
+    },
+    {
+        "atk": 79,
+        "cardLimitBreakMstId": 42000101
+    },
+    {
+        "atk": 107,
+        "cardLimitBreakMstId": 42000102
+    },
+    {
+        "atk": 134,
+        "cardLimitBreakMstId": 42000103
+    },
+    {
+        "atk": 162,
+        "cardLimitBreakMstId": 42000104
+    },
+    {
+        "atk": 189,
+        "cardLimitBreakMstId": 42000105
+    },
+    {
+        "atk": 72,
+        "cardLimitBreakMstId": 42000110
+    },
+    {
+        "atk": 109,
+        "cardLimitBreakMstId": 42000111
+    },
+    {
+        "atk": 146,
+        "cardLimitBreakMstId": 42000112
+    },
+    {
+        "atk": 184,
+        "cardLimitBreakMstId": 42000113
+    },
+    {
+        "atk": 221,
+        "cardLimitBreakMstId": 42000114
+    },
+    {
+        "atk": 259,
+        "cardLimitBreakMstId": 42000115
+    },
+    {
+        "atk": 73,
+        "cardLimitBreakMstId": 42000120
+    },
+    {
+        "atk": 112,
+        "cardLimitBreakMstId": 42000121
+    },
+    {
+        "atk": 150,
+        "cardLimitBreakMstId": 42000122
+    },
+    {
+        "atk": 188,
+        "cardLimitBreakMstId": 42000123
+    },
+    {
+        "atk": 227,
+        "cardLimitBreakMstId": 42000124
+    },
+    {
+        "atk": 265,
+        "cardLimitBreakMstId": 42000125
+    },
+    {
+        "atk": 76,
+        "cardLimitBreakMstId": 42000130
+    },
+    {
+        "atk": 116,
+        "cardLimitBreakMstId": 42000131
+    },
+    {
+        "atk": 156,
+        "cardLimitBreakMstId": 42000132
+    },
+    {
+        "atk": 196,
+        "cardLimitBreakMstId": 42000133
+    },
+    {
+        "atk": 236,
+        "cardLimitBreakMstId": 42000134
+    },
+    {
+        "atk": 276,
+        "cardLimitBreakMstId": 42000135
+    },
+    {
+        "atk": 94,
+        "cardLimitBreakMstId": 42000140
+    },
+    {
+        "atk": 143,
+        "cardLimitBreakMstId": 42000141
+    },
+    {
+        "atk": 193,
+        "cardLimitBreakMstId": 42000142
+    },
+    {
+        "atk": 242,
+        "cardLimitBreakMstId": 42000143
+    },
+    {
+        "atk": 291,
+        "cardLimitBreakMstId": 42000144
+    },
+    {
+        "atk": 340,
+        "cardLimitBreakMstId": 42000145
+    },
+    {
+        "atk": 75,
+        "cardLimitBreakMstId": 42000150
+    },
+    {
+        "atk": 114,
+        "cardLimitBreakMstId": 42000151
+    },
+    {
+        "atk": 153,
+        "cardLimitBreakMstId": 42000152
+    },
+    {
+        "atk": 192,
+        "cardLimitBreakMstId": 42000153
+    },
+    {
+        "atk": 231,
+        "cardLimitBreakMstId": 42000154
+    },
+    {
+        "atk": 271,
+        "cardLimitBreakMstId": 42000155
+    },
+    {
+        "atk": 79,
+        "cardLimitBreakMstId": 42000160
+    },
+    {
+        "atk": 121,
+        "cardLimitBreakMstId": 42000161
+    },
+    {
+        "atk": 162,
+        "cardLimitBreakMstId": 42000162
+    },
+    {
+        "atk": 204,
+        "cardLimitBreakMstId": 42000163
+    },
+    {
+        "atk": 246,
+        "cardLimitBreakMstId": 42000164
+    },
+    {
+        "atk": 287,
+        "cardLimitBreakMstId": 42000165
+    },
+    {
+        "atk": 99,
+        "cardLimitBreakMstId": 42000170
+    },
+    {
+        "atk": 151,
+        "cardLimitBreakMstId": 42000171
+    },
+    {
+        "atk": 203,
+        "cardLimitBreakMstId": 42000172
+    },
+    {
+        "atk": 254,
+        "cardLimitBreakMstId": 42000173
+    },
+    {
+        "atk": 306,
+        "cardLimitBreakMstId": 42000174
+    },
+    {
+        "atk": 358,
+        "cardLimitBreakMstId": 42000175
+    },
+    {
+        "atk": 37,
+        "cardLimitBreakMstId": 42000180
+    },
+    {
+        "atk": 56,
+        "cardLimitBreakMstId": 42000181
+    },
+    {
+        "atk": 75,
+        "cardLimitBreakMstId": 42000182
+    },
+    {
+        "atk": 95,
+        "cardLimitBreakMstId": 42000183
+    },
+    {
+        "atk": 114,
+        "cardLimitBreakMstId": 42000184
+    },
+    {
+        "atk": 133,
+        "cardLimitBreakMstId": 42000185
+    },
+    {
+        "atk": 33,
+        "cardLimitBreakMstId": 42000190
+    },
+    {
+        "atk": 53,
+        "cardLimitBreakMstId": 42000191
+    },
+    {
+        "atk": 74,
+        "cardLimitBreakMstId": 42000192
+    },
+    {
+        "atk": 95,
+        "cardLimitBreakMstId": 42000193
+    },
+    {
+        "atk": 115,
+        "cardLimitBreakMstId": 42000194
+    },
+    {
+        "atk": 136,
+        "cardLimitBreakMstId": 42000195
+    },
+    {
+        "atk": 60,
+        "cardLimitBreakMstId": 42000220
+    },
+    {
+        "atk": 92,
+        "cardLimitBreakMstId": 42000221
+    },
+    {
+        "atk": 124,
+        "cardLimitBreakMstId": 42000222
+    },
+    {
+        "atk": 156,
+        "cardLimitBreakMstId": 42000223
+    },
+    {
+        "atk": 187,
+        "cardLimitBreakMstId": 42000224
+    },
+    {
+        "atk": 219,
+        "cardLimitBreakMstId": 42000225
+    },
+    {
+        "atk": 33,
+        "cardLimitBreakMstId": 42000230
+    },
+    {
+        "atk": 53,
+        "cardLimitBreakMstId": 42000231
+    },
+    {
+        "atk": 73,
+        "cardLimitBreakMstId": 42000232
+    },
+    {
+        "atk": 94,
+        "cardLimitBreakMstId": 42000233
+    },
+    {
+        "atk": 114,
+        "cardLimitBreakMstId": 42000234
+    },
+    {
+        "atk": 135,
+        "cardLimitBreakMstId": 42000235
+    },
+    {
+        "atk": 99,
+        "cardLimitBreakMstId": 42000240
+    },
+    {
+        "atk": 151,
+        "cardLimitBreakMstId": 42000241
+    },
+    {
+        "atk": 203,
+        "cardLimitBreakMstId": 42000242
+    },
+    {
+        "atk": 255,
+        "cardLimitBreakMstId": 42000243
+    },
+    {
+        "atk": 307,
+        "cardLimitBreakMstId": 42000244
+    },
+    {
+        "atk": 359,
+        "cardLimitBreakMstId": 42000245
+    },
+    {
+        "atk": 17,
+        "cardLimitBreakMstId": 42000250
+    },
+    {
+        "atk": 27,
+        "cardLimitBreakMstId": 42000251
+    },
+    {
+        "atk": 37,
+        "cardLimitBreakMstId": 42000252
+    },
+    {
+        "atk": 48,
+        "cardLimitBreakMstId": 42000253
+    },
+    {
+        "atk": 58,
+        "cardLimitBreakMstId": 42000254
+    },
+    {
+        "atk": 69,
+        "cardLimitBreakMstId": 42000255
+    },
+    {
+        "atk": 94,
+        "cardLimitBreakMstId": 42000260
+    },
+    {
+        "atk": 143,
+        "cardLimitBreakMstId": 42000261
+    },
+    {
+        "atk": 193,
+        "cardLimitBreakMstId": 42000262
+    },
+    {
+        "atk": 242,
+        "cardLimitBreakMstId": 42000263
+    },
+    {
+        "atk": 291,
+        "cardLimitBreakMstId": 42000264
+    },
+    {
+        "atk": 340,
+        "cardLimitBreakMstId": 42000265
+    },
+    {
+        "atk": 55,
+        "cardLimitBreakMstId": 42000270
+    },
+    {
+        "atk": 84,
+        "cardLimitBreakMstId": 42000271
+    },
+    {
+        "atk": 113,
+        "cardLimitBreakMstId": 42000272
+    },
+    {
+        "atk": 142,
+        "cardLimitBreakMstId": 42000273
+    },
+    {
+        "atk": 171,
+        "cardLimitBreakMstId": 42000274
+    },
+    {
+        "atk": 200,
+        "cardLimitBreakMstId": 42000275
+    },
+    {
+        "atk": 55,
+        "cardLimitBreakMstId": 42000280
+    },
+    {
+        "atk": 84,
+        "cardLimitBreakMstId": 42000281
+    },
+    {
+        "atk": 113,
+        "cardLimitBreakMstId": 42000282
+    },
+    {
+        "atk": 143,
+        "cardLimitBreakMstId": 42000283
+    },
+    {
+        "atk": 172,
+        "cardLimitBreakMstId": 42000284
+    },
+    {
+        "atk": 201,
+        "cardLimitBreakMstId": 42000285
+    },
+    {
+        "atk": 58,
+        "cardLimitBreakMstId": 42000290
+    },
+    {
+        "atk": 89,
+        "cardLimitBreakMstId": 42000291
+    },
+    {
+        "atk": 119,
+        "cardLimitBreakMstId": 42000292
+    },
+    {
+        "atk": 150,
+        "cardLimitBreakMstId": 42000293
+    },
+    {
+        "atk": 181,
+        "cardLimitBreakMstId": 42000294
+    },
+    {
+        "atk": 211,
+        "cardLimitBreakMstId": 42000295
+    },
+    {
+        "atk": 35,
+        "cardLimitBreakMstId": 42000300
+    },
+    {
+        "atk": 57,
+        "cardLimitBreakMstId": 42000301
+    },
+    {
+        "atk": 78,
+        "cardLimitBreakMstId": 42000302
+    },
+    {
+        "atk": 101,
+        "cardLimitBreakMstId": 42000303
+    },
+    {
+        "atk": 122,
+        "cardLimitBreakMstId": 42000304
+    },
+    {
+        "atk": 145,
+        "cardLimitBreakMstId": 42000305
+    },
+    {
+        "atk": 24,
+        "cardLimitBreakMstId": 43000010
+    },
+    {
+        "atk": 39,
+        "cardLimitBreakMstId": 43000011
+    },
+    {
+        "atk": 53,
+        "cardLimitBreakMstId": 43000012
+    },
+    {
+        "atk": 68,
+        "cardLimitBreakMstId": 43000013
+    },
+    {
+        "atk": 83,
+        "cardLimitBreakMstId": 43000014
+    },
+    {
+        "atk": 98,
+        "cardLimitBreakMstId": 43000015
+    },
+    {
+        "atk": 29,
+        "cardLimitBreakMstId": 43000020
+    },
+    {
+        "atk": 47,
+        "cardLimitBreakMstId": 43000021
+    },
+    {
+        "atk": 64,
+        "cardLimitBreakMstId": 43000022
+    },
+    {
+        "atk": 83,
+        "cardLimitBreakMstId": 43000023
+    },
+    {
+        "atk": 101,
+        "cardLimitBreakMstId": 43000024
+    },
+    {
+        "atk": 119,
+        "cardLimitBreakMstId": 43000025
+    },
+    {
+        "atk": 40,
+        "cardLimitBreakMstId": 43000030
+    },
+    {
+        "atk": 64,
+        "cardLimitBreakMstId": 43000031
+    },
+    {
+        "atk": 88,
+        "cardLimitBreakMstId": 43000032
+    },
+    {
+        "atk": 113,
+        "cardLimitBreakMstId": 43000033
+    },
+    {
+        "atk": 137,
+        "cardLimitBreakMstId": 43000034
+    },
+    {
+        "atk": 162,
+        "cardLimitBreakMstId": 43000035
+    },
+    {
+        "atk": 43,
+        "cardLimitBreakMstId": 43000040
+    },
+    {
+        "atk": 68,
+        "cardLimitBreakMstId": 43000041
+    },
+    {
+        "atk": 94,
+        "cardLimitBreakMstId": 43000042
+    },
+    {
+        "atk": 121,
+        "cardLimitBreakMstId": 43000043
+    },
+    {
+        "atk": 147,
+        "cardLimitBreakMstId": 43000044
+    },
+    {
+        "atk": 174,
+        "cardLimitBreakMstId": 43000045
+    },
+    {
+        "atk": 34,
+        "cardLimitBreakMstId": 43000050
+    },
+    {
+        "atk": 55,
+        "cardLimitBreakMstId": 43000051
+    },
+    {
+        "atk": 76,
+        "cardLimitBreakMstId": 43000052
+    },
+    {
+        "atk": 97,
+        "cardLimitBreakMstId": 43000053
+    },
+    {
+        "atk": 118,
+        "cardLimitBreakMstId": 43000054
+    },
+    {
+        "atk": 140,
+        "cardLimitBreakMstId": 43000055
+    },
+    {
+        "atk": 37,
+        "cardLimitBreakMstId": 43000060
+    },
+    {
+        "atk": 60,
+        "cardLimitBreakMstId": 43000061
+    },
+    {
+        "atk": 83,
+        "cardLimitBreakMstId": 43000062
+    },
+    {
+        "atk": 107,
+        "cardLimitBreakMstId": 43000063
+    },
+    {
+        "atk": 129,
+        "cardLimitBreakMstId": 43000064
+    },
+    {
+        "atk": 153,
+        "cardLimitBreakMstId": 43000065
+    },
+    {
+        "atk": 29,
+        "cardLimitBreakMstId": 43000070
+    },
+    {
+        "atk": 46,
+        "cardLimitBreakMstId": 43000071
+    },
+    {
+        "atk": 64,
+        "cardLimitBreakMstId": 43000072
+    },
+    {
+        "atk": 82,
+        "cardLimitBreakMstId": 43000073
+    },
+    {
+        "atk": 99,
+        "cardLimitBreakMstId": 43000074
+    },
+    {
+        "atk": 118,
+        "cardLimitBreakMstId": 43000075
+    },
+    {
+        "atk": 35,
+        "cardLimitBreakMstId": 43000080
+    },
+    {
+        "atk": 57,
+        "cardLimitBreakMstId": 43000081
+    },
+    {
+        "atk": 79,
+        "cardLimitBreakMstId": 43000082
+    },
+    {
+        "atk": 101,
+        "cardLimitBreakMstId": 43000083
+    },
+    {
+        "atk": 123,
+        "cardLimitBreakMstId": 43000084
+    },
+    {
+        "atk": 145,
+        "cardLimitBreakMstId": 43000085
+    },
+    {
+        "atk": 29,
+        "cardLimitBreakMstId": 43000090
+    },
+    {
+        "atk": 47,
+        "cardLimitBreakMstId": 43000091
+    },
+    {
+        "atk": 65,
+        "cardLimitBreakMstId": 43000092
+    },
+    {
+        "atk": 83,
+        "cardLimitBreakMstId": 43000093
+    },
+    {
+        "atk": 101,
+        "cardLimitBreakMstId": 43000094
+    },
+    {
+        "atk": 120,
+        "cardLimitBreakMstId": 43000095
+    },
+    {
+        "atk": 31,
+        "cardLimitBreakMstId": 43000100
+    },
+    {
+        "atk": 50,
+        "cardLimitBreakMstId": 43000101
+    },
+    {
+        "atk": 69,
+        "cardLimitBreakMstId": 43000102
+    },
+    {
+        "atk": 89,
+        "cardLimitBreakMstId": 43000103
+    },
+    {
+        "atk": 108,
+        "cardLimitBreakMstId": 43000104
+    },
+    {
+        "atk": 128,
+        "cardLimitBreakMstId": 43000105
+    },
+    {
+        "atk": 28,
+        "cardLimitBreakMstId": 43000110
+    },
+    {
+        "atk": 45,
+        "cardLimitBreakMstId": 43000111
+    },
+    {
+        "atk": 62,
+        "cardLimitBreakMstId": 43000112
+    },
+    {
+        "atk": 79,
+        "cardLimitBreakMstId": 43000113
+    },
+    {
+        "atk": 96,
+        "cardLimitBreakMstId": 43000114
+    },
+    {
+        "atk": 114,
+        "cardLimitBreakMstId": 43000115
+    },
+    {
+        "atk": 31,
+        "cardLimitBreakMstId": 43000120
+    },
+    {
+        "atk": 50,
+        "cardLimitBreakMstId": 43000121
+    },
+    {
+        "atk": 68,
+        "cardLimitBreakMstId": 43000122
+    },
+    {
+        "atk": 88,
+        "cardLimitBreakMstId": 43000123
+    },
+    {
+        "atk": 107,
+        "cardLimitBreakMstId": 43000124
+    },
+    {
+        "atk": 126,
+        "cardLimitBreakMstId": 43000125
+    },
+    {
+        "atk": 41,
+        "cardLimitBreakMstId": 43000130
+    },
+    {
+        "atk": 67,
+        "cardLimitBreakMstId": 43000131
+    },
+    {
+        "atk": 92,
+        "cardLimitBreakMstId": 43000132
+    },
+    {
+        "atk": 118,
+        "cardLimitBreakMstId": 43000133
+    },
+    {
+        "atk": 143,
+        "cardLimitBreakMstId": 43000134
+    },
+    {
+        "atk": 169,
+        "cardLimitBreakMstId": 43000135
+    },
+    {
+        "atk": 42,
+        "cardLimitBreakMstId": 43000140
+    },
+    {
+        "atk": 68,
+        "cardLimitBreakMstId": 43000141
+    },
+    {
+        "atk": 94,
+        "cardLimitBreakMstId": 43000142
+    },
+    {
+        "atk": 121,
+        "cardLimitBreakMstId": 43000143
+    },
+    {
+        "atk": 147,
+        "cardLimitBreakMstId": 43000144
+    },
+    {
+        "atk": 173,
+        "cardLimitBreakMstId": 43000145
+    },
+    {
+        "atk": 31,
+        "cardLimitBreakMstId": 43000150
+    },
+    {
+        "atk": 51,
+        "cardLimitBreakMstId": 43000151
+    },
+    {
+        "atk": 70,
+        "cardLimitBreakMstId": 43000152
+    },
+    {
+        "atk": 90,
+        "cardLimitBreakMstId": 43000153
+    },
+    {
+        "atk": 109,
+        "cardLimitBreakMstId": 43000154
+    },
+    {
+        "atk": 129,
+        "cardLimitBreakMstId": 43000155
+    },
+    {
+        "atk": 32,
+        "cardLimitBreakMstId": 43000160
+    },
+    {
+        "atk": 52,
+        "cardLimitBreakMstId": 43000161
+    },
+    {
+        "atk": 71,
+        "cardLimitBreakMstId": 43000162
+    },
+    {
+        "atk": 92,
+        "cardLimitBreakMstId": 43000163
+    },
+    {
+        "atk": 111,
+        "cardLimitBreakMstId": 43000164
+    },
+    {
+        "atk": 132,
+        "cardLimitBreakMstId": 43000165
+    },
+    {
+        "atk": 29,
+        "cardLimitBreakMstId": 43000170
+    },
+    {
+        "atk": 46,
+        "cardLimitBreakMstId": 43000171
+    },
+    {
+        "atk": 64,
+        "cardLimitBreakMstId": 43000172
+    },
+    {
+        "atk": 82,
+        "cardLimitBreakMstId": 43000173
+    },
+    {
+        "atk": 99,
+        "cardLimitBreakMstId": 43000174
+    },
+    {
+        "atk": 117,
+        "cardLimitBreakMstId": 43000175
+    },
+    {
+        "atk": 29,
+        "cardLimitBreakMstId": 43000180
+    },
+    {
+        "atk": 46,
+        "cardLimitBreakMstId": 43000181
+    },
+    {
+        "atk": 63,
+        "cardLimitBreakMstId": 43000182
+    },
+    {
+        "atk": 82,
+        "cardLimitBreakMstId": 43000183
+    },
+    {
+        "atk": 99,
+        "cardLimitBreakMstId": 43000184
+    },
+    {
+        "atk": 117,
+        "cardLimitBreakMstId": 43000185
+    },
+    {
+        "atk": 26,
+        "cardLimitBreakMstId": 43000190
+    },
+    {
+        "atk": 42,
+        "cardLimitBreakMstId": 43000191
+    },
+    {
+        "atk": 58,
+        "cardLimitBreakMstId": 43000192
+    },
+    {
+        "atk": 74,
+        "cardLimitBreakMstId": 43000193
+    },
+    {
+        "atk": 90,
+        "cardLimitBreakMstId": 43000194
+    },
+    {
+        "atk": 107,
+        "cardLimitBreakMstId": 43000195
+    },
+    {
+        "atk": 37,
+        "cardLimitBreakMstId": 43000200
+    },
+    {
+        "atk": 60,
+        "cardLimitBreakMstId": 43000201
+    },
+    {
+        "atk": 83,
+        "cardLimitBreakMstId": 43000202
+    },
+    {
+        "atk": 107,
+        "cardLimitBreakMstId": 43000203
+    },
+    {
+        "atk": 130,
+        "cardLimitBreakMstId": 43000204
+    },
+    {
+        "atk": 153,
+        "cardLimitBreakMstId": 43000205
+    },
+    {
+        "atk": 38,
+        "cardLimitBreakMstId": 43000210
+    },
+    {
+        "atk": 61,
+        "cardLimitBreakMstId": 43000211
+    },
+    {
+        "atk": 84,
+        "cardLimitBreakMstId": 43000212
+    },
+    {
+        "atk": 108,
+        "cardLimitBreakMstId": 43000213
+    },
+    {
+        "atk": 131,
+        "cardLimitBreakMstId": 43000214
+    },
+    {
+        "atk": 155,
+        "cardLimitBreakMstId": 43000215
+    },
+    {
+        "atk": 35,
+        "cardLimitBreakMstId": 43000220
+    },
+    {
+        "atk": 57,
+        "cardLimitBreakMstId": 43000221
+    },
+    {
+        "atk": 79,
+        "cardLimitBreakMstId": 43000222
+    },
+    {
+        "atk": 101,
+        "cardLimitBreakMstId": 43000223
+    },
+    {
+        "atk": 123,
+        "cardLimitBreakMstId": 43000224
+    },
+    {
+        "atk": 145,
+        "cardLimitBreakMstId": 43000225
+    },
+    {
+        "atk": 26,
+        "cardLimitBreakMstId": 43000230
+    },
+    {
+        "atk": 41,
+        "cardLimitBreakMstId": 43000231
+    },
+    {
+        "atk": 57,
+        "cardLimitBreakMstId": 43000232
+    },
+    {
+        "atk": 74,
+        "cardLimitBreakMstId": 43000233
+    },
+    {
+        "atk": 89,
+        "cardLimitBreakMstId": 43000234
+    },
+    {
+        "atk": 106,
+        "cardLimitBreakMstId": 43000235
+    },
+    {
+        "atk": 43,
+        "cardLimitBreakMstId": 43000240
+    },
+    {
+        "atk": 69,
+        "cardLimitBreakMstId": 43000241
+    },
+    {
+        "atk": 95,
+        "cardLimitBreakMstId": 43000242
+    },
+    {
+        "atk": 122,
+        "cardLimitBreakMstId": 43000243
+    },
+    {
+        "atk": 148,
+        "cardLimitBreakMstId": 43000244
+    },
+    {
+        "atk": 175,
+        "cardLimitBreakMstId": 43000245
+    },
+    {
+        "atk": 29,
+        "cardLimitBreakMstId": 43000250
+    },
+    {
+        "atk": 47,
+        "cardLimitBreakMstId": 43000251
+    },
+    {
+        "atk": 65,
+        "cardLimitBreakMstId": 43000252
+    },
+    {
+        "atk": 84,
+        "cardLimitBreakMstId": 43000253
+    },
+    {
+        "atk": 102,
+        "cardLimitBreakMstId": 43000254
+    },
+    {
+        "atk": 121,
+        "cardLimitBreakMstId": 43000255
+    },
+    {
+        "atk": 31,
+        "cardLimitBreakMstId": 43000260
+    },
+    {
+        "atk": 49,
+        "cardLimitBreakMstId": 43000261
+    },
+    {
+        "atk": 68,
+        "cardLimitBreakMstId": 43000262
+    },
+    {
+        "atk": 88,
+        "cardLimitBreakMstId": 43000263
+    },
+    {
+        "atk": 106,
+        "cardLimitBreakMstId": 43000264
+    },
+    {
+        "atk": 126,
+        "cardLimitBreakMstId": 43000265
+    },
+    {
+        "atk": 31,
+        "cardLimitBreakMstId": 43000270
+    },
+    {
+        "atk": 50,
+        "cardLimitBreakMstId": 43000271
+    },
+    {
+        "atk": 68,
+        "cardLimitBreakMstId": 43000272
+    },
+    {
+        "atk": 88,
+        "cardLimitBreakMstId": 43000273
+    },
+    {
+        "atk": 107,
+        "cardLimitBreakMstId": 43000274
+    },
+    {
+        "atk": 127,
+        "cardLimitBreakMstId": 43000275
+    },
+    {
+        "atk": 43,
+        "cardLimitBreakMstId": 43000280
+    },
+    {
+        "atk": 69,
+        "cardLimitBreakMstId": 43000281
+    },
+    {
+        "atk": 95,
+        "cardLimitBreakMstId": 43000282
+    },
+    {
+        "atk": 122,
+        "cardLimitBreakMstId": 43000283
+    },
+    {
+        "atk": 148,
+        "cardLimitBreakMstId": 43000284
+    },
+    {
+        "atk": 175,
+        "cardLimitBreakMstId": 43000285
+    },
+    {
+        "atk": 42,
+        "cardLimitBreakMstId": 43000290
+    },
+    {
+        "atk": 68,
+        "cardLimitBreakMstId": 43000291
+    },
+    {
+        "atk": 93,
+        "cardLimitBreakMstId": 43000292
+    },
+    {
+        "atk": 120,
+        "cardLimitBreakMstId": 43000293
+    },
+    {
+        "atk": 145,
+        "cardLimitBreakMstId": 43000294
+    },
+    {
+        "atk": 172,
+        "cardLimitBreakMstId": 43000295
+    },
+    {
+        "atk": 28,
+        "cardLimitBreakMstId": 43000300
+    },
+    {
+        "atk": 45,
+        "cardLimitBreakMstId": 43000301
+    },
+    {
+        "atk": 63,
+        "cardLimitBreakMstId": 43000302
+    },
+    {
+        "atk": 80,
+        "cardLimitBreakMstId": 43000303
+    },
+    {
+        "atk": 98,
+        "cardLimitBreakMstId": 43000304
+    },
+    {
+        "atk": 116,
+        "cardLimitBreakMstId": 43000305
+    },
+    {
+        "atk": 32,
+        "cardLimitBreakMstId": 43000310
+    },
+    {
+        "atk": 52,
+        "cardLimitBreakMstId": 43000311
+    },
+    {
+        "atk": 72,
+        "cardLimitBreakMstId": 43000312
+    },
+    {
+        "atk": 92,
+        "cardLimitBreakMstId": 43000313
+    },
+    {
+        "atk": 112,
+        "cardLimitBreakMstId": 43000314
+    },
+    {
+        "atk": 132,
+        "cardLimitBreakMstId": 43000315
+    },
+    {
+        "atk": 29,
+        "cardLimitBreakMstId": 43000320
+    },
+    {
+        "atk": 46,
+        "cardLimitBreakMstId": 43000321
+    },
+    {
+        "atk": 63,
+        "cardLimitBreakMstId": 43000322
+    },
+    {
+        "atk": 81,
+        "cardLimitBreakMstId": 43000323
+    },
+    {
+        "atk": 99,
+        "cardLimitBreakMstId": 43000324
+    },
+    {
+        "atk": 117,
+        "cardLimitBreakMstId": 43000325
+    },
+    {
+        "atk": 28,
+        "cardLimitBreakMstId": 43000330
+    },
+    {
+        "atk": 46,
+        "cardLimitBreakMstId": 43000331
+    },
+    {
+        "atk": 63,
+        "cardLimitBreakMstId": 43000332
+    },
+    {
+        "atk": 81,
+        "cardLimitBreakMstId": 43000333
+    },
+    {
+        "atk": 98,
+        "cardLimitBreakMstId": 43000334
+    },
+    {
+        "atk": 116,
+        "cardLimitBreakMstId": 43000335
+    },
+    {
+        "atk": 42,
+        "cardLimitBreakMstId": 43000340
+    },
+    {
+        "atk": 67,
+        "cardLimitBreakMstId": 43000341
+    },
+    {
+        "atk": 92,
+        "cardLimitBreakMstId": 43000342
+    },
+    {
+        "atk": 118,
+        "cardLimitBreakMstId": 43000343
+    },
+    {
+        "atk": 144,
+        "cardLimitBreakMstId": 43000344
+    },
+    {
+        "atk": 170,
+        "cardLimitBreakMstId": 43000345
+    },
+    {
+        "atk": 27,
+        "cardLimitBreakMstId": 43000350
+    },
+    {
+        "atk": 44,
+        "cardLimitBreakMstId": 43000351
+    },
+    {
+        "atk": 60,
+        "cardLimitBreakMstId": 43000352
+    },
+    {
+        "atk": 78,
+        "cardLimitBreakMstId": 43000353
+    },
+    {
+        "atk": 94,
+        "cardLimitBreakMstId": 43000354
+    },
+    {
+        "atk": 112,
+        "cardLimitBreakMstId": 43000355
+    },
+    {
+        "atk": 32,
+        "cardLimitBreakMstId": 43000360
+    },
+    {
+        "atk": 51,
+        "cardLimitBreakMstId": 43000361
+    },
+    {
+        "atk": 71,
+        "cardLimitBreakMstId": 43000362
+    },
+    {
+        "atk": 91,
+        "cardLimitBreakMstId": 43000363
+    },
+    {
+        "atk": 110,
+        "cardLimitBreakMstId": 43000364
+    },
+    {
+        "atk": 130,
+        "cardLimitBreakMstId": 43000365
+    },
+    {
+        "atk": 28,
+        "cardLimitBreakMstId": 43000370
+    },
+    {
+        "atk": 45,
+        "cardLimitBreakMstId": 43000371
+    },
+    {
+        "atk": 62,
+        "cardLimitBreakMstId": 43000372
+    },
+    {
+        "atk": 80,
+        "cardLimitBreakMstId": 43000373
+    },
+    {
+        "atk": 97,
+        "cardLimitBreakMstId": 43000374
+    },
+    {
+        "atk": 114,
+        "cardLimitBreakMstId": 43000375
+    },
+    {
+        "atk": 41,
+        "cardLimitBreakMstId": 43000380
+    },
+    {
+        "atk": 66,
+        "cardLimitBreakMstId": 43000381
+    },
+    {
+        "atk": 92,
+        "cardLimitBreakMstId": 43000382
+    },
+    {
+        "atk": 118,
+        "cardLimitBreakMstId": 43000383
+    },
+    {
+        "atk": 143,
+        "cardLimitBreakMstId": 43000384
+    },
+    {
+        "atk": 169,
+        "cardLimitBreakMstId": 43000385
+    },
+    {
+        "atk": 58,
+        "cardLimitBreakMstId": 51000010
+    },
+    {
+        "atk": 88,
+        "cardLimitBreakMstId": 51000011
+    },
+    {
+        "atk": 119,
+        "cardLimitBreakMstId": 51000012
+    },
+    {
+        "atk": 149,
+        "cardLimitBreakMstId": 51000013
+    },
+    {
+        "atk": 180,
+        "cardLimitBreakMstId": 51000014
+    },
+    {
+        "atk": 210,
+        "cardLimitBreakMstId": 51000015
+    },
+    {
+        "atk": 56,
+        "cardLimitBreakMstId": 51000020
+    },
+    {
+        "atk": 86,
+        "cardLimitBreakMstId": 51000021
+    },
+    {
+        "atk": 115,
+        "cardLimitBreakMstId": 51000022
+    },
+    {
+        "atk": 145,
+        "cardLimitBreakMstId": 51000023
+    },
+    {
+        "atk": 174,
+        "cardLimitBreakMstId": 51000024
+    },
+    {
+        "atk": 204,
+        "cardLimitBreakMstId": 51000025
+    },
+    {
+        "atk": 52,
+        "cardLimitBreakMstId": 51000030
+    },
+    {
+        "atk": 79,
+        "cardLimitBreakMstId": 51000031
+    },
+    {
+        "atk": 106,
+        "cardLimitBreakMstId": 51000032
+    },
+    {
+        "atk": 133,
+        "cardLimitBreakMstId": 51000033
+    },
+    {
+        "atk": 160,
+        "cardLimitBreakMstId": 51000034
+    },
+    {
+        "atk": 187,
+        "cardLimitBreakMstId": 51000035
+    },
+    {
+        "atk": 75,
+        "cardLimitBreakMstId": 51000040
+    },
+    {
+        "atk": 114,
+        "cardLimitBreakMstId": 51000041
+    },
+    {
+        "atk": 154,
+        "cardLimitBreakMstId": 51000042
+    },
+    {
+        "atk": 193,
+        "cardLimitBreakMstId": 51000043
+    },
+    {
+        "atk": 232,
+        "cardLimitBreakMstId": 51000044
+    },
+    {
+        "atk": 271,
+        "cardLimitBreakMstId": 51000045
+    },
+    {
+        "atk": 60,
+        "cardLimitBreakMstId": 51000050
+    },
+    {
+        "atk": 92,
+        "cardLimitBreakMstId": 51000051
+    },
+    {
+        "atk": 123,
+        "cardLimitBreakMstId": 51000052
+    },
+    {
+        "atk": 155,
+        "cardLimitBreakMstId": 51000053
+    },
+    {
+        "atk": 186,
+        "cardLimitBreakMstId": 51000054
+    },
+    {
+        "atk": 218,
+        "cardLimitBreakMstId": 51000055
+    },
+    {
+        "atk": 51,
+        "cardLimitBreakMstId": 51000060
+    },
+    {
+        "atk": 78,
+        "cardLimitBreakMstId": 51000061
+    },
+    {
+        "atk": 105,
+        "cardLimitBreakMstId": 51000062
+    },
+    {
+        "atk": 132,
+        "cardLimitBreakMstId": 51000063
+    },
+    {
+        "atk": 159,
+        "cardLimitBreakMstId": 51000064
+    },
+    {
+        "atk": 186,
+        "cardLimitBreakMstId": 51000065
+    },
+    {
+        "atk": 57,
+        "cardLimitBreakMstId": 51000070
+    },
+    {
+        "atk": 86,
+        "cardLimitBreakMstId": 51000071
+    },
+    {
+        "atk": 116,
+        "cardLimitBreakMstId": 51000072
+    },
+    {
+        "atk": 146,
+        "cardLimitBreakMstId": 51000073
+    },
+    {
+        "atk": 175,
+        "cardLimitBreakMstId": 51000074
+    },
+    {
+        "atk": 205,
+        "cardLimitBreakMstId": 51000075
+    },
+    {
+        "atk": 38,
+        "cardLimitBreakMstId": 51000080
+    },
+    {
+        "atk": 58,
+        "cardLimitBreakMstId": 51000081
+    },
+    {
+        "atk": 78,
+        "cardLimitBreakMstId": 51000082
+    },
+    {
+        "atk": 98,
+        "cardLimitBreakMstId": 51000083
+    },
+    {
+        "atk": 119,
+        "cardLimitBreakMstId": 51000084
+    },
+    {
+        "atk": 139,
+        "cardLimitBreakMstId": 51000085
+    },
+    {
+        "atk": 98,
+        "cardLimitBreakMstId": 51000090
+    },
+    {
+        "atk": 150,
+        "cardLimitBreakMstId": 51000091
+    },
+    {
+        "atk": 201,
+        "cardLimitBreakMstId": 51000092
+    },
+    {
+        "atk": 253,
+        "cardLimitBreakMstId": 51000093
+    },
+    {
+        "atk": 304,
+        "cardLimitBreakMstId": 51000094
+    },
+    {
+        "atk": 356,
+        "cardLimitBreakMstId": 51000095
+    },
+    {
+        "atk": 46,
+        "cardLimitBreakMstId": 51000100
+    },
+    {
+        "atk": 70,
+        "cardLimitBreakMstId": 51000101
+    },
+    {
+        "atk": 94,
+        "cardLimitBreakMstId": 51000102
+    },
+    {
+        "atk": 119,
+        "cardLimitBreakMstId": 51000103
+    },
+    {
+        "atk": 143,
+        "cardLimitBreakMstId": 51000104
+    },
+    {
+        "atk": 167,
+        "cardLimitBreakMstId": 51000105
+    },
+    {
+        "atk": 57,
+        "cardLimitBreakMstId": 51000110
+    },
+    {
+        "atk": 87,
+        "cardLimitBreakMstId": 51000111
+    },
+    {
+        "atk": 117,
+        "cardLimitBreakMstId": 51000112
+    },
+    {
+        "atk": 147,
+        "cardLimitBreakMstId": 51000113
+    },
+    {
+        "atk": 177,
+        "cardLimitBreakMstId": 51000114
+    },
+    {
+        "atk": 207,
+        "cardLimitBreakMstId": 51000115
+    },
+    {
+        "atk": 59,
+        "cardLimitBreakMstId": 51000120
+    },
+    {
+        "atk": 90,
+        "cardLimitBreakMstId": 51000121
+    },
+    {
+        "atk": 120,
+        "cardLimitBreakMstId": 51000122
+    },
+    {
+        "atk": 151,
+        "cardLimitBreakMstId": 51000123
+    },
+    {
+        "atk": 182,
+        "cardLimitBreakMstId": 51000124
+    },
+    {
+        "atk": 213,
+        "cardLimitBreakMstId": 51000125
+    },
+    {
+        "atk": 57,
+        "cardLimitBreakMstId": 51000130
+    },
+    {
+        "atk": 88,
+        "cardLimitBreakMstId": 51000131
+    },
+    {
+        "atk": 118,
+        "cardLimitBreakMstId": 51000132
+    },
+    {
+        "atk": 148,
+        "cardLimitBreakMstId": 51000133
+    },
+    {
+        "atk": 178,
+        "cardLimitBreakMstId": 51000134
+    },
+    {
+        "atk": 208,
+        "cardLimitBreakMstId": 51000135
+    },
+    {
+        "atk": 74,
+        "cardLimitBreakMstId": 51000140
+    },
+    {
+        "atk": 113,
+        "cardLimitBreakMstId": 51000141
+    },
+    {
+        "atk": 152,
+        "cardLimitBreakMstId": 51000142
+    },
+    {
+        "atk": 191,
+        "cardLimitBreakMstId": 51000143
+    },
+    {
+        "atk": 230,
+        "cardLimitBreakMstId": 51000144
+    },
+    {
+        "atk": 269,
+        "cardLimitBreakMstId": 51000145
+    },
+    {
+        "atk": 60,
+        "cardLimitBreakMstId": 51000150
+    },
+    {
+        "atk": 91,
+        "cardLimitBreakMstId": 51000151
+    },
+    {
+        "atk": 123,
+        "cardLimitBreakMstId": 51000152
+    },
+    {
+        "atk": 154,
+        "cardLimitBreakMstId": 51000153
+    },
+    {
+        "atk": 186,
+        "cardLimitBreakMstId": 51000154
+    },
+    {
+        "atk": 217,
+        "cardLimitBreakMstId": 51000155
+    },
+    {
+        "atk": 52,
+        "cardLimitBreakMstId": 51000160
+    },
+    {
+        "atk": 79,
+        "cardLimitBreakMstId": 51000161
+    },
+    {
+        "atk": 106,
+        "cardLimitBreakMstId": 51000162
+    },
+    {
+        "atk": 133,
+        "cardLimitBreakMstId": 51000163
+    },
+    {
+        "atk": 160,
+        "cardLimitBreakMstId": 51000164
+    },
+    {
+        "atk": 187,
+        "cardLimitBreakMstId": 51000165
+    },
+    {
+        "atk": 103,
+        "cardLimitBreakMstId": 51000170
+    },
+    {
+        "atk": 157,
+        "cardLimitBreakMstId": 51000171
+    },
+    {
+        "atk": 210,
+        "cardLimitBreakMstId": 51000172
+    },
+    {
+        "atk": 264,
+        "cardLimitBreakMstId": 51000173
+    },
+    {
+        "atk": 318,
+        "cardLimitBreakMstId": 51000174
+    },
+    {
+        "atk": 372,
+        "cardLimitBreakMstId": 51000175
+    },
+    {
+        "atk": 48,
+        "cardLimitBreakMstId": 51000180
+    },
+    {
+        "atk": 74,
+        "cardLimitBreakMstId": 51000181
+    },
+    {
+        "atk": 99,
+        "cardLimitBreakMstId": 51000182
+    },
+    {
+        "atk": 125,
+        "cardLimitBreakMstId": 51000183
+    },
+    {
+        "atk": 150,
+        "cardLimitBreakMstId": 51000184
+    },
+    {
+        "atk": 176,
+        "cardLimitBreakMstId": 51000185
+    },
+    {
+        "atk": 59,
+        "cardLimitBreakMstId": 51000190
+    },
+    {
+        "atk": 91,
+        "cardLimitBreakMstId": 51000191
+    },
+    {
+        "atk": 122,
+        "cardLimitBreakMstId": 51000192
+    },
+    {
+        "atk": 153,
+        "cardLimitBreakMstId": 51000193
+    },
+    {
+        "atk": 184,
+        "cardLimitBreakMstId": 51000194
+    },
+    {
+        "atk": 215,
+        "cardLimitBreakMstId": 51000195
+    },
+    {
+        "atk": 31,
+        "cardLimitBreakMstId": 51000200
+    },
+    {
+        "atk": 47,
+        "cardLimitBreakMstId": 51000201
+    },
+    {
+        "atk": 64,
+        "cardLimitBreakMstId": 51000202
+    },
+    {
+        "atk": 80,
+        "cardLimitBreakMstId": 51000203
+    },
+    {
+        "atk": 96,
+        "cardLimitBreakMstId": 51000204
+    },
+    {
+        "atk": 113,
+        "cardLimitBreakMstId": 51000205
+    },
+    {
+        "atk": 56,
+        "cardLimitBreakMstId": 51000210
+    },
+    {
+        "atk": 85,
+        "cardLimitBreakMstId": 51000211
+    },
+    {
+        "atk": 114,
+        "cardLimitBreakMstId": 51000212
+    },
+    {
+        "atk": 143,
+        "cardLimitBreakMstId": 51000213
+    },
+    {
+        "atk": 172,
+        "cardLimitBreakMstId": 51000214
+    },
+    {
+        "atk": 202,
+        "cardLimitBreakMstId": 51000215
+    },
+    {
+        "atk": 74,
+        "cardLimitBreakMstId": 51000220
+    },
+    {
+        "atk": 113,
+        "cardLimitBreakMstId": 51000221
+    },
+    {
+        "atk": 152,
+        "cardLimitBreakMstId": 51000222
+    },
+    {
+        "atk": 190,
+        "cardLimitBreakMstId": 51000223
+    },
+    {
+        "atk": 229,
+        "cardLimitBreakMstId": 51000224
+    },
+    {
+        "atk": 268,
+        "cardLimitBreakMstId": 51000225
+    },
+    {
+        "atk": 59,
+        "cardLimitBreakMstId": 51000230
+    },
+    {
+        "atk": 89,
+        "cardLimitBreakMstId": 51000231
+    },
+    {
+        "atk": 120,
+        "cardLimitBreakMstId": 51000232
+    },
+    {
+        "atk": 151,
+        "cardLimitBreakMstId": 51000233
+    },
+    {
+        "atk": 181,
+        "cardLimitBreakMstId": 51000234
+    },
+    {
+        "atk": 212,
+        "cardLimitBreakMstId": 51000235
+    },
+    {
+        "atk": 99,
+        "cardLimitBreakMstId": 51000240
+    },
+    {
+        "atk": 151,
+        "cardLimitBreakMstId": 51000241
+    },
+    {
+        "atk": 203,
+        "cardLimitBreakMstId": 51000242
+    },
+    {
+        "atk": 254,
+        "cardLimitBreakMstId": 51000243
+    },
+    {
+        "atk": 306,
+        "cardLimitBreakMstId": 51000244
+    },
+    {
+        "atk": 358,
+        "cardLimitBreakMstId": 51000245
+    },
+    {
+        "atk": 14,
+        "cardLimitBreakMstId": 51000250
+    },
+    {
+        "atk": 22,
+        "cardLimitBreakMstId": 51000251
+    },
+    {
+        "atk": 31,
+        "cardLimitBreakMstId": 51000252
+    },
+    {
+        "atk": 39,
+        "cardLimitBreakMstId": 51000253
+    },
+    {
+        "atk": 48,
+        "cardLimitBreakMstId": 51000254
+    },
+    {
+        "atk": 57,
+        "cardLimitBreakMstId": 51000255
+    },
+    {
+        "atk": 11,
+        "cardLimitBreakMstId": 51000260
+    },
+    {
+        "atk": 18,
+        "cardLimitBreakMstId": 51000261
+    },
+    {
+        "atk": 26,
+        "cardLimitBreakMstId": 51000262
+    },
+    {
+        "atk": 33,
+        "cardLimitBreakMstId": 51000263
+    },
+    {
+        "atk": 40,
+        "cardLimitBreakMstId": 51000264
+    },
+    {
+        "atk": 48,
+        "cardLimitBreakMstId": 51000265
+    },
+    {
+        "atk": 13,
+        "cardLimitBreakMstId": 51000270
+    },
+    {
+        "atk": 21,
+        "cardLimitBreakMstId": 51000271
+    },
+    {
+        "atk": 29,
+        "cardLimitBreakMstId": 51000272
+    },
+    {
+        "atk": 37,
+        "cardLimitBreakMstId": 51000273
+    },
+    {
+        "atk": 45,
+        "cardLimitBreakMstId": 51000274
+    },
+    {
+        "atk": 54,
+        "cardLimitBreakMstId": 51000275
+    },
+    {
+        "atk": 43,
+        "cardLimitBreakMstId": 51000280
+    },
+    {
+        "atk": 66,
+        "cardLimitBreakMstId": 51000281
+    },
+    {
+        "atk": 89,
+        "cardLimitBreakMstId": 51000282
+    },
+    {
+        "atk": 111,
+        "cardLimitBreakMstId": 51000283
+    },
+    {
+        "atk": 134,
+        "cardLimitBreakMstId": 51000284
+    },
+    {
+        "atk": 157,
+        "cardLimitBreakMstId": 51000285
+    },
+    {
+        "atk": 44,
+        "cardLimitBreakMstId": 51000290
+    },
+    {
+        "atk": 67,
+        "cardLimitBreakMstId": 51000291
+    },
+    {
+        "atk": 90,
+        "cardLimitBreakMstId": 51000292
+    },
+    {
+        "atk": 113,
+        "cardLimitBreakMstId": 51000293
+    },
+    {
+        "atk": 137,
+        "cardLimitBreakMstId": 51000294
+    },
+    {
+        "atk": 160,
+        "cardLimitBreakMstId": 51000295
+    },
+    {
+        "atk": 50,
+        "cardLimitBreakMstId": 51000300
+    },
+    {
+        "atk": 76,
+        "cardLimitBreakMstId": 51000301
+    },
+    {
+        "atk": 103,
+        "cardLimitBreakMstId": 51000302
+    },
+    {
+        "atk": 129,
+        "cardLimitBreakMstId": 51000303
+    },
+    {
+        "atk": 155,
+        "cardLimitBreakMstId": 51000304
+    },
+    {
+        "atk": 182,
+        "cardLimitBreakMstId": 51000305
+    },
+    {
+        "atk": 111,
+        "cardLimitBreakMstId": 51000310
+    },
+    {
+        "atk": 170,
+        "cardLimitBreakMstId": 51000311
+    },
+    {
+        "atk": 228,
+        "cardLimitBreakMstId": 51000312
+    },
+    {
+        "atk": 286,
+        "cardLimitBreakMstId": 51000313
+    },
+    {
+        "atk": 344,
+        "cardLimitBreakMstId": 51000314
+    },
+    {
+        "atk": 403,
+        "cardLimitBreakMstId": 51000315
+    },
+    {
+        "atk": 88,
+        "cardLimitBreakMstId": 51000320
+    },
+    {
+        "atk": 134,
+        "cardLimitBreakMstId": 51000321
+    },
+    {
+        "atk": 180,
+        "cardLimitBreakMstId": 51000322
+    },
+    {
+        "atk": 226,
+        "cardLimitBreakMstId": 51000323
+    },
+    {
+        "atk": 272,
+        "cardLimitBreakMstId": 51000324
+    },
+    {
+        "atk": 318,
+        "cardLimitBreakMstId": 51000325
+    },
+    {
+        "atk": 33,
+        "cardLimitBreakMstId": 54000010
+    },
+    {
+        "atk": 53,
+        "cardLimitBreakMstId": 54000011
+    },
+    {
+        "atk": 73,
+        "cardLimitBreakMstId": 54000012
+    },
+    {
+        "atk": 94,
+        "cardLimitBreakMstId": 54000013
+    },
+    {
+        "atk": 115,
+        "cardLimitBreakMstId": 54000014
+    },
+    {
+        "atk": 136,
+        "cardLimitBreakMstId": 54000015
+    },
+    {
+        "atk": 40,
+        "cardLimitBreakMstId": 54000020
+    },
+    {
+        "atk": 65,
+        "cardLimitBreakMstId": 54000021
+    },
+    {
+        "atk": 90,
+        "cardLimitBreakMstId": 54000022
+    },
+    {
+        "atk": 115,
+        "cardLimitBreakMstId": 54000023
+    },
+    {
+        "atk": 140,
+        "cardLimitBreakMstId": 54000024
+    },
+    {
+        "atk": 165,
+        "cardLimitBreakMstId": 54000025
+    },
+    {
+        "atk": 54,
+        "cardLimitBreakMstId": 54000030
+    },
+    {
+        "atk": 86,
+        "cardLimitBreakMstId": 54000031
+    },
+    {
+        "atk": 118,
+        "cardLimitBreakMstId": 54000032
+    },
+    {
+        "atk": 152,
+        "cardLimitBreakMstId": 54000033
+    },
+    {
+        "atk": 185,
+        "cardLimitBreakMstId": 54000034
+    },
+    {
+        "atk": 218,
+        "cardLimitBreakMstId": 54000035
+    },
+    {
+        "atk": 55,
+        "cardLimitBreakMstId": 54000040
+    },
+    {
+        "atk": 89,
+        "cardLimitBreakMstId": 54000041
+    },
+    {
+        "atk": 122,
+        "cardLimitBreakMstId": 54000042
+    },
+    {
+        "atk": 157,
+        "cardLimitBreakMstId": 54000043
+    },
+    {
+        "atk": 190,
+        "cardLimitBreakMstId": 54000044
+    },
+    {
+        "atk": 225,
+        "cardLimitBreakMstId": 54000045
+    },
+    {
+        "atk": 38,
+        "cardLimitBreakMstId": 54000050
+    },
+    {
+        "atk": 61,
+        "cardLimitBreakMstId": 54000051
+    },
+    {
+        "atk": 84,
+        "cardLimitBreakMstId": 54000052
+    },
+    {
+        "atk": 108,
+        "cardLimitBreakMstId": 54000053
+    },
+    {
+        "atk": 131,
+        "cardLimitBreakMstId": 54000054
+    },
+    {
+        "atk": 155,
+        "cardLimitBreakMstId": 54000055
+    },
+    {
+        "atk": 41,
+        "cardLimitBreakMstId": 54000060
+    },
+    {
+        "atk": 66,
+        "cardLimitBreakMstId": 54000061
+    },
+    {
+        "atk": 91,
+        "cardLimitBreakMstId": 54000062
+    },
+    {
+        "atk": 118,
+        "cardLimitBreakMstId": 54000063
+    },
+    {
+        "atk": 143,
+        "cardLimitBreakMstId": 54000064
+    },
+    {
+        "atk": 169,
+        "cardLimitBreakMstId": 54000065
+    },
+    {
+        "atk": 46,
+        "cardLimitBreakMstId": 54000070
+    },
+    {
+        "atk": 74,
+        "cardLimitBreakMstId": 54000071
+    },
+    {
+        "atk": 103,
+        "cardLimitBreakMstId": 54000072
+    },
+    {
+        "atk": 132,
+        "cardLimitBreakMstId": 54000073
+    },
+    {
+        "atk": 160,
+        "cardLimitBreakMstId": 54000074
+    },
+    {
+        "atk": 189,
+        "cardLimitBreakMstId": 54000075
+    },
+    {
+        "atk": 39,
+        "cardLimitBreakMstId": 54000080
+    },
+    {
+        "atk": 62,
+        "cardLimitBreakMstId": 54000081
+    },
+    {
+        "atk": 86,
+        "cardLimitBreakMstId": 54000082
+    },
+    {
+        "atk": 111,
+        "cardLimitBreakMstId": 54000083
+    },
+    {
+        "atk": 134,
+        "cardLimitBreakMstId": 54000084
+    },
+    {
+        "atk": 159,
+        "cardLimitBreakMstId": 54000085
+    },
+    {
+        "atk": 39,
+        "cardLimitBreakMstId": 54000090
+    },
+    {
+        "atk": 62,
+        "cardLimitBreakMstId": 54000091
+    },
+    {
+        "atk": 86,
+        "cardLimitBreakMstId": 54000092
+    },
+    {
+        "atk": 110,
+        "cardLimitBreakMstId": 54000093
+    },
+    {
+        "atk": 134,
+        "cardLimitBreakMstId": 54000094
+    },
+    {
+        "atk": 158,
+        "cardLimitBreakMstId": 54000095
+    },
+    {
+        "atk": 50,
+        "cardLimitBreakMstId": 54000100
+    },
+    {
+        "atk": 81,
+        "cardLimitBreakMstId": 54000101
+    },
+    {
+        "atk": 111,
+        "cardLimitBreakMstId": 54000102
+    },
+    {
+        "atk": 143,
+        "cardLimitBreakMstId": 54000103
+    },
+    {
+        "atk": 173,
+        "cardLimitBreakMstId": 54000104
+    },
+    {
+        "atk": 205,
+        "cardLimitBreakMstId": 54000105
+    },
+    {
+        "atk": 34,
+        "cardLimitBreakMstId": 54000110
+    },
+    {
+        "atk": 55,
+        "cardLimitBreakMstId": 54000111
+    },
+    {
+        "atk": 76,
+        "cardLimitBreakMstId": 54000112
+    },
+    {
+        "atk": 98,
+        "cardLimitBreakMstId": 54000113
+    },
+    {
+        "atk": 119,
+        "cardLimitBreakMstId": 54000114
+    },
+    {
+        "atk": 140,
+        "cardLimitBreakMstId": 54000115
+    },
+    {
+        "atk": 28,
+        "cardLimitBreakMstId": 54000120
+    },
+    {
+        "atk": 44,
+        "cardLimitBreakMstId": 54000121
+    },
+    {
+        "atk": 61,
+        "cardLimitBreakMstId": 54000122
+    },
+    {
+        "atk": 79,
+        "cardLimitBreakMstId": 54000123
+    },
+    {
+        "atk": 96,
+        "cardLimitBreakMstId": 54000124
+    },
+    {
+        "atk": 113,
+        "cardLimitBreakMstId": 54000125
+    },
+    {
+        "atk": 38,
+        "cardLimitBreakMstId": 54000130
+    },
+    {
+        "atk": 61,
+        "cardLimitBreakMstId": 54000131
+    },
+    {
+        "atk": 84,
+        "cardLimitBreakMstId": 54000132
+    },
+    {
+        "atk": 108,
+        "cardLimitBreakMstId": 54000133
+    },
+    {
+        "atk": 131,
+        "cardLimitBreakMstId": 54000134
+    },
+    {
+        "atk": 155,
+        "cardLimitBreakMstId": 54000135
+    },
+    {
+        "atk": 51,
+        "cardLimitBreakMstId": 54000140
+    },
+    {
+        "atk": 82,
+        "cardLimitBreakMstId": 54000141
+    },
+    {
+        "atk": 113,
+        "cardLimitBreakMstId": 54000142
+    },
+    {
+        "atk": 146,
+        "cardLimitBreakMstId": 54000143
+    },
+    {
+        "atk": 177,
+        "cardLimitBreakMstId": 54000144
+    },
+    {
+        "atk": 209,
+        "cardLimitBreakMstId": 54000145
+    },
+    {
+        "atk": 39,
+        "cardLimitBreakMstId": 54000150
+    },
+    {
+        "atk": 62,
+        "cardLimitBreakMstId": 54000151
+    },
+    {
+        "atk": 86,
+        "cardLimitBreakMstId": 54000152
+    },
+    {
+        "atk": 110,
+        "cardLimitBreakMstId": 54000153
+    },
+    {
+        "atk": 134,
+        "cardLimitBreakMstId": 54000154
+    },
+    {
+        "atk": 158,
+        "cardLimitBreakMstId": 54000155
+    },
+    {
+        "atk": 40,
+        "cardLimitBreakMstId": 54000160
+    },
+    {
+        "atk": 64,
+        "cardLimitBreakMstId": 54000161
+    },
+    {
+        "atk": 88,
+        "cardLimitBreakMstId": 54000162
+    },
+    {
+        "atk": 113,
+        "cardLimitBreakMstId": 54000163
+    },
+    {
+        "atk": 137,
+        "cardLimitBreakMstId": 54000164
+    },
+    {
+        "atk": 162,
+        "cardLimitBreakMstId": 54000165
+    },
+    {
+        "atk": 54,
+        "cardLimitBreakMstId": 54000170
+    },
+    {
+        "atk": 86,
+        "cardLimitBreakMstId": 54000171
+    },
+    {
+        "atk": 118,
+        "cardLimitBreakMstId": 54000172
+    },
+    {
+        "atk": 152,
+        "cardLimitBreakMstId": 54000173
+    },
+    {
+        "atk": 185,
+        "cardLimitBreakMstId": 54000174
+    },
+    {
+        "atk": 219,
+        "cardLimitBreakMstId": 54000175
+    },
+    {
+        "atk": 31,
+        "cardLimitBreakMstId": 54000180
+    },
+    {
+        "atk": 50,
+        "cardLimitBreakMstId": 54000181
+    },
+    {
+        "atk": 69,
+        "cardLimitBreakMstId": 54000182
+    },
+    {
+        "atk": 89,
+        "cardLimitBreakMstId": 54000183
+    },
+    {
+        "atk": 108,
+        "cardLimitBreakMstId": 54000184
+    },
+    {
+        "atk": 128,
+        "cardLimitBreakMstId": 54000185
+    },
+    {
+        "atk": 39,
+        "cardLimitBreakMstId": 54000190
+    },
+    {
+        "atk": 62,
+        "cardLimitBreakMstId": 54000191
+    },
+    {
+        "atk": 86,
+        "cardLimitBreakMstId": 54000192
+    },
+    {
+        "atk": 111,
+        "cardLimitBreakMstId": 54000193
+    },
+    {
+        "atk": 134,
+        "cardLimitBreakMstId": 54000194
+    },
+    {
+        "atk": 159,
+        "cardLimitBreakMstId": 54000195
+    },
+    {
+        "atk": 39,
+        "cardLimitBreakMstId": 54000200
+    },
+    {
+        "atk": 63,
+        "cardLimitBreakMstId": 54000201
+    },
+    {
+        "atk": 87,
+        "cardLimitBreakMstId": 54000202
+    },
+    {
+        "atk": 112,
+        "cardLimitBreakMstId": 54000203
+    },
+    {
+        "atk": 136,
+        "cardLimitBreakMstId": 54000204
+    },
+    {
+        "atk": 161,
+        "cardLimitBreakMstId": 54000205
+    },
+    {
+        "atk": 67,
+        "cardLimitBreakMstId": 54000210
+    },
+    {
+        "atk": 108,
+        "cardLimitBreakMstId": 54000211
+    },
+    {
+        "atk": 149,
+        "cardLimitBreakMstId": 54000212
+    },
+    {
+        "atk": 191,
+        "cardLimitBreakMstId": 54000213
+    },
+    {
+        "atk": 232,
+        "cardLimitBreakMstId": 54000214
+    },
+    {
+        "atk": 274,
+        "cardLimitBreakMstId": 54000215
+    },
+    {
+        "atk": 22,
+        "cardLimitBreakMstId": 99000010
+    },
+    {
+        "atk": 35,
+        "cardLimitBreakMstId": 99000011
+    },
+    {
+        "atk": 48,
+        "cardLimitBreakMstId": 99000012
+    },
+    {
+        "atk": 62,
+        "cardLimitBreakMstId": 99000013
+    },
+    {
+        "atk": 75,
+        "cardLimitBreakMstId": 99000014
+    },
+    {
+        "atk": 89,
+        "cardLimitBreakMstId": 99000015
+    },
+    {
+        "atk": 17,
+        "cardLimitBreakMstId": 99000020
+    },
+    {
+        "atk": 27,
+        "cardLimitBreakMstId": 99000021
+    },
+    {
+        "atk": 38,
+        "cardLimitBreakMstId": 99000022
+    },
+    {
+        "atk": 49,
+        "cardLimitBreakMstId": 99000023
+    },
+    {
+        "atk": 59,
+        "cardLimitBreakMstId": 99000024
+    },
+    {
+        "atk": 70,
+        "cardLimitBreakMstId": 99000025
+    },
+    {
+        "atk": 17,
+        "cardLimitBreakMstId": 99000030
+    },
+    {
+        "atk": 28,
+        "cardLimitBreakMstId": 99000031
+    },
+    {
+        "atk": 38,
+        "cardLimitBreakMstId": 99000032
+    },
+    {
+        "atk": 49,
+        "cardLimitBreakMstId": 99000033
+    },
+    {
+        "atk": 60,
+        "cardLimitBreakMstId": 99000034
+    },
+    {
+        "atk": 71,
+        "cardLimitBreakMstId": 99000035
+    },
+    {
+        "atk": 27,
+        "cardLimitBreakMstId": 99000040
+    },
+    {
+        "atk": 43,
+        "cardLimitBreakMstId": 99000041
+    },
+    {
+        "atk": 59,
+        "cardLimitBreakMstId": 99000042
+    },
+    {
+        "atk": 76,
+        "cardLimitBreakMstId": 99000043
+    },
+    {
+        "atk": 93,
+        "cardLimitBreakMstId": 99000044
+    },
+    {
+        "atk": 110,
+        "cardLimitBreakMstId": 99000045
+    },
+    {
+        "atk": 29,
+        "cardLimitBreakMstId": 99000050
+    },
+    {
+        "atk": 47,
+        "cardLimitBreakMstId": 99000051
+    },
+    {
+        "atk": 65,
+        "cardLimitBreakMstId": 99000052
+    },
+    {
+        "atk": 83,
+        "cardLimitBreakMstId": 99000053
+    },
+    {
+        "atk": 101,
+        "cardLimitBreakMstId": 99000054
+    },
+    {
+        "atk": 120,
+        "cardLimitBreakMstId": 99000055
+    }
+]
