@@ -23,7 +23,7 @@ import { useCharacterStore } from '../store/characterStore'
 import type { Character } from '../store/characterStore'
 
 const props = defineProps<{
-  selected: Character | null
+  selected: Character | undefined
 }>()
 
 const emit = defineEmits<{
@@ -85,7 +85,7 @@ function clear() {
 .selected-character {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.2rem;
 }
 
 .selected-character img {

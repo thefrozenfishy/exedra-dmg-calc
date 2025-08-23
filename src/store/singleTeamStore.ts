@@ -1,32 +1,35 @@
 import { defineStore } from 'pinia'
 import { Character } from './characterStore'
-import { EnemyTargetTypes } from '../Kioku'
 
 export interface TeamSlot {
-  main: Character | null
-  support?: Character | null
+  main: Character | undefined
+  support?: Character | undefined
 }
 
 export const useTeamStore = defineStore('team', {
   state: () => ({
-    slots: Array(5).fill(null).map(() => ({ main: null, support: null })) as TeamSlot[]
+    slots: Array(5).fill(null).map(() => ({})) as TeamSlot[]
   }),
   actions: {
-    setMain(slotIndex: number, member: Character) {
+    setMain(slotIndex: number, member: Character | undefined) {
+      if (member) {
         if (member.ascension < 3) {
-            member.specialLvl = Math.min(member.specialLvl, 4)
+          member.specialLvl = Math.min(member.specialLvl, 4)
         } else if (member.ascension < 5) {
-            member.specialLvl = Math.min(member.specialLvl, 7)
+          member.specialLvl = Math.min(member.specialLvl, 7)
         }
+      }
       this.slots[slotIndex].main = member
       this.save()
     },
-    setSupport(slotIndex: number, member: Character) {
+    setSupport(slotIndex: number, member: Character | undefined) {
+      if (member) {
         if (member.ascension < 3) {
-            member.specialLvl = Math.min(member.specialLvl, 4)
+          member.specialLvl = Math.min(member.specialLvl, 4)
         } else if (member.ascension < 5) {
-            member.specialLvl = Math.min(member.specialLvl, 7)
+          member.specialLvl = Math.min(member.specialLvl, 7)
         }
+      }
       this.slots[slotIndex].support = member
       this.save()
     },
@@ -46,19 +49,23 @@ export interface Enemy {
   name: string
   maxBreak: number
   defense: number
+  defenseUp: number
+  hitsToKill: number
   enabled: boolean
-  type: EnemyTargetTypes
+  isBreak: boolean
+  isWeak: boolean
+  isCrit: boolean
 }
 
 export const useEnemyStore = defineStore('enemies', {
   state: () => ({
     // TODO make it so u can just choose an event/stage and it just pulls this from mst
     enemies: [
-      { name: 'Other', type: EnemyTargetTypes.OTHER, maxBreak: 0, defense: 0, enabled: false },
-      { name: 'Proximity', type: EnemyTargetTypes.PROXIMITY, maxBreak: 0, defense: 0, enabled: false },
-      { name: 'Target', type: EnemyTargetTypes.TARGET, maxBreak: 0, defense: 0, enabled: true },
-      { name: 'Proximity', type: EnemyTargetTypes.PROXIMITY, maxBreak: 0, defense: 0, enabled: false },
-      { name: 'Other', type: EnemyTargetTypes.OTHER, maxBreak: 0, defense: 0, enabled: false }
+      { name: 'Left Other', maxBreak: 300, defense: 1500, enabled: false, defenseUp: 0, isBreak: true, isWeak: true, isCrit: true, hitsToKill: 1 },
+      { name: 'Left Proximity', maxBreak: 300, defense: 1500, enabled: false, defenseUp: 0, isBreak: true, isWeak: true, isCrit: true, hitsToKill: 1 },
+      { name: 'Target', maxBreak: 300, defense: 1500, enabled: true, defenseUp: 0, isBreak: true, isWeak: true, isCrit: true, hitsToKill: 1 },
+      { name: 'Right Proximity', maxBreak: 0, defense: 1500, enabled: false, defenseUp: 0, isBreak: true, isWeak: true, isCrit: true, hitsToKill: 1 },
+      { name: 'Right Other', maxBreak: 300, defense: 1500, enabled: false, defenseUp: 0, isBreak: true, isWeak: true, isCrit: true, hitsToKill: 1 }
     ] as Enemy[]
   }),
   actions: {

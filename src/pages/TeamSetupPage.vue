@@ -1,7 +1,17 @@
 <template>
     <div class="gallery-page">
         <h1>Kioku stats</h1>
-        Data here will be used as defaults in Single Battle Simulator, as well as being the considered Kioku in Best Team calculator
+        Data here will be used as defaults in Single Battle Simulator, as well as being the considered Kioku in Best
+        Team calculator
+
+    
+        <h2>Set default values for all Kioku:</h2>
+        <div class="default-row" v-for="stat in stats" :key="stat.key">
+            <label> {{ stat.label }}:
+                <input type="number" :min="stat.min" :max="stat.max"
+                    @input="e => setAll(stat.key, e.target.valueAsNumber)" />
+            </label>
+        </div>
 
         <!-- One section per role -->
         <div v-for="(chars, role) in groupedCharacters" :key="role" class="role-section">
@@ -15,9 +25,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted } from 'vue'
+import { defineComponent, computed, onMounted, stop } from 'vue'
 import CharacterCard from '../components/CharacterCard.vue'
 import { useCharacterStore } from '../store/characterStore'
+import { KiokuConstants } from '../Kioku'
 
 export default defineComponent({
     components: { CharacterCard },
@@ -41,7 +52,23 @@ export default defineComponent({
             return groups
         })
 
-        return { groupedCharacters }
+        const setAll = (key, newVal) => {
+            store.setCharacters(store.characters.map(char => {
+                char[key] = newVal
+                return char;
+            }))
+        }
+
+        const stats = [
+            { key: 'ascension', label: 'Ascension', min: 0, max: KiokuConstants.maxAscension },
+            { key: 'kiokuLvl', label: 'Kioku Level', min: 1, max: KiokuConstants.maxKiokuLvl },
+            { key: 'magicLvl', label: 'Magic Level', min: 0, max: KiokuConstants.maxMagicLvl },
+            { key: 'heartphialLvl', label: 'Heartphial Level', min: 1, max: KiokuConstants.maxHeartphialLvl },
+            { key: 'specialLvl', label: 'Special Level', min: 1, max: KiokuConstants.maxSpecialLvl }
+        ]
+
+
+        return { groupedCharacters, setAll, stats }
     }
 })
 </script>
@@ -65,5 +92,9 @@ export default defineComponent({
 
 .gallery-page {
     justify-content: center;
+}
+
+.default-row {
+  display: contents;
 }
 </style>

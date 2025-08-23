@@ -1,4 +1,4 @@
-import { SkillDetail, KiokuData, battleConditions, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData, elementMap } from './helpers';
+import { SkillDetail, KiokuData, magicData, MagicLevel, battleConditions, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData, elementMap } from './helpers';
 
 export function getIdx(obj: SkillDetail): number {
     return "passiveSkillMstId" in obj ? obj.passiveSkillMstId : obj.skillMstId;
@@ -43,6 +43,74 @@ export function find_all_details(
     return { ...this_skill, ...sub_skills };
 }
 
+const knownConditions = {
+    "331": () => (amountOfEnemies: number, maxBreak: number) => maxBreak <= 2,        // "ブレイクボーナスが200%以上の敵に対して",
+    "451": () => (amountOfEnemies: number, maxBreak: number) => maxBreak <= 2,        // "ブレイクボーナスが200%以上の敵に対して、必殺技の",
+    "773": () => (amountOfEnemies: number, maxBreak: number) => maxBreak <= 3.5,      // "ブレイク倍率が350%以上の敵に対して必殺技を発動したとき",
+    "330": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 2,  // "敵が2体以上のとき",
+    "439": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 3,  // "敵が3体以上のとき",
+    "440": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 4,  // "敵が4体以上のとき",
+    "441": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 5,  // "敵が5体以上のとき",
+    "1456": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies == 2,  // 敵が2体の場合
+    "1457": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies == 3,  // 敵が3体の場合
+    "1458": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies == 4,  // 敵が4体の場合
+    "1565": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies == 1,  // 敵が1体の場合
+    "1566": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies == 5,  // 敵が5体の場合
+    "1569": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 3, // "敵が3体以上+行動タイプは必殺技+行動者は自身",
+    "1663": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 2, // "敵が2体以上のとき(自ターン問わず)",
+    "1664": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 3, // "敵が3体以上のとき(自ターン問わず)",
+    "1665": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 4, // "敵が4体以上のとき(自ターン問わず)",
+    "1666": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 5, // "敵が5体以上のとき(自ターン問わず)",
+    "7": () => false,  // "必殺技の",
+    "9": () => false,  // "HPが50%以上のとき",
+    "38": () => false,  // "HPが80%以上のとき",
+    "266": () => false,  // "必殺技の",
+    "310": () => false,  // "行動対象がブレイク状態のとき",
+    "317": () => false,  // "必殺技の",
+    "319": () => false,  // 自身が行動可能で魔力が5のとき
+    "337": () => false,  // "対象が「毒」のとき%",
+    "352": () => false,  // "対象が裂傷状態のとき",
+    "428": () => false,  // "魔力が5個のとき",
+    "438": () => false,  // "自身にシールドが張られているとき",
+    "476": () => false,  // "HPが50%未満のとき",
+    "512": () => false,  // "魔力が1以上のとき",
+    "591": () => false,  // "【追撃】の",
+    "939": () => false,  // "デバフが1個以上ある敵に対して",
+    "1178": () => false,  // "継続回復効果が付与されているとき",
+    "1277": () => false,  // "カットアウトが付与されているとき",
+    "1535": () => false,  // "トークンが3以上のとき",
+    "1538": () => false,  // "自分にシールドが付与されているとき",
+    "1542": () => false,  // "魔力が5個で必殺技を使用したとき",
+    "1543": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP80%以上",
+    "1544": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP90%以上",
+    "1545": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP100%",
+    "1562": () => true,  // "自身のHPが50%未満かつ36%以上のとき", // We take the lowest bonus and skip this
+    "1563": () => true,  // "自身のHPが35%未満かつ11%以上のとき", // We take the lowest bonus and skip this
+    "1564": () => false,  // "自身のHPが10%未満のとき",
+    "1568": () => false,  // "行動者のデバフが1以上+行動者は敵",
+    "1580": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP85%以上",
+    "1581": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP95%以上",
+    "1604": () => false,  // "水刃の敵が1体以上いるとき",
+}
+
+export function getSkipCond(condId: string | undefined): boolean | Function {
+    if (!condId) return false;
+    const condIdInt = parseInt(condId || "0");
+
+    if (condIdInt in battleConditions) {
+        try {
+            return knownConditions[condId]()
+        } catch (err) {
+            throw new Error(
+                "Unknown condition: " +
+                (condIdInt in battleConditions
+                    ? battleConditions[condIdInt]
+                    : condIdInt)
+            );
+        }
+    }
+    return false
+}
 
 export class Kioku {
 
@@ -79,91 +147,48 @@ export class Kioku {
         "UP_ABNORMAL_HIT_RATE_RATIO", "DMG_RANDOM", "UP_GIV_VORTEX_DMG_RATIO",
     ]);
 
-    // prettier-ignore-start
-    knownConditions = {
-        "9": () => false,  // "HPが50%以上のとき",
-        "476": () => false,  // "HPが50%未満のとき",
-        "1562": () => true,  // "自身のHPが50%未満かつ36%以上のとき", // We take the lowest bonus and skip this
-        "1563": () => true,  // "自身のHPが35%未満かつ11%以上のとき", // We take the lowest bonus and skip this
-        "1564": () => false,  // "自身のHPが10%未満のとき",
-        "330": () => this.amountEnemies < 2,  // "敵が2体以上のとき",
-        "1663": () => this.amountEnemies < 2, // "敵が2体以上のとき(自ターン問わず)",
-        "439": () => this.amountEnemies < 3,  // "敵が3体以上のとき",
-        "1664": () => this.amountEnemies < 3, // "敵が3体以上のとき(自ターン問わず)",
-        "1569": () => this.amountEnemies < 3, // "敵が3体以上+行動タイプは必殺技+行動者は自身",
-        "440": () => this.amountEnemies < 4,  // "敵が4体以上のとき",
-        "1665": () => this.amountEnemies < 4, // "敵が4体以上のとき(自ターン問わず)",
-        "441": () => this.amountEnemies < 5,  // "敵が5体以上のとき",
-        "1666": () => this.amountEnemies < 5, // "敵が5体以上のとき(自ターン問わず)",
-        "1538": () => false,  // "自分にシールドが付与されているとき",
-        "38": () => false,  // "HPが80%以上のとき",
-        "773": () => this.maxBreak <= 3.5,      // "ブレイク倍率が350%以上の敵に対して必殺技を発動したとき",
-        "331": () => this.maxBreak <= 2,        // "ブレイクボーナスが200%以上の敵に対して",
-        "451": () => this.maxBreak <= 2,        // "ブレイクボーナスが200%以上の敵に対して、必殺技の",
-        "1178": () => false,  // "継続回復効果が付与されているとき",
-        "310": () => false,  // "行動対象がブレイク状態のとき",
-        "1277": () => false,  // "カットアウトが付与されているとき",
-        "266": () => false,  // "必殺技の",
-        "317": () => false,  // "必殺技の",
-        "7": () => false,  // "必殺技の",
-        "512": () => false,  // "魔力が1以上のとき",
-        "428": () => false,  // "魔力が5個のとき",
-        "1535": () => false,  // "トークンが3以上のとき",
-        "1542": () => false,  // "魔力が5個で必殺技を使用したとき",
-        "1543": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP80%以上",
-        "1580": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP85%以上",
-        "1544": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP90%以上",
-        "1581": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP95%以上",
-        "1545": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP100%",
-        "337": () => false,  // "対象が「毒」のとき%",
-        "591": () => false,  // "【追撃】の",
-        "438": () => false,  // "自身にシールドが張られているとき",
-        "319": () => false,  // 自身が行動可能で魔力が5のとき
-        "1565": () => this.amountEnemies == 1,  // 敵が1体の場合
-        "1456": () => this.amountEnemies == 2,  // 敵が2体の場合
-        "1457": () => this.amountEnemies == 3,  // 敵が3体の場合
-        "1458": () => this.amountEnemies == 4,  // 敵が4体の場合
-        "1566": () => this.amountEnemies == 5,  // 敵が5体の場合
-        "352": () => false,  // "対象が裂傷状態のとき",
-        "1604": () => false,  // "水刃の敵が1体以上いるとき",
-        "939": () => false,  // "デバフが1個以上ある敵に対して",
-        "1568": () => false,  // "行動者のデバフが1以上+行動者は敵",
-    }
-
 
     private name: string;
     private dpsElement: string;
     private supportKey: any[] | undefined;
-    private support: Kioku | null;
-    private portrait: string | null;
+    private support: Kioku | undefined;
+    private portrait: string | undefined;
     isDps: boolean;
     private ascension: number;
-    private supportLvl: number;
     private kiokuLvl: number;
     private magicLvl: number;
     private heartphialLvl: number;
-    private skillLvl: number;
-    private abilityLvl: number;
-    private attackLvl: number;
+    private supportLvl = 1;
+    private skillLvl = 1;
+    private abilityLvl = 1;
+    private attackLvl = 1;
+    critRate = 50;
+    critDamage = 100;
     private specialLvl: number;
     private crys: string[];
     private crys_sub: string[];
     private data: KiokuData;
-    effects: Record<string, number[]> = {};
-    private atkPerMagicRank: number;
-    base_atk: number = 0;
+    effects: Record<string, (string | number)[][]> = {};
+    kiokuAtk: number;
+    supportAtk: number = 0;
+    portraitAtk: number = 0;
+    magicAtk: number = 0;
+    heartAtk: number = 0;
+    ascensionAtk: number;
     atk_bonus_flat: number = 0;
     private buff_mult: number = 1;
     private debuff_mult: number = 1;
-    private maxBreak: number = 0;
-    private amountEnemies: number = 0;
 
-    add_to_effects(key: string, value: number) {
+    add_to_effects(key: string, value: number, condId: string) {
         if (key in this.effects) {
-            this.effects[key].push(value);
+            this.effects[key].push([value, condId]);
         } else {
-            this.effects[key] = [value];
+            this.effects[key] = [[value, condId]];
         }
+    }
+
+    getBaseAtk(): number {
+        return this.kiokuAtk + this.supportAtk + this.portraitAtk + this.magicAtk + this.heartAtk
     }
 
     constructor({
@@ -178,7 +203,7 @@ export class Kioku {
         heartphialLvl,
         specialLvl,
         crys,
-    }: KiokuGeneratorArgs) {
+    }: KiokuArgs) {
         this.name = name;
         this.portrait = portrait;
         this.isDps = isDps;
@@ -194,28 +219,44 @@ export class Kioku {
         this.crys_sub = Array(3).fill([KiokuConstants.availableSubCrys.CRIT_DMG, KiokuConstants.availableSubCrys.FLAT_ATK]).flat()
 
         this.supportKey = supportKey;
-        this.support = supportKey ? Kioku.fromKey(supportKey) ?? null : null;
+        this.support = supportKey ? Kioku.fromKey(supportKey) : undefined;
 
-        this.atkPerMagicRank = this.data.rarity === 5 ? 36 : 32;
-        const atk_delta = (this.data.atk100 - this.data.minAtk) / (KiokuConstants.maxKiokuLvl - 1);
-        this.base_atk = this.data.maxAtk - atk_delta * (KiokuConstants.maxKiokuLvl - this.kiokuLvl);
+        this.kiokuAtk = this.kiokuLvl * (this.data.atk100 - this.data.minAtk) / (KiokuConstants.maxKiokuLvl - 1);
+        this.ascensionAtk = this.ascension / 5 * this.data.atka5
 
-        if (this.support) this.base_atk += 0.16 * this.support.base_atk;
-
-        // TODO: Just read this from mst. set atk and ability lvl etc based on this too
-        if (this.magicLvl < 129) this.base_atk -= this.atkPerMagicRank;
-        if (this.magicLvl < 126) this.base_atk -= this.atkPerMagicRank;
-        if (this.magicLvl < 123) this.base_atk -= this.atkPerMagicRank;
-        if (this.magicLvl < 121) this.base_atk -= this.atkPerMagicRank;
-        this.supportLvl = 10;
-        this.skillLvl = 10;
-        this.abilityLvl = 10;
-        this.attackLvl = 10;
-
-        // TODO: Same here, just read from mst
         for (const [k, v] of Object.entries(KiokuConstants.heartphialAtkRewardLvls)) {
-            if (this.heartphialLvl < parseInt(k)) this.base_atk -= v;
+            if (this.heartphialLvl >= parseInt(k)) this.heartAtk += v;
         }
+
+
+        for (let lvl = 1; lvl <= this.magicLvl; lvl++) {
+            const lvlEff = magicData[+(this.data.rarity === 5)][lvl.toString()] as MagicLevel
+            switch (lvlEff.eff) {
+                case "UP_ATK_FIXED":
+                    this.magicAtk += lvlEff.val
+                    break;
+                case "UP_CTR_FIXED":
+                    this.critRate += lvlEff.val
+                    break;
+                case "UP_CTD_FIXED":
+                    this.critDamage += lvlEff.val
+                    break;
+                case "Support Ability Lvl. Up":
+                    this.supportLvl += 1;
+                    break;
+                case "Battle Skill Lvl. Up":
+                    this.skillLvl += 1;
+                    break;
+                case "Ability Lvl. Up":
+                    this.abilityLvl += 1;
+                    break;
+                case "Basic Attack Lvl. Up":
+                    this.attackLvl += 1;
+                    break;
+            }
+        }
+
+        if (this.support) this.supportAtk = 0.16 * this.support.getBaseAtk();
 
         this.setupEffects();
     }
@@ -230,17 +271,17 @@ export class Kioku {
                     this.atk_bonus_flat += eff;
                     break;
                 case KiokuConstants.availableCrys.ATK_25_PERCENT:
-                    this.add_to_effects("UP_ATK_RATIO", 10 * eff);
+                    this.add_to_effects("UP_ATK_RATIO", 10 * eff, "");
                     break;
                 case KiokuConstants.availableCrys.CRIT_DMG:
                 case KiokuConstants.availableSubCrys.CRIT_DMG:
-                    this.add_to_effects("UP_CTD_FIXED", 10 * eff);
+                    this.add_to_effects("UP_CTD_FIXED", 10 * eff, "");
                     break;
                 case KiokuConstants.availableCrys.DMG_TO_WEAK_ELEMENT:
-                    this.add_to_effects("UP_WEAK_ELEMENT_DMG_RATIO", 10 * eff);
+                    this.add_to_effects("UP_WEAK_ELEMENT_DMG_RATIO", 10 * eff, "");
                     break;
                 case KiokuConstants.availableCrys.ELEMENTAL_DMG:
-                    this.add_to_effects("UP_GIV_DMG_RATIO", 10 * eff);
+                    this.add_to_effects("UP_GIV_DMG_RATIO", 10 * eff, "");
                     break;
             }
         }
@@ -285,7 +326,7 @@ export class Kioku {
         if (this.portrait) {
             const port_info = portraits[this.portrait];
             const port_eff = find_all_details(true, port_info.passiveSkill1);
-            this.base_atk += portraitLevels[port_info.cardMstId * 10 + 5].atk;
+            this.portraitAtk = portraitLevels[port_info.cardMstId * 10 + 5].atk;
             this.add_effects({ 1: port_eff[Math.max(...Object.keys(port_eff).map(Number))] }, true, 1);
             // Math.max to find highest level effect of portrait (Always assume LB5 portrait), and format into expected format
         }
@@ -326,12 +367,22 @@ export class Kioku {
         return [this.data.support_target, lvl_details];
     }
 
-    get_special_dmg(targetType: EnemyTargetTypes): number {
+
+    get_special_dmg(targetType: EnemyTargetTypes, amountOfEnemies: number, maxBreak: number, nrHitThatKills: number): [number, boolean] {
         let total_dmg = 0;
         for (const v of Object.values(find_all_details(false, this.data.special_id))) {
-            if (parseInt(String(getIdx(v)).slice(-2)) !== this.specialLvl || !v.abilityEffectType.startsWith("DMG_")) continue;
-
-            if (v.startConditionSetIdCsv && !Object.keys(battleConditions).includes(v.startConditionSetIdCsv)) continue; // TODO is this correct?
+            // Not dmg or incorrect level
+            if (parseInt(String(getIdx(v)).slice(-2)) !== this.specialLvl ||
+                !v.abilityEffectType.startsWith("DMG_")) {
+                continue;
+            }
+            nrHitThatKills -= 1
+            const shouldSkip = getSkipCond(v.activeConditionSetIdCsv)
+            if (typeof(shouldSkip) === 'boolean'){
+                if (shouldSkip) continue;
+            } else {
+                if(shouldSkip(nrHitThatKills > 1 ? amountOfEnemies : amountOfEnemies - 1, maxBreak)) continue;
+            }
 
             if (v.abilityEffectType === "DMG_RANDOM" && targetType === EnemyTargetTypes.TARGET) total_dmg += v.value1 * v.value2;
             // We make random only hit lowest def for simplicity, since this is max dmg
@@ -339,7 +390,7 @@ export class Kioku {
             else if (v.range === 2 && targetType === EnemyTargetTypes.PROXIMITY) total_dmg += v.value2;
             else if (targetType === EnemyTargetTypes.TARGET) total_dmg += v.value1;
         }
-        return total_dmg / 1000;
+        return [total_dmg / 1000, nrHitThatKills < 1]
     }
 
     add_effects(details: Record<string, any>, is_unique: boolean, lvl: number, ignore_buff_mult = false) {
@@ -358,17 +409,6 @@ export class Kioku {
         }
 
         for (const skill of lvl_details) {
-            const cond_id = skill.activeConditionSetIdCsv || "";
-            const cond_id_int = parseInt(cond_id || "0");
-
-            if (cond_id && cond_id_int in battleConditions) {
-                try {
-                    if ((this.knownConditions as any)[cond_id]?.()) continue;
-                } catch (exc) {
-                    throw new Error(`Unknown condition: ${cond_id_int}`);
-                }
-            }
-
             let eff = skill.value1;
             // For multi-value skills, value2 is the max multiplier 
             if (skill.value2) {
@@ -401,13 +441,13 @@ export class Kioku {
             } else if (skill.abilityEffectType === "UP_ELEMENT_DMG_RATE_RATIO") {
                 skill.abilityEffectType = "UP_GIV_DMG_RATIO";
             }
-            this.add_to_effects(skill.abilityEffectType, eff);
+            this.add_to_effects(skill.abilityEffectType, eff, skill.activeConditionSetIdCsv || "");
         }
     }
 
     toString() {
         return `${this.name} A${this.ascension}
-  Stats: base_atk=${this.base_atk.toFixed(0)}, atk_bonus_flat=${this.atk_bonus_flat}, buff_mult=${this.buff_mult}, debuff_mult=${this.debuff_mult}
+  Stats: base_atk=${this.getBaseAtk().toFixed(0)}, atk_bonus_flat=${this.atk_bonus_flat}, buff_mult=${this.buff_mult}, debuff_mult=${this.debuff_mult}
   Support: ${this.support ? this.support.name : null}
   Portrait: ${this.portrait}
   Effect: ${JSON.stringify(Object.fromEntries(
@@ -478,12 +518,25 @@ export interface KiokuGeneratorArgs {
     kiokuLvl?: number;
     magicLvl?: number;
     heartphialLvl?: number;
-    portrait?: string | null;
-    supportKey?: any[] | undefined;
+    portrait?: string;
+    supportKey?: any[];
     isDps?: boolean;
     crys?: string[];
     ascension?: number;
     specialLvl?: number;
+}
+interface KiokuArgs {
+    name: string;
+    dpsElement: string;
+    kiokuLvl: number;
+    magicLvl: number;
+    heartphialLvl: number;
+    portrait: string | undefined;
+    supportKey: any[] | undefined;
+    isDps: boolean;
+    crys: string[];
+    ascension: number;
+    specialLvl: number;
 }
 
 export enum EnemyTargetTypes {
@@ -510,6 +563,7 @@ export function getKioku({
     if (name == null || dpsElement == null || kiokuLvl == null || magicLvl == null || heartphialLvl == null || isDps == null || ascension == null || specialLvl == null) {
         throw new Error("Ivalid arguments provided to getKioku");
     }
+    const clearCrys = crys.filter(Boolean)
     const key = JSON.stringify([
         name,
         dpsElement,
@@ -521,11 +575,10 @@ export function getKioku({
         magicLvl,
         heartphialLvl,
         specialLvl,
-        crys,
+        clearCrys,
     ]);
 
     if (!cache.has(key)) {
-        console.log("Creating new Kioku", key)
         cache.set(key, new Kioku({
             name,
             dpsElement,
@@ -537,10 +590,8 @@ export function getKioku({
             magicLvl,
             heartphialLvl,
             specialLvl,
-            crys,
+            crys: clearCrys,
         }));
-    } else {
-        console.log("Returning known Kioku", key)
     }
 
     return cache.get(key);

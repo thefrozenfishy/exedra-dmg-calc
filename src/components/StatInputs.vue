@@ -7,7 +7,7 @@
           :min="stat.min"
           :max="stat.max"
           :value="member[stat.key]"
-          @input="update(stat.key, $event.target.valueAsNumber)"
+          @input="update(stat.key, $event?.target?.valueAsNumber)"
         />
       </label>
     </div>
@@ -17,17 +17,10 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
 import { KiokuConstants } from '../Kioku';
+import { Character } from '../store/characterStore';
 
 const props = defineProps<{
-  member: {
-    id: string
-    name: string
-    ascension: number
-    level: number
-    magicLevel: number
-    heartphialLevel: number
-    specialLevel: number
-  },
+  member: Character,
   isSupport: boolean
 }>()
 
@@ -43,7 +36,7 @@ const stats = [
   { key: 'specialLvl', label: 'Special Level', min: 1, max: KiokuConstants.maxSpecialLvl, hideForSupport: true }
 ]
 
-function update(key: keyof typeof props.member, value: number) {
+function update(key: string, value?: number) {
   const updated = { ...props.member, [key]: value }
   emit('update', updated)
 }

@@ -4,6 +4,7 @@ import portraitLevelsJson from './assets/base_data/getCardLimitBreakMstList.json
 import passiveDetailsJson from './assets/base_data/getPassiveSkillDetailMstList.json';
 import skillDetailsJson from './assets/base_data/getSkillDetailMstList.json';
 import kiokuDataJson from './assets/base_data/kioku_data.json';
+import magicLevelsJson from './assets/base_data/magic_levels.json';
 
 export const elementMap: Record<string, string> = {
     1: "Flame",
@@ -24,29 +25,36 @@ interface PortraitLvlData {
     atk: number;
 }
 
+export interface MagicLevel {
+    eff: string
+    val: number
+}
+
 export type SkillDetail = Record<string, any>;
 
 export interface KiokuData {
-    id: number;
-    support_id: number;
-    support_target: string;
-    element: string;
-    role: string;
-    rarity: number;
-    atk100: number;
-    minAtk: number;
-    maxAtk: number;
-    ascension_1_effect_2_id: number;
-    ascension_2_effect_2_id: number;
-    ascension_3_effect_2_id: number;
-    ascension_4_effect_2_id: number;
-    ascension_5_effect_2_id: number;
-    skill_id: number;
-    attack_id: number;
-    ability_id: number;
-    special_id: number;
-    crystalis_id: number;
-    character_en: string;
+    id: number
+    name: number
+    rarity: number
+    character_en: string
+    element: string
+    role: string
+    atk100: number
+    minAtk: number
+    atka5: number
+    skill_id: number
+    attack_id: number
+    special_id: number
+    crystalis_id: number
+    support_id: number
+    support_target: string
+    ability_id: number
+    ascension_1_effect_2_id: number
+    ascension_2_effect_2_id: number
+    ascension_3_effect_2_id?: number
+    ascension_4_effect_2_id: number
+    ascension_5_effect_2_id?: number
+
 }
 
 export const battleConditions = Object.fromEntries(
@@ -70,3 +78,5 @@ export const skillDetails = Object.fromEntries(
 ) as Record<string, SkillDetail>;
 
 export const kiokuData = kiokuDataJson as unknown as Record<string, KiokuData>;
+
+export const magicData = magicLevelsJson as unknown as Record<string, MagicLevel>[];

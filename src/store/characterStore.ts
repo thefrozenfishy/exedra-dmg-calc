@@ -51,7 +51,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
     }
 
     const setCharacters = (chars: Character[]) => {
-        characters.value = chars
+        chars.forEach(updateChar)
     }
 
     // Add new characters

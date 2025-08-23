@@ -1,12 +1,12 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import GalleryPage from '../pages/GalleryPage.vue'
-import BestTeam from '../pages/BestTeam.vue'
-import SingleTeam from '../pages/SingleTeam.vue'
+import TeamSetupPage from '../pages/TeamSetupPage.vue'
+import BestTeamPage from '../pages/BestTeamPage.vue'
+import SingleTeamPage from '../pages/SingleTeamPage.vue'
 
 const routes = [
-    { path: '/team-setup', name: 'Team Setup', component: GalleryPage },
-    { path: '/simulator-multiple', name: 'Calculate Best Team', component: BestTeam },
-    { path: '/simulator-single', name: 'Simulate Single Battle', component: SingleTeam },
+    { path: '/team-setup', name: 'Team Setup', component: TeamSetupPage },
+    { path: '/simulator-multiple', name: 'Calculate Best Team', component: BestTeamPage },
+    { path: '/simulator-single', name: 'Simulate Single Battle', component: SingleTeamPage },
 ]
 
 const router = createRouter({
