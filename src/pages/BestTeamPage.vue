@@ -103,7 +103,7 @@ const running = ref(false)
 const results = reactive<{ attackerId: string, team: any, dmg: number }[]>([])
 
 const members = computed(() => store.characters.filter(c => c.enabled))
-const attackers = computed(() => store.characters.filter(c => c.enabled && c.role === Role.Attacker))
+const attackers = computed(() => store.characters.filter(c => (c.enabled && c.role === Role.Attacker) || extraAttackers.value.map(c => c.name).includes(c.name)))
 
 const workerRef = ref<Worker | null>(null)
 const progress = ref<FinalTeam>({})
@@ -170,7 +170,7 @@ export interface FinalTeam {
     supp3supp: Character | undefined
 }
 
-const pupulateTeam = (result: any[]) => ({
+const populateTeam = (result: any[]) => ({
     dmg: result[0],
     crit_rate: result[1],
     attacker: members.value.find(m => m.name === result[2])!,
@@ -191,7 +191,7 @@ const pupulateTeam = (result: any[]) => ({
 const sortedResults: ComputedRef<FinalTeam[]> = computed(() =>
     [...results]
         .sort((a, b) => b.dmg - a.dmg)
-        .map(pupulateTeam)
+        .map(populateTeam)
 )
 
 const topResults = computed(() => sortedResults.value.slice(0, 20))
@@ -212,9 +212,7 @@ async function startSimulation() {
 
     workerRef.value.onmessage = (e) => {
         if (e.data.type === 'progress') {
-            const d = pupulateTeam(e.data.currChars)
-            console.log(d)
-            progress.value = d
+            progress.value = populateTeam(e.data.currChars)
         }
         if (e.data.type === 'done') {
             results.splice(0, results.length, ...e.data.results)
@@ -230,10 +228,7 @@ async function startSimulation() {
             include4StarAttackers: include4StarAttackers.value,
             include4StarSupports: include4StarSupports.value,
             weakElements: weakElements.filter(el => el.enabled).map(el => el.name),
-            extraAttackers: extraAttackersInput.value
-                .split(",")
-                .map(s => s.trim())
-                .filter(Boolean),
+            extraAttackers: extraAttackers.value.map(c => c.name),
             enabledCharacters: JSON.parse(JSON.stringify(members.value))
         }
     })

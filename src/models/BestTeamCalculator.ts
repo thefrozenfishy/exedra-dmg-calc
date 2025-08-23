@@ -58,18 +58,18 @@ export async function findBestTeam({
         } else if (char.rarity === 5 || (char.rarity === 4 && include4StarSupports && [Role.Buffer, Role.Debuffer].includes(char.role))) {
             availableChars[char.role].push(char)
         }
-        if (char.name in extraAttackers) availableChars[Role.Attacker].push(char)
+        if (extraAttackers.includes(char.name)) availableChars[Role.Attacker].push(char)
     })
 
     // TODO: Not hardcode supports? It'd take longer tho and these three are honestly the only options?
-    const atkSupports = enabledCharacters
+    const atkSupportsKeys = enabledCharacters
         .filter(c => ["The Universe's Edge", "Oracle Ray", "Fiore Finale"].includes(c.name))
         .map(getKioku)
         .map(c => c?.getKey())
         .filter(Boolean)
-    console.log(atkSupports)
+
     if (!availableChars[Role.Healer].length) {
-        availableChars[Role.Healer].push(getKioku(enabledCharacters.find(c => c.name === "Circle Of Fire")).getKey())
+        availableChars[Role.Healer].push(getKioku(enabledCharacters.find(c => c.name === "Circle Of Fire")))
     }
 
     const tsurunoData = enabledCharacters.find(c => c.name === "Flame Waltz")
@@ -77,15 +77,12 @@ export async function findBestTeam({
 
     // Nested loops to generate team combinations
     for (const attacker of availableChars.Attacker) {
-        console.log(attacker)
-        const availableSupports = atkSupports.filter(s => s?.[0] !== attacker.name);
-        console.log("A", availableSupports)
-        if (!availableSupports.length) {
-            availableSupports.push(getKioku(enabledCharacters.find(c => c.name === "Ryushin Spiral Fury")).getKey())
+        const availableSupportKeys = atkSupportsKeys.filter(s => s?.[0] !== attacker.name);
+        if (!availableSupportKeys.length) {
+            availableSupportKeys.push(getKioku(enabledCharacters.find(c => c.name === "Ryushin Spiral Fury")).getKey())
         }
 
         for (const sustain of availableChars[Role.Healer]) {
-            console.log(sustain)
             if (sustain.name === attacker.name) continue;
 
             for (const supportList of combinations([...availableChars[Role.Debuffer], ...availableChars[Role.Buffer]], 3)) {
@@ -102,7 +99,6 @@ export async function findBestTeam({
                 if (!supportSupports.length) {
                     supportSupports.push([undefined, undefined, undefined])
                 }
-                console.log(supportList)
 
                 onProgress?.([
                     0,
@@ -115,11 +111,9 @@ export async function findBestTeam({
                     ...supportList.flatMap((s, i) => [s.name, undefined])
                 ])
 
-                for (const attackerSupportKey of availableSupports) {
-                    console.log(attackerSupportKey)
+                for (const attackerSupportKey of availableSupportKeys) {
 
                     for (const attackerPortrait of ["A Dream of a Little Mermaid", "The Savior's Apostle", dmgUpPortrait[attacker.element]]) {
-                        console.log(attackerPortrait)
 
                         for (const supportSupport of supportSupports) {
 
@@ -136,7 +130,7 @@ export async function findBestTeam({
                                     getKioku({ ...sustain, dpsElement: attacker.element })!,
                                     ...supportList.map((s, i) => getKioku({ ...s, dpsElement: attacker.element, supportKey: supportSupport[i] })!)
                                 ]);
-                                console.log("considering", enemies)
+
                                 const [dmg, critRate] = team.calculate_max_dmg(enemies, 0);
                                 results.push([
                                     dmg | 0,
