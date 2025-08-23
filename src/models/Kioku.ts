@@ -155,7 +155,7 @@ export class Kioku {
 
 
     private name: string;
-    private dpsElement: string;
+    private dpsElement: Element;
     private supportKey: any[] | undefined;
     private support: Kioku | undefined;
     private portrait: string | undefined;
@@ -522,7 +522,7 @@ export const KiokuConstants = {
 }
 export interface KiokuGeneratorArgs {
     name: string;
-    dpsElement: string;
+    dpsElement: Element;
     kiokuLvl?: number;
     magicLvl?: number;
     heartphialLvl?: number;
@@ -535,7 +535,7 @@ export interface KiokuGeneratorArgs {
 }
 interface KiokuArgs {
     name: string;
-    dpsElement?: string;
+    dpsElement?: Element;
     kiokuLvl: number;
     magicLvl: number;
     heartphialLvl: number;

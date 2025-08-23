@@ -63,55 +63,7 @@
     </div>
   </div>
 
-  <!-- Enemy section -->
-  <div class="team-page">
-    <h1>Enemies</h1>
-    <div class="team-grid">
-      <div v-for="(enemy, index) in enemies.enemies" :key="index" class="team-slot stat-inputs">
-        <h3>{{ enemy.name }}</h3>
-
-        <div class="enemy-stats">
-          <div v-if="enemy.name !== 'Target'">
-            <label>
-              <input type="checkbox" v-model="enemy.enabled"
-                @change="enemies.updateEnemy(index, { enabled: enemy.enabled })" />
-              Enabled
-            </label>
-          </div>
-          <label>
-            Max Break (%):
-            <input type="number" v-model.number="enemy.maxBreak" step="50"
-              @change="enemies.updateEnemy(index, { maxBreak: enemy.maxBreak })" />
-          </label>
-          <label>
-            Defense:
-            <input type="number" v-model.number="enemy.defense" step="50"
-              @change="enemies.updateEnemy(index, { defense: enemy.defense })" />
-          </label>
-          <label>
-            Defence up (%):
-            <input type="number" v-model.number="enemy.defenseUp"
-              @change="enemies.updateEnemy(index, { defenseUp: enemy.defenseUp })" />
-          </label>
-          <label>
-            Hits to kill:
-            <input type="number" v-model.number="enemy.hitsToKill"
-              @change="enemies.updateEnemy(index, { hitsToKill: enemy.hitsToKill })" />
-          </label>
-          <label>
-            <input type="checkbox" v-model="enemy.isBreak"
-              @change="enemies.updateEnemy(index, { isBreak: enemy.isBreak })" />
-            Is broken
-          </label>
-          <label>
-            <input type="checkbox" v-model="enemy.isCrit"
-              @change="enemies.updateEnemy(index, { isCrit: enemy.isCrit })" />
-            Hit by crit
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
+  <EnemySelector></EnemySelector>
 
   <!-- Debug section TODO: Hide this by default? -->
   <div class="team-page">
@@ -132,6 +84,7 @@ import CharacterSelector from '../components/CharacterSelector.vue'
 import StatInputs from '../components/StatInputs.vue'
 import { getKioku, KiokuGeneratorArgs, KiokuConstants, Kioku } from '../models/Kioku'
 import { Team } from '../models/Team'
+import EnemySelector from '../components/EnemySelector.vue'
 
 const cryKeys = Object.keys(KiokuConstants.availableCrys)
 

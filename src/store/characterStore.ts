@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-import { kiokuData } from '../utils/helpers'
+import { kiokuData, Role } from '../utils/helpers'
 import { KiokuConstants } from '../models/Kioku'
 
 export interface Character {
@@ -9,8 +9,8 @@ export interface Character {
     character_en: string
     enabled: boolean
     ascension: number
-    element: string
-    role: string
+    element: Element
+    role: Role
     rarity: number
     portrait: string
     kiokuLvl: number

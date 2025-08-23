@@ -6,14 +6,33 @@ import skillDetailsJson from '../assets/base_data/getSkillDetailMstList.json';
 import kiokuDataJson from '../assets/base_data/kioku_data.json';
 import magicLevelsJson from '../assets/base_data/magic_levels.json';
 
-export const elementMap: Record<string, string> = {
-    1: "Flame",
-    2: "Aqua",
-    3: "Forest",
-    4: "Light",
-    5: "Dark",
-    6: "Void",
+
+export enum Element {
+    Flame = "Flame",
+    Aqua = "Aqua",
+    Forest = "Forest",
+    Light = "Light",
+    Dark = "Dark",
+    Void = "Void"
+}
+export enum Role {
+    Attacker = "Attacker",
+    Buffer = "Buffer",
+    Debuffer = "Debuffer",
+    Healer = "Healer",
+    Breaker = "Breaker",
+    Defender = "Defender"
+}
+
+export const elementMap: Record<string, Element> = {
+    1: Element.Flame,
+    2: Element.Aqua,
+    3: Element.Forest,
+    4: Element.Light,
+    5: Element.Dark,
+    6: Element.Void,
 };
+
 
 
 interface PortraitData {
@@ -37,8 +56,8 @@ export interface KiokuData {
     name: number
     rarity: number
     character_en: string
-    element: string
-    role: string
+    element: Element
+    role: Role
     atk100: number
     minAtk: number
     atka5: number
@@ -47,7 +66,7 @@ export interface KiokuData {
     special_id: number
     crystalis_id: number
     support_id: number
-    support_target: string
+    support_target: Element | Role
     ability_id: number
     ascension_1_effect_2_id: number
     ascension_2_effect_2_id: number
