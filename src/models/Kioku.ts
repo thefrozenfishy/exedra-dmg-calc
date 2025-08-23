@@ -1,4 +1,4 @@
-import { SkillDetail, KiokuData, magicData, MagicLevel, battleConditions, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData, elementMap } from './helpers';
+import { SkillDetail, KiokuData, magicData, MagicLevel, battleConditions, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData, elementMap } from '../utils/helpers';
 
 export function getIdx(obj: SkillDetail): number {
     return "passiveSkillMstId" in obj ? obj.passiveSkillMstId : obj.skillMstId;
@@ -51,6 +51,11 @@ const knownConditions = {
     "439": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 3,  // "敵が3体以上のとき",
     "440": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 4,  // "敵が4体以上のとき",
     "441": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 5,  // "敵が5体以上のとき",
+    "525": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies >= 2,  // "敵が2体未満のとき",
+    "526": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies >= 3,  // "敵が3体未満のとき",
+    "527": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies >= 4,  // "敵が4体未満のとき",
+    "528": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies >= 5,  // "敵が5体未満のとき",
+    "529": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies >= 6,  // "敵が6体未満のとき",
     "1456": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies == 2,  // 敵が2体の場合
     "1457": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies == 3,  // 敵が3体の場合
     "1458": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies == 4,  // 敵が4体の場合
@@ -67,6 +72,7 @@ const knownConditions = {
     "266": () => false,  // "必殺技の",
     "310": () => false,  // "行動対象がブレイク状態のとき",
     "317": () => false,  // "必殺技の",
+    "316": () => false,  // "戦闘スキルを発動したとき",
     "319": () => false,  // 自身が行動可能で魔力が5のとき
     "337": () => false,  // "対象が「毒」のとき%",
     "352": () => false,  // "対象が裂傷状態のとき",
@@ -99,12 +105,13 @@ export function getSkipCond(condId: string | undefined): boolean | Function {
 
     if (condIdInt in battleConditions) {
         try {
+            console.log(knownConditions[condId])
             return knownConditions[condId]()
         } catch (err) {
             throw new Error(
                 "Unknown condition: " +
                 (condIdInt in battleConditions
-                    ? battleConditions[condIdInt]
+                    ? Object.entries(battleConditions[condIdInt])
                     : condIdInt)
             );
         }
@@ -527,7 +534,7 @@ export interface KiokuGeneratorArgs {
 }
 interface KiokuArgs {
     name: string;
-    dpsElement: string;
+    dpsElement?: string;
     kiokuLvl: number;
     magicLvl: number;
     heartphialLvl: number;
@@ -560,7 +567,18 @@ export function getKioku({
     specialLvl = KiokuConstants.maxSpecialLvl,
     crys = [KiokuConstants.availableCrys.EX],
 }: KiokuGeneratorArgs) {
-    if (name == null || dpsElement == null || kiokuLvl == null || magicLvl == null || heartphialLvl == null || isDps == null || ascension == null || specialLvl == null) {
+    console.log("Called with:", name,
+dpsElement,
+supportKey,
+portrait,
+isDps,
+ascension,
+kiokuLvl,
+magicLvl,
+heartphialLvl,
+specialLvl,
+crys)
+    if (name == null || kiokuLvl == null || magicLvl == null || heartphialLvl == null || isDps == null || ascension == null || specialLvl == null) {
         throw new Error("Ivalid arguments provided to getKioku");
     }
     const clearCrys = crys.filter(Boolean)

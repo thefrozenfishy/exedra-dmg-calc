@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-import { kiokuData } from '../helpers'
-import { KiokuConstants } from '../Kioku'
+import { kiokuData } from '../utils/helpers'
+import { KiokuConstants } from '../models/Kioku'
 
 export interface Character {
     id: string

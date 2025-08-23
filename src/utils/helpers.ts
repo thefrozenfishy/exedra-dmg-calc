@@ -1,10 +1,10 @@
-import battleConditionsJson from './assets/base_data/getBattleConditionSetMstList.json';
-import portraitsJson from './assets/base_data/getCardMstList.json';
-import portraitLevelsJson from './assets/base_data/getCardLimitBreakMstList.json';
-import passiveDetailsJson from './assets/base_data/getPassiveSkillDetailMstList.json';
-import skillDetailsJson from './assets/base_data/getSkillDetailMstList.json';
-import kiokuDataJson from './assets/base_data/kioku_data.json';
-import magicLevelsJson from './assets/base_data/magic_levels.json';
+import battleConditionsJson from '../assets/base_data/getBattleConditionSetMstList.json';
+import portraitsJson from '../assets/base_data/getCardMstList.json';
+import portraitLevelsJson from '../assets/base_data/getCardLimitBreakMstList.json';
+import passiveDetailsJson from '../assets/base_data/getPassiveSkillDetailMstList.json';
+import skillDetailsJson from '../assets/base_data/getSkillDetailMstList.json';
+import kiokuDataJson from '../assets/base_data/kioku_data.json';
+import magicLevelsJson from '../assets/base_data/magic_levels.json';
 
 export const elementMap: Record<string, string> = {
     1: "Flame",

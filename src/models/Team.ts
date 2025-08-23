@@ -1,5 +1,5 @@
 import { EnemyTargetTypes, Kioku, getSkipCond } from "./Kioku";
-import { Enemy } from "./store/singleTeamStore";
+import { Enemy } from "../store/singleTeamStore";
 
 const targetTypeAtPosition = [EnemyTargetTypes.OTHER, EnemyTargetTypes.PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.PROXIMITY, EnemyTargetTypes.OTHER]
 

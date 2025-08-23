@@ -28,7 +28,7 @@
 import { defineComponent, computed, onMounted, stop } from 'vue'
 import CharacterCard from '../components/CharacterCard.vue'
 import { useCharacterStore } from '../store/characterStore'
-import { KiokuConstants } from '../Kioku'
+import { KiokuConstants } from '../models/Kioku'
 
 export default defineComponent({
     components: { CharacterCard },

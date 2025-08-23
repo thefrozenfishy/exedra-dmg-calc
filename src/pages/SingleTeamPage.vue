@@ -130,8 +130,8 @@ import { computed, onMounted } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
 import CharacterSelector from '../components/CharacterSelector.vue'
 import StatInputs from '../components/StatInputs.vue'
-import { getKioku, KiokuGeneratorArgs, KiokuConstants, Kioku } from '../Kioku'
-import { Team } from '../Team'
+import { getKioku, KiokuGeneratorArgs, KiokuConstants, Kioku } from '../models/Kioku'
+import { Team } from '../models/Team'
 
 const cryKeys = Object.keys(KiokuConstants.availableCrys)
 
