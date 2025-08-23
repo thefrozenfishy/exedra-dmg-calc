@@ -22,14 +22,17 @@ export interface FindBestTeamOptions {
     extraAttackers: string[];
     weakElements: string[]
     enabledCharacters: Character[]
+    onProgress?: (currChars: string[]) => void
 }
+
 export async function findBestTeam({
     enemies,
     include4StarAttackers,
     include4StarSupports,
     extraAttackers,
     weakElements,
-    enabledCharacters
+    enabledCharacters,
+    onProgress
 }: FindBestTeamOptions): Promise<any[]> {
     const results = []
     const availableChars: Record<string, Character[]> = {
@@ -53,18 +56,16 @@ export async function findBestTeam({
 
     // TODO: Not hardcode supports? 
     const atkSupports = enabledCharacters
-        .filter(c => ["The Universe's Edge", "Oracle Ray", "Fiore Finale"]            .includes(c.name))
+        .filter(c => ["The Universe's Edge", "Oracle Ray", "Fiore Finale"].includes(c.name))
         .map(getKioku)
         .map(c => c?.getKey())
         .filter(Boolean)
     if (!atkSupports.length) {
-        atkSupports.push(enabledCharacters.find(c => c.name === "Ryushin Spiral Fury").map(getKioku).map(c => c.getKey()))
+        atkSupports.push(getKioku(enabledCharacters.find(c => c.name === "Ryushin Spiral Fury")).getKey())
     }
-    console.log(atkSupports)
 
     const tsurunoData = enabledCharacters.find(c => c.name === "Flame Waltz")
-    const tsuruno = tsurunoData ? getKioku(tsurunoData)?.getKey() : null
-    console.log(tsuruno)
+    const tsurunoKey = tsurunoData ? getKioku(tsurunoData)?.getKey() : null
 
     // Nested loops to generate team combinations
     for (const attacker of availableChars.Attacker) {
@@ -72,7 +73,7 @@ export async function findBestTeam({
         if (!atkSupports.length) {
             availableSupports.push(enabledCharacters.find(c => c.name === "Ryushin Spiral Fury").map(getKioku).map(c => c.getKey()))
         }
-        for (const attackerSupport of availableSupports) {
+        for (const attackerSupportKey of availableSupports) {
             for (const attackerPortrait of ["A Dream of a Little Mermaid", "The Savior's Apostle", dmgUpPortrait[attacker.element]]) {
                 for (const sustain of availableChars["Healer"]) {
                     if (sustain.name === attacker.name) continue;
@@ -80,11 +81,11 @@ export async function findBestTeam({
                         if (supportList.map(c => c.name).includes(attacker.name)) continue;
 
                         const supportSupports = supportList.map((c, idx) => {
-                            if (!tsuruno) return
+                            if (!tsurunoKey) return
                             if (attacker.name === "Flame Waltz") return
                             if (c.role !== "Buffer") return
                             const arr: any[] = [undefined, undefined, undefined]
-                            arr[idx] = tsuruno
+                            arr[idx] = tsurunoKey
                             return arr
                         }).filter(Boolean)
 
@@ -92,43 +93,41 @@ export async function findBestTeam({
                             supportSupports.push([undefined, undefined, undefined])
                         }
 
-                        // Combinations of crystals
-                        for (const attackerCrys of combinations(Object.keys(KiokuConstants.availableCrys).filter(c => c !== KiokuConstants.availableCrys.FLAT_ATK), 3)) {
-                            const team = new Team([
-                                getKioku({
-                                    ...attacker,
-                                    dpsElement: attacker.element,
-                                    portrait: attackerPortrait,
-                                    crys: attackerCrys,
-                                    supportKey: getKioku(attackerSupport)?.getKey(),
-                                    isDps: true
-                                })!,
-                                getKioku({ ...sustain, dpsElement: attacker.element })!,
-                                ...supportList.map((s, i) => getKioku({ ...s, dpsElement: attacker.element, supportKey: supportSupports[i] })!)
-                            ]);
+                        onProgress?.([attacker.name, sustain.name, ...supportList.map(s => s.name)])
 
-                            const [dmg, critRate] = team.calculate_max_dmg([{
-                                name: "Target",
-                                maxBreak: 300,
-                                defense: 1500,
-                                defenseUp: 0,
-                                hitsToKill: 9,
-                                enabled: true,
-                                isBreak: true,
-                                isWeak: true,
-                                isCrit: true,
-                            }], 0);
-                            console.log(dmg, critRate)
-                            results.push([
-                                dmg | 0,
-                                Math.round(critRate * 100),
-                                attacker.name,
-                                attackerPortrait,
-                                attackerSupport?.name,
-                                ...attackerCrys,
-                                sustain.name,
-                                ...supportList.flatMap((s, i) => [s, supportSupports[i] ? "Tsuruno" : "any supp"])
-                            ]);
+                        for (const supportSupport of supportSupports) {
+                            for (const attackerCrys of combinations(Object.entries(KiokuConstants.availableCrys).filter((c, v) => c !== KiokuConstants.availableCrys.FLAT_ATK), 3)) {
+                                const team = new Team([
+                                    getKioku({
+                                        ...attacker,
+                                        dpsElement: attacker.element,
+                                        portrait: attackerPortrait,
+                                        crys: attackerCrys.map(item => item[1]),
+                                        supportKey: attackerSupportKey,
+                                        isDps: true
+                                    })!,
+                                    getKioku({ ...sustain, dpsElement: attacker.element })!,
+                                    ...supportList.map((s, i) => getKioku({ ...s, dpsElement: attacker.element, supportKey: supportSupport[i] })!)
+                                ]);
+
+                                const [dmg, critRate] = team.calculate_max_dmg([
+                                    { name: 'Left Other', maxBreak: 300, defense: 1500, enabled: false, defenseUp: 0, isBreak: true, isWeak: true, isCrit: true, hitsToKill: 1 },
+                                    { name: 'Left Proximity', maxBreak: 300, defense: 1500, enabled: false, defenseUp: 0, isBreak: true, isWeak: true, isCrit: true, hitsToKill: 1 },
+                                    { name: 'Target', maxBreak: 300, defense: 1500, enabled: true, defenseUp: 0, isBreak: true, isWeak: true, isCrit: true, hitsToKill: 1 },
+                                    { name: 'Right Proximity', maxBreak: 0, defense: 1500, enabled: false, defenseUp: 0, isBreak: true, isWeak: true, isCrit: true, hitsToKill: 1 },
+                                    { name: 'Right Other', maxBreak: 300, defense: 1500, enabled: false, defenseUp: 0, isBreak: true, isWeak: true, isCrit: true, hitsToKill: 1 }
+                                ], 0);
+                                results.push([
+                                    dmg | 0,
+                                    Math.round(critRate * 100),
+                                    attacker.name,
+                                    attackerPortrait,
+                                    attackerSupportKey?.[0],
+                                    ...attackerCrys.map(item => item[0]),
+                                    sustain.name,
+                                    ...supportList.flatMap((s, i) => [s.name, supportSupport[i]?.[0]])
+                                ]);
+                            }
                         }
                     }
                 }

@@ -60,7 +60,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
             characters.value.push({
                 name,
                 id: data.id,
-                enabled: data.rarity !== 5 || data.id === 100101,
+                enabled: data.rarity !== 5 || data.id === 10010101,
                 role: data.role,
                 element: data.element,
                 character_en: data.character_en,

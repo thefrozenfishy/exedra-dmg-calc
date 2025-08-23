@@ -167,7 +167,7 @@ export class Team {
                 let val = kiokuAtPosition[k]
                 if (k.endsWith("Atk")) {
                     val |= 0
-                } else if (["crys_sub", "crys", "data", "name", "support", "supportKey", "knownConditions", "effects"].includes(k)) {
+                } else if (["crys_sub", "crys", "data", "support", "supportKey", "knownConditions", "effects"].includes(k)) {
                     return;
                 }
 
@@ -226,7 +226,9 @@ ${lines.join("\n")}
 KIOKU EFFECTS:
 ${effects.join("\n")}
 ` 
-
+        if (this.debug && idx === 0) {
+            console.log(debugText)
+        }
 
         return [total | 0, crit_rate, debugText, enemyDied];
     }

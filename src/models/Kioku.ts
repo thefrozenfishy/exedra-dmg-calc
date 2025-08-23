@@ -105,7 +105,6 @@ export function getSkipCond(condId: string | undefined): boolean | Function {
 
     if (condIdInt in battleConditions) {
         try {
-            console.log(knownConditions[condId])
             return knownConditions[condId]()
         } catch (err) {
             throw new Error(
@@ -290,6 +289,8 @@ export class Kioku {
                 case KiokuConstants.availableCrys.ELEMENTAL_DMG:
                     this.add_to_effects("UP_GIV_DMG_RATIO", 10 * eff, "");
                     break;
+                default:
+                    console.warn("Uknown crys", cry)
             }
         }
         // First add buff mult then later add the effects themselves
@@ -385,10 +386,10 @@ export class Kioku {
             }
             nrHitThatKills -= 1
             const shouldSkip = getSkipCond(v.activeConditionSetIdCsv)
-            if (typeof(shouldSkip) === 'boolean'){
+            if (typeof (shouldSkip) === 'boolean') {
                 if (shouldSkip) continue;
             } else {
-                if(shouldSkip(nrHitThatKills > 1 ? amountOfEnemies : amountOfEnemies - 1, maxBreak)) continue;
+                if (shouldSkip(nrHitThatKills > 1 ? amountOfEnemies : amountOfEnemies - 1, maxBreak)) continue;
             }
 
             if (v.abilityEffectType === "DMG_RANDOM" && targetType === EnemyTargetTypes.TARGET) total_dmg += v.value1 * v.value2;
@@ -567,17 +568,6 @@ export function getKioku({
     specialLvl = KiokuConstants.maxSpecialLvl,
     crys = [KiokuConstants.availableCrys.EX],
 }: KiokuGeneratorArgs) {
-    console.log("Called with:", name,
-dpsElement,
-supportKey,
-portrait,
-isDps,
-ascension,
-kiokuLvl,
-magicLvl,
-heartphialLvl,
-specialLvl,
-crys)
     if (name == null || kiokuLvl == null || magicLvl == null || heartphialLvl == null || isDps == null || ascension == null || specialLvl == null) {
         throw new Error("Ivalid arguments provided to getKioku");
     }
