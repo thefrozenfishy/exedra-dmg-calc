@@ -44,7 +44,6 @@ export const useTeamStore = defineStore('team', {
 
 export const useEnemyStore = defineStore('enemies', {
   state: () => ({
-    // TODO make it so u can just choose an event/stage and it just pulls this from mst
     enemies: [
       { name: 'Left Other', maxBreak: 300, defense: 1500, enabled: false, defenseUp: 0, isBreak: true, isWeak: true, isCrit: true, hitsToKill: 1 },
       { name: 'Left Proximity', maxBreak: 300, defense: 1500, enabled: false, defenseUp: 0, isBreak: true, isWeak: true, isCrit: true, hitsToKill: 1 },

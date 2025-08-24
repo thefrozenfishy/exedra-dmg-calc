@@ -11,6 +11,7 @@ export interface FindBestTeamOptions {
     include4StarAttackers: boolean;
     include4StarSupports: boolean;
     extraAttackers: string[];
+    obligatoryKioku: string[];
     weakElements: KiokuElement[]
     enabledCharacters: Character[]
     onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number) => void,

@@ -32,12 +32,37 @@
                 </div>
             </div>
 
-            <!-- Extra Attackers -->
-            <div class="extra-attackers">
+            <div class="kioku-selector">
+                <h3>Obligatory Kioku</h3>
+
+                <!-- Selected list -->
+                <div class="selected-kioku">
+                    <div @click="removeObligatoryKioku(char)" v-for="char in obligatoryKioku" :key="char.id"
+                        class="chip">
+                        <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+                        <span>{{ char.name }}</span>
+                    </div>
+                </div>
+
+                <!-- Input + dropdown -->
+                <div class="kioku-select">
+                    <input type="text" v-model="obligatoryKiokuQuery"
+                        placeholder="Kioku that must be included in final team..." @focus="showDropdown = true"
+                        @blur="hideDropdown" />
+                    <ul v-if="showDropdown && filteredKioku.length" class="dropdown">
+                        <li v-for="char in filteredKioku" :key="char.id" @mousedown.prevent="addObligatoryKioku(char)">
+                            <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+                            {{ char.name }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="kioku-selector">
                 <h3>Extra Attackers</h3>
 
                 <!-- Selected list -->
-                <div class="selected-attackers">
+                <div class="selected-kioku">
                     <div @click="removeExtraAttacker(char)" v-for="char in extraAttackers" :key="char.id" class="chip">
                         <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
                         <span>{{ char.name }}</span>
@@ -45,12 +70,12 @@
                 </div>
 
                 <!-- Input + dropdown -->
-                <div class="attacker-select">
+                <div class="kioku-select">
                     <input type="text" v-model="extraAttackerQuery"
                         placeholder="Use non-attackers as extra attackers..." @focus="showDropdown = true"
                         @blur="hideDropdown" />
-                    <ul v-if="showDropdown && filteredCharacters.length" class="dropdown">
-                        <li v-for="char in filteredCharacters" :key="char.id"
+                    <ul v-if="showDropdown && filteredAttackers.length" class="dropdown">
+                        <li v-for="char in filteredAttackers" :key="char.id"
                             @mousedown.prevent="addExtraAttacker(char)">
                             <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
                             {{ char.name }}
@@ -111,6 +136,7 @@ const results = reactive<{ attackerId: string, team: any, dmg: number }[][]>([])
 const members = computed(() => store.characters.filter(c => c.enabled))
 const attackers = computed(() => store.characters.filter(c => (c.enabled && c.role === KiokuRole.Attacker) || extraAttackers.value.map(c => c.name).includes(c.name)))
 let prevAttackers: Character[] = []
+let prevObligatoryKioku: Character[] = []
 
 const workerRef = ref<Worker | null>(null)
 const progress = ref<FinalTeam>({})
@@ -132,15 +158,27 @@ const weakElements = reactive([
 // Extra attackers
 const extraAttackers = ref<Character[]>([])
 const extraAttackerQuery = ref("")
+const obligatoryKioku = ref<Character[]>([])
+const obligatoryKiokuQuery = ref("")
 const showDropdown = ref(false)
 
-const filteredCharacters = computed(() => {
+const filteredAttackers = computed(() => {
     const q = extraAttackerQuery.value.toLowerCase()
     return members.value.filter(
         (m) =>
             !extraAttackers.value.some((a) => a.id === m.id) &&
             m.rarity !== 3 &&
             m.role !== KiokuRole.Attacker &&
+            (m.name.toLowerCase().includes(q) ||
+                m.character_en.toLowerCase().includes(q)
+            ))
+})
+const filteredKioku = computed(() => {
+    const q = obligatoryKiokuQuery.value.toLowerCase()
+    return members.value.filter(
+        (m) =>
+            !obligatoryKioku.value.some((a) => a.id === m.id) &&
+            m.rarity !== 3 &&
             (m.name.toLowerCase().includes(q) ||
                 m.character_en.toLowerCase().includes(q)
             ))
@@ -152,8 +190,17 @@ function addExtraAttacker(char: Character) {
     showDropdown.value = false
 }
 
+function addObligatoryKioku(char: Character) {
+    obligatoryKioku.value.push(char)
+    obligatoryKiokuQuery.value = ""
+    showDropdown.value = false
+}
+
 function removeExtraAttacker(char: Character) {
     extraAttackers.value = extraAttackers.value.filter((a) => a.id !== char.id)
+}
+function removeObligatoryKioku(char: Character) {
+    obligatoryKioku.value = obligatoryKioku.value.filter((a) => a.id !== char.id)
 }
 
 function hideDropdown() {
@@ -244,6 +291,7 @@ const topTeamsByAttacker = computed(() => {
 })
 
 async function startSimulation() {
+    prevObligatoryKioku = [...obligatoryKioku.value]
     prevAttackers = [...attackers.value, ...extraAttackers.value]
     running.value = true
     progress.value = {}
@@ -273,6 +321,7 @@ async function startSimulation() {
             include4StarSupports: include4StarSupports.value,
             weakElements: weakElements.filter(el => el.enabled).map(el => el.name),
             extraAttackers: extraAttackers.value.map(c => c.name),
+            obligatoryKioku: obligatoryKioku.value.map(c => c.name),
             enabledCharacters: JSON.parse(JSON.stringify(members.value))
         }
     })
@@ -332,11 +381,11 @@ async function startSimulation() {
 
 
 /* Extra attackers */
-.extra-attackers {
+.kioku-selector {
     margin-top: 1rem;
 }
 
-.selected-attackers {
+.selected-kioku {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -359,11 +408,11 @@ async function startSimulation() {
     border-radius: 50%;
 }
 
-.attacker-select {
+.kioku-select {
     position: relative;
 }
 
-.attacker-select input {
+.kioku-select input {
     width: 100%;
     padding: 0.4rem;
     max-width: 600px;

@@ -26,14 +26,12 @@
         <ul>
             <li>Melodia Appassionata (Swimsuit Sayaka) vortex are not added to the calculation</li>
         </ul>
-        <h1>Planned improvements</h1>
+        <h1>Potentially planned improvements</h1>
         <ul>
             <li>Clean up styling</li>
             <li>Store results to speed up later duplicate simulations</li>
             <li>Allow non-healer teams in best team calculator</li>
             <li>Revise dmg taken- (and def-?) calculation</li>
-            <li>Export/import teams</li>
-            <li>Lock character for 'best team simulator', for those chars u know for a fact you're including</li>
         </ul>
     </div>
 </template>

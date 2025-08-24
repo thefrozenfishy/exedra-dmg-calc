@@ -11,6 +11,7 @@ export async function findBestTeam({
     extraAttackers,
     weakElements,
     enabledCharacters,
+    obligatoryKioku,
     onProgress,
     onError
 }: FindBestTeamOptions): Promise<any[]> {
@@ -100,6 +101,10 @@ export async function findBestTeam({
                     arr[idx] = tsurunoKey
                     return arr
                 }).filter(Boolean)
+
+                if (obligatoryKioku.length) {
+                    if (!obligatoryKioku.every(k => [attacker.name, sustain.name, ...supportList.map(c => c.name)].includes(k))) continue;
+                }
 
                 if (!supportSupports.length) {
                     supportSupports.push([undefined, undefined, undefined])

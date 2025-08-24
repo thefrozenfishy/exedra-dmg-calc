@@ -1,5 +1,5 @@
 <template>
-    <div v-if="character.rarity === 5" class="character-card">
+    <div v-if="character.rarity !== 3" class="character-card">
         <div class="image-wrapper" @click="toggleCharacter">
             <img :src="imgSrc" :alt="character.name" class="character-image"
                 :class="{ disabled: !character.enabled }" />

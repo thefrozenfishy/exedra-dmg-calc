@@ -32,6 +32,40 @@ export const useCharacterStore = defineStore('characterStore', () => {
         chars.forEach(updateChar)
     }
 
+    const exportCharacters = () => {
+        const dataStr = JSON.stringify(characters.value, null, 2) // pretty JSON
+        const blob = new Blob([dataStr], { type: "application/json" })
+        const url = URL.createObjectURL(blob)
+
+        const a = document.createElement("a")
+        a.href = url
+        a.download = "exedraDmgCalcTeam.json"
+        a.click()
+
+        URL.revokeObjectURL(url)
+    }
+
+    const importCharacters = (file: File) => {
+        return new Promise<void>((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = (e) => {
+                try {
+                    const parsed = JSON.parse(e.target?.result as string)
+                    if (Array.isArray(parsed)) {
+                        setCharacters(parsed)
+                        resolve()
+                    } else {
+                        reject(new Error("Invalid file format"))
+                    }
+                } catch (err) {
+                    reject(err)
+                }
+            }
+            reader.onerror = () => reject(reader.error)
+            reader.readAsText(file)
+        })
+    }
+
     // Add new characters
     Object.entries(kiokuData).forEach(([name, data]) => {
         if (!characters.value.map(c => c.name).includes(name)) {
@@ -55,5 +89,5 @@ export const useCharacterStore = defineStore('characterStore', () => {
         }
     });
 
-    return { characters, toggleCharacter, updateChar, setCharacters }
+    return { characters, toggleCharacter, updateChar, setCharacters, exportCharacters, importCharacters }
 })

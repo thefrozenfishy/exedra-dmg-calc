@@ -324,7 +324,7 @@ export class Kioku {
                     else if (sub_d.abilityEffectType === "UP_DEBUFF_EFFECT_VALUE") this.debuff_mult += sub_d.value1 / 1000;
                 }
                 // After mult is applied, start adding effects
-                this.add_effects(supp_eff, true, 10);
+                this.add_effects(supp_eff, true, 10, true);
             }
         }
 
@@ -340,7 +340,7 @@ export class Kioku {
             const port_info = portraits[this.portrait];
             const port_eff = find_all_details(true, port_info.passiveSkill1);
             this.portraitAtk = portraitLevels[port_info.cardMstId * 10 + 5].atk;
-            this.add_effects({ 1: port_eff[Math.max(...Object.keys(port_eff).map(Number))] }, true, 1);
+            this.add_effects({ 1: port_eff[Math.max(...Object.keys(port_eff).map(Number))] }, true, 1, true);
             // Math.max to find highest level effect of portrait (Always assume LB5 portrait), and format into expected format
         }
 
@@ -408,7 +408,6 @@ export class Kioku {
 
     add_effects(details: Record<string, any>, is_unique: boolean, lvl: number, ignore_buff_mult = false) {
         const conds: Record<string, number> = {};
-        // TODO: What's the logic of conds again, this seems weird, document it better
         const lvl_details = Object.values(details).filter(
             (v: any) =>
                 (is_unique || parseInt(String(getIdx(v)).slice(-2)) === lvl) &&
@@ -429,7 +428,6 @@ export class Kioku {
             }
 
             if (!ignore_buff_mult) {
-                // Mult doesn't affect crys. TODO: Does it affect portrat, support? 
                 if (
                     ["DWN_DEF_RATIO", "DWN_DEF_ACCUM_RATIO", "UP_RCV_DMG_RATIO"].includes(
                         skill.abilityEffectType
