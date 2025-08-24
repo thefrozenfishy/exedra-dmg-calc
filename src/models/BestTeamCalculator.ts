@@ -119,6 +119,7 @@ export async function findBestTeam({
                 ], completedRuns, expectedTotalRuns)
 
                 for (const attackerSupportKey of availableSupportKeys) {
+                    if ([attacker.name, sustain.name, ...supportList.map(s => s.name)].includes(attackerSupportKey[0])) continue;
 
                     for (const attackerPortrait of availablePortraits) {
 
