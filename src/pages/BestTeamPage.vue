@@ -29,36 +29,36 @@
 
                 <div class="role-grid">
                     <div class="role-box">
-                        <img src="/exedra-dmg-calc/roles/Attacker.png" alt="Attacker" />
+                        <img :src="'/exedra-dmg-calc/roles/Attacker.png'" alt="Attacker" />
                         <span>Attacker</span>
                         <div class="number">1</div>
                     </div>
 
                     <div class="role-box">
                         <div class="icons">
-                            <img src="/exedra-dmg-calc/roles/Buffer.png" alt="Buffer" />
-                            <img src="/exedra-dmg-calc/roles/Debuffer.png" alt="Debuffer" />
+                            <img :src="'/exedra-dmg-calc/roles/Buffer.png'" alt="Buffer" />
+                            <img :src="'/exedra-dmg-calc/roles/Debuffer.png'" alt="Debuffer" />
                         </div>
                         <span>Buffer+Debuffer</span>
                         <input type="number" v-model.number="deBufferCount" min="0" max="4" />
                     </div>
 
                     <div class="role-box">
-                        <img src="/exedra-dmg-calc/roles/Healer.png" alt="Healer" />
+                        <img :src="'/exedra-dmg-calc/roles/Healer.png'" alt="Healer" />
                         <span>Healer (min)</span>
                         <input type="number" v-model.number="minHealer" min="0"
                             :max="otherCount - minDefender - minBreaker" />
                     </div>
 
                     <div class="role-box">
-                        <img src="/exedra-dmg-calc/roles/Defender.png" alt="Defender" />
+                        <img :src="'/exedra-dmg-calc/roles/Defender.png'" alt="Defender" />
                         <span>Defender (min)</span>
                         <input type="number" v-model.number="minDefender" min="0"
                             :max="otherCount - minHealer - minBreaker" />
                     </div>
 
                     <div class="role-box">
-                        <img src="/exedra-dmg-calc/roles/Breaker.png" alt="Breaker" />
+                        <img :src="'/exedra-dmg-calc/roles/Breaker.png'" alt="Breaker" />
                         <span>Breaker (min)</span>
                         <input type="number" v-model.number="minBreaker" min="0"
                             :max="otherCount - minDefender - minHealer" />
