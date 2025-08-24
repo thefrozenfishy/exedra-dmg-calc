@@ -304,7 +304,7 @@ async function startSimulation() {
             completedRuns.value = e.data.completedRuns
             expectedRuns.value = e.data.expectedTotalRuns
         } else if (e.data.type === 'done') {
-            results.splice(0, results.length, ...e.data.results)
+            results.push(...e.data.results)
             running.value = false
             workerRef.value?.terminate()
             workerRef.value = null
@@ -322,6 +322,7 @@ async function startSimulation() {
             weakElements: weakElements.filter(el => el.enabled).map(el => el.name),
             extraAttackers: extraAttackers.value.map(c => c.name),
             obligatoryKioku: obligatoryKioku.value.map(c => c.name),
+            prevResults: JSON.parse(JSON.stringify(results)),
             enabledCharacters: JSON.parse(JSON.stringify(members.value))
         }
     })

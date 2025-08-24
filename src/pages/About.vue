@@ -32,6 +32,7 @@
             <li>Store results to speed up later duplicate simulations</li>
             <li>Allow non-healer teams in best team calculator</li>
             <li>Revise dmg taken- (and def-?) calculation</li>
+            <li>Allow users to set crys + crys substats for their Kioku in team builder</li>
         </ul>
     </div>
 </template>

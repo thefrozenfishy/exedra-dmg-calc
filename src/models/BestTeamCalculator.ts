@@ -12,6 +12,7 @@ export async function findBestTeam({
     weakElements,
     enabledCharacters,
     obligatoryKioku,
+    prevResults,
     onProgress,
     onError
 }: FindBestTeamOptions): Promise<any[]> {
@@ -22,6 +23,9 @@ export async function findBestTeam({
             onError?.(e)
         }
     }
+
+    const runsAlreadyCompleted = new Set()
+    prevResults.forEach(r => runsAlreadyCompleted.add(JSON.stringify([r[2], r[8], r[9], r[11], r[13]])))
 
     const results = []
     const availableChars: Record<KiokuRole, Character[]> = {
@@ -92,6 +96,9 @@ export async function findBestTeam({
 
             for (const supportList of availableSupportCombinations) {
                 completedRuns += 1;
+
+                const runKey = [attacker.name, sustain.name, ...supportList.map(c => c.name)];
+
                 if (supportList.map(c => c.name).includes(attacker.name)) continue;
                 const supportSupports = supportList.map((c, idx) => {
                     if (!tsurunoKey) return;
@@ -103,8 +110,9 @@ export async function findBestTeam({
                 }).filter(Boolean)
 
                 if (obligatoryKioku.length) {
-                    if (!obligatoryKioku.every(k => [attacker.name, sustain.name, ...supportList.map(c => c.name)].includes(k))) continue;
+                    if (!obligatoryKioku.every(k => runKey.includes(k))) continue;
                 }
+                if (runsAlreadyCompleted.has(JSON.stringify(runKey))) continue;
 
                 if (!supportSupports.length) {
                     supportSupports.push([undefined, undefined, undefined])

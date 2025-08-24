@@ -13,6 +13,7 @@ export interface FindBestTeamOptions {
     extraAttackers: string[];
     obligatoryKioku: string[];
     weakElements: KiokuElement[]
+    prevResults: any[]
     enabledCharacters: Character[]
     onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number) => void,
     onError?: (error: any) => void
