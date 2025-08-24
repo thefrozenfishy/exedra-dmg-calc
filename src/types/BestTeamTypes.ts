@@ -1,5 +1,5 @@
 import { Enemy } from "./EnemyTypes";
-import { Character } from "./KiokuTypes";
+import { Character, KiokuElement } from "./KiokuTypes";
 
 export interface TeamSlot {
     main: Character | undefined
@@ -11,7 +11,7 @@ export interface FindBestTeamOptions {
     include4StarAttackers: boolean;
     include4StarSupports: boolean;
     extraAttackers: string[];
-    weakElements: Element[]
+    weakElements: KiokuElement[]
     enabledCharacters: Character[]
     onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number) => void
 }

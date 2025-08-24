@@ -27,10 +27,8 @@
             <select :value="slot.main.portrait || ''"
               @change="e => team.setMain(index, { ...slot.main, portrait: e?.target?.value })">
               <option disabled value="">Select a portrait</option>
-              <option value="A Dream of a Little Mermaid">A Dream of a Little Mermaid</option>
-              <option value="The Savior's Apostle">The Savior's Apostle</option>
-              <option :value="dmg_plus_portrait[slot.main.element]">
-                {{ dmg_plus_portrait[slot.main.element] }}
+              <option v-for="portrait in portraits(slot.main.element)" :value="portrait" :key="portrait">
+                {{ portrait }}
               </option>
             </select>
           </label>
@@ -85,7 +83,7 @@ import StatInputs from '../components/StatInputs.vue'
 import { getKioku, Kioku } from '../models/Kioku'
 import { Team } from '../models/Team'
 import EnemySelector from '../components/EnemySelector.vue'
-import { KiokuConstants, KiokuGeneratorArgs } from '../types/KiokuTypes'
+import { KiokuConstants, KiokuGeneratorArgs, portraits } from '../types/KiokuTypes'
 
 const cryKeys = Object.keys(KiokuConstants.availableCrys)
 
@@ -95,15 +93,6 @@ function onChangeCrys(idx: number, rawValue: string) {
   const current = main.crys ?? ["", "", ""]
   current[idx - 1] = rawValue as string
   team.setMain(0, { ...main, crys: current } as any)
-}
-
-const dmg_plus_portrait: Record<string, string> = {
-  Flame: "A Reluctant Coach Steps Up",
-  Aqua: "Futures Felt in Photographs",
-  Forest: "Special Stage Persona",
-  Light: "High Five for Harmony",
-  Dark: "One Time Team-up!",
-  Void: "Pride on the Line",
 }
 
 const formatDmg = (out: string | (number | string[])[]) => typeof (out) !== 'string' ? `Max Damage: ${out[0].toLocaleString()} with a ${out[1] * 100}% crit rate` : battleOutput

@@ -1,5 +1,5 @@
 import { EnemyTargetTypes } from '../types/EnemyTypes';
-import { elementMap, KiokuConstants, KiokuData, KiokuGeneratorArgs, Element, MagicLevel, SkillDetail } from '../types/KiokuTypes';
+import { elementMap, KiokuConstants, KiokuData, KiokuGeneratorArgs, KiokuElement, MagicLevel, SkillDetail } from '../types/KiokuTypes';
 import { magicData, battleConditions, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData } from '../utils/helpers';
 
 function getIdx(obj: SkillDetail): number {
@@ -158,7 +158,7 @@ export class Kioku {
 
 
     private name: string;
-    private dpsElement: Element;
+    private dpsElement: KiokuElement;
     private supportKey: any[] | undefined;
     private support: Kioku | undefined;
     private portrait: string | undefined;
@@ -221,7 +221,7 @@ export class Kioku {
         this.magicLvl = magicLvl;
         this.heartphialLvl = heartphialLvl;
         this.specialLvl = specialLvl;
-        this.dpsElement = dpsElement ?? Element.Flame;
+        this.dpsElement = dpsElement ?? KiokuElement.Flame;
         this.crys = crys;
         this.data = kiokuData[name];
 
@@ -501,7 +501,7 @@ export class Kioku {
 
 interface KiokuArgs {
     name: string;
-    dpsElement?: Element;
+    dpsElement?: KiokuElement;
     kiokuLvl: number;
     magicLvl: number;
     heartphialLvl: number;

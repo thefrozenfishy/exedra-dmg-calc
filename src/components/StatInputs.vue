@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
 import { Character, KiokuConstants } from '../types/KiokuTypes';
 
 const props = defineProps<{

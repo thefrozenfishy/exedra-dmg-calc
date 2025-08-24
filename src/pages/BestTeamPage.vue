@@ -97,7 +97,7 @@ import TeamRow from '../components/TeamRow.vue'
 import EnemySelector from '../components/EnemySelector.vue'
 import { useEnemyStore } from '../store/singleTeamStore'
 import { useCharacterStore } from '../store/characterStore'
-import { Role, Character, Element } from '../types/KiokuTypes'
+import { KiokuRole, Character, KiokuElement } from '../types/KiokuTypes'
 const enemies = useEnemyStore()
 
 const store = useCharacterStore()
@@ -107,7 +107,7 @@ const completedRuns = ref(0)
 const results = reactive<{ attackerId: string, team: any, dmg: number }[][]>([])
 
 const members = computed(() => store.characters.filter(c => c.enabled))
-const attackers = computed(() => store.characters.filter(c => (c.enabled && c.role === Role.Attacker) || extraAttackers.value.map(c => c.name).includes(c.name)))
+const attackers = computed(() => store.characters.filter(c => (c.enabled && c.role === KiokuRole.Attacker) || extraAttackers.value.map(c => c.name).includes(c.name)))
 let prevAttackers: Character[] = []
 
 const workerRef = ref<Worker | null>(null)
@@ -119,12 +119,12 @@ const include4StarSupports = ref(false)
 
 // Example element icons (replace with your real assets)
 const weakElements = reactive([
-    { name: Element.Flame, enabled: true },
-    { name: Element.Aqua, enabled: true },
-    { name: Element.Forest, enabled: true },
-    { name: Element.Light, enabled: true },
-    { name: Element.Dark, enabled: true },
-    { name: Element.Void, enabled: true },
+    { name: KiokuElement.Flame, enabled: true },
+    { name: KiokuElement.Aqua, enabled: true },
+    { name: KiokuElement.Forest, enabled: true },
+    { name: KiokuElement.Light, enabled: true },
+    { name: KiokuElement.Dark, enabled: true },
+    { name: KiokuElement.Void, enabled: true },
 ])
 
 // Extra attackers
@@ -138,7 +138,7 @@ const filteredCharacters = computed(() => {
         (m) =>
             !extraAttackers.value.some((a) => a.id === m.id) &&
             m.rarity !== 3 &&
-            m.role !== Role.Attacker &&
+            m.role !== KiokuRole.Attacker &&
             (m.name.toLowerCase().includes(q) ||
                 m.character_en.toLowerCase().includes(q)
             ))

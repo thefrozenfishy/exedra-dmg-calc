@@ -1,4 +1,4 @@
-export enum Element {
+export enum KiokuElement {
     Flame = "Flame",
     Aqua = "Aqua",
     Forest = "Forest",
@@ -6,7 +6,8 @@ export enum Element {
     Dark = "Dark",
     Void = "Void"
 }
-export enum Role {
+
+export enum KiokuRole {
     Attacker = "Attacker",
     Buffer = "Buffer",
     Debuffer = "Debuffer",
@@ -15,15 +16,25 @@ export enum Role {
     Defender = "Defender"
 }
 
-export const elementMap: Record<string, Element> = {
-    1: Element.Flame,
-    2: Element.Aqua,
-    3: Element.Forest,
-    4: Element.Light,
-    5: Element.Dark,
-    6: Element.Void,
+export const elementMap: Record<string, KiokuElement> = {
+    1: KiokuElement.Flame,
+    2: KiokuElement.Aqua,
+    3: KiokuElement.Forest,
+    4: KiokuElement.Light,
+    5: KiokuElement.Dark,
+    6: KiokuElement.Void,
 };
 
+export const portraits = (elem: KiokuElement) => ["A Dream of a Little Mermaid", "The Savior's Apostle", dmgUpPortraits[elem]]
+
+const dmgUpPortraits = {
+    [KiokuElement.Flame]: "A Reluctant Coach Steps Up",
+    [KiokuElement.Aqua]: "Futures Felt in Photographs",
+    [KiokuElement.Forest]: "Special Stage Persona",
+    [KiokuElement.Light]: "High Five for Harmony",
+    [KiokuElement.Dark]: "One Time Team-up!",
+    [KiokuElement.Void]: "Pride on the Line",
+}
 
 export interface PortraitData {
     cardMstId: number;
@@ -47,8 +58,8 @@ export interface Character {
     character_en: string
     enabled: boolean
     ascension: number
-    element: Element
-    role: Role
+    element: KiokuElement
+    role: KiokuRole
     rarity: number
     portrait: string
     kiokuLvl: number
@@ -63,8 +74,8 @@ export interface KiokuData {
     name: number
     rarity: number
     character_en: string
-    element: Element
-    role: Role
+    element: KiokuElement
+    role: KiokuRole
     atk100: number
     minAtk: number
     atka5: number
@@ -73,7 +84,7 @@ export interface KiokuData {
     special_id: number
     crystalis_id: number
     support_id: number
-    support_target: Element | Role
+    support_target: KiokuElement | KiokuRole
     ability_id: number
     ascension_1_effect_2_id: number
     ascension_2_effect_2_id: number
@@ -82,19 +93,29 @@ export interface KiokuData {
     ascension_5_effect_2_id?: number
 }
 
-const availableCrys = {
-    ATK_25_PERCENT: "ATK%-25",
-    CRIT_DMG: "CD-20",
-    DMG_TO_WEAK_ELEMENT: "Elem-24",
-    ELEMENTAL_DMG: "Dmg-20",
-    FLAT_ATK: "ATK-125",
-    EX: "EX"
-};
-const availableSubCrys = {
-    CRIT_DMG: "CD-10",
-    FLAT_ATK: "ATK-60"
+enum availableCrys {
+    ATK_25_PERCENT = "ATK%-25",
+    CRIT_DMG = "CD-20",
+    DMG_TO_WEAK_ELEMENT = "Elem-24",
+    ELEMENTAL_DMG = "Dmg-20",
+    FLAT_ATK = "ATK-125",
+    EX = "EX"
 };
 
+enum availableSubCrys {
+    CRIT_DMG = "CD-10",
+    FLAT_ATK = "ATK-60"
+};
+
+const heartphialAtkRewardLvls = {
+    45: 20,
+    39: 20,
+    33: 20,
+    27: 20,
+    21: 20,
+    15: 10,
+    9: 10
+}
 
 export const KiokuConstants = {
     availableCrys,
@@ -104,12 +125,12 @@ export const KiokuConstants = {
     maxAscension: 5,
     maxHeartphialLvl: 50,
     maxSpecialLvl: 10,
-    heartphialAtkRewardLvls: { 45: 20, 39: 20, 33: 20, 27: 20, 21: 20, 15: 10, 9: 10 } as Record<string, number>,
+    heartphialAtkRewardLvls
 
 }
 export interface KiokuGeneratorArgs {
     name: string;
-    dpsElement: Element;
+    dpsElement: KiokuElement;
     kiokuLvl?: number;
     magicLvl?: number;
     heartphialLvl?: number;

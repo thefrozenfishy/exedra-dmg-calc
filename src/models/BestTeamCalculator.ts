@@ -1,16 +1,7 @@
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { Team } from "./Team";
-import { Role, Element, Character, KiokuConstants } from "../types/KiokuTypes";
+import { KiokuRole, portraits, Character, KiokuConstants } from "../types/KiokuTypes";
 import { getKioku } from "./Kioku";
-
-const dmgUpPortrait = {
-    [Element.Flame]: "A Reluctant Coach Steps Up",
-    [Element.Aqua]: "Futures Felt in Photographs",
-    [Element.Forest]: "Special Stage Persona",
-    [Element.Light]: "High Five for Harmony",
-    [Element.Dark]: "One Time Team-up!",
-    [Element.Void]: "Pride on the Line",
-}
 
 // TODO: Use old results somehow?
 export async function findBestTeam({
@@ -23,30 +14,30 @@ export async function findBestTeam({
     onProgress
 }: FindBestTeamOptions): Promise<any[]> {
     const results = []
-    const availableChars: Record<Role, Character[]> = {
-        [Role.Attacker]: [],
-        [Role.Debuffer]: [],
-        [Role.Buffer]: [],
-        [Role.Healer]: [],
-        [Role.Breaker]: [],
-        [Role.Defender]: [],
+    const availableChars: Record<KiokuRole, Character[]> = {
+        [KiokuRole.Attacker]: [],
+        [KiokuRole.Debuffer]: [],
+        [KiokuRole.Buffer]: [],
+        [KiokuRole.Healer]: [],
+        [KiokuRole.Breaker]: [],
+        [KiokuRole.Defender]: [],
     }
     enabledCharacters.forEach(char => {
-        if (char.role === Role.Attacker) {
-            if (weakElements.includes(char.element) && ((char.rarity === 4 && char.role === Role.Attacker && include4StarAttackers) || char.rarity === 5)) {
-                availableChars[Role.Attacker].push(char)
+        if (char.role === KiokuRole.Attacker) {
+            if (weakElements.includes(char.element) && ((char.rarity === 4 && char.role === KiokuRole.Attacker && include4StarAttackers) || char.rarity === 5)) {
+                availableChars[KiokuRole.Attacker].push(char)
             }
         } else if (char.rarity === 5 ||
             (char.rarity === 4 &&
                 include4StarSupports &&
-                [Role.Buffer, Role.Debuffer].includes(char.role) &&
+                [KiokuRole.Buffer, KiokuRole.Debuffer].includes(char.role) &&
                 !["Nightmare Stinger"].includes(char.name) // Hanna has no debuffs, just remove to speed up computation
             )) {
             availableChars[char.role].push(char)
         }
-        if (extraAttackers.includes(char.name)) availableChars[Role.Attacker].push(char)
+        if (extraAttackers.includes(char.name)) availableChars[KiokuRole.Attacker].push(char)
     })
-    const availableSupportCombinations = combinations([...availableChars[Role.Debuffer], ...availableChars[Role.Buffer]], 3)
+    const availableSupportCombinations = combinations([...availableChars[KiokuRole.Debuffer], ...availableChars[KiokuRole.Buffer]], 3)
 
     // TODO: Not hardcode supports? It'd take longer tho and these three are honestly the only options?
     const atkSupportsKeys = enabledCharacters
@@ -55,23 +46,24 @@ export async function findBestTeam({
         .map(c => c?.getKey())
         .filter(Boolean)
 
-    if (!availableChars[Role.Healer].length) {
-        availableChars[Role.Healer].push(getKioku(enabledCharacters.find(c => c.name === "Circle Of Fire")))
+    if (!availableChars[KiokuRole.Healer].length) {
+        availableChars[KiokuRole.Healer].push(getKioku(enabledCharacters.find(c => c.name === "Circle Of Fire")))
     }
 
     const tsurunoData = enabledCharacters.find(c => c.name === "Flame Waltz")
     const tsurunoKey = tsurunoData ? getKioku(tsurunoData)?.getKey() : null
 
     let completedRuns = 0;
-    let expectedTotalRuns = availableChars[Role.Attacker].length * availableSupportCombinations.length * availableChars[Role.Healer].length
+    let expectedTotalRuns = availableChars[KiokuRole.Attacker].length * availableSupportCombinations.length * availableChars[KiokuRole.Healer].length
 
-    for (const attacker of availableChars[Role.Attacker]) {
+    for (const attacker of availableChars[KiokuRole.Attacker]) {
+        const availablePortraits = portraits(attacker.element)
         const availableSupportKeys = atkSupportsKeys.filter(s => s?.[0] !== attacker.name);
         if (!availableSupportKeys.length) {
             availableSupportKeys.push(getKioku(enabledCharacters.find(c => c.name === "Ryushin Spiral Fury")).getKey())
         }
 
-        for (const sustain of availableChars[Role.Healer]) {
+        for (const sustain of availableChars[KiokuRole.Healer]) {
             if (sustain.name === attacker.name) continue;
 
             for (const supportList of availableSupportCombinations) {
@@ -80,7 +72,7 @@ export async function findBestTeam({
                 const supportSupports = supportList.map((c, idx) => {
                     if (!tsurunoKey) return;
                     if (supportList.map(c => c.name).includes(tsurunoKey?.[0])) return
-                    if (c.role !== Role.Buffer) return
+                    if (c.role !== KiokuRole.Buffer) return
                     const arr: any[] = [undefined, undefined, undefined]
                     arr[idx] = tsurunoKey
                     return arr
@@ -105,7 +97,7 @@ export async function findBestTeam({
 
                 for (const attackerSupportKey of availableSupportKeys) {
 
-                    for (const attackerPortrait of ["A Dream of a Little Mermaid", "The Savior's Apostle", dmgUpPortrait[attacker.element]]) {
+                    for (const attackerPortrait of availablePortraits) {
 
                         for (const supportSupport of supportSupports) {
 

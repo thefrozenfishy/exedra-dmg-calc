@@ -1,7 +1,7 @@
 export enum EnemyTargetTypes {
-    TARGET,
-    PROXIMITY,
-    OTHER
+    TARGET ="TARGET",
+    PROXIMITY ="PROXIMITY",
+    OTHER ="OTHER"
 }
 
 export interface Enemy {
