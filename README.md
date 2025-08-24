@@ -4,10 +4,4 @@ Note: The script always assumes +60ATK & +10% Crit Dmg substats on all crystalis
 
 Use it here https://thefrozenfishy.github.io/exedra-dmg-calc  
 
-Set up your team here: This is used as the default when doing best team calculation and single battle simulation. Default values may only be changed here
-https://thefrozenfishy.github.io/exedra-dmg-calc/#/team-setup
-
-
-
-## Known issues
-* Swimsuit Sayaka vortex not included in calculations
+See how-to and known issues on https://thefrozenfishy.github.io/exedra-dmg-calc/#/about
