@@ -109,13 +109,11 @@ export function getSkipCond(condId: string | undefined): boolean | Function {
         try {
             return knownConditions[condId]()
         } catch (err) {
-            console.error(
-                "Unknown condition: " +
-                (condIdInt in battleConditions
+            throw new Error(
+                `Unknown condition: ${(condIdInt in battleConditions
                     ? Object.entries(battleConditions[condIdInt])
-                    : condIdInt)
+                    : condIdInt)}`
             );
-            return false;
         }
     }
     return false
@@ -528,8 +526,28 @@ export function getKioku({
     specialLvl = KiokuConstants.maxSpecialLvl,
     crys = [KiokuConstants.availableCrys.EX],
 }: KiokuGeneratorArgs) {
+    if (ascension == null) {
+        console.warn("ascension was null, setting to", KiokuConstants.maxAscension)
+        ascension = KiokuConstants.maxAscension
+    } 
+    if (kiokuLvl == null) {
+        console.warn("kiokuLvl was null, setting to", KiokuConstants.maxKiokuLvl)
+        kiokuLvl = KiokuConstants.maxKiokuLvl
+    } 
+    if (magicLvl == null) {
+        console.warn("magicLvl was null, setting to", KiokuConstants.maxMagicLvl)
+        magicLvl = KiokuConstants.maxMagicLvl
+    } 
+    if (heartphialLvl == null) {
+        console.warn("heartphialLvl was null, setting to", KiokuConstants.maxHeartphialLvl)
+        heartphialLvl = KiokuConstants.maxHeartphialLvl
+    } 
+    if (specialLvl == null) {
+        console.warn("specialLvl was null, setting to", KiokuConstants.maxSpecialLvl)
+        specialLvl = KiokuConstants.maxSpecialLvl
+    } 
     if (name == null || kiokuLvl == null || magicLvl == null || heartphialLvl == null || isDps == null || ascension == null || specialLvl == null) {
-        console.error("Ivalid arguments provided to getKioku", {
+        throw new Error(`Ivalid arguments provided to getKioku ${{
             name,
             dpsElement,
             supportKey,
@@ -541,8 +559,7 @@ export function getKioku({
             heartphialLvl,
             specialLvl,
             crys
-        });
-        return null;
+        }}`);
     }
     const clearCrys = crys.filter(Boolean)
     const key = JSON.stringify([

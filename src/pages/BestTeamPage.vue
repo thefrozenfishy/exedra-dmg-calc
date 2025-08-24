@@ -98,6 +98,8 @@ import EnemySelector from '../components/EnemySelector.vue'
 import { useEnemyStore } from '../store/singleTeamStore'
 import { useCharacterStore } from '../store/characterStore'
 import { KiokuRole, Character, KiokuElement } from '../types/KiokuTypes'
+import { toast } from "vue3-toastify"
+
 const enemies = useEnemyStore()
 
 const store = useCharacterStore()
@@ -253,12 +255,17 @@ async function startSimulation() {
             progress.value = populateTeam(e.data.currChars)
             completedRuns.value = e.data.completedRuns
             expectedRuns.value = e.data.expectedTotalRuns
-        }
-        if (e.data.type === 'done') {
+        } else if (e.data.type === 'done') {
             results.splice(0, results.length, ...e.data.results)
             running.value = false
             workerRef.value?.terminate()
             workerRef.value = null
+        }
+        else if (e.data.type === 'error') {
+            toast.error(e.data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+                icon: false
+            })
         }
     }
 
