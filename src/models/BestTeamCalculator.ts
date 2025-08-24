@@ -1,6 +1,6 @@
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { Team } from "./Team";
-import { KiokuRole, portraits, Character, KiokuConstants } from "../types/KiokuTypes";
+import { KiokuRole, portraits, Character, KiokuConstants, KiokuElement, SupportKey } from "../types/KiokuTypes";
 import { getKioku } from "./Kioku";
 
 // TODO: Use old results somehow?
@@ -14,7 +14,7 @@ export async function findBestTeam({
     onProgress,
     onError
 }: FindBestTeamOptions): Promise<any[]> {
-    const safeGetKioku = k => {
+    const safeGetKioku = (k: Character) => {
         try {
             return getKioku(k)
         } catch (e) {
@@ -48,12 +48,21 @@ export async function findBestTeam({
     })
     const availableSupportCombinations = combinations([...availableChars[KiokuRole.Debuffer], ...availableChars[KiokuRole.Buffer]], 3)
 
-    // TODO: Not hardcode supports? It'd take longer tho and these three are honestly the only options?
-    const atkSupportsKeys = enabledCharacters
-        .filter(c => ["The Universe's Edge", "Oracle Ray", "Fiore Finale"].includes(c.name))
-        .map(safeGetKioku)
-        .map(c => c?.getKey())
-        .filter(Boolean)
+    const all5StarKioku = enabledCharacters.filter(c => c.rarity === 5).map(safeGetKioku).filter(Boolean)
+    const highestAtkSupportKey = all5StarKioku.reduce((max, k) => (k?.getBaseAtk() > max?.getBaseAtk() ? k : max))?.getKey()
+    const possibleAtkSupportKeys: Record<SupportKey, any[]> = {
+        ...Object.values(KiokuRole).reduce(
+            (acc, role) => ({ ...acc, [role]: [] }), {}),
+        ...Object.values(KiokuElement).reduce(
+            (acc, el) => ({ ...acc, [el]: [] }), {})
+    }
+    for (const key of [...Object.values(KiokuRole), ...Object.values(KiokuElement)]) {
+        for (const c of all5StarKioku) {
+            if (c?.is_valid_support(key)) {
+                possibleAtkSupportKeys[key].push(c.getKey())
+            }
+        }
+    }
 
     if (!availableChars[KiokuRole.Healer].length) {
         availableChars[KiokuRole.Healer].push(safeGetKioku(enabledCharacters.find(c => c.name === "Circle Of Fire")))
@@ -67,7 +76,12 @@ export async function findBestTeam({
 
     for (const attacker of availableChars[KiokuRole.Attacker]) {
         const availablePortraits = portraits(attacker.element)
-        const availableSupportKeys = atkSupportsKeys.filter(s => s?.[0] !== attacker.name);
+        const availableSupportKeys = Array.from([highestAtkSupportKey, ...possibleAtkSupportKeys[attacker.element], ...possibleAtkSupportKeys[attacker.role]].filter(s => s?.[0] !== attacker.name).reduce((map, item) => {
+            if (item && !map.has(item[0])) {
+                map.set(item[0], item)
+            }
+            return map
+        }, new Map()).values())
         if (!availableSupportKeys.length) {
             availableSupportKeys.push(safeGetKioku(enabledCharacters.find(c => c.name === "Ryushin Spiral Fury")).getKey())
         }

@@ -1,5 +1,5 @@
 import { EnemyTargetTypes } from '../types/EnemyTypes';
-import { elementMap, KiokuConstants, KiokuData, KiokuGeneratorArgs, KiokuElement, MagicLevel, SkillDetail,AvailableCrys, AvailableSubCrys } from '../types/KiokuTypes';
+import { elementMap, KiokuConstants, KiokuData, KiokuGeneratorArgs, KiokuElement, MagicLevel, SkillDetail,AvailableCrys, AvailableSubCrys, SupportKey } from '../types/KiokuTypes';
 import { magicData, battleConditions, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData } from '../utils/helpers';
 
 function getIdx(obj: SkillDetail): number {
@@ -82,7 +82,9 @@ const knownConditions = {
     "438": () => false,  // "自身にシールドが張られているとき",
     "476": () => false,  // "HPが50%未満のとき",
     "512": () => false,  // "魔力が1以上のとき",
+    "575": () => false,  // "デバフ効果が1個以上ある敵に対して",
     "591": () => true,  // "【追撃】の",
+    "667": () => false,  // "対象に状態異常が付与されている場合 AND 自分は行動者",
     "939": () => false,  // "デバフが1個以上ある敵に対して",
     "1178": () => false,  // "継続回復効果が付与されているとき",
     "1277": () => false,  // "カットアウトが付与されているとき",
@@ -361,11 +363,11 @@ export class Kioku {
         }
     }
 
-    is_valid_support(target: string) {
+    is_valid_support(target: SupportKey) {
         return target === this.data.role || target === this.data.element;
     }
 
-    get_support_effect(): [string, Record<string, SkillDetail>] {
+    get_support_effect(): [SupportKey, Record<string, SkillDetail>] {
         const supp_eff = find_all_details(true, this.data.support_id);
         const lvl_details: Record<string, SkillDetail> = {};
         for (const [k, v] of Object.entries(supp_eff)) {

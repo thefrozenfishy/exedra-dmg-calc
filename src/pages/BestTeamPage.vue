@@ -262,6 +262,7 @@ async function startSimulation() {
             workerRef.value = null
         } else if (e.data.type === 'error') {
             toast.error(e.data.error, { position: toast.POSITION.TOP_RIGHT, icon: false })
+            console.error(e.data.error)
         }
     }
 

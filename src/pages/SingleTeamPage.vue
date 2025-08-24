@@ -115,6 +115,7 @@ const teamInstance = computed(() => {
     return new Team(transformedMembers, false)
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
+    console.error(err)
   }
 })
 onMounted(() => {
