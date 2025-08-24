@@ -12,8 +12,8 @@ export default defineComponent({
       <h1>Damage calculator</h1>
       <nav>
         <router-link to="/team-setup">Team Setup</router-link>
-        <router-link to="/simulator-multiple">Calculate Best Team</router-link>
-        <router-link to="/simulator-single">Simulate Single Battle</router-link>
+        <router-link to="/sa-simulator-multiple">Calculate Best Team</router-link>
+        <router-link to="/sa-simulator-single">Simulate Single Battle</router-link>
         <router-link to="/about">About</router-link>
       </nav>
     </header>

@@ -29,6 +29,7 @@
             <li>Clean up styling</li>
             <li>Store results to speed up later duplicate simulations</li>
             <li>Allow non-healer teams in best team calculator</li>
+            <li>Revise dmg taken- (and def-?) calculation</li>
         </ul>
     </div>
 </template>

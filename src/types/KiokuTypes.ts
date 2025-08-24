@@ -141,3 +141,14 @@ export interface KiokuGeneratorArgs {
     ascension?: number;
     specialLvl?: number;
 }
+
+export const correctCharacterParams = (character?: Character) => {
+    if (character) {
+        if (character.ascension < 3) {
+            character.specialLvl = Math.min(character.specialLvl, 4)
+        } else if (character.ascension < 5) {
+            character.specialLvl = Math.min(character.specialLvl, 7)
+        }
+    }
+    return character
+}

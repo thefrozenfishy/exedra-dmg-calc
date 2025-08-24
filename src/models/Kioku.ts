@@ -82,7 +82,7 @@ const knownConditions = {
     "438": () => false,  // "自身にシールドが張られているとき",
     "476": () => false,  // "HPが50%未満のとき",
     "512": () => false,  // "魔力が1以上のとき",
-    "591": () => false,  // "【追撃】の",
+    "591": () => true,  // "【追撃】の",
     "939": () => false,  // "デバフが1個以上ある敵に対して",
     "1178": () => false,  // "継続回復効果が付与されているとき",
     "1277": () => false,  // "カットアウトが付与されているとき",
@@ -529,7 +529,20 @@ export function getKioku({
     crys = [KiokuConstants.availableCrys.EX],
 }: KiokuGeneratorArgs) {
     if (name == null || kiokuLvl == null || magicLvl == null || heartphialLvl == null || isDps == null || ascension == null || specialLvl == null) {
-        throw new Error("Ivalid arguments provided to getKioku");
+        console.error("Ivalid arguments provided to getKioku", {
+            name,
+            dpsElement,
+            supportKey,
+            portrait,
+            isDps,
+            ascension,
+            kiokuLvl,
+            magicLvl,
+            heartphialLvl,
+            specialLvl,
+            crys
+        });
+        return null;
     }
     const clearCrys = crys.filter(Boolean)
     const key = JSON.stringify([

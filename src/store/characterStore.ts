@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-import { Character, KiokuConstants } from '../types/KiokuTypes'
+import { Character, KiokuConstants, correctCharacterParams } from '../types/KiokuTypes'
 import { kiokuData } from '../utils/helpers'
 
 export const useCharacterStore = defineStore('characterStore', () => {
@@ -25,12 +25,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
     }
 
     const updateChar = (char: Character) => {
-        if (char.ascension < 3) {
-            char.specialLvl = Math.min(char.specialLvl, 4)
-        } else if (char.ascension < 5) {
-            char.specialLvl = Math.min(char.specialLvl, 7)
-        }
-        characters.value[characters.value.findIndex(c => c.id === char.id)] = char;
+        characters.value[characters.value.findIndex(c => c.id === char.id)] = correctCharacterParams(char);
     }
 
     const setCharacters = (chars: Character[]) => {

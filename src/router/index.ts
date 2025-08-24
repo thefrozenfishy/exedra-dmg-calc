@@ -6,8 +6,8 @@ import About from '../pages/About.vue'
 
 const routes = [
     { path: '/team-setup', name: 'Team Setup', component: TeamSetupPage },
-    { path: '/simulator-multiple', name: 'Calculate Best Team', component: BestTeamPage },
-    { path: '/simulator-single', name: 'Simulate Single Battle', component: SingleTeamPage },
+    { path: '/sa-simulator-multiple', name: 'Calculate Best Team', component: BestTeamPage },
+    { path: '/sa-simulator-single', name: 'Simulate Single Battle', component: SingleTeamPage },
     { path: '/about', name: 'About', component: About },
 ]
 
