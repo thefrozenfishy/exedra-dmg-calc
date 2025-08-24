@@ -13,9 +13,9 @@
 
 <script lang="ts">
 import { defineComponent, computed } from "vue";
-import type { Character } from "../store/characterStore";
 import { useCharacterStore } from "../store/characterStore";
 import StatInputs from "./StatInputs.vue";
+import { Character } from "../types/KiokuTypes";
 
 export default defineComponent({
     name: "CharacterCard",

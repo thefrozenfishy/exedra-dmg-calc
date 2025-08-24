@@ -25,10 +25,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, stop } from 'vue'
+import { defineComponent, computed } from 'vue'
 import CharacterCard from '../components/CharacterCard.vue'
 import { useCharacterStore } from '../store/characterStore'
-import { KiokuConstants } from '../models/Kioku'
+import { KiokuConstants } from '../types/KiokuTypes'
 
 export default defineComponent({
     components: { CharacterCard },

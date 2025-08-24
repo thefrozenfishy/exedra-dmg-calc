@@ -1,24 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-import { kiokuData, Role, Element } from '../utils/helpers'
-import { KiokuConstants } from '../models/Kioku'
-
-export interface Character {
-    id: string
-    name: string
-    character_en: string
-    enabled: boolean
-    ascension: number
-    element: Element
-    role: Role
-    rarity: number
-    portrait: string
-    kiokuLvl: number
-    magicLvl: number
-    heartphialLvl: number
-    specialLvl: number
-    crys: string[]
-}
+import { Character, KiokuConstants } from '../types/KiokuTypes'
+import { kiokuData } from '../utils/helpers'
 
 export const useCharacterStore = defineStore('characterStore', () => {
     const characters = ref<Character[]>([])
@@ -36,7 +19,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
         { deep: true }
     )
 
-    const toggleCharacter = (id: string) => {
+    const toggleCharacter = (id: number) => {
         const char = characters.value.find(c => c.id === id)
         if (char) char.enabled = !char.enabled
     }

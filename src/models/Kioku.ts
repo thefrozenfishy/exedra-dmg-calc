@@ -1,13 +1,15 @@
-import { SkillDetail, KiokuData, magicData, Element, MagicLevel, battleConditions, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData, elementMap } from '../utils/helpers';
+import { EnemyTargetTypes } from '../types/EnemyTypes';
+import { elementMap, KiokuConstants, KiokuData, KiokuGeneratorArgs, Element, MagicLevel, SkillDetail } from '../types/KiokuTypes';
+import { magicData, battleConditions, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData } from '../utils/helpers';
 
-export function getIdx(obj: SkillDetail): number {
+function getIdx(obj: SkillDetail): number {
     return "passiveSkillMstId" in obj ? obj.passiveSkillMstId : obj.skillMstId;
 }
 
 /**
  * Recursively find all subskills for a given skill ID.
  */
-export function find_all_details(
+function find_all_details(
     is_passive: boolean,
     skill_id: number,
     is_unique: boolean = false
@@ -497,43 +499,6 @@ export class Kioku {
     }
 }
 
-const availableCrys = {
-    ATK_25_PERCENT: "ATK%-25",
-    CRIT_DMG: "CD-20",
-    DMG_TO_WEAK_ELEMENT: "Elem-24",
-    ELEMENTAL_DMG: "Dmg-20",
-    FLAT_ATK: "ATK-125",
-    EX: "EX"
-};
-const availableSubCrys = {
-    CRIT_DMG: "CD-10",
-    FLAT_ATK: "ATK-60"
-};
-
-export const KiokuConstants = {
-    availableCrys,
-    availableSubCrys,
-    maxKiokuLvl: 120,
-    maxMagicLvl: 130,
-    maxAscension: 5,
-    maxHeartphialLvl: 50,
-    maxSpecialLvl: 10,
-    heartphialAtkRewardLvls: { 45: 20, 39: 20, 33: 20, 27: 20, 21: 20, 15: 10, 9: 10 } as Record<string, number>,
-
-}
-export interface KiokuGeneratorArgs {
-    name: string;
-    dpsElement: Element;
-    kiokuLvl?: number;
-    magicLvl?: number;
-    heartphialLvl?: number;
-    portrait?: string;
-    supportKey?: any[];
-    isDps?: boolean;
-    crys?: string[];
-    ascension?: number;
-    specialLvl?: number;
-}
 interface KiokuArgs {
     name: string;
     dpsElement?: Element;
@@ -546,12 +511,6 @@ interface KiokuArgs {
     crys: string[];
     ascension: number;
     specialLvl: number;
-}
-
-export enum EnemyTargetTypes {
-    TARGET,
-    PROXIMITY,
-    OTHER
 }
 
 const cache = new Map<string, Kioku>();

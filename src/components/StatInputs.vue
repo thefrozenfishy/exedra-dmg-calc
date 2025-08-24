@@ -16,8 +16,7 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
-import { KiokuConstants } from '../models/Kioku';
-import { Character } from '../store/characterStore';
+import { Character, KiokuConstants } from '../types/KiokuTypes';
 
 const props = defineProps<{
   member: Character,

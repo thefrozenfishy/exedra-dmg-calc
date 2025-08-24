@@ -1,10 +1,7 @@
 import { defineStore } from 'pinia'
-import { Character } from './characterStore'
-
-export interface TeamSlot {
-  main: Character | undefined
-  support?: Character | undefined
-}
+import { Enemy } from '../types/EnemyTypes'
+import { TeamSlot } from '../types/BestTeamTypes'
+import { Character } from '../types/KiokuTypes'
 
 export const useTeamStore = defineStore('team', {
   state: () => ({
@@ -44,18 +41,6 @@ export const useTeamStore = defineStore('team', {
     }
   }
 })
-
-export interface Enemy {
-  name: string
-  maxBreak: number
-  defense: number
-  defenseUp: number
-  hitsToKill: number
-  enabled: boolean
-  isBreak: boolean
-  isWeak: boolean
-  isCrit: boolean
-}
 
 export const useEnemyStore = defineStore('enemies', {
   state: () => ({

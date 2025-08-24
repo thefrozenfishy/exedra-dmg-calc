@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useCharacterStore } from '../store/characterStore'
-import type { Character } from '../store/characterStore'
+import { Character } from '../types/KiokuTypes';
 
 const props = defineProps<{
   selected: Character | undefined
@@ -38,7 +38,7 @@ const query = ref('')
 const filteredChars = computed(() => {
   return characters.filter(c =>
     c.name.toLowerCase().includes(query.value.toLowerCase()) || c.character_en.toLowerCase().includes(query.value.toLowerCase())
-  ).sort((a, b) => a.id > b.id)
+  ).sort((a, b) => a.id - b.id)
 })
 
 function select(char: Character) {
@@ -46,7 +46,7 @@ function select(char: Character) {
 }
 
 function clear() {
-  emit('select', null)
+  emit('select', undefined)
 }
 </script>
 

@@ -93,11 +93,11 @@
 
 <script lang="ts" setup>
 import { reactive, computed, ref, ComputedRef } from 'vue'
-import { Character, useCharacterStore } from '../store/characterStore'
 import TeamRow from '../components/TeamRow.vue'
-import { Role, Element } from '../utils/helpers'
 import EnemySelector from '../components/EnemySelector.vue'
 import { useEnemyStore } from '../store/singleTeamStore'
+import { useCharacterStore } from '../store/characterStore'
+import { Role, Character, Element } from '../types/KiokuTypes'
 const enemies = useEnemyStore()
 
 const store = useCharacterStore()

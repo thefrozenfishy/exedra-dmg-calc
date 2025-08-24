@@ -1,10 +1,7 @@
-
-
-import { Character } from "../store/characterStore";
-import { Enemy } from "../store/singleTeamStore";
-import { getKioku, KiokuConstants } from "./Kioku";
+import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { Team } from "./Team";
-import { Role, Element } from "../utils/helpers";
+import { Role, Element, Character, KiokuConstants } from "../types/KiokuTypes";
+import { getKioku } from "./Kioku";
 
 const dmgUpPortrait = {
     [Element.Flame]: "A Reluctant Coach Steps Up",
@@ -16,16 +13,6 @@ const dmgUpPortrait = {
 }
 
 // TODO: Use old results somehow?
-export interface FindBestTeamOptions {
-    enemies: Enemy[];
-    include4StarAttackers: boolean;
-    include4StarSupports: boolean;
-    extraAttackers: string[];
-    weakElements: Element[]
-    enabledCharacters: Character[]
-    onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number) => void
-}
-
 export async function findBestTeam({
     enemies,
     include4StarAttackers,
@@ -109,7 +96,9 @@ export async function findBestTeam({
                     attacker.name,
                     undefined,
                     undefined,
-                    undefined, undefined, undefined,
+                    undefined,
+                    undefined,
+                    undefined,
                     sustain.name,
                     ...supportList.flatMap((s, i) => [s.name, undefined])
                 ], completedRuns, expectedTotalRuns)

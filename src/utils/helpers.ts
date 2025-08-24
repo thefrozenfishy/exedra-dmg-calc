@@ -5,76 +5,7 @@ import passiveDetailsJson from '../assets/base_data/getPassiveSkillDetailMstList
 import skillDetailsJson from '../assets/base_data/getSkillDetailMstList.json';
 import kiokuDataJson from '../assets/base_data/kioku_data.json';
 import magicLevelsJson from '../assets/base_data/magic_levels.json';
-
-
-export enum Element {
-    Flame = "Flame",
-    Aqua = "Aqua",
-    Forest = "Forest",
-    Light = "Light",
-    Dark = "Dark",
-    Void = "Void"
-}
-export enum Role {
-    Attacker = "Attacker",
-    Buffer = "Buffer",
-    Debuffer = "Debuffer",
-    Healer = "Healer",
-    Breaker = "Breaker",
-    Defender = "Defender"
-}
-
-export const elementMap: Record<string, Element> = {
-    1: Element.Flame,
-    2: Element.Aqua,
-    3: Element.Forest,
-    4: Element.Light,
-    5: Element.Dark,
-    6: Element.Void,
-};
-
-
-
-interface PortraitData {
-    cardMstId: number;
-    passiveSkill1: number;
-}
-
-interface PortraitLvlData {
-    atk: number;
-}
-
-export interface MagicLevel {
-    eff: string
-    val: number
-}
-
-export type SkillDetail = Record<string, any>;
-
-export interface KiokuData {
-    id: number
-    name: number
-    rarity: number
-    character_en: string
-    element: Element
-    role: Role
-    atk100: number
-    minAtk: number
-    atka5: number
-    skill_id: number
-    attack_id: number
-    special_id: number
-    crystalis_id: number
-    support_id: number
-    support_target: Element | Role
-    ability_id: number
-    ascension_1_effect_2_id: number
-    ascension_2_effect_2_id: number
-    ascension_3_effect_2_id?: number
-    ascension_4_effect_2_id: number
-    ascension_5_effect_2_id?: number
-
-}
+import { PortraitData, SkillDetail, KiokuData, MagicLevel, PortraitLvlData } from '../types/KiokuTypes';
 
 export const battleConditions = Object.fromEntries(
     battleConditionsJson.map((item: any) => [item.battleConditionSetMstId, item])
