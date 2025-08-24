@@ -1,5 +1,5 @@
 import { EnemyTargetTypes } from '../types/EnemyTypes';
-import { elementMap, KiokuConstants, KiokuData, KiokuGeneratorArgs, KiokuElement, MagicLevel, SkillDetail } from '../types/KiokuTypes';
+import { elementMap, KiokuConstants, KiokuData, KiokuGeneratorArgs, KiokuElement, MagicLevel, SkillDetail,AvailableCrys, AvailableSubCrys } from '../types/KiokuTypes';
 import { magicData, battleConditions, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData } from '../utils/helpers';
 
 function getIdx(obj: SkillDetail): number {
@@ -172,8 +172,8 @@ export class Kioku {
     critRate = 50;
     critDamage = 100;
     private specialLvl: number;
-    private crys: string[];
-    private crys_sub: string[];
+    private crys: AvailableCrys[];
+    private crys_sub: AvailableSubCrys[];
     private data: KiokuData;
     effects: Record<string, (string | number)[][]> = {};
     kiokuAtk: number;
@@ -506,7 +506,7 @@ interface KiokuArgs {
     portrait: string | undefined;
     supportKey: any[] | undefined;
     isDps: boolean;
-    crys: string[];
+    crys: AvailableCrys[];
     ascension: number;
     specialLvl: number;
 }

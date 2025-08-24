@@ -93,7 +93,7 @@ export interface KiokuData {
     ascension_5_effect_2_id?: number
 }
 
-enum availableCrys {
+export enum AvailableCrys {
     ATK_25_PERCENT = "ATK%-25",
     CRIT_DMG = "CD-20",
     DMG_TO_WEAK_ELEMENT = "Elem-24",
@@ -102,7 +102,7 @@ enum availableCrys {
     EX = "EX"
 };
 
-enum availableSubCrys {
+export enum AvailableSubCrys {
     CRIT_DMG = "CD-10",
     FLAT_ATK = "ATK-60"
 };
@@ -118,8 +118,8 @@ const heartphialAtkRewardLvls = {
 }
 
 export const KiokuConstants = {
-    availableCrys,
-    availableSubCrys,
+    availableCrys: AvailableCrys,
+    availableSubCrys: AvailableSubCrys,
     maxKiokuLvl: 120,
     maxMagicLvl: 130,
     maxAscension: 5,
