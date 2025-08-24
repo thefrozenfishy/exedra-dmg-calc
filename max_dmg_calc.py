@@ -171,6 +171,11 @@ class Kioku:
         "1666": lambda: amount_enemies < 5,  # "敵が5体以上のとき(自ターン問わず)",
         "1569": lambda: amount_enemies < 3,
         # "敵が3体以上+行動タイプは必殺技+行動者は自身",
+        "525": lambda: amount_enemies >= 2,
+        "526": lambda: amount_enemies >= 3,
+        "527": lambda: amount_enemies >= 4,
+        "528": lambda: amount_enemies >= 5,
+        "529": lambda: amount_enemies >= 6,
         "1538": lambda: False,  # "自分にシールドが付与されているとき",
         "38": lambda: False,  # "HPが80%以上のとき",
         "773": lambda: max_break <= 3.5,
@@ -610,7 +615,6 @@ class Team:
     def __init__(self, kiokus: list[Kioku], debug=False) -> None:
         self.team = kiokus
         self.dps = [kioku for kioku in kiokus if kioku.is_dps][0]
-        self.supports = [kioku for kioku in kiokus if not kioku.is_dps]
         self.all_effects = defaultdict(int)
         self.all_effects["def%"] = 1
         self.debug = debug

@@ -1,0 +1,1046 @@
+[
+  {
+    "1": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "2": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "3": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "4": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "5": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "6": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "7": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "8": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "9": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "10": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "11": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "12": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "13": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "14": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "15": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "16": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "17": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "18": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "19": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "20": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "21": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "22": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "23": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "24": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "25": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "26": {
+      "eff": "UP_CTD_FIXED",
+      "val": 20
+    },
+    "27": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "28": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "29": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "30": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "31": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "32": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "33": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "34": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "35": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "36": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "37": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "38": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "39": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "40": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "41": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "42": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "43": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "44": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "45": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "46": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "47": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "48": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "49": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "50": {
+      "eff": "UP_CTD_FIXED",
+      "val": 20
+    },
+    "51": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "52": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "53": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "54": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "55": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "56": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "57": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "58": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "59": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "60": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "61": {
+      "eff": "UP_CTR_FIXED",
+      "val": 25
+    },
+    "62": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "63": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "64": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "65": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "66": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "67": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "68": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "69": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "70": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "71": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "72": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "73": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "74": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "75": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "76": {
+      "eff": "UP_CTD_FIXED",
+      "val": 20
+    },
+    "77": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "78": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "79": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "80": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "81": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "82": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "83": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "84": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "85": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "86": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "87": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "88": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "89": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "90": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "91": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "92": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "93": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "94": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "95": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "96": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "97": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "98": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "99": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "100": {
+      "eff": "UP_CTD_FIXED",
+      "val": 20
+    },
+    "101": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "102": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "103": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "104": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "105": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "106": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "107": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "108": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "109": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "110": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "111": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "112": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "113": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "114": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "115": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "116": {
+      "eff": "UP_CTD_FIXED",
+      "val": 20
+    },
+    "117": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "118": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "119": {
+      "eff": "UP_CTR_FIXED",
+      "val": 25
+    },
+    "120": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "121": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "122": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "123": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "124": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "125": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "126": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "127": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    },
+    "128": {
+      "eff": "UP_HP_FIXED",
+      "val": 90
+    },
+    "129": {
+      "eff": "UP_ATK_FIXED",
+      "val": 32
+    },
+    "130": {
+      "eff": "UP_DEF_FIXED",
+      "val": 32
+    }
+  },
+  {
+    "1": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "2": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "3": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "4": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "5": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "6": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "7": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "8": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "9": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "10": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "11": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "12": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "13": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "14": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "15": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "16": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "17": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "18": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "19": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "20": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "21": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "22": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "23": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "24": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "25": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "26": {
+      "eff": "UP_CTD_FIXED",
+      "val": 20
+    },
+    "27": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "28": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "29": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "30": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "31": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "32": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "33": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "34": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "35": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "36": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "37": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "38": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "39": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "40": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "41": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "42": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "43": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "44": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "45": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "46": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "47": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "48": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "49": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "50": {
+      "eff": "UP_CTD_FIXED",
+      "val": 20
+    },
+    "51": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "52": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "53": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "54": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "55": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "56": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "57": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "58": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "59": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "60": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "61": {
+      "eff": "UP_CTR_FIXED",
+      "val": 25
+    },
+    "62": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "63": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "64": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "65": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "66": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "67": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "68": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "69": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "70": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "71": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "72": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "73": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "74": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "75": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "76": {
+      "eff": "UP_CTD_FIXED",
+      "val": 20
+    },
+    "77": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "78": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "79": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "80": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "81": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "82": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "83": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "84": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "85": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "86": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "87": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "88": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "89": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "90": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "91": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "92": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "93": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "94": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "95": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "96": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "97": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "98": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "99": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "100": {
+      "eff": "UP_CTD_FIXED",
+      "val": 20
+    },
+    "101": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "102": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "103": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "104": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "105": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "106": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "107": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "108": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "109": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "110": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "111": {
+      "eff": "Battle Skill Lvl. Up",
+      "val": 1
+    },
+    "112": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "113": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "114": {
+      "eff": "Support Ability Lvl. Up",
+      "val": 1
+    },
+    "115": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "116": {
+      "eff": "UP_CTD_FIXED",
+      "val": 20
+    },
+    "117": {
+      "eff": "Basic Attack Lvl. Up",
+      "val": 1
+    },
+    "118": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "119": {
+      "eff": "UP_CTR_FIXED",
+      "val": 25
+    },
+    "120": {
+      "eff": "Ability Lvl. Up",
+      "val": 1
+    },
+    "121": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "122": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "123": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "124": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "125": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "126": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "127": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    },
+    "128": {
+      "eff": "UP_HP_FIXED",
+      "val": 100
+    },
+    "129": {
+      "eff": "UP_ATK_FIXED",
+      "val": 36
+    },
+    "130": {
+      "eff": "UP_DEF_FIXED",
+      "val": 36
+    }
+  }
+]
