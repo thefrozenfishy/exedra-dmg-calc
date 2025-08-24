@@ -73,18 +73,18 @@ export class Team {
     ): [number, number, string[]] {
         let dmg;
         let total_dmg = 0;
-        let crit_rate = 0;
+        let critRate = 0;
         let debugText = ""
         let enemyDied: boolean
         let amountOfEnemies = enemies.filter(e => e.enabled).length
         const debugTexts = ["", "", "", "", ""];
         for (const i of [2, 1, 3, 0, 4]) {
-            [dmg, crit_rate, debugText, enemyDied] = this.calculate_single_dmg(i, this.team[i], enemies[i], amountOfEnemies, atk_down)
+            [dmg, critRate, debugText, enemyDied] = this.calculate_single_dmg(i, this.team[i], enemies[i], amountOfEnemies, atk_down)
             total_dmg += dmg
             if (enemies[i].enabled && enemyDied) amountOfEnemies -= 1
             debugTexts[i] =debugText
         }
-        return [total_dmg, crit_rate, debugTexts]
+        return [total_dmg, Math.round(critRate * 100), debugTexts]
     }
 
     getEffect(key: string, amountOfEnemies: number, maxBreak: number): number {

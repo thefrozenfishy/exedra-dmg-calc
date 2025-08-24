@@ -260,12 +260,8 @@ async function startSimulation() {
             running.value = false
             workerRef.value?.terminate()
             workerRef.value = null
-        }
-        else if (e.data.type === 'error') {
-            toast.error(e.data.error, {
-                position: toast.POSITION.TOP_RIGHT,
-                icon: false
-            })
+        } else if (e.data.type === 'error') {
+            toast.error(e.data.error, { position: toast.POSITION.TOP_RIGHT, icon: false })
         }
     }
 

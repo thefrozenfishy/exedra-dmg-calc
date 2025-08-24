@@ -84,6 +84,7 @@ import { getKioku, Kioku } from '../models/Kioku'
 import { Team } from '../models/Team'
 import EnemySelector from '../components/EnemySelector.vue'
 import { KiokuConstants, KiokuGeneratorArgs, portraits } from '../types/KiokuTypes'
+import { toast } from "vue3-toastify"
 
 const cryKeys = Object.keys(KiokuConstants.availableCrys)
 
@@ -95,7 +96,7 @@ function onChangeCrys(idx: number, rawValue: string) {
   team.setMain(0, { ...main, crys: current } as any)
 }
 
-const formatDmg = (out: string | (number | string[])[]) => typeof (out) !== 'string' ? `Max Damage: ${out[0].toLocaleString()} with a ${out[1] * 100}% crit rate` : battleOutput
+const formatDmg = (out: string | (number | string[])[]) => typeof (out) !== 'string' ? `Max Damage: ${out[0].toLocaleString()} with a ${out[1]}% crit rate` : battleOutput
 const formatDebug = (out: string | (number | string[])[], idx: number) => Array.isArray(out) ? out[2][idx] : battleOutput
 
 
@@ -106,11 +107,15 @@ const isFullTeam = computed(() => team.slots.map(slot => slot.main).filter(Boole
 const teamInstance = computed(() => {
   if (!isFullTeam.value) return;
   const dpsElement = team.slots[0]?.main?.element!
-  const transformedMembers = team.slots.map((m, idx) => {
-    const support = m.support ? getKioku({ ...m.support, dpsElement }) : null
-    return getKioku({ ...m.main, dpsElement, supportKey: support?.getKey(), isDps: idx === 0 } as KiokuGeneratorArgs)
-  }) as Kioku[]
-  return new Team(transformedMembers, false)
+  try {
+    const transformedMembers = team.slots.map((m, idx) => {
+      const support = m.support ? getKioku({ ...m.support, dpsElement }) : null
+      return getKioku({ ...m.main, dpsElement, supportKey: support?.getKey(), isDps: idx === 0 } as KiokuGeneratorArgs)
+    }) as Kioku[]
+    return new Team(transformedMembers, false)
+  } catch (err) {
+    toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
+  }
 })
 onMounted(() => {
   team.load()

@@ -127,7 +127,7 @@ export async function findBestTeam({
                                 const [dmg, critRate] = team.calculate_max_dmg(enemies, 0);
                                 results.push([
                                     dmg | 0,
-                                    Math.round(critRate * 100),
+                                    critRate,
                                     attacker.name,
                                     attackerPortrait,
                                     attackerSupportKey?.[0],
