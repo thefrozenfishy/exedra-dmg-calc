@@ -11,8 +11,17 @@ export async function findBestTeam({
     extraAttackers,
     weakElements,
     enabledCharacters,
-    onProgress
+    onProgress,
+    onError
 }: FindBestTeamOptions): Promise<any[]> {
+    const safeGetKioku = k => {
+        try {
+            return getKioku(k)
+        } catch (e) {
+            onError?.(e)
+        }
+    }
+
     const results = []
     const availableChars: Record<KiokuRole, Character[]> = {
         [KiokuRole.Attacker]: [],
@@ -42,16 +51,16 @@ export async function findBestTeam({
     // TODO: Not hardcode supports? It'd take longer tho and these three are honestly the only options?
     const atkSupportsKeys = enabledCharacters
         .filter(c => ["The Universe's Edge", "Oracle Ray", "Fiore Finale"].includes(c.name))
-        .map(getKioku)
+        .map(safeGetKioku)
         .map(c => c?.getKey())
         .filter(Boolean)
 
     if (!availableChars[KiokuRole.Healer].length) {
-        availableChars[KiokuRole.Healer].push(getKioku(enabledCharacters.find(c => c.name === "Circle Of Fire")))
+        availableChars[KiokuRole.Healer].push(safeGetKioku(enabledCharacters.find(c => c.name === "Circle Of Fire")))
     }
 
     const tsurunoData = enabledCharacters.find(c => c.name === "Flame Waltz")
-    const tsurunoKey = tsurunoData ? getKioku(tsurunoData)?.getKey() : null
+    const tsurunoKey = tsurunoData ? safeGetKioku(tsurunoData)?.getKey() : null
 
     let completedRuns = 0;
     let expectedTotalRuns = availableChars[KiokuRole.Attacker].length * availableSupportCombinations.length * availableChars[KiokuRole.Healer].length
@@ -60,7 +69,7 @@ export async function findBestTeam({
         const availablePortraits = portraits(attacker.element)
         const availableSupportKeys = atkSupportsKeys.filter(s => s?.[0] !== attacker.name);
         if (!availableSupportKeys.length) {
-            availableSupportKeys.push(getKioku(enabledCharacters.find(c => c.name === "Ryushin Spiral Fury")).getKey())
+            availableSupportKeys.push(safeGetKioku(enabledCharacters.find(c => c.name === "Ryushin Spiral Fury")).getKey())
         }
 
         for (const sustain of availableChars[KiokuRole.Healer]) {
@@ -103,7 +112,7 @@ export async function findBestTeam({
 
                             for (const attackerCrys of combinations(Object.entries(KiokuConstants.availableCrys).filter(([k, v]) => v !== KiokuConstants.availableCrys.FLAT_ATK), 3)) {
                                 const team = new Team([
-                                    getKioku({
+                                    safeGetKioku({
                                         ...attacker,
                                         dpsElement: attacker.element,
                                         portrait: attackerPortrait,
@@ -111,8 +120,8 @@ export async function findBestTeam({
                                         supportKey: attackerSupportKey,
                                         isDps: true
                                     })!,
-                                    getKioku({ ...sustain, dpsElement: attacker.element })!,
-                                    ...supportList.map((s, i) => getKioku({ ...s, dpsElement: attacker.element, supportKey: supportSupport[i] })!)
+                                    safeGetKioku({ ...sustain, dpsElement: attacker.element })!,
+                                    ...supportList.map((s, i) => safeGetKioku({ ...s, dpsElement: attacker.element, supportKey: supportSupport[i] })!)
                                 ]);
 
                                 const [dmg, critRate] = team.calculate_max_dmg(enemies, 0);
