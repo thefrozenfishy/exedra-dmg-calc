@@ -32,6 +32,8 @@
             <li>Store results to speed up later duplicate simulations</li>
             <li>Allow non-healer teams in best team calculator</li>
             <li>Revise dmg taken- (and def-?) calculation</li>
+            <li>Export/import teams</li>
+            <li>Lock character for 'best team simulator', for those chars u know for a fact you're including</li>
         </ul>
     </div>
 </template>

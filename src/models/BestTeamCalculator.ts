@@ -126,30 +126,34 @@ export async function findBestTeam({
                         for (const supportSupport of supportSupports) {
 
                             for (const attackerCrys of combinations(Object.entries(KiokuConstants.availableCrys).filter(([k, v]) => v !== KiokuConstants.availableCrys.FLAT_ATK), 3)) {
-                                const team = new Team([
-                                    safeGetKioku({
-                                        ...attacker,
-                                        dpsElement: attacker.element,
-                                        portrait: attackerPortrait,
-                                        crys: attackerCrys.map(item => item[1]),
-                                        supportKey: attackerSupportKey,
-                                        isDps: true
-                                    })!,
-                                    safeGetKioku({ ...sustain, dpsElement: attacker.element })!,
-                                    ...supportList.map((s, i) => safeGetKioku({ ...s, dpsElement: attacker.element, supportKey: supportSupport[i] })!)
-                                ]);
+                                try {
+                                    const team = new Team([
+                                        safeGetKioku({
+                                            ...attacker,
+                                            dpsElement: attacker.element,
+                                            portrait: attackerPortrait,
+                                            crys: attackerCrys.map(item => item[1]),
+                                            supportKey: attackerSupportKey,
+                                            isDps: true
+                                        })!,
+                                        safeGetKioku({ ...sustain, dpsElement: attacker.element })!,
+                                        ...supportList.map((s, i) => safeGetKioku({ ...s, dpsElement: attacker.element, supportKey: supportSupport[i] })!)
+                                    ]);
 
-                                const [dmg, critRate] = team.calculate_max_dmg(enemies, 0);
-                                results.push([
-                                    dmg | 0,
-                                    critRate,
-                                    attacker.name,
-                                    attackerPortrait,
-                                    attackerSupportKey?.[0],
-                                    ...attackerCrys.map(item => item[0]),
-                                    sustain.name,
-                                    ...supportList.flatMap((s, i) => [s.name, supportSupport[i]?.[0]])
-                                ]);
+                                    const [dmg, critRate] = team.calculate_max_dmg(enemies, 0);
+                                    results.push([
+                                        dmg | 0,
+                                        critRate,
+                                        attacker.name,
+                                        attackerPortrait,
+                                        attackerSupportKey?.[0],
+                                        ...attackerCrys.map(item => item[0]),
+                                        sustain.name,
+                                        ...supportList.flatMap((s, i) => [s.name, supportSupport[i]?.[0]])
+                                    ]);
+                                } catch (e) {
+                                    onError?.(e)
+                                }
                             }
                         }
                     }
