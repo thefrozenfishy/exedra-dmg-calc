@@ -14,11 +14,12 @@ export default defineComponent({
         <router-link to="/team-setup">Team Setup</router-link>
         <router-link to="/simulator-multiple">Calculate Best Team</router-link>
         <router-link to="/simulator-single">Simulate Single Battle</router-link>
+        <router-link to="/about">About</router-link>
       </nav>
     </header>
 
     <main>
-      <router-view /> <!-- This renders the current page -->
+      <router-view />
     </main>
   </div>
 </template>

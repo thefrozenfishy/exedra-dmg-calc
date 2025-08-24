@@ -1,4 +1,4 @@
-import { SkillDetail, KiokuData, magicData, MagicLevel, battleConditions, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData, elementMap } from '../utils/helpers';
+import { SkillDetail, KiokuData, magicData, Element, MagicLevel, battleConditions, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData, elementMap } from '../utils/helpers';
 
 export function getIdx(obj: SkillDetail): number {
     return "passiveSkillMstId" in obj ? obj.passiveSkillMstId : obj.skillMstId;
@@ -107,12 +107,13 @@ export function getSkipCond(condId: string | undefined): boolean | Function {
         try {
             return knownConditions[condId]()
         } catch (err) {
-            throw new Error(
+            console.error(
                 "Unknown condition: " +
                 (condIdInt in battleConditions
                     ? Object.entries(battleConditions[condIdInt])
                     : condIdInt)
             );
+            return false;
         }
     }
     return false
@@ -150,7 +151,7 @@ export class Kioku {
         "UP_GIV_BREAK_POINT_DMG_FIXED", "UP_RCV_BREAK_POINT_DMG_RATIO", "ADDITIONAL_SKILL_ACT",
         "UP_SPD_FIXED", "ADD_BUFF_TURN", "UNIQUE_10030301", "UP_SPD_ACCUM_RATIO", "CURSE_ATK",
         "BURN_ATK", "SWITCH_SKILL", "UP_BUFF_EFFECT_VALUE", "ADD_DEBUFF_TURN", "GAIN_SP_FIXED",
-        "UP_ABNORMAL_HIT_RATE_RATIO", "DMG_RANDOM", "UP_GIV_VORTEX_DMG_RATIO",
+        "UP_ABNORMAL_HIT_RATE_RATIO", "DMG_RANDOM", "UP_GIV_VORTEX_DMG_RATIO", "UP_DEBUFF_EFFECT_VALUE", "UP_BUFF_EFFECT_VALUE"
     ]);
 
 
@@ -218,7 +219,7 @@ export class Kioku {
         this.magicLvl = magicLvl;
         this.heartphialLvl = heartphialLvl;
         this.specialLvl = specialLvl;
-        this.dpsElement = dpsElement;
+        this.dpsElement = dpsElement ?? Element.Flame;
         this.crys = crys;
         this.data = kiokuData[name];
 
@@ -467,15 +468,15 @@ export class Kioku {
         return [
             this.name,
             this.dpsElement,
+            this.supportKey,
+            this.portrait,
+            this.isDps,
+            this.ascension,
             this.kiokuLvl,
             this.magicLvl,
             this.heartphialLvl,
-            this.portrait,
-            this.supportKey,
-            this.isDps,
-            this.crys,
-            this.ascension,
             this.specialLvl,
+            this.crys,
         ];
     }
 
@@ -483,15 +484,15 @@ export class Kioku {
         return getKioku({
             name: key[0],
             dpsElement: key[1],
-            kiokuLvl: key[2],
-            magicLvl: key[3],
-            heartphialLvl: key[4],
-            portrait: key[5],
-            supportKey: key[6],
-            isDps: key[7],
-            crys: key[8],
-            ascension: key[9],
-            specialLvl: key[10],
+            supportKey: key[2],
+            portrait: key[3],
+            isDps: key[4],
+            ascension: key[5],
+            kiokuLvl: key[6],
+            magicLvl: key[7],
+            heartphialLvl: key[8],
+            specialLvl: key[9],
+            crys: key[10],
         });
     }
 }

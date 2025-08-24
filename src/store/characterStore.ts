@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-import { kiokuData, Role } from '../utils/helpers'
+import { kiokuData, Role, Element } from '../utils/helpers'
 import { KiokuConstants } from '../models/Kioku'
 
 export interface Character {

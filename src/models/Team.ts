@@ -63,7 +63,7 @@ export class Team {
             key => !(key in Kioku.knownBoosts) && !Kioku.skippable.has(key)
         );
         if (leftover.length > 0) {
-            throw new Error(`Found unknown effects: ${leftover.join(", ")}`);
+            console.error(`Found unknown effects: ${leftover.join(", ")}`);
         }
     }
 

@@ -3,7 +3,7 @@
 
 
         <EnemySelector></EnemySelector>
-        
+
         <div style="height: 40px;"></div>
 
         <!-- Control panel -->
@@ -46,8 +46,9 @@
 
                 <!-- Input + dropdown -->
                 <div class="attacker-select">
-                    <input type="text" v-model="extraAttackerQuery" placeholder="Use non-attackers as extra attackers..."
-                        @focus="showDropdown = true" @blur="hideDropdown" />
+                    <input type="text" v-model="extraAttackerQuery"
+                        placeholder="Use non-attackers as extra attackers..." @focus="showDropdown = true"
+                        @blur="hideDropdown" />
                     <ul v-if="showDropdown && filteredCharacters.length" class="dropdown">
                         <li v-for="char in filteredCharacters" :key="char.id"
                             @mousedown.prevent="addExtraAttacker(char)">
@@ -59,8 +60,9 @@
             </div>
         </div>
 
-        <div class="team-row-wrapper" style="justify-content: center;" v-if="running">
-            <TeamRow :team="progress" :loading="true"></TeamRow>
+        <div class="team-row-wrapper loading-bar" v-if="running">
+            <TeamRow style="margin: 0 auto;" :team="progress" :loading="true" />
+            <progress :value="completedRuns" :max="expectedRuns" class="progress-bar"></progress>
         </div>
 
         <button v-else @click="startSimulation" :disabled="running">
@@ -76,7 +78,7 @@
                 </div>
 
                 <div v-for="attacker in attackers" :key="attacker.id" class="attacker-section">
-                    <div v-if="topTeamsByAttacker[attacker.name].length">
+                    <div v-if="topTeamsByAttacker[attacker.name]?.length">
                         <h3>Top Teams for {{ attacker.name }}</h3>
                         <div class="team-row-wrapper" v-for="(team, idx) in topTeamsByAttacker[attacker.name] ?? []"
                             :key="idx">
@@ -100,10 +102,13 @@ const enemies = useEnemyStore()
 
 const store = useCharacterStore()
 const running = ref(false)
-const results = reactive<{ attackerId: string, team: any, dmg: number }[]>([])
+const expectedRuns = ref(0)
+const completedRuns = ref(0)
+const results = reactive<{ attackerId: string, team: any, dmg: number }[][]>([])
 
 const members = computed(() => store.characters.filter(c => c.enabled))
 const attackers = computed(() => store.characters.filter(c => (c.enabled && c.role === Role.Attacker) || extraAttackers.value.map(c => c.name).includes(c.name)))
+let prevAttackers: Character[] = []
 
 const workerRef = ref<Worker | null>(null)
 const progress = ref<FinalTeam>({})
@@ -111,7 +116,6 @@ const progress = ref<FinalTeam>({})
 // ---- Option states bound to template ----
 const include4StarAttackers = ref(false)
 const include4StarSupports = ref(false)
-const extraAttackersInput = ref("")
 
 // Example element icons (replace with your real assets)
 const weakElements = reactive([
@@ -133,8 +137,11 @@ const filteredCharacters = computed(() => {
     return members.value.filter(
         (m) =>
             !extraAttackers.value.some((a) => a.id === m.id) &&
-            m.name.toLowerCase().includes(q)
-    )
+            m.rarity !== 3 &&
+            m.role !== Role.Attacker &&
+            (m.name.toLowerCase().includes(q) ||
+                m.character_en.toLowerCase().includes(q)
+            ))
 })
 
 function addExtraAttacker(char: Character) {
@@ -188,23 +195,54 @@ const populateTeam = (result: any[]) => ({
     supp3supp: members.value.find(m => m.name === result[14]),
 })
 
-const sortedResults: ComputedRef<FinalTeam[]> = computed(() =>
-    [...results]
-        .sort((a, b) => b.dmg - a.dmg)
-        .map(populateTeam)
-)
+const sortedResults: ComputedRef<any[][]> = computed(() => [...results].sort((a, b) => b[0] - a[0]))
 
-const topResults = computed(() => sortedResults.value.slice(0, 20))
+
+function mergeCells(results: any[]) {
+    /*
+        Merges dmg, crit rate and crys into lists, so show more teams and less small crys varations
+    */
+    const merged = results.reduce((acc: any[], row: any) => {
+        const key = JSON.stringify([row[2], row[3], row[4], row[8], row[9], row[10], row[11], row[12], row[13], row[14]]);
+
+        const prev = acc[acc.length - 1];
+
+        if (prev?.key === key) {
+            prev[0].push(row[0]);
+            prev[1].push(row[1]);
+            prev[5].push(row[5]);
+            prev[6].push(row[6]);
+            prev[7].push(row[7]);
+        } else {
+            acc.push({
+                ...row,
+                0: [row[0]],
+                1: [row[1]],
+                5: [row[5]],
+                6: [row[6]],
+                7: [row[7]],
+                key
+            });
+        }
+        return acc;
+    }, []);
+
+    merged.forEach(m => delete m.key);
+    return merged.map(populateTeam);
+};
+
+const topResults = computed(() => mergeCells(sortedResults.value).slice(0, 20))
 
 const topTeamsByAttacker = computed(() => {
     const map: Record<string, any[]> = {}
-    attackers.value.forEach(a => {
-        map[a.name] = sortedResults.value.filter(team => team.attacker.name === a.name).slice(0, 5)
+    prevAttackers.forEach(a => {
+        map[a.name] = mergeCells(sortedResults.value.filter(r => r[2] === a.name)).slice(0, 5)
     })
     return map
 })
 
 async function startSimulation() {
+    prevAttackers = [...attackers.value, ...extraAttackers.value]
     running.value = true
     progress.value = {}
 
@@ -213,6 +251,8 @@ async function startSimulation() {
     workerRef.value.onmessage = (e) => {
         if (e.data.type === 'progress') {
             progress.value = populateTeam(e.data.currChars)
+            completedRuns.value = e.data.completedRuns
+            expectedRuns.value = e.data.expectedTotalRuns
         }
         if (e.data.type === 'done') {
             results.splice(0, results.length, ...e.data.results)
@@ -353,5 +393,20 @@ async function startSimulation() {
     width: 24px;
     height: 24px;
     border-radius: 50%;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 16px;
+    margin-top: 8px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.loading-bar {
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 300px;
 }
 </style>

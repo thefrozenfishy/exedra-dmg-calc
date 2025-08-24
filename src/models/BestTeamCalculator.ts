@@ -23,7 +23,7 @@ export interface FindBestTeamOptions {
     extraAttackers: string[];
     weakElements: Element[]
     enabledCharacters: Character[]
-    onProgress?: (currChars: string[]) => void
+    onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number) => void
 }
 
 export async function findBestTeam({
@@ -35,12 +35,6 @@ export async function findBestTeam({
     enabledCharacters,
     onProgress
 }: FindBestTeamOptions): Promise<any[]> {
-    console.log("Finding best for", enemies,
-        include4StarAttackers,
-        include4StarSupports,
-        extraAttackers,
-        weakElements,
-        enabledCharacters)
     const results = []
     const availableChars: Record<Role, Character[]> = {
         [Role.Attacker]: [],
@@ -55,11 +49,17 @@ export async function findBestTeam({
             if (weakElements.includes(char.element) && ((char.rarity === 4 && char.role === Role.Attacker && include4StarAttackers) || char.rarity === 5)) {
                 availableChars[Role.Attacker].push(char)
             }
-        } else if (char.rarity === 5 || (char.rarity === 4 && include4StarSupports && [Role.Buffer, Role.Debuffer].includes(char.role))) {
+        } else if (char.rarity === 5 ||
+            (char.rarity === 4 &&
+                include4StarSupports &&
+                [Role.Buffer, Role.Debuffer].includes(char.role) &&
+                !["Nightmare Stinger"].includes(char.name) // Hanna has no debuffs, just remove to speed up computation
+            )) {
             availableChars[char.role].push(char)
         }
         if (extraAttackers.includes(char.name)) availableChars[Role.Attacker].push(char)
     })
+    const availableSupportCombinations = combinations([...availableChars[Role.Debuffer], ...availableChars[Role.Buffer]], 3)
 
     // TODO: Not hardcode supports? It'd take longer tho and these three are honestly the only options?
     const atkSupportsKeys = enabledCharacters
@@ -75,8 +75,10 @@ export async function findBestTeam({
     const tsurunoData = enabledCharacters.find(c => c.name === "Flame Waltz")
     const tsurunoKey = tsurunoData ? getKioku(tsurunoData)?.getKey() : null
 
-    // Nested loops to generate team combinations
-    for (const attacker of availableChars.Attacker) {
+    let completedRuns = 0;
+    let expectedTotalRuns = availableChars[Role.Attacker].length * availableSupportCombinations.length * availableChars[Role.Healer].length
+
+    for (const attacker of availableChars[Role.Attacker]) {
         const availableSupportKeys = atkSupportsKeys.filter(s => s?.[0] !== attacker.name);
         if (!availableSupportKeys.length) {
             availableSupportKeys.push(getKioku(enabledCharacters.find(c => c.name === "Ryushin Spiral Fury")).getKey())
@@ -85,7 +87,8 @@ export async function findBestTeam({
         for (const sustain of availableChars[Role.Healer]) {
             if (sustain.name === attacker.name) continue;
 
-            for (const supportList of combinations([...availableChars[Role.Debuffer], ...availableChars[Role.Buffer]], 3)) {
+            for (const supportList of availableSupportCombinations) {
+                completedRuns += 1;
                 if (supportList.map(c => c.name).includes(attacker.name)) continue;
                 const supportSupports = supportList.map((c, idx) => {
                     if (!tsurunoKey) return;
@@ -109,7 +112,7 @@ export async function findBestTeam({
                     undefined, undefined, undefined,
                     sustain.name,
                     ...supportList.flatMap((s, i) => [s.name, undefined])
-                ])
+                ], completedRuns, expectedTotalRuns)
 
                 for (const attackerSupportKey of availableSupportKeys) {
 
@@ -117,7 +120,7 @@ export async function findBestTeam({
 
                         for (const supportSupport of supportSupports) {
 
-                            for (const attackerCrys of combinations(Object.entries(KiokuConstants.availableCrys).filter((c, v) => c !== KiokuConstants.availableCrys.FLAT_ATK), 3)) {
+                            for (const attackerCrys of combinations(Object.entries(KiokuConstants.availableCrys).filter(([k, v]) => v !== KiokuConstants.availableCrys.FLAT_ATK), 3)) {
                                 const team = new Team([
                                     getKioku({
                                         ...attacker,
