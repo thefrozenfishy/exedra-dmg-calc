@@ -10,11 +10,7 @@
                 <img v-if="!loading && team.portrait" :src="`/exedra-dmg-calc/portraits/${team.portrait}.png`"
                     :alt="team.portrait" :title="team.portrait" class="portrait-image" />
             </div>
-            <div class="image-wrapper">
-                <img v-if="team.sustain" :src="`/exedra-dmg-calc/kioku_images/${team.sustain.id}_thumbnail.png`"
-                    :alt="team.sustain.name" :title="team.sustain.name" class="character-image" />
-            </div>
-            <div v-for="i in 3" :key="i" class="image-wrapper">
+            <div v-for="i in 4" :key="i" class="image-wrapper">
                 <img v-if="team[`supp${i}`]" :src="`/exedra-dmg-calc/kioku_images/${team[`supp${i}`].id}_thumbnail.png`"
                     :title="team[`supp${i}`].name" :alt="team[`supp${i}`].name" class="character-image" />
                 <img v-if="team[`supp${i}supp`]"

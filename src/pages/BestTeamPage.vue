@@ -6,7 +6,6 @@
 
         <div style="height: 40px;"></div>
 
-        <!-- Control panel -->
         <div class="options-panel">
             <h2>Simulation Options</h2>
 
@@ -19,6 +18,59 @@
                 <input type="checkbox" v-model="include4StarSupports" />
                 Include 4★ Supports
             </label>
+
+            <label>
+                <input type="checkbox" v-model="include4StarOthers" />
+                Include 4★ Others
+            </label>
+
+            <div>
+                <h3>Role Distribution</h3>
+
+                <div class="role-grid">
+                    <div class="role-box">
+                        <img src="/exedra-dmg-calc/roles/Attacker.png" alt="Attacker" />
+                        <span>Attacker</span>
+                        <div class="number">1</div>
+                    </div>
+
+                    <div class="role-box">
+                        <div class="icons">
+                            <img src="/exedra-dmg-calc/roles/Buffer.png" alt="Buffer" />
+                            <img src="/exedra-dmg-calc/roles/Debuffer.png" alt="Debuffer" />
+                        </div>
+                        <span>Buffer+Debuffer</span>
+                        <input type="number" v-model.number="deBufferCount" min="0" max="4" />
+                    </div>
+
+                    <div class="role-box">
+                        <img src="/exedra-dmg-calc/roles/Healer.png" alt="Healer" />
+                        <span>Healer (min)</span>
+                        <input type="number" v-model.number="minHealer" min="0"
+                            :max="otherCount - minDefender - minBreaker" />
+                    </div>
+
+                    <div class="role-box">
+                        <img src="/exedra-dmg-calc/roles/Defender.png" alt="Defender" />
+                        <span>Defender (min)</span>
+                        <input type="number" v-model.number="minDefender" min="0"
+                            :max="otherCount - minHealer - minBreaker" />
+                    </div>
+
+                    <div class="role-box">
+                        <img src="/exedra-dmg-calc/roles/Breaker.png" alt="Breaker" />
+                        <span>Breaker (min)</span>
+                        <input type="number" v-model.number="minBreaker" min="0"
+                            :max="otherCount - minDefender - minHealer" />
+                    </div>
+
+                    <div class="role-box total-box" style="grid-column: 3 / span 3; width: 400px;">
+                        <span>Total Other Roles</span>
+                        <div class="number">{{ otherCount }}</div>
+                    </div>
+
+                </div>
+            </div>
 
             <div class="weak-elements">
                 <h3>Weak Elements</h3>
@@ -144,8 +196,8 @@ const progress = ref<FinalTeam>({})
 // ---- Option states bound to template ----
 const include4StarAttackers = ref(false)
 const include4StarSupports = ref(false)
+const include4StarOthers = ref(false)
 
-// Example element icons (replace with your real assets)
 const weakElements = reactive([
     { name: KiokuElement.Flame, enabled: true },
     { name: KiokuElement.Aqua, enabled: true },
@@ -154,6 +206,13 @@ const weakElements = reactive([
     { name: KiokuElement.Dark, enabled: true },
     { name: KiokuElement.Void, enabled: true },
 ])
+
+const deBufferCount = ref(3)
+const otherCount = computed(() => 4 - deBufferCount.value)
+
+const minHealer = ref(0)
+const minDefender = ref(0)
+const minBreaker = ref(0)
 
 // Extra attackers
 const extraAttackers = ref<Character[]>([])
@@ -235,14 +294,24 @@ const populateTeam = (result: any[]) => ({
     attacker_crys1: result[5],
     attacker_crys2: result[6],
     attacker_crys3: result[7],
-    sustain: members.value.find(m => m.name === result[8])!,
-    supp1: members.value.find(m => m.name === result[9])!,
-    supp1supp: members.value.find(m => m.name === result[10]),
-    supp2: members.value.find(m => m.name === result[11])!,
-    supp2supp: members.value.find(m => m.name === result[12]),
-    supp3: members.value.find(m => m.name === result[13])!,
-    supp3supp: members.value.find(m => m.name === result[14]),
+    supp1: members.value.find(m => m.name === result[8])!,
+    supp1supp: members.value.find(m => m.name === result[9]),
+    supp2: members.value.find(m => m.name === result[10])!,
+    supp2supp: members.value.find(m => m.name === result[11]),
+    supp3: members.value.find(m => m.name === result[12])!,
+    supp3supp: members.value.find(m => m.name === result[13]),
+    supp4: members.value.find(m => m.name === result[14])!,
+    supp4supp: members.value.find(m => m.name === result[15]),
 })
+
+const populateStatusTeam = (result: any[]) => ({
+    attacker: members.value.find(m => m.name === result[0])!,
+    supp1: members.value.find(m => m.name === result[1])!,
+    supp2: members.value.find(m => m.name === result[2])!,
+    supp3: members.value.find(m => m.name === result[3])!,
+    supp4: members.value.find(m => m.name === result[4])!,
+})
+
 
 const sortedResults: ComputedRef<any[][]> = computed(() => [...results].sort((a, b) => b[0] - a[0]))
 
@@ -300,7 +369,7 @@ async function startSimulation() {
 
     workerRef.value.onmessage = (e) => {
         if (e.data.type === 'progress') {
-            progress.value = populateTeam(e.data.currChars)
+            progress.value = populateStatusTeam(e.data.currChars)
             completedRuns.value = e.data.completedRuns
             expectedRuns.value = e.data.expectedTotalRuns
         } else if (e.data.type === 'done') {
@@ -319,10 +388,16 @@ async function startSimulation() {
             enemies: JSON.parse(JSON.stringify(enemies.enemies)),
             include4StarAttackers: include4StarAttackers.value,
             include4StarSupports: include4StarSupports.value,
+            include4StarOthers: include4StarOthers.value,
             weakElements: weakElements.filter(el => el.enabled).map(el => el.name),
             extraAttackers: extraAttackers.value.map(c => c.name),
             obligatoryKioku: obligatoryKioku.value.map(c => c.name),
             prevResults: JSON.parse(JSON.stringify(results)),
+            deBufferCount: deBufferCount.value,
+            otherCount: otherCount.value,
+            minHealer: minHealer.value,
+            minDefender: minDefender.value,
+            minBreaker: minBreaker.value,
             enabledCharacters: JSON.parse(JSON.stringify(members.value))
         }
     })
@@ -379,9 +454,6 @@ async function startSimulation() {
 }
 
 
-
-
-/* Extra attackers */
 .kioku-selector {
     margin-top: 1rem;
 }
@@ -462,5 +534,52 @@ async function startSimulation() {
     flex-direction: column;
     margin: 0 auto;
     max-width: 300px;
+}
+
+.role-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    justify-items: center;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.role-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 110%;
+    text-align: center;
+}
+
+.role-box img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.role-box span {
+    margin-top: 0.25rem;
+    font-weight: 500;
+}
+
+.role-box input,
+.role-box .number {
+    margin-top: 0.25rem;
+    width: 60px;
+    text-align: center;
+}
+
+.total-box {
+    font-weight: bold;
+}
+
+.icons {
+    height: 40px;
+}
+
+.gallery-page{
+    padding-bottom: 400px;
 }
 </style>
