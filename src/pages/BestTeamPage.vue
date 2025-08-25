@@ -176,6 +176,7 @@ import { useEnemyStore } from '../store/singleTeamStore'
 import { useCharacterStore } from '../store/characterStore'
 import { KiokuRole, Character, KiokuElement } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
+import { FinalTeam } from '../types/BestTeamTypes'
 
 const enemies = useEnemyStore()
 
@@ -267,25 +268,8 @@ function hideDropdown() {
     setTimeout(() => (showDropdown.value = false), 150)
 }
 
-export interface FinalTeam {
-    dmg: number
-    crit_rate: number
-    attacker: Character
-    portrait: string
-    atk_supp: Character
-    attacker_crys1: string
-    attacker_crys2: string
-    attacker_crys3: string
-    sustain: Character
-    supp1: Character
-    supp1supp: Character | undefined
-    supp2: Character
-    supp2supp: Character | undefined
-    supp3: Character
-    supp3supp: Character | undefined
-}
 
-const populateTeam = (result: any[]) => ({
+const populateTeam = (result: any[]) : FinalTeam => ({
     dmg: result[0],
     crit_rate: result[1],
     attacker: members.value.find(m => m.name === result[2])!,

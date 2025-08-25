@@ -25,3 +25,21 @@ export interface FindBestTeamOptions {
     onError?: (error: any) => void
 }
 
+export interface FinalTeam {
+    dmg: number
+    crit_rate: number
+    attacker: Character
+    portrait: string
+    atk_supp: Character
+    attacker_crys1: string
+    attacker_crys2: string
+    attacker_crys3: string
+    supp1: Character
+    supp1supp: Character | undefined
+    supp2: Character
+    supp2supp: Character | undefined
+    supp3: Character
+    supp3supp: Character | undefined
+    supp4: Character
+    supp4supp: Character | undefined
+}

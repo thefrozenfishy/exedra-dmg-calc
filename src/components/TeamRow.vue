@@ -34,7 +34,8 @@
 </template>
 
 <script lang="ts" setup>
-import { FinalTeam } from '../pages/BestTeamPage.vue';
+import { FinalTeam } from '../types/BestTeamTypes';
+
 
 defineProps<{ team: FinalTeam, loading: boolean }>()
 </script>
