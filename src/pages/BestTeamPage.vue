@@ -65,8 +65,8 @@
                     </div>
 
                     <div class="role-box total-box" style="grid-column: 3 / span 3; width: 400px;">
-                        <span>Total Other Roles</span>
-                        <div class="number">{{ otherCount }}</div>
+                        <span>Flex spot (Healer, Defender or Breaker)</span>
+                        <div class="number">{{ otherCount - minDefender - minHealer - minBreaker }}</div>
                     </div>
 
                 </div>
@@ -111,7 +111,7 @@
             </div>
 
             <div class="kioku-selector">
-                <h3>Extra Attackers</h3>
+                <h3>Non-Attacker Main Damage Dealers</h3>
 
                 <!-- Selected list -->
                 <div class="selected-kioku">
@@ -579,7 +579,7 @@ async function startSimulation() {
     height: 40px;
 }
 
-.gallery-page{
+.gallery-page {
     padding-bottom: 400px;
 }
 </style>
