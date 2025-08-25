@@ -10,7 +10,7 @@
     <div class="team-grid">
       <div v-for="(slot, index) in team.slots" :key="index" class="team-slot">
         <!-- Header per slot -->
-        <h2>{{ index === attackerIndex ? 'Attacker' : 'Member' }}
+        <h2>{{ index === attackerIndex ? 'Damage Dealer' : 'Member' }}
           {{ index < attackerIndex ? index + 1 : index > attackerIndex ? index : "" }}</h2>
 
         <!-- Main character selector -->

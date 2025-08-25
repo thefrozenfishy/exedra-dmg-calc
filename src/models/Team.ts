@@ -182,16 +182,14 @@ export class Team {
                 : [];
 
             const formatCondForKioku = (cond: string[]): string => {
-                console.log(cond)
                 let outString = cond[0]
                 if (cond[1]) {
                     outString += ` if\n    ${cond[1]} - `
-                    const isActiveCond = isActiveForScoreAttack(cond[1])
-                    if (typeof (isActiveCond) === 'boolean') {
-                        outString += isActiveCond
-                    } else {
-                        outString += isActiveCond(amountOfEnemies, enemy.maxBreak)
+                    let isActiveCond = isActiveForScoreAttack(cond[1])
+                    if (typeof (isActiveCond) !== 'boolean') {
+                        isActiveCond = isActiveCond(amountOfEnemies, enemy.maxBreak)
                     }
+                    outString += isActiveCond ? "active" :"disabled"
                     outString += `\n    ${getDescriptionOfCond(cond[1]).match(/.{1,9}/g)?.join("\n    ")}`
 
                 }

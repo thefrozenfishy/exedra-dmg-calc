@@ -124,7 +124,7 @@
                 <!-- Input + dropdown -->
                 <div class="kioku-select">
                     <input type="text" v-model="extraAttackerQuery"
-                        placeholder="Use non-attackers as extra attackers..." @focus="showDropdown = true"
+                        placeholder="Use non-attackers as extra damage dealers, by default only attackers are checked..." @focus="showDropdown = true"
                         @blur="hideDropdown" />
                     <ul v-if="showDropdown && filteredAttackers.length" class="dropdown">
                         <li v-for="char in filteredAttackers" :key="char.id"
