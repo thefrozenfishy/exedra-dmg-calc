@@ -169,16 +169,13 @@ const isCondActive = (cond: BattleCondition, valueToCompareTo: string | number):
     return true;
 }
 
-const lateGetIsActiveCond = (cond: BattleCondition) => {
-    console.log("Setting up late init for", cond)
-    return (amountOfEnemies: number, maxBreak: number) => {
-        const a = cond.compareContent === CompareContent.ALIVE_UNIT_COUNT
+const lateGetIsActiveCond = (cond: BattleCondition) =>
+    (amountOfEnemies: number, maxBreak: number) =>
+        cond.compareContent === CompareContent.ALIVE_UNIT_COUNT
             ? isCondActive(cond, amountOfEnemies)
             : isCondActive(cond, maxBreak)
-        console.log("Checking", cond, "gave", a, "using:", amountOfEnemies, maxBreak)
-        return a;
-    }
-}
+
+
 
 export const isActiveForScoreAttack = (battleConditionSetId: string): boolean | Function => {
     if (!battleConditionSetId) return true
