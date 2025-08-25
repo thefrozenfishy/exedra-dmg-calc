@@ -32,6 +32,7 @@
             <li>Store results to speed up later duplicate simulations</li>
             <li>Revise dmg taken- (and def-?) calculation</li>
             <li>Allow users to set crys + crys substats for their Kioku in team builder</li>
+            <li>Add links to wiki, kioku pages, current SA page, other useful resources</li>
         </ul>
     </div>
 </template>

@@ -1,5 +1,6 @@
-import { Kioku, getSkipCond } from "./Kioku";
+import { Kioku } from "./Kioku";
 import { EnemyTargetTypes, Enemy } from "../types/EnemyTypes";
+import { isActiveForScoreAttack } from "./BattleConditionParser";
 
 const targetTypeAtPosition = [EnemyTargetTypes.OTHER, EnemyTargetTypes.PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.PROXIMITY, EnemyTargetTypes.OTHER]
 
@@ -29,14 +30,14 @@ export class Team {
                         eff = "CRIT_DAMAGE_TOTAL"
                     }
 
-                    const shouldSkip = getSkipCond(condId)
-                    if (typeof (shouldSkip) === 'boolean') {
-                        if (shouldSkip) continue;
+                    const isActiveCond = isActiveForScoreAttack(condId)
+                    if (typeof (isActiveCond) === 'boolean') {
+                        if (!isActiveCond) continue;
                     } else {
                         if (eff in this.extra_effects) {
-                            this.extra_effects[eff].push[[shouldSkip, v]]
+                            this.extra_effects[eff].push([isActiveCond, v])
                         } else {
-                            this.extra_effects[eff] = [[shouldSkip, v]]
+                            this.extra_effects[eff] = [[isActiveCond, v]]
                         }
                     }
 
@@ -90,7 +91,10 @@ export class Team {
     getEffect(key: string, amountOfEnemies: number, maxBreak: number): number {
         let eff = this.all_effects[key]
         this.extra_effects[key]?.forEach(
-            ([fun, e]) => { if (fun(amountOfEnemies, maxBreak)) eff += e }
+            ([fun, e]) => { 
+                if (fun(amountOfEnemies, maxBreak)) eff += e
+
+             }
         )
         return eff
     }

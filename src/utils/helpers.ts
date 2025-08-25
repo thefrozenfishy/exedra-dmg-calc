@@ -1,4 +1,3 @@
-import battleConditionsJson from '../assets/base_data/getBattleConditionSetMstList.json';
 import portraitsJson from '../assets/base_data/getCardMstList.json';
 import portraitLevelsJson from '../assets/base_data/getCardLimitBreakMstList.json';
 import passiveDetailsJson from '../assets/base_data/getPassiveSkillDetailMstList.json';
@@ -6,10 +5,6 @@ import skillDetailsJson from '../assets/base_data/getSkillDetailMstList.json';
 import kiokuDataJson from '../assets/base_data/kioku_data.json';
 import magicLevelsJson from '../assets/base_data/magic_levels.json';
 import { PortraitData, SkillDetail, KiokuData, MagicLevel, PortraitLvlData } from '../types/KiokuTypes';
-
-export const battleConditions = Object.fromEntries(
-    battleConditionsJson.map((item: any) => [item.battleConditionSetMstId, item])
-) as Record<string, object>;
 
 export const portraits = Object.fromEntries(
     portraitsJson.map((item: any) => [item.name, item])

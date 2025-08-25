@@ -1,6 +1,7 @@
 import { EnemyTargetTypes } from '../types/EnemyTypes';
-import { elementMap, KiokuConstants, KiokuData, KiokuGeneratorArgs, KiokuElement, MagicLevel, SkillDetail,AvailableCrys, AvailableSubCrys, SupportKey } from '../types/KiokuTypes';
-import { magicData, battleConditions, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData } from '../utils/helpers';
+import { elementMap, KiokuConstants, KiokuData, KiokuGeneratorArgs, KiokuElement, MagicLevel, SkillDetail, AvailableCrys, AvailableSubCrys, SupportKey } from '../types/KiokuTypes';
+import { magicData, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData } from '../utils/helpers';
+import { isActiveForScoreAttack } from './BattleConditionParser';
 
 function getIdx(obj: SkillDetail): number {
     return "passiveSkillMstId" in obj ? obj.passiveSkillMstId : obj.skillMstId;
@@ -45,85 +46,6 @@ function find_all_details(
     return { ...this_skill, ...sub_skills };
 }
 
-const knownConditions = {
-    "331": () => (amountOfEnemies: number, maxBreak: number) => maxBreak <= 2,        // "ブレイクボーナスが200%以上の敵に対して",
-    "451": () => (amountOfEnemies: number, maxBreak: number) => maxBreak <= 2,        // "ブレイクボーナスが200%以上の敵に対して、必殺技の",
-    "773": () => (amountOfEnemies: number, maxBreak: number) => maxBreak <= 3.5,      // "ブレイク倍率が350%以上の敵に対して必殺技を発動したとき",
-    "330": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 2,  // "敵が2体以上のとき",
-    "439": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 3,  // "敵が3体以上のとき",
-    "440": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 4,  // "敵が4体以上のとき",
-    "441": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 5,  // "敵が5体以上のとき",
-    "525": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies >= 2,  // "敵が2体未満のとき",
-    "526": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies >= 3,  // "敵が3体未満のとき",
-    "527": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies >= 4,  // "敵が4体未満のとき",
-    "528": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies >= 5,  // "敵が5体未満のとき",
-    "529": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies >= 6,  // "敵が6体未満のとき",
-    "1456": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies == 2,  // 敵が2体の場合
-    "1457": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies == 3,  // 敵が3体の場合
-    "1458": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies == 4,  // 敵が4体の場合
-    "1565": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies == 1,  // 敵が1体の場合
-    "1566": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies == 5,  // 敵が5体の場合
-    "1569": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 3, // "敵が3体以上+行動タイプは必殺技+行動者は自身",
-    "1663": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 2, // "敵が2体以上のとき(自ターン問わず)",
-    "1664": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 3, // "敵が3体以上のとき(自ターン問わず)",
-    "1665": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 4, // "敵が4体以上のとき(自ターン問わず)",
-    "1666": () => (amountOfEnemies: number, maxBreak: number) => amountOfEnemies < 5, // "敵が5体以上のとき(自ターン問わず)",
-    "7": () => false,  // "必殺技の",
-    "9": () => false,  // "HPが50%以上のとき",
-    "38": () => false,  // "HPが80%以上のとき",
-    "266": () => false,  // "必殺技の",
-    "310": () => false,  // "行動対象がブレイク状態のとき",
-    "317": () => false,  // "必殺技の",
-    "316": () => false,  // "戦闘スキルを発動したとき",
-    "319": () => false,  // 自身が行動可能で魔力が5のとき
-    "332": () => false,  // "敵がブレイクとき",
-    "337": () => false,  // "対象が「毒」のとき",
-    "352": () => false,  // "対象が裂傷状態のとき",
-    "428": () => false,  // "魔力が5個のとき",
-    "438": () => false,  // "自身にシールドが張られているとき",
-    "476": () => false,  // "HPが50%未満のとき",
-    "512": () => false,  // "魔力が1以上のとき",
-    "575": () => false,  // "デバフ効果が1個以上ある敵に対して",
-    "591": () => true,  // "【追撃】の",
-    "667": () => false,  // "対象に状態異常が付与されている場合 AND 自分は行動者",
-    "937": () => false,  // "自身が必殺技発動時",
-    "939": () => false,  // "デバフが1個以上ある敵に対して",
-    "1178": () => false,  // "継続回復効果が付与されているとき",
-    "1277": () => false,  // "カットアウトが付与されているとき",
-    "1354": () => false,  // "行動者は敵+行動者の状態異常数は1以上",
-    "1535": () => false,  // "トークンが3以上のとき",
-    "1538": () => false,  // "自分にシールドが付与されているとき",
-    "1542": () => false,  // "魔力が5個で必殺技を使用したとき",
-    "1543": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP80%以上",
-    "1544": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP90%以上",
-    "1545": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP100%",
-    "1562": () => true,  // "自身のHPが50%未満かつ36%以上のとき", // We take the lowest bonus and skip this
-    "1563": () => true,  // "自身のHPが35%未満かつ11%以上のとき", // We take the lowest bonus and skip this
-    "1564": () => false,  // "自身のHPが10%未満のとき",
-    "1568": () => false,  // "行動者のデバフが1以上+行動者は敵",
-    "1580": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP85%以上",
-    "1581": () => false,  // "自身が固有バフ(水着マミ)状態の場合+HP95%以上",
-    "1604": () => false,  // "水刃の敵が1体以上いるとき",
-}
-
-export function getSkipCond(condId: string | undefined): boolean | Function {
-    if (!condId) return false;
-    const condIdInt = parseInt(condId || "0");
-
-    if (condIdInt in battleConditions) {
-        try {
-            return knownConditions[condId]()
-        } catch (err) {
-            throw new Error(
-                `Unknown condition: ${(condIdInt in battleConditions
-                    ? Object.entries(battleConditions[condIdInt])
-                    : condIdInt)}`
-            );
-        }
-    }
-    return false
-}
-
 export class Kioku {
 
     static knownBoosts = {
@@ -147,16 +69,54 @@ export class Kioku {
     };
 
     static skippable = new Set([
-        "DWN_RCV_DMG_RATIO", "DMG_ATK", "VORTEX_ATK", "UP_DEF_RATIO", "ADDITIONAL_TURN_UNIT_ACT",
-        "GAIN_EP_RATIO", "HASTE", "UP_SPD_RATIO", "UP_EP_RECOVER_RATE_RATIO", "GAIN_EP_FIXED",
-        "UP_DEF_ACCUM_RATIO", "BLEED_ATK", "BARRIER", "DMG_DEF", "RECOVERY_HP_ATK", "CONTINUOUS_RECOVERY",
-        "UP_HEAL_RATE_RATIO", "CUTOUT", "RECOVERY_HP", "REMOVE_ALL_ABNORMAL", "CHARGE", "SHIELD",
-        "REMOVE_ALL_BUFF", "GAIN_CHARGE_POINT", "CONSUME_CHARGE_POINT", "STUN", "SLOW", "IMM_SLIP_DMG",
-        "POISON_ATK", "DWN_SPD_RATIO", "DWN_ATK_RATIO", "REFLECTION_RATIO",
-        "UP_GIV_BREAK_POINT_DMG_FIXED", "UP_RCV_BREAK_POINT_DMG_RATIO", "ADDITIONAL_SKILL_ACT",
-        "UP_SPD_FIXED", "ADD_BUFF_TURN", "UNIQUE_10030301", "UP_SPD_ACCUM_RATIO", "CURSE_ATK",
-        "BURN_ATK", "SWITCH_SKILL", "UP_BUFF_EFFECT_VALUE", "ADD_DEBUFF_TURN", "GAIN_SP_FIXED",
-        "UP_ABNORMAL_HIT_RATE_RATIO", "DMG_RANDOM", "UP_GIV_VORTEX_DMG_RATIO", "UP_DEBUFF_EFFECT_VALUE", "UP_BUFF_EFFECT_VALUE"
+        "ADD_BUFF_TURN",
+        "ADD_DEBUFF_TURN",
+        "ADDITIONAL_SKILL_ACT",
+        "ADDITIONAL_TURN_UNIT_ACT",
+        "BARRIER", "DMG_DEF",
+        "BLEED_ATK",
+        "BURN_ATK",
+        "CHARGE",
+        "CONSUME_CHARGE_POINT",
+        "CONTINUOUS_RECOVERY",
+        "CUTOUT",
+        "DMG_ATK",
+        "DMG_RANDOM",
+        "DWN_ATK_RATIO",
+        "DWN_RCV_DMG_RATIO",
+        "DWN_SPD_RATIO",
+        "GAIN_CHARGE_POINT",
+        "GAIN_EP_FIXED",
+        "GAIN_EP_RATIO",
+        "GAIN_SP_FIXED",
+        "HASTE",
+        "IMM_SLIP_DMG",
+        "POISON_ATK",
+        "RECOVERY_HP_ATK",
+        "RECOVERY_HP",
+        "REFLECTION_RATIO",
+        "REMOVE_ALL_ABNORMAL",
+        "REMOVE_ALL_BUFF",
+        "SHIELD",
+        "SLOW",
+        "STUN",
+        "SWITCH_SKILL",
+        "UNIQUE_10030301",
+        "UP_ABNORMAL_HIT_RATE_RATIO",
+        "UP_BUFF_EFFECT_VALUE",
+        "UP_BUFF_EFFECT_VALUE",
+        "UP_DEBUFF_EFFECT_VALUE",
+        "UP_DEF_ACCUM_RATIO",
+        "UP_DEF_RATIO",
+        "UP_EP_RECOVER_RATE_RATIO",
+        "UP_GIV_BREAK_POINT_DMG_FIXED",
+        "UP_GIV_VORTEX_DMG_RATIO",
+        "UP_HEAL_RATE_RATIO",
+        "UP_RCV_BREAK_POINT_DMG_RATIO",
+        "UP_SPD_ACCUM_RATIO", "CURSE_ATK",
+        "UP_SPD_FIXED",
+        "UP_SPD_RATIO",
+        "VORTEX_ATK", // TODO: Make vortex work
     ]);
 
 
@@ -391,12 +351,16 @@ export class Kioku {
                 continue;
             }
             nrHitThatKills -= 1
-            const shouldSkip = getSkipCond(v.activeConditionSetIdCsv)
-            if (typeof (shouldSkip) === 'boolean') {
-                if (shouldSkip) continue;
-            } else {
-                if (shouldSkip(nrHitThatKills > 1 ? amountOfEnemies : amountOfEnemies - 1, maxBreak)) continue;
-            }
+            if (v.activeConditionSetIdCsv.split(",").some((condId: string) => {
+                const isActiveCond = isActiveForScoreAttack(condId)
+                if (typeof (isActiveCond) === 'boolean') {
+                    if (!isActiveCond) return true;
+                } else {
+                    if (!isActiveCond(nrHitThatKills > 1 ? amountOfEnemies : amountOfEnemies - 1, maxBreak)) return true;
+                }
+                return false
+            })) continue;
+
 
             if (v.abilityEffectType === "DMG_RANDOM" && targetType === EnemyTargetTypes.TARGET) total_dmg += v.value1 * v.value2;
             // We make random only hit lowest def for simplicity, since this is max dmg
@@ -408,18 +372,11 @@ export class Kioku {
     }
 
     add_effects(details: Record<string, any>, is_unique: boolean, lvl: number, ignore_buff_mult = false) {
-        const conds: Record<string, number> = {};
         const lvl_details = Object.values(details).filter(
             (v: any) =>
                 (is_unique || parseInt(String(getIdx(v)).slice(-2)) === lvl) &&
                 (this.isDps || v.range !== -1)
         );
-
-        for (const skill of lvl_details) {
-            if (!skill.activeConditionSetIdCsv) continue;
-            const start_cond = skill.startConditionSetIdCsv ? parseInt(skill.startConditionSetIdCsv) : 0;
-            if ((conds[skill.activeConditionSetIdCsv] || 0) < start_cond) conds[skill.activeConditionSetIdCsv] = start_cond;
-        }
 
         for (const skill of lvl_details) {
             let eff = skill.value1;
@@ -453,7 +410,9 @@ export class Kioku {
             } else if (skill.abilityEffectType === "UP_ELEMENT_DMG_RATE_RATIO") {
                 skill.abilityEffectType = "UP_GIV_DMG_RATIO";
             }
-            this.add_to_effects(skill.abilityEffectType, eff, skill.activeConditionSetIdCsv || "");
+            skill.activeConditionSetIdCsv.split(",").forEach((condId: string) => {
+                this.add_to_effects(skill.abilityEffectType, eff, condId);
+            });
         }
     }
 
@@ -532,23 +491,23 @@ export function getKioku({
     if (ascension == null) {
         console.warn("ascension was null, setting to", KiokuConstants.maxAscension)
         ascension = KiokuConstants.maxAscension
-    } 
+    }
     if (kiokuLvl == null) {
         console.warn("kiokuLvl was null, setting to", KiokuConstants.maxKiokuLvl)
         kiokuLvl = KiokuConstants.maxKiokuLvl
-    } 
+    }
     if (magicLvl == null) {
         console.warn("magicLvl was null, setting to", KiokuConstants.maxMagicLvl)
         magicLvl = KiokuConstants.maxMagicLvl
-    } 
+    }
     if (heartphialLvl == null) {
         console.warn("heartphialLvl was null, setting to", KiokuConstants.maxHeartphialLvl)
         heartphialLvl = KiokuConstants.maxHeartphialLvl
-    } 
+    }
     if (specialLvl == null) {
         console.warn("specialLvl was null, setting to", KiokuConstants.maxSpecialLvl)
         specialLvl = KiokuConstants.maxSpecialLvl
-    } 
+    }
     if (name == null || kiokuLvl == null || magicLvl == null || heartphialLvl == null || isDps == null || ascension == null || specialLvl == null) {
         throw new Error(`Ivalid arguments provided to getKioku ${{
             name,
