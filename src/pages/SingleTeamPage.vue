@@ -10,7 +10,8 @@
     <div class="team-grid">
       <div v-for="(slot, index) in team.slots" :key="index" class="team-slot">
         <!-- Header per slot -->
-        <h2>{{ index === 0 ? 'Attacker' : 'Member' }} {{ index || "" }}</h2>
+        <h2>{{ index === attackerIndex ? 'Attacker' : 'Member' }}
+          {{ index < attackerIndex ? index + 1 : index > attackerIndex ? index : "" }}</h2>
 
         <!-- Main character selector -->
         <CharacterSelector :selected="slot.main" @select="member => team.setMain(index, member)" />
@@ -21,7 +22,7 @@
         </div>
 
         <!-- Portrait -->
-        <div v-if="index === 0 && slot.main" class="stats">
+        <div v-if="index === attackerIndex && slot.main" class="stats">
           <label>
             Portrait:
             <select :value="slot.main.portrait || ''"
@@ -61,7 +62,7 @@
     </div>
   </div>
 
-  <EnemySelector></EnemySelector>
+  <EnemySelector />
 
   <!-- Debug section TODO: Hide this by default? -->
   <div class="team-page">
@@ -86,14 +87,16 @@ import EnemySelector from '../components/EnemySelector.vue'
 import { KiokuConstants, KiokuGeneratorArgs, portraits } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
 
+const attackerIndex = 2
+
 const cryKeys = Object.keys(KiokuConstants.availableCrys)
 
 function onChangeCrys(idx: number, rawValue: string) {
-  const main = team.slots[0].main
+  const main = team.slots[attackerIndex].main
   if (!main) return
   const current = main.crys ?? ["", "", ""]
   current[idx - 1] = rawValue as string
-  team.setMain(0, { ...main, crys: current } as any)
+  team.setMain(attackerIndex, { ...main, crys: current } as any)
 }
 
 const formatDmg = (out: string | (number | string[])[]) => typeof (out) !== 'string' ? `Max Damage: ${out[0].toLocaleString()} with a ${out[1]}% crit rate` : battleOutput
@@ -106,13 +109,13 @@ const enemies = useEnemyStore()
 const isFullTeam = computed(() => team.slots.map(slot => slot.main).filter(Boolean).length === 5)
 const teamInstance = computed(() => {
   if (!isFullTeam.value) return;
-  const dpsElement = team.slots[0]?.main?.element!
+  const dpsElement = team.slots[attackerIndex]?.main?.element!
   try {
     const transformedMembers = team.slots.map((m, idx) => {
       const support = m.support ? getKioku({ ...m.support, dpsElement }) : null
-      return getKioku({ ...m.main, dpsElement, supportKey: support?.getKey(), isDps: idx === 0 } as KiokuGeneratorArgs)
+      return getKioku({ ...m.main, dpsElement, supportKey: support?.getKey(), isDps: idx === attackerIndex } as KiokuGeneratorArgs)
     }) as Kioku[]
-    return new Team(transformedMembers, false)
+    return new Team(transformedMembers, true)
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
     console.error(err)

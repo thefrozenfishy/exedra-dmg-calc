@@ -175,6 +175,7 @@ const lateGetIsActiveCond = (cond: BattleCondition) =>
             ? isCondActive(cond, amountOfEnemies)
             : isCondActive(cond, maxBreak)
 
+export const getDescriptionOfCond=(battleConditionSetId: string):string => battleConditionSets[battleConditionSetId].description
 
 
 export const isActiveForScoreAttack = (battleConditionSetId: string): boolean | Function => {

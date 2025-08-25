@@ -1,6 +1,6 @@
 import { Kioku } from "./Kioku";
 import { EnemyTargetTypes, Enemy } from "../types/EnemyTypes";
-import { isActiveForScoreAttack } from "./BattleConditionParser";
+import { getDescriptionOfCond, isActiveForScoreAttack } from "./BattleConditionParser";
 
 const targetTypeAtPosition = [EnemyTargetTypes.OTHER, EnemyTargetTypes.PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.PROXIMITY, EnemyTargetTypes.OTHER]
 
@@ -83,7 +83,7 @@ export class Team {
             [dmg, critRate, debugText, enemyDied] = this.calculate_single_dmg(i, this.team[i], enemies[i], amountOfEnemies, atk_down)
             total_dmg += dmg
             if (enemies[i].enabled && enemyDied) amountOfEnemies -= 1
-            debugTexts[i] =debugText
+            debugTexts[i] = debugText
         }
         return [total_dmg, Math.round(critRate * 100), debugTexts]
     }
@@ -91,10 +91,10 @@ export class Team {
     getEffect(key: string, amountOfEnemies: number, maxBreak: number): number {
         let eff = this.all_effects[key]
         this.extra_effects[key]?.forEach(
-            ([fun, e]) => { 
+            ([fun, e]) => {
                 if (fun(amountOfEnemies, maxBreak)) eff += e
 
-             }
+            }
         )
         return eff
     }
@@ -158,35 +158,52 @@ export class Team {
             effect_elem_factor *
             break_factor;
 
+        let debugText = "";
+        if (this.debug) {
 
-        const lines = kiokuAtPosition
-            ? Object.keys(kiokuAtPosition).sort().sort((a,b) => {
-                if (a.endsWith("Atk")) return -1;
-                if (b.endsWith("Atk")) return 1;
-                if (a.endsWith("Lvl")) return -1;
-                if (b.endsWith("Lvl")) return 1;
-                return 0
-            }).map(k => {
-                let key = k
-                let val = kiokuAtPosition[k]
-                if (k.endsWith("Atk")) {
-                    val |= 0
-                } else if (["crys_sub", "crys", "data", "support", "supportKey", "knownConditions", "effects"].includes(k)) {
-                    return;
+            const lines = kiokuAtPosition
+                ? Object.keys(kiokuAtPosition).sort().sort((a, b) => {
+                    if (a.endsWith("Atk")) return -1;
+                    if (b.endsWith("Atk")) return 1;
+                    if (a.endsWith("Lvl")) return -1;
+                    if (b.endsWith("Lvl")) return 1;
+                    return 0
+                }).map(k => {
+                    let key = k
+                    let val = kiokuAtPosition[k]
+                    if (k.endsWith("Atk")) {
+                        val |= 0
+                    } else if (["crys_sub", "crys", "data", "support", "supportKey", "knownConditions", "effects"].includes(k)) {
+                        return;
+                    }
+
+                    return `${["abilityLvl", "ascension"].includes(key) ? `\n${key}` : key} - ${val}`
+                }).filter(Boolean)
+                : [];
+
+            const formatCondForKioku = (cond: string[]): string => {
+                console.log(cond)
+                let outString = cond[0]
+                if (cond[1]) {
+                    outString += ` if\n    ${cond[1]} - `
+                    const isActiveCond = isActiveForScoreAttack(cond[1])
+                    if (typeof (isActiveCond) === 'boolean') {
+                        outString += isActiveCond
+                    } else {
+                        outString += isActiveCond(amountOfEnemies, enemy.maxBreak)
+                    }
+                    outString += `\n    ${getDescriptionOfCond(cond[1]).match(/.{1,9}/g)?.join("\n    ")}`
+
                 }
+                return outString
+            }
 
-                return `${["abilityLvl", "ascension"].includes(key) ? `\n${key}` : key} - ${val}`
-            }).filter(Boolean)
-            : [];
+            const effects = kiokuAtPosition ? Object.keys(kiokuAtPosition["effects"]).sort().map(key => {
+                if (Kioku.skippable.has(key)) return;
+                return `${key} \n  ${kiokuAtPosition["effects"][key].map(formatCondForKioku).join("\n  ")}`
+            }).filter(Boolean) : []
 
-        const effects = kiokuAtPosition ? Object.keys(kiokuAtPosition["effects"]).sort().map(k => {
-            if (Kioku.skippable.has(k)) return;
-            let key = k
-            let val = kiokuAtPosition["effects"][k]
-            return `${key}\n  ${val.map(v => `${v[0]}${v[1] ? ` if ${v[1]}` : ""}`).join("\n  ")}`
-        }).filter(Boolean) : []
-
-        let debugText = ` 
+            debugText = ` 
 DMG CALC MULTIPLIERS:
 Ability Mult - ${special * 100 | 0}%
 Base Attack  - ${(this.dps.getBaseAtk() | 0).toLocaleString()}
@@ -228,10 +245,7 @@ KIOKU STATS:
 ${lines.join("\n")}
 
 KIOKU EFFECTS:
-${effects.join("\n")}
-` 
-        if (this.debug && idx === 0) {
-            console.log(debugText)
+${effects.join("\n")}`;
         }
 
         return [total | 0, crit_rate, debugText, enemyDied];
