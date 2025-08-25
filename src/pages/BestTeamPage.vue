@@ -30,7 +30,7 @@
                 <div class="role-grid">
                     <div class="role-box">
                         <img :src="'/exedra-dmg-calc/roles/Attacker.png'" alt="Attacker" />
-                        <span>Attacker</span>
+                        <span>Damage Dealer</span>
                         <div class="number">1</div>
                     </div>
 
