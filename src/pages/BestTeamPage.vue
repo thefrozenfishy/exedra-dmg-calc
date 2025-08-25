@@ -111,7 +111,7 @@
             </div>
 
             <div class="kioku-selector">
-                <h3>Non-Attacker Main Damage Dealers</h3>
+                <h3>Non-Attacker Damage Dealers</h3>
 
                 <!-- Selected list -->
                 <div class="selected-kioku">
