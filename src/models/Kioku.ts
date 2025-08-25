@@ -193,7 +193,7 @@ export class Kioku {
         this.supportKey = supportKey;
         this.support = supportKey ? Kioku.fromKey(supportKey) : undefined;
 
-        this.kiokuAtk = this.kiokuLvl * (this.data.atk100 - this.data.minAtk) / (KiokuConstants.maxKiokuLvl - 1);
+        this.kiokuAtk = this.data.minAtk +  (this.kiokuLvl-1) * (this.data.atk100 - this.data.minAtk) / (KiokuConstants.maxKiokuLvl - 1);
         this.ascensionAtk = this.ascension / 5 * this.data.atka5
 
         for (const [k, v] of Object.entries(KiokuConstants.heartphialAtkRewardLvls)) {
