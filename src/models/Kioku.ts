@@ -103,6 +103,8 @@ export class Kioku {
         "SWITCH_SKILL",
         "UNIQUE_10030301",
         "UP_ABNORMAL_HIT_RATE_RATIO",
+        "UP_BREAK_DAMAGE_RECEIVE_RATIO",
+        "UP_BREAK_EFFECT",
         "UP_BUFF_EFFECT_VALUE",
         "UP_BUFF_EFFECT_VALUE",
         "UP_DEBUFF_EFFECT_VALUE",
@@ -140,7 +142,7 @@ export class Kioku {
     private crys: AvailableCrys[];
     private crys_sub: AvailableSubCrys[];
     private data: KiokuData;
-    effects: Record<string, (string | number)[][]> = {};
+    effects: Record<string, [number, string][]> = {};
     kiokuAtk: number;
     supportAtk: number = 0;
     portraitAtk: number = 0;

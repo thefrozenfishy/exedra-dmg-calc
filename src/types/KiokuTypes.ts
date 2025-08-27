@@ -28,6 +28,7 @@ export const elementMap: Record<string, KiokuElement> = {
 };
 
 export const portraits = (elem: KiokuElement) => ["A Dream of a Little Mermaid", "The Savior's Apostle", dmgUpPortraits[elem]]
+export const portraitsBestOnly = (elem: KiokuElement) => ["A Dream of a Little Mermaid", "The Savior's Apostle"]
 
 const dmgUpPortraits = {
     [KiokuElement.Flame]: "A Reluctant Coach Steps Up",

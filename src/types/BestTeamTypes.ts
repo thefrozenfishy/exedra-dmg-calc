@@ -13,6 +13,7 @@ export interface FindBestTeamOptions {
     include4StarOthers: boolean;
     extraAttackers: string[];
     obligatoryKioku: string[];
+    ignoredKioku: string[];
     weakElements: KiokuElement[]
     prevResults: any[]
     deBufferCount: number

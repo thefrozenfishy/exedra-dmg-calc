@@ -85,6 +85,33 @@
             </div>
 
             <div class="kioku-selector">
+                <h3>Ignored Kioku </h3>
+                These are Kioku that do not have any dmg boosting effects, and by default will be ignored to speed up
+                computing time
+
+                <!-- Selected list -->
+                <div class="selected-kioku">
+                    <div @click="removeIgnoredKioku(char)" v-for="char in ignoredKioku" :key="char.id" class="chip">
+                        <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+                        <span>{{ char.name }}</span>
+                    </div>
+                </div>
+
+                <!-- Input + dropdown -->
+                <div class="kioku-select">
+                    <input type="text" v-model="ignoredKiokuQuery"
+                        placeholder="Kioku that must be included in final team..."
+                        @focus="showIgnoredKiokuDropdown = true" @blur="hideIgnoredKiokuDropdown" />
+                    <ul v-if="showIgnoredKiokuDropdown && filteredKioku.length" class="dropdown">
+                        <li v-for="char in filteredKioku" :key="char.id" @mousedown.prevent="addIgnoredKioku(char)">
+                            <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+                            {{ char.name }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="kioku-selector">
                 <h3>Obligatory Kioku</h3>
 
                 <!-- Selected list -->
@@ -99,9 +126,9 @@
                 <!-- Input + dropdown -->
                 <div class="kioku-select">
                     <input type="text" v-model="obligatoryKiokuQuery"
-                        placeholder="Kioku that must be included in final team..." @focus="showDropdown = true"
-                        @blur="hideDropdown" />
-                    <ul v-if="showDropdown && filteredKioku.length" class="dropdown">
+                        placeholder="Kioku that must be included in final team..."
+                        @focus="showObligatoryKiokuDropdown = true" @blur="hideObligatoryKiokuDropdown" />
+                    <ul v-if="showObligatoryKiokuDropdown && filteredKioku.length" class="dropdown">
                         <li v-for="char in filteredKioku" :key="char.id" @mousedown.prevent="addObligatoryKioku(char)">
                             <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
                             {{ char.name }}
@@ -124,9 +151,9 @@
                 <!-- Input + dropdown -->
                 <div class="kioku-select">
                     <input type="text" v-model="extraAttackerQuery"
-                        placeholder="Use non-attackers as extra damage dealers, by default only attackers are checked..." @focus="showDropdown = true"
-                        @blur="hideDropdown" />
-                    <ul v-if="showDropdown && filteredAttackers.length" class="dropdown">
+                        placeholder="Use non-attackers as extra damage dealers, by default only attackers are checked..."
+                        @focus="showExtraAttackerDropdown = true" @blur="hideExtraAttackerDropdown" />
+                    <ul v-if="showExtraAttackerDropdown && filteredAttackers.length" class="dropdown">
                         <li v-for="char in filteredAttackers" :key="char.id"
                             @mousedown.prevent="addExtraAttacker(char)">
                             <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
@@ -218,9 +245,15 @@ const minBreaker = ref(0)
 // Extra attackers
 const extraAttackers = ref<Character[]>([])
 const extraAttackerQuery = ref("")
+const showExtraAttackerDropdown = ref(false)
+
 const obligatoryKioku = ref<Character[]>([])
 const obligatoryKiokuQuery = ref("")
-const showDropdown = ref(false)
+const showObligatoryKiokuDropdown = ref(false)
+
+const ignoredKioku = ref<Character[]>(members.value.filter(c => ["Nightmare Stinger", "Lynx Impact", "Circle Of Fire", "Glittering Hurricane", "Surging Laser", "Verdant Shower", "Diamond Splash", "Purple Will-o'-Wisp", "Folter Gefängnis", "Vampire Fang", "Strada Futuro", "Lux☆Magica", "Infinite Poseidon", "Neo Genesis"].includes(c.name)))
+const ignoredKiokuQuery = ref("")
+const showIgnoredKiokuDropdown = ref(false)
 
 const filteredAttackers = computed(() => {
     const q = extraAttackerQuery.value.toLowerCase()
@@ -247,13 +280,17 @@ const filteredKioku = computed(() => {
 function addExtraAttacker(char: Character) {
     extraAttackers.value.push(char)
     extraAttackerQuery.value = ""
-    showDropdown.value = false
+    showExtraAttackerDropdown.value = false
 }
-
 function addObligatoryKioku(char: Character) {
     obligatoryKioku.value.push(char)
     obligatoryKiokuQuery.value = ""
-    showDropdown.value = false
+    showObligatoryKiokuDropdown.value = false
+}
+function addIgnoredKioku(char: Character) {
+    ignoredKioku.value.push(char)
+    ignoredKiokuQuery.value = ""
+    showIgnoredKiokuDropdown.value = false
 }
 
 function removeExtraAttacker(char: Character) {
@@ -262,14 +299,22 @@ function removeExtraAttacker(char: Character) {
 function removeObligatoryKioku(char: Character) {
     obligatoryKioku.value = obligatoryKioku.value.filter((a) => a.id !== char.id)
 }
+function removeIgnoredKioku(char: Character) {
+    ignoredKioku.value = ignoredKioku.value.filter((a) => a.id !== char.id)
+}
 
-function hideDropdown() {
-    // Delay to allow click on item before blur closes it
-    setTimeout(() => (showDropdown.value = false), 150)
+function hideExtraAttackerDropdown() {
+    setTimeout(() => (showExtraAttackerDropdown.value = false), 150)
+}
+function hideObligatoryKiokuDropdown() {
+    setTimeout(() => (showObligatoryKiokuDropdown.value = false), 150)
+}
+function hideIgnoredKiokuDropdown() {
+    setTimeout(() => (showIgnoredKiokuDropdown.value = false), 150)
 }
 
 
-const populateTeam = (result: any[]) : FinalTeam => ({
+const populateTeam = (result: any[]): FinalTeam => ({
     dmg: result[0],
     crit_rate: result[1],
     attacker: members.value.find(m => m.name === result[2])!,
@@ -367,6 +412,10 @@ async function startSimulation() {
         }
     }
 
+    const extraAttackersVal = extraAttackers.value.map(c => c.name)
+    const obligatoryKiokuVal = [...obligatoryKioku.value.map(c => c.name), ...extraAttackersVal]
+    const ignoredKiokuVal = ignoredKioku.value.map(c => c.name).filter(c => !obligatoryKiokuVal.includes(c))
+
     workerRef.value.postMessage({
         options: {
             enemies: JSON.parse(JSON.stringify(enemies.enemies)),
@@ -374,8 +423,9 @@ async function startSimulation() {
             include4StarSupports: include4StarSupports.value,
             include4StarOthers: include4StarOthers.value,
             weakElements: weakElements.filter(el => el.enabled).map(el => el.name),
-            extraAttackers: extraAttackers.value.map(c => c.name),
-            obligatoryKioku: obligatoryKioku.value.map(c => c.name),
+            extraAttackers: extraAttackersVal,
+            obligatoryKioku: obligatoryKiokuVal,
+            ignoredKioku: ignoredKiokuVal,
             prevResults: JSON.parse(JSON.stringify(results)),
             deBufferCount: deBufferCount.value,
             otherCount: otherCount.value,
@@ -448,6 +498,8 @@ async function startSimulation() {
     gap: 0.5rem;
     margin-bottom: 0.5rem;
     max-width: 600px;
+    margin : 0 auto;
+    justify-content: center;
 }
 
 .chip {

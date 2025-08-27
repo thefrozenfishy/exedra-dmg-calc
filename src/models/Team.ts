@@ -8,7 +8,7 @@ export class Team {
     private team: Kioku[];
     private dps: Kioku;
     private all_effects: Record<string, number> = {};
-    private extra_effects: Record<string, (Function | number | string)[]> = {};
+    private extra_effects: Record<string, [Function, number][]> = {};
     private debug: boolean;
 
     constructor(kiokus: Kioku[], debug = false) {
@@ -30,24 +30,24 @@ export class Team {
                         eff = "CRIT_DAMAGE_TOTAL"
                     }
 
-                    const isActiveCond = isActiveForScoreAttack(condId)
+                    const isActiveCond = isActiveForScoreAttack(condId.toString())
                     if (typeof (isActiveCond) === 'boolean') {
                         if (isActiveCond) {
                             if (eff in this.all_effects) {
                                 if (eff === "DEF_MULTIPLIER_TOTAL") {
-                                    this.all_effects[eff] *= 1 - v / 1000;
+                                    this.all_effects[eff] *= 1 - Number(v) / 1000;
                                 } else {
-                                    this.all_effects[eff] += v
+                                    this.all_effects[eff] += Number(v)
                                 }
                             } else {
-                                this.all_effects[eff] = v;
+                                this.all_effects[eff] = Number(v);
                             }
                         }
                     } else {
                         if (eff in this.extra_effects) {
-                            this.extra_effects[eff].push([isActiveCond, v])
+                            this.extra_effects[eff].push([isActiveCond, Number(v)])
                         } else {
-                            this.extra_effects[eff] = [[isActiveCond, v]]
+                            this.extra_effects[eff] = [[isActiveCond, Number(v)]]
                         }
                         continue;
                     }
@@ -121,7 +121,7 @@ export class Team {
         const atk_total = this.dps.getBaseAtk() * (1 + atk_pluss) * (1 - atk_down) + this.dps.atk_bonus_flat;
 
         const def_remaining = this.getEffect("DEF_MULTIPLIER_TOTAL", amountOfEnemies, enemy.maxBreak);
-        const def_total = enemy.defense * (1 + enemy.defenseUp/100) * def_remaining;
+        const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;
 
         const crit_rate =
             (this.dps.critRate +
@@ -145,7 +145,7 @@ export class Team {
         const break_factor = (enemy.isBreak ? enemy.maxBreak / 100 : 1);
 
         const total =
-            enemy.enabled *
+            Number(enemy.enabled) *
             base_dmg *
             def_factor *
             crit_factor *
@@ -165,12 +165,11 @@ export class Team {
                     if (a.endsWith("Lvl")) return -1;
                     if (b.endsWith("Lvl")) return 1;
                     return 0
-                }).map(k => {
-                    let key = k
-                    let val = kiokuAtPosition[k]
-                    if (k.endsWith("Atk")) {
+                }).map(key => {
+                    let val = kiokuAtPosition[key]
+                    if (key.endsWith("Atk")) {
                         val |= 0
-                    } else if (["crys_sub", "crys", "data", "support", "supportKey", "knownConditions", "effects"].includes(k)) {
+                    } else if (["crys_sub", "crys", "data", "support", "supportKey", "knownConditions", "effects"].includes(key)) {
                         return;
                     }
 
@@ -178,8 +177,8 @@ export class Team {
                 }).filter(Boolean)
                 : [];
 
-            const formatCondForKioku = (cond: string[]): string => {
-                let outString = cond[0]
+            const formatCondForKioku = (cond: [number, string]): string => {
+                let outString = cond[0].toString()
                 if (cond[1]) {
                     outString += ` if\n    ${cond[1]} - `
                     let isActiveCond = isActiveForScoreAttack(cond[1])

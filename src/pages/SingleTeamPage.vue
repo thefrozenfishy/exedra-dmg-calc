@@ -99,8 +99,8 @@ function onChangeCrys(idx: number, rawValue: string) {
   team.setMain(attackerIndex, { ...main, crys: current } as any)
 }
 
-const formatDmg = (out: string | (number | string[])[]) => typeof (out) !== 'string' ? `Max Damage: ${out[0].toLocaleString()} with a ${out[1]}% crit rate` : battleOutput
-const formatDebug = (out: string | (number | string[])[], idx: number) => Array.isArray(out) ? out[2][idx] : battleOutput
+const formatDmg = (out: string | (number | string)[][]) => typeof (out) !== 'string' ? `Max Damage: ${out[0].toLocaleString()} with a ${out[1]}% crit rate` : battleOutput
+const formatDebug = (out: string | (number | string)[][], idx: number) => Array.isArray(out) ? out[2][idx] : battleOutput
 
 
 const team = useTeamStore()
