@@ -2,7 +2,7 @@ import { Kioku } from "./Kioku";
 import { EnemyTargetTypes, Enemy } from "../types/EnemyTypes";
 import { getDescriptionOfCond, isActiveForScoreAttack } from "./BattleConditionParser";
 
-const targetTypeAtPosition = [EnemyTargetTypes.OTHER, EnemyTargetTypes.PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.PROXIMITY, EnemyTargetTypes.OTHER]
+const targetTypeAtPosition = [EnemyTargetTypes.L_OTHER, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.R_OTHER]
 
 export class Team {
     private team: Kioku[];
@@ -32,25 +32,27 @@ export class Team {
 
                     const isActiveCond = isActiveForScoreAttack(condId)
                     if (typeof (isActiveCond) === 'boolean') {
-                        if (!isActiveCond) continue;
+                        if (isActiveCond) {
+                            if (eff in this.all_effects) {
+                                if (eff === "DEF_MULTIPLIER_TOTAL") {
+                                    this.all_effects[eff] *= 1 - v / 1000;
+                                } else {
+                                    this.all_effects[eff] += v
+                                }
+                            } else {
+                                this.all_effects[eff] = v;
+                            }
+                        }
                     } else {
                         if (eff in this.extra_effects) {
                             this.extra_effects[eff].push([isActiveCond, v])
                         } else {
                             this.extra_effects[eff] = [[isActiveCond, v]]
                         }
-                    continue;
+                        continue;
                     }
 
-                    if (eff in this.all_effects) {
-                        if (eff === "DEF_MULTIPLIER_TOTAL") {
-                            this.all_effects[eff] *= 1 - v / 1000;
-                        } else {
-                            this.all_effects[eff] += v
-                        }
-                    } else {
-                        this.all_effects[eff] = v;
-                    }
+
                 }
             }
         }
@@ -80,7 +82,7 @@ export class Team {
         let enemyDied: boolean
         let amountOfEnemies = enemies.filter(e => e.enabled).length
         const debugTexts = ["", "", "", "", ""];
-        for (const i of [2, 1, 3, 0, 4]) {
+        for (const i of [EnemyTargetTypes.TARGET, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.L_OTHER, EnemyTargetTypes.R_OTHER]) {
             [dmg, critRate, debugText, enemyDied] = this.calculate_single_dmg(i, this.team[i], enemies[i], amountOfEnemies, atk_down)
             total_dmg += dmg
             if (enemies[i].enabled && enemyDied) amountOfEnemies -= 1
@@ -89,15 +91,19 @@ export class Team {
         return [total_dmg, Math.round(critRate * 100), debugTexts]
     }
 
-    getEffect(key: string, amountOfEnemies: number, maxBreak: number): number {
-        let eff = this.all_effects[key]
-        this.extra_effects[key]?.forEach(
-            ([fun, e]) => {
-                if (fun(amountOfEnemies, maxBreak)) eff += e
-
-            }
-        )
-        return eff
+    getEffect(eff: string, amountOfEnemies: number, maxBreak: number): number {
+        let val = this.all_effects[eff] || 0
+        this.extra_effects[eff]?.forEach(
+            ([fun, v]) => {
+                if (fun(amountOfEnemies, maxBreak)) {
+                    if (eff === "DEF_MULTIPLIER_TOTAL") {
+                        val *= 1 - v / 1000;
+                    } else {
+                        val += v
+                    }
+                }
+            })
+        return val
     }
 
     calculate_single_dmg(
@@ -109,36 +115,26 @@ export class Team {
     ): [number, number, string, boolean] {
         const [special, enemyDied] = this.dps.get_special_dmg(targetTypeAtPosition[idx], amountOfEnemies, enemy.maxBreak, enemy.hitsToKill);
         const atk_pluss =
-            (this.getEffect("UP_ATK_RATIO", amountOfEnemies, enemy.maxBreak) || 0 +
-                (this.getEffect("UP_ATK_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) || 0)) /
+            (this.getEffect("UP_ATK_RATIO", amountOfEnemies, enemy.maxBreak) +
+                (this.getEffect("UP_ATK_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak))) /
             1000;
-
-        const atk_total =
-            this.dps.getBaseAtk() * (1 + atk_pluss) * (1 - atk_down) +
-            this.dps.atk_bonus_flat;
+        const atk_total = this.dps.getBaseAtk() * (1 + atk_pluss) * (1 - atk_down) + this.dps.atk_bonus_flat;
 
         const def_remaining = this.getEffect("DEF_MULTIPLIER_TOTAL", amountOfEnemies, enemy.maxBreak);
         const def_total = enemy.defense * (1 + enemy.defenseUp) * def_remaining;
 
         const crit_rate =
             (this.dps.critRate +
-                (this.getEffect("UP_CTR_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) || 0) +
-                (this.getEffect("UP_CTR_FIXED", amountOfEnemies, enemy.maxBreak) || 0)) /
+                (this.getEffect("UP_CTR_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) +
+                (this.getEffect("UP_CTR_FIXED", amountOfEnemies, enemy.maxBreak))) /
             1000;
 
-        const crit_dmg = (this.dps.critDamage + this.getEffect("CRIT_DAMAGE_TOTAL", amountOfEnemies, enemy.maxBreak) || 0) / 1000;
-        const dmg_pluss = (this.getEffect("UP_GIV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) || 0) / 1000;
-        const elem_dmg_up =
-            (this.getEffect("UP_WEAK_ELEMENT_DMG_RATIO", amountOfEnemies, enemy.maxBreak) || 0) / 1000;
-        const dmg_taken = (this.getEffect("UP_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) || 0) / 1000;
-        const elem_res_down =
-            (this.getEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) || 0) / 1000;
-
-        const base_dmg =
-            special *
-            this.dps.getBaseAtk() *
-            ((this.dps.getBaseAtk() / 124) ** 1.2 + 12) /
-            20;
+        const crit_dmg = (this.dps.critDamage + this.getEffect("CRIT_DAMAGE_TOTAL", amountOfEnemies, enemy.maxBreak)) / 1000;
+        const dmg_pluss = (this.getEffect("UP_GIV_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
+        const elem_dmg_up = (this.getEffect("UP_WEAK_ELEMENT_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
+        const dmg_taken = (this.getEffect("UP_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
+        const elem_res_down = (this.getEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
+        const base_dmg = special * this.dps.getBaseAtk() * ((this.dps.getBaseAtk() / 124) ** 1.2 + 12) / 20;
 
         const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
         const crit_factor = 1 + (enemy.isCrit ? crit_dmg : 0);
@@ -190,7 +186,7 @@ export class Team {
                     if (typeof (isActiveCond) !== 'boolean') {
                         isActiveCond = isActiveCond(amountOfEnemies, enemy.maxBreak)
                     }
-                    outString += isActiveCond ? "active" :"disabled"
+                    outString += isActiveCond ? "active" : "disabled"
                     outString += `\n    ${getDescriptionOfCond(cond[1]).match(/.{1,9}/g)?.join("\n    ")}`
 
                 }
