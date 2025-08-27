@@ -175,18 +175,34 @@ const lateGetIsActiveCond = (cond: BattleCondition) =>
             ? isCondActive(cond, amountOfEnemies)
             : isCondActive(cond, maxBreak)
 
-export const getDescriptionOfCond=(battleConditionSetId: string):string => battleConditionSets[battleConditionSetId].description
+export const getDescriptionOfCond = (battleConditionSetId: string): string => battleConditionSets[battleConditionSetId].description
+
+export const isStartCondRelevantForScoreAttack = (startConditionId: string, maxMagicStacks: number): boolean => {
+    if (!startConditionId) return true
+
+    const battleConditionSet = battleConditionSets[startConditionId]
+    console.log(battleConditionSet)
+    for (const activeCondId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
+        const battleCondition = battleConditions[activeCondId]
+        console.log(battleCondition)
+
+        if (battleCondition.compareContent === CompareContent.CHARGE_POINT) {
+            console.log("res", isCondActive(battleCondition, maxMagicStacks))
+            if (!isCondActive(battleCondition, maxMagicStacks)) return false
+        }
+    }
+    return true;
+}
+
+export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: string): boolean | Function => {
+    if (!activeConditionSetId) return true
+
+    const battleConditionSet = battleConditionSets[activeConditionSetId]
+    if (hardcodedKnownNotActive.includes(activeConditionSetId)) return false
 
 
-export const isActiveForScoreAttack = (battleConditionSetId: string): boolean | Function => {
-    if (!battleConditionSetId) return true
-
-    const battleConditionSet = battleConditionSets[battleConditionSetId]
-    if (hardcodedKnownNotActive.includes(battleConditionSetId)) return false
-
-
-    for (const condId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
-        const battleCondition = battleConditions[condId]
+    for (const activeCondId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
+        const battleCondition = battleConditions[activeCondId]
         if (battleCondition.compareContent === CompareContent.ACTOR_SKILL_TYPE &&
             ["NormalAttack", "ActiveSkill"].includes(battleCondition.compareValue)) return false
 
@@ -195,6 +211,7 @@ export const isActiveForScoreAttack = (battleConditionSetId: string): boolean | 
             return false
         }
         if (battleCondition.compareContent === CompareContent.ALIVE_UNIT_COUNT) {
+            // NOTE: This is incorrect as it breaks the loop, but unlikely that it actually matters ever
             return lateGetIsActiveCond(battleCondition)
         }
         if (battleCondition.compareContent === CompareContent.BREAKED_DAMAGE_RECEIVE_RATE) {

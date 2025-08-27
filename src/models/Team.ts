@@ -1,6 +1,6 @@
 import { Kioku } from "./Kioku";
 import { EnemyTargetTypes, Enemy } from "../types/EnemyTypes";
-import { getDescriptionOfCond, isActiveForScoreAttack } from "./BattleConditionParser";
+import { getDescriptionOfCond, isActiveConditionRelevantForScoreAttack, isStartCondRelevantForScoreAttack } from "./BattleConditionParser";
 
 const targetTypeAtPosition = [EnemyTargetTypes.L_OTHER, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.R_OTHER]
 
@@ -23,36 +23,37 @@ export class Team {
     private setup() {
         for (const kioku of this.team) {
             for (let [eff, val] of Object.entries(kioku.effects)) {
-                for (const [v, condId] of val) {
+                for (const [v, activeCondId, startCondIdCsv] of val) {
                     if (["DWN_DEF_RATIO", "DWN_DEF_ACCUM_RATIO"].includes(eff)) {
                         eff = "DEF_MULTIPLIER_TOTAL"
                     } else if (["UP_CTD_FIXED", "UP_CTD_ACCUM_RATIO", "UP_CTD_RATIO"].includes(eff)) {
                         eff = "CRIT_DAMAGE_TOTAL"
                     }
 
-                    const isActiveCond = isActiveForScoreAttack(condId.toString())
+                    if (!startCondIdCsv.split(",").every(startCondId =>
+                        isStartCondRelevantForScoreAttack(startCondId, kioku.maxMagicStacks))
+                    ) continue;
+
+                    const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId)
                     if (typeof (isActiveCond) === 'boolean') {
                         if (isActiveCond) {
                             if (eff in this.all_effects) {
                                 if (eff === "DEF_MULTIPLIER_TOTAL") {
-                                    this.all_effects[eff] *= 1 - Number(v) / 1000;
+                                    this.all_effects[eff] *= 1 - v / 1000;
                                 } else {
-                                    this.all_effects[eff] += Number(v)
+                                    this.all_effects[eff] += v
                                 }
                             } else {
-                                this.all_effects[eff] = Number(v);
+                                this.all_effects[eff] = v;
                             }
                         }
                     } else {
                         if (eff in this.extra_effects) {
-                            this.extra_effects[eff].push([isActiveCond, Number(v)])
+                            this.extra_effects[eff].push([isActiveCond, v])
                         } else {
-                            this.extra_effects[eff] = [[isActiveCond, Number(v)]]
+                            this.extra_effects[eff] = [[isActiveCond, v]]
                         }
-                        continue;
                     }
-
-
                 }
             }
         }
@@ -108,7 +109,7 @@ export class Team {
 
     calculate_single_dmg(
         idx: number,
-        kiokuAtPosition: Kioku | undefined,
+        kiokuAtPosition: Kioku,
         enemy: Enemy,
         amountOfEnemies: number,
         atk_down: number,
@@ -177,16 +178,21 @@ export class Team {
                 }).filter(Boolean)
                 : [];
 
-            const formatCondForKioku = (cond: [number, string]): string => {
-                let outString = cond[0].toString()
-                if (cond[1]) {
-                    outString += ` if\n    ${cond[1]} - `
-                    let isActiveCond = isActiveForScoreAttack(cond[1])
+            const formatCondForKioku = ([eff, activeCondId, startCondIdCsv]: [number, string, string], idx: number): string => {
+                let outString = eff.toString()
+                if (activeCondId) {
+                    outString += ` if\n    ${activeCondId}${startCondIdCsv ? ` & ${startCondIdCsv}` : ""} - `
+                    let isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId)
                     if (typeof (isActiveCond) !== 'boolean') {
                         isActiveCond = isActiveCond(amountOfEnemies, enemy.maxBreak)
                     }
+                    isActiveCond &&= startCondIdCsv.split(",").every((startCondId: string) => isStartCondRelevantForScoreAttack(startCondId, kiokuAtPosition.maxMagicStacks))
                     outString += isActiveCond ? "active" : "disabled"
-                    outString += `\n    ${getDescriptionOfCond(cond[1]).match(/.{1,9}/g)?.join("\n    ")}`
+                    outString += `\n    ${getDescriptionOfCond(activeCondId).match(/.{1,9}/g)?.join("\n    ")}`
+                    if (startCondIdCsv) {
+                        outString += `\n    & `
+                        outString += `\n    ${getDescriptionOfCond(startCondIdCsv).match(/.{1,9}/g)?.join("\n    ")}`
+                    }
 
                 }
                 return outString

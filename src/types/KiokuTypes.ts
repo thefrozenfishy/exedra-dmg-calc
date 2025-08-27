@@ -53,7 +53,46 @@ export interface MagicLevel {
     val: number
 }
 
-export type SkillDetail = Record<string, any>;
+interface PassiveSkill {
+    abilityEffectType: string
+    activeConditionSetIdCsv: string
+    description: string
+    descriptionType: number
+    element: number
+    passiveSkillDetailMstId: number
+    passiveSkillMstId: number
+    range: number
+    remainCount: number
+    role: number
+    startConditionSetIdCsv: string
+    startTimingIdCsv: string
+    turn: number
+    value1: number
+    value2: number
+    value3: number
+}
+
+interface ActiveSkill {
+    abilityEffectType: string
+    activeConditionSetIdCsv: string
+    description: string
+    descriptionType: number
+    element: number
+    probability: number
+    range: number
+    remainCount: number
+    role: number
+    skillDetailMstId: number
+    skillMstId: number
+    startConditionSetIdCsv: string
+    turn: number
+    value1: number
+    value2: number
+    value3: number
+    value4: number
+}
+
+export type SkillDetail = PassiveSkill | ActiveSkill;
 
 export interface Character {
     id: number
@@ -89,6 +128,7 @@ export interface KiokuData {
     support_id: number
     support_target: KiokuElement | KiokuRole
     ability_id: number
+    maxMagicStacks?: number
     ascension_1_effect_2_id: number
     ascension_2_effect_2_id: number
     ascension_3_effect_2_id?: number

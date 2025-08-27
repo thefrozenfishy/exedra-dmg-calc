@@ -55,7 +55,7 @@ export async function findBestTeam({
     const availableOtherDistributions = generateRoleDistributions(otherCount, minHealer, minDefender, minBreaker)
 
     const all5StarKioku = enabledCharacters.filter(c => c.rarity === 5).map(getKioku).filter(Boolean)
-    const highestAtkSupportKey = all5StarKioku.reduce((max, k) => (k?.getBaseAtk() > max?.getBaseAtk() ? k : max))?.getKey()
+    const highestAtkSupportKey = all5StarKioku.reduce((max, k) => (k.getBaseAtk() > max.getBaseAtk() ? k : max))?.getKey()
     const possibleAtkSupportKeys: Record<SupportKey, any[]> = {
         ...Object.values(KiokuRole).reduce(
             (acc, role) => ({ ...acc, [role]: [] }), {}),

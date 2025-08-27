@@ -1,7 +1,7 @@
 import { EnemyTargetTypes } from '../types/EnemyTypes';
 import { elementMap, KiokuConstants, KiokuData, KiokuGeneratorArgs, KiokuElement, MagicLevel, SkillDetail, AvailableCrys, AvailableSubCrys, SupportKey } from '../types/KiokuTypes';
 import { magicData, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData } from '../utils/helpers';
-import { isActiveForScoreAttack } from './BattleConditionParser';
+import { isActiveConditionRelevantForScoreAttack } from './BattleConditionParser';
 
 function getIdx(obj: SkillDetail): number {
     return "passiveSkillMstId" in obj ? obj.passiveSkillMstId : obj.skillMstId;
@@ -142,7 +142,7 @@ export class Kioku {
     private crys: AvailableCrys[];
     private crys_sub: AvailableSubCrys[];
     private data: KiokuData;
-    effects: Record<string, [number, string][]> = {};
+    effects: Record<string, [number, string, string][]> = {};
     kiokuAtk: number;
     supportAtk: number = 0;
     portraitAtk: number = 0;
@@ -152,12 +152,16 @@ export class Kioku {
     atk_bonus_flat: number = 0;
     private buff_mult: number = 1;
     private debuff_mult: number = 1;
+    maxMagicStacks = 0;
 
-    add_to_effects(key: string, value: number, condId: string) {
+    add_to_effects(key: string, value: number, activeCondId: string, activeStartIdCsv: string) {
+        if (activeCondId === "0") activeCondId = ""
+        if (activeStartIdCsv === "0") activeStartIdCsv = ""
+
         if (key in this.effects) {
-            this.effects[key].push([value, condId]);
+            this.effects[key].push([value, activeCondId, activeStartIdCsv]);
         } else {
-            this.effects[key] = [[value, condId]];
+            this.effects[key] = [[value, activeCondId, activeStartIdCsv]];
         }
     }
 
@@ -189,13 +193,14 @@ export class Kioku {
         this.dpsElement = dpsElement ?? KiokuElement.Flame;
         this.crys = crys;
         this.data = kiokuData[name];
+        this.maxMagicStacks = this.data.maxMagicStacks ?? 0
 
         this.crys_sub = Array(3).fill([KiokuConstants.availableSubCrys.CRIT_DMG, KiokuConstants.availableSubCrys.FLAT_ATK]).flat()
 
         this.supportKey = supportKey;
         this.support = supportKey ? Kioku.fromKey(supportKey) : undefined;
 
-        this.kiokuAtk = this.data.minAtk +  (this.kiokuLvl-1) * (this.data.atk100 - this.data.minAtk) / (KiokuConstants.maxKiokuLvl - 1);
+        this.kiokuAtk = this.data.minAtk + (this.kiokuLvl - 1) * (this.data.atk100 - this.data.minAtk) / (KiokuConstants.maxKiokuLvl - 1);
         this.ascensionAtk = this.ascension / 5 * this.data.atka5
 
         for (const [k, v] of Object.entries(KiokuConstants.heartphialAtkRewardLvls)) {
@@ -245,17 +250,17 @@ export class Kioku {
                     this.atk_bonus_flat += eff;
                     break;
                 case KiokuConstants.availableCrys.ATK_25_PERCENT:
-                    this.add_to_effects("UP_ATK_RATIO", 10 * eff, "");
+                    this.add_to_effects("UP_ATK_RATIO", 10 * eff, "", "");
                     break;
                 case KiokuConstants.availableCrys.CRIT_DMG:
                 case KiokuConstants.availableSubCrys.CRIT_DMG:
-                    this.add_to_effects("UP_CTD_FIXED", 10 * eff, "");
+                    this.add_to_effects("UP_CTD_FIXED", 10 * eff, "", "");
                     break;
                 case KiokuConstants.availableCrys.DMG_TO_WEAK_ELEMENT:
-                    this.add_to_effects("UP_WEAK_ELEMENT_DMG_RATIO", 10 * eff, "");
+                    this.add_to_effects("UP_WEAK_ELEMENT_DMG_RATIO", 10 * eff, "", "");
                     break;
                 case KiokuConstants.availableCrys.ELEMENTAL_DMG:
-                    this.add_to_effects("UP_GIV_DMG_RATIO", 10 * eff, "");
+                    this.add_to_effects("UP_GIV_DMG_RATIO", 10 * eff, "", "");
                     break;
                 default:
                     console.warn("Uknown crys", cry)
@@ -353,8 +358,8 @@ export class Kioku {
                 continue;
             }
             nrHitThatKills -= 1
-            if (v.activeConditionSetIdCsv.split(",").some((condId: string) => {
-                const isActiveCond = isActiveForScoreAttack(condId)
+            if (v.activeConditionSetIdCsv.split(",").some((activeCondId: string) => {
+                const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId)
                 if (typeof (isActiveCond) === 'boolean') {
                     if (!isActiveCond) return true;
                 } else {
@@ -367,7 +372,7 @@ export class Kioku {
             if (v.abilityEffectType === "DMG_RANDOM" && targetType === EnemyTargetTypes.TARGET) total_dmg += v.value1 * v.value2;
             // We make random only hit lowest def for simplicity, since this is max dmg
             else if (v.range === 3) total_dmg += v.value1; // 3 is all enemies
-            else if (v.range === 2 && targetType === EnemyTargetTypes.PROXIMITY) total_dmg += v.value2;
+            else if (v.range === 2 && (targetType === EnemyTargetTypes.L_PROXIMITY || targetType === EnemyTargetTypes.R_PROXIMITY)) total_dmg += v.value2;
             else if (targetType === EnemyTargetTypes.TARGET) total_dmg += v.value1;
         }
         return [total_dmg / 1000, nrHitThatKills < 1]
@@ -412,9 +417,10 @@ export class Kioku {
             } else if (skill.abilityEffectType === "UP_ELEMENT_DMG_RATE_RATIO") {
                 skill.abilityEffectType = "UP_GIV_DMG_RATIO";
             }
-            skill.activeConditionSetIdCsv.split(",").forEach((condId: string) => {
-                this.add_to_effects(skill.abilityEffectType, eff, condId);
+            skill.activeConditionSetIdCsv.split(",").forEach((activeCondId: string) => {
+                this.add_to_effects(skill.abilityEffectType, eff, activeCondId, skill.startConditionSetIdCsv);
             });
+
         }
     }
 
