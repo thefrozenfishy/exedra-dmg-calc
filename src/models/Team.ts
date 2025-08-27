@@ -121,7 +121,7 @@ export class Team {
         const atk_total = this.dps.getBaseAtk() * (1 + atk_pluss) * (1 - atk_down) + this.dps.atk_bonus_flat;
 
         const def_remaining = this.getEffect("DEF_MULTIPLIER_TOTAL", amountOfEnemies, enemy.maxBreak);
-        const def_total = enemy.defense * (1 + enemy.defenseUp) * def_remaining;
+        const def_total = enemy.defense * (1 + enemy.defenseUp/100) * def_remaining;
 
         const crit_rate =
             (this.dps.critRate +
