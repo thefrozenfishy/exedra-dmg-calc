@@ -39,6 +39,7 @@ export class Team {
                         } else {
                             this.extra_effects[eff] = [[isActiveCond, v]]
                         }
+                    continue;
                     }
 
                     if (eff in this.all_effects) {
