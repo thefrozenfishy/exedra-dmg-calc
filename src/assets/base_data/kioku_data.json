@@ -607,6 +607,26 @@
         "support_id": 93016,
         "support_target": "Attacker"
     },
+    "Luce della Speranza": {
+        "ability_id": 15033,
+        "ascension_1_effect_2_id": 85005,
+        "ascension_2_effect_2_id": 85047,
+        "ascension_4_effect_2_id": 85006,
+        "atk100": 1791,
+        "atka5": 179,
+        "attack_id": 1193,
+        "character_en": "Ui Tamaki",
+        "crystalis_id": 1150031,
+        "element": "Dark",
+        "id": 10220101,
+        "minAtk": 100,
+        "rarity": 5,
+        "role": "Buffer",
+        "skill_id": 1194,
+        "special_id": 1195,
+        "support_id": 95032,
+        "support_target": "Buffer"
+    },
     "Lux☆Magica": {
         "ability_id": 15009,
         "ascension_1_effect_2_id": 85023,

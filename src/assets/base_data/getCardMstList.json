@@ -105,6 +105,16 @@
         "passiveSkill1": 4084
     },
     {
+        "cardMstId": 4100022,
+        "name": "Come Back Ui!",
+        "passiveSkill1": 4088
+    },
+    {
+        "cardMstId": 4100023,
+        "name": "Somewhere Even Now",
+        "passiveSkill1": 4089
+    },
+    {
         "cardMstId": 4200001,
         "name": "Captivated by Where You Stand",
         "passiveSkill1": 4018
@@ -243,6 +253,16 @@
         "cardMstId": 4200030,
         "name": "Iroha Tamaki's Birthday 2025",
         "passiveSkill1": 4087
+    },
+    {
+        "cardMstId": 4200031,
+        "name": "Echo of a Voice",
+        "passiveSkill1": 4090
+    },
+    {
+        "cardMstId": 4200032,
+        "name": "The Protected Ones",
+        "passiveSkill1": 4091
     },
     {
         "cardMstId": 4300001,
@@ -435,6 +455,11 @@
         "passiveSkill1": 4078
     },
     {
+        "cardMstId": 4300039,
+        "name": "A Window Between Us",
+        "passiveSkill1": 4092
+    },
+    {
         "cardMstId": 5100001,
         "name": "Best Friend Required",
         "passiveSkill1": 5001
@@ -595,6 +620,16 @@
         "passiveSkill1": 5052
     },
     {
+        "cardMstId": 5100033,
+        "name": "Magical Kawaii Duo",
+        "passiveSkill1": 5055
+    },
+    {
+        "cardMstId": 5100034,
+        "name": "We Keep Going Together",
+        "passiveSkill1": 5056
+    },
+    {
         "cardMstId": 5400001,
         "name": "Rose Garden Witch Minion",
         "passiveSkill1": 5028
@@ -698,6 +733,11 @@
         "cardMstId": 5400021,
         "name": "Blessed Witch",
         "passiveSkill1": 5053
+    },
+    {
+        "cardMstId": 5400022,
+        "name": "Witch of Good Fortune",
+        "passiveSkill1": 5054
     },
     {
         "cardMstId": 9900001,

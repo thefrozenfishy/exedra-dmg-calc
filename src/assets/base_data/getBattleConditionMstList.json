@@ -7646,5 +7646,1037 @@
         "compareTarget": 6,
         "compareValue": "SHIELD,1",
         "description": "シールドが付与されている敵に攻撃したとき"
+    },
+    {
+        "battleConditionMstId": 962,
+        "compareContent": 8,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "FALSE",
+        "description": "行動者は自分以外"
+    },
+    {
+        "battleConditionMstId": 963,
+        "compareContent": 101,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "15000",
+        "description": "自分が15000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstId": 964,
+        "compareContent": 101,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "20000",
+        "description": "自分が20000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstId": 965,
+        "compareContent": 101,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "30000",
+        "description": "自分が30000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstId": 966,
+        "compareContent": 12,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "TSUBAME",
+        "description": "自分がツバメの加護が付与されているとき"
+    },
+    {
+        "battleConditionMstId": 967,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1022",
+        "description": "自分のキャラクターが「環うい」"
+    },
+    {
+        "battleConditionMstId": 968,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "25",
+        "description": "トークンが25以上のとき"
+    },
+    {
+        "battleConditionMstId": 969,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "11",
+        "description": "11ターン未満"
+    },
+    {
+        "battleConditionMstId": 970,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "7",
+        "description": "7ターン以上"
+    },
+    {
+        "battleConditionMstId": 971,
+        "compareContent": 19,
+        "compareOperator": 1,
+        "compareTarget": 2,
+        "compareValue": "Fire",
+        "description": "行動者は火属性"
+    },
+    {
+        "battleConditionMstId": 972,
+        "compareContent": 19,
+        "compareOperator": 1,
+        "compareTarget": 2,
+        "compareValue": "Aqua",
+        "description": "行動者は水属性"
+    },
+    {
+        "battleConditionMstId": 973,
+        "compareContent": 19,
+        "compareOperator": 1,
+        "compareTarget": 2,
+        "compareValue": "Forest",
+        "description": "行動者は木属性"
+    },
+    {
+        "battleConditionMstId": 974,
+        "compareContent": 19,
+        "compareOperator": 1,
+        "compareTarget": 2,
+        "compareValue": "Light",
+        "description": "行動者は光属性"
+    },
+    {
+        "battleConditionMstId": 975,
+        "compareContent": 19,
+        "compareOperator": 1,
+        "compareTarget": 2,
+        "compareValue": "Dark",
+        "description": "行動者は闇属性"
+    },
+    {
+        "battleConditionMstId": 976,
+        "compareContent": 19,
+        "compareOperator": 1,
+        "compareTarget": 2,
+        "compareValue": "Neutral",
+        "description": "行動者は無属性"
+    },
+    {
+        "battleConditionMstId": 977,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "7",
+        "description": "7ターン未満"
+    },
+    {
+        "battleConditionMstId": 978,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "11",
+        "description": "11ターン以上"
+    },
+    {
+        "battleConditionMstId": 979,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "13",
+        "description": "13ターン未満"
+    },
+    {
+        "battleConditionMstId": 980,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "13",
+        "description": "13ターン以上"
+    },
+    {
+        "battleConditionMstId": 981,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "17",
+        "description": "17ターン未満"
+    },
+    {
+        "battleConditionMstId": 982,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "17",
+        "description": "17ターン以上"
+    },
+    {
+        "battleConditionMstId": 983,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "19",
+        "description": "19ターン未満"
+    },
+    {
+        "battleConditionMstId": 984,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "19",
+        "description": "19ターン以上"
+    },
+    {
+        "battleConditionMstId": 985,
+        "compareContent": 19,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "Fire",
+        "description": "対象は火属性"
+    },
+    {
+        "battleConditionMstId": 986,
+        "compareContent": 19,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "Aqua",
+        "description": "対象は水属性"
+    },
+    {
+        "battleConditionMstId": 987,
+        "compareContent": 19,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "Forest",
+        "description": "対象は木属性"
+    },
+    {
+        "battleConditionMstId": 988,
+        "compareContent": 19,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "Light",
+        "description": "対象は光属性"
+    },
+    {
+        "battleConditionMstId": 989,
+        "compareContent": 19,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "Dark",
+        "description": "対象は闇属性"
+    },
+    {
+        "battleConditionMstId": 990,
+        "compareContent": 19,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "Neutral",
+        "description": "対象は無属性"
+    },
+    {
+        "battleConditionMstId": 1001,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "1",
+        "description": "1ターン以上"
+    },
+    {
+        "battleConditionMstId": 1002,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "2",
+        "description": "2ターン以上"
+    },
+    {
+        "battleConditionMstId": 1003,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "3",
+        "description": "3ターン以上"
+    },
+    {
+        "battleConditionMstId": 1004,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "4",
+        "description": "4ターン以上"
+    },
+    {
+        "battleConditionMstId": 1005,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "5",
+        "description": "5ターン以上"
+    },
+    {
+        "battleConditionMstId": 1006,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "6",
+        "description": "6ターン以上"
+    },
+    {
+        "battleConditionMstId": 1007,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "7",
+        "description": "7ターン以上"
+    },
+    {
+        "battleConditionMstId": 1008,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "8",
+        "description": "8ターン以上"
+    },
+    {
+        "battleConditionMstId": 1009,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "9",
+        "description": "9ターン以上"
+    },
+    {
+        "battleConditionMstId": 1010,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "10",
+        "description": "10ターン以上"
+    },
+    {
+        "battleConditionMstId": 1011,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "11",
+        "description": "11ターン以上"
+    },
+    {
+        "battleConditionMstId": 1012,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "12",
+        "description": "12ターン以上"
+    },
+    {
+        "battleConditionMstId": 1013,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "13",
+        "description": "13ターン以上"
+    },
+    {
+        "battleConditionMstId": 1014,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "14",
+        "description": "14ターン以上"
+    },
+    {
+        "battleConditionMstId": 1015,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "15",
+        "description": "15ターン以上"
+    },
+    {
+        "battleConditionMstId": 1016,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "16",
+        "description": "16ターン以上"
+    },
+    {
+        "battleConditionMstId": 1017,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "17",
+        "description": "17ターン以上"
+    },
+    {
+        "battleConditionMstId": 1018,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "18",
+        "description": "18ターン以上"
+    },
+    {
+        "battleConditionMstId": 1019,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "19",
+        "description": "19ターン以上"
+    },
+    {
+        "battleConditionMstId": 1020,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "20",
+        "description": "20ターン以上"
+    },
+    {
+        "battleConditionMstId": 1021,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "21",
+        "description": "21ターン以上"
+    },
+    {
+        "battleConditionMstId": 1022,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "22",
+        "description": "22ターン以上"
+    },
+    {
+        "battleConditionMstId": 1023,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "23",
+        "description": "23ターン以上"
+    },
+    {
+        "battleConditionMstId": 1024,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "24",
+        "description": "24ターン以上"
+    },
+    {
+        "battleConditionMstId": 1025,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "25",
+        "description": "25ターン以上"
+    },
+    {
+        "battleConditionMstId": 1026,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "26",
+        "description": "26ターン以上"
+    },
+    {
+        "battleConditionMstId": 1027,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "27",
+        "description": "27ターン以上"
+    },
+    {
+        "battleConditionMstId": 1028,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "28",
+        "description": "28ターン以上"
+    },
+    {
+        "battleConditionMstId": 1029,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "29",
+        "description": "29ターン以上"
+    },
+    {
+        "battleConditionMstId": 1030,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "30",
+        "description": "30ターン以上"
+    },
+    {
+        "battleConditionMstId": 1031,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "31",
+        "description": "31ターン以上"
+    },
+    {
+        "battleConditionMstId": 1032,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "32",
+        "description": "32ターン以上"
+    },
+    {
+        "battleConditionMstId": 1033,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "33",
+        "description": "33ターン以上"
+    },
+    {
+        "battleConditionMstId": 1034,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "34",
+        "description": "34ターン以上"
+    },
+    {
+        "battleConditionMstId": 1035,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "35",
+        "description": "35ターン以上"
+    },
+    {
+        "battleConditionMstId": 1036,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "36",
+        "description": "36ターン以上"
+    },
+    {
+        "battleConditionMstId": 1037,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "37",
+        "description": "37ターン以上"
+    },
+    {
+        "battleConditionMstId": 1038,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "38",
+        "description": "38ターン以上"
+    },
+    {
+        "battleConditionMstId": 1039,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "39",
+        "description": "39ターン以上"
+    },
+    {
+        "battleConditionMstId": 1040,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "40",
+        "description": "40ターン以上"
+    },
+    {
+        "battleConditionMstId": 1041,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "41",
+        "description": "41ターン以上"
+    },
+    {
+        "battleConditionMstId": 1042,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "42",
+        "description": "42ターン以上"
+    },
+    {
+        "battleConditionMstId": 1043,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "43",
+        "description": "43ターン以上"
+    },
+    {
+        "battleConditionMstId": 1044,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "44",
+        "description": "44ターン以上"
+    },
+    {
+        "battleConditionMstId": 1045,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "45",
+        "description": "45ターン以上"
+    },
+    {
+        "battleConditionMstId": 1046,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "46",
+        "description": "46ターン以上"
+    },
+    {
+        "battleConditionMstId": 1047,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "47",
+        "description": "47ターン以上"
+    },
+    {
+        "battleConditionMstId": 1048,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "48",
+        "description": "48ターン以上"
+    },
+    {
+        "battleConditionMstId": 1049,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "49",
+        "description": "49ターン以上"
+    },
+    {
+        "battleConditionMstId": 1050,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "50",
+        "description": "50ターン以上"
+    },
+    {
+        "battleConditionMstId": 1051,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "1",
+        "description": "1ターン未満"
+    },
+    {
+        "battleConditionMstId": 1052,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "2",
+        "description": "2ターン未満"
+    },
+    {
+        "battleConditionMstId": 1053,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "3",
+        "description": "3ターン未満"
+    },
+    {
+        "battleConditionMstId": 1054,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "4",
+        "description": "4ターン未満"
+    },
+    {
+        "battleConditionMstId": 1055,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "5",
+        "description": "5ターン未満"
+    },
+    {
+        "battleConditionMstId": 1056,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "6",
+        "description": "6ターン未満"
+    },
+    {
+        "battleConditionMstId": 1057,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "7",
+        "description": "7ターン未満"
+    },
+    {
+        "battleConditionMstId": 1058,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "8",
+        "description": "8ターン未満"
+    },
+    {
+        "battleConditionMstId": 1059,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "9",
+        "description": "9ターン未満"
+    },
+    {
+        "battleConditionMstId": 1060,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "10",
+        "description": "10ターン未満"
+    },
+    {
+        "battleConditionMstId": 1061,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "11",
+        "description": "11ターン未満"
+    },
+    {
+        "battleConditionMstId": 1062,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "12",
+        "description": "12ターン未満"
+    },
+    {
+        "battleConditionMstId": 1063,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "13",
+        "description": "13ターン未満"
+    },
+    {
+        "battleConditionMstId": 1064,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "14",
+        "description": "14ターン未満"
+    },
+    {
+        "battleConditionMstId": 1065,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "15",
+        "description": "15ターン未満"
+    },
+    {
+        "battleConditionMstId": 1066,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "16",
+        "description": "16ターン未満"
+    },
+    {
+        "battleConditionMstId": 1067,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "17",
+        "description": "17ターン未満"
+    },
+    {
+        "battleConditionMstId": 1068,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "18",
+        "description": "18ターン未満"
+    },
+    {
+        "battleConditionMstId": 1069,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "19",
+        "description": "19ターン未満"
+    },
+    {
+        "battleConditionMstId": 1070,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "20",
+        "description": "20ターン未満"
+    },
+    {
+        "battleConditionMstId": 1071,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "21",
+        "description": "21ターン未満"
+    },
+    {
+        "battleConditionMstId": 1072,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "22",
+        "description": "22ターン未満"
+    },
+    {
+        "battleConditionMstId": 1073,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "23",
+        "description": "23ターン未満"
+    },
+    {
+        "battleConditionMstId": 1074,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "24",
+        "description": "24ターン未満"
+    },
+    {
+        "battleConditionMstId": 1075,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "25",
+        "description": "25ターン未満"
+    },
+    {
+        "battleConditionMstId": 1076,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "26",
+        "description": "26ターン未満"
+    },
+    {
+        "battleConditionMstId": 1077,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "27",
+        "description": "27ターン未満"
+    },
+    {
+        "battleConditionMstId": 1078,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "28",
+        "description": "28ターン未満"
+    },
+    {
+        "battleConditionMstId": 1079,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "29",
+        "description": "29ターン未満"
+    },
+    {
+        "battleConditionMstId": 1080,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "30",
+        "description": "30ターン未満"
+    },
+    {
+        "battleConditionMstId": 1081,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "31",
+        "description": "31ターン未満"
+    },
+    {
+        "battleConditionMstId": 1082,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "32",
+        "description": "32ターン未満"
+    },
+    {
+        "battleConditionMstId": 1083,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "33",
+        "description": "33ターン未満"
+    },
+    {
+        "battleConditionMstId": 1084,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "34",
+        "description": "34ターン未満"
+    },
+    {
+        "battleConditionMstId": 1085,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "35",
+        "description": "35ターン未満"
+    },
+    {
+        "battleConditionMstId": 1086,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "36",
+        "description": "36ターン未満"
+    },
+    {
+        "battleConditionMstId": 1087,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "37",
+        "description": "37ターン未満"
+    },
+    {
+        "battleConditionMstId": 1088,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "38",
+        "description": "38ターン未満"
+    },
+    {
+        "battleConditionMstId": 1089,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "39",
+        "description": "39ターン未満"
+    },
+    {
+        "battleConditionMstId": 1090,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "40",
+        "description": "40ターン未満"
+    },
+    {
+        "battleConditionMstId": 1091,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "41",
+        "description": "41ターン未満"
+    },
+    {
+        "battleConditionMstId": 1092,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "42",
+        "description": "42ターン未満"
+    },
+    {
+        "battleConditionMstId": 1093,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "43",
+        "description": "43ターン未満"
+    },
+    {
+        "battleConditionMstId": 1094,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "44",
+        "description": "44ターン未満"
+    },
+    {
+        "battleConditionMstId": 1095,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "45",
+        "description": "45ターン未満"
+    },
+    {
+        "battleConditionMstId": 1096,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "46",
+        "description": "46ターン未満"
+    },
+    {
+        "battleConditionMstId": 1097,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "47",
+        "description": "47ターン未満"
+    },
+    {
+        "battleConditionMstId": 1098,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "48",
+        "description": "48ターン未満"
+    },
+    {
+        "battleConditionMstId": 1099,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "49",
+        "description": "49ターン未満"
+    },
+    {
+        "battleConditionMstId": 1100,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "50",
+        "description": "50ターン未満"
     }
 ]

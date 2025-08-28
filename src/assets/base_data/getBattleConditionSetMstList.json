@@ -8265,6 +8265,11 @@
         "description": "シールドが付与されている敵に攻撃したとき"
     },
     {
+        "battleConditionMstIdCsv": "7,25",
+        "battleConditionSetMstId": 1662,
+        "description": "敵の必殺技で自分が1以上のダメージを受けた"
+    },
+    {
         "battleConditionMstIdCsv": "318",
         "battleConditionSetMstId": 1663,
         "description": "敵が2体以上のとき(自ターン問わず)"
@@ -8283,5 +8288,255 @@
         "battleConditionMstIdCsv": "410",
         "battleConditionSetMstId": 1666,
         "description": "敵が5体以上のとき(自ターン問わず)"
+    },
+    {
+        "battleConditionMstIdCsv": "7,963",
+        "battleConditionSetMstId": 1667,
+        "description": "敵の必殺技で自分が15000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "7,964",
+        "battleConditionSetMstId": 1668,
+        "description": "敵の必殺技で自分が20000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "7,965",
+        "battleConditionSetMstId": 1669,
+        "description": "敵の必殺技で自分が30000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "655,962,1",
+        "battleConditionSetMstId": 1670,
+        "description": "自身以外の味方のターン中に敵に対してダメージを与えたときに発動"
+    },
+    {
+        "battleConditionMstIdCsv": "966",
+        "battleConditionSetMstId": 1671,
+        "description": "自分がツバメの加護が付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "968",
+        "battleConditionSetMstId": 1672,
+        "description": "トークンが25以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,970,969",
+        "battleConditionSetMstId": 1673,
+        "description": "自身のターン経過が7ターン以上、11ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "967",
+        "battleConditionSetMstId": 1674,
+        "description": "自分のキャラクターが「環うい」"
+    },
+    {
+        "battleConditionMstIdCsv": "971",
+        "battleConditionSetMstId": 1675,
+        "description": "行動者は火属性"
+    },
+    {
+        "battleConditionMstIdCsv": "972",
+        "battleConditionSetMstId": 1676,
+        "description": "行動者は水属性"
+    },
+    {
+        "battleConditionMstIdCsv": "973",
+        "battleConditionSetMstId": 1677,
+        "description": "行動者は木属性"
+    },
+    {
+        "battleConditionMstIdCsv": "974",
+        "battleConditionSetMstId": 1678,
+        "description": "行動者は光属性"
+    },
+    {
+        "battleConditionMstIdCsv": "975",
+        "battleConditionSetMstId": 1679,
+        "description": "行動者は闇属性"
+    },
+    {
+        "battleConditionMstIdCsv": "976",
+        "battleConditionSetMstId": 1680,
+        "description": "行動者は無属性"
+    },
+    {
+        "battleConditionMstIdCsv": "3,271,259",
+        "battleConditionSetMstId": 1685,
+        "description": "自身のターン経過が3ターン以上、5ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,262,977",
+        "battleConditionSetMstId": 1686,
+        "description": "自身のターン経過が5ターン以上、7ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,970,889",
+        "battleConditionSetMstId": 1687,
+        "description": "自身のターン経過が7ターン以上、9ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,890,969",
+        "battleConditionSetMstId": 1688,
+        "description": "自身のターン経過が9ターン以上、11ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,978,979",
+        "battleConditionSetMstId": 1689,
+        "description": "自身のターン経過が11ターン以上、13ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,980,261",
+        "battleConditionSetMstId": 1690,
+        "description": "自身のターン経過が13ターン以上、15ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,264,981",
+        "battleConditionSetMstId": 1691,
+        "description": "自身のターン経過が15ターン以上、17ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,982,983",
+        "battleConditionSetMstId": 1692,
+        "description": "自身のターン経過が17ターン以上、19ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,984",
+        "battleConditionSetMstId": 1693,
+        "description": "自身が19ターン以上経過している"
+    },
+    {
+        "battleConditionMstIdCsv": "3,269",
+        "battleConditionSetMstId": 1694,
+        "description": "自身のターン経過が3ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1001,1054",
+        "battleConditionSetMstId": 1695,
+        "description": "ターン経過が1ターン以上、4ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1004,1058",
+        "battleConditionSetMstId": 1696,
+        "description": "ターン経過が4ターン以上、8ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1008,1062",
+        "battleConditionSetMstId": 1697,
+        "description": "ターン経過が8ターン以上、12ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1012,1066",
+        "battleConditionSetMstId": 1698,
+        "description": "ターン経過が12ターン以上、16ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1016,1070",
+        "battleConditionSetMstId": 1699,
+        "description": "ターン経過が16ターン以上、20ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1020,1075",
+        "battleConditionSetMstId": 1700,
+        "description": "ターン経過が21ターン以上、25ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1025,1080",
+        "battleConditionSetMstId": 1701,
+        "description": "ターン経過が25ターン以上、30ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1030,1085",
+        "battleConditionSetMstId": 1702,
+        "description": "ターン経過が30ターン以上、35ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1035,1090",
+        "battleConditionSetMstId": 1703,
+        "description": "ターン経過が35ターン以上、40ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1040",
+        "battleConditionSetMstId": 1704,
+        "description": "ターン経過が40ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "985",
+        "battleConditionSetMstId": 1705,
+        "description": "対象は火属性"
+    },
+    {
+        "battleConditionMstIdCsv": "986",
+        "battleConditionSetMstId": 1706,
+        "description": "対象は水属性"
+    },
+    {
+        "battleConditionMstIdCsv": "987",
+        "battleConditionSetMstId": 1707,
+        "description": "対象は木属性"
+    },
+    {
+        "battleConditionMstIdCsv": "988",
+        "battleConditionSetMstId": 1708,
+        "description": "対象は光属性"
+    },
+    {
+        "battleConditionMstIdCsv": "989",
+        "battleConditionSetMstId": 1709,
+        "description": "対象は闇属性"
+    },
+    {
+        "battleConditionMstIdCsv": "990",
+        "battleConditionSetMstId": 1710,
+        "description": "対象は無属性"
+    },
+    {
+        "battleConditionMstIdCsv": "770,265",
+        "battleConditionSetMstId": 1721,
+        "description": "ターン経過が2ターン以上、4ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "267,270",
+        "battleConditionSetMstId": 1722,
+        "description": "ターン経過が4ターン以上、6ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "272,266",
+        "battleConditionSetMstId": 1723,
+        "description": "ターン経過が6ターン以上、8ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "268,260",
+        "battleConditionSetMstId": 1724,
+        "description": "ターン経過が8ターン以上、10ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "263,776",
+        "battleConditionSetMstId": 1725,
+        "description": "ターン経過が10ターン以上、12ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "771,777",
+        "battleConditionSetMstId": 1726,
+        "description": "ターン経過が12ターン以上、14ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "772,778",
+        "battleConditionSetMstId": 1727,
+        "description": "ターン経過が14ターン以上、16ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "773,779",
+        "battleConditionSetMstId": 1728,
+        "description": "ターン経過が16ターン以上、18ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "774,780",
+        "battleConditionSetMstId": 1729,
+        "description": "ターン経過が18ターン以上、20ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "781",
+        "battleConditionSetMstId": 1730,
+        "description": "経過ターンが2ターン未満"
     }
 ]
