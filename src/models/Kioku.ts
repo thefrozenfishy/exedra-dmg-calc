@@ -101,6 +101,7 @@ export class Kioku {
         "SLOW",
         "STUN",
         "SWITCH_SKILL",
+        "TSUBAME_LINK",
         "UNIQUE_10030301",
         "UP_ABNORMAL_HIT_RATE_RATIO",
         "UP_BREAK_DAMAGE_RECEIVE_RATIO",
