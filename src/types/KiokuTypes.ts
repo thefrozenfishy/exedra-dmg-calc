@@ -15,6 +15,8 @@ export enum KiokuRole {
     Breaker = "Breaker",
     Defender = "Defender"
 }
+export type SupportKey = KiokuRole | KiokuElement
+
 
 export const elementMap: Record<string, KiokuElement> = {
     1: KiokuElement.Flame,
@@ -26,6 +28,7 @@ export const elementMap: Record<string, KiokuElement> = {
 };
 
 export const portraits = (elem: KiokuElement) => ["A Dream of a Little Mermaid", "The Savior's Apostle", dmgUpPortraits[elem]]
+export const portraitsBestOnly = (elem: KiokuElement) => ["A Dream of a Little Mermaid", "The Savior's Apostle"]
 
 const dmgUpPortraits = {
     [KiokuElement.Flame]: "A Reluctant Coach Steps Up",
@@ -50,7 +53,46 @@ export interface MagicLevel {
     val: number
 }
 
-export type SkillDetail = Record<string, any>;
+interface PassiveSkill {
+    abilityEffectType: string
+    activeConditionSetIdCsv: string
+    description: string
+    descriptionType: number
+    element: number
+    passiveSkillDetailMstId: number
+    passiveSkillMstId: number
+    range: number
+    remainCount: number
+    role: number
+    startConditionSetIdCsv: string
+    startTimingIdCsv: string
+    turn: number
+    value1: number
+    value2: number
+    value3: number
+}
+
+interface ActiveSkill {
+    abilityEffectType: string
+    activeConditionSetIdCsv: string
+    description: string
+    descriptionType: number
+    element: number
+    probability: number
+    range: number
+    remainCount: number
+    role: number
+    skillDetailMstId: number
+    skillMstId: number
+    startConditionSetIdCsv: string
+    turn: number
+    value1: number
+    value2: number
+    value3: number
+    value4: number
+}
+
+export type SkillDetail = PassiveSkill | ActiveSkill;
 
 export interface Character {
     id: number
@@ -86,6 +128,7 @@ export interface KiokuData {
     support_id: number
     support_target: KiokuElement | KiokuRole
     ability_id: number
+    maxMagicStacks?: number
     ascension_1_effect_2_id: number
     ascension_2_effect_2_id: number
     ascension_3_effect_2_id?: number
@@ -93,7 +136,7 @@ export interface KiokuData {
     ascension_5_effect_2_id?: number
 }
 
-enum availableCrys {
+export enum AvailableCrys {
     ATK_25_PERCENT = "ATK%-25",
     CRIT_DMG = "CD-20",
     DMG_TO_WEAK_ELEMENT = "Elem-24",
@@ -102,7 +145,7 @@ enum availableCrys {
     EX = "EX"
 };
 
-enum availableSubCrys {
+export enum AvailableSubCrys {
     CRIT_DMG = "CD-10",
     FLAT_ATK = "ATK-60"
 };
@@ -118,8 +161,8 @@ const heartphialAtkRewardLvls = {
 }
 
 export const KiokuConstants = {
-    availableCrys,
-    availableSubCrys,
+    availableCrys: AvailableCrys,
+    availableSubCrys: AvailableSubCrys,
     maxKiokuLvl: 120,
     maxMagicLvl: 130,
     maxAscension: 5,

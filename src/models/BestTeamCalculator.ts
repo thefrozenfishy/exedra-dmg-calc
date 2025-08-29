@@ -1,26 +1,29 @@
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { Team } from "./Team";
-import { KiokuRole, portraits, Character, KiokuConstants } from "../types/KiokuTypes";
+import { KiokuRole, portraitsBestOnly, Character, KiokuConstants, KiokuElement, SupportKey } from "../types/KiokuTypes";
 import { getKioku } from "./Kioku";
 
-// TODO: Use old results somehow?
 export async function findBestTeam({
     enemies,
     include4StarAttackers,
     include4StarSupports,
+    include4StarOthers,
     extraAttackers,
     weakElements,
     enabledCharacters,
+    obligatoryKioku,
+    ignoredKioku,
+    deBufferCount,
+    otherCount,
+    minHealer,
+    minDefender,
+    minBreaker,
+    prevResults,
     onProgress,
     onError
 }: FindBestTeamOptions): Promise<any[]> {
-    const safeGetKioku = k => {
-        try {
-            return getKioku(k)
-        } catch (e) {
-            onError?.(e)
-        }
-    }
+    const runsAlreadyCompleted = new Set()
+    prevResults.forEach(r => runsAlreadyCompleted.add(JSON.stringify([r[2], r[8], r[10], r[12], r[14]].sort())))
 
     const results = []
     const availableChars: Record<KiokuRole, Character[]> = {
@@ -32,109 +35,137 @@ export async function findBestTeam({
         [KiokuRole.Defender]: [],
     }
     enabledCharacters.forEach(char => {
-        if (char.role === KiokuRole.Attacker) {
-            if (weakElements.includes(char.element) && ((char.rarity === 4 && char.role === KiokuRole.Attacker && include4StarAttackers) || char.rarity === 5)) {
-                availableChars[KiokuRole.Attacker].push(char)
+        if (!ignoredKioku.includes(char.name)) {
+            if (char.role === KiokuRole.Attacker) {
+                if (weakElements.includes(char.element) && ((char.rarity === 4 && char.role === KiokuRole.Attacker && include4StarAttackers) || char.rarity === 5)) {
+                    availableChars[KiokuRole.Attacker].push(char)
+                }
+            } else if (char.rarity === 5 ||
+                (char.rarity === 4 &&
+                    ((include4StarSupports && [KiokuRole.Buffer, KiokuRole.Debuffer].includes(char.role))
+                        || (include4StarOthers && [KiokuRole.Healer, KiokuRole.Defender, KiokuRole.Breaker].includes(char.role)))
+                )) {
+                availableChars[char.role].push(char)
             }
-        } else if (char.rarity === 5 ||
-            (char.rarity === 4 &&
-                include4StarSupports &&
-                [KiokuRole.Buffer, KiokuRole.Debuffer].includes(char.role) &&
-                !["Nightmare Stinger"].includes(char.name) // Hanna has no debuffs, just remove to speed up computation
-            )) {
-            availableChars[char.role].push(char)
+            if (extraAttackers.includes(char.name)) availableChars[KiokuRole.Attacker].push(char)
         }
-        if (extraAttackers.includes(char.name)) availableChars[KiokuRole.Attacker].push(char)
     })
-    const availableSupportCombinations = combinations([...availableChars[KiokuRole.Debuffer], ...availableChars[KiokuRole.Buffer]], 3)
 
-    // TODO: Not hardcode supports? It'd take longer tho and these three are honestly the only options?
-    const atkSupportsKeys = enabledCharacters
-        .filter(c => ["The Universe's Edge", "Oracle Ray", "Fiore Finale"].includes(c.name))
-        .map(safeGetKioku)
-        .map(c => c?.getKey())
-        .filter(Boolean)
+    const availableSupportCombinations = combinations([...availableChars[KiokuRole.Debuffer], ...availableChars[KiokuRole.Buffer]], deBufferCount)
+    const availableOtherDistributions = generateRoleDistributions(otherCount, minHealer, minDefender, minBreaker)
 
-    if (!availableChars[KiokuRole.Healer].length) {
-        availableChars[KiokuRole.Healer].push(safeGetKioku(enabledCharacters.find(c => c.name === "Circle Of Fire")))
+    const all5StarKioku = enabledCharacters.filter(c => c.rarity === 5).map(getKioku).filter(Boolean)
+    const highestAtkSupportKey = all5StarKioku.reduce((max, k) => (k.getBaseAtk() > max.getBaseAtk() ? k : max))?.getKey()
+    const possibleAtkSupportKeys: Record<SupportKey, any[]> = {
+        ...Object.values(KiokuRole).reduce(
+            (acc, role) => ({ ...acc, [role]: [] }), {}),
+        ...Object.values(KiokuElement).reduce(
+            (acc, el) => ({ ...acc, [el]: [] }), {})
+    }
+    for (const key of [...Object.values(KiokuRole), ...Object.values(KiokuElement)]) {
+        for (const c of all5StarKioku) {
+            if (c?.is_valid_support(key)) {
+                possibleAtkSupportKeys[key].push(c.getKey())
+            }
+        }
     }
 
     const tsurunoData = enabledCharacters.find(c => c.name === "Flame Waltz")
-    const tsurunoKey = tsurunoData ? safeGetKioku(tsurunoData)?.getKey() : null
+    const tsurunoKey = tsurunoData ? getKioku(tsurunoData)?.getKey() : null
 
     let completedRuns = 0;
-    let expectedTotalRuns = availableChars[KiokuRole.Attacker].length * availableSupportCombinations.length * availableChars[KiokuRole.Healer].length
+    const expectedTotalRuns =
+        availableChars[KiokuRole.Attacker].length *
+        availableSupportCombinations.length *
+        availableOtherDistributions.reduce((sum, dist) => {
+            return sum +
+                nCr(availableChars[KiokuRole.Healer].length, dist.healers) *
+                nCr(availableChars[KiokuRole.Defender].length, dist.defenders) *
+                nCr(availableChars[KiokuRole.Breaker].length, dist.breakers);
+        }, 0);
 
     for (const attacker of availableChars[KiokuRole.Attacker]) {
-        const availablePortraits = portraits(attacker.element)
-        const availableSupportKeys = atkSupportsKeys.filter(s => s?.[0] !== attacker.name);
+        const availablePortraits = portraitsBestOnly(attacker.element)
+        const availableSupportKeys = Array.from([highestAtkSupportKey, ...possibleAtkSupportKeys[attacker.element], ...possibleAtkSupportKeys[attacker.role]].filter(s => s?.[0] !== attacker.name).reduce((map, item) => {
+            if (item && !map.has(item[0])) {
+                map.set(item[0], item)
+            }
+            return map
+        }, new Map()).values())
         if (!availableSupportKeys.length) {
-            availableSupportKeys.push(safeGetKioku(enabledCharacters.find(c => c.name === "Ryushin Spiral Fury")).getKey())
+            availableSupportKeys.push(getKioku(enabledCharacters.find(c => c.name === "Ryushin Spiral Fury")).getKey())
         }
+        for (const dist of availableOtherDistributions) {
+            for (const healerCombo of combinations(availableChars[KiokuRole.Healer], dist.healers)) {
+                for (const defenderCombo of combinations(availableChars[KiokuRole.Defender], dist.defenders)) {
+                    for (const breakerCombo of combinations(availableChars[KiokuRole.Breaker], dist.breakers)) {
+                        for (const deBufferCombo of availableSupportCombinations) {
+                            completedRuns += 1;
 
-        for (const sustain of availableChars[KiokuRole.Healer]) {
-            if (sustain.name === attacker.name) continue;
+                            const totalSupports = [
+                                ...healerCombo,
+                                ...defenderCombo,
+                                ...breakerCombo,
+                                ...deBufferCombo
+                            ]
 
-            for (const supportList of availableSupportCombinations) {
-                completedRuns += 1;
-                if (supportList.map(c => c.name).includes(attacker.name)) continue;
-                const supportSupports = supportList.map((c, idx) => {
-                    if (!tsurunoKey) return;
-                    if (supportList.map(c => c.name).includes(tsurunoKey?.[0])) return
-                    if (c.role !== KiokuRole.Buffer) return
-                    const arr: any[] = [undefined, undefined, undefined]
-                    arr[idx] = tsurunoKey
-                    return arr
-                }).filter(Boolean)
+                            if (totalSupports.map(c => c.name).includes(attacker.name)) continue;
 
-                if (!supportSupports.length) {
-                    supportSupports.push([undefined, undefined, undefined])
-                }
+                            const teamNames = [attacker, ...totalSupports].map(c => c.name).sort();
+                            if (obligatoryKioku.length) {
+                                if (!obligatoryKioku.every(k => teamNames.includes(k))) continue;
+                            }
+                            if (runsAlreadyCompleted.has(JSON.stringify(teamNames))) continue;
 
-                onProgress?.([
-                    0,
-                    0,
-                    attacker.name,
-                    undefined,
-                    undefined,
-                    undefined,
-                    undefined,
-                    undefined,
-                    sustain.name,
-                    ...supportList.flatMap((s, i) => [s.name, undefined])
-                ], completedRuns, expectedTotalRuns)
+                            const supportSupports = totalSupports.map((c, idx) => {
+                                if (!tsurunoKey) return;
+                                if (totalSupports.map(c => c.name).includes(tsurunoKey?.[0])) return
+                                if (c.role !== KiokuRole.Buffer) return
+                                const arr: any[] = [undefined, undefined, undefined]
+                                arr[idx] = tsurunoKey
+                                return arr
+                            }).filter(Boolean)
 
-                for (const attackerSupportKey of availableSupportKeys) {
+                            if (!supportSupports.length) {
+                                supportSupports.push([undefined, undefined, undefined])
+                            }
 
-                    for (const attackerPortrait of availablePortraits) {
+                            onProgress?.([attacker.name, ...totalSupports.map(s => s.name)], completedRuns, expectedTotalRuns)
 
-                        for (const supportSupport of supportSupports) {
+                            for (const attackerSupportKey of availableSupportKeys) {
+                                if (teamNames.includes(attackerSupportKey[0])) continue;
+                                for (const attackerPortrait of availablePortraits) {
+                                    for (const supportSupport of supportSupports) {
+                                        for (const attackerCrys of combinations(Object.entries(KiokuConstants.availableCrys).filter(([k, v]) => v !== KiokuConstants.availableCrys.FLAT_ATK), 3)) {
+                                            try {
+                                                const team = new Team([
+                                                    getKioku({
+                                                        ...attacker,
+                                                        dpsElement: attacker.element,
+                                                        portrait: attackerPortrait,
+                                                        crys: attackerCrys.map(item => item[1]),
+                                                        supportKey: attackerSupportKey,
+                                                        isDps: true
+                                                    })!,
+                                                    ...totalSupports.map((s, i) => getKioku({ ...s, dpsElement: attacker.element, supportKey: supportSupport[i] })!)
+                                                ]);
 
-                            for (const attackerCrys of combinations(Object.entries(KiokuConstants.availableCrys).filter(([k, v]) => v !== KiokuConstants.availableCrys.FLAT_ATK), 3)) {
-                                const team = new Team([
-                                    safeGetKioku({
-                                        ...attacker,
-                                        dpsElement: attacker.element,
-                                        portrait: attackerPortrait,
-                                        crys: attackerCrys.map(item => item[1]),
-                                        supportKey: attackerSupportKey,
-                                        isDps: true
-                                    })!,
-                                    safeGetKioku({ ...sustain, dpsElement: attacker.element })!,
-                                    ...supportList.map((s, i) => safeGetKioku({ ...s, dpsElement: attacker.element, supportKey: supportSupport[i] })!)
-                                ]);
-
-                                const [dmg, critRate] = team.calculate_max_dmg(enemies, 0);
-                                results.push([
-                                    dmg | 0,
-                                    Math.round(critRate * 100),
-                                    attacker.name,
-                                    attackerPortrait,
-                                    attackerSupportKey?.[0],
-                                    ...attackerCrys.map(item => item[0]),
-                                    sustain.name,
-                                    ...supportList.flatMap((s, i) => [s.name, supportSupport[i]?.[0]])
-                                ]);
+                                                const [dmg, critRate] = team.calculate_max_dmg(enemies, 0);
+                                                results.push([
+                                                    dmg | 0,
+                                                    critRate,
+                                                    attacker.name,
+                                                    attackerPortrait,
+                                                    attackerSupportKey?.[0],
+                                                    ...attackerCrys.map(item => item[0]),
+                                                    ...totalSupports.flatMap((s, i) => [s.name, supportSupport[i]?.[0]])
+                                                ]);
+                                            } catch (e) {
+                                                onError?.(e)
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -148,7 +179,10 @@ export async function findBestTeam({
 }
 
 // helper: combinations
-export function combinations<T>(arr: T[], k: number): T[][] {
+function combinations<T>(arr: T[], k: number): T[][] {
+    if (k === 0) return [[]];
+    if (k > arr.length) return [];
+
     const result: T[][] = [];
     const comb = (start: number, acc: T[]) => {
         if (acc.length === k) {
@@ -163,4 +197,27 @@ export function combinations<T>(arr: T[], k: number): T[][] {
     };
     comb(0, []);
     return result;
+}
+
+function generateRoleDistributions(otherCount: number, minHealer: number, minDefender: number, minBreaker: number): { healers: number, defenders: number, breakers: number }[] {
+    const distributions: { healers: number, defenders: number, breakers: number }[] = [];
+    for (let healers = minHealer; healers <= otherCount; healers++) {
+        for (let defenders = minDefender; defenders <= otherCount - healers; defenders++) {
+            const breakers = otherCount - healers - defenders;
+            if (breakers >= minBreaker) {
+                distributions.push({ healers, defenders, breakers });
+            }
+        }
+    }
+    return distributions;
+}
+
+function nCr(n: number, r: number): number {
+    if (r < 0 || r > n) return 0;
+    if (r === 0 || r === n) return 1;
+    let res = 1;
+    for (let i = 1; i <= r; i++) {
+        res = res * (n - i + 1) / i;
+    }
+    return res;
 }

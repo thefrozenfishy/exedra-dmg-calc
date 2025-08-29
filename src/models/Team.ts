@@ -1,13 +1,14 @@
-import { Kioku, getSkipCond } from "./Kioku";
+import { Kioku } from "./Kioku";
 import { EnemyTargetTypes, Enemy } from "../types/EnemyTypes";
+import { getDescriptionOfCond, isActiveConditionRelevantForScoreAttack, isStartCondRelevantForScoreAttack } from "./BattleConditionParser";
 
-const targetTypeAtPosition = [EnemyTargetTypes.OTHER, EnemyTargetTypes.PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.PROXIMITY, EnemyTargetTypes.OTHER]
+const targetTypeAtPosition = [EnemyTargetTypes.L_OTHER, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.R_OTHER]
 
 export class Team {
     private team: Kioku[];
     private dps: Kioku;
     private all_effects: Record<string, number> = {};
-    private extra_effects: Record<string, (Function | number | string)[]> = {};
+    private extra_effects: Record<string, [Function, number][]> = {};
     private debug: boolean;
 
     constructor(kiokus: Kioku[], debug = false) {
@@ -22,32 +23,36 @@ export class Team {
     private setup() {
         for (const kioku of this.team) {
             for (let [eff, val] of Object.entries(kioku.effects)) {
-                for (const [v, condId] of val) {
+                for (const [v, activeCondId, startCondIdCsv] of val) {
                     if (["DWN_DEF_RATIO", "DWN_DEF_ACCUM_RATIO"].includes(eff)) {
                         eff = "DEF_MULTIPLIER_TOTAL"
                     } else if (["UP_CTD_FIXED", "UP_CTD_ACCUM_RATIO", "UP_CTD_RATIO"].includes(eff)) {
                         eff = "CRIT_DAMAGE_TOTAL"
                     }
 
-                    const shouldSkip = getSkipCond(condId)
-                    if (typeof (shouldSkip) === 'boolean') {
-                        if (shouldSkip) continue;
+                    if (!startCondIdCsv.split(",").every(startCondId =>
+                        isStartCondRelevantForScoreAttack(startCondId, kioku.maxMagicStacks))
+                    ) continue;
+
+                    const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId)
+                    if (typeof (isActiveCond) === 'boolean') {
+                        if (isActiveCond) {
+                            if (eff in this.all_effects) {
+                                if (eff === "DEF_MULTIPLIER_TOTAL") {
+                                    this.all_effects[eff] *= 1 - v / 1000;
+                                } else {
+                                    this.all_effects[eff] += v
+                                }
+                            } else {
+                                this.all_effects[eff] = v;
+                            }
+                        }
                     } else {
                         if (eff in this.extra_effects) {
-                            this.extra_effects[eff].push[[shouldSkip, v]]
+                            this.extra_effects[eff].push([isActiveCond, v])
                         } else {
-                            this.extra_effects[eff] = [[shouldSkip, v]]
+                            this.extra_effects[eff] = [[isActiveCond, v]]
                         }
-                    }
-
-                    if (eff in this.all_effects) {
-                        if (eff === "DEF_MULTIPLIER_TOTAL") {
-                            this.all_effects[eff] *= 1 - v / 1000;
-                        } else {
-                            this.all_effects[eff] += v
-                        }
-                    } else {
-                        this.all_effects[eff] = v;
                     }
                 }
             }
@@ -73,67 +78,64 @@ export class Team {
     ): [number, number, string[]] {
         let dmg;
         let total_dmg = 0;
-        let crit_rate = 0;
+        let critRate = 0;
         let debugText = ""
         let enemyDied: boolean
         let amountOfEnemies = enemies.filter(e => e.enabled).length
         const debugTexts = ["", "", "", "", ""];
-        for (const i of [2, 1, 3, 0, 4]) {
-            [dmg, crit_rate, debugText, enemyDied] = this.calculate_single_dmg(i, this.team[i], enemies[i], amountOfEnemies, atk_down)
+        for (const i of [EnemyTargetTypes.TARGET, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.L_OTHER, EnemyTargetTypes.R_OTHER]) {
+            [dmg, critRate, debugText, enemyDied] = this.calculate_single_dmg(i, this.team[i], enemies[i], amountOfEnemies, atk_down)
             total_dmg += dmg
             if (enemies[i].enabled && enemyDied) amountOfEnemies -= 1
-            debugTexts[i] =debugText
+            debugTexts[i] = debugText
         }
-        return [total_dmg, crit_rate, debugTexts]
+        return [total_dmg, Math.round(critRate * 100), debugTexts]
     }
 
-    getEffect(key: string, amountOfEnemies: number, maxBreak: number): number {
-        let eff = this.all_effects[key]
-        this.extra_effects[key]?.forEach(
-            ([fun, e]) => { if (fun(amountOfEnemies, maxBreak)) eff += e }
-        )
-        return eff
+    getEffect(eff: string, amountOfEnemies: number, maxBreak: number): number {
+        let val = this.all_effects[eff] || 0
+        this.extra_effects[eff]?.forEach(
+            ([fun, v]) => {
+                if (fun(amountOfEnemies, maxBreak)) {
+                    if (eff === "DEF_MULTIPLIER_TOTAL") {
+                        val *= 1 - v / 1000;
+                    } else {
+                        val += v
+                    }
+                }
+            })
+        return val
     }
 
     calculate_single_dmg(
         idx: number,
-        kiokuAtPosition: Kioku | undefined,
+        kiokuAtPosition: Kioku,
         enemy: Enemy,
         amountOfEnemies: number,
         atk_down: number,
     ): [number, number, string, boolean] {
         const [special, enemyDied] = this.dps.get_special_dmg(targetTypeAtPosition[idx], amountOfEnemies, enemy.maxBreak, enemy.hitsToKill);
         const atk_pluss =
-            (this.getEffect("UP_ATK_RATIO", amountOfEnemies, enemy.maxBreak) || 0 +
-                (this.getEffect("UP_ATK_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) || 0)) /
+            (this.getEffect("UP_ATK_RATIO", amountOfEnemies, enemy.maxBreak) +
+                (this.getEffect("UP_ATK_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak))) /
             1000;
-
-        const atk_total =
-            this.dps.getBaseAtk() * (1 + atk_pluss) * (1 - atk_down) +
-            this.dps.atk_bonus_flat;
+        const atk_total = this.dps.getBaseAtk() * (1 + atk_pluss) * (1 - atk_down) + this.dps.atk_bonus_flat;
 
         const def_remaining = this.getEffect("DEF_MULTIPLIER_TOTAL", amountOfEnemies, enemy.maxBreak);
-        const def_total = enemy.defense * (1 + enemy.defenseUp) * def_remaining;
+        const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;
 
         const crit_rate =
             (this.dps.critRate +
-                (this.getEffect("UP_CTR_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) || 0) +
-                (this.getEffect("UP_CTR_FIXED", amountOfEnemies, enemy.maxBreak) || 0)) /
+                (this.getEffect("UP_CTR_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) +
+                (this.getEffect("UP_CTR_FIXED", amountOfEnemies, enemy.maxBreak))) /
             1000;
 
-        const crit_dmg = (this.dps.critDamage + this.getEffect("CRIT_DAMAGE_TOTAL", amountOfEnemies, enemy.maxBreak) || 0) / 1000;
-        const dmg_pluss = (this.getEffect("UP_GIV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) || 0) / 1000;
-        const elem_dmg_up =
-            (this.getEffect("UP_WEAK_ELEMENT_DMG_RATIO", amountOfEnemies, enemy.maxBreak) || 0) / 1000;
-        const dmg_taken = (this.getEffect("UP_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) || 0) / 1000;
-        const elem_res_down =
-            (this.getEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) || 0) / 1000;
-
-        const base_dmg =
-            special *
-            this.dps.getBaseAtk() *
-            ((this.dps.getBaseAtk() / 124) ** 1.2 + 12) /
-            20;
+        const crit_dmg = (this.dps.critDamage + this.getEffect("CRIT_DAMAGE_TOTAL", amountOfEnemies, enemy.maxBreak)) / 1000;
+        const dmg_pluss = (this.getEffect("UP_GIV_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
+        const elem_dmg_up = (this.getEffect("UP_WEAK_ELEMENT_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
+        const dmg_taken = (this.getEffect("UP_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
+        const elem_res_down = (this.getEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
+        const base_dmg = special * this.dps.getBaseAtk() * ((this.dps.getBaseAtk() / 124) ** 1.2 + 12) / 20;
 
         const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
         const crit_factor = 1 + (enemy.isCrit ? crit_dmg : 0);
@@ -144,7 +146,7 @@ export class Team {
         const break_factor = (enemy.isBreak ? enemy.maxBreak / 100 : 1);
 
         const total =
-            enemy.enabled *
+            Number(enemy.enabled) *
             base_dmg *
             def_factor *
             crit_factor *
@@ -154,35 +156,54 @@ export class Team {
             effect_elem_factor *
             break_factor;
 
+        let debugText = "";
+        if (this.debug) {
 
-        const lines = kiokuAtPosition
-            ? Object.keys(kiokuAtPosition).sort().sort((a,b) => {
-                if (a.endsWith("Atk")) return -1;
-                if (b.endsWith("Atk")) return 1;
-                if (a.endsWith("Lvl")) return -1;
-                if (b.endsWith("Lvl")) return 1;
-                return 0
-            }).map(k => {
-                let key = k
-                let val = kiokuAtPosition[k]
-                if (k.endsWith("Atk")) {
-                    val |= 0
-                } else if (["crys_sub", "crys", "data", "support", "supportKey", "knownConditions", "effects"].includes(k)) {
-                    return;
+            const lines = kiokuAtPosition
+                ? Object.keys(kiokuAtPosition).sort().sort((a, b) => {
+                    if (a.endsWith("Atk")) return -1;
+                    if (b.endsWith("Atk")) return 1;
+                    if (a.endsWith("Lvl")) return -1;
+                    if (b.endsWith("Lvl")) return 1;
+                    return 0
+                }).map(key => {
+                    let val = kiokuAtPosition[key]
+                    if (key.endsWith("Atk")) {
+                        val |= 0
+                    } else if (["crys_sub", "crys", "data", "support", "supportKey", "knownConditions", "effects"].includes(key)) {
+                        return;
+                    }
+
+                    return `${["abilityLvl", "ascension"].includes(key) ? `\n${key}` : key} - ${val}`
+                }).filter(Boolean)
+                : [];
+
+            const formatCondForKioku = ([eff, activeCondId, startCondIdCsv]: [number, string, string], idx: number): string => {
+                let outString = eff.toString()
+                if (activeCondId) {
+                    outString += ` if\n    ${activeCondId}${startCondIdCsv ? ` & ${startCondIdCsv}` : ""} - `
+                    let isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId)
+                    if (typeof (isActiveCond) !== 'boolean') {
+                        isActiveCond = isActiveCond(amountOfEnemies, enemy.maxBreak)
+                    }
+                    isActiveCond &&= startCondIdCsv.split(",").every((startCondId: string) => isStartCondRelevantForScoreAttack(startCondId, kiokuAtPosition.maxMagicStacks))
+                    outString += isActiveCond ? "active" : "disabled"
+                    outString += `\n    ${getDescriptionOfCond(activeCondId).match(/.{1,9}/g)?.join("\n    ")}`
+                    if (startCondIdCsv) {
+                        outString += `\n    & `
+                        outString += `\n    ${getDescriptionOfCond(startCondIdCsv).match(/.{1,9}/g)?.join("\n    ")}`
+                    }
+
                 }
+                return outString
+            }
 
-                return `${["abilityLvl", "ascension"].includes(key) ? `\n${key}` : key} - ${val}`
-            }).filter(Boolean)
-            : [];
+            const effects = kiokuAtPosition ? Object.keys(kiokuAtPosition["effects"]).sort().map(key => {
+                if (Kioku.skippable.has(key)) return;
+                return `${key} \n  ${kiokuAtPosition["effects"][key].map(formatCondForKioku).join("\n  ")}`
+            }).filter(Boolean) : []
 
-        const effects = kiokuAtPosition ? Object.keys(kiokuAtPosition["effects"]).sort().map(k => {
-            if (Kioku.skippable.has(k)) return;
-            let key = k
-            let val = kiokuAtPosition["effects"][k]
-            return `${key}\n  ${val.map(v => `${v[0]}${v[1] ? ` if ${v[1]}` : ""}`).join("\n  ")}`
-        }).filter(Boolean) : []
-
-        let debugText = ` 
+            debugText = ` 
 DMG CALC MULTIPLIERS:
 Ability Mult - ${special * 100 | 0}%
 Base Attack  - ${(this.dps.getBaseAtk() | 0).toLocaleString()}
@@ -224,10 +245,7 @@ KIOKU STATS:
 ${lines.join("\n")}
 
 KIOKU EFFECTS:
-${effects.join("\n")}
-` 
-        if (this.debug && idx === 0) {
-            console.log(debugText)
+${effects.join("\n")}`;
         }
 
         return [total | 0, crit_rate, debugText, enemyDied];

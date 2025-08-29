@@ -2,24 +2,31 @@
     <div :class="loading ? 'loading-bar' : 'team-row'">
         <div class="images">
             <div class="image-wrapper">
-                <img v-if="team.attacker" :src="`/exedra-dmg-calc/kioku_images/${team.attacker.id}_thumbnail.png`"
-                    :alt="team.attacker.name" :title="team.attacker.name" class="character-image" />
-                <img v-if="!loading && team.atk_supp"
-                    :src="`/exedra-dmg-calc/kioku_images/${team.atk_supp.id}_thumbnail.png`" :alt="team.atk_supp.name"
-                    :title="team.atk_supp.name" class="supp-image" />
-                <img v-if="!loading && team.portrait" :src="`/exedra-dmg-calc/portraits/${team.portrait}.png`"
-                    :alt="team.portrait" :title="team.portrait" class="portrait-image" />
+                <a v-if="team.attacker" :href="`https://exedra.wiki/wiki/${team.attacker.name}`" target="_blank">
+                    <img :src="`/exedra-dmg-calc/kioku_images/${team.attacker.id}_thumbnail.png`"
+                        :alt="team.attacker.name" :title="team.attacker.name" class="character-image" />
+                </a>
+                <a v-if="!loading && team.atk_supp" :href="`https://exedra.wiki/wiki/${team.atk_supp.name}`"
+                    target="_blank" class="supp-image">
+                    <img :src="`/exedra-dmg-calc/kioku_images/${team.atk_supp.id}_thumbnail.png`"
+                        :alt="team.atk_supp.name" :title="team.atk_supp.name" />
+                </a>
+                <a v-if="!loading && team.portrait" :href="`https://exedra.wiki/wiki/${team.portrait}`" target="_blank"
+                    class="portrait-image">
+                    <img :src="`/exedra-dmg-calc/portraits/${team.portrait}.png`" :alt="team.portrait"
+                        :title="team.portrait" />
+                </a>
             </div>
-            <div class="image-wrapper">
-                <img v-if="team.sustain" :src="`/exedra-dmg-calc/kioku_images/${team.sustain.id}_thumbnail.png`"
-                    :alt="team.sustain.name" :title="team.sustain.name" class="character-image" />
-            </div>
-            <div v-for="i in 3" :key="i" class="image-wrapper">
-                <img v-if="team[`supp${i}`]" :src="`/exedra-dmg-calc/kioku_images/${team[`supp${i}`].id}_thumbnail.png`"
-                    :title="team[`supp${i}`].name" :alt="team[`supp${i}`].name" class="character-image" />
-                <img v-if="team[`supp${i}supp`]"
-                    :src="`/exedra-dmg-calc/kioku_images/${team[`supp${i}supp`].id}_thumbnail.png`"
-                    :title="team[`supp${i}supp`].name" :alt="team[`supp${i}supp`].name" class="supp-image" />
+            <div v-for="i in 4" :key="i" class="image-wrapper">
+                <a v-if="team[`supp${i}`]" :href="`https://exedra.wiki/wiki/${team[`supp${i}`].name}`" target="_blank">
+                    <img :src="`/exedra-dmg-calc/kioku_images/${team[`supp${i}`].id}_thumbnail.png`"
+                        :title="team[`supp${i}`].name" :alt="team[`supp${i}`].name" class="character-image" />
+                </a>
+                <a v-if="team[`supp${i}supp`]" :href="`https://exedra.wiki/wiki/${team[`supp${i}supp`].name}`"
+                    target="_blank" class="supp-image">
+                    <img :src="`/exedra-dmg-calc/kioku_images/${team[`supp${i}supp`].id}_thumbnail.png`"
+                        :title="team[`supp${i}supp`].name" :alt="team[`supp${i}supp`].name" />
+                </a>
             </div>
         </div>
 
@@ -38,7 +45,8 @@
 </template>
 
 <script lang="ts" setup>
-import { FinalTeam } from '../pages/BestTeamPage.vue';
+import { FinalTeam } from '../types/BestTeamTypes';
+
 
 defineProps<{ team: FinalTeam, loading: boolean }>()
 </script>
@@ -52,9 +60,12 @@ defineProps<{ team: FinalTeam, loading: boolean }>()
 
 .supp-image,
 .portrait-image {
-    width: 30px;
     display: inherit;
     position: absolute;
+}
+.supp-image img,
+.portrait-image img {
+    width: 30px;
 }
 
 .supp-image {

@@ -6,7 +6,6 @@
 
         <div style="height: 40px;"></div>
 
-        <!-- Control panel -->
         <div class="options-panel">
             <h2>Simulation Options</h2>
 
@@ -20,6 +19,59 @@
                 Include 4★ Supports
             </label>
 
+            <label>
+                <input type="checkbox" v-model="include4StarOthers" />
+                Include 4★ Others
+            </label>
+
+            <div>
+                <h3>Role Distribution</h3>
+
+                <div class="role-grid">
+                    <div class="role-box">
+                        <img :src="'/exedra-dmg-calc/roles/Attacker.png'" alt="Attacker" />
+                        <span>Damage Dealer</span>
+                        <div class="number">1</div>
+                    </div>
+
+                    <div class="role-box">
+                        <div class="icons">
+                            <img :src="'/exedra-dmg-calc/roles/Buffer.png'" alt="Buffer" />
+                            <img :src="'/exedra-dmg-calc/roles/Debuffer.png'" alt="Debuffer" />
+                        </div>
+                        <span>Buffer+Debuffer</span>
+                        <input type="number" v-model.number="deBufferCount" min="0" max="4" />
+                    </div>
+
+                    <div class="role-box">
+                        <img :src="'/exedra-dmg-calc/roles/Healer.png'" alt="Healer" />
+                        <span>Healer (min)</span>
+                        <input type="number" v-model.number="minHealer" min="0"
+                            :max="otherCount - minDefender - minBreaker" />
+                    </div>
+
+                    <div class="role-box">
+                        <img :src="'/exedra-dmg-calc/roles/Defender.png'" alt="Defender" />
+                        <span>Defender (min)</span>
+                        <input type="number" v-model.number="minDefender" min="0"
+                            :max="otherCount - minHealer - minBreaker" />
+                    </div>
+
+                    <div class="role-box">
+                        <img :src="'/exedra-dmg-calc/roles/Breaker.png'" alt="Breaker" />
+                        <span>Breaker (min)</span>
+                        <input type="number" v-model.number="minBreaker" min="0"
+                            :max="otherCount - minDefender - minHealer" />
+                    </div>
+
+                    <div class="role-box total-box" style="grid-column: 3 / span 3; width: 400px;">
+                        <span>Flex spot (Healer, Defender or Breaker)</span>
+                        <div class="number">{{ otherCount - minDefender - minHealer - minBreaker }}</div>
+                    </div>
+
+                </div>
+            </div>
+
             <div class="weak-elements">
                 <h3>Weak Elements</h3>
                 <div class="element-grid">
@@ -32,12 +84,64 @@
                 </div>
             </div>
 
-            <!-- Extra Attackers -->
-            <div class="extra-attackers">
-                <h3>Extra Attackers</h3>
+            <div class="kioku-selector">
+                <h3>Ignored Kioku </h3>
+                These are Kioku that do not have any dmg boosting effects, and by default will be ignored to speed up
+                computing time
 
                 <!-- Selected list -->
-                <div class="selected-attackers">
+                <div class="selected-kioku">
+                    <div @click="removeIgnoredKioku(char)" v-for="char in ignoredKioku" :key="char.id" class="chip">
+                        <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+                        <span>{{ char.name }}</span>
+                    </div>
+                </div>
+
+                <!-- Input + dropdown -->
+                <div class="kioku-select">
+                    <input type="text" v-model="ignoredKiokuQuery"
+                        placeholder="Kioku that must be included in final team..."
+                        @focus="showIgnoredKiokuDropdown = true" @blur="hideIgnoredKiokuDropdown" />
+                    <ul v-if="showIgnoredKiokuDropdown && filteredKioku.length" class="dropdown">
+                        <li v-for="char in filteredKioku" :key="char.id" @mousedown.prevent="addIgnoredKioku(char)">
+                            <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+                            {{ char.name }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="kioku-selector">
+                <h3>Obligatory Kioku</h3>
+
+                <!-- Selected list -->
+                <div class="selected-kioku">
+                    <div @click="removeObligatoryKioku(char)" v-for="char in obligatoryKioku" :key="char.id"
+                        class="chip">
+                        <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+                        <span>{{ char.name }}</span>
+                    </div>
+                </div>
+
+                <!-- Input + dropdown -->
+                <div class="kioku-select">
+                    <input type="text" v-model="obligatoryKiokuQuery"
+                        placeholder="Kioku that must be included in final team..."
+                        @focus="showObligatoryKiokuDropdown = true" @blur="hideObligatoryKiokuDropdown" />
+                    <ul v-if="showObligatoryKiokuDropdown && filteredKioku.length" class="dropdown">
+                        <li v-for="char in filteredKioku" :key="char.id" @mousedown.prevent="addObligatoryKioku(char)">
+                            <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+                            {{ char.name }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="kioku-selector">
+                <h3>Non-Attacker Damage Dealers</h3>
+
+                <!-- Selected list -->
+                <div class="selected-kioku">
                     <div @click="removeExtraAttacker(char)" v-for="char in extraAttackers" :key="char.id" class="chip">
                         <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
                         <span>{{ char.name }}</span>
@@ -45,12 +149,12 @@
                 </div>
 
                 <!-- Input + dropdown -->
-                <div class="attacker-select">
+                <div class="kioku-select">
                     <input type="text" v-model="extraAttackerQuery"
-                        placeholder="Use non-attackers as extra attackers..." @focus="showDropdown = true"
-                        @blur="hideDropdown" />
-                    <ul v-if="showDropdown && filteredCharacters.length" class="dropdown">
-                        <li v-for="char in filteredCharacters" :key="char.id"
+                        placeholder="Use non-attackers as extra damage dealers, by default only attackers are checked..."
+                        @focus="showExtraAttackerDropdown = true" @blur="hideExtraAttackerDropdown" />
+                    <ul v-if="showExtraAttackerDropdown && filteredAttackers.length" class="dropdown">
+                        <li v-for="char in filteredAttackers" :key="char.id"
                             @mousedown.prevent="addExtraAttacker(char)">
                             <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
                             {{ char.name }}
@@ -99,6 +203,7 @@ import { useEnemyStore } from '../store/singleTeamStore'
 import { useCharacterStore } from '../store/characterStore'
 import { KiokuRole, Character, KiokuElement } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
+import { FinalTeam } from '../types/BestTeamTypes'
 
 const enemies = useEnemyStore()
 
@@ -111,6 +216,7 @@ const results = reactive<{ attackerId: string, team: any, dmg: number }[][]>([])
 const members = computed(() => store.characters.filter(c => c.enabled))
 const attackers = computed(() => store.characters.filter(c => (c.enabled && c.role === KiokuRole.Attacker) || extraAttackers.value.map(c => c.name).includes(c.name)))
 let prevAttackers: Character[] = []
+let prevObligatoryKioku: Character[] = []
 
 const workerRef = ref<Worker | null>(null)
 const progress = ref<FinalTeam>({})
@@ -118,8 +224,8 @@ const progress = ref<FinalTeam>({})
 // ---- Option states bound to template ----
 const include4StarAttackers = ref(false)
 const include4StarSupports = ref(false)
+const include4StarOthers = ref(false)
 
-// Example element icons (replace with your real assets)
 const weakElements = reactive([
     { name: KiokuElement.Flame, enabled: true },
     { name: KiokuElement.Aqua, enabled: true },
@@ -129,12 +235,27 @@ const weakElements = reactive([
     { name: KiokuElement.Void, enabled: true },
 ])
 
+const deBufferCount = ref(3)
+const otherCount = computed(() => 4 - deBufferCount.value)
+
+const minHealer = ref(0)
+const minDefender = ref(0)
+const minBreaker = ref(0)
+
 // Extra attackers
 const extraAttackers = ref<Character[]>([])
 const extraAttackerQuery = ref("")
-const showDropdown = ref(false)
+const showExtraAttackerDropdown = ref(false)
 
-const filteredCharacters = computed(() => {
+const obligatoryKioku = ref<Character[]>([])
+const obligatoryKiokuQuery = ref("")
+const showObligatoryKiokuDropdown = ref(false)
+
+const ignoredKioku = ref<Character[]>(members.value.filter(c => ["Nightmare Stinger", "Lynx Impact", "Circle Of Fire", "Glittering Hurricane", "Surging Laser", "Verdant Shower", "Diamond Splash", "Purple Will-o'-Wisp", "Folter Gefängnis", "Vampire Fang", "Strada Futuro", "Lux☆Magica", "Infinite Poseidon", "Neo Genesis"].includes(c.name)))
+const ignoredKiokuQuery = ref("")
+const showIgnoredKiokuDropdown = ref(false)
+
+const filteredAttackers = computed(() => {
     const q = extraAttackerQuery.value.toLowerCase()
     return members.value.filter(
         (m) =>
@@ -145,41 +266,55 @@ const filteredCharacters = computed(() => {
                 m.character_en.toLowerCase().includes(q)
             ))
 })
+const filteredKioku = computed(() => {
+    const q = obligatoryKiokuQuery.value.toLowerCase()
+    return members.value.filter(
+        (m) =>
+            !obligatoryKioku.value.some((a) => a.id === m.id) &&
+            m.rarity !== 3 &&
+            (m.name.toLowerCase().includes(q) ||
+                m.character_en.toLowerCase().includes(q)
+            ))
+})
 
 function addExtraAttacker(char: Character) {
     extraAttackers.value.push(char)
     extraAttackerQuery.value = ""
-    showDropdown.value = false
+    showExtraAttackerDropdown.value = false
+}
+function addObligatoryKioku(char: Character) {
+    obligatoryKioku.value.push(char)
+    obligatoryKiokuQuery.value = ""
+    showObligatoryKiokuDropdown.value = false
+}
+function addIgnoredKioku(char: Character) {
+    ignoredKioku.value.push(char)
+    ignoredKiokuQuery.value = ""
+    showIgnoredKiokuDropdown.value = false
 }
 
 function removeExtraAttacker(char: Character) {
     extraAttackers.value = extraAttackers.value.filter((a) => a.id !== char.id)
 }
-
-function hideDropdown() {
-    // Delay to allow click on item before blur closes it
-    setTimeout(() => (showDropdown.value = false), 150)
+function removeObligatoryKioku(char: Character) {
+    obligatoryKioku.value = obligatoryKioku.value.filter((a) => a.id !== char.id)
+}
+function removeIgnoredKioku(char: Character) {
+    ignoredKioku.value = ignoredKioku.value.filter((a) => a.id !== char.id)
 }
 
-export interface FinalTeam {
-    dmg: number
-    crit_rate: number
-    attacker: Character
-    portrait: string
-    atk_supp: Character
-    attacker_crys1: string
-    attacker_crys2: string
-    attacker_crys3: string
-    sustain: Character
-    supp1: Character
-    supp1supp: Character | undefined
-    supp2: Character
-    supp2supp: Character | undefined
-    supp3: Character
-    supp3supp: Character | undefined
+function hideExtraAttackerDropdown() {
+    setTimeout(() => (showExtraAttackerDropdown.value = false), 150)
+}
+function hideObligatoryKiokuDropdown() {
+    setTimeout(() => (showObligatoryKiokuDropdown.value = false), 150)
+}
+function hideIgnoredKiokuDropdown() {
+    setTimeout(() => (showIgnoredKiokuDropdown.value = false), 150)
 }
 
-const populateTeam = (result: any[]) => ({
+
+const populateTeam = (result: any[]): FinalTeam => ({
     dmg: result[0],
     crit_rate: result[1],
     attacker: members.value.find(m => m.name === result[2])!,
@@ -188,14 +323,24 @@ const populateTeam = (result: any[]) => ({
     attacker_crys1: result[5],
     attacker_crys2: result[6],
     attacker_crys3: result[7],
-    sustain: members.value.find(m => m.name === result[8])!,
-    supp1: members.value.find(m => m.name === result[9])!,
-    supp1supp: members.value.find(m => m.name === result[10]),
-    supp2: members.value.find(m => m.name === result[11])!,
-    supp2supp: members.value.find(m => m.name === result[12]),
-    supp3: members.value.find(m => m.name === result[13])!,
-    supp3supp: members.value.find(m => m.name === result[14]),
+    supp1: members.value.find(m => m.name === result[8])!,
+    supp1supp: members.value.find(m => m.name === result[9]),
+    supp2: members.value.find(m => m.name === result[10])!,
+    supp2supp: members.value.find(m => m.name === result[11]),
+    supp3: members.value.find(m => m.name === result[12])!,
+    supp3supp: members.value.find(m => m.name === result[13]),
+    supp4: members.value.find(m => m.name === result[14])!,
+    supp4supp: members.value.find(m => m.name === result[15]),
 })
+
+const populateStatusTeam = (result: any[]) => ({
+    attacker: members.value.find(m => m.name === result[0])!,
+    supp1: members.value.find(m => m.name === result[1])!,
+    supp2: members.value.find(m => m.name === result[2])!,
+    supp3: members.value.find(m => m.name === result[3])!,
+    supp4: members.value.find(m => m.name === result[4])!,
+})
+
 
 const sortedResults: ComputedRef<any[][]> = computed(() => [...results].sort((a, b) => b[0] - a[0]))
 
@@ -244,6 +389,7 @@ const topTeamsByAttacker = computed(() => {
 })
 
 async function startSimulation() {
+    prevObligatoryKioku = [...obligatoryKioku.value]
     prevAttackers = [...attackers.value, ...extraAttackers.value]
     running.value = true
     progress.value = {}
@@ -252,30 +398,40 @@ async function startSimulation() {
 
     workerRef.value.onmessage = (e) => {
         if (e.data.type === 'progress') {
-            progress.value = populateTeam(e.data.currChars)
+            progress.value = populateStatusTeam(e.data.currChars)
             completedRuns.value = e.data.completedRuns
             expectedRuns.value = e.data.expectedTotalRuns
         } else if (e.data.type === 'done') {
-            results.splice(0, results.length, ...e.data.results)
+            results.push(...e.data.results)
             running.value = false
             workerRef.value?.terminate()
             workerRef.value = null
-        }
-        else if (e.data.type === 'error') {
-            toast.error(e.data.error, {
-                position: toast.POSITION.TOP_RIGHT,
-                icon: false
-            })
+        } else if (e.data.type === 'error') {
+            toast.error(e.data.error, { position: toast.POSITION.TOP_RIGHT, icon: false })
+            console.error(e.data.error)
         }
     }
+
+    const extraAttackersVal = extraAttackers.value.map(c => c.name)
+    const obligatoryKiokuVal = [...obligatoryKioku.value.map(c => c.name), ...extraAttackersVal]
+    const ignoredKiokuVal = ignoredKioku.value.map(c => c.name).filter(c => !obligatoryKiokuVal.includes(c))
 
     workerRef.value.postMessage({
         options: {
             enemies: JSON.parse(JSON.stringify(enemies.enemies)),
             include4StarAttackers: include4StarAttackers.value,
             include4StarSupports: include4StarSupports.value,
+            include4StarOthers: include4StarOthers.value,
             weakElements: weakElements.filter(el => el.enabled).map(el => el.name),
-            extraAttackers: extraAttackers.value.map(c => c.name),
+            extraAttackers: extraAttackersVal,
+            obligatoryKioku: obligatoryKiokuVal,
+            ignoredKioku: ignoredKiokuVal,
+            prevResults: JSON.parse(JSON.stringify(results)),
+            deBufferCount: deBufferCount.value,
+            otherCount: otherCount.value,
+            minHealer: minHealer.value,
+            minDefender: minDefender.value,
+            minBreaker: minBreaker.value,
             enabledCharacters: JSON.parse(JSON.stringify(members.value))
         }
     })
@@ -332,19 +488,18 @@ async function startSimulation() {
 }
 
 
-
-
-/* Extra attackers */
-.extra-attackers {
+.kioku-selector {
     margin-top: 1rem;
 }
 
-.selected-attackers {
+.selected-kioku {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
     max-width: 600px;
+    margin : 0 auto;
+    justify-content: center;
 }
 
 .chip {
@@ -362,11 +517,11 @@ async function startSimulation() {
     border-radius: 50%;
 }
 
-.attacker-select {
+.kioku-select {
     position: relative;
 }
 
-.attacker-select input {
+.kioku-select input {
     width: 100%;
     padding: 0.4rem;
     max-width: 600px;
@@ -415,5 +570,52 @@ async function startSimulation() {
     flex-direction: column;
     margin: 0 auto;
     max-width: 300px;
+}
+
+.role-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    justify-items: center;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.role-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 110%;
+    text-align: center;
+}
+
+.role-box img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.role-box span {
+    margin-top: 0.25rem;
+    font-weight: 500;
+}
+
+.role-box input,
+.role-box .number {
+    margin-top: 0.25rem;
+    width: 60px;
+    text-align: center;
+}
+
+.total-box {
+    font-weight: bold;
+}
+
+.icons {
+    height: 40px;
+}
+
+.gallery-page {
+    padding-bottom: 400px;
 }
 </style>

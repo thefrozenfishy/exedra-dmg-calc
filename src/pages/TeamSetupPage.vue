@@ -4,7 +4,15 @@
         Data here will be used as defaults in Single Battle Simulator, as well as being the considered Kioku in Best
         Team calculator
 
-    
+        <h2>Export/Import</h2>
+        <div>
+            <button @click="exportCharacters()">Export</button>
+            <label style="margin-left: 30px;">
+                Import
+                <input  type="file" accept="application/json" @change="handleFileChange" />
+            </label>
+        </div>
+
         <h2>Set default values for all Kioku:</h2>
         <div class="default-row" v-for="stat in stats" :key="stat.key">
             <label> {{ stat.label }}:
@@ -13,7 +21,7 @@
             </label>
         </div>
 
-        <!-- One section per role -->
+        <h2>Kioku config</h2>
         <div v-for="(chars, role) in groupedCharacters" :key="role" class="role-section">
             <h2>{{ role }}</h2>
 
@@ -34,6 +42,13 @@ export default defineComponent({
     components: { CharacterCard },
     setup() {
         const store = useCharacterStore()
+
+        function handleFileChange(e: Event) {
+            const file = (e.target as HTMLInputElement).files?.[0]
+            if (file) {
+                store.importCharacters(file).catch(err => alert("Import failed: " + err.message))
+            }
+        }
 
         // Group characters by role, sort by element then id
         const groupedCharacters = computed(() => {
@@ -68,7 +83,7 @@ export default defineComponent({
         ]
 
 
-        return { groupedCharacters, setAll, stats }
+        return { groupedCharacters, setAll, stats, handleFileChange, exportCharacters: store.exportCharacters }
     }
 })
 </script>
@@ -95,6 +110,6 @@ export default defineComponent({
 }
 
 .default-row {
-  display: contents;
+    display: contents;
 }
 </style>
