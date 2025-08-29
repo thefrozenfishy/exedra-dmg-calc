@@ -82,6 +82,7 @@ export class Kioku {
         "CUTOUT",
         "DMG_ATK",
         "DMG_RANDOM",
+        "DOWN_SPD_RATIO",
         "DWN_ATK_RATIO",
         "DWN_RCV_DMG_RATIO",
         "DWN_SPD_RATIO",
@@ -101,7 +102,6 @@ export class Kioku {
         "SLOW",
         "STUN",
         "SWITCH_SKILL",
-        "TSUBAME_LINK",
         "UNIQUE_10030301",
         "UP_ABNORMAL_HIT_RATE_RATIO",
         "UP_BREAK_DAMAGE_RECEIVE_RATIO",
@@ -115,6 +115,7 @@ export class Kioku {
         "UP_GIV_BREAK_POINT_DMG_FIXED",
         "UP_GIV_VORTEX_DMG_RATIO",
         "UP_HEAL_RATE_RATIO",
+        "UP_HP_RATIO",
         "UP_RCV_BREAK_POINT_DMG_RATIO",
         "UP_SPD_ACCUM_RATIO", "CURSE_ATK",
         "UP_SPD_FIXED",
@@ -418,10 +419,17 @@ export class Kioku {
             } else if (skill.abilityEffectType === "UP_ELEMENT_DMG_RATE_RATIO") {
                 skill.abilityEffectType = "UP_GIV_DMG_RATIO";
             }
-            skill.activeConditionSetIdCsv.split(",").forEach((activeCondId: string) => {
-                this.add_to_effects(skill.abilityEffectType, eff, activeCondId, skill.startConditionSetIdCsv);
-            });
-
+            if (skill.abilityEffectType === "TSUBAME_LINK") {
+                this.add_to_effects("UP_SPD_RATIO", skill.value1, "", "");
+                this.add_to_effects("UP_ATK_RATIO", skill.value2, "", "");
+                this.add_to_effects("UP_GIV_DMG_RATIO", skill.value3, "", "");
+            } else if (skill.abilityEffectType === "TSUBAME_CORE") {
+                this.add_to_effects("DOWN_SPD_RATIO", skill.value1, "", "");
+            } else {
+                skill.activeConditionSetIdCsv.split(",").forEach((activeCondId: string) => {
+                    this.add_to_effects(skill.abilityEffectType, eff, activeCondId, skill.startConditionSetIdCsv);
+                });
+            }
         }
     }
 

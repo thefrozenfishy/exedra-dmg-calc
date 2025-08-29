@@ -3,14 +3,18 @@
     <input type="text" v-model="query" placeholder="Search character..." class="search-input" v-if="!selected" />
 
     <div v-if="selected" class="selected-character">
-      <img :src="`/exedra-dmg-calc/kioku_images/${selected.id}_thumbnail.png`" :alt="selected.name" />
+      <a :href="`https://exedra.wiki/wiki/${selected.name}`" target="_blank">
+        <img :src="`/exedra-dmg-calc/kioku_images/${selected.id}_thumbnail.png`" :alt="selected.name" />
+      </a>
       <span>{{ selected.name }}</span>
       <button @click="clear">✖</button>
     </div>
 
     <div v-else class="character-options">
       <div v-for="char in filteredChars" :key="char.id" class="character-option" @click="select(char)">
-        <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+        <a :href="`https://exedra.wiki/wiki/${char.name}`" target="_blank">
+          <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+        </a>
         <span>{{ char.name }}</span>
       </div>
     </div>

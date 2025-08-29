@@ -181,13 +181,10 @@ export const isStartCondRelevantForScoreAttack = (startConditionId: string, maxM
     if (!startConditionId) return true
 
     const battleConditionSet = battleConditionSets[startConditionId]
-    console.log(battleConditionSet)
     for (const activeCondId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
         const battleCondition = battleConditions[activeCondId]
-        console.log(battleCondition)
 
         if (battleCondition.compareContent === CompareContent.CHARGE_POINT) {
-            console.log("res", isCondActive(battleCondition, maxMagicStacks))
             if (!isCondActive(battleCondition, maxMagicStacks)) return false
         }
     }
