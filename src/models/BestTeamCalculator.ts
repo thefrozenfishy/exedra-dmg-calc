@@ -141,13 +141,11 @@ export async function findBestTeam({
                                                 const team = new Team([
                                                     getKioku({
                                                         ...attacker,
-                                                        dpsElement: attacker.element,
                                                         portrait: attackerPortrait,
                                                         crys: attackerCrys.map(item => item[1]),
-                                                        supportKey: attackerSupportKey,
-                                                        isDps: true
+                                                        supportKey: attackerSupportKey
                                                     })!,
-                                                    ...totalSupports.map((s, i) => getKioku({ ...s, dpsElement: attacker.element, supportKey: supportSupport[i] })!)
+                                                    ...totalSupports.map((s, i) => getKioku({ ...s, supportKey: supportSupport[i] })!)
                                                 ]);
 
                                                 const [dmg, critRate] = team.calculate_max_dmg(enemies, 0);

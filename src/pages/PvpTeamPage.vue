@@ -94,7 +94,7 @@ const battleInstance = computed(() => {
   if (!isFullBattle.value) return;
   const [alliedTeam, enemyTeam] = [true, false].map(b => team.slots.map((m, idx) => {
     const support = m[b].support ? getKioku(m[b].support) : null
-    return getKioku({ ...m[b].main, supportKey: support?.getKey(), isDps: idx === 0 } as KiokuGeneratorArgs)
+    return getKioku({ ...m[b].main, supportKey: support?.getKey() } as KiokuGeneratorArgs)
   }) as Kioku[])
   return new Battle(new Team(alliedTeam), new Team(enemyTeam))
 })

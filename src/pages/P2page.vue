@@ -1,18 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import * as d3 from "d3";
+import { getKioku, Kioku } from "../models/Kioku";
 
 export interface Unit {
-    name: string;
+    kioku: Kioku;
     breakGauge: number
     actionValue: number
     mp: number
-    activeBuffs: string[]
-};
-
-export interface State {
-    alliedUnits: Unit[];
-    enemyUnits: Unit[];
 };
 
 export interface Node extends d3.SimulationNodeDatum {
@@ -31,10 +26,36 @@ const selectedState = ref<State>();
 
 function hashState(state: State) {
     return JSON.stringify([
-        ...state.alliedUnits.map(u => [u.name, u.breakGauge, u.actionValue]),
-        ...state.enemyUnits.map(u => [u.name, u.breakGauge, u.actionValue]),
+        ...state.allies.map(u => [u.name, u.breakGauge, u.actionValue]),
+        ...state.enemies.map(u => [u.name, u.breakGauge, u.actionValue]),
     ]);
 }
+
+class State {
+    private allies: Unit[]
+    private enemies: Unit[]
+
+    constructor(allies: Kioku[], enemies: Kioku[]) {
+        this.allies = allies.map(k => ({
+            kioku: k,
+            breakGauge: 10,
+            actionValue: 0,
+            mp: 10
+        }))
+        this.enemies = enemies.map(k => ({
+            kioku: k,
+            breakGauge: 10,
+            actionValue: 0,
+            mp: 10
+        }))
+    }
+
+    getLowestAv() {
+        Math.min(...this.allies.map(c => c.actionValue), ... this.enemies.map(c => c.actionValue))
+    }
+}
+
+const applyToBoth = (state: State, func: Function): Any[] => [...state.allies[func], ...state.enemies[func]]
 
 function buildTree(): Node {
     const cache = new Map<string, Node>();
@@ -50,63 +71,42 @@ function buildTree(): Node {
         return n;
     }
 
-    const allies = ["Brilliant Beam", "Purple Will-o'-Wisp"]
-    const enemies = ["Tiro Finale", "Time Stop Strike"]
 
-    const root = makeNode({
-        alliedUnits: [{
-            name: "Rika",
-            breakGauge: 200,
-            actionValue: 0,
-            mp: 0,
-            activeBuffs: []
-        }],
-        enemyUnits: [{
-            name: "Rika",
-            breakGauge: 0,
-            actionValue: 0,
-            mp: 0,
-            activeBuffs: []
-        }]
-    });
 
-    const b1 = makeNode({
-        alliedUnits: [{
-            name: "Rika",
-            breakGauge: 150,
-            actionValue: 0,
-            mp: 0,
-            activeBuffs: []
-        }],
-        enemyUnits: [{
-            name: "Rika",
-            breakGauge: 0,
-            actionValue: 0,
-            mp: 0,
-            activeBuffs: []
-        }]
-    });
-    /*
-    const b2 = makeNode({
-        alliedUnits: [{
-            name: "Rika",
-            breakGauge: 0,
-            actionValue: 0,
-            mp: 0,
-            activeBuffs: []
-        }],
-        enemyUnits: [{
-            name: "Rika",
-            breakGauge: 0,
-            actionValue: 0,
-            mp: 0,
-            activeBuffs: []
-        }]
-    });
-    */
+    const createTree = (state: State): Node => {
+        const minAv = state.getLowestAv()
 
-    root.children = [b1];
-    return root;
+
+
+
+        const children: Node[] = []
+        return { id: "", label: "root", state, children }
+    }
+
+    const allies: Unit[] = [{
+        kioku: Kioku({name: "Brilliant Beam" }),
+        breakGauge: 10,
+        actionValue: 0,
+        mp: 10
+    }, {
+        name: "Purple Will-o'-Wisp",
+        breakGauge: 10,
+        actionValue: 10,
+        mp: 10
+    }]
+    const enemies: Unit[] = [{
+        name: "Tiro Finale",
+        breakGauge: 10,
+        actionValue: 0,
+        mp: 10
+    }, {
+        name: "Time Stop Strike",
+        breakGauge: 10,
+        actionValue: 0,
+        mp: 10
+    }]
+
+    return createTree({ allies, enemies });
 }
 
 onMounted(() => {

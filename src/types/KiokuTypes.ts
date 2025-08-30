@@ -46,6 +46,8 @@ export interface PortraitData {
 
 export interface PortraitLvlData {
     atk: number;
+    def: number;
+    hp: number;
 }
 
 export interface MagicLevel {
@@ -121,6 +123,16 @@ export interface KiokuData {
     atk100: number
     minAtk: number
     atka5: number
+    def100: number
+    minDef: number
+    defa5: number
+    hp100: number
+    minHp: number
+    hpa5: number
+    ep: number
+    minSpd: number
+    minCritDmg: number
+    minCritRate: number
     skill_id: number
     attack_id: number
     special_id: number
@@ -173,14 +185,12 @@ export const KiokuConstants = {
 }
 export interface KiokuGeneratorArgs {
     name: string;
-    dpsElement: KiokuElement;
     kiokuLvl?: number;
     magicLvl?: number;
     heartphialLvl?: number;
     portrait?: string;
     supportKey?: any[];
-    isDps?: boolean;
-    crys?: string[];
+    crys?: AvailableCrys[];
     ascension?: number;
     specialLvl?: number;
 }

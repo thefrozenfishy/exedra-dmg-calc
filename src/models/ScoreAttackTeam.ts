@@ -1,6 +1,7 @@
 import { Kioku } from "./Kioku";
 import { EnemyTargetTypes, Enemy } from "../types/EnemyTypes";
 import { getDescriptionOfCond, isActiveConditionRelevantForScoreAttack, isStartCondRelevantForScoreAttack } from "./BattleConditionParser";
+import { KiokuElement } from "../types/KiokuTypes";
 
 const targetTypeAtPosition = [EnemyTargetTypes.L_OTHER, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.R_OTHER]
 
@@ -86,19 +87,26 @@ export class Team {
     private extra_effects: Record<string, [Function, number][]> = {};
     private debug: boolean;
 
-    constructor(kiokus: Kioku[], debug = false) {
-        this.team = kiokus;
-        this.dps = kiokus.find(k => k.isDps)!;
+    constructor(dps: Kioku, team: Kioku[], debug = false) {
+        this.team = team;
+        this.dps = dps;
         this.debug = debug;
         this.all_effects["DEF_MULTIPLIER_TOTAL"] = 1
         this.all_effects["CRIT_DAMAGE_TOTAL"] = 0
+        console.log(dps, team)
         this.setup();
     }
 
     private setup() {
-        for (const kioku of this.team) {
+        const members: [boolean, Kioku][] = [
+            [true, this.dps],
+            ...this.team.map(t => [false, t] as [boolean, Kioku])
+        ];
+        for (const [isDps, kioku] of members) {
             for (let [eff, val] of Object.entries(kioku.effects)) {
-                for (const [v, activeCondId, startCondIdCsv] of val) {
+                for (const [v, activeCondId, startCondIdCsv, range, element] of val) {
+                    if (!isDps && range < 2) continue
+                    if (element && element !== this.dps.element) continue
                     if (["DWN_DEF_RATIO", "DWN_DEF_ACCUM_RATIO"].includes(eff)) {
                         eff = "DEF_MULTIPLIER_TOTAL"
                     } else if (["UP_CTD_FIXED", "UP_CTD_ACCUM_RATIO", "UP_CTD_RATIO"].includes(eff)) {
@@ -147,6 +155,12 @@ export class Team {
         }
     }
 
+    memberForLog = (idx: number): Kioku => {
+        if (idx === EnemyTargetTypes.TARGET) return this.dps
+        if (idx < EnemyTargetTypes.TARGET) return this.team[idx]
+        return this.team[idx - 1]
+    }
+
     calculate_max_dmg(
         enemies: Enemy[],
         atk_down = 0,
@@ -159,7 +173,7 @@ export class Team {
         let amountOfEnemies = enemies.filter(e => e.enabled).length
         const debugTexts = ["", "", "", "", ""];
         for (const i of [EnemyTargetTypes.TARGET, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.L_OTHER, EnemyTargetTypes.R_OTHER]) {
-            [dmg, critRate, debugText, enemyDied] = this.calculate_single_dmg(i, this.team[i], enemies[i], amountOfEnemies, atk_down)
+            [dmg, critRate, debugText, enemyDied] = this.calculate_single_dmg(i, this.memberForLog(i), enemies[i], amountOfEnemies, atk_down)
             total_dmg += dmg
             if (enemies[i].enabled && enemyDied) amountOfEnemies -= 1
             debugTexts[i] = debugText
@@ -253,7 +267,9 @@ export class Team {
                 }).filter(Boolean)
                 : [];
 
-            const formatCondForKioku = ([eff, activeCondId, startCondIdCsv]: [number, string, string], idx: number): string => {
+            const formatCondForKioku = ([eff, activeCondId, startCondIdCsv, range, element]: [number, string, string, number, undefined | KiokuElement], idx: number): string => {
+                if (element && element !== this.dps.element) return ""
+                if (idx !== EnemyTargetTypes.TARGET && range < 2) return ""
                 let outString = eff.toString()
                 if (activeCondId) {
                     outString += ` if\n    ${activeCondId}${startCondIdCsv ? ` & ${startCondIdCsv}` : ""} - `
@@ -275,7 +291,7 @@ export class Team {
 
             const effects = kiokuAtPosition ? Object.keys(kiokuAtPosition["effects"]).sort().map(key => {
                 if (skippable.has(key)) return;
-                return `${key} \n  ${kiokuAtPosition["effects"][key].map(formatCondForKioku).join("\n  ")}`
+                return `${key} \n  ${kiokuAtPosition["effects"][key].map(formatCondForKioku).filter(Boolean).join("\n  ")}`
             }).filter(Boolean) : []
 
             debugText = ` 

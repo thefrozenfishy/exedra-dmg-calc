@@ -109,16 +109,16 @@ const enemies = useEnemyStore()
 const isFullTeam = computed(() => team.slots.map(slot => slot.main).filter(Boolean).length === 5)
 const teamInstance = computed(() => {
   if (!isFullTeam.value) return;
-  const dpsElement = team.slots[attackerIndex]?.main?.element!
   try {
     const transformedMembers = team.slots.map((m, idx) => {
-      const support = m.support ? getKioku({ ...m.support, dpsElement }) : null
-      return getKioku({ ...m.main, dpsElement, supportKey: support?.getKey(), isDps: idx === attackerIndex } as KiokuGeneratorArgs)
+      const support = m.support ? getKioku({ ...m.support }) : null
+      return getKioku({ ...m.main, supportKey: support?.getKey() } as KiokuGeneratorArgs)
     }) as Kioku[]
-    return new Team(transformedMembers, true)
+    return new Team(transformedMembers[attackerIndex], transformedMembers.filter((v, i) => i !== attackerIndex), true)
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
     console.error(err)
+    team.slots = []
   }
 })
 onMounted(() => {
