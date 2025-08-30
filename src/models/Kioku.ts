@@ -168,7 +168,7 @@ export class Kioku {
     }
 
     getBaseAtk(): number {
-        return this.kiokuAtk + this.supportAtk + this.portraitAtk + this.magicAtk + this.heartAtk
+        return this.kiokuAtk + this.supportAtk + this.portraitAtk + this.magicAtk + this.heartAtk + this.ascensionAtk
     }
 
     constructor({
