@@ -1,5 +1,5 @@
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
-import { Team } from "./Team";
+import { Team } from "./ScoreAttackTeam";
 import { KiokuRole, portraitsBestOnly, Character, KiokuConstants, KiokuElement, SupportKey } from "../types/KiokuTypes";
 import { getKioku } from "./Kioku";
 

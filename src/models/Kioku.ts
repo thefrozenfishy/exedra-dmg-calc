@@ -48,81 +48,6 @@ function find_all_details(
 
 export class Kioku {
 
-    static knownBoosts = {
-        UP_ATK_RATIO: "Atk%1",
-        UP_ATK_ACCUM_RATIO: "Atk%2",
-        DEF_MULTIPLIER_TOTAL: "Def% total",
-        DWN_DEF_RATIO: "Def%1",
-        WEAKNESS: "Def%3",
-        DWN_DEF_ACCUM_RATIO: "Def%2",
-        UP_CTR_FIXED: "CR1+",
-        UP_CTR_ACCUM_RATIO: "CR2+",
-        UP_CTD_FIXED: "CD1+",
-        UP_CTD_RATIO: "CD3+",
-        UP_CTD_ACCUM_RATIO: "CD2+",
-        CRIT_DAMAGE_TOTAL: "CD+ total",
-        UP_GIV_DMG_RATIO: "DMG Dealt+",
-        UP_RCV_DMG_RATIO: "DMG Taken+",
-        UP_AIM_RCV_DMG_RATIO: "Elem DMG Taken+",
-        DWN_ELEMENT_RESIST_ACCUM_RATIO: "Elem Resist-",
-        UP_WEAK_ELEMENT_DMG_RATIO: "Elem Dmg+",
-    };
-
-    static skippable = new Set([
-        "ADD_BUFF_TURN",
-        "ADD_DEBUFF_TURN",
-        "ADDITIONAL_SKILL_ACT",
-        "ADDITIONAL_TURN_UNIT_ACT",
-        "BARRIER", "DMG_DEF",
-        "BLEED_ATK",
-        "BURN_ATK",
-        "CHARGE",
-        "CONSUME_CHARGE_POINT",
-        "CONTINUOUS_RECOVERY",
-        "CUTOUT",
-        "DMG_ATK",
-        "DMG_RANDOM",
-        "DOWN_SPD_RATIO",
-        "DWN_ATK_RATIO",
-        "DWN_RCV_DMG_RATIO",
-        "DWN_SPD_RATIO",
-        "GAIN_CHARGE_POINT",
-        "GAIN_EP_FIXED",
-        "GAIN_EP_RATIO",
-        "GAIN_SP_FIXED",
-        "HASTE",
-        "IMM_SLIP_DMG",
-        "POISON_ATK",
-        "RECOVERY_HP_ATK",
-        "RECOVERY_HP",
-        "REFLECTION_RATIO",
-        "REMOVE_ALL_ABNORMAL",
-        "REMOVE_ALL_BUFF",
-        "SHIELD",
-        "SLOW",
-        "STUN",
-        "SWITCH_SKILL",
-        "UNIQUE_10030301",
-        "UP_ABNORMAL_HIT_RATE_RATIO",
-        "UP_BREAK_DAMAGE_RECEIVE_RATIO",
-        "UP_BREAK_EFFECT",
-        "UP_BUFF_EFFECT_VALUE",
-        "UP_BUFF_EFFECT_VALUE",
-        "UP_DEBUFF_EFFECT_VALUE",
-        "UP_DEF_ACCUM_RATIO",
-        "UP_DEF_RATIO",
-        "UP_EP_RECOVER_RATE_RATIO",
-        "UP_GIV_BREAK_POINT_DMG_FIXED",
-        "UP_GIV_VORTEX_DMG_RATIO",
-        "UP_HEAL_RATE_RATIO",
-        "UP_HP_RATIO",
-        "UP_RCV_BREAK_POINT_DMG_RATIO",
-        "UP_SPD_ACCUM_RATIO", "CURSE_ATK",
-        "UP_SPD_FIXED",
-        "UP_SPD_RATIO",
-        "VORTEX_ATK", // TODO: Make vortex work
-    ]);
-
 
     private name: string;
     private dpsElement: KiokuElement;
@@ -247,6 +172,8 @@ export class Kioku {
             if (cry === KiokuConstants.availableCrys.EX || !this.isDps) continue;
             const eff = parseInt(cry.split("-")[1]);
             switch (cry) {
+                // TODO: ADD SPD, MP+, AA on break, spd on break, others???
+                // TODO: Allow input sub crys of these crys
                 case KiokuConstants.availableCrys.FLAT_ATK:
                 case KiokuConstants.availableSubCrys.FLAT_ATK:
                     this.atk_bonus_flat += eff;
@@ -431,16 +358,6 @@ export class Kioku {
                 });
             }
         }
-    }
-
-    toString() {
-        return `${this.name} A${this.ascension}
-  Stats: base_atk=${this.getBaseAtk().toFixed(0)}, atk_bonus_flat=${this.atk_bonus_flat}, buff_mult=${this.buff_mult}, debuff_mult=${this.debuff_mult}
-  Support: ${this.support ? this.support.name : null}
-  Portrait: ${this.portrait}
-  Effect: ${JSON.stringify(Object.fromEntries(
-            Object.entries(this.effects).filter(([k]) => (Kioku.knownBoosts as any)[k])
-        ))}`;
     }
 
     getKey(): any[] {

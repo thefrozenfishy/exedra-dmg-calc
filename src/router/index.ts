@@ -3,7 +3,7 @@ import TeamSetupPage from '../pages/TeamSetupPage.vue'
 import BestTeamPage from '../pages/BestTeamPage.vue'
 import SingleTeamPage from '../pages/SingleTeamPage.vue'
 import About from '../pages/About.vue'
-import PvpTeamPage from '../pages/PvpTeamPage.vue'
+import PvpTeamPage from '../pages/P2page.vue'
 
 const routes = [
     { path: '/team-setup', name: 'Team Setup', component: TeamSetupPage },

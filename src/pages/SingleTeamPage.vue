@@ -82,7 +82,7 @@ import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
 import CharacterSelector from '../components/CharacterSelector.vue'
 import StatInputs from '../components/StatInputs.vue'
 import { getKioku, Kioku } from '../models/Kioku'
-import { Team } from '../models/Team'
+import { Team } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
 import { KiokuConstants, KiokuGeneratorArgs, portraits } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"

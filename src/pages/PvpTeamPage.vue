@@ -72,9 +72,8 @@ import { usePvPStore } from '../store/singleTeamStore'
 import CharacterSelector from '../components/CharacterSelector.vue'
 import StatInputs from '../components/StatInputs.vue'
 import { getKioku, Kioku } from '../models/Kioku'
-import { Team } from '../models/Team'
-import { Battle } from '../models/Battle'
-import EnemySelector from '../components/EnemySelector.vue'
+import { Team } from '../models/ScoreAttackTeam'
+import { Battle } from '../models/PvPBattle'
 import { KiokuConstants, KiokuGeneratorArgs, portraits } from '../types/KiokuTypes'
 
 const cryKeys = Object.keys(KiokuConstants.availableCrys)

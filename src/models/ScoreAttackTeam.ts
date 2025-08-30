@@ -4,6 +4,81 @@ import { getDescriptionOfCond, isActiveConditionRelevantForScoreAttack, isStartC
 
 const targetTypeAtPosition = [EnemyTargetTypes.L_OTHER, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.R_OTHER]
 
+const knownBoosts = {
+    UP_ATK_RATIO: "Atk%1",
+    UP_ATK_ACCUM_RATIO: "Atk%2",
+    DEF_MULTIPLIER_TOTAL: "Def% total",
+    DWN_DEF_RATIO: "Def%1",
+    WEAKNESS: "Def%3",
+    DWN_DEF_ACCUM_RATIO: "Def%2",
+    UP_CTR_FIXED: "CR1+",
+    UP_CTR_ACCUM_RATIO: "CR2+",
+    UP_CTD_FIXED: "CD1+",
+    UP_CTD_RATIO: "CD3+",
+    UP_CTD_ACCUM_RATIO: "CD2+",
+    CRIT_DAMAGE_TOTAL: "CD+ total",
+    UP_GIV_DMG_RATIO: "DMG Dealt+",
+    UP_RCV_DMG_RATIO: "DMG Taken+",
+    UP_AIM_RCV_DMG_RATIO: "Elem DMG Taken+",
+    DWN_ELEMENT_RESIST_ACCUM_RATIO: "Elem Resist-",
+    UP_WEAK_ELEMENT_DMG_RATIO: "Elem Dmg+",
+};
+
+const skippable = new Set([
+    "ADD_BUFF_TURN",
+    "ADD_DEBUFF_TURN",
+    "ADDITIONAL_SKILL_ACT",
+    "ADDITIONAL_TURN_UNIT_ACT",
+    "BARRIER", "DMG_DEF",
+    "BLEED_ATK",
+    "BURN_ATK",
+    "CHARGE",
+    "CONSUME_CHARGE_POINT",
+    "CONTINUOUS_RECOVERY",
+    "CUTOUT",
+    "DMG_ATK",
+    "DMG_RANDOM",
+    "DOWN_SPD_RATIO",
+    "DWN_ATK_RATIO",
+    "DWN_RCV_DMG_RATIO",
+    "DWN_SPD_RATIO",
+    "GAIN_CHARGE_POINT",
+    "GAIN_EP_FIXED",
+    "GAIN_EP_RATIO",
+    "GAIN_SP_FIXED",
+    "HASTE",
+    "IMM_SLIP_DMG",
+    "POISON_ATK",
+    "RECOVERY_HP_ATK",
+    "RECOVERY_HP",
+    "REFLECTION_RATIO",
+    "REMOVE_ALL_ABNORMAL",
+    "REMOVE_ALL_BUFF",
+    "SHIELD",
+    "SLOW",
+    "STUN",
+    "SWITCH_SKILL",
+    "UNIQUE_10030301",
+    "UP_ABNORMAL_HIT_RATE_RATIO",
+    "UP_BREAK_DAMAGE_RECEIVE_RATIO",
+    "UP_BREAK_EFFECT",
+    "UP_BUFF_EFFECT_VALUE",
+    "UP_BUFF_EFFECT_VALUE",
+    "UP_DEBUFF_EFFECT_VALUE",
+    "UP_DEF_ACCUM_RATIO",
+    "UP_DEF_RATIO",
+    "UP_EP_RECOVER_RATE_RATIO",
+    "UP_GIV_BREAK_POINT_DMG_FIXED",
+    "UP_GIV_VORTEX_DMG_RATIO",
+    "UP_HEAL_RATE_RATIO",
+    "UP_HP_RATIO",
+    "UP_RCV_BREAK_POINT_DMG_RATIO",
+    "UP_SPD_ACCUM_RATIO", "CURSE_ATK",
+    "UP_SPD_FIXED",
+    "UP_SPD_RATIO",
+    "VORTEX_ATK", // TODO: Make vortex work
+]);
+
 export class Team {
     private team: Kioku[];
     private dps: Kioku;
@@ -60,12 +135,12 @@ export class Team {
 
         if (this.debug) {
             console.log("Total effects", Object.fromEntries(Object.entries(this.all_effects).filter(
-                ([key, _]) => (key in Kioku.knownBoosts)
+                ([key, _]) => (key in knownBoosts)
             )));
         }
 
         const leftover = Object.keys(this.all_effects).filter(
-            key => !(key in Kioku.knownBoosts) && !Kioku.skippable.has(key)
+            key => !(key in knownBoosts) && !skippable.has(key)
         );
         if (leftover.length > 0) {
             throw new Error(`Found unknown effects: ${leftover.join(", ")}`);
@@ -167,7 +242,7 @@ export class Team {
                     if (b.endsWith("Lvl")) return 1;
                     return 0
                 }).map(key => {
-                    let val = kiokuAtPosition[key]
+                    let val = (kiokuAtPosition as any)[key]
                     if (key.endsWith("Atk")) {
                         val |= 0
                     } else if (["crys_sub", "crys", "data", "support", "supportKey", "knownConditions", "effects"].includes(key)) {
@@ -199,7 +274,7 @@ export class Team {
             }
 
             const effects = kiokuAtPosition ? Object.keys(kiokuAtPosition["effects"]).sort().map(key => {
-                if (Kioku.skippable.has(key)) return;
+                if (skippable.has(key)) return;
                 return `${key} \n  ${kiokuAtPosition["effects"][key].map(formatCondForKioku).join("\n  ")}`
             }).filter(Boolean) : []
 
