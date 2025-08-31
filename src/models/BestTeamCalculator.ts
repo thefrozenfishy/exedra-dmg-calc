@@ -101,7 +101,6 @@ export async function findBestTeam({
                 for (const defenderCombo of combinations(availableChars[KiokuRole.Defender], dist.defenders)) {
                     for (const breakerCombo of combinations(availableChars[KiokuRole.Breaker], dist.breakers)) {
                         for (const deBufferCombo of availableSupportCombinations) {
-                            console.log(attacker, healerCombo, defenderCombo, breakerCombo, deBufferCombo)
                             completedRuns += 1;
 
                             const totalSupports = [
