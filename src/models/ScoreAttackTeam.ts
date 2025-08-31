@@ -155,6 +155,9 @@ export class ScoreAttackTeam {
             console.log("Total effects", Object.fromEntries(Object.entries(this.all_effects).filter(
                 ([key, _]) => (key in knownBoosts)
             )));
+            console.log("Extra effects", Object.fromEntries(Object.entries(this.extra_effects).filter(
+                ([key, _]) => (key in knownBoosts)
+            )));
         }
 
         const leftover = Object.keys(this.all_effects).filter(
