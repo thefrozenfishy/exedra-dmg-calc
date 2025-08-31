@@ -24,7 +24,7 @@
         <!-- Portrait -->
         <div v-if="index === attackerIndex && slot.main" class="stats">
           <label>
-            Portrait:
+            Portrait: {{ slot.main.element }}
             <select :value="slot.main.portrait || ''"
               @change="e => team.setMain(index, { ...slot.main, portrait: e?.target?.value })">
               <option disabled value="">Select a portrait</option>
@@ -110,7 +110,7 @@ const isFullTeam = computed(() => team.slots.map(slot => slot.main).filter(Boole
 const teamInstance = computed(() => {
   if (!isFullTeam.value) return;
   try {
-    const transformedMembers = team.slots.map((m, idx) => {
+    const transformedMembers = team.slots.map(m => {
       const support = m.support ? getKioku({ ...m.support }) : null
       return getKioku({ ...m.main, supportKey: support?.getKey() } as KiokuGeneratorArgs)
     }) as Kioku[]

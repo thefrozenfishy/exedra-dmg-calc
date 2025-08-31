@@ -110,7 +110,7 @@ export interface Character {
     magicLvl: number
     heartphialLvl: number
     specialLvl: number
-    crys: string[]
+    crys: AvailableCrys[]
 }
 
 export interface KiokuData {
