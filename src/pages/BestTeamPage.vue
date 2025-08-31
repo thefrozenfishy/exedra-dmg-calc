@@ -498,7 +498,7 @@ async function startSimulation() {
     gap: 0.5rem;
     margin-bottom: 0.5rem;
     max-width: 600px;
-    margin : 0 auto;
+    margin: 0 auto;
     justify-content: center;
 }
 

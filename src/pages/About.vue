@@ -25,6 +25,7 @@
         <h1>Known Issues</h1>
         <ul>
             <li>Melodia Appassionata (Swimsuit Sayaka) vortex are not added to the calculation</li>
+            <li>Luce della Speranza (Ui) not added to the calculation</li>
         </ul>
         <h1>Potentially planned improvements</h1>
         <ul>

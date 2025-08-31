@@ -1,33 +1,46 @@
 import { defineStore } from 'pinia'
 import { Enemy } from '../types/EnemyTypes'
 import { TeamSlot } from '../types/BestTeamTypes'
-import { Character } from '../types/KiokuTypes'
+import { Character, correctCharacterParams } from '../types/KiokuTypes'
 
+export const usePvPStore = defineStore('pvp', {
+  state: () => ({
+    slots: [
+      Array(5).fill(null).map(() => ({})) as TeamSlot[],
+      Array(5).fill(null).map(() => ({})) as TeamSlot[]
+    ]
+  }),
+  actions: {
+    setMain(slotIndex: number, isAlliedTeam: number, member: Character | undefined) {
+      this.slots[isAlliedTeam][slotIndex].main = correctCharacterParams(member)
+      this.save()
+    },
+    setSupport(slotIndex: number, isAlliedTeam: number, member: Character | undefined) {
+      this.slots[isAlliedTeam][slotIndex].support = correctCharacterParams(member)
+      this.save()
+    },
+    save() {
+      localStorage.setItem('lastPvP', JSON.stringify(this.slots))
+    },
+    load() {
+      const saved = localStorage.getItem('lastPvP')
+      if (saved) {
+        this.slots = JSON.parse(saved)
+      }
+    }
+  }
+})
 export const useTeamStore = defineStore('team', {
   state: () => ({
     slots: Array(5).fill(null).map(() => ({})) as TeamSlot[]
   }),
   actions: {
     setMain(slotIndex: number, member: Character | undefined) {
-      if (member) {
-        if (member.ascension < 3) {
-          member.specialLvl = Math.min(member.specialLvl, 4)
-        } else if (member.ascension < 5) {
-          member.specialLvl = Math.min(member.specialLvl, 7)
-        }
-      }
-      this.slots[slotIndex].main = member
+      this.slots[slotIndex].main = correctCharacterParams(member)
       this.save()
     },
     setSupport(slotIndex: number, member: Character | undefined) {
-      if (member) {
-        if (member.ascension < 3) {
-          member.specialLvl = Math.min(member.specialLvl, 4)
-        } else if (member.ascension < 5) {
-          member.specialLvl = Math.min(member.specialLvl, 7)
-        }
-      }
-      this.slots[slotIndex].support = member
+      this.slots[slotIndex].support = correctCharacterParams(member)
       this.save()
     },
     save() {
