@@ -9,7 +9,7 @@ const routes = [
     { path: '/team-setup', name: 'Team Setup', component: TeamSetupPage },
     { path: '/sa-simulator-multiple', name: 'Calculate Best Team', component: BestTeamPage },
     { path: '/sa-simulator-single', name: 'Simulate Single Battle', component: SingleTeamPage },
-    { path: '/pvp-simulator', name: 'PvP Simulator', component: PvpTeamPage },
+    // { path: '/pvp-simulator', name: 'PvP Simulator', component: PvpTeamPage },
     { path: '/about', name: 'About', component: About },
 ]
 
