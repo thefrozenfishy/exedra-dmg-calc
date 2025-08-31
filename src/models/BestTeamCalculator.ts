@@ -1,5 +1,5 @@
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
-import { Team } from "./ScoreAttackTeam";
+import { ScoreAttackTeam } from "./ScoreAttackTeam";
 import { KiokuRole, portraitsBestOnly, Character, KiokuConstants, KiokuElement, SupportKey } from "../types/KiokuTypes";
 import { getKioku } from "./Kioku";
 
@@ -25,7 +25,7 @@ export async function findBestTeam({
     const runsAlreadyCompleted = new Set()
     prevResults.forEach(r => runsAlreadyCompleted.add(JSON.stringify([r[2], r[8], r[10], r[12], r[14]].sort())))
 
-    const results = []
+    const perAttackerResults: Record<string, any[]> = {}
     const availableChars: Record<KiokuRole, Character[]> = {
         [KiokuRole.Attacker]: [],
         [KiokuRole.Debuffer]: [],
@@ -85,6 +85,7 @@ export async function findBestTeam({
         }, 0);
 
     for (const attacker of availableChars[KiokuRole.Attacker]) {
+        perAttackerResults[attacker.name] = []
         const availablePortraits = portraitsBestOnly(attacker.element)
         const availableSupportKeys = Array.from([highestAtkSupportKey, ...possibleAtkSupportKeys[attacker.element], ...possibleAtkSupportKeys[attacker.role]].filter(s => s?.[0] !== attacker.name).reduce((map, item) => {
             if (item && !map.has(item[0])) {
@@ -100,6 +101,7 @@ export async function findBestTeam({
                 for (const defenderCombo of combinations(availableChars[KiokuRole.Defender], dist.defenders)) {
                     for (const breakerCombo of combinations(availableChars[KiokuRole.Breaker], dist.breakers)) {
                         for (const deBufferCombo of availableSupportCombinations) {
+                            console.log(attacker, healerCombo, defenderCombo, breakerCombo, deBufferCombo)
                             completedRuns += 1;
 
                             const totalSupports = [
@@ -138,18 +140,18 @@ export async function findBestTeam({
                                     for (const supportSupport of supportSupports) {
                                         for (const attackerCrys of combinations(Object.entries(KiokuConstants.availableCrys).filter(([k, v]) => v !== KiokuConstants.availableCrys.FLAT_ATK), 3)) {
                                             try {
-                                                const team = new Team([
+                                                const team = new ScoreAttackTeam(
                                                     getKioku({
                                                         ...attacker,
                                                         portrait: attackerPortrait,
                                                         crys: attackerCrys.map(item => item[1]),
                                                         supportKey: attackerSupportKey
                                                     })!,
-                                                    ...totalSupports.map((s, i) => getKioku({ ...s, supportKey: supportSupport[i] })!)
-                                                ]);
+                                                    totalSupports.map((s, i) => getKioku({ ...s, supportKey: supportSupport[i] }))
+                                                );
 
-                                                const [dmg, critRate] = team.calculate_max_dmg(enemies, 0);
-                                                results.push([
+                                                const [dmg, critRate] = team.calculate_max_dmg(enemies, 0)
+                                                const entry = [
                                                     dmg | 0,
                                                     critRate,
                                                     attacker.name,
@@ -157,7 +159,13 @@ export async function findBestTeam({
                                                     attackerSupportKey?.[0],
                                                     ...attackerCrys.map(item => item[0]),
                                                     ...totalSupports.flatMap((s, i) => [s.name, supportSupport[i]?.[0]])
-                                                ]);
+                                                ]
+
+                                                perAttackerResults[attacker.name].push(entry)
+                                                if (completedRuns % 100 === 0) {
+                                                    perAttackerResults[attacker.name].sort((a, b) => b[0] - a[0])
+                                                    if (perAttackerResults[attacker.name].length > 100) perAttackerResults[attacker.name].length = 100
+                                                }
                                             } catch (e) {
                                                 onError?.(e)
                                             }
@@ -173,7 +181,7 @@ export async function findBestTeam({
     }
 
     // Sort configs descending by damage
-    return results.sort((a, b) => b[0] - a[0]);
+    return Object.values(perAttackerResults).flat()
 }
 
 // helper: combinations

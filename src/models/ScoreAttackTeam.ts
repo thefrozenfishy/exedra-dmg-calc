@@ -84,7 +84,7 @@ const skippable = new Set([
     "VORTEX_ATK", // TODO: Make vortex work
 ]);
 
-export class Team {
+export class ScoreAttackTeam {
     private team: Kioku[];
     private dps: Kioku;
     private all_effects: Record<string, number> = {};
@@ -121,8 +121,6 @@ export class Team {
                     let valueTotal = detail.value1
                     // For multi-value skills, value2 is the max multiplier 
                     valueTotal *= detail.value2 || 1
-
-                    console.log(detail.abilityEffectType, valueTotal)
 
                     detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
                         const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId)

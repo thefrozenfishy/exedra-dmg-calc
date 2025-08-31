@@ -178,7 +178,7 @@ const lateGetIsActiveCond = (cond: BattleCondition) =>
 export const getDescriptionOfCond = (battleConditionSetId: string): string => battleConditionSets[battleConditionSetId].description
 
 export const isStartCondRelevantForScoreAttack = (startConditionId: string, maxMagicStacks: number): boolean => {
-    if (!startConditionId) return true
+    if (!startConditionId || startConditionId === "0") return true
 
     const battleConditionSet = battleConditionSets[startConditionId]
     for (const activeCondId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
@@ -192,7 +192,7 @@ export const isStartCondRelevantForScoreAttack = (startConditionId: string, maxM
 }
 
 export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: string): boolean | Function => {
-    if (!activeConditionSetId) return true
+    if (!activeConditionSetId || activeConditionSetId === "0") return true
 
     const battleConditionSet = battleConditionSets[activeConditionSetId]
     if (hardcodedKnownNotActive.includes(activeConditionSetId)) return false

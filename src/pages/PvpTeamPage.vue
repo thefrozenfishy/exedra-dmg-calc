@@ -72,7 +72,7 @@ import { usePvPStore } from '../store/singleTeamStore'
 import CharacterSelector from '../components/CharacterSelector.vue'
 import StatInputs from '../components/StatInputs.vue'
 import { getKioku, Kioku } from '../models/Kioku'
-import { Team } from '../models/ScoreAttackTeam'
+import { ScoreAttackTeam } from '../models/ScoreAttackTeam'
 import { Battle } from '../models/PvPBattle'
 import { KiokuConstants, KiokuGeneratorArgs, portraits } from '../types/KiokuTypes'
 
@@ -96,7 +96,7 @@ const battleInstance = computed(() => {
     const support = m[b].support ? getKioku(m[b].support) : null
     return getKioku({ ...m[b].main, supportKey: support?.getKey() } as KiokuGeneratorArgs)
   }) as Kioku[])
-  return new Battle(new Team(alliedTeam), new Team(enemyTeam))
+  return new Battle(new ScoreAttackTeam(alliedTeam), new ScoreAttackTeam(enemyTeam))
 })
 onMounted(() => {
   team.load()

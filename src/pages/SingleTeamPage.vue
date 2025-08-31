@@ -82,7 +82,7 @@ import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
 import CharacterSelector from '../components/CharacterSelector.vue'
 import StatInputs from '../components/StatInputs.vue'
 import { getKioku, Kioku } from '../models/Kioku'
-import { Team } from '../models/ScoreAttackTeam'
+import { ScoreAttackTeam } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
 import { KiokuConstants, KiokuGeneratorArgs, portraits } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
@@ -114,7 +114,7 @@ const teamInstance = computed(() => {
       const support = m.support ? getKioku({ ...m.support }) : null
       return getKioku({ ...m.main, supportKey: support?.getKey() } as KiokuGeneratorArgs)
     }) as Kioku[]
-    return new Team(transformedMembers[attackerIndex], transformedMembers.filter((v, i) => i !== attackerIndex), true)
+    return new ScoreAttackTeam(transformedMembers[attackerIndex], transformedMembers.filter((v, i) => i !== attackerIndex), true)
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
     console.error(err)
