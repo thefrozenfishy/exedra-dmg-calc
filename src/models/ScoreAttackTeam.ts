@@ -284,13 +284,14 @@ export class ScoreAttackTeam {
 
         const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
         const crit_factor = 1 + (enemy.isCrit ? crit_dmg : 0);
+        const crit_average = 1 + (crit_rate * crit_dmg);
         const dmg_dealt_factor = 1 + dmg_pluss;
         const dmg_taken_factor = 1 + dmg_taken;
         const elem_resist_factor = 1 + elem_res_down;
         const effect_elem_factor = 1 + (enemy.isWeak ? 0.2 + elem_dmg_up : 0);
         const break_factor = (enemy.isBreak ? enemy.maxBreak / 100 : 1);
 
-        const total =
+        const before_crit_total =
             Number(enemy.enabled) *
             base_dmg *
             def_factor *
@@ -300,6 +301,8 @@ export class ScoreAttackTeam {
             elem_resist_factor *
             effect_elem_factor *
             break_factor;
+        const total = before_crit_total * crit_factor
+        const average_total = before_crit_total * crit_average
 
         let debugText = "";
         if (this.debug) {
@@ -382,6 +385,7 @@ Elem ResFact - ${elem_resist_factor * 100 | 0}%
 EffElem Fact - ${effect_elem_factor * 100 | 0}%
 Break Factor - ${break_factor * 100 | 0}%
 Result       - ${(total | 0).toLocaleString()}
+AverageDmg   - ${(average_total | 0).toLocaleString()}
 
 ENEMY STATS:
 enemiesAlive - ${amountOfEnemies}    
