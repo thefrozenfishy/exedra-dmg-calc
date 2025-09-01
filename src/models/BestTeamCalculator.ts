@@ -1,6 +1,6 @@
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { ScoreAttackTeam } from "./ScoreAttackTeam";
-import { KiokuRole, portraitsBestOnly, Character, KiokuConstants, KiokuElement, SupportKey } from "../types/KiokuTypes";
+import { KiokuRole, portraitsBestOnly, Character, KiokuConstants, KiokuElement, SupportKey, AvailableCrys } from "../types/KiokuTypes";
 import { getKioku } from "./Kioku";
 
 export async function findBestTeam({
@@ -137,7 +137,7 @@ export async function findBestTeam({
                                 if (teamNames.includes(attackerSupportKey[0])) continue;
                                 for (const attackerPortrait of availablePortraits) {
                                     for (const supportSupport of supportSupports) {
-                                        for (const attackerCrys of combinations(Object.entries(KiokuConstants.availableCrys).filter(([k, v]) => v !== KiokuConstants.availableCrys.FLAT_ATK), 3)) {
+                                        for (const attackerCrys of combinations(Object.entries(AvailableCrys).filter(([k, v]) => v !== AvailableCrys.FLAT_ATK), 3)) {
                                             try {
                                                 const team = new ScoreAttackTeam(
                                                     getKioku({
@@ -149,7 +149,7 @@ export async function findBestTeam({
                                                     totalSupports.map((s, i) => getKioku({ ...s, supportKey: supportSupport[i] }))
                                                 );
 
-                                                const [dmg, critRate] = team.calculate_max_dmg(enemies, 0)
+                                                const [dmg, _, critRate] = team.calculate_max_dmg(enemies, 0)
                                                 const entry = [
                                                     dmg | 0,
                                                     critRate,

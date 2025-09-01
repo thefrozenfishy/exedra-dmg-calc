@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-import { Character, KiokuConstants, correctCharacterParams } from '../types/KiokuTypes'
+import { AvailableCrys, AvailableSubCrys, Character, KiokuConstants, correctCharacterParams } from '../types/KiokuTypes'
 import { kiokuData } from '../utils/helpers'
 
 export const useCharacterStore = defineStore('characterStore', () => {
@@ -83,8 +83,8 @@ export const useCharacterStore = defineStore('characterStore', () => {
                 magicLvl: KiokuConstants.maxMagicLvl,
                 heartphialLvl: KiokuConstants.maxHeartphialLvl,
                 specialLvl: KiokuConstants.maxSpecialLvl,
-                crys: [KiokuConstants.availableCrys.EX],
-
+                crys: [AvailableCrys.EX],
+                crys_sub: Array(3).fill([AvailableCrys.CRIT_DMG, AvailableSubCrys.FLAT_ATK, AvailableSubCrys.CRIT_RATE]).flat()
             })
         }
     });

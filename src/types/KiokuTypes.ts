@@ -111,6 +111,7 @@ export interface Character {
     heartphialLvl: number
     specialLvl: number
     crys: AvailableCrys[]
+    crys_sub: AvailableSubCrys[]
 }
 
 export interface KiokuData {
@@ -151,6 +152,7 @@ export interface KiokuData {
 export enum AvailableCrys {
     ATK_25_PERCENT = "ATK%-25",
     CRIT_DMG = "CD-20",
+    CRIT_RATE = "CR-12",
     DMG_TO_WEAK_ELEMENT = "Elem-24",
     ELEMENTAL_DMG = "Dmg-20",
     FLAT_ATK = "ATK-125",
@@ -159,6 +161,7 @@ export enum AvailableCrys {
 
 export enum AvailableSubCrys {
     CRIT_DMG = "CD-10",
+    CRIT_RATE = "CR-5",
     FLAT_ATK = "ATK-60"
 };
 
@@ -173,8 +176,6 @@ const heartphialAtkRewardLvls = {
 }
 
 export const KiokuConstants = {
-    availableCrys: AvailableCrys,
-    availableSubCrys: AvailableSubCrys,
     maxKiokuLvl: 120,
     maxMagicLvl: 130,
     maxAscension: 5,
@@ -191,6 +192,7 @@ export interface KiokuGeneratorArgs {
     portrait?: string;
     supportKey?: any[];
     crys?: AvailableCrys[];
+    crys_sub?: AvailableSubCrys[]
     ascension?: number;
     specialLvl?: number;
 }

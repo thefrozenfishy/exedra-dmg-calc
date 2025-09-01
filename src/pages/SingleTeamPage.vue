@@ -39,7 +39,19 @@
               <select v-for="i in 3" :key="i" :value="slot.main.crys?.[i - 1] ?? ''"
                 @change="e => onChangeCrys(i, e?.target?.value)">
                 <option value="">None</option>
-                <option v-for="k in cryKeys" :key="k" :value="KiokuConstants.availableCrys[k]">
+                <option v-for="k in AvailableCrys" :key="k" :value="AvailableCrys[k]">
+                  {{ k }}
+                </option>
+              </select>
+            </div>
+          </label>
+          <label>
+            SubCrystalis:
+            <div>
+              <select v-for="i in 9" :key="i" :value="slot.main.crys_sub?.[i - 1] ?? ''"
+                @change="e => onChangeSubCrys(i, e?.target?.value)">
+                <option value="">None</option>
+                <option v-for="k in AvailableSubCrys" :key="k" :value="AvailableSubCrys[k]">
                   {{ k }}
                 </option>
               </select>
@@ -84,23 +96,29 @@ import StatInputs from '../components/StatInputs.vue'
 import { getKioku, Kioku } from '../models/Kioku'
 import { ScoreAttackTeam } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
-import { KiokuConstants, KiokuGeneratorArgs, portraits } from '../types/KiokuTypes'
+import { KiokuGeneratorArgs, portraits, AvailableCrys, AvailableSubCrys } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
 
 const attackerIndex = 2
 
-const cryKeys = Object.keys(KiokuConstants.availableCrys)
-
 function onChangeCrys(idx: number, rawValue: string) {
   const main = team.slots[attackerIndex].main
   if (!main) return
-  const current = main.crys ?? ["", "", ""]
+  const current = main.crys ?? [AvailableCrys.EX, "", ""]
   current[idx - 1] = rawValue as string
   team.setMain(attackerIndex, { ...main, crys: current } as any)
 }
+function onChangeSubCrys(idx: number, rawValue: string) {
+  const main = team.slots[attackerIndex].main
+  if (!main) return
+  console.log(main.crys_sub)
+  const current = main.crys_sub ?? Array(9).fill([""]).flat()
+  current[idx - 1] = rawValue as string
+  team.setMain(attackerIndex, { ...main, crys_sub: current } as any)
+}
 
-const formatDmg = (out: string | (number | string)[][]) => typeof (out) !== 'string' ? `Max Damage: ${out[0].toLocaleString()} with a ${out[1]}% crit rate` : battleOutput
-const formatDebug = (out: string | (number | string)[][], idx: number) => Array.isArray(out) ? out[2][idx] : battleOutput
+const formatDmg = (out: string | (number | string)[][]) => typeof (out) !== 'string' ? `Max Damage: ${out[0].toLocaleString()} with a ${out[2]}% crit rate - (Average Damage: ${out[1].toLocaleString()}) ` : battleOutput
+const formatDebug = (out: string | (number | string)[][], idx: number) => Array.isArray(out) ? out[3][idx] : battleOutput
 
 
 const team = useTeamStore()

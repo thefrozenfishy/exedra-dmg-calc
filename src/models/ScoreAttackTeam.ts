@@ -177,21 +177,22 @@ export class ScoreAttackTeam {
     calculate_max_dmg(
         enemies: Enemy[],
         atk_down = 0,
-    ): [number, number, string[]] {
-        let dmg;
+    ): [number, number, number, string[]] {
+        let dmg, avg_dmg, enemyDied;
         let total_dmg = 0;
+        let average_dmg = 0;
         let critRate = 0;
         let debugText = ""
-        let enemyDied: boolean
         let amountOfEnemies = enemies.filter(e => e.enabled).length
         const debugTexts = ["", "", "", "", ""];
         for (const i of [EnemyTargetTypes.TARGET, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.L_OTHER, EnemyTargetTypes.R_OTHER]) {
-            [dmg, critRate, debugText, enemyDied] = this.calculate_single_dmg(i, this.memberForLog(i), enemies[i], amountOfEnemies, atk_down)
-            total_dmg += dmg
+            [dmg, avg_dmg, critRate, debugText, enemyDied] = this.calculate_single_dmg(i, this.memberForLog(i), enemies[i], amountOfEnemies, atk_down)
+            total_dmg += dmg | 0
+            average_dmg += avg_dmg | 0
             if (enemies[i].enabled && enemyDied) amountOfEnemies -= 1
             debugTexts[i] = debugText
         }
-        return [total_dmg, Math.round(critRate * 100), debugTexts]
+        return [total_dmg, average_dmg, Math.round(critRate * 100), debugTexts]
     }
 
     getEffect(eff: string, amountOfEnemies: number, maxBreak: number): number {
@@ -244,7 +245,7 @@ export class ScoreAttackTeam {
         enemy: Enemy,
         amountOfEnemies: number,
         atk_down: number,
-    ): [number, number, string, boolean] {
+    ): [number, number, number, string, boolean] {
         const [special, enemyDied] = this.get_special_dmg(targetTypeAtPosition[idx], amountOfEnemies, enemy.maxBreak, enemy.hitsToKill);
         const atk_pluss =
             (this.getEffect("UP_ATK_RATIO", amountOfEnemies, enemy.maxBreak) +
@@ -405,6 +406,6 @@ KIOKU EFFECTS:
 ${effects.join("\n")}`;
         }
 
-        return [total | 0, crit_rate, debugText, enemyDied];
+        return [total | 0, average_total, crit_rate, debugText, enemyDied];
     }
 }

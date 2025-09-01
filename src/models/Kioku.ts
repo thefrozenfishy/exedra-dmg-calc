@@ -112,6 +112,7 @@ export class Kioku {
         heartphialLvl,
         specialLvl,
         crys,
+        crys_sub
     }: KiokuArgs) {
         this.name = name;
         if (portrait) {
@@ -124,6 +125,7 @@ export class Kioku {
         this.heartphialLvl = heartphialLvl;
         this.specialLvl = specialLvl;
         this.crys = crys;
+        this.crys_sub = crys_sub
         this.data = kiokuData[name];
         this.element = this.data.element
         this.role = this.data.role
@@ -131,8 +133,6 @@ export class Kioku {
         this.maxMagicStacks = this.data.maxMagicStacks ?? 0
         this.critDamage = this.data.minCritDmg * 10
         this.critRate = this.data.minCritRate * 10
-
-        this.crys_sub = Array(3).fill([KiokuConstants.availableSubCrys.CRIT_DMG, KiokuConstants.availableSubCrys.FLAT_ATK]).flat()
 
         this.support = supportKey ? Kioku.fromKey(supportKey) : undefined;
 
@@ -190,26 +190,31 @@ export class Kioku {
     setupEffects(): void {
         let abilityEffectType;
         for (const cry of [...this.crys, ...this.crys_sub]) {
-            if (cry === KiokuConstants.availableCrys.EX) continue;
+            if (cry === AvailableCrys.EX) continue;
             const eff = parseInt(cry.split("-")[1]);
             switch (cry) {
                 // TODO: ADD SPD, MP+, AA on break, spd on break, others???
                 // TODO: Allow input sub crys of these crys
-                case KiokuConstants.availableCrys.FLAT_ATK:
-                case KiokuConstants.availableSubCrys.FLAT_ATK:
+                // TODO: Just read this from mst
+                case AvailableCrys.FLAT_ATK:
+                case AvailableSubCrys.FLAT_ATK:
                     abilityEffectType = "FLAT_ATK"
                     break;
-                case KiokuConstants.availableCrys.ATK_25_PERCENT:
+                case AvailableCrys.ATK_25_PERCENT:
                     abilityEffectType = "UP_ATK_RATIO"
                     break;
-                case KiokuConstants.availableCrys.CRIT_DMG:
-                case KiokuConstants.availableSubCrys.CRIT_DMG:
+                case AvailableCrys.CRIT_DMG:
+                case AvailableSubCrys.CRIT_DMG:
                     abilityEffectType = "UP_CTD_FIXED"
                     break;
-                case KiokuConstants.availableCrys.DMG_TO_WEAK_ELEMENT:
+                case AvailableCrys.CRIT_RATE:
+                case AvailableSubCrys.CRIT_RATE:
+                    abilityEffectType = "UP_CTR_FIXED"
+                    break;
+                case AvailableCrys.DMG_TO_WEAK_ELEMENT:
                     abilityEffectType = "UP_WEAK_ELEMENT_DMG_RATIO"
                     break;
-                case KiokuConstants.availableCrys.ELEMENTAL_DMG:
+                case AvailableCrys.ELEMENTAL_DMG:
                     abilityEffectType = "UP_GIV_DMG_RATIO"
                     break;
                 default:
@@ -291,7 +296,7 @@ export class Kioku {
         for (const [is_passive, skill_label, lvl] of skillTuples) {
             const isCrys = skill_label === "crystalis_id"
             const skill_id = (this.data as any)[skill_label]
-            if (isCrys && !this.crys.includes(KiokuConstants.availableCrys.EX)) continue;
+            if (isCrys && !this.crys.includes(AvailableCrys.EX)) continue;
             const details = find_all_details(
                 is_passive,
                 skill_id,
@@ -342,6 +347,7 @@ export class Kioku {
             this.heartphialLvl,
             this.specialLvl,
             this.crys,
+            this.crys_sub,
         ];
     }
 
@@ -356,6 +362,7 @@ export class Kioku {
             heartphialLvl: key[6],
             specialLvl: key[7],
             crys: key[8],
+            crys_sub: key[9],
         });
     }
 }
@@ -368,6 +375,7 @@ interface KiokuArgs {
     portrait: string | undefined;
     supportKey: any[] | undefined;
     crys: AvailableCrys[];
+    crys_sub: AvailableSubCrys[]
     ascension: number;
     specialLvl: number;
 }
@@ -383,9 +391,12 @@ export function getKioku({
     magicLvl = KiokuConstants.maxMagicLvl,
     heartphialLvl = KiokuConstants.maxHeartphialLvl,
     specialLvl = KiokuConstants.maxSpecialLvl,
-    crys = [KiokuConstants.availableCrys.EX],
+    crys = [AvailableCrys.EX],
+    crys_sub = Array(3).fill([AvailableCrys.CRIT_DMG, AvailableSubCrys.FLAT_ATK, AvailableSubCrys.CRIT_RATE]).flat()
 }: KiokuGeneratorArgs) {
     const clearCrys = crys.filter(Boolean)
+    const clearSubCrys = crys_sub.filter(Boolean)
+    console.log("cleaer", clearSubCrys)
     const key = JSON.stringify([
         name,
         supportKey,
@@ -396,6 +407,7 @@ export function getKioku({
         heartphialLvl,
         specialLvl,
         clearCrys,
+        clearSubCrys,
     ]);
 
     if (!cache.has(key)) {
@@ -409,6 +421,7 @@ export function getKioku({
             heartphialLvl,
             specialLvl,
             crys: clearCrys,
+            crys_sub: clearSubCrys
         }));
     }
 
