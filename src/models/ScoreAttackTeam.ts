@@ -324,7 +324,7 @@ export class ScoreAttackTeam {
                         val = val?.getBaseAtk()
                         key = "SupportAtk"
                     }
-                    if (key.endsWith("Atk")) {
+                    if (key.endsWith("Atk") || key.endsWith("Def") || key.endsWith("Hp")) {
                         val |= 0
                     } else if (["name", "role", "element", "portrait", "crys_sub", "crys", "data", "support", "supportKey", "knownConditions", "effects"].includes(key)) {
                         return;
