@@ -1,14 +1,22 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-import { AvailableCrys, AvailableSubCrys, Character, KiokuConstants, correctCharacterParams } from '../types/KiokuTypes'
-import { kiokuData } from '../utils/helpers'
+import { Character, KiokuConstants, correctCharacterParams } from '../types/KiokuTypes'
+import { crystalises, kiokuData } from '../utils/helpers'
 
 export const useCharacterStore = defineStore('characterStore', () => {
     const characters = ref<Character[]>([])
 
     // Load from localStorage if exists
     const saved = localStorage.getItem('characters')
-    if (saved) { characters.value = JSON.parse(saved) }
+    if (saved) {
+        const oldChars: Character[] = JSON.parse(saved)
+        characters.value = oldChars.map(c => {
+            c.crys = c.crys.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc))
+            c.crys_sub = c.crys_sub.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc))
+            return c
+        })
+
+    }
 
     // Watch and save to localStorage
     watch(
@@ -83,8 +91,8 @@ export const useCharacterStore = defineStore('characterStore', () => {
                 magicLvl: KiokuConstants.maxMagicLvl,
                 heartphialLvl: KiokuConstants.maxHeartphialLvl,
                 specialLvl: KiokuConstants.maxSpecialLvl,
-                crys: [AvailableCrys.EX],
-                crys_sub: Array(3).fill([AvailableCrys.CRIT_DMG, AvailableSubCrys.FLAT_ATK, AvailableSubCrys.CRIT_RATE]).flat()
+                crys: ["EX"],
+                crys_sub: Array(3).fill(["Increases critical rate by 5%.", "Increases critical DMG by 10%.", "Increases ATK by 60."]).flat()
             })
         }
     });

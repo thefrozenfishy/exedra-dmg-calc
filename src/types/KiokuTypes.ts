@@ -1,3 +1,5 @@
+import { crystalises, portraits } from "../utils/helpers";
+
 export enum KiokuElement {
     Flame = "Flame",
     Aqua = "Aqua",
@@ -27,7 +29,23 @@ export const elementMap: Record<string, KiokuElement> = {
     6: KiokuElement.Void,
 };
 
-export const portraits = (elem: KiokuElement) => ["A Dream of a Little Mermaid", "The Savior's Apostle", dmgUpPortraits[elem]]
+export const getPortraits = (elem: KiokuElement): string[] => [
+    { name: "" },
+    ...Object.values(portraits)]
+    .sort((a, b) => {
+        if (a.name === "A Dream of a Little Mermaid") return -1
+        if (b.name === "A Dream of a Little Mermaid") return 1
+        if (a.name === "The Savior's Apostle") return -1
+        if (b.name === "The Savior's Apostle") return 1
+        if (a.name === dmgUpPortraits[elem]) return -1
+        if (b.name === dmgUpPortraits[elem]) return 1
+        if (a.name === "") return -1
+        if (b.name === "") return 1
+
+        return a.name.localeCompare(b.name)
+    })
+    .map(p => p.name)
+
 export const portraitsBestOnly = (elem: KiokuElement) => ["A Dream of a Little Mermaid", "The Savior's Apostle"]
 
 const dmgUpPortraits = {
@@ -42,6 +60,9 @@ const dmgUpPortraits = {
 export interface PortraitData {
     cardMstId: number;
     passiveSkill1: number;
+    element: number;
+    rarity: number;
+    name: string;
 }
 
 export interface PortraitLvlData {
@@ -110,8 +131,8 @@ export interface Character {
     magicLvl: number
     heartphialLvl: number
     specialLvl: number
-    crys: AvailableCrys[]
-    crys_sub: AvailableSubCrys[]
+    crys: string[]
+    crys_sub: string[]
 }
 
 export interface KiokuData {
@@ -149,21 +170,74 @@ export interface KiokuData {
     ascension_5_effect_2_id?: number
 }
 
-export enum AvailableCrys {
-    ATK_25_PERCENT = "ATK%-25",
-    CRIT_DMG = "CD-20",
-    CRIT_RATE = "CR-12",
-    DMG_TO_WEAK_ELEMENT = "Elem-24",
-    ELEMENTAL_DMG = "Dmg-20",
-    FLAT_ATK = "ATK-125",
-    EX = "EX"
-};
+export interface CrystalisData {
+    name: string
+    rarity: number
+    value1: number
+    styleMstId: number
+    selectionAbilityType: number
+}
 
-export enum AvailableSubCrys {
-    CRIT_DMG = "CD-10",
-    CRIT_RATE = "CR-5",
-    FLAT_ATK = "ATK-60"
-};
+export const getCrystalises = (elem: KiokuElement) => [
+    { name: "EX", "styleMstId": 0, selectionAbilityType: 1 },
+    { name: "", "styleMstId": 0, selectionAbilityType: 1 },
+    ...Object.values(crystalises)
+].filter(c => c.styleMstId === 0)
+    .filter(c => c.selectionAbilityType === 1)
+    .sort((a, b) => {
+        if (a.name === "EX") return -1
+        if (b.name === "EX") return 1
+        if (a.name === "Dominant Blow++") return -1
+        if (b.name === "Dominant Blow++") return 1
+        if (a.name === "Mighty Hit++") return -1
+        if (b.name === "Mighty Hit++") return 1
+        if (a.name === "Towering Offense++") return -1
+        if (b.name === "Towering Offense++") return 1
+        if (a.name === elementalCrystalises[elem]) return -1
+        if (b.name === elementalCrystalises[elem]) return 1
+        if (a.name === "") return -1
+        if (b.name === "") return 1
+
+        return a.name.localeCompare(b.name)
+    })
+    .map(c => c.name)
+
+
+export const getBestCrystalises = (elem: KiokuElement) => [
+    "EX",
+    "Dominant Blow++",
+    "Mighty Hit++",
+    "Towering Offense++",
+    elementalCrystalises[elem]
+
+]
+const elementalCrystalises = {
+    [KiokuElement.Flame]: "Inferno++",
+    [KiokuElement.Aqua]: "Torrent++",
+    [KiokuElement.Forest]: "Verdure++",
+    [KiokuElement.Light]: "Radiance++",
+    [KiokuElement.Dark]: "Chaos++",
+    [KiokuElement.Void]: "Nullity++",
+}
+
+export const getSubCrystalises = () => [
+    { name: "", selectionAbilityType: 2 },
+    ...Object.values(crystalises)]
+    .filter(c => c.selectionAbilityType === 2)
+    .sort((a, b) => {
+        if (a.name === "Increases ATK by 60.") return -1
+        if (b.name === "Increases ATK by 60.") return 1
+        if (a.name === "Increases critical DMG by 10%.") return -1
+        if (b.name === "Increases critical DMG by 10%.") return 1
+        if (a.name === "Increases critical rate by 5%.") return -1
+        if (b.name === "Increases critical rate by 5%.") return 1
+        if (a.name === "") return -1
+        if (b.name === "") return 1
+
+        return a.name.localeCompare(b.name, undefined, { numeric: true })
+    })
+    .map(c => c.name)
+
 
 const heartphialAtkRewardLvls = {
     45: 20,
@@ -191,8 +265,8 @@ export interface KiokuGeneratorArgs {
     heartphialLvl?: number;
     portrait?: string;
     supportKey?: any[];
-    crys?: AvailableCrys[];
-    crys_sub?: AvailableSubCrys[]
+    crys?: string[];
+    crys_sub?: string[]
     ascension?: number;
     specialLvl?: number;
 }

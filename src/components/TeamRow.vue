@@ -36,7 +36,11 @@
                 <div class="crit">Crit rate: {{ team.crit_rate[idx] }}%</div>
                 <div class="crys">
                     {{ team.attacker_crys1[idx] }}
+                </div>
+                <div class="crys">
                     {{ team.attacker_crys2[idx] }}
+                </div>
+                <div class="crys">
                     {{ team.attacker_crys3[idx] }}
                 </div>
             </div>
@@ -63,6 +67,7 @@ defineProps<{ team: FinalTeam, loading: boolean }>()
     display: inherit;
     position: absolute;
 }
+
 .supp-image img,
 .portrait-image img {
     width: 30px;

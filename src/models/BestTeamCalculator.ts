@@ -1,6 +1,6 @@
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { ScoreAttackTeam } from "./ScoreAttackTeam";
-import { KiokuRole, portraitsBestOnly, Character, KiokuConstants, KiokuElement, SupportKey, AvailableCrys } from "../types/KiokuTypes";
+import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises } from "../types/KiokuTypes";
 import { getKioku } from "./Kioku";
 
 export async function findBestTeam({
@@ -137,13 +137,13 @@ export async function findBestTeam({
                                 if (teamNames.includes(attackerSupportKey[0])) continue;
                                 for (const attackerPortrait of availablePortraits) {
                                     for (const supportSupport of supportSupports) {
-                                        for (const attackerCrys of combinations(Object.entries(AvailableCrys).filter(([k, v]) => v !== AvailableCrys.FLAT_ATK), 3)) {
+                                        for (const attackerCrys of combinations(getBestCrystalises(attacker.element), 3)) {
                                             try {
                                                 const team = new ScoreAttackTeam(
                                                     getKioku({
                                                         ...attacker,
                                                         portrait: attackerPortrait,
-                                                        crys: attackerCrys.map(item => item[1]),
+                                                        crys: attackerCrys,
                                                         supportKey: attackerSupportKey
                                                     })!,
                                                     totalSupports.map((s, i) => getKioku({ ...s, supportKey: supportSupport[i] }))
@@ -156,7 +156,7 @@ export async function findBestTeam({
                                                     attacker.name,
                                                     attackerPortrait,
                                                     attackerSupportKey?.[0],
-                                                    ...attackerCrys.map(item => item[0]),
+                                                    ...attackerCrys,
                                                     ...totalSupports.flatMap((s, i) => [s.name, supportSupport[i]?.[0]])
                                                 ]
 

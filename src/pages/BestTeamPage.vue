@@ -100,7 +100,7 @@
                 <!-- Input + dropdown -->
                 <div class="kioku-select">
                     <input type="text" v-model="ignoredKiokuQuery"
-                        placeholder="Kioku that must be included in final team..."
+                        placeholder="Kioku that will be ignored during calculations..."
                         @focus="showIgnoredKiokuDropdown = true" @blur="hideIgnoredKiokuDropdown" />
                     <ul v-if="showIgnoredKiokuDropdown && filteredKioku.length" class="dropdown">
                         <li v-for="char in filteredKioku" :key="char.id" @mousedown.prevent="addIgnoredKioku(char)">

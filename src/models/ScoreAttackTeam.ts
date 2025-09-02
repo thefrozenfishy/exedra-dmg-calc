@@ -6,6 +6,7 @@ import { elementMap, KiokuElement, SkillDetail } from "../types/KiokuTypes";
 const targetTypeAtPosition = [EnemyTargetTypes.L_OTHER, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.R_OTHER]
 
 const knownBoosts = {
+    UP_ATK_FIXED: "FlatAtk",
     UP_ATK_RATIO: "Atk%1",
     UP_ATK_ACCUM_RATIO: "Atk%2",
     DWN_DEF_RATIO: "Def%1",
@@ -61,6 +62,8 @@ const skippable = new Set([
     "SLOW",
     "STUN",
     "SWITCH_SKILL",
+    "TSUBAME_CORE", //  Make Ui work
+    "TSUBAME_LINK", // TODO: Make Ui work
     "UNIQUE_10030301",
     "UP_ABNORMAL_HIT_RATE_RATIO",
     "UP_BREAK_DAMAGE_RECEIVE_RATIO",
@@ -69,16 +72,19 @@ const skippable = new Set([
     "UP_BUFF_EFFECT_VALUE",
     "UP_DEBUFF_EFFECT_VALUE",
     "UP_DEF_ACCUM_RATIO",
+    "UP_DEF_FIXED",
     "UP_DEF_RATIO",
+    "UP_EFFECT_HIT_RATE_RATIO",
+    "UP_EFFECT_PARRY_RATE_RATIO",
     "UP_EP_RECOVER_RATE_RATIO",
     "UP_GIV_BREAK_POINT_DMG_FIXED",
+    "UP_GIV_SLIP_DMG_RATIO",
     "UP_GIV_VORTEX_DMG_RATIO",
     "UP_HEAL_RATE_RATIO",
+    "UP_HP_FIXED",
     "UP_HP_RATIO",
     "UP_RCV_BREAK_POINT_DMG_RATIO",
     "UP_SPD_ACCUM_RATIO",
-    "TSUBAME_LINK", // TODO: Make Ui work
-    "TSUBAME_CORE", //  Make Ui work
     "UP_SPD_FIXED",
     "UP_SPD_RATIO",
     "VORTEX_ATK", // TODO: Make vortex work
@@ -251,7 +257,7 @@ export class ScoreAttackTeam {
             (this.getEffect("UP_ATK_RATIO", amountOfEnemies, enemy.maxBreak) +
                 (this.getEffect("UP_ATK_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak))) /
             1000;
-        const flat_atk = this.getEffect("FLAT_ATK", amountOfEnemies, enemy.maxBreak) / 10
+        const flat_atk = this.getEffect("UP_ATK_FIXED", amountOfEnemies, enemy.maxBreak)
         const atk_total = this.dps.getBaseAtk() * (1 + atk_pluss) * (1 - atk_down) + flat_atk
 
         let def_remaining = (

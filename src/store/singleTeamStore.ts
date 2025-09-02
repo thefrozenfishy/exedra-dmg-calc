@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { Enemy } from '../types/EnemyTypes'
 import { TeamSlot } from '../types/BestTeamTypes'
 import { Character, correctCharacterParams } from '../types/KiokuTypes'
+import { crystalises } from '../utils/helpers'
 
 export const usePvPStore = defineStore('pvp', {
   state: () => ({
@@ -49,7 +50,22 @@ export const useTeamStore = defineStore('team', {
     load() {
       const saved = localStorage.getItem('lastTeam')
       if (saved) {
-        this.slots = JSON.parse(saved)
+        const oldChars: TeamSlot[] = JSON.parse(saved)
+        this.slots = oldChars.map(c => {
+          if (c?.main?.crys) {
+            c.main.crys = c.main.crys.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc))
+          }
+          if (c?.support?.crys) {
+            c.support.crys = c.support.crys.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc))
+          }
+          if (c?.main?.crys) {
+            c.main.crys_sub = c.main.crys_sub.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc))
+          }
+          if (c?.support?.crys) {
+            c.support.crys_sub = c.support.crys_sub.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc))
+          }
+          return c
+        })
       }
     }
   }

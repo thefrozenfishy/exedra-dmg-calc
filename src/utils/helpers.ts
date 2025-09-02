@@ -1,13 +1,14 @@
+import selectionAbilityJson from '../assets/base_data/getSelectionAbilityMstList.json';
 import portraitsJson from '../assets/base_data/getCardMstList.json';
 import portraitLevelsJson from '../assets/base_data/getCardLimitBreakMstList.json';
 import passiveDetailsJson from '../assets/base_data/getPassiveSkillDetailMstList.json';
 import skillDetailsJson from '../assets/base_data/getSkillDetailMstList.json';
 import kiokuDataJson from '../assets/base_data/kioku_data.json';
 import magicLevelsJson from '../assets/base_data/magic_levels.json';
-import { PortraitData, SkillDetail, KiokuData, MagicLevel, PortraitLvlData } from '../types/KiokuTypes';
+import { PortraitData, CrystalisData, SkillDetail, KiokuData, MagicLevel, PortraitLvlData } from '../types/KiokuTypes';
 
 export const portraits = Object.fromEntries(
-    portraitsJson.map((item: any) => [item.name, item])
+    portraitsJson.filter(item => item.rarity === 5).map((item: any) => [item.name, item])
 ) as Record<string, PortraitData>;
 
 export const portraitLevels = Object.fromEntries(
@@ -21,6 +22,10 @@ export const passiveDetails = Object.fromEntries(
 export const skillDetails = Object.fromEntries(
     skillDetailsJson.map((item: any) => [item.skillDetailMstId, item])
 ) as Record<string, SkillDetail>;
+
+export const crystalises = Object.fromEntries(
+    selectionAbilityJson.map((item: any) => [item.name, item])
+) as Record<string, CrystalisData>;
 
 export const kiokuData = kiokuDataJson as unknown as Record<string, KiokuData>;
 

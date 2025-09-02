@@ -24,11 +24,11 @@
         <!-- Portrait -->
         <div v-if="index === attackerIndex && slot.main" class="stats">
           <label>
-            Portrait: {{ slot.main.element }}
+            Portrait:
             <select :value="slot.main.portrait || ''"
               @change="e => team.setMain(index, { ...slot.main, portrait: e?.target?.value })">
               <option disabled value="">Select a portrait</option>
-              <option v-for="portrait in portraits(slot.main.element)" :value="portrait" :key="portrait">
+              <option v-for="portrait in getPortraits(slot.main.element)" :value="portrait" :key="portrait">
                 {{ portrait }}
               </option>
             </select>
@@ -38,8 +38,8 @@
             <div>
               <select v-for="i in 3" :key="i" :value="slot.main.crys?.[i - 1] ?? ''"
                 @change="e => onChangeCrys(i, e?.target?.value)">
-                <option value="">None</option>
-                <option v-for="k in AvailableCrys" :key="k" :value="AvailableCrys[k]">
+              <option disabled value="">Select a crystalis</option>
+                <option v-for="k in getCrystalises(slot.main.element)" :key="k" :value="k">
                   {{ k }}
                 </option>
               </select>
@@ -50,8 +50,8 @@
             <div>
               <select v-for="i in 9" :key="i" :value="slot.main.crys_sub?.[i - 1] ?? ''"
                 @change="e => onChangeSubCrys(i, e?.target?.value)">
-                <option value="">None</option>
-                <option v-for="k in AvailableSubCrys" :key="k" :value="AvailableSubCrys[k]">
+              <option disabled value="">Select a substat</option>
+                <option v-for="k in getSubCrystalises()" :key="k" :value="k">
                   {{ k }}
                 </option>
               </select>
@@ -96,7 +96,7 @@ import StatInputs from '../components/StatInputs.vue'
 import { getKioku, Kioku } from '../models/Kioku'
 import { ScoreAttackTeam } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
-import { KiokuGeneratorArgs, portraits, AvailableCrys, AvailableSubCrys } from '../types/KiokuTypes'
+import { KiokuGeneratorArgs, getCrystalises, getPortraits, getSubCrystalises } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
 
 const attackerIndex = 2
@@ -104,7 +104,7 @@ const attackerIndex = 2
 function onChangeCrys(idx: number, rawValue: string) {
   const main = team.slots[attackerIndex].main
   if (!main) return
-  const current = main.crys ?? [AvailableCrys.EX, "", ""]
+  const current = main.crys ?? ["EX", "", ""]
   current[idx - 1] = rawValue as string
   team.setMain(attackerIndex, { ...main, crys: current } as any)
 }
@@ -187,5 +187,9 @@ const battleOutput = computed(() => {
   width: 90%;
   display: block;
   margin-left: 0.3rem;
+}
+
+.stats select {
+  width: 90%;
 }
 </style>

@@ -1,5 +1,5 @@
-import { KiokuConstants, KiokuData, KiokuGeneratorArgs, KiokuElement, MagicLevel, SkillDetail, AvailableCrys, AvailableSubCrys, SupportKey, KiokuRole, PortraitData, PortraitLvlData } from '../types/KiokuTypes';
-import { magicData, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData } from '../utils/helpers';
+import { KiokuConstants, KiokuData, KiokuGeneratorArgs, KiokuElement, MagicLevel, SkillDetail, SupportKey, KiokuRole, PortraitData, PortraitLvlData } from '../types/KiokuTypes';
+import { magicData, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData, crystalises } from '../utils/helpers';
 
 function getIdx(obj: SkillDetail): number {
     return "passiveSkillMstId" in obj ? obj.passiveSkillMstId : obj.skillMstId;
@@ -32,6 +32,12 @@ function find_all_details(
             const valKey = `value${i}`;
             if (valKey in skill) {
                 const subId = Math.floor((skill as any)[valKey] / 100);
+                if (Object.keys(find_all_details(false, subId)).length) {
+                    console.log("Found subskill on false", find_all_details(false, subId))
+                }
+                if (Object.keys(find_all_details(true, subId)).length) {
+                    console.log("Found subskill on true", find_all_details(true, subId))
+                }
                 sub_skills = {
                     ...sub_skills,
                     ...find_all_details(false, subId),
@@ -62,8 +68,8 @@ export class Kioku {
     critRate: number
     critDamage: number;
     private specialLvl: number;
-    private crys: AvailableCrys[];
-    private crys_sub: AvailableSubCrys[];
+    private crys: string[];
+    private crys_sub: string[];
     data: KiokuData;
     effects: Record<number, SkillDetail[]> = {};
     private kiokuAtk: number;
@@ -124,7 +130,7 @@ export class Kioku {
         this.magicLvl = magicLvl;
         this.heartphialLvl = heartphialLvl;
         this.specialLvl = specialLvl;
-        this.crys = crys;
+        this.crys = crys
         this.crys_sub = crys_sub
         this.data = kiokuData[name];
         this.element = this.data.element
@@ -188,58 +194,11 @@ export class Kioku {
     }
 
     setupEffects(): void {
-        let abilityEffectType;
-        for (const cry of [...this.crys, ...this.crys_sub]) {
-            if (cry === AvailableCrys.EX) continue;
-            const eff = parseInt(cry.split("-")[1]);
-            switch (cry) {
-                // TODO: ADD SPD, MP+, AA on break, spd on break, others???
-                // TODO: Allow input sub crys of these crys
-                // TODO: Just read this from mst
-                case AvailableCrys.FLAT_ATK:
-                case AvailableSubCrys.FLAT_ATK:
-                    abilityEffectType = "FLAT_ATK"
-                    break;
-                case AvailableCrys.ATK_25_PERCENT:
-                    abilityEffectType = "UP_ATK_RATIO"
-                    break;
-                case AvailableCrys.CRIT_DMG:
-                case AvailableSubCrys.CRIT_DMG:
-                    abilityEffectType = "UP_CTD_FIXED"
-                    break;
-                case AvailableCrys.CRIT_RATE:
-                case AvailableSubCrys.CRIT_RATE:
-                    abilityEffectType = "UP_CTR_FIXED"
-                    break;
-                case AvailableCrys.DMG_TO_WEAK_ELEMENT:
-                    abilityEffectType = "UP_WEAK_ELEMENT_DMG_RATIO"
-                    break;
-                case AvailableCrys.ELEMENTAL_DMG:
-                    abilityEffectType = "UP_GIV_DMG_RATIO"
-                    break;
-                default:
-                    abilityEffectType = ""
-                    console.warn("Uknown crys", cry)
-            }
-            this.add_to_effects(0, [{
-                abilityEffectType,
-                activeConditionSetIdCsv: "",
-                description: "",
-                descriptionType: 0,
-                element: 0,
-                passiveSkillDetailMstId: 0,
-                passiveSkillMstId: 0,
-                range: -1,
-                remainCount: 0,
-                role: 0,
-                startConditionSetIdCsv: "",
-                startTimingIdCsv: "",
-                turn: 0,
-                value1: 10 * eff,
-                value2: 0,
-                value3: 0,
-            }]);
-        }
+        this.add_to_effects(0,
+            [...this.crys, ...this.crys_sub]
+                .filter(c => c !== "EX")
+                .flatMap(c => Object.values(find_all_details(true, crystalises[c].value1, true))))
+
         // First add buff mult then later add the effects themselves
         // Ascension buffs
         for (let i = 1; i <= this.ascension; i++) {
@@ -296,7 +255,7 @@ export class Kioku {
         for (const [is_passive, skill_label, lvl] of skillTuples) {
             const isCrys = skill_label === "crystalis_id"
             const skill_id = (this.data as any)[skill_label]
-            if (isCrys && !this.crys.includes(AvailableCrys.EX)) continue;
+            if (isCrys && !this.crys.includes("EX")) continue;
             const details = find_all_details(
                 is_passive,
                 skill_id,
@@ -372,10 +331,10 @@ interface KiokuArgs {
     kiokuLvl: number;
     magicLvl: number;
     heartphialLvl: number;
-    portrait: string | undefined;
-    supportKey: any[] | undefined;
-    crys: AvailableCrys[];
-    crys_sub: AvailableSubCrys[]
+    portrait?: string;
+    supportKey?: any[];
+    crys: string[];
+    crys_sub: string[]
     ascension: number;
     specialLvl: number;
 }
@@ -391,12 +350,11 @@ export function getKioku({
     magicLvl = KiokuConstants.maxMagicLvl,
     heartphialLvl = KiokuConstants.maxHeartphialLvl,
     specialLvl = KiokuConstants.maxSpecialLvl,
-    crys = [AvailableCrys.EX],
-    crys_sub = Array(3).fill([AvailableCrys.CRIT_DMG, AvailableSubCrys.FLAT_ATK, AvailableSubCrys.CRIT_RATE]).flat()
+    crys = ["EX"],
+    crys_sub = Array(3).fill(["Increases critical rate by 5%.", "Increases critical DMG by 10%.", "Increases ATK by 60."]).flat()
 }: KiokuGeneratorArgs) {
     const clearCrys = crys.filter(Boolean)
     const clearSubCrys = crys_sub.filter(Boolean)
-    console.log("cleaer", clearSubCrys)
     const key = JSON.stringify([
         name,
         supportKey,
