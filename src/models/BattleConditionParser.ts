@@ -25,7 +25,7 @@ const battleConditionSets = Object.fromEntries(
 ) as Record<string, BattleConditionSet>;
 
 
-enum ProcessTiming {
+export enum ProcessTiming {
     NONE = 0,
     BATTLE_START = 1,
     WAVE_START = 2,
@@ -36,6 +36,14 @@ enum ProcessTiming {
     WAVE_END = 7,
     BATTLE_END = 8,
     AFTER_PROCESS = 9,
+}
+
+export const isTiming = (startTimings: ProcessTiming[], startTimingIdCsv?: string) => {
+    if (!startTimingIdCsv || startTimingIdCsv === "0") return false
+    for (const startTimingId of startTimingIdCsv.split(",")) {
+        if (startTimings.includes(Number(startTimingId))) return true
+    }
+    return false
 }
 
 enum CompareContent {

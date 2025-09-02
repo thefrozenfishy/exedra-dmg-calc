@@ -14,14 +14,16 @@ export class PvPBattle {
 
     getSpeedsAndStartAVs() {
         const av = Math.min(this.team1.getMinAv(), this.team2.getMinAv())
+        this.team1.reduceAv(av)
+        this.team2.reduceAv(av)
         return {
             allies: {
                 spd: this.team1.getTeamSpeeds(),
-                av: this.team1.getTeamNewAVs(av)
+                av: this.team1.getTeamAvs()
             },
             enemies: {
                 spd: this.team2.getTeamSpeeds(),
-                av: this.team2.getTeamNewAVs(av)
+                av: this.team2.getTeamAvs()
             },
         }
     }

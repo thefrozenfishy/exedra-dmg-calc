@@ -71,7 +71,6 @@ onMounted(() => {
 })
 
 const battleOutput = computed(() => {
-  console.log("Tr")
   if (!battleInstance.value) return
   const speeds = (battleInstance.value.getSpeedsAndStartAVs())
 

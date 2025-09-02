@@ -1,6 +1,6 @@
 import { Kioku } from "./Kioku";
 import { KiokuRole, SkillDetail } from "../types/KiokuTypes";
-import { isStartCondRelevantForPvPState, isActiveConditionRelevantForPvPState } from "./BattleConditionParser";
+import { isStartCondRelevantForPvPState, isActiveConditionRelevantForPvPState, isTiming, ProcessTiming } from "./BattleConditionParser";
 import { getIdx } from "../utils/helpers";
 
 export interface ActionResult {
@@ -12,31 +12,53 @@ class KiokuState {
     kioku: Kioku
     passiveEffects: SkillDetail[] = []
     activeEffects: [number, number][] = []
-    breakGauge: number
     currentHp = 100
+    breakGauge = 0
+    currentAv = 0
+    currentSpd = 0
 
     constructor(kioku: Kioku) {
         this.kioku = kioku
-        this.breakGauge = this.maxBreak()
     }
 
-    calculateAv(): number {
-        return (10000 / this.calculateSpd()) | 0
+    init() {
+        this.breakGauge = this.maxBreak()
+        this.currentSpd = this.calculateSpd()
+        this.currentAv = this.calculateStartAv()
+    }
+
+    calculateMaxAv(): number {
+        return (10000 / this.currentSpd) | 0
+    }
+
+    reduceAv(avDelta: number) {
+        this.currentAv -= avDelta
+    }
+
+    calculateStartAv(): number {
+        let haste = 0
+        for (const detail of this.passiveEffects) {
+            if (detail.abilityEffectType === "HASTE") {
+                if (!(isTiming([ProcessTiming.BATTLE_START], detail?.startTimingIdCsv))) continue
+                if (detail.startConditionSetIdCsv.length && detail.startConditionSetIdCsv != "0") continue
+                if (!detail.activeConditionSetIdCsv.split(",").every(condId => isActiveConditionRelevantForPvPState(condId))) continue
+                haste += detail.value1 / 1000
+            }
+        }
+        return this.calculateMaxAv() * Math.max(0, 1 - haste) | 0
     }
 
     calculateSpd(): number {
         let spd = this.kioku.baseSpd
         for (const detail of this.passiveEffects) {
             if (detail.abilityEffectType === "UP_SPD_RATIO") {
-                if (detail.startConditionSetIdCsv.length && detail.startConditionSetIdCsv != "0") continue // Active is never on start, that's start
+                if (detail.startConditionSetIdCsv.length && detail.startConditionSetIdCsv != "0") continue
                 if (!detail.activeConditionSetIdCsv.split(",").every(condId => isActiveConditionRelevantForPvPState(condId))) continue
-                console.log("for", this.kioku.name, "add", ((this.kioku.baseSpd * detail.value1 / 1000) | 0), detail)
                 spd += (this.kioku.baseSpd * detail.value1 / 1000)
             }
             if (detail.abilityEffectType === "UP_SPD_FIXED") {
-                if (detail.startConditionSetIdCsv.length && detail.startConditionSetIdCsv != "0") continue // Active is never on start, that's start
+                if (detail.startConditionSetIdCsv.length && detail.startConditionSetIdCsv != "0") continue
                 if (!detail.activeConditionSetIdCsv.split(",").every(condId => isActiveConditionRelevantForPvPState(condId))) continue
-                console.log("for", this.kioku.name, "add", detail.value1, detail)
                 spd += detail.value1
             }
         }
@@ -71,14 +93,23 @@ export class PvPTeam {
         this.debug = debug;
         this.teamLabel = teamLabel;
         this.setup()
+        this.kiokuStates.forEach(k => k.init())
+    }
+
+    reduceAv(avDelta: number): void {
+        this.kiokuStates.forEach(k => k.reduceAv(avDelta))
+    }
+
+    getMinAv(): number {
+        return Math.min(...Object.values(this.getTeamAvs()))
     }
 
     getTeamSpeeds(): Record<string, number> {
         return this.kiokuStates.reduce((s, k) => ({ ...s, [k.kioku.name]: k.calculateSpd() }), {})
     }
 
-    getTeamNewAVs(minAv: number): Record<string, number> {
-        return this.kiokuStates.reduce((s, k) => ({ ...s, [k.kioku.name]: k.calculateAv() - minAv }), {})
+    getTeamAvs(): Record<string, number> {
+        return this.kiokuStates.reduce((s, k) => ({ ...s, [k.kioku.name]: k.currentAv }), {})
     }
 
     setup() {
@@ -124,13 +155,5 @@ export class PvPTeam {
             // TODO Do something
         }
         return 0
-    }
-
-    reduceAv(av: number): void {
-        this.kiokuStates.forEach(k => k.av -= av)
-    }
-
-    getMinAv(): number {
-        return Math.min(...this.kiokuStates.map(k => k.calculateAv()))
     }
 }
