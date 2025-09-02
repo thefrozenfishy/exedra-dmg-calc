@@ -11,8 +11,8 @@ export const useCharacterStore = defineStore('characterStore', () => {
     if (saved) {
         const oldChars: Character[] = JSON.parse(saved)
         characters.value = oldChars.map(c => {
-            c.crys = c?.crys.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc))
-            c.crys_sub = c?.crys_sub.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc))
+            c.crys = c?.crys?.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc))
+            c.crys_sub = c?.crys_sub?.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc))
             return c
         })
 
