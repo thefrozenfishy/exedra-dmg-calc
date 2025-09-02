@@ -58,10 +58,10 @@ export const useTeamStore = defineStore('team', {
           if (c?.support?.crys) {
             c.support.crys = c.support.crys.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc))
           }
-          if (c?.main?.crys) {
+          if (c?.main?.crys_sub) {
             c.main.crys_sub = c.main.crys_sub.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc))
           }
-          if (c?.support?.crys) {
+          if (c?.support?.crys_sub) {
             c.support.crys_sub = c.support.crys_sub.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc))
           }
           return c
