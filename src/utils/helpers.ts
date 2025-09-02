@@ -30,3 +30,7 @@ export const crystalises = Object.fromEntries(
 export const kiokuData = kiokuDataJson as unknown as Record<string, KiokuData>;
 
 export const magicData = magicLevelsJson as unknown as Record<string, MagicLevel>[];
+
+export function getIdx(obj: SkillDetail): number {
+    return "passiveSkillMstId" in obj ? obj.passiveSkillMstId : obj.skillMstId;
+}

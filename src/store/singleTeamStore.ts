@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { Enemy } from '../types/EnemyTypes'
 import { TeamSlot } from '../types/BestTeamTypes'
-import { Character, correctCharacterParams } from '../types/KiokuTypes'
+import { Character, correctCharacterParams, PvPCharacter } from '../types/KiokuTypes'
 import { crystalises } from '../utils/helpers'
 
 export const usePvPStore = defineStore('pvp', {
@@ -12,13 +12,17 @@ export const usePvPStore = defineStore('pvp', {
     ]
   }),
   actions: {
-    setMain(slotIndex: number, isAlliedTeam: number, member: Character | undefined) {
-      this.slots[isAlliedTeam][slotIndex].main = correctCharacterParams(member)
-      this.save()
+    setMain(isAlliedTeam: number) {
+      return (slotIndex: number, member: PvPCharacter | undefined) => {
+        this.slots[isAlliedTeam][slotIndex].main = correctCharacterParams(member)
+        this.save()
+      }
     },
-    setSupport(slotIndex: number, isAlliedTeam: number, member: Character | undefined) {
-      this.slots[isAlliedTeam][slotIndex].support = correctCharacterParams(member)
-      this.save()
+    setSupport(isAlliedTeam: number) {
+      return (slotIndex: number, member: PvPCharacter | undefined) => {
+        this.slots[isAlliedTeam][slotIndex].support = correctCharacterParams(member)
+        this.save()
+      }
     },
     save() {
       localStorage.setItem('lastPvP', JSON.stringify(this.slots))
@@ -26,7 +30,24 @@ export const usePvPStore = defineStore('pvp', {
     load() {
       const saved = localStorage.getItem('lastPvP')
       if (saved) {
-        this.slots = JSON.parse(saved)
+        const oldChars: TeamSlot[][] = JSON.parse(saved)
+        this.slots = oldChars.map(c => {
+          for (const idx of [0, 1]) {
+            if (c?.[idx]?.main?.crys) {
+              c[idx].main.crys = c[idx].main.crys.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc))
+            }
+            if (c?.[idx]?.support?.crys) {
+              c[idx].support.crys = c[idx].support.crys.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc))
+            }
+            if (c?.[idx]?.main?.crys_sub) {
+              c[idx].main.crys_sub = c[idx].main.crys_sub.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc))
+            }
+            if (c?.[idx]?.support?.crys_sub) {
+              c[idx].support.crys_sub = c[idx].support.crys_sub.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc))
+            }
+          }
+          return c
+        })
       }
     }
   }

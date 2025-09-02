@@ -217,3 +217,37 @@ export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: st
     }
     return true
 }
+
+export const isStartCondRelevantForPvPState = (startConditionId: string, currentMagicStacks: number): boolean => {
+    if (!startConditionId || startConditionId === "0") return true
+
+    const battleConditionSet = battleConditionSets[startConditionId]
+    for (const activeCondId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
+        const battleCondition = battleConditions[activeCondId]
+
+        if (battleCondition.compareContent === CompareContent.CHARGE_POINT) {
+            if (!isCondActive(battleCondition, currentMagicStacks)) return false
+        }
+
+        console.warn("Unknown start condition", battleConditionSet)
+    }
+    return false;
+}
+
+export const isActiveConditionRelevantForPvPState = (activeConditionSetId: string): boolean => {
+    if (!activeConditionSetId || activeConditionSetId === "0") return true
+
+    const battleConditionSet = battleConditionSets[activeConditionSetId]
+    for (const activeCondId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
+        const battleCondition = battleConditions[activeCondId]
+        if (battleCondition.compareContent === CompareContent.HP_RATIO) {
+            return isCondActive(battleCondition, 100)
+        }
+        if (battleCondition.compareContent === CompareContent.ALIVE_UNIT_COUNT) {
+            return isCondActive(battleCondition, 5)
+        }
+
+        console.warn("Unknown active condition", battleCondition)
+    }
+    return false
+}

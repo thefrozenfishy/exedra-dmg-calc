@@ -135,6 +135,11 @@ export interface Character {
     crys_sub: string[]
 }
 
+export interface PvPCharacter extends Character {
+    av: number
+    spd: number
+}
+
 export interface KiokuData {
     id: number
     name: number

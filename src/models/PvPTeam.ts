@@ -1,13 +1,136 @@
 import { Kioku } from "./Kioku";
+import { KiokuRole, SkillDetail } from "../types/KiokuTypes";
+import { isStartCondRelevantForPvPState, isActiveConditionRelevantForPvPState } from "./BattleConditionParser";
+import { getIdx } from "../utils/helpers";
 
+export interface ActionResult {
+    break: number
+    range: number
+}
 
-export class Team {
-    private team: Kioku[];
-    private debug: boolean;
+class KiokuState {
+    kioku: Kioku
+    passiveEffects: SkillDetail[] = []
+    activeEffects: [number, number][] = []
+    breakGauge: number
+    currentHp = 100
 
-    constructor(kiokus: Kioku[], debug = false) {
-        this.team = kiokus;
-        this.debug = debug;
+    constructor(kioku: Kioku) {
+        this.kioku = kioku
+        this.breakGauge = this.maxBreak()
     }
 
+    calculateAv(): number {
+        return (10000 / this.calculateSpd()) | 0
+    }
+
+    calculateSpd(): number {
+        let spd = this.kioku.baseSpd
+        for (const detail of this.passiveEffects) {
+            if (detail.abilityEffectType === "UP_SPD_RATIO") {
+                if (detail.startConditionSetIdCsv.length && detail.startConditionSetIdCsv != "0") continue // Active is never on start, that's start
+                if (!detail.activeConditionSetIdCsv.split(",").every(condId => isActiveConditionRelevantForPvPState(condId))) continue
+                console.log("for", this.kioku.name, "add", ((this.kioku.baseSpd * detail.value1 / 1000) | 0), detail)
+                spd += (this.kioku.baseSpd * detail.value1 / 1000)
+            }
+            if (detail.abilityEffectType === "UP_SPD_FIXED") {
+                if (detail.startConditionSetIdCsv.length && detail.startConditionSetIdCsv != "0") continue // Active is never on start, that's start
+                if (!detail.activeConditionSetIdCsv.split(",").every(condId => isActiveConditionRelevantForPvPState(condId))) continue
+                console.log("for", this.kioku.name, "add", detail.value1, detail)
+                spd += detail.value1
+            }
+        }
+        return spd | 0
+    }
+
+    maxBreak(): number {
+        switch (this.kioku.role) {
+            case KiokuRole.Defender:
+                return this.kioku.data.rarity === 5 ? 195 : 162
+            case KiokuRole.Attacker:
+            case KiokuRole.Breaker:
+                return this.kioku.data.rarity === 5 ? 150 : 125
+            case KiokuRole.Buffer:
+            case KiokuRole.Debuffer:
+                return this.kioku.data.rarity === 5 ? 165 : 137
+            case KiokuRole.Healer:
+                return this.kioku.data.rarity === 5 ? 180 : 150
+        }
+    }
+}
+
+
+export class PvPTeam {
+    private kiokuStates: KiokuState[];
+    private debug: boolean;
+    private teamLabel: string
+    private currentSp = 5
+
+    constructor(kiokus: Kioku[], teamLabel: string, debug = false) {
+        this.kiokuStates = kiokus.map(k => new KiokuState(k))
+        this.debug = debug;
+        this.teamLabel = teamLabel;
+        this.setup()
+    }
+
+    getTeamSpeeds(): Record<string, number> {
+        return this.kiokuStates.reduce((s, k) => ({ ...s, [k.kioku.name]: k.calculateSpd() }), {})
+    }
+
+    getTeamNewAVs(minAv: number): Record<string, number> {
+        return this.kiokuStates.reduce((s, k) => ({ ...s, [k.kioku.name]: k.calculateAv() - minAv }), {})
+    }
+
+    setup() {
+        for (const kiokuState of this.kiokuStates) {
+            for (const skill_id of [0, 1, 2, 3, kiokuState.kioku.data.ability_id, kiokuState.kioku.data.crystalis_id]) {
+                if (skill_id in kiokuState.kioku.effects) {
+                    for (const detail of kiokuState.kioku.effects[skill_id]) {
+                        if (skill_id > 10 && !getIdx(detail).toString().startsWith(skill_id.toString())) continue // "Fua etc are not actually passives"
+                        if (detail.range === -1) {
+                            kiokuState.passiveEffects.push(detail)
+                        } else {
+                            for (const otherKiokuState of this.kiokuStates) {
+                                otherKiokuState.passiveEffects.push(detail)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    getTarget(): KiokuState {
+        // TODO: Select worst? Random? Distribution?
+        return this.kiokuStates[0]
+    }
+
+    getReadyToAct(): ((k: KiokuState) => ActionResult)[] {
+        return this.kiokuStates.filter(k => k.av === 0).map(k => (t: KiokuState) => this.act(k.kioku, k))
+    }
+
+    act(kioku: Kioku, target: KiokuState): ActionResult {
+        let effectId;
+        if (this.currentSp) {
+            this.currentSp--
+            effectId = kioku.data.skill_id
+        } else {
+            this.currentSp++
+            effectId = kioku.data.attack_id
+        }
+
+        for (const detail of kioku.effects[effectId]) {
+            console.log(detail)
+            // TODO Do something
+        }
+        return 0
+    }
+
+    reduceAv(av: number): void {
+        this.kiokuStates.forEach(k => k.av -= av)
+    }
+
+    getMinAv(): number {
+        return Math.min(...this.kiokuStates.map(k => k.calculateAv()))
+    }
 }

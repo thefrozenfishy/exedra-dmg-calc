@@ -1,7 +1,7 @@
 import { Kioku } from "./Kioku";
 import { EnemyTargetTypes, Enemy } from "../types/EnemyTypes";
-import { getDescriptionOfCond, isActiveConditionRelevantForScoreAttack, isStartCondRelevantForScoreAttack } from "./BattleConditionParser";
-import { elementMap, KiokuElement, SkillDetail } from "../types/KiokuTypes";
+import { isActiveConditionRelevantForScoreAttack, isStartCondRelevantForScoreAttack } from "./BattleConditionParser";
+import { elementMap, SkillDetail } from "../types/KiokuTypes";
 
 const targetTypeAtPosition = [EnemyTargetTypes.L_OTHER, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.R_OTHER]
 

@@ -1,9 +1,6 @@
 import { KiokuConstants, KiokuData, KiokuGeneratorArgs, KiokuElement, MagicLevel, SkillDetail, SupportKey, KiokuRole, PortraitData, PortraitLvlData } from '../types/KiokuTypes';
-import { magicData, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData, crystalises } from '../utils/helpers';
+import { magicData, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData, crystalises, getIdx } from '../utils/helpers';
 
-function getIdx(obj: SkillDetail): number {
-    return "passiveSkillMstId" in obj ? obj.passiveSkillMstId : obj.skillMstId;
-}
 
 /**
  * Recursively find all subskills for a given skill ID.
@@ -32,12 +29,6 @@ function find_all_details(
             const valKey = `value${i}`;
             if (valKey in skill) {
                 const subId = Math.floor((skill as any)[valKey] / 100);
-                if (Object.keys(find_all_details(false, subId)).length) {
-                    console.log("Found subskill on false", find_all_details(false, subId))
-                }
-                if (Object.keys(find_all_details(true, subId)).length) {
-                    console.log("Found subskill on true", find_all_details(true, subId))
-                }
                 sub_skills = {
                     ...sub_skills,
                     ...find_all_details(false, subId),
@@ -88,13 +79,6 @@ export class Kioku {
     private buff_mult: number = 1;
     private debuff_mult: number = 1;
     maxMagicStacks = 0;
-
-    add_to_effects(skill_id: number, details: SkillDetail[]) {
-        if (!(skill_id in this.effects)) {
-            this.effects[skill_id] = []
-        }
-        this.effects[skill_id].push(...details);
-    }
 
     getBaseAtk(): number {
         return this.kiokuAtk + (this.support?.getBaseAtk() ?? 0) * 0.16 + (this.portraitStats?.atk ?? 0) + this.magicAtk + this.heartAtk + this.ascensionAtk
@@ -194,10 +178,14 @@ export class Kioku {
     }
 
     setupEffects(): void {
-        this.add_to_effects(0,
-            [...this.crys, ...this.crys_sub]
-                .filter(c => c !== "EX")
-                .flatMap(c => Object.values(find_all_details(true, crystalises[c].value1, true))))
+        for (const crys of [...this.crys, ...this.crys_sub]) {
+            if (crys === "EX") continue
+            if (!(crys in crystalises)) {
+                console.error("Could not find", crys, "in crystalises")
+                continue
+            }
+            this.add_effects(0, find_all_details(true, crystalises[crys].value1, true), true, 1)
+        }
 
         // First add buff mult then later add the effects themselves
         // Ascension buffs
@@ -225,7 +213,7 @@ export class Kioku {
                     else if (sub_d.abilityEffectType === "UP_DEBUFF_EFFECT_VALUE") this.debuff_mult += sub_d.value1 / 1000;
                 }
                 // After mult is applied, start adding effects
-                this.add_effects(0, supp_eff, true, 10, true);
+                this.add_effects(1, supp_eff, true, 10, true);
             }
         }
 
@@ -233,13 +221,13 @@ export class Kioku {
         for (let i = 1; i <= this.ascension; i++) {
             const ascId = (this.data as any)[`ascension_${i}_effect_2_id`] as number;
             if (!ascId) continue;
-            this.add_effects(0, find_all_details(true, ascId), true, 10);
+            this.add_effects(2, find_all_details(true, ascId), true, 10);
         }
 
         // Portrait effects
         if (this.portrait) {
             const port_eff = find_all_details(true, this.portrait.passiveSkill1);
-            this.add_effects(0, { 1: port_eff[Math.max(...Object.keys(port_eff).map(Number))] }, true, 1, true);
+            this.add_effects(3, { 1: port_eff[Math.max(...Object.keys(port_eff).map(Number))] }, true, 1, true);
             // Math.max to find highest level effect of portrait (Always assume LB5 portrait), and format into expected format
         }
 
@@ -292,7 +280,10 @@ export class Kioku {
             }
             return { ...detail, value1: v }
         });
-        this.add_to_effects(skill_id, lvl_details)
+        if (!(skill_id in this.effects)) {
+            this.effects[skill_id] = []
+        }
+        this.effects[skill_id].push(...lvl_details);
     }
 
     getKey(): any[] {

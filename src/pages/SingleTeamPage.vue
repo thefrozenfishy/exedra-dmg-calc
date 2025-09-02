@@ -13,63 +13,8 @@
         <h2>{{ index === attackerIndex ? 'Damage Dealer' : 'Member' }}
           {{ index < attackerIndex ? index + 1 : index > attackerIndex ? index : "" }}</h2>
 
-        <!-- Main character selector -->
-        <CharacterSelector :selected="slot.main" @select="member => team.setMain(index, member)" />
-
-        <!-- Stats -->
-        <div v-if="slot.main" class="stats">
-          <StatInputs :member="slot.main" :isSupport="false" @update="team.setMain(index, $event)" />
-        </div>
-
-        <!-- Portrait -->
-        <div v-if="index === attackerIndex && slot.main" class="stats">
-          <label>
-            Portrait:
-            <select :value="slot.main.portrait || ''"
-              @change="e => team.setMain(index, { ...slot.main, portrait: e?.target?.value })">
-              <option disabled value="">Select a portrait</option>
-              <option v-for="portrait in getPortraits(slot.main.element)" :value="portrait" :key="portrait">
-                {{ portrait }}
-              </option>
-            </select>
-          </label>
-          <label>
-            Crystalis:
-            <div>
-              <select v-for="i in 3" :key="i" :value="slot.main.crys?.[i - 1] ?? ''"
-                @change="e => onChangeCrys(i, e?.target?.value)">
-              <option disabled value="">Select a crystalis</option>
-                <option v-for="k in getCrystalises(slot.main.element)" :key="k" :value="k">
-                  {{ k }}
-                </option>
-              </select>
-            </div>
-          </label>
-          <label>
-            SubCrystalis:
-            <div>
-              <select v-for="i in 9" :key="i" :value="slot.main.crys_sub?.[i - 1] ?? ''"
-                @change="e => onChangeSubCrys(i, e?.target?.value)">
-              <option disabled value="">Select a substat</option>
-                <option v-for="k in getSubCrystalises()" :key="k" :value="k">
-                  {{ k }}
-                </option>
-              </select>
-            </div>
-          </label>
-        </div>
-
-
-        <!-- Only show support selector if main exists -->
-        <div v-if="slot.main" class="support-section">
-          <h3>Support</h3>
-          <CharacterSelector :selected="slot.support" @select="member => team.setSupport(index, member)" />
-        </div>
-
-        <!-- Stats -->
-        <div v-if="slot.support" class="stats">
-          <StatInputs :member="slot.support" :isSupport="true" @update="team.setSupport(index, $event)" />
-        </div>
+        <CharacterEditor :index="index" :slot="slot" :setMain="team.setMain" :setSupport="team.setSupport"
+          :onChangeCrys="onChangeCrys" :onChangeSubCrys="onChangeSubCrys" />
       </div>
     </div>
   </div>
@@ -91,30 +36,29 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
-import CharacterSelector from '../components/CharacterSelector.vue'
-import StatInputs from '../components/StatInputs.vue'
 import { getKioku, Kioku } from '../models/Kioku'
 import { ScoreAttackTeam } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
-import { KiokuGeneratorArgs, getCrystalises, getPortraits, getSubCrystalises } from '../types/KiokuTypes'
+import { KiokuGeneratorArgs } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
+import CharacterEditor from '../components/CharacterEditor.vue'
 
 const attackerIndex = 2
 
-function onChangeCrys(idx: number, rawValue: string) {
-  const main = team.slots[attackerIndex].main
+function onChangeCrys(charIdx: number, crysIdx: number, rawValue: string) {
+  const main = team.slots[charIdx].main
   if (!main) return
   const current = main.crys ?? ["EX", "", ""]
-  current[idx - 1] = rawValue as string
-  team.setMain(attackerIndex, { ...main, crys: current } as any)
+  current[crysIdx - 1] = rawValue as string
+  team.setMain(charIdx, { ...main, crys: current } as any)
 }
-function onChangeSubCrys(idx: number, rawValue: string) {
-  const main = team.slots[attackerIndex].main
+
+function onChangeSubCrys(charIdx: number, crysIdx: number, rawValue: string) {
+  const main = team.slots[charIdx].main
   if (!main) return
-  console.log(main.crys_sub)
   const current = main.crys_sub ?? Array(9).fill([""]).flat()
-  current[idx - 1] = rawValue as string
-  team.setMain(attackerIndex, { ...main, crys_sub: current } as any)
+  current[crysIdx - 1] = rawValue as string
+  team.setMain(charIdx, { ...main, crys_sub: current } as any)
 }
 
 const formatDmg = (out: string | (number | string)[][]) => typeof (out) !== 'string' ? `Max Damage: ${out[0].toLocaleString()} with a ${out[2]}% crit rate - (Average Damage: ${out[1].toLocaleString()}) ` : battleOutput
