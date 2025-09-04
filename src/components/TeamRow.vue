@@ -13,7 +13,7 @@
                 </a>
                 <a v-if="!loading && team.portrait" :href="`https://exedra.wiki/wiki/${team.portrait}`" target="_blank"
                     class="portrait-image">
-                    <img :src="`/exedra-dmg-calc/portraits/${team.portrait}.png`" :alt="team.portrait"
+                    <img :src="`/exedra-dmg-calc/portrait_images/${portraits[team.portrait].resourceName}_thumbnail.png`" :alt="team.portrait"
                         :title="team.portrait" />
                 </a>
             </div>
@@ -50,6 +50,7 @@
 
 <script lang="ts" setup>
 import { FinalTeam } from '../types/BestTeamTypes';
+import { portraits } from '../utils/helpers';
 
 
 defineProps<{ team: FinalTeam, loading: boolean }>()

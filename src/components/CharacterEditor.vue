@@ -12,22 +12,39 @@
       Spd: {{ slot.main.spd }}
     </div>
     <div class="stat">
+      AV after move: {{ (10000 / slot.main.spd) | 0 }}
+    </div>
+    <div class="stat">
       Initial AV: {{ slot.main.av }}
     </div>
   </div>
 
   <!-- Portrait -->
   <div v-if="slot.main" class="stats">
-    <label>
+    <div class="portrait-selector">
       Portrait:
-      <select :value="slot.main.portrait || ''"
-        @change="e => setMain(index, { ...slot.main, portrait: e?.target?.value })">
-        <option disabled value="">Select a portrait</option>
-        <option v-for="portrait in getPortraits(slot.main.element)" :value="portrait" :key="portrait">
-          {{ portrait }}
-        </option>
-      </select>
-    </label>
+      <div class="portrait-input">
+        <input type="text" :value="selectedPortraitName" @input="portraitQuery = $event.target.value"
+          placeholder="Search portrait or effect..." @focus="showPortraitDropdown = true"
+          @blur="hidePortraitDropdown" />
+        <button v-if="props.slot?.main?.portrait" @click.prevent="clearPortrait"
+          style="position: absolute; right: 2px; top: 70%; transform: translateY(-50%); border: none; background: transparent; cursor: pointer;">
+          ×
+        </button>
+
+        <ul v-if="showPortraitDropdown && filteredPortraits.length" class="dropdown">
+          <li v-for="portrait in filteredPortraits" :key="portrait.name"
+            @mousedown.prevent="selectPortrait(portrait.name)">
+            <img :src="portraitImage(portrait)" :alt="portrait.name" />
+            <div style="display: flex; flex-direction: column; text-align: left">
+              <p style="margin: 0; font-weight: bold;">{{ portrait.name }}</p>
+              <p style="margin: 0; font-size: 0.85em; color: #666;">{{ portrait.description }}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
     <label>
       Crystalis:
       <div>
@@ -67,16 +84,19 @@
 </template>
 
 <script setup lang="ts">
+import { find_all_details } from '../models/Kioku';
 import { TeamSlot } from '../types/BestTeamTypes';
-import { getCrystalises, getSubCrystalises, getPortraits, Character } from '../types/KiokuTypes'
+import { getCrystalises, getSubCrystalises, getPortraits, Character, PortraitData } from '../types/KiokuTypes'
+import { portraits } from '../utils/helpers'
 import CharacterSelector from './CharacterSelector.vue'
 import StatInputs from './StatInputs.vue'
+import { ref, computed } from "vue";
 
 const validChar = (m?: Character) => {
   return !!m && "av" in m // Check interface has spd in it (PvPCharacter)
 }
 
-defineProps<{
+const props = defineProps<{
   index: number
   slot: TeamSlot
   setMain: (index: number, member: Character) => void
@@ -84,6 +104,46 @@ defineProps<{
   onChangeCrys: (charIdx: number, crysIdx: number, rawValue: string) => void
   onChangeSubCrys: (charIdx: number, crysIdx: number, rawValue: string) => void
 }>()
+
+const portraitQuery = ref("");
+const showPortraitDropdown = ref(false);
+
+const selectedPortraitName = computed(() =>
+  props.slot?.main?.portrait || portraitQuery.value
+);
+
+const filteredPortraits = computed(() => {
+  const q = portraitQuery.value.toLowerCase()
+  return getPortraits(props.slot?.main?.element)
+    .map(p => portraits[p])
+    .filter(Boolean)
+    .map(p => {
+      const port_eff = find_all_details(true, p.passiveSkill1)
+      const best_eff = port_eff[Math.max(...Object.keys(port_eff).map(Number))]
+      return { ...p, description: best_eff.description }
+    })
+    .filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q))
+})
+
+
+function selectPortrait(portrait: string) {
+  props.setMain(props.index, { ...props.slot.main, portrait });
+  portraitQuery.value = portrait; // so input shows selection
+  showPortraitDropdown.value = false;
+}
+
+function portraitImage(portrait: PortraitData) {
+  return `/exedra-dmg-calc/portrait_images/${portrait?.resourceName}_thumbnail.png`;
+}
+
+function hidePortraitDropdown() {
+  setTimeout(() => (showPortraitDropdown.value = false), 150);
+}
+
+function clearPortrait() {
+  props.setMain(props.index, { ...props.slot.main, portrait: "" });
+  portraitQuery.value = "";
+}
 </script>
 
 <style scoped>
@@ -126,5 +186,48 @@ defineProps<{
 
 .stats select {
   width: 90%;
+}
+
+.portrait-selector {
+  position: relative;
+}
+
+.portrait-selector input {
+  width: 100%;
+  padding: 0.4rem;
+  max-width: 600px;
+}
+
+.portrait-input {
+  width: 80%;
+  margin: 0 auto 0 10px;
+}
+
+.dropdown {
+  position: absolute;
+  z-index: 10;
+  border-radius: 4px;
+  width: 200%;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 0.2rem;
+  margin-left: -36px;
+  background-color: rgba(0, 0, 0, 1)
+}
+
+.dropdown li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+}
+
+.dropdown li:hover {
+  background: #f0f0f0;
+}
+
+.dropdown img {
+  width: 100px;
 }
 </style>

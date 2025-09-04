@@ -29,7 +29,7 @@ export const elementMap: Record<string, KiokuElement> = {
     6: KiokuElement.Void,
 };
 
-export const getPortraits = (elem: KiokuElement): string[] => [
+export const getPortraits = (elem?: KiokuElement): string[] => [
     { name: "" },
     ...Object.values(portraits)]
     .sort((a, b) => {
@@ -37,8 +37,8 @@ export const getPortraits = (elem: KiokuElement): string[] => [
         if (b.name === "A Dream of a Little Mermaid") return 1
         if (a.name === "The Savior's Apostle") return -1
         if (b.name === "The Savior's Apostle") return 1
-        if (a.name === dmgUpPortraits[elem]) return -1
-        if (b.name === dmgUpPortraits[elem]) return 1
+        if (elem && a.name === dmgUpPortraits[elem]) return -1
+        if (elem && b.name === dmgUpPortraits[elem]) return 1
         if (a.name === "") return -1
         if (b.name === "") return 1
 
@@ -63,6 +63,7 @@ export interface PortraitData {
     element: number;
     rarity: number;
     name: string;
+    resourceName: string;
 }
 
 export interface PortraitLvlData {

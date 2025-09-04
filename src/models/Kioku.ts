@@ -5,7 +5,7 @@ import { magicData, portraits, portraitLevels, passiveDetails, skillDetails, kio
 /**
  * Recursively find all subskills for a given skill ID.
  */
-function find_all_details(
+export function find_all_details(
     is_passive: boolean,
     skill_id: number,
     is_unique: boolean = false
