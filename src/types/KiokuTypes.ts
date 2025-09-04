@@ -184,7 +184,7 @@ export interface CrystalisData {
     selectionAbilityType: number
 }
 
-export const getCrystalises = (elem: KiokuElement) => [
+export const getCrystalises = (elem?: KiokuElement) => [
     { name: "EX", "styleMstId": 0, selectionAbilityType: 1 },
     { name: "", "styleMstId": 0, selectionAbilityType: 1 },
     ...Object.values(crystalises)
@@ -199,8 +199,8 @@ export const getCrystalises = (elem: KiokuElement) => [
         if (b.name === "Mighty Hit++") return 1
         if (a.name === "Towering Offense++") return -1
         if (b.name === "Towering Offense++") return 1
-        if (a.name === elementalCrystalises[elem]) return -1
-        if (b.name === elementalCrystalises[elem]) return 1
+        if (elem && a.name === elementalCrystalises[elem]) return -1
+        if (elem && b.name === elementalCrystalises[elem]) return 1
         if (a.name === "") return -1
         if (b.name === "") return 1
 

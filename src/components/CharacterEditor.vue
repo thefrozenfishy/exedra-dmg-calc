@@ -21,9 +21,9 @@
 
   <!-- Portrait -->
   <div v-if="slot.main" class="stats">
-    <div class="portrait-selector">
+    <div class="selector">
       Portrait:
-      <div class="portrait-input">
+      <div class="selector-input">
         <input type="text" :value="selectedPortraitName" @input="portraitQuery = $event.target.value"
           placeholder="Search portrait or effect..." @focus="showPortraitDropdown = true"
           @blur="hidePortraitDropdown" />
@@ -45,23 +45,39 @@
       </div>
     </div>
 
-    <label>
+    <div>
       Crystalis:
-      <div>
-        <select v-for="i in 3" :key="i" :value="slot.main.crys?.[i - 1] ?? ''"
-          @change="e => onChangeCrys(index, i, e?.target?.value)">
-          <option disabled value="">Select a crystalis</option>
-          <option v-for="k in getCrystalises(slot.main.element)" :key="k" :value="k">
-            {{ k }}
-          </option>
-        </select>
+      <div class="selector" style="display: flex; flex-direction: column;">
+        <div v-for="i in 3" :key="i" class="selector-input" style="position: relative; display: inline-block; flex: 1;">
+          <input type="text" :value="selectedCrysName(i)" @input="crysQuery[i - 1] = $event.target.value"
+            placeholder="Search crystalis..." @focus="showCrysDropdown[i - 1] = true" @blur="() => hideCrysDropdown(i)"
+            style="padding-right: 20px; width: 100%;" />
+
+          <!-- Clear button -->
+          <button v-if="props.slot?.main?.crys?.[i - 1]" @click.prevent="clearCrys(i)"
+            style="position: absolute; right: 2px; top: 50%; transform: translateY(-50%); border: none; background: transparent; cursor: pointer;">
+            ×
+          </button>
+
+          <!-- Dropdown -->
+          <ul v-if="showCrysDropdown[i - 1] && filteredCrys(i).length" class="dropdown">
+            <li v-for="crys in filteredCrys(i)" :key="crys.name" @mousedown.prevent="selectCrys(i, crys)">
+              <div style="display: flex; flex-direction: column; text-align: left;">
+                <p style="margin: 0; font-weight: bold;">{{ crys.name }}</p>
+                <p v-for="description of crys.descriptions" style="margin: 0; font-size: 0.85em; color: #666;">{{
+                  description }}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-    </label>
+    </div>
+
     <label>
       SubCrystalis:
       <div>
         <select v-for="i in 9" :key="i" :value="slot.main.crys_sub?.[i - 1] ?? ''"
-          @change="e => onChangeSubCrys(index, i, e?.target?.value)">
+          @change="e => onChangeSubCrys(index, i - 1, e?.target?.value)">
           <option disabled value="">Select a substat</option>
           <option v-for="k in getSubCrystalises()" :key="k" :value="k">
             {{ k }}
@@ -87,7 +103,7 @@
 import { find_all_details } from '../models/Kioku';
 import { TeamSlot } from '../types/BestTeamTypes';
 import { getCrystalises, getSubCrystalises, getPortraits, Character, PortraitData } from '../types/KiokuTypes'
-import { portraits } from '../utils/helpers'
+import { crystalises, portraits } from '../utils/helpers'
 import CharacterSelector from './CharacterSelector.vue'
 import StatInputs from './StatInputs.vue'
 import { ref, computed } from "vue";
@@ -108,9 +124,16 @@ const props = defineProps<{
 const portraitQuery = ref("");
 const showPortraitDropdown = ref(false);
 
+const crysQuery = ref(["", "", ""]);
+const showCrysDropdown = ref([false, false, false]);
+
 const selectedPortraitName = computed(() =>
   props.slot?.main?.portrait || portraitQuery.value
 );
+
+function selectedCrysName(index: number) {
+  return props.slot?.main?.crys?.[index - 1] || crysQuery.value[index - 1] || "";
+}
 
 const filteredPortraits = computed(() => {
   const q = portraitQuery.value.toLowerCase()
@@ -125,11 +148,31 @@ const filteredPortraits = computed(() => {
     .filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q))
 })
 
+function filteredCrys(index: number) {
+  console.log(crysQuery.value[index - 1])
+  const q = (crysQuery.value[index - 1] || "").toLowerCase();
+  return [{ name: "EX", descriptions: ["unique"] }, ...getCrystalises(props.slot?.main?.element)
+    .map(c => crystalises[c])
+    .filter(Boolean)
+    .map(c => {
+      const port_eff = find_all_details(true, c.value1, true)
+      const descriptions = Object.values(port_eff).map(eff => `${eff.description}${eff.turn ? ` (${eff.turn} Turn${eff.turn === 1 ? "" : "s"})` : ""
+        }`).filter(Boolean)
+      return { ...c, descriptions }
+    })
+    .filter(p => p.name.toLowerCase().includes(q) || p.descriptions.some(c => c.toLowerCase().includes(q)))]
+}
 
 function selectPortrait(portrait: string) {
-  props.setMain(props.index, { ...props.slot.main, portrait });
+  props.setMain(props.index, { ...props.slot.main, portrait } as any);
   portraitQuery.value = portrait; // so input shows selection
   showPortraitDropdown.value = false;
+}
+
+function selectCrys(index: number, crys: { name: string; description?: string }) {
+  props.onChangeCrys(props.index, index, crys.name);
+  crysQuery.value[index - 1] = crys.name;
+  showCrysDropdown.value[index - 1] = false;
 }
 
 function portraitImage(portrait: PortraitData) {
@@ -140,9 +183,18 @@ function hidePortraitDropdown() {
   setTimeout(() => (showPortraitDropdown.value = false), 150);
 }
 
+function hideCrysDropdown(index: number) {
+  setTimeout(() => (showCrysDropdown.value[index - 1] = false), 150);
+}
+
 function clearPortrait() {
-  props.setMain(props.index, { ...props.slot.main, portrait: "" });
+  props.setMain(props.index, { ...props.slot.main, portrait: "" } as any);
   portraitQuery.value = "";
+}
+
+function clearCrys(index: number) {
+  props.onChangeCrys(props.index, index, "");
+  crysQuery.value[index - 1] = "";
 }
 </script>
 
@@ -188,17 +240,17 @@ function clearPortrait() {
   width: 90%;
 }
 
-.portrait-selector {
+.selector {
   position: relative;
 }
 
-.portrait-selector input {
+.selector input {
   width: 100%;
   padding: 0.4rem;
   max-width: 600px;
 }
 
-.portrait-input {
+.selector-input {
   width: 80%;
   margin: 0 auto 0 10px;
 }
