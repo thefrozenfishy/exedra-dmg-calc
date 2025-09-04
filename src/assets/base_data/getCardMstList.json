@@ -4,1070 +4,1223 @@
         "element": 0,
         "name": "Typical Morning Greetings",
         "passiveSkill1": 4001,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_00_0001"
     },
     {
         "cardMstId": 4100002,
         "element": 0,
         "name": "Tea, Cake, and Puella Magi",
         "passiveSkill1": 4002,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_00_0002"
     },
     {
         "cardMstId": 4100003,
         "element": 0,
         "name": "A Room to Ourselves",
         "passiveSkill1": 4003,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_00_0003"
     },
     {
         "cardMstId": 4100004,
         "element": 0,
         "name": "Duty-Bound to Battle",
         "passiveSkill1": 4004,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_00_0004"
     },
     {
         "cardMstId": 4100005,
         "element": 0,
         "name": "To You Who Is Too Kind",
         "passiveSkill1": 4005,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_00_0005"
     },
     {
         "cardMstId": 4100006,
         "element": 0,
         "name": "It Wouldn't Be a Pretty Ending",
         "passiveSkill1": 4006,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_00_0006"
     },
     {
         "cardMstId": 4100007,
         "element": 0,
         "name": "I'll Never Regret Anything",
         "passiveSkill1": 4007,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_00_0007"
     },
     {
         "cardMstId": 4100008,
         "element": 0,
         "name": "My Bestie's Confession",
         "passiveSkill1": 4008,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_00_0008"
     },
     {
         "cardMstId": 4100009,
         "element": 0,
         "name": "Feelings Unrequited",
         "passiveSkill1": 4009,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_00_0009"
     },
     {
         "cardMstId": 4100010,
         "element": 0,
         "name": "One Sole Purpose",
         "passiveSkill1": 4010,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_00_0010"
     },
     {
         "cardMstId": 4100011,
         "element": 0,
         "name": "If My Soul Is the Cost",
         "passiveSkill1": 4011,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_00_0011"
     },
     {
         "cardMstId": 4100012,
         "element": 0,
         "name": "A Promise to the Past",
         "passiveSkill1": 4012,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_00_0012"
     },
     {
         "cardMstId": 4100013,
         "element": 0,
         "name": "As Many Times As It Takes",
         "passiveSkill1": 4013,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_00_0013"
     },
     {
         "cardMstId": 4100014,
         "element": 0,
         "name": "Belief in a Little Miracle",
         "passiveSkill1": 4014,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_00_0014"
     },
     {
         "cardMstId": 4100015,
         "element": 0,
         "name": "Familiar and Dear",
         "passiveSkill1": 4015,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_01_0001"
     },
     {
         "cardMstId": 4100016,
         "element": 0,
         "name": "No Space to Come Between",
         "passiveSkill1": 4016,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_01_0002"
     },
     {
         "cardMstId": 4100017,
         "element": 0,
         "name": "For the Sake of My World",
         "passiveSkill1": 4017,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_02_0001"
     },
     {
         "cardMstId": 4100018,
         "element": 0,
         "name": ">｜THANK Y0U_f0r G1V1NG M3...a NAM3｜",
         "passiveSkill1": 4063,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_01_0003"
     },
     {
         "cardMstId": 4100019,
         "element": 0,
         "name": "Team Mikazuki Villa!",
         "passiveSkill1": 4068,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_01_0004"
     },
     {
         "cardMstId": 4100020,
         "element": 0,
         "name": "Sharing the Same Fate",
         "passiveSkill1": 4082,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_03_0001"
     },
     {
         "cardMstId": 4100021,
         "element": 0,
         "name": "Dark Sand Depths",
         "passiveSkill1": 4084,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_01_0005"
     },
     {
         "cardMstId": 4100022,
         "element": 0,
         "name": "Come Back Ui!",
         "passiveSkill1": 4088,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_01_0006"
     },
     {
         "cardMstId": 4100023,
         "element": 0,
         "name": "Somewhere Even Now",
         "passiveSkill1": 4089,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_01_01_0007"
     },
     {
         "cardMstId": 4200001,
         "element": 0,
         "name": "Captivated by Where You Stand",
         "passiveSkill1": 4018,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_00_0001"
     },
     {
         "cardMstId": 4200002,
         "element": 0,
         "name": "To Be an Ideal Magical Girl",
         "passiveSkill1": 4019,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_00_0002"
     },
     {
         "cardMstId": 4200003,
         "element": 0,
         "name": "A Time of Happiness",
         "passiveSkill1": 4050,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_00_0004"
     },
     {
         "cardMstId": 4200004,
         "element": 0,
         "name": "Determination & Separation",
         "passiveSkill1": 4051,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_00_0005"
     },
     {
         "cardMstId": 4200005,
         "element": 0,
         "name": "Madoka's Plenty Bright",
         "passiveSkill1": 4052,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_00_0007"
     },
     {
         "cardMstId": 4200006,
         "element": 0,
         "name": "Tracking a Ghost",
         "passiveSkill1": 4053,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_00_0008"
     },
     {
         "cardMstId": 4200007,
         "element": 0,
         "name": "Pride on the Line",
         "passiveSkill1": 4054,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_00_0009"
     },
     {
         "cardMstId": 4200008,
         "element": 0,
         "name": "A Sunny Tomorrow",
         "passiveSkill1": 4055,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_00_0010"
     },
     {
         "cardMstId": 4200009,
         "element": 0,
         "name": "Yakumo Detective Agency",
         "passiveSkill1": 4061,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_01_0001"
     },
     {
         "cardMstId": 4200010,
         "element": 0,
         "name": "Close Encounters of the Fifth Kind",
         "passiveSkill1": 4062,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_01_0002"
     },
     {
         "cardMstId": 4200011,
         "element": 0,
         "name": "Shared Interests",
         "passiveSkill1": 4064,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_00_0011"
     },
     {
         "cardMstId": 4200012,
         "element": 0,
         "name": "Believe in Yourself",
         "passiveSkill1": 4065,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_00_0012"
     },
     {
         "cardMstId": 4200013,
         "element": 0,
         "name": "Magical Girl Pal",
         "passiveSkill1": 4071,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_00_0013"
     },
     {
         "cardMstId": 4200014,
         "element": 0,
         "name": "Cherished Memories",
         "passiveSkill1": 4072,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_00_0014"
     },
     {
         "cardMstId": 4200015,
         "element": 0,
         "name": "A Moment of Hope",
         "passiveSkill1": 4066,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_01_0003"
     },
     {
         "cardMstId": 4200016,
         "element": 0,
         "name": "Suspicious Seventeen",
         "passiveSkill1": 4067,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_01_0006"
     },
     {
         "cardMstId": 4200017,
         "element": 0,
         "name": "Daydreaming Scientist",
         "passiveSkill1": 4079,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_01_0004"
     },
     {
         "cardMstId": 4200018,
         "element": 0,
         "name": "Miniature Creator",
         "passiveSkill1": 4080,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_01_0010"
     },
     {
         "cardMstId": 4200019,
         "element": 0,
         "name": "A Distant Ideal",
         "passiveSkill1": 4056,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_04_00_0027"
     },
     {
         "cardMstId": 4200022,
         "element": 0,
         "name": "Twin-ergy in Synergy",
         "passiveSkill1": 4073,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_04_01_0003"
     },
     {
         "cardMstId": 4200023,
         "element": 0,
         "name": "Dance☆Magica",
         "passiveSkill1": 4057,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_04_00_0026"
     },
     {
         "cardMstId": 4200024,
         "element": 0,
         "name": "Granting Impossible Miracles",
         "passiveSkill1": 4069,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_04_03_0002"
     },
     {
         "cardMstId": 4200025,
         "element": 0,
         "name": "Forgotten Antinomy",
         "passiveSkill1": 4070,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_04_00_0030"
     },
     {
         "cardMstId": 4200026,
         "element": 0,
         "name": "Midsummer Treat",
         "passiveSkill1": 4081,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_04_00_0023"
     },
     {
         "cardMstId": 4200027,
         "element": 0,
         "name": "Even This Will Someday Fade",
         "passiveSkill1": 4083,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_04_00_0024"
     },
     {
         "cardMstId": 4200028,
         "element": 0,
         "name": "Hot☆Corner Is Hyped!",
         "passiveSkill1": 4085,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_01_0005"
     },
     {
         "cardMstId": 4200029,
         "element": 0,
         "name": "A Time That Will Never Return",
         "passiveSkill1": 4086,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_01_0007"
     },
     {
         "cardMstId": 4200030,
         "element": 0,
         "name": "Iroha Tamaki's Birthday 2025",
         "passiveSkill1": 4087,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_04_01_0025"
     },
     {
         "cardMstId": 4200031,
         "element": 0,
         "name": "Echo of a Voice",
         "passiveSkill1": 4090,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_01_0008"
     },
     {
         "cardMstId": 4200032,
         "element": 0,
         "name": "The Protected Ones",
         "passiveSkill1": 4091,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_02_01_0009"
     },
     {
         "cardMstId": 4300001,
         "element": 0,
         "name": "See You Around, Homura",
         "passiveSkill1": 4020,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_00_1001"
     },
     {
         "cardMstId": 4300002,
         "element": 0,
         "name": "Because I'll Protect You",
         "passiveSkill1": 4021,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_00_1002"
     },
     {
         "cardMstId": 4300003,
         "element": 0,
         "name": "Nice to Meet You Once Again",
         "passiveSkill1": 4022,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1008"
     },
     {
         "cardMstId": 4300004,
         "element": 0,
         "name": "Only Silence Remains Now",
         "passiveSkill1": 4023,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1009"
     },
     {
         "cardMstId": 4300005,
         "element": 0,
         "name": "Even Mightier with Hypnosis!",
         "passiveSkill1": 4024,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1010"
     },
     {
         "cardMstId": 4300006,
         "element": 0,
         "name": "Tears for Wordless Wonder",
         "passiveSkill1": 4025,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1080"
     },
     {
         "cardMstId": 4300007,
         "element": 0,
         "name": "Once Your Average Preppy Girl",
         "passiveSkill1": 4026,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_02_1124"
     },
     {
         "cardMstId": 4300008,
         "element": 0,
         "name": "I'll Keep Changing for Her",
         "passiveSkill1": 4027,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_02_1125"
     },
     {
         "cardMstId": 4300009,
         "element": 0,
         "name": "Waaa! I Just Want to Go Home!",
         "passiveSkill1": 4028,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1017"
     },
     {
         "cardMstId": 4300010,
         "element": 0,
         "name": "One Lethal Lash!",
         "passiveSkill1": 4029,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1018"
     },
     {
         "cardMstId": 4300011,
         "element": 0,
         "name": "Wrapped Around My Finger",
         "passiveSkill1": 4030,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1061"
     },
     {
         "cardMstId": 4300012,
         "element": 0,
         "name": "When the Heat Is On",
         "passiveSkill1": 4031,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1069"
     },
     {
         "cardMstId": 4300013,
         "element": 0,
         "name": "Goodbye's Promise of Tomorrow",
         "passiveSkill1": 4032,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1070"
     },
     {
         "cardMstId": 4300014,
         "element": 0,
         "name": "Heralds of Happiness",
         "passiveSkill1": 4033,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1071"
     },
     {
         "cardMstId": 4300015,
         "element": 0,
         "name": "Bliss-Flavored Cookies",
         "passiveSkill1": 4034,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1072"
     },
     {
         "cardMstId": 4300016,
         "element": 0,
         "name": "Worlds Apart",
         "passiveSkill1": 4035,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1074"
     },
     {
         "cardMstId": 4300017,
         "element": 0,
         "name": "All-Or-Nothing For the Win!",
         "passiveSkill1": 4036,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1076"
     },
     {
         "cardMstId": 4300018,
         "element": 0,
         "name": "Mysterious Time",
         "passiveSkill1": 4037,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1082"
     },
     {
         "cardMstId": 4300019,
         "element": 0,
         "name": "Kako and Me Adventuring",
         "passiveSkill1": 4038,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1083"
     },
     {
         "cardMstId": 4300020,
         "element": 0,
         "name": "Keeping Cool Before the Heat",
         "passiveSkill1": 4039,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1084"
     },
     {
         "cardMstId": 4300021,
         "element": 0,
         "name": "We Can Never Go Back",
         "passiveSkill1": 4040,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1086"
     },
     {
         "cardMstId": 4300022,
         "element": 0,
         "name": "Reliable Mascot Doggo Mameji!",
         "passiveSkill1": 4041,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1090"
     },
     {
         "cardMstId": 4300023,
         "element": 0,
         "name": "Cherish the One Life We Live",
         "passiveSkill1": 4042,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1107"
     },
     {
         "cardMstId": 4300024,
         "element": 0,
         "name": "Counter Sentimental",
         "passiveSkill1": 4043,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1114"
     },
     {
         "cardMstId": 4300025,
         "element": 0,
         "name": "I Did It!",
         "passiveSkill1": 4044,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_02_1126"
     },
     {
         "cardMstId": 4300026,
         "element": 0,
         "name": "Our Little Secret",
         "passiveSkill1": 4045,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_00_1003"
     },
     {
         "cardMstId": 4300027,
         "element": 0,
         "name": "Vivace Pulse",
         "passiveSkill1": 4046,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_00_1004"
     },
     {
         "cardMstId": 4300028,
         "element": 0,
         "name": "For My Own Sake",
         "passiveSkill1": 4047,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_00_1005"
     },
     {
         "cardMstId": 4300029,
         "element": 0,
         "name": "Light & Shadow",
         "passiveSkill1": 4058,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1015"
     },
     {
         "cardMstId": 4300030,
         "element": 0,
         "name": "I'm Also a Magical Girl",
         "passiveSkill1": 4059,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1016"
     },
     {
         "cardMstId": 4300031,
         "element": 0,
         "name": "A Happy End in Sight",
         "passiveSkill1": 4060,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_00_1014"
     },
     {
         "cardMstId": 4300032,
         "element": 0,
         "name": "Oblivion Fades",
         "passiveSkill1": 4048,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1012"
     },
     {
         "cardMstId": 4300033,
         "element": 0,
         "name": "Find Me",
         "passiveSkill1": 4049,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1011"
     },
     {
         "cardMstId": 4300034,
         "element": 0,
         "name": "The Vastness of Space",
         "passiveSkill1": 4076,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1019"
     },
     {
         "cardMstId": 4300035,
         "element": 0,
         "name": "A Mirage Out of Reach",
         "passiveSkill1": 4077,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1020"
     },
     {
         "cardMstId": 4300036,
         "element": 0,
         "name": "Dreaming with Tsukasa",
         "passiveSkill1": 4074,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1025"
     },
     {
         "cardMstId": 4300037,
         "element": 0,
         "name": "Dreaming with Tsukuyo",
         "passiveSkill1": 4075,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1026"
     },
     {
         "cardMstId": 4300038,
         "element": 0,
         "name": "The Ultimate Challenge",
         "passiveSkill1": 4078,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1021"
     },
     {
         "cardMstId": 4300039,
         "element": 0,
         "name": "A Window Between Us",
         "passiveSkill1": 4092,
-        "rarity": 4
+        "rarity": 4,
+        "resourceName": "art_03_01_1022"
     },
     {
         "cardMstId": 5100001,
         "element": 0,
         "name": "Best Friend Required",
         "passiveSkill1": 5001,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_00_0001"
     },
     {
         "cardMstId": 5100002,
         "element": 0,
         "name": "High Five for Harmony",
         "passiveSkill1": 5002,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_00_0002"
     },
     {
         "cardMstId": 5100003,
         "element": 0,
         "name": "A City Ours to Defend",
         "passiveSkill1": 5003,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_00_0003"
     },
     {
         "cardMstId": 5100004,
         "element": 0,
         "name": "Cake Baking Challenge",
         "passiveSkill1": 5004,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_00_0004"
     },
     {
         "cardMstId": 5100005,
         "element": 0,
         "name": "An Occasional Indulgence",
         "passiveSkill1": 5005,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_02_0001"
     },
     {
         "cardMstId": 5100006,
         "element": 0,
         "name": "Each Hope in Our Hearts",
         "passiveSkill1": 5006,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_06_00_0001"
     },
     {
         "cardMstId": 5100007,
         "element": 0,
         "name": "It's Cake Party Time!",
         "passiveSkill1": 5007,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_06_00_0002"
     },
     {
         "cardMstId": 5100008,
         "element": 0,
         "name": "Surely Again Someday",
         "passiveSkill1": 5008,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_06_00_0003"
     },
     {
         "cardMstId": 5100009,
         "element": 0,
         "name": "The Savior's Apostle",
         "passiveSkill1": 5009,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_06_02_0001"
     },
     {
         "cardMstId": 5100010,
         "element": 0,
         "name": "Home Sweet Homebound",
         "passiveSkill1": 5010,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_06_01_0001"
     },
     {
         "cardMstId": 5100011,
         "element": 0,
         "name": "For Hope That Lies Ahead",
         "passiveSkill1": 5011,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_06_01_0002"
     },
     {
         "cardMstId": 5100012,
         "element": 0,
         "name": "Futures Felt in Photographs",
         "passiveSkill1": 5012,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_00_0005"
     },
     {
         "cardMstId": 5100013,
         "element": 0,
         "name": "In Blissful Ignorance",
         "passiveSkill1": 5013,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_00_0006"
     },
     {
         "cardMstId": 5100014,
         "element": 0,
         "name": "We're So Similar?",
         "passiveSkill1": 5014,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_00_0007"
     },
     {
         "cardMstId": 5100015,
         "element": 0,
         "name": "One Time Team-up!",
         "passiveSkill1": 5015,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_00_0008"
     },
     {
         "cardMstId": 5100016,
         "element": 0,
         "name": "A Reluctant Coach Steps Up",
         "passiveSkill1": 5016,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_00_0009"
     },
     {
         "cardMstId": 5100017,
         "element": 0,
         "name": "A Dream of a Little Mermaid",
         "passiveSkill1": 5017,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_00_0010"
     },
     {
         "cardMstId": 5100018,
         "element": 0,
         "name": "Special Stage Persona",
         "passiveSkill1": 5018,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_00_0011"
     },
     {
         "cardMstId": 5100019,
         "element": 0,
         "name": "New Specs to a New Perspective",
         "passiveSkill1": 5019,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_00_0012"
     },
     {
         "cardMstId": 5100020,
         "element": 0,
         "name": "Meeting Within a Dream",
         "passiveSkill1": 5020,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_00_0013"
     },
     {
         "cardMstId": 5100021,
         "element": 0,
         "name": "Rains Too Shall Pass",
         "passiveSkill1": 5021,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_01_0001"
     },
     {
         "cardMstId": 5100022,
         "element": 0,
         "name": "Proof of Friends Again",
         "passiveSkill1": 5022,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_01_0002"
     },
     {
         "cardMstId": 5100023,
         "element": 0,
         "name": "Under a Cherry Blossom Tree",
         "passiveSkill1": 5023,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_06_01_0003"
     },
     {
         "cardMstId": 5100024,
         "element": 0,
         "name": "What She Once Entrusted",
         "passiveSkill1": 5024,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_00_0014"
     },
     {
         "cardMstId": 5100025,
         "element": 0,
         "name": "In a Dream",
         "passiveSkill1": 5025,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_06_00_0004"
     },
     {
         "cardMstId": 5100026,
         "element": 0,
         "name": "Once the Battle's Over",
         "passiveSkill1": 5026,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_06_00_0005"
     },
     {
         "cardMstId": 5100027,
         "element": 0,
         "name": "Magic for Someone's Sake",
         "passiveSkill1": 5027,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_06_00_0006"
     },
     {
         "cardMstId": 5100028,
         "element": 0,
         "name": "Tag Team Revenge!",
         "passiveSkill1": 5045,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_01_0003"
     },
     {
         "cardMstId": 5100029,
         "element": 0,
         "name": "Head of the Hotpot's Privilege!",
         "passiveSkill1": 5048,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_01_0004"
     },
     {
         "cardMstId": 5100030,
         "element": 0,
         "name": "A Future Rewritten: Prologue",
         "passiveSkill1": 5049,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_03_0001"
     },
     {
         "cardMstId": 5100031,
         "element": 0,
         "name": "Farewell to a Future Unseen",
         "passiveSkill1": 5050,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_06_03_0001"
     },
     {
         "cardMstId": 5100032,
         "element": 0,
         "name": "A Brief Treat",
         "passiveSkill1": 5052,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_01_0005"
     },
     {
         "cardMstId": 5100033,
         "element": 0,
         "name": "Magical Kawaii Duo",
         "passiveSkill1": 5055,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_01_0007"
     },
     {
         "cardMstId": 5100034,
         "element": 0,
         "name": "We Keep Going Together",
         "passiveSkill1": 5056,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_00_01_0006"
     },
     {
         "cardMstId": 5400001,
         "element": 0,
         "name": "Rose Garden Witch Minion",
         "passiveSkill1": 5028,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_00_0002"
     },
     {
         "cardMstId": 5400002,
         "element": 0,
         "name": "Rose Garden Witch",
         "passiveSkill1": 5029,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_00_0001"
     },
     {
         "cardMstId": 5400003,
         "element": 0,
         "name": "Darkness Witch",
         "passiveSkill1": 5030,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_00_0007"
     },
     {
         "cardMstId": 5400004,
         "element": 0,
         "name": "Dessert Witch",
         "passiveSkill1": 5031,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_00_0010"
     },
     {
         "cardMstId": 5400005,
         "element": 0,
         "name": "Box Witch",
         "passiveSkill1": 5032,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_00_0013"
     },
     {
         "cardMstId": 5400006,
         "element": 0,
         "name": "Graffiti Witch",
         "passiveSkill1": 5033,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_00_0015"
     },
     {
         "cardMstId": 5400007,
         "element": 0,
         "name": "Silver Witch",
         "passiveSkill1": 5034,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_00_0017"
     },
     {
         "cardMstId": 5400008,
         "element": 0,
         "name": "Shadow Witch",
         "passiveSkill1": 5035,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_00_0019"
     },
     {
         "cardMstId": 5400009,
         "element": 0,
         "name": "Dog Witch",
         "passiveSkill1": 5036,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_00_0021"
     },
     {
         "cardMstId": 5400010,
         "element": 0,
         "name": "Mermaid Witch",
         "passiveSkill1": 5037,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_00_0023"
     },
     {
         "cardMstId": 5400011,
         "element": 0,
         "name": "Artist Witch",
         "passiveSkill1": 5038,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_00_0025"
     },
     {
         "cardMstId": 5400012,
         "element": 0,
         "name": "Chairperson Witch",
         "passiveSkill1": 5039,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_00_0027"
     },
     {
         "cardMstId": 5400013,
         "element": 0,
         "name": "Birdcage Witch",
         "passiveSkill1": 5040,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_00_0029"
     },
     {
         "cardMstId": 5400014,
         "element": 0,
         "name": "Stage Witch",
         "passiveSkill1": 5041,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_00_0031"
     },
     {
         "cardMstId": 5400015,
         "element": 0,
         "name": "Needle Witch",
         "passiveSkill1": 5042,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_02_0001"
     },
     {
         "cardMstId": 5400016,
         "element": 0,
         "name": "Sandbox Witch",
         "passiveSkill1": 5043,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_01_0002"
     },
     {
         "cardMstId": 5400017,
         "element": 0,
         "name": "Uwasa of the Commoner's Horse",
         "passiveSkill1": 5044,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_01_0004"
     },
     {
         "cardMstId": 5400018,
         "element": 0,
         "name": "Uwasa of the Anonymous AI",
         "passiveSkill1": 5046,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_01_0006"
     },
     {
         "cardMstId": 5400019,
         "element": 0,
         "name": "Uwasa of the Chelation Land Ferris Wheel",
         "passiveSkill1": 5047,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_01_0008"
     },
     {
         "cardMstId": 5400020,
         "element": 0,
         "name": "Bovine Witch",
         "passiveSkill1": 5051,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_03_0001"
     },
     {
         "cardMstId": 5400021,
         "element": 0,
         "name": "Blessed Witch",
         "passiveSkill1": 5053,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_01_0010"
     },
     {
         "cardMstId": 5400022,
         "element": 0,
         "name": "Witch of Good Fortune",
         "passiveSkill1": 5054,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_07_01_0011"
     },
     {
         "cardMstId": 9900001,
         "element": 0,
         "name": "Sensing a Sparkling Sentiment!",
         "passiveSkill1": 9001,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_05_01_0003"
     },
     {
         "cardMstId": 9900002,
         "element": 0,
         "name": "Door to a New Kioku",
         "passiveSkill1": 9002,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_05_00_0001"
     },
     {
         "cardMstId": 9900003,
         "element": 0,
         "name": "Glittering Memsparks",
         "passiveSkill1": 9003,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_05_00_0002"
     },
     {
         "cardMstId": 9900004,
         "element": 0,
         "name": "A Sleepy Sunset",
         "passiveSkill1": 9004,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_05_01_0001"
     },
     {
         "cardMstId": 9900005,
         "element": 0,
         "name": "Illumination of Geniuses",
         "passiveSkill1": 9005,
-        "rarity": 5
+        "rarity": 5,
+        "resourceName": "art_05_01_0002"
     }
 ]
