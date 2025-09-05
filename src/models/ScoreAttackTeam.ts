@@ -302,7 +302,6 @@ export class ScoreAttackTeam {
             Number(enemy.enabled) *
             base_dmg *
             def_factor *
-            crit_factor *
             dmg_dealt_factor *
             dmg_taken_factor *
             elem_resist_factor *
