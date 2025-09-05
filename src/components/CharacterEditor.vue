@@ -50,8 +50,8 @@
       <div class="selector" style="display: flex; flex-direction: column;">
         <div v-for="i in 3" :key="i" class="selector-input" style="position: relative; display: inline-block; flex: 1;">
           <input type="text" :value="selectedCrysName(i)" @input="crysQuery[i - 1] = $event.target.value"
-            placeholder="Search crystalis..." @focus="showCrysDropdown[i - 1] = true" @blur="() => hideCrysDropdown(i)"
-            style="padding-right: 20px; width: 100%;" />
+            placeholder="Search crystalis..." @focus="showCrysDropdown[i - 1] = true"
+            @blur="() => hideCrysDropdown(i)" />
 
           <!-- Clear button -->
           <button v-if="props.slot?.main?.crys?.[i - 1]" @click.prevent="clearCrys(i)"
@@ -60,8 +60,8 @@
           </button>
 
           <!-- Dropdown -->
-          <ul v-if="showCrysDropdown[i - 1] && filteredCrys(i).length" class="dropdown">
-            <li v-for="crys in filteredCrys(i)" :key="crys.name" @mousedown.prevent="selectCrys(i, crys)">
+          <ul v-if="showCrysDropdown[i - 1] && filteredCrys(i, slot.main.id).length" class="dropdown">
+            <li v-for="crys in filteredCrys(i, slot.main.id)" :key="crys.name" @mousedown.prevent="selectCrys(i, crys)">
               <div style="display: flex; flex-direction: column; text-align: left;">
                 <p style="margin: 0; font-weight: bold;">{{ crys.name }}</p>
                 <p v-for="description of crys.descriptions" style="margin: 0; font-size: 0.85em; color: #666;">{{
@@ -102,7 +102,7 @@
 <script setup lang="ts">
 import { find_all_details } from '../models/Kioku';
 import { TeamSlot } from '../types/BestTeamTypes';
-import { getCrystalises, getSubCrystalises, getPortraits, Character, PortraitData } from '../types/KiokuTypes'
+import { getCrystalises, getSubCrystalises, getPortraits, Character, PortraitData, getPersonalCrystalisAbility, getPersonalCrystalisEffects } from '../types/KiokuTypes'
 import { crystalises, portraits } from '../utils/helpers'
 import CharacterSelector from './CharacterSelector.vue'
 import StatInputs from './StatInputs.vue'
@@ -148,10 +148,10 @@ const filteredPortraits = computed(() => {
     .filter(p => p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q))
 })
 
-function filteredCrys(index: number) {
-  console.log(crysQuery.value[index - 1])
+function filteredCrys(index: number, styleId: number) {
   const q = (crysQuery.value[index - 1] || "").toLowerCase();
-  return [{ name: "EX", descriptions: ["unique"] }, ...getCrystalises(props.slot?.main?.element)
+  const ex = styleId ? getPersonalCrystalisEffects(styleId) : []
+  return [{ name: "EX", descriptions: ex }, ...getCrystalises(props.slot?.main?.element)
     .map(c => crystalises[c])
     .filter(Boolean)
     .map(c => {
@@ -159,8 +159,8 @@ function filteredCrys(index: number) {
       const descriptions = Object.values(port_eff).map(eff => `${eff.description}${eff.turn ? ` (${eff.turn} Turn${eff.turn === 1 ? "" : "s"})` : ""
         }`).filter(Boolean)
       return { ...c, descriptions }
-    })
-    .filter(p => p.name.toLowerCase().includes(q) || p.descriptions.some(c => c.toLowerCase().includes(q)))]
+    })]
+    .filter(p => p.name.toLowerCase().includes(q) || p.descriptions.some(c => c.toLowerCase().includes(q)))
 }
 
 function selectPortrait(portrait: string) {

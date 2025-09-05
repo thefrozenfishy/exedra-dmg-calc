@@ -1,4 +1,4 @@
-import { crystalises, portraits } from "../utils/helpers";
+import { crystalises, kiokuData, portraits } from "../utils/helpers";
 
 export enum KiokuElement {
     Flame = "Flame",
@@ -165,6 +165,7 @@ export interface KiokuData {
     attack_id: number
     special_id: number
     crystalis_id: number
+    crystalis_effect: string
     support_id: number
     support_target: KiokuElement | KiokuRole
     ability_id: number
@@ -183,6 +184,10 @@ export interface CrystalisData {
     styleMstId: number
     selectionAbilityType: number
 }
+
+export const getPersonalCrystalisEffects = (styleId: number): string[] =>
+    Object.values(kiokuData).find(k => k.id === styleId)?.crystalis_effect?.split("<br>") ?? []
+
 
 export const getCrystalises = (elem?: KiokuElement) => [
     { name: "EX", "styleMstId": 0, selectionAbilityType: 1 },
