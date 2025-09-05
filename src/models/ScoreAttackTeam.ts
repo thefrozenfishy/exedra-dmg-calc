@@ -269,11 +269,11 @@ export class ScoreAttackTeam {
         }
         const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;
 
-        const crit_rate =
+        const crit_rate = Math.min(1,
             (this.dps.critRate +
                 (this.getEffect("UP_CTR_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) +
                 (this.getEffect("UP_CTR_FIXED", amountOfEnemies, enemy.maxBreak))) /
-            1000;
+            1000)
 
         const crit_dmg = (this.dps.critDamage +
             this.getEffect("UP_CTD_FIXED", amountOfEnemies, enemy.maxBreak) +
