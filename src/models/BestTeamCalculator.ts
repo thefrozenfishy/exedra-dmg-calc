@@ -19,6 +19,7 @@ export async function findBestTeam({
     minDefender,
     minBreaker,
     prevResults,
+    optimalSubCrys,
     onProgress,
     onError
 }: FindBestTeamOptions): Promise<any[]> {
@@ -87,7 +88,7 @@ export async function findBestTeam({
     for (const attacker of availableChars[KiokuRole.Attacker]) {
         perAttackerResults[attacker.name] = []
         const availablePortraits = portraitsBestOnly(attacker.element)
-        const availableSupportKeys = Array.from([highestAtkSupportKey, ...possibleAtkSupportKeys[attacker.element], ...possibleAtkSupportKeys[attacker.role]].filter(s => s?.[0] !== attacker.name).reduce((map, item) => {
+        const availableSupportKeys: any[][] = Array.from([highestAtkSupportKey, ...possibleAtkSupportKeys[attacker.element], ...possibleAtkSupportKeys[attacker.role]].filter(s => s?.[0] !== attacker.name).reduce((map, item) => {
             if (item && !map.has(item[0])) {
                 map.set(item[0], item)
             }
@@ -139,11 +140,13 @@ export async function findBestTeam({
                                     for (const supportSupport of supportSupports) {
                                         for (const attackerCrys of combinations(getBestCrystalises(attacker.element), 3)) {
                                             try {
+                                                console.log("For", attacker.name, "Using", optimalSubCrys ? undefined : attacker.crys_sub)
                                                 const team = new ScoreAttackTeam(
                                                     getKioku({
                                                         ...attacker,
                                                         portrait: attackerPortrait,
                                                         crys: attackerCrys,
+                                                        crys_sub: optimalSubCrys ? undefined : attacker.crys_sub,
                                                         supportKey: attackerSupportKey
                                                     })!,
                                                     totalSupports.map((s, i) => getKioku({ ...s, supportKey: supportSupport[i] }))

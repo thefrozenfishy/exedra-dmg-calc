@@ -6,8 +6,26 @@
             {{ character.name }}
         </div>
 
-        <!-- StatInputs handles all stats -->
-        <StatInputs v-if="character.enabled" :member="character" :disabled="!character.enabled" :isSupport=false @update="updateChar" />
+        <div v-if="character.enabled">
+            <StatInputs :member="character" :disabled="!character.enabled" :isSupport=false @update="updateChar" />
+
+            <div v-if="character.enabled" class="stats">
+                <label>
+                    Portrait:
+                    <PortraitSelector v-model="character.portrait" :element="character.element" />
+                </label>
+
+                <label>
+                    Crystalis:
+                    <CrystalisSelector v-model="character.crys" :element="character.element" :styleId="character.id" />
+                </label>
+
+                <label>
+                    Subcrystalis:
+                    <SubCrystalisSelector v-model="character.crys_sub" />
+                </label>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -15,11 +33,19 @@
 import { defineComponent, computed } from "vue";
 import { useCharacterStore } from "../store/characterStore";
 import StatInputs from "./StatInputs.vue";
+import PortraitSelector from './PortraitSelector.vue';
+import CrystalisSelector from './CrystalisSelector.vue';
+import SubCrystalisSelector from './SubCrystalisSelector.vue';
 import { Character } from "../types/KiokuTypes";
 
 export default defineComponent({
     name: "CharacterCard",
-    components: { StatInputs },
+    components: {
+        StatInputs,
+        PortraitSelector,
+        CrystalisSelector,
+        SubCrystalisSelector
+    },
     props: {
         character: {
             type: Object as () => Character,

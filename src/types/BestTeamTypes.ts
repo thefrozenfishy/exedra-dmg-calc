@@ -21,6 +21,7 @@ export interface FindBestTeamOptions {
     minHealer: number
     minDefender: number
     minBreaker: number
+    optimalSubCrys: boolean
     enabledCharacters: Character[]
     onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number) => void,
     onError?: (error: any) => void

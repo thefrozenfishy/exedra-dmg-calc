@@ -1,7 +1,7 @@
 <template>
     <div class="gallery-page">
         <h1>Kioku stats</h1>
-        Data here will be used as defaults in Single Battle Simulator, as well as being the considered Kioku in Best
+        Data here will be used as defaults in Single Battle Simulators, as well as being the considered Kioku when calculating Best
         Team calculator
 
         <h2>Export/Import</h2>

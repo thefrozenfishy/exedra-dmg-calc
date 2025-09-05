@@ -24,6 +24,11 @@
                 Include 4★ Others
             </label>
 
+            <label>
+                <input type="checkbox" v-model="optimalSubCrys" />
+                Calculate using perfect Crit rate, Crit Damage & atk crystalis substats
+            </label>
+
             <div>
                 <h3>Role Distribution</h3>
 
@@ -225,6 +230,7 @@ const progress = ref<FinalTeam>({})
 const include4StarAttackers = ref(false)
 const include4StarSupports = ref(false)
 const include4StarOthers = ref(false)
+const optimalSubCrys = ref(true)
 
 const weakElements = reactive([
     { name: KiokuElement.Flame, enabled: true },
@@ -432,6 +438,7 @@ async function startSimulation() {
             minHealer: minHealer.value,
             minDefender: minDefender.value,
             minBreaker: minBreaker.value,
+            optimalSubCrys: optimalSubCrys.value,
             enabledCharacters: JSON.parse(JSON.stringify(members.value))
         }
     })
