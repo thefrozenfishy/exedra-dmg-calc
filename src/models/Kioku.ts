@@ -19,13 +19,7 @@ export function find_all_details(
     const this_skill: Record<string, SkillDetail> = {};
     for (const [k, v] of Object.entries(details)) {
         const vKey = Math.floor((v as any)[key] / (is_unique ? 1 : 100));
-        if (vKey === skill_id) {
-            this_skill[k] = v;
-            if (v.abilityEffectType === "SWITCH_SKILL") {
-                // Switch skill means the entire skill is replaced, so we don't want to find details of the replaced skill
-                return { ...find_all_details(true, v.value1), ...find_all_details(false, v.value1) }
-            }
-        }
+        if (vKey === skill_id) this_skill[k] = v;
     }
 
     // recursively add sub-skills
@@ -239,16 +233,22 @@ export class Kioku {
 
         // Skills effects
         const skillTuples: [boolean, string, number][] = [
+            [true, "ability_id", this.abilityLvl],
             [false, "skill_id", this.skillLvl],
             [false, "attack_id", this.attackLvl],
-            [true, "ability_id", this.abilityLvl],
             [false, "special_id", this.specialLvl],
             [true, "crystalis_id", 0],
         ];
 
         for (const [is_passive, skill_label, lvl] of skillTuples) {
             const isCrys = skill_label === "crystalis_id"
-            const skill_id = (this.data as any)[skill_label]
+            let skill_id = (this.data as any)[skill_label]
+            if (skill_label === "skill_id") {
+                console.log(this.effects)
+                const swapId = Object.values(this.effects).find(d => d.find(s => s.abilityEffectType === "SWITCH_SKILL"))?.[0].value1
+                console.log("Replacing w", swapId)
+                skill_id = swapId ?? skill_id
+            }
             if (isCrys && !this.crys.includes("EX")) continue;
             const details = find_all_details(
                 is_passive,
