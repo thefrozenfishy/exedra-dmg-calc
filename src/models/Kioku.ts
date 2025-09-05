@@ -19,7 +19,13 @@ export function find_all_details(
     const this_skill: Record<string, SkillDetail> = {};
     for (const [k, v] of Object.entries(details)) {
         const vKey = Math.floor((v as any)[key] / (is_unique ? 1 : 100));
-        if (vKey === skill_id) this_skill[k] = v;
+        if (vKey === skill_id) {
+            this_skill[k] = v;
+            if (v.abilityEffectType === "SWITCH_SKILL") {
+                // Switch skill means the entire skill is replaced, so we don't want to find details of the replaced skill
+                return { ...find_all_details(true, v.value1), ...find_all_details(false, v.value1) }
+            }
+        }
     }
 
     // recursively add sub-skills
