@@ -3,14 +3,13 @@
     <h1>Simulate PvP Action Order</h1>
 
     <p style="color: red;">UNDER CONSTRUCTION</p>
-    <p>For now this page can be used to check SPD breakpoints, looking if a quickstep+ to quickstep++ upgrade actually will matter etc. </p>
-    <p>Look up portraits <a href="https://exedra.wiki/wiki/Portraits?hide=r" target="_blank">on the wiki</a></p>
+    <p>For now this page can be used to check SPD breakpoints, looking if a quickstep+ to quickstep++ upgrade actually
+      will matter etc. </p>
     <div>
       <h2>Battle Order</h2>
       <div class="battle-output">
         {{ battleOutput }}
       </div>
-
     </div>
 
     <div v-for="isAlliedTeam in [1, 0]">
@@ -75,10 +74,12 @@ const battleOutput = computed(() => {
   const speeds = (battleInstance.value.getSpeedsAndStartAVs())
 
   for (const isAlliedTeam of [0, 1]) {
-    for (const [key, vals] of Object.entries(speeds[isAlliedTeam ? "allies": "enemies"])) {
+    for (const [key, vals] of Object.entries(speeds[isAlliedTeam ? "allies" : "enemies"])) {
       for (const [charname, val] of Object.entries(vals)) {
-        const charIdx = team.slots[isAlliedTeam].findIndex(c => c.main?.name === charname)
-        team.setMain(isAlliedTeam)(charIdx, { ...team.slots[isAlliedTeam][charIdx].main, [key]: val })
+        team.slots[isAlliedTeam].forEach((c, idx) => {
+          if (c.main?.name === charname)
+            team.setMain(isAlliedTeam)(idx, { ...team.slots[isAlliedTeam][idx].main, [key]: val })
+        })
       }
     }
   }
