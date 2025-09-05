@@ -41,7 +41,9 @@ const query = ref('')
 
 const filteredChars = computed(() => {
   return characters.filter(c =>
-    c.name.toLowerCase().includes(query.value.toLowerCase()) || c.character_en.toLowerCase().includes(query.value.toLowerCase())
+    c.name.toLowerCase().includes(query.value.toLowerCase()) 
+    || c.character_en.toLowerCase().includes(query.value.toLowerCase())
+    || (c.name === "Time Stop Strike" && query.value.toLowerCase().startsWith("moe"))
   ).sort((a, b) => a.id - b.id)
 })
 

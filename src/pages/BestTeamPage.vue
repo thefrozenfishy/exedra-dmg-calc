@@ -270,6 +270,7 @@ const filteredAttackers = computed(() => {
             m.role !== KiokuRole.Attacker &&
             (m.name.toLowerCase().includes(q) ||
                 m.character_en.toLowerCase().includes(q)
+                || (m.name === "Time Stop Strike" && q.startsWith("moe"))
             ))
 })
 const filteredKioku = computed(() => {
@@ -280,6 +281,7 @@ const filteredKioku = computed(() => {
             m.rarity !== 3 &&
             (m.name.toLowerCase().includes(q) ||
                 m.character_en.toLowerCase().includes(q)
+                || (m.name === "Time Stop Strike" && q.startsWith("moe"))
             ))
 })
 
