@@ -9,13 +9,13 @@
 
   <div v-if="validChar(slot?.main)" class="stats">
     <div class="stat">
-      Spd: {{ slot.main.spd }}
+      Spd: {{ round(slot.main.spd) }} ({{ slot.main.baseSpd }} <span style="color: blue">+ {{ round(slot.main.spd - slot.main.baseSpd) }}</span>)
     </div>
     <div class="stat">
-      AV after move: {{ (10000 / slot.main.spd) | 0 }}
+      AV after move: {{ round(10000 / slot.main.spd) }}
     </div>
     <div class="stat">
-      Initial AV: {{ slot.main.av }}
+      Initial AV: {{ round(slot.main.distance) }}
     </div>
   </div>
 
@@ -57,8 +57,10 @@ import SubCrystalisSelector from './SubCrystalisSelector.vue';
 import StatInputs from './StatInputs.vue'
 import { Character, PvPCharacter } from '../types/KiokuTypes';
 
+const round = (spd: number) => spd.toFixed(2)
+
 const validChar = (m?: PvPCharacter | Character) => {
-  return !!m && "av" in m // Check interface has spd in it (PvPCharacter)
+  return !!m && "spd" in m // Check interface has spd in it (PvPCharacter)
 }
 
 const props = defineProps<{

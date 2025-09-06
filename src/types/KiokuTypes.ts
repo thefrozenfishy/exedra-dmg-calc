@@ -1,5 +1,7 @@
 import { crystalises, kiokuData, portraits } from "../utils/helpers";
 
+export const spdDistance = 10000
+
 export enum KiokuElement {
     Flame = "Flame",
     Aqua = "Aqua",
@@ -77,7 +79,7 @@ export interface MagicLevel {
     val: number
 }
 
-interface PassiveSkill {
+export interface PassiveSkill {
     abilityEffectType: string
     activeConditionSetIdCsv: string
     description: string
@@ -137,8 +139,9 @@ export interface Character {
 }
 
 export interface PvPCharacter extends Character {
-    av: number
+    distance: number
     spd: number
+    baseSpd: number
 }
 
 export interface KiokuData {

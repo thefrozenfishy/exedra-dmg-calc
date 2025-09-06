@@ -1,5 +1,5 @@
 import { Kioku } from "./Kioku";
-import { KiokuRole, SkillDetail } from "../types/KiokuTypes";
+import { KiokuRole, PassiveSkill, SkillDetail, spdDistance } from "../types/KiokuTypes";
 import { isStartCondRelevantForPvPState, isActiveConditionRelevantForPvPState, isTiming, ProcessTiming } from "./BattleConditionParser";
 import { getIdx } from "../utils/helpers";
 
@@ -8,44 +8,58 @@ export interface ActionResult {
     range: number
 }
 
+const aggro = {
+    [KiokuRole.Defender]: 15,
+    [KiokuRole.Buffer]: 10,
+    [KiokuRole.Debuffer]: 10,
+    [KiokuRole.Healer]: 10,
+    [KiokuRole.Attacker]: 5,
+    [KiokuRole.Breaker]: 5,
+}
+
 class KiokuState {
     kioku: Kioku
     passiveEffects: SkillDetail[] = []
     activeEffects: [number, number][] = []
     currentHp = 100
-    breakGauge = 0
-    currentAv = 0
+    breakGauge: number
+    aggro: number
+    distanceRemaining = spdDistance
     currentSpd = 0
 
     constructor(kioku: Kioku) {
         this.kioku = kioku
+        this.breakGauge = this.maxBreak()
+        this.aggro = aggro[kioku.role]
     }
 
     init() {
-        this.breakGauge = this.maxBreak()
         this.currentSpd = this.calculateSpd()
-        this.currentAv = this.calculateStartAv()
+        this.resetDistanceRemaining()
+        this.applyStartHaste()
     }
 
-    calculateMaxAv(): number {
-        return (10000 / this.currentSpd) | 0
+
+    reduceDistance(distanceDelta: number): void {
+        this.distanceRemaining -= distanceDelta
     }
 
-    reduceAv(avDelta: number) {
-        this.currentAv -= avDelta
+    resetDistanceRemaining(): void {
+        this.distanceRemaining = spdDistance / this.currentSpd
     }
 
-    calculateStartAv(): number {
+    applyStartHaste(): void {
         let haste = 0
         for (const detail of this.passiveEffects) {
             if (detail.abilityEffectType === "HASTE") {
-                if (!(isTiming([ProcessTiming.BATTLE_START], detail?.startTimingIdCsv))) continue
+                if (!(isTiming([ProcessTiming.BATTLE_START], (detail as PassiveSkill)?.startTimingIdCsv))) continue
                 if (detail.startConditionSetIdCsv.length && detail.startConditionSetIdCsv != "0") continue
                 if (!detail.activeConditionSetIdCsv.split(",").every(condId => isActiveConditionRelevantForPvPState(condId))) continue
                 haste += detail.value1 / 1000
             }
         }
-        return this.calculateMaxAv() * Math.max(0, 1 - haste) | 0
+        console.log(this.kioku.name, this.distanceRemaining, haste, this.currentSpd)
+        this.distanceRemaining *= (1 - Math.min(1, haste))
     }
 
     calculateSpd(): number {
@@ -62,7 +76,7 @@ class KiokuState {
                 spd += detail.value1
             }
         }
-        return spd | 0
+        return spd
     }
 
     maxBreak(): number {
@@ -96,20 +110,24 @@ export class PvPTeam {
         this.kiokuStates.forEach(k => k.init())
     }
 
-    reduceAv(avDelta: number): void {
-        this.kiokuStates.forEach(k => k.reduceAv(avDelta))
+    reduceDistance(distanceDelta: number): void {
+        this.kiokuStates.forEach(k => k.reduceDistance(distanceDelta))
     }
 
-    getMinAv(): number {
-        return Math.min(...Object.values(this.getTeamAvs()))
+    getNextDistance(): number {
+        return Math.min(...Object.values(this.getTeamDistanceRemaining()))
+    }
+
+    getTeamBaseSpeeds(): Record<string, number> {
+        return this.kiokuStates.reduce((s, k) => ({ ...s, [k.kioku.name]: k.kioku.baseSpd }), {})
     }
 
     getTeamSpeeds(): Record<string, number> {
         return this.kiokuStates.reduce((s, k) => ({ ...s, [k.kioku.name]: k.calculateSpd() }), {})
     }
 
-    getTeamAvs(): Record<string, number> {
-        return this.kiokuStates.reduce((s, k) => ({ ...s, [k.kioku.name]: k.currentAv }), {})
+    getTeamDistanceRemaining(): Record<string, number> {
+        return this.kiokuStates.reduce((s, k) => ({ ...s, [k.kioku.name]: k.distanceRemaining }), {})
     }
 
     setup() {
@@ -132,28 +150,25 @@ export class PvPTeam {
     }
 
     getTarget(): KiokuState {
-        // TODO: Select worst? Random? Distribution?
+        // TODO: Select worst? Random? Distribution? all?
         return this.kiokuStates[0]
     }
 
-    getReadyToAct(): ((k: KiokuState) => ActionResult)[] {
-        return this.kiokuStates.filter(k => k.av === 0).map(k => (t: KiokuState) => this.act(k.kioku, k))
+    getNextActor(): KiokuState {
+        return this.kiokuStates.filter(k => k.distanceRemaining === 0)[0]
     }
 
-    act(kioku: Kioku, target: KiokuState): ActionResult {
+    act(): SkillDetail[] {
+        const actor = this.getNextActor()
         let effectId;
         if (this.currentSp) {
             this.currentSp--
-            effectId = kioku.data.skill_id
+            effectId = actor.kioku.data.skill_id
         } else {
             this.currentSp++
-            effectId = kioku.data.attack_id
+            effectId = actor.kioku.data.attack_id
         }
 
-        for (const detail of kioku.effects[effectId]) {
-            console.log(detail)
-            // TODO Do something
-        }
-        return 0
+        return actor.kioku.effects[effectId]
     }
 }

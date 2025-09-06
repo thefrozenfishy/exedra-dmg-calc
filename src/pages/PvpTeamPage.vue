@@ -71,7 +71,7 @@ onMounted(() => {
 
 const battleOutput = computed(() => {
   if (!battleInstance.value) return
-  const speeds = (battleInstance.value.getSpeedsAndStartAVs())
+  const speeds = (battleInstance.value.executeNextAction())
 
   for (const isAlliedTeam of [0, 1]) {
     for (const [key, vals] of Object.entries(speeds[isAlliedTeam ? "allies" : "enemies"])) {
