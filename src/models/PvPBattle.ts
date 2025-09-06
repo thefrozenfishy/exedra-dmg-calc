@@ -1,5 +1,5 @@
-import { ActionResult, PvPTeam } from "./PvPTeam";
-
+import { BattleState } from "../types/KiokuTypes";
+import { PvPTeam } from "./PvPTeam";
 
 export class PvPBattle {
     private team1: PvPTeam;
@@ -10,34 +10,54 @@ export class PvPBattle {
         this.team1 = team1;
         this.team2 = team2;
         this.debug = debug;
+        this.advanceCharacters()
     }
 
-    getNextActor(): [PvPTeam, number] {
+    getCurrentState(): BattleState {
+        return {
+            allies: this.team1.kiokuStates.map(k => ({
+                spd: k.currentSpd,
+                baseSpd: k.kioku.baseSpd,
+                distance: k.distanceRemaining,
+                name: k.kioku.name,
+                breakCurrent: k.breakGauge,
+                maxBreakGauge: k.maxBreakGauge,
+                mp: k.currentMp,
+                maxMp: k.maxMp,
+                id: k.kioku.data.id,
+            })),
+            enemies: this.team2.kiokuStates.map(k => ({
+                spd: k.currentSpd,
+                baseSpd: k.kioku.baseSpd,
+                distance: k.distanceRemaining,
+                name: k.kioku.name,
+                breakCurrent: k.breakGauge,
+                maxBreakGauge: k.maxBreakGauge,
+                mp: k.currentMp,
+                maxMp: k.maxMp,
+                id: k.kioku.data.id,
+            }))
+        }
+    }
+
+    getNextActor(): [PvPTeam, PvPTeam, number] {
         const distance = this.team2.getNextDistance()
         const altDistance = this.team1.getNextDistance()
-        if (distance > altDistance) return [this.team1, altDistance]
-        return [this.team2, distance]
+        if (distance > altDistance) return [this.team1, this.team2, altDistance]
+        return [this.team2, this.team1, distance]
     }
 
-    executeNextAction() {
-        const [team, distance] = this.getNextActor()
-        console.log(team, distance)
+    advanceCharacters(): void {
+        const [a, b, distance] = this.getNextActor()
+
         this.team1.reduceDistance(distance)
         this.team2.reduceDistance(distance)
+    }
 
-        team.act()
-
-        return {
-            allies: {
-                spd: this.team1.getTeamSpeeds(),
-                baseSpd: this.team1.getTeamBaseSpeeds(),
-                distance: this.team1.getTeamDistanceRemaining()
-            },
-            enemies: {
-                spd: this.team2.getTeamSpeeds(),
-                baseSpd: this.team2.getTeamBaseSpeeds(),
-                distance: this.team2.getTeamDistanceRemaining()
-            },
-        }
+    executeNextAction(): void {
+        if (this.team2.useUltimate(this.team1)) return
+        if (this.team1.useUltimate(this.team2)) return
+        const [actorTeam, targetTeam, distance] = this.getNextActor()
+        actorTeam.useAttackOrSkill(targetTeam)
     }
 }

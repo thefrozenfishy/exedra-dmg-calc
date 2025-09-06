@@ -393,7 +393,7 @@ const topTeamsByAttacker = computed(() => {
         const results = sortedResults.value.filter(r => r[2] === a.name)
         if (results.length) map[a.name] = mergeCells(sortedResults.value.filter(r => r[2] === a.name)).slice(0, 5)
     })
-    const highestAtk = Object.fromEntries(Object.entries(map).map(([a, b]) => { console.log(a, b); return [a, Math.max(...b.map(t => t.dmg[0]))] }))
+    const highestAtk = Object.fromEntries(Object.entries(map).map(([a, b]) => [a, Math.max(...b.map(t => t.dmg[0]))]))
     return Object.entries(map).sort((a, b) => highestAtk[b[0]] - highestAtk[a[0]])
 })
 

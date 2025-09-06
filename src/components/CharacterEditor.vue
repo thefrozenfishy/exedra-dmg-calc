@@ -7,15 +7,16 @@
     <StatInputs :member="slot.main" :isSupport="false" @update="setMain(index, $event)" />
   </div>
 
-  <div v-if="validChar(slot?.main)" class="stats">
+  <div v-if="extraData" class="stats">
     <div class="stat">
-      Spd: {{ round(slot.main.spd) }} ({{ slot.main.baseSpd }} <span style="color: blue">+ {{ round(slot.main.spd - slot.main.baseSpd) }}</span>)
+      Spd: {{ round(extraData.spd) }} ({{ extraData.baseSpd }}
+      <span style="color: blue">+ {{ round(extraData.spd - extraData.baseSpd) }}</span>)
     </div>
     <div class="stat">
-      AV after move: {{ round(10000 / slot.main.spd) }}
+      AV after move: {{ round(10000 / extraData.spd) }}
     </div>
     <div class="stat">
-      Initial AV: {{ round(slot.main.distance) }}
+      Initial AV: {{ round(extraData.distance) }}
     </div>
   </div>
 
@@ -55,19 +56,16 @@ import PortraitSelector from './PortraitSelector.vue';
 import CrystalisSelector from './CrystalisSelector.vue';
 import SubCrystalisSelector from './SubCrystalisSelector.vue';
 import StatInputs from './StatInputs.vue'
-import { Character, PvPCharacter } from '../types/KiokuTypes';
+import { BattleSnapshot, Character } from '../types/KiokuTypes';
 
 const round = (spd: number) => spd.toFixed(2)
-
-const validChar = (m?: PvPCharacter | Character) => {
-  return !!m && "spd" in m // Check interface has spd in it (PvPCharacter)
-}
 
 const props = defineProps<{
   index: number
   slot: TeamSlot
-  setMain: (index: number, member: PvPCharacter | Character) => void
-  setSupport: (index: number, member: PvPCharacter | Character) => void
+  extraData?: BattleSnapshot
+  setMain: (index: number, member: Character) => void
+  setSupport: (index: number, member: Character) => void
   onChangeCrys: (charIdx: number, crysIdx: number, rawValue: string) => void
   onChangeSubCrys: (charIdx: number, crysIdx: number, rawValue: string) => void
 }>()
@@ -85,5 +83,4 @@ const props = defineProps<{
 .stats select {
   width: 90%;
 }
-
 </style>

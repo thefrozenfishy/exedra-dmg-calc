@@ -138,10 +138,21 @@ export interface Character {
     crys_sub: string[]
 }
 
-export interface PvPCharacter extends Character {
-    distance: number
+export interface BattleSnapshot {
     spd: number
     baseSpd: number
+    distance: number
+    id: number
+    breakCurrent: number
+    maxBreakGauge: number
+    mp: number
+    maxMp: number
+    name: string
+}
+
+export interface BattleState {
+    allies: BattleSnapshot[]
+    enemies: BattleSnapshot[]
 }
 
 export interface KiokuData {

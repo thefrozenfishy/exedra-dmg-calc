@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { Enemy } from '../types/EnemyTypes'
 import { TeamSlot } from '../types/BestTeamTypes'
-import { Character, correctCharacterParams, PvPCharacter } from '../types/KiokuTypes'
+import { Character, correctCharacterParams, Character } from '../types/KiokuTypes'
 import { crystalises } from '../utils/helpers'
 
 export const usePvPStore = defineStore('pvp', {
@@ -13,13 +13,13 @@ export const usePvPStore = defineStore('pvp', {
   }),
   actions: {
     setMain(isAlliedTeam: number) {
-      return (slotIndex: number, member: PvPCharacter | undefined) => {
+      return (slotIndex: number, member: Character | undefined) => {
         this.slots[isAlliedTeam][slotIndex].main = correctCharacterParams(member)
         this.save()
       }
     },
     setSupport(isAlliedTeam: number) {
-      return (slotIndex: number, member: PvPCharacter | undefined) => {
+      return (slotIndex: number, member: Character | undefined) => {
         this.slots[isAlliedTeam][slotIndex].support = correctCharacterParams(member)
         this.save()
       }
