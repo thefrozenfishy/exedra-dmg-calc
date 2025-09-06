@@ -186,11 +186,10 @@
                     <TeamRow :team="team" :loading="false" />
                 </div>
 
-                <div v-for="attacker in attackers" :key="attacker.id" class="attacker-section">
-                    <div v-if="topTeamsByAttacker[attacker.name]?.length">
-                        <h3>Top Teams for {{ attacker.name }}</h3>
-                        <div class="team-row-wrapper" v-for="(team, idx) in topTeamsByAttacker[attacker.name] ?? []"
-                            :key="idx">
+                <div v-for="[attackerName, teams] of topTeamsByAttacker" :key="attackerName" class="attacker-section">
+                    <div v-if="teams?.length">
+                        <h3>Top Teams for {{ attackerName }}</h3>
+                        <div class="team-row-wrapper" v-for="(team, idx) in teams" :key="idx">
                             <TeamRow :team="team" :loading="false" />
                         </div>
                     </div>
@@ -208,7 +207,7 @@ import { useEnemyStore } from '../store/singleTeamStore'
 import { useCharacterStore } from '../store/characterStore'
 import { KiokuRole, Character, KiokuElement } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
-import { FinalTeam } from '../types/BestTeamTypes'
+import { ConsolidatedFinalTeam, FinalTeam } from '../types/BestTeamTypes'
 
 const enemies = useEnemyStore()
 
@@ -353,7 +352,7 @@ const populateStatusTeam = (result: any[]) => ({
 const sortedResults: ComputedRef<any[][]> = computed(() => [...results].sort((a, b) => b[0] - a[0]))
 
 
-function mergeCells(results: any[]) {
+function mergeCells(results: any[]): ConsolidatedFinalTeam[] {
     /*
         Merges dmg, crit rate and crys into lists, so show more teams and less small crys varations
     */
@@ -389,11 +388,13 @@ function mergeCells(results: any[]) {
 const topResults = computed(() => mergeCells(sortedResults.value).slice(0, 20))
 
 const topTeamsByAttacker = computed(() => {
-    const map: Record<string, any[]> = {}
+    const map: Record<string, ConsolidatedFinalTeam[]> = {}
     prevAttackers.forEach(a => {
-        map[a.name] = mergeCells(sortedResults.value.filter(r => r[2] === a.name)).slice(0, 5)
+        const results = sortedResults.value.filter(r => r[2] === a.name)
+        if (results.length) map[a.name] = mergeCells(sortedResults.value.filter(r => r[2] === a.name)).slice(0, 5)
     })
-    return map
+    const highestAtk = Object.fromEntries(Object.entries(map).map(([a, b]) => { console.log(a, b); return [a, Math.max(...b.map(t => t.dmg[0]))] }))
+    return Object.entries(map).sort((a, b) => highestAtk[b[0]] - highestAtk[a[0]])
 })
 
 async function startSimulation() {

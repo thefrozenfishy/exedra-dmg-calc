@@ -140,7 +140,6 @@ export async function findBestTeam({
                                     for (const supportSupport of supportSupports) {
                                         for (const attackerCrys of combinations(getBestCrystalises(attacker.element), 3)) {
                                             try {
-                                                console.log("For", attacker.name, "Using", optimalSubCrys ? undefined : attacker.crys_sub)
                                                 const team = new ScoreAttackTeam(
                                                     getKioku({
                                                         ...attacker,

@@ -244,9 +244,7 @@ export class Kioku {
             const isCrys = skill_label === "crystalis_id"
             let skill_id = (this.data as any)[skill_label]
             if (skill_label === "skill_id") {
-                console.log(this.effects)
                 const swapId = Object.values(this.effects).find(d => d.find(s => s.abilityEffectType === "SWITCH_SKILL"))?.[0].value1
-                console.log("Replacing w", swapId)
                 skill_id = swapId ?? skill_id
             }
             if (isCrys && !this.crys.includes("EX")) continue;
