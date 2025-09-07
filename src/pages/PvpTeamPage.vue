@@ -9,25 +9,30 @@
           <!-- Header per slot -->
           <h2> {{ isAlliedTeam ? "Ally" : "Enemy" }} {{ index + 1 }}</h2>
 
-          <CharacterEditor :index="index" :slot="slot" :extraData="battleOutput[0]?.[isAlliedTeam ? 'allies' : 'enemies']?.find(b => b.name === slot.main?.name)"
+          <CharacterEditor :index="index" :slot="slot" :extraData="battleOutput[0]?.[isAlliedTeam ? 'allies' : 'enemies']?.team?.find(b => b.name === slot.main?.name)"
             :setMain="team.setMain(isAlliedTeam)" :setSupport="team.setSupport(isAlliedTeam)"
             :onChangeCrys="onChangeCrys(isAlliedTeam)" :onChangeSubCrys="onChangeSubCrys(isAlliedTeam)" />
         </div>
       </div>
     </div>
   </div>
-  <div style="display: none;">
+  <div>
     <h2>Battle Order</h2>
+     <p style="color: red;">UNDER CONSTRUCTION</p>
     <button @click="runSimulation" :disabled="!isFullBattle">Run Simulation</button>
+    <p style="color: red;">Take this with a big grain of salt, as my understanding of the mechanics here are not perfect, nor do I want to use the time to special case all different attacks, targeting etc</p>
+    <p>I'll try to make sure all common pvp characters work identical to ingame, but niche picks are at your own risk</p>
+    <p>First few turns are probably correct, so use this to check speed ties etc. The further down you go the less likely it is to be correct</p>
     <div class="battle-output">
       <div v-for="(state, idx) in battleOutput" :key="idx" class="battle-state">
         <hr class="matchup-separator" />
         <div v-for="side of [state.allies, state.enemies]">
-          <div class="row allies">
-            <div v-for="char in side" :key="char.id" class="character">
+          <div class="row">
+            {{ side.sp }}
+            <div v-for="char in side.team" :key="char.id" class="character">
               <a :href="`https://exedra.wiki/wiki/${char.name}`" target="_blank" style="display: block;">
                 <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name"
-                  :class="{ 'at-zero': char.distance === 0 }" />
+                  :class="{ 'at-zero': char.secondsLeft - 0.01 <= 0 }" />
               </a>
               <div class="progress-bar">
                 MP
@@ -37,7 +42,7 @@
                 Break
                 <progress :value="char.breakCurrent" :max="char.maxBreakGauge"></progress>
               </div>
-              <div class="distance">{{ round(char.distance) }}</div>
+              <div class="distance">{{ round(char.secondsLeft) }}</div>
             </div>
           </div>
         </div>
@@ -84,7 +89,6 @@ const isFullBattle = computed(() => team.slots[0].every(t => t?.main) && team.sl
 const battleInstance = ref<PvPBattle | null>(null)
 
 watch(team, () => {
-  console.log("aaa", isFullBattle)
   if (!isFullBattle.value) {
     battleOutput.value = []
     battleInstance.value = null
@@ -96,7 +100,6 @@ watch(team, () => {
   const battle = new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"))
   battleInstance.value = battle
   battleOutput.value = [battle.getCurrentState()]
-  console.log("battleInstance recalculated:", battle)
 }, { immediate: true, deep: true })
 
 onMounted(() => {
@@ -108,7 +111,7 @@ function runSimulation() {
     battleOutput.value = []
     return
   }
-
+  if (battleOutput.value.length > 1) return // Only run sim once
 
   const states = []
   for (let index = 0; index < 25; index++) {

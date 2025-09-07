@@ -38,10 +38,13 @@ export enum ProcessTiming {
     AFTER_PROCESS = 9,
 }
 
-export const isTiming = (startTimings: ProcessTiming[], startTimingIdCsv?: string) => {
-    if (!startTimingIdCsv || startTimingIdCsv === "0") return false
+export const isTiming = (startTiming: ProcessTiming, startTimingIdCsv: string) => {
+    if (!startTimingIdCsv || startTimingIdCsv === "0") {
+        console.error("Unknown start timing", startTimingIdCsv)
+        return false
+    }
     for (const startTimingId of startTimingIdCsv.split(",")) {
-        if (startTimings.includes(Number(startTimingId))) return true
+        if (startTiming === Number(startTimingId)) return true
     }
     return false
 }
@@ -226,36 +229,40 @@ export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: st
     return true
 }
 
-export const isStartCondRelevantForPvPState = (startConditionId: string, currentMagicStacks: number): boolean => {
-    if (!startConditionId || startConditionId === "0") return true
+export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], {
+    currentMagicStacks = 0,
+    amountOfEnemies = 5,
+    currentHp = 100,
+    brokenUnits = 0,
+}: {
+    currentMagicStacks?: number,
+    amountOfEnemies?: number,
+    currentHp?: number,
+    brokenUnits?: number
+}): boolean =>
+    conditionSetIdCsvList.every(conditionSetIdCsv => conditionSetIdCsv.split(",").every(conditionSetId => {
+        if (!conditionSetId || conditionSetId === "0") return true
 
-    const battleConditionSet = battleConditionSets[startConditionId]
-    for (const activeCondId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
-        const battleCondition = battleConditions[activeCondId]
-
-        if (battleCondition.compareContent === CompareContent.CHARGE_POINT) {
-            if (!isCondActive(battleCondition, currentMagicStacks)) return false
+        const battleConditionSet = battleConditionSets[conditionSetId]
+        for (const conditionId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
+            const battleCondition = battleConditions[conditionId]
+            if (battleCondition.compareContent === CompareContent.HP_RATIO) {
+                if (!isCondActive(battleCondition, currentHp)) return false
+            } else if (battleCondition.compareContent === CompareContent.IS_ACTOR) {
+                // This is mabayu skill not working on self etc, just pretend this scenario doesn't happen
+            } else if (battleCondition.compareContent === CompareContent.ALIVE_UNIT_COUNT) {
+                if (!isCondActive(battleCondition, amountOfEnemies)) return false
+            } else if (battleCondition.compareContent === CompareContent.BREAKED_UNIT_COUNT) {
+                if (!isCondActive(battleCondition, brokenUnits)) return false
+            } else if (battleCondition.compareContent === CompareContent.CHARGE_POINT) {
+                if (!isCondActive(battleCondition, currentMagicStacks)) return false
+            } else if (battleCondition.compareContent === CompareContent.IS_FRIEND) {
+                // Pretend it is always friend cause I think we never target enemy?
+            } else if (battleCondition.compareContent === CompareContent.ACTOR_SKILL_TYPE) {
+                // If it's ult, fua, skill etc, just pretend it always is...
+            } else {
+                console.warn(`Unknown condition ${battleCondition.compareContent}`, battleCondition)
+            }
         }
-
-        console.warn("Unknown start condition", battleConditionSet)
-    }
-    return false;
-}
-
-export const isActiveConditionRelevantForPvPState = (activeConditionSetId: string): boolean => {
-    if (!activeConditionSetId || activeConditionSetId === "0") return true
-
-    const battleConditionSet = battleConditionSets[activeConditionSetId]
-    for (const activeCondId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
-        const battleCondition = battleConditions[activeCondId]
-        if (battleCondition.compareContent === CompareContent.HP_RATIO) {
-            return isCondActive(battleCondition, 100)
-        }
-        if (battleCondition.compareContent === CompareContent.ALIVE_UNIT_COUNT) {
-            return isCondActive(battleCondition, 5)
-        }
-
-        console.warn("Unknown active condition", battleCondition)
-    }
-    return false
-}
+        return true
+    }))

@@ -1,7 +1,6 @@
 import { Kioku } from "./Kioku";
-import { KiokuRole, PassiveSkill, SkillDetail, spdDistance } from "../types/KiokuTypes";
-import { isStartCondRelevantForPvPState, isActiveConditionRelevantForPvPState, isTiming, ProcessTiming } from "./BattleConditionParser";
-import { getIdx } from "../utils/helpers";
+import { KiokuRole, SkillDetail, maxMeters } from "../types/KiokuTypes";
+import { isConditionSetActiveForPvP, isTiming, ProcessTiming } from "./BattleConditionParser";
 
 const aggro = {
     [KiokuRole.Defender]: 15,
@@ -18,18 +17,40 @@ const defaultbreak = {
     "attack_id": { 1: 10 },
 }
 
+const friendlySkills = [
+    "CONSUME_CHARGE_POINT", //TODO:  HANDLE
+    "CUTOUT",
+    "GAIN_CHARGE_POINT", //TODO:  HANDLE
+    "GAIN_EP_RATIO",
+    "GAIN_EP_FIXED",
+    "HASTE",
+    "UP_ATK_RATIO",
+    "UP_BREAK_DAMAGE_RECEIVE_RATIO",
+    "UP_EP_RECOVER_RATE_RATIO",
+    "UP_GIV_BREAK_POINT_DMG_FIXED",
+    "UP_GIV_DMG_RATIO",
+    "UP_SPD_FIXED",
+    "UP_SPD_RATIO",
+]
+
+const enemySkills = [
+    "DMG_ATK",
+    "DMG_DEF",
+]
+
 export class KiokuState {
     kioku: Kioku
-    passiveEffects: SkillDetail[] = []
-    activeEffects: Record<string, SkillDetail> = {}
+    effects: Record<string, SkillDetail> = {}
     breakGauge: number
     maxBreakGauge: number
+    isBroken = false
     aggro: number
-    distanceRemaining = spdDistance
-    currentSpd = 0
+    metersRemaining = maxMeters
+    currentSpd = 0  // Spd is m/s
     currentMp = 0
     maxMp: number
-    mpBonus = 0
+    mpGain = 1
+    currentMagic = 0
 
     constructor(kioku: Kioku) {
         this.kioku = kioku
@@ -39,92 +60,100 @@ export class KiokuState {
         this.maxMp = kioku.data.ep
     }
 
-    init() {
-        this.currentSpd = this.calculateSpd()
-        this.resetDistanceRemaining()
-        this.applyStartHaste()
+    resetMeters() {
+        this.metersRemaining = maxMeters
     }
 
-
-    reduceDistance(distanceDelta: number): void {
-        this.distanceRemaining -= distanceDelta
-    }
-
-    resetDistanceRemaining(): void {
-        this.distanceRemaining = spdDistance / this.currentSpd
-    }
-
-    applyHaste(value: number): void {
-        this.distanceRemaining = Math.max(this.distanceRemaining - (spdDistance / this.currentSpd * value / 1000), 0)
-    }
-
-    applyToSelfEffect(detail: SkillDetail, effectName: string) {
-        console.log(detail)
-        switch (detail.abilityEffectType) {
-            case "DMG_ATK":
-            case "DMG_DEF":
-                // TODO: Proximity should use value4
-                let breakVal = detail.value3 || defaultbreak[effectName][detail.range]
-                breakVal += Object.values(this.activeEffects).reduce((sum, eff) => eff.abilityEffectType === "UP_GIV_BREAK_POINT_DMG_FIXED" ? sum + eff.value1 : sum, 0)
-                breakVal += this.passiveEffects.reduce((sum, eff) => eff.abilityEffectType === "UP_GIV_BREAK_POINT_DMG_FIXED" ? sum + eff.value1 : sum, 0)
-                this.breakGauge -= breakVal
-                break
-            case "HASTE":
-                this.applyHaste(detail.value1)
-                break;
-            case "UP_GIV_DMG_RATIO":
-            case "UP_CTR_FIXED":
-                break
-            case "UP_GIV_BREAK_POINT_DMG_FIXED":
-                this.activeEffects[getIdx(detail)] = detail
-                break
-            default:
-                throw Error(`$Unknown abilityEffectType ${detail.abilityEffectType}`)
-        }
-    }
-
-    sliceTargets(targets: KiokuState[], range: number): KiokuState[] {
-        // TODO: Make this select into a graph?
-        if (range === 1) return [targets[0]]
-        if (range === 2) return targets.slice(0, 2)
-        if (range === 3) return targets
-        return [this]
-    }
-
-    applyEffectsTo(targets: KiokuState[], details: SkillDetail[], effectName: string): void {
-        for (const detail of details) {
-            for (const target of this.sliceTargets(targets, detail.range)) {
-                target.applyToSelfEffect(detail, effectName)
-            }
-        }
-    }
-
-    applyStartHaste(): void {
-        for (const detail of this.passiveEffects) {
-            if (detail.abilityEffectType === "HASTE") {
-                if (!(isTiming([ProcessTiming.BATTLE_START], (detail as PassiveSkill)?.startTimingIdCsv))) continue
-                if (detail.startConditionSetIdCsv.length && detail.startConditionSetIdCsv != "0") continue
-                if (!detail.activeConditionSetIdCsv.split(",").every(condId => isActiveConditionRelevantForPvPState(condId))) continue
-                this.applyHaste(detail.value1)
-            }
-        }
-    }
-
-    calculateSpd(): number {
+    updateSpd(): void {
         let spd = this.kioku.baseSpd
-        for (const detail of this.passiveEffects) {
-            if (detail.abilityEffectType === "UP_SPD_RATIO") {
-                if (detail.startConditionSetIdCsv.length && detail.startConditionSetIdCsv != "0") continue
-                if (!detail.activeConditionSetIdCsv.split(",").every(condId => isActiveConditionRelevantForPvPState(condId))) continue
-                spd += (this.kioku.baseSpd * detail.value1 / 1000)
-            }
-            if (detail.abilityEffectType === "UP_SPD_FIXED") {
-                if (detail.startConditionSetIdCsv.length && detail.startConditionSetIdCsv != "0") continue
-                if (!detail.activeConditionSetIdCsv.split(",").every(condId => isActiveConditionRelevantForPvPState(condId))) continue
-                spd += detail.value1
-            }
+        const effs = this.filteredEffects()
+        for (const detail of Object.values(effs["UP_SPD_RATIO"] ?? {})) {
+            spd += (this.kioku.baseSpd * detail.value1 / 1000)
         }
-        return spd
+        for (const detail of Object.values(effs["UP_SPD_FIXED"] ?? {})) {
+            spd += detail.value1
+        }
+        this.currentSpd = spd
+    }
+
+    updateMPGain(): void {
+        let mpGain = 1
+        const effs = this.filteredEffects()
+        for (const detail of Object.values(effs["UP_EP_RECOVER_RATE_RATIO"] ?? {})) {
+            mpGain += detail.value1 / 1000
+        }
+        this.mpGain = mpGain
+    }
+
+    secondsUntilAct(): number {
+        return this.metersRemaining / this.currentSpd
+    }
+
+    traverseSeconds(seconds: number): void {
+        this.progressMeters(seconds * this.currentSpd)
+    }
+
+    progressMeters(metersWalked: number): void {
+        this.metersRemaining = Math.max(this.metersRemaining - metersWalked, 0)
+    }
+
+    filteredEffects(brokenUnits = 0) {
+        const currents: Record<string, SkillDetail[]> = {}
+        for (const effect of Object.values(this.effects)) {
+            if (!isConditionSetActiveForPvP([effect.activeConditionSetIdCsv, effect.activeConditionSetIdCsv], {
+                currentMagicStacks: this.currentMagic,
+                amountOfEnemies: 5,
+                currentHp: 100,
+                brokenUnits,
+            })) continue
+            if (!(effect.abilityEffectType in currents)) currents[effect.abilityEffectType] = []
+            currents[effect.abilityEffectType].push(effect)
+        }
+        return currents
+    }
+
+    endTurn() {
+        this.effects = Object.fromEntries(Object.entries(this.effects).map(([id, eff]) => {
+            if ("passiveSkillMstId" in eff) return [id, eff]
+            eff.turn -= 1
+            if (eff.abilityEffectType === "CUTOUT") this.progressMeters(10000)
+            if (eff.turn <= 0) return [null, null]
+            return [id, eff]
+        }).filter(([id, eff]) => id != null))
+    }
+
+    applyEffectToTarget(target: KiokuState, detail: SkillDetail, effectName: string, brokenUnits = 0) {
+        if (!isConditionSetActiveForPvP([detail.activeConditionSetIdCsv, detail.activeConditionSetIdCsv], {
+            currentMagicStacks: this.currentMagic,
+            amountOfEnemies: 5,
+            currentHp: 100,
+            brokenUnits,
+        })) return
+        if (detail.abilityEffectType.startsWith("DMG_")) {
+            // TODO: Proximity should use value4, prolly doesn't matter much tho
+            // TODO: Random dmg special case it?
+            let breakVal = detail.value3 || defaultbreak[effectName][detail.range]
+            breakVal += Object.values(this.filteredEffects()).flat()
+                .reduce((sum, eff) => eff.abilityEffectType === "UP_GIV_BREAK_POINT_DMG_FIXED" ? sum + eff.value1 : sum, 0)
+            target.breakGauge -= breakVal
+        } else if ([...enemySkills, ...friendlySkills].includes(detail.abilityEffectType)) {
+            target.effects["passiveSkillDetailMstId" in detail ? detail.passiveSkillDetailMstId : detail.skillDetailMstId] = detail
+            if (detail.abilityEffectType === "HASTE") {
+                target.progressMeters(10 * detail.value1)
+            } else if (detail.abilityEffectType === "GAIN_EP_RATIO") {
+                console.log("Adding MP RATIO", detail, target.maxMp, detail.value1 / 1000, target.mpGain, Math.floor((target.maxMp * detail.value1 / 1000) * target.mpGain))
+                target.currentMp += Math.floor((target.maxMp * detail.value1 / 1000) * target.mpGain)
+            } else if (detail.abilityEffectType === "GAIN_EP_FIXED") {
+                console.log("Adding MP FIXED", detail, detail.value1, target.mpGain, Math.floor((detail.value1) * target.mpGain))
+                target.currentMp += Math.floor(detail.value1 * target.mpGain)
+            } else if (["UP_SPD_FIXED", "UP_SPD_RATIO"].includes(detail.abilityEffectType)) {
+                target.updateSpd()
+            } else if ("UP_EP_RECOVER_RATE_RATIO" === detail.abilityEffectType) {
+                target.updateMPGain()
+            }
+        } else {
+            throw Error(`$Unknown abilityEffectType ${detail.abilityEffectType} `)
+        }
     }
 
     maxBreak(): number {
@@ -146,98 +175,132 @@ export class KiokuState {
 
 export class PvPTeam {
     kiokuStates: KiokuState[];
+    declare otherTeam: PvPTeam
     private debug: boolean;
     private teamLabel: string
-    private currentSp = 5
+    currentSp = 5
 
     constructor(kiokus: Kioku[], teamLabel: string, debug = false) {
         this.kiokuStates = kiokus.map(k => new KiokuState(k))
         this.debug = debug;
         this.teamLabel = teamLabel;
-        this.setup()
-        this.kiokuStates.forEach(k => k.init())
     }
 
-    reduceDistance(distanceDelta: number): void {
-        this.kiokuStates.forEach(k => k.reduceDistance(distanceDelta))
+    setOpponent(otherTeam: PvPTeam) {
+        this.otherTeam = otherTeam
     }
 
-    getNextDistance(): number {
-        return this.kiokuStates.reduce((s, k) => s < k.distanceRemaining ? s : k.distanceRemaining, spdDistance)
+    traverseSeconds(seconds: number): void {
+        this.kiokuStates.forEach(k => k.traverseSeconds(seconds))
+    }
+
+    getSecondsToNext(): number {
+        return this.kiokuStates.reduce((s, k) => s < k.secondsUntilAct() ? s : k.secondsUntilAct(), maxMeters)
     }
 
     setup() {
         for (const kiokuState of this.kiokuStates) {
-            for (const skill_id of [0, 1, 2, 3, kiokuState.kioku.data.ability_id, kiokuState.kioku.data.crystalis_id]) {
-                if (skill_id in kiokuState.kioku.effects) {
-                    for (const detail of kiokuState.kioku.effects[skill_id]) {
-                        if (skill_id > 10 && !getIdx(detail).toString().startsWith(skill_id.toString())) continue // "Fua etc are not actually passives"
-                        if (detail.abilityEffectType === "UP_SPD_RATIO") console.log(kiokuState.kioku.name, detail.range, detail.value1, detail)
-                        if (detail.range === -1) {
-                            kiokuState.passiveEffects.push(detail)
-                        } else {
-                            for (const otherKiokuState of this.kiokuStates) {
-                                otherKiokuState.passiveEffects.push(detail)
-                            }
-                        }
-                    }
-                }
+            this.applyPassives(kiokuState, ProcessTiming.BATTLE_START)
+        }
+        for (const kiokuState of this.kiokuStates) {
+            kiokuState.updateSpd()
+        }
+    }
+
+    applyPassives(actor: KiokuState, timing: ProcessTiming, brokenUnits = 0) {
+        for (const skillName of [11, 22, 33, 44, "ability_id", "crystalis_id"]) {
+            this.act(actor, skillName, timing, brokenUnits)
+        }
+    }
+
+    getNextActor(): KiokuState {
+        return this.kiokuStates.filter(k => k.metersRemaining <= 0)[0]
+    }
+
+    sliceTargets(actor: KiokuState, possibleTargets: KiokuState[], range: number, effectId: number, abilityEffectType: string): KiokuState[] {
+        if (range === 1) {
+            if (abilityEffectType.startsWith("DMG_")) return [possibleTargets[0]] // TODO How to handle aggro? Make this select into a graph?
+            const eligableTargets = this.kiokuStates.filter(k => k.kioku.name !== actor.kioku.name)
+            if (effectId === 1066) { // Hazuki skill
+                return [eligableTargets
+                    .filter(k => k.metersRemaining)
+                    .reduce((s, k) => !s?.distanceRemaining || s.distanceRemaining < k.metersRemaining ? k : s, {}) as KiokuState]
+            }
+            if (effectId === 1161) { // Mabayu skill
+                return [eligableTargets.reduce((s, k) => !s?.kioku || s.kioku.getBaseAtk() < k.kioku.getBaseAtk() ? k : s, {}) as KiokuState]
+            }
+            if (effectId === 1072) { // Rika skill
+                return [eligableTargets
+                    .filter(k => [KiokuRole.Attacker, KiokuRole.Breaker].includes(k.kioku.role))
+                    .reduce((s, k) => s.currentMp > k.currentMp ? k : s, { currentMp: 999 }) as KiokuState]
+            }
+            console.warn(actor.kioku.name, effectId, "has range 1, who to target?")
+            return [possibleTargets[0]]
+        }
+        if (range === 2) return possibleTargets.slice(0, 3) // TODO: Handle proximity / Random
+        if (range === 3) return possibleTargets
+        return [actor]
+    }
+
+    act(actor: KiokuState, effectName: string | number, actionState: ProcessTiming, brokenUnits = 0): void {
+        const effectId = actor.kioku.data[effectName] ?? effectName
+        const details = actor.kioku.effects[effectId] ?? []
+
+        let possibleTargets: KiokuState[] = []
+        for (const detail of details) {
+            if ("startTimingIdCsv" in detail && !isTiming(actionState, detail.startTimingIdCsv)) continue
+            if (actionState === ProcessTiming.BATTLE_START && detail.abilityEffectType.startsWith("DMG_")) continue // TODO: This should be handled differently
+            if (friendlySkills.includes(detail.abilityEffectType)) {
+                possibleTargets = this.kiokuStates
+            } else if (enemySkills.includes(detail.abilityEffectType)) {
+                possibleTargets = this.otherTeam.kiokuStates
+            } else {
+                console.warn("Unknown effect type", detail.abilityEffectType, detail)
+                continue
+            }
+            for (const target of this.sliceTargets(actor, possibleTargets, detail.range, effectId, detail.abilityEffectType)) {
+                actor.applyEffectToTarget(target, detail, effectName.toString(), brokenUnits)
             }
         }
     }
 
-    getTarget(): KiokuState {
-        // TODO: Select worst? Random? Distribution? all?
-        return this.kiokuStates[0]
-    }
-
-    getNextActor(): KiokuState {
-        return this.kiokuStates.filter(k => k.distanceRemaining === 0)[0]
-    }
-
-    act(actor: KiokuState, otherTeam: PvPTeam, effectName: string): void {
-        const effectId = actor.kioku.data[effectName]
-        const details = actor.kioku.effects[effectId]
-        let targets: KiokuState[] = otherTeam.kiokuStates
-        switch (effectId) {
-            case 1066: // Hazuki skill
-                targets = [this.kiokuStates
-                    .filter(k => k.kioku.name !== actor.kioku.name)
-                    .filter(k => k.distanceRemaining)
-                    .reduce((s, k) => !s?.distanceRemaining || s.distanceRemaining < k.distanceRemaining ? k : s, {})]
-                break
-            case 1022:
-            case 1149:
-                break
-            default:
-                console.warn(effectId, details)
-                throw Error(`${actor.kioku.name} - Unknown effectId ${effectId}`)
-        }
-        actor.applyEffectsTo(targets, details, effectName)
-    }
-
-    useUltimate(otherTeam: PvPTeam): boolean {
+    useUltimate(): boolean {
         const readyKiokus = this.kiokuStates.filter(k => k.currentMp >= k.maxMp)
         if (!readyKiokus.length) return false
         const actor = readyKiokus[0]
-        actor.currentMp = Math.floor(5 * (1 + actor.mpBonus))
-        this.act(actor, otherTeam, "special_id")
+        actor.currentMp = Math.floor(5 * actor.mpGain)
+        this.act(actor, "special_id", ProcessTiming.ATTACK_END)
         return true
     }
 
-    useAttackOrSkill(otherTeam: PvPTeam): void {
+    useAttackOrSkill(): void {
         const actor = this.getNextActor()
+        this.applyPassives(actor, ProcessTiming.TURN_START)
         let effectName;
         if (this.currentSp) {
             this.currentSp--
             effectName = "skill_id"
-            actor.currentMp += Math.floor(30 * (1 + actor.mpBonus))
+            actor.currentMp += Math.floor(30 * actor.mpGain)
         } else {
             this.currentSp++
             effectName = "attack_id"
-            actor.currentMp += Math.floor(15 * (1 + actor.mpBonus))
+            actor.currentMp += Math.floor(15 * actor.mpGain)
         }
-        actor.resetDistanceRemaining()
-        this.act(actor, otherTeam, effectName)
+        actor.resetMeters()
+        this.act(actor, effectName, ProcessTiming.ATTACK_END)
+        actor.endTurn()
+    }
+
+    hasNewlyBrokenUnits(): number {
+        const newlyBroken = this.kiokuStates.filter(k => k.breakGauge <= 0 && !k.isBroken)
+        newlyBroken.forEach(k => k.isBroken = true)
+        return newlyBroken.length
+    }
+
+    resolveEndOfTurn(): void {
+        const brokenUnits = this.otherTeam.hasNewlyBrokenUnits()
+        if (brokenUnits) {
+            this.kiokuStates.forEach(k => this.applyPassives(k, ProcessTiming.ATTACK_END, brokenUnits))
+        }
     }
 }

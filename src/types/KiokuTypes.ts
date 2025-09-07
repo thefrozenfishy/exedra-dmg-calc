@@ -1,6 +1,6 @@
 import { crystalises, kiokuData, portraits } from "../utils/helpers";
 
-export const spdDistance = 10000
+export const maxMeters = 10_000
 
 export enum KiokuElement {
     Flame = "Flame",
@@ -139,9 +139,15 @@ export interface Character {
 }
 
 export interface BattleSnapshot {
+    sp: number
+    team: TeamSnapshot[]
+}
+
+export interface TeamSnapshot {
     spd: number
+    atk: number
     baseSpd: number
-    distance: number
+    secondsLeft: number
     id: number
     breakCurrent: number
     maxBreakGauge: number
@@ -151,8 +157,8 @@ export interface BattleSnapshot {
 }
 
 export interface BattleState {
-    allies: BattleSnapshot[]
-    enemies: BattleSnapshot[]
+    allies: BattleSnapshot
+    enemies: BattleSnapshot
 }
 
 export interface KiokuData {

@@ -13,10 +13,13 @@
       <span style="color: blue">+ {{ round(extraData.spd - extraData.baseSpd) }}</span>)
     </div>
     <div class="stat">
-      AV after move: {{ round(10000 / extraData.spd) }}
+      AV after move: {{ round(10_000 / extraData.spd) }}
     </div>
     <div class="stat">
-      Initial AV: {{ round(extraData.distance) }}
+      Initial AV: {{ round(extraData.secondsLeft) }}
+    </div>
+    <div class="stat">
+      Base atk: {{ round(extraData.atk) }}
     </div>
   </div>
 
@@ -56,14 +59,14 @@ import PortraitSelector from './PortraitSelector.vue';
 import CrystalisSelector from './CrystalisSelector.vue';
 import SubCrystalisSelector from './SubCrystalisSelector.vue';
 import StatInputs from './StatInputs.vue'
-import { BattleSnapshot, Character } from '../types/KiokuTypes';
+import { Character, TeamSnapshot } from '../types/KiokuTypes';
 
 const round = (spd: number) => spd.toFixed(2)
 
 const props = defineProps<{
   index: number
   slot: TeamSlot
-  extraData?: BattleSnapshot
+  extraData?: TeamSnapshot
   setMain: (index: number, member: Character) => void
   setSupport: (index: number, member: Character) => void
   onChangeCrys: (charIdx: number, crysIdx: number, rawValue: string) => void
