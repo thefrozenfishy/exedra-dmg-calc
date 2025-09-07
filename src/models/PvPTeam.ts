@@ -141,10 +141,8 @@ export class KiokuState {
             if (detail.abilityEffectType === "HASTE") {
                 target.progressMeters(10 * detail.value1)
             } else if (detail.abilityEffectType === "GAIN_EP_RATIO") {
-                console.log("Adding MP RATIO", detail, target.maxMp, detail.value1 / 1000, target.mpGain, Math.floor((target.maxMp * detail.value1 / 1000) * target.mpGain))
                 target.currentMp += Math.floor((target.maxMp * detail.value1 / 1000) * target.mpGain)
             } else if (detail.abilityEffectType === "GAIN_EP_FIXED") {
-                console.log("Adding MP FIXED", detail, detail.value1, target.mpGain, Math.floor((detail.value1) * target.mpGain))
                 target.currentMp += Math.floor(detail.value1 * target.mpGain)
             } else if (["UP_SPD_FIXED", "UP_SPD_RATIO"].includes(detail.abilityEffectType)) {
                 target.updateSpd()
@@ -214,7 +212,7 @@ export class PvPTeam {
     }
 
     getNextActor(): KiokuState {
-        return this.kiokuStates.filter(k => k.metersRemaining <= 0)[0]
+        return this.kiokuStates.filter(k => k.metersRemaining - 0.1 <= 0)[0]
     }
 
     sliceTargets(actor: KiokuState, possibleTargets: KiokuState[], range: number, effectId: number, abilityEffectType: string): KiokuState[] {
