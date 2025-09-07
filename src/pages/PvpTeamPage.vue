@@ -2,10 +2,6 @@
   <div class="team-page">
     <h1>Simulate PvP Action Order</h1>
 
-    <p style="color: red;">UNDER CONSTRUCTION</p>
-    <p>For now this page can be used to check SPD breakpoints, looking if a quickstep+ to quickstep++ upgrade actuchar
-      will matter etc. </p>
-
     <div v-for="isAlliedTeam in [1, 0]">
       <h2>{{ isAlliedTeam ? "Allied" : "Enemy" }} Team</h2>
       <div class="team-grid">
