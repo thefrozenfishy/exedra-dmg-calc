@@ -222,7 +222,7 @@ export class PvPTeam {
             if (effectId === 1066) { // Hazuki skill
                 return [eligableTargets
                     .filter(k => k.metersRemaining)
-                    .reduce((s, k) => s.secondsUntilAct() < k.secondsUntilAct() ? k : s, { secondsUntilAct: () => 999 }) as KiokuState]
+                    .reduce((s, k) => s.secondsUntilAct() < k.secondsUntilAct() ? k : s, { secondsUntilAct: () => 0 }) as KiokuState]
             }
             if (effectId === 1161) { // Mabayu skill
                 return [eligableTargets.reduce((s, k) => s.kioku.getBaseAtk() < k.kioku.getBaseAtk() ? k : s, { kioku: { getBaseAtk: () => 0 } }) as KiokuState]
