@@ -13,6 +13,7 @@ const knownBoosts = {
     WEAKNESS: "Def%3",
     DWN_DEF_ACCUM_RATIO: "Def%2",
     UP_CTR_FIXED: "CR1+",
+    UP_CTR_RATIO: "CR3+",
     UP_CTR_ACCUM_RATIO: "CR2+",
     UP_CTD_FIXED: "CD1+",
     UP_CTD_RATIO: "CD3+",
@@ -269,11 +270,13 @@ export class ScoreAttackTeam {
         }
         const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;
 
-        const crit_rate = Math.min(1,
-            (this.dps.critRate +
-                (this.getEffect("UP_CTR_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) +
-                (this.getEffect("UP_CTR_FIXED", amountOfEnemies, enemy.maxBreak))) /
-            1000)
+        const uncapped_crit_rate = (this.dps.critRate +
+            (this.getEffect("UP_CTR_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) +
+            (this.getEffect("UP_CTR_FIXED", amountOfEnemies, enemy.maxBreak)) +
+            (this.getEffect("UP_CTR_RATIO", amountOfEnemies, enemy.maxBreak))) /
+            1000
+
+        const crit_rate = Math.min(1, uncapped_crit_rate)
 
         const crit_dmg = (this.dps.critDamage +
             this.getEffect("UP_CTD_FIXED", amountOfEnemies, enemy.maxBreak) +
@@ -374,6 +377,7 @@ Atk Up flat  - ${flat_atk | 0}
 Total Atk    - ${(atk_total | 0).toLocaleString()}
 Def down%    - ${(1 - def_remaining) * 100 | 0}%
 Total def    - ${(def_total | 0).toLocaleString()}
+Crit rate    - ${uncapped_crit_rate * 100 | 0}%
 Crit dmg     - ${crit_dmg * 100 | 0}%
 Dmg Dealt    - ${dmg_pluss * 100 | 0}%
 Elem dmg up  - ${elem_dmg_up * 100 | 0}%
