@@ -7880,6 +7880,86 @@
         "description": "対象は無属性"
     },
     {
+        "battleConditionMstId": 991,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "10",
+        "description": "対象のHPが10%未満のとき"
+    },
+    {
+        "battleConditionMstId": 992,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "20",
+        "description": "対象のHPが20%未満のとき"
+    },
+    {
+        "battleConditionMstId": 993,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "30",
+        "description": "対象のHPが30%未満のとき"
+    },
+    {
+        "battleConditionMstId": 994,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "40",
+        "description": "対象のHPが40%未満のとき"
+    },
+    {
+        "battleConditionMstId": 995,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "50",
+        "description": "対象のHPが50%未満のとき"
+    },
+    {
+        "battleConditionMstId": 996,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "60",
+        "description": "対象のHPが60%未満のとき"
+    },
+    {
+        "battleConditionMstId": 997,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "70",
+        "description": "対象のHPが70%未満のとき"
+    },
+    {
+        "battleConditionMstId": 998,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "80",
+        "description": "対象のHPが80%未満のとき"
+    },
+    {
+        "battleConditionMstId": 999,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "90",
+        "description": "対象のHPが90%未満のとき"
+    },
+    {
+        "battleConditionMstId": 1000,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "100",
+        "description": "対象のHPが100%未満のとき"
+    },
+    {
         "battleConditionMstId": 1001,
         "compareContent": 7,
         "compareOperator": 4,
@@ -8678,5 +8758,85 @@
         "compareTarget": 1,
         "compareValue": "50",
         "description": "50ターン未満"
+    },
+    {
+        "battleConditionMstId": 1101,
+        "compareContent": 303,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "1",
+        "description": "自軍にクリティカルダメージが発生しなかった場合"
+    },
+    {
+        "battleConditionMstId": 1102,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1098",
+        "description": "自分のキャラクターが「万年桜のウワサ」"
+    },
+    {
+        "battleConditionMstId": 1103,
+        "compareContent": 306,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "1",
+        "description": "味方が1人ブレイクされた"
+    },
+    {
+        "battleConditionMstId": 1104,
+        "compareContent": 306,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "2",
+        "description": "味方が2人ブレイクされた"
+    },
+    {
+        "battleConditionMstId": 1105,
+        "compareContent": 306,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "3",
+        "description": "味方が3人ブレイクされた"
+    },
+    {
+        "battleConditionMstId": 1106,
+        "compareContent": 306,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "4",
+        "description": "味方が4人ブレイクされた"
+    },
+    {
+        "battleConditionMstId": 1107,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "30",
+        "description": "トークンが30以上のとき"
+    },
+    {
+        "battleConditionMstId": 1108,
+        "compareContent": 306,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "4",
+        "description": "味方が4人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstId": 1109,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "60",
+        "description": "トークンが60未満"
+    },
+    {
+        "battleConditionMstId": 1110,
+        "compareContent": 306,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "3",
+        "description": "味方が3人以上ブレイクされた"
     }
 ]

@@ -424,6 +424,14 @@
         "resourceName": "art_02_01_0009"
     },
     {
+        "cardMstId": 4200033,
+        "element": 0,
+        "name": "Counselor of Curious Queries",
+        "passiveSkill1": 4093,
+        "rarity": 5,
+        "resourceName": "art_04_01_0007"
+    },
+    {
         "cardMstId": 4300001,
         "element": 0,
         "name": "See You Around, Homura",
@@ -734,6 +742,14 @@
         "passiveSkill1": 4092,
         "rarity": 4,
         "resourceName": "art_03_01_1022"
+    },
+    {
+        "cardMstId": 4300040,
+        "element": 0,
+        "name": "Imagine a Happy Future",
+        "passiveSkill1": 4094,
+        "rarity": 4,
+        "resourceName": "art_03_01_1098"
     },
     {
         "cardMstId": 5100001,

@@ -8360,6 +8360,26 @@
         "description": "行動者は無属性"
     },
     {
+        "battleConditionMstIdCsv": "962,1,306",
+        "battleConditionSetMstId": 1681,
+        "description": "自身以外の味方が追撃/反撃/援護発動時"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,281",
+        "battleConditionSetMstId": 1682,
+        "description": "自身以外の味方がクリティカル発生させたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "397,1",
+        "battleConditionSetMstId": 1683,
+        "description": "味方のターン中に魔力が6個のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "397,2",
+        "battleConditionSetMstId": 1684,
+        "description": "敵のターン中に魔力が6個のとき"
+    },
+    {
         "battleConditionMstIdCsv": "3,271,259",
         "battleConditionSetMstId": 1685,
         "description": "自身のターン経過が3ターン以上、5ターン未満"
@@ -8490,6 +8510,56 @@
         "description": "対象は無属性"
     },
     {
+        "battleConditionMstIdCsv": "991",
+        "battleConditionSetMstId": 1711,
+        "description": "対象のHPが10%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "992",
+        "battleConditionSetMstId": 1712,
+        "description": "対象のHPが20%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "993",
+        "battleConditionSetMstId": 1713,
+        "description": "対象のHPが30%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "994",
+        "battleConditionSetMstId": 1714,
+        "description": "対象のHPが40%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "995",
+        "battleConditionSetMstId": 1715,
+        "description": "対象のHPが50%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "996",
+        "battleConditionSetMstId": 1716,
+        "description": "対象のHPが60%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "997",
+        "battleConditionSetMstId": 1717,
+        "description": "対象のHPが70%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "998",
+        "battleConditionSetMstId": 1718,
+        "description": "対象のHPが80%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "999",
+        "battleConditionSetMstId": 1719,
+        "description": "対象のHPが90%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1000",
+        "battleConditionSetMstId": 1720,
+        "description": "対象のHPが100%未満のとき"
+    },
+    {
         "battleConditionMstIdCsv": "770,265",
         "battleConditionSetMstId": 1721,
         "description": "ターン経過が2ターン以上、4ターン未満"
@@ -8538,5 +8608,220 @@
         "battleConditionMstIdCsv": "781",
         "battleConditionSetMstId": 1730,
         "description": "経過ターンが2ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "406,843",
+        "battleConditionSetMstId": 1731,
+        "description": "トークンが0のとき AND 自軍にクリティカルダメージが発生"
+    },
+    {
+        "battleConditionMstIdCsv": "393,843",
+        "battleConditionSetMstId": 1732,
+        "description": "トークンが1のとき AND 自軍にクリティカルダメージが発生"
+    },
+    {
+        "battleConditionMstIdCsv": "394,843",
+        "battleConditionSetMstId": 1733,
+        "description": "トークンが2のとき AND 自軍にクリティカルダメージが発生"
+    },
+    {
+        "battleConditionMstIdCsv": "395,843",
+        "battleConditionSetMstId": 1734,
+        "description": "トークンが3のとき AND 自軍にクリティカルダメージが発生"
+    },
+    {
+        "battleConditionMstIdCsv": "396,843",
+        "battleConditionSetMstId": 1735,
+        "description": "トークンが4のとき AND 自軍にクリティカルダメージが発生"
+    },
+    {
+        "battleConditionMstIdCsv": "350,452",
+        "battleConditionSetMstId": 1736,
+        "description": "味方が4体未満の場合（自分を除く） AND 味方が1回ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "69,273,1108",
+        "battleConditionSetMstId": 1737,
+        "description": "6ターンごと（1ターン目から）AND 連続行動の1回目 AND 味方が4人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "69,274,1108",
+        "battleConditionSetMstId": 1738,
+        "description": "6ターンごと（1ターン目から） AND 連続行動の2回目 AND 味方が4人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "70,273,1108",
+        "battleConditionSetMstId": 1739,
+        "description": "6ターンごと（2ターン目から） AND 連続行動の1回目 AND 味方が4人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "70,274,1108",
+        "battleConditionSetMstId": 1740,
+        "description": "6ターンごと（2ターン目から） AND 連続行動の2回目 AND 味方が4人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "71,273,1108",
+        "battleConditionSetMstId": 1741,
+        "description": "6ターンごと（3ターン目から） AND 連続行動の1回目 AND 味方が4人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "71,274,1108",
+        "battleConditionSetMstId": 1742,
+        "description": "6ターンごと（3ターン目から） AND 連続行動の2回目 AND 味方が4人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "72,273,1108",
+        "battleConditionSetMstId": 1743,
+        "description": "6ターンごと（4ターン目から） AND 連続行動の1回目 AND 味方が4人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "72,274,1108",
+        "battleConditionSetMstId": 1744,
+        "description": "6ターンごと（4ターン目から） AND 連続行動の2回目 AND 味方が4人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "73,273,1108",
+        "battleConditionSetMstId": 1745,
+        "description": "6ターンごと（5ターン目から） AND 連続行動の1回目 AND 味方が4人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "73,274,1108",
+        "battleConditionSetMstId": 1746,
+        "description": "6ターンごと（5ターン目から） AND 連続行動の2回目 AND 味方が4人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "74,273,1108",
+        "battleConditionSetMstId": 1747,
+        "description": "6ターンごと（6ターン目から） AND 連続行動の1回目 AND 味方が4人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "74,274,1108",
+        "battleConditionSetMstId": 1748,
+        "description": "6ターンごと（6ターン目から） AND 連続行動の2回目 AND 味方が4人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "1102",
+        "battleConditionSetMstId": 1749,
+        "description": "自分のキャラクターが「万年桜のウワサ」"
+    },
+    {
+        "battleConditionMstIdCsv": "1103",
+        "battleConditionSetMstId": 1750,
+        "description": "味方が1人ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "1104",
+        "battleConditionSetMstId": 1751,
+        "description": "味方が2人ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "1105",
+        "battleConditionSetMstId": 1752,
+        "description": "味方が3人ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "1106",
+        "battleConditionSetMstId": 1753,
+        "description": "味方が4人ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "846,868",
+        "battleConditionSetMstId": 1754,
+        "description": "トークンが0以上10未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "877,870",
+        "battleConditionSetMstId": 1755,
+        "description": "トークンが10以上20未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "878,871",
+        "battleConditionSetMstId": 1756,
+        "description": "トークンが20以上30未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1107,872",
+        "battleConditionSetMstId": 1757,
+        "description": "トークンが30以上40未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "879,845",
+        "battleConditionSetMstId": 1758,
+        "description": "トークンが40以上50未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1106,452,420",
+        "battleConditionSetMstId": 1759,
+        "description": "味方が4人ブレイクされた AND 味方が1回ブレイクされた AND 自身がブレイク状態ではない場合"
+    },
+    {
+        "battleConditionMstIdCsv": "350,273",
+        "battleConditionSetMstId": 1760,
+        "description": "味方が4体未満の場合（自分を除く） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1106,273",
+        "battleConditionSetMstId": 1761,
+        "description": "味方が4人ブレイクされた AND  連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "147,273",
+        "battleConditionSetMstId": 1762,
+        "description": "バトル開始から自分の行動が1回目 AND  連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "148,273",
+        "battleConditionSetMstId": 1763,
+        "description": "バトル開始から自分の行動が2回目 AND  連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "149,273",
+        "battleConditionSetMstId": 1764,
+        "description": "バトル開始から自分の行動が3回目 AND  連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "150,273",
+        "battleConditionSetMstId": 1765,
+        "description": "バトル開始から自分の行動が4回目 AND  連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1103,333",
+        "battleConditionSetMstId": 1766,
+        "description": "味方が1人ブレイクされた AND  味方が2体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "1104,348",
+        "battleConditionSetMstId": 1767,
+        "description": "味方が2人ブレイクされた AND  味方が3体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "1105,350",
+        "battleConditionSetMstId": 1768,
+        "description": "味方が3人ブレイクされた AND  味方が4体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "880,1109",
+        "battleConditionSetMstId": 1769,
+        "description": "トークンが50以上60未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "881,873",
+        "battleConditionSetMstId": 1770,
+        "description": "トークンが60以上70未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "882,874",
+        "battleConditionSetMstId": 1771,
+        "description": "トークンが70以上80未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1108",
+        "battleConditionSetMstId": 1773,
+        "description": "味方が4人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "1110,350",
+        "battleConditionSetMstId": 1774,
+        "description": "味方が3人以上ブレイクされた AND  味方が4体未満の場合（自分を除く）"
     }
 ]

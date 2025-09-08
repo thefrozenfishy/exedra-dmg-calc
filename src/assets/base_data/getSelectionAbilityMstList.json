@@ -3748,5 +3748,20 @@
         "targetType": 2,
         "value1": 1150031,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases own critical rate by 10% and follow-up attack critical DMG by 20%.",
+        "name": "| I Have to Protect Them, No Matter What |",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 116,
+        "selectionAbilityMstId": 7032,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10980101,
+        "targetType": 2,
+        "value1": 1150032,
+        "value2": 0
     }
 ]
