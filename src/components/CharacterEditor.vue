@@ -10,7 +10,7 @@
   <div v-if="extraData" class="stats">
     <div class="stat">
       Spd: {{ round(extraData.spd) }} ({{ extraData.baseSpd }}
-      <span style="color: blue">+ {{ round(extraData.spd - extraData.baseSpd) }}</span>)
+      <span style="color: aqua">+ {{ round(extraData.spd - extraData.baseSpd) }}</span>)
     </div>
     <div class="stat">
       AV after move: {{ round(10_000 / extraData.spd) }}
