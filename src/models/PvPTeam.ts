@@ -1,5 +1,5 @@
 import { Kioku } from "./Kioku";
-import { KiokuRole, SkillDetail, maxMeters } from "../types/KiokuTypes";
+import { BasicIds, KiokuRole, SkillDetail, maxMeters } from "../types/KiokuTypes";
 import { isConditionSetActiveForPvP, isTiming, ProcessTiming } from "./BattleConditionParser";
 
 const aggro = {
@@ -58,6 +58,20 @@ export class KiokuState {
         this.maxBreakGauge = this.breakGauge
         this.aggro = aggro[kioku.role]
         this.maxMp = kioku.data.ep
+    }
+
+    condenceCrysEffects() {
+        console.log("Condensing crys for", this.kioku.name)
+        const crystalisEffects: Record<string, SkillDetail> = {}
+        for (const effect of this.kioku.effects[BasicIds.CRYS] ?? []) {
+            if (!(effect.abilityEffectType in crystalisEffects)) {
+                crystalisEffects[effect.abilityEffectType] = effect
+            } else {
+                crystalisEffects[effect.abilityEffectType].value1 += effect.value1
+            }
+        }
+        console.log("Condensed to", crystalisEffects)
+        this.kioku.effects[BasicIds.CRYS] = Object.values(crystalisEffects)
     }
 
     resetMeters() {
@@ -198,6 +212,7 @@ export class PvPTeam {
 
     setup() {
         for (const kiokuState of this.kiokuStates) {
+            kiokuState.condenceCrysEffects()
             this.applyPassives(kiokuState, ProcessTiming.BATTLE_START)
         }
         for (const kiokuState of this.kiokuStates) {
@@ -206,7 +221,7 @@ export class PvPTeam {
     }
 
     applyPassives(actor: KiokuState, timing: ProcessTiming, brokenUnits = 0) {
-        for (const skillName of [11, 22, 33, 44, "ability_id", "crystalis_id"]) {
+        for (const skillName of [BasicIds.CRYS, BasicIds.SUPPORT, BasicIds.ASCENSION, BasicIds.PORTRAIT, "ability_id", "crystalis_id"]) {
             this.act(actor, skillName, timing, brokenUnits)
         }
     }

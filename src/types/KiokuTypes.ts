@@ -2,6 +2,13 @@ import { crystalises, kiokuData, portraits } from "../utils/helpers";
 
 export const maxMeters = 10_000
 
+export enum BasicIds {
+    CRYS = 11,
+    SUPPORT = 22,
+    ASCENSION = 33,
+    PORTRAIT = 44,
+}
+
 export enum KiokuElement {
     Flame = "Flame",
     Aqua = "Aqua",

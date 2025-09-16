@@ -1,4 +1,4 @@
-import { KiokuConstants, KiokuData, KiokuGeneratorArgs, KiokuElement, MagicLevel, SkillDetail, SupportKey, KiokuRole, PortraitData, PortraitLvlData } from '../types/KiokuTypes';
+import { KiokuConstants, KiokuData, KiokuGeneratorArgs, KiokuElement, MagicLevel, SkillDetail, SupportKey, KiokuRole, PortraitData, PortraitLvlData, BasicIds } from '../types/KiokuTypes';
 import { magicData, portraits, portraitLevels, passiveDetails, skillDetails, kiokuData, crystalises, getIdx } from '../utils/helpers';
 
 
@@ -184,7 +184,7 @@ export class Kioku {
                 console.error("Could not find", crys, "in crystalises")
                 continue
             }
-            this.add_effects(11, find_all_details(true, crystalises[crys].value1, true), true, 1)
+            this.add_effects(BasicIds.CRYS, find_all_details(true, crystalises[crys].value1, true), true, 1)
         }
 
         // First add buff mult then later add the effects themselves
@@ -213,7 +213,7 @@ export class Kioku {
                     else if (sub_d.abilityEffectType === "UP_DEBUFF_EFFECT_VALUE") this.debuff_mult += sub_d.value1 / 1000;
                 }
                 // After mult is applied, start adding effects
-                this.add_effects(22, supp_eff, true, 10, true);
+                this.add_effects(BasicIds.SUPPORT, supp_eff, true, 10, true);
             }
         }
 
@@ -221,13 +221,13 @@ export class Kioku {
         for (let i = 1; i <= this.ascension; i++) {
             const ascId = (this.data as any)[`ascension_${i}_effect_2_id`] as number;
             if (!ascId) continue;
-            this.add_effects(33, find_all_details(true, ascId), true, 10);
+            this.add_effects(BasicIds.ASCENSION, find_all_details(true, ascId), true, 10);
         }
 
         // Portrait effects
         if (this.portrait) {
             const port_eff = find_all_details(true, this.portrait.passiveSkill1);
-            this.add_effects(44, { 1: port_eff[Math.max(...Object.keys(port_eff).map(Number))] }, true, 1, true);
+            this.add_effects(BasicIds.PORTRAIT, { 1: port_eff[Math.max(...Object.keys(port_eff).map(Number))] }, true, 1, true);
             // Math.max to find highest level effect of portrait (Always assume LB5 portrait), and format into expected format
         }
 
