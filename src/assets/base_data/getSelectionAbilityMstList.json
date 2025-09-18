@@ -3763,20 +3763,5 @@
         "targetType": 2,
         "value1": 1150032,
         "value2": 0
-    },
-    {
-        "abilityEffectType": "",
-        "description": "At battle start, grants 1 Magic. On basic attack, advances action order by 10%.",
-        "name": "Results Will All Be Good",
-        "rarity": 4,
-        "resourceIconName": "battle_icon_selection_ability_ex",
-        "selectionAbilityEffectId": 117,
-        "selectionAbilityMstId": 7033,
-        "selectionAbilityType": 1,
-        "sortOrder": 0,
-        "styleMstId": 10920101,
-        "targetType": 2,
-        "value1": 1150033,
-        "value2": 0
     }
 ]

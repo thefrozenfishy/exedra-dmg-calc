@@ -184,14 +184,6 @@
         "resourceName": "art_01_01_0007"
     },
     {
-        "cardMstId": 4100024,
-        "element": 0,
-        "name": "The Last Ensemble",
-        "passiveSkill1": 4095,
-        "rarity": 4,
-        "resourceName": "art_01_00_0017"
-    },
-    {
         "cardMstId": 4200001,
         "element": 0,
         "name": "Captivated by Where You Stand",
@@ -438,22 +430,6 @@
         "passiveSkill1": 4093,
         "rarity": 5,
         "resourceName": "art_04_01_0007"
-    },
-    {
-        "cardMstId": 4200034,
-        "element": 0,
-        "name": "Parting with a Smile",
-        "passiveSkill1": 4096,
-        "rarity": 5,
-        "resourceName": "art_04_03_0004"
-    },
-    {
-        "cardMstId": 4200035,
-        "element": 0,
-        "name": "Help Me Momoko!",
-        "passiveSkill1": 4097,
-        "rarity": 5,
-        "resourceName": "art_04_01_0005"
     },
     {
         "cardMstId": 4300001,
@@ -776,14 +752,6 @@
         "resourceName": "art_03_01_1098"
     },
     {
-        "cardMstId": 4300041,
-        "element": 0,
-        "name": "I Saw the Future",
-        "passiveSkill1": 4098,
-        "rarity": 4,
-        "resourceName": "art_03_01_1092"
-    },
-    {
         "cardMstId": 5100001,
         "element": 0,
         "name": "Best Friend Required",
@@ -1056,14 +1024,6 @@
         "resourceName": "art_00_01_0006"
     },
     {
-        "cardMstId": 5100035,
-        "element": 0,
-        "name": "A Future Rewritten: Interlude",
-        "passiveSkill1": 5058,
-        "rarity": 5,
-        "resourceName": "art_02_00_0015"
-    },
-    {
         "cardMstId": 5400001,
         "element": 0,
         "name": "Rose Garden Witch Minion",
@@ -1238,14 +1198,6 @@
         "passiveSkill1": 5054,
         "rarity": 5,
         "resourceName": "art_07_01_0011"
-    },
-    {
-        "cardMstId": 5400023,
-        "element": 0,
-        "name": "Dessert Witch (Scene 0)",
-        "passiveSkill1": 5057,
-        "rarity": 5,
-        "resourceName": "art_07_03_0002"
     },
     {
         "cardMstId": 9900001,

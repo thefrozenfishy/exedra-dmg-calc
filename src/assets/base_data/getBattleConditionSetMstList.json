@@ -8815,11 +8815,6 @@
         "description": "トークンが70以上80未満のとき"
     },
     {
-        "battleConditionMstIdCsv": "420,286,314,407",
-        "battleConditionSetMstId": 1772,
-        "description": "自身にバリアとシールドが貼られている時に1以上のダメージを受けた"
-    },
-    {
         "battleConditionMstIdCsv": "1108",
         "battleConditionSetMstId": 1773,
         "description": "味方が4人以上ブレイクされた"
@@ -8828,90 +8823,5 @@
         "battleConditionMstIdCsv": "1110,350",
         "battleConditionSetMstId": 1774,
         "description": "味方が3人以上ブレイクされた AND  味方が4体未満の場合（自分を除く）"
-    },
-    {
-        "battleConditionMstIdCsv": "1111",
-        "battleConditionSetMstId": 1775,
-        "description": "トークンが3未満"
-    },
-    {
-        "battleConditionMstIdCsv": "1199",
-        "battleConditionSetMstId": 1776,
-        "description": "自分のキャラクターが「安名メル」"
-    },
-    {
-        "battleConditionMstIdCsv": "3,906",
-        "battleConditionSetMstId": 1872,
-        "description": "自身のターン開始時にSPが0のとき"
-    },
-    {
-        "battleConditionMstIdCsv": "3,1001,1055",
-        "battleConditionSetMstId": 1873,
-        "description": "自身のターン経過が1ターン以上、5ターン未満"
-    },
-    {
-        "battleConditionMstIdCsv": "3,1005,1060",
-        "battleConditionSetMstId": 1874,
-        "description": "自身のターン経過が5ターン以上、10ターン未満"
-    },
-    {
-        "battleConditionMstIdCsv": "3,1010,1065",
-        "battleConditionSetMstId": 1875,
-        "description": "自身のターン経過が10ターン以上、15ターン未満"
-    },
-    {
-        "battleConditionMstIdCsv": "3,1015,1070",
-        "battleConditionSetMstId": 1876,
-        "description": "自身のターン経過が15ターン以上、20ターン未満"
-    },
-    {
-        "battleConditionMstIdCsv": "3,1020,1075",
-        "battleConditionSetMstId": 1877,
-        "description": "自身のターン経過が20ターン以上、25ターン未満"
-    },
-    {
-        "battleConditionMstIdCsv": "3,1025,1080",
-        "battleConditionSetMstId": 1878,
-        "description": "自身のターン経過が25ターン以上、30ターン未満"
-    },
-    {
-        "battleConditionMstIdCsv": "3,1030,1085",
-        "battleConditionSetMstId": 1879,
-        "description": "自身のターン経過が30ターン以上、35ターン未満"
-    },
-    {
-        "battleConditionMstIdCsv": "3,1035,1090",
-        "battleConditionSetMstId": 1880,
-        "description": "自身のターン経過が35ターン以上、40ターン未満"
-    },
-    {
-        "battleConditionMstIdCsv": "3,1040,1095",
-        "battleConditionSetMstId": 1881,
-        "description": "自身のターン経過が40ターン以上、45ターン未満"
-    },
-    {
-        "battleConditionMstIdCsv": "3,1045,1100",
-        "battleConditionSetMstId": 1882,
-        "description": "自身のターン経過が45ターン以上、50ターン未満"
-    },
-    {
-        "battleConditionMstIdCsv": "3,1050",
-        "battleConditionSetMstId": 1883,
-        "description": "自身のターン経過が50ターン以上"
-    },
-    {
-        "battleConditionMstIdCsv": "393,5,3",
-        "battleConditionSetMstId": 1884,
-        "description": "魔力が1のときに通常攻撃を発動したとき"
-    },
-    {
-        "battleConditionMstIdCsv": "394,5,3",
-        "battleConditionSetMstId": 1885,
-        "description": "魔力が2のときに通常攻撃を発動したとき"
-    },
-    {
-        "battleConditionMstIdCsv": "395,5,3",
-        "battleConditionSetMstId": 1904,
-        "description": "魔力が3のときに通常攻撃を発動したとき"
     }
 ]
