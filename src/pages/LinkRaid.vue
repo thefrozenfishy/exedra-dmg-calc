@@ -1,7 +1,8 @@
 <template>
     <div class="add-user">
         <h2>Link Raid Automation</h2>
-        <p>This tool helps automate Link Raid battles download it <a href="https://github.com/thefrozenfishy/exedra-link-raid-automation">here</a></p>
+        <p>This tool helps automate Link Raid battles download it <a
+                href="https://github.com/thefrozenfishy/exedra-link-raid-automation">here</a></p>
         <p>If you wish to add yourself to the community priority list add yourself to the list here</p>
         <form @submit.prevent="submitUsername" class="form">
             <input v-model="username" placeholder="Enter your username" required />
@@ -27,17 +28,13 @@ async function submitUsername() {
 
     try {
         const res = await fetch(
-            "https://api.github.com/repos/thefrozenfishy/exedra-link-raid-automation/actions/workflows/add-user.yml/dispatches",
+            "https://exedra-link-raid-add-username.camilla-jahr.workers.dev/",
             {
                 method: "POST",
                 headers: {
-                    Accept: "application/vnd.github+json",
-                    Authorization: `Bearer ${import.meta.env.VITE_GITHUB_TOKEN}`,
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    ref: "main",
-                    inputs: { username: username.value },
-                }),
+                body: JSON.stringify({ username: username.value }),
             }
         );
 
@@ -57,6 +54,7 @@ async function submitUsername() {
         loading.value = false;
     }
 }
+
 </script>
 
 <style scoped>
