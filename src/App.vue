@@ -15,6 +15,7 @@ export default defineComponent({
         <router-link to="/sa-simulator-multiple">Calculate Best Team</router-link>
         <router-link to="/sa-simulator-single">Simulate Single Battle</router-link>
         <router-link to="/pvp-simulator">PvP Simulator</router-link>
+        <router-link to="/link-raid">Link Raid</router-link>
         <router-link to="/about">About</router-link>
       </nav>
     </header>
