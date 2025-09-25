@@ -8838,5 +8838,21 @@
         "compareTarget": 5,
         "compareValue": "3",
         "description": "味方が3人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstId": 1111,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "3",
+        "description": "トークンが3未満"
+    },
+    {
+        "battleConditionMstId": 1199,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1092",
+        "description": "自分のキャラクターが「安名メル」"
     }
 ]
