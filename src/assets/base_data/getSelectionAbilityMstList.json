@@ -3778,5 +3778,20 @@
         "targetType": 2,
         "value1": 1150033,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases critical DMG by 20%.<br>When all enemy sigils total 10 or more:<br>Increases SPD by 10%.",
+        "name": "That Is Why I Will Keep Fighting",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 118,
+        "selectionAbilityMstId": 7034,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10020301,
+        "targetType": 2,
+        "value1": 1150034,
+        "value2": 0
     }
 ]
