@@ -192,6 +192,14 @@
         "resourceName": "art_01_00_0017"
     },
     {
+        "cardMstId": 4100025,
+        "element": 0,
+        "name": "Toward the Future You Await",
+        "passiveSkill1": 4099,
+        "rarity": 4,
+        "resourceName": "art_04_00_0032"
+    },
+    {
         "cardMstId": 4200001,
         "element": 0,
         "name": "Captivated by Where You Stand",
@@ -454,6 +462,22 @@
         "passiveSkill1": 4097,
         "rarity": 5,
         "resourceName": "art_04_01_0005"
+    },
+    {
+        "cardMstId": 4200036,
+        "element": 0,
+        "name": "That Which Took My Heart",
+        "passiveSkill1": 4100,
+        "rarity": 5,
+        "resourceName": "art_04_00_0031"
+    },
+    {
+        "cardMstId": 4200037,
+        "element": 0,
+        "name": "Magia Day 2025 Celebration",
+        "passiveSkill1": 4101,
+        "rarity": 5,
+        "resourceName": "art_05_00_0004"
     },
     {
         "cardMstId": 4300001,
@@ -1064,6 +1088,38 @@
         "resourceName": "art_02_00_0015"
     },
     {
+        "cardMstId": 5100036,
+        "element": 0,
+        "name": "In a World Without You",
+        "passiveSkill1": 5060,
+        "rarity": 5,
+        "resourceName": "art_01_00_0018"
+    },
+    {
+        "cardMstId": 5100037,
+        "element": 0,
+        "name": "Even If Memories Mislead Me",
+        "passiveSkill1": 5061,
+        "rarity": 5,
+        "resourceName": "art_01_00_0019"
+    },
+    {
+        "cardMstId": 5100038,
+        "element": 0,
+        "name": "Feelings That Never Falter",
+        "passiveSkill1": 5062,
+        "rarity": 5,
+        "resourceName": "art_01_00_0020"
+    },
+    {
+        "cardMstId": 5100039,
+        "element": 0,
+        "name": "Faith We'll Meet Again Someday",
+        "passiveSkill1": 5063,
+        "rarity": 5,
+        "resourceName": "art_06_00_0008"
+    },
+    {
         "cardMstId": 5400001,
         "element": 0,
         "name": "Rose Garden Witch Minion",
@@ -1246,6 +1302,14 @@
         "passiveSkill1": 5057,
         "rarity": 5,
         "resourceName": "art_07_03_0002"
+    },
+    {
+        "cardMstId": 5400024,
+        "element": 0,
+        "name": "Spindle Witch",
+        "passiveSkill1": 5059,
+        "rarity": 5,
+        "resourceName": "art_07_00_0050"
     },
     {
         "cardMstId": 9900001,
