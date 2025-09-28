@@ -55,7 +55,9 @@ export const getPortraits = (elem?: KiokuElement): string[] => [
     })
     .map(p => p.name)
 
-export const portraitsBestOnly = (elem: KiokuElement) => ["A Dream of a Little Mermaid", "The Savior's Apostle"]
+export const portraitsBestOnly = (elem: KiokuElement) => [
+    "A Dream of a Little Mermaid", "The Savior's Apostle", "Faith We'll Meet Again Someday"
+]
 
 const dmgUpPortraits = {
     [KiokuElement.Flame]: "A Reluctant Coach Steps Up",
