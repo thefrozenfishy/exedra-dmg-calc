@@ -107,7 +107,9 @@ export class Kioku {
         this.name = name;
         if (portrait) {
             this.portrait = portraits[portrait]
-            this.portraitStats = portraitLevels[this.portrait.cardMstId * 10 + 5];
+            if (this.portrait) {
+                this.portraitStats = portraitLevels[this.portrait.cardMstId * 10 + 5];
+            }
         }
         this.ascension = ascension;
         this.kiokuLvl = kiokuLvl;
