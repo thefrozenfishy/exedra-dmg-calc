@@ -80,7 +80,9 @@ const teamInstance = computed(() => {
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
     console.error(err)
-    team.slots = []
+    for (let index = 0; index < 5; index++) {
+        team.setMain(index, undefined)
+    }
   }
 })
 onMounted(() => {

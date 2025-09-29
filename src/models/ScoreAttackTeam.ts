@@ -28,7 +28,6 @@ const knownBoosts = {
 };
 
 const skippable = new Set([
-    "CONSUME_COUNT_POINT", // TODO: Verify bowmura is correct
     "ADD_BUFF_TURN",
     "ADD_DEBUFF_TURN",
     "ADDITIONAL_SKILL_ACT",
@@ -38,6 +37,7 @@ const skippable = new Set([
     "BURN_ATK",
     "CHARGE",
     "CONSUME_CHARGE_POINT",
+    "CONSUME_COUNT_POINT", // TODO: Verify bowmura is correct
     "CONTINUOUS_RECOVERY",
     "COUNT", 
     "CURSE_ATK",
@@ -57,6 +57,7 @@ const skippable = new Set([
     "HASTE",
     "IMM_SLIP_DMG",
     "POISON_ATK",
+    "RE_ACTION_TURN_UNIT_ACT",
     "RECOVERY_HP_ATK",
     "RECOVERY_HP",
     "REFLECTION_RATIO",
