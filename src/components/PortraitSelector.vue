@@ -41,6 +41,11 @@ const filtered = computed(() => {
         .map((p) => {
             const eff = find_all_details(true, p.passiveSkill1);
             const best = eff[Math.max(...Object.keys(eff).map(Number))];
+            if (p.name === "Faith We'll Meet Again Someday") best.description = "Increases DMG dealt when targeting elemental weakness by 20%." // This for some reason has the wrong description, so we override it manually... z_z
+            if (!best.description.includes((best.value1 / 10).toString())) {
+                console.error("Description is wrong? ", p, best)
+                best.description += ` (ERROR. Value should be = ${(best.value1 / 10).toString()})`
+            }
             return { ...p, description: best.description };
         })
         .filter(
