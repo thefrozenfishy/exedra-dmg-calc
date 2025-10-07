@@ -5,6 +5,7 @@ import SingleTeamPage from '../pages/SingleTeamPage.vue'
 import About from '../pages/About.vue'
 import PvpTeamPage from '../pages/PvpTeamPage.vue'
 import LinkRaid from '../pages/LinkRaid.vue'
+import TierLists from '../pages/TierLists.vue'
 
 const routes = [
     { path: '/team-setup', name: 'Team Setup', component: TeamSetupPage },
@@ -12,6 +13,7 @@ const routes = [
     { path: '/sa-simulator-single', name: 'Simulate Single Battle', component: SingleTeamPage },
     { path: '/pvp-simulator', name: 'PvP Simulator', component: PvpTeamPage },
     { path: '/link-raid', name: 'Link Raid', component: LinkRaid },
+    { path: '/tier-lists', name: 'Tier Lists', component: TierLists },
     { path: '/about', name: 'About', component: About },
 ]
 
