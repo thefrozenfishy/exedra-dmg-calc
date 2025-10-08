@@ -28,7 +28,7 @@ def run(cmd, check=True, capture=False):
 #for key in kiokus.keys():
 for key in ("Pluvia☆Magica", "Brilliant Beam", "Tiro Finale"):
     # TODO: Handle ' in filename, use ´
-    dir_path = content_dir / key
+    dir_path = content_dir / key.replace("'", "´")
     for tier in tier_lists:
         file_path = dir_path / f"{tier}.md"
         if file_path.exists():
