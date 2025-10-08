@@ -87,14 +87,14 @@ function normalizeColor(value) {
             <td v-for="role in allRoles" :key="role">
               <div class="characters-cell">
                 <div v-for="char in entriesByRole(entriesByRank[rank])[role]" :key="char.name"
-                  class="character-card relative">
+                  class="character-card relative" @click="toggleExpanded(char)">
                   <div class="character-img-wrapper">
                     <img :src="`/exedra-dmg-calc/kioku_images/${kiokuDataJson[char.name].id}_thumbnail.png`"
-                      :alt="char.name" class="character-img" @click="toggleExpanded(char)" />
+                      :alt="char.name" class="character-img" />
 
                     <div v-if="char.meta.ascension" class="ascension-overlay">
-                      <img :src="`/exedra-dmg-calc/ascensions/${char.meta.ascension}.png`"
-                        :alt="`Ascension ${char.meta.ascension}`" class="ascension-icon" />
+                      <img :src="`/exedra-dmg-calc/ascension_background.png`" class="ascension-icon" />
+                      <span class="ascension-number">{{ char.meta.ascension }}</span>
                     </div>
                   </div>
 
@@ -185,16 +185,26 @@ th {
 
 .ascension-overlay {
   position: absolute;
-  bottom: 0px;
-  left: 0px;
-  width: 25px;
-  height: 25px;
+  bottom: -3px;
+  left: -3px;
+  width: 30px;
+  height: 30px;
 }
 
 .ascension-icon {
   height: 100%;
   width: 100%;
   object-fit: contain;
+}
+
+.ascension-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  color: black;
+  font-size: 15px;
 }
 
 .tags {
