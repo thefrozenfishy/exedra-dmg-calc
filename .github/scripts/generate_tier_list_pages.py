@@ -5,7 +5,7 @@ import os
 import subprocess
 from pathlib import Path
 
-tier_lists  =["pvp"]
+tier_lists  = [t.removesuffix(".md") for t in os.listdir("src/content/tierlists/descriptions")]
 
 base_json = Path("src/assets/base_data/kioku_data.json")
 content_dir = Path("src/content/tierlists/kioku")
