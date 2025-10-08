@@ -25,7 +25,7 @@ jobs:
 
       - name: Run tier list pages generator
         env:
-          GITHUB_TOKEN: ${{ secrets.VITE_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TIER_LIST_PR_MAKER }}
           REPO: ${{ github.repository }}
           BASE_BRANCH: ${{ github.event.repository.default_branch }}
         run: python .github/scripts/generate_tier_list_pages.py
