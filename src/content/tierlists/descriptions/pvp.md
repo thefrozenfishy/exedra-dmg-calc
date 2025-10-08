@@ -7,6 +7,18 @@ tags:
   - name: SPD Aura
     description: This Unit gives SPD to the whole team
     color: blue
+roles:
+  - Attacker
+  - name: Buffer
+    description: Buffers are op
+    color: red
+  - Breaker
+ranks:
+  - 0
+  - 0.5
+  - 1
+  - 2
+  - 3
 ---
 
 # PvP Tier List

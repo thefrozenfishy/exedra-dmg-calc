@@ -16,6 +16,10 @@ const tagInfo = Object.fromEntries([
   ...sharedTags.map(t => [t.name, { ...t }]),
   ...props.info.meta.tags.map(t => [t.name, { ...t }]),
 ])
+const roleInfo = Object.fromEntries([
+  ...sharedRoles.map(t => [t.name, { ...t }]),
+  ...props.info.meta.roles.filter(r => r.name).map(t => [t.name, { ...t }]),
+])
 
 const files = Object.fromEntries(
   Object.entries(import.meta.glob('../content/tierlists/kioku/*/*.md', { eager: true }))
@@ -29,9 +33,8 @@ const entries = Object.entries(files).map(([path, mod]) => ({
   Component: mod.default
 }))
 
-const ranks = ['0', '0.5', '1', '2', '3', 'For Fun', 'Unranked', 'Unplayable']
-
-const allRoles = [...new Set(entries.map(e => kiokuDataJson[e.name].role))]
+const ranks = props.info.meta.ranks
+const allRoles = props.info.meta.roles.map(r => r.name ? r.name : r)
 
 const entriesByRank = computed(() => {
   const map = {}
