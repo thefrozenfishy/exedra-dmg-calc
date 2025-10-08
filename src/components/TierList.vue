@@ -1,12 +1,21 @@
 <script setup>
 import { ref, computed } from 'vue'
 import kiokuDataJson from '../assets/base_data/kioku_data.json'
+import yaml from 'js-yaml'
+import sharedConfigRaw from '../content/tierlists/master.yaml?raw'
+
+const sharedConfig = yaml.load(sharedConfigRaw)
+const sharedRoles = sharedConfig.roles || [] // TODO: Use the roles? How, where?
+const sharedTags = sharedConfig.tags || []
 
 const props = defineProps({
   info: Object
 })
 
-const tagInfo = Object.fromEntries(props.info.meta.tags.map(t => [t.name, { ...t }]))
+const tagInfo = Object.fromEntries([
+  ...sharedTags.map(t => [t.name, { ...t }]),
+  ...props.info.meta.tags.map(t => [t.name, { ...t }]),
+])
 
 const files = Object.fromEntries(
   Object.entries(import.meta.glob('../content/tierlists/kioku/*/*.md', { eager: true }))
