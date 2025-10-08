@@ -3,7 +3,7 @@ rank: 3
 category: Enabler
 tags: 
   - MP Gain
-  - AA on battle start
+  - AA On Battle Start
 ---
 
 # Brilliant Beam

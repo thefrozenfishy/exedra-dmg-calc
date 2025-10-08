@@ -3,20 +3,19 @@ import { ref, computed } from 'vue'
 import kiokuDataJson from '../assets/base_data/kioku_data.json'
 
 const props = defineProps({
-  folder: String
+  info: Object
 })
 
-const expanded = ref(null)
+const tagInfo = Object.fromEntries(props.info.meta.tags.map(t => [t.name, { ...t }]))
 
-const folderMap = {
-  Raid: import.meta.glob('../content/tierlists/raid/*.md', { eager: true }),
-  PvP: import.meta.glob('../content/tierlists/pvp/*.md', { eager: true }),
-}
-
-const files = folderMap[props.folder] || {}
+const files = Object.fromEntries(
+  Object.entries(import.meta.glob('../content/tierlists/kioku/*/*.md', { eager: true }))
+    .filter(f =>
+      f[0].includes(props.info.name)
+    ))
 
 const entries = Object.entries(files).map(([path, mod]) => ({
-  name: path.split('/').pop().replace('.md', '').replace('´', "'"),
+  name: path.split('/').at(-2).replace('.md', '').replace('´', "'"),
   meta: mod.frontmatter || {},
   Component: mod.default
 }))
@@ -46,16 +45,22 @@ function entriesByRole(entries) {
   return map
 }
 
-function toggleExpanded(name) {
-  expanded.value = expanded.value === name ? null : name
-  console.log(expanded.value)
+const charKey = char => `${char.name}${char.meta.ascension ?? 0}`
+
+const expanded = ref(null)
+function toggleExpanded(char) {
+  expanded.value = expanded.value === charKey(char) ? null : charKey(char)
+}
+
+function normalizeColor(value) {
+  // Add '#' if it's a hex without one
+  if (/^[0-9A-Fa-f]{3,6}$/.test(value)) return `#${value}`
+  return value
 }
 </script>
 
 <template>
   <div class="tier-list">
-    <h2>{{ folder }} Tier List</h2>
-
     <table class="tier-table">
       <thead>
         <tr>
@@ -69,21 +74,37 @@ function toggleExpanded(name) {
             <td class="rank-cell">{{ rank }}</td>
             <td v-for="role in allRoles" :key="role">
               <div class="characters-cell">
-                <div v-for="char in entriesByRole(entriesByRank[rank])[role]" :key="char.name" class="character-card">
-                  <img :src="`/exedra-dmg-calc/kioku_images/${kiokuDataJson[char.name].id}_thumbnail.png`"
-                    :alt="char.name" class="character-img" @click="toggleExpanded(char.name)" />
-                  <div class="tags" @click="toggleExpanded(char.name)">
-                    <span v-for="tag in char.meta.tags || []" :key="tag" class="tag">{{ tag }}</span>
+                <div v-for="char in entriesByRole(entriesByRank[rank])[role]" :key="char.name"
+                  class="character-card relative">
+                  <div class="character-img-wrapper">
+                    <img :src="`/exedra-dmg-calc/kioku_images/${kiokuDataJson[char.name].id}_thumbnail.png`"
+                      :alt="char.name" class="character-img" @click="toggleExpanded(char)" />
+
+                    <div v-if="char.meta.ascension" class="ascension-overlay">
+                      <img :src="`/exedra-dmg-calc/ascensions/${char.meta.ascension}.png`"
+                        :alt="`Ascension ${char.meta.ascension}`" class="ascension-icon" />
+                    </div>
+                  </div>
+
+                  <div class="tags" @click="toggleExpanded(char)">
+                    <div v-for="tag in char.meta.tags || []" :key="tag" class="tag-wrapper">
+                      <span class="tag" :style="`background-color: ${normalizeColor(tagInfo[tag]?.color)}`">
+                        {{ tag }}
+                      </span>
+                      <div v-if="tagInfo[tag]?.description" class="tooltip">
+                        {{ tagInfo[tag]?.description }}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </td>
           </tr>
 
-          <tr v-if="entriesByRank[rank].some(c => expanded === c.name)">
+          <tr v-if="entriesByRank[rank].some(c => expanded === charKey(c))">
             <td colspan="100%" class="expanded-row">
               <div v-for="char in entriesByRank[rank]">
-                <component :key="char.name" v-if="expanded === char.name" :is="char.Component" />
+                <component :key="char.name" v-if="expanded === charKey(char)" :is="char.Component" />
               </div>
             </td>
           </tr>
@@ -131,7 +152,13 @@ th {
 
 .character-card {
   cursor: pointer;
+  position: relative;
   text-align: center;
+}
+
+.character-img-wrapper {
+  position: relative;
+  display: inline-block;
 }
 
 .character-img {
@@ -144,6 +171,20 @@ th {
   border: 1px solid #666;
 }
 
+.ascension-overlay {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 25px;
+  height: 25px;
+}
+
+.ascension-icon {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -152,12 +193,63 @@ th {
   gap: 0.25rem;
 }
 
+.tag-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .tag {
-  font-size: 0.65rem;
-  padding: 0.1rem 0.3rem;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.4rem;
   border-radius: 0.25rem;
   background-color: #555;
+  cursor: pointer;
+  user-select: none;
+  transition: filter 0.2s;
 }
+
+.tag:hover {
+  filter: brightness(1.2);
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e1e1e;
+  color: #eee;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 0.7rem;
+  white-space: normal;
+  width: max-content;
+  max-width: 180px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 100;
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #1e1e1e transparent transparent transparent;
+}
+
+.tag-wrapper:hover .tooltip {
+  opacity: 1;
+  transform: translateX(-50%);
+}
+
 
 .expanded-row {
   background-color: #1a1a1a;

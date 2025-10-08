@@ -1,7 +1,0 @@
----
-rank:
-category:
-tags: 
----
-
-# Yuma
