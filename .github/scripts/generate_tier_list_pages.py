@@ -57,7 +57,12 @@ for key in ("Pluvia☆Magica", "Brilliant Beam", "Tiro Finale"):
         run(["git", "checkout", "-b", branch_name, f"origin/{base_branch}"])
 
         run(["git", "add", str(file_path)])
-        run(["git", "commit", "-m", pr_title])
+        run([
+            "git",
+            "-c", "user.name=Tier List Adder",
+            "-c", "user.email=tier-list-adder-worker@users.noreply.github.com",
+            "commit", "-m", pr_title
+        ])
         run(["git", "push", "origin", branch_name])
 
         run([
