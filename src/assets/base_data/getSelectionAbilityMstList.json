@@ -3793,5 +3793,20 @@
         "targetType": 2,
         "value1": 1150034,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases HP recovery amount by 20%.<br>If own HP 80% or higher, decreases own DMG taken by 20%.",
+        "name": "This One's on the House",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 119,
+        "selectionAbilityMstId": 7035,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10240101,
+        "targetType": 2,
+        "value1": 1150035,
+        "value2": 0
     }
 ]

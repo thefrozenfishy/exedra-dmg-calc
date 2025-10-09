@@ -9385,6 +9385,51 @@
         "description": "魔力が2のときに通常攻撃を発動したとき"
     },
     {
+        "battleConditionMstIdCsv": "420,812,286",
+        "battleConditionSetMstId": 1889,
+        "description": "自身がブレイク状態ではなく、行動可能な状態で、攻撃で味方が2人殺された場合"
+    },
+    {
+        "battleConditionMstIdCsv": "420,813,286",
+        "battleConditionSetMstId": 1890,
+        "description": "自身がブレイク状態ではなく、行動可能な状態で、攻撃で味方が3人殺された場合"
+    },
+    {
+        "battleConditionMstIdCsv": "420,814,286",
+        "battleConditionSetMstId": 1891,
+        "description": "自身がブレイク状態ではなく、行動可能な状態で、攻撃で味方が4人殺された場合"
+    },
+    {
+        "battleConditionMstIdCsv": "354,372",
+        "battleConditionSetMstId": 1892,
+        "description": "倒されている味方が1体以上、10体未満の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "363,1204",
+        "battleConditionSetMstId": 1893,
+        "description": "倒されている味方が10体以上、20体未満の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1200,1205",
+        "battleConditionSetMstId": 1894,
+        "description": "倒されている味方が20体以上、30体未満の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1201,1206",
+        "battleConditionSetMstId": 1895,
+        "description": "倒されている味方が30体以上、40体未満の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1202,1207",
+        "battleConditionSetMstId": 1896,
+        "description": "倒されている味方が40体以上、50体未満の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1203",
+        "battleConditionSetMstId": 1897,
+        "description": "倒されている味方が50体以上の場合"
+    },
+    {
         "battleConditionMstIdCsv": "395,5,3",
         "battleConditionSetMstId": 1904,
         "description": "魔力が3のときに通常攻撃を発動したとき"
@@ -9475,6 +9520,96 @@
         "description": "自軍のターン中に敵が倒されたとき"
     },
     {
+        "battleConditionMstIdCsv": "1219",
+        "battleConditionSetMstId": 1922,
+        "description": "敵軍のSPが6の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1220",
+        "battleConditionSetMstId": 1923,
+        "description": "敵軍のSPが6の未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1221",
+        "battleConditionSetMstId": 1924,
+        "description": "敵軍のSPが5以上の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1222",
+        "battleConditionSetMstId": 1925,
+        "description": "敵軍のSPが6以上の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1223",
+        "battleConditionSetMstId": 1926,
+        "description": "対象のバフ数が1未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1224",
+        "battleConditionSetMstId": 1927,
+        "description": "対象のバフ数が2未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1225",
+        "battleConditionSetMstId": 1928,
+        "description": "対象のバフ数が3未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1226",
+        "battleConditionSetMstId": 1929,
+        "description": "対象のバフ数が4未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1227",
+        "battleConditionSetMstId": 1930,
+        "description": "対象のバフ数が5未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1228",
+        "battleConditionSetMstId": 1931,
+        "description": "対象のバフ数が6未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1229",
+        "battleConditionSetMstId": 1932,
+        "description": "対象のバフ数が7未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1230",
+        "battleConditionSetMstId": 1933,
+        "description": "対象のバフ数が8未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1231",
+        "battleConditionSetMstId": 1934,
+        "description": "対象のバフ数が9未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1232",
+        "battleConditionSetMstId": 1935,
+        "description": "対象のバフ数が10未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1135,1226",
+        "battleConditionSetMstId": 1936,
+        "description": "対象のバフ数が2以上、4未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1137,1228",
+        "battleConditionSetMstId": 1937,
+        "description": "対象のバフ数が4以上、6未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1139,1230",
+        "battleConditionSetMstId": 1938,
+        "description": "対象のバフ数が6以上、8未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1141,1232",
+        "battleConditionSetMstId": 1939,
+        "description": "対象のバフ数が8以上、10未満"
+    },
+    {
         "battleConditionMstIdCsv": "1244,57",
         "battleConditionSetMstId": 1940,
         "description": "自軍の生存者が4体未満,自分が3ターンごとに（ターン1から）"
@@ -9563,5 +9698,340 @@
         "battleConditionMstIdCsv": "1245",
         "battleConditionSetMstId": 1957,
         "description": "自軍の生存者が5体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1246",
+        "battleConditionSetMstId": 1958,
+        "description": "自分のキャラクターが「八雲みたま」"
+    },
+    {
+        "battleConditionMstIdCsv": "1248,1",
+        "battleConditionSetMstId": 1959,
+        "description": "刻印の合計が3以上のとき +行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "1209,1",
+        "battleConditionSetMstId": 1960,
+        "description": "刻印の合計が6以上のとき +行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "1214,1",
+        "battleConditionSetMstId": 1961,
+        "description": "刻印の合計9以上のとき   +行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "1251,1",
+        "battleConditionSetMstId": 1962,
+        "description": "刻印の合計が12以上のとき+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "1208,1",
+        "battleConditionSetMstId": 1963,
+        "description": "刻印の合計が15以上のとき+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "1247,3,5",
+        "battleConditionSetMstId": 1964,
+        "description": "刻印の合計が2以上のとき+自分は行動者+行動タイプが通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "1249,3,5",
+        "battleConditionSetMstId": 1965,
+        "description": "刻印の合計が4以上のとき+自分は行動者+行動タイプが通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "1209,3,5",
+        "battleConditionSetMstId": 1966,
+        "description": "刻印の合計が6以上のとき+自分は行動者+行動タイプが通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "1250,3,5",
+        "battleConditionSetMstId": 1967,
+        "description": "刻印の合計が8以上のとき+自分は行動者+行動タイプが通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "1211,3,5",
+        "battleConditionSetMstId": 1968,
+        "description": "刻印の合計が10以上のとき+自分は行動者+行動タイプが通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "1252,3,5",
+        "battleConditionSetMstId": 1969,
+        "description": "攻撃した対象、通常、自身"
+    },
+    {
+        "battleConditionMstIdCsv": "1247,3,6",
+        "battleConditionSetMstId": 1970,
+        "description": "刻印の合計が2以上のとき+自分は行動者+行動タイプがスキル攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "1249,3,6",
+        "battleConditionSetMstId": 1971,
+        "description": "刻印の合計が4以上のとき+自分は行動者+行動タイプがスキル攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "1209,3,6",
+        "battleConditionSetMstId": 1972,
+        "description": "刻印の合計が6以上のとき+自分は行動者+行動タイプがスキル攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "1250,3,6",
+        "battleConditionSetMstId": 1973,
+        "description": "刻印の合計が8以上のとき+自分は行動者+行動タイプがスキル攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "1211,3,6",
+        "battleConditionSetMstId": 1974,
+        "description": "刻印の合計が10以上のとき+自分は行動者+行動タイプがスキル攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "401",
+        "battleConditionSetMstId": 1975,
+        "description": "トークンが10のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "687",
+        "battleConditionSetMstId": 1976,
+        "description": "トークンが51のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "688",
+        "battleConditionSetMstId": 1977,
+        "description": "トークンが52のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "689",
+        "battleConditionSetMstId": 1978,
+        "description": "トークンが53のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "690",
+        "battleConditionSetMstId": 1979,
+        "description": "トークンが54のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "691",
+        "battleConditionSetMstId": 1980,
+        "description": "トークンが55のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "692",
+        "battleConditionSetMstId": 1981,
+        "description": "トークンが56のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "693",
+        "battleConditionSetMstId": 1982,
+        "description": "トークンが57のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "694",
+        "battleConditionSetMstId": 1983,
+        "description": "トークンが58のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "695",
+        "battleConditionSetMstId": 1984,
+        "description": "トークンが59のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "696",
+        "battleConditionSetMstId": 1985,
+        "description": "トークンが60のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "697",
+        "battleConditionSetMstId": 1986,
+        "description": "トークンが61のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "698",
+        "battleConditionSetMstId": 1987,
+        "description": "トークンが62のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "699",
+        "battleConditionSetMstId": 1988,
+        "description": "トークンが63のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "700",
+        "battleConditionSetMstId": 1989,
+        "description": "トークンが64のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "701",
+        "battleConditionSetMstId": 1990,
+        "description": "トークンが65のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "702",
+        "battleConditionSetMstId": 1991,
+        "description": "トークンが66のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "703",
+        "battleConditionSetMstId": 1992,
+        "description": "トークンが67のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "704",
+        "battleConditionSetMstId": 1993,
+        "description": "トークンが68のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "705",
+        "battleConditionSetMstId": 1994,
+        "description": "トークンが69のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "706",
+        "battleConditionSetMstId": 1995,
+        "description": "トークンが70のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "707",
+        "battleConditionSetMstId": 1996,
+        "description": "トークンが71のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "708",
+        "battleConditionSetMstId": 1997,
+        "description": "トークンが72のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "709",
+        "battleConditionSetMstId": 1998,
+        "description": "トークンが73のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "710",
+        "battleConditionSetMstId": 1999,
+        "description": "トークンが74のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "711",
+        "battleConditionSetMstId": 2000,
+        "description": "トークンが75のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "712",
+        "battleConditionSetMstId": 2001,
+        "description": "トークンが76のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "713",
+        "battleConditionSetMstId": 2002,
+        "description": "トークンが77のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "714",
+        "battleConditionSetMstId": 2003,
+        "description": "トークンが78のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "715",
+        "battleConditionSetMstId": 2004,
+        "description": "トークンが79のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "716",
+        "battleConditionSetMstId": 2005,
+        "description": "トークンが80のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1264,916",
+        "battleConditionSetMstId": 2008,
+        "description": "自身が弱点属性以外で攻撃されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "990,3,6",
+        "battleConditionSetMstId": 2009,
+        "description": "対象は無属性、行動者は自分、戦闘スキルを発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1255,5,916",
+        "battleConditionSetMstId": 2010,
+        "description": "自軍に対して弱点属性で攻撃されたユニット数が3以上の時 AND 行動タイプが通常 AND 攻撃されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1255,6,916",
+        "battleConditionSetMstId": 2011,
+        "description": "自軍に対して弱点属性で攻撃されたユニット数が3以上の時 AND 行動タイプがスキル AND 攻撃されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1255,7,916",
+        "battleConditionSetMstId": 2012,
+        "description": "自軍に対して弱点属性で攻撃されたユニット数が3以上の時 AND 行動タイプが必殺技 AND 攻撃されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1265",
+        "battleConditionSetMstId": 2015,
+        "description": "敵全体のデバフ数が1未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1266",
+        "battleConditionSetMstId": 2016,
+        "description": "敵全体のデバフ数が1のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1267",
+        "battleConditionSetMstId": 2017,
+        "description": "敵全体のデバフ数が2のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1268",
+        "battleConditionSetMstId": 2018,
+        "description": "敵全体のデバフ数が3のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1269",
+        "battleConditionSetMstId": 2019,
+        "description": "敵全体のデバフ数が4のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1270",
+        "battleConditionSetMstId": 2020,
+        "description": "敵全体のデバフ数が5のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1271",
+        "battleConditionSetMstId": 2021,
+        "description": "敵全体のデバフ数が6のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1272",
+        "battleConditionSetMstId": 2022,
+        "description": "敵全体のデバフ数が7のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1273",
+        "battleConditionSetMstId": 2023,
+        "description": "敵全体のデバフ数が8のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1274",
+        "battleConditionSetMstId": 2024,
+        "description": "敵全体のデバフ数が9のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1275",
+        "battleConditionSetMstId": 2025,
+        "description": "敵全体のデバフ数が10のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "818",
+        "battleConditionSetMstId": 2026,
+        "description": "敵全体のデバフ数が8以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,6",
+        "battleConditionSetMstId": 2027,
+        "description": "自身以外の味方が戦闘スキル発動時"
+    },
+    {
+        "battleConditionMstIdCsv": "1281",
+        "battleConditionSetMstId": 2052,
+        "description": "敵軍のデバフ数が1以上のとき"
     }
 ]

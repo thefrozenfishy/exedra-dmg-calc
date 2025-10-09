@@ -480,6 +480,22 @@
         "resourceName": "art_05_00_0004"
     },
     {
+        "cardMstId": 4200038,
+        "element": 0,
+        "name": "Madoka Kaname's Birthday 2025 Celebration",
+        "passiveSkill1": 4102,
+        "rarity": 5,
+        "resourceName": "art_04_00_0035"
+    },
+    {
+        "cardMstId": 4200039,
+        "element": 0,
+        "name": "Mitama's Homemade Delights",
+        "passiveSkill1": 4103,
+        "rarity": 5,
+        "resourceName": "art_04_01_0013"
+    },
+    {
         "cardMstId": 4300001,
         "element": 0,
         "name": "See You Around, Homura",
@@ -806,6 +822,14 @@
         "passiveSkill1": 4098,
         "rarity": 4,
         "resourceName": "art_03_01_1092"
+    },
+    {
+        "cardMstId": 4300042,
+        "element": 0,
+        "name": "Consumed with Loathing",
+        "passiveSkill1": 4104,
+        "rarity": 4,
+        "resourceName": "art_03_01_1024"
     },
     {
         "cardMstId": 5100001,

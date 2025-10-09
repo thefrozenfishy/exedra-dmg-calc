@@ -9552,6 +9552,70 @@
         "description": "自分のキャラクターが「安名メル」"
     },
     {
+        "battleConditionMstId": 1200,
+        "compareContent": 203,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "20",
+        "description": "味方が20体以上倒されている場合"
+    },
+    {
+        "battleConditionMstId": 1201,
+        "compareContent": 203,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "30",
+        "description": "味方が30体以上倒されている場合"
+    },
+    {
+        "battleConditionMstId": 1202,
+        "compareContent": 203,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "40",
+        "description": "味方が40体以上倒されている場合"
+    },
+    {
+        "battleConditionMstId": 1203,
+        "compareContent": 203,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "50",
+        "description": "味方が50体以上倒されている場合"
+    },
+    {
+        "battleConditionMstId": 1204,
+        "compareContent": 203,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "20",
+        "description": "倒されている味方が20体未満の場合"
+    },
+    {
+        "battleConditionMstId": 1205,
+        "compareContent": 203,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "30",
+        "description": "倒されている味方が30体未満の場合"
+    },
+    {
+        "battleConditionMstId": 1206,
+        "compareContent": 203,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "40",
+        "description": "倒されている味方が40体未満の場合"
+    },
+    {
+        "battleConditionMstId": 1207,
+        "compareContent": 203,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "50",
+        "description": "倒されている味方が50体未満の場合"
+    },
+    {
         "battleConditionMstId": 1208,
         "compareContent": 209,
         "compareOperator": 4,
@@ -9638,6 +9702,118 @@
         "compareTarget": 4,
         "compareValue": "COUNT,1",
         "description": "刻印が付与されている敵に1ダメージ以上"
+    },
+    {
+        "battleConditionMstId": 1219,
+        "compareContent": 201,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "6",
+        "description": "敵軍のSPが6の場合"
+    },
+    {
+        "battleConditionMstId": 1220,
+        "compareContent": 201,
+        "compareOperator": 5,
+        "compareTarget": 6,
+        "compareValue": "6",
+        "description": "敵軍のSPが6の未満"
+    },
+    {
+        "battleConditionMstId": 1221,
+        "compareContent": 201,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "5",
+        "description": "敵軍のSPが5以上の場合"
+    },
+    {
+        "battleConditionMstId": 1222,
+        "compareContent": 201,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "6",
+        "description": "敵軍のSPが6以上の場合"
+    },
+    {
+        "battleConditionMstId": 1223,
+        "compareContent": 24,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "1",
+        "description": "対象のバフ数が1未満"
+    },
+    {
+        "battleConditionMstId": 1224,
+        "compareContent": 24,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "2",
+        "description": "対象のバフ数が2未満"
+    },
+    {
+        "battleConditionMstId": 1225,
+        "compareContent": 24,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "3",
+        "description": "対象のバフ数が3未満"
+    },
+    {
+        "battleConditionMstId": 1226,
+        "compareContent": 24,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "4",
+        "description": "対象のバフ数が4未満"
+    },
+    {
+        "battleConditionMstId": 1227,
+        "compareContent": 24,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "5",
+        "description": "対象のバフ数が5未満"
+    },
+    {
+        "battleConditionMstId": 1228,
+        "compareContent": 24,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "6",
+        "description": "対象のバフ数が6未満"
+    },
+    {
+        "battleConditionMstId": 1229,
+        "compareContent": 24,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "7",
+        "description": "対象のバフ数が7未満"
+    },
+    {
+        "battleConditionMstId": 1230,
+        "compareContent": 24,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "8",
+        "description": "対象のバフ数が8未満"
+    },
+    {
+        "battleConditionMstId": 1231,
+        "compareContent": 24,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "9",
+        "description": "対象のバフ数が9未満"
+    },
+    {
+        "battleConditionMstId": 1232,
+        "compareContent": 24,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "10",
+        "description": "対象のバフ数が10未満"
     },
     {
         "battleConditionMstId": 1233,
@@ -9742,5 +9918,253 @@
         "compareTarget": 5,
         "compareValue": "5",
         "description": "自軍の生存者が5体未満"
+    },
+    {
+        "battleConditionMstId": 1246,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1024",
+        "description": "自分のキャラクターが「八雲みたま」"
+    },
+    {
+        "battleConditionMstId": 1247,
+        "compareContent": 209,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "2",
+        "description": "刻印の合計が2以上のとき"
+    },
+    {
+        "battleConditionMstId": 1248,
+        "compareContent": 209,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "3",
+        "description": "刻印の合計が3以上のとき"
+    },
+    {
+        "battleConditionMstId": 1249,
+        "compareContent": 209,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "4",
+        "description": "刻印の合計が4以上のとき"
+    },
+    {
+        "battleConditionMstId": 1250,
+        "compareContent": 209,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "8",
+        "description": "刻印の合計が8以上のとき"
+    },
+    {
+        "battleConditionMstId": 1251,
+        "compareContent": 209,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "12",
+        "description": "刻印の合計が12以上のとき"
+    },
+    {
+        "battleConditionMstId": 1252,
+        "compareContent": 110,
+        "compareOperator": 1,
+        "compareTarget": 3,
+        "compareValue": "TRUE",
+        "description": "攻撃した対象"
+    },
+    {
+        "battleConditionMstId": 1253,
+        "compareContent": 307,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "1",
+        "description": "弱点属性で攻撃されたユニット数が1体以上のとき"
+    },
+    {
+        "battleConditionMstId": 1254,
+        "compareContent": 307,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "2",
+        "description": "弱点属性で攻撃されたユニット数が2体以上のとき"
+    },
+    {
+        "battleConditionMstId": 1255,
+        "compareContent": 307,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "3",
+        "description": "弱点属性で攻撃されたユニット数が3体以上のとき"
+    },
+    {
+        "battleConditionMstId": 1256,
+        "compareContent": 307,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "4",
+        "description": "弱点属性で攻撃されたユニット数が4体以上のとき"
+    },
+    {
+        "battleConditionMstId": 1257,
+        "compareContent": 307,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "5",
+        "description": "弱点属性で攻撃されたユニット数が5体以上のとき"
+    },
+    {
+        "battleConditionMstId": 1258,
+        "compareContent": 307,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "1",
+        "description": "弱点属性で攻撃されたユニット数が1体未満のとき"
+    },
+    {
+        "battleConditionMstId": 1259,
+        "compareContent": 307,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "2",
+        "description": "弱点属性で攻撃されたユニット数が2体未満のとき"
+    },
+    {
+        "battleConditionMstId": 1260,
+        "compareContent": 307,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "3",
+        "description": "弱点属性で攻撃されたユニット数が3体未満のとき"
+    },
+    {
+        "battleConditionMstId": 1261,
+        "compareContent": 307,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "4",
+        "description": "弱点属性で攻撃されたユニット数が4体未満のとき"
+    },
+    {
+        "battleConditionMstId": 1262,
+        "compareContent": 307,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "5",
+        "description": "弱点属性で攻撃されたユニット数が5体未満のとき"
+    },
+    {
+        "battleConditionMstId": 1263,
+        "compareContent": 109,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "TRUE",
+        "description": "弱点属性で攻撃された"
+    },
+    {
+        "battleConditionMstId": 1264,
+        "compareContent": 109,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "FALSE",
+        "description": "弱点属性以外で攻撃された"
+    },
+    {
+        "battleConditionMstId": 1265,
+        "compareContent": 208,
+        "compareOperator": 5,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "敵全体のデバフ数が1未満"
+    },
+    {
+        "battleConditionMstId": 1266,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "敵全体のデバフ数が1"
+    },
+    {
+        "battleConditionMstId": 1267,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "2",
+        "description": "敵全体のデバフ数が2"
+    },
+    {
+        "battleConditionMstId": 1268,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "3",
+        "description": "敵全体のデバフ数が3"
+    },
+    {
+        "battleConditionMstId": 1269,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "4",
+        "description": "敵全体のデバフ数が4"
+    },
+    {
+        "battleConditionMstId": 1270,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "5",
+        "description": "敵全体のデバフ数が5"
+    },
+    {
+        "battleConditionMstId": 1271,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "6",
+        "description": "敵全体のデバフ数が6"
+    },
+    {
+        "battleConditionMstId": 1272,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "7",
+        "description": "敵全体のデバフ数が7"
+    },
+    {
+        "battleConditionMstId": 1273,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "8",
+        "description": "敵全体のデバフ数が8"
+    },
+    {
+        "battleConditionMstId": 1274,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "9",
+        "description": "敵全体のデバフ数が9"
+    },
+    {
+        "battleConditionMstId": 1275,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "10",
+        "description": "敵全体のデバフ数が10"
+    },
+    {
+        "battleConditionMstId": 1281,
+        "compareContent": 208,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "敵軍のデバフ数が1以上"
     }
 ]
