@@ -200,6 +200,14 @@
         "resourceName": "art_04_00_0032"
     },
     {
+        "cardMstId": 4100026,
+        "element": 0,
+        "name": "Risky Game Plan",
+        "passiveSkill1": 4105,
+        "rarity": 4,
+        "resourceName": "art_01_01_0008"
+    },
+    {
         "cardMstId": 4200001,
         "element": 0,
         "name": "Captivated by Where You Stand",
@@ -494,6 +502,22 @@
         "passiveSkill1": 4103,
         "rarity": 5,
         "resourceName": "art_04_01_0013"
+    },
+    {
+        "cardMstId": 4200040,
+        "element": 0,
+        "name": "After-School Moment",
+        "passiveSkill1": 4106,
+        "rarity": 5,
+        "resourceName": "art_04_01_0011"
+    },
+    {
+        "cardMstId": 4200041,
+        "element": 0,
+        "name": "Dawning Defiance",
+        "passiveSkill1": 4108,
+        "rarity": 5,
+        "resourceName": "art_05_01_0005"
     },
     {
         "cardMstId": 4300001,
@@ -832,6 +856,14 @@
         "resourceName": "art_03_01_1024"
     },
     {
+        "cardMstId": 4300043,
+        "element": 0,
+        "name": "Long-Lost Reunion",
+        "passiveSkill1": 4107,
+        "rarity": 4,
+        "resourceName": "art_03_01_1013"
+    },
+    {
         "cardMstId": 5100001,
         "element": 0,
         "name": "Best Friend Required",
@@ -1144,6 +1176,22 @@
         "resourceName": "art_06_00_0008"
     },
     {
+        "cardMstId": 5100040,
+        "element": 0,
+        "name": "Unfamiliar Kindness",
+        "passiveSkill1": 5064,
+        "rarity": 5,
+        "resourceName": "art_00_01_0008"
+    },
+    {
+        "cardMstId": 5100041,
+        "element": 0,
+        "name": "Magical Girls Before the Dawn",
+        "passiveSkill1": 5065,
+        "rarity": 5,
+        "resourceName": "art_06_01_0004"
+    },
+    {
         "cardMstId": 5400001,
         "element": 0,
         "name": "Rose Garden Witch Minion",
@@ -1334,6 +1382,14 @@
         "passiveSkill1": 5059,
         "rarity": 5,
         "resourceName": "art_07_00_0050"
+    },
+    {
+        "cardMstId": 5400025,
+        "element": 0,
+        "name": "Bunny Eared Witch",
+        "passiveSkill1": 5066,
+        "rarity": 5,
+        "resourceName": "art_07_01_0014"
     },
     {
         "cardMstId": 9900001,

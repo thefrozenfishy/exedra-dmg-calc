@@ -10033,5 +10033,85 @@
         "battleConditionMstIdCsv": "1281",
         "battleConditionSetMstId": 2052,
         "description": "敵軍のデバフ数が1以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "393,3,7",
+        "battleConditionSetMstId": 2054,
+        "description": "魔力が1個で必殺技を使ったとき"
+    },
+    {
+        "battleConditionMstIdCsv": "394,3,7",
+        "battleConditionSetMstId": 2055,
+        "description": "魔力が2個で必殺技を使ったとき"
+    },
+    {
+        "battleConditionMstIdCsv": "395,3,7",
+        "battleConditionSetMstId": 2056,
+        "description": "魔力が3個で必殺技を使ったとき"
+    },
+    {
+        "battleConditionMstIdCsv": "396,3,7",
+        "battleConditionSetMstId": 2057,
+        "description": "魔力が4個で必殺技を使ったとき"
+    },
+    {
+        "battleConditionMstIdCsv": "285,3,7",
+        "battleConditionSetMstId": 2058,
+        "description": "魔力が5個で必殺技を使ったとき"
+    },
+    {
+        "battleConditionMstIdCsv": "397,3,7",
+        "battleConditionSetMstId": 2059,
+        "description": "魔力が6個で必殺技を使ったとき"
+    },
+    {
+        "battleConditionMstIdCsv": "398,3,7",
+        "battleConditionSetMstId": 2060,
+        "description": "魔力が7個で必殺技を使ったとき"
+    },
+    {
+        "battleConditionMstIdCsv": "399,3,7",
+        "battleConditionSetMstId": 2061,
+        "description": "魔力が8個で必殺技を使ったとき"
+    },
+    {
+        "battleConditionMstIdCsv": "400,3,7",
+        "battleConditionSetMstId": 2062,
+        "description": "魔力が9個で必殺技を使ったとき"
+    },
+    {
+        "battleConditionMstIdCsv": "401,3,7",
+        "battleConditionSetMstId": 2063,
+        "description": "魔力が10個で必殺技を使ったとき"
+    },
+    {
+        "battleConditionMstIdCsv": "69,273,389",
+        "battleConditionSetMstId": 2064,
+        "description": "6ターンごと（1ターン目から） AND 連続行動の1回目 AND 味方が誰もいない（自分だけ）"
+    },
+    {
+        "battleConditionMstIdCsv": "72,273,389",
+        "battleConditionSetMstId": 2065,
+        "description": "6ターンごと（4ターン目から） AND 連続行動の1回目 AND 味方が誰もいない（自分だけ）"
+    },
+    {
+        "battleConditionMstIdCsv": "69,273,333",
+        "battleConditionSetMstId": 2066,
+        "description": "6ターンごと（1ターン目から） AND 連続行動の1回目 AND 味方が2体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "72,273,333",
+        "battleConditionSetMstId": 2067,
+        "description": "6ターンごと（4ターン目から） AND 連続行動の1回目 AND 味方が2体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "1283",
+        "battleConditionSetMstId": 2068,
+        "description": "自分のキャラクターが「梓みふゆ」"
+    },
+    {
+        "battleConditionMstIdCsv": "1264,25",
+        "battleConditionSetMstId": 2097,
+        "description": "自身が弱点属性以外で、1以上のダメージを受けたとき"
     }
 ]

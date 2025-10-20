@@ -3808,5 +3808,20 @@
         "targetType": 2,
         "value1": 1150035,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases critical rate by 20%, and on critical hit, increases break gauge depletion (1 turn), and increases break bonus by 30% (1 turn).",
+        "name": "Something I Didn't Want to Give Up",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 120,
+        "selectionAbilityMstId": 7036,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10130101,
+        "targetType": 2,
+        "value1": 1150036,
+        "value2": 0
     }
 ]

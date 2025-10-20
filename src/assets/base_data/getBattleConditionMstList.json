@@ -10166,5 +10166,13 @@
         "compareTarget": 6,
         "compareValue": "1",
         "description": "敵軍のデバフ数が1以上"
+    },
+    {
+        "battleConditionMstId": 1283,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1013",
+        "description": "自分のキャラクターが「梓みふゆ」"
     }
 ]
