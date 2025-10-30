@@ -520,6 +520,14 @@
         "resourceName": "art_05_01_0005"
     },
     {
+        "cardMstId": 4200042,
+        "element": 0,
+        "name": "My Prankster Pal",
+        "passiveSkill1": 4109,
+        "rarity": 5,
+        "resourceName": "art_04_00_0019"
+    },
+    {
         "cardMstId": 4300001,
         "element": 0,
         "name": "See You Around, Homura",

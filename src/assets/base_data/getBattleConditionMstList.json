@@ -10160,6 +10160,46 @@
         "description": "敵全体のデバフ数が10"
     },
     {
+        "battleConditionMstId": 1276,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "11",
+        "description": "敵全体のデバフ数が11"
+    },
+    {
+        "battleConditionMstId": 1277,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "12",
+        "description": "敵全体のデバフ数が12"
+    },
+    {
+        "battleConditionMstId": 1278,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "13",
+        "description": "敵全体のデバフ数が13"
+    },
+    {
+        "battleConditionMstId": 1279,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "14",
+        "description": "敵全体のデバフ数が14"
+    },
+    {
+        "battleConditionMstId": 1280,
+        "compareContent": 208,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "25",
+        "description": "敵全体のデバフ数が25以上"
+    },
+    {
         "battleConditionMstId": 1281,
         "compareContent": 208,
         "compareOperator": 4,
@@ -10174,5 +10214,293 @@
         "compareTarget": 1,
         "compareValue": "1013",
         "description": "自分のキャラクターが「梓みふゆ」"
+    },
+    {
+        "battleConditionMstId": 1284,
+        "compareContent": 208,
+        "compareOperator": 5,
+        "compareTarget": 6,
+        "compareValue": "11",
+        "description": "敵全体のデバフ数が11未満"
+    },
+    {
+        "battleConditionMstId": 1285,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "15",
+        "description": "敵全体のデバフ数が15"
+    },
+    {
+        "battleConditionMstId": 1286,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "16",
+        "description": "敵全体のデバフ数が16"
+    },
+    {
+        "battleConditionMstId": 1287,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "17",
+        "description": "敵全体のデバフ数が17"
+    },
+    {
+        "battleConditionMstId": 1288,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "18",
+        "description": "敵全体のデバフ数が18"
+    },
+    {
+        "battleConditionMstId": 1289,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "19",
+        "description": "敵全体のデバフ数が19"
+    },
+    {
+        "battleConditionMstId": 1290,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "20",
+        "description": "敵全体のデバフ数が20"
+    },
+    {
+        "battleConditionMstId": 1291,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "21",
+        "description": "敵全体のデバフ数が21"
+    },
+    {
+        "battleConditionMstId": 1292,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "22",
+        "description": "敵全体のデバフ数が22"
+    },
+    {
+        "battleConditionMstId": 1293,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "23",
+        "description": "敵全体のデバフ数が23"
+    },
+    {
+        "battleConditionMstId": 1294,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "24",
+        "description": "敵全体のデバフ数が24"
+    },
+    {
+        "battleConditionMstId": 1295,
+        "compareContent": 13,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "4,5",
+        "description": "自分が4ターンごとに（ターン5から）"
+    },
+    {
+        "battleConditionMstId": 1296,
+        "compareContent": 13,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "4,6",
+        "description": "自分が4ターンごとに（ターン6から）"
+    },
+    {
+        "battleConditionMstId": 1297,
+        "compareContent": 13,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "4,7",
+        "description": "自分が4ターンごとに（ターン7から）"
+    },
+    {
+        "battleConditionMstId": 1298,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "5",
+        "description": "トークンが16以上のとき"
+    },
+    {
+        "battleConditionMstId": 1299,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "5",
+        "description": "トークンが11以上のとき"
+    },
+    {
+        "battleConditionMstId": 1300,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "11",
+        "description": "トークンが11未満"
+    },
+    {
+        "battleConditionMstId": 1301,
+        "compareContent": 210,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "1,1",
+        "description": "キャンディホリックが付与されている敵に攻撃したとき"
+    },
+    {
+        "battleConditionMstId": 1302,
+        "compareContent": 205,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "敵全体で状態異常が付与されている敵が1体以上いる"
+    },
+    {
+        "battleConditionMstId": 1303,
+        "compareContent": 112,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "CURSE",
+        "description": "自身に呪いダメージが発生したとき"
+    },
+    {
+        "battleConditionMstId": 1304,
+        "compareContent": 112,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "POISON",
+        "description": "自身に毒ダメージが発生したとき"
+    },
+    {
+        "battleConditionMstId": 1305,
+        "compareContent": 112,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "BURN",
+        "description": "自身に火傷ダメージが発生したとき"
+    },
+    {
+        "battleConditionMstId": 1306,
+        "compareContent": 112,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "BLEED",
+        "description": "自身に裂傷ダメージが発生したとき"
+    },
+    {
+        "battleConditionMstId": 1307,
+        "compareContent": 112,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "VORTEX",
+        "description": "自身に水刃ダメージが発生したとき"
+    },
+    {
+        "battleConditionMstId": 1308,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "1",
+        "description": "対象がキャンディホリック付与されているとき"
+    },
+    {
+        "battleConditionMstId": 1309,
+        "compareContent": 13,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "4,8",
+        "description": "自分が4ターンごとに（ターン8から）"
+    },
+    {
+        "battleConditionMstId": 1310,
+        "compareContent": 210,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "1,1",
+        "description": "敵全体でキャンディホリックが付与されている敵が1体以上いる"
+    },
+    {
+        "battleConditionMstId": 1331,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 8,
+        "compareValue": "1",
+        "description": "キャンディホリックが付与されている敵に攻撃したとき"
+    },
+    {
+        "battleConditionMstId": 1332,
+        "compareContent": 110,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "TRUE",
+        "description": "攻撃した対象"
+    },
+    {
+        "battleConditionMstId": 1337,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 3,
+        "compareValue": "1",
+        "description": "キャンディホリックが付与されている敵に攻撃したとき"
+    },
+    {
+        "battleConditionMstId": 1338,
+        "compareContent": 110,
+        "compareOperator": 1,
+        "compareTarget": 3,
+        "compareValue": "TRUE",
+        "description": "攻撃した対象"
+    },
+    {
+        "battleConditionMstId": 1340,
+        "compareContent": 12,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "CURSE",
+        "description": "対象が「呪い」の場合"
+    },
+    {
+        "battleConditionMstId": 1341,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "13",
+        "description": "トークンが13未満"
+    },
+    {
+        "battleConditionMstId": 1342,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "9",
+        "description": "トークンが9未満"
+    },
+    {
+        "battleConditionMstId": 1343,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "7",
+        "description": "トークンが7未満"
+    },
+    {
+        "battleConditionMstId": 1344,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "8",
+        "description": "トークンが8未満"
     }
 ]

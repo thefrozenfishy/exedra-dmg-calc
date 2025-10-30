@@ -3823,5 +3823,20 @@
         "targetType": 2,
         "value1": 1150036,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases ongoing DMG dealt by 40%.<br>On attack to Candyholic enemy, increases own ATK by 2% (2 turns; max 10 stacks).",
+        "name": "Would You Like a Sweet Treat?",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 121,
+        "selectionAbilityMstId": 7037,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10030201,
+        "targetType": 2,
+        "value1": 1150037,
+        "value2": 0
     }
 ]
