@@ -29,15 +29,17 @@ def run(cmd, check=True, capture=False):
     subprocess.run(cmd, check=check)
 
 
-# for key in kiokus.keys():
-for key in ("Pluvia☆Magica", "Brilliant Beam", "Tiro Finale"):
-    dir_path = content_dir / key.replace("'", "´")
+# for kioku_name, info in kiokus.values():
+#     if info["rarity"] != 5:
+#         continue
+for kioku_name in ("Pluvia☆Magica", "Brilliant Beam", "Tiro Finale"):
+    dir_path = content_dir / kioku_name.replace("'", "´")
     for tier in tier_lists:
         file_path = dir_path / f"{tier}.md"
         if file_path.exists():
             print(f"✅ Exists: {file_path}")
             continue
-        pr_title = f"Add {key} {tier} markdown"
+        pr_title = f"Add {kioku_name} {tier} markdown"
         pr_check = run(
             [
                 "gh",
@@ -62,9 +64,9 @@ for key in ("Pluvia☆Magica", "Brilliant Beam", "Tiro Finale"):
             raise FileNotFoundError(f"Missing {template_file}")
 
         template = template_file.read_text(encoding="utf-8")
-        content = template.replace("{{NAME}}", key)
+        content = template.replace("{{NAME}}", kioku_name)
         file_path.write_text(content, encoding="utf-8")
-        branch_name = f"auto/kioku-{key.replace(' ', '-').lower()}-{tier}"
+        branch_name = f"auto/kioku-{kioku_name.replace(' ', '-').lower()}-{tier}"
 
         run(["git", "fetch", "origin", base_branch])
         run(["git", "checkout", "-b", branch_name, f"origin/{base_branch}"])
@@ -94,7 +96,7 @@ for key in ("Pluvia☆Magica", "Brilliant Beam", "Tiro Finale"):
                 "--title",
                 pr_title,
                 "--body",
-                f"Automatically generated {tier} markdown for **{key}**.",
+                f"Automatically generated {tier} markdown for **{kioku_name}**.",
                 "--base",
                 base_branch,
                 "--head",

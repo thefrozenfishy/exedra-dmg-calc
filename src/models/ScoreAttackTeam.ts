@@ -48,6 +48,7 @@ const skippable = new Set([
     "DOWN_SPD_RATIO",
     "DWN_ATK_RATIO",
     "DWN_RCV_DMG_RATIO",
+    "DWN_SPD_ACCUM_RATIO",
     "DWN_SPD_RATIO",
     "GAIN_CHARGE_POINT",
     "GAIN_COUNT_POINT",
@@ -70,6 +71,8 @@ const skippable = new Set([
     "TSUBAME_CORE", //  Make Ui work
     "TSUBAME_LINK", // TODO: Make Ui work
     "UNIQUE_10030301",
+    "UNIQUE_BUFF",
+    "UNIQUE_DEBUFF",
     "UP_ABNORMAL_HIT_RATE_RATIO",
     "UP_BREAK_DAMAGE_RECEIVE_RATIO",
     "UP_BREAK_EFFECT",

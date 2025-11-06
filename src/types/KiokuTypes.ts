@@ -46,6 +46,8 @@ export const getPortraits = (elem?: KiokuElement): string[] => [
         if (b.name === "A Dream of a Little Mermaid") return 1
         if (a.name === "The Savior's Apostle") return -1
         if (b.name === "The Savior's Apostle") return 1
+        if (a.name === "Faith We'll Meet Again Someday") return -1
+        if (b.name === "Faith We'll Meet Again Someday") return 1
         if (elem && a.name === dmgUpPortraits[elem]) return -1
         if (elem && b.name === dmgUpPortraits[elem]) return 1
         if (a.name === "") return -1
