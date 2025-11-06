@@ -10432,6 +10432,166 @@
         "description": "敵全体でキャンディホリックが付与されている敵が1体以上いる"
     },
     {
+        "battleConditionMstId": 1311,
+        "compareContent": 23,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "6",
+        "description": "自分の状態異常数が6"
+    },
+    {
+        "battleConditionMstId": 1312,
+        "compareContent": 23,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "7",
+        "description": "自分の状態異常数が7"
+    },
+    {
+        "battleConditionMstId": 1313,
+        "compareContent": 23,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "8",
+        "description": "自分の状態異常数が8"
+    },
+    {
+        "battleConditionMstId": 1314,
+        "compareContent": 23,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "9",
+        "description": "自分の状態異常数が9"
+    },
+    {
+        "battleConditionMstId": 1315,
+        "compareContent": 23,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "10",
+        "description": "自分の状態異常数が10"
+    },
+    {
+        "battleConditionMstId": 1316,
+        "compareContent": 23,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "6",
+        "description": "自分の状態異常数が6以上"
+    },
+    {
+        "battleConditionMstId": 1317,
+        "compareContent": 23,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "7",
+        "description": "自分の状態異常数が7以上"
+    },
+    {
+        "battleConditionMstId": 1318,
+        "compareContent": 23,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "8",
+        "description": "自分の状態異常数が8以上"
+    },
+    {
+        "battleConditionMstId": 1319,
+        "compareContent": 23,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "9",
+        "description": "自分の状態異常数が9以上"
+    },
+    {
+        "battleConditionMstId": 1320,
+        "compareContent": 23,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "10",
+        "description": "自分の状態異常数が10以上"
+    },
+    {
+        "battleConditionMstId": 1321,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "1",
+        "description": "自分の状態異常数が1未満"
+    },
+    {
+        "battleConditionMstId": 1322,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "2",
+        "description": "自分の状態異常数が2未満"
+    },
+    {
+        "battleConditionMstId": 1323,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "3",
+        "description": "自分の状態異常数が3未満"
+    },
+    {
+        "battleConditionMstId": 1324,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "4",
+        "description": "自分の状態異常数が4未満"
+    },
+    {
+        "battleConditionMstId": 1325,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "5",
+        "description": "自分の状態異常数が5未満"
+    },
+    {
+        "battleConditionMstId": 1326,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "6",
+        "description": "自分の状態異常数が6未満"
+    },
+    {
+        "battleConditionMstId": 1327,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "7",
+        "description": "自分の状態異常数が7未満"
+    },
+    {
+        "battleConditionMstId": 1328,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "8",
+        "description": "自分の状態異常数が8未満"
+    },
+    {
+        "battleConditionMstId": 1329,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "9",
+        "description": "自分の状態異常数が9未満"
+    },
+    {
+        "battleConditionMstId": 1330,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "10",
+        "description": "自分の状態異常数が10未満"
+    },
+    {
         "battleConditionMstId": 1331,
         "compareContent": 26,
         "compareOperator": 7,
@@ -10448,6 +10608,38 @@
         "description": "攻撃した対象"
     },
     {
+        "battleConditionMstId": 1333,
+        "compareContent": 23,
+        "compareOperator": 4,
+        "compareTarget": 8,
+        "compareValue": "1",
+        "description": "対象の状態異常数が1以上"
+    },
+    {
+        "battleConditionMstId": 1334,
+        "compareContent": 23,
+        "compareOperator": 4,
+        "compareTarget": 8,
+        "compareValue": "2",
+        "description": "対象の状態異常数が2以上"
+    },
+    {
+        "battleConditionMstId": 1335,
+        "compareContent": 23,
+        "compareOperator": 4,
+        "compareTarget": 8,
+        "compareValue": "3",
+        "description": "対象の状態異常数が3以上"
+    },
+    {
+        "battleConditionMstId": 1336,
+        "compareContent": 23,
+        "compareOperator": 4,
+        "compareTarget": 8,
+        "compareValue": "4",
+        "description": "対象の状態異常数が4以上"
+    },
+    {
         "battleConditionMstId": 1337,
         "compareContent": 26,
         "compareOperator": 7,
@@ -10462,6 +10654,14 @@
         "compareTarget": 3,
         "compareValue": "TRUE",
         "description": "攻撃した対象"
+    },
+    {
+        "battleConditionMstId": 1339,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "2",
+        "description": "ファントムトリックが付与されているとき"
     },
     {
         "battleConditionMstId": 1340,
@@ -10502,5 +10702,85 @@
         "compareTarget": 1,
         "compareValue": "8",
         "description": "トークンが8未満"
+    },
+    {
+        "battleConditionMstId": 1345,
+        "compareContent": 310,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "持続ダメージが発生したとき"
+    },
+    {
+        "battleConditionMstId": 1347,
+        "compareContent": 208,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "18",
+        "description": "味方全体のデバフ数が18以上"
+    },
+    {
+        "battleConditionMstId": 1348,
+        "compareContent": 208,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "18",
+        "description": "味方全体のデバフ数が18未満"
+    },
+    {
+        "battleConditionMstId": 1349,
+        "compareContent": 208,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "10",
+        "description": "味方全体のデバフ数が10以上"
+    },
+    {
+        "battleConditionMstId": 1350,
+        "compareContent": 208,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "10",
+        "description": "味方全体のデバフ数が10未満"
+    },
+    {
+        "battleConditionMstId": 1351,
+        "compareContent": 208,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "7",
+        "description": "味方全体のデバフ数が7以上"
+    },
+    {
+        "battleConditionMstId": 1352,
+        "compareContent": 208,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "7",
+        "description": "味方全体のデバフ数が7未満"
+    },
+    {
+        "battleConditionMstId": 1353,
+        "compareContent": 208,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "4",
+        "description": "味方全体のデバフ数が4以上"
+    },
+    {
+        "battleConditionMstId": 1354,
+        "compareContent": 208,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "4",
+        "description": "味方全体のデバフ数が4未満"
+    },
+    {
+        "battleConditionMstId": 1355,
+        "compareContent": 208,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "0",
+        "description": "味方全体のデバフ数が0以上"
     }
 ]

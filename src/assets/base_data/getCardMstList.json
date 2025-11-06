@@ -528,6 +528,14 @@
         "resourceName": "art_04_00_0019"
     },
     {
+        "cardMstId": 4200043,
+        "element": 0,
+        "name": "The Journey's Not Over Yet",
+        "passiveSkill1": 4110,
+        "rarity": 5,
+        "resourceName": "art_04_01_0009"
+    },
+    {
         "cardMstId": 4300001,
         "element": 0,
         "name": "See You Around, Homura",

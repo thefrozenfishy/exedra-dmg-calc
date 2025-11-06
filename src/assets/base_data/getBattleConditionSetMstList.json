@@ -10515,14 +10515,169 @@
         "description": "敵全体でキャンディホリックが付与されている敵が1体以上いる"
     },
     {
+        "battleConditionMstIdCsv": "1311",
+        "battleConditionSetMstId": 2124,
+        "description": "自分の状態異常数が6"
+    },
+    {
+        "battleConditionMstIdCsv": "1312",
+        "battleConditionSetMstId": 2125,
+        "description": "自分の状態異常数が7"
+    },
+    {
+        "battleConditionMstIdCsv": "1313",
+        "battleConditionSetMstId": 2126,
+        "description": "自分の状態異常数が8"
+    },
+    {
+        "battleConditionMstIdCsv": "1314",
+        "battleConditionSetMstId": 2127,
+        "description": "自分の状態異常数が9"
+    },
+    {
+        "battleConditionMstIdCsv": "1315",
+        "battleConditionSetMstId": 2128,
+        "description": "自分の状態異常数が10"
+    },
+    {
+        "battleConditionMstIdCsv": "1316",
+        "battleConditionSetMstId": 2129,
+        "description": "自分の状態異常数が6以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1317",
+        "battleConditionSetMstId": 2130,
+        "description": "自分の状態異常数が7以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1318",
+        "battleConditionSetMstId": 2131,
+        "description": "自分の状態異常数が8以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1319",
+        "battleConditionSetMstId": 2132,
+        "description": "自分の状態異常数が9以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1320",
+        "battleConditionSetMstId": 2133,
+        "description": "自分の状態異常数が10以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1321",
+        "battleConditionSetMstId": 2134,
+        "description": "自分の状態異常数が1未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1322",
+        "battleConditionSetMstId": 2135,
+        "description": "自分の状態異常数が2未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1323",
+        "battleConditionSetMstId": 2136,
+        "description": "自分の状態異常数が3未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1324",
+        "battleConditionSetMstId": 2137,
+        "description": "自分の状態異常数が4未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1325",
+        "battleConditionSetMstId": 2138,
+        "description": "自分の状態異常数が5未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1326",
+        "battleConditionSetMstId": 2139,
+        "description": "自分の状態異常数が6未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1327",
+        "battleConditionSetMstId": 2140,
+        "description": "自分の状態異常数が7未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1328",
+        "battleConditionSetMstId": 2141,
+        "description": "自分の状態異常数が8未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1329",
+        "battleConditionSetMstId": 2142,
+        "description": "自分の状態異常数が9未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1330",
+        "battleConditionSetMstId": 2143,
+        "description": "自分の状態異常数が10未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1333",
+        "battleConditionSetMstId": 2144,
+        "description": "対象の状態異常数が1以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1334",
+        "battleConditionSetMstId": 2145,
+        "description": "対象の状態異常数が2以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1335",
+        "battleConditionSetMstId": 2146,
+        "description": "対象の状態異常数が3以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1336",
+        "battleConditionSetMstId": 2147,
+        "description": "対象の状態異常数が4以上"
+    },
+    {
         "battleConditionMstIdCsv": "1337,1338,3",
         "battleConditionSetMstId": 2148,
         "description": "自身がキャンディホリックが付与されている敵に攻撃したとき"
     },
     {
+        "battleConditionMstIdCsv": "1339",
+        "battleConditionSetMstId": 2149,
+        "description": "自身がファントムトリック状態のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1339,1332,3",
+        "battleConditionSetMstId": 2150,
+        "description": "自身がファントムトリック状態のとき+敵に攻撃したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1339,6,3",
+        "battleConditionSetMstId": 2151,
+        "description": "自身がファントムトリック状態のとき+戦闘スキルを発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1339,5,3",
+        "battleConditionSetMstId": 2152,
+        "description": "自身がファントムトリック状態のとき+通常攻撃を発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1339,7,3",
+        "battleConditionSetMstId": 2153,
+        "description": "自身がファントムトリック状態のとき+必殺技を発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1339,276",
+        "battleConditionSetMstId": 2154,
+        "description": "自身がファントムトリック状態のとき+敵がブレイクしたとき"
+    },
+    {
         "battleConditionMstIdCsv": "1310,3",
         "battleConditionSetMstId": 2155,
         "description": "キャンディホリックが付与されている敵が1体以上いる+自分は行動者"
+    },
+    {
+        "battleConditionMstIdCsv": "782",
+        "battleConditionSetMstId": 2156,
+        "description": "カットアウトが付与されているとき"
     },
     {
         "battleConditionMstIdCsv": "1299,1341",
@@ -10583,5 +10738,115 @@
         "battleConditionMstIdCsv": "523",
         "battleConditionSetMstId": 2168,
         "description": "トークンが2未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1345",
+        "battleConditionSetMstId": 2169,
+        "description": "持続ダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1339,1345",
+        "battleConditionSetMstId": 2170,
+        "description": "自身がファントムトリック状態のとき+持続ダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1339",
+        "battleConditionSetMstId": 2171,
+        "description": "自身がファントムトリック状態のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1339,318",
+        "battleConditionSetMstId": 2172,
+        "description": "自身がファントムトリック状態のとき+敵が2体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1339,408",
+        "battleConditionSetMstId": 2173,
+        "description": "自身がファントムトリック状態のとき+敵が3体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1339,409",
+        "battleConditionSetMstId": 2174,
+        "description": "自身がファントムトリック状態のとき+敵が4体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1339,410",
+        "battleConditionSetMstId": 2175,
+        "description": "自身がファントムトリック状態のとき+敵が5体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "419,1323,25",
+        "battleConditionSetMstId": 2176,
+        "description": "自身がブレイク状態のとき、自分の状態異常数が3未満で、1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "419,1168,25",
+        "battleConditionSetMstId": 2177,
+        "description": "自身がブレイク状態のとき、自分の状態異常数が3で、1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "419,1169,25",
+        "battleConditionSetMstId": 2178,
+        "description": "自身がブレイク状態のとき、自分の状態異常数が4で、1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "419,1170,25",
+        "battleConditionSetMstId": 2179,
+        "description": "自身がブレイク状態のとき、自分の状態異常数が5で、1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "419,1311,25",
+        "battleConditionSetMstId": 2180,
+        "description": "自身がブレイク状態のとき、自分の状態異常数が6で、1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "419,1312,25",
+        "battleConditionSetMstId": 2181,
+        "description": "自身がブレイク状態のとき、自分の状態異常数が7で、1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "419,1313,25",
+        "battleConditionSetMstId": 2182,
+        "description": "自身がブレイク状態のとき、自分の状態異常数が8で、1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "419,1319,25",
+        "battleConditionSetMstId": 2183,
+        "description": "自身がブレイク状態のとき、自分の状態異常数が9以上で、1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "1347",
+        "battleConditionSetMstId": 2185,
+        "description": "味方全体のデバフ数が18以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1349,1348",
+        "battleConditionSetMstId": 2186,
+        "description": "味方全体のデバフ数が10以上18未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1351,1350",
+        "battleConditionSetMstId": 2187,
+        "description": "味方全体のデバフ数が7以上10未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1353,1352",
+        "battleConditionSetMstId": 2188,
+        "description": "味方全体のデバフ数が4以上7未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1355,1354",
+        "battleConditionSetMstId": 2189,
+        "description": "味方全体のデバフ数が0以上4未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1339,6,3,1332",
+        "battleConditionSetMstId": 2190,
+        "description": "自身がファントムトリック状態のとき+戦闘スキルを発動したとき+攻撃した対象"
+    },
+    {
+        "battleConditionMstIdCsv": "1339,5,3,1332",
+        "battleConditionSetMstId": 2191,
+        "description": "自身がファントムトリック状態のとき+通常攻撃を発動したとき+攻撃した対象"
     }
 ]
