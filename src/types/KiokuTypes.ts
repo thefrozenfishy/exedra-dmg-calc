@@ -314,15 +314,6 @@ export const getSubCrystalises = () => [
     .map(c => c.name)
 
 
-const heartphialAtkRewardLvls = {
-    45: 20,
-    39: 20,
-    33: 20,
-    27: 20,
-    21: 20,
-    15: 10,
-    9: 10
-}
 
 export const KiokuConstants = {
     maxKiokuLvl: 120,
@@ -330,9 +321,8 @@ export const KiokuConstants = {
     maxAscension: 5,
     maxHeartphialLvl: 50,
     maxSpecialLvl: 10,
-    heartphialAtkRewardLvls
-
 }
+
 export interface KiokuGeneratorArgs {
     name: string;
     kiokuLvl?: number;
@@ -345,6 +335,8 @@ export interface KiokuGeneratorArgs {
     ascension?: number;
     specialLvl?: number;
     score?: boolean;
+    buffMultReduction?: number;
+    debuffMultReduction?: number;
 }
 
 export const correctCharacterParams = (character?: Character) => {

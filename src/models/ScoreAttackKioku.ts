@@ -11,8 +11,10 @@ export class ScoreAttackKioku extends Kioku {
     private buffMult = 1;
     private debuffMult = 1;
 
-    constructor(args: KiokuArgs) {
+    constructor(args: KiokuArgs, buffMultReduction = 0, debuffMultReduction = 0) {
         super(args);
+        this.buffMult -= buffMultReduction;
+        this.debuffMult -= debuffMultReduction;
 
         if (this.support && [this.data.role, this.data.element].includes(this.support.data.support_target)) {
             this.addEffect(passiveDetails, "passiveSkillMstId", this.support.data.support_id, this.support.supportLvl, false);

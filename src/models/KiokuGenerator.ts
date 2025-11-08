@@ -29,7 +29,10 @@ export function getKioku<T extends Kioku>({
     crys = [],
     crys_sub = [],
     score = false,
+    buffMultReduction = 0,
+    debuffMultReduction = 0
 }: KiokuGeneratorArgs): T {
+    console.log("Generating Kioku:",name, crys, crys_sub)
     const clearCrys = crys.filter(Boolean)
     const clearSubCrys = crys_sub.filter(Boolean)
     const Class = score ? ScoreAttackKioku : Kioku;
@@ -59,7 +62,9 @@ export function getKioku<T extends Kioku>({
             specialLvl,
             crys: clearCrys,
             crys_sub: clearSubCrys
-        }));
+        },
+            buffMultReduction,
+            debuffMultReduction));
     }
 
     return cache.get(key) as T;

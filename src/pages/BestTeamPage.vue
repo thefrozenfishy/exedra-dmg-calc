@@ -29,6 +29,14 @@
                 Calculate using perfect Crit rate, Crit Damage & atk crystalis substats
             </label>
 
+            <label>Buff Bonus Reduction:
+                <input type="number" v-model.number="buffMultReduction" step="0.1" />
+            </label>
+
+            <label>Debuff Bonus Reduction:
+                <input type="number" v-model.number="debuffMultReduction" step="0.1" />
+            </label>
+
             <div>
                 <h3>Role Distribution</h3>
 
@@ -225,10 +233,11 @@ let prevObligatoryKioku: Character[] = []
 const workerRef = ref<Worker | null>(null)
 const progress = ref<FinalTeam>({})
 
-// ---- Option states bound to template ----
 const include4StarAttackers = ref(false)
 const include4StarSupports = ref(false)
 const include4StarOthers = ref(false)
+const buffMultReduction = ref(0);
+const debuffMultReduction = ref(0);
 const optimalSubCrys = ref(true)
 
 const weakElements = reactive([
@@ -247,7 +256,6 @@ const minHealer = ref(0)
 const minDefender = ref(0)
 const minBreaker = ref(0)
 
-// Extra attackers
 const extraAttackers = ref<Character[]>([])
 const extraAttackerQuery = ref("")
 const showExtraAttackerDropdown = ref(false)
@@ -401,6 +409,7 @@ async function startSimulation() {
     prevObligatoryKioku = [...obligatoryKioku.value]
     prevAttackers = [...attackers.value, ...extraAttackers.value]
     running.value = true
+    results.splice(0, results.length)
     progress.value = {}
 
     workerRef.value = new Worker(new URL('../workers/BestTeamWorker.js', import.meta.url), { type: 'module' })
@@ -435,14 +444,15 @@ async function startSimulation() {
             extraAttackers: extraAttackersVal,
             obligatoryKioku: obligatoryKiokuVal,
             ignoredKioku: ignoredKiokuVal,
-            prevResults: JSON.parse(JSON.stringify(results)),
             deBufferCount: deBufferCount.value,
             otherCount: otherCount.value,
             minHealer: minHealer.value,
             minDefender: minDefender.value,
             minBreaker: minBreaker.value,
             optimalSubCrys: optimalSubCrys.value,
-            enabledCharacters: JSON.parse(JSON.stringify(members.value))
+            enabledCharacters: JSON.parse(JSON.stringify(members.value)),
+            buffMultReduction: buffMultReduction.value,
+            debuffMultReduction: debuffMultReduction.value,
         }
     })
 }

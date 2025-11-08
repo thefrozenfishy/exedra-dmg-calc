@@ -21,6 +21,20 @@
   <EnemySelector />
 
   <div class="team-page">
+    <h2>Extra settings</h2>
+    <div key="buffMultReduction">
+      <label>Buff Bonus Reduction:
+        <input type="number" v-model.number="buffMultReduction" step="0.1" />
+      </label>
+    </div>
+    <div key="buffMultReduction">
+      <label>Debuff Bonus Reduction:
+        <input type="number" v-model.number="debuffMultReduction" step="0.1" />
+      </label>
+    </div>
+  </div>
+
+  <div class="team-page">
     <h1>Debug info</h1>
     <div class="team-grid">
       <div v-for="(enemy, index) in enemies.enemies" :key="index" class="team-slot">
@@ -31,17 +45,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
 import { ScoreAttackTeam } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
-import { KiokuGeneratorArgs } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
-import { getKioku } from '../models/KiokuGenerator'
+import { KiokuArgs } from '../models/KiokuGenerator'
 import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
 
 const attackerIndex = 2
+
+const buffMultReduction = ref(0);
+const debuffMultReduction = ref(0);
 
 function onChangeCrys(charIdx: number, crysIdx: number, rawValue: string) {
   const main = team.slots[charIdx].main
@@ -71,8 +87,14 @@ const teamInstance = computed(() => {
   if (!isFullTeam.value) return;
   try {
     const transformedMembers = team.slots.map(m => {
-      const support = m.support ? getKioku({ ...m.support, score: true }) : null
-      return getKioku({ ...m.main, supportKey: support?.getKey(), score: true } as KiokuGeneratorArgs)
+      const support = m.support ? new ScoreAttackKioku({ ...m.support }) : null
+      return new ScoreAttackKioku({
+        ...m.main,
+        supportKey: support?.getKey()
+      } as KiokuArgs,
+        buffMultReduction.value,
+        debuffMultReduction.value,
+      )
     }) as ScoreAttackKioku[]
     return new ScoreAttackTeam(transformedMembers[attackerIndex], transformedMembers.filter((v, i) => i !== attackerIndex), true)
   } catch (err) {

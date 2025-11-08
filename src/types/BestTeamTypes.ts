@@ -15,7 +15,6 @@ export interface FindBestTeamOptions {
     obligatoryKioku: string[];
     ignoredKioku: string[];
     weakElements: KiokuElement[]
-    prevResults: any[]
     deBufferCount: number
     otherCount: number
     minHealer: number
@@ -23,6 +22,8 @@ export interface FindBestTeamOptions {
     minBreaker: number
     optimalSubCrys: boolean
     enabledCharacters: Character[]
+    buffMultReduction: number
+    debuffMultReduction: number
     onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number) => void,
     onError?: (error: any) => void
 }
