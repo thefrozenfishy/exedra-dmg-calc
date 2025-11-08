@@ -9,7 +9,8 @@
           <!-- Header per slot -->
           <h2> {{ isAlliedTeam ? "Ally" : "Enemy" }} {{ index + 1 }}</h2>
 
-          <CharacterEditor :index="index" :slot="slot" :extraData="battleOutput[0]?.[isAlliedTeam ? 'allies' : 'enemies']?.team?.find(b => b.name === slot.main?.name)"
+          <CharacterEditor :index="index" :slot="slot"
+            :extraData="battleOutput[0]?.[isAlliedTeam ? 'allies' : 'enemies']?.team?.find(b => b.name === slot.main?.name)"
             :setMain="team.setMain(isAlliedTeam)" :setSupport="team.setSupport(isAlliedTeam)"
             :onChangeCrys="onChangeCrys(isAlliedTeam)" :onChangeSubCrys="onChangeSubCrys(isAlliedTeam)" />
         </div>
@@ -18,11 +19,14 @@
   </div>
   <div>
     <h2>Battle Order</h2>
-     <p style="color: red;">UNDER CONSTRUCTION</p>
+    <p style="color: red;">UNDER CONSTRUCTION</p>
     <button @click="runSimulation" :disabled="!isFullBattle">Run Simulation</button>
-    <p style="color: red;">Take this with a big grain of salt, as my understanding of the mechanics here are not perfect, nor do I want to use the time to special case all different attacks, targeting etc</p>
-    <p>I'll try to make sure all common pvp characters work identical to ingame, but niche picks are at your own risk</p>
-    <p>First few turns are probably correct, so use this to check speed ties etc. The further down you go the less likely it is to be correct</p>
+    <p style="color: red;">Take this with a big grain of salt, as my understanding of the mechanics here are not
+      perfect, nor do I want to use the time to special case all different attacks, targeting etc</p>
+    <p>I'll try to make sure all common pvp characters work identical to ingame, but niche picks are at your own risk
+    </p>
+    <p>First few turns are probably correct, so use this to check speed ties etc. The further down you go the less
+      likely it is to be correct</p>
     <div class="battle-output">
       <div v-for="(state, idx) in battleOutput" :key="idx" class="battle-state">
         <hr class="matchup-separator" />
@@ -52,14 +56,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, Ref, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { usePvPStore } from '../store/singleTeamStore'
-import { getKioku, Kioku } from '../models/Kioku'
-import { BattleSnapshot, BattleState, KiokuGeneratorArgs } from '../types/KiokuTypes'
+import { Kioku } from '../models/Kioku'
+import { BattleState, KiokuGeneratorArgs } from '../types/KiokuTypes'
 import { PvPBattle } from '../models/PvPBattle'
 import { PvPTeam } from '../models/PvPTeam'
 import CharacterEditor from '../components/CharacterEditor.vue'
 import { toast } from 'vue3-toastify'
+import { getKioku } from '../models/KiokuGenerator'
 
 const team = usePvPStore()
 

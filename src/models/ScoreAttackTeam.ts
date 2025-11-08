@@ -1,7 +1,7 @@
-import { Kioku } from "./Kioku";
+import { ScoreAttackKioku } from "./ScoreAttackKioku";
 import { EnemyTargetTypes, Enemy } from "../types/EnemyTypes";
 import { isActiveConditionRelevantForScoreAttack, isStartCondRelevantForScoreAttack } from "./BattleConditionParser";
-import { elementMap, SkillDetail } from "../types/KiokuTypes";
+import { ActiveSkill, elementMap, SkillDetail } from "../types/KiokuTypes";
 
 const targetTypeAtPosition = [EnemyTargetTypes.L_OTHER, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.R_OTHER]
 
@@ -14,6 +14,7 @@ const knownBoosts = {
     DWN_DEF_ACCUM_RATIO: "Def%2",
     UP_CTR_FIXED: "CR1+",
     UP_CTR_RATIO: "CR3+",
+    UP_RCV_CTR_RATIO: "CR4+",
     UP_CTR_ACCUM_RATIO: "CR2+",
     UP_CTD_FIXED: "CD1+",
     UP_CTD_RATIO: "CD3+",
@@ -39,7 +40,7 @@ const skippable = new Set([
     "CONSUME_CHARGE_POINT",
     "CONSUME_COUNT_POINT", // TODO: Verify bowmura is correct
     "CONTINUOUS_RECOVERY",
-    "COUNT", 
+    "COUNT",
     "CURSE_ATK",
     "CUTOUT",
     "DMG_ATK",
@@ -64,6 +65,7 @@ const skippable = new Set([
     "REFLECTION_RATIO",
     "REMOVE_ALL_ABNORMAL",
     "REMOVE_ALL_BUFF",
+    "REMOVE_ALL_DEBUFF",
     "SHIELD",
     "SLOW",
     "STUN",
@@ -99,14 +101,14 @@ const skippable = new Set([
 ]);
 
 export class ScoreAttackTeam {
-    private team: Kioku[];
-    private dps: Kioku;
+    private team: ScoreAttackKioku[];
+    private dps: ScoreAttackKioku;
     private all_effects: Record<string, number> = {};
     private extra_effects: Record<string, [Function, number][]> = {};
     private debug: boolean;
     private debugTexts: Record<string, Record<string, [SkillDetail, number][]>> = {}
 
-    constructor(dps: Kioku, team: Kioku[], debug = false) {
+    constructor(dps: ScoreAttackKioku, team: ScoreAttackKioku[], debug = false) {
         this.team = team;
         this.dps = dps;
         this.debug = debug;
@@ -116,52 +118,50 @@ export class ScoreAttackTeam {
     }
 
     private setup() {
-        const members: [boolean, Kioku][] = [
+        const members: [boolean, ScoreAttackKioku][] = [
             [true, this.dps],
-            ...this.team.map(t => [false, t] as [boolean, Kioku])
+            ...this.team.map(t => [false, t] as [boolean, ScoreAttackKioku])
         ];
         for (const [isDps, kioku] of members) {
             this.debugTexts[kioku.name] = {}
-            for (let [skill_id, details] of Object.entries(kioku.effects)) {
-                for (let detail of details) {
-                    if (skippable.has(detail.abilityEffectType)) continue
-                    if (!isDps && detail.range < 1) continue
-                    if (detail.element && elementMap[detail.element] !== this.dps.element) continue
+            for (const detail of kioku.effects) {
+                if (skippable.has(detail.abilityEffectType)) continue
+                if (!isDps && detail.range < 1) continue
+                if (detail.element && elementMap[detail.element] !== this.dps.data.element) continue
 
-                    if (detail.startConditionSetIdCsv.split(",").some(startCondId =>
-                        !isStartCondRelevantForScoreAttack(startCondId, kioku.maxMagicStacks))
-                    ) continue;
+                if (detail.startConditionSetIdCsv.split(",").some(startCondId =>
+                    !isStartCondRelevantForScoreAttack(startCondId, kioku.maxMagicStacks))
+                ) continue;
 
-                    let valueTotal = detail.value1
-                    // For multi-value skills, value2 is the max multiplier 
-                    valueTotal *= detail.value2 || 1
+                let valueTotal = detail.value1
+                // For multi-value skills, value2 is the max multiplier 
+                valueTotal *= detail.value2 || 1
 
-                    detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
-                        const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId)
-                        if (typeof (isActiveCond) === 'boolean') {
-                            if (isActiveCond) {
-                                if (detail.abilityEffectType in this.all_effects) {
-                                    if (["DWN_DEF_RATIO", "DWN_DEF_ACCUM_RATIO"].includes(detail.abilityEffectType)) {
-                                        this.all_effects[detail.abilityEffectType] *= 1 - valueTotal / 1000;
-                                    } else {
-                                        this.all_effects[detail.abilityEffectType] += valueTotal
-                                    }
+                detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
+                    const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId)
+                    if (typeof (isActiveCond) === 'boolean') {
+                        if (isActiveCond) {
+                            if (detail.abilityEffectType in this.all_effects) {
+                                if (["DWN_DEF_RATIO", "DWN_DEF_ACCUM_RATIO"].includes(detail.abilityEffectType)) {
+                                    this.all_effects[detail.abilityEffectType] *= 1 - valueTotal / 1000;
                                 } else {
-                                    this.all_effects[detail.abilityEffectType] = valueTotal;
+                                    this.all_effects[detail.abilityEffectType] += valueTotal
                                 }
-                                if (!(detail.abilityEffectType in this.debugTexts[kioku.name])) {
-                                    this.debugTexts[kioku.name][detail.abilityEffectType] = []
-                                }
-                                this.debugTexts[kioku.name][detail.abilityEffectType].push([detail, valueTotal])
+                            } else {
+                                this.all_effects[detail.abilityEffectType] = valueTotal;
                             }
-                        } else {
-                            if (!(detail.abilityEffectType in this.extra_effects)) {
-                                this.extra_effects[detail.abilityEffectType] = []
+                            if (!(detail.abilityEffectType in this.debugTexts[kioku.name])) {
+                                this.debugTexts[kioku.name][detail.abilityEffectType] = []
                             }
-                            this.extra_effects[detail.abilityEffectType].push([isActiveCond, valueTotal])
+                            this.debugTexts[kioku.name][detail.abilityEffectType].push([detail, valueTotal])
                         }
-                    })
-                }
+                    } else {
+                        if (!(detail.abilityEffectType in this.extra_effects)) {
+                            this.extra_effects[detail.abilityEffectType] = []
+                        }
+                        this.extra_effects[detail.abilityEffectType].push([isActiveCond, valueTotal])
+                    }
+                })
             }
         }
 
@@ -182,7 +182,7 @@ export class ScoreAttackTeam {
         }
     }
 
-    memberForLog = (idx: number): Kioku => {
+    memberForLog = (idx: number): ScoreAttackKioku => {
         if (idx === EnemyTargetTypes.TARGET) return this.dps
         if (idx < EnemyTargetTypes.TARGET) return this.team[idx]
         return this.team[idx - 1]
@@ -210,7 +210,7 @@ export class ScoreAttackTeam {
     }
 
     getEffect(eff: string, amountOfEnemies: number, maxBreak: number): number {
-        let val = this.all_effects[eff] || 0
+        let val = this.all_effects[eff] ?? 0
         this.extra_effects[eff]?.forEach(
             ([fun, v]) => {
                 if (fun(amountOfEnemies, maxBreak)) {
@@ -226,7 +226,8 @@ export class ScoreAttackTeam {
 
     get_special_dmg(targetType: EnemyTargetTypes, amountOfEnemies: number, maxBreak: number, nrHitThatKills: number): [number, boolean] {
         let total_dmg = 0;
-        for (const detail of Object.values(this.dps.effects[this.dps.data.special_id])) {
+        for (const detail of this.dps.effects) {
+            if (((detail as ActiveSkill).skillMstId / 100 | 0) !== this.dps.data.special_id) continue
             let delta_dmg = 0
             if (!detail.abilityEffectType.startsWith("DMG_")) continue
             detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
@@ -255,7 +256,7 @@ export class ScoreAttackTeam {
 
     calculate_single_dmg(
         idx: number,
-        kiokuAtPosition: Kioku,
+        kiokuAtPosition: ScoreAttackKioku,
         enemy: Enemy,
         amountOfEnemies: number,
         atk_down: number,
@@ -277,15 +278,16 @@ export class ScoreAttackTeam {
         }
         const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;
 
-        const uncapped_crit_rate = (this.dps.critRate +
-            (this.getEffect("UP_CTR_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) +
-            (this.getEffect("UP_CTR_FIXED", amountOfEnemies, enemy.maxBreak)) +
-            (this.getEffect("UP_CTR_RATIO", amountOfEnemies, enemy.maxBreak))) /
+        const uncapped_crit_rate = (this.dps.baseCritRate +
+            this.getEffect("UP_CTR_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) +
+            this.getEffect("UP_CTR_FIXED", amountOfEnemies, enemy.maxBreak) +
+            this.getEffect("UP_RCV_CTR_RATIO", amountOfEnemies, enemy.maxBreak) +
+            this.getEffect("UP_CTR_RATIO", amountOfEnemies, enemy.maxBreak)) /
             1000
 
         const crit_rate = Math.min(1, uncapped_crit_rate)
 
-        const crit_dmg = (this.dps.critDamage +
+        const crit_dmg = (this.dps.baseCritDamage +
             this.getEffect("UP_CTD_FIXED", amountOfEnemies, enemy.maxBreak) +
             this.getEffect("UP_CTD_RATIO", amountOfEnemies, enemy.maxBreak) +
             this.getEffect("UP_CTD_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)
@@ -322,31 +324,38 @@ export class ScoreAttackTeam {
 
         let debugText = "";
         if (this.debug) {
-
             const lines = kiokuAtPosition
                 ? Object.keys(kiokuAtPosition).sort().sort((a, b) => {
                     if (a.endsWith("Atk")) return -1;
                     if (b.endsWith("Atk")) return 1;
+                    if (a === "portrait") return -1;
+                    if (b === "portrait") return 1;
+                    if (a === "support") return -1;
+                    if (b === "support") return 1;
                     if (a.endsWith("Lvl")) return -1;
                     if (b.endsWith("Lvl")) return 1;
                     return 0
                 }).map(key => {
                     let val = (kiokuAtPosition as any)[key]
-                    if (key === "portraitStats") {
-                        val = val?.["atk"]
-                        key = "PortraitAtk"
-                    }
-                    if (key === "support") {
-                        val = val?.getBaseAtk()
-                        key = "SupportAtk"
-                    }
-                    if (key.endsWith("Atk") || key.endsWith("Def") || key.endsWith("Hp")) {
-                        val |= 0
-                    } else if (["name", "role", "element", "portrait", "crys_sub", "crys", "data", "support", "supportKey", "knownConditions", "effects"].includes(key)) {
+                    if (key.startsWith("base") || key.endsWith("Def") || key.endsWith("Hp")) return;
+                    if (["effects", "ascension", "crys", "data", "inputCrys", "inputCrysSub", "name", "scalableEffects", "unscalableEffects"].includes(key)) {
                         return;
                     }
-
-                    return `${["abilityLvl", "ascension"].includes(key) ? `\n${key}` : key} - ${val}`
+                    if (key === "portrait") {
+                        val = val?.["stats"]?.["atk"];
+                        key = "PortraitAtk";
+                    }
+                    if (key === "support") {
+                        val = val?.getBaseAtk() * 0.16;
+                        key = "SupportAtk";
+                    }
+                    if (key === "supportLvl") {
+                        val = (kiokuAtPosition as any)["support"]?.supportLvl
+                    }
+                    if (key.endsWith("Atk")) {
+                        val |= 0;
+                    }
+                    return `${key.padEnd(12)} - ${val}`
                 }).filter(Boolean)
                 : [];
 
@@ -366,7 +375,7 @@ export class ScoreAttackTeam {
                     if (st.length) {
                         outString += " => " + st
                     }
-                    const desc = d.description.match(/.{1,18}/g)?.join("\n   ")
+                    const desc = d.description.match(/.{1,20}/g)?.join("\n   ")
                     outString += `${desc ? `\n  ${desc}` : ''}`
                     return outString
                 }
@@ -413,7 +422,7 @@ is_break     - ${enemy.isBreak}
 is_elemt_weak- ${enemy.isWeak}         
 does_crit    - ${enemy.isCrit}         
 enabled      - ${enemy.enabled}
-died         - ${enemyDied}
+enemy died   - ${enemyDied}
 
 KIOKU STATS:
 ${lines.join("\n")}

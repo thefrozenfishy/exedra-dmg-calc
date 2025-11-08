@@ -70,13 +70,14 @@ const dmgUpPortraits = {
     [KiokuElement.Void]: "Pride on the Line",
 }
 
-export interface PortraitData {
+export interface Portrait {
     cardMstId: number;
     passiveSkill1: number;
     element: number;
     rarity: number;
     name: string;
     resourceName: string;
+    stats: PortraitLvlData
 }
 
 export interface PortraitLvlData {
@@ -109,7 +110,7 @@ export interface PassiveSkill {
     value3: number
 }
 
-interface ActiveSkill {
+export interface ActiveSkill {
     abilityEffectType: string
     activeConditionSetIdCsv: string
     description: string
@@ -130,6 +131,7 @@ interface ActiveSkill {
 }
 
 export type SkillDetail = PassiveSkill | ActiveSkill;
+export type SkillKey = "skillMstId" | "passiveSkillMstId";
 
 export interface Character {
     id: number
@@ -214,6 +216,37 @@ export interface CrystalisData {
     value1: number
     styleMstId: number
     selectionAbilityType: number
+}
+
+export interface StyleParamUp {
+    styleParamUpMstId: number
+    styleMstId: number
+    styleParamUpTreeMstId: number
+    priority: number
+    styleParamUpEffectMstId: number
+}
+
+export interface StyleParamUpEffect {
+    abilityEffectType: string
+    name: string
+    styleParamUpEffectMstId: number
+    targetType: number
+    value1: number
+    value2: number
+}
+
+export interface CharacterHeart {
+    characterHeartMstId: number
+    characterMstId: number
+    objectRewardGroupId: number
+    paramUpGroupId: number
+}
+
+export interface CharacterHeartParamUpGroup {
+    characterHeartParamUpGroupMstId: number
+    heartLevel: number
+    paramUpGroupId: number
+    styleParamUpEffectMstId: number
 }
 
 export const getPersonalCrystalisEffects = (styleId: number): string[] =>
@@ -311,6 +344,7 @@ export interface KiokuGeneratorArgs {
     crys_sub?: string[]
     ascension?: number;
     specialLvl?: number;
+    score?: boolean;
 }
 
 export const correctCharacterParams = (character?: Character) => {

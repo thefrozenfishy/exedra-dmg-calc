@@ -1,7 +1,7 @@
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { ScoreAttackTeam } from "./ScoreAttackTeam";
 import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises } from "../types/KiokuTypes";
-import { getKioku } from "./Kioku";
+import { getKioku } from "./KiokuGenerator";
 
 export async function findBestTeam({
     enemies,
@@ -55,7 +55,7 @@ export async function findBestTeam({
     const availableSupportCombinations = combinations([...availableChars[KiokuRole.Debuffer], ...availableChars[KiokuRole.Buffer]], deBufferCount)
     const availableOtherDistributions = generateRoleDistributions(otherCount, minHealer, minDefender, minBreaker)
 
-    const all5StarKioku = enabledCharacters.filter(c => c.rarity === 5).map(getKioku).filter(Boolean)
+    const all5StarKioku = enabledCharacters.filter(c => c.rarity === 5).map(c => getKioku({ ...c, score: true })).filter(Boolean)
     const highestAtkSupportKey = all5StarKioku.reduce((max, k) => (k.getBaseAtk() > max.getBaseAtk() ? k : max))?.getKey()
     const possibleAtkSupportKeys: Record<SupportKey, any[]> = {
         ...Object.values(KiokuRole).reduce(
@@ -65,14 +65,14 @@ export async function findBestTeam({
     }
     for (const key of [...Object.values(KiokuRole), ...Object.values(KiokuElement)]) {
         for (const c of all5StarKioku) {
-            if (c?.is_valid_support(key)) {
+            if (c?.data.support_target == key) {
                 possibleAtkSupportKeys[key].push(c.getKey())
             }
         }
     }
 
     const tsurunoData = enabledCharacters.find(c => c.name === "Flame Waltz")
-    const tsurunoKey = tsurunoData ? getKioku(tsurunoData)?.getKey() : null
+    const tsurunoKey = tsurunoData ? getKioku({ ...tsurunoData, score: true })?.getKey() : null
 
     let completedRuns = 0;
     const expectedTotalRuns =
@@ -95,7 +95,7 @@ export async function findBestTeam({
             return map
         }, new Map()).values())
         if (!availableSupportKeys.length) {
-            availableSupportKeys.push(getKioku(enabledCharacters.find(c => c.name === "Ryushin Spiral Fury")).getKey())
+            availableSupportKeys.push(getKioku({ ...enabledCharacters.find(c => c.name === "White Camellia"), score: true }).getKey())
         }
         for (const dist of availableOtherDistributions) {
             for (const healerCombo of combinations(availableChars[KiokuRole.Healer], dist.healers)) {
@@ -146,9 +146,10 @@ export async function findBestTeam({
                                                         portrait: attackerPortrait,
                                                         crys: attackerCrys,
                                                         crys_sub: optimalSubCrys ? undefined : attacker.crys_sub,
-                                                        supportKey: attackerSupportKey
+                                                        supportKey: attackerSupportKey,
+                                                        score: true
                                                     })!,
-                                                    totalSupports.map((s, i) => getKioku({ ...s, supportKey: supportSupport[i] }))
+                                                    totalSupports.map((s, i) => getKioku({ ...s, supportKey: supportSupport[i], score: true }))
                                                 );
 
                                                 const [dmg, _, critRate] = team.calculate_max_dmg(enemies, 0)

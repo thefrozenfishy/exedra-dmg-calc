@@ -26,7 +26,6 @@ import {
     getPersonalCrystalisEffects,
 } from "../types/KiokuTypes";
 import { crystalises } from "../utils/helpers";
-import { find_all_details } from "../models/Kioku";
 
 const props = defineProps<{
     element?: string;

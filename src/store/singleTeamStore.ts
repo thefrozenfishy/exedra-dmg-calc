@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { Enemy } from '../types/EnemyTypes'
 import { TeamSlot } from '../types/BestTeamTypes'
-import { Character, correctCharacterParams, Character } from '../types/KiokuTypes'
+import { Character, correctCharacterParams } from '../types/KiokuTypes'
 import { crystalises } from '../utils/helpers'
 
 export const usePvPStore = defineStore('pvp', {

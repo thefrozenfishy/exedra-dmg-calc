@@ -20,9 +20,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { getPortraits, KiokuElement, PortraitData } from "../types/KiokuTypes";
+import { getPortraits, KiokuElement, Portrait } from "../types/KiokuTypes";
 import { portraits } from "../utils/helpers";
-import { find_all_details } from "../models/Kioku";
 
 const props = defineProps<{
     element?: KiokuElement;
@@ -67,7 +66,7 @@ function clear() {
     show.value = false;
 }
 
-function portraitImage(p: PortraitData) {
+function portraitImage(p: Portrait) {
     return `/exedra-dmg-calc/portrait_images/${p.resourceName}_thumbnail.png`;
 }
 

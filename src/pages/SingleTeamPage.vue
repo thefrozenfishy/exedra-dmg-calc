@@ -9,7 +9,6 @@
 
     <div class="team-grid">
       <div v-for="(slot, index) in team.slots" :key="index" class="team-slot">
-        <!-- Header per slot -->
         <h2>{{ index === attackerIndex ? 'Damage Dealer' : 'Member' }}
           {{ index < attackerIndex ? index + 1 : index > attackerIndex ? index : "" }}</h2>
 
@@ -21,27 +20,26 @@
 
   <EnemySelector />
 
-  <!-- Debug section TODO: Hide this by default? -->
   <div class="team-page">
     <h1>Debug info</h1>
     <div class="team-grid">
       <div v-for="(enemy, index) in enemies.enemies" :key="index" class="team-slot">
-        <pre style="text-align: left; padding: 0 2rem;">{{ formatDebug(battleOutput, index) }}</pre>
+        <pre style="text-align: left; padding: 0 1rem;">{{ formatDebug(battleOutput, index) }}</pre>
       </div>
     </div>
   </div>
-
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
-import { getKioku, Kioku } from '../models/Kioku'
 import { ScoreAttackTeam } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
 import { KiokuGeneratorArgs } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
+import { getKioku } from '../models/KiokuGenerator'
+import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
 
 const attackerIndex = 2
 
@@ -61,8 +59,8 @@ function onChangeSubCrys(charIdx: number, crysIdx: number, rawValue: string) {
   team.setMain(charIdx, { ...main, crys_sub: current } as any)
 }
 
-const formatDmg = (out: string | (number | string)[][]) => typeof (out) !== 'string' ? `Max Damage: ${out[0].toLocaleString()} with a ${out[2]}% crit rate - (Average Damage: ${out[1].toLocaleString()}) ` : battleOutput
-const formatDebug = (out: string | (number | string)[][], idx: number) => Array.isArray(out) ? out[3][idx] : battleOutput
+const formatDmg = (out: string | [number, number, number, string[]]) => typeof (out) !== 'string' ? `Max Damage: ${out[0].toLocaleString()} with a ${out[2]}% crit rate - (Average Damage: ${out[1].toLocaleString()}) ` : battleOutput
+const formatDebug = (out: string | [number, number, number, string[]], idx: number) => Array.isArray(out) ? out[3][idx] : battleOutput
 
 
 const team = useTeamStore()
@@ -73,15 +71,15 @@ const teamInstance = computed(() => {
   if (!isFullTeam.value) return;
   try {
     const transformedMembers = team.slots.map(m => {
-      const support = m.support ? getKioku({ ...m.support }) : null
-      return getKioku({ ...m.main, supportKey: support?.getKey() } as KiokuGeneratorArgs)
-    }) as Kioku[]
+      const support = m.support ? getKioku({ ...m.support, score: true }) : null
+      return getKioku({ ...m.main, supportKey: support?.getKey(), score: true } as KiokuGeneratorArgs)
+    }) as ScoreAttackKioku[]
     return new ScoreAttackTeam(transformedMembers[attackerIndex], transformedMembers.filter((v, i) => i !== attackerIndex), true)
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
     console.error(err)
     for (let index = 0; index < 5; index++) {
-        team.setMain(index, undefined)
+      team.setMain(index, undefined)
     }
   }
 })

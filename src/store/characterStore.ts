@@ -6,7 +6,6 @@ import { crystalises, kiokuData } from '../utils/helpers'
 export const useCharacterStore = defineStore('characterStore', () => {
     const characters = ref<Character[]>([])
 
-    // Load from localStorage if exists
     const saved = localStorage.getItem('characters')
     if (saved) {
         const oldChars: Character[] = JSON.parse(saved)
@@ -18,7 +17,6 @@ export const useCharacterStore = defineStore('characterStore', () => {
 
     }
 
-    // Watch and save to localStorage
     watch(
         characters,
         (newVal) => {
@@ -74,7 +72,6 @@ export const useCharacterStore = defineStore('characterStore', () => {
         })
     }
 
-    // Add new characters
     Object.entries(kiokuData).forEach(([name, data]) => {
         if (!characters.value.map(c => c.name).includes(name)) {
             characters.value.push({

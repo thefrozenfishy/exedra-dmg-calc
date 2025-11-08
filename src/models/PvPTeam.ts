@@ -1,6 +1,6 @@
-import { Kioku } from "./Kioku";
 import { BasicIds, KiokuRole, SkillDetail, maxMeters } from "../types/KiokuTypes";
 import { isConditionSetActiveForPvP, isTiming, ProcessTiming } from "./BattleConditionParser";
+import { Kioku } from "./Kioku";
 
 const aggro = {
     [KiokuRole.Defender]: 15,
@@ -61,7 +61,6 @@ export class KiokuState {
     }
 
     condenceCrysEffects() {
-        console.log("Condensing crys for", this.kioku.name)
         const crystalisEffects: Record<string, SkillDetail> = {}
         for (const effect of this.kioku.effects[BasicIds.CRYS] ?? []) {
             if (!(effect.abilityEffectType in crystalisEffects)) {
@@ -70,7 +69,6 @@ export class KiokuState {
                 crystalisEffects[effect.abilityEffectType].value1 += effect.value1
             }
         }
-        console.log("Condensed to", crystalisEffects)
         this.kioku.effects[BasicIds.CRYS] = Object.values(crystalisEffects)
     }
 

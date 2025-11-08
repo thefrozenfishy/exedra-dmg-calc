@@ -1,0 +1,186 @@
+[
+    {
+        "abilityEffectType": "UP_HP_FIXED",
+        "name": "HP +100",
+        "styleParamUpEffectMstId": 101,
+        "targetType": 1,
+        "value1": 100,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_ATK_FIXED",
+        "name": "ATK +36",
+        "styleParamUpEffectMstId": 102,
+        "targetType": 1,
+        "value1": 36,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_DEF_FIXED",
+        "name": "DEF +36",
+        "styleParamUpEffectMstId": 103,
+        "targetType": 1,
+        "value1": 36,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_CTR_FIXED",
+        "name": "CRT +2.5%",
+        "styleParamUpEffectMstId": 104,
+        "targetType": 1,
+        "value1": 25,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_CTD_FIXED",
+        "name": "Increases critical DMG by 2%.",
+        "styleParamUpEffectMstId": 105,
+        "targetType": 1,
+        "value1": 20,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_HP_FIXED",
+        "name": "HP +90",
+        "styleParamUpEffectMstId": 106,
+        "targetType": 1,
+        "value1": 90,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_ATK_FIXED",
+        "name": "ATK +32",
+        "styleParamUpEffectMstId": 107,
+        "targetType": 1,
+        "value1": 32,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_DEF_FIXED",
+        "name": "DEF +32",
+        "styleParamUpEffectMstId": 108,
+        "targetType": 1,
+        "value1": 32,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "name": "Basic Attack Lvl. Up",
+        "styleParamUpEffectMstId": 201,
+        "targetType": 2,
+        "value1": 1,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "name": "Battle Skill Lvl. Up",
+        "styleParamUpEffectMstId": 202,
+        "targetType": 3,
+        "value1": 1,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "name": "Ability Lvl. Up",
+        "styleParamUpEffectMstId": 203,
+        "targetType": 4,
+        "value1": 1,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "name": "Support Ability Lvl. Up",
+        "styleParamUpEffectMstId": 204,
+        "targetType": 5,
+        "value1": 1,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_HP_FIXED",
+        "name": "Increases HP by 30.",
+        "styleParamUpEffectMstId": 501,
+        "targetType": 1,
+        "value1": 30,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_HP_FIXED",
+        "name": "Increases HP by 40.",
+        "styleParamUpEffectMstId": 502,
+        "targetType": 1,
+        "value1": 40,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_HP_FIXED",
+        "name": "HP +5",
+        "styleParamUpEffectMstId": 503,
+        "targetType": 1,
+        "value1": 5,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_HP_FIXED",
+        "name": "HP +10",
+        "styleParamUpEffectMstId": 504,
+        "targetType": 1,
+        "value1": 10,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_HP_FIXED",
+        "name": "HP +20",
+        "styleParamUpEffectMstId": 505,
+        "targetType": 1,
+        "value1": 20,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_ATK_FIXED",
+        "name": "ATK +10",
+        "styleParamUpEffectMstId": 601,
+        "targetType": 1,
+        "value1": 10,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_ATK_FIXED",
+        "name": "ATK +20",
+        "styleParamUpEffectMstId": 602,
+        "targetType": 1,
+        "value1": 20,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_ATK_FIXED",
+        "name": "ATK +5",
+        "styleParamUpEffectMstId": 603,
+        "targetType": 1,
+        "value1": 5,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_DEF_FIXED",
+        "name": "DEF +10",
+        "styleParamUpEffectMstId": 701,
+        "targetType": 1,
+        "value1": 10,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_DEF_FIXED",
+        "name": "DEF +20",
+        "styleParamUpEffectMstId": 702,
+        "targetType": 1,
+        "value1": 20,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_DEF_FIXED",
+        "name": "DEF +5",
+        "styleParamUpEffectMstId": 703,
+        "targetType": 1,
+        "value1": 5,
+        "value2": 0
+    }
+]
