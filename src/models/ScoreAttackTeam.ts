@@ -267,6 +267,7 @@ export class ScoreAttackTeam {
         amountOfEnemies: number,
         atk_down: number,
     ): [number, number, number, string, boolean] {
+        // TODO: Add atk%-, dmg taken down% and dmg dealt down% from enemies
         const [special, enemyDied] = this.get_special_dmg(targetTypeAtPosition[idx], amountOfEnemies, enemy.maxBreak, enemy.hitsToKill);
         const atk_pluss =
             (this.getEffect("UP_ATK_RATIO", amountOfEnemies, enemy.maxBreak) +
@@ -279,7 +280,8 @@ export class ScoreAttackTeam {
             this.getEffect("DWN_DEF_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) *
             this.getEffect("DWN_DEF_RATIO", amountOfEnemies, enemy.maxBreak)
         );
-        if ("WEAKNESS" in this.all_effects) { // Weakness may be applied only once, and acts as -10% def
+        if ("WEAKNESS" in this.all_effects) {
+            // Weakness may be applied only once, and acts as -10% def
             def_remaining *= 0.9
         }
         const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;

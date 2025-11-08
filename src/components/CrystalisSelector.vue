@@ -21,11 +21,9 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import {
-    getCrystalises,
-    getPersonalCrystalisEffects,
-} from "../types/KiokuTypes";
+import { getCrystalises, getPersonalCrystalisEffects, } from "../types/KiokuTypes";
 import { crystalises } from "../utils/helpers";
+import { passiveDetails } from '../utils/helpers';
 
 const props = defineProps<{
     element?: string;
@@ -46,7 +44,7 @@ function filtered(index: number) {
             .map((c) => crystalises[c])
             .filter(Boolean)
             .map((c) => {
-                const eff = find_all_details(true, c.value1, true);
+                const eff = Object.values(passiveDetails).filter(v => (v as any).passiveSkillMstId === c.value1)
                 const desc = Object.values(eff).map(
                     (e) =>
                         `${e.description}${e.turn ? ` (${e.turn} Turn${e.turn === 1 ? "" : "s"})` : ""

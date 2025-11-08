@@ -22,6 +22,7 @@
 import { ref, computed } from "vue";
 import { getPortraits, KiokuElement, Portrait } from "../types/KiokuTypes";
 import { portraits } from "../utils/helpers";
+import { passiveDetails } from '../utils/helpers';
 
 const props = defineProps<{
     element?: KiokuElement;
@@ -38,15 +39,18 @@ const filtered = computed(() => {
         .map((p) => portraits[p])
         .filter(Boolean)
         .map((p) => {
-            // TODO Reimplement
-            /*const eff = find_all_details(true, p.passiveSkill1);
+            const eff = Object.values(passiveDetails).filter(v => (v as any).passiveSkillMstId === p.passiveSkill1 * 100 + 6)
             const best = eff[Math.max(...Object.keys(eff).map(Number))];
-            if (p.name === "Faith We'll Meet Again Someday") best.description = "Increases DMG dealt when targeting elemental weakness by 20%." // This for some reason has the wrong description, so we override it manually... z_z
+
+            if (p.name === "Faith We'll Meet Again Someday")
+                best.description = "Increases DMG dealt when targeting elemental weakness by 20%."
+            // This for some reason has the wrong description, so we override it manually... z_z
+
             if (!best.description.includes((best.value1 / 10).toString())) {
                 console.error("Description is wrong? ", p, best)
-                best.description += ` (ERROR. Value should be = ${(best.value1 / 10).toString()})`
-            }*/
-            return { ...p, description: "WIP" };
+                best.description += ` (ERROR. Root data is wrong value should be ${(best.value1 / 10).toString()}). Tell TFF to fix`
+            }
+            return { ...p, description: best.description };
         })
         .filter(
             (p) =>
