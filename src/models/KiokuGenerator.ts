@@ -32,7 +32,6 @@ export function getKioku<T extends Kioku>({
     buffMultReduction = 0,
     debuffMultReduction = 0
 }: KiokuGeneratorArgs): T {
-    console.log("Generating Kioku:",name, crys, crys_sub)
     const clearCrys = crys.filter(Boolean)
     const clearSubCrys = crys_sub.filter(Boolean)
     const Class = score ? ScoreAttackKioku : Kioku;

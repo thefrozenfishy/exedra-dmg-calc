@@ -38,7 +38,7 @@ const skippable = new Set([
     "BURN_ATK",
     "CHARGE",
     "CONSUME_CHARGE_POINT",
-    "CONSUME_COUNT_POINT", // TODO: Verify bowmura is correct
+    "CONSUME_COUNT_POINT",
     "CONTINUOUS_RECOVERY",
     "COUNT",
     "CURSE_ATK",
@@ -100,6 +100,11 @@ const skippable = new Set([
     "VORTEX_ATK", // TODO: Make vortex work
 ]);
 
+const bannedEffects: Set<number> = new Set([
+    65101002, // Sakurako passive is listed multiple places
+    65101003, // Sakurako passive is listed multiple places
+]);
+
 export class ScoreAttackTeam {
     private team: ScoreAttackKioku[];
     private dps: ScoreAttackKioku;
@@ -126,6 +131,7 @@ export class ScoreAttackTeam {
             this.debugTexts[kioku.name] = {}
             for (const detail of kioku.effects) {
                 if (skippable.has(detail.abilityEffectType)) continue
+                if (bannedEffects.has(detail.skillDetailMstId ?? detail.passiveSkillDetailMstId)) continue
                 if (!isDps && detail.range < 1) continue
                 if (detail.element && elementMap[detail.element] !== this.dps.data.element) continue
 
@@ -374,7 +380,7 @@ export class ScoreAttackTeam {
                         }
                         st += "S" + d.startConditionSetIdCsv
                     }
-                    let outString = `${n / 10}`
+                    let outString = `${n / 10} (${d.skillDetailMstId ?? d.passiveSkillDetailMstId})`
                     if (st.length) {
                         outString += " => " + st
                     }
