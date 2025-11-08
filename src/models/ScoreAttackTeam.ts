@@ -350,10 +350,13 @@ export class ScoreAttackTeam {
                         key = "SupportAtk";
                     }
                     if (key === "supportLvl") {
-                        val = (kiokuAtPosition as any)["support"]?.supportLvl
+                        val = (kiokuAtPosition as any)["support"]?.supportLvl ?? "N/A"
                     }
                     if (key.endsWith("Atk")) {
                         val |= 0;
+                    }
+                    if (key === "SupportAtk" || key === "supportLvl") {
+                        val = val + "\n"
                     }
                     return `${key.padEnd(12)} - ${val}`
                 }).filter(Boolean)
