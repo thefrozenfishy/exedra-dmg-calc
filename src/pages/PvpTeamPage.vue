@@ -6,7 +6,6 @@
       <h2>{{ isAlliedTeam ? "Allied" : "Enemy" }} Team</h2>
       <div class="team-grid">
         <div v-for="(slot, index) in team.slots[isAlliedTeam]" :key="index" class="team-slot">
-          <!-- Header per slot -->
           <h2> {{ isAlliedTeam ? "Ally" : "Enemy" }} {{ index + 1 }}</h2>
 
           <CharacterEditor :index="index" :slot="slot"
@@ -46,7 +45,8 @@
                 Break
                 <progress :value="char.breakCurrent" :max="char.maxBreakGauge"></progress>
               </div>
-              <div class="distance">{{ round(char.secondsLeft) }}</div>
+              <div class="distance">Magic: {{ char.magicStacks }} / {{ char.maxMagicStacks }}</div>
+              <div class="distance">{{ round(char.secondsLeft) }} AV ({{ round(char.distanceLeft / 100) }} AA)</div>
             </div>
           </div>
         </div>
@@ -58,13 +58,12 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { usePvPStore } from '../store/singleTeamStore'
-import { Kioku } from '../models/Kioku'
-import { BattleState, KiokuGeneratorArgs } from '../types/KiokuTypes'
+import { BattleState } from '../types/KiokuTypes'
 import { PvPBattle } from '../models/PvPBattle'
 import { PvPTeam } from '../models/PvPTeam'
 import CharacterEditor from '../components/CharacterEditor.vue'
 import { toast } from 'vue3-toastify'
-import { getKioku } from '../models/KiokuGenerator'
+import { PvPKioku } from '../models/PvPKioku'
 
 const team = usePvPStore()
 
@@ -88,9 +87,7 @@ const onChangeSubCrys = (isAlliedTeam: number) => (charIdx: number, crysIdx: num
   team.setMain(isAlliedTeam)(charIdx, { ...main, crys_sub: current } as any)
 }
 
-
 const isFullBattle = computed(() => team.slots[0].every(t => t?.main) && team.slots[1].every(t => t?.main))
-
 const battleInstance = ref<PvPBattle | null>(null)
 
 watch(team, () => {
@@ -100,8 +97,8 @@ watch(team, () => {
     return
   }
   const [alliedTeam, enemyTeam] = [1, 0].map(idx => team.slots[idx].map(m =>
-    getKioku({ ...m.main, supportKey: m.support ? getKioku(m.support)?.getKey() : null } as KiokuGeneratorArgs)
-  ) as Kioku[])
+    new PvPKioku({ ...m.main, supportKey: m.support ? new PvPKioku(m.support)?.getKey() : undefined })
+  ))
   const battle = new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"))
   battleInstance.value = battle
   battleOutput.value = [battle.getCurrentState()]
@@ -119,8 +116,8 @@ function runSimulation() {
   if (battleOutput.value.length > 1) return // Only run sim once
 
   const states = []
-  for (let index = 0; index < 25; index++) {
-    battleInstance.value.advanceCharacters()
+  for (let index = 0; index < 3; index++) {
+    battleInstance.value.traverseToNextActor()
     states.push(battleInstance.value.getCurrentState())
     try {
       battleInstance.value.executeNextAction()

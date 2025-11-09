@@ -1,13 +1,12 @@
-import { ActiveSkill, KiokuData, SkillDetail, SkillKey } from '../types/KiokuTypes';
+import { ActiveSkill, KiokuArgs, KiokuData, SkillDetail, SkillKey } from '../types/KiokuTypes';
 import { passiveDetails, skillDetails } from '../utils/helpers';
 import { Kioku } from './Kioku';
-import { KiokuArgs } from './KiokuGenerator';
 
 
 export class ScoreAttackKioku extends Kioku {
     effects: SkillDetail[];
-    scalableEffects: SkillDetail[] = [];
-    unscalableEffects: SkillDetail[] = [];
+    private scalableEffects: SkillDetail[] = [];
+    private unscalableEffects: SkillDetail[] = [];
     private buffMult = 1;
     private debuffMult = 1;
 

@@ -1,6 +1,6 @@
-import { crystalises, kiokuData, portraits } from "../utils/helpers";
+import { PvPTeam, KiokuState } from "../models/PvPTeam";
+import { crystalises, kiokuData, portraits, skillDetails } from "../utils/helpers";
 
-export const maxMeters = 10_000
 
 export enum BasicIds {
     CRYS = 11,
@@ -26,8 +26,8 @@ export enum KiokuRole {
     Breaker = "Breaker",
     Defender = "Defender"
 }
-export type SupportKey = KiokuRole | KiokuElement
 
+export type SupportKey = KiokuRole | KiokuElement
 
 export const elementMap: Record<string, KiokuElement> = {
     1: KiokuElement.Flame,
@@ -131,6 +131,7 @@ export interface ActiveSkill {
 }
 
 export type SkillDetail = PassiveSkill | ActiveSkill;
+export const skillDetailId = (d: SkillDetail) => "skillDetailMstId" in d ? d.skillDetailMstId : d.passiveSkillDetailMstId
 export type SkillKey = "skillMstId" | "passiveSkillMstId";
 
 export interface Character {
@@ -151,7 +152,7 @@ export interface Character {
     crys_sub: string[]
 }
 
-export interface BattleSnapshot {
+export interface TeamSnapshotList {
     sp: number
     team: TeamSnapshot[]
 }
@@ -160,7 +161,10 @@ export interface TeamSnapshot {
     spd: number
     atk: number
     baseSpd: number
+    magicStacks: number
+    maxMagicStacks: number
     secondsLeft: number
+    distanceLeft: number
     id: number
     breakCurrent: number
     maxBreakGauge: number
@@ -169,9 +173,9 @@ export interface TeamSnapshot {
     name: string
 }
 
-export interface BattleState {
-    allies: BattleSnapshot
-    enemies: BattleSnapshot
+export interface BattleSnapshot {
+    allies: TeamSnapshotList
+    enemies: TeamSnapshotList
 }
 
 export interface KiokuData {
@@ -323,20 +327,19 @@ export const KiokuConstants = {
     maxSpecialLvl: 10,
 }
 
-export interface KiokuGeneratorArgs {
+
+
+export interface KiokuArgs {
     name: string;
-    kiokuLvl?: number;
-    magicLvl?: number;
-    heartphialLvl?: number;
+    kiokuLvl: number;
+    magicLvl: number;
+    heartphialLvl: number;
     portrait?: string;
     supportKey?: any[];
-    crys?: string[];
-    crys_sub?: string[]
-    ascension?: number;
-    specialLvl?: number;
-    score?: boolean;
-    buffMultReduction?: number;
-    debuffMultReduction?: number;
+    crys: string[];
+    crys_sub: string[]
+    ascension: number;
+    specialLvl: number;
 }
 
 export const correctCharacterParams = (character?: Character) => {
@@ -348,4 +351,62 @@ export const correctCharacterParams = (character?: Character) => {
         }
     }
     return character
+}
+
+export const maxMeters = 10_000
+
+export const aggro = {
+    [KiokuRole.Defender]: 15,
+    [KiokuRole.Buffer]: 10,
+    [KiokuRole.Debuffer]: 10,
+    [KiokuRole.Healer]: 10,
+    [KiokuRole.Attacker]: 5,
+    [KiokuRole.Breaker]: 5,
+}
+
+export enum TargetType {
+    specialId = "SpecialAttack",
+    skillId = "ActiveSkill",
+    attackId = "NormalAttack",
+    fuaId = "AdditionalSkill",
+}
+
+export const TargetTypeLookup = {
+    [TargetType.specialId]: "special_id",
+    [TargetType.skillId]: "skill_id",
+    [TargetType.attackId]: "attack_id",
+}
+
+export const targetTypeToLvl = {
+    [TargetType.specialId]: "specialLvl",
+    [TargetType.skillId]: "skillLvl",
+    [TargetType.attackId]: "attackLvl",
+}
+
+export enum targetRange {
+    SELF = -1,
+    TARGET = 1,
+    PROXIMITY = 2,
+    ALL = 3,
+}
+
+export const defaultbreak = {
+    [TargetType.specialId]: { [targetRange.TARGET]: 35, [targetRange.PROXIMITY]: 30, [targetRange.ALL]: 25 },
+    [TargetType.skillId]: { [targetRange.TARGET]: 20, [targetRange.PROXIMITY]: 15, [targetRange.ALL]: 12 },
+    [TargetType.attackId]: { [targetRange.TARGET]: 10 },
+    [TargetType.fuaId]: { [targetRange.TARGET]: 0 }, // TODO: Check
+}
+
+export const mpGainFromAction = {
+    [TargetType.specialId]: 5,
+    [TargetType.skillId]: 30,
+    [TargetType.attackId]: 15,
+}
+
+export interface BattleState {
+    actorTeam: PvPTeam,
+    enemyTeam: PvPTeam,
+    actor: KiokuState,
+    target: KiokuState,
+    actionType?: TargetType
 }

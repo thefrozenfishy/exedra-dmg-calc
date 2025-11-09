@@ -1,6 +1,6 @@
-import { KiokuConstants, KiokuData, Portrait, StyleParamUpEffect } from '../types/KiokuTypes';
+import { KiokuArgs, KiokuConstants, KiokuData, Portrait, StyleParamUpEffect } from '../types/KiokuTypes';
 import { portraits, kiokuData, crystalises, characterHeart, characterHeartParamUpGroup, styleParamUpEffect, styleParamUp } from '../utils/helpers';
-import { getKioku, KiokuArgs } from './KiokuGenerator';
+import { fromKey } from '../models/BestTeamCalculator';
 
 export class Kioku {
     name: string;
@@ -34,7 +34,6 @@ export class Kioku {
     private heartDef: number = 0;
     private heartHp: number = 0;
 
-    baseSpd: number
     baseCritRate: number
     baseCritDamage: number;
 
@@ -68,7 +67,7 @@ export class Kioku {
         this.data = kiokuData[name];
 
         if (portrait) this.portrait = portraits[portrait]
-        if (supportKey) this.support = Kioku.fromKey(supportKey);
+        if (supportKey) this.support = fromKey(supportKey);
 
         this.inputCrys = crys;
         this.inputCrysSub = crys_sub;
@@ -78,7 +77,6 @@ export class Kioku {
         this.magicLvl = magicLvl;
         this.heartphialLvl = heartphialLvl;
         this.specialLvl = specialLvl;
-        this.baseSpd = this.data.minSpd
         this.maxMagicStacks = this.data.maxMagicStacks ?? 0
         this.baseCritDamage = this.data.minCritDmg * 10
         this.baseCritRate = this.data.minCritRate * 10
@@ -163,20 +161,5 @@ export class Kioku {
             this.inputCrys,
             this.inputCrysSub,
         ];
-    }
-
-    static fromKey(key: any[]) {
-        return getKioku({
-            name: key[0],
-            supportKey: key[1],
-            portrait: key[2],
-            ascension: key[3],
-            kiokuLvl: key[4],
-            magicLvl: key[5],
-            heartphialLvl: key[6],
-            specialLvl: key[7],
-            crys: key[8],
-            crys_sub: key[9],
-        });
     }
 }

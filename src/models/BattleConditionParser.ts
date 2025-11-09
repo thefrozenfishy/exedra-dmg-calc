@@ -1,5 +1,7 @@
 import battleConditionSetsJson from '../assets/base_data/getBattleConditionSetMstList.json';
 import battleConditionsJson from '../assets/base_data/getBattleConditionMstList.json';
+import { BattleState, PassiveSkill, SkillDetail } from '../types/KiokuTypes';
+import { KiokuState, PvPTeam } from './PvPTeam';
 
 interface BattleCondition {
     battleConditionMstId: number
@@ -38,12 +40,12 @@ export enum ProcessTiming {
     AFTER_PROCESS = 9,
 }
 
-export const isTiming = (startTiming: ProcessTiming, startTimingIdCsv: string) => {
-    if (!startTimingIdCsv || startTimingIdCsv === "0") {
-        console.error("Unknown start timing", startTimingIdCsv)
+export const isTimingActive = (startTiming: ProcessTiming, eff: PassiveSkill) => {
+    if (!eff.startTimingIdCsv || eff.startTimingIdCsv === "0") {
+        console.error("Unknown start timing", eff)
         return false
     }
-    for (const startTimingId of startTimingIdCsv.split(",")) {
+    for (const startTimingId of eff.startTimingIdCsv.split(",")) {
         if (startTiming === Number(startTimingId)) return true
     }
     return false
@@ -234,37 +236,44 @@ export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: st
     return true
 }
 
+
+
+export const isConditionSetActive = (eff: SkillDetail, state: BattleState) =>
+    isConditionSetActiveForPvP(eff.activeConditionSetIdCsv.split(","), state)
+    && isConditionSetActiveForPvP(eff.startConditionSetIdCsv.split(","), state)
+
 export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], {
-    currentMagicStacks = 0,
-    amountOfEnemies = 5,
-    currentHp = 100,
-    brokenUnits = 0,
-}: {
-    currentMagicStacks?: number,
-    amountOfEnemies?: number,
-    currentHp?: number,
-    brokenUnits?: number
-}): boolean =>
+    actorTeam,
+    enemyTeam,
+    actor,
+    target,
+    actionType
+}: BattleState): boolean =>
     conditionSetIdCsvList.every(conditionSetIdCsv => conditionSetIdCsv.split(",").every(conditionSetId => {
         if (!conditionSetId || conditionSetId === "0") return true
 
         const battleConditionSet = battleConditionSets[conditionSetId]
         for (const conditionId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
             const battleCondition = battleConditions[conditionId]
+
+            console.log("Considering", battleCondition)
+
             if (battleCondition.compareContent === CompareContent.HP_RATIO) {
-                if (!isCondActive(battleCondition, currentHp)) return false
+                if (!isCondActive(battleCondition, actor.currentHpPercent)) return false
             } else if (battleCondition.compareContent === CompareContent.IS_ACTOR) {
                 // This is mabayu skill not working on self etc, just pretend this scenario doesn't happen
             } else if (battleCondition.compareContent === CompareContent.ALIVE_UNIT_COUNT) {
-                if (!isCondActive(battleCondition, amountOfEnemies)) return false
+                if (!isCondActive(battleCondition, enemyTeam.kiokuStates.length)) return false
             } else if (battleCondition.compareContent === CompareContent.BREAKED_UNIT_COUNT) {
-                if (!isCondActive(battleCondition, brokenUnits)) return false
+                if (!isCondActive(battleCondition, enemyTeam.kiokuStates.filter(k => k.isBroken).length)) return false
             } else if (battleCondition.compareContent === CompareContent.CHARGE_POINT) {
-                if (!isCondActive(battleCondition, currentMagicStacks)) return false
+                if (!isCondActive(battleCondition, actor.currentMagic)) return false
             } else if (battleCondition.compareContent === CompareContent.IS_FRIEND) {
                 // Pretend it is always friend cause I think we never target enemy?
             } else if (battleCondition.compareContent === CompareContent.ACTOR_SKILL_TYPE) {
-                // If it's ult, fua, skill etc, just pretend it always is...
+                if (!actionType || !isCondActive(battleCondition, actionType)) return false
+            } else if (battleCondition.compareContent === CompareContent.ABILITY_EFFECT) {
+                if (!Object.values(target.activeEffectDetails).some(e => isCondActive(battleCondition, e.abilityEffectType))) return false
             } else {
                 console.warn(`Unknown condition ${battleCondition.compareContent}`, battleCondition)
             }

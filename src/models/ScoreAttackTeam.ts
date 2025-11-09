@@ -1,7 +1,7 @@
 import { ScoreAttackKioku } from "./ScoreAttackKioku";
 import { EnemyTargetTypes, Enemy } from "../types/EnemyTypes";
 import { isActiveConditionRelevantForScoreAttack, isStartCondRelevantForScoreAttack } from "./BattleConditionParser";
-import { ActiveSkill, elementMap, SkillDetail } from "../types/KiokuTypes";
+import { ActiveSkill, elementMap, SkillDetail, skillDetailId } from "../types/KiokuTypes";
 
 const targetTypeAtPosition = [EnemyTargetTypes.L_OTHER, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.R_OTHER]
 
@@ -131,7 +131,7 @@ export class ScoreAttackTeam {
             this.debugTexts[kioku.name] = {}
             for (const detail of kioku.effects) {
                 if (skippable.has(detail.abilityEffectType)) continue
-                if (bannedEffects.has(detail.skillDetailMstId ?? detail.passiveSkillDetailMstId)) continue
+                if (bannedEffects.has(skillDetailId(detail))) continue
                 if (!isDps && detail.range < 1) continue
                 if (detail.element && elementMap[detail.element] !== this.dps.data.element) continue
 
@@ -382,7 +382,7 @@ export class ScoreAttackTeam {
                         }
                         st += "S" + d.startConditionSetIdCsv
                     }
-                    let outString = `${n / 10} (${d.skillDetailMstId ?? d.passiveSkillDetailMstId})`
+                    let outString = `${n / 10} (${skillDetailId(d)})`
                     if (st.length) {
                         outString += " => " + st
                     }

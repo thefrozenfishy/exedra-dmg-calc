@@ -1,8 +1,89 @@
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { ScoreAttackTeam } from "./ScoreAttackTeam";
-import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises, KiokuGeneratorArgs } from "../types/KiokuTypes";
-import { getKioku } from "./KiokuGenerator";
+import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises, KiokuConstants } from "../types/KiokuTypes";
 import { ScoreAttackKioku } from "./ScoreAttackKioku";
+
+const cache = new Map<string, ScoreAttackKioku>();
+
+interface KiokuGeneratorArgs {
+    name: string;
+    kiokuLvl?: number;
+    magicLvl?: number;
+    heartphialLvl?: number;
+    portrait?: string;
+    supportKey?: any[];
+    crys?: string[];
+    crys_sub?: string[]
+    ascension?: number;
+    specialLvl?: number;
+    buffMultReduction?: number;
+    debuffMultReduction?: number;
+}
+
+export function fromKey(key: any[]) {
+    return getKioku({
+        name: key[0],
+        supportKey: key[1],
+        portrait: key[2],
+        ascension: key[3],
+        kiokuLvl: key[4],
+        magicLvl: key[5],
+        heartphialLvl: key[6],
+        specialLvl: key[7],
+        crys: key[8],
+        crys_sub: key[9],
+    });
+}
+
+function getKioku({
+    name,
+    supportKey,
+    portrait,
+    ascension = KiokuConstants.maxAscension,
+    kiokuLvl = KiokuConstants.maxKiokuLvl,
+    magicLvl = KiokuConstants.maxMagicLvl,
+    heartphialLvl = KiokuConstants.maxHeartphialLvl,
+    specialLvl = KiokuConstants.maxSpecialLvl,
+    crys = [],
+    crys_sub = [],
+    buffMultReduction = 0,
+    debuffMultReduction = 0
+}: KiokuGeneratorArgs): ScoreAttackKioku {
+    const clearCrys = crys.filter(Boolean)
+    const clearSubCrys = crys_sub.filter(Boolean)
+
+    const key = JSON.stringify([
+        name,
+        supportKey,
+        portrait,
+        ascension,
+        kiokuLvl,
+        magicLvl,
+        heartphialLvl,
+        specialLvl,
+        clearCrys,
+        clearSubCrys,
+    ]);
+
+    if (!cache.has(key)) {
+        cache.set(key, new ScoreAttackKioku({
+            name,
+            supportKey,
+            portrait,
+            ascension,
+            kiokuLvl,
+            magicLvl,
+            heartphialLvl,
+            specialLvl,
+            crys: clearCrys,
+            crys_sub: clearSubCrys
+        },
+            buffMultReduction,
+            debuffMultReduction));
+    }
+
+    return cache.get(key) as ScoreAttackKioku;
+}
 
 export async function findBestTeam({
     enemies,
@@ -26,7 +107,7 @@ export async function findBestTeam({
     onError
 }: FindBestTeamOptions): Promise<any[]> {
 
-    const fetchKioku = (data: Character | KiokuGeneratorArgs | undefined): ScoreAttackKioku => getKioku({ ...data, score: true, debuffMultReduction, buffMultReduction })
+    const fetchKioku = (data: Character | KiokuGeneratorArgs | undefined): ScoreAttackKioku => getKioku({ ...data, debuffMultReduction, buffMultReduction })
 
     const perAttackerResults: Record<string, any[]> = {}
     const availableChars: Record<KiokuRole, Character[]> = {
@@ -156,6 +237,7 @@ export async function findBestTeam({
                                                     })!,
                                                     totalSupports.map((s, i) => fetchKioku({
                                                         ...s,
+                                                        crys: optimalSubCrys ? ["EX"] : s.crys,
                                                         supportKey: supportSupport[i],
                                                     })!),
                                                 );
