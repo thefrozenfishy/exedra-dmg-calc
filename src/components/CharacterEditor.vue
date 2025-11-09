@@ -13,10 +13,13 @@
       <span style="color: aqua">+ {{ round(extraData.spd - extraData.baseSpd) }}</span>)
     </div>
     <div class="stat">
-      AV after move: {{ round(10_000 / extraData.spd) }}
+      Initial AV: {{ round(extraData.secondsLeft) }}
     </div>
     <div class="stat">
-      Initial AV: {{ round(extraData.secondsLeft) }}
+      AA needed to act: {{ round(extraData.distanceLeft / 100) }}
+    </div>
+    <div class="stat">
+      AV after move: {{ round(10_000 / extraData.spd) }}
     </div>
     <div class="stat">
       Base atk: {{ round(extraData.atk) }}

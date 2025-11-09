@@ -66,10 +66,18 @@ export class PvPBattle {
     }
 
     executeNextAction(): void {
-        if (this.team2.useUltimate()) return
-        if (this.team1.useUltimate()) return
+        let eff = this.team2.useUltimate()
+        if (eff) {
+            this.team2.resolveEndOfTurn(eff)
+            return
+        }
+        eff = this.team1.useUltimate()
+        if (eff) {
+            this.team1.resolveEndOfTurn(eff)
+            return
+        }
         const actorTeam = this.traverseToNextActor()
-        actorTeam.useAttackOrSkill()
-        actorTeam.resolveEndOfTurn()
+        eff = actorTeam.useAttackOrSkill()
+        actorTeam.resolveEndOfTurn(eff)
     }
 }

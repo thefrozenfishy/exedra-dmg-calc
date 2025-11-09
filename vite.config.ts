@@ -8,6 +8,9 @@ const characterMap = Object.fromEntries(
 )
 
 export default defineConfig({
+  build: {
+    sourcemap: true
+  },
   plugins: [
     vue({
       include: [/\.vue$/, /\.md$/],

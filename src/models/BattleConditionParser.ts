@@ -161,22 +161,22 @@ const hardcodedKnownNotActive = [
 
 const isCondActive = (cond: BattleCondition, valueToCompareTo: string | number): boolean => {
     if (cond.compareOperator === CompareOperator.EQUAL) {
-        return Number(valueToCompareTo) === Number(cond.compareValue)
+        return valueToCompareTo == cond.compareValue
     }
     if (cond.compareOperator === CompareOperator.NOT_EQUAL) {
-        return Number(valueToCompareTo) !== Number(cond.compareValue)
+        return valueToCompareTo != cond.compareValue
     }
     if (cond.compareOperator === CompareOperator.GREATER) {
-        return Number(valueToCompareTo) > Number(cond.compareValue)
+        return valueToCompareTo > cond.compareValue
     }
     if (cond.compareOperator === CompareOperator.GREATER_OR_EQUAL) {
-        return Number(valueToCompareTo) >= Number(cond.compareValue)
+        return valueToCompareTo >= cond.compareValue
     }
     if (cond.compareOperator === CompareOperator.LESS) {
-        return Number(valueToCompareTo) < Number(cond.compareValue)
+        return valueToCompareTo < cond.compareValue
     }
     if (cond.compareOperator === CompareOperator.LESS_OR_EQUAL) {
-        return Number(valueToCompareTo) <= Number(cond.compareValue)
+        return valueToCompareTo <= cond.compareValue
     }
     if (cond.compareOperator === CompareOperator.CONTAIN) {
         return cond.compareValue.includes(valueToCompareTo.toString())

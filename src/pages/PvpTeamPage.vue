@@ -1,6 +1,6 @@
 <template>
   <div class="team-page">
-    <h1>Simulate PvP Action Order</h1>
+    <h1>PvP Action Order calculator</h1>
 
     <div v-for="isAlliedTeam in [1, 0]">
       <h2>{{ isAlliedTeam ? "Allied" : "Enemy" }} Team</h2>
@@ -16,7 +16,7 @@
       </div>
     </div>
   </div>
-  <div>
+  <div style="display: none;">
     <h2>Battle Order</h2>
     <p style="color: red;">UNDER CONSTRUCTION</p>
     <button @click="runSimulation" :disabled="!isFullBattle">Run Simulation</button>
@@ -37,16 +37,17 @@
                 <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name"
                   :class="{ 'at-zero': char.secondsLeft - 0.01 <= 0 }" />
               </a>
-              <div class="progress-bar">
+              <div class="progress-bar" :title="char.mp + ' / ' + char.maxMp">
                 MP
                 <progress :value="char.mp" :max="char.maxMp">MP</progress>
               </div>
-              <div class="progress-bar">
+              <div class="progress-bar" :title="Math.max(char.breakCurrent, 0) + ' / ' + char.maxBreakGauge">
                 Break
                 <progress :value="char.breakCurrent" :max="char.maxBreakGauge"></progress>
               </div>
               <div class="distance">Magic: {{ char.magicStacks }} / {{ char.maxMagicStacks }}</div>
               <div class="distance">{{ round(char.secondsLeft) }} AV ({{ round(char.distanceLeft / 100) }} AA)</div>
+              <div class="distance">{{ round(char.spd) }} spd</div>
             </div>
           </div>
         </div>
