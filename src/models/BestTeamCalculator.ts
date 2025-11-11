@@ -229,12 +229,7 @@ export async function findBestTeam({
                                                         ...attacker,
                                                         portrait: attackerPortrait,
                                                         crys: attackerCrys,
-                                                        crys_sub: optimalSubCrys ?
-                                                            Array(3).fill([
-                                                                "Increases critical rate by 5%.",
-                                                                "Increases critical DMG by 10%.",
-                                                                "Increases ATK by 60."
-                                                            ]).flat() : attacker.crys_sub,
+                                                        crys_sub: optimalSubCrys ? KiokuConstants.optimal_attacker_crys_sub : attacker.crys_sub,
                                                         supportKey: attackerSupportKey,
                                                     })!,
                                                     totalSupports.map((s, i) => fetchKioku({

@@ -310,6 +310,8 @@ export const getSubCrystalises = () => [
         if (b.name === "Increases critical DMG by 10%.") return 1
         if (a.name === "Increases critical rate by 5%.") return -1
         if (b.name === "Increases critical rate by 5%.") return 1
+        if (a.name === "Increases SPD by 4.") return -1
+        if (b.name === "Increases SPD by 4.") return 1
         if (a.name === "") return -1
         if (b.name === "") return 1
 
@@ -325,6 +327,7 @@ export const KiokuConstants = {
     maxAscension: 5,
     maxHeartphialLvl: 50,
     maxSpecialLvl: 10,
+    optimal_attacker_crys_sub: Array(3).fill(["Increases critical rate by 5%.", "Increases critical DMG by 10%.", "Increases ATK by 60."]).flat()
 }
 
 

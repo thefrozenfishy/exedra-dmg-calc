@@ -3,6 +3,18 @@ import { ref, watch } from 'vue'
 import { Character, KiokuConstants, correctCharacterParams } from '../types/KiokuTypes'
 import { crystalises, kiokuData } from '../utils/helpers'
 
+
+const base = {
+    ascension: KiokuConstants.maxAscension,
+    portrait: "",
+    kiokuLvl: KiokuConstants.maxKiokuLvl,
+    magicLvl: KiokuConstants.maxMagicLvl,
+    heartphialLvl: KiokuConstants.maxHeartphialLvl,
+    specialLvl: KiokuConstants.maxSpecialLvl,
+    crys: ["EX"],
+    crys_sub: KiokuConstants.optimal_attacker_crys_sub
+}
+
 export const useCharacterStore = defineStore('characterStore', () => {
     const characters = ref<Character[]>([])
 
@@ -10,11 +22,11 @@ export const useCharacterStore = defineStore('characterStore', () => {
     if (saved) {
         const oldChars: Character[] = JSON.parse(saved)
         characters.value = oldChars.map(c => {
-            c.crys = c?.crys?.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc))
-            c.crys_sub = c?.crys_sub?.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc))
+            c.crys = c?.crys?.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc)) ?? []
+            c.crys_sub = c?.crys_sub?.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc)) ?? []
             return c
-        })
-
+        }).filter(k => "name" in k && "id" in k && "enabled" in k && "role" in k && "element" in k && "character_en" in k && "rarity" in k)
+            .map(c => ({ ...base, ...Object.fromEntries(Object.entries(c).filter(([k, v]) => v != null)) }))
     }
 
     watch(
@@ -82,14 +94,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
                 element: data.element,
                 character_en: data.character_en,
                 rarity: data.rarity,
-                ascension: KiokuConstants.maxAscension,
-                portrait: "",
-                kiokuLvl: KiokuConstants.maxKiokuLvl,
-                magicLvl: KiokuConstants.maxMagicLvl,
-                heartphialLvl: KiokuConstants.maxHeartphialLvl,
-                specialLvl: KiokuConstants.maxSpecialLvl,
-                crys: ["EX"],
-                crys_sub: Array(3).fill(["Increases critical rate by 5%.", "Increases critical DMG by 10%.", "Increases ATK by 60."]).flat()
+                ...base,
             })
         }
     });

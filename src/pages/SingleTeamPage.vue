@@ -45,19 +45,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
 import { ScoreAttackTeam } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
 import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
-import { KiokuArgs } from '../models/KiokuGenerator'
 import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
+import { useSetting, useSettingsStore } from '../store/settingsStore'
+import { KiokuArgs } from '../types/KiokuTypes'
 
 const attackerIndex = 2
 
-const buffMultReduction = ref(0);
-const debuffMultReduction = ref(0);
+const buffMultReduction = useSetting("buffMultReduction", 0)
+const debuffMultReduction = useSetting("debuffMultReduction", 0)
 
 function onChangeCrys(charIdx: number, crysIdx: number, rawValue: string) {
   const main = team.slots[charIdx].main
@@ -81,6 +82,7 @@ const formatDebug = (out: string | [number, number, number, string[]], idx: numb
 
 const team = useTeamStore()
 const enemies = useEnemyStore()
+const settings = useSettingsStore()
 
 const isFullTeam = computed(() => team.slots.map(slot => slot.main).filter(Boolean).length === 5)
 const teamInstance = computed(() => {
@@ -104,10 +106,6 @@ const teamInstance = computed(() => {
       team.setMain(index, undefined)
     }
   }
-})
-onMounted(() => {
-  team.load()
-  enemies.load()
 })
 
 const battleOutput = computed(() => {

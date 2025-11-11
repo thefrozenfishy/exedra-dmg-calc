@@ -69,8 +69,8 @@ export class Kioku {
         if (portrait) this.portrait = portraits[portrait]
         if (supportKey) this.support = fromKey(supportKey);
 
-        this.inputCrys = crys.filter(Boolean);
-        this.inputCrysSub = crys_sub.filter(Boolean);
+        this.inputCrys = crys?.filter(Boolean) ?? [];
+        this.inputCrysSub = crys_sub?.filter(Boolean) ?? [];
 
         this.ascension = ascension;
         this.kiokuLvl = kiokuLvl;
@@ -98,7 +98,7 @@ export class Kioku {
             }
         }
 
-        for (const c of [...crys, ...crys_sub]) {
+        for (const c of [...this.inputCrys, ...this.inputCrysSub]) {
             if (c === "EX") {
                 this.crys.push(this.data.crystalis_id)
             } else if (c in crystalises) {

@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { usePvPStore } from '../store/singleTeamStore'
 import { BattleState } from '../types/KiokuTypes'
 import { PvPBattle } from '../models/PvPBattle'
@@ -104,10 +104,6 @@ watch(team, () => {
   battleInstance.value = battle
   battleOutput.value = [battle.getCurrentState()]
 }, { immediate: true, deep: true })
-
-onMounted(() => {
-  team.load()
-})
 
 function runSimulation() {
   if (!isFullBattle.value || !battleInstance.value) {

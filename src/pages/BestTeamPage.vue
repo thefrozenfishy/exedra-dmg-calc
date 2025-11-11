@@ -178,8 +178,11 @@
         </div>
 
         <div class="team-row-wrapper loading-bar" v-if="running">
-            <TeamRow style="margin: 0 auto;" :team="progress" :loading="true" />
-            <progress :value="completedRuns" :max="expectedRuns" class="progress-bar"></progress>
+            <TeamRow style="margin: 0 auto;" :team="progress" :loading="true" :optimalSubCrys />
+            <div class="progress-wrapper">
+                <progress :value="completedRuns" :max="expectedRuns" class="progress-bar"></progress>
+                <span class="progress-text">{{ completedRuns }} / {{ expectedRuns }}</span>
+            </div>
         </div>
 
         <button v-else @click="startSimulation" :disabled="running">
@@ -191,14 +194,14 @@
             <div class="results ">
                 <h2>Top Teams Overall</h2>
                 <div class="team-row-wrapper" v-for="(team, idx) in topResults" :key="idx">
-                    <TeamRow :team="team" :loading="false" />
+                    <TeamRow :team :loading="false" :optimalSubCrys />
                 </div>
 
                 <div v-for="[attackerName, teams] of topTeamsByAttacker" :key="attackerName" class="attacker-section">
                     <div v-if="teams?.length">
                         <h3>Top Teams for {{ attackerName }}</h3>
                         <div class="team-row-wrapper" v-for="(team, idx) in teams" :key="idx">
-                            <TeamRow :team="team" :loading="false" />
+                            <TeamRow :team :loading="false" :optimalSubCrys />
                         </div>
                     </div>
                 </div>
@@ -216,10 +219,11 @@ import { useCharacterStore } from '../store/characterStore'
 import { KiokuRole, Character, KiokuElement } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
 import { ConsolidatedFinalTeam, FinalTeam } from '../types/BestTeamTypes'
+import { useSetting } from '../store/settingsStore'
 
 const enemies = useEnemyStore()
-
 const store = useCharacterStore()
+
 const running = ref(false)
 const expectedRuns = ref(0)
 const completedRuns = ref(0)
@@ -230,41 +234,44 @@ const attackers = computed(() => store.characters.filter(c => (c.enabled && c.ro
 let prevAttackers: Character[] = []
 let prevObligatoryKioku: Character[] = []
 
+const defaultIgnoredKioku = members.value.filter(c => ["Nightmare Stinger", "Lynx Impact", "Circle Of Fire", "Glittering Hurricane", "Surging Laser", "Verdant Shower", "Diamond Splash", "Purple Will-o'-Wisp", "Folter Gefängnis", "Vampire Fang", "Strada Futuro", "Lux☆Magica", "Infinite Poseidon", "Neo Genesis"].includes(c.name))
+
 const workerRef = ref<Worker | null>(null)
 const progress = ref<FinalTeam>({})
 
-const include4StarAttackers = ref(false)
-const include4StarSupports = ref(false)
-const include4StarOthers = ref(false)
-const buffMultReduction = ref(0);
-const debuffMultReduction = ref(0);
-const optimalSubCrys = ref(true)
+const include4StarAttackers = useSetting("include4StarAttackers", false)
+const include4StarSupports = useSetting("include4StarSupports", false)
+const include4StarOthers = useSetting("include4StarOthers", false)
+const buffMultReduction = useSetting("buffMultReduction", 0);
+const debuffMultReduction = useSetting("debuffMultReduction", 0);
+const optimalSubCrys = useSetting("optimalSubCrys", true)
 
 const weakElements = reactive([
-    { name: KiokuElement.Flame, enabled: true },
-    { name: KiokuElement.Aqua, enabled: true },
-    { name: KiokuElement.Forest, enabled: true },
-    { name: KiokuElement.Light, enabled: true },
-    { name: KiokuElement.Dark, enabled: true },
-    { name: KiokuElement.Void, enabled: true },
+    { name: KiokuElement.Flame, enabled: useSetting("flame-enabled", true) },
+    { name: KiokuElement.Aqua, enabled: useSetting("aqua-enabled", true) },
+    { name: KiokuElement.Forest, enabled: useSetting("forest-enabled", true) },
+    { name: KiokuElement.Light, enabled: useSetting("light-enabled", true) },
+    { name: KiokuElement.Dark, enabled: useSetting("dark-enabled", true) },
+    { name: KiokuElement.Void, enabled: useSetting("void-enabled", true) },
 ])
 
-const deBufferCount = ref(3)
+
+const deBufferCount = useSetting("deBufferCount", 3)
 const otherCount = computed(() => 4 - deBufferCount.value)
 
-const minHealer = ref(0)
-const minDefender = ref(0)
-const minBreaker = ref(0)
+const minHealer = useSetting("minHealer", 0)
+const minDefender = useSetting("minDefender", 0)
+const minBreaker = useSetting("minBreaker", 0)
 
-const extraAttackers = ref<Character[]>([])
+const extraAttackers = useSetting<Character[]>("extraAttackers", [])
 const extraAttackerQuery = ref("")
 const showExtraAttackerDropdown = ref(false)
 
-const obligatoryKioku = ref<Character[]>([])
+const obligatoryKioku = useSetting<Character[]>("obligatoryKioku", [])
 const obligatoryKiokuQuery = ref("")
 const showObligatoryKiokuDropdown = ref(false)
 
-const ignoredKioku = ref<Character[]>(members.value.filter(c => ["Nightmare Stinger", "Lynx Impact", "Circle Of Fire", "Glittering Hurricane", "Surging Laser", "Verdant Shower", "Diamond Splash", "Purple Will-o'-Wisp", "Folter Gefängnis", "Vampire Fang", "Strada Futuro", "Lux☆Magica", "Infinite Poseidon", "Neo Genesis"].includes(c.name)))
+const ignoredKioku = useSetting<Character[]>("ignoredKioku", defaultIgnoredKioku)
 const ignoredKiokuQuery = ref("")
 const showIgnoredKiokuDropdown = ref(false)
 
@@ -293,17 +300,17 @@ const filteredKioku = computed(() => {
 })
 
 function addExtraAttacker(char: Character) {
-    extraAttackers.value.push(char)
+    extraAttackers.value = [...extraAttackers.value, char]
     extraAttackerQuery.value = ""
     showExtraAttackerDropdown.value = false
 }
 function addObligatoryKioku(char: Character) {
-    obligatoryKioku.value.push(char)
+    obligatoryKioku.value = [...obligatoryKioku.value, char]
     obligatoryKiokuQuery.value = ""
     showObligatoryKiokuDropdown.value = false
 }
 function addIgnoredKioku(char: Character) {
-    ignoredKioku.value.push(char)
+    ignoredKioku.value = [...ignoredKioku.value, char]
     ignoredKiokuQuery.value = ""
     showIgnoredKiokuDropdown.value = false
 }
@@ -583,6 +590,17 @@ async function startSimulation() {
     margin-top: 8px;
     border-radius: 8px;
     overflow: hidden;
+}
+
+.progress-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.progress-text {
+    font-size: 14px;
+    opacity: 0.8;
 }
 
 .loading-bar {

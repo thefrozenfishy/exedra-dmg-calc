@@ -54,7 +54,6 @@
 <script lang="ts" setup>
 import { useEnemyStore } from '../store/singleTeamStore'
 const enemies = useEnemyStore()
-enemies.load()
 </script>
 
 <style scoped>

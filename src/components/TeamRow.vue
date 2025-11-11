@@ -13,8 +13,8 @@
                 </a>
                 <a v-if="!loading && team.portrait" :href="`https://exedra.wiki/wiki/${team.portrait}`" target="_blank"
                     class="portrait-image">
-                    <img :src="`/exedra-dmg-calc/portrait_images/${portraits[team.portrait].resourceName}_thumbnail.png`" :alt="team.portrait"
-                        :title="team.portrait" />
+                    <img :src="`/exedra-dmg-calc/portrait_images/${portraits[team.portrait].resourceName}_thumbnail.png`"
+                        :alt="team.portrait" :title="team.portrait" />
                 </a>
             </div>
             <div v-for="i in 4" :key="i" class="image-wrapper">
@@ -43,6 +43,11 @@
                 <div class="crys">
                     {{ team.attacker_crys3[idx] }}
                 </div>
+                <div>
+                    <button @click="saveToStore(idx)" class="save-button">Open team single battle editor</button>
+                </div>
+                <div>
+                </div>
             </div>
         </div>
     </div>
@@ -51,9 +56,38 @@
 <script lang="ts" setup>
 import { FinalTeam } from '../types/BestTeamTypes';
 import { portraits } from '../utils/helpers';
+import { useTeamStore } from '../store/singleTeamStore';
+import { KiokuConstants } from '../types/KiokuTypes';
+import { useRouter } from 'vue-router'
 
+const props = defineProps<{ team: FinalTeam, loading: boolean, optimalSubCrys: boolean }>()
+const teamStore = useTeamStore()
+const router = useRouter()
 
-defineProps<{ team: FinalTeam, loading: boolean }>()
+function saveToStore(idx: number) {
+    const { team } = props
+    teamStore.setMain(0, { ...team.supp1, crys: ["EX"] })
+    teamStore.setSupport(0, team.supp1supp)
+
+    teamStore.setMain(1, { ...team.supp2, crys: ["EX"] })
+    teamStore.setSupport(1, team.supp2supp)
+
+    teamStore.setMain(2, {
+        ...team.attacker,
+        portrait: team.portrait,
+        crys: [team.attacker_crys1[idx], team.attacker_crys2[idx], team.attacker_crys3[idx]],
+        crys_sub: props.optimalSubCrys ? KiokuConstants.optimal_attacker_crys_sub : team.attacker.crys_sub
+    })
+    teamStore.setSupport(2, team.atk_supp)
+
+    teamStore.setMain(3, { ...team.supp3, crys: ["EX"] })
+    teamStore.setSupport(3, team.supp3supp)
+
+    teamStore.setMain(4, { ...team.supp4, crys: ["EX"] })
+    teamStore.setSupport(4, team.supp4supp)
+
+    router.push('/sa-simulator-single')
+}
 </script>
 
 <style scoped>
@@ -92,7 +126,7 @@ defineProps<{ team: FinalTeam, loading: boolean }>()
 .team-row {
     display: flex;
     margin-bottom: 1rem;
-    width: 80%;
+    width: 100%;
 }
 
 .loading-bar {
@@ -142,5 +176,16 @@ defineProps<{ team: FinalTeam, loading: boolean }>()
     flex: 1;
     text-align: right;
     margin-left: 10px;
+}
+
+.save-button {
+    margin-left: auto;
+    padding: 0.5em;
+    font-size: 12px;
+    border: none;
+}
+
+.save-button:hover {
+    background-color: gray;
 }
 </style>
