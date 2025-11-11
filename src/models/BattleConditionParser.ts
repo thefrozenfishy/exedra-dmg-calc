@@ -256,8 +256,6 @@ export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], {
         for (const conditionId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
             const battleCondition = battleConditions[conditionId]
 
-            console.log("Considering", battleCondition)
-
             if (battleCondition.compareContent === CompareContent.HP_RATIO) {
                 if (!isCondActive(battleCondition, actor.currentHpPercent)) return false
             } else if (battleCondition.compareContent === CompareContent.IS_ACTOR) {

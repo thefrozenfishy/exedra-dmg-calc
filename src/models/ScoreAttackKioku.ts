@@ -52,6 +52,14 @@ export class ScoreAttackKioku extends Kioku {
                 this.addEffect(skillDetails, "skillMstId", 0, e.value1, true);
             }
         });
+        this.scalableEffects.forEach(e => {
+            if (e.abilityEffectType === "TSUBAME_LINK") {
+                this.scalableEffects.push(
+                    { ...e, abilityEffectType: "UP_ATK_RATIO", value1: e.value2, value2: 0, value3: 0 },
+                    { ...e, abilityEffectType: "UP_DMG_DEALT", value1: e.value3, value2: 0, value3: 0 }
+                )
+            }
+        })
 
         this.effects = this.unscalableEffects.concat(this.scalableEffects.map(e => {
             let v = e.value1;

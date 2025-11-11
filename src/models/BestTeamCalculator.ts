@@ -178,7 +178,9 @@ export async function findBestTeam({
             return map
         }, new Map()).values())
         if (!availableSupportKeys.length) {
-            availableSupportKeys.push(fetchKioku(enabledCharacters.find(c => c.name === "White Camellia")).getKey())
+            availableSupportKeys.push(fetchKioku(enabledCharacters.find(c => c.name === "White Camellia") ?? {
+                name: "White Camellia",
+            }).getKey())
         }
         for (const dist of availableOtherDistributions) {
             for (const healerCombo of combinations(availableChars[KiokuRole.Healer], dist.healers)) {

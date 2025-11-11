@@ -6,26 +6,27 @@ import { ActiveSkill, elementMap, SkillDetail, skillDetailId } from "../types/Ki
 const targetTypeAtPosition = [EnemyTargetTypes.L_OTHER, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.TARGET, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.R_OTHER]
 
 const knownBoosts = {
+    DWN_DEF_ACCUM_RATIO: "Def%2",
+    DWN_DEF_RATIO: "Def%1",
+    DWN_ELEMENT_RESIST_ACCUM_RATIO: "Elem Resist-",
+    FLAT_ATK: "Flat atk",
+    UP_AIM_RCV_DMG_RATIO: "Elem DMG Taken+",
+    UP_ATK_ACCUM_RATIO: "Atk%2",
     UP_ATK_FIXED: "FlatAtk",
     UP_ATK_RATIO: "Atk%1",
-    UP_ATK_ACCUM_RATIO: "Atk%2",
-    DWN_DEF_RATIO: "Def%1",
-    WEAKNESS: "Def%3",
-    DWN_DEF_ACCUM_RATIO: "Def%2",
-    UP_CTR_FIXED: "CR1+",
-    UP_CTR_RATIO: "CR3+",
-    UP_RCV_CTR_RATIO: "CR4+",
-    UP_CTR_ACCUM_RATIO: "CR2+",
+    UP_CTD_ACCUM_RATIO: "CD2+",
     UP_CTD_FIXED: "CD1+",
     UP_CTD_RATIO: "CD3+",
-    UP_CTD_ACCUM_RATIO: "CD2+",
-    UP_GIV_DMG_RATIO: "DMG Dealt+",
+    UP_CTR_ACCUM_RATIO: "CR2+",
+    UP_CTR_FIXED: "CR1+",
+    UP_CTR_RATIO: "CR3+",
+    UP_DMG_DEALT: "Additional dmg", // TODO: Check that this is correct. How does it scale w buff+, how to put into dmg calc?
     UP_ELEMENT_DMG_RATE_RATIO: "Dmg Dealt+ (Elem only)",
+    UP_GIV_DMG_RATIO: "DMG Dealt+",
+    UP_RCV_CTR_RATIO: "CR4+",
     UP_RCV_DMG_RATIO: "DMG Taken+",
-    UP_AIM_RCV_DMG_RATIO: "Elem DMG Taken+",
-    DWN_ELEMENT_RESIST_ACCUM_RATIO: "Elem Resist-",
     UP_WEAK_ELEMENT_DMG_RATIO: "Elem Dmg+",
-    FLAT_ATK: "Flat atk",
+    WEAKNESS: "Def%3",
 };
 
 const skippable = new Set([
@@ -70,8 +71,8 @@ const skippable = new Set([
     "SLOW",
     "STUN",
     "SWITCH_SKILL",
-    "TSUBAME_CORE", //  Make Ui work
-    "TSUBAME_LINK", // TODO: Make Ui work
+    "TSUBAME_CORE",
+    "TSUBAME_LINK",
     "UNIQUE_10030301",
     "UNIQUE_BUFF",
     "UNIQUE_DEBUFF",

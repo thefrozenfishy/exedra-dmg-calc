@@ -181,12 +181,9 @@ export class KiokuState {
         } else if (detail.abilityEffectType === "CUTOUT") {
             target.activeEffectDetails[skillDetailId(detail)] = { ...detail, turn: 1 }
         } else if (detail.abilityEffectType === "ADDITIONAL_SKILL_ACT") {
-            console.log("FOUND ADD ACT", detail.value1)
             return detail.value1;
         } else if (detail.abilityEffectType === "GAIN_CHARGE_POINT") {
-            console.log("upps", this.currentMagic)
             this.currentMagic += detail.value1;
-            console.log("apps", this.currentMagic)
         } else if ("passiveSkillDetailMstId" in detail) {
             target.passiveEffectDetails[detail.passiveSkillDetailMstId] = detail
         } else {
@@ -293,7 +290,6 @@ export class PvPTeam {
     }
 
     act(actor: KiokuState, effectName: TargetType): void {
-        console.log("Act", actor, effectName)
         if (effectName === TargetType.attackId) {
             this.currentSp++;
         } else if (effectName === TargetType.skillId) {

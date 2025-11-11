@@ -29,17 +29,23 @@
         </ul>
         <h1>Potentially planned improvements</h1>
         <ul>
-            <li>Clean up styling</li>
-            <li>Store results to speed up later duplicate simulations</li>
-            <li>Revise dmg taken- (and def-?) calculation</li>
-            <li>Allow users to set crys + crys substats for their Kioku in team builder</li>
-            <li>Add links to wiki, kioku pages, current SA page, other useful resources</li>
+            <li>Add "import boss stats" or something similar</li>
         </ul>
+        <h1>Dump debug data</h1>
+        <button :onclick="downloadLS">Export LocalStorage</button>
     </div>
 </template>
 
 <script lang="ts" setup>
-
+function downloadLS() {
+    const data = JSON.stringify(localStorage, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'exedra_dmg_calc_debug.json';
+    a.click();
+}
 </script>
 
 <style scoped>

@@ -69,8 +69,8 @@ export class Kioku {
         if (portrait) this.portrait = portraits[portrait]
         if (supportKey) this.support = fromKey(supportKey);
 
-        this.inputCrys = crys;
-        this.inputCrysSub = crys_sub;
+        this.inputCrys = crys.filter(Boolean);
+        this.inputCrysSub = crys_sub.filter(Boolean);
 
         this.ascension = ascension;
         this.kiokuLvl = kiokuLvl;
