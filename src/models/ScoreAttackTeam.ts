@@ -106,6 +106,11 @@ const bannedEffects: Set<number> = new Set([
     65101003, // Sakurako passive is listed multiple places
 ]);
 
+function prettyNumber(n: number) {
+    const rounded = Math.round((n + Number.EPSILON) * 100) / 100;
+    return Number(rounded.toString());
+}
+
 export class ScoreAttackTeam {
     private team: ScoreAttackKioku[];
     private dps: ScoreAttackKioku;
@@ -364,6 +369,7 @@ export class ScoreAttackTeam {
                     if (key.endsWith("Atk")) {
                         val |= 0;
                     }
+                    val = prettyNumber(val).toString()
                     if (key === "SupportAtk" || key === "supportLvl") {
                         val = val + "\n"
                     }
@@ -383,7 +389,7 @@ export class ScoreAttackTeam {
                         }
                         st += "S" + d.startConditionSetIdCsv
                     }
-                    let outString = `${n / 10} (${skillDetailId(d)})`
+                    let outString = `${prettyNumber(n / 10)} (${skillDetailId(d)})`
                     if (st.length) {
                         outString += " => " + st
                     }
