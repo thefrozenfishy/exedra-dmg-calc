@@ -20,6 +20,9 @@ const knownBoosts = {
     UP_CTR_ACCUM_RATIO: "CR2+",
     UP_CTR_FIXED: "CR1+",
     UP_CTR_RATIO: "CR3+",
+    UP_DEF_ACCUM_RATIO: "Def%1",
+    UP_DEF_FIXED: "Flat def",
+    UP_DEF_RATIO: "Def%2",
     UP_DMG_DEALT: "Additional dmg", // TODO: Check that this is correct. How does it scale w buff+, how to put into dmg calc?
     UP_ELEMENT_DMG_RATE_RATIO: "Dmg Dealt+ (Elem only)",
     UP_GIV_DMG_RATIO: "DMG Dealt+",
@@ -82,15 +85,13 @@ const skippable = new Set([
     "UP_BUFF_EFFECT_VALUE",
     "UP_BUFF_EFFECT_VALUE",
     "UP_DEBUFF_EFFECT_VALUE",
-    "UP_DEF_ACCUM_RATIO",
-    "UP_DEF_FIXED",
-    "UP_DEF_RATIO",
     "UP_EFFECT_HIT_RATE_RATIO",
     "UP_EFFECT_PARRY_RATE_RATIO",
     "UP_EP_RECOVER_RATE_RATIO",
     "UP_GIV_BREAK_POINT_DMG_FIXED",
     "UP_GIV_SLIP_DMG_RATIO",
     "UP_GIV_VORTEX_DMG_RATIO",
+    "UP_HATE",
     "UP_HEAL_RATE_RATIO",
     "UP_HP_FIXED",
     "UP_HP_RATIO",
@@ -236,12 +237,14 @@ export class ScoreAttackTeam {
         return val
     }
 
-    get_special_dmg(targetType: EnemyTargetTypes, amountOfEnemies: number, maxBreak: number, nrHitThatKills: number): [number, boolean] {
+    get_special_dmg(targetType: EnemyTargetTypes, amountOfEnemies: number, maxBreak: number, nrHitThatKills: number): [number, boolean, boolean] {
         let total_dmg = 0;
+        let uses_def = false;
         for (const detail of this.dps.effects) {
             if (((detail as ActiveSkill).skillMstId / 100 | 0) !== this.dps.data.special_id) continue
             let delta_dmg = 0
             if (!detail.abilityEffectType.startsWith("DMG_")) continue
+            if (detail.abilityEffectType.includes("DEF")) uses_def = true
             detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
                 const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId)
                 if (typeof (isActiveCond) === 'boolean') {
@@ -263,7 +266,7 @@ export class ScoreAttackTeam {
             })
             total_dmg += delta_dmg
         }
-        return [total_dmg / 1000, nrHitThatKills < 1]
+        return [total_dmg / 1000, nrHitThatKills < 1, uses_def]
     }
 
     calculate_single_dmg(
@@ -274,13 +277,14 @@ export class ScoreAttackTeam {
         atk_down: number,
     ): [number, number, number, string, boolean] {
         // TODO: Add atk%-, dmg taken down% and dmg dealt down% from enemies
-        const [special, enemyDied] = this.get_special_dmg(targetTypeAtPosition[idx], amountOfEnemies, enemy.maxBreak, enemy.hitsToKill);
+        const [special, enemyDied, uses_def] = this.get_special_dmg(targetTypeAtPosition[idx], amountOfEnemies, enemy.maxBreak, enemy.hitsToKill);
+        const base_atk = uses_def ? this.dps.getBaseDef() : this.dps.getBaseAtk();
         const atk_pluss =
-            (this.getEffect("UP_ATK_RATIO", amountOfEnemies, enemy.maxBreak) +
-                (this.getEffect("UP_ATK_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak))) /
+            (this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_RATIO`, amountOfEnemies, enemy.maxBreak) +
+                (this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_ACCUM_RATIO`, amountOfEnemies, enemy.maxBreak))) /
             1000;
-        const flat_atk = this.getEffect("UP_ATK_FIXED", amountOfEnemies, enemy.maxBreak)
-        const atk_total = this.dps.getBaseAtk() * (1 + atk_pluss) * (1 - atk_down) + flat_atk
+        const flat_atk = this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_FIXED`, amountOfEnemies, enemy.maxBreak)
+        const atk_total = base_atk * (1 + atk_pluss) * (1 - atk_down) + flat_atk
 
         let def_remaining = (
             this.getEffect("DWN_DEF_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) *
@@ -311,9 +315,10 @@ export class ScoreAttackTeam {
             this.getEffect("UP_ELEMENT_DMG_RATE_RATIO", amountOfEnemies, enemy.maxBreak)
         ) / 1000;
         const elem_dmg_up = (this.getEffect("UP_WEAK_ELEMENT_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
-        const dmg_taken = (this.getEffect("UP_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
+        const dmg_taken = (this.getEffect("UP_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
+            this.getEffect("UP_AIM_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
         const elem_res_down = (this.getEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
-        const base_dmg = special * this.dps.getBaseAtk() * ((this.dps.getBaseAtk() / 124) ** 1.2 + 12) / 20;
+        const base_dmg = special * base_atk * ((base_atk / 124) ** 1.2 + 12) / 20;
 
         const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
         const crit_factor = 1 + (enemy.isCrit ? crit_dmg : 0);
@@ -405,10 +410,10 @@ export class ScoreAttackTeam {
 DMG CALC MULTIPLIERS:
 DPS stats:
 Ability Mult - ${special * 100 | 0}%
-Base Attack  - ${(this.dps.getBaseAtk() | 0).toLocaleString()}
-Atk Up %     - ${atk_pluss * 100 | 0}%
-Atk Up flat  - ${flat_atk | 0}
-Total Atk    - ${(atk_total | 0).toLocaleString()}
+Base ${uses_def ? "Def" : "Atk"}  - ${(base_atk | 0).toLocaleString()}
+${uses_def ? "Def" : "Atk"} Up %     - ${atk_pluss * 100 | 0}%
+${uses_def ? "Def" : "Atk"} Up flat  - ${flat_atk | 0}
+Total ${uses_def ? "Def" : "Atk"}    - ${(atk_total | 0).toLocaleString()}
 Def down%    - ${(1 - def_remaining) * 100 | 0}%
 Total def    - ${(def_total | 0).toLocaleString()}
 Crit rate    - ${uncapped_crit_rate * 100 | 0}%
