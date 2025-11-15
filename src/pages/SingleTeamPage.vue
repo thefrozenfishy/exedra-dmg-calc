@@ -64,7 +64,7 @@ const attackerIndex = 2
 
 const buffMultReduction = useSetting("buffMultReduction", 0)
 const debuffMultReduction = useSetting("debuffMultReduction", 0)
-const attackerHealth = useSetting("attackerHealth", 0)
+const attackerHealth = useSetting("attackerHealth", 100)
 
 function onChangeCrys(charIdx: number, crysIdx: number, rawValue: string) {
   const main = team.slots[charIdx].main

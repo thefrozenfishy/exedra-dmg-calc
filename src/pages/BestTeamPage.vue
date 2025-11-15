@@ -248,7 +248,7 @@ const include4StarSupports = useSetting("include4StarSupports", false)
 const include4StarOthers = useSetting("include4StarOthers", false)
 const buffMultReduction = useSetting("buffMultReduction", 0);
 const debuffMultReduction = useSetting("debuffMultReduction", 0);
-const attackerHealth = useSetting("attackerHealth", 0);
+const attackerHealth = useSetting("attackerHealth", 100);
 const optimalSubCrys = useSetting("optimalSubCrys", true)
 
 const weakElements = reactive([
