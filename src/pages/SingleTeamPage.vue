@@ -23,13 +23,18 @@
   <div class="team-page">
     <h2>Extra settings</h2>
     <div key="buffMultReduction">
-      <label>Buff Bonus Reduction:
-        <input type="number" v-model.number="buffMultReduction" step="0.1" />
+      <label>Buff Bonus Reduction (%):
+        <input type="number" v-model.number="buffMultReduction" step="1" />
       </label>
     </div>
     <div key="buffMultReduction">
-      <label>Debuff Bonus Reduction:
-        <input type="number" v-model.number="debuffMultReduction" step="0.1" />
+      <label>Debuff Bonus Reduction (%):
+        <input type="number" v-model.number="debuffMultReduction" step="1" />
+      </label>
+    </div>
+    <div key="attackerHealth">
+      <label>Attacker HP when using ultimate (%):
+        <input type="number" v-model.number="attackerHealth" step="1" />
       </label>
     </div>
   </div>
@@ -52,13 +57,14 @@ import EnemySelector from '../components/EnemySelector.vue'
 import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
 import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
-import { useSetting, useSettingsStore } from '../store/settingsStore'
+import { useSetting } from '../store/settingsStore'
 import { KiokuArgs } from '../types/KiokuTypes'
 
 const attackerIndex = 2
 
 const buffMultReduction = useSetting("buffMultReduction", 0)
 const debuffMultReduction = useSetting("debuffMultReduction", 0)
+const attackerHealth = useSetting("attackerHealth", 0)
 
 function onChangeCrys(charIdx: number, crysIdx: number, rawValue: string) {
   const main = team.slots[charIdx].main
@@ -82,7 +88,6 @@ const formatDebug = (out: string | [number, number, number, string[]], idx: numb
 
 const team = useTeamStore()
 const enemies = useEnemyStore()
-const settings = useSettingsStore()
 
 const isFullTeam = computed(() => team.slots.map(slot => slot.main).filter(Boolean).length === 5)
 const teamInstance = computed(() => {
@@ -98,7 +103,7 @@ const teamInstance = computed(() => {
         debuffMultReduction.value,
       )
     }) as ScoreAttackKioku[]
-    return new ScoreAttackTeam(transformedMembers[attackerIndex], transformedMembers.filter((v, i) => i !== attackerIndex), true)
+    return new ScoreAttackTeam(transformedMembers[attackerIndex], transformedMembers.filter((v, i) => i !== attackerIndex), attackerHealth.value, true)
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
     console.error(err)

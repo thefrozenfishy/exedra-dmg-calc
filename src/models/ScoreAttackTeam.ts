@@ -118,12 +118,14 @@ export class ScoreAttackTeam {
     private all_effects: Record<string, number> = {};
     private extra_effects: Record<string, [Function, number][]> = {};
     private debug: boolean;
+    private attackerHealth: number;
     private debugTexts: Record<string, Record<string, [SkillDetail, number][]>> = {}
 
-    constructor(dps: ScoreAttackKioku, team: ScoreAttackKioku[], debug = false) {
+    constructor(dps: ScoreAttackKioku, team: ScoreAttackKioku[], attackerHealth = 100, debug = false) {
         this.team = team;
         this.dps = dps;
         this.debug = debug;
+        this.attackerHealth = attackerHealth;
         this.all_effects["DWN_DEF_ACCUM_RATIO"] = 1
         this.all_effects["DWN_DEF_RATIO"] = 1
         this.setup();
@@ -151,7 +153,7 @@ export class ScoreAttackTeam {
                 valueTotal *= detail.value2 || 1
 
                 detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
-                    const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId)
+                    const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId, this.attackerHealth)
                     if (typeof (isActiveCond) === 'boolean') {
                         if (isActiveCond) {
                             if (detail.abilityEffectType in this.all_effects) {
@@ -246,7 +248,7 @@ export class ScoreAttackTeam {
             if (!detail.abilityEffectType.startsWith("DMG_")) continue
             if (detail.abilityEffectType.includes("DEF")) uses_def = true
             detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
-                const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId)
+                const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId, this.attackerHealth)
                 if (typeof (isActiveCond) === 'boolean') {
                     if (!isActiveCond) return
                 } else {

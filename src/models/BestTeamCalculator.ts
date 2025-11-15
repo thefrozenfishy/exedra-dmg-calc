@@ -103,6 +103,7 @@ export async function findBestTeam({
     optimalSubCrys,
     buffMultReduction,
     debuffMultReduction,
+    attackerHealth,
     onProgress,
     onError
 }: FindBestTeamOptions): Promise<any[]> {
@@ -237,6 +238,7 @@ export async function findBestTeam({
                                                         crys: optimalSubCrys ? ["EX"] : s.crys,
                                                         supportKey: supportSupport[i],
                                                     })!),
+                                                    attackerHealth
                                                 );
 
                                                 const [dmg, _, critRate] = team.calculate_max_dmg(enemies, 0)

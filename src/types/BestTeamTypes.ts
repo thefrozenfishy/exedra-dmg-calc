@@ -24,6 +24,7 @@ export interface FindBestTeamOptions {
     enabledCharacters: Character[]
     buffMultReduction: number
     debuffMultReduction: number
+    attackerHealth: number
     onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number) => void,
     onError?: (error: any) => void
 }

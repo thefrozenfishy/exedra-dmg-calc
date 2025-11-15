@@ -44,7 +44,7 @@
                     {{ team.attacker_crys3[idx] }}
                 </div>
                 <div>
-                    <button @click="saveToStore(idx)" class="save-button">Open team single battle editor</button>
+                    <button @click="saveToStore(idx)" class="save-button">Open team in single battle editor</button>
                 </div>
                 <div>
                 </div>

@@ -1,7 +1,6 @@
 import battleConditionSetsJson from '../assets/base_data/getBattleConditionSetMstList.json';
 import battleConditionsJson from '../assets/base_data/getBattleConditionMstList.json';
 import { BattleState, PassiveSkill, SkillDetail } from '../types/KiokuTypes';
-import { KiokuState, PvPTeam } from './PvPTeam';
 
 interface BattleCondition {
     battleConditionMstId: number
@@ -153,12 +152,6 @@ Object.values(battleConditions).forEach(c => {
     }
 })
 
-const hardcodedKnownNotActive = [
-    // Asuka atk+ on low HP, ignore high HP bonuses
-    "1562",
-    "1563"
-]
-
 const isCondActive = (cond: BattleCondition, valueToCompareTo: string | number): boolean => {
     if (cond.compareOperator === CompareOperator.EQUAL) {
         return valueToCompareTo == cond.compareValue
@@ -209,12 +202,10 @@ export const isStartCondRelevantForScoreAttack = (startConditionId: string, maxM
     return true;
 }
 
-export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: string): boolean | Function => {
+export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: string, attackerHealth: number): boolean | Function => {
     if (!activeConditionSetId || activeConditionSetId === "0") return true
 
     const battleConditionSet = battleConditionSets[activeConditionSetId]
-    if (hardcodedKnownNotActive.includes(activeConditionSetId)) return false
-
 
     for (const activeCondId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
         const battleCondition = battleConditions[activeCondId]
@@ -231,6 +222,9 @@ export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: st
         }
         if (battleCondition.compareContent === CompareContent.BREAKED_DAMAGE_RECEIVE_RATE) {
             return lateGetIsActiveCond(battleCondition)
+        }
+        if (battleCondition.compareContent === CompareContent.HP_RATIO) {
+            if (!isCondActive(battleCondition, attackerHealth)) return false
         }
     }
     return true

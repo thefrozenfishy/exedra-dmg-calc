@@ -29,12 +29,16 @@
                 Calculate using perfect Crit rate, Crit Damage & atk crystalis substats
             </label>
 
-            <label>Buff Bonus Reduction:
-                <input type="number" v-model.number="buffMultReduction" step="0.1" />
+            <label>Buff Bonus Reduction (%):
+                <input type="number" v-model.number="buffMultReduction" step="1" />
             </label>
 
-            <label>Debuff Bonus Reduction:
-                <input type="number" v-model.number="debuffMultReduction" step="0.1" />
+            <label>Debuff Bonus Reduction (%):
+                <input type="number" v-model.number="debuffMultReduction" step="1" />
+            </label>
+
+            <label>Attacker HP when using ultimate (%):
+                <input type="number" v-model.number="attackerHealth" step="1" />
             </label>
 
             <div>
@@ -244,6 +248,7 @@ const include4StarSupports = useSetting("include4StarSupports", false)
 const include4StarOthers = useSetting("include4StarOthers", false)
 const buffMultReduction = useSetting("buffMultReduction", 0);
 const debuffMultReduction = useSetting("debuffMultReduction", 0);
+const attackerHealth = useSetting("attackerHealth", 0);
 const optimalSubCrys = useSetting("optimalSubCrys", true)
 
 const weakElements = reactive([
@@ -460,6 +465,7 @@ async function startSimulation() {
             enabledCharacters: JSON.parse(JSON.stringify(members.value)),
             buffMultReduction: buffMultReduction.value,
             debuffMultReduction: debuffMultReduction.value,
+            attackerHealth: attackerHealth.value,
         }
     })
 }
