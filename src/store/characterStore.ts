@@ -3,7 +3,6 @@ import { ref, watch } from 'vue'
 import { Character, KiokuConstants, correctCharacterParams } from '../types/KiokuTypes'
 import { crystalises, kiokuData } from '../utils/helpers'
 
-
 const base = {
     ascension: KiokuConstants.maxAscension,
     portrait: "",
@@ -18,6 +17,19 @@ const base = {
 export const useCharacterStore = defineStore('characterStore', () => {
     const characters = ref<Character[]>([])
 
+    const baseChars: Record<string, Character> = Object.fromEntries(Object.entries(kiokuData).map(([name, data]) => [name, {
+        name,
+        id: data.id,
+        enabled: data.rarity !== 5 || data.id === 10010101,
+        role: data.role,
+        element: data.element,
+        supportTarget: data.support_target,
+        supportDescription: data.support_effect,
+        character_en: data.character_en,
+        rarity: data.rarity,
+        ...base,
+    }]));
+
     const saved = localStorage.getItem('characters')
     if (saved) {
         const oldChars: Character[] = JSON.parse(saved)
@@ -26,7 +38,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
             c.crys_sub = c?.crys_sub?.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc)) ?? []
             return c
         }).filter(k => "name" in k && "id" in k && "enabled" in k && "role" in k && "element" in k && "character_en" in k && "rarity" in k)
-            .map(c => ({ ...base, ...Object.fromEntries(Object.entries(c).filter(([k, v]) => v != null)) }))
+            .map(c => ({ ...baseChars[c.name], ...Object.fromEntries(Object.entries(c).filter(([k, v]) => v != null)) }))
     }
 
     watch(
@@ -84,19 +96,8 @@ export const useCharacterStore = defineStore('characterStore', () => {
         })
     }
 
-    Object.entries(kiokuData).forEach(([name, data]) => {
-        if (!characters.value.map(c => c.name).includes(name)) {
-            characters.value.push({
-                name,
-                id: data.id,
-                enabled: data.rarity !== 5 || data.id === 10010101,
-                role: data.role,
-                element: data.element,
-                character_en: data.character_en,
-                rarity: data.rarity,
-                ...base,
-            })
-        }
+    Object.entries(baseChars).forEach(([name, data]) => {
+        if (!characters.value.map(c => c.name).includes(name)) characters.value.push(data)
     });
 
     return { characters, toggleCharacter, updateChar, setCharacters, exportCharacters, importCharacters }

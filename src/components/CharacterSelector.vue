@@ -11,11 +11,16 @@
     </div>
 
     <div v-else class="character-options">
-      <div v-for="char in filteredChars" :key="char.id" class="character-option" @click="select(char)">
+      <div v-for="char in filteredChars" :key="char.id" class="character-option"
+        :class="[main?.role, main?.element].includes(char.supportTarget) ? 'relevant-support' : ''"
+        @click="select(char)">
         <a :href="`https://exedra.wiki/wiki/${char.name}`" target="_blank">
           <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
         </a>
-        <span>{{ char.name }}</span>
+        <div class="details">
+          <p>{{ char.name }}</p>
+          <p v-if="main">{{ char.supportDescription }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -28,6 +33,7 @@ import { Character } from '../types/KiokuTypes';
 
 const props = defineProps<{
   selected: Character | undefined
+  main?: Character | undefined
 }>()
 
 const emit = defineEmits<{
@@ -41,7 +47,7 @@ const query = ref('')
 
 const filteredChars = computed(() => {
   return characters.filter(c =>
-    c.name.toLowerCase().includes(query.value.toLowerCase()) 
+    c.name.toLowerCase().includes(query.value.toLowerCase())
     || c.character_en.toLowerCase().includes(query.value.toLowerCase())
     || (c.name === "Time Stop Strike" && query.value.toLowerCase().startsWith("moe"))
   ).sort((a, b) => a.id - b.id)
@@ -72,6 +78,14 @@ function clear() {
   border: 1px solid #ccc;
   border-radius: 6px;
   padding: 0.3rem;
+}
+
+.relevant-support {
+  background-color: #603050;
+}
+
+.relevant-support p {
+  color: white; 
 }
 
 .character-option {

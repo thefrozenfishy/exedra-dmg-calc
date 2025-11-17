@@ -46,7 +46,7 @@
   <!-- Only show support selector if main exists -->
   <div v-if="slot.main" class="support-section">
     <h3>Support</h3>
-    <CharacterSelector :selected="slot.support" @select="(member: Character) => setSupport(index, member)" />
+    <CharacterSelector :selected="slot.support" :main="slot.main" @select="(member: Character) => setSupport(index, member)" />
   </div>
 
   <!-- Stats -->

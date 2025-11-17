@@ -1,5 +1,5 @@
 import { PvPTeam, KiokuState } from "../models/PvPTeam";
-import { crystalises, kiokuData, portraits, skillDetails } from "../utils/helpers";
+import { crystalises, kiokuData, portraits } from "../utils/helpers";
 
 
 export enum BasicIds {
@@ -141,6 +141,8 @@ export interface Character {
     enabled: boolean
     ascension: number
     element: KiokuElement
+    supportTarget: SupportKey
+    supportDescription: string
     role: KiokuRole
     rarity: number
     portrait: string
@@ -204,7 +206,8 @@ export interface KiokuData {
     crystalis_id: number
     crystalis_effect: string
     support_id: number
-    support_target: KiokuElement | KiokuRole
+    support_target: SupportKey
+    support_effect: string
     ability_id: number
     maxMagicStacks?: number
     ascension_1_effect_2_id: number
