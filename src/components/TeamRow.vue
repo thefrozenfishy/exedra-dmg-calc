@@ -79,6 +79,9 @@ function saveToStore(idx: number) {
     if (!offElements.includes(team.supp1.element)) {
         teamStore.setCharBuffReduction(0, offElementBuffMultReduction)
         teamStore.setCharDebuffReduction(0, offElementDebuffMultReduction)
+    } else {
+        teamStore.setCharBuffReduction(0, undefined)
+        teamStore.setCharDebuffReduction(0, undefined)
     }
 
     teamStore.setMain(1, { ...team.supp2, crys: ["EX"] })
@@ -86,6 +89,9 @@ function saveToStore(idx: number) {
     if (!offElements.includes(team.supp2.element)) {
         teamStore.setCharBuffReduction(1, offElementBuffMultReduction)
         teamStore.setCharDebuffReduction(1, offElementDebuffMultReduction)
+    } else {
+        teamStore.setCharBuffReduction(1, undefined)
+        teamStore.setCharDebuffReduction(1, undefined)
     }
 
     teamStore.setMain(2, {
@@ -101,6 +107,9 @@ function saveToStore(idx: number) {
     if (!offElements.includes(team.supp3.element)) {
         teamStore.setCharBuffReduction(3, offElementBuffMultReduction)
         teamStore.setCharDebuffReduction(3, offElementDebuffMultReduction)
+    } else {
+        teamStore.setCharBuffReduction(3, undefined)
+        teamStore.setCharDebuffReduction(3, undefined)
     }
 
     teamStore.setMain(4, { ...team.supp4, crys: ["EX"] })
@@ -108,6 +117,9 @@ function saveToStore(idx: number) {
     if (!offElements.includes(team.supp4.element)) {
         teamStore.setCharBuffReduction(4, offElementBuffMultReduction)
         teamStore.setCharDebuffReduction(4, offElementDebuffMultReduction)
+    } else {
+        teamStore.setCharBuffReduction(4, undefined)
+        teamStore.setCharDebuffReduction(4, undefined)
     }
 
     router.push('/sa-simulator-single')
