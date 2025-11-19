@@ -28,6 +28,7 @@
         "role": "Attacker",
         "skill_id": 1197,
         "special_id": 1198,
+        "support_effect": "Increases critical rate by 15%.<br>On battle skill use, increases critical DMG by 5% (Stacks 5 times).",
         "support_id": 95033,
         "support_target": "Attacker"
     },
@@ -59,6 +60,7 @@
         "role": "Attacker",
         "skill_id": 1022,
         "special_id": 1023,
+        "support_effect": "Increases critical DMG by 18%, and on critical hit, grants 5 MP.",
         "support_id": 95004,
         "support_target": "Aqua"
     },
@@ -92,6 +94,7 @@
         "role": "Attacker",
         "skill_id": 1143,
         "special_id": "",
+        "support_effect": "Increases ATK by 7.5%.",
         "support_id": 93015,
         "support_target": "Dark"
     },
@@ -124,6 +127,7 @@
         "role": "Breaker",
         "skill_id": 1206,
         "special_id": 1207,
+        "support_effect": "Increases SPD by 20%.<br>On critical hit, increases break gauge depletion (5) (2 turns).",
         "support_id": 95036,
         "support_target": "Breaker"
     },
@@ -157,6 +161,7 @@
         "role": "Attacker",
         "skill_id": 1091,
         "special_id": "",
+        "support_effect": "Increases DMG dealt by 5%.",
         "support_id": 93002,
         "support_target": "Attacker"
     },
@@ -190,6 +195,7 @@
         "role": "Buffer",
         "skill_id": 1107,
         "special_id": "",
+        "support_effect": "Increases max HP by 5%.",
         "support_id": 93011,
         "support_target": "Flame"
     },
@@ -222,6 +228,7 @@
         "role": "Defender",
         "skill_id": 1013,
         "special_id": 1014,
+        "support_effect": "Decreases DMG taken by 7.5%.<br>On DMG dealt to an enemy, increases DEF by 3.5% (Max 5 stacks).",
         "support_id": 95013,
         "support_target": "Aqua"
     },
@@ -253,6 +260,7 @@
         "role": "Debuffer",
         "skill_id": 1209,
         "special_id": 1210,
+        "support_effect": "Increases own ongoing DMG dealt by 15%.<br>Increases SPD by 15%.<br>On own basic attack, grants 2 MP.",
         "support_id": 95037,
         "support_target": "Debuffer"
     },
@@ -285,6 +293,7 @@
         "role": "Buffer",
         "skill_id": 1072,
         "special_id": 1073,
+        "support_effect": "Decreases DMG taken by 5%.",
         "support_id": 94013,
         "support_target": "Flame"
     },
@@ -316,6 +325,7 @@
         "role": "Debuffer",
         "skill_id": 1170,
         "special_id": 1171,
+        "support_effect": "At turn start, grants 2 MP.<br>When 3 or more debuffs are applied to enemies, increases SPD by 25%.",
         "support_id": 95023,
         "support_target": "Debuffer"
     },
@@ -348,6 +358,7 @@
         "role": "Breaker",
         "skill_id": 1167,
         "special_id": 1168,
+        "support_effect": "On DMG dealt to an enemy when 2 or more debuffs are applied to enemies, grants 2 MP.<br>Increases SPD by 20%.",
         "support_id": 95024,
         "support_target": "Breaker"
     },
@@ -379,6 +390,7 @@
         "role": "Healer",
         "skill_id": 1051,
         "special_id": 1052,
+        "support_effect": "Increases MP recovery rate by 5%.",
         "support_id": 94004,
         "support_target": "Healer"
     },
@@ -410,6 +422,7 @@
         "role": "Attacker",
         "skill_id": 1004,
         "special_id": 1005,
+        "support_effect": "Increases DMG dealt by 15%, and increases follow-up attack and counterattack DMG dealt by 32%.",
         "support_id": 95002,
         "support_target": "Dark"
     },
@@ -441,6 +454,7 @@
         "role": "Attacker",
         "skill_id": 1164,
         "special_id": 1165,
+        "support_effect": "Increases own battle skill DMG dealt by 15% and SPD by 15.",
         "support_id": 95022,
         "support_target": "Attacker"
     },
@@ -473,6 +487,7 @@
         "role": "Breaker",
         "skill_id": 1054,
         "special_id": 1055,
+        "support_effect": "Increases ATK by 10%.",
         "support_id": 94005,
         "support_target": "Breaker"
     },
@@ -504,6 +519,7 @@
         "role": "Healer",
         "skill_id": 1158,
         "special_id": 1159,
+        "support_effect": "Increases HP recovery amount by 12%.<br>At battle start, advances action order by 15%.",
         "support_id": 95020,
         "support_target": "Healer"
     },
@@ -536,6 +552,7 @@
         "role": "Attacker",
         "skill_id": 1182,
         "special_id": 1183,
+        "support_effect": "Increases DMG dealt when targeting elemental weakness by 25%, and on battle skill use, applies shield to self (10% / 1 time).",
         "support_id": 95028,
         "support_target": "Attacker"
     },
@@ -567,6 +584,7 @@
         "role": "Buffer",
         "skill_id": 1025,
         "special_id": 1026,
+        "support_effect": "Increases self-applied buff effects by 30% (* excluding MP recovery and action order advance effects), and increases SPD by 15%.",
         "support_id": 95005,
         "support_target": "Buffer"
     },
@@ -598,6 +616,7 @@
         "role": "Defender",
         "skill_id": 1155,
         "special_id": 1156,
+        "support_effect": "Increases chance of being targeted (5).<br>Decreases DMG taken by 10%.",
         "support_id": 95012,
         "support_target": "Defender"
     },
@@ -629,7 +648,41 @@
         "role": "Breaker",
         "skill_id": 1125,
         "special_id": 1126,
+        "support_effect": "Decreases DMG taken by 5%.",
         "support_id": 94015,
+        "support_target": "Breaker"
+    },
+    "Groundhog Daze": {
+        "ability_id": 15040,
+        "ascension_1_effect_2_id": 85003,
+        "ascension_2_effect_2_id": 85056,
+        "ascension_4_effect_2_id": 85004,
+        "atk100": 1800,
+        "atka5": 180,
+        "attack_id": 1214,
+        "character_en": "Mabayu Aki",
+        "crystalis_effect": "On basic attack, grants 2 MP.<br>While Invisible is applied to self:<br>On taking at least 1 DMG from an enemy attack, advances action order by 5%.",
+        "crystalis_id": 1150039,
+        "def100": 1854,
+        "defa5": 185,
+        "element": "Void",
+        "ep": 75,
+        "hp100": 5832,
+        "hpa5": 583,
+        "id": 10070201,
+        "maxMagicStacks": 5,
+        "minAtk": 100,
+        "minCritDmg": 10,
+        "minCritRate": 5,
+        "minDef": 103,
+        "minHp": 324,
+        "minSpd": 117,
+        "rarity": 5,
+        "role": "Breaker",
+        "skill_id": 1215,
+        "special_id": 1216,
+        "support_effect": "Increases SPD by 20%.<br>On own special attack, increases break gauge depletion (5) (2 turns).",
+        "support_id": 95039,
         "support_target": "Breaker"
     },
     "Hanna's Kioku": {
@@ -662,6 +715,7 @@
         "role": "Breaker",
         "skill_id": 1101,
         "special_id": "",
+        "support_effect": "Increases SPD by 8%.",
         "support_id": 93008,
         "support_target": "Breaker"
     },
@@ -695,6 +749,7 @@
         "role": "Debuffer",
         "skill_id": 1105,
         "special_id": "",
+        "support_effect": "Increases DEF by 7.5%.",
         "support_id": 93010,
         "support_target": "Debuffer"
     },
@@ -728,6 +783,7 @@
         "role": "Buffer",
         "skill_id": 1103,
         "special_id": "",
+        "support_effect": "Increases SPD by 8%.",
         "support_id": 93009,
         "support_target": "Buffer"
     },
@@ -759,6 +815,7 @@
         "role": "Buffer",
         "skill_id": 1161,
         "special_id": 1162,
+        "support_effect": "On basic attack, advances action order by 10%.<br>Increases SPD by 20%.",
         "support_id": 95021,
         "support_target": "Buffer"
     },
@@ -790,6 +847,7 @@
         "role": "Breaker",
         "skill_id": 1028,
         "special_id": 1029,
+        "support_effect": "Grants 15 MP at battle start, and on enemy break, grants 2 MP.",
         "support_id": 95016,
         "support_target": "Aqua"
     },
@@ -821,6 +879,7 @@
         "role": "Attacker",
         "skill_id": 1119,
         "special_id": 1120,
+        "support_effect": "Increases DMG dealt when targeting elemental weakness by 15%.",
         "support_id": 94012,
         "support_target": "Attacker"
     },
@@ -852,6 +911,7 @@
         "role": "Healer",
         "skill_id": 1031,
         "special_id": 1032,
+        "support_effect": "Increases HP recovery amount by 12%, and on taking DMG equal to 20% or higher of own HP, advances action order by 5%.",
         "support_id": 95018,
         "support_target": "Healer"
     },
@@ -885,6 +945,7 @@
         "role": "Attacker",
         "skill_id": 1133,
         "special_id": "",
+        "support_effect": "Increases DEF by 7.5%.",
         "support_id": 93019,
         "support_target": "Attacker"
     },
@@ -918,6 +979,7 @@
         "role": "Breaker",
         "skill_id": 1089,
         "special_id": "",
+        "support_effect": "Increases ATK by 7.5%.",
         "support_id": 93001,
         "support_target": "Breaker"
     },
@@ -951,6 +1013,7 @@
         "role": "Defender",
         "skill_id": 1137,
         "special_id": "",
+        "support_effect": "Increases DEF by 7.5%.",
         "support_id": 93007,
         "support_target": "Light"
     },
@@ -984,6 +1047,7 @@
         "role": "Healer",
         "skill_id": 1084,
         "special_id": "",
+        "support_effect": "Increases HP recovery amount by 8%.",
         "support_id": 93021,
         "support_target": "Healer"
     },
@@ -1015,6 +1079,7 @@
         "role": "Attacker",
         "skill_id": 1010,
         "special_id": 1011,
+        "support_effect": "Increases ATK by 15%, and if target in break, increases DMG dealt by 12%.",
         "support_id": 95014,
         "support_target": "Flame"
     },
@@ -1049,6 +1114,7 @@
         "role": "Attacker",
         "skill_id": 1145,
         "special_id": "",
+        "support_effect": "Decreases DMG taken by 5%.",
         "support_id": 93016,
         "support_target": "Attacker"
     },
@@ -1080,6 +1146,7 @@
         "role": "Buffer",
         "skill_id": 1194,
         "special_id": 1195,
+        "support_effect": "Increases all allies' follow-up attack and counterattack DMG dealt by 15%.<br>On DMG dealt by allies other than self, grants 1 MP to self.",
         "support_id": 95032,
         "support_target": "Buffer"
     },
@@ -1111,6 +1178,7 @@
         "role": "Breaker",
         "skill_id": 1149,
         "special_id": 1150,
+        "support_effect": "Increases break gauge depletion (2) and increases break effect by 10%.",
         "support_id": 95009,
         "support_target": "Light"
     },
@@ -1142,6 +1210,7 @@
         "role": "Healer",
         "skill_id": 1081,
         "special_id": 1082,
+        "support_effect": "Increases HP recovery amount by 12%.",
         "support_id": 94017,
         "support_target": "Healer"
     },
@@ -1173,6 +1242,7 @@
         "role": "Attacker",
         "skill_id": 1212,
         "special_id": 1213,
+        "support_effect": "Increases ATK by 15% and DMG dealt by 10%.<br>On enemy break, increases DMG dealt when targeting elemental weakness by 10% (2 turns).",
         "support_id": 95038,
         "support_target": "Attacker"
     },
@@ -1206,6 +1276,7 @@
         "role": "Attacker",
         "skill_id": 1139,
         "special_id": "",
+        "support_effect": "Increases ATK by 7.5%.",
         "support_id": 93012,
         "support_target": "Light"
     },
@@ -1239,6 +1310,7 @@
         "role": "Breaker",
         "skill_id": 1135,
         "special_id": "",
+        "support_effect": "Increases ATK by 7.5%.",
         "support_id": 93020,
         "support_target": "Aqua"
     },
@@ -1270,6 +1342,7 @@
         "role": "Debuffer",
         "skill_id": 1185,
         "special_id": 1186,
+        "support_effect": "Increases ongoing DMG dealt by 15%.<br>When 3 or more debuffs are applied to enemies, increases SPD by 15%.",
         "support_id": 95029,
         "support_target": "Debuffer"
     },
@@ -1301,6 +1374,7 @@
         "role": "Debuffer",
         "skill_id": 1063,
         "special_id": 1064,
+        "support_effect": "Increases ailment hit rate by 10%.",
         "support_id": 94009,
         "support_target": "Flame"
     },
@@ -1334,6 +1408,7 @@
         "role": "Debuffer",
         "skill_id": 1099,
         "special_id": "",
+        "support_effect": "Increases max HP by 5%.",
         "support_id": 93006,
         "support_target": "Debuffer"
     },
@@ -1365,6 +1440,7 @@
         "role": "Debuffer",
         "skill_id": 1176,
         "special_id": 1177,
+        "support_effect": "Increases DMG dealt by 10% and ailment hit rate by 30%, and decreases DMG taken from enemies with at least 1 ailment by 5%.",
         "support_id": 95026,
         "support_target": "Debuffer"
     },
@@ -1398,6 +1474,7 @@
         "role": "Buffer",
         "skill_id": 1093,
         "special_id": "",
+        "support_effect": "Increases DEF by 7.5%.",
         "support_id": 93003,
         "support_target": "Buffer"
     },
@@ -1431,6 +1508,7 @@
         "role": "Buffer",
         "skill_id": 1131,
         "special_id": "",
+        "support_effect": "Increases DEF by 7.5%.",
         "support_id": 93018,
         "support_target": "Aqua"
     },
@@ -1462,6 +1540,7 @@
         "role": "Breaker",
         "skill_id": 1173,
         "special_id": 1174,
+        "support_effect": "Increases break gauge depletion (2). When 2 or more buffs are applied to self: Increases SPD by 25%. * Only refers to buffs activated by basic attack / battle skill / special attack / follow-up attack / counterattack / assist.",
         "support_id": 95025,
         "support_target": "Breaker"
     },
@@ -1493,6 +1572,7 @@
         "role": "Debuffer",
         "skill_id": 1060,
         "special_id": 1061,
+        "support_effect": "Increases ailment hit rate by 10%.",
         "support_id": 94008,
         "support_target": "Debuffer"
     },
@@ -1525,6 +1605,7 @@
         "role": "Breaker",
         "skill_id": 1179,
         "special_id": 1180,
+        "support_effect": "Increases SPD by 20%.<br>When at least 2 enemies are present: Increases break gauge depletion (1) (For each enemy above 2, increases break gauge depletion further (1)).",
         "support_id": 95027,
         "support_target": "Void"
     },
@@ -1557,6 +1638,7 @@
         "role": "Attacker",
         "skill_id": 1086,
         "special_id": 1087,
+        "support_effect": "On battle skill use, restores own HP by 2% of user's ATK.<br>On enemy break, increases SPD by 20% (2 turns) and ATK by 20% (2 turns).",
         "support_id": 95019,
         "support_target": "Attacker"
     },
@@ -1588,6 +1670,7 @@
         "role": "Attacker",
         "skill_id": 1075,
         "special_id": 1076,
+        "support_effect": "Increases DMG dealt when targeting elemental weakness by 25%.<br>With 2 or more enemies present, increases DMG dealt by 5%, plus an additional 5% for each enemy above 2.",
         "support_id": 95006,
         "support_target": "Attacker"
     },
@@ -1620,6 +1703,7 @@
         "role": "Healer",
         "skill_id": 1188,
         "special_id": 1189,
+        "support_effect": "Increases max HP by 10% and SPD by 12%.<br>On battle skill use, increases DMG dealt when targeting elemental weakness by 15% (2 turns).",
         "support_id": 95030,
         "support_target": "Healer"
     },
@@ -1651,6 +1735,7 @@
         "role": "Breaker",
         "skill_id": 1001,
         "special_id": 1002,
+        "support_effect": "Increases break bonus by 20%, and on enemy break, grants 5 MP.",
         "support_id": 95001,
         "support_target": "Light"
     },
@@ -1682,6 +1767,7 @@
         "role": "Breaker",
         "skill_id": 1040,
         "special_id": 1041,
+        "support_effect": "Increases SPD by 12%.",
         "support_id": 94001,
         "support_target": "Flame"
     },
@@ -1715,6 +1801,7 @@
         "role": "Breaker",
         "skill_id": 1095,
         "special_id": "",
+        "support_effect": "Increases SPD by 8%.",
         "support_id": 93004,
         "support_target": "Flame"
     },
@@ -1748,6 +1835,7 @@
         "role": "Attacker",
         "skill_id": 1109,
         "special_id": "",
+        "support_effect": "Increases ATK by 7.5%.",
         "support_id": 93013,
         "support_target": "Attacker"
     },
@@ -1781,6 +1869,7 @@
         "role": "Breaker",
         "skill_id": 1141,
         "special_id": "",
+        "support_effect": "Increases DEF by 7.5%.",
         "support_id": 93014,
         "support_target": "Breaker"
     },
@@ -1812,6 +1901,7 @@
         "role": "Attacker",
         "skill_id": 1037,
         "special_id": 1038,
+        "support_effect": "Increases ATK by 10%.",
         "support_id": 94002,
         "support_target": "Aqua"
     },
@@ -1845,6 +1935,7 @@
         "role": "Breaker",
         "skill_id": 1097,
         "special_id": "",
+        "support_effect": "Increases SPD by 8%.",
         "support_id": 93005,
         "support_target": "Aqua"
     },
@@ -1876,6 +1967,7 @@
         "role": "Attacker",
         "skill_id": 1128,
         "special_id": 1129,
+        "support_effect": "Increases ATK by 10%.",
         "support_id": 94016,
         "support_target": "Attacker"
     },
@@ -1908,6 +2000,7 @@
         "role": "Debuffer",
         "skill_id": 1034,
         "special_id": 1035,
+        "support_effect": "Increases SPD by 10% and ailment hit rate by 30%, and increases DMG dealt to enemies with at least 1 ailment by 2%.",
         "support_id": 95008,
         "support_target": "Debuffer"
     },
@@ -1939,6 +2032,7 @@
         "role": "Breaker",
         "skill_id": 1019,
         "special_id": 1020,
+        "support_effect": "Increases break gauge depletion (2) and increases break effect by 45%.",
         "support_id": 95003,
         "support_target": "Breaker"
     },
@@ -1970,6 +2064,7 @@
         "role": "Healer",
         "skill_id": 1203,
         "special_id": 1204,
+        "support_effect": "Increases HP recovery amount by 12%.<br>On basic attack, advances action order by 10%.",
         "support_id": 95035,
         "support_target": "Healer"
     },
@@ -2001,6 +2096,7 @@
         "role": "Defender",
         "skill_id": 1116,
         "special_id": 1117,
+        "support_effect": "Increases DEF by 10%.",
         "support_id": 94007,
         "support_target": "Defender"
     },
@@ -2033,6 +2129,7 @@
         "role": "Breaker",
         "skill_id": 1200,
         "special_id": 1201,
+        "support_effect": "Increases basic attack break gauge depletion (5).<br>On battle skill use, increases own SPD by 25% (2 turns).",
         "support_id": 95034,
         "support_target": "Breaker"
     },
@@ -2064,6 +2161,7 @@
         "role": "Attacker",
         "skill_id": 1045,
         "special_id": 1046,
+        "support_effect": "Increases special attack DMG dealt by 12% and ATK by 15%.",
         "support_id": 95017,
         "support_target": "Attacker"
     },
@@ -2095,6 +2193,7 @@
         "role": "Buffer",
         "skill_id": 1066,
         "special_id": 1067,
+        "support_effect": "Increases SPD by 12%.",
         "support_id": 94010,
         "support_target": "Buffer"
     },
@@ -2127,6 +2226,7 @@
         "role": "Buffer",
         "skill_id": 1016,
         "special_id": 1017,
+        "support_effect": "Increases SPD by 20%.<br>On battle skill use, advances all allies' action order by 5%.",
         "support_id": 95015,
         "support_target": "Buffer"
     },
@@ -2159,6 +2259,7 @@
         "role": "Buffer",
         "skill_id": 1007,
         "special_id": 1008,
+        "support_effect": "Increases SPD by 25%, and MP recovery rate by 10%.",
         "support_id": 95010,
         "support_target": "Forest"
     },
@@ -2190,6 +2291,7 @@
         "role": "Attacker",
         "skill_id": 1191,
         "special_id": 1192,
+        "support_effect": "When at least 1 enemy is present, increases ATK by 3%, plus 3% for each additional enemy (max 15%).<br>On battle skill use, increases DMG dealt when targeting elemental weakness by 25% (2 turns).",
         "support_id": 95031,
         "support_target": "Dark"
     },
@@ -2221,6 +2323,7 @@
         "role": "Debuffer",
         "skill_id": 1152,
         "special_id": 1153,
+        "support_effect": "Increases DMG dealt to enemies with at least 1 debuff by 15%.<br>Increases SPD by 15%.",
         "support_id": 95011,
         "support_target": "Dark"
     },
@@ -2252,6 +2355,7 @@
         "role": "Debuffer",
         "skill_id": 1069,
         "special_id": 1070,
+        "support_effect": "Increases SPD by 12%.",
         "support_id": 94011,
         "support_target": "Debuffer"
     },
@@ -2283,6 +2387,7 @@
         "role": "Defender",
         "skill_id": 1078,
         "special_id": 1079,
+        "support_effect": "Increases DEF by 15% and MP recovery rate by 10%.",
         "support_id": 95007,
         "support_target": "Defender"
     },
@@ -2314,6 +2419,7 @@
         "role": "Breaker",
         "skill_id": 1057,
         "special_id": 1058,
+        "support_effect": "Increases break effect by 30%.",
         "support_id": 94006,
         "support_target": "Breaker"
     },
@@ -2345,6 +2451,7 @@
         "role": "Attacker",
         "skill_id": 1048,
         "special_id": 1049,
+        "support_effect": "Increases critical rate by 5%.",
         "support_id": 94003,
         "support_target": "Attacker"
     },
@@ -2378,6 +2485,7 @@
         "role": "Healer",
         "skill_id": 1111,
         "special_id": "",
+        "support_effect": "Increases max HP by 5%.",
         "support_id": 93017,
         "support_target": "Healer"
     },
@@ -2409,6 +2517,7 @@
         "role": "Buffer",
         "skill_id": 1122,
         "special_id": 1123,
+        "support_effect": "Increases max HP by 10%.",
         "support_id": 94014,
         "support_target": "Light"
     }

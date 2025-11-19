@@ -10782,5 +10782,29 @@
         "compareTarget": 5,
         "compareValue": "0",
         "description": "味方全体のデバフ数が0以上"
+    },
+    {
+        "battleConditionMstId": 1356,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1007",
+        "description": "自分のキャラクターが「愛生まばゆ」"
+    },
+    {
+        "battleConditionMstId": 1357,
+        "compareContent": 12,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "UNIQUE_10070201",
+        "description": "自身が固有バフ(インビジブル)状態の場合"
+    },
+    {
+        "battleConditionMstId": 1358,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "22",
+        "description": "バトル開始から自分の行動が22回目以降"
     }
 ]

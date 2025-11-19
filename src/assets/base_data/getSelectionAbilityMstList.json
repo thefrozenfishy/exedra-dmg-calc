@@ -3853,5 +3853,20 @@
         "targetType": 2,
         "value1": 1150038,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "On basic attack, grants 2 MP.<br>While Invisible is applied to self:<br>On taking at least 1 DMG from an enemy attack, advances action order by 5%.",
+        "name": "Turned Out to Be a Wonderful Film",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 123,
+        "selectionAbilityMstId": 7039,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10070201,
+        "targetType": 2,
+        "value1": 1150039,
+        "value2": 0
     }
 ]

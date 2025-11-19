@@ -4,6 +4,8 @@ import { Character, KiokuElement } from "./KiokuTypes";
 export interface TeamSlot {
     main: Character | undefined
     support?: Character | undefined
+    buffMultReduction?: number
+    debuffMultReduction?: number
 }
 
 export interface FindBestTeamOptions {
@@ -23,7 +25,9 @@ export interface FindBestTeamOptions {
     optimalSubCrys: boolean
     enabledCharacters: Character[]
     buffMultReduction: number
+    offElementBuffMultReduction: number
     debuffMultReduction: number
+    offElementDebuffMultReduction: number
     attackerHealth: number
     onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number) => void,
     onError?: (error: any) => void

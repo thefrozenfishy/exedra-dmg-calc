@@ -57,6 +57,12 @@ export const useTeamStore = defineStore('team', {
     slots: Array(5).fill(null).map(() => ({})) as TeamSlot[]
   }),
   actions: {
+    setCharBuffReduction(index: number, value?: number) {
+      this.slots[index].buffMultReduction = value
+    },
+    setCharDebuffReduction(index: number, value?: number) {
+      this.slots[index].debuffMultReduction = value
+    },
     setMain(slotIndex: number, member: Character | undefined) {
       this.slots[slotIndex].main = correctCharacterParams(member)
       this.save()

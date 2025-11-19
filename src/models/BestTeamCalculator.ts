@@ -47,7 +47,7 @@ function getKioku({
     crys = [],
     crys_sub = [],
     buffMultReduction = 0,
-    debuffMultReduction = 0
+    debuffMultReduction = 0,
 }: KiokuGeneratorArgs): ScoreAttackKioku {
     const clearCrys = crys.filter(Boolean)
     const clearSubCrys = crys_sub.filter(Boolean)
@@ -102,13 +102,18 @@ export async function findBestTeam({
     minBreaker,
     optimalSubCrys,
     buffMultReduction,
+    offElementBuffMultReduction,
     debuffMultReduction,
+    offElementDebuffMultReduction,
     attackerHealth,
     onProgress,
     onError
 }: FindBestTeamOptions): Promise<any[]> {
-
-    const fetchKioku = (data: Character | KiokuGeneratorArgs | undefined): ScoreAttackKioku => getKioku({ ...data, debuffMultReduction, buffMultReduction })
+    const fetchKioku = (data: Character): ScoreAttackKioku => getKioku({
+        ...data,
+        buffMultReduction: weakElements.includes(data.element) ? buffMultReduction : offElementBuffMultReduction,
+        debuffMultReduction: weakElements.includes(data.element) ? debuffMultReduction : offElementDebuffMultReduction,
+    })
 
     const perAttackerResults: Record<string, any[]> = {}
     const availableChars: Record<KiokuRole, Character[]> = {

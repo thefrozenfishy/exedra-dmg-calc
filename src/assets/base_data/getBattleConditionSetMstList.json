@@ -10848,5 +10848,80 @@
         "battleConditionMstIdCsv": "1339,5,3,1332",
         "battleConditionSetMstId": 2191,
         "description": "自身がファントムトリック状態のとき+通常攻撃を発動したとき+攻撃した対象"
+    },
+    {
+        "battleConditionMstIdCsv": "1356",
+        "battleConditionSetMstId": 2192,
+        "description": "自分のキャラクターが「愛生まばゆ」"
+    },
+    {
+        "battleConditionMstIdCsv": "1357",
+        "battleConditionSetMstId": 2193,
+        "description": "自身が固有バフ(インビジブル)状態の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1357,6,962,1",
+        "battleConditionSetMstId": 2194,
+        "description": "自身が固有バフ(インビジブル)状態の場合+戦闘スキルを発動したとき+自分以外の味方"
+    },
+    {
+        "battleConditionMstIdCsv": "1357,5,962,1",
+        "battleConditionSetMstId": 2195,
+        "description": "自身が固有バフ(インビジブル)状態の場合+通常攻撃を発動したとき+自分以外の味方"
+    },
+    {
+        "battleConditionMstIdCsv": "1357,7,3",
+        "battleConditionSetMstId": 2196,
+        "description": "自身が固有バフ(インビジブル)状態の場合+必殺技を発動したとき+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "1357,7,962,1",
+        "battleConditionSetMstId": 2197,
+        "description": "自身が固有バフ(インビジブル)状態の場合+必殺技を発動したとき+自分以外の味方"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,7",
+        "battleConditionSetMstId": 2198,
+        "description": "自身以外の味方が必殺技発動時"
+    },
+    {
+        "battleConditionMstIdCsv": "25,1357",
+        "battleConditionSetMstId": 2199,
+        "description": "自分が1以上のダメージを受けた+自身が固有バフ(インビジブル)状態の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1358",
+        "battleConditionSetMstId": 2200,
+        "description": "バトル開始から自分の行動が22回目以降"
+    },
+    {
+        "battleConditionMstIdCsv": "292",
+        "battleConditionSetMstId": 2205,
+        "description": "自分は火属性"
+    },
+    {
+        "battleConditionMstIdCsv": "294",
+        "battleConditionSetMstId": 2206,
+        "description": "自分は水属性"
+    },
+    {
+        "battleConditionMstIdCsv": "295",
+        "battleConditionSetMstId": 2207,
+        "description": "自分は木属性"
+    },
+    {
+        "battleConditionMstIdCsv": "296",
+        "battleConditionSetMstId": 2208,
+        "description": "自分は光属性"
+    },
+    {
+        "battleConditionMstIdCsv": "297",
+        "battleConditionSetMstId": 2209,
+        "description": "自分は闇属性"
+    },
+    {
+        "battleConditionMstIdCsv": "298",
+        "battleConditionSetMstId": 2210,
+        "description": "自分は無属性"
     }
 ]

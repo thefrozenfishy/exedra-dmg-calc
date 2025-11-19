@@ -95,12 +95,14 @@ const teamInstance = computed(() => {
   try {
     const transformedMembers = team.slots.map(m => {
       const support = m.support ? new ScoreAttackKioku({ ...m.support }) : null
-      return new ScoreAttackKioku({
-        ...m.main,
-        supportKey: support?.getKey()
-      } as KiokuArgs,
-        buffMultReduction.value,
-        debuffMultReduction.value,
+
+      return new ScoreAttackKioku(
+        {
+          ...m.main,
+          supportKey: support?.getKey()
+        } as KiokuArgs,
+        (m.buffMultReduction || buffMultReduction.value) ?? 0,
+        (m.debuffMultReduction || debuffMultReduction.value) ?? 0,
       )
     }) as ScoreAttackKioku[]
     return new ScoreAttackTeam(transformedMembers[attackerIndex], transformedMembers.filter((v, i) => i !== attackerIndex), attackerHealth.value, true)

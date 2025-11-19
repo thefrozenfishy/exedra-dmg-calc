@@ -57,20 +57,36 @@
 import { FinalTeam } from '../types/BestTeamTypes';
 import { portraits } from '../utils/helpers';
 import { useTeamStore } from '../store/singleTeamStore';
-import { KiokuConstants } from '../types/KiokuTypes';
+import { KiokuConstants, KiokuElement } from '../types/KiokuTypes';
 import { useRouter } from 'vue-router'
 
-const props = defineProps<{ team: FinalTeam, loading: boolean, optimalSubCrys: boolean }>()
+const props = defineProps<{
+    team: FinalTeam,
+    weakElements?: { name: KiokuElement, enabled: boolean }[],
+    offElementBuffMultReduction?: number,
+    offElementDebuffMultReduction?: number
+    loading: boolean,
+    optimalSubCrys: boolean
+}>()
 const teamStore = useTeamStore()
 const router = useRouter()
 
 function saveToStore(idx: number) {
-    const { team } = props
+    const { team, weakElements, offElementBuffMultReduction, offElementDebuffMultReduction } = props
+    const offElements = weakElements!.filter(w => w.enabled).map(w => w.name)
     teamStore.setMain(0, { ...team.supp1, crys: ["EX"] })
     teamStore.setSupport(0, team.supp1supp)
+    if (!offElements.includes(team.supp1.element)) {
+        teamStore.setCharBuffReduction(0, offElementBuffMultReduction)
+        teamStore.setCharDebuffReduction(0, offElementDebuffMultReduction)
+    }
 
     teamStore.setMain(1, { ...team.supp2, crys: ["EX"] })
     teamStore.setSupport(1, team.supp2supp)
+    if (!offElements.includes(team.supp2.element)) {
+        teamStore.setCharBuffReduction(1, offElementBuffMultReduction)
+        teamStore.setCharDebuffReduction(1, offElementDebuffMultReduction)
+    }
 
     teamStore.setMain(2, {
         ...team.attacker,
@@ -82,9 +98,17 @@ function saveToStore(idx: number) {
 
     teamStore.setMain(3, { ...team.supp3, crys: ["EX"] })
     teamStore.setSupport(3, team.supp3supp)
+    if (!offElements.includes(team.supp3.element)) {
+        teamStore.setCharBuffReduction(3, offElementBuffMultReduction)
+        teamStore.setCharDebuffReduction(3, offElementDebuffMultReduction)
+    }
 
     teamStore.setMain(4, { ...team.supp4, crys: ["EX"] })
     teamStore.setSupport(4, team.supp4supp)
+    if (!offElements.includes(team.supp4.element)) {
+        teamStore.setCharBuffReduction(4, offElementBuffMultReduction)
+        teamStore.setCharDebuffReduction(4, offElementDebuffMultReduction)
+    }
 
     router.push('/sa-simulator-single')
 }

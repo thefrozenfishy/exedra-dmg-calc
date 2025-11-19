@@ -33,9 +33,29 @@
                 <input type="number" v-model.number="buffMultReduction" step="1" />
             </label>
 
+            <div class="input-with-clear">
+                <label>Off-Element Buff Bonus Reduction (%):
+                    <input type="number" v-model.number="offElementBuffMultReduction" />
+                    <button class="clear-button" @click="clearBuff" v-if="offElementBuffMultReduction != null">
+                        ✖
+                    </button>
+                    <div v-else style="padding: 1em; display: inline;"> </div>
+                </label>
+            </div>
+
             <label>Debuff Bonus Reduction (%):
                 <input type="number" v-model.number="debuffMultReduction" step="1" />
             </label>
+
+            <div class="input-with-clear">
+                <label>Off-Element Debuff Bonus Reduction (%):
+                    <input type="number" v-model.number="offElementDebuffMultReduction" />
+                    <button class="clear-button" @click="clearDebuff" v-if="offElementDebuffMultReduction != null">
+                        ✖
+                    </button>
+                    <div v-else style="padding: 1em; display: inline;"> </div>
+                </label>
+            </div>
 
             <label>Attacker HP when using ultimate (%):
                 <input type="number" v-model.number="attackerHealth" step="1" />
@@ -106,7 +126,6 @@
                 These are Kioku that do not have any dmg boosting effects, and by default will be ignored to speed up
                 computing time
 
-                <!-- Selected list -->
                 <div class="selected-kioku">
                     <div @click="removeIgnoredKioku(char)" v-for="char in ignoredKioku" :key="char.id" class="chip">
                         <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
@@ -114,7 +133,6 @@
                     </div>
                 </div>
 
-                <!-- Input + dropdown -->
                 <div class="kioku-select">
                     <input type="text" v-model="ignoredKiokuQuery"
                         placeholder="Kioku that will be ignored during calculations..."
@@ -131,7 +149,6 @@
             <div class="kioku-selector">
                 <h3>Obligatory Kioku</h3>
 
-                <!-- Selected list -->
                 <div class="selected-kioku">
                     <div @click="removeObligatoryKioku(char)" v-for="char in obligatoryKioku" :key="char.id"
                         class="chip">
@@ -140,7 +157,6 @@
                     </div>
                 </div>
 
-                <!-- Input + dropdown -->
                 <div class="kioku-select">
                     <input type="text" v-model="obligatoryKiokuQuery"
                         placeholder="Kioku that must be included in final team..."
@@ -157,7 +173,6 @@
             <div class="kioku-selector">
                 <h3>Non-Attacker Damage Dealers</h3>
 
-                <!-- Selected list -->
                 <div class="selected-kioku">
                     <div @click="removeExtraAttacker(char)" v-for="char in extraAttackers" :key="char.id" class="chip">
                         <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
@@ -165,7 +180,6 @@
                     </div>
                 </div>
 
-                <!-- Input + dropdown -->
                 <div class="kioku-select">
                     <input type="text" v-model="extraAttackerQuery"
                         placeholder="Use non-attackers as extra damage dealers, by default only attackers are checked..."
@@ -198,14 +212,16 @@
             <div class="results ">
                 <h2>Top Teams Overall</h2>
                 <div class="team-row-wrapper" v-for="(team, idx) in topResults" :key="idx">
-                    <TeamRow :team :loading="false" :optimalSubCrys />
+                    <TeamRow :team :weakElements :offElementBuffMultReduction :offElementDebuffMultReduction
+                        :loading="false" :optimalSubCrys />
                 </div>
 
                 <div v-for="[attackerName, teams] of topTeamsByAttacker" :key="attackerName" class="attacker-section">
                     <div v-if="teams?.length">
                         <h3>Top Teams for {{ attackerName }}</h3>
                         <div class="team-row-wrapper" v-for="(team, idx) in teams" :key="idx">
-                            <TeamRow :team :loading="false" :optimalSubCrys />
+                            <TeamRow :team :weakElements :offElementBuffMultReduction :offElementDebuffMultReduction
+                                :loading="false" :optimalSubCrys />
                         </div>
                     </div>
                 </div>
@@ -248,6 +264,14 @@ const include4StarSupports = useSetting("include4StarSupports", false)
 const include4StarOthers = useSetting("include4StarOthers", false)
 const buffMultReduction = useSetting("buffMultReduction", 0);
 const debuffMultReduction = useSetting("debuffMultReduction", 0);
+const offElementBuffMultReduction = useSetting("offElementBuffMultReduction", undefined);
+const clearBuff = () => {
+    offElementBuffMultReduction.value = undefined;
+};
+const offElementDebuffMultReduction = useSetting("offElementDebuffMultReduction", undefined);
+const clearDebuff = () => {
+    offElementDebuffMultReduction.value = undefined;
+};
 const attackerHealth = useSetting("attackerHealth", 100);
 const optimalSubCrys = useSetting("optimalSubCrys", true)
 
@@ -464,7 +488,9 @@ async function startSimulation() {
             optimalSubCrys: optimalSubCrys.value,
             enabledCharacters: JSON.parse(JSON.stringify(members.value)),
             buffMultReduction: buffMultReduction.value,
+            offElementBuffMultReduction: offElementBuffMultReduction.value,
             debuffMultReduction: debuffMultReduction.value,
+            offElementDebuffMultReduction: offElementDebuffMultReduction.value,
             attackerHealth: attackerHealth.value,
         }
     })
@@ -661,5 +687,17 @@ async function startSimulation() {
 
 .gallery-page {
     padding-bottom: 400px;
+}
+
+.input-with-clear {
+    position: relative;
+    gap: 2rem;
+}
+
+.clear-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0 0 0 1em;
 }
 </style>

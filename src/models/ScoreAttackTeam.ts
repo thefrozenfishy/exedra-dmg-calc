@@ -77,6 +77,7 @@ const skippable = new Set([
     "TSUBAME_CORE",
     "TSUBAME_LINK",
     "UNIQUE_10030301",
+    "UNIQUE_10070201",
     "UNIQUE_BUFF",
     "UNIQUE_DEBUFF",
     "UP_ABNORMAL_HIT_RATE_RATIO",

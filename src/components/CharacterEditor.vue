@@ -1,8 +1,6 @@
 <template>
-  <!-- Main character selector -->
   <CharacterSelector :selected="slot.main" @select="(member: Character) => setMain(index, member)" />
 
-  <!-- Stats -->
   <div v-if="slot.main" class="stats">
     <StatInputs :member="slot.main" :isSupport="false" @update="setMain(index, $event)" />
   </div>
@@ -42,14 +40,34 @@
       <SubCrystalisSelector v-model="slot.main.crys_sub" />
     </label>
   </div>
-
-  <!-- Only show support selector if main exists -->
-  <div v-if="slot.main" class="support-section">
-    <h3>Support</h3>
-    <CharacterSelector :selected="slot.support" :main="slot.main" @select="(member: Character) => setSupport(index, member)" />
+  <div v-if="!extraData">
+    <h3>Effect Overrides</h3>
+    <div class="team-page">
+      <div key="buffMultReduction">
+        <label>Buff Bonus Reduction (%):
+          <div class="input-with-clear">
+            <input type="number" v-model.number="slot.buffMultReduction" @change="applyBuff" />
+            <button class="clear-btn" @click="clearBuff" v-if="slot.buffMultReduction != null">✖</button>
+          </div>
+        </label>
+      </div>
+      <div key="buffMultReduction">
+        <label>Debuff Bonus Reduction (%):
+          <div class="input-with-clear">
+            <input type="number" v-model.number="slot.debuffMultReduction" @change="applyDebuff" />
+            <button class="clear-btn" @click="clearDebuff" v-if="slot.debuffMultReduction != null">✖</button>
+          </div>
+        </label>
+      </div>
+    </div>
   </div>
 
-  <!-- Stats -->
+  <div v-if="slot.main" class="support-section">
+    <h3>Support</h3>
+    <CharacterSelector :selected="slot.support" :main="slot.main"
+      @select="(member: Character) => setSupport(index, member)" />
+  </div>
+
   <div v-if="slot.support" class="stats">
     <StatInputs :member="slot.support" :isSupport="true" @update="setSupport(index, $event)" />
   </div>
@@ -76,6 +94,21 @@ const props = defineProps<{
   onChangeSubCrys: (charIdx: number, crysIdx: number, rawValue: string) => void
 }>()
 
+function applyBuff() {
+  props.slot.buffMultReduction = Number(props.slot.buffMultReduction ?? 0)
+}
+
+function applyDebuff() {
+  props.slot.debuffMultReduction = Number(props.slot.debuffMultReduction ?? 0)
+}
+
+function clearBuff() {
+  props.slot.buffMultReduction = undefined
+}
+
+function clearDebuff() {
+  props.slot.debuffMultReduction = undefined
+}
 
 </script>
 
@@ -88,5 +121,12 @@ const props = defineProps<{
 
 .stats select {
   width: 90%;
+}
+
+.input-with-clear {
+  display: flex;
+  position: relative;
+  align-items: center;
+  gap: 2rem;
 }
 </style>
