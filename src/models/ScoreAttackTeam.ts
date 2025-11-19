@@ -139,8 +139,14 @@ export class ScoreAttackTeam {
             [true, this.dps],
             ...this.team.map(t => [false, t] as [boolean, ScoreAttackKioku])
         ];
-        for (const [isDps, kioku] of members) {
-            kioku.effects.forEach(detail => {this.activeBuffsAndDebuffs.push(detail.abilityEffectType)})
+        for (const [_, kioku] of members) {
+            kioku.effects = kioku.effects.filter(detail => {
+                if (Aliment.WEAKNESS === detail.abilityEffectType && !(this.activeBuffsAndDebuffs.includes(Aliment.WEAKNESS))) {
+                    return false;
+                }
+                this.activeBuffsAndDebuffs.push(detail.abilityEffectType)
+                return true;
+            })
         }
         for (const [isDps, kioku] of members) {
             this.debugTexts[kioku.name] = {}
@@ -185,12 +191,6 @@ export class ScoreAttackTeam {
                 })
             }
         }
-        if ("WEAKNESS" in this.all_effects && !(this.activeBuffsAndDebuffs.includes(Aliment.WEAKNESS))) {
-            delete this.all_effects["WEAKNESS"]
-            for (const kioku of [...this.team, this.dps]) {
-                delete this.debugTexts[kioku.name]["WEAKNESS"]
-            }
-        }
 
         if (this.debug) {
             console.log("Total effects", Object.fromEntries(Object.entries(this.all_effects).filter(
@@ -228,8 +228,8 @@ export class ScoreAttackTeam {
         const debugTexts = ["", "", "", "", ""];
         for (const i of [EnemyTargetTypes.TARGET, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.L_OTHER, EnemyTargetTypes.R_OTHER]) {
             [dmg, avg_dmg, critRate, debugText, enemyDied] = this.calculate_single_dmg(i, this.memberForLog(i), enemies[i], amountOfEnemies, atk_down)
-            total_dmg += dmg | 0
-            average_dmg += avg_dmg | 0
+            total_dmg += dmg
+            average_dmg += avg_dmg
             if (enemies[i].enabled && enemyDied) amountOfEnemies -= 1
             debugTexts[i] = debugText
         }
@@ -468,6 +468,6 @@ KIOKU EFFECTS:
 ${effects.join("\n")}`;
         }
 
-        return [total | 0, average_total, crit_rate, debugText, enemyDied];
+        return [total | 0, average_total | 0, crit_rate, debugText, enemyDied];
     }
 }
