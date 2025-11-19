@@ -10,6 +10,16 @@
             <h2>Simulation Options</h2>
 
             <label>
+                Top Teams to display
+                <input type="number" v-model="topTeams" />
+            </label>
+
+            <label>
+                Top Teams to display per dps
+                <input type="number" v-model="topTeamsPerKioku" />
+            </label>
+
+            <label>
                 <input type="checkbox" v-model="include4StarAttackers" />
                 Include 4★ Attackers
             </label>
@@ -271,6 +281,8 @@ const defaultIgnoredKioku = members.value.filter(c => ["Nightmare Stinger", "Lyn
 const workerRef = ref<Worker | null>(null)
 const progress = ref<FinalTeam>({})
 
+const topTeamsPerKioku = useSetting("topTeamsPerKioku", 5)
+const topTeams = useSetting("topTeamsPerKioku", 20)
 const include4StarAttackers = useSetting("include4StarAttackers", false)
 const include4StarSupports = useSetting("include4StarSupports", false)
 const include4StarOthers = useSetting("include4StarOthers", false)
@@ -456,13 +468,13 @@ function mergeCells(results: any[]): ConsolidatedFinalTeam[] {
     return merged.map(populateTeam);
 };
 
-const topResults = computed(() => mergeCells(sortedResults.value).slice(0, 20))
+const topResults = computed(() => mergeCells(sortedResults.value).slice(0, topTeams.value))
 
 const topTeamsByAttacker = computed(() => {
     const map: Record<string, ConsolidatedFinalTeam[]> = {}
     prevAttackers.forEach(a => {
         const results = sortedResults.value.filter(r => r[2] === a.name)
-        if (results.length) map[a.name] = mergeCells(sortedResults.value.filter(r => r[2] === a.name)).slice(0, 5)
+        if (results.length) map[a.name] = mergeCells(sortedResults.value.filter(r => r[2] === a.name)).slice(0, topTeamsPerKioku.value)
     })
     const highestAtk = Object.fromEntries(Object.entries(map).map(([a, b]) => [a, Math.max(...b.map(t => t.dmg[0]))]))
     return Object.entries(map).sort((a, b) => highestAtk[b[0]] - highestAtk[a[0]])
