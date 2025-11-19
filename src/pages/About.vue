@@ -9,11 +9,9 @@
             boxes</p>
         <p>By default only attackers are tested, but if you want to use a non-Attacker as attacker in the simulator
             simply add them to extra attackers</p>
-        <p>Hits to kill is there to reflect a quick in the code, where the amount of enemies are calculated separately
+        <p>Hits to kill is there to reflect a quirk in the code, where the amount of enemies are calculated separately
             for each enemy, meaning that Oriko support, Momoko EX etc will do less damage to other enemies if any of the
             former are killed. You can test the effect in Single Team Calculator</p>
-        <p>Note that it always assumes the +10% crit dmg and +60 ATK substats are chosen on the crystalises, as these
-            are the only ones increasing damage done</p>
         <h2>Simulate Single Battle</h2>
         <p>Here you can set up a concrete battle, and see how minor changes affects the total damage dealt. The settings
             are otherwise identical to the previous pages. Changes done to Kioku here do not overwrite your defaults, so
@@ -25,7 +23,7 @@
         <h1>Known Issues</h1>
         <ul>
             <li>Melodia Appassionata (Swimsuit Sayaka) vortex are not added to the calculation</li>
-            <li>Luce della Speranza (Ui) not added to the calculation</li>
+            <li>Luce della Speranza (Ui) ult not added to the calculation</li>
         </ul>
         <h1>Potentially planned improvements</h1>
         <ul>
