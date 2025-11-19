@@ -1,6 +1,6 @@
 import battleConditionSetsJson from '../assets/base_data/getBattleConditionSetMstList.json';
 import battleConditionsJson from '../assets/base_data/getBattleConditionMstList.json';
-import { BattleState, PassiveSkill, SkillDetail } from '../types/KiokuTypes';
+import { Aliment, BattleState, PassiveSkill, SkillDetail } from '../types/KiokuTypes';
 
 interface BattleCondition {
     battleConditionMstId: number
@@ -152,7 +152,7 @@ Object.values(battleConditions).forEach(c => {
     }
 })
 
-const isCondActive = (cond: BattleCondition, valueToCompareTo: string | number): boolean => {
+const isCondActive = (cond: BattleCondition, valueToCompareTo: string | number | any[]): boolean => {
     if (cond.compareOperator === CompareOperator.EQUAL) {
         return valueToCompareTo == cond.compareValue
     }
@@ -172,10 +172,10 @@ const isCondActive = (cond: BattleCondition, valueToCompareTo: string | number):
         return valueToCompareTo <= cond.compareValue
     }
     if (cond.compareOperator === CompareOperator.CONTAIN) {
-        return cond.compareValue.includes(valueToCompareTo.toString())
+        return valueToCompareTo.includes(cond.compareValue)
     }
     if (cond.compareOperator === CompareOperator.NOT_CONTAIN) {
-        return !cond.compareValue.includes(valueToCompareTo.toString())
+        return !valueToCompareTo.includes(cond.compareValue)
     }
     return true;
 }
@@ -202,7 +202,7 @@ export const isStartCondRelevantForScoreAttack = (startConditionId: string, maxM
     return true;
 }
 
-export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: string, attackerHealth: number): boolean | Function => {
+export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: string, attackerHealth: number, activeAliments: Aliment[]): boolean | Function => {
     if (!activeConditionSetId || activeConditionSetId === "0") return true
 
     const battleConditionSet = battleConditionSets[activeConditionSetId]
@@ -219,6 +219,9 @@ export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: st
         if (battleCondition.compareContent === CompareContent.ALIVE_UNIT_COUNT) {
             // NOTE: This is incorrect as it breaks the loop, but unlikely that it actually matters ever
             return lateGetIsActiveCond(battleCondition)
+        }
+        if (battleCondition.compareContent === CompareContent.ABILITY_EFFECT) {
+            if (!isCondActive(battleCondition, activeAliments)) return false
         }
         if (battleCondition.compareContent === CompareContent.BREAKED_DAMAGE_RECEIVE_RATE) {
             return lateGetIsActiveCond(battleCondition)

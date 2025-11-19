@@ -37,6 +37,17 @@
         <input type="number" v-model.number="attackerHealth" step="1" />
       </label>
     </div>
+    <div class="weak-elements">
+      <h4>Active aliments</h4>
+      <div class="aliment-grid">
+        <div v-for="aliment in aliments" :key="aliment.name" class="aliment" :class="{ disabled: !aliment.enabled }"
+          @click="aliment.enabled = !aliment.enabled">
+          <img :src="`/exedra-dmg-calc/aliments/${aliment.display}.png`" :alt="aliment.display"
+            :title="aliment.display" />
+          <span>{{ aliment.display }}</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="team-page">
@@ -50,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, reactive } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
 import { ScoreAttackTeam } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
@@ -58,7 +69,7 @@ import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
 import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
 import { useSetting } from '../store/settingsStore'
-import { KiokuArgs } from '../types/KiokuTypes'
+import { Aliment, KiokuArgs } from '../types/KiokuTypes'
 
 const attackerIndex = 2
 
@@ -105,7 +116,13 @@ const teamInstance = computed(() => {
         (m.debuffMultReduction || debuffMultReduction.value) ?? 0,
       )
     }) as ScoreAttackKioku[]
-    return new ScoreAttackTeam(transformedMembers[attackerIndex], transformedMembers.filter((v, i) => i !== attackerIndex), attackerHealth.value, true)
+    return new ScoreAttackTeam(
+      transformedMembers[attackerIndex],
+      transformedMembers.filter((v, i) => i !== attackerIndex),
+      attackerHealth.value,
+      aliments.filter(el => el.enabled).map(el => el.name),
+      true
+    )
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
     console.error(err)
@@ -120,6 +137,16 @@ const battleOutput = computed(() => {
   return teamInstance.value.calculate_max_dmg(enemies.enemies, 0)
 })
 
+const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1).toLowerCase()
+const aliments = reactive([
+  { name: Aliment.BURN, display: capitalize(Aliment.BURN), enabled: useSetting("burn-enabled", true) },
+  { name: Aliment.WEAKNESS, display: capitalize(Aliment.WEAKNESS), enabled: useSetting("weakness-enabled", true) },
+  { name: Aliment.POISON, display: capitalize(Aliment.POISON), enabled: useSetting("poison-enabled", true) },
+  { name: Aliment.STUN, display: capitalize(Aliment.STUN), enabled: useSetting("stun-enabled", true) },
+  { name: Aliment.CURSE, display: capitalize(Aliment.CURSE), enabled: useSetting("curse-enabled", true) },
+  { name: Aliment.WOUND, display: capitalize(Aliment.WOUND), enabled: useSetting("wound-enabled", true) },
+  { name: Aliment.VORTEX, display: capitalize(Aliment.VORTEX), enabled: useSetting("vortex-enabled", true) },
+])
 </script>
 
 <style scoped>
@@ -162,5 +189,29 @@ const battleOutput = computed(() => {
 
 .stats select {
   width: 90%;
+}
+
+.aliment-grid {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.aliment {
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.3s;
+}
+
+.aliment img {
+  width: 30px;
+  height: 30px;
+  display: block;
+  margin: 0 auto;
+}
+
+.aliment.disabled {
+  opacity: 0.3;
 }
 </style>

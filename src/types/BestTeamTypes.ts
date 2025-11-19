@@ -1,5 +1,5 @@
 import { Enemy } from "./EnemyTypes";
-import { Character, KiokuElement } from "./KiokuTypes";
+import { Aliment, Character, KiokuElement } from "./KiokuTypes";
 
 export interface TeamSlot {
     main: Character | undefined
@@ -17,6 +17,7 @@ export interface FindBestTeamOptions {
     obligatoryKioku: string[];
     ignoredKioku: string[];
     weakElements: KiokuElement[]
+    activeAliments: Aliment[]
     deBufferCount: number
     otherCount: number
     minHealer: number

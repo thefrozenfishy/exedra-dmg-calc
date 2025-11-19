@@ -111,12 +111,24 @@
 
             <div class="weak-elements">
                 <h3>Weak Elements</h3>
-                <div class="element-grid">
+                <div class="element-aliment-grid">
                     <div v-for="element in weakElements" :key="element.name" class="element"
-                        :class="{ disabled: !element.enabled }" @click="element.enabled = !element.enabled">
+                        :class="{ disabled: !element.enabled }" @click="toggleElement(element)">
                         <img :src="`/exedra-dmg-calc/elements/${element.name}.png`" :alt="element.name"
                             :title="element.name" />
                         <span>{{ element.name }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="weak-elements">
+                <h3>Active aliments</h3>
+                <div class="element-aliment-grid">
+                    <div v-for="aliment in aliments" :key="aliment.name" class="aliment"
+                        :class="{ disabled: !aliment.enabled }" @click="aliment.enabled = !aliment.enabled">
+                        <img :src="`/exedra-dmg-calc/aliments/${aliment.display}.png`" :alt="aliment.display"
+                            :title="aliment.display" />
+                        <span>{{ aliment.display }}</span>
                     </div>
                 </div>
             </div>
@@ -231,12 +243,12 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, computed, ref, ComputedRef } from 'vue'
+import { reactive, computed, ref, ComputedRef, watch } from 'vue'
 import TeamRow from '../components/TeamRow.vue'
 import EnemySelector from '../components/EnemySelector.vue'
 import { useEnemyStore } from '../store/singleTeamStore'
 import { useCharacterStore } from '../store/characterStore'
-import { KiokuRole, Character, KiokuElement } from '../types/KiokuTypes'
+import { KiokuRole, Character, KiokuElement, Aliment, elementAlimentMap } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
 import { ConsolidatedFinalTeam, FinalTeam } from '../types/BestTeamTypes'
 import { useSetting } from '../store/settingsStore'
@@ -284,6 +296,21 @@ const weakElements = reactive([
     { name: KiokuElement.Void, enabled: useSetting("void-enabled", true) },
 ])
 
+const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1).toLowerCase()
+const aliments = reactive([
+    { name: Aliment.BURN, display: capitalize(Aliment.BURN), enabled: useSetting("burn-enabled", true) },
+    { name: Aliment.WEAKNESS, display: capitalize(Aliment.WEAKNESS), enabled: useSetting("weakness-enabled", true) },
+    { name: Aliment.POISON, display: capitalize(Aliment.POISON), enabled: useSetting("poison-enabled", true) },
+    { name: Aliment.STUN, display: capitalize(Aliment.STUN), enabled: useSetting("stun-enabled", true) },
+    { name: Aliment.CURSE, display: capitalize(Aliment.CURSE), enabled: useSetting("curse-enabled", true) },
+    { name: Aliment.WOUND, display: capitalize(Aliment.WOUND), enabled: useSetting("wound-enabled", true) },
+    { name: Aliment.VORTEX, display: capitalize(Aliment.VORTEX), enabled: useSetting("vortex-enabled", true) },
+])
+
+const toggleElement = element => {
+    element.enabled = !element.enabled;
+    aliments.find(a => a.name === elementAlimentMap[element.name]).enabled = element.enabled;
+};
 
 const deBufferCount = useSetting("deBufferCount", 3)
 const otherCount = computed(() => 4 - deBufferCount.value)
@@ -477,6 +504,7 @@ async function startSimulation() {
             include4StarSupports: include4StarSupports.value,
             include4StarOthers: include4StarOthers.value,
             weakElements: weakElements.filter(el => el.enabled).map(el => el.name),
+            activeAliments: aliments.filter(el => el.enabled).map(el => el.name),
             extraAttackers: extraAttackersVal,
             obligatoryKioku: obligatoryKiokuVal,
             ignoredKioku: ignoredKiokuVal,
@@ -513,14 +541,15 @@ async function startSimulation() {
     margin-top: 0.5rem;
 }
 
-.element-grid {
+.element-aliment-grid {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-.element {
+.element,
+.aliment {
     cursor: pointer;
     text-align: center;
     transition: opacity 0.3s;
@@ -533,7 +562,15 @@ async function startSimulation() {
     margin: 0 auto;
 }
 
-.element.disabled {
+.aliment img {
+    width: 30px;
+    height: 30px;
+    display: block;
+    margin: 0 auto;
+}
+
+.element.disabled,
+.aliment.disabled {
     opacity: 0.3;
 }
 

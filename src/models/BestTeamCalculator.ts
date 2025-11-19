@@ -92,6 +92,7 @@ export async function findBestTeam({
     include4StarOthers,
     extraAttackers,
     weakElements,
+    activeAliments,
     enabledCharacters,
     obligatoryKioku,
     ignoredKioku,
@@ -243,7 +244,8 @@ export async function findBestTeam({
                                                         crys: optimalSubCrys ? ["EX"] : s.crys,
                                                         supportKey: supportSupport[i],
                                                     })!),
-                                                    attackerHealth
+                                                    attackerHealth,
+                                                    activeAliments
                                                 );
 
                                                 const [dmg, _, critRate] = team.calculate_max_dmg(enemies, 0)

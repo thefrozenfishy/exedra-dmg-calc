@@ -18,6 +18,25 @@ export enum KiokuElement {
     Void = "Void"
 }
 
+export enum Aliment {
+    BURN = "BURN",
+    CURSE = "CURSE",
+    POISON = "POISON",
+    STUN = "STUN",
+    VORTEX = "VORTEX",
+    WEAKNESS = "WEAKNESS",
+    WOUND = "BLEED",
+}
+
+export const elementAlimentMap: Record<KiokuElement, Aliment> = {
+    [KiokuElement.Flame]: Aliment.BURN,
+    [KiokuElement.Aqua]: Aliment.WEAKNESS,
+    [KiokuElement.Forest]: Aliment.POISON,
+    [KiokuElement.Light]: Aliment.STUN,
+    [KiokuElement.Dark]: Aliment.CURSE,
+    [KiokuElement.Void]: Aliment.WOUND,
+};
+
 export enum KiokuRole {
     Attacker = "Attacker",
     Buffer = "Buffer",

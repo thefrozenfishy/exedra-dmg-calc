@@ -70,6 +70,8 @@ export class ScoreAttackKioku extends Kioku {
             }
             return { ...e, value1: v }
         }));
+        if (this.buffMult < 0) this.buffMult = 0;
+        if (this.debuffMult < 0) this.debuffMult = 0;
     }
 
     addEffect(map: Record<any, SkillDetail>, key: SkillKey, id: number, lvl: number, affectedByMult: boolean) {
