@@ -202,7 +202,7 @@ export const isStartCondRelevantForScoreAttack = (startConditionId: string, maxM
     return true;
 }
 
-export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: string, attackerHealth: number, activeAliments: Aliment[]): boolean | Function => {
+export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: string, attackerHealth: number, activeAliments: string[]): boolean | Function => {
     if (!activeConditionSetId || activeConditionSetId === "0") return true
 
     const battleConditionSet = battleConditionSets[activeConditionSetId]
