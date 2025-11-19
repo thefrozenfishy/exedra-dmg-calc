@@ -120,7 +120,7 @@ export class ScoreAttackTeam {
     private extra_effects: Record<string, [Function, number][]> = {};
     private debug: boolean;
     private attackerHealth: number;
-    private activeAliments: Aliment[];
+    private activeBuffsAndDebuffs: string[];
     private debugTexts: Record<string, Record<string, [SkillDetail, number][]>> = {}
 
     constructor(dps: ScoreAttackKioku, team: ScoreAttackKioku[], attackerHealth: number, activeAliments: Aliment[], debug = false) {
@@ -128,7 +128,7 @@ export class ScoreAttackTeam {
         this.dps = dps;
         this.debug = debug;
         this.attackerHealth = attackerHealth;
-        this.activeAliments = activeAliments;
+        this.activeBuffsAndDebuffs = activeAliments;
         this.all_effects["DWN_DEF_ACCUM_RATIO"] = 1
         this.all_effects["DWN_DEF_RATIO"] = 1
         this.setup();
@@ -139,6 +139,9 @@ export class ScoreAttackTeam {
             [true, this.dps],
             ...this.team.map(t => [false, t] as [boolean, ScoreAttackKioku])
         ];
+        for (const [isDps, kioku] of members) {
+            kioku.effects.forEach(detail => {this.activeBuffsAndDebuffs.push(detail.abilityEffectType)})
+        }
         for (const [isDps, kioku] of members) {
             this.debugTexts[kioku.name] = {}
             for (const detail of kioku.effects) {
@@ -156,7 +159,7 @@ export class ScoreAttackTeam {
                 valueTotal *= detail.value2 || 1
 
                 detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
-                    const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId, this.attackerHealth, this.activeAliments)
+                    const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId, this.attackerHealth, this.activeBuffsAndDebuffs)
                     if (typeof (isActiveCond) === 'boolean') {
                         if (isActiveCond) {
                             if (detail.abilityEffectType in this.all_effects) {
@@ -182,7 +185,7 @@ export class ScoreAttackTeam {
                 })
             }
         }
-        if ("WEAKNESS" in this.all_effects && !(this.activeAliments.includes(Aliment.WEAKNESS))) {
+        if ("WEAKNESS" in this.all_effects && !(this.activeBuffsAndDebuffs.includes(Aliment.WEAKNESS))) {
             delete this.all_effects["WEAKNESS"]
             for (const kioku of [...this.team, this.dps]) {
                 delete this.debugTexts[kioku.name]["WEAKNESS"]
@@ -257,7 +260,7 @@ export class ScoreAttackTeam {
             if (!detail.abilityEffectType.startsWith("DMG_")) continue
             if (detail.abilityEffectType.includes("DEF")) uses_def = true
             detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
-                const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId, this.attackerHealth, this.activeAliments)
+                const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId, this.attackerHealth, this.activeBuffsAndDebuffs)
                 if (typeof (isActiveCond) === 'boolean') {
                     if (!isActiveCond) return
                 } else {
