@@ -144,7 +144,9 @@ export class ScoreAttackTeam {
                 if (Aliment.WEAKNESS === detail.abilityEffectType && !(this.activeBuffsAndDebuffs.includes(Aliment.WEAKNESS))) {
                     return false;
                 }
-                this.activeBuffsAndDebuffs.push(detail.abilityEffectType)
+                if (!this.activeBuffsAndDebuffs.includes(detail.abilityEffectType)) {
+                    this.activeBuffsAndDebuffs.push(detail.abilityEffectType)
+                }
                 return true;
             })
         }
