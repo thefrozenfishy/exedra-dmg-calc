@@ -279,6 +279,7 @@ export class ScoreAttackTeam {
                     this.debugTexts[this.dps.name][detail.abilityEffectType] = []
                 }
                 this.debugTexts[this.dps.name][detail.abilityEffectType].push([detail, delta_dmg])
+                nrHitThatKills--;
             })
             total_dmg += delta_dmg
         }
