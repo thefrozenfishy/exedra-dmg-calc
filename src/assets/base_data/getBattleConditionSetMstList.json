@@ -10815,6 +10815,11 @@
         "description": "自身がブレイク状態のとき、自分の状態異常数が9以上で、1以上のダメージを受けた"
     },
     {
+        "battleConditionMstIdCsv": "1346",
+        "battleConditionSetMstId": 2184,
+        "description": "自身がXさやか専用バフ状態のとき"
+    },
+    {
         "battleConditionMstIdCsv": "1347",
         "battleConditionSetMstId": 2185,
         "description": "味方全体のデバフ数が18以上"
@@ -10923,5 +10928,80 @@
         "battleConditionMstIdCsv": "298",
         "battleConditionSetMstId": 2210,
         "description": "自分は無属性"
+    },
+    {
+        "battleConditionMstIdCsv": "1346",
+        "battleConditionSetMstId": 2211,
+        "description": "自身がXさやか状態のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1338,1362,1363,1364",
+        "battleConditionSetMstId": 2212,
+        "description": "Xさやか状態のとき+攻撃したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "275",
+        "battleConditionSetMstId": 2213,
+        "description": "連続行動の3回目"
+    },
+    {
+        "battleConditionMstIdCsv": "3,56",
+        "battleConditionSetMstId": 2214,
+        "description": "自分のターン、2ターンごとに（ターン2から）"
+    },
+    {
+        "battleConditionMstIdCsv": "1255,916",
+        "battleConditionSetMstId": 2215,
+        "description": "自軍に対して弱点属性で攻撃されたユニット数が3以上の時 AND 攻撃されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1365",
+        "battleConditionSetMstId": 2216,
+        "description": "Xさやかバフが付与された味方が1体の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1366",
+        "battleConditionSetMstId": 2217,
+        "description": "Xさやかバフが付与された味方が2体の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1367",
+        "battleConditionSetMstId": 2218,
+        "description": "Xさやかバフが付与された味方が3体の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1368",
+        "battleConditionSetMstId": 2219,
+        "description": "Xさやかバフが付与された味方が4体の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1369",
+        "battleConditionSetMstId": 2220,
+        "description": "Xさやかバフが付与された味方が5体の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1346,1370,6",
+        "battleConditionSetMstId": 2221,
+        "description": "Xさやか専用バフが付与されているとき+SPが2以上+戦闘スキル発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1346,1371",
+        "battleConditionSetMstId": 2222,
+        "description": "Xさやか専用バフが付与されているとき+SPが4以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1346,1371,5",
+        "battleConditionSetMstId": 2259,
+        "description": "Xさやか専用バフが付与されているとき+SPが4以上+通常攻撃を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "1346,1384,7",
+        "battleConditionSetMstId": 2260,
+        "description": "Xさやか専用バフが付与されているとき+SPが3以上+必殺技を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "1346,1384,306",
+        "battleConditionSetMstId": 2263,
+        "description": "Xさやか専用バフが付与されているとき+SPが3以上+追撃を発動"
     }
 ]

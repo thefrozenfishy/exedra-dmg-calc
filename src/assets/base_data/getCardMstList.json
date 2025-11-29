@@ -1174,6 +1174,23 @@
     },
     {
         "advPosition": 0,
+        "cardMstId": 4200045,
+        "characterMstId": 0,
+        "element": 0,
+        "illustrator": "",
+        "name": "Mission Complete!",
+        "passiveSkill1": 4114,
+        "passiveSkill2": 0,
+        "passiveSkill3": 0,
+        "rarity": 5,
+        "releaseTime": "2025-11-29T12:00:00+09:00",
+        "resourceName": "art_04_00_0034",
+        "source": "",
+        "unlockIdCsv": "31",
+        "unlockTypeCsv": "2"
+    },
+    {
+        "advPosition": 0,
         "cardMstId": 4300001,
         "characterMstId": 0,
         "element": 0,

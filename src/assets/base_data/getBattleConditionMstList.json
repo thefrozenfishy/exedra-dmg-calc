@@ -10712,6 +10712,14 @@
         "description": "持続ダメージが発生したとき"
     },
     {
+        "battleConditionMstId": 1346,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "4",
+        "description": "Xさやか専用バフが付与されているとき"
+    },
+    {
         "battleConditionMstId": 1347,
         "compareContent": 208,
         "compareOperator": 4,
@@ -10806,5 +10814,93 @@
         "compareTarget": 1,
         "compareValue": "22",
         "description": "バトル開始から自分の行動が22回目以降"
+    },
+    {
+        "battleConditionMstId": 1362,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 8,
+        "compareValue": "4",
+        "description": "Xさやかのユニーク状態"
+    },
+    {
+        "battleConditionMstId": 1363,
+        "compareContent": 8,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "TRUE",
+        "description": "対象個別のアクターか"
+    },
+    {
+        "battleConditionMstId": 1364,
+        "compareContent": 10,
+        "compareOperator": 1,
+        "compareTarget": 2,
+        "compareValue": "TRUE",
+        "description": "行動者は味方か"
+    },
+    {
+        "battleConditionMstId": 1365,
+        "compareContent": 210,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "4,1",
+        "description": "Xさやかバフが付与された味方が1体の場合"
+    },
+    {
+        "battleConditionMstId": 1366,
+        "compareContent": 210,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "4,2",
+        "description": "Xさやかバフが付与された味方が2体の場合"
+    },
+    {
+        "battleConditionMstId": 1367,
+        "compareContent": 210,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "4,3",
+        "description": "Xさやかバフが付与された味方が3体の場合"
+    },
+    {
+        "battleConditionMstId": 1368,
+        "compareContent": 210,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "4,4",
+        "description": "Xさやかバフが付与された味方が4体の場合"
+    },
+    {
+        "battleConditionMstId": 1369,
+        "compareContent": 210,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "4,5",
+        "description": "Xさやかバフが付与された味方が5体の場合"
+    },
+    {
+        "battleConditionMstId": 1370,
+        "compareContent": 201,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "2",
+        "description": "SPが2以上のとき"
+    },
+    {
+        "battleConditionMstId": 1371,
+        "compareContent": 201,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "4",
+        "description": "SPが4以上のとき"
+    },
+    {
+        "battleConditionMstId": 1384,
+        "compareContent": 201,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "3",
+        "description": "SPが3以上のとき"
     }
 ]

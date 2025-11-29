@@ -3868,5 +3868,20 @@
         "targetType": 2,
         "value1": 1150039,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "On battle skill use, grants 5 MP.<br>When at least 1 ally has Yuletide Gleam, increases SPD by 2%. (Effect increases based on how many allies with Yuletide Gleam are present, max 10%). * Not affected by increases to buff effects.",
+        "name": "I'll Get the Gifts Out in Time!",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 124,
+        "selectionAbilityMstId": 7040,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10040301,
+        "targetType": 2,
+        "value1": 1150040,
+        "value2": 0
     }
 ]
