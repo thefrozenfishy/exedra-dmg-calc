@@ -87,7 +87,8 @@
                             <img :src="'/exedra-dmg-calc/roles/Debuffer.png'" alt="Debuffer" />
                         </div>
                         <span>Buffer+Debuffer</span>
-                        <input type="number" v-model.number="deBufferCount" min="0" max="4" />
+                        <input type="number" v-model.number="deBufferCount" min="0"
+                            :max="4 - minHealer - minDefender - minBreaker" />
                     </div>
 
                     <div class="role-box">
