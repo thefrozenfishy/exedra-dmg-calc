@@ -85,6 +85,10 @@ function getKioku({
     return cache.get(key) as ScoreAttackKioku;
 }
 
+const RELEVANT_SUPPORT_SUPPORTS = {
+    [KiokuRole.Buffer]: ["Flame Waltz", "Buon Natale Grazioso"]
+}
+
 export async function findBestTeam({
     enemies,
     include4StarAttackers,
@@ -161,8 +165,12 @@ export async function findBestTeam({
         }
     }
 
-    const tsurunoData = enabledCharacters.find(c => c.name === "Flame Waltz")
-    const tsurunoKey = tsurunoData ? fetchKioku(tsurunoData)?.getKey() : null
+    const bufferSupportData: any[][] = RELEVANT_SUPPORT_SUPPORTS[KiokuRole.Buffer]
+        .map(n => enabledCharacters.find(c => c.name === n))
+        .filter(Boolean)
+        .map(c => fetchKioku(c as Character))
+        .filter(Boolean)
+        .map(c => c.getKey());
 
     let completedRuns = 0;
     const expectedTotalRuns =
@@ -210,17 +218,21 @@ export async function findBestTeam({
                                 if (!obligatoryKioku.every(k => teamNames.includes(k))) continue;
                             }
 
-                            const supportSupports = totalSupports.map((c, idx) => {
-                                if (!tsurunoKey) return;
-                                if (totalSupports.map(c => c.name).includes(tsurunoKey?.[0])) return
-                                if (c.role !== KiokuRole.Buffer) return
-                                const arr: any[] = [undefined, undefined, undefined]
-                                arr[idx] = tsurunoKey
-                                return arr
-                            }).filter(Boolean)
-
-                            if (!supportSupports.length) {
-                                supportSupports.push([undefined, undefined, undefined])
+                            const activeDeBufferSupports = bufferSupportData.filter(s => !deBufferCombo.map(c => c.name).includes(s[0]))
+                            const supportSupports = [];
+                            if (activeDeBufferSupports.length) {
+                                const bufferIndexes = totalSupports.map((c, idx) => c.role === KiokuRole.Buffer ? idx : null).filter(v => v !== null) as number[]
+                                const combos = combinations(activeDeBufferSupports, Math.min(activeDeBufferSupports.length, bufferIndexes.length));
+                                for (const combo of combos) {
+                                    const perms = permute(combo);
+                                    for (const p of perms) {
+                                        const arr = new Array(totalSupports.length).fill(undefined);
+                                        for (let i = 0; i < p.length; i++)                                             arr[bufferIndexes[i]] = p[i];
+                                        supportSupports.push(arr);
+                                    }
+                                }
+                            } else {
+                                supportSupports.push(new Array(totalSupports.length).fill(undefined));
                             }
 
                             onProgress?.([attacker.name, ...totalSupports.map(s => s.name)], completedRuns, expectedTotalRuns)
@@ -278,11 +290,19 @@ export async function findBestTeam({
         }
     }
 
-    // Sort configs descending by damage
     return Object.values(perAttackerResults).flat()
 }
 
-// helper: combinations
+function permute(arr: any[]): any[][] {
+    if (arr.length <= 1) return [arr];
+    const result = [];
+    for (let i = 0; i < arr.length; i++) {
+        const rest = [...arr.slice(0, i), ...arr.slice(i + 1)];
+        for (const r of permute(rest)) result.push([arr[i], ...r]);
+    }
+    return result;
+}
+
 function combinations<T>(arr: T[], k: number): T[][] {
     if (k === 0) return [[]];
     if (k > arr.length) return [];
