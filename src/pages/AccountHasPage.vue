@@ -72,9 +72,10 @@ td {
     width: 85px;
     font-weight: bold;
     background-color: #333;
-    text-align: center;
     font-size: 1.2rem;
     color: #eee;
+    vertical-align: middle;
+    box-sizing: border-box;
 }
 
 .characters-cell {
@@ -84,22 +85,12 @@ td {
     min-height: 60px;
 }
 
-.character-card {
-    text-align: center;
-}
-
-.character-img-wrapper {
-    position: relative;
-}
-
 .character-img {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    object-fit: cover;
     border: 1px solid #666;
     display: block;
-    margin: 0 auto;
     transition: transform 0.15s ease;
 }
 
