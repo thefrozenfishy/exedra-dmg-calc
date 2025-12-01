@@ -9,8 +9,9 @@
                         <div v-for="ch in chars" :key="ch.id" class="character-card">
                             <div class="character-img-wrapper">
                                 <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
-                                    <img class="character-img"
-                                        :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name" />
+                                    <img class="character-img" :class="{ 'obtained-border': ch.obtain !== '' }"
+                                        :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
+                                        :title="makeTitle(ch)" />
                                 </a>
                             </div>
                         </div>
@@ -48,6 +49,14 @@ const groupedByAscension = computed(() => {
 
     return groups
 })
+
+const makeTitle = (ch: Character): string => {
+    let title = `${ch.name}`
+    if (ch.obtain && ch.obtain !== "") {
+        title += ` -  ${ch.obtain}`
+    }
+    return title
+}
 </script>
 
 <style scoped>
@@ -96,5 +105,9 @@ td {
 
 .character-img:hover {
     transform: scale(1.08);
+}
+
+.obtained-border {
+    border: 2px solid red;
 }
 </style>

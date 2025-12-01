@@ -154,23 +154,24 @@ export const skillDetailId = (d: SkillDetail) => "skillDetailMstId" in d ? d.ski
 export type SkillKey = "skillMstId" | "passiveSkillMstId";
 
 export interface Character {
-    id: number
-    name: string
-    character_en: string
-    enabled: boolean
     ascension: number
+    character_en: string
+    crys_sub: string[]
+    crys: string[]
     element: KiokuElement
-    supportTarget: SupportKey
-    supportDescription: string
-    role: KiokuRole
-    rarity: number
-    portrait: string
+    enabled: boolean
+    heartphialLvl: number
+    id: number
     kiokuLvl: number
     magicLvl: number
-    heartphialLvl: number
+    name: string
+    obtain: string
+    portrait: string
+    rarity: number
+    role: KiokuRole
     specialLvl: number
-    crys: string[]
-    crys_sub: string[]
+    supportDescription: string
+    supportTarget: SupportKey
 }
 
 export interface TeamSnapshotList {
@@ -200,35 +201,36 @@ export interface BattleSnapshot {
 }
 
 export interface KiokuData {
-    id: number
-    name: number
-    rarity: number
-    character_en: string
-    element: KiokuElement
-    role: KiokuRole
+    ability_id: number
     atk100: number
-    minAtk: number
     atka5: number
+    attack_id: number
+    character_en: string
+    crystalis_effect: string
+    crystalis_id: number
     def100: number
-    minDef: number
     defa5: number
-    hp100: number
-    minHp: number
-    hpa5: number
+    element: KiokuElement
     ep: number
-    minSpd: number
+    hp100: number
+    hpa5: number
+    id: number
+    maxMagicStacks?: number
+    minAtk: number
     minCritDmg: number
     minCritRate: number
+    minDef: number
+    minHp: number
+    minSpd: number
+    name: number
+    obtain: string
+    rarity: number
+    role: KiokuRole
     skill_id: number
-    attack_id: number
     special_id: number
-    crystalis_id: number
-    crystalis_effect: string
+    support_effect: string
     support_id: number
     support_target: SupportKey
-    support_effect: string
-    ability_id: number
-    maxMagicStacks?: number
     ascension_1_effect_2_id: number
     ascension_2_effect_2_id: number
     ascension_3_effect_2_id?: number
