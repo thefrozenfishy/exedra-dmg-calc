@@ -3,7 +3,7 @@
         <table class="ascension-table">
             <tbody>
                 <tr v-for="(chars, index) in groupedByAscension" :key="index">
-                    <td class="asc-cell">{{ index === 6 ? "Not Owned" : `Ascension ${5 - index}` }}</td>
+                    <td class="asc-cell">{{ index === 6 ? "Not Owned" : `A${5 - index}` }}</td>
 
                     <td class="characters-cell">
                         <div v-for="ch in chars" :key="ch.id" class="character-card">
