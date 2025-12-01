@@ -26,7 +26,7 @@ import { useCharacterStore } from "../store/characterStore"
 import { Character } from "../types/KiokuTypes"
 
 const store = useCharacterStore()
-const members = computed(() => store.characters.filter(c => c.rarity === 5))
+const members = computed(() => store.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
 
 const groupedByAscension = computed(() => {
     const groups: Character[][] = [[], [], [], [], [], [], []]
