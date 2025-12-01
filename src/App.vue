@@ -9,7 +9,7 @@ export default defineComponent({
 <template>
   <div id="app">
     <header>
-      <h1>Damage calculator</h1>
+      <h1>TFF's mess of a toolbox</h1>
       <nav>
         <router-link to="/team-setup">Team Setup</router-link>
         <router-link to="/my-kioku">My Kioku</router-link>

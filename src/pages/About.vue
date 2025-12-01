@@ -1,17 +1,23 @@
 <template>
     <div style="text-align: left;">
         <h1>About</h1>
+        <h2>Info</h2>
+        <p>The damage calculations try to capture all the oddities of the exedra damage calculations in an automatic way, but might read some things wrong, 
+            I try to correct this as soon as I am made aware of them, 
+            if you spot anything weird then you can use the <a href="https://docs.google.com/spreadsheets/d/1AZhIqAazG_B99bxPWBbsMxKJ_hF24wwiXProgSshsmk/edit?usp=sharing">Exedra Damage Calculator</a> sheet to calculate the damage manually.</p>
+        <p>The calculations here are based on the formulas in that sheet.</p>
+
         <h2>Team Setup</h2>
-        <p>Used to input your team. The Kioku here will be used as your available Kioku on other pages</p>
+        <p>Used to input your team. The Kioku here will be used as your available Kioku on other pages.</p>
         <h2>Calculate Best Team</h2>
         <p>A Score Attack tool, allowing you to calculate your best team for any stage.</p>
         <p>The best teams usually do not include 4★ Kioku, but you can include them in the calculation if you check the
             boxes</p>
         <p>By default only attackers are tested, but if you want to use a non-Attacker as attacker in the simulator
-            simply add them to extra attackers</p>
+            simply add them to extra attackers.</p>
         <p>Hits to kill is there to reflect a quirk in the code, where the amount of enemies are calculated separately
             for each enemy, meaning that Oriko support, Momoko EX etc will do less damage to other enemies if any of the
-            former are killed. You can test the effect in Single Team Calculator</p>
+            former are killed. You can test the effect in Single Team Calculator.</p>
         <h2>Simulate Single Battle</h2>
         <p>Here you can set up a concrete battle, and see how minor changes affects the total damage dealt. The settings
             are otherwise identical to the previous pages. Changes done to Kioku here do not overwrite your defaults, so
@@ -19,7 +25,7 @@
         <h1>Contact</h1>
         <p>If you have feedback, notice any bugs, or have suggestions for improvements just reach out to tff on the <a
                 href="https://discord.gg/magiaexedra">exedra discord</a>, or make issues/pr on <a
-                href="https://github.com/thefrozenfishy/exedra-dmg-calc">GitHub</a></p>
+                href="https://github.com/thefrozenfishy/exedra-dmg-calc">GitHub</a>.</p>
         <h1>Known Issues</h1>
         <ul>
             <li>Melodia Appassionata (Swimsuit Sayaka) vortex are not added to the calculation</li>
