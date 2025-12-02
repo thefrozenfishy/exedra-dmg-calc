@@ -16,8 +16,11 @@
                             @touchend="onTouchEnd">
                             <div class="character-img-wrapper">
                                 <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
-                                    <img class="character-img"
-                                        :class="ch.obtain !== '' ? 'limited-border' : 'default-border'"
+                                    <img class="character-img" :class="ch.obtain !== ''
+                                        ? 'limited-border'
+                                        : new Date() > new Date(ch.permaDate)
+                                            ? 'default-border'
+                                            : 'not-limited-border'"
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
                                 </a>
@@ -86,7 +89,9 @@ const groupedByAscension = computed(() => {
 const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
     if (ch.obtain && ch.obtain !== "") {
-        title += ` -  ${ch.obtain}`
+        title += " -  Limited"
+    } else if (ch.permaDate == "") {
+        title += " -  Not added to permanent yet"
     }
     return title
 }
@@ -247,6 +252,10 @@ td {
 
 .limited-border {
     border: 2px solid red;
+}
+
+.not-limited-border {
+    border: 2px solid blue;
 }
 
 .default-border {
