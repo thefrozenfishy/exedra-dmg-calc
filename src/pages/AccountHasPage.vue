@@ -27,6 +27,18 @@
                 </tr>
             </tbody>
         </table>
+        <div class="extra-input">
+            +500s collected:
+            <input type="number" v-model.number="extraCollected" />
+        </div>
+        <div class="total-ascensions">
+            <div>
+                Total SSRs collected: {{ totalAscensions + extraCollected }}
+            </div>
+            <div>
+                Total limiteds collected: {{ totalLimiteds }}
+            </div>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -38,6 +50,9 @@ import { toast } from "vue3-toastify"
 
 const store = useCharacterStore()
 const members = computed(() => store.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
+const totalAscensions = computed(() => members.value.filter(ch => ch.enabled).reduce((sum, ch) => sum + ch.ascension + 1, 0))
+const totalLimiteds = computed(() => members.value.filter(ch => ch.enabled).filter(ch => ch.obtain !== "").reduce((sum, ch) => sum + ch.ascension + 1, 0))
+const extraCollected = ref(0)
 
 const groupedByAscension = computed(() => {
     const groups: Character[][] = [[], [], [], [], [], [], []]
@@ -246,5 +261,30 @@ td {
 
 .copy-btn:hover {
     background: #555;
+}
+
+.total-ascensions {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #eee;
+}
+
+.extra-input {
+    margin-top: 1rem;
+    text-align: center;
+    color: #eee;
+    font-size: 1rem;
+}
+
+.extra-input input {
+    margin-left: 0.5rem;
+    padding: 0.2rem 0.4rem;
+    width: 80px;
+    background: #333;
+    border: 1px solid #666;
+    border-radius: 4px;
+    color: #eee;
 }
 </style>
