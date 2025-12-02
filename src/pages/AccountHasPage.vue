@@ -38,6 +38,11 @@
             <div>
                 Total limiteds collected: {{ totalLimiteds }}
             </div>
+            <div>
+                Probability of hitting non A5 on standard pull:
+                {{ standardPool.length - ownedA5StandardPool.length }} / {{ standardPool.length }} |
+                {{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100) }}%
+            </div>
         </div>
     </div>
 </template>
@@ -52,7 +57,10 @@ const store = useCharacterStore()
 const members = computed(() => store.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
 const totalAscensions = computed(() => members.value.filter(ch => ch.enabled).reduce((sum, ch) => sum + ch.ascension + 1, 0))
 const totalLimiteds = computed(() => members.value.filter(ch => ch.enabled).filter(ch => ch.obtain !== "").reduce((sum, ch) => sum + ch.ascension + 1, 0))
+const standardPool = computed(() => members.value.filter(ch => new Date() > new Date(ch.permaDate)))
+const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.enabled && ch.ascension === 5))
 const extraCollected = ref(0)
+const round = (nr: number) => nr.toFixed(2)
 
 const groupedByAscension = computed(() => {
     const groups: Character[][] = [[], [], [], [], [], [], []]

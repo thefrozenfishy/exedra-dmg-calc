@@ -168,6 +168,7 @@ export interface Character {
     obtain: string
     portrait: string
     rarity: number
+    permaDate: string
     role: KiokuRole
     specialLvl: number
     supportDescription: string
@@ -225,6 +226,7 @@ export interface KiokuData {
     name: number
     obtain: string
     rarity: number
+    permaDate: string
     role: KiokuRole
     skill_id: number
     special_id: number

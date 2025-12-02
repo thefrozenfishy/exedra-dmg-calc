@@ -28,6 +28,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
         character_en: data.character_en,
         rarity: data.rarity,
         obtain: data.obtain ?? "",
+        permaDate: data.permaDate ?? "",
         ...base,
     }]));
 
