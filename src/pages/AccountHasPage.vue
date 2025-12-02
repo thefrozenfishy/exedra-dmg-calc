@@ -4,14 +4,16 @@
 
         <table class="ascension-table">
             <tbody>
-                <tr :class="{ 'drag-over': dragOver === index }" @dragover.prevent="dragOver = index"
-                    @dragleave="dragLeave" v-for="(chars, index) in groupedByAscension" :key="index" class="asc-row"
-                    @drop="onDrop(index)">
+                <tr :data-index="index" :class="{ 'drag-over': dragOver === index }"
+                    @dragover.prevent="dragOver = index" @dragleave="dragLeave" @drop="onDrop(index)"
+                    v-for="(chars, index) in groupedByAscension" :key="index" class="asc-row">
+
                     <td class="asc-cell">{{ index === 6 ? "Not Owned" : `A${5 - index}` }}</td>
 
                     <td class="characters-cell">
                         <div v-for="ch in chars" :key="ch.id" class="character-card" draggable="true"
-                            @dragstart="onDragStart(ch)">
+                            @dragstart="onDragStart(ch)" @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove"
+                            @touchend="onTouchEnd">
                             <div class="character-img-wrapper">
                                 <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
                                     <img class="character-img"
@@ -115,6 +117,38 @@ const copyAscensionList = async () => {
             console.error(err)
         }
     })
+}
+// --- MOBILE DRAG AND DROP ---
+const touchDragged = ref<Character | null>(null)
+
+const onTouchStart = (ch: Character, e: TouchEvent) => {
+    touchDragged.value = ch
+    draggedChar.value = ch
+
+    e.preventDefault()
+}
+
+const onTouchMove = (e: TouchEvent) => {
+    const touch = e.touches[0]
+    const element = document.elementFromPoint(touch.clientX, touch.clientY)
+    const row = element?.closest("tr.asc-row")
+
+    if (!row) {
+        dragOver.value = null
+        return
+    }
+
+    const idx = Number(row.getAttribute("data-index"))
+    dragOver.value = idx
+}
+
+const onTouchEnd = () => {
+    if (dragOver.value != null) {
+        onDrop(dragOver.value)
+    }
+    dragOver.value = null
+    touchDragged.value = null
+    draggedChar.value = null
 }
 </script>
 
