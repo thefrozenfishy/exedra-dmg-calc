@@ -98,25 +98,47 @@ const dragLeave = (e: DragEvent) => {
     }
 }
 
-
 const copyAscensionList = async () => {
     const el = document.querySelector(".ascension-table") as HTMLElement
     if (!el) return
 
     const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
 
-    canvas.toBlob(async (blob) => {
-        if (!blob) return
+    const blob: Blob | null = await new Promise(resolve =>
+        canvas.toBlob(resolve, "image/png")
+    )
+    if (!blob) return
 
-        try {
-            await navigator.clipboard.write([
-                new ClipboardItem({ "image/png": blob })
-            ])
-        } catch (err) {
-            toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
-            console.error(err)
-        }
-    })
+    try {
+        const perm = await navigator.permissions?.query({
+            name: "clipboard-write" as PermissionName
+        })
+    } catch { }
+
+    try {
+        const item = new ClipboardItem({ "image/png": blob })
+        await navigator.clipboard.write([item])
+
+        toast.success("Copied to clipboard!", {
+            position: toast.POSITION.TOP_RIGHT,
+            icon: false,
+        })
+    } catch (err) {
+        console.error("Clipboard failed:", err)
+
+        // --- fallback for iPhone (clipboard blocked unless PWA/fullscreen) ---
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement("a")
+        link.href = url
+        link.download = "ascension.png"
+        link.click()
+        URL.revokeObjectURL(url)
+
+        toast.info("Clipboard blocked — saved as file instead", {
+            position: toast.POSITION.TOP_RIGHT,
+            icon: false,
+        })
+    }
 }
 // --- MOBILE DRAG AND DROP ---
 const touchDragged = ref<Character | null>(null)
