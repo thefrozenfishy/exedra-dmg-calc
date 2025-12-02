@@ -1,15 +1,21 @@
 <template>
     <div class="ascension-list">
+        <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
+
         <table class="ascension-table">
             <tbody>
-                <tr v-for="(chars, index) in groupedByAscension" :key="index">
+                <tr :class="{ 'drag-over': dragOver === index }" @dragover.prevent="dragOver = index"
+                    @dragleave="dragLeave" v-for="(chars, index) in groupedByAscension" :key="index" class="asc-row"
+                    @drop="onDrop(index)">
                     <td class="asc-cell">{{ index === 6 ? "Not Owned" : `A${5 - index}` }}</td>
 
                     <td class="characters-cell">
-                        <div v-for="ch in chars" :key="ch.id" class="character-card">
+                        <div v-for="ch in chars" :key="ch.id" class="character-card" draggable="true"
+                            @dragstart="onDragStart(ch)">
                             <div class="character-img-wrapper">
                                 <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
-                                    <img class="character-img" :class="{ 'obtained-border': ch.obtain !== '' }"
+                                    <img class="character-img"
+                                        :class="ch.obtain !== '' ? 'limited-border' : 'default-border'"
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
                                 </a>
@@ -22,9 +28,11 @@
     </div>
 </template>
 <script setup lang="ts">
-import { computed } from "vue"
+import { computed, ref } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { Character } from "../types/KiokuTypes"
+import html2canvas from "html2canvas"
+import { toast } from "vue3-toastify"
 
 const store = useCharacterStore()
 const members = computed(() => store.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
@@ -56,6 +64,57 @@ const makeTitle = (ch: Character): string => {
         title += ` -  ${ch.obtain}`
     }
     return title
+}
+
+const draggedChar = ref<Character | null>(null)
+const dragOver = ref<number | null>(null)
+
+const onDragStart = (ch: Character) => {
+    draggedChar.value = ch
+}
+
+const onDrop = (targetIndex: number) => {
+
+    if (!draggedChar.value) return
+
+    const ch = draggedChar.value
+
+    if (targetIndex === 6) {
+        ch.enabled = false
+    } else {
+        ch.enabled = true
+        ch.ascension = 5 - targetIndex
+    }
+
+    store.updateChar({ ...ch })
+    draggedChar.value = null
+}
+
+const dragLeave = (e: DragEvent) => {
+    if (!e.currentTarget || !(e.currentTarget as HTMLElement).contains(e.relatedTarget as Node)) {
+        dragOver.value = null
+    }
+}
+
+
+const copyAscensionList = async () => {
+    const el = document.querySelector(".ascension-table") as HTMLElement
+    if (!el) return
+
+    const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
+
+    canvas.toBlob(async (blob) => {
+        if (!blob) return
+
+        try {
+            await navigator.clipboard.write([
+                new ClipboardItem({ "image/png": blob })
+            ])
+        } catch (err) {
+            toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
+            console.error(err)
+        }
+    })
 }
 </script>
 
@@ -107,7 +166,29 @@ td {
     transform: scale(1.08);
 }
 
-.obtained-border {
+.limited-border {
     border: 2px solid red;
+}
+
+.default-border {
+    border: 2px solid transparent;
+}
+
+.asc-row.drag-over {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.copy-btn {
+    margin-bottom: 10px;
+    padding: 0.4rem 0.8rem;
+    background: #444;
+    color: #eee;
+    border: 1px solid #666;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.copy-btn:hover {
+    background: #555;
 }
 </style>
