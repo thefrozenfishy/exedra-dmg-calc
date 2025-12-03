@@ -1,6 +1,7 @@
 <template>
     <div class="ascension-list">
         <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
+        <button class="copy-btn" @click="downloadAscensionList">Download</button>
 
         <table class="ascension-table">
             <tbody>
@@ -128,6 +129,15 @@ const dragLeave = (e: DragEvent) => {
     }
 }
 
+const downloadImg = async (blob: Blob) => {
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "ascension.png"
+    link.click()
+    URL.revokeObjectURL(url)
+}
+
 const copyAscensionList = async () => {
     const el = document.querySelector(".ascension-table") as HTMLElement
     if (!el) return
@@ -156,19 +166,27 @@ const copyAscensionList = async () => {
     } catch (err) {
         console.error("Clipboard failed:", err)
 
-        // --- fallback for iPhone (clipboard blocked unless PWA/fullscreen) ---
-        const url = URL.createObjectURL(blob)
-        const link = document.createElement("a")
-        link.href = url
-        link.download = "ascension.png"
-        link.click()
-        URL.revokeObjectURL(url)
+        await downloadImg(blob)
 
         toast.info("Clipboard blocked — saved as file instead", {
             position: toast.POSITION.TOP_RIGHT,
             icon: false,
         })
     }
+}
+
+const downloadAscensionList = async () => {
+    const el = document.querySelector(".ascension-table") as HTMLElement
+    if (!el) return
+
+    const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
+
+    canvas.toBlob((blob) => {
+        if (!blob) return
+
+        downloadImg(blob)
+
+    }, "image/png")
 }
 // --- MOBILE DRAG AND DROP ---
 const touchDragged = ref<Character | null>(null)
@@ -269,7 +287,7 @@ td {
 }
 
 .copy-btn {
-    margin-bottom: 10px;
+    margin: 10px;
     padding: 0.4rem 0.8rem;
     background: #444;
     color: #eee;
