@@ -2,7 +2,7 @@
     <div class="ascension-list">
         <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
         <button class="copy-btn" @click="downloadAscensionList">Download</button>
-        <label> <input type="checkbox" v-model="showLevels" /> Show levels </label>
+        <label> <input type="checkbox" v-model="showLevels" /> Show Magic and Special levels </label>
         <label> <input type="checkbox" :disabled="!showLevels" v-model="colourLevels" /> Colour max levels </label>
 
         <table class="ascension-table">
@@ -27,13 +27,13 @@
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
                                 </a>
-                                <div v-if="showLevels && index !== 6" class="level-badge">
-                                    <span
-                                        :class="{ maxLvl: colourLevels && ch.magicLvl === KiokuConstants.maxMagicLvl }">ml{{
-                                            ch.magicLvl
-                                        }}</span>
-                                    <span :class="{ maxLvl: colourLevels && isMaxSpecialLvl(ch) }">sp{{
-                                        ch.specialLvl }}</span>
+                                <div class="magic-level-badge level-badge" v-if="showLevels && index !== 6"
+                                    :class="{ maxLvl: colourLevels && ch.magicLvl === KiokuConstants.maxMagicLvl }">
+                                    {{ ch.magicLvl }}
+                                </div>
+                                <div class="special-level-badge level-badge" v-if="showLevels && index !== 6"
+                                    :class="{ maxLvl: colourLevels && isMaxSpecialLvl(ch) }">
+                                    {{ ch.specialLvl }}
                                 </div>
                             </div>
                         </div>
@@ -351,7 +351,7 @@ td {
 .level-badge {
     position: absolute;
     bottom: 0;
-    left: 50%;
+    width: 30px;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.8);
     color: #fff;
@@ -360,6 +360,14 @@ td {
     text-align: center;
     backdrop-filter: blur(2px);
     border-radius: 15rem;
+}
+
+.special-level-badge {
+    left: 80%;
+}
+
+.magic-level-badge {
+    left: 20%;
 }
 
 .maxLvl {
