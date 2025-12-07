@@ -2,6 +2,8 @@
     <div class="ascension-list">
         <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
         <button class="copy-btn" @click="downloadAscensionList">Download</button>
+        <label> <input type="checkbox" v-model="showLevels" /> Show levels </label>
+        <label> <input type="checkbox" :disabled="!showLevels" v-model="colourLevels" /> Colour max levels </label>
 
         <table class="ascension-table">
             <tbody>
@@ -25,6 +27,14 @@
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
                                 </a>
+                                <div v-if="showLevels && index !== 6" class="level-badge">
+                                    <span
+                                        :class="{ maxLvl: colourLevels && ch.magicLvl === KiokuConstants.maxMagicLvl }">ml{{
+                                            ch.magicLvl
+                                        }}</span>
+                                    <span :class="{ maxLvl: colourLevels && isMaxSpecialLvl(ch) }">sp{{
+                                        ch.specialLvl }}</span>
+                                </div>
                             </div>
                         </div>
                     </td>
@@ -53,7 +63,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import { useCharacterStore } from "../store/characterStore"
-import { Character } from "../types/KiokuTypes"
+import { Character, KiokuConstants } from "../types/KiokuTypes"
 import html2canvas from "html2canvas"
 import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
@@ -65,8 +75,16 @@ const totalLimiteds = computed(() => members.value.filter(ch => ch.enabled).filt
 const standardPool = computed(() => members.value.filter(ch => new Date() > new Date(ch.permaDate)))
 const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.enabled && ch.ascension === 5))
 const extraCollected = useSetting("extraCollected", 0)
+const showLevels = useSetting("showLevels", false);
+const colourLevels = useSetting("colourLevels", false);
 
 const round = (nr: number) => nr.toFixed(2)
+
+const isMaxSpecialLvl = (ch: Character): boolean => {
+    if (ch.ascension === 5) return ch.specialLvl === 10
+    if (ch.ascension >= 3) return ch.specialLvl === 7
+    return ch.specialLvl === 4
+}
 
 const groupedByAscension = computed(() => {
     const groups: Character[][] = [[], [], [], [], [], [], []]
@@ -323,5 +341,28 @@ td {
     border: 1px solid #666;
     border-radius: 4px;
     color: #eee;
+}
+
+.character-img-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.level-badge {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    font-size: 0.6rem;
+    pointer-events: none;
+    text-align: center;
+    backdrop-filter: blur(2px);
+    border-radius: 15rem;
+}
+
+.maxLvl {
+    color: green;
 }
 </style>
