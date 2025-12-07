@@ -62,6 +62,12 @@
             </div>
         </div>
     </div>
+
+    <div>
+        <h4 style="margin-bottom: 0;">About:</h4>
+        You can edit, export, and import your kioku on the Team Setup page.<br />
+        Red borders indicate limited characters, blue borders indicate characters not yet added to the permanent roster, and transparent borders indicate standard permanent characters.
+    </div>
 </template>
 <script setup lang="ts">
 import { computed, ref } from "vue"
