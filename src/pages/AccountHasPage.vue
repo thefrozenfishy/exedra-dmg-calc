@@ -87,8 +87,8 @@ const totalPossibleLimiteds = computed(() => members.value.filter(ch => ch.obtai
 const standardPool = computed(() => members.value.filter(ch => new Date() > new Date(ch.permaDate)))
 const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.enabled && ch.ascension === 5))
 const extraCollected = useSetting("extraCollected", 0)
-const showLevels = useSetting("showLevels", false);
-const colourLevels = useSetting("colourLevels", false);
+const showLevels = useSetting("showLevels", true);
+const colourLevels = useSetting("colourLevels", true);
 
 const round = (nr: number) => nr.toFixed(2)
 
