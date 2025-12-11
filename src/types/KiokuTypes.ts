@@ -325,27 +325,39 @@ const elementalCrystalises = {
     [KiokuElement.Void]: "Nullity++",
 }
 
-export const getSubCrystalises = () => [
-    { name: "", selectionAbilityType: 2 },
-    ...Object.values(crystalises)]
-    .filter(c => c.selectionAbilityType === 2)
-    .sort((a, b) => {
-        if (a.name === "Increases ATK by 60.") return -1
-        if (b.name === "Increases ATK by 60.") return 1
-        if (a.name === "Increases critical DMG by 10%.") return -1
-        if (b.name === "Increases critical DMG by 10%.") return 1
-        if (a.name === "Increases critical rate by 5%.") return -1
-        if (b.name === "Increases critical rate by 5%.") return 1
-        if (a.name === "Increases SPD by 4.") return -1
-        if (b.name === "Increases SPD by 4.") return 1
-        if (a.name === "") return -1
-        if (b.name === "") return 1
+const priorityOrder = [
+    "Increases ATK by 60.",
+    "Increases critical DMG by 10%.",
+    "Increases critical rate by 5%.",
+    "Increases SPD by 4.",
+    "",
+];
 
-        return a.name.localeCompare(b.name, undefined, { numeric: true })
-    })
-    .map(c => c.name)
+const getPriority = (name: string) => {
+    const idx = priorityOrder.indexOf(name);
+    return idx === -1 ? priorityOrder.length : idx;
+};
 
+export const getSubCrystalises = () => {
+    return [
+        { name: "", selectionAbilityType: 2 },
+        ...Object.values(crystalises),
+    ]
+        .filter(c => c.selectionAbilityType === 2)
+        .map(c => c.name.replace(/\.$/, " .").replace("%", " %"),)
+        .sort((a, b) => {
+            const pa = getPriority(a);
+            const pb = getPriority(b);
 
+            if (pa !== pb) return pa - pb;
+
+            return a.localeCompare(b, undefined, {
+                numeric: true,
+                sensitivity: "base",
+            });
+        })
+        .map(c => c.replace(" %", "%").replace(/ \.$/, "."));
+};
 
 export const KiokuConstants = {
     maxKiokuLvl: 120,
