@@ -28,11 +28,11 @@
                                         :title="makeTitle(ch)" />
                                 </a>
                                 <div class="magic-level-badge level-badge" v-if="showLevels && index !== 6"
-                                    :class="colourLevels && ch.magicLvl === KiokuConstants.maxMagicLvl ? 'maxLvl' : 'notMaxLvl'">
+                                    :class="colourLevels ? ch.magicLvl === KiokuConstants.maxMagicLvl ? 'maxLvl' : 'notMaxLvl' : ''">
                                     {{ ch.magicLvl }}
                                 </div>
                                 <div class="special-level-badge level-badge" v-if="showLevels && index !== 6"
-                                    :class="colourLevels && isMaxSpecialLvl(ch) ? 'maxLvl' : 'notMaxLvl'">
+                                    :class="colourLevels ? isMaxSpecialLvl(ch) ? 'maxLvl' : 'notMaxLvl' : ''">
                                     {{ ch.specialLvl }}
                                 </div>
                             </div>
