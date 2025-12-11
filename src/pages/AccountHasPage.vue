@@ -372,6 +372,8 @@ td {
     text-align: center;
     backdrop-filter: blur(2px);
     border-radius: 15rem;
+    font-weight: bold;
+    color: pink;
 }
 
 .special-level-badge {
@@ -383,6 +385,6 @@ td {
 }
 
 .maxLvl {
-    color: green;
+    color: palegreen;
 }
 </style>
