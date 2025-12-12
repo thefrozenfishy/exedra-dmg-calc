@@ -78,6 +78,7 @@ enum CompareContent {
     BUFF_COUNT = 24,
     DEBUFF_COUNT = 25,
     HAS_BUFF = 26,
+    X_KYOUKO_DEBUFF_COUNT = 27,
     DMG = 101,
     DMG_RATIO = 102,
     IS_KILLED = 103,
@@ -228,6 +229,10 @@ export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: st
         }
         if (battleCondition.compareContent === CompareContent.HP_RATIO) {
             if (!isCondActive(battleCondition, attackerHealth)) return false
+        }
+
+        if (battleCondition.compareContent === CompareContent.X_KYOUKO_DEBUFF_COUNT) {
+            if (!isCondActive(battleCondition, "5,10")) return false
         }
     }
     return true
