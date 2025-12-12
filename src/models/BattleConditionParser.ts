@@ -88,6 +88,8 @@ enum CompareContent {
     IS_BARRIER_DESTROYED = 107,
     BREAKED_DAMAGE_RECEIVE_RATE_BECOME_MAX = 108,
     IS_WEAK_ELEMENT_ATTACKED = 109,
+    IS_DURING_ATTACK = 110,
+    WHEN_DOT_IS_PROCCED = 111,
     HAS_ALIMENT = 112,
     SP = 201,
     ALIVE_UNIT_COUNT = 202,
@@ -96,6 +98,7 @@ enum CompareContent {
     ABILITY_EFFECT_UNIT_COUNT = 205,
     BREAKED_DAMAGE_RECEIVE_RATE_GREATER_THAN_UNIT_COUNT = 206,
     BREAKED_DAMAGE_RECEIVE_RATE_LESS_THAN_UNIT_COUNT = 207,
+    NR_OF_DEBUFFS = 208,
     SIGILS_APPLIED_COUNT = 209,
     OTHER_BUFF_COUNT = 210,
     KILLED_UNIT_COUNT = 301,
@@ -106,15 +109,10 @@ enum CompareContent {
     BREAKED_UNIT_TOTAL_COUNT = 306,
     WEAK_ELEMENT_ATTACKED_UNIT_COUNT = 307,
     BREAKED_DAMAGE_RECEIVE_RATE_BECOME_MAX_UNIT_COUNT = 308,
+    HAS_BUFxF_APPLIED = 309,
     ONGOING_DAMAGE = 310,
     ACTOR_SKILL_TYPE = 401,
     COMBO_ACTION_STEP = 402,
-
-    // New
-    NR_OF_DEBUFFS = 208,
-    HAS_BUFF_APPLIED = 309,
-    IS_DURING_ATTACK = 110,
-    WHEN_DOT_IS_PROCCED = 111,
 }
 
 enum CompareOperator {
@@ -274,6 +272,10 @@ export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], {
                 if (!actionType || !isCondActive(battleCondition, actionType)) return false
             } else if (battleCondition.compareContent === CompareContent.ABILITY_EFFECT) {
                 if (!Object.values(target.activeEffectDetails).some(e => isCondActive(battleCondition, e.abilityEffectType))) return false
+            } else if (battleCondition.compareContent === CompareContent.BUFF_COUNT) {
+                if (!isCondActive(battleCondition, 0)) return false
+            } else if (battleCondition.compareContent === CompareContent.NR_OF_DEBUFFS) {
+                if (!isCondActive(battleCondition, 0)) return false
             } else {
                 console.warn(`Unknown condition ${battleCondition.compareContent}`, battleCondition)
             }

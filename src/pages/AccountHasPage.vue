@@ -53,6 +53,9 @@
                 Standard roster collected: {{ totalStandards }} / {{ totalPossibleStandards }} ({{ round(totalStandards / totalPossibleStandards * 100) }}%)
             </div>
             <div>
+                ({{ round( extraCollected / (totalStandards + extraCollected) * 100) }}% of your collected standard SSRs have been +500s)
+            </div>
+            <div>
                 Limited roster collected: {{ totalLimiteds }} / {{ totalPossibleLimiteds }} ({{ round(totalLimiteds / totalPossibleLimiteds * 100) }}%)
             </div>
             <div>
