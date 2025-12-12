@@ -10816,6 +10816,30 @@
         "description": "バトル開始から自分の行動が22回目以降"
     },
     {
+        "battleConditionMstId": 1359,
+        "compareContent": 309,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "BURN,1",
+        "description": "火傷状態が付与されている敵に攻撃したとき"
+    },
+    {
+        "battleConditionMstId": 1360,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 8,
+        "compareValue": "5",
+        "description": "X杏子専用デバフが付与されている敵に攻撃したとき"
+    },
+    {
+        "battleConditionMstId": 1361,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "5",
+        "description": "X杏子専用デバフが付与されているとき"
+    },
+    {
         "battleConditionMstId": 1362,
         "compareContent": 26,
         "compareOperator": 7,
@@ -10896,11 +10920,123 @@
         "description": "SPが4以上のとき"
     },
     {
+        "battleConditionMstId": 1372,
+        "compareContent": 309,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "DWN_RCV_DMG_RATIO,3",
+        "description": "攻撃を受けた被ダメ軽減を持つ味方が3体未満のとき"
+    },
+    {
+        "battleConditionMstId": 1373,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "5,1",
+        "description": "X杏子専用デバフが1のとき"
+    },
+    {
+        "battleConditionMstId": 1374,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "5,2",
+        "description": "X杏子専用デバフが2のとき"
+    },
+    {
+        "battleConditionMstId": 1375,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "5,3",
+        "description": "X杏子専用デバフが3のとき"
+    },
+    {
+        "battleConditionMstId": 1376,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "5,4",
+        "description": "X杏子専用デバフが4のとき"
+    },
+    {
+        "battleConditionMstId": 1377,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "5,5",
+        "description": "X杏子専用デバフが5のとき"
+    },
+    {
+        "battleConditionMstId": 1378,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "5,6",
+        "description": "X杏子専用デバフが6のとき"
+    },
+    {
+        "battleConditionMstId": 1379,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "5,7",
+        "description": "X杏子専用デバフが7のとき"
+    },
+    {
+        "battleConditionMstId": 1380,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "5,8",
+        "description": "X杏子専用デバフが8のとき"
+    },
+    {
+        "battleConditionMstId": 1381,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "5,9",
+        "description": "X杏子専用デバフが9のとき"
+    },
+    {
+        "battleConditionMstId": 1382,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "5,10",
+        "description": "X杏子専用デバフが10のとき"
+    },
+    {
+        "battleConditionMstId": 1383,
+        "compareContent": 309,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "DWN_RCV_DMG_RATIO,3",
+        "description": "攻撃を受けた被ダメ軽減を持つ味方が3体以上のとき"
+    },
+    {
         "battleConditionMstId": 1384,
         "compareContent": 201,
         "compareOperator": 4,
         "compareTarget": 5,
         "compareValue": "3",
         "description": "SPが3以上のとき"
+    },
+    {
+        "battleConditionMstId": 1385,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "36",
+        "description": "自身のHPが36%未満のとき"
+    },
+    {
+        "battleConditionMstId": 1386,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "11",
+        "description": "自身のHPが11%未満のとき"
     }
 ]

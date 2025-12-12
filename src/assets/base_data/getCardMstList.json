@@ -1191,6 +1191,23 @@
     },
     {
         "advPosition": 0,
+        "cardMstId": 4200046,
+        "characterMstId": 0,
+        "element": 0,
+        "illustrator": "",
+        "name": "Belated Special Delivery",
+        "passiveSkill1": 4115,
+        "passiveSkill2": 0,
+        "passiveSkill3": 0,
+        "rarity": 5,
+        "releaseTime": "2025-12-11T12:00:00+09:00",
+        "resourceName": "art_04_00_0003",
+        "source": "",
+        "unlockIdCsv": "32",
+        "unlockTypeCsv": "2"
+    },
+    {
+        "advPosition": 0,
         "cardMstId": 4300001,
         "characterMstId": 0,
         "element": 0,

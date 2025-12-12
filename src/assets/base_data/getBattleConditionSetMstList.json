@@ -10900,6 +10900,26 @@
         "description": "バトル開始から自分の行動が22回目以降"
     },
     {
+        "battleConditionMstIdCsv": "1359",
+        "battleConditionSetMstId": 2201,
+        "description": "火傷状態が付与されている敵に攻撃したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1360",
+        "battleConditionSetMstId": 2202,
+        "description": "攻撃対象がX杏子専用デバフ状態の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1361",
+        "battleConditionSetMstId": 2203,
+        "description": "自身がX杏子専用デバフ状態の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1360,474",
+        "battleConditionSetMstId": 2204,
+        "description": "攻撃対象がX杏子専用デバフ状態の場合+敵が1以上のダメージを受けた（個別判定）"
+    },
+    {
         "battleConditionMstIdCsv": "292",
         "battleConditionSetMstId": 2205,
         "description": "自分は火属性"
@@ -10990,6 +11010,186 @@
         "description": "Xさやか専用バフが付与されているとき+SPが4以上"
     },
     {
+        "battleConditionMstIdCsv": "25,1372",
+        "battleConditionSetMstId": 2223,
+        "description": "1以上のダメージを受けた、攻撃を受けた被ダメ軽減を持つ味方が3体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "25,1263",
+        "battleConditionSetMstId": 2224,
+        "description": "1以上のダメージを受けた、弱点属性で攻撃された"
+    },
+    {
+        "battleConditionMstIdCsv": "25,1264",
+        "battleConditionSetMstId": 2225,
+        "description": "1以上のダメージを受けた、弱点属性以外で攻撃された"
+    },
+    {
+        "battleConditionMstIdCsv": "1253",
+        "battleConditionSetMstId": 2226,
+        "description": "弱点属性で攻撃されたユニット数が1体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1254",
+        "battleConditionSetMstId": 2227,
+        "description": "弱点属性で攻撃されたユニット数が2体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1255",
+        "battleConditionSetMstId": 2228,
+        "description": "弱点属性で攻撃されたユニット数が3体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1256",
+        "battleConditionSetMstId": 2229,
+        "description": "弱点属性で攻撃されたユニット数が4体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1257",
+        "battleConditionSetMstId": 2230,
+        "description": "弱点属性で攻撃されたユニット数が5体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1258",
+        "battleConditionSetMstId": 2231,
+        "description": "弱点属性で攻撃されたユニット数が1体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1259",
+        "battleConditionSetMstId": 2232,
+        "description": "弱点属性で攻撃されたユニット数が2体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1260",
+        "battleConditionSetMstId": 2233,
+        "description": "弱点属性で攻撃されたユニット数が3体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1261",
+        "battleConditionSetMstId": 2234,
+        "description": "弱点属性で攻撃されたユニット数が4体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1262",
+        "battleConditionSetMstId": 2235,
+        "description": "弱点属性で攻撃されたユニット数が5体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1373",
+        "battleConditionSetMstId": 2236,
+        "description": "X杏子専用デバフが1のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1374",
+        "battleConditionSetMstId": 2237,
+        "description": "X杏子専用デバフが2のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1375",
+        "battleConditionSetMstId": 2238,
+        "description": "X杏子専用デバフが3のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1376",
+        "battleConditionSetMstId": 2239,
+        "description": "X杏子専用デバフが4のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1377",
+        "battleConditionSetMstId": 2240,
+        "description": "X杏子専用デバフが5のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1378",
+        "battleConditionSetMstId": 2241,
+        "description": "X杏子専用デバフが6のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1379",
+        "battleConditionSetMstId": 2242,
+        "description": "X杏子専用デバフが7のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1380",
+        "battleConditionSetMstId": 2243,
+        "description": "X杏子専用デバフが8のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1381",
+        "battleConditionSetMstId": 2244,
+        "description": "X杏子専用デバフが9のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1382",
+        "battleConditionSetMstId": 2245,
+        "description": "X杏子専用デバフが10のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "318,3,7",
+        "battleConditionSetMstId": 2246,
+        "description": "敵の生存者数が2体以上 AND 自分は行動者 AND 行動タイプは必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "408,3,7",
+        "battleConditionSetMstId": 2247,
+        "description": "敵の生存者数が3体以上 AND 自分は行動者 AND 行動タイプは必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "1359,3",
+        "battleConditionSetMstId": 2248,
+        "description": "火傷状態が付与されている敵に攻撃したとき+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "3,6,1360,1332",
+        "battleConditionSetMstId": 2249,
+        "description": "行動者は自分+戦闘スキルを発動したとき+攻撃対象がX杏子専用デバフ状態の場合+攻撃した対象"
+    },
+    {
+        "battleConditionMstIdCsv": "6,3,1360,1332",
+        "battleConditionSetMstId": 2250,
+        "description": "行動者は自分+追撃を発動したとき+攻撃対象がX杏子専用デバフ状態の場合+攻撃した対象"
+    },
+    {
+        "battleConditionMstIdCsv": "1360,1332,3",
+        "battleConditionSetMstId": 2251,
+        "description": "攻撃対象がX杏子専用デバフ状態の場合+攻撃した対象+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "1382,306",
+        "battleConditionSetMstId": 2252,
+        "description": "X杏子専用デバフが10以上のとき+行動タイプは追撃"
+    },
+    {
+        "battleConditionMstIdCsv": "1359,6,3",
+        "battleConditionSetMstId": 2253,
+        "description": "対象が火傷+戦闘スキルを発動したとき+攻撃した対象+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "1359,5,3",
+        "battleConditionSetMstId": 2254,
+        "description": "対象が火傷+通常攻撃を発動したとき+攻撃した対象+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "399,420,286",
+        "battleConditionSetMstId": 2255,
+        "description": "魔力が8で、自身がブレイク状態ではなく、行動可能な状態のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "25,1383",
+        "battleConditionSetMstId": 2256,
+        "description": "1以上のダメージを受けた、攻撃を受けた被ダメ軽減を持つ味方が3体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,6,1332,1",
+        "battleConditionSetMstId": 2257,
+        "description": "行動者は自分+戦闘スキルを発動したとき+攻撃した対象+行動者は味方"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1332,1,1360",
+        "battleConditionSetMstId": 2258,
+        "description": "行動者は自分+攻撃した対象+行動者は味方+攻撃対象がX杏子専用デバフ状態の場合"
+    },
+    {
         "battleConditionMstIdCsv": "1346,1371,5",
         "battleConditionSetMstId": 2259,
         "description": "Xさやか専用バフが付与されているとき+SPが4以上+通常攻撃を発動"
@@ -10998,6 +11198,16 @@
         "battleConditionMstIdCsv": "1346,1384,7",
         "battleConditionSetMstId": 2260,
         "description": "Xさやか専用バフが付与されているとき+SPが3以上+必殺技を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "1385,902",
+        "battleConditionSetMstId": 2261,
+        "description": "自身のHPが36%未満かつ11%以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1386",
+        "battleConditionSetMstId": 2262,
+        "description": "自身のHPが11%未満のとき"
     },
     {
         "battleConditionMstIdCsv": "1346,1384,306",
