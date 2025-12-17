@@ -2,9 +2,11 @@
     <div class="ascension-list">
         <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
         <button class="copy-btn" @click="downloadAscensionList">Download</button>
-        <label> <input type="checkbox" v-model="showLevels" /> Show Magic and Special levels </label>
-        <label> <input type="checkbox" :disabled="!showLevels" v-model="colourLevels" /> Colour max levels </label>
-
+        <div>
+            <label> <input type="checkbox" v-model="showLevels" /> Show Magic and Special levels </label>
+            <label> <input type="checkbox" v-model="showHearts" /> Show Heartphial levels </label>
+            <label> <input type="checkbox" :disabled="!showLevels" v-model="colourLevels" /> Colour max levels </label>
+        </div>
         <table class="ascension-table">
             <tbody>
                 <tr :data-index="index" :class="{ 'drag-over': dragOver === index }"
@@ -27,6 +29,10 @@
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
                                 </a>
+                                <div class="heart-level-badge level-badge" v-if="showHearts && index !== 6"
+                                    :class="colourLevels ? ch.heartphialLvl === KiokuConstants.maxHeartphialLvl ? 'maxLvl' : 'notMaxLvl' : ''">
+                                    {{ ch.heartphialLvl }}
+                                </div>
                                 <div class="magic-level-badge level-badge" v-if="showLevels && index !== 6"
                                     :class="colourLevels ? ch.magicLvl === KiokuConstants.maxMagicLvl ? 'maxLvl' : 'notMaxLvl' : ''">
                                     {{ ch.magicLvl }}
@@ -50,13 +56,16 @@
                 Total SSRs collected: {{ totalAscensions + extraCollected }}
             </div>
             <div>
-                Standard roster collected: {{ totalStandards }} / {{ totalPossibleStandards }} ({{ round(totalStandards / totalPossibleStandards * 100) }}%)
+                Standard roster collected: {{ totalStandards }} / {{ totalPossibleStandards }} ({{ round(totalStandards
+                    / totalPossibleStandards * 100) }}%)
             </div>
             <div>
-                ({{ round( extraCollected / (totalStandards + extraCollected) * 100) }}% of your collected standard SSRs have been +500s)
+                ({{ round(extraCollected / (totalStandards + extraCollected) * 100) }}% of your collected standard SSRs
+                have been +500s)
             </div>
             <div>
-                Limited roster collected: {{ totalLimiteds }} / {{ totalPossibleLimiteds }} ({{ round(totalLimiteds / totalPossibleLimiteds * 100) }}%)
+                Limited roster collected: {{ totalLimiteds }} / {{ totalPossibleLimiteds }} ({{ round(totalLimiteds /
+                totalPossibleLimiteds * 100) }}%)
             </div>
             <div>
                 Probability of hitting non A5 on standard pull:
@@ -69,7 +78,8 @@
     <div>
         <h4 style="margin-bottom: 0;">About:</h4>
         You can edit, export, and import your kioku on the Team Setup page.<br />
-        Red borders indicate limited characters, blue borders indicate characters not yet added to the permanent roster, and transparent borders indicate standard permanent characters.
+        Red borders indicate limited characters, blue borders indicate characters not yet added to the permanent roster,
+        and transparent borders indicate standard permanent characters.
     </div>
 </template>
 <script setup lang="ts">
@@ -91,6 +101,7 @@ const standardPool = computed(() => members.value.filter(ch => new Date() > new 
 const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.enabled && ch.ascension === 5))
 const extraCollected = useSetting("extraCollected", 0)
 const showLevels = useSetting("showLevels", true);
+const showHearts = useSetting("showHearts", false);
 const colourLevels = useSetting("colourLevels", true);
 
 const round = (nr: number) => nr.toFixed(2)
@@ -365,7 +376,6 @@ td {
 
 .level-badge {
     position: absolute;
-    bottom: 0;
     width: 30px;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.8);
@@ -380,10 +390,17 @@ td {
 
 .special-level-badge {
     left: 80%;
+    bottom: 0;
+}
+
+.heart-level-badge {
+    left: 20%;
+    top: 0;
 }
 
 .magic-level-badge {
     left: 20%;
+    bottom: 0;
 }
 
 .maxLvl {

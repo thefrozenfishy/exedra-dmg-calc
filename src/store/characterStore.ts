@@ -58,6 +58,12 @@ export const useCharacterStore = defineStore('characterStore', () => {
 
     const updateChar = (char: Character) => {
         characters.value[characters.value.findIndex(c => c.id === char.id)] = correctCharacterParams(char);
+
+        characters.value.forEach(c => {
+            if (c.character_en === char.character_en) {
+                c.heartphialLvl = char.heartphialLvl
+            }
+        })
     }
 
     const setCharacters = (chars: Character[]) => {
