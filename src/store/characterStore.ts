@@ -26,6 +26,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
         supportTarget: data.support_target,
         supportDescription: data.support_effect,
         character_en: data.character_en,
+        heartphial: data.heartphial || data.character_en,
         rarity: data.rarity,
         obtain: data.obtain ?? "",
         permaDate: data.permaDate ?? "",
@@ -60,7 +61,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
         characters.value[characters.value.findIndex(c => c.id === char.id)] = correctCharacterParams(char);
 
         characters.value.forEach(c => {
-            if (c.character_en === char.character_en) {
+            if (c.heartphial === char.heartphial) {
                 c.heartphialLvl = char.heartphialLvl
             }
         })

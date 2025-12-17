@@ -160,15 +160,16 @@ export interface Character {
     crys: string[]
     element: KiokuElement
     enabled: boolean
+    heartphial: string
     heartphialLvl: number
     id: number
     kiokuLvl: number
     magicLvl: number
     name: string
     obtain: string
+    permaDate: string
     portrait: string
     rarity: number
-    permaDate: string
     role: KiokuRole
     specialLvl: number
     supportDescription: string
@@ -213,6 +214,7 @@ export interface KiokuData {
     defa5: number
     element: KiokuElement
     ep: number
+    heartphial: string
     hp100: number
     hpa5: number
     id: number
@@ -225,8 +227,8 @@ export interface KiokuData {
     minSpd: number
     name: number
     obtain: string
-    rarity: number
     permaDate: string
+    rarity: number
     role: KiokuRole
     skill_id: number
     special_id: number
