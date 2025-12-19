@@ -27,18 +27,49 @@
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
                                 </a>
-                                <div class="heart-level-badge level-badge" v-if="showHearts && index !== 6"
-                                    :class="colourLevels ? ch.heartphialLvl === KiokuConstants.maxHeartphialLvl ? 'maxLvl' : 'notMaxLvl' : ''">
-                                    {{ ch.heartphialLvl }}
+                                <div class="heart-level-badge level-badge editable" v-if="showHearts && index !== 6"
+                                    :class="colourLevels
+                                        ? ch.heartphialLvl === KiokuConstants.maxHeartphialLvl ? 'maxLvl' : 'notMaxLvl'
+                                        : ''" @click.stop="startEdit(ch, 'heartphialLvl')">
+                                    <template v-if="isEditing(ch, 'heartphialLvl')">
+                                        <input type="number" v-model.number="editValue" :min="1"
+                                            :max="KiokuConstants.maxHeartphialLvl"
+                                            @blur="commitEdit(ch, 'heartphialLvl')"
+                                            @keydown.enter.prevent="commitEdit(ch, 'heartphialLvl')" />
+                                    </template>
+                                    <template v-else>
+                                        {{ ch.heartphialLvl }}
+                                    </template>
                                 </div>
-                                <div class="magic-level-badge level-badge" v-if="showLevels && index !== 6"
-                                    :class="colourLevels ? ch.magicLvl === KiokuConstants.maxMagicLvl ? 'maxLvl' : 'notMaxLvl' : ''">
-                                    {{ ch.magicLvl }}
+
+                                <div class="magic-level-badge level-badge editable" v-if="showLevels && index !== 6"
+                                    :class="colourLevels
+                                        ? ch.magicLvl === KiokuConstants.maxMagicLvl ? 'maxLvl' : 'notMaxLvl'
+                                        : ''" @click.stop="startEdit(ch, 'magicLvl')">
+                                    <template v-if="isEditing(ch, 'magicLvl')">
+                                        <input type="number" v-model.number="editValue" :min="0"
+                                            :max="KiokuConstants.maxMagicLvl" @blur="commitEdit(ch, 'magicLvl')"
+                                            @keydown.enter.prevent="commitEdit(ch, 'magicLvl')" />
+                                    </template>
+                                    <template v-else>
+                                        {{ ch.magicLvl }}
+                                    </template>
                                 </div>
-                                <div class="special-level-badge level-badge" v-if="showLevels && index !== 6"
-                                    :class="colourLevels ? isMaxSpecialLvl(ch) ? 'maxLvl' : 'notMaxLvl' : ''">
-                                    {{ ch.specialLvl }}
+
+                                <div class="special-level-badge level-badge editable" v-if="showLevels && index !== 6"
+                                    :class="colourLevels
+                                        ? isMaxSpecialLvl(ch) ? 'maxLvl' : 'notMaxLvl'
+                                        : ''" @click.stop="startEdit(ch, 'specialLvl')">
+                                    <template v-if="isEditing(ch, 'specialLvl')">
+                                        <input type="number" v-model.number="editValue" :min="1"
+                                            :max="KiokuConstants.maxSpecialLvl" @blur="commitEdit(ch, 'specialLvl')"
+                                            @keydown.enter.prevent="commitEdit(ch, 'specialLvl')" />
+                                    </template>
+                                    <template v-else>
+                                        {{ ch.specialLvl }}
+                                    </template>
                                 </div>
+
                             </div>
                         </div>
                     </td>
@@ -73,10 +104,12 @@
         </div>
         <h4 style="margin-bottom: 0;">Maxed Heartphial, Magic-, Kioku- & Special level kioku:</h4>
         <div>
-            5-stars: {{ maxed5starChars.length }} / {{ ownedFiveStars.length }} ({{ round(maxed5starChars.length / ownedFiveStars.length * 100) }}%)
+            5-stars: {{ maxed5starChars.length }} / {{ ownedFiveStars.length }}
+             ({{ round(maxed5starChars.length / ownedFiveStars.length * 100) }}%)
         </div>
         <div v-if="show4stars">
-            4-stars: {{ maxed4starChars.length }} / {{ allMembers.length - fiveStarMembers.length }} ({{ round(maxed4starChars.length / (allMembers.length - fiveStarMembers.length) * 100) }}%)
+            4-stars: {{ maxed4starChars.length }} / {{ allMembers.length - fiveStarMembers.length }}
+             ({{ round(maxed4starChars.length / (allMembers.length - fiveStarMembers.length) * 100) }}%)
         </div>
         <div>
             <h4 style="margin-bottom: 0;">About:</h4>
@@ -166,6 +199,37 @@ const borderClass = (ch: Character): string => {
     if (new Date() > new Date(ch.permaDate)) return "default-border"
     return "not-limited-border"
 
+}
+
+type EditableField = "magicLvl" | "heartphialLvl" | "specialLvl"
+
+const editing = ref<{ id: number; field: EditableField } | null>(null)
+const editValue = ref<number>(0)
+
+const startEdit = (ch: Character, field: EditableField) => {
+    editing.value = { id: ch.id, field }
+    editValue.value = ch[field]
+}
+
+const isEditing = (ch: Character, field: EditableField) =>
+    editing.value?.id === ch.id && editing.value.field === field
+
+const commitEdit = (ch: Character, field: EditableField) => {
+    let max =
+        field === "magicLvl"
+            ? KiokuConstants.maxMagicLvl
+            : field === "heartphialLvl"
+                ? KiokuConstants.maxHeartphialLvl
+                : KiokuConstants.maxSpecialLvl
+
+    const value = Math.max(0, Math.min(editValue.value, max))
+
+    store.updateChar({
+        ...ch,
+        [field]: value,
+    })
+
+    editing.value = null
 }
 
 const draggedChar = ref<Character | null>(null)
@@ -406,7 +470,6 @@ td {
     background: rgba(0, 0, 0, 0.8);
     color: #fff;
     font-size: 0.6rem;
-    pointer-events: none;
     text-align: center;
     backdrop-filter: blur(2px);
     border-radius: 15rem;
@@ -434,5 +497,20 @@ td {
 
 .notMaxLvl {
     color: pink;
+}
+
+.level-badge.editable {
+    cursor: pointer;
+}
+
+.level-badge input {
+    width: 32px;
+    background: #111;
+    color: #fff;
+    border: 1px solid #666;
+    border-radius: 6px;
+    font-size: 0.6rem;
+    text-align: center;
+    padding: 1px;
 }
 </style>
