@@ -22,11 +22,7 @@
                             @touchend="onTouchEnd">
                             <div class="character-img-wrapper">
                                 <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
-                                    <img class="character-img" :class="ch.obtain !== ''
-                                        ? 'limited-border'
-                                        : new Date() > new Date(ch.permaDate)
-                                            ? 'default-border'
-                                            : 'not-limited-border'"
+                                    <img class="character-img" :class="borderClass(ch)"
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
                                 </a>
@@ -66,7 +62,7 @@
             </div>
             <div>
                 Limited roster collected: {{ totalLimiteds }} / {{ totalPossibleLimiteds }} ({{ round(totalLimiteds /
-                totalPossibleLimiteds * 100) }}%)
+                    totalPossibleLimiteds * 100) }}%)
             </div>
             <div>
                 Probability of hitting non A5 on standard pull:
@@ -137,12 +133,22 @@ const groupedByAscension = computed(() => {
 
 const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
-    if (ch.obtain && ch.obtain !== "") {
+    if (ch.rarity === 4 || ch.name === "Lux☆Magica") {
+        title += " -  4 star"
+    } else if (ch.obtain && ch.obtain !== "") {
         title += " -  Limited"
     } else if (ch.permaDate == "") {
         title += " -  Not added to permanent yet"
     }
     return title
+}
+
+const borderClass = (ch: Character): string => {
+    if (ch.rarity === 4 || ch.name === "Lux☆Magica") return "four-star-border"
+    if (ch.obtain && ch.obtain !== "") return "limited-border"
+    if (new Date() > new Date(ch.permaDate)) return "default-border"
+    return "not-limited-border"
+
 }
 
 const draggedChar = ref<Character | null>(null)
@@ -322,6 +328,10 @@ td {
 
 .not-limited-border {
     border: 2px solid blue;
+}
+
+.four-star-border {
+    border: 2px solid green;
 }
 
 .default-border {
