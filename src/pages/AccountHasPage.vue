@@ -6,7 +6,8 @@
             <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
             <label> <input type="checkbox" v-model="showLevels" /> Show Magic and Special levels </label>
             <label> <input type="checkbox" v-model="showHearts" /> Show Heartphial levels </label>
-            <label> <input type="checkbox" :disabled="!showLevels" v-model="colourLevels" /> Colour max levels </label>
+            <label> <input type="checkbox" :disabled="!(showLevels || showHearts)" v-model="colourLevels" /> Colour max
+                levels </label>
         </div>
         <table class="ascension-table">
             <tbody>
@@ -113,7 +114,7 @@
         </div>
         <div>
             <h4 style="margin-bottom: 0;">About:</h4>
-            You can edit, export, and import your kioku on the Team Setup page.<br />
+            You can edit, export, and import your kioku on the Team Setup page, or edit here directly.<br />
             Red borders indicate limited characters, blue borders indicate characters not yet added to the permanent
             roster,
             and transparent borders indicate standard permanent characters.
@@ -187,7 +188,8 @@ const groupedByAscension = computed(() => {
 
 const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
-    if (ch.obtain && ch.obtain !== "") {
+    if (ch.name === "Lux☆Magica") { }
+    else if (ch.obtain && ch.obtain !== "") {
         title += " -  Limited"
     } else if (ch.permaDate == "") {
         title += " -  Not added to permanent yet"
@@ -196,6 +198,7 @@ const makeTitle = (ch: Character): string => {
 }
 
 const borderClass = (ch: Character): string => {
+    if (ch.name === "Lux☆Magica") return "default-border"
     if (ch.obtain && ch.obtain !== "") return "limited-border"
     if (new Date() > new Date(ch.permaDate)) return "default-border"
     return "not-limited-border"
