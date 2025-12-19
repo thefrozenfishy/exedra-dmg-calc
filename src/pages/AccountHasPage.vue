@@ -14,7 +14,7 @@
                     @dragover.prevent="dragOver = index" @dragleave="dragLeave" @drop="onDrop(index)"
                     v-for="(chars, index) in groupedByAscension" :key="index" class="asc-row">
 
-                    <td class="asc-cell">{{ index === 6 ? "Not Owned" : `A${5 - index}` }}</td>
+                    <td class="asc-cell">{{ index === 6 ? "Not Owned" : index === 7 ? "4 Stars" : `A${5 - index}` }}</td>
 
                     <td class="characters-cell">
                         <div v-for="ch in chars" :key="ch.id" class="character-card" draggable="true"
@@ -111,15 +111,15 @@ const isMaxSpecialLvl = (ch: Character): boolean => {
 }
 
 const groupedByAscension = computed(() => {
-    const groups: Character[][] = [[], [], [], [], [], [], []]
+    const groups: Character[][] = [[], [], [], [], [], [], [], []]
 
     for (const ch of members.value) {
         const asc = ch.ascension
         const index = 5 - asc
-        if (ch.enabled) {
-            if (index >= 0 && index < 6) {
-                groups[index].push(ch)
-            }
+        if (ch.rarity === 4 || ch.name === "Lux☆Magica") {
+            groups[7].push(ch)
+        } else if (ch.enabled) {
+            groups[index].push(ch)
         } else {
             groups[6].push(ch)
         }
@@ -127,15 +127,16 @@ const groupedByAscension = computed(() => {
     for (const group of groups) {
         group.sort((a, b) => a.id - b.id)
     }
+    if (!show4stars.value) {
+        groups.splice(7, 1)
+    }
 
     return groups
 })
 
 const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
-    if (ch.rarity === 4 || ch.name === "Lux☆Magica") {
-        title += " -  4 star"
-    } else if (ch.obtain && ch.obtain !== "") {
+    if (ch.obtain && ch.obtain !== "") {
         title += " -  Limited"
     } else if (ch.permaDate == "") {
         title += " -  Not added to permanent yet"
@@ -144,7 +145,6 @@ const makeTitle = (ch: Character): string => {
 }
 
 const borderClass = (ch: Character): string => {
-    if (ch.rarity === 4 || ch.name === "Lux☆Magica") return "four-star-border"
     if (ch.obtain && ch.obtain !== "") return "limited-border"
     if (new Date() > new Date(ch.permaDate)) return "default-border"
     return "not-limited-border"
@@ -328,10 +328,6 @@ td {
 
 .not-limited-border {
     border: 2px solid blue;
-}
-
-.four-star-border {
-    border: 2px solid green;
 }
 
 .default-border {
