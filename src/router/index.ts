@@ -6,6 +6,7 @@ import About from '../pages/About.vue'
 import AccountHasPage from '../pages/AccountHasPage.vue'
 import PvpTeamPage from '../pages/PvpTeamPage.vue'
 import LinkRaid from '../pages/LinkRaid.vue'
+import GachaRatePage from '../pages/GachaRatePage.vue'
 import TierLists from '../pages/TierLists.vue'
 
 const routes = [
@@ -17,6 +18,7 @@ const routes = [
     { path: '/tier-lists', name: 'Tier Lists', component: TierLists },
     { path: '/about', name: 'About', component: About },
     { path: '/my-kioku', name: 'My Kioku', component: AccountHasPage },
+    { path: '/gacha-rate', name: 'Gacha Rate', component: GachaRatePage },
 ]
 
 const router = createRouter({
