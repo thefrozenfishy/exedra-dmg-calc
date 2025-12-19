@@ -3,6 +3,7 @@
         <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
         <button class="copy-btn" @click="downloadAscensionList">Download</button>
         <div>
+            <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
             <label> <input type="checkbox" v-model="showLevels" /> Show Magic and Special levels </label>
             <label> <input type="checkbox" v-model="showHearts" /> Show Heartphial levels </label>
             <label> <input type="checkbox" :disabled="!showLevels" v-model="colourLevels" /> Colour max levels </label>
@@ -91,7 +92,7 @@ import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
 
 const store = useCharacterStore()
-const members = computed(() => store.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
+const members = computed(() => store.characters.filter(c => c.rarity !== 3 && (show4stars.value || (c.rarity === 5 && c.name !== "Lux☆Magica"))))
 const totalAscensions = computed(() => members.value.filter(ch => ch.enabled).reduce((sum, ch) => sum + ch.ascension + 1, 0))
 const totalStandards = computed(() => members.value.filter(ch => ch.enabled).filter(ch => ch.obtain === "").reduce((sum, ch) => sum + ch.ascension + 1, 0))
 const totalPossibleStandards = computed(() => members.value.filter(ch => ch.obtain === "").reduce((sum, _) => sum + 6, 0))
@@ -103,6 +104,7 @@ const extraCollected = useSetting("extraCollected", 0)
 const showLevels = useSetting("showLevels", true);
 const showHearts = useSetting("showHearts", false);
 const colourLevels = useSetting("colourLevels", true);
+const show4stars = useSetting("show4stars", false);
 
 const round = (nr: number) => nr.toFixed(2)
 
