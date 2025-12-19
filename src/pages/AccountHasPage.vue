@@ -73,7 +73,7 @@
         </div>
         <h4 style="margin-bottom: 0;">Maxed Heartphial, Magic-, Kioku- & Special level kioku:</h4>
         <div>
-            5-stars: {{ maxed5starChars.length }} / {{ fiveStarMembers.length }} ({{ round(maxed5starChars.length / fiveStarMembers.length * 100) }}%)
+            5-stars: {{ maxed5starChars.length }} / {{ ownedFiveStars.length }} ({{ round(maxed5starChars.length / ownedFiveStars.length * 100) }}%)
         </div>
         <div v-if="show4stars">
             4-stars: {{ maxed4starChars.length }} / {{ allMembers.length - fiveStarMembers.length }} ({{ round(maxed4starChars.length / (allMembers.length - fiveStarMembers.length) * 100) }}%)
@@ -98,10 +98,11 @@ import { useSetting } from "../store/settingsStore"
 const store = useCharacterStore()
 const allMembers = computed(() => store.characters.filter(c => c.rarity !== 3 && (show4stars.value || (c.rarity === 5 && c.name !== "Lux☆Magica"))))
 const fiveStarMembers = computed(() => store.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
-const totalAscensions = computed(() => fiveStarMembers.value.filter(ch => ch.enabled).reduce((sum, ch) => sum + ch.ascension + 1, 0))
-const totalStandards = computed(() => fiveStarMembers.value.filter(ch => ch.enabled).filter(ch => ch.obtain === "").reduce((sum, ch) => sum + ch.ascension + 1, 0))
+const ownedFiveStars = computed(() => fiveStarMembers.value.filter(c => c.enabled))
+const totalAscensions = computed(() => ownedFiveStars.value.reduce((sum, ch) => sum + ch.ascension + 1, 0))
+const totalStandards = computed(() => ownedFiveStars.value.filter(ch => ch.obtain === "").reduce((sum, ch) => sum + ch.ascension + 1, 0))
 const totalPossibleStandards = computed(() => fiveStarMembers.value.filter(ch => ch.obtain === "").reduce((sum, _) => sum + 6, 0))
-const totalLimiteds = computed(() => fiveStarMembers.value.filter(ch => ch.enabled).filter(ch => ch.obtain !== "").reduce((sum, ch) => sum + ch.ascension + 1, 0))
+const totalLimiteds = computed(() => ownedFiveStars.value.filter(ch => ch.obtain !== "").reduce((sum, ch) => sum + ch.ascension + 1, 0))
 const totalPossibleLimiteds = computed(() => fiveStarMembers.value.filter(ch => ch.obtain !== "").reduce((sum, _) => sum + 6, 0))
 const standardPool = computed(() => fiveStarMembers.value.filter(ch => new Date() > new Date(ch.permaDate)))
 const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.enabled && ch.ascension === 5))
