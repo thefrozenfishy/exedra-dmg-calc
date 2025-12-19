@@ -30,7 +30,7 @@
                                 <div class="heart-level-badge level-badge editable" v-if="showHearts && index !== 6"
                                     :class="colourLevels
                                         ? ch.heartphialLvl === KiokuConstants.maxHeartphialLvl ? 'maxLvl' : 'notMaxLvl'
-                                        : ''" @click.stop="startEdit(ch, 'heartphialLvl')">
+                                        : ''" @click.stop="startEdit(ch, 'heartphialLvl', $event)">
                                     <template v-if="isEditing(ch, 'heartphialLvl')">
                                         <input type="number" v-model.number="editValue" :min="1"
                                             :max="KiokuConstants.maxHeartphialLvl"
@@ -45,7 +45,7 @@
                                 <div class="magic-level-badge level-badge editable" v-if="showLevels && index !== 6"
                                     :class="colourLevels
                                         ? ch.magicLvl === KiokuConstants.maxMagicLvl ? 'maxLvl' : 'notMaxLvl'
-                                        : ''" @click.stop="startEdit(ch, 'magicLvl')">
+                                        : ''" @click.stop="startEdit(ch, 'magicLvl', $event)">
                                     <template v-if="isEditing(ch, 'magicLvl')">
                                         <input type="number" v-model.number="editValue" :min="0"
                                             :max="KiokuConstants.maxMagicLvl" @blur="commitEdit(ch, 'magicLvl')"
@@ -59,7 +59,7 @@
                                 <div class="special-level-badge level-badge editable" v-if="showLevels && index !== 6"
                                     :class="colourLevels
                                         ? isMaxSpecialLvl(ch) ? 'maxLvl' : 'notMaxLvl'
-                                        : ''" @click.stop="startEdit(ch, 'specialLvl')">
+                                        : ''" @click.stop="startEdit(ch, 'specialLvl', $event)">
                                     <template v-if="isEditing(ch, 'specialLvl')">
                                         <input type="number" v-model.number="editValue" :min="1"
                                             :max="KiokuConstants.maxSpecialLvl" @blur="commitEdit(ch, 'specialLvl')"
@@ -105,11 +105,11 @@
         <h4 style="margin-bottom: 0;">Maxed Heartphial, Magic-, Kioku- & Special level kioku:</h4>
         <div>
             5-stars: {{ maxed5starChars.length }} / {{ ownedFiveStars.length }}
-             ({{ round(maxed5starChars.length / ownedFiveStars.length * 100) }}%)
+            ({{ round(maxed5starChars.length / ownedFiveStars.length * 100) }}%)
         </div>
         <div v-if="show4stars">
             4-stars: {{ maxed4starChars.length }} / {{ allMembers.length - fiveStarMembers.length }}
-             ({{ round(maxed4starChars.length / (allMembers.length - fiveStarMembers.length) * 100) }}%)
+            ({{ round(maxed4starChars.length / (allMembers.length - fiveStarMembers.length) * 100) }}%)
         </div>
         <div>
             <h4 style="margin-bottom: 0;">About:</h4>
@@ -127,6 +127,7 @@ import { Character, KiokuConstants } from "../types/KiokuTypes"
 import html2canvas from "html2canvas"
 import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
+import { nextTick } from "vue"
 
 const store = useCharacterStore()
 const allMembers = computed(() => store.characters.filter(c => c.rarity !== 3 && (show4stars.value || (c.rarity === 5 && c.name !== "Lux☆Magica"))))
@@ -206,10 +207,17 @@ type EditableField = "magicLvl" | "heartphialLvl" | "specialLvl"
 const editing = ref<{ id: number; field: EditableField } | null>(null)
 const editValue = ref<number>(0)
 
-const startEdit = (ch: Character, field: EditableField) => {
+const startEdit = async (ch: Character, field: EditableField, e: MouseEvent) => {
     editing.value = { id: ch.id, field }
     editValue.value = ch[field]
+
+    await nextTick()
+
+    const input = (e.currentTarget as HTMLElement).querySelector("input")
+    input?.focus()
+    input?.select()
 }
+
 
 const isEditing = (ch: Character, field: EditableField) =>
     editing.value?.id === ch.id && editing.value.field === field
