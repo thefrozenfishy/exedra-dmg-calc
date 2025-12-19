@@ -14,7 +14,8 @@
                     @dragover.prevent="dragOver = index" @dragleave="dragLeave" @drop="onDrop(index)"
                     v-for="(chars, index) in groupedByAscension" :key="index" class="asc-row">
 
-                    <td class="asc-cell">{{ index === 6 ? "Not Owned" : index === 7 ? "4 Stars" : `A${5 - index}` }}</td>
+                    <td class="asc-cell">{{ index === 6 ? "Not Owned" : index === 7 ? "4 Stars" : `A${5 - index}` }}
+                    </td>
 
                     <td class="characters-cell">
                         <div v-for="ch in chars" :key="ch.id" class="character-card" draggable="true"
@@ -70,13 +71,20 @@
                 {{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100) }}%
             </div>
         </div>
-    </div>
-
-    <div>
-        <h4 style="margin-bottom: 0;">About:</h4>
-        You can edit, export, and import your kioku on the Team Setup page.<br />
-        Red borders indicate limited characters, blue borders indicate characters not yet added to the permanent roster,
-        and transparent borders indicate standard permanent characters.
+        <h4 style="margin-bottom: 0;">Maxed Heartphial, Magic-, Kioku- & Special level kioku:</h4>
+        <div>
+            5-stars: {{ maxed5starChars.length }} / {{ fiveStarMembers.length }} ({{ round(maxed5starChars.length / fiveStarMembers.length * 100) }}%)
+        </div>
+        <div>
+            4-stars: {{ maxed4starChars.length }} / {{ allMembers.length - fiveStarMembers.length }} ({{ round(maxed4starChars.length / (allMembers.length - fiveStarMembers.length) * 100) }}%)
+        </div>
+        <div>
+            <h4 style="margin-bottom: 0;">About:</h4>
+            You can edit, export, and import your kioku on the Team Setup page.<br />
+            Red borders indicate limited characters, blue borders indicate characters not yet added to the permanent
+            roster,
+            and transparent borders indicate standard permanent characters.
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -89,14 +97,16 @@ import { useSetting } from "../store/settingsStore"
 
 const store = useCharacterStore()
 const allMembers = computed(() => store.characters.filter(c => c.rarity !== 3 && (show4stars.value || (c.rarity === 5 && c.name !== "Lux☆Magica"))))
-const members = computed(() => store.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
-const totalAscensions = computed(() => members.value.filter(ch => ch.enabled).reduce((sum, ch) => sum + ch.ascension + 1, 0))
-const totalStandards = computed(() => members.value.filter(ch => ch.enabled).filter(ch => ch.obtain === "").reduce((sum, ch) => sum + ch.ascension + 1, 0))
-const totalPossibleStandards = computed(() => members.value.filter(ch => ch.obtain === "").reduce((sum, _) => sum + 6, 0))
-const totalLimiteds = computed(() => members.value.filter(ch => ch.enabled).filter(ch => ch.obtain !== "").reduce((sum, ch) => sum + ch.ascension + 1, 0))
-const totalPossibleLimiteds = computed(() => members.value.filter(ch => ch.obtain !== "").reduce((sum, _) => sum + 6, 0))
-const standardPool = computed(() => members.value.filter(ch => new Date() > new Date(ch.permaDate)))
+const fiveStarMembers = computed(() => store.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
+const totalAscensions = computed(() => fiveStarMembers.value.filter(ch => ch.enabled).reduce((sum, ch) => sum + ch.ascension + 1, 0))
+const totalStandards = computed(() => fiveStarMembers.value.filter(ch => ch.enabled).filter(ch => ch.obtain === "").reduce((sum, ch) => sum + ch.ascension + 1, 0))
+const totalPossibleStandards = computed(() => fiveStarMembers.value.filter(ch => ch.obtain === "").reduce((sum, _) => sum + 6, 0))
+const totalLimiteds = computed(() => fiveStarMembers.value.filter(ch => ch.enabled).filter(ch => ch.obtain !== "").reduce((sum, ch) => sum + ch.ascension + 1, 0))
+const totalPossibleLimiteds = computed(() => fiveStarMembers.value.filter(ch => ch.obtain !== "").reduce((sum, _) => sum + 6, 0))
+const standardPool = computed(() => fiveStarMembers.value.filter(ch => new Date() > new Date(ch.permaDate)))
 const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.enabled && ch.ascension === 5))
+const maxed5starChars = computed(() => allMembers.value.filter(ch => ch.enabled && isMaxLevels(ch)).filter(ch => fiveStarMembers.value.includes(ch)))
+const maxed4starChars = computed(() => allMembers.value.filter(isMaxLevels).filter(ch => !fiveStarMembers.value.includes(ch)))
 const extraCollected = useSetting("extraCollected", 0)
 const showLevels = useSetting("showLevels", true);
 const showHearts = useSetting("showHearts", false);
@@ -110,6 +120,11 @@ const isMaxSpecialLvl = (ch: Character): boolean => {
     if (ch.ascension >= 3) return ch.specialLvl === 7
     return ch.specialLvl === 4
 }
+
+const isMaxLevels = (ch: Character): boolean => ch.magicLvl === KiokuConstants.maxMagicLvl &&
+    ch.heartphialLvl === KiokuConstants.maxHeartphialLvl &&
+    isMaxSpecialLvl(ch) && ch.kiokuLvl === KiokuConstants.maxKiokuLvl
+
 
 const groupedByAscension = computed(() => {
     const groups: Character[][] = [[], [], [], [], [], [], [], []]
