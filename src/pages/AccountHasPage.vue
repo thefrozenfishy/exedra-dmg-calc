@@ -75,7 +75,7 @@
         <div>
             5-stars: {{ maxed5starChars.length }} / {{ fiveStarMembers.length }} ({{ round(maxed5starChars.length / fiveStarMembers.length * 100) }}%)
         </div>
-        <div>
+        <div v-if="show4stars">
             4-stars: {{ maxed4starChars.length }} / {{ allMembers.length - fiveStarMembers.length }} ({{ round(maxed4starChars.length / (allMembers.length - fiveStarMembers.length) * 100) }}%)
         </div>
         <div>
