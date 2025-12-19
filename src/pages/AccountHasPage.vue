@@ -88,7 +88,8 @@ import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
 
 const store = useCharacterStore()
-const members = computed(() => store.characters.filter(c => c.rarity !== 3 && (show4stars.value || (c.rarity === 5 && c.name !== "Lux☆Magica"))))
+const allMembers = computed(() => store.characters.filter(c => c.rarity !== 3 && (show4stars.value || (c.rarity === 5 && c.name !== "Lux☆Magica"))))
+const members = computed(() => store.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
 const totalAscensions = computed(() => members.value.filter(ch => ch.enabled).reduce((sum, ch) => sum + ch.ascension + 1, 0))
 const totalStandards = computed(() => members.value.filter(ch => ch.enabled).filter(ch => ch.obtain === "").reduce((sum, ch) => sum + ch.ascension + 1, 0))
 const totalPossibleStandards = computed(() => members.value.filter(ch => ch.obtain === "").reduce((sum, _) => sum + 6, 0))
@@ -113,7 +114,7 @@ const isMaxSpecialLvl = (ch: Character): boolean => {
 const groupedByAscension = computed(() => {
     const groups: Character[][] = [[], [], [], [], [], [], [], []]
 
-    for (const ch of members.value) {
+    for (const ch of allMembers.value) {
         const asc = ch.ascension
         const index = 5 - asc
         if (ch.rarity === 4 || ch.name === "Lux☆Magica") {
