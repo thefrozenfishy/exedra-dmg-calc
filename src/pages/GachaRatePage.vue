@@ -284,7 +284,7 @@ const captureChunks = async () => {
 
     const step_size = Math.min(200, 20 * Math.ceil(pullResults.value.length / (5 * 20)));
 
-    for (let i = 0; i <= pullResults.value.length; i += step_size) {
+    for (let i = 0; i < pullResults.value.length; i += step_size) {
         last_pull_count.value = i + step_size;
         await nextTick();
 
