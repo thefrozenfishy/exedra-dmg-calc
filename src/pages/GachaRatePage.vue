@@ -326,21 +326,23 @@ function resetSimulator() {
 
         <div class="pull-grid">
             <template v-for="(p, i) in visiblePulls" :key="i">
-                <!-- separator every 10 pulls -->
                 <div v-if="i % 10 === 0 && i !== 0" class="ten-separator">
                     {{ pullResults.length - i }} pulls ago
                 </div>
 
-                <div class="pull-card">
-                    <div style="position: relative;">
-                        <img class="pull-img" :class="{
-                            'blue-border': p.rarity === 3,
-                            'purple-border': p.rarity === 4,
-                            'gold-border': p.rarity === 5
-                        }" :src="`/exedra-dmg-calc/kioku_images/${p.char?.id}_thumbnail.png`" />
-                        <div v-if="p.isRateUp" class="rateup-badge">
-                            UP
-                        </div>
+                <div class="pull-card"
+                    :class="{ 'gold-card': p.rarity === 5, 'plat-card': p.isRateUp }">
+                    <div :title="p.char?.name">
+                        <a :href="`https://exedra.wiki/wiki/${p.char?.name}`" target="_blank">
+                            <img class="pull-img" :class="{
+                                'blue-border': p.rarity === 3,
+                                'purple-border': p.rarity === 4,
+                                'gold-border': p.rarity === 5
+                            }" :src="`/exedra-dmg-calc/kioku_images/${p.char?.id}_thumbnail.png`" />
+                            <div v-if="p.isRateUp" class="rateup-badge">
+                                UP
+                            </div>
+                        </a>
                     </div>
                 </div>
             </template>
@@ -445,6 +447,11 @@ label {
     position: relative;
 }
 
+.pull-card:hover {
+    transform: scale(1.05);
+    transition: transform 0.15s ease-in-out;
+}
+
 .pull-img {
     width: 60px;
     height: 60px;
@@ -463,6 +470,16 @@ label {
 
 .gold-border {
     border-color: #fcbf49;
+}
+
+.gold-card {
+    background: linear-gradient(145deg, rgba(252, 191, 73, 0.2), rgba(252, 191, 73, 0.35));
+    box-shadow: 0 0 10px rgba(252, 191, 73, 0.5);
+}
+
+.plat-card {
+    background: linear-gradient(145deg, rgba(99, 126, 161, 0.2), rgba(255, 255, 255, 0.35));
+    box-shadow: 0 0 12px rgba(176, 196, 222, 0.6);
 }
 
 .rateup-badge {
