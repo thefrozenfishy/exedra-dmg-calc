@@ -231,7 +231,7 @@ function pull(blueToPurple = false) {
 
 function pullSingle() {
     last_pull_count.value = 1
-    pull(true)
+    pull(false)
 }
 
 function pullTen() {
