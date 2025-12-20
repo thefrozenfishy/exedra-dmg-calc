@@ -33,9 +33,7 @@ const eligible3stars = computed(() =>
 const eligible4stars = computed(() =>
     characterStore.characters.filter(c => c.rarity === 4)
 )
-const eligible5stars = computed(() =>
-    characterStore.characters.filter(c => c.name === pickupCharacter.value?.name || c.rarity === 5 && c.name !== 'Lux☆Magica' && new Date() > new Date(c.permaDate))
-)
+const eligible5stars = computed(() => characterStore.characters.filter(c => c.name !== pickupCharacter.value?.name && (c.rarity === 5 && c.name !== 'Lux☆Magica' && new Date() > new Date(c.permaDate))))
 
 const rate = ref(3)
 const pickupRate = ref(.75)
@@ -195,7 +193,7 @@ function pull(blueToPurple = false) {
 
     const hitRoll = Math.random()
 
-    if (hitRoll < pickupRate.value / 100) {
+    if (pickupCharacter.value && hitRoll < pickupRate.value / 100) {
         result.rarity = 5
         result.isRateUp = true
         result.char = pickupCharacter.value
