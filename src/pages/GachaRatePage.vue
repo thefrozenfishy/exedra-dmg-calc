@@ -162,7 +162,7 @@ onMounted(renderChart)
     <div class="controls">
         <label>
             Pickup Rate (%)
-            <input type="number" v-model.number="rate" />
+            <input type="number" v-model.number="rate" step="0.01" />
         </label>
 
         <label>
