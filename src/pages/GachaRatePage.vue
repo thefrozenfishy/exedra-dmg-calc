@@ -480,9 +480,6 @@ label {
     padding: 1rem;
     border-radius: 8px;
     background: #1e1e1e;
-}
-
-.simulator {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -530,10 +527,6 @@ label {
     background: #141414;
     padding: 0.5rem;
     border-radius: 4px;
-}
-
-.log-entry {
-    opacity: 0.9;
 }
 
 .pull-grid {
