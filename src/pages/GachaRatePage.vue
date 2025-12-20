@@ -25,6 +25,7 @@ Chart.register(
 )
 
 const pickupCharacter = useSetting("pickupCharacter", undefined)
+const showFullHistory = ref(false)
 
 const characterStore = useCharacterStore()
 const eligible3stars = computed(() =>
@@ -180,10 +181,15 @@ const goldCount = ref(0)
 const rateUpCount = ref(0)
 
 const pullResults = ref([])
+let last_pull_count = 0
 
-const displayedPulls = computed(() =>
-    pullResults.value.slice().reverse()
-)
+const visiblePulls = computed(() => {
+    const list = pullResults.value
+    return showFullHistory.value
+        ? list
+        : list.slice(0, last_pull_count)
+})
+
 
 function pull(blueToPurple = false) {
     simPulls.value++
@@ -223,21 +229,21 @@ function pull(blueToPurple = false) {
 }
 
 function pullSingle() {
-    pullResults.value = []
+    last_pull_count = 1
     pull(true)
 }
 
 function pullTen() {
-    pullResults.value = []
+    last_pull_count = 10
     for (let i = 0; i < 10; i++) {
-        pull(i === 9)
+        pull(i === 0)
     }
 }
 
 function pullHundred() {
-    pullResults.value = []
+    last_pull_count = 100
     for (let i = 0; i < 100; i++) {
-        pull((i % 10) === 9)
+        pull((i % 10) === 0)
     }
 }
 
@@ -311,20 +317,35 @@ function resetSimulator() {
             <div>⭐ Rate-up: {{ rateUpCount }}</div>
         </div>
 
+        <div class="history-header">
+            <button class="history-toggle" @click="showFullHistory = !showFullHistory">
+                {{ showFullHistory ? 'Hide full history' : 'Show full history' }}
+                ({{ pullResults.length }} pulls)
+            </button>
+        </div>
+
         <div class="pull-grid">
-            <div v-for="(p, i) in displayedPulls" :key="i" class="pull-card">
-                <div style="position: relative;">
-                    <img class="pull-img" :class="{
-                        'blue-border': p.rarity === 3,
-                        'purple-border': p.rarity === 4,
-                        'gold-border': p.rarity === 5
-                    }" :src="`/exedra-dmg-calc/kioku_images/${p.char?.id}_thumbnail.png`" />
-                    <div v-if="p.isRateUp" class="rateup-badge">
-                        UP
+            <template v-for="(p, i) in visiblePulls" :key="i">
+                <!-- separator every 10 pulls -->
+                <div v-if="i % 10 === 0 && i !== 0" class="ten-separator">
+                    {{ pullResults.length - i }} pulls ago
+                </div>
+
+                <div class="pull-card">
+                    <div style="position: relative;">
+                        <img class="pull-img" :class="{
+                            'blue-border': p.rarity === 3,
+                            'purple-border': p.rarity === 4,
+                            'gold-border': p.rarity === 5
+                        }" :src="`/exedra-dmg-calc/kioku_images/${p.char?.id}_thumbnail.png`" />
+                        <div v-if="p.isRateUp" class="rateup-badge">
+                            UP
+                        </div>
                     </div>
                 </div>
-            </div>
+            </template>
         </div>
+
     </div>
 </template>
 
@@ -461,5 +482,35 @@ label {
     flex-direction: column;
     font-size: 0.85rem;
     gap: 0.25rem;
+}
+
+.history-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.history-toggle {
+    background: #2a2a2a;
+    color: #ddd;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 0.4rem 0.75rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.history-toggle:hover {
+    background: #333;
+}
+
+.ten-separator {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #888;
+    padding: 0.25rem 0;
+    border-top: 1px dashed #333;
+    border-bottom: 1px dashed #333;
 }
 </style>

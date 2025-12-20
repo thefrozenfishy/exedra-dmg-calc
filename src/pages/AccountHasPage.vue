@@ -103,7 +103,7 @@
                 {{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100) }}%
             </div>
         </div>
-        <h4 style="margin-bottom: 0;">Maxed Heartphial, Magic-, Kioku- & Special level kioku:</h4>
+        <h4 style="margin-bottom: 0;">Maxed Heartphial-, Magic-, Kioku- & Special level kioku:</h4>
         <div>
             5-stars: {{ maxed5starChars.length }} / {{ ownedFiveStars.length }}
             ({{ round(maxed5starChars.length / ownedFiveStars.length * 100) }}%)
