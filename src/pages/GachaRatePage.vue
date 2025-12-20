@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import {
     Chart,
     LineController,
@@ -21,7 +21,8 @@ Chart.register(
     Legend
 )
 
-const rate = ref(.75)
+const rate = ref(3)
+const pickupRate = ref(.75)
 const sparkInterval = ref(200)
 const softPityAt = ref(100)
 const softPityRate = ref(12)
@@ -88,7 +89,7 @@ function renderChart() {
         datasets.push({
             label: `a${t}+`,
             data: labels.map(p =>
-                probAtLeastJ(p, t, rate.value / 100)
+                probAtLeastJ(p, t, pickupRate.value / 100)
             ),
             borderColor: curveColors[t - 1],
             backgroundColor: curveColors[t - 1],
@@ -148,6 +149,7 @@ function renderChart() {
 watch(
     [
         rate,
+        pickupRate,
         sparkInterval,
         softPityAt,
         softPityRate,
@@ -156,13 +158,93 @@ watch(
 )
 
 onMounted(renderChart)
+
+const simPulls = ref(0)
+const simCopies = ref(0)
+const simSparksUsed = ref(0)
+const pullResults = ref([])
+
+const blueCount = ref(0)
+const purpleCount = ref(0)
+const goldCount = ref(0)
+const rateUpCount = ref(0)
+
+const displayedPulls = computed(() =>
+    pullResults.value.slice().reverse()
+)
+
+function pull(blueToPurple = false) {
+    simPulls.value++
+    console.log(`Pull #${simPulls.value}`, blueToPurple)
+
+    let result = {
+        rarity: 3,
+        isRateUp: false
+    }
+
+    const hitRoll = Math.random()
+
+    if (hitRoll < pickupRate.value / 100) {
+        result.rarity = 5
+        result.isRateUp = true
+        simCopies.value++
+    } else if (hitRoll < rate.value / 100) {
+        result.rarity = 5
+        simCopies.value++
+    } else if (blueToPurple || hitRoll < 0.15) {
+        result.rarity = 4
+    }
+
+    if (result.rarity === 3) blueCount.value++
+    if (result.rarity === 4) purpleCount.value++
+    if (result.rarity === 5) goldCount.value++
+    if (result.isRateUp) rateUpCount.value++
+
+    pullResults.value.unshift(result)
+}
+
+function pullSingle() {
+    pullResults.value = []
+    pull(true)
+}
+
+function pullTen() {
+    pullResults.value = []
+    for (let i = 0; i < 10; i++) {
+        pull(i === 9)
+    }
+}
+
+function pullHundred() {
+    pullResults.value = []
+    for (let i = 0; i < 100; i++) {
+        pull((i % 10) === 9)
+    }
+}
+
+function resetSimulator() {
+    simPulls.value = 0
+    simCopies.value = 0
+    simSparksUsed.value = 0
+
+    blueCount.value = 0
+    purpleCount.value = 0
+    goldCount.value = 0
+    rateUpCount.value = 0
+
+    pullResults.value = []
+}
 </script>
 
 <template>
     <div class="controls">
         <label>
-            Pickup Rate (%)
+            SSR Rate (%)
             <input type="number" v-model.number="rate" step="0.01" />
+        </label>
+        <label>
+            Pickup Rate (%)
+            <input type="number" v-model.number="pickupRate" step="0.01" />
         </label>
 
         <label>
@@ -183,6 +265,39 @@ onMounted(renderChart)
 
     <div class="chart-wrapper">
         <canvas ref="canvasRef"></canvas>
+    </div>
+    <div class="simulator">
+        <h3>🎰 Gacha Simulator</h3>
+
+        <div class="sim-controls">
+            <button @click="pullSingle">1 Pull</button>
+            <button @click="pullTen">10 Pulls</button>
+            <button @click="pullHundred">100 Pulls</button>
+            <button class="reset" @click="resetSimulator"> Reset </button>
+        </div>
+
+        <div class="sim-stats">
+            <div>Total: {{ simPulls }}</div>
+            <div>🔵 3★: {{ blueCount }}</div>
+            <div>🟣 4★: {{ purpleCount }}</div>
+            <div>🟡 5★: {{ goldCount }}</div>
+            <div>⭐ Rate-up: {{ rateUpCount }}</div>
+        </div>
+
+        <div class="pull-grid">
+            <div v-for="(p, i) in displayedPulls" :key="i" class="pull-card">
+                <div style="position: relative;">
+                    <img class="pull-img" :class="{
+                        'blue-border': p.rarity === 3,
+                        'purple-border': p.rarity === 4,
+                        'gold-border': p.rarity === 5
+                    }" src="/exedra-dmg-calc/kioku_images/10010101_thumbnail.png" />
+                    <div v-if="p.isRateUp" class="rateup-badge">
+                        UP
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -205,5 +320,114 @@ label {
     position: relative;
     height: 600px;
     width: 100%;
+}
+
+.simulator {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 8px;
+    background: #1e1e1e;
+}
+
+.simulator {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.simulator h3 {
+    margin-bottom: 0.75rem;
+}
+
+.sim-controls {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.sim-controls button {
+    padding: 0.4rem 0.75rem;
+    border-radius: 4px;
+    background: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.sim-controls button:hover {
+    background: #444;
+}
+
+.sim-controls .reset {
+    margin-left: auto;
+    background: #552222;
+}
+
+.sim-stats {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.sim-log {
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: 0.8rem;
+    background: #141414;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.log-entry {
+    opacity: 0.9;
+}
+
+.pull-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 0.75rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.pull-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.pull-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 4px solid transparent;
+    object-fit: cover;
+}
+
+.blue-border {
+    border-color: #4cc9f0;
+}
+
+.purple-border {
+    border-color: #9b5de5;
+}
+
+.gold-border {
+    border-color: #fcbf49;
+}
+
+.rateup-badge {
+    position: absolute;
+    bottom: 0px;
+    right: -4px;
+    background: gold;
+    color: black;
+    font-size: 0.7em;
+    font-weight: bold;
+    padding: 2px 4px;
+    border-radius: 6px;
 }
 </style>

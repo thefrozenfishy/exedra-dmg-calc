@@ -19,8 +19,7 @@
     </div>
 
     <div v-else class="character-options">
-      <div v-for="char in filteredChars" :key="char.id" class="character-option"
-        @click="select(char)">
+      <div v-for="char in filteredChars" :key="char.id" class="character-option" @click="select(char)">
         <a :href="`https://exedra.wiki/wiki/${char.name}`" target="_blank">
           <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
         </a>
@@ -41,6 +40,7 @@ import { Character } from '../types/KiokuTypes'
 const props = defineProps<{
   selected: Character | undefined
   main?: Character | undefined
+  filter?: (c: Character) => boolean
 }>()
 
 const emit = defineEmits<{
@@ -54,7 +54,13 @@ const query = ref('')
 const onlyRelevant = ref(true)
 
 const filteredChars = computed(() => {
-  let list = characters.filter(c =>
+  let list = characters
+
+  if (props.filter) {
+    list = list.filter(props.filter)
+  }
+
+  list = list.filter(c =>
     c.name.toLowerCase().includes(query.value.toLowerCase()) ||
     c.character_en.toLowerCase().includes(query.value.toLowerCase()) ||
     (c.name === "Time Stop Strike" && query.value.toLowerCase().startsWith("moe"))
