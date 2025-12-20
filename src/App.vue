@@ -11,13 +11,13 @@ export default defineComponent({
     <header>
       <h1>TFF's mess of a toolbox</h1>
       <nav>
-        <router-link to="/team-setup">Team Setup</router-link>
-        <router-link to="/my-kioku">My Kioku</router-link>
+        <router-link to="/team-setup">Kioku Setup</router-link>
+        <router-link to="/my-kioku">My Kioku Viewer</router-link>
         <router-link to="/gacha-rate">Gacha Rate+Sim</router-link>
-        <router-link to="/sa-simulator-multiple">Calculate Best Team</router-link>
-        <router-link to="/sa-simulator-single">Simulate Single Battle</router-link>
-        <router-link to="/pvp-simulator">PvP Simulator</router-link>
-        <router-link to="/link-raid">Link Raid</router-link>
+        <router-link to="/sa-simulator-multiple">Best SA Team Calculator</router-link>
+        <router-link to="/sa-simulator-single">Single Battle Calculator</router-link>
+        <router-link to="/pvp-simulator">PvP Calculator</router-link>
+        <router-link to="/link-raid">Link Raid Tool</router-link>
         <!--router-link to="/tier-lists">Tier Lists</router-link-->
         <router-link to="/about">About</router-link>
       </nav>
