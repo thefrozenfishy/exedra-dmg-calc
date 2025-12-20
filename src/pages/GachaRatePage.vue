@@ -279,13 +279,23 @@ const waitForImages = async (container) => {
 };
 
 const captureChunks = async () => {
+    if (!showFullHistory.value) {
+        const el = document.querySelector(".pull-grid");
+        if (el) {
+            await waitForImages(el);
+            const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#1e1e1e" });
+            return [canvas];
+        }
+    }
     const canvases = [];
     const originalCount = last_pull_count.value;
+    showFullHistory.value = false;
 
     const step_size = Math.min(200, 20 * Math.ceil(pullResults.value.length / (5 * 20)));
 
     for (let i = 0; i < pullResults.value.length; i += step_size) {
         last_pull_count.value = i + step_size;
+        image_idx_zero.value = i;
         await nextTick();
 
         const el = document.querySelector(".pull-grid");
@@ -295,15 +305,16 @@ const captureChunks = async () => {
 
         const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#1e1e1e" });
         canvases.push(canvas);
-        image_idx_zero.value = last_pull_count.value;
     }
 
     last_pull_count.value = originalCount;
     image_idx_zero.value = 0;
+    showFullHistory.value = true;
     return canvases;
 };
 
-const mergeCanvasesHorizontally = (canvases) => {
+const captureImageOfHistory = async () => {
+    const canvases = await captureChunks();
     const totalWidth = canvases.reduce((sum, c) => sum + c.width, 0);
     const maxHeight = Math.max(...canvases.map(c => c.height));
 
@@ -324,12 +335,11 @@ const mergeCanvasesHorizontally = (canvases) => {
 };
 
 const imgName = computed(() =>
-    `Gacha ${pullResults.value.length} pulls ${rate.value}-${pickupRate.value} rates ${pickupCharacter.value ? pickupCharacter.value.name : 'no'} pickup.png`
+    `Gacha ${showFullHistory.value ? pullResults.value.length : last_pull_count.value} pulls ${rate.value}-${pickupRate.value} rates ${pickupCharacter.value ? pickupCharacter.value.name : 'no'} pickup.png`
 );
 
 const copyFullHistoryHorizontal = async () => {
-    const canvases = await captureChunks();
-    const merged = mergeCanvasesHorizontally(canvases);
+    const merged = await captureImageOfHistory();
 
     const blob = await new Promise(resolve => merged.toBlob(resolve, "image/png"));
     if (!blob) return;
@@ -344,8 +354,7 @@ const copyFullHistoryHorizontal = async () => {
 };
 
 const downloadFullHistoryHorizontal = async () => {
-    const canvases = await captureChunks();
-    const merged = mergeCanvasesHorizontally(canvases);
+    const merged = await captureImageOfHistory();
 
     merged.toBlob((blob) => {
         if (!blob) return;
