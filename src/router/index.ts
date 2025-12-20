@@ -18,7 +18,7 @@ const routes = [
     { path: '/tier-lists', name: 'Tier Lists', component: TierLists },
     { path: '/about', name: 'About', component: About },
     { path: '/my-kioku', name: 'My Kioku', component: AccountHasPage },
-    { path: '/gacha-rate', name: 'Gacha Rate', component: GachaRatePage },
+    { path: '/gacha-rate', name: 'Gacha Rate+Sim', component: GachaRatePage },
 ]
 
 const router = createRouter({
