@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted, computed } from 'vue'
+import { ref, watch, onMounted, computed, nextTick } from 'vue'
 import {
     Chart,
     LineController,
@@ -13,6 +13,8 @@ import {
 import { useSetting } from '../store/settingsStore'
 import CharacterSelector from '../components/CharacterSelector.vue'
 import { useCharacterStore } from '../store/characterStore'
+import html2canvas from "html2canvas";
+import { toast } from "vue3-toastify";
 
 Chart.register(
     LineController,
@@ -181,20 +183,19 @@ const goldCount = ref(0)
 const rateUpCount = ref(0)
 
 const pullResults = ref([])
-let last_pull_count = 0
+let last_pull_count = ref(0)
+let image_idx_zero = ref(0)
 
 const visiblePulls = computed(() => {
     const list = pullResults.value
     return showFullHistory.value
         ? list
-        : list.slice(0, last_pull_count)
+        : list.slice(image_idx_zero.value, last_pull_count.value)
 })
 
 
 function pull(blueToPurple = false) {
     simPulls.value++
-    console.log(`Pull #${simPulls.value}`, blueToPurple)
-
     let result = { isRateUp: false }
 
     const hitRoll = Math.random()
@@ -229,19 +230,19 @@ function pull(blueToPurple = false) {
 }
 
 function pullSingle() {
-    last_pull_count = 1
+    last_pull_count.value = 1
     pull(true)
 }
 
 function pullTen() {
-    last_pull_count = 10
+    last_pull_count.value = 10
     for (let i = 0; i < 10; i++) {
         pull(i === 0)
     }
 }
 
 function pullHundred() {
-    last_pull_count = 100
+    last_pull_count.value = 100
     for (let i = 0; i < 100; i++) {
         pull((i % 10) === 0)
     }
@@ -257,6 +258,88 @@ function resetSimulator() {
 
     pullResults.value = []
 }
+
+const downloadImg = async (blob, filename = "screenshot.png") => {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(url);
+}
+
+const captureChunks = async () => {
+    const canvases = [];
+    const originalCount = last_pull_count.value;
+
+    const step_size = Math.min(200, 20 * Math.ceil(pullResults.value.length / (5 * 20)));
+
+    for (let i = 0; i <= pullResults.value.length; i += step_size) {
+        last_pull_count.value = i + step_size;
+        await nextTick();
+
+        const el = document.querySelector(".pull-grid");
+        if (!el) continue;
+
+        const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#1e1e1e" });
+        canvases.push(canvas);
+        image_idx_zero.value = last_pull_count.value;
+    }
+
+    last_pull_count.value = originalCount;
+    image_idx_zero.value = 0;
+    return canvases;
+};
+
+const mergeCanvasesHorizontally = (canvases) => {
+    const totalWidth = canvases.reduce((sum, c) => sum + c.width, 0);
+    const maxHeight = Math.max(...canvases.map(c => c.height));
+
+    const finalCanvas = document.createElement("canvas");
+    finalCanvas.width = totalWidth;
+    finalCanvas.height = maxHeight;
+
+    const ctx = finalCanvas.getContext("2d");
+    if (!ctx) return finalCanvas;
+
+    let x = 0;
+    for (const c of canvases) {
+        ctx.drawImage(c, x, 0);
+        x += c.width;
+    }
+
+    return finalCanvas;
+};
+
+const imgName = computed(() =>
+    `Gacha ${pullResults.value.length} pulls ${rate.value}-${pickupRate.value} rates ${pickupCharacter.value ? pickupCharacter.value.name : 'no'} pickup.png`
+);
+
+const copyFullHistoryHorizontal = async () => {
+    const canvases = await captureChunks();
+    const merged = mergeCanvasesHorizontally(canvases);
+
+    const blob = await new Promise(resolve => merged.toBlob(resolve, "image/png"));
+    if (!blob) return;
+
+    try {
+        await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+        toast.success("Copied full history horizontally!", { position: toast.POSITION.TOP_RIGHT });
+    } catch {
+        await downloadImg(blob, imgName.value);
+        toast.info("Clipboard blocked — saved as file instead", { position: toast.POSITION.TOP_RIGHT });
+    }
+};
+
+const downloadFullHistoryHorizontal = async () => {
+    const canvases = await captureChunks();
+    const merged = mergeCanvasesHorizontally(canvases);
+
+    merged.toBlob((blob) => {
+        if (!blob) return;
+        downloadImg(blob, imgName.value);
+    }, "image/png");
+};
 </script>
 
 <template>
@@ -322,6 +405,8 @@ function resetSimulator() {
                 {{ showFullHistory ? 'Hide full history' : 'Show full history' }}
                 ({{ pullResults.length }} pulls)
             </button>
+            <button class="history-toggle" @click="copyFullHistoryHorizontal">Copy as image</button>
+            <button class="history-toggle" @click="downloadFullHistoryHorizontal">Download</button>
         </div>
 
         <div class="pull-grid">
@@ -330,8 +415,7 @@ function resetSimulator() {
                     {{ pullResults.length - i }} pulls ago
                 </div>
 
-                <div class="pull-card"
-                    :class="{ 'gold-card': p.rarity === 5, 'plat-card': p.isRateUp }">
+                <div class="pull-card" :class="{ 'gold-card': p.rarity === 5, 'plat-card': p.isRateUp }">
                     <div :title="p.char?.name">
                         <a :href="`https://exedra.wiki/wiki/${p.char?.name}`" target="_blank">
                             <img class="pull-img" :class="{
@@ -478,8 +562,8 @@ label {
 }
 
 .plat-card {
-    background: linear-gradient(145deg, rgba(99, 126, 161, 0.2), rgba(255, 255, 255, 0.35));
-    box-shadow: 0 0 12px rgba(176, 196, 222, 0.6);
+    background: linear-gradient(145deg, rgba(255, 223, 0, 0.3), rgba(255, 223, 0, 0.5));
+    box-shadow: 0 0 15px rgba(255, 223, 0, 0.8);
 }
 
 .rateup-badge {
@@ -505,6 +589,7 @@ label {
     display: flex;
     justify-content: center;
     margin-bottom: 0.5rem;
+    gap: 0.5rem;
 }
 
 .history-toggle {
