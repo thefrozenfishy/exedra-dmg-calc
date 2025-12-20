@@ -268,6 +268,16 @@ const downloadImg = async (blob, filename = "screenshot.png") => {
     URL.revokeObjectURL(url);
 }
 
+const waitForImages = async (container) => {
+    const images = Array.from(container.querySelectorAll("img.pull-img"));
+    await Promise.all(images.map(img => {
+        if (img.complete) return;
+        return new Promise(resolve => {
+            img.onload = img.onerror = resolve;
+        });
+    }));
+};
+
 const captureChunks = async () => {
     const canvases = [];
     const originalCount = last_pull_count.value;
@@ -280,6 +290,8 @@ const captureChunks = async () => {
 
         const el = document.querySelector(".pull-grid");
         if (!el) continue;
+
+        await waitForImages(el);
 
         const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#1e1e1e" });
         canvases.push(canvas);
