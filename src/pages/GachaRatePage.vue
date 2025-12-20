@@ -10,6 +10,9 @@ import {
     Tooltip,
     Legend
 } from 'chart.js'
+import { useSetting } from '../store/settingsStore'
+import CharacterSelector from '../components/CharacterSelector.vue'
+import { useCharacterStore } from '../store/characterStore'
 
 Chart.register(
     LineController,
@@ -19,6 +22,19 @@ Chart.register(
     CategoryScale,
     Tooltip,
     Legend
+)
+
+const pickupCharacter = useSetting("pickupCharacter", undefined)
+
+const characterStore = useCharacterStore()
+const eligible3stars = computed(() =>
+    characterStore.characters.filter(c => c.rarity === 3)
+)
+const eligible4stars = computed(() =>
+    characterStore.characters.filter(c => c.rarity === 4)
+)
+const eligible5stars = computed(() =>
+    characterStore.characters.filter(c => c.name === pickupCharacter.value?.name || c.rarity === 5 && c.name !== 'Lux☆Magica' && new Date() > new Date(c.permaDate))
 )
 
 const rate = ref(3)
@@ -160,14 +176,12 @@ watch(
 onMounted(renderChart)
 
 const simPulls = ref(0)
-const simCopies = ref(0)
-const simSparksUsed = ref(0)
-const pullResults = ref([])
-
 const blueCount = ref(0)
 const purpleCount = ref(0)
 const goldCount = ref(0)
 const rateUpCount = ref(0)
+
+const pullResults = ref([])
 
 const displayedPulls = computed(() =>
     pullResults.value.slice().reverse()
@@ -177,22 +191,29 @@ function pull(blueToPurple = false) {
     simPulls.value++
     console.log(`Pull #${simPulls.value}`, blueToPurple)
 
-    let result = {
-        rarity: 3,
-        isRateUp: false
-    }
+    let result = { isRateUp: false }
 
     const hitRoll = Math.random()
 
     if (hitRoll < pickupRate.value / 100) {
         result.rarity = 5
         result.isRateUp = true
-        simCopies.value++
+        result.char = pickupCharacter.value
     } else if (hitRoll < rate.value / 100) {
         result.rarity = 5
-        simCopies.value++
+        result.char = eligible5stars.value[
+            Math.floor(Math.random() * eligible5stars.value.length)
+        ]
     } else if (blueToPurple || hitRoll < 0.15) {
         result.rarity = 4
+        result.char = eligible4stars.value[
+            Math.floor(Math.random() * eligible4stars.value.length)
+        ]
+    } else {
+        result.rarity = 3
+        result.char = eligible3stars.value[
+            Math.floor(Math.random() * eligible3stars.value.length)
+        ]
     }
 
     if (result.rarity === 3) blueCount.value++
@@ -224,8 +245,6 @@ function pullHundred() {
 
 function resetSimulator() {
     simPulls.value = 0
-    simCopies.value = 0
-    simSparksUsed.value = 0
 
     blueCount.value = 0
     purpleCount.value = 0
@@ -238,10 +257,6 @@ function resetSimulator() {
 
 <template>
     <div class="controls">
-        <label>
-            SSR Rate (%)
-            <input type="number" v-model.number="rate" step="0.01" />
-        </label>
         <label>
             Pickup Rate (%)
             <input type="number" v-model.number="pickupRate" step="0.01" />
@@ -266,6 +281,20 @@ function resetSimulator() {
     <div class="chart-wrapper">
         <canvas ref="canvasRef"></canvas>
     </div>
+
+    <div class="controls">
+        <label>
+            SSR Rate (%)
+            <input type="number" v-model.number="rate" step="0.01" />
+        </label>
+
+        <div class="control">
+            <span class="control-label">Pickup Character</span>
+            <CharacterSelector :selected="pickupCharacter" @select="pickupCharacter = $event"
+                :filter="c => c.rarity === 5 && c.name !== 'Lux☆Magica'" />
+        </div>
+    </div>
+
     <div class="simulator">
         <h3>🎰 Gacha Simulator</h3>
 
@@ -291,7 +320,7 @@ function resetSimulator() {
                         'blue-border': p.rarity === 3,
                         'purple-border': p.rarity === 4,
                         'gold-border': p.rarity === 5
-                    }" src="/exedra-dmg-calc/kioku_images/10010101_thumbnail.png" />
+                    }" :src="`/exedra-dmg-calc/kioku_images/${p.char?.id}_thumbnail.png`" />
                     <div v-if="p.isRateUp" class="rateup-badge">
                         UP
                     </div>
@@ -318,8 +347,6 @@ label {
 
 .chart-wrapper {
     position: relative;
-    height: 600px;
-    width: 100%;
 }
 
 .simulator {
@@ -429,5 +456,12 @@ label {
     font-weight: bold;
     padding: 2px 4px;
     border-radius: 6px;
+}
+
+.control {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.85rem;
+    gap: 0.25rem;
 }
 </style>
