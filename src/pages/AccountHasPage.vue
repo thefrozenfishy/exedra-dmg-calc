@@ -176,8 +176,13 @@ const groupedByAscension = computed(() => {
             groups[6].push(ch)
         }
     }
-    for (const group of groups) {
-        group.sort((a, b) => a.id - b.id)
+    for (let i = 0; i < groups.length; i++) {
+        if (i === 6) {
+            groups[i].sort((a, b) => a.id - b.id)
+            continue
+        } else {
+            groups[i].sort((a, b) => b.id - a.id)
+        }
     }
     if (!show4stars.value) {
         groups.splice(7, 1)
