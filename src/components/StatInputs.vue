@@ -2,13 +2,8 @@
   <div class="stat-inputs">
     <div class="stat" v-for="stat in stats" :key="stat.key">
       <label v-if="!(isSupport && stat.hideForSupport)">{{ stat.label }}:
-        <input
-          type="number"
-          :min="stat.min"
-          :max="stat.max"
-          :value="member[stat.key]"
-          @input="update(stat.key, $event?.target?.valueAsNumber)"
-        />
+        <input type="number" :min="stat.min" :max="stat.max" :value="member[stat.key]"
+          @input="update(stat.key, stat.min, stat.max, $event?.target?.valueAsNumber)" />
       </label>
     </div>
   </div>
@@ -34,7 +29,14 @@ const stats = [
   { key: 'specialLvl', label: 'Special Level', min: 1, max: KiokuConstants.maxSpecialLvl, hideForSupport: true }
 ]
 
-function update(key: string, value?: number) {
+function update(key: string, min: number, max: number, value?: number) {
+  if (value) {
+    if (value < min) {
+      value = min
+    } else if (value > max) {
+      value = max
+    }
+  }
   const updated = { ...props.member, [key]: value }
   emit('update', updated)
 }
