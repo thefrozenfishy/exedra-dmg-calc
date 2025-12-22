@@ -11038,5 +11038,85 @@
         "compareTarget": 1,
         "compareValue": "11",
         "description": "自身のHPが11%未満のとき"
+    },
+    {
+        "battleConditionMstId": 1387,
+        "compareContent": 28,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "11370101",
+        "description": "自身が【アルティメットまどか】のとき"
+    },
+    {
+        "battleConditionMstId": 1388,
+        "compareContent": 304,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "1",
+        "description": "自チームが1以上のトータルダメージを受けたとき"
+    },
+    {
+        "battleConditionMstId": 1389,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "6",
+        "description": "X五十鈴れん専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 1390,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "60",
+        "description": "自身のHPが60%以上のとき"
+    },
+    {
+        "battleConditionMstId": 1391,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "70",
+        "description": "自身のHPが70%以上のとき"
+    },
+    {
+        "battleConditionMstId": 1392,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "80",
+        "description": "自身のHPが80%以上のとき"
+    },
+    {
+        "battleConditionMstId": 1393,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "90",
+        "description": "自身のHPが90%以上のとき"
+    },
+    {
+        "battleConditionMstId": 1394,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "100",
+        "description": "自身のHPが100%以上のとき"
+    },
+    {
+        "battleConditionMstId": 1395,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "7",
+        "description": "Xりか専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 1396,
+        "compareContent": 8,
+        "compareOperator": 1,
+        "compareTarget": 2,
+        "compareValue": "TRUE",
+        "description": "行動者+IsActor"
     }
 ]

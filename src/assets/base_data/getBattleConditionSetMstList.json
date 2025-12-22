@@ -11213,5 +11213,90 @@
         "battleConditionMstIdCsv": "1346,1384,306",
         "battleConditionSetMstId": 2263,
         "description": "Xさやか専用バフが付与されているとき+SPが3以上+追撃を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "6,3,1387",
+        "battleConditionSetMstId": 2264,
+        "description": "戦闘スキルを発動したとき+自身が【アルティメットまどか】のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "449,1,1363",
+        "battleConditionSetMstId": 2265,
+        "description": "衰弱状態の敵にダメージを与えた場合+行動者は仲間+IsActer"
+    },
+    {
+        "battleConditionMstIdCsv": "1388",
+        "battleConditionSetMstId": 2266,
+        "description": "自チームが1以上のトータルダメージを受けたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1389",
+        "battleConditionSetMstId": 2267,
+        "description": "X五十鈴れん専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1390,1389",
+        "battleConditionSetMstId": 2268,
+        "description": "X五十鈴れん専用バフが付与されているとき+自身のHPが60%以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1391,1389",
+        "battleConditionSetMstId": 2269,
+        "description": "X五十鈴れん専用バフが付与されているとき+自身のHPが70%以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1392,1389",
+        "battleConditionSetMstId": 2270,
+        "description": "X五十鈴れん専用バフが付与されているとき+自身のHPが80%以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1393,1389",
+        "battleConditionSetMstId": 2271,
+        "description": "X五十鈴れん専用バフが付与されているとき+自身のHPが90%以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1394,1389",
+        "battleConditionSetMstId": 2272,
+        "description": "X五十鈴れん専用バフが付与されているとき+自身のHPが100%以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1395,38",
+        "battleConditionSetMstId": 2273,
+        "description": "Xりか専用バフが付与されているとき+HP80%以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1389,3,7",
+        "battleConditionSetMstId": 2274,
+        "description": "X五十鈴れん専用バフが付与されているとき+行動タイプは必殺技+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "1395,9",
+        "battleConditionSetMstId": 2275,
+        "description": "Xりか専用バフが付与されているとき+HP50%以上"
+    },
+    {
+        "battleConditionMstIdCsv": "449,3,5",
+        "battleConditionSetMstId": 2276,
+        "description": "衰弱状態の敵にダメージを与えた場合+行動者は自身+行動タイプは通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "449,3,6",
+        "battleConditionSetMstId": 2277,
+        "description": "衰弱状態の敵にダメージを与えた場合+行動者は自身+行動タイプは戦闘スキル"
+    },
+    {
+        "battleConditionMstIdCsv": "449,3,7",
+        "battleConditionSetMstId": 2278,
+        "description": "衰弱状態の敵にダメージを与えた場合+行動者は自身+行動タイプは必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "9,1389",
+        "battleConditionSetMstId": 2294,
+        "description": "X五十鈴れん専用バフが付与されているとき+自身のHPが50%以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1395",
+        "battleConditionSetMstId": 2317,
+        "description": "Xりか専用バフが付与されているとき"
     }
 ]
