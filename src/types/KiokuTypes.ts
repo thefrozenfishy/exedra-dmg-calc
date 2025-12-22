@@ -174,6 +174,7 @@ export interface Character {
     specialLvl: number
     supportDescription: string
     supportTarget: SupportKey
+    dupes: number
 }
 
 export interface TeamSnapshotList {

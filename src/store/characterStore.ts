@@ -30,6 +30,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
         rarity: data.rarity,
         obtain: data.obtain ?? "",
         permaDate: data.permaDate ?? "",
+        dupes: 0,
         ...base,
     }]));
 

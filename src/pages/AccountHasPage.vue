@@ -6,6 +6,7 @@
             <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
             <label> <input type="checkbox" v-model="showLevels" /> Show Magic and Special levels </label>
             <label> <input type="checkbox" v-model="showHearts" /> Show Heartphial levels </label>
+            <label> <input type="checkbox" v-model="showDupes" /> Show Dupes </label>
             <label> <input type="checkbox" :disabled="!(showLevels || showHearts)" v-model="colourLevels" /> Colour max
                 levels </label>
         </div>
@@ -28,6 +29,16 @@
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
                                 </a>
+                                <div class="dupe-badge level-badge editable" v-if="showDupes && index === 0"
+                                    @click.stop="startEdit(ch, 'dupes', $event)">
+                                    <template v-if="isEditing(ch, 'dupes')">
+                                        <input type="number" v-model.number="editValue" @blur="commitEdit(ch, 'dupes')"
+                                            @keydown.enter.prevent="commitEdit(ch, 'dupes')" />
+                                    </template>
+                                    <template v-else>
+                                        + {{ ch.dupes }}
+                                    </template>
+                                </div>
                                 <div class="heart-level-badge level-badge editable" v-if="showHearts && index !== 6"
                                     :class="colourLevels
                                         ? ch.heartphialLvl === KiokuConstants.maxHeartphialLvl ? 'maxLvl' : 'notMaxLvl'
@@ -80,17 +91,18 @@
         <div class="extra-input">
             +500s collected:
             <input type="number" v-model.number="extraCollected" />
+            <p v-if="showDupes">(NOTE: Add <i>either</i> here or via dupes on characters, not both)</p>
         </div>
         <div class="total-ascensions">
             <div>
-                Total SSRs collected: {{ totalAscensions + extraCollected }}
+                Total SSRs collected: {{ totalAscensions + extraTotal }}
             </div>
             <div>
                 Standard roster collected: {{ totalStandards }} / {{ totalPossibleStandards }} ({{ round(totalStandards
                     / totalPossibleStandards * 100) }}%)
             </div>
             <div>
-                ({{ round(extraCollected / (totalStandards + extraCollected) * 100) }}% of your collected standard SSRs
+                ({{ round(extraTotal / (totalStandards + extraTotal) * 100) }}% of your collected standard SSRs
                 have been +500s)
             </div>
             <div>
@@ -144,8 +156,10 @@ const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.en
 const maxed5starChars = computed(() => allMembers.value.filter(ch => ch.enabled && isMaxLevels(ch)).filter(ch => fiveStarMembers.value.includes(ch)))
 const maxed4starChars = computed(() => allMembers.value.filter(isMaxLevels).filter(ch => !fiveStarMembers.value.includes(ch)))
 const extraCollected = useSetting("extraCollected", 0)
+const extraTotal = computed(() => extraCollected.value + (showDupes.value ? ownedFiveStars.value.reduce((sum, ch) => sum + ch.dupes, 0) : 0))
 const showLevels = useSetting("showLevels", true);
 const showHearts = useSetting("showHearts", false);
+const showDupes = useSetting("showDupes", false);
 const colourLevels = useSetting("colourLevels", true);
 const show4stars = useSetting("show4stars", false);
 
@@ -210,7 +224,7 @@ const borderClass = (ch: Character): string => {
 
 }
 
-type EditableField = "magicLvl" | "heartphialLvl" | "specialLvl"
+type EditableField = "magicLvl" | "heartphialLvl" | "specialLvl" | "dupes"
 
 const editing = ref<{ id: number; field: EditableField } | null>(null)
 const editValue = ref<number>(0)
@@ -499,6 +513,11 @@ td {
 
 .heart-level-badge {
     left: 20%;
+    top: 0;
+}
+
+.dupe-badge {
+    left: 80%;
     top: 0;
 }
 
