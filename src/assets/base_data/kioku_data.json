@@ -2181,7 +2181,7 @@
         "role": "Breaker",
         "skill_id": 1224,
         "special_id": 1225,
-        "support_effect": "Increases SPD by 20%.<br>If HP 50% or higher, increases break gauge depletion (1) (Effect increases the higher the remaining HP).",
+        "support_effect": "Increases SPD by 20%.<br>If HP 50% or higher, increases break gauge depletion (50%-59% (1), 60%-79% (2), 80%-99% (3), 100% (4)).",
         "support_id": 95042,
         "support_target": "Breaker"
     },
