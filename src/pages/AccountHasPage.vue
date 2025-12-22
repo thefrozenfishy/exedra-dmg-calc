@@ -88,10 +88,9 @@
                 </tr>
             </tbody>
         </table>
-        <div class="extra-input">
+        <div class="extra-input" v-if="!showDupes">
             +500s collected:
             <input type="number" v-model.number="extraCollected" />
-            <p v-if="showDupes">(NOTE: Add <i>either</i> here or via dupes on characters, not both)</p>
         </div>
         <div class="total-ascensions">
             <div>
@@ -156,7 +155,7 @@ const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.en
 const maxed5starChars = computed(() => allMembers.value.filter(ch => ch.enabled && isMaxLevels(ch)).filter(ch => fiveStarMembers.value.includes(ch)))
 const maxed4starChars = computed(() => allMembers.value.filter(isMaxLevels).filter(ch => !fiveStarMembers.value.includes(ch)))
 const extraCollected = useSetting("extraCollected", 0)
-const extraTotal = computed(() => extraCollected.value + (showDupes.value ? ownedFiveStars.value.reduce((sum, ch) => sum + ch.dupes, 0) : 0))
+const extraTotal = computed(() => (showDupes.value ? ownedFiveStars.value.reduce((sum, ch) => sum + ch.dupes, 0) : extraCollected.value))
 const showLevels = useSetting("showLevels", true);
 const showHearts = useSetting("showHearts", false);
 const showDupes = useSetting("showDupes", false);
