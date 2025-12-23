@@ -57,24 +57,41 @@ export const elementMap: Record<string, KiokuElement> = {
     6: KiokuElement.Void,
 };
 
-export const getPortraits = (elem?: KiokuElement): string[] => [
-    { name: "" },
-    ...Object.values(portraits)]
-    .sort((a, b) => {
-        if (a.name === "A Dream of a Little Mermaid") return -1
-        if (b.name === "A Dream of a Little Mermaid") return 1
-        if (a.name === "The Savior's Apostle") return -1
-        if (b.name === "The Savior's Apostle") return 1
-        if (a.name === "Faith We'll Meet Again Someday") return -1
-        if (b.name === "Faith We'll Meet Again Someday") return 1
-        if (elem && a.name === dmgUpPortraits[elem]) return -1
-        if (elem && b.name === dmgUpPortraits[elem]) return 1
-        if (a.name === "") return -1
-        if (b.name === "") return 1
+const portraitPriority = (elem?: KiokuElement): string[] => [
+    "A Dream of a Little Mermaid",
+    "The Savior's Apostle",
+    "Faith We'll Meet Again Someday",
+    "Farewell to a Future Unseen",
+    "For Hope That Lies Ahead",
+    "Proof of Friends Again",
+    ...(elem ? [dmgUpPortraits[elem]] : []),
+    "",
+];
 
-        return a.name.localeCompare(b.name)
-    })
-    .map(p => p.name)
+const getPortraitPriority = (name: string, elem?: KiokuElement) => {
+    const order = portraitPriority(elem);
+    const idx = order.indexOf(name);
+    return idx === -1 ? order.length : idx;
+};
+
+export const getPortraits = (elem?: KiokuElement): string[] => {
+    return [
+        { name: "" },
+        ...Object.values(portraits),
+    ]
+        .sort((a, b) => {
+            const pa = getPortraitPriority(a.name, elem);
+            const pb = getPortraitPriority(b.name, elem);
+
+            if (pa !== pb) return pa - pb;
+
+            return a.name.localeCompare(b.name, undefined, {
+                numeric: true,
+                sensitivity: "base",
+            });
+        })
+        .map(p => p.name);
+};
 
 export const portraitsBestOnly = (elem: KiokuElement) => [
     "A Dream of a Little Mermaid", "The Savior's Apostle", "Faith We'll Meet Again Someday"
@@ -245,6 +262,7 @@ export interface KiokuData {
 
 export interface CrystalisData {
     name: string
+    description: string
     rarity: number
     value1: number
     styleMstId: number
@@ -286,30 +304,42 @@ export const getPersonalCrystalisEffects = (styleId: number): string[] =>
     Object.values(kiokuData).find(k => k.id === styleId)?.crystalis_effect?.split("<br>") ?? []
 
 
-export const getCrystalises = (elem?: KiokuElement) => [
-    { name: "EX", "styleMstId": 0, selectionAbilityType: 1 },
-    { name: "", "styleMstId": 0, selectionAbilityType: 1 },
-    ...Object.values(crystalises)
-].filter(c => c.styleMstId === 0)
-    .filter(c => c.selectionAbilityType === 1)
-    .sort((a, b) => {
-        if (a.name === "EX") return -1
-        if (b.name === "EX") return 1
-        if (a.name === "Dominant Blow++") return -1
-        if (b.name === "Dominant Blow++") return 1
-        if (a.name === "Mighty Hit++") return -1
-        if (b.name === "Mighty Hit++") return 1
-        if (a.name === "Towering Offense++") return -1
-        if (b.name === "Towering Offense++") return 1
-        if (elem && a.name === elementalCrystalises[elem]) return -1
-        if (elem && b.name === elementalCrystalises[elem]) return 1
-        if (a.name === "") return -1
-        if (b.name === "") return 1
+const crystalisePriority = (elem?: KiokuElement): string[] => [
+    "EX",
+    "Dominant Blow++",
+    "Mighty Hit++",
+    "Towering Offense++",
+    "Quickstep++",
+    ...(elem ? [elementalCrystalises[elem]] : []),
+    "",
+];
 
-        return a.name.localeCompare(b.name)
-    })
-    .map(c => c.name)
+const getCrysSortOrder = (name: string, elem?: KiokuElement) => {
+    const order = crystalisePriority(elem);
+    const idx = order.indexOf(name);
+    return idx === -1 ? order.length : idx;
+};
 
+export const getCrystalises = (elem?: KiokuElement) => {
+    return [
+        { name: "EX", styleMstId: 0, selectionAbilityType: 1 },
+        { name: "", styleMstId: 0, selectionAbilityType: 1 },
+        ...Object.values(crystalises),
+    ]
+        .filter(c => c.styleMstId === 0 && c.selectionAbilityType === 1)
+        .sort((a, b) => {
+            const pa = getCrysSortOrder(a.name, elem);
+            const pb = getCrysSortOrder(b.name, elem);
+
+            if (pa !== pb) return pa - pb;
+
+            return a.name.localeCompare(b.name, undefined, {
+                numeric: true,
+                sensitivity: "base",
+            });
+        })
+        .map(c => c.name);
+};
 
 export const getBestCrystalises = (elem: KiokuElement) => [
     "EX",
@@ -336,30 +366,39 @@ const priorityOrder = [
     "",
 ];
 
-const getPriority = (name: string) => {
+const subCrysTranslate = (name: string): string => {
+    const transformed = name
+        .replace("Increases ", "")
+        .replace(" by ", " +")
+        .replace(/\.$/, "")
+        .replace(" %", "%");
+
+    return transformed.charAt(0).toUpperCase() + transformed.slice(1);
+};
+
+const getSubCrysSortOrder = (name: string) => {
     const idx = priorityOrder.indexOf(name);
     return idx === -1 ? priorityOrder.length : idx;
 };
 
 export const getSubCrystalises = () => {
     return [
-        { name: "", selectionAbilityType: 2 },
+        { name: "", selectionAbilityType: 2, description: "" },
         ...Object.values(crystalises),
     ]
         .filter(c => c.selectionAbilityType === 2)
-        .map(c => c.name.replace(/\.$/, " .").replace("%", " %"),)
         .sort((a, b) => {
-            const pa = getPriority(a);
-            const pb = getPriority(b);
+            const pa = getSubCrysSortOrder(a.description);
+            const pb = getSubCrysSortOrder(b.description);
 
             if (pa !== pb) return pa - pb;
 
-            return a.localeCompare(b, undefined, {
+            return a.description.localeCompare(b.description, undefined, {
                 numeric: true,
                 sensitivity: "base",
             });
         })
-        .map(c => c.replace(" %", "%").replace(/ \.$/, "."));
+        .map(c => ({ name: c.name, description: subCrysTranslate(c.description) }))
 };
 
 export const KiokuConstants = {

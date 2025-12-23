@@ -3,7 +3,7 @@
         <select v-for="i in 9" :key="i" :value="modelValue?.[i - 1] ?? ''"
             @change="e => update(i - 1, (e.target as HTMLSelectElement).value)">
             <option disabled value=""></option>
-            <option v-for="k in subOptions" :key="k" :value="k">{{ k }}</option>
+            <option v-for="k in subOptions" :key="k.name" :value="k.name">{{ k.description }}</option>
         </select>
     </div>
 </template>
