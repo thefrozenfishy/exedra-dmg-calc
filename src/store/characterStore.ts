@@ -40,6 +40,8 @@ export const useCharacterStore = defineStore('characterStore', () => {
         characters.value = oldChars.map(c => {
             c.crys = c?.crys?.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc)) ?? []
             c.crys_sub = c?.crys_sub?.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc)) ?? []
+            if (c.ascension < 0) c.ascension = 0
+            if (c.ascension > KiokuConstants.maxAscension) c.ascension = KiokuConstants.maxAscension
             return c
         }).filter(k => "name" in k && "id" in k && "enabled" in k && "role" in k && "element" in k && "character_en" in k && "rarity" in k)
             .map(c => ({ ...baseChars[c.name], ...Object.fromEntries(Object.entries(c).filter(([k, v]) => v != null)) }))
