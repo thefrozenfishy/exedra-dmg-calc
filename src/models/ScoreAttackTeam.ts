@@ -309,10 +309,9 @@ export class ScoreAttackTeam {
 
         let def_remaining = (
             this.getEffect("DWN_DEF_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) *
-            this.getEffect("DWN_DEF_RATIO", amountOfEnemies, enemy.maxBreak)
+            this.getEffect("DWN_DEF_RATIO", amountOfEnemies, enemy.maxBreak) *
+            (0.9 ** this.all_effects["WEAKNESS"]) // Weakness acts as -10% def
         );
-        // Weakness acts as -10% def
-        def_remaining *= 0.9 ** this.all_effects["WEAKNESS"]
 
         const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;
 
