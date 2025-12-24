@@ -132,6 +132,7 @@ export class ScoreAttackTeam {
         this.activeBuffsAndDebuffs = activeAliments;
         this.all_effects["DWN_DEF_ACCUM_RATIO"] = 1
         this.all_effects["DWN_DEF_RATIO"] = 1
+        this.all_effects["WEAKNESS"] = 0
         this.setup();
     }
 
@@ -174,6 +175,8 @@ export class ScoreAttackTeam {
                             if (detail.abilityEffectType in this.all_effects) {
                                 if (["DWN_DEF_RATIO", "DWN_DEF_ACCUM_RATIO"].includes(detail.abilityEffectType)) {
                                     this.all_effects[detail.abilityEffectType] *= 1 - valueTotal / 1000;
+                                } else if (detail.abilityEffectType === "WEAKNESS") {
+                                    this.all_effects[detail.abilityEffectType] += 1;
                                 } else {
                                     this.all_effects[detail.abilityEffectType] += valueTotal
                                 }
@@ -308,10 +311,9 @@ export class ScoreAttackTeam {
             this.getEffect("DWN_DEF_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) *
             this.getEffect("DWN_DEF_RATIO", amountOfEnemies, enemy.maxBreak)
         );
-        if ("WEAKNESS" in this.all_effects) {
-            // Weakness may be applied only once, and acts as -10% def
-            def_remaining *= 0.9
-        }
+        // Weakness acts as -10% def
+        def_remaining *= 0.9 ** this.all_effects["WEAKNESS"]
+
         const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;
 
         const uncapped_crit_rate = (this.dps.baseCritRate +
