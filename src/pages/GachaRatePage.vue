@@ -104,7 +104,7 @@ function renderChart() {
 
     for (let t = 1; t <= 6; t++) {
         datasets.push({
-            label: `a${t}+`,
+            label: `a${t - 1}+`,
             data: labels.map(p =>
                 probAtLeastJ(p, t, pickupRate.value / 100)
             ),
