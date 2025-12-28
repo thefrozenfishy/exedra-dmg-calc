@@ -16,19 +16,20 @@
       </div>
     </div>
   </div>
-  <div style="display: none;">
+  <div>
     <h2>Battle Order</h2>
     <p style="color: red;">UNDER CONSTRUCTION</p>
     <button @click="runSimulation" :disabled="!isFullBattle">Run Simulation</button>
     <p style="color: red;">Take this with a big grain of salt, as my understanding of the mechanics here are not
       perfect, nor do I want to use the time to special case all different attacks, targeting etc</p>
-    <p>I'll try to make sure all common pvp characters work identical to ingame, but niche picks are at your own risk
-    </p>
-    <p>First few turns are probably correct, so use this to check speed ties etc. The further down you go the less
-      likely it is to be correct</p>
+    <p>Use this to get a gut feel for how characters and speed vs AV vs AA works and how speed ties resolve</p>
+    <p>I'll try to make sure all common pvp characters work identical to in-game, but niche picks are at your own risk</p>
+    <p>If anything looks weird, just give me a poke with an example team!</p>
     <div class="battle-output">
       <div v-for="(state, idx) in battleOutput" :key="idx" class="battle-state">
         <hr class="matchup-separator" />
+        <div>Action {{ idx + 1 }} is by {{ state.lastActor }} on {{ state.lastTeamIsTeam1 ? "Allied" : "Enemy" }} team
+          using {{ state.lastTargetType ?? "SETUP" }}</div>
         <div v-for="side of [state.allies, state.enemies]">
           <div class="row">
             {{ side.sp }}
@@ -41,7 +42,7 @@
                 MP
                 <progress :value="char.mp" :max="char.maxMp">MP</progress>
               </div>
-              <div class="progress-bar" :title="Math.max(char.breakCurrent, 0) + ' / ' + char.maxBreakGauge">
+              <div class="progress-bar" :title="char.breakCurrent + ' / ' + char.maxBreakGauge">
                 Break
                 <progress :value="char.breakCurrent" :max="char.maxBreakGauge"></progress>
               </div>
@@ -59,7 +60,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { usePvPStore } from '../store/singleTeamStore'
-import { BattleState } from '../types/KiokuTypes'
+import { BattleSnapshot } from '../types/KiokuTypes'
 import { PvPBattle } from '../models/PvPBattle'
 import { PvPTeam } from '../models/PvPTeam'
 import CharacterEditor from '../components/CharacterEditor.vue'
@@ -68,7 +69,7 @@ import { PvPKioku } from '../models/PvPKioku'
 
 const team = usePvPStore()
 
-const battleOutput = ref<BattleState[]>([])
+const battleOutput = ref<BattleSnapshot[]>([])
 
 const round = (spd: number) => spd.toFixed(2)
 
@@ -113,7 +114,7 @@ function runSimulation() {
   if (battleOutput.value.length > 1) return // Only run sim once
 
   const states = []
-  for (let index = 0; index < 3; index++) {
+  for (let index = 0; index < 30; index++) {
     battleInstance.value.traverseToNextActor()
     states.push(battleInstance.value.getCurrentState())
     try {

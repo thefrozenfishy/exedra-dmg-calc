@@ -1,10 +1,13 @@
-import { BattleSnapshot } from "../types/KiokuTypes";
-import { PvPTeam } from "./PvPTeam";
+import { BattleSnapshot, TargetType } from "../types/KiokuTypes";
+import { KiokuState, PvPTeam } from "./PvPTeam";
 
 export class PvPBattle {
     private team1: PvPTeam;
     private team2: PvPTeam;
     private debug: boolean;
+    private lastActor: KiokuState = undefined;
+    private lastTargetType: TargetType = undefined;
+    private lastTeamIsTeam1: boolean = false;
 
     constructor(team1: PvPTeam, team2: PvPTeam, debug = false) {
         this.team1 = team1;
@@ -52,32 +55,43 @@ export class PvPBattle {
                     maxMp: k.maxMp,
                     id: k.kioku.data.id,
                 }))
-            }
+            },
+            lastActor: this.lastActor?.kioku.data.name,
+            lastTeamIsTeam1: this.lastTeamIsTeam1,
+            lastTargetType: this.lastTargetType
         }
     }
 
     traverseToNextActor(): PvPTeam {
         const seconds1 = this.team1.getSecondsUntilNextReadyKioku()
         const seconds2 = this.team2.getSecondsUntilNextReadyKioku()
-        this.team1.traverseSeconds(seconds2 > seconds1 ? seconds1 : seconds2)
-        this.team2.traverseSeconds(seconds2 > seconds1 ? seconds1 : seconds2)
+        const secondsTraveled = seconds2 > seconds1 ? seconds1 : seconds2
+        console.log("Next actors in", seconds1, "seconds for team 1 and", seconds2, "seconds for team 2. Traversing", secondsTraveled)
+        this.team1.traverseSeconds(secondsTraveled)
+        this.team2.traverseSeconds(secondsTraveled)
         if (seconds2 > seconds1) return this.team1
         return this.team2
     }
 
     executeNextAction(): void {
-        let eff = this.team2.useUltimate()
-        if (eff) {
-            this.team2.resolveEndOfTurn(eff)
-            return
+        this.lastTeamIsTeam1 = false
+        let eff: [KiokuState, TargetType] | undefined = this.team2.useUltimate()
+        if (!eff) {
+            this.lastTeamIsTeam1 = true
+            eff = this.team1.useUltimate()
         }
-        eff = this.team1.useUltimate()
-        if (eff) {
-            this.team1.resolveEndOfTurn(eff)
-            return
+        if (!eff) {
+            const actorTeam = this.traverseToNextActor()
+            eff = actorTeam.useAttackOrSkill()
+            this.lastTeamIsTeam1 = this.team1 === actorTeam
         }
-        const actorTeam = this.traverseToNextActor()
-        eff = actorTeam.useAttackOrSkill()
-        actorTeam.resolveEndOfTurn(eff)
+        this.lastActor = eff[0]
+        this.lastTargetType = eff[1]
+        this.resolveEndOfTurn()
+    }
+
+    resolveEndOfTurn(): void {
+        this.team2.resolveEndOfTurn()
+        this.team1.resolveEndOfTurn()
     }
 }

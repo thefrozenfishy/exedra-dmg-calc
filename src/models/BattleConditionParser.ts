@@ -1,6 +1,7 @@
 import battleConditionSetsJson from '../assets/base_data/getBattleConditionSetMstList.json';
 import battleConditionsJson from '../assets/base_data/getBattleConditionMstList.json';
-import { Aliment, BattleState, PassiveSkill, SkillDetail } from '../types/KiokuTypes';
+import { BattleState, PassiveSkill, SkillDetail } from '../types/KiokuTypes';
+import { KiokuState } from './PvPTeam';
 
 interface BattleCondition {
     battleConditionMstId: number
@@ -152,7 +153,8 @@ Object.values(battleConditions).forEach(c => {
     }
 })
 
-const isCondActive = (cond: BattleCondition, valueToCompareTo: string | number | any[]): boolean => {
+const isCondActive = (cond: BattleCondition, valueToCompareTo: any): boolean => {
+    if (typeof valueToCompareTo === "boolean") valueToCompareTo = valueToCompareTo ? "TRUE" : "FALSE"
     if (cond.compareOperator === CompareOperator.EQUAL) {
         return valueToCompareTo == cond.compareValue
     }
@@ -238,6 +240,21 @@ export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: st
 }
 
 
+const targetsToCompareTo = (compareTarget: CompareTarget, state: BattleState): KiokuState[] => {
+    if (compareTarget === CompareTarget.SELF) return [state.actor]
+    if (compareTarget === CompareTarget.ACTOR) return [state.actor]
+    if (compareTarget === CompareTarget.MAIN_TARGET) return [state.target]
+    if (compareTarget === CompareTarget.ALL_TARGETS) return [state.target]
+    if (compareTarget === CompareTarget.FRIEND_TEAM) return state.actorTeam.kiokuStates
+    if (compareTarget === CompareTarget.OPPONENT_TEAM) return state.enemyTeam.kiokuStates
+    return [state.actor]
+}
+
+export const conditionSetRequiresActorIsSelf = (eff: SkillDetail) =>
+    eff.startConditionSetIdCsv.length && eff.startConditionSetIdCsv.split(",").some(conditionSetId => {
+        const battleConditionSet = battleConditionSets[conditionSetId]
+        return battleConditionSet.battleConditionMstIdCsv.split(",").some(condId => condId === "3")
+    })
 
 export const isConditionSetActive = (eff: SkillDetail, state: BattleState) =>
     isConditionSetActiveForPvP(eff.activeConditionSetIdCsv.split(","), state)
@@ -251,32 +268,47 @@ export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], {
     actionType
 }: BattleState): boolean =>
     conditionSetIdCsvList.every(conditionSetIdCsv => conditionSetIdCsv.split(",").every(conditionSetId => {
-        if (!conditionSetId || conditionSetId === "0") return true
+        if (!conditionSetId.length || conditionSetId === "0") return true
 
         const battleConditionSet = battleConditionSets[conditionSetId]
         for (const conditionId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
             const battleCondition = battleConditions[conditionId]
 
+            const compTargets = targetsToCompareTo(battleCondition.compareTarget, {
+                actorTeam,
+                enemyTeam,
+                actor,
+                target,
+                actionType
+            })
+
             if (battleCondition.compareContent === CompareContent.HP_RATIO) {
                 if (!isCondActive(battleCondition, actor.currentHpPercent)) return false
             } else if (battleCondition.compareContent === CompareContent.IS_ACTOR) {
-                // This is mabayu skill not working on self etc, just pretend this scenario doesn't happen
+                if (!isCondActive(battleCondition, target.teamLabel !== actor.teamLabel ? true : actor === target)) return false
             } else if (battleCondition.compareContent === CompareContent.ALIVE_UNIT_COUNT) {
                 if (!isCondActive(battleCondition, enemyTeam.kiokuStates.length)) return false
             } else if (battleCondition.compareContent === CompareContent.BREAKED_UNIT_COUNT) {
-                if (!isCondActive(battleCondition, enemyTeam.kiokuStates.filter(k => k.isBroken).length)) return false
+                if (!isCondActive(battleCondition, enemyTeam.kiokuStates.filter(k => k.currentRemainingBreakGauge <= 0 && !k.isBroken).length)) return false
             } else if (battleCondition.compareContent === CompareContent.CHARGE_POINT) {
                 if (!isCondActive(battleCondition, actor.currentMagic)) return false
             } else if (battleCondition.compareContent === CompareContent.IS_FRIEND) {
-                // Pretend it is always friend cause I think we never target enemy?
+                if (!isCondActive(battleCondition, target.teamLabel === actor.teamLabel)) return false
             } else if (battleCondition.compareContent === CompareContent.ACTOR_SKILL_TYPE) {
                 if (!actionType || !isCondActive(battleCondition, actionType)) return false
             } else if (battleCondition.compareContent === CompareContent.ABILITY_EFFECT) {
                 if (!Object.values(target.activeEffectDetails).some(e => isCondActive(battleCondition, e.abilityEffectType))) return false
             } else if (battleCondition.compareContent === CompareContent.BUFF_COUNT) {
-                if (!isCondActive(battleCondition, 0)) return false
+                console.log("Found buffs", compTargets.reduce((acc, k) => acc + k.numberOfBuffs(), 0))
+                if (!isCondActive(battleCondition, compTargets.reduce((acc, k) => acc + k.numberOfBuffs(), 0))) return false
+            } else if (battleCondition.compareContent === CompareContent.DEBUFF_COUNT) {
+                if (!isCondActive(battleCondition, compTargets.reduce((acc, k) => acc + k.numberOfDebuffs(), 0))) return false
             } else if (battleCondition.compareContent === CompareContent.NR_OF_DEBUFFS) {
-                if (!isCondActive(battleCondition, 0)) return false
+                if (!isCondActive(battleCondition, compTargets.reduce((acc, k) => acc + k.numberOfDebuffs(), 0))) return false
+            } else if (battleCondition.compareContent === CompareContent.BREAKED_DAMAGE_RECEIVE_RATE_BECOME_MAX_UNIT_COUNT) {// TODO
+                if (!isCondActive(battleCondition, 0)) return false // TODO fix
+            } else if (battleCondition.compareContent === CompareContent.TOTAL_DAMAGE) {
+                if (!isCondActive(battleCondition, 1000)) return false // TODO fix
             } else {
                 console.warn(`Unknown condition ${battleCondition.compareContent}`, battleCondition)
             }

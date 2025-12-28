@@ -218,6 +218,9 @@ export interface TeamSnapshot {
 export interface BattleSnapshot {
     allies: TeamSnapshotList
     enemies: TeamSnapshotList
+    lastActor?: string
+    lastTeamIsTeam1?: boolean
+    lastTargetType?: TargetType
 }
 
 export interface KiokuData {
@@ -484,6 +487,7 @@ export const mpGainFromAction = {
     [TargetType.specialId]: 5,
     [TargetType.skillId]: 30,
     [TargetType.attackId]: 15,
+    [TargetType.fuaId]: 0,
 }
 
 export interface BattleState {
