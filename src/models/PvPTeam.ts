@@ -29,6 +29,7 @@ const enemySkills = [
     "DWN_SPD_RATIO",
     "DWN_DEF_RATIO",
     "WEAKNESS",
+    "SLOW",
 ]
 
 function maxBreak(rarity: number, role: KiokuRole): number {
@@ -55,12 +56,12 @@ export class KiokuState {
     maxMp: number
     aggro: number
 
-    effectDetailBank: PassiveSkill[] = [];
-    // Put in here things that will trigger on start, break, end etc
-    passiveEffectDetails: Record<string, PassiveSkill> = {};
+    team: PvPTeam
+
     // Put in here the effects that are active constantly and use in calculations
-    activeEffectDetails: Record<string, SkillDetail> = {}
+    passiveEffectDetails: PassiveSkill[] = [];
     // Put in here the effects that are only active for a certain amount of turns
+    activeEffectDetails: Record<string, SkillDetail> = {}
 
     currentRemainingBreakGauge: number
     currentMetersRemaining = maxMeters
@@ -74,9 +75,10 @@ export class KiokuState {
 
     stateGen: (actor: KiokuState, target: KiokuState, actionType?: TargetType) => BattleState
 
-    constructor(posIdx: number, teamLabel: string, kioku: PvPKioku, stateGen: (actor: KiokuState, target: KiokuState, actionType?: TargetType) => BattleState) {
+    constructor(posIdx: number, teamLabel: string, team: PvPTeam, kioku: PvPKioku, stateGen: (actor: KiokuState, target: KiokuState, actionType?: TargetType) => BattleState) {
         this.posIdx = posIdx
         this.teamLabel = teamLabel
+        this.team = team
         this.kioku = kioku
         this.currentRemainingBreakGauge = maxBreak(kioku.data.rarity, kioku.data.role)
         this.maxBreakGauge = this.currentRemainingBreakGauge
@@ -164,7 +166,7 @@ export class KiokuState {
 
     filteredEffects(): Record<string, SkillDetail[]> {
         const currents: Record<string, SkillDetail[]> = {};
-        [...Object.values(this.passiveEffectDetails), ...Object.values(this.activeEffectDetails)]
+        [...this.passiveEffectDetails, ...Object.values(this.activeEffectDetails)]
             .forEach(detail => {
                 if (!isConditionSetActive(detail, this.stateGen(this, this))) return
                 if (!(detail.abilityEffectType in currents)) currents[detail.abilityEffectType] = []
@@ -175,24 +177,16 @@ export class KiokuState {
 
     addEffectToBank(detail: SkillDetail) {
         if ("passiveSkillMstId" in detail) {
-            this.effectDetailBank.push(detail)
+            this.passiveEffectDetails.push(detail)
         } else {
             console.error("An active thing was added to the bank??")
         }
-    }
-
-    dealBreakDamageToEnemy(target: KiokuState, detail: SkillDetail, effectName: TargetType) {
-
     }
 
     applyEffect(target: KiokuState, detail: SkillDetail, effectName?: TargetType): number | undefined {
         /**
          * @returns action id if additional act should be triggered, otherwise returns null
          */
-        if ("passiveSkillDetailMstId" in detail) {
-            target.passiveEffectDetails[detail.passiveSkillDetailMstId] = detail
-            return
-        } 
         if (!isConditionSetActive(detail, this.stateGen(this, target, effectName))) return
         if (detail.abilityEffectType.startsWith("DMG_")) {
             // TODO: Proximity should use value4, prolly doesn't matter much tho
@@ -205,21 +199,26 @@ export class KiokuState {
             return;
         }
 
+        const effTargets = this.team.sliceTargets(this, this.team.kiokuStates, detail)
 
         if (detail.turn) {
-            target.activeEffectDetails[skillDetailId(detail)] = detail
+            effTargets.forEach(t => t.activeEffectDetails[skillDetailId(detail)] = detail)
         } else if (detail.abilityEffectType === "HASTE") {
-            target.progressMeters(detail.value1 * 10)
+            console.warn("HASTING", detail, effTargets)
+            effTargets.forEach(t => t.progressMeters(detail.value1 * 10))
         } else if (detail.abilityEffectType === "GAIN_EP_RATIO") {
-            target.getMp(target.maxMp * detail.value1 / 1000)
+            effTargets.forEach(t => t.getMp(target.maxMp * detail.value1 / 1000))
         } else if (detail.abilityEffectType === "GAIN_EP_FIXED") {
-            target.getMp(detail.value1)
+            effTargets.forEach(t => t.getMp(detail.value1))
         } else if (detail.abilityEffectType === "CUTOUT") {
-            target.activeEffectDetails[skillDetailId(detail)] = { ...detail, turn: 1 }
+            effTargets.forEach(t => t.activeEffectDetails[skillDetailId(detail)] = { ...detail, turn: 1 })
         } else if (detail.abilityEffectType === "ADDITIONAL_SKILL_ACT") {
             return detail.value1;
         } else if (detail.abilityEffectType === "GAIN_CHARGE_POINT") {
             this.currentMagic += detail.value1;
+        } else if ("passiveSkillDetailMstId" in detail) {
+            console.warn("How to handle this", this, detail, target, effectName)
+            // TODO How to handle passiveS? 
         } else {
             console.error("Active without turn", detail)
         }
@@ -248,7 +247,7 @@ export class PvPTeam {
     })
 
     constructor(kiokus: PvPKioku[], teamLabel: string, debug = false) {
-        this.kiokuStates = kiokus.map((k, i) => new KiokuState(i, teamLabel, k, this.generateState))
+        this.kiokuStates = kiokus.map((k, i) => new KiokuState(i, teamLabel, this, k, this.generateState))
         this.debug = debug;
         this.teamLabel = teamLabel;
     }
@@ -259,24 +258,16 @@ export class PvPTeam {
         this.kiokuStates.forEach(k => k.kioku.effects.forEach(e => {
             k.addEffectToBank(e)
         }))
-        this.kiokuStates.forEach(k => {
-            console.log("Initial effects for", k.kioku.name, JSON.stringify(k.effectDetailBank.map(d => d.activeConditionSetIdCsv))
-            )
-        })
         this.triggerPassives(ProcessTiming.BATTLE_START)
     }
 
     triggerPassives(timing: ProcessTiming, lastAction?: TargetType, lastActor?: KiokuState): Record<number, KiokuState> {
-        console.log("triggering passives for", this.teamLabel, ProcessTiming[timing])
         let additionalAct: Record<number, KiokuState> = {};
-        for (const k of lastActor ? [lastActor] : this.kiokuStates) {
-            k.effectDetailBank.forEach(detail => {
-                //console.log("Checking passive", detail, "from", k.kioku.name, conditionSetRequiresActorIsSelf(detail), lastActor);
+        for (const k of this.kiokuStates) {
+            k.passiveEffectDetails.forEach(detail => {
                 if (conditionSetRequiresActorIsSelf(detail) && (!lastActor || lastActor !== k)) return
                 this.sliceTargets(k, this.kiokuStates, detail).forEach(t => {
-                    if (detail.activeConditionSetIdCsv === "1344") console.log("dddetail", detail)
                     if (isTimingCorrect(timing, detail)) {
-                        //console.info("applying passive", detail, "from", k.kioku.name, "to", t.kioku.name)
                         const fua = k.applyEffect(t, detail, lastAction)
                         if (fua) additionalAct[fua] = k
                     }
@@ -384,6 +375,7 @@ export class PvPTeam {
         const effType = this.currentSp ? TargetType.skillId : TargetType.attackId
         this.triggerPassives(ProcessTiming.TURN_START, effType)
         this.act(actor, effType)
+        console.error("TRIGGERING PASSIVES AFTER", actor.kioku.name, actor, effType)
         const actionIds = this.triggerPassives(ProcessTiming.ATTACK_END, effType, actor)
         this.triggerFua(actionIds)
         console.log(this.teamLabel, "actor is", actor.kioku.name, "using", effType)

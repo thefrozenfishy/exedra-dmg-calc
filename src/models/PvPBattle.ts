@@ -93,5 +93,6 @@ export class PvPBattle {
     resolveEndOfTurn(): void {
         this.team2.resolveEndOfTurn()
         this.team1.resolveEndOfTurn()
+        console.log("===========================================================================")
     }
 }
