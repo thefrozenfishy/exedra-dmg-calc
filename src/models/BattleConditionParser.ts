@@ -252,6 +252,7 @@ const targetsToCompareTo = (compareTarget: CompareTarget, state: BattleState): K
 
 export const conditionSetRequiresActorIsSelf = (eff: SkillDetail) =>
     eff.startConditionSetIdCsv.length && eff.startConditionSetIdCsv.split(",").some(conditionSetId => {
+        if (!conditionSetId.length || conditionSetId === "0") return true
         const battleConditionSet = battleConditionSets[conditionSetId]
         return battleConditionSet.battleConditionMstIdCsv.split(",").some(condId => condId === "3")
     })
