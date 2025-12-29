@@ -293,6 +293,9 @@ export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], {
                 if (!isCondActive(battleCondition, enemyTeam.kiokuStates.filter(k => k.currentRemainingBreakGauge <= 0 && !k.isBroken).length)) return false
             } else if (battleCondition.compareContent === CompareContent.CHARGE_POINT) {
                 if (!isCondActive(battleCondition, actor.currentMagic)) return false
+            } else if (battleCondition.compareContent === CompareContent.CTD_UNIT_COUNT) {
+                // Assume we never crit
+                return false
             } else if (battleCondition.compareContent === CompareContent.IS_FRIEND) {
                 if (!isCondActive(battleCondition, target.teamLabel === actor.teamLabel)) return false
             } else if (battleCondition.compareContent === CompareContent.ACTOR_SKILL_TYPE) {
