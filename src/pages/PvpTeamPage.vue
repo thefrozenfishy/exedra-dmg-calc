@@ -23,13 +23,24 @@
     <p style="color: red;">Take this with a big grain of salt, as my understanding of the mechanics here are not
       perfect, nor do I want to use the time to special case all different attacks, targeting etc</p>
     <p>Use this to get a gut feel for how characters and speed vs AV vs AA works and how speed ties resolve</p>
-    <p>I'll try to make sure all common pvp characters work identical to in-game, but niche picks are at your own risk</p>
+    <p>I'll try to make sure all common pvp characters work identical to in-game, but niche picks are at your own risk
+    </p>
     <p>If anything looks weird, just give me a poke with an example team!</p>
     <div class="battle-output">
       <div v-for="(state, idx) in battleOutput" :key="idx" class="battle-state">
-        <hr class="matchup-separator" />
-        <div>Action {{ idx + 1 }} is by {{ state.lastActor }} on {{ state.lastTeamIsTeam1 ? "Allied" : "Enemy" }} team
-          using {{ state.lastTargetType ?? "SETUP" }}</div>
+        <div class="matchup-divider">
+          <div v-if="idx > 0" class="ten-separator" :class="state.lastTeamIsTeam1 ? 'ally' : 'enemy'">
+            <span class="turn">Action {{ idx }}</span>
+            <span class="actor">{{ state.lastActor }}</span>
+            <span class="action"> {{ skillTranslate[state.lastTargetType] }} </span>
+          </div>
+          <div v-else>
+
+            <span class="action"> SETUP </span>
+          </div>
+        </div>
+
+
         <div v-for="side of [state.allies, state.enemies]">
           <div class="row">
             {{ side.sp }}
@@ -60,12 +71,19 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { usePvPStore } from '../store/singleTeamStore'
-import { BattleSnapshot } from '../types/KiokuTypes'
+import { BattleSnapshot, TargetType } from '../types/KiokuTypes'
 import { PvPBattle } from '../models/PvPBattle'
 import { PvPTeam } from '../models/PvPTeam'
 import CharacterEditor from '../components/CharacterEditor.vue'
 import { toast } from 'vue3-toastify'
 import { PvPKioku } from '../models/PvPKioku'
+
+const skillTranslate = {
+  [TargetType.attackId]: "Basic Attack",
+  [TargetType.specialId]: "Ultimate",
+  [TargetType.skillId]: "Battle Skill",
+
+}
 
 const team = usePvPStore()
 
@@ -213,13 +231,47 @@ function runSimulation() {
   color: #666;
 }
 
-.matchup-separator {
-  margin: 1.5rem 0;
-  border: none;
-  border-top: 2px dashed #aaa;
-}
-
 .progress-bar>progress {
   width: 50%;
+}
+
+.ten-separator {
+  margin: 0.35rem 0.75rem;
+  border-radius: 999px;
+  color: #cccaca;
+  font-weight: bold;
+  font-weight: 600;
+}
+
+.ten-separator.ally {
+  background: #2d462d;
+  border-color: #0b240b;
+}
+
+.ten-separator.enemy {
+  background: #682c2c;
+  border-color: rgb(143, 40, 40);
+}
+
+.matchup-divider {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  margin: 1.75rem 0 1rem;
+}
+
+.matchup-divider::before,
+.matchup-divider::after {
+  content: "";
+  flex: 1;
+  height: 3px;
+  background: linear-gradient(to right,
+      transparent,
+      #aaa,
+      transparent);
+}
+
+.matchup-divider span {
+  padding: 0 0.75rem;
 }
 </style>
