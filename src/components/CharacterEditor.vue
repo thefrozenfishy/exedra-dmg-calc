@@ -10,16 +10,16 @@
       Spd: {{ round(extraData.spd) }} ({{ extraData.baseSpd }}
       <span style="color: aqua">+ {{ round(extraData.spd - extraData.baseSpd) }}</span>)
     </div>
-    <div class="stat">
+    <div class="stat" title="AV the girl will have at the start of the match">
       Initial AV: {{ round(extraData.secondsLeft) }}
     </div>
-    <div class="stat">
+    <div class="stat" title="How much AA will be required to bring the girl to 0 AV">
       AA needed to act: {{ round(extraData.distanceLeft / 100) }}
     </div>
-    <div class="stat">
+    <div class="stat" title="What AV the char will reset to after doing their action given their current spd">
       AV after move: {{ round(10_000 / extraData.spd) }}
     </div>
-    <div class="stat">
+    <div class="stat" title="Base atk, using for Mabayu targetting and being the main contributor to dmg">
       Base atk: {{ round(extraData.atk) }}
     </div>
   </div>

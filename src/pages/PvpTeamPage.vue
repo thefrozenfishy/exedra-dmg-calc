@@ -36,18 +36,18 @@
           </div>
           <div v-else>
 
-            <span class="action"> SETUP </span>
+            <span class="action"> Initial State </span>
           </div>
         </div>
-
 
         <div v-for="side of [state.allies, state.enemies]">
           <div class="row">
             {{ side.sp }}
             <div v-for="char in side.team" :key="char.id" class="character">
-              <a :href="`https://exedra.wiki/wiki/${char.name}`" target="_blank" style="display: block;">
+              <a :href="`https://exedra.wiki/wiki/${char.name}`" target="_blank" style="display: block;"
+                :class="{ broken: char.breakCurrent <= 0 }">
                 <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name"
-                  :class="{ 'at-zero': char.secondsLeft - 0.01 <= 0 }" />
+                  :class="{ 'at-zero': char.secondsLeft - 0.001 <= 0 }" />
               </a>
               <div class="progress-bar" :title="char.mp + ' / ' + char.maxMp">
                 MP
@@ -60,6 +60,8 @@
               <div class="distance">Magic: {{ char.magicStacks }} / {{ char.maxMagicStacks }}</div>
               <div class="distance">{{ round(char.secondsLeft) }} AV ({{ round(char.distanceLeft / 100) }} AA)</div>
               <div class="distance">{{ round(char.spd) }} spd</div>
+              <div class="distance" :title="char.buffs.join('\n')">{{ char.buffs.length }} buffs</div>
+              <div class="distance" :title="char.debuffs.join('\n')">{{ char.debuffs.length }} debuffs</div>
             </div>
           </div>
         </div>
@@ -223,6 +225,10 @@ function runSimulation() {
   border-color: green;
   border-radius: 50%;
   border-width: 5px;
+}
+
+.broken {
+  filter: grayscale(100%) brightness(0.6);
 }
 
 .distance {

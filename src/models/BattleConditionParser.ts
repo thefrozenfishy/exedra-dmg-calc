@@ -299,12 +299,11 @@ export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], {
             } else if (battleCondition.compareContent === CompareContent.ABILITY_EFFECT) {
                 if (!Object.values(target.activeEffectDetails).some(e => isCondActive(battleCondition, e.abilityEffectType))) return false
             } else if (battleCondition.compareContent === CompareContent.BUFF_COUNT) {
-                console.log("Found buffs", compTargets.reduce((acc, k) => acc + k.numberOfBuffs(), 0))
-                if (!isCondActive(battleCondition, compTargets.reduce((acc, k) => acc + k.numberOfBuffs(), 0))) return false
+                if (!isCondActive(battleCondition, compTargets.reduce((acc, k) => acc + k.currentBuffs().length, 0))) return false
             } else if (battleCondition.compareContent === CompareContent.DEBUFF_COUNT) {
-                if (!isCondActive(battleCondition, compTargets.reduce((acc, k) => acc + k.numberOfDebuffs(), 0))) return false
+                if (!isCondActive(battleCondition, compTargets.reduce((acc, k) => acc + k.currentDebuffs().length, 0))) return false
             } else if (battleCondition.compareContent === CompareContent.NR_OF_DEBUFFS) {
-                if (!isCondActive(battleCondition, compTargets.reduce((acc, k) => acc + k.numberOfDebuffs(), 0))) return false
+                if (!isCondActive(battleCondition, compTargets.reduce((acc, k) => acc + k.currentDebuffs().length, 0))) return false
             } else if (battleCondition.compareContent === CompareContent.BREAKED_DAMAGE_RECEIVE_RATE_BECOME_MAX_UNIT_COUNT) {// TODO
                 if (!isCondActive(battleCondition, 0)) return false // TODO fix
             } else if (battleCondition.compareContent === CompareContent.TOTAL_DAMAGE) {

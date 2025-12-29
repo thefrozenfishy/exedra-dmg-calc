@@ -144,6 +144,7 @@ export interface PassiveSkill {
     value1: number
     value2: number
     value3: number
+    applier?: string
 }
 
 export interface ActiveSkill {
@@ -164,6 +165,7 @@ export interface ActiveSkill {
     value2: number
     value3: number
     value4: number
+    applier?: string
 }
 
 export type SkillDetail = PassiveSkill | ActiveSkill;
@@ -203,6 +205,8 @@ export interface TeamSnapshot {
     spd: number
     atk: number
     baseSpd: number
+    buffs: string[]
+    debuffs: string[]
     magicStacks: number
     maxMagicStacks: number
     secondsLeft: number
@@ -246,7 +250,7 @@ export interface KiokuData {
     minDef: number
     minHp: number
     minSpd: number
-    name: number
+    name: string
     obtain: string
     permaDate: string
     rarity: number

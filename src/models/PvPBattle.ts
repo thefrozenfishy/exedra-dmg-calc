@@ -25,6 +25,8 @@ export class PvPBattle {
                 team: this.team1.kiokuStates.map(k => ({
                     atk: k.kioku.getBaseAtk(),
                     spd: k.currentSpd,
+                    buffs: k.currentBuffs(),
+                    debuffs: k.currentDebuffs(),
                     magicStacks: k.currentMagic,
                     maxMagicStacks: k.kioku.maxMagicStacks,
                     baseSpd: k.kioku.data.minSpd,
@@ -43,6 +45,8 @@ export class PvPBattle {
                 team: this.team2.kiokuStates.map(k => ({
                     atk: k.kioku.getBaseAtk(),
                     spd: k.currentSpd,
+                    buffs: k.currentBuffs(),
+                    debuffs: k.currentDebuffs(),
                     magicStacks: k.currentMagic,
                     maxMagicStacks: k.kioku.maxMagicStacks,
                     baseSpd: k.kioku.data.minSpd,

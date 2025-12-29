@@ -88,9 +88,16 @@ export class KiokuState {
     }
 
     resolveBreak() {
-        if (this.currentRemainingBreakGauge <= 0) {
+        if (this.currentRemainingBreakGauge <= 0 && !this.isBroken) {
             this.isBroken = true
             this.progressMeters(-2500)
+        }
+    }
+
+    exitBreak() {
+        if (this.isBroken) {
+            this.isBroken = false
+            this.currentRemainingBreakGauge = this.maxBreakGauge
         }
     }
 
@@ -108,14 +115,17 @@ export class KiokuState {
         this.activeEffectDetails = updated;
     }
 
-    numberOfBuffs(): number {
-        return Object.values(this.activeEffectDetails).reduce((sum, d) =>
-            sum + (friendlySkills.includes(d.abilityEffectType) ? 1 : 0), 0)
+    currentBuffs(): string[] {
+        return Object.values(this.activeEffectDetails)
+            .filter(d => friendlySkills.includes(d.abilityEffectType))
+            .map(d => `${d.applier} - ${d.description}`)
     }
 
-    numberOfDebuffs(): number {
-        return Object.values(this.activeEffectDetails).reduce((sum, d) =>
-            sum + (!Object.values(Aliment).includes(d.abilityEffectType as Aliment) && enemySkills.includes(d.abilityEffectType) ? 1 : 0), 0)
+    currentDebuffs(): string[] {
+        return Object.values(this.activeEffectDetails)
+            .filter(d => !Object.values(Aliment).includes(d.abilityEffectType as Aliment)
+                && enemySkills.includes(d.abilityEffectType))
+            .map(d => `${d.applier} - ${d.description}`)
     }
 
 
@@ -195,11 +205,15 @@ export class KiokuState {
             target.getMp(5)
             return;
         }
-
-        const effTargets = this.team.sliceTargets(this, this.team.kiokuStates, detail)
+        let effTargets
+        if (this === target) {
+            effTargets = this.team.sliceTargets(this, this.team.kiokuStates, detail)
+        } else {
+            effTargets = [target]
+        }
 
         if (detail.turn) {
-            effTargets.forEach(t => t.activeEffectDetails[skillDetailId(detail)] = detail)
+            effTargets.forEach(t => t.activeEffectDetails[skillDetailId(detail)] = { applier: this.kioku.name, ...detail })
         } else if (detail.abilityEffectType === "HASTE") {
             console.warn(this.kioku.name, "HASTING", detail, effTargets.map(k => k.kioku.name))
             effTargets.forEach(t => t.progressMeters(detail.value1 * 10))
@@ -208,7 +222,7 @@ export class KiokuState {
         } else if (detail.abilityEffectType === "GAIN_EP_FIXED") {
             effTargets.forEach(t => t.getMp(detail.value1))
         } else if (detail.abilityEffectType === "CUTOUT") {
-            effTargets.forEach(t => t.activeEffectDetails[skillDetailId(detail)] = { ...detail, turn: 1 })
+            effTargets.forEach(t => t.activeEffectDetails[skillDetailId(detail)] = { ...detail, applier: this.kioku.name, turn: 1 })
         } else if (detail.abilityEffectType === "ADDITIONAL_SKILL_ACT") {
             return detail.value1;
         } else if (detail.abilityEffectType === "GAIN_CHARGE_POINT") {
@@ -348,6 +362,7 @@ export class PvPTeam {
             }
             console.log("Possible targets for", detail.abilityEffectType, "are", this.sliceTargets(actor, possibleTargets, detail).map(k => k.kioku.name))
             for (const target of this.sliceTargets(actor, possibleTargets, detail)) {
+                console.log(actor.kioku.name, "applies", detail.abilityEffectType, "to", target.kioku.name, "w eff", effectName)
                 actor.applyEffect(target, detail, effectName)
             }
         }
@@ -355,7 +370,10 @@ export class PvPTeam {
     }
 
     useUltimate(): [KiokuState, TargetType] | undefined {
-        const readyKiokus = this.kiokuStates.filter(k => k.currentMp >= k.maxMp).filter(k => k.maxMp > 0)
+        const readyKiokus = this.kiokuStates
+            .filter(k => k.currentMp >= k.maxMp)
+            .filter(k => k.maxMp > 0)
+            .filter(k => k.currentRemainingBreakGauge > 0)
         if (!readyKiokus.length) return;
         const actor = readyKiokus[0]
         this.act(actor, TargetType.specialId)
@@ -368,6 +386,7 @@ export class PvPTeam {
         console.log(this.kiokuStates.map(k => k.activeEffectDetails))
         const actor = this.getNextActor()
         actor.resetDistanceRemaining()
+        actor.exitBreak()
         const effType = this.currentSp ? TargetType.skillId : TargetType.attackId
         this.triggerPassives(ProcessTiming.TURN_START, effType)
         this.act(actor, effType)
