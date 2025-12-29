@@ -19,38 +19,42 @@ export default defineConfig({
       frontmatter: true,
       markdownItSetup(md) {
         md.core.ruler.push('replace_character', state => {
-          const charNames = Object.keys(characterMap).join('|')
+          const charNames = Object.keys(characterMap).sort((a, b) => b.length - a.length).join('|')
           const regex = new RegExp(`\\b(${charNames})\\b`, 'g')
 
           for (const token of state.tokens) {
-            if (token.type === 'inline') {
-              const newChildren = []
-              let lastIndex = 0
-              const text = token.content
+            if (token.type !== 'inline' || !token.children) continue
 
-              text.replace(regex, (match, _, offset) => {
+            token.children = token.children.flatMap(child => {
+              if (child.type !== 'text') return child
+
+              const parts = []
+              let lastIndex = 0
+
+              child.content.replace(regex, (match, _, offset) => {
                 if (offset > lastIndex) {
-                  newChildren.push({
+                  parts.push({
                     type: 'text',
-                    content: text.slice(lastIndex, offset)
+                    content: child.content.slice(lastIndex, offset)
                   })
                 }
-                newChildren.push({
+
+                parts.push({
                   type: 'html_inline',
                   content: `<CharacterLink name="${match}" id="${characterMap[match]}" />`
                 })
                 lastIndex = offset + match.length
               })
 
-              if (lastIndex < text.length) {
-                newChildren.push({
+              if (lastIndex < child.content.length) {
+                parts.push({
                   type: 'text',
-                  content: text.slice(lastIndex)
+                  content: child.content.slice(lastIndex)
                 })
               }
 
-              token.children = newChildren
-            }
+              return parts.length ? parts : child
+            })
           }
         })
       }

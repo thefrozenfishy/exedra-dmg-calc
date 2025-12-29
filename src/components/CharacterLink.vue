@@ -21,7 +21,7 @@ const props = defineProps({
     display: inline-flex;
     align-items: baseline;
     text-decoration: none;
-    color: inherit;
+    color: rgb(219, 173, 196);
     cursor: pointer;
     font-size: inherit;
 }
