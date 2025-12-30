@@ -29,7 +29,7 @@
         <h1>Known Issues</h1>
         <ul>
             <li>Melodia Appassionata (Swimsuit Sayaka) vortex are not added to the calculation</li>
-            <li>Luce della Speranza (Ui) ult not added to the calculation</li>
+            <li>Dot pop (Haloween Alina etc) isn't added to the dmg calculation</li>
         </ul>
         <h1>Potentially planned improvements</h1>
         <ul>
