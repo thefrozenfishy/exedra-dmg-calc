@@ -17,10 +17,9 @@ const base = {
 export const useCharacterStore = defineStore('characterStore', () => {
     const characters = ref<Character[]>([])
 
-    const baseChars: Record<string, Character> = Object.fromEntries(Object.entries(kiokuData).map(([name, data]) => [name, {
+    const charInfo: Record<string, Character> = Object.fromEntries(Object.entries(kiokuData).map(([name, data]) => [name, {
         name,
         id: data.id,
-        enabled: data.rarity !== 5 || data.id === 10010101,
         role: data.role,
         element: data.element,
         supportTarget: data.support_target,
@@ -28,11 +27,15 @@ export const useCharacterStore = defineStore('characterStore', () => {
         character_en: data.character_en,
         heartphial: data.heartphial || data.character_en,
         rarity: data.rarity,
-        obtain: data.obtain ?? "",
-        permaDate: data.permaDate ?? "",
+        obtain: data.obtain,
+        permaDate: data.permaDate,
+    }]));
+
+    const basicSetting = (ch) => ({
+        enabled: ch.rarity !== 5 || ch.id === 10010101,
         dupes: 0,
         ...base,
-    }]));
+    })
 
     const saved = localStorage.getItem('characters')
     if (saved) {
@@ -44,7 +47,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
             if (c.ascension > KiokuConstants.maxAscension) c.ascension = KiokuConstants.maxAscension
             return c
         }).filter(k => "name" in k && "id" in k && "enabled" in k && "role" in k && "element" in k && "character_en" in k && "rarity" in k)
-            .map(c => ({ ...baseChars[c.name], ...Object.fromEntries(Object.entries(c).filter(([k, v]) => v != null)) }))
+            .map(c => ({ ...basicSetting(c), ...Object.fromEntries(Object.entries(c).filter(([k, v]) => v != null)), ...charInfo[c.name] }))
     }
 
     watch(
@@ -108,7 +111,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
         })
     }
 
-    Object.entries(baseChars).forEach(([name, data]) => {
+    Object.entries(charInfo).forEach(([name, data]) => {
         if (!characters.value.map(c => c.name).includes(name)) characters.value.push(data)
     });
 
