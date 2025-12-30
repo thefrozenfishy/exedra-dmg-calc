@@ -11118,5 +11118,181 @@
         "compareTarget": 2,
         "compareValue": "TRUE",
         "description": "行動者+IsActor"
+    },
+    {
+        "battleConditionMstId": 1397,
+        "compareContent": 401,
+        "compareOperator": 2,
+        "compareTarget": 7,
+        "compareValue": "AdditionalSkill",
+        "description": "行動タイプが追加攻撃ではない"
+    },
+    {
+        "battleConditionMstId": 1408,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "1",
+        "description": "対象の状態異常数が1未満"
+    },
+    {
+        "battleConditionMstId": 1409,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "2",
+        "description": "対象の状態異常数が2未満"
+    },
+    {
+        "battleConditionMstId": 1410,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "3",
+        "description": "対象の状態異常数が3未満"
+    },
+    {
+        "battleConditionMstId": 1411,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "4",
+        "description": "対象の状態異常数が4未満"
+    },
+    {
+        "battleConditionMstId": 1412,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "5",
+        "description": "対象の状態異常数が5未満"
+    },
+    {
+        "battleConditionMstId": 1413,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "6",
+        "description": "対象の状態異常数が6未満"
+    },
+    {
+        "battleConditionMstId": 1414,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "7",
+        "description": "対象の状態異常数が7未満"
+    },
+    {
+        "battleConditionMstId": 1415,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "8",
+        "description": "対象の状態異常数が8未満"
+    },
+    {
+        "battleConditionMstId": 1416,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "9",
+        "description": "対象の状態異常数が9未満"
+    },
+    {
+        "battleConditionMstId": 1417,
+        "compareContent": 23,
+        "compareOperator": 5,
+        "compareTarget": 8,
+        "compareValue": "10",
+        "description": "対象の状態異常数が10未満"
+    },
+    {
+        "battleConditionMstId": 1423,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "8",
+        "description": "晴れ着まどか専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 1424,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "11",
+        "description": "トークンが11以上のとき"
+    },
+    {
+        "battleConditionMstId": 1425,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "21",
+        "description": "トークンが21以上のとき"
+    },
+    {
+        "battleConditionMstId": 1426,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "31",
+        "description": "トークンが31以上のとき"
+    },
+    {
+        "battleConditionMstId": 1427,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "41",
+        "description": "トークンが41以上のとき"
+    },
+    {
+        "battleConditionMstId": 1428,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "51",
+        "description": "トークンが51以上のとき"
+    },
+    {
+        "battleConditionMstId": 1429,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "11",
+        "description": "トークンが11未満のとき"
+    },
+    {
+        "battleConditionMstId": 1430,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "21",
+        "description": "トークンが21未満のとき"
+    },
+    {
+        "battleConditionMstId": 1431,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "31",
+        "description": "トークンが31未満のとき"
+    },
+    {
+        "battleConditionMstId": 1432,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "41",
+        "description": "トークンが41未満のとき"
+    },
+    {
+        "battleConditionMstId": 1433,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "51",
+        "description": "トークンが51未満のとき"
     }
 ]

@@ -11290,13 +11290,118 @@
         "description": "衰弱状態の敵にダメージを与えた場合+行動者は自身+行動タイプは必殺技"
     },
     {
+        "battleConditionMstIdCsv": "3,1397,281",
+        "battleConditionSetMstId": 2279,
+        "description": "行動者は自分、行動タイプが追加攻撃ではない、攻撃対象にクリティカルダメージが発生"
+    },
+    {
         "battleConditionMstIdCsv": "9,1389",
         "battleConditionSetMstId": 2294,
         "description": "X五十鈴れん専用バフが付与されているとき+自身のHPが50%以上のとき"
     },
     {
+        "battleConditionMstIdCsv": "1408",
+        "battleConditionSetMstId": 2295,
+        "description": "対象の状態異常数が1未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1409",
+        "battleConditionSetMstId": 2296,
+        "description": "対象の状態異常数が2未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1410",
+        "battleConditionSetMstId": 2297,
+        "description": "対象の状態異常数が3未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1411",
+        "battleConditionSetMstId": 2298,
+        "description": "対象の状態異常数が4未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1412",
+        "battleConditionSetMstId": 2299,
+        "description": "対象の状態異常数が5未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1413",
+        "battleConditionSetMstId": 2300,
+        "description": "対象の状態異常数が6未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1414",
+        "battleConditionSetMstId": 2301,
+        "description": "対象の状態異常数が7未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1415",
+        "battleConditionSetMstId": 2302,
+        "description": "対象の状態異常数が8未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1416",
+        "battleConditionSetMstId": 2303,
+        "description": "対象の状態異常数が9未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1417",
+        "battleConditionSetMstId": 2304,
+        "description": "対象の状態異常数が10未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1423",
+        "battleConditionSetMstId": 2310,
+        "description": "晴れ着まどか専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "467,1429",
+        "battleConditionSetMstId": 2311,
+        "description": "トークンが1以上11未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1424,1430",
+        "battleConditionSetMstId": 2312,
+        "description": "トークンが11以上21未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1425,1431",
+        "battleConditionSetMstId": 2313,
+        "description": "トークンが21以上31未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1426,1432",
+        "battleConditionSetMstId": 2314,
+        "description": "トークンが31以上41未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1427,1433",
+        "battleConditionSetMstId": 2315,
+        "description": "トークンが41以上51未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1428",
+        "battleConditionSetMstId": 2316,
+        "description": "トークンが51以上のとき"
+    },
+    {
         "battleConditionMstIdCsv": "1395",
         "battleConditionSetMstId": 2317,
         "description": "Xりか専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,265",
+        "battleConditionSetMstId": 2358,
+        "description": "自身のターン経過が4ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,63",
+        "battleConditionSetMstId": 2359,
+        "description": "自分のターン、4ターンごとに（ターン4から）"
+    },
+    {
+        "battleConditionMstIdCsv": "3,980",
+        "battleConditionSetMstId": 2363,
+        "description": "自身のターン経過が13ターン以上"
     }
 ]

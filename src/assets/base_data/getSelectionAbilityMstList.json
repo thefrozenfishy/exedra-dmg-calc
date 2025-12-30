@@ -3928,5 +3928,20 @@
         "targetType": 2,
         "value1": 1150043,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "On battle skill use, restores own HP by 3% of user's HP.<br>On special attack, advances own action order by 10%.",
+        "name": "Pray for Good Health and Peace for All",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 128,
+        "selectionAbilityMstId": 7044,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10010301,
+        "targetType": 2,
+        "value1": 1150044,
+        "value2": 0
     }
 ]
