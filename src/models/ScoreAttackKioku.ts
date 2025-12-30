@@ -56,7 +56,8 @@ export class ScoreAttackKioku extends Kioku {
             if (e.abilityEffectType === "TSUBAME_LINK") {
                 this.scalableEffects.push(
                     { ...e, abilityEffectType: "UP_ATK_RATIO", value1: e.value2, value2: 0, value3: 0 },
-                    { ...e, abilityEffectType: "UP_DMG_DEALT", value1: e.value3, value2: 0, value3: 0 }
+                    { ...e, abilityEffectType: "ADDITIONAL_DAMAGE", value1: e.value3, value2: 0, value3: 0 },
+                    { ...e, abilityEffectType: "TSUBAME", value1: 0, value2: 0, value3: 0 } // This is just to trigger the active condition
                 )
             }
         })

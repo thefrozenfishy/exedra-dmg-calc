@@ -14,6 +14,7 @@ const knownBoosts = {
     UP_ATK_ACCUM_RATIO: "Atk%2",
     UP_ATK_FIXED: "FlatAtk",
     UP_ATK_RATIO: "Atk%1",
+    UP_ATK_CONSUME_RATIO: "Atk%3",
     UP_CTD_ACCUM_RATIO: "CD2+",
     UP_CTD_FIXED: "CD1+",
     UP_CTD_RATIO: "CD3+",
@@ -23,7 +24,7 @@ const knownBoosts = {
     UP_DEF_ACCUM_RATIO: "Def%1",
     UP_DEF_FIXED: "Flat def",
     UP_DEF_RATIO: "Def%2",
-    UP_DMG_DEALT: "Additional dmg", // TODO: Check that this is correct. How does it scale w buff+, how to put into dmg calc?
+    ADDITIONAL_DAMAGE: "Additional dmg",
     UP_ELEMENT_DMG_RATE_RATIO: "Dmg Dealt+ (Elem only)",
     UP_GIV_DMG_RATIO: "DMG Dealt+",
     UP_RCV_CTR_RATIO: "CR4+",
@@ -76,6 +77,7 @@ const skippable = new Set([
     "SWITCH_SKILL",
     "TSUBAME_CORE",
     "TSUBAME_LINK",
+    "TSUBAME",
     "UNIQUE_10030301",
     "UNIQUE_10070201",
     "UNIQUE_BUFF",
@@ -279,10 +281,6 @@ export class ScoreAttackTeam {
                 else if (detail.range === 2 && (targetType === EnemyTargetTypes.L_PROXIMITY || targetType === EnemyTargetTypes.R_PROXIMITY)) delta_dmg = detail.value2;
                 else if (targetType === EnemyTargetTypes.TARGET) delta_dmg = detail.value1;
 
-                if (!(detail.abilityEffectType in this.debugTexts[this.dps.name])) {
-                    this.debugTexts[this.dps.name][detail.abilityEffectType] = []
-                }
-                this.debugTexts[this.dps.name][detail.abilityEffectType].push([detail, delta_dmg])
                 nrHitThatKills--;
             })
             total_dmg += delta_dmg
@@ -302,6 +300,7 @@ export class ScoreAttackTeam {
         const base_atk = uses_def ? this.dps.getBaseDef() : this.dps.getBaseAtk();
         const atk_pluss =
             (this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_RATIO`, amountOfEnemies, enemy.maxBreak) +
+                this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_CONSUME_RATIO`, amountOfEnemies, enemy.maxBreak) +
                 (this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_ACCUM_RATIO`, amountOfEnemies, enemy.maxBreak))) /
             1000;
         const flat_atk = this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_FIXED`, amountOfEnemies, enemy.maxBreak)
@@ -337,7 +336,16 @@ export class ScoreAttackTeam {
         const dmg_taken = (this.getEffect("UP_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
             this.getEffect("UP_AIM_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
         const elem_res_down = (this.getEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
-        const base_dmg = special * base_atk * ((base_atk / 124) ** 1.2 + 12) / 20;
+        let base_dmg = special * base_atk * ((base_atk / 124) ** 1.2 + 12) / 20;
+        if (special > 0) { // Add dmg only to enemies hit by something
+            for (const ally of this.team) {
+                for (const eff of ally.effects) {
+                    if (eff.abilityEffectType === "ADDITIONAL_DAMAGE") {
+                        base_dmg += (eff.value1 / 1000) * ally.getBaseAtk() * ((ally.getBaseAtk() / 124) ** 1.2 + 12) / 20;
+                    }
+                }
+            }
+        }
 
         const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
         const crit_factor = 1 + (enemy.isCrit ? crit_dmg : 0);
@@ -429,7 +437,7 @@ export class ScoreAttackTeam {
 DMG CALC MULTIPLIERS:
 DPS stats:
 Ability Mult - ${special * 100 | 0}%
-Base ${uses_def ? "Def" : "Atk"}  - ${(base_atk | 0).toLocaleString()}
+Base ${uses_def ? "Def" : "Atk"}     - ${((idx == 2 ? base_atk : kiokuAtPosition.getBaseAtk()) | 0).toLocaleString()}
 ${uses_def ? "Def" : "Atk"} Up %     - ${atk_pluss * 100 | 0}%
 ${uses_def ? "Def" : "Atk"} Up flat  - ${flat_atk | 0}
 Total ${uses_def ? "Def" : "Atk"}    - ${(atk_total | 0).toLocaleString()}
