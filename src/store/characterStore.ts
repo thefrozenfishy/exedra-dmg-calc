@@ -112,7 +112,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
     }
 
     Object.entries(charInfo).forEach(([name, data]) => {
-        if (!characters.value.map(c => c.name).includes(name)) characters.value.push(data)
+        if (!characters.value.map(c => c.name).includes(name)) characters.value.push({...basicSetting(data), ...data})
     });
 
     return { characters, toggleCharacter, updateChar, setCharacters, exportCharacters, importCharacters }
