@@ -190,15 +190,15 @@ export class KiokuState {
         }
     }
 
-    applyEffect(target: KiokuState, detail: SkillDetail, effectName?: TargetType): number | undefined {
+    applyEffect(target: KiokuState, detail: SkillDetail, targetType?: TargetType): number | undefined {
         /**
          * @returns action id if additional act should be triggered, otherwise returns null
          */
-        if (!isConditionSetActive(detail, this.stateGen(this, target, effectName))) return
+        if (!isConditionSetActive(detail, this.stateGen(this, target, targetType))) return
         if (detail.abilityEffectType.startsWith("DMG_")) {
             // TODO: Proximity should use value4, prolly doesn't matter much tho
             // TODO: Random dmg special case it?
-            let breakVal = detail.value3 || defaultbreak[effectName][detail.range]
+            let breakVal = detail.value3 || defaultbreak[targetType][detail.range]
             breakVal += Object.values(this.filteredEffects()).flat()
                 .reduce((sum, detail) => detail.abilityEffectType === "UP_GIV_BREAK_POINT_DMG_FIXED" ? sum + detail.value1 : sum, 0)
             target.currentRemainingBreakGauge -= breakVal
@@ -228,8 +228,11 @@ export class KiokuState {
         } else if (detail.abilityEffectType === "GAIN_CHARGE_POINT") {
             this.currentMagic += detail.value1;
         } else if ("passiveSkillDetailMstId" in detail) {
-            console.warn("How to handle this", this, detail, target, effectName)
-            // TODO How to handle passiveS? 
+            if (targetType === TargetType.init) {
+                effTargets.forEach(t => t.passiveEffectDetails[skillDetailId(detail)] = { ...detail, applier: this.kioku.name })
+            } else {
+                console.warn("Passive was triggered late, handle?", this, effTargets, detail)
+            }
         } else {
             console.error("Active without turn", detail)
         }
@@ -269,7 +272,7 @@ export class PvPTeam {
         this.kiokuStates.forEach(k => k.kioku.effects.forEach(e => {
             k.addEffectToBank(e)
         }))
-        this.triggerPassives(ProcessTiming.BATTLE_START)
+        this.triggerPassives(ProcessTiming.BATTLE_START, TargetType.init)
     }
 
     triggerPassives(timing: ProcessTiming, lastAction?: TargetType, lastActor?: KiokuState): Record<number, KiokuState> {

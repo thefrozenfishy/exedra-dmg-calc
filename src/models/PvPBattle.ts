@@ -5,8 +5,8 @@ export class PvPBattle {
     private team1: PvPTeam;
     private team2: PvPTeam;
     private debug: boolean;
-    private lastActor: KiokuState = undefined;
-    private lastTargetType: TargetType = undefined;
+    private lastActor?: KiokuState = undefined;
+    private lastTargetType?: TargetType = undefined;
     private lastTeamIsTeam1: boolean = false;
 
     constructor(team1: PvPTeam, team2: PvPTeam, debug = false) {

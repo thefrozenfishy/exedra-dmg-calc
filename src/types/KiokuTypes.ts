@@ -459,6 +459,7 @@ export enum TargetType {
     skillId = "ActiveSkill",
     attackId = "NormalAttack",
     fuaId = "AdditionalSkill",
+    init = "INIT"
 }
 
 export const TargetTypeLookup = {
