@@ -203,6 +203,7 @@ export interface TeamSnapshotList {
 
 export interface TeamSnapshot {
     spd: number
+    currSpdBuffs: [number, string, string?][]
     atk: number
     baseSpd: number
     buffs: string[]

@@ -59,7 +59,7 @@
               </div>
               <div class="distance">Magic: {{ char.magicStacks }} / {{ char.maxMagicStacks }}</div>
               <div class="distance">{{ round(char.secondsLeft) }} AV ({{ round(char.distanceLeft / 100) }} AA)</div>
-              <div class="distance">{{ round(char.spd) }} spd</div>
+              <div class="distance" :title="formatSpdBuffs(char.currSpdBuffs)">{{ round(char.spd) }} spd</div>
               <div class="distance" :title="char.buffs.join('\n')">{{ char.buffs.length }} buffs</div>
               <div class="distance" :title="char.debuffs.join('\n')">{{ char.debuffs.length }} debuffs</div>
             </div>
@@ -92,6 +92,8 @@ const team = usePvPStore()
 const battleOutput = ref<BattleSnapshot[]>([])
 
 const round = (spd: number) => spd.toFixed(2)
+
+const formatSpdBuffs = (buffs: [number, string, string?][]) => buffs.map(buff => `${round(buff[0])} given by "${buff[1]}" applied by ${buff[2] ?? "UNKNOWN"}`).join("\n")
 
 const onChangeCrys = (isAlliedTeam: number) => (charIdx: number, crysIdx: number, rawValue: string) => {
   const main = team.slots[isAlliedTeam][charIdx].main

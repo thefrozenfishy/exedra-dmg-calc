@@ -5,7 +5,7 @@
     <StatInputs :member="slot.main" :isSupport="false" @update="setMain(index, $event)" />
   </div>
 
-  <div v-if="extraData" class="stats">
+  <div v-if="extraData" class="stats" :title="formatSpdBuffs(extraData.currSpdBuffs)">
     <div class="stat">
       Spd: {{ round(extraData.spd) }} ({{ extraData.baseSpd }}
       <span style="color: aqua">+ {{ round(extraData.spd - extraData.baseSpd) }}</span>)
@@ -83,6 +83,8 @@ import StatInputs from './StatInputs.vue'
 import { Character, TeamSnapshot } from '../types/KiokuTypes';
 
 const round = (spd: number) => spd.toFixed(2)
+
+const formatSpdBuffs = (buffs: [number, string, string?][]) => buffs.map(buff => `${round(buff[0])} given by "${buff[1]}" applied by ${buff[2] ?? "UNKNOWN"}`).join("\n")
 
 const props = defineProps<{
   index: number

@@ -71,6 +71,9 @@ export class KiokuState {
     currentMpGain = 1
     currentMagic = 0
 
+    // Debug helpers
+    currSpdEffects: [number, string, string?][] = []
+
     isBroken = false
 
     stateGen: (actor: KiokuState, target: KiokuState, actionType?: TargetType) => BattleState
@@ -130,14 +133,19 @@ export class KiokuState {
 
 
     updateSpd(): void {
+        this.currSpdEffects = []
         let spd = this.kioku.data.minSpd
         const effs = this.filteredEffects()
         console.log("Speed effects for", this.kioku.name, effs)
         for (const detail of Object.values(effs["UP_SPD_RATIO"] ?? {})) {
-            spd += (this.kioku.data.minSpd * detail.value1 / 1000)
+            const step = (this.kioku.data.minSpd * detail.value1 / 1000)
+            spd += step
+            this.currSpdEffects.push([step, detail.description, detail.applier])
         }
         for (const detail of Object.values(effs["UP_SPD_FIXED"] ?? {})) {
-            spd += detail.value1
+            const step = detail.value1
+            spd += step
+            this.currSpdEffects.push([step, detail.description, detail.applier])
         }
         this.currentSpd = spd
     }
@@ -184,7 +192,7 @@ export class KiokuState {
 
     addEffectToBank(detail: SkillDetail) {
         if ("passiveSkillMstId" in detail) {
-            this.passiveEffectDetails[skillDetailId(detail)] = detail
+            this.passiveEffectDetails[skillDetailId(detail)] = { ...detail, applier: this.kioku.name }
         } else {
             console.error("An active thing was added to the bank??")
         }
@@ -214,6 +222,9 @@ export class KiokuState {
 
         if (detail.turn) {
             effTargets.forEach(t => t.activeEffectDetails[skillDetailId(detail)] = { applier: this.kioku.name, ...detail })
+            if ("passiveSkillDetailMstId" in detail) {
+                delete this.passiveEffectDetails[skillDetailId(detail)]
+            }
         } else if (detail.abilityEffectType === "HASTE") {
             console.warn(this.kioku.name, "HASTING", detail, effTargets.map(k => k.kioku.name))
             effTargets.forEach(t => t.progressMeters(detail.value1 * 10))
@@ -229,7 +240,7 @@ export class KiokuState {
             this.currentMagic += detail.value1;
         } else if ("passiveSkillDetailMstId" in detail) {
             if (targetType === TargetType.init) {
-                effTargets.forEach(t => t.passiveEffectDetails[skillDetailId(detail)] = { ...detail, applier: this.kioku.name })
+                effTargets.forEach(t => t.passiveEffectDetails[skillDetailId(detail)] = detail)
             } else {
                 console.warn("Passive was triggered late, handle?", this, effTargets, detail)
             }
