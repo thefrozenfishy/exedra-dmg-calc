@@ -283,7 +283,7 @@ const workerRef = ref<Worker | null>(null)
 const progress = ref<FinalTeam>({})
 
 const topTeamsPerKioku = useSetting("topTeamsPerKioku", 5)
-const topTeams = useSetting("topTeamsPerKioku", 20)
+const topTeams = useSetting("topTeams", 20)
 const include4StarAttackers = useSetting("include4StarAttackers", false)
 const include4StarSupports = useSetting("include4StarSupports", false)
 const include4StarOthers = useSetting("include4StarOthers", false)
