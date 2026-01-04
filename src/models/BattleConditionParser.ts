@@ -190,7 +190,7 @@ const lateGetIsActiveCond = (cond: BattleCondition) =>
 
 export const getDescriptionOfCond = (battleConditionSetId: string): string => battleConditionSets[battleConditionSetId].description
 
-export const isStartCondRelevantForScoreAttack = (startConditionId: string, maxMagicStacks: number): boolean => {
+export const isStartCondRelevantForScoreAttack = (startConditionId: string, maxMagicStacks: number, nrOfEnemies: number): boolean => {
     if (!startConditionId || startConditionId === "0") return true
 
     const battleConditionSet = battleConditionSets[startConditionId]
@@ -199,6 +199,10 @@ export const isStartCondRelevantForScoreAttack = (startConditionId: string, maxM
 
         if (battleCondition.compareContent === CompareContent.CHARGE_POINT) {
             if (!isCondActive(battleCondition, maxMagicStacks)) return false
+        }
+
+        if (battleCondition.compareContent === CompareContent.ALIVE_UNIT_COUNT) {
+            if (!isCondActive(battleCondition, nrOfEnemies)) return false
         }
     }
     return true;

@@ -171,6 +171,7 @@ export class ScoreAttackTeam {
                 valueTotal *= detail.value2 || 1
 
                 detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
+                    // TODO: Wtf is going on here? it's adding the detail multiple times if multiple active conds???
                     const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId, this.attackerHealth, this.activeBuffsAndDebuffs)
                     if (typeof (isActiveCond) === 'boolean') {
                         if (isActiveCond) {
@@ -232,13 +233,14 @@ export class ScoreAttackTeam {
         let average_dmg = 0;
         let critRate = 0;
         let debugText = ""
-        let amountOfEnemies = enemies.filter(e => e.enabled).length
+        let initAmountOfEnemies = enemies.filter(e => e.enabled).length
+        let currentAmountOfEnemies = initAmountOfEnemies
         const debugTexts = ["", "", "", "", ""];
         for (const i of [EnemyTargetTypes.TARGET, EnemyTargetTypes.L_PROXIMITY, EnemyTargetTypes.R_PROXIMITY, EnemyTargetTypes.L_OTHER, EnemyTargetTypes.R_OTHER]) {
-            [dmg, avg_dmg, critRate, debugText, enemyDied] = this.calculate_single_dmg(i, this.memberForLog(i), enemies[i], amountOfEnemies, atk_down)
+            [dmg, avg_dmg, critRate, debugText, enemyDied] = this.calculate_single_dmg(i, this.memberForLog(i), enemies[i], initAmountOfEnemies, currentAmountOfEnemies, atk_down)
             total_dmg += dmg
             average_dmg += avg_dmg
-            if (enemies[i].enabled && enemyDied) amountOfEnemies -= 1
+            if (enemies[i].enabled && enemyDied) currentAmountOfEnemies -= 1
             debugTexts[i] = debugText
         }
         return [total_dmg, average_dmg, Math.round(critRate * 100), debugTexts]
@@ -259,10 +261,13 @@ export class ScoreAttackTeam {
         return val
     }
 
-    get_special_dmg(targetType: EnemyTargetTypes, amountOfEnemies: number, maxBreak: number, nrHitThatKills: number): [number, boolean, boolean] {
+    get_special_dmg(targetType: EnemyTargetTypes, initAmountOfEnemies: number, currentAmountOfEnemies: number, maxBreak: number, nrHitThatKills: number): [number, boolean, boolean] {
         let total_dmg = 0;
         let uses_def = false;
         for (const detail of this.dps.effects) {
+            if (detail.startConditionSetIdCsv.split(",").some(startCondId =>
+                !isStartCondRelevantForScoreAttack(startCondId, this.dps.maxMagicStacks, initAmountOfEnemies))
+            ) continue;
             if (((detail as ActiveSkill).skillMstId / 100 | 0) !== this.dps.data.special_id) continue
             let delta_dmg = 0
             if (!detail.abilityEffectType.startsWith("DMG_")) continue
@@ -272,7 +277,7 @@ export class ScoreAttackTeam {
                 if (typeof (isActiveCond) === 'boolean') {
                     if (!isActiveCond) return
                 } else {
-                    if (!isActiveCond(nrHitThatKills > 1 ? amountOfEnemies : amountOfEnemies - 1, maxBreak)) return;
+                    if (!isActiveCond(nrHitThatKills > 1 ? currentAmountOfEnemies : currentAmountOfEnemies - 1, maxBreak)) return;
                 }
 
                 if (detail.abilityEffectType === "DMG_RANDOM" && targetType === EnemyTargetTypes.TARGET) delta_dmg = detail.value1 * detail.value2;
@@ -292,50 +297,51 @@ export class ScoreAttackTeam {
         idx: number,
         kiokuAtPosition: ScoreAttackKioku,
         enemy: Enemy,
-        amountOfEnemies: number,
+        initAmountOfEnemies: number,
+        currentAmountOfEnemies: number,
         atk_down: number,
     ): [number, number, number, string, boolean] {
         // TODO: Add atk%-, dmg taken down% and dmg dealt down% from enemies
-        const [special, enemyDied, uses_def] = this.get_special_dmg(targetTypeAtPosition[idx], amountOfEnemies, enemy.maxBreak, enemy.hitsToKill);
+        const [special, enemyDied, uses_def] = this.get_special_dmg(targetTypeAtPosition[idx],initAmountOfEnemies, currentAmountOfEnemies, enemy.maxBreak, enemy.hitsToKill);
         const base_atk = uses_def ? this.dps.getBaseDef() : this.dps.getBaseAtk();
         const atk_pluss =
-            (this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_RATIO`, amountOfEnemies, enemy.maxBreak) +
-                this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_CONSUME_RATIO`, amountOfEnemies, enemy.maxBreak) +
-                (this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_ACCUM_RATIO`, amountOfEnemies, enemy.maxBreak))) /
+            (this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_RATIO`, currentAmountOfEnemies, enemy.maxBreak) +
+                this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_CONSUME_RATIO`, currentAmountOfEnemies, enemy.maxBreak) +
+                (this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_ACCUM_RATIO`, currentAmountOfEnemies, enemy.maxBreak))) /
             1000;
-        const flat_atk = this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_FIXED`, amountOfEnemies, enemy.maxBreak)
+        const flat_atk = this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_FIXED`, currentAmountOfEnemies, enemy.maxBreak)
         const atk_total = base_atk * (1 + atk_pluss) * (1 - atk_down) + flat_atk
 
         let def_remaining = (
-            this.getEffect("DWN_DEF_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) *
-            this.getEffect("DWN_DEF_RATIO", amountOfEnemies, enemy.maxBreak) *
+            this.getEffect("DWN_DEF_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak) *
+            this.getEffect("DWN_DEF_RATIO", currentAmountOfEnemies, enemy.maxBreak) *
             (0.9 ** this.all_effects["WEAKNESS"]) // Weakness acts as -10% def
         );
 
         const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;
 
         const uncapped_crit_rate = (this.dps.baseCritRate +
-            this.getEffect("UP_CTR_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) +
-            this.getEffect("UP_CTR_FIXED", amountOfEnemies, enemy.maxBreak) +
-            this.getEffect("UP_RCV_CTR_RATIO", amountOfEnemies, enemy.maxBreak) +
-            this.getEffect("UP_CTR_RATIO", amountOfEnemies, enemy.maxBreak)) /
+            this.getEffect("UP_CTR_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
+            this.getEffect("UP_CTR_FIXED", currentAmountOfEnemies, enemy.maxBreak) +
+            this.getEffect("UP_RCV_CTR_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
+            this.getEffect("UP_CTR_RATIO", currentAmountOfEnemies, enemy.maxBreak)) /
             1000
 
         const crit_rate = Math.min(1, uncapped_crit_rate)
 
         const crit_dmg = (this.dps.baseCritDamage +
-            this.getEffect("UP_CTD_FIXED", amountOfEnemies, enemy.maxBreak) +
-            this.getEffect("UP_CTD_RATIO", amountOfEnemies, enemy.maxBreak) +
-            this.getEffect("UP_CTD_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)
+            this.getEffect("UP_CTD_FIXED", currentAmountOfEnemies, enemy.maxBreak) +
+            this.getEffect("UP_CTD_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
+            this.getEffect("UP_CTD_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak)
         ) / 1000;
         const dmg_pluss = (
-            this.getEffect("UP_GIV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
-            this.getEffect("UP_ELEMENT_DMG_RATE_RATIO", amountOfEnemies, enemy.maxBreak)
+            this.getEffect("UP_GIV_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
+            this.getEffect("UP_ELEMENT_DMG_RATE_RATIO", currentAmountOfEnemies, enemy.maxBreak)
         ) / 1000;
-        const elem_dmg_up = (this.getEffect("UP_WEAK_ELEMENT_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
-        const dmg_taken = (this.getEffect("UP_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
-            this.getEffect("UP_AIM_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
-        const elem_res_down = (this.getEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) / 1000;
+        const elem_dmg_up = (this.getEffect("UP_WEAK_ELEMENT_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak)) / 1000;
+        const dmg_taken = (this.getEffect("UP_RCV_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
+            this.getEffect("UP_AIM_RCV_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak)) / 1000;
+        const elem_res_down = (this.getEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak)) / 1000;
         let base_dmg = special * base_atk * ((base_atk / 124) ** 1.2 + 12) / 20;
         if (special > 0) { // Add dmg only to enemies hit by something
             for (const ally of this.team) {
@@ -464,7 +470,7 @@ Result       - ${(total | 0).toLocaleString()}
 AverageDmg   - ${(average_total | 0).toLocaleString()}
 
 ENEMY STATS:
-enemiesAlive - ${amountOfEnemies}    
+enemiesAlive - ${currentAmountOfEnemies}    
 base_def     - ${enemy.defense.toLocaleString()}    
 break        - ${enemy.maxBreak}% 
 def_up       - ${enemy.defenseUp}%  
