@@ -122,7 +122,8 @@ function saveToStore(idx: number) {
         teamStore.setCharDebuffReduction(4, undefined)
     }
 
-    router.push('/sa-simulator-single')
+    const route = router.resolve('/sa-simulator-single')
+    window.open(route.href, '_blank')
 }
 </script>
 

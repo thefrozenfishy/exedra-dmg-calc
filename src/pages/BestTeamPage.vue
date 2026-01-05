@@ -160,8 +160,8 @@
                     <input type="text" v-model="ignoredKiokuQuery"
                         placeholder="Kioku that will be ignored during calculations..."
                         @focus="showIgnoredKiokuDropdown = true" @blur="hideIgnoredKiokuDropdown" />
-                    <ul v-if="showIgnoredKiokuDropdown && filteredKioku.length" class="dropdown">
-                        <li v-for="char in filteredKioku" :key="char.id" @mousedown.prevent="addIgnoredKioku(char)">
+                    <ul v-if="showIgnoredKiokuDropdown && filteredIgnoredKioku.length" class="dropdown">
+                        <li v-for="char in filteredIgnoredKioku" :key="char.id" @mousedown.prevent="addIgnoredKioku(char)">
                             <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
                             {{ char.name }}
                         </li>
@@ -361,6 +361,17 @@ const filteredKioku = computed(() => {
     return members.value.filter(
         (m) =>
             !obligatoryKioku.value.some((a) => a.id === m.id) &&
+            m.rarity !== 3 &&
+            (m.name.toLowerCase().includes(q) ||
+                m.character_en.toLowerCase().includes(q)
+                || (m.name === "Time Stop Strike" && q.startsWith("moe"))
+            ))
+})
+const filteredIgnoredKioku = computed(() => {
+    const q = ignoredKiokuQuery.value.toLowerCase()
+    return members.value.filter(
+        (m) =>
+            !ignoredKioku.value.some((a) => a.id === m.id) &&
             m.rarity !== 3 &&
             (m.name.toLowerCase().includes(q) ||
                 m.character_en.toLowerCase().includes(q)
