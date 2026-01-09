@@ -11128,6 +11128,86 @@
         "description": "行動タイプが追加攻撃ではない"
     },
     {
+        "battleConditionMstId": 1398,
+        "compareContent": 206,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "1,1",
+        "description": "ブレイクしている敵が1体"
+    },
+    {
+        "battleConditionMstId": 1399,
+        "compareContent": 206,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "1,2",
+        "description": "ブレイクしている敵が2体"
+    },
+    {
+        "battleConditionMstId": 1400,
+        "compareContent": 206,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "1,3",
+        "description": "ブレイクしている敵が3体"
+    },
+    {
+        "battleConditionMstId": 1401,
+        "compareContent": 206,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "1,4",
+        "description": "ブレイクしている敵が4体"
+    },
+    {
+        "battleConditionMstId": 1402,
+        "compareContent": 206,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "1,5",
+        "description": "ブレイクしている敵が5体"
+    },
+    {
+        "battleConditionMstId": 1403,
+        "compareContent": 302,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "1度の攻撃で敵を1体以上ブレイクさせた"
+    },
+    {
+        "battleConditionMstId": 1404,
+        "compareContent": 302,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "2",
+        "description": "1度の攻撃で敵を2体以上ブレイクさせた"
+    },
+    {
+        "battleConditionMstId": 1405,
+        "compareContent": 302,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "3",
+        "description": "1度の攻撃で敵を3体以上ブレイクさせた"
+    },
+    {
+        "battleConditionMstId": 1406,
+        "compareContent": 302,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "4",
+        "description": "1度の攻撃で敵を4体以上ブレイクさせた"
+    },
+    {
+        "battleConditionMstId": 1407,
+        "compareContent": 302,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "5",
+        "description": "1度の攻撃で敵を5体以上ブレイクさせた"
+    },
+    {
         "battleConditionMstId": 1408,
         "compareContent": 23,
         "compareOperator": 5,
@@ -11206,6 +11286,46 @@
         "compareTarget": 8,
         "compareValue": "10",
         "description": "対象の状態異常数が10未満"
+    },
+    {
+        "battleConditionMstId": 1418,
+        "compareContent": 206,
+        "compareOperator": 5,
+        "compareTarget": 6,
+        "compareValue": "1,1",
+        "description": "ブレイクしている敵が1体未満"
+    },
+    {
+        "battleConditionMstId": 1419,
+        "compareContent": 206,
+        "compareOperator": 5,
+        "compareTarget": 6,
+        "compareValue": "1,2",
+        "description": "ブレイクしている敵が2体未満"
+    },
+    {
+        "battleConditionMstId": 1420,
+        "compareContent": 206,
+        "compareOperator": 5,
+        "compareTarget": 6,
+        "compareValue": "1,3",
+        "description": "ブレイクしている敵が3体未満"
+    },
+    {
+        "battleConditionMstId": 1421,
+        "compareContent": 206,
+        "compareOperator": 5,
+        "compareTarget": 6,
+        "compareValue": "1,4",
+        "description": "ブレイクしている敵が4体未満"
+    },
+    {
+        "battleConditionMstId": 1422,
+        "compareContent": 206,
+        "compareOperator": 5,
+        "compareTarget": 6,
+        "compareValue": "1,5",
+        "description": "ブレイクしている敵が5体未満"
     },
     {
         "battleConditionMstId": 1423,
@@ -11294,5 +11414,189 @@
         "compareTarget": 1,
         "compareValue": "51",
         "description": "トークンが51未満のとき"
+    },
+    {
+        "battleConditionMstId": 1434,
+        "compareContent": 309,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "DWN_RCV_BREAK_POINT_DMG_RATIO,3",
+        "description": "攻撃を受けたブレイク削減耐性を持つ味方が3体未満のとき"
+    },
+    {
+        "battleConditionMstId": 1435,
+        "compareContent": 309,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "DWN_RCV_BREAK_POINT_DMG_RATIO,5",
+        "description": "攻撃を受けたブレイク削減耐性を持つ味方が5体未満のとき"
+    },
+    {
+        "battleConditionMstId": 1436,
+        "compareContent": 309,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "DWN_RCV_BREAK_POINT_DMG_RATIO,2",
+        "description": "攻撃を受けたブレイク削減耐性を持つ味方が2体未満のとき"
+    },
+    {
+        "battleConditionMstId": 1437,
+        "compareContent": 13,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1,10",
+        "description": "自分が1ターンごとに（ターン10から）"
+    },
+    {
+        "battleConditionMstId": 1438,
+        "compareContent": 206,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "1,0",
+        "description": "ブレイクしている味方が0体"
+    },
+    {
+        "battleConditionMstId": 1439,
+        "compareContent": 206,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "1,1",
+        "description": "ブレイクしている味方が1体"
+    },
+    {
+        "battleConditionMstId": 1440,
+        "compareContent": 206,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "1,2",
+        "description": "ブレイクしている味方が2体"
+    },
+    {
+        "battleConditionMstId": 1441,
+        "compareContent": 206,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "1,3",
+        "description": "ブレイクしている味方が3体"
+    },
+    {
+        "battleConditionMstId": 1442,
+        "compareContent": 206,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "1,4",
+        "description": "ブレイクしている味方が4体"
+    },
+    {
+        "battleConditionMstId": 1443,
+        "compareContent": 206,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "1,5",
+        "description": "ブレイクしている味方が5体"
+    },
+    {
+        "battleConditionMstId": 1444,
+        "compareContent": 206,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "1,0",
+        "description": "ブレイクしている味方が0体以上"
+    },
+    {
+        "battleConditionMstId": 1445,
+        "compareContent": 206,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "1,1",
+        "description": "ブレイクしている味方が1体以上"
+    },
+    {
+        "battleConditionMstId": 1446,
+        "compareContent": 206,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "1,2",
+        "description": "ブレイクしている味方が2体以上"
+    },
+    {
+        "battleConditionMstId": 1447,
+        "compareContent": 206,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "1,3",
+        "description": "ブレイクしている味方が3体以上"
+    },
+    {
+        "battleConditionMstId": 1448,
+        "compareContent": 206,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "1,4",
+        "description": "ブレイクしている味方が4体以上"
+    },
+    {
+        "battleConditionMstId": 1449,
+        "compareContent": 206,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "1,5",
+        "description": "ブレイクしている味方が5体以上"
+    },
+    {
+        "battleConditionMstId": 1450,
+        "compareContent": 302,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "1",
+        "description": "1度の攻撃でブレイクされた味方が1体未満"
+    },
+    {
+        "battleConditionMstId": 1451,
+        "compareContent": 302,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "2",
+        "description": "1度の攻撃でブレイクされた味方が2体未満"
+    },
+    {
+        "battleConditionMstId": 1452,
+        "compareContent": 302,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "3",
+        "description": "1度の攻撃でブレイクされた味方が3体未満"
+    },
+    {
+        "battleConditionMstId": 1453,
+        "compareContent": 302,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "4",
+        "description": "1度の攻撃でブレイクされた味方が4体未満"
+    },
+    {
+        "battleConditionMstId": 1454,
+        "compareContent": 302,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "5",
+        "description": "1度の攻撃でブレイクされた味方が5体未満"
+    },
+    {
+        "battleConditionMstId": 1455,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1104",
+        "description": "自分のキャラクターが「雪野かなえ」"
+    },
+    {
+        "battleConditionMstId": 1459,
+        "compareContent": 101,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "0",
+        "description": "自分がダメージを受けなかった"
     }
 ]

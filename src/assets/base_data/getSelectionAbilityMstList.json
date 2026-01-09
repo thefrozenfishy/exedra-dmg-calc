@@ -3943,5 +3943,20 @@
         "targetType": 2,
         "value1": 1150044,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "On battle skill use, increases critical rate by 20% (2 turns).<br>On own critical hit, advances own action order by 10%.",
+        "name": "I Won't Just Give up on Myself",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 129,
+        "selectionAbilityMstId": 7045,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11040101,
+        "targetType": 2,
+        "value1": 1150045,
+        "value2": 0
     }
 ]

@@ -11295,6 +11295,46 @@
         "description": "行動者は自分、行動タイプが追加攻撃ではない、攻撃対象にクリティカルダメージが発生"
     },
     {
+        "battleConditionMstIdCsv": "1398",
+        "battleConditionSetMstId": 2286,
+        "description": "ブレイクしている敵が1体"
+    },
+    {
+        "battleConditionMstIdCsv": "1399",
+        "battleConditionSetMstId": 2287,
+        "description": "ブレイクしている敵が2体"
+    },
+    {
+        "battleConditionMstIdCsv": "1400",
+        "battleConditionSetMstId": 2288,
+        "description": "ブレイクしている敵が3体"
+    },
+    {
+        "battleConditionMstIdCsv": "1401",
+        "battleConditionSetMstId": 2289,
+        "description": "ブレイクしている敵が4体"
+    },
+    {
+        "battleConditionMstIdCsv": "1402",
+        "battleConditionSetMstId": 2290,
+        "description": "ブレイクしている敵が5体"
+    },
+    {
+        "battleConditionMstIdCsv": "1405,3",
+        "battleConditionSetMstId": 2291,
+        "description": "1度の攻撃で敵を3体以上ブレイクさせた、行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "420,282,1364",
+        "battleConditionSetMstId": 2292,
+        "description": "自身がブレイク状態ではなく、行動者は味方、敵が1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "536",
+        "battleConditionSetMstId": 2293,
+        "description": "味方が1体未満の場合（自分を除く）"
+    },
+    {
         "battleConditionMstIdCsv": "9,1389",
         "battleConditionSetMstId": 2294,
         "description": "X五十鈴れん専用バフが付与されているとき+自身のHPが50%以上のとき"
@@ -11350,6 +11390,31 @@
         "description": "対象の状態異常数が10未満"
     },
     {
+        "battleConditionMstIdCsv": "1418",
+        "battleConditionSetMstId": 2305,
+        "description": "ブレイクしている敵が1体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1419",
+        "battleConditionSetMstId": 2306,
+        "description": "ブレイクしている敵が2体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1420",
+        "battleConditionSetMstId": 2307,
+        "description": "ブレイクしている敵が3体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1421",
+        "battleConditionSetMstId": 2308,
+        "description": "ブレイクしている敵が4体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1422",
+        "battleConditionSetMstId": 2309,
+        "description": "ブレイクしている敵が5体未満"
+    },
+    {
         "battleConditionMstIdCsv": "1423",
         "battleConditionSetMstId": 2310,
         "description": "晴れ着まどか専用バフが付与されているとき"
@@ -11390,6 +11455,186 @@
         "description": "Xりか専用バフが付与されているとき"
     },
     {
+        "battleConditionMstIdCsv": "2,25,1434",
+        "battleConditionSetMstId": 2318,
+        "description": "行動者は敵、自分が1以上のダメージを受けた、攻撃を受けたブレイク削減耐性を持つ味方が3体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,25,1435",
+        "battleConditionSetMstId": 2319,
+        "description": "行動者は敵、自分が1以上のダメージを受けた、攻撃を受けたブレイク削減耐性を持つ味方が5体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "7,916,3",
+        "battleConditionSetMstId": 2320,
+        "description": "行動タイプが必殺技 AND 攻撃した+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "281,3,1338",
+        "battleConditionSetMstId": 2321,
+        "description": "クリティカルダメージが発生した+攻撃した+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "281,3,1332",
+        "battleConditionSetMstId": 2322,
+        "description": "クリティカルダメージが発生した+攻撃した+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "2,7,25,1436",
+        "battleConditionSetMstId": 2323,
+        "description": "行動者は敵、行動タイプは必殺技、自分が1以上のダメージを受けた、攻撃を受けたブレイク削減耐性を持つ味方が2体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1437",
+        "battleConditionSetMstId": 2324,
+        "description": "自分が1ターンごとに（ターン10から）"
+    },
+    {
+        "battleConditionMstIdCsv": "420,755",
+        "battleConditionSetMstId": 2325,
+        "description": "自身がブレイク状態ではない場合、味方にブレイクが発生した"
+    },
+    {
+        "battleConditionMstIdCsv": "1438",
+        "battleConditionSetMstId": 2326,
+        "description": "ブレイクしている味方が0体"
+    },
+    {
+        "battleConditionMstIdCsv": "1439",
+        "battleConditionSetMstId": 2327,
+        "description": "ブレイクしている味方が1体"
+    },
+    {
+        "battleConditionMstIdCsv": "1440",
+        "battleConditionSetMstId": 2328,
+        "description": "ブレイクしている味方が2体"
+    },
+    {
+        "battleConditionMstIdCsv": "1441",
+        "battleConditionSetMstId": 2329,
+        "description": "ブレイクしている味方が3体"
+    },
+    {
+        "battleConditionMstIdCsv": "1442",
+        "battleConditionSetMstId": 2330,
+        "description": "ブレイクしている味方が4体"
+    },
+    {
+        "battleConditionMstIdCsv": "1443",
+        "battleConditionSetMstId": 2331,
+        "description": "ブレイクしている味方が5体"
+    },
+    {
+        "battleConditionMstIdCsv": "2,7,25,1434",
+        "battleConditionSetMstId": 2332,
+        "description": "行動者は敵、行動タイプは必殺技、自分が1以上のダメージを受けた、攻撃を受けたブレイク削減耐性を持つ味方が3体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,7,25,1435",
+        "battleConditionSetMstId": 2333,
+        "description": "行動者は敵、行動タイプは必殺技、自分が1以上のダメージを受けた、攻撃を受けたブレイク削減耐性を持つ味方が5体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "55,273",
+        "battleConditionSetMstId": 2334,
+        "description": "自分が2ターンごとに（ターン1から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "55,274",
+        "battleConditionSetMstId": 2335,
+        "description": "自分が2ターンごとに（ターン1から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "56,273",
+        "battleConditionSetMstId": 2336,
+        "description": "自分が2ターンごとに（ターン2から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "56,274",
+        "battleConditionSetMstId": 2337,
+        "description": "自分が2ターンごとに（ターン2から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "420,2,7,25,1436",
+        "battleConditionSetMstId": 2338,
+        "description": "自身がブレイク状態ではない場合、行動者は敵、行動タイプは必殺技、自分が1以上のダメージを受けた、攻撃を受けたブレイク削減耐性を持つ味方が2体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1444",
+        "battleConditionSetMstId": 2339,
+        "description": "ブレイクしている味方が0体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1445",
+        "battleConditionSetMstId": 2340,
+        "description": "ブレイクしている味方が1体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1446",
+        "battleConditionSetMstId": 2341,
+        "description": "ブレイクしている味方が2体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1447",
+        "battleConditionSetMstId": 2342,
+        "description": "ブレイクしている味方が3体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1448",
+        "battleConditionSetMstId": 2343,
+        "description": "ブレイクしている味方が4体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1449",
+        "battleConditionSetMstId": 2344,
+        "description": "ブレイクしている味方が5体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1450",
+        "battleConditionSetMstId": 2345,
+        "description": "1度の攻撃でブレイクされた味方が1体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1451",
+        "battleConditionSetMstId": 2346,
+        "description": "1度の攻撃でブレイクされた味方が2体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1452",
+        "battleConditionSetMstId": 2347,
+        "description": "1度の攻撃でブレイクされた味方が3体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1453",
+        "battleConditionSetMstId": 2348,
+        "description": "1度の攻撃でブレイクされた味方が4体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1454",
+        "battleConditionSetMstId": 2349,
+        "description": "1度の攻撃でブレイクされた味方が5体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "420,2,755,1452",
+        "battleConditionSetMstId": 2350,
+        "description": "自身がブレイク状態ではない場合、行動者は敵、敵の攻撃で味方がブレイクした、1度の攻撃でブレイクされた味方が3体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "59,273,349",
+        "battleConditionSetMstId": 2351,
+        "description": "自分が3ターンごとに（ターン3から）、味方が4体存在する場合（自分を除く） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "59,273,350",
+        "battleConditionSetMstId": 2352,
+        "description": "自分が3ターンごとに（ターン3から）、味方が4体未満の場合（自分を除く）AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1455",
+        "battleConditionSetMstId": 2353,
+        "description": "自分のキャラクターが「雪野かなえ」"
+    },
+    {
         "battleConditionMstIdCsv": "3,265",
         "battleConditionSetMstId": 2358,
         "description": "自身のターン経過が4ターン未満"
@@ -11398,6 +11643,21 @@
         "battleConditionMstIdCsv": "3,63",
         "battleConditionSetMstId": 2359,
         "description": "自分のターン、4ターンごとに（ターン4から）"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1459,1397",
+        "battleConditionSetMstId": 2360,
+        "description": "行動者は敵、自分がダメージを受けなかった、行動タイプが追加行動ではない"
+    },
+    {
+        "battleConditionMstIdCsv": "25,1263,1397",
+        "battleConditionSetMstId": 2361,
+        "description": "1以上のダメージを受けた、弱点属性で攻撃された、行動タイプが追加行動ではない"
+    },
+    {
+        "battleConditionMstIdCsv": "420,286,401",
+        "battleConditionSetMstId": 2362,
+        "description": "自身がブレイク状態ではなく、行動可能な状態で、魔力が10のとき"
     },
     {
         "battleConditionMstIdCsv": "3,980",
