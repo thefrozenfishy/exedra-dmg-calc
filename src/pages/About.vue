@@ -2,9 +2,12 @@
     <div style="text-align: left;">
         <h1>About</h1>
         <h2>Info</h2>
-        <p>The damage calculations try to capture all the oddities of the exedra damage calculations in an automatic way, but might read some things wrong, 
-            I try to correct this as soon as I am made aware of them, 
-            if you spot anything weird then you can use the <a href="https://docs.google.com/spreadsheets/d/1AZhIqAazG_B99bxPWBbsMxKJ_hF24wwiXProgSshsmk/edit?usp=sharing">Exedra Damage Calculator</a> sheet to calculate the damage manually.</p>
+        <p>The damage calculations try to capture all the oddities of the exedra damage calculations in an automatic
+            way, but might read some things wrong,
+            I try to correct this as soon as I am made aware of them,
+            if you spot anything weird then you can use the <a
+                href="https://docs.google.com/spreadsheets/d/1AZhIqAazG_B99bxPWBbsMxKJ_hF24wwiXProgSshsmk/edit?usp=sharing">Exedra
+                Damage Calculator</a> sheet to calculate the damage manually.</p>
         <p>The calculations here are based on the formulas in that sheet.</p>
 
         <h2>Team Setup</h2>
@@ -36,7 +39,7 @@
             <li>Add "import boss stats" or something similar</li>
         </ul>
         <h1>Dump debug data</h1>
-        <button :onclick="downloadLS">Export LocalStorage</button>
+        <button class="export-button" :onclick="downloadLS">Export LocalStorage</button>
     </div>
 </template>
 
@@ -61,5 +64,12 @@ function downloadLS() {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+}
+
+.export-button {
+    background-color: #2b2a33;
+    border: 1px solid white;
+    padding: 0.2rem 0.6rem;
+    font: 0.9em sans-serif;
 }
 </style>

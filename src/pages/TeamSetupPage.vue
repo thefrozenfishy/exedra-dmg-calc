@@ -6,7 +6,7 @@
 
         <h2>Export/Import</h2>
         <div>
-            <button @click="exportCharacters()">Export</button>
+            <button class="export-button" @click="exportCharacters()">Export</button>
             <label style="margin-left: 30px;">
                 Import
                 <input  type="file" accept="application/json" @change="handleFileChange" />
@@ -111,5 +111,12 @@ export default defineComponent({
 
 .default-row {
     display: contents;
+}
+
+.export-button {
+    background-color: #2b2a33;
+    border: 1px solid white;
+    padding: 0.2rem 0.6rem;
+    font: 0.9em sans-serif;
 }
 </style>
