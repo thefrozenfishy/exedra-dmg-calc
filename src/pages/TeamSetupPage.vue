@@ -118,5 +118,6 @@ export default defineComponent({
     border: 1px solid white;
     padding: 0.2rem 0.6rem;
     font: 0.9em sans-serif;
+    color: rgba(255, 255, 255, 0.87);
 }
 </style>
