@@ -11592,11 +11592,43 @@
         "description": "自分のキャラクターが「雪野かなえ」"
     },
     {
+        "battleConditionMstId": 1456,
+        "compareContent": 309,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "BARRIER,1",
+        "description": "バリアが付与されている味方軍が攻撃を受けたとき"
+    },
+    {
+        "battleConditionMstId": 1457,
+        "compareContent": 107,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "TRUE",
+        "description": "行動対象（個別）のバリアが壊れた"
+    },
+    {
+        "battleConditionMstId": 1458,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1133",
+        "description": "自分のキャラクターが「浅古小糸」"
+    },
+    {
         "battleConditionMstId": 1459,
         "compareContent": 101,
         "compareOperator": 1,
         "compareTarget": 1,
         "compareValue": "0",
         "description": "自分がダメージを受けなかった"
+    },
+    {
+        "battleConditionMstId": 1463,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 2,
+        "compareValue": "40",
+        "description": "行動者のHPが40％未満"
     }
 ]

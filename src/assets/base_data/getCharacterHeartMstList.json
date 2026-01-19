@@ -298,5 +298,11 @@
         "characterMstId": 1126,
         "objectRewardGroupId": 1126,
         "paramUpGroupId": 1
+    },
+    {
+        "characterHeartMstId": 1133,
+        "characterMstId": 1133,
+        "objectRewardGroupId": 1133,
+        "paramUpGroupId": 1
     }
 ]

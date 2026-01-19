@@ -3958,5 +3958,20 @@
         "targetType": 2,
         "value1": 1150045,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "At battle start, grants 3 Magic.<br>When attacked, increases DEF by 2% (Max 10 stacks).",
+        "name": "I'll Keep Going, No Matter What",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 130,
+        "selectionAbilityMstId": 7046,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11330101,
+        "targetType": 2,
+        "value1": 1150046,
+        "value2": 0
     }
 ]

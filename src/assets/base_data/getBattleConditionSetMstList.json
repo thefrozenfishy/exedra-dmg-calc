@@ -11635,6 +11635,26 @@
         "description": "自分のキャラクターが「雪野かなえ」"
     },
     {
+        "battleConditionMstIdCsv": "1456,1457",
+        "battleConditionSetMstId": 2354,
+        "description": "バリアが付与されている味方軍が攻撃を受けたとき+行動対象(個別)のバリアが壊されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1458",
+        "battleConditionSetMstId": 2355,
+        "description": "自分のキャラクターが「浅古小糸」"
+    },
+    {
+        "battleConditionMstIdCsv": "1456",
+        "battleConditionSetMstId": 2356,
+        "description": "バリアが付与されている味方軍が攻撃を受けたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1457,2",
+        "battleConditionSetMstId": 2357,
+        "description": "行動対象(個別)のバリアが壊されたとき"
+    },
+    {
         "battleConditionMstIdCsv": "3,265",
         "battleConditionSetMstId": 2358,
         "description": "自身のターン経過が4ターン未満"
@@ -11663,5 +11683,20 @@
         "battleConditionMstIdCsv": "3,980",
         "battleConditionSetMstId": 2363,
         "description": "自身のターン経過が13ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1055",
+        "battleConditionSetMstId": 2364,
+        "description": "自身のターン経過が5ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1025",
+        "battleConditionSetMstId": 2365,
+        "description": "自身のターン経過が25ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "892,1463",
+        "battleConditionSetMstId": 2386,
+        "description": "行動者のHPが40％未満 AND 攻撃された時(0ダメージを含む)"
     }
 ]
