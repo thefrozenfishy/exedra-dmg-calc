@@ -437,7 +437,7 @@ td {
 }
 
 .not-limited-border {
-    border: 2px solid blue;
+    border: 2px solid rgb(255, 255, 0);
 }
 
 .default-border {
