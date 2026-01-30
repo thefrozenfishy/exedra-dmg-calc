@@ -94,15 +94,18 @@ export const getPortraits = (elem?: KiokuElement): string[] => {
 };
 
 export const portraitsBestOnly = (elem: KiokuElement) => [
-    "A Dream of a Little Mermaid", "The Savior's Apostle", "Faith We'll Meet Again Someday"
-]
+    "A Dream of a Little Mermaid", 
+    "The Savior's Apostle",
+    "Faith We'll Meet Again Someday",
+    elem === KiokuElement.Dark ? "Because...I'm Not Alone Anymore" : null,
+].filter(Boolean)
 
 const dmgUpPortraits = {
     [KiokuElement.Flame]: "A Reluctant Coach Steps Up",
     [KiokuElement.Aqua]: "Futures Felt in Photographs",
     [KiokuElement.Forest]: "Special Stage Persona",
     [KiokuElement.Light]: "High Five for Harmony",
-    [KiokuElement.Dark]: "One Time Team-up!",
+    [KiokuElement.Dark]: ["One Time Team-up!", "Because...I'm Not Alone Anymore"],
     [KiokuElement.Void]: "Pride on the Line",
 }
 

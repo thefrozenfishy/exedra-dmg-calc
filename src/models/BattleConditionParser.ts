@@ -81,6 +81,7 @@ enum CompareContent {
     HAS_BUFF = 26,
     X_KYOUKO_DEBUFF_COUNT = 27,
     SELF_IS_KIOKU = 28,
+    FIELD = 29,
     DMG = 101,
     DMG_RATIO = 102,
     IS_KILLED = 103,

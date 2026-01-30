@@ -44,6 +44,7 @@ const skippable = new Set([
     "CHARGE",
     "CONSUME_CHARGE_POINT",
     "CONSUME_COUNT_POINT",
+    "CONSUME_ZONE_STACK",
     "CONTINUOUS_RECOVERY",
     "COUNT",
     "CURSE_ATK",
@@ -61,6 +62,7 @@ const skippable = new Set([
     "GAIN_EP_FIXED",
     "GAIN_EP_RATIO",
     "GAIN_SP_FIXED",
+    "GAIN_ZONE_STACK",
     "HASTE",
     "IMM_SLIP_DMG",
     "POISON_ATK",
@@ -80,6 +82,7 @@ const skippable = new Set([
     "TSUBAME",
     "UNIQUE_10030301",
     "UNIQUE_10070201",
+    "UNIQUE_BUFF_ACCUM",
     "UNIQUE_BUFF",
     "UNIQUE_DEBUFF_ACCUM",
     "UNIQUE_DEBUFF",
@@ -102,6 +105,7 @@ const skippable = new Set([
     "UP_RCV_BREAK_POINT_DMG_RATIO",
     "UP_SPD_ACCUM_RATIO",
     "UP_SPD_FIXED",
+    "ZONE_STACK",
     "UP_SPD_RATIO",
     "VORTEX_ATK", // TODO: Make vortex work
 ]);
@@ -302,7 +306,7 @@ export class ScoreAttackTeam {
         atk_down: number,
     ): [number, number, number, string, boolean] {
         // TODO: Add atk%-, dmg taken down% and dmg dealt down% from enemies
-        const [special, enemyDied, uses_def] = this.get_special_dmg(targetTypeAtPosition[idx],initAmountOfEnemies, currentAmountOfEnemies, enemy.maxBreak, enemy.hitsToKill);
+        const [special, enemyDied, uses_def] = this.get_special_dmg(targetTypeAtPosition[idx], initAmountOfEnemies, currentAmountOfEnemies, enemy.maxBreak, enemy.hitsToKill);
         const base_atk = uses_def ? this.dps.getBaseDef() : this.dps.getBaseAtk();
         const atk_pluss =
             (this.getEffect(`UP_${uses_def ? "DEF" : "ATK"}_RATIO`, currentAmountOfEnemies, enemy.maxBreak) +
