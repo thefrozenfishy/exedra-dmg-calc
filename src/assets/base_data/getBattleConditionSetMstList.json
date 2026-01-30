@@ -11695,8 +11695,323 @@
         "description": "自身のターン経過が25ターン以上"
     },
     {
+        "battleConditionMstIdCsv": "1001",
+        "battleConditionSetMstId": 2366,
+        "description": "自身の経過ターンが1ターン以降"
+    },
+    {
+        "battleConditionMstIdCsv": "1002",
+        "battleConditionSetMstId": 2367,
+        "description": "自身の経過ターンが2ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1003",
+        "battleConditionSetMstId": 2368,
+        "description": "自身の経過ターンが3ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1004",
+        "battleConditionSetMstId": 2369,
+        "description": "自身の経過ターンが4ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1005",
+        "battleConditionSetMstId": 2370,
+        "description": "自身の経過ターンが5ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1006",
+        "battleConditionSetMstId": 2371,
+        "description": "自身の経過ターンが6ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1007",
+        "battleConditionSetMstId": 2372,
+        "description": "自身の経過ターンが7ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1008",
+        "battleConditionSetMstId": 2373,
+        "description": "自身の経過ターンが8ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1009",
+        "battleConditionSetMstId": 2374,
+        "description": "自身の経過ターンが9ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1010",
+        "battleConditionSetMstId": 2375,
+        "description": "自身の経過ターンが10ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1460",
+        "battleConditionSetMstId": 2376,
+        "description": "対象にバリアが貼られていない場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1461",
+        "battleConditionSetMstId": 2377,
+        "description": "対象にバリアが貼られている場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1020",
+        "battleConditionSetMstId": 2378,
+        "description": "自身の経過ターンが20ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1001,1054",
+        "battleConditionSetMstId": 2379,
+        "description": "自身の経過ターンが1ターン以上、4ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1004,1057",
+        "battleConditionSetMstId": 2380,
+        "description": "自身の経過ターンが4ターン以上、7ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1007,1060",
+        "battleConditionSetMstId": 2381,
+        "description": "自身の経過ターンが7ターン以上、10ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1010,1063",
+        "battleConditionSetMstId": 2382,
+        "description": "自身の経過ターンが10ターン以上、13ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1013,1066",
+        "battleConditionSetMstId": 2383,
+        "description": "自身の経過ターンが13ターン以上、16ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1016,1069",
+        "battleConditionSetMstId": 2384,
+        "description": "自身の経過ターンが16ターン以上、19ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1019",
+        "battleConditionSetMstId": 2385,
+        "description": "自身の経過ターンが19ターン以上"
+    },
+    {
         "battleConditionMstIdCsv": "892,1463",
         "battleConditionSetMstId": 2386,
         "description": "行動者のHPが40％未満 AND 攻撃された時(0ダメージを含む)"
+    },
+    {
+        "battleConditionMstIdCsv": "1464,630,1478",
+        "battleConditionSetMstId": 2387,
+        "description": "弱点属性で攻撃された敵軍のユニット数が1体以上のとき+追撃以外+エーテルブロウ以外"
+    },
+    {
+        "battleConditionMstIdCsv": "1462,3",
+        "battleConditionSetMstId": 2388,
+        "description": "行動タイプがエーテルブロウ"
+    },
+    {
+        "battleConditionMstIdCsv": "1465",
+        "battleConditionSetMstId": 2389,
+        "description": "悪魔ほむらのフィールドが発動しているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1465,7,3",
+        "battleConditionSetMstId": 2390,
+        "description": "悪魔ほむらのフィールドが発動しているとき＋必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1466",
+        "battleConditionSetMstId": 2391,
+        "description": "悪魔ほむらの専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1467",
+        "battleConditionSetMstId": 2392,
+        "description": "悪魔ほむらの専用バフが10以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1468,7,3",
+        "battleConditionSetMstId": 2393,
+        "description": "悪魔ほむらの専用バフが10のとき＋必殺技発動したとき＋行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "1469",
+        "battleConditionSetMstId": 2394,
+        "description": "悪魔ほむらの専用バフが2未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1474,1470",
+        "battleConditionSetMstId": 2395,
+        "description": "悪魔ほむらの専用バフが2以上のとき+悪魔ほむらの専用バフが4未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1475,1471",
+        "battleConditionSetMstId": 2396,
+        "description": "悪魔ほむらの専用バフが4以上のとき+悪魔ほむらの専用バフが6未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1476,1472",
+        "battleConditionSetMstId": 2397,
+        "description": "悪魔ほむらの専用バフが6以上のとき+悪魔ほむらの専用バフが8未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1477,1473",
+        "battleConditionSetMstId": 2398,
+        "description": "悪魔ほむらの専用バフが8以上のとき+悪魔ほむらの専用バフが10未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1468",
+        "battleConditionSetMstId": 2399,
+        "description": "悪魔ほむらの専用バフが10のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "25,975",
+        "battleConditionSetMstId": 2400,
+        "description": "1以上のダメージを受けた、行動者は闇属性"
+    },
+    {
+        "battleConditionMstIdCsv": "1479,7",
+        "battleConditionSetMstId": 2401,
+        "description": "悪魔ほむらの専用バフが1のとき+必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1480,7",
+        "battleConditionSetMstId": 2402,
+        "description": "悪魔ほむらの専用バフが2のとき+必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1481,7",
+        "battleConditionSetMstId": 2403,
+        "description": "悪魔ほむらの専用バフが3のとき+必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1482,7",
+        "battleConditionSetMstId": 2404,
+        "description": "悪魔ほむらの専用バフが4のとき+必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1483,7",
+        "battleConditionSetMstId": 2405,
+        "description": "悪魔ほむらの専用バフが5のとき+必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1484,7",
+        "battleConditionSetMstId": 2406,
+        "description": "悪魔ほむらの専用バフが6のとき+必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1485,7",
+        "battleConditionSetMstId": 2407,
+        "description": "悪魔ほむらの専用バフが7のとき+必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1486,7",
+        "battleConditionSetMstId": 2408,
+        "description": "悪魔ほむらの専用バフが8のとき+必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1487,7",
+        "battleConditionSetMstId": 2409,
+        "description": "悪魔ほむらの専用バフが9のとき+必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1488,7",
+        "battleConditionSetMstId": 2410,
+        "description": "悪魔ほむらの専用バフが10のとき+必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1489,7",
+        "battleConditionSetMstId": 2411,
+        "description": "悪魔ほむらの専用バフが1以上のとき+必殺技が発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "975,1,655,5",
+        "battleConditionSetMstId": 2412,
+        "description": "闇属性の仲間がダメージを与えたとき(通常攻撃発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "324",
+        "battleConditionSetMstId": 2413,
+        "description": "行動者+ブレイクボーナスが最大のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1491",
+        "battleConditionSetMstId": 2416,
+        "description": "1度の攻撃でブレイクされた味方が1体"
+    },
+    {
+        "battleConditionMstIdCsv": "1492",
+        "battleConditionSetMstId": 2417,
+        "description": "1度の攻撃でブレイクされた味方が2体"
+    },
+    {
+        "battleConditionMstIdCsv": "1493",
+        "battleConditionSetMstId": 2418,
+        "description": "1度の攻撃でブレイクされた味方が3体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1479,1462",
+        "battleConditionSetMstId": 2427,
+        "description": "悪魔ほむらの専用バフが1のとき+エーテルブロウ発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1480,1462",
+        "battleConditionSetMstId": 2428,
+        "description": "悪魔ほむらの専用バフが2のとき+エーテルブロウ発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1481,1462",
+        "battleConditionSetMstId": 2429,
+        "description": "悪魔ほむらの専用バフが3のとき+エーテルブロウ発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1482,1462",
+        "battleConditionSetMstId": 2430,
+        "description": "悪魔ほむらの専用バフが4のとき+エーテルブロウ発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1483,1462",
+        "battleConditionSetMstId": 2431,
+        "description": "悪魔ほむらの専用バフが5のとき+エーテルブロウ発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1484,1462",
+        "battleConditionSetMstId": 2432,
+        "description": "悪魔ほむらの専用バフが6のとき+エーテルブロウ発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1485,1462",
+        "battleConditionSetMstId": 2433,
+        "description": "悪魔ほむらの専用バフが7のとき+エーテルブロウ発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1486,1462",
+        "battleConditionSetMstId": 2434,
+        "description": "悪魔ほむらの専用バフが8のとき+エーテルブロウ発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1487,1462",
+        "battleConditionSetMstId": 2435,
+        "description": "悪魔ほむらの専用バフが9のとき+エーテルブロウ発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1488,1462",
+        "battleConditionSetMstId": 2436,
+        "description": "悪魔ほむらの専用バフが10のとき+エーテルブロウ発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1489,1462",
+        "battleConditionSetMstId": 2437,
+        "description": "悪魔ほむらの専用バフが1以上のとき+エーテルブロウを発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "975,1,655,6",
+        "battleConditionSetMstId": 2477,
+        "description": "闇属性の仲間がダメージを与えたとき(戦闘スキル発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "975,1,655,7",
+        "battleConditionSetMstId": 2478,
+        "description": "闇属性の仲間がダメージを与えたとき(必殺技発動したとき)"
     }
 ]

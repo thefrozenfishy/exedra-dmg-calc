@@ -11624,11 +11624,267 @@
         "description": "自分がダメージを受けなかった"
     },
     {
+        "battleConditionMstId": 1460,
+        "compareContent": 12,
+        "compareOperator": 8,
+        "compareTarget": 8,
+        "compareValue": "BARRIER",
+        "description": "対象にバリアが貼られていない場合"
+    },
+    {
+        "battleConditionMstId": 1461,
+        "compareContent": 12,
+        "compareOperator": 7,
+        "compareTarget": 8,
+        "compareValue": "BARRIER",
+        "description": "対象にバリアが貼られている場合"
+    },
+    {
+        "battleConditionMstId": 1462,
+        "compareContent": 401,
+        "compareOperator": 1,
+        "compareTarget": 7,
+        "compareValue": "EtherBlow",
+        "description": "行動タイプがエーテルブロウ"
+    },
+    {
         "battleConditionMstId": 1463,
         "compareContent": 2,
         "compareOperator": 5,
         "compareTarget": 2,
         "compareValue": "40",
         "description": "行動者のHPが40％未満"
+    },
+    {
+        "battleConditionMstId": 1464,
+        "compareContent": 307,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "弱点属性で攻撃された敵軍のユニット数が1体以上のとき"
+    },
+    {
+        "battleConditionMstId": 1465,
+        "compareContent": 29,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "10001,TRUE",
+        "description": "悪魔ほむらのフィールドが発動しているとき"
+    },
+    {
+        "battleConditionMstId": 1466,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "9",
+        "description": "悪魔ほむらの専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 1467,
+        "compareContent": 27,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "9,10",
+        "description": "悪魔ほむらの専用バフが10以上のとき"
+    },
+    {
+        "battleConditionMstId": 1468,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "9,10",
+        "description": "悪魔ほむらの専用バフが10のとき"
+    },
+    {
+        "battleConditionMstId": 1469,
+        "compareContent": 27,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "9,2",
+        "description": "悪魔ほむらの専用バフが2未満のとき"
+    },
+    {
+        "battleConditionMstId": 1470,
+        "compareContent": 27,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "9,4",
+        "description": "悪魔ほむらの専用バフが4未満のとき"
+    },
+    {
+        "battleConditionMstId": 1471,
+        "compareContent": 27,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "9,6",
+        "description": "悪魔ほむらの専用バフが6未満のとき"
+    },
+    {
+        "battleConditionMstId": 1472,
+        "compareContent": 27,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "9,8",
+        "description": "悪魔ほむらの専用バフが8未満のとき"
+    },
+    {
+        "battleConditionMstId": 1473,
+        "compareContent": 27,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "9,10",
+        "description": "悪魔ほむらの専用バフが10未満のとき"
+    },
+    {
+        "battleConditionMstId": 1474,
+        "compareContent": 27,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "9,2",
+        "description": "悪魔ほむらの専用バフが2以上のとき"
+    },
+    {
+        "battleConditionMstId": 1475,
+        "compareContent": 27,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "9,4",
+        "description": "悪魔ほむらの専用バフが4以上のとき"
+    },
+    {
+        "battleConditionMstId": 1476,
+        "compareContent": 27,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "9,6",
+        "description": "悪魔ほむらの専用バフが6以上のとき"
+    },
+    {
+        "battleConditionMstId": 1477,
+        "compareContent": 27,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "9,8",
+        "description": "悪魔ほむらの専用バフが8以上のとき"
+    },
+    {
+        "battleConditionMstId": 1478,
+        "compareContent": 401,
+        "compareOperator": 2,
+        "compareTarget": 7,
+        "compareValue": "EtherBlow",
+        "description": "行動タイプがエーテルブロウ以外が発動した時"
+    },
+    {
+        "battleConditionMstId": 1479,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "9,1",
+        "description": "悪魔ほむらの専用バフが1のとき"
+    },
+    {
+        "battleConditionMstId": 1480,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "9,2",
+        "description": "悪魔ほむらの専用バフが2のとき"
+    },
+    {
+        "battleConditionMstId": 1481,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "9,3",
+        "description": "悪魔ほむらの専用バフが3のとき"
+    },
+    {
+        "battleConditionMstId": 1482,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "9,4",
+        "description": "悪魔ほむらの専用バフが4のとき"
+    },
+    {
+        "battleConditionMstId": 1483,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "9,5",
+        "description": "悪魔ほむらの専用バフが5のとき"
+    },
+    {
+        "battleConditionMstId": 1484,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "9,6",
+        "description": "悪魔ほむらの専用バフが6のとき"
+    },
+    {
+        "battleConditionMstId": 1485,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "9,7",
+        "description": "悪魔ほむらの専用バフが7のとき"
+    },
+    {
+        "battleConditionMstId": 1486,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "9,8",
+        "description": "悪魔ほむらの専用バフが8のとき"
+    },
+    {
+        "battleConditionMstId": 1487,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "9,9",
+        "description": "悪魔ほむらの専用バフが9のとき"
+    },
+    {
+        "battleConditionMstId": 1488,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "9,10",
+        "description": "悪魔ほむらの専用バフが10のとき"
+    },
+    {
+        "battleConditionMstId": 1489,
+        "compareContent": 27,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "9,1",
+        "description": "悪魔ほむらの専用バフが1以上のとき"
+    },
+    {
+        "battleConditionMstId": 1491,
+        "compareContent": 302,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "1",
+        "description": "1度の攻撃でブレイクされた味方が1体"
+    },
+    {
+        "battleConditionMstId": 1492,
+        "compareContent": 302,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "2",
+        "description": "1度の攻撃でブレイクされた味方が2体"
+    },
+    {
+        "battleConditionMstId": 1493,
+        "compareContent": 302,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "3",
+        "description": "1度の攻撃でブレイクされた味方が3体以上"
     }
 ]

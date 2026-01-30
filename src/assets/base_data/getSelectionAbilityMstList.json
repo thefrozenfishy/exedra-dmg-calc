@@ -3973,5 +3973,20 @@
         "targetType": 2,
         "value1": 1150046,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases special attack DMG dealt by 20%, and on Spatial Sundering activation, grants 10 MP.",
+        "name": "I Am Now an Existence Known as Evil",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 131,
+        "selectionAbilityMstId": 7047,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11380101,
+        "targetType": 2,
+        "value1": 1150047,
+        "value2": 0
     }
 ]
