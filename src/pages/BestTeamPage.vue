@@ -518,7 +518,7 @@ async function startSimulation() {
     }
 
     const extraAttackersVal = extraAttackers.value.map(c => c.name)
-    const obligatoryKiokuVal = [...obligatoryKioku.value.map(c => c.name), ...extraAttackersVal]
+    const obligatoryKiokuVal = obligatoryKioku.value.map(c => c.name)
     const ignoredKiokuVal = ignoredKioku.value.map(c => c.name).filter(c => !obligatoryKiokuVal.includes(c))
 
     workerRef.value.postMessage({
