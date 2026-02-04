@@ -1,6 +1,24 @@
-import { KiokuArgs, KiokuConstants, KiokuData, Portrait, StyleParamUpEffect } from '../types/KiokuTypes';
+import { KiokuArgs, KiokuData, Portrait, StyleParamUpEffect } from '../types/KiokuTypes';
 import { portraits, kiokuData, crystalises, characterHeart, characterHeartParamUpGroup, styleParamUpEffect, styleParamUp } from '../utils/helpers';
 import { fromKey } from '../models/BestTeamCalculator';
+
+const KIOKU_LEVEL_BREAKPOINTS = [1, 120, 140, 160, 180, 200] as const;
+
+const linear_interpolation = (a: number, b: number, t: number) =>
+    a + (b - a) * t;
+
+const kiokuStat = (lvl: number, v: readonly number[]) => {
+    const i = KIOKU_LEVEL_BREAKPOINTS.findIndex(L => lvl <= L);
+    if (i <= 0) return v[0];
+    if (i === -1) return v.at(-1)!;
+    return linear_interpolation(
+        v[i - 1],
+        v[i],
+        (lvl - KIOKU_LEVEL_BREAKPOINTS[i - 1]) /
+            (KIOKU_LEVEL_BREAKPOINTS[i] - KIOKU_LEVEL_BREAKPOINTS[i - 1])
+    );
+};
+
 
 export class Kioku {
     name: string;
@@ -81,9 +99,39 @@ export class Kioku {
         this.baseCritDamage = this.data.minCritDmg * 10
         this.baseCritRate = this.data.minCritRate * 10
 
-        this.kiokuAtk = this.data.minAtk + (this.kiokuLvl - 1) * (this.data.atk100 - this.data.minAtk) / (KiokuConstants.maxKiokuLvl - 1);
-        this.kiokuDef = this.data.minDef + (this.kiokuLvl - 1) * (this.data.def100 - this.data.minDef) / (KiokuConstants.maxKiokuLvl - 1);
-        this.kiokuHp = this.data.minHp + (this.kiokuLvl - 1) * (this.data.hp100 - this.data.minHp) / (KiokuConstants.maxKiokuLvl - 1);
+        this.kiokuAtk = Math.round(
+            kiokuStat(this.kiokuLvl, [
+                this.data.minAtk,
+                this.data.atk120,
+                this.data.atk140,
+                this.data.atk160,
+                this.data.atk180,
+                this.data.atk200
+            ])
+        );
+
+        this.kiokuDef = Math.round(
+            kiokuStat(this.kiokuLvl, [
+                this.data.minDef,
+                this.data.def120,
+                this.data.def140,
+                this.data.def160,
+                this.data.def180,
+                this.data.def200
+            ])
+        );
+
+        this.kiokuHp = Math.round(
+            kiokuStat(this.kiokuLvl, [
+                this.data.minHp,
+                this.data.hp120,
+                this.data.hp140,
+                this.data.hp160,
+                this.data.hp180,
+                this.data.hp200
+            ])
+        );
+
 
         const heartGroup = characterHeart[this.data.id / 10_000]?.paramUpGroupId ?? 1;
         for (const v of Object.values(characterHeartParamUpGroup)) {

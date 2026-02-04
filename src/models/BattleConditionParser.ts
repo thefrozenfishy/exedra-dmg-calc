@@ -79,7 +79,7 @@ enum CompareContent {
     BUFF_COUNT = 24,
     DEBUFF_COUNT = 25,
     HAS_BUFF = 26,
-    X_KYOUKO_DEBUFF_COUNT = 27,
+    UNIQUE_DEBUFF_COUNT = 27,
     SELF_IS_KIOKU = 28,
     FIELD = 29,
     DMG = 101,
@@ -205,6 +205,11 @@ export const isStartCondRelevantForScoreAttack = (startConditionId: string, maxM
         if (battleCondition.compareContent === CompareContent.ALIVE_UNIT_COUNT) {
             if (!isCondActive(battleCondition, nrOfEnemies)) return false
         }
+
+        if (battleCondition.compareContent === CompareContent.UNIQUE_DEBUFF_COUNT) {
+            if (battleCondition.battleConditionMstId === 1468) return true // Akumura
+            return false
+        }
     }
     return true;
 }
@@ -237,8 +242,9 @@ export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: st
             if (!isCondActive(battleCondition, attackerHealth)) return false
         }
 
-        if (battleCondition.compareContent === CompareContent.X_KYOUKO_DEBUFF_COUNT) {
-            if (!isCondActive(battleCondition, "5,10")) return false
+        if (battleCondition.compareContent === CompareContent.UNIQUE_DEBUFF_COUNT) {
+            if (battleCondition.battleConditionMstId === 1382) return true // XKyouko
+            return false
         }
     }
     return true

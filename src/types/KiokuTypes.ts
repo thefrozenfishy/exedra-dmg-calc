@@ -94,7 +94,7 @@ export const getPortraits = (elem?: KiokuElement): string[] => {
 };
 
 export const portraitsBestOnly = (elem: KiokuElement) => [
-    "A Dream of a Little Mermaid", 
+    "A Dream of a Little Mermaid",
     "The Savior's Apostle",
     "Faith We'll Meet Again Someday",
     elem === KiokuElement.Dark ? "Because...I'm Not Alone Anymore" : null,
@@ -233,19 +233,28 @@ export interface BattleSnapshot {
 
 export interface KiokuData {
     ability_id: number
-    atk100: number
-    atka5: number
+    atk120: number
+    atk140: number
+    atk160: number
+    atk180: number
+    atk200: number
     attack_id: number
     character_en: string
     crystalis_effect: string
     crystalis_id: number
-    def100: number
-    defa5: number
+    def120: number
+    def140: number
+    def160: number
+    def180: number
+    def200: number
     element: KiokuElement
     ep: number
     heartphial: string
-    hp100: number
-    hpa5: number
+    hp120: number
+    hp140: number
+    hp160: number
+    hp180: number
+    hp200: number
     id: number
     maxMagicStacks?: number
     minAtk: number
@@ -254,7 +263,6 @@ export interface KiokuData {
     minDef: number
     minHp: number
     minSpd: number
-    name: string
     obtain: string
     permaDate: string
     rarity: number
@@ -413,7 +421,7 @@ export const getSubCrystalises = () => {
 };
 
 export const KiokuConstants = {
-    maxKiokuLvl: 120,
+    maxKiokuLvl: 140,
     maxMagicLvl: 130,
     maxAscension: 5,
     maxHeartphialLvl: 50,
