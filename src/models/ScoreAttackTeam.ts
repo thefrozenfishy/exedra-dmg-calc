@@ -159,69 +159,49 @@ export class ScoreAttackTeam {
             })
         }
         for (const [isDps, kioku] of members) {
-            this.debugTexts[kioku.name] = {};
-
+            this.debugTexts[kioku.name] = {}
             for (const detail of kioku.effects) {
-                if (skippable.has(detail.abilityEffectType)) continue;
-                if (bannedEffects.has(skillDetailId(detail))) continue;
-                if (!isDps && detail.range < 1) continue;
-                if (detail.element && elementMap[detail.element] !== this.dps.data.element) continue;
-                if (detail.startConditionSetIdCsv.split(",").some(startCondId => !isStartCondRelevantForScoreAttack(startCondId, kioku.maxMagicStacks))) continue;
+                if (skippable.has(detail.abilityEffectType)) continue
+                if (bannedEffects.has(skillDetailId(detail))) continue
+                if (!isDps && detail.range < 1) continue
+                if (detail.element && elementMap[detail.element] !== this.dps.data.element) continue
 
-                let valueTotal = detail.value1 * (detail.value2 || 1);
+                if (detail.startConditionSetIdCsv.split(",").some(startCondId =>
+                    !isStartCondRelevantForScoreAttack(startCondId, kioku.maxMagicStacks))
+                ) continue;
 
-                const activeCondIds = detail.activeConditionSetIdCsv.split(",").filter(Boolean);
+                let valueTotal = detail.value1
+                // For multi-value skills, value2 is the max multiplier 
+                valueTotal *= detail.value2 || 1
 
-                let deferredConds: Function[] = [];
-
-                const allActiveConditionsMet = activeCondIds.every(activeCondId => {
-                    const cond = isActiveConditionRelevantForScoreAttack(
-                        activeCondId,
-                        this.attackerHealth,
-                        this.activeBuffsAndDebuffs
-                    );
-
-                    if (typeof cond === "boolean") {
-                        return cond;
-                    }
-
-                    deferredConds.push(cond);
-                    return true;
-                });
-
-                if (!allActiveConditionsMet) continue;
-
-                /* ---------- APPLY EFFECT ONCE ---------- */
-
-                if (detail.abilityEffectType in this.all_effects) {
-                    if (["DWN_DEF_RATIO", "DWN_DEF_ACCUM_RATIO"].includes(detail.abilityEffectType)) {
-                        this.all_effects[detail.abilityEffectType] *= 1 - valueTotal / 1000;
-                    } else if (detail.abilityEffectType === "WEAKNESS") {
-                        this.all_effects[detail.abilityEffectType] += 1;
+                detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
+                    // TODO: Wtf is going on here? it's adding the detail multiple times if multiple active conds???
+                    const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId, this.attackerHealth, this.activeBuffsAndDebuffs)
+                    if (typeof (isActiveCond) === 'boolean') {
+                        if (isActiveCond) {
+                            if (detail.abilityEffectType in this.all_effects) {
+                                if (["DWN_DEF_RATIO", "DWN_DEF_ACCUM_RATIO"].includes(detail.abilityEffectType)) {
+                                    this.all_effects[detail.abilityEffectType] *= 1 - valueTotal / 1000;
+                                } else if (detail.abilityEffectType === "WEAKNESS") {
+                                    this.all_effects[detail.abilityEffectType] += 1;
+                                } else {
+                                    this.all_effects[detail.abilityEffectType] += valueTotal
+                                }
+                            } else {
+                                this.all_effects[detail.abilityEffectType] = valueTotal;
+                            }
+                            if (!(detail.abilityEffectType in this.debugTexts[kioku.name])) {
+                                this.debugTexts[kioku.name][detail.abilityEffectType] = []
+                            }
+                            this.debugTexts[kioku.name][detail.abilityEffectType].push([detail, valueTotal])
+                        }
                     } else {
-                        this.all_effects[detail.abilityEffectType] += valueTotal;
+                        if (!(detail.abilityEffectType in this.extra_effects)) {
+                            this.extra_effects[detail.abilityEffectType] = []
+                        }
+                        this.extra_effects[detail.abilityEffectType].push([isActiveCond, valueTotal])
                     }
-                } else {
-                    this.all_effects[detail.abilityEffectType] =
-                        detail.abilityEffectType === "WEAKNESS" ? 1 : valueTotal;
-                }
-
-                if (!(detail.abilityEffectType in this.debugTexts[kioku.name])) {
-                    this.debugTexts[kioku.name][detail.abilityEffectType] = [];
-                }
-                this.debugTexts[kioku.name][detail.abilityEffectType].push([detail, valueTotal]);
-
-                /* ---------- REGISTER DEFERRED CONDITIONS ONCE ---------- */
-
-                if (deferredConds.length > 0) {
-                    if (!(detail.abilityEffectType in this.extra_effects)) {
-                        this.extra_effects[detail.abilityEffectType] = [];
-                    }
-
-                    for (const cond of deferredConds) {
-                        this.extra_effects[detail.abilityEffectType].push([cond, valueTotal]);
-                    }
-                }
+                })
             }
         }
 
@@ -292,45 +272,29 @@ export class ScoreAttackTeam {
             if (detail.startConditionSetIdCsv.split(",").some(startCondId =>
                 !isStartCondRelevantForScoreAttack(startCondId, this.dps.maxMagicStacks, initAmountOfEnemies))
             ) continue;
-            if (((detail as ActiveSkill).skillMstId / 100 | 0) !== this.dps.data.special_id) continue;
-            if (!detail.abilityEffectType.startsWith("DMG_")) continue;
-
-            if (detail.abilityEffectType.includes("DEF")) uses_def = true;
-            const allActiveConditionsMet = detail.activeConditionSetIdCsv.split(",").every(activeCondId => {
-                const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId, this.attackerHealth, this.activeBuffsAndDebuffs);
-                console.log("CHECKING COND", detail, activeCondId, isActiveCond)
-                if (typeof isActiveCond === "boolean") {
-                    return isActiveCond;
+            if (((detail as ActiveSkill).skillMstId / 100 | 0) !== this.dps.data.special_id) continue
+            let delta_dmg = 0
+            if (!detail.abilityEffectType.startsWith("DMG_")) continue
+            if (detail.abilityEffectType.includes("DEF")) uses_def = true
+            detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
+                const isActiveCond = isActiveConditionRelevantForScoreAttack(activeCondId, this.attackerHealth, this.activeBuffsAndDebuffs)
+                if (typeof (isActiveCond) === 'boolean') {
+                    if (!isActiveCond) return
+                } else {
+                    if (!isActiveCond(nrHitThatKills > 1 ? currentAmountOfEnemies : currentAmountOfEnemies - 1, maxBreak)) return;
                 }
 
-                return isActiveCond(nrHitThatKills > 1 ? currentAmountOfEnemies : currentAmountOfEnemies - 1, maxBreak);
-            });
-            console.log("CHECKING", detail, allActiveConditionsMet)
-            if (!allActiveConditionsMet) continue;
+                if (detail.abilityEffectType === "DMG_RANDOM" && targetType === EnemyTargetTypes.TARGET) delta_dmg = detail.value1 * detail.value2;
+                // We make random only hit lowest def for simplicity, since this is max dmg
+                else if (detail.range === 3) delta_dmg = detail.value1; // 3 is all enemies
+                else if (detail.range === 2 && (targetType === EnemyTargetTypes.L_PROXIMITY || targetType === EnemyTargetTypes.R_PROXIMITY)) delta_dmg = detail.value2;
+                else if (targetType === EnemyTargetTypes.TARGET) delta_dmg = detail.value1;
 
-            // Apply damage ONCE per detail
-            let delta_dmg = 0;
-
-            if (detail.abilityEffectType === "DMG_RANDOM" && targetType === EnemyTargetTypes.TARGET) {
-                delta_dmg = detail.value1 * detail.value2;
-            }
-            // 3 = all enemies
-            else if (detail.range === 3) {
-                delta_dmg = detail.value1;
-            }
-            else if (detail.range === 2 &&
-                (targetType === EnemyTargetTypes.L_PROXIMITY || targetType === EnemyTargetTypes.R_PROXIMITY)
-            ) {
-                delta_dmg = detail.value2;
-            } else if (targetType === EnemyTargetTypes.TARGET) {
-                delta_dmg = detail.value1;
-            }
-
-            nrHitThatKills--;
-            console.log("AKTIV", detail, delta_dmg)
-            total_dmg += delta_dmg;
+                nrHitThatKills--;
+            })
+            total_dmg += delta_dmg
         }
-        return [total_dmg / 1000, nrHitThatKills < 1, uses_def];
+        return [total_dmg / 1000, nrHitThatKills < 1, uses_def]
     }
 
     calculate_single_dmg(
