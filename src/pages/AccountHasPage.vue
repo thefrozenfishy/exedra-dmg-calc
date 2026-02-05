@@ -114,7 +114,7 @@
                 {{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100) }}%
             </div>
         </div>
-        <h4 style="margin-bottom: 0;">Maxed Heartphial-, Magic-, Kioku- & Special level kioku:</h4>
+        <h4 style="margin-bottom: 0;">Maxed Heartphial-, Magic-, & Special level kioku:</h4>
         <div>
             5-stars: {{ maxed5starChars.length }} / {{ ownedFiveStars.length }}
             ({{ round(maxed5starChars.length / ownedFiveStars.length * 100) }}%)
@@ -172,7 +172,7 @@ const isMaxSpecialLvl = (ch: Character): boolean => {
 
 const isMaxLevels = (ch: Character): boolean => ch.magicLvl === KiokuConstants.maxMagicLvl &&
     ch.heartphialLvl === KiokuConstants.maxHeartphialLvl &&
-    isMaxSpecialLvl(ch) && ch.kiokuLvl === KiokuConstants.maxKiokuLvl
+    isMaxSpecialLvl(ch)
 
 
 const groupedByAscension = computed(() => {
