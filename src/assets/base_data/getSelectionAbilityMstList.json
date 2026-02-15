@@ -3988,5 +3988,20 @@
         "targetType": 2,
         "value1": 1150047,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "At battle start, grants 5 Magic.<br>While Curious Cheese is applied, decreases DMG taken by 10%.",
+        "name": "I Just Wanted to Eat Cheese One More Time",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 132,
+        "selectionAbilityMstId": 7048,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10060101,
+        "targetType": 2,
+        "value1": 1150048,
+        "value2": 0
     }
 ]

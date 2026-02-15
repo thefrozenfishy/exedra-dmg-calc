@@ -11935,6 +11935,16 @@
         "description": "行動者+ブレイクボーナスが最大のとき"
     },
     {
+        "battleConditionMstIdCsv": "1490,653",
+        "battleConditionSetMstId": 2414,
+        "description": "自身が専用バフ状態：なぎさ+行動対象者を回復したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1490,38",
+        "battleConditionSetMstId": 2415,
+        "description": "自身が専用バフ状態：なぎさ+HP80%以上"
+    },
+    {
         "battleConditionMstIdCsv": "1491",
         "battleConditionSetMstId": 2416,
         "description": "1度の攻撃でブレイクされた味方が1体"
@@ -12005,6 +12015,101 @@
         "description": "悪魔ほむらの専用バフが1以上のとき+エーテルブロウを発動したとき"
     },
     {
+        "battleConditionMstIdCsv": "1515",
+        "battleConditionSetMstId": 2458,
+        "description": "自分のキャラクターが「百江なぎさ」"
+    },
+    {
+        "battleConditionMstIdCsv": "1490",
+        "battleConditionSetMstId": 2459,
+        "description": "自身が専用バフ状態：なぎさ"
+    },
+    {
+        "battleConditionMstIdCsv": "74,273,536",
+        "battleConditionSetMstId": 2460,
+        "description": "6ターンごと（6ターン目から） AND 連続行動の1回目　AND　味方が1体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "74,273,333",
+        "battleConditionSetMstId": 2461,
+        "description": "6ターンごと（6ターン目から） AND 連続行動の1回目　AND　味方が2体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "74,273,348",
+        "battleConditionSetMstId": 2462,
+        "description": "6ターンごと（6ターン目から） AND 連続行動の1回目　AND　味方が3体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "74,273,350",
+        "battleConditionSetMstId": 2463,
+        "description": "6ターンごと（6ターン目から） AND 連続行動の1回目　AND　味方が4体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "71,273,536",
+        "battleConditionSetMstId": 2464,
+        "description": "6ターンごと（3ターン目から） AND 連続行動の1回目　AND　味方が1体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "71,273,333",
+        "battleConditionSetMstId": 2465,
+        "description": "6ターンごと（3ターン目から） AND 連続行動の1回目　AND　味方が2体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "71,273,348",
+        "battleConditionSetMstId": 2466,
+        "description": "6ターンごと（3ターン目から） AND 連続行動の1回目　AND　味方が3体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "71,273,350",
+        "battleConditionSetMstId": 2467,
+        "description": "6ターンごと（3ターン目から） AND 連続行動の1回目　AND　味方が4体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "71,273,349",
+        "battleConditionSetMstId": 2468,
+        "description": "6ターンごと（3ターン目から） AND 連続行動の1回目　AND　味方が4体以上存在する場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "74,273,349",
+        "battleConditionSetMstId": 2469,
+        "description": "6ターンごと（6ターン目から） AND 連続行動の1回目　AND　味方が4体以上存在する場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "3,259",
+        "battleConditionSetMstId": 2470,
+        "description": "自身の経過ターンが5ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,262,977",
+        "battleConditionSetMstId": 2471,
+        "description": "自身の経過ターンが5ターン以上、7ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,970,1060",
+        "battleConditionSetMstId": 2472,
+        "description": "自身の経過ターンが7ターン以上、10ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1010,1062",
+        "battleConditionSetMstId": 2473,
+        "description": "自身の経過ターンが10ターン以上、12ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1012,1065",
+        "battleConditionSetMstId": 2474,
+        "description": "自身の経過ターンが12ターン以上、15ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1015,1068",
+        "battleConditionSetMstId": 2475,
+        "description": "自身の経過ターンが15ターン以上、18ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1018",
+        "battleConditionSetMstId": 2476,
+        "description": "自身の経過ターンが18ターン以上"
+    },
+    {
         "battleConditionMstIdCsv": "975,1,655,6",
         "battleConditionSetMstId": 2477,
         "description": "闇属性の仲間がダメージを与えたとき(戦闘スキル発動したとき)"
@@ -12013,5 +12118,575 @@
         "battleConditionMstIdCsv": "975,1,655,7",
         "battleConditionSetMstId": 2478,
         "description": "闇属性の仲間がダメージを与えたとき(必殺技発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1004,1060",
+        "battleConditionSetMstId": 2479,
+        "description": "自身の経過ターンが4ターン以上、10ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1010,1066",
+        "battleConditionSetMstId": 2480,
+        "description": "自身の経過ターンが10ターン以上、16ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1016",
+        "battleConditionSetMstId": 2481,
+        "description": "自身の経過ターンが16ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1516",
+        "battleConditionSetMstId": 2482,
+        "description": "倒された味方が0体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1517",
+        "battleConditionSetMstId": 2483,
+        "description": "倒された味方が1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1518",
+        "battleConditionSetMstId": 2484,
+        "description": "倒された味方が2体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1519",
+        "battleConditionSetMstId": 2485,
+        "description": "倒された味方が3体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1520",
+        "battleConditionSetMstId": 2486,
+        "description": "倒された味方が4体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1521",
+        "battleConditionSetMstId": 2487,
+        "description": "倒された味方が5体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1522",
+        "battleConditionSetMstId": 2488,
+        "description": "倒された味方が6体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1523",
+        "battleConditionSetMstId": 2489,
+        "description": "倒された味方が7体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1524",
+        "battleConditionSetMstId": 2490,
+        "description": "倒された味方が8体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1525",
+        "battleConditionSetMstId": 2491,
+        "description": "倒された味方が9体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1526",
+        "battleConditionSetMstId": 2492,
+        "description": "倒された味方が10体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1527",
+        "battleConditionSetMstId": 2493,
+        "description": "倒された味方が11体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1528",
+        "battleConditionSetMstId": 2494,
+        "description": "倒された味方が12体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1529",
+        "battleConditionSetMstId": 2495,
+        "description": "倒された味方が13体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1530",
+        "battleConditionSetMstId": 2496,
+        "description": "倒された味方が14体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1531",
+        "battleConditionSetMstId": 2497,
+        "description": "倒された味方が15体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1532",
+        "battleConditionSetMstId": 2498,
+        "description": "倒された味方が16体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1533",
+        "battleConditionSetMstId": 2499,
+        "description": "倒された味方が17体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1534",
+        "battleConditionSetMstId": 2500,
+        "description": "倒された味方が18体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1535",
+        "battleConditionSetMstId": 2501,
+        "description": "倒された味方が19体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1536",
+        "battleConditionSetMstId": 2502,
+        "description": "倒された味方が20体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1537",
+        "battleConditionSetMstId": 2503,
+        "description": "倒された味方が21体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1538",
+        "battleConditionSetMstId": 2504,
+        "description": "倒された味方が22体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1539",
+        "battleConditionSetMstId": 2505,
+        "description": "倒された味方が23体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1540",
+        "battleConditionSetMstId": 2506,
+        "description": "倒された味方が24体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1541",
+        "battleConditionSetMstId": 2507,
+        "description": "倒された味方が25体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1542",
+        "battleConditionSetMstId": 2508,
+        "description": "倒された味方が26体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1543",
+        "battleConditionSetMstId": 2509,
+        "description": "倒された味方が27体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1544",
+        "battleConditionSetMstId": 2510,
+        "description": "倒された味方が28体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1545",
+        "battleConditionSetMstId": 2511,
+        "description": "倒された味方が29体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1546",
+        "battleConditionSetMstId": 2512,
+        "description": "倒された味方が30体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1547",
+        "battleConditionSetMstId": 2513,
+        "description": "倒された味方が20体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1548",
+        "battleConditionSetMstId": 2514,
+        "description": "倒された味方が30体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "420,286,350,60",
+        "battleConditionSetMstId": 2515,
+        "description": "自身がブレイク状態ではなく、行動可能な状態で、味方が4体未満の場合（自分を除く）、4ターンごとに（ターン1から）"
+    },
+    {
+        "battleConditionMstIdCsv": "420,286,350,61",
+        "battleConditionSetMstId": 2516,
+        "description": "自身がブレイク状態ではなく、行動可能な状態で、味方が4体未満の場合（自分を除く）、4ターンごとに（ターン2から）"
+    },
+    {
+        "battleConditionMstIdCsv": "420,286,350,62",
+        "battleConditionSetMstId": 2517,
+        "description": "自身がブレイク状態ではなく、行動可能な状態で、味方が4体未満の場合（自分を除く）、4ターンごとに（ターン3から）"
+    },
+    {
+        "battleConditionMstIdCsv": "420,286,350,63",
+        "battleConditionSetMstId": 2518,
+        "description": "自身がブレイク状態ではなく、行動可能な状態で、味方が4体未満の場合（自分を除く）、4ターンごとに（ターン4から）"
+    },
+    {
+        "battleConditionMstIdCsv": "306,25",
+        "battleConditionSetMstId": 2519,
+        "description": "行動タイプが追撃、自分が1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "1462,25",
+        "battleConditionSetMstId": 2520,
+        "description": "行動タイプがエーテルブロウ、自分が1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "1549",
+        "battleConditionSetMstId": 2521,
+        "description": "行動者のHPが50％未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1550",
+        "battleConditionSetMstId": 2522,
+        "description": "行動者のデバフ数が2以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1551",
+        "battleConditionSetMstId": 2523,
+        "description": "自身のバフ数が5未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1552",
+        "battleConditionSetMstId": 2524,
+        "description": "倒した敵が1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1553",
+        "battleConditionSetMstId": 2525,
+        "description": "倒した敵が2体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1554",
+        "battleConditionSetMstId": 2526,
+        "description": "倒した敵が3体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1555",
+        "battleConditionSetMstId": 2527,
+        "description": "倒した敵が4体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1556",
+        "battleConditionSetMstId": 2528,
+        "description": "倒した敵が5体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1557",
+        "battleConditionSetMstId": 2529,
+        "description": "倒した敵が6体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1558",
+        "battleConditionSetMstId": 2530,
+        "description": "倒した敵が7体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1559",
+        "battleConditionSetMstId": 2531,
+        "description": "倒した敵が8体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1560",
+        "battleConditionSetMstId": 2532,
+        "description": "倒した敵が9体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1561",
+        "battleConditionSetMstId": 2533,
+        "description": "倒した敵が10体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1562",
+        "battleConditionSetMstId": 2534,
+        "description": "倒した敵が11体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1563",
+        "battleConditionSetMstId": 2535,
+        "description": "倒した敵が12体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1564",
+        "battleConditionSetMstId": 2536,
+        "description": "倒した敵が13体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1565",
+        "battleConditionSetMstId": 2537,
+        "description": "倒した敵が14体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1566",
+        "battleConditionSetMstId": 2538,
+        "description": "倒した敵が15体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1567",
+        "battleConditionSetMstId": 2539,
+        "description": "倒した敵が16体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1568",
+        "battleConditionSetMstId": 2540,
+        "description": "倒した敵が17体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1569",
+        "battleConditionSetMstId": 2541,
+        "description": "倒した敵が18体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1570",
+        "battleConditionSetMstId": 2542,
+        "description": "倒した敵が19体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1571",
+        "battleConditionSetMstId": 2543,
+        "description": "倒した敵が20体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1572",
+        "battleConditionSetMstId": 2544,
+        "description": "倒した敵が21体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1573",
+        "battleConditionSetMstId": 2545,
+        "description": "倒した敵が22体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1574",
+        "battleConditionSetMstId": 2546,
+        "description": "倒した敵が23体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1575",
+        "battleConditionSetMstId": 2547,
+        "description": "倒した敵が24体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1576",
+        "battleConditionSetMstId": 2548,
+        "description": "倒した敵が25体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1577",
+        "battleConditionSetMstId": 2549,
+        "description": "倒した敵が26体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1578",
+        "battleConditionSetMstId": 2550,
+        "description": "倒した敵が27体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1579",
+        "battleConditionSetMstId": 2551,
+        "description": "倒した敵が28体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1580",
+        "battleConditionSetMstId": 2552,
+        "description": "倒した敵が29体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1581",
+        "battleConditionSetMstId": 2553,
+        "description": "倒した敵が30体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1582",
+        "battleConditionSetMstId": 2554,
+        "description": "倒した敵が31体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1583",
+        "battleConditionSetMstId": 2555,
+        "description": "倒した敵が32体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1584",
+        "battleConditionSetMstId": 2556,
+        "description": "倒した敵が33体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1585",
+        "battleConditionSetMstId": 2557,
+        "description": "倒した敵が34体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1586",
+        "battleConditionSetMstId": 2558,
+        "description": "倒した敵が35体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1587",
+        "battleConditionSetMstId": 2559,
+        "description": "倒した敵が36体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1588",
+        "battleConditionSetMstId": 2560,
+        "description": "倒した敵が37体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1589",
+        "battleConditionSetMstId": 2561,
+        "description": "倒した敵が38体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1590",
+        "battleConditionSetMstId": 2562,
+        "description": "倒した敵が39体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1591",
+        "battleConditionSetMstId": 2563,
+        "description": "倒した敵が40体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1592",
+        "battleConditionSetMstId": 2564,
+        "description": "倒した敵が41体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1593",
+        "battleConditionSetMstId": 2565,
+        "description": "倒した敵が42体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1594",
+        "battleConditionSetMstId": 2566,
+        "description": "倒した敵が43体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1595",
+        "battleConditionSetMstId": 2567,
+        "description": "倒した敵が44体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1596",
+        "battleConditionSetMstId": 2568,
+        "description": "倒した敵が45体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1597",
+        "battleConditionSetMstId": 2569,
+        "description": "倒した敵が46体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1598",
+        "battleConditionSetMstId": 2570,
+        "description": "倒した敵が47体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1599",
+        "battleConditionSetMstId": 2571,
+        "description": "倒した敵が48体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1600",
+        "battleConditionSetMstId": 2572,
+        "description": "倒した敵が49体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1601",
+        "battleConditionSetMstId": 2573,
+        "description": "倒した敵が50体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1602",
+        "battleConditionSetMstId": 2574,
+        "description": "倒した敵が50体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "292,3,655",
+        "battleConditionSetMstId": 2575,
+        "description": "自分は火属性、自分は行動者、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "294,3,655",
+        "battleConditionSetMstId": 2576,
+        "description": "自分は水属性、自分は行動者、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "295,3,655",
+        "battleConditionSetMstId": 2577,
+        "description": "自分は木属性、自分は行動者、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "296,3,655",
+        "battleConditionSetMstId": 2578,
+        "description": "自分は光属性、自分は行動者、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "297,3,655",
+        "battleConditionSetMstId": 2579,
+        "description": "自分は闇属性、自分は行動者、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "298,3,655",
+        "battleConditionSetMstId": 2580,
+        "description": "自分は無属性、自分は行動者、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,56,350",
+        "battleConditionSetMstId": 2581,
+        "description": "行動者は自分、2ターンごとに（ターン2から）、味方が4体未満の場合（自分を除く）"
+    },
+    {
+        "battleConditionMstIdCsv": "1604",
+        "battleConditionSetMstId": 2582,
+        "description": "自身のデバフ数が1未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1605",
+        "battleConditionSetMstId": 2583,
+        "description": "自身のデバフ数が2未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1606",
+        "battleConditionSetMstId": 2584,
+        "description": "自身のデバフ数が3未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1607",
+        "battleConditionSetMstId": 2585,
+        "description": "自身のデバフ数が4未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1608",
+        "battleConditionSetMstId": 2586,
+        "description": "自身のデバフ数が5未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1609",
+        "battleConditionSetMstId": 2587,
+        "description": "自身のデバフ数が6未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1610",
+        "battleConditionSetMstId": 2588,
+        "description": "自身のデバフ数が7未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1611",
+        "battleConditionSetMstId": 2589,
+        "description": "自身のデバフ数が8未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1612",
+        "battleConditionSetMstId": 2590,
+        "description": "自身のデバフ数が9未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1613",
+        "battleConditionSetMstId": 2591,
+        "description": "自身のデバフ数が10未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1646",
+        "battleConditionSetMstId": 2644,
+        "description": "行動者のバフ数が3未満"
     }
 ]
