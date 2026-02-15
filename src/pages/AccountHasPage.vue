@@ -142,7 +142,7 @@ import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
 
 const store = useCharacterStore()
-const allMembers = computed(() => store.characters.filter(c => (show4stars.value ? (c.rarity !== 3 || ["Kako's Kioku", "Meiyui's Kioku", "Natsuki's Kioku", "Konoha's Kioku", ].includes(c.name)) : c.rarity === 5 && c.name !== "Lux☆Magica")))
+const allMembers = computed(() => store.characters.filter(c => (show4stars.value ? (c.rarity !== 3 || ["Kako's Kioku", "Meiyui's Kioku", "Natsuki's Kioku", "Konoha's Kioku",].includes(c.name)) : c.rarity === 5 && c.name !== "Lux☆Magica")))
 const fiveStarMembers = computed(() => store.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
 const ownedFiveStars = computed(() => fiveStarMembers.value.filter(c => c.enabled))
 const totalAscensions = computed(() => ownedFiveStars.value.reduce((sum, ch) => sum + ch.ascension + 1, 0))
@@ -181,7 +181,7 @@ const groupedByAscension = computed(() => {
     for (const ch of allMembers.value) {
         const asc = ch.ascension
         const index = 5 - asc
-        if (ch.rarity === 3 ||ch.rarity === 4 || ch.name === "Lux☆Magica") {
+        if (ch.rarity === 3 || ch.rarity === 4 || ch.name === "Lux☆Magica") {
             groups[7].push(ch)
         } else if (ch.enabled) {
             groups[index].push(ch)
@@ -243,14 +243,14 @@ const startEdit = async (ch: Character, field: EditableField, e: MouseEvent) => 
 const isEditing = (ch: Character, field: EditableField) =>
     editing.value?.id === ch.id && editing.value.field === field
 
-const commitEdit = (ch: Character, field: EditableField) => {
-    let max =
-        field === "magicLvl"
-            ? KiokuConstants.maxMagicLvl
-            : field === "heartphialLvl"
-                ? KiokuConstants.maxHeartphialLvl
-                : KiokuConstants.maxSpecialLvl
+const fieldMax: Partial<Record<EditableField, number>> = {
+    magicLvl: KiokuConstants.maxMagicLvl,
+    heartphialLvl: KiokuConstants.maxHeartphialLvl,
+    specialLvl: KiokuConstants.maxSpecialLvl,
+}
 
+const commitEdit = (ch: Character, field: EditableField) => {
+    const max = fieldMax[field] ?? Infinity
     const value = Math.max(0, Math.min(editValue.value, max))
 
     store.updateChar({
