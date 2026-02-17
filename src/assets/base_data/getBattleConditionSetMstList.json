@@ -12685,8 +12685,183 @@
         "description": "自身のデバフ数が10未満"
     },
     {
+        "battleConditionMstIdCsv": "1614",
+        "battleConditionSetMstId": 2592,
+        "description": "パティシエ杏子専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1614,393",
+        "battleConditionSetMstId": 2593,
+        "description": "パティシエ杏子専用バフが付与されているとき+魔力が1のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1614,394",
+        "battleConditionSetMstId": 2594,
+        "description": "パティシエ杏子専用バフが付与されているとき+魔力が2のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1614,395",
+        "battleConditionSetMstId": 2595,
+        "description": "パティシエ杏子専用バフが付与されているとき+魔力が3のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1614,396",
+        "battleConditionSetMstId": 2596,
+        "description": "パティシエ杏子専用バフが付与されているとき+魔力が4のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1614,285",
+        "battleConditionSetMstId": 2597,
+        "description": "パティシエ杏子専用バフが付与されているとき+魔力が5のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1614,397",
+        "battleConditionSetMstId": 2598,
+        "description": "パティシエ杏子専用バフが付与されているとき+魔力が6のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1614,398",
+        "battleConditionSetMstId": 2599,
+        "description": "パティシエ杏子専用バフが付与されているとき+魔力が7のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1614,399",
+        "battleConditionSetMstId": 2600,
+        "description": "パティシエ杏子専用バフが付与されているとき+魔力が8のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1614,400",
+        "battleConditionSetMstId": 2601,
+        "description": "パティシエ杏子専用バフが付与されているとき+魔力が9のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1614,401",
+        "battleConditionSetMstId": 2602,
+        "description": "パティシエ杏子専用バフが付与されているとき+魔力が10のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "654,3",
+        "battleConditionSetMstId": 2603,
+        "description": "自身のターン中に行動対象がブレイク中の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "971,1,655,5",
+        "battleConditionSetMstId": 2604,
+        "description": "火属性の仲間がダメージを与えたとき：通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "654,1,3",
+        "battleConditionSetMstId": 2605,
+        "description": "行動対象がブレイク中の場合+行動者は仲間+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "537,3,1603,1615",
+        "battleConditionSetMstId": 2606,
+        "description": "ブレイク中の敵が1体以上+行動者は自分+1以上のダメージを与えたとき+通常攻撃以外"
+    },
+    {
+        "battleConditionMstIdCsv": "654,3,1603,5",
+        "battleConditionSetMstId": 2607,
+        "description": "行動対象メインがブレイク中+1以上のダメージを与えたとき＋行動者は自分+通常攻撃のみ"
+    },
+    {
+        "battleConditionMstIdCsv": "1634",
+        "battleConditionSetMstId": 2619,
+        "description": "一度の攻撃で自軍に1体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1635",
+        "battleConditionSetMstId": 2620,
+        "description": "一度の攻撃で自軍に2体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1636",
+        "battleConditionSetMstId": 2621,
+        "description": "一度の攻撃で自軍に3体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1637",
+        "battleConditionSetMstId": 2622,
+        "description": "一度の攻撃で自軍に4体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1638",
+        "battleConditionSetMstId": 2623,
+        "description": "一度の攻撃で自軍に5体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "445",
+        "battleConditionSetMstId": 2624,
+        "description": "自身のHPが50％未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "971,1,655,6",
+        "battleConditionSetMstId": 2625,
+        "description": "火属性の仲間がダメージを与えたとき：戦闘スキル"
+    },
+    {
+        "battleConditionMstIdCsv": "971,1,655,7",
+        "battleConditionSetMstId": 2626,
+        "description": "火属性の仲間がダメージを与えたとき：必殺"
+    },
+    {
+        "battleConditionMstIdCsv": "3,262,889",
+        "battleConditionSetMstId": 2627,
+        "description": "自身の経過ターンが5ターン以上、9ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,890,979",
+        "battleConditionSetMstId": 2628,
+        "description": "自身の経過ターンが9ターン以上、13ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,980,981",
+        "battleConditionSetMstId": 2629,
+        "description": "自身の経過ターンが13ターン以上、17ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,982",
+        "battleConditionSetMstId": 2630,
+        "description": "自身が17ターン以上経過している"
+    },
+    {
+        "battleConditionMstIdCsv": "3,68",
+        "battleConditionSetMstId": 2631,
+        "description": "自分のターン、5ターンごとに（ターン5から）"
+    },
+    {
+        "battleConditionMstIdCsv": "1639,875",
+        "battleConditionSetMstId": 2632,
+        "description": "トークンが81以上90未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1641,1640",
+        "battleConditionSetMstId": 2633,
+        "description": "トークンが71以上81未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1643,1642",
+        "battleConditionSetMstId": 2634,
+        "description": "トークンが61以上71未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1428,1644",
+        "battleConditionSetMstId": 2635,
+        "description": "トークンが51以上61未満のとき"
+    },
+    {
         "battleConditionMstIdCsv": "1646",
         "battleConditionSetMstId": 2644,
         "description": "行動者のバフ数が3未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1614,406",
+        "battleConditionSetMstId": 2645,
+        "description": "パティシエ杏子専用バフが付与されているとき+魔力が0のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "726",
+        "battleConditionSetMstId": 2700,
+        "description": "トークンが90のとき"
     }
 ]

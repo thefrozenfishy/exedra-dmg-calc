@@ -12688,6 +12688,110 @@
         "description": "自身のデバフ数が10未満"
     },
     {
+        "battleConditionMstId": 1614,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "11",
+        "description": "パティシエ杏子専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 1615,
+        "compareContent": 401,
+        "compareOperator": 2,
+        "compareTarget": 7,
+        "compareValue": "NormalAttack",
+        "description": "行動タイプが通常攻撃以外"
+    },
+    {
+        "battleConditionMstId": 1634,
+        "compareContent": 303,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "1",
+        "description": "一度の攻撃で自軍に1体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstId": 1635,
+        "compareContent": 303,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "2",
+        "description": "一度の攻撃で自軍に2体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstId": 1636,
+        "compareContent": 303,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "3",
+        "description": "一度の攻撃で自軍に3体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstId": 1637,
+        "compareContent": 303,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "4",
+        "description": "一度の攻撃で自軍に4体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstId": 1638,
+        "compareContent": 303,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "5",
+        "description": "一度の攻撃で自軍に5体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstId": 1639,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "81",
+        "description": "トークンが81以上のとき"
+    },
+    {
+        "battleConditionMstId": 1640,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "81",
+        "description": "トークンが81未満のとき"
+    },
+    {
+        "battleConditionMstId": 1641,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "71",
+        "description": "トークンが71以上のとき"
+    },
+    {
+        "battleConditionMstId": 1642,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "71",
+        "description": "トークンが71未満のとき"
+    },
+    {
+        "battleConditionMstId": 1643,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "61",
+        "description": "トークンが61以上のとき"
+    },
+    {
+        "battleConditionMstId": 1644,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "61",
+        "description": "トークンが61未満のとき"
+    },
+    {
         "battleConditionMstId": 1646,
         "compareContent": 24,
         "compareOperator": 5,
