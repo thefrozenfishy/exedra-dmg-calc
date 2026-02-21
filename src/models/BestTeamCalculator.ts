@@ -86,7 +86,7 @@ function getKioku({
 }
 
 const RELEVANT_SUPPORT_SUPPORTS = {
-    [KiokuRole.Buffer]: ["Flame Waltz", "Buon Natale Grazioso"]
+    [KiokuRole.Buffer]: ["Flame Waltz", "Buon Natale Grazioso", "Pluvia☆Neujahr"]
 }
 
 export async function findBestTeam({
@@ -227,7 +227,7 @@ export async function findBestTeam({
                                     const perms = permute(combo);
                                     for (const p of perms) {
                                         const arr = new Array(totalSupports.length).fill(undefined);
-                                        for (let i = 0; i < p.length; i++)                                             arr[bufferIndexes[i]] = p[i];
+                                        for (let i = 0; i < p.length; i++) arr[bufferIndexes[i]] = p[i];
                                         supportSupports.push(arr);
                                     }
                                 }
