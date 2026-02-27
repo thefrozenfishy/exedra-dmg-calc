@@ -12704,6 +12704,150 @@
         "description": "行動タイプが通常攻撃以外"
     },
     {
+        "battleConditionMstId": 1616,
+        "compareContent": 12,
+        "compareOperator": 7,
+        "compareTarget": 8,
+        "compareValue": "CONTINUOUS_RECOVERY",
+        "description": "リゲインが付与されている"
+    },
+    {
+        "battleConditionMstId": 1617,
+        "compareContent": 104,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "TRUE",
+        "description": "自身または味方が回復したとき"
+    },
+    {
+        "battleConditionMstId": 1618,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "10",
+        "description": "自身のHPが10%以上のとき"
+    },
+    {
+        "battleConditionMstId": 1619,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "25",
+        "description": "自身のHPが25%未満のとき"
+    },
+    {
+        "battleConditionMstId": 1620,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "25",
+        "description": "自身のHPが25%以上のとき"
+    },
+    {
+        "battleConditionMstId": 1621,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "51",
+        "description": "自身のHPが51%未満のとき"
+    },
+    {
+        "battleConditionMstId": 1622,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "51",
+        "description": "自身のHPが51%以上のとき"
+    },
+    {
+        "battleConditionMstId": 1623,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "91",
+        "description": "自身のHPが91%未満のとき"
+    },
+    {
+        "battleConditionMstId": 1624,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "91",
+        "description": "自身のHPが91%以上のとき"
+    },
+    {
+        "battleConditionMstId": 1625,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "12",
+        "description": "パティシエマミ専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 1626,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "50",
+        "description": "自身のHPが50%未満のとき"
+    },
+    {
+        "battleConditionMstId": 1627,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "50",
+        "description": "自身のHPが50%以上のとき"
+    },
+    {
+        "battleConditionMstId": 1628,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "70",
+        "description": "自身のHPが70%未満のとき"
+    },
+    {
+        "battleConditionMstId": 1629,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "70",
+        "description": "自身のHPが70%以上のとき"
+    },
+    {
+        "battleConditionMstId": 1630,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "90",
+        "description": "自身のHPが90%未満のとき"
+    },
+    {
+        "battleConditionMstId": 1631,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "90",
+        "description": "自身のHPが90%以上のとき"
+    },
+    {
+        "battleConditionMstId": 1632,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "100",
+        "description": "自身のHPが100%未満のとき"
+    },
+    {
+        "battleConditionMstId": 1633,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "100",
+        "description": "自身のHPが100%以上のとき"
+    },
+    {
         "battleConditionMstId": 1634,
         "compareContent": 303,
         "compareOperator": 1,

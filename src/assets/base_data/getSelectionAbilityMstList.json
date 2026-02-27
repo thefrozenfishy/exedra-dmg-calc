@@ -4018,5 +4018,20 @@
         "targetType": 2,
         "value1": 1150049,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "On basic attack, advances action order by 5%.<br>While Donut of Love is applied, decreases DMG taken by 10%.",
+        "name": "Don't Sneak Any Bites",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 134,
+        "selectionAbilityMstId": 7050,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10030401,
+        "targetType": 2,
+        "value1": 1150050,
+        "value2": 0
     }
 ]

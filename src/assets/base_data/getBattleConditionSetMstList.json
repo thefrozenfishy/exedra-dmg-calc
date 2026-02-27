@@ -12765,6 +12765,61 @@
         "description": "行動対象メインがブレイク中+1以上のダメージを与えたとき＋行動者は自分+通常攻撃のみ"
     },
     {
+        "battleConditionMstIdCsv": "1616,1617,1,655",
+        "battleConditionSetMstId": 2608,
+        "description": "リゲインが付与されている+自身または味方が回復したとき+行動者は仲間+敵軍に与えたダメージが1以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1619",
+        "battleConditionSetMstId": 2609,
+        "description": "自身のHPが25%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1620,1621",
+        "battleConditionSetMstId": 2610,
+        "description": "自身のHPが25%以上のとき+対象のHPが51%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1622,1623",
+        "battleConditionSetMstId": 2611,
+        "description": "自身のHPが51%以上のとき+対象のHPが91%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1624",
+        "battleConditionSetMstId": 2612,
+        "description": "自身のHPが91%以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1625",
+        "battleConditionSetMstId": 2613,
+        "description": "パティシエマミ専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1618,1626",
+        "battleConditionSetMstId": 2614,
+        "description": "対象のHPが10%以上のとき+自身のHPが50%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1627,1628",
+        "battleConditionSetMstId": 2615,
+        "description": "自身のHPが50%以上のとき+自身のHPが70%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1629,1630",
+        "battleConditionSetMstId": 2616,
+        "description": "自身のHPが70%以上のとき+自身のHPが90%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1631,1632",
+        "battleConditionSetMstId": 2617,
+        "description": "自身のHPが90%以上のとき+自身のHPが100%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1633",
+        "battleConditionSetMstId": 2618,
+        "description": "自身のHPが100%以上のとき"
+    },
+    {
         "battleConditionMstIdCsv": "1634",
         "battleConditionSetMstId": 2619,
         "description": "一度の攻撃で自軍に1体クリティカルダメージが発生したとき"

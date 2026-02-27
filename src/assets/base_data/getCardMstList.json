@@ -1446,6 +1446,23 @@
     },
     {
         "advPosition": 0,
+        "cardMstId": 4200058,
+        "characterMstId": 0,
+        "element": 0,
+        "illustrator": "",
+        "name": "The Greatest Pairing",
+        "passiveSkill1": 4133,
+        "passiveSkill2": 0,
+        "passiveSkill3": 0,
+        "rarity": 5,
+        "releaseTime": "2026-02-27T12:00:00+09:00",
+        "resourceName": "art_04_00_0036",
+        "source": "",
+        "unlockIdCsv": "42",
+        "unlockTypeCsv": "2"
+    },
+    {
+        "advPosition": 0,
         "cardMstId": 4300001,
         "characterMstId": 0,
         "element": 0,
