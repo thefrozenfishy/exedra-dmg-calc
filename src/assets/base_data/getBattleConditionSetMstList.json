@@ -12918,5 +12918,50 @@
         "battleConditionMstIdCsv": "726",
         "battleConditionSetMstId": 2700,
         "description": "トークンが90のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "5,655,1",
+        "battleConditionSetMstId": 2730,
+        "description": "行動タイプが通常攻撃+ダメージを与えたとき+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "6,655,1",
+        "battleConditionSetMstId": 2731,
+        "description": "行動タイプが戦闘スキル+ダメージを与えたとき+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "7,655,1",
+        "battleConditionSetMstId": 2732,
+        "description": "行動タイプが必殺技+ダメージを与えたとき+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "25,1263,5",
+        "battleConditionSetMstId": 2733,
+        "description": "1以上のダメージを受けた、弱点属性で攻撃された、行動タイプが通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "25,1263,6",
+        "battleConditionSetMstId": 2734,
+        "description": "1以上のダメージを受けた、弱点属性で攻撃された、行動タイプが戦闘スキル"
+    },
+    {
+        "battleConditionMstIdCsv": "25,1263,7",
+        "battleConditionSetMstId": 2735,
+        "description": "1以上のダメージを受けた、弱点属性で攻撃された、行動タイプが必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1459,5",
+        "battleConditionSetMstId": 2736,
+        "description": "行動者は敵、自分がダメージを受けなかった、行動タイプが通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1459,6",
+        "battleConditionSetMstId": 2737,
+        "description": "行動者は敵、自分がダメージを受けなかった、行動タイプが戦闘スキル"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1459,7",
+        "battleConditionSetMstId": 2738,
+        "description": "行動者は敵、自分がダメージを受けなかった、行動タイプが必殺技"
     }
 ]
