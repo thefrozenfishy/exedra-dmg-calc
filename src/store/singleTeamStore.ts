@@ -14,8 +14,9 @@ export const usePvPStore = defineStore('pvp', {
   actions: {
     setMain(isAlliedTeam: number) {
       return (slotIndex: number, member: Character | undefined) => {
+        const isNewChar = !this.slots[isAlliedTeam][slotIndex].main || this.slots[isAlliedTeam][slotIndex].main.id !== member?.id
         this.slots[isAlliedTeam][slotIndex].main = correctCharacterParams(member)
-        if (this.slots[isAlliedTeam][slotIndex].main) {
+        if (this.slots[isAlliedTeam][slotIndex].main && isNewChar) {
           this.slots[isAlliedTeam][slotIndex].main.crys_sub = ["Increases SPD by 4.", "Increases SPD by 4.", "Increases SPD by 4."]
         }
         this.save()
