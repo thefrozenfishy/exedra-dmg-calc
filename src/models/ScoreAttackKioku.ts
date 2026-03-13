@@ -1,12 +1,12 @@
-import { ActiveSkill, KiokuArgs, KiokuData, SkillDetail, SkillKey } from '../types/KiokuTypes';
+import { ActiveSkill, KiokuArgs, KiokuData, SkillDetail, skillDetailId, SkillKey } from '../types/KiokuTypes';
 import { passiveDetails, skillDetails } from '../utils/helpers';
 import { Kioku } from './Kioku';
 
 
 export class ScoreAttackKioku extends Kioku {
     effects: SkillDetail[];
-    private scalableEffects: SkillDetail[] = [];
-    private unscalableEffects: SkillDetail[] = [];
+    private scalableEffects: Record<string, SkillDetail> = {};
+    private unscalableEffects: Record<string, SkillDetail> = {};
     private buffMult = 1;
     private debuffMult = 1;
 
@@ -27,7 +27,7 @@ export class ScoreAttackKioku extends Kioku {
 
         }
         this.crys.forEach(c => {
-            this.addEffect(passiveDetails, "passiveSkillMstId", 0, c, false);
+            this.addEffect(passiveDetails, "passiveSkillMstId", 0, c, false, true);
         });
 
         this.addEffect(skillDetails, "skillMstId", this.data.special_id, this.specialLvl, true);
@@ -35,14 +35,14 @@ export class ScoreAttackKioku extends Kioku {
 
         this.addEffect(passiveDetails, "passiveSkillMstId", this.data.ability_id, this.abilityLvl, true);
         let skillId = this.data.skill_id;
-        this.scalableEffects.forEach(e => {
+        Object.values(this.scalableEffects).forEach(e => {
             if ((e as ActiveSkill).abilityEffectType === "SWITCH_SKILL") {
                 skillId = e.value1
             }
         });
         this.addEffect(skillDetails, "skillMstId", skillId, this.skillLvl, true);
 
-        [...this.unscalableEffects, ...this.scalableEffects].forEach(e => {
+        [...Object.values(this.unscalableEffects), ...Object.values(this.scalableEffects)].forEach(e => {
             if (e.abilityEffectType === "UP_BUFF_EFFECT_VALUE") {
                 this.buffMult += e.value1 / 1000;
             } else if (e.abilityEffectType === "UP_DEBUFF_EFFECT_VALUE") {
@@ -52,17 +52,17 @@ export class ScoreAttackKioku extends Kioku {
                 this.addEffect(skillDetails, "skillMstId", 0, e.value1, true);
             }
         });
-        this.scalableEffects.forEach(e => {
+        Object.values(this.scalableEffects).forEach(e => {
             if (e.abilityEffectType === "TSUBAME_LINK") {
-                this.scalableEffects.push(
-                    { ...e, abilityEffectType: "UP_ATK_RATIO", value1: e.value2, value2: 0, value3: 0 },
-                    { ...e, abilityEffectType: "ADDITIONAL_DAMAGE", value1: e.value3, value2: 0, value3: 0 },
-                    { ...e, abilityEffectType: "TSUBAME", value1: 0, value2: 0, value3: 0 } // This is just to trigger the active condition
-                )
+                this.scalableEffects[skillDetailId(e).toString() + "1"] = { ...e, abilityEffectType: "UP_ATK_RATIO", value1: e.value2, value2: 0, value3: 0 };
+                this.scalableEffects[skillDetailId(e).toString() + "2"] = { ...e, abilityEffectType: "ADDITIONAL_DAMAGE", value1: e.value3, value2: 0, value3: 0 };
+                this.scalableEffects[skillDetailId(e).toString() + "3"] = { ...e, abilityEffectType: "TSUBAME", value1: 0, value2: 0, value3: 0 }; // This is just to trigger the active condition
             }
         })
 
-        this.effects = this.unscalableEffects.concat(this.scalableEffects.map(e => {
+        if (this.buffMult < 0) this.buffMult = 0;
+        if (this.debuffMult < 0) this.debuffMult = 0;
+        this.effects = Object.values(this.unscalableEffects).concat(Object.values(this.scalableEffects).map(e => {
             let v = e.value1;
             if (e.abilityEffectType.startsWith("DWN_") || e.abilityEffectType.startsWith("DOWN_") || e.abilityEffectType.replace("AIM_", "") === "UP_RCV_DMG_RATIO") {
                 v *= this.debuffMult;
@@ -71,11 +71,24 @@ export class ScoreAttackKioku extends Kioku {
             }
             return { ...e, value1: v }
         }));
-        if (this.buffMult < 0) this.buffMult = 0;
-        if (this.debuffMult < 0) this.debuffMult = 0;
     }
 
-    addEffect(map: Record<any, SkillDetail>, key: SkillKey, id: number, lvl: number, affectedByMult: boolean) {
-        (affectedByMult ? this.scalableEffects : this.unscalableEffects).push(...Object.values(map).filter(v => (v as any)[key] === id * 100 + lvl));
+    addEffect(map: Record<any, SkillDetail>, key: SkillKey, id: number, lvl: number, affectedByMult: boolean, retainDupes = false) {
+        const obj = Object.values(map).filter(v => (v as any)[key] === id * 100 + lvl);
+        const target = affectedByMult ? this.scalableEffects : this.unscalableEffects;
+        for (const e of obj) {
+            let key = skillDetailId(e).toString();
+            if (retainDupes) {
+                let idx = 1;
+                while (key in target) {
+                    key = `${skillDetailId(e)}${idx++}`;
+                }
+            }
+            if (Object.keys(target).includes(key)) {
+                console.warn(`Duplicate effect ID ${key} on ${this.name} for`, e)
+            } else {
+                target[key] = e;
+            }
+        }
     }
 }
