@@ -12942,5 +12942,109 @@
         "compareTarget": 2,
         "compareValue": "3",
         "description": "行動者のバフ数が3未満"
+    },
+    {
+        "battleConditionMstId": 1650,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "1000",
+        "description": "トークンが1000以上のとき"
+    },
+    {
+        "battleConditionMstId": 1651,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "13",
+        "description": "タルト専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 1657,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "200",
+        "description": "トークンが200以上のとき"
+    },
+    {
+        "battleConditionMstId": 1658,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "400",
+        "description": "トークンが400未満のとき"
+    },
+    {
+        "battleConditionMstId": 1659,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "400",
+        "description": "トークンが400以上のとき"
+    },
+    {
+        "battleConditionMstId": 1660,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "600",
+        "description": "トークンが600未満のとき"
+    },
+    {
+        "battleConditionMstId": 1661,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "600",
+        "description": "トークンが600以上のとき"
+    },
+    {
+        "battleConditionMstId": 1662,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "800",
+        "description": "トークンが800未満のとき"
+    },
+    {
+        "battleConditionMstId": 1663,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "800",
+        "description": "トークンが800以上のとき"
+    },
+    {
+        "battleConditionMstId": 1664,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "1000",
+        "description": "トークンが1000未満のとき"
+    },
+    {
+        "battleConditionMstId": 1676,
+        "compareContent": 309,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "UNIQUE_BUFF,1",
+        "description": "専用バフが付与されている味方に攻撃したとき"
+    },
+    {
+        "battleConditionMstId": 1679,
+        "compareContent": 25,
+        "compareOperator": 4,
+        "compareTarget": 2,
+        "compareValue": "3",
+        "description": "行動者のデバフ数が3以上"
+    },
+    {
+        "battleConditionMstId": 1685,
+        "compareContent": 110,
+        "compareOperator": 1,
+        "compareTarget": 3,
+        "compareValue": "TRUE",
+        "description": "攻撃された時"
     }
 ]

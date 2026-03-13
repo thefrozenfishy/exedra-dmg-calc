@@ -12915,9 +12915,224 @@
         "description": "パティシエ杏子専用バフが付与されているとき+魔力が0のとき"
     },
     {
+        "battleConditionMstIdCsv": "1650",
+        "battleConditionSetMstId": 2650,
+        "description": "トークンが1000以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1650,3,7",
+        "battleConditionSetMstId": 2651,
+        "description": "トークンが1000以上のとき+行動者は自分+行動タイプは必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "1651",
+        "battleConditionSetMstId": 2652,
+        "description": "タルト専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1685",
+        "battleConditionSetMstId": 2653,
+        "description": "行動者は敵+攻撃を受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "1657,1658",
+        "battleConditionSetMstId": 2659,
+        "description": "トークンが200以上のとき+トークンが400未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1659,1660",
+        "battleConditionSetMstId": 2660,
+        "description": "トークンが400以上のとき+トークンが600未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1661,1662",
+        "battleConditionSetMstId": 2661,
+        "description": "トークンが600以上のとき+トークンが800未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1663,1664",
+        "battleConditionSetMstId": 2662,
+        "description": "トークンが800以上のとき+トークンが1000未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,392,285",
+        "battleConditionSetMstId": 2673,
+        "description": "自身のターンが開始 AND 魔力が5のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1002,1054",
+        "battleConditionSetMstId": 2674,
+        "description": "自身の経過ターンが2ターン以上、4ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1004,1056",
+        "battleConditionSetMstId": 2675,
+        "description": "自身の経過ターンが4ターン以上、6ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1006,1058",
+        "battleConditionSetMstId": 2676,
+        "description": "自身の経過ターンが6ターン以上、8ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1189,1606",
+        "battleConditionSetMstId": 2677,
+        "description": "自身のデバフ数が1以上3未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1191,1608",
+        "battleConditionSetMstId": 2678,
+        "description": "自身のデバフ数が3以上5未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1193,1611",
+        "battleConditionSetMstId": 2679,
+        "description": "自身のデバフ数が5以上8未満"
+    },
+    {
+        "battleConditionMstIdCsv": "396,892,789",
+        "battleConditionSetMstId": 2680,
+        "description": "トークンが4のとき AND 自身が攻撃されたとき（0ダメージ含む） AND 自身のデバフ数が0"
+    },
+    {
+        "battleConditionMstIdCsv": "396,892,1189,1606",
+        "battleConditionSetMstId": 2681,
+        "description": "トークンが4のとき AND 自身が攻撃されたとき（0ダメージ含む） AND 自身のデバフ数が1以上3未満"
+    },
+    {
+        "battleConditionMstIdCsv": "396,892,1191,1608",
+        "battleConditionSetMstId": 2682,
+        "description": "トークンが4のとき AND 自身が攻撃されたとき（0ダメージ含む） AND 自身のデバフ数が3以上5未満"
+    },
+    {
+        "battleConditionMstIdCsv": "396,892,1193,1611",
+        "battleConditionSetMstId": 2683,
+        "description": "トークンが4のとき AND 自身が攻撃されたとき（0ダメージ含む） AND 自身のデバフ数が5以上8未満"
+    },
+    {
+        "battleConditionMstIdCsv": "396,892,957",
+        "battleConditionSetMstId": 2684,
+        "description": "トークンが4のとき AND &自身が攻撃されたとき（0ダメージ含む） AND 自身のデバフ数が8以上"
+    },
+    {
+        "battleConditionMstIdCsv": "396,892",
+        "battleConditionSetMstId": 2685,
+        "description": "トークンが4のとき AND &自身が攻撃されたとき（0ダメージ含む）"
+    },
+    {
+        "battleConditionMstIdCsv": "57,273",
+        "battleConditionSetMstId": 2686,
+        "description": "3ターンごと（1ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "57,274",
+        "battleConditionSetMstId": 2687,
+        "description": "3ターンごと（1ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "57,275",
+        "battleConditionSetMstId": 2688,
+        "description": "3ターンごと（1ターン目から） AND 連続行動の3回目"
+    },
+    {
+        "battleConditionMstIdCsv": "58,273",
+        "battleConditionSetMstId": 2689,
+        "description": "3ターンごと（2ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "58,274",
+        "battleConditionSetMstId": 2690,
+        "description": "3ターンごと（2ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "58,275",
+        "battleConditionSetMstId": 2691,
+        "description": "3ターンごと（2ターン目から） AND 連続行動の3回目"
+    },
+    {
+        "battleConditionMstIdCsv": "59,273",
+        "battleConditionSetMstId": 2692,
+        "description": "3ターンごと（3ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "59,274",
+        "battleConditionSetMstId": 2693,
+        "description": "3ターンごと（3ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "59,275",
+        "battleConditionSetMstId": 2694,
+        "description": "3ターンごと（3ターン目から） AND 連続行動の3回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1664",
+        "battleConditionSetMstId": 2695,
+        "description": "トークンが1000未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1008,1060",
+        "battleConditionSetMstId": 2696,
+        "description": "自身の経過ターンが8ターン以上、10ターン未満"
+    },
+    {
         "battleConditionMstIdCsv": "726",
         "battleConditionSetMstId": 2700,
         "description": "トークンが90のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "400,892,789",
+        "battleConditionSetMstId": 2701,
+        "description": "トークンが9のとき AND 自身が攻撃されたとき（0ダメージ含む） AND 自身のデバフ数が0"
+    },
+    {
+        "battleConditionMstIdCsv": "400,892,1189,1606",
+        "battleConditionSetMstId": 2702,
+        "description": "トークンが9のとき AND 自身が攻撃されたとき（0ダメージ含む） AND 自身のデバフ数が1以上3未満"
+    },
+    {
+        "battleConditionMstIdCsv": "400,892,1191,1608",
+        "battleConditionSetMstId": 2703,
+        "description": "トークンが9のとき AND 自身が攻撃されたとき（0ダメージ含む） AND 自身のデバフ数が3以上5未満"
+    },
+    {
+        "battleConditionMstIdCsv": "400,892,1193,1611",
+        "battleConditionSetMstId": 2704,
+        "description": "トークンが9のとき AND 自身が攻撃されたとき（0ダメージ含む） AND 自身のデバフ数が5以上8未満"
+    },
+    {
+        "battleConditionMstIdCsv": "400,892,957",
+        "battleConditionSetMstId": 2705,
+        "description": "トークンが9のとき AND &自身が攻撃されたとき（0ダメージ含む） AND 自身のデバフ数が8以上"
+    },
+    {
+        "battleConditionMstIdCsv": "400,892",
+        "battleConditionSetMstId": 2706,
+        "description": "トークンが9のとき AND &自身が攻撃されたとき（0ダメージ含む）"
+    },
+    {
+        "battleConditionMstIdCsv": "1651,1,1685,962",
+        "battleConditionSetMstId": 2712,
+        "description": "行動者は仲間+行動者は自身以外+タルトの専用バフが付与されているとき+敵を攻撃したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "324,3",
+        "battleConditionSetMstId": 2713,
+        "description": "ブレイクボーナスが最大のとき+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "1676,2,1651",
+        "battleConditionSetMstId": 2714,
+        "description": "攻撃を受けたとき+タルト専用バフがあるとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1650,3,7",
+        "battleConditionSetMstId": 2715,
+        "description": "トークンが1000以上のとき+行動者は自分+行動タイプは必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "2,25,1679",
+        "battleConditionSetMstId": 2719,
+        "description": "行動者は敵 AND 自分が1以上のダメージを受けた AND 行動者のデバフ数が3以上"
     },
     {
         "battleConditionMstIdCsv": "5,655,1",

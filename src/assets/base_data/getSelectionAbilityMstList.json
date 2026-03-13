@@ -4033,5 +4033,20 @@
         "targetType": 2,
         "value1": 1150050,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "At battle start, increases SPD by 50% (1 turn).<br>On special attack, grants 5 MP.",
+        "name": "The Power to Bring Light to All of France!",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 135,
+        "selectionAbilityMstId": 7051,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11150101,
+        "targetType": 2,
+        "value1": 1150051,
+        "value2": 0
     }
 ]
