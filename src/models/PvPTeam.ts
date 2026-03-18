@@ -142,9 +142,19 @@ export class KiokuState {
             spd += step
             this.currSpdEffects.push([step, detail.description, detail.applier])
         }
+        for (const detail of Object.values(effs["DWN_SPD_RATIO"] ?? {})) {
+            const step = (this.kioku.data.minSpd * detail.value1 / 1000)
+            spd -= step
+            this.currSpdEffects.push([step, detail.description, detail.applier])
+        }
         for (const detail of Object.values(effs["UP_SPD_FIXED"] ?? {})) {
             const step = detail.value1
             spd += step
+            this.currSpdEffects.push([step, detail.description, detail.applier])
+        }
+        for (const detail of Object.values(effs["DWN_SPD_FIXED"] ?? {})) {
+            const step = detail.value1
+            spd -= step
             this.currSpdEffects.push([step, detail.description, detail.applier])
         }
         this.currentSpd = spd
@@ -202,6 +212,9 @@ export class KiokuState {
         /**
          * @returns action id if additional act should be triggered, otherwise returns null
          */
+        if (detail.abilityEffectType === "DWN_SPD_RATIO") {
+            console.warn(this.kioku.name, "SLOWED", detail, target.kioku.name)
+        }
         if (!isConditionSetActive(detail, this.stateGen(this, target, targetType))) return
         if (detail.abilityEffectType.startsWith("DMG_")) {
             // TODO: Proximity should use value4, prolly doesn't matter much tho
@@ -293,8 +306,14 @@ export class PvPTeam {
                 if (conditionSetRequiresActorIsSelf(detail) && (!lastActor || lastActor !== k)) return
                 if (isTimingCorrect(timing, detail)) {
                     console.log("Appying effect from", lastActor, "to", k)
-                    const fua = k.applyEffect(k, detail, lastAction)
-                    if (fua) additionalAct[fua] = k
+                    if (enemySkills.includes(detail.abilityEffectType)) {
+                        this.otherTeam.kiokuStates.forEach(target => {
+                            k.applyEffect(target, detail, lastAction)
+                        })
+                    } else {
+                        const fua = k.applyEffect(k, detail, lastAction)
+                        if (fua) additionalAct[fua] = k
+                    }
                 }
             })
         }
