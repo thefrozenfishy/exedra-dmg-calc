@@ -278,7 +278,6 @@ export async function findBestTeam({
                                                 onError?.(e)
                                             }
                                         }
-                                        console.log(perAttackerResults[attacker.name])
                                     }
                                 }
                             }
