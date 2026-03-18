@@ -4048,5 +4048,20 @@
         "targetType": 2,
         "value1": 1150051,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases DMG dealt when targeting elemental weakness by 20%.<br><br>On own attack to enemy with at least 2 debuffs:<br>Increases ATK by 2% (2 turns; max 10 stacks).",
+        "name": "Time for a Lovely Bloodbath!",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 136,
+        "selectionAbilityMstId": 7052,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11200101,
+        "targetType": 2,
+        "value1": 1150052,
+        "value2": 0
     }
 ]

@@ -13130,6 +13130,16 @@
         "description": "トークンが1000以上のとき+行動者は自分+行動タイプは必殺技"
     },
     {
+        "battleConditionMstIdCsv": "1677,2",
+        "battleConditionSetMstId": 2716,
+        "description": "行動者のデバフ数が1以上+行動者は敵"
+    },
+    {
+        "battleConditionMstIdCsv": "1678,1338",
+        "battleConditionSetMstId": 2717,
+        "description": "敵全体のデバフ数が2以上"
+    },
+    {
         "battleConditionMstIdCsv": "2,25,1679",
         "battleConditionSetMstId": 2719,
         "description": "行動者は敵 AND 自分が1以上のダメージを受けた AND 行動者のデバフ数が3以上"
@@ -13178,5 +13188,20 @@
         "battleConditionMstIdCsv": "2,1459,7",
         "battleConditionSetMstId": 2738,
         "description": "行動者は敵、自分がダメージを受けなかった、行動タイプが必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "1678,1338,3",
+        "battleConditionSetMstId": 2739,
+        "description": "デバフ効果が2個以上ある敵に対して　攻撃(対象メイン)　行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "324,3,1332",
+        "battleConditionSetMstId": 2741,
+        "description": "ブレイクボーナスが最大のとき+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "1687",
+        "battleConditionSetMstId": 2747,
+        "description": "自分のキャラクターが「コルボー」"
     }
 ]

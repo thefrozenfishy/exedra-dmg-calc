@@ -13032,6 +13032,22 @@
         "description": "専用バフが付与されている味方に攻撃したとき"
     },
     {
+        "battleConditionMstId": 1677,
+        "compareContent": 25,
+        "compareOperator": 4,
+        "compareTarget": 2,
+        "compareValue": "1",
+        "description": "対象のデバフ数は1以上"
+    },
+    {
+        "battleConditionMstId": 1678,
+        "compareContent": 25,
+        "compareOperator": 4,
+        "compareTarget": 3,
+        "compareValue": "2",
+        "description": "対象のデバフ数は2以上"
+    },
+    {
         "battleConditionMstId": 1679,
         "compareContent": 25,
         "compareOperator": 4,
@@ -13046,5 +13062,13 @@
         "compareTarget": 3,
         "compareValue": "TRUE",
         "description": "攻撃された時"
+    },
+    {
+        "battleConditionMstId": 1687,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1120",
+        "description": "自分のキャラクターが「コルボー」"
     }
 ]

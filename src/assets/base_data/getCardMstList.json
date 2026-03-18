@@ -2296,6 +2296,23 @@
     },
     {
         "advPosition": 0,
+        "cardMstId": 4300049,
+        "characterMstId": 0,
+        "element": 0,
+        "illustrator": "",
+        "name": "Secret Sentiments and a Vow",
+        "passiveSkill1": 4136,
+        "passiveSkill2": 0,
+        "passiveSkill3": 0,
+        "rarity": 4,
+        "releaseTime": "2026-03-18T12:00:00+09:00",
+        "resourceName": "art_03_04_1120",
+        "source": "",
+        "unlockIdCsv": "0",
+        "unlockTypeCsv": "7"
+    },
+    {
+        "advPosition": 0,
         "cardMstId": 5100001,
         "characterMstId": 0,
         "element": 0,
