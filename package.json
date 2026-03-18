@@ -12,6 +12,7 @@
   "dependencies": {
     "chart.js": "^4.5.1",
     "d3": "^7.9.0",
+    "heap-js": "^2.7.1",
     "html2canvas": "^1.4.1",
     "pinia": "^3.0.3",
     "vite-plugin-md": "^0.22.5",

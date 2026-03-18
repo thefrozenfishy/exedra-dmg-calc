@@ -1,9 +1,11 @@
+import { Heap } from "heap-js";
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { ScoreAttackTeam } from "./ScoreAttackTeam";
 import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises, KiokuConstants } from "../types/KiokuTypes";
 import { ScoreAttackKioku } from "./ScoreAttackKioku";
 
 const cache = new Map<string, ScoreAttackKioku>();
+const customPriorityComparator = (a: any[], b: any[]) => b[0] - a[0];
 
 interface KiokuGeneratorArgs {
     name: string;
@@ -120,7 +122,7 @@ export async function findBestTeam({
         debuffMultReduction: weakElements.includes(data.element) ? debuffMultReduction : offElementDebuffMultReduction,
     })
 
-    const perAttackerResults: Record<string, any[]> = {}
+    const perAttackerResults: Record<string, Heap<any[]>> = {}
     const availableChars: Record<KiokuRole, Character[]> = {
         [KiokuRole.Attacker]: [],
         [KiokuRole.Debuffer]: [],
@@ -184,7 +186,8 @@ export async function findBestTeam({
         }, 0);
 
     for (const attacker of availableChars[KiokuRole.Attacker]) {
-        perAttackerResults[attacker.name] = []
+        perAttackerResults[attacker.name] = new Heap(customPriorityComparator)
+        perAttackerResults[attacker.name].limit = 100
         const availablePortraits = portraitsBestOnly(attacker.element)
         const availableSupportKeys: any[][] = Array.from([highestAtkSupportKey, ...possibleAtkSupportKeys[attacker.element], ...possibleAtkSupportKeys[attacker.role]].filter(s => s?.[0] !== attacker.name).reduce((map, item) => {
             if (item && !map.has(item[0])) {
@@ -261,7 +264,8 @@ export async function findBestTeam({
                                                 );
 
                                                 const [dmg, _, critRate] = team.calculate_max_dmg(enemies, 0)
-                                                const entry = [
+
+                                                perAttackerResults[attacker.name].push([
                                                     dmg | 0,
                                                     critRate,
                                                     attacker.name,
@@ -269,17 +273,12 @@ export async function findBestTeam({
                                                     attackerSupportKey?.[0],
                                                     ...attackerCrys,
                                                     ...totalSupports.flatMap((s, i) => [s.name, supportSupport[i]?.[0]])
-                                                ]
-
-                                                perAttackerResults[attacker.name].push(entry)
-                                                if (completedRuns % 100 === 0) {
-                                                    perAttackerResults[attacker.name].sort((a, b) => b[0] - a[0])
-                                                    if (perAttackerResults[attacker.name].length > 100) perAttackerResults[attacker.name].length = 100
-                                                }
+                                                ])
                                             } catch (e) {
                                                 onError?.(e)
                                             }
                                         }
+                                        console.log(perAttackerResults[attacker.name])
                                     }
                                 }
                             }
@@ -290,7 +289,7 @@ export async function findBestTeam({
         }
     }
 
-    return Object.values(perAttackerResults).flat()
+    return Object.values(perAttackerResults).flat().flatMap(e => e.heapArray)
 }
 
 function permute(arr: any[]): any[][] {
