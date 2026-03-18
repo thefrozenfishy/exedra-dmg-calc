@@ -70,6 +70,7 @@ const skippable = new Set([
     "RECOVERY_HP_ATK",
     "RECOVERY_HP",
     "REFLECTION_RATIO",
+    "REGAIN_ATK",
     "REMOVE_ALL_ABNORMAL",
     "REMOVE_ALL_BUFF",
     "REMOVE_ALL_DEBUFF",
@@ -105,8 +106,8 @@ const skippable = new Set([
     "UP_RCV_BREAK_POINT_DMG_RATIO",
     "UP_SPD_ACCUM_RATIO",
     "UP_SPD_FIXED",
-    "ZONE_STACK",
     "UP_SPD_RATIO",
+    "ZONE_STACK",
     "VORTEX_ATK", // TODO: Make vortex work
 ]);
 
