@@ -46,11 +46,15 @@ export interface FinalTeam {
     attacker_crys3: string[]
     supp1: Character
     supp1supp: Character | undefined
+    supp1portrait: string | undefined
     supp2: Character
     supp2supp: Character | undefined
+    supp2portrait: string | undefined
     supp3: Character
     supp3supp: Character | undefined
+    supp3portrait: string | undefined
     supp4: Character
     supp4supp: Character | undefined
+    supp4portrait: string | undefined
     alt_dmg: number[]
 }

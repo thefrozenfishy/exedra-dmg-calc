@@ -27,6 +27,11 @@
                     <img :src="`/exedra-dmg-calc/kioku_images/${team[`supp${i}supp`].id}_thumbnail.png`"
                         :title="team[`supp${i}supp`].name" :alt="team[`supp${i}supp`].name" />
                 </a>
+                <a v-if="team[`supp${i}portrait`]" :href="`https://exedra.wiki/wiki/${team[`supp${i}portrait`]}`" target="_blank"
+                    class="portrait-image">
+                    <img :src="`/exedra-dmg-calc/portrait_images/${portraits[team[`supp${i}portrait`]].resourceName}_thumbnail.png`"
+                        :alt="team[`supp${i}portrait`]" :title="team[`supp${i}portrait`]" />
+                </a>
             </div>
         </div>
 
@@ -75,7 +80,7 @@ const router = useRouter()
 function saveToStore(idx: number) {
     const { team, weakElements, offElementBuffMultReduction, offElementDebuffMultReduction } = props
     const offElements = weakElements!.filter(w => w.enabled).map(w => w.name)
-    teamStore.setMain(0, { ...team.supp1, crys: ["EX"] })
+    teamStore.setMain(0, { ...team.supp1, crys: ["EX"], portrait: team.supp1portrait })
     teamStore.setSupport(0, team.supp1supp)
     if (!offElements.includes(team.supp1.element)) {
         teamStore.setCharBuffReduction(0, offElementBuffMultReduction)
@@ -85,7 +90,7 @@ function saveToStore(idx: number) {
         teamStore.setCharDebuffReduction(0, undefined)
     }
 
-    teamStore.setMain(1, { ...team.supp2, crys: ["EX"] })
+    teamStore.setMain(1, { ...team.supp2, crys: ["EX"], portrait: team.supp2portrait })
     teamStore.setSupport(1, team.supp2supp)
     if (!offElements.includes(team.supp2.element)) {
         teamStore.setCharBuffReduction(1, offElementBuffMultReduction)
@@ -103,7 +108,7 @@ function saveToStore(idx: number) {
     })
     teamStore.setSupport(2, team.atk_supp)
 
-    teamStore.setMain(3, { ...team.supp3, crys: ["EX"] })
+    teamStore.setMain(3, { ...team.supp3, crys: ["EX"], portrait: team.supp3portrait})
     teamStore.setSupport(3, team.supp3supp)
     if (!offElements.includes(team.supp3.element)) {
         teamStore.setCharBuffReduction(3, offElementBuffMultReduction)
@@ -113,7 +118,7 @@ function saveToStore(idx: number) {
         teamStore.setCharDebuffReduction(3, undefined)
     }
 
-    teamStore.setMain(4, { ...team.supp4, crys: ["EX"] })
+    teamStore.setMain(4, { ...team.supp4, crys: ["EX"], portrait: team.supp4portrait })
     teamStore.setSupport(4, team.supp4supp)
     if (!offElements.includes(team.supp4.element)) {
         teamStore.setCharBuffReduction(4, offElementBuffMultReduction)
@@ -143,7 +148,7 @@ function saveToStore(idx: number) {
 
 .supp-image img,
 .portrait-image img {
-    width: 30px;
+    width: 25px;
 }
 
 .supp-image {
@@ -153,7 +158,7 @@ function saveToStore(idx: number) {
 
 .portrait-image {
     margin-top: -15px;
-    margin-left: -10px;
+    margin-left: -5px;
 }
 
 .image-wrapper {

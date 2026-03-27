@@ -265,7 +265,7 @@ import TeamRow from '../components/TeamRow.vue'
 import EnemySelector from '../components/EnemySelector.vue'
 import { useEnemyStore } from '../store/singleTeamStore'
 import { useCharacterStore } from '../store/characterStore'
-import { KiokuRole, Character, KiokuElement, Aliment, elementAlimentMap } from '../types/KiokuTypes'
+import { KiokuRole, Character, KiokuElement, Aliment, elementAlimentMap, HAS_FALLBACK_SUPPORT_AND_PORTRAIT } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
 import { FinalTeam } from '../types/BestTeamTypes'
 import { useSetting } from '../store/settingsStore'
@@ -435,12 +435,16 @@ const populateTeam = (result: any[]): FinalTeam => ({
     attacker_crys3: result[8],
     supp1: members.value.find(m => m.name === result[9])!,
     supp1supp: members.value.find(m => m.name === result[10]),
+    supp1portrait: HAS_FALLBACK_SUPPORT_AND_PORTRAIT.includes(result[9]) ? "For Hope That Lies Ahead" : undefined,
     supp2: members.value.find(m => m.name === result[11])!,
     supp2supp: members.value.find(m => m.name === result[12]),
+    supp2portrait: HAS_FALLBACK_SUPPORT_AND_PORTRAIT.includes(result[11]) ? "For Hope That Lies Ahead" : undefined,
     supp3: members.value.find(m => m.name === result[13])!,
     supp3supp: members.value.find(m => m.name === result[14]),
+    supp3portrait: HAS_FALLBACK_SUPPORT_AND_PORTRAIT.includes(result[13]) ? "For Hope That Lies Ahead" : undefined,
     supp4: members.value.find(m => m.name === result[15])!,
     supp4supp: members.value.find(m => m.name === result[16]),
+    supp4portrait: HAS_FALLBACK_SUPPORT_AND_PORTRAIT.includes(result[15]) ? "For Hope That Lies Ahead" : undefined,
 })
 
 const populateStatusTeam = (result: any[]) => ({
@@ -461,7 +465,6 @@ function mergeCells(results: any[]): FinalTeam[] {
     */
     const merged = results.reduce((acc: any[], row: any) => {
         const key = JSON.stringify([row[3], row[4], row[5], row[9], row[10], row[11], row[12], row[13], row[14], row[15]]);
-        console.log(key)
         const prev = acc[acc.length - 1];
 
         if (prev?.key === key) {
@@ -487,7 +490,6 @@ function mergeCells(results: any[]): FinalTeam[] {
     }, []);
 
     merged.forEach(m => delete m.key);
-    console.log(merged.map(populateTeam))
     return merged.map(populateTeam);
 };
 

@@ -1,7 +1,7 @@
 import { Heap } from "heap-js";
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { ScoreAttackTeam } from "./ScoreAttackTeam";
-import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises, KiokuConstants } from "../types/KiokuTypes";
+import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises, KiokuConstants, HAS_FALLBACK_SUPPORT_AND_PORTRAIT } from "../types/KiokuTypes";
 import { ScoreAttackKioku } from "./ScoreAttackKioku";
 
 const cache = new Map<string, ScoreAttackKioku>();
@@ -256,11 +256,18 @@ export async function findBestTeam({
                                                         crys_sub: optimalSubCrys ? KiokuConstants.optimal_attacker_crys_sub : attacker.crys_sub,
                                                         supportKey: attackerSupportKey,
                                                     })!,
-                                                    totalSupports.map((s, i) => fetchKioku({
-                                                        ...s,
-                                                        crys: optimalSubCrys ? ["EX"] : s.crys,
-                                                        supportKey: supportSupport[i],
-                                                    })!),
+                                                    totalSupports.map((s, i) => {
+                                                        let supportKey = supportSupport[i]
+                                                        if (!supportSupport[i] && HAS_FALLBACK_SUPPORT_AND_PORTRAIT.includes(s.name)) {
+                                                            supportKey = highestAtkSupportKey
+                                                        }
+                                                        return fetchKioku({
+                                                            ...s,
+                                                            portrait: "For Hope That Lies Ahead",
+                                                            crys: optimalSubCrys ? ["EX"] : s.crys,
+                                                            supportKey,
+                                                        })
+                                                    }),
                                                     attackerHealth,
                                                     activeAliments
                                                 );
@@ -276,7 +283,11 @@ export async function findBestTeam({
                                                     attackerPortrait,
                                                     attackerSupportKey?.[0],
                                                     ...attackerCrys,
-                                                    ...totalSupports.flatMap((s, i) => [s.name, supportSupport[i]?.[0]]),
+                                                    ...totalSupports.flatMap((s, i) => [s.name,
+                                                    supportSupport[i]?.[0] ?? (
+                                                        HAS_FALLBACK_SUPPORT_AND_PORTRAIT.includes(s.name)
+                                                            ? highestAtkSupportKey?.[0]
+                                                            : undefined)]),
                                                 ]
                                                 if (perAttackerResults[attacker.name].size() < LIMIT)
                                                     perAttackerResults[attacker.name].push(entry)
