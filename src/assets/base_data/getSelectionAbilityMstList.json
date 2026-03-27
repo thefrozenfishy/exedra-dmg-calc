@@ -4063,5 +4063,35 @@
         "targetType": 2,
         "value1": 1150052,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases critical rate by 10%.<br><br>While own forest field active:<br>Decreases DMG taken by 10% and increases SPD by 10%.",
+        "name": "I Want To Save Everyone",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 137,
+        "selectionAbilityMstId": 7053,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11450101,
+        "targetType": 2,
+        "value1": 1150053,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases break gauge depletion, and increases break bonus by 30%.<br><br>While Abyssal Rose is applied:<br>Decreases DMG taken by 10%.",
+        "name": "If There's No Other Way, Fine",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 138,
+        "selectionAbilityMstId": 7054,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11460101,
+        "targetType": 2,
+        "value1": 1150054,
+        "value2": 0
     }
 ]
