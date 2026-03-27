@@ -30,31 +30,13 @@ export interface FindBestTeamOptions {
     debuffMultReduction: number
     offElementDebuffMultReduction: number
     attackerHealth: number
+    optimizeAverageDamage: boolean
     onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number) => void,
     onError?: (error: any) => void
 }
 
 export interface FinalTeam {
-    dmg: number
-    crit_rate: number
-    attacker: Character
-    portrait: string
-    atk_supp: Character
-    attacker_crys1: string
-    attacker_crys2: string
-    attacker_crys3: string
-    supp1: Character
-    supp1supp: Character | undefined
-    supp2: Character
-    supp2supp: Character | undefined
-    supp3: Character
-    supp3supp: Character | undefined
-    supp4: Character
-    supp4supp: Character | undefined
-}
-
-export interface ConsolidatedFinalTeam {
-    dmg: number[]
+    optimized_dmg: number[]
     crit_rate: number[]
     attacker: Character
     portrait: string
@@ -70,4 +52,5 @@ export interface ConsolidatedFinalTeam {
     supp3supp: Character | undefined
     supp4: Character
     supp4supp: Character | undefined
+    alt_dmg: number[]
 }

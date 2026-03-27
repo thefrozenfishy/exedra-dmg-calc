@@ -34,6 +34,11 @@
                 Include 4★ Others
             </label>
 
+            <label title="Optimizes for average damage over many hits, instead of assuming crit">
+                <input type="checkbox" v-model="optimizeAverageDamage" />
+                Optimize for Average Damage (LR)
+            </label>
+
             <label>
                 <input type="checkbox" v-model="optimalSubCrys" />
                 Calculate using perfect Crit rate, Crit Damage & atk crystalis substats
@@ -161,7 +166,8 @@
                         placeholder="Kioku that will be ignored during calculations..."
                         @focus="showIgnoredKiokuDropdown = true" @blur="hideIgnoredKiokuDropdown" />
                     <ul v-if="showIgnoredKiokuDropdown && filteredIgnoredKioku.length" class="dropdown">
-                        <li v-for="char in filteredIgnoredKioku" :key="char.id" @mousedown.prevent="addIgnoredKioku(char)">
+                        <li v-for="char in filteredIgnoredKioku" :key="char.id"
+                            @mousedown.prevent="addIgnoredKioku(char)">
                             <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
                             {{ char.name }}
                         </li>
@@ -261,7 +267,7 @@ import { useEnemyStore } from '../store/singleTeamStore'
 import { useCharacterStore } from '../store/characterStore'
 import { KiokuRole, Character, KiokuElement, Aliment, elementAlimentMap } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
-import { ConsolidatedFinalTeam, FinalTeam } from '../types/BestTeamTypes'
+import { FinalTeam } from '../types/BestTeamTypes'
 import { useSetting } from '../store/settingsStore'
 
 const enemies = useEnemyStore()
@@ -294,6 +300,7 @@ const clearBuff = () => {
     offElementBuffMultReduction.value = undefined;
 };
 const offElementDebuffMultReduction = useSetting("offElementDebuffMultReduction", undefined);
+const optimizeAverageDamage = useSetting("optimizeAverageDamage", false);
 const clearDebuff = () => {
     offElementDebuffMultReduction.value = undefined;
 };
@@ -417,22 +424,23 @@ function hideIgnoredKiokuDropdown() {
 
 
 const populateTeam = (result: any[]): FinalTeam => ({
-    dmg: result[0],
+    optimized_dmg: result[0],
     crit_rate: result[1],
-    attacker: members.value.find(m => m.name === result[2])!,
-    portrait: result[3],
-    atk_supp: members.value.find(m => m.name === result[4])!,
-    attacker_crys1: result[5],
-    attacker_crys2: result[6],
-    attacker_crys3: result[7],
-    supp1: members.value.find(m => m.name === result[8])!,
-    supp1supp: members.value.find(m => m.name === result[9]),
-    supp2: members.value.find(m => m.name === result[10])!,
-    supp2supp: members.value.find(m => m.name === result[11]),
-    supp3: members.value.find(m => m.name === result[12])!,
-    supp3supp: members.value.find(m => m.name === result[13]),
-    supp4: members.value.find(m => m.name === result[14])!,
-    supp4supp: members.value.find(m => m.name === result[15]),
+    alt_dmg: result[2],
+    attacker: members.value.find(m => m.name === result[3])!,
+    portrait: result[4],
+    atk_supp: members.value.find(m => m.name === result[5])!,
+    attacker_crys1: result[6],
+    attacker_crys2: result[7],
+    attacker_crys3: result[8],
+    supp1: members.value.find(m => m.name === result[9])!,
+    supp1supp: members.value.find(m => m.name === result[10]),
+    supp2: members.value.find(m => m.name === result[11])!,
+    supp2supp: members.value.find(m => m.name === result[12]),
+    supp3: members.value.find(m => m.name === result[13])!,
+    supp3supp: members.value.find(m => m.name === result[14]),
+    supp4: members.value.find(m => m.name === result[15])!,
+    supp4supp: members.value.find(m => m.name === result[16]),
 })
 
 const populateStatusTeam = (result: any[]) => ({
@@ -447,29 +455,31 @@ const populateStatusTeam = (result: any[]) => ({
 const sortedResults: ComputedRef<any[][]> = computed(() => [...results].sort((a, b) => b[0] - a[0]))
 
 
-function mergeCells(results: any[]): ConsolidatedFinalTeam[] {
+function mergeCells(results: any[]): FinalTeam[] {
     /*
         Merges dmg, crit rate and crys into lists, so show more teams and less small crys varations
     */
     const merged = results.reduce((acc: any[], row: any) => {
-        const key = JSON.stringify([row[2], row[3], row[4], row[8], row[9], row[10], row[11], row[12], row[13], row[14]]);
-
+        const key = JSON.stringify([row[3], row[4], row[5], row[9], row[10], row[11], row[12], row[13], row[14], row[15]]);
+        console.log(key)
         const prev = acc[acc.length - 1];
 
         if (prev?.key === key) {
             prev[0].push(row[0]);
             prev[1].push(row[1]);
-            prev[5].push(row[5]);
+            prev[2].push(row[2]);
             prev[6].push(row[6]);
             prev[7].push(row[7]);
+            prev[8].push(row[8]);
         } else {
             acc.push({
                 ...row,
                 0: [row[0]],
                 1: [row[1]],
-                5: [row[5]],
+                2: [row[2]],
                 6: [row[6]],
                 7: [row[7]],
+                8: [row[8]],
                 key
             });
         }
@@ -477,18 +487,19 @@ function mergeCells(results: any[]): ConsolidatedFinalTeam[] {
     }, []);
 
     merged.forEach(m => delete m.key);
+    console.log(merged.map(populateTeam))
     return merged.map(populateTeam);
 };
 
 const topResults = computed(() => mergeCells(sortedResults.value).slice(0, topTeams.value))
 
 const topTeamsByAttacker = computed(() => {
-    const map: Record<string, ConsolidatedFinalTeam[]> = {}
+    const map: Record<string, FinalTeam[]> = {}
     prevAttackers.forEach(a => {
-        const results = sortedResults.value.filter(r => r[2] === a.name)
-        if (results.length) map[a.name] = mergeCells(sortedResults.value.filter(r => r[2] === a.name)).slice(0, topTeamsPerKioku.value)
+        const results = sortedResults.value.filter(r => r[3] === a.name)
+        if (results.length) map[a.name] = mergeCells(sortedResults.value.filter(r => r[3] === a.name)).slice(0, topTeamsPerKioku.value)
     })
-    const highestAtk = Object.fromEntries(Object.entries(map).map(([a, b]) => [a, Math.max(...b.map(t => t.dmg[0]))]))
+    const highestAtk = Object.fromEntries(Object.entries(map).map(([a, b]) => [a, Math.max(...b.map(t => t.optimized_dmg[0]))]))
     return Object.entries(map).sort((a, b) => highestAtk[b[0]] - highestAtk[a[0]])
 })
 
@@ -544,6 +555,7 @@ async function startSimulation() {
             debuffMultReduction: debuffMultReduction.value,
             offElementDebuffMultReduction: offElementDebuffMultReduction.value,
             attackerHealth: attackerHealth.value,
+            optimizeAverageDamage: optimizeAverageDamage.value,
         }
     })
 }

@@ -6,6 +6,7 @@ import { ScoreAttackKioku } from "./ScoreAttackKioku";
 
 const cache = new Map<string, ScoreAttackKioku>();
 const customPriorityComparator = (a: any[], b: any[]) => b[0] - a[0];
+const LIMIT = 1000;
 
 interface KiokuGeneratorArgs {
     name: string;
@@ -113,6 +114,7 @@ export async function findBestTeam({
     debuffMultReduction,
     offElementDebuffMultReduction,
     attackerHealth,
+    optimizeAverageDamage,
     onProgress,
     onError
 }: FindBestTeamOptions): Promise<any[]> {
@@ -187,7 +189,7 @@ export async function findBestTeam({
 
     for (const attacker of availableChars[KiokuRole.Attacker]) {
         perAttackerResults[attacker.name] = new Heap(customPriorityComparator)
-        perAttackerResults[attacker.name].limit = 100
+        perAttackerResults[attacker.name].limit = LIMIT
         const availablePortraits = portraitsBestOnly(attacker.element)
         const availableSupportKeys: any[][] = Array.from([highestAtkSupportKey, ...possibleAtkSupportKeys[attacker.element], ...possibleAtkSupportKeys[attacker.role]].filter(s => s?.[0] !== attacker.name).reduce((map, item) => {
             if (item && !map.has(item[0])) {
@@ -263,17 +265,24 @@ export async function findBestTeam({
                                                     activeAliments
                                                 );
 
-                                                const [dmg, _, critRate] = team.calculate_max_dmg(enemies, 0)
+                                                let [max_dmg, average_dmg, critRate] = team.calculate_max_dmg(enemies, 0)
+                                                if (optimizeAverageDamage) [average_dmg, max_dmg] = [max_dmg, average_dmg]
 
-                                                perAttackerResults[attacker.name].push([
-                                                    dmg | 0,
+                                                const entry = [
+                                                    max_dmg | 0,
                                                     critRate,
+                                                    average_dmg | 0,
                                                     attacker.name,
                                                     attackerPortrait,
                                                     attackerSupportKey?.[0],
                                                     ...attackerCrys,
-                                                    ...totalSupports.flatMap((s, i) => [s.name, supportSupport[i]?.[0]])
-                                                ])
+                                                    ...totalSupports.flatMap((s, i) => [s.name, supportSupport[i]?.[0]]),
+                                                ]
+                                                if (perAttackerResults[attacker.name].size() < LIMIT)
+                                                    perAttackerResults[attacker.name].push(entry)
+                                                else if (entry[0] > perAttackerResults[attacker.name].peek()[0])
+                                                    perAttackerResults[attacker.name].replace(entry)
+                                                perAttackerResults[attacker.name].push(entry)
                                             } catch (e) {
                                                 onError?.(e)
                                             }

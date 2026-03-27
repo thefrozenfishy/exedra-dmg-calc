@@ -31,9 +31,10 @@
         </div>
 
         <div v-if="!loading" class="results-table">
-            <div v-for="(dmg, idx) in team.dmg" :key="idx" class="result-row">
+            <div v-for="(dmg, idx) in team.optimized_dmg" :key="idx" class="result-row">
                 <div class="dmg"><strong>{{ dmg.toLocaleString() }}</strong></div>
-                <div class="crit">Crit rate: {{ team.crit_rate[idx] }}%</div>
+                <div class="crit">Crit: {{ team.crit_rate[idx] }}%</div>
+                <div class="dmg"><strong>[{{ team.alt_dmg[idx].toLocaleString() }}]</strong></div>
                 <div class="crys">
                     {{ team.attacker_crys1[idx] }}
                 </div>
