@@ -6,7 +6,7 @@ import { ScoreAttackKioku } from "./ScoreAttackKioku";
 
 const cache = new Map<string, ScoreAttackKioku>();
 const customPriorityComparator = (a: any[], b: any[]) => b[0] - a[0];
-const LIMIT = 10_000;
+const LIMIT = 1000;
 
 interface KiokuGeneratorArgs {
     name: string;
@@ -293,7 +293,6 @@ export async function findBestTeam({
                                                     perAttackerResults[attacker.name].push(entry)
                                                 else if (entry[0] > perAttackerResults[attacker.name].peek()[0])
                                                     perAttackerResults[attacker.name].replace(entry)
-                                                perAttackerResults[attacker.name].push(entry)
                                             } catch (e) {
                                                 onError?.(e)
                                             }
