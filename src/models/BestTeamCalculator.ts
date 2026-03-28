@@ -6,7 +6,7 @@ import { ScoreAttackKioku } from "./ScoreAttackKioku";
 
 const cache = new Map<string, ScoreAttackKioku>();
 const customPriorityComparator = (a: any[], b: any[]) => b[0] - a[0];
-const LIMIT = 1000;
+const LIMIT = 10_000;
 
 interface KiokuGeneratorArgs {
     name: string;
