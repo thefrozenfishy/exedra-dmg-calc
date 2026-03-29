@@ -15,7 +15,7 @@ const kiokuStat = (lvl: number, v: readonly number[]) => {
         v[i - 1],
         v[i],
         (lvl - KIOKU_LEVEL_BREAKPOINTS[i - 1]) /
-            (KIOKU_LEVEL_BREAKPOINTS[i] - KIOKU_LEVEL_BREAKPOINTS[i - 1])
+        (KIOKU_LEVEL_BREAKPOINTS[i] - KIOKU_LEVEL_BREAKPOINTS[i - 1])
     );
 };
 
@@ -58,15 +58,15 @@ export class Kioku {
     maxMagicStacks = 0;
 
     getBaseAtk(): number {
-        return (this.kiokuAtk * (1 + 0.02 * this.ascension) + (this.support?.getBaseAtk() ?? 0) * 0.16 + (this.portrait?.stats?.atk ?? 0) + this.magicAtk + this.heartAtk);
+        return Math.floor(this.kiokuAtk * (1 + 0.02 * this.ascension)) + Math.floor((this.support?.getBaseAtk() ?? 0) * 0.16) + (this.portrait?.stats?.atk ?? 0) + this.magicAtk + this.heartAtk;
     }
 
     getBaseDef(): number {
-        return (this.kiokuDef * (1 + 0.02 * this.ascension) + (this.support?.getBaseDef() ?? 0) * 0.16 + (this.portrait?.stats?.def ?? 0) + this.magicDef + this.heartDef);
+        return Math.floor(this.kiokuDef * (1 + 0.02 * this.ascension)) + Math.floor((this.support?.getBaseDef() ?? 0) * 0.16) + (this.portrait?.stats?.def ?? 0) + this.magicDef + this.heartDef;
     }
 
     getBaseHp(): number {
-        return (this.kiokuHp * (1 + 0.02 * this.ascension) + (this.support?.getBaseHp() ?? 0) * 0.16 + (this.portrait?.stats?.hp ?? 0) + this.magicHp + this.heartHp);
+        return Math.floor(this.kiokuHp * (1 + 0.02 * this.ascension)) + Math.floor((this.support?.getBaseHp() ?? 0) * 0.16) + (this.portrait?.stats?.hp ?? 0) + this.magicHp + this.heartHp;
     }
 
     constructor({

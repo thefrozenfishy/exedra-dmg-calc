@@ -266,6 +266,48 @@ export class ScoreAttackTeam {
         return val
     }
 
+    add_additional_dmg(): number {
+        let base_dmg = 0;
+        for (const ally of this.team) {
+            for (const eff of ally.effects) {
+                if (eff.abilityEffectType === "ADDITIONAL_DAMAGE") {
+                    base_dmg += this.calc_base_dmg(eff.value1 / 1000, ally.getBaseAtk());
+                }
+            }
+        }
+        return base_dmg
+    }
+
+    add_dot_dmg(): number {
+        let base_dmg = 0;
+        for (const ally of [this.dps, ...this.team]) {
+            let passive_done = false
+            let active_done = false
+            for (const eff of ally.effects) {
+                if (
+                    Object.values(Aliment).includes(eff.abilityEffectType.replace("_ATK", "") as Aliment) &&
+                    this.activeBuffsAndDebuffs.includes(eff.abilityEffectType.replace("_ATK", ""))
+                ) {
+                    if ("passiveSkillDetailMstId" in eff) {
+                        if (passive_done) continue
+                        passive_done = true
+                    } else {
+                        if (active_done) continue
+                        active_done = true
+                    }
+                    base_dmg += this.calc_base_dmg(eff.turn * eff.value1 / 1000, ally.getBaseAtk())
+                }
+            }
+        }
+        // TODO: Factor in ongoing dmg+ 
+        // TODO: Do it properly using the buffs _on the ally_ not on the dps
+        return base_dmg
+    }
+
+    calc_base_dmg(ability_percentage: number, base_atk: number): number {
+        return ability_percentage * base_atk * ((base_atk / 124) ** 1.2 + 12) / 20;
+    }
+
     get_special_dmg(targetType: EnemyTargetTypes, initAmountOfEnemies: number, currentAmountOfEnemies: number, maxBreak: number, nrHitThatKills: number): [number, boolean, boolean] {
         let total_dmg = 0;
         let uses_def = false;
@@ -347,15 +389,9 @@ export class ScoreAttackTeam {
         const dmg_taken = (this.getEffect("UP_RCV_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
             this.getEffect("UP_AIM_RCV_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak)) / 1000;
         const elem_res_down = (this.getEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak)) / 1000;
-        let base_dmg = special * base_atk * ((base_atk / 124) ** 1.2 + 12) / 20;
+        let base_dmg = this.calc_base_dmg(special, base_atk);
         if (special > 0) { // Add dmg only to enemies hit by something
-            for (const ally of this.team) {
-                for (const eff of ally.effects) {
-                    if (eff.abilityEffectType === "ADDITIONAL_DAMAGE") {
-                        base_dmg += (eff.value1 / 1000) * ally.getBaseAtk() * ((ally.getBaseAtk() / 124) ** 1.2 + 12) / 20;
-                    }
-                }
-            }
+            base_dmg += this.add_additional_dmg()
         }
 
         const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
@@ -367,17 +403,24 @@ export class ScoreAttackTeam {
         const effect_elem_factor = 1 + (enemy.isWeak ? 0.2 + elem_dmg_up : 0);
         const break_factor = (enemy.isBreak ? enemy.maxBreak / 100 : 1);
 
-        const before_crit_total =
+        let dot_dmg = 0
+        if (this.dps.effects.some(eff => eff.abilityEffectType === "IMM_SLIP_DMG")) {
+            dot_dmg += this.add_dot_dmg()
+        }
+
+        const base_dmg_mult =
             Number(enemy.enabled) *
-            base_dmg *
             def_factor *
             dmg_dealt_factor *
             dmg_taken_factor *
             elem_resist_factor *
             effect_elem_factor *
             break_factor;
-        const total = before_crit_total * crit_factor
-        const average_total = before_crit_total * crit_average
+        const dot_total_dmg = base_dmg_mult * dot_dmg
+        const pre_dot_total = base_dmg_mult * base_dmg * crit_factor
+        const pre_dot_average = base_dmg_mult * base_dmg * crit_average
+        let total = pre_dot_total + dot_total_dmg
+        let average_total = pre_dot_average + dot_total_dmg
 
         let debugText = "";
         if (this.debug) {
@@ -471,6 +514,9 @@ Dmg Tkn Fact - ${dmg_taken_factor * 100 | 0}%
 Elem ResFact - ${elem_resist_factor * 100 | 0}%
 EffElem Fact - ${effect_elem_factor * 100 | 0}%
 Break Factor - ${break_factor * 100 | 0}%
+Dot          - ${(dot_total_dmg | 0).toLocaleString()}
+Pre-dot-total- ${(pre_dot_total | 0).toLocaleString()}
+Pre-dot-avrg - ${(pre_dot_average | 0).toLocaleString()}
 Result       - ${(total | 0).toLocaleString()}
 AverageDmg   - ${(average_total | 0).toLocaleString()}
 

@@ -9,6 +9,7 @@ export class ScoreAttackKioku extends Kioku {
     private unscalableEffects: Record<string, SkillDetail> = {};
     private buffMult = 1;
     private debuffMult = 1;
+    private debuffTurnBonus = 0;
 
     constructor(args: KiokuArgs, buffMultReduction = 0, debuffMultReduction = 0) {
         super(args);
@@ -47,11 +48,13 @@ export class ScoreAttackKioku extends Kioku {
                 this.buffMult += e.value1 / 1000;
             } else if (e.abilityEffectType === "UP_DEBUFF_EFFECT_VALUE") {
                 this.debuffMult += e.value1 / 1000;
-            }
-            if (e.abilityEffectType === "ADDITIONAL_SKILL_ACT") {
+            } else if (e.abilityEffectType === "ADDITIONAL_SKILL_ACT") {
                 this.addEffect(skillDetails, "skillMstId", 0, e.value1, true);
+            } else if (e.abilityEffectType === "ADD_DEBUFF_TURN") {
+                this.debuffTurnBonus += e.value1; // Also increases buffs atm, but since those can't pop it doesn't matter. This is for dot pop
             }
         });
+
         Object.values(this.scalableEffects).forEach(e => {
             if (e.abilityEffectType === "TSUBAME_LINK") {
                 this.scalableEffects[skillDetailId(e).toString() + "1"] = { ...e, abilityEffectType: "UP_ATK_RATIO", value1: e.value2, value2: 0, value3: 0 };
@@ -69,7 +72,7 @@ export class ScoreAttackKioku extends Kioku {
             } else if (e.abilityEffectType.startsWith("UP_")) {
                 v *= this.buffMult;
             }
-            return { ...e, value1: v }
+            return { ...e, value1: v, turn: e.turn + this.debuffTurnBonus }
         }));
     }
 
