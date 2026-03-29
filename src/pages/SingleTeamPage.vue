@@ -112,13 +112,14 @@ const formatDmg = (out: string | [number, number, number, any[]]) =>
     : out
 
 type SectionKey = keyof DebugSections
-const debugSectionOrder: SectionKey[] = ['calc', 'enemy', 'kiokuStats', 'kiokuReceived', 'kiokuContributed']
+const debugSectionOrder: SectionKey[] = ['calc', 'enemy', 'kiokuStats', 'kiokuReceived', 'kiokuContributed', 'kiokuDebuffs']
 const debugSectionLabels: Record<SectionKey, string> = {
   calc: 'DMG Calculation',
   enemy: 'Enemy Stats',
   kiokuStats: 'Kioku Stats',
   kiokuReceived: 'Buffs Received',
   kiokuContributed: 'Contributed to DPS',
+  kiokuDebuffs: 'Debuffs Applied',
 }
 
 const visibleDebugSections = reactive<Record<SectionKey, boolean>>({
@@ -127,6 +128,7 @@ const visibleDebugSections = reactive<Record<SectionKey, boolean>>({
   kiokuStats: true,
   kiokuReceived: true,
   kiokuContributed: true,
+  kiokuDebuffs: true,
 })
 
 const collapsedSlotSections = reactive<Record<number, Partial<Record<SectionKey, boolean>>>>({})

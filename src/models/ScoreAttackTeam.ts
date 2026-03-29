@@ -106,7 +106,6 @@ const skippable = new Set([
     "UP_EFFECT_PARRY_RATE_RATIO",
     "UP_EP_RECOVER_RATE_RATIO",
     "UP_GIV_BREAK_POINT_DMG_FIXED",
-    "UP_GIV_SLIP_DMG_RATIO",
     "UP_GIV_VORTEX_DMG_RATIO",
     "UP_HATE",
     "UP_HEAL_RATE_RATIO",
@@ -147,6 +146,7 @@ interface AllyContext {
     extraEffects: ExtraEffectPool;
     debugContributionsToDps: DebugContributions;
     debugContributionsToSelf: DebugContributions;
+    debugDebuffContributions: DebugContributions;
 }
 
 export interface DebugSections {
@@ -155,6 +155,7 @@ export interface DebugSections {
     kiokuStats: string;
     kiokuReceived: string;
     kiokuContributed: string;
+    kiokuDebuffs: string;
 }
 
 export class ScoreAttackTeam {
@@ -220,6 +221,7 @@ export class ScoreAttackTeam {
                 extraEffects: {},
                 debugContributionsToDps: {},
                 debugContributionsToSelf: {},
+                debugDebuffContributions: {},
             });
         }
 
@@ -245,7 +247,12 @@ export class ScoreAttackTeam {
                     || detail.abilityEffectType.replace("AIM_", "") === "UP_RCV_DMG_RATIO";
 
                 if (isDebuff) {
-                    this.distributeEffect(detail, valueTotal, this.debuffPool, this.extraDebuffPool);
+                    this.distributeEffect(
+                        detail, valueTotal,
+                        this.debuffPool, this.extraDebuffPool,
+                        undefined, undefined,
+                        sourceCtx.debugDebuffContributions,
+                    );
                 } else {
                     for (let targetIdx = 0; targetIdx < 5; targetIdx++) {
                         if (!buffAppliesToAlly(detail.range, sourceIdx, targetIdx)) continue;
@@ -301,6 +308,7 @@ export class ScoreAttackTeam {
         extraPool: ExtraEffectPool,
         debugContributionsToDps?: DebugContributions,
         debugContributionsToSelf?: DebugContributions,
+        debugDebuffContributions?: DebugContributions,
     ) {
         detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
             const isActiveCond = isActiveConditionRelevantForScoreAttack(
@@ -313,7 +321,7 @@ export class ScoreAttackTeam {
                 if (!isActiveCond) return;
                 this.accumulateIntoPool(detail.abilityEffectType, valueTotal, pool);
 
-                for (const dbg of [debugContributionsToDps, debugContributionsToSelf]) {
+                for (const dbg of [debugContributionsToDps, debugContributionsToSelf, debugDebuffContributions]) {
                     if (!dbg) continue;
                     if (!(detail.abilityEffectType in dbg)) dbg[detail.abilityEffectType] = [];
                     dbg[detail.abilityEffectType].push([detail, valueTotal]);
@@ -438,20 +446,20 @@ export class ScoreAttackTeam {
                 }
 
                 const allyTotalAtk = this.resolveAllyAtk(allyIdx, false, amountOfEnemies, enemy.maxBreak);
-                const base = this.calc_base_dmg(eff.turn * eff.value1 / 1000, allyTotalAtk);
+                const base = this.calc_base_dmg(eff.turn * eff.value1 / 1000, this.allyContexts[allyIdx].kioku.getBaseAtk());
 
                 const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;
                 const ally_def_factor = Math.min(2, ((allyTotalAtk + 10) / (def_total + 10)) * 0.12);
 
                 const dmg_dealt =
                     (this.getAllyEffect(allyIdx, "UP_GIV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
-                        this.getAllyEffect(DPS_IDX, "UP_GIV_SLIP_DMG_RATIO", amountOfEnemies, enemy.maxBreak) + // Ongoing only here
+                        this.getAllyEffect(allyIdx, "UP_GIV_SLIP_DMG_RATIO", amountOfEnemies, enemy.maxBreak) + // Ongoing only here
                         this.getAllyEffect(allyIdx, "UP_ELEMENT_DMG_RATE_RATIO", amountOfEnemies, enemy.maxBreak)) /
                     1000;
 
                 const dmg_taken =
-                    (this.getAllyEffect(allyIdx, "UP_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
-                        this.getAllyEffect(allyIdx, "UP_AIM_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) /
+                    (this.getDebuffEffect("UP_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
+                        this.getDebuffEffect("UP_AIM_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) /
                     1000;
 
                 const elem_dmg_up =
@@ -540,10 +548,10 @@ export class ScoreAttackTeam {
         let total_dmg = 0;
         let average_dmg = 0;
         let critRate = 0;
-        let debugSections: DebugSections = { calc: "", enemy: "", kiokuStats: "", kiokuReceived: "", kiokuContributed: "" };
+        let debugSections: DebugSections = { calc: "", enemy: "", kiokuStats: "", kiokuReceived: "", kiokuContributed: "", kiokuDebuffs: "" };
         let initAmountOfEnemies = enemies.filter(e => e.enabled).length;
         let currentAmountOfEnemies = initAmountOfEnemies;
-        const allDebugSections: DebugSections[] = Array(5).fill(null).map(() => ({ calc: "", enemy: "", kiokuStats: "", kiokuReceived: "", kiokuContributed: "" }));
+        const allDebugSections: DebugSections[] = Array(5).fill(null).map(() => ({ calc: "", enemy: "", kiokuStats: "", kiokuReceived: "", kiokuContributed: "", kiokuDebuffs: "" }));
 
         for (const i of [
             EnemyTargetTypes.TARGET,
@@ -640,8 +648,8 @@ export class ScoreAttackTeam {
         const elem_dmg_up =
             this.getAllyEffect(DPS_IDX, "UP_WEAK_ELEMENT_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak) / 1000;
         const dmg_taken =
-            (this.getAllyEffect(DPS_IDX, "UP_RCV_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
-                this.getAllyEffect(DPS_IDX, "UP_AIM_RCV_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak)) /
+            (this.getDebuffEffect("UP_RCV_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
+                this.getDebuffEffect("UP_AIM_RCV_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak)) /
             1000;
         const elem_res_down =
             this.getDebuffEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak) / 1000;
@@ -659,7 +667,7 @@ export class ScoreAttackTeam {
         const break_factor = enemy.isBreak ? enemy.maxBreak / 100 : 1;
 
         let dot_total_dmg = 0;
-        if (special > 0 && this.dps.effects.some(eff => eff.abilityEffectType === "IMM_SLIP_DMG")) {
+        if (enemy.enabled && this.dps.effects.some(eff => eff.abilityEffectType === "IMM_SLIP_DMG")) {
             dot_total_dmg = this.add_dot_dmg(enemy, currentAmountOfEnemies);
         }
 
@@ -678,7 +686,7 @@ export class ScoreAttackTeam {
         const total = pre_dot_total + dot_total_dmg;
         const average_total = pre_dot_average + dot_total_dmg;
 
-        let sections: DebugSections = { calc: "", enemy: "", kiokuStats: "", kiokuReceived: "", kiokuContributed: "" };
+        let sections: DebugSections = { calc: "", enemy: "", kiokuStats: "", kiokuReceived: "", kiokuContributed: "", kiokuDebuffs: "" };
 
         if (this.debug) {
             const posCtx = this.allyContexts[idx];
@@ -760,6 +768,9 @@ ${this.formatContributions(posCtx.debugContributionsToSelf)}`;
 
             sections.kiokuContributed = `CONTRIBUTED TO DPS BY ${posCtx.kioku.name}:
 ${this.formatContributions(posCtx.debugContributionsToDps)}`;
+
+            sections.kiokuDebuffs = `DEBUFFS APPLIED BY ${posCtx.kioku.name}:
+${this.formatContributions(posCtx.debugDebuffContributions)}`;
         }
 
         return [total | 0, average_total | 0, crit_rate, sections, enemyDied];
