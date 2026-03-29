@@ -5,7 +5,7 @@ import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getB
 import { ScoreAttackKioku } from "./ScoreAttackKioku";
 
 const cache = new Map<string, ScoreAttackKioku>();
-const customPriorityComparator = (a: any[], b: any[]) => b[0] - a[0];
+const customPriorityComparator = (a: any[], b: any[]) => a[0] - b[0];
 const LIMIT = 1000;
 
 interface KiokuGeneratorArgs {
