@@ -271,7 +271,6 @@ export async function findBestTeam({
                                                     attackerHealth,
                                                     activeAliments
                                                 );
-
                                                 let [max_dmg, average_dmg, critRate] = team.calculate_max_dmg(enemies, 0)
                                                 if (optimizeAverageDamage) [average_dmg, max_dmg] = [max_dmg, average_dmg]
 
@@ -307,7 +306,8 @@ export async function findBestTeam({
         }
     }
 
-    return Object.values(perAttackerResults).flat().flatMap(e => e.heapArray)
+    return Object.values(perAttackerResults)
+        .flatMap(heap => heap.toArray().sort((a, b) => b[0] - a[0]))
 }
 
 function permute(arr: any[]): any[][] {
