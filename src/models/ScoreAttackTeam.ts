@@ -35,34 +35,12 @@ const knownBoosts = {
     ADDITIONAL_DAMAGE: "Additional dmg",
     UP_ELEMENT_DMG_RATE_RATIO: "Dmg Dealt+ (Elem only)",
     UP_GIV_DMG_RATIO: "DMG Dealt+",
+    UP_GIV_SLIP_DMG_RATIO: "DOT DMG+",
     UP_RCV_CTR_RATIO: "CR4+",
     UP_RCV_DMG_RATIO: "DMG Taken+",
     UP_WEAK_ELEMENT_DMG_RATIO: "Elem Dmg+",
     WEAKNESS: "Def%3",
 };
-
-const buffEffectTypes = new Set([
-    "ADDITIONAL_DAMAGE",
-    "UP_ATK_ACCUM_RATIO",
-    "UP_ATK_FIXED",
-    "UP_ATK_RATIO",
-    "UP_ATK_CONSUME_RATIO",
-    "UP_CTD_ACCUM_RATIO",
-    "UP_CTD_FIXED",
-    "UP_CTD_RATIO",
-    "UP_CTR_ACCUM_RATIO",
-    "UP_CTR_FIXED",
-    "UP_CTR_RATIO",
-    "UP_DEF_ACCUM_RATIO",
-    "UP_DEF_FIXED",
-    "UP_DEF_RATIO",
-    "UP_ELEMENT_DMG_RATE_RATIO",
-    "UP_GIV_DMG_RATIO",
-    "UP_RCV_CTR_RATIO",
-    "UP_RCV_DMG_RATIO",
-    "UP_AIM_RCV_DMG_RATIO",
-    "UP_WEAK_ELEMENT_DMG_RATIO",
-]);
 
 const skippable = new Set([
     "ADD_BUFF_TURN",
@@ -262,20 +240,22 @@ export class ScoreAttackTeam {
                 let valueTotal = detail.value1;
                 valueTotal *= detail.value2 || 1;
 
-                const isBuff = buffEffectTypes.has(detail.abilityEffectType);
+                const isDebuff = detail.abilityEffectType.startsWith("DWN_")
+                    || detail.abilityEffectType.startsWith("DOWN_")
+                    || detail.abilityEffectType.replace("AIM_", "") === "UP_RCV_DMG_RATIO";
 
-                if (isBuff) {
+                if (isDebuff) {
+                    this.distributeEffect(detail, valueTotal, this.debuffPool, this.extraDebuffPool);
+                } else {
                     for (let targetIdx = 0; targetIdx < 5; targetIdx++) {
                         if (!buffAppliesToAlly(detail.range, sourceIdx, targetIdx)) continue;
 
                         const targetCtx = this.allyContexts[targetIdx];
 
-                        // For DPS contributions: attribute to the source ally
                         const dbgToDps = targetIdx === DPS_IDX
                             ? sourceCtx.debugContributionsToDps
                             : undefined;
 
-                        // For "received" contributions: attribute to the target ally
                         const dbgToSelf = targetCtx.debugContributionsToSelf;
 
                         this.distributeEffect(
@@ -285,8 +265,6 @@ export class ScoreAttackTeam {
                             dbgToSelf,
                         );
                     }
-                } else {
-                    this.distributeEffect(detail, valueTotal, this.debuffPool, this.extraDebuffPool);
                 }
             }
         }
@@ -429,8 +407,16 @@ export class ScoreAttackTeam {
         return base_dmg;
     }
 
-    add_dot_dmg(amountOfEnemies: number, maxBreak: number): number {
-        let base_dmg = 0;
+    add_dot_dmg(enemy: Enemy, amountOfEnemies: number): number {
+        let total = 0;
+
+        const def_remaining =
+            this.getDebuffEffect("DWN_DEF_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) *
+            this.getDebuffEffect("DWN_DEF_RATIO", amountOfEnemies, enemy.maxBreak) *
+            (0.9 ** this.debuffPool["WEAKNESS"]);
+        const elem_res_down =
+            this.getDebuffEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) / 1000;
+        const break_factor = enemy.isBreak ? enemy.maxBreak / 100 : 1;
 
         for (let allyIdx = 0; allyIdx < 5; allyIdx++) {
             let passive_done = false;
@@ -451,13 +437,39 @@ export class ScoreAttackTeam {
                     active_done = true;
                 }
 
-                const allyTotalAtk = this.resolveAllyAtk(allyIdx, false, amountOfEnemies, maxBreak);
-                base_dmg += this.calc_base_dmg(eff.turn * eff.value1 / 1000, allyTotalAtk);
+                const allyTotalAtk = this.resolveAllyAtk(allyIdx, false, amountOfEnemies, enemy.maxBreak);
+                const base = this.calc_base_dmg(eff.turn * eff.value1 / 1000, allyTotalAtk);
+
+                const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;
+                const ally_def_factor = Math.min(2, ((allyTotalAtk + 10) / (def_total + 10)) * 0.12);
+
+                const dmg_dealt =
+                    (this.getAllyEffect(allyIdx, "UP_GIV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
+                        this.getAllyEffect(DPS_IDX, "UP_GIV_SLIP_DMG_RATIO", amountOfEnemies, enemy.maxBreak) + // Ongoing only here
+                        this.getAllyEffect(allyIdx, "UP_ELEMENT_DMG_RATE_RATIO", amountOfEnemies, enemy.maxBreak)) /
+                    1000;
+
+                const dmg_taken =
+                    (this.getAllyEffect(allyIdx, "UP_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
+                        this.getAllyEffect(allyIdx, "UP_AIM_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) /
+                    1000;
+
+                const elem_dmg_up =
+                    this.getAllyEffect(allyIdx, "UP_WEAK_ELEMENT_DMG_RATIO", amountOfEnemies, enemy.maxBreak) / 1000;
+                const effect_elem_factor = 1 + (enemy.isWeak ? 0.2 + elem_dmg_up : 0);
+
+                total +=
+                    base *
+                    ally_def_factor *
+                    (1 + dmg_dealt) *
+                    (1 + dmg_taken) *
+                    (1 + elem_res_down) *
+                    effect_elem_factor *
+                    break_factor;
             }
         }
 
-        // TODO: Factor in ongoing dmg+ per ally
-        return base_dmg;
+        return total;
     }
 
     get_special_dmg(
@@ -646,13 +658,14 @@ export class ScoreAttackTeam {
         const effect_elem_factor = 1 + (enemy.isWeak ? 0.2 + elem_dmg_up : 0);
         const break_factor = enemy.isBreak ? enemy.maxBreak / 100 : 1;
 
-        let dot_dmg = 0;
-        if (this.dps.effects.some(eff => eff.abilityEffectType === "IMM_SLIP_DMG")) {
-            dot_dmg += this.add_dot_dmg(currentAmountOfEnemies, enemy.maxBreak);
+        let dot_total_dmg = 0;
+        if (special > 0 && this.dps.effects.some(eff => eff.abilityEffectType === "IMM_SLIP_DMG")) {
+            dot_total_dmg = this.add_dot_dmg(enemy, currentAmountOfEnemies);
         }
 
-        const base_dmg_mult =
+        const total_dmg_pre_crit =
             Number(enemy.enabled) *
+            base_dmg *
             def_factor *
             dmg_dealt_factor *
             dmg_taken_factor *
@@ -660,9 +673,8 @@ export class ScoreAttackTeam {
             effect_elem_factor *
             break_factor;
 
-        const dot_total_dmg = base_dmg_mult * dot_dmg;
-        const pre_dot_total = base_dmg_mult * base_dmg * crit_factor;
-        const pre_dot_average = base_dmg_mult * base_dmg * crit_average;
+        const pre_dot_total = total_dmg_pre_crit * crit_factor;
+        const pre_dot_average = total_dmg_pre_crit * crit_average;
         const total = pre_dot_total + dot_total_dmg;
         const average_total = pre_dot_average + dot_total_dmg;
 
