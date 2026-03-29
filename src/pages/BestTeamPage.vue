@@ -265,7 +265,7 @@ import TeamRow from '../components/TeamRow.vue'
 import EnemySelector from '../components/EnemySelector.vue'
 import { useEnemyStore } from '../store/singleTeamStore'
 import { useCharacterStore } from '../store/characterStore'
-import { KiokuRole, Character, KiokuElement, Aliment, elementAlimentMap, HAS_FALLBACK_SUPPORT_AND_PORTRAIT } from '../types/KiokuTypes'
+import { KiokuRole, Character, KiokuElement, Aliment, elementAlimentMap } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
 import { FinalTeam } from '../types/BestTeamTypes'
 import { useSetting } from '../store/settingsStore'
@@ -435,16 +435,16 @@ const populateTeam = (result: any[]): FinalTeam => ({
     attacker_crys3: result[8],
     supp1: members.value.find(m => m.name === result[9])!,
     supp1supp: members.value.find(m => m.name === result[10]),
-    supp1portrait: HAS_FALLBACK_SUPPORT_AND_PORTRAIT.includes(result[9]) ? "For Hope That Lies Ahead" : undefined,
-    supp2: members.value.find(m => m.name === result[11])!,
-    supp2supp: members.value.find(m => m.name === result[12]),
-    supp2portrait: HAS_FALLBACK_SUPPORT_AND_PORTRAIT.includes(result[11]) ? "For Hope That Lies Ahead" : undefined,
-    supp3: members.value.find(m => m.name === result[13])!,
-    supp3supp: members.value.find(m => m.name === result[14]),
-    supp3portrait: HAS_FALLBACK_SUPPORT_AND_PORTRAIT.includes(result[13]) ? "For Hope That Lies Ahead" : undefined,
-    supp4: members.value.find(m => m.name === result[15])!,
-    supp4supp: members.value.find(m => m.name === result[16]),
-    supp4portrait: HAS_FALLBACK_SUPPORT_AND_PORTRAIT.includes(result[15]) ? "For Hope That Lies Ahead" : undefined,
+    supp1portrait: result[11],
+    supp2: members.value.find(m => m.name === result[12])!,
+    supp2supp: members.value.find(m => m.name === result[13]),
+    supp2portrait: result[14],
+    supp3: members.value.find(m => m.name === result[15])!,
+    supp3supp: members.value.find(m => m.name === result[16]),
+    supp3portrait: result[17],
+    supp4: members.value.find(m => m.name === result[18])!,
+    supp4supp: members.value.find(m => m.name === result[19]),
+    supp4portrait: result[20],
 })
 
 const populateStatusTeam = (result: any[]) => ({

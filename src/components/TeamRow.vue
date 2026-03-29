@@ -80,7 +80,7 @@ const router = useRouter()
 function saveToStore(idx: number) {
     const { team, weakElements, offElementBuffMultReduction, offElementDebuffMultReduction } = props
     const offElements = weakElements!.filter(w => w.enabled).map(w => w.name)
-    teamStore.setMain(0, { ...team.supp1, crys: ["EX"], portrait: team.supp1portrait })
+    teamStore.setMain(0, { ...team.supp1, crys: ["EX", "Dominant Blow++", "Towering Offense++"], portrait: team.supp1portrait })
     teamStore.setSupport(0, team.supp1supp)
     if (!offElements.includes(team.supp1.element)) {
         teamStore.setCharBuffReduction(0, offElementBuffMultReduction)
@@ -90,7 +90,7 @@ function saveToStore(idx: number) {
         teamStore.setCharDebuffReduction(0, undefined)
     }
 
-    teamStore.setMain(1, { ...team.supp2, crys: ["EX"], portrait: team.supp2portrait })
+    teamStore.setMain(1, { ...team.supp2, crys: ["EX", "Dominant Blow++", "Towering Offense++"], portrait: team.supp2portrait })
     teamStore.setSupport(1, team.supp2supp)
     if (!offElements.includes(team.supp2.element)) {
         teamStore.setCharBuffReduction(1, offElementBuffMultReduction)
@@ -108,7 +108,7 @@ function saveToStore(idx: number) {
     })
     teamStore.setSupport(2, team.atk_supp)
 
-    teamStore.setMain(3, { ...team.supp3, crys: ["EX"], portrait: team.supp3portrait})
+    teamStore.setMain(3, { ...team.supp3, crys: ["EX", "Dominant Blow++", "Towering Offense++"], portrait: team.supp3portrait})
     teamStore.setSupport(3, team.supp3supp)
     if (!offElements.includes(team.supp3.element)) {
         teamStore.setCharBuffReduction(3, offElementBuffMultReduction)
@@ -118,7 +118,7 @@ function saveToStore(idx: number) {
         teamStore.setCharDebuffReduction(3, undefined)
     }
 
-    teamStore.setMain(4, { ...team.supp4, crys: ["EX"], portrait: team.supp4portrait })
+    teamStore.setMain(4, { ...team.supp4, crys: ["EX", "Dominant Blow++", "Towering Offense++"], portrait: team.supp4portrait })
     teamStore.setSupport(4, team.supp4supp)
     if (!offElements.includes(team.supp4.element)) {
         teamStore.setCharBuffReduction(4, offElementBuffMultReduction)

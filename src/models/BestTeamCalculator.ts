@@ -1,7 +1,7 @@
 import { Heap } from "heap-js";
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { ScoreAttackTeam } from "./ScoreAttackTeam";
-import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises, KiokuConstants, HAS_FALLBACK_SUPPORT_AND_PORTRAIT } from "../types/KiokuTypes";
+import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises, KiokuConstants } from "../types/KiokuTypes";
 import { ScoreAttackKioku } from "./ScoreAttackKioku";
 
 const cache = new Map<string, ScoreAttackKioku>();
@@ -188,6 +188,8 @@ export async function findBestTeam({
         }, 0);
 
     for (const attacker of availableChars[KiokuRole.Attacker]) {
+        const kiokuWhoShouldHavePortrait = new Set<string>([])
+        const hasDotPop = fetchKioku({ ...attacker }).effects.some(e => e.abilityEffectType === "IMM_SLIP_DMG")
         perAttackerResults[attacker.name] = new Heap(customPriorityComparator)
         perAttackerResults[attacker.name].limit = LIMIT
         const availablePortraits = portraitsBestOnly(attacker.element)
@@ -257,16 +259,16 @@ export async function findBestTeam({
                                                         supportKey: attackerSupportKey,
                                                     })!,
                                                     totalSupports.map((s, i) => {
-                                                        let supportKey = supportSupport[i]
-                                                        if (!supportSupport[i] && HAS_FALLBACK_SUPPORT_AND_PORTRAIT.includes(s.name)) {
-                                                            supportKey = highestAtkSupportKey
-                                                        }
-                                                        return fetchKioku({
+                                                        const k = fetchKioku({
                                                             ...s,
-                                                            portrait: "For Hope That Lies Ahead",
-                                                            crys: optimalSubCrys ? ["EX"] : s.crys,
-                                                            supportKey,
+                                                            portrait: "Farewell to a Future Unseen",
+                                                            crys: optimalSubCrys ? ["EX", "Dominant Blow++", "Towering Offense++"] : s.crys,
+                                                            supportKey: supportSupport[i] ?? highestAtkSupportKey,
                                                         })
+                                                        if (k.shouldUseSupportAndPortraitReason === 1 || (hasDotPop && k.shouldUseSupportAndPortraitReason === 2)) {
+                                                            kiokuWhoShouldHavePortrait.add(s.name)
+                                                        }
+                                                        return k!
                                                     }),
                                                     attackerHealth,
                                                     activeAliments
@@ -282,11 +284,14 @@ export async function findBestTeam({
                                                     attackerPortrait,
                                                     attackerSupportKey?.[0],
                                                     ...attackerCrys,
-                                                    ...totalSupports.flatMap((s, i) => [s.name,
-                                                    supportSupport[i]?.[0] ?? (
-                                                        HAS_FALLBACK_SUPPORT_AND_PORTRAIT.includes(s.name)
-                                                            ? highestAtkSupportKey?.[0]
-                                                            : undefined)]),
+                                                    ...totalSupports.flatMap((s, i) => [
+                                                        s.name,
+                                                        supportSupport[i]?.[0] ?? (
+                                                            kiokuWhoShouldHavePortrait.has(s.name)
+                                                                ? highestAtkSupportKey?.[0]
+                                                                : undefined),
+                                                        kiokuWhoShouldHavePortrait.has(s.name) ? "Farewell to a Future Unseen" : undefined
+                                                    ]),
                                                 ]
                                                 if (perAttackerResults[attacker.name].size() < LIMIT)
                                                     perAttackerResults[attacker.name].push(entry)

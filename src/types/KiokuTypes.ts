@@ -57,8 +57,6 @@ export const elementMap: Record<string, KiokuElement> = {
     6: KiokuElement.Void,
 };
 
-export const HAS_FALLBACK_SUPPORT_AND_PORTRAIT = ["Pluvia☆Neujahr", "Luce della Speranza"]
-
 const portraitPriority = (elem?: KiokuElement): string[] => [
     "A Dream of a Little Mermaid",
     "The Savior's Apostle",

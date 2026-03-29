@@ -1,10 +1,11 @@
-import { ActiveSkill, KiokuArgs, KiokuData, SkillDetail, skillDetailId, SkillKey } from '../types/KiokuTypes';
+import { ActiveSkill, Aliment, KiokuArgs, KiokuData, SkillDetail, skillDetailId, SkillKey } from '../types/KiokuTypes';
 import { passiveDetails, skillDetails } from '../utils/helpers';
 import { Kioku } from './Kioku';
 
 
 export class ScoreAttackKioku extends Kioku {
     effects: SkillDetail[];
+    shouldUseSupportAndPortraitReason = 0;
     private scalableEffects: Record<string, SkillDetail> = {};
     private unscalableEffects: Record<string, SkillDetail> = {};
     private buffMult = 1;
@@ -74,6 +75,15 @@ export class ScoreAttackKioku extends Kioku {
             }
             return { ...e, value1: v, turn: e.turn + this.debuffTurnBonus }
         }));
+        this.effects.forEach(e => {
+            const dotType = e.abilityEffectType.replace("_ATK", "");
+
+            if (e.abilityEffectType === "ADDITIONAL_DAMAGE") {
+                this.shouldUseSupportAndPortraitReason = 1;
+            } else if (Object.values(Aliment).includes(dotType as Aliment)) {
+                this.shouldUseSupportAndPortraitReason = 2;
+            }
+        });
     }
 
     addEffect(map: Record<any, SkillDetail>, key: SkillKey, id: number, lvl: number, affectedByMult: boolean, retainDupes = false) {
