@@ -11,7 +11,6 @@ const targetTypeAtPosition = [
     EnemyTargetTypes.R_OTHER,
 ];
 
-// Position index of the DPS in the ally array
 const DPS_IDX = 2;
 
 const knownBoosts = {
@@ -42,8 +41,6 @@ const knownBoosts = {
     WEAKNESS: "Def%3",
 };
 
-// Buff effect types that apply to allies (as opposed to debuffs on enemies).
-// Anything NOT in this set is treated as a debuff and goes into the global debuff pool.
 const buffEffectTypes = new Set([
     "ADDITIONAL_DAMAGE",
     "UP_ATK_ACCUM_RATIO",
@@ -142,7 +139,7 @@ const skippable = new Set([
     "UP_SPD_FIXED",
     "UP_SPD_RATIO",
     "ZONE_STACK",
-    "VORTEX_ATK", // TODO: Make vortex work
+    "VORTEX_ATK",
 ]);
 
 const bannedEffects: Set<number> = new Set([
@@ -155,27 +152,37 @@ function prettyNumber(n: number) {
     return Number(rounded.toString());
 }
 
-function buffAppliesToAlly(range: number, selfIdx: number, allyIdx: number): boolean {
-    if (range == -1) return selfIdx === allyIdx;
+function buffAppliesToAlly(range: number, sourceIdx: number, targetIdx: number): boolean {
+    if (range === -1) return sourceIdx === targetIdx;
     if (range >= 2) return true;
-    return allyIdx === DPS_IDX;
+    return targetIdx === DPS_IDX;
 }
 
 type EffectPool = Record<string, number>;
 type ExtraEffectPool = Record<string, [Function, number][]>;
-
+type DebugContributions = Record<string, [SkillDetail, number][]>;
 
 interface AllyContext {
     kioku: ScoreAttackKioku;
     isDps: boolean;
     effects: EffectPool;
     extraEffects: ExtraEffectPool;
-    debugContributions: Record<string, [SkillDetail, number][]>;
+    debugContributionsToDps: DebugContributions;
+    debugContributionsToSelf: DebugContributions;
+}
+
+export interface DebugSections {
+    calc: string;
+    enemy: string;
+    kiokuStats: string;
+    kiokuReceived: string;
+    kiokuContributed: string;
 }
 
 export class ScoreAttackTeam {
     private team: ScoreAttackKioku[];
     private dps: ScoreAttackKioku;
+
     private allyContexts: AllyContext[] = [];
     private debuffPool: EffectPool = {};
     private extraDebuffPool: ExtraEffectPool = {};
@@ -228,28 +235,28 @@ export class ScoreAttackTeam {
         this.debuffPool["WEAKNESS"] = 0;
 
         for (let idx = 0; idx < 5; idx++) {
-            const kioku = alliesOrdered[idx];
-
             this.allyContexts.push({
-                kioku,
+                kioku: alliesOrdered[idx],
                 isDps: idx === DPS_IDX,
                 effects: {},
                 extraEffects: {},
-                debugContributions: {},
-            } as AllyContext);
+                debugContributionsToDps: {},
+                debugContributionsToSelf: {},
+            });
         }
-        for (let idx = 0; idx < 5; idx++) {
-            const kioku = alliesOrdered[idx];
-            for (const detail of kioku.effects) {
+
+        for (let sourceIdx = 0; sourceIdx < 5; sourceIdx++) {
+            const sourceKioku = alliesOrdered[sourceIdx];
+            const sourceCtx = this.allyContexts[sourceIdx];
+
+            for (const detail of sourceKioku.effects) {
                 if (skippable.has(detail.abilityEffectType)) continue;
                 if (bannedEffects.has(skillDetailId(detail))) continue;
-
                 if (detail.element && elementMap[detail.element] !== this.dps.data.element) continue;
-
                 if (
                     detail.startConditionSetIdCsv
                         .split(",")
-                        .some(id => !isStartCondRelevantForScoreAttack(id, kioku.maxMagicStacks))
+                        .some(id => !isStartCondRelevantForScoreAttack(id, sourceKioku.maxMagicStacks))
                 ) continue;
 
                 let valueTotal = detail.value1;
@@ -258,15 +265,25 @@ export class ScoreAttackTeam {
                 const isBuff = buffEffectTypes.has(detail.abilityEffectType);
 
                 if (isBuff) {
-                    for (let allyIdx = 0; allyIdx < 5; allyIdx++) {
-                        if (!buffAppliesToAlly(detail.range, idx, allyIdx)) continue;
+                    for (let targetIdx = 0; targetIdx < 5; targetIdx++) {
+                        if (!buffAppliesToAlly(detail.range, sourceIdx, targetIdx)) continue;
 
-                        const ctx = this.allyContexts[allyIdx];
-                        this.distributeEffect(detail, valueTotal, ctx.effects, ctx.extraEffects);
+                        const targetCtx = this.allyContexts[targetIdx];
 
-                        if (!(detail.abilityEffectType in ctx.debugContributions)) {
-                            ctx.debugContributions[detail.abilityEffectType] = [];
-                        }
+                        // For DPS contributions: attribute to the source ally
+                        const dbgToDps = targetIdx === DPS_IDX
+                            ? sourceCtx.debugContributionsToDps
+                            : undefined;
+
+                        // For "received" contributions: attribute to the target ally
+                        const dbgToSelf = targetCtx.debugContributionsToSelf;
+
+                        this.distributeEffect(
+                            detail, valueTotal,
+                            targetCtx.effects, targetCtx.extraEffects,
+                            dbgToDps,
+                            dbgToSelf,
+                        );
                     }
                 } else {
                     this.distributeEffect(detail, valueTotal, this.debuffPool, this.extraDebuffPool);
@@ -277,16 +294,12 @@ export class ScoreAttackTeam {
         if (this.debug) {
             console.log(
                 "Debuff pool",
-                Object.fromEntries(
-                    Object.entries(this.debuffPool).filter(([key]) => key in knownBoosts),
-                ),
+                Object.fromEntries(Object.entries(this.debuffPool).filter(([key]) => key in knownBoosts)),
             );
             for (let i = 0; i < 5; i++) {
                 console.log(
                     `Ally[${i}] buff pool`,
-                    Object.fromEntries(
-                        Object.entries(this.allyContexts[i].effects).filter(([key]) => key in knownBoosts),
-                    ),
+                    Object.fromEntries(Object.entries(this.allyContexts[i].effects).filter(([key]) => key in knownBoosts)),
                 );
             }
         }
@@ -308,6 +321,8 @@ export class ScoreAttackTeam {
         valueTotal: number,
         pool: EffectPool,
         extraPool: ExtraEffectPool,
+        debugContributionsToDps?: DebugContributions,
+        debugContributionsToSelf?: DebugContributions,
     ) {
         detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
             const isActiveCond = isActiveConditionRelevantForScoreAttack(
@@ -319,6 +334,12 @@ export class ScoreAttackTeam {
             if (typeof isActiveCond === "boolean") {
                 if (!isActiveCond) return;
                 this.accumulateIntoPool(detail.abilityEffectType, valueTotal, pool);
+
+                for (const dbg of [debugContributionsToDps, debugContributionsToSelf]) {
+                    if (!dbg) continue;
+                    if (!(detail.abilityEffectType in dbg)) dbg[detail.abilityEffectType] = [];
+                    dbg[detail.abilityEffectType].push([detail, valueTotal]);
+                }
             } else {
                 if (!(detail.abilityEffectType in extraPool)) {
                     extraPool[detail.abilityEffectType] = [];
@@ -430,7 +451,6 @@ export class ScoreAttackTeam {
                     active_done = true;
                 }
 
-                // Use the ally's own total atk via their buff pool
                 const allyTotalAtk = this.resolveAllyAtk(allyIdx, false, amountOfEnemies, maxBreak);
                 base_dmg += this.calc_base_dmg(eff.turn * eff.value1 / 1000, allyTotalAtk);
             }
@@ -503,18 +523,15 @@ export class ScoreAttackTeam {
         return this.team[idx - 1];
     };
 
-    calculate_max_dmg(
-        enemies: Enemy[],
-        atk_down = 0,
-    ): [number, number, number, string[]] {
+    calculate_max_dmg(enemies: Enemy[], atk_down = 0): [number, number, number, DebugSections[]] {
         let dmg: number, avg_dmg: number, enemyDied: boolean;
         let total_dmg = 0;
         let average_dmg = 0;
         let critRate = 0;
-        let debugText = "";
+        let debugSections: DebugSections = { calc: "", enemy: "", kiokuStats: "", kiokuReceived: "", kiokuContributed: "" };
         let initAmountOfEnemies = enemies.filter(e => e.enabled).length;
         let currentAmountOfEnemies = initAmountOfEnemies;
-        const debugTexts = ["", "", "", "", ""];
+        const allDebugSections: DebugSections[] = Array(5).fill(null).map(() => ({ calc: "", enemy: "", kiokuStats: "", kiokuReceived: "", kiokuContributed: "" }));
 
         for (const i of [
             EnemyTargetTypes.TARGET,
@@ -523,21 +540,40 @@ export class ScoreAttackTeam {
             EnemyTargetTypes.L_OTHER,
             EnemyTargetTypes.R_OTHER,
         ]) {
-            [dmg, avg_dmg, critRate, debugText, enemyDied] = this.calculate_single_dmg(
-                i,
-                this.memberForLog(i),
-                enemies[i],
-                initAmountOfEnemies,
-                currentAmountOfEnemies,
-                atk_down,
+            [dmg, avg_dmg, critRate, debugSections, enemyDied] = this.calculate_single_dmg(
+                i, this.memberForLog(i), enemies[i],
+                initAmountOfEnemies, currentAmountOfEnemies, atk_down,
             );
             total_dmg += dmg;
             average_dmg += avg_dmg;
             if (enemies[i].enabled && enemyDied) currentAmountOfEnemies -= 1;
-            debugTexts[i] = debugText;
+            allDebugSections[i] = debugSections;
         }
 
-        return [total_dmg, average_dmg, Math.round(critRate * 100), debugTexts];
+        return [total_dmg, average_dmg, Math.round(critRate * 100), allDebugSections];
+    }
+
+    private formatContributions(contribs: DebugContributions): string {
+        const keys = Object.keys(contribs).sort();
+        if (keys.length === 0) return "(none)";
+        return keys.map(key =>
+            `  ${key}\n   ${contribs[key]
+                .sort((a, b) => a[1] - b[1])
+                .map(([d, n]) => {
+                    let st = "";
+                    if (d.activeConditionSetIdCsv.length) st += "A" + d.activeConditionSetIdCsv;
+                    if (d.startConditionSetIdCsv.length) {
+                        if (st.length) st += " & ";
+                        st += "S" + d.startConditionSetIdCsv;
+                    }
+                    let outString = `${prettyNumber(n / 10)} (${skillDetailId(d)})`;
+                    if (st.length) outString += " => " + st;
+                    const desc = d.description.match(/.{1,20}/g)?.join("\n     ");
+                    outString += `${desc ? `\n    ${desc}` : ""}`;
+                    return outString;
+                })
+                .join("\n   ")}`
+        ).join("\n");
     }
 
     calculate_single_dmg(
@@ -547,16 +583,13 @@ export class ScoreAttackTeam {
         initAmountOfEnemies: number,
         currentAmountOfEnemies: number,
         atk_down: number,
-    ): [number, number, number, string, boolean] {
+    ): [number, number, number, DebugSections, boolean] {
         const [special, enemyDied, uses_def] = this.get_special_dmg(
             targetTypeAtPosition[idx],
-            initAmountOfEnemies,
-            currentAmountOfEnemies,
-            enemy.maxBreak,
-            enemy.hitsToKill,
+            initAmountOfEnemies, currentAmountOfEnemies,
+            enemy.maxBreak, enemy.hitsToKill,
         );
 
-        // DPS stats — always from ally index 2
         const base_atk = uses_def ? this.dps.getBaseDef() : this.dps.getBaseAtk();
         const atk_total = this.resolveAllyAtk(DPS_IDX, uses_def, currentAmountOfEnemies, enemy.maxBreak, atk_down);
         const flat_atk = this.getAllyEffect(DPS_IDX, `UP_${uses_def ? "DEF" : "ATK"}_FIXED`, currentAmountOfEnemies, enemy.maxBreak);
@@ -566,7 +599,6 @@ export class ScoreAttackTeam {
                 this.getAllyEffect(DPS_IDX, `UP_${uses_def ? "DEF" : "ATK"}_ACCUM_RATIO`, currentAmountOfEnemies, enemy.maxBreak)) /
             1000;
 
-        // Debuffs — from global debuff pool
         let def_remaining =
             this.getDebuffEffect("DWN_DEF_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak) *
             this.getDebuffEffect("DWN_DEF_RATIO", currentAmountOfEnemies, enemy.maxBreak) *
@@ -574,7 +606,6 @@ export class ScoreAttackTeam {
 
         const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;
 
-        // Crit — from DPS buff pool
         const uncapped_crit_rate =
             (this.dps.baseCritRate +
                 this.getAllyEffect(DPS_IDX, "UP_CTR_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
@@ -590,7 +621,6 @@ export class ScoreAttackTeam {
                 this.getAllyEffect(DPS_IDX, "UP_CTD_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak)) /
             1000;
 
-        // Damage multipliers — buffs from DPS pool, debuffs from global pool
         const dmg_pluss =
             (this.getAllyEffect(DPS_IDX, "UP_GIV_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
                 this.getAllyEffect(DPS_IDX, "UP_ELEMENT_DMG_RATE_RATIO", currentAmountOfEnemies, enemy.maxBreak)) /
@@ -605,9 +635,7 @@ export class ScoreAttackTeam {
             this.getDebuffEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak) / 1000;
 
         let base_dmg = this.calc_base_dmg(special, base_atk);
-        if (special > 0) {
-            base_dmg += this.add_additional_dmg();
-        }
+        if (special > 0) base_dmg += this.add_additional_dmg();
 
         const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
         const crit_factor = 1 + (enemy.isCrit ? crit_dmg : 0);
@@ -638,10 +666,53 @@ export class ScoreAttackTeam {
         const total = pre_dot_total + dot_total_dmg;
         const average_total = pre_dot_average + dot_total_dmg;
 
-        let debugText = "";
+        let sections: DebugSections = { calc: "", enemy: "", kiokuStats: "", kiokuReceived: "", kiokuContributed: "" };
+
         if (this.debug) {
-            const ctx = this.allyContexts[idx];
-            const lines = kiokuAtPosition
+            const posCtx = this.allyContexts[idx];
+
+            sections.calc = `DMG CALC MULTIPLIERS:
+Ability Mult - ${special * 100 | 0}%
+Base ${uses_def ? "Def" : "Atk"}     - ${(base_atk | 0).toLocaleString()}
+${uses_def ? "Def" : "Atk"} Up %     - ${atk_pluss * 100 | 0}%
+${uses_def ? "Def" : "Atk"} Up flat  - ${flat_atk | 0}
+Total ${uses_def ? "Def" : "Atk"}    - ${(atk_total | 0).toLocaleString()}
+Def down%    - ${(1 - def_remaining) * 100 | 0}%
+Total def    - ${(def_total | 0).toLocaleString()}
+Crit rate    - ${uncapped_crit_rate * 100 | 0}%
+Crit dmg     - ${crit_dmg * 100 | 0}%
+Dmg Dealt    - ${dmg_pluss * 100 | 0}%
+Elem dmg up  - ${elem_dmg_up * 100 | 0}%
+Dmg Taken    - ${dmg_taken * 100 | 0}%
+Elem Res     - ${elem_res_down * 100 | 0}%
+atk down     - ${atk_down * 100 | 0}%
+
+Ability dmg  - ${(base_dmg | 0).toLocaleString()}
+Def Factor   - ${def_factor * 100 | 0}%
+Crit Factor  - ${crit_factor * 100 | 0}%
+Dmg Dlt Fact - ${dmg_dealt_factor * 100 | 0}%
+Dmg Tkn Fact - ${dmg_taken_factor * 100 | 0}%
+Elem ResFact - ${elem_resist_factor * 100 | 0}%
+EffElem Fact - ${effect_elem_factor * 100 | 0}%
+Break Factor - ${break_factor * 100 | 0}%
+Dot          - ${(dot_total_dmg | 0).toLocaleString()}
+Pre-dot-total- ${(pre_dot_total | 0).toLocaleString()}
+Pre-dot-avrg - ${(pre_dot_average | 0).toLocaleString()}
+Result       - ${(total | 0).toLocaleString()}
+AverageDmg   - ${(average_total | 0).toLocaleString()}`;
+
+            sections.enemy = `ENEMY STATS:
+enemiesAlive - ${currentAmountOfEnemies}
+base_def     - ${enemy.defense.toLocaleString()}
+break        - ${enemy.maxBreak}%
+def_up       - ${enemy.defenseUp}%
+is_break     - ${enemy.isBreak}
+is_elemt_weak- ${enemy.isWeak}
+does_crit    - ${enemy.isCrit}
+enabled      - ${enemy.enabled}
+enemy died   - ${enemyDied}`;
+
+            const statLines = kiokuAtPosition
                 ? Object.keys(kiokuAtPosition)
                     .sort()
                     .sort((a, b) => {
@@ -658,20 +729,10 @@ export class ScoreAttackTeam {
                     .map(key => {
                         let val = (kiokuAtPosition as any)[key];
                         if (key.startsWith("base") || key.endsWith("Def") || key.endsWith("Hp")) return;
-                        if (
-                            ["effects", "ascension", "crys", "data", "inputCrys", "inputCrysSub", "name", "scalableEffects", "unscalableEffects"].includes(key)
-                        ) return;
-                        if (key === "portrait") {
-                            val = val?.["stats"]?.["atk"];
-                            key = "PortraitAtk";
-                        }
-                        if (key === "support") {
-                            val = val?.getBaseAtk() * 0.16;
-                            key = "SupportAtk";
-                        }
-                        if (key === "supportLvl") {
-                            val = (kiokuAtPosition as any)["support"]?.supportLvl ?? "N/A";
-                        }
+                        if (["effects", "ascension", "crys", "data", "inputCrys", "inputCrysSub", "name", "scalableEffects", "unscalableEffects"].includes(key)) return;
+                        if (key === "portrait") { val = val?.["stats"]?.["atk"]; key = "PortraitAtk"; }
+                        if (key === "support") { val = val?.getBaseAtk() * 0.16; key = "SupportAtk"; }
+                        if (key === "supportLvl") { val = (kiokuAtPosition as any)["support"]?.supportLvl ?? "N/A"; }
                         if (key.endsWith("Atk")) val |= 0;
                         val = prettyNumber(val).toString();
                         if (key === "SupportAtk" || key === "supportLvl") val = val + "\n";
@@ -679,82 +740,16 @@ export class ScoreAttackTeam {
                     })
                     .filter(Boolean)
                 : [];
+            sections.kiokuStats = `KIOKU STATS: ${kiokuAtPosition?.name ?? ""}
+${statLines.join("\n")}`;
 
-            const effects = ctx
-                ? Object.keys(ctx.debugContributions)
-                    .sort()
-                    .map(key =>
-                        `${key} \n ${ctx.debugContributions[key]
-                            .sort((a, b) => a[1] - b[1])
-                            .map(([d, n]) => {
-                                let st = "";
-                                if (d.activeConditionSetIdCsv.length) st += "A" + d.activeConditionSetIdCsv;
-                                if (d.startConditionSetIdCsv.length) {
-                                    if (st.length) st += " & ";
-                                    st += "S" + d.startConditionSetIdCsv;
-                                }
-                                let outString = `${prettyNumber(n / 10)} (${skillDetailId(d)})`;
-                                if (st.length) outString += " => " + st;
-                                const desc = d.description.match(/.{1,20}/g)?.join("\n   ");
-                                outString += `${desc ? `\n  ${desc}` : ""}`;
-                                return outString;
-                            })
-                            .join("\n ")}`
-                    )
-                    .filter(Boolean)
-                : [];
+            sections.kiokuReceived = `BUFFS RECEIVED BY ${posCtx.kioku.name}:
+${this.formatContributions(posCtx.debugContributionsToSelf)}`;
 
-            debugText = `
-DMG CALC MULTIPLIERS:
-DPS stats:
-Ability Mult - ${special * 100 | 0}%
-Base ${uses_def ? "Def" : "Atk"}     - ${((idx === DPS_IDX ? base_atk : kiokuAtPosition.getBaseAtk()) | 0).toLocaleString()}
-${uses_def ? "Def" : "Atk"} Up %     - ${atk_pluss * 100 | 0}%
-${uses_def ? "Def" : "Atk"} Up flat  - ${flat_atk | 0}
-Total ${uses_def ? "Def" : "Atk"}    - ${(atk_total | 0).toLocaleString()}
-Def down%    - ${(1 - def_remaining) * 100 | 0}%
-Total def    - ${(def_total | 0).toLocaleString()}
-Crit rate    - ${uncapped_crit_rate * 100 | 0}%
-Crit dmg     - ${crit_dmg * 100 | 0}%
-Dmg Dealt    - ${dmg_pluss * 100 | 0}%
-Elem dmg up  - ${elem_dmg_up * 100 | 0}%
-Dmg Taken    - ${dmg_taken * 100 | 0}%
-Elem Res     - ${elem_res_down * 100 | 0}%
-atk down     - ${atk_down * 100 | 0}%
-
-FORMULA:
-Ability dmg  - ${(base_dmg | 0).toLocaleString()}
-Def Factor   - ${def_factor * 100 | 0}%
-Crit Factor  - ${crit_factor * 100 | 0}%
-Dmg Dlt Fact - ${dmg_dealt_factor * 100 | 0}%
-Dmg Tkn Fact - ${dmg_taken_factor * 100 | 0}%
-Elem ResFact - ${elem_resist_factor * 100 | 0}%
-EffElem Fact - ${effect_elem_factor * 100 | 0}%
-Break Factor - ${break_factor * 100 | 0}%
-Dot          - ${(dot_total_dmg | 0).toLocaleString()}
-Pre-dot-total- ${(pre_dot_total | 0).toLocaleString()}
-Pre-dot-avrg - ${(pre_dot_average | 0).toLocaleString()}
-Result       - ${(total | 0).toLocaleString()}
-AverageDmg   - ${(average_total | 0).toLocaleString()}
-
-ENEMY STATS:
-enemiesAlive - ${currentAmountOfEnemies}    
-base_def     - ${enemy.defense.toLocaleString()}    
-break        - ${enemy.maxBreak}% 
-def_up       - ${enemy.defenseUp}%  
-is_break     - ${enemy.isBreak}    
-is_elemt_weak- ${enemy.isWeak}         
-does_crit    - ${enemy.isCrit}         
-enabled      - ${enemy.enabled}
-enemy died   - ${enemyDied}
-
-KIOKU STATS:
-${lines.join("\n")}
-
-KIOKU EFFECTS:
-${effects.join("\n")}`;
+            sections.kiokuContributed = `CONTRIBUTED TO DPS BY ${posCtx.kioku.name}:
+${this.formatContributions(posCtx.debugContributionsToDps)}`;
         }
 
-        return [total | 0, average_total | 0, crit_rate, debugText, enemyDied];
+        return [total | 0, average_total | 0, crit_rate, sections, enemyDied];
     }
 }

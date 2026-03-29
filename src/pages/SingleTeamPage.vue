@@ -53,8 +53,21 @@
   <div class="team-page">
     <h1>Debug info</h1>
     <div class="team-grid">
-      <div v-for="(enemy, index) in enemies.enemies" :key="index" class="team-slot">
-        <pre style="text-align: left; padding: 0 1rem;">{{ formatDebug(battleOutput, index) }}</pre>
+      <div v-for="(enemy, index) in enemies.enemies" :key="index" class="team-slot debug-slot">
+        <h3 class="debug-slot-title">{{ debugSlotTitle(index) }}</h3>
+
+        <template v-if="Array.isArray(battleOutput)">
+          <template v-for="(key) in debugSectionOrder" :key="key">
+            <div v-if="visibleDebugSections[key]" class="debug-section">
+              <div class="debug-section-header" @click="toggleSlotSection(index, key)">
+                {{ debugSectionLabels[key] }}
+                <span class="debug-toggle-icon">{{ collapsedSlotSections[index]?.[key] ? '▸' : '▾' }}</span>
+              </div>
+              <pre v-if="!collapsedSlotSections[index]?.[key]" class="debug-pre">{{ battleOutput[3][index][key] }}</pre>
+            </div>
+          </template>
+        </template>
+        <pre v-else class="debug-pre">{{ battleOutput }}</pre>
       </div>
     </div>
   </div>
@@ -63,7 +76,7 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
-import { ScoreAttackTeam } from '../models/ScoreAttackTeam'
+import { ScoreAttackTeam, type DebugSections } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
 import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
@@ -93,9 +106,40 @@ function onChangeSubCrys(charIdx: number, crysIdx: number, rawValue: string) {
   team.setMain(charIdx, { ...main, crys_sub: current } as any)
 }
 
-const formatDmg = (out: string | [number, number, number, string[]]) => typeof (out) !== 'string' ? `Max Damage: ${out[0].toLocaleString()} with a ${out[2]}% crit rate - (Average Damage: ${out[1].toLocaleString()}) ` : battleOutput
-const formatDebug = (out: string | [number, number, number, string[]], idx: number) => Array.isArray(out) ? out[3][idx] : battleOutput
+const formatDmg = (out: string | [number, number, number, any[]]) =>
+  typeof out !== 'string'
+    ? `Max Damage: ${out[0].toLocaleString()} with a ${out[2]}% crit rate - (Average Damage: ${out[1].toLocaleString()})`
+    : out
 
+type SectionKey = keyof DebugSections
+const debugSectionOrder: SectionKey[] = ['calc', 'enemy', 'kiokuStats', 'kiokuReceived', 'kiokuContributed']
+const debugSectionLabels: Record<SectionKey, string> = {
+  calc: 'DMG Calculation',
+  enemy: 'Enemy Stats',
+  kiokuStats: 'Kioku Stats',
+  kiokuReceived: 'Buffs Received',
+  kiokuContributed: 'Contributed to DPS',
+}
+
+const visibleDebugSections = reactive<Record<SectionKey, boolean>>({
+  calc: true,
+  enemy: true,
+  kiokuStats: true,
+  kiokuReceived: true,
+  kiokuContributed: true,
+})
+
+const collapsedSlotSections = reactive<Record<number, Partial<Record<SectionKey, boolean>>>>({})
+
+function toggleSlotSection(slotIdx: number, key: SectionKey) {
+  if (!collapsedSlotSections[slotIdx]) collapsedSlotSections[slotIdx] = {}
+  collapsedSlotSections[slotIdx][key] = !collapsedSlotSections[slotIdx][key]
+}
+
+const debugSlotTitle = (idx: number) => {
+  const labels = ['L Other', 'L Proximity', 'Target', 'R Proximity', 'R Other']
+  return labels[idx] ?? `Slot ${idx}`
+}
 
 const team = useTeamStore()
 const enemies = useEnemyStore()
@@ -106,12 +150,8 @@ const teamInstance = computed(() => {
   try {
     const transformedMembers = team.slots.map(m => {
       const support = m.support ? new ScoreAttackKioku({ ...m.support }) : null
-
       return new ScoreAttackKioku(
-        {
-          ...m.main,
-          supportKey: support?.getKey()
-        } as KiokuArgs,
+        { ...m.main, supportKey: support?.getKey() } as KiokuArgs,
         (m.buffMultReduction || buffMultReduction.value) ?? 0,
         (m.debuffMultReduction || debuffMultReduction.value) ?? 0,
       )
@@ -213,5 +253,52 @@ const aliments = reactive([
 
 .aliment.disabled {
   opacity: 0.3;
+}
+
+.debug-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.debug-slot-title {
+  margin: 0.5rem 0 0.25rem;
+  padding: 0 1rem;
+  font-size: 1rem;
+}
+
+.debug-section {
+  border: 1px solid #1a1a1a;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.debug-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0.75rem;
+  background: #1a1a1a;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  user-select: none;
+}
+
+.debug-section-header:hover {
+  background: #646cff;
+}
+
+.debug-toggle-icon {
+  font-size: 0.75rem;
+}
+
+.debug-pre {
+  text-align: left;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  font-size: 0.78rem;
+  overflow-x: visible;
+  white-space: pre;
 }
 </style>
