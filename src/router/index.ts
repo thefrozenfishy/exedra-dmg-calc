@@ -9,6 +9,7 @@ import Pvp101Page from '../pages/Pvp101Page.vue'
 import LinkRaid from '../pages/LinkRaid.vue'
 import GachaRatePage from '../pages/GachaRatePage.vue'
 import TierLists from '../pages/TierLists.vue'
+import KiokuGridPage from '../pages/KiokuGridPage.vue'
 
 const routes = [
     { path: '/team-setup', name: 'Kioku Setup', component: TeamSetupPage },
@@ -16,6 +17,7 @@ const routes = [
     { path: '/sa-simulator-single', name: 'Single Battle Calculator', component: SingleTeamPage },
     { path: '/pvp-simulator', name: 'PvP Calculator', component: PvpTeamPage },
     { path: '/pvp-how-to', name: 'PvP 101', component: Pvp101Page },
+    { path: '/kioku-grid', name: 'Kioku Grid', component: KiokuGridPage },
     { path: '/link-raid', name: 'Link Raid Tool', component: LinkRaid },
     { path: '/tier-lists', name: 'Tier Lists', component: TierLists },
     { path: '/about', name: 'About', component: About },

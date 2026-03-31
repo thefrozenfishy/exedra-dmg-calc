@@ -244,7 +244,8 @@ export class ScoreAttackTeam {
 
                 const isDebuff = detail.abilityEffectType.startsWith("DWN_")
                     || detail.abilityEffectType.startsWith("DOWN_")
-                    || detail.abilityEffectType.replace("AIM_", "") === "UP_RCV_DMG_RATIO";
+                    || detail.abilityEffectType.replace("AIM_", "") === "UP_RCV_DMG_RATIO"
+                    || detail.abilityEffectType === "WEAKNESS";
 
                 if (isDebuff) {
                     this.distributeEffect(

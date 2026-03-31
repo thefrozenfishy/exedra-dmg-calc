@@ -13,6 +13,7 @@ export default defineComponent({
       <nav>
         <router-link to="/team-setup">Kioku Setup</router-link>
         <router-link to="/my-kioku">My Kioku Viewer</router-link>
+        <router-link to="/kioku-grid">Kioku Grid</router-link>
         <router-link to="/gacha-rate">Gacha Rate+Sim</router-link>
         <router-link to="/sa-simulator-multiple">Best SA Team Calculator</router-link>
         <router-link to="/sa-simulator-single">Single Battle Calculator</router-link>
