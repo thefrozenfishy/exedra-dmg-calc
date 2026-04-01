@@ -192,7 +192,7 @@ export async function findBestTeam({
         const hasDotPop = fetchKioku({ ...attacker }).effects.some(e => e.abilityEffectType === "IMM_SLIP_DMG")
         perAttackerResults[attacker.name] = new Heap(customPriorityComparator)
         perAttackerResults[attacker.name].limit = LIMIT
-        const availablePortraits = portraitsBestOnly(attacker.element)
+        const availablePortraits = portraitsBestOnly(attacker.element, optimizeAverageDamage)
         const availableSupportKeys: any[][] = Array.from([highestAtkSupportKey, ...possibleAtkSupportKeys[attacker.element], ...possibleAtkSupportKeys[attacker.role]].filter(s => s?.[0] !== attacker.name).reduce((map, item) => {
             if (item && !map.has(item[0])) {
                 map.set(item[0], item)

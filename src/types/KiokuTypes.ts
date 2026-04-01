@@ -93,11 +93,12 @@ export const getPortraits = (elem?: KiokuElement): string[] => {
         .map(p => p.name);
 };
 
-export const portraitsBestOnly = (elem: KiokuElement) => [
+export const portraitsBestOnly = (elem: KiokuElement, optimizeAverageDamage: boolean) => [
     "A Dream of a Little Mermaid",
     "The Savior's Apostle",
     "Faith We'll Meet Again Someday",
     elem === KiokuElement.Dark ? "Because...I'm Not Alone Anymore" : null,
+    optimizeAverageDamage ? "Farewell to a Future Unseen" : null,
 ].filter(Boolean)
 
 const dmgUpPortraits = {
