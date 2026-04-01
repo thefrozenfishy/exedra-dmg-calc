@@ -375,7 +375,7 @@ const downloadAscensionList = async () => {
 }
 
 .character-img-wwrapper {
-    position: fixed;
+    position: inherit;
 }
 
 .char-img {
