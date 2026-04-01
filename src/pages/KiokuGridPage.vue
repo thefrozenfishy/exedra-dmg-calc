@@ -1,13 +1,24 @@
 <template>
     <div>
-        <div>
-            <label> <input type="checkbox" v-model="show5stars" /> Include 5-stars </label>
-            <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
-            <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
-            <label>
-                <input type="checkbox" v-model="showOwnedOnly" />
-                Show Owned Only
-            </label>
+        <div class="options-bar">
+            <div class="options-row">
+                <label> <input type="checkbox" v-model="show5stars" /> Include 5-stars </label>
+                <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
+                <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
+                <label> <input type="checkbox" v-model="showOwnedOnly" /> Show Owned Only </label>
+            </div>
+
+            <div class="options-row" v-if="hiddenElements.length || hiddenRoles.length">
+                <span class="chips-label">Hidden:</span>
+                <button v-for="el in hiddenElements" :key="el" class="chip" @click="toggleElement(el)"
+                    :title="`Show ${el}`">
+                    <img :src="`/exedra-dmg-calc/elements/${el}.png`" :alt="el" />
+                </button>
+                <button v-for="role in hiddenRoles" :key="role" class="chip" @click="toggleRole(role)"
+                    :title="`Show ${role}`">
+                    <img :src="`/exedra-dmg-calc/roles/${role}.png`" :alt="role" />
+                </button>
+            </div>
         </div>
 
         <div class="grid-scroll">
@@ -15,20 +26,20 @@
                 <thead>
                     <tr>
                         <th class="corner-cell"></th>
-                        <th v-for="element in Object.values(KiokuElement)" :key="element"
-                            class="header-cell element-header">
-                            <img :src="`/exedra-dmg-calc/elements/${element}.png`" :alt="element" :title="element"
-                                class="header-icon" />
+                        <th v-for="element in visibleElements" :key="element" class="header-cell element-header">
+                            <img :src="`/exedra-dmg-calc/elements/${element}.png`" :alt="element"
+                                :title="`Hide ${element}`" class="header-icon header-icon-btn"
+                                @click="toggleElement(element)" />
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="role in Object.values(KiokuRole)" :key="role">
+                    <tr v-for="role in visibleRoles" :key="role">
                         <td class="header-cell role-header">
-                            <img :src="`/exedra-dmg-calc/roles/${role}.png`" :alt="role" :title="role"
-                                class="header-icon" />
+                            <img :src="`/exedra-dmg-calc/roles/${role}.png`" :alt="role" :title="`Hide ${role}`"
+                                class="header-icon header-icon-btn" @click="toggleRole(role)" />
                         </td>
-                        <td v-for="element in Object.values(KiokuElement)" :key="element" class="grid-cell">
+                        <td v-for="element in visibleElements" :key="element" class="grid-cell">
                             <div v-for="r in [5, 4, 3]" :key="r" v-show="shouldShow(r)" class="rarity-band"
                                 :class="`rarity-${r}`" :style="{ '--band-rows': bandRows(element, role, r) }">
                                 <div v-for="ch in getChars(element, role, r)" :key="ch.id" class="char-thumb">
@@ -62,13 +73,39 @@ const shouldShow = (r: number) => {
     return false
 }
 
-const show5stars = useSetting("showGrid5stars", true);
-const show4stars = useSetting("showGrid4stars", false);
-const show3stars = useSetting("showGrid3stars", false);
-const showOwnedOnly = useSetting("showGridOnlyOwned", true);
+const show5stars = useSetting("showGrid5stars", true)
+const show4stars = useSetting("showGrid4stars", false)
+const show3stars = useSetting("showGrid3stars", false)
+const showOwnedOnly = useSetting("showGridOnlyOwned", true)
+
+const hiddenElements = useSetting<KiokuElement[]>("hiddenGridElements", [])
+const hiddenRoles = useSetting<KiokuRole[]>("hiddenGridRoles", [])
+
+const toggleElement = (el: KiokuElement) => {
+    if (hiddenElements.value.includes(el))
+        hiddenElements.value = hiddenElements.value.filter(e => e !== el)
+    else
+        hiddenElements.value = [...hiddenElements.value, el]
+}
+
+const toggleRole = (role: KiokuRole) => {
+    if (hiddenRoles.value.includes(role))
+        hiddenRoles.value = hiddenRoles.value.filter(r => r !== role)
+    else
+        hiddenRoles.value = [...hiddenRoles.value, role]
+}
+
+const visibleElements = computed(() =>
+    Object.values(KiokuElement).filter(el => !hiddenElements.value.includes(el))
+)
+
+const visibleRoles = computed(() =>
+    Object.values(KiokuRole).filter(role => !hiddenRoles.value.includes(role))
+)
 
 const allChars = computed(() =>
-    showOwnedOnly.value ? store.characters.filter(c => c.enabled) : store.characters
+    (showOwnedOnly.value ? store.characters.filter(c => c.enabled) : store.characters)
+        .map(c => ({ ...c, rarity: c.name === "Lux☆Magica" ? 4 : c.rarity }))
 )
 
 const getChars = (element: string, role: string, rarity: number): Character[] =>
@@ -78,9 +115,9 @@ const getChars = (element: string, role: string, rarity: number): Character[] =>
 
 const maxCharsPerRarityPerRole = computed(() => {
     const result: Record<string, Record<number, number>> = {}
-    for (const role of Object.values(KiokuRole)) {
+    for (const role of visibleRoles.value) {
         result[role] = { 3: 0, 4: 0, 5: 0 }
-        for (const element of Object.values(KiokuElement)) {
+        for (const element of visibleElements.value) {
             for (const r of [3, 4, 5]) {
                 const count = getChars(element, role, r).length
                 if (count > result[role][r]) result[role][r] = count
@@ -101,6 +138,7 @@ const borderClass = (ch: Character): string => {
     if (new Date() > new Date(ch.permaDate)) return "default-border"
     return "not-limited-border"
 }
+
 const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
     if (ch.name === "Lux☆Magica") { }
@@ -116,6 +154,59 @@ const makeTitle = (ch: Character): string => {
 </script>
 
 <style scoped>
+.options-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.options-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.chips-label {
+    font-size: 0.78rem;
+    opacity: 0.6;
+}
+
+.chip {
+    display: flex;
+    align-items: center;
+    padding: 2px;
+    background: #2a2a2a;
+    border: 1px solid #555;
+    border-radius: 6px;
+    cursor: pointer;
+    opacity: 0.55;
+    transition: opacity 0.15s, background 0.15s;
+}
+
+.chip:hover {
+    opacity: 1;
+    background: #383838;
+}
+
+.chip img {
+    height: 28px;
+    display: block;
+}
+
+.header-icon-btn {
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.15s;
+}
+
+.header-icon-btn:hover {
+    opacity: 0.5;
+    transform: scale(0.9);
+}
+
 .grid-scroll {
     overflow-x: auto;
 }
