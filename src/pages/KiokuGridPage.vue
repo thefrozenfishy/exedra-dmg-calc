@@ -2,10 +2,21 @@
     <div>
         <div class="options-bar">
             <div class="options-row">
+                <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
+                <button class="copy-btn" @click="downloadAscensionList">Download</button>
+            </div>
+            <div class="options-row">
                 <label> <input type="checkbox" v-model="show5stars" /> Include 5-stars </label>
                 <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
                 <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
                 <label> <input type="checkbox" v-model="showOwnedOnly" /> Show Owned Only </label>
+            </div>
+            <div class="options-row">
+                <label> <input type="checkbox" v-model="showAscensions" /> Show Ascensions </label>
+                <label> <input type="checkbox" v-model="showLevels" /> Show Magic & Special levels </label>
+                <label> <input type="checkbox" v-model="showHearts" /> Show Heartphial levels </label>
+                <label> <input type="checkbox" v-model="colourLevels" :disabled="!(showLevels || showHearts)" /> Colour
+                    max levels </label>
             </div>
 
             <div class="options-row" v-if="hiddenElements.length || hiddenRoles.length">
@@ -43,11 +54,34 @@
                             <div v-for="r in [5, 4, 3]" :key="r" v-show="shouldShow(r)" class="rarity-band"
                                 :class="`rarity-${r}`" :style="{ '--band-rows': bandRows(element, role, r) }">
                                 <div v-for="ch in getChars(element, role, r)" :key="ch.id" class="char-thumb">
-                                    <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
-                                        <img :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`"
-                                            :alt="ch.name" :title="makeTitle(ch)" class="char-img"
-                                            :class="borderClass(ch)" />
-                                    </a>
+                                    <div class="character-img-wrapper">
+                                        <div class="character-img-wwrapper">
+                                            <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
+                                                <img :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`"
+                                                    :alt="ch.name" :title="makeTitle(ch)" class="char-img"
+                                                    :class="borderClass(ch)" />
+                                            </a>
+
+                                            <div class="heart-level-badge level-badge" v-if="showHearts && ch.enabled"
+                                                :class="colourLevels ? (ch.heartphialLvl === KiokuConstants.maxHeartphialLvl ? 'maxLvl' : 'notMaxLvl') : ''">
+                                                {{ ch.heartphialLvl }}
+                                            </div>
+
+                                            <div class="magic-level-badge level-badge" v-if="showLevels && ch.enabled"
+                                                :class="colourLevels ? (ch.magicLvl === KiokuConstants.maxMagicLvl ? 'maxLvl' : 'notMaxLvl') : ''">
+                                                {{ ch.magicLvl }}
+                                            </div>
+
+                                            <div class="special-level-badge level-badge" v-if="showLevels && ch.enabled"
+                                                :class="colourLevels ? (isMaxSpecialLvl(ch) ? 'maxLvl' : 'notMaxLvl') : ''">
+                                                {{ ch.specialLvl }}
+                                            </div>
+
+                                            <div class="ascension-badge level-badge" v-if="showLevels && ch.enabled">
+                                                A{{ ch.ascension }}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </td>
@@ -61,9 +95,10 @@
 <script setup lang="ts">
 import { computed } from "vue"
 import { useCharacterStore } from "../store/characterStore"
-import { Character, KiokuElement, KiokuRole } from "../types/KiokuTypes"
+import { Character, KiokuElement, KiokuRole, KiokuConstants } from "../types/KiokuTypes"
 import { useSetting } from "../store/settingsStore"
-
+import html2canvas from "html2canvas"
+import { toast } from "vue3-toastify"
 const store = useCharacterStore()
 
 const shouldShow = (r: number) => {
@@ -77,6 +112,10 @@ const show5stars = useSetting("showGrid5stars", true)
 const show4stars = useSetting("showGrid4stars", false)
 const show3stars = useSetting("showGrid3stars", false)
 const showOwnedOnly = useSetting("showGridOnlyOwned", true)
+const showLevels = useSetting("showLevels", true)
+const showAscensions = useSetting("showAscensions", true)
+const showHearts = useSetting("showHearts", false)
+const colourLevels = useSetting("colourLevels", true)
 
 const hiddenElements = useSetting<KiokuElement[]>("hiddenGridElements", [])
 const hiddenRoles = useSetting<KiokuRole[]>("hiddenGridRoles", [])
@@ -100,7 +139,13 @@ const visibleElements = computed(() =>
 )
 
 const visibleRoles = computed(() =>
-    Object.values(KiokuRole).filter(role => !hiddenRoles.value.includes(role))
+    Object.values(KiokuRole).sort((a, b) => {
+        if (a === KiokuRole.Defender) return 1
+        if (b === KiokuRole.Defender) return -1
+        if (a === KiokuRole.Healer) return 1
+        if (b === KiokuRole.Healer) return -1
+        return 0
+    }).filter(role => !hiddenRoles.value.includes(role))
 )
 
 const allChars = computed(() =>
@@ -150,6 +195,72 @@ const makeTitle = (ch: Character): string => {
         title += " -  Added to standard pool on " + new Date(ch.permaDate).toLocaleDateString()
     }
     return title
+}
+
+const isMaxSpecialLvl = (ch: Character): boolean => {
+    if (ch.ascension === 5) return ch.specialLvl === 10
+    if (ch.ascension >= 3) return ch.specialLvl === 7
+    return ch.specialLvl === 4
+}
+
+const downloadImg = async (blob: Blob) => {
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "ascension.png"
+    link.click()
+    URL.revokeObjectURL(url)
+}
+
+const copyAscensionList = async () => {
+    const el = document.querySelector(".er-grid") as HTMLElement
+    if (!el) return
+
+    const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
+
+    const blob: Blob | null = await new Promise(resolve =>
+        canvas.toBlob(resolve, "image/png")
+    )
+    if (!blob) return
+
+    try {
+        const perm = await navigator.permissions?.query({
+            name: "clipboard-write" as PermissionName
+        })
+    } catch { }
+
+    try {
+        const item = new ClipboardItem({ "image/png": blob })
+        await navigator.clipboard.write([item])
+
+        toast.success("Copied to clipboard!", {
+            position: toast.POSITION.TOP_RIGHT,
+            icon: false,
+        })
+    } catch (err) {
+        console.error("Clipboard failed:", err)
+
+        await downloadImg(blob)
+
+        toast.info("Clipboard blocked — saved as file instead", {
+            position: toast.POSITION.TOP_RIGHT,
+            icon: false,
+        })
+    }
+}
+
+const downloadAscensionList = async () => {
+    const el = document.querySelector(".ascension-table") as HTMLElement
+    if (!el) return
+
+    const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
+
+    canvas.toBlob((blob) => {
+        if (!blob) return
+
+        downloadImg(blob)
+
+    }, "image/png")
 }
 </script>
 
@@ -254,8 +365,22 @@ const makeTitle = (ch: Character): string => {
     background: rgba(125, 211, 252, 0.07);
 }
 
+.char-thumb {
+    display: contents;
+}
+
+.character-img-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.character-img-wwrapper {
+    position: fixed;
+}
+
 .char-img {
     height: 60px;
+    width: 60px;
     border-radius: 50%;
     display: block;
 }
@@ -274,5 +399,67 @@ const makeTitle = (ch: Character): string => {
 
 .default-border {
     border: 2px solid transparent;
+}
+
+.level-badge {
+    position: absolute;
+    width: 30px;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    font-size: 0.6rem;
+    text-align: center;
+    backdrop-filter: blur(2px);
+    border-radius: 15rem;
+    font-weight: bold;
+}
+
+.heart-level-badge {
+    left: 20%;
+    top: 0;
+}
+
+.magic-level-badge {
+    left: 20%;
+    bottom: 0;
+}
+
+.special-level-badge {
+    left: 80%;
+    bottom: 0;
+}
+
+.ascension-badge {
+    left: 80%;
+    top: 0;
+}
+
+.level-badge input {
+    width: 32px;
+    background: #111;
+    color: #fff;
+    border: 1px solid #666;
+    border-radius: 6px;
+    font-size: 0.6rem;
+    text-align: center;
+    padding: 1px;
+}
+
+.maxLvl {
+    color: palegreen;
+}
+
+.notMaxLvl {
+    color: pink;
+}
+
+.copy-btn {
+    margin: 10px;
+    padding: 0.4rem 0.8rem;
+    background: #444;
+    color: #eee;
+    border: 1px solid #666;
+    border-radius: 6px;
+    cursor: pointer;
 }
 </style>
