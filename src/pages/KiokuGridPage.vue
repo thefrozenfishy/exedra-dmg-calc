@@ -55,7 +55,7 @@
                                 :class="`rarity-${r}`" :style="{ '--band-rows': bandRows(element, role, r) }">
                                 <div v-for="ch in getChars(element, role, r)" :key="ch.id" class="char-thumb">
                                     <div class="character-img-wrapper">
-                                        <div class="character-img-wwrapper">
+                                        <div>
                                             <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
                                                 <img :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`"
                                                     :alt="ch.name" :title="makeTitle(ch)" class="char-img"
@@ -374,7 +374,7 @@ const downloadAscensionList = async () => {
     display: inline-block;
 }
 
-.character-img-wwrapper {
+.character-img-wrapper > div {
     position: inherit;
 }
 
@@ -432,17 +432,6 @@ const downloadAscensionList = async () => {
 .ascension-badge {
     left: 80%;
     top: 0;
-}
-
-.level-badge input {
-    width: 32px;
-    background: #111;
-    color: #fff;
-    border: 1px solid #666;
-    border-radius: 6px;
-    font-size: 0.6rem;
-    text-align: center;
-    padding: 1px;
 }
 
 .maxLvl {
