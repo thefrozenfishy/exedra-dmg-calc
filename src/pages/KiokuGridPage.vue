@@ -193,6 +193,8 @@ const toggleRole = (role: KiokuRole) => {
 const allChars = computed(() =>
     (showOwnedOnly.value ? store.characters.filter(c => c.enabled) : store.characters)
         .map(c => ({ ...c, rarity: c.name === "Lux☆Magica" ? 4 : c.rarity }))
+        .filter(c => !hiddenElements.value.includes(c.element as KiokuElement))
+        .filter(c => !hiddenRoles.value.includes(c.role as KiokuRole))
 )
 
 const allElements = computed(() =>
