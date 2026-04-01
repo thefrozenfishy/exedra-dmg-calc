@@ -179,7 +179,7 @@ const bandRows = (element: string, role: string, rarity: number): number => {
 
 const borderClass = (ch: Character): string => {
     if (ch.name === "Lux☆Magica") return "default-border"
-    if (ch.obtain && ch.obtain !== "") return "limited-border"
+    if (ch.obtain && ch.obtain !== "Permanent") return "limited-border"
     if (new Date() > new Date(ch.permaDate)) return "default-border"
     return "not-limited-border"
 }
@@ -187,8 +187,8 @@ const borderClass = (ch: Character): string => {
 const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
     if (ch.name === "Lux☆Magica") { }
-    else if (ch.obtain && ch.obtain !== "") {
-        title += " -  Limited"
+    else if (ch.obtain && ch.obtain !== "Permanent") {
+        title += ` -  ${ch.obtain}`
     } else if (ch.permaDate == "") {
         title += " -  Not added to permanent yet"
     } else if (new Date(ch.permaDate) > new Date()) {

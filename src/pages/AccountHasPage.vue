@@ -148,10 +148,10 @@ const allMembers = computed(() => store.characters.filter(c => (show4stars.value
 const fiveStarMembers = computed(() => store.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
 const ownedFiveStars = computed(() => fiveStarMembers.value.filter(c => c.enabled))
 const totalAscensions = computed(() => ownedFiveStars.value.reduce((sum, ch) => sum + ch.ascension + 1, 0))
-const totalStandards = computed(() => ownedFiveStars.value.filter(ch => ch.obtain === "").reduce((sum, ch) => sum + ch.ascension + 1, 0))
-const totalPossibleStandards = computed(() => fiveStarMembers.value.filter(ch => ch.obtain === "").reduce((sum, _) => sum + 6, 0))
-const totalLimiteds = computed(() => ownedFiveStars.value.filter(ch => ch.obtain !== "").reduce((sum, ch) => sum + ch.ascension + 1, 0))
-const totalPossibleLimiteds = computed(() => fiveStarMembers.value.filter(ch => ch.obtain !== "").reduce((sum, _) => sum + 6, 0))
+const totalStandards = computed(() => ownedFiveStars.value.filter(ch => ch.obtain === "Permanent").reduce((sum, ch) => sum + ch.ascension + 1, 0))
+const totalPossibleStandards = computed(() => fiveStarMembers.value.filter(ch => ch.obtain === "Permanent").reduce((sum, _) => sum + 6, 0))
+const totalLimiteds = computed(() => ownedFiveStars.value.filter(ch => ch.obtain !== "Permanent").reduce((sum, ch) => sum + ch.ascension + 1, 0))
+const totalPossibleLimiteds = computed(() => fiveStarMembers.value.filter(ch => ch.obtain !== "Permanent").reduce((sum, _) => sum + 6, 0))
 const standardPool = computed(() => fiveStarMembers.value.filter(ch => new Date() > new Date(ch.permaDate)))
 const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.enabled && ch.ascension === 5))
 const maxed5starChars = computed(() => allMembers.value.filter(ch => ch.enabled && isMaxLevels(ch)).filter(ch => fiveStarMembers.value.includes(ch)))
@@ -209,8 +209,8 @@ const groupedByAscension = computed(() => {
 const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
     if (ch.name === "Lux☆Magica") { }
-    else if (ch.obtain && ch.obtain !== "") {
-        title += " -  Limited"
+    else if (ch.obtain && ch.obtain !== "Permanent") {
+        title += ` -  ${ch.obtain}`
     } else if (ch.permaDate == "") {
         title += " -  Not added to permanent yet"
     } else if (new Date(ch.permaDate) > new Date()) {
@@ -221,7 +221,7 @@ const makeTitle = (ch: Character): string => {
 
 const borderClass = (ch: Character): string => {
     if (ch.name === "Lux☆Magica") return "default-border"
-    if (ch.obtain && ch.obtain !== "") return "limited-border"
+    if (ch.obtain && ch.obtain !== "Permanent") return "limited-border"
     if (new Date() > new Date(ch.permaDate)) return "default-border"
     return "not-limited-border"
 
