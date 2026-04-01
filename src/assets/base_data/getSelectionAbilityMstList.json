@@ -3031,6 +3031,21 @@
     },
     {
         "abilityEffectType": "",
+        "description": "Increases ATK by 8.8% and DMG dealt by 8.8%.",
+        "name": "It's a Non-Binding Verbal Agreement!",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 68,
+        "selectionAbilityMstId": 5022,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11520101,
+        "targetType": 2,
+        "value1": 1130022,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
         "description": "Increases special attack break gauge depletion.<br>Increases MP recovery rate by 10%.",
         "name": "I Am the Magical Girl Born of Halloween!",
         "rarity": 4,
