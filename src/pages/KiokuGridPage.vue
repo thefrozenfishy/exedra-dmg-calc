@@ -12,11 +12,31 @@
                 <label> <input type="checkbox" v-model="showOwnedOnly" /> Show Owned Only </label>
             </div>
             <div class="options-row">
-                <label> <input type="checkbox" v-model="showAscensions" /> Show Ascensions </label>
                 <label> <input type="checkbox" v-model="showLevels" /> Show Magic & Special levels </label>
                 <label> <input type="checkbox" v-model="showHearts" /> Show Heartphial levels </label>
                 <label> <input type="checkbox" v-model="colourLevels" :disabled="!(showLevels || showHearts)" /> Colour
                     max levels </label>
+            </div>
+            <div class="options-row">
+                <label>
+                    Columns:
+                    <select v-model="xAxisKey" class="axis-select">
+                        <option v-for="opt in axisOptions" :key="opt.key" :value="opt.key"
+                            :disabled="opt.key === yAxisKey">
+                            {{ opt.label }}
+                        </option>
+                    </select>
+                </label>
+                <label>
+                    Rows:
+                    <select v-model="yAxisKey" class="axis-select">
+                        <option v-for="opt in axisOptions" :key="opt.key" :value="opt.key"
+                            :disabled="opt.key === xAxisKey">
+                            {{ opt.label }}
+                        </option>
+                    </select>
+                </label>
+                <span class="info-axis-label">Info badge: <strong>{{ infoAxisLabel }}</strong></span>
             </div>
 
             <div class="options-row" v-if="hiddenElements.length || hiddenRoles.length">
@@ -37,23 +57,32 @@
                 <thead>
                     <tr>
                         <th class="corner-cell"></th>
-                        <th v-for="element in visibleElements" :key="element" class="header-cell element-header">
-                            <img :src="`/exedra-dmg-calc/elements/${element}.png`" :alt="element"
-                                :title="`Hide ${element}`" class="header-icon header-icon-btn"
-                                @click="toggleElement(element)" />
+                        <th v-for="xVal in visibleXValues" :key="xVal" class="header-cell element-header">
+                            <img v-if="xAxisKey === 'element'" :src="`/exedra-dmg-calc/elements/${xVal}.png`"
+                                :alt="xVal" :title="`Hide ${xVal}`" class="header-icon header-icon-btn"
+                                @click="toggleElement(xVal as KiokuElement)" />
+                            <img v-else-if="xAxisKey === 'role'" :src="`/exedra-dmg-calc/roles/${xVal}.png`" :alt="xVal"
+                                :title="`Hide ${xVal}`" class="header-icon header-icon-btn"
+                                @click="toggleRole(xVal as KiokuRole)" />
+                            <span v-else class="ascension-header-label">A{{ xVal }}</span>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="role in visibleRoles" :key="role">
+                    <tr v-for="yVal in visibleYValues" :key="yVal">
                         <td class="header-cell role-header">
-                            <img :src="`/exedra-dmg-calc/roles/${role}.png`" :alt="role" :title="`Hide ${role}`"
-                                class="header-icon header-icon-btn" @click="toggleRole(role)" />
+                            <img v-if="yAxisKey === 'element'" :src="`/exedra-dmg-calc/elements/${yVal}.png`"
+                                :alt="yVal" :title="`Hide ${yVal}`" class="header-icon header-icon-btn"
+                                @click="toggleElement(yVal as KiokuElement)" />
+                            <img v-else-if="yAxisKey === 'role'" :src="`/exedra-dmg-calc/roles/${yVal}.png`" :alt="yVal"
+                                :title="`Hide ${yVal}`" class="header-icon header-icon-btn"
+                                @click="toggleRole(yVal as KiokuRole)" />
+                            <span v-else class="ascension-header-label">A{{ yVal }}</span>
                         </td>
-                        <td v-for="element in visibleElements" :key="element" class="grid-cell">
+                        <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
                             <div v-for="r in [5, 4, 3]" :key="r" v-show="shouldShow(r)" class="rarity-band"
-                                :class="`rarity-${r}`" :style="{ '--band-rows': bandRows(element, role, r) }">
-                                <div v-for="ch in getChars(element, role, r)" :key="ch.id" class="char-thumb">
+                                :class="`rarity-${r}`" :style="{ '--band-rows': bandRows(xVal, yVal, r) }">
+                                <div v-for="ch in getChars(xVal, yVal, r)" :key="ch.id" class="char-thumb">
                                     <div class="character-img-wrapper">
                                         <div>
                                             <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
@@ -77,8 +106,18 @@
                                                 {{ ch.specialLvl }}
                                             </div>
 
-                                            <div class="ascension-badge level-badge" v-if="showLevels && ch.enabled">
+                                            <div class="ascension-badge level-badge" v-if="infoAxisKey === 'ascension'">
                                                 A{{ ch.ascension }}
+                                            </div>
+                                            <div class="ascension-badge level-badge info-badge-img"
+                                                v-else-if="infoAxisKey === 'element'">
+                                                <img :src="`/exedra-dmg-calc/elements/${ch.element}.png`"
+                                                    :alt="ch.element" class="info-badge-icon" />
+                                            </div>
+                                            <div class="ascension-badge level-badge info-badge-img"
+                                                v-else-if="infoAxisKey === 'role'">
+                                                <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`" :alt="ch.role"
+                                                    class="info-badge-icon" />
                                             </div>
                                         </div>
                                     </div>
@@ -99,7 +138,27 @@ import { Character, KiokuElement, KiokuRole, KiokuConstants } from "../types/Kio
 import { useSetting } from "../store/settingsStore"
 import html2canvas from "html2canvas"
 import { toast } from "vue3-toastify"
+
 const store = useCharacterStore()
+
+
+type AxisKey = "element" | "role" | "ascension"
+
+const axisOptions: { key: AxisKey; label: string }[] = [
+    { key: "element", label: "Element" },
+    { key: "role", label: "Role" },
+    { key: "ascension", label: "Ascension" },
+]
+
+const xAxisKey = useSetting<AxisKey>("gridXAxis", "element")
+const yAxisKey = useSetting<AxisKey>("gridYAxis", "role")
+
+const infoAxisKey = computed<AxisKey>(() =>
+    axisOptions.find(o => o.key !== xAxisKey.value && o.key !== yAxisKey.value)!.key
+)
+const infoAxisLabel = computed(() =>
+    axisOptions.find(o => o.key === infoAxisKey.value)!.label
+)
 
 const shouldShow = (r: number) => {
     if (r === 5) return show5stars.value
@@ -113,7 +172,6 @@ const show4stars = useSetting("showGrid4stars", false)
 const show3stars = useSetting("showGrid3stars", false)
 const showOwnedOnly = useSetting("showGridOnlyOwned", true)
 const showLevels = useSetting("showLevels", true)
-const showAscensions = useSetting("showAscensions", true)
 const showHearts = useSetting("showHearts", false)
 const colourLevels = useSetting("colourLevels", true)
 
@@ -121,59 +179,78 @@ const hiddenElements = useSetting<KiokuElement[]>("hiddenGridElements", [])
 const hiddenRoles = useSetting<KiokuRole[]>("hiddenGridRoles", [])
 
 const toggleElement = (el: KiokuElement) => {
-    if (hiddenElements.value.includes(el))
-        hiddenElements.value = hiddenElements.value.filter(e => e !== el)
-    else
-        hiddenElements.value = [...hiddenElements.value, el]
+    hiddenElements.value = hiddenElements.value.includes(el)
+        ? hiddenElements.value.filter(e => e !== el)
+        : [...hiddenElements.value, el]
 }
 
 const toggleRole = (role: KiokuRole) => {
-    if (hiddenRoles.value.includes(role))
-        hiddenRoles.value = hiddenRoles.value.filter(r => r !== role)
-    else
-        hiddenRoles.value = [...hiddenRoles.value, role]
+    hiddenRoles.value = hiddenRoles.value.includes(role)
+        ? hiddenRoles.value.filter(r => r !== role)
+        : [...hiddenRoles.value, role]
 }
-
-const visibleElements = computed(() =>
-    Object.values(KiokuElement).filter(el => !hiddenElements.value.includes(el))
-)
-
-const visibleRoles = computed(() =>
-    Object.values(KiokuRole).sort((a, b) => {
-        if (a === KiokuRole.Defender) return 1
-        if (b === KiokuRole.Defender) return -1
-        if (a === KiokuRole.Healer) return 1
-        if (b === KiokuRole.Healer) return -1
-        return 0
-    }).filter(role => !hiddenRoles.value.includes(role))
-)
 
 const allChars = computed(() =>
     (showOwnedOnly.value ? store.characters.filter(c => c.enabled) : store.characters)
         .map(c => ({ ...c, rarity: c.name === "Lux☆Magica" ? 4 : c.rarity }))
 )
 
-const getChars = (element: string, role: string, rarity: number): Character[] =>
-    allChars.value.filter(
-        c => c.element === element && c.role === role && c.rarity === rarity
-    )
+const allElements = computed(() =>
+    Object.values(KiokuElement).filter(el => !hiddenElements.value.includes(el))
+)
 
-const maxCharsPerRarityPerRole = computed(() => {
+const allRoles = computed(() =>
+    Object.values(KiokuRole)
+        .sort((a, b) => {
+            if (a === KiokuRole.Defender) return 1
+            if (b === KiokuRole.Defender) return -1
+            if (a === KiokuRole.Healer) return 1
+            if (b === KiokuRole.Healer) return -1
+            return 0
+        })
+        .filter(role => !hiddenRoles.value.includes(role))
+)
+
+const valuesFor = (key: AxisKey): string[] => {
+    if (key === "element") return allElements.value as string[]
+    if (key === "role") return allRoles.value as string[]
+    return ["5", "4", "3", "2", "1", "0"]
+}
+
+const visibleXValues = computed(() => valuesFor(xAxisKey.value))
+const visibleYValues = computed(() => valuesFor(yAxisKey.value))
+
+
+const getChars = (xVal: string, yVal: string, rarity: number): Character[] =>
+    allChars.value.filter(c => {
+        if (c.rarity !== rarity) return false
+        const xMatch =
+            xAxisKey.value === "element" ? c.element === xVal :
+                xAxisKey.value === "role" ? c.role === xVal :
+                    String(c.ascension) === xVal
+        const yMatch =
+            yAxisKey.value === "element" ? c.element === yVal :
+                yAxisKey.value === "role" ? c.role === yVal :
+                    String(c.ascension) === yVal
+        return xMatch && yMatch
+    })
+
+const maxCharsPerRarityPerRow = computed(() => {
     const result: Record<string, Record<number, number>> = {}
-    for (const role of visibleRoles.value) {
-        result[role] = { 3: 0, 4: 0, 5: 0 }
-        for (const element of visibleElements.value) {
+    for (const yVal of visibleYValues.value) {
+        result[yVal] = { 3: 0, 4: 0, 5: 0 }
+        for (const xVal of visibleXValues.value) {
             for (const r of [3, 4, 5]) {
-                const count = getChars(element, role, r).length
-                if (count > result[role][r]) result[role][r] = count
+                const count = getChars(xVal, yVal, r).length
+                if (count > result[yVal][r]) result[yVal][r] = count
             }
         }
     }
     return result
 })
 
-const bandRows = (element: string, role: string, rarity: number): number => {
-    const maxInRow = maxCharsPerRarityPerRole.value[role]?.[rarity] ?? 0
+const bandRows = (xVal: string, yVal: string, rarity: number): number => {
+    const maxInRow = maxCharsPerRarityPerRow.value[yVal]?.[rarity] ?? 0
     return Math.max(1, Math.ceil(maxInRow / 2))
 }
 
@@ -281,6 +358,43 @@ const downloadAscensionList = async () => {
     gap: 0.75rem;
 }
 
+.axis-select {
+    margin-left: 0.3rem;
+    background: #2a2a2a;
+    color: #eee;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 0.15rem 0.3rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.info-axis-label {
+    font-size: 0.82rem;
+    opacity: 0.7;
+}
+
+.ascension-header-label {
+    display: block;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: bold;
+    padding: 0.3rem 0.5rem;
+}
+
+.info-badge-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px;
+}
+
+.info-badge-icon {
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+
 .chips-label {
     font-size: 0.78rem;
     opacity: 0.6;
@@ -374,7 +488,7 @@ const downloadAscensionList = async () => {
     display: inline-block;
 }
 
-.character-img-wrapper > div {
+.character-img-wrapper>div {
     position: inherit;
 }
 
