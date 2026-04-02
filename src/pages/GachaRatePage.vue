@@ -36,14 +36,33 @@ const eligible3stars = computed(() =>
 const eligible4stars = computed(() =>
     characterStore.characters.filter(c => c.rarity === 4)
 )
-const eligible5stars = computed(() => characterStore.characters.filter(c => c.name !== pickupCharacter.value?.name && (c.rarity === 5 && c.name !== 'Lux☆Magica' && new Date() > new Date(c.permaDate))))
+const eligible5stars = computed(() =>
+    characterStore.characters.filter(c =>
+        c.name !== pickupCharacter.value?.name &&
+        (c.rarity === 5 && c.name !== 'Lux☆Magica' && new Date() > new Date(c.permaDate))
+    )
+)
 
 const rate = ref(3)
 const pickupRate = ref(.75)
 const sparkInterval = ref(200)
+const sparkIntervalReduction = ref(0)
 const softPityAt = ref(100)
 const softPityRate = ref(12)
+const isDualPickup = ref(false)
+const hasRetryingSoftPity = ref(false)
 
+const sparkPoints = computed(() => {
+    let currentPull = 0
+    let currentInterval = sparkInterval.value
+    let points = new Set()
+    while (currentPull + currentInterval <= 1000 && currentInterval > 0) {
+        currentPull += currentInterval
+        points.add(currentPull)
+        currentInterval -= sparkIntervalReduction.value
+    }
+    return points;
+})
 const canvasRef = ref(null)
 let chart
 
@@ -56,43 +75,101 @@ const curveColors = [
     '#FFB703'  // amber
 ]
 
+const STATE = { ELIGIBLE: 0, LOCKED: 1 }
 
-function combination(n, k) {
-    if (k < 0 || k > n) return 0
-    if (k === 0 || k === n) return 1
-    let res = 1
-    for (let i = 1; i <= k; i++) {
-        res *= (n - i + 1) / i
-    }
-    return res
-}
+function computeDPTable(maxPulls, maxCopies) {
+    const pickupP = pickupRate.value / 100
+    const softP = softPityRate.value / 100
 
-function binomial(n, k, p) {
-    return (
-        combination(n, k) *
-        Math.pow(p, k) *
-        Math.pow(1 - p, n - k)
+    let dp = Array.from({ length: maxCopies + 1 }, () => [0, 0])
+    dp[0][STATE.ELIGIBLE] = 1
+
+    const result = Array.from({ length: maxPulls + 1 }, () =>
+        Array(maxCopies + 1).fill(0)
     )
-}
 
-function probAtLeastJ(pullIdx, targetCopies, p) {
-    const remaining =
-        targetCopies - Math.floor(pullIdx / sparkInterval.value)
+    for (let p = 1; p <= maxPulls; p++) {
+        let afterNormal = Array.from({ length: maxCopies + 1 }, () => [0, 0])
 
-    if (remaining <= 0) return 1.0
+        for (let k = 0; k <= maxCopies; k++) {
+            for (let s = 0; s <= 1; s++) {
+                const prob = dp[k][s]
+                if (prob === 0) continue
 
-    let failProb = 0
-    for (let k = 0; k < remaining; k++) {
-        failProb += binomial(pullIdx, k, p)
+                const nk = Math.min(k + 1, maxCopies)
+
+                afterNormal[nk][s] += prob * pickupP
+                afterNormal[k][s] += prob * (1 - pickupP)
+            }
+        }
+
+        const isSoftWindow =
+            (hasRetryingSoftPity.value
+                ? (p >= softPityAt.value && p % 10 === 0)
+                : (p === softPityAt.value)
+            )
+
+        let afterSoft = Array.from({ length: maxCopies + 1 }, () => [0, 0])
+
+        for (let k = 0; k <= maxCopies; k++) {
+            for (let s = 0; s <= 1; s++) {
+                const prob = afterNormal[k][s]
+                if (prob === 0) continue
+
+                const nk = Math.min(k + 1, maxCopies)
+
+                if (isSoftWindow && s === STATE.ELIGIBLE) {
+                    const trigger = prob * softP
+                    const noTrigger = prob * (1 - softP)
+
+                    if (trigger > 0) {
+                        if (isDualPickup.value) {
+                            const success = trigger * 0.5
+                            const fail = trigger * 0.5
+
+                            afterSoft[nk][STATE.LOCKED] += success
+                            afterSoft[k][STATE.LOCKED] += fail
+                        } else {
+                            afterSoft[nk][STATE.LOCKED] += trigger
+                        }
+                    }
+
+                    afterSoft[k][s] += noTrigger
+
+                } else {
+                    afterSoft[k][s] += prob
+                }
+            }
+        }
+
+        let next = Array.from({ length: maxCopies + 1 }, () => [0, 0])
+
+        if (sparkPoints.value.has(p)) {
+            for (let k = 0; k <= maxCopies; k++) {
+                for (let s = 0; s <= 1; s++) {
+                    const prob = afterSoft[k][s]
+                    if (prob === 0) continue
+
+                    const nk = Math.min(k + 1, maxCopies)
+                    next[nk][s] += prob
+                }
+            }
+        } else {
+            next = afterSoft
+        }
+
+        dp = next
+
+        for (let k = 0; k <= maxCopies; k++) {
+            let sum = 0
+            for (let kk = k; kk <= maxCopies; kk++) {
+                sum += dp[kk][0] + dp[kk][1]
+            }
+            result[p][k] = Math.min(sum, 1)
+        }
     }
 
-    let prob = 1 - failProb
-
-    if (pullIdx >= softPityAt.value) {
-        prob += (1 - prob) * (softPityRate.value / 100) / remaining
-    }
-
-    return Math.min(prob, 1.0)
+    return result
 }
 
 function renderChart() {
@@ -100,14 +177,14 @@ function renderChart() {
 
     const labels = Array.from({ length: 1000 }, (_, i) => i)
 
+    const dpTable = computeDPTable(1000, 6)
+
     const datasets = []
 
     for (let t = 1; t <= 6; t++) {
         datasets.push({
             label: `a${t - 1}+`,
-            data: labels.map(p =>
-                probAtLeastJ(p, t, pickupRate.value / 100)
-            ),
+            data: labels.map(p => dpTable[p][t]),
             borderColor: curveColors[t - 1],
             backgroundColor: curveColors[t - 1],
             tension: 0.2,
@@ -168,8 +245,11 @@ watch(
         rate,
         pickupRate,
         sparkInterval,
+        sparkIntervalReduction,
         softPityAt,
         softPityRate,
+        isDualPickup,
+        hasRetryingSoftPity
     ],
     renderChart
 )
@@ -192,7 +272,6 @@ const visiblePulls = computed(() => {
         ? list
         : list.slice(image_idx_zero.value, last_pull_count.value)
 })
-
 
 function pull(blueToPurple = false) {
     simPulls.value++
@@ -250,12 +329,10 @@ function pullHundred() {
 
 function resetSimulator() {
     simPulls.value = 0
-
     blueCount.value = 0
     purpleCount.value = 0
     goldCount.value = 0
     rateUpCount.value = 0
-
     pullResults.value = []
 }
 
@@ -376,6 +453,11 @@ const downloadFullHistoryHorizontal = async () => {
         </label>
 
         <label>
+            Spark Interval Reduction per spark
+            <input type="number" v-model.number="sparkIntervalReduction" />
+        </label>
+
+        <label>
             100 Gauge Soft Pity Pull at
             <input type="number" v-model.number="softPityAt" />
         </label>
@@ -383,6 +465,16 @@ const downloadFullHistoryHorizontal = async () => {
         <label>
             100 Gauge Soft Pity Rate (%)
             <input type="number" v-model.number="softPityRate" />
+        </label>
+
+        <label>
+            Is Dual Pickup
+            <input type="checkbox" v-model.boolean="isDualPickup" />
+        </label>
+
+        <label>
+            Has retrying soft pity system
+            <input type="checkbox" v-model.boolean="hasRetryingSoftPity" />
         </label>
     </div>
 
@@ -460,7 +552,7 @@ const downloadFullHistoryHorizontal = async () => {
 <style scoped>
 .controls {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     gap: 0.75rem;
     margin-bottom: 1rem;
 }
