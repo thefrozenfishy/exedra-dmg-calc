@@ -53,7 +53,7 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualAttacker(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                        }}</span>
+                            }}</span>
                     </div>
                 </button>
             </div>
@@ -138,7 +138,7 @@
                                                 <div class="role-badge-inner">
                                                     <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`" :alt="ch.role"
                                                         class="info-badge-icon" />
-                                                    <span class="role-badge-tag">{{ rangeTag(ch.range) }}</span>
+                                                    <span class="role-badge-tag">{{ rangeTag(ch.range)[0] }}</span>
                                                 </div>
                                             </div>
                                             <div class="ascension-badge level-badge info-badge-img"
@@ -540,10 +540,12 @@ const downloadAscensionList = async () => {
 }
 
 .role-badge-tag {
-    font-size: 0.5rem;
     font-weight: bold;
     line-height: 1;
     color: #fff;
+    right: 2px;
+    position: absolute;
+    top: 30%;
 }
 
 .chips-label {
@@ -677,7 +679,7 @@ const downloadAscensionList = async () => {
 
 .level-badge {
     position: absolute;
-    width: 30px;
+    width: 25px;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.8);
     color: #fff;
@@ -689,22 +691,22 @@ const downloadAscensionList = async () => {
 }
 
 .heart-level-badge {
-    left: 20%;
+    left: 22%;
     top: 0;
 }
 
 .magic-level-badge {
-    left: 20%;
+    left: 22%;
     bottom: 0;
 }
 
 .special-level-badge {
-    left: 80%;
+    left: 78%;
     bottom: 0;
 }
 
 .ascension-badge {
-    left: 80%;
+    left: 78%;
     top: 0;
 }
 
