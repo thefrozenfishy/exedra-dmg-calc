@@ -304,7 +304,7 @@ const displayedVirtualRoles = computed(() =>
 
 const allChars = computed(() =>
     markedCharacters.value
-        .filter(c => showOwnedOnly.value && c.enabled)
+        .filter(c => !showOwnedOnly.value || c.enabled)
         .filter(c => !hiddenElements.value.includes(c.element as KiokuElement))
         .filter(c => !hiddenVirtualRoles.value.includes(virtualRoleForChar(c)))
 )
