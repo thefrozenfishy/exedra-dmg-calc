@@ -19,34 +19,36 @@
             </div>
             <div class="options-row">
                 <label>
-                    Columns:
-                    <select v-model="xAxisKey" class="axis-select">
-                        <option v-for="opt in axisOptions" :key="opt.key" :value="opt.key"
-                            :disabled="opt.key === yAxisKey">
-                            {{ opt.label }}
+                    Rows:
+                    <select :value="yAxisKey" class="axis-select" @change="onYChange">
+                        <option v-for="opt in axisOptions" :key="opt.key" :value="opt.key">
+                            {{ opt.label }} {{ opt.key === xAxisKey ? "🗘" : "" }}
                         </option>
                     </select>
                 </label>
                 <label>
-                    Rows:
-                    <select v-model="yAxisKey" class="axis-select">
-                        <option v-for="opt in axisOptions" :key="opt.key" :value="opt.key"
-                            :disabled="opt.key === xAxisKey">
-                            {{ opt.label }}
+                    Columns:
+                    <select :value="xAxisKey" class="axis-select" @change="onXChange">
+                        <option v-for="opt in axisOptions" :key="opt.key" :value="opt.key">
+                            {{ opt.label }} {{ opt.key === yAxisKey ? "🗘" : "" }}
                         </option>
                     </select>
                 </label>
-                <span class="info-axis-label">Info badge: <strong>{{ infoAxisLabel }}</strong></span>
             </div>
 
-            <div class="options-row" v-if="hiddenElements.length || hiddenRoles.length">
-                <span class="chips-label">Hidden:</span>
-                <button v-for="el in hiddenElements" :key="el" class="chip" @click="toggleElement(el)"
-                    :title="`Show ${el}`">
+            <div class="options-row">
+                <button v-for="el in allElementValues" :key="el" class="chip"
+                    :class="hiddenElements.includes(el) ? 'chip--hidden' : 'chip--visible'"
+                    @click="toggleElement(el as KiokuElement)"
+                    :title="hiddenElements.includes(el) ? `Show ${el}` : `Hide ${el}`">
                     <img :src="`/exedra-dmg-calc/elements/${el}.png`" :alt="el" />
                 </button>
-                <button v-for="role in hiddenRoles" :key="role" class="chip" @click="toggleRole(role)"
-                    :title="`Show ${role}`">
+            </div>
+            <div class="options-row">
+                <button v-for="role in allRoleValues" :key="role" class="chip"
+                    :class="hiddenRoles.includes(role) ? 'chip--hidden' : 'chip--visible'"
+                    @click="toggleRole(role as KiokuRole)"
+                    :title="hiddenRoles.includes(role) ? `Show ${role}` : `Hide ${role}`">
                     <img :src="`/exedra-dmg-calc/roles/${role}.png`" :alt="role" />
                 </button>
             </div>
@@ -156,9 +158,18 @@ const yAxisKey = useSetting<AxisKey>("gridYAxis", "role")
 const infoAxisKey = computed<AxisKey>(() =>
     axisOptions.find(o => o.key !== xAxisKey.value && o.key !== yAxisKey.value)!.key
 )
-const infoAxisLabel = computed(() =>
-    axisOptions.find(o => o.key === infoAxisKey.value)!.label
-)
+
+const onXChange = (e: Event) => {
+    const newVal = (e.target as HTMLSelectElement).value as AxisKey
+    if (newVal === yAxisKey.value) yAxisKey.value = xAxisKey.value
+    xAxisKey.value = newVal
+}
+
+const onYChange = (e: Event) => {
+    const newVal = (e.target as HTMLSelectElement).value as AxisKey
+    if (newVal === xAxisKey.value) xAxisKey.value = yAxisKey.value
+    yAxisKey.value = newVal
+}
 
 const shouldShow = (r: number) => {
     if (r === 5) return show5stars.value
@@ -197,25 +208,21 @@ const allChars = computed(() =>
         .filter(c => !hiddenRoles.value.includes(c.role as KiokuRole))
 )
 
-const allElements = computed(() =>
-    Object.values(KiokuElement).filter(el => !hiddenElements.value.includes(el))
-)
+const allElementValues = computed(() => Object.values(KiokuElement))
+const displayedElements = computed(() => allElementValues.value.filter(el => !hiddenElements.value.includes(el)))
 
-const allRoles = computed(() =>
-    Object.values(KiokuRole)
-        .sort((a, b) => {
-            if (a === KiokuRole.Defender) return 1
-            if (b === KiokuRole.Defender) return -1
-            if (a === KiokuRole.Healer) return 1
-            if (b === KiokuRole.Healer) return -1
-            return 0
-        })
-        .filter(role => !hiddenRoles.value.includes(role))
-)
+const allRoleValues = computed(() => Object.values(KiokuRole).sort((a, b) => {
+    if (a === KiokuRole.Defender) return 1
+    if (b === KiokuRole.Defender) return -1
+    if (a === KiokuRole.Healer) return 1
+    if (b === KiokuRole.Healer) return -1
+    return 0
+}))
+const displayedRoles = computed(() => allRoleValues.value.filter(role => !hiddenRoles.value.includes(role)))
 
 const valuesFor = (key: AxisKey): string[] => {
-    if (key === "element") return allElements.value as string[]
-    if (key === "role") return allRoles.value as string[]
+    if (key === "element") return displayedElements.value as string[]
+    if (key === "role") return displayedRoles.value as string[]
     return ["5", "4", "3", "2", "1", "0"]
 }
 
@@ -412,6 +419,15 @@ const downloadAscensionList = async () => {
     cursor: pointer;
     opacity: 0.55;
     transition: opacity 0.15s, background 0.15s;
+}
+
+.chip--visible {
+    opacity: 1;
+}
+
+.chip--hidden {
+    opacity: 0.3;
+    filter: grayscale(60%);
 }
 
 .chip:hover {
