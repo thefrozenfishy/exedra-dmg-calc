@@ -16,6 +16,7 @@
                 <label> <input type="checkbox" v-model="showHearts" /> Show Heartphial levels </label>
                 <label> <input type="checkbox" v-model="colourLevels" :disabled="!(showLevels || showHearts)" /> Colour
                     max levels </label>
+                <label> <input type="checkbox" v-model="splitAttackerRange" /> Split Attacker ranges </label>
             </div>
             <div class="options-row">
                 <label>
@@ -45,11 +46,15 @@
                 </button>
             </div>
             <div class="options-row">
-                <button v-for="role in allRoleValues" :key="role" class="chip"
-                    :class="hiddenRoles.includes(role) ? 'chip--hidden' : 'chip--visible'"
-                    @click="toggleRole(role as KiokuRole)"
-                    :title="hiddenRoles.includes(role) ? `Show ${role}` : `Hide ${role}`">
-                    <img :src="`/exedra-dmg-calc/roles/${role}.png`" :alt="role" />
+                <button v-for="vRole in allVirtualRoleValues" :key="vRole" class="chip"
+                    :class="hiddenVirtualRoles.includes(vRole) ? 'chip--hidden' : 'chip--visible'"
+                    @click="toggleVirtualRole(vRole)"
+                    :title="hiddenVirtualRoles.includes(vRole) ? `Show ${virtualRoleLabel(vRole)}` : `Hide ${virtualRoleLabel(vRole)}`">
+                    <div class="role-chip-inner">
+                        <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
+                        <span v-if="isVirtualAttacker(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
+                        }}</span>
+                    </div>
                 </button>
             </div>
         </div>
@@ -63,9 +68,15 @@
                             <img v-if="xAxisKey === 'element'" :src="`/exedra-dmg-calc/elements/${xVal}.png`"
                                 :alt="xVal" :title="`Hide ${xVal}`" class="header-icon header-icon-btn"
                                 @click="toggleElement(xVal as KiokuElement)" />
-                            <img v-else-if="xAxisKey === 'role'" :src="`/exedra-dmg-calc/roles/${xVal}.png`" :alt="xVal"
-                                :title="`Hide ${xVal}`" class="header-icon header-icon-btn"
-                                @click="toggleRole(xVal as KiokuRole)" />
+                            <template v-else-if="xAxisKey === 'role'">
+                                <div class="role-header-inner" @click="toggleVirtualRole(xVal)"
+                                    :title="`Hide ${virtualRoleLabel(xVal)}`">
+                                    <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(xVal)}.png`" :alt="xVal"
+                                        class="header-icon header-icon-btn" />
+                                    <span v-if="isVirtualAttacker(xVal)" class="role-header-label">{{
+                                        virtualRoleRangeTag(xVal) }}</span>
+                                </div>
+                            </template>
                             <span v-else class="ascension-header-label">A{{ xVal }}</span>
                         </th>
                     </tr>
@@ -76,9 +87,15 @@
                             <img v-if="yAxisKey === 'element'" :src="`/exedra-dmg-calc/elements/${yVal}.png`"
                                 :alt="yVal" :title="`Hide ${yVal}`" class="header-icon header-icon-btn"
                                 @click="toggleElement(yVal as KiokuElement)" />
-                            <img v-else-if="yAxisKey === 'role'" :src="`/exedra-dmg-calc/roles/${yVal}.png`" :alt="yVal"
-                                :title="`Hide ${yVal}`" class="header-icon header-icon-btn"
-                                @click="toggleRole(yVal as KiokuRole)" />
+                            <template v-else-if="yAxisKey === 'role'">
+                                <div class="role-header-inner" @click="toggleVirtualRole(yVal)"
+                                    :title="`Hide ${virtualRoleLabel(yVal)}`">
+                                    <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(yVal)}.png`" :alt="yVal"
+                                        class="header-icon header-icon-btn" />
+                                    <span v-if="isVirtualAttacker(yVal)" class="role-header-label">{{
+                                        virtualRoleRangeTag(yVal) }}</span>
+                                </div>
+                            </template>
                             <span v-else class="ascension-header-label">A{{ yVal }}</span>
                         </td>
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
@@ -116,6 +133,14 @@
                                                 <img :src="`/exedra-dmg-calc/elements/${ch.element}.png`"
                                                     :alt="ch.element" class="info-badge-icon" />
                                             </div>
+                                            <div class="ascension-badge level-badge"
+                                                v-else-if="infoAxisKey === 'role' && ch.role === KiokuRole.Attacker && splitAttackerRange">
+                                                <div class="role-badge-inner">
+                                                    <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`" :alt="ch.role"
+                                                        class="info-badge-icon" />
+                                                    <span class="role-badge-tag">{{ rangeTag(ch.range) }}</span>
+                                                </div>
+                                            </div>
                                             <div class="ascension-badge level-badge info-badge-img"
                                                 v-else-if="infoAxisKey === 'role'">
                                                 <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`" :alt="ch.role"
@@ -140,10 +165,10 @@ import { Character, KiokuElement, KiokuRole, KiokuConstants } from "../types/Kio
 import { useSetting } from "../store/settingsStore"
 import html2canvas from "html2canvas"
 import { toast } from "vue3-toastify"
+import { Kioku } from "../models/Kioku"
+import { skillDetails } from "../utils/helpers"
 
 const store = useCharacterStore()
-
-
 type AxisKey = "element" | "role" | "ascension"
 
 const axisOptions: { key: AxisKey; label: string }[] = [
@@ -185,9 +210,45 @@ const showOwnedOnly = useSetting("showGridOnlyOwned", true)
 const showLevels = useSetting("showLevels", true)
 const showHearts = useSetting("showHearts", false)
 const colourLevels = useSetting("colourLevels", true)
+const splitAttackerRange = useSetting("splitAttackerRange", true)
+
+type VirtualRole = string
+
+const VIRTUAL_ATTACKER_ST = "Attacker-ST"
+const VIRTUAL_ATTACKER_P = "Attacker-Prox"
+const VIRTUAL_ATTACKER_AOE = "Attacker-AOE"
+
+const rangeTag = (range: number): string => {
+    if (range === 2) return "Prox"
+    if (range === 3) return "AOE"
+    return "ST"
+}
+
+const virtualRoleForChar = (ch: { role: string; range: number }): VirtualRole => {
+    if (ch.role === KiokuRole.Attacker && splitAttackerRange.value) {
+        return `Attacker-${rangeTag(ch.range)}`
+    }
+    return ch.role
+}
+
+const isVirtualAttacker = (vRole: VirtualRole): boolean =>
+    vRole === VIRTUAL_ATTACKER_ST || vRole === VIRTUAL_ATTACKER_P || vRole === VIRTUAL_ATTACKER_AOE
+
+const virtualRoleBase = (vRole: VirtualRole): string =>
+    isVirtualAttacker(vRole) ? KiokuRole.Attacker : vRole
+
+const virtualRoleRangeTag = (vRole: VirtualRole): string => {
+    if (vRole === VIRTUAL_ATTACKER_ST) return "ST"
+    if (vRole === VIRTUAL_ATTACKER_P) return "Prox"
+    if (vRole === VIRTUAL_ATTACKER_AOE) return "AOE"
+    return ""
+}
+
+const virtualRoleLabel = (vRole: VirtualRole): string =>
+    isVirtualAttacker(vRole) ? `Attacker (${virtualRoleRangeTag(vRole)})` : vRole
 
 const hiddenElements = useSetting<KiokuElement[]>("hiddenGridElements", [])
-const hiddenRoles = useSetting<KiokuRole[]>("hiddenGridRoles", [])
+const hiddenVirtualRoles = useSetting<VirtualRole[]>("hiddenGridRoles", [])
 
 const toggleElement = (el: KiokuElement) => {
     hiddenElements.value = hiddenElements.value.includes(el)
@@ -195,53 +256,83 @@ const toggleElement = (el: KiokuElement) => {
         : [...hiddenElements.value, el]
 }
 
-const toggleRole = (role: KiokuRole) => {
-    hiddenRoles.value = hiddenRoles.value.includes(role)
-        ? hiddenRoles.value.filter(r => r !== role)
-        : [...hiddenRoles.value, role]
+const toggleVirtualRole = (vRole: VirtualRole) => {
+    hiddenVirtualRoles.value = hiddenVirtualRoles.value.includes(vRole)
+        ? hiddenVirtualRoles.value.filter(r => r !== vRole)
+        : [...hiddenVirtualRoles.value, vRole]
 }
 
+const markedCharacters = computed(() => store.characters.map(c => {
+    let range = 1
+    if (c.name === "Lux☆Magica") c.rarity = 4
+    if (c.role === KiokuRole.Attacker) {
+        const k = new Kioku({ ...c })
+        for (const e of Object.values(skillDetails).filter(v => v.skillMstId === k.data.special_id * 100 + 10)) {
+            if (e.abilityEffectType.startsWith("DMG_")) {
+                range = Math.max(range, e.range)
+            }
+        }
+    }
+    return { ...c, range }
+}))
+
+const baseRoleOrder = computed(() =>
+    Object.values(KiokuRole).sort((a, b) => {
+        if (a === KiokuRole.Defender) return 1
+        if (b === KiokuRole.Defender) return -1
+        if (a === KiokuRole.Healer) return 1
+        if (b === KiokuRole.Healer) return -1
+        return 0
+    })
+)
+
+const allVirtualRoleValues = computed<VirtualRole[]>(() => {
+    const result: VirtualRole[] = []
+    for (const role of baseRoleOrder.value) {
+        if (role === KiokuRole.Attacker && splitAttackerRange.value) {
+            result.push(VIRTUAL_ATTACKER_ST, VIRTUAL_ATTACKER_P, VIRTUAL_ATTACKER_AOE)
+        } else {
+            result.push(role)
+        }
+    }
+    return result
+})
+
+const displayedVirtualRoles = computed(() =>
+    allVirtualRoleValues.value.filter(vr => !hiddenVirtualRoles.value.includes(vr))
+)
+
 const allChars = computed(() =>
-    (showOwnedOnly.value ? store.characters.filter(c => c.enabled) : store.characters)
-        .map(c => ({ ...c, rarity: c.name === "Lux☆Magica" ? 4 : c.rarity }))
+    markedCharacters.value
+        .filter(c => showOwnedOnly.value && c.enabled)
         .filter(c => !hiddenElements.value.includes(c.element as KiokuElement))
-        .filter(c => !hiddenRoles.value.includes(c.role as KiokuRole))
+        .filter(c => !hiddenVirtualRoles.value.includes(virtualRoleForChar(c)))
 )
 
 const allElementValues = computed(() => Object.values(KiokuElement))
 const displayedElements = computed(() => allElementValues.value.filter(el => !hiddenElements.value.includes(el)))
 
-const allRoleValues = computed(() => Object.values(KiokuRole).sort((a, b) => {
-    if (a === KiokuRole.Defender) return 1
-    if (b === KiokuRole.Defender) return -1
-    if (a === KiokuRole.Healer) return 1
-    if (b === KiokuRole.Healer) return -1
-    return 0
-}))
-const displayedRoles = computed(() => allRoleValues.value.filter(role => !hiddenRoles.value.includes(role)))
 
 const valuesFor = (key: AxisKey): string[] => {
     if (key === "element") return displayedElements.value as string[]
-    if (key === "role") return displayedRoles.value as string[]
+    if (key === "role") return displayedVirtualRoles.value
     return ["5", "4", "3", "2", "1", "0"]
 }
 
 const visibleXValues = computed(() => valuesFor(xAxisKey.value))
 const visibleYValues = computed(() => valuesFor(yAxisKey.value))
 
-
-const getChars = (xVal: string, yVal: string, rarity: number): Character[] =>
+const getChars = (xVal: string, yVal: string, rarity: number): (typeof allChars.value[0])[] =>
     allChars.value.filter(c => {
         if (c.rarity !== rarity) return false
-        const xMatch =
-            xAxisKey.value === "element" ? c.element === xVal :
-                xAxisKey.value === "role" ? c.role === xVal :
-                    String(c.ascension) === xVal
-        const yMatch =
-            yAxisKey.value === "element" ? c.element === yVal :
-                yAxisKey.value === "role" ? c.role === yVal :
-                    String(c.ascension) === yVal
-        return xMatch && yMatch
+
+        const matchesVal = (axisKey: AxisKey, val: string) => {
+            if (axisKey === "element") return c.element === val
+            if (axisKey === "ascension") return String(c.ascension) === val
+            return virtualRoleForChar(c) === val
+        }
+
+        return matchesVal(xAxisKey.value, xVal) && matchesVal(yAxisKey.value, yVal)
     })
 
 const maxCharsPerRarityPerRow = computed(() => {
@@ -402,6 +493,57 @@ const downloadAscensionList = async () => {
     width: 16px;
     height: 16px;
     display: block;
+}
+
+.role-chip-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.role-chip-label {
+    position: absolute;
+    bottom: -2px;
+    right: -4px;
+    font-size: 0.5rem;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    border-radius: 3px;
+    padding: 0 2px;
+    line-height: 1.3;
+    pointer-events: none;
+}
+
+.role-header-inner {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.role-header-label {
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #eee;
+    margin-top: 2px;
+    line-height: 1;
+}
+
+.role-badge-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+}
+
+.role-badge-tag {
+    font-size: 0.5rem;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
 }
 
 .chips-label {
