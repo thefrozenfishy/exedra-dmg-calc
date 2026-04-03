@@ -179,8 +179,8 @@ const axisOptions: { key: AxisKey; label: string }[] = [
     { key: "ascension", label: "Ascension" },
 ]
 
-const xAxisKey = useSetting<AxisKey>("gridXAxis", "element")
-const yAxisKey = useSetting<AxisKey>("gridYAxis", "role")
+const xAxisKey = useSetting<AxisKey>("gridXAxis", "role")
+const yAxisKey = useSetting<AxisKey>("gridYAxis", "ascension")
 
 const infoAxisKey = computed<AxisKey>(() =>
     axisOptions.find(o => o.key !== xAxisKey.value && o.key !== yAxisKey.value)!.key
