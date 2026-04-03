@@ -9,7 +9,7 @@
                 <label> <input type="checkbox" v-model="show5stars" /> Include 5-stars </label>
                 <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
                 <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
-                <label> <input type="checkbox" v-model="showOwnedOnly" /> Show Owned Only </label>
+                <label> <input type="checkbox" v-model="showUnowned" /> Show Unowned </label>
             </div>
             <div class="options-row">
                 <label> <input type="checkbox" v-model="showLevels" /> Show Magic & Special levels </label>
@@ -53,7 +53,7 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualAttacker(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                            }}</span>
+                        }}</span>
                     </div>
                 </button>
             </div>
@@ -77,7 +77,8 @@
                                         virtualRoleRangeTag(xVal) }}</span>
                                 </div>
                             </template>
-                            <span v-else class="ascension-header-label">A{{ xVal }}</span>
+                            <span v-else class="ascension-header-label">{{ xVal === "-1" ? "Not Owned" : `A${xVal}`
+                                }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -96,7 +97,8 @@
                                         virtualRoleRangeTag(yVal) }}</span>
                                 </div>
                             </template>
-                            <span v-else class="ascension-header-label">A{{ yVal }}</span>
+                            <span v-else class="ascension-header-label">{{ yVal === "-1" ? "Not Owned" : `A${yVal}`
+                                }}</span>
                         </td>
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
                             <div v-for="r in [5, 4, 3]" :key="r" v-show="shouldShow(r)" class="rarity-band"
@@ -126,7 +128,7 @@
                                             </div>
 
                                             <div class="ascension-badge level-badge" v-if="infoAxisKey === 'ascension'">
-                                                A{{ ch.ascension }}
+                                                {{ ch.ascension === -1 ? "X" : `A${ch.ascension}` }}
                                             </div>
                                             <div class="ascension-badge level-badge info-badge-img"
                                                 v-else-if="infoAxisKey === 'element'">
@@ -206,7 +208,7 @@ const shouldShow = (r: number) => {
 const show5stars = useSetting("showGrid5stars", true)
 const show4stars = useSetting("showGrid4stars", false)
 const show3stars = useSetting("showGrid3stars", false)
-const showOwnedOnly = useSetting("showGridOnlyOwned", true)
+const showUnowned = useSetting("showGridUnowned", false)
 const showLevels = useSetting("showLevels", true)
 const showHearts = useSetting("showHearts", false)
 const colourLevels = useSetting("colourLevels", true)
@@ -265,6 +267,7 @@ const toggleVirtualRole = (vRole: VirtualRole) => {
 const markedCharacters = computed(() => store.characters.map(c => {
     let range = 1
     if (c.name === "Lux☆Magica") c.rarity = 4
+    if (!c.enabled) c.ascension = -1
     if (c.role === KiokuRole.Attacker) {
         const k = new Kioku({ ...c })
         for (const e of Object.values(skillDetails).filter(v => v.skillMstId === k.data.special_id * 100 + 10)) {
@@ -304,7 +307,7 @@ const displayedVirtualRoles = computed(() =>
 
 const allChars = computed(() =>
     markedCharacters.value
-        .filter(c => !showOwnedOnly.value || c.enabled)
+        .filter(c => showUnowned.value ? true : c.enabled )
         .filter(c => !hiddenElements.value.includes(c.element as KiokuElement))
         .filter(c => !hiddenVirtualRoles.value.includes(virtualRoleForChar(c)))
 )
@@ -316,6 +319,7 @@ const displayedElements = computed(() => allElementValues.value.filter(el => !hi
 const valuesFor = (key: AxisKey): string[] => {
     if (key === "element") return displayedElements.value as string[]
     if (key === "role") return displayedVirtualRoles.value
+    if (showUnowned.value) return ["5", "4", "3", "2", "1", "0", "-1"]
     return ["5", "4", "3", "2", "1", "0"]
 }
 
@@ -328,7 +332,7 @@ const getChars = (xVal: string, yVal: string, rarity: number): (typeof allChars.
 
         const matchesVal = (axisKey: AxisKey, val: string) => {
             if (axisKey === "element") return c.element === val
-            if (axisKey === "ascension") return String(c.ascension) === val
+            if (axisKey === "ascension") return val === (c.enabled ? String(c.ascension) : "-1")
             return virtualRoleForChar(c) === val
         }
 
