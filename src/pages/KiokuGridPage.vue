@@ -270,8 +270,11 @@ const markedCharacters = computed(() => store.characters.map(c => {
     if (!c.enabled) c.ascension = -1
     if (c.role === KiokuRole.Attacker) {
         const k = new Kioku({ ...c })
-        for (const e of Object.values(skillDetails).filter(v => v.skillMstId === k.data.special_id * 100 + 10)) {
-            if (e.abilityEffectType.startsWith("DMG_")) {
+        const effects = Object.values(skillDetails).filter(v => v.skillMstId === k.data.special_id * 100 + 10)
+        const highest = effects.reduce((max, e) => e.abilityEffectType.startsWith("DMG_") && e.value1 > max ? e.value1 : max, 1)
+        for (const e of effects) {
+            if (e.abilityEffectType.startsWith("DMG_") && e.value1 >= highest * 0.6) {
+                // To avoid Madokami etc from being listed as AOE when they have a single strong hit and a weak AOE hit, only consider hits that are at least 60% of the strongest hit
                 range = Math.max(range, e.range)
             }
         }
