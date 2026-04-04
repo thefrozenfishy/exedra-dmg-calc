@@ -137,7 +137,7 @@ function buffAppliesToAlly(range: number, sourceIdx: number, targetIdx: number):
 
 type EffectPool = Record<string, number>;
 type ExtraEffectPool = Record<string, [Function, number][]>;
-type DebugContributions = Record<string, [SkillDetail, number][]>;
+type DebugContributions = Record<string, [SkillDetail, number, string][]>;
 
 interface AllyContext {
     kioku: ScoreAttackKioku;
@@ -251,8 +251,10 @@ export class ScoreAttackTeam {
                     this.distributeEffect(
                         detail, valueTotal,
                         this.debuffPool, this.extraDebuffPool,
-                        undefined, undefined,
+                        undefined,
+                        undefined,
                         sourceCtx.debugDebuffContributions,
+                        sourceKioku.name,
                     );
                 } else {
                     for (let targetIdx = 0; targetIdx < 5; targetIdx++) {
@@ -271,6 +273,8 @@ export class ScoreAttackTeam {
                             targetCtx.effects, targetCtx.extraEffects,
                             dbgToDps,
                             dbgToSelf,
+                            undefined,
+                            sourceKioku.name,
                         );
                     }
                 }
@@ -310,6 +314,7 @@ export class ScoreAttackTeam {
         debugContributionsToDps?: DebugContributions,
         debugContributionsToSelf?: DebugContributions,
         debugDebuffContributions?: DebugContributions,
+        sourceName: string = "?",
     ) {
         detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
             const isActiveCond = isActiveConditionRelevantForScoreAttack(
@@ -325,7 +330,7 @@ export class ScoreAttackTeam {
                 for (const dbg of [debugContributionsToDps, debugContributionsToSelf, debugDebuffContributions]) {
                     if (!dbg) continue;
                     if (!(detail.abilityEffectType in dbg)) dbg[detail.abilityEffectType] = [];
-                    dbg[detail.abilityEffectType].push([detail, valueTotal]);
+                    dbg[detail.abilityEffectType].push([detail, valueTotal, sourceName]);
                 }
             } else {
                 if (!(detail.abilityEffectType in extraPool)) {
@@ -574,27 +579,41 @@ export class ScoreAttackTeam {
         return [total_dmg, average_dmg, Math.round(critRate * 100), allDebugSections];
     }
 
-    private formatContributions(contribs: DebugContributions): string {
-        const keys = Object.keys(contribs).sort();
-        if (keys.length === 0) return "(none)";
-        return keys.map(key =>
-            `  ${key}\n   ${contribs[key]
-                .sort((a, b) => a[1] - b[1])
-                .map(([d, n]) => {
-                    let st = "";
-                    if (d.activeConditionSetIdCsv.length) st += "A" + d.activeConditionSetIdCsv;
-                    if (d.startConditionSetIdCsv.length) {
-                        if (st.length) st += " & ";
-                        st += "S" + d.startConditionSetIdCsv;
-                    }
-                    let outString = `${prettyNumber(n / 10)} (${skillDetailId(d)})`;
-                    if (st.length) outString += " => " + st;
-                    const desc = d.description.match(/.{1,20}/g)?.join("\n     ");
-                    outString += `${desc ? `\n    ${desc}` : ""}`;
-                    return outString;
-                })
-                .join("\n   ")}`
-        ).join("\n");
+    private formatContributions(contribs: DebugContributions, saySource: boolean): string {
+        const bySource: Record<string, [string, SkillDetail, number][]> = {};
+
+        for (const [effectType, entries] of Object.entries(contribs)) {
+            for (const [detail, value, sourceName] of entries) {
+                if (!bySource[sourceName]) bySource[sourceName] = [];
+                bySource[sourceName].push([effectType, detail, value]);
+            }
+        }
+
+        if (Object.keys(bySource).length === 0) return "(none)";
+
+        return Object.entries(bySource)
+            .sort(([a], [b]) => a.localeCompare(b))
+            .map(([sourceName, entries]) => {
+                const lines = entries
+                    .sort(([, , a], [, , b]) => a - b)
+                    .map(([effectType, d, n]) => {
+                        let st = "";
+                        if (d.activeConditionSetIdCsv.length) st += "A" + d.activeConditionSetIdCsv;
+                        if (d.startConditionSetIdCsv.length) {
+                            if (st.length) st += " & ";
+                            st += "S" + d.startConditionSetIdCsv;
+                        }
+                        let outString = ` ${effectType}: ${prettyNumber(n / 10)} (${skillDetailId(d)})`.match(/.{1,30}/g)?.join("\n     ");
+                        if (st.length) outString += " => " + st;
+                        const desc = d.description.match(/.{1,20}/g)?.join("\n     ");
+                        if (desc) outString += `\n  ${desc}`;
+                        return outString;
+                    })
+                    .join("\n");
+                if (saySource) return `From ${sourceName}:\n${lines}`;
+                return lines
+            })
+            .join("\n\n");
     }
 
     calculate_single_dmg(
@@ -694,8 +713,7 @@ export class ScoreAttackTeam {
         if (this.debug) {
             const posCtx = this.allyContexts[idx];
 
-            sections.calc = `DMG CALC MULTIPLIERS:
-Ability Mult - ${special * 100 | 0}%
+            sections.calc = `Ability Mult - ${special * 100 | 0}%
 Base ${uses_def ? "Def" : "Atk"}     - ${(base_atk | 0).toLocaleString()}
 ${uses_def ? "Def" : "Atk"} Up %     - ${atk_pluss * 100 | 0}%
 ${uses_def ? "Def" : "Atk"} Up flat  - ${flat_atk | 0}
@@ -724,8 +742,7 @@ Pre-dot-avrg - ${(pre_dot_average | 0).toLocaleString()}
 Result       - ${(total | 0).toLocaleString()}
 AverageDmg   - ${(average_total | 0).toLocaleString()}`;
 
-            sections.enemy = `ENEMY STATS:
-enemiesAlive - ${currentAmountOfEnemies}
+            sections.enemy = `enemiesAlive - ${currentAmountOfEnemies}
 base_def     - ${enemy.defense.toLocaleString()}
 break        - ${enemy.maxBreak}%
 def_up       - ${enemy.defenseUp}%
@@ -752,6 +769,7 @@ enemy died   - ${enemyDied}`;
                     .map(key => {
                         let val = (kiokuAtPosition as any)[key];
                         if (key.startsWith("base") || key.endsWith("Def") || key.endsWith("Hp")) return;
+                        if (key === "shouldUseSupportAndPortraitReason") return;
                         if (["effects", "ascension", "crys", "data", "inputCrys", "inputCrysSub", "name", "scalableEffects", "unscalableEffects"].includes(key)) return;
                         if (key === "portrait") { val = val?.["stats"]?.["atk"]; key = "PortraitAtk"; }
                         if (key === "support") { val = val?.getBaseAtk() * 0.16; key = "SupportAtk"; }
@@ -763,17 +781,13 @@ enemy died   - ${enemyDied}`;
                     })
                     .filter(Boolean)
                 : [];
-            sections.kiokuStats = `KIOKU STATS: ${kiokuAtPosition?.name ?? ""}
-${statLines.join("\n")}`;
+            sections.kiokuStats = statLines.join("\n");
 
-            sections.kiokuReceived = `BUFFS RECEIVED BY ${posCtx.kioku.name}:
-${this.formatContributions(posCtx.debugContributionsToSelf)}`;
+            sections.kiokuReceived = this.formatContributions(posCtx.debugContributionsToSelf, true);
 
-            sections.kiokuContributed = `CONTRIBUTED TO DPS BY ${posCtx.kioku.name}:
-${this.formatContributions(posCtx.debugContributionsToDps)}`;
+            sections.kiokuContributed = this.formatContributions(posCtx.debugContributionsToDps, false);
 
-            sections.kiokuDebuffs = `DEBUFFS APPLIED BY ${posCtx.kioku.name}:
-${this.formatContributions(posCtx.debugDebuffContributions)}`;
+            sections.kiokuDebuffs = this.formatContributions(posCtx.debugDebuffContributions, false);
         }
 
         return [total | 0, average_total | 0, crit_rate, sections, enemyDied];

@@ -297,7 +297,6 @@ const aliments = reactive([
 
 .debug-pre {
   text-align: left;
-  padding: 0.5rem 1rem;
   margin: 0;
   font-size: 0.78rem;
   overflow-x: visible;
