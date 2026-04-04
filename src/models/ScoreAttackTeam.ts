@@ -655,8 +655,6 @@ export class ScoreAttackTeam {
         const elem_res_down =
             this.getDebuffEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak) / 1000;
 
-        let base_dmg = this.calc_base_dmg(special, base_atk);
-        if (special > 0) base_dmg += this.add_additional_dmg();
 
         const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
         const crit_factor = 1 + (enemy.isCrit ? crit_dmg : 0);
@@ -667,9 +665,13 @@ export class ScoreAttackTeam {
         const effect_elem_factor = 1 + (enemy.isWeak ? 0.2 + elem_dmg_up : 0);
         const break_factor = enemy.isBreak ? enemy.maxBreak / 100 : 1;
 
+        let base_dmg = this.calc_base_dmg(special, base_atk);
         let dot_total_dmg = 0;
-        if (enemy.enabled && this.dps.effects.some(eff => eff.abilityEffectType === "IMM_SLIP_DMG")) {
-            dot_total_dmg = this.add_dot_dmg(enemy, currentAmountOfEnemies);
+        if (special > 0) {
+            base_dmg += this.add_additional_dmg();
+            if (this.dps.effects.some(eff => eff.abilityEffectType === "IMM_SLIP_DMG")) {
+                dot_total_dmg = this.add_dot_dmg(enemy, currentAmountOfEnemies);
+            }
         }
 
         const total_dmg_pre_crit =
