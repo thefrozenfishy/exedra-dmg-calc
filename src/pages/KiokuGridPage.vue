@@ -12,7 +12,7 @@
                 <label> <input type="checkbox" v-model="showUnowned" /> Show Unowned </label>
             </div>
             <div class="options-row">
-                <label> <input type="checkbox" v-model="showLevels" /> Show Magic & Special levels </label>
+                <label> <input type="checkbox" v-model="showLevels" /> Show Magic &amp; Special levels </label>
                 <label> <input type="checkbox" v-model="showHearts" /> Show Heartphial levels </label>
                 <label> <input type="checkbox" v-model="colourLevels" :disabled="!(showLevels || showHearts)" /> Colour
                     max levels </label>
@@ -36,7 +36,6 @@
                     </select>
                 </label>
             </div>
-
             <div class="options-row">
                 <button v-for="el in allElementValues" :key="el" class="chip"
                     :class="hiddenElements.includes(el) ? 'chip--hidden' : 'chip--visible'"
@@ -53,12 +52,11 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualAttacker(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                        }}</span>
+                            }}</span>
                     </div>
                 </button>
             </div>
         </div>
-
         <div class="grid-scroll">
             <table class="er-grid">
                 <thead>
@@ -102,31 +100,27 @@
                         </td>
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
                             <div v-for="r in [5, 4, 3]" :key="r" v-show="shouldShow(r)" class="rarity-band"
-                                :class="`rarity-${r}`" :style="{ '--band-rows': bandRows(xVal, yVal, r) }">
+                                :class="`rarity-${r}`" :style="{ '--band-rows': bandRows(yVal, r) }">
                                 <div v-for="ch in getChars(xVal, yVal, r)" :key="ch.id" class="char-thumb">
                                     <div class="character-img-wrapper">
                                         <div>
                                             <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
                                                 <img :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`"
-                                                    :alt="ch.name" :title="makeTitle(ch)" class="char-img"
-                                                    :class="borderClass(ch)" />
+                                                    :alt="ch.name" :title="ch._title" class="char-img"
+                                                    :class="ch._borderClass" />
                                             </a>
-
                                             <div class="heart-level-badge level-badge" v-if="showHearts && ch.enabled"
                                                 :class="colourLevels ? (ch.heartphialLvl === KiokuConstants.maxHeartphialLvl ? 'maxLvl' : 'notMaxLvl') : ''">
                                                 {{ ch.heartphialLvl }}
                                             </div>
-
                                             <div class="magic-level-badge level-badge" v-if="showLevels && ch.enabled"
                                                 :class="colourLevels ? (ch.magicLvl === KiokuConstants.maxMagicLvl ? 'maxLvl' : 'notMaxLvl') : ''">
                                                 {{ ch.magicLvl }}
                                             </div>
-
                                             <div class="special-level-badge level-badge" v-if="showLevels && ch.enabled"
-                                                :class="colourLevels ? (isMaxSpecialLvl(ch) ? 'maxLvl' : 'notMaxLvl') : ''">
+                                                :class="colourLevels ? (ch._isMaxSpecial ? 'maxLvl' : 'notMaxLvl') : ''">
                                                 {{ ch.specialLvl }}
                                             </div>
-
                                             <div class="ascension-badge level-badge" v-if="infoAxisKey === 'ascension'">
                                                 {{ ch.ascension === -1 ? "X" : `A${ch.ascension}` }}
                                             </div>
@@ -171,6 +165,7 @@ import { Kioku } from "../models/Kioku"
 import { skillDetails } from "../utils/helpers"
 
 const store = useCharacterStore()
+
 type AxisKey = "element" | "role" | "ascension"
 
 const axisOptions: { key: AxisKey; label: string }[] = [
@@ -264,22 +259,40 @@ const toggleVirtualRole = (vRole: VirtualRole) => {
         : [...hiddenVirtualRoles.value, vRole]
 }
 
+const skillDetailsBySkillMstId = (() => {
+    const map = new Map<number, (typeof skillDetails[keyof typeof skillDetails])[]>()
+    for (const v of Object.values(skillDetails)) {
+        const arr = map.get(v.skillMstId) ?? []
+        arr.push(v)
+        map.set(v.skillMstId, arr)
+    }
+    return map
+})()
+
 const markedCharacters = computed(() => store.characters.map(c => {
     let range = 1
     if (c.name === "Lux☆Magica") c.rarity = 4
     if (!c.enabled) c.ascension = -1
     if (c.role === KiokuRole.Attacker) {
         const k = new Kioku({ ...c })
-        const effects = Object.values(skillDetails).filter(v => v.skillMstId === k.data.special_id * 100 + 10)
-        const highest = effects.reduce((max, e) => e.abilityEffectType.startsWith("DMG_") && e.value1 > max ? e.value1 : max, 1)
+        const effects = skillDetailsBySkillMstId.get(k.data.special_id * 100 + 10) ?? []
+        const highest = effects.reduce(
+            (max, e) => e.abilityEffectType.startsWith("DMG_") && e.value1 > max ? e.value1 : max,
+            1
+        )
         for (const e of effects) {
             if (e.abilityEffectType.startsWith("DMG_") && e.value1 >= highest * 0.6) {
-                // To avoid Madokami etc from being listed as AOE when they have a single strong hit and a weak AOE hit, only consider hits that are at least 60% of the strongest hit
                 range = Math.max(range, e.range)
             }
         }
     }
-    return { ...c, range }
+    const enriched = { ...c, range }
+    return {
+        ...enriched,
+        _borderClass: borderClass(enriched as unknown as Character),
+        _title: makeTitle(enriched as unknown as Character),
+        _isMaxSpecial: isMaxSpecialLvl(enriched as unknown as Character),
+    }
 }))
 
 const baseRoleOrder = computed(() =>
@@ -310,14 +323,13 @@ const displayedVirtualRoles = computed(() =>
 
 const allChars = computed(() =>
     markedCharacters.value
-        .filter(c => showUnowned.value ? true : c.enabled )
+        .filter(c => showUnowned.value ? true : c.enabled)
         .filter(c => !hiddenElements.value.includes(c.element as KiokuElement))
         .filter(c => !hiddenVirtualRoles.value.includes(virtualRoleForChar(c)))
 )
 
 const allElementValues = computed(() => Object.values(KiokuElement))
 const displayedElements = computed(() => allElementValues.value.filter(el => !hiddenElements.value.includes(el)))
-
 
 const valuesFor = (key: AxisKey): string[] => {
     if (key === "element") return displayedElements.value as string[]
@@ -329,18 +341,36 @@ const valuesFor = (key: AxisKey): string[] => {
 const visibleXValues = computed(() => valuesFor(xAxisKey.value))
 const visibleYValues = computed(() => valuesFor(yAxisKey.value))
 
-const getChars = (xVal: string, yVal: string, rarity: number): (typeof allChars.value[0])[] =>
-    allChars.value.filter(c => {
-        if (c.rarity !== rarity) return false
+const charMap = computed(() => {
+    const xVals = visibleXValues.value
+    const yVals = visibleYValues.value
+    const xKey = xAxisKey.value
+    const yKey = yAxisKey.value
+    const chars = allChars.value
 
-        const matchesVal = (axisKey: AxisKey, val: string) => {
-            if (axisKey === "element") return c.element === val
-            if (axisKey === "ascension") return val === (c.enabled ? String(c.ascension) : "-1")
-            return virtualRoleForChar(c) === val
+    const matchVal = (axisKey: AxisKey, val: string, c: typeof chars[0]): boolean => {
+        if (axisKey === "element") return c.element === val
+        if (axisKey === "ascension") return val === (c.enabled ? String(c.ascension) : "-1")
+        return virtualRoleForChar(c) === val
+    }
+
+    const map = new Map<string, typeof chars>()
+
+    for (const yVal of yVals) {
+        for (const xVal of xVals) {
+            for (const r of [3, 4, 5] as const) {
+                const key = `${xVal}|${yVal}|${r}`
+                map.set(key, chars.filter(c =>
+                    c.rarity === r && matchVal(xKey, xVal, c) && matchVal(yKey, yVal, c)
+                ))
+            }
         }
+    }
+    return map
+})
 
-        return matchesVal(xAxisKey.value, xVal) && matchesVal(yAxisKey.value, yVal)
-    })
+const getChars = (xVal: string, yVal: string, rarity: number) =>
+    charMap.value.get(`${xVal}|${yVal}|${rarity}`) ?? []
 
 const maxCharsPerRarityPerRow = computed(() => {
     const result: Record<string, Record<number, number>> = {}
@@ -348,7 +378,7 @@ const maxCharsPerRarityPerRow = computed(() => {
         result[yVal] = { 3: 0, 4: 0, 5: 0 }
         for (const xVal of visibleXValues.value) {
             for (const r of [3, 4, 5]) {
-                const count = getChars(xVal, yVal, r).length
+                const count = (charMap.value.get(`${xVal}|${yVal}|${r}`) ?? []).length
                 if (count > result[yVal][r]) result[yVal][r] = count
             }
         }
@@ -356,15 +386,17 @@ const maxCharsPerRarityPerRow = computed(() => {
     return result
 })
 
-const bandRows = (xVal: string, yVal: string, rarity: number): number => {
+const bandRows = (yVal: string, rarity: number): number => {
     const maxInRow = maxCharsPerRarityPerRow.value[yVal]?.[rarity] ?? 0
     return Math.max(1, Math.ceil(maxInRow / 2))
 }
 
+const today = new Date()
+
 const borderClass = (ch: Character): string => {
     if (ch.name === "Lux☆Magica") return "default-border"
     if (ch.obtain && ch.obtain !== "Permanent") return "limited-border"
-    if (new Date() > new Date(ch.permaDate)) return "default-border"
+    if (today > new Date(ch.permaDate)) return "default-border"
     return "not-limited-border"
 }
 
@@ -372,11 +404,11 @@ const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
     if (ch.name === "Lux☆Magica") { }
     else if (ch.obtain && ch.obtain !== "Permanent") {
-        title += ` -  ${ch.obtain}`
+        title += ` - ${ch.obtain}`
     } else if (ch.permaDate == "") {
-        title += " -  Not added to permanent yet"
-    } else if (new Date(ch.permaDate) > new Date()) {
-        title += " -  Added to standard pool on " + new Date(ch.permaDate).toLocaleDateString()
+        title += " - Not added to permanent yet"
+    } else if (new Date(ch.permaDate) > today) {
+        title += " - Added to standard pool on " + new Date(ch.permaDate).toLocaleDateString()
     }
     return title
 }
@@ -399,33 +431,26 @@ const downloadImg = async (blob: Blob) => {
 const copyAscensionList = async () => {
     const el = document.querySelector(".er-grid") as HTMLElement
     if (!el) return
-
     const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
-
     const blob: Blob | null = await new Promise(resolve =>
         canvas.toBlob(resolve, "image/png")
     )
     if (!blob) return
-
     try {
         const perm = await navigator.permissions?.query({
             name: "clipboard-write" as PermissionName
         })
     } catch { }
-
     try {
         const item = new ClipboardItem({ "image/png": blob })
         await navigator.clipboard.write([item])
-
         toast.success("Copied to clipboard!", {
             position: toast.POSITION.TOP_RIGHT,
             icon: false,
         })
     } catch (err) {
         console.error("Clipboard failed:", err)
-
         await downloadImg(blob)
-
         toast.info("Clipboard blocked — saved as file instead", {
             position: toast.POSITION.TOP_RIGHT,
             icon: false,
@@ -436,14 +461,10 @@ const copyAscensionList = async () => {
 const downloadAscensionList = async () => {
     const el = document.querySelector(".ascension-table") as HTMLElement
     if (!el) return
-
     const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
-
     canvas.toBlob((blob) => {
         if (!blob) return
-
         downloadImg(blob)
-
     }, "image/png")
 }
 </script>
