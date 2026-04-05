@@ -52,7 +52,7 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualAttacker(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                            }}</span>
+                        }}</span>
                     </div>
                 </button>
             </div>
@@ -76,7 +76,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ xVal === "-1" ? "Not Owned" : `A${xVal}`
-                                }}</span>
+                            }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -96,56 +96,62 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ yVal === "-1" ? "Not Owned" : `A${yVal}`
-                                }}</span>
+                            }}</span>
                         </td>
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
-                            <div v-for="r in [5, 4, 3]" :key="r" v-show="shouldShow(r)" class="rarity-band"
-                                :class="`rarity-${r}`" :style="{ '--band-rows': bandRows(yVal, r) }">
-                                <div v-for="ch in getChars(xVal, yVal, r)" :key="ch.id" class="char-thumb">
-                                    <div class="character-img-wrapper">
-                                        <div>
-                                            <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
-                                                <img :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`"
-                                                    :alt="ch.name" :title="ch._title" class="char-img"
-                                                    :class="ch._borderClass" />
-                                            </a>
-                                            <div class="heart-level-badge level-badge" v-if="showHearts && ch.enabled"
-                                                :class="colourLevels ? (ch.heartphialLvl === KiokuConstants.maxHeartphialLvl ? 'maxLvl' : 'notMaxLvl') : ''">
-                                                {{ ch.heartphialLvl }}
-                                            </div>
-                                            <div class="magic-level-badge level-badge" v-if="showLevels && ch.enabled"
-                                                :class="colourLevels ? (ch.magicLvl === KiokuConstants.maxMagicLvl ? 'maxLvl' : 'notMaxLvl') : ''">
-                                                {{ ch.magicLvl }}
-                                            </div>
-                                            <div class="special-level-badge level-badge" v-if="showLevels && ch.enabled"
-                                                :class="colourLevels ? (ch._isMaxSpecial ? 'maxLvl' : 'notMaxLvl') : ''">
-                                                {{ ch.specialLvl }}
-                                            </div>
-                                            <div class="ascension-badge level-badge" v-if="infoAxisKey === 'ascension'">
-                                                {{ ch.ascension === -1 ? "X" : `A${ch.ascension}` }}
-                                            </div>
-                                            <div class="ascension-badge level-badge info-badge-img"
-                                                v-else-if="infoAxisKey === 'element'">
-                                                <img :src="`/exedra-dmg-calc/elements/${ch.element}.png`"
-                                                    :alt="ch.element" class="info-badge-icon" />
-                                            </div>
-                                            <div class="ascension-badge level-badge"
-                                                v-else-if="infoAxisKey === 'role' && ch.role === KiokuRole.Attacker && splitAttackerRange">
-                                                <div class="role-badge-inner">
+                            <template v-for="r in [5, 4, 3]" :key="r">
+                                <div v-if="shouldShow(r)" class="rarity-band" :class="`rarity-${r}`"
+                                    :style="{ '--band-rows': bandRows(yVal, r) }">
+                                    <div v-for="ch in getChars(xVal, yVal, r)" :key="ch.id" class="char-thumb">
+                                        <div class="character-img-wrapper">
+                                            <div>
+                                                <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
+                                                    <img :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`"
+                                                        :alt="ch.name" :title="ch._title" class="char-img"
+                                                        :class="ch._borderClass" />
+                                                </a>
+                                                <div class="heart-level-badge level-badge"
+                                                    v-if="showHearts && ch.enabled"
+                                                    :class="colourLevels ? (ch.heartphialLvl === KiokuConstants.maxHeartphialLvl ? 'maxLvl' : 'notMaxLvl') : ''">
+                                                    {{ ch.heartphialLvl }}
+                                                </div>
+                                                <div class="magic-level-badge level-badge"
+                                                    v-if="showLevels && ch.enabled"
+                                                    :class="colourLevels ? (ch.magicLvl === KiokuConstants.maxMagicLvl ? 'maxLvl' : 'notMaxLvl') : ''">
+                                                    {{ ch.magicLvl }}
+                                                </div>
+                                                <div class="special-level-badge level-badge"
+                                                    v-if="showLevels && ch.enabled"
+                                                    :class="colourLevels ? (ch._isMaxSpecial ? 'maxLvl' : 'notMaxLvl') : ''">
+                                                    {{ ch.specialLvl }}
+                                                </div>
+                                                <div class="ascension-badge level-badge"
+                                                    v-if="infoAxisKey === 'ascension'">
+                                                    {{ ch.ascension === -1 ? "X" : `A${ch.ascension}` }}
+                                                </div>
+                                                <div class="ascension-badge level-badge info-badge-img"
+                                                    v-else-if="infoAxisKey === 'element'">
+                                                    <img :src="`/exedra-dmg-calc/elements/${ch.element}.png`"
+                                                        :alt="ch.element" class="info-badge-icon" />
+                                                </div>
+                                                <div class="ascension-badge level-badge"
+                                                    v-else-if="infoAxisKey === 'role' && ch.role === KiokuRole.Attacker && splitAttackerRange">
+                                                    <div class="role-badge-inner">
+                                                        <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`"
+                                                            :alt="ch.role" class="info-badge-icon" />
+                                                        <span class="role-badge-tag">{{ rangeTag(ch.range)[0] }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="ascension-badge level-badge info-badge-img"
+                                                    v-else-if="infoAxisKey === 'role'">
                                                     <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`" :alt="ch.role"
                                                         class="info-badge-icon" />
-                                                    <span class="role-badge-tag">{{ rangeTag(ch.range)[0] }}</span>
                                                 </div>
-                                            </div>
-                                            <div class="ascension-badge level-badge info-badge-img"
-                                                v-else-if="infoAxisKey === 'role'">
-                                                <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`" :alt="ch.role"
-                                                    class="info-badge-icon" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </template>
                         </td>
                     </tr>
                 </tbody>
@@ -713,7 +719,6 @@ const downloadAscensionList = async () => {
     color: #fff;
     font-size: 0.6rem;
     text-align: center;
-    backdrop-filter: blur(2px);
     border-radius: 15rem;
     font-weight: bold;
 }

@@ -504,7 +504,6 @@ td {
     color: #fff;
     font-size: 0.6rem;
     text-align: center;
-    backdrop-filter: blur(2px);
     border-radius: 15rem;
     font-weight: bold;
 }
