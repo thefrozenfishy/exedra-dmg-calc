@@ -13350,6 +13350,21 @@
         "description": "自身の経過ターンが8ターン以上、10ターン未満"
     },
     {
+        "battleConditionMstIdCsv": "3,1603",
+        "battleConditionSetMstId": 2697,
+        "description": "自分は行動者+攻撃対象に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1670,3,1603",
+        "battleConditionSetMstId": 2698,
+        "description": "しのぶの専用バフが付与されているとき+行動者は自分+1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1670,1,1603,962",
+        "battleConditionSetMstId": 2699,
+        "description": "しのぶの専用バフが付与されているとき+行動者は味方+1以上敵にダメージを与えたとき+自身以外の行動者"
+    },
+    {
         "battleConditionMstIdCsv": "726",
         "battleConditionSetMstId": 2700,
         "description": "トークンが90のとき"
@@ -13455,6 +13470,31 @@
         "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき、行動者は自分、通常攻撃を使用"
     },
     {
+        "battleConditionMstIdCsv": "1680",
+        "battleConditionSetMstId": 2721,
+        "description": "八九寺真宵専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1681",
+        "battleConditionSetMstId": 2722,
+        "description": "八九寺真宵専用バフが10以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1115,1127",
+        "battleConditionSetMstId": 2727,
+        "description": "自身のHPが30%以上のとき+自身のHPが50%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1117,1130",
+        "battleConditionSetMstId": 2728,
+        "description": "自身のHPが50%以上のとき+自身のHPが80%未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1120,1132",
+        "battleConditionSetMstId": 2729,
+        "description": "自身のHPが80%以上のとき+自身のHPが100%未満のとき"
+    },
+    {
         "battleConditionMstIdCsv": "5,655,1",
         "battleConditionSetMstId": 2730,
         "description": "行動タイプが通常攻撃+ダメージを与えたとき+行動者は仲間"
@@ -13505,9 +13545,34 @@
         "description": "デバフ効果が2個以上ある敵に対して　攻撃(対象メイン)　行動者は自身"
     },
     {
+        "battleConditionMstIdCsv": "1670,306",
+        "battleConditionSetMstId": 2740,
+        "description": "忍の専用バフが付与されているとき+追撃発動した時"
+    },
+    {
         "battleConditionMstIdCsv": "324,3,1332",
         "battleConditionSetMstId": 2741,
         "description": "ブレイクボーナスが最大のとき+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "1670",
+        "battleConditionSetMstId": 2742,
+        "description": "忍の専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "314,1680",
+        "battleConditionSetMstId": 2743,
+        "description": "自分のバリアが攻撃された+真宵の専用バフがあるとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,522,6,1685",
+        "battleConditionSetMstId": 2744,
+        "description": "行動者は味方+行動者は自身以外+戦闘スキルを発動したとき+攻撃したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,522,6,1685,1680",
+        "battleConditionSetMstId": 2745,
+        "description": "行動者は味方+行動者は自身以外+戦闘スキルを発動したとき+攻撃したとき+真宵の専用バフがあるとき"
     },
     {
         "battleConditionMstIdCsv": "1686",
@@ -13518,6 +13583,16 @@
         "battleConditionMstIdCsv": "1687",
         "battleConditionSetMstId": 2747,
         "description": "自分のキャラクターが「コルボー」"
+    },
+    {
+        "battleConditionMstIdCsv": "1688",
+        "battleConditionSetMstId": 2748,
+        "description": "自分のキャラクターが「忍野忍」"
+    },
+    {
+        "battleConditionMstIdCsv": "1689",
+        "battleConditionSetMstId": 2749,
+        "description": "自分のキャラクターが「八九寺真宵」"
     },
     {
         "battleConditionMstIdCsv": "1693",
@@ -13568,6 +13643,11 @@
         "battleConditionMstIdCsv": "3,1697,7",
         "battleConditionSetMstId": 2772,
         "description": "行動者は自分+ブレイカーのみ+必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1685,3",
+        "battleConditionSetMstId": 2773,
+        "description": "攻撃されたとき + 行動者は自身"
     },
     {
         "battleConditionMstIdCsv": "1693,522,1,281",

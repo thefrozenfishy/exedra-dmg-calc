@@ -13296,6 +13296,14 @@
         "description": "攻撃が命中した敵数が5体のとき"
     },
     {
+        "battleConditionMstId": 1670,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "14",
+        "description": "しのぶの専用バフが付与されているとき"
+    },
+    {
         "battleConditionMstId": 1671,
         "compareContent": 302,
         "compareOperator": 1,
@@ -13368,6 +13376,22 @@
         "description": "行動者のデバフ数が3以上"
     },
     {
+        "battleConditionMstId": 1680,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "15",
+        "description": "八九寺真宵専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 1681,
+        "compareContent": 27,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "15,10",
+        "description": "八九寺真宵専用バフが10以上のとき"
+    },
+    {
         "battleConditionMstId": 1685,
         "compareContent": 110,
         "compareOperator": 1,
@@ -13390,6 +13414,22 @@
         "compareTarget": 1,
         "compareValue": "1120",
         "description": "自分のキャラクターが「コルボー」"
+    },
+    {
+        "battleConditionMstId": 1688,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1151",
+        "description": "自分のキャラクターが「忍野忍」"
+    },
+    {
+        "battleConditionMstId": 1689,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1150",
+        "description": "自分のキャラクターが「八九寺真宵」"
     },
     {
         "battleConditionMstId": 1693,

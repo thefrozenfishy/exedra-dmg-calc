@@ -4108,5 +4108,35 @@
         "targetType": 2,
         "value1": 1150054,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases DMG dealt by 20%.<br>Increase HP recovery amount by 10%.",
+        "name": "All Shall Bow Before My Blades",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 139,
+        "selectionAbilityMstId": 7055,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11510101,
+        "targetType": 2,
+        "value1": 1150055,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases Max HP by 10%, and increases chance of being targeted.<br>On special attack, increases SPD by 10% (2 turns).",
+        "name": "That Attack Can Just Get Lost!",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 140,
+        "selectionAbilityMstId": 7056,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11500101,
+        "targetType": 2,
+        "value1": 1150056,
+        "value2": 0
     }
 ]
