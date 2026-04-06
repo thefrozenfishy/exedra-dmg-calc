@@ -34,7 +34,8 @@ const knownBoosts = {
     UP_DEF_RATIO: "Def%2",
     ADDITIONAL_DAMAGE: "Additional dmg",
     UP_ELEMENT_DMG_RATE_RATIO: "Dmg Dealt+ (Elem only)",
-    UP_GIV_DMG_RATIO: "DMG Dealt+",
+    UP_GIV_DMG_RATIO: "DMG Dealt+1",
+    UP_GIV_DMG_ACCUM_RATIO: "DMG Dealt+2",
     UP_GIV_SLIP_DMG_RATIO: "DOT DMG+",
     UP_RCV_CTR_RATIO: "CR4+",
     UP_RCV_DMG_RATIO: "DMG Taken+",
@@ -459,6 +460,7 @@ export class ScoreAttackTeam {
 
                 const dmg_dealt =
                     (this.getAllyEffect(allyIdx, "UP_GIV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
+                        this.getAllyEffect(allyIdx, "UP_GIV_DMG_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) +
                         this.getAllyEffect(allyIdx, "UP_GIV_SLIP_DMG_RATIO", amountOfEnemies, enemy.maxBreak) + // Ongoing only here
                         this.getAllyEffect(allyIdx, "UP_ELEMENT_DMG_RATE_RATIO", amountOfEnemies, enemy.maxBreak)) /
                     1000;
@@ -663,6 +665,7 @@ export class ScoreAttackTeam {
 
         const dmg_pluss =
             (this.getAllyEffect(DPS_IDX, "UP_GIV_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
+                this.getAllyEffect(DPS_IDX, "UP_GIV_DMG_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
                 this.getAllyEffect(DPS_IDX, "UP_ELEMENT_DMG_RATE_RATIO", currentAmountOfEnemies, enemy.maxBreak)) /
             1000;
         const elem_dmg_up =
