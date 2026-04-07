@@ -233,7 +233,6 @@ export class ScoreAttackTeam {
             for (const detail of sourceKioku.effects) {
                 if (skippable.has(detail.abilityEffectType)) continue;
                 if (bannedEffects.has(skillDetailId(detail))) continue;
-                if (detail.element && elementMap[detail.element] !== this.dps.data.element) continue;
                 if (
                     detail.startConditionSetIdCsv
                         .split(",")
@@ -249,9 +248,13 @@ export class ScoreAttackTeam {
                     || detail.abilityEffectType === "WEAKNESS";
 
                 if (isDebuff) {
+                    if (detail.element && elementMap[detail.element] !== this.dps.data.element) continue;
+                    // Note this is kinda wrong cause it increases based on main dps element also non-dps, but it's probably fair
                     this.distributeEffect(
-                        detail, valueTotal,
-                        this.debuffPool, this.extraDebuffPool,
+                        detail,
+                        valueTotal,
+                        this.debuffPool,
+                        this.extraDebuffPool,
                         undefined,
                         undefined,
                         sourceCtx.debugDebuffContributions,
@@ -262,6 +265,7 @@ export class ScoreAttackTeam {
                         if (!buffAppliesToAlly(detail.range, sourceIdx, targetIdx)) continue;
 
                         const targetCtx = this.allyContexts[targetIdx];
+                        if (detail.element && elementMap[detail.element] !== targetCtx.kioku.data.element) continue;
 
                         const dbgToDps = targetIdx === DPS_IDX
                             ? sourceCtx.debugContributionsToDps
@@ -270,8 +274,10 @@ export class ScoreAttackTeam {
                         const dbgToSelf = targetCtx.debugContributionsToSelf;
 
                         this.distributeEffect(
-                            detail, valueTotal,
-                            targetCtx.effects, targetCtx.extraEffects,
+                            detail,
+                            valueTotal,
+                            targetCtx.effects,
+                            targetCtx.extraEffects,
                             dbgToDps,
                             dbgToSelf,
                             undefined,
