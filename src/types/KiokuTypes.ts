@@ -98,6 +98,7 @@ export const portraitsBestOnly = (elem: KiokuElement, optimizeAverageDamage: boo
     "The Savior's Apostle",
     "Faith We'll Meet Again Someday",
     elem === KiokuElement.Dark ? "Because...I'm Not Alone Anymore" : null,
+    elem === KiokuElement.Flame ? "Monogatari Collab Celebration 2" : null,
     optimizeAverageDamage ? "Farewell to a Future Unseen" : null,
 ].filter(Boolean)
 

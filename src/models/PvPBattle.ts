@@ -62,7 +62,7 @@ export class PvPBattle {
                     id: k.kioku.data.id,
                 }))
             },
-            lastActor: this.lastActor?.kioku.data.name,
+            lastActor: this.lastActor?.kioku.name,
             lastTeamIsTeam1: this.lastTeamIsTeam1,
             lastTargetType: this.lastTargetType
         }

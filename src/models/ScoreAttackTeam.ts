@@ -695,7 +695,7 @@ export class ScoreAttackTeam {
 
         let base_dmg = this.calc_base_dmg(special, base_atk);
         let dot_total_dmg = 0;
-        if (special > 0) {
+        if (special > 0 && enemy.enabled) {
             base_dmg += this.add_additional_dmg();
             if (this.dps.effects.some(eff => eff.abilityEffectType === "IMM_SLIP_DMG")) {
                 dot_total_dmg = this.add_dot_dmg(enemy, currentAmountOfEnemies);
