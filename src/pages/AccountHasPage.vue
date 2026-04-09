@@ -68,8 +68,8 @@
                                     </template>
                                 </div>
 
-                                <div class="special-level-badge level-badge editable" v-if="showLevels && index !== 6"
-                                    :class="colourLevels
+                                <div class="special-level-badge level-badge editable"
+                                    v-if="showLevels && index !== 6 && ch.rarity !== 3" :class="colourLevels
                                         ? isMaxSpecialLvl(ch) ? 'maxLvl' : 'notMaxLvl'
                                         : ''" @click.stop="startEdit(ch, 'specialLvl', $event)">
                                     <template v-if="isEditing(ch, 'specialLvl')">
@@ -174,7 +174,7 @@ const isMaxSpecialLvl = (ch: Character): boolean => {
 
 const isMaxLevels = (ch: Character): boolean => ch.magicLvl === KiokuConstants.maxMagicLvl &&
     ch.heartphialLvl === KiokuConstants.maxHeartphialLvl &&
-    isMaxSpecialLvl(ch)
+    (isMaxSpecialLvl(ch) || ch.rarity === 3)
 
 
 const groupedByAscension = computed(() => {
