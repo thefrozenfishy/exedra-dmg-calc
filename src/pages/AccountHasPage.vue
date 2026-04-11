@@ -22,7 +22,7 @@
                     </td>
 
                     <td class="characters-cell">
-                        <div v-for="ch in chars" :key="ch.id" class="character-card" draggable="true"
+                        <div v-for="ch in chars" :key="ch.id" draggable="true"
                             @dragstart="onDragStart(ch)" @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove"
                             @touchend="onTouchEnd">
                             <div class="character-img-wrapper">
@@ -434,12 +434,12 @@ td {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    min-height: 60px;
+    min-height: 68px;
 }
 
 .character-img {
-    width: 60px;
-    height: 60px;
+    width: 68px;
+    height: 68px;
     border-radius: 50%;
     border: 1px solid #666;
     display: block;
