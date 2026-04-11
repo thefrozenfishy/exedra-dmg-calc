@@ -3,6 +3,7 @@
         <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
         <button class="copy-btn" @click="downloadAscensionList">Download</button>
         <div>
+            <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
             <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
             <label> <input type="checkbox" v-model="showLevels" /> Show Magic and Special levels </label>
             <label> <input type="checkbox" v-model="showHearts" /> Show Heartphial levels </label>
@@ -16,7 +17,8 @@
                     @dragover.prevent="dragOver = index" @dragleave="dragLeave" @drop="onDrop(index)"
                     v-for="(chars, index) in groupedByAscension" :key="index" class="asc-row">
 
-                    <td class="asc-cell">{{ index === 6 ? "Not Owned" : index === 7 ? "4 Stars" : `A${5 - index}` }}
+                    <td class="asc-cell">{{ index === 6 ? "Not Owned" : index === 7 ? "4 Stars" : index === 8 ? "3 Stars"
+                        : `A${5 - index}` }}
                     </td>
 
                     <td class="characters-cell">
@@ -120,8 +122,12 @@
             ({{ round(maxed5starChars.length / ownedFiveStars.length * 100) }}%)
         </div>
         <div v-if="show4stars">
-            4-stars: {{ maxed4starChars.length }} / {{ allMembers.length - fiveStarMembers.length }}
-            ({{ round(maxed4starChars.length / (allMembers.length - fiveStarMembers.length) * 100) }}%)
+            4-stars: {{ maxed4starChars.length }} / {{ fourStarMembers.length }}
+            ({{ round(maxed4starChars.length / (fourStarMembers.length) * 100) }}%)
+        </div>
+        <div v-if="show3stars">
+            3-stars: {{ maxed3starChars.length }} / {{ threeStarMembers.length }}
+            ({{ round(maxed3starChars.length / (threeStarMembers.length) * 100) }}%)
         </div>
         <div>
             <h4 style="margin-bottom: 0;">About:</h4>
@@ -141,11 +147,14 @@ import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
 
 const store = useCharacterStore()
-const allMembers = computed(() => store.characters.filter(c => (show4stars.value ? (
-    c.rarity !== 3 ||
-    ["Kako's Kioku", "Meiyui's Kioku", "Natsuki's Kioku", "Konoha's Kioku", "Madoka-senpai's Kioku"].includes(c.name)
-) : c.rarity === 5 && c.name !== "Lux☆Magica")))
 const fiveStarMembers = computed(() => store.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
+const fourStarMembers = computed(() => store.characters.filter(c => c.rarity === 4 || c.name === "Lux☆Magica"))
+const threeStarMembers = computed(() => store.characters.filter(c => c.rarity === 3))
+
+const maxed5starChars = computed(() => fiveStarMembers.value.filter(ch => ch.enabled && isMaxLevels(ch)))
+const maxed4starChars = computed(() => fourStarMembers.value.filter(isMaxLevels))
+const maxed3starChars = computed(() => threeStarMembers.value.filter(isMaxLevels))
+
 const ownedFiveStars = computed(() => fiveStarMembers.value.filter(c => c.enabled))
 const totalAscensions = computed(() => ownedFiveStars.value.reduce((sum, ch) => sum + ch.ascension + 1, 0))
 const totalStandards = computed(() => ownedFiveStars.value.filter(ch => ch.obtain === "Permanent").reduce((sum, ch) => sum + ch.ascension + 1, 0))
@@ -154,15 +163,15 @@ const totalLimiteds = computed(() => ownedFiveStars.value.filter(ch => ch.obtain
 const totalPossibleLimiteds = computed(() => fiveStarMembers.value.filter(ch => ch.obtain !== "Permanent").reduce((sum, _) => sum + 6, 0))
 const standardPool = computed(() => fiveStarMembers.value.filter(ch => new Date() > new Date(ch.permaDate)))
 const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.enabled && ch.ascension === 5))
-const maxed5starChars = computed(() => allMembers.value.filter(ch => ch.enabled && isMaxLevels(ch)).filter(ch => fiveStarMembers.value.includes(ch)))
-const maxed4starChars = computed(() => allMembers.value.filter(isMaxLevels).filter(ch => !fiveStarMembers.value.includes(ch)))
 const extraCollected = useSetting("extraCollected", 0)
 const extraTotal = computed(() => (showDupes.value ? ownedFiveStars.value.reduce((sum, ch) => sum + ch.dupes, 0) : extraCollected.value))
+
 const showLevels = useSetting("showLevels", true);
 const showHearts = useSetting("showHearts", false);
 const showDupes = useSetting("showDupes", false);
 const colourLevels = useSetting("colourLevels", true);
 const show4stars = useSetting("show4stars", false);
+const show3stars = useSetting("show3stars", false);
 
 const round = (nr: number) => nr.toFixed(2)
 
@@ -178,13 +187,15 @@ const isMaxLevels = (ch: Character): boolean => ch.magicLvl === KiokuConstants.m
 
 
 const groupedByAscension = computed(() => {
-    const groups: Character[][] = [[], [], [], [], [], [], [], []]
+    const groups: Character[][] = [[], [], [], [], [], [], [], [], []]
 
-    for (const ch of allMembers.value) {
+    for (const ch of store.characters) {
         const asc = ch.ascension
         const index = 5 - asc
-        if (ch.rarity === 3 || ch.rarity === 4 || ch.name === "Lux☆Magica") {
+        if (ch.rarity === 4 || ch.name === "Lux☆Magica") {
             groups[7].push(ch)
+        } else if (ch.rarity === 3) {
+            groups[8].push(ch)
         } else if (ch.enabled) {
             groups[index].push(ch)
         } else {
@@ -198,6 +209,9 @@ const groupedByAscension = computed(() => {
         } else {
             groups[i].sort((a, b) => b.id - a.id)
         }
+    }
+    if (!show3stars.value) {
+        groups.splice(8, 1)
     }
     if (!show4stars.value) {
         groups.splice(7, 1)
