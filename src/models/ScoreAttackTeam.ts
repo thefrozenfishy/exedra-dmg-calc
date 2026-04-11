@@ -13,7 +13,7 @@ const targetTypeAtPosition = [
 
 const DPS_IDX = 2;
 
-const knownBoosts = {
+export const knownBoosts = {
     DWN_DEF_ACCUM_RATIO: "Def%2",
     DWN_DEF_RATIO: "Def%1",
     DWN_ELEMENT_RESIST_ACCUM_RATIO: "Elem Resist-",
@@ -138,7 +138,7 @@ function buffAppliesToAlly(range: number, sourceIdx: number, targetIdx: number):
 
 type EffectPool = Record<string, number>;
 type ExtraEffectPool = Record<string, [Function, number][]>;
-type DebugContributions = Record<string, [SkillDetail, number, string][]>;
+export type DebugContributions = Record<string, [SkillDetail, number, string][]>;
 
 interface AllyContext {
     kioku: ScoreAttackKioku;
@@ -157,7 +157,22 @@ export interface DebugSections {
     kiokuReceived: string;
     kiokuContributed: string;
     kiokuDebuffs: string;
+    rawReceived: DebugContributions;
+    rawContributed: DebugContributions;
+    rawDebuffs: DebugContributions;
 }
+
+const emptyDebugSections = (): DebugSections => ({
+    calc: "",
+    enemy: "",
+    kiokuStats: "",
+    kiokuReceived: "",
+    kiokuContributed: "",
+    kiokuDebuffs: "",
+    rawReceived: {},
+    rawContributed: {},
+    rawDebuffs: {},
+});
 
 export class ScoreAttackTeam {
     private team: ScoreAttackKioku[];
@@ -170,6 +185,7 @@ export class ScoreAttackTeam {
     private debug: boolean;
     private attackerHealth: number;
     private activeBuffsAndDebuffs: string[];
+    private userBannedEffects: Set<number>;
 
     constructor(
         dps: ScoreAttackKioku,
@@ -177,12 +193,14 @@ export class ScoreAttackTeam {
         attackerHealth: number,
         activeAliments: Aliment[],
         debug = false,
+        userBannedEffects: Set<number> = new Set(),
     ) {
         this.team = team;
         this.dps = dps;
         this.debug = debug;
         this.attackerHealth = attackerHealth;
         this.activeBuffsAndDebuffs = activeAliments;
+        this.userBannedEffects = userBannedEffects;
         this.setup();
     }
 
@@ -239,6 +257,8 @@ export class ScoreAttackTeam {
                         .some(id => !isStartCondRelevantForScoreAttack(id, sourceKioku.maxMagicStacks))
                 ) continue;
 
+                const userBanned = this.userBannedEffects.has(skillDetailId(detail));
+
                 let valueTotal = detail.value1;
                 valueTotal *= detail.value2 || 1;
 
@@ -249,7 +269,6 @@ export class ScoreAttackTeam {
 
                 if (isDebuff) {
                     if (detail.element && elementMap[detail.element] !== this.dps.data.element) continue;
-                    // Note this is kinda wrong cause it increases based on main dps element also non-dps, but it's probably fair
                     this.distributeEffect(
                         detail,
                         valueTotal,
@@ -259,6 +278,7 @@ export class ScoreAttackTeam {
                         undefined,
                         sourceCtx.debugDebuffContributions,
                         sourceKioku.name,
+                        userBanned,
                     );
                 } else {
                     for (let targetIdx = 0; targetIdx < 5; targetIdx++) {
@@ -282,6 +302,7 @@ export class ScoreAttackTeam {
                             dbgToSelf,
                             undefined,
                             sourceKioku.name,
+                            userBanned,
                         );
                     }
                 }
@@ -322,6 +343,7 @@ export class ScoreAttackTeam {
         debugContributionsToSelf?: DebugContributions,
         debugDebuffContributions?: DebugContributions,
         sourceName: string = "?",
+        userBanned: boolean = false,
     ) {
         detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
             const isActiveCond = isActiveConditionRelevantForScoreAttack(
@@ -332,18 +354,26 @@ export class ScoreAttackTeam {
 
             if (typeof isActiveCond === "boolean") {
                 if (!isActiveCond) return;
-                this.accumulateIntoPool(detail.abilityEffectType, valueTotal, pool);
-
                 for (const dbg of [debugContributionsToDps, debugContributionsToSelf, debugDebuffContributions]) {
                     if (!dbg) continue;
                     if (!(detail.abilityEffectType in dbg)) dbg[detail.abilityEffectType] = [];
                     dbg[detail.abilityEffectType].push([detail, valueTotal, sourceName]);
                 }
+                if (!userBanned) {
+                    this.accumulateIntoPool(detail.abilityEffectType, valueTotal, pool);
+                }
             } else {
                 if (!(detail.abilityEffectType in extraPool)) {
                     extraPool[detail.abilityEffectType] = [];
                 }
-                extraPool[detail.abilityEffectType].push([isActiveCond, valueTotal]);
+                if (!userBanned) {
+                    extraPool[detail.abilityEffectType].push([isActiveCond, valueTotal]);
+                }
+                for (const dbg of [debugContributionsToDps, debugContributionsToSelf, debugDebuffContributions]) {
+                    if (!dbg) continue;
+                    if (!(detail.abilityEffectType in dbg)) dbg[detail.abilityEffectType] = [];
+                    dbg[detail.abilityEffectType].push([detail, valueTotal, sourceName]);
+                }
             }
         });
     }
@@ -467,7 +497,7 @@ export class ScoreAttackTeam {
                 const dmg_dealt =
                     (this.getAllyEffect(allyIdx, "UP_GIV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
                         this.getAllyEffect(allyIdx, "UP_GIV_DMG_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) +
-                        this.getAllyEffect(allyIdx, "UP_GIV_SLIP_DMG_RATIO", amountOfEnemies, enemy.maxBreak) + // Ongoing only here
+                        this.getAllyEffect(allyIdx, "UP_GIV_SLIP_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
                         this.getAllyEffect(allyIdx, "UP_ELEMENT_DMG_RATE_RATIO", amountOfEnemies, enemy.maxBreak)) /
                     1000;
 
@@ -562,10 +592,10 @@ export class ScoreAttackTeam {
         let total_dmg = 0;
         let average_dmg = 0;
         let critRate = 0;
-        let debugSections: DebugSections = { calc: "", enemy: "", kiokuStats: "", kiokuReceived: "", kiokuContributed: "", kiokuDebuffs: "" };
+        let debugSections: DebugSections = emptyDebugSections();
         let initAmountOfEnemies = enemies.filter(e => e.enabled).length;
         let currentAmountOfEnemies = initAmountOfEnemies;
-        const allDebugSections: DebugSections[] = Array(5).fill(null).map(() => ({ calc: "", enemy: "", kiokuStats: "", kiokuReceived: "", kiokuContributed: "", kiokuDebuffs: "" }));
+        const allDebugSections: DebugSections[] = Array(5).fill(null).map(emptyDebugSections);
 
         for (const i of [
             EnemyTargetTypes.TARGET,
@@ -619,7 +649,7 @@ export class ScoreAttackTeam {
                     })
                     .join("\n");
                 if (saySource) return `From ${sourceName}:\n${lines}`;
-                return lines
+                return lines;
             })
             .join("\n\n");
     }
@@ -683,7 +713,6 @@ export class ScoreAttackTeam {
         const elem_res_down =
             this.getDebuffEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak) / 1000;
 
-
         const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
         const crit_factor = 1 + (enemy.isCrit ? crit_dmg : 0);
         const crit_average = 1 + crit_rate * crit_dmg;
@@ -717,7 +746,7 @@ export class ScoreAttackTeam {
         const total = pre_dot_total + dot_total_dmg;
         const average_total = pre_dot_average + dot_total_dmg;
 
-        let sections: DebugSections = { calc: "", enemy: "", kiokuStats: "", kiokuReceived: "", kiokuContributed: "", kiokuDebuffs: "" };
+        let sections: DebugSections = emptyDebugSections();
 
         if (this.debug) {
             const posCtx = this.allyContexts[idx];
@@ -793,10 +822,12 @@ enemy died   - ${enemyDied}`;
             sections.kiokuStats = statLines.join("\n");
 
             sections.kiokuReceived = this.formatContributions(posCtx.debugContributionsToSelf, true);
-
             sections.kiokuContributed = this.formatContributions(posCtx.debugContributionsToDps, false);
-
             sections.kiokuDebuffs = this.formatContributions(posCtx.debugDebuffContributions, false);
+
+            sections.rawReceived = posCtx.debugContributionsToSelf;
+            sections.rawContributed = posCtx.debugContributionsToDps;
+            sections.rawDebuffs = posCtx.debugDebuffContributions;
         }
 
         return [total | 0, average_total | 0, crit_rate, sections, enemyDied];

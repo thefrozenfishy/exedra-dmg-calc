@@ -27,7 +27,7 @@
         <input type="number" v-model.number="buffMultReduction" step="1" />
       </label>
     </div>
-    <div key="buffMultReduction">
+    <div key="debuffMultReduction">
       <label>Debuff Bonus Reduction (%):
         <input type="number" v-model.number="debuffMultReduction" step="1" />
       </label>
@@ -52,6 +52,12 @@
 
   <div class="team-page">
     <h1>Debug info</h1>
+
+    <div v-if="hasBannedEffects" class="banned-banner">
+      <span>Note: {{ bannedCount }} effect{{ bannedCount === 1 ? '' : 's' }} excluded from calculation</span>
+      <button class="clear-banned-btn" @click="clearBanned">Include all</button>
+    </div>
+
     <div class="team-grid">
       <div v-for="(enemy, index) in enemies.enemies" :key="index" class="team-slot debug-slot">
         <h3 class="debug-slot-title">{{ debugSlotTitle(index) }}</h3>
@@ -63,7 +69,39 @@
                 {{ debugSectionLabels[key] }}
                 <span class="debug-toggle-icon">{{ collapsedSlotSections[index]?.[key] ? '▸' : '▾' }}</span>
               </div>
-              <pre v-if="!collapsedSlotSections[index]?.[key]" class="debug-pre">{{ battleOutput[3][index][key] }}</pre>
+              <template v-if="!collapsedSlotSections[index]?.[key]">
+                <template v-if="rawSectionKey(key)">
+                  <div class="debug-contrib-table">
+                    <template v-for="(entries, effectType) in battleOutput[3][index][rawSectionKey(key)!]"
+                      :key="effectType">
+                      <div class="debug-contrib-group">
+                        <div class="debug-contrib-group-label"> {{ effectType }} </div>
+                        <div v-for="[detail, value, sourceName] in entries" :key="skillDetailId(detail)"
+                          class="debug-contrib-row" :class="{ banned: bannedEffectIds[skillDetailId(detail)] }"
+                          @click="toggleBannedEffect(skillDetailId(detail))">
+                          <span class="debug-contrib-source">{{ sourceName }}</span>
+                          <span class="debug-contrib-value">{{ prettyDisplay(value, detail) }}</span>
+                          <div v-if="detail.description" class="debug-contrib-desc">{{ detail.description }}</div>
+                          <div class="debug-contrib-meta">
+                            <span class="debug-contrib-id clickable-id"
+                              @click.stop="copyToClipboard(String(skillDetailId(detail)))">
+                              {{ skillDetailId(detail) }}
+                            </span>
+                            <span v-if="detail.activeConditionSetIdCsv" class="debug-contrib-cond">A{{
+                              detail.activeConditionSetIdCsv }}</span>
+                            <span v-if="detail.startConditionSetIdCsv" class="debug-contrib-cond">S{{
+                              detail.startConditionSetIdCsv }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </template>
+                    <div v-if="!Object.keys(battleOutput[3][index][rawSectionKey(key)!] ?? {}).length"
+                      class="debug-contrib-empty">(none)
+                    </div>
+                  </div>
+                </template>
+                <pre v-else class="debug-pre">{{ battleOutput[3][index][key] }}</pre>
+              </template>
             </div>
           </template>
         </template>
@@ -82,7 +120,7 @@ import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
 import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
 import { useSetting } from '../store/settingsStore'
-import { Aliment, KiokuArgs } from '../types/KiokuTypes'
+import { Aliment, KiokuArgs, SkillDetail, skillDetailId } from '../types/KiokuTypes'
 
 const attackerIndex = 2
 
@@ -111,6 +149,27 @@ const formatDmg = (out: string | [number, number, number, any[]]) =>
     ? `Max Damage: ${out[0].toLocaleString()} with a ${out[2]}% crit rate - (Average Damage: ${out[1].toLocaleString()})`
     : out
 
+const bannedEffectIds = reactive<Record<number, true>>({})
+
+function toggleBannedEffect(id: number) {
+  if (bannedEffectIds[id]) delete bannedEffectIds[id]
+  else bannedEffectIds[id] = true
+}
+
+function clearBanned() {
+  for (const key of Object.keys(bannedEffectIds)) {
+    delete bannedEffectIds[Number(key)]
+  }
+}
+
+const bannedCount = computed(() => Object.keys(bannedEffectIds).length)
+const hasBannedEffects = computed(() => bannedCount.value > 0)
+
+function prettyDisplay(value: number, detail?: SkillDetail): string {
+  if (!detail?.description?.includes("%")) return value.toLocaleString()
+  return `${Math.round((value / 10 + Number.EPSILON) * 100) / 100}%`
+}
+
 type SectionKey = keyof DebugSections
 const debugSectionOrder: SectionKey[] = ['calc', 'enemy', 'kiokuStats', 'kiokuReceived', 'kiokuContributed', 'kiokuDebuffs']
 const debugSectionLabels: Record<SectionKey, string> = {
@@ -120,6 +179,16 @@ const debugSectionLabels: Record<SectionKey, string> = {
   kiokuReceived: 'Buffs Received',
   kiokuContributed: 'Contributed to DPS',
   kiokuDebuffs: 'Debuffs Applied',
+  rawReceived: '',
+  rawContributed: '',
+  rawDebuffs: '',
+}
+
+const rawSectionKey = (key: SectionKey): 'rawReceived' | 'rawContributed' | 'rawDebuffs' | null => {
+  if (key === 'kiokuReceived') return 'rawReceived'
+  if (key === 'kiokuContributed') return 'rawContributed'
+  if (key === 'kiokuDebuffs') return 'rawDebuffs'
+  return null
 }
 
 const visibleDebugSections = reactive<Record<SectionKey, boolean>>({
@@ -129,6 +198,9 @@ const visibleDebugSections = reactive<Record<SectionKey, boolean>>({
   kiokuReceived: true,
   kiokuContributed: true,
   kiokuDebuffs: true,
+  rawReceived: false,
+  rawContributed: false,
+  rawDebuffs: false,
 })
 
 const collapsedSlotSections = reactive<Record<number, Partial<Record<SectionKey, boolean>>>>({})
@@ -143,10 +215,11 @@ const debugSlotTitle = (idx: number) => {
   return labels[idx] ?? `Slot ${idx}`
 }
 
+
 const team = useTeamStore()
 const enemies = useEnemyStore()
-
 const isFullTeam = computed(() => team.slots.map(slot => slot.main).filter(Boolean).length === 5)
+
 const teamInstance = computed(() => {
   if (!isFullTeam.value) return;
   try {
@@ -158,12 +231,16 @@ const teamInstance = computed(() => {
         (m.debuffMultReduction || debuffMultReduction.value) ?? 0,
       )
     }) as ScoreAttackKioku[]
+
+    const bannedSet = new Set(Object.keys(bannedEffectIds).map(Number))
+
     return new ScoreAttackTeam(
       transformedMembers[attackerIndex],
       transformedMembers.filter((v, i) => i !== attackerIndex),
       attackerHealth.value,
       aliments.filter(el => el.enabled).map(el => el.name),
-      true
+      true,
+      bannedSet,
     )
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
@@ -178,6 +255,22 @@ const battleOutput = computed(() => {
   if (!teamInstance.value) return 'Select 5 characters to calculate'
   return teamInstance.value.calculate_max_dmg(enemies.enemies, 0)
 })
+
+async function copyToClipboard(text: string) {
+  try {
+    await navigator.clipboard.writeText(text)
+    toast.success(`Copied: ${text}`, {
+      position: toast.POSITION.TOP_RIGHT,
+      icon: false,
+    })
+  } catch (err) {
+    console.error(err)
+    toast.error("Failed to copy", {
+      position: toast.POSITION.TOP_RIGHT,
+      icon: false,
+    })
+  }
+}
 
 const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1).toLowerCase()
 const aliments = reactive([
@@ -257,6 +350,36 @@ const aliments = reactive([
   opacity: 0.3;
 }
 
+.banned-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  background: rgba(180, 40, 40, 0.2);
+  border: 1px solid rgba(200, 60, 60, 0.5);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #f99;
+  max-width: 1200px;
+}
+
+.clear-banned-btn {
+  margin-left: auto;
+  padding: 0.2rem 0.75rem;
+  background: rgba(200, 60, 60, 0.3);
+  border: 1px solid rgba(200, 60, 60, 0.6);
+  border-radius: 4px;
+  color: #fcc;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.15s;
+}
+
+.clear-banned-btn:hover {
+  background: rgba(200, 60, 60, 0.55);
+}
+
 .debug-slot {
   display: flex;
   flex-direction: column;
@@ -299,7 +422,155 @@ const aliments = reactive([
   text-align: left;
   margin: 0;
   font-size: 0.78rem;
-  overflow-x: visible;
+  overflow-x: auto;
   white-space: pre;
+}
+
+.debug-contrib-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.4rem 0.5rem;
+}
+
+.debug-contrib-empty {
+  font-size: 0.78rem;
+  color: #555;
+  padding: 0.25rem 0.25rem;
+}
+
+.debug-contrib-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.debug-contrib-group-label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #aaa;
+  padding: 0.15rem 0.25rem 0.1rem;
+  border-bottom: 1px solid #222;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.debug-contrib-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0.3rem 0.4rem;
+  border-radius: 4px;
+  border-left: 2px solid #2a2a2a;
+  cursor: pointer;
+  font-size: 0.76rem;
+  background: #141414;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.debug-contrib-row:hover {
+  background: #222;
+  border-left-color: #666;
+}
+
+.debug-contrib-row.banned {
+  background: rgba(120, 20, 20, 0.25);
+  border-left-color: #882222;
+  color: #d04040;
+}
+
+.debug-contrib-row.banned:hover {
+  background: rgba(140, 25, 25, 0.4);
+  border-left-color: #aa3333;
+}
+
+.debug-contrib-source {
+  font-weight: 600;
+  color: #ddd;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: ellipsis;
+  min-width: 0;
+  text-align: left;
+}
+
+.debug-contrib-row.banned .debug-contrib-source {
+  color: #e07070;
+}
+
+.debug-contrib-type-inline {
+  font-family: monospace;
+  font-size: 0.68rem;
+  color: #666;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.debug-contrib-row.banned .debug-contrib-type-inline {
+  color: #884444;
+}
+
+.debug-contrib-value {
+  color: #7cf;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  font-weight: 600;
+  text-align: left;
+}
+
+.debug-contrib-row.banned .debug-contrib-value {
+  color: #c06060;
+}
+
+.debug-contrib-desc {
+  font-size: 0.72rem;
+  color: #888;
+  padding-left: 1.1rem;
+  white-space: normal;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.debug-contrib-row.banned .debug-contrib-desc {
+  color: #774444;
+}
+
+.debug-contrib-meta {
+  display: flex;
+  gap: 0.5rem;
+  padding-left: 1.1rem;
+  flex-wrap: wrap;
+}
+
+.debug-contrib-id {
+  color: #aaa;
+  font-size: 0.65rem;
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+.debug-contrib-cond {
+  color: #404040;
+  font-size: 0.65rem;
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+.debug-contrib-row.banned .debug-contrib-id,
+.debug-contrib-row.banned .debug-contrib-cond {
+  color: #5a3030;
+}
+
+.clickable-id {
+  cursor: pointer;
+  transition: color 0.12s, text-shadow 0.12s;
+}
+
+.clickable-id:hover {
+  color: #4cff88;
+  text-shadow: 0 0 4px rgba(76, 255, 136, 0.6);
 }
 </style>
