@@ -4138,5 +4138,20 @@
         "targetType": 2,
         "value1": 1150056,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases break bonus by 5% (Effect scales based on how many enemies there are; max 25%).<br>On enemy break, increases MP by 10%.",
+        "name": "Let's Kick Them to the Curb",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 141,
+        "selectionAbilityMstId": 7057,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11490101,
+        "targetType": 2,
+        "value1": 1150057,
+        "value2": 0
     }
 ]
