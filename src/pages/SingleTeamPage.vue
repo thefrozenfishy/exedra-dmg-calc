@@ -58,60 +58,80 @@
       <button class="clear-banned-btn" @click="clearBanned">Include all</button>
     </div>
 
-    <div class="team-grid">
-      <div v-for="(enemy, index) in enemies.enemies" :key="index" class="team-slot debug-slot">
-        <h3 class="debug-slot-title">{{ debugSlotTitle(index) }}</h3>
+    <div class="debug-sections">
+      <template v-for="key in debugSectionOrder" :key="key">
+        <div v-if="visibleDebugSections[key]" class="debug-section-row">
 
-        <template v-if="Array.isArray(battleOutput)">
-          <template v-for="(key) in debugSectionOrder" :key="key">
-            <div v-if="visibleDebugSections[key]" class="debug-section">
-              <div class="debug-section-header" @click="toggleSlotSection(index, key)">
-                {{ debugSectionLabels[key] }}
-                <span class="debug-toggle-icon">{{ collapsedSlotSections[index]?.[key] ? '▸' : '▾' }}</span>
-              </div>
-              <template v-if="!collapsedSlotSections[index]?.[key]">
+          <div class="debug-section-header" @click="">
+            {{ debugSectionLabels[key] }}
+          </div>
+
+          <div class="debug-section-grid">
+            <div v-for="(enemy, index) in enemies.enemies" :key="index" class="debug-slot">
+              <h3 class="debug-slot-title">{{ debugSlotTitle(index) }}</h3>
+
+              <template v-if="Array.isArray(battleOutput)">
                 <template v-if="rawSectionKey(key)">
                   <div class="debug-contrib-table">
                     <template v-for="(entries, effectType) in battleOutput[3][index][rawSectionKey(key)!]"
                       :key="effectType">
                       <div class="debug-contrib-group">
-                        <div class="debug-contrib-group-label"> {{ effectType }} </div>
+                        <div class="debug-contrib-group-label">
+                          {{ effectType }}
+                        </div>
+
                         <div v-for="[detail, value, sourceName, dotTargetCharId, dotTargetName] in entries"
                           :key="`${skillDetailId(detail)}_${dotTargetCharId ?? 'dps'}`" class="debug-contrib-row"
                           :class="dotContribRowClass(detail, dotTargetCharId, rawSectionKey(key)!)"
                           @click="handleContribRowClick(detail, dotTargetCharId, rawSectionKey(key)!)">
                           <span class="debug-contrib-source">{{ sourceName }}</span>
+
                           <span v-if="dotTargetName && rawSectionKey(key) === 'rawContributed'"
                             class="debug-contrib-dot-target">
                             → {{ dotTargetName }}
                           </span>
-                          <span class="debug-contrib-value">{{ prettyDisplay(value, detail) }}</span>
-                          <div v-if="detail.description" class="debug-contrib-desc">{{ detail.description }}</div>
+
+                          <span class="debug-contrib-value">
+                            {{ prettyDisplay(value, detail) }}
+                          </span>
+
+                          <div v-if="detail.description" class="debug-contrib-desc">
+                            {{ detail.description }}
+                          </div>
+
                           <div class="debug-contrib-meta">
                             <span class="debug-contrib-id clickable-id"
                               @click.stop="copyToClipboard(String(skillDetailId(detail)))">
                               {{ skillDetailId(detail) }}
                             </span>
-                            <span v-if="detail.activeConditionSetIdCsv" class="debug-contrib-cond">A{{
-                              detail.activeConditionSetIdCsv }}</span>
-                            <span v-if="detail.startConditionSetIdCsv" class="debug-contrib-cond">S{{
-                              detail.startConditionSetIdCsv }}</span>
+
+                            <span v-if="detail.activeConditionSetIdCsv" class="debug-contrib-cond">
+                              A{{ detail.activeConditionSetIdCsv }}
+                            </span>
+
+                            <span v-if="detail.startConditionSetIdCsv" class="debug-contrib-cond">
+                              S{{ detail.startConditionSetIdCsv }}
+                            </span>
                           </div>
                         </div>
                       </div>
                     </template>
+
                     <div v-if="!Object.keys(battleOutput[3][index][rawSectionKey(key)!] ?? {}).length"
-                      class="debug-contrib-empty">(none)
+                      class="debug-contrib-empty">
+                      (none)
                     </div>
                   </div>
                 </template>
+
                 <pre v-else class="debug-pre">{{ battleOutput[3][index][key] }}</pre>
               </template>
+
+              <pre v-else class="debug-pre">{{ battleOutput }}</pre>
             </div>
-          </template>
-        </template>
-        <pre v-else class="debug-pre">{{ battleOutput }}</pre>
-      </div>
+          </div>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -698,5 +718,39 @@ const aliments = reactive([
 .clickable-id:hover {
   color: #4cff88;
   text-shadow: 0 0 4px rgba(76, 255, 136, 0.6);
+}
+
+.debug-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 1200px;
+}
+
+.debug-section-row {
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.debug-section-header {
+  padding: 0.4rem 0.75rem;
+  background: #1a1a1a;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.debug-section-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.debug-section-grid .debug-slot {
+  border-right: 1px solid #222;
+  padding: 0.4rem;
+}
+
+.debug-section-grid .debug-slot:last-child {
+  border-right: none;
 }
 </style>

@@ -811,44 +811,44 @@ export class ScoreAttackTeam {
         if (this.debug) {
             const posCtx = this.allyContexts[idx];
 
-            sections.calc = `Ability Mult - ${special * 100 | 0}%
-Base ${uses_def ? "Def" : "Atk"}     - ${(base_atk | 0).toLocaleString()}
-${uses_def ? "Def" : "Atk"} Up %     - ${atk_pluss * 100 | 0}%
-${uses_def ? "Def" : "Atk"} Up flat  - ${flat_atk | 0}
-Total ${uses_def ? "Def" : "Atk"}    - ${(atk_total | 0).toLocaleString()}
-Def down%    - ${(1 - def_remaining) * 100 | 0}%
-Total def    - ${(def_total | 0).toLocaleString()}
-Crit rate    - ${uncapped_crit_rate * 100 | 0}%
-Crit dmg     - ${crit_dmg * 100 | 0}%
-Dmg Dealt    - ${dmg_pluss * 100 | 0}%
-Elem dmg up  - ${elem_dmg_up * 100 | 0}%
-Dmg Taken    - ${dmg_taken * 100 | 0}%
-Elem Res     - ${elem_res_down * 100 | 0}%
-atk down     - ${atk_down * 100 | 0}%
+            sections.calc = `Ability Mult    - ${special * 100 | 0}%
+Base ${uses_def ? "Def" : "Atk"}        - ${(base_atk | 0).toLocaleString()}
+${uses_def ? "Def" : "Atk"} Up %        - ${atk_pluss * 100 | 0}%
+${uses_def ? "Def" : "Atk"} Up flat     - ${flat_atk | 0}
+Total ${uses_def ? "Def" : "Atk"}       - ${(atk_total | 0).toLocaleString()}
+Def down%       - ${(1 - def_remaining) * 100 | 0}%
+Total def       - ${(def_total | 0).toLocaleString()}
+Crit rate       - ${uncapped_crit_rate * 100 | 0}%
+Crit dmg        - ${crit_dmg * 100 | 0}%
+Dmg Dealt       - ${dmg_pluss * 100 | 0}%
+Elem dmg up     - ${elem_dmg_up * 100 | 0}%
+Dmg Taken       - ${dmg_taken * 100 | 0}%
+Elem Res        - ${elem_res_down * 100 | 0}%
+atk down        - ${atk_down * 100 | 0}%
+   
+Ability dmg     - ${(base_dmg | 0).toLocaleString()}
+Def Factor      - ${def_factor * 100 | 0}%
+Crit Factor     - ${crit_factor * 100 | 0}%
+Dmg Dlt Fact    - ${dmg_dealt_factor * 100 | 0}%
+Dmg Tkn Fact    - ${dmg_taken_factor * 100 | 0}%
+Elem ResFact    - ${elem_resist_factor * 100 | 0}%
+EffElem Fact    - ${effect_elem_factor * 100 | 0}%
+Break Factor    - ${break_factor * 100 | 0}%
+Dot             - ${(dot_total_dmg | 0).toLocaleString()}
+Pre-dot-total   - ${(pre_dot_total | 0).toLocaleString()}
+Pre-dot-avrg    - ${(pre_dot_average | 0).toLocaleString()}
+Result          - ${(total | 0).toLocaleString()}
+AverageDmg      - ${(average_total | 0).toLocaleString()}`;
 
-Ability dmg  - ${(base_dmg | 0).toLocaleString()}
-Def Factor   - ${def_factor * 100 | 0}%
-Crit Factor  - ${crit_factor * 100 | 0}%
-Dmg Dlt Fact - ${dmg_dealt_factor * 100 | 0}%
-Dmg Tkn Fact - ${dmg_taken_factor * 100 | 0}%
-Elem ResFact - ${elem_resist_factor * 100 | 0}%
-EffElem Fact - ${effect_elem_factor * 100 | 0}%
-Break Factor - ${break_factor * 100 | 0}%
-Dot          - ${(dot_total_dmg | 0).toLocaleString()}
-Pre-dot-total- ${(pre_dot_total | 0).toLocaleString()}
-Pre-dot-avrg - ${(pre_dot_average | 0).toLocaleString()}
-Result       - ${(total | 0).toLocaleString()}
-AverageDmg   - ${(average_total | 0).toLocaleString()}`;
-
-            sections.enemy = `enemiesAlive - ${currentAmountOfEnemies}
-base_def     - ${enemy.defense.toLocaleString()}
-break        - ${enemy.maxBreak}%
-def_up       - ${enemy.defenseUp}%
-is_break     - ${enemy.isBreak}
-is_elemt_weak- ${enemy.isWeak}
-does_crit    - ${enemy.isCrit}
-enabled      - ${enemy.enabled}
-enemy died   - ${enemyDied}`;
+            sections.enemy = `enemiesAlive    - ${currentAmountOfEnemies}
+base_def        - ${enemy.defense.toLocaleString()}
+break           - ${enemy.maxBreak}%
+def_up          - ${enemy.defenseUp}%
+is_break        - ${enemy.isBreak}
+is_elemt_weak   - ${enemy.isWeak}
+does_crit       - ${enemy.isCrit}
+enabled         - ${enemy.enabled}
+enemy died      - ${enemyDied}`;
 
             const statLines = kiokuAtPosition
                 ? Object.keys(kiokuAtPosition)
@@ -875,7 +875,7 @@ enemy died   - ${enemyDied}`;
                         if (key.endsWith("Atk")) val |= 0;
                         val = prettyNumber(val).toString();
                         if (key === "SupportAtk" || key === "supportLvl") val = val + "\n";
-                        return `${key.padEnd(12)} - ${val}`;
+                        return `${key.padEnd(15)} - ${val}`;
                     })
                     .filter(Boolean)
                 : [];
