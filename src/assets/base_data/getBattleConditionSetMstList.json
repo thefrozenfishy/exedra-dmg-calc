@@ -13480,6 +13480,26 @@
         "description": "八九寺真宵専用バフが10以上のとき"
     },
     {
+        "battleConditionMstIdCsv": "1682,1685,3",
+        "battleConditionSetMstId": 2723,
+        "description": "斧乃木余接専用バフが付与されているとき / 敵を攻撃したとき / 行動者自身"
+    },
+    {
+        "battleConditionMstIdCsv": "1682",
+        "battleConditionSetMstId": 2724,
+        "description": "斧乃木余接専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1682,1684",
+        "battleConditionSetMstId": 2725,
+        "description": "斧乃木余接専用バフが付与されているとき+ブレイクボーナスが最大ではない"
+    },
+    {
+        "battleConditionMstIdCsv": "1682,1683",
+        "battleConditionSetMstId": 2726,
+        "description": "斧乃木余接専用バフが付与されているとき+ブレイクボーナスが最大"
+    },
+    {
         "battleConditionMstIdCsv": "1115,1127",
         "battleConditionSetMstId": 2727,
         "description": "自身のHPが30%以上のとき+自身のHPが50%未満のとき"
@@ -13593,6 +13613,71 @@
         "battleConditionMstIdCsv": "1689",
         "battleConditionSetMstId": 2749,
         "description": "自分のキャラクターが「八九寺真宵」"
+    },
+    {
+        "battleConditionMstIdCsv": "1690",
+        "battleConditionSetMstId": 2750,
+        "description": "自分のキャラクターが「斧乃木余接」"
+    },
+    {
+        "battleConditionMstIdCsv": "542,273",
+        "battleConditionSetMstId": 2751,
+        "description": "3ターンごと（4ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "542,274",
+        "battleConditionSetMstId": 2752,
+        "description": "3ターンごと（4ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "548,273",
+        "battleConditionSetMstId": 2753,
+        "description": "3ターンごと（5ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "548,274",
+        "battleConditionSetMstId": 2754,
+        "description": "3ターンごと（5ターン目から）AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1691,273",
+        "battleConditionSetMstId": 2755,
+        "description": "3ターンごと（6ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1691,274",
+        "battleConditionSetMstId": 2756,
+        "description": "3ターンごと（6ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "904,1685,3",
+        "battleConditionSetMstId": 2757,
+        "description": "敵が1体で敵を攻撃したとき / 行動者自身"
+    },
+    {
+        "battleConditionMstIdCsv": "864,1685,3",
+        "battleConditionSetMstId": 2758,
+        "description": "敵が2体で敵を攻撃したとき / 行動者自身"
+    },
+    {
+        "battleConditionMstIdCsv": "865,1685,3",
+        "battleConditionSetMstId": 2759,
+        "description": "敵が3体で敵を攻撃したとき / 行動者自身"
+    },
+    {
+        "battleConditionMstIdCsv": "866,1685,3",
+        "battleConditionSetMstId": 2760,
+        "description": "敵が4体で敵を攻撃したとき / 行動者自身"
+    },
+    {
+        "battleConditionMstIdCsv": "905,1685,3",
+        "battleConditionSetMstId": 2761,
+        "description": "敵が5体で敵を攻撃したとき / 行動者自身"
+    },
+    {
+        "battleConditionMstIdCsv": "1692,3,6",
+        "battleConditionSetMstId": 2762,
+        "description": "トークンが10未満 / 行動者自身 / 行動タイプ戦闘スキル"
     },
     {
         "battleConditionMstIdCsv": "1693",
@@ -14050,6 +14135,31 @@
         "description": "行動者は無属性 AND 対象は無属性"
     },
     {
+        "battleConditionMstIdCsv": "974,989",
+        "battleConditionSetMstId": 2855,
+        "description": "行動者は光属性 AND 対象は闇属性"
+    },
+    {
+        "battleConditionMstIdCsv": "975,988",
+        "battleConditionSetMstId": 2856,
+        "description": "行動者は闇属性 AND 対象は光属性"
+    },
+    {
+        "battleConditionMstIdCsv": "975,989",
+        "battleConditionSetMstId": 2857,
+        "description": "行動者は闇属性 AND 対象は闇属性"
+    },
+    {
+        "battleConditionMstIdCsv": "975,990",
+        "battleConditionSetMstId": 2858,
+        "description": "行動者は闇属性 AND 対象は無属性"
+    },
+    {
+        "battleConditionMstIdCsv": "976,989",
+        "battleConditionSetMstId": 2859,
+        "description": "行動者は無属性 AND 対象は闇属性"
+    },
+    {
         "battleConditionMstIdCsv": "1403,3",
         "battleConditionSetMstId": 2895,
         "description": "行動者は自身＋敵全体で1体でもブレイクしたとき"
@@ -14058,5 +14168,245 @@
         "battleConditionMstIdCsv": "1774,3,1603",
         "battleConditionSetMstId": 2897,
         "description": "ブレイク中、且つ攻撃を受けたユニットが1体以上のとき+1以上のダメージを与えたとき＋行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "1776",
+        "battleConditionSetMstId": 2898,
+        "description": "バトル中に味方がブレイクした総回数が0回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1777",
+        "battleConditionSetMstId": 2899,
+        "description": "バトル中に味方がブレイクした総回数が1回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1778",
+        "battleConditionSetMstId": 2900,
+        "description": "バトル中に味方がブレイクした総回数が2回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1779",
+        "battleConditionSetMstId": 2901,
+        "description": "バトル中に味方がブレイクした総回数が3回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1780",
+        "battleConditionSetMstId": 2902,
+        "description": "バトル中に味方がブレイクした総回数が4回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1781",
+        "battleConditionSetMstId": 2903,
+        "description": "バトル中に味方がブレイクした総回数が5回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1782",
+        "battleConditionSetMstId": 2904,
+        "description": "バトル中に味方がブレイクした総回数が6回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1783",
+        "battleConditionSetMstId": 2905,
+        "description": "バトル中に味方がブレイクした総回数が7回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1784",
+        "battleConditionSetMstId": 2906,
+        "description": "バトル中に味方がブレイクした総回数が8回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1785",
+        "battleConditionSetMstId": 2907,
+        "description": "バトル中に味方がブレイクした総回数が9回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1786",
+        "battleConditionSetMstId": 2908,
+        "description": "バトル中に味方がブレイクした総回数が10回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1787",
+        "battleConditionSetMstId": 2909,
+        "description": "バトル中に味方がブレイクした総回数が11回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1788",
+        "battleConditionSetMstId": 2910,
+        "description": "バトル中に味方がブレイクした総回数が12回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1789",
+        "battleConditionSetMstId": 2911,
+        "description": "バトル中に味方がブレイクした総回数が13回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1790",
+        "battleConditionSetMstId": 2912,
+        "description": "バトル中に味方がブレイクした総回数が14回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1791",
+        "battleConditionSetMstId": 2913,
+        "description": "バトル中に味方がブレイクした総回数が15回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1792",
+        "battleConditionSetMstId": 2914,
+        "description": "バトル中に味方がブレイクした総回数が16回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1793",
+        "battleConditionSetMstId": 2915,
+        "description": "バトル中に味方がブレイクした総回数が17回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1794",
+        "battleConditionSetMstId": 2916,
+        "description": "バトル中に味方がブレイクした総回数が18回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1795",
+        "battleConditionSetMstId": 2917,
+        "description": "バトル中に味方がブレイクした総回数が19回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1796",
+        "battleConditionSetMstId": 2918,
+        "description": "バトル中に味方がブレイクした総回数が20回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1797",
+        "battleConditionSetMstId": 2919,
+        "description": "バトル中に味方がブレイクした総回数が21回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1798",
+        "battleConditionSetMstId": 2920,
+        "description": "バトル中に味方がブレイクした総回数が22回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1799",
+        "battleConditionSetMstId": 2921,
+        "description": "バトル中に味方がブレイクした総回数が23回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1800",
+        "battleConditionSetMstId": 2922,
+        "description": "バトル中に味方がブレイクした総回数が24回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1801",
+        "battleConditionSetMstId": 2923,
+        "description": "バトル中に味方がブレイクした総回数が25回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1802",
+        "battleConditionSetMstId": 2924,
+        "description": "バトル中に味方がブレイクした総回数が26回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1803",
+        "battleConditionSetMstId": 2925,
+        "description": "バトル中に味方がブレイクした総回数が27回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1804",
+        "battleConditionSetMstId": 2926,
+        "description": "バトル中に味方がブレイクした総回数が28回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1805",
+        "battleConditionSetMstId": 2927,
+        "description": "バトル中に味方がブレイクした総回数が29回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1806",
+        "battleConditionSetMstId": 2928,
+        "description": "バトル中に味方がブレイクした総回数が30回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1807",
+        "battleConditionSetMstId": 2929,
+        "description": "自身のブレイク回数が0回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1808",
+        "battleConditionSetMstId": 2930,
+        "description": "自身のブレイク回数が1回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1809",
+        "battleConditionSetMstId": 2931,
+        "description": "自身のブレイク回数が2回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1810",
+        "battleConditionSetMstId": 2932,
+        "description": "自身のブレイク回数が3回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1811",
+        "battleConditionSetMstId": 2933,
+        "description": "自身のブレイク回数が4回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1812",
+        "battleConditionSetMstId": 2934,
+        "description": "自身のブレイク回数が5回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1813",
+        "battleConditionSetMstId": 2935,
+        "description": "自身のブレイク回数が6回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1814",
+        "battleConditionSetMstId": 2936,
+        "description": "自身のブレイク回数が7回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1815",
+        "battleConditionSetMstId": 2937,
+        "description": "自身のブレイク回数が8回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1816",
+        "battleConditionSetMstId": 2938,
+        "description": "自身のブレイク回数が9回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1817",
+        "battleConditionSetMstId": 2939,
+        "description": "自身のブレイク回数が10回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1807,419",
+        "battleConditionSetMstId": 2944,
+        "description": "自身のブレイク回数が0回のとき、自身がブレイク状態の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1808,419",
+        "battleConditionSetMstId": 2945,
+        "description": "自身のブレイク回数が1回のとき、自身がブレイク状態の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1809,419",
+        "battleConditionSetMstId": 2946,
+        "description": "自身のブレイク回数が2回のとき、自身がブレイク状態の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1810,419",
+        "battleConditionSetMstId": 2947,
+        "description": "自身のブレイク回数が3回のとき、自身がブレイク状態の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1811,419",
+        "battleConditionSetMstId": 2948,
+        "description": "自身のブレイク回数が4回のとき、自身がブレイク状態の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1020",
+        "battleConditionSetMstId": 2949,
+        "description": "自身の経過ターンが20ターン以上"
     }
 ]
