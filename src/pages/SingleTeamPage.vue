@@ -76,10 +76,15 @@
                       :key="effectType">
                       <div class="debug-contrib-group">
                         <div class="debug-contrib-group-label"> {{ effectType }} </div>
-                        <div v-for="[detail, value, sourceName] in entries" :key="skillDetailId(detail)"
-                          class="debug-contrib-row" :class="{ banned: bannedEffectIds[skillDetailId(detail)] }"
-                          @click="toggleBannedEffect(skillDetailId(detail))">
+                        <div v-for="[detail, value, sourceName, dotTargetCharId, dotTargetName] in entries"
+                          :key="`${skillDetailId(detail)}_${dotTargetCharId ?? 'dps'}`" class="debug-contrib-row"
+                          :class="dotContribRowClass(detail, dotTargetCharId, rawSectionKey(key)!)"
+                          @click="handleContribRowClick(detail, dotTargetCharId, rawSectionKey(key)!)">
                           <span class="debug-contrib-source">{{ sourceName }}</span>
+                          <span v-if="dotTargetName && rawSectionKey(key) === 'rawContributed'"
+                            class="debug-contrib-dot-target">
+                            → {{ dotTargetName }}
+                          </span>
                           <span class="debug-contrib-value">{{ prettyDisplay(value, detail) }}</span>
                           <div v-if="detail.description" class="debug-contrib-desc">{{ detail.description }}</div>
                           <div class="debug-contrib-meta">
@@ -114,7 +119,7 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
-import { ScoreAttackTeam, type DebugSections } from '../models/ScoreAttackTeam'
+import { ScoreAttackTeam, type DebugSections, type DotAllyCompositeKey } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
 import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
@@ -165,6 +170,55 @@ function clearBanned() {
 const bannedCount = computed(() => Object.keys(bannedEffectIds).length)
 const hasBannedEffects = computed(() => bannedCount.value > 0)
 
+const enabledDotAllyEffects = reactive<Record<DotAllyCompositeKey, true>>({})
+
+function dotCompositeKey(detail: SkillDetail, dotTargetCharId: string): DotAllyCompositeKey {
+  return `${skillDetailId(detail)}_${dotTargetCharId}` as DotAllyCompositeKey
+}
+
+function toggleDotAllyEffect(detail: SkillDetail, dotTargetCharId: string) {
+  const key = dotCompositeKey(detail, dotTargetCharId)
+  if (enabledDotAllyEffects[key]) delete enabledDotAllyEffects[key]
+  else enabledDotAllyEffects[key] = true
+}
+
+function isDotAllyEnabled(detail: SkillDetail, dotTargetCharId: string): boolean {
+  return !!enabledDotAllyEffects[dotCompositeKey(detail, dotTargetCharId)]
+}
+
+type RawKey = 'rawReceived' | 'rawContributed' | 'rawDebuffs'
+
+function isDotAllyRow(dotTargetCharId: string | undefined, rawKey: RawKey): boolean {
+  return !!dotTargetCharId && rawKey !== 'rawDebuffs'
+}
+
+function dotContribRowClass(
+  detail: SkillDetail,
+  dotTargetCharId: string | undefined,
+  rawKey: RawKey,
+): Record<string, boolean> {
+  if (!isDotAllyRow(dotTargetCharId, rawKey)) {
+    return { banned: !!bannedEffectIds[skillDetailId(detail)] }
+  }
+  const enabled = isDotAllyEnabled(detail, dotTargetCharId!)
+  return {
+    'dot-ally-disabled': !enabled,
+    'dot-ally-enabled': enabled,
+  }
+}
+
+function handleContribRowClick(
+  detail: SkillDetail,
+  dotTargetCharId: string | undefined,
+  rawKey: RawKey,
+) {
+  if (isDotAllyRow(dotTargetCharId, rawKey)) {
+    toggleDotAllyEffect(detail, dotTargetCharId!)
+  } else {
+    toggleBannedEffect(skillDetailId(detail))
+  }
+}
+
 function prettyDisplay(value: number, detail?: SkillDetail): string {
   if (!detail?.description?.includes("%")) return value.toLocaleString()
   return `${Math.round((value / 10 + Number.EPSILON) * 100) / 100}%`
@@ -184,7 +238,7 @@ const debugSectionLabels: Record<SectionKey, string> = {
   rawDebuffs: '',
 }
 
-const rawSectionKey = (key: SectionKey): 'rawReceived' | 'rawContributed' | 'rawDebuffs' | null => {
+const rawSectionKey = (key: SectionKey): RawKey | null => {
   if (key === 'kiokuReceived') return 'rawReceived'
   if (key === 'kiokuContributed') return 'rawContributed'
   if (key === 'kiokuDebuffs') return 'rawDebuffs'
@@ -215,7 +269,6 @@ const debugSlotTitle = (idx: number) => {
   return labels[idx] ?? `Slot ${idx}`
 }
 
-
 const team = useTeamStore()
 const enemies = useEnemyStore()
 const isFullTeam = computed(() => team.slots.map(slot => slot.main).filter(Boolean).length === 5)
@@ -233,6 +286,7 @@ const teamInstance = computed(() => {
     }) as ScoreAttackKioku[]
 
     const bannedSet = new Set(Object.keys(bannedEffectIds).map(Number))
+    const enabledDotSet = new Set(Object.keys(enabledDotAllyEffects) as DotAllyCompositeKey[])
 
     return new ScoreAttackTeam(
       transformedMembers[attackerIndex],
@@ -241,6 +295,7 @@ const teamInstance = computed(() => {
       aliments.filter(el => el.enabled).map(el => el.name),
       true,
       bannedSet,
+      enabledDotSet,
     )
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
@@ -485,6 +540,77 @@ const aliments = reactive([
 .debug-contrib-row.banned:hover {
   background: rgba(140, 25, 25, 0.4);
   border-left-color: #aa3333;
+}
+
+.debug-contrib-row.dot-ally-disabled {
+  background: rgba(120, 100, 0, 0.2);
+  border-left-color: #886600;
+  color: #ccaa00;
+}
+
+.debug-contrib-row.dot-ally-disabled:hover {
+  background: rgba(140, 115, 0, 0.35);
+  border-left-color: #aaaa00;
+}
+
+.debug-contrib-row.dot-ally-disabled .debug-contrib-source {
+  color: #ddcc55;
+}
+
+.debug-contrib-row.dot-ally-disabled .debug-contrib-value {
+  color: #ccaa00;
+}
+
+.debug-contrib-row.dot-ally-disabled .debug-contrib-desc {
+  color: #776600;
+}
+
+.debug-contrib-row.dot-ally-disabled .debug-contrib-id,
+.debug-contrib-row.dot-ally-disabled .debug-contrib-cond {
+  color: #554400;
+}
+
+.debug-contrib-row.dot-ally-enabled {
+  background: rgba(20, 100, 40, 0.25);
+  border-left-color: #226633;
+  color: #44cc77;
+}
+
+.debug-contrib-row.dot-ally-enabled:hover {
+  background: rgba(25, 120, 50, 0.4);
+  border-left-color: #33aa55;
+}
+
+.debug-contrib-row.dot-ally-enabled .debug-contrib-source {
+  color: #88ddaa;
+}
+
+.debug-contrib-row.dot-ally-enabled .debug-contrib-value {
+  color: #44cc77;
+}
+
+.debug-contrib-row.dot-ally-enabled .debug-contrib-desc {
+  color: #336644;
+}
+
+.debug-contrib-row.dot-ally-enabled .debug-contrib-id,
+.debug-contrib-row.dot-ally-enabled .debug-contrib-cond {
+  color: #224433;
+}
+
+.debug-contrib-dot-target {
+  font-size: 0.7rem;
+  font-style: italic;
+  color: #aaa;
+  margin-bottom: 1px;
+}
+
+.debug-contrib-row.dot-ally-disabled .debug-contrib-dot-target {
+  color: #886600;
+}
+
+.debug-contrib-row.dot-ally-enabled .debug-contrib-dot-target {
+  color: #336644;
 }
 
 .debug-contrib-source {

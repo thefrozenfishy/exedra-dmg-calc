@@ -138,7 +138,8 @@ function buffAppliesToAlly(range: number, sourceIdx: number, targetIdx: number):
 
 type EffectPool = Record<string, number>;
 type ExtraEffectPool = Record<string, [Function, number][]>;
-export type DebugContributions = Record<string, [SkillDetail, number, string][]>;
+export type DebugContributions = Record<string, [SkillDetail, number, string, string?, string?][]>;
+export type DotAllyCompositeKey = `${number}_${string}`;
 
 interface AllyContext {
     kioku: ScoreAttackKioku;
@@ -186,6 +187,10 @@ export class ScoreAttackTeam {
     private attackerHealth: number;
     private activeBuffsAndDebuffs: string[];
     private userBannedEffects: Set<number>;
+    private enabledDotAllyEffects: Set<DotAllyCompositeKey>;
+
+    private hasDpsDotPop: boolean = false;
+    private dotAllyIndices: { idx: number; charId: string; name: string }[] = [];
 
     constructor(
         dps: ScoreAttackKioku,
@@ -194,6 +199,7 @@ export class ScoreAttackTeam {
         activeAliments: Aliment[],
         debug = false,
         userBannedEffects: Set<number> = new Set(),
+        enabledDotAllyEffects: Set<DotAllyCompositeKey> = new Set(),
     ) {
         this.team = team;
         this.dps = dps;
@@ -201,6 +207,7 @@ export class ScoreAttackTeam {
         this.attackerHealth = attackerHealth;
         this.activeBuffsAndDebuffs = activeAliments;
         this.userBannedEffects = userBannedEffects;
+        this.enabledDotAllyEffects = enabledDotAllyEffects;
         this.setup();
     }
 
@@ -231,6 +238,31 @@ export class ScoreAttackTeam {
         this.debuffPool["DWN_DEF_ACCUM_RATIO"] = 1;
         this.debuffPool["DWN_DEF_RATIO"] = 1;
         this.debuffPool["WEAKNESS"] = 0;
+
+        this.hasDpsDotPop = this.dps.effects.some(
+            eff => eff.abilityEffectType === "IMM_SLIP_DMG",
+        );
+
+        if (this.hasDpsDotPop) {
+            for (const nonDpsIdx of [0, 1, 3, 4]) {
+                const kioku = alliesOrdered[nonDpsIdx];
+                const hasDot = kioku.effects.some(eff => {
+                    const dotType = eff.abilityEffectType.replace("_ATK", "");
+                    return (
+                        dotType !== Aliment.WEAKNESS &&
+                        Object.values(Aliment).includes(dotType as Aliment) &&
+                        this.activeBuffsAndDebuffs.includes(dotType)
+                    );
+                });
+                if (hasDot) {
+                    this.dotAllyIndices.push({
+                        idx: nonDpsIdx,
+                        charId: String(kioku.data.id),
+                        name: kioku.name,
+                    });
+                }
+            }
+        }
 
         for (let idx = 0; idx < 5; idx++) {
             this.allyContexts.push({
@@ -305,6 +337,32 @@ export class ScoreAttackTeam {
                             userBanned,
                         );
                     }
+
+                    if (detail.range === 1 && this.dotAllyIndices.length > 0) {
+                        for (const { idx: dotIdx, charId, name: dotName } of this.dotAllyIndices) {
+                            if (dotIdx === DPS_IDX) continue;
+
+                            const dotCtx = this.allyContexts[dotIdx];
+                            if (detail.element && elementMap[detail.element] !== dotCtx.kioku.data.element) continue;
+
+                            const compositeKey = `${skillDetailId(detail)}_${charId}` as DotAllyCompositeKey;
+                            const dotEnabled = this.enabledDotAllyEffects.has(compositeKey);
+
+                            this.distributeEffect(
+                                detail,
+                                valueTotal,
+                                dotCtx.effects,
+                                dotCtx.extraEffects,
+                                sourceCtx.debugContributionsToDps,
+                                dotCtx.debugContributionsToSelf,
+                                undefined,
+                                sourceKioku.name,
+                                !dotEnabled,
+                                charId,
+                                dotName,
+                            );
+                        }
+                    }
                 }
             }
         }
@@ -344,6 +402,8 @@ export class ScoreAttackTeam {
         debugDebuffContributions?: DebugContributions,
         sourceName: string = "?",
         userBanned: boolean = false,
+        dotTargetCharId?: string,
+        dotTargetName?: string,
     ) {
         detail.activeConditionSetIdCsv.split(",").forEach(activeCondId => {
             const isActiveCond = isActiveConditionRelevantForScoreAttack(
@@ -357,7 +417,7 @@ export class ScoreAttackTeam {
                 for (const dbg of [debugContributionsToDps, debugContributionsToSelf, debugDebuffContributions]) {
                     if (!dbg) continue;
                     if (!(detail.abilityEffectType in dbg)) dbg[detail.abilityEffectType] = [];
-                    dbg[detail.abilityEffectType].push([detail, valueTotal, sourceName]);
+                    dbg[detail.abilityEffectType].push([detail, valueTotal, sourceName, dotTargetCharId, dotTargetName]);
                 }
                 if (!userBanned) {
                     this.accumulateIntoPool(detail.abilityEffectType, valueTotal, pool);
@@ -372,7 +432,7 @@ export class ScoreAttackTeam {
                 for (const dbg of [debugContributionsToDps, debugContributionsToSelf, debugDebuffContributions]) {
                     if (!dbg) continue;
                     if (!(detail.abilityEffectType in dbg)) dbg[detail.abilityEffectType] = [];
-                    dbg[detail.abilityEffectType].push([detail, valueTotal, sourceName]);
+                    dbg[detail.abilityEffectType].push([detail, valueTotal, sourceName, dotTargetCharId, dotTargetName]);
                 }
             }
         });
@@ -726,7 +786,7 @@ export class ScoreAttackTeam {
         let dot_total_dmg = 0;
         if (special > 0 && enemy.enabled) {
             base_dmg += this.add_additional_dmg();
-            if (this.dps.effects.some(eff => eff.abilityEffectType === "IMM_SLIP_DMG")) {
+            if (this.hasDpsDotPop) {
                 dot_total_dmg = this.add_dot_dmg(enemy, currentAmountOfEnemies);
             }
         }
