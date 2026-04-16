@@ -123,6 +123,8 @@ const skippable = new Set([
 const bannedEffects: Set<number> = new Set([
     65101002, // Sakurako passive is listed multiple places
     65101003, // Sakurako passive is listed multiple places
+    12701003, // Yotsugi too
+    12721005, // Yotsugi too
 ]);
 
 function prettyNumber(n: number) {
