@@ -5,6 +5,11 @@
     <div class="battle-output">
       <h2>Battle Result</h2>
       <h3>{{ formatDmg(battleOutput) }}</h3>
+      <h4>Score Attack score: {{ sa_score }} given: <input style="width: 3em;" v-model.number="hp_percentage_team" type="number"
+          step="1" max="100" min="0" />% health
+        remaining, <input style="width: 3em;" v-model.number="turns" type="number" step="1" min="1" max="16" /> turns,
+        and <span title="To find score multiplier, calculate (dmg_dealt / points_from_dmg_done) in an SA run, this changes for each SA">score multiplier of <input style="width: 4em;" v-model.number="scoreMultiplier" type="number" step="0.1"
+          min="0" /></span></h4>
     </div>
 
     <div class="team-grid">
@@ -152,6 +157,14 @@ const attackerIndex = 2
 const buffMultReduction = useSetting("buffMultReduction", 0)
 const debuffMultReduction = useSetting("debuffMultReduction", 0)
 const attackerHealth = useSetting("attackerHealth", 100)
+const scoreMultiplier = useSetting("scoreMultiplier", 35)
+const turns = useSetting("turns", 3)
+const hp_percentage_team = useSetting("hp_percentage_team", 20)
+
+const sa_score = computed(() => {
+  if (typeof battleOutput.value === 'string') return "unknown"
+  return Number((20 * (battleOutput.value[0] as number) / scoreMultiplier.value + (90000 - 5000 * turns.value) + 15000 * hp_percentage_team.value / 100).toFixed(0)).toLocaleString()
+})
 
 function onChangeCrys(charIdx: number, crysIdx: number, rawValue: string) {
   const main = team.slots[charIdx].main
