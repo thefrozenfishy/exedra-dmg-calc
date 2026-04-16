@@ -13,7 +13,7 @@ app.component('CharacterLink', CharacterLink)
 app.use(createPinia())
 if (import.meta.env.DEV) {
     const favicon = document.getElementById("app-icon") as HTMLLinkElement;
-    favicon.href = favicon.href.replace("icon", "icon-dev");
+    favicon.href = favicon.href.replace("icon.png", "icon-dev.png?v=" + Date.now());
 }
 useTeamStore().load()
 usePvPStore().load()

@@ -116,6 +116,16 @@ enum CompareContent {
     ONGOING_DAMAGE = 310,
     ACTOR_SKILL_TYPE = 401,
     COMBO_ACTION_STEP = 402,
+    AWAKEN = 1101,
+    CALAMITY_COUNTER = 1201,
+    // A = 2002,
+    // B = 1202,
+    PLAYER_TEAM = 1001,
+    // D = 313,
+    FIRST_ACTION = 2001,
+    // F = 113,
+    // G = 114,
+    // H = 314,
 }
 
 enum CompareOperator {
