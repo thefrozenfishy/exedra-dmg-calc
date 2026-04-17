@@ -163,7 +163,7 @@ const hp_percentage_team = useSetting("hp_percentage_team", 20)
 
 const sa_score = computed(() => {
   if (typeof battleOutput.value === 'string') return "unknown"
-  return Number((20 * (battleOutput.value[0] as number) / scoreMultiplier.value + (90000 - 5000 * turns.value) + 15000 * hp_percentage_team.value / 100).toFixed(0)).toLocaleString()
+  return (800_000 + Number((20 * ((battleOutput.value[0] as number) / scoreMultiplier.value + (90000 - 5000 * turns.value) + 15000 * hp_percentage_team.value / 100)).toFixed(0))).toLocaleString()
 })
 
 function onChangeCrys(charIdx: number, crysIdx: number, rawValue: string) {
