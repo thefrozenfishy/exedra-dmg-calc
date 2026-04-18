@@ -190,6 +190,7 @@ export class ScoreAttackTeam {
     private activeBuffsAndDebuffs: string[];
     private userBannedEffects: Set<number>;
     private enabledDotAllyEffects: Set<DotAllyCompositeKey>;
+    private stackOverrides: Map<number, number> = new Map();
 
     private hasDpsDotPop: boolean = false;
     private dotAllyIndices: { idx: number; charId: string; name: string }[] = [];
@@ -202,6 +203,7 @@ export class ScoreAttackTeam {
         debug = false,
         userBannedEffects: Set<number> = new Set(),
         enabledDotAllyEffects: Set<DotAllyCompositeKey> = new Set(),
+        stackOverrides: Map<number, number> = new Map(),
     ) {
         this.team = team;
         this.dps = dps;
@@ -210,6 +212,7 @@ export class ScoreAttackTeam {
         this.activeBuffsAndDebuffs = activeAliments;
         this.userBannedEffects = userBannedEffects;
         this.enabledDotAllyEffects = enabledDotAllyEffects;
+        this.stackOverrides = stackOverrides;
         this.setup();
     }
 
@@ -293,8 +296,10 @@ export class ScoreAttackTeam {
 
                 const userBanned = this.userBannedEffects.has(skillDetailId(detail));
 
-                let valueTotal = detail.value1;
-                valueTotal *= detail.value2 || 1;
+                const maxStacks = detail.value2 || 1;
+                const id = skillDetailId(detail);
+                const stacks = this.stackOverrides.has(id) ? this.stackOverrides.get(id)! : maxStacks;
+                let valueTotal = detail.value1 * stacks;
 
                 const isDebuff = detail.abilityEffectType.startsWith("DWN_")
                     || detail.abilityEffectType.startsWith("DOWN_")

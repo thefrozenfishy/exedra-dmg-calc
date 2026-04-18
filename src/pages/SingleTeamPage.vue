@@ -5,11 +5,13 @@
     <div class="battle-output">
       <h2>Battle Result</h2>
       <h3>{{ formatDmg(battleOutput) }}</h3>
-      <h4>Score Attack score: {{ sa_score }} given: <input style="width: 3em;" v-model.number="hp_percentage_team" type="number"
-          step="1" max="100" min="0" />% health
+      <h4>Score Attack score: {{ sa_score }} given: <input style="width: 3em;" v-model.number="hp_percentage_team"
+          type="number" step="1" max="100" min="0" />% health
         remaining, <input style="width: 3em;" v-model.number="turns" type="number" step="1" min="1" max="16" /> turns,
-        and <span title="To find score multiplier, calculate (dmg_dealt / points_from_dmg_done) in an SA run, this changes for each SA">score multiplier of <input style="width: 4em;" v-model.number="scoreMultiplier" type="number" step="0.1"
-          min="0" /></span></h4>
+        and <span
+          title="To find score multiplier, calculate (dmg_dealt / points_from_dmg_done) in an SA run, this changes for each SA">score
+          multiplier of <input style="width: 4em;" v-model.number="scoreMultiplier" type="number" step="0.1"
+            min="0" /></span></h4>
     </div>
 
     <div class="team-grid">
@@ -104,6 +106,15 @@
                             {{ detail.description }}
                           </div>
 
+                          <div v-if="detail.value2 > 1" class="debug-contrib-stacks" @click.stop>
+                            <label>
+                              Stacks:
+                              <input type="number" :min="0" :max="detail.value2" :value="getStackOverride(detail)"
+                                @change="e => stackOverride(e, detail)" style="width: 3.5em;" />
+                              / {{ detail.value2 }}
+                            </label>
+                          </div>
+
                           <div class="debug-contrib-meta">
                             <span class="debug-contrib-id clickable-id"
                               @click.stop="copyToClipboard(String(skillDetailId(detail)))">
@@ -187,6 +198,17 @@ const formatDmg = (out: string | [number, number, number, any[]]) =>
     ? `Max Damage: ${out[0].toLocaleString()} with a ${out[2]}% crit rate - (Average Damage: ${out[1].toLocaleString()})`
     : out
 
+const stackOverrides = reactive<Map<number, number>>(new Map());
+function stackOverride(e: Event, detail: SkillDetail) {
+  const v = Number((e.target as HTMLInputElement).value);
+  const clamped = Math.max(0, Math.min(detail.value2, v));
+  if (clamped === detail.value2) stackOverrides.delete(skillDetailId(detail));
+  else stackOverrides.set(skillDetailId(detail), clamped);
+}
+
+const getStackOverride = (detail: SkillDetail): number | undefined =>
+  stackOverrides.get(skillDetailId(detail)) ?? detail.value2
+
 const bannedEffectIds = reactive<Record<number, true>>({})
 
 function toggleBannedEffect(id: number) {
@@ -253,8 +275,10 @@ function handleContribRowClick(
 }
 
 function prettyDisplay(value: number, detail?: SkillDetail): string {
+  const nr = Math.round((value / 10 + Number.EPSILON) * 100) / 100
+  if (detail?.description === "") return `${value.toLocaleString()} or ${nr}%`
   if (!detail?.description?.includes("%")) return value.toLocaleString()
-  return `${Math.round((value / 10 + Number.EPSILON) * 100) / 100}%`
+  return `${nr}%`
 }
 
 type SectionKey = keyof DebugSections
@@ -290,13 +314,6 @@ const visibleDebugSections = reactive<Record<SectionKey, boolean>>({
   rawDebuffs: false,
 })
 
-const collapsedSlotSections = reactive<Record<number, Partial<Record<SectionKey, boolean>>>>({})
-
-function toggleSlotSection(slotIdx: number, key: SectionKey) {
-  if (!collapsedSlotSections[slotIdx]) collapsedSlotSections[slotIdx] = {}
-  collapsedSlotSections[slotIdx][key] = !collapsedSlotSections[slotIdx][key]
-}
-
 const debugSlotTitle = (idx: number) => {
   const labels = ['L Other', 'L Proximity', 'Target', 'R Proximity', 'R Other']
   return labels[idx] ?? `Slot ${idx}`
@@ -320,6 +337,7 @@ const teamInstance = computed(() => {
 
     const bannedSet = new Set(Object.keys(bannedEffectIds).map(Number))
     const enabledDotSet = new Set(Object.keys(enabledDotAllyEffects) as DotAllyCompositeKey[])
+    const stackOverridesCopy = new Map(stackOverrides);
 
     return new ScoreAttackTeam(
       transformedMembers[attackerIndex],
@@ -329,6 +347,7 @@ const teamInstance = computed(() => {
       true,
       bannedSet,
       enabledDotSet,
+      stackOverridesCopy,
     )
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
@@ -765,5 +784,28 @@ const aliments = reactive([
 
 .debug-section-grid .debug-slot:last-child {
   border-right: none;
+}
+
+.debug-contrib-stacks {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  color: #aaa;
+  padding-left: 1.1rem;
+}
+
+.debug-contrib-stacks input {
+  background: #1e1e1e;
+  border: 1px solid #444;
+  border-radius: 3px;
+  color: #ddd;
+  padding: 0.1rem 0.2rem;
+  font-size: 0.72rem;
+}
+
+.debug-contrib-stacks input:focus {
+  outline: 1px solid #646cff;
+  border-color: #646cff;
 }
 </style>
