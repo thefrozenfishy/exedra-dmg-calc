@@ -142,6 +142,7 @@ type EffectPool = Record<string, number>;
 type ExtraEffectPool = Record<string, [Function, number][]>;
 export type DebugContributions = Record<string, [SkillDetail, number, string, string?, string?][]>;
 export type DotAllyCompositeKey = `${number}_${string}`;
+export type EnemyDebuffCompositeKey = `${number}_enemy${number}`;
 
 interface AllyContext {
     kioku: ScoreAttackKioku;
@@ -150,7 +151,7 @@ interface AllyContext {
     extraEffects: ExtraEffectPool;
     debugContributionsToDps: DebugContributions;
     debugContributionsToSelf: DebugContributions;
-    debugDebuffContributions: DebugContributions;
+    debugDebuffContributions: DebugContributions[]; 
 }
 
 export interface DebugSections {
@@ -160,9 +161,11 @@ export interface DebugSections {
     kiokuReceived: string;
     kiokuContributed: string;
     kiokuDebuffs: string;
+    kiokuEnemyDebuffs: string;
     rawReceived: DebugContributions;
     rawContributed: DebugContributions;
     rawDebuffs: DebugContributions;
+    rawEnemyDebuffs: DebugContributions;
 }
 
 const emptyDebugSections = (): DebugSections => ({
@@ -172,9 +175,11 @@ const emptyDebugSections = (): DebugSections => ({
     kiokuReceived: "",
     kiokuContributed: "",
     kiokuDebuffs: "",
+    kiokuEnemyDebuffs: "",
     rawReceived: {},
     rawContributed: {},
     rawDebuffs: {},
+    rawEnemyDebuffs: {},
 });
 
 export class ScoreAttackTeam {
@@ -182,14 +187,15 @@ export class ScoreAttackTeam {
     private dps: ScoreAttackKioku;
 
     private allyContexts: AllyContext[] = [];
-    private debuffPool: EffectPool = {};
-    private extraDebuffPool: ExtraEffectPool = {};
+    private debuffPools: EffectPool[] = Array(5).fill(null).map(() => ({}));
+    private extraDebuffPools: ExtraEffectPool[] = Array(5).fill(null).map(() => ({}));
 
     private debug: boolean;
     private attackerHealth: number;
     private activeBuffsAndDebuffs: string[];
     private userBannedEffects: Set<number>;
     private enabledDotAllyEffects: Set<DotAllyCompositeKey>;
+    private enabledEnemyDebuffs: Set<EnemyDebuffCompositeKey>;
     private stackOverrides: Map<number, number> = new Map();
 
     private hasDpsDotPop: boolean = false;
@@ -204,6 +210,7 @@ export class ScoreAttackTeam {
         userBannedEffects: Set<number> = new Set(),
         enabledDotAllyEffects: Set<DotAllyCompositeKey> = new Set(),
         stackOverrides: Map<number, number> = new Map(),
+        enabledEnemyDebuffs: Set<EnemyDebuffCompositeKey> = new Set(),
     ) {
         this.team = team;
         this.dps = dps;
@@ -213,6 +220,7 @@ export class ScoreAttackTeam {
         this.userBannedEffects = userBannedEffects;
         this.enabledDotAllyEffects = enabledDotAllyEffects;
         this.stackOverrides = stackOverrides;
+        this.enabledEnemyDebuffs = enabledEnemyDebuffs;
         this.setup();
     }
 
@@ -240,9 +248,11 @@ export class ScoreAttackTeam {
             });
         }
 
-        this.debuffPool["DWN_DEF_ACCUM_RATIO"] = 1;
-        this.debuffPool["DWN_DEF_RATIO"] = 1;
-        this.debuffPool["WEAKNESS"] = 0;
+        for (let i = 0; i < 5; i++) {
+            this.debuffPools[i]["DWN_DEF_ACCUM_RATIO"] = 1;
+            this.debuffPools[i]["DWN_DEF_RATIO"] = 1;
+            this.debuffPools[i]["WEAKNESS"] = 0;
+        }
 
         this.hasDpsDotPop = this.dps.effects.some(
             eff => eff.abilityEffectType === "IMM_SLIP_DMG",
@@ -277,7 +287,7 @@ export class ScoreAttackTeam {
                 extraEffects: {},
                 debugContributionsToDps: {},
                 debugContributionsToSelf: {},
-                debugDebuffContributions: {},
+                debugDebuffContributions: Array(5).fill(null).map(() => ({})),
             });
         }
 
@@ -308,17 +318,21 @@ export class ScoreAttackTeam {
 
                 if (isDebuff) {
                     if (detail.element && elementMap[detail.element] !== this.dps.data.element) continue;
-                    this.distributeEffect(
-                        detail,
-                        valueTotal,
-                        this.debuffPool,
-                        this.extraDebuffPool,
-                        undefined,
-                        undefined,
-                        sourceCtx.debugDebuffContributions,
-                        sourceKioku.name,
-                        userBanned,
-                    );
+                    for (let ei = 0; ei < 5; ei++) {
+                        const compositeKey = `${skillDetailId(detail)}_enemy${ei}` as EnemyDebuffCompositeKey;
+                        const debuffEnabled = this.enabledEnemyDebuffs.has(compositeKey);
+                        this.distributeEffect(
+                            detail,
+                            valueTotal,
+                            this.debuffPools[ei],
+                            this.extraDebuffPools[ei],
+                            undefined,
+                            undefined,
+                            sourceCtx.debugDebuffContributions[ei],
+                            sourceKioku.name,
+                            !debuffEnabled,
+                        );
+                    }
                 } else {
                     for (let targetIdx = 0; targetIdx < 5; targetIdx++) {
                         if (!buffAppliesToAlly(detail.range, sourceIdx, targetIdx)) continue;
@@ -376,8 +390,8 @@ export class ScoreAttackTeam {
 
         if (this.debug) {
             console.log(
-                "Debuff pool",
-                Object.fromEntries(Object.entries(this.debuffPool).filter(([key]) => key in knownBoosts)),
+                "Debuff pool (target)",
+                Object.fromEntries(Object.entries(this.debuffPools[DPS_IDX]).filter(([key]) => key in knownBoosts)),
             );
             for (let i = 0; i < 5; i++) {
                 console.log(
@@ -388,7 +402,7 @@ export class ScoreAttackTeam {
         }
 
         const allPoolKeys = [
-            ...Object.keys(this.debuffPool),
+            ...this.debuffPools.flatMap(p => Object.keys(p)),
             ...this.allyContexts.flatMap(ctx => Object.keys(ctx.effects)),
         ];
         const leftover = [...new Set(allPoolKeys)].filter(
@@ -474,9 +488,9 @@ export class ScoreAttackTeam {
         return val;
     }
 
-    private getDebuffEffect(eff: string, amountOfEnemies: number, maxBreak: number): number {
-        let val = this.debuffPool[eff] ?? 0;
-        this.extraDebuffPool[eff]?.forEach(([fun, v]) => {
+    private getDebuffEffect(eff: string, enemyIdx: number, amountOfEnemies: number, maxBreak: number): number {
+        let val = this.debuffPools[enemyIdx][eff] ?? 0;
+        this.extraDebuffPools[enemyIdx][eff]?.forEach(([fun, v]) => {
             if (fun(amountOfEnemies, maxBreak)) {
                 if (["DWN_DEF_RATIO", "DWN_DEF_ACCUM_RATIO"].includes(eff)) {
                     val *= 1 - v / 1000;
@@ -525,15 +539,15 @@ export class ScoreAttackTeam {
         return base_dmg;
     }
 
-    add_dot_dmg(enemy: Enemy, amountOfEnemies: number): number {
+    add_dot_dmg(enemy: Enemy, enemyIdx: number, amountOfEnemies: number): number {
         let total = 0;
 
         const def_remaining =
-            this.getDebuffEffect("DWN_DEF_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) *
-            this.getDebuffEffect("DWN_DEF_RATIO", amountOfEnemies, enemy.maxBreak) *
-            (0.9 ** this.debuffPool["WEAKNESS"]);
+            this.getDebuffEffect("DWN_DEF_ACCUM_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) *
+            this.getDebuffEffect("DWN_DEF_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) *
+            (0.9 ** this.debuffPools[enemyIdx]["WEAKNESS"]);
         const elem_res_down =
-            this.getDebuffEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) / 1000;
+            this.getDebuffEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) / 1000;
         const break_factor = enemy.isBreak ? enemy.maxBreak / 100 : 1;
 
         for (let allyIdx = 0; allyIdx < 5; allyIdx++) {
@@ -569,8 +583,8 @@ export class ScoreAttackTeam {
                     1000;
 
                 const dmg_taken =
-                    (this.getDebuffEffect("UP_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
-                        this.getDebuffEffect("UP_AIM_RCV_DMG_RATIO", amountOfEnemies, enemy.maxBreak)) /
+                    (this.getDebuffEffect("UP_RCV_DMG_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) +
+                        this.getDebuffEffect("UP_AIM_RCV_DMG_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak)) /
                     1000;
 
                 const elem_dmg_up =
@@ -745,9 +759,9 @@ export class ScoreAttackTeam {
             1000;
 
         let def_remaining =
-            this.getDebuffEffect("DWN_DEF_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak) *
-            this.getDebuffEffect("DWN_DEF_RATIO", currentAmountOfEnemies, enemy.maxBreak) *
-            (0.9 ** this.debuffPool["WEAKNESS"]);
+            this.getDebuffEffect("DWN_DEF_ACCUM_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) *
+            this.getDebuffEffect("DWN_DEF_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) *
+            (0.9 ** this.debuffPools[idx]["WEAKNESS"]);
 
         const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;
 
@@ -774,11 +788,11 @@ export class ScoreAttackTeam {
         const elem_dmg_up =
             this.getAllyEffect(DPS_IDX, "UP_WEAK_ELEMENT_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak) / 1000;
         const dmg_taken =
-            (this.getDebuffEffect("UP_RCV_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
-                this.getDebuffEffect("UP_AIM_RCV_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak)) /
+            (this.getDebuffEffect("UP_RCV_DMG_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) +
+                this.getDebuffEffect("UP_AIM_RCV_DMG_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak)) /
             1000;
         const elem_res_down =
-            this.getDebuffEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak) / 1000;
+            this.getDebuffEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) / 1000;
 
         const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
         const crit_factor = 1 + (enemy.isCrit ? crit_dmg : 0);
@@ -794,7 +808,7 @@ export class ScoreAttackTeam {
         if (special > 0 && enemy.enabled) {
             base_dmg += this.add_additional_dmg();
             if (this.hasDpsDotPop) {
-                dot_total_dmg = this.add_dot_dmg(enemy, currentAmountOfEnemies);
+                dot_total_dmg = this.add_dot_dmg(enemy, idx, currentAmountOfEnemies);
             }
         }
 
@@ -817,6 +831,14 @@ export class ScoreAttackTeam {
 
         if (this.debug) {
             const posCtx = this.allyContexts[idx];
+
+            const enemyDebuffContribs: DebugContributions = {};
+            for (const ctx of this.allyContexts) {
+                for (const [effectType, entries] of Object.entries(ctx.debugDebuffContributions[idx])) {
+                    if (!(effectType in enemyDebuffContribs)) enemyDebuffContribs[effectType] = [];
+                    enemyDebuffContribs[effectType].push(...entries);
+                }
+            }
 
             sections.calc = `Ability Mult    - ${special * 100 | 0}%
 Base ${uses_def ? "Def" : "Atk"}        - ${(base_atk | 0).toLocaleString()}
@@ -890,11 +912,15 @@ enemy died      - ${enemyDied}`;
 
             sections.kiokuReceived = this.formatContributions(posCtx.debugContributionsToSelf, true);
             sections.kiokuContributed = this.formatContributions(posCtx.debugContributionsToDps, false);
-            sections.kiokuDebuffs = this.formatContributions(posCtx.debugDebuffContributions, false);
+            sections.kiokuDebuffs = this.formatContributions(posCtx.debugDebuffContributions[idx], false);
+            sections.kiokuEnemyDebuffs = enemy.enabled
+                ? this.formatContributions(enemyDebuffContribs, true)
+                : "";
 
             sections.rawReceived = posCtx.debugContributionsToSelf;
             sections.rawContributed = posCtx.debugContributionsToDps;
-            sections.rawDebuffs = posCtx.debugDebuffContributions;
+            sections.rawDebuffs = posCtx.debugDebuffContributions[idx];
+            sections.rawEnemyDebuffs = enemy.enabled ? enemyDebuffContribs : {};
         }
 
         return [total | 0, average_total | 0, crit_rate, sections, enemyDied];

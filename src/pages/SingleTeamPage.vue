@@ -89,8 +89,8 @@
 
                         <div v-for="[detail, value, sourceName, dotTargetCharId, dotTargetName] in entries"
                           :key="`${skillDetailId(detail)}_${dotTargetCharId ?? 'dps'}`" class="debug-contrib-row"
-                          :class="dotContribRowClass(detail, dotTargetCharId, rawSectionKey(key)!)"
-                          @click="handleContribRowClick(detail, dotTargetCharId, rawSectionKey(key)!)">
+                          :class="dotContribRowClass(detail, dotTargetCharId, rawSectionKey(key)!, index)"
+                          @click="handleContribRowClick(detail, dotTargetCharId, rawSectionKey(key)!, index)">
                           <span class="debug-contrib-source">{{ sourceName }}</span>
 
                           <span v-if="dotTargetName && rawSectionKey(key) === 'rawContributed'"
@@ -155,7 +155,7 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
-import { ScoreAttackTeam, type DebugSections, type DotAllyCompositeKey } from '../models/ScoreAttackTeam'
+import { ScoreAttackTeam, type DebugSections, type DotAllyCompositeKey, type EnemyDebuffCompositeKey } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
 import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
@@ -241,7 +241,23 @@ function isDotAllyEnabled(detail: SkillDetail, dotTargetCharId: string): boolean
   return !!enabledDotAllyEffects[dotCompositeKey(detail, dotTargetCharId)]
 }
 
-type RawKey = 'rawReceived' | 'rawContributed' | 'rawDebuffs'
+const enabledEnemyDebuffs = reactive<Set<EnemyDebuffCompositeKey>>(new Set())
+
+function enemyDebuffKey(detail: SkillDetail, enemyIdx: number): EnemyDebuffCompositeKey {
+  return `${skillDetailId(detail)}_enemy${enemyIdx}` as EnemyDebuffCompositeKey
+}
+
+function toggleEnemyDebuff(detail: SkillDetail, enemyIdx: number) {
+  const key = enemyDebuffKey(detail, enemyIdx)
+  if (enabledEnemyDebuffs.has(key)) enabledEnemyDebuffs.delete(key)
+  else enabledEnemyDebuffs.add(key)
+}
+
+function isEnemyDebuffEnabled(detail: SkillDetail, enemyIdx: number): boolean {
+  return enabledEnemyDebuffs.has(enemyDebuffKey(detail, enemyIdx))
+}
+
+type RawKey = 'rawReceived' | 'rawContributed' | 'rawDebuffs' | 'rawEnemyDebuffs'
 
 function isDotAllyRow(dotTargetCharId: string | undefined, rawKey: RawKey): boolean {
   return !!dotTargetCharId && rawKey !== 'rawDebuffs'
@@ -251,7 +267,15 @@ function dotContribRowClass(
   detail: SkillDetail,
   dotTargetCharId: string | undefined,
   rawKey: RawKey,
+  enemyIdx?: number,
 ): Record<string, boolean> {
+  if (rawKey === 'rawEnemyDebuffs' && enemyIdx !== undefined) {
+    const enabled = isEnemyDebuffEnabled(detail, enemyIdx)
+    return {
+      'debuff-enemy-disabled': !enabled,
+      'debuff-enemy-enabled': enabled,
+    }
+  }
   if (!isDotAllyRow(dotTargetCharId, rawKey)) {
     return { banned: !!bannedEffectIds[skillDetailId(detail)] }
   }
@@ -266,8 +290,11 @@ function handleContribRowClick(
   detail: SkillDetail,
   dotTargetCharId: string | undefined,
   rawKey: RawKey,
+  enemyIdx?: number,
 ) {
-  if (isDotAllyRow(dotTargetCharId, rawKey)) {
+  if (rawKey === 'rawEnemyDebuffs' && enemyIdx !== undefined) {
+    toggleEnemyDebuff(detail, enemyIdx)
+  } else if (isDotAllyRow(dotTargetCharId, rawKey)) {
     toggleDotAllyEffect(detail, dotTargetCharId!)
   } else {
     toggleBannedEffect(skillDetailId(detail))
@@ -282,7 +309,7 @@ function prettyDisplay(value: number, detail?: SkillDetail): string {
 }
 
 type SectionKey = keyof DebugSections
-const debugSectionOrder: SectionKey[] = ['calc', 'enemy', 'kiokuStats', 'kiokuReceived', 'kiokuContributed', 'kiokuDebuffs']
+const debugSectionOrder: SectionKey[] = ['calc', 'enemy', 'kiokuStats', 'kiokuReceived', 'kiokuContributed', 'kiokuDebuffs', 'kiokuEnemyDebuffs']
 const debugSectionLabels: Record<SectionKey, string> = {
   calc: 'DMG Calculation',
   enemy: 'Enemy Stats',
@@ -290,15 +317,18 @@ const debugSectionLabels: Record<SectionKey, string> = {
   kiokuReceived: 'Buffs Received',
   kiokuContributed: 'Contributed to DPS',
   kiokuDebuffs: 'Debuffs Applied',
+  kiokuEnemyDebuffs: 'Debuffs on This Enemy',
   rawReceived: '',
   rawContributed: '',
   rawDebuffs: '',
+  rawEnemyDebuffs: '',
 }
 
 const rawSectionKey = (key: SectionKey): RawKey | null => {
   if (key === 'kiokuReceived') return 'rawReceived'
   if (key === 'kiokuContributed') return 'rawContributed'
   if (key === 'kiokuDebuffs') return 'rawDebuffs'
+  if (key === 'kiokuEnemyDebuffs') return 'rawEnemyDebuffs'
   return null
 }
 
@@ -309,9 +339,11 @@ const visibleDebugSections = reactive<Record<SectionKey, boolean>>({
   kiokuReceived: true,
   kiokuContributed: true,
   kiokuDebuffs: true,
+  kiokuEnemyDebuffs: true,
   rawReceived: false,
   rawContributed: false,
   rawDebuffs: false,
+  rawEnemyDebuffs: false,
 })
 
 const debugSlotTitle = (idx: number) => {
@@ -338,6 +370,7 @@ const teamInstance = computed(() => {
     const bannedSet = new Set(Object.keys(bannedEffectIds).map(Number))
     const enabledDotSet = new Set(Object.keys(enabledDotAllyEffects) as DotAllyCompositeKey[])
     const stackOverridesCopy = new Map(stackOverrides);
+    const enabledEnemyDebuffsCopy = new Set(enabledEnemyDebuffs)
 
     return new ScoreAttackTeam(
       transformedMembers[attackerIndex],
@@ -348,6 +381,7 @@ const teamInstance = computed(() => {
       bannedSet,
       enabledDotSet,
       stackOverridesCopy,
+      enabledEnemyDebuffsCopy,
     )
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
@@ -807,5 +841,27 @@ const aliments = reactive([
 .debug-contrib-stacks input:focus {
   outline: 1px solid #646cff;
   border-color: #646cff;
+}
+
+.debug-contrib-row.debuff-enemy-disabled {
+  background: rgba(80, 20, 120, 0.2);
+  border-left-color: #662299;
+  color: #bb77ee;
+}
+
+.debug-contrib-row.debuff-enemy-disabled:hover {
+  background: rgba(100, 25, 150, 0.35);
+  border-left-color: #9933cc;
+}
+
+.debug-contrib-row.debuff-enemy-enabled {
+  background: rgba(20, 80, 120, 0.25);
+  border-left-color: #226699;
+  color: #44aaee;
+}
+
+.debug-contrib-row.debuff-enemy-enabled:hover {
+  background: rgba(25, 100, 150, 0.4);
+  border-left-color: #3399cc;
 }
 </style>
