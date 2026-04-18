@@ -80,7 +80,7 @@ export class ScoreAttackKioku extends Kioku {
 
             if (e.abilityEffectType === "ADDITIONAL_DAMAGE") {
                 this.shouldUseSupportAndPortraitReason = 1;
-            } else if (Object.values(Aliment).includes(dotType as Aliment)) {
+            } else if (dotType !== Aliment.WEAKNESS && Object.values(Aliment).includes(dotType as Aliment)) {
                 this.shouldUseSupportAndPortraitReason = 2;
             }
         });

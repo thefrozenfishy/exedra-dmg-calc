@@ -261,7 +261,7 @@ export async function findBestTeam({
                                                     totalSupports.map((s, i) => {
                                                         const k = fetchKioku({
                                                             ...s,
-                                                            portrait: "Farewell to a Future Unseen",
+                                                            portrait: "The Savior's Apostle",
                                                             crys: optimalSubCrys ? ["EX", "Dominant Blow++", "Towering Offense++"] : s.crys,
                                                             supportKey: supportSupport[i] ?? highestAtkSupportKey,
                                                         })
@@ -290,7 +290,7 @@ export async function findBestTeam({
                                                             kiokuWhoShouldHavePortrait.has(s.name)
                                                                 ? highestAtkSupportKey?.[0]
                                                                 : undefined),
-                                                        kiokuWhoShouldHavePortrait.has(s.name) ? "Farewell to a Future Unseen" : undefined
+                                                        kiokuWhoShouldHavePortrait.has(s.name) ? "The Savior's Apostle" : undefined
                                                     ]),
                                                 ]
                                                 if (perAttackerResults[attacker.name].size() < LIMIT)
