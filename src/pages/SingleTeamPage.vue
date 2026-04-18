@@ -69,7 +69,7 @@
       <template v-for="key in debugSectionOrder" :key="key">
         <div v-if="visibleDebugSections[key]" class="debug-section-row">
 
-          <div class="debug-section-header" @click="">
+          <div class="debug-section-header">
             {{ debugSectionLabels[key] }}
           </div>
 
@@ -89,7 +89,7 @@
 
                         <div v-for="[detail, value, sourceName, dotTargetCharId, dotTargetName] in entries"
                           :key="`${skillDetailId(detail)}_${dotTargetCharId ?? 'dps'}`" class="debug-contrib-row"
-                          :class="dotContribRowClass(detail, dotTargetCharId, rawSectionKey(key)!, index)"
+                          :class="contribRowClass(detail, dotTargetCharId, rawSectionKey(key)!, index)"
                           @click="handleContribRowClick(detail, dotTargetCharId, rawSectionKey(key)!, index)">
                           <span class="debug-contrib-source">{{ sourceName }}</span>
 
@@ -109,8 +109,10 @@
                           <div v-if="detail.value2 > 1" class="debug-contrib-stacks" @click.stop>
                             <label>
                               Stacks:
-                              <input type="number" :min="0" :max="detail.value2" :value="getStackOverride(detail)"
-                                @change="e => stackOverride(e, detail)" style="width: 3.5em;" />
+                              <input type="number" :min="0" :max="detail.value2"
+                                :value="getStackOverride(detail, isDebuffSection(rawSectionKey(key)!) ? index : undefined)"
+                                @change="e => onStackChange(e, detail, isDebuffSection(rawSectionKey(key)!) ? index : undefined)"
+                                style="width: 3.5em;" />
                               / {{ detail.value2 }}
                             </label>
                           </div>
@@ -198,16 +200,33 @@ const formatDmg = (out: string | [number, number, number, any[]]) =>
     ? `Max Damage: ${out[0].toLocaleString()} with a ${out[2]}% crit rate - (Average Damage: ${out[1].toLocaleString()})`
     : out
 
-const stackOverrides = reactive<Map<number, number>>(new Map());
-function stackOverride(e: Event, detail: SkillDetail) {
-  const v = Number((e.target as HTMLInputElement).value);
-  const clamped = Math.max(0, Math.min(detail.value2, v));
-  if (clamped === detail.value2) stackOverrides.delete(skillDetailId(detail));
-  else stackOverrides.set(skillDetailId(detail), clamped);
+const stackOverrides = reactive<Map<number, number>>(new Map())
+const debuffStackOverrides = reactive<Map<string, number>>(new Map())
+
+function isDebuffSection(rawKey: RawKey): boolean {
+  return rawKey === 'rawDebuffs' || rawKey === 'rawEnemyDebuffs'
 }
 
-const getStackOverride = (detail: SkillDetail): number | undefined =>
-  stackOverrides.get(skillDetailId(detail)) ?? detail.value2
+function getStackOverride(detail: SkillDetail, enemyIdx?: number): number {
+  if (enemyIdx !== undefined) {
+    const key = `${skillDetailId(detail)}_enemy${enemyIdx}`
+    return debuffStackOverrides.get(key) ?? detail.value2
+  }
+  return stackOverrides.get(skillDetailId(detail)) ?? detail.value2
+}
+
+function onStackChange(e: Event, detail: SkillDetail, enemyIdx?: number) {
+  const v = Number((e.target as HTMLInputElement).value)
+  const clamped = Math.max(0, Math.min(detail.value2, v))
+  if (enemyIdx !== undefined) {
+    const key = `${skillDetailId(detail)}_enemy${enemyIdx}`
+    if (clamped === detail.value2) debuffStackOverrides.delete(key)
+    else debuffStackOverrides.set(key, clamped)
+  } else {
+    if (clamped === detail.value2) stackOverrides.delete(skillDetailId(detail))
+    else stackOverrides.set(skillDetailId(detail), clamped)
+  }
+}
 
 const bannedEffectIds = reactive<Record<number, true>>({})
 
@@ -241,48 +260,52 @@ function isDotAllyEnabled(detail: SkillDetail, dotTargetCharId: string): boolean
   return !!enabledDotAllyEffects[dotCompositeKey(detail, dotTargetCharId)]
 }
 
-const enabledEnemyDebuffs = reactive<Set<EnemyDebuffCompositeKey>>(new Set())
+const disabledEnemyDebuffs = reactive<Set<EnemyDebuffCompositeKey>>(new Set())
 
-function enemyDebuffKey(detail: SkillDetail, enemyIdx: number): EnemyDebuffCompositeKey {
+function enemyDebuffCompositeKey(detail: SkillDetail, enemyIdx: number): EnemyDebuffCompositeKey {
   return `${skillDetailId(detail)}_enemy${enemyIdx}` as EnemyDebuffCompositeKey
 }
 
-function toggleEnemyDebuff(detail: SkillDetail, enemyIdx: number) {
-  const key = enemyDebuffKey(detail, enemyIdx)
-  if (enabledEnemyDebuffs.has(key)) enabledEnemyDebuffs.delete(key)
-  else enabledEnemyDebuffs.add(key)
+function toggleEnemyDebuffDisabled(detail: SkillDetail, enemyIdx: number) {
+  const key = enemyDebuffCompositeKey(detail, enemyIdx)
+  if (disabledEnemyDebuffs.has(key)) disabledEnemyDebuffs.delete(key)
+  else disabledEnemyDebuffs.add(key)
 }
 
 function isEnemyDebuffEnabled(detail: SkillDetail, enemyIdx: number): boolean {
-  return enabledEnemyDebuffs.has(enemyDebuffKey(detail, enemyIdx))
+  return !disabledEnemyDebuffs.has(enemyDebuffCompositeKey(detail, enemyIdx))
 }
 
 type RawKey = 'rawReceived' | 'rawContributed' | 'rawDebuffs' | 'rawEnemyDebuffs'
 
 function isDotAllyRow(dotTargetCharId: string | undefined, rawKey: RawKey): boolean {
-  return !!dotTargetCharId && rawKey !== 'rawDebuffs'
+  return !!dotTargetCharId && rawKey !== 'rawDebuffs' && rawKey !== 'rawEnemyDebuffs'
 }
 
-function dotContribRowClass(
+function contribRowClass(
   detail: SkillDetail,
   dotTargetCharId: string | undefined,
   rawKey: RawKey,
-  enemyIdx?: number,
+  enemyIdx: number,
 ): Record<string, boolean> {
-  if (rawKey === 'rawEnemyDebuffs' && enemyIdx !== undefined) {
-    const enabled = isEnemyDebuffEnabled(detail, enemyIdx)
-    return {
-      'debuff-enemy-disabled': !enabled,
-      'debuff-enemy-enabled': enabled,
-    }
-  }
-  if (!isDotAllyRow(dotTargetCharId, rawKey)) {
-    return { banned: !!bannedEffectIds[skillDetailId(detail)] }
-  }
-  const enabled = isDotAllyEnabled(detail, dotTargetCharId!)
+  const isEnemyDebuff = rawKey === 'rawEnemyDebuffs'
+  const enemyEnabled = isEnemyDebuff
+    ? isEnemyDebuffEnabled(detail, enemyIdx)
+    : true
+
   return {
-    'dot-ally-disabled': !enabled,
-    'dot-ally-enabled': enabled,
+    'is-disabled':
+      (rawKey === 'rawDebuffs' && !!bannedEffectIds[skillDetailId(detail)]) ||
+      (isEnemyDebuff && !enemyEnabled) ||
+      (!isEnemyDebuff && !isDotAllyRow(dotTargetCharId, rawKey) && !!bannedEffectIds[skillDetailId(detail)]),
+
+    'is-dot-off':
+      isDotAllyRow(dotTargetCharId, rawKey) &&
+      !isDotAllyEnabled(detail, dotTargetCharId!),
+
+    'is-dot-on':
+      isDotAllyRow(dotTargetCharId, rawKey) &&
+      isDotAllyEnabled(detail, dotTargetCharId!),
   }
 }
 
@@ -290,10 +313,12 @@ function handleContribRowClick(
   detail: SkillDetail,
   dotTargetCharId: string | undefined,
   rawKey: RawKey,
-  enemyIdx?: number,
+  enemyIdx: number,
 ) {
-  if (rawKey === 'rawEnemyDebuffs' && enemyIdx !== undefined) {
-    toggleEnemyDebuff(detail, enemyIdx)
+  if (rawKey === 'rawEnemyDebuffs') {
+    toggleEnemyDebuffDisabled(detail, enemyIdx)
+  } else if (rawKey === 'rawDebuffs') {
+    toggleBannedEffect(skillDetailId(detail))
   } else if (isDotAllyRow(dotTargetCharId, rawKey)) {
     toggleDotAllyEffect(detail, dotTargetCharId!)
   } else {
@@ -309,14 +334,16 @@ function prettyDisplay(value: number, detail?: SkillDetail): string {
 }
 
 type SectionKey = keyof DebugSections
-const debugSectionOrder: SectionKey[] = ['calc', 'enemy', 'kiokuStats', 'kiokuReceived', 'kiokuContributed', 'kiokuDebuffs', 'kiokuEnemyDebuffs']
+const debugSectionOrder: SectionKey[] = [
+  'calc', 'enemy', 'kiokuStats', 'kiokuReceived', 'kiokuContributed', 'kiokuDebuffs', 'kiokuEnemyDebuffs',
+]
 const debugSectionLabels: Record<SectionKey, string> = {
   calc: 'DMG Calculation',
   enemy: 'Enemy Stats',
   kiokuStats: 'Kioku Stats',
   kiokuReceived: 'Buffs Received',
   kiokuContributed: 'Contributed to DPS',
-  kiokuDebuffs: 'Debuffs Applied',
+  kiokuDebuffs: 'Debuffs Applied by Char',
   kiokuEnemyDebuffs: 'Debuffs on This Enemy',
   rawReceived: '',
   rawContributed: '',
@@ -338,7 +365,7 @@ const visibleDebugSections = reactive<Record<SectionKey, boolean>>({
   kiokuStats: true,
   kiokuReceived: true,
   kiokuContributed: true,
-  kiokuDebuffs: true,
+  kiokuDebuffs: false,
   kiokuEnemyDebuffs: true,
   rawReceived: false,
   rawContributed: false,
@@ -369,8 +396,9 @@ const teamInstance = computed(() => {
 
     const bannedSet = new Set(Object.keys(bannedEffectIds).map(Number))
     const enabledDotSet = new Set(Object.keys(enabledDotAllyEffects) as DotAllyCompositeKey[])
-    const stackOverridesCopy = new Map(stackOverrides);
-    const enabledEnemyDebuffsCopy = new Set(enabledEnemyDebuffs)
+    const stackOverridesCopy = new Map(stackOverrides)
+    const disabledEnemyDebuffsCopy = new Set(disabledEnemyDebuffs)
+    const debuffStackOverridesCopy = new Map(debuffStackOverrides) as Map<EnemyDebuffCompositeKey, number>
 
     return new ScoreAttackTeam(
       transformedMembers[attackerIndex],
@@ -381,7 +409,8 @@ const teamInstance = computed(() => {
       bannedSet,
       enabledDotSet,
       stackOverridesCopy,
-      enabledEnemyDebuffsCopy,
+      disabledEnemyDebuffsCopy,
+      debuffStackOverridesCopy,
     )
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
@@ -400,16 +429,10 @@ const battleOutput = computed(() => {
 async function copyToClipboard(text: string) {
   try {
     await navigator.clipboard.writeText(text)
-    toast.success(`Copied: ${text}`, {
-      position: toast.POSITION.TOP_RIGHT,
-      icon: false,
-    })
+    toast.success(`Copied: ${text}`, { position: toast.POSITION.TOP_RIGHT, icon: false })
   } catch (err) {
     console.error(err)
-    toast.error("Failed to copy", {
-      position: toast.POSITION.TOP_RIGHT,
-      icon: false,
-    })
+    toast.error("Failed to copy", { position: toast.POSITION.TOP_RIGHT, icon: false })
   }
 }
 
@@ -427,7 +450,9 @@ const aliments = reactive([
 
 <style scoped>
 .team-page {
-  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .team-grid {
@@ -435,6 +460,7 @@ const aliments = reactive([
   gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   max-width: 1200px;
+  width: 100%;
 }
 
 .team-slot {
@@ -477,7 +503,7 @@ const aliments = reactive([
 .aliment {
   cursor: pointer;
   text-align: center;
-  transition: opacity 0.3s;
+  transition: opacity 0.2s;
 }
 
 .aliment img {
@@ -497,293 +523,28 @@ const aliments = reactive([
   gap: 1rem;
   margin-bottom: 1rem;
   padding: 0.5rem 1rem;
-  background: rgba(180, 40, 40, 0.2);
-  border: 1px solid rgba(200, 60, 60, 0.5);
+  background: rgba(180, 40, 40, 0.15);
+  border: 1px solid rgba(200, 60, 60, 0.4);
   border-radius: 6px;
   font-size: 0.85rem;
-  color: #f99;
+  color: #f19999;
   max-width: 1200px;
+  width: 100%;
 }
 
 .clear-banned-btn {
   margin-left: auto;
   padding: 0.2rem 0.75rem;
-  background: rgba(200, 60, 60, 0.3);
-  border: 1px solid rgba(200, 60, 60, 0.6);
+  background: rgba(200, 60, 60, 0.25);
+  border: 1px solid rgba(200, 60, 60, 0.5);
   border-radius: 4px;
   color: #fcc;
   cursor: pointer;
   font-size: 0.8rem;
-  transition: background 0.15s;
 }
 
 .clear-banned-btn:hover {
-  background: rgba(200, 60, 60, 0.55);
-}
-
-.debug-slot {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.debug-slot-title {
-  margin: 0.5rem 0 0.25rem;
-  padding: 0 1rem;
-  font-size: 1rem;
-}
-
-.debug-section {
-  border: 1px solid #1a1a1a;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.debug-section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.3rem 0.75rem;
-  background: #1a1a1a;
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 600;
-  user-select: none;
-}
-
-.debug-section-header:hover {
-  background: #646cff;
-}
-
-.debug-toggle-icon {
-  font-size: 0.75rem;
-}
-
-.debug-pre {
-  text-align: left;
-  margin: 0;
-  font-size: 0.78rem;
-  overflow-x: auto;
-  white-space: pre;
-}
-
-.debug-contrib-table {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  padding: 0.4rem 0.5rem;
-}
-
-.debug-contrib-empty {
-  font-size: 0.78rem;
-  color: #555;
-  padding: 0.25rem 0.25rem;
-}
-
-.debug-contrib-group {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.debug-contrib-group-label {
-  display: flex;
-  align-items: baseline;
-  gap: 0.4rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: #aaa;
-  padding: 0.15rem 0.25rem 0.1rem;
-  border-bottom: 1px solid #222;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.debug-contrib-row {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 0.3rem 0.4rem;
-  border-radius: 4px;
-  border-left: 2px solid #2a2a2a;
-  cursor: pointer;
-  font-size: 0.76rem;
-  background: #141414;
-  transition: background 0.12s, border-color 0.12s;
-}
-
-.debug-contrib-row:hover {
-  background: #222;
-  border-left-color: #666;
-}
-
-.debug-contrib-row.banned {
-  background: rgba(120, 20, 20, 0.25);
-  border-left-color: #882222;
-  color: #d04040;
-}
-
-.debug-contrib-row.banned:hover {
-  background: rgba(140, 25, 25, 0.4);
-  border-left-color: #aa3333;
-}
-
-.debug-contrib-row.dot-ally-disabled {
-  background: rgba(120, 100, 0, 0.2);
-  border-left-color: #886600;
-  color: #ccaa00;
-}
-
-.debug-contrib-row.dot-ally-disabled:hover {
-  background: rgba(140, 115, 0, 0.35);
-  border-left-color: #aaaa00;
-}
-
-.debug-contrib-row.dot-ally-disabled .debug-contrib-source {
-  color: #ddcc55;
-}
-
-.debug-contrib-row.dot-ally-disabled .debug-contrib-value {
-  color: #ccaa00;
-}
-
-.debug-contrib-row.dot-ally-disabled .debug-contrib-desc {
-  color: #776600;
-}
-
-.debug-contrib-row.dot-ally-disabled .debug-contrib-id,
-.debug-contrib-row.dot-ally-disabled .debug-contrib-cond {
-  color: #554400;
-}
-
-.debug-contrib-row.dot-ally-enabled {
-  background: rgba(20, 100, 40, 0.25);
-  border-left-color: #226633;
-  color: #44cc77;
-}
-
-.debug-contrib-row.dot-ally-enabled:hover {
-  background: rgba(25, 120, 50, 0.4);
-  border-left-color: #33aa55;
-}
-
-.debug-contrib-row.dot-ally-enabled .debug-contrib-source {
-  color: #88ddaa;
-}
-
-.debug-contrib-row.dot-ally-enabled .debug-contrib-value {
-  color: #44cc77;
-}
-
-.debug-contrib-row.dot-ally-enabled .debug-contrib-desc {
-  color: #336644;
-}
-
-.debug-contrib-row.dot-ally-enabled .debug-contrib-id,
-.debug-contrib-row.dot-ally-enabled .debug-contrib-cond {
-  color: #224433;
-}
-
-.debug-contrib-dot-target {
-  font-size: 0.7rem;
-  font-style: italic;
-  color: #aaa;
-  margin-bottom: 1px;
-}
-
-.debug-contrib-row.dot-ally-disabled .debug-contrib-dot-target {
-  color: #886600;
-}
-
-.debug-contrib-row.dot-ally-enabled .debug-contrib-dot-target {
-  color: #336644;
-}
-
-.debug-contrib-source {
-  font-weight: 600;
-  color: #ddd;
-  white-space: normal;
-  overflow: visible;
-  text-overflow: ellipsis;
-  min-width: 0;
-  text-align: left;
-}
-
-.debug-contrib-row.banned .debug-contrib-source {
-  color: #e07070;
-}
-
-.debug-contrib-type-inline {
-  font-family: monospace;
-  font-size: 0.68rem;
-  color: #666;
-  white-space: nowrap;
-  text-align: left;
-}
-
-.debug-contrib-row.banned .debug-contrib-type-inline {
-  color: #884444;
-}
-
-.debug-contrib-value {
-  color: #7cf;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  font-weight: 600;
-  text-align: left;
-}
-
-.debug-contrib-row.banned .debug-contrib-value {
-  color: #c06060;
-}
-
-.debug-contrib-desc {
-  font-size: 0.72rem;
-  color: #888;
-  padding-left: 1.1rem;
-  white-space: normal;
-  line-height: 1.3;
-  text-align: left;
-}
-
-.debug-contrib-row.banned .debug-contrib-desc {
-  color: #774444;
-}
-
-.debug-contrib-meta {
-  display: flex;
-  gap: 0.5rem;
-  padding-left: 1.1rem;
-  flex-wrap: wrap;
-}
-
-.debug-contrib-id {
-  color: #aaa;
-  font-size: 0.65rem;
-  font-family: monospace;
-  white-space: nowrap;
-}
-
-.debug-contrib-cond {
-  color: #404040;
-  font-size: 0.65rem;
-  font-family: monospace;
-  white-space: nowrap;
-}
-
-.debug-contrib-row.banned .debug-contrib-id,
-.debug-contrib-row.banned .debug-contrib-cond {
-  color: #5a3030;
-}
-
-.clickable-id {
-  cursor: pointer;
-  transition: color 0.12s, text-shadow 0.12s;
-}
-
-.clickable-id:hover {
-  color: #4cff88;
-  text-shadow: 0 0 4px rgba(76, 255, 136, 0.6);
+  background: rgba(200, 60, 60, 0.45);
 }
 
 .debug-sections {
@@ -791,6 +552,7 @@ const aliments = reactive([
   flex-direction: column;
   gap: 1rem;
   max-width: 1200px;
+  width: 100%;
 }
 
 .debug-section-row {
@@ -820,48 +582,167 @@ const aliments = reactive([
   border-right: none;
 }
 
+.debug-slot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.debug-slot-title {
+  margin: 0.4rem 0 0.2rem;
+  padding: 0 0.5rem;
+  font-size: 0.95rem;
+}
+
+.debug-pre {
+  text-align: left;
+  margin: 0;
+  font-size: 0.78rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.debug-contrib-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.3rem 0.4rem;
+}
+
+.debug-contrib-empty {
+  font-size: 0.75rem;
+  color: #555;
+  padding: 0.2rem;
+}
+
+.debug-contrib-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.debug-contrib-group-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #888;
+  padding: 0.1rem 0.2rem;
+  border-bottom: 1px solid #222;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.debug-contrib-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0.25rem 0.35rem;
+  border-radius: 4px;
+  border-left: 2px solid #2a2a2a;
+  cursor: pointer;
+  font-size: 0.75rem;
+  background: #141414;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.debug-contrib-row:hover {
+  background: #1f1f1f;
+  border-left-color: #555;
+}
+
+.debug-contrib-row.is-disabled {
+  background: rgba(120, 20, 20, 0.2);
+  border-left-color: #882222;
+  color: #d46a6a;
+}
+
+.debug-contrib-row.is-dot-off {
+  background: rgba(140, 110, 0, 0.18);
+  border-left-color: #8a6b00;
+  color: #d4b84a;
+}
+
+.debug-contrib-row.is-dot-on {
+  background: rgba(20, 100, 40, 0.2);
+  border-left-color: #2e7d4f;
+  color: #5fdc9b;
+}
+
+.debug-contrib-source {
+  font-weight: 600;
+  color: #ddd;
+}
+
+.debug-contrib-value {
+  color: #7cf;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.debug-contrib-desc {
+  font-size: 0.72rem;
+  color: #888;
+  padding-left: 0.8rem;
+  line-height: 1.3;
+}
+
+.debug-contrib-dot-target {
+  font-size: 0.7rem;
+  font-style: italic;
+  color: #aaa;
+}
+
+.debug-contrib-meta {
+  display: flex;
+  gap: 0.4rem;
+  padding-left: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.debug-contrib-id {
+  color: #666;
+  font-size: 0.65rem;
+  font-family: monospace;
+  cursor: pointer;
+  transition: color 0.12s, text-shadow 0.12s;
+}
+
+.debug-contrib-row:not(.is-disabled) .debug-contrib-id:hover {
+  color: #4cff88;
+  text-shadow: 0 0 4px rgba(76, 255, 136, 0.6);
+}
+
+.debug-contrib-row.is-disabled .debug-contrib-id:hover {
+  color: #7ccfff;
+  text-shadow: 0 0 4px rgba(120, 200, 255, 0.6);
+}
+
+.debug-contrib-cond {
+  color: #444;
+  font-size: 0.65rem;
+  font-family: monospace;
+}
+
 .debug-contrib-stacks {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
   font-size: 0.72rem;
   color: #aaa;
-  padding-left: 1.1rem;
+  padding-left: 0.8rem;
 }
 
 .debug-contrib-stacks input {
+  width: 3.5em;
   background: #1e1e1e;
-  border: 1px solid #444;
+  border: 1px solid #333;
   border-radius: 3px;
-  color: #ddd;
+  color: #ccc;
   padding: 0.1rem 0.2rem;
   font-size: 0.72rem;
 }
 
 .debug-contrib-stacks input:focus {
-  outline: 1px solid #646cff;
-  border-color: #646cff;
-}
-
-.debug-contrib-row.debuff-enemy-disabled {
-  background: rgba(80, 20, 120, 0.2);
-  border-left-color: #662299;
-  color: #bb77ee;
-}
-
-.debug-contrib-row.debuff-enemy-disabled:hover {
-  background: rgba(100, 25, 150, 0.35);
-  border-left-color: #9933cc;
-}
-
-.debug-contrib-row.debuff-enemy-enabled {
-  background: rgba(20, 80, 120, 0.25);
-  border-left-color: #226699;
-  color: #44aaee;
-}
-
-.debug-contrib-row.debuff-enemy-enabled:hover {
-  background: rgba(25, 100, 150, 0.4);
-  border-left-color: #3399cc;
+  outline: 1px solid #666;
+  border-color: #666;
 }
 </style>

@@ -151,7 +151,7 @@ interface AllyContext {
     extraEffects: ExtraEffectPool;
     debugContributionsToDps: DebugContributions;
     debugContributionsToSelf: DebugContributions;
-    debugDebuffContributions: DebugContributions[]; 
+    debugDebuffContributions: DebugContributions[];
 }
 
 export interface DebugSections {
@@ -195,8 +195,9 @@ export class ScoreAttackTeam {
     private activeBuffsAndDebuffs: string[];
     private userBannedEffects: Set<number>;
     private enabledDotAllyEffects: Set<DotAllyCompositeKey>;
-    private enabledEnemyDebuffs: Set<EnemyDebuffCompositeKey>;
-    private stackOverrides: Map<number, number> = new Map();
+    private disabledEnemyDebuffs: Set<EnemyDebuffCompositeKey>;
+    private stackOverrides: Map<number, number>;
+    private debuffStackOverrides: Map<EnemyDebuffCompositeKey, number>;
 
     private hasDpsDotPop: boolean = false;
     private dotAllyIndices: { idx: number; charId: string; name: string }[] = [];
@@ -210,7 +211,8 @@ export class ScoreAttackTeam {
         userBannedEffects: Set<number> = new Set(),
         enabledDotAllyEffects: Set<DotAllyCompositeKey> = new Set(),
         stackOverrides: Map<number, number> = new Map(),
-        enabledEnemyDebuffs: Set<EnemyDebuffCompositeKey> = new Set(),
+        disabledEnemyDebuffs: Set<EnemyDebuffCompositeKey> = new Set(),
+        debuffStackOverrides: Map<EnemyDebuffCompositeKey, number> = new Map(),
     ) {
         this.team = team;
         this.dps = dps;
@@ -220,7 +222,8 @@ export class ScoreAttackTeam {
         this.userBannedEffects = userBannedEffects;
         this.enabledDotAllyEffects = enabledDotAllyEffects;
         this.stackOverrides = stackOverrides;
-        this.enabledEnemyDebuffs = enabledEnemyDebuffs;
+        this.disabledEnemyDebuffs = disabledEnemyDebuffs;
+        this.debuffStackOverrides = debuffStackOverrides;
         this.setup();
     }
 
@@ -248,10 +251,10 @@ export class ScoreAttackTeam {
             });
         }
 
-        for (let i = 0; i < 5; i++) {
-            this.debuffPools[i]["DWN_DEF_ACCUM_RATIO"] = 1;
-            this.debuffPools[i]["DWN_DEF_RATIO"] = 1;
-            this.debuffPools[i]["WEAKNESS"] = 0;
+        for (let ei = 0; ei < 5; ei++) {
+            this.debuffPools[ei]["DWN_DEF_ACCUM_RATIO"] = 1;
+            this.debuffPools[ei]["DWN_DEF_RATIO"] = 1;
+            this.debuffPools[ei]["WEAKNESS"] = 0;
         }
 
         this.hasDpsDotPop = this.dps.effects.some(
@@ -304,13 +307,6 @@ export class ScoreAttackTeam {
                         .some(id => !isStartCondRelevantForScoreAttack(id, sourceKioku.maxMagicStacks))
                 ) continue;
 
-                const userBanned = this.userBannedEffects.has(skillDetailId(detail));
-
-                const maxStacks = detail.value2 || 1;
-                const id = skillDetailId(detail);
-                const stacks = this.stackOverrides.has(id) ? this.stackOverrides.get(id)! : maxStacks;
-                let valueTotal = detail.value1 * stacks;
-
                 const isDebuff = detail.abilityEffectType.startsWith("DWN_")
                     || detail.abilityEffectType.startsWith("DOWN_")
                     || detail.abilityEffectType.replace("AIM_", "") === "UP_RCV_DMG_RATIO"
@@ -318,22 +314,35 @@ export class ScoreAttackTeam {
 
                 if (isDebuff) {
                     if (detail.element && elementMap[detail.element] !== this.dps.data.element) continue;
+                    const globallyBanned = this.userBannedEffects.has(skillDetailId(detail));
                     for (let ei = 0; ei < 5; ei++) {
                         const compositeKey = `${skillDetailId(detail)}_enemy${ei}` as EnemyDebuffCompositeKey;
-                        const debuffEnabled = this.enabledEnemyDebuffs.has(compositeKey);
+                        const debuffDisabled = this.disabledEnemyDebuffs.has(compositeKey);
+                        const maxStacks = detail.value2 || 1;
+                        const debuffStacks = this.debuffStackOverrides.has(compositeKey)
+                            ? this.debuffStackOverrides.get(compositeKey)!
+                            : maxStacks;
+                        const debuffValueTotal = detail.value1 * debuffStacks;
                         this.distributeEffect(
                             detail,
-                            valueTotal,
+                            debuffValueTotal,
                             this.debuffPools[ei],
                             this.extraDebuffPools[ei],
                             undefined,
                             undefined,
                             sourceCtx.debugDebuffContributions[ei],
                             sourceKioku.name,
-                            !debuffEnabled,
+                            globallyBanned || debuffDisabled
                         );
                     }
                 } else {
+                    const maxBuffStacks = detail.value2 || 1;
+                    const buffStacks = this.stackOverrides.has(skillDetailId(detail))
+                        ? this.stackOverrides.get(skillDetailId(detail))!
+                        : maxBuffStacks;
+                    const valueTotal = detail.value1 * buffStacks;
+                    const userBanned = this.userBannedEffects.has(skillDetailId(detail));
+
                     for (let targetIdx = 0; targetIdx < 5; targetIdx++) {
                         if (!buffAppliesToAlly(detail.range, sourceIdx, targetIdx)) continue;
 
@@ -389,12 +398,13 @@ export class ScoreAttackTeam {
         }
 
         if (this.debug) {
-            console.log(
-                "Debuff pool (target)",
-                Object.fromEntries(Object.entries(this.debuffPools[DPS_IDX]).filter(([key]) => key in knownBoosts)),
-            );
             for (let i = 0; i < 5; i++) {
+
                 console.log(
+                    `Enemy[${i}] debuff pool`,
+                    Object.fromEntries(Object.entries(this.debuffPools[i]).filter(([key]) => key in knownBoosts)),
+                );               
+                 console.log(
                     `Ally[${i}] buff pool`,
                     Object.fromEntries(Object.entries(this.allyContexts[i].effects).filter(([key]) => key in knownBoosts)),
                 );
