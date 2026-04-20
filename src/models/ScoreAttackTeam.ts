@@ -120,12 +120,18 @@ const skippable = new Set([
     "VORTEX_ATK",
 ]);
 
-const bannedEffects: Set<number> = new Set([
-    65101002, // Sakurako passive is listed multiple places
-    65101003, // Sakurako passive is listed multiple places
-    12701003, // Yotsugi too
-    12721005, // Yotsugi too
+const bannedEffects: Set<string> = new Set([
+    "65101002", // Sakurako passive is listed multiple places
+    "65101003", // Sakurako passive is listed multiple places
+    "12701003", // Yotsugi too
+    "12721005", // Yotsugi too
 ]);
+
+const effectIsBanned = (detail: SkillDetail): boolean => {
+    // Becasue then I dont have to add all the levels
+    const id = skillDetailId(detail).toString();
+    return bannedEffects.has(id.slice(0, -4) + "10" + id.slice(-2));
+}
 
 function prettyNumber(n: number) {
     const rounded = Math.round((n + Number.EPSILON) * 100) / 100;
@@ -300,7 +306,7 @@ export class ScoreAttackTeam {
 
             for (const detail of sourceKioku.effects) {
                 if (skippable.has(detail.abilityEffectType)) continue;
-                if (bannedEffects.has(skillDetailId(detail))) continue;
+                if (effectIsBanned(detail)) continue;
                 if (
                     detail.startConditionSetIdCsv
                         .split(",")

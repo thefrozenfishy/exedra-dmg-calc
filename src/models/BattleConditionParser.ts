@@ -73,8 +73,8 @@ enum CompareContent {
     CAN_NOT_ACTION = 18,
     IS_ELEMENT_TYPE = 19,
     IS_ROLE_TYPE = 20,
-    BREAKED_DAMAGE_RECEIVE_RATE = 21,
-    IS_MAX_BREAKED_DAMAGE_RECEIVE_RATE = 22,
+    BREAK_DAMAGE_RECEIVE_RATE = 21,
+    IS_MAX_BREAK_DAMAGE_RECEIVE_RATE = 22,
     ABNORMAL_STATE_COUNT = 23,
     BUFF_COUNT = 24,
     DEBUFF_COUNT = 25,
@@ -89,43 +89,40 @@ enum CompareContent {
     IS_BARRIER_ADDED = 105,
     IS_BARRIER_ATTACKED = 106,
     IS_BARRIER_DESTROYED = 107,
-    BREAKED_DAMAGE_RECEIVE_RATE_BECOME_MAX = 108,
+    BREAK_DAMAGE_RECEIVE_RATE_BECOME_MAX = 108,
     IS_WEAK_ELEMENT_ATTACKED = 109,
     IS_DURING_ATTACK = 110,
-    WHEN_DOT_IS_PROCCED = 111,
+    WHEN_DOT_IS_TRIGGERED = 111,
     HAS_ALIMENT = 112,
     SP = 201,
     ALIVE_UNIT_COUNT = 202,
     DEAD_UNIT_COUNT = 203,
     APPLIED_SKILL_EFFECT_TYPE = 204,
     ABILITY_EFFECT_UNIT_COUNT = 205,
-    BREAKED_DAMAGE_RECEIVE_RATE_GREATER_THAN_UNIT_COUNT = 206,
-    BREAKED_DAMAGE_RECEIVE_RATE_LESS_THAN_UNIT_COUNT = 207,
+    BREAK_DAMAGE_RECEIVE_RATE_GREATER_THAN_UNIT_COUNT = 206,
+    BREAK_DAMAGE_RECEIVE_RATE_LESS_THAN_UNIT_COUNT = 207,
     NR_OF_DEBUFFS = 208,
     SIGILS_APPLIED_COUNT = 209,
     OTHER_BUFF_COUNT = 210,
     KILLED_UNIT_COUNT = 301,
-    BREAKED_UNIT_COUNT = 302,
+    BREAK_UNIT_COUNT = 302,
     CTD_UNIT_COUNT = 303,
     TOTAL_DAMAGE = 304,
     ABILITY_EFFECT_AND_DAMAGE = 305,
-    BREAKED_UNIT_TOTAL_COUNT = 306,
+    BREAK_UNIT_TOTAL_COUNT = 306,
     WEAK_ELEMENT_ATTACKED_UNIT_COUNT = 307,
-    BREAKED_DAMAGE_RECEIVE_RATE_BECOME_MAX_UNIT_COUNT = 308,
+    BREAK_DAMAGE_RECEIVE_RATE_BECOME_MAX_UNIT_COUNT = 308,
     HAS_BUFxF_APPLIED = 309,
     ONGOING_DAMAGE = 310,
     ACTOR_SKILL_TYPE = 401,
     COMBO_ACTION_STEP = 402,
     AWAKEN = 1101,
     CALAMITY_COUNTER = 1201,
-    // A = 2002,
-    // B = 1202,
     PLAYER_TEAM = 1001,
-    // D = 313,
     FIRST_ACTION = 2001,
-    // F = 113,
-    // G = 114,
-    // H = 314,
+    SUMIRE_FIELD_START = 113,
+    SUMIRE_FIELD_END = 114,
+    DEVIL_HOMURA_FIELD = 29,
 }
 
 enum CompareOperator {
@@ -245,7 +242,7 @@ export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: st
         if (battleCondition.compareContent === CompareContent.ABILITY_EFFECT) {
             if (!isCondActive(battleCondition, activeAliments)) return false
         }
-        if (battleCondition.compareContent === CompareContent.BREAKED_DAMAGE_RECEIVE_RATE) {
+        if (battleCondition.compareContent === CompareContent.BREAK_DAMAGE_RECEIVE_RATE) {
             return lateGetIsActiveCond(battleCondition)
         }
         if (battleCondition.compareContent === CompareContent.HP_RATIO) {
@@ -310,7 +307,7 @@ export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], {
                 if (!isCondActive(battleCondition, target.teamLabel !== actor.teamLabel ? true : actor === target)) return false
             } else if (battleCondition.compareContent === CompareContent.ALIVE_UNIT_COUNT) {
                 if (!isCondActive(battleCondition, enemyTeam.kiokuStates.length)) return false
-            } else if (battleCondition.compareContent === CompareContent.BREAKED_UNIT_COUNT) {
+            } else if (battleCondition.compareContent === CompareContent.BREAK_UNIT_COUNT) {
                 if (!isCondActive(battleCondition, enemyTeam.kiokuStates.filter(k => k.currentRemainingBreakGauge <= 0 && !k.isBroken).length)) return false
             } else if (battleCondition.compareContent === CompareContent.CHARGE_POINT) {
                 if (!isCondActive(battleCondition, actor.currentMagic)) return false
@@ -329,7 +326,7 @@ export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], {
                 if (!isCondActive(battleCondition, compTargets.reduce((acc, k) => acc + k.currentDebuffs().length, 0))) return false
             } else if (battleCondition.compareContent === CompareContent.NR_OF_DEBUFFS) {
                 if (!isCondActive(battleCondition, compTargets.reduce((acc, k) => acc + k.currentDebuffs().length, 0))) return false
-            } else if (battleCondition.compareContent === CompareContent.BREAKED_DAMAGE_RECEIVE_RATE_BECOME_MAX_UNIT_COUNT) {// TODO
+            } else if (battleCondition.compareContent === CompareContent.BREAK_DAMAGE_RECEIVE_RATE_BECOME_MAX_UNIT_COUNT) {// TODO
                 if (!isCondActive(battleCondition, 0)) return false // TODO fix
             } else if (battleCondition.compareContent === CompareContent.TOTAL_DAMAGE) {
                 if (!isCondActive(battleCondition, 1000)) return false // TODO fix
