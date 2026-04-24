@@ -453,6 +453,8 @@ const aliments = reactive([
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .team-grid {
@@ -467,6 +469,7 @@ const aliments = reactive([
   border: 2px solid #ccc;
   border-radius: 8px;
   padding-bottom: 1rem;
+  min-width: 0; 
 }
 
 .support-section {
@@ -570,7 +573,11 @@ const aliments = reactive([
 
 .debug-section-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.debug-section-grid .debug-slot {
+  min-width: 0;
 }
 
 .debug-section-grid .debug-slot {
@@ -599,7 +606,8 @@ const aliments = reactive([
   margin: 0;
   font-size: 0.78rem;
   overflow-x: auto;
-  white-space: pre;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .debug-contrib-table {

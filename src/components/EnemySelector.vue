@@ -66,14 +66,16 @@ const enemies = useEnemyStore()
   gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   max-width: 1200px;
+  width: 100%;            
+  box-sizing: border-box; 
 }
 
 .team-slot {
   border: 2px solid #ccc;
   border-radius: 8px;
   padding-bottom: 1rem;
+  min-width: 0; 
 }
-
 
 .stat-inputs {
   display: flex;
