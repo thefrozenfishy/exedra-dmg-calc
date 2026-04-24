@@ -545,6 +545,23 @@
     },
     {
         "advPosition": 0,
+        "cardMstId": 4100033,
+        "characterMstId": 0,
+        "element": 0,
+        "illustrator": "",
+        "name": "Rightful King's Coronation",
+        "passiveSkill1": 4160,
+        "passiveSkill2": 0,
+        "passiveSkill3": 0,
+        "rarity": 4,
+        "releaseTime": "2026-04-24T12:00:00+09:00",
+        "resourceName": "art_01_04_0003",
+        "source": "",
+        "unlockIdCsv": "0",
+        "unlockTypeCsv": "1"
+    },
+    {
+        "advPosition": 0,
         "cardMstId": 4200001,
         "characterMstId": 0,
         "element": 0,
@@ -1800,6 +1817,23 @@
         "source": "",
         "unlockIdCsv": "0",
         "unlockTypeCsv": "99"
+    },
+    {
+        "advPosition": 0,
+        "cardMstId": 4200078,
+        "characterMstId": 0,
+        "element": 0,
+        "illustrator": "",
+        "name": "Maiden's Transcendence",
+        "passiveSkill1": 4162,
+        "passiveSkill2": 0,
+        "passiveSkill3": 0,
+        "rarity": 5,
+        "releaseTime": "2026-04-24T12:00:00+09:00",
+        "resourceName": "art_04_04_0002",
+        "source": "",
+        "unlockIdCsv": "49",
+        "unlockTypeCsv": "2"
     },
     {
         "advPosition": 0,

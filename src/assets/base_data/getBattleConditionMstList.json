@@ -13936,6 +13936,14 @@
         "description": "ブレイク中、且つ攻撃を受けたユニットが1体以上のとき"
     },
     {
+        "battleConditionMstId": 1775,
+        "compareContent": 25,
+        "compareOperator": 4,
+        "compareTarget": 8,
+        "compareValue": "4",
+        "description": "対象のデバフ数が4以上"
+    },
+    {
         "battleConditionMstId": 1776,
         "compareContent": 306,
         "compareOperator": 1,
@@ -14270,5 +14278,821 @@
         "compareTarget": 1,
         "compareValue": "10",
         "description": "自身のブレイク回数が10回のとき"
+    },
+    {
+        "battleConditionMstId": 1818,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "20",
+        "description": "メリッサの専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 1819,
+        "compareContent": 26,
+        "compareOperator": 8,
+        "compareTarget": 1,
+        "compareValue": "20",
+        "description": "メリッサの専用バフが付与されいないとき"
+    },
+    {
+        "battleConditionMstId": 1856,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "51",
+        "description": "51ターン以上"
+    },
+    {
+        "battleConditionMstId": 1857,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "52",
+        "description": "52ターン以上"
+    },
+    {
+        "battleConditionMstId": 1858,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "53",
+        "description": "53ターン以上"
+    },
+    {
+        "battleConditionMstId": 1859,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "54",
+        "description": "54ターン以上"
+    },
+    {
+        "battleConditionMstId": 1860,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "55",
+        "description": "55ターン以上"
+    },
+    {
+        "battleConditionMstId": 1861,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "56",
+        "description": "56ターン以上"
+    },
+    {
+        "battleConditionMstId": 1862,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "57",
+        "description": "57ターン以上"
+    },
+    {
+        "battleConditionMstId": 1863,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "58",
+        "description": "58ターン以上"
+    },
+    {
+        "battleConditionMstId": 1864,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "59",
+        "description": "59ターン以上"
+    },
+    {
+        "battleConditionMstId": 1865,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "60",
+        "description": "60ターン以上"
+    },
+    {
+        "battleConditionMstId": 1866,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "61",
+        "description": "61ターン以上"
+    },
+    {
+        "battleConditionMstId": 1867,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "62",
+        "description": "62ターン以上"
+    },
+    {
+        "battleConditionMstId": 1868,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "63",
+        "description": "63ターン以上"
+    },
+    {
+        "battleConditionMstId": 1869,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "64",
+        "description": "64ターン以上"
+    },
+    {
+        "battleConditionMstId": 1870,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "65",
+        "description": "65ターン以上"
+    },
+    {
+        "battleConditionMstId": 1871,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "66",
+        "description": "66ターン以上"
+    },
+    {
+        "battleConditionMstId": 1872,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "67",
+        "description": "67ターン以上"
+    },
+    {
+        "battleConditionMstId": 1873,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "68",
+        "description": "68ターン以上"
+    },
+    {
+        "battleConditionMstId": 1874,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "69",
+        "description": "69ターン以上"
+    },
+    {
+        "battleConditionMstId": 1875,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "70",
+        "description": "70ターン以上"
+    },
+    {
+        "battleConditionMstId": 1876,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "71",
+        "description": "71ターン以上"
+    },
+    {
+        "battleConditionMstId": 1877,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "72",
+        "description": "72ターン以上"
+    },
+    {
+        "battleConditionMstId": 1878,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "73",
+        "description": "73ターン以上"
+    },
+    {
+        "battleConditionMstId": 1879,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "74",
+        "description": "74ターン以上"
+    },
+    {
+        "battleConditionMstId": 1880,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "75",
+        "description": "75ターン以上"
+    },
+    {
+        "battleConditionMstId": 1881,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "76",
+        "description": "76ターン以上"
+    },
+    {
+        "battleConditionMstId": 1882,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "77",
+        "description": "77ターン以上"
+    },
+    {
+        "battleConditionMstId": 1883,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "78",
+        "description": "78ターン以上"
+    },
+    {
+        "battleConditionMstId": 1884,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "79",
+        "description": "79ターン以上"
+    },
+    {
+        "battleConditionMstId": 1885,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "80",
+        "description": "80ターン以上"
+    },
+    {
+        "battleConditionMstId": 1886,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "81",
+        "description": "81ターン以上"
+    },
+    {
+        "battleConditionMstId": 1887,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "82",
+        "description": "82ターン以上"
+    },
+    {
+        "battleConditionMstId": 1888,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "83",
+        "description": "83ターン以上"
+    },
+    {
+        "battleConditionMstId": 1889,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "84",
+        "description": "84ターン以上"
+    },
+    {
+        "battleConditionMstId": 1890,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "85",
+        "description": "85ターン以上"
+    },
+    {
+        "battleConditionMstId": 1891,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "86",
+        "description": "86ターン以上"
+    },
+    {
+        "battleConditionMstId": 1892,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "87",
+        "description": "87ターン以上"
+    },
+    {
+        "battleConditionMstId": 1893,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "88",
+        "description": "88ターン以上"
+    },
+    {
+        "battleConditionMstId": 1894,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "89",
+        "description": "89ターン以上"
+    },
+    {
+        "battleConditionMstId": 1895,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "90",
+        "description": "90ターン以上"
+    },
+    {
+        "battleConditionMstId": 1896,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "91",
+        "description": "91ターン以上"
+    },
+    {
+        "battleConditionMstId": 1897,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "92",
+        "description": "92ターン以上"
+    },
+    {
+        "battleConditionMstId": 1898,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "93",
+        "description": "93ターン以上"
+    },
+    {
+        "battleConditionMstId": 1899,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "94",
+        "description": "94ターン以上"
+    },
+    {
+        "battleConditionMstId": 1900,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "95",
+        "description": "95ターン以上"
+    },
+    {
+        "battleConditionMstId": 1901,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "96",
+        "description": "96ターン以上"
+    },
+    {
+        "battleConditionMstId": 1902,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "97",
+        "description": "97ターン以上"
+    },
+    {
+        "battleConditionMstId": 1903,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "98",
+        "description": "98ターン以上"
+    },
+    {
+        "battleConditionMstId": 1904,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "99",
+        "description": "99ターン以上"
+    },
+    {
+        "battleConditionMstId": 1905,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "100",
+        "description": "100ターン以上"
+    },
+    {
+        "battleConditionMstId": 1906,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "51",
+        "description": "51ターン未満"
+    },
+    {
+        "battleConditionMstId": 1907,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "52",
+        "description": "52ターン未満"
+    },
+    {
+        "battleConditionMstId": 1908,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "53",
+        "description": "53ターン未満"
+    },
+    {
+        "battleConditionMstId": 1909,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "54",
+        "description": "54ターン未満"
+    },
+    {
+        "battleConditionMstId": 1910,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "55",
+        "description": "55ターン未満"
+    },
+    {
+        "battleConditionMstId": 1911,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "56",
+        "description": "56ターン未満"
+    },
+    {
+        "battleConditionMstId": 1912,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "57",
+        "description": "57ターン未満"
+    },
+    {
+        "battleConditionMstId": 1913,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "58",
+        "description": "58ターン未満"
+    },
+    {
+        "battleConditionMstId": 1914,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "59",
+        "description": "59ターン未満"
+    },
+    {
+        "battleConditionMstId": 1915,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "60",
+        "description": "60ターン未満"
+    },
+    {
+        "battleConditionMstId": 1916,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "61",
+        "description": "61ターン未満"
+    },
+    {
+        "battleConditionMstId": 1917,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "62",
+        "description": "62ターン未満"
+    },
+    {
+        "battleConditionMstId": 1918,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "63",
+        "description": "63ターン未満"
+    },
+    {
+        "battleConditionMstId": 1919,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "64",
+        "description": "64ターン未満"
+    },
+    {
+        "battleConditionMstId": 1920,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "65",
+        "description": "65ターン未満"
+    },
+    {
+        "battleConditionMstId": 1921,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "66",
+        "description": "66ターン未満"
+    },
+    {
+        "battleConditionMstId": 1922,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "67",
+        "description": "67ターン未満"
+    },
+    {
+        "battleConditionMstId": 1923,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "68",
+        "description": "68ターン未満"
+    },
+    {
+        "battleConditionMstId": 1924,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "69",
+        "description": "69ターン未満"
+    },
+    {
+        "battleConditionMstId": 1925,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "70",
+        "description": "70ターン未満"
+    },
+    {
+        "battleConditionMstId": 1926,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "71",
+        "description": "71ターン未満"
+    },
+    {
+        "battleConditionMstId": 1927,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "72",
+        "description": "72ターン未満"
+    },
+    {
+        "battleConditionMstId": 1928,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "73",
+        "description": "73ターン未満"
+    },
+    {
+        "battleConditionMstId": 1929,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "74",
+        "description": "74ターン未満"
+    },
+    {
+        "battleConditionMstId": 1930,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "75",
+        "description": "75ターン未満"
+    },
+    {
+        "battleConditionMstId": 1931,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "76",
+        "description": "76ターン未満"
+    },
+    {
+        "battleConditionMstId": 1932,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "77",
+        "description": "77ターン未満"
+    },
+    {
+        "battleConditionMstId": 1933,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "78",
+        "description": "78ターン未満"
+    },
+    {
+        "battleConditionMstId": 1934,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "79",
+        "description": "79ターン未満"
+    },
+    {
+        "battleConditionMstId": 1935,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "80",
+        "description": "80ターン未満"
+    },
+    {
+        "battleConditionMstId": 1936,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "81",
+        "description": "81ターン未満"
+    },
+    {
+        "battleConditionMstId": 1937,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "82",
+        "description": "82ターン未満"
+    },
+    {
+        "battleConditionMstId": 1938,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "83",
+        "description": "83ターン未満"
+    },
+    {
+        "battleConditionMstId": 1939,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "84",
+        "description": "84ターン未満"
+    },
+    {
+        "battleConditionMstId": 1940,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "85",
+        "description": "85ターン未満"
+    },
+    {
+        "battleConditionMstId": 1941,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "86",
+        "description": "86ターン未満"
+    },
+    {
+        "battleConditionMstId": 1942,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "87",
+        "description": "87ターン未満"
+    },
+    {
+        "battleConditionMstId": 1943,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "88",
+        "description": "88ターン未満"
+    },
+    {
+        "battleConditionMstId": 1944,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "89",
+        "description": "89ターン未満"
+    },
+    {
+        "battleConditionMstId": 1945,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "90",
+        "description": "90ターン未満"
+    },
+    {
+        "battleConditionMstId": 1946,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "91",
+        "description": "91ターン未満"
+    },
+    {
+        "battleConditionMstId": 1947,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "92",
+        "description": "92ターン未満"
+    },
+    {
+        "battleConditionMstId": 1948,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "93",
+        "description": "93ターン未満"
+    },
+    {
+        "battleConditionMstId": 1949,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "94",
+        "description": "94ターン未満"
+    },
+    {
+        "battleConditionMstId": 1950,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "95",
+        "description": "95ターン未満"
+    },
+    {
+        "battleConditionMstId": 1951,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "96",
+        "description": "96ターン未満"
+    },
+    {
+        "battleConditionMstId": 1952,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "97",
+        "description": "97ターン未満"
+    },
+    {
+        "battleConditionMstId": 1953,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "98",
+        "description": "98ターン未満"
+    },
+    {
+        "battleConditionMstId": 1954,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "99",
+        "description": "99ターン未満"
+    },
+    {
+        "battleConditionMstId": 1955,
+        "compareContent": 7,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "100",
+        "description": "100ターン未満"
     }
 ]

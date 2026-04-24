@@ -14165,6 +14165,11 @@
         "description": "行動者は自身＋敵全体で1体でもブレイクしたとき"
     },
     {
+        "battleConditionMstIdCsv": "1775",
+        "battleConditionSetMstId": 2896,
+        "description": "対象のデバフ数が4以上"
+    },
+    {
         "battleConditionMstIdCsv": "1774,3,1603",
         "battleConditionSetMstId": 2897,
         "description": "ブレイク中、且つ攻撃を受けたユニットが1体以上のとき+1以上のダメージを与えたとき＋行動者は自分"
@@ -14380,6 +14385,11 @@
         "description": "自身のブレイク回数が10回のとき"
     },
     {
+        "battleConditionMstIdCsv": "2,786",
+        "battleConditionSetMstId": 2940,
+        "description": "行動者は敵 AND 相手が呪い状態ではない場合"
+    },
+    {
         "battleConditionMstIdCsv": "1807,419",
         "battleConditionSetMstId": 2944,
         "description": "自身のブレイク回数が0回のとき、自身がブレイク状態の場合"
@@ -14408,5 +14418,305 @@
         "battleConditionMstIdCsv": "1020",
         "battleConditionSetMstId": 2949,
         "description": "自身の経過ターンが20ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1818",
+        "battleConditionSetMstId": 2950,
+        "description": "メリッサの専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1819",
+        "battleConditionSetMstId": 2951,
+        "description": "メリッサの専用バフが付与されいないとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,655,5",
+        "battleConditionSetMstId": 2952,
+        "description": "行動者は味方+敵全体に対して1以上のダメージを与えたとき+通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "1,655,6,962",
+        "battleConditionSetMstId": 2953,
+        "description": "行動者は味方+敵全体に対して1以上のダメージを与えたとき+戦闘スキル+自身以外"
+    },
+    {
+        "battleConditionMstIdCsv": "1,655,7",
+        "battleConditionSetMstId": 2954,
+        "description": "行動者は味方+敵全体に対して1以上のダメージを与えたとき+必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "1818,6,3",
+        "battleConditionSetMstId": 2955,
+        "description": "メリッサの専用バフ付与時+戦闘スキルを発動+行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "3,306,1332",
+        "battleConditionSetMstId": 2956,
+        "description": "行動者が自身 + 追撃・反撃・援護を発動したとき+攻撃した対象"
+    },
+    {
+        "battleConditionMstIdCsv": "613,420,286",
+        "battleConditionSetMstId": 2957,
+        "description": "魔力が11で、自身がブレイク状態ではなく、行動可能な状態のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "658,420,286",
+        "battleConditionSetMstId": 2958,
+        "description": "魔力が22で、自身がブレイク状態ではなく、行動可能な状態のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "669,420,286",
+        "battleConditionSetMstId": 2959,
+        "description": "魔力が33で、自身がブレイク状態ではなく、行動可能な状態のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "680,420,286",
+        "battleConditionSetMstId": 2960,
+        "description": "魔力が44で、自身がブレイク状態ではなく、行動可能な状態のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "691,420,286",
+        "battleConditionSetMstId": 2961,
+        "description": "魔力が55で、自身がブレイク状態ではなく、行動可能な状態のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "702,420,286",
+        "battleConditionSetMstId": 2962,
+        "description": "魔力が66で、自身がブレイク状態ではなく、行動可能な状態のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "713,420,286",
+        "battleConditionSetMstId": 2963,
+        "description": "魔力が77で、自身がブレイク状態ではなく、行動可能な状態のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "724,420,286",
+        "battleConditionSetMstId": 2964,
+        "description": "魔力が88で、自身がブレイク状態ではなく、行動可能な状態のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "735,420,286",
+        "battleConditionSetMstId": 2965,
+        "description": "魔力が99で、自身がブレイク状態ではなく、行動可能な状態のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "717",
+        "battleConditionSetMstId": 2966,
+        "description": "トークンが81のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "718",
+        "battleConditionSetMstId": 2967,
+        "description": "トークンが82のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "719",
+        "battleConditionSetMstId": 2968,
+        "description": "トークンが83のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "720",
+        "battleConditionSetMstId": 2969,
+        "description": "トークンが84のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "721",
+        "battleConditionSetMstId": 2970,
+        "description": "トークンが85のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "722",
+        "battleConditionSetMstId": 2971,
+        "description": "トークンが86のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "723",
+        "battleConditionSetMstId": 2972,
+        "description": "トークンが87のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "724",
+        "battleConditionSetMstId": 2973,
+        "description": "トークンが88のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "725",
+        "battleConditionSetMstId": 2974,
+        "description": "トークンが89のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "726",
+        "battleConditionSetMstId": 2975,
+        "description": "トークンが90のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "727",
+        "battleConditionSetMstId": 2976,
+        "description": "トークンが91のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "728",
+        "battleConditionSetMstId": 2977,
+        "description": "トークンが92のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "729",
+        "battleConditionSetMstId": 2978,
+        "description": "トークンが93のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "730",
+        "battleConditionSetMstId": 2979,
+        "description": "トークンが94のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "731",
+        "battleConditionSetMstId": 2980,
+        "description": "トークンが95のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "732",
+        "battleConditionSetMstId": 2981,
+        "description": "トークンが96のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "733",
+        "battleConditionSetMstId": 2982,
+        "description": "トークンが97のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "734",
+        "battleConditionSetMstId": 2983,
+        "description": "トークンが98のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "735",
+        "battleConditionSetMstId": 2984,
+        "description": "トークンが99のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "7,25,420",
+        "battleConditionSetMstId": 2985,
+        "description": "自身がブレイク状態ではなく、敵の必殺技で自分が1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "972,1,655,5,1818",
+        "battleConditionSetMstId": 2986,
+        "description": "行動者は水属性＋行動者は味方+敵全体に対して1以上のダメージを与えたとき+通常攻撃+メリッサの専用バフがあるとき"
+    },
+    {
+        "battleConditionMstIdCsv": "972,1,655,6,1818",
+        "battleConditionSetMstId": 2987,
+        "description": "行動者は水属性＋行動者は味方+敵全体に対して1以上のダメージを与えたとき+戦闘スキル+メリッサの専用バフがあるとき"
+    },
+    {
+        "battleConditionMstIdCsv": "972,1,655,7,1818",
+        "battleConditionSetMstId": 2988,
+        "description": "行動者は水属性＋行動者は味方+敵全体に対して1以上のダメージを与えたとき+必殺技+メリッサの専用バフがあるとき"
+    },
+    {
+        "battleConditionMstIdCsv": "962,974,1603,5,1",
+        "battleConditionSetMstId": 2989,
+        "description": "行動者は光属性+敵全体に1以上のダメージを与えたとき+通常攻撃+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "962,975,1603,5,1",
+        "battleConditionSetMstId": 2990,
+        "description": "行動者は闇属性+敵全体に1以上のダメージを与えたとき+通常攻撃+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "467,1603,3",
+        "battleConditionSetMstId": 2994,
+        "description": "魔力1以上＋敵に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "284,1603,3,1695",
+        "battleConditionSetMstId": 2995,
+        "description": "魔力2以上＋敵に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "962,974,1603,6,1",
+        "battleConditionSetMstId": 3016,
+        "description": "行動者は光属性+敵全体に1以上のダメージを与えたとき+戦闘スキル+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "962,975,1603,6,1",
+        "battleConditionSetMstId": 3017,
+        "description": "行動者は闇属性+敵全体に1以上のダメージを与えたとき+戦闘スキル+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "962,974,1603,7,1",
+        "battleConditionSetMstId": 3018,
+        "description": "行動者は光属性+敵全体に1以上のダメージを与えたとき+必殺技+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "962,975,1603,7,1",
+        "battleConditionSetMstId": 3019,
+        "description": "行動者は闇属性+敵全体に1以上のダメージを与えたとき+必殺技+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "1040,1095",
+        "battleConditionSetMstId": 3088,
+        "description": "ターン経過が40ターン以上、45ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1045,1100",
+        "battleConditionSetMstId": 3089,
+        "description": "ターン経過が45ターン以上、50ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1050,1910",
+        "battleConditionSetMstId": 3090,
+        "description": "ターン経過が50ターン以上、55ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1860,1915",
+        "battleConditionSetMstId": 3091,
+        "description": "ターン経過が55ターン以上、60ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1865,1920",
+        "battleConditionSetMstId": 3092,
+        "description": "ターン経過が60ターン以上、65ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1870,1925",
+        "battleConditionSetMstId": 3093,
+        "description": "ターン経過が65ターン以上、70ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1875,1930",
+        "battleConditionSetMstId": 3094,
+        "description": "ターン経過が70ターン以上、75ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1880,1935",
+        "battleConditionSetMstId": 3095,
+        "description": "ターン経過が75ターン以上、80ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1885,1940",
+        "battleConditionSetMstId": 3096,
+        "description": "ターン経過が80ターン以上、85ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1890,1945",
+        "battleConditionSetMstId": 3097,
+        "description": "ターン経過が85ターン以上、90ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1895,1950",
+        "battleConditionSetMstId": 3098,
+        "description": "ターン経過が90ターン以上、95ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1900,1955",
+        "battleConditionSetMstId": 3099,
+        "description": "ターン経過が95ターン以上、100ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1050",
+        "battleConditionSetMstId": 3100,
+        "description": "ターン経過が100ターン以上"
     }
 ]
