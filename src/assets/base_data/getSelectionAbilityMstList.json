@@ -4153,5 +4153,35 @@
         "targetType": 2,
         "value1": 1150057,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases MP recovery rate by 10%.<br><br>On battle skill use:<br>Increases all allies' DMG dealt by 20% (2 turns).",
+        "name": "I Won't Let the Light Go Out",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 142,
+        "selectionAbilityMstId": 7058,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11160101,
+        "targetType": 2,
+        "value1": 1150058,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases own follow-up attack DMG dealt by 40%.<br><br>On own follow-up attack:<br>Decreases target's all elemental RES by 2.5% (Stacks 4 times).",
+        "name": "I'll Make Sure You Pay",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 143,
+        "selectionAbilityMstId": 7059,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11170101,
+        "targetType": 2,
+        "value1": 1150059,
+        "value2": 0
     }
 ]
