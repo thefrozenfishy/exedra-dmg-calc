@@ -89,7 +89,8 @@ function getKioku({
 }
 
 const RELEVANT_SUPPORT_SUPPORTS = {
-    [KiokuRole.Buffer]: ["Flame Waltz", "Buon Natale Grazioso", "Pluvia☆Neujahr"]
+    [KiokuRole.Buffer]: ["Flame Waltz", "Buon Natale Grazioso", "Pluvia☆Neujahr", "L'Ombre"],
+    [KiokuRole.Debuffer]: ["Désintégration"],
 }
 
 export async function findBestTeam({
@@ -169,12 +170,15 @@ export async function findBestTeam({
         }
     }
 
-    const bufferSupportData: any[][] = RELEVANT_SUPPORT_SUPPORTS[KiokuRole.Buffer]
-        .map(n => enabledCharacters.find(c => c.name === n))
-        .filter(Boolean)
-        .map(c => fetchKioku(c as Character))
-        .filter(Boolean)
-        .map(c => c.getKey());
+    const relevantSupportData: Partial<Record<KiokuRole, any[][]>> = {};
+    for (const [role, names] of Object.entries(RELEVANT_SUPPORT_SUPPORTS) as [KiokuRole, string[]][]) {
+        relevantSupportData[role] = names
+            .map(n => enabledCharacters.find(c => c.name === n))
+            .filter(Boolean)
+            .map(c => fetchKioku(c as Character))
+            .filter(Boolean)
+            .map(c => c.getKey());
+    }
 
     let completedRuns = 0;
     const expectedTotalRuns =
@@ -225,21 +229,30 @@ export async function findBestTeam({
                                 if (!obligatoryKioku.every(k => teamNames.includes(k))) continue;
                             }
 
-                            const activeDeBufferSupports = bufferSupportData.filter(s => !deBufferCombo.map(c => c.name).includes(s[0]))
-                            const supportSupports = [];
-                            if (activeDeBufferSupports.length) {
-                                const bufferIndexes = totalSupports.map((c, idx) => c.role === KiokuRole.Buffer ? idx : null).filter(v => v !== null) as number[]
-                                const combos = combinations(activeDeBufferSupports, Math.min(activeDeBufferSupports.length, bufferIndexes.length));
-                                for (const combo of combos) {
-                                    const perms = permute(combo);
-                                    for (const p of perms) {
-                                        const arr = new Array(totalSupports.length).fill(undefined);
-                                        for (let i = 0; i < p.length; i++) arr[bufferIndexes[i]] = p[i];
-                                        supportSupports.push(arr);
+                            const supportSupports: any[][] = [new Array(totalSupports.length).fill(undefined)];
+
+                            for (const [role, supportPool] of Object.entries(relevantSupportData) as [KiokuRole, any[][]][]) {
+                                const activePool = supportPool.filter(s => !deBufferCombo.map(c => c.name).includes(s[0]));
+                                if (!activePool.length) continue;
+
+                                const roleIndexes = totalSupports
+                                    .map((c, idx) => c.role === role ? idx : null)
+                                    .filter(v => v !== null) as number[];
+                                if (!roleIndexes.length) continue;
+
+                                const roleCombos = combinations(activePool, Math.min(activePool.length, roleIndexes.length));
+
+                                const expanded: any[][] = [];
+                                for (const existing of supportSupports) {
+                                    for (const combo of roleCombos) {
+                                        for (const perm of permute(combo)) {
+                                            const arr = [...existing];
+                                            for (let i = 0; i < perm.length; i++) arr[roleIndexes[i]] = perm[i];
+                                            expanded.push(arr);
+                                        }
                                     }
                                 }
-                            } else {
-                                supportSupports.push(new Array(totalSupports.length).fill(undefined));
+                                supportSupports.splice(0, supportSupports.length, ...expanded);
                             }
 
                             onProgress?.([attacker.name, ...totalSupports.map(s => s.name)], completedRuns, expectedTotalRuns)
