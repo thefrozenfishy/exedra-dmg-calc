@@ -89,7 +89,8 @@ function getKioku({
 }
 
 const RELEVANT_SUPPORT_SUPPORTS = {
-    [KiokuRole.Buffer]: ["Flame Waltz", "Buon Natale Grazioso", "Pluvia☆Neujahr"]
+    [KiokuRole.Buffer]: ["Flame Waltz", "Buon Natale Grazioso", "Pluvia☆Neujahr", "L'Ombre"],
+    [KiokuRole.Debuffer]: ["Désintégration"],
 }
 
 export async function findBestTeam({
