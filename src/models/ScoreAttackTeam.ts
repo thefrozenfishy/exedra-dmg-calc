@@ -3,13 +3,6 @@ import { EnemyTargetTypes, Enemy } from "../types/EnemyTypes";
 import { isActiveConditionRelevantForScoreAttack, isStartCondRelevantForScoreAttack } from "./BattleConditionParser";
 import { ActiveSkill, Aliment, elementMap, SkillDetail, skillDetailId } from "../types/KiokuTypes";
 
-const targetTypeAtPosition = [
-    EnemyTargetTypes.L_OTHER,
-    EnemyTargetTypes.L_PROXIMITY,
-    EnemyTargetTypes.TARGET,
-    EnemyTargetTypes.R_PROXIMITY,
-    EnemyTargetTypes.R_OTHER,
-];
 
 const DPS_IDX = 2;
 
@@ -411,8 +404,8 @@ export class ScoreAttackTeam {
                 console.log(
                     `Enemy[${i}] debuff pool`,
                     Object.fromEntries(Object.entries(this.debuffPools[i]).filter(([key]) => key in knownBoosts)),
-                );               
-                 console.log(
+                );
+                console.log(
                     `Ally[${i}] buff pool`,
                     Object.fromEntries(Object.entries(this.allyContexts[i].effects).filter(([key]) => key in knownBoosts)),
                 );
@@ -696,13 +689,29 @@ export class ScoreAttackTeam {
         let currentAmountOfEnemies = initAmountOfEnemies;
         const allDebugSections: DebugSections[] = Array(5).fill(null).map(emptyDebugSections);
 
-        for (const i of [
-            EnemyTargetTypes.TARGET,
-            EnemyTargetTypes.L_PROXIMITY,
-            EnemyTargetTypes.R_PROXIMITY,
-            EnemyTargetTypes.L_OTHER,
-            EnemyTargetTypes.R_OTHER,
-        ]) {
+        let targetTypeAtPosition
+        const isAoeDps = this.dps.effects.some(eff => {
+            if ((eff as ActiveSkill).skillDetailMstId === this.dps.data.special_id * 10000 + 1001) return eff.range === 3
+        })
+        if (isAoeDps) {
+             targetTypeAtPosition = [
+                EnemyTargetTypes.L_OTHER,
+                EnemyTargetTypes.L_PROXIMITY,
+                EnemyTargetTypes.TARGET,
+                EnemyTargetTypes.R_PROXIMITY,
+                EnemyTargetTypes.R_OTHER,
+            ];
+        }
+        else {
+             targetTypeAtPosition = [
+                EnemyTargetTypes.TARGET,
+                EnemyTargetTypes.L_PROXIMITY,
+                EnemyTargetTypes.R_PROXIMITY,
+                EnemyTargetTypes.L_OTHER,
+                EnemyTargetTypes.R_OTHER,
+            ];
+        }
+        for (const i of targetTypeAtPosition) {
             [dmg, avg_dmg, critRate, debugSections, enemyDied] = this.calculate_single_dmg(
                 i, this.memberForLog(i), enemies[i],
                 initAmountOfEnemies, currentAmountOfEnemies, atk_down,
@@ -762,7 +771,7 @@ export class ScoreAttackTeam {
         atk_down: number,
     ): [number, number, number, DebugSections, boolean] {
         const [special, enemyDied, uses_def] = this.get_special_dmg(
-            targetTypeAtPosition[idx],
+            idx,
             initAmountOfEnemies, currentAmountOfEnemies,
             enemy.maxBreak, enemy.hitsToKill,
         );
