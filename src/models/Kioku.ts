@@ -135,7 +135,7 @@ export class Kioku {
 
         const heartGroup = characterHeart[this.data.id / 10_000]?.paramUpGroupId ?? 1;
         for (const v of Object.values(characterHeartParamUpGroup)) {
-            if (v.paramUpGroupId === heartGroup && this.heartphialLvl > v.heartLevel) {
+            if (v.paramUpGroupId === heartGroup && this.heartphialLvl >= v.heartLevel) {
                 this.addStat(v.styleParamUpEffectMstId, false);
             }
         }
