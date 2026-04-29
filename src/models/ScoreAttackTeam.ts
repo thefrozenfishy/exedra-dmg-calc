@@ -832,8 +832,9 @@ export class ScoreAttackTeam {
 
         let base_dmg = this.calc_base_dmg(special, base_atk);
         let dot_total_dmg = 0;
+        const add_dmg = this.add_additional_dmg();
         if (special > 0 && enemy.enabled) {
-            base_dmg += this.add_additional_dmg();
+            base_dmg += add_dmg;
             if (this.hasDpsDotPop) {
                 dot_total_dmg = this.add_dot_dmg(enemy, idx, currentAmountOfEnemies);
             }
@@ -891,6 +892,7 @@ Elem ResFact    - ${elem_resist_factor * 100 | 0}%
 EffElem Fact    - ${effect_elem_factor * 100 | 0}%
 Break Factor    - ${break_factor * 100 | 0}%
 Dot             - ${(dot_total_dmg | 0).toLocaleString()}
+Additional Dmg  - ${(total * (add_dmg / base_dmg) | 0).toLocaleString()}
 Pre-dot-total   - ${(pre_dot_total | 0).toLocaleString()}
 Pre-dot-avrg    - ${(pre_dot_average | 0).toLocaleString()}
 Result          - ${(total | 0).toLocaleString()}
