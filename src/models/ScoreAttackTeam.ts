@@ -892,7 +892,7 @@ Elem ResFact    - ${elem_resist_factor * 100 | 0}%
 EffElem Fact    - ${effect_elem_factor * 100 | 0}%
 Break Factor    - ${break_factor * 100 | 0}%
 Dot             - ${(dot_total_dmg | 0).toLocaleString()}
-Additional Dmg  - ${(total * (add_dmg / base_dmg) | 0).toLocaleString()}
+Additional Dmg  - ${(pre_dot_total * (add_dmg / base_dmg) | 0).toLocaleString()}
 Pre-dot-total   - ${(pre_dot_total | 0).toLocaleString()}
 Pre-dot-avrg    - ${(pre_dot_average | 0).toLocaleString()}
 Result          - ${(total | 0).toLocaleString()}
