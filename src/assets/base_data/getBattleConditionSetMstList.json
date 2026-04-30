@@ -14160,6 +14160,181 @@
         "description": "行動者は無属性 AND 対象は闇属性"
     },
     {
+        "battleConditionMstIdCsv": "1750",
+        "battleConditionSetMstId": 2860,
+        "description": "トークンが100以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1750,1771",
+        "battleConditionSetMstId": 2861,
+        "description": "トークンが100以上〜250未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1759,1770",
+        "battleConditionSetMstId": 2862,
+        "description": "トークンが250以上、500未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1758,1773",
+        "battleConditionSetMstId": 2863,
+        "description": "トークンが500以上、750未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1772",
+        "battleConditionSetMstId": 2864,
+        "description": "トークンが750以上"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,974,5,655",
+        "battleConditionSetMstId": 2865,
+        "description": "行動者は自身以外+行動者は味方+行動者は光属性+行動タイプは通常攻撃+敵チームに与えるトータルダメージは1以上"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,974,6,655",
+        "battleConditionSetMstId": 2866,
+        "description": "行動者は自身以外+行動者は味方+行動者は光属性+行動タイプは戦闘スキル+敵チームに与えるトータルダメージは1以上"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,974,7,655",
+        "battleConditionSetMstId": 2867,
+        "description": "行動者は自身以外+行動者は味方+行動者は光属性+行動タイプは必殺技+敵チームに与えるトータルダメージは1以上"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,974,5,655,281",
+        "battleConditionSetMstId": 2868,
+        "description": "行動者は自身以外+行動者は味方+行動者は光属性+行動タイプは通常攻撃+クリティカルが発生した+敵チームに与えるトータルダメージは1以上"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,974,6,655,281",
+        "battleConditionSetMstId": 2869,
+        "description": "行動者は自身以外+行動者は味方+行動者は光属性+行動タイプは戦闘スキル+クリティカルが発生した+敵チームに与えるトータルダメージは1以上"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,974,7,655,281",
+        "battleConditionSetMstId": 2870,
+        "description": "行動者は自身以外+行動者は味方+行動者は光属性+行動タイプは必殺技+クリティカルが発生した+敵チームに与えるトータルダメージは1以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1750,1753",
+        "battleConditionSetMstId": 2871,
+        "description": "トークンが100以上、200未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1752,1755",
+        "battleConditionSetMstId": 2872,
+        "description": "トークンが200以上、300未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1754,1757",
+        "battleConditionSetMstId": 2873,
+        "description": "トークンが300以上、400未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1756,1759",
+        "battleConditionSetMstId": 2874,
+        "description": "トークンが400以上、500未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1758,1761",
+        "battleConditionSetMstId": 2875,
+        "description": "トークンが500以上、600未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1760,1763",
+        "battleConditionSetMstId": 2876,
+        "description": "トークンが600以上、700未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1762,1765",
+        "battleConditionSetMstId": 2877,
+        "description": "トークンが700以上、800未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1764,1767",
+        "battleConditionSetMstId": 2878,
+        "description": "トークンが800以上、900未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1766,1769",
+        "battleConditionSetMstId": 2879,
+        "description": "トークンが900以上、1000未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1768",
+        "battleConditionSetMstId": 2880,
+        "description": "トークンが1000以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1758,6,3",
+        "battleConditionSetMstId": 2881,
+        "description": "トークンが500以上+行動タイプは戦闘スキル+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "1749",
+        "battleConditionSetMstId": 2882,
+        "description": "タルトFinalの専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1749,1753",
+        "battleConditionSetMstId": 2883,
+        "description": "タルトFinalの専用バフが付与されているとき+トークンが200未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1749,1752,1757",
+        "battleConditionSetMstId": 2884,
+        "description": "タルトFinalの専用バフが付与されているとき+トークンが200以上、トークンが400未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1749,1761,1756",
+        "battleConditionSetMstId": 2885,
+        "description": "タルトFinalの専用バフが付与されているとき+トークンが400以上、600未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1749,1765,1760",
+        "battleConditionSetMstId": 2886,
+        "description": "タルトFinalの専用バフが付与されているとき+トークンが600以上、800未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1749,1769,1764",
+        "battleConditionSetMstId": 2887,
+        "description": "タルトFinalの専用バフが付与されているとき+トークンが800以上、1000未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1749,1768",
+        "battleConditionSetMstId": 2888,
+        "description": "タルトFinalの専用バフが付与されているとき+トークンが1000以上"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,974,5,655,1759",
+        "battleConditionSetMstId": 2889,
+        "description": "行動者は自身以外+行動者は味方+行動者は光属性+行動タイプは通常攻撃+敵チームに与えるトータルダメージは1以上+トークンは500未満"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,974,6,655,1759",
+        "battleConditionSetMstId": 2890,
+        "description": "行動者は自身以外+行動者は味方+行動者は光属性+行動タイプは戦闘スキル+敵チームに与えるトータルダメージは1以上+トークンは500未満"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,974,7,655,1759",
+        "battleConditionSetMstId": 2891,
+        "description": "行動者は自身以外+行動者は味方+行動者は光属性+行動タイプは必殺技+敵チームに与えるトータルダメージは1以上+トークンは500未満"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,974,5,655,281,1759",
+        "battleConditionSetMstId": 2892,
+        "description": "行動者は自身以外+行動者は味方+行動者は光属性+行動タイプは通常攻撃+クリティカルが発生した+敵チームに与えるトータルダメージは1以上+トークンは500未満"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,974,6,655,281,1759",
+        "battleConditionSetMstId": 2893,
+        "description": "行動者は自身以外+行動者は味方+行動者は光属性+行動タイプは戦闘スキル+クリティカルが発生した+敵チームに与えるトータルダメージは1以上+トークンは500未満"
+    },
+    {
+        "battleConditionMstIdCsv": "962,1,974,7,655,281,1759",
+        "battleConditionSetMstId": 2894,
+        "description": "行動者は自身以外+行動者は味方+行動者は光属性+行動タイプは必殺技+クリティカルが発生した+敵チームに与えるトータルダメージは1以上+トークンは500未満"
+    },
+    {
         "battleConditionMstIdCsv": "1403,3",
         "battleConditionSetMstId": 2895,
         "description": "行動者は自身＋敵全体で1体でもブレイクしたとき"
@@ -14625,6 +14800,21 @@
         "description": "行動者は闇属性+敵全体に1以上のダメージを与えたとき+通常攻撃+行動者は仲間"
     },
     {
+        "battleConditionMstIdCsv": "1820",
+        "battleConditionSetMstId": 2991,
+        "description": "自分のキャラクターが「タルト」"
+    },
+    {
+        "battleConditionMstIdCsv": "1821",
+        "battleConditionSetMstId": 2992,
+        "description": "自分のキャラクターが「リズ・ホークウッド」"
+    },
+    {
+        "battleConditionMstIdCsv": "1822",
+        "battleConditionSetMstId": 2993,
+        "description": "自分のキャラクターが「メリッサ・ド・ヴィニョル」"
+    },
+    {
         "battleConditionMstIdCsv": "467,1603,3",
         "battleConditionSetMstId": 2994,
         "description": "魔力1以上＋敵に1以上のダメージを与えたとき"
@@ -14633,6 +14823,101 @@
         "battleConditionMstIdCsv": "284,1603,3,1695",
         "battleConditionSetMstId": 2995,
         "description": "魔力2以上＋敵に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1505,3,7",
+        "battleConditionSetMstId": 2996,
+        "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき、行動者は自分、必殺技を使用"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,7,1252",
+        "battleConditionSetMstId": 2997,
+        "description": "自身がプレイヤー側のユニットのとき、自分は行動者、行動タイプは必殺技、攻撃した"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,281",
+        "battleConditionSetMstId": 2998,
+        "description": "自身がプレイヤー側のユニットのとき、自分は行動者、敵軍にクリティカルダメージが発生"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,306",
+        "battleConditionSetMstId": 2999,
+        "description": "自身がプレイヤー側のユニットのとき、自分は行動者、行動タイプが追撃/反撃/援護"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1462",
+        "battleConditionSetMstId": 3000,
+        "description": "自身がプレイヤー側のユニットのとき、自分は行動者、行動タイプが特殊ダメージ"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,306,1332,1665",
+        "battleConditionSetMstId": 3001,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプが追撃/反撃/援護、攻撃を与えた、攻撃が命中した敵数が1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,306,1332,1666",
+        "battleConditionSetMstId": 3002,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプが追撃/反撃/援護、攻撃を与えた、攻撃が命中した敵数が2体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,306,1332,1667",
+        "battleConditionSetMstId": 3003,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプが追撃/反撃/援護、攻撃を与えた、攻撃が命中した敵数が3体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,306,1332,1668",
+        "battleConditionSetMstId": 3004,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプが追撃/反撃/援護、攻撃を与えた、攻撃が命中した敵数が4体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,306,1332,1669",
+        "battleConditionSetMstId": 3005,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプが追撃/反撃/援護、攻撃を与えた、攻撃が命中した敵数が5体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1462,1332,1665",
+        "battleConditionSetMstId": 3006,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプが特殊ダメージ、攻撃を与えた、攻撃が命中した敵数が1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1462,1332,1666",
+        "battleConditionSetMstId": 3007,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプが特殊ダメージ、攻撃を与えた、攻撃が命中した敵数が2体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1462,1332,1667",
+        "battleConditionSetMstId": 3008,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプが特殊ダメージ、攻撃を与えた、攻撃が命中した敵数が3体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1462,1332,1668",
+        "battleConditionSetMstId": 3009,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプが特殊ダメージ、攻撃を与えた、攻撃が命中した敵数が4体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1462,1332,1669",
+        "battleConditionSetMstId": 3010,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプが特殊ダメージ、攻撃を与えた、攻撃が命中した敵数が5体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1110",
+        "battleConditionSetMstId": 3011,
+        "description": "味方が3人以上ブレイクされた"
+    },
+    {
+        "battleConditionMstIdCsv": "1603,522,1",
+        "battleConditionSetMstId": 3012,
+        "description": "行動者は自身以外＋敵全体で1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1751",
+        "battleConditionSetMstId": 3014,
+        "description": "トークンが100未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1512",
+        "battleConditionSetMstId": 3015,
+        "description": "バトル開始から自分の行動が11回以上の場合"
     },
     {
         "battleConditionMstIdCsv": "962,974,1603,6,1",
@@ -14653,6 +14938,326 @@
         "battleConditionMstIdCsv": "962,975,1603,7,1",
         "battleConditionSetMstId": 3019,
         "description": "行動者は闇属性+敵全体に1以上のダメージを与えたとき+必殺技+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "1427",
+        "battleConditionSetMstId": 3020,
+        "description": "トークンが41以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1824",
+        "battleConditionSetMstId": 3021,
+        "description": "自分のターン、6ターンごとに（ターン8から）"
+    },
+    {
+        "battleConditionMstIdCsv": "1823",
+        "battleConditionSetMstId": 3022,
+        "description": "バリアが張られた敵が1体以上存在する場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1388,1101",
+        "battleConditionSetMstId": 3023,
+        "description": "自チームが1以上のトータルダメージを受けたとき、自軍にクリティカルダメージが発生しなかった場合"
+    },
+    {
+        "battleConditionMstIdCsv": "147,273",
+        "battleConditionSetMstId": 3024,
+        "description": "バトル開始から自分の行動が1回目、連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "147,274",
+        "battleConditionSetMstId": 3025,
+        "description": "バトル開始から自分の行動が1回目、連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "148,273",
+        "battleConditionSetMstId": 3026,
+        "description": "バトル開始から自分の行動が2回目、連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "148,274",
+        "battleConditionSetMstId": 3027,
+        "description": "バトル開始から自分の行動が2回目、連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "149,273",
+        "battleConditionSetMstId": 3028,
+        "description": "バトル開始から自分の行動が3回目、連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "149,274",
+        "battleConditionSetMstId": 3029,
+        "description": "バトル開始から自分の行動が3回目、連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "150,273",
+        "battleConditionSetMstId": 3030,
+        "description": "バトル開始から自分の行動が4回目、連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "150,274",
+        "battleConditionSetMstId": 3031,
+        "description": "バトル開始から自分の行動が4回目、連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "151,273",
+        "battleConditionSetMstId": 3032,
+        "description": "バトル開始から自分の行動が5回目、連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "151,274",
+        "battleConditionSetMstId": 3033,
+        "description": "バトル開始から自分の行動が5回目、連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "152,273",
+        "battleConditionSetMstId": 3034,
+        "description": "バトル開始から自分の行動が6回目、連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "152,274",
+        "battleConditionSetMstId": 3035,
+        "description": "バトル開始から自分の行動が6回目、連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1825,273",
+        "battleConditionSetMstId": 3036,
+        "description": "バトル開始から自分の行動が7回目以降、連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1825,274",
+        "battleConditionSetMstId": 3037,
+        "description": "バトル開始から自分の行動が7回目以降、連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1053",
+        "battleConditionSetMstId": 3040,
+        "description": "自身の経過ターンが3ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,271,977",
+        "battleConditionSetMstId": 3041,
+        "description": "自身の経過ターンが3ターン以上、7ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,970,1061",
+        "battleConditionSetMstId": 3042,
+        "description": "自身の経過ターンが7ターン以上、11ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1011",
+        "battleConditionSetMstId": 3043,
+        "description": "自身の経過ターンが11ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1826",
+        "battleConditionSetMstId": 3045,
+        "description": "バトル開始から対象の行動が1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1827",
+        "battleConditionSetMstId": 3046,
+        "description": "バトル開始から対象の行動が2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1828",
+        "battleConditionSetMstId": 3047,
+        "description": "バトル開始から対象の行動が3回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1829",
+        "battleConditionSetMstId": 3048,
+        "description": "バトル開始から対象の行動が4回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1830",
+        "battleConditionSetMstId": 3049,
+        "description": "バトル開始から対象の行動が5回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1831",
+        "battleConditionSetMstId": 3050,
+        "description": "バトル開始から対象の行動が6回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1832",
+        "battleConditionSetMstId": 3051,
+        "description": "バトル開始から対象の行動が7回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1833",
+        "battleConditionSetMstId": 3052,
+        "description": "バトル開始から対象の行動が8回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1834",
+        "battleConditionSetMstId": 3053,
+        "description": "バトル開始から対象の行動が9回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1835",
+        "battleConditionSetMstId": 3054,
+        "description": "バトル開始から対象の行動が10回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1836",
+        "battleConditionSetMstId": 3055,
+        "description": "バトル開始から対象の行動が11回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1837",
+        "battleConditionSetMstId": 3056,
+        "description": "バトル開始から対象の行動が12回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1838",
+        "battleConditionSetMstId": 3057,
+        "description": "バトル開始から対象の行動が13回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1839",
+        "battleConditionSetMstId": 3058,
+        "description": "バトル開始から対象の行動が14回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1840",
+        "battleConditionSetMstId": 3059,
+        "description": "バトル開始から対象の行動が15回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1841",
+        "battleConditionSetMstId": 3060,
+        "description": "バトル開始から対象の行動が16回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1842",
+        "battleConditionSetMstId": 3061,
+        "description": "バトル開始から対象の行動が17回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1843",
+        "battleConditionSetMstId": 3062,
+        "description": "バトル開始から対象の行動が18回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1844",
+        "battleConditionSetMstId": 3063,
+        "description": "バトル開始から対象の行動が19回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1845",
+        "battleConditionSetMstId": 3064,
+        "description": "バトル開始から対象の行動が20回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1846",
+        "battleConditionSetMstId": 3065,
+        "description": "バトル開始から対象の行動が5回目以降"
+    },
+    {
+        "battleConditionMstIdCsv": "1847",
+        "battleConditionSetMstId": 3066,
+        "description": "バトル開始から対象の行動が10回目以降"
+    },
+    {
+        "battleConditionMstIdCsv": "1848",
+        "battleConditionSetMstId": 3067,
+        "description": "バトル開始から対象の行動が15回目以降"
+    },
+    {
+        "battleConditionMstIdCsv": "1849",
+        "battleConditionSetMstId": 3068,
+        "description": "バトル開始から対象の行動が20回目以降"
+    },
+    {
+        "battleConditionMstIdCsv": "1750,1850",
+        "battleConditionSetMstId": 3069,
+        "description": "トークンが100以上〜200未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1851,1852",
+        "battleConditionSetMstId": 3070,
+        "description": "トークンが200以上、300未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1853,1854",
+        "battleConditionSetMstId": 3071,
+        "description": "トークンが300以上、500未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1758",
+        "battleConditionSetMstId": 3072,
+        "description": "トークンが500以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1426",
+        "battleConditionSetMstId": 3073,
+        "description": "トークンが31以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1771",
+        "battleConditionSetMstId": 3075,
+        "description": "250未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1603,522,1,5",
+        "battleConditionSetMstId": 3076,
+        "description": "行動者は自身以外＋敵全体で1以上のダメージを与えたとき+通常攻撃発動時"
+    },
+    {
+        "battleConditionMstIdCsv": "1603,522,1,6",
+        "battleConditionSetMstId": 3077,
+        "description": "行動者は自身以外＋敵全体で1以上のダメージを与えたとき+戦闘スキル発動時"
+    },
+    {
+        "battleConditionMstIdCsv": "1603,522,1,7",
+        "battleConditionSetMstId": 3078,
+        "description": "行動者は自身以外＋敵全体で1以上のダメージを与えたとき+必殺技発動時"
+    },
+    {
+        "battleConditionMstIdCsv": "281,1,522,5",
+        "battleConditionSetMstId": 3079,
+        "description": "クリティカルダメージが発生したとき+通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "281,1,522,6",
+        "battleConditionSetMstId": 3080,
+        "description": "クリティカルダメージが発生したとき+戦闘スキル"
+    },
+    {
+        "battleConditionMstIdCsv": "281,1,522,7",
+        "battleConditionSetMstId": 3081,
+        "description": "クリティカルダメージが発生したとき+必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "1603,522,1,5,1855",
+        "battleConditionSetMstId": 3082,
+        "description": "行動者は自身以外＋敵全体で1以上のダメージを与えたとき+通常攻撃発動時+トークン500未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1603,522,1,6,1855",
+        "battleConditionSetMstId": 3083,
+        "description": "行動者は自身以外＋敵全体で1以上のダメージを与えたとき+戦闘スキル発動時+トークン500未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1603,522,1,7,1855",
+        "battleConditionSetMstId": 3084,
+        "description": "行動者は自身以外＋敵全体で1以上のダメージを与えたとき+必殺技発動時+トークン500未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "281,1,522,5,1855",
+        "battleConditionSetMstId": 3085,
+        "description": "クリティカルダメージが発生したとき+通常攻撃+トークン510未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "281,1,522,6,1855",
+        "battleConditionSetMstId": 3086,
+        "description": "クリティカルダメージが発生したとき+戦闘スキル+トークン510未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "281,1,522,7,1855",
+        "battleConditionSetMstId": 3087,
+        "description": "クリティカルダメージが発生したとき+必殺技+トークン510未満のとき"
     },
     {
         "battleConditionMstIdCsv": "1040,1095",
@@ -14718,5 +15323,30 @@
         "battleConditionMstIdCsv": "1050",
         "battleConditionSetMstId": 3100,
         "description": "ターン経過が100ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1332,1665",
+        "battleConditionSetMstId": 3134,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、戦闘スキルを使用、攻撃を与えた、攻撃が命中した敵数が1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1332,1666",
+        "battleConditionSetMstId": 3135,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、戦闘スキルを使用、攻撃を与えた、攻撃が命中した敵数が2体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1332,1667",
+        "battleConditionSetMstId": 3136,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、戦闘スキルを使用、攻撃を与えた、攻撃が命中した敵数が3体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1332,1668",
+        "battleConditionSetMstId": 3137,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、戦闘スキルを使用、攻撃を与えた、攻撃が命中した敵数が4体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1332,1669",
+        "battleConditionSetMstId": 3138,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、戦闘スキルを使用、攻撃を与えた、攻撃が命中した敵数が5体のとき"
     }
 ]

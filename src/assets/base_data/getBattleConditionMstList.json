@@ -12040,6 +12040,14 @@
         "description": "カウントダウンの解除条件を満たしたとき"
     },
     {
+        "battleConditionMstId": 1512,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "11",
+        "description": "バトル開始から自分の行動が11回以上の場合"
+    },
+    {
         "battleConditionMstId": 1513,
         "compareContent": 1001,
         "compareOperator": 1,
@@ -13928,6 +13936,206 @@
         "description": "トークンが16以上のとき"
     },
     {
+        "battleConditionMstId": 1749,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "19",
+        "description": "タルトFinalの専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 1750,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "100",
+        "description": "トークンが100以上のとき"
+    },
+    {
+        "battleConditionMstId": 1751,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "100",
+        "description": "トークンが100未満のとき"
+    },
+    {
+        "battleConditionMstId": 1752,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "200",
+        "description": "トークンが200以上のとき"
+    },
+    {
+        "battleConditionMstId": 1753,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "200",
+        "description": "トークンが200未満のとき"
+    },
+    {
+        "battleConditionMstId": 1754,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "300",
+        "description": "トークンが300以上のとき"
+    },
+    {
+        "battleConditionMstId": 1755,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "300",
+        "description": "トークンが300未満のとき"
+    },
+    {
+        "battleConditionMstId": 1756,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "400",
+        "description": "トークンが400以上のとき"
+    },
+    {
+        "battleConditionMstId": 1757,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "400",
+        "description": "トークンが400未満のとき"
+    },
+    {
+        "battleConditionMstId": 1758,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "500",
+        "description": "トークンが500以上のとき"
+    },
+    {
+        "battleConditionMstId": 1759,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "500",
+        "description": "トークンが500未満のとき"
+    },
+    {
+        "battleConditionMstId": 1760,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "600",
+        "description": "トークンが600以上のとき"
+    },
+    {
+        "battleConditionMstId": 1761,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "600",
+        "description": "トークンが600未満のとき"
+    },
+    {
+        "battleConditionMstId": 1762,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "700",
+        "description": "トークンが700以上のとき"
+    },
+    {
+        "battleConditionMstId": 1763,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "700",
+        "description": "トークンが700未満のとき"
+    },
+    {
+        "battleConditionMstId": 1764,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "800",
+        "description": "トークンが800以上のとき"
+    },
+    {
+        "battleConditionMstId": 1765,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "800",
+        "description": "トークンが800未満のとき"
+    },
+    {
+        "battleConditionMstId": 1766,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "900",
+        "description": "トークンが900以上のとき"
+    },
+    {
+        "battleConditionMstId": 1767,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "900",
+        "description": "トークンが900未満のとき"
+    },
+    {
+        "battleConditionMstId": 1768,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "1000",
+        "description": "トークンが1000以上のとき"
+    },
+    {
+        "battleConditionMstId": 1769,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "1000",
+        "description": "トークンが1000未満のとき"
+    },
+    {
+        "battleConditionMstId": 1770,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "250",
+        "description": "トークンが250以上のとき"
+    },
+    {
+        "battleConditionMstId": 1771,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "250",
+        "description": "トークンが250未満のとき"
+    },
+    {
+        "battleConditionMstId": 1772,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "750",
+        "description": "トークンが750以上のとき"
+    },
+    {
+        "battleConditionMstId": 1773,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "750",
+        "description": "トークンが750未満のとき"
+    },
+    {
         "battleConditionMstId": 1774,
         "compareContent": 314,
         "compareOperator": 4,
@@ -14294,6 +14502,294 @@
         "compareTarget": 1,
         "compareValue": "20",
         "description": "メリッサの専用バフが付与されいないとき"
+    },
+    {
+        "battleConditionMstId": 1820,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1115",
+        "description": "自分のキャラクターが「タルト」"
+    },
+    {
+        "battleConditionMstId": 1821,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1116",
+        "description": "自分のキャラクターが「リズ・ホークウッド」"
+    },
+    {
+        "battleConditionMstId": 1822,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1117",
+        "description": "自分のキャラクターが「メリッサ・ド・ヴィニョル」"
+    },
+    {
+        "battleConditionMstId": 1823,
+        "compareContent": 205,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "BARRIER,1",
+        "description": "バリアが張られた敵が1体以上存在する場合"
+    },
+    {
+        "battleConditionMstId": 1824,
+        "compareContent": 13,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "6,8",
+        "description": "自分が6ターンごとに（ターン8から）"
+    },
+    {
+        "battleConditionMstId": 1825,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "7",
+        "description": "バトル開始から自分の行動が7回目以降"
+    },
+    {
+        "battleConditionMstId": 1826,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "1",
+        "description": "バトル開始から対象の行動が1回目"
+    },
+    {
+        "battleConditionMstId": 1827,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "2",
+        "description": "バトル開始から対象の行動が2回目"
+    },
+    {
+        "battleConditionMstId": 1828,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "3",
+        "description": "バトル開始から対象の行動が3回目"
+    },
+    {
+        "battleConditionMstId": 1829,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "4",
+        "description": "バトル開始から対象の行動が4回目"
+    },
+    {
+        "battleConditionMstId": 1830,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "5",
+        "description": "バトル開始から対象の行動が5回目"
+    },
+    {
+        "battleConditionMstId": 1831,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "6",
+        "description": "バトル開始から対象の行動が6回目"
+    },
+    {
+        "battleConditionMstId": 1832,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "7",
+        "description": "バトル開始から対象の行動が7回目"
+    },
+    {
+        "battleConditionMstId": 1833,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "8",
+        "description": "バトル開始から対象の行動が8回目"
+    },
+    {
+        "battleConditionMstId": 1834,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "9",
+        "description": "バトル開始から対象の行動が9回目"
+    },
+    {
+        "battleConditionMstId": 1835,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "10",
+        "description": "バトル開始から対象の行動が10回目"
+    },
+    {
+        "battleConditionMstId": 1836,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "11",
+        "description": "バトル開始から対象の行動が11回目"
+    },
+    {
+        "battleConditionMstId": 1837,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "12",
+        "description": "バトル開始から対象の行動が12回目"
+    },
+    {
+        "battleConditionMstId": 1838,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "13",
+        "description": "バトル開始から対象の行動が13回目"
+    },
+    {
+        "battleConditionMstId": 1839,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "14",
+        "description": "バトル開始から対象の行動が14回目"
+    },
+    {
+        "battleConditionMstId": 1840,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "15",
+        "description": "バトル開始から対象の行動が15回目"
+    },
+    {
+        "battleConditionMstId": 1841,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "16",
+        "description": "バトル開始から対象の行動が16回目"
+    },
+    {
+        "battleConditionMstId": 1842,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "17",
+        "description": "バトル開始から対象の行動が17回目"
+    },
+    {
+        "battleConditionMstId": 1843,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "18",
+        "description": "バトル開始から対象の行動が18回目"
+    },
+    {
+        "battleConditionMstId": 1844,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "19",
+        "description": "バトル開始から対象の行動が19回目"
+    },
+    {
+        "battleConditionMstId": 1845,
+        "compareContent": 7,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "20",
+        "description": "バトル開始から対象の行動が20回目"
+    },
+    {
+        "battleConditionMstId": 1846,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 8,
+        "compareValue": "5",
+        "description": "バトル開始から対象の行動が5回目以降"
+    },
+    {
+        "battleConditionMstId": 1847,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 8,
+        "compareValue": "10",
+        "description": "バトル開始から対象の行動が10回目以降"
+    },
+    {
+        "battleConditionMstId": 1848,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 8,
+        "compareValue": "15",
+        "description": "バトル開始から対象の行動が15回目以降"
+    },
+    {
+        "battleConditionMstId": 1849,
+        "compareContent": 7,
+        "compareOperator": 4,
+        "compareTarget": 8,
+        "compareValue": "20",
+        "description": "バトル開始から対象の行動が20回目以降"
+    },
+    {
+        "battleConditionMstId": 1850,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "200",
+        "description": "トークンが200未満のとき"
+    },
+    {
+        "battleConditionMstId": 1851,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "200",
+        "description": "トークンが200以上のとき"
+    },
+    {
+        "battleConditionMstId": 1852,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "300",
+        "description": "トークンが300未満のとき"
+    },
+    {
+        "battleConditionMstId": 1853,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "300",
+        "description": "トークンが300以上のとき"
+    },
+    {
+        "battleConditionMstId": 1854,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "500",
+        "description": "トークンが500未満のとき"
+    },
+    {
+        "battleConditionMstId": 1855,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "500",
+        "description": "トークンが500未満のとき"
     },
     {
         "battleConditionMstId": 1856,

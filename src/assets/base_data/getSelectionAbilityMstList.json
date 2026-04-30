@@ -4183,5 +4183,20 @@
         "targetType": 2,
         "value1": 1150059,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "On triggering Ombre et Lumière, increases ATK by 5% (Stacks 4 times).<br>Increases DMG dealt when targeting elemental weakness by 10%.",
+        "name": "I'll Save It All, No Matter What!",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 144,
+        "selectionAbilityMstId": 7060,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11440101,
+        "targetType": 2,
+        "value1": 1150060,
+        "value2": 0
     }
 ]
