@@ -9,7 +9,7 @@
                 <label> <input type="checkbox" v-model="show5stars" /> Include 5-stars </label>
                 <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
                 <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
-                <label> <input type="checkbox" v-model="showUnowned" /> Show Unowned </label>
+                <label> <input type="checkbox" v-model="showUnowned" /> Include Unowned </label>
             </div>
             <div class="options-row">
                 <label> <input type="checkbox" v-model="showLevels" /> Show Magic &amp; Special levels </label>

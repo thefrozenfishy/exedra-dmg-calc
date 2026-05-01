@@ -5,11 +5,15 @@
         <div>
             <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
             <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
+            <label> <input type="checkbox" v-model="showUnowned" /> Include Unowned </label>
+        </div>
+        <div>
             <label> <input type="checkbox" v-model="showLevels" /> Show Magic and Special levels </label>
             <label> <input type="checkbox" v-model="showHearts" /> Show Heartphial levels </label>
             <label> <input type="checkbox" v-model="showDupes" /> Show Dupes </label>
-            <label> <input type="checkbox" :disabled="!(showLevels || showHearts)" v-model="colourLevels" /> Colour max
-                levels </label>
+            <label> <input type="checkbox" :disabled="!(showLevels || showHearts)" v-model="colourLevels" />
+                Colour max levels
+            </label>
         </div>
         <table class="ascension-table">
             <tbody>
@@ -22,9 +26,8 @@
                     </td>
 
                     <td class="characters-cell">
-                        <div v-for="ch in chars" :key="ch.id" draggable="true"
-                            @dragstart="onDragStart(ch)" @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove"
-                            @touchend="onTouchEnd">
+                        <div v-for="ch in chars" :key="ch.id" draggable="true" @dragstart="onDragStart(ch)"
+                            @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove" @touchend="onTouchEnd">
                             <div class="character-img-wrapper">
                                 <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
                                     <img class="character-img" :class="borderClass(ch)"
@@ -172,6 +175,7 @@ const showDupes = useSetting("showDupes", false);
 const colourLevels = useSetting("colourLevels", true);
 const show4stars = useSetting("show4stars", false);
 const show3stars = useSetting("show3stars", false);
+const showUnowned = useSetting("showUnowned", false);
 
 const round = (nr: number) => nr.toFixed(2)
 
@@ -215,6 +219,9 @@ const groupedByAscension = computed(() => {
     }
     if (!show4stars.value) {
         groups.splice(7, 1)
+    }
+    if (!showUnowned.value) {
+        groups.splice(6, 1)
     }
 
     return groups
