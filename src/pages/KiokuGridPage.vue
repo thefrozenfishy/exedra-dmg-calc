@@ -465,7 +465,7 @@ const copyAscensionList = async () => {
 }
 
 const downloadAscensionList = async () => {
-    const el = document.querySelector(".ascension-table") as HTMLElement
+    const el = document.querySelector(".er-grid") as HTMLElement
     if (!el) return
     const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
     canvas.toBlob((blob) => {
