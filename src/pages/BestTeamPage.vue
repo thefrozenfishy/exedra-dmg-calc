@@ -240,6 +240,18 @@
         <div v-if="topResults.length">
             <div class="results ">
                 <h2>Top Teams Overall</h2>
+                <div class="team-row-wrapper result-header">
+                    <div class="header-images-spacer"></div>
+                    <div class="header-columns">
+                        <div class="dmg">{{ optimizeAverageDamage ? 'Avg' : 'Max' }} Damage</div>
+                        <div class="crit">Crit Rate</div>
+                        <div class="dmg">{{ optimizeAverageDamage ? 'Max' : 'Avg' }} Damage</div>
+                        <div class="crys">Crystal 1</div>
+                        <div class="crys">Crystal 2</div>
+                        <div class="crys">Crystal 3</div>
+                        <div style="min-width: 200px;"></div>
+                    </div>
+                </div>
                 <div class="team-row-wrapper" v-for="(team, idx) in topResults" :key="idx">
                     <TeamRow :team :weakElements :offElementBuffMultReduction :offElementDebuffMultReduction
                         :loading="false" :optimalSubCrys />
@@ -248,6 +260,18 @@
                 <div v-for="[attackerName, teams] of topTeamsByAttacker" :key="attackerName" class="attacker-section">
                     <div v-if="teams?.length">
                         <h3>Top Teams for {{ attackerName }}</h3>
+                        <div class="team-row-wrapper result-header">
+                            <div class="header-images-spacer"></div>
+                            <div class="header-columns">
+                                <div class="dmg">{{ optimizeAverageDamage ? 'Avg' : 'Max' }} Damage</div>
+                                <div class="crit">Crit Rate</div>
+                                <div class="dmg">{{ optimizeAverageDamage ? 'Max' : 'Avg' }} Damage</div>
+                                <div class="crys">Crystal 1</div>
+                                <div class="crys">Crystal 2</div>
+                                <div class="crys">Crystal 3</div>
+                                <div style="min-width: 200px;"></div>
+                            </div>
+                        </div>
                         <div class="team-row-wrapper" v-for="(team, idx) in teams" :key="idx">
                             <TeamRow :team :weakElements :offElementBuffMultReduction :offElementDebuffMultReduction
                                 :loading="false" :optimalSubCrys />
@@ -679,6 +703,44 @@ async function startSimulation() {
     gap: 0.5rem;
     padding: 0.3rem 0.5rem;
     cursor: pointer;
+}
+
+.result-header {
+    opacity: 0.6;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0 8px;
+    margin-bottom: -0.5rem;
+}
+
+.header-images-spacer {
+    min-width: calc(5 * (45px + 1.2em));
+    flex-shrink: 0;
+}
+
+.header-columns {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 4px 8px;
+}
+
+.header-columns .dmg {
+    text-align: left;
+    min-width: 80px;
+}
+
+.header-columns .crit {
+    text-align: center;
+    min-width: 80px;
+}
+
+.header-columns .crys {
+    flex: 1;
+    text-align: right;
+    margin-left: 10px;
 }
 
 .dropdown li:hover {

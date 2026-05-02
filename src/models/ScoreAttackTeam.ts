@@ -679,7 +679,7 @@ export class ScoreAttackTeam {
         return this.team[idx - 1];
     };
 
-    calculate_max_dmg(enemies: Enemy[], atk_down = 0): [number, number, number, DebugSections[]] {
+    calculate_max_dmg(enemies: Enemy[], atk_down = 0): [number, number, string, DebugSections[]] {
         let dmg: number, avg_dmg: number, enemyDied: boolean;
         let total_dmg = 0;
         let average_dmg = 0;
@@ -694,7 +694,7 @@ export class ScoreAttackTeam {
             if ((eff as ActiveSkill).skillDetailMstId === this.dps.data.special_id * 10000 + 1001) return eff.range === 3
         })
         if (isAoeDps) {
-             targetTypeAtPosition = [
+            targetTypeAtPosition = [
                 EnemyTargetTypes.L_OTHER,
                 EnemyTargetTypes.L_PROXIMITY,
                 EnemyTargetTypes.TARGET,
@@ -703,7 +703,7 @@ export class ScoreAttackTeam {
             ];
         }
         else {
-             targetTypeAtPosition = [
+            targetTypeAtPosition = [
                 EnemyTargetTypes.TARGET,
                 EnemyTargetTypes.L_PROXIMITY,
                 EnemyTargetTypes.R_PROXIMITY,
@@ -722,7 +722,9 @@ export class ScoreAttackTeam {
             allDebugSections[i] = debugSections;
         }
 
-        return [total_dmg, average_dmg, Math.round(critRate * 100), allDebugSections];
+        let crit_rate = (100 * critRate).toFixed(1)
+        if (critRate * 1000 % 10 === 0)  crit_rate = Math.round(critRate * 100).toFixed(0)
+        return [total_dmg, average_dmg, crit_rate, allDebugSections];
     }
 
     private formatContributions(contribs: DebugContributions, saySource: boolean): string {
