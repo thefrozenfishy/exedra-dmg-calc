@@ -21,9 +21,7 @@
                     @dragover.prevent="dragOver = index" @dragleave="dragLeave" @drop="onDrop(index)"
                     v-for="(chars, index) in groupedByAscension" :key="index" class="asc-row">
 
-                    <td class="asc-cell">{{ index === 6 ? "Not Owned" : index === 7 ? "4 Stars" : index === 8 ? "3 Stars"
-                        : `A${5 - index}` }}
-                    </td>
+                    <td class="asc-cell">{{ (chars as any).label }}</td>
 
                     <td class="characters-cell">
                         <div v-for="ch in chars" :key="ch.id" draggable="true" @dragstart="onDragStart(ch)"
@@ -34,7 +32,8 @@
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
                                 </a>
-                                <div class="dupe-badge level-badge editable" v-if="showDupes && index === 0"
+                                <div class="dupe-badge level-badge editable"
+                                    v-if="showDupes && (chars as any).label === 'A5'"
                                     @click.stop="startEdit(ch, 'dupes', $event)">
                                     <template v-if="isEditing(ch, 'dupes')">
                                         <input type="number" v-model.number="editValue" @blur="commitEdit(ch, 'dupes')"
@@ -44,8 +43,8 @@
                                         + {{ ch.dupes }}
                                     </template>
                                 </div>
-                                <div class="heart-level-badge level-badge editable" v-if="showHearts && index !== 6"
-                                    :class="colourLevels
+                                <div class="heart-level-badge level-badge editable"
+                                    v-if="showHearts && (chars as any).label !== 'Not Owned'" :class="colourLevels
                                         ? ch.heartphialLvl === KiokuConstants.maxHeartphialLvl ? 'maxLvl' : 'notMaxLvl'
                                         : ''" @click.stop="startEdit(ch, 'heartphialLvl', $event)">
                                     <template v-if="isEditing(ch, 'heartphialLvl')">
@@ -59,8 +58,8 @@
                                     </template>
                                 </div>
 
-                                <div class="magic-level-badge level-badge editable" v-if="showLevels && index !== 6"
-                                    :class="colourLevels
+                                <div class="magic-level-badge level-badge editable"
+                                    v-if="showLevels && (chars as any).label !== 'Not Owned'" :class="colourLevels
                                         ? ch.magicLvl === KiokuConstants.maxMagicLvl ? 'maxLvl' : 'notMaxLvl'
                                         : ''" @click.stop="startEdit(ch, 'magicLvl', $event)">
                                     <template v-if="isEditing(ch, 'magicLvl')">
@@ -74,8 +73,7 @@
                                 </div>
 
                                 <div class="special-level-badge level-badge editable"
-                                    v-if="showLevels && index !== 6 && ch.rarity !== 3" :class="colourLevels
-                                        ? isMaxSpecialLvl(ch) ? 'maxLvl' : 'notMaxLvl'
+                                    v-if="showLevels && (chars as any).label !== 'Not Owned' && ch.rarity !== 3" :class="colourLevels ? isMaxSpecialLvl(ch) ? 'maxLvl' : 'notMaxLvl'
                                         : ''" @click.stop="startEdit(ch, 'specialLvl', $event)">
                                     <template v-if="isEditing(ch, 'specialLvl')">
                                         <input type="number" v-model.number="editValue" :min="1"
@@ -191,38 +189,38 @@ const isMaxLevels = (ch: Character): boolean => ch.magicLvl === KiokuConstants.m
 
 
 const groupedByAscension = computed(() => {
-    const groups: Character[][] = [[], [], [], [], [], [], [], [], []]
+    type LabelledGroup = Character[] & { label?: string }
+    const groups: LabelledGroup[] = Array.from({ length: 9 }, () => [])
+
+    groups[0].label = "A5"
+    groups[1].label = "A4"
+    groups[2].label = "A3"
+    groups[3].label = "A2"
+    groups[4].label = "A1"
+    groups[5].label = "A0"
+    groups[6].label = "Not Owned"
+    groups[7].label = "4 Stars"
+    groups[8].label = "3 Stars"
 
     for (const ch of store.characters) {
-        const asc = ch.ascension
-        const index = 5 - asc
         if (ch.rarity === 4 || ch.name === "Lux☆Magica") {
             groups[7].push(ch)
         } else if (ch.rarity === 3) {
             groups[8].push(ch)
         } else if (ch.enabled) {
-            groups[index].push(ch)
+            groups[5 - ch.ascension].push(ch)
         } else {
             groups[6].push(ch)
         }
     }
+
     for (let i = 0; i < groups.length; i++) {
-        if (i === 6) {
-            groups[i].sort((a, b) => a.id - b.id)
-            continue
-        } else {
-            groups[i].sort((a, b) => b.id - a.id)
-        }
+        groups[i].sort((a, b) => i === 6 ? a.id - b.id : b.id - a.id)
     }
-    if (!show3stars.value) {
-        groups.splice(8, 1)
-    }
-    if (!show4stars.value) {
-        groups.splice(7, 1)
-    }
-    if (!showUnowned.value) {
-        groups.splice(6, 1)
-    }
+
+    if (!show3stars.value) groups.splice(8, 1)
+    if (!show4stars.value) groups.splice(7, 1)
+    if (!showUnowned.value) groups.splice(6, 1)
 
     return groups
 })
