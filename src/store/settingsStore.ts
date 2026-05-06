@@ -7,7 +7,6 @@ export function useSetting<T>(key: string, defaultValue: T) {
 
   const localRef = ref<T>(stored)
 
-  // whenever ref changes → save to store
   watch(localRef, (val) => {
     store.set(key, val)
   })

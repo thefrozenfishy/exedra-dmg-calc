@@ -5,20 +5,25 @@
     <div class="battle-output">
       <h2>Battle Result</h2>
       <h3>{{ formatDmg(battleOutput) }}</h3>
-      <h4>Score Attack score: {{ sa_score }} given: <input style="width: 3em;" v-model.number="hp_percentage_team"
-          type="number" step="1" max="100" min="0" />% health
-        remaining, <input style="width: 3em;" v-model.number="turns" type="number" step="1" min="1" max="16" /> turns,
-        and <span
-          title="To find score multiplier, calculate (dmg_dealt / points_from_dmg_done) in an SA run, this changes for each SA">score
-          multiplier of <input style="width: 4em;" v-model.number="scoreMultiplier" type="number" step="0.1"
-            min="0" /></span></h4>
+      <h4>
+        Score Attack score: {{ sa_score }} given:
+        <input style="width: 3em;" v-model.number="hp_percentage_team" type="number" step="1" max="100" min="0" />%
+        health remaining,
+        <input style="width: 3em;" v-model.number="turns" type="number" step="1" min="1" max="16" /> turns, and
+        <span
+          title="To find score multiplier, calculate (dmg_dealt / points_from_dmg_done) in an SA run, this changes for each SA">
+          score multiplier of
+          <input style="width: 4em;" v-model.number="scoreMultiplier" type="number" step="0.1" min="0" />
+        </span>
+      </h4>
     </div>
 
     <div class="team-grid">
       <div v-for="(slot, index) in team.slots" :key="index" class="team-slot">
-        <h2>{{ index === attackerIndex ? 'Damage Dealer' : 'Member' }}
-          {{ index < attackerIndex ? index + 1 : index > attackerIndex ? index : "" }}</h2>
-
+        <h2>
+          {{ index === attackerIndex ? 'Damage Dealer' : 'Member' }}
+          {{ index < attackerIndex ? index + 1 : index > attackerIndex ? index : "" }}
+        </h2>
         <CharacterEditor :index="index" :slot="slot" :setMain="team.setMain" :setSupport="team.setSupport"
           :onChangeCrys="onChangeCrys" :onChangeSubCrys="onChangeSubCrys" />
       </div>
@@ -29,47 +34,14 @@
 
   <div class="team-page">
     <h2>Extra settings</h2>
-    <div key="buffMultReduction">
-      <label>Buff Bonus Reduction (%):
-        <input type="number" v-model.number="buffMultReduction" step="1" />
-      </label>
-    </div>
-    <div key="debuffMultReduction">
-      <label>Debuff Bonus Reduction (%):
-        <input type="number" v-model.number="debuffMultReduction" step="1" />
-      </label>
-    </div>
-    <div key="attackerHealth">
-      <label>Attacker HP when using ultimate (%):
-        <input type="number" v-model.number="attackerHealth" step="1" />
-      </label>
-    </div>
-
-    <div class="arena-buffs-section">
-      <h4>Arena Buffs <span class="arena-buffs-subtitle">(applied to all units)</span></h4>
-      <div v-for="(entry, idx) in arenaEffects" :key="idx" class="arena-buff-row">
-        <select v-model="entry.type">
-          <option v-for="(label, key) in knownBoosts" :key="key" :value="key">
-            {{ key }} ({{ label }})
-          </option>
-        </select>
-        <input type="number" v-model.number="entry.value" step="0.1" style="width: 5em;" />
-        <span class="arena-buff-unit">%</span>
-        <button class="arena-buff-remove" @click="removeArenaEffect(idx)">✕</button>
-      </div>
-      <button class="arena-buff-add" @click="addArenaEffect">+ Add Arena Buff</button>
-    </div>
-
+    <DamageReductionInputs />
+    <ArenaBuffs />
     <div class="weak-elements">
-      <h4>Active aliments</h4>
-      <div class="aliment-grid">
-        <div v-for="aliment in aliments" :key="aliment.name" class="aliment" :class="{ disabled: !aliment.enabled }"
-          @click="aliment.enabled = !aliment.enabled">
-          <img :src="`/exedra-dmg-calc/aliments/${aliment.display}.png`" :alt="aliment.display"
-            :title="aliment.display" />
-          <span>{{ aliment.display }}</span>
-        </div>
-      </div>
+      <AlimentToggler ref="alimentRef">
+        <template #heading>
+          <h4>Active aliments</h4>
+        </template>
+      </AlimentToggler>
     </div>
   </div>
 
@@ -84,7 +56,6 @@
     <div class="debug-sections">
       <template v-for="key in debugSectionOrder" :key="key">
         <div v-if="visibleDebugSections[key]" class="debug-section-row">
-
           <div class="debug-section-header">
             {{ debugSectionLabels[key] }}
           </div>
@@ -99,9 +70,7 @@
                     <template v-for="(entries, effectType) in battleOutput[3][index][rawSectionKey(key)!]"
                       :key="effectType">
                       <div class="debug-contrib-group">
-                        <div class="debug-contrib-group-label">
-                          {{ effectType }}
-                        </div>
+                        <div class="debug-contrib-group-label">{{ effectType }}</div>
 
                         <div v-for="[detail, value, sourceName, dotTargetCharId, dotTargetName] in entries"
                           :key="`${skillDetailId(detail)}_${dotTargetCharId ?? 'dps'}`" class="debug-contrib-row"
@@ -138,11 +107,9 @@
                               @click.stop="copyToClipboard(String(skillDetailId(detail)))">
                               {{ skillDetailId(detail) }}
                             </span>
-
                             <span v-if="detail.activeConditionSetIdCsv" class="debug-contrib-cond">
                               A{{ detail.activeConditionSetIdCsv }}
                             </span>
-
                             <span v-if="detail.startConditionSetIdCsv" class="debug-contrib-cond">
                               S{{ detail.startConditionSetIdCsv }}
                             </span>
@@ -171,15 +138,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
-import { ScoreAttackTeam, knownBoosts, type DebugSections, type DotAllyCompositeKey, type EnemyDebuffCompositeKey } from '../models/ScoreAttackTeam'
+import { ScoreAttackTeam, type DebugSections, type DotAllyCompositeKey, type EnemyDebuffCompositeKey } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
+import ArenaBuffs from '../components/ArenaBuffs.vue'
+import AlimentToggler from '../components/AlimentToggler.vue'
+import DamageReductionInputs from '../components/DamageReductionInputs.vue'
 import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
 import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
 import { useSetting } from '../store/settingsStore'
-import { Aliment, KiokuArgs, SkillDetail, skillDetailId } from '../types/KiokuTypes'
+import { KiokuArgs, SkillDetail, skillDetailId } from '../types/KiokuTypes'
 
 const attackerIndex = 2
 
@@ -189,6 +159,9 @@ const attackerHealth = useSetting("attackerHealth", 100)
 const scoreMultiplier = useSetting("scoreMultiplier", 35)
 const turns = useSetting("turns", 3)
 const hp_percentage_team = useSetting("hp_percentage_team", 20)
+const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
+
+const alimentRef = ref<InstanceType<typeof AlimentToggler> | null>(null)
 
 const sa_score = computed(() => {
   if (typeof battleOutput.value === 'string') return "unknown"
@@ -199,7 +172,7 @@ function onChangeCrys(charIdx: number, crysIdx: number, rawValue: string) {
   const main = team.slots[charIdx].main
   if (!main) return
   const current = main.crys ?? ["EX", "", ""]
-  current[crysIdx - 1] = rawValue as string
+  current[crysIdx - 1] = rawValue
   team.setMain(charIdx, { ...main, crys: current } as any)
 }
 
@@ -207,7 +180,7 @@ function onChangeSubCrys(charIdx: number, crysIdx: number, rawValue: string) {
   const main = team.slots[charIdx].main
   if (!main) return
   const current = main.crys_sub ?? Array(9).fill([""]).flat()
-  current[crysIdx - 1] = rawValue as string
+  current[crysIdx - 1] = rawValue
   team.setMain(charIdx, { ...main, crys_sub: current } as any)
 }
 
@@ -225,15 +198,13 @@ function isDebuffSection(rawKey: RawKey): boolean {
 
 function getStackOverride(detail: SkillDetail, enemyIdx?: number): number {
   if (enemyIdx !== undefined) {
-    const key = `${skillDetailId(detail)}_enemy${enemyIdx}`
-    return debuffStackOverrides.get(key) ?? detail.value2
+    return debuffStackOverrides.get(`${skillDetailId(detail)}_enemy${enemyIdx}`) ?? detail.value2
   }
   return stackOverrides.get(skillDetailId(detail)) ?? detail.value2
 }
 
 function onStackChange(e: Event, detail: SkillDetail, enemyIdx?: number) {
-  const v = Number((e.target as HTMLInputElement).value)
-  const clamped = Math.max(0, Math.min(detail.value2, v))
+  const clamped = Math.max(0, Math.min(detail.value2, Number((e.target as HTMLInputElement).value)))
   if (enemyIdx !== undefined) {
     const key = `${skillDetailId(detail)}_enemy${enemyIdx}`
     if (clamped === detail.value2) debuffStackOverrides.delete(key)
@@ -245,62 +216,30 @@ function onStackChange(e: Event, detail: SkillDetail, enemyIdx?: number) {
 }
 
 const bannedEffectIds = reactive<Record<number, true>>({})
-
-function toggleBannedEffect(id: number) {
-  if (bannedEffectIds[id]) delete bannedEffectIds[id]
-  else bannedEffectIds[id] = true
-}
-
-function clearBanned() {
-  for (const key of Object.keys(bannedEffectIds)) {
-    delete bannedEffectIds[Number(key)]
-  }
-}
-
+const toggleBannedEffect = (id: number) => { if (bannedEffectIds[id]) delete bannedEffectIds[id]; else bannedEffectIds[id] = true }
+const clearBanned = () => { for (const key of Object.keys(bannedEffectIds)) delete bannedEffectIds[Number(key)] }
 const bannedCount = computed(() => Object.keys(bannedEffectIds).length)
 const hasBannedEffects = computed(() => bannedCount.value > 0)
 
 const enabledDotAllyEffects = reactive<Record<DotAllyCompositeKey, true>>({})
-
-function dotCompositeKey(detail: SkillDetail, dotTargetCharId: string): DotAllyCompositeKey {
-  return `${skillDetailId(detail)}_${dotTargetCharId}` as DotAllyCompositeKey
-}
-
-function toggleDotAllyEffect(detail: SkillDetail, dotTargetCharId: string) {
+const dotCompositeKey = (detail: SkillDetail, dotTargetCharId: string): DotAllyCompositeKey =>
+  `${skillDetailId(detail)}_${dotTargetCharId}` as DotAllyCompositeKey
+const toggleDotAllyEffect = (detail: SkillDetail, dotTargetCharId: string) => {
   const key = dotCompositeKey(detail, dotTargetCharId)
-  if (enabledDotAllyEffects[key]) delete enabledDotAllyEffects[key]
-  else enabledDotAllyEffects[key] = true
+  if (enabledDotAllyEffects[key]) delete enabledDotAllyEffects[key]; else enabledDotAllyEffects[key] = true
 }
-
-function isDotAllyEnabled(detail: SkillDetail, dotTargetCharId: string): boolean {
-  return !!enabledDotAllyEffects[dotCompositeKey(detail, dotTargetCharId)]
-}
+const isDotAllyEnabled = (detail: SkillDetail, dotTargetCharId: string) =>
+  !!enabledDotAllyEffects[dotCompositeKey(detail, dotTargetCharId)]
 
 const disabledEnemyDebuffs = reactive<Set<EnemyDebuffCompositeKey>>(new Set())
-
-function enemyDebuffCompositeKey(detail: SkillDetail, enemyIdx: number): EnemyDebuffCompositeKey {
-  return `${skillDetailId(detail)}_enemy${enemyIdx}` as EnemyDebuffCompositeKey
-}
-
-function toggleEnemyDebuffDisabled(detail: SkillDetail, enemyIdx: number) {
+const enemyDebuffCompositeKey = (detail: SkillDetail, enemyIdx: number): EnemyDebuffCompositeKey =>
+  `${skillDetailId(detail)}_enemy${enemyIdx}` as EnemyDebuffCompositeKey
+const toggleEnemyDebuffDisabled = (detail: SkillDetail, enemyIdx: number) => {
   const key = enemyDebuffCompositeKey(detail, enemyIdx)
-  if (disabledEnemyDebuffs.has(key)) disabledEnemyDebuffs.delete(key)
-  else disabledEnemyDebuffs.add(key)
+  if (disabledEnemyDebuffs.has(key)) disabledEnemyDebuffs.delete(key); else disabledEnemyDebuffs.add(key)
 }
-
-function isEnemyDebuffEnabled(detail: SkillDetail, enemyIdx: number): boolean {
-  return !disabledEnemyDebuffs.has(enemyDebuffCompositeKey(detail, enemyIdx))
-}
-
-const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
-
-function addArenaEffect() {
-  arenaEffects.value = [...arenaEffects.value, { type: Object.keys(knownBoosts)[0], value: 0 }]
-}
-
-function removeArenaEffect(idx: number) {
-  arenaEffects.value = arenaEffects.value.toSpliced(idx, 1)
-}
+const isEnemyDebuffEnabled = (detail: SkillDetail, enemyIdx: number) =>
+  !disabledEnemyDebuffs.has(enemyDebuffCompositeKey(detail, enemyIdx))
 
 type RawKey = 'rawReceived' | 'rawContributed' | 'rawDebuffs' | 'rawEnemyDebuffs'
 
@@ -308,48 +247,23 @@ function isDotAllyRow(dotTargetCharId: string | undefined, rawKey: RawKey): bool
   return !!dotTargetCharId && rawKey !== 'rawDebuffs' && rawKey !== 'rawEnemyDebuffs'
 }
 
-function contribRowClass(
-  detail: SkillDetail,
-  dotTargetCharId: string | undefined,
-  rawKey: RawKey,
-  enemyIdx: number,
-): Record<string, boolean> {
+function contribRowClass(detail: SkillDetail, dotTargetCharId: string | undefined, rawKey: RawKey, enemyIdx: number) {
   const isEnemyDebuff = rawKey === 'rawEnemyDebuffs'
-  const enemyEnabled = isEnemyDebuff
-    ? isEnemyDebuffEnabled(detail, enemyIdx)
-    : true
-
   return {
     'is-disabled':
       (rawKey === 'rawDebuffs' && !!bannedEffectIds[skillDetailId(detail)]) ||
-      (isEnemyDebuff && !enemyEnabled) ||
+      (isEnemyDebuff && !isEnemyDebuffEnabled(detail, enemyIdx)) ||
       (!isEnemyDebuff && !isDotAllyRow(dotTargetCharId, rawKey) && !!bannedEffectIds[skillDetailId(detail)]),
-
-    'is-dot-off':
-      isDotAllyRow(dotTargetCharId, rawKey) &&
-      !isDotAllyEnabled(detail, dotTargetCharId!),
-
-    'is-dot-on':
-      isDotAllyRow(dotTargetCharId, rawKey) &&
-      isDotAllyEnabled(detail, dotTargetCharId!),
+    'is-dot-off': isDotAllyRow(dotTargetCharId, rawKey) && !isDotAllyEnabled(detail, dotTargetCharId!),
+    'is-dot-on': isDotAllyRow(dotTargetCharId, rawKey) && isDotAllyEnabled(detail, dotTargetCharId!),
   }
 }
 
-function handleContribRowClick(
-  detail: SkillDetail,
-  dotTargetCharId: string | undefined,
-  rawKey: RawKey,
-  enemyIdx: number,
-) {
-  if (rawKey === 'rawEnemyDebuffs') {
-    toggleEnemyDebuffDisabled(detail, enemyIdx)
-  } else if (rawKey === 'rawDebuffs') {
-    toggleBannedEffect(skillDetailId(detail))
-  } else if (isDotAllyRow(dotTargetCharId, rawKey)) {
-    toggleDotAllyEffect(detail, dotTargetCharId!)
-  } else {
-    toggleBannedEffect(skillDetailId(detail))
-  }
+function handleContribRowClick(detail: SkillDetail, dotTargetCharId: string | undefined, rawKey: RawKey, enemyIdx: number) {
+  if (rawKey === 'rawEnemyDebuffs') toggleEnemyDebuffDisabled(detail, enemyIdx)
+  else if (rawKey === 'rawDebuffs') toggleBannedEffect(skillDetailId(detail))
+  else if (isDotAllyRow(dotTargetCharId, rawKey)) toggleDotAllyEffect(detail, dotTargetCharId!)
+  else toggleBannedEffect(skillDetailId(detail))
 }
 
 function prettyDisplay(value: number, detail?: SkillDetail): string {
@@ -360,23 +274,13 @@ function prettyDisplay(value: number, detail?: SkillDetail): string {
 }
 
 type SectionKey = keyof DebugSections
-const debugSectionOrder: SectionKey[] = [
-  'calc', 'enemy', 'kiokuStats', 'kiokuReceived', 'kiokuContributed', 'kiokuDebuffs', 'kiokuEnemyDebuffs',
-]
+const debugSectionOrder: SectionKey[] = ['calc', 'enemy', 'kiokuStats', 'kiokuReceived', 'kiokuContributed', 'kiokuDebuffs', 'kiokuEnemyDebuffs']
 const debugSectionLabels: Record<SectionKey, string> = {
-  calc: 'DMG Calculation',
-  enemy: 'Enemy Stats',
-  kiokuStats: 'Kioku Stats',
-  kiokuReceived: 'Buffs Received',
-  kiokuContributed: 'Contributed to DPS',
-  kiokuDebuffs: 'Debuffs Applied by Char',
-  kiokuEnemyDebuffs: 'Debuffs on This Enemy',
-  rawReceived: '',
-  rawContributed: '',
-  rawDebuffs: '',
-  rawEnemyDebuffs: '',
+  calc: 'DMG Calculation', enemy: 'Enemy Stats', kiokuStats: 'Kioku Stats',
+  kiokuReceived: 'Buffs Received', kiokuContributed: 'Contributed to DPS',
+  kiokuDebuffs: 'Debuffs Applied by Char', kiokuEnemyDebuffs: 'Debuffs on This Enemy',
+  rawReceived: '', rawContributed: '', rawDebuffs: '', rawEnemyDebuffs: '',
 }
-
 const rawSectionKey = (key: SectionKey): RawKey | null => {
   if (key === 'kiokuReceived') return 'rawReceived'
   if (key === 'kiokuContributed') return 'rawContributed'
@@ -384,32 +288,19 @@ const rawSectionKey = (key: SectionKey): RawKey | null => {
   if (key === 'kiokuEnemyDebuffs') return 'rawEnemyDebuffs'
   return null
 }
-
 const visibleDebugSections = reactive<Record<SectionKey, boolean>>({
-  calc: true,
-  enemy: true,
-  kiokuStats: true,
-  kiokuReceived: true,
-  kiokuContributed: true,
-  kiokuDebuffs: false,
-  kiokuEnemyDebuffs: true,
-  rawReceived: false,
-  rawContributed: false,
-  rawDebuffs: false,
-  rawEnemyDebuffs: false,
+  calc: true, enemy: true, kiokuStats: true, kiokuReceived: true,
+  kiokuContributed: true, kiokuDebuffs: false, kiokuEnemyDebuffs: true,
+  rawReceived: false, rawContributed: false, rawDebuffs: false, rawEnemyDebuffs: false,
 })
-
-const debugSlotTitle = (idx: number) => {
-  const labels = ['L Other', 'L Proximity', 'Target', 'R Proximity', 'R Other']
-  return labels[idx] ?? `Slot ${idx}`
-}
+const debugSlotTitle = (idx: number) => ['L Other', 'L Proximity', 'Target', 'R Proximity', 'R Other'][idx] ?? `Slot ${idx}`
 
 const team = useTeamStore()
 const enemies = useEnemyStore()
 const isFullTeam = computed(() => team.slots.map(slot => slot.main).filter(Boolean).length === 5)
 
 const teamInstance = computed(() => {
-  if (!isFullTeam.value) return;
+  if (!isFullTeam.value) return
   try {
     const transformedMembers = team.slots.map(m => {
       const support = m.support ? new ScoreAttackKioku({ ...m.support }) : null
@@ -420,12 +311,6 @@ const teamInstance = computed(() => {
       )
     }) as ScoreAttackKioku[]
 
-    const bannedSet = new Set(Object.keys(bannedEffectIds).map(Number))
-    const enabledDotSet = new Set(Object.keys(enabledDotAllyEffects) as DotAllyCompositeKey[])
-    const stackOverridesCopy = new Map(stackOverrides)
-    const disabledEnemyDebuffsCopy = new Set(disabledEnemyDebuffs)
-    const debuffStackOverridesCopy = new Map(debuffStackOverrides) as Map<EnemyDebuffCompositeKey, number>
-
     const arenaEffectsMap: Record<string, number> = {}
     for (const { type, value } of arenaEffects.value) {
       if (!type) continue
@@ -434,23 +319,21 @@ const teamInstance = computed(() => {
 
     return new ScoreAttackTeam(
       transformedMembers[attackerIndex],
-      transformedMembers.filter((v, i) => i !== attackerIndex),
+      transformedMembers.filter((_, i) => i !== attackerIndex),
       attackerHealth.value,
-      aliments.filter(el => el.enabled).map(el => el.name),
+      alimentRef.value?.aliments.filter(a => a.enabled).map(a => a.name) ?? [],
       arenaEffectsMap,
       true,
-      bannedSet,
-      enabledDotSet,
-      stackOverridesCopy,
-      disabledEnemyDebuffsCopy,
-      debuffStackOverridesCopy,
+      new Set(Object.keys(bannedEffectIds).map(Number)),
+      new Set(Object.keys(enabledDotAllyEffects) as DotAllyCompositeKey[]),
+      new Map(stackOverrides),
+      new Set(disabledEnemyDebuffs),
+      new Map(debuffStackOverrides) as Map<EnemyDebuffCompositeKey, number>,
     )
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
     console.error(err)
-    for (let index = 0; index < 5; index++) {
-      team.setMain(index, undefined)
-    }
+    for (let i = 0; i < 5; i++) team.setMain(i, undefined)
   }
 })
 
@@ -468,17 +351,6 @@ async function copyToClipboard(text: string) {
     toast.error("Failed to copy", { position: toast.POSITION.TOP_RIGHT, icon: false })
   }
 }
-
-const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1).toLowerCase()
-const aliments = reactive([
-  { name: Aliment.BURN, display: capitalize(Aliment.BURN), enabled: useSetting("burn-enabled", true) },
-  { name: Aliment.WEAKNESS, display: capitalize(Aliment.WEAKNESS), enabled: useSetting("weakness-enabled", true) },
-  { name: Aliment.POISON, display: capitalize(Aliment.POISON), enabled: useSetting("poison-enabled", true) },
-  { name: Aliment.STUN, display: capitalize(Aliment.STUN), enabled: useSetting("stun-enabled", true) },
-  { name: Aliment.CURSE, display: capitalize(Aliment.CURSE), enabled: useSetting("curse-enabled", true) },
-  { name: Aliment.WOUND, display: capitalize(Aliment.WOUND), enabled: useSetting("wound-enabled", true) },
-  { name: Aliment.VORTEX, display: capitalize(Aliment.VORTEX), enabled: useSetting("vortex-enabled", true) },
-])
 </script>
 
 <style scoped>
@@ -503,54 +375,6 @@ const aliments = reactive([
   border-radius: 8px;
   padding-bottom: 1rem;
   min-width: 0;
-}
-
-.support-section {
-  margin-top: 1rem;
-  padding-top: 0.5rem;
-  border-top: 1px dashed #999;
-}
-
-.stat-inputs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: auto;
-  height: 100%;
-}
-
-.stat-inputs label {
-  width: 90%;
-  display: block;
-  margin-left: 0.3rem;
-}
-
-.stats select {
-  width: 90%;
-}
-
-.aliment-grid {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.aliment {
-  cursor: pointer;
-  text-align: center;
-  transition: opacity 0.2s;
-}
-
-.aliment img {
-  width: 30px;
-  height: 30px;
-  display: block;
-  margin: 0 auto;
-}
-
-.aliment.disabled {
-  opacity: 0.3;
 }
 
 .banned-banner {
@@ -583,65 +407,6 @@ const aliments = reactive([
   background: rgba(200, 60, 60, 0.45);
 }
 
-.arena-buffs-section {
-  width: 100%;
-  max-width: 600px;
-  margin: 1rem 0;
-}
-
-.arena-buffs-subtitle {
-  font-size: 0.75rem;
-  opacity: 0.6;
-  font-weight: normal;
-  margin-left: 0.4rem;
-}
-
-.arena-buff-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.4rem;
-}
-
-.arena-buff-row select {
-  flex: 1;
-  min-width: 0;
-}
-
-.arena-buff-unit {
-  font-size: 0.85rem;
-  opacity: 0.7;
-}
-
-.arena-buff-remove {
-  background: rgba(200, 60, 60, 0.2);
-  border: 1px solid rgba(200, 60, 60, 0.4);
-  border-radius: 4px;
-  color: #fcc;
-  cursor: pointer;
-  padding: 0.15rem 0.5rem;
-  font-size: 0.8rem;
-}
-
-.arena-buff-remove:hover {
-  background: rgba(200, 60, 60, 0.4);
-}
-
-.arena-buff-add {
-  margin-top: 0.4rem;
-  padding: 0.25rem 0.75rem;
-  background: rgba(60, 120, 200, 0.2);
-  border: 1px solid rgba(60, 120, 200, 0.4);
-  border-radius: 4px;
-  color: #aacff9;
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-
-.arena-buff-add:hover {
-  background: rgba(60, 120, 200, 0.4);
-}
-
 .debug-sections {
   display: flex;
   flex-direction: column;
@@ -669,12 +434,9 @@ const aliments = reactive([
 }
 
 .debug-section-grid .debug-slot {
-  min-width: 0;
-}
-
-.debug-section-grid .debug-slot {
   border-right: 1px solid #222;
   padding: 0.4rem;
+  min-width: 0;
 }
 
 .debug-section-grid .debug-slot:last-child {
