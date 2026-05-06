@@ -44,6 +44,22 @@
         <input type="number" v-model.number="attackerHealth" step="1" />
       </label>
     </div>
+
+    <div class="arena-buffs-section">
+      <h4>Arena Buffs <span class="arena-buffs-subtitle">(applied to all units)</span></h4>
+      <div v-for="(entry, idx) in arenaEffects" :key="idx" class="arena-buff-row">
+        <select v-model="entry.type">
+          <option v-for="(label, key) in knownBoosts" :key="key" :value="key">
+            {{ key }} ({{ label }})
+          </option>
+        </select>
+        <input type="number" v-model.number="entry.value" step="0.1" style="width: 5em;" />
+        <span class="arena-buff-unit">%</span>
+        <button class="arena-buff-remove" @click="removeArenaEffect(idx)">✕</button>
+      </div>
+      <button class="arena-buff-add" @click="addArenaEffect">+ Add Arena Buff</button>
+    </div>
+
     <div class="weak-elements">
       <h4>Active aliments</h4>
       <div class="aliment-grid">
@@ -157,7 +173,7 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
-import { ScoreAttackTeam, type DebugSections, type DotAllyCompositeKey, type EnemyDebuffCompositeKey } from '../models/ScoreAttackTeam'
+import { ScoreAttackTeam, knownBoosts, type DebugSections, type DotAllyCompositeKey, type EnemyDebuffCompositeKey } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
 import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
@@ -274,6 +290,16 @@ function toggleEnemyDebuffDisabled(detail: SkillDetail, enemyIdx: number) {
 
 function isEnemyDebuffEnabled(detail: SkillDetail, enemyIdx: number): boolean {
   return !disabledEnemyDebuffs.has(enemyDebuffCompositeKey(detail, enemyIdx))
+}
+
+const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
+
+function addArenaEffect() {
+  arenaEffects.value = [...arenaEffects.value, { type: Object.keys(knownBoosts)[0], value: 0 }]
+}
+
+function removeArenaEffect(idx: number) {
+  arenaEffects.value = arenaEffects.value.toSpliced(idx, 1)
 }
 
 type RawKey = 'rawReceived' | 'rawContributed' | 'rawDebuffs' | 'rawEnemyDebuffs'
@@ -400,11 +426,18 @@ const teamInstance = computed(() => {
     const disabledEnemyDebuffsCopy = new Set(disabledEnemyDebuffs)
     const debuffStackOverridesCopy = new Map(debuffStackOverrides) as Map<EnemyDebuffCompositeKey, number>
 
+    const arenaEffectsMap: Record<string, number> = {}
+    for (const { type, value } of arenaEffects.value) {
+      if (!type) continue
+      arenaEffectsMap[type] = (arenaEffectsMap[type] ?? 0) + value
+    }
+
     return new ScoreAttackTeam(
       transformedMembers[attackerIndex],
       transformedMembers.filter((v, i) => i !== attackerIndex),
       attackerHealth.value,
       aliments.filter(el => el.enabled).map(el => el.name),
+      arenaEffectsMap,
       true,
       bannedSet,
       enabledDotSet,
@@ -469,7 +502,7 @@ const aliments = reactive([
   border: 2px solid #ccc;
   border-radius: 8px;
   padding-bottom: 1rem;
-  min-width: 0; 
+  min-width: 0;
 }
 
 .support-section {
@@ -548,6 +581,65 @@ const aliments = reactive([
 
 .clear-banned-btn:hover {
   background: rgba(200, 60, 60, 0.45);
+}
+
+.arena-buffs-section {
+  width: 100%;
+  max-width: 600px;
+  margin: 1rem 0;
+}
+
+.arena-buffs-subtitle {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  font-weight: normal;
+  margin-left: 0.4rem;
+}
+
+.arena-buff-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.arena-buff-row select {
+  flex: 1;
+  min-width: 0;
+}
+
+.arena-buff-unit {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.arena-buff-remove {
+  background: rgba(200, 60, 60, 0.2);
+  border: 1px solid rgba(200, 60, 60, 0.4);
+  border-radius: 4px;
+  color: #fcc;
+  cursor: pointer;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+.arena-buff-remove:hover {
+  background: rgba(200, 60, 60, 0.4);
+}
+
+.arena-buff-add {
+  margin-top: 0.4rem;
+  padding: 0.25rem 0.75rem;
+  background: rgba(60, 120, 200, 0.2);
+  border: 1px solid rgba(60, 120, 200, 0.4);
+  border-radius: 4px;
+  color: #aacff9;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.arena-buff-add:hover {
+  background: rgba(60, 120, 200, 0.4);
 }
 
 .debug-sections {

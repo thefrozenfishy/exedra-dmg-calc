@@ -199,6 +199,7 @@ export class ScoreAttackTeam {
     private disabledEnemyDebuffs: Set<EnemyDebuffCompositeKey>;
     private stackOverrides: Map<number, number>;
     private debuffStackOverrides: Map<EnemyDebuffCompositeKey, number>;
+    private arenaEffects: Record<string, number>;
 
     private hasDpsDotPop: boolean = false;
     private dotAllyIndices: { idx: number; charId: string; name: string }[] = [];
@@ -208,6 +209,7 @@ export class ScoreAttackTeam {
         team: ScoreAttackKioku[],
         attackerHealth: number,
         activeAliments: Aliment[],
+        arenaEffects: Record<string, number>,
         debug = false,
         userBannedEffects: Set<number> = new Set(),
         enabledDotAllyEffects: Set<DotAllyCompositeKey> = new Set(),
@@ -225,6 +227,7 @@ export class ScoreAttackTeam {
         this.stackOverrides = stackOverrides;
         this.disabledEnemyDebuffs = disabledEnemyDebuffs;
         this.debuffStackOverrides = debuffStackOverrides;
+        this.arenaEffects = arenaEffects;
         this.setup();
     }
 
@@ -395,6 +398,13 @@ export class ScoreAttackTeam {
                         }
                     }
                 }
+            }
+        }
+
+        for (const [effectType, value] of Object.entries(this.arenaEffects)) {
+            if (!value) continue;
+            for (let i = 0; i < 5; i++) {
+                this.accumulateIntoPool(effectType, value * 10, this.allyContexts[i].effects);
             }
         }
 
@@ -723,7 +733,7 @@ export class ScoreAttackTeam {
         }
 
         let crit_rate = (100 * critRate).toFixed(1)
-        if (critRate * 1000 % 10 === 0)  crit_rate = Math.round(critRate * 100).toFixed(0)
+        if (critRate * 1000 % 10 === 0) crit_rate = Math.round(critRate * 100).toFixed(0)
         return [total_dmg, average_dmg, crit_rate, allDebugSections];
     }
 

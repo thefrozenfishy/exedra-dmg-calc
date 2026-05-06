@@ -31,6 +31,7 @@ export interface FindBestTeamOptions {
     offElementDebuffMultReduction: number
     attackerHealth: number
     optimizeAverageDamage: boolean
+    arenaEffectsMap: Record<string, number>
     onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number) => void,
     onError?: (error: any) => void
 }

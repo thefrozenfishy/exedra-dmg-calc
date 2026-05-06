@@ -116,6 +116,7 @@ export async function findBestTeam({
     offElementDebuffMultReduction,
     attackerHealth,
     optimizeAverageDamage,
+    arenaEffectsMap,
     onProgress,
     onError
 }: FindBestTeamOptions): Promise<any[]> {
@@ -284,7 +285,8 @@ export async function findBestTeam({
                                                         return k!
                                                     }),
                                                     attackerHealth,
-                                                    activeAliments
+                                                    activeAliments,
+                                                    arenaEffectsMap,
                                                 );
                                                 let [max_dmg, average_dmg, critRate] = team.calculate_max_dmg(enemies, 0)
                                                 if (optimizeAverageDamage) [average_dmg, max_dmg] = [max_dmg, average_dmg]

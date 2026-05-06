@@ -76,6 +76,21 @@
                 <input type="number" v-model.number="attackerHealth" step="1" />
             </label>
 
+            <div class="arena-buffs-section">
+                <h4>Arena Buffs <span class="arena-buffs-subtitle">(applied to all units)</span></h4>
+                <div v-for="(entry, idx) in arenaEffects" :key="idx" class="arena-buff-row">
+                    <select v-model="entry.type">
+                        <option v-for="(label, key) in knownBoosts" :key="key" :value="key">
+                            {{ key }} ({{ label }})
+                        </option>
+                    </select>
+                    <input type="number" v-model.number="entry.value" step="0.1" style="width: 5em;" />
+                    <span class="arena-buff-unit">%</span>
+                    <button class="arena-buff-remove" @click="removeArenaEffect(idx)">✕</button>
+                </div>
+                <button class="arena-buff-add" @click="addArenaEffect">+ Add Arena Buff</button>
+            </div>
+
             <div>
                 <h3>Role Distribution</h3>
 
@@ -293,6 +308,7 @@ import { KiokuRole, Character, KiokuElement, Aliment, elementAlimentMap } from '
 import { toast } from "vue3-toastify"
 import { FinalTeam } from '../types/BestTeamTypes'
 import { useSetting } from '../store/settingsStore'
+import { knownBoosts } from '../models/ScoreAttackTeam'
 
 const enemies = useEnemyStore()
 const store = useCharacterStore()
@@ -311,6 +327,16 @@ const defaultIgnoredKioku = members.value.filter(c => ["Nightmare Stinger", "Lyn
 
 const workerRef = ref<Worker | null>(null)
 const progress = ref<FinalTeam>({})
+
+const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
+
+function addArenaEffect() {
+    arenaEffects.value = [...arenaEffects.value, { type: Object.keys(knownBoosts)[0], value: 0 }]
+}
+
+function removeArenaEffect(idx: number) {
+    arenaEffects.value = arenaEffects.value.toSpliced(idx, 1)
+}
 
 const topTeamsPerKioku = useSetting("topTeamsPerKioku", 5)
 const topTeams = useSetting("topTeams", 20)
@@ -557,6 +583,11 @@ async function startSimulation() {
     const extraAttackersVal = extraAttackers.value.map(c => c.name)
     const obligatoryKiokuVal = obligatoryKioku.value.map(c => c.name)
     const ignoredKiokuVal = ignoredKioku.value.map(c => c.name).filter(c => !obligatoryKiokuVal.includes(c))
+    const arenaEffectsMap: Record<string, number> = {}
+    for (const { type, value } of arenaEffects.value) {
+        if (!type) continue
+        arenaEffectsMap[type] = (arenaEffectsMap[type] ?? 0) + value
+    }
 
     workerRef.value.postMessage({
         options: {
@@ -582,6 +613,7 @@ async function startSimulation() {
             offElementDebuffMultReduction: offElementDebuffMultReduction.value,
             attackerHealth: attackerHealth.value,
             optimizeAverageDamage: optimizeAverageDamage.value,
+            arenaEffectsMap
         }
     })
 }
@@ -751,6 +783,65 @@ async function startSimulation() {
     width: 24px;
     height: 24px;
     border-radius: 50%;
+}
+
+.arena-buffs-section {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+}
+
+.arena-buffs-subtitle {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    font-weight: normal;
+    margin-left: 0.4rem;
+}
+
+.arena-buff-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+}
+
+.arena-buff-row select {
+    flex: 1;
+    min-width: 0;
+}
+
+.arena-buff-unit {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.arena-buff-remove {
+    background: rgba(200, 60, 60, 0.2);
+    border: 1px solid rgba(200, 60, 60, 0.4);
+    border-radius: 4px;
+    color: #fcc;
+    cursor: pointer;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.arena-buff-remove:hover {
+    background: rgba(200, 60, 60, 0.4);
+}
+
+.arena-buff-add {
+    margin-top: 0.4rem;
+    padding: 0.25rem 0.75rem;
+    background: rgba(60, 120, 200, 0.2);
+    border: 1px solid rgba(60, 120, 200, 0.4);
+    border-radius: 4px;
+    color: #aacff9;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.arena-buff-add:hover {
+    background: rgba(60, 120, 200, 0.4);
 }
 
 .progress-bar {

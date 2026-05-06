@@ -1,6 +1,7 @@
 __pycache__
 .venv
 .vscode
+.history
 history
 results
 gather_data.py
