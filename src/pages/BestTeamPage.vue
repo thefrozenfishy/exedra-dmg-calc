@@ -1,8 +1,7 @@
 <template>
     <div class="gallery-page">
 
-
-        <EnemySelector></EnemySelector>
+        <EnemySelector />
 
         <div style="height: 40px;"></div>
 
@@ -44,56 +43,12 @@
                 Calculate using perfect Crit rate, Crit Damage & atk crystalis substats
             </label>
 
-            <label>Buff Bonus Reduction (%):
-                <input type="number" v-model.number="buffMultReduction" step="1" />
-            </label>
+            <DamageReductionInputs />
 
-            <div class="input-with-clear">
-                <label>Off-Element Buff Bonus Reduction (%):
-                    <input type="number" v-model.number="offElementBuffMultReduction" />
-                    <button class="clear-button" @click="clearBuff" v-if="offElementBuffMultReduction != null">
-                        ✖
-                    </button>
-                    <div v-else style="padding: 1em; display: inline;"> </div>
-                </label>
-            </div>
-
-            <label>Debuff Bonus Reduction (%):
-                <input type="number" v-model.number="debuffMultReduction" step="1" />
-            </label>
-
-            <div class="input-with-clear">
-                <label>Off-Element Debuff Bonus Reduction (%):
-                    <input type="number" v-model.number="offElementDebuffMultReduction" />
-                    <button class="clear-button" @click="clearDebuff" v-if="offElementDebuffMultReduction != null">
-                        ✖
-                    </button>
-                    <div v-else style="padding: 1em; display: inline;"> </div>
-                </label>
-            </div>
-
-            <label>Attacker HP when using ultimate (%):
-                <input type="number" v-model.number="attackerHealth" step="1" />
-            </label>
-
-            <div class="arena-buffs-section">
-                <h4>Arena Buffs <span class="arena-buffs-subtitle">(applied to all units)</span></h4>
-                <div v-for="(entry, idx) in arenaEffects" :key="idx" class="arena-buff-row">
-                    <select v-model="entry.type">
-                        <option v-for="(label, key) in knownBoosts" :key="key" :value="key">
-                            {{ key }} ({{ label }})
-                        </option>
-                    </select>
-                    <input type="number" v-model.number="entry.value" step="0.1" style="width: 5em;" />
-                    <span class="arena-buff-unit">%</span>
-                    <button class="arena-buff-remove" @click="removeArenaEffect(idx)">✕</button>
-                </div>
-                <button class="arena-buff-add" @click="addArenaEffect">+ Add Arena Buff</button>
-            </div>
+            <ArenaBuffs />
 
             <div>
                 <h3>Role Distribution</h3>
-
                 <div class="role-grid">
                     <div class="role-box">
                         <img :src="'/exedra-dmg-calc/roles/Attacker.png'" alt="Attacker" />
@@ -136,7 +91,6 @@
                         <span>Flex spot (Healer, Defender or Breaker)</span>
                         <div class="number">{{ otherCount - minDefender - minHealer - minBreaker }}</div>
                     </div>
-
                 </div>
             </div>
 
@@ -152,22 +106,12 @@
                 </div>
             </div>
 
-            <div class="weak-elements">
-                <h3>Active aliments</h3>
-                <div class="element-aliment-grid">
-                    <div v-for="aliment in aliments" :key="aliment.name" class="aliment"
-                        :class="{ disabled: !aliment.enabled }" @click="aliment.enabled = !aliment.enabled">
-                        <img :src="`/exedra-dmg-calc/aliments/${aliment.display}.png`" :alt="aliment.display"
-                            :title="aliment.display" />
-                        <span>{{ aliment.display }}</span>
-                    </div>
-                </div>
-            </div>
+            <AlimentToggler ref="alimentRef" />
 
             <div class="kioku-selector">
-                <h3>Ignored Kioku </h3>
-                These are Kioku that do not have any dmg boosting effects, and by default will be ignored to speed up
-                computing time
+                <h3>Ignored Kioku</h3>
+                <p>These are Kioku that do not have any dmg boosting effects, and by default will be ignored to speed up
+                    computing time</p>
 
                 <div class="selected-kioku">
                     <div @click="removeIgnoredKioku(char)" v-for="char in ignoredKioku" :key="char.id" class="chip">
@@ -251,22 +195,10 @@
             {{ running ? "Running" : 'Start Simulation' }}
         </button>
 
-
         <div v-if="topResults.length">
-            <div class="results ">
+            <div class="results">
                 <h2>Top Teams Overall</h2>
-                <div class="team-row-wrapper result-header">
-                    <div class="header-images-spacer"></div>
-                    <div class="header-columns">
-                        <div class="dmg">{{ optimizeAverageDamage ? 'Avg' : 'Max' }} Damage</div>
-                        <div class="crit">Crit Rate</div>
-                        <div class="dmg">{{ optimizeAverageDamage ? 'Max' : 'Avg' }} Damage</div>
-                        <div class="crys">Crystal 1</div>
-                        <div class="crys">Crystal 2</div>
-                        <div class="crys">Crystal 3</div>
-                        <div style="min-width: 200px;"></div>
-                    </div>
-                </div>
+                <ResultsHeader :optimizeAverageDamage />
                 <div class="team-row-wrapper" v-for="(team, idx) in topResults" :key="idx">
                     <TeamRow :team :weakElements :offElementBuffMultReduction :offElementDebuffMultReduction
                         :loading="false" :optimalSubCrys />
@@ -275,18 +207,7 @@
                 <div v-for="[attackerName, teams] of topTeamsByAttacker" :key="attackerName" class="attacker-section">
                     <div v-if="teams?.length">
                         <h3>Top Teams for {{ attackerName }}</h3>
-                        <div class="team-row-wrapper result-header">
-                            <div class="header-images-spacer"></div>
-                            <div class="header-columns">
-                                <div class="dmg">{{ optimizeAverageDamage ? 'Avg' : 'Max' }} Damage</div>
-                                <div class="crit">Crit Rate</div>
-                                <div class="dmg">{{ optimizeAverageDamage ? 'Max' : 'Avg' }} Damage</div>
-                                <div class="crys">Crystal 1</div>
-                                <div class="crys">Crystal 2</div>
-                                <div class="crys">Crystal 3</div>
-                                <div style="min-width: 200px;"></div>
-                            </div>
-                        </div>
+                        <ResultsHeader :optimizeAverageDamage />
                         <div class="team-row-wrapper" v-for="(team, idx) in teams" :key="idx">
                             <TeamRow :team :weakElements :offElementBuffMultReduction :offElementDebuffMultReduction
                                 :loading="false" :optimalSubCrys />
@@ -299,16 +220,19 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, computed, ref, ComputedRef, watch } from 'vue'
+import { reactive, computed, ref, ComputedRef } from 'vue'
 import TeamRow from '../components/TeamRow.vue'
 import EnemySelector from '../components/EnemySelector.vue'
+import ArenaBuffs from '../components/ArenaBuffs.vue'
+import AlimentToggler from '../components/AlimentToggler.vue'
+import DamageReductionInputs from '../components/DamageReductionInputs.vue'
+import ResultsHeader from '../components/ResultsHeader.vue'
 import { useEnemyStore } from '../store/singleTeamStore'
 import { useCharacterStore } from '../store/characterStore'
-import { KiokuRole, Character, KiokuElement, Aliment, elementAlimentMap } from '../types/KiokuTypes'
+import { KiokuRole, Character, KiokuElement, elementAlimentMap } from '../types/KiokuTypes'
 import { toast } from "vue3-toastify"
 import { FinalTeam } from '../types/BestTeamTypes'
 import { useSetting } from '../store/settingsStore'
-import { knownBoosts } from '../models/ScoreAttackTeam'
 
 const enemies = useEnemyStore()
 const store = useCharacterStore()
@@ -328,34 +252,21 @@ const defaultIgnoredKioku = members.value.filter(c => ["Nightmare Stinger", "Lyn
 const workerRef = ref<Worker | null>(null)
 const progress = ref<FinalTeam>({})
 
-const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
-
-function addArenaEffect() {
-    arenaEffects.value = [...arenaEffects.value, { type: Object.keys(knownBoosts)[0], value: 0 }]
-}
-
-function removeArenaEffect(idx: number) {
-    arenaEffects.value = arenaEffects.value.toSpliced(idx, 1)
-}
+const alimentRef = ref<InstanceType<typeof AlimentToggler> | null>(null)
 
 const topTeamsPerKioku = useSetting("topTeamsPerKioku", 5)
 const topTeams = useSetting("topTeams", 20)
 const include4StarAttackers = useSetting("include4StarAttackers", false)
 const include4StarSupports = useSetting("include4StarSupports", false)
 const include4StarOthers = useSetting("include4StarOthers", false)
-const buffMultReduction = useSetting("buffMultReduction", 0);
-const debuffMultReduction = useSetting("debuffMultReduction", 0);
-const offElementBuffMultReduction = useSetting("offElementBuffMultReduction", undefined);
-const clearBuff = () => {
-    offElementBuffMultReduction.value = undefined;
-};
-const offElementDebuffMultReduction = useSetting("offElementDebuffMultReduction", undefined);
-const optimizeAverageDamage = useSetting("optimizeAverageDamage", false);
-const clearDebuff = () => {
-    offElementDebuffMultReduction.value = undefined;
-};
-const attackerHealth = useSetting("attackerHealth", 100);
+const buffMultReduction = useSetting("buffMultReduction", 0)
+const debuffMultReduction = useSetting("debuffMultReduction", 0)
+const offElementBuffMultReduction = useSetting("offElementBuffMultReduction", undefined)
+const offElementDebuffMultReduction = useSetting("offElementDebuffMultReduction", undefined)
+const optimizeAverageDamage = useSetting("optimizeAverageDamage", false)
+const attackerHealth = useSetting("attackerHealth", 100)
 const optimalSubCrys = useSetting("optimalSubCrys", true)
+const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
 
 const weakElements = reactive([
     { name: KiokuElement.Flame, enabled: useSetting("flame-enabled", true) },
@@ -366,25 +277,16 @@ const weakElements = reactive([
     { name: KiokuElement.Void, enabled: useSetting("void-enabled", true) },
 ])
 
-const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1).toLowerCase()
-const aliments = reactive([
-    { name: Aliment.BURN, display: capitalize(Aliment.BURN), enabled: useSetting("burn-enabled", true) },
-    { name: Aliment.WEAKNESS, display: capitalize(Aliment.WEAKNESS), enabled: useSetting("weakness-enabled", true) },
-    { name: Aliment.POISON, display: capitalize(Aliment.POISON), enabled: useSetting("poison-enabled", true) },
-    { name: Aliment.STUN, display: capitalize(Aliment.STUN), enabled: useSetting("stun-enabled", true) },
-    { name: Aliment.CURSE, display: capitalize(Aliment.CURSE), enabled: useSetting("curse-enabled", true) },
-    { name: Aliment.WOUND, display: capitalize(Aliment.WOUND), enabled: useSetting("wound-enabled", true) },
-    { name: Aliment.VORTEX, display: capitalize(Aliment.VORTEX), enabled: useSetting("vortex-enabled", true) },
-])
-
-const toggleElement = element => {
-    element.enabled = !element.enabled;
-    aliments.find(a => a.name === elementAlimentMap[element.name]).enabled = element.enabled;
-};
+// Keep weak element toggles in sync with their linked aliment in AlimentToggler
+const toggleElement = (element: typeof weakElements[number]) => {
+    element.enabled = !element.enabled
+    if (!alimentRef.value) return
+    const linked = alimentRef.value.aliments.find(a => a.name === elementAlimentMap[element.name])
+    if (linked) linked.enabled = element.enabled
+}
 
 const deBufferCount = useSetting("deBufferCount", 3)
 const otherCount = computed(() => 4 - deBufferCount.value)
-
 const minHealer = useSetting("minHealer", 0)
 const minDefender = useSetting("minDefender", 0)
 const minBreaker = useSetting("minBreaker", 0)
@@ -403,75 +305,41 @@ const showIgnoredKiokuDropdown = ref(false)
 
 const filteredAttackers = computed(() => {
     const q = extraAttackerQuery.value.toLowerCase()
-    return members.value.filter(
-        (m) =>
-            !extraAttackers.value.some((a) => a.id === m.id) &&
-            m.rarity !== 3 &&
-            m.role !== KiokuRole.Attacker &&
-            (m.name.toLowerCase().includes(q) ||
-                m.character_en.toLowerCase().includes(q)
-                || (m.name === "Time Stop Strike" && q.startsWith("moe"))
-            ))
+    return members.value.filter(m =>
+        !extraAttackers.value.some(a => a.id === m.id) &&
+        m.rarity !== 3 &&
+        m.role !== KiokuRole.Attacker &&
+        (m.name.toLowerCase().includes(q) || m.character_en.toLowerCase().includes(q) || (m.name === "Time Stop Strike" && q.startsWith("moe")))
+    )
 })
 const filteredKioku = computed(() => {
     const q = obligatoryKiokuQuery.value.toLowerCase()
-    return members.value.filter(
-        (m) =>
-            !obligatoryKioku.value.some((a) => a.id === m.id) &&
-            m.rarity !== 3 &&
-            (m.name.toLowerCase().includes(q) ||
-                m.character_en.toLowerCase().includes(q)
-                || (m.name === "Time Stop Strike" && q.startsWith("moe"))
-            ))
+    return members.value.filter(m =>
+        !obligatoryKioku.value.some(a => a.id === m.id) &&
+        m.rarity !== 3 &&
+        (m.name.toLowerCase().includes(q) || m.character_en.toLowerCase().includes(q) || (m.name === "Time Stop Strike" && q.startsWith("moe")))
+    )
 })
 const filteredIgnoredKioku = computed(() => {
     const q = ignoredKiokuQuery.value.toLowerCase()
-    return members.value.filter(
-        (m) =>
-            !ignoredKioku.value.some((a) => a.id === m.id) &&
-            m.rarity !== 3 &&
-            (m.name.toLowerCase().includes(q) ||
-                m.character_en.toLowerCase().includes(q)
-                || (m.name === "Time Stop Strike" && q.startsWith("moe"))
-            ))
+    return members.value.filter(m =>
+        !ignoredKioku.value.some(a => a.id === m.id) &&
+        m.rarity !== 3 &&
+        (m.name.toLowerCase().includes(q) || m.character_en.toLowerCase().includes(q) || (m.name === "Time Stop Strike" && q.startsWith("moe")))
+    )
 })
 
-function addExtraAttacker(char: Character) {
-    extraAttackers.value = [...extraAttackers.value, char]
-    extraAttackerQuery.value = ""
-    showExtraAttackerDropdown.value = false
-}
-function addObligatoryKioku(char: Character) {
-    obligatoryKioku.value = [...obligatoryKioku.value, char]
-    obligatoryKiokuQuery.value = ""
-    showObligatoryKiokuDropdown.value = false
-}
-function addIgnoredKioku(char: Character) {
-    ignoredKioku.value = [...ignoredKioku.value, char]
-    ignoredKiokuQuery.value = ""
-    showIgnoredKiokuDropdown.value = false
-}
+function addExtraAttacker(char: Character) { extraAttackers.value = [...extraAttackers.value, char]; extraAttackerQuery.value = ""; showExtraAttackerDropdown.value = false }
+function addObligatoryKioku(char: Character) { obligatoryKioku.value = [...obligatoryKioku.value, char]; obligatoryKiokuQuery.value = ""; showObligatoryKiokuDropdown.value = false }
+function addIgnoredKioku(char: Character) { ignoredKioku.value = [...ignoredKioku.value, char]; ignoredKiokuQuery.value = ""; showIgnoredKiokuDropdown.value = false }
 
-function removeExtraAttacker(char: Character) {
-    extraAttackers.value = extraAttackers.value.filter((a) => a.id !== char.id)
-}
-function removeObligatoryKioku(char: Character) {
-    obligatoryKioku.value = obligatoryKioku.value.filter((a) => a.id !== char.id)
-}
-function removeIgnoredKioku(char: Character) {
-    ignoredKioku.value = ignoredKioku.value.filter((a) => a.id !== char.id)
-}
+function removeExtraAttacker(char: Character) { extraAttackers.value = extraAttackers.value.filter(a => a.id !== char.id) }
+function removeObligatoryKioku(char: Character) { obligatoryKioku.value = obligatoryKioku.value.filter(a => a.id !== char.id) }
+function removeIgnoredKioku(char: Character) { ignoredKioku.value = ignoredKioku.value.filter(a => a.id !== char.id) }
 
-function hideExtraAttackerDropdown() {
-    setTimeout(() => (showExtraAttackerDropdown.value = false), 150)
-}
-function hideObligatoryKiokuDropdown() {
-    setTimeout(() => (showObligatoryKiokuDropdown.value = false), 150)
-}
-function hideIgnoredKiokuDropdown() {
-    setTimeout(() => (showIgnoredKiokuDropdown.value = false), 150)
-}
-
+function hideExtraAttackerDropdown() { setTimeout(() => (showExtraAttackerDropdown.value = false), 150) }
+function hideObligatoryKiokuDropdown() { setTimeout(() => (showObligatoryKiokuDropdown.value = false), 150) }
+function hideIgnoredKiokuDropdown() { setTimeout(() => (showIgnoredKiokuDropdown.value = false), 150) }
 
 const populateTeam = (result: any[]): FinalTeam => ({
     optimized_dmg: result[0],
@@ -505,51 +373,31 @@ const populateStatusTeam = (result: any[]) => ({
     supp4: members.value.find(m => m.name === result[4])!,
 })
 
-
 const sortedResults: ComputedRef<any[][]> = computed(() => [...results].sort((a, b) => b[0] - a[0]))
 
-
 function mergeCells(results: any[]): FinalTeam[] {
-    /*
-        Merges dmg, crit rate and crys into lists, so show more teams and less small crys varations
-    */
     const merged = results.reduce((acc: any[], row: any) => {
-        const key = JSON.stringify([row[3], row[4], row[5], row[9], row[10], row[11], row[12], row[13], row[14], row[15]]);
-        const prev = acc[acc.length - 1];
-
+        const key = JSON.stringify([row[3], row[4], row[5], row[9], row[10], row[11], row[12], row[13], row[14], row[15]])
+        const prev = acc[acc.length - 1]
         if (prev?.key === key) {
-            prev[0].push(row[0]);
-            prev[1].push(row[1]);
-            prev[2].push(row[2]);
-            prev[6].push(row[6]);
-            prev[7].push(row[7]);
-            prev[8].push(row[8]);
+            prev[0].push(row[0]); prev[1].push(row[1]); prev[2].push(row[2])
+            prev[6].push(row[6]); prev[7].push(row[7]); prev[8].push(row[8])
         } else {
-            acc.push({
-                ...row,
-                0: [row[0]],
-                1: [row[1]],
-                2: [row[2]],
-                6: [row[6]],
-                7: [row[7]],
-                8: [row[8]],
-                key
-            });
+            acc.push({ ...row, 0: [row[0]], 1: [row[1]], 2: [row[2]], 6: [row[6]], 7: [row[7]], 8: [row[8]], key })
         }
-        return acc;
-    }, []);
-
-    merged.forEach(m => delete m.key);
-    return merged.map(populateTeam);
-};
+        return acc
+    }, [])
+    merged.forEach(m => delete m.key)
+    return merged.map(populateTeam)
+}
 
 const topResults = computed(() => mergeCells(sortedResults.value).slice(0, topTeams.value))
 
 const topTeamsByAttacker = computed(() => {
     const map: Record<string, FinalTeam[]> = {}
     prevAttackers.forEach(a => {
-        const results = sortedResults.value.filter(r => r[3] === a.name)
-        if (results.length) map[a.name] = mergeCells(sortedResults.value.filter(r => r[3] === a.name)).slice(0, topTeamsPerKioku.value)
+        const filtered = sortedResults.value.filter(r => r[3] === a.name)
+        if (filtered.length) map[a.name] = mergeCells(filtered).slice(0, topTeamsPerKioku.value)
     })
     const highestAtk = Object.fromEntries(Object.entries(map).map(([a, b]) => [a, Math.max(...b.map(t => t.optimized_dmg[0]))]))
     return Object.entries(map).sort((a, b) => highestAtk[b[0]] - highestAtk[a[0]])
@@ -580,9 +428,6 @@ async function startSimulation() {
         }
     }
 
-    const extraAttackersVal = extraAttackers.value.map(c => c.name)
-    const obligatoryKiokuVal = obligatoryKioku.value.map(c => c.name)
-    const ignoredKiokuVal = ignoredKioku.value.map(c => c.name).filter(c => !obligatoryKiokuVal.includes(c))
     const arenaEffectsMap: Record<string, number> = {}
     for (const { type, value } of arenaEffects.value) {
         if (!type) continue
@@ -596,10 +441,10 @@ async function startSimulation() {
             include4StarSupports: include4StarSupports.value,
             include4StarOthers: include4StarOthers.value,
             weakElements: weakElements.filter(el => el.enabled).map(el => el.name),
-            activeAliments: aliments.filter(el => el.enabled).map(el => el.name),
-            extraAttackers: extraAttackersVal,
-            obligatoryKioku: obligatoryKiokuVal,
-            ignoredKioku: ignoredKiokuVal,
+            activeAliments: alimentRef.value?.aliments.filter(a => a.enabled).map(a => a.name) ?? [],
+            extraAttackers: extraAttackers.value.map(c => c.name),
+            obligatoryKioku: obligatoryKioku.value.map(c => c.name),
+            ignoredKioku: ignoredKioku.value.map(c => c.name).filter(c => !obligatoryKioku.value.map(c => c.name).includes(c)),
             deBufferCount: deBufferCount.value,
             otherCount: otherCount.value,
             minHealer: minHealer.value,
@@ -613,11 +458,10 @@ async function startSimulation() {
             offElementDebuffMultReduction: offElementDebuffMultReduction.value,
             attackerHealth: attackerHealth.value,
             optimizeAverageDamage: optimizeAverageDamage.value,
-            arenaEffectsMap
+            arenaEffectsMap,
         }
     })
 }
-
 </script>
 
 <style scoped>
@@ -642,8 +486,7 @@ async function startSimulation() {
     justify-content: center;
 }
 
-.element,
-.aliment {
+.element {
     cursor: pointer;
     text-align: center;
     transition: opacity 0.3s;
@@ -656,15 +499,7 @@ async function startSimulation() {
     margin: 0 auto;
 }
 
-.aliment img {
-    width: 30px;
-    height: 30px;
-    display: block;
-    margin: 0 auto;
-}
-
-.element.disabled,
-.aliment.disabled {
+.element.disabled {
     opacity: 0.3;
 }
 
@@ -674,9 +509,8 @@ async function startSimulation() {
 
 .results {
     display: flex;
-    flex-direction: column
+    flex-direction: column;
 }
-
 
 .kioku-selector {
     margin-top: 1rem;
@@ -686,7 +520,6 @@ async function startSimulation() {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-bottom: 0.5rem;
     max-width: 600px;
     margin: 0 auto;
     justify-content: center;
@@ -737,44 +570,6 @@ async function startSimulation() {
     cursor: pointer;
 }
 
-.result-header {
-    opacity: 0.6;
-    font-size: 11px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 0 8px;
-    margin-bottom: -0.5rem;
-}
-
-.header-images-spacer {
-    min-width: calc(5 * (45px + 1.2em));
-    flex-shrink: 0;
-}
-
-.header-columns {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 4px 8px;
-}
-
-.header-columns .dmg {
-    text-align: left;
-    min-width: 80px;
-}
-
-.header-columns .crit {
-    text-align: center;
-    min-width: 80px;
-}
-
-.header-columns .crys {
-    flex: 1;
-    text-align: right;
-    margin-left: 10px;
-}
-
 .dropdown li:hover {
     background: #f0f0f0;
 }
@@ -783,65 +578,6 @@ async function startSimulation() {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-}
-
-.arena-buffs-section {
-    width: 100%;
-    max-width: 600px;
-    margin: auto;
-}
-
-.arena-buffs-subtitle {
-    font-size: 0.75rem;
-    opacity: 0.6;
-    font-weight: normal;
-    margin-left: 0.4rem;
-}
-
-.arena-buff-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.4rem;
-}
-
-.arena-buff-row select {
-    flex: 1;
-    min-width: 0;
-}
-
-.arena-buff-unit {
-    font-size: 0.85rem;
-    opacity: 0.7;
-}
-
-.arena-buff-remove {
-    background: rgba(200, 60, 60, 0.2);
-    border: 1px solid rgba(200, 60, 60, 0.4);
-    border-radius: 4px;
-    color: #fcc;
-    cursor: pointer;
-    padding: 0.15rem 0.5rem;
-    font-size: 0.8rem;
-}
-
-.arena-buff-remove:hover {
-    background: rgba(200, 60, 60, 0.4);
-}
-
-.arena-buff-add {
-    margin-top: 0.4rem;
-    padding: 0.25rem 0.75rem;
-    background: rgba(60, 120, 200, 0.2);
-    border: 1px solid rgba(60, 120, 200, 0.4);
-    border-radius: 4px;
-    color: #aacff9;
-    cursor: pointer;
-    font-size: 0.85rem;
-}
-
-.arena-buff-add:hover {
-    background: rgba(60, 120, 200, 0.4);
 }
 
 .progress-bar {
@@ -915,17 +651,5 @@ async function startSimulation() {
 
 .gallery-page {
     padding-bottom: 400px;
-}
-
-.input-with-clear {
-    position: relative;
-    gap: 2rem;
-}
-
-.clear-button {
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    padding: 0 0 0 1em;
 }
 </style>
