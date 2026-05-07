@@ -20,6 +20,7 @@ export default defineComponent({
         <router-link to="/pvp-simulator">PvP Calculator</router-link>
         <router-link to="/pvp-how-to">PvP 101</router-link>
         <router-link to="/link-raid">Link Raid Tool</router-link>
+        <router-link to="/crys-reroll">Crystalis Reroller</router-link>
         <!--router-link to="/tier-lists">Tier Lists</router-link-->
         <router-link to="/about">About</router-link>
       </nav>

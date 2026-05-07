@@ -1,7 +1,7 @@
 <template>
     <div class="add-user">
         <h2>Link Raid Automation</h2>
-        <p>This tool helps automate Link Raid battles download it <a
+        <p>This tool helps automate Link Raid battles. Download it <a
                 href="https://github.com/thefrozenfishy/exedra-link-raid-automation">here</a></p>
         <p>If you wish to add yourself to the community priority list add yourself to the list here</p>
         <form @submit.prevent="submitUsername" class="form">
