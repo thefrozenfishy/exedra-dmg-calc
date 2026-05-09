@@ -168,12 +168,12 @@ const extraCollected = useSetting("extraCollected", 0)
 const extraTotal = computed(() => (showDupes.value ? ownedFiveStars.value.reduce((sum, ch) => sum + ch.dupes, 0) : extraCollected.value))
 
 const showLevels = useSetting("showLevels", true);
-const showHearts = useSetting("showHearts", false);
-const showDupes = useSetting("showDupes", false);
+const showHearts = useSetting("showHearts", true);
+const showDupes = useSetting("showDupes", true);
 const colourLevels = useSetting("colourLevels", true);
 const show4stars = useSetting("show4stars", false);
 const show3stars = useSetting("show3stars", false);
-const showUnowned = useSetting("showUnowned", false);
+const showUnowned = useSetting("showUnowned", true);
 
 const round = (nr: number) => nr.toFixed(2)
 

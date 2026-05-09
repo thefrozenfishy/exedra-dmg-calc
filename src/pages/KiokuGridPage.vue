@@ -209,7 +209,7 @@ const shouldShow = (r: number) => {
 const show5stars = useSetting("showGrid5stars", true)
 const show4stars = useSetting("showGrid4stars", false)
 const show3stars = useSetting("showGrid3stars", false)
-const showUnowned = useSetting("showGridUnowned", false)
+const showUnowned = useSetting("showGridUnowned", true)
 const showLevels = useSetting("showLevels", true)
 const showHearts = useSetting("showHearts", false)
 const colourLevels = useSetting("colourLevels", true)
