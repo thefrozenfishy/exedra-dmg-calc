@@ -1,11 +1,19 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 
-export function useSetting<T>(key: string, defaultValue: T) {
+const settingRefs = new Map<string, ReturnType<typeof ref>>()
+
+export function useSetting<T>(key: string, defaultValue: T): Ref<T> {
   const store = useSettingsStore()
-  const stored = store.get(key, defaultValue)
 
+  if (settingRefs.has(key)) {
+    return settingRefs.get(key) as Ref<T>
+  }
+
+  const stored = store.get(key, defaultValue) as T
   const localRef = ref<T>(stored)
+
+  settingRefs.set(key, localRef)
 
   watch(localRef, (val) => {
     store.set(key, val)
