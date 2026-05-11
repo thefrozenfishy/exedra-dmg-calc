@@ -4198,5 +4198,20 @@
         "targetType": 2,
         "value1": 1150060,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases critical rate by 20%.<br>On own special attack, increases SPD by 15% (2 turns).",
+        "name": "Now for Your Punishment",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 145,
+        "selectionAbilityMstId": 7061,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10230101,
+        "targetType": 2,
+        "value1": 1150061,
+        "value2": 0
     }
 ]

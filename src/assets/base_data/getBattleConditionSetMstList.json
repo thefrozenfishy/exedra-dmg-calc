@@ -14565,6 +14565,21 @@
         "description": "行動者は敵 AND 相手が呪い状態ではない場合"
     },
     {
+        "battleConditionMstIdCsv": "1,5,281",
+        "battleConditionSetMstId": 2941,
+        "description": "行動者は味方+行動タイプは通常攻撃+クリティカルが発生した"
+    },
+    {
+        "battleConditionMstIdCsv": "1,6,281",
+        "battleConditionSetMstId": 2942,
+        "description": "行動者は味方+行動タイプは戦闘スキル+クリティカルが発生した"
+    },
+    {
+        "battleConditionMstIdCsv": "1,7,281",
+        "battleConditionSetMstId": 2943,
+        "description": "行動者は味方+行動タイプは必殺技+クリティカルが発生した"
+    },
+    {
         "battleConditionMstIdCsv": "1807,419",
         "battleConditionSetMstId": 2944,
         "description": "自身のブレイク回数が0回のとき、自身がブレイク状態の場合"
@@ -15323,6 +15338,151 @@
         "battleConditionMstIdCsv": "1050",
         "battleConditionSetMstId": 3100,
         "description": "ターン経過が100ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1956",
+        "battleConditionSetMstId": 3101,
+        "description": "自分のキャラクターが「和泉十七夜」"
+    },
+    {
+        "battleConditionMstIdCsv": "880,1751",
+        "battleConditionSetMstId": 3105,
+        "description": "トークンが50以上+トークンが100未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1750,1959",
+        "battleConditionSetMstId": 3106,
+        "description": "トークンが100以上のとき+トークンが150未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1958,1753",
+        "battleConditionSetMstId": 3107,
+        "description": "トークンが150以上のとき+トークンが200未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1752,1771",
+        "battleConditionSetMstId": 3108,
+        "description": "トークンが200以上のとき+トークンが250未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1770,1755",
+        "battleConditionSetMstId": 3109,
+        "description": "トークンが250以上のとき+トークンが300未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1754,1961",
+        "battleConditionSetMstId": 3110,
+        "description": "トークンが300以上のとき+トークンが350未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1960,1757",
+        "battleConditionSetMstId": 3111,
+        "description": "トークンが350以上のとき+トークンが400未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1756,1963",
+        "battleConditionSetMstId": 3112,
+        "description": "トークンが400以上のとき+トークンが450未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1962,1759",
+        "battleConditionSetMstId": 3113,
+        "description": "トークンが450以上のとき+トークンが500未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1758,1965",
+        "battleConditionSetMstId": 3114,
+        "description": "トークンが500以上のとき+トークンが550未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1964,1761",
+        "battleConditionSetMstId": 3115,
+        "description": "トークンが550以上のとき+トークンが600未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1760,1967",
+        "battleConditionSetMstId": 3116,
+        "description": "トークンが600以上のとき+トークンが650未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1966,1763",
+        "battleConditionSetMstId": 3117,
+        "description": "トークンが650以上のとき+トークンが700未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1762,1773",
+        "battleConditionSetMstId": 3118,
+        "description": "トークンが700以上のとき+トークンが750未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1772,1765",
+        "battleConditionSetMstId": 3119,
+        "description": "トークンが750以上のとき+トークンが800未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1764,1969",
+        "battleConditionSetMstId": 3120,
+        "description": "トークンが800以上のとき+トークンが850未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1968,1767",
+        "battleConditionSetMstId": 3121,
+        "description": "トークンが850以上のとき+トークンが900未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1766,1971",
+        "battleConditionSetMstId": 3122,
+        "description": "トークンが900以上のとき+トークンが950未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1970,1769",
+        "battleConditionSetMstId": 3123,
+        "description": "トークンが950以上のとき+トークンが1000未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "972,986",
+        "battleConditionSetMstId": 3124,
+        "description": "行動者は水属性 AND 対象は水属性"
+    },
+    {
+        "battleConditionMstIdCsv": "972,988",
+        "battleConditionSetMstId": 3125,
+        "description": "行動者は水属性 AND 対象は光属性"
+    },
+    {
+        "battleConditionMstIdCsv": "972,989",
+        "battleConditionSetMstId": 3126,
+        "description": "行動者は水属性 AND 対象は闇属性"
+    },
+    {
+        "battleConditionMstIdCsv": "974,986",
+        "battleConditionSetMstId": 3127,
+        "description": "行動者は光属性 AND 対象は水属性"
+    },
+    {
+        "battleConditionMstIdCsv": "974,988",
+        "battleConditionSetMstId": 3128,
+        "description": "行動者は光属性 AND 対象は光属性"
+    },
+    {
+        "battleConditionMstIdCsv": "974,989",
+        "battleConditionSetMstId": 3129,
+        "description": "行動者は光属性 AND 対象は闇属性"
+    },
+    {
+        "battleConditionMstIdCsv": "975,986",
+        "battleConditionSetMstId": 3130,
+        "description": "行動者は闇属性 AND 対象は水属性"
+    },
+    {
+        "battleConditionMstIdCsv": "975,988",
+        "battleConditionSetMstId": 3131,
+        "description": "行動者は闇属性 AND 対象は光属性"
+    },
+    {
+        "battleConditionMstIdCsv": "975,989",
+        "battleConditionSetMstId": 3132,
+        "description": "行動者は闇属性 AND 対象は闇属性"
     },
     {
         "battleConditionMstIdCsv": "1513,3,6,1332,1665",

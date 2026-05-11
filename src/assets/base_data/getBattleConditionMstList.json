@@ -15590,5 +15590,125 @@
         "compareTarget": 1,
         "compareValue": "100",
         "description": "100ターン未満"
+    },
+    {
+        "battleConditionMstId": 1956,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1023",
+        "description": "自分のキャラクターが「和泉十七夜」"
+    },
+    {
+        "battleConditionMstId": 1958,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "150",
+        "description": "トークンが150以上のとき"
+    },
+    {
+        "battleConditionMstId": 1959,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "150",
+        "description": "トークンが150未満のとき"
+    },
+    {
+        "battleConditionMstId": 1960,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "350",
+        "description": "トークンが350以上のとき"
+    },
+    {
+        "battleConditionMstId": 1961,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "350",
+        "description": "トークンが350未満のとき"
+    },
+    {
+        "battleConditionMstId": 1962,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "450",
+        "description": "トークンが450以上のとき"
+    },
+    {
+        "battleConditionMstId": 1963,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "450",
+        "description": "トークンが450未満のとき"
+    },
+    {
+        "battleConditionMstId": 1964,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "550",
+        "description": "トークンが550以上のとき"
+    },
+    {
+        "battleConditionMstId": 1965,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "550",
+        "description": "トークンが550未満のとき"
+    },
+    {
+        "battleConditionMstId": 1966,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "650",
+        "description": "トークンが650以上のとき"
+    },
+    {
+        "battleConditionMstId": 1967,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "650",
+        "description": "トークンが650未満のとき"
+    },
+    {
+        "battleConditionMstId": 1968,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "850",
+        "description": "トークンが850以上のとき"
+    },
+    {
+        "battleConditionMstId": 1969,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "850",
+        "description": "トークンが850未満のとき"
+    },
+    {
+        "battleConditionMstId": 1970,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "950",
+        "description": "トークンが950以上のとき"
+    },
+    {
+        "battleConditionMstId": 1971,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "950",
+        "description": "トークンが950未満のとき"
     }
 ]
