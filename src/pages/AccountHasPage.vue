@@ -36,7 +36,8 @@
                                     v-if="showDupes && (chars as any).label === 'A5'"
                                     @click.stop="startEdit(ch, 'dupes', $event)">
                                     <template v-if="isEditing(ch, 'dupes')">
-                                        <input type="number" v-model.number="editValue" @blur="commitEdit(ch, 'dupes')"
+                                        <input type="number" v-model.number="editValue" @click.stop
+                                            @blur="commitEdit(ch, 'dupes')"
                                             @keydown.enter.prevent="commitEdit(ch, 'dupes')" />
                                     </template>
                                     <template v-else>
@@ -49,7 +50,7 @@
                                         : ''" @click.stop="startEdit(ch, 'heartphialLvl', $event)">
                                     <template v-if="isEditing(ch, 'heartphialLvl')">
                                         <input type="number" v-model.number="editValue" :min="1"
-                                            :max="KiokuConstants.maxHeartphialLvl"
+                                            :max="getMax(ch, 'heartphialLvl')" @click.stop
                                             @blur="commitEdit(ch, 'heartphialLvl')"
                                             @keydown.enter.prevent="commitEdit(ch, 'heartphialLvl')" />
                                     </template>
@@ -64,7 +65,7 @@
                                         : ''" @click.stop="startEdit(ch, 'magicLvl', $event)">
                                     <template v-if="isEditing(ch, 'magicLvl')">
                                         <input type="number" v-model.number="editValue" :min="0"
-                                            :max="KiokuConstants.maxMagicLvl" @blur="commitEdit(ch, 'magicLvl')"
+                                            :max="getMax(ch, 'magicLvl')" @click.stop @blur="commitEdit(ch, 'magicLvl')"
                                             @keydown.enter.prevent="commitEdit(ch, 'magicLvl')" />
                                     </template>
                                     <template v-else>
@@ -73,11 +74,12 @@
                                 </div>
 
                                 <div class="special-level-badge level-badge editable"
-                                    v-if="showLevels && (chars as any).label !== 'Not Owned' && ch.rarity !== 3" :class="colourLevels ? isMaxSpecialLvl(ch) ? 'maxLvl' : 'notMaxLvl'
+                                    v-if="showLevels && (chars as any).label !== 'Not Owned' && ch.rarity !== 3" :class="colourLevels ? getMaxSpecialLvl(ch) === ch.specialLvl ? 'maxLvl' : 'notMaxLvl'
                                         : ''" @click.stop="startEdit(ch, 'specialLvl', $event)">
                                     <template v-if="isEditing(ch, 'specialLvl')">
                                         <input type="number" v-model.number="editValue" :min="1"
-                                            :max="KiokuConstants.maxSpecialLvl" @blur="commitEdit(ch, 'specialLvl')"
+                                            :max="getMax(ch, 'specialLvl')" @click.stop
+                                            @blur="commitEdit(ch, 'specialLvl')"
                                             @keydown.enter.prevent="commitEdit(ch, 'specialLvl')" />
                                     </template>
                                     <template v-else>
@@ -177,15 +179,15 @@ const showUnowned = useSetting("showUnowned", true);
 
 const round = (nr: number) => nr.toFixed(2)
 
-const isMaxSpecialLvl = (ch: Character): boolean => {
-    if (ch.ascension === 5) return ch.specialLvl === 10
-    if (ch.ascension >= 3) return ch.specialLvl === 7
-    return ch.specialLvl === 4
+const getMaxSpecialLvl = (ch: Character): number => {
+    if (ch.ascension === 5) return 10
+    if (ch.ascension >= 3) return 7
+    return 4
 }
 
 const isMaxLevels = (ch: Character): boolean => ch.magicLvl === KiokuConstants.maxMagicLvl &&
     ch.heartphialLvl === KiokuConstants.maxHeartphialLvl &&
-    (isMaxSpecialLvl(ch) || ch.rarity === 3)
+    (getMaxSpecialLvl(ch) === ch.specialLvl || ch.rarity === 3)
 
 
 const groupedByAscension = computed(() => {
@@ -272,9 +274,21 @@ const fieldMax: Partial<Record<EditableField, number>> = {
     specialLvl: KiokuConstants.maxSpecialLvl,
 }
 
-const commitEdit = (ch: Character, field: EditableField) => {
-    const max = fieldMax[field] ?? Infinity
-    const value = Math.max(0, Math.min(editValue.value, max))
+const getMax = (ch: Character, field: EditableField) => {
+    if (field === "specialLvl") {
+        return getMaxSpecialLvl(ch)
+    }
+
+    return fieldMax[field] ?? Infinity
+}
+
+const commitEdit = async (ch: Character, field: EditableField) => {
+    await nextTick()
+
+    const max = getMax(ch, field)
+    const min = field === "magicLvl" || field === "dupes" ? 0 : 1
+
+    const value = Math.max(min, Math.min(editValue.value, max))
 
     store.updateChar({
         ...ch,
