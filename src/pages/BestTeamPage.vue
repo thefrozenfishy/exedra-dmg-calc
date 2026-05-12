@@ -290,6 +290,20 @@ const otherCount = computed(() => 4 - deBufferCount.value)
 const minHealer = useSetting("minHealer", 0)
 const minDefender = useSetting("minDefender", 0)
 const minBreaker = useSetting("minBreaker", 0)
+function safeInt(value: unknown, fallback = 0, min?: number, max?: number): number {
+    let n = Number(value)
+
+    if (!Number.isFinite(n)) {
+        n = fallback
+    }
+
+    n = Math.floor(n)
+
+    if (min !== undefined) n = Math.max(min, n)
+    if (max !== undefined) n = Math.min(max, n)
+
+    return n
+}
 
 const extraAttackers = useSetting<Character[]>("extraAttackers", [])
 const extraAttackerQuery = ref("")
@@ -433,6 +447,7 @@ async function startSimulation() {
         if (!type) continue
         arenaEffectsMap[type] = (arenaEffectsMap[type] ?? 0) + value
     }
+    const safeDeBufferCount = safeInt(deBufferCount.value, 3, 0, 4)
 
     workerRef.value.postMessage({
         options: {
@@ -445,11 +460,11 @@ async function startSimulation() {
             extraAttackers: extraAttackers.value.map(c => c.name),
             obligatoryKioku: obligatoryKioku.value.map(c => c.name),
             ignoredKioku: ignoredKioku.value.map(c => c.name).filter(c => !obligatoryKioku.value.map(c => c.name).includes(c)),
-            deBufferCount: deBufferCount.value,
-            otherCount: otherCount.value,
-            minHealer: minHealer.value,
-            minDefender: minDefender.value,
-            minBreaker: minBreaker.value,
+            deBufferCount: safeDeBufferCount,
+            otherCount: Math.max(0, 4 - safeDeBufferCount),
+            minHealer: safeInt(minHealer.value, 0, 0, 4),
+            minDefender: safeInt(minDefender.value, 0, 0, 4),
+            minBreaker: safeInt(minBreaker.value, 0, 0, 4),
             optimalSubCrys: optimalSubCrys.value,
             enabledCharacters: JSON.parse(JSON.stringify(members.value)),
             buffMultReduction: buffMultReduction.value,
