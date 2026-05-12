@@ -67,7 +67,8 @@
               <template v-if="Array.isArray(battleOutput)">
                 <template v-if="rawSectionKey(key)">
                   <div class="debug-contrib-table">
-                    <template v-for="(entries, effectType) in battleOutput[3][index][rawSectionKey(key)!]"
+                    <template
+                      v-for="(entries, effectType) in sortEffectType(battleOutput[3][index][rawSectionKey(key)!])"
                       :key="effectType">
                       <div class="debug-contrib-group">
                         <div class="debug-contrib-group-label">{{ effectType }}</div>
@@ -163,6 +164,7 @@ const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects
 
 const alimentRef = ref<InstanceType<typeof AlimentToggler> | null>(null)
 
+const sortEffectType = (effects: object) => Object.fromEntries(Object.entries(effects).sort(([a], [b]) => a.localeCompare(b)))
 const sa_score = computed(() => {
   if (typeof battleOutput.value === 'string') return "unknown"
   return (800_000 + Number((20 * ((battleOutput.value[0] as number) / scoreMultiplier.value + (90000 - 5000 * turns.value) + 15000 * hp_percentage_team.value / 100)).toFixed(0))).toLocaleString()
