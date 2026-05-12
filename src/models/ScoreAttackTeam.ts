@@ -120,6 +120,8 @@ const bannedEffects: Set<string> = new Set([
     "65101003", // Sakurako passive is listed multiple places
     "12701003", // Yotsugi too
     "12721005", // Yotsugi too
+    "65261003", // Kanagi fua
+    "65251003", // Kanagi fua
 ]);
 
 const effectIsBanned = (detail: SkillDetail): boolean => {
