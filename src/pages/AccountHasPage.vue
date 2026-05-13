@@ -12,6 +12,7 @@
         </div>
         <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
         <button class="copy-btn" @click="downloadAscensionList">Download</button>
+        <button class="copy-btn" @click="copyHyperLink">Copy Link</button>
         <div>
             <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
             <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
@@ -160,14 +161,29 @@ import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
 import { onMounted } from "vue"
 import { useRoute } from "vue-router"
-import { loadCharactersByFriendCode } from "../store/cloud"
+import { getFriendCode, loadCharactersByFriendCode } from "../store/cloud"
 import { getFriends } from "../store/cloud"
 
 const route = useRoute()
 
 const viewingFriendName = ref<string | null>(null)
+
+const friendCode = ref<string | null>(null)
+const loadFriendCode = async () => {
+    try {
+        friendCode.value = await getFriendCode()
+    } catch (err) {
+        console.error(err)
+    }
+}
+
+onMounted(async () => {
+    if (route.query.friend) {
+        await loadFriendCode()
+    }
+})
 const viewingFriendCode = computed(() =>
-    typeof route.query.friend === "string"
+    typeof route.query.friend === "string" && route.query.friend !== friendCode.value
         ? route.query.friend.toUpperCase()
         : null
 )
@@ -431,6 +447,27 @@ const copyAscensionList = async () => {
             position: toast.POSITION.TOP_RIGHT,
             icon: false,
         })
+    }
+}
+
+const copyHyperLink = async () => {
+    try {
+        const perm = await navigator.permissions?.query({
+            name: "clipboard-write" as PermissionName
+        })
+    } catch { }
+
+    try {
+        const friendId = viewingFriendCode.value ?? friendCode.value
+        const item = new ClipboardItem({ "text/plain": `http://localhost:5173/exedra-dmg-calc/#/my-kioku?friend=${friendId}` })
+        await navigator.clipboard.write([item])
+
+        toast.success("Copied to clipboard!", {
+            position: toast.POSITION.TOP_RIGHT,
+            icon: false,
+        })
+    } catch (err) {
+        console.error("Clipboard failed:", err)
     }
 }
 

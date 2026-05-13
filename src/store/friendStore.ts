@@ -12,7 +12,16 @@ import {
 export interface FriendProfile {
     friend_id: string
     display_name: string,
-    nickname?: string
+    nickname?: string,
+    power?: {
+        total: number
+        attacker: number
+        buffer: number
+        debuffer: number
+        breaker: number
+        defender: number
+        healer: number
+    },
 }
 
 export const useFriendStore = defineStore('friendStore', () => {
