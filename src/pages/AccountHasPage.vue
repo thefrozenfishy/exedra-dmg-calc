@@ -1,7 +1,14 @@
 <template>
     <div class="ascension-list">
         <div v-if="isReadonly" class="viewing-banner">
-            Viewing friend profile: <span style="color: lightgreen;">{{ viewingFriendCode }}</span>
+            Viewing profile:
+            <span style="color: lightgreen;">
+                {{ viewingFriendName }}
+            </span>
+
+            <span v-if="viewingFriendName !== viewingFriendCode" style="opacity: 0.7; margin-left: 0.35rem;">
+                ({{ viewingFriendCode }})
+            </span>
         </div>
         <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
         <button class="copy-btn" @click="downloadAscensionList">Download</button>
@@ -154,9 +161,11 @@ import { nextTick } from "vue"
 import { onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { loadCharactersByFriendCode } from "../store/cloud"
+import { getFriends } from "../store/cloud"
 
 const route = useRoute()
 
+const viewingFriendName = ref<string | null>(null)
 const viewingFriendCode = computed(() =>
     typeof route.query.friend === "string"
         ? route.query.friend.toUpperCase()
@@ -180,6 +189,20 @@ onMounted(async () => {
     )
 
     displayedCharacters.value = store.mergeChars(rows)
+
+    const friends = await getFriends()
+
+    const friend = friends.find(
+        f => f.friend_id === viewingFriendCode.value
+    )
+
+    if (friend) {
+        const nick = friend.nickname?.trim()
+        const disp = friend.display_name?.trim()
+        viewingFriendName.value = nick ? `${nick} (${disp})` : disp
+    } else {
+        viewingFriendName.value = viewingFriendCode.value
+    }
 })
 
 const fiveStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
