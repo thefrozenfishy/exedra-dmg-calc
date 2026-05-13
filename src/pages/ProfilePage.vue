@@ -154,23 +154,25 @@ onMounted(async () => {
     await store.loadProfile()
     await store.loadFriends()
 
-    for (const friend of store.friends) {
-        try {
-            const rows = await loadCharactersByFriendCode(
-                friend.friend_id
-            )
+    await Promise.all(
+        store.friends.map(async friend => {
+            try {
+                const rows = await loadCharactersByFriendCode(
+                    friend.friend_id
+                )
 
-            const chars = characterStore.mergeChars(rows)
+                const chars = characterStore.mergeChars(rows)
 
-            friend.power = getPowerScores(chars)
-        } catch (err) {
-            console.error(
-                'Failed loading friend power:',
-                friend.friend_id,
-                err
-            )
-        }
-    }
+                friend.power = getPowerScores(chars)
+            } catch (err) {
+                console.error(
+                    'Failed loading friend power:',
+                    friend.friend_id,
+                    err
+                )
+            }
+        })
+    )
 })
 
 const saveName = async () => {
