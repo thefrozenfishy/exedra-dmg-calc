@@ -1,14 +1,11 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'App'
-})
+<script setup lang="ts">
+import CloudSyncWidget from './components/CloudSyncWidget.vue'
 </script>
 
 <template>
   <div id="app">
     <header>
+      <CloudSyncWidget />
       <h1>TFF's Exedra Toolbox</h1>
       <nav>
         <router-link to="/team-setup">Kioku Setup</router-link>

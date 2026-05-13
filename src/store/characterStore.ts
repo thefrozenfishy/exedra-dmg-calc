@@ -2,7 +2,18 @@ import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { Character, KiokuConstants, correctCharacterParams } from '../types/KiokuTypes'
 import { crystalises, kiokuData } from '../utils/helpers'
-
+import debounce from "lodash.debounce"
+import {
+    saveCharacters,
+    loadCharacters,
+    createCloudUser,
+    restoreCloudAccount
+} from "../store/cloud"
+import {
+    createUserId,
+    setUserId,
+    getUserId
+} from "../store/user"
 const base = {
     ascension: KiokuConstants.maxAscension,
     portrait: "",
@@ -50,13 +61,82 @@ export const useCharacterStore = defineStore('characterStore', () => {
             .map(c => ({ ...basicSetting(c), ...Object.fromEntries(Object.entries(c).filter(([k, v]) => v != null)), ...charInfo[c.name] }))
     }
 
+    const debouncedCloudSave = debounce(async () => {
+        try {
+            if (!getUserId()) return
+            await saveCharacters(characters.value)
+        } catch (err) {
+            console.error(err)
+        }
+    }, 3000)
+
     watch(
         characters,
         (newVal) => {
             localStorage.setItem('characters', JSON.stringify(newVal))
+            debouncedCloudSave()
         },
         { deep: true }
     )
+
+    const applyCloudCharacters = (rows: any[]) => {
+        rows.forEach((row) => {
+            const char = characters.value.find(c => c.id === row.character_id)
+
+            if (!char) return
+
+            Object.assign(char, {
+                enabled: row.enabled,
+
+                dupes: row.dupes,
+                ascension: row.ascension,
+
+                kiokuLvl: row.kioku_lvl,
+                magicLvl: row.magic_lvl,
+                heartphialLvl: row.heartphial_lvl,
+                specialLvl: row.special_lvl,
+
+                portrait: row.portrait,
+
+                crys: row.crys,
+                crys_sub: row.crys_sub
+            })
+        })
+    }
+
+    const createCloudAccount = async () => {
+        const userId = createUserId()
+
+        await createCloudUser(userId)
+
+        await saveCharacters(characters.value)
+
+        return userId
+    }
+
+    const loadExistingCloudAccount = async (userId: string) => {
+        await restoreCloudAccount(userId)
+
+        setUserId(userId)
+
+        const rows = await loadCharacters()
+
+        applyCloudCharacters(rows)
+    }
+
+    const initializeCloud = async () => {
+        if (!getUserId()) return
+
+        try {
+            const rows = await loadCharacters()
+
+            if (rows.length > 0) {
+                applyCloudCharacters(rows)
+            }
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     const toggleCharacter = (id: number) => {
         const char = characters.value.find(c => c.id === id)
@@ -112,8 +192,18 @@ export const useCharacterStore = defineStore('characterStore', () => {
     }
 
     Object.entries(charInfo).forEach(([name, data]) => {
-        if (!characters.value.map(c => c.name).includes(name)) characters.value.push({...basicSetting(data), ...data})
+        if (!characters.value.map(c => c.name).includes(name)) characters.value.push({ ...basicSetting(data), ...data })
     });
 
-    return { characters, toggleCharacter, updateChar, setCharacters, exportCharacters, importCharacters }
+    return {
+        characters,
+        toggleCharacter,
+        updateChar,
+        setCharacters,
+        exportCharacters,
+        importCharacters,
+        createCloudAccount,
+        loadExistingCloudAccount,
+        initializeCloud,
+    }
 })

@@ -10,10 +10,12 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.105.4",
     "chart.js": "^4.5.1",
     "d3": "^7.9.0",
     "heap-js": "^2.7.1",
     "html2canvas": "^1.4.1",
+    "lodash.debounce": "^4.0.8",
     "pinia": "^3.0.3",
     "vite-plugin-md": "^0.22.5",
     "vue": "^3.5.18",
@@ -22,9 +24,11 @@
   },
   "devDependencies": {
     "@types/d3": "^7.4.3",
+    "@types/lodash.debounce": "^4.0.9",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.7.0",
     "gh-pages": "^6.3.0",
+    "supabase": "^2.98.2",
     "typescript": "~5.8.3",
     "vite": "^7.1.2",
     "vue-tsc": "^3.0.5"

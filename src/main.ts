@@ -6,6 +6,7 @@ import router from './router'
 import "vue3-toastify/dist/index.css"
 import CharacterLink from './components/CharacterLink.vue'
 import { useSettingsStore } from './store/settingsStore';
+import { useCharacterStore } from './store/characterStore'
 import { useTeamStore, useEnemyStore, usePvPStore } from './store/singleTeamStore';
 
 const app = createApp(App)
@@ -15,6 +16,7 @@ if (import.meta.env.DEV) {
     const favicon = document.getElementById("app-icon") as HTMLLinkElement;
     favicon.href = favicon.href.replace("icon.png", "icon-dev.png?v=" + Date.now());
 }
+useCharacterStore().initializeCloud()
 useTeamStore().load()
 usePvPStore().load()
 useEnemyStore().load()
