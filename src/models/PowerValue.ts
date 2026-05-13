@@ -123,7 +123,7 @@ function normalize(
     if (max <= 0) return 0
 
     return Math.round(
-        (current / max) * 100
+        Math.sqrt((current / max)) * 100
     )
 }
 
