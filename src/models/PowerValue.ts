@@ -42,13 +42,13 @@ function getCharacterPower(ch: Character): number {
 
     switch (ch.role) {
         case KiokuRole.Attacker:
-            return power * 1.2
-        case KiokuRole.Breaker:
-            return power * 1.1
-        case KiokuRole.Buffer:
-            return power * 1.2
-        case KiokuRole.Debuffer:
             return power * 1.15
+        case KiokuRole.Breaker:
+            return power * 1
+        case KiokuRole.Buffer:
+            return power * 1.25
+        case KiokuRole.Debuffer:
+            return power * 1.2
         case KiokuRole.Healer:
             return power * 0.9
         default: // Defender

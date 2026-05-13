@@ -10,14 +10,68 @@
             <section class="profile-section">
                 <h2>Profile</h2>
 
-                <div class="profile-row">
-                    <label>Your Name</label>
+                <div class="friend-card self-card">
+                    <div class="friend-left">
+                        <div class="friend-name-row">
+                            <div class="friend-primary">
+                                {{ store.displayName || 'Unnamed' }}
+                            </div>
 
-                    <input v-model="store.displayName" maxlength="32" placeholder="Enter display name" />
+                            <button class="edit-nick-btn" @click="editingSelfName = true">
+                                🖊
+                            </button>
+                        </div>
 
-                    <button @click="saveName">
-                        Save
-                    </button>
+                        <div class="friend-code">
+                            Your profile
+                        </div>
+
+                        <input v-if="editingSelfName" v-model="pendingDisplayName" class="nickname-inline-input"
+                            placeholder="Display name" maxlength="32" @blur="finishDisplayNameEdit"
+                            @keydown.enter="finishDisplayNameEdit" />
+                    </div>
+
+                    <div v-if="myPower" class="friend-power">
+                        <div class="total-power-big">
+                            <img :src="'/exedra-dmg-calc/pwr.png'" alt="Total" />
+
+                            <div class="total-power-value">
+                                {{ myPower.total }}
+                            </div>
+                        </div>
+
+                        <div class="role-grid-compact">
+                            <div class="mini-power-box">
+                                <img :src="'/exedra-dmg-calc/roles/Attacker.png'" />
+                                <span>{{ myPower.attacker }}</span>
+                            </div>
+
+                            <div class="mini-power-box">
+                                <img :src="'/exedra-dmg-calc/roles/Buffer.png'" />
+                                <span>{{ myPower.buffer }}</span>
+                            </div>
+
+                            <div class="mini-power-box">
+                                <img :src="'/exedra-dmg-calc/roles/Debuffer.png'" />
+                                <span>{{ myPower.debuffer }}</span>
+                            </div>
+
+                            <div class="mini-power-box">
+                                <img :src="'/exedra-dmg-calc/roles/Breaker.png'" />
+                                <span>{{ myPower.breaker }}</span>
+                            </div>
+
+                            <div class="mini-power-box">
+                                <img :src="'/exedra-dmg-calc/roles/Defender.png'" />
+                                <span>{{ myPower.defender }}</span>
+                            </div>
+
+                            <div class="mini-power-box">
+                                <img :src="'/exedra-dmg-calc/roles/Healer.png'" />
+                                <span>{{ myPower.healer }}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -121,13 +175,19 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { toast } from 'vue3-toastify'
 import { FriendProfile, useFriendStore } from '../store/friendStore'
 import { getUserId } from '../store/user'
+import { getPowerScores } from '../models/PowerValue'
+import { useCharacterStore } from '../store/characterStore'
 
 const store = useFriendStore()
+const characterStore = useCharacterStore()
 
+const myPower = computed(() =>
+    getPowerScores(characterStore.characters)
+)
 const editingFriend = ref<string | null>(null)
 
 const finishNicknameEdit = async (
@@ -149,10 +209,17 @@ onMounted(async () => {
 
     await store.loadProfile()
     await store.loadFriends()
+    pendingDisplayName.value = store.displayName
 })
 
-const saveName = async () => {
+const editingSelfName = ref(false)
+
+const pendingDisplayName = ref('')
+
+const finishDisplayNameEdit = async () => {
     try {
+        store.displayName = pendingDisplayName.value
+
         await store.saveDisplayName()
 
         toast.success('Profile updated!', {
@@ -166,6 +233,8 @@ const saveName = async () => {
             position: toast.POSITION.TOP_RIGHT,
             icon: false,
         })
+    } finally {
+        editingSelfName.value = false
     }
 }
 
@@ -493,5 +562,12 @@ a:hover {
     color: white;
 
     padding: 0.35rem 0.55rem;
+}
+
+.self-card {
+    border: 1px solid #5f4a74;
+    background: linear-gradient(180deg,
+            #26212f 0%,
+            #1f1f1f 100%);
 }
 </style>
