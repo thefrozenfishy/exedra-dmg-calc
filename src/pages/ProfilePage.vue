@@ -60,7 +60,7 @@
 
                         <div v-if="friend.power" class="friend-power">
                             <div class="total-power-big" title="Power rating">
-                                <img :src="'/exedra-dmg-calc/icon.png'" alt="Total" />
+                                <img :src="'/exedra-dmg-calc/pwr.png'" alt="Total" />
 
                                 <div class="total-power-value">
                                     {{ friend.power.total }}
