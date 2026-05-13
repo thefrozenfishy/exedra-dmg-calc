@@ -8,6 +8,8 @@ import {
     getMyProfile,
     saveFriendNickname,
     loadCharactersByFriendCode,
+    getFriendCode,
+    updateFriendCode,
 } from '../store/cloud'
 import { getPowerScores } from '../models/PowerValue'
 import { useCharacterStore } from '../store/characterStore'
@@ -32,6 +34,7 @@ export const useFriendStore = defineStore('friendStore', () => {
     const characterStore = useCharacterStore()
     const friends = ref<FriendProfile[]>([])
     const displayName = ref('')
+    const friendCode = ref('')
 
     const loadProfile = async () => {
         try {
@@ -39,6 +42,10 @@ export const useFriendStore = defineStore('friendStore', () => {
 
             if (profile) {
                 displayName.value = profile.display_name ?? ''
+
+                const code = await getFriendCode()
+
+                friendCode.value = code ?? ''
             }
         } catch (err) {
             console.error(err)
@@ -85,6 +92,12 @@ export const useFriendStore = defineStore('friendStore', () => {
         await loadFriends()
     }
 
+    const saveFriendCode = async () => {
+        await updateFriendCode(
+            friendCode.value
+        )
+    }
+
     const saveNickname = async (
         friendId: string,
         nickname: string
@@ -117,5 +130,7 @@ export const useFriendStore = defineStore('friendStore', () => {
         addFriend,
         deleteFriend,
         saveNickname,
+        friendCode,
+        saveFriendCode,
     }
 })

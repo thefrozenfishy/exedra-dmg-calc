@@ -25,6 +25,19 @@
                         <div class="friend-code">
                             Your profile
                         </div>
+                        <div class="friend-code-row">
+                            <div class="friend-code">
+                                {{ store.friendCode }}
+                            </div>
+
+                            <button class="edit-nick-btn" @click="editingFriendCode = true">
+                                🖊
+                            </button>
+                        </div>
+
+                        <input v-if="editingFriendCode" v-model="pendingFriendCode" class="nickname-inline-input"
+                            placeholder="Friend code" maxlength="5" @blur="finishFriendCodeEdit"
+                            @keydown.enter="finishFriendCodeEdit" />
 
                         <input v-if="editingSelfName" v-model="pendingDisplayName" class="nickname-inline-input"
                             placeholder="Display name" maxlength="32" @blur="finishDisplayNameEdit"
@@ -217,7 +230,8 @@ const finishNicknameEdit = async (
 }
 
 const userId = getUserId()
-
+const editingFriendCode = ref(false)
+const pendingFriendCode = ref('')
 const friendCode = ref('')
 
 onMounted(async () => {
@@ -226,6 +240,7 @@ onMounted(async () => {
     await store.loadProfile()
     await store.loadFriends()
     pendingDisplayName.value = store.displayName
+    pendingFriendCode.value = store.friendCode
 })
 
 const editingSelfName = ref(false)
@@ -251,6 +266,40 @@ const finishDisplayNameEdit = async () => {
         })
     } finally {
         editingSelfName.value = false
+    }
+}
+
+const finishFriendCodeEdit = async () => {
+    try {
+        store.friendCode = pendingFriendCode.value
+            .trim()
+            .toUpperCase()
+
+        await store.saveFriendCode()
+
+        toast.success(
+            'Friend code updated!',
+            {
+                position:
+                    toast.POSITION.TOP_RIGHT,
+                icon: false,
+            }
+        )
+    } catch (err) {
+        console.error(err)
+
+        toast.error(
+            err instanceof Error
+                ? err.message
+                : 'Failed to update friend code, it must be unique',
+            {
+                position:
+                    toast.POSITION.TOP_RIGHT,
+                icon: false,
+            }
+        )
+    } finally {
+        editingFriendCode.value = false
     }
 }
 
@@ -316,6 +365,13 @@ const addFriend = async () => {
     display: flex;
     gap: 1rem;
     align-items: center;
+}
+
+.friend-code-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0 auto;
 }
 
 input {

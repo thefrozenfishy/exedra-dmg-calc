@@ -7,7 +7,7 @@ async function createProfile(userId: string) {
 
     const { error } = await supabase
         .from('user_profiles')
-        .insert({
+        .upsert({
             user_id: userId
         })
 
@@ -281,4 +281,37 @@ export async function loadCharactersByFriendCode(friendCode: string) {
 
         id: row.character_id
     }))
+}
+
+export async function updateFriendCode(
+    friendCode: string
+) {
+    const userId = getUserId()
+
+    if (!userId) return
+
+    friendCode = friendCode
+        .trim()
+        .toUpperCase()
+
+    if (friendCode === await getFriendCode()) return
+
+    if (!/^[A-Z0-9]{5}$/.test(friendCode)) {
+        throw new Error(
+            'Friend code must be 5 capital letters or numbers'
+        )
+    }
+
+    const supabase = getSupabase()
+
+    const { error } = await supabase
+        .from('users')
+        .update({
+            friend_id: friendCode
+        })
+        .eq('user_id', userId)
+
+    if (error) {
+        throw error
+    }
 }
