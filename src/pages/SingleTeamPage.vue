@@ -46,7 +46,7 @@
   </div>
 
   <div class="team-page">
-    <h1>Debug info</h1>
+    <h1>Detailed info</h1>
 
     <div v-if="hasBannedEffects" class="banned-banner">
       <span>Note: {{ bannedCount }} effect{{ bannedCount === 1 ? '' : 's' }} excluded from calculation</span>
