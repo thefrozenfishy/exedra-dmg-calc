@@ -7,7 +7,10 @@ import {
     updateDisplayName,
     getMyProfile,
     saveFriendNickname,
+    loadCharactersByFriendCode,
 } from '../store/cloud'
+import { getPowerScores } from '../models/PowerValue'
+import { useCharacterStore } from '../store/characterStore'
 
 export interface FriendProfile {
     friend_id: string
@@ -25,6 +28,7 @@ export interface FriendProfile {
 }
 
 export const useFriendStore = defineStore('friendStore', () => {
+    const characterStore = useCharacterStore()
     const friends = ref<FriendProfile[]>([])
     const displayName = ref('')
 
@@ -51,6 +55,25 @@ export const useFriendStore = defineStore('friendStore', () => {
     const loadFriends = async () => {
         try {
             friends.value = await getFriends()
+            await Promise.all(
+                friends.value.map(async friend => {
+                    try {
+                        const rows = await loadCharactersByFriendCode(
+                            friend.friend_id
+                        )
+
+                        const chars = characterStore.mergeChars(rows)
+
+                        friend.power = getPowerScores(chars)
+                    } catch (err) {
+                        console.error(
+                            'Failed loading friend power:',
+                            friend.friend_id,
+                            err
+                        )
+                    }
+                })
+            )
         } catch (err) {
             console.error(err)
         }

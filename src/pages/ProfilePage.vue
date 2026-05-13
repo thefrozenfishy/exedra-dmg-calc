@@ -125,12 +125,8 @@ import { onMounted, ref } from 'vue'
 import { toast } from 'vue3-toastify'
 import { FriendProfile, useFriendStore } from '../store/friendStore'
 import { getUserId } from '../store/user'
-import { loadCharactersByFriendCode } from '../store/cloud'
-import { getPowerScores } from '../models/PowerValue'
-import { useCharacterStore } from '../store/characterStore'
 
 const store = useFriendStore()
-const characterStore = useCharacterStore()
 
 const editingFriend = ref<string | null>(null)
 
@@ -153,26 +149,6 @@ onMounted(async () => {
 
     await store.loadProfile()
     await store.loadFriends()
-
-    await Promise.all(
-        store.friends.map(async friend => {
-            try {
-                const rows = await loadCharactersByFriendCode(
-                    friend.friend_id
-                )
-
-                const chars = characterStore.mergeChars(rows)
-
-                friend.power = getPowerScores(chars)
-            } catch (err) {
-                console.error(
-                    'Failed loading friend power:',
-                    friend.friend_id,
-                    err
-                )
-            }
-        })
-    )
 })
 
 const saveName = async () => {
