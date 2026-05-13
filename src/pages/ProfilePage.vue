@@ -32,7 +32,7 @@
                     </div>
 
                     <div v-if="myPower" class="friend-power">
-                        <div class="total-power-big">
+                        <div class="total-power-big" title="Power rating">
                             <img :src="'/exedra-dmg-calc/pwr.png'" alt="Total" />
 
                             <div class="total-power-value">
@@ -41,34 +41,42 @@
                         </div>
 
                         <div class="role-grid-compact">
-                            <div class="mini-power-box">
+                            <div class="mini-power-box" title="Attacker power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Attacker.png'" />
                                 <span>{{ myPower.attacker }}</span>
                             </div>
 
-                            <div class="mini-power-box">
+                            <div class="mini-power-box" title="Buffer power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Buffer.png'" />
                                 <span>{{ myPower.buffer }}</span>
                             </div>
 
-                            <div class="mini-power-box">
+                            <div class="mini-power-box" title="Debuffer power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Debuffer.png'" />
                                 <span>{{ myPower.debuffer }}</span>
                             </div>
 
-                            <div class="mini-power-box">
+                            <div class="mini-power-box" title="Breaker power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Breaker.png'" />
                                 <span>{{ myPower.breaker }}</span>
                             </div>
 
-                            <div class="mini-power-box">
+                            <div class="mini-power-box" title="Defender power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Defender.png'" />
                                 <span>{{ myPower.defender }}</span>
                             </div>
 
-                            <div class="mini-power-box">
+                            <div class="mini-power-box" title="Healer power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Healer.png'" />
                                 <span>{{ myPower.healer }}</span>
+                            </div>
+                        </div>
+
+                        <div class="whale-power-big" title="Whale power">
+                            <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale power" />
+
+                            <div class="total-power-value">
+                                {{ myPower.whale }}
                             </div>
                         </div>
                     </div>
@@ -150,6 +158,14 @@
                                 <div class="mini-power-box" title="Healer power rating">
                                     <img :src="'/exedra-dmg-calc/roles/Healer.png'" alt="Healer" />
                                     <span>{{ friend.power.healer }}</span>
+                                </div>
+                            </div>
+
+                            <div class="whale-power-big" title="Whale power">
+                                <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale power" />
+
+                                <div class="total-power-value">
+                                    {{ friend.power.whale }}
                                 </div>
                             </div>
                         </div>
@@ -394,6 +410,26 @@ a:hover {
 }
 
 .total-power-big img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+.whale-power-big {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 78px;
+    height: 78px;
+
+    border-radius: 18px;
+
+    border: 1px solid #8e5bc7;
+}
+
+.whale-power-big img {
     width: 28px;
     height: 28px;
     object-fit: contain;

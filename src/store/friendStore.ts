@@ -24,6 +24,7 @@ export interface FriendProfile {
         breaker: number
         defender: number
         healer: number
+        whale: number
     },
 }
 

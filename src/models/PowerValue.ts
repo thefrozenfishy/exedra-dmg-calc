@@ -9,6 +9,7 @@ export type PowerScores = {
     breaker: number
     defender: number
     healer: number
+    whale: number
 }
 
 function getCharacterPower(ch: Character): number {
@@ -32,11 +33,6 @@ function getCharacterPower(ch: Character): number {
     }
 
     if (ch.obtain !== "Permanent") {
-        power *= 3
-    } else if (
-        !ch.permaDate ||
-        new Date(ch.permaDate) > new Date()
-    ) {
         power *= 2
     }
 
@@ -64,6 +60,60 @@ function getMaxCharacterPower(ch: Character): number {
     }
 
     return getCharacterPower(maxed)
+}
+function getCharacterWhalePower(ch: Character): number {
+    if (!ch.enabled) return 0
+    let power = 100
+
+    power += ch.ascension * 40
+
+    if ([KiokuRole.Attacker, KiokuRole.Breaker].includes(ch.role)) {
+        if (ch.ascension >= 3) {
+            power += 40
+        }
+        if (ch.ascension == 5) {
+            power += 40
+        }
+    } else {
+        if (ch.ascension >= 4) {
+            power += 40
+            if (ch.role === KiokuRole.Buffer) power += 40
+        }
+    }
+
+    if (ch.obtain !== "Permanent") {
+        power *= 3
+    } else if (
+        !ch.permaDate ||
+        new Date(ch.permaDate) > new Date()
+    ) {
+        power *= 5
+    }
+
+    switch (ch.role) {
+        case KiokuRole.Attacker:
+            return power * 1
+        case KiokuRole.Breaker:
+            return power * 1.2
+        case KiokuRole.Buffer:
+            return power * 0.8
+        case KiokuRole.Debuffer:
+            return power * 0.85
+        case KiokuRole.Healer:
+            return power * 1.25
+        default: // Defender
+            return power * 1.2
+    }
+}
+
+function getMaxCharacterWhalePower(ch: Character): number {
+    const maxed: Character = {
+        ...ch,
+        enabled: true,
+        ascension: KiokuConstants.maxAscension,
+    }
+
+    return getCharacterWhalePower(maxed)
 }
 
 function normalize(
@@ -102,8 +152,12 @@ export function getPowerScores(
 
     let totalCurrent = 0
     let totalMax = 0
+    let totalWhaleCurrent = 0
+    let totalWhaleMax = 0
 
     for (const ch of fiveStars) {
+        totalWhaleCurrent += getCharacterWhalePower(ch)
+        totalWhaleMax += getMaxCharacterWhalePower(ch)
         const current = getCharacterPower(ch)
         const max = getMaxCharacterPower(ch)
 
@@ -178,5 +232,10 @@ export function getPowerScores(
             roleCurrent.healer,
             roleMax.healer
         ),
+
+        whale: normalize(
+            totalWhaleCurrent,
+            totalWhaleMax,
+        )
     }
 }
