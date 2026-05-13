@@ -37,7 +37,7 @@ function getCharacterPower(ch: Character): number {
         !ch.permaDate ||
         new Date(ch.permaDate) > new Date()
     ) {
-        power *= 4
+        power *= 2
     }
 
     switch (ch.role) {
