@@ -122,10 +122,13 @@ ALTER TABLE public.user_characters ENABLE ROW LEVEL SECURITY;
 -- USERS POLICIES
 -- =========================================================
 
-CREATE POLICY "public read users"
+CREATE POLICY "users can read own row"
 ON public.users
 FOR SELECT
-USING (true);
+USING (
+  user_id =
+  (current_setting('request.headers', true)::json->>'x-user-id')::uuid
+);
 
 CREATE POLICY "insert own user"
 ON public.users
@@ -147,11 +150,6 @@ USING (
 -- USER CHARACTER POLICIES
 -- =========================================================
 
-CREATE POLICY "public read characters"
-ON public.user_characters
-FOR SELECT
-USING (true);
-
 CREATE POLICY "insert own characters"
 ON public.user_characters
 FOR INSERT
@@ -171,6 +169,14 @@ USING (
 CREATE POLICY "delete own characters"
 ON public.user_characters
 FOR DELETE
+USING (
+  user_id =
+  (current_setting('request.headers', true)::json->>'x-user-id')::uuid
+);
+
+CREATE POLICY "read own characters"
+ON public.user_characters
+FOR SELECT
 USING (
   user_id =
   (current_setting('request.headers', true)::json->>'x-user-id')::uuid

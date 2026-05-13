@@ -195,6 +195,12 @@ export const useCharacterStore = defineStore('characterStore', () => {
         if (!characters.value.map(c => c.name).includes(name)) characters.value.push({ ...basicSetting(data), ...data })
     });
 
+    const mergeChars = (rows: Character[]) => rows.map(c => {
+        const chInfo = Object.values(charInfo).find(ch => ch.id === c.id);
+        if (!chInfo) return
+        return { ...chInfo, ...c }
+    })
+
     return {
         characters,
         toggleCharacter,
@@ -205,5 +211,6 @@ export const useCharacterStore = defineStore('characterStore', () => {
         createCloudAccount,
         loadExistingCloudAccount,
         initializeCloud,
+        mergeChars,
     }
 })

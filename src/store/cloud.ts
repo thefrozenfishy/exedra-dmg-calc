@@ -1,29 +1,39 @@
-import { supabase } from "../utils/supabase"
+import { getSupabase } from "../utils/supabase"
 import { getUserId } from "./user"
 import type { Character } from "../types/KiokuTypes"
 
-function authHeaders() {
-    return {
-        "x-user-id": getUserId() ?? ""
-    }
+async function createProfile(userId: string) {
+    const supabase = getSupabase()
+
+    const { error } = await supabase
+        .from('user_profiles')
+        .insert({
+            user_id: userId
+        })
+
+    if (error) throw error
 }
 
 export async function createCloudUser(userId: string) {
+    const supabase = getSupabase()
+
     const { error } = await supabase
         .from("users")
         .upsert({
             user_id: userId
         })
-        .select()
-        .setHeader("x-user-id", userId)
 
     if (error) throw error
+
+    await createProfile(userId)
 }
 
 export async function saveCharacters(chars: Character[]) {
     const userId = getUserId()
 
     if (!userId) return
+
+    const supabase = getSupabase()
 
     const rows = chars.map(c => ({
         user_id: userId,
@@ -49,7 +59,6 @@ export async function saveCharacters(chars: Character[]) {
     const { error } = await supabase
         .from("user_characters")
         .upsert(rows)
-        .setHeader("x-user-id", userId)
 
     if (error) throw error
 }
@@ -59,11 +68,12 @@ export async function loadCharacters() {
 
     if (!userId) return []
 
+    const supabase = getSupabase()
+
     const { data, error } = await supabase
         .from("user_characters")
         .select("*")
         .eq("user_id", userId)
-        .setHeader("x-user-id", userId)
 
     if (error) throw error
 
@@ -71,35 +81,17 @@ export async function loadCharacters() {
 }
 
 export async function restoreCloudAccount(userId: string) {
+    const supabase = getSupabase()
+
     const { data, error } = await supabase
         .from("users")
         .select("*")
         .eq("user_id", userId)
         .single()
-        .setHeader("x-user-id", userId)
 
     if (error || !data) {
         throw new Error("Account not found")
     }
-
-    return data
-}
-
-export async function getFriendCharacters(friendId: string) {
-    const { data: user, error: userError } = await supabase
-        .from("users")
-        .select("user_id")
-        .eq("friend_id", friendId)
-        .single()
-
-    if (userError) throw userError
-
-    const { data, error } = await supabase
-        .from("user_characters")
-        .select("*")
-        .eq("user_id", user.user_id)
-
-    if (error) throw error
 
     return data
 }
@@ -109,14 +101,184 @@ export async function getFriendCode() {
 
     if (!userId) return null
 
+    const supabase = getSupabase()
+
     const { data, error } = await supabase
         .from("users")
         .select("friend_id")
         .eq("user_id", userId)
         .single()
-        .setHeader("x-user-id", userId)
 
     if (error) throw error
 
     return data.friend_id
+}
+
+export async function getMyProfile() {
+    const userId = getUserId()
+
+    if (!userId) return null
+
+    const supabase = getSupabase()
+
+    const { data, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', userId)
+        .single()
+
+    if (error) throw error
+
+    return data
+}
+
+export async function updateDisplayName(displayName: string) {
+    const userId = getUserId()
+
+    if (!userId) return
+
+    const supabase = getSupabase()
+
+    const { error } = await supabase
+        .from('user_profiles')
+        .upsert({
+            user_id: userId,
+            display_name: displayName
+        })
+
+    if (error) throw error
+}
+
+export async function saveFriendNickname(
+    friendId: string,
+    nickname: string
+) {
+    const userId = getUserId()
+
+    if (!userId) return
+
+    const supabase = getSupabase()
+
+    const { error } = await supabase
+        .from('user_friends')
+        .update({
+            nickname
+        })
+        .eq('user_id', userId)
+        .eq('friend_id', friendId)
+
+    if (error) throw error
+}
+
+export async function getFriends() {
+    const userId = getUserId()
+
+    if (!userId) return []
+
+    const supabase = getSupabase()
+
+    const { data: relations, error } = await supabase
+        .from('user_friends')
+        .select('friend_id, nickname')
+        .eq('user_id', userId)
+
+    if (error) throw error
+
+    if (!relations?.length) return []
+
+    const friendCodes = relations.map(r => r.friend_id)
+
+    const { data: profiles, error: profileError } = await supabase
+        .from('public_profiles')
+        .select('friend_id, display_name')
+        .in('friend_id', friendCodes)
+
+    if (profileError) throw profileError
+
+    return relations.map(friend => {
+        const profile = profiles.find(
+            p => p.friend_id === friend.friend_id
+        )
+
+        return {
+            friend_id: friend.friend_id,
+            nickname: friend.nickname ?? '',
+            display_name:
+                profile?.display_name || 'Unnamed'
+        }
+    })
+}
+
+export async function addFriendByCode(friendCode: string) {
+    const userId = getUserId()
+
+    if (!userId) return
+
+    const supabase = getSupabase()
+
+    friendCode = friendCode.toUpperCase()
+
+    const myCode = await getFriendCode()
+
+    if (friendCode === myCode) {
+        throw new Error('Cannot add yourself')
+    }
+
+    const { error } = await supabase
+        .from('user_friends')
+        .upsert({
+            user_id: userId,
+            friend_id: friendCode,
+            nickname: ''
+        })
+
+    if (error) throw error
+}
+
+export async function removeFriend(friendId: string) {
+    const userId = getUserId()
+
+    if (!userId) return
+
+    const supabase = getSupabase()
+
+    const { error } = await supabase
+        .from('user_friends')
+        .delete()
+        .eq('user_id', userId)
+        .eq('friend_id', friendId)
+
+    if (error) throw error
+}
+
+export async function loadCharactersByFriendCode(friendCode: string) {
+    const supabase = getSupabase()
+
+    const { data, error } = await supabase.rpc(
+        'get_public_characters',
+        {
+            target_friend_id: friendCode.toUpperCase()
+        }
+    )
+
+    if (error) throw error
+
+    return data.map(row => ({
+        enabled: row.enabled,
+
+        dupes: row.dupes,
+        ascension: row.ascension,
+
+        kiokuLvl: row.kioku_lvl,
+        magicLvl: row.magic_lvl,
+        heartphialLvl: row.heartphial_lvl,
+        specialLvl: row.special_lvl,
+
+        portrait: row.portrait,
+
+        crys: row.crys,
+        crys_sub: row.crys_sub,
+
+        id: row.character_id
+    }))
 }

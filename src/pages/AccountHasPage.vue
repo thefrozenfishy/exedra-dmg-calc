@@ -1,5 +1,8 @@
 <template>
     <div class="ascension-list">
+        <div v-if="isReadonly" class="viewing-banner">
+            Viewing friend profile: <span style="color: lightgreen;">{{ viewingFriendCode }}</span>
+        </div>
         <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
         <button class="copy-btn" @click="downloadAscensionList">Download</button>
         <div>
@@ -141,18 +144,47 @@
     </div>
 </template>
 <script setup lang="ts">
-import { computed, ref } from "vue"
+import { computed, readonly, ref } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { Character, KiokuConstants } from "../types/KiokuTypes"
 import html2canvas from "html2canvas"
 import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
+import { onMounted } from "vue"
+import { useRoute } from "vue-router"
+import { loadCharactersByFriendCode } from "../store/cloud"
+
+const route = useRoute()
+
+const viewingFriendCode = computed(() =>
+    typeof route.query.friend === "string"
+        ? route.query.friend.toUpperCase()
+        : null
+)
 
 const store = useCharacterStore()
-const fiveStarMembers = computed(() => store.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
-const fourStarMembers = computed(() => store.characters.filter(c => c.rarity === 4 || c.name === "Lux☆Magica"))
-const threeStarMembers = computed(() => store.characters.filter(c => c.rarity === 3))
+const displayedCharacters = ref<Character[]>([])
+const displayedCharactersComputed = computed(() =>
+    isReadonly.value
+        ? displayedCharacters.value
+        : store.characters
+)
+const isReadonly = computed(() => !!viewingFriendCode.value)
+
+onMounted(async () => {
+    if (!viewingFriendCode.value) return
+
+    const rows = await loadCharactersByFriendCode(
+        viewingFriendCode.value
+    )
+
+    displayedCharacters.value = store.mergeChars(rows)
+})
+
+const fiveStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
+const fourStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 4 || c.name === "Lux☆Magica"))
+const threeStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 3))
 
 const maxed5starChars = computed(() => fiveStarMembers.value.filter(ch => ch.enabled && isMaxLevels(ch)))
 const maxed4starChars = computed(() => fourStarMembers.value.filter(isMaxLevels))
@@ -204,7 +236,7 @@ const groupedByAscension = computed(() => {
     groups[7].label = "4 Stars"
     groups[8].label = "3 Stars"
 
-    for (const ch of store.characters) {
+    for (const ch of displayedCharactersComputed.value) {
         if (ch.rarity === 4 || ch.name === "Lux☆Magica") {
             groups[7].push(ch)
         } else if (ch.rarity === 3) {
@@ -254,6 +286,7 @@ const editing = ref<{ id: number; field: EditableField } | null>(null)
 const editValue = ref<number>(0)
 
 const startEdit = async (ch: Character, field: EditableField, e: MouseEvent) => {
+    if (isReadonly.value) return
     editing.value = { id: ch.id, field }
     editValue.value = ch[field]
 
@@ -283,6 +316,7 @@ const getMax = (ch: Character, field: EditableField) => {
 }
 
 const commitEdit = async (ch: Character, field: EditableField) => {
+    if (isReadonly.value) return
     await nextTick()
 
     const max = getMax(ch, field)
@@ -302,10 +336,12 @@ const draggedChar = ref<Character | null>(null)
 const dragOver = ref<number | null>(null)
 
 const onDragStart = (ch: Character) => {
+    if (isReadonly.value) return
     draggedChar.value = ch
 }
 
 const onDrop = (targetIndex: number) => {
+    if (isReadonly.value) return
 
     if (!draggedChar.value) return
 
@@ -323,6 +359,7 @@ const onDrop = (targetIndex: number) => {
 }
 
 const dragLeave = (e: DragEvent) => {
+    if (isReadonly.value) return
     if (!e.currentTarget || !(e.currentTarget as HTMLElement).contains(e.relatedTarget as Node)) {
         dragOver.value = null
     }
@@ -391,6 +428,7 @@ const downloadAscensionList = async () => {
 const touchDragged = ref<Character | null>(null)
 
 const onTouchStart = (ch: Character, e: TouchEvent) => {
+    if (isReadonly.value) return
     touchDragged.value = ch
     draggedChar.value = ch
 
@@ -398,6 +436,7 @@ const onTouchStart = (ch: Character, e: TouchEvent) => {
 }
 
 const onTouchMove = (e: TouchEvent) => {
+    if (isReadonly.value) return
     const touch = e.touches[0]
     const element = document.elementFromPoint(touch.clientX, touch.clientY)
     const row = element?.closest("tr.asc-row")
@@ -412,6 +451,7 @@ const onTouchMove = (e: TouchEvent) => {
 }
 
 const onTouchEnd = () => {
+    if (isReadonly.value) return
     if (dragOver.value != null) {
         onDrop(dragOver.value)
     }
@@ -582,5 +622,15 @@ td {
     font-size: 0.6rem;
     text-align: center;
     padding: 1px;
+}
+
+.viewing-banner {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    background: #2d2233;
+    border: 1px solid #b57edc;
+    color: #f0d8ff;
+    font-weight: bold;
 }
 </style>
