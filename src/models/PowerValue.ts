@@ -1,4 +1,4 @@
-import { KiokuConstants, KiokuRole, type Character } from "../types/KiokuTypes"
+import { KiokuConstants, KiokuElement, KiokuRole, type Character } from "../types/KiokuTypes"
 
 export type PowerScores = {
     total: number
@@ -98,40 +98,78 @@ function normalize(
     )
 }
 
+function applyGroupedDiminishingReturns(
+    items: WeightedEntry[],
+    getValue: (item: WeightedEntry) => number = (x => x.value),
+    getGroup: (item: WeightedEntry) => string = (x => `${x.role}_${x.element}`),
+    decay = 0.8
+): number {
+    const groups = new Map<string, number[]>()
+
+    for (const item of items) {
+        const group = getGroup(item)
+        const value = getValue(item)
+
+        if (!groups.has(group)) {
+            groups.set(group, [])
+        }
+
+        groups.get(group)!.push(value)
+    }
+
+    let total = 0
+
+    for (const values of groups.values()) {
+        values.sort((a, b) => b - a)
+
+        values.forEach((value, index) => {
+            console.log(`Value: ${value}, Decay: ${Math.pow(decay, index)}, Total Before: ${total}`)
+            total += value * Math.pow(decay, index)
+        })
+    }
+
+    return total
+}
+
+type WeightedEntry = {
+    value: number
+    role: KiokuRole
+    element: KiokuElement
+}
+
 export function getPowerScores(
     chars: Character[]
 ): PowerScores {
     const fiveStars = chars.filter(ch => ch.rarity === 5 && ch.name !== "Lux☆Magica")
 
     const roleCurrent = {
-        attacker: 0,
-        buffer: 0,
-        debuffer: 0,
-        breaker: 0,
-        defender: 0,
-        healer: 0,
+        attacker: [] as WeightedEntry[],
+        buffer: [] as WeightedEntry[],
+        debuffer: [] as WeightedEntry[],
+        breaker: [] as WeightedEntry[],
+        defender: [] as WeightedEntry[],
+        healer: [] as WeightedEntry[],
     }
 
     const roleMax = {
-        attacker: 0,
-        buffer: 0,
-        debuffer: 0,
-        breaker: 0,
-        defender: 0,
-        healer: 0,
+        attacker: [] as WeightedEntry[],
+        buffer: [] as WeightedEntry[],
+        debuffer: [] as WeightedEntry[],
+        breaker: [] as WeightedEntry[],
+        defender: [] as WeightedEntry[],
+        healer: [] as WeightedEntry[],
     }
 
-    let totalCurrent = 0
-    let totalMax = 0
-    let totalWhaleCurrent = 0
-    let totalWhaleMax = 0
+    const totalCurrent: WeightedEntry[] = []
+    const totalMax: WeightedEntry[] = []
+    const totalWhaleCurrent: WeightedEntry[] = []
+    const totalWhaleMax: WeightedEntry[] = []
 
     for (const ch of fiveStars) {
         let current = getCharacterPower(ch)
         let max = getMaxCharacterPower(ch)
         const ratio = current / max
 
-        const limitedScalar = ch.obtain !== "Permanent" ? 2 : 1
         let whaleScalar = 1
         if (ch.obtain !== "Permanent") {
             whaleScalar = 3
@@ -160,55 +198,81 @@ export function getPowerScores(
                 break
         }
 
+        const data = { role: ch.role, element: ch.element }
+
         const kiokuScaling = UNIQUE_KIOKU_SCALING[ch.name] ?? 1
 
-        const scaledMax = limitedScalar * roleScaling * kiokuScaling
+        const scaledMax = roleScaling * kiokuScaling
         const scaledCurrent = ratio * scaledMax
 
         const whaleScaledMax = whaleScalar / (roleScaling * kiokuScaling)
         const whaleScaledCurrent = ratio * whaleScaledMax
 
-        totalCurrent += scaledCurrent
-        totalMax += scaledMax
-        totalWhaleCurrent += whaleScaledCurrent
-        totalWhaleMax += whaleScaledMax
+        totalCurrent.push({ ...data, value: scaledCurrent })
+        totalMax.push({ ...data, value: scaledMax })
+        totalWhaleCurrent.push({ ...data, value: whaleScaledCurrent })
+        totalWhaleMax.push({ ...data, value: whaleScaledMax })
 
         switch (ch.role) {
             case KiokuRole.Attacker:
-                roleCurrent.attacker += scaledCurrent
-                roleMax.attacker += scaledMax
+                roleCurrent.attacker.push({ ...data, value: scaledCurrent })
+                roleMax.attacker.push({ ...data, value: scaledMax })
                 break
             case KiokuRole.Buffer:
-                roleCurrent.buffer += scaledCurrent
-                roleMax.buffer += scaledMax
+                roleCurrent.buffer.push({ ...data, value: scaledCurrent })
+                roleMax.buffer.push({ ...data, value: scaledMax })
                 break
             case KiokuRole.Debuffer:
-                roleCurrent.debuffer += scaledCurrent
-                roleMax.debuffer += scaledMax
+                roleCurrent.debuffer.push({ ...data, value: scaledCurrent })
+                roleMax.debuffer.push({ ...data, value: scaledMax })
                 break
             case KiokuRole.Breaker:
-                roleCurrent.breaker += scaledCurrent
-                roleMax.breaker += scaledMax
+                roleCurrent.breaker.push({ ...data, value: scaledCurrent })
+                roleMax.breaker.push({ ...data, value: scaledMax })
                 break
             case KiokuRole.Defender:
-                roleCurrent.defender += scaledCurrent
-                roleMax.defender += scaledMax
+                roleCurrent.defender.push({ ...data, value: scaledCurrent })
+                roleMax.defender.push({ ...data, value: scaledMax })
                 break
             case KiokuRole.Healer:
-                roleCurrent.healer += scaledCurrent
-                roleMax.healer += scaledMax
+                roleCurrent.healer.push({ ...data, value: scaledCurrent })
+                roleMax.healer.push({ ...data, value: scaledMax })
                 break
         }
     }
 
     return {
-        total: normalize(totalCurrent, totalMax),
-        whale: normalize(totalWhaleCurrent, totalWhaleMax),
-        attacker: normalize(roleCurrent.attacker, roleMax.attacker),
-        buffer: normalize(roleCurrent.buffer, roleMax.buffer),
-        debuffer: normalize(roleCurrent.debuffer, roleMax.debuffer),
-        breaker: normalize(roleCurrent.breaker, roleMax.breaker),
-        defender: normalize(roleCurrent.defender, roleMax.defender),
-        healer: normalize(roleCurrent.healer, roleMax.healer),
+        total: normalize(
+            applyGroupedDiminishingReturns(totalCurrent),
+            applyGroupedDiminishingReturns(totalMax)
+        ),
+        whale: normalize(
+            applyGroupedDiminishingReturns(totalWhaleCurrent),
+            applyGroupedDiminishingReturns(totalWhaleMax)
+        ),
+        attacker: normalize(
+            applyGroupedDiminishingReturns(roleCurrent.attacker),
+            applyGroupedDiminishingReturns(roleMax.attacker)
+        ),
+        buffer: normalize(
+            applyGroupedDiminishingReturns(roleCurrent.buffer),
+            applyGroupedDiminishingReturns(roleMax.buffer)
+        ),
+        debuffer: normalize(
+            applyGroupedDiminishingReturns(roleCurrent.debuffer),
+            applyGroupedDiminishingReturns(roleMax.debuffer)
+        ),
+        breaker: normalize(
+            applyGroupedDiminishingReturns(roleCurrent.breaker),
+            applyGroupedDiminishingReturns(roleMax.breaker)
+        ),
+        defender: normalize(
+            applyGroupedDiminishingReturns(roleCurrent.defender),
+            applyGroupedDiminishingReturns(roleMax.defender)
+        ),
+        healer: normalize(
+            applyGroupedDiminishingReturns(roleCurrent.healer),
+            applyGroupedDiminishingReturns(roleMax.healer)
+        ),
     }
 }
