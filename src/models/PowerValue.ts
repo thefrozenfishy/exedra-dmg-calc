@@ -20,22 +20,27 @@ const UNIQUE_KIOKU_SCALING: Record<string, number> = {
     // Healers
     "Glitterjoy Snow Globe": 1.15,
     "Judgement Earth": 1.25,
+    "Panna Vorticosa": 0.8,
 
     // Buffers
-    "Hollow Woman": 1.8,
-    "Pluvia☆Neujahr": 1.6,
-    "Luce della Speranza": 1.40,
+    "Hollow Woman": 2,
+    "Pluvia☆Neujahr": 1.5,
+    "Luce della Speranza": 1.3,
 
     // Breakers
     "Pluvia☆Magica": 1.25,
+    "Sacred Gift": 1.1,
 
     // Debuffers
-    "Ultra Great Big Hammer": 0.70,
+    "Ultra Great Big Hammer": 0.5,
+    "Bebe-O'-Lantern": 1.2,
+    "Yuletide Gift": 1.2,
 
     // Attackers
     "Falsified Phenomena": 1.5,
     "Nothing to Despair, Ever": 1.2,
     "Marigold Dadaism": 0.5,
+    "Kiss-shot": 0.8,
 }
 
 function getCharacterPower(ch: Character): number {
@@ -47,10 +52,13 @@ function getCharacterPower(ch: Character): number {
     if (ch.ascension >= 2) power += 20
     switch (ch.role) {
         case KiokuRole.Breaker:
+            if (ch.ascension >= 3) power += 30
             if (ch.ascension >= 4) power += 10
+            if (ch.ascension >= 5) power += 30
+            break
         case KiokuRole.Attacker:
-            if (ch.ascension >= 3) power += 40
-            if (ch.ascension >= 5) power += 40
+            if (ch.ascension >= 3) power += 25
+            if (ch.ascension >= 5) power += 55
             break;
         case KiokuRole.Buffer:
             if (ch.ascension >= 4) power += 80
