@@ -43,21 +43,6 @@ function getCharacterPower(ch: Character): number {
             if (ch.ascension >= 4) power += 10
             break
     }
-
-    if ([KiokuRole.Attacker, KiokuRole.Breaker].includes(ch.role)) {
-        if (ch.ascension >= 3) {
-            power += 40
-        }
-        if (ch.ascension == 5) {
-            power += 40
-        }
-    } else {
-        if (ch.ascension >= 4) {
-            power += 40
-            if (ch.role === KiokuRole.Buffer) power += 40
-        }
-    }
-
     return power
 }
 
