@@ -22,9 +22,6 @@
                             </button>
                         </div>
 
-                        <div class="friend-code">
-                            Your profile
-                        </div>
                         <div class="friend-code-row">
                             <div class="friend-code">
                                 {{ store.friendCode }}
@@ -34,6 +31,21 @@
                                 🖊
                             </button>
                         </div>
+
+                        <div class="friend-code-row">
+                            <img :src="'/exedra-dmg-calc/union.png'" alt="Union" />
+                            <div class="friend-code">
+                                {{ store.unionName || 'No union' }}
+                            </div>
+
+                            <button class="edit-nick-btn" @click="editingUnionName = true">
+                                🖊
+                            </button>
+                        </div>
+
+                        <input v-if="editingUnionName" v-model="pendingUnionName" class="nickname-inline-input"
+                            placeholder="Union name" maxlength="32" @blur="finishUnionEdit"
+                            @keydown.enter="finishUnionEdit" />
 
                         <input v-if="editingFriendCode" v-model="pendingFriendCode" class="nickname-inline-input"
                             placeholder="Friend code" maxlength="5" @blur="finishFriendCodeEdit"
@@ -100,19 +112,68 @@
                 <h2>Friends</h2>
 
                 <div class="add-friend-row">
+
+                    <label for="sortMode">Sort by:</label>
+                    <select v-model="sortMode" id="sortMode">
+                        <option value="default">
+                            Default
+                        </option>
+
+                        <option value="name">
+                            Name Only
+                        </option>
+
+                        <option value="total">
+                            Total Power
+                        </option>
+
+                        <option value="attacker">
+                            Attacker Power
+                        </option>
+
+                        <option value="buffer">
+                            Buffer Power
+                        </option>
+
+                        <option value="debuffer">
+                            Debuffer Power
+                        </option>
+
+                        <option value="breaker">
+                            Breaker Power
+                        </option>
+
+                        <option value="defender">
+                            Defender Power
+                        </option>
+
+                        <option value="healer">
+                            Healer Power
+                        </option>
+
+                        <option value="whale">
+                            Whale Power
+                        </option>
+                    </select>
+                    
                     <input v-model="friendCode" placeholder="Enter friend code" maxlength="5" />
 
                     <button @click="addFriend">
                         Add Friend
                     </button>
+
                 </div>
 
                 <div class="friend-list">
-                    <div v-for="friend in store.friends" :key="friend.friend_id" class="friend-card">
+                    <div v-for="friend in sortedFriends" :key="friend.friend_id" class="friend-card"
+                        :class="{ 'union-member': friend.isUnionMember }">
                         <div class="friend-left">
                             <div class="friend-name-row">
+                                <div v-if="friend.isUnionMember" class="union-badge">
+                                    <img :src="'/exedra-dmg-calc/union.png'" alt="Union" />
+                                </div>
                                 <div class="friend-primary">
-                                    {{ friend.nickname || friend.display_name }}
+                                    {{ friend.nickname?.trim() || friend.display_name?.trim() }}
                                 </div>
 
                                 <button class="edit-nick-btn" @click="editingFriend = friend.friend_id">
@@ -120,12 +181,12 @@
                                 </button>
                             </div>
 
-                            <div v-if="friend.nickname && friend.display_name" class="friend-secondary">
+                            <div v-if="friend.nickname?.trim() && friend.display_name?.trim()" class="friend-secondary">
                                 {{ friend.display_name }}
                             </div>
 
-                            <div class="friend-code">
-                                {{ friend.friend_id }}
+                            <div class="friend-union">
+                                {{ friend.union_name?.trim() }}
                             </div>
 
                             <input v-if="editingFriend === friend.friend_id" v-model="friend.nickname"
@@ -184,6 +245,9 @@
                         </div>
 
                         <div class="friend-actions">
+                            <button v-if="friend.isFriend" @click="store.toggleFavorite(friend.friend_id)">
+                                {{ friend.favorite ? '★' : '☆' }}
+                            </button>
                             <router-link :to="{
                                 path: '/my-kioku',
                                 query: {
@@ -193,7 +257,11 @@
                                 View Kioku
                             </router-link>
 
-                            <button class="remove-btn" @click="store.deleteFriend(friend.friend_id)">
+                            <button v-if="!friend.isFriend" @click="store.addFriend(friend.friend_id)">
+                                Add Friend
+                            </button>
+
+                            <button v-else class="remove-btn" @click="store.deleteFriend(friend.friend_id)">
                                 Remove
                             </button>
                         </div>
@@ -206,10 +274,11 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
 import { toast } from 'vue3-toastify'
-import { FriendProfile, useFriendStore } from '../store/friendStore'
+import { SocialProfile, useFriendStore } from '../store/friendStore'
 import { getUserId } from '../store/user'
 import { getPowerScores } from '../models/PowerValue'
 import { useCharacterStore } from '../store/characterStore'
+import { useSetting } from '../store/settingsStore'
 
 const store = useFriendStore()
 const characterStore = useCharacterStore()
@@ -220,7 +289,7 @@ const myPower = computed(() =>
 const editingFriend = ref<string | null>(null)
 
 const finishNicknameEdit = async (
-    friend: FriendProfile
+    friend: SocialProfile
 ) => {
     try {
         await saveNickname(friend)
@@ -233,6 +302,8 @@ const userId = getUserId()
 const editingFriendCode = ref(false)
 const pendingFriendCode = ref('')
 const friendCode = ref('')
+const editingUnionName = ref(false)
+const pendingUnionName = ref('')
 
 onMounted(async () => {
     if (!userId) return
@@ -241,11 +312,86 @@ onMounted(async () => {
     await store.loadFriends()
     pendingDisplayName.value = store.displayName
     pendingFriendCode.value = store.friendCode
+    pendingUnionName.value = store.unionName
 })
 
 const editingSelfName = ref(false)
 
 const pendingDisplayName = ref('')
+
+type SortModes = 'default' | 'name' | 'total' | 'whale' | 'attacker' | 'buffer' | 'debuffer' | 'breaker' | 'defender' | 'healer'
+const sortMode = useSetting<SortModes>("sortMode", "default")
+
+
+const sortedFriends = computed(() => {
+    const arr = [...store.friends]
+
+    arr.sort((a, b) => {
+        if (sortMode.value === 'default') {
+            if (!!a.favorite !== !!b.favorite) {
+                return a.favorite ? -1 : 1
+            }
+
+            if (!!a.isUnionMember !== !!b.isUnionMember) {
+                return a.isUnionMember
+                    ? -1
+                    : 1
+            }
+        }
+
+        let diff = 0
+
+        switch (sortMode.value) {
+            case 'total':
+                diff = (b.power?.total || 0) - (a.power?.total || 0)
+                break
+
+            case 'whale':
+                diff = (b.power?.whale || 0) - (a.power?.whale || 0)
+                break
+
+            case 'attacker':
+                diff = (b.power?.attacker || 0) - (a.power?.attacker || 0)
+                break
+
+            case 'buffer':
+                diff = (b.power?.buffer || 0) - (a.power?.buffer || 0)
+                break
+
+            case 'debuffer':
+                diff = (b.power?.debuffer || 0) - (a.power?.debuffer || 0)
+                break
+
+            case 'breaker':
+                diff = (b.power?.breaker || 0) - (a.power?.breaker || 0)
+                break
+
+            case 'defender':
+                diff = (b.power?.defender || 0) - (a.power?.defender || 0)
+                break
+
+            case 'healer':
+                diff = (b.power?.healer || 0) - (a.power?.healer || 0)
+                break
+        }
+
+        if (diff !== 0) {
+            return diff
+        }
+
+        return (
+            a.nickname ||
+            a.display_name
+        ).localeCompare(
+            b.nickname ||
+            b.display_name
+        )
+    })
+
+    return arr
+})
+
+
 
 const finishDisplayNameEdit = async () => {
     try {
@@ -303,7 +449,35 @@ const finishFriendCodeEdit = async () => {
     }
 }
 
-const saveNickname = async (friend: FriendProfile) => {
+const finishUnionEdit = async () => {
+    try {
+        store.unionName = pendingUnionName.value.trim()
+
+        await store.saveUnionName()
+
+        await store.loadFriends()
+
+        toast.success('Union updated!', {
+            position: toast.POSITION.TOP_RIGHT,
+            icon: false,
+        })
+    } catch (err) {
+        console.error(err)
+
+        toast.error(
+            'Failed to update union',
+            {
+                position:
+                    toast.POSITION.TOP_RIGHT,
+                icon: false,
+            }
+        )
+    } finally {
+        editingUnionName.value = false
+    }
+}
+
+const saveNickname = async (friend: SocialProfile) => {
     try {
         await store.saveNickname(
             friend.friend_id,
@@ -372,6 +546,13 @@ const addFriend = async () => {
     align-items: center;
     gap: 0.4rem;
     margin: 0 auto;
+}
+
+.friend-name-row img,
+.friend-code-row img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
 }
 
 input {
@@ -661,5 +842,15 @@ a:hover {
     background: linear-gradient(180deg,
             #26212f 0%,
             #1f1f1f 100%);
+}
+
+.union-badge {
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+    color: #8fb7ff;
+}
+
+.friend-card.union-member {
+    border: 1px solid #3f5d8a;
 }
 </style>

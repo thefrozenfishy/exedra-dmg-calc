@@ -150,6 +150,27 @@ export async function updateDisplayName(displayName: string) {
     if (error) throw error
 }
 
+export async function updateUnionName(
+    unionName: string
+) {
+    const userId = getUserId()
+
+    if (!userId) return
+
+    unionName = unionName.trim()
+
+    const supabase = getSupabase()
+
+    const { error } = await supabase
+        .from('user_profiles')
+        .update({
+            union_name: unionName
+        })
+        .eq('user_id', userId)
+
+    if (error) throw error
+}
+
 export async function saveFriendNickname(
     friendId: string,
     nickname: string
@@ -171,6 +192,27 @@ export async function saveFriendNickname(
     if (error) throw error
 }
 
+export async function setFriendFavorite(
+    friendId: string,
+    favorite: boolean
+) {
+    const userId = getUserId()
+
+    if (!userId) return
+
+    const supabase = getSupabase()
+
+    const { error } = await supabase
+        .from('user_friends')
+        .update({
+            favorite
+        })
+        .eq('user_id', userId)
+        .eq('friend_id', friendId)
+
+    if (error) throw error
+}
+
 export async function getFriends() {
     const userId = getUserId()
 
@@ -180,7 +222,7 @@ export async function getFriends() {
 
     const { data: relations, error } = await supabase
         .from('user_friends')
-        .select('friend_id, nickname')
+        .select('friend_id, nickname, favorite')
         .eq('user_id', userId)
 
     if (error) throw error
@@ -191,7 +233,7 @@ export async function getFriends() {
 
     const { data: profiles, error: profileError } = await supabase
         .from('public_profiles')
-        .select('friend_id, display_name')
+        .select('friend_id, display_name, union_name')
         .in('friend_id', friendCodes)
 
     if (profileError) throw profileError
@@ -204,8 +246,11 @@ export async function getFriends() {
         return {
             friend_id: friend.friend_id,
             nickname: friend.nickname ?? '',
-            display_name:
-                profile?.display_name || 'Unnamed'
+            display_name: profile?.display_name || 'Unnamed',
+            union_name: profile?.union_name || '',
+            favorite: friend.favorite ?? false,
+            isFriend: true,
+            isUnionMember: false,
         }
     })
 }
@@ -250,6 +295,23 @@ export async function removeFriend(friendId: string) {
         .eq('friend_id', friendId)
 
     if (error) throw error
+}
+
+export async function getUnionMembers(
+    unionName: string
+) {
+    const supabase = getSupabase()
+
+    const { data, error } = await supabase.rpc(
+        'get_union_members',
+        {
+            target_union: unionName
+        }
+    )
+
+    if (error) throw error
+
+    return data
 }
 
 export async function loadCharactersByFriendCode(friendCode: string) {
