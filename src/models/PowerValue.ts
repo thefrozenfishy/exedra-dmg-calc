@@ -18,18 +18,26 @@ function getCharacterPower(ch: Character): number {
 
     power += ch.ascension * 40
 
+    if (ch.ascension >= 2) power += 20
     switch (ch.role) {
-        case KiokuRole.Attacker:
         case KiokuRole.Breaker:
-            if (ch.ascension >= 3) power += 40
             if (ch.ascension >= 4) power += 10
+        case KiokuRole.Attacker:
+            if (ch.ascension >= 3) power += 40
             if (ch.ascension >= 5) power += 40
             break;
         case KiokuRole.Buffer:
+            if (ch.ascension >= 4) power += 80
+            break
         case KiokuRole.Debuffer:
+            if (ch.ascension >= 4) power += 60
+            break
         case KiokuRole.Defender:
+            if (ch.ascension >= 4) power += 20
+            break
         case KiokuRole.Healer:
-        default:
+            if (ch.ascension >= 4) power += 10
+            break
     }
 
     if ([KiokuRole.Attacker, KiokuRole.Breaker].includes(ch.role)) {
