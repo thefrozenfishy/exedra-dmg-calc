@@ -40,6 +40,8 @@
         </ul>
         <h1>Dump debug data</h1>
         <button class="export-button" :onclick="downloadLS">Export LocalStorage</button>
+        <h1>Toggle beta</h1>
+        <button class="export-button" :onclick="toggleBeta">Toggle beta</button>
     </div>
 </template>
 
@@ -52,6 +54,9 @@ function downloadLS() {
     a.href = url;
     a.download = 'exedra_dmg_calc_debug.json';
     a.click();
+}
+function toggleBeta() {
+    localStorage.setItem('beta', localStorage.getItem('beta') === 'true' ? 'false' : 'true');
 }
 </script>
 
