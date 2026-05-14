@@ -12,9 +12,13 @@ export type PowerScores = {
     whale: number
 }
 
+UNIQUE_POWER_VALUES = {
+    "Folter Gefängnis": 50,
+}
+
 function getCharacterPower(ch: Character): number {
     if (!ch.enabled) return 0
-    let power = 100
+    let power = UNIQUE_POWER_VALUES[ch.name] || 100
 
     power += ch.ascension * 40
 
