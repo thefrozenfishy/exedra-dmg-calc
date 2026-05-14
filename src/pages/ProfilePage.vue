@@ -290,13 +290,15 @@
                         </div>
 
                         <div class="friend-actions">
-                            <router-link :to="{
+                            <router-link v-slot="{ href }" :to="{
                                 path: '/my-kioku',
                                 query: {
                                     friend: friend.friend_id
                                 }
-                            }">
-                                View Kioku
+                            }" custom>
+                                <a :href="href" target="_blank" rel="noopener noreferrer">
+                                    View Kioku
+                                </a>
                             </router-link>
 
                             <button v-if="!friend.isFriend" @click="store.addFriend(friend.friend_id)">
@@ -313,8 +315,10 @@
         </template>
     </div>
     <div>
-        <p>Curious how the power values are calculated? Check out the calculation on <a class="link"
-                href="https://github.com/thefrozenfishy/exedra-dmg-calc/blob/main/src/models/PowerValue.ts">Github</a></p>
+        <p>Curious how the power values are calculated? Check out the calculation on <a
+                href="https://github.com/thefrozenfishy/exedra-dmg-calc/blob/main/src/models/PowerValue.ts" class="link"
+                target="_blank" rel="noopener noreferrer">Github</a>
+        </p>
         <p>If you think the calculation can be improved, talk to me about it!</p>
     </div>
 </template>

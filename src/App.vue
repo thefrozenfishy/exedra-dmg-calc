@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import CloudSyncWidget from './components/CloudSyncWidget.vue'
-const beta = localStorage.getItem("beta") ?? false
 const icon = document.getElementById('app-icon').href
 </script>
 
 <template>
   <div id="app">
     <header>
-      <CloudSyncWidget v-if="beta" />
+      <CloudSyncWidget />
       <div class="title-row">
         <img :src="icon" alt="App Icon" class="app-icon" />
         <h1>TFF's Exedra Toolbox</h1>
       </div>
       <nav>
         <router-link to="/team-setup">Kioku Setup</router-link>
-        <router-link v-if="beta" to="/profile">Profile + Friends</router-link>
+        <router-link to="/profile">Profile + Friends</router-link>
         <router-link to="/my-kioku">My Kioku Viewer</router-link>
         <router-link to="/kioku-grid">Kioku Grid</router-link>
         <router-link to="/gacha-rate">Gacha Rate+Sim</router-link>
