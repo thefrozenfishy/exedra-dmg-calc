@@ -127,6 +127,7 @@ export function getPowerScores(
     for (const ch of fiveStars) {
         let current = getCharacterPower(ch)
         let max = getMaxCharacterPower(ch)
+        const ratio = current / max
 
         const limitedScalar = ch.obtain !== "Permanent" ? 2 : 1
         let whaleScalar = 1
@@ -158,12 +159,12 @@ export function getPowerScores(
         }
 
         const kiokuScaling = UNIQUE_KIOKU_SCALING[ch.name] ?? 1
-        const currentRatio = (current / max) * kiokuScaling
 
-        const scaledCurrent = currentRatio * roleScaling * limitedScalar
-        const scaledMax = kiokuScaling * roleScaling * limitedScalar
-        const whaleScaledCurrent = currentRatio * (1 / roleScaling) * whaleScalar
-        const whaleScaledMax = kiokuScaling * (1 / roleScaling) * whaleScalar
+        const scaledMax = limitedScalar * roleScaling * kiokuScaling
+        const scaledCurrent = ratio * scaledMax
+
+        const whaleScaledMax = whaleScalar / (roleScaling * kiokuScaling)
+        const whaleScaledCurrent = ratio * whaleScaledMax
 
         totalCurrent += scaledCurrent
         totalMax += scaledMax
