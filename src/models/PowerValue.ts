@@ -18,6 +18,20 @@ function getCharacterPower(ch: Character): number {
 
     power += ch.ascension * 40
 
+    switch (ch.role) {
+        case KiokuRole.Attacker:
+        case KiokuRole.Breaker:
+            if (ch.ascension >= 3) power += 40
+            if (ch.ascension >= 4) power += 10
+            if (ch.ascension >= 5) power += 40
+            break;
+        case KiokuRole.Buffer:
+        case KiokuRole.Debuffer:
+        case KiokuRole.Defender:
+        case KiokuRole.Healer:
+        default:
+    }
+
     if ([KiokuRole.Attacker, KiokuRole.Breaker].includes(ch.role)) {
         if (ch.ascension >= 3) {
             power += 40
@@ -32,24 +46,7 @@ function getCharacterPower(ch: Character): number {
         }
     }
 
-    if (ch.obtain !== "Permanent") {
-        power *= 2
-    }
-
-    switch (ch.role) {
-        case KiokuRole.Attacker:
-            return power * 1.15
-        case KiokuRole.Breaker:
-            return power * 1
-        case KiokuRole.Buffer:
-            return power * 1.25
-        case KiokuRole.Debuffer:
-            return power * 1.2
-        case KiokuRole.Healer:
-            return power * 0.9
-        default: // Defender
-            return power * 0.95
-    }
+    return power
 }
 
 function getMaxCharacterPower(ch: Character): number {
@@ -60,60 +57,6 @@ function getMaxCharacterPower(ch: Character): number {
     }
 
     return getCharacterPower(maxed)
-}
-function getCharacterWhalePower(ch: Character): number {
-    if (!ch.enabled) return 0
-    let power = 100
-
-    power += ch.ascension * 40
-
-    if ([KiokuRole.Attacker, KiokuRole.Breaker].includes(ch.role)) {
-        if (ch.ascension >= 3) {
-            power += 40
-        }
-        if (ch.ascension == 5) {
-            power += 40
-        }
-    } else {
-        if (ch.ascension >= 4) {
-            power += 40
-            if (ch.role === KiokuRole.Buffer) power += 40
-        }
-    }
-
-    if (ch.obtain !== "Permanent") {
-        power *= 3
-    } else if (
-        !ch.permaDate ||
-        new Date(ch.permaDate) > new Date()
-    ) {
-        power *= 5
-    }
-
-    switch (ch.role) {
-        case KiokuRole.Attacker:
-            return power * 1
-        case KiokuRole.Breaker:
-            return power * 1.2
-        case KiokuRole.Buffer:
-            return power * 0.8
-        case KiokuRole.Debuffer:
-            return power * 0.85
-        case KiokuRole.Healer:
-            return power * 1.25
-        default: // Defender
-            return power * 1.2
-    }
-}
-
-function getMaxCharacterWhalePower(ch: Character): number {
-    const maxed: Character = {
-        ...ch,
-        enabled: true,
-        ascension: KiokuConstants.maxAscension,
-    }
-
-    return getCharacterWhalePower(maxed)
 }
 
 function normalize(
@@ -156,43 +99,71 @@ export function getPowerScores(
     let totalWhaleMax = 0
 
     for (const ch of fiveStars) {
-        totalWhaleCurrent += getCharacterWhalePower(ch)
-        totalWhaleMax += getMaxCharacterWhalePower(ch)
-        const current = getCharacterPower(ch)
-        const max = getMaxCharacterPower(ch)
+        let current = getCharacterPower(ch)
+        let max = getMaxCharacterPower(ch)
 
-        totalCurrent += current
-        totalMax += max
+        const pwrLimScaling = ch.obtain !== "Permanent" ? 2 : 1
+        let whaleLimScaling = 1
+        if (ch.obtain !== "Permanent") {
+            whaleLimScaling = 3
+        } else if (!ch.permaDate || new Date(ch.permaDate) > new Date()) {
+            whaleLimScaling *= 5
+        }
+
+        let roleScaling
+        switch (ch.role) {
+            case KiokuRole.Attacker:
+                roleScaling = 1.15
+            case KiokuRole.Breaker:
+                roleScaling = 1
+            case KiokuRole.Buffer:
+                roleScaling = 1.25
+            case KiokuRole.Debuffer:
+                roleScaling = 1.2
+            case KiokuRole.Healer:
+                roleScaling = 0.9
+            case KiokuRole.Defender:
+            default: // Defender
+                roleScaling = 0.95
+        }
+
+        const whaleScaling = 1 / roleScaling
+        const currentScaled = current / max
+
+        totalCurrent += currentScaled * roleScaling * pwrLimScaling
+        totalMax += roleScaling * pwrLimScaling
+        totalWhaleCurrent += currentScaled * whaleScaling * whaleLimScaling
+        totalWhaleMax += whaleScaling * whaleLimScaling
 
         switch (ch.role) {
             case KiokuRole.Attacker:
-                roleCurrent.attacker += current
-                roleMax.attacker += max
+                roleCurrent.attacker += currentScaled
+                roleMax.attacker += 1
                 break
 
             case KiokuRole.Buffer:
-                roleCurrent.buffer += current
-                roleMax.buffer += max
+                roleCurrent.buffer += currentScaled
+                roleMax.buffer += 1
                 break
 
             case KiokuRole.Debuffer:
-                roleCurrent.debuffer += current
-                roleMax.debuffer += max
+                roleCurrent.debuffer += currentScaled
+                roleMax.debuffer += 1
                 break
 
             case KiokuRole.Breaker:
-                roleCurrent.breaker += current
-                roleMax.breaker += max
+                roleCurrent.breaker += currentScaled
+                roleMax.breaker += 1
                 break
 
             case KiokuRole.Defender:
-                roleCurrent.defender += current
-                roleMax.defender += max
+                roleCurrent.defender += currentScaled
+                roleMax.defender += 1
                 break
 
             case KiokuRole.Healer:
-                roleCurrent.healer += current
-                roleMax.healer += max
+                roleCurrent.healer += currentScaled
+                roleMax.healer += 1
                 break
         }
     }
