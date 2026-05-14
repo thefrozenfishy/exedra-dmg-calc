@@ -215,7 +215,8 @@
                                         }}
                                     </div>
 
-                                    <button class="edit-nick-btn" @click="editingFriend = friend.friend_id">
+                                    <button v-if="friend.isFriend" class="edit-nick-btn"
+                                        @click="editingFriend = friend.friend_id">
                                         🖊
                                     </button>
                                 </div>
@@ -298,6 +299,18 @@
                             }" custom>
                                 <a :href="href" target="_blank" rel="noopener noreferrer">
                                     View Kioku
+                                </a>
+                            </router-link>
+
+                            <router-link v-slot="{ href }" :to="{
+                                path: '/account-compare',
+                                query: {
+                                    left: store.friendCode,
+                                    right: friend.friend_id,
+                                }
+                            }" custom>
+                                <a :href="href" target="_blank" rel="noopener noreferrer">
+                                    Compare
                                 </a>
                             </router-link>
 
@@ -490,8 +503,6 @@ const sortedFriends = computed(() => {
     return arr
 })
 
-
-
 const finishDisplayNameEdit = async () => {
     try {
         store.displayName = pendingDisplayName.value
@@ -673,7 +684,7 @@ a {
     background: #444;
     border: 1px solid #666;
     color: white;
-    padding: 0.65rem 1rem;
+    padding: 0.3rem 0.5rem;
     border-radius: 10px;
     text-decoration: none;
     cursor: pointer;
@@ -733,7 +744,7 @@ a.link {
     gap: 1.2rem;
 
     background: #1f1f1f;
-    padding: 1rem 1.1rem;
+    padding: 0.5rem 0.7rem;
 
     border-radius: 14px;
 }
@@ -758,7 +769,7 @@ a.link {
     display: flex;
     align-items: center;
 
-    gap: 2.2rem;
+    gap: 1rem;
 
     min-width: 0;
 
@@ -772,12 +783,9 @@ a.link {
 ========================= */
 
 .friend-avatar-wrapper {
-    position: relative;
-
-    width: 54px;
-    height: 54px;
-
-    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .profile-avatar {
@@ -883,8 +891,6 @@ a.link {
     gap: 0.18rem;
 
     min-width: 0;
-
-    max-width: 220px;
 }
 
 .profile-info {
@@ -925,7 +931,7 @@ a.link {
     overflow: hidden;
     text-overflow: ellipsis;
 
-    max-width: 100px;
+    max-width: 140px;
 }
 
 .friend-secondary {
@@ -1087,7 +1093,7 @@ a.link {
     display: flex;
     flex-direction: column;
 
-    gap: 0.55rem;
+    gap: 0.2rem;
 
     width: 120px;
     flex-shrink: 0;

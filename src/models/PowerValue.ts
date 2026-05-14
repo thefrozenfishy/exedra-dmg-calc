@@ -123,7 +123,6 @@ function applyGroupedDiminishingReturns(
         values.sort((a, b) => b - a)
 
         values.forEach((value, index) => {
-            console.log(`Value: ${value}, Decay: ${Math.pow(decay, index)}, Total Before: ${total}`)
             total += value * Math.pow(decay, index)
         })
     }
