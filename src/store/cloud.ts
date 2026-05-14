@@ -83,17 +83,18 @@ export async function loadCharacters() {
 export async function restoreCloudAccount(userId: string) {
     const supabase = getSupabase()
 
-    const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("user_id", userId)
-        .single()
+    const { data, error } = await supabase.rpc(
+        'check_user_exists',
+        {
+            target_user_id: userId
+        }
+    )
 
     if (error || !data) {
         throw new Error("Account not found")
     }
 
-    return data
+    return true
 }
 
 export async function getFriendCode() {
