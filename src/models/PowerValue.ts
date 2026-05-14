@@ -15,26 +15,25 @@ export type PowerScores = {
 const UNIQUE_KIOKU_SCALING: Record<string, number> = {
     // Defenders
     "Folter Gefängnis": 0.5,
-    "Baldamente Fortissimo": 1.7,
+    "La Lumière": 0.7,
+    "Baldamente Fortissimo": 1.5,
 
     // Healers
     "Glitterjoy Snow Globe": 1.15,
     "Judgement Earth": 1.25,
-    "Panna Vorticosa": 0.8,
 
     // Buffers
-    "Hollow Woman": 2,
-    "Pluvia☆Neujahr": 1.5,
-    "Luce della Speranza": 1.3,
+    "Hollow Woman": 1.75,
+    "Pluvia☆Neujahr": 1.25,
 
     // Breakers
     "Pluvia☆Magica": 1.25,
     "Sacred Gift": 1.1,
 
     // Debuffers
-    "Ultra Great Big Hammer": 0.5,
-    "Bebe-O'-Lantern": 1.2,
-    "Yuletide Gift": 1.2,
+    "Ultra Great Big Hammer": 0.50,
+    "Bebe-O'-Lantern": 1.25,
+    "Yuletide Gift": 1.25,
 
     // Attackers
     "Falsified Phenomena": 1.5,
