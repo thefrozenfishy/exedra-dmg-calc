@@ -12,13 +12,36 @@ export type PowerScores = {
     whale: number
 }
 
-const UNIQUE_POWER_VALUES: Record<string, number> = {
-    "Folter Gefängnis": 50,
+const UNIQUE_KIOKU_SCALING: Record<string, number> = {
+    // Defenders
+    "Folter Gefängnis": 0.5,
+    "Baldamente Fortissimo": 2,
+
+    // Healers
+    "Glitterjoy Snow Globe": 1.15,
+    "Judgement Earth": 1.25,
+
+    // Buffers
+    "Hollow Woman": 2,
+    "Pluvia☆Neujahr": 1.7,
+    "Luce della Speranza": 1.50,
+    "Tiro Finale": 1.30,
+
+    // Breakers
+    "Pluvia☆Magica": 1.25,
+
+    // Debuffers
+    "Ultra Great Big Hammer": 0.70,
+
+    // Attackers
+    "Falsified Phenomena": 2.00,
+    "Nothing to Despair, Ever": 1.30,
+    "Marigold Dadaism": 0.50,
 }
 
 function getCharacterPower(ch: Character): number {
     if (!ch.enabled) return 0
-    let power = UNIQUE_POWER_VALUES[ch.name] || 100
+    let power = 100
 
     power += ch.ascension * 40
 
@@ -37,10 +60,10 @@ function getCharacterPower(ch: Character): number {
             if (ch.ascension >= 4) power += 60
             break
         case KiokuRole.Defender:
-            if (ch.ascension >= 4) power += 20
+            if (ch.ascension >= 4) power += 25
             break
         case KiokuRole.Healer:
-            if (ch.ascension >= 4) power += 10
+            if (ch.ascension >= 4) power += 30
             break
     }
     return power
@@ -111,56 +134,71 @@ export function getPowerScores(
         switch (ch.role) {
             case KiokuRole.Attacker:
                 roleScaling = 1.15
+                break
             case KiokuRole.Breaker:
                 roleScaling = 1
+                break
             case KiokuRole.Buffer:
                 roleScaling = 1.25
+                break
             case KiokuRole.Debuffer:
                 roleScaling = 1.2
+                break
             case KiokuRole.Healer:
                 roleScaling = 0.9
+                break
             case KiokuRole.Defender:
-            default: // Defender
-                roleScaling = 0.95
+            default:
+                roleScaling = 0.9
+                break
         }
 
-        const whaleScaling = 1 / roleScaling
-        const currentScaled = current / max
 
-        totalCurrent += currentScaled * roleScaling * pwrLimScaling
-        totalMax += roleScaling * pwrLimScaling
+        const kiokuScaling = UNIQUE_KIOKU_SCALING[ch.name] ?? 1
+        const currentScaled = (current / max) * kiokuScaling
+        const maxScaled = kiokuScaling
+
+        const pwrScalings = roleScaling * pwrLimScaling
+        const whaleScaling = 1 / roleScaling
+
+        totalCurrent += currentScaled * pwrScalings
+        totalMax += maxScaled * pwrScalings
         totalWhaleCurrent += currentScaled * whaleScaling * whaleLimScaling
-        totalWhaleMax += whaleScaling * whaleLimScaling
+        totalWhaleMax += maxScaled * whaleScaling * whaleLimScaling
+
+        roleCurrent.attacker += currentScaled
+        roleMax.attacker += kiokuScaling
+
 
         switch (ch.role) {
             case KiokuRole.Attacker:
                 roleCurrent.attacker += currentScaled
-                roleMax.attacker += 1
+                roleMax.attacker += kiokuScaling
                 break
 
             case KiokuRole.Buffer:
                 roleCurrent.buffer += currentScaled
-                roleMax.buffer += 1
+                roleMax.buffer += kiokuScaling
                 break
 
             case KiokuRole.Debuffer:
                 roleCurrent.debuffer += currentScaled
-                roleMax.debuffer += 1
+                roleMax.debuffer += kiokuScaling
                 break
 
             case KiokuRole.Breaker:
                 roleCurrent.breaker += currentScaled
-                roleMax.breaker += 1
+                roleMax.breaker += kiokuScaling
                 break
 
             case KiokuRole.Defender:
                 roleCurrent.defender += currentScaled
-                roleMax.defender += 1
+                roleMax.defender += kiokuScaling
                 break
 
             case KiokuRole.Healer:
                 roleCurrent.healer += currentScaled
-                roleMax.healer += 1
+                roleMax.healer += kiokuScaling
                 break
         }
     }
