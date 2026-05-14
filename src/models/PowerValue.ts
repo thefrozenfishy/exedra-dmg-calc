@@ -128,12 +128,12 @@ export function getPowerScores(
         let current = getCharacterPower(ch)
         let max = getMaxCharacterPower(ch)
 
-        const pwrLimScaling = ch.obtain !== "Permanent" ? 2 : 1
-        let whaleLimScaling = 1
+        const limitedPowerScalingScalar = ch.obtain !== "Permanent" ? 2 : 1
+        let whaleFromLimitedPowerScalar = 1
         if (ch.obtain !== "Permanent") {
-            whaleLimScaling = 3
+            whaleFromLimitedPowerScalar = 3
         } else if (!ch.permaDate || new Date(ch.permaDate) > new Date()) {
-            whaleLimScaling *= 5
+            whaleFromLimitedPowerScalar *= 5
         }
 
         let roleScaling
@@ -157,22 +157,13 @@ export function getPowerScores(
                 break
         }
 
-
         const kiokuScaling = UNIQUE_KIOKU_SCALING[ch.name] ?? 1
         const currentScaled = (current / max) * kiokuScaling
-        const maxScaled = kiokuScaling
 
-        const pwrScalings = roleScaling * pwrLimScaling
-        const whaleScaling = 1 / roleScaling
-
-        totalCurrent += currentScaled * pwrScalings
-        totalMax += maxScaled * pwrScalings
-        totalWhaleCurrent += currentScaled * whaleScaling * whaleLimScaling
-        totalWhaleMax += maxScaled * whaleScaling * whaleLimScaling
-
-        roleCurrent.attacker += currentScaled
-        roleMax.attacker += kiokuScaling
-
+        totalCurrent += currentScaled * roleScaling * limitedPowerScalingScalar
+        totalMax += kiokuScaling * roleScaling * limitedPowerScalingScalar
+        totalWhaleCurrent += currentScaled * (1 / roleScaling) * whaleFromLimitedPowerScalar
+        totalWhaleMax += kiokuScaling * (1 / roleScaling) * whaleFromLimitedPowerScalar
 
         switch (ch.role) {
             case KiokuRole.Attacker:
@@ -208,44 +199,13 @@ export function getPowerScores(
     }
 
     return {
-        total: normalize(
-            totalCurrent,
-            totalMax
-        ),
-
-        attacker: normalize(
-            roleCurrent.attacker,
-            roleMax.attacker
-        ),
-
-        buffer: normalize(
-            roleCurrent.buffer,
-            roleMax.buffer
-        ),
-
-        debuffer: normalize(
-            roleCurrent.debuffer,
-            roleMax.debuffer
-        ),
-
-        breaker: normalize(
-            roleCurrent.breaker,
-            roleMax.breaker
-        ),
-
-        defender: normalize(
-            roleCurrent.defender,
-            roleMax.defender
-        ),
-
-        healer: normalize(
-            roleCurrent.healer,
-            roleMax.healer
-        ),
-
-        whale: normalize(
-            totalWhaleCurrent,
-            totalWhaleMax,
-        )
+        total: normalize(totalCurrent, totalMax),
+        whale: normalize(totalWhaleCurrent, totalWhaleMax),
+        attacker: normalize(roleCurrent.attacker, roleMax.attacker),
+        buffer: normalize(roleCurrent.buffer, roleMax.buffer),
+        debuffer: normalize(roleCurrent.debuffer, roleMax.debuffer),
+        breaker: normalize(roleCurrent.breaker, roleMax.breaker),
+        defender: normalize(roleCurrent.defender, roleMax.defender),
+        healer: normalize(roleCurrent.healer, roleMax.healer),
     }
 }
