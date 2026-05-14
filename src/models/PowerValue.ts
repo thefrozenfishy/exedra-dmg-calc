@@ -14,8 +14,8 @@ export type PowerScores = {
 
 const UNIQUE_KIOKU_SCALING: Record<string, number> = {
     // Defenders
-    "Folter Gefängnis": 0.5,
-    "La Lumière": 0.7,
+    "Folter Gefängnis": 0.75,
+    "La Lumière": 0.8,
     "Baldamente Fortissimo": 1.5,
 
     // Healers
@@ -23,23 +23,26 @@ const UNIQUE_KIOKU_SCALING: Record<string, number> = {
     "Judgement Earth": 1.25,
 
     // Buffers
-    "Hollow Woman": 1.75,
+    "Hollow Woman": 2,
     "Pluvia☆Neujahr": 1.25,
 
     // Breakers
     "Pluvia☆Magica": 1.25,
-    "Sacred Gift": 1.1,
+    "Sacred Gift": 1.15,
+    "Final Fatebloom": 1.15,
+    "Unlimited Rulebook": 1.1,
+    "Neo Genesis": 0.75,
 
     // Debuffers
-    "Ultra Great Big Hammer": 0.50,
+    "Ultra Great Big Hammer": 0.75,
     "Bebe-O'-Lantern": 1.25,
     "Yuletide Gift": 1.25,
 
     // Attackers
     "Falsified Phenomena": 1.5,
     "Nothing to Despair, Ever": 1.2,
-    "Marigold Dadaism": 0.5,
-    "Kiss-shot": 0.8,
+    "Marigold Dadaism": 0.75,
+    "Kiss-shot": 0.75,
 }
 
 function getCharacterPower(ch: Character): number {
