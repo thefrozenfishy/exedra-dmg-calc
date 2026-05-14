@@ -128,15 +128,15 @@ export function getPowerScores(
         let current = getCharacterPower(ch)
         let max = getMaxCharacterPower(ch)
 
-        const limitedPowerScalingScalar = ch.obtain !== "Permanent" ? 2 : 1
-        let whaleFromLimitedPowerScalar = 1
+        const limitedScalar = ch.obtain !== "Permanent" ? 2 : 1
+        let whaleScalar = 1
         if (ch.obtain !== "Permanent") {
-            whaleFromLimitedPowerScalar = 3
+            whaleScalar = 3
         } else if (!ch.permaDate || new Date(ch.permaDate) > new Date()) {
-            whaleFromLimitedPowerScalar *= 5
+            whaleScalar *= 5
         }
 
-        let roleScaling
+        let roleScaling: number
         switch (ch.role) {
             case KiokuRole.Attacker:
                 roleScaling = 1.15
@@ -158,42 +158,42 @@ export function getPowerScores(
         }
 
         const kiokuScaling = UNIQUE_KIOKU_SCALING[ch.name] ?? 1
-        const currentScaled = (current / max) * kiokuScaling
+        const currentRatio = (current / max) * kiokuScaling
 
-        totalCurrent += currentScaled * roleScaling * limitedPowerScalingScalar
-        totalMax += kiokuScaling * roleScaling * limitedPowerScalingScalar
-        totalWhaleCurrent += currentScaled * (1 / roleScaling) * whaleFromLimitedPowerScalar
-        totalWhaleMax += kiokuScaling * (1 / roleScaling) * whaleFromLimitedPowerScalar
+        const scaledCurrent = currentRatio * roleScaling * limitedScalar
+        const scaledMax = kiokuScaling * roleScaling * limitedScalar
+        const whaleScaledCurrent = currentRatio * (1 / roleScaling) * whaleScalar
+        const whaleScaledMax = kiokuScaling * (1 / roleScaling) * whaleScalar
+
+        totalCurrent += scaledCurrent
+        totalMax += scaledMax
+        totalWhaleCurrent += whaleScaledCurrent
+        totalWhaleMax += whaleScaledMax
 
         switch (ch.role) {
             case KiokuRole.Attacker:
-                roleCurrent.attacker += currentScaled
-                roleMax.attacker += kiokuScaling
+                roleCurrent.attacker += scaledCurrent
+                roleMax.attacker += scaledMax
                 break
-
             case KiokuRole.Buffer:
-                roleCurrent.buffer += currentScaled
-                roleMax.buffer += kiokuScaling
+                roleCurrent.buffer += scaledCurrent
+                roleMax.buffer += scaledMax
                 break
-
             case KiokuRole.Debuffer:
-                roleCurrent.debuffer += currentScaled
-                roleMax.debuffer += kiokuScaling
+                roleCurrent.debuffer += scaledCurrent
+                roleMax.debuffer += scaledMax
                 break
-
             case KiokuRole.Breaker:
-                roleCurrent.breaker += currentScaled
-                roleMax.breaker += kiokuScaling
+                roleCurrent.breaker += scaledCurrent
+                roleMax.breaker += scaledMax
                 break
-
             case KiokuRole.Defender:
-                roleCurrent.defender += currentScaled
-                roleMax.defender += kiokuScaling
+                roleCurrent.defender += scaledCurrent
+                roleMax.defender += scaledMax
                 break
-
             case KiokuRole.Healer:
-                roleCurrent.healer += currentScaled
-                roleMax.healer += kiokuScaling
+                roleCurrent.healer += scaledCurrent
+                roleMax.healer += scaledMax
                 break
         }
     }
