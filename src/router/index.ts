@@ -12,10 +12,12 @@ import GachaRatePage from '../pages/GachaRatePage.vue'
 import TierLists from '../pages/TierLists.vue'
 import KiokuGridPage from '../pages/KiokuGridPage.vue'
 import ProfilePage from '../pages/ProfilePage.vue'
+import AccountComparisonPage from '../pages/AccountComparisonPage.vue'
 
 const routes = [
     { path: '/profile', name: 'Profile + Friends', component: ProfilePage },
     { path: '/team-setup', name: 'Kioku Setup', component: TeamSetupPage },
+    { path: '/account-compare', name: 'Account Comparison', component: AccountComparisonPage },
     { path: '/sa-simulator-multiple', name: 'Best SA Team Calculator', component: BestTeamPage },
     { path: '/sa-simulator-single', name: 'Single Battle Calculator', component: SingleTeamPage },
     { path: '/pvp-simulator', name: 'PvP Calculator', component: PvpTeamPage },

@@ -269,6 +269,29 @@ export async function getFriends() {
     })
 }
 
+export async function getProfile(friend_id: string) {
+    const userId = getUserId()
+
+    if (!userId) return null
+
+    const supabase = getSupabase()
+
+    const { data: profile, error: profileError } = await supabase
+        .from('public_profiles')
+        .select('*')
+        .eq('friend_id', friend_id)
+        .single()
+
+    if (profileError) throw profileError
+
+    return {
+        friend_id,
+        display_name: profile?.display_name,
+        union_name: profile?.union_name,
+        profile_icon: profile?.profile_icon,
+    }
+}
+
 export async function addFriendByCode(friendCode: string) {
     const userId = getUserId()
 
