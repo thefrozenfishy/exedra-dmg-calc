@@ -220,18 +220,64 @@ const borderClass = (ch: Character): string => {
 }
 
 .subtitle {
-    margin-top: 0.5rem;
-    font-size: 1.1rem;
+    margin-top: 0.75rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    flex-wrap: wrap;
+
+    font-size: 1.05rem;
+}
+
+.friend-avatar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+
+    background: #2b2b2b;
+
+    border: 1px solid #444;
+
+    border-radius: 999px;
+
+    padding: 0.35rem 0.75rem;
+}
+
+.profile-avatar {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    border: 2px solid #666;
+
+    background: #111;
+
+    flex-shrink: 0;
+}
+
+.left-name,
+.right-name {
+    font-weight: bold;
+
+    max-width: 220px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .left-name {
     color: #90caf9;
-    font-weight: bold;
 }
 
 .right-name {
     color: #ffab91;
-    font-weight: bold;
 }
 
 .controls {
@@ -329,6 +375,25 @@ const borderClass = (ch: Character): string => {
     .diff-label {
         width: 70px;
         font-size: 1rem;
+    }
+
+    .subtitle {
+        gap: 0.6rem;
+        font-size: 0.95rem;
+    }
+
+    .friend-avatar-wrapper {
+        padding: 0.3rem 0.6rem;
+    }
+
+    .profile-avatar {
+        width: 34px;
+        height: 34px;
+    }
+
+    .left-name,
+    .right-name {
+        max-width: 120px;
     }
 }
 </style>
