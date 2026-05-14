@@ -302,7 +302,7 @@
                                 </a>
                             </router-link>
 
-                            <router-link v-slot="{ href }" :to="{
+                            <router-link v-if="is_beta" v-slot="{ href }" :to="{
                                 path: '/account-compare',
                                 query: {
                                     left: store.friendCode,
@@ -346,6 +346,8 @@ import { useSetting } from '../store/settingsStore'
 
 const store = useFriendStore()
 const characterStore = useCharacterStore()
+
+const is_beta = localStorage.getItem("beta") === 'true'
 
 const myPower = computed(() =>
     getPowerScores(characterStore.characters)
