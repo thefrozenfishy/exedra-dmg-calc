@@ -248,7 +248,7 @@ export async function getFriends() {
         .from('public_profiles')
         .select('*')
         .in('friend_id', friendCodes)
-    console.log("Loaded friend profiles:", profiles)
+
     if (profileError) throw profileError
 
     return relations.map(friend => {
