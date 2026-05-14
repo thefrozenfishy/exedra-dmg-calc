@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import CloudSyncWidget from './components/CloudSyncWidget.vue'
 const beta = localStorage.getItem("beta") ?? false
+const icon = document.getElementById('app-icon').href
 </script>
 
 <template>
   <div id="app">
     <header>
       <CloudSyncWidget v-if="beta" />
-      <h1>TFF's Exedra Toolbox</h1>
+      <div class="title-row">
+        <img :src="icon" alt="App Icon" class="app-icon" />
+        <h1>TFF's Exedra Toolbox</h1>
+      </div>
       <nav>
         <router-link to="/team-setup">Kioku Setup</router-link>
         <router-link v-if="beta" to="/profile">Profile + Friends</router-link>
@@ -66,5 +70,28 @@ nav a {
 nav a.router-link-active {
   font-weight: bold;
   color: #860a67;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.app-icon {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+}
+
+.title-row h1 {
+  margin: 0;
+  line-height: 1;
+}
+
+.app-icon {
+  transform: translateY(2px);
 }
 </style>

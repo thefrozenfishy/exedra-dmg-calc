@@ -15,6 +15,9 @@ app.use(createPinia())
 if (import.meta.env.DEV) {
     const favicon = document.getElementById("app-icon") as HTMLLinkElement;
     favicon.href = favicon.href.replace("icon.png", "icon-dev.png?v=" + Date.now());
+} else if (localStorage.getItem("beta")) {
+    const favicon = document.getElementById("app-icon") as HTMLLinkElement;
+    favicon.href = favicon.href.replace("icon.png", "icon-beta.png?v=" + Date.now());
 }
 useCharacterStore().initializeCloud()
 useTeamStore().load()

@@ -152,7 +152,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { computed, readonly, ref } from "vue"
+import { computed, ref } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { Character, KiokuConstants } from "../types/KiokuTypes"
 import html2canvas from "html2canvas"
@@ -178,9 +178,7 @@ const loadFriendCode = async () => {
 }
 
 onMounted(async () => {
-    if (route.query.friend) {
-        await loadFriendCode()
-    }
+    await loadFriendCode()
 })
 const viewingFriendCode = computed(() =>
     typeof route.query.friend === "string" && route.query.friend !== friendCode.value
@@ -459,9 +457,9 @@ const copyHyperLink = async () => {
 
     try {
         const friendId = viewingFriendCode.value ?? friendCode.value
-        const item = new ClipboardItem({ "text/plain": `http://localhost:5173/exedra-dmg-calc/#/my-kioku?friend=${friendId}` })
-        await navigator.clipboard.write([item])
-
+        await navigator.clipboard.writeText(
+            `${window.location.origin}/exedra-dmg-calc/#/my-kioku?friend=${friendId}`
+        )
         toast.success("Copied to clipboard!", {
             position: toast.POSITION.TOP_RIGHT,
             icon: false,
