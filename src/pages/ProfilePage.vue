@@ -312,6 +312,11 @@
             </section>
         </template>
     </div>
+    <div>
+        <p>Curious how the power values are calculated? Check out the calculation on <a class="link"
+                href="https://github.com/thefrozenfishy/exedra-dmg-calc/blob/main/src/models/PowerValue.ts">Github</a></p>
+        <p>If you think the calculation can be improved, talk to me about it!</p>
+    </div>
 </template>
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
@@ -684,6 +689,10 @@ a:hover {
 button:active,
 a:active {
     transform: scale(0.98);
+}
+
+a.link {
+    padding: 0.2rem;
 }
 
 /* =========================
