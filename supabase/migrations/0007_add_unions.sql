@@ -37,7 +37,8 @@ CREATE OR REPLACE FUNCTION public.get_union_members(
 RETURNS TABLE (
   friend_id CHAR(5),
   display_name TEXT,
-  union_name TEXT
+  union_name TEXT,
+  profile_icon integer
 )
 LANGUAGE sql
 SECURITY DEFINER
@@ -45,7 +46,8 @@ AS $$
   SELECT
     u.friend_id,
     p.display_name,
-    p.union_name
+    p.union_name,
+    p.profile_icon
   FROM public.user_profiles p
   JOIN public.users u
     ON u.user_id = p.user_id

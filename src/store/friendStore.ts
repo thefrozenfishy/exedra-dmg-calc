@@ -91,6 +91,7 @@ export const useFriendStore = defineStore('friendStore', () => {
                         friend_id: member.friend_id,
                         display_name: member.display_name || 'Unnamed',
                         union_name: member.union_name || '',
+                        profile_icon: member.profile_icon,
                         isFriend: false,
                         isUnionMember: true,
                     })

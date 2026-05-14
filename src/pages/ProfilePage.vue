@@ -749,9 +749,9 @@ a:active {
 
     min-width: 0;
 
-    flex: 0 1 auto;
+    flex: 1 1 auto;
 
-    width: 250px;
+    max-width: 220px;
 }
 
 /* =========================
@@ -888,15 +888,6 @@ a:active {
     min-width: 0;
 }
 
-.friend-code,
-.friend-secondary,
-.friend-union span {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .friend-name-row {
     display: flex;
     align-items: center;
@@ -920,6 +911,8 @@ a:active {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    max-width: 100px;
 }
 
 .friend-secondary {
@@ -1239,6 +1232,10 @@ a:active {
     .friend-actions a,
     .friend-actions button {
         flex: 1;
+    }
+
+    .friend-primary {
+        max-width: 500px;
     }
 }
 </style>
