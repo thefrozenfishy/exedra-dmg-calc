@@ -457,6 +457,7 @@ const copyHyperLink = async () => {
 
     try {
         const friendId = viewingFriendCode.value ?? friendCode.value
+        if (!friendId) throw new Error("You need to sync your friend code first!")
         await navigator.clipboard.writeText(
             `${window.location.origin}/exedra-dmg-calc/#/my-kioku?friend=${friendId}`
         )
@@ -466,6 +467,7 @@ const copyHyperLink = async () => {
         })
     } catch (err) {
         console.error("Clipboard failed:", err)
+        toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
     }
 }
 
