@@ -12,7 +12,8 @@ import {
     updateFriendCode,
     getUnionMembers,
     updateUnionName,
-    setFriendFavorite
+    setFriendFavorite,
+    updateprofile_icon
 } from '../store/cloud'
 import { getPowerScores, PowerScores } from '../models/PowerValue'
 import { useCharacterStore } from '../store/characterStore'
@@ -23,6 +24,7 @@ export interface SocialProfile {
     nickname?: string
     union_name?: string
     favorite?: boolean
+    profile_icon?: number
     isFriend?: boolean
     isUnionMember?: boolean
     power?: PowerScores
@@ -34,6 +36,7 @@ export const useFriendStore = defineStore('friendStore', () => {
     const displayName = ref('')
     const friendCode = ref('')
     const unionName = ref('')
+    const profile_icon = ref<number | undefined>(undefined)
 
     const loadProfile = async () => {
         try {
@@ -42,6 +45,7 @@ export const useFriendStore = defineStore('friendStore', () => {
             if (profile) {
                 displayName.value = profile.display_name ?? ''
                 unionName.value = profile.union_name ?? ''
+                profile_icon.value = profile.profile_icon
 
                 const code = await getFriendCode()
 
@@ -192,6 +196,12 @@ export const useFriendStore = defineStore('friendStore', () => {
         )
     }
 
+    const saveprofile_icon = async () => {
+        await updateprofile_icon(
+            profile_icon.value
+        )
+    }
+
     return {
         friends,
         displayName,
@@ -206,5 +216,7 @@ export const useFriendStore = defineStore('friendStore', () => {
         unionName,
         saveUnionName,
         toggleFavorite,
+        profile_icon,
+        saveprofile_icon,
     }
 })

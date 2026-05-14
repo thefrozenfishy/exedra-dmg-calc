@@ -150,9 +150,22 @@ export async function updateDisplayName(displayName: string) {
     if (error) throw error
 }
 
-export async function updateUnionName(
-    unionName: string
-) {
+export async function updateprofile_icon(profile_icon: number) {
+    const userId = getUserId()
+
+    if (!userId) return
+
+    const supabase = getSupabase()
+
+    const { error } = await supabase
+        .from('user_profiles')
+        .update({ profile_icon })
+        .eq('user_id', userId)
+
+    if (error) throw error
+}
+
+export async function updateUnionName(unionName: string) {
     const userId = getUserId()
 
     if (!userId) return
@@ -233,9 +246,9 @@ export async function getFriends() {
 
     const { data: profiles, error: profileError } = await supabase
         .from('public_profiles')
-        .select('friend_id, display_name, union_name')
+        .select('*')
         .in('friend_id', friendCodes)
-
+    console.log("Loaded friend profiles:", profiles)
     if (profileError) throw profileError
 
     return relations.map(friend => {
@@ -248,6 +261,7 @@ export async function getFriends() {
             nickname: friend.nickname ?? '',
             display_name: profile?.display_name || 'Unnamed',
             union_name: profile?.union_name || '',
+            profile_icon: profile?.profile_icon,
             favorite: friend.favorite ?? false,
             isFriend: true,
             isUnionMember: false,

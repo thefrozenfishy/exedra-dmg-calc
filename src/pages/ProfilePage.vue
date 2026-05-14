@@ -12,48 +12,77 @@
 
                 <div class="friend-card self-card">
                     <div class="friend-left">
-                        <div class="friend-name-row">
-                            <div class="friend-primary">
-                                {{ store.displayName || 'Unnamed' }}
-                            </div>
-
-                            <button class="edit-nick-btn" @click="editingSelfName = true">
-                                🖊
+                        <div class="profile-avatar-wrapper" ref="avatarPickerRef">
+                            <button class="profile-avatar-button" ref="avatarButtonRef"
+                                @click="showAvatarPicker = !showAvatarPicker">
+                                <div class="profile-avatar-ring">
+                                    <img class="profile-avatar-large" :src="avatarUrl(store.profile_icon)"
+                                        alt="Profile avatar" />
+                                </div>
                             </button>
+
+                            <transition name="fade-scale">
+                                <div v-if="showAvatarPicker" class="avatar-picker">
+                                    <div class="avatar-picker-title">
+                                        Select Profile Avatar
+                                    </div>
+
+                                    <div class="avatar-grid">
+                                        <button v-for="ch in iconPicker" :key="ch.id" class="avatar-option"
+                                            :class="{ selected: ch.id === store.profile_icon }"
+                                            @click="selectAvatar(ch.id)">
+                                            <img :src="kiokuThumb(ch.id)" :alt="ch.name" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </transition>
                         </div>
 
-                        <div class="friend-code-row">
-                            <div class="friend-code">
-                                {{ store.friendCode }}
+                        <div class="friend-info profile-info">
+                            <div class="friend-name-row">
+                                <div class="friend-primary">
+                                    {{ store.displayName || 'Unnamed' }}
+                                </div>
+
+                                <button class="edit-nick-btn" @click="editingSelfName = true">
+                                    🖊
+                                </button>
                             </div>
 
-                            <button class="edit-nick-btn" @click="editingFriendCode = true">
-                                🖊
-                            </button>
-                        </div>
+                            <div class="friend-code-row">
+                                <div class="friend-code">
+                                    {{ store.friendCode }}
+                                </div>
 
-                        <div class="friend-code-row">
-                            <img :src="'/exedra-dmg-calc/union.png'" alt="Union" />
-                            <div class="friend-code">
-                                {{ store.unionName || 'No union' }}
+                                <button class="edit-nick-btn" @click="editingFriendCode = true">
+                                    🖊
+                                </button>
                             </div>
 
-                            <button class="edit-nick-btn" @click="editingUnionName = true">
-                                🖊
-                            </button>
+                            <div class="friend-code-row">
+                                <img :src="'/exedra-dmg-calc/union.png'" alt="Union" />
+
+                                <div class="friend-code">
+                                    {{ store.unionName || 'No union' }}
+                                </div>
+
+                                <button class="edit-nick-btn" @click="editingUnionName = true">
+                                    🖊
+                                </button>
+                            </div>
+
+                            <input v-if="editingUnionName" v-model="pendingUnionName" class="nickname-inline-input"
+                                placeholder="Union name" maxlength="32" @blur="finishUnionEdit"
+                                @keydown.enter="finishUnionEdit" />
+
+                            <input v-if="editingFriendCode" v-model="pendingFriendCode" class="nickname-inline-input"
+                                placeholder="Friend code" maxlength="5" @blur="finishFriendCodeEdit"
+                                @keydown.enter="finishFriendCodeEdit" />
+
+                            <input v-if="editingSelfName" v-model="pendingDisplayName" class="nickname-inline-input"
+                                placeholder="Display name" maxlength="32" @blur="finishDisplayNameEdit"
+                                @keydown.enter="finishDisplayNameEdit" />
                         </div>
-
-                        <input v-if="editingUnionName" v-model="pendingUnionName" class="nickname-inline-input"
-                            placeholder="Union name" maxlength="32" @blur="finishUnionEdit"
-                            @keydown.enter="finishUnionEdit" />
-
-                        <input v-if="editingFriendCode" v-model="pendingFriendCode" class="nickname-inline-input"
-                            placeholder="Friend code" maxlength="5" @blur="finishFriendCodeEdit"
-                            @keydown.enter="finishFriendCodeEdit" />
-
-                        <input v-if="editingSelfName" v-model="pendingDisplayName" class="nickname-inline-input"
-                            placeholder="Display name" maxlength="32" @blur="finishDisplayNameEdit"
-                            @keydown.enter="finishDisplayNameEdit" />
                     </div>
 
                     <div v-if="myPower" class="friend-power">
@@ -155,7 +184,7 @@
                             Whale Power
                         </option>
                     </select>
-                    
+
                     <input v-model="friendCode" placeholder="Enter friend code" maxlength="5" />
 
                     <button @click="addFriend">
@@ -168,30 +197,46 @@
                     <div v-for="friend in sortedFriends" :key="friend.friend_id" class="friend-card"
                         :class="{ 'union-member': friend.isUnionMember }">
                         <div class="friend-left">
-                            <div class="friend-name-row">
-                                <div v-if="friend.isUnionMember" class="union-badge">
-                                    <img :src="'/exedra-dmg-calc/union.png'" alt="Union" />
-                                </div>
-                                <div class="friend-primary">
-                                    {{ friend.nickname?.trim() || friend.display_name?.trim() }}
-                                </div>
+                            <div class="friend-avatar-wrapper">
+                                <img class="profile-avatar" :src="avatarUrl(friend)" />
 
-                                <button class="edit-nick-btn" @click="editingFriend = friend.friend_id">
-                                    🖊
+                                <button v-if="friend.isFriend" class="favorite-badge"
+                                    @click="store.toggleFavorite(friend.friend_id)">
+                                    {{ friend.favorite ? '★' : '☆' }}
                                 </button>
                             </div>
 
-                            <div v-if="friend.nickname?.trim() && friend.display_name?.trim()" class="friend-secondary">
-                                {{ friend.display_name }}
-                            </div>
+                            <div class="friend-info">
+                                <div class="friend-name-row">
+                                    <div class="friend-primary">
+                                        {{
+                                            friend.nickname?.trim()
+                                            || friend.display_name?.trim()
+                                        }}
+                                    </div>
 
-                            <div class="friend-union">
-                                {{ friend.union_name?.trim() }}
-                            </div>
+                                    <button class="edit-nick-btn" @click="editingFriend = friend.friend_id">
+                                        🖊
+                                    </button>
+                                </div>
 
-                            <input v-if="editingFriend === friend.friend_id" v-model="friend.nickname"
-                                class="nickname-inline-input" placeholder="Nickname" maxlength="24"
-                                @blur="finishNicknameEdit(friend)" @keydown.enter="finishNicknameEdit(friend)" />
+                                <div v-if="friend.nickname?.trim() && friend.display_name?.trim()"
+                                    class="friend-secondary">
+                                    {{ friend.display_name }}
+                                </div>
+
+                                <div v-if="friend.union_name?.trim()" class="friend-union">
+                                    <img :src="'/exedra-dmg-calc/union.png'" alt="Union" />
+
+                                    <span>
+                                        {{ friend.union_name }}
+                                    </span>
+                                </div>
+
+                                <input v-if="editingFriend === friend.friend_id" v-model="friend.nickname"
+                                    class="nickname-inline-input" placeholder="Nickname" maxlength="24"
+                                    @blur="finishNicknameEdit(friend)" @keydown.enter="finishNicknameEdit(friend)" />
+                            </div>
                         </div>
 
                         <div v-if="friend.power" class="friend-power">
@@ -245,9 +290,6 @@
                         </div>
 
                         <div class="friend-actions">
-                            <button v-if="friend.isFriend" @click="store.toggleFavorite(friend.friend_id)">
-                                {{ friend.favorite ? '★' : '☆' }}
-                            </button>
                             <router-link :to="{
                                 path: '/my-kioku',
                                 query: {
@@ -272,7 +314,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
 import { toast } from 'vue3-toastify'
 import { SocialProfile, useFriendStore } from '../store/friendStore'
 import { getUserId } from '../store/user'
@@ -304,20 +346,68 @@ const pendingFriendCode = ref('')
 const friendCode = ref('')
 const editingUnionName = ref(false)
 const pendingUnionName = ref('')
+const avatarPickerRef = ref<HTMLElement | null>(null)
+const avatarButtonRef = ref<HTMLElement | null>(null)
+
+const handleClickOutside = (event: MouseEvent) => {
+    const target = event.target as Node
+
+    if (
+        avatarPickerRef.value &&
+        !avatarPickerRef.value.contains(target) &&
+        avatarButtonRef.value &&
+        !avatarButtonRef.value.contains(target)
+    ) {
+        showAvatarPicker.value = false
+    }
+}
 
 onMounted(async () => {
     if (!userId) return
 
     await store.loadProfile()
     await store.loadFriends()
+
     pendingDisplayName.value = store.displayName
     pendingFriendCode.value = store.friendCode
     pendingUnionName.value = store.unionName
+
+    document.addEventListener(
+        'mousedown',
+        handleClickOutside
+    )
+})
+
+onBeforeUnmount(() => {
+    document.removeEventListener(
+        'mousedown',
+        handleClickOutside
+    )
 })
 
 const editingSelfName = ref(false)
 
 const pendingDisplayName = ref('')
+
+const showAvatarPicker = ref(false)
+
+const iconPicker = computed(() => [...characterStore.characters].sort((a, b) => a.id - b.id)
+)
+const selectAvatar = async (id: number) => {
+    store.profile_icon = id
+
+    await store.saveprofile_icon()
+
+    showAvatarPicker.value = false
+
+    toast.success(
+        'Profile avatar updated!',
+        {
+            position: toast.POSITION.TOP_RIGHT,
+            icon: false,
+        }
+    )
+}
 
 type SortModes = 'default' | 'name' | 'total' | 'whale' | 'attacker' | 'buffer' | 'debuffer' | 'breaker' | 'defender' | 'healer'
 const sortMode = useSetting<SortModes>("sortMode", "default")
@@ -518,50 +608,55 @@ const addFriend = async () => {
         })
     }
 }
+
+const kiokuThumb = (id: number) => `/exedra-dmg-calc/kioku_images/${id}_thumbnail.png`
+
+const avatarUrl = (
+    profile:
+        | { profile_icon?: number }
+        | number
+        | undefined
+) => {
+    if (typeof profile === 'number') {
+        return kiokuThumb(profile)
+    }
+
+    return kiokuThumb(
+        profile?.profile_icon ||
+        10010101
+    )
+}
 </script>
 <style scoped>
 .profile-page {
-    max-width: 900px;
+    max-width: 960px;
     margin: 0 auto;
     color: #ddd;
 }
 
+/* =========================
+   Sections
+========================= */
+
 .profile-section,
 .friend-section {
     margin-top: 2rem;
-    padding: 1rem;
+    padding: 1.2rem;
     background: #2b2b2b;
-    border-radius: 12px;
+    border-radius: 16px;
 }
 
-.profile-row,
-.add-friend-row {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-}
+/* =========================
+   Inputs / Buttons
+========================= */
 
-.friend-code-row {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin: 0 auto;
-}
-
-.friend-name-row img,
-.friend-code-row img {
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
-}
-
-input {
-    flex: 1;
+input,
+select {
     background: #111;
     border: 1px solid #555;
-    border-radius: 8px;
+    border-radius: 10px;
     color: white;
-    padding: 0.7rem;
+    padding: 0.7rem 0.9rem;
 }
 
 button,
@@ -569,16 +664,46 @@ a {
     background: #444;
     border: 1px solid #666;
     color: white;
-    padding: 0.6rem 1rem;
-    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    border-radius: 10px;
     text-decoration: none;
     cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.12s ease;
 }
 
 button:hover,
 a:hover {
     background: #555;
+    border-color: #777;
 }
+
+button:active,
+a:active {
+    transform: scale(0.98);
+}
+
+/* =========================
+   Header Row
+========================= */
+
+.add-friend-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.add-friend-row input {
+    width: 160px;
+}
+
+/* =========================
+   Friend List
+========================= */
 
 .friend-list {
     display: flex;
@@ -592,214 +717,249 @@ a:hover {
     align-items: center;
     justify-content: space-between;
 
-    gap: 1rem;
+    gap: 1.2rem;
 
     background: #1f1f1f;
-    padding: 1rem;
+    padding: 1rem 1.1rem;
 
-    border-radius: 12px;
+    border-radius: 14px;
 }
+
+.friend-card.union-member {
+    border: 1px solid #3f5d8a;
+}
+
+.self-card {
+    border: 1px solid #5f4a74;
+    background:
+        linear-gradient(180deg,
+            #26212f 0%,
+            #1f1f1f 100%);
+}
+
+/* =========================
+   Left Side
+========================= */
 
 .friend-left {
-    min-width: 160px;
-
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-}
-
-.friend-primary {
-    font-size: 1.1rem;
-    font-weight: bold;
-}
-
-.friend-secondary {
-    opacity: 0.75;
-    font-size: 0.9rem;
-}
-
-.friend-code {
-    opacity: 0.6;
-    font-size: 0.85rem;
-}
-
-.friend-power {
     display: flex;
     align-items: center;
-    gap: 1rem;
 
-    flex: 1;
+    gap: 2.2rem;
+
+    min-width: 0;
+
+    flex: 0 1 auto;
+
+    width: 250px;
 }
 
-.total-power-big {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+/* =========================
+   Avatars
+========================= */
 
-    min-width: 78px;
-    height: 78px;
+.friend-avatar-wrapper {
+    position: relative;
 
-    border-radius: 18px;
+    width: 54px;
+    height: 54px;
 
-    background: #33263f;
-    border: 1px solid #8e5bc7;
+    flex-shrink: 0;
 }
 
-.total-power-big img {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
+.profile-avatar {
+    width: 54px;
+    height: 54px;
+
+    border-radius: 50%;
+    object-fit: cover;
+
+    border: 2px solid #666;
+    background: #222;
+
+    display: block;
 }
 
-.whale-power-big {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    min-width: 78px;
-    height: 78px;
-
-    border-radius: 18px;
-
-    border: 1px solid #8e5bc7;
+.profile-avatar-wrapper {
+    position: relative;
+    flex-shrink: 0;
 }
 
-.whale-power-big img {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
+.profile-avatar-button {
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
 }
 
-.total-power-value {
-    font-size: 1.4rem;
-    font-weight: bold;
+.profile-avatar-ring {
+    width: 88px;
+    height: 88px;
 
-    color: #fff;
+    border-radius: 50%;
+
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease;
 }
 
-.role-grid-compact {
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 0.45rem;
+.profile-avatar-ring:hover {
+    transform: scale(1.04);
+    filter: brightness(1.05);
 }
 
-.mini-power-box {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-
-    min-width: 70px;
-
-    background: #292929;
-    border: 1px solid #444;
-
-    border-radius: 999px;
-
-    padding: 0.2rem 0.5rem;
-}
-
-.mini-power-box img {
-    width: 16px;
-    height: 16px;
-    object-fit: contain;
-}
-
-.mini-power-box span {
-    font-size: 0.78rem;
-    font-weight: bold;
-}
-
-.friend-actions {
-    display: flex;
-    flex-direction: column;
-
-    gap: 0.45rem;
-
-    width: 150px;
-}
-
-.friend-actions input {
+.profile-avatar-large {
     width: 100%;
+    height: 100%;
+
+    border-radius: 50%;
+    object-fit: cover;
+
+    border: 3px solid #8e5bc7;
+    background: #222;
+
+    display: block;
 }
 
-.remove-btn {
-    background: #612020;
-}
+/* =========================
+   Favorite Star
+========================= */
 
-.remove-btn:hover {
-    background: #7d2a2a;
-}
+.favorite-badge {
+    position: absolute;
 
-.offline-box {
-    margin-top: 2rem;
-    padding: 1rem;
-    background: #2b2b2b;
-    border-radius: 12px;
-}
+    top: -5px;
+    right: -10px;
 
-.friend-display {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-}
+    width: 22px;
+    height: 22px;
 
-.friend-primary {
-    font-size: 1.1rem;
-    font-weight: bold;
-}
+    border-radius: 50%;
 
-.friend-secondary {
-    opacity: 0.75;
-    font-size: 0.9rem;
-}
+    padding: 0;
 
-.power-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-top: 0.4rem;
-}
-
-.power-box {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
+    justify-content: center;
 
-    background: #292929;
-    border: 1px solid #444;
+    background: #3b2b17;
+    border: 1px solid #c59a3d;
 
-    border-radius: 999px;
+    color: #ffd66b;
 
-    padding: 0.2rem 0.55rem;
-}
-
-.power-box img {
-    width: 18px;
-    height: 18px;
-    object-fit: contain;
-}
-
-.power-value {
     font-size: 0.8rem;
     font-weight: bold;
-    color: #ddd;
 }
 
-.total-power {
-    background: #33263f;
-    border-color: #8e5bc7;
+.favorite-badge:hover {
+    background: #4b361b;
+    transform: scale(1.08);
+}
+
+/* =========================
+   Friend Info
+========================= */
+
+.friend-info {
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+    justify-content: center;
+
+    gap: 0.18rem;
+
+    min-width: 0;
+
+    max-width: 220px;
+}
+
+.profile-info {
+    max-width: 260px;
+}
+
+.profile-info img {
+    width: 24px;
+    height: 24px;
+}
+
+.friend-code-row,
+.friend-union {
+    min-width: 0;
+}
+
+.friend-code,
+.friend-secondary,
+.friend-union span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .friend-name-row {
     display: flex;
     align-items: center;
+
     gap: 0.45rem;
-    margin: 0 auto;
+
+    line-height: 1;
+
+    min-width: 0;
 }
+
+.friend-primary {
+    flex: 1;
+    min-width: 0;
+
+    font-size: 1.05rem;
+    font-weight: 700;
+
+    line-height: 1.05;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.friend-secondary {
+    font-size: 0.78rem;
+    line-height: 1;
+
+    opacity: 0.65;
+}
+
+.friend-union {
+    display: flex;
+    align-items: center;
+
+    gap: 0.32rem;
+
+    font-size: 0.74rem;
+    line-height: 1;
+
+    opacity: 0.8;
+}
+
+.friend-union img {
+    width: 13px;
+    height: 13px;
+}
+
+.friend-code-row {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.friend-code {
+    opacity: 0.65;
+    font-size: 0.88rem;
+}
+
+/* =========================
+   Edit Buttons
+========================= */
 
 .edit-nick-btn {
     display: flex;
@@ -814,43 +974,271 @@ a:hover {
     font-size: 0.75rem;
     line-height: 1;
 
-    opacity: 0.75;
+    opacity: 0.7;
 }
 
 .edit-nick-btn:hover {
     opacity: 1;
-    background: #454545;
+    background: #4b4b4b;
 }
 
 .nickname-inline-input {
-    margin-top: 0.35rem;
-
-    width: 140px;
-
-    background: #111;
-    border: 1px solid #666;
-
-    border-radius: 8px;
-
-    color: white;
-
-    padding: 0.35rem 0.55rem;
+    margin-top: 0.45rem;
+    width: 120px;
 }
 
-.self-card {
-    border: 1px solid #5f4a74;
-    background: linear-gradient(180deg,
-            #26212f 0%,
-            #1f1f1f 100%);
+/* =========================
+   Power Area
+========================= */
+
+.friend-power {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.9rem;
+
+    flex: 1;
+
+    min-width: 0;
 }
 
-.union-badge {
-    margin-top: 0.2rem;
-    font-size: 0.75rem;
-    color: #8fb7ff;
+.total-power-big,
+.whale-power-big {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 78px;
+    height: 78px;
+
+    border-radius: 18px;
 }
 
-.friend-card.union-member {
-    border: 1px solid #3f5d8a;
+.total-power-big {
+    background: #33263f;
+    border: 1px solid #8e5bc7;
+}
+
+.whale-power-big {
+    border: 1px solid #8e5bc7;
+}
+
+.total-power-big img,
+.whale-power-big img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+.total-power-value {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.role-grid-compact {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 0.45rem;
+}
+
+.mini-power-box {
+    display: flex;
+    align-items: center;
+
+    gap: 0.35rem;
+
+    min-width: 72px;
+
+    background: #292929;
+    border: 1px solid #444;
+
+    border-radius: 999px;
+
+    padding: 0.22rem 0.55rem;
+}
+
+.mini-power-box img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+.mini-power-box span {
+    font-size: 0.78rem;
+    font-weight: bold;
+}
+
+/* =========================
+   Right Actions
+========================= */
+
+.friend-actions {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.55rem;
+
+    width: 120px;
+    flex-shrink: 0;
+}
+
+.friend-actions a,
+.friend-actions button {
+    width: 100%;
+    box-sizing: border-box;
+
+    text-align: center;
+}
+
+.friend-actions a {
+    background: #5b4a78;
+    border-color: #8e5bc7;
+
+    font-weight: 600;
+}
+
+.friend-actions a:hover {
+    background: #705998;
+}
+
+.remove-btn {
+    background: #3a2424;
+    border-color: #6b3a3a;
+}
+
+.remove-btn:hover {
+    background: #522f2f;
+}
+
+/* =========================
+   Avatar Picker
+========================= */
+
+.avatar-picker {
+    position: absolute;
+
+    top: 98px;
+    left: 0;
+
+    z-index: 100;
+
+    width: 340px;
+
+    padding: 1rem;
+
+    border-radius: 16px;
+
+    background: #1f1f1f;
+    border: 1px solid #444;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.avatar-picker-title {
+    margin-bottom: 0.75rem;
+
+    font-size: 0.95rem;
+    font-weight: bold;
+}
+
+.avatar-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(54px, 1fr));
+
+    gap: 0.55rem;
+
+    max-height: 300px;
+
+    overflow-y: auto;
+}
+
+.avatar-option {
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    border-radius: 50%;
+}
+
+.avatar-option:hover {
+    transform: scale(1.08);
+}
+
+.avatar-option.selected {
+    box-shadow:
+        0 0 0 2px #b57edc;
+}
+
+.avatar-option img {
+    width: 54px;
+    height: 54px;
+
+    border-radius: 50%;
+
+    display: block;
+}
+
+/* =========================
+   Animations
+========================= */
+
+.fade-scale-enter-active,
+.fade-scale-leave-active {
+    transition:
+        opacity 0.18s ease,
+        transform 0.18s ease;
+}
+
+.fade-scale-enter-from,
+.fade-scale-leave-to {
+    opacity: 0;
+    transform: scale(0.96);
+}
+
+/* =========================
+   Misc
+========================= */
+
+.offline-box {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #2b2b2b;
+    border-radius: 12px;
+}
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 900px) {
+    .friend-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .friend-power {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .friend-actions {
+        width: 100%;
+        flex-direction: row;
+    }
+
+    .friend-actions a,
+    .friend-actions button {
+        flex: 1;
+    }
 }
 </style>

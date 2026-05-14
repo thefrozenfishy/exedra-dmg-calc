@@ -3,6 +3,7 @@
 -- =========================================================
 
 ALTER TABLE public.user_profiles
+ADD COLUMN profile_icon integer DEFAULT 10010101 NOT NULL,
 ADD COLUMN union_name TEXT NOT NULL DEFAULT '';
 
 -- =========================================================
@@ -20,7 +21,8 @@ CREATE OR REPLACE VIEW public.public_profiles AS
 SELECT
   u.friend_id,
   p.display_name,
-  p.union_name
+  p.union_name,
+  p.profile_icon
 FROM public.user_profiles p
 JOIN public.users u
   ON u.user_id = p.user_id;
