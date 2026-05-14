@@ -15,17 +15,16 @@ export type PowerScores = {
 const UNIQUE_KIOKU_SCALING: Record<string, number> = {
     // Defenders
     "Folter Gefängnis": 0.5,
-    "Baldamente Fortissimo": 2,
+    "Baldamente Fortissimo": 1.7,
 
     // Healers
     "Glitterjoy Snow Globe": 1.15,
     "Judgement Earth": 1.25,
 
     // Buffers
-    "Hollow Woman": 2,
-    "Pluvia☆Neujahr": 1.7,
-    "Luce della Speranza": 1.50,
-    "Tiro Finale": 1.30,
+    "Hollow Woman": 1.8,
+    "Pluvia☆Neujahr": 1.6,
+    "Luce della Speranza": 1.40,
 
     // Breakers
     "Pluvia☆Magica": 1.25,
@@ -34,9 +33,9 @@ const UNIQUE_KIOKU_SCALING: Record<string, number> = {
     "Ultra Great Big Hammer": 0.70,
 
     // Attackers
-    "Falsified Phenomena": 2.00,
-    "Nothing to Despair, Ever": 1.30,
-    "Marigold Dadaism": 0.50,
+    "Falsified Phenomena": 1.5,
+    "Nothing to Despair, Ever": 1.2,
+    "Marigold Dadaism": 0.5,
 }
 
 function getCharacterPower(ch: Character): number {
@@ -145,8 +144,6 @@ export function getPowerScores(
                 roleScaling = 1.2
                 break
             case KiokuRole.Healer:
-                roleScaling = 0.9
-                break
             case KiokuRole.Defender:
             default:
                 roleScaling = 0.9
