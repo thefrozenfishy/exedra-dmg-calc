@@ -15,7 +15,6 @@ export type PowerScores = {
 const UNIQUE_KIOKU_SCALING: Record<string, number> = {
     // Defenders
     "Folter Gefängnis": 0.75,
-    "La Lumière": 0.8,
     "Baldamente Fortissimo": 1.5,
 
     // Healers
