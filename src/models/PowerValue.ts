@@ -12,7 +12,7 @@ export type PowerScores = {
     whale: number
 }
 
-UNIQUE_POWER_VALUES = {
+const UNIQUE_POWER_VALUES: Record<string, number> = {
     "Folter Gefängnis": 50,
 }
 
