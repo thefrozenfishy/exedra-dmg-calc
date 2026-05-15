@@ -4,9 +4,7 @@ const VALUE_OF_UNOWNED_DIFF = 5
 const COSINE_SIMILARITY_VALUE = 0.2
 
 function remap(v: number, min: number, max: number) {
-    // Remap v from 0-1 to min-max, with clamping
     const normalized = (v - min) / (max - min)
-    console.log("Raw similarity:", v, "Normalized:", normalized)
     return Math.round(Math.max(0, Math.min(1, normalized)) * 100)
 }
 
