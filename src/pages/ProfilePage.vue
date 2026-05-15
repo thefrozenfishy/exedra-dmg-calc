@@ -368,7 +368,13 @@ const isTFF = localStorage.getItem('isTFF') === 'true'
 const addFriends = async () => {
     if (!isTFF) return
     await addAllFriends()
-    console.log("Added all friends")
+    toast.success(
+        'Added all friends!',
+        {
+            position: toast.POSITION.TOP_RIGHT,
+            icon: false,
+        }
+    )
 }
 
 const exportData = () => {

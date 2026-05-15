@@ -55,7 +55,6 @@ function getWhaleMultiplier(ch: Character): number {
     if (COLLAB.has(ch.name)) {
         return 2
     }
-    console.log(ch.name, ch.permaDate, ch.releaseDate)
 
     const permanentDate = new Date(ch.permaDate)
     const releaseDate = new Date(ch.releaseDate)

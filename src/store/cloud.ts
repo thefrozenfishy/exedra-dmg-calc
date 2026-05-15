@@ -336,8 +336,6 @@ export async function addAllFriends() {
             nickname: ''
         }))
 
-    console.log('Adding friends', rows.map(r => r.friend_id))
-
     if (rows.length === 0) return
 
     const { error } = await supabase

@@ -86,7 +86,6 @@ export const useFriendStore = defineStore('friendStore', () => {
         } catch (err) {
             console.error(err)
         }
-        console.log('My profile loaded', displayName.value, unionName.value, profile_icon.value, friendCode.value)
     }
 
     const saveDisplayName = async () => {
