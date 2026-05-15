@@ -1,5 +1,5 @@
-import { useBeta } from "../store/betaStore"
 import { KiokuConstants, KiokuElement, KiokuRole, type Character } from "../types/KiokuTypes"
+import { useBetaNumber } from "../utils/betaSettings"
 
 
 export type PowerScores = {
@@ -123,13 +123,13 @@ function getCharacterPower(ch: Character): number {
 function getCharacterWhalePower(ch: Character): number {
     if (!ch.enabled) return 0
 
-    let whale = Number(useBeta("whaleBase", 100).value)
+    let whale = useBetaNumber("whaleBase")
 
-    if (ch.ascension >= 1) whale += Number(useBeta("whaleAscension1", 20).value)
-    if (ch.ascension >= 2) whale += Number(useBeta("whaleAscension2", 40).value)
-    if (ch.ascension >= 3) whale += Number(useBeta("whaleAscension3", 60).value)
-    if (ch.ascension >= 4) whale += Number(useBeta("whaleAscension4", 80).value)
-    if (ch.ascension >= 5) whale += Number(useBeta("whaleAscension5", 100).value)
+    if (ch.ascension >= 1) whale += useBetaNumber("whaleAscension1")
+    if (ch.ascension >= 2) whale += useBetaNumber("whaleAscension2")
+    if (ch.ascension >= 3) whale += useBetaNumber("whaleAscension3")
+    if (ch.ascension >= 4) whale += useBetaNumber("whaleAscension4")
+    if (ch.ascension >= 5) whale += useBetaNumber("whaleAscension5")
 
     return whale
 }
@@ -152,9 +152,9 @@ function remap(v: number, min: number, max: number, normExp: number): number {
 function normalize(
     current: number,
     max: number,
-    minNorm: number = Number(useBeta("defaultNormalizeMin", 0).value),
-    maxNorm: number = Number(useBeta("defaultNormalizeMax", 1).value),
-    normExp: number = Number(useBeta("defaultNormalizationExponent", 2).value)
+    minNorm: number = useBetaNumber("defaultNormalizeMin"),
+    maxNorm: number = useBetaNumber("defaultNormalizeMax"),
+    normExp: number = useBetaNumber("defaultNormalizationExponent")
 ): number {
     return remap(current / max, minNorm, maxNorm, normExp)
 }
@@ -163,7 +163,7 @@ function applyGroupedDiminishingReturns(
     items: WeightedEntry[],
     getValue: (item: WeightedEntry) => number = (x => x.value),
     getGroup: (item: WeightedEntry) => string = (x => `${x.role}_${x.element}`),
-    decay = Number(useBeta("diminishingReturnsDecay", 0.8).value)
+    decay = useBetaNumber("diminishingReturnsDecay")
 ): number {
     const groups = new Map<string, number[]>()
 
@@ -232,21 +232,21 @@ export function getPowerScores(
         let roleScaling: number
         switch (ch.role) {
             case KiokuRole.Attacker:
-                roleScaling = Number(useBeta("attackerScaling", 1.15).value)
+                roleScaling = useBetaNumber("attackerScaling")
                 break
             case KiokuRole.Breaker:
-                roleScaling = Number(useBeta("breakerScaling", 1).value)
+                roleScaling = useBetaNumber("breakerScaling")
                 break
             case KiokuRole.Buffer:
-                roleScaling = Number(useBeta("bufferScaling", 1.25).value)
+                roleScaling = useBetaNumber("bufferScaling")
                 break
             case KiokuRole.Debuffer:
-                roleScaling = Number(useBeta("debufferScaling", 1.2).value)
+                roleScaling = useBetaNumber("debufferScaling")
                 break
             case KiokuRole.Healer:
             case KiokuRole.Defender:
             default:
-                roleScaling = Number(useBeta("defaultScaling", 0.9).value)
+                roleScaling = useBetaNumber("defaultScaling")
                 break
         }
 
@@ -301,9 +301,9 @@ export function getPowerScores(
         whale: normalize(
             applyGroupedDiminishingReturns(totalWhaleCurrent),
             applyGroupedDiminishingReturns(totalWhaleMax),
-            Number(useBeta("whaleNormalizeMin", 0.2).value),
-            Number(useBeta("whaleNormalizeMax", 0.95).value),
-            Number(useBeta("whaleNormalizationExponent", 2).value)
+            useBetaNumber("whaleNormalizeMin"),
+            useBetaNumber("whaleNormalizeMax"),
+            useBetaNumber("whaleNormalizationExponent")
         ),
         attacker: normalize(
             applyGroupedDiminishingReturns(roleCurrent.attacker),
