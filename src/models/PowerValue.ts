@@ -1,5 +1,5 @@
 import { KiokuConstants, KiokuElement, KiokuRole, type Character } from "../types/KiokuTypes"
-import { useBetaNumber } from "../utils/betaSettings"
+import { useBetaNumber, useBetaValue } from "../utils/betaSettings"
 
 
 export type PowerScores = {
@@ -12,38 +12,6 @@ export type PowerScores = {
     defender: number
     healer: number
     whale: number
-}
-
-const UNIQUE_KIOKU_SCALING: Record<string, number> = {
-    // Defenders
-    "Folter Gefängnis": 0.75,
-    "Baldamente Fortissimo": 1.5,
-
-    // Healers
-    "Glitterjoy Snow Globe": 1.15,
-    "Judgement Earth": 1.25,
-
-    // Buffers
-    "Hollow Woman": 2,
-    "Pluvia☆Neujahr": 1.25,
-
-    // Breakers
-    "Pluvia☆Magica": 1.25,
-    "Sacred Gift": 1.15,
-    "Final Fatebloom": 1.15,
-    "Unlimited Rulebook": 1.1,
-    "Neo Genesis": 0.75,
-
-    // Debuffers
-    "Ultra Great Big Hammer": 0.75,
-    "Bebe-O'-Lantern": 1.25,
-    "Yuletide Gift": 1.25,
-
-    // Attackers
-    "Falsified Phenomena": 1.5,
-    "Nothing to Despair, Ever": 1.2,
-    "Marigold Dadaism": 0.75,
-    "Kiss-shot": 0.75,
 }
 
 const COLLAB = new Set([
@@ -253,7 +221,7 @@ export function getPowerScores(
 
         const data = { role: ch.role, element: ch.element }
 
-        const kiokuScaling = UNIQUE_KIOKU_SCALING[ch.name] ?? 1
+        const kiokuScaling = useBetaValue<Record<string, number>>("kiokuScalings")[ch.name] ?? 1
 
         const scaledMax = roleScaling * kiokuScaling
         const scaledCurrent = pwrRatio * scaledMax

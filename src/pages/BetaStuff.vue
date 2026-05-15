@@ -19,11 +19,11 @@
                     </span>
                 </div>
 
-                <p v-if="setting.description" class="description">
-                    {{ setting.description }}
-                </p>
+                <input v-if="!isJsonSetting(setting.defaultValue)" :id="setting.key"
+                    v-model.lazy="values[setting.key].value" />
 
-                <input :id="setting.key" type="number" step="0.01" v-model.number="values[setting.key].value" />
+                <textarea v-else :id="setting.key" :value="jsonValues[setting.key]"
+                    @change="onJsonChange(setting.key, $event)" class="json-editor" />
             </div>
         </section>
     </div>
@@ -31,14 +31,6 @@
 
 <script lang="ts" setup>
 import { useBeta } from "../store/betaStore"
-
-type Setting = {
-    key: string
-    label: string
-    defaultValue: number
-    description?: string
-}
-
 import { BETA_SECTIONS } from "../utils/betaSettings"
 
 const sections = BETA_SECTIONS
@@ -53,9 +45,55 @@ for (const section of sections) {
         )
     }
 }
+
+function isJsonSetting(value: unknown): boolean {
+    return typeof value === "object" && value !== null
+}
+
+const jsonValues: Record<string, string> = {}
+
+for (const section of sections) {
+    for (const setting of section.settings) {
+        if (isJsonSetting(setting.defaultValue)) {
+            jsonValues[setting.key] = JSON.stringify(
+                values[setting.key].value,
+                null,
+                2
+            )
+        }
+    }
+}
+
+function onJsonChange(key: string, event: Event) {
+    const target = event.target as HTMLTextAreaElement
+
+    try {
+        const parsed = JSON.parse(target.value)
+
+        values[key].value = parsed
+        jsonValues[key] = JSON.stringify(parsed, null, 2)
+    }
+    catch (err) {
+        console.error(`Invalid JSON for ${key}`, err)
+    }
+}
 </script>
 
 <style scoped>
+.json-editor {
+    width: 100%;
+    min-height: 240px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #111;
+    color: white;
+    font-family: monospace;
+    font-size: 0.9rem;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
 .beta-settings {
     max-width: 900px;
     margin: 0 auto;

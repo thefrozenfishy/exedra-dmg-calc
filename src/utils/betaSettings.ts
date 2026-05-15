@@ -3,15 +3,27 @@ import { useBeta } from "../store/betaStore"
 export function useBetaNumber(
     key: keyof typeof BETA_DEFAULTS
 ): number {
-    return Number(
-        useBeta(key, BETA_DEFAULTS[key]).value
-    )
+    return Number(useBetaValue<number>(key))
 }
+
+export function useBetaValue<T>(
+    key: keyof typeof BETA_DEFAULTS
+): T {
+    return useBeta<T>(key, BETA_DEFAULTS[key]).value
+
+}
+
+export type BetaSettingValue =
+    | number
+    | string
+    | boolean
+    | Record<string, any>
+    | any[]
 
 export type BetaSetting = {
     key: string
     label: string
-    defaultValue: number
+    defaultValue: BetaSettingValue
     description?: string
 }
 
@@ -129,6 +141,46 @@ export const BETA_SECTIONS = [
             },
         ],
     },
+    {
+        title: "Kioku Scalings",
+        description: "Multiplicative scalings for Kioku characters. These are applied after all other calculations, so they can be used to make simple buffs/nerfs to specific characters without affecting the overall balance of the system.",
+        settings: [
+            {
+                key: "kiokuScalings",
+                label: "Kioku Scalings",
+                defaultValue: {
+                    // Defenders
+                    "Folter Gefängnis": 0.75,
+                    "Baldamente Fortissimo": 1.5,
+
+                    // Healers
+                    "Glitterjoy Snow Globe": 1.15,
+                    "Judgement Earth": 1.25,
+
+                    // Buffers
+                    "Hollow Woman": 2,
+                    "Pluvia☆Neujahr": 1.25,
+
+                    // Breakers
+                    "Pluvia☆Magica": 1.25,
+                    "Sacred Gift": 1.15,
+                    "Final Fatebloom": 1.15,
+                    "Unlimited Rulebook": 1.1,
+                    "Neo Genesis": 0.75,
+
+                    // Debuffers
+                    "Ultra Great Big Hammer": 0.75,
+                    "Bebe-O'-Lantern": 1.25,
+                    "Yuletide Gift": 1.25,
+
+                    // Attackers
+                    "Falsified Phenomena": 1.5,
+                    "Nothing to Despair, Ever": 1.2,
+                    "Marigold Dadaism": 0.75,
+                    "Kiss-shot": 0.75,
+                },
+            }]
+    }
 ] as const
 
 export const BETA_DEFAULTS = Object.fromEntries(
@@ -138,4 +190,4 @@ export const BETA_DEFAULTS = Object.fromEntries(
             setting.defaultValue
         ])
     )
-) as Record<string, number>
+) as Record<string, any>
