@@ -32,7 +32,7 @@ export const BETA_SECTIONS = [
             {
                 key: "defaultNormalizationExponent",
                 label: "Default Normalization Exponent",
-                defaultValue: 2,
+                defaultValue: 0.5,
             },
             {
                 key: "whaleNormalizeMin",
@@ -47,7 +47,7 @@ export const BETA_SECTIONS = [
             {
                 key: "whaleNormalizationExponent",
                 label: "Whale Normalization Exponent",
-                defaultValue: 2,
+                defaultValue: 0.5,
             },
         ],
     },
