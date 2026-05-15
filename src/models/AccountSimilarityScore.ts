@@ -1,6 +1,7 @@
 import { KiokuConstants, type Character } from "../types/KiokuTypes"
 
-const VALUE_OF_UNOWNED_DIFF = 10
+const VALUE_OF_UNOWNED_DIFF = 5
+const COSINE_SIMILARITY_VALUE = 0.2
 
 export function getAccountSimilarityScore(
     myChars: Character[],
@@ -21,6 +22,7 @@ export function getAccountSimilarityScore(
     for (const id of myMap.keys()) {
         const mine = myMap.get(id)
         const theirs = otherMap.get(id)
+        if (!mine?.enabled || !theirs?.enabled) continue
 
         const a = mine?.enabled ? mine.ascension + VALUE_OF_UNOWNED_DIFF : 0
 
@@ -40,7 +42,7 @@ export function getAccountSimilarityScore(
 
     const cosineSimilarity = dot / (Math.sqrt(magA) * Math.sqrt(magB))
     const distanceSimilarity = 1 - (distanceTotal / distanceMax)
-    const rawSimilarity = cosineSimilarity * 0.3 + distanceSimilarity * 0.7
+    const rawSimilarity = cosineSimilarity * COSINE_SIMILARITY_VALUE + distanceSimilarity * (1 - COSINE_SIMILARITY_VALUE)
 
     return Math.round(rawSimilarity * 100)
 }
