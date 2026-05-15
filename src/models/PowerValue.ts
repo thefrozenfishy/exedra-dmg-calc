@@ -139,9 +139,7 @@ function normalize(
 ): number {
     if (max <= 0) return 0
 
-    return Math.round(
-        Math.sqrt((current / max)) * 100
-    )
+    return Math.round(((current / max)) * 100)
 }
 
 function applyGroupedDiminishingReturns(
