@@ -1,7 +1,6 @@
 import { KiokuConstants, KiokuElement, KiokuRole, type Character } from "../types/KiokuTypes"
 import { useBetaNumber, useBetaValue } from "../utils/betaSettings"
 
-
 export type PowerScores = {
     total: number
 
@@ -21,70 +20,65 @@ const COLLAB = new Set([
 ])
 
 function getWhaleMultiplier(ch: Character): number {
-    // Collabs don't decay and are always limited
+    const now = Date.now()
+
+    const monthMs = useBetaNumber("whaleMonthMs")
+    const permMonths = useBetaNumber("whalePermanentDurationMonths")
+    const releaseMonths = useBetaNumber("whaleReleaseDurationMonths")
+    const floor = useBetaNumber("whaleDecayFloor")
+    const collabMult = useBetaNumber("whaleCollabMultiplier")
+
     if (COLLAB.has(ch.name)) {
-        return 2
+        return collabMult
     }
 
-    const permanentDate = new Date(ch.permaDate)
+    const permanentDate = ch.permaDate ? new Date(ch.permaDate) : null
     const releaseDate = new Date(ch.releaseDate)
-    const msPerMonth = 1000 * 60 * 60 * 24 * 30
 
-    if (ch.permaDate) {
-        if (permanentDate > new Date()) {
-            return 2
+    if (permanentDate) {
+        if (permanentDate.getTime() > now) {
+            return collabMult
         }
 
-        const monthsSincePermanent = (new Date().getTime() - permanentDate.getTime()) / msPerMonth
-        if (monthsSincePermanent >= 12) {
-            return 0.5
+        const monthsSincePermanent =
+            (now - permanentDate.getTime()) / monthMs
+
+        if (monthsSincePermanent >= permMonths) {
+            return floor
         }
 
-        const progress = monthsSincePermanent / 12
-
-        return 2 - progress * 1.5
+        const progress = monthsSincePermanent / permMonths
+        return collabMult - progress * (collabMult - floor)
     }
 
-    const monthsSince = (new Date().getTime() - releaseDate.getTime()) / msPerMonth
-    if (monthsSince >= 24) {
+    const monthsSince = (now - releaseDate.getTime()) / monthMs
+
+    if (monthsSince >= releaseMonths) {
         return 1
     }
 
-    const progress = monthsSince / 24
-
-    return 2 - progress
+    const progress = monthsSince / releaseMonths
+    return collabMult - progress * (collabMult - 1)
 }
 
 function getCharacterPower(ch: Character): number {
     if (!ch.enabled) return 0
-    let power = 100
 
-    power += ch.ascension * 40
+    let power = useBetaNumber("basePower")
+    power += ch.ascension * useBetaNumber("ascensionPowerPerLevel")
 
-    if (ch.ascension >= 2) power += 20
-    switch (ch.role) {
-        case KiokuRole.Breaker:
-            if (ch.ascension >= 3) power += 30
-            if (ch.ascension >= 4) power += 10
-            if (ch.ascension >= 5) power += 30
-            break
-        case KiokuRole.Attacker:
-            if (ch.ascension >= 3) power += 25
-            if (ch.ascension >= 5) power += 55
-            break;
-        case KiokuRole.Buffer:
-            if (ch.ascension >= 4) power += 80
-            break
-        case KiokuRole.Debuffer:
-            if (ch.ascension >= 4) power += 60
-            break
-        case KiokuRole.Defender:
-            if (ch.ascension >= 4) power += 25
-            break
-        case KiokuRole.Healer:
-            if (ch.ascension >= 4) power += 30
-            break
+    const matrix =
+        useBetaValue<Record<string, Record<number, number>>>(
+            "roleAscensionBonuses"
+        )
+
+    const roleBonuses = matrix[ch.role] ?? {}
+
+    // apply ALL ascension bonuses up to current level
+    for (let i = 1; i <= ch.ascension; i++) {
+        power += roleBonuses[i] ?? 0
     }
+
     return power
 }
 
@@ -114,6 +108,7 @@ function getMaxPower(ch: Character, getPower: (character: Character) => number):
 
 function remap(v: number, min: number, max: number, normExp: number): number {
     const normalized = Math.pow((v - min) / (max - min), normExp)
+    if (Number.isNaN(normalized)) return 0
     return Math.round(Math.max(0, Math.min(1, normalized)) * 100)
 }
 
@@ -124,14 +119,14 @@ function normalize(
     maxNorm: number = useBetaNumber("defaultNormalizeMax"),
     normExp: number = useBetaNumber("defaultNormalizationExponent")
 ): number {
-    if (max <= 0) return 0;
+    if (max <= 0) return 0
     return remap(current / max, minNorm, maxNorm, normExp)
 }
 
 function applyGroupedDiminishingReturns(
     items: WeightedEntry[],
-    getValue: (item: WeightedEntry) => number = (x => x.value),
-    getGroup: (item: WeightedEntry) => string = (x => `${x.role}_${x.element}`),
+    getValue: (item: WeightedEntry) => number = (x) => x.value,
+    getGroup: (item: WeightedEntry) => string = (x) => `${x.role}_${x.element}`,
     decay = useBetaNumber("diminishingReturnsDecay")
 ): number {
     const groups = new Map<string, number[]>()
@@ -166,10 +161,10 @@ type WeightedEntry = {
     element: KiokuElement
 }
 
-export function getPowerScores(
-    chars: Character[]
-): PowerScores {
-    const fiveStars = chars.filter(ch => ch.rarity === 5 && ch.name !== "Lux☆Magica")
+export function getPowerScores(chars: Character[]): PowerScores {
+    const fiveStars = chars.filter(
+        (ch) => ch.rarity === 5 && ch.name !== "Lux☆Magica"
+    )
 
     const roleCurrent = {
         attacker: [] as WeightedEntry[],
@@ -195,71 +190,46 @@ export function getPowerScores(
     const totalWhaleMax: WeightedEntry[] = []
 
     for (const ch of fiveStars) {
-        const pwrRatio = getCharacterPower(ch) / getMaxPower(ch, getCharacterPower)
-        const whaleRatio = getCharacterWhalePower(ch) / getMaxPower(ch, getCharacterWhalePower)
+        const pwrRatio =
+            getCharacterPower(ch) /
+            getMaxPower(ch, getCharacterPower)
 
-        let roleScaling: number
-        switch (ch.role) {
-            case KiokuRole.Attacker:
-                roleScaling = useBetaNumber("attackerScaling")
-                break
-            case KiokuRole.Breaker:
-                roleScaling = useBetaNumber("breakerScaling")
-                break
-            case KiokuRole.Buffer:
-                roleScaling = useBetaNumber("bufferScaling")
-                break
-            case KiokuRole.Debuffer:
-                roleScaling = useBetaNumber("debufferScaling")
-                break
-            case KiokuRole.Healer:
-            case KiokuRole.Defender:
-            default:
-                roleScaling = useBetaNumber("defaultScaling")
-                break
-        }
+        const whaleRatio =
+            getCharacterWhalePower(ch) /
+            getMaxPower(ch, getCharacterWhalePower)
 
-        const data = { role: ch.role, element: ch.element }
+        const roleScaling =
+            useBetaValue<Record<string, number>>("roleScalings")[ch.role] ??
+            useBetaNumber("defaultScaling")
 
-        const kiokuScaling = useBetaValue<Record<string, number>>("kiokuScalings")[ch.name] ?? 1
+        const kiokuScaling =
+            useBetaValue<Record<string, number>>("kiokuScalings")[ch.name] ??
+            1
 
         const scaledMax = roleScaling * kiokuScaling
         const scaledCurrent = pwrRatio * scaledMax
 
-        const whaleScaledMax = getWhaleMultiplier(ch) / (roleScaling * kiokuScaling)
+        const whaleScaledMax =
+            getWhaleMultiplier(ch) / (roleScaling * kiokuScaling)
+
         const whaleScaledCurrent = whaleRatio * whaleScaledMax
+
+        const data = { role: ch.role, element: ch.element }
 
         totalCurrent.push({ ...data, value: scaledCurrent })
         totalMax.push({ ...data, value: scaledMax })
         totalWhaleCurrent.push({ ...data, value: whaleScaledCurrent })
         totalWhaleMax.push({ ...data, value: whaleScaledMax })
 
-        switch (ch.role) {
-            case KiokuRole.Attacker:
-                roleCurrent.attacker.push({ ...data, value: scaledCurrent })
-                roleMax.attacker.push({ ...data, value: scaledMax })
-                break
-            case KiokuRole.Buffer:
-                roleCurrent.buffer.push({ ...data, value: scaledCurrent })
-                roleMax.buffer.push({ ...data, value: scaledMax })
-                break
-            case KiokuRole.Debuffer:
-                roleCurrent.debuffer.push({ ...data, value: scaledCurrent })
-                roleMax.debuffer.push({ ...data, value: scaledMax })
-                break
-            case KiokuRole.Breaker:
-                roleCurrent.breaker.push({ ...data, value: scaledCurrent })
-                roleMax.breaker.push({ ...data, value: scaledMax })
-                break
-            case KiokuRole.Defender:
-                roleCurrent.defender.push({ ...data, value: scaledCurrent })
-                roleMax.defender.push({ ...data, value: scaledMax })
-                break
-            case KiokuRole.Healer:
-                roleCurrent.healer.push({ ...data, value: scaledCurrent })
-                roleMax.healer.push({ ...data, value: scaledMax })
-                break
-        }
+        roleCurrent[ch.role as keyof typeof roleCurrent]?.push({
+            ...data,
+            value: scaledCurrent,
+        })
+
+        roleMax[ch.role as keyof typeof roleMax]?.push({
+            ...data,
+            value: scaledMax,
+        })
     }
 
     return {

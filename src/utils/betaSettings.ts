@@ -78,30 +78,19 @@ export const BETA_SECTIONS = [
     {
         title: "Role Scaling",
         settings: [
+            { key: "defaultScaling", label: "Default Scaling", defaultValue: 0.9 },
+
             {
-                key: "attackerScaling",
-                label: "Attacker Scaling",
-                defaultValue: 1.15,
-            },
-            {
-                key: "breakerScaling",
-                label: "Breaker Scaling",
-                defaultValue: 1,
-            },
-            {
-                key: "bufferScaling",
-                label: "Buffer Scaling",
-                defaultValue: 1.25,
-            },
-            {
-                key: "debufferScaling",
-                label: "Debuffer Scaling",
-                defaultValue: 1.2,
-            },
-            {
-                key: "defaultScaling",
-                label: "Default Scaling",
-                defaultValue: 0.9,
+                key: "roleScalings",
+                label: "Role Scalings",
+                defaultValue: {
+                    attacker: 1.15,
+                    breaker: 1,
+                    buffer: 1.25,
+                    debuffer: 1.2,
+                    defender: 0.9,
+                    healer: 0.9,
+                },
             },
         ],
     },
@@ -138,6 +127,31 @@ export const BETA_SECTIONS = [
                 key: "whaleAscension5",
                 label: "Whale Ascension 5",
                 defaultValue: 100,
+            },
+            {
+                key: "whaleMonthMs",
+                label: "Whale Month Length (ms)",
+                defaultValue: 1000 * 60 * 60 * 24 * 30,
+            },
+            {
+                key: "whalePermanentDurationMonths",
+                label: "Permanent Duration (months)",
+                defaultValue: 12,
+            },
+            {
+                key: "whaleReleaseDurationMonths",
+                label: "Release Decay Duration (months)",
+                defaultValue: 24,
+            },
+            {
+                key: "whaleDecayFloor",
+                label: "Whale Decay Floor",
+                defaultValue: 0.5,
+            },
+            {
+                key: "whaleCollabMultiplier",
+                label: "Collab Whale Multiplier",
+                defaultValue: 2,
             },
         ],
     },
@@ -179,7 +193,74 @@ export const BETA_SECTIONS = [
                     "Marigold Dadaism": 0.75,
                     "Kiss-shot": 0.75,
                 },
-            }]
+            }
+        ]
+    },
+    {
+        title: "Character Power",
+        settings: [
+            { key: "basePower", label: "Base Power", defaultValue: 100 },
+            { key: "ascensionPowerPerLevel", label: "Ascension Power Per Level", defaultValue: 40 },
+        ],
+    },
+
+    {
+        title: "Role Ascension Matrix",
+        settings: [
+            {
+                key: "roleAscensionBonuses",
+                label: "Role Ascension Bonuses",
+                defaultValue: {
+                    attacker: {
+                        1: 0,
+                        2: 0,
+                        3: 25,
+                        4: 0,
+                        5: 55,
+                    },
+
+                    breaker: {
+                        1: 0,
+                        2: 0,
+                        3: 30,
+                        4: 10,
+                        5: 30,
+                    },
+
+                    buffer: {
+                        1: 0,
+                        2: 0,
+                        3: 0,
+                        4: 80,
+                        5: 0,
+                    },
+
+                    debuffer: {
+                        1: 0,
+                        2: 0,
+                        3: 0,
+                        4: 60,
+                        5: 0,
+                    },
+
+                    defender: {
+                        1: 0,
+                        2: 0,
+                        3: 0,
+                        4: 25,
+                        5: 0,
+                    },
+
+                    healer: {
+                        1: 0,
+                        2: 0,
+                        3: 0,
+                        4: 30,
+                        5: 0,
+                    },
+                },
+            },
+        ],
     }
 ] as const
 
