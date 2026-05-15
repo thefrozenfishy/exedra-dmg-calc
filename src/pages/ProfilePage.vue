@@ -785,9 +785,8 @@ a.link {
 ========================= */
 
 .friend-avatar-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
+    position: relative;
 }
 
 .profile-avatar {
