@@ -123,13 +123,13 @@ function getCharacterPower(ch: Character): number {
 function getCharacterWhalePower(ch: Character): number {
     if (!ch.enabled) return 0
 
-    let whale = Number(useBeta("whaleBase", 0).value)
+    let whale = Number(useBeta("whaleBase", 100).value)
 
-    if (ch.ascension >= 1) whale += Number(useBeta("whaleAscension1", 0).value)
-    if (ch.ascension >= 2) whale += Number(useBeta("whaleAscension2", 0).value)
-    if (ch.ascension >= 3) whale += Number(useBeta("whaleAscension3", 0).value)
-    if (ch.ascension >= 4) whale += Number(useBeta("whaleAscension4", 0).value)
-    if (ch.ascension >= 5) whale += Number(useBeta("whaleAscension5", 0).value)
+    if (ch.ascension >= 1) whale += Number(useBeta("whaleAscension1", 20).value)
+    if (ch.ascension >= 2) whale += Number(useBeta("whaleAscension2", 40).value)
+    if (ch.ascension >= 3) whale += Number(useBeta("whaleAscension3", 60).value)
+    if (ch.ascension >= 4) whale += Number(useBeta("whaleAscension4", 80).value)
+    if (ch.ascension >= 5) whale += Number(useBeta("whaleAscension5", 100).value)
 
     return whale
 }
@@ -152,8 +152,8 @@ function remap(v: number, min: number, max: number, normExp: number): number {
 function normalize(
     current: number,
     max: number,
-    minNorm: number = Number(useBeta("defaultNormalizeMin", 2).value),
-    maxNorm: number = Number(useBeta("defaultNormalizeMax", 5).value),
+    minNorm: number = Number(useBeta("defaultNormalizeMin", 0.2).value),
+    maxNorm: number = Number(useBeta("defaultNormalizeMax", 0.95).value),
     normExp: number = Number(useBeta("defaultNormalizationExponent", 2).value)
 ): number {
     return remap(current / max, minNorm, maxNorm, normExp)
@@ -163,7 +163,7 @@ function applyGroupedDiminishingReturns(
     items: WeightedEntry[],
     getValue: (item: WeightedEntry) => number = (x => x.value),
     getGroup: (item: WeightedEntry) => string = (x => `${x.role}_${x.element}`),
-    decay = Number(useBeta("diminishingReturnsDecay", 8).value)
+    decay = Number(useBeta("diminishingReturnsDecay", 0.8).value)
 ): number {
     const groups = new Map<string, number[]>()
 
@@ -232,21 +232,21 @@ export function getPowerScores(
         let roleScaling: number
         switch (ch.role) {
             case KiokuRole.Attacker:
-                roleScaling = Number(useBeta("attackerScaling", 5).value)
+                roleScaling = Number(useBeta("attackerScaling", 1.15).value)
                 break
             case KiokuRole.Breaker:
                 roleScaling = Number(useBeta("breakerScaling", 1).value)
                 break
             case KiokuRole.Buffer:
-                roleScaling = Number(useBeta("bufferScaling", 5).value)
+                roleScaling = Number(useBeta("bufferScaling", 1.25).value)
                 break
             case KiokuRole.Debuffer:
-                roleScaling = Number(useBeta("debufferScaling", 2).value)
+                roleScaling = Number(useBeta("debufferScaling", 1.2).value)
                 break
             case KiokuRole.Healer:
             case KiokuRole.Defender:
             default:
-                roleScaling = Number(useBeta("defaultScaling", 9).value)
+                roleScaling = Number(useBeta("defaultScaling", 0.9).value)
                 break
         }
 
@@ -301,8 +301,8 @@ export function getPowerScores(
         whale: normalize(
             applyGroupedDiminishingReturns(totalWhaleCurrent),
             applyGroupedDiminishingReturns(totalWhaleMax),
-            Number(useBeta("whaleNormalizeMin", 2).value),
-            Number(useBeta("whaleNormalizeMax", 5).value),
+            Number(useBeta("whaleNormalizeMin", 0.2).value),
+            Number(useBeta("whaleNormalizeMax", 0.95).value),
             Number(useBeta("whaleNormalizationExponent", 2).value)
         ),
         attacker: normalize(
