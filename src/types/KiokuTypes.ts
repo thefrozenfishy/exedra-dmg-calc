@@ -192,6 +192,7 @@ export interface Character {
     name: string
     obtain: string
     permaDate: string
+    releaseDate: string
     portrait?: string
     rarity: number
     role: KiokuRole
@@ -267,6 +268,7 @@ export interface KiokuData {
     minSpd: number
     obtain: string
     permaDate: string
+    releaseDate: string
     rarity: number
     role: KiokuRole
     skill_id: number

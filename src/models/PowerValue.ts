@@ -55,25 +55,35 @@ function getWhaleMultiplier(ch: Character): number {
     if (COLLAB.has(ch.name)) {
         return 2
     }
+    console.log(ch.name, ch.permaDate, ch.releaseDate)
+
     const permanentDate = new Date(ch.permaDate)
-
-    // limiteds and still not permanents
-    if (!ch.permaDate || permanentDate > new Date()) {
-        return 2
-    }
-
+    const releaseDate = new Date(ch.releaseDate)
     const msPerMonth = 1000 * 60 * 60 * 24 * 30
-    const monthsSincePermanent = (new Date().getTime() - permanentDate.getTime()) / msPerMonth
 
-    // after 12 months
-    if (monthsSincePermanent >= 12) {
-        return 0.5
+    if (ch.permaDate) {
+        if (permanentDate > new Date()) {
+            return 2
+        }
+
+        const monthsSincePermanent = (new Date().getTime() - permanentDate.getTime()) / msPerMonth
+        if (monthsSincePermanent >= 12) {
+            return 0.5
+        }
+
+        const progress = monthsSincePermanent / 12
+
+        return 2 - progress * 1.5
     }
 
-    // smooth decay from month
-    const progress = (monthsSincePermanent) / 12
+    const monthsSince = (new Date().getTime() - releaseDate.getTime()) / msPerMonth
+    if (monthsSince >= 24) {
+        return 1
+    }
 
-    return 2 - progress * 1.5
+    const progress = monthsSince / 24
+
+    return 2 - progress
 }
 
 function getCharacterPower(ch: Character): number {
