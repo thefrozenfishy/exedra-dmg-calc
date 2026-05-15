@@ -397,14 +397,14 @@ const downloadAscensionList = async () => {
 .comparison-badge {
     position: absolute;
     left: 50%;
-    bottom: -6px;
+    bottom: 0px;
     transform: translateX(-50%);
 
     background: rgba(0, 0, 0, 0.9);
     padding: 1px 3px;
 
     border-radius: 999px;
-    font-size: 0.45rem;
+    font-size: 0.55rem;
     font-weight: bold;
 
     white-space: nowrap;
