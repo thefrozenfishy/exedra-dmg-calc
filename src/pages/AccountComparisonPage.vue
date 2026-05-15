@@ -36,7 +36,7 @@
                 </label>
                 <label>
                     <input type="checkbox" v-model="showUnowned" />
-                    Show units not owned by neither party
+                    Show units not owned by either party
                 </label>
                 <label>
                     <input type="checkbox" v-model="collapseEmptyRows" />
