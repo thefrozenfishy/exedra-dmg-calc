@@ -1,7 +1,6 @@
-import { useBetaStore } from "../store/betaStore"
+import { useBeta } from "../store/betaStore"
 import { KiokuConstants, KiokuElement, KiokuRole, type Character } from "../types/KiokuTypes"
 
-const betaStore = useBetaStore()
 
 export type PowerScores = {
     total: number
@@ -124,13 +123,13 @@ function getCharacterPower(ch: Character): number {
 function getCharacterWhalePower(ch: Character): number {
     if (!ch.enabled) return 0
 
-    let whale = Number(betaStore.get("whaleBase", 0))
+    let whale = Number(useBeta("whaleBase", 0).value)
 
-    if (ch.ascension >= 1) whale += Number(betaStore.get("whaleAscension1", 0))
-    if (ch.ascension >= 2) whale += Number(betaStore.get("whaleAscension2", 0))
-    if (ch.ascension >= 3) whale += Number(betaStore.get("whaleAscension3", 0))
-    if (ch.ascension >= 4) whale += Number(betaStore.get("whaleAscension4", 0))
-    if (ch.ascension >= 5) whale += Number(betaStore.get("whaleAscension5", 0))
+    if (ch.ascension >= 1) whale += Number(useBeta("whaleAscension1", 0).value)
+    if (ch.ascension >= 2) whale += Number(useBeta("whaleAscension2", 0).value)
+    if (ch.ascension >= 3) whale += Number(useBeta("whaleAscension3", 0).value)
+    if (ch.ascension >= 4) whale += Number(useBeta("whaleAscension4", 0).value)
+    if (ch.ascension >= 5) whale += Number(useBeta("whaleAscension5", 0).value)
 
     return whale
 }
@@ -153,9 +152,9 @@ function remap(v: number, min: number, max: number, normExp: number): number {
 function normalize(
     current: number,
     max: number,
-    minNorm: number = Number(betaStore.get("defaultNormalizeMin", 2)),
-    maxNorm: number = Number(betaStore.get("defaultNormalizeMax", 5)),
-    normExp: number = Number(betaStore.get("defaultNormalizationExponent", 2))
+    minNorm: number = Number(useBeta("defaultNormalizeMin", 2).value),
+    maxNorm: number = Number(useBeta("defaultNormalizeMax", 5).value),
+    normExp: number = Number(useBeta("defaultNormalizationExponent", 2).value)
 ): number {
     return remap(current / max, minNorm, maxNorm, normExp)
 }
@@ -164,7 +163,7 @@ function applyGroupedDiminishingReturns(
     items: WeightedEntry[],
     getValue: (item: WeightedEntry) => number = (x => x.value),
     getGroup: (item: WeightedEntry) => string = (x => `${x.role}_${x.element}`),
-    decay = Number(betaStore.get("diminishingReturnsDecay", 8))
+    decay = Number(useBeta("diminishingReturnsDecay", 8).value)
 ): number {
     const groups = new Map<string, number[]>()
 
@@ -233,21 +232,21 @@ export function getPowerScores(
         let roleScaling: number
         switch (ch.role) {
             case KiokuRole.Attacker:
-                roleScaling = Number(betaStore.get("attackerScaling", 5))
+                roleScaling = Number(useBeta("attackerScaling", 5).value)
                 break
             case KiokuRole.Breaker:
-                roleScaling = Number(betaStore.get("breakerScaling", 1))
+                roleScaling = Number(useBeta("breakerScaling", 1).value)
                 break
             case KiokuRole.Buffer:
-                roleScaling = Number(betaStore.get("bufferScaling", 5))
+                roleScaling = Number(useBeta("bufferScaling", 5).value)
                 break
             case KiokuRole.Debuffer:
-                roleScaling = Number(betaStore.get("debufferScaling", 2))
+                roleScaling = Number(useBeta("debufferScaling", 2).value)
                 break
             case KiokuRole.Healer:
             case KiokuRole.Defender:
             default:
-                roleScaling = Number(betaStore.get("defaultScaling", 9))
+                roleScaling = Number(useBeta("defaultScaling", 9).value)
                 break
         }
 
@@ -302,9 +301,9 @@ export function getPowerScores(
         whale: normalize(
             applyGroupedDiminishingReturns(totalWhaleCurrent),
             applyGroupedDiminishingReturns(totalWhaleMax),
-            Number(betaStore.get("whaleNormalizeMin", 2)),
-            Number(betaStore.get("whaleNormalizeMax", 5)),
-            Number(betaStore.get("whaleNormalizationExponent", 2))
+            Number(useBeta("whaleNormalizeMin", 2).value),
+            Number(useBeta("whaleNormalizeMax", 5).value),
+            Number(useBeta("whaleNormalizationExponent", 2).value)
         ),
         attacker: normalize(
             applyGroupedDiminishingReturns(roleCurrent.attacker),
