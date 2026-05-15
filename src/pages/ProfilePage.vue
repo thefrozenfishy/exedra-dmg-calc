@@ -341,7 +341,10 @@
         </p>
         <p>If you think the calculation can be improved, talk to me about it!</p>
     </div>
-    <button v-if="isTFF" @click="addFriends">Add all</button>
+    <div v-if="isTFF">
+        <button @click="addFriends">Add all</button>
+        <button @click="exportData">Export Data</button>
+    </div>
 </template>
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
@@ -361,6 +364,86 @@ const addFriends = async () => {
     if (!isTFF) return
     await addAllFriends()
     console.log("Added all friends")
+}
+
+const exportData = () => {
+    const rows: string[] = []
+
+    const csvEscape = (val: unknown) => {
+        if (val === null || val === undefined) return ''
+        const str = String(val)
+        if (/[",\n]/.test(str)) {
+            return `"${str.replace(/"/g, '""')}"`
+        }
+        return str
+    }
+
+    const pushRow = (cols: (string | number | undefined)[]) => {
+        rows.push(cols.map(csvEscape).join(','))
+    }
+
+    pushRow([
+        'type',
+        'id',
+        'name',
+        'total',
+        'attacker',
+        'buffer',
+        'debuffer',
+        'breaker',
+        'defender',
+        'healer',
+        'whale',
+        'similarity'
+    ])
+
+    if (myPower.value) {
+        pushRow([
+            'self',
+            store.friendCode,
+            store.displayName,
+            myPower.value.total,
+            myPower.value.attacker,
+            myPower.value.buffer,
+            myPower.value.debuffer,
+            myPower.value.breaker,
+            myPower.value.defender,
+            myPower.value.healer,
+            myPower.value.whale,
+            ''
+        ])
+    }
+
+    // ---- FRIENDS ----
+    for (const f of store.friends) {
+        pushRow([
+            'friend',
+            f.friend_id,
+            f.nickname || f.display_name,
+            f.power?.total,
+            f.power?.attacker,
+            f.power?.buffer,
+            f.power?.debuffer,
+            f.power?.breaker,
+            f.power?.defender,
+            f.power?.healer,
+            f.power?.whale,
+            f.accountSimilarity
+        ])
+    }
+
+    const blob = new Blob([rows.join('\n')], {
+        type: 'text/csv;charset=utf-8;'
+    })
+
+    const url = URL.createObjectURL(blob)
+
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `profile_export.csv`
+    a.click()
+
+    URL.revokeObjectURL(url)
 }
 
 const myPower = computed(() =>

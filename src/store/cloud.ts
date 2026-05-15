@@ -298,8 +298,9 @@ export async function addAllFriends() {
 
     const supabase = getSupabase()
 
-    const [{ data: profiles }, { data: existing }] = await Promise.all([
+      const [{ data: profiles }, myCode, { data: existing }] = await Promise.all([
         supabase.from('public_profiles').select('friend_id'),
+        await getFriendCode(),
         supabase.from('user_friends').select('friend_id').eq('user_id', userId)
     ])
 
@@ -308,7 +309,7 @@ export async function addAllFriends() {
     const existingSet = new Set(existing?.map(e => e.friend_id) ?? [])
 
     const rows = profiles
-        .filter(p => p.friend_id !== userId)
+        .filter(p => p.friend_id !== myCode)
         .filter(p => !existingSet.has(p.friend_id))
         .map(p => ({
             user_id: userId,

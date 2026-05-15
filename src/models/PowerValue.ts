@@ -44,6 +44,38 @@ const UNIQUE_KIOKU_SCALING: Record<string, number> = {
     "Kiss-shot": 0.75,
 }
 
+const COLLAB = new Set([
+    "Unlimited Rulebook",
+    "Screw Zone",
+    "Kiss-shot",
+])
+
+function getWhaleMultiplier(ch: Character): number {
+    // Collabs don't decay and are always limited
+    if (COLLAB.has(ch.name)) {
+        return 2
+    }
+    const permanentDate = new Date(ch.permaDate)
+
+    // limiteds and still not permanents
+    if (!ch.permaDate || permanentDate > new Date()) {
+        return 2
+    }
+
+    const msPerMonth = 1000 * 60 * 60 * 24 * 30
+    const monthsSincePermanent = (new Date().getTime() - permanentDate.getTime()) / msPerMonth
+
+    // after 12 months
+    if (monthsSincePermanent >= 12) {
+        return 0.5
+    }
+
+    // smooth decay from month
+    const progress = (monthsSincePermanent) / 12
+
+    return 2 - progress * 1.5
+}
+
 function getCharacterPower(ch: Character): number {
     if (!ch.enabled) return 0
     let power = 100
@@ -169,13 +201,6 @@ export function getPowerScores(
         let max = getMaxCharacterPower(ch)
         const ratio = current / max
 
-        let whaleScalar = 1
-        if (ch.obtain !== "Permanent") {
-            whaleScalar = 3
-        } else if (!ch.permaDate || new Date(ch.permaDate) > new Date()) {
-            whaleScalar *= 5
-        }
-
         let roleScaling: number
         switch (ch.role) {
             case KiokuRole.Attacker:
@@ -204,7 +229,7 @@ export function getPowerScores(
         const scaledMax = roleScaling * kiokuScaling
         const scaledCurrent = ratio * scaledMax
 
-        const whaleScaledMax = whaleScalar / (roleScaling * kiokuScaling)
+        const whaleScaledMax = getWhaleMultiplier(ch) / (roleScaling * kiokuScaling)
         const whaleScaledCurrent = ratio * whaleScaledMax
 
         totalCurrent.push({ ...data, value: scaledCurrent })
