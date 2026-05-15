@@ -3,6 +3,13 @@ import { KiokuConstants, type Character } from "../types/KiokuTypes"
 const VALUE_OF_UNOWNED_DIFF = 5
 const COSINE_SIMILARITY_VALUE = 0.2
 
+function remap(v: number, min: number, max: number) {
+    // Remap v from 0-1 to min-max, with clamping
+    const normalized = (v - min) / (max - min)
+    console.log("Raw similarity:", v, "Normalized:", normalized)
+    return Math.round(Math.max(0, Math.min(1, normalized)) * 100)
+}
+
 export function getAccountSimilarityScore(
     myChars: Character[],
     otherChars: Character[]
@@ -22,7 +29,7 @@ export function getAccountSimilarityScore(
     for (const id of myMap.keys()) {
         const mine = myMap.get(id)
         const theirs = otherMap.get(id)
-        if (!mine?.enabled || !theirs?.enabled) continue
+        if (!mine?.enabled && !theirs?.enabled) continue
 
         const a = mine?.enabled ? mine.ascension + VALUE_OF_UNOWNED_DIFF : 0
 
@@ -44,5 +51,5 @@ export function getAccountSimilarityScore(
     const distanceSimilarity = 1 - (distanceTotal / distanceMax)
     const rawSimilarity = cosineSimilarity * COSINE_SIMILARITY_VALUE + distanceSimilarity * (1 - COSINE_SIMILARITY_VALUE)
 
-    return Math.round(rawSimilarity * 100)
+    return remap(rawSimilarity, 0.7, 0.9)
 }
