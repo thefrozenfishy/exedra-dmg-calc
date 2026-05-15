@@ -180,6 +180,10 @@
                             Healer Power
                         </option>
 
+                        <option value="similarity">
+                            Similarity Score
+                        </option>
+
                         <option value="whale">
                             Whale Power
                         </option>
@@ -431,7 +435,7 @@ const selectAvatar = async (id: number) => {
     )
 }
 
-type SortModes = 'default' | 'name' | 'total' | 'whale' | 'attacker' | 'buffer' | 'debuffer' | 'breaker' | 'defender' | 'healer'
+type SortModes = 'default' | 'name' | 'total' | 'whale' | 'attacker' | 'buffer' | 'debuffer' | 'breaker' | 'defender' | 'healer' | "similarity"
 const sortMode = useSetting<SortModes>("sortMode", "default")
 
 
@@ -484,6 +488,10 @@ const sortedFriends = computed(() => {
 
             case 'healer':
                 diff = (b.power?.healer || 0) - (a.power?.healer || 0)
+                break
+
+            case 'similarity':
+                diff = (b.accountSimilarity || 0) - (a.accountSimilarity || 0)
                 break
         }
 
