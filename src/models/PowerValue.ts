@@ -125,7 +125,7 @@ function getCharacterWhalePower(ch: Character): number {
     let whale = 100
 
     if (ch.ascension >= 1) whale += 20
-    if (ch.ascension >= 2) whale += 45
+    if (ch.ascension >= 2) whale += 40
     if (ch.ascension >= 3) whale += 60
     if (ch.ascension >= 4) whale += 80
     if (ch.ascension >= 5) whale += 100
