@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import CloudSyncWidget from './components/CloudSyncWidget.vue'
 const icon = document.getElementById('app-icon').href
+const beta = localStorage.getItem('beta') === 'true'
 </script>
 
 <template>
@@ -29,6 +30,9 @@ const icon = document.getElementById('app-icon').href
           <router-link to="/crys-reroll">Crystalis Reroller</router-link>
           <!--router-link to="/tier-lists">Tier Lists</router-link-->
           <router-link to="/about">About</router-link>
+        </div>
+        <div v-if="beta">
+          <router-link to="/beta">Beta Settings</router-link>
         </div>
       </nav>
     </header>

@@ -1,3 +1,4 @@
+import { useBeta } from "../store/betaStore"
 import { KiokuConstants, KiokuElement, KiokuRole, type Character } from "../types/KiokuTypes"
 
 export type PowerScores = {
@@ -121,13 +122,13 @@ function getCharacterPower(ch: Character): number {
 function getCharacterWhalePower(ch: Character): number {
     if (!ch.enabled) return 0
 
-    let whale = 100
+    let whale = useBeta("whaleBase", 100)
 
-    if (ch.ascension >= 1) whale += 20
-    if (ch.ascension >= 2) whale += 40
-    if (ch.ascension >= 3) whale += 60
-    if (ch.ascension >= 4) whale += 80
-    if (ch.ascension >= 5) whale += 100
+    if (ch.ascension >= 1) whale += useBeta("whaleAscension1", 20)
+    if (ch.ascension >= 2) whale += useBeta("whaleAscension2", 40)
+    if (ch.ascension >= 3) whale += useBeta("whaleAscension3", 60)
+    if (ch.ascension >= 4) whale += useBeta("whaleAscension4", 80)
+    if (ch.ascension >= 5) whale += useBeta("whaleAscension5", 100)
 
     return whale
 }
@@ -142,20 +143,26 @@ function getMaxPower(ch: Character, getPower: (character: Character) => number):
     return getPower(maxed)
 }
 
-function remap(v: number, min: number, max: number) {
-    const normalized = Math.sqrt((v - min) / (max - min))
+function remap(v: number, min: number, max: number, normExp: number): number {
+    const normalized = Math.pow((v - min) / (max - min), normExp)
     return Math.round(Math.max(0, Math.min(1, normalized)) * 100)
 }
 
-function normalize(current: number, max: number): number {
-    return remap(current / max, 0.2, 0.95)
+function normalize(
+    current: number,
+    max: number,
+    minNorm: number = useBeta("defaultNormalizeMin", 0.2),
+    maxNorm: number = useBeta("defaultNormalizeMax", 0.95),
+    normExp: number = useBeta("defaultNormalizationExponent", 2)
+): number {
+    return remap(current / max, minNorm, maxNorm, normExp)
 }
 
 function applyGroupedDiminishingReturns(
     items: WeightedEntry[],
     getValue: (item: WeightedEntry) => number = (x => x.value),
     getGroup: (item: WeightedEntry) => string = (x => `${x.role}_${x.element}`),
-    decay = 0.8
+    decay = useBeta("diminishingReturnsDecay", 0.8)
 ): number {
     const groups = new Map<string, number[]>()
 
@@ -224,21 +231,21 @@ export function getPowerScores(
         let roleScaling: number
         switch (ch.role) {
             case KiokuRole.Attacker:
-                roleScaling = 1.15
+                roleScaling = useBeta("attackerScaling", 1.15)
                 break
             case KiokuRole.Breaker:
-                roleScaling = 1
+                roleScaling = useBeta("breakerScaling", 1)
                 break
             case KiokuRole.Buffer:
-                roleScaling = 1.25
+                roleScaling = useBeta("bufferScaling", 1.25)
                 break
             case KiokuRole.Debuffer:
-                roleScaling = 1.2
+                roleScaling = useBeta("debufferScaling", 1.2)
                 break
             case KiokuRole.Healer:
             case KiokuRole.Defender:
             default:
-                roleScaling = 0.9
+                roleScaling = useBeta("defaultScaling", 0.9)
                 break
         }
 
@@ -292,7 +299,10 @@ export function getPowerScores(
         ),
         whale: normalize(
             applyGroupedDiminishingReturns(totalWhaleCurrent),
-            applyGroupedDiminishingReturns(totalWhaleMax)
+            applyGroupedDiminishingReturns(totalWhaleMax),
+            useBeta("whaleNormalizeMin", 0.2),
+            useBeta("whaleNormalizeMax", 0.95),
+            useBeta("whaleNormalizationExponent", 2)
         ),
         attacker: normalize(
             applyGroupedDiminishingReturns(roleCurrent.attacker),

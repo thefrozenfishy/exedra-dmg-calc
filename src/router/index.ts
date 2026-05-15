@@ -13,6 +13,7 @@ import TierLists from '../pages/TierLists.vue'
 import KiokuGridPage from '../pages/KiokuGridPage.vue'
 import ProfilePage from '../pages/ProfilePage.vue'
 import AccountComparisonPage from '../pages/AccountComparisonPage.vue'
+import BetaStuff from '../pages/BetaStuff.vue'
 
 const routes = [
     { path: '/profile', name: 'Profile + Friends', component: ProfilePage },
@@ -29,6 +30,7 @@ const routes = [
     { path: '/about', name: 'About', component: About },
     { path: '/my-kioku', name: 'My Kioku Viewer', component: AccountHasPage },
     { path: '/gacha-rate', name: 'Gacha Rate+Sim', component: GachaRatePage },
+    { path: '/beta', name: 'Beta Settings', component: BetaStuff },
 ]
 
 const router = createRouter({
