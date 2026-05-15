@@ -188,7 +188,7 @@
                     <input v-model="friendCode" placeholder="Enter friend code" maxlength="5" />
 
                     <button @click="addFriend">
-                        Add Friend
+                        Follow
                     </button>
 
                 </div>
@@ -315,7 +315,7 @@
                             </router-link>
 
                             <button v-if="!friend.isFriend" @click="store.addFriend(friend.friend_id)">
-                                Add Friend
+                                Follow
                             </button>
 
                             <button v-else class="remove-btn" @click="store.deleteFriend(friend.friend_id)">
