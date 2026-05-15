@@ -109,14 +109,28 @@ function getCharacterPower(ch: Character): number {
     return power
 }
 
-function getMaxCharacterPower(ch: Character): number {
+function getCharacterWhalePower(ch: Character): number {
+    if (!ch.enabled) return 0
+
+    let whale = 100
+
+    if (ch.ascension >= 1) whale += 20
+    if (ch.ascension >= 2) whale += 45
+    if (ch.ascension >= 3) whale += 60
+    if (ch.ascension >= 4) whale += 80
+    if (ch.ascension >= 5) whale += 100
+
+    return whale
+}
+
+function getMaxPower(ch: Character, getPower: (character: Character) => number): number {
     const maxed: Character = {
         ...ch,
         enabled: true,
         ascension: KiokuConstants.maxAscension,
     }
 
-    return getCharacterPower(maxed)
+    return getPower(maxed)
 }
 
 function normalize(
@@ -197,9 +211,8 @@ export function getPowerScores(
     const totalWhaleMax: WeightedEntry[] = []
 
     for (const ch of fiveStars) {
-        let current = getCharacterPower(ch)
-        let max = getMaxCharacterPower(ch)
-        const ratio = current / max
+        const pwrRatio = getCharacterPower(ch) / getMaxPower(ch, getCharacterPower)
+        const whaleRatio = getCharacterWhalePower(ch) / getMaxPower(ch, getCharacterWhalePower)
 
         let roleScaling: number
         switch (ch.role) {
@@ -227,10 +240,10 @@ export function getPowerScores(
         const kiokuScaling = UNIQUE_KIOKU_SCALING[ch.name] ?? 1
 
         const scaledMax = roleScaling * kiokuScaling
-        const scaledCurrent = ratio * scaledMax
+        const scaledCurrent = pwrRatio * scaledMax
 
         const whaleScaledMax = getWhaleMultiplier(ch) / (roleScaling * kiokuScaling)
-        const whaleScaledCurrent = ratio * whaleScaledMax
+        const whaleScaledCurrent = whaleRatio * whaleScaledMax
 
         totalCurrent.push({ ...data, value: scaledCurrent })
         totalMax.push({ ...data, value: scaledMax })
