@@ -327,6 +327,17 @@ const copyHyperLink = async () => {
 </script>
 
 <style scoped>
+.graph-container {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: fit-content;
+    max-width: max-content;
+
+    margin: 0 auto;
+}
+
 .header {
     margin-bottom: 1rem;
     text-align: center;
@@ -392,13 +403,15 @@ const copyHyperLink = async () => {
 }
 
 .diff-groups {
-    margin: 0 auto;
     display: flex;
     gap: 0.1rem;
     align-items: flex-start;
-    padding-bottom: 0.5rem;
-    justify-content: center;
-    width: max-content;
+
+    width: fit-content;
+    max-width: max-content;
+
+    justify-content: flex-start;
+    margin: 0 auto;
 }
 
 .diff-group {
