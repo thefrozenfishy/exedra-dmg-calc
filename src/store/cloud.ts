@@ -124,7 +124,7 @@ export async function getMyProfile() {
 
     const { data, error } = await supabase
         .from('user_profiles')
-        .select('*')
+        .select('*, users (*)')
         .eq('user_id', userId)
         .single()
 

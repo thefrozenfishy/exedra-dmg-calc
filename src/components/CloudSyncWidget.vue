@@ -49,47 +49,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { ref, computed } from "vue"
 import { useCharacterStore } from "../store/characterStore"
-import { getUserId } from "../store/user"
-import { getFriendCode } from "../store/cloud"
+import { useFriendStore } from "../store/friendStore"
 import { toast } from "vue3-toastify"
 
 const store = useCharacterStore()
+const friendStore = useFriendStore()
 
-const userId = ref(getUserId())
-const friendCode = ref<string | null>(null)
+const userId = computed(() => friendStore.userID)
+const friendCode = computed(() => friendStore.friendCode)
 
 const showRestore = ref(false)
 const restoreId = ref("")
 const expanded = ref(false)
 
-const loadFriendCode = async () => {
-    try {
-        friendCode.value = await getFriendCode()
-    } catch (err) {
-        console.error(err)
-    }
-}
-
-onMounted(async () => {
-    if (userId.value) {
-        await loadFriendCode()
-    }
-})
 
 const createAccount = async () => {
     try {
-        const id = await store.createCloudAccount()
-
-        userId.value = id
-
-        await loadFriendCode()
-
+        await store.createCloudAccount()
         toast.success("Cloud sync enabled!", {
             position: toast.POSITION.TOP_RIGHT,
             icon: false,
         })
+        window.location.reload()
     } catch (err) {
         console.error(err)
 
@@ -134,17 +117,11 @@ const restoreAccount = async () => {
         await store.loadExistingCloudAccount(
             restoreId.value.trim()
         )
-
-        userId.value = restoreId.value.trim()
-
-        await loadFriendCode()
-
-        showRestore.value = false
-
         toast.success("Profile loaded!", {
             position: toast.POSITION.TOP_RIGHT,
             icon: false,
         })
+        window.location.reload()
     } catch (err) {
         console.error(err)
 

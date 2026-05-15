@@ -1,25 +1,24 @@
 <template>
     <div class="diff-page">
         <div class="header">
-            <h1>Account Difference</h1>
+            <h1>Account Comparison</h1>
 
             <div class="subtitle" v-if="leftCode && rightCode">
                 Comparing
-                <FriendPickerBadge :profile="leftProfile" :friends="friends" :side="'left'" :current-code="leftCode"
-                    @pick="onPickLeft" />
+                <FriendPickerBadge side="left" :current-code="leftCode" placeholder="Left account" @pick="onPickLeft" />
                 vs
                 <FriendPickerBadge :profile="rightProfile" :friends="friends" :side="'right'" :current-code="rightCode"
-                    @pick="onPickRight" />
+                    :self="selfEntry" @pick="onPickRight" />
             </div>
 
             <div v-else class="subtitle missing-codes">
                 <span>Select two accounts to compare</span>
                 <div class="inline-pickers">
-                    <FriendPickerBadge :profile="leftProfile" :friends="friends" :side="'left'" :current-code="leftCode"
-                        :placeholder="'Left account'" @pick="onPickLeft" />
+                    <FriendPickerBadge side="left" :current-code="leftCode" placeholder="Left account"
+                        @pick="onPickLeft" />
                     vs
-                    <FriendPickerBadge :profile="rightProfile" :friends="friends" :side="'right'"
-                        :current-code="rightCode" :placeholder="'Right account'" @pick="onPickRight" />
+                    <FriendPickerBadge side="right" :current-code="rightCode" placeholder="Right account"
+                        @pick="onPickRight" />
                 </div>
             </div>
         </div>
@@ -65,22 +64,22 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
-
 import { useCharacterStore } from "../store/characterStore"
-import { loadCharactersByFriendCode, getProfile, getFriends } from "../store/cloud"
-
 import type { Character } from "../types/KiokuTypes"
 import { useSetting } from "../store/settingsStore"
-import FriendPickerBadge from "../components/FriendPickerBadge.vue"
+import FriendPickerBadge from "../components/Friendpickerbadge.vue"
+import { useFriendStore, SocialProfile } from "../store/friendStore"
+import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 
-const kiokuThumb = (id: number) => `/exedra-dmg-calc/kioku_images/${id}_thumbnail.png`
-const avatarUrl = (profile: Profile | null) => kiokuThumb(profile?.profile_icon || 10010101)
+const friendStore = useFriendStore()
 
 type ComparedCharacter = Character & {
     diff: number
     leftScore: number
     rightScore: number
 }
+
+const friendsList = computed(() => friendStore.friends)
 
 const route = useRoute()
 const router = useRouter()
@@ -98,16 +97,10 @@ const rightCode = computed(() =>
         : null
 )
 
-type Profile = {
-    display_name: string
-    friend_id: string
-    profile_icon: number
-    union_name: string
-}
-
-const leftProfile = ref<Profile | null>(null)
-const rightProfile = ref<Profile | null>(null)
+const leftProfile = ref<SocialProfile | null>(null)
+const rightProfile = ref<SocialProfile | null>(null)
 const friends = ref<any[]>([])
+const selfEntry = ref<SocialProfile | null>(null)
 
 const leftCharacters = ref<Character[]>([])
 const rightCharacters = ref<Character[]>([])
@@ -116,28 +109,30 @@ const showEqual = useSetting("showEqualCompareAcc", false)
 const collapseEmptyRows = useSetting("collapseEmptyRows", true)
 
 onMounted(async () => {
-    try {
-        friends.value = await getFriends()
-    } catch (err) {
-        console.error(err)
-    }
-
     if (!leftCode.value || !rightCode.value) return
     await loadBothSides()
 })
 
+const loadFriendKioku = async (code: string) => {
+    const found = friendsList.value.find(f => f.friend_id === code)
+    const profPromise: Promise<SocialProfile | null> = found ? Promise.resolve(found) : getProfile(code)
+    const [rows, profile] = await Promise.all([
+        loadCharactersByFriendCode(code),
+        profPromise.catch(() => null),
+    ])
+    return [store.mergeChars(rows), profile] as [Character[], SocialProfile | null]
+}
+
 const loadBothSides = async () => {
     if (!leftCode.value || !rightCode.value) return
 
-    const [leftRows, rightRows, lProfile, rProfile] = await Promise.all([
-        loadCharactersByFriendCode(leftCode.value),
-        loadCharactersByFriendCode(rightCode.value),
-        getProfile(leftCode.value),
-        getProfile(rightCode.value),
+    const [[leftRows, lProfile], [rightRows, rProfile]] = await Promise.all([
+        loadFriendKioku(leftCode.value),
+        loadFriendKioku(rightCode.value),
     ])
 
-    leftCharacters.value = store.mergeChars(leftRows)
-    rightCharacters.value = store.mergeChars(rightRows)
+    leftCharacters.value = leftRows
+    rightCharacters.value = rightRows
 
     leftProfile.value = lProfile
     rightProfile.value = rProfile
@@ -147,11 +142,8 @@ const onPickLeft = async (code: string) => {
     await router.replace({
         query: { ...route.query, left: code.toUpperCase() }
     })
-    const [rows, profile] = await Promise.all([
-        loadCharactersByFriendCode(code),
-        getProfile(code),
-    ])
-    leftCharacters.value = store.mergeChars(rows)
+    const [rows, profile] = await loadFriendKioku(code)
+    leftCharacters.value = rows
     leftProfile.value = profile
 }
 
@@ -159,11 +151,8 @@ const onPickRight = async (code: string) => {
     await router.replace({
         query: { ...route.query, right: code.toUpperCase() }
     })
-    const [rows, profile] = await Promise.all([
-        loadCharactersByFriendCode(code),
-        getProfile(code),
-    ])
-    rightCharacters.value = store.mergeChars(rows)
+    const [rows, profile] = await loadFriendKioku(code)
+    rightCharacters.value = rows
     rightProfile.value = profile
 }
 

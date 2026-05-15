@@ -2,16 +2,25 @@
     <div class="ascension-list">
         <div v-if="isReadonly || isViewingBannerOpen" class="viewing-banner">
             <span class="viewing-label">Viewing:</span>
-            <FriendPickerBadge :profile="viewingProfile" :friends="friendsList" side="left"
-                :current-code="viewingFriendCode" placeholder="Select a friend…" @pick="switchToFriend" />
-            <router-link :to="{ path: '/my-kioku' }" class="back-to-own" title="Back to your own kioku">
-                ← Mine
+            <FriendPickerBadge hide-self side="left" :current-code="viewingFriendCode" placeholder="Select a friend…"
+                @pick="switchToFriend" />
+            <router-link :to="{
+                path: '/account-compare',
+                query: {
+                    left: friendCode,
+                    right: viewingFriendCode,
+                }
+            }" class="compare-to-own" title="Compare with your own kioku">
+                Compare
+            </router-link>
+            <router-link :to="{ path: '/my-kioku' }" class="back-to-own" title="View own kioku">
+                ← Your Kioku
             </router-link>
         </div>
         <div v-else class="viewing-banner-own">
             <span class="viewing-own-label">Your Kioku</span>
             <button class="view-friend-btn" @click="isViewingBannerOpen = true">
-                👥 View a friend's
+                View Friend's Kioku
             </button>
         </div>
 
@@ -167,34 +176,18 @@ import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
 import { onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { getFriendCode, loadCharactersByFriendCode, getProfile } from "../store/cloud"
-import { getFriends } from "../store/cloud"
-import FriendPickerBadge from "../components/FriendPickerBadge.vue"
+import FriendPickerBadge from "../components/Friendpickerbadge.vue"
+import { useFriendStore, SocialProfile } from "../store/friendStore"
+import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 
 const route = useRoute()
 const router = useRouter()
+const friendStore = useFriendStore()
 
-const friendCode = ref<string | null>(null)
-const friendsList = ref<any[]>([])
-const viewingProfile = ref<{ display_name?: string; profile_icon?: number } | null>(null)
+const friendCode = computed(() => friendStore.friendCode)
+const friendsList = computed(() => friendStore.friends)
+const viewingProfile = ref<SocialProfile | null>(null)
 const isViewingBannerOpen = ref(false)
-
-const loadFriendCode = async () => {
-    try {
-        friendCode.value = await getFriendCode()
-    } catch (err) {
-        console.error(err)
-    }
-}
-
-onMounted(async () => {
-    await loadFriendCode()
-    try {
-        friendsList.value = await getFriends()
-    } catch (err) {
-        console.error(err)
-    }
-})
 
 const viewingFriendCode = computed(() =>
     typeof route.query.friend === "string" && route.query.friend !== friendCode.value
@@ -224,20 +217,14 @@ const switchToFriend = async (code: string) => {
 }
 
 const loadFriendKioku = async (code: string) => {
+    const found = friendsList.value.find(f => f.friend_id === code)
+    const profPromise: Promise<SocialProfile | null> = found ? Promise.resolve(found) : getProfile(code)
     const [rows, profile] = await Promise.all([
         loadCharactersByFriendCode(code),
-        getProfile(code).catch(() => null),
+        profPromise.catch(() => null),
     ])
     displayedCharacters.value = store.mergeChars(rows)
     viewingProfile.value = profile
-
-    const found = friendsList.value.find(f => f.friend_id === code)
-    if (found && !viewingProfile.value) {
-        viewingProfile.value = {
-            display_name: found.nickname?.trim() || found.display_name?.trim(),
-            profile_icon: found.profile_icon,
-        }
-    }
 }
 
 const fiveStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
@@ -693,6 +680,25 @@ td {
 }
 
 .back-to-own:hover {
+    background: #4a3a5a;
+}
+
+.compare-to-own {
+    margin-right: auto;
+    padding: 0.3rem 0.75rem;
+    background: #3a2f47;
+    border: 1px solid #8e5bc7;
+    border-radius: 999px;
+    color: #c9a0e8;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+
+.compare-to-own:hover {
     background: #4a3a5a;
 }
 

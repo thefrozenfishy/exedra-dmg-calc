@@ -1,6 +1,5 @@
 <template>
     <div class="fpb-wrapper" ref="wrapperRef">
-        <!-- The clickable badge -->
         <button class="friend-avatar-wrapper"
             :class="[side === 'left' ? 'side-left' : 'side-right', { 'is-open': open, 'is-placeholder': !currentCode }]"
             @click="toggle" :title="currentCode ? `Click to change (${currentCode})` : 'Click to select an account'">
@@ -9,7 +8,6 @@
             <span class="badge-chevron" :class="{ 'open': open }">▾</span>
         </button>
 
-        <!-- Dropdown -->
         <transition name="picker-drop">
             <div v-if="open" class="fpb-dropdown" :class="side">
                 <div class="fpb-search-row">
@@ -20,15 +18,45 @@
                 </div>
 
                 <div class="fpb-list" ref="listRef">
-                    <!-- Friend matches -->
+                    <template v-if="selfVisible && selfProfile">
+                        <div class="fpb-section-label">You</div>
+
+                        <button class="fpb-option fpb-self" :class="{ 'fpb-active': cursor === 0 }"
+                            @click="pick(selfProfile.friend_id)" @mouseenter="cursor = 0">
+                            <img class="fpb-opt-avatar fpb-self-avatar"
+                                :src="kiokuThumb(selfProfile.profile_icon || 10010101)" />
+
+                            <div class="fpb-opt-info">
+                                <span class="fpb-opt-name">
+                                    {{
+                                        selfProfile.display_name?.trim() ||
+                                        selfProfile.friend_id
+                                    }}
+
+                                    <span class="fpb-you-tag">
+                                        you
+                                    </span>
+                                </span>
+
+                                <span class="fpb-opt-code">
+                                    {{ selfProfile.friend_id }}
+                                </span>
+                            </div>
+                        </button>
+                    </template>
+
                     <template v-if="filteredFriends.length">
                         <div class="fpb-section-label">Friends</div>
                         <button v-for="(f, i) in filteredFriends" :key="f.friend_id" class="fpb-option"
-                            :class="{ 'fpb-active': cursor === i }" @click="pick(f.friend_id)" @mouseenter="cursor = i">
+                            :class="{ 'fpb-active': cursor === selfOffset + i, 'fpb-union': f.isUnionMember }"
+                            @click="pick(f.friend_id)" @mouseenter="cursor = selfOffset + i">
                             <img class="fpb-opt-avatar" :src="kiokuThumb(f.profile_icon || 10010101)" />
                             <div class="fpb-opt-info">
-                                <span class="fpb-opt-name">{{ f.nickname?.trim() || f.display_name?.trim() ||
-                                    f.friend_id }}</span>
+                                <span class="fpb-opt-name">
+                                    {{ f.nickname?.trim() || f.display_name?.trim() || f.friend_id }}
+                                    <span v-if="f.favorite" class="fpb-star">★</span>
+                                    <span v-if="f.isUnionMember" class="fpb-union-tag">union</span>
+                                </span>
                                 <span v-if="f.nickname?.trim() && f.display_name?.trim()" class="fpb-opt-sub">{{
                                     f.display_name }}</span>
                                 <span class="fpb-opt-code">{{ f.friend_id }}</span>
@@ -36,11 +64,12 @@
                         </button>
                     </template>
 
-                    <!-- Direct code entry if query looks like a code and no exact match -->
-                    <template v-if="queryLooksLikeCode && !exactFriendMatch">
+                    <template v-if="queryLooksLikeCode && !exactMatch">
                         <div class="fpb-section-label">Direct entry</div>
-                        <button class="fpb-option" :class="{ 'fpb-active': cursor === filteredFriends.length }"
-                            @click="pick(query.toUpperCase())" @mouseenter="cursor = filteredFriends.length">
+                        <button class="fpb-option"
+                            :class="{ 'fpb-active': cursor === selfOffset + filteredFriends.length }"
+                            @click="pick(query.toUpperCase())"
+                            @mouseenter="cursor = selfOffset + filteredFriends.length">
                             <div class="fpb-opt-code-icon">🔍</div>
                             <div class="fpb-opt-info">
                                 <span class="fpb-opt-name">Load <strong>{{ query.toUpperCase() }}</strong></span>
@@ -49,9 +78,8 @@
                         </button>
                     </template>
 
-                    <!-- Empty state -->
-                    <div v-if="filteredFriends.length === 0 && !queryLooksLikeCode" class="fpb-empty">
-                        {{ query.length ? 'No friends match — type a 5-char code to load directly' : 'No friends yet' }}
+                    <div v-if="!selfVisible && filteredFriends.length === 0 && !queryLooksLikeCode" class="fpb-empty">
+                        {{ query.length ? 'No matches — type a 5-char code to load directly' : 'No friends yet' }}
                     </div>
                 </div>
             </div>
@@ -60,89 +88,186 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from "vue"
+import {
+    ref,
+    computed,
+    watch,
+    nextTick,
+    onMounted,
+    onBeforeUnmount,
+} from "vue"
 
-type FriendEntry = {
-    friend_id: string
-    display_name?: string
-    nickname?: string
-    profile_icon?: number
-    union_name?: string
-}
+import {
+    useFriendStore,
+    type SocialProfile,
+} from "../store/friendStore"
 
-type Profile = {
-    display_name?: string
-    friend_id?: string
-    profile_icon?: number
-}
-
-const props = defineProps<{
-    profile: Profile | null
-    friends: FriendEntry[]
+const props = withDefaults(defineProps<{
     side: "left" | "right"
     currentCode: string | null
+    hideSelf?: boolean
     placeholder?: string
-}>()
+}>(), {
+    hideSelf: false,
+})
 
 const emit = defineEmits<{
     (e: "pick", code: string): void
 }>()
 
-const kiokuThumb = (id: number) => `/exedra-dmg-calc/kioku_images/${id}_thumbnail.png`
+const store = useFriendStore()
 
 const open = ref(false)
 const query = ref("")
 const cursor = ref(0)
-const searchInputRef = ref<HTMLInputElement | null>(null)
+
 const wrapperRef = ref<HTMLElement | null>(null)
 const listRef = ref<HTMLElement | null>(null)
+const searchInputRef = ref<HTMLInputElement | null>(null)
+
+const kiokuThumb = (id: number) =>
+    `/exedra-dmg-calc/kioku_images/${id}_thumbnail.png`
+
+const normalise = (s: string) =>
+    s.toLowerCase().trim()
+
+const selfProfile = computed<SocialProfile | null>(() => {
+    if (!store.friendCode) return null
+
+    return {
+        friend_id: store.friendCode,
+        display_name: store.displayName,
+        union_name: store.unionName,
+        profile_icon: store.profile_icon,
+    }
+})
+
+const currentProfile = computed(() => {
+    if (!props.currentCode) return null
+
+    if (props.currentCode === store.friendCode) {
+        return selfProfile.value
+    }
+
+    return (
+        store.friends.find(
+            f => f.friend_id === props.currentCode
+        ) ?? null
+    )
+})
 
 const avatarSrc = computed(() =>
-    kiokuThumb(props.profile?.profile_icon || 10010101)
+    kiokuThumb(
+        currentProfile.value?.profile_icon || 10010101
+    )
 )
 
 const displayLabel = computed(() => {
-    if (!props.currentCode) return props.placeholder ?? "Select…"
-    return props.profile?.display_name?.trim() || props.currentCode
+    if (!props.currentCode) {
+        return props.placeholder ?? "Select…"
+    }
+
+    return (
+        currentProfile.value?.display_name?.trim() ||
+        currentProfile.value?.nickname?.trim() ||
+        props.currentCode
+    )
 })
 
-const toggle = () => {
-    open.value = !open.value
-    if (open.value) {
-        query.value = ""
-        cursor.value = 0
-        nextTick(() => searchInputRef.value?.focus())
-    }
-}
+const selfVisible = computed(() => {
+    if (props.hideSelf) return false
+    const self = selfProfile.value
 
-const normalise = (s: string) => s.toLowerCase().trim()
+    if (!self?.friend_id) return false
+
+    const q = normalise(query.value)
+
+    if (!q) return true
+
+    return (
+        normalise(self.friend_id).includes(q) ||
+        normalise(self.display_name ?? "").includes(q)
+    )
+})
+
+const selfOffset = computed(() =>
+    selfVisible.value ? 1 : 0
+)
 
 const filteredFriends = computed(() => {
     const q = normalise(query.value)
-    if (!q) return props.friends
-    return props.friends.filter(f => {
-        return (
+
+    const base = q
+        ? store.friends.filter(f =>
             normalise(f.friend_id).includes(q) ||
             normalise(f.display_name ?? "").includes(q) ||
             normalise(f.nickname ?? "").includes(q)
         )
+        : [...store.friends]
+
+    base.sort((a, b) => {
+        if (!!a.favorite !== !!b.favorite) {
+            return a.favorite ? -1 : 1
+        }
+
+        if (
+            !!a.isUnionMember !==
+            !!b.isUnionMember
+        ) {
+            return a.isUnionMember ? -1 : 1
+        }
+
+        return (
+            a.nickname ||
+            a.display_name ||
+            ""
+        ).localeCompare(
+            b.nickname ||
+            b.display_name ||
+            ""
+        )
     })
+
+    return base
 })
 
-const queryLooksLikeCode = computed(() =>
-    query.value.trim().length == 5
-)
+const queryLooksLikeCode = computed(() => query.value.trim().length == 5)
 
-const exactFriendMatch = computed(() =>
-    props.friends.some(f => normalise(f.friend_id) === normalise(query.value))
-)
+const exactMatch = computed(() => {
+    const q = normalise(query.value)
+
+    return store.friends.some(f => normalise(f.friend_id) === q) || normalise(store.friendCode) === q
+})
 
 const totalOptions = computed(() =>
-    filteredFriends.value.length + (queryLooksLikeCode.value && !exactFriendMatch.value ? 1 : 0)
+    selfOffset.value +
+    filteredFriends.value.length +
+    (
+        queryLooksLikeCode.value && !exactMatch.value ? 1 : 0
+    )
 )
+
+const toggle = () => {
+    open.value = !open.value
+
+    if (!open.value) return
+
+    query.value = ""
+    cursor.value = 0
+
+    nextTick(() => { searchInputRef.value?.focus() })
+}
+
+const pick = (code: string) => {
+    open.value = false
+    query.value = ""
+
+    emit("pick", code.toUpperCase())
+}
 
 const moveCursor = (dir: number) => {
     cursor.value = (cursor.value + dir + totalOptions.value) % totalOptions.value
+
     nextTick(() => {
         const active = listRef.value?.querySelector(".fpb-active") as HTMLElement | null
         active?.scrollIntoView({ block: "nearest" })
@@ -150,30 +275,47 @@ const moveCursor = (dir: number) => {
 }
 
 const onEnter = () => {
-    if (cursor.value < filteredFriends.value.length) {
-        pick(filteredFriends.value[cursor.value].friend_id)
-    } else if (queryLooksLikeCode.value && !exactFriendMatch.value) {
+    if (selfVisible.value &&
+        cursor.value === 0 &&
+        selfProfile.value) {
+        pick(selfProfile.value.friend_id)
+        return
+    }
+
+    if (cursor.value <
+        selfOffset.value +
+        filteredFriends.value.length) {
+        pick(
+            filteredFriends.value[
+                cursor.value -
+                selfOffset.value
+            ].friend_id
+        )
+
+        return
+    }
+
+    if (queryLooksLikeCode.value && !exactMatch.value) {
         pick(query.value.toUpperCase())
     }
 }
 
-const pick = (code: string) => {
-    open.value = false
-    query.value = ""
-    emit("pick", code)
-}
-
-// Close on outside click
 const handleClickOutside = (e: MouseEvent) => {
-    if (wrapperRef.value && !wrapperRef.value.contains(e.target as Node)) {
+    if (
+        wrapperRef.value &&
+        !wrapperRef.value.contains(
+            e.target as Node
+        )
+    ) {
         open.value = false
     }
 }
 
-onMounted(() => document.addEventListener("mousedown", handleClickOutside))
-onBeforeUnmount(() => document.removeEventListener("mousedown", handleClickOutside))
-
 watch(query, () => { cursor.value = 0 })
+
+onMounted(() => { document.addEventListener("mousedown", handleClickOutside) })
+
+onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOutside) })
 </script>
 
 <style scoped>
@@ -184,7 +326,6 @@ watch(query, () => { cursor.value = 0 })
     align-items: flex-start;
 }
 
-/* ── Badge button ── */
 .friend-avatar-wrapper {
     display: flex;
     align-items: center;
@@ -254,7 +395,6 @@ watch(query, () => { cursor.value = 0 })
     transform: rotate(180deg);
 }
 
-/* ── Dropdown ── */
 .fpb-dropdown {
     position: absolute;
     top: calc(100% + 6px);
@@ -281,7 +421,6 @@ watch(query, () => { cursor.value = 0 })
     right: 0;
 }
 
-/* ── Search ── */
 .fpb-search-row {
     padding: 0.6rem 0.7rem 0.4rem;
     border-bottom: 1px solid #333;
@@ -304,7 +443,6 @@ watch(query, () => { cursor.value = 0 })
     border-color: #8e5bc7;
 }
 
-/* ── List ── */
 .fpb-list {
     max-height: 260px;
     overflow-y: auto;
@@ -399,7 +537,51 @@ watch(query, () => { cursor.value = 0 })
     text-align: center;
 }
 
-/* ── Animation ── */
+.fpb-self .fpb-self-avatar {
+    border-color: #8e5bc7;
+}
+
+.fpb-you-tag {
+    display: inline-block;
+    margin-left: 0.3rem;
+    padding: 0 0.35rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: #3a2f47;
+    border: 1px solid #8e5bc7;
+    border-radius: 999px;
+    color: #c9a0e8;
+    vertical-align: middle;
+}
+
+.fpb-star {
+    color: #ffd66b;
+    font-size: 0.8rem;
+    margin-left: 0.2rem;
+    vertical-align: middle;
+}
+
+.fpb-union-tag {
+    display: inline-block;
+    margin-left: 0.3rem;
+    padding: 0 0.35rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: #1e2d40;
+    border: 1px solid #3f5d8a;
+    border-radius: 999px;
+    color: #7aaddc;
+    vertical-align: middle;
+}
+
+.fpb-union {
+    border-left: 2px solid #3f5d8a;
+}
+
 .picker-drop-enter-active,
 .picker-drop-leave-active {
     transition:
@@ -413,7 +595,6 @@ watch(query, () => { cursor.value = 0 })
     transform: translateY(-6px) scale(0.98);
 }
 
-/* ── Mobile ── */
 @media (max-width: 700px) {
     .fpb-dropdown {
         width: 260px;

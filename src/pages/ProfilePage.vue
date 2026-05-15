@@ -302,7 +302,7 @@
                                 </a>
                             </router-link>
 
-                            <router-link v-if="is_beta" v-slot="{ href }" :to="{
+                            <router-link v-slot="{ href }" :to="{
                                 path: '/account-compare',
                                 query: {
                                     left: store.friendCode,
@@ -347,8 +347,6 @@ import { useSetting } from '../store/settingsStore'
 const store = useFriendStore()
 const characterStore = useCharacterStore()
 
-const is_beta = localStorage.getItem("beta") === 'true'
-
 const myPower = computed(() =>
     getPowerScores(characterStore.characters)
 )
@@ -388,9 +386,6 @@ const handleClickOutside = (event: MouseEvent) => {
 
 onMounted(async () => {
     if (!userId) return
-
-    await store.loadProfile()
-    await store.loadFriends()
 
     pendingDisplayName.value = store.displayName
     pendingFriendCode.value = store.friendCode
@@ -566,8 +561,6 @@ const finishUnionEdit = async () => {
         store.unionName = pendingUnionName.value.trim()
 
         await store.saveUnionName()
-
-        await store.loadFriends()
 
         toast.success('Union updated!', {
             position: toast.POSITION.TOP_RIGHT,

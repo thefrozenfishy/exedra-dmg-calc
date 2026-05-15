@@ -8,12 +8,11 @@ import {
     getMyProfile,
     saveFriendNickname,
     loadCharactersByFriendCode,
-    getFriendCode,
     updateFriendCode,
     getUnionMembers,
     updateUnionName,
     setFriendFavorite,
-    updateprofile_icon
+    updateprofile_icon,
 } from '../store/cloud'
 import { getPowerScores, PowerScores } from '../models/PowerValue'
 import { useCharacterStore } from '../store/characterStore'
@@ -35,10 +34,31 @@ export const useFriendStore = defineStore('friendStore', () => {
     const friends = ref<SocialProfile[]>([])
     const displayName = ref('')
     const friendCode = ref('')
+    const userID = ref(null)
     const unionName = ref('')
     const profile_icon = ref<number | undefined>(undefined)
 
-    const loadProfile = async () => {
+    const initialized = ref(false)
+    const loading = ref(false)
+
+    const initialize = async () => {
+        if (initialized.value || loading.value) return
+
+        loading.value = true
+
+        try {
+            await Promise.all([
+                loadMyProfile(),
+                loadFriends(),
+            ])
+
+            initialized.value = true
+        } finally {
+            loading.value = false
+        }
+    }
+
+    const loadMyProfile = async () => {
         try {
             const profile = await getMyProfile()
 
@@ -46,14 +66,13 @@ export const useFriendStore = defineStore('friendStore', () => {
                 displayName.value = profile.display_name ?? ''
                 unionName.value = profile.union_name ?? ''
                 profile_icon.value = profile.profile_icon
-
-                const code = await getFriendCode()
-
-                friendCode.value = code ?? ''
+                friendCode.value = profile.users?.friend_id
+                userID.value = profile.users?.user_id
             }
         } catch (err) {
             console.error(err)
         }
+        console.log('My profile loaded', displayName.value, unionName.value, profile_icon.value, friendCode.value)
     }
 
     const saveDisplayName = async () => {
@@ -178,6 +197,7 @@ export const useFriendStore = defineStore('friendStore', () => {
         await updateUnionName(
             unionName.value
         )
+        await loadFriends()
     }
 
     const toggleFavorite = async (
@@ -198,26 +218,25 @@ export const useFriendStore = defineStore('friendStore', () => {
     }
 
     const saveprofile_icon = async () => {
-        await updateprofile_icon(
-            profile_icon.value
-        )
+        if (profile_icon.value) await updateprofile_icon(profile_icon.value)
     }
 
     return {
         friends,
         displayName,
-        loadProfile,
         saveDisplayName,
-        loadFriends,
         addFriend,
         deleteFriend,
         saveNickname,
         friendCode,
+        userID,
         saveFriendCode,
         unionName,
         saveUnionName,
         toggleFavorite,
         profile_icon,
         saveprofile_icon,
+        loadMyProfile,
+        initialize,
     }
 })

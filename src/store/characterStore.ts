@@ -14,6 +14,7 @@ import {
     setUserId,
     getUserId
 } from "../store/user"
+
 const base = {
     ascension: KiokuConstants.maxAscension,
     portrait: "",

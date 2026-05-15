@@ -101,7 +101,6 @@ export default defineComponent({
 .gallery {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
-    /* max 5 per row */
     gap: 1rem;
 }
 
