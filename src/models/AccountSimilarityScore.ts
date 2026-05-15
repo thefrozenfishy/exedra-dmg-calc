@@ -1,11 +1,6 @@
-import { type Character } from "../types/KiokuTypes"
+import { KiokuConstants, type Character } from "../types/KiokuTypes"
 
-const VALUE_OF_UNOWNED_DIFF = 2
-function sigmoidRemap(value: number): number {
-    // Converts 0-1 -> perceptually nicer spread
-    const transformed = 1 / (1 + Math.exp(-(value * 100 - 65) / 7))
-    return Math.round(transformed * 100)
-}
+const VALUE_OF_UNOWNED_DIFF = 10
 
 export function getAccountSimilarityScore(
     myChars: Character[],
@@ -36,7 +31,7 @@ export function getAccountSimilarityScore(
         magB += b * b
 
         distanceTotal += Math.abs(a - b)
-        distanceMax += 5 + VALUE_OF_UNOWNED_DIFF
+        distanceMax += KiokuConstants.maxAscension + VALUE_OF_UNOWNED_DIFF
     }
 
     if (magA === 0 || magB === 0) {
@@ -45,7 +40,7 @@ export function getAccountSimilarityScore(
 
     const cosineSimilarity = dot / (Math.sqrt(magA) * Math.sqrt(magB))
     const distanceSimilarity = 1 - (distanceTotal / distanceMax)
-    const rawSimilarity = cosineSimilarity * 0.7 + distanceSimilarity * 0.3
+    const rawSimilarity = cosineSimilarity * 0.3 + distanceSimilarity * 0.7
 
-    return sigmoidRemap(rawSimilarity)
+    return Math.round(rawSimilarity * 100)
 }
