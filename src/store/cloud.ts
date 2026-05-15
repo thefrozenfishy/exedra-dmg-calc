@@ -165,6 +165,25 @@ export async function updateprofile_icon(profile_icon: number) {
     if (error) throw error
 }
 
+export async function getAllUnionNames(): Promise<string[]> {
+    const supabase = getSupabase()
+
+    const { data, error } = await supabase
+        .from('public_profiles')
+        .select('union_name')
+
+    if (error) throw error
+
+    const set = new Set<string>()
+
+    for (const row of data ?? []) {
+        const name = row.union_name?.trim()
+        if (name) set.add(name)
+    }
+
+    return [...set].sort((a, b) => a.localeCompare(b))
+}
+
 export async function updateUnionName(unionName: string) {
     const userId = getUserId()
 
@@ -298,7 +317,7 @@ export async function addAllFriends() {
 
     const supabase = getSupabase()
 
-      const [{ data: profiles }, myCode, { data: existing }] = await Promise.all([
+    const [{ data: profiles }, myCode, { data: existing }] = await Promise.all([
         supabase.from('public_profiles').select('friend_id'),
         await getFriendCode(),
         supabase.from('user_friends').select('friend_id').eq('user_id', userId)

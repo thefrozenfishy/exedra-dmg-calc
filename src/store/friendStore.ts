@@ -13,6 +13,7 @@ import {
     updateUnionName,
     setFriendFavorite,
     updateprofile_icon,
+    getAllUnionNames,
 } from '../store/cloud'
 import { getPowerScores, PowerScores } from '../models/PowerValue'
 import { useCharacterStore } from '../store/characterStore'
@@ -35,6 +36,7 @@ export interface SocialProfile {
 export const useFriendStore = defineStore('friendStore', () => {
     const characterStore = useCharacterStore()
     const friends = ref<SocialProfile[]>([])
+    const unionOptions = ref<string[]>([])
     const displayName = ref('')
     const friendCode = ref('')
     const userID = ref(null)
@@ -53,11 +55,20 @@ export const useFriendStore = defineStore('friendStore', () => {
             await Promise.all([
                 loadMyProfile(),
                 loadFriends(),
+                loadUnionOptions(),
             ])
 
             initialized.value = true
         } finally {
             loading.value = false
+        }
+    }
+
+    const loadUnionOptions = async () => {
+        try {
+            unionOptions.value = await getAllUnionNames()
+        } catch (err) {
+            console.error('Failed loading unions', err)
         }
     }
 
@@ -242,5 +253,6 @@ export const useFriendStore = defineStore('friendStore', () => {
         saveprofile_icon,
         loadMyProfile,
         initialize,
+        unionOptions,
     }
 })

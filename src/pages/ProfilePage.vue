@@ -72,8 +72,12 @@
                             </div>
 
                             <input v-if="editingUnionName" v-model="pendingUnionName" class="nickname-inline-input"
-                                placeholder="Union name" maxlength="32" @blur="finishUnionEdit"
+                                placeholder="No Union" maxlength="32" list="union-list" @blur="finishUnionEdit"
                                 @keydown.enter="finishUnionEdit" />
+
+                            <datalist id="union-list">
+                                <option v-for="u in store.unionOptions" :key="u" :value="u" />
+                            </datalist>
 
                             <input v-if="editingFriendCode" v-model="pendingFriendCode" class="nickname-inline-input"
                                 placeholder="Friend code" maxlength="5" @blur="finishFriendCodeEdit"
@@ -232,8 +236,9 @@
                                 </div>
 
                                 <div v-if="friend.union_name?.trim()" class="friend-union">
-                                    <img :src="'/exedra-dmg-calc/union.png'" alt="Union" />
-
+                                    <div class="union-icon" :class="{ 'union-member': friend.isUnionMember }">
+                                        <img :src="'/exedra-dmg-calc/union.png'" alt="Union" />
+                                    </div>
                                     <span>
                                         {{ friend.union_name }}
                                     </span>
@@ -828,6 +833,27 @@ a.link {
 /* =========================
    Friend List
 ========================= */
+
+.union-icon.union-member {
+    width: 22px;
+    height: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.union-icon.union-member img {
+    width: 13px;
+    height: 13px;
+}
+
+.union-icon.union-member {
+    border-radius: 50%;
+
+    border: 1px solid #8e5bc7;
+    background: #33263f;
+}
 
 .friend-list {
     display: flex;
