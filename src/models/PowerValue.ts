@@ -2,8 +2,6 @@ import { useBetaStore } from "../store/betaStore"
 import { KiokuConstants, KiokuElement, KiokuRole, type Character } from "../types/KiokuTypes"
 
 const betaStore = useBetaStore()
-betaStore.load()
-
 
 export type PowerScores = {
     total: number

@@ -9,6 +9,7 @@ import { useSettingsStore } from './store/settingsStore';
 import { useCharacterStore } from './store/characterStore'
 import { useTeamStore, useEnemyStore, usePvPStore } from './store/singleTeamStore';
 import { useFriendStore } from './store/friendStore';
+import { useBetaStore } from './store/betaStore';
 
 const app = createApp(App)
 app.component('CharacterLink', CharacterLink)
@@ -26,5 +27,6 @@ useTeamStore().load()
 usePvPStore().load()
 useEnemyStore().load()
 useSettingsStore().load()
+useBetaStore().load()
 app.use(router)
 app.mount('#app')
