@@ -1,29 +1,51 @@
 import { type Character } from "../types/KiokuTypes"
 
-const VALUE_OF_UNOWNED_DIFF = 3
+const VALUE_OF_UNOWNED_DIFF = 2
+function sigmoidRemap(value: number): number {
+    // Converts 0-1 -> perceptually nicer spread
+    const transformed = 1 / (1 + Math.exp(-(value * 100 - 65) / 7))
+    return Math.round(transformed * 100)
+}
 
 export function getAccountSimilarityScore(
     myChars: Character[],
     otherChars: Character[]
 ): number {
     const myFiveStars = myChars.filter(ch => ch.rarity === 5 && ch.name !== "Lux☆Magica")
+    const myMap = new Map(myFiveStars.map(ch => [ch.id, ch]))
     const otherFiveStars = otherChars.filter(ch => ch.rarity === 5 && ch.name !== "Lux☆Magica")
-    let total = 0
-    let max = 0
+    const otherMap = new Map(otherFiveStars.map(ch => [ch.id, ch]))
 
-    for (const char of myFiveStars) {
-        const otherChar = otherFiveStars.find(ch => ch.id === char.id)
-        if (!otherChar) continue
-        if (!char.enabled && !otherChar.enabled) continue
-        const myAsc = char.enabled ? char.ascension : 0
-        const otherAsc = otherChar.enabled ? otherChar.ascension : 0
-        console.log(`Comparing ${char.name}: from ${total}, ${max}, myAsc ${myAsc}, otherAsc ${otherAsc}`)
+    let dot = 0
+    let magA = 0
+    let magB = 0
 
-        total += Math.abs(myAsc - otherAsc)
-        total += Math.abs(Number(char.enabled) - Number(otherChar.enabled)) * VALUE_OF_UNOWNED_DIFF
-        max += 5 + VALUE_OF_UNOWNED_DIFF
-        console.log(`Comparing ${char.name}: to ${total}, ${max}, myAsc ${myAsc}, otherAsc ${otherAsc}`)
+    let distanceTotal = 0
+    let distanceMax = 0
+
+    for (const id of myMap.keys()) {
+        const mine = myMap.get(id)
+        const theirs = otherMap.get(id)
+
+        const a = mine?.enabled ? mine.ascension + VALUE_OF_UNOWNED_DIFF : 0
+
+        const b = theirs?.enabled ? theirs.ascension + VALUE_OF_UNOWNED_DIFF : 0
+
+        dot += a * b
+        magA += a * a
+        magB += b * b
+
+        distanceTotal += Math.abs(a - b)
+        distanceMax += 5 + VALUE_OF_UNOWNED_DIFF
     }
 
-    return 100 - Math.round(100 * total / max)
+    if (magA === 0 || magB === 0) {
+        return 0
+    }
+
+    const cosineSimilarity = dot / (Math.sqrt(magA) * Math.sqrt(magB))
+    const distanceSimilarity = 1 - (distanceTotal / distanceMax)
+    const rawSimilarity = cosineSimilarity * 0.7 + distanceSimilarity * 0.3
+
+    return sigmoidRemap(rawSimilarity)
 }
