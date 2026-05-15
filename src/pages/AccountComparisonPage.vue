@@ -24,14 +24,21 @@
         </div>
 
         <div class="controls" v-if="leftCode && rightCode">
-            <label>
-                <input type="checkbox" v-model="showEqual" />
-                Show equal units
-            </label>
-            <label>
-                <input type="checkbox" v-model="collapseEmptyRows" />
-                Collapse empty rows
-            </label>
+            <div>
+                <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
+                <button class="copy-btn" @click="downloadAscensionList">Download</button>
+                <button class="copy-btn" @click="copyHyperLink">Copy Link</button>
+            </div>
+            <div>
+                <label>
+                    <input type="checkbox" v-model="showEqual" />
+                    Show equal units
+                </label>
+                <label>
+                    <input type="checkbox" v-model="collapseEmptyRows" />
+                    Collapse empty rows
+                </label>
+            </div>
         </div>
 
         <div class="diff-groups" v-if="leftCode && rightCode">
@@ -72,6 +79,8 @@ import { useSetting } from "../store/settingsStore"
 import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
+import html2canvas from "html2canvas"
+import { toast } from "vue3-toastify"
 
 const friendStore = useFriendStore()
 
@@ -238,15 +247,69 @@ const diffColor = (diff: number) => {
         backgroundColor: `hsl(${hue}, ${saturation}%, ${lightness}%)`
     }
 }
+
+function sanitizeFilename(input: string | null): string {
+    return input?.normalize("NFKD").replace(/[<>:"/\\|?*\x00-\x1F]/g, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .replace(/\.+$/, "") || "unknown"
+}
+
+const downloadImg = async (blob: Blob) => {
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = `compare_${sanitizeFilename(leftProfile.value?.display_name || leftCode.value)}_v_${sanitizeFilename(rightProfile.value?.display_name || rightCode.value)}.png`
+    link.click()
+    URL.revokeObjectURL(url)
+}
+
+const copyAscensionList = async () => {
+    const el = document.querySelector(".diff-groups") as HTMLElement
+    if (!el) return
+
+    const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
+    const blob: Blob | null = await new Promise(resolve =>
+        canvas.toBlob(resolve, "image/png")
+    )
+    if (!blob) return
+
+    try {
+        const item = new ClipboardItem({ "image/png": blob })
+        await navigator.clipboard.write([item])
+        toast.success("Copied to clipboard!", { position: toast.POSITION.TOP_RIGHT, icon: false })
+    } catch (err) {
+        console.error("Clipboard failed:", err)
+        await downloadImg(blob)
+        toast.info("Clipboard blocked — saved as file instead", { position: toast.POSITION.TOP_RIGHT, icon: false })
+    }
+}
+
+const copyHyperLink = async () => {
+    try {
+        await navigator.clipboard.writeText(
+            `${window.location.origin}/exedra-dmg-calc/#/account-compare?left=${leftCode.value}&right=${rightCode.value}`
+        )
+        toast.success("Copied to clipboard!", { position: toast.POSITION.TOP_RIGHT, icon: false })
+    } catch (err) {
+        console.error("Clipboard failed:", err)
+        toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
+    }
+}
+
+const downloadAscensionList = async () => {
+    const el = document.querySelector(".diff-groups") as HTMLElement
+    if (!el) return
+
+    const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
+    canvas.toBlob((blob) => {
+        if (!blob) return
+        downloadImg(blob)
+    }, "image/png")
+}
 </script>
 
 <style scoped>
-.diff-page {
-    max-width: 1000px;
-    margin: 0 auto;
-    color: #ddd;
-}
-
 .header {
     margin-bottom: 1rem;
     text-align: center;
@@ -277,19 +340,17 @@ const diffColor = (diff: number) => {
 
 .controls {
     margin-bottom: 1rem;
-    display: flex;
     gap: 1rem;
-    flex-wrap: wrap;
 }
 
 .diff-groups {
+    margin: 0 auto;
     display: flex;
     gap: 0.1rem;
     align-items: flex-start;
-    overflow-x: auto;
     padding-bottom: 0.5rem;
     justify-content: center;
-    width: 100%;
+    width: max-content;
 }
 
 .diff-group {
@@ -369,6 +430,16 @@ const diffColor = (diff: number) => {
 
 .default-border {
     border: 2px solid transparent;
+}
+
+.copy-btn {
+    margin: 10px;
+    padding: 0.4rem 0.8rem;
+    background: #444;
+    color: #eee;
+    border: 1px solid #666;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
 @media (max-width: 700px) {
