@@ -47,7 +47,7 @@
 
         <div class="graph-container" v-if="leftCode && rightCode">
             <div class="score-pill">
-                <img class="score-icon" src="/exedra-dmg-calc/similarity.png" alt="" />
+                <img class="score-icon" :src="'/exedra-dmg-calc/similarity.png'" alt="" />
                 <span class="score-label">Similarity Score</span>
                 <span class="score-value">
                     {{ accountDifferenceScore }}
