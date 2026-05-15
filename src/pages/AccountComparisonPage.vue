@@ -35,6 +35,10 @@
                     Show equal units
                 </label>
                 <label>
+                    <input type="checkbox" v-model="showUnowned" />
+                    Show units not owned by neither party
+                </label>
+                <label>
                     <input type="checkbox" v-model="collapseEmptyRows" />
                     Collapse empty rows
                 </label>
@@ -58,9 +62,17 @@
                             </a>
 
                             <div class="comparison-badge">
-                                {{ formatState(ch.leftScore) }}
-                                →
-                                {{ formatState(ch.rightScore) }}
+                                <span :class="formatState(ch.leftScore).cls">
+                                    {{ formatState(ch.leftScore).text }}
+                                </span>
+
+                                <span :class="formatArrowState(ch.leftScore, ch.rightScore).cls">
+                                    →
+                                </span>
+
+                                <span :class="formatState(ch.rightScore).cls">
+                                    {{ formatState(ch.rightScore).text }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -116,8 +128,9 @@ const selfEntry = ref<SocialProfile | null>(null)
 const leftCharacters = ref<Character[]>([])
 const rightCharacters = ref<Character[]>([])
 
-const showEqual = useSetting("showEqualCompareAcc", false)
-const collapseEmptyRows = useSetting("collapseEmptyRows", true)
+const showEqual = useSetting("showEqualCompareAcc", true)
+const collapseEmptyRows = useSetting("collapseEmptyRows", false)
+const showUnowned = useSetting("showUnowned", false)
 
 onMounted(async () => {
     if (!leftCode.value || !rightCode.value) return
@@ -192,6 +205,8 @@ const comparedCharacters = computed<ComparedCharacter[]>(() => {
         })
         .filter(ch => {
             if (!showEqual.value && ch.diff === 0) return false
+            if (!showUnowned.value && ch.leftScore === 0 && ch.rightScore === 0) return false
+            if (!showUnowned.value && (!ch.leftScore && !ch.rightScore)) return false
             return true
         })
 })
@@ -221,9 +236,31 @@ const chunk10 = (arr: ComparedCharacter[]) => {
     return res
 }
 
-const formatState = (score: number): string => {
-    if (score === 0) return "X"
-    return `A${score - 1}`
+const formatState = (score: number) => {
+    if (score === 0) {
+        return {
+            text: "X",
+            cls: "state-none"
+        }
+    }
+
+    const asc = score - 1
+
+    return {
+        text: `A${asc}`,
+        cls: asc === 5 ? "state-green" : "state-normal"
+    }
+}
+
+const formatArrowState = (leftScore: number, rightScore: number) => {
+    const left = formatState(leftScore)
+    const right = formatState(rightScore)
+
+    const isGreen = left.cls === "state-green" && right.cls === "state-green"
+
+    return {
+        cls: isGreen ? "arrow-green" : "arrow-normal"
+    }
 }
 
 const borderClass = (ch: Character): string => {
@@ -430,6 +467,28 @@ const downloadAscensionList = async () => {
 
 .default-border {
     border: 2px solid transparent;
+}
+
+.state-green {
+    color: #39d353;
+    font-weight: 700;
+}
+
+.state-normal {
+    color: #ddd;
+}
+
+.state-none {
+    color: #777;
+}
+
+.arrow-green {
+    color: #39d353;
+    font-weight: 800;
+}
+
+.arrow-normal {
+    color: #bbb;
 }
 
 .copy-btn {
