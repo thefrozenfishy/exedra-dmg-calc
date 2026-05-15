@@ -143,13 +143,13 @@ function getMaxPower(ch: Character, getPower: (character: Character) => number):
     return getPower(maxed)
 }
 
-function normalize(
-    current: number,
-    max: number
-): number {
-    if (max <= 0) return 0
+function remap(v: number, min: number, max: number) {
+    const normalized = (v - min) / (max - min)
+    return Math.round(Math.max(0, Math.min(1, normalized)) * 100)
+}
 
-    return Math.round(((current / max)) * 100)
+function normalize(current: number, max: number): number {
+    return remap(current / max, 0.2, 0.95)
 }
 
 function applyGroupedDiminishingReturns(
