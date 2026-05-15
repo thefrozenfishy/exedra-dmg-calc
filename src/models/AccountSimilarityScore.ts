@@ -29,7 +29,7 @@ export function getAccountSimilarityScore(
     for (const id of myMap.keys()) {
         const mine = myMap.get(id)
         const theirs = otherMap.get(id)
-        if (!mine?.enabled && !theirs?.enabled) continue
+        if (!(mine?.enabled || theirs?.enabled)) continue
 
         const a = mine?.enabled ? mine.ascension + VALUE_OF_UNOWNED_DIFF : 0
 
@@ -51,5 +51,5 @@ export function getAccountSimilarityScore(
     const distanceSimilarity = 1 - (distanceTotal / distanceMax)
     const rawSimilarity = cosineSimilarity * COSINE_SIMILARITY_VALUE + distanceSimilarity * (1 - COSINE_SIMILARITY_VALUE)
 
-    return remap(rawSimilarity, 0.7, 0.9)
+    return remap(rawSimilarity, 0.5, 0.95)
 }
