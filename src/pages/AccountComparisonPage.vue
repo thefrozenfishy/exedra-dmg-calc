@@ -129,8 +129,8 @@ const leftCharacters = ref<Character[]>([])
 const rightCharacters = ref<Character[]>([])
 
 const showEqual = useSetting("showEqualCompareAcc", true)
-const collapseEmptyRows = useSetting("collapseEmptyRows", false)
-const showUnowned = useSetting("showUnowned", false)
+const collapseEmptyRows = useSetting("collapseEmptyComparisonRows", false)
+const showUnowned = useSetting("showComparisonBothUnowned", false)
 
 onMounted(async () => {
     if (!leftCode.value || !rightCode.value) return
