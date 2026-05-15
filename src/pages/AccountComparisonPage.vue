@@ -67,7 +67,7 @@ import { useRoute, useRouter } from "vue-router"
 import { useCharacterStore } from "../store/characterStore"
 import type { Character } from "../types/KiokuTypes"
 import { useSetting } from "../store/settingsStore"
-import FriendPickerBadge from "../components/Friendpickerbadge.vue"
+import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 

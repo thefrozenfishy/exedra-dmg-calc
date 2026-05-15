@@ -176,7 +176,7 @@ import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
 import { onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import FriendPickerBadge from "../components/Friendpickerbadge.vue"
+import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 
