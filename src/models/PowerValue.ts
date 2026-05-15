@@ -152,8 +152,8 @@ function remap(v: number, min: number, max: number, normExp: number): number {
 function normalize(
     current: number,
     max: number,
-    minNorm: number = Number(useBeta("defaultNormalizeMin", 0.2).value),
-    maxNorm: number = Number(useBeta("defaultNormalizeMax", 0.95).value),
+    minNorm: number = Number(useBeta("defaultNormalizeMin", 0).value),
+    maxNorm: number = Number(useBeta("defaultNormalizeMax", 1).value),
     normExp: number = Number(useBeta("defaultNormalizationExponent", 2).value)
 ): number {
     return remap(current / max, minNorm, maxNorm, normExp)
