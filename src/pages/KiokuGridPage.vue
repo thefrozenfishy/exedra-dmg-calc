@@ -2,8 +2,8 @@
     <div>
         <div class="options-bar">
             <div class="options-row">
-                <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
-                <button class="copy-btn" @click="downloadAscensionList">Download</button>
+                <button class="copy-btn" @click="copyGridToClipboard">Copy to clipboard</button>
+                <button class="copy-btn" @click="downloadGrid">Download</button>
             </div>
             <div class="options-row">
                 <label> <input type="checkbox" v-model="show5stars" /> Include 5-stars </label>
@@ -165,10 +165,9 @@ import { computed } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { Character, KiokuElement, KiokuRole, KiokuConstants } from "../types/KiokuTypes"
 import { useSetting } from "../store/settingsStore"
-import html2canvas from "html2canvas"
-import { toast } from "vue3-toastify"
 import { Kioku } from "../models/Kioku"
 import { skillDetails } from "../utils/helpers"
+import { copyImageToClipboard, downloadImage } from "../utils/image"
 
 const store = useCharacterStore()
 
@@ -425,57 +424,49 @@ const isMaxSpecialLvl = (ch: Character): boolean => {
     return ch.specialLvl === 4
 }
 
-const downloadImg = async (blob: Blob) => {
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.href = url
-    link.download = "ascension.png"
-    link.click()
-    URL.revokeObjectURL(url)
+const downloadGrid = async () => {
+    const el = document.querySelector(".grid-scroll") as HTMLElement
+    if (!el) return
+
+    el.classList.add("exporting")
+
+    await new Promise(requestAnimationFrame)
+    await new Promise(requestAnimationFrame)
+
+    await downloadImage("grid.png", el)
+
+    el.classList.remove("exporting")
 }
 
-const copyAscensionList = async () => {
-    const el = document.querySelector(".er-grid") as HTMLElement
+const copyGridToClipboard = async () => {
+    const el = document.querySelector(".grid-scroll") as HTMLElement
     if (!el) return
-    const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
-    const blob: Blob | null = await new Promise(resolve =>
-        canvas.toBlob(resolve, "image/png")
-    )
-    if (!blob) return
-    try {
-        const perm = await navigator.permissions?.query({
-            name: "clipboard-write" as PermissionName
-        })
-    } catch { }
-    try {
-        const item = new ClipboardItem({ "image/png": blob })
-        await navigator.clipboard.write([item])
-        toast.success("Copied to clipboard!", {
-            position: toast.POSITION.TOP_RIGHT,
-            icon: false,
-        })
-    } catch (err) {
-        console.error("Clipboard failed:", err)
-        await downloadImg(blob)
-        toast.info("Clipboard blocked — saved as file instead", {
-            position: toast.POSITION.TOP_RIGHT,
-            icon: false,
-        })
-    }
-}
 
-const downloadAscensionList = async () => {
-    const el = document.querySelector(".er-grid") as HTMLElement
-    if (!el) return
-    const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
-    canvas.toBlob((blob) => {
-        if (!blob) return
-        downloadImg(blob)
-    }, "image/png")
+    el.classList.add("exporting")
+
+    await new Promise(requestAnimationFrame)
+    await new Promise(requestAnimationFrame)
+
+    await copyImageToClipboard("grid.png", el)
+
+    el.classList.remove("exporting")
 }
 </script>
 
 <style scoped>
+.exporting {
+    overflow: visible !important;
+}
+
+.exporting .grid-scroll {
+    overflow: visible !important;
+}
+
+.exporting .er-grid {
+    margin: 0 !important;
+    width: max-content !important;
+}
+
 .options-bar {
     display: flex;
     flex-direction: column;
@@ -626,10 +617,6 @@ const downloadAscensionList = async () => {
 .header-icon-btn:hover {
     opacity: 0.5;
     transform: scale(0.9);
-}
-
-.grid-scroll {
-    overflow-x: auto;
 }
 
 .er-grid {

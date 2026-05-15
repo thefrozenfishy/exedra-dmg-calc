@@ -16,6 +16,8 @@ import {
 } from '../store/cloud'
 import { getPowerScores, PowerScores } from '../models/PowerValue'
 import { useCharacterStore } from '../store/characterStore'
+import { getAccountSimilarityScore } from '../models/AccountSimilarityScore'
+import { Character } from '../types/KiokuTypes'
 
 export interface SocialProfile {
     friend_id: string
@@ -27,6 +29,7 @@ export interface SocialProfile {
     isFriend?: boolean
     isUnionMember?: boolean
     power?: PowerScores
+    accountSimilarity?: number
 }
 
 export const useFriendStore = defineStore('friendStore', () => {
@@ -123,9 +126,10 @@ export const useFriendStore = defineStore('friendStore', () => {
                             friend.friend_id
                         )
 
-                        const chars = characterStore.mergeChars(rows)
+                        const chars = characterStore.mergeChars(rows) as Character[]
 
                         friend.power = getPowerScores(chars)
+                        friend.accountSimilarity = getAccountSimilarityScore(characterStore.characters, chars)
                     } catch (err) {
                         console.error(
                             'Failed loading friend power:',

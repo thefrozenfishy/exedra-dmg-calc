@@ -13,7 +13,7 @@ import {
 import { useSetting } from '../store/settingsStore'
 import CharacterSelector from '../components/CharacterSelector.vue'
 import { useCharacterStore } from '../store/characterStore'
-import html2canvas from "html2canvas";
+import { toPng } from "html-to-image"
 import { toast } from "vue3-toastify";
 
 Chart.register(
@@ -355,89 +355,129 @@ const waitForImages = async (container) => {
     }));
 };
 
-const captureChunks = async () => {
-    if (!showFullHistory.value) {
-        const el = document.querySelector(".pull-grid");
-        if (el) {
-            await waitForImages(el);
-            const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#1e1e1e" });
-            return [canvas];
-        }
-    }
-    const canvases = [];
-    const originalCount = last_pull_count.value;
-    showFullHistory.value = false;
+const captureElement = async (el) => {
+    const dataUrl = await toPng(el, {
+        cacheBust: true,
+        pixelRatio: 2,
+        backgroundColor: "#1e1e1e",
+        skipFonts: false
+    })
 
-    const step_size = Math.min(200, 20 * Math.ceil(pullResults.value.length / (5 * 20)));
+    const img = new Image()
+
+    await new Promise((resolve, reject) => {
+        img.onload = () => resolve()
+        img.onerror = reject
+        img.src = dataUrl
+    })
+
+    const canvas = document.createElement("canvas")
+    canvas.width = img.width
+    canvas.height = img.height
+
+    const ctx = canvas.getContext("2d")
+    if (!ctx) throw new Error("No canvas context")
+
+    ctx.drawImage(img, 0, 0)
+
+    return canvas
+}
+
+const captureChunks = async () => {
+    const canvases = []
+
+    if (!showFullHistory.value) {
+        const el = document.querySelector(".pull-grid")
+        if (el) {
+            await waitForImages(el)
+            canvases.push(await captureElement(el))
+        }
+        return canvases
+    }
+
+    const originalCount = last_pull_count.value
+    showFullHistory.value = false
+
+    const step_size = Math.min(
+        200,
+        20 * Math.ceil(pullResults.value.length / (5 * 20))
+    )
 
     for (let i = 0; i < pullResults.value.length; i += step_size) {
-        last_pull_count.value = i + step_size;
-        image_idx_zero.value = i;
-        await nextTick();
+        last_pull_count.value = i + step_size
+        image_idx_zero.value = i
 
-        const el = document.querySelector(".pull-grid");
-        if (!el) continue;
+        await nextTick()
 
-        await waitForImages(el);
+        const el = document.querySelector(".pull-grid")
+        if (!el) continue
 
-        const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#1e1e1e" });
-        canvases.push(canvas);
+        await waitForImages(el)
+        canvases.push(await captureElement(el))
     }
 
-    last_pull_count.value = originalCount;
-    image_idx_zero.value = 0;
-    showFullHistory.value = true;
-    return canvases;
-};
+    last_pull_count.value = originalCount
+    image_idx_zero.value = 0
+    showFullHistory.value = true
+
+    return canvases
+}
 
 const captureImageOfHistory = async () => {
-    const canvases = await captureChunks();
-    const totalWidth = canvases.reduce((sum, c) => sum + c.width, 0);
-    const maxHeight = Math.max(...canvases.map(c => c.height));
+    const canvases = await captureChunks()
 
-    const finalCanvas = document.createElement("canvas");
-    finalCanvas.width = totalWidth;
-    finalCanvas.height = maxHeight;
+    const totalWidth = canvases.reduce((sum, c) => sum + c.width, 0)
+    const maxHeight = Math.max(...canvases.map(c => c.height))
 
-    const ctx = finalCanvas.getContext("2d");
-    if (!ctx) return finalCanvas;
+    const finalCanvas = document.createElement("canvas")
+    finalCanvas.width = totalWidth
+    finalCanvas.height = maxHeight
 
-    let x = 0;
+    const ctx = finalCanvas.getContext("2d")
+    if (!ctx) return finalCanvas
+
+    let x = 0
     for (const c of canvases) {
-        ctx.drawImage(c, x, 0);
-        x += c.width;
+        ctx.drawImage(c, x, 0)
+        x += c.width
     }
 
-    return finalCanvas;
-};
+    return finalCanvas
+}
 
 const imgName = computed(() =>
     `Gacha ${showFullHistory.value ? pullResults.value.length : last_pull_count.value} pulls ${rate.value}-${pickupRate.value} rates ${pickupCharacter.value ? pickupCharacter.value.name : 'no'} pickup.png`
 );
 
 const copyFullHistoryHorizontal = async () => {
-    const merged = await captureImageOfHistory();
+    const canvas = await captureImageOfHistory()
 
-    const blob = await new Promise(resolve => merged.toBlob(resolve, "image/png"));
-    if (!blob) return;
+    const blob = await new Promise(resolve =>
+        canvas.toBlob(resolve, "image/png")
+    )
+
+    if (!blob) return
 
     try {
-        await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-        toast.success("Copied full history horizontally!", { position: toast.POSITION.TOP_RIGHT });
+        await navigator.clipboard.write([
+            new ClipboardItem({ "image/png": blob })
+        ])
+
+        toast.success("Copied full history horizontally!")
     } catch {
-        await downloadImg(blob, imgName.value);
-        toast.info("Clipboard blocked — saved as file instead", { position: toast.POSITION.TOP_RIGHT });
+        downloadImg(blob, imgName.value)
+        toast.info("Clipboard blocked — saved as file instead")
     }
-};
+}
 
 const downloadFullHistoryHorizontal = async () => {
-    const merged = await captureImageOfHistory();
+    const canvas = await captureImageOfHistory()
 
-    merged.toBlob((blob) => {
-        if (!blob) return;
-        downloadImg(blob, imgName.value);
-    }, "image/png");
-};
+    canvas.toBlob((blob) => {
+        if (!blob) return
+        downloadImg(blob, imgName.value)
+    }, "image/png")
+}
 </script>
 
 <template>

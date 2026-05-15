@@ -170,7 +170,6 @@
 import { computed, ref } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { Character, KiokuConstants } from "../types/KiokuTypes"
-import html2canvas from "html2canvas"
 import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
@@ -179,6 +178,7 @@ import { useRoute, useRouter } from "vue-router"
 import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
+import { copyImageToClipboard, downloadImage } from "../utils/image"
 
 const route = useRoute()
 const router = useRouter()
@@ -396,35 +396,16 @@ const dragLeave = (e: DragEvent) => {
         dragOver.value = null
     }
 }
-
-const downloadImg = async (blob: Blob) => {
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.href = url
-    link.download = "ascension.png"
-    link.click()
-    URL.revokeObjectURL(url)
-}
-
-const copyAscensionList = async () => {
+const downloadAscensionList = () => {
     const el = document.querySelector(".ascension-table") as HTMLElement
     if (!el) return
+    downloadImage("ascension.png", el)
+}
 
-    const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
-    const blob: Blob | null = await new Promise(resolve =>
-        canvas.toBlob(resolve, "image/png")
-    )
-    if (!blob) return
-
-    try {
-        const item = new ClipboardItem({ "image/png": blob })
-        await navigator.clipboard.write([item])
-        toast.success("Copied to clipboard!", { position: toast.POSITION.TOP_RIGHT, icon: false })
-    } catch (err) {
-        console.error("Clipboard failed:", err)
-        await downloadImg(blob)
-        toast.info("Clipboard blocked — saved as file instead", { position: toast.POSITION.TOP_RIGHT, icon: false })
-    }
+const copyAscensionList = () => {
+    const el = document.querySelector(".ascension-table") as HTMLElement
+    if (!el) return
+    copyImageToClipboard("ascension.png", el)
 }
 
 const copyHyperLink = async () => {
@@ -439,17 +420,6 @@ const copyHyperLink = async () => {
         console.error("Clipboard failed:", err)
         toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
     }
-}
-
-const downloadAscensionList = async () => {
-    const el = document.querySelector(".ascension-table") as HTMLElement
-    if (!el) return
-
-    const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
-    canvas.toBlob((blob) => {
-        if (!blob) return
-        downloadImg(blob)
-    }, "image/png")
 }
 
 const touchDragged = ref<Character | null>(null)

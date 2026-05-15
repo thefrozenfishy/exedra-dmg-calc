@@ -25,8 +25,8 @@
 
         <div class="controls" v-if="leftCode && rightCode">
             <div>
-                <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
-                <button class="copy-btn" @click="downloadAscensionList">Download</button>
+                <button class="copy-btn" @click="copyGraphToClipboard">Copy to clipboard</button>
+                <button class="copy-btn" @click="downloadGraph">Download</button>
                 <button class="copy-btn" @click="copyHyperLink">Copy Link</button>
             </div>
             <div>
@@ -45,34 +45,43 @@
             </div>
         </div>
 
-        <div class="diff-groups" v-if="leftCode && rightCode">
-            <div v-for="group in groupedCharacters" :key="group.label" class="diff-group"
-                :style="diffColor(group.label)">
-                <div class="diff-label">
-                    {{ group.label > 0 ? "+" : "" }}{{ group.label }}
-                </div>
+        <div class="graph-container" v-if="leftCode && rightCode">
+            <div class="score-pill">
+                <img class="score-icon" src="/exedra-dmg-calc/similarity.png" alt="" />
+                <span class="score-label">Similarity Score</span>
+                <span class="score-value">
+                    {{ accountDifferenceScore }}
+                </span>
+            </div>
+            <div class="diff-groups">
+                <div v-for="group in groupedCharacters" :key="group.label" class="diff-group"
+                    :style="diffColor(group.label)">
+                    <div class="diff-label">
+                        {{ group.label > 0 ? "+" : "" }}{{ group.label }}
+                    </div>
 
-                <div class="characters-cell">
-                    <div v-for="(col, colIndex) in chunk10(group.characters)" :key="colIndex" class="char-column"
-                        :style="diffColor(group.label)">
-                        <div v-for="ch in col" :key="ch.id" class="character-wrapper">
-                            <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
-                                <img class="character-img" :class="borderClass(ch)"
-                                    :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name" />
-                            </a>
+                    <div class="characters-cell">
+                        <div v-for="(col, colIndex) in chunk10(group.characters)" :key="colIndex" class="char-column"
+                            :style="diffColor(group.label)">
+                            <div v-for="ch in col" :key="ch.id" class="character-wrapper">
+                                <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
+                                    <img class="character-img" :class="borderClass(ch)"
+                                        :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name" />
+                                </a>
 
-                            <div class="comparison-badge">
-                                <span :class="formatState(ch.leftScore).cls">
-                                    {{ formatState(ch.leftScore).text }}
-                                </span>
+                                <div class="comparison-badge">
+                                    <span :class="formatState(ch.leftScore).cls">
+                                        {{ formatState(ch.leftScore).text }}
+                                    </span>
 
-                                <span :class="formatArrowState(ch.leftScore, ch.rightScore).cls">
-                                    →
-                                </span>
+                                    <span :class="formatArrowState(ch.leftScore, ch.rightScore).cls">
+                                        →
+                                    </span>
 
-                                <span :class="formatState(ch.rightScore).cls">
-                                    {{ formatState(ch.rightScore).text }}
-                                </span>
+                                    <span :class="formatState(ch.rightScore).cls">
+                                        {{ formatState(ch.rightScore).text }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -91,7 +100,8 @@ import { useSetting } from "../store/settingsStore"
 import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
-import html2canvas from "html2canvas"
+import { getAccountSimilarityScore } from "../models/AccountSimilarityScore"
+import { copyImageToClipboard, downloadImage } from "../utils/image"
 import { toast } from "vue3-toastify"
 
 const friendStore = useFriendStore()
@@ -103,6 +113,11 @@ type ComparedCharacter = Character & {
 }
 
 const friendsList = computed(() => friendStore.friends)
+
+const accountDifferenceScore = computed(() => {
+    if (!leftCode.value || !rightCode.value) return null
+    return getAccountSimilarityScore(leftCharacters.value, rightCharacters.value)
+})
 
 const route = useRoute()
 const router = useRouter()
@@ -284,42 +299,18 @@ const diffColor = (diff: number) => {
         backgroundColor: `hsl(${hue}, ${saturation}%, ${lightness}%)`
     }
 }
+const filename = computed(() => `compare_${leftProfile.value?.display_name || leftCode.value}_v_${rightProfile.value?.display_name || rightCode.value}.png`)
 
-function sanitizeFilename(input: string | null): string {
-    return input?.normalize("NFKD").replace(/[<>:"/\\|?*\x00-\x1F]/g, "")
-        .replace(/\s+/g, " ")
-        .trim()
-        .replace(/\.+$/, "") || "unknown"
-}
-
-const downloadImg = async (blob: Blob) => {
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.href = url
-    link.download = `compare_${sanitizeFilename(leftProfile.value?.display_name || leftCode.value)}_v_${sanitizeFilename(rightProfile.value?.display_name || rightCode.value)}.png`
-    link.click()
-    URL.revokeObjectURL(url)
-}
-
-const copyAscensionList = async () => {
-    const el = document.querySelector(".diff-groups") as HTMLElement
+const downloadGraph = () => {
+    const el = document.querySelector(".graph-container") as HTMLElement
     if (!el) return
+    downloadImage(filename.value, el)
+}
 
-    const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
-    const blob: Blob | null = await new Promise(resolve =>
-        canvas.toBlob(resolve, "image/png")
-    )
-    if (!blob) return
-
-    try {
-        const item = new ClipboardItem({ "image/png": blob })
-        await navigator.clipboard.write([item])
-        toast.success("Copied to clipboard!", { position: toast.POSITION.TOP_RIGHT, icon: false })
-    } catch (err) {
-        console.error("Clipboard failed:", err)
-        await downloadImg(blob)
-        toast.info("Clipboard blocked — saved as file instead", { position: toast.POSITION.TOP_RIGHT, icon: false })
-    }
+const copyGraphToClipboard = () => {
+    const el = document.querySelector(".graph-container") as HTMLElement
+    if (!el) return
+    copyImageToClipboard(filename.value, el)
 }
 
 const copyHyperLink = async () => {
@@ -332,17 +323,6 @@ const copyHyperLink = async () => {
         console.error("Clipboard failed:", err)
         toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
     }
-}
-
-const downloadAscensionList = async () => {
-    const el = document.querySelector(".diff-groups") as HTMLElement
-    if (!el) return
-
-    const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
-    canvas.toBlob((blob) => {
-        if (!blob) return
-        downloadImg(blob)
-    }, "image/png")
 }
 </script>
 
@@ -360,6 +340,37 @@ const downloadAscensionList = async () => {
     gap: 1rem;
     flex-wrap: wrap;
     font-size: 1.05rem;
+}
+
+.score-pill {
+    margin-top: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+
+    background: #1f1f1f;
+    border: 1px solid #444;
+
+    font-size: 0.85rem;
+    color: #ddd;
+    line-height: 1;
+}
+
+.score-icon {
+    height: 14px;
+}
+
+.score-label {
+    color: #aaa;
+}
+
+.score-value {
+    font-weight: 700;
+    color: #fff;
+    margin-left: 0.15rem;
 }
 
 .missing-codes {

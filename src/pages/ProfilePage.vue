@@ -94,7 +94,7 @@
                             </div>
                         </div>
 
-                        <div class="role-grid-compact">
+                        <div class="role-grid-compact role-grid-3-compact">
                             <div class="mini-power-box" title="Attacker power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Attacker.png'" />
                                 <span>{{ myPower.attacker }}</span>
@@ -250,7 +250,7 @@
                                 </div>
                             </div>
 
-                            <div class="role-grid-compact">
+                            <div class="role-grid-compact role-grid-4-compact">
                                 <div class="mini-power-box" title="Attacker power rating">
                                     <img :src="'/exedra-dmg-calc/roles/Attacker.png'" alt="Attacker" />
                                     <span>{{ friend.power.attacker }}</span>
@@ -264,6 +264,11 @@
                                 <div class="mini-power-box" title="Debuffer power rating">
                                     <img :src="'/exedra-dmg-calc/roles/Debuffer.png'" alt="Debuffer" />
                                     <span>{{ friend.power.debuffer }}</span>
+                                </div>
+
+                                <div class="mini-power-box" title="Similarity score">
+                                    <img :src="'/exedra-dmg-calc/similarity.png'" alt="Similarity" />
+                                    <span>{{ friend.accountSimilarity }}</span>
                                 </div>
 
                                 <div class="mini-power-box" title="Breaker power rating">
@@ -280,13 +285,10 @@
                                     <img :src="'/exedra-dmg-calc/roles/Healer.png'" alt="Healer" />
                                     <span>{{ friend.power.healer }}</span>
                                 </div>
-                            </div>
 
-                            <div class="whale-power-big" title="Whale power">
-                                <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale power" />
-
-                                <div class="total-power-value">
-                                    {{ friend.power.whale }}
+                                <div class="mini-power-box" title="Whale power">
+                                    <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale" />
+                                    <span>{{ friend.power.whale }}</span>
                                 </div>
                             </div>
                         </div>
@@ -1047,10 +1049,15 @@ a.link {
 
 .role-grid-compact {
     display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
     gap: 0.45rem;
+}
+
+.role-grid-4-compact {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.role-grid-3-compact {
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .mini-power-box {
