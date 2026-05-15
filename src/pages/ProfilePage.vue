@@ -383,9 +383,10 @@ const exportData = () => {
     }
 
     pushRow([
-        'type',
         'id',
-        'name',
+        'nickname',
+        'display name',
+        'union name',
         'total',
         'attacker',
         'buffer',
@@ -399,9 +400,10 @@ const exportData = () => {
 
     if (myPower.value) {
         pushRow([
-            'self',
             store.friendCode,
             store.displayName,
+            store.displayName,
+            store.unionName,
             myPower.value.total,
             myPower.value.attacker,
             myPower.value.buffer,
@@ -414,12 +416,12 @@ const exportData = () => {
         ])
     }
 
-    // ---- FRIENDS ----
     for (const f of store.friends) {
         pushRow([
-            'friend',
             f.friend_id,
-            f.nickname || f.display_name,
+            f.nickname,
+            f.display_name,
+            f.union_name,
             f.power?.total,
             f.power?.attacker,
             f.power?.buffer,
