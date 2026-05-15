@@ -34,15 +34,17 @@
             </label>
         </div>
 
-        <table class="diff-table" v-if="leftCode && rightCode">
-            <tbody>
-                <tr v-for="group in groupedCharacters" :key="group.label" class="diff-row">
-                    <td class="diff-label">
-                        {{ group.label > 0 ? "+" : "" }}{{ group.label }}
-                    </td>
+        <div class="diff-groups" v-if="leftCode && rightCode">
+            <div v-for="group in groupedCharacters" :key="group.label" class="diff-group"
+                :style="diffColor(group.label)">
+                <div class="diff-label">
+                    {{ group.label > 0 ? "+" : "" }}{{ group.label }}
+                </div>
 
-                    <td class="characters-cell">
-                        <div v-for="ch in group.characters" :key="ch.id" class="character-wrapper">
+                <div class="characters-cell">
+                    <div v-for="(col, colIndex) in chunk10(group.characters)" :key="colIndex" class="char-column"
+                        :style="diffColor(group.label)">
+                        <div v-for="ch in col" :key="ch.id" class="character-wrapper">
                             <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
                                 <img class="character-img" :class="borderClass(ch)"
                                     :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name" />
@@ -54,10 +56,10 @@
                                 {{ formatState(ch.rightScore) }}
                             </div>
                         </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -202,6 +204,14 @@ const groupedCharacters = computed(() => {
     return groups
 })
 
+const chunk10 = (arr: ComparedCharacter[]) => {
+    const res: ComparedCharacter[][] = []
+    for (let i = 0; i < arr.length; i += 10) {
+        res.push(arr.slice(i, i + 10))
+    }
+    return res
+}
+
 const formatState = (score: number): string => {
     if (score === 0) return "X"
     return `A${score - 1}`
@@ -211,6 +221,22 @@ const borderClass = (ch: Character): string => {
     if (ch.obtain && ch.obtain !== "Permanent") return "limited-border"
     if (new Date() > new Date(ch.permaDate)) return "default-border"
     return "not-limited-border"
+}
+
+const diffColor = (diff: number) => {
+    const max = 6
+    const t = Math.min(Math.abs(diff) / max, 1)
+
+    const hue = diff > 0 ? 140 : diff < 0 ? 0 : 220
+
+    const lightnessBase = 18
+    const lightness = lightnessBase + t * 10
+
+    const saturation = diff === 0 ? 10 : 25 + t * 15
+
+    return {
+        backgroundColor: `hsl(${hue}, ${saturation}%, ${lightness}%)`
+    }
 }
 </script>
 
@@ -256,35 +282,47 @@ const borderClass = (ch: Character): string => {
     flex-wrap: wrap;
 }
 
-.diff-table {
+.diff-groups {
+    display: flex;
+    gap: 0.1rem;
+    align-items: flex-start;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    justify-content: center;
     width: 100%;
-    border-collapse: collapse;
 }
 
-.diff-row td {
-    border: 1px solid #444;
-    padding: 0.5rem;
-    vertical-align: top;
-}
+.diff-group {
+    min-width: 72px;
+    min-height: 802px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-.diff-label {
-    width: 90px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.3rem;
-    background: #333;
-    vertical-align: middle;
+    flex: 0 0 auto;
+    width: max-content;
 }
 
 .characters-cell {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    min-height: 72px;
+    align-items: flex-start;
+}
+
+.char-column {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: flex-end;
+    gap: 0.35rem;
+
+    height: 770px;
+
+    flex: 0 0 auto;
 }
 
 .character-wrapper {
     position: relative;
+    flex: 0 0 auto;
 }
 
 .character-img {
@@ -293,6 +331,28 @@ const borderClass = (ch: Character): string => {
     border-radius: 50%;
     display: block;
     transition: transform 0.15s ease;
+}
+
+.comparison-badge {
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    transform: translateX(-50%);
+
+    background: rgba(0, 0, 0, 0.9);
+    padding: 1px 3px;
+
+    border-radius: 999px;
+    font-size: 0.45rem;
+    font-weight: bold;
+
+    white-space: nowrap;
+    border: 1px solid #666;
+}
+
+.diff-label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
 }
 
 .character-img:hover {
@@ -309,20 +369,6 @@ const borderClass = (ch: Character): string => {
 
 .default-border {
     border: 2px solid transparent;
-}
-
-.comparison-badge {
-    position: absolute;
-    left: 50%;
-    bottom: -8px;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.85);
-    padding: 2px 6px;
-    border-radius: 999px;
-    font-size: 0.65rem;
-    font-weight: bold;
-    white-space: nowrap;
-    border: 1px solid #666;
 }
 
 @media (max-width: 700px) {
