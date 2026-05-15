@@ -143,7 +143,7 @@ function getMaxPower(ch: Character, getPower: (character: Character) => number):
 }
 
 function remap(v: number, min: number, max: number) {
-    const normalized = (v - min) / (max - min)
+    const normalized = Math.sqrt((v - min) / (max - min))
     return Math.round(Math.max(0, Math.min(1, normalized)) * 100)
 }
 
