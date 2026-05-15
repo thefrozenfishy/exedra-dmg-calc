@@ -193,6 +193,7 @@
 
                 </div>
 
+                <p>Power values will see some changes while formula is being fine tuned!</p>
                 <div class="friend-list">
                     <div v-for="friend in sortedFriends" :key="friend.friend_id" class="friend-card"
                         :class="{ 'union-member': friend.isUnionMember }">
