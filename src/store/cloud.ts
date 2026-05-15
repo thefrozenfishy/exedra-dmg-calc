@@ -292,6 +292,41 @@ export async function getProfile(friend_id: string) {
     }
 }
 
+export async function addAllFriends() {
+    const userId = getUserId()
+    if (!userId) return
+
+    const supabase = getSupabase()
+
+    const [{ data: profiles }, { data: existing }] = await Promise.all([
+        supabase.from('public_profiles').select('friend_id'),
+        supabase.from('user_friends').select('friend_id').eq('user_id', userId)
+    ])
+
+    if (!profiles) return
+
+    const existingSet = new Set(existing?.map(e => e.friend_id) ?? [])
+
+    const rows = profiles
+        .filter(p => p.friend_id !== userId)
+        .filter(p => !existingSet.has(p.friend_id))
+        .map(p => ({
+            user_id: userId,
+            friend_id: p.friend_id,
+            nickname: ''
+        }))
+
+    console.log('Adding friends', rows.map(r => r.friend_id))
+
+    if (rows.length === 0) return
+
+    const { error } = await supabase
+        .from('user_friends')
+        .insert(rows)
+
+    if (error) throw error
+}
+
 export async function addFriendByCode(friendCode: string) {
     const userId = getUserId()
 

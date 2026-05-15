@@ -341,6 +341,7 @@
         </p>
         <p>If you think the calculation can be improved, talk to me about it!</p>
     </div>
+    <button v-if="isTFF" @click="addFriends">Add all</button>
 </template>
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
@@ -350,9 +351,17 @@ import { getUserId } from '../store/user'
 import { getPowerScores } from '../models/PowerValue'
 import { useCharacterStore } from '../store/characterStore'
 import { useSetting } from '../store/settingsStore'
+import { addAllFriends } from '../store/cloud'
 
 const store = useFriendStore()
 const characterStore = useCharacterStore()
+
+const isTFF = localStorage.getItem('isTFF') === 'true'
+const addFriends = async () => {
+    if (!isTFF) return
+    await addAllFriends()
+    console.log("Added all friends")
+}
 
 const myPower = computed(() =>
     getPowerScores(characterStore.characters)
