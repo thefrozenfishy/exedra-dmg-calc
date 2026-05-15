@@ -1,25 +1,13 @@
 import { defineStore } from 'pinia'
-import { ref, watch, type Ref } from 'vue'
-
-const betaRefs = new Map<string, ReturnType<typeof ref>>()
+import { computed, ref, type Ref } from 'vue'
 
 export function useBeta<T>(key: string, defaultValue: T): Ref<T> {
   const store = useBetaStore()
 
-  if (betaRefs.has(key)) {
-    return betaRefs.get(key) as Ref<T>
-  }
-
-  const stored = store.get(key, defaultValue) as T
-  const localRef = ref<T>(stored)
-
-  betaRefs.set(key, localRef)
-
-  watch(localRef, (val) => {
-    store.set(key, val)
+  return computed({
+    get: () => store.get(key, defaultValue),
+    set: (value) => store.set(key, value),
   })
-
-  return localRef
 }
 
 export const useBetaStore = defineStore('betaValues', {
