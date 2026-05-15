@@ -5,19 +5,26 @@
 
             <div class="subtitle" v-if="leftCode && rightCode">
                 Comparing
-                <div class="friend-avatar-wrapper">
-                    <img class="profile-avatar" :src="avatarUrl(leftProfile)" />
-                    <span class="left-name">{{ leftProfile?.display_name?.trim() || leftProfile?.friend_id }}</span>
-                </div>
+                <FriendPickerBadge :profile="leftProfile" :friends="friends" :side="'left'" :current-code="leftCode"
+                    @pick="onPickLeft" />
                 vs
-                <div class="friend-avatar-wrapper">
-                    <img class="profile-avatar" :src="avatarUrl(rightProfile)" />
-                    <span class="right-name">{{ rightProfile?.display_name?.trim() || rightProfile?.friend_id }}</span>
+                <FriendPickerBadge :profile="rightProfile" :friends="friends" :side="'right'" :current-code="rightCode"
+                    @pick="onPickRight" />
+            </div>
+
+            <div v-else class="subtitle missing-codes">
+                <span>Select two accounts to compare</span>
+                <div class="inline-pickers">
+                    <FriendPickerBadge :profile="leftProfile" :friends="friends" :side="'left'" :current-code="leftCode"
+                        :placeholder="'Left account'" @pick="onPickLeft" />
+                    vs
+                    <FriendPickerBadge :profile="rightProfile" :friends="friends" :side="'right'"
+                        :current-code="rightCode" :placeholder="'Right account'" @pick="onPickRight" />
                 </div>
             </div>
         </div>
 
-        <div class="controls">
+        <div class="controls" v-if="leftCode && rightCode">
             <label>
                 <input type="checkbox" v-model="showEqual" />
                 Show equal units
@@ -28,7 +35,7 @@
             </label>
         </div>
 
-        <table class="diff-table">
+        <table class="diff-table" v-if="leftCode && rightCode">
             <tbody>
                 <tr v-for="group in groupedCharacters" :key="group.label" class="diff-row">
                     <td class="diff-label">
@@ -57,17 +64,17 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 
 import { useCharacterStore } from "../store/characterStore"
-import { loadCharactersByFriendCode, getProfile } from "../store/cloud"
+import { loadCharactersByFriendCode, getProfile, getFriends } from "../store/cloud"
 
 import type { Character } from "../types/KiokuTypes"
 import { useSetting } from "../store/settingsStore"
+import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 
 const kiokuThumb = (id: number) => `/exedra-dmg-calc/kioku_images/${id}_thumbnail.png`
 const avatarUrl = (profile: Profile | null) => kiokuThumb(profile?.profile_icon || 10010101)
-
 
 type ComparedCharacter = Character & {
     diff: number
@@ -76,6 +83,7 @@ type ComparedCharacter = Character & {
 }
 
 const route = useRoute()
+const router = useRouter()
 const store = useCharacterStore()
 
 const leftCode = computed(() =>
@@ -89,6 +97,7 @@ const rightCode = computed(() =>
         ? route.query.right.toUpperCase()
         : null
 )
+
 type Profile = {
     display_name: string
     friend_id: string
@@ -98,6 +107,7 @@ type Profile = {
 
 const leftProfile = ref<Profile | null>(null)
 const rightProfile = ref<Profile | null>(null)
+const friends = ref<any[]>([])
 
 const leftCharacters = ref<Character[]>([])
 const rightCharacters = ref<Character[]>([])
@@ -106,6 +116,17 @@ const showEqual = useSetting("showEqualCompareAcc", false)
 const collapseEmptyRows = useSetting("collapseEmptyRows", true)
 
 onMounted(async () => {
+    try {
+        friends.value = await getFriends()
+    } catch (err) {
+        console.error(err)
+    }
+
+    if (!leftCode.value || !rightCode.value) return
+    await loadBothSides()
+})
+
+const loadBothSides = async () => {
     if (!leftCode.value || !rightCode.value) return
 
     const [leftRows, rightRows, lProfile, rProfile] = await Promise.all([
@@ -120,7 +141,31 @@ onMounted(async () => {
 
     leftProfile.value = lProfile
     rightProfile.value = rProfile
-})
+}
+
+const onPickLeft = async (code: string) => {
+    await router.replace({
+        query: { ...route.query, left: code.toUpperCase() }
+    })
+    const [rows, profile] = await Promise.all([
+        loadCharactersByFriendCode(code),
+        getProfile(code),
+    ])
+    leftCharacters.value = store.mergeChars(rows)
+    leftProfile.value = profile
+}
+
+const onPickRight = async (code: string) => {
+    await router.replace({
+        query: { ...route.query, right: code.toUpperCase() }
+    })
+    const [rows, profile] = await Promise.all([
+        loadCharactersByFriendCode(code),
+        getProfile(code),
+    ])
+    rightCharacters.value = store.mergeChars(rows)
+    rightProfile.value = profile
+}
 
 const getScore = (ch?: Character): number => {
     if (!ch?.enabled) return 0
@@ -128,13 +173,8 @@ const getScore = (ch?: Character): number => {
 }
 
 const comparedCharacters = computed<ComparedCharacter[]>(() => {
-    const leftMap = new Map(
-        leftCharacters.value.map(ch => [ch.id, ch])
-    )
-
-    const rightMap = new Map(
-        rightCharacters.value.map(ch => [ch.id, ch])
-    )
+    const leftMap = new Map(leftCharacters.value.map(ch => [ch.id, ch]))
+    const rightMap = new Map(rightCharacters.value.map(ch => [ch.id, ch]))
 
     return store.characters
         .filter(ch => ch.rarity === 5)
@@ -145,45 +185,29 @@ const comparedCharacters = computed<ComparedCharacter[]>(() => {
 
             return {
                 ...base,
-
                 leftScore: getScore(left),
                 rightScore: getScore(right),
-
-                diff:
-                    getScore(left) -
-                    getScore(right)
+                diff: getScore(left) - getScore(right)
             }
         })
         .filter(ch => {
-            if (!showEqual.value && ch.diff === 0) {
-                return false
-            }
+            if (!showEqual.value && ch.diff === 0) return false
             return true
         })
 })
 
 const groupedCharacters = computed(() => {
-    const groups: {
-        label: number
-        characters: ComparedCharacter[]
-    }[] = []
+    const groups: { label: number; characters: ComparedCharacter[] }[] = []
 
     for (let diff = 6; diff >= -6; diff--) {
         const chars = comparedCharacters.value
             .filter(ch => ch.diff === diff)
             .sort((a, b) => b.id - a.id)
 
-        if (collapseEmptyRows.value && chars.length === 0) {
-            continue
-        }
-        if (!showEqual.value && diff === 0) {
-            continue
-        }
+        if (collapseEmptyRows.value && chars.length === 0) continue
+        if (!showEqual.value && diff === 0) continue
 
-        groups.push({
-            label: diff,
-            characters: chars
-        })
+        groups.push({ label: diff, characters: chars })
     }
 
     return groups
@@ -195,14 +219,8 @@ const formatState = (score: number): string => {
 }
 
 const borderClass = (ch: Character): string => {
-    if (ch.obtain && ch.obtain !== "Permanent") {
-        return "limited-border"
-    }
-
-    if (new Date() > new Date(ch.permaDate)) {
-        return "default-border"
-    }
-
+    if (ch.obtain && ch.obtain !== "Permanent") return "limited-border"
+    if (new Date() > new Date(ch.permaDate)) return "default-border"
     return "not-limited-border"
 }
 </script>
@@ -221,63 +239,25 @@ const borderClass = (ch: Character): string => {
 
 .subtitle {
     margin-top: 0.75rem;
-
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 1rem;
-
     flex-wrap: wrap;
-
     font-size: 1.05rem;
 }
 
-.friend-avatar-wrapper {
+.missing-codes {
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.inline-pickers {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
-
-    background: #2b2b2b;
-
-    border: 1px solid #444;
-
-    border-radius: 999px;
-
-    padding: 0.35rem 0.75rem;
-}
-
-.profile-avatar {
-    width: 42px;
-    height: 42px;
-
-    border-radius: 50%;
-
-    object-fit: cover;
-
-    border: 2px solid #666;
-
-    background: #111;
-
-    flex-shrink: 0;
-}
-
-.left-name,
-.right-name {
-    font-weight: bold;
-
-    max-width: 220px;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.left-name {
-    color: #90caf9;
-}
-
-.right-name {
-    color: #ffab91;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .controls {
@@ -347,18 +327,12 @@ const borderClass = (ch: Character): string => {
     left: 50%;
     bottom: -8px;
     transform: translateX(-50%);
-
     background: rgba(0, 0, 0, 0.85);
-
     padding: 2px 6px;
-
     border-radius: 999px;
-
     font-size: 0.65rem;
     font-weight: bold;
-
     white-space: nowrap;
-
     border: 1px solid #666;
 }
 
@@ -380,20 +354,6 @@ const borderClass = (ch: Character): string => {
     .subtitle {
         gap: 0.6rem;
         font-size: 0.95rem;
-    }
-
-    .friend-avatar-wrapper {
-        padding: 0.3rem 0.6rem;
-    }
-
-    .profile-avatar {
-        width: 34px;
-        height: 34px;
-    }
-
-    .left-name,
-    .right-name {
-        max-width: 120px;
     }
 }
 </style>

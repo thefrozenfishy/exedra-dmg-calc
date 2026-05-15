@@ -1,15 +1,20 @@
 <template>
     <div class="ascension-list">
-        <div v-if="isReadonly" class="viewing-banner">
-            Viewing profile:
-            <span style="color: lightgreen;">
-                {{ viewingFriendName }}
-            </span>
-
-            <span v-if="viewingFriendName !== viewingFriendCode" style="opacity: 0.7; margin-left: 0.35rem;">
-                ({{ viewingFriendCode }})
-            </span>
+        <div v-if="isReadonly || isViewingBannerOpen" class="viewing-banner">
+            <span class="viewing-label">Viewing:</span>
+            <FriendPickerBadge :profile="viewingProfile" :friends="friendsList" side="left"
+                :current-code="viewingFriendCode" placeholder="Select a friend…" @pick="switchToFriend" />
+            <router-link :to="{ path: '/my-kioku' }" class="back-to-own" title="Back to your own kioku">
+                ← Mine
+            </router-link>
         </div>
+        <div v-else class="viewing-banner-own">
+            <span class="viewing-own-label">Your Kioku</span>
+            <button class="view-friend-btn" @click="isViewingBannerOpen = true">
+                👥 View a friend's
+            </button>
+        </div>
+
         <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
         <button class="copy-btn" @click="downloadAscensionList">Download</button>
         <button class="copy-btn" @click="copyHyperLink">Copy Link</button>
@@ -151,6 +156,7 @@
         </div>
     </div>
 </template>
+
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import { useCharacterStore } from "../store/characterStore"
@@ -160,15 +166,19 @@ import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
 import { onMounted } from "vue"
-import { useRoute } from "vue-router"
-import { getFriendCode, loadCharactersByFriendCode } from "../store/cloud"
+import { useRoute, useRouter } from "vue-router"
+import { getFriendCode, loadCharactersByFriendCode, getProfile } from "../store/cloud"
 import { getFriends } from "../store/cloud"
+import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 
 const route = useRoute()
-
-const viewingFriendName = ref<string | null>(null)
+const router = useRouter()
 
 const friendCode = ref<string | null>(null)
+const friendsList = ref<any[]>([])
+const viewingProfile = ref<{ display_name?: string; profile_icon?: number } | null>(null)
+const isViewingBannerOpen = ref(false)
+
 const loadFriendCode = async () => {
     try {
         friendCode.value = await getFriendCode()
@@ -179,7 +189,13 @@ const loadFriendCode = async () => {
 
 onMounted(async () => {
     await loadFriendCode()
+    try {
+        friendsList.value = await getFriends()
+    } catch (err) {
+        console.error(err)
+    }
 })
+
 const viewingFriendCode = computed(() =>
     typeof route.query.friend === "string" && route.query.friend !== friendCode.value
         ? route.query.friend.toUpperCase()
@@ -195,29 +211,34 @@ const displayedCharactersComputed = computed(() =>
 )
 const isReadonly = computed(() => !!viewingFriendCode.value)
 
+
 onMounted(async () => {
     if (!viewingFriendCode.value) return
-
-    const rows = await loadCharactersByFriendCode(
-        viewingFriendCode.value
-    )
-
-    displayedCharacters.value = store.mergeChars(rows)
-
-    const friends = await getFriends()
-
-    const friend = friends.find(
-        f => f.friend_id === viewingFriendCode.value
-    )
-
-    if (friend) {
-        const nick = friend.nickname?.trim()
-        const disp = friend.display_name?.trim()
-        viewingFriendName.value = nick ? `${nick} (${disp})` : disp
-    } else {
-        viewingFriendName.value = viewingFriendCode.value
-    }
+    await loadFriendKioku(viewingFriendCode.value)
 })
+
+const switchToFriend = async (code: string) => {
+    isViewingBannerOpen.value = false
+    await router.replace({ query: { friend: code } })
+    await loadFriendKioku(code)
+}
+
+const loadFriendKioku = async (code: string) => {
+    const [rows, profile] = await Promise.all([
+        loadCharactersByFriendCode(code),
+        getProfile(code).catch(() => null),
+    ])
+    displayedCharacters.value = store.mergeChars(rows)
+    viewingProfile.value = profile
+
+    const found = friendsList.value.find(f => f.friend_id === code)
+    if (found && !viewingProfile.value) {
+        viewingProfile.value = {
+            display_name: found.nickname?.trim() || found.display_name?.trim(),
+            profile_icon: found.profile_icon,
+        }
+    }
+}
 
 const fiveStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
 const fourStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 4 || c.name === "Lux☆Magica"))
@@ -257,7 +278,6 @@ const getMaxSpecialLvl = (ch: Character): number => {
 const isMaxLevels = (ch: Character): boolean => ch.magicLvl === KiokuConstants.maxMagicLvl &&
     ch.heartphialLvl === KiokuConstants.maxHeartphialLvl &&
     (getMaxSpecialLvl(ch) === ch.specialLvl || ch.rarity === 3)
-
 
 const groupedByAscension = computed(() => {
     type LabelledGroup = Character[] & { label?: string }
@@ -314,7 +334,6 @@ const borderClass = (ch: Character): string => {
     if (ch.obtain && ch.obtain !== "Permanent") return "limited-border"
     if (new Date() > new Date(ch.permaDate)) return "default-border"
     return "not-limited-border"
-
 }
 
 type EditableField = "magicLvl" | "heartphialLvl" | "specialLvl" | "dupes"
@@ -334,7 +353,6 @@ const startEdit = async (ch: Character, field: EditableField, e: MouseEvent) => 
     input?.select()
 }
 
-
 const isEditing = (ch: Character, field: EditableField) =>
     editing.value?.id === ch.id && editing.value.field === field
 
@@ -345,10 +363,7 @@ const fieldMax: Partial<Record<EditableField, number>> = {
 }
 
 const getMax = (ch: Character, field: EditableField) => {
-    if (field === "specialLvl") {
-        return getMaxSpecialLvl(ch)
-    }
-
+    if (field === "specialLvl") return getMaxSpecialLvl(ch)
     return fieldMax[field] ?? Infinity
 }
 
@@ -358,14 +373,9 @@ const commitEdit = async (ch: Character, field: EditableField) => {
 
     const max = getMax(ch, field)
     const min = field === "magicLvl" || field === "dupes" ? 0 : 1
-
     const value = Math.max(min, Math.min(editValue.value, max))
 
-    store.updateChar({
-        ...ch,
-        [field]: value,
-    })
-
+    store.updateChar({ ...ch, [field]: value })
     editing.value = null
 }
 
@@ -379,11 +389,9 @@ const onDragStart = (ch: Character) => {
 
 const onDrop = (targetIndex: number) => {
     if (isReadonly.value) return
-
     if (!draggedChar.value) return
 
     const ch = draggedChar.value
-
     if (targetIndex === 6) {
         ch.enabled = false
     } else {
@@ -416,55 +424,30 @@ const copyAscensionList = async () => {
     if (!el) return
 
     const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
-
     const blob: Blob | null = await new Promise(resolve =>
         canvas.toBlob(resolve, "image/png")
     )
     if (!blob) return
 
     try {
-        const perm = await navigator.permissions?.query({
-            name: "clipboard-write" as PermissionName
-        })
-    } catch { }
-
-    try {
         const item = new ClipboardItem({ "image/png": blob })
         await navigator.clipboard.write([item])
-
-        toast.success("Copied to clipboard!", {
-            position: toast.POSITION.TOP_RIGHT,
-            icon: false,
-        })
+        toast.success("Copied to clipboard!", { position: toast.POSITION.TOP_RIGHT, icon: false })
     } catch (err) {
         console.error("Clipboard failed:", err)
-
         await downloadImg(blob)
-
-        toast.info("Clipboard blocked — saved as file instead", {
-            position: toast.POSITION.TOP_RIGHT,
-            icon: false,
-        })
+        toast.info("Clipboard blocked — saved as file instead", { position: toast.POSITION.TOP_RIGHT, icon: false })
     }
 }
 
 const copyHyperLink = async () => {
-    try {
-        const perm = await navigator.permissions?.query({
-            name: "clipboard-write" as PermissionName
-        })
-    } catch { }
-
     try {
         const friendId = viewingFriendCode.value ?? friendCode.value
         if (!friendId) throw new Error("You need to sync your friend code first!")
         await navigator.clipboard.writeText(
             `${window.location.origin}/exedra-dmg-calc/#/my-kioku?friend=${friendId}`
         )
-        toast.success("Copied to clipboard!", {
-            position: toast.POSITION.TOP_RIGHT,
-            icon: false,
-        })
+        toast.success("Copied to clipboard!", { position: toast.POSITION.TOP_RIGHT, icon: false })
     } catch (err) {
         console.error("Clipboard failed:", err)
         toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
@@ -476,22 +459,18 @@ const downloadAscensionList = async () => {
     if (!el) return
 
     const canvas = await html2canvas(el, { scale: 2, backgroundColor: "#242424" })
-
     canvas.toBlob((blob) => {
         if (!blob) return
-
         downloadImg(blob)
-
     }, "image/png")
 }
-// --- MOBILE DRAG AND DROP ---
+
 const touchDragged = ref<Character | null>(null)
 
 const onTouchStart = (ch: Character, e: TouchEvent) => {
     if (isReadonly.value) return
     touchDragged.value = ch
     draggedChar.value = ch
-
     e.preventDefault()
 }
 
@@ -500,21 +479,13 @@ const onTouchMove = (e: TouchEvent) => {
     const touch = e.touches[0]
     const element = document.elementFromPoint(touch.clientX, touch.clientY)
     const row = element?.closest("tr.asc-row")
-
-    if (!row) {
-        dragOver.value = null
-        return
-    }
-
-    const idx = Number(row.getAttribute("data-index"))
-    dragOver.value = idx
+    if (!row) { dragOver.value = null; return }
+    dragOver.value = Number(row.getAttribute("data-index"))
 }
 
 const onTouchEnd = () => {
     if (isReadonly.value) return
-    if (dragOver.value != null) {
-        onDrop(dragOver.value)
-    }
+    if (dragOver.value != null) onDrop(dragOver.value)
     dragOver.value = null
     touchDragged.value = null
     draggedChar.value = null
@@ -685,12 +656,82 @@ td {
 }
 
 .viewing-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+
     margin-bottom: 1rem;
-    padding: 0.75rem;
-    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+    border-radius: 10px;
     background: #2d2233;
     border: 1px solid #b57edc;
-    color: #f0d8ff;
-    font-weight: bold;
+}
+
+.viewing-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #c9a0e8;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+}
+
+.back-to-own {
+    margin-left: auto;
+    padding: 0.3rem 0.75rem;
+    background: #3a2f47;
+    border: 1px solid #8e5bc7;
+    border-radius: 999px;
+    color: #c9a0e8;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+
+.back-to-own:hover {
+    background: #4a3a5a;
+}
+
+.viewing-banner-own {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 10px;
+    background: #262626;
+    border: 1px solid #444;
+}
+
+.viewing-own-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.view-friend-btn {
+    margin-left: auto;
+    padding: 0.3rem 0.75rem;
+    background: #333;
+    border: 1px solid #555;
+    border-radius: 999px;
+    color: #bbb;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    flex-shrink: 0;
+}
+
+.view-friend-btn:hover {
+    background: #3d3d3d;
+    border-color: #777;
+    color: #ddd;
 }
 </style>
