@@ -156,6 +156,7 @@ function normalize(
     maxNorm: number = useBetaNumber("defaultNormalizeMax"),
     normExp: number = useBetaNumber("defaultNormalizationExponent")
 ): number {
+    if (max <= 0) return 0;
     return remap(current / max, minNorm, maxNorm, normExp)
 }
 
