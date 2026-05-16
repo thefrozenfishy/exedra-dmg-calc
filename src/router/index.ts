@@ -15,6 +15,8 @@ import ProfilePage from '../pages/ProfilePage.vue'
 import AccountComparisonPage from '../pages/AccountComparisonPage.vue'
 import BetaStuff from '../pages/BetaStuff.vue'
 
+const base = import.meta.env.BASE_URL
+
 const routes = [
     { path: '/profile', name: 'Profile + Friends', component: ProfilePage },
     { path: '/team-setup', name: 'Kioku Setup', component: TeamSetupPage },
@@ -30,12 +32,21 @@ const routes = [
     { path: '/about', name: 'About', component: About },
     { path: '/my-kioku', name: 'My Kioku Viewer', component: AccountHasPage },
     { path: '/gacha-rate', name: 'Gacha Rate+Sim', component: GachaRatePage },
-    { path: '/beta', name: 'Beta Settings', component: BetaStuff },
+    { path: '/beta', name: 'Beta Settings', component: BetaStuff, meta: { reloadOnLeave: true } },
 ]
 
 const router = createRouter({
     history: createWebHashHistory(),
     routes
+})
+
+router.beforeEach((to, from) => {
+    if (from.meta?.reloadOnLeave) {
+        const target = window.location.origin + base + '#' + to.fullPath
+        window.location.href = target
+        setTimeout(() => window.location.reload(), 50)
+        return false
+    }
 })
 
 export default router

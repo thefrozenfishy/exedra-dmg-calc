@@ -346,13 +346,53 @@
         </p>
         <p>If you think the calculation can be improved, talk to me about it!</p>
     </div>
-    <div v-if="isTFF">
-        <button @click="addFriends">Add all</button>
+    <section v-if="isBeta()" class="profile-section analytics-section">
+        <h2>Power Analytics</h2>
+
+        <div class="analytics-controls">
+            <label>
+                Graph Mode
+                <select v-model="graphMode">
+                    <option value="scatter">
+                        Scatter Plot
+                    </option>
+
+                    <option value="percentile">
+                        Percentile Curve
+                    </option>
+                </select>
+            </label>
+
+            <label>
+                X Axis
+                <select v-model="selectedXAxis">
+                    <option v-for="opt in graphOptions" :key="opt.value" :value="opt.value">
+                        {{ opt.label }}
+                    </option>
+                </select>
+            </label>
+
+            <label v-if="graphMode === 'scatter'">
+                Y Axis
+                <select v-model="selectedYAxis">
+                    <option v-for="opt in graphOptions" :key="opt.value" :value="opt.value">
+                        {{ opt.label }}
+                    </option>
+                </select>
+            </label>
+        </div>
+
+        <div class="chart-wrapper analytics-chart">
+            <canvas ref="analyticsCanvasRef"></canvas>
+        </div>
+    </section>
+    <div v-if="isBeta()">
+        <button @click="addFriends">Add all possible players as friends</button>
         <button @click="exportData">Export Data</button>
     </div>
 </template>
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed, watch } from 'vue'
 import { toast } from 'vue3-toastify'
 import { SocialProfile, useFriendStore } from '../store/friendStore'
 import { getUserId } from '../store/user'
@@ -361,6 +401,18 @@ import { useCharacterStore } from '../store/characterStore'
 import { useSetting } from '../store/settingsStore'
 import { addAllFriends } from '../store/cloud'
 import { KiokuRole } from '../types/KiokuTypes'
+import {
+    Chart,
+    LineController,
+    LineElement,
+    PointElement,
+    ScatterController,
+    LinearScale,
+    CategoryScale,
+    Tooltip,
+    Legend
+} from 'chart.js'
+import { isBeta } from '../utils/betaSettings'
 
 const store = useFriendStore()
 const characterStore = useCharacterStore()
@@ -503,6 +555,9 @@ onMounted(async () => {
     pendingDisplayName.value = store.displayName
     pendingFriendCode.value = store.friendCode
     pendingUnionName.value = store.unionName
+
+    renderAnalyticsChart()
+
 
     document.addEventListener(
         'mousedown',
@@ -758,6 +813,245 @@ const avatarUrl = (
         10010101
     )
 }
+// GRAPH
+
+
+Chart.register(
+    LineController,
+    LineElement,
+    PointElement,
+    ScatterController,
+    LinearScale,
+    CategoryScale,
+    Tooltip,
+    Legend
+)
+
+const analyticsCanvasRef = ref<HTMLCanvasElement | null>(null)
+
+let analyticsChart: Chart | null = null
+
+const graphMode = ref<'scatter' | 'percentile'>('percentile')
+
+const graphOptions = [
+    {
+        label: 'Total Power',
+        value: 'total'
+    },
+    {
+        label: 'Attacker',
+        value: KiokuRole.Attacker
+    },
+    {
+        label: 'Buffer',
+        value: KiokuRole.Buffer
+    },
+    {
+        label: 'Debuffer',
+        value: KiokuRole.Debuffer
+    },
+    {
+        label: 'Breaker',
+        value: KiokuRole.Breaker
+    },
+    {
+        label: 'Defender',
+        value: KiokuRole.Defender
+    },
+    {
+        label: 'Healer',
+        value: KiokuRole.Healer
+    },
+    {
+        label: 'Whale',
+        value: 'whale'
+    },
+    {
+        label: 'Similarity',
+        value: 'similarity'
+    }
+]
+
+const selectedXAxis = ref<any>('total')
+const selectedYAxis = ref<any>('whale')
+
+const analyticsPlayers = computed(() => {
+    const list = []
+
+    if (myPower.value) {
+        list.push({
+            power: myPower.value,
+            similarity: 100
+        })
+    }
+
+    for (const friend of store.friends) {
+        if (!friend.power) continue
+
+        list.push({
+            power: friend.power,
+            similarity: friend.accountSimilarity || 0
+        })
+    }
+
+    return list
+})
+
+const getMetricValue = (
+    player: any,
+    metric: string
+) => {
+    if (metric === 'similarity') {
+        return player.similarity || 0
+    }
+
+    return player.power?.[metric] || 0
+}
+
+const renderAnalyticsChart = () => {
+    if (!analyticsCanvasRef.value) return
+
+    analyticsChart?.destroy()
+
+    const players = analyticsPlayers.value
+
+    if (!players.length) return
+
+    if (graphMode.value === 'scatter') {
+        analyticsChart = new Chart(
+            analyticsCanvasRef.value,
+            {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: `${selectedXAxis.value} vs ${selectedYAxis.value}`,
+                            data: players.map(p => ({
+                                x: getMetricValue(
+                                    p,
+                                    selectedXAxis.value
+                                ),
+                                y: getMetricValue(
+                                    p,
+                                    selectedYAxis.value
+                                )
+                            })),
+                            backgroundColor: '#8e5bc7'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    animation: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: selectedXAxis.value
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: selectedYAxis.value
+                            }
+                        }
+                    }
+                }
+            }
+        )
+
+        return
+    }
+
+    const sorted = [...players]
+        .map(p =>
+            getMetricValue(
+                p,
+                selectedXAxis.value
+            )
+        )
+        .sort((a, b) => a - b)
+
+    const percentileData = sorted.map(
+        (value, index) => ({
+            x: value,
+            y:
+                ((index + 1) / sorted.length) *
+                100
+        })
+    )
+
+    analyticsChart = new Chart(
+        analyticsCanvasRef.value,
+        {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: 'Percentile Curve',
+                        data: percentileData,
+                        borderColor: '#4CC9F0',
+                        backgroundColor:
+                            'rgba(76,201,240,0.2)',
+                        tension: 0.15,
+                        pointRadius: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                animation: false,
+                parsing: false,
+                scales: {
+                    x: {
+                        type: 'linear',
+                        title: {
+                            display: true,
+                            text: selectedXAxis.value
+                        }
+                    },
+                    y: {
+                        min: 0,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text:
+                                '% of Players Below'
+                        },
+                        ticks: {
+                            callback: v => `${v}%`
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label(ctx) {
+                                return (
+                                    `${ctx.parsed.y.toFixed(1)}% ` +
+                                    `below ${ctx.parsed.x}`
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    )
+}
+
+watch(
+    [
+        graphMode,
+        selectedXAxis,
+        selectedYAxis,
+        analyticsPlayers
+    ],
+    () => renderAnalyticsChart(),
+    { deep: true }
+)
+
 </script>
 <style scoped>
 .profile-page {
@@ -1363,6 +1657,33 @@ a.link {
     padding: 1rem;
     background: #2b2b2b;
     border-radius: 12px;
+}
+
+/* =========================
+   Graphs
+========================= */
+
+.analytics-section {
+    margin-top: 2rem;
+}
+
+.analytics-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.analytics-controls label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.analytics-chart {
+    background: #181818;
+    border-radius: 12px;
+    padding: 1rem;
 }
 
 /* =========================
