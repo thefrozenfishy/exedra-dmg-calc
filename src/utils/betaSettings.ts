@@ -44,7 +44,7 @@ export const BETA_SECTIONS = [
             {
                 key: "defaultNormalizeMin",
                 label: "Default Normalize Min",
-                defaultValue: 0,
+                defaultValue: 0.05,
             },
             {
                 key: "defaultNormalizeMax",
@@ -88,17 +88,17 @@ export const BETA_SECTIONS = [
     {
         title: "Role Scaling",
         settings: [
-            { key: "defaultScaling", label: "Default Scaling", defaultValue: 0.9 },
+            { key: "defaultScaling", label: "Default Scaling", defaultValue: 1 },
 
             {
                 key: "roleScalings",
                 label: "Role Scalings",
                 defaultValue: {
-                    [KiokuRole.Attacker]: 1.15,
+                    [KiokuRole.Attacker]: 1.2,
                     [KiokuRole.Breaker]: 1,
-                    [KiokuRole.Buffer]: 1.25,
-                    [KiokuRole.Debuffer]: 1.2,
-                    [KiokuRole.Defender]: 0.9,
+                    [KiokuRole.Buffer]: 1.4,
+                    [KiokuRole.Debuffer]: 1.3,
+                    [KiokuRole.Defender]: 0.7,
                     [KiokuRole.Healer]: 0.9,
                 },
             },
@@ -172,35 +172,38 @@ export const BETA_SECTIONS = [
                 key: "kiokuScalings",
                 label: "Kioku Scalings",
                 defaultValue: {
-                    // Defenders
-                    "Folter Gefängnis": 0.75,
-                    "Baldamente Fortissimo": 1.5,
-
-                    // Healers
-                    "Glitterjoy Snow Globe": 1.15,
-                    "Judgement Earth": 1.25,
+                    // Attackers
+                    "Falsified Phenomena": 1.4,
+                    "Nothing to Despair, Ever": 1.2,
+                    "Marigold Dadaism": 0.7,
+                    "Kiss-shot": 0.7,
 
                     // Buffers
-                    "Hollow Woman": 2,
-                    "Pluvia☆Neujahr": 1.25,
+                    "Hollow Woman": 1.6,
+                    "Luce della Speranza": 1.2,
+                    "Pluvia☆Neujahr": 1.2,
 
                     // Breakers
-                    "Pluvia☆Magica": 1.25,
+                    "Pluvia☆Magica": 1.4,
                     "Sacred Gift": 1.15,
                     "Final Fatebloom": 1.15,
                     "Unlimited Rulebook": 1.1,
-                    "Neo Genesis": 0.75,
+                    "Strada Futuro": 0.85,
+                    "Tenebrous Arcana": 0.85,
+                    "Neo Genesis": 0.7,
 
                     // Debuffers
-                    "Ultra Great Big Hammer": 0.75,
-                    "Bebe-O'-Lantern": 1.25,
-                    "Yuletide Gift": 1.25,
+                    "Yuletide Gift": 1.4,
+                    "Bebe-O'-Lantern": 1.4,
+                    "Ultra Great Big Hammer": 0.7,
 
-                    // Attackers
-                    "Falsified Phenomena": 1.5,
-                    "Nothing to Despair, Ever": 1.2,
-                    "Marigold Dadaism": 0.75,
-                    "Kiss-shot": 0.75,
+                    // Defenders
+                    "Folter Gefängnis": 0.7,
+                    "Baldamente Fortissimo": 1.4,
+
+                    // Healers
+                    "Judgement Earth": 1.2,
+                    "Glitterjoy Snow Globe": 1.1,
                 },
             }
         ]
@@ -223,7 +226,7 @@ export const BETA_SECTIONS = [
         title: "Character Power",
         settings: [
             { key: "basePower", label: "Base Power", defaultValue: 100 },
-            { key: "ascensionPowerPerLevel", label: "Ascension Power Per Level", defaultValue: 40 },
+            { key: "ascensionPowerPerLevel", label: "Ascension Power Per Level", defaultValue: 20 },
         ],
     },
 
@@ -236,50 +239,50 @@ export const BETA_SECTIONS = [
                 defaultValue: {
                     [KiokuRole.Attacker]: {
                         "1": 0,
-                        "2": 0,
-                        "3": 25,
+                        "2": 10,
+                        "3": 35,
                         "4": 0,
                         "5": 55,
                     },
 
                     [KiokuRole.Breaker]: {
                         "1": 0,
-                        "2": 0,
-                        "3": 30,
-                        "4": 10,
-                        "5": 30,
+                        "2": 10,
+                        "3": 35,
+                        "4": 20,
+                        "5": 35,
                     },
 
                     [KiokuRole.Buffer]: {
-                        "1": 0,
-                        "2": 0,
-                        "3": 0,
-                        "4": 80,
-                        "5": 0,
+                        "1": 10,
+                        "2": 15,
+                        "3": 5,
+                        "4": 60,
+                        "5": 10,
                     },
 
                     [KiokuRole.Debuffer]: {
-                        "1": 0,
-                        "2": 0,
-                        "3": 0,
-                        "4": 60,
-                        "5": 0,
+                        "1": 10,
+                        "2": 10,
+                        "3": 10,
+                        "4": 55,
+                        "5": 15,
                     },
 
-                    [KiokuRole.Defender]    : {
+                    [KiokuRole.Defender]: {
                         "1": 0,
-                        "2": 0,
+                        "2": 35,
                         "3": 0,
-                        "4": 25,
-                        "5": 0,
+                        "4": 55,
+                        "5": 10,
                     },
 
                     [KiokuRole.Healer]: {
-                        "1": 0,
-                        "2": 0,
-                        "3": 0,
-                        "4": 30,
-                        "5": 0,
+                        "1": 20,
+                        "2": 10,
+                        "3": 5,
+                        "4": 50,
+                        "5": 15,
                     },
                 },
             },
