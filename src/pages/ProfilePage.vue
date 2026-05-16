@@ -419,7 +419,6 @@ const characterStore = useCharacterStore()
 
 const isTFF = localStorage.getItem('isTFF') === 'true'
 const addFriends = async () => {
-    if (!isTFF) return
     await addAllFriends()
     toast.success(
         'Added all friends!',
