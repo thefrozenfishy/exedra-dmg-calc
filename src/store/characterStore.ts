@@ -58,7 +58,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
             c.crys_sub = c?.crys_sub?.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc)) ?? []
             if (c.ascension < 0) c.ascension = 0
             if (c.ascension > KiokuConstants.maxAscension) c.ascension = KiokuConstants.maxAscension
-            if (c.rarity < KiokuConstants.maxAscension) c.ascension = KiokuConstants.maxAscension
+            if (c.rarity < 5) c.ascension = KiokuConstants.maxAscension
             return c
         }).filter(k => "name" in k && "id" in k && "enabled" in k && "role" in k && "element" in k && "character_en" in k && "rarity" in k)
             .map(c => ({ ...basicSetting(c), ...Object.fromEntries(Object.entries(c).filter(([k, v]) => v != null)), ...charInfo[c.name] }))
@@ -105,7 +105,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
                 crys_sub: row.crys_sub
             })
             if (char.rarity < 5) char.ascension = KiokuConstants.maxAscension;
-            if (char.ascension < KiokuConstants.maxAscension) char.ascension = KiokuConstants.maxAscension;
+            if (char.ascension > KiokuConstants.maxAscension) char.ascension = KiokuConstants.maxAscension;
             if (char.ascension < 0) char.ascension = 0;
         })
     }
