@@ -121,13 +121,13 @@ function getMaxPower(ch: Character, getPower: (character: Character) => number):
 
 function remap(v: number, min: number, max: number, normExp: number): number {
     const normalized = Math.pow((v - min) / (max - min), normExp)
-    if (isBeta()) console.log("Remapping:", { before: v, after: normalized })
+    if (isBeta()) console.debug("Remapping:", { before: v, after: normalized })
     if (Number.isNaN(normalized)) return 0
     return Math.round(Math.max(0, Math.min(1, normalized)) * 100)
 }
 
 function normalize(current: number, max: number, minNorm: number, maxNorm: number, normExp: number): number {
-    if (isBeta()) console.log("Running normalize:", { current, max, minNorm, maxNorm, normExp })
+    if (isBeta()) console.debug("Running normalize:", { current, max, minNorm, maxNorm, normExp })
     if (max <= 0) return 0
     return remap(current / max, minNorm, maxNorm, normExp)
 }
@@ -229,7 +229,7 @@ export function getPowerScores(chars: Character[]): PowerScores {
         roleCurrent[ch.role]?.push({ ...data, value: scaledCurrent })
         roleMax[ch.role]?.push({ ...data, value: scaledMax })
         if (isBeta()) {
-            console.log(`For ${ch.name}:`, {
+            console.debug(`For ${ch.name}:`, {
                 totalCurrent: totalCurrent.at(-1),
                 totalMax: totalMax.at(-1),
                 totalWhaleCurrent: totalWhaleCurrent.at(-1),
