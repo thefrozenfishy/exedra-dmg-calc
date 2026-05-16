@@ -13,6 +13,10 @@ export function useBetaValue<T>(
 
 }
 
+export function isBeta(): boolean {
+    return localStorage.getItem("beta") === "true"
+}
+
 export type BetaSettingValue =
     | number
     | string

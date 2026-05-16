@@ -1,5 +1,5 @@
 import { KiokuConstants, KiokuElement, KiokuRole, type Character } from "../types/KiokuTypes"
-import { useBetaNumber, useBetaValue } from "../utils/betaSettings"
+import { isBeta, useBetaNumber, useBetaValue } from "../utils/betaSettings"
 
 export type PowerScores = {
     total: number
@@ -76,7 +76,7 @@ function getCharacterPower(ch: Character): number {
 
     // apply ALL ascension bonuses up to current level
     for (let i = 1; i <= ch.ascension; i++) {
-        power += roleBonuses[i] ?? 0
+        power += roleBonuses[i] ? Number(roleBonuses[i]) : 0
     }
 
     return power
@@ -112,13 +112,8 @@ function remap(v: number, min: number, max: number, normExp: number): number {
     return Math.round(Math.max(0, Math.min(1, normalized)) * 100)
 }
 
-function normalize(
-    current: number,
-    max: number,
-    minNorm: number = useBetaNumber("defaultNormalizeMin"),
-    maxNorm: number = useBetaNumber("defaultNormalizeMax"),
-    normExp: number = useBetaNumber("defaultNormalizationExponent")
-): number {
+function normalize(current: number, max: number, minNorm: number, maxNorm: number, normExp: number): number {
+    console.log("Running normalize:", { current, max, minNorm, maxNorm, normExp })
     if (max <= 0) return 0
     return remap(current / max, minNorm, maxNorm, normExp)
 }
@@ -190,27 +185,23 @@ export function getPowerScores(chars: Character[]): PowerScores {
     const totalWhaleMax: WeightedEntry[] = []
 
     for (const ch of fiveStars) {
-        const pwrRatio =
-            getCharacterPower(ch) /
-            getMaxPower(ch, getCharacterPower)
+        const pwrRatio = getCharacterPower(ch) / getMaxPower(ch, getCharacterPower)
 
-        const whaleRatio =
-            getCharacterWhalePower(ch) /
-            getMaxPower(ch, getCharacterWhalePower)
+        const whaleRatio = getCharacterWhalePower(ch) / getMaxPower(ch, getCharacterWhalePower)
 
         const roleScaling =
-            useBetaValue<Record<string, number>>("roleScalings")[ch.role] ??
-            useBetaNumber("defaultScaling")
+            useBetaValue<Record<string, number>>("roleScalings")[ch.role] ?
+                Number(useBetaValue<Record<string, number>>("roleScalings")[ch.role]) : useBetaNumber("defaultScaling")
 
         const kiokuScaling =
-            useBetaValue<Record<string, number>>("kiokuScalings")[ch.name] ??
-            1
+            useBetaValue<Record<string, number>>("kiokuScalings")[ch.name] ?
+                Number(useBetaValue<Record<string, number>>("kiokuScalings")[ch.name]) : 1
+
 
         const scaledMax = roleScaling * kiokuScaling
         const scaledCurrent = pwrRatio * scaledMax
 
-        const whaleScaledMax =
-            getWhaleMultiplier(ch) / (roleScaling * kiokuScaling)
+        const whaleScaledMax = getWhaleMultiplier(ch) / (roleScaling * kiokuScaling)
 
         const whaleScaledCurrent = whaleRatio * whaleScaledMax
 
@@ -230,12 +221,27 @@ export function getPowerScores(chars: Character[]): PowerScores {
             ...data,
             value: scaledMax,
         })
+        if (isBeta()) {
+            console.log(`For ${ch.name}:`, {
+                totalCurrent: totalCurrent.at(-1),
+                totalMax: totalMax.at(-1),
+                totalWhaleCurrent: totalWhaleCurrent.at(-1),
+                totalWhaleMax: totalWhaleMax.at(-1),
+                roleCurrent: roleCurrent[ch.role].at(-1),
+                roleMax: roleMax[ch.role].at(-1),
+            })
+        }
     }
+
+
 
     return {
         total: normalize(
             applyGroupedDiminishingReturns(totalCurrent),
-            applyGroupedDiminishingReturns(totalMax)
+            applyGroupedDiminishingReturns(totalMax),
+            useBetaNumber("defaultNormalizeMin"),
+            useBetaNumber("defaultNormalizeMax"),
+            useBetaNumber("defaultNormalizationExponent"),
         ),
         whale: normalize(
             applyGroupedDiminishingReturns(totalWhaleCurrent),
@@ -246,27 +252,45 @@ export function getPowerScores(chars: Character[]): PowerScores {
         ),
         attacker: normalize(
             applyGroupedDiminishingReturns(roleCurrent.attacker),
-            applyGroupedDiminishingReturns(roleMax.attacker)
+            applyGroupedDiminishingReturns(roleMax.attacker),
+            useBetaNumber("defaultNormalizeMin"),
+            useBetaNumber("defaultNormalizeMax"),
+            useBetaNumber("defaultNormalizationExponent"),
         ),
         buffer: normalize(
             applyGroupedDiminishingReturns(roleCurrent.buffer),
-            applyGroupedDiminishingReturns(roleMax.buffer)
+            applyGroupedDiminishingReturns(roleMax.buffer),
+            useBetaNumber("defaultNormalizeMin"),
+            useBetaNumber("defaultNormalizeMax"),
+            useBetaNumber("defaultNormalizationExponent"),
         ),
         debuffer: normalize(
             applyGroupedDiminishingReturns(roleCurrent.debuffer),
-            applyGroupedDiminishingReturns(roleMax.debuffer)
+            applyGroupedDiminishingReturns(roleMax.debuffer),
+            useBetaNumber("defaultNormalizeMin"),
+            useBetaNumber("defaultNormalizeMax"),
+            useBetaNumber("defaultNormalizationExponent"),
         ),
         breaker: normalize(
             applyGroupedDiminishingReturns(roleCurrent.breaker),
-            applyGroupedDiminishingReturns(roleMax.breaker)
+            applyGroupedDiminishingReturns(roleMax.breaker),
+            useBetaNumber("defaultNormalizeMin"),
+            useBetaNumber("defaultNormalizeMax"),
+            useBetaNumber("defaultNormalizationExponent"),
         ),
         defender: normalize(
             applyGroupedDiminishingReturns(roleCurrent.defender),
-            applyGroupedDiminishingReturns(roleMax.defender)
+            applyGroupedDiminishingReturns(roleMax.defender),
+            useBetaNumber("defaultNormalizeMin"),
+            useBetaNumber("defaultNormalizeMax"),
+            useBetaNumber("defaultNormalizationExponent"),
         ),
         healer: normalize(
             applyGroupedDiminishingReturns(roleCurrent.healer),
-            applyGroupedDiminishingReturns(roleMax.healer)
+            applyGroupedDiminishingReturns(roleMax.healer),
+            useBetaNumber("defaultNormalizeMin"),
+            useBetaNumber("defaultNormalizeMax"),
+            useBetaNumber("defaultNormalizationExponent"),
         ),
     }
 }
