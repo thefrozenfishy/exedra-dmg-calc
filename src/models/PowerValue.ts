@@ -162,21 +162,21 @@ export function getPowerScores(chars: Character[]): PowerScores {
     )
 
     const roleCurrent = {
-        attacker: [] as WeightedEntry[],
-        buffer: [] as WeightedEntry[],
-        debuffer: [] as WeightedEntry[],
-        breaker: [] as WeightedEntry[],
-        defender: [] as WeightedEntry[],
-        healer: [] as WeightedEntry[],
+        [KiokuRole.Attacker]: [] as WeightedEntry[],
+        [KiokuRole.Buffer]: [] as WeightedEntry[],
+        [KiokuRole.Debuffer]: [] as WeightedEntry[],
+        [KiokuRole.Breaker]: [] as WeightedEntry[],
+        [KiokuRole.Defender]: [] as WeightedEntry[],
+        [KiokuRole.Healer]: [] as WeightedEntry[],
     }
 
     const roleMax = {
-        attacker: [] as WeightedEntry[],
-        buffer: [] as WeightedEntry[],
-        debuffer: [] as WeightedEntry[],
-        breaker: [] as WeightedEntry[],
-        defender: [] as WeightedEntry[],
-        healer: [] as WeightedEntry[],
+        [KiokuRole.Attacker]: [] as WeightedEntry[],
+        [KiokuRole.Buffer]: [] as WeightedEntry[],
+        [KiokuRole.Debuffer]: [] as WeightedEntry[],
+        [KiokuRole.Breaker]: [] as WeightedEntry[],
+        [KiokuRole.Defender]: [] as WeightedEntry[],
+        [KiokuRole.Healer]: [] as WeightedEntry[],
     }
 
     const totalCurrent: WeightedEntry[] = []
@@ -212,15 +212,8 @@ export function getPowerScores(chars: Character[]): PowerScores {
         totalWhaleCurrent.push({ ...data, value: whaleScaledCurrent })
         totalWhaleMax.push({ ...data, value: whaleScaledMax })
 
-        roleCurrent[ch.role as keyof typeof roleCurrent]?.push({
-            ...data,
-            value: scaledCurrent,
-        })
-
-        roleMax[ch.role as keyof typeof roleMax]?.push({
-            ...data,
-            value: scaledMax,
-        })
+        roleCurrent[ch.role]?.push({ ...data, value: scaledCurrent })
+        roleMax[ch.role]?.push({ ...data, value: scaledMax })
         if (isBeta()) {
             console.log(`For ${ch.name}:`, {
                 totalCurrent: totalCurrent.at(-1),
@@ -251,43 +244,43 @@ export function getPowerScores(chars: Character[]): PowerScores {
             useBetaNumber("whaleNormalizationExponent")
         ),
         attacker: normalize(
-            applyGroupedDiminishingReturns(roleCurrent.attacker),
-            applyGroupedDiminishingReturns(roleMax.attacker),
+            applyGroupedDiminishingReturns(roleCurrent[KiokuRole.Attacker]),
+            applyGroupedDiminishingReturns(roleMax[KiokuRole.Attacker]),
             useBetaNumber("defaultNormalizeMin"),
             useBetaNumber("defaultNormalizeMax"),
             useBetaNumber("defaultNormalizationExponent"),
         ),
         buffer: normalize(
-            applyGroupedDiminishingReturns(roleCurrent.buffer),
-            applyGroupedDiminishingReturns(roleMax.buffer),
+            applyGroupedDiminishingReturns(roleCurrent[KiokuRole.Buffer]),
+            applyGroupedDiminishingReturns(roleMax[KiokuRole.Buffer]),
             useBetaNumber("defaultNormalizeMin"),
             useBetaNumber("defaultNormalizeMax"),
             useBetaNumber("defaultNormalizationExponent"),
         ),
         debuffer: normalize(
-            applyGroupedDiminishingReturns(roleCurrent.debuffer),
-            applyGroupedDiminishingReturns(roleMax.debuffer),
+            applyGroupedDiminishingReturns(roleCurrent[KiokuRole.Debuffer]),
+            applyGroupedDiminishingReturns(roleMax[KiokuRole.Debuffer]),
             useBetaNumber("defaultNormalizeMin"),
             useBetaNumber("defaultNormalizeMax"),
             useBetaNumber("defaultNormalizationExponent"),
         ),
         breaker: normalize(
-            applyGroupedDiminishingReturns(roleCurrent.breaker),
-            applyGroupedDiminishingReturns(roleMax.breaker),
+            applyGroupedDiminishingReturns(roleCurrent[KiokuRole.Breaker]),
+            applyGroupedDiminishingReturns(roleMax[KiokuRole.Breaker]),
             useBetaNumber("defaultNormalizeMin"),
             useBetaNumber("defaultNormalizeMax"),
             useBetaNumber("defaultNormalizationExponent"),
         ),
         defender: normalize(
-            applyGroupedDiminishingReturns(roleCurrent.defender),
-            applyGroupedDiminishingReturns(roleMax.defender),
+            applyGroupedDiminishingReturns(roleCurrent[KiokuRole.Defender]),
+            applyGroupedDiminishingReturns(roleMax[KiokuRole.Defender]),
             useBetaNumber("defaultNormalizeMin"),
             useBetaNumber("defaultNormalizeMax"),
             useBetaNumber("defaultNormalizationExponent"),
         ),
         healer: normalize(
-            applyGroupedDiminishingReturns(roleCurrent.healer),
-            applyGroupedDiminishingReturns(roleMax.healer),
+            applyGroupedDiminishingReturns(roleCurrent[KiokuRole.Healer]),
+            applyGroupedDiminishingReturns(roleMax[KiokuRole.Healer]),
             useBetaNumber("defaultNormalizeMin"),
             useBetaNumber("defaultNormalizeMax"),
             useBetaNumber("defaultNormalizationExponent"),
