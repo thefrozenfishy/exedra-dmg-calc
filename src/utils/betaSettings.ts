@@ -17,6 +17,12 @@ export function isBeta(): boolean {
     return localStorage.getItem("beta") === "true"
 }
 
+export function toggleBeta() {
+    const current = isBeta();
+    localStorage.setItem("beta", current ? "false" : "true");
+    window.location.reload()
+}
+
 export type BetaSettingValue =
     | number
     | string

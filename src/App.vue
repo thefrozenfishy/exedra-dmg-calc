@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import CloudSyncWidget from './components/CloudSyncWidget.vue'
+import { isBeta } from './utils/betaSettings';
 const icon = document.getElementById('app-icon').href
-const beta = localStorage.getItem('beta') === 'true'
+const beta = isBeta()
 </script>
 
 <template>

@@ -46,6 +46,8 @@
 </template>
 
 <script lang="ts" setup>
+import { toggleBeta } from '../utils/betaSettings';
+
 function downloadLS() {
     const data = JSON.stringify(localStorage, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
@@ -54,9 +56,6 @@ function downloadLS() {
     a.href = url;
     a.download = 'exedra_dmg_calc_debug.json';
     a.click();
-}
-function toggleBeta() {
-    localStorage.setItem('beta', localStorage.getItem('beta') === 'true' ? 'false' : 'true');
 }
 </script>
 

@@ -10,6 +10,7 @@ import { useCharacterStore } from './store/characterStore'
 import { useTeamStore, useEnemyStore, usePvPStore } from './store/singleTeamStore';
 import { useFriendStore } from './store/friendStore';
 import { useBetaStore } from './store/betaStore';
+import { isBeta } from './utils/betaSettings'
 
 const app = createApp(App)
 app.component('CharacterLink', CharacterLink)
@@ -17,16 +18,16 @@ app.use(createPinia())
 if (import.meta.env.DEV) {
     const favicon = document.getElementById("app-icon") as HTMLLinkElement;
     favicon.href = favicon.href.replace("icon.png", "icon-dev.png?v=" + Date.now());
-} else if (localStorage.getItem("beta")) {
+} else if (isBeta()) {
     const favicon = document.getElementById("app-icon") as HTMLLinkElement;
     favicon.href = favicon.href.replace("icon.png", "icon-beta.png?v=" + Date.now());
 }
+useBetaStore().load()
 await useCharacterStore().initializeCloud()
 await useFriendStore().initialize()
 useTeamStore().load()
 usePvPStore().load()
 useEnemyStore().load()
 useSettingsStore().load()
-useBetaStore().load()
 app.use(router)
 app.mount('#app')
