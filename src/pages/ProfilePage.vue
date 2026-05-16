@@ -101,32 +101,32 @@
                         <div class="role-grid-compact role-grid-3-compact">
                             <div class="mini-power-box" title="Attacker power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Attacker.png'" />
-                                <span>{{ myPower.attacker }}</span>
+                                <span>{{ myPower[KiokuRole.Attacker] }}</span>
                             </div>
 
                             <div class="mini-power-box" title="Buffer power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Buffer.png'" />
-                                <span>{{ myPower.buffer }}</span>
+                                <span>{{ myPower[KiokuRole.Buffer] }}</span>
                             </div>
 
                             <div class="mini-power-box" title="Debuffer power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Debuffer.png'" />
-                                <span>{{ myPower.debuffer }}</span>
+                                <span>{{ myPower[KiokuRole.Debuffer] }}</span>
                             </div>
 
                             <div class="mini-power-box" title="Breaker power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Breaker.png'" />
-                                <span>{{ myPower.breaker }}</span>
+                                <span>{{ myPower[KiokuRole.Breaker] }}</span>
                             </div>
 
                             <div class="mini-power-box" title="Defender power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Defender.png'" />
-                                <span>{{ myPower.defender }}</span>
+                                <span>{{ myPower[KiokuRole.Defender] }}</span>
                             </div>
 
                             <div class="mini-power-box" title="Healer power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Healer.png'" />
-                                <span>{{ myPower.healer }}</span>
+                                <span>{{ myPower[KiokuRole.Healer] }}</span>
                             </div>
                         </div>
 
@@ -262,17 +262,17 @@
                             <div class="role-grid-compact role-grid-4-compact">
                                 <div class="mini-power-box" title="Attacker power rating">
                                     <img :src="'/exedra-dmg-calc/roles/Attacker.png'" alt="Attacker" />
-                                    <span>{{ friend.power.attacker }}</span>
+                                    <span>{{ friend.power[KiokuRole.Attacker] }}</span>
                                 </div>
 
                                 <div class="mini-power-box" title="Buffer power rating">
                                     <img :src="'/exedra-dmg-calc/roles/Buffer.png'" alt="Buffer" />
-                                    <span>{{ friend.power.buffer }}</span>
+                                    <span>{{ friend.power[KiokuRole.Buffer] }}</span>
                                 </div>
 
                                 <div class="mini-power-box" title="Debuffer power rating">
                                     <img :src="'/exedra-dmg-calc/roles/Debuffer.png'" alt="Debuffer" />
-                                    <span>{{ friend.power.debuffer }}</span>
+                                    <span>{{ friend.power[KiokuRole.Debuffer] }}</span>
                                 </div>
 
                                 <div class="mini-power-box" title="Similarity score">
@@ -282,17 +282,17 @@
 
                                 <div class="mini-power-box" title="Breaker power rating">
                                     <img :src="'/exedra-dmg-calc/roles/Breaker.png'" alt="Breaker" />
-                                    <span>{{ friend.power.breaker }}</span>
+                                    <span>{{ friend.power[KiokuRole.Breaker] }}</span>
                                 </div>
 
                                 <div class="mini-power-box" title="Defender power rating">
                                     <img :src="'/exedra-dmg-calc/roles/Defender.png'" alt="Defender" />
-                                    <span>{{ friend.power.defender }}</span>
+                                    <span>{{ friend.power[KiokuRole.Defender] }}</span>
                                 </div>
 
                                 <div class="mini-power-box" title="Healer power rating">
                                     <img :src="'/exedra-dmg-calc/roles/Healer.png'" alt="Healer" />
-                                    <span>{{ friend.power.healer }}</span>
+                                    <span>{{ friend.power[KiokuRole.Healer] }}</span>
                                 </div>
 
                                 <div class="mini-power-box" title="Whale power">
@@ -360,6 +360,7 @@ import { getPowerScores } from '../models/PowerValue'
 import { useCharacterStore } from '../store/characterStore'
 import { useSetting } from '../store/settingsStore'
 import { addAllFriends } from '../store/cloud'
+import { KiokuRole } from '../types/KiokuTypes'
 
 const store = useFriendStore()
 const characterStore = useCharacterStore()
@@ -416,12 +417,12 @@ const exportData = () => {
             store.displayName,
             store.unionName,
             myPower.value.total,
-            myPower.value.attacker,
-            myPower.value.buffer,
-            myPower.value.debuffer,
-            myPower.value.breaker,
-            myPower.value.defender,
-            myPower.value.healer,
+            myPower.value[KiokuRole.Attacker],
+            myPower.value[KiokuRole.Buffer],
+            myPower.value[KiokuRole.Debuffer],
+            myPower.value[KiokuRole.Breaker],
+            myPower.value[KiokuRole.Defender],
+            myPower.value[KiokuRole.Healer],
             myPower.value.whale,
             ''
         ])
@@ -434,12 +435,12 @@ const exportData = () => {
             f.display_name,
             f.union_name,
             f.power?.total,
-            f.power?.attacker,
-            f.power?.buffer,
-            f.power?.debuffer,
-            f.power?.breaker,
-            f.power?.defender,
-            f.power?.healer,
+            f.power?.[KiokuRole.Attacker],
+            f.power?.[KiokuRole.Buffer],
+            f.power?.[KiokuRole.Debuffer],
+            f.power?.[KiokuRole.Breaker],
+            f.power?.[KiokuRole.Defender],
+            f.power?.[KiokuRole.Healer],
             f.power?.whale,
             f.accountSimilarity
         ])
@@ -572,27 +573,27 @@ const sortedFriends = computed(() => {
                 break
 
             case 'attacker':
-                diff = (b.power?.attacker || 0) - (a.power?.attacker || 0)
+                diff = (b.power?.[KiokuRole.Attacker] || 0) - (a.power?.[KiokuRole.Attacker] || 0)
                 break
 
             case 'buffer':
-                diff = (b.power?.buffer || 0) - (a.power?.buffer || 0)
+                diff = (b.power?.[KiokuRole.Buffer] || 0) - (a.power?.[KiokuRole.Buffer] || 0)
                 break
 
             case 'debuffer':
-                diff = (b.power?.debuffer || 0) - (a.power?.debuffer || 0)
+                diff = (b.power?.[KiokuRole.Debuffer] || 0) - (a.power?.[KiokuRole.Debuffer] || 0)
                 break
 
             case 'breaker':
-                diff = (b.power?.breaker || 0) - (a.power?.breaker || 0)
+                diff = (b.power?.[KiokuRole.Breaker] || 0) - (a.power?.[KiokuRole.Breaker] || 0)
                 break
 
             case 'defender':
-                diff = (b.power?.defender || 0) - (a.power?.defender || 0)
+                diff = (b.power?.[KiokuRole.Defender] || 0) - (a.power?.[KiokuRole.Defender] || 0)
                 break
 
             case 'healer':
-                diff = (b.power?.healer || 0) - (a.power?.healer || 0)
+                diff = (b.power?.[KiokuRole.Healer] || 0) - (a.power?.[KiokuRole.Healer] || 0)
                 break
 
             case 'similarity':

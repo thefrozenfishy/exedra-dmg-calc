@@ -4,12 +4,12 @@ import { isBeta, useBetaNumber, useBetaValue } from "../utils/betaSettings"
 export type PowerScores = {
     total: number
 
-    attacker: number
-    buffer: number
-    debuffer: number
-    breaker: number
-    defender: number
-    healer: number
+    [KiokuRole.Attacker]: number
+    [KiokuRole.Buffer]: number
+    [KiokuRole.Debuffer]: number
+    [KiokuRole.Breaker]: number
+    [KiokuRole.Defender]: number
+    [KiokuRole.Healer]: number
     whale: number
 }
 
@@ -68,7 +68,7 @@ function getCharacterPower(ch: Character): number {
     power += ch.ascension * useBetaNumber("ascensionPowerPerLevel")
 
     const matrix =
-        useBetaValue<Record<string, Record<number, number>>>(
+        useBetaValue<Record<KiokuRole, Record<number, number>>>(
             "roleAscensionBonuses"
         )
 
@@ -79,7 +79,20 @@ function getCharacterPower(ch: Character): number {
         power += roleBonuses[i] ? Number(roleBonuses[i]) : 0
     }
 
-    return power
+    const uniqueKiokuAscensionBonuses =
+        useBetaValue<Record<string, Record<string, number>>>(
+            "kiokuAscensionScalings"
+        )
+
+    const kiokuBonuses = uniqueKiokuAscensionBonuses[ch.name] ?? { 2: 50 }
+
+    for (const [ascensionLevel, bonus] of Object.entries(kiokuBonuses)) {
+        if (ch.ascension >= Number(ascensionLevel)) {
+            power += Number(bonus)
+        }
+
+        return power
+    }
 }
 
 function getCharacterWhalePower(ch: Character): number {
@@ -243,42 +256,42 @@ export function getPowerScores(chars: Character[]): PowerScores {
             useBetaNumber("whaleNormalizeMax"),
             useBetaNumber("whaleNormalizationExponent")
         ),
-        attacker: normalize(
+        [KiokuRole.Attacker]: normalize(
             applyGroupedDiminishingReturns(roleCurrent[KiokuRole.Attacker]),
             applyGroupedDiminishingReturns(roleMax[KiokuRole.Attacker]),
             useBetaNumber("defaultNormalizeMin"),
             useBetaNumber("defaultNormalizeMax"),
             useBetaNumber("defaultNormalizationExponent"),
         ),
-        buffer: normalize(
+        [KiokuRole.Buffer]: normalize(
             applyGroupedDiminishingReturns(roleCurrent[KiokuRole.Buffer]),
             applyGroupedDiminishingReturns(roleMax[KiokuRole.Buffer]),
             useBetaNumber("defaultNormalizeMin"),
             useBetaNumber("defaultNormalizeMax"),
             useBetaNumber("defaultNormalizationExponent"),
         ),
-        debuffer: normalize(
+        [KiokuRole.Debuffer]: normalize(
             applyGroupedDiminishingReturns(roleCurrent[KiokuRole.Debuffer]),
             applyGroupedDiminishingReturns(roleMax[KiokuRole.Debuffer]),
             useBetaNumber("defaultNormalizeMin"),
             useBetaNumber("defaultNormalizeMax"),
             useBetaNumber("defaultNormalizationExponent"),
         ),
-        breaker: normalize(
+        [KiokuRole.Breaker]: normalize(
             applyGroupedDiminishingReturns(roleCurrent[KiokuRole.Breaker]),
             applyGroupedDiminishingReturns(roleMax[KiokuRole.Breaker]),
             useBetaNumber("defaultNormalizeMin"),
             useBetaNumber("defaultNormalizeMax"),
             useBetaNumber("defaultNormalizationExponent"),
         ),
-        defender: normalize(
+        [KiokuRole.Defender]: normalize(
             applyGroupedDiminishingReturns(roleCurrent[KiokuRole.Defender]),
             applyGroupedDiminishingReturns(roleMax[KiokuRole.Defender]),
             useBetaNumber("defaultNormalizeMin"),
             useBetaNumber("defaultNormalizeMax"),
             useBetaNumber("defaultNormalizationExponent"),
         ),
-        healer: normalize(
+        [KiokuRole.Healer]: normalize(
             applyGroupedDiminishingReturns(roleCurrent[KiokuRole.Healer]),
             applyGroupedDiminishingReturns(roleMax[KiokuRole.Healer]),
             useBetaNumber("defaultNormalizeMin"),

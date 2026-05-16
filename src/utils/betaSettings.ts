@@ -1,4 +1,5 @@
 import { useBeta } from "../store/betaStore"
+import { KiokuRole } from "../types/KiokuTypes";
 
 export function useBetaNumber(
     key: keyof typeof BETA_DEFAULTS
@@ -34,7 +35,6 @@ export type BetaSetting = {
     key: string
     label: string
     defaultValue: BetaSettingValue
-    description?: string
 }
 
 export const BETA_SECTIONS = [
@@ -94,12 +94,12 @@ export const BETA_SECTIONS = [
                 key: "roleScalings",
                 label: "Role Scalings",
                 defaultValue: {
-                    attacker: 1.15,
-                    breaker: 1,
-                    buffer: 1.25,
-                    debuffer: 1.2,
-                    defender: 0.9,
-                    healer: 0.9,
+                    [KiokuRole.Attacker]: 1.15,
+                    [KiokuRole.Breaker]: 1,
+                    [KiokuRole.Buffer]: 1.25,
+                    [KiokuRole.Debuffer]: 1.2,
+                    [KiokuRole.Defender]: 0.9,
+                    [KiokuRole.Healer]: 0.9,
                 },
             },
         ],
@@ -167,7 +167,6 @@ export const BETA_SECTIONS = [
     },
     {
         title: "Kioku Scalings",
-        description: "Multiplicative scalings for Kioku characters. These are applied after all other calculations, so they can be used to make simple buffs/nerfs to specific characters without affecting the overall balance of the system.",
         settings: [
             {
                 key: "kiokuScalings",
@@ -207,6 +206,20 @@ export const BETA_SECTIONS = [
         ]
     },
     {
+        title: "Kioku Ascension Scalings",
+        settings: [
+            {
+                key: "kiokuAscensionScalings",
+                label: "Kioku Ascension Scalings",
+                defaultValue: {
+                    "Tiro Finale": { 2: 50 },
+                    "Dark Art Dominion": { 4: 50 },
+                    "Falsified Phenomena": { 4: 50 }
+                },
+            }
+        ]
+    },
+    {
         title: "Character Power",
         settings: [
             { key: "basePower", label: "Base Power", defaultValue: 100 },
@@ -221,7 +234,7 @@ export const BETA_SECTIONS = [
                 key: "roleAscensionBonuses",
                 label: "Role Ascension Bonuses",
                 defaultValue: {
-                    attacker: {
+                    [KiokuRole.Attacker]: {
                         1: 0,
                         2: 0,
                         3: 25,
@@ -229,7 +242,7 @@ export const BETA_SECTIONS = [
                         5: 55,
                     },
 
-                    breaker: {
+                    [KiokuRole.Breaker]: {
                         1: 0,
                         2: 0,
                         3: 30,
@@ -237,7 +250,7 @@ export const BETA_SECTIONS = [
                         5: 30,
                     },
 
-                    buffer: {
+                    [KiokuRole.Buffer]: {
                         1: 0,
                         2: 0,
                         3: 0,
@@ -245,7 +258,7 @@ export const BETA_SECTIONS = [
                         5: 0,
                     },
 
-                    debuffer: {
+                    [KiokuRole.Debuffer]: {
                         1: 0,
                         2: 0,
                         3: 0,
@@ -253,7 +266,7 @@ export const BETA_SECTIONS = [
                         5: 0,
                     },
 
-                    defender: {
+                    [KiokuRole.Defender]    : {
                         1: 0,
                         2: 0,
                         3: 0,
@@ -261,7 +274,7 @@ export const BETA_SECTIONS = [
                         5: 0,
                     },
 
-                    healer: {
+                    [KiokuRole.Healer]: {
                         1: 0,
                         2: 0,
                         3: 0,
