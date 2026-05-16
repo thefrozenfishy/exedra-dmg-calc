@@ -104,6 +104,9 @@ export const useCharacterStore = defineStore('characterStore', () => {
                 crys: row.crys,
                 crys_sub: row.crys_sub
             })
+            if (char.rarity < 5) char.ascension = KiokuConstants.maxAscension;
+            if (char.ascension < KiokuConstants.maxAscension) char.ascension = KiokuConstants.maxAscension;
+            if (char.ascension < 0) char.ascension = 0;
         })
     }
 
