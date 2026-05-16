@@ -944,12 +944,16 @@ const renderAnalyticsChart = () => {
                     animation: false,
                     scales: {
                         x: {
+                            min: 0,
+                            max: 100,
                             title: {
                                 display: true,
                                 text: selectedXAxis.value
                             }
                         },
                         y: {
+                            min: 0,
+                            max: 100,
                             title: {
                                 display: true,
                                 text: selectedYAxis.value
@@ -1004,6 +1008,8 @@ const renderAnalyticsChart = () => {
                 parsing: false,
                 scales: {
                     x: {
+                        min: 0,
+                        max: 100,
                         type: 'linear',
                         title: {
                             display: true,
