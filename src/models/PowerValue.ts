@@ -68,15 +68,15 @@ function getCharacterPower(ch: Character): number {
     power += ch.ascension * useBetaNumber("ascensionPowerPerLevel")
 
     const matrix =
-        useBetaValue<Record<KiokuRole, Record<number, number>>>(
+        useBetaValue<Record<KiokuRole, Record<string, number>>>(
             "roleAscensionBonuses"
         )
 
-    const roleBonuses = matrix[ch.role] ?? {}
+    const roleBonuses: Record<string, number> = matrix[ch.role] ?? {}
 
     // apply ALL ascension bonuses up to current level
     for (let i = 1; i <= ch.ascension; i++) {
-        power += roleBonuses[i] ? Number(roleBonuses[i]) : 0
+        power += roleBonuses[i.toString()] ? Number(roleBonuses[i.toString()]) : 0
     }
 
     const uniqueKiokuAscensionBonuses =
@@ -84,15 +84,15 @@ function getCharacterPower(ch: Character): number {
             "kiokuAscensionScalings"
         )
 
-    const kiokuBonuses = uniqueKiokuAscensionBonuses[ch.name] ?? { 2: 50 }
+    const kiokuBonuses: Record<string, number> = uniqueKiokuAscensionBonuses[ch.name] ?? {}
 
     for (const [ascensionLevel, bonus] of Object.entries(kiokuBonuses)) {
         if (ch.ascension >= Number(ascensionLevel)) {
             power += Number(bonus)
         }
 
-        return power
     }
+    return power
 }
 
 function getCharacterWhalePower(ch: Character): number {

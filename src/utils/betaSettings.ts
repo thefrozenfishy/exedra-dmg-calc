@@ -212,9 +212,9 @@ export const BETA_SECTIONS = [
                 key: "kiokuAscensionScalings",
                 label: "Kioku Ascension Scalings",
                 defaultValue: {
-                    "Tiro Finale": { 2: 50 },
-                    "Dark Art Dominion": { 4: 50 },
-                    "Falsified Phenomena": { 4: 50 }
+                    "Tiro Finale": { "2": 50 },
+                    "Dark Art Dominion": { "4": 50 },
+                    "Falsified Phenomena": { "4": 50 }
                 },
             }
         ]
@@ -235,51 +235,51 @@ export const BETA_SECTIONS = [
                 label: "Role Ascension Bonuses",
                 defaultValue: {
                     [KiokuRole.Attacker]: {
-                        1: 0,
-                        2: 0,
-                        3: 25,
-                        4: 0,
-                        5: 55,
+                        "1": 0,
+                        "2": 0,
+                        "3": 25,
+                        "4": 0,
+                        "5": 55,
                     },
 
                     [KiokuRole.Breaker]: {
-                        1: 0,
-                        2: 0,
-                        3: 30,
-                        4: 10,
-                        5: 30,
+                        "1": 0,
+                        "2": 0,
+                        "3": 30,
+                        "4": 10,
+                        "5": 30,
                     },
 
                     [KiokuRole.Buffer]: {
-                        1: 0,
-                        2: 0,
-                        3: 0,
-                        4: 80,
-                        5: 0,
+                        "1": 0,
+                        "2": 0,
+                        "3": 0,
+                        "4": 80,
+                        "5": 0,
                     },
 
                     [KiokuRole.Debuffer]: {
-                        1: 0,
-                        2: 0,
-                        3: 0,
-                        4: 60,
-                        5: 0,
+                        "1": 0,
+                        "2": 0,
+                        "3": 0,
+                        "4": 60,
+                        "5": 0,
                     },
 
                     [KiokuRole.Defender]    : {
-                        1: 0,
-                        2: 0,
-                        3: 0,
-                        4: 25,
-                        5: 0,
+                        "1": 0,
+                        "2": 0,
+                        "3": 0,
+                        "4": 25,
+                        "5": 0,
                     },
 
                     [KiokuRole.Healer]: {
-                        1: 0,
-                        2: 0,
-                        3: 0,
-                        4: 30,
-                        5: 0,
+                        "1": 0,
+                        "2": 0,
+                        "3": 0,
+                        "4": 30,
+                        "5": 0,
                     },
                 },
             },
