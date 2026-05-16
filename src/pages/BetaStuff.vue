@@ -12,6 +12,8 @@
                 <div class="setting-header">
                     <label :for="setting.key">
                         {{ setting.label }}
+
+                        <span v-if="hasChanged(setting)" class="changed-dot" title="Changed from default" />
                     </label>
 
                     <span class="default">
@@ -44,6 +46,33 @@ for (const section of sections) {
             setting.defaultValue
         )
     }
+}
+
+function normalizeValue(value: unknown): unknown {
+    if (typeof value === "string") {
+        const trimmed = value.trim()
+
+        if (trimmed === "true") {
+            return true
+        }
+
+        if (trimmed === "false") {
+            return false
+        }
+
+        if (trimmed !== "" && !isNaN(Number(trimmed))) {
+            return Number(trimmed)
+        }
+    }
+
+    return value
+}
+
+function hasChanged(setting: { key: string; defaultValue: unknown }) {
+    const current = normalizeValue(values[setting.key].value)
+    const defaultValue = normalizeValue(setting.defaultValue)
+
+    return JSON.stringify(current) !== JSON.stringify(defaultValue)
 }
 
 function isJsonSetting(value: unknown): boolean {
@@ -80,6 +109,16 @@ function onJsonChange(key: string, event: Event) {
 </script>
 
 <style scoped>
+.changed-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-left: 8px;
+    border-radius: 50%;
+    background: #ffb86c;
+    box-shadow: 0 0 8px rgba(255, 184, 108, 0.7);
+}
+
 .json-editor {
     width: 100%;
     min-height: 240px;
