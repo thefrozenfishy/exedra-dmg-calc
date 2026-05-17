@@ -1,12 +1,26 @@
 import { defineStore } from 'pinia'
 import { computed, ref, type Ref } from 'vue'
+import { isBeta } from '../utils/betaSettings'
 
 export function useBeta<T>(key: string, defaultValue: T): Ref<T> {
   const store = useBetaStore()
 
   return computed({
-    get: () => store.get(key, defaultValue),
-    set: (value) => store.set(key, value),
+    get: () => {
+      if (!isBeta()) {
+        return defaultValue
+      }
+
+      return store.get(key, defaultValue)
+    },
+
+    set: (value) => {
+      if (!isBeta()) {
+        return
+      }
+
+      store.set(key, value)
+    },
   })
 }
 

@@ -4,9 +4,17 @@
             <h1>Account Comparison</h1>
 
             <div class="subtitle" v-if="leftCode && rightCode">
-                Comparing
                 <FriendPickerBadge side="left" :current-code="leftCode" placeholder="Left account" @pick="onPickLeft" />
-                vs
+                <div class="graph-meta">
+                    vs
+                    <div class="score-pill floating-score">
+                        <img class="score-icon" :src="'/exedra-dmg-calc/similarity.png'" alt="" />
+                        <span class="score-label">Similarity Score</span>
+                        <span class="score-value">
+                            {{ accountDifferenceScore }}
+                        </span>
+                    </div>
+                </div>
                 <FriendPickerBadge :profile="rightProfile" :friends="friends" :side="'right'" :current-code="rightCode"
                     :self="selfEntry" @pick="onPickRight" />
             </div>
@@ -46,13 +54,40 @@
         </div>
 
         <div class="graph-container" v-if="leftCode && rightCode">
-            <div class="score-pill">
-                <img class="score-icon" :src="'/exedra-dmg-calc/similarity.png'" alt="" />
-                <span class="score-label">Similarity Score</span>
-                <span class="score-value">
-                    {{ accountDifferenceScore }}
-                </span>
+
+            <div class="export-header">
+                <div class="export-side left-side">
+                    <img v-if="leftProfile?.profile_icon"
+                        :src="`/exedra-dmg-calc/kioku_images/${leftProfile.profile_icon}_thumbnail.png`"
+                        class="export-avatar" />
+
+                    <div class="export-name">
+                        {{ leftProfile?.display_name || leftCode }}
+                    </div>
+                </div>
+
+                <div class="score-pill export-score">
+                    <img class="score-icon" :src="'/exedra-dmg-calc/similarity.png'" alt="" />
+
+                    <div class="score-content">
+                        <span class="score-label">Similarity Score</span>
+                        <span class="score-value">
+                            {{ accountDifferenceScore }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="export-side right-side">
+                    <div class="export-name">
+                        {{ rightProfile?.display_name || rightCode }}
+                    </div>
+
+                    <img v-if="rightProfile?.profile_icon"
+                        :src="`/exedra-dmg-calc/kioku_images/${rightProfile.profile_icon}_thumbnail.png`"
+                        class="export-avatar" />
+                </div>
             </div>
+
             <div class="diff-groups">
                 <div v-for="group in groupedCharacters" :key="group.label" class="diff-group"
                     :style="diffColor(group.label)">
@@ -301,16 +336,40 @@ const diffColor = (diff: number) => {
 }
 const filename = computed(() => `compare_${leftProfile.value?.display_name || leftCode.value}_v_${rightProfile.value?.display_name || rightCode.value}.png`)
 
-const downloadGraph = () => {
-    const el = document.querySelector(".graph-container") as HTMLElement
-    if (!el) return
-    downloadImage(filename.value, el)
+const withExportHeader = async (fn: () => Promise<void> | void) => {
+    const header = document.querySelector(".export-header") as HTMLElement | null
+
+    if (header) {
+        header.style.display = "flex"
+    }
+
+    await new Promise(r => requestAnimationFrame(r))
+
+    try {
+        await fn()
+    } finally {
+        if (header) {
+            header.style.display = "none"
+        }
+    }
 }
 
-const copyGraphToClipboard = () => {
+const downloadGraph = async () => {
     const el = document.querySelector(".graph-container") as HTMLElement
     if (!el) return
-    copyImageToClipboard(filename.value, el)
+
+    await withExportHeader(() =>
+        downloadImage(filename.value, el)
+    )
+}
+
+const copyGraphToClipboard = async () => {
+    const el = document.querySelector(".graph-container") as HTMLElement
+    if (!el) return
+
+    await withExportHeader(() =>
+        copyImageToClipboard(filename.value, el)
+    )
 }
 
 const copyHyperLink = async () => {
@@ -327,6 +386,167 @@ const copyHyperLink = async () => {
 </script>
 
 <style scoped>
+.graph-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.floating-score {
+    margin-top: 0;
+
+    transform: translateY(-20%);
+
+    background:
+        linear-gradient(180deg,
+            rgba(40, 40, 40, 0.96),
+            rgba(24, 24, 24, 0.96));
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.28);
+}
+
+.export-header {
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(180deg,
+            rgba(255, 255, 255, 0.04),
+            rgba(255, 255, 255, 0.02));
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.export-side {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+
+    min-width: 180px;
+}
+
+.left-side {
+    justify-content: flex-end;
+}
+
+.right-side {
+    justify-content: flex-start;
+}
+
+.export-avatar {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 50%;
+    object-fit: cover;
+
+    border: 2px solid rgba(255, 255, 255, 0.2);
+
+    box-shadow:
+        0 0 12px rgba(0, 0, 0, 0.35);
+}
+
+.left-side .export-avatar {
+    border-color: rgba(80, 180, 255, 0.7);
+}
+
+.right-side .export-avatar {
+    border-color: rgba(255, 120, 120, 0.7);
+}
+
+.export-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #f2f2f2;
+
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.left-side .export-name {
+    color: #8fd0ff;
+}
+
+.right-side .export-name {
+    color: #ffb0b0;
+}
+
+.export-score {
+    margin-top: 0;
+
+    display: flex;
+    align-items: center;
+
+    align-self: center;
+
+    padding: 0.55rem 1rem;
+
+    transform: translateY(-1px);
+
+    background:
+        linear-gradient(180deg,
+            rgba(40, 40, 40, 0.96),
+            rgba(24, 24, 24, 0.96));
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.score-content {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.export-score .score-label {
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+
+    display: flex;
+    align-items: center;
+}
+
+.export-score .score-value {
+    font-size: 1rem;
+    line-height: 1;
+
+    display: flex;
+    align-items: center;
+}
+
+.export-score .score-icon {
+    height: 18px;
+    width: 18px;
+    flex-shrink: 0;
+}
+
+.export-matchup {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #eee;
+}
+
+.vs-text {
+    color: #888;
+}
+
 .graph-container {
     display: inline-flex;
     flex-direction: column;
@@ -354,7 +574,7 @@ const copyHyperLink = async () => {
 }
 
 .score-pill {
-    margin-top: 0.75rem;
+    margin: auto;
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
