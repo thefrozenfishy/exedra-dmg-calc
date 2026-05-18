@@ -24,6 +24,12 @@
         <h2>Activity timeline</h2>
         <div>
           <label>
+            Last:
+            <select v-model="selectedWindow">
+              <option v-for="option in windowOptions" :key="option" :value="option">{{ option }} days</option>
+            </select>
+          </label>
+          <label style="margin-left:12px">
             User:
             <select v-model="selectedUser">
               <option value="all">All</option>
@@ -179,6 +185,8 @@ const eventRows = computed(() => {
 
 const selectedUser = ref<string>('all')
 const selectedEvent = ref<string>('all')
+const selectedWindow = ref<number>(7)
+const windowOptions = [3, 7, 14, 30, 90]
 
 const getDisplayUser = (row: AnalyticsRowWithDisplay) => row.display_user
 
@@ -289,14 +297,28 @@ const fetchAnalytics = async () => {
 
   try {
     const supabase = getSupabase()
-    const { data, error: fetchError } = await supabase
-      .from('analytics')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(1000)
+    const windowStart = new Date(Date.now() - selectedWindow.value * 86400000).toISOString()
+    const pageSize = 1000
+    let offset = 0
+    const fetchedRows: AnalyticsRow[] = []
 
-    if (fetchError) throw fetchError
-    rows.value = (data ?? []).map((row: AnalyticsRow) => ({
+    while (true) {
+      const { data, error: fetchError } = await supabase
+        .from('analytics')
+        .select('*')
+        .gte('created_at', windowStart)
+        .order('created_at', { ascending: false })
+        .range(offset, offset + pageSize - 1)
+
+      if (fetchError) throw fetchError
+      if (!data || data.length === 0) break
+
+      fetchedRows.push(...data)
+      if (data.length < pageSize) break
+      offset += pageSize
+    }
+
+    rows.value = fetchedRows.map((row: AnalyticsRow) => ({
       ...row,
       display_user: row.user_id ?? 'anonymous'
     })) as AnalyticsRowWithDisplay[]
@@ -328,9 +350,7 @@ const fetchAnalytics = async () => {
 
 const refresh = () => fetchAnalytics()
 
-const formatDate = (value: string) => new Date(value).toLocaleString()
-const formatMetadata = (value: any) => JSON.stringify(value, null, 2)
-
+watch(selectedWindow, fetchAnalytics)
 onMounted(fetchAnalytics)
 </script>
 
