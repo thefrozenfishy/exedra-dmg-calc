@@ -428,7 +428,6 @@ const onTouchStart = (ch: Character, e: TouchEvent) => {
     if (isReadonly.value) return
     touchDragged.value = ch
     draggedChar.value = ch
-    e.preventDefault()
 }
 
 const onTouchMove = (e: TouchEvent) => {
