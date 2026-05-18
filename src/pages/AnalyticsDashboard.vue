@@ -215,6 +215,14 @@ const pageViewRows = computed(() => {
   return Object.entries(counts).sort((a, b) => b[1] - a[1])
 })
 
+const timelineLabels = computed(() => {
+  const dates = new Set<string>()
+  for (const row of filteredRows.value) {
+    dates.add(new Date(row.created_at).toISOString().slice(0, 10))
+  }
+  return [...dates].sort()
+})
+
 const timelineRows = computed(() => {
   const counts: Record<string, number> = {}
   for (const row of filteredRows.value) {
@@ -222,6 +230,37 @@ const timelineRows = computed(() => {
     counts[dateKey] = (counts[dateKey] ?? 0) + 1
   }
   return Object.entries(counts).sort((a, b) => a[0].localeCompare(b[0]))
+})
+
+const timelineSeries = computed(() => {
+  const labels = timelineLabels.value
+  if (selectedUser.value === 'all') {
+    const userMap: Record<string, Record<string, number>> = {}
+    for (const row of filteredRows.value) {
+      const user = getDisplayUser(row)
+      const dateKey = new Date(row.created_at).toISOString().slice(0, 10)
+      userMap[user] = userMap[user] ?? {}
+      userMap[user][dateKey] = (userMap[user][dateKey] ?? 0) + 1
+    }
+
+    return Object.keys(userMap).sort().map((user, idx) => ({
+      label: user,
+      data: labels.map(date => userMap[user][date] ?? 0),
+      backgroundColor: getColorForIndex(idx),
+    }))
+  }
+
+  const userCounts: Record<string, number> = {}
+  for (const row of filteredRows.value) {
+    const dateKey = new Date(row.created_at).toISOString().slice(0, 10)
+    userCounts[dateKey] = (userCounts[dateKey] ?? 0) + 1
+  }
+
+  return [{
+    label: selectedUser.value,
+    data: labels.map(date => userCounts[date] ?? 0),
+    backgroundColor: '#38bdf8',
+  }]
 })
 
 const uniqueEventCount = computed(() => new Set(rows.value.map(r => r.event)).size)
@@ -242,6 +281,11 @@ const timelineChartRef = ref<HTMLCanvasElement | null>(null)
 
 Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend)
 
+const getColorForIndex = (index: number) => {
+  const hue = (index * 57) % 360
+  return `hsla(${hue}, 70%, 55%, 0.85)`
+}
+
 const renderPageChart = async () => {
   await nextTick()
   if (!pageChartRef.value) return
@@ -249,12 +293,13 @@ const renderPageChart = async () => {
 
   const labels = pageViewRows.value.map(p => p[0])
   const data = pageViewRows.value.map(p => p[1])
+  const colors = pageViewRows.value.map((_, idx) => getColorForIndex(idx))
 
   pageChart = new Chart(pageChartRef.value, {
     type: 'bar',
     data: {
       labels,
-      datasets: [{ label: 'Page views', data, backgroundColor: '#7b61d8' }]
+      datasets: [{ label: 'Page views', data, backgroundColor: colors }]
     },
     options: {
       responsive: true,
@@ -269,19 +314,22 @@ const renderTimelineChart = async () => {
   if (!timelineChartRef.value) return
   timelineChart?.destroy()
 
-  const labels = timelineRows.value.map(p => p[0])
-  const data = timelineRows.value.map(p => p[1])
+  const labels = timelineLabels.value
+  const datasets = timelineSeries.value
 
   timelineChart = new Chart(timelineChartRef.value, {
     type: 'bar',
     data: {
       labels,
-      datasets: [{ label: 'Activity', data, backgroundColor: '#38bdf8' }]
+      datasets,
     },
     options: {
       responsive: true,
-      plugins: { legend: { display: false } },
-      scales: { x: { ticks: { maxRotation: 45, minRotation: 0 } } }
+      plugins: { legend: { display: true } },
+      scales: {
+        x: { stacked: true, ticks: { maxRotation: 45, minRotation: 0 } },
+        y: { stacked: true, beginAtZero: true }
+      }
     }
   })
 }
