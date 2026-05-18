@@ -225,7 +225,7 @@
                                     </div>
 
                                     <button v-if="friend.isFriend" class="edit-nick-btn"
-                                        @click="editingFriend = friend.friend_id">
+                                        @click="startEditingNickname(friend)">
                                         🖊
                                     </button>
                                 </div>
@@ -244,9 +244,10 @@
                                     </span>
                                 </div>
 
-                                <input v-if="editingFriend === friend.friend_id" v-model="friend.nickname"
+                                <input v-if="editingFriend === friend.friend_id" v-model="pendingNickname"
                                     class="nickname-inline-input" placeholder="Nickname" maxlength="24"
-                                    @blur="finishNicknameEdit(friend)" @keydown.enter="finishNicknameEdit(friend)" />
+                                    @blur="finishNicknameEdit(friend)"
+                                    @keydown.enter.prevent="finishNicknameEdit(friend)" />
                             </div>
                         </div>
 
@@ -515,15 +516,22 @@ const myPower = computed(() =>
     getPowerScores(characterStore.characters)
 )
 const editingFriend = ref<string | null>(null)
+const pendingNickname = ref('')
 
 const finishNicknameEdit = async (
     friend: SocialProfile
 ) => {
     try {
-        await saveNickname(friend)
+        await saveNickname(friend.friend_id, pendingNickname.value.trim())
     } finally {
         editingFriend.value = null
+        pendingNickname.value = ''
     }
+}
+
+const startEditingNickname = (friend: SocialProfile) => {
+    editingFriend.value = friend.friend_id
+    pendingNickname.value = friend.nickname?.trim() || friend.display_name?.trim() || ''
 }
 
 const userId = getUserId()
@@ -753,12 +761,9 @@ const finishUnionEdit = async () => {
     }
 }
 
-const saveNickname = async (friend: SocialProfile) => {
+const saveNickname = async (friendId: string, nickname: string) => {
     try {
-        await store.saveNickname(
-            friend.friend_id,
-            friend.nickname || ''
-        )
+        await store.saveNickname(friendId, nickname)
 
         toast.success('Nickname updated!', {
             position: toast.POSITION.TOP_RIGHT,
