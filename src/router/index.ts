@@ -14,6 +14,8 @@ import KiokuGridPage from '../pages/KiokuGridPage.vue'
 import ProfilePage from '../pages/ProfilePage.vue'
 import AccountComparisonPage from '../pages/AccountComparisonPage.vue'
 import BetaStuff from '../pages/BetaStuff.vue'
+import AnalyticsDashboard from '../pages/AnalyticsDashboard.vue'
+import logEvent from '../utils/analytics'
 
 const base = import.meta.env.BASE_URL
 
@@ -32,6 +34,7 @@ const routes = [
     { path: '/about', name: 'About', component: About },
     { path: '/my-kioku', name: 'My Kioku Viewer', component: AccountHasPage },
     { path: '/gacha-rate', name: 'Gacha Rate+Sim', component: GachaRatePage },
+    { path: '/analytics', name: 'Analytics Dashboard', component: AnalyticsDashboard },
     { path: '/beta', name: 'Beta Settings', component: BetaStuff, meta: { reloadOnLeave: true } },
 ]
 
@@ -49,4 +52,11 @@ router.beforeEach((to, from) => {
     }
 })
 
+router.afterEach((to) => {
+    try {
+        logEvent('page_view', { path: to.fullPath, name: to.name })
+    } catch (err) {
+        console.error('Failed to log page view', err)
+    }
+})
 export default router

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CloudSyncWidget from './components/CloudSyncWidget.vue'
 import { isBeta } from './utils/betaSettings';
-const icon = document.getElementById('app-icon').href
+const icon = (document.getElementById('app-icon') as HTMLLinkElement | null)?.href ?? ''
 const beta = isBeta()
 </script>
 
@@ -34,6 +34,7 @@ const beta = isBeta()
         </div>
         <div v-if="beta">
           <router-link to="/beta">Beta Settings</router-link>
+          <router-link to="/analytics">Analytics</router-link>
         </div>
       </nav>
     </header>

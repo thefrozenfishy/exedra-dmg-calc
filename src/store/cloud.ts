@@ -1,5 +1,6 @@
 import { getSupabase } from "../utils/supabase"
 import { getUserId } from "./user"
+import { logEvent } from '../utils/analytics'
 import type { Character } from "../types/KiokuTypes"
 
 async function createProfile(userId: string) {
@@ -14,7 +15,25 @@ async function createProfile(userId: string) {
     if (error) throw error
 }
 
-export async function createCloudUser(userId: string) {
+const withAnalytics = <T extends (...args: any[]) => Promise<any>>(
+    fn: T,
+    event: string,
+    metadataFn: (args: Parameters<T>) => any = args => ({ ...args })
+) => {
+    return async (...args: Parameters<T>): Promise<ReturnType<T>> => {
+        const result = await fn(...args)
+        console.log("For", event, "got", result)
+        try {
+            await logEvent(event, metadataFn(args))
+        } catch (err) {
+            console.error(`Failed logging analytics ${event}`, err)
+        }
+
+        return result
+    }
+}
+
+async function _createCloudUser(userId: string) {
     const supabase = getSupabase()
 
     const { error } = await supabase
@@ -28,7 +47,7 @@ export async function createCloudUser(userId: string) {
     await createProfile(userId)
 }
 
-export async function saveCharacters(chars: Character[]) {
+async function _saveCharacters(chars: Character[]) {
     const userId = getUserId()
 
     if (!userId) return
@@ -63,7 +82,7 @@ export async function saveCharacters(chars: Character[]) {
     if (error) throw error
 }
 
-export async function loadCharacters() {
+async function _loadCharacters() {
     const userId = getUserId()
 
     if (!userId) return []
@@ -80,7 +99,7 @@ export async function loadCharacters() {
     return data
 }
 
-export async function restoreCloudAccount(userId: string) {
+async function _restoreCloudAccount(userId: string) {
     const supabase = getSupabase()
 
     const { data, error } = await supabase.rpc(
@@ -97,7 +116,7 @@ export async function restoreCloudAccount(userId: string) {
     return true
 }
 
-export async function getFriendCode() {
+async function _getFriendCode() {
     const userId = getUserId()
 
     if (!userId) return null
@@ -115,7 +134,7 @@ export async function getFriendCode() {
     return data.friend_id
 }
 
-export async function getMyProfile() {
+async function _getMyProfile() {
     const userId = getUserId()
 
     if (!userId) return null
@@ -133,7 +152,7 @@ export async function getMyProfile() {
     return data
 }
 
-export async function updateDisplayName(displayName: string) {
+async function _updateDisplayName(displayName: string) {
     const userId = getUserId()
 
     if (!userId) return
@@ -150,7 +169,7 @@ export async function updateDisplayName(displayName: string) {
     if (error) throw error
 }
 
-export async function updateprofile_icon(profile_icon: number) {
+async function _updateprofile_icon(profile_icon: number) {
     const userId = getUserId()
 
     if (!userId) return
@@ -165,7 +184,7 @@ export async function updateprofile_icon(profile_icon: number) {
     if (error) throw error
 }
 
-export async function getAllUnionNames(): Promise<string[]> {
+async function _getAllUnionNames(): Promise<string[]> {
     const supabase = getSupabase()
 
     const { data, error } = await supabase
@@ -184,7 +203,7 @@ export async function getAllUnionNames(): Promise<string[]> {
     return [...set].sort((a, b) => a.localeCompare(b))
 }
 
-export async function updateUnionName(unionName: string) {
+async function _updateUnionName(unionName: string) {
     const userId = getUserId()
 
     if (!userId) return
@@ -203,7 +222,7 @@ export async function updateUnionName(unionName: string) {
     if (error) throw error
 }
 
-export async function saveFriendNickname(
+async function _saveFriendNickname(
     friendId: string,
     nickname: string
 ) {
@@ -224,7 +243,7 @@ export async function saveFriendNickname(
     if (error) throw error
 }
 
-export async function setFriendFavorite(
+async function _setFriendFavorite(
     friendId: string,
     favorite: boolean
 ) {
@@ -245,7 +264,7 @@ export async function setFriendFavorite(
     if (error) throw error
 }
 
-export async function getFriends() {
+async function _getFriends() {
     const userId = getUserId()
 
     if (!userId) return []
@@ -288,7 +307,7 @@ export async function getFriends() {
     })
 }
 
-export async function getProfile(friend_id: string) {
+async function _getProfile(friend_id: string) {
     const userId = getUserId()
 
     if (!userId) return null
@@ -311,7 +330,7 @@ export async function getProfile(friend_id: string) {
     }
 }
 
-export async function addAllFriends() {
+async function _addAllFriends() {
     const userId = getUserId()
     if (!userId) return
 
@@ -345,7 +364,7 @@ export async function addAllFriends() {
     if (error) throw error
 }
 
-export async function addFriendByCode(friendCode: string) {
+async function _addFriendByCode(friendCode: string) {
     const userId = getUserId()
 
     if (!userId) return
@@ -371,7 +390,7 @@ export async function addFriendByCode(friendCode: string) {
     if (error) throw error
 }
 
-export async function removeFriend(friendId: string) {
+async function _removeFriend(friendId: string) {
     const userId = getUserId()
 
     if (!userId) return
@@ -387,7 +406,7 @@ export async function removeFriend(friendId: string) {
     if (error) throw error
 }
 
-export async function getUnionMembers(
+async function _getUnionMembers(
     unionName: string
 ) {
     const supabase = getSupabase()
@@ -404,7 +423,7 @@ export async function getUnionMembers(
     return data
 }
 
-export async function loadCharactersByFriendCode(friendCode: string) {
+async function _loadCharactersByFriendCode(friendCode: string) {
     const supabase = getSupabase()
 
     const { data, error } = await supabase.rpc(
@@ -416,7 +435,7 @@ export async function loadCharactersByFriendCode(friendCode: string) {
 
     if (error) throw error
 
-    return data.map(row => ({
+    return (data as any[]).map(row => ({
         enabled: row.enabled,
 
         dupes: row.dupes,
@@ -436,7 +455,7 @@ export async function loadCharactersByFriendCode(friendCode: string) {
     }))
 }
 
-export async function updateFriendCode(
+async function _updateFriendCode(
     friendCode: string
 ) {
     const userId = getUserId()
@@ -468,3 +487,110 @@ export async function updateFriendCode(
         throw error
     }
 }
+
+export const createCloudUser = withAnalytics(
+    _createCloudUser,
+    'create_cloud_user'
+)
+
+export const saveCharacters = withAnalytics(
+    _saveCharacters,
+    'save_characters',
+    ([chars]) => ({ characterCount: chars?.length ?? 0 })
+)
+
+export const updateDisplayName = withAnalytics(
+    _updateDisplayName,
+    'update_display_name'
+)
+
+export const updateprofile_icon = withAnalytics(
+    _updateprofile_icon,
+    'update_profile_icon'
+)
+
+export const updateUnionName = withAnalytics(
+    _updateUnionName,
+    'update_union_name'
+)
+
+export const saveFriendNickname = withAnalytics(
+    _saveFriendNickname,
+    'save_friend_nickname'
+)
+
+export const setFriendFavorite = withAnalytics(
+    _setFriendFavorite,
+    'set_friend_favorite'
+)
+
+export const addAllFriends = withAnalytics(
+    _addAllFriends,
+    'add_all_friends'
+)
+
+export const addFriendByCode = withAnalytics(
+    _addFriendByCode,
+    'add_friend',
+    ([friendCode]) => ({ friendCode })
+)
+
+export const loadCharactersByFriendCode = withAnalytics(
+    _loadCharactersByFriendCode,
+    'load_characters_by_friend_code',
+    ([friendCode]) => ({ friendCode })
+)
+
+export const removeFriend = withAnalytics(
+    _removeFriend,
+    'remove_friend',
+    ([friendId]) => ({ friendId })
+)
+
+export const getFriendCode = withAnalytics(
+    _getFriendCode,
+    'get_friend_code'
+)
+
+export const loadCharacters = withAnalytics(
+    _loadCharacters,
+    'load_characters'
+)
+
+export const restoreCloudAccount = withAnalytics(
+    _restoreCloudAccount,
+    'restore_cloud_account'
+)
+
+export const getMyProfile = withAnalytics(
+    _getMyProfile,
+    'get_my_profile'
+)
+
+export const getAllUnionNames = withAnalytics(
+    _getAllUnionNames,
+    'get_all_union_names'
+)
+
+export const getFriends = withAnalytics(
+    _getFriends,
+    'get_friends'
+)
+
+export const getProfile = withAnalytics(
+    _getProfile,
+    'get_profile',
+    ([friend_id]) => ({ friend_id })
+)
+
+export const getUnionMembers = withAnalytics(
+    _getUnionMembers,
+    'get_union_members',
+    ([unionName]) => ({ unionName })
+)
+
+export const updateFriendCode = withAnalytics(
+    _updateFriendCode,
+    'update_friend_code',
+    ([friendCode]) => ({ friendCode })
+)
