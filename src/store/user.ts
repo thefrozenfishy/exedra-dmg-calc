@@ -7,7 +7,7 @@ export function setUserId(userId: string) {
 }
 
 export function createUserId() {
-    const id = crypto.randomUUID()
+    const id = localStorage.getItem("tempUUID") ?? crypto.randomUUID()
 
     setUserId(id)
 
