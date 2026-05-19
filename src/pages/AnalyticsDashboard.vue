@@ -201,10 +201,10 @@ const rows = ref<AnalyticsRowWithDisplay[]>([])
 const totalEvents = computed(() => rows.value.length)
 const eventRows = computed(() => {
   const counts: Record<string, number> = {}
-  for (const row of rows.value) {
+  for (const row of filteredRows.value) {
     counts[row.event] = (counts[row.event] ?? 0) + 1
   }
-  return Object.entries(counts)
+  return Object.entries(counts).sort((a, b) => b[1] - a[1])
 })
 
 const selectedUser = ref<string>('all')
