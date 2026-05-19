@@ -191,9 +191,12 @@ const windowOptions = [3, 7, 14, 30, 90]
 const getDisplayUser = (row: AnalyticsRowWithDisplay) => row.display_user
 
 const userOptions = computed(() => {
-  const set = new Set<string>()
-  for (const r of rows.value) set.add(getDisplayUser(r))
-  return [...set].sort()
+  const counts: Record<string, number> = {}
+  for (const r of rows.value) {
+    const user = getDisplayUser(r)
+    counts[user] = (counts[user] ?? 0) + 1
+  }
+  return Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([user]) => user)
 })
 
 const eventOptions = computed(() => [...new Set(rows.value.map(r => r.event))].sort())
