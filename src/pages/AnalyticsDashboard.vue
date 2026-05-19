@@ -104,6 +104,30 @@
 
     <section class="analytics-section">
       <div class="section-header">
+        <h2>Page views by day / user</h2>
+      </div>
+      <table class="analytics-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>User</th>
+            <th>Path</th>
+            <th>Views</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="([date, user, path, count], index) in pageViewsByDayUserRows" :key="`${date}-${user}-${path}`">
+            <td>{{ date }}</td>
+            <td>{{ user }}</td>
+            <td>{{ path }}</td>
+            <td>{{ count }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="analytics-section">
+      <div class="section-header">
         <h2>Top events</h2>
       </div>
       <table class="analytics-table">
@@ -207,15 +231,41 @@ const filteredRows = computed(() => rows.value.filter(r => {
   return true
 }))
 
+const normalizePagePath = (path: string) => path.split('?')[0].replace(/\/+$/, '') || '/'
+
 const pageViewRows = computed(() => {
   const counts: Record<string, number> = {}
   for (const row of rows.value) {
     if (selectedUser.value !== 'all' && getDisplayUser(row) !== selectedUser.value) continue
     if (row.event !== 'page_view') continue
-    const path = row.metadata?.path || row.metadata?.route || 'unknown'
+    const rawPath = row.metadata?.path || row.metadata?.route || 'unknown'
+    const path = normalizePagePath(rawPath)
     counts[path] = (counts[path] ?? 0) + 1
   }
   return Object.entries(counts).sort((a, b) => b[1] - a[1])
+})
+
+const pageViewsByDayUserRows = computed(() => {
+  const counts: Record<string, number> = {}
+
+  for (const row of rows.value) {
+    if (selectedUser.value !== 'all' && getDisplayUser(row) !== selectedUser.value) continue
+    if (row.event !== 'page_view') continue
+
+    const date = new Date(row.created_at).toISOString().slice(0, 10)
+    const user = getDisplayUser(row)
+    const path = normalizePagePath(row.metadata?.path || row.metadata?.route || 'unknown')
+    const key = `${date}||${user}||${path}`
+
+    counts[key] = (counts[key] ?? 0) + 1
+  }
+
+  return Object.entries(counts)
+    .map(([key, count]) => {
+      const [date, user, path] = key.split('||')
+      return [date, user, path, count] as [string, string, string, number]
+    })
+    .sort((a, b) => a[0].localeCompare(b[0]) || a[1].localeCompare(b[1]) || a[2].localeCompare(b[2]))
 })
 
 const timelineLabels = computed(() => {

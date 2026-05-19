@@ -1,5 +1,6 @@
 import { KiokuConstants, KiokuElement, KiokuRole, type Character } from "../types/KiokuTypes"
 import { isBeta, useBetaNumber, useBetaValue } from "../utils/betaSettings"
+import { skewnormCdf } from "../utils/mathFuncs"
 
 export type PowerScores = {
     total: number
@@ -21,11 +22,16 @@ const COLLAB = new Set([
 
 function getWhaleMultiplier(ch: Character): number {
     const now = Date.now()
+    const monthMs = 1000 * 60 * 60 * 24 * 30
 
-    const monthMs = useBetaNumber("whaleMonthMs")
     const permMonths = useBetaNumber("whalePermanentDurationMonths")
-    const releaseMonths = useBetaNumber("whaleReleaseDurationMonths")
-    const floor = useBetaNumber("whaleDecayFloor")
+    const permMult = useBetaNumber("whalePermanentMultiplier")
+    const permFloor = useBetaNumber("whalePermanentDecayFloor")
+
+    const limitedMonths = useBetaNumber("whaleLimitedDurationMonths")
+    const limitedMult = useBetaNumber("whaleLimitedMultiplier")
+    const limitedFloor = useBetaNumber("whaleLimitedDecayFloor")
+
     const collabMult = useBetaNumber("whaleCollabMultiplier")
 
     if (COLLAB.has(ch.name)) {
@@ -37,28 +43,28 @@ function getWhaleMultiplier(ch: Character): number {
 
     if (permanentDate) {
         if (permanentDate.getTime() > now) {
-            return collabMult
+            return permMult
         }
 
         const monthsSincePermanent =
             (now - permanentDate.getTime()) / monthMs
 
         if (monthsSincePermanent >= permMonths) {
-            return floor
+            return permFloor
         }
 
         const progress = monthsSincePermanent / permMonths
-        return collabMult - progress * (collabMult - floor)
+        return permMult - progress * (permMult - permFloor)
     }
 
     const monthsSince = (now - releaseDate.getTime()) / monthMs
 
-    if (monthsSince >= releaseMonths) {
-        return 1
+    if (monthsSince >= limitedMonths) {
+        return limitedFloor
     }
 
-    const progress = monthsSince / releaseMonths
-    return collabMult - progress * (collabMult - 1)
+    const progress = monthsSince / limitedMonths
+    return limitedMult - progress * (limitedMult - limitedFloor)
 }
 
 function getCharacterPower(ch: Character): number {
@@ -119,6 +125,13 @@ function getMaxPower(ch: Character, getPower: (character: Character) => number):
     return getPower(maxed)
 }
 
+// Default is March 27, 2025 in milliseconds
+function getModelF2PWhalePower(startDateMs: number = 1742947200000): number {
+    const monthMs = 1000 * 60 * 60 * 24 * 30
+    const months = (Math.floor(Date.now()) - startDateMs) / monthMs
+    return 247 * months + 4600 * (1 - Math.exp(-months / 4)) + 300 
+}
+
 function remap(v: number, min: number, max: number, normExp: number): number {
     const normalized = Math.pow((v - min) / (max - min), normExp)
     if (isBeta()) console.debug("Remapping:", { before: v, after: normalized })
@@ -130,6 +143,23 @@ function normalize(current: number, max: number, minNorm: number, maxNorm: numbe
     if (isBeta()) console.debug("Running normalize:", { current, max, minNorm, maxNorm, normExp })
     if (max <= 0) return 0
     return remap(current / max, minNorm, maxNorm, normExp)
+}
+
+function normalizeWhale(current: number, max: number, minNorm: number, maxNorm: number): number {
+    const a = useBetaNumber("whaleSkewNormA")
+    const loc = useBetaNumber("whaleSkewNormLoc") 
+    const scale = useBetaNumber("whaleSkewNormScale")
+
+    if (isBeta()) console.debug("Running normalizeWhale:", { current, max, minNorm, maxNorm, a, loc, scale })
+    if (max <= 0) return 0
+
+    // remap
+    // tho min and max are probably not needed anymore
+    const v = (current / max - minNorm) / (maxNorm - minNorm)
+    const normalized = skewnormCdf(v, a, loc, scale)
+    if (isBeta()) console.debug("Remapping Whale:", { before: v, after: normalized })
+    if (Number.isNaN(normalized)) return 0
+    return Math.round(Math.max(0, Math.min(1, normalized)) * 100)
 }
 
 function applyGroupedDiminishingReturns(
@@ -201,8 +231,6 @@ export function getPowerScores(chars: Character[]): PowerScores {
     for (const ch of fiveStars) {
         const pwrRatio = getCharacterPower(ch) / getMaxPower(ch, getCharacterPower)
 
-        const whaleRatio = getCharacterWhalePower(ch) / getMaxPower(ch, getCharacterWhalePower)
-
         const roleScaling =
             useBetaValue<Record<string, number>>("roleScalings")[ch.role] ?
                 Number(useBetaValue<Record<string, number>>("roleScalings")[ch.role]) : useBetaNumber("defaultScaling")
@@ -215,9 +243,9 @@ export function getPowerScores(chars: Character[]): PowerScores {
         const scaledMax = roleScaling * kiokuScaling
         const scaledCurrent = pwrRatio * scaledMax
 
-        const whaleScaledMax = getWhaleMultiplier(ch) / (roleScaling * kiokuScaling)
-
-        const whaleScaledCurrent = whaleRatio * whaleScaledMax
+        const whaleMetaMultiplier = 1 + (1 / (roleScaling * kiokuScaling) - 1) * useBetaNumber("whaleMetaMultiplier")
+        const whaleScaledMax = getMaxPower(ch, getCharacterWhalePower) * getWhaleMultiplier(ch) * whaleMetaMultiplier
+        const whaleScaledCurrent = getCharacterWhalePower(ch) * getWhaleMultiplier(ch) * whaleMetaMultiplier
 
         const data = { role: ch.role, element: ch.element }
 
@@ -240,7 +268,16 @@ export function getPowerScores(chars: Character[]): PowerScores {
         }
     }
 
-
+    const modelF2PWhalePower = getModelF2PWhalePower()
+    const whaleValue = totalWhaleCurrent.reduce((sum, entry) => sum + entry.value, 0)
+    const maxWhaleValue = totalWhaleMax.reduce((sum, entry) => sum + entry.value, 0)
+    const diffWithF2P = Math.max(0, whaleValue - modelF2PWhalePower)
+    const maxDiffWithF2P = Math.max(0, maxWhaleValue - modelF2PWhalePower)
+    console.debug("Model F2 Whale Power:", modelF2PWhalePower)
+    console.debug("Total Whale Value:", whaleValue)
+    console.debug("Max Whale Value:", maxWhaleValue)
+    console.debug("Difference with F2P:", diffWithF2P)
+    console.debug("Max Difference with F2P:", maxDiffWithF2P)
 
     return {
         total: normalize(
@@ -250,12 +287,11 @@ export function getPowerScores(chars: Character[]): PowerScores {
             useBetaNumber("defaultNormalizeMax"),
             useBetaNumber("defaultNormalizationExponent"),
         ),
-        whale: normalize(
-            applyGroupedDiminishingReturns(totalWhaleCurrent),
-            applyGroupedDiminishingReturns(totalWhaleMax),
+        whale: normalizeWhale(
+            diffWithF2P,
+            maxDiffWithF2P,
             useBetaNumber("whaleNormalizeMin"),
             useBetaNumber("whaleNormalizeMax"),
-            useBetaNumber("whaleNormalizationExponent")
         ),
         [KiokuRole.Attacker]: normalize(
             applyGroupedDiminishingReturns(roleCurrent[KiokuRole.Attacker]),
