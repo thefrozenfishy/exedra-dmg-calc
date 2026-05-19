@@ -204,7 +204,7 @@ const eventRows = computed(() => {
   for (const row of rows.value) {
     counts[row.event] = (counts[row.event] ?? 0) + 1
   }
-  return Object.entries(counts).sort((a, b) => b[1] - a[1])
+  return Object.entries(counts)
 })
 
 const selectedUser = ref<string>('all')
@@ -217,10 +217,13 @@ const getDisplayUser = (row: AnalyticsRowWithDisplay) => row.display_user
 const userOptions = computed(() => {
   const counts: Record<string, number> = {}
   for (const r of rows.value) {
+    if (selectedEvent.value !== 'all' && r.event !== selectedEvent.value) continue
     const user = getDisplayUser(r)
     counts[user] = (counts[user] ?? 0) + 1
   }
-  return Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([user]) => user)
+  return Object.entries(counts)
+    .sort((a, b) => a[1] - b[1] || a[0].localeCompare(b[0]))
+    .map(([user]) => user)
 })
 
 const eventOptions = computed(() => [...new Set(rows.value.map(r => r.event))].sort())
@@ -296,11 +299,42 @@ const timelineSeries = computed(() => {
       userMap[user][dateKey] = (userMap[user][dateKey] ?? 0) + 1
     }
 
-    return Object.keys(userMap).sort().map((user, idx) => ({
-      label: user,
-      data: labels.map(date => userMap[user][date] ?? 0),
-      backgroundColor: getColorForIndex(idx),
-    }))
+    return Object.entries(userMap)
+      .map(([user, data]) => ({
+        user,
+        total: Object.values(data).reduce((sum, count) => sum + count, 0),
+        data,
+      }))
+      .sort((a, b) => b.total - a.total || a.user.localeCompare(b.user))
+      .map((entry, idx) => ({
+        label: entry.user,
+        data: labels.map(date => entry.data[date] ?? 0),
+        backgroundColor: getColorForIndex(idx),
+      }))
+  }
+
+  const pageRows = filteredRows.value.filter(row => row.event === 'page_view')
+  if (pageRows.length > 0) {
+    const pageMap: Record<string, Record<string, number>> = {}
+    for (const row of pageRows) {
+      const path = normalizePagePath(row.metadata?.path || row.metadata?.route || 'unknown')
+      const dateKey = new Date(row.created_at).toISOString().slice(0, 10)
+      pageMap[path] = pageMap[path] ?? {}
+      pageMap[path][dateKey] = (pageMap[path][dateKey] ?? 0) + 1
+    }
+
+    return Object.entries(pageMap)
+      .map(([path, data]) => ({
+        path,
+        total: Object.values(data).reduce((sum, count) => sum + count, 0),
+        data,
+      }))
+      .sort((a, b) => b.total - a.total || a.path.localeCompare(b.path))
+      .map((entry, idx) => ({
+        label: entry.path,
+        data: labels.map(date => entry.data[date] ?? 0),
+        backgroundColor: getColorForIndex(idx),
+      }))
   }
 
   const userCounts: Record<string, number> = {}
