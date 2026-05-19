@@ -204,12 +204,15 @@ const filteredRows = computed(() => rows.value.filter(r => {
   return true
 }))
 
+const normalizePagePath = (path: string) => path.split('?')[0].replace(/\/+$/, '') || '/'
+
 const pageViewRows = computed(() => {
   const counts: Record<string, number> = {}
   for (const row of rows.value) {
     if (selectedUser.value !== 'all' && getDisplayUser(row) !== selectedUser.value) continue
     if (row.event !== 'page_view') continue
-    const path = row.metadata?.path || row.metadata?.route || 'unknown'
+    const rawPath = row.metadata?.path || row.metadata?.route || 'unknown'
+    const path = normalizePagePath(rawPath)
     counts[path] = (counts[path] ?? 0) + 1
   }
   return Object.entries(counts).sort((a, b) => b[1] - a[1])
