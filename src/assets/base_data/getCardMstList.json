@@ -1871,6 +1871,23 @@
     },
     {
         "advPosition": 0,
+        "cardMstId": 4200080,
+        "characterMstId": 0,
+        "element": 0,
+        "illustrator": "",
+        "name": "A Serene Symbiosis",
+        "passiveSkill1": 4168,
+        "passiveSkill2": 0,
+        "passiveSkill3": 0,
+        "rarity": 5,
+        "releaseTime": "2026-05-20T12:00:00+09:00",
+        "resourceName": "art_04_00_0042",
+        "source": "",
+        "unlockIdCsv": "53",
+        "unlockTypeCsv": "2"
+    },
+    {
+        "advPosition": 0,
         "cardMstId": 4300001,
         "characterMstId": 0,
         "element": 0,
