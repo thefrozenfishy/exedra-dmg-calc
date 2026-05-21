@@ -1,5 +1,52 @@
 <template>
     <div class="profile-page">
+        <div v-if="isBeta()">
+            <button @click="showGraph = !showGraph">{{ showGraph ? 'Hide' : 'Show' }} graph</button>
+
+            <section v-if="showGraph" class="profile-section analytics-section">
+                <h2>Power Analytics</h2>
+                <div>
+                    <button @click="loadPlayers">Load more players into the graph</button>
+                    <button @click="exportData">Export Data</button>
+                </div>
+                <div class="analytics-controls">
+                    <label>
+                        Graph Mode
+                        <select v-model="graphMode">
+                            <option value="scatter">
+                                Scatter Plot
+                            </option>
+
+                            <option value="percentile">
+                                Percentile Curve
+                            </option>
+                        </select>
+                    </label>
+
+                    <label>
+                        X Axis
+                        <select v-model="selectedXAxis">
+                            <option v-for="opt in graphOptions" :key="opt.value" :value="opt.value">
+                                {{ opt.label }}
+                            </option>
+                        </select>
+                    </label>
+
+                    <label v-if="graphMode === 'scatter'">
+                        Y Axis
+                        <select v-model="selectedYAxis">
+                            <option v-for="opt in graphOptions" :key="opt.value" :value="opt.value">
+                                {{ opt.label }}
+                            </option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="chart-wrapper analytics-chart">
+                    <canvas ref="analyticsCanvasRef"></canvas>
+                </div>
+            </section>
+        </div>
         <h1>Profile & Friends</h1>
 
         <div v-if="!userId" class="offline-box">
@@ -347,50 +394,6 @@
         </p>
         <p>If you think the calculation can be improved, talk to me about it!</p>
     </div>
-    <section v-if="isBeta()" class="profile-section analytics-section">
-        <h2>Power Analytics</h2>
-
-        <div class="analytics-controls">
-            <label>
-                Graph Mode
-                <select v-model="graphMode">
-                    <option value="scatter">
-                        Scatter Plot
-                    </option>
-
-                    <option value="percentile">
-                        Percentile Curve
-                    </option>
-                </select>
-            </label>
-
-            <label>
-                X Axis
-                <select v-model="selectedXAxis">
-                    <option v-for="opt in graphOptions" :key="opt.value" :value="opt.value">
-                        {{ opt.label }}
-                    </option>
-                </select>
-            </label>
-
-            <label v-if="graphMode === 'scatter'">
-                Y Axis
-                <select v-model="selectedYAxis">
-                    <option v-for="opt in graphOptions" :key="opt.value" :value="opt.value">
-                        {{ opt.label }}
-                    </option>
-                </select>
-            </label>
-        </div>
-
-        <div class="chart-wrapper analytics-chart">
-            <canvas ref="analyticsCanvasRef"></canvas>
-        </div>
-    </section>
-    <div v-if="isBeta()">
-        <button @click="addFriends">Add all possible players as friends</button>
-        <button @click="exportData">Export Data</button>
-    </div>
 </template>
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref, computed, watch } from 'vue'
@@ -400,7 +403,6 @@ import { getUserId } from '../store/user'
 import { getPowerScores } from '../models/PowerValue'
 import { useCharacterStore } from '../store/characterStore'
 import { useSetting } from '../store/settingsStore'
-import { addAllFriends } from '../store/cloud'
 import { KiokuRole } from '../types/KiokuTypes'
 import {
     Chart,
@@ -418,11 +420,10 @@ import { isBeta } from '../utils/betaSettings'
 const store = useFriendStore()
 const characterStore = useCharacterStore()
 
-const isTFF = localStorage.getItem('isTFF') === 'true'
-const addFriends = async () => {
-    await addAllFriends()
+const loadPlayers = async () => {
+    await store.loadFriends(true)
     toast.success(
-        'Added all friends!',
+        'Added all players!',
         {
             position: toast.POSITION.TOP_RIGHT,
             icon: false,
@@ -605,7 +606,7 @@ const selectAvatar = async (id: number) => {
 
 type SortModes = 'default' | 'name' | 'total' | 'whale' | 'attacker' | 'buffer' | 'debuffer' | 'breaker' | 'defender' | 'healer' | "similarity"
 const sortMode = useSetting<SortModes>("sortMode", "default")
-
+const showGraph = useSetting<boolean>("showAnalyticsGraph", false)
 
 const sortedFriends = computed(() => {
     const arr = [...store.friends]
@@ -835,7 +836,7 @@ const analyticsCanvasRef = ref<HTMLCanvasElement | null>(null)
 
 let analyticsChart: Chart | null = null
 
-const graphMode = ref<'scatter' | 'percentile'>('percentile')
+const graphMode = useSetting<'scatter' | 'percentile'>("betaGraphMode", "percentile")
 
 const graphOptions = [
     {
@@ -876,8 +877,8 @@ const graphOptions = [
     }
 ]
 
-const selectedXAxis = ref<any>('total')
-const selectedYAxis = ref<any>('whale')
+const selectedXAxis = useSetting<string>('betaGraphSelectedXAxis', 'total')
+const selectedYAxis = useSetting<string>('betaGraphSelectedYAxis', 'whale')
 
 const analyticsPlayers = computed(() => {
     const list = []
@@ -951,6 +952,12 @@ const renderAnalyticsChart = () => {
                         x: {
                             min: 0,
                             max: 100,
+                            ticks: {
+                                stepSize: 10
+                            },
+                            grid: {
+                                color: 'rgba(140, 100, 190, 0.35)'
+                            },
                             title: {
                                 display: true,
                                 text: selectedXAxis.value
@@ -959,6 +966,12 @@ const renderAnalyticsChart = () => {
                         y: {
                             min: 0,
                             max: 100,
+                            ticks: {
+                                stepSize: 10
+                            },
+                            grid: {
+                                color: 'rgba(140, 100, 190, 0.35)'
+                            },
                             title: {
                                 display: true,
                                 text: selectedYAxis.value
@@ -1016,6 +1029,12 @@ const renderAnalyticsChart = () => {
                         min: 0,
                         max: 100,
                         type: 'linear',
+                        ticks: {
+                            stepSize: 10
+                        },
+                        grid: {
+                            color: 'rgba(140, 100, 190, 0.35)'
+                        },
                         title: {
                             display: true,
                             text: selectedXAxis.value
@@ -1024,13 +1043,17 @@ const renderAnalyticsChart = () => {
                     y: {
                         min: 0,
                         max: 100,
+                        ticks: {
+                            stepSize: 10,
+                            callback: v => `${v}%`
+                        },
+                        grid: {
+                            color: 'rgba(140, 100, 190, 0.35)'
+                        },
                         title: {
                             display: true,
                             text:
                                 '% of Players Below'
-                        },
-                        ticks: {
-                            callback: v => `${v}%`
                         }
                     }
                 },

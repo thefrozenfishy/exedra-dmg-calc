@@ -14,6 +14,7 @@ import {
     setFriendFavorite,
     updateprofile_icon,
     getAllUnionNames,
+    loadAllPlayers,
 } from '../store/cloud'
 import { getPowerScores, PowerScores } from '../models/PowerValue'
 import { useCharacterStore } from '../store/characterStore'
@@ -96,10 +97,15 @@ export const useFriendStore = defineStore('friendStore', () => {
         }
     }
 
-    const loadFriends = async () => {
+    const loadFriends = async (all = false) => {
         try {
             friends.value = []
-            const loadedFriends = await getFriends()
+            let loadedFriends;
+            if (all) {
+                loadedFriends = await loadAllPlayers()
+            } else {
+                loadedFriends = await getFriends()
+            }
             friends.value = loadedFriends
 
             if (unionName.value) {
@@ -253,5 +259,6 @@ export const useFriendStore = defineStore('friendStore', () => {
         loadMyProfile,
         initialize,
         unionOptions,
+        loadFriends,
     }
 })

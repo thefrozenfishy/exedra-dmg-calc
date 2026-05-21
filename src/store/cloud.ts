@@ -330,38 +330,27 @@ async function _getProfile(friend_id: string) {
     }
 }
 
-async function _addAllFriends() {
-    const userId = getUserId()
-    if (!userId) return
-
+async function _loadAllPlayers() {
     const supabase = getSupabase()
 
-    const [{ data: profiles }, myCode, { data: existing }] = await Promise.all([
-        supabase.from('public_profiles').select('friend_id'),
-        await getFriendCode(),
-        supabase.from('user_friends').select('friend_id').eq('user_id', userId)
-    ])
+    const { data: profiles, error: profileError } = await supabase
+        .from('public_profiles')
+        .select('*')
 
-    if (!profiles) return
+    if (profileError) throw profileError
 
-    const existingSet = new Set(existing?.map(e => e.friend_id) ?? [])
-
-    const rows = profiles
-        .filter(p => p.friend_id !== myCode)
-        .filter(p => !existingSet.has(p.friend_id))
-        .map(p => ({
-            user_id: userId,
-            friend_id: p.friend_id,
-            nickname: ''
-        }))
-
-    if (rows.length === 0) return
-
-    const { error } = await supabase
-        .from('user_friends')
-        .insert(rows)
-
-    if (error) throw error
+    return profiles.map(profile => {
+        return {
+            friend_id: profile.friend_id,
+            nickname: '',
+            display_name: profile?.display_name || 'Unnamed',
+            union_name: profile?.union_name || '',
+            profile_icon: profile?.profile_icon,
+            favorite: false,
+            isFriend: true,
+            isUnionMember: false,
+        }
+    })
 }
 
 async function _addFriendByCode(friendCode: string) {
@@ -524,9 +513,9 @@ export const setFriendFavorite = withAnalytics(
     'set_friend_favorite'
 )
 
-export const addAllFriends = withAnalytics(
-    _addAllFriends,
-    'add_all_friends'
+export const loadAllPlayers = withAnalytics(
+    _loadAllPlayers,
+    'load_all_players'
 )
 
 export const addFriendByCode = withAnalytics(
