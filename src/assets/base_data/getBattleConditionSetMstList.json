@@ -15045,6 +15045,16 @@
         "description": "バトル開始から自分の行動が7回目以降、連続行動の2回目"
     },
     {
+        "battleConditionMstIdCsv": "399,3,7",
+        "battleConditionSetMstId": 3038,
+        "description": "魔力が8個で必殺技を使用したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,655,6",
+        "battleConditionSetMstId": 3039,
+        "description": "行動者は味方+敵全体に対して1以上のダメージを与えたとき+戦闘スキル"
+    },
+    {
         "battleConditionMstIdCsv": "3,1053",
         "battleConditionSetMstId": 3040,
         "description": "自身の経過ターンが3ターン未満"
@@ -15508,5 +15518,310 @@
         "battleConditionMstIdCsv": "1513,3,6,1332,1669",
         "battleConditionSetMstId": 3138,
         "description": "自身がプレイヤー側のユニットのとき、行動者は自分、戦闘スキルを使用、攻撃を与えた、攻撃が命中した敵数が5体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "887",
+        "battleConditionSetMstId": 3139,
+        "description": "トークンが8未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1459",
+        "battleConditionSetMstId": 3141,
+        "description": "行動者は敵、自分がダメージを受けなかった"
+    },
+    {
+        "battleConditionMstIdCsv": "3,267,977",
+        "battleConditionSetMstId": 3142,
+        "description": "自身のターン経過が4ターン以上、7ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,970",
+        "battleConditionSetMstId": 3143,
+        "description": "自身のターン経過が7ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "3,970,1060",
+        "battleConditionSetMstId": 3144,
+        "description": "自身のターン経過が7ターン以上、10ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,263",
+        "battleConditionSetMstId": 3145,
+        "description": "自身のターン経過が10ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "150,274",
+        "battleConditionSetMstId": 3146,
+        "description": "バトル開始から自分の行動が4回目 AND  連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "151,273",
+        "battleConditionSetMstId": 3147,
+        "description": "バトル開始から自分の行動が5回目 AND  連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "151,274",
+        "battleConditionSetMstId": 3148,
+        "description": "バトル開始から自分の行動が5回目 AND  連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "152,273",
+        "battleConditionSetMstId": 3149,
+        "description": "バトル開始から自分の行動が6回目 AND  連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "152,274",
+        "battleConditionSetMstId": 3150,
+        "description": "バトル開始から自分の行動が6回目 AND  連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1973,273",
+        "battleConditionSetMstId": 3151,
+        "description": "自分が3ターンごとに（ターン7から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1973,274",
+        "battleConditionSetMstId": 3152,
+        "description": "自分が3ターンごとに（ターン7から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1973,275",
+        "battleConditionSetMstId": 3153,
+        "description": "自分が3ターンごとに（ターン7から） AND 連続行動の3回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1974,273",
+        "battleConditionSetMstId": 3154,
+        "description": "自分が3ターンごとに（ターン8から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1974,274",
+        "battleConditionSetMstId": 3155,
+        "description": "自分が3ターンごとに（ターン8から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1974,275",
+        "battleConditionSetMstId": 3156,
+        "description": "自分が3ターンごとに（ターン8から） AND 連続行動の3回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1975,273",
+        "battleConditionSetMstId": 3157,
+        "description": "自分が3ターンごとに（ターン9から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1975,274",
+        "battleConditionSetMstId": 3158,
+        "description": "自分が3ターンごとに（ターン9から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "1975,275",
+        "battleConditionSetMstId": 3159,
+        "description": "自分が3ターンごとに（ターン9から） AND 連続行動の3回目"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1101",
+        "battleConditionSetMstId": 3165,
+        "description": "自軍にクリティカルダメージが発生しなかった場合"
+    },
+    {
+        "battleConditionMstIdCsv": "267,977",
+        "battleConditionSetMstId": 3203,
+        "description": "バトル開始から自分の行動が4回目以上、7回目未満"
+    },
+    {
+        "battleConditionMstIdCsv": "970",
+        "battleConditionSetMstId": 3204,
+        "description": "バトル開始から自分の行動が7回目以上"
+    },
+    {
+        "battleConditionMstIdCsv": "654,3,1603",
+        "battleConditionSetMstId": 3206,
+        "description": "自身のターン中に行動対象がブレイク中の場合+ダメージが1以上"
+    },
+    {
+        "battleConditionMstIdCsv": "306,916",
+        "battleConditionSetMstId": 3237,
+        "description": "行動タイプが追撃/反撃 AND 攻撃されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "90,273",
+        "battleConditionSetMstId": 3246,
+        "description": "9ターンごと（1ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "90,274",
+        "battleConditionSetMstId": 3247,
+        "description": "9ターンごと（1ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "91,273",
+        "battleConditionSetMstId": 3248,
+        "description": "9ターンごと（2ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "91,274",
+        "battleConditionSetMstId": 3249,
+        "description": "9ターンごと（2ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "92,273",
+        "battleConditionSetMstId": 3250,
+        "description": "9ターンごと（3ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "92,274",
+        "battleConditionSetMstId": 3251,
+        "description": "9ターンごと（3ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "93,273",
+        "battleConditionSetMstId": 3252,
+        "description": "9ターンごと（4ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "93,274",
+        "battleConditionSetMstId": 3253,
+        "description": "9ターンごと（4ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "94,273",
+        "battleConditionSetMstId": 3254,
+        "description": "9ターンごと（5ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "94,274",
+        "battleConditionSetMstId": 3255,
+        "description": "9ターンごと（5ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "95,273",
+        "battleConditionSetMstId": 3256,
+        "description": "9ターンごと（6ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "95,274",
+        "battleConditionSetMstId": 3257,
+        "description": "9ターンごと（6ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "96,273",
+        "battleConditionSetMstId": 3258,
+        "description": "9ターンごと（7ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "96,274",
+        "battleConditionSetMstId": 3259,
+        "description": "9ターンごと（7ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "97,273",
+        "battleConditionSetMstId": 3260,
+        "description": "9ターンごと（8ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "97,274",
+        "battleConditionSetMstId": 3261,
+        "description": "9ターンごと（8ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "98,273",
+        "battleConditionSetMstId": 3262,
+        "description": "9ターンごと（9ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "98,274",
+        "battleConditionSetMstId": 3263,
+        "description": "9ターンごと（9ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "462,892",
+        "battleConditionSetMstId": 3265,
+        "description": "自分に状態異常が付与されていない場合 AND 攻撃されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,916",
+        "battleConditionSetMstId": 3266,
+        "description": "行動者は敵 AND 攻撃されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2013",
+        "battleConditionSetMstId": 3267,
+        "description": "持続ダメージが発生した味方が1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2014",
+        "battleConditionSetMstId": 3268,
+        "description": "持続ダメージが発生した味方が2体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2015",
+        "battleConditionSetMstId": 3269,
+        "description": "持続ダメージが発生した味方が3体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2016",
+        "battleConditionSetMstId": 3270,
+        "description": "持続ダメージが発生した味方が4体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2017",
+        "battleConditionSetMstId": 3271,
+        "description": "持続ダメージが発生した味方が5体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "7,2019",
+        "battleConditionSetMstId": 3272,
+        "description": "敵の必殺技で自分が60000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "467,867",
+        "battleConditionSetMstId": 3284,
+        "description": "トークンが1以上5未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,74",
+        "battleConditionSetMstId": 3285,
+        "description": "自分のターン、6ターンごとに（ターン6から）"
+    },
+    {
+        "battleConditionMstIdCsv": "1107",
+        "battleConditionSetMstId": 3287,
+        "description": "トークンが30以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "5,25",
+        "battleConditionSetMstId": 3291,
+        "description": "行動タイプが通常 AND 自分が1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "6,25",
+        "battleConditionSetMstId": 3292,
+        "description": "行動タイプがスキル AND 自分が1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "7,25",
+        "battleConditionSetMstId": 3293,
+        "description": "行動タイプが必殺技 AND 自分が1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "2020",
+        "battleConditionSetMstId": 3294,
+        "description": "1度の攻撃でブレイクされた味方が3体"
+    },
+    {
+        "battleConditionMstIdCsv": "2021",
+        "battleConditionSetMstId": 3295,
+        "description": "1度の攻撃でブレイクされた味方が4体"
+    },
+    {
+        "battleConditionMstIdCsv": "2022",
+        "battleConditionSetMstId": 3296,
+        "description": "1度の攻撃でブレイクされた味方が5体"
+    },
+    {
+        "battleConditionMstIdCsv": "420,286,285",
+        "battleConditionSetMstId": 3298,
+        "description": "自身がブレイク状態ではなく、行動可能な状態で、魔力が5のとき"
     }
 ]

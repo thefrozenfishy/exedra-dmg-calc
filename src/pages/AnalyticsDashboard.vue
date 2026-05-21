@@ -72,6 +72,13 @@
         <h2>Page views</h2>
         <div>
           <label>
+            Page:
+            <select v-model="selectedPage">
+              <option value="all">All</option>
+              <option v-for="p in pageOptions" :key="p" :value="p">{{ p }}</option>
+            </select>
+          </label>
+          <label style="margin-left:12px">
             User:
             <select v-model="selectedUser">
               <option value="all">All</option>
@@ -209,6 +216,7 @@ const eventRows = computed(() => {
 
 const selectedUser = ref<string>('all')
 const selectedEvent = ref<string>('all')
+const selectedPage = ref<string>('all')
 const selectedWindow = ref<number>(7)
 const windowOptions = [3, 7, 14, 30, 90]
 
@@ -228,6 +236,17 @@ const userOptions = computed(() => {
 
 const eventOptions = computed(() => [...new Set(rows.value.map(r => r.event))].sort())
 
+const pageOptions = computed(() => {
+  const pages = new Set<string>()
+  for (const row of rows.value) {
+    if (row.event === 'page_view') {
+      const path = normalizePagePath(row.metadata?.path || row.metadata?.route || 'unknown')
+      pages.add(path)
+    }
+  }
+  return [...pages].sort()
+})
+
 const filteredRows = computed(() => rows.value.filter(r => {
   if (selectedUser.value !== 'all' && getDisplayUser(r) !== selectedUser.value) return false
   if (selectedEvent.value !== 'all' && r.event !== selectedEvent.value) return false
@@ -243,6 +262,7 @@ const pageViewRows = computed(() => {
     if (row.event !== 'page_view') continue
     const rawPath = row.metadata?.path || row.metadata?.route || 'unknown'
     const path = normalizePagePath(rawPath)
+    if (selectedPage.value !== 'all' && path !== selectedPage.value) continue
     counts[path] = (counts[path] ?? 0) + 1
   }
   return Object.entries(counts).sort((a, b) => b[1] - a[1])
@@ -258,6 +278,7 @@ const pageViewsByDayUserRows = computed(() => {
     const date = new Date(row.created_at).toISOString().slice(0, 10)
     const user = getDisplayUser(row)
     const path = normalizePagePath(row.metadata?.path || row.metadata?.route || 'unknown')
+    if (selectedPage.value !== 'all' && path !== selectedPage.value) continue
     const key = `${date}||${user}||${path}`
 
     counts[key] = (counts[key] ?? 0) + 1
@@ -291,6 +312,34 @@ const timelineRows = computed(() => {
 const timelineSeries = computed(() => {
   const labels = timelineLabels.value
   if (selectedUser.value === 'all') {
+    // If a specific page is selected, show users for that page
+    if (selectedPage.value !== 'all') {
+      const userMap: Record<string, Record<string, number>> = {}
+      for (const row of filteredRows.value) {
+        if (row.event !== 'page_view') continue
+        const path = normalizePagePath(row.metadata?.path || row.metadata?.route || 'unknown')
+        if (path !== selectedPage.value) continue
+        const user = getDisplayUser(row)
+        const dateKey = new Date(row.created_at).toISOString().slice(0, 10)
+        userMap[user] = userMap[user] ?? {}
+        userMap[user][dateKey] = (userMap[user][dateKey] ?? 0) + 1
+      }
+
+      return Object.entries(userMap)
+        .map(([user, data]) => ({
+          user,
+          total: Object.values(data).reduce((sum, count) => sum + count, 0),
+          data,
+        }))
+        .sort((a, b) => b.total - a.total || a.user.localeCompare(b.user))
+        .map((entry, idx) => ({
+          label: entry.user,
+          data: labels.map(date => entry.data[date] ?? 0),
+          backgroundColor: getColorForIndex(idx),
+        }))
+    }
+
+    // Otherwise show all users
     const userMap: Record<string, Record<string, number>> = {}
     for (const row of filteredRows.value) {
       const user = getDisplayUser(row)
@@ -421,7 +470,7 @@ const renderTimelineChart = async () => {
   })
 }
 
-watch([rows, selectedUser, selectedEvent], () => {
+watch([rows, selectedUser, selectedEvent, selectedPage], () => {
   renderPageChart()
   renderTimelineChart()
 })
