@@ -1,7 +1,7 @@
 <template>
     <div class="page">
         <h2>Character Crystalis Selections</h2>
-        <CharacterSelector :selected="selectedCharacter" @select="onSelectCharacter" />
+        <CharacterSelector :selected="selectedCharacter" @select="onSelectCharacter" :filter="ch => ch.enabled" />
 
         <div v-if="characterId && character">
             <div class="crys-grid">
