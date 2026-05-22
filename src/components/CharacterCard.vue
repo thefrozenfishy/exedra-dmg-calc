@@ -15,15 +15,26 @@
                     <PortraitSelector v-model="character.portrait" :element="character.element" />
                 </label>
 
-                <label>
-                    Crystalis:
-                    <CrystalisSelector v-model="character.crys" :element="character.element" :styleId="character.id" />
-                </label>
+                Crystalis:
+                <div class="crys-section">
+                    <label v-for="slot in 3" :key="slot" class="crys-slot">
+                        <select :value="getSelectedCrys(slot)"
+                            @change="setCrys(slot, Number(($event.target as HTMLSelectElement).value))">
+                            <option :value="0"></option>
 
-                <label>
-                    Subcrystalis:
-                    <SubCrystalisSelector v-model="character.crys_sub" />
-                </label>
+                            <option v-for="crys in crysOptions(slot)" :key="crys.selectionAbilityMstId"
+                                :value="crys.selectionAbilityMstId">
+                                {{ crys.name }}
+                            </option>
+                        </select>
+                    </label>
+                </div>
+                <router-link class="theme-button" :to="{
+                    path: '/character-crys',
+                    query: { character_id: character.id }
+                }">
+                    Edit SubCrys
+                </router-link>
             </div>
         </div>
     </div>
@@ -34,17 +45,14 @@ import { defineComponent, computed } from "vue";
 import { useCharacterStore } from "../store/characterStore";
 import StatInputs from "./StatInputs.vue";
 import PortraitSelector from './PortraitSelector.vue';
-import CrystalisSelector from './CrystalisSelector.vue';
-import SubCrystalisSelector from './SubCrystalisSelector.vue';
 import { Character } from "../types/KiokuTypes";
+import { crystalises } from "../utils/helpers";
 
 export default defineComponent({
     name: "CharacterCard",
     components: {
         StatInputs,
         PortraitSelector,
-        CrystalisSelector,
-        SubCrystalisSelector
     },
     props: {
         character: {
@@ -65,7 +73,61 @@ export default defineComponent({
             store.updateChar(char)
         }
 
-        return { imgSrc, toggleCharacter, updateChar };
+        const getSelectedCrys = (slot: number) => {
+            const entry = Object.entries(props.character.crysOptions)
+                .find(([, c]) => c.useIndex === slot)
+
+            return entry ? Number(entry[0]) : 0
+        }
+
+        const crysOptions = (slot: number) => {
+            return Object.entries(props.character.crysOptions)
+                .filter(([id, crys]) => crys.useIndex === 0 || crys.useIndex === slot)
+                .map(([id, crys]) => crystalises[Number(id)])
+                .map((crys) => ({
+                    ...crys,
+                    name: crys.styleMstId ? "EX" : crys.name
+                }))
+                .sort((a, b) => {
+                    const sDiff = b.styleMstId - a.styleMstId
+                    if (sDiff) return sDiff
+                    return b.sortOrder - a.sortOrder
+                })
+        }
+
+        const setCrys = (slot: number, newId: number) => {
+            Object.values(props.character.crysOptions).forEach(c => {
+                if (c.useIndex === slot) {
+                    c.useIndex = 0
+                }
+            })
+
+            if (newId === 0) {
+                return
+            }
+
+            Object.values(props.character.crysOptions).forEach(c => {
+                if (c.useIndex !== slot && c.useIndex !== 0) {
+                    const id = Object.entries(props.character.crysOptions)
+                        .find(([, v]) => v === c)?.[0]
+
+                    if (Number(id) === newId) {
+                        c.useIndex = 0
+                    }
+                }
+            })
+
+            props.character.crysOptions[newId].useIndex = slot
+        }
+
+        return {
+            imgSrc,
+            toggleCharacter,
+            updateChar,
+            getSelectedCrys,
+            crysOptions,
+            setCrys,
+        };
     },
 });
 </script>
@@ -78,7 +140,7 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 90px;
+    width: 110px;
 }
 
 .character-image {
@@ -93,5 +155,64 @@ export default defineComponent({
 
 .image-wrapper {
     height: 130px;
+}
+
+.character-card {
+    cursor: pointer;
+    border: 2px solid transparent;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 110px;
+
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.character-card select {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.crys-slot {
+    width: 100%;
+}
+
+.crys-section {
+    width: 100%;
+}
+
+.stats {
+    width: 100%;
+}
+
+.theme-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    margin-top: 0.4rem;
+
+    border: 1px solid #555;
+    border-radius: 6px;
+
+    color: white;
+
+    font-size: 0.85rem;
+    text-decoration: none;
+
+    box-sizing: border-box;
+}
+
+.theme-button:hover {
+    background: #3a3a3a;
+    border-color: #777;
+}
+
+.theme-button:active {
+    transform: scale(0.98);
 }
 </style>

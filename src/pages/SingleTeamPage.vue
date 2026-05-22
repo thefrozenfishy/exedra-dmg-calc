@@ -24,8 +24,7 @@
           {{ index === attackerIndex ? 'Damage Dealer' : 'Member' }}
           {{ index < attackerIndex ? index + 1 : index > attackerIndex ? index : "" }}
         </h2>
-        <CharacterEditor :index="index" :slot="slot" :setMain="team.setMain" :setSupport="team.setSupport"
-          :onChangeCrys="onChangeCrys" :onChangeSubCrys="onChangeSubCrys" />
+        <CharacterEditor :index="index" :slot="slot" :setMain="team.setMain" :setSupport="team.setSupport" />
       </div>
     </div>
   </div>
@@ -170,22 +169,6 @@ const sa_score = computed(() => {
   return (800_000 + Number((20 * ((battleOutput.value[0] as number) / scoreMultiplier.value + (90000 - 5000 * turns.value) + 15000 * hp_percentage_team.value / 100)).toFixed(0))).toLocaleString()
 })
 
-function onChangeCrys(charIdx: number, crysIdx: number, rawValue: string) {
-  const main = team.slots[charIdx].main
-  if (!main) return
-  const current = main.crys ?? ["EX", "", ""]
-  current[crysIdx - 1] = rawValue
-  team.setMain(charIdx, { ...main, crys: current } as any)
-}
-
-function onChangeSubCrys(charIdx: number, crysIdx: number, rawValue: string) {
-  const main = team.slots[charIdx].main
-  if (!main) return
-  const current = main.crys_sub ?? Array(9).fill([""]).flat()
-  current[crysIdx - 1] = rawValue
-  team.setMain(charIdx, { ...main, crys_sub: current } as any)
-}
-
 const formatDmg = (out: string | [number, number, number, any[]]) =>
   typeof out !== 'string'
     ? `Max Damage: ${out[0].toLocaleString()} with a ${out[2]}% crit rate - (Average Damage: ${out[1].toLocaleString()})`
@@ -306,8 +289,19 @@ const teamInstance = computed(() => {
   try {
     const transformedMembers = team.slots.map(m => {
       const support = m.support ? new ScoreAttackKioku({ ...m.support }) : null
+
+      const crys = m.main
+        ? Object.entries(m.main.crysOptions)
+          .filter(([, v]) => v.useIndex > 0)
+        : []
+
       return new ScoreAttackKioku(
-        { ...m.main, supportKey: support?.getKey() } as KiokuArgs,
+        {
+          ...m.main,
+          crysIDs: crys.map(c => Number(c[0])),
+          subCrysIDs: crys.flatMap(c => c[1].subCrys),
+          supportKey: support?.getKey(),
+        } as KiokuArgs,
         (m.buffMultReduction || buffMultReduction.value) ?? 0,
         (m.debuffMultReduction || debuffMultReduction.value) ?? 0,
       )

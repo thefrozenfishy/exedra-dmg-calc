@@ -25,8 +25,8 @@ export class Kioku {
     protected support?: Kioku;
     protected portrait?: Portrait;
 
-    private inputCrys: string[];
-    private inputCrysSub: string[];
+    private inputCrysIDs: number[];
+    private inputSubCrysIDs: number[];
 
     protected ascension: number;
     private kiokuLvl: number;
@@ -78,8 +78,8 @@ export class Kioku {
         magicLvl,
         heartphialLvl,
         specialLvl,
-        crys,
-        crys_sub
+        crysIDs,
+        subCrysIDs
     }: KiokuArgs) {
         this.name = name;
         this.data = kiokuData[name];
@@ -87,8 +87,8 @@ export class Kioku {
         if (portrait) this.portrait = portraits[portrait]
         if (supportKey) this.support = fromKey(supportKey);
 
-        this.inputCrys = crys?.filter(Boolean) ?? [];
-        this.inputCrysSub = crys_sub?.filter(Boolean) ?? [];
+        this.inputCrysIDs = crysIDs?.filter(Boolean) ?? [];
+        this.inputSubCrysIDs = subCrysIDs?.filter(Boolean) ?? [];
 
         this.ascension = ascension;
         this.kiokuLvl = kiokuLvl;
@@ -146,10 +146,8 @@ export class Kioku {
             }
         }
 
-        for (const c of [...this.inputCrys, ...this.inputCrysSub]) {
-            if (c === "EX") {
-                this.crys.push(this.data.crystalis_id)
-            } else if (c in crystalises) {
+        for (const c of [...this.inputCrysIDs, ...this.inputSubCrysIDs]) {
+            if (c in crystalises) {
                 this.crys.push(crystalises[c].value1)
             } else {
                 console.error("Could not find", c, "in crystalises")
@@ -206,8 +204,8 @@ export class Kioku {
             this.magicLvl,
             this.heartphialLvl,
             this.specialLvl,
-            this.inputCrys,
-            this.inputCrysSub,
+            this.inputCrysIDs,
+            this.inputSubCrysIDs,
         ];
     }
 }

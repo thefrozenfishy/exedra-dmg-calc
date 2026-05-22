@@ -2,7 +2,28 @@ import { defineStore } from 'pinia'
 import { Enemy } from '../types/EnemyTypes'
 import { TeamSlot } from '../types/BestTeamTypes'
 import { Character, correctCharacterParams } from '../types/KiokuTypes'
-import { crystalises } from '../utils/helpers'
+import { relevantCrys } from '../types/KiokuTypes'
+
+function normalizeCharacter(member?: Character) {
+  if (!member) return undefined
+
+  const corrected = correctCharacterParams(member)
+
+  return {
+    ...corrected,
+    crysOptions: Object.fromEntries(
+      relevantCrys(corrected.id).map(cx => [
+        cx.selectionAbilityMstId,
+        {
+          enabled: false,
+          useIndex: 0,
+          subCrys: [],
+          ...(corrected.crysOptions?.[cx.selectionAbilityMstId] ?? {}),
+        }
+      ])
+    ),
+  }
+}
 
 export const usePvPStore = defineStore('pvp', {
   state: () => ({
@@ -14,17 +35,13 @@ export const usePvPStore = defineStore('pvp', {
   actions: {
     setMain(isAlliedTeam: number) {
       return (slotIndex: number, member: Character | undefined) => {
-        const isNewChar = !this.slots[isAlliedTeam][slotIndex].main || this.slots[isAlliedTeam][slotIndex].main.id !== member?.id
-        this.slots[isAlliedTeam][slotIndex].main = correctCharacterParams(member)
-        if (this.slots[isAlliedTeam][slotIndex].main && isNewChar) {
-          this.slots[isAlliedTeam][slotIndex].main.crys_sub = ["Increases SPD by 4.", "Increases SPD by 4.", "Increases SPD by 4."]
-        }
+        this.slots[isAlliedTeam][slotIndex].main = normalizeCharacter(member)
         this.save()
       }
     },
     setSupport(isAlliedTeam: number) {
       return (slotIndex: number, member: Character | undefined) => {
-        this.slots[isAlliedTeam][slotIndex].support = correctCharacterParams(member)
+        this.slots[isAlliedTeam][slotIndex].support = normalizeCharacter(member)
         this.save()
       }
     },
@@ -33,26 +50,16 @@ export const usePvPStore = defineStore('pvp', {
     },
     load() {
       const saved = localStorage.getItem('lastPvP')
-      if (saved) {
-        const oldChars: TeamSlot[][] = JSON.parse(saved)
-        this.slots = oldChars.map(c => {
-          for (const idx of [0, 1]) {
-            if (c?.[idx]?.main?.crys) {
-              c[idx].main.crys = c[idx].main.crys.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc))
-            }
-            if (c?.[idx]?.support?.crys) {
-              c[idx].support.crys = c[idx].support.crys.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc))
-            }
-            if (c?.[idx]?.main?.crys_sub) {
-              c[idx].main.crys_sub = c[idx].main.crys_sub.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc))
-            }
-            if (c?.[idx]?.support?.crys_sub) {
-              c[idx].support.crys_sub = c[idx].support.crys_sub.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc))
-            }
-          }
-          return c
-        })
-      }
+      if (!saved) return
+      const parsed = JSON.parse(saved)
+
+      this.slots = parsed.map((team: TeamSlot[]) =>
+        team.map(slot => ({
+          ...slot,
+          main: normalizeCharacter(slot.main),
+          support: normalizeCharacter(slot.support),
+        }))
+      )
     }
   }
 })
@@ -68,11 +75,11 @@ export const useTeamStore = defineStore('team', {
       this.slots[index].debuffMultReduction = value
     },
     setMain(slotIndex: number, member: Character | undefined) {
-      this.slots[slotIndex].main = correctCharacterParams(member)
+      this.slots[slotIndex].main = normalizeCharacter(member)
       this.save()
     },
     setSupport(slotIndex: number, member: Character | undefined) {
-      this.slots[slotIndex].support = correctCharacterParams(member)
+      this.slots[slotIndex].support = normalizeCharacter(member)
       this.save()
     },
     save() {
@@ -80,24 +87,14 @@ export const useTeamStore = defineStore('team', {
     },
     load() {
       const saved = localStorage.getItem('lastTeam')
-      if (saved) {
-        const oldChars: TeamSlot[] = JSON.parse(saved)
-        this.slots = oldChars.map(c => {
-          if (c?.main?.crys) {
-            c.main.crys = c.main.crys.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc))
-          }
-          if (c?.support?.crys) {
-            c.support.crys = c.support.crys.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc))
-          }
-          if (c?.main?.crys_sub) {
-            c.main.crys_sub = c.main.crys_sub.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc))
-          }
-          if (c?.support?.crys_sub) {
-            c.support.crys_sub = c.support.crys_sub.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc))
-          }
-          return c
-        })
-      }
+      if (!saved) return
+      const parsed = JSON.parse(saved)
+
+      this.slots = parsed.map((slot: TeamSlot) => ({
+        ...slot,
+        main: normalizeCharacter(slot.main),
+        support: normalizeCharacter(slot.support),
+      }))
     }
   }
 })

@@ -27,8 +27,8 @@
                     <img :src="`/exedra-dmg-calc/kioku_images/${team[`supp${i}supp`].id}_thumbnail.png`"
                         :title="team[`supp${i}supp`].name" :alt="team[`supp${i}supp`].name" />
                 </a>
-                <a v-if="team[`supp${i}portrait`]" :href="`https://exedra.wiki/wiki/${team[`supp${i}portrait`]}`" target="_blank"
-                    class="portrait-image">
+                <a v-if="team[`supp${i}portrait`]" :href="`https://exedra.wiki/wiki/${team[`supp${i}portrait`]}`"
+                    target="_blank" class="portrait-image">
                     <img :src="`/exedra-dmg-calc/portrait_images/${portraits[team[`supp${i}portrait`]].resourceName}_thumbnail.png`"
                         :alt="team[`supp${i}portrait`]" :title="team[`supp${i}portrait`]" />
                 </a>
@@ -41,13 +41,13 @@
                 <div class="crit">Crit: {{ team.crit_rate[idx] }}%</div>
                 <div class="dmg"><strong>[{{ team.alt_dmg[idx].toLocaleString() }}]</strong></div>
                 <div class="crys">
-                    {{ team.attacker_crys1[idx] }}
+                    {{ presentCrysName(team.attacker_crys1[idx]) }}
                 </div>
                 <div class="crys">
-                    {{ team.attacker_crys2[idx] }}
+                    {{ presentCrysName(team.attacker_crys2[idx]) }}
                 </div>
                 <div class="crys">
-                    {{ team.attacker_crys3[idx] }}
+                    {{ presentCrysName(team.attacker_crys3[idx]) }}
                 </div>
                 <div>
                     <button @click="saveToStore(idx)" class="save-button">Open team in single battle editor</button>
@@ -61,10 +61,16 @@
 
 <script lang="ts" setup>
 import { FinalTeam } from '../types/BestTeamTypes';
-import { portraits } from '../utils/helpers';
+import { crystalises, portraits } from '../utils/helpers';
 import { useTeamStore } from '../store/singleTeamStore';
-import { KiokuConstants, KiokuElement } from '../types/KiokuTypes';
+import { KiokuElement, maxDmgSubCrys } from '../types/KiokuTypes';
 import { useRouter } from 'vue-router'
+
+const presentCrysName = (id: number) => {
+    const crys = crystalises[id]
+    if (crys.styleMstId) return "EX"
+    return crys.name
+}
 
 const props = defineProps<{
     team: FinalTeam,
@@ -80,7 +86,7 @@ const router = useRouter()
 function saveToStore(idx: number) {
     const { team, weakElements, offElementBuffMultReduction, offElementDebuffMultReduction } = props
     const offElements = weakElements!.filter(w => w.enabled).map(w => w.name)
-    teamStore.setMain(0, { ...team.supp1, crys: ["EX", "Dominant Blow++", "Towering Offense++"], portrait: team.supp1portrait })
+    teamStore.setMain(0, { ...team.supp1, portrait: team.supp1portrait })
     teamStore.setSupport(0, team.supp1supp)
     if (!offElements.includes(team.supp1.element)) {
         teamStore.setCharBuffReduction(0, offElementBuffMultReduction)
@@ -90,7 +96,7 @@ function saveToStore(idx: number) {
         teamStore.setCharDebuffReduction(0, undefined)
     }
 
-    teamStore.setMain(1, { ...team.supp2, crys: ["EX", "Dominant Blow++", "Towering Offense++"], portrait: team.supp2portrait })
+    teamStore.setMain(1, { ...team.supp2, portrait: team.supp2portrait })
     teamStore.setSupport(1, team.supp2supp)
     if (!offElements.includes(team.supp2.element)) {
         teamStore.setCharBuffReduction(1, offElementBuffMultReduction)
@@ -99,16 +105,20 @@ function saveToStore(idx: number) {
         teamStore.setCharBuffReduction(1, undefined)
         teamStore.setCharDebuffReduction(1, undefined)
     }
-
-    teamStore.setMain(2, {
-        ...team.attacker,
-        portrait: team.portrait,
-        crys: [team.attacker_crys1[idx], team.attacker_crys2[idx], team.attacker_crys3[idx]],
-        crys_sub: props.optimalSubCrys ? KiokuConstants.optimal_attacker_crys_sub : team.attacker.crys_sub
-    })
+    const crysOptions = ({ ...team.attacker.crysOptions })
+    console.log("From", { ...crysOptions })
+    Object.values(crysOptions).forEach(c => c.useIndex = 0)
+    crysOptions[team.attacker_crys1[idx]].useIndex = 1
+    crysOptions[team.attacker_crys1[idx]].subCrys = maxDmgSubCrys
+    crysOptions[team.attacker_crys2[idx]].useIndex = 2
+    crysOptions[team.attacker_crys2[idx]].subCrys = maxDmgSubCrys
+    crysOptions[team.attacker_crys3[idx]].useIndex = 3
+    crysOptions[team.attacker_crys3[idx]].subCrys = maxDmgSubCrys
+    console.log("To", { ...crysOptions })
+    teamStore.setMain(2, { ...team.attacker, portrait: team.portrait, crysOptions })
     teamStore.setSupport(2, team.atk_supp)
 
-    teamStore.setMain(3, { ...team.supp3, crys: ["EX", "Dominant Blow++", "Towering Offense++"], portrait: team.supp3portrait})
+    teamStore.setMain(3, { ...team.supp3, portrait: team.supp3portrait })
     teamStore.setSupport(3, team.supp3supp)
     if (!offElements.includes(team.supp3.element)) {
         teamStore.setCharBuffReduction(3, offElementBuffMultReduction)
@@ -118,7 +128,7 @@ function saveToStore(idx: number) {
         teamStore.setCharDebuffReduction(3, undefined)
     }
 
-    teamStore.setMain(4, { ...team.supp4, crys: ["EX", "Dominant Blow++", "Towering Offense++"], portrait: team.supp4portrait })
+    teamStore.setMain(4, { ...team.supp4, portrait: team.supp4portrait })
     teamStore.setSupport(4, team.supp4supp)
     if (!offElements.includes(team.supp4.element)) {
         teamStore.setCharBuffReduction(4, offElementBuffMultReduction)

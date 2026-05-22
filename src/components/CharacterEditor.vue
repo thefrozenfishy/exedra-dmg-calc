@@ -30,15 +30,35 @@
       <PortraitSelector v-model="slot.main.portrait" :element="slot.main.element" />
     </label>
 
-    <label>
+    <div>
       Crystalis:
-      <CrystalisSelector v-model="slot.main.crys" :element="slot.main.element" :styleId="slot.main.id" />
-    </label>
+      <div class="crys-section">
+        <div v-for="slotIndex in 3" :key="slotIndex" class="crys-slot"> <select :value="getSelectedCrys(slotIndex)"
+            @change="setCrys(slotIndex, Number(($event.target as HTMLSelectElement).value))">
 
-    <label>
-      Subcrystalis:
-      <SubCrystalisSelector v-model="slot.main.crys_sub" />
-    </label>
+            <option :value="0"></option>
+
+            <option v-for="crys in crysOptions(slotIndex)" :key="crys.selectionAbilityMstId"
+              :value="crys.selectionAbilityMstId">
+              {{ crys.name }}
+            </option>
+          </select>
+          <div v-if="getSelectedCrys(slotIndex)" class="subcrys-section">
+            <select v-for="(sub, subIndex) in getSubCrys(slotIndex)" :key="subIndex" :value="sub" class="subcrys-select"
+              @change="updateSubCrys(
+                slotIndex,
+                subIndex,
+                Number(($event.target as HTMLSelectElement).value)
+              )">
+              <option v-for="item in subCrysList" :key="item.id" :value="item.id">
+                {{ subCrysTranslate(item.name) }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
   <div v-if="!extraData">
     <h3>Effect Overrides</h3>
@@ -77,14 +97,15 @@
 import { TeamSlot } from '../types/BestTeamTypes';
 import CharacterSelector from './CharacterSelector.vue'
 import PortraitSelector from './PortraitSelector.vue';
-import CrystalisSelector from './CrystalisSelector.vue';
-import SubCrystalisSelector from './SubCrystalisSelector.vue';
+import { crystalises } from '../utils/helpers';
 import StatInputs from './StatInputs.vue'
-import { Character, TeamSnapshot } from '../types/KiokuTypes';
+import { Character, subCrysTranslate, TeamSnapshot } from '../types/KiokuTypes';
+import { getSubCrystalises } from '../types/KiokuTypes'
 
 const round = (spd: number) => spd.toFixed(2)
 
 const formatSpdBuffs = (buffs: [number, string, string?][]) => buffs.map(buff => `${round(buff[0])} given by "${buff[1]}" applied by ${buff[2] ?? "UNKNOWN"}`).join("\n")
+const subCrysList = getSubCrystalises()
 
 const props = defineProps<{
   index: number
@@ -92,8 +113,6 @@ const props = defineProps<{
   extraData?: TeamSnapshot
   setMain: (index: number, member: Character) => void
   setSupport: (index: number, member: Character) => void
-  onChangeCrys: (charIdx: number, crysIdx: number, rawValue: string) => void
-  onChangeSubCrys: (charIdx: number, crysIdx: number, rawValue: string) => void
 }>()
 
 function applyBuff() {
@@ -111,10 +130,128 @@ function clearBuff() {
 function clearDebuff() {
   props.slot.debuffMultReduction = undefined
 }
+function getSelectedCrys(slotIndex: number) {
+  if (!props.slot.main) {
+    return 0
+  }
 
+  const entry = Object.entries(props.slot.main.crysOptions)
+    .find(([, c]) => c.useIndex === slotIndex)
+
+  return entry ? Number(entry[0]) : 0
+}
+
+function crysOptions(slotIndex: number) {
+  if (!props.slot.main) {
+    return []
+  }
+
+  return Object.entries(props.slot.main.crysOptions)
+    .filter(([_, crys]) => crys.useIndex === 0 || crys.useIndex === slotIndex)
+    .map(([id]) => crystalises[Number(id)])
+    .map((crys) => ({
+      ...crys,
+      name: crys.styleMstId ? "EX" : crys.name
+    }))
+    .sort((a, b) => {
+      const sDiff = b.styleMstId - a.styleMstId
+
+      if (sDiff) {
+        return sDiff
+      }
+
+      return b.sortOrder - a.sortOrder
+    })
+}
+
+function setCrys(slotIndex: number, newId: number) {
+  if (!props.slot.main) {
+    return
+  }
+
+  Object.values(props.slot.main.crysOptions).forEach(c => {
+    if (c.useIndex === slotIndex) {
+      c.useIndex = 0
+    }
+  })
+
+  if (newId === 0) {
+    return
+  }
+
+  Object.values(props.slot.main.crysOptions).forEach(c => {
+    if (c.useIndex !== slotIndex && c.useIndex !== 0) {
+      const id = Object.entries(props.slot.main!.crysOptions)
+        .find(([, v]) => v === c)?.[0]
+
+      if (Number(id) === newId) {
+        c.useIndex = 0
+      }
+    }
+  })
+
+  props.slot.main.crysOptions[newId].useIndex = slotIndex
+}
+
+function getSelectedCrysData(slotIndex: number) {
+  if (!props.slot.main) {
+    return undefined
+  }
+
+  const crysId = getSelectedCrys(slotIndex)
+
+  if (!crysId) {
+    return undefined
+  }
+
+  return props.slot.main.crysOptions[crysId]
+}
+
+function getSubCrys(slotIndex: number): number[] {
+  const crys = getSelectedCrysData(slotIndex)
+
+  if (!crys) {
+    return []
+  }
+
+  if (!crys.subCrys || crys.subCrys.length !== 3) {
+    crys.subCrys = [4034, 4044, 4054]
+  }
+
+  return crys.subCrys
+}
+
+function updateSubCrys(
+  slotIndex: number,
+  subIndex: number,
+  value: number
+) {
+  const crys = getSelectedCrysData(slotIndex)
+
+  if (!crys) {
+    return
+  }
+
+  crys.subCrys[subIndex] = value
+}
 </script>
 
 <style scoped>
+.crys-section {
+  width: 100%;
+}
+
+.crys-slot {
+  width: 100%;
+  display: block;
+}
+
+.stats select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
 .support-section {
   margin-top: 1rem;
   padding-top: 0.5rem;
@@ -130,5 +267,16 @@ function clearDebuff() {
   position: relative;
   align-items: center;
   gap: 2rem;
+}
+
+.subcrys-section {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1.5rem;
+}
+
+.subcrys-select {
+  width: 100%;
+  box-sizing: border-box;
 }
 </style>

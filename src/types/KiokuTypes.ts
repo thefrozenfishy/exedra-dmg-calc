@@ -1,5 +1,5 @@
 import { PvPTeam, KiokuState } from "../models/PvPTeam";
-import { crystalises, kiokuData, portraits } from "../utils/helpers";
+import { crystalises, portraits } from "../utils/helpers";
 
 
 export enum BasicIds {
@@ -100,7 +100,7 @@ export const portraitsBestOnly = (elem: KiokuElement, optimizeAverageDamage: boo
     elem === KiokuElement.Dark ? "Because...I'm Not Alone Anymore" : null,
     elem === KiokuElement.Flame ? "Monogatari Collab Celebration 2" : null,
     optimizeAverageDamage ? "Farewell to a Future Unseen" : null,
-].filter(Boolean)
+].filter(c => !!c) as string[]
 
 const dmgUpPortraits = {
     [KiokuElement.Flame]: "A Reluctant Coach Steps Up",
@@ -180,10 +180,7 @@ export type SkillKey = "skillMstId" | "passiveSkillMstId";
 export interface Character {
     ascension: number
     character_en: string
-    crys1: number
-    crys2: number
-    crys3: number
-    crysOptions: CrystalisSelection[]
+    crysOptions: Record<number, CrystalisSelection>
     element: KiokuElement
     enabled: boolean
     heartphial: string
@@ -303,14 +300,14 @@ export interface CrystalisData {
 
 export interface CrystalisSelection {
     enabled: boolean
-    id: number
-    subCrys1: number
-    subCrys2: number
-    subCrys3: number
+    useIndex: number
+    subCrys: number[]
 }
 
+export const getEX = (characterId: number) => Object.values(crystalises).find(c => c.styleMstId === characterId)
+
 export const relevantCrys: (characterId: number) => CrystalisData[] = (characterId: number) => [
-    Object.values(crystalises).find(c => c.styleMstId === characterId),
+    getEX(characterId),
     ...Object.values(crystalises).filter(c => c.selectionAbilityType === 1 && c.rarity === 3)
 ].filter(c => !!c)
 
@@ -345,55 +342,14 @@ export interface CharacterHeartParamUpGroup {
     styleParamUpEffectMstId: number
 }
 
-export const getPersonalCrystalisEffects = (styleId: number): string[] =>
-    Object.values(kiokuData).find(k => k.id === styleId)?.crystalis_effect?.split("<br>") ?? []
-
-
-const crystalisePriority = (elem?: KiokuElement): string[] => [
-    "EX",
+export const getBestCrystalises = (char: Character) => relevantCrys(char.id).filter(c => c.styleMstId === char.id || [
     "Dominant Blow++",
     "Mighty Hit++",
     "Towering Offense++",
-    "Quickstep++",
-    ...(elem ? [elementalCrystalises[elem]] : []),
-    "",
-];
+    elementalCrystalises[char.element]
+].includes(c.name))
 
-const getCrysSortOrder = (name: string, elem?: KiokuElement) => {
-    const order = crystalisePriority(elem);
-    const idx = order.indexOf(name);
-    return idx === -1 ? order.length : idx;
-};
 
-export const getCrystalises = (elem?: KiokuElement) => {
-    return [
-        { name: "EX", styleMstId: 0, selectionAbilityType: 1 },
-        { name: "", styleMstId: 0, selectionAbilityType: 1 },
-        ...Object.values(crystalises),
-    ]
-        .filter(c => c.styleMstId === 0 && c.selectionAbilityType === 1)
-        .sort((a, b) => {
-            const pa = getCrysSortOrder(a.name, elem);
-            const pb = getCrysSortOrder(b.name, elem);
-
-            if (pa !== pb) return pa - pb;
-
-            return a.name.localeCompare(b.name, undefined, {
-                numeric: true,
-                sensitivity: "base",
-            });
-        })
-        .map(c => c.name);
-};
-
-export const getBestCrystalises = (elem: KiokuElement) => [
-    "EX",
-    "Dominant Blow++",
-    "Mighty Hit++",
-    "Towering Offense++",
-    elementalCrystalises[elem]
-
-]
 const elementalCrystalises = {
     [KiokuElement.Flame]: "Inferno++",
     [KiokuElement.Aqua]: "Torrent++",
@@ -403,15 +359,7 @@ const elementalCrystalises = {
     [KiokuElement.Void]: "Nullity++",
 }
 
-const priorityOrder = [
-    "Increases ATK by 60.",
-    "Increases critical DMG by 10%.",
-    "Increases critical rate by 5%.",
-    "Increases SPD by 4.",
-    "",
-];
-
-const subCrysTranslate = (name: string): string => {
+export const subCrysTranslate = (name: string): string => {
     const transformed = name
         .replace("Increases ", "")
         .replace(" by ", " +")
@@ -421,41 +369,31 @@ const subCrysTranslate = (name: string): string => {
     return transformed.charAt(0).toUpperCase() + transformed.slice(1);
 };
 
-const getSubCrysSortOrder = (name: string) => {
-    const idx = priorityOrder.indexOf(name);
-    return idx === -1 ? priorityOrder.length : idx;
-};
-
-export const getSubCrystalises = () => {
+export const getSubCrystalises: () => { name: string; id: number, description: string }[] = () => {
     return [
-        { name: "", selectionAbilityType: 2, description: "" },
-        ...Object.values(crystalises),
-    ]
-        .filter(c => c.selectionAbilityType === 2)
+        { name: "", description: "", rarity: 10, selectionAbilityMstId: 0, sortOrder: 10, selectionAbilityEffectId: 50 },
+        ...Object.values(crystalises).filter(c => c.selectionAbilityType === 2),
+    ].map(c => { if (c.selectionAbilityMstId === 4034) c.rarity = 10; return c })
         .sort((a, b) => {
-            const pa = getSubCrysSortOrder(a.description);
-            const pb = getSubCrysSortOrder(b.description);
-
-            if (pa !== pb) return pa - pb;
-
-            return a.description.localeCompare(b.description, undefined, {
-                numeric: true,
-                sensitivity: "base",
-            });
+            if (a.rarity !== b.rarity) {
+                if (a.rarity === 10) return -1
+                if (b.rarity === 10) return 1
+            }
+            if (a.selectionAbilityEffectId !== b.selectionAbilityEffectId) return a.selectionAbilityEffectId - b.selectionAbilityEffectId
+            return a.sortOrder - b.sortOrder
         })
-        .map(c => ({ name: c.name, description: subCrysTranslate(c.description) }))
+        .map(c => ({ name: c.name, id: c.selectionAbilityMstId, description: subCrysTranslate(c.description) }))
 };
 
+export const maxDmgSubCrys = [4020, 4044, 4054]
 export const KiokuConstants = {
     maxKiokuLvl: 140,
     maxMagicLvl: 130,
     maxAscension: 5,
     maxHeartphialLvl: 50,
     maxSpecialLvl: 10,
-    optimal_attacker_crys_sub: Array(3).fill(["Increases critical rate by 5%.", "Increases critical DMG by 10%.", "Increases ATK by 60."]).flat()
+    optimalAttackerSubCrys: Array(3).fill(maxDmgSubCrys).flat()
 }
-
-
 
 export interface KiokuArgs {
     name: string;
@@ -464,8 +402,8 @@ export interface KiokuArgs {
     heartphialLvl: number;
     portrait?: string;
     supportKey?: any[];
-    crys: string[];
-    crys_sub: string[]
+    crysIDs: number[];
+    subCrysIDs: number[]
     ascension: number;
     specialLvl: number;
 }

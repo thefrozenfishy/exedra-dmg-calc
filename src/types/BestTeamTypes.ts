@@ -42,9 +42,9 @@ export interface FinalTeam {
     attacker: Character
     portrait: string
     atk_supp: Character
-    attacker_crys1: string[]
-    attacker_crys2: string[]
-    attacker_crys3: string[]
+    attacker_crys1: number[]
+    attacker_crys2: number[]
+    attacker_crys3: number[]
     supp1: Character
     supp1supp: Character | undefined
     supp1portrait: string | undefined

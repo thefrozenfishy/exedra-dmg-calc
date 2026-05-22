@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
-import { Character, KiokuConstants, correctCharacterParams } from '../types/KiokuTypes'
-import { crystalises, kiokuData } from '../utils/helpers'
+import { Character, KiokuConstants, correctCharacterParams, relevantCrys } from '../types/KiokuTypes'
+import { kiokuData } from '../utils/helpers'
 import debounce from "lodash.debounce"
 import {
     saveCharacters,
@@ -42,19 +42,9 @@ export const useCharacterStore = defineStore('characterStore', () => {
         releaseDate: data.releaseDate,
     }]));
 
-    const basicSetting = (ch) => ({
+    const basicSetting = (ch: Character) => ({
         enabled: ch.rarity !== 5 || ch.id === 10010101,
         dupes: 0,
-        crys1: 0,
-        crys2: 0,
-        crys3: 0,
-        crysOptions: Object.values(crystalises).map(c => ({
-            enabled: false,
-            id: c.selectionAbilityEffectId,
-            subCrys1: 0,
-            subCrys2: 0,
-            subCrys3: 0,
-        })),
         ...base,
     })
 
@@ -66,8 +56,23 @@ export const useCharacterStore = defineStore('characterStore', () => {
             if (c.ascension > KiokuConstants.maxAscension) c.ascension = KiokuConstants.maxAscension
             if (c.rarity < 5) c.ascension = KiokuConstants.maxAscension
             return c
-        }).filter(k => "name" in k && "id" in k && "enabled" in k && "role" in k && "element" in k && "character_en" in k && "rarity" in k)
-            .map(c => ({ ...basicSetting(c), ...Object.fromEntries(Object.entries(c).filter(([k, v]) => v != null)), ...charInfo[c.name] }))
+        })
+            .filter(k => "name" in k && "id" in k && "enabled" in k && "role" in k && "element" in k && "character_en" in k && "rarity" in k)
+            .map(c => ({
+                ...basicSetting(c),
+                ...Object.fromEntries(Object.entries(c).filter(([k, v]) => v != null)),
+                ...charInfo[c.name],
+                crysOptions: Object.fromEntries(relevantCrys(c.id)
+                    .map(cx => [
+                        cx.selectionAbilityMstId, {
+                            enabled: false,
+                            useIndex: 0,
+                            subCrys: [],
+                            ...(c.crysOptions?.[cx.selectionAbilityMstId] ?? {}),
+                        }
+                    ])),
+            })
+            )
     }
 
     const debouncedCloudSave = debounce(async () => {
@@ -108,7 +113,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
                 portrait: row.portrait,
 
                 crys: row.crys,
-                crys_sub: row.crys_sub
+                subCrys: row.subCrys
             })
             if (char.rarity < 5) char.ascension = KiokuConstants.maxAscension;
             if (char.ascension > KiokuConstants.maxAscension) char.ascension = KiokuConstants.maxAscension;

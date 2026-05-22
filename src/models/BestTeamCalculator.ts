@@ -1,7 +1,7 @@
 import { Heap } from "heap-js";
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { ScoreAttackTeam } from "./ScoreAttackTeam";
-import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises, KiokuConstants } from "../types/KiokuTypes";
+import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises, KiokuConstants, getEX } from "../types/KiokuTypes";
 import { ScoreAttackKioku } from "./ScoreAttackKioku";
 
 const cache = new Map<string, ScoreAttackKioku>();
@@ -15,8 +15,8 @@ interface KiokuGeneratorArgs {
     heartphialLvl?: number;
     portrait?: string;
     supportKey?: any[];
-    crys?: string[];
-    crys_sub?: string[]
+    crysIDs?: number[];
+    subCrysIDs?: number[]
     ascension?: number;
     specialLvl?: number;
     buffMultReduction?: number;
@@ -33,8 +33,8 @@ export function fromKey(key: any[]) {
         magicLvl: key[5],
         heartphialLvl: key[6],
         specialLvl: key[7],
-        crys: key[8],
-        crys_sub: key[9],
+        crysIDs: key[8],
+        subCrysIDs: key[9],
     });
 }
 
@@ -47,13 +47,13 @@ function getKioku({
     magicLvl = KiokuConstants.maxMagicLvl,
     heartphialLvl = KiokuConstants.maxHeartphialLvl,
     specialLvl = KiokuConstants.maxSpecialLvl,
-    crys = [],
-    crys_sub = [],
+    crysIDs = [],
+    subCrysIDs = [],
     buffMultReduction = 0,
     debuffMultReduction = 0,
 }: KiokuGeneratorArgs): ScoreAttackKioku {
-    const clearCrys = crys.filter(Boolean)
-    const clearSubCrys = crys_sub.filter(Boolean)
+    const clearCrys = crysIDs.filter(Boolean)
+    const clearSubCrys = subCrysIDs.filter(Boolean)
 
     const key = JSON.stringify([
         name,
@@ -78,8 +78,8 @@ function getKioku({
             magicLvl,
             heartphialLvl,
             specialLvl,
-            crys: clearCrys,
-            crys_sub: clearSubCrys
+            crysIDs: clearCrys,
+            subCrysIDs: clearSubCrys
         },
             buffMultReduction,
             debuffMultReduction));
@@ -120,7 +120,7 @@ export async function findBestTeam({
     onProgress,
     onError
 }: FindBestTeamOptions): Promise<any[]> {
-    const fetchKioku = (data: Character): ScoreAttackKioku => getKioku({
+    const fetchKioku = (data: KiokuGeneratorArgs & Character): ScoreAttackKioku => getKioku({
         ...data,
         buffMultReduction: weakElements.includes(data.element) ? buffMultReduction : offElementBuffMultReduction,
         debuffMultReduction: weakElements.includes(data.element) ? debuffMultReduction : offElementDebuffMultReduction,
@@ -262,21 +262,23 @@ export async function findBestTeam({
                                 if (teamNames.includes(attackerSupportKey[0])) continue;
                                 for (const attackerPortrait of availablePortraits) {
                                     for (const supportSupport of supportSupports) {
-                                        for (const attackerCrys of combinations(getBestCrystalises(attacker.element), 3)) {
+                                        for (const attackerCrys of combinations(getBestCrystalises(attacker), 3)) {
                                             try {
                                                 const team = new ScoreAttackTeam(
                                                     fetchKioku({
                                                         ...attacker,
                                                         portrait: attackerPortrait,
-                                                        crys: attackerCrys,
-                                                        crys_sub: optimalSubCrys ? KiokuConstants.optimal_attacker_crys_sub : attacker.crys_sub,
+                                                        crysIDs: attackerCrys.map(c => c.selectionAbilityMstId),
+                                                        subCrysIDs: optimalSubCrys
+                                                            ? KiokuConstants.optimalAttackerSubCrys
+                                                            : Object.values(attacker.crysOptions).filter(c => c.useIndex !== 0).flatMap(c => c.subCrys),
                                                         supportKey: attackerSupportKey,
                                                     })!,
                                                     totalSupports.map((s, i) => {
                                                         const k = fetchKioku({
                                                             ...s,
                                                             portrait: "The Savior's Apostle",
-                                                            crys: optimalSubCrys ? ["EX", "Dominant Blow++", "Towering Offense++"] : s.crys,
+                                                            crysIDs: [getEX(s.id)?.selectionAbilityMstId].filter(c => c != null),
                                                             supportKey: supportSupport[i] ?? highestAtkSupportKey,
                                                         })
                                                         if (k.shouldUseSupportAndPortraitReason === 1 || (hasDotPop && k.shouldUseSupportAndPortraitReason === 2)) {
@@ -298,7 +300,7 @@ export async function findBestTeam({
                                                     attacker.name,
                                                     attackerPortrait,
                                                     attackerSupportKey?.[0],
-                                                    ...attackerCrys,
+                                                    ...attackerCrys.map(c => c.selectionAbilityMstId),
                                                     ...totalSupports.flatMap((s, i) => [
                                                         s.name,
                                                         supportSupport[i]?.[0] ?? (

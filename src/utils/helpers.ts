@@ -27,7 +27,7 @@ export const skillDetails = Object.fromEntries(
 ) as Record<string, ActiveSkill>;
 
 export const crystalises = Object.fromEntries(
-    selectionAbilityJson.map((item: any) => [item.name, item])
+    selectionAbilityJson.map((item: any) => [item.selectionAbilityMstId, item])
 ) as Record<string, CrystalisData>;
 
 export const styleParamUpEffect = Object.fromEntries(

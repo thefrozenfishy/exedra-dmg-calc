@@ -10,8 +10,7 @@
 
           <CharacterEditor :index="index" :slot="slot"
             :extraData="battleOutput[0]?.[isAlliedTeam ? 'allies' : 'enemies']?.team?.find(b => b.name === slot.main?.name)"
-            :setMain="team.setMain(isAlliedTeam)" :setSupport="team.setSupport(isAlliedTeam)"
-            :onChangeCrys="onChangeCrys(isAlliedTeam)" :onChangeSubCrys="onChangeSubCrys(isAlliedTeam)" />
+            :setMain="team.setMain(isAlliedTeam)" :setSupport="team.setSupport(isAlliedTeam)" />
         </div>
       </div>
     </div>
@@ -95,22 +94,6 @@ const round = (spd: number) => spd.toFixed(2)
 
 const formatSpdBuffs = (buffs: [number, string, string?][]) => buffs.map(buff => `${round(buff[0])} given by "${buff[1]}" applied by ${buff[2] ?? "UNKNOWN"}`).join("\n")
 
-const onChangeCrys = (isAlliedTeam: number) => (charIdx: number, crysIdx: number, rawValue: string) => {
-  const main = team.slots[isAlliedTeam][charIdx].main
-  if (!main) return
-  const current = main?.crys ?? ["", "", ""]
-  current[crysIdx - 1] = rawValue as string
-  team.setMain(isAlliedTeam)(charIdx, { ...main, crys: current } as any)
-}
-
-const onChangeSubCrys = (isAlliedTeam: number) => (charIdx: number, crysIdx: number, rawValue: string) => {
-  const main = team.slots[isAlliedTeam][charIdx].main
-  if (!main) return
-  const current = main.crys_sub ?? Array(9).fill([""]).flat()
-  current[crysIdx - 1] = rawValue as string
-  team.setMain(isAlliedTeam)(charIdx, { ...main, crys_sub: current } as any)
-}
-
 const isFullBattle = computed(() => team.slots[0].every(t => t?.main) && team.slots[1].every(t => t?.main))
 const battleInstance = ref<PvPBattle | null>(null)
 
@@ -120,9 +103,23 @@ watch(team, () => {
     battleInstance.value = null
     return
   }
-  const [alliedTeam, enemyTeam] = [1, 0].map(idx => team.slots[idx].map(m =>
-    new PvPKioku({ ...m.main, supportKey: m.support ? new PvPKioku(m.support)?.getKey() : undefined })
-  ))
+  const [alliedTeam, enemyTeam] = [1, 0].map(idx =>
+    team.slots[idx].map(m => {
+      const crys = m.main
+        ? Object.entries(m.main.crysOptions)
+          .filter(([, v]) => v.useIndex > 0)
+        : []
+
+      return new PvPKioku({
+        ...m.main,
+        crysIDs: crys.map(c => Number(c[0])),
+        subCrysIDs: crys.flatMap(c => c[1].subCrys),
+        supportKey: m.support
+          ? new PvPKioku(m.support).getKey()
+          : undefined,
+      })
+    })
+  )
   const battle = new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"))
   battleInstance.value = battle
   battleOutput.value = [battle.getCurrentState()]

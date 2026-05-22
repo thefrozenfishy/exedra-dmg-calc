@@ -134,13 +134,11 @@ function getModelF2PWhalePower(startDateMs: number = 1742947200000): number {
 
 function remap(v: number, min: number, max: number, normExp: number): number {
     const normalized = Math.pow((v - min) / (max - min), normExp)
-    if (isBeta()) console.debug("Remapping:", { before: v, after: normalized })
     if (Number.isNaN(normalized)) return 0
     return Math.round(Math.max(0, Math.min(1, normalized)) * 100)
 }
 
 function normalize(current: number, max: number, minNorm: number, maxNorm: number, normExp: number): number {
-    if (isBeta()) console.debug("Running normalize:", { current, max, minNorm, maxNorm, normExp })
     if (max <= 0) return 0
     return remap(current / max, minNorm, maxNorm, normExp)
 }
@@ -150,14 +148,12 @@ function normalizeWhale(current: number, max: number, minNorm: number, maxNorm: 
     const loc = useBetaNumber("whaleSkewNormLoc") 
     const scale = useBetaNumber("whaleSkewNormScale")
 
-    if (isBeta()) console.debug("Running normalizeWhale:", { current, max, minNorm, maxNorm, a, loc, scale })
     if (max <= 0) return 0
 
     // remap
     // tho min and max are probably not needed anymore
     const v = (current / max - minNorm) / (maxNorm - minNorm)
     const normalized = skewnormCdf(v, a, loc, scale)
-    if (isBeta()) console.debug("Remapping Whale:", { before: v, after: normalized })
     if (Number.isNaN(normalized)) return 0
     return Math.round(Math.max(0, Math.min(1, normalized)) * 100)
 }
@@ -256,16 +252,6 @@ export function getPowerScores(chars: Character[]): PowerScores {
 
         roleCurrent[ch.role]?.push({ ...data, value: scaledCurrent })
         roleMax[ch.role]?.push({ ...data, value: scaledMax })
-        if (isBeta()) {
-            console.debug(`For ${ch.name}:`, {
-                totalCurrent: totalCurrent.at(-1),
-                totalMax: totalMax.at(-1),
-                totalWhaleCurrent: totalWhaleCurrent.at(-1),
-                totalWhaleMax: totalWhaleMax.at(-1),
-                roleCurrent: roleCurrent[ch.role].at(-1),
-                roleMax: roleMax[ch.role].at(-1),
-            })
-        }
     }
 
     const modelF2PWhalePower = getModelF2PWhalePower()
@@ -273,11 +259,6 @@ export function getPowerScores(chars: Character[]): PowerScores {
     const maxWhaleValue = totalWhaleMax.reduce((sum, entry) => sum + entry.value, 0)
     const diffWithF2P = Math.max(0, whaleValue - modelF2PWhalePower)
     const maxDiffWithF2P = Math.max(0, maxWhaleValue - modelF2PWhalePower)
-    console.debug("Model F2 Whale Power:", modelF2PWhalePower)
-    console.debug("Total Whale Value:", whaleValue)
-    console.debug("Max Whale Value:", maxWhaleValue)
-    console.debug("Difference with F2P:", diffWithF2P)
-    console.debug("Max Difference with F2P:", maxDiffWithF2P)
 
     return {
         total: normalize(

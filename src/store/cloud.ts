@@ -22,7 +22,6 @@ const withAnalytics = <T extends (...args: any[]) => Promise<any>>(
 ) => {
     return async (...args: Parameters<T>): Promise<ReturnType<T>> => {
         const result = await fn(...args)
-        console.log("For", event, "got", result)
         try {
             await logEvent(event, metadataFn(args))
         } catch (err) {
