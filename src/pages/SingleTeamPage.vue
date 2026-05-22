@@ -59,7 +59,7 @@
             <div class="share-slot-crys-row">
               <span class="share-chip" v-for="([crysId], idx) in Object.entries(slot.main.crysOptions)
                 .filter(([, value]) => value.useIndex > 0)" :key="`cry-${idx}`">
-                {{ crystalises[Number(crysId)]?.name }}
+                {{ crystalises[Number(crysId)]?.styleMstId ? "EX" : crystalises[Number(crysId)]?.name }}
               </span>
             </div>
 
