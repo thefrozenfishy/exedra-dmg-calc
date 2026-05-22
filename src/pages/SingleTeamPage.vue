@@ -504,7 +504,7 @@ async function copyToClipboard(text: string) {
 }
 
 .share-card-preview {
-  display: none;
+  display: block;
   width: 100%;
   max-width: 1200px;
   border: 1px solid #555;
@@ -605,7 +605,6 @@ async function copyToClipboard(text: string) {
   gap: 1rem;
   justify-content: center;
   align-items: flex-start;
-  flex-wrap: wrap;
 }
 
 .share-slot-portrait-block,
@@ -619,10 +618,7 @@ async function copyToClipboard(text: string) {
 .share-slot-portrait-icon,
 .share-slot-support-image {
   height: 40px;
-  border-radius: 10px;
   object-fit: cover;
-  border: 1px solid #444;
-  background: #111;
 }
 
 .share-slot-portrait-label,
