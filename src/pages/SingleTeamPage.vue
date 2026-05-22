@@ -18,6 +18,61 @@
       </h4>
     </div>
 
+    <div class="share-card-actions">
+      <button class="copy-btn" @click="copyTeamShareCardToClipboard" :disabled="!shareCardAvailable">
+        Copy team share image
+      </button>
+      <button class="copy-btn" @click="downloadTeamShareCard" :disabled="!shareCardAvailable">
+        Download team share image
+      </button>
+    </div>
+
+    <div class="share-card-preview" ref="shareCardRef">
+      <div class="share-card-grid">
+        <div v-for="(slot, index) in team.slots" :key="index" class="share-slot">
+          <div v-if="slot.main">
+            <div class="share-slot-top">
+              <div class="share-slot-kioku-image">
+                <img :src="kiokuImage(slot.main)" :alt="slot.main.name" />
+                <div class="share-overlay-badges">
+                  <span class="share-overlay-badge ascension">A{{ slot.main.ascension }}</span>
+                  <span class="share-overlay-badge heart">{{ slot.main.heartphialLvl }}</span>
+                  <span class="share-overlay-badge magic">{{ slot.main.magicLvl }}</span>
+                  <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">{{ slot.main.specialLvl
+                  }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="share-slot-portrait-support">
+              <div class="share-slot-portrait-block" v-if="slot.main?.portrait">
+                <img class="share-slot-portrait-icon" :src="portraitImage(slot.main.portrait)"
+                  :alt="slot.main.portrait" />
+                <div class="share-slot-portrait-label">{{ slot.main.portrait }}</div>
+              </div>
+              <div class="share-slot-support-block" v-if="slot.support">
+                <img class="share-slot-support-image" :src="kiokuImage(slot.support)" :alt="slot.support.name" />
+                <div class="share-slot-support-label">{{ slot.support.name }}</div>
+              </div>
+            </div>
+
+            <div class="share-slot-crys-row">
+              <span class="share-chip" v-for="(cry, idx) in slot.main.crys.filter(Boolean)" :key="`cry-${idx}`">
+                {{ cry }}
+              </span>
+            </div>
+
+            <div class="share-slot-subcrys-row">
+              <span class="share-chip subcrys-chip" v-for="(item, idx) in summarizeSubCrys(slot.main.crys_sub)"
+                :key="`sub-${idx}`">
+                {{ item }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="team-grid">
       <div v-for="(slot, index) in team.slots" :key="index" class="team-slot">
         <h2>
@@ -147,9 +202,11 @@ import AlimentToggler from '../components/AlimentToggler.vue'
 import DamageReductionInputs from '../components/DamageReductionInputs.vue'
 import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
+import { copyImageToClipboard, downloadImage } from '../utils/image'
 import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
 import { useSetting } from '../store/settingsStore'
-import { KiokuArgs, SkillDetail, skillDetailId } from '../types/KiokuTypes'
+import { KiokuArgs, Character, SkillDetail, skillDetailId } from '../types/KiokuTypes'
+import { crystalises, passiveDetails, portraits } from "../utils/helpers";
 
 const attackerIndex = 2
 
@@ -162,6 +219,66 @@ const hp_percentage_team = useSetting("hp_percentage_team", 20)
 const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
 
 const alimentRef = ref<InstanceType<typeof AlimentToggler> | null>(null)
+const shareCardRef = ref<HTMLElement | null>(null)
+const shareCardAvailable = computed(() => team.slots.some(slot => !!slot.main))
+
+const portraitImage = (portrait?: string) => {
+  if (!portrait) return ''
+  return `/exedra-dmg-calc/portrait_images/${portraits[portrait].resourceName}_thumbnail.png`;
+}
+
+const kiokuImage = (member: Character) =>
+  `/exedra-dmg-calc/kioku_images/${member.id}_thumbnail.png`
+
+const summarizeSubCrys = (subCrys: string[]) => {
+  const items = subCrys
+    .filter(Boolean)
+    .map(c => Object.values(crystalises).find(cx => cx.description === c))
+    .map((c) => Object.values(passiveDetails).find(v => (v as any).passiveSkillMstId === c.value1))
+    .filter(c => !!c)
+  console.log("items", items)
+  if (!items.length) return []
+  const counts = items.reduce((acc, eff) => {
+    console.log(acc, eff)
+    if (eff.abilityEffectType in acc) {
+      acc[eff.abilityEffectType][1] = acc[eff.abilityEffectType][1] + eff.value1
+    } else {
+      acc[eff.abilityEffectType] = [
+        eff.description
+          .replace(eff.value1, "XXXXX")
+          .replace((eff.value1 / 10).toFixed(1), "XXXXX")
+          .replace((eff.value1 / 10).toFixed(0), "XXXXX"),
+        eff.value1
+      ]
+    }
+
+    return acc
+  }, {} as Record<string, number>)
+  console.log("counts", counts)
+  return Object.entries(counts).map(([effType, [desc, nr]]) => desc.replace("XXXXX", (desc as string).includes("%") ? nr / 10 : nr))
+}
+
+const copyTeamShareCardToClipboard = async () => {
+  if (!shareCardRef.value) return
+
+  shareCardRef.value.classList.add("exporting")
+
+  await new Promise(requestAnimationFrame)
+  await copyImageToClipboard('single-team-share.png', shareCardRef.value)
+
+  shareCardRef.value.classList.remove("exporting")
+}
+
+const downloadTeamShareCard = async () => {
+  if (!shareCardRef.value) return
+
+  shareCardRef.value.classList.add("exporting")
+
+  await new Promise(requestAnimationFrame)
+  await downloadImage('single-team-share.png', shareCardRef.value)
+
+  shareCardRef.value.classList.remove("exporting")
+}
 
 const sortEffectType = (effects: object) => Object.fromEntries(Object.entries(effects).sort(([a], [b]) => a.localeCompare(b)))
 const sa_score = computed(() => {
@@ -364,6 +481,192 @@ async function copyToClipboard(text: string) {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   max-width: 1200px;
   width: 100%;
+}
+
+.exporting {
+    display: block !important;
+}
+
+.share-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin: 1rem 0;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.share-card-preview {
+  display: none;
+  width: 100%;
+  max-width: 1200px;
+  border: 1px solid #555;
+  border-radius: 10px;
+  padding: 1rem;
+  background: #111;
+  color: #eee;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.35);
+  margin-bottom: 1.5rem;
+}
+
+.share-card-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.share-slot {
+  background: #161616;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 220px;
+}
+
+.share-slot-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.share-slot-kioku-image {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 14px;
+  background: #0f0f0f;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-slot-kioku-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.share-overlay-badges {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.share-overlay-badge {
+  position: absolute;
+  min-width: 32px;
+  transform: translateX(-50%);
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.88);
+  color: #fff;
+  font-size: 0.72rem;
+  text-align: center;
+  border-radius: 999px;
+  font-weight: 700;
+  padding: 0 0.35rem;
+}
+
+.share-overlay-badge.ascension {
+  left: 80%;
+  top: 0;
+}
+
+.share-overlay-badge.heart {
+  left: 20%;
+  top: 0;
+}
+
+.share-overlay-badge.magic {
+  left: 20%;
+  bottom: 0;
+}
+
+.share-overlay-badge.special {
+  left: 80%;
+  bottom: 0;
+}
+
+.share-slot-portrait-support {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.share-slot-portrait-block,
+.share-slot-support-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.share-slot-portrait-icon,
+.share-slot-support-image {
+  height: 40px;
+  object-fit: cover;
+}
+
+.share-slot-portrait-label,
+.share-slot-support-label {
+  font-size: 0.78rem;
+  color: #ddd;
+  text-align: center;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.share-slot-crys-row,
+.share-slot-subcrys-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0.4rem;
+  justify-content: center;
+  align-items: center;
+  min-height: 2rem;
+}
+
+.share-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  color: #d2f0ff;
+  font-size: 0.78rem;
+}
+
+.subcrys-chip {
+  background: rgba(99, 141, 168, 0.16);
+}
+
+.share-slot-portrait-icon {
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #444;
+  background: #111;
+}
+
+.share-slot-crys {
+  width: 100%;
+  text-align: left;
+  font-size: 0.77rem;
+  color: #9fd;
+  line-height: 1.4;
+  min-height: 2rem;
 }
 
 .team-slot {
