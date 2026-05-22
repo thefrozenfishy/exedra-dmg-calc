@@ -163,10 +163,11 @@ const setUseIndex = (effectId: number, useIndex: number) => {
 }
 
 .crys-image {
-    width: 48px;
-    height: 48px;
+    width: 64px;
+    height: 64px;
     object-fit: contain;
     flex-shrink: 0;
+    margin: -5px;
 }
 
 .crys-image.disabled {
