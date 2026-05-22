@@ -36,6 +36,10 @@
             <label> <input type="checkbox" v-model="showLevels" /> Show Magic and Special levels </label>
             <label> <input type="checkbox" v-model="showHearts" /> Show Heartphial levels </label>
             <label> <input type="checkbox" v-model="showDupes" /> Show Dupes </label>
+            <label>
+                <input type="checkbox" v-model="showCrys" />
+                Show Crys Counter
+            </label>
             <label> <input type="checkbox" :disabled="!(showLevels || showHearts)" v-model="colourLevels" />
                 Colour max levels
             </label>
@@ -57,6 +61,15 @@
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
                                 </a>
+                                <router-link v-if="showCrys && (chars as any).label !== 'Not Owned'"
+                                    class="crys-count-badge level-badge crys-link" :to="{
+                                        path: '/character-crys',
+                                        query: { character_id: ch.id }
+                                    }" @click.stop :class="colourLevels
+                                        ? getCrysCount(ch) >= maxCrysCount ? 'maxLvl' : 'notMaxLvl'
+                                        : ''">
+                                    {{ getCrysCount(ch) }}
+                                </router-link>
                                 <div class="dupe-badge level-badge editable"
                                     v-if="showDupes && (chars as any).label === 'A5'"
                                     @click.stop="startEdit(ch, 'dupes', $event)">
@@ -169,7 +182,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import { useCharacterStore } from "../store/characterStore"
-import { Character, KiokuConstants } from "../types/KiokuTypes"
+import { Character, KiokuConstants, KiokuElement, relevantCrys } from "../types/KiokuTypes"
 import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
@@ -179,6 +192,7 @@ import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 import { copyImageToClipboard, downloadImage } from "../utils/image"
+import { crystalises, passiveDetails } from "../utils/helpers"
 
 const route = useRoute()
 const router = useRouter()
@@ -249,7 +263,9 @@ const extraTotal = computed(() => (showDupes.value ? ownedFiveStars.value.reduce
 const showLevels = useSetting("showLevels", true);
 const showHearts = useSetting("showHearts", true);
 const showDupes = useSetting("showDupes", true);
+const showCrys = useSetting("showCrys", true);
 const colourLevels = useSetting("colourLevels", true);
+
 const show4stars = useSetting("show4stars", false);
 const show3stars = useSetting("show3stars", false);
 const showUnowned = useSetting("showUnowned", true);
@@ -260,6 +276,23 @@ const getMaxSpecialLvl = (ch: Character): number => {
     if (ch.ascension === 5) return 10
     if (ch.ascension >= 3) return 7
     return 4
+}
+
+const shouldFilterOutOffElement = (elem: KiokuElement, selectionAbilityMstId: number) =>
+    [0, elem].includes(passiveDetails[crystalises[selectionAbilityMstId].value1 * 100 + 1].element)
+
+const maxCrysCount = relevantCrys(10010101).filter(c => shouldFilterOutOffElement(KiokuElement.Light, c.selectionAbilityMstId)).length
+
+const getCrysCount = (ch: Character): number => {
+    if (!ch.crysOptions) return 0
+    return Object
+        .entries(ch.crysOptions)
+        .filter(([i, c]) => shouldFilterOutOffElement(ch.element, Number(i)))
+        .map(([i, c]) => c)
+        .reduce((sum: number, opt: any) => {
+            if (!opt?.enabled) return sum
+            return sum + 1
+        }, 0)
 }
 
 const isMaxLevels = (ch: Character): boolean => ch.magicLvl === KiokuConstants.maxMagicLvl &&
@@ -581,6 +614,21 @@ td {
 .dupe-badge {
     left: 80%;
     top: 0;
+}
+
+.crys-count-badge {
+    right: 0;
+    top: 50%;
+    transform: translate(50%, -50%);
+}
+
+.crys-link {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.crys-link:hover {
+    transform: translate(50%, -50%) scale(1.08);
 }
 
 .magic-level-badge {

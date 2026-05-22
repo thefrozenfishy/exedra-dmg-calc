@@ -15,12 +15,12 @@ const beta = isBeta()
       </div>
       <nav>
         <div>
-          <router-link to="/team-setup">Kioku Setup</router-link>
           <router-link to="/profile">Profile + Friends</router-link>
+          <router-link to="/team-setup">Kioku Setup</router-link>
+          <router-link to="/character-crys">Character Crystalis</router-link>
           <router-link to="/my-kioku">My Kioku Viewer</router-link>
           <router-link to="/kioku-grid">Kioku Grid</router-link>
           <router-link to="/account-compare">Account Comparison</router-link>
-          <router-link to="/character-crys">Character Crystalis</router-link>
         </div>
         <div>
           <router-link to="/sa-simulator-multiple">Best SA Team Calculator</router-link>

@@ -138,9 +138,7 @@ export const useFriendStore = defineStore('friendStore', () => {
             await Promise.all(
                 friends.value.map(async friend => {
                     try {
-                        const rows = await loadCharactersByFriendCode(
-                            friend.friend_id
-                        )
+                        const rows = await loadCharactersByFriendCode(                            friend.friend_id                        )
 
                         const chars = characterStore.mergeChars(rows) as Character[]
 

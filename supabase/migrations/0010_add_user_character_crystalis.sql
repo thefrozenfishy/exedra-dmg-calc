@@ -1,61 +1,49 @@
--- Create table to store per-user per-character crystalis selections
+ALTER TABLE public.user_characters
+DROP COLUMN crys;
 
-CREATE TABLE public.user_character_crystalis (
-  user_id UUID NOT NULL
-    REFERENCES public.users(user_id)
-    ON DELETE CASCADE,
+ALTER TABLE public.user_characters
+DROP COLUMN crys_sub;
 
-  character_id BIGINT NOT NULL,
+ALTER TABLE public.user_characters
+ADD COLUMN crys_options JSONB NOT NULL DEFAULT '{}'::jsonb;
 
-  selections JSONB NOT NULL DEFAULT '[]'::jsonb,
+DROP FUNCTION IF EXISTS public.get_public_characters(CHAR);
 
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+CREATE FUNCTION public.get_public_characters(
+  target_friend_id CHAR(5)
+)
+RETURNS TABLE (
+  character_id BIGINT,
+  enabled BOOLEAN,
+  dupes INT,
+  ascension INT,
+  kioku_lvl INT,
+  magic_lvl INT,
+  heartphial_lvl INT,
+  special_lvl INT,
+  portrait TEXT,
+  crys_options JSONB
+)
+LANGUAGE sql
+SECURITY DEFINER
+AS $$
+  SELECT
+    uc.character_id,
+    uc.enabled,
+    uc.dupes,
+    uc.ascension,
+    uc.kioku_lvl,
+    uc.magic_lvl,
+    uc.heartphial_lvl,
+    uc.special_lvl,
+    uc.portrait,
+    uc.crys_options
+  FROM public.user_characters uc
+  JOIN public.users u
+    ON u.user_id = uc.user_id
+  WHERE u.friend_id = target_friend_id;
+$$;
 
-  PRIMARY KEY (user_id, character_id)
-);
-
-CREATE TRIGGER user_character_crystalis_updated_at
-BEFORE UPDATE ON public.user_character_crystalis
-FOR EACH ROW
-EXECUTE FUNCTION set_updated_at();
-
-CREATE INDEX idx_user_character_crystalis_user_id
-ON public.user_character_crystalis(user_id);
-
-ALTER TABLE public.user_character_crystalis ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "insert own character crystalis"
-ON public.user_character_crystalis
-FOR INSERT
-WITH CHECK (
-  user_id =
-  (current_setting('request.headers', true)::json->>'x-user-id')::uuid
-);
-
-CREATE POLICY "update own character crystalis"
-ON public.user_character_crystalis
-FOR UPDATE
-USING (
-  user_id =
-  (current_setting('request.headers', true)::json->>'x-user-id')::uuid
-);
-
-CREATE POLICY "delete own character crystalis"
-ON public.user_character_crystalis
-FOR DELETE
-USING (
-  user_id =
-  (current_setting('request.headers', true)::json->>'x-user-id')::uuid
-);
-
-CREATE POLICY "read own character crystalis"
-ON public.user_character_crystalis
-FOR SELECT
-USING (
-  user_id =
-  (current_setting('request.headers', true)::json->>'x-user-id')::uuid
-);
-
-GRANT SELECT, INSERT, UPDATE, DELETE
-ON public.user_character_crystalis
+GRANT EXECUTE
+ON FUNCTION public.get_public_characters(CHAR)
 TO anon, authenticated;

@@ -70,8 +70,7 @@ async function _saveCharacters(chars: Character[]) {
 
         portrait: c.portrait,
 
-        crys: c.crys,
-        crys_sub: c.crys_sub
+        crys_options: c.crysOptions
     }))
 
     const { error } = await supabase
@@ -113,43 +112,6 @@ async function _restoreCloudAccount(userId: string) {
     }
 
     return true
-}
-
-async function _saveCharacterCrystalis(characterId: number, selections: CrystalisSelection[]) {
-    const userId = getUserId()
-
-    if (!userId) return
-
-    const supabase = getSupabase()
-
-    const { error } = await supabase
-        .from('user_character_crystalis')
-        .upsert({
-            user_id: userId,
-            character_id: characterId,
-            selections
-        })
-
-    if (error) throw error
-}
-
-async function _loadCharacterCrystalis(characterId: number) {
-    const userId = getUserId()
-
-    if (!userId) return []
-
-    const supabase = getSupabase()
-
-    const { data, error } = await supabase
-        .from('user_character_crystalis')
-        .select('selections')
-        .eq('user_id', userId)
-        .eq('character_id', characterId)
-        .single()
-
-    if (error) throw error
-
-    return data?.selections ?? []
 }
 
 async function _getFriendCode() {
@@ -473,8 +435,7 @@ async function _loadCharactersByFriendCode(friendCode: string) {
 
         portrait: row.portrait,
 
-        crys: row.crys,
-        crys_sub: row.crys_sub,
+        crysOptions: row.crys_options ?? {},
 
         id: row.character_id
     }))
@@ -618,16 +579,4 @@ export const updateFriendCode = withAnalytics(
     _updateFriendCode,
     'update_friend_code',
     ([friendCode]) => ({ friendCode })
-)
-
-export const saveCharacterCrystalis = withAnalytics(
-    _saveCharacterCrystalis,
-    'save_character_crystalis',
-    ([characterId, selections]) => ({ characterId, selectionCount: selections?.length ?? 0 })
-)
-
-export const loadCharacterCrystalis = withAnalytics(
-    _loadCharacterCrystalis,
-    'load_character_crystalis',
-    ([characterId]) => ({ characterId })
 )
