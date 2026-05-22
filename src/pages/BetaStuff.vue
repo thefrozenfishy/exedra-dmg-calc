@@ -1,6 +1,6 @@
 <template>
     <div class="beta-settings">
-        <h1>Beta Settings</h1>
+        <h2>Beta Settings</h2>
         <p class="warning">
             Set these at your own risk.
         </p>

@@ -180,8 +180,10 @@ export type SkillKey = "skillMstId" | "passiveSkillMstId";
 export interface Character {
     ascension: number
     character_en: string
-    crys_sub: string[]
-    crys: string[]
+    crys1: number
+    crys2: number
+    crys3: number
+    crysOptions: CrystalisSelection[]
     element: KiokuElement
     enabled: boolean
     heartphial: string
@@ -284,13 +286,33 @@ export interface KiokuData {
 }
 
 export interface CrystalisData {
-    name: string
+    abilityEffectType: string
     description: string
+    name: string
     rarity: number
-    value1: number
-    styleMstId: number
+    resourceIconName: string
+    selectionAbilityEffectId: number
+    selectionAbilityMstId: number
     selectionAbilityType: number
+    sortOrder: number
+    styleMstId: number
+    targetType: number
+    value1: number
+    value2: number
 }
+
+export interface CrystalisSelection {
+    enabled: boolean
+    id: number
+    subCrys1: number
+    subCrys2: number
+    subCrys3: number
+}
+
+export const relevantCrys: (characterId: number) => CrystalisData[] = (characterId: number) => [
+    Object.values(crystalises).find(c => c.styleMstId === characterId),
+    ...Object.values(crystalises).filter(c => c.selectionAbilityType === 1 && c.rarity === 3)
+].filter(c => !!c)
 
 export interface StyleParamUp {
     styleParamUpMstId: number

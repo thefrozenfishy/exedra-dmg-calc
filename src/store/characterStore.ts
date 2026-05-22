@@ -22,8 +22,6 @@ const base = {
     magicLvl: KiokuConstants.maxMagicLvl,
     heartphialLvl: KiokuConstants.maxHeartphialLvl,
     specialLvl: KiokuConstants.maxSpecialLvl,
-    crys: ["EX"],
-    crys_sub: KiokuConstants.optimal_attacker_crys_sub
 }
 
 export const useCharacterStore = defineStore('characterStore', () => {
@@ -47,6 +45,16 @@ export const useCharacterStore = defineStore('characterStore', () => {
     const basicSetting = (ch) => ({
         enabled: ch.rarity !== 5 || ch.id === 10010101,
         dupes: 0,
+        crys1: 0,
+        crys2: 0,
+        crys3: 0,
+        crysOptions: Object.values(crystalises).map(c => ({
+            enabled: false,
+            id: c.selectionAbilityEffectId,
+            subCrys1: 0,
+            subCrys2: 0,
+            subCrys3: 0,
+        })),
         ...base,
     })
 
@@ -54,8 +62,6 @@ export const useCharacterStore = defineStore('characterStore', () => {
     if (saved) {
         const oldChars: Character[] = JSON.parse(saved)
         characters.value = oldChars.map(c => {
-            c.crys = c?.crys?.filter(sc => ["EX", ...Object.values(crystalises).map(cr => cr.name)].includes(sc)) ?? []
-            c.crys_sub = c?.crys_sub?.filter(sc => Object.values(crystalises).map(cr => cr.name).includes(sc)) ?? []
             if (c.ascension < 0) c.ascension = 0
             if (c.ascension > KiokuConstants.maxAscension) c.ascension = KiokuConstants.maxAscension
             if (c.rarity < 5) c.ascension = KiokuConstants.maxAscension

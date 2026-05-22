@@ -8,6 +8,7 @@ import PvpTeamPage from '../pages/PvpTeamPage.vue'
 import Pvp101Page from '../pages/Pvp101Page.vue'
 import LinkRaid from '../pages/LinkRaid.vue'
 import CrysReroll from '../pages/CrysReroll.vue'
+import CharacterCrysPage from '../pages/CharacterCrysPage.vue'
 import GachaRatePage from '../pages/GachaRatePage.vue'
 import TierLists from '../pages/TierLists.vue'
 import KiokuGridPage from '../pages/KiokuGridPage.vue'
@@ -30,6 +31,7 @@ const routes = [
     { path: '/kioku-grid', name: 'Kioku Grid', component: KiokuGridPage },
     { path: '/link-raid', name: 'Link Raid Tool', component: LinkRaid },
     { path: '/crys-reroll', name: 'Crystalis Reroller', component: CrysReroll },
+    { path: '/character-crys', name: 'Character Crystalis', component: CharacterCrysPage },
     { path: '/tier-lists', name: 'Tier Lists', component: TierLists },
     { path: '/about', name: 'About', component: About },
     { path: '/my-kioku', name: 'My Kioku Viewer', component: AccountHasPage },
