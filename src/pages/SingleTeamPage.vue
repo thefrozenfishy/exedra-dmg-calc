@@ -39,7 +39,7 @@
                   <span class="share-overlay-badge heart">{{ slot.main.heartphialLvl }}</span>
                   <span class="share-overlay-badge magic">{{ slot.main.magicLvl }}</span>
                   <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">{{ slot.main.specialLvl
-                  }}</span>
+                    }}</span>
                 </div>
               </div>
             </div>
@@ -64,8 +64,7 @@
             </div>
 
             <div class="share-slot-subcrys-row">
-              <span class="share-chip subcrys-chip"
-                v-for="(item, idx) in summarizeSubCrys(Object.values(slot.main.crysOptions).flatMap(option => option.subCrys))"
+              <span class="share-chip subcrys-chip" v-for="(item, idx) in summarizeSubCrys(slot.main)"
                 :key="`sub-${idx}`">
                 {{ item }}
               </span>
@@ -232,8 +231,11 @@ const portraitImage = (portrait?: string) => {
 const kiokuImage = (member: Character) =>
   `/exedra-dmg-calc/kioku_images/${member.id}_thumbnail.png`
 
-const summarizeSubCrys = (subCrysIds: number[]) => {
-  const items = subCrysIds
+const summarizeSubCrys = (ch: Character) => {
+
+  const items = Object.values(ch.crysOptions)
+    .filter(c => c.useIndex > 0)
+    .flatMap(option => option.subCrys)
     .filter(Boolean)
     .map(c => Object.values(crystalises).find(cx => cx.selectionAbilityMstId === c))
     .map(c => Object.values(passiveDetails).find(v => (v as any).passiveSkillMstId === c?.value1))
