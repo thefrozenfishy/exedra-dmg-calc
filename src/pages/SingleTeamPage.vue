@@ -504,7 +504,7 @@ async function copyToClipboard(text: string) {
 }
 
 .share-card-preview {
-  display: block;
+  display: none;
   width: 100%;
   max-width: 1200px;
   border: 1px solid #555;
