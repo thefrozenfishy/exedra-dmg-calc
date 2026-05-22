@@ -157,7 +157,7 @@
                 {{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100) }}%
             </div>
         </div>
-        <h4 style="margin-bottom: 0;">Maxed Heartphial-, Magic-, & Special level kioku:</h4>
+        <h4 style="margin-bottom: 0;">Maxed Heartphial-, Magic-, & Special level kioku with all (not off element) crys collected:</h4>
         <div>
             5-stars: {{ maxed5starChars.length }} / {{ ownedFiveStars.length }}
             ({{ round(maxed5starChars.length / ownedFiveStars.length * 100) }}%)
@@ -245,9 +245,9 @@ const fiveStarMembers = computed(() => displayedCharactersComputed.value.filter(
 const fourStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 4 || c.name === "Lux☆Magica"))
 const threeStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 3))
 
-const maxed5starChars = computed(() => fiveStarMembers.value.filter(ch => ch.enabled && isMaxLevels(ch)))
-const maxed4starChars = computed(() => fourStarMembers.value.filter(isMaxLevels))
-const maxed3starChars = computed(() => threeStarMembers.value.filter(isMaxLevels))
+const maxed5starChars = computed(() => fiveStarMembers.value.filter(ch => ch.enabled && isMaxLevels(ch) && getCrysCount(ch) === maxCrysCount))
+const maxed4starChars = computed(() => fourStarMembers.value.filter(ch => isMaxLevels(ch) && getCrysCount(ch) === maxCrysCount))
+const maxed3starChars = computed(() => threeStarMembers.value.filter(ch => isMaxLevels(ch) && getCrysCount(ch) === maxCrysCount))
 
 const ownedFiveStars = computed(() => fiveStarMembers.value.filter(c => c.enabled))
 const totalAscensions = computed(() => ownedFiveStars.value.reduce((sum, ch) => sum + ch.ascension + 1, 0))
