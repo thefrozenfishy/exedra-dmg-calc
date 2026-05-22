@@ -57,13 +57,15 @@
             </div>
 
             <div class="share-slot-crys-row">
-              <span class="share-chip" v-for="(cry, idx) in slot.main.crys.filter(Boolean)" :key="`cry-${idx}`">
-                {{ cry }}
+              <span class="share-chip" v-for="([crysId], idx) in Object.entries(slot.main.crysOptions)
+                .filter(([, value]) => value.useIndex > 0)" :key="`cry-${idx}`">
+                {{ crystalises[Number(crysId)]?.name }}
               </span>
             </div>
 
             <div class="share-slot-subcrys-row">
-              <span class="share-chip subcrys-chip" v-for="(item, idx) in summarizeSubCrys(slot.main.crys_sub)"
+              <span class="share-chip subcrys-chip"
+                v-for="(item, idx) in summarizeSubCrys(Object.values(slot.main.crysOptions).flatMap(option => option.subCrys))"
                 :key="`sub-${idx}`">
                 {{ item }}
               </span>
@@ -230,13 +232,13 @@ const portraitImage = (portrait?: string) => {
 const kiokuImage = (member: Character) =>
   `/exedra-dmg-calc/kioku_images/${member.id}_thumbnail.png`
 
-const summarizeSubCrys = (subCrys: string[]) => {
-  const items = subCrys
+const summarizeSubCrys = (subCrysIds: number[]) => {
+  const items = subCrysIds
     .filter(Boolean)
-    .map(c => Object.values(crystalises).find(cx => cx.description === c))
-    .map((c) => Object.values(passiveDetails).find(v => (v as any).passiveSkillMstId === c.value1))
+    .map(c => Object.values(crystalises).find(cx => cx.selectionAbilityMstId === c))
+    .map(c => Object.values(passiveDetails).find(v => (v as any).passiveSkillMstId === c?.value1))
     .filter(c => !!c)
-  console.log("items", items)
+
   if (!items.length) return []
   const counts = items.reduce((acc, eff) => {
     console.log(acc, eff)
@@ -254,7 +256,7 @@ const summarizeSubCrys = (subCrys: string[]) => {
 
     return acc
   }, {} as Record<string, number>)
-  console.log("counts", counts)
+
   return Object.entries(counts).map(([effType, [desc, nr]]) => desc.replace("XXXXX", (desc as string).includes("%") ? nr / 10 : nr))
 }
 
@@ -484,7 +486,7 @@ async function copyToClipboard(text: string) {
 }
 
 .exporting {
-    display: block !important;
+  display: block !important;
 }
 
 .share-card-actions {
