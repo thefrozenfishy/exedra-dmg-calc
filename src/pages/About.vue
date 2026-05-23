@@ -1,46 +1,37 @@
 <template>
+    Profile + FriendsKioku SetupCharacter CrystalisMy Kioku ViewerKioku GridAccount Comparison
+    Best SA Team CalculatorSingle Battle CalculatorPvP CalculatorPvP 101Gacha Rate+SimLink Raid ToolCrystalis
+    RerollerAbout
     <div style="text-align: left;">
         <h1>About</h1>
-        <h2>Info</h2>
-        <p>The damage calculations try to capture all the oddities of the exedra damage calculations in an automatic
-            way, but might read some things wrong,
-            I try to correct this as soon as I am made aware of them,
-            if you spot anything weird then you can use the <a
-                href="https://docs.google.com/spreadsheets/d/1AZhIqAazG_B99bxPWBbsMxKJ_hF24wwiXProgSshsmk/edit?usp=sharing">Exedra
-                Damage Calculator</a> sheet to calculate the damage manually.</p>
-        <p>The calculations here are based on the formulas in that sheet.</p>
+        This toolbox is various Exedra tools I've found the need for, I try to maintain them all, but if you spot an
+        error please don't refrain from poking me on discord @tff in the <a href="https://discord.gg/magiaexedra">Exedra
+            Discord</a>.
 
-        <h2>Team Setup</h2>
-        <p>Used to input your team. The Kioku here will be used as your available Kioku on other pages.</p>
-        <h2>Calculate Best Team</h2>
-        <p>A Score Attack tool, allowing you to calculate your best team for any stage.</p>
-        <p>The best teams usually do not include 4★ Kioku, but you can include them in the calculation if you check the
-            boxes</p>
-        <p>By default only attackers are tested, but if you want to use a non-Attacker as attacker in the simulator
-            simply add them to extra attackers.</p>
-        <p>Hits to kill is there to reflect a quirk in the code, where the amount of enemies are calculated separately
-            for each enemy, meaning that Oriko support, Momoko EX etc will do less damage to other enemies if any of the
-            former are killed. You can test the effect in Single Team Calculator.</p>
-        <h2>Simulate Single Battle</h2>
-        <p>Here you can set up a concrete battle, and see how minor changes affects the total damage dealt. The settings
-            are otherwise identical to the previous pages. Changes done to Kioku here do not overwrite your defaults, so
-            feel free to change values as desired</p>
-        <h1>Contact</h1>
-        <p>If you have feedback, notice any bugs, or have suggestions for improvements just reach out to tff on the <a
-                href="https://discord.gg/magiaexedra">exedra discord</a>, or make issues/pr on <a
-                href="https://github.com/thefrozenfishy/exedra-dmg-calc">GitHub</a>.</p>
-        <h1>Known Issues</h1>
-        <ul>
-            <li>Melodia Appassionata (Swimsuit Sayaka) vortex are not added to the calculation</li>
-            <li>Dot pop (Haloween Alina etc) isn't added to the dmg calculation</li>
-        </ul>
-        <h1>Potentially planned improvements</h1>
-        <ul>
-            <li>Add "import boss stats" or something similar</li>
-        </ul>
-        <h1>Dump debug data</h1>
+        <h2>Profile</h2>
+        <p>You can store your data online by syncing your data. Note down your recovery code and use it to sync your
+            data across devices.</p>
+
+        <h2>Friends</h2>
+        <p>You may add other players, allowing you to easily check their owned kioku, as well as calculated total pwr,
+            role pwr, and whale pwr, giving a quick way to compare yourself with your friends. Players in the same
+            unions are automatically shown in your list.</p>
+
+        <h2>Kioku setup</h2>
+        <p><b>Kioku Setup</b> and <b>My Kioku Viewer</b> may be used to edit the Kioku on your account.</p>
+
+        <h2>Calculators</h2>
+        <p>The <b>Best SA Team Calculator</b> may be used to find the highest dmg team in any given stage. Find the
+            enemy stats on the <a href="https://exedra.wiki/wiki/Magia_Exedra_Wiki">Exedra Wiki</a>. To check futher
+            details, such as checking the damage without spesific buffs you can open the team in the <b>Single Battle
+                Calculator</b>. The damage calc is based on the <a
+                href="https://docs.google.com/spreadsheets/d/1AZhIqAazG_B99bxPWBbsMxKJ_hF24wwiXProgSshsmk/edit?usp=sharing">Exedra
+                Damage Calculator Sheet</a> if you wish to input data manually</p>
+        <p><b>PvP Calculator</b> is made to calculate spd and turn orders, but do be aware that there are many quicks in
+            pvp, not all are captured in the calculator, so trust the first few actions mostly.</p>
+
+        <h1>Debug stuff</h1>
         <button class="export-button" :onclick="downloadLS">Export LocalStorage</button>
-        <h1>Toggle beta</h1>
         <button class="export-button" :onclick="toggleBeta">Toggle beta</button>
     </div>
 </template>

@@ -601,6 +601,10 @@ td {
     font-weight: bold;
 }
 
+.level-badge:hover {
+    border: 1px solid #b57edc;
+}
+
 .special-level-badge {
     left: 80%;
     bottom: 0;
