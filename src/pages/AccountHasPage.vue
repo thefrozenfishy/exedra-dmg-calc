@@ -182,7 +182,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import { useCharacterStore } from "../store/characterStore"
-import { Character, KiokuConstants, KiokuElement, relevantCrys } from "../types/KiokuTypes"
+import { Character, elementMap, KiokuConstants, KiokuElement, relevantCrys } from "../types/KiokuTypes"
 import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
@@ -279,7 +279,7 @@ const getMaxSpecialLvl = (ch: Character): number => {
 }
 
 const shouldFilterOutOffElement = (elem: KiokuElement, selectionAbilityMstId: number) =>
-    [0, elem].includes(passiveDetails[crystalises[selectionAbilityMstId].value1 * 100 + 1].element)
+    [0, elem].includes(elementMap[passiveDetails[crystalises[selectionAbilityMstId].value1 * 100 + 1].element] ?? 0)
 
 const maxCrysCount = relevantCrys(10010101).filter(c => shouldFilterOutOffElement(KiokuElement.Light, c.selectionAbilityMstId)).length
 
