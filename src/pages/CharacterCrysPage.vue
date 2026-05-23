@@ -210,9 +210,14 @@ const setUseIndex = (effectId: number, useIndex: number) => {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 4px;
-    color: inherit;
+    color: #ffffff;
     padding: 3px 6px;
     font-size: 0.85em;
+}
+
+.subcrys-select option {
+    background: #1e1e2e;
+    color: #ffffff;
 }
 
 .subcrys-desc {
