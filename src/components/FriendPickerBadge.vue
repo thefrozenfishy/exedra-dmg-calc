@@ -101,6 +101,7 @@ import {
     useFriendStore,
     type SocialProfile,
 } from "../store/friendStore"
+import { getProfile } from "../store/cloud";
 
 const props = withDefaults(defineProps<{
     side: "left" | "right"
@@ -140,20 +141,6 @@ const selfProfile = computed<SocialProfile | null>(() => {
         union_name: store.unionName,
         profile_icon: store.profile_icon,
     }
-})
-
-const currentProfile = computed(() => {
-    if (!props.currentCode) return null
-
-    if (props.currentCode === store.friendCode) {
-        return selfProfile.value
-    }
-
-    return (
-        store.friends.find(
-            f => f.friend_id === props.currentCode
-        ) ?? null
-    )
 })
 
 const avatarSrc = computed(() =>
@@ -312,6 +299,32 @@ const handleClickOutside = (e: MouseEvent) => {
 }
 
 watch(query, () => { cursor.value = 0 })
+const currentProfile = ref<SocialProfile | null>(null)
+
+watch(
+    () => props.currentCode,
+    async (code) => {
+        if (!code) {
+            currentProfile.value = null
+            return
+        }
+
+        if (code === store.friendCode) {
+            currentProfile.value = selfProfile.value
+            return
+        }
+
+        const existing = store.friends.find(f => f.friend_id === code)
+
+        if (existing) {
+            currentProfile.value = existing
+            return
+        }
+
+        currentProfile.value = await getProfile(code)
+    },
+    { immediate: true }
+)
 
 onMounted(() => { document.addEventListener("mousedown", handleClickOutside) })
 
