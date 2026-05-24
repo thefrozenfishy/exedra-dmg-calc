@@ -66,7 +66,7 @@
                                         path: '/character-crys',
                                         query: { character_id: ch.id }
                                     }" @click.stop :class="colourLevels
-                                        ? getCrysCount(ch) >= maxCrysCount ? 'maxLvl' : 'notMaxLvl'
+                                        ? getCrysCount(ch) >= maxCrysCount ? 'maxLvl' : hasElementalCrys(ch) ? 'notMaxLvlMissingElemCrys' : 'notMaxLvl'
                                         : ''">
                                     {{ getCrysCount(ch) }}
                                 </router-link>
@@ -157,7 +157,8 @@
                 {{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100) }}%
             </div>
         </div>
-        <h4 style="margin-bottom: 0;">Maxed Heartphial-, Magic-, & Special level kioku with all (not off element) crys collected:</h4>
+        <h4 style="margin-bottom: 0;">Maxed Heartphial-, Magic-, & Special level kioku with all (not off element) crys
+            collected:</h4>
         <div>
             5-stars: {{ maxed5starChars.length }} / {{ ownedFiveStars.length }}
             ({{ round(maxed5starChars.length / ownedFiveStars.length * 100) }}%)
@@ -175,6 +176,7 @@
             You can edit, export, and import your kioku on the Team Setup page, or edit here directly.<br />
             Red borders indicate limited characters, yellow borders indicate characters not yet added to the permanent
             roster, and transparent borders indicate standard permanent characters.
+            For crys counter red indicates some crys are missing, yellow that some are missing, but the elemental crys has been collected, and green that all not off-elemental crys have been collected
         </div>
     </div>
 </template>
@@ -278,10 +280,10 @@ const getMaxSpecialLvl = (ch: Character): number => {
     return 4
 }
 
-const shouldFilterOutOffElement = (elem: KiokuElement, selectionAbilityMstId: number) =>
-    [0, elem].includes(elementMap[passiveDetails[crystalises[selectionAbilityMstId].value1 * 100 + 1].element] ?? 0)
-
+const getCrysElement = (selectionAbilityMstId: number) => elementMap[passiveDetails[crystalises[selectionAbilityMstId].value1 * 100 + 1].element] ?? 0
+const shouldFilterOutOffElement = (elem: KiokuElement, selectionAbilityMstId: number) => [0, elem].includes(getCrysElement(selectionAbilityMstId))
 const maxCrysCount = relevantCrys(10010101).filter(c => shouldFilterOutOffElement(KiokuElement.Light, c.selectionAbilityMstId)).length
+const hasElementalCrys = (ch: Character) => Object.entries(ch.crysOptions).some(([i, c]) => getCrysElement(Number(i)) === ch.element && c.enabled)
 
 const getCrysCount = (ch: Character): number => {
     if (!ch.crysOptions) return 0
@@ -642,6 +644,10 @@ td {
 
 .maxLvl {
     color: palegreen;
+}
+
+.notMaxLvlMissingElemCrys {
+    color: saddlebrown;
 }
 
 .notMaxLvl {
