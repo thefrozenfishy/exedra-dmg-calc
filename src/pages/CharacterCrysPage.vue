@@ -9,7 +9,7 @@
                     :class="{ disabled: !crys.enabled }">
 
                     <div v-if="crys.enabled" class="use-index-selector">
-                        <div v-for="i in 3" :key="i" class="use-index-box" :class="{ active: crys.useIndex === (i) }"
+                        <div v-for="i in 3" :key="i" class="use-index-box" :class="{ active: crys.useIndex === i }"
                             @click.stop="setUseIndex(crys.selectionAbilityMstId, i)">
                             {{ i }}
                         </div>
@@ -18,19 +18,38 @@
                     <div class="crys-header" @click="toggleCrys(crys.selectionAbilityMstId)">
                         <img :src="`/exedra-dmg-calc/selection_ability/${crys.resourceIconName}.png`" :alt="crys.name"
                             class="crys-image" :class="{ disabled: !crys.enabled }" />
-
                         <span class="crys-name">{{ crys.name }}</span>
                     </div>
 
-                    <div v-if="crys.enabled" class="subcrys-section">
-                        <div v-for="(sub, i) in crys.subCrys" :key="i" class="subcrys-row">
-                            <select class="subcrys-select" :value="sub"
-                                @change="e => updateSubCrys(crys.selectionAbilityMstId, i, Number((e.target as HTMLSelectElement).value))">
-                                <option v-for="item in subCrysList" :key="item.id" :value="item.id">
-                                    {{ item.name }}
-                                </option>
-                            </select>
+                    <div class="subcrys-bar"
+                        :ref="el => { if (el) barRefMap[crys.selectionAbilityMstId] = el as HTMLElement }">
+                        <div v-for="(subId, idx) in crys.subCrys" :key="idx" class="subcrys-pill"
+                            :class="{ filled: subId !== 0 }"
+                            @click.stop="openFlyout(crys.selectionAbilityMstId, idx, $event)">
+                            <div v-if="subId !== 0" class="pill-label">{{ getSubName(subId) }}</div>
+                            <span v-else class="pill-empty">+</span>
                         </div>
+
+                        <Teleport to="body">
+                            <div v-if="activeFlyout === crys.selectionAbilityMstId" class="flyout" :style="flyoutStyle"
+                                @click.stop>
+                                <div class="flyout-scroll">
+                                    <div v-for="parent in groupedSubCrys" :key="parent.id" class="flyout-item"
+                                        @click.stop="toggleSubCrys(crys.selectionAbilityMstId, crys.subCrys, parent.key, parent.subs)"
+                                        @mouseenter="activeSubFlyout = parent.id" @mouseleave="activeSubFlyout = null">
+                                        <span class="item-name">{{ parent.name }}</span>
+                                        <span class="arrow">›</span>
+                                        <div v-if="activeSubFlyout === parent.id" class="sub-flyout">
+                                            <div v-for="sub in parent.subs.sort((a, b) => b.rarity - a.rarity)"
+                                                :key="sub.selectionAbilityMstId" class="sub-flyout-item"
+                                                @click.stop="toggleSubCrys(crys.selectionAbilityMstId, crys.subCrys, sub.selectionAbilityMstId, parent.subs)">
+                                                <span>{{ sub.name }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Teleport>
                     </div>
                 </div>
             </div>
@@ -39,12 +58,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { relevantCrys, getSubCrystalises } from '../types/KiokuTypes'
 import CharacterSelector from '../components/CharacterSelector.vue'
 import { useCharacterStore } from '../store/characterStore'
-import type { Character } from '../types/KiokuTypes'
+import type { Character, CrystalisData } from '../types/KiokuTypes'
 
 const route = useRoute()
 const router = useRouter()
@@ -52,19 +71,33 @@ const store = useCharacterStore()
 
 const characterId = ref(Number(route.query.character_id) || 0)
 const selectedCharacter = ref<Character | undefined>(store.characters.find(c => c.id === characterId.value))
+const activeFlyout = ref<number | null>(null)
+const flyoutStyle = ref<Record<string, string>>({})
+const activeSubFlyout = ref<number | null>(null)
+const activeSlotIndex = ref<number | null>(null)
 
-const subCrysList = getSubCrystalises()
+const subCrysFlatList = getSubCrystalises()
 
-const character = computed(() =>
-    store.characters.find(c => c.id === characterId.value)
-)
+const groupedSubCrys = computed(() => {
+    const groups: Record<string, { id: number; key: number; name: string; subs: typeof subCrysFlatList }> = {}
+    for (const s of subCrysFlatList) {
+        const key = s.selectionAbilityEffectId
+        if (!groups[key]) groups[key] = { id: key, key: 0, name: "", subs: [] }
+        groups[key].subs.push(s)
+        if (s.rarity === 10) {
+            groups[key].name = s.description
+            groups[key].key = s.selectionAbilityMstId
+        }
+    }
+    return Object.values(groups)
+})
+
+const character = computed(() => store.characters.find(c => c.id === characterId.value))
 
 const options = computed(() => {
     if (!characterId.value || !character.value) return []
-    const crysOptions = character.value.crysOptions
-
     return relevantCrys(characterId.value).map(c => {
-        const selection = crysOptions[c.selectionAbilityMstId]
+        const selection = character.value!.crysOptions[c.selectionAbilityMstId]
         return {
             ...c,
             enabled: selection?.enabled ?? false,
@@ -73,6 +106,54 @@ const options = computed(() => {
         }
     }).sort((a, b) => b.rarity - a.rarity || b.sortOrder - a.sortOrder)
 })
+
+function getSubName(id: number): string {
+    return subCrysFlatList.find(s => s.selectionAbilityMstId === id)?.name ?? '?'
+}
+
+const barRefMap = ref<Record<number, HTMLElement>>({})
+
+function openFlyout(effectId: number, slotIndex: number, event: MouseEvent) {
+    if (activeFlyout.value === effectId) {
+        activeFlyout.value = null
+        return
+    }
+    activeSlotIndex.value = slotIndex
+    const bar = barRefMap.value[effectId]
+    if (bar) {
+        const rect = bar.getBoundingClientRect()
+        flyoutStyle.value = {
+            position: 'fixed',
+            top: `${rect.bottom + 4}px`,
+            left: `${rect.left}px`,
+            width: `${rect.width}px`,
+            height: `${5 * rect.height}px`,
+            zIndex: '9999',
+        }
+    }
+    activeFlyout.value = effectId
+}
+
+function toggleSubCrys(effectId: number, currentSubCrys: number[], subId: number, siblingSubs: CrystalisData[]) {
+    const char = character.value
+    if (!char) return
+
+    const targetSlot = activeSlotIndex.value
+    if (targetSlot == null) return
+
+    const shouldRemove = currentSubCrys.indexOf(subId) === targetSlot
+    const newSubCrys = [...currentSubCrys].map(c => siblingSubs.map(s => s.selectionAbilityMstId).includes(c) ? 0 : c)
+    if (!shouldRemove) newSubCrys[targetSlot] = subId
+
+    store.updateChar({
+        ...char,
+        crysOptions: {
+            ...char.crysOptions,
+            [effectId]: { ...char.crysOptions[effectId], subCrys: newSubCrys },
+        },
+    })
+    activeFlyout.value = null
+}
 
 const toggleCrys = (effectId: number) => {
     const char = character.value
@@ -91,21 +172,6 @@ const toggleCrys = (effectId: number) => {
     })
 }
 
-const updateSubCrys = (effectId: number, subIndex: number, value: number) => {
-    const char = character.value
-    if (!char) return
-    const current = char.crysOptions[effectId]
-    const newSubCrys = [...(current.subCrys?.length === 3 ? current.subCrys : [0, 0, 0])]
-    newSubCrys[subIndex] = value
-    store.updateChar({
-        ...char,
-        crysOptions: {
-            ...char.crysOptions,
-            [effectId]: { ...current, subCrys: newSubCrys },
-        },
-    })
-}
-
 const onSelectCharacter = async (char?: Character) => {
     if (!char) {
         selectedCharacter.value = undefined
@@ -113,7 +179,6 @@ const onSelectCharacter = async (char?: Character) => {
         await router.replace({ query: {} })
         return
     }
-
     characterId.value = char.id
     selectedCharacter.value = char
     await router.replace({ query: { character_id: char.id } })
@@ -122,12 +187,29 @@ const onSelectCharacter = async (char?: Character) => {
 const setUseIndex = (effectId: number, useIndex: number) => {
     const char = character.value
     if (!char) return
-
     for (const crys of Object.values(char.crysOptions)) {
         if (crys.useIndex === useIndex) crys.useIndex = 0
     }
     char.crysOptions[effectId].useIndex = useIndex
 }
+
+function onOutsideClick(event?: Event) {
+    const target = event?.target as HTMLElement | null
+    if (target?.closest?.('.flyout') || target?.closest?.('.sub-flyout')) return
+    activeFlyout.value = null
+}
+
+onMounted(() => {
+    document.addEventListener('click', onOutsideClick)
+    document.addEventListener('scroll', onOutsideClick, true)
+    document.addEventListener('wheel', onOutsideClick, true)
+})
+onBeforeUnmount(() => {
+    document.removeEventListener('click', onOutsideClick)
+    document.removeEventListener('scroll', onOutsideClick, true)
+    document.removeEventListener('wheel', onOutsideClick, true)
+
+})
 </script>
 
 <style scoped>
@@ -258,5 +340,132 @@ const setUseIndex = (effectId: number, useIndex: number) => {
     background: rgba(170, 100, 255, 0.7);
     border-color: rgba(220, 180, 255, 0.9);
     font-weight: 600;
+}
+
+.subcrys-bar {
+    margin-top: 8px;
+    display: flex;
+    gap: 5px;
+    position: relative;
+    flex-direction: column;
+}
+
+.subcrys-pill {
+    flex: 1;
+    height: 28px;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.subcrys-pill:hover {
+    border-color: rgba(160, 110, 255, 0.5);
+    background: rgba(160, 110, 255, 0.1);
+}
+
+.subcrys-pill.filled {
+    border-color: rgba(160, 110, 255, 0.45);
+    background: rgba(120, 80, 220, 0.15);
+    color: inherit;
+}
+
+.pill-badge {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background: rgba(170, 100, 255, 0.7);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pill-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pill-empty {
+    opacity: 0.3;
+}
+
+.flyout {
+    background: var(--color-bg, #1c1c24);
+    border: 0.5px solid rgba(160, 110, 255, 0.4);
+    border-radius: 7px;
+    overflow: visible;
+    position: relative;
+}
+
+.flyout-scroll {
+    max-height: 220px;
+    overflow-y: visible;
+    overflow-x: visible;
+    position: relative;
+}
+
+.flyout-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    position: relative;
+    gap: 6px;
+}
+
+.flyout-item:hover {
+    background: rgba(160, 110, 255, 0.12);
+}
+
+.flyout-item .item-name {
+    flex: 1;
+}
+
+.flyout-item .arrow {
+    opacity: 0.4;
+    font-size: 10px;
+}
+
+.flyout-item:hover .arrow {
+    opacity: 0.8;
+}
+
+.sub-flyout {
+    position: absolute;
+    left: 100%;
+    top: -1px;
+    min-width: 160px;
+    background: var(--color-bg, #1c1c24);
+    border: 0.5px solid rgba(160, 110, 255, 0.4);
+    border-radius: 7px;
+    z-index: 10000;
+    overflow: visible;
+}
+
+.sub-flyout-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    cursor: pointer;
+    gap: 6px;
+    width: 240px;
+    height: 14px;
+}
+
+.sub-flyout-item:hover {
+    background: rgba(160, 110, 255, 0.12);
 }
 </style>

@@ -369,9 +369,23 @@ export const subCrysTranslate = (name: string): string => {
     return transformed.charAt(0).toUpperCase() + transformed.slice(1);
 };
 
-export const getSubCrystalises: () => { name: string; id: number, description: string }[] = () => {
+export const getSubCrystalises: () => CrystalisData[] = () => {
     return [
-        { name: "", description: "", rarity: 10, selectionAbilityMstId: 0, sortOrder: 10, selectionAbilityEffectId: 50 },
+        {
+            abilityEffectType: "",
+            description: "",
+            name: "",
+            rarity: 10,
+            resourceIconName: "",
+            selectionAbilityEffectId: 50,
+            selectionAbilityMstId: 0,
+            selectionAbilityType: 0,
+            sortOrder: 10,
+            styleMstId: 0,
+            targetType: 0,
+            value1: 0,
+            value2: 0,
+        },
         ...Object.values(crystalises).filter(c => c.selectionAbilityType === 2),
     ].map(c => { if (c.selectionAbilityMstId === 4034) c.rarity = 10; return c })
         .sort((a, b) => {
@@ -382,7 +396,7 @@ export const getSubCrystalises: () => { name: string; id: number, description: s
             if (a.selectionAbilityEffectId !== b.selectionAbilityEffectId) return a.selectionAbilityEffectId - b.selectionAbilityEffectId
             return a.sortOrder - b.sortOrder
         })
-        .map(c => ({ name: c.name, id: c.selectionAbilityMstId, description: subCrysTranslate(c.description) }))
+        .map(c => ({ ...c, description: subCrysTranslate(c.description) }))
 };
 
 export const maxDmgSubCrys = [4020, 4044, 4054]

@@ -50,7 +50,7 @@
                 subIndex,
                 Number(($event.target as HTMLSelectElement).value)
               )">
-              <option v-for="item in subCrysList" :key="item.id" :value="item.id">
+              <option v-for="item in subCrysList" :key="item.selectionAbilityMstId" :value="item.selectionAbilityMstId">
                 {{ subCrysTranslate(item.name) }}
               </option>
             </select>
