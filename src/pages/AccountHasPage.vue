@@ -280,8 +280,15 @@ const getMaxSpecialLvl = (ch: Character): number => {
     return 4
 }
 
-const shouldFilterOutOffElement = (elem: KiokuElement, selectionAbilityMstId: number) =>
-    [0, elem].includes(elementMap[passiveDetails[crystalises[selectionAbilityMstId].value1 * 100 + 1].element] ?? 0)
+const getCrysElement = (selectionAbilityMstId: number) => elementMap[passiveDetails[crystalises[selectionAbilityMstId].value1 * 100 + 1].element] ?? 0
+const shouldFilterOutOffElement = (elem: KiokuElement, selectionAbilityMstId: number) => {
+    if (!(selectionAbilityMstId in crystalises)) {
+        console.warn(selectionAbilityMstId, "for a", elem, "kioku, not in crystalises")
+        return false
+    }
+    return [0, elem].includes(getCrysElement(selectionAbilityMstId))
+
+}
 
 const maxCrysCount = relevantCrys(10010101).filter(c => shouldFilterOutOffElement(KiokuElement.Light, c.selectionAbilityMstId)).length
 const hasElementalCrys = (ch: Character) => Object.entries(ch.crysOptions).some(([i, c]) => getCrysElement(Number(i)) === ch.element && c.enabled)
