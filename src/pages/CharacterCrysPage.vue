@@ -6,7 +6,7 @@
         <div v-if="characterId && character">
             <div class="crys-grid">
                 <div v-for="crys in options" :key="crys.selectionAbilityMstId" class="crys-card"
-                    :class="{ disabled: !crys.enabled }">
+                    :class="{ disabled: !crys.enabled, offElement: offElementalCrys(crys) }">
 
                     <div v-if="crys.enabled" class="use-index-selector">
                         <div v-for="i in 3" :key="i" class="use-index-box" :class="{ active: crys.useIndex === i }"
@@ -60,10 +60,17 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { relevantCrys, getSubCrystalises } from '../types/KiokuTypes'
+import { relevantCrys, getSubCrystalises, elementMap } from '../types/KiokuTypes'
 import CharacterSelector from '../components/CharacterSelector.vue'
 import { useCharacterStore } from '../store/characterStore'
 import type { Character, CrystalisData } from '../types/KiokuTypes'
+import { passiveDetails } from '../utils/helpers'
+
+const offElementalCrys = (crys: CrystalisData) => {
+    const elem = elementMap[passiveDetails[crys.value1 * 100 + 1].element]
+    if (elem) return elem !== character.value?.element
+    return false
+}
 
 const route = useRoute()
 const router = useRouter()
@@ -236,6 +243,11 @@ onBeforeUnmount(() => {
     border-color: rgba(255, 255, 255, 0.35);
 }
 
+.crys-card.offElement {
+    background: rgba(80, 18, 24, 0.08);
+    border-color: rgba(120, 40, 50, 0.35);
+}
+
 .crys-header {
     display: flex;
     align-items: center;
@@ -292,9 +304,14 @@ onBeforeUnmount(() => {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 4px;
-    color: inherit;
+    color: #ffffff;
     padding: 3px 6px;
     font-size: 0.85em;
+}
+
+.subcrys-select option {
+    background: #1e1e2e;
+    color: #ffffff;
 }
 
 .subcrys-desc {

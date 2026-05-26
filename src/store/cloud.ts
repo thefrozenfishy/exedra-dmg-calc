@@ -1,7 +1,7 @@
 import { getSupabase } from "../utils/supabase"
 import { getUserId } from "./user"
 import { logEvent } from '../utils/analytics'
-import type { Character, CrystalisSelection } from "../types/KiokuTypes"
+import type { Character } from "../types/KiokuTypes"
 
 async function createProfile(userId: string) {
     const supabase = getSupabase()
@@ -20,7 +20,7 @@ const withAnalytics = <T extends (...args: any[]) => Promise<any>>(
     event: string,
     metadataFn: (args: Parameters<T>) => any = args => ({ ...args })
 ) => {
-    return async (...args: Parameters<T>): Promise<ReturnType<T>> => {
+    return async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> => {
         const result = await fn(...args)
         try {
             await logEvent(event, metadataFn(args))
