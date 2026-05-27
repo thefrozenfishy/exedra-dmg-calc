@@ -176,7 +176,9 @@
             You can edit, export, and import your kioku on the Team Setup page, or edit here directly.<br />
             Red borders indicate limited characters, yellow borders indicate characters not yet added to the permanent
             roster, and transparent borders indicate standard permanent characters.
-            For crys counter red indicates some crys are missing, yellow that some are missing, but the elemental crys has been collected, and green that all not off-elemental crys have been collected
+            For crys counter red indicates some crys are missing, yellow that some are missing, but the elemental crys
+            has been
+            collected, and green that all not off-elemental crys have been collected
         </div>
     </div>
 </template>
@@ -280,15 +282,16 @@ const getMaxSpecialLvl = (ch: Character): number => {
     return 4
 }
 
-const getCrysElement = (selectionAbilityMstId: number) => elementMap[passiveDetails[crystalises[selectionAbilityMstId].value1 * 100 + 1].element] ?? 0
-const shouldFilterOutOffElement = (elem: KiokuElement, selectionAbilityMstId: number) => {
+const getCrysElement = (selectionAbilityMstId: number) => {
     if (!(selectionAbilityMstId in crystalises)) {
-        console.warn(selectionAbilityMstId, "for a", elem, "kioku, not in crystalises")
-        return false
+        console.warn(selectionAbilityMstId, "not in crystalises")
+        return 0
     }
-    return [0, elem].includes(getCrysElement(selectionAbilityMstId))
-
+    return elementMap[passiveDetails[crystalises[selectionAbilityMstId].value1 * 100 + 1].element] ?? 0
 }
+
+const shouldFilterOutOffElement = (elem: KiokuElement, selectionAbilityMstId: number) =>
+    [0, elem].includes(getCrysElement(selectionAbilityMstId))
 
 const maxCrysCount = relevantCrys(10010101).filter(c => shouldFilterOutOffElement(KiokuElement.Light, c.selectionAbilityMstId)).length
 const hasElementalCrys = (ch: Character) => Object.entries(ch.crysOptions).some(([i, c]) => getCrysElement(Number(i)) === ch.element && c.enabled)

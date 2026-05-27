@@ -54,17 +54,55 @@
                 </div>
             </div>
         </div>
+        <div v-else class="missing-element-grid">
+            <h2>Kioku missing their elemental crys (For crys farming teambuilding)</h2>
+            <div>
+                <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
+                <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
+            </div>
+            <table class="element-table">
+                <tbody>
+                    <tr v-for="elem in KiokuElement" :key="elem" class="element-row">
+                        <td class="element-cell">
+                            <div class="element-header">
+                                <img :src="`/exedra-dmg-calc/elements/${elem}.png`" class="element-icon" />
+                                <span>{{ elem }}</span>
+                            </div>
+                        </td>
+
+                        <td class="character-list">
+                            <template v-if="missingElementCharacters(elem).length">
+                                <div v-for="char in missingElementCharacters(elem)" :key="char.id"
+                                    class="character-chip" :class="{
+                                        limited: char.obtain && char.obtain !== 'Permanent',
+                                        'not-perma': !char.obtain || new Date(char.permaDate) > new Date()
+                                    }">
+
+                                    <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`"
+                                        class="character-icon" :title="char.name" />
+                                </div>
+                            </template>
+
+                            <div v-else class="empty-text">
+                                All covered
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { relevantCrys, getSubCrystalises, elementMap } from '../types/KiokuTypes'
+import { relevantCrys, getSubCrystalises, elementMap, KiokuElement } from '../types/KiokuTypes'
 import CharacterSelector from '../components/CharacterSelector.vue'
 import { useCharacterStore } from '../store/characterStore'
 import type { Character, CrystalisData } from '../types/KiokuTypes'
 import { passiveDetails } from '../utils/helpers'
+import { useSetting } from "../store/settingsStore"
 
 const offElementalCrys = (crys: CrystalisData) => {
     const elem = elementMap[passiveDetails[crys.value1 * 100 + 1].element]
@@ -82,6 +120,8 @@ const activeFlyout = ref<number | null>(null)
 const flyoutStyle = ref<Record<string, string>>({})
 const activeSubFlyout = ref<number | null>(null)
 const activeSlotIndex = ref<number | null>(null)
+const show4stars = useSetting("show4stars", false);
+const show3stars = useSetting("show3stars", false);
 
 const subCrysFlatList = getSubCrystalises()
 
@@ -119,6 +159,28 @@ function getSubName(id: number): string {
 }
 
 const barRefMap = ref<Record<number, HTMLElement>>({})
+
+function missingElementCharacters(elem: KiokuElement) {
+    return store.characters.filter(char => {
+        if (!char.enabled) return false
+        if (char.element !== elem) return false
+        if (char.rarity === 3 && !show3stars.value) return false
+        if ((char.rarity === 4 || char.name === "Lux☆Magica") && !show4stars.value) return false
+
+        const hasElementalCrys = Object.entries(char.crysOptions).some(([id, crys]) => {
+            if (!crys.enabled) return false
+
+            const crysData = relevantCrys(char.id).find(c => c.selectionAbilityMstId === Number(id))
+            if (!crysData) return false
+
+            const crysElem = elementMap[passiveDetails[crysData.value1 * 100 + 1].element]
+
+            return crysElem === char.element
+        })
+
+        return !hasElementalCrys
+    })
+}
 
 function openFlyout(effectId: number, slotIndex: number, event: MouseEvent) {
     if (activeFlyout.value === effectId) {
@@ -484,5 +546,75 @@ onBeforeUnmount(() => {
 
 .sub-flyout-item:hover {
     background: rgba(160, 110, 255, 0.12);
+}
+
+.missing-element-grid {
+    max-width: 900px;
+    margin: 16px auto 0;
+}
+
+.element-row {
+    display: table-row;
+}
+
+.element-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.element-cell {
+    width: 110px;
+    font-weight: bold;
+    background-color: #333;
+    font-size: 1rem;
+    color: #eee;
+    vertical-align: middle;
+    box-sizing: border-box;
+
+    border: 1px solid #444;
+    padding: 0.5rem;
+}
+
+.character-list {
+    border: 1px solid #444;
+    padding: 0.5rem;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    min-height: 68px;
+    align-items: center;
+}
+
+.element-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.element-icon {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.character-chip {
+    position: relative;
+    display: inline-block;
+}
+
+.character-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    display: block;
+    transition: transform 0.15s ease;
+}
+
+.empty-text {
+    opacity: 0.45;
+    font-size: 0.9rem;
+    color: #bbb;
 }
 </style>
