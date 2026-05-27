@@ -171,6 +171,10 @@
             3-stars: {{ maxed3starChars.length }} / {{ threeStarMembers.length }}
             ({{ round(maxed3starChars.length / (threeStarMembers.length) * 100) }}%)
         </div>
+        <h4>Crys yet to collect</h4>
+        <div>5 stars: {{ missingCrys5stars }}</div>
+        <div v-if="show4stars">4 stars: {{ missingCrys4stars }}</div>
+        <div v-if="show3stars">3 stars: {{ missingCrys3stars }}</div>
         <div>
             <h4 style="margin-bottom: 0;">About:</h4>
             You can edit, export, and import your kioku on the Team Setup page, or edit here directly.<br />
@@ -263,6 +267,10 @@ const standardPool = computed(() => fiveStarMembers.value.filter(ch => new Date(
 const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.enabled && ch.ascension === 5))
 const extraCollected = useSetting("extraCollected", 0)
 const extraTotal = computed(() => (showDupes.value ? ownedFiveStars.value.reduce((sum, ch) => sum + ch.dupes, 0) : extraCollected.value))
+
+const missingCrys5stars = computed(() => fiveStarMembers.value.reduce((p, c) => p + (maxCrysCount - getCrysCount(c)), 0))
+const missingCrys4stars = computed(() => fourStarMembers.value.reduce((p, c) => p + (maxCrysCount - getCrysCount(c)), 0))
+const missingCrys3stars = computed(() => threeStarMembers.value.reduce((p, c) => p + (maxCrysCount - getCrysCount(c)), 0))
 
 const showLevels = useSetting("showLevels", true);
 const showHearts = useSetting("showHearts", true);
