@@ -268,7 +268,7 @@ const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.en
 const extraCollected = useSetting("extraCollected", 0)
 const extraTotal = computed(() => (showDupes.value ? ownedFiveStars.value.reduce((sum, ch) => sum + ch.dupes, 0) : extraCollected.value))
 
-const missingCrys5stars = computed(() => fiveStarMembers.value.reduce((p, c) => p + (maxCrysCount - getCrysCount(c)), 0))
+const missingCrys5stars = computed(() => fiveStarMembers.value.reduce((p, c) => p + (c.enabled ? (maxCrysCount - getCrysCount(c)) : 0), 0))
 const missingCrys4stars = computed(() => fourStarMembers.value.reduce((p, c) => p + (maxCrysCount - getCrysCount(c)), 0))
 const missingCrys3stars = computed(() => threeStarMembers.value.reduce((p, c) => p + (maxCrysCount - getCrysCount(c)), 0))
 
