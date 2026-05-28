@@ -89,8 +89,8 @@ function getKioku({
 }
 
 const RELEVANT_SUPPORT_SUPPORTS = {
-    [KiokuRole.Buffer]: ["Flame Waltz", "Buon Natale Grazioso", "Pluvia☆Neujahr", "L'Ombre"],
-    [KiokuRole.Debuffer]: ["Désintégration"],
+    [KiokuRole.Buffer]: ["Flame Waltz", "Buon Natale Grazioso", "Pluvia☆Neujahr", "L'Ombre", "Scorchin' Summer Spike"],
+    [KiokuRole.Debuffer]: ["Désintégration", "Splashin' Kyubey Blast"],
 }
 
 export async function findBestTeam({
