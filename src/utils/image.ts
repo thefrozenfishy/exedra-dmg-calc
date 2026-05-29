@@ -16,6 +16,7 @@ export const canWriteToClipboard = async (): Promise<boolean> => {
         const result = await navigator.permissions.query({ name: "clipboard-write" as PermissionName })
         return result.state === "granted" || result.state === "prompt"
     } catch {
+        alert(`found no permissions`)
         return true
     }
 }
