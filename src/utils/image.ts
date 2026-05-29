@@ -24,7 +24,10 @@ export const openImageInNewTab = async (target: string | HTMLElement) => {
     const el = getElement(target)
     if (!el) return
     const dataUrl = await toPng(el, IMG_SETTINGS)
-    window.open(dataUrl, "_blank")
+    const blob = await fetch(dataUrl).then(r => r.blob())
+    const url = URL.createObjectURL(blob)
+    window.open(url, "_blank")
+    setTimeout(() => URL.revokeObjectURL(url), 10000)
 }
 
 function sanitizeFilename(input: string | null): string {

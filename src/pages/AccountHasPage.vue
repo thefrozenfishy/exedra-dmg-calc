@@ -58,7 +58,8 @@
                         <div v-for="ch in chars" :key="ch.id" draggable="true" @dragstart="onDragStart(ch)"
                             @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove" @touchend="onTouchEnd">
                             <div class="character-img-wrapper">
-                                <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
+                                <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank"
+                                    @click="(e) => { if (touchMoved) e.preventDefault() }">
                                     <img class="character-img" :class="borderClass(ch)"
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
@@ -487,15 +488,18 @@ const copyHyperLink = async () => {
 }
 
 const touchDragged = ref<Character | null>(null)
+const touchMoved = ref(false)
 
 const onTouchStart = (ch: Character, e: TouchEvent) => {
     if (isReadonly.value) return
+    touchMoved.value = false
     touchDragged.value = ch
     draggedChar.value = ch
 }
 
 const onTouchMove = (e: TouchEvent) => {
     if (isReadonly.value) return
+    touchMoved.value = true
     const touch = e.touches[0]
     const element = document.elementFromPoint(touch.clientX, touch.clientY)
     const row = element?.closest("tr.asc-row")
