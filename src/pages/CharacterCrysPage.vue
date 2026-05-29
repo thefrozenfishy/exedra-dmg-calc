@@ -36,10 +36,12 @@
                                 <div class="flyout-scroll">
                                     <div v-for="parent in groupedSubCrys" :key="parent.id" class="flyout-item"
                                         @click.stop="toggleSubCrys(crys.selectionAbilityMstId, crys.subCrys, parent.key, parent.subs)"
-                                        @mouseenter="activeSubFlyout = parent.id" @mouseleave="activeSubFlyout = null">
+                                        @mouseenter="handleSubmenuMouseEnter(parent.id, $event)"
+                                        @mouseleave="activeSubFlyout = null">
                                         <span class="item-name">{{ parent.name }}</span>
                                         <span class="arrow">›</span>
-                                        <div v-if="activeSubFlyout === parent.id" class="sub-flyout">
+                                        <div v-if="activeSubFlyout === parent.id" class="sub-flyout"
+                                            :style="subFlyoutStyle">
                                             <div v-for="sub in parent.subs.sort((a, b) => b.rarity - a.rarity)"
                                                 :key="sub.selectionAbilityMstId" class="sub-flyout-item"
                                                 @click.stop="toggleSubCrys(crys.selectionAbilityMstId, crys.subCrys, sub.selectionAbilityMstId, parent.subs)">
@@ -95,7 +97,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { relevantCrys, getSubCrystalises, elementMap, KiokuElement } from '../types/KiokuTypes'
 import CharacterSelector from '../components/CharacterSelector.vue'
@@ -117,6 +119,8 @@ const store = useCharacterStore()
 const characterId = ref(Number(route.query.character_id) || 0)
 const selectedCharacter = ref<Character | undefined>(store.characters.find(c => c.id === characterId.value))
 const activeFlyout = ref<number | null>(null)
+const subFlyoutStyle = ref<Record<string, string>>({})
+const isMainFlipped = ref(false)
 const flyoutStyle = ref<Record<string, string>>({})
 const activeSubFlyout = ref<number | null>(null)
 const activeSlotIndex = ref<number | null>(null)
@@ -182,25 +186,77 @@ function missingElementCharacters(elem: KiokuElement) {
     })
 }
 
-function openFlyout(effectId: number, slotIndex: number, event: MouseEvent) {
+async function openFlyout(effectId: number, slotIndex: number, event: MouseEvent) {
     if (activeFlyout.value === effectId) {
         activeFlyout.value = null
         return
     }
     activeSlotIndex.value = slotIndex
     const bar = barRefMap.value[effectId]
-    if (bar) {
-        const rect = bar.getBoundingClientRect()
+    if (!bar) return
+
+    const rect = bar.getBoundingClientRect()
+
+    activeFlyout.value = effectId
+    flyoutStyle.value = {
+        position: 'fixed',
+        top: `${rect.bottom + 4}px`,
+        left: `${rect.left}px`,
+        width: `${rect.width}px`,
+        height: `${5 * rect.height}px`,
+        opacity: '0',
+        pointerEvents: 'none',
+        zIndex: '9999',
+    }
+
+    await nextTick()
+
+    const flyoutEl = document.querySelector('.flyout') as HTMLElement
+    if (flyoutEl) {
+        const flyoutHeight = flyoutEl.offsetHeight
+        const spaceBelow = window.innerHeight - rect.bottom
+        const spaceAbove = rect.top
+
+        isMainFlipped.value = spaceBelow < flyoutHeight + 10 && spaceAbove > spaceBelow
+
+        const finalTop = isMainFlipped.value
+            ? rect.top - flyoutHeight - 4
+            : rect.bottom + 4
+
         flyoutStyle.value = {
             position: 'fixed',
-            top: `${rect.bottom + 4}px`,
+            top: `${finalTop}px`,
             left: `${rect.left}px`,
             width: `${rect.width}px`,
             height: `${5 * rect.height}px`,
+            opacity: '1',
+            pointerEvents: 'auto',
             zIndex: '9999',
         }
     }
-    activeFlyout.value = effectId
+}
+
+async function handleSubmenuMouseEnter(parentId: number, event: MouseEvent) {
+    activeSubFlyout.value = parentId
+    await nextTick()
+
+    const subFlyoutEl = (event.target as HTMLElement).querySelector('.sub-flyout') as HTMLElement
+    if (!subFlyoutEl) return
+
+    const rect = subFlyoutEl.getBoundingClientRect()
+    const overflowBottom = rect.bottom > window.innerHeight
+
+    if (overflowBottom || isMainFlipped.value) {
+        subFlyoutStyle.value = {
+            bottom: '-1px',
+            top: 'auto'
+        }
+    } else {
+        subFlyoutStyle.value = {
+            top: '-1px',
+            bottom: 'auto'
+        }
+    }
 }
 
 function toggleSubCrys(effectId: number, currentSubCrys: number[], subId: number, siblingSubs: CrystalisData[]) {
