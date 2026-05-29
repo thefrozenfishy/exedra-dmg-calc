@@ -15355,6 +15355,16 @@
         "description": "自分のキャラクターが「和泉十七夜」"
     },
     {
+        "battleConditionMstIdCsv": "279",
+        "battleConditionSetMstId": 3103,
+        "description": "敵を1体以上倒したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1957",
+        "battleConditionSetMstId": 3104,
+        "description": "自身に水着ほむらの専用バフが付与されているとき"
+    },
+    {
         "battleConditionMstIdCsv": "880,1751",
         "battleConditionSetMstId": 3105,
         "description": "トークンが50以上+トークンが100未満のとき"
@@ -15525,6 +15535,11 @@
         "description": "トークンが8未満のとき"
     },
     {
+        "battleConditionMstIdCsv": "1972,3,7",
+        "battleConditionSetMstId": 3140,
+        "description": "水着ほむらの専用バフを持っているエネミーが1体以上いるとき+行動者は自身+必殺技発動時。"
+    },
+    {
         "battleConditionMstIdCsv": "2,1459",
         "battleConditionSetMstId": 3141,
         "description": "行動者は敵、自分がダメージを受けなかった"
@@ -15625,6 +15640,181 @@
         "description": "自軍にクリティカルダメージが発生しなかった場合"
     },
     {
+        "battleConditionMstIdCsv": "975,1,655,5,962",
+        "battleConditionSetMstId": 3166,
+        "description": "自身以外の闇属性の仲間がダメージを与えたとき(通常攻撃発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "975,1,655,6,962",
+        "battleConditionSetMstId": 3167,
+        "description": "自身以外の闇属性の仲間がダメージを与えたとき(戦闘スキル発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "975,1,655,7,962",
+        "battleConditionSetMstId": 3168,
+        "description": "自身以外の闇属性の仲間がダメージを与えたとき(必殺技発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,655,3",
+        "battleConditionSetMstId": 3171,
+        "description": "自身がプレイヤー側のユニットのとき、敵チームに与えるトータルダメージは1以上、自分は行動者"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1505,1983",
+        "battleConditionSetMstId": 3172,
+        "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき、自軍のSPが0の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1505,1984",
+        "battleConditionSetMstId": 3173,
+        "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき、自軍のSPが1の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1505,1985",
+        "battleConditionSetMstId": 3174,
+        "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき、自軍のSPが2の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1505,1986",
+        "battleConditionSetMstId": 3175,
+        "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき、自軍のSPが3の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1505,1987",
+        "battleConditionSetMstId": 3176,
+        "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき、自軍のSPが4の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1505,1988",
+        "battleConditionSetMstId": 3177,
+        "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき、自軍のSPが5の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1505,1989",
+        "battleConditionSetMstId": 3178,
+        "description": "自身がプレイヤー側のユニットのとき、結界対策発揮フェーズのとき、自軍のSPが6の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,801",
+        "battleConditionSetMstId": 3179,
+        "description": "自身がプレイヤー側のユニットのとき、対象のデバフ数が3"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,802",
+        "battleConditionSetMstId": 3180,
+        "description": "自身がプレイヤー側のユニットのとき、対象のデバフ数が4"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1647",
+        "battleConditionSetMstId": 3181,
+        "description": "自身がプレイヤー側のユニットのとき、対象のデバフ数が5"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1648",
+        "battleConditionSetMstId": 3182,
+        "description": "自身がプレイヤー側のユニットのとき、対象のデバフ数が6"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1990",
+        "battleConditionSetMstId": 3183,
+        "description": "自身がプレイヤー側のユニットのとき、対象のデバフ数が7"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1991",
+        "battleConditionSetMstId": 3184,
+        "description": "自身がプレイヤー側のユニットのとき、対象のデバフ数が8"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1992",
+        "battleConditionSetMstId": 3185,
+        "description": "自身がプレイヤー側のユニットのとき、対象のデバフ数が9"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1993",
+        "battleConditionSetMstId": 3186,
+        "description": "自身がプレイヤー側のユニットのとき、対象のデバフ数が10以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1265",
+        "battleConditionSetMstId": 3187,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が1未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1266",
+        "battleConditionSetMstId": 3188,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が1"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1267",
+        "battleConditionSetMstId": 3189,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が2"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1268",
+        "battleConditionSetMstId": 3190,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が3"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1269",
+        "battleConditionSetMstId": 3191,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が4"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1270",
+        "battleConditionSetMstId": 3192,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が5"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1271",
+        "battleConditionSetMstId": 3193,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が6"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1272",
+        "battleConditionSetMstId": 3194,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が7"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1273",
+        "battleConditionSetMstId": 3195,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が8"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1274",
+        "battleConditionSetMstId": 3196,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が9"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1275",
+        "battleConditionSetMstId": 3197,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が10"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1276",
+        "battleConditionSetMstId": 3198,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が11"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1277",
+        "battleConditionSetMstId": 3199,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が12"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1278",
+        "battleConditionSetMstId": 3200,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が13"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1279",
+        "battleConditionSetMstId": 3201,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が14"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,1252,1994",
+        "battleConditionSetMstId": 3202,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃した、敵全体のデバフ数が15以上"
+    },
+    {
         "battleConditionMstIdCsv": "267,977",
         "battleConditionSetMstId": 3203,
         "description": "バトル開始から自分の行動が4回目以上、7回目未満"
@@ -15635,14 +15825,149 @@
         "description": "バトル開始から自分の行動が7回目以上"
     },
     {
+        "battleConditionMstIdCsv": "1995",
+        "battleConditionSetMstId": 3205,
+        "description": "自身に状態異常命中率上昇バフが付与されているとき"
+    },
+    {
         "battleConditionMstIdCsv": "654,3,1603",
         "battleConditionSetMstId": 3206,
         "description": "自身のターン中に行動対象がブレイク中の場合+ダメージが1以上"
     },
     {
+        "battleConditionMstIdCsv": "1507,2,7",
+        "battleConditionSetMstId": 3207,
+        "description": "自身がカウントダウン発動中のとき、行動者は敵、行動タイプは必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "2,7",
+        "battleConditionSetMstId": 3208,
+        "description": "行動者は敵、行動タイプは必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "565,3",
+        "battleConditionSetMstId": 3209,
+        "description": "敵軍のSPが0の場合、自分は行動者"
+    },
+    {
+        "battleConditionMstIdCsv": "566,3",
+        "battleConditionSetMstId": 3210,
+        "description": "敵軍のSPが1の場合、自分は行動者"
+    },
+    {
+        "battleConditionMstIdCsv": "567,3",
+        "battleConditionSetMstId": 3211,
+        "description": "敵軍のSPが2の場合、自分は行動者"
+    },
+    {
+        "battleConditionMstIdCsv": "568,3",
+        "battleConditionSetMstId": 3212,
+        "description": "敵軍のSPが3の場合、自分は行動者"
+    },
+    {
+        "battleConditionMstIdCsv": "569,3",
+        "battleConditionSetMstId": 3213,
+        "description": "敵軍のSPが4の場合、自分は行動者"
+    },
+    {
+        "battleConditionMstIdCsv": "570,3",
+        "battleConditionSetMstId": 3214,
+        "description": "敵軍のSPが5の場合、自分は行動者"
+    },
+    {
+        "battleConditionMstIdCsv": "1996",
+        "battleConditionSetMstId": 3215,
+        "description": "味方全体のデバフ数が0"
+    },
+    {
+        "battleConditionMstIdCsv": "1997",
+        "battleConditionSetMstId": 3216,
+        "description": "味方全体のデバフ数が1"
+    },
+    {
+        "battleConditionMstIdCsv": "1998",
+        "battleConditionSetMstId": 3217,
+        "description": "味方全体のデバフ数が2"
+    },
+    {
+        "battleConditionMstIdCsv": "1999",
+        "battleConditionSetMstId": 3218,
+        "description": "味方全体のデバフ数が3"
+    },
+    {
+        "battleConditionMstIdCsv": "2000",
+        "battleConditionSetMstId": 3219,
+        "description": "味方全体のデバフ数が4"
+    },
+    {
+        "battleConditionMstIdCsv": "2001",
+        "battleConditionSetMstId": 3220,
+        "description": "味方全体のデバフ数が5"
+    },
+    {
+        "battleConditionMstIdCsv": "2002",
+        "battleConditionSetMstId": 3221,
+        "description": "味方全体のデバフ数が6"
+    },
+    {
+        "battleConditionMstIdCsv": "2003",
+        "battleConditionSetMstId": 3222,
+        "description": "味方全体のデバフ数が7"
+    },
+    {
+        "battleConditionMstIdCsv": "2004",
+        "battleConditionSetMstId": 3223,
+        "description": "味方全体のデバフ数が8"
+    },
+    {
+        "battleConditionMstIdCsv": "2005",
+        "battleConditionSetMstId": 3224,
+        "description": "味方全体のデバフ数が9"
+    },
+    {
+        "battleConditionMstIdCsv": "2006",
+        "battleConditionSetMstId": 3225,
+        "description": "味方全体のデバフ数が10"
+    },
+    {
+        "battleConditionMstIdCsv": "2007",
+        "battleConditionSetMstId": 3226,
+        "description": "味方全体のデバフ数が11"
+    },
+    {
+        "battleConditionMstIdCsv": "2008",
+        "battleConditionSetMstId": 3227,
+        "description": "味方全体のデバフ数が12"
+    },
+    {
+        "battleConditionMstIdCsv": "2009",
+        "battleConditionSetMstId": 3228,
+        "description": "味方全体のデバフ数が13"
+    },
+    {
+        "battleConditionMstIdCsv": "2010",
+        "battleConditionSetMstId": 3229,
+        "description": "味方全体のデバフ数が14"
+    },
+    {
+        "battleConditionMstIdCsv": "2011",
+        "battleConditionSetMstId": 3230,
+        "description": "味方全体のデバフ数が15"
+    },
+    {
+        "battleConditionMstIdCsv": "2012",
+        "battleConditionSetMstId": 3231,
+        "description": "味方全体のデバフ数が15以上"
+    },
+    {
         "battleConditionMstIdCsv": "306,916",
         "battleConditionSetMstId": 3237,
         "description": "行動タイプが追撃/反撃 AND 攻撃されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,7,420",
+        "battleConditionSetMstId": 3245,
+        "description": "行動者は敵、行動タイプは必殺技、自身がブレイク状態ではない場合"
     },
     {
         "battleConditionMstIdCsv": "90,273",
@@ -15735,6 +16060,11 @@
         "description": "9ターンごと（9ターン目から） AND 連続行動の2回目"
     },
     {
+        "battleConditionMstIdCsv": "1972",
+        "battleConditionSetMstId": 3264,
+        "description": "水着ほむらの専用バフを持っているエネミーが1体以上いるとき"
+    },
+    {
         "battleConditionMstIdCsv": "462,892",
         "battleConditionSetMstId": 3265,
         "description": "自分に状態異常が付与されていない場合 AND 攻撃されたとき"
@@ -15785,9 +16115,19 @@
         "description": "自分のターン、6ターンごとに（ターン6から）"
     },
     {
+        "battleConditionMstIdCsv": "25,1506",
+        "battleConditionSetMstId": 3286,
+        "description": "自分が1以上のダメージを受けた、結界対策発揮フェーズではないとき"
+    },
+    {
         "battleConditionMstIdCsv": "1107",
         "battleConditionSetMstId": 3287,
         "description": "トークンが30以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1",
+        "battleConditionSetMstId": 3290,
+        "description": "行動者は仲間"
     },
     {
         "battleConditionMstIdCsv": "5,25",

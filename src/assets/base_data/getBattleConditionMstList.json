@@ -15600,6 +15600,14 @@
         "description": "自分のキャラクターが「和泉十七夜」"
     },
     {
+        "battleConditionMstId": 1957,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "21",
+        "description": "自身の水着ほむらの専用バフがあるとき"
+    },
+    {
         "battleConditionMstId": 1958,
         "compareContent": 17,
         "compareOperator": 4,
@@ -15712,6 +15720,14 @@
         "description": "トークンが950未満のとき"
     },
     {
+        "battleConditionMstId": 1972,
+        "compareContent": 210,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "21,1",
+        "description": "敵軍に水着ほむらの専用バフがあるとき"
+    },
+    {
         "battleConditionMstId": 1973,
         "compareContent": 13,
         "compareOperator": 1,
@@ -15734,6 +15750,246 @@
         "compareTarget": 1,
         "compareValue": "3,9",
         "description": "自分が3ターンごとに（ターン9から）"
+    },
+    {
+        "battleConditionMstId": 1983,
+        "compareContent": 201,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "0",
+        "description": "自軍のSPが0の場合"
+    },
+    {
+        "battleConditionMstId": 1984,
+        "compareContent": 201,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "1",
+        "description": "自軍のSPが1の場合"
+    },
+    {
+        "battleConditionMstId": 1985,
+        "compareContent": 201,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "2",
+        "description": "自軍のSPが2の場合"
+    },
+    {
+        "battleConditionMstId": 1986,
+        "compareContent": 201,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "3",
+        "description": "自軍のSPが3の場合"
+    },
+    {
+        "battleConditionMstId": 1987,
+        "compareContent": 201,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "4",
+        "description": "自軍のSPが4の場合"
+    },
+    {
+        "battleConditionMstId": 1988,
+        "compareContent": 201,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "5",
+        "description": "自軍のSPが5の場合"
+    },
+    {
+        "battleConditionMstId": 1989,
+        "compareContent": 201,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "6",
+        "description": "自軍のSPが6の場合"
+    },
+    {
+        "battleConditionMstId": 1990,
+        "compareContent": 25,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "7",
+        "description": "対象のデバフ数が7"
+    },
+    {
+        "battleConditionMstId": 1991,
+        "compareContent": 25,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "8",
+        "description": "対象のデバフ数が8"
+    },
+    {
+        "battleConditionMstId": 1992,
+        "compareContent": 25,
+        "compareOperator": 1,
+        "compareTarget": 8,
+        "compareValue": "9",
+        "description": "対象のデバフ数が9"
+    },
+    {
+        "battleConditionMstId": 1993,
+        "compareContent": 25,
+        "compareOperator": 4,
+        "compareTarget": 8,
+        "compareValue": "10",
+        "description": "対象のデバフ数が10以上"
+    },
+    {
+        "battleConditionMstId": 1994,
+        "compareContent": 208,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "15",
+        "description": "敵全体のデバフ数が15以上"
+    },
+    {
+        "battleConditionMstId": 1995,
+        "compareContent": 12,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "UP_ABNORMAL_HIT_RATE_RATIO",
+        "description": "自身に状態異常命中率上昇バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 1996,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "0",
+        "description": "味方全体のデバフ数が0"
+    },
+    {
+        "battleConditionMstId": 1997,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "1",
+        "description": "味方全体のデバフ数が1"
+    },
+    {
+        "battleConditionMstId": 1998,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "2",
+        "description": "味方全体のデバフ数が2"
+    },
+    {
+        "battleConditionMstId": 1999,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "3",
+        "description": "味方全体のデバフ数が3"
+    },
+    {
+        "battleConditionMstId": 2000,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "4",
+        "description": "味方全体のデバフ数が4"
+    },
+    {
+        "battleConditionMstId": 2001,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "5",
+        "description": "味方全体のデバフ数が5"
+    },
+    {
+        "battleConditionMstId": 2002,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "6",
+        "description": "味方全体のデバフ数が6"
+    },
+    {
+        "battleConditionMstId": 2003,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "7",
+        "description": "味方全体のデバフ数が7"
+    },
+    {
+        "battleConditionMstId": 2004,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "8",
+        "description": "味方全体のデバフ数が8"
+    },
+    {
+        "battleConditionMstId": 2005,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "9",
+        "description": "味方全体のデバフ数が9"
+    },
+    {
+        "battleConditionMstId": 2006,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "10",
+        "description": "味方全体のデバフ数が10"
+    },
+    {
+        "battleConditionMstId": 2007,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "11",
+        "description": "味方全体のデバフ数が11"
+    },
+    {
+        "battleConditionMstId": 2008,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "12",
+        "description": "味方全体のデバフ数が12"
+    },
+    {
+        "battleConditionMstId": 2009,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "13",
+        "description": "味方全体のデバフ数が13"
+    },
+    {
+        "battleConditionMstId": 2010,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "14",
+        "description": "味方全体のデバフ数が14"
+    },
+    {
+        "battleConditionMstId": 2011,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "15",
+        "description": "味方全体のデバフ数が15"
+    },
+    {
+        "battleConditionMstId": 2012,
+        "compareContent": 208,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "15",
+        "description": "味方全体のデバフ数が15以上"
     },
     {
         "battleConditionMstId": 2013,
