@@ -53,15 +53,7 @@ export const copyImageToClipboard = async (filename: string, target: string | HT
     } catch (err) {
         console.error(err)
         try {
-            const dataUrl = await toPng(el, {
-                cacheBust: true,
-                pixelRatio: 2,
-                backgroundColor: "#242424",
-                skipFonts: false
-            })
-            const blob = await (await fetch(dataUrl)).blob()
-            await downloadImg(filename, blob)
-
+            downloadImage(filename, target)
             toast.update(toastId, {
                 render: "Clipboard unavailable, image downloaded instead",
                 type: "info",
