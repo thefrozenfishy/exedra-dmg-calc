@@ -52,7 +52,6 @@ export const copyImageToClipboard = async (filename: string, target: string | HT
         })
     } catch (err) {
         console.error(err)
-        alert("Clipboard error: " + err)  
         try {
             downloadImage(filename, target)
             toast.update(toastId, {
