@@ -1,5 +1,5 @@
 import { toPng } from "html-to-image"
-import { Id, toast } from "vue3-toastify"
+import { toast } from "vue3-toastify"
 import { ref, onMounted } from "vue"
 
 const IMG_SETTINGS = {
@@ -52,10 +52,7 @@ function sanitizeFilename(input: string | null): string {
         .replace(/\.+$/, "") || "unknown"
 }
 
-const withExportState = async <T>(target: string | HTMLElement, options: ImageExportOptions = {}, fn: (el: HTMLElement) => Promise<T>): Promise<T | undefined> => {
-    const el = getElement(target)
-    if (!el) return
-
+const withExportState = async <T>(el: HTMLElement, options: ImageExportOptions = {}, fn: (el: HTMLElement) => Promise<T>): Promise<T> => {
     if (options.onBefore) await options.onBefore()
     if (options.exportClass) el.classList.add(options.exportClass)
 
@@ -81,14 +78,18 @@ const downloadBlob = async (filename: string, blob: Blob) => {
     URL.revokeObjectURL(url)
 }
 
-const copyBlobToClipboard = async (filename: string, blob: Blob) => {
+const writeBlobPromiseToClipboard = async (filename: string, blobPromise: Promise<Blob>) => {
     const toastId = toast.loading("Copying to clipboard...", { position: toast.POSITION.TOP_RIGHT, icon: false })
+
     try {
-        await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
+        await navigator.clipboard.write([
+            new ClipboardItem({ "image/png": blobPromise })
+        ])
         toast.update(toastId, { render: "Copied to clipboard!", type: "success", isLoading: false, autoClose: 3000 })
     } catch (err) {
-        console.error(err)
+        console.error("Clipboard write failed, triggering fallback:", err)
         try {
+            const blob = await blobPromise
             await downloadBlob(filename, blob)
             toast.update(toastId, { render: "Clipboard unavailable, image downloaded instead", type: "info", isLoading: false, autoClose: 3000 })
         } catch (fallbackErr) {
@@ -98,16 +99,14 @@ const copyBlobToClipboard = async (filename: string, blob: Blob) => {
     }
 }
 
-const openBlobInNewTab = (blob: Blob, toastId?: Id) => {
-    const url = URL.createObjectURL(blob)
-    window.open(url, "_blank")
-    if (toastId) toast.update(toastId, { render: "Opened new tab!", type: "success", isLoading: false, autoClose: 3000 })
-    setTimeout(() => URL.revokeObjectURL(url), 10000)
-}
-
 export const openImageInNewTab = async (target: string | HTMLElement, options?: ImageExportOptions) => {
-    const newTab = window.open("", "_blank")
+    const el = getElement(target)
+    if (!el) {
+        toast.error("Target element not found", { position: toast.POSITION.TOP_RIGHT })
+        return
+    }
 
+    const newTab = window.open("", "_blank")
     if (!newTab) {
         toast.error("Popup blocked! Please allow popups for this site.", { position: toast.POSITION.TOP_RIGHT })
         return
@@ -118,37 +117,10 @@ export const openImageInNewTab = async (target: string | HTMLElement, options?: 
         <head>
             <title>Generating Image...</title>
             <style>
-                body {
-                    background: #242424;
-                    color: #eee;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100vh;
-                    margin: 0;
-                    font-family: sans-serif;
-                }
-                .spinner {
-                    width: 48px;
-                    height: 48px;
-                    border: 5px solid rgba(255, 255, 255, 0.1);
-                    border-radius: 50%;
-                    border-top-color: #b57edc; /* Matches your app's badge colors */
-                    animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-                    margin-bottom: 1.25rem;
-                }
-                @keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
-                h2 {
-                    font-weight: 500;
-                    font-size: 1.1rem;
-                    letter-spacing: 0.05em;
-                    color: #aaa;
-                    margin: 0;
-                }
+                body { background: #242424; color: #eee; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; }
+                .spinner { width: 48px; height: 48px; border: 5px solid rgba(255, 255, 255, 0.1); border-radius: 50%; border-top-color: #b57edc; animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite; margin-bottom: 1.25rem; }
+                @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                h2 { font-weight: 500; font-size: 1.1rem; letter-spacing: 0.05em; color: #aaa; margin: 0; }
             </style>
         </head>
         <body>
@@ -159,59 +131,90 @@ export const openImageInNewTab = async (target: string | HTMLElement, options?: 
     `)
     newTab.document.close()
 
-    await withExportState(target, options, async (el) => {
-        const toastId = toast.loading("Opening tab...", { position: toast.POSITION.TOP_RIGHT, icon: false })
+    const toastId = toast.loading("Opening tab...", { position: toast.POSITION.TOP_RIGHT, icon: false })
 
-        try {
-            const dataUrl = await toPng(el, IMG_SETTINGS)
+    try {
+        const url = await withExportState(el, options, async (element) => {
+            const dataUrl = await toPng(element, IMG_SETTINGS)
             const blob = await fetch(dataUrl).then(r => r.blob())
-            const url = URL.createObjectURL(blob)
+            return URL.createObjectURL(blob)
+        })
 
-            newTab.location.href = url
-
-            toast.update(toastId, { render: "Opened new tab!", type: "success", isLoading: false, autoClose: 3000 })
-            setTimeout(() => URL.revokeObjectURL(url), 10000)
-        } catch (err) {
-            console.error("Image generation failed:", err)
-            newTab.close()
-            toast.update(toastId, { render: "Failed to generate image", type: "error", isLoading: false, autoClose: 3000 })
-        }
-    })
+        newTab.location.href = url
+        toast.update(toastId, { render: "Opened new tab!", type: "success", isLoading: false, autoClose: 3000 })
+        setTimeout(() => URL.revokeObjectURL(url), 10000)
+    } catch (err) {
+        console.error("Image generation failed:", err)
+        newTab.close()
+        toast.update(toastId, { render: "Failed to generate image", type: "error", isLoading: false, autoClose: 3000 })
+    }
 }
 
 export const copyImageToClipboard = async (filename: string, target: string | HTMLElement, options?: ImageExportOptions) => {
-    await withExportState(target, options, async (el) => {
-        const blob = await toPng(el, IMG_SETTINGS).then(dataUrl => fetch(dataUrl).then(r => r.blob()))
-        await copyBlobToClipboard(filename, blob)
+    const el = getElement(target)
+    if (!el) {
+        toast.error("Target element not found", { position: toast.POSITION.TOP_RIGHT })
+        return
+    }
+
+    const blobPromise = withExportState(el, options, async (element) => {
+        const dataUrl = await toPng(element, IMG_SETTINGS)
+        return fetch(dataUrl).then(r => r.blob())
     })
+
+    await writeBlobPromiseToClipboard(filename, blobPromise)
 }
 
 export const downloadImage = async (filename: string, target: string | HTMLElement, options?: ImageExportOptions) => {
-    await withExportState(target, options, async (el) => {
-        const toastId = toast.loading("Downloading...", { position: toast.POSITION.TOP_RIGHT, icon: false })
-        try {
-            const dataUrl = await toPng(el, { ...IMG_SETTINGS, pixelRatio: 2 })
+    const el = getElement(target)
+    if (!el) {
+        toast.error("Target element not found", { position: toast.POSITION.TOP_RIGHT })
+        return
+    }
+
+    const toastId = toast.loading("Downloading...", { position: toast.POSITION.TOP_RIGHT, icon: false })
+    try {
+        await withExportState(el, options, async (element) => {
+            const dataUrl = await toPng(element, { ...IMG_SETTINGS, pixelRatio: 2 })
             const blob = await fetch(dataUrl).then(r => r.blob())
             await downloadBlob(filename, blob)
-            toast.update(toastId, { render: `Downloaded as ${filename}`, type: "success", isLoading: false, autoClose: 3000 })
-        } catch (err) {
-            console.error("Download failed:", err)
-            toast.update(toastId, { render: "Download failed", type: "error", isLoading: false, autoClose: 3000 })
-        }
-    })
+        })
+        toast.update(toastId, { render: `Downloaded as ${filename}`, type: "success", isLoading: false, autoClose: 3000 })
+    } catch (err) {
+        console.error("Download failed:", err)
+        toast.update(toastId, { render: "Download failed", type: "error", isLoading: false, autoClose: 3000 })
+    }
 }
 
 export const copyCanvasToClipboard = async (filename: string, canvas: HTMLCanvasElement) => {
-    const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png"))
-    await copyBlobToClipboard(filename, blob)
+    const blobPromise = new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png")
+    })
+    await writeBlobPromiseToClipboard(filename, blobPromise)
 }
 
 export const openCanvasInImage = async (canvas: HTMLCanvasElement) => {
-    const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png"))
-    openBlobInNewTab(blob)
+    const toastId = toast.loading("Opening image...", { position: toast.POSITION.TOP_RIGHT, icon: false })
+    try {
+        const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png"))
+        const url = URL.createObjectURL(blob)
+        window.open(url, "_blank")
+        toast.update(toastId, { render: "Opened image!", type: "success", isLoading: false, autoClose: 3000 })
+        setTimeout(() => URL.revokeObjectURL(url), 10000)
+    } catch (err) {
+        console.error(err)
+        toast.update(toastId, { render: "Failed to open canvas", type: "error", isLoading: false, autoClose: 3000 })
+    }
 }
 
 export const downloadCanvas = async (filename: string, canvas: HTMLCanvasElement) => {
-    const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png"))
-    await downloadBlob(filename, blob)
+    const toastId = toast.loading("Downloading...", { position: toast.POSITION.TOP_RIGHT, icon: false })
+    try {
+        const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png"))
+        await downloadBlob(filename, blob)
+        toast.update(toastId, { render: `Downloaded as ${filename}`, type: "success", isLoading: false, autoClose: 3000 })
+    } catch (err) {
+        console.error(err)
+        toast.update(toastId, { render: "Download failed", type: "error", isLoading: false, autoClose: 3000 })
+    }
 }
