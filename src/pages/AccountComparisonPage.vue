@@ -139,7 +139,7 @@ import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 import { getAccountSimilarityScore } from "../models/AccountSimilarityScore"
-import { canWriteToClipboard, copyImageToClipboard, downloadImage, openImageInNewTab, useClipboardSupport } from "../utils/image"
+import { copyImageToClipboard, downloadImage, openImageInNewTab, useClipboardSupport } from "../utils/image"
 import { toast } from "vue3-toastify"
 
 const friendStore = useFriendStore()
