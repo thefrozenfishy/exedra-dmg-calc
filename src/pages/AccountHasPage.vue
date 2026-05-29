@@ -59,7 +59,7 @@
                             @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove" @touchend="onTouchEnd">
                             <div class="character-img-wrapper">
                                 <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank"
-                                    @click="(e) => { if (touchMoved) e.preventDefault() }">
+                                    @click="(e) => { if (touchMoved) e.preventDefault() }" @contextmenu.prevent>
                                     <img class="character-img" :class="borderClass(ch)"
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
@@ -622,6 +622,11 @@ td {
 .character-img-wrapper {
     position: relative;
     display: inline-block;
+}
+
+.character-img-wrapper a {
+    -webkit-touch-callout: none;
+    user-select: none;
 }
 
 .level-badge {
