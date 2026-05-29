@@ -1,6 +1,32 @@
 import { toPng } from "html-to-image"
 import { toast } from "vue3-toastify"
 
+
+const IMG_SETTINGS = {
+    cacheBust: true,
+    pixelRatio: 1,
+    backgroundColor: "#242424",
+    skipFonts: false
+}
+
+export const canWriteToClipboard = async (): Promise<boolean> => {
+    if (!navigator.clipboard || !window.ClipboardItem) return false
+    if (!ClipboardItem.supports("image/png")) return false
+    try {
+        const result = await navigator.permissions.query({ name: "clipboard-write" as PermissionName })
+        return result.state === "granted" || result.state === "prompt"
+    } catch {
+        return true
+    }
+}
+
+export const openImageInNewTab = async (target: string | HTMLElement) => {
+    const el = getElement(target)
+    if (!el) return
+    const dataUrl = await toPng(el, IMG_SETTINGS)
+    window.open(dataUrl, "_blank")
+}
+
 function sanitizeFilename(input: string | null): string {
     return input?.normalize("NFKD").replace(/[<>:"/\\|?*\x00-\x1F]/g, "")
         .replace(/\s+/g, " ")
@@ -35,12 +61,7 @@ export const copyImageToClipboard = async (filename: string, target: string | HT
     })
 
     try {
-        const blobPromise = toPng(el, {
-            cacheBust: true,
-            pixelRatio: 1,
-            backgroundColor: "#242424",
-            skipFonts: false
-        }).then(dataUrl => fetch(dataUrl).then(r => r.blob()))
+        const blobPromise = toPng(el, IMG_SETTINGS).then(dataUrl => fetch(dataUrl).then(r => r.blob()))
 
         await navigator.clipboard.write([new ClipboardItem({ "image/png": blobPromise })])
 
@@ -82,12 +103,7 @@ export const downloadImage = async (filename: string, target: string | HTMLEleme
     })
 
     try {
-        const dataUrl = await toPng(el, {
-            cacheBust: true,
-            pixelRatio: 2,
-            backgroundColor: "#242424",
-            skipFonts: false
-        })
+        const dataUrl = await toPng(el, { ...IMG_SETTINGS, pixelRatio: 2, })
 
         const blob = await (await fetch(dataUrl)).blob()
         await downloadImg(filename, blob)

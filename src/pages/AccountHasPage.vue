@@ -24,7 +24,9 @@
             </button>
         </div>
 
-        <button class="copy-btn" @click="copyAscensionList">Copy to clipboard</button>
+        <button class="copy-btn" @click="clipboardSupported ? copyAscensionList() : openAscensionListInNewTab()">
+            {{ clipboardSupported ? 'Copy to clipboard' : 'Open image in new tab' }}
+        </button>
         <button class="copy-btn" @click="downloadAscensionList">Download</button>
         <button class="copy-btn" @click="copyHyperLink">Copy Link</button>
         <div>
@@ -199,7 +201,7 @@ import { useRoute, useRouter } from "vue-router"
 import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
-import { copyImageToClipboard, downloadImage } from "../utils/image"
+import { canWriteToClipboard, copyImageToClipboard, downloadImage, openImageInNewTab } from "../utils/image"
 import { crystalises, passiveDetails } from "../utils/helpers"
 
 const route = useRoute()
@@ -217,6 +219,12 @@ const viewingFriendCode = computed(() =>
         : null
 )
 
+const openAscensionListInNewTab = () => {
+    const el = document.querySelector(".ascension-table") as HTMLElement
+    if (!el) return
+    openImageInNewTab(el)
+}
+
 const store = useCharacterStore()
 const displayedCharacters = ref<Character[]>([])
 const displayedCharactersComputed = computed(() =>
@@ -226,8 +234,10 @@ const displayedCharactersComputed = computed(() =>
 )
 const isReadonly = computed(() => !!viewingFriendCode.value)
 
+const clipboardSupported = ref(true)
 
 onMounted(async () => {
+    clipboardSupported.value = await canWriteToClipboard()
     if (!viewingFriendCode.value) return
     await loadFriendKioku(viewingFriendCode.value)
 })
