@@ -26,26 +26,6 @@ const getElement = (target: string | HTMLElement): HTMLElement | null => {
     return target
 }
 
-const compressPngBlob = (dataUrl: string): Promise<Blob> => {
-    return new Promise((resolve, reject) => {
-        const img = new Image()
-        img.onload = () => {
-            const canvas = document.createElement("canvas")
-            canvas.width = img.width
-            canvas.height = img.height
-            canvas.getContext("2d")!.drawImage(img, 0, 0, canvas.width, canvas.height)
-            canvas.toBlob(
-                blob => {
-                    blob ? resolve(blob) : reject(new Error("Failed"))
-                },
-                "image/png"
-            )
-        }
-        img.onerror = reject
-        img.src = dataUrl
-    })
-}
-
 export const copyImageToClipboard = async (filename: string, target: string | HTMLElement) => {
     const el = getElement(target)
     if (!el) return
@@ -60,7 +40,7 @@ export const copyImageToClipboard = async (filename: string, target: string | HT
             pixelRatio: 1,
             backgroundColor: "#242424",
             skipFonts: false
-        }).then(dataUrl => compressPngBlob(dataUrl))
+        }).then(dataUrl => fetch(dataUrl).then(r => r.blob()))
 
         await navigator.clipboard.write([new ClipboardItem({ "image/png": blobPromise })])
 
