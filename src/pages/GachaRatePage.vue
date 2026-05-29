@@ -360,7 +360,9 @@ const captureElement = async (el) => {
         cacheBust: true,
         pixelRatio: 2,
         backgroundColor: "#1e1e1e",
-        skipFonts: false
+        skipFonts: false,
+        width: el.offsetWidth,
+        height: el.offsetHeight + 15,
     })
 
     const img = new Image()
@@ -658,6 +660,8 @@ label {
     gap: 0.75rem;
     width: 100%;
     margin-top: 1rem;
+    padding: 16px;
+    box-sizing: border-box;
 }
 
 .pull-card {
