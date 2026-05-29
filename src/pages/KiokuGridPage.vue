@@ -2,7 +2,9 @@
     <div>
         <div class="options-bar">
             <div class="options-row">
-                <button class="copy-btn" @click="copyGridToClipboard">Copy to clipboard</button>
+                <button class="copy-btn" @click="clipboardSupported ? copyGridToClipboard() : openGridInNewTab()">
+                    {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
+                </button>
                 <button class="copy-btn" @click="downloadGrid">Download</button>
             </div>
             <div class="options-row">
@@ -52,7 +54,7 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualAttacker(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                        }}</span>
+                            }}</span>
                     </div>
                 </button>
             </div>
@@ -76,7 +78,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ xVal === "-1" ? "Not Owned" : `A${xVal}`
-                            }}</span>
+                                }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -96,7 +98,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ yVal === "-1" ? "Not Owned" : `A${yVal}`
-                            }}</span>
+                                }}</span>
                         </td>
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
                             <template v-for="r in [5, 4, 3]" :key="r">
@@ -167,7 +169,7 @@ import { Character, KiokuElement, KiokuRole, KiokuConstants } from "../types/Kio
 import { useSetting } from "../store/settingsStore"
 import { Kioku } from "../models/Kioku"
 import { skillDetails } from "../utils/helpers"
-import { copyImageToClipboard, downloadImage } from "../utils/image"
+import { copyImageToClipboard, downloadImage, openImageInNewTab, useClipboardSupport } from "../utils/image"
 
 const store = useCharacterStore()
 
@@ -424,33 +426,12 @@ const isMaxSpecialLvl = (ch: Character): boolean => {
     return ch.specialLvl === 4
 }
 
-const downloadGrid = async () => {
-    const el = document.querySelector(".grid-scroll") as HTMLElement
-    if (!el) return
+const { clipboardSupported } = useClipboardSupport()
+const exportOpts = { exportClass: "exporting" }
 
-    el.classList.add("exporting")
-
-    await new Promise(requestAnimationFrame)
-    await new Promise(requestAnimationFrame)
-
-    await downloadImage("grid.png", el)
-
-    el.classList.remove("exporting")
-}
-
-const copyGridToClipboard = async () => {
-    const el = document.querySelector(".grid-scroll") as HTMLElement
-    if (!el) return
-
-    el.classList.add("exporting")
-
-    await new Promise(requestAnimationFrame)
-    await new Promise(requestAnimationFrame)
-
-    await copyImageToClipboard("grid.png", el)
-
-    el.classList.remove("exporting")
-}
+const downloadGrid = () => downloadImage("grid.png", ".grid-scroll", exportOpts)
+const copyGridToClipboard = () => copyImageToClipboard("grid.png", ".grid-scroll", exportOpts)
+const openGridInNewTab = () => openImageInNewTab(".grid-scroll", exportOpts)
 </script>
 
 <style scoped>

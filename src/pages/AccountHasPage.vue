@@ -25,7 +25,7 @@
         </div>
 
         <button class="copy-btn" @click="clipboardSupported ? copyAscensionList() : openAscensionListInNewTab()">
-            {{ clipboardSupported ? 'Copy to clipboard' : 'Open image in new tab' }}
+            {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
         </button>
         <button class="copy-btn" @click="downloadAscensionList">Download</button>
         <button class="copy-btn" @click="copyHyperLink">Copy Link</button>
@@ -202,7 +202,7 @@ import { useRoute, useRouter } from "vue-router"
 import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
-import { canWriteToClipboard, copyImageToClipboard, downloadImage, openImageInNewTab } from "../utils/image"
+import { copyImageToClipboard, downloadImage, openImageInNewTab, useClipboardSupport } from "../utils/image"
 import { crystalises, passiveDetails } from "../utils/helpers"
 
 const route = useRoute()
@@ -220,12 +220,6 @@ const viewingFriendCode = computed(() =>
         : null
 )
 
-const openAscensionListInNewTab = () => {
-    const el = document.querySelector(".ascension-table") as HTMLElement
-    if (!el) return
-    openImageInNewTab(el)
-}
-
 const store = useCharacterStore()
 const displayedCharacters = ref<Character[]>([])
 const displayedCharactersComputed = computed(() =>
@@ -235,10 +229,7 @@ const displayedCharactersComputed = computed(() =>
 )
 const isReadonly = computed(() => !!viewingFriendCode.value)
 
-const clipboardSupported = ref(true)
-
 onMounted(async () => {
-    clipboardSupported.value = await canWriteToClipboard()
     if (!viewingFriendCode.value) return
     await loadFriendKioku(viewingFriendCode.value)
 })
@@ -461,17 +452,12 @@ const dragLeave = (e: DragEvent) => {
         dragOver.value = null
     }
 }
-const downloadAscensionList = () => {
-    const el = document.querySelector(".ascension-table") as HTMLElement
-    if (!el) return
-    downloadImage("ascension.png", el)
-}
 
-const copyAscensionList = () => {
-    const el = document.querySelector(".ascension-table") as HTMLElement
-    if (!el) return
-    copyImageToClipboard("ascension.png", el)
-}
+const { clipboardSupported } = useClipboardSupport()
+
+const downloadAscensionList = () => downloadImage("ascension.png", ".ascension-table")
+const copyAscensionList = () => copyImageToClipboard("ascension.png", ".ascension-table")
+const openAscensionListInNewTab = () => openImageInNewTab(".ascension-table")
 
 const copyHyperLink = async () => {
     try {

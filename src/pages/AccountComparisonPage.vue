@@ -33,7 +33,10 @@
 
         <div class="controls" v-if="leftCode && rightCode">
             <div>
-                <button class="copy-btn" @click="copyGraphToClipboard">Copy to clipboard</button>
+                <button class="copy-btn"
+                    @click="clipboardSupported ? copyGraphToClipboard() : openGraphInNewTab()">
+                    {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
+                </button>
                 <button class="copy-btn" @click="downloadGraph">Download</button>
                 <button class="copy-btn" @click="copyHyperLink">Copy Link</button>
             </div>
@@ -136,7 +139,7 @@ import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 import { getAccountSimilarityScore } from "../models/AccountSimilarityScore"
-import { copyImageToClipboard, downloadImage } from "../utils/image"
+import { canWriteToClipboard, copyImageToClipboard, downloadImage, openImageInNewTab, useClipboardSupport } from "../utils/image"
 import { toast } from "vue3-toastify"
 
 const friendStore = useFriendStore()
@@ -354,23 +357,22 @@ const withExportHeader = async (fn: () => Promise<void> | void) => {
     }
 }
 
-const downloadGraph = async () => {
-    const el = document.querySelector(".graph-container") as HTMLElement
-    if (!el) return
+const { clipboardSupported } = useClipboardSupport()
 
-    await withExportHeader(() =>
-        downloadImage(filename.value, el)
-    )
+const exportOpts = {
+    onBefore: () => {
+        const header = document.querySelector(".export-header") as HTMLElement | null
+        if (header) header.style.display = "flex"
+    },
+    onAfter: () => {
+        const header = document.querySelector(".export-header") as HTMLElement | null
+        if (header) header.style.display = "none"
+    }
 }
 
-const copyGraphToClipboard = async () => {
-    const el = document.querySelector(".graph-container") as HTMLElement
-    if (!el) return
-
-    await withExportHeader(() =>
-        copyImageToClipboard(filename.value, el)
-    )
-}
+const downloadGraph = () => downloadImage(filename.value, ".graph-container", exportOpts)
+const copyGraphToClipboard = () => copyImageToClipboard(filename.value, ".graph-container", exportOpts)
+const openGraphInNewTab = () => openImageInNewTab(".graph-container", exportOpts)
 
 const copyHyperLink = async () => {
     try {

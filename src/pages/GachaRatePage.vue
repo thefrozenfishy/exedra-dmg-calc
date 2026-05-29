@@ -14,7 +14,7 @@ import { useSetting } from '../store/settingsStore'
 import CharacterSelector from '../components/CharacterSelector.vue'
 import { useCharacterStore } from '../store/characterStore'
 import { toPng } from "html-to-image"
-import { toast } from "vue3-toastify";
+import { copyCanvasToClipboard, useClipboardSupport, openCanvasInImage, downloadCanvas } from '../utils/image'
 
 Chart.register(
     LineController,
@@ -449,61 +449,21 @@ const imgName = computed(() =>
     `Gacha ${showFullHistory.value ? pullResults.value.length : last_pull_count.value} pulls ${rate.value}-${pickupRate.value} rates ${pickupCharacter.value ? pickupCharacter.value.name : 'no'} pickup.png`
 );
 
+const { clipboardSupported } = useClipboardSupport()
+
 const copyFullHistoryHorizontal = async () => {
-    const toastId = toast.loading("Copying to clipboard...", {
-        position: toast.POSITION.TOP_RIGHT,
-        icon: false
-    })
+    const canvas = await captureImageOfHistory()
+    await copyCanvasToClipboard(imgName.value, canvas)
+}
 
-    try {
-        const blobPromise = captureImageOfHistory().then(canvas =>
-            new Promise((resolve, reject) =>
-                canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png")
-            )
-        )
-
-        await navigator.clipboard.write([
-            new ClipboardItem({ "image/png": blobPromise })
-        ])
-
-        toast.update(toastId, {
-            render: "Copied to clipboard!",
-            type: "success",
-            isLoading: false,
-            autoClose: 3000
-        })
-    } catch {
-        try {
-            const canvas = await captureImageOfHistory()
-            const blob = await new Promise((resolve, reject) =>
-                canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png")
-            )
-            downloadImg(blob, imgName.value)
-
-            toast.update(toastId, {
-                render: "Clipboard blocked — saved as file instead",
-                type: "info",
-                isLoading: false,
-                autoClose: 3000
-            })
-        } catch {
-            toast.update(toastId, {
-                render: "Image export failed",
-                type: "error",
-                isLoading: false,
-                autoClose: 3000
-            })
-        }
-    }
+const openFullHistoryHorizontalNewTab = async () => {
+    const canvas = await captureImageOfHistory()
+    await openCanvasInImage(canvas)
 }
 
 const downloadFullHistoryHorizontal = async () => {
     const canvas = await captureImageOfHistory()
-
-    canvas.toBlob((blob) => {
-        if (!blob) return
-        downloadImg(blob, imgName.value)
-    }, "image/png")
+    await downloadCanvas(imgName.value, canvas)
 }
 </script>
 
@@ -585,7 +545,10 @@ const downloadFullHistoryHorizontal = async () => {
                 {{ showFullHistory ? 'Hide full history' : 'Show full history' }}
                 ({{ pullResults.length }} pulls)
             </button>
-            <button class="history-toggle" @click="copyFullHistoryHorizontal">Copy as image</button>
+            <button class="history-toggle"
+                @click="clipboardSupported ? copyFullHistoryHorizontal() : openFullHistoryHorizontalNewTab()">
+                {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
+            </button>
             <button class="history-toggle" @click="downloadFullHistoryHorizontal">Download</button>
         </div>
 

@@ -19,8 +19,10 @@
     </div>
 
     <div class="share-card-actions">
-      <button class="copy-btn" @click="copyTeamShareCardToClipboard" :disabled="!shareCardAvailable">
-        Copy team share image
+      <button class="copy-btn"
+        @click="clipboardSupported ? copyTeamShareCardToClipboard() : openTeamShareCardInNewTab()"
+        :disabled="!shareCardAvailable">
+        {{ clipboardSupported ? 'Copy team share image to clipboard' : 'Open image in new tab' }}
       </button>
       <button class="copy-btn" @click="downloadTeamShareCard" :disabled="!shareCardAvailable">
         Download team share image
@@ -39,7 +41,7 @@
                   <span class="share-overlay-badge heart">{{ slot.main.heartphialLvl }}</span>
                   <span class="share-overlay-badge magic">{{ slot.main.magicLvl }}</span>
                   <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">{{ slot.main.specialLvl
-                    }}</span>
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -58,7 +60,8 @@
 
             <div class="share-slot-crys-row">
               <span class="share-chip" v-for="([crysId], idx) in Object.entries(slot.main.crysOptions)
-                .filter(([, value]) => value.useIndex > 0).sort(([, a], [, b]) => a.useIndex - b.useIndex)" :key="`cry-${idx}`">
+                .filter(([, value]) => value.useIndex > 0).sort(([, a], [, b]) => a.useIndex - b.useIndex)"
+                :key="`cry-${idx}`">
                 {{ crystalises[Number(crysId)]?.styleMstId ? "EX" : crystalises[Number(crysId)]?.name }}
               </span>
             </div>
@@ -203,7 +206,7 @@ import AlimentToggler from '../components/AlimentToggler.vue'
 import DamageReductionInputs from '../components/DamageReductionInputs.vue'
 import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
-import { copyImageToClipboard, downloadImage } from '../utils/image'
+import { copyImageToClipboard, downloadImage, openImageInNewTab, useClipboardSupport } from '../utils/image'
 import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
 import { useSetting } from '../store/settingsStore'
 import { KiokuArgs, Character, SkillDetail, skillDetailId } from '../types/KiokuTypes'
@@ -262,27 +265,12 @@ const summarizeSubCrys = (ch: Character) => {
   return Object.entries(counts).map(([effType, [desc, nr]]) => desc.replace("XXXXX", (desc as string).includes("%") ? nr / 10 : nr))
 }
 
-const copyTeamShareCardToClipboard = async () => {
-  if (!shareCardRef.value) return
+const { clipboardSupported } = useClipboardSupport()
+const exportOpts = { exportClass: "exporting" }
 
-  shareCardRef.value.classList.add("exporting")
-
-  await new Promise(requestAnimationFrame)
-  await copyImageToClipboard('single-team-share.png', shareCardRef.value)
-
-  shareCardRef.value.classList.remove("exporting")
-}
-
-const downloadTeamShareCard = async () => {
-  if (!shareCardRef.value) return
-
-  shareCardRef.value.classList.add("exporting")
-
-  await new Promise(requestAnimationFrame)
-  await downloadImage('single-team-share.png', shareCardRef.value)
-
-  shareCardRef.value.classList.remove("exporting")
-}
+const copyTeamShareCardToClipboard = () => copyImageToClipboard('single-team-share.png', shareCardRef.value!, exportOpts)
+const openTeamShareCardInNewTab = () => openImageInNewTab(shareCardRef.value!, exportOpts)
+const downloadTeamShareCard = () => downloadImage('single-team-share.png', shareCardRef.value!, exportOpts)
 
 const sortEffectType = (effects: object) => Object.fromEntries(Object.entries(effects).sort(([a], [b]) => a.localeCompare(b)))
 const sa_score = computed(() => {
