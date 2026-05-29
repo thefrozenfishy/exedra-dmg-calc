@@ -26,6 +26,26 @@ const getElement = (target: string | HTMLElement): HTMLElement | null => {
     return target
 }
 
+const compressPngBlob = (dataUrl: string): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+        const img = new Image()
+        img.onload = () => {
+            const canvas = document.createElement("canvas")
+            canvas.width = img.width
+            canvas.height = img.height
+            canvas.getContext("2d")!.drawImage(img, 0, 0, canvas.width, canvas.height)
+            canvas.toBlob(
+                blob => {
+                    blob ? resolve(blob) : reject(new Error("Failed"))
+                },
+                "image/png"
+            )
+        }
+        img.onerror = reject
+        img.src = dataUrl
+    })
+}
+
 export const copyImageToClipboard = async (filename: string, target: string | HTMLElement) => {
     const el = getElement(target)
     if (!el) return
@@ -37,10 +57,10 @@ export const copyImageToClipboard = async (filename: string, target: string | HT
     try {
         const blobPromise = toPng(el, {
             cacheBust: true,
-            pixelRatio: 2,
+            pixelRatio: 1,
             backgroundColor: "#242424",
             skipFonts: false
-        }).then(dataUrl => fetch(dataUrl).then(r => r.blob()))
+        }).then(dataUrl => compressPngBlob(dataUrl))
 
         await navigator.clipboard.write([new ClipboardItem({ "image/png": blobPromise })])
 
@@ -76,6 +96,10 @@ export const copyImageToClipboard = async (filename: string, target: string | HT
 export const downloadImage = async (filename: string, target: string | HTMLElement) => {
     const el = getElement(target)
     if (!el) return
+    const toastId = toast.loading("Downloading...", {
+        position: toast.POSITION.TOP_RIGHT,
+        icon: false
+    })
 
     try {
         const dataUrl = await toPng(el, {
@@ -87,11 +111,19 @@ export const downloadImage = async (filename: string, target: string | HTMLEleme
 
         const blob = await (await fetch(dataUrl)).blob()
         await downloadImg(filename, blob)
+        toast.update(toastId, {
+            render: `Downloaded as ${filename}`,
+            type: "success",
+            isLoading: false,
+            autoClose: 3000
+        })
     } catch (err) {
         console.error("Download failed:", err)
-        toast.error("Download failed", {
-            position: toast.POSITION.TOP_RIGHT,
-            icon: false
+        toast.update(toastId, {
+            render: "Download failed",
+            type: "error",
+            isLoading: false,
+            autoClose: 3000
         })
     }
 }
