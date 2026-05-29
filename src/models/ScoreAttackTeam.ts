@@ -39,6 +39,8 @@ export const knownBoosts = {
 const skippable = new Set([
     "ADD_BUFF_TURN",
     "ADD_DEBUFF_TURN",
+    "ADD_BUFF_TURN_IMM",
+    "ADD_DEBUFF_TURN_IMM",
     "ADDITIONAL_SKILL_ACT",
     "ADDITIONAL_TURN_UNIT_ACT",
     "BARRIER",
@@ -122,6 +124,8 @@ const bannedEffects: Set<string> = new Set([
     "12721005", // Yotsugi too
     "65261003", // Kanagi fua
     "65251003", // Kanagi fua
+    "65281002", // Smura fua
+    "65291002", // Smura fua
 ]);
 
 const effectIsBanned = (detail: SkillDetail): boolean => {
