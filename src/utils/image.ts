@@ -29,27 +29,29 @@ const getElement = (target: string | HTMLElement): HTMLElement | null => {
 export const copyImageToClipboard = async (filename: string, target: string | HTMLElement) => {
     const el = getElement(target)
     if (!el) return
+    const toastId = toast.loading("Copying to clipboard...", {
+        position: toast.POSITION.TOP_RIGHT,
+        icon: false
+    })
 
     try {
-        const dataUrl = await toPng(el, {
+        const blobPromise = toPng(el, {
             cacheBust: true,
             pixelRatio: 2,
             backgroundColor: "#242424",
             skipFonts: false
-        })
+        }).then(dataUrl => fetch(dataUrl).then(r => r.blob()))
 
-        const blob = await (await fetch(dataUrl)).blob()
+        await navigator.clipboard.write([new ClipboardItem({ "image/png": blobPromise })])
 
-        const item = new ClipboardItem({ "image/png": blob })
-        await navigator.clipboard.write([item])
-
-        toast.success("Copied to clipboard!", {
-            position: toast.POSITION.TOP_RIGHT,
-            icon: false
+        toast.update(toastId, {
+            render: "Copied to clipboard!",
+            type: "success",
+            isLoading: false,
+            autoClose: 3000
         })
     } catch (err) {
         console.error(err)
-
         try {
             const dataUrl = await toPng(el, {
                 cacheBust: true,
@@ -57,14 +59,23 @@ export const copyImageToClipboard = async (filename: string, target: string | HT
                 backgroundColor: "#242424",
                 skipFonts: false
             })
-
             const blob = await (await fetch(dataUrl)).blob()
             await downloadImg(filename, blob)
+
+            toast.update(toastId, {
+                render: "Clipboard unavailable, image downloaded instead",
+                type: "info",
+                isLoading: false,
+                autoClose: 3000
+            })
         } catch (fallbackErr) {
             console.error("Image export failed completely:", fallbackErr)
-            toast.error("Image export failed", {
-                position: toast.POSITION.TOP_RIGHT,
-                icon: false
+
+            toast.update(toastId, {
+                render: "Image export failed",
+                type: "error",
+                isLoading: false,
+                autoClose: 3000
             })
         }
     }

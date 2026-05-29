@@ -450,23 +450,50 @@ const imgName = computed(() =>
 );
 
 const copyFullHistoryHorizontal = async () => {
-    const canvas = await captureImageOfHistory()
-
-    const blob = await new Promise(resolve =>
-        canvas.toBlob(resolve, "image/png")
-    )
-
-    if (!blob) return
+    const toastId = toast.loading("Copying to clipboard...", {
+        position: toast.POSITION.TOP_RIGHT,
+        icon: false
+    })
 
     try {
+        const blobPromise = captureImageOfHistory().then(canvas =>
+            new Promise((resolve, reject) =>
+                canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png")
+            )
+        )
+
         await navigator.clipboard.write([
-            new ClipboardItem({ "image/png": blob })
+            new ClipboardItem({ "image/png": blobPromise })
         ])
 
-        toast.success("Copied full history horizontally!")
+        toast.update(toastId, {
+            render: "Copied to clipboard!",
+            type: "success",
+            isLoading: false,
+            autoClose: 3000
+        })
     } catch {
-        downloadImg(blob, imgName.value)
-        toast.info("Clipboard blocked — saved as file instead")
+        try {
+            const canvas = await captureImageOfHistory()
+            const blob = await new Promise((resolve, reject) =>
+                canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png")
+            )
+            downloadImg(blob, imgName.value)
+
+            toast.update(toastId, {
+                render: "Clipboard blocked — saved as file instead",
+                type: "info",
+                isLoading: false,
+                autoClose: 3000
+            })
+        } catch {
+            toast.update(toastId, {
+                render: "Image export failed",
+                type: "error",
+                isLoading: false,
+                autoClose: 3000
+            })
+        }
     }
 }
 
