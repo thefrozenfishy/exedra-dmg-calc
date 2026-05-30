@@ -392,52 +392,6 @@ onBeforeUnmount(() => {
     padding-right: 20px;
 }
 
-.crys-toggle-hint {
-    font-size: 1.1em;
-    opacity: 0.6;
-}
-
-.subcrys-section {
-    margin-top: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding-left: 4px;
-    border-left: 2px solid rgba(255, 255, 255, 0.15);
-}
-
-.subcrys-row {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.subcrys-label {
-    font-size: 0.72em;
-    opacity: 0.5;
-}
-
-.subcrys-select {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    color: #ffffff;
-    padding: 3px 6px;
-    font-size: 0.85em;
-}
-
-.subcrys-select option {
-    background: #1e1e2e;
-    color: #ffffff;
-}
-
-.subcrys-desc {
-    font-size: 0.72em;
-    opacity: 0.5;
-    line-height: 1.3;
-}
-
 .crys-card {
     position: relative;
 }
@@ -512,24 +466,11 @@ onBeforeUnmount(() => {
     color: inherit;
 }
 
-.pill-badge {
-    width: 14px;
-    height: 14px;
-    border-radius: 3px;
-    background: rgba(170, 100, 255, 0.7);
-    color: #fff;
-    font-size: 9px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
 .pill-label {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: 11px;
 }
 
 .pill-empty {
