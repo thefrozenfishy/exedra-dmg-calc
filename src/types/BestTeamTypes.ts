@@ -17,6 +17,7 @@ export interface FindBestTeamOptions {
     obligatoryKioku: string[];
     ignoredKioku: string[];
     weakElements: KiokuElement[]
+    onlyConsiderOnElements: boolean
     activeAliments: Aliment[]
     deBufferCount: number
     otherCount: number

@@ -100,6 +100,7 @@ export async function findBestTeam({
     include4StarOthers,
     extraAttackers,
     weakElements,
+    onlyConsiderOnElements,
     activeAliments,
     enabledCharacters,
     obligatoryKioku,
@@ -146,7 +147,7 @@ export async function findBestTeam({
                     ((include4StarSupports && [KiokuRole.Buffer, KiokuRole.Debuffer].includes(char.role))
                         || (include4StarOthers && [KiokuRole.Healer, KiokuRole.Defender, KiokuRole.Breaker].includes(char.role)))
                 )) {
-                availableChars[char.role].push(char)
+                if (!onlyConsiderOnElements || (onlyConsiderOnElements && weakElements.includes(char.element))) availableChars[char.role].push(char)
             }
             if (extraAttackers.includes(char.name)) availableChars[KiokuRole.Attacker].push(char)
         }

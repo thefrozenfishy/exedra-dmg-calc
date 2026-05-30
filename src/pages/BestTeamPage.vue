@@ -39,6 +39,11 @@
             </label>
 
             <label>
+                <input type="checkbox" v-model="onlyConsiderOnElements" />
+                Only consider Kioku which are on-element 
+            </label>
+
+            <label>
                 <input type="checkbox" v-model="optimalSubCrys" />
                 Calculate using perfect Crit rate, Crit Damage & atk crystalis substats
             </label>
@@ -267,6 +272,7 @@ const optimizeAverageDamage = useSetting("optimizeAverageDamage", false)
 const attackerHealth = useSetting("attackerHealth", 100)
 const optimalSubCrys = useSetting("optimalSubCrys", true)
 const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
+const onlyConsiderOnElements = useSetting("onlyConsiderOnElements", false)
 
 const weakElements = reactive([
     { name: KiokuElement.Flame, enabled: useSetting("flame-enabled", true) },
@@ -456,6 +462,7 @@ async function startSimulation() {
             include4StarSupports: include4StarSupports.value,
             include4StarOthers: include4StarOthers.value,
             weakElements: weakElements.filter(el => el.enabled).map(el => el.name),
+            onlyConsiderOnElements: onlyConsiderOnElements.value,
             activeAliments: alimentRef.value?.aliments.filter(a => a.enabled).map(a => a.name) ?? [],
             extraAttackers: extraAttackers.value.map(c => c.name),
             obligatoryKioku: obligatoryKioku.value.map(c => c.name),
