@@ -366,6 +366,10 @@ onBeforeUnmount(() => {
     background: rgba(80, 18, 24, 0.08);
 }
 
+.crys-card.offElement:not(.disabled) {
+    background: rgba(80, 18, 24, 0.18);
+}
+
 .crys-header {
     display: flex;
     align-items: center;
