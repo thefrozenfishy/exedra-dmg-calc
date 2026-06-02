@@ -350,20 +350,20 @@ onBeforeUnmount(() => {
 }
 
 .crys-card {
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.10);
     border-radius: 6px;
     padding: 10px;
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.01);
     transition: border-color 0.15s;
 }
 
 .crys-card:not(.disabled) {
-    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.45);
 }
 
 .crys-card.offElement {
     background: rgba(80, 18, 24, 0.08);
-    border-color: rgba(120, 40, 50, 0.35);
 }
 
 .crys-header {
