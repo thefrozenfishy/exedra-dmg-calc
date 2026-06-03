@@ -19,6 +19,64 @@
       </div>
     </section>
 
+    <section class="analytics-section errors-section">
+      <div class="section-header">
+        <h2>
+          <span class="error-icon">⚠</span>
+          Errors
+          <span v-if="errorRows.length" class="error-badge">{{ errorRows.length }}</span>
+        </h2>
+        <div>
+          <label>
+            Last:
+            <select v-model="selectedWindow">
+              <option v-for="option in windowOptions" :key="option" :value="option">{{ option }} days</option>
+            </select>
+          </label>
+          <button @click="refresh" style="margin-left:12px">Refresh</button>
+        </div>
+      </div>
+      <div v-if="errorRows.length === 0" class="no-errors">
+        ✓ No errors in this window
+      </div>
+      <table v-else class="analytics-table">
+        <thead>
+          <tr>
+            <th style="width:160px">Last seen</th>
+            <th style="width:60px">Count</th>
+            <th style="width:140px">Users</th>
+            <th>Message</th>
+            <th>Stack / Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(err, index) in errorRows"
+            :key="index"
+            class="error-row"
+            :class="{ expanded: expandedErrors.has(err.key) }"
+            @click="toggleErrorExpanded(err.key)"
+          >
+            <td class="mono">{{ err.lastSeen }}</td>
+            <td>
+              <span v-if="err.count > 1" class="count-badge">{{ err.count }}</span>
+              <span v-else>1</span>
+            </td>
+            <td class="mono dim">
+              <span v-for="(u, i) in err.users" :key="u" class="user-tag">{{ u }}</span>
+            </td>
+            <td class="error-message-cell">{{ err.message }}</td>
+            <td class="mono dim stack-cell">
+              <span v-if="!expandedErrors.has(err.key)" class="stack-truncated">
+                {{ err.stack ? err.stack.split('\n')[0].slice(0, 80) + (err.stack.length > 80 || err.stack.includes('\n') ? '…' : '') : '—' }}
+              </span>
+              <span v-else class="stack-full">{{ err.stack || '—' }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
     <section class="analytics-section">
       <div class="section-header">
         <h2>Activity timeline</h2>
@@ -202,6 +260,14 @@ type AnalyticsRowWithDisplay = AnalyticsRow & {
   display_user: string
 }
 
+type ErrorGroup = {
+  message: string
+  stack: string
+  users: string[]
+  count: number
+  lastSeen: string
+}
+
 const loading = ref(false)
 const error = ref<string | null>(null)
 const rows = ref<AnalyticsRowWithDisplay[]>([])
@@ -212,6 +278,56 @@ const eventRows = computed(() => {
     counts[row.event] = (counts[row.event] ?? 0) + 1
   }
   return Object.entries(counts).sort((a, b) => b[1] - a[1])
+})
+
+const expandedErrors = ref<Set<string>>(new Set())
+
+const toggleErrorExpanded = (key: string) => {
+  const next = new Set(expandedErrors.value)
+  if (next.has(key)) next.delete(key)
+  else next.add(key)
+  expandedErrors.value = next
+}
+
+const errorRows = computed<(ErrorGroup & { key: string })[]>(() => {
+  const errorEvents = rows.value.filter(r => r.event === 'js_error' || r.event === 'console_error')
+
+  const groups = new Map<string, ErrorGroup & { userSet: Set<string> }>()
+
+  for (const row of errorEvents) {
+    const message = row.metadata?.message ?? String(row.metadata ?? '')
+    const stack = row.metadata?.stack ?? row.metadata?.source ?? ''
+    const key = message
+
+    const existing = groups.get(key)
+    const ts = new Date(row.created_at)
+
+    if (existing) {
+      existing.count++
+      existing.userSet.add(row.display_user)
+      if (ts > new Date(existing.lastSeen)) {
+        existing.lastSeen = row.created_at
+        existing.stack = stack
+      }
+    } else {
+      groups.set(key, {
+        message,
+        stack,
+        users: [],
+        userSet: new Set([row.display_user]),
+        count: 1,
+        lastSeen: row.created_at,
+      })
+    }
+  }
+
+  return [...groups.entries()]
+    .map(([key, g]) => ({ ...g, key, users: [...g.userSet] }))
+    .sort((a, b) => new Date(b.lastSeen).getTime() - new Date(a.lastSeen).getTime())
+    .map(g => ({
+      ...g,
+      lastSeen: new Date(g.lastSeen).toLocaleString(),
+    }))
 })
 
 const selectedUser = ref<string>('all')
@@ -312,7 +428,6 @@ const timelineRows = computed(() => {
 const timelineSeries = computed(() => {
   const labels = timelineLabels.value
   if (selectedUser.value === 'all') {
-    // If a specific page is selected, show users for that page
     if (selectedPage.value !== 'all') {
       const userMap: Record<string, Record<string, number>> = {}
       for (const row of filteredRows.value) {
@@ -339,7 +454,6 @@ const timelineSeries = computed(() => {
         }))
     }
 
-    // Otherwise show all users
     const userMap: Record<string, Record<string, number>> = {}
     for (const row of filteredRows.value) {
       const user = getDisplayUser(row)
@@ -507,7 +621,6 @@ const fetchAnalytics = async () => {
       display_user: row.user_id ?? 'anonymous'
     })) as AnalyticsRowWithDisplay[]
 
-    // map user_id -> friend_id (public identifier) via RPC; fallback to uuid
     try {
       const userIds = Array.from(new Set(rows.value.map(r => r.user_id).filter(Boolean))) as string[]
       if (userIds.length) {
@@ -575,6 +688,123 @@ onMounted(fetchAnalytics)
   border: 1px solid #444;
   border-radius: 14px;
   padding: 1rem;
+}
+
+.errors-section {
+  border-color: #5a2d2d;
+  background: #2a2020;
+}
+
+.errors-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.error-icon {
+  color: #f87171;
+  font-size: 1.1rem;
+}
+
+.error-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #dc2626;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0 0.5rem;
+  min-width: 1.4rem;
+  height: 1.4rem;
+  margin-left: 0.25rem;
+}
+
+.no-errors {
+  color: #6ee7b7;
+  padding: 0.75rem 0;
+  font-size: 0.95rem;
+}
+
+.error-row {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.error-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.error-row.expanded {
+  background: rgba(220, 38, 38, 0.07);
+}
+
+.error-row td {
+  vertical-align: top;
+}
+
+.user-tag {
+  display: inline-block;
+  background: #3a2a2a;
+  border: 1px solid #5a3a3a;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.75rem;
+  color: #ccc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
+}
+
+.error-message-cell {
+  color: #fca5a5;
+  word-break: break-word;
+  max-width: 320px;
+}
+
+.stack-cell {
+  font-size: 0.75rem;
+  max-width: 240px;
+  color: #888;
+}
+
+.stack-truncated {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 240px;
+}
+
+.stack-full {
+  white-space: pre-wrap;
+  word-break: break-all;
+  display: block;
+}
+
+.count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #7f1d1d;
+  color: #fca5a5;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 0 0.4rem;
+  min-width: 1.6rem;
+  height: 1.4rem;
+}
+
+.mono {
+  font-family: monospace;
+  font-size: 0.82rem;
+}
+
+.dim {
+  color: #888;
 }
 
 .section-header {

@@ -11,8 +11,27 @@ import { useTeamStore, useEnemyStore, usePvPStore } from './store/singleTeamStor
 import { useFriendStore } from './store/friendStore';
 import { useBetaStore } from './store/betaStore';
 import { isBeta } from './utils/betaSettings'
+import { logEvent } from './utils/analytics'
 
 const app = createApp(App)
+window.onerror = (message, source, lineno, colno, error) => {
+    logEvent('js_error', {
+        message: String(message),
+        source,
+        lineno,
+        colno,
+        stack: error?.stack ?? null,
+    })
+}
+
+window.onunhandledrejection = (event: PromiseRejectionEvent) => {
+    const error = event.reason
+    logEvent('js_error', {
+        message: error?.message ?? String(error),
+        stack: error?.stack ?? null,
+        type: 'unhandled_promise_rejection',
+    })
+}
 app.component('CharacterLink', CharacterLink)
 app.use(createPinia())
 if (import.meta.env.DEV) {
