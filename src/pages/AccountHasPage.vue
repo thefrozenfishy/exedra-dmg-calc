@@ -56,7 +56,7 @@
 
                     <td class="characters-cell">
                         <div v-for="ch in chars" :key="ch.id" draggable="true" @dragstart="onDragStart(ch)"
-                            @touchstart.prevent="onTouchStart(ch, $event)" @touchmove.prevent="onTouchMove"
+                            @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove"
                             @touchend="onTouchEnd">
                             <div class="character-img-wrapper">
                                 <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank" @contextmenu.prevent>
@@ -474,28 +474,52 @@ const copyHyperLink = async () => {
 }
 
 const touchDragged = ref<Character | null>(null)
+const touchStartPos = ref<{ x: number; y: number } | null>(null)
+const touchDidDrag = ref(false)
+const DRAG_THRESHOLD = 8
 
 const onTouchStart = (ch: Character, e: TouchEvent) => {
     if (isReadonly.value) return
     touchDragged.value = ch
     draggedChar.value = ch
+    touchStartPos.value = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+    touchDidDrag.value = false
 }
 
 const onTouchMove = (e: TouchEvent) => {
     if (isReadonly.value) return
+    if (!touchStartPos.value) return
+
+    const dx = e.touches[0].clientX - touchStartPos.value.x
+    const dy = e.touches[0].clientY - touchStartPos.value.y
+
+    if (!touchDidDrag.value && Math.sqrt(dx * dx + dy * dy) < DRAG_THRESHOLD) return
+
+    touchDidDrag.value = true
+    e.preventDefault()
+
     const touch = e.touches[0]
     const element = document.elementFromPoint(touch.clientX, touch.clientY)
     const row = element?.closest("tr.asc-row")
-    if (!row) { dragOver.value = null; return }
-    dragOver.value = Number(row.getAttribute("data-index"))
+    dragOver.value = row ? Number(row.getAttribute("data-index")) : null
 }
 
-const onTouchEnd = () => {
+const onTouchEnd = (e: TouchEvent) => {
     if (isReadonly.value) return
-    if (dragOver.value != null) onDrop(dragOver.value)
+
+    if (!touchDidDrag.value) {
+        const touch = e.changedTouches[0]
+        const target = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLElement | null
+        target?.click()
+    } else {
+        if (dragOver.value != null) onDrop(dragOver.value)
+    }
+
     dragOver.value = null
     touchDragged.value = null
     draggedChar.value = null
+    touchStartPos.value = null
+    touchDidDrag.value = false
 }
 </script>
 
