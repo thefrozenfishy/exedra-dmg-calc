@@ -86,7 +86,7 @@
                             </template>
 
                             <div v-else class="empty-text">
-                                All covered
+                                    All collected
                             </div>
                         </td>
                     </tr>
