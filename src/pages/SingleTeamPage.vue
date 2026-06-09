@@ -41,7 +41,7 @@
                   <span class="share-overlay-badge heart">{{ slot.main.heartphialLvl }}</span>
                   <span class="share-overlay-badge magic">{{ slot.main.magicLvl }}</span>
                   <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">{{ slot.main.specialLvl
-                  }}</span>
+                    }}</span>
                 </div>
               </div>
             </div>
@@ -493,11 +493,11 @@ async function copyToClipboard(text: string) {
   display: none;
   width: 100%;
   max-width: 1200px;
-  border: 1px solid #555;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 10px;
   padding: 1rem;
-  background: #111;
-  color: #eee;
+  background: rgba(18, 13, 25, 0.95);
+  color: var(--text);
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.35);
   margin-bottom: 1.5rem;
 }
@@ -509,8 +509,8 @@ async function copyToClipboard(text: string) {
 }
 
 .share-slot {
-  background: #161616;
-  border: 1px solid #333;
+  background: rgba(15, 11, 21, 0.95);
+  border: 1px solid rgba(255, 209, 110, 0.15);
   border-radius: 12px;
   padding: 0.75rem;
   display: flex;
@@ -530,7 +530,7 @@ async function copyToClipboard(text: string) {
   width: 120px;
   height: 120px;
   border-radius: 14px;
-  background: #0f0f0f;
+  background: radial-gradient(circle at top, rgba(255, 207, 109, 0.14), rgba(14, 10, 21, 1));
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -551,15 +551,15 @@ async function copyToClipboard(text: string) {
 
 .share-overlay-badge {
   position: absolute;
-  min-width: 32px;
+  min-width: 34px;
   transform: translateX(-50%);
-  height: 32px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.88);
-  color: #fff;
-  font-size: 0.72rem;
+  background: rgba(15, 12, 20, 0.88);
+  color: var(--text);
+  font-size: 0.74rem;
   text-align: center;
   border-radius: 999px;
   font-weight: 700;
@@ -610,7 +610,7 @@ async function copyToClipboard(text: string) {
 .share-slot-portrait-label,
 .share-slot-support-label {
   font-size: 0.78rem;
-  color: #ddd;
+  color: var(--muted);
   text-align: center;
   max-width: 100px;
   overflow: hidden;
@@ -634,37 +634,28 @@ async function copyToClipboard(text: string) {
   justify-content: center;
   padding: 0.25rem 0.65rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  color: #d2f0ff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--accent);
   font-size: 0.78rem;
 }
 
 .subcrys-chip {
-  background: rgba(99, 141, 168, 0.16);
+  background: rgba(246, 214, 130, 0.15);
 }
 
 .share-slot-portrait-icon {
   height: 40px;
   border-radius: 8px;
   object-fit: cover;
-  border: 1px solid #444;
-  background: #111;
-}
-
-.share-slot-crys {
-  width: 100%;
-  text-align: left;
-  font-size: 0.77rem;
-  color: #9fd;
-  line-height: 1.4;
-  min-height: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--panel);
 }
 
 .team-slot {
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  padding-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 1rem;
   min-width: 0;
 }
 
@@ -674,11 +665,11 @@ async function copyToClipboard(text: string) {
   gap: 1rem;
   margin-bottom: 1rem;
   padding: 0.5rem 1rem;
-  background: rgba(180, 40, 40, 0.15);
-  border: 1px solid rgba(200, 60, 60, 0.4);
+  background: rgba(180, 40, 40, 0.12);
+  border: 1px solid rgba(200, 60, 60, 0.28);
   border-radius: 6px;
   font-size: 0.85rem;
-  color: #f19999;
+  color: var(--danger-soft);
   max-width: 1200px;
   width: 100%;
 }
@@ -686,16 +677,16 @@ async function copyToClipboard(text: string) {
 .clear-banned-btn {
   margin-left: auto;
   padding: 0.2rem 0.75rem;
-  background: rgba(200, 60, 60, 0.25);
-  border: 1px solid rgba(200, 60, 60, 0.5);
+  background: rgba(200, 60, 60, 0.2);
+  border: 1px solid rgba(200, 60, 60, 0.45);
   border-radius: 4px;
-  color: #fcc;
+  color: var(--danger-soft);
   cursor: pointer;
   font-size: 0.8rem;
 }
 
 .clear-banned-btn:hover {
-  background: rgba(200, 60, 60, 0.45);
+  background: rgba(200, 60, 60, 0.35);
 }
 
 .debug-sections {
@@ -707,14 +698,14 @@ async function copyToClipboard(text: string) {
 }
 
 .debug-section-row {
-  border: 1px solid #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
   overflow: hidden;
 }
 
 .debug-section-header {
   padding: 0.4rem 0.75rem;
-  background: #1a1a1a;
+  background: rgba(255, 255, 255, 0.04);
   font-size: 0.85rem;
   font-weight: 600;
 }
@@ -725,7 +716,7 @@ async function copyToClipboard(text: string) {
 }
 
 .debug-section-grid .debug-slot {
-  border-right: 1px solid #222;
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
   padding: 0.4rem;
   min-width: 0;
 }
@@ -744,6 +735,7 @@ async function copyToClipboard(text: string) {
   margin: 0.4rem 0 0.2rem;
   padding: 0 0.5rem;
   font-size: 0.95rem;
+  color: var(--text);
 }
 
 .debug-pre {
@@ -764,7 +756,7 @@ async function copyToClipboard(text: string) {
 
 .debug-contrib-empty {
   font-size: 0.75rem;
-  color: #555;
+  color: var(--muted);
   padding: 0.2rem;
 }
 
@@ -777,9 +769,9 @@ async function copyToClipboard(text: string) {
 .debug-contrib-group-label {
   font-size: 0.7rem;
   font-weight: 700;
-  color: #888;
+  color: var(--muted);
   padding: 0.1rem 0.2rem;
-  border-bottom: 1px solid #222;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -790,50 +782,50 @@ async function copyToClipboard(text: string) {
   gap: 2px;
   padding: 0.25rem 0.35rem;
   border-radius: 4px;
-  border-left: 2px solid #2a2a2a;
+  border-left: 2px solid rgba(255, 255, 255, 0.05);
   cursor: pointer;
   font-size: 0.75rem;
-  background: #141414;
+  background: rgba(255, 255, 255, 0.03);
   transition: background 0.12s, border-color 0.12s;
 }
 
 .debug-contrib-row:hover {
-  background: #1f1f1f;
-  border-left-color: #555;
+  background: rgba(255, 255, 255, 0.07);
+  border-left-color: rgba(255, 209, 110, 0.55);
 }
 
 .debug-contrib-row.is-disabled {
-  background: rgba(120, 20, 20, 0.2);
-  border-left-color: #882222;
-  color: #d46a6a;
+  background: rgba(180, 40, 40, 0.18);
+  border-left-color: rgba(200, 60, 60, 0.65);
+  color: var(--danger-soft);
 }
 
 .debug-contrib-row.is-dot-off {
-  background: rgba(140, 110, 0, 0.18);
-  border-left-color: #8a6b00;
-  color: #d4b84a;
+  background: rgba(245, 204, 117, 0.18);
+  border-left-color: rgba(244, 206, 102, 0.55);
+  color: var(--warning);
 }
 
 .debug-contrib-row.is-dot-on {
-  background: rgba(20, 100, 40, 0.2);
-  border-left-color: #2e7d4f;
-  color: #5fdc9b;
+  background: rgba(20, 100, 40, 0.18);
+  border-left-color: var(--success);
+  color: var(--success-soft);
 }
 
 .debug-contrib-source {
   font-weight: 600;
-  color: #ddd;
+  color: var(--text-light);
 }
 
 .debug-contrib-value {
-  color: #7cf;
+  color: var(--info);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
 .debug-contrib-desc {
   font-size: 0.72rem;
-  color: #888;
+  color: var(--muted);
   padding-left: 0.8rem;
   line-height: 1.3;
 }
@@ -841,7 +833,7 @@ async function copyToClipboard(text: string) {
 .debug-contrib-dot-target {
   font-size: 0.7rem;
   font-style: italic;
-  color: #aaa;
+  color: var(--muted);
 }
 
 .debug-contrib-meta {
@@ -852,7 +844,7 @@ async function copyToClipboard(text: string) {
 }
 
 .debug-contrib-id {
-  color: #666;
+  color: var(--muted);
   font-size: 0.65rem;
   font-family: monospace;
   cursor: pointer;
@@ -860,17 +852,17 @@ async function copyToClipboard(text: string) {
 }
 
 .debug-contrib-row:not(.is-disabled) .debug-contrib-id:hover {
-  color: #4cff88;
-  text-shadow: 0 0 4px rgba(76, 255, 136, 0.6);
+  color: var(--success);
+  text-shadow: 0 0 4px rgba(122, 247, 173, 0.55);
 }
 
 .debug-contrib-row.is-disabled .debug-contrib-id:hover {
-  color: #7ccfff;
-  text-shadow: 0 0 4px rgba(120, 200, 255, 0.6);
+  color: var(--info-soft);
+  text-shadow: 0 0 4px rgba(184, 219, 255, 0.45);
 }
 
 .debug-contrib-cond {
-  color: #444;
+  color: var(--muted);
   font-size: 0.65rem;
   font-family: monospace;
 }
@@ -880,22 +872,22 @@ async function copyToClipboard(text: string) {
   align-items: center;
   gap: 0.3rem;
   font-size: 0.72rem;
-  color: #aaa;
+  color: var(--muted);
   padding-left: 0.8rem;
 }
 
 .debug-contrib-stacks input {
   width: 3.5em;
-  background: #1e1e1e;
-  border: 1px solid #333;
-  border-radius: 3px;
-  color: #ccc;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: var(--text);
   padding: 0.1rem 0.2rem;
   font-size: 0.72rem;
 }
 
 .debug-contrib-stacks input:focus {
-  outline: 1px solid #666;
-  border-color: #666;
+  outline: 1px solid rgba(255, 209, 110, 0.45);
+  border-color: rgba(255, 209, 110, 0.45);
 }
 </style>

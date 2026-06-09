@@ -56,8 +56,7 @@
 
                     <td class="characters-cell">
                         <div v-for="ch in chars" :key="ch.id" draggable="true" @dragstart="onDragStart(ch)"
-                            @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove"
-                            @touchend="onTouchEnd">
+                            @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove" @touchend="onTouchEnd">
                             <div class="character-img-wrapper">
                                 <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank" @contextmenu.prevent>
                                     <img class="character-img" :class="borderClass(ch)"
@@ -174,10 +173,12 @@
             3-stars: {{ maxed3starChars.length }} / {{ threeStarMembers.length }}
             ({{ round(maxed3starChars.length / (threeStarMembers.length) * 100) }}%)
         </div>
-        <h4>Crys yet to collect</h4>
-        <div>5 stars: {{ missingCrys5stars }}</div>
-        <div v-if="show4stars">4 stars: {{ missingCrys4stars }}</div>
-        <div v-if="show3stars">3 stars: {{ missingCrys3stars }}</div>
+        <template v-if="showCrys">
+            <h4>Crys yet to collect</h4>
+            <div>5 stars: {{ missingCrys5stars }}</div>
+            <div v-if="show4stars">4 stars: {{ missingCrys4stars }}</div>
+            <div v-if="show3stars">3 stars: {{ missingCrys3stars }}</div>
+        </template>
         <div>
             <h4 style="margin-bottom: 0;">About:</h4>
             You can edit, export, and import your kioku on the Team Setup page, or edit here directly.<br />
@@ -527,7 +528,7 @@ const onTouchEnd = (e: TouchEvent) => {
 .ascension-list {
     max-width: 900px;
     margin: 0 auto;
-    color: #ddd;
+    color: var(--text);
 }
 
 .ascension-table {
@@ -536,7 +537,7 @@ const onTouchEnd = (e: TouchEvent) => {
 }
 
 td {
-    border: 1px solid #444;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     padding: 0.5rem;
     vertical-align: top;
 }
@@ -544,9 +545,9 @@ td {
 .asc-cell {
     width: 85px;
     font-weight: bold;
-    background-color: #333;
+    background-color: rgba(255, 255, 255, 0.06);
     font-size: 1.2rem;
-    color: #eee;
+    color: var(--text);
     vertical-align: middle;
     box-sizing: border-box;
 }
@@ -562,7 +563,7 @@ td {
     width: 68px;
     height: 68px;
     border-radius: 50%;
-    border: 1px solid #666;
+    border: 1px solid rgba(255, 255, 255, 0.12);
     display: block;
     transition: transform 0.15s ease;
 }
@@ -589,16 +590,18 @@ td {
 
 .copy-btn {
     margin: 10px;
-    padding: 0.4rem 0.8rem;
-    background: #444;
-    color: #eee;
-    border: 1px solid #666;
-    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
     cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
 }
 
 .copy-btn:hover {
-    background: #555;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 209, 110, 0.35);
 }
 
 .total-ascensions {
@@ -606,13 +609,13 @@ td {
     text-align: center;
     font-size: 1.2rem;
     font-weight: bold;
-    color: #eee;
+    color: var(--text);
 }
 
 .extra-input {
     margin-top: 1rem;
     text-align: center;
-    color: #eee;
+    color: var(--text);
     font-size: 1rem;
 }
 
@@ -620,10 +623,10 @@ td {
     margin-left: 0.5rem;
     padding: 0.2rem 0.4rem;
     width: 80px;
-    background: #333;
-    border: 1px solid #666;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 4px;
-    color: #eee;
+    color: var(--text);
 }
 
 .character-img-wrapper {
@@ -641,7 +644,7 @@ td {
     width: 30px;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.8);
-    color: #fff;
+    color: var(--text);
     font-size: 0.6rem;
     text-align: center;
     border-radius: 15rem;
@@ -649,7 +652,7 @@ td {
 }
 
 .level-badge:hover {
-    border: 1px solid #b57edc;
+    border: 1px solid rgba(246, 214, 130, 0.35);
 }
 
 .special-level-badge {
@@ -705,9 +708,9 @@ td {
 
 .level-badge input {
     width: 32px;
-    background: #111;
-    color: #fff;
-    border: 1px solid #666;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 6px;
     font-size: 0.6rem;
     text-align: center;
@@ -723,14 +726,14 @@ td {
     margin-bottom: 1rem;
     padding: 0.6rem 0.9rem;
     border-radius: 10px;
-    background: #2d2233;
-    border: 1px solid #b57edc;
+    background: var(--panel);
+    border: 1px solid rgba(246, 214, 130, 0.35);
 }
 
 .viewing-label {
     font-size: 0.82rem;
     font-weight: 700;
-    color: #c9a0e8;
+    color: var(--accent-soft);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     flex-shrink: 0;
@@ -739,10 +742,10 @@ td {
 .back-to-own {
     margin-left: auto;
     padding: 0.3rem 0.75rem;
-    background: #3a2f47;
-    border: 1px solid #8e5bc7;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(246, 214, 130, 0.45);
     border-radius: 999px;
-    color: #c9a0e8;
+    color: var(--accent-soft);
     font-size: 0.82rem;
     font-weight: 600;
     text-decoration: none;
@@ -752,16 +755,16 @@ td {
 }
 
 .back-to-own:hover {
-    background: #4a3a5a;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .compare-to-own {
     margin-right: auto;
     padding: 0.3rem 0.75rem;
-    background: #3a2f47;
-    border: 1px solid #8e5bc7;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(246, 214, 130, 0.45);
     border-radius: 999px;
-    color: #c9a0e8;
+    color: var(--accent-soft);
     font-size: 0.82rem;
     font-weight: 600;
     text-decoration: none;
@@ -771,7 +774,7 @@ td {
 }
 
 .compare-to-own:hover {
-    background: #4a3a5a;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .viewing-banner-own {
@@ -781,14 +784,14 @@ td {
     margin-bottom: 1rem;
     padding: 0.5rem 0.9rem;
     border-radius: 10px;
-    background: #262626;
-    border: 1px solid #444;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .viewing-own-label {
     font-size: 0.82rem;
     font-weight: 700;
-    color: #999;
+    color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.06em;
 }
@@ -796,10 +799,10 @@ td {
 .view-friend-btn {
     margin-left: auto;
     padding: 0.3rem 0.75rem;
-    background: #333;
-    border: 1px solid #555;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 999px;
-    color: #bbb;
+    color: var(--muted);
     font-size: 0.82rem;
     font-weight: 600;
     cursor: pointer;
@@ -808,8 +811,8 @@ td {
 }
 
 .view-friend-btn:hover {
-    background: #3d3d3d;
-    border-color: #777;
-    color: #ddd;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.14);
+    color: var(--text);
 }
 </style>

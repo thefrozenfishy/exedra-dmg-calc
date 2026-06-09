@@ -50,13 +50,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="(err, index) in errorRows"
-            :key="index"
-            class="error-row"
-            :class="{ expanded: expandedErrors.has(err.key) }"
-            @click="toggleErrorExpanded(err.key)"
-          >
+          <tr v-for="(err, index) in errorRows" :key="index" class="error-row"
+            :class="{ expanded: expandedErrors.has(err.key) }" @click="toggleErrorExpanded(err.key)">
             <td class="mono">{{ err.lastSeen }}</td>
             <td>
               <span v-if="err.count > 1" class="count-badge">{{ err.count }}</span>
@@ -68,7 +63,8 @@
             <td class="error-message-cell">{{ err.message }}</td>
             <td class="mono dim stack-cell">
               <span v-if="!expandedErrors.has(err.key)" class="stack-truncated">
-                {{ err.stack ? err.stack.split('\n')[0].slice(0, 80) + (err.stack.length > 80 || err.stack.includes('\n') ? '…' : '') : '—' }}
+                {{ err.stack ? err.stack.split('\n')[0].slice(0, 80) + (err.stack.length > 80 ||
+                  err.stack.includes('\n') ? '…' : '') : '—' }}
               </span>
               <span v-else class="stack-full">{{ err.stack || '—' }}</span>
             </td>
@@ -607,7 +603,7 @@ onMounted(fetchAnalytics)
 .analytics-page {
   max-width: 1024px;
   margin: 0 auto;
-  color: #ddd;
+  color: var(--text);
 }
 
 .analytics-summary {
@@ -622,8 +618,8 @@ onMounted(fetchAnalytics)
 }
 
 .summary-card {
-  background: #2b2b2b;
-  border: 1px solid #444;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
   padding: 1rem;
 }
@@ -636,15 +632,15 @@ onMounted(fetchAnalytics)
 
 .analytics-section {
   margin-bottom: 2rem;
-  background: #2b2b2b;
-  border: 1px solid #444;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
   padding: 1rem;
 }
 
 .errors-section {
-  border-color: #5a2d2d;
-  background: #2a2020;
+  border-color: rgba(220, 38, 38, 0.18);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .errors-section h2 {
@@ -654,7 +650,7 @@ onMounted(fetchAnalytics)
 }
 
 .error-icon {
-  color: #f87171;
+  color: var(--danger);
   font-size: 1.1rem;
 }
 
@@ -662,8 +658,8 @@ onMounted(fetchAnalytics)
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #dc2626;
-  color: #fff;
+  background: rgba(220, 38, 38, 0.9);
+  color: var(--text);
   font-size: 0.75rem;
   font-weight: 700;
   border-radius: 999px;
@@ -674,7 +670,7 @@ onMounted(fetchAnalytics)
 }
 
 .no-errors {
-  color: #6ee7b7;
+  color: var(--success);
   padding: 0.75rem 0;
   font-size: 0.95rem;
 }
@@ -698,12 +694,12 @@ onMounted(fetchAnalytics)
 
 .user-tag {
   display: inline-block;
-  background: #3a2a2a;
-  border: 1px solid #5a3a3a;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 4px;
   padding: 1px 5px;
   font-size: 0.75rem;
-  color: #ccc;
+  color: var(--muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -711,7 +707,7 @@ onMounted(fetchAnalytics)
 }
 
 .error-message-cell {
-  color: #fca5a5;
+  color: var(--danger);
   word-break: break-word;
   max-width: 320px;
 }
@@ -719,7 +715,7 @@ onMounted(fetchAnalytics)
 .stack-cell {
   font-size: 0.75rem;
   max-width: 240px;
-  color: #888;
+  color: var(--muted);
 }
 
 .stack-truncated {
@@ -740,8 +736,8 @@ onMounted(fetchAnalytics)
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #7f1d1d;
-  color: #fca5a5;
+  background: rgba(220, 38, 38, 0.18);
+  color: var(--danger);
   font-size: 0.8rem;
   font-weight: 700;
   border-radius: 6px;
@@ -756,7 +752,7 @@ onMounted(fetchAnalytics)
 }
 
 .dim {
-  color: #888;
+  color: var(--muted);
 }
 
 .section-header {
@@ -776,34 +772,35 @@ onMounted(fetchAnalytics)
 .analytics-table td {
   text-align: left;
   padding: 0.75rem;
-  border-bottom: 1px solid #3a3a3a;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .analytics-table th {
-  color: #f1f1f1;
+  color: var(--text);
 }
 
 .analytics-table pre {
   margin: 0;
   white-space: pre-wrap;
   word-break: break-word;
-  color: #ccc;
+  color: var(--muted);
 }
 
 button {
-  background: #4a4a4a;
-  border: 1px solid #666;
-  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text);
   padding: 0.6rem 0.9rem;
   border-radius: 10px;
   cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 button:hover {
-  background: #5e5e5e;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .error-message {
-  color: #ff6b6b;
+  color: var(--danger);
 }
 </style>

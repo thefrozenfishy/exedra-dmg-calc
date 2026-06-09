@@ -466,9 +466,9 @@ const openGridInNewTab = () => openImageInNewTab(".grid-scroll", exportOpts)
 
 .axis-select {
     margin-left: 0.3rem;
-    background: #2a2a2a;
-    color: #eee;
-    border: 1px solid #555;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 4px;
     padding: 0.15rem 0.3rem;
     font-size: 0.85rem;
@@ -515,7 +515,7 @@ const openGridInNewTab = () => openImageInNewTab(".grid-scroll", exportOpts)
     font-size: 0.5rem;
     font-weight: bold;
     background: rgba(0, 0, 0, 0.75);
-    color: #fff;
+    color: var(--text);
     border-radius: 3px;
     padding: 0 2px;
     line-height: 1.3;
@@ -533,7 +533,7 @@ const openGridInNewTab = () => openImageInNewTab(".grid-scroll", exportOpts)
 .role-header-label {
     font-size: 0.7rem;
     font-weight: bold;
-    color: #eee;
+    color: var(--text);
     margin-top: 2px;
     line-height: 1;
 }
@@ -548,7 +548,7 @@ const openGridInNewTab = () => openImageInNewTab(".grid-scroll", exportOpts)
 .role-badge-tag {
     font-weight: bold;
     line-height: 1;
-    color: #fff;
+    color: var(--text);
     right: 2px;
     position: absolute;
     top: 30%;
@@ -563,8 +563,8 @@ const openGridInNewTab = () => openImageInNewTab(".grid-scroll", exportOpts)
     display: flex;
     align-items: center;
     padding: 2px;
-    background: #2a2a2a;
-    border: 1px solid #555;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 6px;
     cursor: pointer;
     opacity: 0.55;
@@ -582,7 +582,7 @@ const openGridInNewTab = () => openImageInNewTab(".grid-scroll", exportOpts)
 
 .chip:hover {
     opacity: 1;
-    background: #383838;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .chip img {
@@ -608,9 +608,9 @@ const openGridInNewTab = () => openImageInNewTab(".grid-scroll", exportOpts)
 
 .corner-cell,
 .header-cell {
-    background: #2c2c2c;
+    background: rgba(255, 255, 255, 0.05);
     padding: 0.4rem 0.5rem;
-    border: 1px solid #444;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .header-icon {
@@ -684,7 +684,7 @@ const openGridInNewTab = () => openImageInNewTab(".grid-scroll", exportOpts)
     width: 25px;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.8);
-    color: #fff;
+    color: var(--text);
     font-size: 0.6rem;
     text-align: center;
     border-radius: 15rem;
@@ -721,11 +721,17 @@ const openGridInNewTab = () => openImageInNewTab(".grid-scroll", exportOpts)
 
 .copy-btn {
     margin: 10px;
-    padding: 0.4rem 0.8rem;
-    background: #444;
-    color: #eee;
-    border: 1px solid #666;
-    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
     cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.copy-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 209, 110, 0.35);
 }
 </style>

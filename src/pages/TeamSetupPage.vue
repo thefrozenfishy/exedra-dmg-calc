@@ -1,7 +1,8 @@
 <template>
     <div class="gallery-page">
         <h1>Kioku stats</h1>
-        Data here will be used as defaults in Single Battle Simulators, as well as being the considered Kioku when calculating Best
+        Data here will be used as defaults in Single Battle Simulators, as well as being the considered Kioku when
+        calculating Best
         Team calculator
 
         <h2>Export/Import</h2>
@@ -9,7 +10,7 @@
             <button class="export-button" @click="exportCharacters()">Export</button>
             <label style="margin-left: 30px;">
                 Import
-                <input  type="file" accept="application/json" @change="handleFileChange" />
+                <input type="file" accept="application/json" @change="handleFileChange" />
             </label>
         </div>
 
@@ -113,8 +114,8 @@ export default defineComponent({
 }
 
 .export-button {
-    background-color: #2b2a33;
-    border: 1px solid white;
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 0.2rem 0.6rem;
     font: 0.9em sans-serif;
     color: rgba(255, 255, 255, 0.87);

@@ -40,7 +40,7 @@
 
             <label>
                 <input type="checkbox" v-model="onlyConsiderOnElements" />
-                Only consider Kioku which are on-element 
+                Only consider Kioku which are on-element
             </label>
 
             <label>
@@ -490,7 +490,7 @@ async function startSimulation() {
 .options-panel {
     margin-bottom: 1rem;
     padding: 1rem;
-    border: 1px solid #ddd;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -593,7 +593,7 @@ async function startSimulation() {
 }
 
 .dropdown li:hover {
-    background: #f0f0f0;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .dropdown img {

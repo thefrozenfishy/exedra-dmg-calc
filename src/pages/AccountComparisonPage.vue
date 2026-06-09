@@ -33,8 +33,7 @@
 
         <div class="controls" v-if="leftCode && rightCode">
             <div>
-                <button class="copy-btn"
-                    @click="clipboardSupported ? copyGraphToClipboard() : openGraphInNewTab()">
+                <button class="copy-btn" @click="clipboardSupported ? copyGraphToClipboard() : openGraphInNewTab()">
                     {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
                 </button>
                 <button class="copy-btn" @click="downloadGraph">Download</button>
@@ -470,17 +469,17 @@ const copyHyperLink = async () => {
 .export-name {
     font-size: 1rem;
     font-weight: 700;
-    color: #f2f2f2;
+    color: var(--text);
 
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .left-side .export-name {
-    color: #8fd0ff;
+    color: var(--info-soft);
 }
 
 .right-side .export-name {
-    color: #ffb0b0;
+    color: var(--danger-soft);
 }
 
 .export-score {
@@ -542,11 +541,11 @@ const copyHyperLink = async () => {
 
     font-size: 1.1rem;
     font-weight: 700;
-    color: #eee;
+    color: var(--text);
 }
 
 .vs-text {
-    color: #888;
+    color: var(--muted);
 }
 
 .graph-container {
@@ -584,11 +583,11 @@ const copyHyperLink = async () => {
     padding: 0.35rem 0.65rem;
     border-radius: 999px;
 
-    background: #1f1f1f;
-    border: 1px solid #444;
+    background: var(--panel);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 
     font-size: 0.85rem;
-    color: #ddd;
+    color: var(--text);
     line-height: 1;
 }
 
@@ -597,12 +596,12 @@ const copyHyperLink = async () => {
 }
 
 .score-label {
-    color: #aaa;
+    color: var(--muted);
 }
 
 .score-value {
     font-weight: 700;
-    color: #fff;
+    color: var(--text);
     margin-left: 0.15rem;
 }
 
@@ -691,7 +690,7 @@ const copyHyperLink = async () => {
     font-weight: bold;
 
     white-space: nowrap;
-    border: 1px solid #666;
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .diff-label {
@@ -716,35 +715,41 @@ const copyHyperLink = async () => {
 }
 
 .state-green {
-    color: #39d353;
+    color: var(--success);
     font-weight: 700;
 }
 
 .state-normal {
-    color: #ddd;
+    color: var(--text);
 }
 
 .state-none {
-    color: #777;
+    color: var(--muted);
 }
 
 .arrow-green {
-    color: #39d353;
+    color: var(--success);
     font-weight: 800;
 }
 
 .arrow-normal {
-    color: #bbb;
+    color: var(--muted);
 }
 
 .copy-btn {
     margin: 10px;
-    padding: 0.4rem 0.8rem;
-    background: #444;
-    color: #eee;
-    border: 1px solid #666;
-    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
     cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.copy-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 209, 110, 0.35);
 }
 
 @media (max-width: 700px) {

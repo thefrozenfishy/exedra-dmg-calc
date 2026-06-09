@@ -1,12 +1,38 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --bg: #1f1f1f;
+  --bg-soft: rgba(255, 255, 255, 0.06);
+  --panel: rgba(28, 28, 28, 0.96);
+  --panel-strong: rgba(20, 20, 20, 0.98);
+  --border: rgba(246, 214, 130, 0.14);
+  --border-strong: rgba(246, 214, 130, 0.28);
+  --text: #f8eed7;
+  --muted: #c8b99b;
+  --accent: #f6d485;
+  --accent-soft: #f9e2bb;
+  --accent-strong: #d4a85c;
+  --info: #8bcff9;
+  --info-soft: #d9e8ff;
+  --success: #79d5aa;
+  --success-soft: #d8f2e1;
+  --danger: #ff9b8f;
+  --danger-soft: #ffcfc9;
+  --warning: #f3cc7b;
+  --warning-soft: rgba(243, 204, 123, 0.32);
+  --tier-purple: #f2c96e;
+  --tier-gold: #f2c96e;
+  --tier-blue: #70b5eb;
+  --text-light: #fcf2e2;
+  --highlight: rgba(255, 255, 255, 0.1);
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
+  --radius: 18px;
+  --radius-sm: 10px;
+
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  color-scheme: dark;
+  color: var(--text);
+  background-color: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -15,20 +41,20 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--accent-soft);
   text-decoration: inherit;
 }
 
 a:hover {
-  color: #535bf2;
+  color: var(--warning);
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
 }
 
 h1 {
@@ -37,35 +63,73 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.7em 1.3em;
+  font-size: 1rem;
+  font-weight: 600;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
 }
 
 button:hover {
-  border-color: #646cff;
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(246, 214, 130, 0.35);
+}
+
+button:active {
+  transform: translateY(1px);
 }
 
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 3px solid rgba(255, 209, 110, 0.35);
+  outline-offset: 2px;
 }
 
-.card {
-  padding: 2em;
+.copy-btn {
+  min-width: 220px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.04));
+  color: var(--text);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+}
+
+.copy-btn:hover {
+  border-color: rgba(255, 209, 110, 0.35);
+}
+
+input[type='number'] {
+  min-width: 4rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  padding: 0.35rem 0.55rem;
+}
+
+input[type='number']:focus {
+  outline: none;
+  border-color: rgba(255, 209, 110, 0.4);
+  box-shadow: 0 0 0 3px rgba(255, 209, 110, 0.12);
 }
 
 #app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 2rem 1.5rem;
+  min-height: 100vh;
+}
+
+.card,
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 
 
@@ -92,8 +156,8 @@ button:focus-visible {
 .dropdown {
   position: absolute;
   z-index: 10;
-  background: black;
-  color: white;
+  background: var(--panel-strong);
+  color: var(--text);
   width: 200%;
   min-width: 400px;
   max-height: 300px;
@@ -109,7 +173,7 @@ button:focus-visible {
 }
 
 .dropdown li:hover {
-  background: #333;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .dropdown img {
@@ -130,5 +194,5 @@ button:focus-visible {
 .details> :not(:first-child) {
   margin: 0;
   font-size: 0.85em;
-  color: #666
+  color: var(--muted);
 }

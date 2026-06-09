@@ -48,12 +48,6 @@ const beta = isBeta()
 
 
 <style>
-html,
-body,
-#app {
-  height: 100%;
-}
-
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   margin: 0 auto auto auto;
@@ -75,12 +69,12 @@ main {
 nav a {
   margin: 0 1rem;
   text-decoration: none;
-  color: #e4afd4;
+  color: var(--accent-soft);
 }
 
 nav a.router-link-active {
   font-weight: bold;
-  color: #860a67;
+  color: var(--accent-strong);
 }
 
 .title-row {

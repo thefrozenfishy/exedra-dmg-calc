@@ -344,13 +344,13 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
     align-items: center;
     gap: 0.55rem;
 
-    background: #2b2b2b;
-    border: 1px solid #444;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 999px;
     padding: 0.35rem 0.75rem 0.35rem 0.45rem;
 
     cursor: pointer;
-    color: #ddd;
+    color: var(--text);
 
     transition:
         background 0.15s,
@@ -360,9 +360,9 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
 
 .friend-avatar-wrapper:hover,
 .friend-avatar-wrapper.is-open {
-    background: #333;
-    border-color: #666;
-    box-shadow: 0 0 0 2px rgba(142, 91, 199, 0.35);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0 0 2px rgba(255, 209, 110, 0.2);
 }
 
 .friend-avatar-wrapper.is-placeholder {
@@ -375,8 +375,8 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
     height: 42px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #666;
-    background: #111;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.03);
     flex-shrink: 0;
 }
 
@@ -390,11 +390,11 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
 }
 
 .side-left .badge-name {
-    color: #90caf9;
+    color: var(--info-soft);
 }
 
 .side-right .badge-name {
-    color: #ffab91;
+    color: var(--danger-soft);
 }
 
 .badge-chevron {
@@ -415,8 +415,8 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
 
     width: 300px;
 
-    background: #1a1a1a;
-    border: 1px solid #555;
+    background: rgba(18, 13, 25, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px;
 
     box-shadow:
@@ -436,16 +436,16 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
 
 .fpb-search-row {
     padding: 0.6rem 0.7rem 0.4rem;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .fpb-search {
     width: 100%;
     box-sizing: border-box;
-    background: #111;
-    border: 1px solid #555;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
-    color: #eee;
+    color: var(--text);
     padding: 0.45rem 0.65rem;
     font-size: 0.88rem;
     outline: none;
@@ -453,7 +453,7 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
 }
 
 .fpb-search:focus {
-    border-color: #8e5bc7;
+    border-color: rgba(255, 209, 110, 0.45);
 }
 
 .fpb-list {
@@ -468,7 +468,7 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #777;
+    color: var(--muted);
 }
 
 .fpb-option {
@@ -483,7 +483,7 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
 
     background: transparent;
     border: none;
-    color: #ddd;
+    color: var(--text);
     cursor: pointer;
 
     transition: background 0.1s;
@@ -491,7 +491,7 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
 
 .fpb-option:hover,
 .fpb-option.fpb-active {
-    background: #2a2a2a;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .fpb-opt-avatar {
@@ -499,7 +499,7 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
     height: 36px;
     border-radius: 50%;
     object-fit: cover;
-    border: 1px solid #555;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     flex-shrink: 0;
 }
 
@@ -538,7 +538,7 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
 
 .fpb-opt-code {
     font-size: 0.7rem;
-    color: #8e5bc7;
+    color: rgba(255, 209, 110, 0.9);
     font-family: monospace;
     letter-spacing: 0.05em;
 }
@@ -546,12 +546,12 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
 .fpb-empty {
     padding: 0.7rem 0.9rem;
     font-size: 0.82rem;
-    color: #666;
+    color: var(--muted);
     text-align: center;
 }
 
 .fpb-self .fpb-self-avatar {
-    border-color: #8e5bc7;
+    border-color: rgba(255, 209, 110, 0.8);
 }
 
 .fpb-you-tag {
@@ -562,15 +562,15 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    background: #3a2f47;
-    border: 1px solid #8e5bc7;
+    background: rgba(255, 209, 110, 0.12);
+    border: 1px solid rgba(255, 209, 110, 0.35);
     border-radius: 999px;
-    color: #c9a0e8;
+    color: var(--accent);
     vertical-align: middle;
 }
 
 .fpb-star {
-    color: #ffd66b;
+    color: var(--accent-soft);
     font-size: 0.8rem;
     margin-left: 0.2rem;
     vertical-align: middle;
@@ -584,15 +584,15 @@ onBeforeUnmount(() => { document.removeEventListener("mousedown", handleClickOut
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    background: #1e2d40;
-    border: 1px solid #3f5d8a;
+    background: rgba(246, 214, 130, 0.16);
+    border: 1px solid rgba(246, 214, 130, 0.32);
     border-radius: 999px;
-    color: #7aaddc;
+    color: var(--accent);
     vertical-align: middle;
 }
 
 .fpb-union {
-    border-left: 2px solid #3f5d8a;
+    border-left: 2px solid rgba(246, 214, 130, 0.35);
 }
 
 .picker-drop-enter-active,

@@ -196,10 +196,10 @@ export default defineComponent({
     width: 100%;
     margin-top: 0.4rem;
 
-    border: 1px solid #555;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 6px;
 
-    color: white;
+    color: var(--text);
 
     font-size: 0.85rem;
     text-decoration: none;
@@ -208,8 +208,8 @@ export default defineComponent({
 }
 
 .theme-button:hover {
-    background: #3a3a3a;
-    border-color: #777;
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.14);
 }
 
 .theme-button:active {

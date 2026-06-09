@@ -131,7 +131,7 @@ function normalizeColor(value) {
   max-width: 1000px;
   margin: 0 auto;
   font-family: sans-serif;
-  color: #ddd;
+  color: var(--text);
 }
 
 .tier-table {
@@ -141,19 +141,19 @@ function normalizeColor(value) {
 
 th,
 td {
-  border: 1px solid #444;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 0.5rem;
   vertical-align: top;
 }
 
 th {
-  background-color: #222;
+  background-color: rgba(18, 13, 25, 0.96);
   text-align: left;
 }
 
 .rank-cell {
   font-weight: bold;
-  background-color: #333;
+  background-color: rgba(255, 255, 255, 0.06);
 }
 
 .characters-cell {
@@ -180,7 +180,7 @@ th {
   border-radius: 50%;
   display: block;
   margin: 0 auto;
-  border: 1px solid #666;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .ascension-overlay {
@@ -221,18 +221,18 @@ th {
 }
 
 .tag {
-  color: #fff;
+  color: var(--text);
   font-size: 0.75rem;
   padding: 0.1rem 0.4rem;
   border-radius: 0.25rem;
-  background-color: #555;
+  background-color: rgba(255, 255, 255, 0.08);
   cursor: pointer;
   user-select: none;
   transition: filter 0.2s;
 }
 
 .tag:hover {
-  filter: brightness(1.2);
+  filter: brightness(1.15);
 }
 
 .tooltip {
@@ -240,8 +240,8 @@ th {
   bottom: 120%;
   left: 50%;
   transform: translateX(-50%);
-  background: #1e1e1e;
-  color: #eee;
+  background: rgba(18, 13, 25, 0.96);
+  color: var(--text);
   padding: 0.4rem 0.6rem;
   border-radius: 0.4rem;
   font-size: 0.7rem;
@@ -264,7 +264,7 @@ th {
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: #1e1e1e transparent transparent transparent;
+  border-color: rgba(18, 13, 25, 0.96) transparent transparent transparent;
 }
 
 .tag-wrapper:hover .tooltip {
@@ -274,7 +274,7 @@ th {
 
 
 .expanded-row {
-  background-color: #1a1a1a;
+  background-color: rgba(255, 255, 255, 0.05);
   padding: 0.5rem;
 }
 </style>

@@ -115,13 +115,13 @@ function clear() {
   gap: 0.3rem;
   max-height: 280px;
   overflow-y: auto;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
   padding: 0.3rem;
 }
 
 .character-option p {
-  color: white;
+  color: var(--text);
 }
 
 .character-option {

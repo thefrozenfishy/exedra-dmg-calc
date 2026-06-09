@@ -54,7 +54,7 @@ function downloadLS() {
 .options-panel {
     margin-bottom: 1rem;
     padding: 1rem;
-    border: 1px solid #ddd;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -62,8 +62,8 @@ function downloadLS() {
 }
 
 .export-button {
-    background-color: #2b2a33;
-    border: 1px solid white;
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 0.2rem 0.6rem;
     font: 0.9em sans-serif;
     color: rgba(255, 255, 255, 0.87);

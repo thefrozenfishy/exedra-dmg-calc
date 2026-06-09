@@ -58,36 +58,42 @@ const enemies = useEnemyStore()
 
 <style scoped>
 .team-page {
-  justify-content: center;
+    justify-content: center;
+    /* width: 100%; */
+    /*gap: 1rem; */
 }
 
 .team-grid {
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  max-width: 1200px;
-  width: 100%;            
-  box-sizing: border-box; 
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    padding-right: 2rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .team-slot {
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  padding-bottom: 1rem;
-  min-width: 0; 
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 1rem;
+    min-width: 0;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
 .stat-inputs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: auto;
-  height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: auto;
+    width: 100%;
+    height: 350px;
 }
 
 .stat-inputs label {
-  width: 90%;
-  display: block;
-  margin-left: 0.3rem;
+    width: 100%;
+    display: block;
+    color: var(--text);
+    margin-left: 0.3rem;
 }
 </style>

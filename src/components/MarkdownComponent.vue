@@ -19,7 +19,7 @@ const props = defineProps({
     max-width: 1000px;
     margin: 2rem auto;
     padding: 1rem;
-    color: #ddd;
+    color: var(--text);
     font-family: sans-serif;
     line-height: 1.7;
     text-align: left;
@@ -28,7 +28,7 @@ const props = defineProps({
 .markdown-page :deep(h1),
 .markdown-page :deep(h2),
 .markdown-page :deep(h3) {
-    color: #fff;
+    color: var(--text);
     margin-top: 1.5rem;
 }
 
@@ -42,13 +42,13 @@ const props = defineProps({
 }
 
 .markdown-page :deep(code) {
-    background: #2a2a2a;
+    background: rgba(255, 255, 255, 0.05);
     padding: 0.15rem 0.35rem;
     border-radius: 4px;
 }
 
 .markdown-page :deep(pre) {
-    background: #1e1e1e;
+    background: var(--panel);
     padding: 0.75rem;
     border-radius: 6px;
     overflow-x: auto;

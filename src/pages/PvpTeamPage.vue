@@ -161,7 +161,7 @@ function runSimulation() {
 }
 
 .team-slot {
-  border: 2px solid #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   padding-bottom: 1rem;
 }
@@ -169,7 +169,8 @@ function runSimulation() {
 .support-section {
   margin-top: 1rem;
   padding-top: 0.5rem;
-  border-top: 1px dashed #999;
+  border-top: 1px dashed rgba(255, 255, 255, 0.12);
+  color: var(--muted);
 }
 
 .stat-inputs {
@@ -183,13 +184,8 @@ function runSimulation() {
 .stat-inputs label {
   width: 90%;
   display: block;
+  color: var(--text);
   margin-left: 0.3rem;
-}
-
-.stat-inputs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
 }
 
 .stat {
@@ -211,6 +207,7 @@ function runSimulation() {
 
 .character {
   text-align: center;
+  color: var(--text);
 }
 
 .character img {
@@ -221,7 +218,7 @@ function runSimulation() {
 }
 
 .character img.at-zero {
-  border-color: green;
+  border-color: var(--success);
   border-radius: 50%;
   border-width: 5px;
 }
@@ -233,7 +230,7 @@ function runSimulation() {
 .distance {
   margin-top: 0.25rem;
   font-size: 0.9em;
-  color: #666;
+  color: var(--muted);
 }
 
 .progress-bar>progress {
@@ -243,19 +240,19 @@ function runSimulation() {
 .ten-separator {
   margin: 0.35rem 0.75rem;
   border-radius: 999px;
-  color: #cccaca;
+  color: var(--text);
   font-weight: bold;
   font-weight: 600;
 }
 
 .ten-separator.ally {
-  background: #2d462d;
-  border-color: #0b240b;
+  background: rgba(128, 198, 153, 0.15);
+  border-color: rgba(128, 198, 153, 0.28);
 }
 
 .ten-separator.enemy {
-  background: #682c2c;
-  border-color: rgb(143, 40, 40);
+  background: rgba(255, 154, 154, 0.18);
+  border-color: rgba(255, 129, 129, 0.35);
 }
 
 .matchup-divider {
@@ -270,10 +267,7 @@ function runSimulation() {
   content: "";
   flex: 1;
   height: 3px;
-  background: linear-gradient(to right,
-      transparent,
-      #aaa,
-      transparent);
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.25), transparent);
 }
 
 .matchup-divider span {

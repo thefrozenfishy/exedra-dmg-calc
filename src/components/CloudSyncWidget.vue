@@ -146,19 +146,20 @@ const restoreAccount = async () => {
 }
 
 .cloud-sync-widget button {
-    background: #333;
-    border: 1px solid #666;
-    color: white;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text);
 
     border-radius: 8px;
 
     padding: 0.45rem 0.75rem;
 
     cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .cloud-sync-widget button:hover {
-    background: #444;
+    background: rgba(255, 255, 255, 0.12);
 }
 
 .restore-modal {
@@ -167,9 +168,9 @@ const restoreAccount = async () => {
     top: 60px;
     right: 12px;
 
-    background: #222;
+    background: rgba(18, 13, 25, 0.96);
 
-    border: 1px solid #555;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
 
     padding: 12px;
@@ -182,9 +183,9 @@ const restoreAccount = async () => {
 }
 
 .restore-modal input {
-    background: #111;
-    border: 1px solid #555;
-    color: white;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text);
 
     padding: 0.5rem;
     border-radius: 8px;

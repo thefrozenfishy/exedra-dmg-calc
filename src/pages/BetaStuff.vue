@@ -115,8 +115,8 @@ function onJsonChange(key: string, event: Event) {
     height: 8px;
     margin-left: 8px;
     border-radius: 50%;
-    background: #ffb86c;
-    box-shadow: 0 0 8px rgba(255, 184, 108, 0.7);
+    background: rgba(255, 209, 110, 0.3);
+    box-shadow: 0 0 8px rgba(255, 209, 110, 0.45);
 }
 
 .json-editor {
@@ -124,9 +124,9 @@ function onJsonChange(key: string, event: Event) {
     min-height: 240px;
     padding: 12px;
     border-radius: 8px;
-    border: 1px solid #444;
-    background: #111;
-    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
     font-family: monospace;
     font-size: 0.9rem;
     resize: vertical;
@@ -137,20 +137,20 @@ function onJsonChange(key: string, event: Event) {
     max-width: 900px;
     margin: 0 auto;
     padding: 24px;
-    color: #f5f5f5;
+    color: var(--text);
 }
 
 .warning {
     margin-bottom: 24px;
-    color: #ffb86c;
+    color: rgba(255, 209, 110, 0.9);
 }
 
 .section {
     margin-bottom: 32px;
     padding: 20px;
     border-radius: 12px;
-    background: #1e1e1e;
-    border: 1px solid #333;
+    background: rgba(18, 13, 25, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .section h2 {
@@ -180,12 +180,12 @@ label {
 
 .default {
     font-size: 0.85rem;
-    color: #999;
+    color: var(--muted);
 }
 
 .description {
     margin: 0 0 8px;
-    color: #aaa;
+    color: var(--muted);
     font-size: 0.9rem;
 }
 
@@ -193,15 +193,15 @@ input {
     width: 100%;
     padding: 10px 12px;
     border-radius: 8px;
-    border: 1px solid #444;
-    background: #111;
-    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
     font-size: 1rem;
     box-sizing: border-box;
 }
 
 input:focus {
     outline: none;
-    border-color: #6aa9ff;
+    border-color: rgba(255, 209, 110, 0.45);
 }
 </style>

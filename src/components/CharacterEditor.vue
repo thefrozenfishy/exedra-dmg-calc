@@ -416,14 +416,14 @@ function getSubCrys(slotIndex: number): number[] {
   gap: 4px;
   cursor: pointer;
   font-size: 11px;
-  color: var(--color-text-secondary, #aaa);
+  color: var(--color-text-secondary, var(--muted));
   transition: border-color 0.15s, background 0.15s;
   padding: 0 6px;
 }
 
 .subcrys-pill:hover {
-  border-color: rgba(160, 110, 255, 0.5);
-  background: rgba(160, 110, 255, 0.1);
+  border-color: rgba(246, 214, 130, 0.55);
+  background: rgba(246, 214, 130, 0.12);
 }
 
 .subcrys-pill.filled {
@@ -443,7 +443,7 @@ function getSubCrys(slotIndex: number): number[] {
 
 .ce-flyout {
   background: var(--color-bg, #1c1c24);
-  border: 0.5px solid rgba(160, 110, 255, 0.4);
+  border: 0.5px solid rgba(246, 214, 130, 0.35);
   border-radius: 7px;
   overflow: visible;
   position: relative;
@@ -467,7 +467,7 @@ function getSubCrys(slotIndex: number): number[] {
 }
 
 .ce-flyout-item:hover {
-  background: rgba(160, 110, 255, 0.12);
+  background: rgba(246, 214, 130, 0.12);
 }
 
 .ce-flyout-item .item-name {
@@ -489,7 +489,7 @@ function getSubCrys(slotIndex: number): number[] {
   top: -1px;
   min-width: 160px;
   background: var(--color-bg, #1c1c24);
-  border: 0.5px solid rgba(160, 110, 255, 0.4);
+  border: 0.5px solid rgba(246, 214, 130, 0.35);
   border-radius: 7px;
   z-index: 10000;
   overflow: visible;
@@ -506,6 +506,6 @@ function getSubCrys(slotIndex: number): number[] {
 }
 
 .ce-sub-flyout-item:hover {
-  background: rgba(160, 110, 255, 0.12);
+  background: rgba(246, 214, 130, 0.12);
 }
 </style>

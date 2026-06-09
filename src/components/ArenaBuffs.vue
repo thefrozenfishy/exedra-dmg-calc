@@ -70,7 +70,7 @@ function removeArenaEffect(idx: number) {
   background: rgba(200, 60, 60, 0.2);
   border: 1px solid rgba(200, 60, 60, 0.4);
   border-radius: 4px;
-  color: #fcc;
+  color: var(--danger-soft);
   cursor: pointer;
   padding: 0.15rem 0.5rem;
   font-size: 0.8rem;
@@ -86,7 +86,7 @@ function removeArenaEffect(idx: number) {
   background: rgba(60, 120, 200, 0.2);
   border: 1px solid rgba(60, 120, 200, 0.4);
   border-radius: 4px;
-  color: #aacff9;
+  color: var(--info-soft);
   cursor: pointer;
   font-size: 0.85rem;
 }

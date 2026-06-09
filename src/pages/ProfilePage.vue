@@ -1090,7 +1090,7 @@ watch(
 .profile-page {
     max-width: 960px;
     margin: 0 auto;
-    color: #ddd;
+    color: var(--text);
 }
 
 /* =========================
@@ -1101,7 +1101,7 @@ watch(
 .friend-section {
     margin-top: 2rem;
     padding: 1.2rem;
-    background: #2b2b2b;
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 16px;
 }
 
@@ -1111,18 +1111,18 @@ watch(
 
 input,
 select {
-    background: #111;
-    border: 1px solid #555;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 10px;
-    color: white;
+    color: var(--text);
     padding: 0.7rem 0.9rem;
 }
 
 button,
 a {
-    background: #444;
-    border: 1px solid #666;
-    color: white;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text);
     padding: 0.3rem 0.5rem;
     border-radius: 10px;
     text-decoration: none;
@@ -1136,8 +1136,8 @@ a {
 
 button:hover,
 a:hover {
-    background: #555;
-    border-color: #777;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.18);
 }
 
 button:active,
@@ -1185,8 +1185,8 @@ a.link {
 .union-icon.union-member {
     border-radius: 50%;
 
-    border: 1px solid #8e5bc7;
-    background: #33263f;
+    border: 1px solid rgba(246, 214, 130, 0.5);
+    background: var(--panel);
 }
 
 .friend-list {
@@ -1203,22 +1203,22 @@ a.link {
 
     gap: 1.2rem;
 
-    background: #1f1f1f;
+    background: var(--panel);
     padding: 0.5rem 0.7rem;
 
     border-radius: 14px;
 }
 
 .friend-card.union-member {
-    border: 1px solid #3f5d8a;
+    border: 1px solid rgba(246, 214, 130, 0.4);
 }
 
 .self-card {
-    border: 1px solid #5f4a74;
+    border: 1px solid rgba(246, 214, 130, 0.45);
     background:
         linear-gradient(180deg,
-            #26212f 0%,
-            #1f1f1f 100%);
+            rgba(33, 23, 12, 0.96) 0%,
+            rgba(18, 13, 10, 1) 100%);
 }
 
 /* =========================
@@ -1254,8 +1254,8 @@ a.link {
     border-radius: 50%;
     object-fit: cover;
 
-    border: 2px solid #666;
-    background: #222;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    background: rgba(18, 13, 25, 0.96);
 
     display: block;
 }
@@ -1295,8 +1295,8 @@ a.link {
     border-radius: 50%;
     object-fit: cover;
 
-    border: 3px solid #8e5bc7;
-    background: #222;
+    border: 3px solid rgba(246, 214, 130, 0.85);
+    background: rgba(18, 13, 25, 0.96);
 
     display: block;
 }
@@ -1322,17 +1322,17 @@ a.link {
     align-items: center;
     justify-content: center;
 
-    background: #3b2b17;
-    border: 1px solid #c59a3d;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 209, 110, 0.35);
 
-    color: #ffd66b;
+    color: var(--accent);
 
     font-size: 0.8rem;
     font-weight: bold;
 }
 
 .favorite-badge:hover {
-    background: #4b361b;
+    background: rgba(255, 255, 255, 0.08);
     transform: scale(1.08);
 }
 
@@ -1450,7 +1450,7 @@ a.link {
 
 .edit-nick-btn:hover {
     opacity: 1;
-    background: #4b4b4b;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .nickname-inline-input {
@@ -1488,12 +1488,12 @@ a.link {
 }
 
 .total-power-big {
-    background: #33263f;
-    border: 1px solid #8e5bc7;
+    background: var(--panel);
+    border: 1px solid rgba(246, 214, 130, 0.35);
 }
 
 .whale-power-big {
-    border: 1px solid #8e5bc7;
+    border: 1px solid rgba(246, 214, 130, 0.35);
 }
 
 .total-power-big img,
@@ -1506,7 +1506,7 @@ a.link {
 .total-power-value {
     font-size: 1.3rem;
     font-weight: bold;
-    color: #fff;
+    color: var(--text);
 }
 
 .role-grid-compact {
@@ -1530,8 +1530,8 @@ a.link {
 
     min-width: 72px;
 
-    background: #292929;
-    border: 1px solid #444;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 
     border-radius: 999px;
 
@@ -1572,23 +1572,23 @@ a.link {
 }
 
 .friend-actions a {
-    background: #5b4a78;
-    border-color: #8e5bc7;
+    background: rgba(246, 214, 130, 0.18);
+    border-color: rgba(246, 214, 130, 0.35);
 
     font-weight: 600;
 }
 
 .friend-actions a:hover {
-    background: #705998;
+    background: rgba(246, 214, 130, 0.26);
 }
 
 .remove-btn {
-    background: #3a2424;
-    border-color: #6b3a3a;
+    background: rgba(255, 105, 105, 0.14);
+    border-color: rgba(255, 105, 105, 0.24);
 }
 
 .remove-btn:hover {
-    background: #522f2f;
+    background: rgba(255, 105, 105, 0.2);
 }
 
 /* =========================
@@ -1609,8 +1609,8 @@ a.link {
 
     border-radius: 16px;
 
-    background: #1f1f1f;
-    border: 1px solid #444;
+    background: var(--panel);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 
     box-shadow:
         0 10px 30px rgba(0, 0, 0, 0.35);
@@ -1646,13 +1646,13 @@ a.link {
     border-radius: 50%;
 }
 
-.avatar-option:hover {
+..avatar-option:hover {
     transform: scale(1.08);
 }
 
 .avatar-option.selected {
     box-shadow:
-        0 0 0 2px #b57edc;
+        0 0 0 2px rgba(246, 214, 130, 0.75);
 }
 
 .avatar-option img {
@@ -1688,7 +1688,7 @@ a.link {
 .offline-box {
     margin-top: 2rem;
     padding: 1rem;
-    background: #2b2b2b;
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 12px;
 }
 
@@ -1714,7 +1714,7 @@ a.link {
 }
 
 .analytics-chart {
-    background: #181818;
+    background: rgba(255, 255, 255, 0.04);
     border-radius: 12px;
     padding: 1rem;
 }

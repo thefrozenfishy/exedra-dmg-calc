@@ -603,7 +603,7 @@ label {
     margin-top: 2rem;
     padding: 1rem;
     border-radius: 8px;
-    background: #1e1e1e;
+    background: var(--panel);
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -622,19 +622,19 @@ label {
 .sim-controls button {
     padding: 0.4rem 0.75rem;
     border-radius: 4px;
-    background: #333;
-    color: white;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
     border: none;
     cursor: pointer;
 }
 
 .sim-controls button:hover {
-    background: #444;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .sim-controls .reset {
     margin-left: auto;
-    background: #552222;
+    background: rgba(255, 105, 105, 0.18);
 }
 
 .sim-stats {
@@ -648,7 +648,7 @@ label {
     max-height: 200px;
     overflow-y: auto;
     font-size: 0.8rem;
-    background: #141414;
+    background: rgba(255, 255, 255, 0.04);
     padding: 0.5rem;
     border-radius: 4px;
 }
@@ -685,15 +685,15 @@ label {
 }
 
 .blue-border {
-    border-color: #4cc9f0;
+    border-color: var(--tier-blue);
 }
 
 .purple-border {
-    border-color: #9b5de5;
+    border-color: var(--tier-purple);
 }
 
 .gold-border {
-    border-color: #fcbf49;
+    border-color: var(--tier-gold);
 }
 
 .gold-card {
@@ -733,9 +733,9 @@ label {
 }
 
 .history-toggle {
-    background: #2a2a2a;
-    color: #ddd;
-    border: 1px solid #444;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 6px;
     padding: 0.4rem 0.75rem;
     cursor: pointer;
@@ -743,16 +743,16 @@ label {
 }
 
 .history-toggle:hover {
-    background: #333;
+    background: rgba(255, 255, 255, 0.12);
 }
 
 .ten-separator {
     grid-column: 1 / -1;
     text-align: center;
     font-size: 0.7rem;
-    color: #888;
+    color: var(--muted);
     padding: 0.25rem 0;
-    border-top: 1px dashed #333;
-    border-bottom: 1px dashed #333;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
 }
 </style>

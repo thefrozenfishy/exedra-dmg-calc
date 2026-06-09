@@ -86,7 +86,7 @@
                             </template>
 
                             <div v-else class="empty-text">
-                                    All collected
+                                All collected
                             </div>
                         </td>
                     </tr>
@@ -426,12 +426,12 @@ onBeforeUnmount(() => {
 }
 
 .use-index-box:hover {
-    background: rgba(160, 110, 255, 0.28);
+    background: rgba(255, 209, 110, 0.28);
 }
 
 .use-index-box.active {
-    background: rgba(170, 100, 255, 0.7);
-    border-color: rgba(220, 180, 255, 0.9);
+    background: rgba(255, 209, 110, 0.72);
+    border-color: rgba(255, 209, 110, 0.95);
     font-weight: 600;
 }
 
@@ -460,13 +460,13 @@ onBeforeUnmount(() => {
 }
 
 .subcrys-pill:hover {
-    border-color: rgba(160, 110, 255, 0.5);
-    background: rgba(160, 110, 255, 0.1);
+    border-color: rgba(246, 214, 130, 0.55);
+    background: rgba(246, 214, 130, 0.12);
 }
 
 .subcrys-pill.filled {
-    border-color: rgba(160, 110, 255, 0.45);
-    background: rgba(120, 80, 220, 0.15);
+    border-color: rgba(246, 214, 130, 0.45);
+    background: rgba(246, 214, 130, 0.15);
     color: inherit;
 }
 
@@ -483,7 +483,7 @@ onBeforeUnmount(() => {
 
 .flyout {
     background: var(--color-bg, #1c1c24);
-    border: 0.5px solid rgba(160, 110, 255, 0.4);
+    border: 0.5px solid rgba(246, 214, 130, 0.35);
     border-radius: 7px;
     overflow: visible;
     position: relative;
@@ -507,7 +507,7 @@ onBeforeUnmount(() => {
 }
 
 .flyout-item:hover {
-    background: rgba(160, 110, 255, 0.12);
+    background: rgba(246, 214, 130, 0.12);
 }
 
 .flyout-item .item-name {
@@ -529,7 +529,7 @@ onBeforeUnmount(() => {
     top: -1px;
     min-width: 160px;
     background: var(--color-bg, #1c1c24);
-    border: 0.5px solid rgba(160, 110, 255, 0.4);
+    border: 0.5px solid rgba(246, 214, 130, 0.35);
     border-radius: 7px;
     z-index: 10000;
     overflow: visible;
@@ -546,7 +546,7 @@ onBeforeUnmount(() => {
 }
 
 .sub-flyout-item:hover {
-    background: rgba(160, 110, 255, 0.12);
+    background: rgba(246, 214, 130, 0.12);
 }
 
 .missing-element-grid {
@@ -566,18 +566,18 @@ onBeforeUnmount(() => {
 .element-cell {
     width: 110px;
     font-weight: bold;
-    background-color: #333;
+    background-color: rgba(255, 255, 255, 0.06);
     font-size: 1rem;
-    color: #eee;
+    color: var(--text);
     vertical-align: middle;
     box-sizing: border-box;
 
-    border: 1px solid #444;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     padding: 0.5rem;
 }
 
 .character-list {
-    border: 1px solid #444;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     padding: 0.5rem;
 
     display: flex;
@@ -616,6 +616,6 @@ onBeforeUnmount(() => {
 .empty-text {
     opacity: 0.45;
     font-size: 0.9rem;
-    color: #bbb;
+    color: var(--muted);
 }
 </style>
