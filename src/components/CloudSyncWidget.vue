@@ -21,6 +21,24 @@
                 <button class="expand-btn" @click="expanded = !expanded">
                     {{ expanded ? "‹" : "›" }}
                 </button>
+
+                <div class="help-tooltip">
+                    <button class="help-btn">?</button>
+
+                    <div class="tooltip-content">
+                        Your profile is stored in the cloud using a Secret Player ID.
+
+                        <br><br>
+
+                        Save this ID somewhere safe. It can be used to restore your profile
+                        on another device or browser. 
+                        You can load the same profile on multiple devices by using the same ID.
+
+                        <br><br>
+
+                        Anyone with this ID can access and edit your data. Do not share it publicly.
+                    </div>
+                </div>
             </div>
         </template>
 
@@ -32,6 +50,23 @@
             <button @click="showRestore = true">
                 Load Profile
             </button>
+
+            <div class="help-tooltip">
+                <button class="help-btn">?</button>
+
+                <div class="tooltip-content">
+                    Creating a cloud profile uploads all your kioku data and generates a Secret Player ID.
+
+                    <br><br>
+
+                    This ID is your recovery key. Save it somewhere safe. If you lose it contact TFF.
+
+                    <br><br>
+
+                    You can use it later with "Load Profile" to restore your data on
+                    any device or browser.
+                </div>
+            </div>
         </template>
 
         <div v-if="showRestore" class="restore-modal">
@@ -219,5 +254,55 @@ const restoreAccount = async () => {
 .slide-left-leave-to {
     opacity: 0;
     transform: translateX(20px);
+}
+
+.help-tooltip {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.help-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    font-weight: bold;
+}
+
+.tooltip-content {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+
+    width: 280px;
+
+    padding: 12px;
+
+    background: rgba(18, 13, 25, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+
+    color: var(--text);
+    font-size: 0.9rem;
+    line-height: 1.4;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+
+    transition:
+        opacity 0.15s ease,
+        transform 0.15s ease,
+        visibility 0.15s ease;
+
+    pointer-events: none;
+
+    z-index: 1001;
+}
+
+.help-tooltip:hover .tooltip-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 </style>

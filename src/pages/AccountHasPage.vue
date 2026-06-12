@@ -57,9 +57,10 @@
                     <td class="characters-cell">
                         <div v-for="ch in chars" :key="ch.id" draggable="true" @dragstart="onDragStart(ch)"
                             @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove" @touchend="onTouchEnd">
-                            <div class="character-img-wrapper">
+                            <div class="character-img-wrapper" :class="{ 'completed-wrapper': isCompleted(ch) }">
                                 <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank" @contextmenu.prevent>
-                                    <img class="character-img" :class="borderClass(ch)"
+                                    <img class="character-img"
+                                        :class="[borderClass(ch), { 'completed-glow': isCompleted(ch) }]"
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
                                 </a>
@@ -256,9 +257,9 @@ const fiveStarMembers = computed(() => displayedCharactersComputed.value.filter(
 const fourStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 4 || c.name === "Lux☆Magica"))
 const threeStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 3))
 
-const maxed5starChars = computed(() => fiveStarMembers.value.filter(ch => ch.enabled && isMaxLevels(ch) && getCrysCount(ch) === maxCrysCount))
-const maxed4starChars = computed(() => fourStarMembers.value.filter(ch => isMaxLevels(ch) && getCrysCount(ch) === maxCrysCount))
-const maxed3starChars = computed(() => threeStarMembers.value.filter(ch => isMaxLevels(ch) && getCrysCount(ch) === maxCrysCount))
+const maxed5starChars = computed(() => fiveStarMembers.value.filter(isCompleted))
+const maxed4starChars = computed(() => fourStarMembers.value.filter(isCompleted))
+const maxed3starChars = computed(() => threeStarMembers.value.filter(isCompleted))
 
 const ownedFiveStars = computed(() => fiveStarMembers.value.filter(c => c.enabled))
 const totalAscensions = computed(() => ownedFiveStars.value.reduce((sum, ch) => sum + ch.ascension + 1, 0))
@@ -319,9 +320,10 @@ const getCrysCount = (ch: Character): number => {
         }, 0)
 }
 
-const isMaxLevels = (ch: Character): boolean => ch.magicLvl === KiokuConstants.maxMagicLvl &&
-    ch.heartphialLvl === KiokuConstants.maxHeartphialLvl &&
-    (getMaxSpecialLvl(ch) === ch.specialLvl || ch.rarity === 3)
+const isMaxHeartLevel = (ch: Character): boolean => showHearts.value ? ch.heartphialLvl === KiokuConstants.maxHeartphialLvl : true
+const isMaxMagicAndSpecialLevel = (ch: Character): boolean => showLevels.value ? ch.magicLvl === KiokuConstants.maxMagicLvl && (getMaxSpecialLvl(ch) === ch.specialLvl || ch.rarity === 3) : true
+const isMaxCrysCollected = (ch: Character): boolean => showCrys.value ? getCrysCount(ch) === maxCrysCount : true
+const isCompleted = (ch: Character): boolean => (ch.enabled || ch.rarity !== 5 || ch.name === "Lux☆Magica") && isMaxHeartLevel(ch) && isMaxMagicAndSpecialLevel(ch) && isMaxCrysCollected(ch)
 
 const groupedByAscension = computed(() => {
     type LabelledGroup = Character[] & { label?: string }
@@ -581,7 +583,24 @@ td {
 }
 
 .default-border {
-    border: 2px solid transparent;
+    border: none;
+}
+
+.completed-glow {
+    box-shadow:
+        0 0 5px 1px rgba(255, 215, 0, 0.7),
+        0 0 15px 3px rgba(255, 190, 0, 0.25);
+}
+
+.completed-wrapper .level-badge {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.completed-wrapper:hover .level-badge {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .asc-row.drag-over {
