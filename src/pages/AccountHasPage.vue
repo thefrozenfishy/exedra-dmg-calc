@@ -33,6 +33,7 @@
             <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
             <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
             <label> <input type="checkbox" v-model="showUnowned" /> Include Unowned </label>
+            <label> <input type="checkbox" v-model="highlightCompleted" /> Highlight Completed </label>
         </div>
         <div>
             <label> <input type="checkbox" v-model="showLevels" /> Show Magic and Special levels </label>
@@ -57,10 +58,13 @@
                     <td class="characters-cell">
                         <div v-for="ch in chars" :key="ch.id" draggable="true" @dragstart="onDragStart(ch)"
                             @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove" @touchend="onTouchEnd">
-                            <div class="character-img-wrapper" :class="{ 'completed-wrapper': isCompleted(ch) }">
+                            <div class="character-img-wrapper" :class="{
+                                'completed-wrapper': shouldHighlightCompleted(ch),
+                                'editing-active': editing?.id === ch.id
+                            }">
                                 <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank" @contextmenu.prevent>
                                     <img class="character-img"
-                                        :class="[borderClass(ch), { 'completed-glow': isCompleted(ch) }]"
+                                        :class="[borderClass(ch), { 'completed-glow': shouldHighlightCompleted(ch) }]"
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
                                 </a>
@@ -281,6 +285,7 @@ const showHearts = useSetting("showHearts", true);
 const showDupes = useSetting("showDupes", true);
 const showCrys = useSetting("showCrys", true);
 const colourLevels = useSetting("colourLevels", true);
+const highlightCompleted = useSetting("highlightCompleted", true);
 
 const show4stars = useSetting("show4stars", false);
 const show3stars = useSetting("show3stars", false);
@@ -324,6 +329,7 @@ const isMaxHeartLevel = (ch: Character): boolean => showHearts.value ? ch.heartp
 const isMaxMagicAndSpecialLevel = (ch: Character): boolean => showLevels.value ? ch.magicLvl === KiokuConstants.maxMagicLvl && (getMaxSpecialLvl(ch) === ch.specialLvl || ch.rarity === 3) : true
 const isMaxCrysCollected = (ch: Character): boolean => showCrys.value ? getCrysCount(ch) === maxCrysCount : true
 const isCompleted = (ch: Character): boolean => (ch.enabled || ch.rarity !== 5 || ch.name === "Lux☆Magica") && isMaxHeartLevel(ch) && isMaxMagicAndSpecialLevel(ch) && isMaxCrysCollected(ch)
+const shouldHighlightCompleted = (ch: Character): boolean => highlightCompleted.value && isCompleted(ch)
 
 const groupedByAscension = computed(() => {
     type LabelledGroup = Character[] & { label?: string }
@@ -598,7 +604,8 @@ td {
     transition: opacity 0.15s ease;
 }
 
-.completed-wrapper:hover .level-badge {
+.completed-wrapper:hover .level-badge,
+.completed-wrapper.editing-active .level-badge {
     opacity: 1;
     pointer-events: auto;
 }
@@ -687,6 +694,7 @@ td {
 .dupe-badge {
     left: 80%;
     top: 0;
+    opacity: 1 !important;
 }
 
 .crys-count-badge {
