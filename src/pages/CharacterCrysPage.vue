@@ -61,6 +61,10 @@
             <div>
                 <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
                 <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
+                <label v-if="showOffElementalOnesOption">
+                    <input type="checkbox" v-model="showOffElementalOnes" />
+                    Include off elemental kioku
+                </label>
             </div>
             <table class="element-table">
                 <tbody>
@@ -73,8 +77,8 @@
                         </td>
 
                         <td class="character-list">
-                            <template v-if="missingElementCharacters(elem).length">
-                                <div v-for="char in missingElementCharacters(elem)" :key="char.id"
+                            <template v-if="missingElementCharacters(elem, showOffElementalOnes).length">
+                                <div v-for="char in missingElementCharacters(elem, showOffElementalOnes)" :key="char.id"
                                     class="character-chip" :class="{
                                         limited: char.obtain && char.obtain !== 'Permanent',
                                         'not-perma': !char.obtain || new Date(char.permaDate) > new Date()
@@ -126,6 +130,11 @@ const activeSubFlyout = ref<number | null>(null)
 const activeSlotIndex = ref<number | null>(null)
 const show4stars = useSetting("show4stars", false);
 const show3stars = useSetting("show3stars", false);
+const showOffElementalOnes = useSetting("showOffElementalCrysCollection", false)
+const showOffElementalOnesOption = computed(() => store.characters.some(char => {
+    if (!char.enabled) return false
+    return Object.values(char.crysOptions).every((c) => c.enabled == null || c.enabled)
+}))
 
 const subCrysFlatList = getSubCrystalises()
 
@@ -164,10 +173,10 @@ function getSubName(id: number): string {
 
 const barRefMap = ref<Record<number, HTMLElement>>({})
 
-function missingElementCharacters(elem: KiokuElement) {
+function missingElementCharacters(elem: KiokuElement, showOffElement: boolean) {
     return store.characters.filter(char => {
         if (!char.enabled) return false
-        if (char.element !== elem) return false
+        if (!showOffElement && char.element !== elem) return false
         if (char.rarity === 3 && !show3stars.value) return false
         if ((char.rarity === 4 || char.name === "Lux☆Magica") && !show4stars.value) return false
 
@@ -179,7 +188,7 @@ function missingElementCharacters(elem: KiokuElement) {
 
             const crysElem = elementMap[passiveDetails[crysData.value1 * 100 + 1].element]
 
-            return crysElem === char.element
+            return crysElem === elem
         })
 
         return !hasElementalCrys
