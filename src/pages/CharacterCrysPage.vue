@@ -4,6 +4,10 @@
         <CharacterSelector :selected="selectedCharacter" @select="onSelectCharacter" :filter="ch => ch.enabled" />
 
         <div v-if="characterId && character">
+            <div class="bulk-actions">
+                <button class="bulk-btn" @click="() => updateAll(true)">Select All</button>
+                <button class="bulk-btn" @click="() => updateAll(false)">Deselect All</button>
+            </div>
             <div class="crys-grid">
                 <div v-for="crys in options" :key="crys.selectionAbilityMstId" class="crys-card"
                     :class="{ disabled: !crys.enabled, offElement: offElementalCrys(crys) }">
@@ -306,6 +310,22 @@ const toggleCrys = (effectId: number) => {
     })
 }
 
+const updateAll = (enabled: boolean) => {
+    const char = character.value
+    if (!char) return
+    const updatedOptions = { ...char.crysOptions }
+    for (const crys of options.value) {
+        if (offElementalCrys(crys)) continue
+        const current = updatedOptions[crys.selectionAbilityMstId]
+        updatedOptions[crys.selectionAbilityMstId] = {
+            ...current,
+            enabled,
+            subCrys: current?.subCrys?.length === 3 ? current.subCrys : [0, 0, 0],
+        }
+    }
+    store.updateChar({ ...char, crysOptions: updatedOptions })
+}
+
 const onSelectCharacter = async (char?: Character) => {
     if (!char) {
         selectedCharacter.value = undefined
@@ -349,6 +369,12 @@ onBeforeUnmount(() => {
 <style scoped>
 .page {
     padding: 12px;
+}
+
+.bulk-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
 }
 
 .crys-grid {
