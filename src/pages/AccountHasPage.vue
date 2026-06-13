@@ -60,6 +60,7 @@
                             @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove" @touchend="onTouchEnd">
                             <div class="character-img-wrapper" :class="{
                                 'completed-wrapper': shouldHighlightCompleted(ch),
+                                'completed-wrapper-diamond': shouldShinyHighlightCompleted(ch),
                                 'editing-active': editing?.id === ch.id
                             }">
                                 <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank" @contextmenu.prevent>
@@ -73,9 +74,9 @@
                                         path: '/character-crys',
                                         query: { character_id: ch.id }
                                     }" @click.stop :class="colourLevels
-                                        ? getCrysCount(ch) >= maxCrysCount ? 'maxLvl' : hasElementalCrys(ch) ? 'notMaxLvlMissingElemCrys' : 'notMaxLvl'
+                                        ? getCrysCount(ch, true) >= maxCrysCount ? 'maxLvl' : hasElementalCrys(ch) ? 'notMaxLvlMissingElemCrys' : 'notMaxLvl'
                                         : ''">
-                                    {{ getCrysCount(ch) }}
+                                    {{ getCrysCount(ch, true) }}
                                 </router-link>
                                 <div class="dupe-badge level-badge editable"
                                     v-if="showDupes && (chars as any).label === 'A5'"
@@ -191,7 +192,10 @@
             roster, and transparent borders indicate standard permanent characters.
             For crys counter red indicates some crys are missing, yellow that some are missing, but the elemental crys
             has been
-            collected, and green that all not off-elemental crys have been collected
+            collected, and green that all not off-elemental crys have been collected.
+            Maxed out kioku are given a golden colour to indicate their completeness.
+            <template v-if="displayedCharactersComputed.some(shouldShinyHighlightCompleted)">Truly perfected kioku with all crys,
+                including off elemental ones, are given a diamond border!</template>
         </div>
     </div>
 </template>
@@ -276,9 +280,9 @@ const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.en
 const extraCollected = useSetting("extraCollected", 0)
 const extraTotal = computed(() => (showDupes.value ? ownedFiveStars.value.reduce((sum, ch) => sum + ch.dupes, 0) : extraCollected.value))
 
-const missingCrys5stars = computed(() => fiveStarMembers.value.reduce((p, c) => p + (c.enabled ? (maxCrysCount - getCrysCount(c)) : 0), 0))
-const missingCrys4stars = computed(() => fourStarMembers.value.reduce((p, c) => p + (maxCrysCount - getCrysCount(c)), 0))
-const missingCrys3stars = computed(() => threeStarMembers.value.reduce((p, c) => p + (maxCrysCount - getCrysCount(c)), 0))
+const missingCrys5stars = computed(() => fiveStarMembers.value.reduce((p, c) => p + (c.enabled ? (maxCrysCount - getCrysCount(c, true)) : 0), 0))
+const missingCrys4stars = computed(() => fourStarMembers.value.reduce((p, c) => p + (maxCrysCount - getCrysCount(c, true)), 0))
+const missingCrys3stars = computed(() => threeStarMembers.value.reduce((p, c) => p + (maxCrysCount - getCrysCount(c, true)), 0))
 
 const showLevels = useSetting("showLevels", true);
 const showHearts = useSetting("showHearts", true);
@@ -313,11 +317,11 @@ const shouldFilterOutOffElement = (elem: KiokuElement, selectionAbilityMstId: nu
 const maxCrysCount = relevantCrys(10010101).filter(c => shouldFilterOutOffElement(KiokuElement.Light, c.selectionAbilityMstId)).length
 const hasElementalCrys = (ch: Character) => Object.entries(ch.crysOptions).some(([i, c]) => getCrysElement(Number(i)) === ch.element && c.enabled)
 
-const getCrysCount = (ch: Character): number => {
+const getCrysCount = (ch: Character, filterOutOffElement: boolean): number => {
     if (!ch.crysOptions) return 0
     return Object
         .entries(ch.crysOptions)
-        .filter(([i, c]) => shouldFilterOutOffElement(ch.element, Number(i)))
+        .filter(([i, c]) => filterOutOffElement ? shouldFilterOutOffElement(ch.element, Number(i)) : true)
         .map(([i, c]) => c)
         .reduce((sum: number, opt: any) => {
             if (!opt?.enabled) return sum
@@ -327,9 +331,10 @@ const getCrysCount = (ch: Character): number => {
 
 const isMaxHeartLevel = (ch: Character): boolean => showHearts.value ? ch.heartphialLvl === KiokuConstants.maxHeartphialLvl : true
 const isMaxMagicAndSpecialLevel = (ch: Character): boolean => showLevels.value ? ch.magicLvl === KiokuConstants.maxMagicLvl && (getMaxSpecialLvl(ch) === ch.specialLvl || ch.rarity === 3) : true
-const isMaxCrysCollected = (ch: Character): boolean => showCrys.value ? getCrysCount(ch) === maxCrysCount : true
+const isMaxCrysCollected = (ch: Character): boolean => showCrys.value ? getCrysCount(ch, true) === maxCrysCount : true
 const isCompleted = (ch: Character): boolean => (ch.enabled || ch.rarity !== 5 || ch.name === "Lux☆Magica") && isMaxHeartLevel(ch) && isMaxMagicAndSpecialLevel(ch) && isMaxCrysCollected(ch)
 const shouldHighlightCompleted = (ch: Character): boolean => highlightCompleted.value && isCompleted(ch)
+const shouldShinyHighlightCompleted = (ch: Character): boolean => highlightCompleted.value && showCrys.value && isCompleted(ch) && getCrysCount(ch, false) === relevantCrys(ch.id).length
 
 const groupedByAscension = computed(() => {
     type LabelledGroup = Character[] & { label?: string }
@@ -596,6 +601,26 @@ td {
     box-shadow:
         0 0 5px 1px rgba(255, 215, 0, 0.7),
         0 0 15px 3px rgba(255, 190, 0, 0.25);
+}
+
+.completed-wrapper-diamond .completed-glow {
+    animation: diamond-spark 10s ease-in-out infinite;
+}
+
+@keyframes diamond-spark {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 5px 1px rgba(220, 245, 255, 0.7),
+            0 0 15px 3px rgba(185, 235, 255, 0.25);
+    }
+
+    50% {
+        box-shadow:
+            0 0 5px 1px rgba(220, 245, 255, 0.7),
+            0 0 20px 5px rgba(185, 235, 255, 0.25);
+    }
 }
 
 .completed-wrapper .level-badge {
