@@ -234,15 +234,20 @@ export const isStartCondRelevantForScoreAttack = (startConditionId: string, maxM
     return true;
 }
 
-export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: string, attackerHealth: number, activeAliments: string[]): boolean | Function => {
+export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: string, attackerHealth: number, activeAliments: string[], maxMagicStacks: number): boolean | Function => {
     if (!activeConditionSetId || activeConditionSetId === "0") return true
 
     const battleConditionSet = battleConditionSets[activeConditionSetId]
 
     for (const activeCondId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
         const battleCondition = battleConditions[activeCondId]
+
+        if (battleCondition.compareContent === CompareContent.CHARGE_POINT) {
+            if (!isCondActive(battleCondition, maxMagicStacks)) return false
+        }
+
         if (battleCondition.compareContent === CompareContent.ACTOR_SKILL_TYPE &&
-            ["NormalAttack", "ActiveSkill"].includes(battleCondition.compareValue)) return false
+            ["NormalAttack", "ActiveSkill", "EtherBlow"].includes(battleCondition.compareValue)) return false
 
         if (battleCondition.compareValue === "AdditionalSkill" &&
             battleCondition.compareOperator === CompareOperator.EQUAL) {

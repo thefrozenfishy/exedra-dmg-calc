@@ -458,6 +458,7 @@ export class ScoreAttackTeam {
                 activeCondId,
                 this.attackerHealth,
                 this.activeBuffsAndDebuffs,
+                this.dps.maxMagicStacks,
             );
 
             if (typeof isActiveCond === "boolean") {
@@ -659,6 +660,7 @@ export class ScoreAttackTeam {
                     activeCondId,
                     this.attackerHealth,
                     this.activeBuffsAndDebuffs,
+                    this.dps.maxMagicStacks,
                 );
 
                 if (typeof isActiveCond === "boolean") {
