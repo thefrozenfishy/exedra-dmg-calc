@@ -246,7 +246,6 @@ const summarizeSubCrys = (ch: Character) => {
 
   if (!items.length) return []
   const counts = items.reduce((acc, eff) => {
-    console.log(acc, eff)
     if (eff.abilityEffectType in acc) {
       acc[eff.abilityEffectType][1] = acc[eff.abilityEffectType][1] + eff.value1
     } else {

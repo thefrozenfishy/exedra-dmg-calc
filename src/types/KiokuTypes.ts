@@ -306,10 +306,11 @@ export interface CrystalisSelection {
 
 export const getEX = (characterId: number) => Object.values(crystalises).find(c => c.styleMstId === characterId)
 
-export const relevantCrys: (characterId: number) => CrystalisData[] = (characterId: number) => [
-    getEX(characterId),
-    ...Object.values(crystalises).filter(c => c.selectionAbilityType === 1 && c.rarity === 3)
-].filter(c => !!c)
+export function relevantCrys(characterId: number, includeLowRarityCrys = false): CrystalisData[] {
+    return [getEX(characterId),
+    ...Object.values(crystalises).filter(c => c.styleMstId === 0 && c.selectionAbilityType === 1 && (includeLowRarityCrys ? true : c.rarity === 3))
+    ].filter(c => !!c)
+}
 
 export interface StyleParamUp {
     styleParamUpMstId: number

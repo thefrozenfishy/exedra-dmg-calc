@@ -7,12 +7,12 @@ import { relevantCrys } from '../types/KiokuTypes'
 function normalizeCharacter(member?: Character) {
   if (!member) return undefined
 
-  const corrected = correctCharacterParams(member)
+  const corrected = correctCharacterParams(member) as Character
 
   return {
     ...corrected,
     crysOptions: Object.fromEntries(
-      relevantCrys(corrected.id).map(cx => [
+      relevantCrys(corrected.id, true).map(cx => [
         cx.selectionAbilityMstId,
         {
           enabled: false,
