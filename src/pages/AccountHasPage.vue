@@ -194,7 +194,8 @@
             has been
             collected, and green that all not off-elemental crys have been collected.
             Maxed out kioku are given a golden colour to indicate their completeness.
-            <template v-if="displayedCharactersComputed.some(shouldShinyHighlightCompleted)">Truly perfected kioku with all crys,
+            <template v-if="displayedCharactersComputed.some(shouldShinyHighlightCompleted)">Truly perfected kioku with
+                all crys,
                 including off elemental ones, are given a diamond border!</template>
         </div>
     </div>
@@ -604,22 +605,26 @@ td {
 }
 
 .completed-wrapper-diamond .completed-glow {
-    animation: diamond-spark 10s ease-in-out infinite;
+    animation: platinum-pulse 4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 
-@keyframes diamond-spark {
-
-    0%,
-    100% {
+@keyframes platinum-pulse {
+    0% {
         box-shadow:
-            0 0 5px 1px rgba(220, 245, 255, 0.7),
-            0 0 15px 3px rgba(185, 235, 255, 0.25);
+            0 0 5px 2px rgba(210, 235, 255, 0.55),
+            0 0 12px 2px rgba(185, 215, 240, 0.15);
     }
 
     50% {
         box-shadow:
-            0 0 5px 1px rgba(220, 245, 255, 0.7),
-            0 0 20px 5px rgba(185, 235, 255, 0.25);
+            0 0 5px 2px rgba(225, 242, 255, 0.95),
+            0 0 12px 2px rgba(195, 225, 248, 0.22);
+    }
+
+    100% {
+        box-shadow:
+            0 0 5px 2px rgba(210, 235, 255, 0.55),
+            0 0 12px 2px rgba(185, 215, 240, 0.15);
     }
 }
 
