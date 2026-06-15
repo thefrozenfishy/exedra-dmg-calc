@@ -145,6 +145,14 @@
                             </div>
                         </div>
 
+                        <div v-if="isTouchDevice" class="whale-power-big" title="Whale power">
+                            <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale power" />
+
+                            <div class="total-power-value">
+                                {{ myPower.whale }}
+                            </div>
+                        </div>
+
                         <div class="role-grid-compact role-grid-3-compact">
                             <div class="mini-power-box" title="Attacker power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Attacker.png'" />
@@ -177,7 +185,7 @@
                             </div>
                         </div>
 
-                        <div class="whale-power-big" title="Whale power">
+                        <div v-if="!isTouchDevice" class="whale-power-big" title="Whale power">
                             <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale power" />
 
                             <div class="total-power-value">
@@ -299,11 +307,29 @@
                         </div>
 
                         <div v-if="friend.power" class="friend-power">
-                            <div class="total-power-big" title="Power rating">
+                            <div class="total-power-big friend" title="Power rating">
                                 <img :src="'/exedra-dmg-calc/pwr.png'" alt="Total" />
 
                                 <div class="total-power-value">
                                     {{ friend.power.total }}
+                                </div>
+                            </div>
+
+
+                            <div v-if="isTouchDevice" class="whale-power-big friend" title="Whale power">
+                                <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale power" />
+
+                                <div class="total-power-value">
+                                    {{ myPower.whale }}
+                                </div>
+                            </div>
+
+
+                            <div v-if="isTouchDevice" class="whale-power-big friend" title="Similarity score">
+                                <img :src="'/exedra-dmg-calc/similarity.png'" alt="Similarity" />
+
+                                <div class="total-power-value">
+                                    {{ friend.accountSimilarity }}
                                 </div>
                             </div>
 
@@ -323,7 +349,7 @@
                                     <span>{{ friend.power[KiokuRole.Debuffer] }}</span>
                                 </div>
 
-                                <div class="mini-power-box" title="Similarity score">
+                                <div v-if="!isTouchDevice" class="mini-power-box" title="Similarity score">
                                     <img :src="'/exedra-dmg-calc/similarity.png'" alt="Similarity" />
                                     <span>{{ friend.accountSimilarity }}</span>
                                 </div>
@@ -343,7 +369,7 @@
                                     <span>{{ friend.power[KiokuRole.Healer] }}</span>
                                 </div>
 
-                                <div class="mini-power-box" title="Whale power">
+                                <div v-if="!isTouchDevice" class="mini-power-box" title="Whale power">
                                     <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale" />
                                     <span>{{ friend.power.whale }}</span>
                                 </div>
@@ -543,6 +569,7 @@ const editingUnionName = ref(false)
 const pendingUnionName = ref('')
 const avatarPickerRef = ref<HTMLElement | null>(null)
 const avatarButtonRef = ref<HTMLElement | null>(null)
+const isTouchDevice = ref(false)
 
 const handleClickOutside = (event: MouseEvent) => {
     const target = event.target as Node
@@ -558,6 +585,7 @@ const handleClickOutside = (event: MouseEvent) => {
 }
 
 onMounted(async () => {
+    isTouchDevice.value = window.matchMedia("(pointer: coarse)").matches
     if (!userId) return
 
     pendingDisplayName.value = store.displayName
@@ -1105,6 +1133,15 @@ watch(
     border-radius: 16px;
 }
 
+@media (max-width: 768px) {
+
+    .profile-section,
+    .friend-section {
+        margin-top: 1.5rem;
+        padding: 0.8rem;
+    }
+}
+
 /* =========================
    Inputs / Buttons
 ========================= */
@@ -1164,6 +1201,16 @@ a.link {
     width: 160px;
 }
 
+@media (max-width: 480px) {
+    .add-friend-row {
+        gap: 0.5rem;
+    }
+
+    .add-friend-row input {
+        width: 100%;
+    }
+}
+
 /* =========================
    Friend List
 ========================= */
@@ -1209,6 +1256,15 @@ a.link {
     border-radius: 14px;
 }
 
+@media (max-width: 768px) {
+    .friend-card {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 1rem;
+    }
+}
+
 .friend-card.union-member {
     border: 1px solid rgba(246, 214, 130, 0.4);
 }
@@ -1236,6 +1292,13 @@ a.link {
     flex: 1 1 auto;
 
     max-width: 220px;
+}
+
+@media (max-width: 768px) {
+    .friend-left {
+        max-width: none;
+        flex-basis: 100%;
+    }
 }
 
 /* =========================
@@ -1474,6 +1537,14 @@ a.link {
     min-width: 0;
 }
 
+@media (max-width: 768px) {
+    .friend-power {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+}
+
 .total-power-big,
 .whale-power-big {
     display: flex;
@@ -1485,6 +1556,22 @@ a.link {
     height: 78px;
 
     border-radius: 18px;
+}
+
+@media (max-width: 480px) {
+
+    .total-power-big,
+    .whale-power-big {
+        min-width: 135px;
+        height: 65px;
+        margin-right: -2px;
+        flex-direction: revert;
+    }
+
+    .friend {
+        min-width: 92px;
+        margin: -4px;
+    }
 }
 
 .total-power-big {
@@ -1520,6 +1607,16 @@ a.link {
 
 .role-grid-3-compact {
     grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 480px) {
+    .role-grid-4-compact {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .role-grid-3-compact {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 .mini-power-box {

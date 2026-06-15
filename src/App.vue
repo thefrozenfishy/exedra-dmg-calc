@@ -96,7 +96,46 @@ nav a.router-link-active {
   line-height: 1;
 }
 
-.app-icon {
-  transform: translateY(2px);
+@media (max-width: 768px) {
+  #app {
+    min-width: 100%;
+  }
+
+  main {
+    padding: 1rem;
+  }
+
+  .title-row h1 {
+    font-size: 1.5em;
+  }
+
+  nav a {
+    margin: 0 0.25rem;
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 0.75rem;
+  }
+
+  header {
+    padding: 0.75rem;
+  }
+
+  .title-row h1 {
+    font-size: 1.2em;
+  }
+
+  .app-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  nav a {
+    margin: 0 0.15rem;
+    font-size: 0.65em;
+  }
 }
 </style>

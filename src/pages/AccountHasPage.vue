@@ -47,12 +47,13 @@
                 Colour max levels
             </label>
         </div>
-        <table class="ascension-table" @click.self="isTouchJiggleMode = false">
+        <table class="ascension-table" @click.self="isTouchJiggleMode = false" @dragover="handleTableDragOver"
+            @dragend="stopAutoScroll">
             <tbody @click.self="isTouchJiggleMode = false">
                 <tr :data-index="index" :class="{ 'drag-over': dragOver === index }"
-                    @dragover.prevent="dragOver = index" @dragleave="dragLeave" @drop="onDrop(index)"
-                    @click.self="isTouchJiggleMode = false" v-for="(chars, index) in groupedByAscension" :key="index"
-                    class="asc-row">
+                    @dragover.prevent="dragOver = index; handleTableDragOver($event)" @dragleave="dragLeave"
+                    @drop="onDrop(index)" @click.self="isTouchJiggleMode = false"
+                    v-for="(chars, index) in groupedByAscension" :key="index" class="asc-row">
 
                     <td class="asc-cell" @click="isTouchJiggleMode = false">{{ (chars as any).label }}</td>
 
@@ -457,6 +458,8 @@ const onDrop = (targetIndex: number) => {
     if (isReadonly.value) return
     if (!draggedChar.value) return
 
+    stopAutoScroll()
+
     const ch = draggedChar.value
     if (targetIndex === 6) {
         ch.enabled = false
@@ -473,6 +476,48 @@ const dragLeave = (e: DragEvent) => {
     if (isReadonly.value) return
     if (!e.currentTarget || !(e.currentTarget as HTMLElement).contains(e.relatedTarget as Node)) {
         dragOver.value = null
+        stopAutoScroll()
+    }
+}
+
+let autoScrollInterval: ReturnType<typeof setInterval> | null = null
+
+const stopAutoScroll = () => {
+    if (autoScrollInterval) {
+        clearInterval(autoScrollInterval)
+        autoScrollInterval = null
+    }
+}
+
+const startAutoScroll = (direction: 'up' | 'down') => {
+    stopAutoScroll()
+    const scrollAmount = 50
+    autoScrollInterval = setInterval(() => {
+        const mainElement = document.querySelector('main')
+        if (mainElement) {
+            mainElement.scrollTop += direction === 'up' ? -scrollAmount : scrollAmount
+        }
+    }, 50)
+}
+
+const handleTableDragOver = (e: DragEvent) => {
+    if (isReadonly.value || !draggedChar.value) {
+        stopAutoScroll()
+        return
+    }
+
+    const mainElement = document.querySelector('main')
+    if (!mainElement) return
+
+    const rect = mainElement.getBoundingClientRect()
+    const scrollThreshold = 100
+
+    if (e.clientY < rect.top + scrollThreshold && mainElement.scrollTop > 0) {
+        startAutoScroll('up')
+    } else if (e.clientY > rect.bottom - scrollThreshold && mainElement.scrollTop < mainElement.scrollHeight - mainElement.clientHeight) {
+        startAutoScroll('down')
+    } else {
+        stopAutoScroll()
     }
 }
 
@@ -600,6 +645,12 @@ const onTouchEnd = (e: TouchEvent) => {
     color: var(--text);
 }
 
+@media (max-width: 768px) {
+    .ascension-list {
+        max-width: 100%;
+    }
+}
+
 .ascension-table {
     width: 100%;
     border-collapse: collapse;
@@ -621,11 +672,33 @@ td {
     box-sizing: border-box;
 }
 
+@media (max-width: 480px) {
+    .asc-cell {
+        width: 65px;
+        font-size: 1rem;
+        padding: 0.4rem;
+    }
+}
+
 .characters-cell {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     min-height: 68px;
+}
+
+@media (max-width: 768px) {
+    .characters-cell {
+        min-height: 56px;
+        gap: 0.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .characters-cell {
+        min-height: 48px;
+        gap: 0.3rem;
+    }
 }
 
 .character-img {
@@ -635,6 +708,20 @@ td {
     border: 1px solid rgba(255, 255, 255, 0.12);
     display: block;
     transition: transform 0.15s ease;
+}
+
+@media (max-width: 768px) {
+    .character-img {
+        width: 64px;
+        height: 64px;
+    }
+}
+
+@media (max-width: 480px) {
+    .character-img {
+        width: 64px;
+        height: 64px;
+    }
 }
 
 .character-img:hover {
