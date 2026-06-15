@@ -19,7 +19,7 @@
                 </transition>
 
                 <button class="expand-btn" @click="expanded = !expanded">
-                    {{ expanded ? "‹" : "›" }}
+                    {{ expanded ? "›" : "‹" }}
                 </button>
 
                 <div class="help-tooltip">
