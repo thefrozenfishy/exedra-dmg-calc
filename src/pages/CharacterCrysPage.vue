@@ -10,7 +10,8 @@
             </div>
             <div class="crys-grid">
                 <div v-for="crys in options" :key="crys.selectionAbilityMstId" class="crys-card"
-                    :class="{ disabled: !crys.enabled, offElement: offElementalCrys(crys) }">
+                    :class="{ disabled: !crys.enabled, offElement: offElementalCrys(crys) }"
+                    :title="crys.description?.replace('<br>', '\n')">
 
                     <div v-if="crys.enabled" class="use-index-selector">
                         <div v-for="i in 3" :key="i" class="use-index-box" :class="{ active: crys.useIndex === i }"
