@@ -47,18 +47,17 @@
                 Colour max levels
             </label>
         </div>
-        <table class="ascension-table" @click.self="isTouchJiggleMode = false" @dragover.prevent="handleTableDragOver"
-            @dragend="stopAutoScroll">
+        <table class="ascension-table" @click.self="isTouchJiggleMode = false">
             <tbody @click.self="isTouchJiggleMode = false">
                 <tr :data-index="index" :class="{ 'drag-over': dragOver === index }"
-                    @dragover.prevent="dragOver = index; handleTableDragOver($event)" @dragleave="dragLeave"
+                    @dragover.prevent="dragOver = index" @dragleave="dragLeave"
                     @drop="onDrop(index)" @click.self="isTouchJiggleMode = false"
                     v-for="(chars, index) in groupedByAscension" :key="index" class="asc-row">
 
                     <td class="asc-cell" @click="isTouchJiggleMode = false">{{ (chars as any).label }}</td>
 
                     <td class="characters-cell" @click.self="isTouchJiggleMode = false">
-                        <div v-for="ch in chars" :key="ch.id" :draggable="!isTouchDevice" @dragstart="onDragStart(ch)"
+                        <div v-for="ch in chars" :key="ch.id" :draggable="!isTouchDevice" @dragstart="onDragStart(ch, $event)"
                             @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove($event)"
                             @touchend="onTouchEnd($event)" :class="{ 'jiggling': isTouchJiggleMode }"
                             @contextmenu.prevent>
@@ -84,8 +83,8 @@
                                             path: '/character-crys',
                                             query: { character_id: ch.id }
                                         }" @click.stop :class="colourLevels
-                                        ? getCrysCount(ch, true) >= maxCrysCount ? 'maxLvl' : hasElementalCrys(ch) ? 'notMaxLvlMissingElemCrys' : 'notMaxLvl'
-                                        : ''">
+                                            ? getCrysCount(ch, true) >= maxCrysCount ? 'maxLvl' : hasElementalCrys(ch) ? 'notMaxLvlMissingElemCrys' : 'notMaxLvl'
+                                            : ''">
                                         {{ getCrysCount(ch, true) }}
                                     </router-link>
                                     <div v-else class="crys-count-badge level-badge" :class="colourLevels
@@ -463,8 +462,6 @@ const onDrop = (targetIndex: number) => {
     if (isReadonly.value) return
     if (!draggedChar.value) return
 
-    stopAutoScroll()
-
     const ch = draggedChar.value
     if (targetIndex === 6) {
         ch.enabled = false
@@ -481,45 +478,6 @@ const dragLeave = (e: DragEvent) => {
     if (isReadonly.value) return
     if (!e.currentTarget || !(e.currentTarget as HTMLElement).contains(e.relatedTarget as Node)) {
         dragOver.value = null
-        stopAutoScroll()
-    }
-}
-
-let autoScrollInterval: ReturnType<typeof setInterval> | null = null
-
-const stopAutoScroll = () => {
-    if (autoScrollInterval) {
-        clearInterval(autoScrollInterval)
-        autoScrollInterval = null
-    }
-}
-
-const startAutoScroll = (direction: 'up' | 'down') => {
-    stopAutoScroll()
-    const scrollAmount = 50
-    autoScrollInterval = setInterval(() => {
-        window.scrollBy(0, direction === 'up' ? -scrollAmount : scrollAmount)
-    }, 50)
-}
-
-const handleTableDragOver = (e: DragEvent) => {
-    if (isReadonly.value) {
-        stopAutoScroll()
-        return
-    }
-
-    const scrollThreshold = 100
-    const viewportHeight = window.innerHeight
-
-    // Check if dragging near top of viewport
-    if (e.clientY < scrollThreshold && window.scrollY > 0) {
-        startAutoScroll('up')
-    }
-    // Check if dragging near bottom of viewport
-    else if (e.clientY > viewportHeight - scrollThreshold && window.scrollY < document.documentElement.scrollHeight - viewportHeight) {
-        startAutoScroll('down')
-    } else {
-        stopAutoScroll()
     }
 }
 
