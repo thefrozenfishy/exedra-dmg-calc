@@ -59,7 +59,8 @@
                     <td class="characters-cell" @click.self="isTouchJiggleMode = false">
                         <div v-for="ch in chars" :key="ch.id" :draggable="!isTouchDevice" @dragstart="onDragStart(ch)"
                             @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove($event)"
-                            @touchend="onTouchEnd($event)" :class="{ 'jiggling': isTouchJiggleMode }">
+                            @touchend="onTouchEnd($event)" :class="{ 'jiggling': isTouchJiggleMode }"
+                            @contextmenu.prevent>
                             <div class="character-img-wrapper" :class="{
                                 'completed-wrapper': shouldHighlightCompleted(ch),
                                 'completed-wrapper-diamond': shouldShinyHighlightCompleted(ch),
@@ -75,7 +76,7 @@
                                 <img v-else class="character-img"
                                     :class="[borderClass(ch), { 'completed-glow': shouldHighlightCompleted(ch) }]"
                                     :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
-                                    :title="makeTitle(ch)" />
+                                    :title="makeTitle(ch)" @contextmenu.prevent />
                                 <router-link v-if="showCrys && (chars as any).label !== 'Not Owned'"
                                     class="crys-count-badge level-badge crys-link" :to="{
                                         path: '/character-crys',
