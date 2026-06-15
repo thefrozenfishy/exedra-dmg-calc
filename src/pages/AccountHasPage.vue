@@ -47,28 +47,35 @@
                 Colour max levels
             </label>
         </div>
-        <table class="ascension-table">
-            <tbody>
+        <table class="ascension-table" @click.self="isTouchJiggleMode = false">
+            <tbody @click.self="isTouchJiggleMode = false">
                 <tr :data-index="index" :class="{ 'drag-over': dragOver === index }"
                     @dragover.prevent="dragOver = index" @dragleave="dragLeave" @drop="onDrop(index)"
-                    v-for="(chars, index) in groupedByAscension" :key="index" class="asc-row">
+                    @click.self="isTouchJiggleMode = false" v-for="(chars, index) in groupedByAscension" :key="index"
+                    class="asc-row">
 
-                    <td class="asc-cell">{{ (chars as any).label }}</td>
+                    <td class="asc-cell" @click="isTouchJiggleMode = false">{{ (chars as any).label }}</td>
 
-                    <td class="characters-cell">
-                        <div v-for="ch in chars" :key="ch.id" draggable="true" @dragstart="onDragStart(ch)"
-                            @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove" @touchend="onTouchEnd">
+                    <td class="characters-cell" @click.self="isTouchJiggleMode = false">
+                        <div v-for="ch in chars" :key="ch.id" :draggable="!isTouchDevice" @dragstart="onDragStart(ch)"
+                            @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove($event)"
+                            @touchend="onTouchEnd($event)" :class="{ 'jiggling': isTouchJiggleMode }">
                             <div class="character-img-wrapper" :class="{
                                 'completed-wrapper': shouldHighlightCompleted(ch),
                                 'completed-wrapper-diamond': shouldShinyHighlightCompleted(ch),
                                 'editing-active': editing?.id === ch.id
                             }">
-                                <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank" @contextmenu.prevent>
+                                <a v-if="!isTouchDevice" :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank"
+                                    @contextmenu.prevent>
                                     <img class="character-img"
                                         :class="[borderClass(ch), { 'completed-glow': shouldHighlightCompleted(ch) }]"
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                         :title="makeTitle(ch)" />
                                 </a>
+                                <img v-else class="character-img"
+                                    :class="[borderClass(ch), { 'completed-glow': shouldHighlightCompleted(ch) }]"
+                                    :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
+                                    :title="makeTitle(ch)" />
                                 <router-link v-if="showCrys && (chars as any).label !== 'Not Owned'"
                                     class="crys-count-badge level-badge crys-link" :to="{
                                         path: '/character-crys',
@@ -488,17 +495,47 @@ const copyHyperLink = async () => {
     }
 }
 
+const isTouchDevice = ref(false)
+const isTouchJiggleMode = ref(false)
+
 const touchDragged = ref<Character | null>(null)
 const touchStartPos = ref<{ x: number; y: number } | null>(null)
-const touchDidDrag = ref(false)
-const DRAG_THRESHOLD = 8
+const touchIsDragging = ref(false)
+const touchHoldTimer = ref<ReturnType<typeof setTimeout> | null>(null)
+const HOLD_DURATION = 500
+const MOVE_CANCEL_THRESHOLD = 8
+
+onMounted(() => {
+    isTouchDevice.value = window.matchMedia("(pointer: coarse)").matches
+    document.addEventListener("touchstart", onDocumentTouchToExitJiggle, { passive: true })
+})
+
+const onDocumentTouchToExitJiggle = (e: TouchEvent) => {
+    if (!isTouchJiggleMode.value) return
+    const target = e.target as HTMLElement
+    if (!target.closest(".jiggling") && !target.closest(".asc-row")) {
+        isTouchJiggleMode.value = false
+    }
+}
 
 const onTouchStart = (ch: Character, e: TouchEvent) => {
     if (isReadonly.value) return
-    touchDragged.value = ch
-    draggedChar.value = ch
+
+    isTouchDevice.value = true
     touchStartPos.value = { x: e.touches[0].clientX, y: e.touches[0].clientY }
-    touchDidDrag.value = false
+    touchIsDragging.value = false
+
+    if (isTouchJiggleMode.value) {
+        touchDragged.value = ch
+        draggedChar.value = ch
+    } else {
+        touchHoldTimer.value = setTimeout(() => {
+            isTouchJiggleMode.value = true
+            touchDragged.value = ch
+            draggedChar.value = ch
+            if (navigator.vibrate) navigator.vibrate(40)
+        }, HOLD_DURATION)
+    }
 }
 
 const onTouchMove = (e: TouchEvent) => {
@@ -507,10 +544,22 @@ const onTouchMove = (e: TouchEvent) => {
 
     const dx = e.touches[0].clientX - touchStartPos.value.x
     const dy = e.touches[0].clientY - touchStartPos.value.y
+    const dist = Math.sqrt(dx * dx + dy * dy)
 
-    if (!touchDidDrag.value && Math.sqrt(dx * dx + dy * dy) < DRAG_THRESHOLD) return
+    if (!isTouchJiggleMode.value) {
+        if (dist > MOVE_CANCEL_THRESHOLD && touchHoldTimer.value) {
+            clearTimeout(touchHoldTimer.value)
+            touchHoldTimer.value = null
+        }
+        return
+    }
 
-    touchDidDrag.value = true
+    if (dist > MOVE_CANCEL_THRESHOLD) {
+        touchIsDragging.value = true
+    }
+
+    if (!touchIsDragging.value) return
+
     e.preventDefault()
 
     const touch = e.touches[0]
@@ -522,11 +571,16 @@ const onTouchMove = (e: TouchEvent) => {
 const onTouchEnd = (e: TouchEvent) => {
     if (isReadonly.value) return
 
-    if (!touchDidDrag.value) {
+    if (touchHoldTimer.value) {
+        clearTimeout(touchHoldTimer.value)
+        touchHoldTimer.value = null
+    }
+
+    if (!isTouchJiggleMode.value) {
         const touch = e.changedTouches[0]
         const target = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLElement | null
         target?.click()
-    } else {
+    } else if (touchIsDragging.value) {
         if (dragOver.value != null) onDrop(dragOver.value)
     }
 
@@ -534,7 +588,7 @@ const onTouchEnd = (e: TouchEvent) => {
     touchDragged.value = null
     draggedChar.value = null
     touchStartPos.value = null
-    touchDidDrag.value = false
+    touchIsDragging.value = false
 }
 </script>
 
@@ -634,6 +688,11 @@ td {
     transition: opacity 0.15s ease;
 }
 
+.level-badge input {
+    min-width: 2rem;
+
+}
+
 .completed-wrapper:hover .level-badge,
 .completed-wrapper.editing-active .level-badge {
     opacity: 1;
@@ -642,6 +701,66 @@ td {
 
 .asc-row.drag-over {
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes jiggle {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    20% {
+        transform: rotate(-3deg);
+    }
+
+    40% {
+        transform: rotate(3deg);
+    }
+
+    60% {
+        transform: rotate(-2deg);
+    }
+
+    80% {
+        transform: rotate(2deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.jiggling {
+    animation: jiggle 0.8s ease-in-out infinite;
+    cursor: grab;
+}
+
+.jiggling:active {
+    cursor: grabbing;
+}
+
+.jiggle-hint {
+    width: 100%;
+    font-size: 0.7rem;
+    color: var(--accent-soft, #f6d682);
+    background: rgba(246, 214, 130, 0.08);
+    border: 1px solid rgba(246, 214, 130, 0.25);
+    border-radius: 6px;
+    padding: 0.25rem 0.5rem;
+    margin-bottom: 0.25rem;
+    text-align: center;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .copy-btn {
