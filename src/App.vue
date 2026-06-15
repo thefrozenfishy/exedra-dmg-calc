@@ -109,6 +109,10 @@ nav a.router-link-active {
     font-size: 1.5em;
   }
 
+  .title-row {
+    margin-top: 40px;
+  }
+
   nav a {
     margin: 0 0.25rem;
     font-size: 0.8em;

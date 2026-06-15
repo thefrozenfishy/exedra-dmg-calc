@@ -1570,7 +1570,7 @@ a.link {
 
     .friend {
         min-width: 92px;
-        margin: -4px;
+        margin: -5px;
     }
 }
 
