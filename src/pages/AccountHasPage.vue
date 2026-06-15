@@ -47,7 +47,7 @@
                 Colour max levels
             </label>
         </div>
-        <table class="ascension-table" @click.self="isTouchJiggleMode = false" @dragover="handleTableDragOver"
+        <table class="ascension-table" @click.self="isTouchJiggleMode = false" @dragover.prevent="handleTableDragOver"
             @dragend="stopAutoScroll">
             <tbody @click.self="isTouchJiggleMode = false">
                 <tr :data-index="index" :class="{ 'drag-over': dragOver === index }"
@@ -78,15 +78,20 @@
                                     :class="[borderClass(ch), { 'completed-glow': shouldHighlightCompleted(ch) }]"
                                     :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
                                     :title="makeTitle(ch)" @contextmenu.prevent />
-                                <router-link v-if="showCrys && (chars as any).label !== 'Not Owned'"
-                                    class="crys-count-badge level-badge crys-link" :to="{
-                                        path: '/character-crys',
-                                        query: { character_id: ch.id }
-                                    }" @click.stop :class="colourLevels
+                                <template v-if="showCrys && (chars as any).label !== 'Not Owned'">
+                                    <router-link v-if="!isTouchDevice" class="crys-count-badge level-badge crys-link"
+                                        :to="{
+                                            path: '/character-crys',
+                                            query: { character_id: ch.id }
+                                        }" @click.stop :class="colourLevels
                                         ? getCrysCount(ch, true) >= maxCrysCount ? 'maxLvl' : hasElementalCrys(ch) ? 'notMaxLvlMissingElemCrys' : 'notMaxLvl'
                                         : ''">
-                                    {{ getCrysCount(ch, true) }}
-                                </router-link>
+                                        {{ getCrysCount(ch, true) }}
+                                    </router-link>
+                                    <div v-else class="crys-count-badge level-badge" :class="colourLevels
+                                        ? getCrysCount(ch, true) >= maxCrysCount ? 'maxLvl' : hasElementalCrys(ch) ? 'notMaxLvlMissingElemCrys' : 'notMaxLvl'
+                                        : ''">{{ getCrysCount(ch, true) }}</div>
+                                </template>
                                 <div class="dupe-badge level-badge editable"
                                     v-if="showDupes && (chars as any).label === 'A5'"
                                     @click.stop="startEdit(ch, 'dupes', $event)">
@@ -493,28 +498,25 @@ const startAutoScroll = (direction: 'up' | 'down') => {
     stopAutoScroll()
     const scrollAmount = 50
     autoScrollInterval = setInterval(() => {
-        const mainElement = document.querySelector('main')
-        if (mainElement) {
-            mainElement.scrollTop += direction === 'up' ? -scrollAmount : scrollAmount
-        }
+        window.scrollBy(0, direction === 'up' ? -scrollAmount : scrollAmount)
     }, 50)
 }
 
 const handleTableDragOver = (e: DragEvent) => {
-    if (isReadonly.value || !draggedChar.value) {
+    if (isReadonly.value) {
         stopAutoScroll()
         return
     }
 
-    const mainElement = document.querySelector('main')
-    if (!mainElement) return
-
-    const rect = mainElement.getBoundingClientRect()
     const scrollThreshold = 100
+    const viewportHeight = window.innerHeight
 
-    if (e.clientY < rect.top + scrollThreshold && mainElement.scrollTop > 0) {
+    // Check if dragging near top of viewport
+    if (e.clientY < scrollThreshold && window.scrollY > 0) {
         startAutoScroll('up')
-    } else if (e.clientY > rect.bottom - scrollThreshold && mainElement.scrollTop < mainElement.scrollHeight - mainElement.clientHeight) {
+    }
+    // Check if dragging near bottom of viewport
+    else if (e.clientY > viewportHeight - scrollThreshold && window.scrollY < document.documentElement.scrollHeight - viewportHeight) {
         startAutoScroll('down')
     } else {
         stopAutoScroll()
