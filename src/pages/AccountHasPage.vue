@@ -668,6 +668,7 @@ td {
     border: 1px solid rgba(255, 255, 255, 0.12);
     display: block;
     transition: transform 0.15s ease;
+    border: 2px solid transparent;
 }
 
 @media (max-width: 768px) {
@@ -689,18 +690,15 @@ td {
 }
 
 .limited-border {
-    border: 2px solid red;
+    border-color: red !important;
 }
 
 .not-limited-border {
-    border: 2px solid rgb(255, 255, 0);
-}
-
-.default-border {
-    border: none;
+    border-color: rgb(255, 255, 0) !important;
 }
 
 .completed-glow {
+    border-color: rgba(255, 215, 0, 0.7);
     box-shadow:
         0 0 5px 1px rgba(255, 215, 0, 0.7),
         0 0 15px 3px rgba(255, 190, 0, 0.25);
