@@ -458,7 +458,7 @@ const dragOver = ref<number | null>(null)
 const onDragStart = (ch: Character, e: DragEvent) => {
     if (isReadonly.value) return
     draggedChar.value = ch
-    
+
     // Override Safari's default behaviour of dragging the <img> or <a>
     if (e.dataTransfer) {
         e.dataTransfer.setData('text/plain', String(ch.id))
@@ -687,6 +687,10 @@ td {
     display: block;
     transition: transform 0.15s ease;
     border: 2px solid transparent;
+
+    -webkit-user-drag: none;
+    user-drag: none;
+    -webkit-touch-callout: none;
 }
 
 @media (max-width: 768px) {
@@ -874,6 +878,7 @@ td {
 .character-img-wrapper {
     position: relative;
     display: inline-block;
+    touch-action: none;
 }
 
 .character-img-wrapper a {
