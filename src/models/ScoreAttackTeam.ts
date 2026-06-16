@@ -645,10 +645,10 @@ export class ScoreAttackTeam {
                 const effect_elem_factor = 1 + (enemy.isWeak ? 0.2 + elem_dmg_up : 0);
 
                 const crit_dmg =
-                    (this.dps.baseCritDamage +
-                        this.getAllyEffect(DPS_IDX, "UP_CTD_FIXED", amountOfEnemies, enemy.maxBreak) +
-                        this.getAllyEffect(DPS_IDX, "UP_CTD_RATIO", amountOfEnemies, enemy.maxBreak) +
-                        this.getAllyEffect(DPS_IDX, "UP_CTD_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) /
+                    (this.allyContexts[allyIdx].kioku.baseCritDamage +
+                        this.getAllyEffect(allyIdx, "UP_CTD_FIXED", amountOfEnemies, enemy.maxBreak) +
+                        this.getAllyEffect(allyIdx, "UP_CTD_RATIO", amountOfEnemies, enemy.maxBreak) +
+                        this.getAllyEffect(allyIdx, "UP_CTD_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) /
                     1000;
                 const crit_factor = 1 + (enemy.isCrit && isVortex ? crit_dmg : 0);
 
@@ -718,7 +718,6 @@ export class ScoreAttackTeam {
 
                 nrHitThatKills--;
             });
-
             total_dmg += delta_dmg;
         }
 
@@ -894,16 +893,15 @@ export class ScoreAttackTeam {
             }
             if (this.dps.name === "Melodia Appassionata") {
                 dot_total_dmg = this.calc_base_dmg(
-                    (this.dps.effects.find(e => {
-                        const skillId = skillDetailId(e).toString()
-                        return skillId.startsWith("1185") && skillId.endsWith("04")
-                    })?.value1 ?? 0) / 1000, base_atk) *
+                    (this.dps.effects.find(e => e.abilityEffectType === "VORTEX_ATK" && skillDetailId(e).toString().startsWith("1185"))?.value1 ?? 0) / 1000, base_atk
+                ) *
                     def_factor *
                     dmg_dealt_factor *
                     dmg_taken_factor *
                     elem_resist_factor *
                     effect_elem_factor *
-                    break_factor;
+                    break_factor *
+                    crit_factor;
             } else {
                 dot_total_dmg += this.add_dot_dmg(enemy, idx, currentAmountOfEnemies, true);
             }
