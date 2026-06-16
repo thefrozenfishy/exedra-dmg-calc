@@ -344,7 +344,9 @@ const getCrysCount = (ch: Character, filterOutOffElement: boolean): number => {
 }
 
 const isMaxHeartLevel = (ch: Character): boolean => showHearts.value ? ch.heartphialLvl === KiokuConstants.maxHeartphialLvl : true
-const isMaxMagicAndSpecialLevel = (ch: Character): boolean => showLevels.value ? ch.magicLvl === KiokuConstants.maxMagicLvl && (getMaxSpecialLvl(ch) === ch.specialLvl || ch.rarity === 3) : true
+const isMaxMagicAndSpecialLevel = (ch: Character): boolean => showLevels.value ? ch.magicLvl === KiokuConstants.maxMagicLvl
+    // Since Fuuka sp10 breaks her for pvp allow sp9 to also be considered completed
+    && ((ch.name === "Final Fatebloom" && ch.ascension === 5 ? 9 : getMaxSpecialLvl(ch)) <= ch.specialLvl || ch.rarity === 3) : true
 const isMaxCrysCollected = (ch: Character): boolean => showCrys.value ? getCrysCount(ch, true) === maxCrysCount : true
 const isCompleted = (ch: Character): boolean => (ch.enabled || ch.rarity !== 5 || ch.name === "Lux☆Magica") && isMaxHeartLevel(ch) && isMaxMagicAndSpecialLevel(ch) && isMaxCrysCollected(ch)
 const shouldHighlightCompleted = (ch: Character): boolean => highlightCompleted.value && isCompleted(ch)
