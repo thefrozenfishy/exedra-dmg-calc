@@ -67,16 +67,16 @@
                                 'editing-active': editing?.id === ch.id
                             }">
                                 <a v-if="!isTouchDevice" :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank"
-                                    @contextmenu.prevent>
+                                    @contextmenu.prevent @dragstart.prevent>
                                     <img class="character-img"
                                         :class="[borderClass(ch), { 'completed-glow': shouldHighlightCompleted(ch) }]"
                                         :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
-                                        :title="makeTitle(ch)" />
+                                        :title="makeTitle(ch)" draggable="false" />
                                 </a>
                                 <img v-else class="character-img"
                                     :class="[borderClass(ch), { 'completed-glow': shouldHighlightCompleted(ch) }]"
                                     :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
-                                    :title="makeTitle(ch)" @contextmenu.prevent />
+                                    :title="makeTitle(ch)" @contextmenu.prevent draggable="false" />
                                 <template v-if="showCrys && (chars as any).label !== 'Not Owned'">
                                     <router-link v-if="!isTouchDevice" class="crys-count-badge level-badge crys-link"
                                         :to="{
