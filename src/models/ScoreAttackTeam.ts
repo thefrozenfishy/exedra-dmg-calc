@@ -631,6 +631,7 @@ export class ScoreAttackTeam {
                     (this.getAllyEffect(allyIdx, "UP_GIV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
                         this.getAllyEffect(allyIdx, "UP_GIV_DMG_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) +
                         this.getAllyEffect(allyIdx, "UP_GIV_SLIP_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
+                        this.getAllyEffect(allyIdx, "UP_GIV_VORTEX_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
                         this.getAllyEffect(allyIdx, "UP_ELEMENT_DMG_RATE_RATIO", amountOfEnemies, enemy.maxBreak)) /
                     1000;
 
@@ -643,6 +644,14 @@ export class ScoreAttackTeam {
                     this.getAllyEffect(allyIdx, "UP_WEAK_ELEMENT_DMG_RATIO", amountOfEnemies, enemy.maxBreak) / 1000;
                 const effect_elem_factor = 1 + (enemy.isWeak ? 0.2 + elem_dmg_up : 0);
 
+                const crit_dmg =
+                    (this.dps.baseCritDamage +
+                        this.getAllyEffect(DPS_IDX, "UP_CTD_FIXED", amountOfEnemies, enemy.maxBreak) +
+                        this.getAllyEffect(DPS_IDX, "UP_CTD_RATIO", amountOfEnemies, enemy.maxBreak) +
+                        this.getAllyEffect(DPS_IDX, "UP_CTD_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) /
+                    1000;
+                const crit_factor = 1 + (enemy.isCrit && isVortex ? crit_dmg : 0);
+
                 total +=
                     base *
                     ally_def_factor *
@@ -650,7 +659,8 @@ export class ScoreAttackTeam {
                     (1 + dmg_taken) *
                     (1 + elem_res_down) *
                     effect_elem_factor *
-                    break_factor;
+                    break_factor *
+                    crit_factor;
             }
         }
 
