@@ -455,9 +455,16 @@ const commitEdit = async (ch: Character, field: EditableField) => {
 const draggedChar = ref<Character | null>(null)
 const dragOver = ref<number | null>(null)
 
-const onDragStart = (ch: Character) => {
+const onDragStart = (ch: Character, e: DragEvent) => {
     if (isReadonly.value) return
     draggedChar.value = ch
+    
+    // Override Safari's default behaviour of dragging the <img> or <a>
+    if (e.dataTransfer) {
+        e.dataTransfer.setData('text/plain', String(ch.id))
+        const wrapper = (e.currentTarget as HTMLElement)
+        e.dataTransfer.setDragImage(wrapper, wrapper.offsetWidth / 2, wrapper.offsetHeight / 2)
+    }
 }
 
 const onDrop = (targetIndex: number) => {
