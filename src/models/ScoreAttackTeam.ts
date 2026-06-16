@@ -118,27 +118,36 @@ const skippable = new Set([
 ]);
 
 const bannedEffects: Set<string> = new Set([
-    "65101002", // Sakurako passive is listed multiple places
-    "65101003", // Sakurako passive is listed multiple places
-    "12701003", // Yotsugi too
-    "12721005", // Yotsugi too
-    "65261003", // Kanagi fua
-    "65251003", // Kanagi fua
-    "65281002", // Smura fua
-    "65291002", // Smura fua
-    "150301002", // SSaya passive stack
-    "150301003", // SSaya passive stack
-    "150301004", // SSaya passive stack
-    "150301005", // SSaya passive stack
-    "150301006", // SSaya passive stack
-    "150301007", // SSaya passive stack
-    "150301008", // SSaya passive stack
-    "150301009", // SSaya passive stack
-    "150301010", // SSaya passive stack
+    // Sakurako passive is listed multiple places
+    "65101002",
+    "65101003",
+    // Yotsugi too
+    "12701003",
+    "12721005",
+    // Kanagi fua
+    "65261003",
+    "65251003",
+    // Smura fua
+    "65281002",
+    "65291002",
+    // Why the fuck does SSaya passive have so many stack things???
+    "150301001",
+    "150301002",
+    "150301003",
+    "150301004",
+    "150301005",
+    "150301006",
+    "150301007",
+    "150301008",
+    "150301009",
+    "150301010",
+    "150301011",
+    "850441002",
+    "850441003",
 ]);
 
 const effectIsBanned = (detail: SkillDetail): boolean => {
-    // Becasue then I dont have to add all the levels
+    // Because then I dont have to add all the levels
     const id = skillDetailId(detail).toString();
     return bannedEffects.has(id.slice(0, -4) + "10" + id.slice(-2));
 }
@@ -593,10 +602,10 @@ export class ScoreAttackTeam {
 
             for (const eff of this.allyContexts[allyIdx].kioku.effects) {
                 const dotType = eff.abilityEffectType.replace("_ATK", "") as Aliment;
-                if (dotType === Aliment.VORTEX) { 
+                if (dotType === Aliment.VORTEX) {
                     if (!isVortex) continue
                     if (skillDetailId(eff).toString().startsWith("1185")) continue
-                 }
+                }
                 else { if (isVortex) continue }
 
                 if (
