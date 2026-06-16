@@ -126,6 +126,15 @@ const bannedEffects: Set<string> = new Set([
     "65251003", // Kanagi fua
     "65281002", // Smura fua
     "65291002", // Smura fua
+    "150301002", // SSaya passive stack
+    "150301003", // SSaya passive stack
+    "150301004", // SSaya passive stack
+    "150301005", // SSaya passive stack
+    "150301006", // SSaya passive stack
+    "150301007", // SSaya passive stack
+    "150301008", // SSaya passive stack
+    "150301009", // SSaya passive stack
+    "150301010", // SSaya passive stack
 ]);
 
 const effectIsBanned = (detail: SkillDetail): boolean => {
@@ -857,6 +866,19 @@ export class ScoreAttackTeam {
             base_dmg += add_dmg;
             if (this.hasDpsDotPop) {
                 dot_total_dmg = this.add_dot_dmg(enemy, idx, currentAmountOfEnemies);
+            } else if (this.dps.name === "Melodia Appassionata") {
+                console.log("found", this.dps.effects.find(e => skillDetailId(e).toString().startsWith("1185") && skillDetailId(e).toString().endsWith("04")))
+                dot_total_dmg = this.calc_base_dmg(
+                    (this.dps.effects.find(e => {
+                        const skillId = skillDetailId(e).toString()
+                        return skillId.startsWith("1185") && skillId.endsWith("04")
+                    })?.value1 ?? 0) / 1000, base_atk) *
+                    def_factor *
+                    dmg_dealt_factor *
+                    dmg_taken_factor *
+                    elem_resist_factor *
+                    effect_elem_factor *
+                    break_factor;
             }
         }
 
