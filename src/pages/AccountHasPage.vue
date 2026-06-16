@@ -50,17 +50,17 @@
         <table class="ascension-table" @click.self="isTouchJiggleMode = false">
             <tbody @click.self="isTouchJiggleMode = false">
                 <tr :data-index="index" :class="{ 'drag-over': dragOver === index }"
-                    @dragover.prevent="dragOver = index" @dragleave="dragLeave"
-                    @drop="onDrop(index)" @click.self="isTouchJiggleMode = false"
-                    v-for="(chars, index) in groupedByAscension" :key="index" class="asc-row">
+                    @dragover.prevent="dragOver = index" @dragleave="dragLeave" @drop="onDrop(index)"
+                    @click.self="isTouchJiggleMode = false" v-for="(chars, index) in groupedByAscension" :key="index"
+                    class="asc-row">
 
                     <td class="asc-cell" @click="isTouchJiggleMode = false">{{ (chars as any).label }}</td>
 
                     <td class="characters-cell" @click.self="isTouchJiggleMode = false">
-                        <div v-for="ch in chars" :key="ch.id" :draggable="!isTouchDevice" @dragstart="onDragStart(ch, $event)"
-                            @touchstart="onTouchStart(ch, $event)" @touchmove="onTouchMove($event)"
-                            @touchend="onTouchEnd($event)" :class="{ 'jiggling': isTouchJiggleMode }"
-                            @contextmenu.prevent>
+                        <div v-for="ch in chars" :key="ch.id" :draggable="!isTouchDevice"
+                            @dragstart="onDragStart(ch, $event)" @touchstart="onTouchStart(ch, $event)"
+                            @touchmove="onTouchMove($event)" @touchend="onTouchEnd($event)"
+                            :class="{ 'jiggling': isTouchJiggleMode }" @contextmenu.prevent>
                             <div class="character-img-wrapper" :class="{
                                 'completed-wrapper': shouldHighlightCompleted(ch),
                                 'completed-wrapper-diamond': shouldShinyHighlightCompleted(ch),
@@ -482,10 +482,11 @@ const dragLeave = (e: DragEvent) => {
 }
 
 const { clipboardSupported } = useClipboardSupport()
+const exportOpts = { exportClass: "exporting" }
 
-const downloadAscensionList = () => downloadImage("ascension.png", ".ascension-table")
-const copyAscensionList = () => copyImageToClipboard("ascension.png", ".ascension-table")
-const openAscensionListInNewTab = () => openImageInNewTab(".ascension-table")
+const downloadAscensionList = () => downloadImage("ascension.png", ".ascension-table", exportOpts)
+const copyAscensionList = () => copyImageToClipboard("ascension.png", ".ascension-table", exportOpts)
+const openAscensionListInNewTab = () => openImageInNewTab(".ascension-table", exportOpts)
 
 const copyHyperLink = async () => {
     try {
@@ -605,9 +606,17 @@ const onTouchEnd = (e: TouchEvent) => {
     color: var(--text);
 }
 
+.exporting {
+    width: 900px !important;
+}
+
 @media (max-width: 768px) {
     .ascension-list {
         max-width: 100%;
+    }
+
+    .exporting {
+        width: 830px !important;
     }
 }
 
