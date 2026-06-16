@@ -576,7 +576,7 @@ export class ScoreAttackTeam {
         return base_dmg;
     }
 
-    add_dot_dmg(enemy: Enemy, enemyIdx: number, amountOfEnemies: number): number {
+    add_dot_dmg(enemy: Enemy, enemyIdx: number, amountOfEnemies: number, isVortex: boolean): number {
         let total = 0;
 
         const def_remaining =
@@ -592,9 +592,15 @@ export class ScoreAttackTeam {
             let active_done = false;
 
             for (const eff of this.allyContexts[allyIdx].kioku.effects) {
-                const dotType = eff.abilityEffectType.replace("_ATK", "");
+                const dotType = eff.abilityEffectType.replace("_ATK", "") as Aliment;
+                if (dotType === Aliment.VORTEX) { 
+                    if (!isVortex) continue
+                    if (skillDetailId(eff).toString().startsWith("1185")) continue
+                 }
+                else { if (isVortex) continue }
+
                 if (
-                    !Object.values(Aliment).includes(dotType as Aliment) ||
+                    !Object.values(Aliment).includes(dotType) ||
                     !this.activeBuffsAndDebuffs.includes(dotType)
                 ) continue;
 
@@ -865,9 +871,9 @@ export class ScoreAttackTeam {
         if (special > 0 && enemy.enabled) {
             base_dmg += add_dmg;
             if (this.hasDpsDotPop) {
-                dot_total_dmg = this.add_dot_dmg(enemy, idx, currentAmountOfEnemies);
-            } else if (this.dps.name === "Melodia Appassionata") {
-                console.log("found", this.dps.effects.find(e => skillDetailId(e).toString().startsWith("1185") && skillDetailId(e).toString().endsWith("04")))
+                dot_total_dmg = this.add_dot_dmg(enemy, idx, currentAmountOfEnemies, false);
+            }
+            if (this.dps.name === "Melodia Appassionata") {
                 dot_total_dmg = this.calc_base_dmg(
                     (this.dps.effects.find(e => {
                         const skillId = skillDetailId(e).toString()
@@ -879,6 +885,8 @@ export class ScoreAttackTeam {
                     elem_resist_factor *
                     effect_elem_factor *
                     break_factor;
+            } else {
+                dot_total_dmg += this.add_dot_dmg(enemy, idx, currentAmountOfEnemies, true);
             }
         }
 
