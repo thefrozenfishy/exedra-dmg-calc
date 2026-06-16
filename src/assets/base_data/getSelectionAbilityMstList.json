@@ -4243,5 +4243,20 @@
         "targetType": 2,
         "value1": 1150063,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "On own special attack while Beachball's Boon is applied to self, grants 3 MP.<br>Decreases DMG taken by 5% for self and Attacker allies with Beachball's Boon.",
+        "name": "It's a Guava! They're Pretty Tasty!",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 148,
+        "selectionAbilityMstId": 7064,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10050201,
+        "targetType": 2,
+        "value1": 1150064,
+        "value2": 0
     }
 ]

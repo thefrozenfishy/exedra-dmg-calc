@@ -15752,6 +15752,62 @@
         "description": "自分が3ターンごとに（ターン9から）"
     },
     {
+        "battleConditionMstId": 1976,
+        "compareContent": 314,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "ブレイク中、且つ攻撃を受けたユニットが1体のとき"
+    },
+    {
+        "battleConditionMstId": 1977,
+        "compareContent": 314,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "2",
+        "description": "ブレイク中、且つ攻撃を受けたユニットが2体のとき"
+    },
+    {
+        "battleConditionMstId": 1978,
+        "compareContent": 314,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "3",
+        "description": "ブレイク中、且つ攻撃を受けたユニットが3体のとき"
+    },
+    {
+        "battleConditionMstId": 1979,
+        "compareContent": 314,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "4",
+        "description": "ブレイク中、且つ攻撃を受けたユニットが4体のとき"
+    },
+    {
+        "battleConditionMstId": 1980,
+        "compareContent": 314,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "5",
+        "description": "ブレイク中、且つ攻撃を受けたユニットが5体のとき"
+    },
+    {
+        "battleConditionMstId": 1981,
+        "compareContent": 20,
+        "compareOperator": 1,
+        "compareTarget": 2,
+        "compareValue": "Attacker",
+        "description": "行動者はアタッカー"
+    },
+    {
+        "battleConditionMstId": 1982,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "22",
+        "description": "自身の水着杏子の専用バフがあるとき"
+    },
+    {
         "battleConditionMstId": 1983,
         "compareContent": 201,
         "compareOperator": 1,
@@ -16030,6 +16086,14 @@
         "compareTarget": 5,
         "compareValue": "5",
         "description": "持続ダメージが発生した味方が5体のとき"
+    },
+    {
+        "battleConditionMstId": 2018,
+        "compareContent": 314,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "ブレイク中、且つ攻撃を受けたユニットが1体のとき"
     },
     {
         "battleConditionMstId": 2019,

@@ -15635,6 +15635,31 @@
         "description": "自分が3ターンごとに（ターン9から） AND 連続行動の3回目"
     },
     {
+        "battleConditionMstIdCsv": "1976,1",
+        "battleConditionSetMstId": 3160,
+        "description": "ブレイク中、且つ攻撃を受けたユニットが1体のとき+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "1977,1",
+        "battleConditionSetMstId": 3161,
+        "description": "ブレイク中、且つ攻撃を受けたユニットが2体のとき+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "1978,1",
+        "battleConditionSetMstId": 3162,
+        "description": "ブレイク中、且つ攻撃を受けたユニットが3体のとき+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "1979,1",
+        "battleConditionSetMstId": 3163,
+        "description": "ブレイク中、且つ攻撃を受けたユニットが4体のとき+行動者は仲間"
+    },
+    {
+        "battleConditionMstIdCsv": "1980,1",
+        "battleConditionSetMstId": 3164,
+        "description": "ブレイク中、且つ攻撃を受けたユニットが5体のとき+行動者は仲間"
+    },
+    {
         "battleConditionMstIdCsv": "2,1101",
         "battleConditionSetMstId": 3165,
         "description": "自軍にクリティカルダメージが発生しなかった場合"
@@ -15653,6 +15678,16 @@
         "battleConditionMstIdCsv": "975,1,655,7,962",
         "battleConditionSetMstId": 3168,
         "description": "自身以外の闇属性の仲間がダメージを与えたとき(必殺技発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "1982",
+        "battleConditionSetMstId": 3169,
+        "description": "自身に水着杏子が付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "880",
+        "battleConditionSetMstId": 3170,
+        "description": "トークンが50以上のとき"
     },
     {
         "battleConditionMstIdCsv": "1513,655,3",
@@ -15960,9 +15995,69 @@
         "description": "味方全体のデバフ数が15以上"
     },
     {
+        "battleConditionMstIdCsv": "1982,904",
+        "battleConditionSetMstId": 3232,
+        "description": "自身に水着杏子が付与されているとき+敵の対数が1体の時"
+    },
+    {
+        "battleConditionMstIdCsv": "1982,864",
+        "battleConditionSetMstId": 3233,
+        "description": "自身に水着杏子が付与されているとき+敵の対数が2体の時"
+    },
+    {
+        "battleConditionMstIdCsv": "1982,865",
+        "battleConditionSetMstId": 3234,
+        "description": "自身に水着杏子が付与されているとき+敵の対数が3体の時"
+    },
+    {
+        "battleConditionMstIdCsv": "1982,866",
+        "battleConditionSetMstId": 3235,
+        "description": "自身に水着杏子が付与されているとき+敵の対数が4体の時"
+    },
+    {
+        "battleConditionMstIdCsv": "1982,905",
+        "battleConditionSetMstId": 3236,
+        "description": "自身に水着杏子が付与されているとき+敵の対数が5体の時"
+    },
+    {
         "battleConditionMstIdCsv": "306,916",
         "battleConditionSetMstId": 3237,
         "description": "行動タイプが追撃/反撃 AND 攻撃されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,2018",
+        "battleConditionSetMstId": 3238,
+        "description": "行動者は仲間＋ブレイク中、且つ攻撃を受けたユニットが1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,1976,1399,1603",
+        "battleConditionSetMstId": 3239,
+        "description": "行動者は仲間＋ブレイク中、且つ攻撃を受けたユニットが1体のとき+敵の生存数が2体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,1976,1400,1603",
+        "battleConditionSetMstId": 3240,
+        "description": "行動者は仲間＋ブレイク中、且つ攻撃を受けたユニットが1体のとき+敵の生存数が3体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,1976,1401,1603",
+        "battleConditionSetMstId": 3241,
+        "description": "行動者は仲間＋ブレイク中、且つ攻撃を受けたユニットが1体のとき+敵の生存数が4体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,1976,1402,1603",
+        "battleConditionSetMstId": 3242,
+        "description": "行動者は仲間＋ブレイク中、且つ攻撃を受けたユニットが1体のとき+敵の生存数が5体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1758,6,640",
+        "battleConditionSetMstId": 3243,
+        "description": "チャージ50%以上+行動者は自分+戦闘スキルを発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,6,1603,962",
+        "battleConditionSetMstId": 3244,
+        "description": "行動者は味方+戦闘スキルを発動したとき+敵にダメージを与えたとき+行動者は自身以外"
     },
     {
         "battleConditionMstIdCsv": "2,7,420",
@@ -16105,6 +16200,61 @@
         "description": "敵の必殺技で自分が60000以上のダメージを受けた"
     },
     {
+        "battleConditionMstIdCsv": "1650,1695",
+        "battleConditionSetMstId": 3273,
+        "description": "トークンが1000以上のとき、アタッカーのみ"
+    },
+    {
+        "battleConditionMstIdCsv": "1982,3,7",
+        "battleConditionSetMstId": 3274,
+        "description": "自身に水着杏子が付与されているとき+自分は行動者+行動タイプは必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "973,987",
+        "battleConditionSetMstId": 3275,
+        "description": "行動者は水属性 AND 対象は水属性"
+    },
+    {
+        "battleConditionMstIdCsv": "973,988",
+        "battleConditionSetMstId": 3276,
+        "description": "行動者は水属性 AND 対象は光属性"
+    },
+    {
+        "battleConditionMstIdCsv": "973,990",
+        "battleConditionSetMstId": 3277,
+        "description": "行動者は水属性 AND 対象は闇属性"
+    },
+    {
+        "battleConditionMstIdCsv": "974,987",
+        "battleConditionSetMstId": 3278,
+        "description": "行動者は光属性 AND 対象は水属性"
+    },
+    {
+        "battleConditionMstIdCsv": "974,988",
+        "battleConditionSetMstId": 3279,
+        "description": "行動者は光属性 AND 対象は光属性"
+    },
+    {
+        "battleConditionMstIdCsv": "974,990",
+        "battleConditionSetMstId": 3280,
+        "description": "行動者は光属性 AND 対象は闇属性"
+    },
+    {
+        "battleConditionMstIdCsv": "976,987",
+        "battleConditionSetMstId": 3281,
+        "description": "行動者は闇属性 AND 対象は水属性"
+    },
+    {
+        "battleConditionMstIdCsv": "976,988",
+        "battleConditionSetMstId": 3282,
+        "description": "行動者は闇属性 AND 対象は光属性"
+    },
+    {
+        "battleConditionMstIdCsv": "976,990",
+        "battleConditionSetMstId": 3283,
+        "description": "行動者は闇属性 AND 対象は闇属性"
+    },
+    {
         "battleConditionMstIdCsv": "467,867",
         "battleConditionSetMstId": 3284,
         "description": "トークンが1以上5未満のとき"
@@ -16123,6 +16273,16 @@
         "battleConditionMstIdCsv": "1107",
         "battleConditionSetMstId": 3287,
         "description": "トークンが30以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,7,446",
+        "battleConditionSetMstId": 3288,
+        "description": "自身が毒状態の敵に必殺技でダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,7,435",
+        "battleConditionSetMstId": 3289,
+        "description": "味方が毒状態の敵に必殺技でダメージを与えたとき"
     },
     {
         "battleConditionMstIdCsv": "1",
@@ -16160,8 +16320,33 @@
         "description": "1度の攻撃でブレイクされた味方が5体"
     },
     {
+        "battleConditionMstIdCsv": "1981,655,6",
+        "battleConditionSetMstId": 3297,
+        "description": "行動者はアタッカー＋敵軍に1以上のダメージを与えたとき"
+    },
+    {
         "battleConditionMstIdCsv": "420,286,285",
         "battleConditionSetMstId": 3298,
         "description": "自身がブレイク状態ではなく、行動可能な状態で、魔力が5のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,6,655,1695",
+        "battleConditionSetMstId": 3299,
+        "description": "行動者は自分+戦闘スキルを発動したとき+敵チームに1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1650,1695",
+        "battleConditionSetMstId": 3306,
+        "description": "アタッカー(個別対象)＋トークンが1000以上の時"
+    },
+    {
+        "battleConditionMstIdCsv": "5,3",
+        "battleConditionSetMstId": 3308,
+        "description": "通常攻撃発動したとき+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "1403,1",
+        "battleConditionSetMstId": 3339,
+        "description": "行動者は仲間＋敵全体で1体でもブレイクしたとき"
     }
 ]
