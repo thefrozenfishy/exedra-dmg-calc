@@ -719,18 +719,21 @@ td {
 
 @keyframes platinum-pulse {
     0% {
+        border-color: rgba(210, 235, 255, 0.55);
         box-shadow:
             0 0 5px 2px rgba(210, 235, 255, 0.55),
             0 0 12px 2px rgba(185, 215, 240, 0.15);
     }
 
     50% {
+        border-color: rgba(225, 242, 255, 0.95);
         box-shadow:
             0 0 5px 2px rgba(225, 242, 255, 0.95),
             0 0 12px 2px rgba(195, 225, 248, 0.22);
     }
 
     100% {
+        border-color: rgba(210, 235, 255, 0.55);
         box-shadow:
             0 0 5px 2px rgba(210, 235, 255, 0.55),
             0 0 12px 2px rgba(185, 215, 240, 0.15);
