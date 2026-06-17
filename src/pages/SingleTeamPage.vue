@@ -39,9 +39,9 @@
                 <img :src="kiokuImage(slot.main)" :alt="slot.main.name" />
                 <div class="share-overlay-badges">
                   <span class="share-overlay-badge ascension">A{{ slot.main.ascension }}</span>
-                  <span class="share-overlay-badge heart">{{ slot.main.heartphialLvl }}</span>
-                  <span class="share-overlay-badge magic">{{ slot.main.magicLvl }}</span>
-                  <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">{{ slot.main.specialLvl
+                  <span class="share-overlay-badge heart">H{{ slot.main.heartphialLvl }}</span>
+                  <span class="share-overlay-badge magic">ML{{ slot.main.magicLvl }}</span>
+                  <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">{{ SPslot.main.specialLvl
                     }}</span>
                 </div>
               </div>
