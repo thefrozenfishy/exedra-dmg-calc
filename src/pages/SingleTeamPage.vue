@@ -33,7 +33,7 @@
       <div>{{ formatDmg(battleOutput) }}</div>
       <div class="share-card-grid">
         <div v-for="(slot, index) in team.slots" :key="index" class="share-slot">
-          <div v-if="slot.main">
+          <div v-if="slot?.main">
             <div class="share-slot-top">
               <div class="share-slot-kioku-image">
                 <img :src="kiokuImage(slot.main)" :alt="slot.main.name" />
@@ -41,7 +41,7 @@
                   <span class="share-overlay-badge ascension">A{{ slot.main.ascension }}</span>
                   <span class="share-overlay-badge heart">H{{ slot.main.heartphialLvl }}</span>
                   <span class="share-overlay-badge magic">ML{{ slot.main.magicLvl }}</span>
-                  <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">{{ SPslot.main.specialLvl
+                  <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">SP{{ slot.main.specialLvl
                     }}</span>
                 </div>
               </div>
