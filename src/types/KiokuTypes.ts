@@ -46,6 +46,15 @@ export enum KiokuRole {
     Defender = "Defender"
 }
 
+export const roleMap: Record<string, KiokuRole> = {
+  1: KiokuRole.Attacker,
+  2: KiokuRole.Breaker,
+  3: KiokuRole.Healer,
+  4: KiokuRole.Buffer,
+  5: KiokuRole.Debuffer,
+  6: KiokuRole.Defender,
+};
+
 export type SupportKey = KiokuRole | KiokuElement
 
 export const elementMap: Record<string, KiokuElement> = {

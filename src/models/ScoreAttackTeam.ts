@@ -1,7 +1,7 @@
 import { ScoreAttackKioku } from "./ScoreAttackKioku";
 import { EnemyTargetTypes, Enemy } from "../types/EnemyTypes";
 import { isActiveConditionRelevantForScoreAttack, isStartCondRelevantForScoreAttack } from "./BattleConditionParser";
-import { ActiveSkill, Aliment, elementMap, SkillDetail, skillDetailId } from "../types/KiokuTypes";
+import { ActiveSkill, Aliment, elementMap, roleMap, SkillDetail, skillDetailId } from "../types/KiokuTypes";
 
 
 const DPS_IDX = 2;
@@ -376,6 +376,7 @@ export class ScoreAttackTeam {
 
                         const targetCtx = this.allyContexts[targetIdx];
                         if (detail.element && elementMap[detail.element] !== targetCtx.kioku.data.element) continue;
+                        if (detail.role && roleMap[detail.role] !== targetCtx.kioku.data.role) continue;
 
                         const dbgToDps = targetIdx === DPS_IDX
                             ? sourceCtx.debugContributionsToDps
@@ -402,6 +403,7 @@ export class ScoreAttackTeam {
 
                             const dotCtx = this.allyContexts[dotIdx];
                             if (detail.element && elementMap[detail.element] !== dotCtx.kioku.data.element) continue;
+                            if (detail.role && roleMap[detail.role] !== dotCtx.kioku.data.role) continue;
 
                             const compositeKey = `${skillDetailId(detail)}_${charId}` as DotAllyCompositeKey;
                             const dotEnabled = this.enabledDotAllyEffects.has(compositeKey);
