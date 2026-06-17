@@ -30,6 +30,7 @@
     </div>
 
     <div class="share-card-preview" ref="shareCardRef">
+      <div>{{ formatDmg(battleOutput) }}</div>
       <div class="share-card-grid">
         <div v-for="(slot, index) in team.slots" :key="index" class="share-slot">
           <div v-if="slot.main">
