@@ -329,7 +329,7 @@ const shouldFilterOutOffElement = (elem: KiokuElement, selectionAbilityMstId: nu
     [0, elem].includes(getCrysElement(selectionAbilityMstId))
 
 const maxCrysCount = relevantCrys(10010101).filter(c => shouldFilterOutOffElement(KiokuElement.Light, c.selectionAbilityMstId)).length
-const hasElementalCrys = (ch: Character) => Object.entries(ch.crysOptions).some(([i, c]) => getCrysElement(Number(i)) === ch.element && c.enabled)
+const hasElementalCrys = (ch: Character) => ch?.crysOptions && Object.entries(ch.crysOptions).some(([i, c]) => getCrysElement(Number(i)) === ch.element && c.enabled)
 
 const getCrysCount = (ch: Character, filterOutOffElement: boolean): number => {
     if (!ch.crysOptions) return 0
