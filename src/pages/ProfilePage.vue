@@ -969,6 +969,7 @@ const analyticsPlayers = computed(() => {
 
     if (myPower.value) {
         list.push({
+            name: store.displayName || store.friendCode,
             power: myPower.value,
             similarity: 100,
             lim: myChars.value.lim,
@@ -980,6 +981,7 @@ const analyticsPlayers = computed(() => {
         if (!friend.power) continue
 
         list.push({
+            name: friend.nickname?.trim() || friend.display_name?.trim() || friend.friend_id,
             power: friend.power,
             similarity: friend.accountSimilarity || 0,
             lim: friend.kioku_count?.lim || 0,
@@ -1024,7 +1026,8 @@ const renderAnalyticsChart = () => {
                             label: `${selectedXAxis.value} vs ${selectedYAxis.value}`,
                             data: players.map(p => ({
                                 x: getMetricValue(p, selectedXAxis.value),
-                                y: getMetricValue(p, selectedYAxis.value)
+                                y: getMetricValue(p, selectedYAxis.value),
+                                name: p.name,
                             })),
                             backgroundColor: '#8e5bc7'
                         }
@@ -1062,6 +1065,17 @@ const renderAnalyticsChart = () => {
                                 text: selectedYAxis.value
                             }
                         }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label(ctx) {
+                                    const raw = ctx.raw as { x: number; y: number; name?: string }
+                                    const label = raw.name ? `${raw.name}: ` : ''
+                                    return `${label}(${raw.x}, ${raw.y})`
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1071,22 +1085,17 @@ const renderAnalyticsChart = () => {
     }
 
     const sorted = [...players]
-        .map(p =>
-            getMetricValue(
-                p,
-                selectedXAxis.value
-            )
-        )
-        .sort((a, b) => a - b)
+        .map(p => ({
+            value: getMetricValue(p, selectedXAxis.value),
+            name: p.name,
+        }))
+        .sort((a, b) => a.value - b.value)
 
-    const percentileData = sorted.map(
-        (value, index) => ({
-            x: value,
-            y:
-                ((index + 1) / sorted.length) *
-                100
-        })
-    )
+    const percentileData = sorted.map(({ value, name }, index) => ({
+        x: value,
+        y: ((index + 1) / sorted.length) * 100,
+        name,
+    }))
 
     analyticsChart = new Chart(
         analyticsCanvasRef.value,
@@ -1146,10 +1155,9 @@ const renderAnalyticsChart = () => {
                     tooltip: {
                         callbacks: {
                             label(ctx) {
-                                return (
-                                    `${ctx.parsed.y.toFixed(1)}% ` +
-                                    `below ${ctx.parsed.x}`
-                                )
+                                const raw = ctx.raw as { x: number; y: number; name?: string }
+                                const namePart = raw.name ? `${raw.name} — ` : ''
+                                return `${namePart}${ctx.parsed.y?.toFixed(1)}% below ${ctx.parsed.x}`
                             }
                         }
                     }
