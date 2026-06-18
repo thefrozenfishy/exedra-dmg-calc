@@ -1,6 +1,12 @@
 import { KiokuConstants, KiokuElement, KiokuRole, type Character } from "../types/KiokuTypes"
-import { isBeta, useBetaNumber, useBetaValue } from "../utils/betaSettings"
+import { useBetaNumber, useBetaValue } from "../utils/betaSettings"
 import { skewnormCdf } from "../utils/mathFuncs"
+
+export function countCharsObtained(chars: Character[]): { lim: number, perm: number } {
+    const relevant = chars.filter(c => c.rarity === 5 && c.enabled && c.name !== "Lux☆Magica")
+    const lim_amount = relevant.filter(c => c.obtain === "Exclusive").length
+    return { lim: lim_amount, perm: relevant.length - lim_amount }
+}
 
 export type PowerScores = {
     total: number
@@ -129,7 +135,7 @@ function getMaxPower(ch: Character, getPower: (character: Character) => number):
 function getModelF2PWhalePower(startDateMs: number = 1742947200000): number {
     const monthMs = 1000 * 60 * 60 * 24 * 30
     const months = (Math.floor(Date.now()) - startDateMs) / monthMs
-    return 247 * months + 4600 * (1 - Math.exp(-months / 4)) + 300 
+    return 247 * months + 4600 * (1 - Math.exp(-months / 4)) + 300
 }
 
 function remap(v: number, min: number, max: number, normExp: number): number {
@@ -145,7 +151,7 @@ function normalize(current: number, max: number, minNorm: number, maxNorm: numbe
 
 function normalizeWhale(current: number, max: number, minNorm: number, maxNorm: number): number {
     const a = useBetaNumber("whaleSkewNormA")
-    const loc = useBetaNumber("whaleSkewNormLoc") 
+    const loc = useBetaNumber("whaleSkewNormLoc")
     const scale = useBetaNumber("whaleSkewNormScale")
 
     if (max <= 0) return 0

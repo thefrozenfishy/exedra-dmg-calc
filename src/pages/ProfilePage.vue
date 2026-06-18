@@ -153,7 +153,7 @@
                             </div>
                         </div>
 
-                        <div class="role-grid-compact role-grid-3-compact">
+                        <div class="role-grid-compact role-grid-4-compact">
                             <div class="mini-power-box" title="Attacker power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Attacker.png'" />
                                 <span>{{ myPower[KiokuRole.Attacker] }}</span>
@@ -169,6 +169,11 @@
                                 <span>{{ myPower[KiokuRole.Debuffer] }}</span>
                             </div>
 
+                            <div v-if="!isTouchDevice" class="mini-power-box" title="Nr of standard 5☆ Kioku owned">
+                                <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
+                                <span>{{ myChars.perm }}</span>
+                            </div>
+
                             <div class="mini-power-box" title="Breaker power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Breaker.png'" />
                                 <span>{{ myPower[KiokuRole.Breaker] }}</span>
@@ -182,6 +187,16 @@
                             <div class="mini-power-box" title="Healer power rating">
                                 <img :src="'/exedra-dmg-calc/roles/Healer.png'" />
                                 <span>{{ myPower[KiokuRole.Healer] }}</span>
+                            </div>
+
+                            <div v-if="isTouchDevice" class="mini-power-box" title="Nr of standard 5☆ Kioku owned">
+                                <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
+                                <span>{{ myChars.perm }}</span>
+                            </div>
+
+                            <div class="mini-power-box" title="Nr of limited 5☆ Kioku owned">
+                                <img class="lim-icon" :src="'/exedra-dmg-calc/lim-kioku.png'" />
+                                <span>{{ myChars.lim }}</span>
                             </div>
                         </div>
 
@@ -333,7 +348,7 @@
                                 </div>
                             </div>
 
-                            <div class="role-grid-compact role-grid-4-compact">
+                            <div class="role-grid-compact role-grid-5-compact">
                                 <div class="mini-power-box" title="Attacker power rating">
                                     <img :src="'/exedra-dmg-calc/roles/Attacker.png'" alt="Attacker" />
                                     <span>{{ friend.power[KiokuRole.Attacker] }}</span>
@@ -354,6 +369,11 @@
                                     <span>{{ friend.accountSimilarity }}</span>
                                 </div>
 
+                                <div v-if="!isTouchDevice" class="mini-power-box" title="Nr of standard 5☆ Kioku owned">
+                                    <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
+                                    <span>{{ friend.kioku_count?.perm }}</span>
+                                </div>
+
                                 <div class="mini-power-box" title="Breaker power rating">
                                     <img :src="'/exedra-dmg-calc/roles/Breaker.png'" alt="Breaker" />
                                     <span>{{ friend.power[KiokuRole.Breaker] }}</span>
@@ -372,6 +392,16 @@
                                 <div v-if="!isTouchDevice" class="mini-power-box" title="Whale power">
                                     <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale" />
                                     <span>{{ friend.power.whale }}</span>
+                                </div>
+
+                                <div v-if="isTouchDevice" class="mini-power-box" title="Nr of standard 5☆ Kioku owned">
+                                    <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
+                                    <span>{{ friend.kioku_count?.perm }}</span>
+                                </div>
+
+                                <div class="mini-power-box" title="Nr of limited 5☆ Kioku owned">
+                                    <img class="lim-icon" :src="'/exedra-dmg-calc/lim-kioku.png'" />
+                                    <span>{{ friend.kioku_count?.lim }}</span>
                                 </div>
                             </div>
                         </div>
@@ -426,7 +456,7 @@ import { onMounted, onBeforeUnmount, ref, computed, watch } from 'vue'
 import { toast } from 'vue3-toastify'
 import { SocialProfile, useFriendStore } from '../store/friendStore'
 import { getUserId } from '../store/user'
-import { getPowerScores } from '../models/PowerValue'
+import { countCharsObtained, getPowerScores } from '../models/PowerValue'
 import { useCharacterStore } from '../store/characterStore'
 import { useSetting } from '../store/settingsStore'
 import { KiokuRole } from '../types/KiokuTypes'
@@ -539,9 +569,8 @@ const exportData = () => {
     URL.revokeObjectURL(url)
 }
 
-const myPower = computed(() =>
-    getPowerScores(characterStore.characters)
-)
+const myPower = computed(() => getPowerScores(characterStore.characters))
+const myChars = computed(() => countCharsObtained(characterStore.characters))
 const editingFriend = ref<string | null>(null)
 const pendingNickname = ref('')
 
@@ -609,13 +638,10 @@ onBeforeUnmount(() => {
 })
 
 const editingSelfName = ref(false)
-
 const pendingDisplayName = ref('')
-
 const showAvatarPicker = ref(false)
+const iconPicker = computed(() => [...characterStore.characters].sort((a, b) => a.id - b.id))
 
-const iconPicker = computed(() => [...characterStore.characters].sort((a, b) => a.id - b.id)
-)
 const selectAvatar = async (id: number) => {
     store.profile_icon = id
 
@@ -1601,20 +1627,20 @@ a.link {
     gap: 0.45rem;
 }
 
+.role-grid-5-compact {
+    grid-template-columns: repeat(5, 1fr);
+}
+
 .role-grid-4-compact {
     grid-template-columns: repeat(4, 1fr);
 }
 
-.role-grid-3-compact {
-    grid-template-columns: repeat(3, 1fr);
-}
-
 @media (max-width: 480px) {
-    .role-grid-4-compact {
+    .role-grid-5-compact {
         grid-template-columns: repeat(3, 1fr);
     }
 
-    .role-grid-3-compact {
+    .role-grid-4-compact {
         grid-template-columns: repeat(3, 1fr);
     }
 }
@@ -1625,7 +1651,7 @@ a.link {
 
     gap: 0.35rem;
 
-    min-width: 72px;
+    min-width: 64px;
 
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1639,6 +1665,12 @@ a.link {
     width: 16px;
     height: 16px;
     object-fit: contain;
+}
+
+img.lim-icon {
+    height: 25px;
+    width: 25px;
+    margin: -10px -5px;
 }
 
 .mini-power-box span {
@@ -1820,14 +1852,14 @@ a.link {
    Mobile
 ========================= */
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
     .friend-card {
         flex-direction: column;
         align-items: stretch;
     }
 
     .friend-power {
-        justify-content: flex-start;
+        justify-content: center;
         flex-wrap: wrap;
     }
 

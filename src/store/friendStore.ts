@@ -16,7 +16,7 @@ import {
     getAllUnionNames,
     loadAllPlayers,
 } from '../store/cloud'
-import { getPowerScores, PowerScores } from '../models/PowerValue'
+import { countCharsObtained, getPowerScores, PowerScores } from '../models/PowerValue'
 import { useCharacterStore } from '../store/characterStore'
 import { getAccountSimilarityScore } from '../models/AccountSimilarityScore'
 import { Character } from '../types/KiokuTypes'
@@ -31,6 +31,7 @@ export interface SocialProfile {
     isFriend?: boolean
     isUnionMember?: boolean
     power?: PowerScores
+    kioku_count?: { lim: number, perm: number }
     accountSimilarity?: number
 }
 
@@ -138,11 +139,12 @@ export const useFriendStore = defineStore('friendStore', () => {
             await Promise.all(
                 friends.value.map(async friend => {
                     try {
-                        const rows = await loadCharactersByFriendCode(                            friend.friend_id                        )
+                        const rows = await loadCharactersByFriendCode(friend.friend_id)
 
                         const chars = characterStore.mergeChars(rows) as Character[]
 
                         friend.power = getPowerScores(chars)
+                        friend.kioku_count = countCharsObtained(chars)
                         friend.accountSimilarity = getAccountSimilarityScore(characterStore.characters, chars)
                     } catch (err) {
                         console.error(
