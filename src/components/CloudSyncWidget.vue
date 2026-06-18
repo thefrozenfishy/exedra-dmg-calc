@@ -44,11 +44,11 @@
 
         <template v-else>
             <button @click="createAccount">
-                Click to Sync Profile
+                Create New Profile
             </button>
 
             <button @click="showRestore = true">
-                Load Profile
+                Load Existing Profile
             </button>
 
             <div class="help-tooltip">
