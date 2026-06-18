@@ -169,9 +169,10 @@
                                 <span>{{ myPower[KiokuRole.Debuffer] }}</span>
                             </div>
 
-                            <div v-if="!isTouchDevice" class="mini-power-box" title="Nr of standard 5☆ Kioku owned">
+                            <div v-if="!isTouchDevice" class="mini-power-box"
+                                title="Nr of standard 5☆ Kioku owned (Ascensions)">
                                 <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
-                                <span>{{ myChars.perm }}</span>
+                                <span>{{ myChars.perm }} ({{ myChars.permAs }})</span>
                             </div>
 
                             <div class="mini-power-box" title="Breaker power rating">
@@ -189,14 +190,15 @@
                                 <span>{{ myPower[KiokuRole.Healer] }}</span>
                             </div>
 
-                            <div v-if="isTouchDevice" class="mini-power-box" title="Nr of standard 5☆ Kioku owned">
+                            <div v-if="isTouchDevice" class="mini-power-box"
+                                title="Nr of standard 5☆ Kioku owned (Ascensions)">
                                 <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
-                                <span>{{ myChars.perm }}</span>
+                                <span>{{ myChars.perm }} ({{ myChars.permAs }})</span>
                             </div>
 
-                            <div class="mini-power-box" title="Nr of limited 5☆ Kioku owned">
+                            <div class="mini-power-box" title="Nr of limited 5☆ Kioku owned (Ascensions)">
                                 <img class="lim-icon" :src="'/exedra-dmg-calc/lim-kioku.png'" />
-                                <span>{{ myChars.lim }}</span>
+                                <span>{{ myChars.lim }} ({{ myChars.limAs }})</span>
                             </div>
                         </div>
 
@@ -266,8 +268,16 @@
                             Permanent Characters
                         </option>
 
+                        <option value="permAs">
+                            Permanent Character Ascensions
+                        </option>
+
                         <option value="lim">
                             Limited Characters
+                        </option>
+
+                        <option value="limAs">
+                            Limited Character Ascensions
                         </option>
                     </select>
 
@@ -377,9 +387,10 @@
                                     <span>{{ friend.accountSimilarity }}</span>
                                 </div>
 
-                                <div v-if="!isTouchDevice" class="mini-power-box" title="Nr of standard 5☆ Kioku owned">
+                                <div v-if="!isTouchDevice" class="mini-power-box"
+                                    title="Nr of standard 5☆ Kioku owned (Ascensions)">
                                     <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
-                                    <span>{{ friend.kioku_count?.perm }}</span>
+                                    <span>{{ friend.kioku_count?.perm }} ({{ friend.kioku_count?.permAs }})</span>
                                 </div>
 
                                 <div class="mini-power-box" title="Breaker power rating">
@@ -402,14 +413,15 @@
                                     <span>{{ friend.power.whale }}</span>
                                 </div>
 
-                                <div v-if="isTouchDevice" class="mini-power-box" title="Nr of standard 5☆ Kioku owned">
+                                <div v-if="isTouchDevice" class="mini-power-box"
+                                    title="Nr of standard 5☆ Kioku owned (Ascensions)">
                                     <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
-                                    <span>{{ friend.kioku_count?.perm }}</span>
+                                    <span>{{ friend.kioku_count?.perm }} ({{ friend.kioku_count?.permAs }})</span>
                                 </div>
 
-                                <div class="mini-power-box" title="Nr of limited 5☆ Kioku owned">
+                                <div class="mini-power-box" title="Nr of limited 5☆ Kioku owned (Ascensions)">
                                     <img class="lim-icon" :src="'/exedra-dmg-calc/lim-kioku.png'" />
-                                    <span>{{ friend.kioku_count?.lim }}</span>
+                                    <span>{{ friend.kioku_count?.lim }} ({{ friend.kioku_count?.limAs }})</span>
                                 </div>
                             </div>
                         </div>
@@ -526,7 +538,9 @@ const exportData = () => {
         'whale',
         'similarity',
         'standard_kioku',
+        'standard_kioku(A)',
         'limited_kioku',
+        'limited_kioku(A)',
     ])
 
     if (myPower.value) {
@@ -545,7 +559,9 @@ const exportData = () => {
             myPower.value.whale,
             '',
             myChars.value.perm,
+            myChars.value.permAs,
             myChars.value.lim,
+            myChars.value.limAs,
         ])
     }
 
@@ -565,7 +581,9 @@ const exportData = () => {
             f.power?.whale,
             f.accountSimilarity,
             f.kioku_count?.perm,
+            f.kioku_count?.permAs,
             f.kioku_count?.lim,
+            f.kioku_count?.limAs,
         ])
     }
 
@@ -672,7 +690,21 @@ const selectAvatar = async (id: number) => {
     )
 }
 
-type SortModes = 'default' | 'name' | 'total' | 'whale' | 'attacker' | 'buffer' | 'debuffer' | 'breaker' | 'defender' | 'healer' | "similarity" | "lim" | "perm"
+type SortModes = 'default'
+    | 'name'
+    | 'total'
+    | 'whale'
+    | 'attacker'
+    | 'buffer'
+    | 'debuffer'
+    | 'breaker'
+    | 'defender'
+    | 'healer'
+    | "similarity"
+    | "lim"
+    | "limAs"
+    | "perm"
+    | "permAs"
 const sortMode = useSetting<SortModes>("sortMode", "default")
 const showGraph = useSetting<boolean>("showAnalyticsGraph", false)
 
@@ -735,8 +767,16 @@ const sortedFriends = computed(() => {
                 diff = (b.kioku_count?.perm || 0) - (a.kioku_count?.perm || 0)
                 break
 
+            case 'permAs':
+                diff = (b.kioku_count?.permAs || 0) - (a.kioku_count?.permAs || 0)
+                break
+
             case 'lim':
                 diff = (b.kioku_count?.lim || 0) - (a.kioku_count?.lim || 0)
+                break
+
+            case 'limAs':
+                diff = (b.kioku_count?.limAs || 0) - (a.kioku_count?.limAs || 0)
                 break
         }
 
@@ -956,8 +996,16 @@ const graphOptions = [
         value: 'perm'
     },
     {
+        label: 'Permanent Ascensions',
+        value: 'permAs'
+    },
+    {
         label: 'Limiteds',
         value: 'lim'
+    },
+    {
+        label: 'Limited Ascensions',
+        value: 'limAs'
     },
 ]
 
@@ -973,7 +1021,9 @@ const analyticsPlayers = computed(() => {
             power: myPower.value,
             similarity: 100,
             lim: myChars.value.lim,
+            limAs: myChars.value.limAs,
             perm: myChars.value.perm,
+            permAs: myChars.value.permAs,
         })
     }
 
@@ -985,7 +1035,9 @@ const analyticsPlayers = computed(() => {
             power: friend.power,
             similarity: friend.accountSimilarity || 0,
             lim: friend.kioku_count?.lim || 0,
+            limAs: friend.kioku_count?.limAs || 0,
             perm: friend.kioku_count?.perm || 0,
+            permAs: friend.kioku_count?.permAs || 0,
         })
     }
 
@@ -993,7 +1045,7 @@ const analyticsPlayers = computed(() => {
 })
 
 const getMetricValue = (player: any, metric: string) => {
-    if (['similarity', 'lim', 'perm'].includes(metric)) {
+    if (['similarity', 'lim', 'perm', 'limAs', 'permAs'].includes(metric)) {
         return player[metric] || 0
     }
 
@@ -1002,7 +1054,9 @@ const getMetricValue = (player: any, metric: string) => {
 
 const getMaxTick = (axisLabel: string) => {
     if (axisLabel === "perm") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica" && c.obtain !== "Exclusive").length
+    if (axisLabel === "permAs") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica" && c.obtain !== "Exclusive").length * 6
     if (axisLabel === "lim") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica" && c.obtain === "Exclusive").length
+    if (axisLabel === "limAs") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica" && c.obtain === "Exclusive").length * 6
     return 100
 }
 

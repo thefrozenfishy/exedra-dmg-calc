@@ -2,10 +2,18 @@ import { KiokuConstants, KiokuElement, KiokuRole, type Character } from "../type
 import { useBetaNumber, useBetaValue } from "../utils/betaSettings"
 import { skewnormCdf } from "../utils/mathFuncs"
 
-export function countCharsObtained(chars: Character[]): { lim: number, perm: number } {
+export function countCharsObtained(chars: Character[]): { lim: number,limAs: number, perm: number, permAs: number } {
     const relevant = chars.filter(c => c.rarity === 5 && c.enabled && c.name !== "Lux☆Magica")
-    const lim_amount = relevant.filter(c => c.obtain === "Exclusive").length
-    return { lim: lim_amount, perm: relevant.length - lim_amount }
+    const lims = relevant.filter(c => c.obtain === "Exclusive")
+    const perms = relevant.filter(c => c.obtain !== "Exclusive")
+    const limAs = lims.reduce((sum, ch) => sum + ch.ascension + 1, 0)
+    const permAs = perms.reduce((sum, ch) => sum + ch.ascension + 1, 0)
+    return {
+        lim: lims.length,
+        limAs,
+        perm: perms.length,
+        permAs,
+    }
 }
 
 export type PowerScores = {

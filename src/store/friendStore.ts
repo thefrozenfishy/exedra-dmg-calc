@@ -31,7 +31,7 @@ export interface SocialProfile {
     isFriend?: boolean
     isUnionMember?: boolean
     power?: PowerScores
-    kioku_count?: { lim: number, perm: number }
+    kioku_count?: { lim: number, limAs: number, perm: number, permAs: number }
     accountSimilarity?: number
 }
 
