@@ -222,6 +222,7 @@
 
                     <label for="sortMode">Sort by:</label>
                     <select v-model="sortMode" id="sortMode">
+                        <option value="default">Default</option>
                         <option v-for="opt in graphOptions" :key="opt.value" :value="opt.value">
                             {{ opt.label }}
                         </option>
@@ -915,16 +916,16 @@ const graphOptions = [
         value: KiokuRole.Attacker
     },
     {
+        label: 'Breaker',
+        value: KiokuRole.Breaker
+    },
+    {
         label: 'Buffer',
         value: KiokuRole.Buffer
     },
     {
         label: 'Debuffer',
         value: KiokuRole.Debuffer
-    },
-    {
-        label: 'Breaker',
-        value: KiokuRole.Breaker
     },
     {
         label: 'Defender',
@@ -943,19 +944,19 @@ const graphOptions = [
         value: 'similarity'
     },
     {
-        label: 'Permanents',
+        label: 'Permanent kioku',
         value: 'perm'
     },
     {
-        label: 'Permanent Ascensions',
+        label: 'Permanent kioku ascensions',
         value: 'permAs'
     },
     {
-        label: 'Limiteds',
+        label: 'Limited kioku',
         value: 'lim'
     },
     {
-        label: 'Limited Ascensions',
+        label: 'Limited kioku ascensions',
         value: 'limAs'
     },
 ]
