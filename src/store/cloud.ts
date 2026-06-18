@@ -334,6 +334,7 @@ async function _loadAllPlayers() {
     const { data: profiles, error: profileError } = await supabase
         .from('public_profiles')
         .select('*')
+        .neq("friend_id", await getFriendCode())
 
     if (profileError) throw profileError
 
