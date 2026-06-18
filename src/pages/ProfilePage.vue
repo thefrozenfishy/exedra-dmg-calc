@@ -1046,7 +1046,7 @@ const renderAnalyticsChart = () => {
                                 names: p.names,
                                 count: p.count,
                             })),
-                            backgroundColor: "rgb(177, 15, 15)",
+                            backgroundColor: "whitesmoke",
                             pointRadius: aggregatedPoints.map(p =>
                                 Math.min(3 + Math.log2(p.count) * 2, 10)
                             ),
