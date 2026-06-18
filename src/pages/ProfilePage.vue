@@ -1050,10 +1050,10 @@ const renderAnalyticsChart = () => {
                                 `rgba(142, 91, 199, ${Math.min(0.25 + Math.log2(p.count) * 0.15, 1)})`
                             ),
                             pointRadius: aggregatedPoints.map(p =>
-                                Math.min(4 + Math.log2(p.count) * 4, 18)
+                                Math.min(3 + Math.log2(p.count) * 2, 10)
                             ),
                             pointHoverRadius: aggregatedPoints.map(p =>
-                                Math.min(6 + Math.log2(p.count) * 4, 20)
+                                Math.min(5 + Math.log2(p.count) * 2, 12)
                             ),
                         }
                     ]
