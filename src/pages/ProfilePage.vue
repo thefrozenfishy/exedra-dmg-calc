@@ -1016,6 +1016,22 @@ const renderAnalyticsChart = () => {
     if (!players.length) return
 
     if (graphMode.value === 'scatter') {
+        const pointMap = new Map<string, { x: number; y: number; names: string[]; count: number }>()
+
+        for (const p of players) {
+            const x = getMetricValue(p, selectedXAxis.value)
+            const y = getMetricValue(p, selectedYAxis.value)
+            const key = `${x}|${y}`
+            if (pointMap.has(key)) {
+                pointMap.get(key)!.names.push(p.name)
+                pointMap.get(key)!.count++
+            } else {
+                pointMap.set(key, { x, y, names: [p.name], count: 1 })
+            }
+        }
+
+        const aggregatedPoints = [...pointMap.values()]
+
         analyticsChart = new Chart(
             analyticsCanvasRef.value,
             {
@@ -1024,12 +1040,21 @@ const renderAnalyticsChart = () => {
                     datasets: [
                         {
                             label: `${selectedXAxis.value} vs ${selectedYAxis.value}`,
-                            data: players.map(p => ({
-                                x: getMetricValue(p, selectedXAxis.value),
-                                y: getMetricValue(p, selectedYAxis.value),
-                                name: p.name,
+                            data: aggregatedPoints.map(p => ({
+                                x: p.x,
+                                y: p.y,
+                                names: p.names,
+                                count: p.count,
                             })),
-                            backgroundColor: '#8e5bc7'
+                            backgroundColor: aggregatedPoints.map(p =>
+                                `rgba(142, 91, 199, ${Math.min(0.25 + Math.log2(p.count) * 0.15, 1)})`
+                            ),
+                            pointRadius: aggregatedPoints.map(p =>
+                                Math.min(4 + Math.log2(p.count) * 4, 18)
+                            ),
+                            pointHoverRadius: aggregatedPoints.map(p =>
+                                Math.min(6 + Math.log2(p.count) * 4, 20)
+                            ),
                         }
                     ]
                 },
@@ -1040,39 +1065,30 @@ const renderAnalyticsChart = () => {
                         x: {
                             min: 0,
                             max: getMaxTick(selectedXAxis.value),
-                            ticks: {
-                                stepSize: 10
-                            },
-                            grid: {
-                                color: 'rgba(140, 100, 190, 0.35)'
-                            },
-                            title: {
-                                display: true,
-                                text: selectedXAxis.value
-                            }
+                            ticks: { stepSize: 10 },
+                            grid: { color: 'rgba(140, 100, 190, 0.35)' },
+                            title: { display: true, text: selectedXAxis.value }
                         },
                         y: {
                             min: 0,
                             max: getMaxTick(selectedYAxis.value),
-                            ticks: {
-                                stepSize: 10
-                            },
-                            grid: {
-                                color: 'rgba(140, 100, 190, 0.35)'
-                            },
-                            title: {
-                                display: true,
-                                text: selectedYAxis.value
-                            }
+                            ticks: { stepSize: 10 },
+                            grid: { color: 'rgba(140, 100, 190, 0.35)' },
+                            title: { display: true, text: selectedYAxis.value }
                         }
                     },
                     plugins: {
                         tooltip: {
                             callbacks: {
                                 label(ctx) {
-                                    const raw = ctx.raw as { x: number; y: number; name?: string }
-                                    const label = raw.name ? `${raw.name}: ` : ''
-                                    return `${label}(${raw.x}, ${raw.y})`
+                                    const raw = ctx.raw as { x: number; y: number; names: string[]; count: number }
+                                    if (raw.count === 1) {
+                                        return `${raw.names[0]}: (${raw.x}, ${raw.y})`
+                                    }
+                                    return [
+                                        `${raw.count} players at (${raw.x}, ${raw.y}):`,
+                                        ...raw.names.map(n => `  · ${n}`)
+                                    ]
                                 }
                             }
                         }
@@ -1107,8 +1123,7 @@ const renderAnalyticsChart = () => {
                         label: 'Percentile Curve',
                         data: percentileData,
                         borderColor: '#4CC9F0',
-                        backgroundColor:
-                            'rgba(76,201,240,0.2)',
+                        backgroundColor: 'rgba(76,201,240,0.2)',
                         tension: 0.15,
                         pointRadius: 2
                     }
@@ -1123,16 +1138,9 @@ const renderAnalyticsChart = () => {
                         min: 0,
                         max: getMaxTick(selectedXAxis.value),
                         type: 'linear',
-                        ticks: {
-                            stepSize: 10
-                        },
-                        grid: {
-                            color: 'rgba(140, 100, 190, 0.35)'
-                        },
-                        title: {
-                            display: true,
-                            text: selectedXAxis.value
-                        }
+                        ticks: { stepSize: 10 },
+                        grid: { color: 'rgba(140, 100, 190, 0.35)' },
+                        title: { display: true, text: selectedXAxis.value }
                     },
                     y: {
                         min: 0,
@@ -1141,14 +1149,8 @@ const renderAnalyticsChart = () => {
                             stepSize: 10,
                             callback: v => `${v}%`
                         },
-                        grid: {
-                            color: 'rgba(140, 100, 190, 0.35)'
-                        },
-                        title: {
-                            display: true,
-                            text:
-                                '% of Players Below'
-                        }
+                        grid: { color: 'rgba(140, 100, 190, 0.35)' },
+                        title: { display: true, text: '% of Players Below' }
                     }
                 },
                 plugins: {
