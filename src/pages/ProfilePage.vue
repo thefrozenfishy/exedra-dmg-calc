@@ -8,6 +8,7 @@
                 <div>
                     <button @click="loadPlayers">Load more players into the graph</button>
                     <button @click="exportData">Export Data</button>
+                    <button @click="copy">Copy image to clipboard </button>
                 </div>
                 <div class="analytics-controls">
                     <label>
@@ -436,6 +437,7 @@ import {
     Legend
 } from 'chart.js'
 import { isBeta } from '../utils/betaSettings'
+import { copyImageToClipboard } from '../utils/image'
 
 const store = useFriendStore()
 const characterStore = useCharacterStore()
@@ -955,6 +957,13 @@ const graphOptions = [
 
 const selectedXAxis = useSetting<string>('betaGraphSelectedXAxis', 'total')
 const selectedYAxis = useSetting<string>('betaGraphSelectedYAxis', 'whale')
+const copy = () => copyImageToClipboard(
+    graphMode.value === 'scatter'
+        ? `${getAxisLabel(selectedXAxis.value)} vs ${getAxisLabel(selectedYAxis.value)}.png`
+        : `${getAxisLabel(selectedXAxis.value)}.png`,
+
+    ".chart-wrapper",
+)
 
 const analyticsPlayers = computed(() => {
     const list = []
@@ -1039,7 +1048,7 @@ const renderAnalyticsChart = () => {
                 data: {
                     datasets: [
                         {
-                            label: `${selectedXAxis.value} vs ${selectedYAxis.value}`,
+                            label: `${getAxisLabel(selectedXAxis.value)} vs ${getAxisLabel(selectedYAxis.value)}`,
                             data: aggregatedPoints.map(p => ({
                                 x: p.x,
                                 y: p.y,
