@@ -1736,9 +1736,9 @@ a.link {
 }
 
 img.lim-icon {
-    height: 25px;
-    width: 25px;
-    margin: -10px -5px;
+    height: 24px;
+    width: 24px;
+    margin: -4px;
 }
 
 .mini-power-box span {
