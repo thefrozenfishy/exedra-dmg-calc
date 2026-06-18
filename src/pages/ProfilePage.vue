@@ -220,64 +220,8 @@
 
                     <label for="sortMode">Sort by:</label>
                     <select v-model="sortMode" id="sortMode">
-                        <option value="default">
-                            Default
-                        </option>
-
-                        <option value="name">
-                            Name Only
-                        </option>
-
-                        <option value="total">
-                            Total Power
-                        </option>
-
-                        <option value="attacker">
-                            Attacker Power
-                        </option>
-
-                        <option value="buffer">
-                            Buffer Power
-                        </option>
-
-                        <option value="debuffer">
-                            Debuffer Power
-                        </option>
-
-                        <option value="breaker">
-                            Breaker Power
-                        </option>
-
-                        <option value="defender">
-                            Defender Power
-                        </option>
-
-                        <option value="healer">
-                            Healer Power
-                        </option>
-
-                        <option value="similarity">
-                            Similarity Score
-                        </option>
-
-                        <option value="whale">
-                            Whale Power
-                        </option>
-
-                        <option value="perm">
-                            Permanent Characters
-                        </option>
-
-                        <option value="permAs">
-                            Permanent Character Ascensions
-                        </option>
-
-                        <option value="lim">
-                            Limited Characters
-                        </option>
-
-                        <option value="limAs">
-                            Limited Character Ascensions
+                        <option v-for="opt in graphOptions" :key="opt.value" :value="opt.value">
+                            {{ opt.label }}
                         </option>
                     </select>
 
@@ -1052,6 +996,8 @@ const getMetricValue = (player: any, metric: string) => {
     return player.power?.[metric] || 0
 }
 
+const getAxisLabel = (value: string) => graphOptions.find(o => o.value === value)?.label ?? value
+
 const getMaxTick = (axisLabel: string) => {
     if (axisLabel === "perm") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica" && c.obtain !== "Exclusive").length
     if (axisLabel === "permAs") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica" && c.obtain !== "Exclusive").length * 6
@@ -1119,14 +1065,14 @@ const renderAnalyticsChart = () => {
                             max: getMaxTick(selectedXAxis.value),
                             ticks: { stepSize: 10 },
                             grid: { color: 'rgba(140, 100, 190, 0.35)' },
-                            title: { display: true, text: selectedXAxis.value }
+                            title: { display: true, text: getAxisLabel(selectedXAxis.value) }
                         },
                         y: {
                             min: 0,
                             max: getMaxTick(selectedYAxis.value),
                             ticks: { stepSize: 10 },
                             grid: { color: 'rgba(140, 100, 190, 0.35)' },
-                            title: { display: true, text: selectedYAxis.value }
+                            title: { display: true, text: getAxisLabel(selectedYAxis.value) }
                         }
                     },
                     plugins: {
@@ -1192,7 +1138,7 @@ const renderAnalyticsChart = () => {
                         type: 'linear',
                         ticks: { stepSize: 10 },
                         grid: { color: 'rgba(140, 100, 190, 0.35)' },
-                        title: { display: true, text: selectedXAxis.value }
+                        title: { display: true, text: getAxisLabel(selectedXAxis.value) }
                     },
                     y: {
                         min: 0,
