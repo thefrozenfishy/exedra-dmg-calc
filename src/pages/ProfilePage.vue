@@ -261,6 +261,14 @@
                         <option value="whale">
                             Whale Power
                         </option>
+
+                        <option value="perm">
+                            Permanent Characters
+                        </option>
+
+                        <option value="lim">
+                            Limited Characters
+                        </option>
                     </select>
 
                     <input v-model="friendCode" placeholder="Enter friend code" maxlength="5" />
@@ -516,7 +524,9 @@ const exportData = () => {
         'defender',
         'healer',
         'whale',
-        'similarity'
+        'similarity',
+        'standard_kioku',
+        'limited_kioku',
     ])
 
     if (myPower.value) {
@@ -533,7 +543,9 @@ const exportData = () => {
             myPower.value[KiokuRole.Defender],
             myPower.value[KiokuRole.Healer],
             myPower.value.whale,
-            ''
+            '',
+            myChars.value.perm,
+            myChars.value.lim,
         ])
     }
 
@@ -551,7 +563,9 @@ const exportData = () => {
             f.power?.[KiokuRole.Defender],
             f.power?.[KiokuRole.Healer],
             f.power?.whale,
-            f.accountSimilarity
+            f.accountSimilarity,
+            f.kioku_count?.perm,
+            f.kioku_count?.lim,
         ])
     }
 
@@ -658,7 +672,7 @@ const selectAvatar = async (id: number) => {
     )
 }
 
-type SortModes = 'default' | 'name' | 'total' | 'whale' | 'attacker' | 'buffer' | 'debuffer' | 'breaker' | 'defender' | 'healer' | "similarity"
+type SortModes = 'default' | 'name' | 'total' | 'whale' | 'attacker' | 'buffer' | 'debuffer' | 'breaker' | 'defender' | 'healer' | "similarity" | "lim" | "perm"
 const sortMode = useSetting<SortModes>("sortMode", "default")
 const showGraph = useSetting<boolean>("showAnalyticsGraph", false)
 
@@ -715,6 +729,14 @@ const sortedFriends = computed(() => {
 
             case 'similarity':
                 diff = (b.accountSimilarity || 0) - (a.accountSimilarity || 0)
+                break
+
+            case 'perm':
+                diff = (b.kioku_count?.perm || 0) - (a.kioku_count?.perm || 0)
+                break
+
+            case 'lim':
+                diff = (b.kioku_count?.lim || 0) - (a.kioku_count?.lim || 0)
                 break
         }
 
@@ -928,7 +950,15 @@ const graphOptions = [
     {
         label: 'Similarity',
         value: 'similarity'
-    }
+    },
+    {
+        label: 'Permanents',
+        value: 'perm'
+    },
+    {
+        label: 'Limiteds',
+        value: 'lim'
+    },
 ]
 
 const selectedXAxis = useSetting<string>('betaGraphSelectedXAxis', 'total')
@@ -940,7 +970,9 @@ const analyticsPlayers = computed(() => {
     if (myPower.value) {
         list.push({
             power: myPower.value,
-            similarity: 100
+            similarity: 100,
+            lim: myChars.value.lim,
+            perm: myChars.value.perm,
         })
     }
 
@@ -949,22 +981,27 @@ const analyticsPlayers = computed(() => {
 
         list.push({
             power: friend.power,
-            similarity: friend.accountSimilarity || 0
+            similarity: friend.accountSimilarity || 0,
+            lim: friend.kioku_count?.lim || 0,
+            perm: friend.kioku_count?.perm || 0,
         })
     }
 
     return list
 })
 
-const getMetricValue = (
-    player: any,
-    metric: string
-) => {
-    if (metric === 'similarity') {
-        return player.similarity || 0
+const getMetricValue = (player: any, metric: string) => {
+    if (['similarity', 'lim', 'perm'].includes(metric)) {
+        return player[metric] || 0
     }
 
     return player.power?.[metric] || 0
+}
+
+const getMaxTick = (axisLabel: string) => {
+    if (axisLabel === "perm") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica" && c.obtain !== "Exclusive").length
+    if (axisLabel === "lim") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica" && c.obtain === "Exclusive").length
+    return 100
 }
 
 const renderAnalyticsChart = () => {
@@ -986,14 +1023,8 @@ const renderAnalyticsChart = () => {
                         {
                             label: `${selectedXAxis.value} vs ${selectedYAxis.value}`,
                             data: players.map(p => ({
-                                x: getMetricValue(
-                                    p,
-                                    selectedXAxis.value
-                                ),
-                                y: getMetricValue(
-                                    p,
-                                    selectedYAxis.value
-                                )
+                                x: getMetricValue(p, selectedXAxis.value),
+                                y: getMetricValue(p, selectedYAxis.value)
                             })),
                             backgroundColor: '#8e5bc7'
                         }
@@ -1005,7 +1036,7 @@ const renderAnalyticsChart = () => {
                     scales: {
                         x: {
                             min: 0,
-                            max: 100,
+                            max: getMaxTick(selectedXAxis.value),
                             ticks: {
                                 stepSize: 10
                             },
@@ -1019,7 +1050,7 @@ const renderAnalyticsChart = () => {
                         },
                         y: {
                             min: 0,
-                            max: 100,
+                            max: getMaxTick(selectedYAxis.value),
                             ticks: {
                                 stepSize: 10
                             },
@@ -1081,7 +1112,7 @@ const renderAnalyticsChart = () => {
                 scales: {
                     x: {
                         min: 0,
-                        max: 100,
+                        max: getMaxTick(selectedXAxis.value),
                         type: 'linear',
                         ticks: {
                             stepSize: 10
