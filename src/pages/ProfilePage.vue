@@ -170,10 +170,11 @@
                                 <span>{{ myPower[KiokuRole.Debuffer] }}</span>
                             </div>
 
-                            <div v-if="!isTouchDevice" class="mini-power-box"
+                            <div v-if="!isTouchDevice" class="mini-power-box bigger-box"
                                 title="Nr of standard 5☆ Kioku owned (Ascensions)">
                                 <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
-                                <span>{{ myChars.perm }} ({{ myChars.permAs }})</span>
+                                <pre>{{ formatKiokuCount(myChars.perm, myChars.permAs) }}</pre>
+
                             </div>
 
                             <div class="mini-power-box" title="Breaker power rating">
@@ -191,15 +192,15 @@
                                 <span>{{ myPower[KiokuRole.Healer] }}</span>
                             </div>
 
-                            <div v-if="isTouchDevice" class="mini-power-box"
+                            <div v-if="isTouchDevice" class="mini-power-box bigger-box"
                                 title="Nr of standard 5☆ Kioku owned (Ascensions)">
                                 <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
-                                <span>{{ myChars.perm }} ({{ myChars.permAs }})</span>
+                                <pre>{{ formatKiokuCount(myChars.perm, myChars.permAs) }}</pre>
                             </div>
 
-                            <div class="mini-power-box" title="Nr of limited 5☆ Kioku owned (Ascensions)">
+                            <div class="mini-power-box bigger-box" title="Nr of limited 5☆ Kioku owned (Ascensions)">
                                 <img class="lim-icon" :src="'/exedra-dmg-calc/lim-kioku.png'" />
-                                <span>{{ myChars.lim }} ({{ myChars.limAs }})</span>
+                                <pre>{{ formatKiokuCount(myChars.lim, myChars.limAs) }}</pre>
                             </div>
                         </div>
 
@@ -332,10 +333,10 @@
                                     <span>{{ friend.accountSimilarity }}</span>
                                 </div>
 
-                                <div v-if="!isTouchDevice" class="mini-power-box"
+                                <div v-if="!isTouchDevice" class="mini-power-box bigger-box"
                                     title="Nr of standard 5☆ Kioku owned (Ascensions)">
                                     <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
-                                    <span>{{ friend.kioku_count?.perm }} ({{ friend.kioku_count?.permAs }})</span>
+                                    <pre>{{ formatKiokuCount(friend.kioku_count?.perm, friend.kioku_count?.permAs) }}</pre>
                                 </div>
 
                                 <div class="mini-power-box" title="Breaker power rating">
@@ -358,15 +359,16 @@
                                     <span>{{ friend.power.whale }}</span>
                                 </div>
 
-                                <div v-if="isTouchDevice" class="mini-power-box"
+                                <div v-if="isTouchDevice" class="mini-power-box bigger-box"
                                     title="Nr of standard 5☆ Kioku owned (Ascensions)">
                                     <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
-                                    <span>{{ friend.kioku_count?.perm }} ({{ friend.kioku_count?.permAs }})</span>
+                                    <pre>{{ formatKiokuCount(friend.kioku_count?.perm, friend.kioku_count?.permAs) }}</pre>
                                 </div>
 
-                                <div class="mini-power-box" title="Nr of limited 5☆ Kioku owned (Ascensions)">
+                                <div class="mini-power-box bigger-box"
+                                    title="Nr of limited 5☆ Kioku owned (Ascensions)">
                                     <img class="lim-icon" :src="'/exedra-dmg-calc/lim-kioku.png'" />
-                                    <span>{{ friend.kioku_count?.lim }} ({{ friend.kioku_count?.limAs }})</span>
+                                    <pre>{{ formatKiokuCount(friend.kioku_count?.lim, friend.kioku_count?.limAs) }}</pre>
                                 </div>
                             </div>
                         </div>
@@ -452,6 +454,9 @@ const loadPlayers = async () => {
         }
     )
 }
+
+const formatKiokuCount = (chars: number | undefined, ascs: number | undefined) =>
+    `${String(chars || 0).padStart(2, ' ')} ${`(${ascs || 0})`.padStart(5, ' ')}`
 
 const exportData = () => {
     const rows: string[] = []
@@ -1195,6 +1200,11 @@ watch(
     color: var(--text);
 }
 
+pre {
+    padding: 0;
+    margin: 0;
+}
+
 /* =========================
    Sections
 ========================= */
@@ -1682,37 +1692,41 @@ a.link {
 }
 
 .role-grid-5-compact {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(5, max-content);
+    justify-content: start;
 }
 
 .role-grid-4-compact {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, max-content);
+    justify-content: start;
 }
 
 @media (max-width: 480px) {
     .role-grid-5-compact {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, max-content);
+        justify-content: start;
     }
 
     .role-grid-4-compact {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, max-content);
+        justify-content: start;
     }
 }
 
 .mini-power-box {
     display: flex;
     align-items: center;
-
     gap: 0.35rem;
-
-    min-width: 64px;
-
+    width: 48px;
+    font-family: monospace;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.08);
-
     border-radius: 999px;
-
     padding: 0.22rem 0.55rem;
+}
+
+.bigger-box {
+    width: 82px;
 }
 
 .mini-power-box img {
