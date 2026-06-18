@@ -32,6 +32,28 @@ window.onunhandledrejection = (event: PromiseRejectionEvent) => {
         type: 'unhandled_promise_rejection',
     })
 }
+
+const originalConsoleError = console.error.bind(console)
+console.error = (...args) => {
+    originalConsoleError(...args)
+    const error = args.find((a): a is Error => a instanceof Error)
+
+    logEvent('js_error', {
+        message: error?.message ?? args.map(String).join(' '),
+        stack: error?.stack ?? null,
+        type: 'console_error',
+    })
+}
+
+app.config.errorHandler = (err, instance, info) => {
+    console.error(
+        '[Vue Error]',
+        info,
+        instance?.$options?.name,
+        err
+    )
+}
+
 app.component('CharacterLink', CharacterLink)
 app.use(createPinia())
 if (import.meta.env.DEV) {
@@ -41,12 +63,17 @@ if (import.meta.env.DEV) {
     const favicon = document.getElementById("app-icon") as HTMLLinkElement;
     favicon.href = favicon.href.replace("icon.png", "icon-beta.png?v=" + Date.now());
 }
-useBetaStore().load()
-await useCharacterStore().initializeCloud()
-await useFriendStore().initialize()
-useTeamStore().load()
-usePvPStore().load()
-useEnemyStore().load()
-useSettingsStore().load()
+try {
+    useBetaStore().load()
+    await useCharacterStore().initializeCloud()
+    await useFriendStore().initialize()
+    useTeamStore().load()
+    usePvPStore().load()
+    useEnemyStore().load()
+    useSettingsStore().load()
+} catch (err) {
+    logEvent('app_boot_failed')
+    console.error(err)
+}
 app.use(router)
 app.mount('#app')
