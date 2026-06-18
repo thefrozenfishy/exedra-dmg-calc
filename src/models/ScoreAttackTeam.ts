@@ -652,7 +652,6 @@ export class ScoreAttackTeam {
                         this.getAllyEffect(allyIdx, "UP_CTD_RATIO", amountOfEnemies, enemy.maxBreak) +
                         this.getAllyEffect(allyIdx, "UP_CTD_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) /
                     1000;
-                const crit_factor = 1 + (enemy.isCrit && isVortex ? crit_dmg : 0);
 
                 total +=
                     base *
@@ -661,8 +660,7 @@ export class ScoreAttackTeam {
                     (1 + dmg_taken) *
                     (1 + elem_res_down) *
                     effect_elem_factor *
-                    break_factor *
-                    crit_factor;
+                    break_factor;
             }
         }
 
