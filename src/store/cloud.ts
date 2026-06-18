@@ -70,7 +70,7 @@ async function _saveCharacters(chars: Character[]) {
 
         portrait: c.portrait,
 
-        crys_options: c.crysOptions
+        crys_options: c.crysOptions || {} // This for some reason was null for a user, unsure why but see if this fixes it? 
     }))
 
     const { error } = await supabase
