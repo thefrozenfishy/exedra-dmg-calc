@@ -71,30 +71,41 @@
                             :max="4 - minHealer - minDefender - minBreaker" />
                     </div>
 
-                    <div class="role-box">
-                        <img :src="'/exedra-dmg-calc/roles/Healer.png'" alt="Healer" />
+                    <div class="role-box" :class="{ 'role-disabled': disabledOtherRoles.includes(KiokuRole.Healer) }"
+                        @click="toggleOtherRole(KiokuRole.Healer)" style="cursor:pointer;"
+                        title="Click to disable Healers from flex spots">
+                        <img :src="'/exedra-dmg-calc/roles/Healer.png'" alt=KiokuRole.Healer />
                         <span>Healer (min)</span>
                         <input type="number" v-model.number="minHealer" min="0"
-                            :max="otherCount - minDefender - minBreaker" />
+                            :max="otherCount - minDefender - minBreaker" @click.stop />
                     </div>
 
-                    <div class="role-box">
-                        <img :src="'/exedra-dmg-calc/roles/Defender.png'" alt="Defender" />
+                    <div class="role-box" :class="{ 'role-disabled': disabledOtherRoles.includes(KiokuRole.Defender) }"
+                        @click="toggleOtherRole(KiokuRole.Defender)" style="cursor:pointer;"
+                        title="Click to disable Defenders from flex spots">
+                        <img :src="'/exedra-dmg-calc/roles/Defender.png'" alt=KiokuRole.Defender />
                         <span>Defender (min)</span>
                         <input type="number" v-model.number="minDefender" min="0"
-                            :max="otherCount - minHealer - minBreaker" />
+                            :max="otherCount - minHealer - minBreaker" @click.stop />
                     </div>
 
-                    <div class="role-box">
-                        <img :src="'/exedra-dmg-calc/roles/Breaker.png'" alt="Breaker" />
+                    <div class="role-box" :class="{ 'role-disabled': disabledOtherRoles.includes(KiokuRole.Breaker) }"
+                        @click="toggleOtherRole(KiokuRole.Breaker)" style="cursor:pointer;"
+                        title="Click to disable Breakers from flex spots">
+                        <img :src="'/exedra-dmg-calc/roles/Breaker.png'" alt=KiokuRole.Breaker />
                         <span>Breaker (min)</span>
                         <input type="number" v-model.number="minBreaker" min="0"
-                            :max="otherCount - minDefender - minHealer" />
+                            :max="otherCount - minDefender - minHealer" @click.stop />
                     </div>
 
                     <div class="role-box total-box" style="grid-column: 3 / span 3; width: 400px;">
-                        <span>Flex spot (Healer, Defender or Breaker)</span>
-                        <div class="number">{{ otherCount - minDefender - minHealer - minBreaker }}</div>
+                        <span>Flex spot ({{ flexRoleLabel }})</span>
+                        <div class="number">{{
+                            otherCount
+                            - (disabledOtherRoles.includes(KiokuRole.Defender) ? 0 : minDefender)
+                            - (disabledOtherRoles.includes(KiokuRole.Healer) ? 0 : minHealer)
+                            - (disabledOtherRoles.includes(KiokuRole.Breaker) ? 0 : minBreaker)
+                            }}</div>
                     </div>
                 </div>
             </div>
@@ -296,6 +307,22 @@ const otherCount = computed(() => 4 - deBufferCount.value)
 const minHealer = useSetting("minHealer", 0)
 const minDefender = useSetting("minDefender", 0)
 const minBreaker = useSetting("minBreaker", 0)
+
+const disabledOtherRoles = useSetting<KiokuRole[]>("disabledOtherRoles", [])
+
+function toggleOtherRole(role: KiokuRole) {
+    if (disabledOtherRoles.value.includes(role)) {
+        disabledOtherRoles.value = disabledOtherRoles.value.filter(r => r !== role)
+    } else {
+        disabledOtherRoles.value = [...disabledOtherRoles.value, role]
+    }
+}
+
+const flexRoleLabel = computed(() => {
+    const enabled = [KiokuRole.Healer, KiokuRole.Defender, KiokuRole.Breaker].filter(r => !disabledOtherRoles.value.includes(r))
+    return enabled.length ? enabled.join(', ') : 'none'
+})
+
 function safeInt(value: unknown, fallback = 0, min?: number, max?: number): number {
     let n = Number(value)
 
@@ -480,6 +507,7 @@ async function startSimulation() {
             offElementDebuffMultReduction: offElementDebuffMultReduction.value,
             attackerHealth: attackerHealth.value,
             optimizeAverageDamage: optimizeAverageDamage.value,
+            disabledOtherRoles: [...disabledOtherRoles.value],
             arenaEffectsMap,
         }
     })
@@ -661,6 +689,17 @@ async function startSimulation() {
     margin-top: 0.25rem;
     width: 60px;
     text-align: center;
+}
+
+.role-box.role-disabled {
+    opacity: 0.35;
+    filter: grayscale(0.6);
+    transition: opacity 0.2s, filter 0.2s;
+}
+
+.role-box.role-disabled span {
+    text-decoration: line-through;
+    opacity: 0.7;
 }
 
 .total-box {

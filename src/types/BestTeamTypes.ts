@@ -1,5 +1,5 @@
 import { Enemy } from "./EnemyTypes";
-import { Aliment, Character, KiokuElement } from "./KiokuTypes";
+import { Aliment, Character, KiokuElement, KiokuRole } from "./KiokuTypes";
 
 export interface TeamSlot {
     main: Character | undefined
@@ -32,6 +32,7 @@ export interface FindBestTeamOptions {
     offElementDebuffMultReduction: number
     attackerHealth: number
     optimizeAverageDamage: boolean
+    disabledOtherRoles: KiokuRole[]
     arenaEffectsMap: Record<string, number>
     onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number) => void,
     onError?: (error: any) => void

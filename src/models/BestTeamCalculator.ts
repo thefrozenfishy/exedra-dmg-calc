@@ -117,6 +117,7 @@ export async function findBestTeam({
     offElementDebuffMultReduction,
     attackerHealth,
     optimizeAverageDamage,
+    disabledOtherRoles,
     arenaEffectsMap,
     onProgress,
     onError
@@ -152,6 +153,18 @@ export async function findBestTeam({
             if (extraAttackers.includes(char.name)) availableChars[KiokuRole.Attacker].push(char)
         }
     })
+    if (disabledOtherRoles.includes(KiokuRole.Healer)) {
+        availableChars[KiokuRole.Healer] = []
+        minHealer = 0
+    }
+    if (disabledOtherRoles.includes(KiokuRole.Defender)) {
+        availableChars[KiokuRole.Defender] = []
+        minDefender = 0
+    }
+    if (disabledOtherRoles.includes(KiokuRole.Breaker)) {
+        availableChars[KiokuRole.Breaker] = []
+        minBreaker = 0
+    }
 
     const availableSupportCombinations = combinations([...availableChars[KiokuRole.Debuffer], ...availableChars[KiokuRole.Buffer]], deBufferCount)
     const availableOtherDistributions = generateRoleDistributions(otherCount, minHealer, minDefender, minBreaker)
