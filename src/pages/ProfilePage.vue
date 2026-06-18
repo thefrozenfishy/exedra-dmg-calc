@@ -5,7 +5,7 @@
 
             <section v-if="showGraph" class="profile-section analytics-section">
                 <h2>Power Analytics</h2>
-                <div>
+                <div class="btn-container">
                     <button @click="loadPlayers">Load more players into the graph</button>
                     <button @click="exportData">Export Data</button>
                     <button @click="copy">Copy image to clipboard </button>
@@ -1258,6 +1258,12 @@ a:active {
 
 a.link {
     padding: 0.2rem;
+}
+
+.btn-container {
+    gap: 1rem;
+    display: flex;
+    justify-content: center;
 }
 
 /* =========================
