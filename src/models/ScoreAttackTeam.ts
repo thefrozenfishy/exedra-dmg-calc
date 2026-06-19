@@ -981,6 +981,8 @@ enemy died      - ${enemyDied}`;
                     .sort((a, b) => {
                         if (a.endsWith("Atk")) return -1;
                         if (b.endsWith("Atk")) return 1;
+                        if (a === "ascension") return -1;
+                        if (b === "ascension") return 1;
                         if (a === "portrait") return -1;
                         if (b === "portrait") return 1;
                         if (a === "support") return -1;
@@ -993,8 +995,9 @@ enemy died      - ${enemyDied}`;
                         let val = (kiokuAtPosition as any)[key];
                         if (key.startsWith("base") || key.endsWith("Def") || key.endsWith("Hp")) return;
                         if (key === "shouldUseSupportAndPortraitReason") return;
-                        if (["effects", "ascension", "crys", "data", "inputCrys", "inputCrysSub", "name", "scalableEffects", "unscalableEffects"].includes(key)) return;
+                        if (["effects", "crys", "data", "inputCrys", "inputCrysSub", "name", "scalableEffects", "unscalableEffects"].includes(key)) return;
                         if (key === "portrait") { val = val?.["stats"]?.["atk"]; key = "PortraitAtk"; }
+                        if (key === "ascension") { val = (kiokuAtPosition as any)?.["kiokuAtk"] * (0.02 * val); key = "AscensionAtk"; }
                         if (key === "support") { val = val?.getBaseAtk() * 0.16; key = "SupportAtk"; }
                         if (key === "supportLvl") { val = (kiokuAtPosition as any)["support"]?.supportLvl ?? "N/A"; }
                         if (key.endsWith("Atk")) val |= 0;

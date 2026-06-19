@@ -25,6 +25,9 @@ function normalizeCharacter(member?: Character) {
   }
 }
 
+let pvpPersistenceSubscribed = false
+let teamPersistenceSubscribed = false
+
 export const usePvPStore = defineStore('pvp', {
   state: () => ({
     slots: [
@@ -36,13 +39,11 @@ export const usePvPStore = defineStore('pvp', {
     setMain(isAlliedTeam: number) {
       return (slotIndex: number, member: Character | undefined) => {
         this.slots[isAlliedTeam][slotIndex].main = normalizeCharacter(member)
-        this.save()
       }
     },
     setSupport(isAlliedTeam: number) {
       return (slotIndex: number, member: Character | undefined) => {
         this.slots[isAlliedTeam][slotIndex].support = normalizeCharacter(member)
-        this.save()
       }
     },
     save() {
@@ -50,19 +51,28 @@ export const usePvPStore = defineStore('pvp', {
     },
     load() {
       const saved = localStorage.getItem('lastPvP')
-      if (!saved) return
-      const parsed = JSON.parse(saved)
+      if (saved) {
+        const parsed = JSON.parse(saved)
 
-      this.slots = parsed.map((team: TeamSlot[]) =>
-        team.map(slot => ({
-          ...slot,
-          main: normalizeCharacter(slot.main),
-          support: normalizeCharacter(slot.support),
-        }))
-      )
+        this.slots = parsed.map((team: TeamSlot[]) =>
+          team.map(slot => ({
+            ...slot,
+            main: normalizeCharacter(slot.main),
+            support: normalizeCharacter(slot.support),
+          }))
+        )
+      }
+
+      if (!pvpPersistenceSubscribed) {
+        pvpPersistenceSubscribed = true
+        this.$subscribe(() => {
+          this.save()
+        }, { detached: true, flush: 'post' })
+      }
     }
   }
 })
+
 export const useTeamStore = defineStore('team', {
   state: () => ({
     slots: Array(5).fill(null).map(() => ({})) as TeamSlot[]
@@ -76,25 +86,32 @@ export const useTeamStore = defineStore('team', {
     },
     setMain(slotIndex: number, member: Character | undefined) {
       this.slots[slotIndex].main = normalizeCharacter(member)
-      this.save()
     },
     setSupport(slotIndex: number, member: Character | undefined) {
       this.slots[slotIndex].support = normalizeCharacter(member)
-      this.save()
     },
     save() {
+      console.log("Saving")
       localStorage.setItem('lastTeam', JSON.stringify(this.slots))
     },
     load() {
       const saved = localStorage.getItem('lastTeam')
-      if (!saved) return
-      const parsed = JSON.parse(saved)
+      if (saved) {
+        const parsed = JSON.parse(saved)
 
-      this.slots = parsed.map((slot: TeamSlot) => ({
-        ...slot,
-        main: normalizeCharacter(slot.main),
-        support: normalizeCharacter(slot.support),
-      }))
+        this.slots = parsed.map((slot: TeamSlot) => ({
+          ...slot,
+          main: normalizeCharacter(slot.main),
+          support: normalizeCharacter(slot.support),
+        }))
+      }
+
+      if (!teamPersistenceSubscribed) {
+        teamPersistenceSubscribed = true
+        this.$subscribe(() => {
+          this.save()
+        }, { detached: true, flush: 'post' })
+      }
     }
   }
 })

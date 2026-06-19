@@ -45,10 +45,8 @@ const filtered = computed(() => {
             if (p.name === "Faith We'll Meet Again Someday") {
                 // This for some reason has the wrong description, so we override it manually... z_z
                 best.description = "Increases DMG dealt when targeting elemental weakness by 20%."
-            }
-            if (p.name === "Maiden's Transcendence") { /* Just has spd in not percentile */}
-
-            if (!best.description.includes((best.value1 / 10).toString())) {
+            } else if (p.name === "Maiden's Transcendence") { /* Just has spd in not percentile */ }
+            else if (!best.description.includes((best.value1 / 10).toString())) {
                 console.error("Description is wrong? ", p, best)
                 best.description += ` (ERROR. Root data is wrong value should be ${(best.value1 / 10).toString()}). Tell TFF to fix`
             }
