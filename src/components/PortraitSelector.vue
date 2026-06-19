@@ -44,6 +44,7 @@ const filtered = computed(() => {
 
             if (p.name === "Faith We'll Meet Again Someday")
                 best.description = "Increases DMG dealt when targeting elemental weakness by 20%."
+            if (p.name === "Maiden's Transcendence") { /* Just has spd in not percentile */}
             // This for some reason has the wrong description, so we override it manually... z_z
 
             if (!best.description.includes((best.value1 / 10).toString())) {
