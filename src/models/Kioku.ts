@@ -99,7 +99,7 @@ export class Kioku {
         this.baseCritDamage = this.data.minCritDmg * 10
         this.baseCritRate = this.data.minCritRate * 10
 
-        this.kiokuAtk = Math.round(
+        this.kiokuAtk = Math.floor(
             kiokuStat(this.kiokuLvl, [
                 this.data.minAtk,
                 this.data.atk120,
@@ -110,7 +110,7 @@ export class Kioku {
             ])
         );
 
-        this.kiokuDef = Math.round(
+        this.kiokuDef = Math.floor(
             kiokuStat(this.kiokuLvl, [
                 this.data.minDef,
                 this.data.def120,
@@ -121,7 +121,7 @@ export class Kioku {
             ])
         );
 
-        this.kiokuHp = Math.round(
+        this.kiokuHp = Math.floor(
             kiokuStat(this.kiokuLvl, [
                 this.data.minHp,
                 this.data.hp120,

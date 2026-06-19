@@ -1,10 +1,10 @@
 <template>
     <!-- Enemy section -->
     <div class="team-page">
-        <h3>Enemies</h3>
+        <h2>Enemies</h2>
         <div class="team-grid">
             <div v-for="(enemy, index) in enemies.enemies" :key="index" class="team-slot stat-inputs">
-                <h3>{{ enemy.name }}</h3>
+                <h3 class="enemy-title">{{ enemy.name }}</h3>
 
                 <div class="enemy-stats">
                     <div v-if="enemy.name !== 'Target'">
@@ -14,6 +14,7 @@
                             Enabled
                         </label>
                     </div>
+                    <div v-else style="height: 24px;"></div>
                     <label>
                         Max Break (%):
                         <input type="number" v-model.number="enemy.maxBreak" step="50"
@@ -44,6 +45,11 @@
                             @change="enemies.updateEnemy(index, { isCrit: enemy.isCrit })" />
                         Hit by crit
                     </label>
+                    <label>
+                        <input type="checkbox" v-model="enemy.isAddDmgCrit"
+                            @change="enemies.updateEnemy(index, { isAddDmgCrit: enemy.isAddDmgCrit })" />
+                        Additional dmg crit
+                    </label>
                 </div>
             </div>
         </div>
@@ -59,8 +65,6 @@ const enemies = useEnemyStore()
 <style scoped>
 .team-page {
     justify-content: center;
-    /* width: 100%; */
-    /*gap: 1rem; */
 }
 
 .team-grid {
@@ -70,6 +74,11 @@ const enemies = useEnemyStore()
     padding-right: 2rem;
     width: 100%;
     box-sizing: border-box;
+    min-height: 400px;
+}
+
+.enemy-title {
+    margin-bottom: 0px;
 }
 
 .team-slot {
@@ -87,7 +96,7 @@ const enemies = useEnemyStore()
     gap: 0.75rem;
     margin-top: auto;
     width: 100%;
-    height: 350px;
+    height: 380px;
 }
 
 .stat-inputs label {

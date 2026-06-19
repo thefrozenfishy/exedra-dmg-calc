@@ -16,4 +16,5 @@ export interface Enemy {
     isBreak: boolean
     isWeak: boolean
     isCrit: boolean
+    isAddDmgCrit: boolean
 }

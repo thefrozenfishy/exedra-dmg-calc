@@ -876,6 +876,7 @@ export class ScoreAttackTeam {
 
         const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
         const crit_factor = 1 + (enemy.isCrit ? crit_dmg : 0);
+        const crit_add_factor = 1 + (enemy.isAddDmgCrit ? crit_dmg : 0);
         const crit_average = 1 + crit_rate * crit_dmg;
         const dmg_dealt_factor = 1 + dmg_pluss;
         const dmg_taken_factor = 1 + dmg_taken;
@@ -883,44 +884,40 @@ export class ScoreAttackTeam {
         const effect_elem_factor = 1 + (enemy.isWeak ? 0.2 + elem_dmg_up : 0);
         const break_factor = enemy.isBreak ? enemy.maxBreak / 100 : 1;
 
-        let base_dmg = this.calc_base_dmg(special, base_atk);
+        const base_dmg = this.calc_base_dmg(special, base_atk);
+        const dmg_mult =
+            Number(enemy.enabled) *
+            def_factor *
+            dmg_dealt_factor *
+            dmg_taken_factor *
+            elem_resist_factor *
+            effect_elem_factor *
+            break_factor
         let dot_total_dmg = 0;
-        const add_dmg = this.add_additional_dmg();
+        let add_dmg = 0;
         if (special > 0 && enemy.enabled) {
-            base_dmg += add_dmg;
+            add_dmg = this.add_additional_dmg()
             if (this.hasDpsDotPop) {
                 dot_total_dmg = this.add_dot_dmg(enemy, idx, currentAmountOfEnemies, false);
             }
             if (this.dps.name === "Melodia Appassionata") {
                 dot_total_dmg = this.calc_base_dmg(
                     (this.dps.effects.find(e => e.abilityEffectType === "VORTEX_ATK" && skillDetailId(e).toString().startsWith("1185"))?.value1 ?? 0) / 1000, base_atk
-                ) *
-                    def_factor *
-                    dmg_dealt_factor *
-                    dmg_taken_factor *
-                    elem_resist_factor *
-                    effect_elem_factor *
-                    break_factor *
-                    crit_factor;
+                ) * dmg_mult * crit_factor;
             } else {
                 dot_total_dmg += this.add_dot_dmg(enemy, idx, currentAmountOfEnemies, true);
             }
         }
 
-        const total_dmg_pre_crit =
-            Number(enemy.enabled) *
-            base_dmg *
-            def_factor *
-            dmg_dealt_factor *
-            dmg_taken_factor *
-            elem_resist_factor *
-            effect_elem_factor *
-            break_factor;
+        const total_dmg_pre_crit = base_dmg * dmg_mult;
+        const total_add_dmg_pre_crit = add_dmg * dmg_mult;
 
         const pre_dot_total = total_dmg_pre_crit * crit_factor;
         const pre_dot_average = total_dmg_pre_crit * crit_average;
-        const total = pre_dot_total + dot_total_dmg;
-        const average_total = pre_dot_average + dot_total_dmg;
+        const pre_dot_add_total = total_add_dmg_pre_crit * crit_add_factor;
+        const pre_dot_add_average = total_add_dmg_pre_crit * crit_average;
+        const total = Math.ceil(pre_dot_total) + Math.ceil(pre_dot_add_total) + Math.ceil(dot_total_dmg);
+        const average_total = Math.ceil(pre_dot_average) + Math.ceil(pre_dot_add_average) + Math.ceil(dot_total_dmg);
 
         let sections: DebugSections = emptyDebugSections();
 
@@ -958,12 +955,14 @@ Dmg Tkn Fact    - ${dmg_taken_factor * 100 | 0}%
 Elem ResFact    - ${elem_resist_factor * 100 | 0}%
 EffElem Fact    - ${effect_elem_factor * 100 | 0}%
 Break Factor    - ${break_factor * 100 | 0}%
-Dot             - ${(dot_total_dmg | 0).toLocaleString()}
-Additional Dmg  - ${(pre_dot_total * (add_dmg / base_dmg) | 0).toLocaleString()}
-Pre-dot-total   - ${(pre_dot_total | 0).toLocaleString()}
-Pre-dot-avrg    - ${(pre_dot_average | 0).toLocaleString()}
-Result          - ${(total | 0).toLocaleString()}
-AverageDmg      - ${(average_total | 0).toLocaleString()}`;
+Dot             - ${Math.ceil(dot_total_dmg).toLocaleString()}
+pre-add-dmg     - ${Math.ceil(pre_dot_total).toLocaleString()}
+add-dmg         - ${Math.ceil(pre_dot_add_total).toLocaleString()}
+Pre-dot-total   - ${Math.ceil(pre_dot_total).toLocaleString()}
+Pre-dot-avrg    - ${Math.ceil(pre_dot_average).toLocaleString()}
+Pre-dot-add-avrg- ${Math.ceil(pre_dot_add_average).toLocaleString()}
+Result          - ${total.toLocaleString()}
+AverageDmg      - ${average_total.toLocaleString()}`;
 
             sections.enemy = `enemiesAlive    - ${currentAmountOfEnemies}
 base_def        - ${enemy.defense.toLocaleString()}
@@ -972,6 +971,7 @@ def_up          - ${enemy.defenseUp}%
 is_break        - ${enemy.isBreak}
 is_elemt_weak   - ${enemy.isWeak}
 does_crit       - ${enemy.isCrit}
+does_add_crit   - ${enemy.isAddDmgCrit}
 enabled         - ${enemy.enabled}
 enemy died      - ${enemyDied}`;
 
@@ -1022,6 +1022,6 @@ enemy died      - ${enemyDied}`;
             sections.rawEnemyDebuffs = enemy.enabled ? enemyDebuffContribs : {};
         }
 
-        return [total | 0, average_total | 0, crit_rate, sections, enemyDied];
+        return [total, average_total, crit_rate, sections, enemyDied];
     }
 }

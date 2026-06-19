@@ -464,7 +464,6 @@ async function copyToClipboard(text: string) {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  overflow-x: hidden;
 }
 
 .team-grid {
