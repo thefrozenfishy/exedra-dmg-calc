@@ -38,8 +38,20 @@ console.error = (...args) => {
     originalConsoleError(...args)
     const error = args.find((a): a is Error => a instanceof Error)
 
+    const message = error?.message ?? args
+        .map(a => {
+            if (typeof a === 'string') return a
+            if (a instanceof Error) return a.message
+            try {
+                return JSON.stringify(a)
+            } catch {
+                return String(a)
+            }
+        })
+        .join(' ')
+
     logEvent('js_error', {
-        message: error?.message ?? args.map(String).join(' '),
+        message,
         stack: error?.stack ?? null,
         type: 'console_error',
     })
