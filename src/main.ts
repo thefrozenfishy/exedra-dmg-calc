@@ -14,6 +14,7 @@ import { isBeta } from './utils/betaSettings'
 import { logEvent } from './utils/analytics'
 
 const app = createApp(App)
+
 window.onerror = (message, source, lineno, colno, error) => {
     logEvent('js_error', {
         message: String(message),
@@ -21,6 +22,7 @@ window.onerror = (message, source, lineno, colno, error) => {
         lineno,
         colno,
         stack: error?.stack ?? null,
+        page: window.location.pathname,
     })
 }
 
@@ -30,6 +32,7 @@ window.onunhandledrejection = (event: PromiseRejectionEvent) => {
         message: error?.message ?? String(error),
         stack: error?.stack ?? null,
         type: 'unhandled_promise_rejection',
+        page: window.location.pathname,
     })
 }
 
@@ -54,6 +57,7 @@ console.error = (...args) => {
         message,
         stack: error?.stack ?? null,
         type: 'console_error',
+        page: window.location.pathname,
     })
 }
 
