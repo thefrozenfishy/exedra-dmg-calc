@@ -63,7 +63,7 @@
             <td class="error-message-cell">{{ err.message }}</td>
             <td class="mono dim stack-cell">
               <span v-if="!expandedErrors.has(err.key)" class="stack-truncated">
-                {{ err.page || 'unknown page' }}<br />
+                {{ err.page }}<br />
                 {{ err.stack ? err.stack.split('\n')[0].slice(0, 80) + (err.stack.length > 80 ||
                   err.stack.includes('\n') ? '…' : '') : '—' }}
               </span>
@@ -270,6 +270,7 @@ const errorRows = computed<(ErrorGroup & { key: string })[]>(() => {
   for (const row of errorEvents) {
     const message = row.metadata?.message ?? String(row.metadata ?? '')
     const stack = row.metadata?.stack ?? row.metadata?.source ?? ''
+    const page = row.metadata?.page ?? 'Unknown page'
     const key = message
 
     const existing = groups.get(key)
@@ -290,6 +291,7 @@ const errorRows = computed<(ErrorGroup & { key: string })[]>(() => {
         userSet: new Set([row.display_user]),
         count: 1,
         lastSeen: row.created_at,
+        page,
       })
     }
   }
