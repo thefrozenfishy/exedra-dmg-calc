@@ -70,7 +70,7 @@ export const useFriendStore = defineStore('friendStore', () => {
         try {
             unionOptions.value = await getAllUnionNames()
         } catch (err) {
-            console.error('Failed loading unions', err)
+            console.error("Failed loading unions:", err)
         }
     }
 
@@ -86,7 +86,7 @@ export const useFriendStore = defineStore('friendStore', () => {
                 userID.value = profile.users?.user_id
             }
         } catch (err) {
-            console.error(err)
+            console.error("Failed to load my profile:", err)
         }
     }
 
@@ -94,7 +94,7 @@ export const useFriendStore = defineStore('friendStore', () => {
         try {
             await updateDisplayName(displayName.value)
         } catch (err) {
-            console.error(err)
+            console.error("Failed to save display name:", err)
         }
     }
 
@@ -156,7 +156,7 @@ export const useFriendStore = defineStore('friendStore', () => {
                 })
             )
         } catch (err) {
-            console.error(err)
+            console.error("friendStore load friends error:", err)
         }
     }
 

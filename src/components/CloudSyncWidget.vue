@@ -109,7 +109,7 @@ const createAccount = async () => {
         })
         window.location.reload()
     } catch (err) {
-        console.error(err)
+        console.error("Failed to create cloud profile:", err)
 
         toast.error("Failed to create cloud profile", {
             position: toast.POSITION.TOP_RIGHT,
@@ -158,7 +158,7 @@ const restoreAccount = async () => {
         })
         window.location.reload()
     } catch (err) {
-        console.error(err)
+        console.error("Failed to load profile:", err)
 
         toast.error("Failed to load profile", {
             position: toast.POSITION.TOP_RIGHT,

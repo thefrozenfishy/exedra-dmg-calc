@@ -759,7 +759,7 @@ const finishDisplayNameEdit = async () => {
             icon: false,
         })
     } catch (err) {
-        console.error(err)
+        console.error("Failed to save profile:", err)
 
         toast.error('Failed to save profile', {
             position: toast.POSITION.TOP_RIGHT,
@@ -787,7 +787,7 @@ const finishFriendCodeEdit = async () => {
             }
         )
     } catch (err) {
-        console.error(err)
+        console.error("Failed to update friend code:", err)
 
         toast.error(
             err instanceof Error
@@ -815,7 +815,7 @@ const finishUnionEdit = async () => {
             icon: false,
         })
     } catch (err) {
-        console.error(err)
+        console.error("Failed to update union:", err)
 
         toast.error(
             'Failed to update union',
@@ -839,7 +839,7 @@ const saveNickname = async (friendId: string, nickname: string) => {
             icon: false,
         })
     } catch (err) {
-        console.error(err)
+        console.error("Failed to save nickname:", err)
 
         toast.error('Failed to save nickname', {
             position: toast.POSITION.TOP_RIGHT,
@@ -860,7 +860,7 @@ const addFriend = async () => {
             icon: false,
         })
     } catch (err) {
-        console.error(err)
+        console.error("Failed to add friend:", err)
 
         toast.error('Failed to add friend', {
             position: toast.POSITION.TOP_RIGHT,

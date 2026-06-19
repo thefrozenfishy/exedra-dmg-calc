@@ -80,7 +80,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
             if (!getUserId()) return
             await saveCharacters(characters.value)
         } catch (err) {
-            console.error(err)
+            console.error("Failed to save characters:", err)
         }
     }, 3000)
 
@@ -150,7 +150,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
                 applyCloudCharacters(rows)
             }
         } catch (err) {
-            console.error(err)
+            console.error("Failed to initialize cloud characters:", err)
         }
     }
 

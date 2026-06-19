@@ -204,7 +204,7 @@ export class KiokuState {
         if ("passiveSkillMstId" in detail) {
             this.passiveEffectDetails[skillDetailId(detail)] = { ...detail, applier: this.kioku.name }
         } else {
-            console.error("An active thing was added to the bank??")
+            console.warn("An active thing was added to the bank??")
         }
     }
 
@@ -258,7 +258,7 @@ export class KiokuState {
                 console.warn("Passive was triggered late, handle?", this, effTargets, detail)
             }
         } else {
-            console.error("Active without turn", detail)
+            console.warn("Active without turn", detail)
         }
         return;
     }
@@ -359,13 +359,13 @@ export class PvPTeam {
                     .filter(k => [KiokuRole.Attacker, KiokuRole.Breaker].includes(k.kioku.data.role))
                     .reduce((s, k) => s.currentMp > k.currentMp ? k : s, { currentMp: 999 }) as KiokuState]
             }
-            console.error(actor.kioku.name, detail, "has range 1, who to target?")
+            console.warn(actor.kioku.name, detail, "has range 1, who to target?")
             return [possibleTargets[0]]
         }
         if (detail.range === targetRange.PROXIMITY) return possibleTargets.slice(0, 3) // TODO: Handle proximity / Random
         if (detail.range === targetRange.ALL) return possibleTargets
         if (detail.range === targetRange.SELF) return [actor]
-        console.error("Unknown target", detail)
+        console.warn("Unknown target", detail)
         return []
     }
 
@@ -390,7 +390,7 @@ export class PvPTeam {
             } else if (enemySkills.includes(detail.abilityEffectType)) {
                 possibleTargets = this.otherTeam.kiokuStates
             } else {
-                console.error("Unknown effect type", detail.abilityEffectType, detail, "assuming enemy targets")
+                console.warn("Unknown effect type", detail.abilityEffectType, detail, "assuming enemy targets")
                 possibleTargets = this.otherTeam.kiokuStates
             }
             console.log("Possible targets for", detail.abilityEffectType, "are", this.sliceTargets(actor, possibleTargets, detail).map(k => k.kioku.name))
@@ -423,7 +423,7 @@ export class PvPTeam {
         const effType = this.currentSp ? TargetType.skillId : TargetType.attackId
         this.triggerPassives(ProcessTiming.TURN_START, effType)
         this.act(actor, effType)
-        console.error("TRIGGERING PASSIVES AFTER", actor.kioku.name, actor, effType)
+        console.warn("TRIGGERING PASSIVES AFTER", actor.kioku.name, actor, effType)
         const actionIds = this.triggerPassives(ProcessTiming.ATTACK_END, effType, actor)
         this.triggerFua(actionIds)
         console.log(this.teamLabel, "actor is", actor.kioku.name, "using", effType)

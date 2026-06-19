@@ -437,7 +437,7 @@ const teamInstance = computed(() => {
     )
   } catch (err) {
     toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
-    console.error(err)
+    console.error("Failed to initialize team instance:", err)
     for (let i = 0; i < 5; i++) team.setMain(i, undefined)
   }
 })
@@ -452,7 +452,7 @@ async function copyToClipboard(text: string) {
     await navigator.clipboard.writeText(text)
     toast.success(`Copied: ${text}`, { position: toast.POSITION.TOP_RIGHT, icon: false })
   } catch (err) {
-    console.error(err)
+    console.error("Failed to copy:", err)
     toast.error("Failed to copy", { position: toast.POSITION.TOP_RIGHT, icon: false })
   }
 }

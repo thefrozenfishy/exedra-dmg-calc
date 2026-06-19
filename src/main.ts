@@ -73,7 +73,7 @@ try {
     useSettingsStore().load()
 } catch (err) {
     logEvent('app_boot_failed')
-    console.error(err)
+    console.error("Failed to initialize app:", err)
 }
 app.use(router)
 app.mount('#app')

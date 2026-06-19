@@ -150,7 +150,7 @@ export class Kioku {
             if (c in crystalises) {
                 this.crys.push(crystalises[c].value1)
             } else {
-                console.error("Could not find", c, "in crystalises")
+                console.warn("Could not find", c, "in crystalises")
             }
         }
     }

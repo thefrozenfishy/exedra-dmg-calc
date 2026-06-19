@@ -140,7 +140,7 @@ function runSimulation() {
       battleInstance.value.executeNextAction()
     } catch (e) {
       toast.warning(e)
-      console.error(e)
+      console.warn("Failed to execute next action:", e)
     }
   }
   battleOutput.value = states
