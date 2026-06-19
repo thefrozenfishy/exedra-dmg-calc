@@ -42,10 +42,11 @@ const filtered = computed(() => {
             const eff = Object.values(passiveDetails).filter(v => (v as any).passiveSkillMstId === p.passiveSkill1 * 100 + 6)
             const best = eff[Math.max(...Object.keys(eff).map(Number))];
 
-            if (p.name === "Faith We'll Meet Again Someday")
+            if (p.name === "Faith We'll Meet Again Someday") {
+                // This for some reason has the wrong description, so we override it manually... z_z
                 best.description = "Increases DMG dealt when targeting elemental weakness by 20%."
+            }
             if (p.name === "Maiden's Transcendence") { /* Just has spd in not percentile */}
-            // This for some reason has the wrong description, so we override it manually... z_z
 
             if (!best.description.includes((best.value1 / 10).toString())) {
                 console.error("Description is wrong? ", p, best)
