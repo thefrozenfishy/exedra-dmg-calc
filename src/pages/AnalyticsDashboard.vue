@@ -63,6 +63,7 @@
             <td class="error-message-cell">{{ err.message }}</td>
             <td class="mono dim stack-cell">
               <span v-if="!expandedErrors.has(err.key)" class="stack-truncated">
+                {{ err.page || 'unknown page' }}<br />
                 {{ err.stack ? err.stack.split('\n')[0].slice(0, 80) + (err.stack.length > 80 ||
                   err.stack.includes('\n') ? '…' : '') : '—' }}
               </span>
