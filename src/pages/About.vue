@@ -1,7 +1,4 @@
 <template>
-    Profile + FriendsKioku SetupCharacter CrystalisMy Kioku ViewerKioku GridAccount Comparison
-    Best SA Team CalculatorSingle Battle CalculatorPvP CalculatorPvP 101Gacha Rate+SimLink Raid ToolCrystalis
-    RerollerAbout
     <div style="text-align: left;">
         <h1>About</h1>
         This toolbox is various Exedra tools I've found the need for, I try to maintain them all, but if you spot an
