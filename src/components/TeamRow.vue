@@ -107,12 +107,9 @@ function saveToStore(idx: number) {
     }
     const crysOptions = ({ ...team.attacker.crysOptions })
     Object.values(crysOptions).forEach(c => c.useIndex = 0)
-    crysOptions[team.attacker_crys1[idx]].useIndex = 1
-    crysOptions[team.attacker_crys1[idx]].subCrys = maxDmgSubCrys
-    crysOptions[team.attacker_crys2[idx]].useIndex = 2
-    crysOptions[team.attacker_crys2[idx]].subCrys = maxDmgSubCrys
-    crysOptions[team.attacker_crys3[idx]].useIndex = 3
-    crysOptions[team.attacker_crys3[idx]].subCrys = maxDmgSubCrys
+    crysOptions[team.attacker_crys1[idx]] = { ...(crysOptions[team.attacker_crys1[idx]] || {}), useIndex: 1, subCrys: maxDmgSubCrys }
+    crysOptions[team.attacker_crys2[idx]] = { ...(crysOptions[team.attacker_crys2[idx]] || {}), useIndex: 2, subCrys: maxDmgSubCrys }
+    crysOptions[team.attacker_crys3[idx]] = { ...(crysOptions[team.attacker_crys3[idx]] || {}), useIndex: 3, subCrys: maxDmgSubCrys }
     teamStore.setMain(2, { ...team.attacker, portrait: team.portrait, crysOptions })
     teamStore.setSupport(2, team.atk_supp)
 

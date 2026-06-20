@@ -421,6 +421,11 @@ const startEdit = async (ch: Character, field: EditableField, e: MouseEvent) => 
 
     await nextTick()
 
+    if (e.currentTarget == null) {
+        console.error("Could not find target", e, ch, field)
+        return
+    }
+
     const input = (e.currentTarget as HTMLElement).querySelector("input")
     input?.focus()
     input?.select()
