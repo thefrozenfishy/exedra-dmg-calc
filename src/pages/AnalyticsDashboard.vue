@@ -308,8 +308,8 @@ const errorRows = computed<(ErrorGroup & { key: string })[]>(() => {
 const selectedUser = ref<string>('all')
 const selectedEvent = ref<string>('all')
 const selectedPage = ref<string>('all')
-const selectedWindow = ref<number>(7)
-const windowOptions = [3, 7, 14, 30, 90]
+const selectedWindow = ref<number>(3)
+const windowOptions = [1, 3, 7, 14, 30, 90]
 
 const getDisplayUser = (row: AnalyticsRowWithDisplay) => row.display_user
 
