@@ -1,5 +1,8 @@
 <template>
-    <div v-if="character.rarity !== 3" class="character-card">
+    <div v-if="(character.rarity === 5 && character.name !== 'Lux☆Magica')
+        || ((character.rarity === 4 || character.name === 'Lux☆Magica') && show4stars)
+        || (character.rarity === 3 && show3stars)
+    " class="character-card">
         <div class="image-wrapper" @click="toggleCharacter">
             <img :src="imgSrc" :alt="character.name" class="character-image"
                 :class="{ disabled: !character.enabled }" />
@@ -57,6 +60,14 @@ export default defineComponent({
     props: {
         character: {
             type: Object as () => Character,
+            required: true,
+        },
+        show3stars: {
+            type: Object as () => boolean,
+            required: true,
+        },
+        show4stars: {
+            type: Object as () => boolean,
             required: true,
         },
     },

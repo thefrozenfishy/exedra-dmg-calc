@@ -5,13 +5,15 @@
         calculating Best
         Team calculator
 
-        <h2>Export/Import</h2>
+        <h2>Options</h2>
         <div>
-            <button class="export-button" @click="exportCharacters()">Export</button>
+            <button class="export-button" @click="exportCharacters()">Export characters to file</button>
             <label style="margin-left: 30px;">
                 Import
                 <input type="file" accept="application/json" @change="handleFileChange" />
             </label>
+            <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
+            <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
         </div>
 
         <h2>Set default values for all Kioku:</h2>
@@ -27,7 +29,7 @@
             <h2>{{ role }}</h2>
 
             <div class="gallery">
-                <CharacterCard v-for="char in chars" :key="char.id" :character="char" />
+                <CharacterCard v-for="char in chars" :key="char.id" :character="char" :show3stars :show4stars />
             </div>
         </div>
     </div>
@@ -37,12 +39,15 @@
 import { defineComponent, computed } from 'vue'
 import CharacterCard from '../components/CharacterCard.vue'
 import { useCharacterStore } from '../store/characterStore'
-import { KiokuConstants } from '../types/KiokuTypes'
+import { Character, KiokuConstants } from '../types/KiokuTypes'
+import { useSetting } from '../store/settingsStore.js'
 
 export default defineComponent({
     components: { CharacterCard },
     setup() {
         const store = useCharacterStore()
+        const show4stars = useSetting("show4stars", false);
+        const show3stars = useSetting("show3stars", false);
 
         function handleFileChange(e: Event) {
             const file = (e.target as HTMLInputElement).files?.[0]
@@ -60,10 +65,7 @@ export default defineComponent({
             })
 
             for (const role in groups) {
-                groups[role] = groups[role].slice().sort((a, b) => {
-                    if (a.element !== b.element) return a.element === b.element
-                    return a.id === b.id
-                })
+                groups[role] = groups[role].slice().sort((a, b) => a.id - b.id)
             }
             return groups
         })
@@ -84,7 +86,7 @@ export default defineComponent({
         ]
 
 
-        return { groupedCharacters, setAll, stats, handleFileChange, exportCharacters: store.exportCharacters }
+        return { groupedCharacters, setAll, stats, handleFileChange, exportCharacters: store.exportCharacters, show3stars, show4stars }
     }
 })
 </script>
