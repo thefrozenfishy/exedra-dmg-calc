@@ -397,7 +397,7 @@ export const getSubCrystalises: () => CrystalisData[] = () => {
             value2: 0,
         },
         ...Object.values(crystalises).filter(c => c.selectionAbilityType === 2),
-    ].map(c => { if (c.selectionAbilityMstId === 4034) c.rarity = 10; return c })
+    ].map(c => { if (c.selectionAbilityMstId === 4034) c.rarity = 10; if (c.selectionAbilityMstId === 4033) c.rarity = 8; return c })
         .sort((a, b) => {
             if (a.rarity !== b.rarity) {
                 if (a.rarity === 10) return -1

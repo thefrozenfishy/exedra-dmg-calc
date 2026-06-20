@@ -26,38 +26,8 @@
                         <span class="crys-name">{{ crys.name }}</span>
                     </div>
 
-                    <div class="subcrys-bar"
-                        :ref="el => { if (el) barRefMap[crys.selectionAbilityMstId] = el as HTMLElement }">
-                        <div v-for="(subId, idx) in crys.subCrys" :key="idx" class="subcrys-pill"
-                            :class="{ filled: subId !== 0 }"
-                            @click.stop="openFlyout(crys.selectionAbilityMstId, idx, $event)">
-                            <div v-if="subId !== 0" class="pill-label">{{ getSubName(subId) }}</div>
-                            <span v-else class="pill-empty">+</span>
-                        </div>
-
-                        <Teleport to="body">
-                            <div v-if="activeFlyout === crys.selectionAbilityMstId" class="flyout" :style="flyoutStyle"
-                                @click.stop>
-                                <div class="flyout-scroll">
-                                    <div v-for="parent in groupedSubCrys" :key="parent.id" class="flyout-item"
-                                        @click.stop="toggleSubCrys(crys.selectionAbilityMstId, crys.subCrys, parent.key, parent.subs)"
-                                        @mouseenter="handleSubmenuMouseEnter(parent.id, $event)"
-                                        @mouseleave="activeSubFlyout = null">
-                                        <span class="item-name">{{ parent.name }}</span>
-                                        <span class="arrow">›</span>
-                                        <div v-if="activeSubFlyout === parent.id" class="sub-flyout"
-                                            :style="subFlyoutStyle">
-                                            <div v-for="sub in parent.subs.sort((a, b) => b.rarity - a.rarity)"
-                                                :key="sub.selectionAbilityMstId" class="sub-flyout-item"
-                                                @click.stop="toggleSubCrys(crys.selectionAbilityMstId, crys.subCrys, sub.selectionAbilityMstId, parent.subs)">
-                                                <span>{{ sub.name }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </Teleport>
-                    </div>
+                    <SubCrysBar :sub-crys="crys.subCrys" :grouped-sub-crys="groupedSubCrys"
+                        @update="newSubCrys => updateSubCrys(crys.selectionAbilityMstId, newSubCrys)" />
                 </div>
             </div>
         </div>
@@ -106,10 +76,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { relevantCrys, getSubCrystalises, elementMap, KiokuElement } from '../types/KiokuTypes'
 import CharacterSelector from '../components/CharacterSelector.vue'
+import SubCrysBar from '../components/SubCrysBar.vue'
 import { useCharacterStore } from '../store/characterStore'
 import type { Character, CrystalisData } from '../types/KiokuTypes'
 import { passiveDetails } from '../utils/helpers'
@@ -127,12 +98,6 @@ const store = useCharacterStore()
 
 const characterId = ref(Number(route.query.character_id) || 0)
 const selectedCharacter = ref<Character | undefined>(store.characters.find(c => c.id === characterId.value))
-const activeFlyout = ref<number | null>(null)
-const subFlyoutStyle = ref<Record<string, string>>({})
-const isMainFlipped = ref(false)
-const flyoutStyle = ref<Record<string, string>>({})
-const activeSubFlyout = ref<number | null>(null)
-const activeSlotIndex = ref<number | null>(null)
 const show4stars = useSetting("show4stars", false);
 const show3stars = useSetting("show3stars", false);
 const showOffElementalOnes = useSetting("showOffElementalCrysCollection", false)
@@ -172,12 +137,6 @@ const options = computed(() => {
     }).sort((a, b) => b.rarity - a.rarity || b.sortOrder - a.sortOrder)
 })
 
-function getSubName(id: number): string {
-    return subCrysFlatList.find(s => s.selectionAbilityMstId === id)?.name ?? '?'
-}
-
-const barRefMap = ref<Record<number, HTMLElement>>({})
-
 function missingElementCharacters(elem: KiokuElement, showOffElement: boolean) {
     return store.characters.filter(char => {
         if (!char.enabled) return false
@@ -200,89 +159,9 @@ function missingElementCharacters(elem: KiokuElement, showOffElement: boolean) {
     })
 }
 
-async function openFlyout(effectId: number, slotIndex: number, event: MouseEvent) {
-    if (activeFlyout.value === effectId) {
-        activeFlyout.value = null
-        return
-    }
-    activeSlotIndex.value = slotIndex
-    const bar = barRefMap.value[effectId]
-    if (!bar) return
-
-    const rect = bar.getBoundingClientRect()
-
-    activeFlyout.value = effectId
-    flyoutStyle.value = {
-        position: 'fixed',
-        top: `${rect.bottom + 4}px`,
-        left: `${rect.left}px`,
-        width: `${rect.width}px`,
-        height: `${5 * rect.height}px`,
-        opacity: '0',
-        pointerEvents: 'none',
-        zIndex: '9999',
-    }
-
-    await nextTick()
-
-    const flyoutEl = document.querySelector('.flyout') as HTMLElement
-    if (flyoutEl) {
-        const flyoutHeight = flyoutEl.offsetHeight
-        const spaceBelow = window.innerHeight - rect.bottom
-        const spaceAbove = rect.top
-
-        isMainFlipped.value = spaceBelow < flyoutHeight + 10 && spaceAbove > spaceBelow
-
-        const finalTop = isMainFlipped.value
-            ? rect.top - flyoutHeight - 4
-            : rect.bottom + 4
-
-        flyoutStyle.value = {
-            position: 'fixed',
-            top: `${finalTop}px`,
-            left: `${rect.left}px`,
-            width: `${rect.width}px`,
-            height: `${5 * rect.height}px`,
-            opacity: '1',
-            pointerEvents: 'auto',
-            zIndex: '9999',
-        }
-    }
-}
-
-async function handleSubmenuMouseEnter(parentId: number, event: MouseEvent) {
-    activeSubFlyout.value = parentId
-    await nextTick()
-
-    const subFlyoutEl = (event.target as HTMLElement).querySelector('.sub-flyout') as HTMLElement
-    if (!subFlyoutEl) return
-
-    const rect = subFlyoutEl.getBoundingClientRect()
-    const overflowBottom = rect.bottom > window.innerHeight
-
-    if (overflowBottom || isMainFlipped.value) {
-        subFlyoutStyle.value = {
-            bottom: '-1px',
-            top: 'auto'
-        }
-    } else {
-        subFlyoutStyle.value = {
-            top: '-1px',
-            bottom: 'auto'
-        }
-    }
-}
-
-function toggleSubCrys(effectId: number, currentSubCrys: number[], subId: number, siblingSubs: CrystalisData[]) {
+function updateSubCrys(effectId: number, newSubCrys: number[]) {
     const char = character.value
     if (!char) return
-
-    const targetSlot = activeSlotIndex.value
-    if (targetSlot == null) return
-
-    const shouldRemove = currentSubCrys.indexOf(subId) === targetSlot
-    const newSubCrys = [...currentSubCrys].map(c => siblingSubs.map(s => s.selectionAbilityMstId).includes(c) ? 0 : c)
-    if (!shouldRemove) newSubCrys[targetSlot] = subId
 
     store.updateChar({
         ...char,
@@ -291,7 +170,6 @@ function toggleSubCrys(effectId: number, currentSubCrys: number[], subId: number
             [effectId]: { ...char.crysOptions[effectId], subCrys: newSubCrys },
         },
     })
-    activeFlyout.value = null
 }
 
 const toggleCrys = (effectId: number) => {
@@ -347,24 +225,6 @@ const setUseIndex = (effectId: number, useIndex: number) => {
     }
     char.crysOptions[effectId].useIndex = useIndex
 }
-
-function onOutsideClick(event?: Event) {
-    const target = event?.target as HTMLElement | null
-    if (target?.closest?.('.flyout') || target?.closest?.('.sub-flyout')) return
-    activeFlyout.value = null
-}
-
-onMounted(() => {
-    document.addEventListener('click', onOutsideClick)
-    document.addEventListener('scroll', onOutsideClick, true)
-    document.addEventListener('wheel', onOutsideClick, true)
-})
-onBeforeUnmount(() => {
-    document.removeEventListener('click', onOutsideClick)
-    document.removeEventListener('scroll', onOutsideClick, true)
-    document.removeEventListener('wheel', onOutsideClick, true)
-
-})
 </script>
 
 <style scoped>
@@ -471,118 +331,8 @@ onBeforeUnmount(() => {
     font-weight: 600;
 }
 
-.subcrys-bar {
+.crys-card :deep(.subcrys-bar) {
     margin-top: 8px;
-    display: flex;
-    gap: 5px;
-    position: relative;
-    flex-direction: column;
-}
-
-.subcrys-pill {
-    flex: 1;
-    height: 28px;
-    border-radius: 5px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    background: rgba(255, 255, 255, 0.04);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    cursor: pointer;
-    font-size: 11px;
-    color: var(--color-text-secondary);
-    transition: border-color 0.15s, background 0.15s;
-}
-
-.subcrys-pill:hover {
-    border-color: rgba(246, 214, 130, 0.55);
-    background: rgba(246, 214, 130, 0.12);
-}
-
-.subcrys-pill.filled {
-    border-color: rgba(246, 214, 130, 0.45);
-    background: rgba(246, 214, 130, 0.15);
-    color: inherit;
-}
-
-.pill-label {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 11px;
-}
-
-.pill-empty {
-    opacity: 0.3;
-}
-
-.flyout {
-    background: var(--color-bg, #1c1c24);
-    border: 0.5px solid rgba(246, 214, 130, 0.35);
-    border-radius: 7px;
-    overflow: visible;
-    position: relative;
-}
-
-.flyout-scroll {
-    max-height: 220px;
-    overflow-y: visible;
-    overflow-x: visible;
-    position: relative;
-}
-
-.flyout-item {
-    display: flex;
-    align-items: center;
-    padding: 6px 10px;
-    cursor: pointer;
-    font-size: 12px;
-    position: relative;
-    gap: 6px;
-}
-
-.flyout-item:hover {
-    background: rgba(246, 214, 130, 0.12);
-}
-
-.flyout-item .item-name {
-    flex: 1;
-}
-
-.flyout-item .arrow {
-    opacity: 0.4;
-    font-size: 10px;
-}
-
-.flyout-item:hover .arrow {
-    opacity: 0.8;
-}
-
-.sub-flyout {
-    position: absolute;
-    left: 100%;
-    top: -1px;
-    min-width: 160px;
-    background: var(--color-bg, #1c1c24);
-    border: 0.5px solid rgba(246, 214, 130, 0.35);
-    border-radius: 7px;
-    z-index: 10000;
-    overflow: visible;
-}
-
-.sub-flyout-item {
-    display: flex;
-    align-items: center;
-    padding: 6px 10px;
-    cursor: pointer;
-    gap: 6px;
-    width: 240px;
-    height: 14px;
-}
-
-.sub-flyout-item:hover {
-    background: rgba(246, 214, 130, 0.12);
 }
 
 .missing-element-grid {
