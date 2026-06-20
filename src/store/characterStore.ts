@@ -112,7 +112,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
 
                 portrait: row.portrait,
 
-                crysOptions: row.crys_options 
+                crysOptions: row.crys_options || {}
             })
             if (char.rarity < 5) char.ascension = KiokuConstants.maxAscension;
             if (char.ascension > KiokuConstants.maxAscension) char.ascension = KiokuConstants.maxAscension;
