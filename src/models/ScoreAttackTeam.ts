@@ -332,7 +332,7 @@ export class ScoreAttackTeam {
                 if (
                     detail.startConditionSetIdCsv
                         .split(",")
-                        .some(id => !isStartCondRelevantForScoreAttack(id, sourceKioku.maxMagicStacks))
+                        .some(id => !isStartCondRelevantForScoreAttack(id, sourceKioku.maxMagicStacks, 5, this.dps.data.role))
                 ) continue;
 
                 const isDebuff = detail.abilityEffectType.startsWith("DWN_")
@@ -681,7 +681,7 @@ export class ScoreAttackTeam {
             if (
                 detail.startConditionSetIdCsv
                     .split(",")
-                    .some(id => !isStartCondRelevantForScoreAttack(id, this.dps.maxMagicStacks, initAmountOfEnemies))
+                    .some(id => !isStartCondRelevantForScoreAttack(id, this.dps.maxMagicStacks, initAmountOfEnemies, this.dps.data.role))
             ) continue;
             if (((detail as ActiveSkill).skillMstId / 100 | 0) !== this.dps.data.special_id) continue;
 

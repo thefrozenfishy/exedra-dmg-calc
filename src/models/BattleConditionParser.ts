@@ -1,6 +1,6 @@
 import battleConditionSetsJson from '../assets/base_data/getBattleConditionSetMstList.json';
 import battleConditionsJson from '../assets/base_data/getBattleConditionMstList.json';
-import { BattleState, PassiveSkill, SkillDetail } from '../types/KiokuTypes';
+import { BattleState, KiokuRole, PassiveSkill, SkillDetail } from '../types/KiokuTypes';
 import { KiokuState } from './PvPTeam';
 
 interface BattleCondition {
@@ -211,12 +211,22 @@ const lateGetIsActiveCond = (cond: BattleCondition) =>
 
 export const getDescriptionOfCond = (battleConditionSetId: string): string => battleConditionSets[battleConditionSetId].description
 
-export const isStartCondRelevantForScoreAttack = (startConditionId: string, maxMagicStacks: number, nrOfEnemies: number): boolean => {
+const logged = {}
+export const isStartCondRelevantForScoreAttack = (
+    startConditionId: string, 
+    maxMagicStacks: number, 
+    nrOfEnemies: number,
+    attackerRole: KiokuRole,
+): boolean => {
     if (!startConditionId || startConditionId === "0") return true
 
     const battleConditionSet = battleConditionSets[startConditionId]
     for (const activeCondId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
         const battleCondition = battleConditions[activeCondId]
+        if (!(activeCondId in logged)) {
+            logged[activeCondId] = true
+            console.debug(startConditionId, battleConditionSet, battleCondition)
+        }
 
         if (battleCondition.compareContent === CompareContent.CHARGE_POINT) {
             if (!isCondActive(battleCondition, maxMagicStacks)) return false
@@ -229,6 +239,10 @@ export const isStartCondRelevantForScoreAttack = (startConditionId: string, maxM
         if (battleCondition.compareContent === CompareContent.UNIQUE_DEBUFF_COUNT) {
             if (battleCondition.battleConditionMstId === 1468) return true // Akumura
             return false
+        }
+
+        if (battleCondition.compareContent === CompareContent.IS_ROLE_TYPE) {
+            if (!isCondActive(battleCondition, attackerRole)) return false
         }
     }
     return true;

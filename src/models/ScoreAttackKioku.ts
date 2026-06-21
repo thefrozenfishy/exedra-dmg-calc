@@ -68,9 +68,10 @@ export class ScoreAttackKioku extends Kioku {
         if (this.debuffMult < 0) this.debuffMult = 0;
         this.effects = Object.values(this.unscalableEffects).concat(Object.values(this.scalableEffects).map(e => {
             let v = e.value1;
-            if (e.abilityEffectType.startsWith("DWN_") || e.abilityEffectType.startsWith("DOWN_") || e.abilityEffectType.replace("AIM_", "") === "UP_RCV_DMG_RATIO") {
+            const abilityEffectType = e.abilityEffectType.replace("AIM_", "")
+            if (abilityEffectType.startsWith("DWN_") || abilityEffectType.startsWith("DOWN_") || abilityEffectType.startsWith("UP_RCV_")) {
                 v *= this.debuffMult;
-            } else if (e.abilityEffectType.startsWith("UP_")) {
+            } else if (abilityEffectType.startsWith("UP_")) {
                 v *= this.buffMult;
             }
             return { ...e, value1: v, turn: e.turn + this.debuffTurnBonus }
