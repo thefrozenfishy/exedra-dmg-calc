@@ -7,7 +7,7 @@ import { countCharsObtained, getPowerScores } from "../models/PowerValue"
 
 export class NameRequiredError extends Error {
     constructor() {
-        super("A player name is required to view the everyone board.")
+        super("A player name is required to view the full leaderboard.")
         this.name = "NameRequiredError"
     }
 }

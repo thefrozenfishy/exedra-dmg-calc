@@ -67,8 +67,14 @@
                                         alt="Profile avatar" />
                                 </div>
 
-                                <img class="rank-badge rank-badge-large" :src="rankIcon(store.myRank)"
-                                    :title="rankTitle(store.myRank)" :alt="rankAlt(store.myRank)" />
+                                <template v-if="store.myRank?.rank">
+                                    <img v-if="store.myRank.rank <= 10" :src="rankIcon(store.myRank)"
+                                        :title="rankTitle(store.myRank)" :alt="rankAlt(store.myRank)"
+                                        class="rank-badge rank-badge-large" />
+                                    <span v-else class="rank-badge rank-badge-large">
+                                        {{ rankAlt(store.myRank) }}
+                                    </span>
+                                </template>
                             </button>
 
                             <transition name="fade-scale">
@@ -222,7 +228,7 @@
 
                 <div class="add-friend-row">
 
-                    <label  for="listScope">Show:</label>
+                    <label for="listScope">Show:</label>
                     <select v-model="listScope" id="listScope">
                         <option value="mine">Friends + Union</option>
                         <option value="all">Everyone</option>
@@ -246,12 +252,14 @@
 
                 <p v-if="listLoading" class="list-loading-hint">Loading…</p>
 
-                <div v-if="store.nameRequired " class="name-required-notice">
-                    Set a player name in your profile before you can view the everyone board.
+                <div v-if="store.nameRequired" class="name-required-notice">
+                    Set a player name in your profile before you can receive a rank and view the full leaderboard.
                 </div>
 
                 <template v-else>
                     <p>Power might see some minor changes while formula is being fine tuned!</p>
+                    <p v-if="listScope !== 'all'">Ranks are only given to non-abandoned accounts with profile, Unnamed
+                        accounts are not counted</p>
                     <div class="friend-list">
                         <div v-for="friend in sortedFriends" :key="friend.friend_id" class="friend-card"
                             :class="{ 'union-member': friend.isUnionMember, 'stale-profile': friend.isActive === false }"
@@ -260,8 +268,13 @@
                                 <div class="friend-avatar-wrapper">
                                     <img class="profile-avatar" :src="avatarUrl(friend)" />
 
-                                    <img class="rank-badge" :src="rankIcon(friend)" :title="rankTitle(friend)"
-                                        :alt="rankAlt(friend)"  />
+                                    <template v-if="friend.rank">
+                                        <img v-if="friend.rank <= 10" class="rank-badge" :src="rankIcon(friend)"
+                                            :title="rankTitle(friend)" :alt="rankAlt(friend)" />
+                                        <span v-else class="rank-badge">
+                                            {{ rankAlt(friend) }}
+                                        </span>
+                                    </template>
 
                                     <button v-if="friend.isFriend" class="favorite-badge"
                                         @click="store.toggleFavorite(friend.friend_id)">
@@ -470,7 +483,6 @@ type RankLike = MyRank | SocialProfile | undefined
 const rankIcon = (r: RankLike) => {
     if (!r || r.rank == null || !r.totalPlayers) return undefined
     if (r.rank <= 10) return `/exedra-dmg-calc/ranks/${r.rank}.png`
-    return "null"
 }
 const rankTitle = (r: RankLike) => {
     if (!r || r.rank == null || !r.totalPlayers) return ''
@@ -961,10 +973,10 @@ let analyticsChart: Chart | null = null
 const graphMode = useSetting<'scatter' | 'percentile'>("betaGraphMode", "percentile")
 
 const graphOptions = [
-     {
+    {
         label: 'Rank',
         value: 'rank'
-    } ,
+    },
     {
         label: 'Total Power',
         value: 'total'
@@ -1135,7 +1147,7 @@ const renderAnalyticsChart = () => {
                         x: {
                             min: selectedXAxis.value === 'rank' ? 1 : 0,
                             max: getMaxTick(selectedXAxis.value),
-                            reverse : selectedXAxis.value === 'rank',
+                            reverse: selectedXAxis.value === 'rank',
                             ticks: { stepSize: 10 },
                             grid: { color: 'rgba(140, 100, 190, 0.35)' },
                             title: { display: true, text: getAxisLabel(selectedXAxis.value) }
@@ -1143,7 +1155,7 @@ const renderAnalyticsChart = () => {
                         y: {
                             min: selectedYAxis.value === 'rank' ? 1 : 0,
                             max: getMaxTick(selectedYAxis.value),
-                            reverse : selectedYAxis.value === 'rank',
+                            reverse: selectedYAxis.value === 'rank',
                             ticks: { stepSize: 10 },
                             grid: { color: 'rgba(140, 100, 190, 0.35)' },
                             title: { display: true, text: getAxisLabel(selectedYAxis.value) }
@@ -1291,11 +1303,13 @@ pre {
 ========================= */
 
 input,
-select {
+select,
+option {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 10px;
     color: var(--text);
+    background: var(--panel);
     padding: 0.7rem 0.9rem;
 }
 
