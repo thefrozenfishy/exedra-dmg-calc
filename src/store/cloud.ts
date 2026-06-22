@@ -2,6 +2,15 @@ import { getSupabase } from "../utils/supabase"
 import { getUserId } from "./user"
 import { logEvent } from '../utils/analytics'
 import type { Character } from "../types/KiokuTypes"
+import { KiokuRole } from "../types/KiokuTypes"
+import { countCharsObtained, getPowerScores } from "../models/PowerValue"
+
+export class NameRequiredError extends Error {
+    constructor() {
+        super("A player name is required to view the everyone board.")
+        this.name = "NameRequiredError"
+    }
+}
 
 async function createProfile(userId: string) {
     const supabase = getSupabase()
@@ -78,6 +87,36 @@ async function _saveCharacters(chars: Character[]) {
         .upsert(rows)
 
     if (error) throw error
+
+    await _updateMyScore(userId, chars)
+}
+
+async function _updateMyScore(userId: string, chars: Character[]) {
+    const supabase = getSupabase()
+
+    const power = getPowerScores(chars)
+    const kioku = countCharsObtained(chars)
+
+    const { error } = await supabase
+        .from('user_profiles')
+        .update({
+            power_total: power.total,
+            power_whale: power.whale,
+            power_attacker: power[KiokuRole.Attacker],
+            power_buffer: power[KiokuRole.Buffer],
+            power_debuffer: power[KiokuRole.Debuffer],
+            power_breaker: power[KiokuRole.Breaker],
+            power_defender: power[KiokuRole.Defender],
+            power_healer: power[KiokuRole.Healer],
+            kioku_lim: kioku.lim,
+            kioku_lim_as: kioku.limAs,
+            kioku_perm: kioku.perm,
+            kioku_perm_as: kioku.permAs,
+            score_updated_at: new Date().toISOString(),
+        })
+        .eq('user_id', userId)
+
+    if (error) console.error("Failed to update power score:", error)
 }
 
 async function _loadCharacters() {
@@ -182,6 +221,81 @@ async function _updateprofile_icon(profile_icon: number) {
     if (error) throw error
 }
 
+async function _getSimilarityRelations(myFriendId: string) {
+    const supabase = getSupabase()
+
+    const { data, error } = await supabase.rpc(
+        'get_similarity_relations',
+        { target_friend_id: myFriendId }
+    )
+
+    if (error) throw error
+
+    return (data as any[]).map(row => row.related_friend_id as string)
+}
+
+async function _upsertSimilarity(
+    myFriendId: string,
+    otherFriendId: string,
+    similarity: number
+) {
+    const supabase = getSupabase()
+
+    const { error } = await supabase.rpc(
+        'upsert_similarity',
+        {
+            my_friend_id: myFriendId,
+            other_friend_id: otherFriendId,
+            p_similarity: similarity,
+        }
+    )
+
+    if (error) throw error
+}
+
+export async function touchLastSeen() {
+    const userId = getUserId()
+
+    if (!userId) return
+
+    const supabase = getSupabase()
+
+    const { error } = await supabase.rpc(
+        'touch_last_seen',
+        { target_user_id: userId }
+    )
+
+    if (error) console.error("Failed to touch last seen:", error)
+}
+
+async function _getMyRank() {
+    const userId = getUserId()
+
+    if (!userId) return null
+
+    const supabase = getSupabase()
+
+    const myCode = await getFriendCode()
+
+    if (!myCode) return null
+
+    const { data, error } = await supabase
+        .from('public_profiles_ranked')
+        .select('global_rank, total_players')
+        .eq('friend_id', myCode)
+        .single()
+
+    if (error) throw error
+
+    return {
+        rank: data.global_rank as number,
+        totalPlayers: data.total_players as number,
+        percentile: data.total_players
+            ? data.global_rank / data.total_players
+            : 1,
+    }
+}
+
 async function _getAllUnionNames(): Promise<string[]> {
     const supabase = getSupabase()
 
@@ -262,6 +376,61 @@ async function _setFriendFavorite(
     if (error) throw error
 }
 
+export function scoreFromProfile(profile: any) {
+    return {
+        power: {
+            total: profile?.power_total ?? 0,
+            whale: profile?.power_whale ?? 0,
+            [KiokuRole.Attacker]: profile?.power_attacker ?? 0,
+            [KiokuRole.Buffer]: profile?.power_buffer ?? 0,
+            [KiokuRole.Debuffer]: profile?.power_debuffer ?? 0,
+            [KiokuRole.Breaker]: profile?.power_breaker ?? 0,
+            [KiokuRole.Defender]: profile?.power_defender ?? 0,
+            [KiokuRole.Healer]: profile?.power_healer ?? 0,
+        },
+        kioku_count: {
+            lim: profile?.kioku_lim ?? 0,
+            limAs: profile?.kioku_lim_as ?? 0,
+            perm: profile?.kioku_perm ?? 0,
+            permAs: profile?.kioku_perm_as ?? 0,
+        },
+        isActive: profile?.is_active ?? false,
+    }
+}
+
+async function attachSimilarity<T extends { friend_id?: string }>(
+    myFriendId: string,
+    rows: T[]
+): Promise<(T & { accountSimilarity?: number })[]> {
+    const otherCodes = rows.map(r => r.friend_id).filter(Boolean) as string[]
+
+    if (!otherCodes.length) return rows
+
+    const supabase = getSupabase()
+
+    const { data, error } = await supabase.rpc(
+        'get_similarity_for',
+        {
+            target_friend_id: myFriendId,
+            other_friend_ids: otherCodes,
+        }
+    )
+
+    if (error) {
+        console.error("Failed to load precomputed similarities:", error)
+        return rows
+    }
+
+    const byFriendId = new Map(
+        (data as any[]).map(r => [r.other_friend_id as string, r.similarity as number])
+    )
+
+    return rows.map(row => ({
+        ...row,
+        accountSimilarity: row.friend_id ? byFriendId.get(row.friend_id) : undefined,
+    }))
+}
+
 async function _getFriends() {
     const userId = getUserId()
 
@@ -281,14 +450,19 @@ async function _getFriends() {
     const friendCodes = relations.map(r => r.friend_id)
 
     const { data: profiles, error: profileError } = await supabase
-        .from('public_profiles')
+        .from('public_profiles_ranked')
         .select('*')
         .in('friend_id', friendCodes)
 
     if (profileError) throw profileError
 
+    const myFriendId = await getFriendCode()
+    const withSimilarity = myFriendId
+        ? await attachSimilarity(myFriendId, profiles ?? [])
+        : (profiles ?? [])
+
     return relations.map(friend => {
-        const profile = profiles.find(
+        const profile = withSimilarity.find(
             p => p.friend_id === friend.friend_id
         )
 
@@ -301,6 +475,10 @@ async function _getFriends() {
             favorite: friend.favorite ?? false,
             isFriend: true,
             isUnionMember: false,
+            accountSimilarity: profile?.accountSimilarity,
+            rank: profile?.global_rank ?? null,
+            totalPlayers: profile?.total_players ?? null,
+            ...scoreFromProfile(profile),
         }
     })
 }
@@ -329,16 +507,39 @@ async function _getProfile(friend_id: string) {
 }
 
 async function _loadAllPlayers() {
+    const userId = getUserId()
+    const myFriendId = await getFriendCode()
+
+    if (userId) {
+        const supabase = getSupabase()
+
+        const { data: myProfile, error: myProfileError } = await supabase
+            .from('user_profiles')
+            .select('display_name')
+            .eq('user_id', userId)
+            .single()
+
+        if (myProfileError) throw myProfileError
+
+        if (!myProfile?.display_name?.trim()) {
+            throw new NameRequiredError()
+        }
+    }
+
     const supabase = getSupabase()
 
     const { data: profiles, error: profileError } = await supabase
-        .from('public_profiles')
+        .from('public_profiles_ranked')
         .select('*')
-        .neq("friend_id", await getFriendCode())
+        .neq("friend_id", myFriendId)
 
     if (profileError) throw profileError
 
-    return profiles.map(profile => {
+    const withSimilarity = myFriendId
+        ? await attachSimilarity(myFriendId, profiles ?? [])
+        : (profiles ?? [])
+
+    return withSimilarity.map(profile => {
         return {
             friend_id: profile.friend_id,
             nickname: '',
@@ -348,6 +549,10 @@ async function _loadAllPlayers() {
             favorite: false,
             isFriend: true,
             isUnionMember: false,
+            accountSimilarity: profile?.accountSimilarity,
+            rank: profile?.global_rank ?? null,
+            totalPlayers: profile?.total_players ?? null,
+            ...scoreFromProfile(profile),
         }
     })
 }
@@ -552,6 +757,22 @@ export const restoreCloudAccount = withAnalytics(
 export const getMyProfile = withAnalytics(
     _getMyProfile,
     'get_my_profile'
+)
+
+export const getMyRank = withAnalytics(
+    _getMyRank,
+    'get_my_rank'
+)
+
+export const getSimilarityRelations = withAnalytics(
+    _getSimilarityRelations,
+    'get_similarity_relations'
+)
+
+export const upsertSimilarity = withAnalytics(
+    _upsertSimilarity,
+    'upsert_similarity',
+    ([, otherFriendId]) => ({ otherFriendId })
 )
 
 export const getAllUnionNames = withAnalytics(

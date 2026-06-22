@@ -6,7 +6,6 @@
             <section v-if="showGraph" class="profile-section analytics-section">
                 <h2>Power Analytics</h2>
                 <div class="btn-container">
-                    <button @click="loadPlayers">Load more players into the graph</button>
                     <button @click="exportData">Export Data</button>
                     <button @click="copy">Copy image to clipboard </button>
                 </div>
@@ -67,6 +66,9 @@
                                     <img class="profile-avatar-large" :src="avatarUrl(store.profile_icon)"
                                         alt="Profile avatar" />
                                 </div>
+
+                                <img v-if="isBeta()" class="rank-badge rank-badge-large" :src="rankIcon(store.myRank)"
+                                    :title="rankTitle(store.myRank)" :alt="rankAlt(store.myRank)" />
                             </button>
 
                             <transition name="fade-scale">
@@ -220,6 +222,12 @@
 
                 <div class="add-friend-row">
 
+                    <label v-if="isBeta()" for="listScope">Show:</label>
+                    <select v-if="isBeta()" v-model="listScope" id="listScope">
+                        <option value="mine">Friends + Union</option>
+                        <option value="all">Everyone</option>
+                    </select>
+
                     <label for="sortMode">Sort by:</label>
                     <select v-model="sortMode" id="sortMode">
                         <option value="default">Default</option>
@@ -236,178 +244,190 @@
 
                 </div>
 
-                <p>Power values will see some changes while formula is being fine tuned!</p>
-                <div class="friend-list">
-                    <div v-for="friend in sortedFriends" :key="friend.friend_id" class="friend-card"
-                        :class="{ 'union-member': friend.isUnionMember }">
-                        <div class="friend-left">
-                            <div class="friend-avatar-wrapper">
-                                <img class="profile-avatar" :src="avatarUrl(friend)" />
+                <p v-if="listLoading" class="list-loading-hint">Loading…</p>
 
-                                <button v-if="friend.isFriend" class="favorite-badge"
-                                    @click="store.toggleFavorite(friend.friend_id)">
-                                    {{ friend.favorite ? '★' : '☆' }}
-                                </button>
-                            </div>
+                <div v-if="store.nameRequired && isBeta()" class="name-required-notice">
+                    Set a player name in your profile before you can view the everyone board.
+                </div>
 
-                            <div class="friend-info">
-                                <div class="friend-name-row">
-                                    <div class="friend-primary">
-                                        {{
-                                            friend.nickname?.trim()
-                                            || friend.display_name?.trim()
-                                        }}
-                                    </div>
+                <template v-else>
+                    <p>Power might see some minor changes while formula is being fine tuned!</p>
+                    <div class="friend-list">
+                        <div v-for="friend in sortedFriends" :key="friend.friend_id" class="friend-card"
+                            :class="{ 'union-member': friend.isUnionMember, 'stale-profile': isBeta() && friend.isActive === false }"
+                            :title="isBeta() && friend.isActive ? '' : 'Account is inactive, it will become active once they make any changes to their account'">
+                            <div class="friend-left">
+                                <div class="friend-avatar-wrapper">
+                                    <img class="profile-avatar" :src="avatarUrl(friend)" />
 
-                                    <button v-if="friend.isFriend" class="edit-nick-btn"
-                                        @click="startEditingNickname(friend)">
-                                        🖊
+                                    <img class="rank-badge" :src="rankIcon(friend)" :title="rankTitle(friend)"
+                                        :alt="rankAlt(friend)" v-if="isBeta()" />
+
+                                    <button v-if="friend.isFriend" class="favorite-badge"
+                                        @click="store.toggleFavorite(friend.friend_id)">
+                                        {{ friend.favorite ? '★' : '☆' }}
                                     </button>
                                 </div>
 
-                                <div v-if="friend.nickname?.trim() && friend.display_name?.trim()"
-                                    class="friend-secondary">
-                                    {{ friend.display_name }}
-                                </div>
+                                <div class="friend-info">
+                                    <div class="friend-name-row">
+                                        <div class="friend-primary">
+                                            {{
+                                                friend.nickname?.trim()
+                                                || friend.display_name?.trim()
+                                            }}
+                                        </div>
 
-                                <div v-if="friend.union_name?.trim()" class="friend-union">
-                                    <div class="union-icon" :class="{ 'union-member': friend.isUnionMember }">
-                                        <img :src="'/exedra-dmg-calc/union.png'" alt="Union" />
+                                        <button v-if="friend.isFriend" class="edit-nick-btn"
+                                            @click="startEditingNickname(friend)">
+                                            🖊
+                                        </button>
                                     </div>
-                                    <span>
-                                        {{ friend.union_name }}
-                                    </span>
-                                </div>
 
-                                <input v-if="editingFriend === friend.friend_id" v-model="pendingNickname"
-                                    class="nickname-inline-input" placeholder="Nickname" maxlength="24"
-                                    @blur="finishNicknameEdit(friend)"
-                                    @keydown.enter.prevent="finishNicknameEdit(friend)" />
-                            </div>
-                        </div>
+                                    <div v-if="friend.nickname?.trim() && friend.display_name?.trim()"
+                                        class="friend-secondary">
+                                        {{ friend.display_name }}
+                                    </div>
 
-                        <div v-if="friend.power" class="friend-power">
-                            <div class="total-power-big friend" title="Power rating">
-                                <img :src="'/exedra-dmg-calc/pwr.png'" alt="Total" />
+                                    <div v-if="friend.union_name?.trim()" class="friend-union">
+                                        <div class="union-icon" :class="{ 'union-member': friend.isUnionMember }">
+                                            <img :src="'/exedra-dmg-calc/union.png'" alt="Union" />
+                                        </div>
+                                        <span>
+                                            {{ friend.union_name }}
+                                        </span>
+                                    </div>
 
-                                <div class="total-power-value">
-                                    {{ friend.power.total }}
-                                </div>
-                            </div>
-
-
-                            <div v-if="isTouchDevice" class="whale-power-big friend" title="Whale power">
-                                <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale power" />
-
-                                <div class="total-power-value">
-                                    {{ myPower.whale }}
+                                    <input v-if="editingFriend === friend.friend_id" v-model="pendingNickname"
+                                        class="nickname-inline-input" placeholder="Nickname" maxlength="24"
+                                        @blur="finishNicknameEdit(friend)"
+                                        @keydown.enter.prevent="finishNicknameEdit(friend)" />
                                 </div>
                             </div>
 
+                            <div v-if="friend.power" class="friend-power">
+                                <div class="total-power-big friend" title="Power rating">
+                                    <img :src="'/exedra-dmg-calc/pwr.png'" alt="Total" />
 
-                            <div v-if="isTouchDevice" class="whale-power-big friend" title="Similarity score">
-                                <img :src="'/exedra-dmg-calc/similarity.png'" alt="Similarity" />
-
-                                <div class="total-power-value">
-                                    {{ friend.accountSimilarity }}
-                                </div>
-                            </div>
-
-                            <div class="role-grid-compact role-grid-5-compact">
-                                <div class="mini-power-box" title="Attacker power rating">
-                                    <img :src="'/exedra-dmg-calc/roles/Attacker.png'" alt="Attacker" />
-                                    <span>{{ friend.power[KiokuRole.Attacker] }}</span>
+                                    <div class="total-power-value">
+                                        {{ friend.power.total }}
+                                    </div>
                                 </div>
 
-                                <div class="mini-power-box" title="Buffer power rating">
-                                    <img :src="'/exedra-dmg-calc/roles/Buffer.png'" alt="Buffer" />
-                                    <span>{{ friend.power[KiokuRole.Buffer] }}</span>
+
+                                <div v-if="isTouchDevice" class="whale-power-big friend" title="Whale power">
+                                    <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale power" />
+
+                                    <div class="total-power-value">
+                                        {{ myPower.whale }}
+                                    </div>
                                 </div>
 
-                                <div class="mini-power-box" title="Debuffer power rating">
-                                    <img :src="'/exedra-dmg-calc/roles/Debuffer.png'" alt="Debuffer" />
-                                    <span>{{ friend.power[KiokuRole.Debuffer] }}</span>
-                                </div>
 
-                                <div v-if="!isTouchDevice" class="mini-power-box" title="Similarity score">
+                                <div v-if="isTouchDevice" class="whale-power-big friend" title="Similarity score">
                                     <img :src="'/exedra-dmg-calc/similarity.png'" alt="Similarity" />
-                                    <span>{{ friend.accountSimilarity }}</span>
+
+                                    <div class="total-power-value">
+                                        {{ friend.accountSimilarity }}
+                                    </div>
                                 </div>
 
-                                <div v-if="!isTouchDevice" class="mini-power-box bigger-box"
-                                    title="Nr of standard 5☆ Kioku owned (Ascensions)">
-                                    <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
-                                    <pre>{{ formatKiokuCount(friend.kioku_count?.perm, friend.kioku_count?.permAs) }}</pre>
-                                </div>
+                                <div class="role-grid-compact role-grid-5-compact">
+                                    <div class="mini-power-box" title="Attacker power rating">
+                                        <img :src="'/exedra-dmg-calc/roles/Attacker.png'" alt="Attacker" />
+                                        <span>{{ friend.power[KiokuRole.Attacker] }}</span>
+                                    </div>
 
-                                <div class="mini-power-box" title="Breaker power rating">
-                                    <img :src="'/exedra-dmg-calc/roles/Breaker.png'" alt="Breaker" />
-                                    <span>{{ friend.power[KiokuRole.Breaker] }}</span>
-                                </div>
+                                    <div class="mini-power-box" title="Buffer power rating">
+                                        <img :src="'/exedra-dmg-calc/roles/Buffer.png'" alt="Buffer" />
+                                        <span>{{ friend.power[KiokuRole.Buffer] }}</span>
+                                    </div>
 
-                                <div class="mini-power-box" title="Defender power rating">
-                                    <img :src="'/exedra-dmg-calc/roles/Defender.png'" alt="Defender" />
-                                    <span>{{ friend.power[KiokuRole.Defender] }}</span>
-                                </div>
+                                    <div class="mini-power-box" title="Debuffer power rating">
+                                        <img :src="'/exedra-dmg-calc/roles/Debuffer.png'" alt="Debuffer" />
+                                        <span>{{ friend.power[KiokuRole.Debuffer] }}</span>
+                                    </div>
 
-                                <div class="mini-power-box" title="Healer power rating">
-                                    <img :src="'/exedra-dmg-calc/roles/Healer.png'" alt="Healer" />
-                                    <span>{{ friend.power[KiokuRole.Healer] }}</span>
-                                </div>
+                                    <div v-if="!isTouchDevice" class="mini-power-box" title="Similarity score">
+                                        <img :src="'/exedra-dmg-calc/similarity.png'" alt="Similarity" />
+                                        <span>{{ friend.accountSimilarity }}</span>
+                                    </div>
 
-                                <div v-if="!isTouchDevice" class="mini-power-box" title="Whale power">
-                                    <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale" />
-                                    <span>{{ friend.power.whale }}</span>
-                                </div>
+                                    <div v-if="!isTouchDevice" class="mini-power-box bigger-box"
+                                        title="Nr of standard 5☆ Kioku owned (Ascensions)">
+                                        <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
+                                        <pre>{{ formatKiokuCount(friend.kioku_count?.perm, friend.kioku_count?.permAs) }}</pre>
+                                    </div>
 
-                                <div v-if="isTouchDevice" class="mini-power-box bigger-box"
-                                    title="Nr of standard 5☆ Kioku owned (Ascensions)">
-                                    <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
-                                    <pre>{{ formatKiokuCount(friend.kioku_count?.perm, friend.kioku_count?.permAs) }}</pre>
-                                </div>
+                                    <div class="mini-power-box" title="Breaker power rating">
+                                        <img :src="'/exedra-dmg-calc/roles/Breaker.png'" alt="Breaker" />
+                                        <span>{{ friend.power[KiokuRole.Breaker] }}</span>
+                                    </div>
 
-                                <div class="mini-power-box bigger-box"
-                                    title="Nr of limited 5☆ Kioku owned (Ascensions)">
-                                    <img class="lim-icon" :src="'/exedra-dmg-calc/lim-kioku.png'" />
-                                    <pre>{{ formatKiokuCount(friend.kioku_count?.lim, friend.kioku_count?.limAs) }}</pre>
+                                    <div class="mini-power-box" title="Defender power rating">
+                                        <img :src="'/exedra-dmg-calc/roles/Defender.png'" alt="Defender" />
+                                        <span>{{ friend.power[KiokuRole.Defender] }}</span>
+                                    </div>
+
+                                    <div class="mini-power-box" title="Healer power rating">
+                                        <img :src="'/exedra-dmg-calc/roles/Healer.png'" alt="Healer" />
+                                        <span>{{ friend.power[KiokuRole.Healer] }}</span>
+                                    </div>
+
+                                    <div v-if="!isTouchDevice" class="mini-power-box" title="Whale power">
+                                        <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale" />
+                                        <span>{{ friend.power.whale }}</span>
+                                    </div>
+
+                                    <div v-if="isTouchDevice" class="mini-power-box bigger-box"
+                                        title="Nr of standard 5☆ Kioku owned (Ascensions)">
+                                        <img :src="'/exedra-dmg-calc/perm-kioku.png'" />
+                                        <pre>{{ formatKiokuCount(friend.kioku_count?.perm, friend.kioku_count?.permAs) }}</pre>
+                                    </div>
+
+                                    <div class="mini-power-box bigger-box"
+                                        title="Nr of limited 5☆ Kioku owned (Ascensions)">
+                                        <img class="lim-icon" :src="'/exedra-dmg-calc/lim-kioku.png'" />
+                                        <pre>{{ formatKiokuCount(friend.kioku_count?.lim, friend.kioku_count?.limAs) }}</pre>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="friend-actions">
-                            <router-link v-slot="{ href }" :to="{
-                                path: '/my-kioku',
-                                query: {
-                                    friend: friend.friend_id
-                                }
-                            }" custom>
-                                <a :href="href" target="_blank" rel="noopener noreferrer">
-                                    View Kioku
-                                </a>
-                            </router-link>
+                            <div class="friend-actions">
+                                <router-link v-slot="{ href }" :to="{
+                                    path: '/my-kioku',
+                                    query: {
+                                        friend: friend.friend_id
+                                    }
+                                }" custom>
+                                    <a :href="href" target="_blank" rel="noopener noreferrer">
+                                        View Kioku
+                                    </a>
+                                </router-link>
 
-                            <router-link v-slot="{ href }" :to="{
-                                path: '/account-compare',
-                                query: {
-                                    left: store.friendCode,
-                                    right: friend.friend_id,
-                                }
-                            }" custom>
-                                <a :href="href" target="_blank" rel="noopener noreferrer">
-                                    Compare
-                                </a>
-                            </router-link>
+                                <router-link v-slot="{ href }" :to="{
+                                    path: '/account-compare',
+                                    query: {
+                                        left: store.friendCode,
+                                        right: friend.friend_id,
+                                    }
+                                }" custom>
+                                    <a :href="href" target="_blank" rel="noopener noreferrer">
+                                        Compare
+                                    </a>
+                                </router-link>
 
-                            <button v-if="!friend.isFriend" @click="store.addFriend(friend.friend_id)">
-                                Follow
-                            </button>
+                                <button v-if="!friend.isFriend" @click="store.addFriend(friend.friend_id)">
+                                    Follow
+                                </button>
 
-                            <button v-else class="remove-btn" @click="store.deleteFriend(friend.friend_id)">
-                                Remove
-                            </button>
+                                <button v-else class="remove-btn" @click="store.deleteFriend(friend.friend_id)">
+                                    Remove
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </template>
             </section>
         </template>
     </div>
@@ -441,19 +461,25 @@ import {
 } from 'chart.js'
 import { isBeta } from '../utils/betaSettings'
 import { copyImageToClipboard } from '../utils/image'
+import { MyRank } from '../store/friendStore'
 
 const store = useFriendStore()
 const characterStore = useCharacterStore()
 
-const loadPlayers = async () => {
-    await store.loadFriends(true)
-    toast.success(
-        'Added all players!',
-        {
-            position: toast.POSITION.TOP_RIGHT,
-            icon: false,
-        }
-    )
+type RankLike = MyRank | SocialProfile | undefined
+
+const rankIcon = (r: RankLike) => {
+    if (!r || r.rank == null || !r.totalPlayers) return undefined
+    if (r.rank <= 10) return `/exedra-dmg-calc/ranks/${r.rank}.png`
+    return "null"
+}
+const rankTitle = (r: RankLike) => {
+    if (!r || r.rank == null || !r.totalPlayers) return ''
+    return `#${r.rank} of ${r.totalPlayers}`
+}
+const rankAlt = (r: RankLike) => {
+    if (!r || r.rank == null || !r.totalPlayers) return ''
+    return `#${r.rank}`
 }
 
 const formatKiokuCount = (chars: number | undefined, ascs: number | undefined) =>
@@ -477,6 +503,7 @@ const exportData = () => {
 
     pushRow([
         'id',
+        'rank',
         'nickname',
         'display name',
         'union name',
@@ -498,6 +525,7 @@ const exportData = () => {
     if (myPower.value) {
         pushRow([
             store.friendCode,
+            store.myRank?.rank,
             store.displayName,
             store.displayName,
             store.unionName,
@@ -520,6 +548,7 @@ const exportData = () => {
     for (const f of store.friends) {
         pushRow([
             f.friend_id,
+            f.rank,
             f.nickname,
             f.display_name,
             f.union_name,
@@ -605,6 +634,10 @@ onMounted(async () => {
     pendingFriendCode.value = store.friendCode
     pendingUnionName.value = store.unionName
 
+    if (listScope.value === 'all') {
+        await loadFriendsForScope('all')
+    }
+
     renderAnalyticsChart()
 
 
@@ -643,6 +676,7 @@ const selectAvatar = async (id: number) => {
 }
 
 type SortModes = 'default'
+    | 'rank'
     | 'name'
     | 'total'
     | 'whale'
@@ -659,6 +693,20 @@ type SortModes = 'default'
     | "permAs"
 const sortMode = useSetting<SortModes>("sortMode", "default")
 const showGraph = useSetting<boolean>("showAnalyticsGraph", false)
+
+const listScope = useSetting<'mine' | 'all'>("friendListScope", "mine")
+const listLoading = ref(false)
+
+const loadFriendsForScope = async (scope: 'mine' | 'all') => {
+    listLoading.value = true
+    try {
+        await store.loadFriends(scope === 'all')
+    } finally {
+        listLoading.value = false
+    }
+}
+
+watch(listScope, (scope) => loadFriendsForScope(scope))
 
 const sortedFriends = computed(() => {
     const arr = [...store.friends]
@@ -679,6 +727,13 @@ const sortedFriends = computed(() => {
         let diff = 0
 
         switch (sortMode.value) {
+            case 'rank':
+                diff = (b.power?.total || 0) - (a.power?.total || 0)
+                if (diff === 0) diff = (b.power?.whale || 0) - (a.power?.whale || 0)
+                if (diff === 0) diff = (b.kioku_count?.limAs || 0) - (a.kioku_count?.limAs || 0)
+                if (diff === 0) diff = (b.kioku_count?.lim || 0) - (a.kioku_count?.lim || 0)
+                break
+
             case 'total':
                 diff = (b.power?.total || 0) - (a.power?.total || 0)
                 break
@@ -907,6 +962,10 @@ let analyticsChart: Chart | null = null
 const graphMode = useSetting<'scatter' | 'percentile'>("betaGraphMode", "percentile")
 
 const graphOptions = [
+    isBeta() ? {
+        label: 'Rank',
+        value: 'rank'
+    } : null,
     {
         label: 'Total Power',
         value: 'total'
@@ -959,7 +1018,7 @@ const graphOptions = [
         label: 'Limited kioku ascensions',
         value: 'limAs'
     },
-]
+].filter(Boolean)
 
 const selectedXAxis = useSetting<string>('betaGraphSelectedXAxis', 'total')
 const selectedYAxis = useSetting<string>('betaGraphSelectedYAxis', 'whale')
@@ -983,6 +1042,7 @@ const analyticsPlayers = computed(() => {
             limAs: myChars.value.limAs,
             perm: myChars.value.perm,
             permAs: myChars.value.permAs,
+            rank: store.myRank?.rank,
         })
     }
 
@@ -997,6 +1057,7 @@ const analyticsPlayers = computed(() => {
             limAs: friend.kioku_count?.limAs || 0,
             perm: friend.kioku_count?.perm || 0,
             permAs: friend.kioku_count?.permAs || 0,
+            rank: friend.rank,
         })
     }
 
@@ -1004,11 +1065,7 @@ const analyticsPlayers = computed(() => {
 })
 
 const getMetricValue = (player: any, metric: string) => {
-    if (['similarity', 'lim', 'perm', 'limAs', 'permAs'].includes(metric)) {
-        return player[metric] || 0
-    }
-
-    return player.power?.[metric] || 0
+    return player.power?.[metric] ?? player[metric] ?? 0
 }
 
 const getAxisLabel = (value: string) => graphOptions.find(o => o.value === value)?.label ?? value
@@ -1018,6 +1075,7 @@ const getMaxTick = (axisLabel: string) => {
     if (axisLabel === "permAs") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica" && c.obtain !== "Exclusive").length * 6
     if (axisLabel === "lim") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica" && c.obtain === "Exclusive").length
     if (axisLabel === "limAs") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica" && c.obtain === "Exclusive").length * 6
+    if (axisLabel === "rank") return store.myRank?.totalPlayers
     return 100
 }
 
@@ -1076,15 +1134,17 @@ const renderAnalyticsChart = () => {
                     animation: false,
                     scales: {
                         x: {
-                            min: 0,
+                            min: selectedXAxis.value === 'rank' ? 1 : 0,
                             max: getMaxTick(selectedXAxis.value),
+                            reverse : selectedXAxis.value === 'rank',
                             ticks: { stepSize: 10 },
                             grid: { color: 'rgba(140, 100, 190, 0.35)' },
                             title: { display: true, text: getAxisLabel(selectedXAxis.value) }
                         },
                         y: {
-                            min: 0,
+                            min: selectedYAxis.value === 'rank' ? 1 : 0,
                             max: getMaxTick(selectedYAxis.value),
+                            reverse : selectedYAxis.value === 'rank',
                             ticks: { stepSize: 10 },
                             grid: { color: 'rgba(140, 100, 190, 0.35)' },
                             title: { display: true, text: getAxisLabel(selectedYAxis.value) }
@@ -1420,6 +1480,8 @@ a.link {
 }
 
 .profile-avatar-button {
+    position: relative;
+
     padding: 0;
     border: none;
     background: transparent;
@@ -1488,6 +1550,65 @@ a.link {
 .favorite-badge:hover {
     background: rgba(255, 255, 255, 0.08);
     transform: scale(1.08);
+}
+
+/* =========================
+   Rank Badge
+========================= */
+
+.rank-badge {
+    position: absolute;
+
+    bottom: -4px;
+    right: -6px;
+
+    width: 24px;
+    height: 24px;
+
+    border-radius: 50%;
+    object-fit: contain;
+
+    background: rgba(18, 13, 25, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+
+    font-size: x-small;
+
+    line-height: 24px;
+    text-align: center;
+}
+
+.rank-badge-large {
+    bottom: 0;
+    right: -4px;
+
+    width: 30px;
+    height: 30px;
+}
+
+.list-loading-hint {
+    opacity: 0.7;
+    font-size: 0.85rem;
+}
+
+.name-required-notice {
+    padding: 12px 16px;
+    margin: 8px 0;
+
+    border-radius: 8px;
+    border: 1px solid rgba(255, 180, 80, 0.4);
+    background: rgba(255, 180, 80, 0.08);
+
+    font-size: 0.9rem;
+}
+
+.friend-card.stale-profile {
+    opacity: 0.55;
+}
+
+.friend-card.stale-profile .profile-avatar {
+    filter: grayscale(0.6);
 }
 
 /* =========================
@@ -1844,7 +1965,7 @@ img.lim-icon {
     border-radius: 50%;
 }
 
-..avatar-option:hover {
+.avatar-option:hover {
     transform: scale(1.08);
 }
 

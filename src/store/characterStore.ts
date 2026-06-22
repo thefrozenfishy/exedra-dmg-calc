@@ -7,13 +7,19 @@ import {
     saveCharacters,
     loadCharacters,
     createCloudUser,
-    restoreCloudAccount
+    restoreCloudAccount,
+    getSimilarityRelations,
+    upsertSimilarity,
+    loadCharactersByFriendCode,
+    getFriendCode,
+    touchLastSeen,
 } from "../store/cloud"
 import {
     createUserId,
     setUserId,
     getUserId
 } from "../store/user"
+import { getAccountSimilarityScore } from "../models/AccountSimilarityScore"
 
 const base = {
     ascension: KiokuConstants.maxAscension,
@@ -75,10 +81,49 @@ export const useCharacterStore = defineStore('characterStore', () => {
             )
     }
 
+    const precomputeSimilarities = async () => {
+        const userId = getUserId()
+
+        if (!userId) return
+
+        try {
+            const myFriendId = await getFriendCode()
+
+            if (!myFriendId) return
+
+            const relatedFriendIds = await getSimilarityRelations(myFriendId)
+
+            await Promise.all(
+                relatedFriendIds.map(async (otherFriendId) => {
+                    try {
+                        const rows = await loadCharactersByFriendCode(otherFriendId)
+                        const theirChars = mergeChars(rows) as Character[]
+
+                        const similarity = getAccountSimilarityScore(
+                            characters.value,
+                            theirChars
+                        )
+
+                        await upsertSimilarity(myFriendId, otherFriendId, similarity)
+                    } catch (err) {
+                        console.error(
+                            "Failed to precompute similarity for",
+                            otherFriendId,
+                            err
+                        )
+                    }
+                })
+            )
+        } catch (err) {
+            console.error("Failed to load similarity relations:", err)
+        }
+    }
+
     const debouncedCloudSave = debounce(async () => {
         try {
             if (!getUserId()) return
             await saveCharacters(characters.value)
+            await precomputeSimilarities()
         } catch (err) {
             console.error("Failed to save characters:", err)
         }
@@ -152,6 +197,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
         } catch (err) {
             console.error("Failed to initialize cloud characters:", err)
         }
+        touchLastSeen()
     }
 
     const toggleCharacter = (id: number) => {
