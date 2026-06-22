@@ -1,6 +1,6 @@
 <template>
     <div class="profile-page">
-        <div v-if="isBeta()">
+        <div>
             <button @click="showGraph = !showGraph">{{ showGraph ? 'Hide' : 'Show' }} graph</button>
 
             <section v-if="showGraph" class="profile-section analytics-section">
@@ -67,7 +67,7 @@
                                         alt="Profile avatar" />
                                 </div>
 
-                                <img v-if="isBeta()" class="rank-badge rank-badge-large" :src="rankIcon(store.myRank)"
+                                <img class="rank-badge rank-badge-large" :src="rankIcon(store.myRank)"
                                     :title="rankTitle(store.myRank)" :alt="rankAlt(store.myRank)" />
                             </button>
 
@@ -222,8 +222,8 @@
 
                 <div class="add-friend-row">
 
-                    <label v-if="isBeta()" for="listScope">Show:</label>
-                    <select v-if="isBeta()" v-model="listScope" id="listScope">
+                    <label  for="listScope">Show:</label>
+                    <select v-model="listScope" id="listScope">
                         <option value="mine">Friends + Union</option>
                         <option value="all">Everyone</option>
                     </select>
@@ -246,7 +246,7 @@
 
                 <p v-if="listLoading" class="list-loading-hint">Loading…</p>
 
-                <div v-if="store.nameRequired && isBeta()" class="name-required-notice">
+                <div v-if="store.nameRequired " class="name-required-notice">
                     Set a player name in your profile before you can view the everyone board.
                 </div>
 
@@ -254,14 +254,14 @@
                     <p>Power might see some minor changes while formula is being fine tuned!</p>
                     <div class="friend-list">
                         <div v-for="friend in sortedFriends" :key="friend.friend_id" class="friend-card"
-                            :class="{ 'union-member': friend.isUnionMember, 'stale-profile': isBeta() && friend.isActive === false }"
-                            :title="isBeta() && friend.isActive ? '' : 'Account is inactive, it will become active once they make any changes to their account'">
+                            :class="{ 'union-member': friend.isUnionMember, 'stale-profile': friend.isActive === false }"
+                            :title="friend.isActive ? '' : 'Account is inactive, it will become active once they make any changes to their account'">
                             <div class="friend-left">
                                 <div class="friend-avatar-wrapper">
                                     <img class="profile-avatar" :src="avatarUrl(friend)" />
 
                                     <img class="rank-badge" :src="rankIcon(friend)" :title="rankTitle(friend)"
-                                        :alt="rankAlt(friend)" v-if="isBeta()" />
+                                        :alt="rankAlt(friend)"  />
 
                                     <button v-if="friend.isFriend" class="favorite-badge"
                                         @click="store.toggleFavorite(friend.friend_id)">
@@ -459,7 +459,6 @@ import {
     Tooltip,
     Legend
 } from 'chart.js'
-import { isBeta } from '../utils/betaSettings'
 import { copyImageToClipboard } from '../utils/image'
 import { MyRank } from '../store/friendStore'
 
@@ -962,10 +961,10 @@ let analyticsChart: Chart | null = null
 const graphMode = useSetting<'scatter' | 'percentile'>("betaGraphMode", "percentile")
 
 const graphOptions = [
-    isBeta() ? {
+     {
         label: 'Rank',
         value: 'rank'
-    } : null,
+    } ,
     {
         label: 'Total Power',
         value: 'total'
@@ -1585,6 +1584,8 @@ a.link {
 
     width: 30px;
     height: 30px;
+    font-size: small;
+    line-height: 30px;
 }
 
 .list-loading-hint {
