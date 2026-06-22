@@ -1,0 +1,494 @@
+import { crystalises, portraits } from "./helpers";
+
+
+export enum BasicIds {
+    CRYS = 11,
+    SUPPORT = 22,
+    ASCENSION = 33,
+    PORTRAIT = 44,
+}
+
+export enum KiokuElement {
+    Flame = "Flame",
+    Aqua = "Aqua",
+    Forest = "Forest",
+    Light = "Light",
+    Dark = "Dark",
+    Void = "Void"
+}
+
+export enum Aliment {
+    BURN = "BURN",
+    CURSE = "CURSE",
+    POISON = "POISON",
+    STUN = "STUN",
+    VORTEX = "VORTEX",
+    WEAKNESS = "WEAKNESS",
+    WOUND = "BLEED",
+}
+
+export const elementAlimentMap: Record<KiokuElement, Aliment> = {
+    [KiokuElement.Flame]: Aliment.BURN,
+    [KiokuElement.Aqua]: Aliment.WEAKNESS,
+    [KiokuElement.Forest]: Aliment.POISON,
+    [KiokuElement.Light]: Aliment.STUN,
+    [KiokuElement.Dark]: Aliment.CURSE,
+    [KiokuElement.Void]: Aliment.WOUND,
+};
+
+export enum KiokuRole {
+    Attacker = "Attacker",
+    Buffer = "Buffer",
+    Debuffer = "Debuffer",
+    Healer = "Healer",
+    Breaker = "Breaker",
+    Defender = "Defender"
+}
+
+export const roleMap: Record<string, KiokuRole> = {
+  1: KiokuRole.Attacker,
+  2: KiokuRole.Breaker,
+  3: KiokuRole.Healer,
+  4: KiokuRole.Buffer,
+  5: KiokuRole.Debuffer,
+  6: KiokuRole.Defender,
+};
+
+export type SupportKey = KiokuRole | KiokuElement
+
+export const elementMap: Record<string, KiokuElement> = {
+    1: KiokuElement.Flame,
+    2: KiokuElement.Aqua,
+    3: KiokuElement.Forest,
+    4: KiokuElement.Light,
+    5: KiokuElement.Dark,
+    6: KiokuElement.Void,
+};
+
+const portraitPriority = (elem?: KiokuElement): string[] => [
+    "A Dream of a Little Mermaid",
+    "The Savior's Apostle",
+    "Faith We'll Meet Again Someday",
+    "Farewell to a Future Unseen",
+    "For Hope That Lies Ahead",
+    "Proof of Friends Again",
+];
+
+const getPortraitPriority = (name: string, elem?: KiokuElement) => {
+    const order = portraitPriority(elem);
+    const idx = order.indexOf(name);
+    return idx === -1 ? order.length : idx;
+};
+
+export const getPortraits = (elem?: KiokuElement): string[] => {
+    return [
+        { name: "" },
+        ...Object.values(portraits),
+    ]
+        .sort((a, b) => {
+            const pa = getPortraitPriority(a.name, elem);
+            const pb = getPortraitPriority(b.name, elem);
+
+            if (pa !== pb) return pa - pb;
+
+            return a.name.localeCompare(b.name, undefined, {
+                numeric: true,
+                sensitivity: "base",
+            });
+        })
+        .map(p => p.name);
+};
+
+export const portraitsBestOnly = (elem: KiokuElement, optimizeAverageDamage: boolean) => [
+    "A Dream of a Little Mermaid",
+    "The Savior's Apostle",
+    "Faith We'll Meet Again Someday",
+    elem === KiokuElement.Dark ? "Because...I'm Not Alone Anymore" : null,
+    elem === KiokuElement.Flame ? "Monogatari Collab Celebration 2" : null,
+    optimizeAverageDamage ? "Farewell to a Future Unseen" : null,
+].filter(c => !!c) as string[]
+
+const dmgUpPortraits = {
+    [KiokuElement.Flame]: "A Reluctant Coach Steps Up",
+    [KiokuElement.Aqua]: "Futures Felt in Photographs",
+    [KiokuElement.Forest]: "Special Stage Persona",
+    [KiokuElement.Light]: "High Five for Harmony",
+    [KiokuElement.Dark]: ["One Time Team-up!", "Because...I'm Not Alone Anymore"],
+    [KiokuElement.Void]: "Pride on the Line",
+}
+
+export interface Portrait {
+    cardMstId: number;
+    passiveSkill1: number;
+    element: number;
+    rarity: number;
+    name: string;
+    resourceName: string;
+    stats: PortraitLvlData
+}
+
+export interface PortraitLvlData {
+    atk: number;
+    def: number;
+    hp: number;
+}
+
+export interface MagicLevel {
+    eff: string
+    val: number
+}
+
+export interface PassiveSkill {
+    abilityEffectType: string
+    activeConditionSetIdCsv: string
+    description: string
+    descriptionType: number
+    element: number
+    passiveSkillDetailMstId: number
+    passiveSkillMstId: number
+    range: number
+    remainCount: number
+    role: number
+    startConditionSetIdCsv: string
+    startTimingIdCsv: string
+    turn: number
+    value1: number
+    value2: number
+    value3: number
+    applier?: string
+}
+
+export interface ActiveSkill {
+    abilityEffectType: string
+    activeConditionSetIdCsv: string
+    description: string
+    descriptionType: number
+    element: number
+    probability: number
+    range: number
+    remainCount: number
+    role: number
+    skillDetailMstId: number
+    skillMstId: number
+    startConditionSetIdCsv: string
+    turn: number
+    value1: number
+    value2: number
+    value3: number
+    value4: number
+    applier?: string
+}
+
+export type SkillDetail = PassiveSkill | ActiveSkill;
+export const skillDetailId = (d: SkillDetail) => "skillDetailMstId" in d ? d.skillDetailMstId : d.passiveSkillDetailMstId
+export type SkillKey = "skillMstId" | "passiveSkillMstId";
+
+export interface Character {
+    ascension: number
+    character_en: string
+    crysOptions: Record<number, CrystalisSelection>
+    element: KiokuElement
+    enabled: boolean
+    heartphial: string
+    heartphialLvl: number
+    id: number
+    kiokuLvl: number
+    magicLvl: number
+    name: string
+    obtain: string
+    permaDate: string
+    releaseDate: string
+    portrait?: string
+    rarity: number
+    role: KiokuRole
+    specialLvl: number
+    supportDescription: string
+    supportTarget: SupportKey
+    dupes: number
+}
+
+export interface TeamSnapshotList {
+    sp: number
+    team: TeamSnapshot[]
+}
+
+export interface TeamSnapshot {
+    spd: number
+    currSpdBuffs: [number, string, string?][]
+    atk: number
+    baseSpd: number
+    buffs: string[]
+    debuffs: string[]
+    magicStacks: number
+    maxMagicStacks: number
+    secondsLeft: number
+    distanceLeft: number
+    id: number
+    breakCurrent: number
+    maxBreakGauge: number
+    mp: number
+    maxMp: number
+    name: string
+}
+
+export interface BattleSnapshot {
+    allies: TeamSnapshotList
+    enemies: TeamSnapshotList
+    lastActor?: string
+    lastTeamIsTeam1?: boolean
+    lastTargetType?: TargetType
+}
+
+export interface KiokuData {
+    ability_id: number
+    atk120: number
+    atk140: number
+    atk160: number
+    atk180: number
+    atk200: number
+    attack_id: number
+    character_en: string
+    crystalis_effect: string
+    crystalis_id: number
+    def120: number
+    def140: number
+    def160: number
+    def180: number
+    def200: number
+    element: KiokuElement
+    ep: number
+    heartphial: string
+    hp120: number
+    hp140: number
+    hp160: number
+    hp180: number
+    hp200: number
+    id: number
+    maxMagicStacks?: number
+    minAtk: number
+    minCritDmg: number
+    minCritRate: number
+    minDef: number
+    minHp: number
+    minSpd: number
+    obtain: string
+    permaDate: string
+    releaseDate: string
+    rarity: number
+    role: KiokuRole
+    skill_id: number
+    special_id: number
+    support_effect: string
+    support_id: number
+    support_target: SupportKey
+    ascension_1_effect_2_id: number
+    ascension_2_effect_2_id: number
+    ascension_3_effect_2_id?: number
+    ascension_4_effect_2_id: number
+    ascension_5_effect_2_id?: number
+}
+
+export interface CrystalisData {
+    abilityEffectType: string
+    description: string
+    name: string
+    rarity: number
+    resourceIconName: string
+    selectionAbilityEffectId: number
+    selectionAbilityMstId: number
+    selectionAbilityType: number
+    sortOrder: number
+    styleMstId: number
+    targetType: number
+    value1: number
+    value2: number
+}
+
+export interface CrystalisSelection {
+    enabled: boolean
+    useIndex: number
+    subCrys: number[]
+}
+
+export const getEX = (characterId: number) => Object.values(crystalises).find(c => c.styleMstId === characterId)
+
+export function relevantCrys(characterId: number, includeLowRarityCrys = false): CrystalisData[] {
+    return [getEX(characterId),
+    ...Object.values(crystalises).filter(c => c.styleMstId === 0 && c.selectionAbilityType === 1 && (includeLowRarityCrys ? true : c.rarity === 3))
+    ].filter(c => !!c)
+}
+
+export interface StyleParamUp {
+    styleParamUpMstId: number
+    styleMstId: number
+    styleParamUpTreeMstId: number
+    priority: number
+    styleParamUpEffectMstId: number
+}
+
+export interface StyleParamUpEffect {
+    abilityEffectType: string
+    name: string
+    styleParamUpEffectMstId: number
+    targetType: number
+    value1: number
+    value2: number
+}
+
+export interface CharacterHeart {
+    characterHeartMstId: number
+    characterMstId: number
+    objectRewardGroupId: number
+    paramUpGroupId: number
+}
+
+export interface CharacterHeartParamUpGroup {
+    characterHeartParamUpGroupMstId: number
+    heartLevel: number
+    paramUpGroupId: number
+    styleParamUpEffectMstId: number
+}
+
+export const getBestCrystalises = (char: Character) => relevantCrys(char.id).filter(c => c.styleMstId === char.id || [
+    "Dominant Blow++",
+    "Mighty Hit++",
+    "Towering Offense++",
+    elementalCrystalises[char.element]
+].includes(c.name))
+
+
+const elementalCrystalises = {
+    [KiokuElement.Flame]: "Inferno++",
+    [KiokuElement.Aqua]: "Torrent++",
+    [KiokuElement.Forest]: "Verdure++",
+    [KiokuElement.Light]: "Radiance++",
+    [KiokuElement.Dark]: "Chaos++",
+    [KiokuElement.Void]: "Nullity++",
+}
+
+export const subCrysTranslate = (name: string): string => {
+    const transformed = name
+        .replace("Increases ", "")
+        .replace(" by ", " +")
+        .replace(/\.$/, "")
+        .replace(" %", "%");
+
+    return transformed.charAt(0).toUpperCase() + transformed.slice(1);
+};
+
+export const getSubCrystalises: () => CrystalisData[] = () => {
+    return [
+        {
+            abilityEffectType: "",
+            description: "",
+            name: "",
+            rarity: 10,
+            resourceIconName: "",
+            selectionAbilityEffectId: 50,
+            selectionAbilityMstId: 0,
+            selectionAbilityType: 0,
+            sortOrder: 10,
+            styleMstId: 0,
+            targetType: 0,
+            value1: 0,
+            value2: 0,
+        },
+        ...Object.values(crystalises).filter(c => c.selectionAbilityType === 2),
+    ].map(c => { if (c.selectionAbilityMstId === 4034) c.rarity = 10; if (c.selectionAbilityMstId === 4033) c.rarity = 8; return c })
+        .sort((a, b) => {
+            if (a.rarity !== b.rarity) {
+                if (a.rarity === 10) return -1
+                if (b.rarity === 10) return 1
+            }
+            if (a.selectionAbilityEffectId !== b.selectionAbilityEffectId) return a.selectionAbilityEffectId - b.selectionAbilityEffectId
+            return a.sortOrder - b.sortOrder
+        })
+        .map(c => ({ ...c, description: subCrysTranslate(c.description) }))
+};
+
+export const maxDmgSubCrys = [4020, 4044, 4054]
+export const KiokuConstants = {
+    maxKiokuLvl: 140,
+    maxMagicLvl: 130,
+    maxAscension: 5,
+    maxHeartphialLvl: 50,
+    maxSpecialLvl: 10,
+    optimalAttackerSubCrys: Array(3).fill(maxDmgSubCrys).flat()
+}
+
+export interface KiokuArgs {
+    name: string;
+    kiokuLvl: number;
+    magicLvl: number;
+    heartphialLvl: number;
+    portrait?: string;
+    supportKey?: any[];
+    crysIDs: number[];
+    subCrysIDs: number[]
+    ascension: number;
+    specialLvl: number;
+}
+
+export const correctCharacterParams = (character?: Character) => {
+    if (character) {
+        if (character.ascension < 3) {
+            character.specialLvl = Math.min(character.specialLvl, 4)
+        } else if (character.ascension < 5) {
+            character.specialLvl = Math.min(character.specialLvl, 7)
+        }
+    }
+    return character
+}
+
+export const maxMeters = 10_000
+
+export const aggro = {
+    [KiokuRole.Defender]: 15,
+    [KiokuRole.Buffer]: 10,
+    [KiokuRole.Debuffer]: 10,
+    [KiokuRole.Healer]: 10,
+    [KiokuRole.Attacker]: 5,
+    [KiokuRole.Breaker]: 5,
+}
+
+export enum TargetType {
+    specialId = "SpecialAttack",
+    skillId = "ActiveSkill",
+    attackId = "NormalAttack",
+    fuaId = "AdditionalSkill",
+    init = "INIT"
+}
+
+export const TargetTypeLookup = {
+    [TargetType.specialId]: "special_id",
+    [TargetType.skillId]: "skill_id",
+    [TargetType.attackId]: "attack_id",
+}
+
+export const targetTypeToLvl = {
+    [TargetType.specialId]: "specialLvl",
+    [TargetType.skillId]: "skillLvl",
+    [TargetType.attackId]: "attackLvl",
+}
+
+export enum targetRange {
+    SELF = -1,
+    TARGET = 1,
+    PROXIMITY = 2,
+    ALL = 3,
+}
+
+export const defaultbreak = {
+    [TargetType.specialId]: { [targetRange.TARGET]: 35, [targetRange.PROXIMITY]: 30, [targetRange.ALL]: 25 },
+    [TargetType.skillId]: { [targetRange.TARGET]: 20, [targetRange.PROXIMITY]: 15, [targetRange.ALL]: 12 },
+    [TargetType.attackId]: { [targetRange.TARGET]: 10 },
+    [TargetType.fuaId]: { [targetRange.TARGET]: 0 }, // TODO: Check
+}
+
+export const mpGainFromAction = {
+    [TargetType.specialId]: 5,
+    [TargetType.skillId]: 30,
+    [TargetType.attackId]: 15,
+    [TargetType.fuaId]: 0,
+}
+

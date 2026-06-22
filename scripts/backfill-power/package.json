@@ -1,0 +1,10 @@
+{
+  "name": "backfill-power",
+  "private": true,
+  "description": "One-shot script to backfill power scores for existing users. Not part of the main app build.",
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.0"
+  }
+}
