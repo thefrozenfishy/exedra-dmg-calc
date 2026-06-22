@@ -71,7 +71,7 @@
                                     <img v-if="store.myRank.rank <= 10" :src="rankIcon(store.myRank)"
                                         :title="rankTitle(store.myRank)" :alt="rankAlt(store.myRank)"
                                         class="rank-badge rank-badge-large" />
-                                    <span v-else class="rank-badge rank-badge-large">
+                                    <span v-else class="rank-badge rank-badge-large" :title="rankTitle(store.myRank)">
                                         {{ rankAlt(store.myRank) }}
                                     </span>
                                 </template>
@@ -271,7 +271,7 @@
                                     <template v-if="friend.rank">
                                         <img v-if="friend.rank <= 10" class="rank-badge" :src="rankIcon(friend)"
                                             :title="rankTitle(friend)" :alt="rankAlt(friend)" />
-                                        <span v-else class="rank-badge">
+                                        <span v-else class="rank-badge" :title="rankTitle(friend)">
                                             {{ rankAlt(friend) }}
                                         </span>
                                     </template>
