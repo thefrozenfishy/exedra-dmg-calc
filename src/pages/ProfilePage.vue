@@ -6,8 +6,12 @@
             <section v-if="showGraph" class="profile-section analytics-section">
                 <h2>Power Analytics</h2>
                 <div class="btn-container">
-                    <button @click="exportData">Export Data</button>
+                    <button @click="exportData">Export data to Excel</button>
                     <button @click="copy">Copy image to clipboard </button>
+                    <button @click="clipboardSupported ? copy() : openInNewTab()">
+                        {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
+                    </button>
+                    <button @click="download">Download image</button>
                 </div>
                 <div class="analytics-controls">
                     <label>
@@ -42,8 +46,17 @@
                     </label>
                 </div>
 
-                <div class="chart-wrapper analytics-chart">
-                    <canvas ref="analyticsCanvasRef"></canvas>
+                <div class="chart-wrapper">
+                    <div class="analytics-chart">
+                        <canvas ref="analyticsCanvasRef"></canvas>
+                    </div>
+
+                    <div v-if="graphMode === 'scatter'" class="chart-legend">
+                        <div v-for="item in legendItems" :key="item.label" class="legend-item">
+                            <span class="legend-swatch" :style="{ background: item.color }"></span>
+                            <span>{{ item.label }}</span>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
@@ -472,7 +485,7 @@ import {
     Tooltip,
     Legend
 } from 'chart.js'
-import { copyImageToClipboard } from '../utils/image'
+import { copyImageToClipboard, downloadImage, openImageInNewTab, useClipboardSupport } from '../utils/image'
 import { MyRank } from '../store/friendStore'
 
 const store = useFriendStore()
@@ -1033,13 +1046,15 @@ const graphOptions = [
 
 const selectedXAxis = useSetting<string>('betaGraphSelectedXAxis', 'total')
 const selectedYAxis = useSetting<string>('betaGraphSelectedYAxis', 'whale')
-const copy = () => copyImageToClipboard(
-    graphMode.value === 'scatter'
-        ? `${getAxisLabel(selectedXAxis.value)} vs ${getAxisLabel(selectedYAxis.value)}.png`
-        : `${getAxisLabel(selectedXAxis.value)}.png`,
 
-    ".chart-wrapper",
-)
+const { clipboardSupported } = useClipboardSupport()
+
+const pngName = computed(() => graphMode.value === 'scatter'
+    ? `${getAxisLabel(selectedXAxis.value)} vs ${getAxisLabel(selectedYAxis.value)}.png`
+    : `${getAxisLabel(selectedXAxis.value)}.png`)
+const download = () => downloadImage(pngName.value, ".chart-wrapper")
+const copy = () => copyImageToClipboard(pngName.value, ".chart-wrapper")
+const openInNewTab = () => openImageInNewTab(".chart-wrapper")
 
 const analyticsPlayers = computed(() => {
     const list = []
@@ -1054,6 +1069,7 @@ const analyticsPlayers = computed(() => {
             perm: myChars.value.perm,
             permAs: myChars.value.permAs,
             rank: store.myRank?.rank,
+            relation: Relation.SELF,
         })
     }
 
@@ -1069,6 +1085,7 @@ const analyticsPlayers = computed(() => {
             perm: friend.kioku_count?.perm || 0,
             permAs: friend.kioku_count?.permAs || 0,
             rank: friend.rank,
+            relation: friend.isUnionMember ? Relation.UNION : friend.isFriend ? Relation.FRIEND : Relation.DEFAULT,
         })
     }
 
@@ -1090,6 +1107,24 @@ const getMaxTick = (axisLabel: string) => {
     return 100
 }
 
+enum Relation {
+    DEFAULT = "whitesmoke",
+    FRIEND = "green",
+    UNION = "purple",
+    SELF = "red",
+}
+
+const legendItems = computed(() => [
+    { label: 'You', color: Relation.SELF },
+    { label: 'Union member', color: Relation.UNION },
+    { label: 'Following', color: Relation.FRIEND },
+    { label: 'Other', color: Relation.DEFAULT },
+])
+
+function selectColor(p: { relation: Relation }, prevBestRelation?: Relation): Relation {
+    return [Relation.SELF, Relation.UNION, Relation.FRIEND, Relation.DEFAULT].find(r => prevBestRelation === r || p.relation === r) ?? Relation.DEFAULT
+}
+
 const renderAnalyticsChart = () => {
     if (!analyticsCanvasRef.value) return
 
@@ -1100,7 +1135,7 @@ const renderAnalyticsChart = () => {
     if (!players.length) return
 
     if (graphMode.value === 'scatter') {
-        const pointMap = new Map<string, { x: number; y: number; names: string[]; count: number }>()
+        const pointMap = new Map<string, { x: number; y: number; names: string[]; count: number, color: Relation }>()
 
         for (const p of players) {
             const x = getMetricValue(p, selectedXAxis.value)
@@ -1109,8 +1144,9 @@ const renderAnalyticsChart = () => {
             if (pointMap.has(key)) {
                 pointMap.get(key)!.names.push(p.name)
                 pointMap.get(key)!.count++
+                pointMap.get(key)!.color = selectColor(p, pointMap.get(key)?.color)
             } else {
-                pointMap.set(key, { x, y, names: [p.name], count: 1 })
+                pointMap.set(key, { x, y, names: [p.name], count: 1, color: selectColor(p) })
             }
         }
 
@@ -1130,7 +1166,9 @@ const renderAnalyticsChart = () => {
                                 names: p.names,
                                 count: p.count,
                             })),
-                            backgroundColor: "whitesmoke",
+                            backgroundColor: aggregatedPoints.map(p => p.color),
+                            borderColor: '#ffffff',
+                            borderWidth: 1,
                             pointRadius: aggregatedPoints.map(p =>
                                 Math.min(3 + Math.log2(p.count) * 2, 10)
                             ),
@@ -1148,20 +1186,27 @@ const renderAnalyticsChart = () => {
                             min: selectedXAxis.value === 'rank' ? 1 : 0,
                             max: getMaxTick(selectedXAxis.value),
                             reverse: selectedXAxis.value === 'rank',
-                            ticks: { stepSize: 10 },
+                            ticks: { stepSize: 10, color: "white" },
                             grid: { color: 'rgba(140, 100, 190, 0.35)' },
-                            title: { display: true, text: getAxisLabel(selectedXAxis.value) }
+                            title: { display: true, text: getAxisLabel(selectedXAxis.value), color: "white" }
                         },
                         y: {
                             min: selectedYAxis.value === 'rank' ? 1 : 0,
                             max: getMaxTick(selectedYAxis.value),
                             reverse: selectedYAxis.value === 'rank',
-                            ticks: { stepSize: 10 },
+                            ticks: { stepSize: 10, color: "white" },
                             grid: { color: 'rgba(140, 100, 190, 0.35)' },
-                            title: { display: true, text: getAxisLabel(selectedYAxis.value) }
+                            title: { display: true, text: getAxisLabel(selectedYAxis.value), color: "white" }
                         }
                     },
                     plugins: {
+                        legend: {
+                            labels: {
+                                boxWidth: 0,
+                                boxHeight: 0,
+                                color: Relation.DEFAULT,
+                            }
+                        },
                         tooltip: {
                             callbacks: {
                                 label(ctx) {
@@ -1206,7 +1251,7 @@ const renderAnalyticsChart = () => {
                     {
                         label: 'Percentile Curve',
                         data: percentileData,
-                        borderColor: '#4CC9F0',
+                        borderColor: 'white',
                         backgroundColor: 'rgba(76,201,240,0.2)',
                         tension: 0.15,
                         pointRadius: 2
@@ -1222,22 +1267,30 @@ const renderAnalyticsChart = () => {
                         min: 0,
                         max: getMaxTick(selectedXAxis.value),
                         type: 'linear',
-                        ticks: { stepSize: 10 },
+                        ticks: { stepSize: 10, color: "white" },
                         grid: { color: 'rgba(140, 100, 190, 0.35)' },
-                        title: { display: true, text: getAxisLabel(selectedXAxis.value) }
+                        title: { display: true, text: getAxisLabel(selectedXAxis.value), color: "white" }
                     },
                     y: {
                         min: 0,
                         max: 100,
                         ticks: {
                             stepSize: 10,
-                            callback: v => `${v}%`
+                            callback: v => `${v}%`,
+                            color: "white",
                         },
                         grid: { color: 'rgba(140, 100, 190, 0.35)' },
-                        title: { display: true, text: '% of Players Below' }
+                        title: { display: true, text: '% of Players Below', color: "white" }
                     }
                 },
                 plugins: {
+                    legend: {
+                        labels: {
+                            boxWidth: 0,
+                            boxHeight: 0,
+                            color: Relation.DEFAULT,
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label(ctx) {
@@ -2047,10 +2100,33 @@ img.lim-icon {
     gap: 0.35rem;
 }
 
-.analytics-chart {
+.chart-wrapper {
     background: rgba(255, 255, 255, 0.04);
     border-radius: 12px;
     padding: 1rem;
+}
+
+.chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.legend-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 /* =========================
