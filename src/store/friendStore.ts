@@ -86,7 +86,7 @@ export const useFriendStore = defineStore('friendStore', () => {
         try {
             myRank.value = await getMyRank()
         } catch (err) {
-            console.error("Failed to load my rank:", err)
+            console.warn("Failed to load my rank:", err)
         }
     }
 
