@@ -7,7 +7,6 @@
                 <h2>Power Analytics</h2>
                 <div class="btn-container">
                     <button @click="exportData">Export data to Excel</button>
-                    <button @click="copy">Copy image to clipboard </button>
                     <button @click="clipboardSupported ? copy() : openInNewTab()">
                         {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
                     </button>
