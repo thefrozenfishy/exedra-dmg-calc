@@ -270,8 +270,10 @@
 
                 <template v-else>
                     <p>Power might see some minor changes while formula is being fine tuned!</p>
-                    <p v-if="listScope !== 'all'">Ranks are only given to non-abandoned accounts with profile, Unnamed
-                        accounts are not counted</p>
+                    <p v-if="listScope === 'all'">
+                        Rank is based on the power of the account. Unnamed accounts and inactive accounts are not
+                        included
+                    </p>
                     <div class="friend-list">
                         <div v-for="friend in sortedFriends" :key="friend.friend_id" class="friend-card"
                             :class="{ 'union-member': friend.isUnionMember, 'stale-profile': friend.isActive === false }"
