@@ -7,7 +7,7 @@ import { countCharsObtained, getPowerScores } from "../models/PowerValue"
 
 export class NameRequiredError extends Error {
     constructor() {
-        super("A player name is required to view the full leaderboard.")
+        super("A player name is required to view the everyone board.")
         this.name = "NameRequiredError"
     }
 }
@@ -535,6 +535,18 @@ async function _loadAllPlayers() {
 
     if (profileError) throw profileError
 
+    let followedCodes = new Set<string>()
+    if (userId) {
+        const { data: relations, error: relationsError } = await supabase
+            .from('user_friends')
+            .select('friend_id')
+            .eq('user_id', userId)
+
+        if (relationsError) throw relationsError
+
+        followedCodes = new Set((relations ?? []).map(r => r.friend_id))
+    }
+
     const withSimilarity = myFriendId
         ? await attachSimilarity(myFriendId, profiles ?? [])
         : (profiles ?? [])
@@ -547,7 +559,7 @@ async function _loadAllPlayers() {
             union_name: profile?.union_name || '',
             profile_icon: profile?.profile_icon,
             favorite: false,
-            isFriend: true,
+            isFriend: followedCodes.has(profile.friend_id),
             isUnionMember: false,
             accountSimilarity: profile?.accountSimilarity,
             rank: profile?.global_rank ?? null,
