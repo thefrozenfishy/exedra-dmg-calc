@@ -1,0 +1,19 @@
+name = "exedra-share-worker"
+main = "wrangler/index.ts"
+compatibility_date = "2024-01-01"
+
+# Create the KV namespace first with:
+#   wrangler kv namespace create SHARE_PAGES
+# Then paste the returned id below.
+[[kv_namespaces]]
+binding = "SHARE_PAGES"
+id = "bc100284da134e479abbdeefd9430663"
+
+# WORKER_SECRET: set this via the Cloudflare dashboard or:
+#   wrangler secret put WORKER_SECRET
+# Use the same value as CLOUDFLARE_WORKER_SECRET in your Supabase secrets.
+
+# Optional: uncomment to use a custom domain route
+# [[routes]]
+# pattern = "thefrozenfishy.com/share/*"
+# zone_name = "thefrozenfishy.com"

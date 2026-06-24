@@ -28,7 +28,7 @@ async function submitUsername() {
 
     try {
         const res = await fetch(
-            "https://exedra-link-raid-add-username.camilla-jahr.workers.dev/",
+            "https://exedra-link-raid-add-username.thefrozenfishy.workers.dev//",
             {
                 method: "POST",
                 headers: {
