@@ -228,6 +228,8 @@ export class ScoreAttackTeam {
     private hasDpsDotPop: boolean = false;
     private dotAllyIndices: { idx: number; charId: string; name: string }[] = [];
 
+    private dmg_id: number = 0; // Just the special_id for all except 3*, to allow 3* to use the calc
+
     constructor(
         dps: ScoreAttackKioku,
         team: ScoreAttackKioku[],
@@ -458,6 +460,8 @@ export class ScoreAttackTeam {
         if (leftover.length > 0) {
             throw new Error(`Found unknown effects: ${leftover.join(", ")}`);
         }
+
+        this.dmg_id = this.dps.data.rarity === 3 ? this.dps.data.skill_id : this.dps.data.special_id
     }
 
     private distributeEffect(
@@ -683,7 +687,7 @@ export class ScoreAttackTeam {
                     .split(",")
                     .some(id => !isStartCondRelevantForScoreAttack(id, this.dps.maxMagicStacks, initAmountOfEnemies, this.dps.data.role))
             ) continue;
-            if (((detail as ActiveSkill).skillMstId / 100 | 0) !== this.dps.data.special_id) continue;
+            if (((detail as ActiveSkill).skillMstId / 100 | 0) !== this.dmg_id) continue;
 
             let delta_dmg = 0;
             if (!detail.abilityEffectType.startsWith("DMG_")) continue;
@@ -742,7 +746,7 @@ export class ScoreAttackTeam {
 
         let targetTypeAtPosition
         const isAoeDps = this.dps.effects.some(eff => {
-            if ((eff as ActiveSkill).skillDetailMstId === this.dps.data.special_id * 10000 + 1001) return eff.range === 3
+            if ((eff as ActiveSkill).skillDetailMstId === this.dmg_id * 10000 + 1001) return eff.range === 3
         })
         if (isAoeDps) {
             targetTypeAtPosition = [

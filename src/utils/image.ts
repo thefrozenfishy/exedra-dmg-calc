@@ -194,11 +194,23 @@ const uploadBlobForSharing = async (blob: Blob): Promise<{ path: string, publicU
     return { path, publicUrl: data.publicUrl, shareId }
 }
 
-const createSharePage = async (shareId: string, imageUrl: string, displayName?: string): Promise<string> => {
+export interface ShareLinkOptions {
+    title?: string
+    displayName?: string
+    backUrl?: string
+}
+
+const createSharePage = async (shareId: string, imageUrl: string, opts: ShareLinkOptions = {}): Promise<string> => {
     const supabase = getSupabase()
 
     const { data, error } = await supabase.functions.invoke("create-share-page", {
-        body: { shareId, imageUrl, displayName },
+        body: {
+            shareId,
+            imageUrl,
+            displayName: opts.displayName,
+            title: opts.title,
+            backUrl: opts.backUrl,
+        },
     })
 
     if (error) {
@@ -212,7 +224,7 @@ const createSharePage = async (shareId: string, imageUrl: string, displayName?: 
 export const generateShareLink = async (
     target: string | HTMLElement,
     options?: ImageExportOptions,
-    displayName?: string
+    shareOpts?: ShareLinkOptions
 ): Promise<string> => {
     const el = getElement(target)
     if (!el) {
@@ -225,19 +237,19 @@ export const generateShareLink = async (
     })
 
     const { publicUrl, shareId } = await uploadBlobForSharing(blob)
-    return await createSharePage(shareId, publicUrl, displayName)
+    return await createSharePage(shareId, publicUrl, shareOpts)
 }
 
 export const generateShareLinkFromCanvas = async (
     canvas: HTMLCanvasElement,
-    displayName?: string
+    shareOpts?: ShareLinkOptions
 ): Promise<string> => {
     const blob = await new Promise<Blob>((resolve, reject) =>
         canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png")
     )
 
     const { publicUrl, shareId } = await uploadBlobForSharing(blob)
-    return await createSharePage(shareId, publicUrl, displayName)
+    return await createSharePage(shareId, publicUrl, shareOpts)
 }
 
 export const copyTextToClipboard = async (text: string, successMessage = "Copied to clipboard!") => {

@@ -523,6 +523,13 @@ const dragLeave = (e: DragEvent) => {
 const { clipboardSupported } = useClipboardSupport()
 const exportOpts = { exportClass: "exporting" }
 
+const currentPageUrl = () => {
+    const friendId = viewingFriendCode.value ?? friendCode.value
+    return friendId
+        ? `${window.location.origin}/exedra-dmg-calc/#/my-kioku?friend=${friendId}`
+        : `${window.location.origin}/exedra-dmg-calc/#/my-kioku`
+}
+
 const displayedName = computed(() =>
     viewingFriendCode.value
         ? (viewingProfile.value?.display_name || "A player")
@@ -543,7 +550,11 @@ const shareAscensionList = async () => {
     shareLinkError.value = null
 
     try {
-        shareLinkUrl.value = await generateShareLink(".ascension-table", exportOpts, displayedName.value)
+        shareLinkUrl.value = await generateShareLink(".ascension-table", exportOpts, {
+            title: `${displayedName.value}'s Kioku Collection`,
+            displayName: displayedName.value,
+            backUrl: currentPageUrl(),
+        })
     } catch (err) {
         console.error("Failed to generate share link:", err)
         shareLinkError.value = "Failed to generate share link. Please try again."
@@ -560,9 +571,7 @@ const copyHyperLink = async () => {
     try {
         const friendId = viewingFriendCode.value ?? friendCode.value
         if (!friendId) throw new Error("You need to sync your friend code first!")
-        await navigator.clipboard.writeText(
-            `${window.location.origin}/exedra-dmg-calc/#/my-kioku?friend=${friendId}`
-        )
+        await navigator.clipboard.writeText(currentPageUrl())
         toast.success("Copied to clipboard!", { position: toast.POSITION.TOP_RIGHT, icon: false })
     } catch (err) {
         console.error("Clipboard failed:", err)

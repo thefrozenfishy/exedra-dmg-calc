@@ -1,22 +1,18 @@
-// Cloudflare Worker: share-worker
-//
-// POST /share        — stores {imageUrl, displayName} in KV, returns {url, shareId}
-// GET  /share/:id   — serves a minimal HTML page with og:image meta tags
-//
-// Deploy with: wrangler deploy
-// Bind a KV namespace named SHARE_PAGES in wrangler.toml.
+// upload using ``wrangler deploy``
 
 export interface Env {
     SHARE_PAGES: KVNamespace
-    // Set this in Cloudflare dashboard → Workers → your worker → Settings → Variables
-    // Use the same value in your Supabase create-share-page function as WORKER_SECRET
     WORKER_SECRET: string
 }
 
 interface ShareEntry {
     imageUrl: string
     displayName: string
+    title?: string
+    backUrl?: string
 }
+
+const TOOLBOX_URL = "https://thefrozenfishy.github.io/exedra-dmg-calc/"
 
 function escapeHtml(input: string): string {
     return input
@@ -27,17 +23,24 @@ function escapeHtml(input: string): string {
         .replace(/'/g, "&#039;")
 }
 
-function buildSharePageHtml(imageUrl: string, displayName: string, shareUrl: string): string {
-    const safeName = escapeHtml(displayName || "A player")
-    const safeImage = escapeHtml(imageUrl)
+function buildSharePageHtml(entry: ShareEntry, shareUrl: string): string {
+    const safeImage = escapeHtml(entry.imageUrl)
     const safeShare = escapeHtml(shareUrl)
-    const title = `${safeName}'s Kioku Collection`
+
+    const resolvedTitle = entry.title?.trim()
+        || `${entry.displayName || "A player"}'s Kioku Collection`
+    const title = escapeHtml(resolvedTitle)
+
+    const resolvedBackUrl = entry.backUrl?.trim() || TOOLBOX_URL
+    const safeBackUrl = escapeHtml(resolvedBackUrl)
+
     const description = "Shared from Exedra Damage Calculator"
 
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title}</title>
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${description}">
@@ -47,10 +50,72 @@ function buildSharePageHtml(imageUrl: string, displayName: string, shareUrl: str
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${title}">
 <meta name="twitter:image" content="${safeImage}">
-<meta http-equiv="refresh" content="0; url=${safeImage}">
+<style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        background: #242424;
+        color: #eee;
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+        min-height: 100vh;
+    }
+    .topbar {
+        position: sticky;
+        top: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        background: rgba(20, 16, 24, 0.92);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(6px);
+    }
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 0.9rem;
+        background: rgba(255, 255, 255, 0.06);
+        color: #eee;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .back-link:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 209, 110, 0.35);
+    }
+    .topbar-title {
+        font-size: 0.9rem;
+        color: #aaa;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .image-wrap {
+        display: flex;
+        justify-content: center;
+        padding: 1.5rem 1rem;
+    }
+    .image-wrap img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+</style>
 </head>
 <body>
-<p>Redirecting to <a href="${safeImage}">image</a>...</p>
+<div class="topbar">
+    <a class="back-link" href="${safeBackUrl}">&larr; Back</a>
+    <span class="topbar-title">${title}</span>
+</div>
+<div class="image-wrap">
+    <img src="${safeImage}" alt="${title}">
+</div>
 </body>
 </html>`
 }
@@ -94,14 +159,14 @@ export default {
                 return json({ error: "Unauthorized" }, 401)
             }
 
-            let body: { shareId?: string; imageUrl?: string; displayName?: string }
+            let body: { shareId?: string; imageUrl?: string; displayName?: string; title?: string; backUrl?: string }
             try {
                 body = await request.json()
             } catch {
                 return json({ error: "Invalid JSON" }, 400)
             }
 
-            const { shareId, imageUrl, displayName = "" } = body
+            const { shareId, imageUrl, displayName = "", title = "", backUrl = "" } = body
 
             if (!shareId || !imageUrl) {
                 return json({ error: "shareId and imageUrl are required" }, 400)
@@ -117,7 +182,7 @@ export default {
                 return json({ error: "imageUrl must point at the share-images bucket" }, 400)
             }
 
-            const entry: ShareEntry = { imageUrl, displayName }
+            const entry: ShareEntry = { imageUrl, displayName, title, backUrl }
 
             // TTL of 1 year — shares don't need to last forever
             await env.SHARE_PAGES.put(shareId, JSON.stringify(entry), {
@@ -140,7 +205,7 @@ export default {
 
             const entry: ShareEntry = JSON.parse(raw)
             const shareUrl = `${url.origin}/share/${shareId}`
-            return html(buildSharePageHtml(entry.imageUrl, entry.displayName, shareUrl))
+            return html(buildSharePageHtml(entry, shareUrl))
         }
 
         return json({ error: "Not found" }, 404)

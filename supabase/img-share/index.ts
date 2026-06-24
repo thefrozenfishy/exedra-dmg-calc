@@ -1,12 +1,4 @@
-// Supabase Edge Function: create-share-page
-//
-// Receives a Storage image URL + display name from the client,
-// forwards to the Cloudflare Worker which stores it in KV and
-// returns a clean share URL.
-//
-// Secrets required (set via `supabase secrets set`):
-//   CLOUDFLARE_WORKER_URL  — e.g. https://exedra-share-worker.yourname.workers.dev
-//   CLOUDFLARE_WORKER_SECRET — shared secret, must match WORKER_SECRET in the worker
+// Uploaded at https://supabase.com/dashboard/project/hqutdzugcelwjooqwpst/functions/create-share-page/code
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts"
 
@@ -17,6 +9,8 @@ interface CreateSharePageRequest {
     shareId: string
     imageUrl: string
     displayName?: string
+    title?: string
+    backUrl?: string
 }
 
 const corsHeaders = {
@@ -70,6 +64,8 @@ serve(async (req) => {
                 shareId: body.shareId,
                 imageUrl: body.imageUrl,
                 displayName: body.displayName ?? "",
+                title: body.title ?? "",
+                backUrl: body.backUrl ?? "",
             }),
         })
 
