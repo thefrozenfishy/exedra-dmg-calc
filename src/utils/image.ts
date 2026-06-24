@@ -1,6 +1,8 @@
 import { toPng } from "html-to-image"
 import { toast } from "vue3-toastify"
 import { ref, onMounted } from "vue"
+import { getSupabase } from "./supabase"
+import { getUserId } from "../store/user"
 
 const IMG_SETTINGS = {
     cacheBust: true,
@@ -163,6 +165,111 @@ export const copyImageToClipboard = async (filename: string, target: string | HT
     })
 
     await writeBlobPromiseToClipboard(filename, blobPromise)
+}
+
+const SHARE_BUCKET = "share-images"
+
+function randomId(): string {
+    return crypto.randomUUID().replace(/-/g, "").slice(0, 12)
+}
+
+const uploadBlobForSharing = async (blob: Blob): Promise<{ path: string, publicUrl: string, shareId: string }> => {
+    const supabase = getSupabase()
+    const userId = getUserId() ?? "anon"
+    const shareId = randomId()
+
+    const path = `${userId}/${Date.now()}-${shareId}.png`
+
+    const { error: uploadError } = await supabase.storage
+        .from(SHARE_BUCKET)
+        .upload(path, blob, {
+            contentType: "image/png",
+            cacheControl: "31536000", // 1 year -- this file never changes once uploaded
+        })
+
+    if (uploadError) throw uploadError
+
+    const { data } = supabase.storage.from(SHARE_BUCKET).getPublicUrl(path)
+
+    return { path, publicUrl: data.publicUrl, shareId }
+}
+
+const createSharePage = async (shareId: string, imageUrl: string, displayName?: string): Promise<string> => {
+    const supabase = getSupabase()
+
+    const { data, error } = await supabase.functions.invoke("create-share-page", {
+        body: { shareId, imageUrl, displayName },
+    })
+
+    if (error) {
+        console.error("create-share-page failed, falling back to raw image URL:", error)
+        return imageUrl
+    }
+
+    return data?.url ?? imageUrl
+}
+
+export const shareImage = async (filename: string, target: string | HTMLElement, options?: ImageExportOptions, displayName?: string) => {
+    const el = getElement(target)
+    if (!el) {
+        toast.error("Target element not found", { position: toast.POSITION.TOP_RIGHT })
+        return
+    }
+
+    const toastId = toast.loading("Creating share link...", { position: toast.POSITION.TOP_RIGHT, icon: false })
+
+    try {
+        const blob = await withExportState(el, options, async (element) => {
+            const dataUrl = await toPng(element, IMG_SETTINGS)
+            return fetch(dataUrl).then(r => r.blob())
+        })
+
+        const { publicUrl, shareId } = await uploadBlobForSharing(blob)
+        const url = await createSharePage(shareId, publicUrl, displayName)
+
+        await navigator.clipboard.writeText(url)
+
+        toast.update(toastId, {
+            render: "Share link copied! Paste it anywhere to show the image.",
+            type: "success",
+            isLoading: false,
+            autoClose: 4000,
+        })
+
+        return url
+    } catch (err) {
+        console.error("Failed to create share link:", err)
+        toast.update(toastId, { render: "Failed to create share link", type: "error", isLoading: false, autoClose: 3000 })
+        return null
+    }
+}
+
+export const shareCanvas = async (filename: string, canvas: HTMLCanvasElement, displayName?: string) => {
+    const toastId = toast.loading("Creating share link...", { position: toast.POSITION.TOP_RIGHT, icon: false })
+
+    try {
+        const blob = await new Promise<Blob>((resolve, reject) =>
+            canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png")
+        )
+
+        const { publicUrl, shareId } = await uploadBlobForSharing(blob)
+        const url = await createSharePage(shareId, publicUrl, displayName)
+
+        await navigator.clipboard.writeText(url)
+
+        toast.update(toastId, {
+            render: "Share link copied! Paste it anywhere to show the image.",
+            type: "success",
+            isLoading: false,
+            autoClose: 4000,
+        })
+
+        return url
+    } catch (err) {
+        console.error("Failed to create share link:", err)
+        toast.update(toastId, { render: "Failed to create share link", type: "error", isLoading: false, autoClose: 3000 })
+        return null
+    }
 }
 
 export const downloadImage = async (filename: string, target: string | HTMLElement, options?: ImageExportOptions) => {

@@ -28,6 +28,7 @@
             {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
         </button>
         <button class="copy-btn" @click="downloadAscensionList">Download</button>
+        <button v-if="isBeta()" class="copy-btn" @click="shareAscensionList">Share Image Link</button>
         <button class="copy-btn" @click="copyHyperLink">Copy Link</button>
         <div>
             <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
@@ -226,8 +227,9 @@ import { useRoute, useRouter } from "vue-router"
 import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
-import { copyImageToClipboard, downloadImage, openImageInNewTab, useClipboardSupport } from "../utils/image"
+import { copyImageToClipboard, downloadImage, openImageInNewTab, shareImage, useClipboardSupport } from "../utils/image"
 import { crystalises, passiveDetails } from "../utils/helpers"
+import { isBeta } from "../utils/betaSettings"
 
 const route = useRoute()
 const router = useRouter()
@@ -498,9 +500,16 @@ const dragLeave = (e: DragEvent) => {
 const { clipboardSupported } = useClipboardSupport()
 const exportOpts = { exportClass: "exporting" }
 
+const displayedName = computed(() =>
+    viewingFriendCode.value
+        ? (viewingProfile.value?.display_name || "A player")
+        : (friendStore.displayName || "A player")
+)
+
 const downloadAscensionList = () => downloadImage("ascension.png", ".ascension-table", exportOpts)
 const copyAscensionList = () => copyImageToClipboard("ascension.png", ".ascension-table", exportOpts)
 const openAscensionListInNewTab = () => openImageInNewTab(".ascension-table", exportOpts)
+const shareAscensionList = () => shareImage("ascension.png", ".ascension-table", exportOpts, displayedName.value)
 
 const copyHyperLink = async () => {
     try {

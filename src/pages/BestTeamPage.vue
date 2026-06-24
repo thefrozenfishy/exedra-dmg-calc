@@ -212,6 +212,13 @@
         </button>
 
         <div v-if="topResults.length">
+            <div v-if="isBeta()" class="btn-container">
+                <button @click="clipboardSupported ? copy() : openInNewTab()">
+                    {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
+                </button>
+                <button @click="download">Download image</button>
+                <button class="copy-btn" @click="share">Share Image Link</button>
+            </div>
             <div class="results">
                 <h2>Top Teams Overall</h2>
                 <ResultsHeader :optimizeAverageDamage />
@@ -249,9 +256,14 @@ import { KiokuRole, Character, KiokuElement, elementAlimentMap } from '../types/
 import { toast } from "vue3-toastify"
 import { FinalTeam } from '../types/BestTeamTypes'
 import { useSetting } from '../store/settingsStore'
+import { copyImageToClipboard, downloadImage, openImageInNewTab, shareImage, useClipboardSupport } from '../utils/image.js'
+import { useFriendStore } from "../store/friendStore"
+import { isBeta } from '../utils/betaSettings.js'
 
+const { clipboardSupported } = useClipboardSupport()
 const enemies = useEnemyStore()
 const store = useCharacterStore()
+const friendStore = useFriendStore()
 
 const running = ref(false)
 const expectedRuns = ref(0)
@@ -337,6 +349,11 @@ function safeInt(value: unknown, fallback = 0, min?: number, max?: number): numb
 
     return n
 }
+
+const download = () => downloadImage("best_sa_team.png", ".results")
+const copy = () => copyImageToClipboard("best_sa_team.png", ".results")
+const openInNewTab = () => openImageInNewTab(".results")
+const share = () => shareImage("best_sa_team.png", ".results", {}, `${friendStore.displayName ?? "My"} best team vs ${weakElements.filter(el => el.enabled).map(el => el.name).join(" & ")}`)
 
 const extraAttackers = useSetting<Character[]>("extraAttackers", [])
 const extraAttackerQuery = ref("")
