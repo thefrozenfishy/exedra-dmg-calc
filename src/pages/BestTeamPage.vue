@@ -105,7 +105,7 @@
                             - (disabledOtherRoles.includes(KiokuRole.Defender) ? 0 : minDefender)
                             - (disabledOtherRoles.includes(KiokuRole.Healer) ? 0 : minHealer)
                             - (disabledOtherRoles.includes(KiokuRole.Breaker) ? 0 : minBreaker)
-                        }}</div>
+                            }}</div>
                     </div>
                 </div>
             </div>
@@ -375,7 +375,13 @@ const share = async () => {
     shareLinkError.value = null
 
     try {
-        shareLinkUrl.value = await generateShareLink(".results", {}, `${friendStore.displayName ?? "My"} best team vs ${weakElements.filter(el => el.enabled).map(el => el.name).join(" & ")}`)
+        shareLinkUrl.value = await generateShareLink(".results", {},
+            {
+                title: `${friendStore.displayName ?? "My"} best team vs ${weakElements.filter(el => el.enabled).map(el => el.name).join(" & ")}`,
+                displayName: friendStore.displayName ?? "Me",
+                backUrl: `${window.location.origin}/exedra-dmg-calc/#/sa-simulator-multiple`,
+            }
+        )
     } catch (err) {
         console.error("Failed to generate share link:", err)
         shareLinkError.value = "Failed to generate share link. Please try again."
