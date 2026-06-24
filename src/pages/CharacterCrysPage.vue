@@ -10,8 +10,7 @@
             </div>
             <div class="crys-grid">
                 <div v-for="crys in options" :key="crys.selectionAbilityMstId" class="crys-card"
-                    :class="{ disabled: !crys.enabled, offElement: offElementalCrys(crys) }"
-                    :title="crys.description?.replace('<br>', '\n')">
+                    :class="{ disabled: !crys.enabled, offElement: offElementalCrys(crys) }">
 
                     <div v-if="crys.enabled" class="use-index-selector">
                         <div v-for="i in 3" :key="i" class="use-index-box" :class="{ active: crys.useIndex === i }"
@@ -23,7 +22,10 @@
                     <div class="crys-header" @click="toggleCrys(crys.selectionAbilityMstId)">
                         <img :src="`/exedra-dmg-calc/selection_ability/${crys.resourceIconName}.png`" :alt="crys.name"
                             class="crys-image" :class="{ disabled: !crys.enabled }" />
-                        <span class="crys-name">{{ crys.name }}</span>
+                        <div class="details">
+                            <span>{{ crys.name }}</span>
+                            <span>{{ crys.description.replaceAll("<br>", "\n") }}</span>
+                        </div>
                     </div>
 
                     <SubCrysBar :sub-crys="crys.subCrys" :grouped-sub-crys="groupedSubCrys"
@@ -251,6 +253,10 @@ const setUseIndex = (effectId: number, useIndex: number) => {
     padding: 10px;
     background: rgba(255, 255, 255, 0.01);
     transition: border-color 0.15s;
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .crys-card:not(.disabled) {
@@ -268,6 +274,7 @@ const setUseIndex = (effectId: number, useIndex: number) => {
 
 .crys-header {
     display: flex;
+    flex: 1;
     align-items: center;
     gap: 8px;
     cursor: pointer;
@@ -284,12 +291,6 @@ const setUseIndex = (effectId: number, useIndex: number) => {
 
 .crys-image.disabled {
     opacity: 0.3;
-}
-
-.crys-name {
-    flex: 1;
-    font-size: 0.85em;
-    padding-right: 20px;
 }
 
 .crys-card {
@@ -332,7 +333,8 @@ const setUseIndex = (effectId: number, useIndex: number) => {
 }
 
 .crys-card :deep(.subcrys-bar) {
-    margin-top: 8px;
+    margin-top: auto;
+    padding-top: 8px;
 }
 
 .missing-element-grid {
@@ -403,5 +405,17 @@ const setUseIndex = (effectId: number, useIndex: number) => {
     opacity: 0.45;
     font-size: 0.9rem;
     color: var(--muted);
+}
+
+.details {
+    padding-right: 20px;
+}
+
+.details> :first-child {
+    font-size: 0.85em;
+}
+
+.details> :last-child {
+    white-space: pre-line;
 }
 </style>
