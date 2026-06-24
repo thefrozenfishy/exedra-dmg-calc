@@ -46,7 +46,10 @@
             <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
             <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
             <label> <input type="checkbox" v-model="showUnowned" /> Include Unowned </label>
-            <label> <input type="checkbox" v-model="highlightCompleted" /> Highlight Completed </label>
+            <label v-if="showOffElementalOnesOption">
+                <input type="checkbox" v-model="showOffElementalOnes" />
+                Include off-elemental crys in count
+            </label>
         </div>
         <div>
             <label> <input type="checkbox" v-model="showLevels" /> Show Magic and Special levels </label>
@@ -56,9 +59,13 @@
                 <input type="checkbox" v-model="showCrys" />
                 Show Crys Counter
             </label>
-            <label> <input type="checkbox" :disabled="!(showLevels || showHearts)" v-model="colourLevels" />
-                Colour max levels
-            </label>
+            <div>
+
+                <label> <input type="checkbox" v-model="highlightCompleted" /> Highlight Completed </label>
+                <label> <input type="checkbox" :disabled="!(showLevels || showHearts)" v-model="colourLevels" />
+                    Colour max levels
+                </label>
+            </div>
         </div>
         <table class="ascension-table" @click.self="isTouchJiggleMode = false">
             <tbody @click.self="isTouchJiggleMode = false">
@@ -220,7 +227,7 @@
             has been
             collected, and green that all not off-elemental crys have been collected.
             Maxed out kioku are given a golden colour to indicate their completeness.
-            <template v-if="displayedCharactersComputed.some(shouldShinyHighlightCompleted)">Truly perfected kioku with
+            <template v-if="showOffElementalOnesOption">Truly perfected kioku with
                 all crys,
                 including off elemental ones, are given a diamond border!</template>
         </div>
@@ -307,9 +314,9 @@ const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.en
 const extraCollected = useSetting("extraCollected", 0)
 const extraTotal = computed(() => (showDupes.value ? ownedFiveStars.value.reduce((sum, ch) => sum + ch.dupes, 0) : extraCollected.value))
 
-const missingCrys5stars = computed(() => fiveStarMembers.value.reduce((p, c) => p + (c.enabled ? (maxCrysCount - getCrysCount(c, true)) : 0), 0))
-const missingCrys4stars = computed(() => fourStarMembers.value.reduce((p, c) => p + (maxCrysCount - getCrysCount(c, true)), 0))
-const missingCrys3stars = computed(() => threeStarMembers.value.reduce((p, c) => p + (maxCrysCount - getCrysCount(c, true)), 0))
+const missingCrys5stars = computed(() => fiveStarMembers.value.reduce((p, c) => p + (c.enabled ? (maxCrysCount.value - getCrysCount(c, true)) : 0), 0))
+const missingCrys4stars = computed(() => fourStarMembers.value.reduce((p, c) => p + (maxCrysCount.value - getCrysCount(c, true)), 0))
+const missingCrys3stars = computed(() => threeStarMembers.value.reduce((p, c) => p + (maxCrysCount.value - getCrysCount(c, true)), 0))
 
 const showLevels = useSetting("showLevels", true);
 const showHearts = useSetting("showHearts", true);
@@ -318,6 +325,7 @@ const showCrys = useSetting("showCrys", true);
 const colourLevels = useSetting("colourLevels", true);
 const highlightCompleted = useSetting("highlightCompleted", true);
 
+const showOffElementalOnes = useSetting("showOffElementalCrysCollection", false)
 const show4stars = useSetting("show4stars", false);
 const show3stars = useSetting("show3stars", false);
 const showUnowned = useSetting("showUnowned", true);
@@ -341,14 +349,14 @@ const getCrysElement = (selectionAbilityMstId: number) => {
 const shouldFilterOutOffElement = (elem: KiokuElement, selectionAbilityMstId: number) =>
     [0, elem].includes(getCrysElement(selectionAbilityMstId))
 
-const maxCrysCount = relevantCrys(10010101).filter(c => shouldFilterOutOffElement(KiokuElement.Light, c.selectionAbilityMstId)).length
+const maxCrysCount = computed(() => relevantCrys(10010101).filter(c => showOffElementalOnes.value ? true : shouldFilterOutOffElement(KiokuElement.Light, c.selectionAbilityMstId)).length)
 const hasElementalCrys = (ch: Character) => ch?.crysOptions && Object.entries(ch.crysOptions).some(([i, c]) => getCrysElement(Number(i)) === ch.element && c.enabled)
 
 const getCrysCount = (ch: Character, filterOutOffElement: boolean): number => {
     if (!ch.crysOptions) return 0
     return Object
         .entries(ch.crysOptions)
-        .filter(([i, c]) => filterOutOffElement ? shouldFilterOutOffElement(ch.element, Number(i)) : true)
+        .filter(([i, c]) => filterOutOffElement ? showOffElementalOnes.value ? true : shouldFilterOutOffElement(ch.element, Number(i)) : true)
         .map(([i, c]) => c)
         .reduce((sum: number, opt: any) => {
             if (!opt?.enabled) return sum
@@ -360,10 +368,14 @@ const isMaxHeartLevel = (ch: Character): boolean => showHearts.value ? ch.heartp
 const isMaxMagicAndSpecialLevel = (ch: Character): boolean => showLevels.value ? ch.magicLvl === KiokuConstants.maxMagicLvl
     // Since Fuuka sp10 breaks her for pvp allow sp9 to also be considered completed
     && ((ch.name === "Final Fatebloom" && ch.ascension === 5 ? 9 : getMaxSpecialLvl(ch)) <= ch.specialLvl || ch.rarity === 3) : true
-const isMaxCrysCollected = (ch: Character): boolean => showCrys.value ? getCrysCount(ch, true) === maxCrysCount : true
+const isMaxCrysCollected = (ch: Character): boolean => showCrys.value ? getCrysCount(ch, true) === maxCrysCount.value : true
 const isCompleted = (ch: Character): boolean => (ch.enabled || ch.rarity !== 5 || ch.name === "Lux☆Magica") && isMaxHeartLevel(ch) && isMaxMagicAndSpecialLevel(ch) && isMaxCrysCollected(ch)
 const shouldHighlightCompleted = (ch: Character): boolean => highlightCompleted.value && isCompleted(ch)
 const shouldShinyHighlightCompleted = (ch: Character): boolean => highlightCompleted.value && showCrys.value && isCompleted(ch) && getCrysCount(ch, false) === relevantCrys(ch.id).length
+const showOffElementalOnesOption = computed(() => displayedCharactersComputed.value.some(char => {
+    if (!char.enabled) return false
+    return Object.values(char.crysOptions).every((c) => c.enabled == null || c.enabled)
+}))
 
 const groupedByAscension = computed(() => {
     type LabelledGroup = Character[] & { label?: string }
