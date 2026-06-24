@@ -28,8 +28,20 @@
             {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
         </button>
         <button class="copy-btn" @click="downloadAscensionList">Download</button>
-        <button v-if="isBeta()" class="copy-btn" @click="shareAscensionList">Share Image Link</button>
+        <button class="copy-btn" :disabled="shareLinkLoading" @click="shareAscensionList">
+            {{ shareLinkLoading ? 'Generating…' : 'Share Image Link' }}
+        </button>
         <button class="copy-btn" @click="copyHyperLink">Copy Link</button>
+
+        <div v-if="shareLinkUrl || shareLinkError" class="share-link-result">
+            <template v-if="shareLinkUrl">
+                <input class="share-link-input" type="text" readonly :value="shareLinkUrl"
+                    @click="($event.target as HTMLInputElement).select()" />
+                <button class="copy-btn" @click="copyShareLink">Copy</button>
+            </template>
+            <span v-else class="share-link-error">{{ shareLinkError }}</span>
+        </div>
+
         <div>
             <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
             <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
@@ -227,9 +239,8 @@ import { useRoute, useRouter } from "vue-router"
 import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
-import { copyImageToClipboard, downloadImage, openImageInNewTab, shareImage, useClipboardSupport } from "../utils/image"
+import { copyImageToClipboard, downloadImage, openImageInNewTab, generateShareLink, copyTextToClipboard, useClipboardSupport } from "../utils/image"
 import { crystalises, passiveDetails } from "../utils/helpers"
-import { isBeta } from "../utils/betaSettings"
 
 const route = useRoute()
 const router = useRouter()
@@ -509,7 +520,29 @@ const displayedName = computed(() =>
 const downloadAscensionList = () => downloadImage("ascension.png", ".ascension-table", exportOpts)
 const copyAscensionList = () => copyImageToClipboard("ascension.png", ".ascension-table", exportOpts)
 const openAscensionListInNewTab = () => openImageInNewTab(".ascension-table", exportOpts)
-const shareAscensionList = () => shareImage("ascension.png", ".ascension-table", exportOpts, displayedName.value)
+
+const shareLinkLoading = ref(false)
+const shareLinkUrl = ref<string | null>(null)
+const shareLinkError = ref<string | null>(null)
+
+const shareAscensionList = async () => {
+    shareLinkLoading.value = true
+    shareLinkUrl.value = null
+    shareLinkError.value = null
+
+    try {
+        shareLinkUrl.value = await generateShareLink(".ascension-table", exportOpts, displayedName.value)
+    } catch (err) {
+        console.error("Failed to generate share link:", err)
+        shareLinkError.value = "Failed to generate share link. Please try again."
+    } finally {
+        shareLinkLoading.value = false
+    }
+}
+
+const copyShareLink = () => {
+    if (shareLinkUrl.value) copyTextToClipboard(shareLinkUrl.value)
+}
 
 const copyHyperLink = async () => {
     try {
@@ -862,6 +895,39 @@ td {
 .copy-btn:hover {
     background: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 209, 110, 0.35);
+}
+
+.copy-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.share-link-result {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    margin: 4px 10px 10px;
+}
+
+.share-link-input {
+    flex: 1 1 260px;
+    min-width: 160px;
+
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+
+    font-family: inherit;
+    font-size: 0.85rem;
+}
+
+.share-link-error {
+    color: #ff8a8a;
+    font-size: 0.9rem;
 }
 
 .total-ascensions {

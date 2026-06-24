@@ -105,7 +105,7 @@
                             - (disabledOtherRoles.includes(KiokuRole.Defender) ? 0 : minDefender)
                             - (disabledOtherRoles.includes(KiokuRole.Healer) ? 0 : minHealer)
                             - (disabledOtherRoles.includes(KiokuRole.Breaker) ? 0 : minBreaker)
-                            }}</div>
+                        }}</div>
                     </div>
                 </div>
             </div>
@@ -217,7 +217,18 @@
                     {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
                 </button>
                 <button @click="download">Download image</button>
-                <button class="copy-btn" @click="share">Share Image Link</button>
+                <button class="copy-btn" :disabled="shareLinkLoading" @click="share">
+                    {{ shareLinkLoading ? 'Generating…' : 'Share Image Link' }}
+                </button>
+
+                <div v-if="shareLinkUrl || shareLinkError" class="share-link-result">
+                    <template v-if="shareLinkUrl">
+                        <input class="share-link-input" type="text" readonly :value="shareLinkUrl"
+                            @click="($event.target as HTMLInputElement).select()" />
+                        <button class="copy-btn" @click="copyShareLink">Copy</button>
+                    </template>
+                    <span v-else class="share-link-error">{{ shareLinkError }}</span>
+                </div>
             </div>
             <div class="results">
                 <h2>Top Teams Overall</h2>
@@ -256,7 +267,7 @@ import { KiokuRole, Character, KiokuElement, elementAlimentMap } from '../types/
 import { toast } from "vue3-toastify"
 import { FinalTeam } from '../types/BestTeamTypes'
 import { useSetting } from '../store/settingsStore'
-import { copyImageToClipboard, downloadImage, openImageInNewTab, shareImage, useClipboardSupport } from '../utils/image.js'
+import { copyImageToClipboard, downloadImage, openImageInNewTab, generateShareLink, useClipboardSupport, copyTextToClipboard } from '../utils/image.js'
 import { useFriendStore } from "../store/friendStore"
 import { isBeta } from '../utils/betaSettings.js'
 
@@ -353,7 +364,29 @@ function safeInt(value: unknown, fallback = 0, min?: number, max?: number): numb
 const download = () => downloadImage("best_sa_team.png", ".results")
 const copy = () => copyImageToClipboard("best_sa_team.png", ".results")
 const openInNewTab = () => openImageInNewTab(".results")
-const share = () => shareImage("best_sa_team.png", ".results", {}, `${friendStore.displayName ?? "My"} best team vs ${weakElements.filter(el => el.enabled).map(el => el.name).join(" & ")}`)
+
+const shareLinkLoading = ref(false)
+const shareLinkUrl = ref<string | null>(null)
+const shareLinkError = ref<string | null>(null)
+
+const share = async () => {
+    shareLinkLoading.value = true
+    shareLinkUrl.value = null
+    shareLinkError.value = null
+
+    try {
+        shareLinkUrl.value = await generateShareLink(".results", {}, `${friendStore.displayName ?? "My"} best team vs ${weakElements.filter(el => el.enabled).map(el => el.name).join(" & ")}`)
+    } catch (err) {
+        console.error("Failed to generate share link:", err)
+        shareLinkError.value = "Failed to generate share link. Please try again."
+    } finally {
+        shareLinkLoading.value = false
+    }
+}
+
+const copyShareLink = () => {
+    if (shareLinkUrl.value) copyTextToClipboard(shareLinkUrl.value)
+}
 
 const extraAttackers = useSetting<Character[]>("extraAttackers", [])
 const extraAttackerQuery = ref("")

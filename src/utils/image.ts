@@ -209,66 +209,46 @@ const createSharePage = async (shareId: string, imageUrl: string, displayName?: 
     return data?.url ?? imageUrl
 }
 
-export const shareImage = async (filename: string, target: string | HTMLElement, options?: ImageExportOptions, displayName?: string) => {
+export const generateShareLink = async (
+    target: string | HTMLElement,
+    options?: ImageExportOptions,
+    displayName?: string
+): Promise<string> => {
     const el = getElement(target)
     if (!el) {
-        toast.error("Target element not found", { position: toast.POSITION.TOP_RIGHT })
-        return
+        throw new Error("Target element not found")
     }
 
-    const toastId = toast.loading("Creating share link...", { position: toast.POSITION.TOP_RIGHT, icon: false })
+    const blob = await withExportState(el, options, async (element) => {
+        const dataUrl = await toPng(element, IMG_SETTINGS)
+        return fetch(dataUrl).then(r => r.blob())
+    })
 
-    try {
-        const blob = await withExportState(el, options, async (element) => {
-            const dataUrl = await toPng(element, IMG_SETTINGS)
-            return fetch(dataUrl).then(r => r.blob())
-        })
-
-        const { publicUrl, shareId } = await uploadBlobForSharing(blob)
-        const url = await createSharePage(shareId, publicUrl, displayName)
-
-        await navigator.clipboard.writeText(url)
-
-        toast.update(toastId, {
-            render: "Share link copied! Paste it anywhere to show the image.",
-            type: "success",
-            isLoading: false,
-            autoClose: 4000,
-        })
-
-        return url
-    } catch (err) {
-        console.error("Failed to create share link:", err)
-        toast.update(toastId, { render: "Failed to create share link", type: "error", isLoading: false, autoClose: 3000 })
-        return null
-    }
+    const { publicUrl, shareId } = await uploadBlobForSharing(blob)
+    return await createSharePage(shareId, publicUrl, displayName)
 }
 
-export const shareCanvas = async (filename: string, canvas: HTMLCanvasElement, displayName?: string) => {
-    const toastId = toast.loading("Creating share link...", { position: toast.POSITION.TOP_RIGHT, icon: false })
+export const generateShareLinkFromCanvas = async (
+    canvas: HTMLCanvasElement,
+    displayName?: string
+): Promise<string> => {
+    const blob = await new Promise<Blob>((resolve, reject) =>
+        canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png")
+    )
 
+    const { publicUrl, shareId } = await uploadBlobForSharing(blob)
+    return await createSharePage(shareId, publicUrl, displayName)
+}
+
+export const copyTextToClipboard = async (text: string, successMessage = "Copied to clipboard!") => {
     try {
-        const blob = await new Promise<Blob>((resolve, reject) =>
-            canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png")
-        )
-
-        const { publicUrl, shareId } = await uploadBlobForSharing(blob)
-        const url = await createSharePage(shareId, publicUrl, displayName)
-
-        await navigator.clipboard.writeText(url)
-
-        toast.update(toastId, {
-            render: "Share link copied! Paste it anywhere to show the image.",
-            type: "success",
-            isLoading: false,
-            autoClose: 4000,
-        })
-
-        return url
+        await navigator.clipboard.writeText(text)
+        toast.success(successMessage, { position: toast.POSITION.TOP_RIGHT, icon: false })
+        return true
     } catch (err) {
-        console.error("Failed to create share link:", err)
-        toast.update(toastId, { render: "Failed to create share link", type: "error", isLoading: false, autoClose: 3000 })
-        return null
+        console.error("Clipboard write failed:", err)
+        toast.error("Couldn't copy to clipboard", { position: toast.POSITION.TOP_RIGHT, icon: false })
+        return false
     }
 }
 

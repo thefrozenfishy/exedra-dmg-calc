@@ -118,11 +118,25 @@ async function commitSharePage(shareId: string, html: string): Promise<string> {
     return `https://${GITHUB_OWNER}.github.io/${PAGES_BASE_PATH}/share/${shareId}/`
 }
 
+const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+}
+
 serve(async (req) => {
+    // Browsers send an OPTIONS preflight before any cross-origin POST
+    // with a JSON body. Without answering it with the right headers, the
+    // browser blocks the real request before it's ever sent -- that's
+    // the "CORS Missing Allow Origin" / 405 error.
+    if (req.method === "OPTIONS") {
+        return new Response(null, { status: 204, headers: corsHeaders })
+    }
+
     if (req.method !== "POST") {
         return new Response(JSON.stringify({ error: "Method not allowed" }), {
             status: 405,
-            headers: { "Content-Type": "application/json" },
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
         })
     }
 
@@ -132,7 +146,7 @@ serve(async (req) => {
         if (!body.shareId || !body.imageUrl) {
             return new Response(
                 JSON.stringify({ error: "shareId and imageUrl are required" }),
-                { status: 400, headers: { "Content-Type": "application/json" } }
+                { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
             )
         }
 
@@ -143,7 +157,7 @@ serve(async (req) => {
         if (!allowedImageHostPattern.test(body.imageUrl)) {
             return new Response(
                 JSON.stringify({ error: "imageUrl must point at the share-images bucket" }),
-                { status: 400, headers: { "Content-Type": "application/json" } }
+                { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
             )
         }
 
@@ -152,13 +166,13 @@ serve(async (req) => {
 
         return new Response(JSON.stringify({ url: pageUrl }), {
             status: 200,
-            headers: { "Content-Type": "application/json" },
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
         })
     } catch (err) {
         console.error("create-share-page failed:", err)
         return new Response(
             JSON.stringify({ error: err instanceof Error ? err.message : String(err) }),
-            { status: 500, headers: { "Content-Type": "application/json" } }
+            { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         )
     }
 })
