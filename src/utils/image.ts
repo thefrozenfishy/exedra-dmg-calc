@@ -6,9 +6,14 @@ import { getUserId } from "../store/user"
 
 const IMG_SETTINGS = {
     cacheBust: true,
-    pixelRatio: 1,
+    pixelRatio: 2,
     backgroundColor: "#242424",
     skipFonts: false
+}
+
+const HIGH_RES_IMG_SETTINGS = {
+    ...IMG_SETTINGS,
+    pixelRatio: 3,
 }
 
 export interface ImageExportOptions {
@@ -137,7 +142,7 @@ export const openImageInNewTab = async (target: string | HTMLElement, options?: 
 
     try {
         const url = await withExportState(el, options, async (element) => {
-            const dataUrl = await toPng(element, IMG_SETTINGS)
+            const dataUrl = await toPng(element, HIGH_RES_IMG_SETTINGS)
             const blob = await fetch(dataUrl).then(r => r.blob())
             return URL.createObjectURL(blob)
         })
@@ -232,7 +237,7 @@ export const generateShareLink = async (
     }
 
     const blob = await withExportState(el, options, async (element) => {
-        const dataUrl = await toPng(element, IMG_SETTINGS)
+        const dataUrl = await toPng(element, HIGH_RES_IMG_SETTINGS)
         return fetch(dataUrl).then(r => r.blob())
     })
 
@@ -274,7 +279,7 @@ export const downloadImage = async (filename: string, target: string | HTMLEleme
     const toastId = toast.loading("Downloading...", { position: toast.POSITION.TOP_RIGHT, icon: false })
     try {
         await withExportState(el, options, async (element) => {
-            const dataUrl = await toPng(element, { ...IMG_SETTINGS, pixelRatio: 2 })
+            const dataUrl = await toPng(element, HIGH_RES_IMG_SETTINGS)
             const blob = await fetch(dataUrl).then(r => r.blob())
             await downloadBlob(filename, blob)
         })
