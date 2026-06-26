@@ -2239,8 +2239,6 @@ img.lim-icon {
     font-size: 0.82rem;
     color: #eee;
     white-space: nowrap;
-    backdrop-filter: blur(6px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     min-width: 120px;
 }
 
