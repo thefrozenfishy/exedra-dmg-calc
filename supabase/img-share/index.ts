@@ -8,7 +8,6 @@ const WORKER_SECRET = Deno.env.get("CLOUDFLARE_WORKER_SECRET")
 interface CreateSharePageRequest {
     shareId: string
     imageUrl: string
-    displayName?: string
     title?: string
     backUrl?: string
 }
@@ -63,7 +62,6 @@ serve(async (req) => {
             body: JSON.stringify({
                 shareId: body.shareId,
                 imageUrl: body.imageUrl,
-                displayName: body.displayName ?? "",
                 title: body.title ?? "",
                 backUrl: body.backUrl ?? "",
             }),

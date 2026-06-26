@@ -7,7 +7,6 @@ export interface Env {
 
 interface ShareEntry {
     imageUrl: string
-    displayName: string
     title?: string
     backUrl?: string
 }
@@ -27,8 +26,7 @@ function buildSharePageHtml(entry: ShareEntry, shareUrl: string): string {
     const safeImage = escapeHtml(entry.imageUrl)
     const safeShare = escapeHtml(shareUrl)
 
-    const resolvedTitle = entry.title?.trim()
-        || `${entry.displayName || "A player"}'s Kioku Collection`
+    const resolvedTitle = entry.title?.trim() || "My Shared Image`
     const title = escapeHtml(resolvedTitle)
 
     const resolvedBackUrl = entry.backUrl?.trim() || TOOLBOX_URL
@@ -159,14 +157,14 @@ export default {
                 return json({ error: "Unauthorized" }, 401)
             }
 
-            let body: { shareId?: string; imageUrl?: string; displayName?: string; title?: string; backUrl?: string }
+            let body: { shareId?: string; imageUrl?: string;  title?: string; backUrl?: string }
             try {
                 body = await request.json()
             } catch {
                 return json({ error: "Invalid JSON" }, 400)
             }
 
-            const { shareId, imageUrl, displayName = "", title = "", backUrl = "" } = body
+            const { shareId, imageUrl,  title = "", backUrl = "" } = body
 
             if (!shareId || !imageUrl) {
                 return json({ error: "shareId and imageUrl are required" }, 400)
@@ -182,7 +180,7 @@ export default {
                 return json({ error: "imageUrl must point at the share-images bucket" }, 400)
             }
 
-            const entry: ShareEntry = { imageUrl, displayName, title, backUrl }
+            const entry: ShareEntry = { imageUrl,  title, backUrl }
 
             // TTL of 1 year — shares don't need to last forever
             await env.SHARE_PAGES.put(shareId, JSON.stringify(entry), {

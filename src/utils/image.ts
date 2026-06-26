@@ -201,7 +201,6 @@ const uploadBlobForSharing = async (blob: Blob): Promise<{ path: string, publicU
 
 export interface ShareLinkOptions {
     title?: string
-    displayName?: string
     backUrl?: string
 }
 
@@ -212,7 +211,6 @@ const createSharePage = async (shareId: string, imageUrl: string, opts: ShareLin
         body: {
             shareId,
             imageUrl,
-            displayName: opts.displayName,
             title: opts.title,
             backUrl: opts.backUrl,
         },
