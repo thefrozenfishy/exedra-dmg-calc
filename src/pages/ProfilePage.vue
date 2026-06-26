@@ -383,7 +383,7 @@
                                     <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale power" />
 
                                     <div class="total-power-value">
-                                        {{ myPower.whale }}
+                                        {{ friend.power.whale }}
                                     </div>
                                 </div>
 
