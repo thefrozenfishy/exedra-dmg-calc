@@ -104,7 +104,7 @@ const show4stars = useSetting("show4stars", false);
 const show3stars = useSetting("show3stars", false);
 const showOffElementalOnes = useSetting("showOffElementalCrysCollection", false)
 const showOffElementalOnesOption = computed(() => store.characters.some(char => {
-    if (!char.enabled) return false
+    if (!char?.enabled) return false
     return Object.values(char.crysOptions).every((c) => c.enabled == null || c.enabled)
 }))
 
@@ -141,13 +141,13 @@ const options = computed(() => {
 
 function missingElementCharacters(elem: KiokuElement, showOffElement: boolean) {
     return store.characters.filter(char => {
-        if (!char.enabled) return false
+        if (!char?.enabled) return false
         if (!showOffElement && char.element !== elem) return false
         if (char.rarity === 3 && !show3stars.value) return false
         if ((char.rarity === 4 || char.name === "Lux☆Magica") && !show4stars.value) return false
 
         const hasElementalCrys = Object.entries(char.crysOptions).some(([id, crys]) => {
-            if (!crys.enabled) return false
+            if (!crys?.enabled) return false
 
             const crysData = relevantCrys(char.id).find(c => c.selectionAbilityMstId === Number(id))
             if (!crysData) return false

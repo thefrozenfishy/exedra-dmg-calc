@@ -371,7 +371,7 @@ const isCompleted = (ch: Character): boolean => (ch.enabled || ch.rarity !== 5 |
 const shouldHighlightCompleted = (ch: Character): boolean => highlightCompleted.value && isCompleted(ch)
 const shouldShinyHighlightCompleted = (ch: Character): boolean => highlightCompleted.value && showCrys.value && isCompleted(ch) && getCrysCount(ch, false) === relevantCrys(ch.id).length
 const showOffElementalOnesOption = computed(() => displayedCharactersComputed.value.some(char => {
-    if (!char.enabled) return false
+    if (!char?.enabled) return false
     return Object.values(char.crysOptions).every((c) => c.enabled == null || c.enabled)
 }))
 
