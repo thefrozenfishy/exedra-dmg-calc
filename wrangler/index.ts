@@ -26,7 +26,7 @@ function buildSharePageHtml(entry: ShareEntry, shareUrl: string): string {
     const safeImage = escapeHtml(entry.imageUrl)
     const safeShare = escapeHtml(shareUrl)
 
-    const resolvedTitle = entry.title?.trim() || "My Shared Image`
+    const resolvedTitle = entry.title?.trim() || "My Shared Image"
     const title = escapeHtml(resolvedTitle)
 
     const resolvedBackUrl = entry.backUrl?.trim() || TOOLBOX_URL
