@@ -57,10 +57,35 @@
                     </label>
                 </div>
 
-                <div class="chart-wrapper">
+                <div class="chart-wrapper" ref="chartContainerRef">
                     <div class="analytics-chart">
-                        <canvas ref="analyticsCanvasRef"></canvas>
+                        <canvas ref="analyticsCanvasRef" @click="handleChartClick"></canvas>
                     </div>
+
+                    <div v-if="hoveredTooltip" class="chart-tooltip-overlay"
+                        :style="{ left: hoveredTooltip.x + 'px', top: hoveredTooltip.y + 'px' }">
+                        <div class="chart-tooltip-content">
+                            <div v-for="(line, i) in hoveredTooltip.lines" :key="i" class="chart-tooltip-line">
+                                {{ line }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <TransitionGroup name="tooltip-fade">
+                        <div v-for="(tooltip, index) in pinnedTooltips" :key="index"
+                            class="chart-tooltip-overlay is-pinned"
+                            :style="{ left: tooltip.x + 'px', top: tooltip.y + 'px' }">
+                            <div class="chart-tooltip-content">
+                                <button class="chart-tooltip-dismiss" title="Dismiss" @click.stop="dismissPin(index)">
+                                    ×
+                                </button>
+
+                                <div v-for="(line, i) in tooltip.lines" :key="i" class="chart-tooltip-line">
+                                    {{ line }}
+                                </div>
+                            </div>
+                        </div>
+                    </TransitionGroup>
 
                     <div v-if="graphMode === 'scatter'" class="chart-legend">
                         <div v-for="item in legendItems" :key="item.label" class="legend-item">
@@ -1000,8 +1025,72 @@ Chart.register(
 )
 
 const analyticsCanvasRef = ref<HTMLCanvasElement | null>(null)
+const chartContainerRef = ref<HTMLElement | null>(null)
 
 let analyticsChart: Chart | null = null
+
+interface PinnedTooltip {
+    x: number
+    y: number
+    lines: string[]
+    pinned: boolean
+}
+const hoveredTooltip = ref<PinnedTooltip | null>(null)
+const pinnedTooltips = ref<PinnedTooltip[]>([])
+const dismissPin = (index: number) => {
+    pinnedTooltips.value.splice(index, 1)
+}
+
+const makeExternalTooltipHandler = (getLines: (ctx: any) => string[]) => {
+    return (context: any) => {
+        const { tooltip } = context
+        if (tooltip.opacity === 0 || !tooltip.dataPoints?.length) {
+            hoveredTooltip.value = null
+            return
+        }
+
+        const canvas = analyticsCanvasRef.value
+        const container = chartContainerRef.value
+        if (!canvas || !container) return
+
+        const containerRect = container.getBoundingClientRect()
+        const canvasRect = canvas.getBoundingClientRect()
+
+        hoveredTooltip.value = {
+            x: (canvasRect.left - containerRect.left) + tooltip.caretX,
+            y: (canvasRect.top - containerRect.top) + tooltip.caretY,
+            lines: getLines(tooltip),
+            pinned: false,
+        }
+    }
+}
+
+const handleChartClick = (event: MouseEvent) => {
+    if (!analyticsChart) return
+
+    const elements = analyticsChart.getElementsAtEventForMode(
+        event, 'nearest', { intersect: true }, false
+    )
+
+    if (!elements.length) {
+        return
+    }
+
+    if (hoveredTooltip.value) {
+        const alreadyPinned = pinnedTooltips.value.findIndex(
+            p => p.lines.join('|') === hoveredTooltip.value!.lines.join('|')
+        )
+
+        if (alreadyPinned === -1) {
+            pinnedTooltips.value.push({
+                ...hoveredTooltip.value,
+                pinned: true,
+            })
+        } else {
+            dismissPin(alreadyPinned)
+        }
+    }
+}
 
 const graphMode = useSetting<'scatter' | 'percentile'>("betaGraphMode", "percentile")
 
@@ -1149,6 +1238,7 @@ const renderAnalyticsChart = () => {
     if (!analyticsCanvasRef.value) return
 
     analyticsChart?.destroy()
+    hoveredTooltip.value = null
 
     const players = analyticsPlayers.value
 
@@ -1228,18 +1318,17 @@ const renderAnalyticsChart = () => {
                             }
                         },
                         tooltip: {
-                            callbacks: {
-                                label(ctx) {
-                                    const raw = ctx.raw as { x: number; y: number; names: string[]; count: number }
-                                    if (raw.count === 1) {
-                                        return `${raw.names[0]}: (${raw.x}, ${raw.y})`
-                                    }
-                                    return [
-                                        `${raw.count} players at (${raw.x}, ${raw.y}):`,
-                                        ...raw.names.map(n => `  · ${n}`)
-                                    ]
+                            enabled: false,
+                            external: makeExternalTooltipHandler(tooltip => {
+                                const raw = tooltip.dataPoints[0].raw as { x: number; y: number; names: string[]; count: number }
+                                if (raw.count === 1) {
+                                    return [`${raw.names[0]}: (${raw.x}, ${raw.y})`]
                                 }
-                            }
+                                return [
+                                    `${raw.count} players at (${raw.x}, ${raw.y}):`,
+                                    ...raw.names.map((n: string) => `  · ${n}`)
+                                ]
+                            }),
                         }
                     }
                 }
@@ -1312,13 +1401,12 @@ const renderAnalyticsChart = () => {
                         }
                     },
                     tooltip: {
-                        callbacks: {
-                            label(ctx) {
-                                const raw = ctx.raw as { x: number; y: number; name?: string }
-                                const namePart = raw.name ? `${raw.name} — ` : ''
-                                return `${namePart}${ctx.parsed.y?.toFixed(1)}% below ${ctx.parsed.x}`
-                            }
-                        }
+                        enabled: false,
+                        external: makeExternalTooltipHandler(tooltip => {
+                            const raw = tooltip.dataPoints[0].raw as { x: number; y: number; name?: string }
+                            const namePart = raw.name ? `${raw.name} — ` : ''
+                            return [`${namePart}${tooltip.dataPoints[0].parsed.y?.toFixed(1)}% below ${tooltip.dataPoints[0].parsed.x}`]
+                        }),
                     }
                 }
             }
@@ -2120,10 +2208,137 @@ img.lim-icon {
     gap: 0.35rem;
 }
 
+/* =========================
+   Chart Tooltip Overlay
+========================= */
+
 .chart-wrapper {
+    position: relative;
     background: rgba(255, 255, 255, 0.04);
     border-radius: 12px;
     padding: 1rem;
+}
+
+.chart-tooltip-overlay {
+    position: absolute;
+    pointer-events: none;
+    z-index: 10;
+    transform: translate(-50%, calc(-100% - 10px));
+}
+
+.chart-tooltip-overlay.is-pinned {
+    pointer-events: auto;
+}
+
+.chart-tooltip-content {
+    position: relative;
+    background: rgba(20, 16, 32, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 0.55rem 0.8rem;
+    font-size: 0.82rem;
+    color: #eee;
+    white-space: nowrap;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    min-width: 120px;
+}
+
+.is-pinned .chart-tooltip-content {
+    border-color: rgba(255, 209, 110, 0.45);
+}
+
+.is-pinned .chart-tooltip-content::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+
+    width: 10px;
+    height: 10px;
+
+    background: rgba(20, 16, 32, 0.92);
+    border-right: 2px solid rgba(255, 209, 110, 0.45);
+    border-bottom: 2px solid rgba(255, 209, 110, 0.45);
+
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.chart-tooltip-dismiss {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    width: auto;
+    min-width: unset;
+}
+
+.chart-tooltip-dismiss:hover {
+    color: #fff;
+    background: none;
+    border: none;
+    transform: none;
+}
+
+.chart-tooltip-line {
+    line-height: 1.5;
+}
+
+.chart-tooltip-hint {
+    margin-top: 0.3rem;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.35);
+    text-align: center;
+}
+
+.chart-tooltip-actions {
+    margin-top: 0.5rem;
+    padding-top: 0.4rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    gap: 0.4rem;
+}
+
+.chart-tooltip-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.78rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    color: #eee;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.chart-tooltip-action-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 209, 110, 0.4);
+}
+
+.chart-tooltip-action-btn svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+}
+
+.tooltip-fade-enter-active,
+.tooltip-fade-leave-active {
+    transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.tooltip-fade-enter-from,
+.tooltip-fade-leave-to {
+    opacity: 0;
+    transform: translate(-50%, calc(-100% - 6px));
 }
 
 .chart-legend {
