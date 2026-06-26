@@ -158,7 +158,7 @@ export const BETA_SECTIONS = [
                 label: "Whale Decay Permanent Floor",
                 defaultValue: 0.5,
             },
-                        {
+            {
                 key: "whalePermanentDurationMonths",
                 label: "Permanent Duration (months)",
                 defaultValue: 12,
@@ -166,14 +166,14 @@ export const BETA_SECTIONS = [
             {
                 key: "whaleLimitedMultiplier",
                 label: "Limited Multiplier",
-                defaultValue: 2, 
+                defaultValue: 2,
             },
             {
                 key: "whaleLimitedDecayFloor",
                 label: "Whale Decay Limited Floor",
                 defaultValue: 1,
             },
-                        {
+            {
                 key: "whaleLimitedDurationMonths",
                 label: "Limited Duration (months)",
                 defaultValue: 48,
@@ -198,37 +198,43 @@ export const BETA_SECTIONS = [
                 label: "Kioku Scalings",
                 defaultValue: {
                     // Attackers
-                    "Falsified Phenomena": 1.4,
+                    "Falsified Phenomena": 1.5,
+                    "Kiss-shot": 0.5,
+                    "Marigold Dadaism": 0.5,
                     "Nothing to Despair, Ever": 1.2,
-                    "Marigold Dadaism": 0.7,
-                    "Kiss-shot": 0.7,
 
                     // Buffers
-                    "Hollow Woman": 1.6,
-                    "Luce della Speranza": 1.2,
-                    "Pluvia☆Neujahr": 1.2,
+                    "Buon Natale Grazioso": 1.1,
+                    "Hollow Woman": 1.5,
+                    "Luce della Speranza": 1.25,
+                    "Pluvia☆Neujahr": 1.25,
+                    "Scorchin' Summer Spike": 1.4,
 
                     // Breakers
-                    "Pluvia☆Magica": 1.4,
-                    "Sacred Gift": 1.15,
-                    "Final Fatebloom": 1.15,
+                    "Crimson Confectioner": 1.1,
+                    "Doppel of Invitations": 0.9,
+                    "Final Fatebloom": 1.25,
+                    "Groundhog Daze": 0.9,
+                    "Neo Genesis": 0.5,
+                    "Pluvia☆Magica": 1.5,
+                    "Sacred Gift": 1.25,
+                    "Strada Futuro": 0.9,
+                    "Tenebrous Arcana": 0.5,
                     "Unlimited Rulebook": 1.1,
-                    "Strada Futuro": 0.85,
-                    "Tenebrous Arcana": 0.85,
-                    "Neo Genesis": 0.7,
 
                     // Debuffers
-                    "Yuletide Gift": 1.4,
-                    "Bebe-O'-Lantern": 1.4,
-                    "Ultra Great Big Hammer": 0.7,
+                    "Bebe-O'-Lantern": 1.5,
+                    "Splashin' Kyubey Blast": 1.5,
+                    "Ultra Great Big Hammer": 0.75,
+                    "Yuletide Gift": 1.5,
 
                     // Defenders
-                    "Folter Gefängnis": 0.7,
-                    "Baldamente Fortissimo": 1.4,
+                    "Baldamente Fortissimo": 1.5,
+                    "Folter Gefängnis": 0.75,
 
                     // Healers
-                    "Judgement Earth": 1.2,
-                    "Glitterjoy Snow Globe": 1.1,
+                    "Glitterjoy Snow Globe": 1.15,
+                    "Judgement Earth": 1.3,
                 },
             }
         ]
@@ -265,25 +271,25 @@ export const BETA_SECTIONS = [
                     [KiokuRole.Attacker]: {
                         "1": 0,
                         "2": 10,
-                        "3": 35,
-                        "4": 0,
+                        "3": 30,
+                        "4": 5,
                         "5": 55,
                     },
 
                     [KiokuRole.Breaker]: {
                         "1": 0,
                         "2": 10,
-                        "3": 35,
+                        "3": 30,
                         "4": 20,
-                        "5": 35,
+                        "5": 40,
                     },
 
                     [KiokuRole.Buffer]: {
                         "1": 10,
-                        "2": 15,
-                        "3": 5,
-                        "4": 60,
-                        "5": 10,
+                        "2": 10,
+                        "3": 10,
+                        "4": 55,
+                        "5": 15,
                     },
 
                     [KiokuRole.Debuffer]: {
@@ -296,18 +302,18 @@ export const BETA_SECTIONS = [
 
                     [KiokuRole.Defender]: {
                         "1": 0,
-                        "2": 35,
+                        "2": 30,
                         "3": 0,
-                        "4": 55,
+                        "4": 60,
                         "5": 10,
                     },
 
                     [KiokuRole.Healer]: {
                         "1": 20,
-                        "2": 10,
+                        "2": 15,
                         "3": 5,
                         "4": 50,
-                        "5": 15,
+                        "5": 10
                     },
                 },
             },
