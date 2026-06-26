@@ -183,7 +183,7 @@
                     / totalPossibleStandards * 100) }}%)
             </div>
             <div>
-                ({{ round(extraTotal / (totalStandards + extraTotal) * 100) }}% of your collected standard SSRs
+                ({{extraTotal}} / {{ round(extraTotal / (totalStandards + extraTotal) * 100) }}% of your collected standard SSRs
                 have been +500s)
             </div>
             <div>
