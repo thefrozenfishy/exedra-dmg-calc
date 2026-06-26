@@ -6,11 +6,23 @@
             <section v-if="showGraph" class="profile-section analytics-section">
                 <h2>Power Analytics</h2>
                 <div class="btn-container">
-                    <button @click="exportData">Export data to Excel</button>
-                    <button @click="clipboardSupported ? copy() : openInNewTab()">
-                        {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
-                    </button>
-                    <button @click="download">Download image</button>
+                    <ImageActionsToolbar target=".chart-wrapper" :filename="pngName"
+                        :share-options="shareOptionsForChart">
+                        <button class="icon-btn" :title="exportedCSV ? 'Exported!' : 'Export csv'"
+                            :aria-label="exportedCSV ? 'Exported!' : 'Export csv'" @click="exportData">
+                            <svg v-if="exportedCSV" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M20 6L9 17l-5-5" />
+                            </svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="12" y1="11" x2="12" y2="17" />
+                                <polyline points="9 14 12 17 15 14" />
+                            </svg>
+                        </button>
+                    </ImageActionsToolbar>
                 </div>
                 <div class="analytics-controls">
                     <label>
@@ -486,7 +498,7 @@ import {
     Tooltip,
     Legend
 } from 'chart.js'
-import { copyImageToClipboard, downloadImage, openImageInNewTab, useClipboardSupport } from '../utils/image'
+import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import { MyRank } from '../store/friendStore'
 
 const store = useFriendStore()
@@ -509,6 +521,9 @@ const rankAlt = (r: RankLike) => {
 
 const formatKiokuCount = (chars: number | undefined, ascs: number | undefined) =>
     `${String(chars || 0).padStart(2, ' ')} ${`(${ascs || 0})`.padStart(5, ' ')}`
+
+
+const exportedCSV = ref(false)
 
 const exportData = () => {
     const rows: string[] = []
@@ -605,6 +620,10 @@ const exportData = () => {
     a.click()
 
     URL.revokeObjectURL(url)
+
+
+    exportedCSV.value = true
+    setTimeout(() => { exportedCSV.value = false }, 1500)
 }
 
 const myPower = computed(() => getPowerScores(characterStore.characters))
@@ -1048,14 +1067,16 @@ const graphOptions = [
 const selectedXAxis = useSetting<string>('betaGraphSelectedXAxis', 'total')
 const selectedYAxis = useSetting<string>('betaGraphSelectedYAxis', 'whale')
 
-const { clipboardSupported } = useClipboardSupport()
-
 const pngName = computed(() => graphMode.value === 'scatter'
     ? `${getAxisLabel(selectedXAxis.value)} vs ${getAxisLabel(selectedYAxis.value)}.png`
     : `${getAxisLabel(selectedXAxis.value)}.png`)
-const download = () => downloadImage(pngName.value, ".chart-wrapper")
-const copy = () => copyImageToClipboard(pngName.value, ".chart-wrapper")
-const openInNewTab = () => openImageInNewTab(".chart-wrapper")
+
+const shareOptionsForChart = () => ({
+    title: graphMode.value === 'scatter'
+        ? `${getAxisLabel(selectedXAxis.value)} vs ${getAxisLabel(selectedYAxis.value)}`
+        : getAxisLabel(selectedXAxis.value),
+    backUrl: window.location.href,
+})
 
 const analyticsPlayers = computed(() => {
     const list = []

@@ -33,11 +33,21 @@
 
         <div class="controls" v-if="leftCode && rightCode">
             <div>
-                <button class="copy-btn" @click="clipboardSupported ? copyGraphToClipboard() : openGraphInNewTab()">
-                    {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
-                </button>
-                <button class="copy-btn" @click="downloadGraph">Download</button>
-                <button class="copy-btn" @click="copyHyperLink">Copy Link</button>
+                <ImageActionsToolbar target=".graph-container" :filename="filename" :export-options="exportOpts"
+                    :share-options="shareOptionsForComparison">
+                    <button class="icon-btn" :title="hyperlinkCopied ? 'Copied!' : 'Copy page link'"
+                        :aria-label="hyperlinkCopied ? 'Copied!' : 'Copy page link'" @click="copyHyperLink">
+                        <svg v-if="hyperlinkCopied" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M20 6L9 17l-5-5" />
+                        </svg>
+                        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                        </svg>
+                    </button>
+                </ImageActionsToolbar>
             </div>
             <div>
                 <label>
@@ -138,7 +148,7 @@ import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 import { getAccountSimilarityScore } from "../models/AccountSimilarityScore"
-import { copyImageToClipboard, downloadImage, openImageInNewTab, useClipboardSupport } from "../utils/image"
+import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { toast } from "vue3-toastify"
 
 const friendStore = useFriendStore()
@@ -356,8 +366,6 @@ const withExportHeader = async (fn: () => Promise<void> | void) => {
     }
 }
 
-const { clipboardSupported } = useClipboardSupport()
-
 const exportOpts = {
     onBefore: () => {
         const header = document.querySelector(".export-header") as HTMLElement | null
@@ -369,15 +377,23 @@ const exportOpts = {
     }
 }
 
-const downloadGraph = () => downloadImage(filename.value, ".graph-container", exportOpts)
-const copyGraphToClipboard = () => copyImageToClipboard(filename.value, ".graph-container", exportOpts)
-const openGraphInNewTab = () => openImageInNewTab(".graph-container", exportOpts)
+const comparisonPageUrl = () =>
+    `${window.location.origin}/exedra-dmg-calc/#/account-compare?left=${leftCode.value}&right=${rightCode.value}`
+
+const shareOptionsForComparison = () => ({
+    title: `${leftProfile.value?.display_name || leftCode.value} vs ${rightProfile.value?.display_name || rightCode.value}`,
+    backUrl: comparisonPageUrl(),
+})
+
+const hyperlinkCopied = ref(false)
 
 const copyHyperLink = async () => {
     try {
         await navigator.clipboard.writeText(
             `${window.location.origin}/exedra-dmg-calc/#/account-compare?left=${leftCode.value}&right=${rightCode.value}`
         )
+        hyperlinkCopied.value = true
+        setTimeout(() => { hyperlinkCopied.value = false }, 1500)
         toast.success("Copied to clipboard!", { position: toast.POSITION.TOP_RIGHT, icon: false })
     } catch (err) {
         console.error("Clipboard failed:", err)

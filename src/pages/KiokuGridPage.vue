@@ -2,10 +2,11 @@
     <div>
         <div class="options-bar">
             <div class="options-row">
-                <button class="copy-btn" @click="clipboardSupported ? copyGridToClipboard() : openGridInNewTab()">
-                    {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
-                </button>
-                <button class="copy-btn" @click="downloadGrid">Download</button>
+                <ImageActionsToolbar
+                    target=".grid-scroll"
+                    filename="grid.png"
+                    :export-options="exportOpts"
+                    :share-options="shareOptionsForGrid" />
             </div>
             <div class="options-row">
                 <label> <input type="checkbox" v-model="show5stars" /> Include 5-stars </label>
@@ -169,7 +170,8 @@ import { Character, KiokuElement, KiokuRole, KiokuConstants } from "../types/Kio
 import { useSetting } from "../store/settingsStore"
 import { Kioku } from "../models/Kioku"
 import { skillDetails } from "../utils/helpers"
-import { copyImageToClipboard, downloadImage, openImageInNewTab, useClipboardSupport } from "../utils/image"
+import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
+import { useFriendStore } from "../store/friendStore"
 
 const store = useCharacterStore()
 
@@ -426,12 +428,12 @@ const isMaxSpecialLvl = (ch: Character): boolean => {
     return ch.specialLvl === 4
 }
 
-const { clipboardSupported } = useClipboardSupport()
 const exportOpts = { exportClass: "exporting" }
 
-const downloadGrid = () => downloadImage("grid.png", ".grid-scroll", exportOpts)
-const copyGridToClipboard = () => copyImageToClipboard("grid.png", ".grid-scroll", exportOpts)
-const openGridInNewTab = () => openImageInNewTab(".grid-scroll", exportOpts)
+const shareOptionsForGrid = () => ({
+    title: `${useFriendStore().displayName || "My"} Kioku Grid`,
+    backUrl: window.location.href,
+})
 </script>
 
 <style scoped>

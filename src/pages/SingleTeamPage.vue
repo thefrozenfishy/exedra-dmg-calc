@@ -19,14 +19,12 @@
     </div>
 
     <div class="share-card-actions">
-      <button class="copy-btn"
-        @click="clipboardSupported ? copyTeamShareCardToClipboard() : openTeamShareCardInNewTab()"
-        :disabled="!shareCardAvailable">
-        {{ clipboardSupported ? 'Copy team share image to clipboard' : 'Open image in new tab' }}
-      </button>
-      <button class="copy-btn" @click="downloadTeamShareCard" :disabled="!shareCardAvailable">
-        Download team share image
-      </button>
+      <ImageActionsToolbar
+        :target="() => shareCardRef!"
+        filename="single-team-share.png"
+        :export-options="exportOpts"
+        :share-options="shareOptionsForTeamCard"
+        :disabled="!shareCardAvailable" />
     </div>
 
     <div class="share-card-preview" ref="shareCardRef">
@@ -207,11 +205,12 @@ import AlimentToggler from '../components/AlimentToggler.vue'
 import DamageReductionInputs from '../components/DamageReductionInputs.vue'
 import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
-import { copyImageToClipboard, downloadImage, openImageInNewTab, useClipboardSupport } from '../utils/image'
+import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
 import { useSetting } from '../store/settingsStore'
 import { KiokuArgs, Character, SkillDetail, skillDetailId } from '../types/KiokuTypes'
 import { crystalises, passiveDetails, portraits } from "../utils/helpers";
+import { useFriendStore } from '../store/friendStore'
 
 const attackerIndex = 2
 
@@ -265,12 +264,12 @@ const summarizeSubCrys = (ch: Character) => {
   return Object.entries(counts).map(([effType, [desc, nr]]) => desc.replace("XXXXX", (desc as string).includes("%") ? nr / 10 : nr))
 }
 
-const { clipboardSupported } = useClipboardSupport()
 const exportOpts = { exportClass: "exporting" }
 
-const copyTeamShareCardToClipboard = () => copyImageToClipboard('single-team-share.png', shareCardRef.value!, exportOpts)
-const openTeamShareCardInNewTab = () => openImageInNewTab(shareCardRef.value!, exportOpts)
-const downloadTeamShareCard = () => downloadImage('single-team-share.png', shareCardRef.value!, exportOpts)
+const shareOptionsForTeamCard = () => ({
+    title: `${useFriendStore().displayName || "My"} team setup`,
+    backUrl: window.location.href,
+})
 
 const sortEffectType = (effects: object) => Object.fromEntries(Object.entries(effects).sort(([a], [b]) => a.localeCompare(b)))
 const sa_score = computed(() => {

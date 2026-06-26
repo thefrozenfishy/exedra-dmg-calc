@@ -24,23 +24,21 @@
             </button>
         </div>
 
-        <button class="copy-btn" @click="clipboardSupported ? copyAscensionList() : openAscensionListInNewTab()">
-            {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
-        </button>
-        <button class="copy-btn" @click="downloadAscensionList">Download</button>
-        <button class="copy-btn" :disabled="shareLinkLoading" @click="shareAscensionList">
-            {{ shareLinkLoading ? 'Generating…' : 'Share Image Link' }}
-        </button>
-        <button class="copy-btn" @click="copyHyperLink">Copy Link</button>
-
-        <div v-if="shareLinkUrl || shareLinkError" class="share-link-result">
-            <template v-if="shareLinkUrl">
-                <input class="share-link-input" type="text" readonly :value="shareLinkUrl"
-                    @click="($event.target as HTMLInputElement).select()" />
-                <button class="copy-btn" @click="copyShareLink">Copy</button>
-            </template>
-            <span v-else class="share-link-error">{{ shareLinkError }}</span>
-        </div>
+        <ImageActionsToolbar target=".ascension-table" filename="ascension.png" :export-options="exportOpts"
+            :share-options="shareOptionsForAscensionList">
+            <button class="icon-btn" :title="hyperlinkCopied ? 'Copied!' : 'Copy page link'"
+                :aria-label="hyperlinkCopied ? 'Copied!' : 'Copy page link'" @click="copyHyperLink">
+                <svg v-if="hyperlinkCopied" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M20 6L9 17l-5-5" />
+                </svg>
+                <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                </svg>
+            </button>
+        </ImageActionsToolbar>
 
         <div>
             <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
@@ -244,9 +242,9 @@ import { nextTick } from "vue"
 import { onMounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import FriendPickerBadge from "../components/FriendPickerBadge.vue"
+import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
-import { copyImageToClipboard, downloadImage, openImageInNewTab, generateShareLink, copyTextToClipboard, useClipboardSupport } from "../utils/image"
 import { crystalises, passiveDetails } from "../utils/helpers"
 
 const route = useRoute()
@@ -520,7 +518,6 @@ const dragLeave = (e: DragEvent) => {
     }
 }
 
-const { clipboardSupported } = useClipboardSupport()
 const exportOpts = { exportClass: "exporting" }
 
 const currentPageUrl = () => {
@@ -532,46 +529,24 @@ const currentPageUrl = () => {
 
 const displayedName = computed(() =>
     viewingFriendCode.value
-        ? (viewingProfile.value?.display_name || "A player")
-        : (friendStore.displayName || "A player")
+        ? `${(viewingProfile.value?.display_name || "A player")}'s`
+        : (friendStore.displayName ? `${friendStore.displayName}'s` : "My")
 )
 
-const downloadAscensionList = () => downloadImage("ascension.png", ".ascension-table", exportOpts)
-const copyAscensionList = () => copyImageToClipboard("ascension.png", ".ascension-table", exportOpts)
-const openAscensionListInNewTab = () => openImageInNewTab(".ascension-table", exportOpts)
+const shareOptionsForAscensionList = () => ({
+    title: `${displayedName.value} Kioku Collection`,
+    backUrl: currentPageUrl(),
+})
 
-const shareLinkLoading = ref(false)
-const shareLinkUrl = ref<string | null>(null)
-const shareLinkError = ref<string | null>(null)
-
-const shareAscensionList = async () => {
-    shareLinkLoading.value = true
-    shareLinkUrl.value = null
-    shareLinkError.value = null
-
-    try {
-        shareLinkUrl.value = await generateShareLink(".ascension-table", exportOpts, {
-            title: `${displayedName.value}'s Kioku Collection`,
-            displayName: displayedName.value,
-            backUrl: currentPageUrl(),
-        })
-    } catch (err) {
-        console.error("Failed to generate share link:", err)
-        shareLinkError.value = "Failed to generate share link. Please try again."
-    } finally {
-        shareLinkLoading.value = false
-    }
-}
-
-const copyShareLink = () => {
-    if (shareLinkUrl.value) copyTextToClipboard(shareLinkUrl.value)
-}
+const hyperlinkCopied = ref(false)
 
 const copyHyperLink = async () => {
     try {
         const friendId = viewingFriendCode.value ?? friendCode.value
         if (!friendId) throw new Error("You need to sync your friend code first!")
         await navigator.clipboard.writeText(currentPageUrl())
+        hyperlinkCopied.value = true
+        setTimeout(() => { hyperlinkCopied.value = false }, 1500)
         toast.success("Copied to clipboard!", { position: toast.POSITION.TOP_RIGHT, icon: false })
     } catch (err) {
         console.error("Clipboard failed:", err)
@@ -735,18 +710,21 @@ td {
 
 @media (max-width: 768px) {
     .characters-cell {
+        min-height: 56px;
         gap: 0.4rem;
     }
-    .characters-cell>div {
-        flex: 0 0 calc((100% - (3 * 0.4rem)) / 4);
-        max-width: calc((100% - (3 * 0.4rem)) / 4);
+}
+
+@media (max-width: 480px) {
+    .characters-cell {
+        min-height: 48px;
+        gap: 0.3rem;
     }
 }
 
 .character-img {
     width: 68px;
-    aspect-ratio: 1;
-    height: auto;
+    height: 68px;
     border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.12);
     display: block;
@@ -760,7 +738,15 @@ td {
 
 @media (max-width: 768px) {
     .character-img {
-        width: 100%;
+        width: 64px;
+        height: 64px;
+    }
+}
+
+@media (max-width: 480px) {
+    .character-img {
+        width: 64px;
+        height: 64px;
     }
 }
 
@@ -889,55 +875,6 @@ td {
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.copy-btn {
-    margin: 10px;
-    padding: 0.6rem 1rem;
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--text);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
-    cursor: pointer;
-    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
-}
-
-.copy-btn:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 209, 110, 0.35);
-}
-
-.copy-btn:disabled {
-    opacity: 0.6;
-    cursor: default;
-}
-
-.share-link-result {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-
-    margin: 4px 10px 10px;
-}
-
-.share-link-input {
-    flex: 1 1 260px;
-    min-width: 160px;
-
-    padding: 0.5rem 0.75rem;
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--text);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-
-    font-family: inherit;
-    font-size: 0.85rem;
-}
-
-.share-link-error {
-    color: #ff8a8a;
-    font-size: 0.9rem;
 }
 
 .total-ascensions {
