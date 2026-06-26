@@ -721,6 +721,8 @@ onBeforeUnmount(() => {
         'mousedown',
         handleClickOutside
     )
+
+    store.stopSimilarityQueue()
 })
 
 const editingSelfName = ref(false)
@@ -772,6 +774,10 @@ const loadFriendsForScope = async (scope: 'mine' | 'all') => {
         await store.loadFriends(scope === 'all')
     } finally {
         listLoading.value = false
+    }
+
+    if (scope !== 'all') {
+        store.stopSimilarityQueue()
     }
 }
 
@@ -871,6 +877,15 @@ const sortedFriends = computed(() => {
 
     return arr
 })
+
+watch(
+    () => sortedFriends.value.map(f => f.friend_id),
+    (ids) => {
+        if (listScope.value === 'all' && ids.length) {
+            store.runSimilarityQueue(ids)
+        }
+    }
+)
 
 const finishDisplayNameEdit = async () => {
     try {

@@ -17,6 +17,7 @@ import {
     getAllUnionNames,
     loadAllPlayers,
     scoreFromProfile,
+    upsertSimilarity,
     NameRequiredError,
 } from '../store/cloud'
 import { PowerScores } from '../models/PowerValue'
@@ -47,6 +48,8 @@ export interface MyRank {
     totalPlayers: number
     percentile: number
 }
+
+const SIMILARITY_QUEUE_DELAY_MS = 250
 
 export const useFriendStore = defineStore('friendStore', () => {
     const characterStore = useCharacterStore()
@@ -188,12 +191,48 @@ export const useFriendStore = defineStore('friendStore', () => {
             const rows = await loadCharactersByFriendCode(friendId)
             const chars = characterStore.mergeChars(rows) as Character[]
 
-            friend.accountSimilarity = getAccountSimilarityScore(characterStore.characters, chars)
+            const similarity = getAccountSimilarityScore(characterStore.characters, chars)
+            friend.accountSimilarity = similarity
+
+            if (friendCode.value) {
+                try {
+                    await upsertSimilarity(friendCode.value, friendId, similarity)
+                } catch (err) {
+                    console.error('Failed to save similarity score:', friendId, err)
+                }
+            }
         } catch (err) {
             console.error('Failed loading friend similarity:', friendId, err)
         } finally {
             friend.similarityLoading = false
         }
+    }
+
+    let similarityQueueGeneration = 0
+
+    const runSimilarityQueue = async (orderedFriendIds: string[]) => {
+        const generation = ++similarityQueueGeneration
+
+        for (const friendId of orderedFriendIds) {
+            if (generation !== similarityQueueGeneration) return
+
+            const friend = friends.value.find(f => f.friend_id === friendId)
+
+            if (
+                !friend ||
+                friend.accountSimilarity != null ||
+                friend.similarityLoading ||
+                friend.isActive === false
+            ) continue
+
+            await loadFriendSimilarity(friendId)
+
+            await new Promise(resolve => setTimeout(resolve, SIMILARITY_QUEUE_DELAY_MS))
+        }
+    }
+
+    const stopSimilarityQueue = () => {
+        similarityQueueGeneration++
     }
 
     const addFriend = async (friendCode: string) => {
@@ -297,6 +336,8 @@ export const useFriendStore = defineStore('friendStore', () => {
         unionOptions,
         loadFriends,
         loadFriendSimilarity,
+        runSimilarityQueue,
+        stopSimilarityQueue,
         myRank,
         loadMyRank,
         nameRequired,
