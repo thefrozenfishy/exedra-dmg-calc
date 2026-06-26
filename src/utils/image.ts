@@ -4,17 +4,39 @@ import { ref, onMounted } from "vue"
 import { getSupabase } from "./supabase"
 import { getUserId } from "../store/user"
 
-const IMG_SETTINGS = {
+const BASE_IMG_SETTINGS = {
     cacheBust: true,
-    pixelRatio: 2,
     backgroundColor: "#242424",
-    skipFonts: false
+    skipFonts: false,
 }
 
-const HIGH_RES_IMG_SETTINGS = {
-    ...IMG_SETTINGS,
-    pixelRatio: 3,
+const MAX_CANVAS_SIDE_PX = 16_000
+
+const SHARE_MAX_BYTES = 50 * 1024 * 1024 * 0.8
+
+const safeSettings = (el: HTMLElement, pixelRatio: number, maxBytes = Infinity) => {
+    const naturalWidth  = el.scrollWidth
+    const naturalHeight = el.scrollHeight
+
+    const scaledWidth = naturalWidth * pixelRatio
+
+    const maxHeightByCanvas = Math.floor(MAX_CANVAS_SIDE_PX / pixelRatio)
+
+    const maxHeightByBytes = Math.floor(maxBytes / (scaledWidth * pixelRatio * 4))
+
+    const clampedHeight = Math.min(naturalHeight, maxHeightByCanvas, maxHeightByBytes)
+
+    return {
+        ...BASE_IMG_SETTINGS,
+        pixelRatio,
+        width:  naturalWidth,
+        height: clampedHeight,
+    }
 }
+
+const imgSettings     = (el: HTMLElement) => safeSettings(el, 2)
+const highResSettings = (el: HTMLElement) => safeSettings(el, 2)
+const shareSettings   = (el: HTMLElement) => safeSettings(el, 2, SHARE_MAX_BYTES)
 
 export interface ImageExportOptions {
     exportClass?: string;
@@ -142,7 +164,7 @@ export const openImageInNewTab = async (target: string | HTMLElement, options?: 
 
     try {
         const url = await withExportState(el, options, async (element) => {
-            const dataUrl = await toPng(element, HIGH_RES_IMG_SETTINGS)
+            const dataUrl = await toPng(element, highResSettings(element))
             const blob = await fetch(dataUrl).then(r => r.blob())
             return URL.createObjectURL(blob)
         })
@@ -165,7 +187,7 @@ export const copyImageToClipboard = async (filename: string, target: string | HT
     }
 
     const blobPromise = withExportState(el, options, async (element) => {
-        const dataUrl = await toPng(element, IMG_SETTINGS)
+        const dataUrl = await toPng(element, imgSettings(element))
         return fetch(dataUrl).then(r => r.blob())
     })
 
@@ -235,7 +257,7 @@ export const generateShareLink = async (
     }
 
     const blob = await withExportState(el, options, async (element) => {
-        const dataUrl = await toPng(element, HIGH_RES_IMG_SETTINGS)
+        const dataUrl = await toPng(element, shareSettings(element))
         return fetch(dataUrl).then(r => r.blob())
     })
 
@@ -277,7 +299,7 @@ export const downloadImage = async (filename: string, target: string | HTMLEleme
     const toastId = toast.loading("Downloading...", { position: toast.POSITION.TOP_RIGHT, icon: false })
     try {
         await withExportState(el, options, async (element) => {
-            const dataUrl = await toPng(element, HIGH_RES_IMG_SETTINGS)
+            const dataUrl = await toPng(element, highResSettings(element))
             const blob = await fetch(dataUrl).then(r => r.blob())
             await downloadBlob(filename, blob)
         })
