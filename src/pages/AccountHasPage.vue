@@ -735,21 +735,18 @@ td {
 
 @media (max-width: 768px) {
     .characters-cell {
-        min-height: 56px;
         gap: 0.4rem;
     }
-}
-
-@media (max-width: 480px) {
-    .characters-cell {
-        min-height: 48px;
-        gap: 0.3rem;
+    .characters-cell>div {
+        flex: 0 0 calc((100% - (3 * 0.4rem)) / 4);
+        max-width: calc((100% - (3 * 0.4rem)) / 4);
     }
 }
 
 .character-img {
     width: 68px;
-    height: 68px;
+    aspect-ratio: 1;
+    height: auto;
     border-radius: 50%;
     border: 1px solid rgba(255, 255, 255, 0.12);
     display: block;
@@ -763,15 +760,7 @@ td {
 
 @media (max-width: 768px) {
     .character-img {
-        width: 64px;
-        height: 64px;
-    }
-}
-
-@media (max-width: 480px) {
-    .character-img {
-        width: 64px;
-        height: 64px;
+        width: 100%;
     }
 }
 
