@@ -45,50 +45,100 @@ export const BETA_DEFAULTS: Record<string, any> = {
     whaleMetaMultiplier: 1,
 
     kiokuScalings: {
-        "Falsified Phenomena": 1.4,
+        // Attackers
+        "Kiss-shot": 0.5,
+        "Marigold Dadaism": 0.5,
         "Nothing to Despair, Ever": 1.2,
-        "Marigold Dadaism": 0.7,
-        "Kiss-shot": 0.7,
 
-        "Hollow Woman": 1.6,
-        "Luce della Speranza": 1.2,
-        "Pluvia☆Neujahr": 1.2,
+        // Buffers
+        "Buon Natale Grazioso": 1.1,
+        "Hollow Woman": 1.5,
+        "Luce della Speranza": 1.25,
+        "Pluvia☆Neujahr": 1.25,
+        "Scorchin' Summer Spike": 1.4,
 
-        "Pluvia☆Magica": 1.4,
-        "Sacred Gift": 1.15,
-        "Final Fatebloom": 1.15,
+        // Breakers
+        "Crimson Confectioner": 1.1,
+        "Doppel of Invitations": 0.9,
+        "Final Fatebloom": 1.25,
+        "Groundhog Daze": 0.9,
+        "Neo Genesis": 0.5,
+        "Pluvia☆Magica": 1.5,
+        "Sacred Gift": 1.25,
+        "Strada Futuro": 0.9,
+        "Tenebrous Arcana": 0.5,
         "Unlimited Rulebook": 1.1,
-        "Strada Futuro": 0.85,
-        "Tenebrous Arcana": 0.85,
-        "Neo Genesis": 0.7,
 
-        "Yuletide Gift": 1.4,
-        "Bebe-O'-Lantern": 1.4,
-        "Ultra Great Big Hammer": 0.7,
+        // Debuffers
+        "Bebe-O'-Lantern": 1.5,
+        "Splashin' Kyubey Blast": 1.5,
+        "Ultra Great Big Hammer": 0.75,
+        "Yuletide Gift": 1.5,
 
-        "Folter Gefängnis": 0.7,
-        "Baldamente Fortissimo": 1.4,
+        // Defenders
+        "Baldamente Fortissimo": 1.5,
+        "Folter Gefängnis": 0.75,
 
-        "Judgement Earth": 1.2,
-        "Glitterjoy Snow Globe": 1.1,
+        // Healers
+        "Glitterjoy Snow Globe": 1.15,
+        "Judgement Earth": 1.3,
     },
 
     kiokuAscensionScalings: {
-        "Tiro Finale": { "2": 50 },
-        "Dark Art Dominion": { "4": 50 },
-        "Falsified Phenomena": { "4": 50 },
+        "Falsified Phenomena": { "4": 225 },
     },
 
     basePower: 100,
     ascensionPowerPerLevel: 20,
 
     roleAscensionBonuses: {
-        [KiokuRole.Attacker]: { "1": 0, "2": 10, "3": 35, "4": 0, "5": 55 },
-        [KiokuRole.Breaker]: { "1": 0, "2": 10, "3": 35, "4": 20, "5": 35 },
-        [KiokuRole.Buffer]: { "1": 10, "2": 15, "3": 5, "4": 60, "5": 10 },
-        [KiokuRole.Debuffer]: { "1": 10, "2": 10, "3": 10, "4": 55, "5": 15 },
-        [KiokuRole.Defender]: { "1": 0, "2": 35, "3": 0, "4": 55, "5": 10 },
-        [KiokuRole.Healer]: { "1": 20, "2": 10, "3": 5, "4": 50, "5": 15 },
+        [KiokuRole.Attacker]: {
+            "1": 0,
+            "2": 10,
+            "3": 30,
+            "4": 5,
+            "5": 55,
+        },
+
+        [KiokuRole.Breaker]: {
+            "1": 0,
+            "2": 10,
+            "3": 30,
+            "4": 20,
+            "5": 40,
+        },
+
+        [KiokuRole.Buffer]: {
+            "1": 10,
+            "2": 10,
+            "3": 10,
+            "4": 55,
+            "5": 15,
+        },
+
+        [KiokuRole.Debuffer]: {
+            "1": 10,
+            "2": 10,
+            "3": 10,
+            "4": 55,
+            "5": 15,
+        },
+
+        [KiokuRole.Defender]: {
+            "1": 0,
+            "2": 30,
+            "3": 0,
+            "4": 60,
+            "5": 10,
+        },
+
+        [KiokuRole.Healer]: {
+            "1": 20,
+            "2": 15,
+            "3": 5,
+            "4": 50,
+            "5": 10
+        },
     },
 }
 

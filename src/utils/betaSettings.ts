@@ -198,7 +198,6 @@ export const BETA_SECTIONS = [
                 label: "Kioku Scalings",
                 defaultValue: {
                     // Attackers
-                    "Falsified Phenomena": 1.5,
                     "Kiss-shot": 0.5,
                     "Marigold Dadaism": 0.5,
                     "Nothing to Despair, Ever": 1.2,
@@ -246,9 +245,7 @@ export const BETA_SECTIONS = [
                 key: "kiokuAscensionScalings",
                 label: "Kioku Ascension Scalings",
                 defaultValue: {
-                    "Tiro Finale": { "2": 50 },
-                    "Dark Art Dominion": { "4": 50 },
-                    "Falsified Phenomena": { "4": 50 }
+                    "Falsified Phenomena": { "4": 225 }
                 },
             }
         ]

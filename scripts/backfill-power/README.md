@@ -73,6 +73,14 @@ to read and write every user's row, which means bypassing RLS on purpose).
 anywhere public, don't reuse it for anything else. If it ever leaks,
 rotate it from the same Settings → API page.
 
+## 4.5 Remove the bad .ts code from KiokuTypes.ts
+
+```ts
+    ...(elem ? [dmgUpPortraits[elem]] : []),
+    "",
+```
+fails for some reason, delete it
+
 ## 5. Run it
 
 **PowerShell:**
