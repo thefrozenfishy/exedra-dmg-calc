@@ -1,22 +1,36 @@
 <template>
     <div class="page">
         <h2>Character Crystalis Selections</h2>
-        <CharacterSelector :selected="selectedCharacter" @select="onSelectCharacter" :filter="ch => ch.enabled" />
+        <CharacterSelector v-if="!characterId || !character" :selected="selectedCharacter" @select="onSelectCharacter"
+            :filter="ch => ch.enabled" />
 
         <div v-if="characterId && character">
             <div class="bulk-actions">
-                <button class="bulk-btn" @click="() => updateAll(true)">Select All</button>
-                <button class="bulk-btn" @click="() => updateAll(false)">Deselect All</button>
-
+                <CharacterSelector :selected="selectedCharacter" @select="onSelectCharacter"
+                    :filter="ch => ch.enabled" />
                 <div class="mass-edit-panel" :class="{ disabled: !massEditSelection.size }">
                     <div class="mass-edit-header">
                         <span class="mass-edit-title">
                             Multi edit sub-crys
                             <span v-if="massEditSelection.size" class="mass-edit-count">({{ massEditSelection.size
-                                }})</span>
+                            }})</span>
                         </span>
                         <button v-if="massEditSelection.size" class="mass-edit-clear" @click="clearMassEditSelection">
                             Clear
+                        </button>
+                        <button v-else class="mass-edit-clear"
+                            @click="massEditSelection = new Set(options.map(c => c.selectionAbilityMstId))">
+                            Select all
+                        </button>
+                    </div>
+                    <div class="mass-edit-enable-row">
+                        <button class="mass-edit-enable-btn" :disabled="!massEditSelection.size"
+                            @click="setEnabledForSelected(true)">
+                            Enable selected
+                        </button>
+                        <button class="mass-edit-enable-btn" :disabled="!massEditSelection.size"
+                            @click="setEnabledForSelected(false)">
+                            Disable selected
                         </button>
                     </div>
                     <SubCrysBar :sub-crys="massEditSubCrys" :grouped-sub-crys="groupedSubCrys"
@@ -27,9 +41,11 @@
                 <div v-for="crys in options" :key="crys.selectionAbilityMstId" class="crys-card"
                     :class="{ disabled: !crys.enabled, offElement: offElementalCrys(crys) }">
 
-                    <div class="mass-edit-toggle" :class="{ checked: massEditSelection.has(crys.selectionAbilityMstId) }"
+                    <div class="mass-edit-toggle"
+                        :class="{ checked: massEditSelection.has(crys.selectionAbilityMstId) }"
                         @click.stop="toggleMassEditSelection(crys.selectionAbilityMstId)">
-                        <svg v-if="massEditSelection.has(crys.selectionAbilityMstId)" viewBox="0 0 16 16" class="check-icon">
+                        <svg v-if="massEditSelection.has(crys.selectionAbilityMstId)" viewBox="0 0 16 16"
+                            class="check-icon">
                             <path d="M3 8.5L6.2 11.7L13 4.5" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
@@ -127,7 +143,7 @@ const show4stars = useSetting("show4stars", false);
 const show3stars = useSetting("show3stars", false);
 const showOffElementalOnes = useSetting("showOffElementalCrysCollection", false)
 const showOffElementalOnesOption = computed(() => store.characters.some(char => {
-    if (!char?.enabled) return false
+    if (!char.enabled) return false
     return Object.values(char.crysOptions).every((c) => c.enabled == null || c.enabled)
 }))
 
@@ -229,6 +245,22 @@ function clearMassEditSelection() {
     massEditSubCrys.value = [0, 0, 0]
 }
 
+function setEnabledForSelected(enabled: boolean) {
+    const char = character.value
+    if (!char || !massEditSelection.value.size) return
+
+    const updatedOptions = { ...char.crysOptions }
+    for (const effectId of massEditSelection.value) {
+        const current = updatedOptions[effectId]
+        updatedOptions[effectId] = {
+            ...current,
+            enabled,
+            subCrys: current?.subCrys?.length === 3 ? current.subCrys : [0, 0, 0],
+        }
+    }
+    store.updateChar({ ...char, crysOptions: updatedOptions })
+}
+
 function applyMassEditSubCrys(newSubCrys: number[]) {
     const char = character.value
     if (!char || !massEditSelection.value.size) {
@@ -262,22 +294,6 @@ function applyMassEditSubCrys(newSubCrys: number[]) {
     store.updateChar({ ...char, crysOptions: updatedOptions })
 
     massEditSubCrys.value = newSubCrys
-}
-
-const updateAll = (enabled: boolean) => {
-    const char = character.value
-    if (!char) return
-    const updatedOptions = { ...char.crysOptions }
-    for (const crys of options.value) {
-        if (offElementalCrys(crys)) continue
-        const current = updatedOptions[crys.selectionAbilityMstId]
-        updatedOptions[crys.selectionAbilityMstId] = {
-            ...current,
-            enabled,
-            subCrys: current?.subCrys?.length === 3 ? current.subCrys : [0, 0, 0],
-        }
-    }
-    store.updateChar({ ...char, crysOptions: updatedOptions })
 }
 
 const onSelectCharacter = async (char?: Character) => {
@@ -314,6 +330,33 @@ const setUseIndex = (effectId: number, useIndex: number) => {
     align-items: flex-start;
     gap: 8px;
     margin-top: 8px;
+}
+
+.toggle-all-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.04);
+    color: inherit;
+    font-size: 0.85em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.toggle-all-btn:hover {
+    border-color: rgba(246, 214, 130, 0.55);
+    background: rgba(246, 214, 130, 0.10);
+}
+
+.toggle-all-icon {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    opacity: 0.85;
 }
 
 .mass-edit-panel {
@@ -371,6 +414,34 @@ const setUseIndex = (effectId: number, useIndex: number) => {
 
 .mass-edit-clear:hover {
     opacity: 1;
+}
+
+.mass-edit-enable-row {
+    display: flex;
+    gap: 6px;
+}
+
+.mass-edit-enable-btn {
+    flex: 1;
+    padding: 5px 8px;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.04);
+    color: inherit;
+    font-size: 0.76em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, opacity 0.15s;
+}
+
+.mass-edit-enable-btn:not(:disabled):hover {
+    border-color: rgba(246, 214, 130, 0.55);
+    background: rgba(246, 214, 130, 0.14);
+}
+
+.mass-edit-enable-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
 }
 
 .mass-edit-toggle {
