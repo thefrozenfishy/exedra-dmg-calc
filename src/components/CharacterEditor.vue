@@ -33,7 +33,8 @@
     <div>
       Crystalis:
       <div class="crys-section">
-        <div v-for="slotIndex in 3" :key="slotIndex" class="crys-slot"> <select :value="getSelectedCrys(slotIndex)"
+        <div v-for="slotIndex in 3" :key="slotIndex" class="crys-slot">
+          <select :value="getSelectedCrys(slotIndex)"
             @change="setCrys(slotIndex, Number(($event.target as HTMLSelectElement).value))">
 
             <option :value="0"></option>

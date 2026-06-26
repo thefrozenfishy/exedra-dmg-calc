@@ -7,10 +7,33 @@
             <div class="bulk-actions">
                 <button class="bulk-btn" @click="() => updateAll(true)">Select All</button>
                 <button class="bulk-btn" @click="() => updateAll(false)">Deselect All</button>
+
+                <div class="mass-edit-panel" :class="{ disabled: !massEditSelection.size }">
+                    <div class="mass-edit-header">
+                        <span class="mass-edit-title">
+                            Multi edit sub-crys
+                            <span v-if="massEditSelection.size" class="mass-edit-count">({{ massEditSelection.size
+                                }})</span>
+                        </span>
+                        <button v-if="massEditSelection.size" class="mass-edit-clear" @click="clearMassEditSelection">
+                            Clear
+                        </button>
+                    </div>
+                    <SubCrysBar :sub-crys="massEditSubCrys" :grouped-sub-crys="groupedSubCrys"
+                        @update="applyMassEditSubCrys" />
+                </div>
             </div>
             <div class="crys-grid">
                 <div v-for="crys in options" :key="crys.selectionAbilityMstId" class="crys-card"
                     :class="{ disabled: !crys.enabled, offElement: offElementalCrys(crys) }">
+
+                    <div class="mass-edit-toggle" :class="{ checked: massEditSelection.has(crys.selectionAbilityMstId) }"
+                        @click.stop="toggleMassEditSelection(crys.selectionAbilityMstId)">
+                        <svg v-if="massEditSelection.has(crys.selectionAbilityMstId)" viewBox="0 0 16 16" class="check-icon">
+                            <path d="M3 8.5L6.2 11.7L13 4.5" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
 
                     <div v-if="crys.enabled" class="use-index-selector">
                         <div v-for="i in 3" :key="i" class="use-index-box" :class="{ active: crys.useIndex === i }"
@@ -191,6 +214,56 @@ const toggleCrys = (effectId: number) => {
     })
 }
 
+const massEditSelection = ref<Set<number>>(new Set())
+const massEditSubCrys = ref<number[]>([0, 0, 0])
+
+function toggleMassEditSelection(effectId: number) {
+    const next = new Set(massEditSelection.value)
+    if (next.has(effectId)) next.delete(effectId)
+    else next.add(effectId)
+    massEditSelection.value = next
+}
+
+function clearMassEditSelection() {
+    massEditSelection.value = new Set()
+    massEditSubCrys.value = [0, 0, 0]
+}
+
+function applyMassEditSubCrys(newSubCrys: number[]) {
+    const char = character.value
+    if (!char || !massEditSelection.value.size) {
+        massEditSubCrys.value = [0, 0, 0]
+        return
+    }
+
+    const prev = massEditSubCrys.value
+    const targetSlot = newSubCrys.findIndex((id, idx) => id !== prev[idx])
+    if (targetSlot === -1) return
+
+    const pickedId = newSubCrys[targetSlot]
+    const siblingIds = pickedId !== 0
+        ? (groupedSubCrys.value.find(g => g.subs.some(s => s.selectionAbilityMstId === pickedId))
+            ?.subs.map(s => s.selectionAbilityMstId) ?? [pickedId])
+        : []
+
+    const updatedOptions = { ...char.crysOptions }
+    for (const effectId of massEditSelection.value) {
+        const current = updatedOptions[effectId]
+        const existing = current?.subCrys?.length === 3 ? current.subCrys : [0, 0, 0]
+
+        const shouldRemove = pickedId !== 0 && existing[targetSlot] === pickedId
+        const cleared = existing.map(id => siblingIds.includes(id) ? 0 : id)
+        if (!shouldRemove && pickedId !== 0) cleared[targetSlot] = pickedId
+        if (pickedId === 0) cleared[targetSlot] = 0
+
+        updatedOptions[effectId] = { ...current, subCrys: cleared }
+    }
+
+    store.updateChar({ ...char, crysOptions: updatedOptions })
+
+    massEditSubCrys.value = newSubCrys
+}
+
 const updateAll = (enabled: boolean) => {
     const char = character.value
     if (!char) return
@@ -211,11 +284,13 @@ const onSelectCharacter = async (char?: Character) => {
     if (!char) {
         selectedCharacter.value = undefined
         characterId.value = 0
+        clearMassEditSelection()
         await router.replace({ query: {} })
         return
     }
     characterId.value = char.id
     selectedCharacter.value = char
+    clearMassEditSelection()
     await router.replace({ query: { character_id: char.id } })
 }
 
@@ -236,8 +311,98 @@ const setUseIndex = (effectId: number, useIndex: number) => {
 
 .bulk-actions {
     display: flex;
+    align-items: flex-start;
     gap: 8px;
     margin-top: 8px;
+}
+
+.mass-edit-panel {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 220px;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(246, 214, 130, 0.35);
+    background: rgba(246, 214, 130, 0.06);
+    transition: opacity 0.15s, border-color 0.15s;
+}
+
+.mass-edit-panel.disabled {
+    opacity: 0.5;
+    border-color: rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.mass-edit-panel.disabled :deep(.subcrys-bar) {
+    pointer-events: none;
+}
+
+.mass-edit-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.mass-edit-title {
+    font-size: 0.8em;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    opacity: 0.85;
+}
+
+.mass-edit-count {
+    font-weight: 400;
+    opacity: 0.7;
+}
+
+.mass-edit-clear {
+    background: none;
+    border: none;
+    color: inherit;
+    opacity: 0.6;
+    font-size: 0.78em;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.mass-edit-clear:hover {
+    opacity: 1;
+}
+
+.mass-edit-toggle {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.mass-edit-toggle:hover {
+    border-color: rgba(246, 214, 130, 0.6);
+}
+
+.mass-edit-toggle.checked {
+    background: rgba(246, 214, 130, 0.75);
+    border-color: rgba(246, 214, 130, 0.95);
+}
+
+.check-icon {
+    width: 12px;
+    height: 12px;
+    color: #1c1c24;
 }
 
 .crys-grid {
