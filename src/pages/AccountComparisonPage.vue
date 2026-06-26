@@ -381,7 +381,7 @@ const comparisonPageUrl = () =>
     `${window.location.origin}/exedra-dmg-calc/#/account-compare?left=${leftCode.value}&right=${rightCode.value}`
 
 const shareOptionsForComparison = () => ({
-    title: `${leftProfile.value?.display_name || leftCode.value} vs ${rightProfile.value?.display_name || rightCode.value}`,
+    title: `Account comparison ${leftProfile.value?.display_name || leftCode.value} vs ${rightProfile.value?.display_name || rightCode.value}`,
     backUrl: comparisonPageUrl(),
 })
 

@@ -6,7 +6,7 @@
             <section v-if="showGraph" class="profile-section analytics-section">
                 <h2>Power Analytics</h2>
                 <div class="btn-container">
-                    <ImageActionsToolbar target=".chart-wrapper" :filename="pngName"
+                    <ImageActionsToolbar target=".chart-wrapper" :filename="`${fileName}.png`"
                         :share-options="shareOptionsForChart">
                         <button class="icon-btn" :title="exportedCSV ? 'Exported!' : 'Export csv'"
                             :aria-label="exportedCSV ? 'Exported!' : 'Export csv'" @click="exportData">
@@ -1067,14 +1067,12 @@ const graphOptions = [
 const selectedXAxis = useSetting<string>('betaGraphSelectedXAxis', 'total')
 const selectedYAxis = useSetting<string>('betaGraphSelectedYAxis', 'whale')
 
-const pngName = computed(() => graphMode.value === 'scatter'
-    ? `${getAxisLabel(selectedXAxis.value)} vs ${getAxisLabel(selectedYAxis.value)}.png`
-    : `${getAxisLabel(selectedXAxis.value)}.png`)
+const fileName = computed(() => graphMode.value === 'scatter'
+    ? `${getAxisLabel(selectedXAxis.value)} vs ${getAxisLabel(selectedYAxis.value)}`
+    : `${getAxisLabel(selectedXAxis.value)}`)
 
 const shareOptionsForChart = () => ({
-    title: graphMode.value === 'scatter'
-        ? `${getAxisLabel(selectedXAxis.value)} vs ${getAxisLabel(selectedYAxis.value)}`
-        : getAxisLabel(selectedXAxis.value),
+    title: `Plot of ${fileName.value}`,
     backUrl: window.location.href,
 })
 
