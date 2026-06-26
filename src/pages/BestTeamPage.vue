@@ -105,7 +105,7 @@
                             - (disabledOtherRoles.includes(KiokuRole.Defender) ? 0 : minDefender)
                             - (disabledOtherRoles.includes(KiokuRole.Healer) ? 0 : minHealer)
                             - (disabledOtherRoles.includes(KiokuRole.Breaker) ? 0 : minBreaker)
-                            }}</div>
+                        }}</div>
                     </div>
                 </div>
             </div>
@@ -212,10 +212,8 @@
         </button>
 
         <div v-if="topResults.length">
-            <div v-if="isBeta()" class="btn-container">
-                <ImageActionsToolbar
-                    target=".results"
-                    filename="best_sa_team.png"
+            <div class="btn-container">
+                <ImageActionsToolbar target=".results" filename="best_sa_team.png" :export-options="exportOpts"
                     :share-options="shareOptionsForBestTeam" />
             </div>
             <div class="results">
@@ -257,7 +255,6 @@ import { FinalTeam } from '../types/BestTeamTypes'
 import { useSetting } from '../store/settingsStore'
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import { useFriendStore } from "../store/friendStore"
-import { isBeta } from '../utils/betaSettings.js'
 
 const enemies = useEnemyStore()
 const store = useCharacterStore()
@@ -347,6 +344,8 @@ function safeInt(value: unknown, fallback = 0, min?: number, max?: number): numb
 
     return n
 }
+
+const exportOpts = { exportClass: "exporting" }
 
 const shareOptionsForBestTeam = () => ({
     title: `${friendStore.displayName ?? "My"} best team vs ${weakElements.filter(el => el.enabled).map(el => el.name).join(" & ")}`,

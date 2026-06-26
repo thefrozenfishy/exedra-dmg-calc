@@ -49,10 +49,10 @@
                 <div class="crys">
                     {{ presentCrysName(team.attacker_crys3[idx]) }}
                 </div>
-                <div>
+                <div class="remove-during-export">
                     <button @click="saveToStore(idx)" class="save-button">Open team in single battle editor</button>
                 </div>
-                <div>
+                <div class="remove-during-export">
                 </div>
             </div>
         </div>
@@ -235,5 +235,9 @@ function saveToStore(idx: number) {
 
 .save-button:hover {
     background-color: gray;
+}
+
+.results.exporting .remove-during-export {
+    display: none;
 }
 </style>

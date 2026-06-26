@@ -8,7 +8,7 @@
             <div class="crys">Crystal 1</div>
             <div class="crys">Crystal 2</div>
             <div class="crys">Crystal 3</div>
-            <div style="min-width: 200px;"></div>
+            <div class="remove-during-export" style="min-width: 200px;"></div>
         </div>
     </div>
 </template>
@@ -58,5 +58,9 @@ defineProps<{ optimizeAverageDamage: boolean }>()
     flex: 1;
     text-align: right;
     margin-left: 10px;
+}
+
+.results.exporting .remove-during-export {
+    display: none;
 }
 </style>
