@@ -536,15 +536,17 @@ async function _loadAllPlayers() {
     if (profileError) throw profileError
 
     let followedCodes = new Set<string>()
+    let favCodes = new Set<string>()
     if (userId) {
         const { data: relations, error: relationsError } = await supabase
             .from('user_friends')
-            .select('friend_id')
+            .select('friend_id, favorite')
             .eq('user_id', userId)
 
         if (relationsError) throw relationsError
 
         followedCodes = new Set((relations ?? []).map(r => r.friend_id))
+        favCodes = new Set((relations ?? []).filter(r => r.favorite).map(r => r.friend_id))
     }
 
     const withSimilarity = myFriendId
@@ -558,7 +560,7 @@ async function _loadAllPlayers() {
             display_name: profile?.display_name || 'Unnamed',
             union_name: profile?.union_name || '',
             profile_icon: profile?.profile_icon,
-            favorite: false,
+            favorite: favCodes.has(profile.friend_id),
             isFriend: followedCodes.has(profile.friend_id),
             isUnionMember: false,
             accountSimilarity: profile?.accountSimilarity,

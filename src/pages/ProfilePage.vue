@@ -1194,7 +1194,10 @@ const analyticsPlayers = computed(() => {
             perm: friend.kioku_count?.perm || 0,
             permAs: friend.kioku_count?.permAs || 0,
             rank: friend.rank,
-            relation: friend.isUnionMember ? Relation.UNION : friend.isFriend ? Relation.FRIEND : Relation.DEFAULT,
+            relation: friend.favorite ? Relation.FAVOURITE :
+                friend.isUnionMember ? Relation.UNION :
+                    friend.isFriend ? Relation.FRIEND :
+                        Relation.DEFAULT,
         })
     }
 
@@ -1221,17 +1224,19 @@ enum Relation {
     FRIEND = "green",
     UNION = "purple",
     SELF = "red",
+    FAVOURITE = "aqua",
 }
 
 const legendItems = computed(() => [
     { label: 'You', color: Relation.SELF },
     { label: 'Union member', color: Relation.UNION },
     { label: 'Following', color: Relation.FRIEND },
+    { label: 'Favourite', color: Relation.FAVOURITE },
     { label: 'Other', color: Relation.DEFAULT },
 ])
 
 function selectColor(p: { relation: Relation }, prevBestRelation?: Relation): Relation {
-    return [Relation.SELF, Relation.UNION, Relation.FRIEND, Relation.DEFAULT].find(r => prevBestRelation === r || p.relation === r) ?? Relation.DEFAULT
+    return [Relation.SELF, Relation.FAVOURITE, Relation.UNION, Relation.FRIEND, Relation.DEFAULT].find(r => prevBestRelation === r || p.relation === r) ?? Relation.DEFAULT
 }
 
 const renderAnalyticsChart = () => {

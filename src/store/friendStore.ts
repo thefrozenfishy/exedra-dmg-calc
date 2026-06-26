@@ -154,6 +154,7 @@ export const useFriendStore = defineStore('friendStore', () => {
 
                     friends.value.push({
                         friend_id: member.friend_id,
+                        favorite: member.favorite,
                         display_name: member.display_name || 'Unnamed',
                         union_name: member.union_name || '',
                         profile_icon: member.profile_icon,
