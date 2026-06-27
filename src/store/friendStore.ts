@@ -224,6 +224,7 @@ export const useFriendStore = defineStore('friendStore', () => {
                 friend.similarityLoading ||
                 friend.isActive === false
             ) continue
+            console.debug("Calculating sim score for", friendId)
 
             await loadFriendSimilarity(friendId)
 
