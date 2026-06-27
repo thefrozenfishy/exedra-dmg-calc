@@ -220,7 +220,7 @@ export const useFriendStore = defineStore('friendStore', () => {
 
             if (
                 !friend ||
-                friend.accountSimilarity != null ||
+                // friend.accountSimilarity != null || // To allow recompute (should just look for updated at?)
                 friend.similarityLoading ||
                 friend.isActive === false
             ) continue
