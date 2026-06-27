@@ -83,6 +83,63 @@
                                 <div v-for="(line, i) in tooltip.lines" :key="i" class="chart-tooltip-line">
                                     {{ line }}
                                 </div>
+
+                                <div v-if="tooltip.player" class="chart-tooltip-actions">
+                                    <router-link v-slot="{ href }" :to="{
+                                        path: '/my-kioku',
+                                        query: { friend: tooltip.player.friendId }
+                                    }" custom>
+                                        <a :href="href" target="_blank" rel="noopener noreferrer"
+                                            class="chart-tooltip-action-btn" title="View profile"
+                                            aria-label="View profile" @click.stop>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                aria-hidden="true">
+                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                <circle cx="12" cy="12" r="3" />
+                                            </svg>
+                                        </a>
+                                    </router-link>
+
+                                    <router-link v-if="!tooltip.player.isSelf" v-slot="{ href }" :to="{
+                                        path: '/account-compare',
+                                        query: { left: store.friendCode, right: tooltip.player.friendId }
+                                    }" custom>
+                                        <a :href="href" target="_blank" rel="noopener noreferrer"
+                                            class="chart-tooltip-action-btn" title="Compare"
+                                            aria-label="Compare" @click.stop>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                aria-hidden="true">
+                                                <polyline points="16 3 21 3 21 8" />
+                                                <line x1="21" y1="3" x2="14" y2="10" />
+                                                <polyline points="8 21 3 21 3 16" />
+                                                <line x1="3" y1="21" x2="10" y2="14" />
+                                            </svg>
+                                        </a>
+                                    </router-link>
+
+                                    <button v-if="!tooltip.player.isSelf" class="chart-tooltip-action-btn"
+                                        :title="tooltip.player.isFriend ? 'Unfollow' : 'Follow'"
+                                        :aria-label="tooltip.player.isFriend ? 'Unfollow' : 'Follow'"
+                                        @click.stop="toggleFollowFromTooltip(tooltip)">
+                                        <svg v-if="tooltip.player.isFriend" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                            <circle cx="9" cy="7" r="4" />
+                                            <line x1="17" y1="8" x2="23" y2="8" />
+                                        </svg>
+                                        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                            aria-hidden="true">
+                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                            <circle cx="9" cy="7" r="4" />
+                                            <line x1="20" y1="5" x2="20" y2="11" />
+                                            <line x1="17" y1="8" x2="23" y2="8" />
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </TransitionGroup>
@@ -1049,6 +1106,11 @@ interface PinnedTooltip {
     y: number
     lines: string[]
     pinned: boolean
+    player?: {
+        friendId: string
+        isSelf: boolean
+        isFriend: boolean
+    } | null
 }
 const hoveredTooltip = ref<PinnedTooltip | null>(null)
 const pinnedTooltips = ref<PinnedTooltip[]>([])
@@ -1056,7 +1118,28 @@ const dismissPin = (index: number) => {
     pinnedTooltips.value.splice(index, 1)
 }
 
-const makeExternalTooltipHandler = (getLines: (ctx: any) => string[]) => {
+const toggleFollowFromTooltip = async (tooltip: PinnedTooltip) => {
+    if (!tooltip.player) return
+
+    try {
+        if (tooltip.player.isFriend) {
+            await store.deleteFriend(tooltip.player.friendId)
+        } else {
+            await store.addFriend(tooltip.player.friendId)
+        }
+    } catch (err) {
+        console.error("Failed to update friend status:", err)
+
+        toast.error('Failed to update friend status', {
+            position: toast.POSITION.TOP_RIGHT,
+            icon: false,
+        })
+    }
+}
+
+const makeExternalTooltipHandler = (
+    getLines: (ctx: any) => { lines: string[]; player?: PinnedTooltip['player'] }
+) => {
     return (context: any) => {
         const { tooltip } = context
         if (tooltip.opacity === 0 || !tooltip.dataPoints?.length) {
@@ -1071,11 +1154,14 @@ const makeExternalTooltipHandler = (getLines: (ctx: any) => string[]) => {
         const containerRect = container.getBoundingClientRect()
         const canvasRect = canvas.getBoundingClientRect()
 
+        const { lines, player } = getLines(tooltip)
+
         hoveredTooltip.value = {
             x: (canvasRect.left - containerRect.left) + tooltip.caretX,
             y: (canvasRect.top - containerRect.top) + tooltip.caretY,
-            lines: getLines(tooltip),
+            lines,
             pinned: false,
+            player: player ?? null,
         }
     }
 }
@@ -1194,6 +1280,9 @@ const analyticsPlayers = computed(() => {
             permAs: myChars.value.permAs,
             rank: store.myRank?.rank,
             relation: Relation.SELF,
+            friendId: store.friendCode,
+            isSelf: true,
+            isFriend: false,
         })
     }
 
@@ -1213,6 +1302,9 @@ const analyticsPlayers = computed(() => {
                 friend.isUnionMember ? Relation.UNION :
                     friend.isFriend ? Relation.FRIEND :
                         Relation.DEFAULT,
+            friendId: friend.friend_id,
+            isSelf: false,
+            isFriend: !!friend.isFriend,
         })
     }
 
@@ -1265,18 +1357,20 @@ const renderAnalyticsChart = () => {
     if (!players.length) return
 
     if (graphMode.value === 'scatter') {
-        const pointMap = new Map<string, { x: number; y: number; names: string[]; count: number, color: Relation }>()
+        const pointMap = new Map<string, { x: number; y: number; names: string[]; players: { friendId: string; isSelf: boolean; isFriend: boolean }[]; count: number, color: Relation }>()
 
         for (const p of players) {
             const x = getMetricValue(p, selectedXAxis.value)
             const y = getMetricValue(p, selectedYAxis.value)
             const key = `${x}|${y}`
+            const playerMeta = { friendId: p.friendId, isSelf: p.isSelf, isFriend: p.isFriend }
             if (pointMap.has(key)) {
                 pointMap.get(key)!.names.push(p.name)
+                pointMap.get(key)!.players.push(playerMeta)
                 pointMap.get(key)!.count++
                 pointMap.get(key)!.color = selectColor(p, pointMap.get(key)?.color)
             } else {
-                pointMap.set(key, { x, y, names: [p.name], count: 1, color: selectColor(p) })
+                pointMap.set(key, { x, y, names: [p.name], players: [playerMeta], count: 1, color: selectColor(p) })
             }
         }
 
@@ -1294,6 +1388,7 @@ const renderAnalyticsChart = () => {
                                 x: p.x,
                                 y: p.y,
                                 names: p.names,
+                                players: p.players,
                                 count: p.count,
                             })),
                             backgroundColor: aggregatedPoints.map(p => p.color),
@@ -1340,14 +1435,19 @@ const renderAnalyticsChart = () => {
                         tooltip: {
                             enabled: false,
                             external: makeExternalTooltipHandler(tooltip => {
-                                const raw = tooltip.dataPoints[0].raw as { x: number; y: number; names: string[]; count: number }
+                                const raw = tooltip.dataPoints[0].raw as { x: number; y: number; names: string[]; players: { friendId: string; isSelf: boolean; isFriend: boolean }[]; count: number }
                                 if (raw.count === 1) {
-                                    return [`${raw.names[0]}: (${raw.x}, ${raw.y})`]
+                                    return {
+                                        lines: [`${raw.names[0]}: (${raw.x}, ${raw.y})`],
+                                        player: raw.players[0],
+                                    }
                                 }
-                                return [
-                                    `${raw.count} players at (${raw.x}, ${raw.y}):`,
-                                    ...raw.names.map((n: string) => `  · ${n}`)
-                                ]
+                                return {
+                                    lines: [
+                                        `${raw.count} players at (${raw.x}, ${raw.y}):`,
+                                        ...raw.names.map((n: string) => `  · ${n}`)
+                                    ],
+                                }
                             }),
                         }
                     }
@@ -1362,13 +1462,19 @@ const renderAnalyticsChart = () => {
         .map(p => ({
             value: getMetricValue(p, selectedXAxis.value),
             name: p.name,
+            friendId: p.friendId,
+            isSelf: p.isSelf,
+            isFriend: p.isFriend,
         }))
         .sort((a, b) => a.value - b.value)
 
-    const percentileData = sorted.map(({ value, name }, index) => ({
+    const percentileData = sorted.map(({ value, name, friendId, isSelf, isFriend }, index) => ({
         x: value,
         y: ((index + 1) / sorted.length) * 100,
         name,
+        friendId,
+        isSelf,
+        isFriend,
     }))
 
     analyticsChart = new Chart(
@@ -1423,9 +1529,14 @@ const renderAnalyticsChart = () => {
                     tooltip: {
                         enabled: false,
                         external: makeExternalTooltipHandler(tooltip => {
-                            const raw = tooltip.dataPoints[0].raw as { x: number; y: number; name?: string }
+                            const raw = tooltip.dataPoints[0].raw as { x: number; y: number; name?: string; friendId?: string; isSelf?: boolean; isFriend?: boolean }
                             const namePart = raw.name ? `${raw.name} — ` : ''
-                            return [`${namePart}${tooltip.dataPoints[0].parsed.y?.toFixed(1)}% below ${tooltip.dataPoints[0].parsed.x}`]
+                            return {
+                                lines: [`${namePart}${tooltip.dataPoints[0].parsed.y?.toFixed(1)}% below ${tooltip.dataPoints[0].parsed.x}`],
+                                player: raw.friendId
+                                    ? { friendId: raw.friendId, isSelf: !!raw.isSelf, isFriend: !!raw.isFriend }
+                                    : undefined,
+                            }
                         }),
                     }
                 }
@@ -2320,26 +2431,31 @@ img.lim-icon {
     padding-top: 0.4rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
-    gap: 0.4rem;
+    justify-content: center;
+    gap: 0.35rem;
 }
 
 .chart-tooltip-action-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    padding: 0.3rem 0.6rem;
-    font-size: 0.78rem;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 8px;
+    border-radius: 6px;
     color: #eee;
     cursor: pointer;
+    text-decoration: none;
     transition: background 0.15s, border-color 0.15s;
 }
 
 .chart-tooltip-action-btn:hover {
     background: rgba(255, 255, 255, 0.14);
     border-color: rgba(255, 209, 110, 0.4);
+    color: #eee;
+    transform: none;
 }
 
 .chart-tooltip-action-btn svg {
