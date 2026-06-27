@@ -49,5 +49,5 @@ export function getAccountSimilarityScore(
     const distanceSimilarity = 1 - (distanceTotal / distanceMax)
     const rawSimilarity = cosineSimilarity * COSINE_SIMILARITY_VALUE + distanceSimilarity * (1 - COSINE_SIMILARITY_VALUE)
 
-    return remap(rawSimilarity, 0.6, 0.90)
+    return remap(rawSimilarity, 0.6, 1)
 }
