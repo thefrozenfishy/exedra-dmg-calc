@@ -1,6 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import TeamSetupPage from '../pages/TeamSetupPage.vue'
-import TeamSetupPage2 from '../pages/TeamSetupPage2.vue'
 import BestTeamPage from '../pages/BestTeamPage.vue'
 import SingleTeamPage from '../pages/SingleTeamPage.vue'
 import About from '../pages/About.vue'
@@ -24,7 +23,6 @@ const base = import.meta.env.BASE_URL
 const routes = [
     { path: '/profile', name: 'Profile + Friends', component: ProfilePage },
     { path: '/team-setup', name: 'Kioku Setup', component: TeamSetupPage },
-    { path: '/team-setup2', name: 'Kioku Setup (Test)', component: TeamSetupPage2 },
     { path: '/account-compare', name: 'Account Comparison', component: AccountComparisonPage },
     { path: '/sa-simulator-multiple', name: 'Best SA Team Calculator', component: BestTeamPage },
     { path: '/sa-simulator-single', name: 'Single Battle Calculator', component: SingleTeamPage },

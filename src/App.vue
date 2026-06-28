@@ -17,7 +17,6 @@ const beta = isBeta()
         <div>
           <router-link to="/profile">Profile + Friends</router-link>
           <router-link to="/team-setup">Kioku Setup</router-link>
-          <router-link to="/team-setup2" v-if="beta">(Test)</router-link>
           <router-link to="/character-crys">Character Crystalis</router-link>
           <router-link to="/my-kioku">My Kioku Viewer</router-link>
           <router-link to="/kioku-grid">Kioku Grid</router-link>
