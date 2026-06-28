@@ -142,7 +142,6 @@ export default defineComponent({
     }
 
     const crysOptions = (slot: number) => {
-      console.log(props.character, props.character.crysOptions)
       return Object.entries(props.character.crysOptions)
         .filter(([, crys]) => crys.useIndex === 0 || crys.useIndex === slot)
         .map(([id]) => crystalises[Number(id)])

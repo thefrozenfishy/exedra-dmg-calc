@@ -17,7 +17,7 @@ export function useSetting<T>(key: string, defaultValue: T): Ref<T> {
 
   watch(localRef, (val) => {
     store.set(key, val)
-  })
+  }, { deep: true })
 
   return localRef
 }

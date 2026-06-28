@@ -144,9 +144,9 @@ export default defineComponent({
       filters.magicMax = null
     }
 
-    const collapsedRoles = reactive<Record<string, boolean>>({})
+    const collapsedRoles = useSetting<Record<string, boolean>>("collapsedRoles", {})
     function toggleRole(role: string) {
-      collapsedRoles[role] = !collapsedRoles[role]
+      collapsedRoles.value[role] = !collapsedRoles.value[role]
     }
 
     const groupedCharacters = computed(() => {
