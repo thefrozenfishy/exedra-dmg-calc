@@ -485,7 +485,6 @@ export default defineComponent({
   border: 1px solid var(--border);
   border-top: none;
   border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-  overflow: hidden;
 }
 
 .empty-role {
