@@ -31,14 +31,8 @@
       <div class="col col-crystalis">
         <span class="col-heading">Crystalis</span>
         <div class="crys-slots">
-          <select v-for="slot in 3" :key="slot" :value="getSelectedCrys(slot)"
-            @change="setCrys(slot, Number(($event.target as HTMLSelectElement).value))">
-            <option :value="0">—</option>
-            <option v-for="crys in crysOptions(slot)" :key="crys.selectionAbilityMstId"
-              :value="crys.selectionAbilityMstId">
-              {{ crys.name }}
-            </option>
-          </select>
+          <CrysSelector v-for="slot in 3" :key="slot" :character-id="character.id" :model-value="getSelectedCrys(slot)"
+            placeholder="—" @update:model-value="id => setCrys(slot, id)" />
         </div>
       </div>
 
@@ -63,12 +57,13 @@
 import { defineComponent, computed } from 'vue'
 import { useCharacterStore } from '../store/characterStore'
 import PortraitSelector from './PortraitSelector.vue'
+import CrysSelector from './CrysSelector.vue'
 import { Character, KiokuConstants } from '../types/KiokuTypes'
 import { crystalises } from '../utils/helpers'
 
 export default defineComponent({
   name: 'CharacterCard',
-  components: { PortraitSelector },
+  components: { PortraitSelector, CrysSelector },
   props: {
     character: {
       type: Object as () => Character,
@@ -154,17 +149,14 @@ export default defineComponent({
     }
 
     const setCrys = (slot: number, newId: number) => {
-      Object.values(props.character.crysOptions).forEach(c => {
-        if (c.useIndex === slot) c.useIndex = 0
+      const updated = { ...props.character, crysOptions: { ...props.character.crysOptions } }
+      Object.entries(updated.crysOptions).forEach(([id, c]) => {
+        if (c.useIndex === slot) updated.crysOptions[id] = { ...c, useIndex: 0 }
       })
-      if (newId === 0) return
-      Object.values(props.character.crysOptions).forEach(c => {
-        if (c.useIndex !== slot && c.useIndex !== 0) {
-          const id = Object.entries(props.character.crysOptions).find(([, v]) => v === c)?.[0]
-          if (Number(id) === newId) c.useIndex = 0
-        }
-      })
-      props.character.crysOptions[newId].useIndex = slot
+      if (newId !== 0 && updated.crysOptions[newId]) {
+        updated.crysOptions[newId] = { ...updated.crysOptions[newId], useIndex: slot }
+      }
+      store.updateChar(updated)
     }
 
     return {
@@ -317,23 +309,11 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   gap: 3px;
-}
-
-.crys-slots select {
   width: 100%;
-  min-width: 0;
-  font-size: 0.78rem;
-  padding: 0.22rem 0.35rem;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text);
 }
 
-.crys-slots select:focus {
-  outline: none;
-  border-color: var(--border-strong);
-  box-shadow: 0 0 0 3px rgba(246, 212, 133, 0.1);
+.col-crystalis {
+  min-width: 0;
 }
 
 /* ── Col 4: Portrait ── */
