@@ -1,8 +1,65 @@
 <script setup lang="ts">
 import CloudSyncWidget from './components/CloudSyncWidget.vue'
 import { isBeta } from './utils/betaSettings';
+import { useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { useSetting } from './store/settingsStore'
+
 const icon = (document.getElementById('app-icon') as HTMLLinkElement | null)?.href ?? ''
 const beta = isBeta()
+const router = useRouter()
+
+const navRoutes = computed(() =>
+  router.getRoutes().filter(r => r.meta?.version != null)
+)
+
+const seenVersions = computed(() => {
+  const map = new Map<string, ReturnType<typeof useSetting<number>>>()
+  for (const route of navRoutes.value) {
+    const key = `page_version:${route.path}`
+    map.set(route.path, useSetting<number>(key, 0))
+  }
+  return map
+})
+
+function isNew(path: string): boolean {
+  const route = router.resolve(path)
+  const currentVersion = (route.meta?.version as number | undefined) ?? 0
+  const seen = seenVersions.value.get(path)
+  return currentVersion > (seen?.value ?? 0)
+}
+
+router.afterEach((to) => {
+  const version = to.meta?.version as number | undefined
+  if (version == null) return
+  const seen = seenVersions.value.get(to.path)
+  if (seen && seen.value < version) {
+    seen.value = version
+  }
+})
+
+const group1Paths = [
+  '/profile',
+  '/team-setup',
+  '/character-crys',
+  '/my-kioku',
+  '/kioku-grid',
+  '/account-compare',
+]
+const group2Paths = [
+  '/sa-simulator-multiple',
+  '/sa-simulator-single',
+  '/pvp-simulator',
+  '/pvp-how-to',
+  '/gacha-rate',
+  '/link-raid',
+  '/crys-reroll',
+  '/about',
+]
+
+function routeForPath(path: string) {
+  return router.getRoutes().find(r => r.path === path)
+}
 </script>
 
 <template>
@@ -15,23 +72,20 @@ const beta = isBeta()
       </div>
       <nav>
         <div>
-          <router-link to="/profile">Profile + Friends</router-link>
-          <router-link to="/team-setup">Kioku Setup</router-link>
-          <router-link to="/character-crys">Character Crystalis</router-link>
-          <router-link to="/my-kioku">My Kioku Viewer</router-link>
-          <router-link to="/kioku-grid">Kioku Grid</router-link>
-          <router-link to="/account-compare">Account Comparison</router-link>
+          <template v-for="path in group1Paths" :key="path">
+            <router-link :to="path" :class="{ 'nav-new': isNew(path) }">
+              {{ routeForPath(path)?.name }}
+              <span v-if="isNew(path)" class="new-sparkle" aria-label="Updated">✨</span>
+            </router-link>
+          </template>
         </div>
         <div>
-          <router-link to="/sa-simulator-multiple">Best SA Team Calculator</router-link>
-          <router-link to="/sa-simulator-single">Single Battle Calculator</router-link>
-          <router-link to="/pvp-simulator">PvP Calculator</router-link>
-          <router-link to="/pvp-how-to">PvP 101</router-link>
-          <router-link to="/gacha-rate">Gacha Rate+Sim</router-link>
-          <router-link to="/link-raid">Link Raid Tool</router-link>
-          <router-link to="/crys-reroll">Crystalis Reroller</router-link>
-          <!--router-link to="/tier-lists">Tier Lists</router-link-->
-          <router-link to="/about">About</router-link>
+          <template v-for="path in group2Paths" :key="path">
+            <router-link :to="path" :class="{ 'nav-new': isNew(path) }">
+              {{ routeForPath(path)?.name }}
+              <span v-if="isNew(path)" class="new-sparkle" aria-label="Updated">✨</span>
+            </router-link>
+          </template>
         </div>
         <div v-if="beta">
           <router-link to="/beta">Beta Settings</router-link>
@@ -75,6 +129,58 @@ nav a {
 nav a.router-link-active {
   font-weight: bold;
   color: var(--accent-strong);
+}
+
+nav a.nav-new {
+  position: relative;
+  background: linear-gradient(90deg,
+      var(--accent-soft) 0%,
+      #ffe066 40%,
+      #ffb347 60%,
+      var(--accent-soft) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 2s linear infinite;
+  font-weight: 600;
+}
+
+nav a.nav-new.router-link-active {
+  -webkit-text-fill-color: transparent;
+}
+
+.new-sparkle {
+  display: inline-block;
+  animation: sparkle-pop 1.4s ease-in-out infinite;
+  -webkit-text-fill-color: initial;
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  font-style: normal;
+  margin-left: 1px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% center;
+  }
+
+  100% {
+    background-position: -200% center;
+  }
+}
+
+@keyframes sparkle-pop {
+
+  0%,
+  100% {
+    transform: scale(1) rotate(-5deg);
+  }
+
+  50% {
+    transform: scale(1.25) rotate(8deg);
+  }
 }
 
 .title-row {
