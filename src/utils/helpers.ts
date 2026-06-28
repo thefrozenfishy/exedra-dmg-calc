@@ -7,6 +7,7 @@ import styleParamUpJson from '../assets/base_data/getStyleParamUpMstList.json';
 import styleParamUpEffectJson from '../assets/base_data/getStyleParamUpEffectMstList.json';
 import characterHeartParamUpGroupJson from '../assets/base_data/getCharacterHeartParamUpGroupMstList.json';
 import characterHeartJson from '../assets/base_data/getCharacterHeartMstList.json';
+import characterHeartLevelUpJson from '../assets/base_data/getCharacterHeartLevelUpMstList.json';
 import kiokuDataJson from '../assets/base_data/kioku_data.json';
 import { Portrait, CrystalisData, KiokuData, PortraitLvlData, StyleParamUpEffect, CharacterHeart, CharacterHeartParamUpGroup, ActiveSkill, PassiveSkill, StyleParamUp } from '../types/KiokuTypes';
 
@@ -45,5 +46,16 @@ export const characterHeartParamUpGroup = Object.fromEntries(
 export const characterHeart = Object.fromEntries(
     characterHeartJson.map((item: any) => [item.characterMstId, item])
 ) as Record<string, CharacterHeart>;
+
+export const heartLevelUpExp = Object.fromEntries(
+    characterHeartLevelUpJson.map((item: any) => [item.heartLevel, item.heartLevelUpExp])
+) as Record<number, number>;
+
+export const maxHeartphialExp = Object.values(heartLevelUpExp).reduce((sum, exp) => sum + exp, 0);
+
+export const cumulativeHeartphialExp: Record<number, number> = { 0: 0 };
+for (let lvl = 1; lvl <= 50; lvl++) {
+    cumulativeHeartphialExp[lvl] = cumulativeHeartphialExp[lvl - 1] + (heartLevelUpExp[lvl] ?? 0);
+}
 
 export const kiokuData = kiokuDataJson as unknown as Record<string, KiokuData>;

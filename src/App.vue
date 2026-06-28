@@ -41,11 +41,12 @@ router.afterEach((to) => {
 const group1Paths = [
   '/profile',
   '/team-setup',
+  beta ? '/heartphial' : null,
   '/character-crys',
   '/my-kioku',
   '/kioku-grid',
   '/account-compare',
-]
+].filter(Boolean)
 const group2Paths = [
   '/sa-simulator-multiple',
   '/sa-simulator-single',
@@ -55,7 +56,7 @@ const group2Paths = [
   '/link-raid',
   '/crys-reroll',
   '/about',
-]
+].filter(Boolean)
 
 function routeForPath(path: string) {
   return router.getRoutes().find(r => r.path === path)

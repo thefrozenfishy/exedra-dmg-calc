@@ -12,6 +12,7 @@ import CharacterCrysPage from '../pages/CharacterCrysPage.vue'
 import GachaRatePage from '../pages/GachaRatePage.vue'
 import TierLists from '../pages/TierLists.vue'
 import KiokuGridPage from '../pages/KiokuGridPage.vue'
+import HeartphialPage from '../pages/HeartphialPage.vue'
 import ProfilePage from '../pages/ProfilePage.vue'
 import AccountComparisonPage from '../pages/AccountComparisonPage.vue'
 import BetaStuff from '../pages/BetaStuff.vue'
@@ -29,6 +30,7 @@ const routes = [
     { path: '/pvp-simulator', name: 'PvP Calculator', component: PvpTeamPage, meta: { version: 0 } },
     { path: '/pvp-how-to', name: 'PvP 101', component: Pvp101Page, meta: { version: 0 } },
     { path: '/kioku-grid', name: 'Kioku Grid', component: KiokuGridPage, meta: { version: 0 } },
+    { path: '/heartphial', name: 'Heartphial', component: HeartphialPage, meta: { version: 0 } },
     { path: '/link-raid', name: 'Link Raid Tool', component: LinkRaid, meta: { version: 0 } },
     { path: '/crys-reroll', name: 'Crystalis Reroller', component: CrysReroll, meta: { version: 0 } },
     { path: '/character-crys', name: 'Character Crystalis', component: CharacterCrysPage, meta: { version: 0 } },
