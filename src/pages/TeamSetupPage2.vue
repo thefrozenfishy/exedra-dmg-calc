@@ -305,15 +305,15 @@ export default defineComponent({
 }
 
 .btn-apply {
-  background: rgba(121, 213, 170, 0.12);
-  border-color: rgba(121, 213, 170, 0.3);
-  color: var(--success);
+  background: rgba(246, 212, 133, 0.1);
+  border-color: var(--border-strong);
+  color: var(--accent);
   align-self: flex-end;
 }
 
 .btn-apply:hover {
-  background: rgba(121, 213, 170, 0.2);
-  border-color: rgba(121, 213, 170, 0.5);
+  background: rgba(246, 212, 133, 0.18);
+  border-color: var(--accent-strong);
 }
 
 /* ── Chips ── */
