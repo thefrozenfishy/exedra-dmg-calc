@@ -75,11 +75,11 @@ export default defineComponent({
       required: true,
     },
     show3stars: {
-      type: Object as () => boolean,
+      type: Boolean,
       required: true,
     },
     show4stars: {
-      type: Object as () => boolean,
+      type: Boolean,
       required: true,
     },
     filters: {
