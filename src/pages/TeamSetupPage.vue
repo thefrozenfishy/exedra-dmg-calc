@@ -106,7 +106,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, reactive } from 'vue'
-import CharacterCard from '../components/CharacterCard.vue/index.js'
+import CharacterCard from '../components/CharacterCard.vue'
 import { useCharacterStore } from '../store/characterStore.js'
 import { Character, KiokuConstants } from '../types/KiokuTypes.js'
 import { useSetting } from '../store/settingsStore.js'
