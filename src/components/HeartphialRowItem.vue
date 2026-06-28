@@ -2,6 +2,7 @@
   <div class="heartphial-row" :class="{ 'is-maxed': row.isMaxed }">
     <div class="row-styles">
       <div v-for="style in row.styles" :key="style.id" class="style-thumb">
+        <img class="orb" :src="`/exedra-dmg-calc/rarity/${style.rarity}.png`" alt="" aria-hidden="true" />
         <a :href="`https://exedra.wiki/wiki/${style.name}`" target="_blank">
           <img :src="`/exedra-dmg-calc/kioku_images/${style.id}_thumbnail.png`" :alt="style.name" :title="style.name"
             class="style-img" :class="{ 'is-unowned': !style.enabled }" />
@@ -76,6 +77,18 @@ const emit = defineEmits<{
   opacity: 0.42;
 }
 
+.orb {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .row-styles {
   display: flex;
   flex-wrap: wrap;
@@ -86,21 +99,22 @@ const emit = defineEmits<{
 }
 
 .style-thumb {
-  display: inline-block;
+  position: relative;
 }
 
 .style-img {
+  position: relative;
   width: 40px;
   height: 40px;
-  border-radius: var(--radius-sm);
+  border-radius: 50%;
   border: 1px solid var(--border);
   display: block;
   transition: opacity 0.15s;
 }
 
 .style-img.is-unowned {
-  filter: grayscale(80%);
-  opacity: 0.35;
+  filter: grayscale(95%);
+  z-index: 1;
 }
 
 .row-info {
