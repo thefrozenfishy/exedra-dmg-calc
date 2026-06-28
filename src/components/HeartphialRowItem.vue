@@ -79,13 +79,13 @@ const emit = defineEmits<{
 
 .orb {
   position: absolute;
-  bottom: -4px;
+  bottom: -5px;
   left: 50%;
   transform: translateX(-50%);
   width: 52px;
   height: 52px;
   object-fit: contain;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
 }
 
@@ -114,7 +114,6 @@ const emit = defineEmits<{
 
 .style-img.is-unowned {
   filter: grayscale(95%);
-  z-index: 1;
 }
 
 .row-info {
