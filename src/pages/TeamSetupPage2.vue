@@ -5,9 +5,6 @@
       Defaults used in Single Battle Simulator and Best Team calculator.
     </p>
 
-    <!-- ════════════════════════════════════════
-         TOP BAR: import / export / rarity
-    ═══════════════════════════════════════════ -->
     <section class="toolbar card">
       <div class="toolbar-left">
         <button class="btn" @click="exportCharacters()">Export</button>
@@ -26,9 +23,6 @@
       </div>
     </section>
 
-    <!-- ════════════════════════════════════════
-         FILTERS
-    ═══════════════════════════════════════════ -->
     <section class="filters card">
       <span class="filters-heading">Filters</span>
 
@@ -44,7 +38,8 @@
         <label class="chip" :class="{ active: filters.heartphialMax === true }">
           <input type="radio" name="hp-filter" :value="true" v-model="filters.heartphialMax" /> Max
         </label>
-        <button class="chip clear-chip" v-if="filters.heartphialMax !== null" @click="filters.heartphialMax = null">✕</button>
+        <button class="chip clear-chip" v-if="filters.heartphialMax !== null"
+          @click="filters.heartphialMax = null">✕</button>
       </div>
 
       <div class="filter-group">
@@ -72,60 +67,35 @@
       <button class="btn btn-sm clear-all-btn" v-if="anyFilterActive" @click="clearFilters">Clear all</button>
     </section>
 
-    <!-- ════════════════════════════════════════
-         BULK SET
-    ═══════════════════════════════════════════ -->
     <section class="bulk-set card">
       <span class="filters-heading">Set for all visible Kioku</span>
       <div class="bulk-fields">
         <label v-for="stat in stats" :key="stat.key" class="bulk-field">
           <span class="bulk-label">{{ stat.label }}</span>
-          <input
-            type="number"
-            :min="stat.min"
-            :max="stat.max"
-            :placeholder="`0–${stat.max}`"
-            @input="e => pendingBulk[stat.key] = (e.target as HTMLInputElement).valueAsNumber"
-          />
+          <input type="number" :min="stat.min" :max="stat.max" :placeholder="`—`"
+            @input="e => pendingBulk[stat.key] = (e.target as HTMLInputElement).valueAsNumber" />
         </label>
         <button class="btn btn-apply" @click="applyBulk">Apply</button>
       </div>
     </section>
 
-    <!-- ════════════════════════════════════════
-         COLUMN HEADER (sticky)
-    ═══════════════════════════════════════════ -->
     <div class="list-header">
       <span>Character</span>
-      <span class="th-center">Asc</span>
-      <span>Levels (Kioku / Magic / HP / SP)</span>
+      <span>Asc · Kioku · Magic · HP · SP</span>
       <span>Crystalis</span>
       <span>Portrait</span>
     </div>
 
-    <!-- ════════════════════════════════════════
-         ROLE GROUPS (collapsible)
-    ═══════════════════════════════════════════ -->
     <div v-for="(chars, role) in groupedCharacters" :key="role" class="role-section">
-      <button
-        class="role-header"
-        @click="toggleRole(role)"
-        :aria-expanded="!collapsedRoles[role]"
-      >
+      <button class="role-header" @click="toggleRole(role)" :aria-expanded="!collapsedRoles[role]">
         <span class="role-chevron" :class="{ rotated: collapsedRoles[role] }">▾</span>
         <span class="role-name">{{ role }}</span>
         <span class="role-count">{{ visibleCountFor(chars) }} / {{ chars.length }}</span>
       </button>
 
       <div v-show="!collapsedRoles[role]" class="role-body">
-        <CharacterCard
-          v-for="char in chars"
-          :key="char.id"
-          :character="char"
-          :show3stars="show3stars"
-          :show4stars="show4stars"
-          :filters="filters"
-        />
+        <CharacterCard v-for="char in chars" :key="char.id" :character="char" :show3stars="show3stars"
+          :show4stars="show4stars" :filters="filters" />
         <div v-if="visibleCountFor(chars) === 0" class="empty-role">
           No Kioku match the current filters in this group.
         </div>
@@ -135,7 +105,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, reactive, ref } from 'vue'
+import { defineComponent, computed, reactive } from 'vue'
 import CharacterCard from '../components/CharacterCard2.vue'
 import { useCharacterStore } from '../store/characterStore'
 import { Character, KiokuConstants } from '../types/KiokuTypes'
@@ -148,7 +118,6 @@ export default defineComponent({
     const show4stars = useSetting('show4stars', false)
     const show3stars = useSetting('show3stars', false)
 
-    // ── Filters ──────────────────────────────
     const filters = reactive<{
       hideUnowned: boolean
       heartphialMax: boolean | null
@@ -175,14 +144,11 @@ export default defineComponent({
       filters.magicMax = null
     }
 
-    // ── Collapsible sections ─────────────────
     const collapsedRoles = reactive<Record<string, boolean>>({})
-
     function toggleRole(role: string) {
       collapsedRoles[role] = !collapsedRoles[role]
     }
 
-    // ── Grouped characters ───────────────────
     const groupedCharacters = computed(() => {
       const groups: Record<string, typeof store.characters> = {}
       store.characters.forEach(char => {
@@ -195,17 +161,16 @@ export default defineComponent({
       return groups
     })
 
-    // Count how many chars in a group pass current filters
     function isCharVisible(char: Character): boolean {
       if (char.rarity === 3 && !show3stars.value) return false
       if ((char.rarity === 4 || char.name === 'Lux☆Magica') && !show4stars.value) return false
       if (filters.hideUnowned && !char.enabled) return false
       if (char.enabled) {
-        if (filters.heartphialMax === true  && char.heartphialLvl < KiokuConstants.maxHeartphialLvl) return false
+        if (filters.heartphialMax === true && char.heartphialLvl < KiokuConstants.maxHeartphialLvl) return false
         if (filters.heartphialMax === false && char.heartphialLvl >= KiokuConstants.maxHeartphialLvl) return false
-        if (filters.spMax === true  && char.specialLvl < KiokuConstants.maxSpecialLvl) return false
+        if (filters.spMax === true && char.specialLvl < KiokuConstants.maxSpecialLvl) return false
         if (filters.spMax === false && char.specialLvl >= KiokuConstants.maxSpecialLvl) return false
-        if (filters.magicMax === true  && char.magicLvl < KiokuConstants.maxMagicLvl) return false
+        if (filters.magicMax === true && char.magicLvl < KiokuConstants.maxMagicLvl) return false
         if (filters.magicMax === false && char.magicLvl >= KiokuConstants.maxMagicLvl) return false
       }
       return true
@@ -215,13 +180,12 @@ export default defineComponent({
       return chars.filter(isCharVisible).length
     }
 
-    // ── Bulk set ─────────────────────────────
     const stats = [
-      { key: 'ascension',     label: 'Ascension',  min: 0, max: KiokuConstants.maxAscension },
-      { key: 'kiokuLvl',      label: 'Kioku Lvl',  min: 1, max: KiokuConstants.maxKiokuLvl },
-      { key: 'magicLvl',      label: 'Magic Lvl',  min: 0, max: KiokuConstants.maxMagicLvl },
-      { key: 'heartphialLvl', label: 'HP Lvl',     min: 1, max: KiokuConstants.maxHeartphialLvl },
-      { key: 'specialLvl',    label: 'SP Lvl',     min: 1, max: KiokuConstants.maxSpecialLvl },
+      { key: 'ascension', label: 'Ascension', min: 0, max: KiokuConstants.maxAscension },
+      { key: 'kiokuLvl', label: 'Kioku Lvl', min: 1, max: KiokuConstants.maxKiokuLvl },
+      { key: 'magicLvl', label: 'Magic Lvl', min: 0, max: KiokuConstants.maxMagicLvl },
+      { key: 'heartphialLvl', label: 'HP Lvl', min: 1, max: KiokuConstants.maxHeartphialLvl },
+      { key: 'specialLvl', label: 'SP Lvl', min: 1, max: KiokuConstants.maxSpecialLvl },
     ]
 
     const pendingBulk = reactive<Record<string, number>>({})
@@ -240,7 +204,6 @@ export default defineComponent({
       )
     }
 
-    // ── Import ───────────────────────────────
     function handleFileChange(e: Event) {
       const file = (e.target as HTMLInputElement).files?.[0]
       if (file) {
@@ -273,27 +236,28 @@ export default defineComponent({
 .setup-page {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 1.5rem 1rem 4rem;
+  padding: 0 0 4rem;
 }
 
 .page-title {
-  font-size: 1.4rem;
-  margin: 0 0 0.2rem;
+  font-size: 2rem;
+  margin: 0 0 0.25rem;
+  color: var(--text);
 }
 
 .page-subtitle {
   font-size: 0.85rem;
-  color: rgba(255,255,255,0.45);
-  margin: 0 0 1.2rem;
+  color: var(--muted);
+  margin: 0 0 1.25rem;
 }
 
 /* ── Cards ── */
 .card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 8px;
-  padding: 0.7rem 1rem;
-  margin-bottom: 0.75rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.65rem 1rem;
+  margin-bottom: 0.6rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -305,7 +269,8 @@ export default defineComponent({
   justify-content: space-between;
 }
 
-.toolbar-left, .toolbar-right {
+.toolbar-left,
+.toolbar-right {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -313,18 +278,21 @@ export default defineComponent({
 
 /* ── Buttons ── */
 .btn {
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 6px;
-  padding: 0.25rem 0.7rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.4em 0.9em;
   font-size: 0.85rem;
-  color: rgba(255,255,255,0.87);
+  font-weight: 600;
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .btn:hover {
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.14);
+  border-color: var(--border-strong);
 }
 
 .btn input[type="file"] {
@@ -332,18 +300,20 @@ export default defineComponent({
 }
 
 .btn-sm {
-  padding: 0.18rem 0.5rem;
+  padding: 0.28rem 0.65rem;
   font-size: 0.78rem;
 }
 
 .btn-apply {
-  background: rgba(125,211,176,0.15);
-  border-color: rgba(125,211,176,0.3);
-  color: #7dd3b0;
+  background: rgba(121, 213, 170, 0.12);
+  border-color: rgba(121, 213, 170, 0.3);
+  color: var(--success);
+  align-self: flex-end;
 }
 
 .btn-apply:hover {
-  background: rgba(125,211,176,0.25);
+  background: rgba(121, 213, 170, 0.2);
+  border-color: rgba(121, 213, 170, 0.5);
 }
 
 /* ── Chips ── */
@@ -351,56 +321,67 @@ export default defineComponent({
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0.18rem 0.55rem;
-  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--border);
   border-radius: 20px;
   font-size: 0.8rem;
   cursor: pointer;
-  color: rgba(255,255,255,0.6);
+  color: var(--muted);
   transition: background 0.12s, border-color 0.12s, color 0.12s;
   user-select: none;
 }
 
-.chip input { display: none; }
+.chip input {
+  display: none;
+}
 
 .chip.active {
-  background: rgba(125,211,176,0.14);
-  border-color: rgba(125,211,176,0.45);
-  color: #7dd3b0;
+  background: rgba(246, 212, 133, 0.1);
+  border-color: var(--border-strong);
+  color: var(--accent);
 }
 
 .clear-chip {
   background: none;
-  border-color: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.35);
+  border-color: transparent;
+  color: var(--muted);
   padding: 0.1rem 0.4rem;
+  opacity: 0.7;
+}
+
+.clear-chip:hover {
+  opacity: 1;
+  color: var(--danger);
+  border-color: transparent;
+  background: none;
 }
 
 .clear-all-btn {
   margin-left: auto;
 }
 
-/* ── Filters ── */
+/* ── Filter bar ── */
 .filters-heading {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.08em;
+  color: var(--muted);
   margin-right: 0.25rem;
   flex-shrink: 0;
+  opacity: 0.7;
 }
 
 .filter-group {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  border-left: 1px solid rgba(255,255,255,0.08);
-  padding-left: 0.6rem;
+  border-left: 1px solid var(--border);
+  padding-left: 0.65rem;
 }
 
 .filter-group-label {
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.45);
+  font-size: 0.74rem;
+  color: var(--muted);
   margin-right: 2px;
 }
 
@@ -420,38 +401,40 @@ export default defineComponent({
 }
 
 .bulk-label {
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: rgba(255,255,255,0.38);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  opacity: 0.75;
 }
 
 .bulk-field input {
-  width: 62px;
+  width: 60px;
   text-align: center;
 }
 
-/* ── Column header ── */
+/* ── Column header (sticky) ── */
 .list-header {
   display: grid;
-  grid-template-columns: 160px 64px 1fr 1fr 140px;
+  grid-template-columns: 180px auto 140px 1fr;
   gap: 0 0.75rem;
-  padding: 0.3rem 0.6rem;
-  font-size: 0.68rem;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.64rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: rgba(255,255,255,0.35);
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  margin-bottom: 0.25rem;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border-strong);
+  margin-bottom: 0.2rem;
   position: sticky;
   top: 0;
-  background: var(--bg, #1a1a1a);
+  background: var(--bg);
   z-index: 10;
+  opacity: 0.8;
 }
 
 /* ── Role sections ── */
 .role-section {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .role-header {
@@ -459,27 +442,28 @@ export default defineComponent({
   align-items: center;
   gap: 0.5rem;
   width: 100%;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 6px;
-  padding: 0.4rem 0.7rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.8rem;
   cursor: pointer;
   text-align: left;
-  color: rgba(255,255,255,0.87);
-  font-size: 0.9rem;
+  color: var(--text);
+  font-size: 0.88rem;
   font-weight: 600;
-  transition: background 0.15s;
+  transition: background 0.15s, border-color 0.15s;
 }
 
 .role-header:hover {
-  background: rgba(255,255,255,0.07);
+  background: var(--bg-soft);
+  border-color: var(--border-strong);
 }
 
 .role-chevron {
   font-size: 1rem;
   line-height: 1;
   transition: transform 0.2s;
-  color: rgba(255,255,255,0.5);
+  color: var(--muted);
 }
 
 .role-chevron.rotated {
@@ -488,25 +472,27 @@ export default defineComponent({
 
 .role-name {
   flex: 1;
+  color: var(--accent-soft);
 }
 
 .role-count {
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.38);
+  font-size: 0.74rem;
+  color: var(--muted);
   font-weight: 400;
 }
 
 .role-body {
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
   border-top: none;
-  border-radius: 0 0 6px 6px;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   overflow: hidden;
 }
 
 .empty-role {
-  padding: 0.7rem 1rem;
+  padding: 0.65rem 1rem;
   font-size: 0.82rem;
-  color: rgba(255,255,255,0.28);
+  color: var(--muted);
   font-style: italic;
+  opacity: 0.6;
 }
 </style>

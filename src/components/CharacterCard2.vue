@@ -1,88 +1,59 @@
 <template>
-  <div
-    v-if="isVisible"
-    class="character-row"
-    :class="{ 'character-row--disabled': !character.enabled }"
-  >
-    <!-- Col 1: Portrait + name + toggle -->
+  <div v-if="isVisible" class="character-row" :class="{ 'character-row--disabled': !character.enabled }">
     <div class="col col-identity" @click="toggleCharacter" title="Toggle owned">
       <img :src="imgSrc" :alt="character.name" class="char-thumb" :class="{ faded: !character.enabled }" />
-      <span class="char-name">{{ character.name }}</span>
-      <span class="rarity-stars">{{ '★'.repeat(character.rarity) }}</span>
+      <div class="char-names">
+        <span class="char-name">{{ character.name }}</span>
+        <span class="char-name-en">{{ character.character_en }}</span>
+        <span class="rarity-stars">{{ '★'.repeat(character.rarity) }}</span>
+      </div>
     </div>
 
-    <!-- Rest only shown when enabled -->
     <template v-if="character.enabled">
-      <!-- Col 2: Ascension (single stat, special prominence) -->
-      <div class="col col-ascension">
-        <span class="col-heading">Ascension</span>
-        <input
-          type="number"
-          :min="0"
-          :max="maxAscension"
-          :value="character.ascension"
-          :class="{ 'at-max': character.ascension >= maxAscension }"
-          @input="updateStat('ascension', 0, maxAscension, $event?.target?.valueAsNumber)"
-        />
-      </div>
-
-      <!-- Col 3: The four levels -->
-      <div class="col col-levels">
-        <span class="col-heading">Levels</span>
-        <div class="levels-grid">
-          <label v-for="s in levelStats" :key="s.key" class="level-cell">
+      <div class="col col-stats">
+        <span class="col-heading">Stats</span>
+        <div class="stats-grid">
+          <label class="stat-cell">
+            <span class="cell-label">Asc</span>
+            <input type="number" :min="0" :max="maxAscension" :value="character.ascension"
+              :class="{ 'at-max': character.ascension >= maxAscension }"
+              @input="updateStat('ascension', 0, maxAscension, $event?.target?.valueAsNumber)" />
+          </label>
+          <label v-for="s in levelStats" :key="s.key" class="stat-cell">
             <span class="cell-label">{{ s.short }}</span>
-            <input
-              type="number"
-              :min="s.min"
-              :max="s.max"
-              :value="character[s.key]"
+            <input type="number" :min="s.min" :max="s.max" :value="character[s.key]"
               :class="{ 'at-max': character[s.key] >= s.max }"
-              @input="updateStat(s.key, s.min, s.max, $event?.target?.valueAsNumber)"
-            />
+              @input="updateStat(s.key, s.min, s.max, $event?.target?.valueAsNumber)" />
           </label>
         </div>
       </div>
 
-      <!-- Col 4: Crystalis -->
       <div class="col col-crystalis">
         <span class="col-heading">Crystalis</span>
         <div class="crys-slots">
-          <select
-            v-for="slot in 3"
-            :key="slot"
-            :value="getSelectedCrys(slot)"
-            @change="setCrys(slot, Number(($event.target as HTMLSelectElement).value))"
-          >
+          <select v-for="slot in 3" :key="slot" :value="getSelectedCrys(slot)"
+            @change="setCrys(slot, Number(($event.target as HTMLSelectElement).value))">
             <option :value="0">—</option>
-            <option
-              v-for="crys in crysOptions(slot)"
-              :key="crys.selectionAbilityMstId"
-              :value="crys.selectionAbilityMstId"
-            >
+            <option v-for="crys in crysOptions(slot)" :key="crys.selectionAbilityMstId"
+              :value="crys.selectionAbilityMstId">
               {{ crys.name }}
             </option>
           </select>
         </div>
       </div>
 
-      <!-- Col 5: Portrait selector + edit link -->
       <div class="col col-portrait">
         <span class="col-heading">Portrait</span>
-        <PortraitSelector v-model="character.portrait" :element="character.element" />
-        <router-link
-          class="edit-crys-btn"
-          :to="{ path: '/character-crys', query: { character_id: character.id } }"
-        >
+        <PortraitSelector class="edit-port-btn" v-model="character.portrait" :element="character.element" />
+        <router-link class="edit-crys-btn" :to="{ path: '/character-crys', query: { character_id: character.id } }">
           Edit SubCrys
         </router-link>
       </div>
     </template>
 
-    <!-- Disabled placeholder columns -->
     <template v-else>
       <div class="col col-disabled-msg">
-        <span>Not owned — click portrait to enable</span>
+        <span>Not owned — click to enable</span>
       </div>
     </template>
   </div>
@@ -127,10 +98,10 @@ export default defineComponent({
     const maxAscension = KiokuConstants.maxAscension
 
     const levelStats = [
-      { key: 'kiokuLvl',      short: 'Kioku', min: 1, max: KiokuConstants.maxKiokuLvl },
-      { key: 'magicLvl',      short: 'Magic', min: 0, max: KiokuConstants.maxMagicLvl },
-      { key: 'heartphialLvl', short: 'HP',    min: 1, max: KiokuConstants.maxHeartphialLvl },
-      { key: 'specialLvl',    short: 'SP',    min: 1, max: KiokuConstants.maxSpecialLvl },
+      { key: 'kiokuLvl', short: 'Kioku', min: 1, max: KiokuConstants.maxKiokuLvl },
+      { key: 'magicLvl', short: 'Magic', min: 0, max: KiokuConstants.maxMagicLvl },
+      { key: 'heartphialLvl', short: 'HP', min: 1, max: KiokuConstants.maxHeartphialLvl },
+      { key: 'specialLvl', short: 'SP', min: 1, max: KiokuConstants.maxSpecialLvl },
     ]
 
     const imgSrc = computed(
@@ -139,24 +110,18 @@ export default defineComponent({
 
     const isVisible = computed(() => {
       const c = props.character
-      // rarity filters
       if (c.rarity === 3 && !props.show3stars) return false
       if ((c.rarity === 4 || c.name === 'Lux☆Magica') && !props.show4stars) return false
-
-      // hide unowned
       if (props.filters.hideUnowned && !c.enabled) return false
-
-      // level filters (only apply to owned characters)
       if (c.enabled) {
         const f = props.filters
-        if (f.heartphialMax === true  && c.heartphialLvl < KiokuConstants.maxHeartphialLvl) return false
+        if (f.heartphialMax === true && c.heartphialLvl < KiokuConstants.maxHeartphialLvl) return false
         if (f.heartphialMax === false && c.heartphialLvl >= KiokuConstants.maxHeartphialLvl) return false
-        if (f.spMax === true  && c.specialLvl < KiokuConstants.maxSpecialLvl) return false
+        if (f.spMax === true && c.specialLvl < KiokuConstants.maxSpecialLvl) return false
         if (f.spMax === false && c.specialLvl >= KiokuConstants.maxSpecialLvl) return false
-        if (f.magicMax === true  && c.magicLvl < KiokuConstants.maxMagicLvl) return false
+        if (f.magicMax === true && c.magicLvl < KiokuConstants.maxMagicLvl) return false
         if (f.magicMax === false && c.magicLvl >= KiokuConstants.maxMagicLvl) return false
       }
-
       return true
     })
 
@@ -218,28 +183,31 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* ── Row container ── */
+/* ── Row ── */
 .character-row {
   display: grid;
   grid-template-columns:
-    160px          /* identity */
-    64px           /* ascension */
-    1fr            /* levels */
-    1fr            /* crystalis */
-    140px;         /* portrait + link */
-  align-items: start;
+    180px
+    /* identity: thumb + stacked names */
+    auto
+    /* stats: asc + 4 levels in one row */
+    140px
+    /* crystalis: narrow */
+    1fr;
+  /* portrait: wider */
+  align-items: center;
   gap: 0 0.75rem;
-  padding: 0.45rem 0.6rem;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid var(--border);
   transition: background 0.15s;
 }
 
 .character-row:hover {
-  background: rgba(255,255,255,0.03);
+  background: var(--bg-soft);
 }
 
 .character-row--disabled {
-  opacity: 0.5;
+  opacity: 0.45;
 }
 
 /* ── Column base ── */
@@ -250,104 +218,136 @@ export default defineComponent({
 }
 
 .col-heading {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: rgba(255,255,255,0.38);
-  margin-bottom: 2px;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  margin-bottom: 1px;
 }
 
 /* ── Col 1: Identity ── */
 .col-identity {
   flex-direction: row;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
   cursor: pointer;
   user-select: none;
 }
 
 .char-thumb {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
   flex-shrink: 0;
 }
 
 .char-thumb.faded {
-  opacity: 0.28;
+  opacity: 0.25;
+  filter: grayscale(0.5);
+}
+
+.char-names {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
 }
 
 .char-name {
   font-size: 0.85rem;
-  font-weight: 500;
-  line-height: 1.2;
-  flex: 1;
-  min-width: 0;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.char-name-en {
+  font-size: 0.72rem;
+  color: var(--muted);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .rarity-stars {
   font-size: 0.6rem;
-  color: #d4af37;
+  color: var(--accent);
   letter-spacing: -1px;
+  margin-top: 1px;
+}
+
+/* ── Col 2: Stats (Asc + 4 levels in one horizontal row) ── */
+.col-stats {
   flex-shrink: 0;
 }
 
-/* ── Col 2: Ascension ── */
-.col-ascension {
-  align-items: center;
+.stats-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
 }
 
-.col-ascension input {
-  width: 46px;
-  text-align: center;
-}
-
-/* ── Col 3: Levels grid ── */
-.levels-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px 8px;
-}
-
-.level-cell {
+.stat-cell {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1px;
+  gap: 2px;
 }
 
 .cell-label {
-  font-size: 0.65rem;
-  color: rgba(255,255,255,0.42);
+  font-size: 0.6rem;
+  color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
-.level-cell input {
-  width: 46px;
+.stat-cell input {
+  width: 42px;
   text-align: center;
+  padding: 0.25rem 0.3rem;
+  font-size: 0.82rem;
 }
 
-/* ── Col 4: Crystalis ── */
+/* ── Col 3: Crystalis (narrow) ── */
 .crys-slots {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
 }
 
 .crys-slots select {
   width: 100%;
   min-width: 0;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
+  padding: 0.22rem 0.35rem;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
 }
 
-/* ── Col 5: Portrait + link ── */
+.crys-slots select:focus {
+  outline: none;
+  border-color: var(--border-strong);
+  box-shadow: 0 0 0 3px rgba(246, 212, 133, 0.1);
+}
+
+/* ── Col 4: Portrait ── */
 .col-portrait {
   align-items: flex-start;
+}
+
+.edit-port-btn {
+  width: 100%;
+}
+
+.edit-port-btn :deep(input) {
+  width: calc(100% - 2.8rem);
+  margin: 0 auto;
 }
 
 .edit-crys-btn {
@@ -356,34 +356,37 @@ export default defineComponent({
   align-items: center;
   width: 100%;
   margin-top: 0.3rem;
-  padding: 0.2rem 0.4rem;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 5px;
-  color: var(--text, rgba(255,255,255,0.87));
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--accent-soft);
   font-size: 0.78rem;
   text-decoration: none;
   box-sizing: border-box;
+  transition: background 0.15s, border-color 0.15s;
 }
 
 .edit-crys-btn:hover {
-  background: rgba(255,255,255,0.08);
-  border-color: rgba(255,255,255,0.18);
+  background: var(--bg-soft);
+  border-color: var(--border-strong);
+  color: var(--accent);
 }
 
 /* ── Disabled placeholder ── */
 .col-disabled-msg {
   grid-column: 2 / -1;
+  display: flex;
   align-items: center;
-  justify-content: center;
   font-size: 0.78rem;
-  color: rgba(255,255,255,0.28);
+  color: var(--muted);
   font-style: italic;
   padding: 0.2rem 0;
+  opacity: 0.6;
 }
 
 /* ── at-max highlight ── */
 input.at-max {
-  color: #7dd3b0;
-  border-color: rgba(125, 211, 176, 0.4);
+  color: var(--success);
+  border-color: rgba(121, 213, 170, 0.35);
 }
 </style>
