@@ -66,6 +66,8 @@ export const useFriendStore = defineStore('friendStore', () => {
     const initialized = ref(false)
     const loading = ref(false)
 
+    const getFormattedDisplayNamePossessive = (name?: string) => name ? `${name}'s` : displayName.value ? `${displayName.value}'s` : `My`
+
     const initialize = async () => {
         if (initialized.value || loading.value) return
 
@@ -320,6 +322,7 @@ export const useFriendStore = defineStore('friendStore', () => {
     return {
         friends,
         displayName,
+        getFormattedDisplayNamePossessive,
         saveDisplayName,
         addFriend,
         deleteFriend,

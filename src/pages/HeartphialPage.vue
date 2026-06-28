@@ -103,6 +103,7 @@ import {
     type HeartphialRow,
     type HeartphialSegmentMode,
 } from "../models/HeartphialExp"
+import { useFriendStore } from "../store/friendStore"
 
 const store = useCharacterStore()
 
@@ -216,7 +217,7 @@ const formatExp = (n: number) => n.toLocaleString()
 
 const exportOpts = { exportClass: "exporting" }
 const shareOptions = () => ({
-    title: "Heartphial Exp Progress",
+    title: `${useFriendStore().getFormattedDisplayNamePossessive()} Heartphial Exp Progress`,
     backUrl: window.location.href,
 })
 </script>

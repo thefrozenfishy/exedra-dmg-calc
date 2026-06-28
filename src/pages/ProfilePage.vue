@@ -1262,7 +1262,7 @@ const fileName = computed(() => graphMode.value === 'scatter'
     : `${getAxisLabel(selectedXAxis.value)}`)
 
 const shareOptionsForChart = () => ({
-    title: `${store.displayName} plot of ${fileName.value}`,
+    title: `${store.getFormattedDisplayNamePossessive()} plot of ${fileName.value}`,
     backUrl: window.location.href,
 })
 

@@ -173,13 +173,13 @@ const store = useCharacterStore()
 const leftCode = computed(() =>
     typeof route.query.left === "string"
         ? route.query.left.toUpperCase()
-        : null
+        : undefined
 )
 
 const rightCode = computed(() =>
     typeof route.query.right === "string"
         ? route.query.right.toUpperCase()
-        : null
+        : undefined
 )
 
 const leftProfile = ref<SocialProfile | null>(null)
@@ -381,7 +381,7 @@ const comparisonPageUrl = () =>
     `${window.location.origin}/exedra-dmg-calc/#/account-compare?left=${leftCode.value}&right=${rightCode.value}`
 
 const shareOptionsForComparison = () => ({
-    title: `Account comparison ${leftProfile.value?.display_name || leftCode.value} vs ${rightProfile.value?.display_name || rightCode.value}`,
+    title: `Account comparison: ${friendStore.getFormattedDisplayNamePossessive(leftProfile.value?.display_name || leftCode.value)} vs ${friendStore.getFormattedDisplayNamePossessive(rightProfile.value?.display_name || rightCode.value)}`,
     backUrl: comparisonPageUrl(),
 })
 

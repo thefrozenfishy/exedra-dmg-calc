@@ -348,7 +348,7 @@ function safeInt(value: unknown, fallback = 0, min?: number, max?: number): numb
 const exportOpts = { exportClass: "exporting" }
 
 const shareOptionsForBestTeam = () => ({
-    title: `${friendStore.displayName ?? "My"} best team vs ${weakElements.filter(el => el.enabled).map(el => el.name).join(" & ")}`,
+    title: `${friendStore.getFormattedDisplayNamePossessive()} best team vs ${weakElements.filter(el => el.enabled).map(el => el.name).join(" & ")}`,
     backUrl: window.location.href,
 })
 

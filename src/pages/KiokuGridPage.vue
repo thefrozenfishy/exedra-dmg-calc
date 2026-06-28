@@ -431,7 +431,7 @@ const isMaxSpecialLvl = (ch: Character): boolean => {
 const exportOpts = { exportClass: "exporting" }
 
 const shareOptionsForGrid = () => ({
-    title: `${useFriendStore().displayName || "My"} Kioku Grid`,
+    title: `${useFriendStore().getFormattedDisplayNamePossessive()} Kioku Grid`,
     backUrl: window.location.href,
 })
 </script>

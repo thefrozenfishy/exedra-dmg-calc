@@ -19,12 +19,8 @@
     </div>
 
     <div class="share-card-actions">
-      <ImageActionsToolbar
-        :target="() => shareCardRef!"
-        filename="single-team-share.png"
-        :export-options="exportOpts"
-        :share-options="shareOptionsForTeamCard"
-        :disabled="!shareCardAvailable" />
+      <ImageActionsToolbar :target="() => shareCardRef!" filename="single-team-share.png" :export-options="exportOpts"
+        :share-options="shareOptionsForTeamCard" :disabled="!shareCardAvailable" />
     </div>
 
     <div class="share-card-preview" ref="shareCardRef">
@@ -40,7 +36,7 @@
                   <span class="share-overlay-badge heart">H{{ slot.main.heartphialLvl }}</span>
                   <span class="share-overlay-badge magic">ML{{ slot.main.magicLvl }}</span>
                   <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">SP{{ slot.main.specialLvl
-                    }}</span>
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -267,8 +263,8 @@ const summarizeSubCrys = (ch: Character) => {
 const exportOpts = { exportClass: "exporting" }
 
 const shareOptionsForTeamCard = () => ({
-    title: `${useFriendStore().displayName || "My"} team setup`,
-    backUrl: window.location.href,
+  title: `${useFriendStore().getFormattedDisplayNamePossessive()} Team Setup`,
+  backUrl: window.location.href,
 })
 
 const sortEffectType = (effects: object) => Object.fromEntries(Object.entries(effects).sort(([a], [b]) => a.localeCompare(b)))
