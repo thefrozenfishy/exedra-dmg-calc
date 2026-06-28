@@ -30,6 +30,19 @@ const base = {
     specialLvl: KiokuConstants.maxSpecialLvl,
 }
 
+const buildCrysOptions = (id: number, stored: Record<string, any> = {}) =>
+    Object.fromEntries(
+        relevantCrys(id).map(cx => [
+            cx.selectionAbilityMstId,
+            {
+                enabled: false,
+                useIndex: 0,
+                subCrys: [],
+                ...(stored[cx.selectionAbilityMstId] ?? {}),
+            }
+        ])
+    )
+
 export const useCharacterStore = defineStore('characterStore', () => {
     const characters = ref<Character[]>([])
 
@@ -68,17 +81,8 @@ export const useCharacterStore = defineStore('characterStore', () => {
                 ...basicSetting(c),
                 ...Object.fromEntries(Object.entries(c).filter(([k, v]) => v != null)),
                 ...charInfo[c.name],
-                crysOptions: Object.fromEntries(relevantCrys(c.id)
-                    .map(cx => [
-                        cx.selectionAbilityMstId, {
-                            enabled: false,
-                            useIndex: 0,
-                            subCrys: [],
-                            ...(c.crysOptions?.[cx.selectionAbilityMstId] ?? {}),
-                        }
-                    ])),
-            })
-            )
+                crysOptions: buildCrysOptions(c.id, c.crysOptions),
+            }))
     }
 
     const precomputeSimilarities = async () => {
@@ -157,7 +161,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
 
                 portrait: row.portrait,
 
-                crysOptions: row.crys_options || {}
+                crysOptions: buildCrysOptions(row.character_id, row.crys_options ?? {}),
             })
             if (char.rarity < 5) char.ascension = KiokuConstants.maxAscension;
             if (char.ascension > KiokuConstants.maxAscension) char.ascension = KiokuConstants.maxAscension;
@@ -254,7 +258,13 @@ export const useCharacterStore = defineStore('characterStore', () => {
     }
 
     Object.entries(charInfo).forEach(([name, data]) => {
-        if (!characters.value.map(c => c.name).includes(name)) characters.value.push({ ...basicSetting(data), ...data })
+        if (!characters.value.map(c => c.name).includes(name)) {
+            characters.value.push({
+                ...basicSetting(data),
+                ...data,
+                crysOptions: buildCrysOptions(data.id),
+            })
+        }
     });
 
     const mergeChars = (rows: Character[]) => rows.map(c => {
