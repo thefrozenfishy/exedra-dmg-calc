@@ -13,11 +13,13 @@
           <input type="file" accept="application/json" @change="handleFileChange" />
         </label>
 
-        <button v-if="highestTeam" class="btn" :class="{ 'btn-active': showHighestTeam }"
-          @click="showHighestTeam = !showHighestTeam">
-          {{ showHighestTeam ? 'Hide Highest PWR Team' : 'Show Highest PWR Team' }}
-        </button>
-        <span v-if="calculating" class="calc-indicator">(Calculating optimal builds...)</span>
+        <template v-if="isbeta">
+          <button v-if="highestTeam" class="btn" :class="{ 'btn-active': showHighestTeam }"
+            @click="showHighestTeam = !showHighestTeam">
+            {{ showHighestTeam ? 'Hide Highest PWR Team' : 'Show Highest PWR Team' }}
+          </button>
+          <span v-if="calculating" class="calc-indicator">(Calculating optimal builds...)</span>
+        </template>
       </div>
       <div class="toolbar-right rarity-toggles">
         <label class="chip" :class="{ active: show4stars }">
@@ -29,15 +31,17 @@
       </div>
     </section>
 
-    <section v-if="showHighestTeam && highestTeam" class="best-team-panel card">
-      <div class="best-team-header">
-        <span class="filters-heading highlight">Highest Possible Team PWR</span>
-        <span class="pwr-display"> <strong>{{ highestPwr?.toLocaleString() }}</strong></span>
-      </div>
-      <div class="team-rows">
-        <TeamRow :team="highestTeam" />
-      </div>
-    </section>
+    <template v-if="isbeta">
+      <section v-if="showHighestTeam && highestTeam" class="best-team-panel card">
+        <div class="best-team-header">
+          <span class="filters-heading highlight">Highest Possible Team PWR</span>
+          <span class="pwr-display"> <strong>{{ highestPwr?.toLocaleString() }}</strong></span>
+        </div>
+        <div class="team-rows">
+          <TeamRow :team="highestTeam" />
+        </div>
+      </section>
+    </template>
 
     <section class="filters card">
       <span class="filters-heading">Filters</span>
@@ -128,6 +132,7 @@ import { useCharacterStore } from '../store/characterStore.js'
 import { Character, KiokuConstants } from '../types/KiokuTypes.js'
 import { useSetting } from '../store/settingsStore.js'
 import { FinalTeam } from '../types/BestTeamTypes.js'
+import { isBeta } from '../utils/betaSettings.js'
 
 export default defineComponent({
   components: { CharacterCard, TeamRow },
@@ -280,6 +285,7 @@ export default defineComponent({
       highestTeam,
       showHighestTeam,
       calculating,
+      isbeta: isBeta()
     }
   },
 })
