@@ -2,7 +2,7 @@ import { Kioku } from "../models/Kioku";
 import { Character, highestPwrPortraits, KiokuArgs } from "../types/KiokuTypes";
 
 const MAIN_CANDIDATES = 10;
-const SUPPORT_CANDIDATES = 20;
+const SUPPORT_CANDIDATES = 40;
 
 interface Candidate {
     char: Character;
@@ -32,14 +32,14 @@ self.onmessage = function (e: MessageEvent) {
     const ranked: Candidate[] = [...characters]
         .map(char => ({
             char,
-            kioku: new Kioku(char as KiokuArgs)
+            kioku: new Kioku({ ...char, portrait: null }),
         }))
-        .sort((a, b) => b.kioku.getTotalPower() - a.kioku.getTotalPower());
+        .map(c => ({ ...c, pwr: c.kioku.getTotalPower() }))
+        .sort((a, b) => b.pwr - a.pwr);
 
     const mains = ranked.slice(0, MAIN_CANDIDATES);
     const supportPool = ranked.slice(0, SUPPORT_CANDIDATES);
 
-    // 1. Structural Map Pre-calculation
     const scoreCache = new Map<string, Map<string, Map<string, number>>>();
 
     for (const main of mains) {
@@ -74,7 +74,6 @@ self.onmessage = function (e: MessageEvent) {
     let maxTeamPower = -Infinity;
     let bestTeamSetup: [string, string, string][] = [];
 
-    // Sort teams globally based on their individual baseline components to find heavy hitters first
     teams.sort((teamA, teamB) => {
         const powerA = teamA.reduce((sum, c) => sum + c.kioku.getTotalPower(), 0);
         const powerB = teamB.reduce((sum, c) => sum + c.kioku.getTotalPower(), 0);
@@ -101,14 +100,11 @@ self.onmessage = function (e: MessageEvent) {
                     }
                 }
             }
-            // Sort options descending
             list.sort((a, b) => b.power - a.power);
             options.push(list);
             maxPossibleSlotPower[idx] = list.length > 0 ? list[0].power : 0;
         }
 
-        // Global check: If this team configuration under absolute flawless non-conflict conditions 
-        // cannot beat our global high score, skip processing this team completely.
         const totalTheoreticalMax = maxPossibleSlotPower.reduce((a, b) => a + b, 0);
         if (totalTheoreticalMax <= maxTeamPower) {
             continue;
@@ -119,7 +115,6 @@ self.onmessage = function (e: MessageEvent) {
             remainingMax[i] = maxPossibleSlotPower[i] + remainingMax[i + 1];
         }
 
-        // Track used states across a highly restricted bitwise/string iteration
         const usedPortraits = new Set<string>();
         const usedSupports = new Set<string>();
         const current: [string, string, string][] = [];
