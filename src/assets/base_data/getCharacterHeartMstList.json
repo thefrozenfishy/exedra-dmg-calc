@@ -168,9 +168,21 @@
         "paramUpGroupId": 2
     },
     {
+        "characterHeartMstId": 1059,
+        "characterMstId": 1059,
+        "objectRewardGroupId": 1059,
+        "paramUpGroupId": 1
+    },
+    {
         "characterHeartMstId": 1061,
         "characterMstId": 1061,
         "objectRewardGroupId": 1061,
+        "paramUpGroupId": 1
+    },
+    {
+        "characterHeartMstId": 1062,
+        "characterMstId": 1062,
+        "objectRewardGroupId": 1062,
         "paramUpGroupId": 1
     },
     {

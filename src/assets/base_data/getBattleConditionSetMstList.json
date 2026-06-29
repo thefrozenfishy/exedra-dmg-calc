@@ -16335,9 +16335,44 @@
         "description": "行動者は自分+戦闘スキルを発動したとき+敵チームに1以上のダメージを与えたとき"
     },
     {
+        "battleConditionMstIdCsv": "1619,407",
+        "battleConditionSetMstId": 3300,
+        "description": "自身のHPが25%未満のとき+自身にシールドが貼られている"
+    },
+    {
+        "battleConditionMstIdCsv": "1620,1621,407",
+        "battleConditionSetMstId": 3301,
+        "description": "自身のHPが25%以上のとき+対象のHPが51%未満のとき+自身にシールドが貼られている"
+    },
+    {
+        "battleConditionMstIdCsv": "1622,1623,407",
+        "battleConditionSetMstId": 3302,
+        "description": "自身のHPが51%以上のとき+対象のHPが91%未満のとき+自身にシールドが貼られている"
+    },
+    {
+        "battleConditionMstIdCsv": "1624,407",
+        "battleConditionSetMstId": 3303,
+        "description": "自身のHPが91%以上のとき+自身にシールドが貼られている"
+    },
+    {
+        "battleConditionMstIdCsv": "7,507",
+        "battleConditionSetMstId": 3304,
+        "description": "毒状態の敵が1体以上存在する場合に必殺技を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "2024",
+        "battleConditionSetMstId": 3305,
+        "description": "敵軍のデバフ数が5以上のとき"
+    },
+    {
         "battleConditionMstIdCsv": "1650,1695",
         "battleConditionSetMstId": 3306,
         "description": "アタッカー(個別対象)＋トークンが1000以上の時"
+    },
+    {
+        "battleConditionMstIdCsv": "2025",
+        "battleConditionSetMstId": 3307,
+        "description": "敵軍のデバフ数が2以上"
     },
     {
         "battleConditionMstIdCsv": "5,3",
@@ -16345,8 +16380,278 @@
         "description": "通常攻撃発動したとき+行動者は自分"
     },
     {
+        "battleConditionMstIdCsv": "972,1,655,5",
+        "battleConditionSetMstId": 3309,
+        "description": "水属性の仲間がダメージを与えたとき(通常攻撃発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "972,1,655,6",
+        "battleConditionSetMstId": 3310,
+        "description": "水属性の仲間がダメージを与えたとき(戦闘スキル発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "972,1,655,7",
+        "battleConditionSetMstId": 3311,
+        "description": "水属性の仲間がダメージを与えたとき(必殺技発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "2026",
+        "battleConditionSetMstId": 3312,
+        "description": "水着いろはのフィールドが発動しているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "306,2027",
+        "battleConditionSetMstId": 3313,
+        "description": "追撃を発動したとき+水着環いろはフィールドがない"
+    },
+    {
+        "battleConditionMstIdCsv": "2027",
+        "battleConditionSetMstId": 3314,
+        "description": "水着いろはのフィールドが発動していないとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2028",
+        "battleConditionSetMstId": 3315,
+        "description": "水着いろはの専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "281,1,522,5,2028",
+        "battleConditionSetMstId": 3316,
+        "description": "水着いろはの専用バフが付与されているとき+クリティカルダメージが発生したとき+通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "281,1,522,6,2028",
+        "battleConditionSetMstId": 3317,
+        "description": "水着いろはの専用バフが付与されているとき+クリティカルダメージが発生したとき+戦闘スキル"
+    },
+    {
+        "battleConditionMstIdCsv": "281,1,522,7,2028",
+        "battleConditionSetMstId": 3318,
+        "description": "水着いろはの専用バフが付与されているとき+クリティカルダメージが発生したとき+必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "3,655",
+        "battleConditionSetMstId": 3319,
+        "description": "自分は行動者、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2034",
+        "battleConditionSetMstId": 3320,
+        "description": "敵軍のデバフ数が3以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2030",
+        "battleConditionSetMstId": 3321,
+        "description": "敵軍のデバフ数が4以上"
+    },
+    {
+        "battleConditionMstIdCsv": "752,1338,3",
+        "battleConditionSetMstId": 3322,
+        "description": "デバフ効果が1個の敵に対して　攻撃(対象メイン)　行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "753,1338,3",
+        "battleConditionSetMstId": 3323,
+        "description": "デバフ効果が2個の敵に対して　攻撃(対象メイン)　行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "801,1338,3",
+        "battleConditionSetMstId": 3324,
+        "description": "デバフ効果が3個の敵に対して　攻撃(対象メイン)　行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "1775,1338,3",
+        "battleConditionSetMstId": 3325,
+        "description": "デバフ効果が4個以上の敵に対して　攻撃(対象メイン)　行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "2028,306",
+        "battleConditionSetMstId": 3326,
+        "description": "水着いろはの専用バフが付与されているとき+追撃発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2028,6",
+        "battleConditionSetMstId": 3327,
+        "description": "水着いろはの専用バフが付与されているとき+戦闘スキル発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,6,3,1505",
+        "battleConditionSetMstId": 3328,
+        "description": "自身がプレイヤー側のユニットのとき+行動タイプがスキル攻撃+行動者は自身+結界対策発揮フェーズのとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,306,3,1505",
+        "battleConditionSetMstId": 3329,
+        "description": "自身がプレイヤー側のユニットのとき+ 追撃・反撃・援護を発動したとき+行動者は自身++結界対策発揮フェーズのとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,1462,3,1505",
+        "battleConditionSetMstId": 3330,
+        "description": "自身がプレイヤー側のユニットのとき+行動タイプがエーテルブロウ+行動者は自身++結界対策発揮フェーズのとき"
+    },
+    {
+        "battleConditionMstIdCsv": "522,7,2033,1",
+        "battleConditionSetMstId": 3331,
+        "description": "行動者は自分ではない+ブレイカー+必殺技を発動+行動者は味方"
+    },
+    {
+        "battleConditionMstIdCsv": "7,3,2028",
+        "battleConditionSetMstId": 3332,
+        "description": "水着いろはの専用バフが付与されているとき+自身が必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "306,2026",
+        "battleConditionSetMstId": 3333,
+        "description": "水着いろはのフィールドが発動しているとき+追撃を発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,2032,5",
+        "battleConditionSetMstId": 3334,
+        "description": "行動者は敵 AND 行動タイプが通常攻撃 AND 攻撃を受けた味方が1体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,2032,6",
+        "battleConditionSetMstId": 3335,
+        "description": "行動者は敵 AND 行動タイプがスキル攻撃 AND 攻撃を受けた味方が1体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,2032,7",
+        "battleConditionSetMstId": 3336,
+        "description": "行動者は敵 AND 行動タイプが必殺技 AND 攻撃を受けた味方が1体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1507",
+        "battleConditionSetMstId": 3337,
+        "description": "行動者は敵 AND 自身がカウントダウン発動中のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "285,1507",
+        "battleConditionSetMstId": 3338,
+        "description": "トークンが5のとき AND 自身がカウントダウン発動中のとき"
+    },
+    {
         "battleConditionMstIdCsv": "1403,1",
         "battleConditionSetMstId": 3339,
         "description": "行動者は仲間＋敵全体で1体でもブレイクしたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1748,870",
+        "battleConditionSetMstId": 3340,
+        "description": "トークンが16以上20未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1634,5",
+        "battleConditionSetMstId": 3341,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に1体クリティカルダメージが発生したとき AND 行動タイプが通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1635,5",
+        "battleConditionSetMstId": 3342,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に2体クリティカルダメージが発生したとき AND 行動タイプが通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1636,5",
+        "battleConditionSetMstId": 3343,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に3体クリティカルダメージが発生したとき AND 行動タイプが通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1637,5",
+        "battleConditionSetMstId": 3344,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に4体クリティカルダメージが発生したとき AND 行動タイプが通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1638,5",
+        "battleConditionSetMstId": 3345,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に5体クリティカルダメージが発生したとき AND 行動タイプが通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1634,6",
+        "battleConditionSetMstId": 3346,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に1体クリティカルダメージが発生したとき AND 行動タイプがスキル攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1635,6",
+        "battleConditionSetMstId": 3347,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に2体クリティカルダメージが発生したとき AND 行動タイプがスキル攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1636,6",
+        "battleConditionSetMstId": 3348,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に3体クリティカルダメージが発生したとき AND 行動タイプがスキル攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1637,6",
+        "battleConditionSetMstId": 3349,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に4体クリティカルダメージが発生したとき AND 行動タイプがスキル攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1638,6",
+        "battleConditionSetMstId": 3350,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に5体クリティカルダメージが発生したとき AND 行動タイプがスキル攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1634,7",
+        "battleConditionSetMstId": 3351,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に1体クリティカルダメージが発生したとき AND 行動タイプが必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1635,7",
+        "battleConditionSetMstId": 3352,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に2体クリティカルダメージが発生したとき AND 行動タイプが必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1636,7",
+        "battleConditionSetMstId": 3353,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に3体クリティカルダメージが発生したとき AND 行動タイプが必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1637,7",
+        "battleConditionSetMstId": 3354,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に4体クリティカルダメージが発生したとき AND 行動タイプが必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1638,7",
+        "battleConditionSetMstId": 3355,
+        "description": "行動者は敵 AND 一度の攻撃で自軍に5体クリティカルダメージが発生したとき AND 行動タイプが必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "401,1507",
+        "battleConditionSetMstId": 3383,
+        "description": "トークンが10のとき AND 自身がカウントダウン発動中のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2052",
+        "battleConditionSetMstId": 3384,
+        "description": "自分のキャラクターが「都ひなの」"
+    },
+    {
+        "battleConditionMstIdCsv": "2053",
+        "battleConditionSetMstId": 3385,
+        "description": "自分のキャラクターが「木崎衣美里」"
+    },
+    {
+        "battleConditionMstIdCsv": "2055",
+        "battleConditionSetMstId": 3390,
+        "description": "自軍のデバフ数が2以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2056",
+        "battleConditionSetMstId": 3391,
+        "description": "自軍のデバフ数が3"
+    },
+    {
+        "battleConditionMstIdCsv": "2057",
+        "battleConditionSetMstId": 3392,
+        "description": "自軍のデバフ数が4"
+    },
+    {
+        "battleConditionMstIdCsv": "2058",
+        "battleConditionSetMstId": 3393,
+        "description": "自軍のデバフ数が5以上"
+    },
+    {
+        "battleConditionMstIdCsv": "7,916,3,435",
+        "battleConditionSetMstId": 3401,
+        "description": "行動タイプが必殺技 AND 攻撃した+行動者は自分+毒状態の敵が1体以上"
     }
 ]
