@@ -425,7 +425,7 @@ export interface KiokuArgs {
     magicLvl: number;
     heartphialLvl: number;
     portrait?: string;
-    supportKey?: any[];
+    support?: any;
     crysIDs: number[];
     subCrysIDs: number[]
     ascension: number;

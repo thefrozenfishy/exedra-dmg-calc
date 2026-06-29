@@ -1,8 +1,17 @@
-import { KiokuArgs, KiokuData, Portrait, StyleParamUpEffect } from '../types/KiokuTypes';
+import { KiokuArgs, KiokuData, KiokuRole, Portrait, StyleParamUpEffect } from '../types/KiokuTypes';
 import { portraits, kiokuData, crystalises, characterHeart, characterHeartParamUpGroup, styleParamUpEffect, styleParamUp } from '../utils/helpers';
-import { fromKey } from '../models/BestTeamCalculator';
 
 const KIOKU_LEVEL_BREAKPOINTS = [1, 120, 140, 160, 180, 200] as const;
+
+// Fetched from config.json cause I'm lazy
+const ROLE_COEFFICIENTS: Record<string, { hp: number; atk: number; def: number }> = {
+    [KiokuRole.Attacker]: { hp: 950, atk: 1100, def: 950 },
+    [KiokuRole.Breaker]: { hp: 1000, atk: 1000, def: 1000 },
+    [KiokuRole.Healer]: { hp: 1000, atk: 1000, def: 1000 },
+    [KiokuRole.Buffer]: { hp: 1000, atk: 1000, def: 1000 },
+    [KiokuRole.Debuffer]: { hp: 1000, atk: 1000, def: 1000 },
+    [KiokuRole.Defender]: { hp: 1050, atk: 800, def: 1150 }
+};
 
 const linear_interpolation = (a: number, b: number, t: number) =>
     a + (b - a) * t;
@@ -69,9 +78,30 @@ export class Kioku {
         return Math.floor(this.kiokuHp * (1 + 0.02 * this.ascension)) + Math.floor((this.support?.getBaseHp() ?? 0) * 0.16) + (this.portrait?.stats?.hp ?? 0) + this.magicHp + this.heartHp;
     }
 
+    getTotalPower(): number {
+        const roleCoeff = ROLE_COEFFICIENTS[this.data.role]
+        const hpTerm = (100 / 1000) * this.getBaseHp() * (roleCoeff.hp / 1000);
+        const atkTerm = (300 / 1000) * this.getBaseAtk() * (roleCoeff.atk / 1000);
+        const defTerm = (300 / 1000) * this.getBaseDef() * (roleCoeff.def / 1000);
+        const baseStatsBracket = hpTerm + atkTerm + defTerm;
+
+        const critModifierBracket = ((this.baseCritRate / 1000) * (this.baseCritDamage / 1000)) + 1.0;
+
+        const baseSkillVal = 1000 / 1000.0;
+        const normalSkillTerm = (this.attackLvl * 30) / 1000.0;
+        const activeSkillTerm = (this.skillLvl * 120) / 1000.0;
+        const passiveSkillTerm = (this.abilityLvl * 100) / 1000.0;
+        const specialAttackTerm = this.data.rarity === 3 ? 0 : (this.specialLvl * 150) / 1000.0;
+
+        const skillModifierBracket = baseSkillVal + normalSkillTerm + activeSkillTerm + passiveSkillTerm + specialAttackTerm;
+
+        const finalPowerFloat = baseStatsBracket * critModifierBracket * skillModifierBracket;
+        return Math.floor(finalPowerFloat);
+    }
+
     constructor({
         name,
-        supportKey,
+        support,
         portrait,
         ascension,
         kiokuLvl,
@@ -85,7 +115,7 @@ export class Kioku {
         this.data = kiokuData[name];
 
         if (portrait) this.portrait = portraits[portrait]
-        if (supportKey) this.support = fromKey(supportKey);
+        if (support) this.support = support;
 
         this.inputCrysIDs = crysIDs?.filter(Boolean) ?? [];
         this.inputSubCrysIDs = subCrysIDs?.filter(Boolean) ?? [];
@@ -207,5 +237,22 @@ export class Kioku {
             this.inputCrysIDs,
             this.inputSubCrysIDs,
         ];
+    }
+
+    static fromKey(key: any[]): Kioku {
+        if (!key || key.length === 0) return undefined as any;
+
+        return new Kioku({
+            name: key[0],
+            support: key[1] ? Kioku.fromKey(key[1]) : undefined,
+            portrait: key[2],
+            ascension: key[3],
+            kiokuLvl: key[4],
+            magicLvl: key[5],
+            heartphialLvl: key[6],
+            specialLvl: key[7],
+            crysIDs: key[8],
+            subCrysIDs: key[9],
+        });
     }
 }

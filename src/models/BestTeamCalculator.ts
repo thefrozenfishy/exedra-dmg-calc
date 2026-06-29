@@ -71,7 +71,7 @@ function getKioku({
     if (!cache.has(key)) {
         cache.set(key, new ScoreAttackKioku({
             name,
-            supportKey,
+            support: supportKey ? fromKey(supportKey) : undefined,
             portrait,
             ascension,
             kiokuLvl,
