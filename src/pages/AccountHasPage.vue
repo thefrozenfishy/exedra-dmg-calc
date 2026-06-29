@@ -1,5 +1,7 @@
 <template>
-    <div class="ascension-list">
+    <div class="setup-page ascension-list">
+        <h1 class="page-title">Your Kioku</h1>
+
         <div v-if="isReadonly || isViewingBannerOpen" class="viewing-banner">
             <span class="viewing-label">Viewing:</span>
             <FriendPickerBadge hide-self side="left" :current-code="viewingFriendCode" placeholder="Select a friend…"
@@ -24,47 +26,67 @@
             </button>
         </div>
 
-        <ImageActionsToolbar target=".ascension-table" filename="ascension.png" :export-options="exportOpts"
-            :share-options="shareOptionsForAscensionList">
-            <button class="icon-btn" :title="hyperlinkCopied ? 'Copied!' : 'Copy page link'"
-                :aria-label="hyperlinkCopied ? 'Copied!' : 'Copy page link'" @click="copyHyperLink">
-                <svg v-if="hyperlinkCopied" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M20 6L9 17l-5-5" />
-                </svg>
-                <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                </svg>
-            </button>
-        </ImageActionsToolbar>
-
-        <div>
-            <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
-            <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
-            <label> <input type="checkbox" v-model="showUnowned" /> Include Unowned </label>
-            <label v-if="showOffElementalOnesOption">
-                <input type="checkbox" v-model="showOffElementalOnes" />
-                Include off-elemental crys in count
-            </label>
-        </div>
-        <div>
-            <label> <input type="checkbox" v-model="showLevels" /> Show Magic and Special levels </label>
-            <label> <input type="checkbox" v-model="showHearts" /> Show Heartphial levels </label>
-            <label> <input type="checkbox" v-model="showDupes" /> Show Dupes </label>
-            <label>
-                <input type="checkbox" v-model="showCrys" />
-                Show Crys Counter
-            </label>
-            <div>
-
-                <label> <input type="checkbox" v-model="highlightCompleted" /> Highlight Completed </label>
-                <label> <input type="checkbox" :disabled="!(showLevels || showHearts)" v-model="colourLevels" />
-                    Colour max levels
-                </label>
+        <section class="toolbar card">
+            <div class="toolbar-left">
+                <ImageActionsToolbar target=".ascension-table" filename="ascension.png" :export-options="exportOpts"
+                    :share-options="shareOptionsForAscensionList">
+                    <button class="icon-btn icon-btn--accent" :title="hyperlinkCopied ? 'Copied!' : 'Copy page link'"
+                        :aria-label="hyperlinkCopied ? 'Copied!' : 'Copy page link'" @click="copyHyperLink">
+                        <svg v-if="hyperlinkCopied" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M20 6L9 17l-5-5" />
+                        </svg>
+                        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                        </svg>
+                    </button>
+                </ImageActionsToolbar>
             </div>
-        </div>
+        </section>
+
+        <section class="filters card">
+            <span class="filters-heading">Roster</span>
+
+            <label class="chip" :class="{ active: show3stars }">
+                <input type="checkbox" v-model="show3stars" /> ★★★
+            </label>
+            <label class="chip" :class="{ active: show4stars }">
+                <input type="checkbox" v-model="show4stars" /> ★★★★
+            </label>
+            <label class="chip" :class="{ active: showUnowned }">
+                <input type="checkbox" v-model="showUnowned" /> Unowned
+            </label>
+            <label v-if="showOffElementalOnesOption" class="chip" :class="{ active: showOffElementalOnes }">
+                <input type="checkbox" v-model="showOffElementalOnes" /> Off-elemental crys in count
+            </label>
+        </section>
+
+        <section class="filters card">
+            <span class="filters-heading">Display</span>
+
+            <label class="chip" :class="{ active: showLevels }">
+                <input type="checkbox" v-model="showLevels" /> Magic &amp; Special levels
+            </label>
+            <label class="chip" :class="{ active: showHearts }">
+                <input type="checkbox" v-model="showHearts" /> Heartphial levels
+            </label>
+            <label class="chip" :class="{ active: showDupes }">
+                <input type="checkbox" v-model="showDupes" /> Dupes
+            </label>
+            <label class="chip" :class="{ active: showCrys }">
+                <input type="checkbox" v-model="showCrys" /> Crys counter
+            </label>
+            <label class="chip" :class="{ active: highlightCompleted }">
+                <input type="checkbox" v-model="highlightCompleted" /> Highlight completed
+            </label>
+            <label class="chip" :class="{ active: colourLevels, disabled: !(showLevels || showHearts) }">
+                <input type="checkbox" :disabled="!(showLevels || showHearts)" v-model="colourLevels" /> Colour max
+                levels
+            </label>
+        </section>
+
         <table class="ascension-table" @click.self="isTouchJiggleMode = false">
             <tbody @click.self="isTouchJiggleMode = false">
                 <tr :data-index="index" :class="{ 'drag-over': dragOver === index }"
@@ -170,66 +192,89 @@
                 </tr>
             </tbody>
         </table>
-        <div class="extra-input" v-if="!showDupes">
-            +500s collected:
+        <div class="card extra-input" v-if="!showDupes">
+            <span class="filters-heading">+500s collected</span>
             <input type="number" v-model.number="extraCollected" />
         </div>
-        <div class="total-ascensions">
-            <div>
-                Total SSRs collected: {{ totalAscensions + extraTotal }}
+        <section class="card stats-card">
+            <span class="filters-heading">Collection stats</span>
+            <div class="stat-row">
+                <span class="stat-label">Total SSRs collected</span>
+                <span class="stat-value">{{ totalAscensions + extraTotal }}</span>
             </div>
-            <div>
-                Standard roster collected: {{ totalStandards }} / {{ totalPossibleStandards }} ({{ round(totalStandards
-                    / totalPossibleStandards * 100) }}%)
+            <div class="stat-row">
+                <span class="stat-label">Standard roster collected</span>
+                <span class="stat-value">{{ totalStandards }} / {{ totalPossibleStandards }}
+                    ({{ round(totalStandards / totalPossibleStandards * 100) }}%)</span>
             </div>
-            <div>
-                ({{ extraTotal }} / {{ round(extraTotal / (totalStandards + extraTotal) * 100) }}% of your collected
-                standard SSRs
-                have been +500s)
+            <div class="stat-row stat-row-sub">
+                <span class="stat-label">— of which +500s</span>
+                <span class="stat-value">{{ extraTotal }}
+                    ({{ round(extraTotal / (totalStandards + extraTotal) * 100) }}%)</span>
             </div>
-            <div>
-                Limited roster collected: {{ totalLimiteds }} / {{ totalPossibleLimiteds }} ({{ round(totalLimiteds /
-                    totalPossibleLimiteds * 100) }}%)
+            <div class="stat-row">
+                <span class="stat-label">Limited roster collected</span>
+                <span class="stat-value">{{ totalLimiteds }} / {{ totalPossibleLimiteds }}
+                    ({{ round(totalLimiteds / totalPossibleLimiteds * 100) }}%)</span>
             </div>
-            <div>
-                Probability of hitting non A5 on standard pull:
-                {{ standardPool.length - ownedA5StandardPool.length }} / {{ standardPool.length }} |
-                {{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100) }}%
+            <div class="stat-row">
+                <span class="stat-label">Chance of non-A5 on standard pull</span>
+                <span class="stat-value">{{ standardPool.length - ownedA5StandardPool.length }} / {{ standardPool.length
+                    }}
+                    ({{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100)
+                    }}%)</span>
             </div>
-        </div>
-        <h4 style="margin-bottom: 0;">Maxed Heartphial-, Magic-, & Special level kioku with all (not off element) crys
-            collected:</h4>
-        <div>
-            5-stars: {{ maxed5starChars.length }} / {{ ownedFiveStars.length }}
-            ({{ round(maxed5starChars.length / ownedFiveStars.length * 100) }}%)
-        </div>
-        <div v-if="show4stars">
-            4-stars: {{ maxed4starChars.length }} / {{ fourStarMembers.length }}
-            ({{ round(maxed4starChars.length / (fourStarMembers.length) * 100) }}%)
-        </div>
-        <div v-if="show3stars">
-            3-stars: {{ maxed3starChars.length }} / {{ threeStarMembers.length }}
-            ({{ round(maxed3starChars.length / (threeStarMembers.length) * 100) }}%)
-        </div>
-        <template v-if="showCrys">
-            <h4>Crys yet to collect</h4>
-            <div>5 stars: {{ missingCrys5stars }}</div>
-            <div v-if="show4stars">4 stars: {{ missingCrys4stars }}</div>
-            <div v-if="show3stars">3 stars: {{ missingCrys3stars }}</div>
-        </template>
-        <div>
-            <h4 style="margin-bottom: 0;">About:</h4>
-            You can edit, export, and import your kioku on the Team Setup page, or edit here directly.<br />
-            Red borders indicate limited characters, yellow borders indicate characters not yet added to the permanent
-            roster, and transparent borders indicate standard permanent characters.
-            For crys counter red indicates some crys are missing, yellow that some are missing, but the elemental crys
-            has been
-            collected, and green that all not off-elemental crys have been collected.
-            Maxed out kioku are given a golden colour to indicate their completeness.
-            <template v-if="showOffElementalOnesOption">Truly perfected kioku with
-                all crys,
-                including off elemental ones, are given a diamond border!</template>
-        </div>
+        </section>
+
+        <section class="card stats-card">
+            <span class="filters-heading">Maxed kioku (Heartphial, Magic &amp; Special level, all on-element
+                crys)</span>
+            <div class="stat-row">
+                <span class="stat-label">5-stars</span>
+                <span class="stat-value">{{ maxed5starChars.length }} / {{ ownedFiveStars.length }}
+                    ({{ round(maxed5starChars.length / ownedFiveStars.length * 100) }}%)</span>
+            </div>
+            <div class="stat-row" v-if="show4stars">
+                <span class="stat-label">4-stars</span>
+                <span class="stat-value">{{ maxed4starChars.length }} / {{ fourStarMembers.length }}
+                    ({{ round(maxed4starChars.length / (fourStarMembers.length) * 100) }}%)</span>
+            </div>
+            <div class="stat-row" v-if="show3stars">
+                <span class="stat-label">3-stars</span>
+                <span class="stat-value">{{ maxed3starChars.length }} / {{ threeStarMembers.length }}
+                    ({{ round(maxed3starChars.length / (threeStarMembers.length) * 100) }}%)</span>
+            </div>
+        </section>
+
+        <section class="card stats-card" v-if="showCrys">
+            <span class="filters-heading">Crys yet to collect</span>
+            <div class="stat-row">
+                <span class="stat-label">5-stars</span>
+                <span class="stat-value">{{ missingCrys5stars }}</span>
+            </div>
+            <div class="stat-row" v-if="show4stars">
+                <span class="stat-label">4-stars</span>
+                <span class="stat-value">{{ missingCrys4stars }}</span>
+            </div>
+            <div class="stat-row" v-if="show3stars">
+                <span class="stat-label">3-stars</span>
+                <span class="stat-value">{{ missingCrys3stars }}</span>
+            </div>
+        </section>
+
+        <section class="card about-card">
+            <span class="filters-heading">About</span>
+            <p>
+                You can edit, export, and import your kioku on the Team Setup page, or edit here directly.<br />
+                Red borders indicate limited characters, yellow borders indicate characters not yet added to the
+                permanent roster, and transparent borders indicate standard permanent characters.
+                For crys counter, red indicates some crys are missing, yellow that some are missing but the elemental
+                crys has been collected, and green that all on-element crys have been collected.
+                Maxed out kioku are given a golden glow to indicate their completeness.
+                <template v-if="showOffElementalOnesOption">Truly perfected kioku with all crys, including
+                    off-elemental ones, are given a diamond border!</template>
+            </p>
+        </section>
     </div>
 </template>
 
@@ -653,6 +698,119 @@ const onTouchEnd = (e: TouchEvent) => {
 </script>
 
 <style scoped>
+/* ── Page (shared design system) ── */
+.setup-page {
+    padding: 0 0 4rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    margin: 0 0 0.25rem;
+    color: var(--text);
+}
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.65rem 1rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toolbar {
+    justify-content: space-between;
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: var(--muted);
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+    user-select: none;
+}
+
+.chip input {
+    display: none;
+}
+
+.chip.active {
+    background: var(--accent-glow);
+    border-color: var(--border-strong);
+    color: var(--accent);
+}
+
+.chip.disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.filters-heading {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-right: 0.25rem;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+/* ── Stats / about cards ── */
+.stats-card,
+.about-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.3rem;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.88rem;
+    padding: 0.15rem 0;
+}
+
+.stat-row-sub {
+    padding-left: 1rem;
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.stat-label {
+    color: var(--muted);
+}
+
+.stat-value {
+    color: var(--text);
+    font-weight: 600;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.about-card p {
+    margin: 0.3rem 0 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
 .ascension-list {
     max-width: 900px;
     margin: 0 auto;
@@ -856,10 +1014,10 @@ td {
 .jiggle-hint {
     width: 100%;
     font-size: 0.7rem;
-    color: var(--accent-soft, #f6d682);
-    background: rgba(246, 214, 130, 0.08);
-    border: 1px solid rgba(246, 214, 130, 0.25);
-    border-radius: 6px;
+    color: var(--accent-soft);
+    background: var(--accent-glow);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
     padding: 0.25rem 0.5rem;
     margin-bottom: 0.25rem;
     text-align: center;
@@ -878,28 +1036,12 @@ td {
     }
 }
 
-.total-ascensions {
-    margin-top: 1rem;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--text);
-}
-
-.extra-input {
-    margin-top: 1rem;
-    text-align: center;
-    color: var(--text);
-    font-size: 1rem;
-}
-
 .extra-input input {
-    margin-left: 0.5rem;
-    padding: 0.2rem 0.4rem;
-    width: 80px;
+    padding: 0.2rem 0.5rem;
+    width: 90px;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     color: var(--text);
 }
 
@@ -927,7 +1069,7 @@ td {
 }
 
 .level-badge:hover {
-    border: 1px solid rgba(246, 214, 130, 0.35);
+    border: 1px solid var(--border-strong);
 }
 
 .special-level-badge {
@@ -1001,9 +1143,9 @@ td {
 
     margin-bottom: 1rem;
     padding: 0.6rem 0.9rem;
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     background: var(--panel);
-    border: 1px solid rgba(246, 214, 130, 0.35);
+    border: 1px solid var(--border-strong);
 }
 
 .viewing-label {
@@ -1019,7 +1161,7 @@ td {
     margin-left: auto;
     padding: 0.3rem 0.75rem;
     background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(246, 214, 130, 0.45);
+    border: 1px solid var(--border-strong);
     border-radius: 999px;
     color: var(--accent-soft);
     font-size: 0.82rem;
@@ -1038,7 +1180,7 @@ td {
     margin-right: auto;
     padding: 0.3rem 0.75rem;
     background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(246, 214, 130, 0.45);
+    border: 1px solid var(--border-strong);
     border-radius: 999px;
     color: var(--accent-soft);
     font-size: 0.82rem;
@@ -1059,9 +1201,9 @@ td {
     gap: 0.75rem;
     margin-bottom: 1rem;
     padding: 0.5rem 0.9rem;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
 }
 
 .viewing-own-label {

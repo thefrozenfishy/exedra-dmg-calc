@@ -1,9 +1,6 @@
 <template>
   <div class="setup-page">
     <h1 class="page-title">Kioku Setup</h1>
-    <p class="page-subtitle">
-      Defaults used in Single Battle Simulator and Best Team calculator.
-    </p>
 
     <section class="toolbar card">
       <div class="toolbar-left">
@@ -243,12 +240,6 @@ export default defineComponent({
   font-size: 2rem;
   margin: 0 0 0.25rem;
   color: var(--text);
-}
-
-.page-subtitle {
-  font-size: 0.85rem;
-  color: var(--muted);
-  margin: 0 0 1.25rem;
 }
 
 /* ── Cards ── */

@@ -1,8 +1,8 @@
 <template>
-    <div class="diff-page">
-        <div class="header">
-            <h1>Account Comparison</h1>
+    <div class="setup-page diff-page">
+        <h1 class="page-title">Account Comparison</h1>
 
+        <div class="header">
             <div class="subtitle" v-if="leftCode && rightCode">
                 <FriendPickerBadge side="left" :current-code="leftCode" placeholder="Left account" @pick="onPickLeft" />
                 <div class="graph-meta">
@@ -31,11 +31,11 @@
             </div>
         </div>
 
-        <div class="controls" v-if="leftCode && rightCode">
-            <div>
+        <section class="toolbar card" v-if="leftCode && rightCode">
+            <div class="toolbar-left">
                 <ImageActionsToolbar target=".graph-container" :filename="filename" :export-options="exportOpts"
                     :share-options="shareOptionsForComparison">
-                    <button class="icon-btn" :title="hyperlinkCopied ? 'Copied!' : 'Copy page link'"
+                    <button class="icon-btn icon-btn--accent" :title="hyperlinkCopied ? 'Copied!' : 'Copy page link'"
                         :aria-label="hyperlinkCopied ? 'Copied!' : 'Copy page link'" @click="copyHyperLink">
                         <svg v-if="hyperlinkCopied" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -49,21 +49,23 @@
                     </button>
                 </ImageActionsToolbar>
             </div>
-            <div>
-                <label>
-                    <input type="checkbox" v-model="showEqual" />
-                    Show equal units
+
+            <div class="toolbar-right filters-inline">
+                <span class="filters-heading">Filters</span>
+
+                <label class="chip" :class="{ active: showEqual }">
+                    <input type="checkbox" v-model="showEqual" /> Show equal units
                 </label>
-                <label>
-                    <input type="checkbox" v-model="showUnowned" />
-                    Show units owned by neither party
+
+                <label class="chip" :class="{ active: showUnowned }">
+                    <input type="checkbox" v-model="showUnowned" /> Show units owned by neither party
                 </label>
-                <label>
-                    <input type="checkbox" v-model="collapseEmptyRows" />
-                    Collapse empty rows
+
+                <label class="chip" :class="{ active: collapseEmptyRows }">
+                    <input type="checkbox" v-model="collapseEmptyRows" /> Collapse empty rows
                 </label>
             </div>
-        </div>
+        </section>
 
         <div class="graph-container" v-if="leftCode && rightCode">
 
@@ -217,8 +219,8 @@ const loadBothSides = async () => {
         loadFriendKioku(rightCode.value),
     ])
 
-    leftCharacters.value = leftRows
-    rightCharacters.value = rightRows
+    leftCharacters.value = leftRows.filter(Boolean)
+    rightCharacters.value = rightRows.filter(Boolean)
 
     leftProfile.value = lProfile
     rightProfile.value = rProfile
@@ -403,6 +405,80 @@ const copyHyperLink = async () => {
 </script>
 
 <style scoped>
+/* ── Page (shared design system) ── */
+.setup-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 0 4rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    margin: 0 0 0.25rem;
+    color: var(--text);
+}
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.65rem 1rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toolbar {
+    justify-content: space-between;
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: var(--muted);
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+    user-select: none;
+}
+
+.chip input {
+    display: none;
+}
+
+.chip.active {
+    background: var(--accent-glow);
+    border-color: var(--border-strong);
+    color: var(--accent);
+}
+
+.filters-heading {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-right: 0.25rem;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.filters-inline {
+    flex-wrap: wrap;
+}
+
 .graph-meta {
     display: flex;
     flex-direction: column;
@@ -575,6 +651,17 @@ const copyHyperLink = async () => {
     margin: 0 auto;
 }
 
+.setup-page.diff-page {
+    max-width: none;
+}
+
+.setup-page.diff-page>.header,
+.setup-page.diff-page>.toolbar {
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .header {
     margin-bottom: 1rem;
     text-align: center;
@@ -632,11 +719,6 @@ const copyHyperLink = async () => {
     gap: 1rem;
     flex-wrap: wrap;
     justify-content: center;
-}
-
-.controls {
-    margin-bottom: 1rem;
-    gap: 1rem;
 }
 
 .diff-groups {

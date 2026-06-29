@@ -10,6 +10,8 @@
   --accent: #f6d485;
   --accent-soft: #f9e2bb;
   --accent-strong: #d4a85c;
+  --accent-glow: rgba(246, 212, 133, 0.1);
+  --accent-glow-strong: rgba(246, 212, 133, 0.18);
   --info: #8bcff9;
   --info-soft: #d9e8ff;
   --success: #79d5aa;
@@ -259,35 +261,46 @@ input[type='number']:focus {
 }
 
 .icon-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 
-    width: 42px;
-    height: 42px;
+  width: 42px;
+  height: 42px;
 
-    padding: 0;
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--text, #eee);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
-    cursor: pointer;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text, #eee);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  cursor: pointer;
 
-    transition: background 0.2s ease, border-color 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .icon-btn:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 209, 110, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 209, 110, 0.35);
 }
 
 .icon-btn:disabled {
-    cursor: default;
-    opacity: 0.75;
+  cursor: default;
+  opacity: 0.75;
 }
 
 .icon-btn svg {
-    width: 20px;
-    height: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.icon-btn--accent {
+  background: var(--accent-glow);
+  border-color: var(--border-strong);
+  color: var(--accent);
+}
+
+.icon-btn--accent:hover:not(:disabled) {
+  background: var(--accent-glow-strong);
+  border-color: var(--accent);
 }

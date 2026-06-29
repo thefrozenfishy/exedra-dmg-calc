@@ -12,9 +12,9 @@ export function getAccountSimilarityScore(
     myChars: Character[],
     otherChars: Character[]
 ): number {
-    const myFiveStars = myChars.filter(ch => ch.rarity === 5 && ch.name !== "Lux☆Magica")
+    const myFiveStars = myChars.filter(ch => ch && ch.rarity === 5 && ch.name !== "Lux☆Magica")
     const myMap = new Map(myFiveStars.map(ch => [ch.id, ch]))
-    const otherFiveStars = otherChars.filter(ch => ch.rarity === 5 && ch.name !== "Lux☆Magica")
+    const otherFiveStars = otherChars.filter(ch => ch && ch.rarity === 5 && ch.name !== "Lux☆Magica")
     const otherMap = new Map(otherFiveStars.map(ch => [ch.id, ch]))
 
     let dot = 0

@@ -1,7 +1,6 @@
 <template>
     <div class="setup-page">
         <h1 class="page-title">Heartphial Progress</h1>
-        <p class="page-subtitle">Track Heartphial EXP across all your Kioku.</p>
 
         <section class="toolbar card">
             <div class="toolbar-left">
@@ -233,12 +232,6 @@ const shareOptions = () => ({
     font-size: 2rem;
     margin: 0 0 0.25rem;
     color: var(--text);
-}
-
-.page-subtitle {
-    font-size: 0.85rem;
-    color: var(--muted);
-    margin: 0 0 1.25rem;
 }
 
 .card {

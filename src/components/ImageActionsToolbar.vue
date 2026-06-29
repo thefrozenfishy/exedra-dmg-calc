@@ -2,7 +2,7 @@
     <div class="image-actions-toolbar">
         <div class="image-actions-buttons">
             <!-- Download -->
-            <button class="icon-btn" :disabled="downloadLoading || disabled"
+            <button class="icon-btn icon-btn--accent" :disabled="downloadLoading || disabled"
                 :aria-label="downloadLoading ? 'Downloading…' : 'Download image'"
                 :title="downloadLoading ? 'Downloading…' : 'Download image'" @click="handleDownload">
                 <span v-if="downloadLoading" class="icon-spinner" aria-hidden="true" />
@@ -18,7 +18,7 @@
             <slot />
 
             <!-- Share -->
-            <button class="icon-btn" :disabled="shareLinkLoading || disabled"
+            <button class="icon-btn icon-btn--accent" :disabled="shareLinkLoading || disabled"
                 :aria-label="shareLinkLoading ? 'Generating share link…' : 'Share image'"
                 :title="shareLinkLoading ? 'Generating share link…' : 'Share image'" @click="handleShare">
                 <span v-if="shareLinkLoading" class="icon-spinner" aria-hidden="true" />
@@ -42,7 +42,7 @@
                 placeholder="Click share to generate a link" />
 
             <!-- Copy icon button -->
-            <button v-if="shareLinkUrl" class="icon-btn" :aria-label="copied ? 'Copied!' : 'Copy link'"
+            <button v-if="shareLinkUrl" class="icon-btn icon-btn--accent" :aria-label="copied ? 'Copied!' : 'Copy link'"
                 :title="copied ? 'Copied!' : 'Copy link'" @click="copyShareLink">
                 <!-- Checkmark when just copied -->
                 <svg v-if="copied" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -50,8 +50,8 @@
                     <path d="M20 6L9 17l-5-5" />
                 </svg>
                 <!-- Clipboard icon normally -->
-                <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" aria-hidden="true">
+                <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <!-- back document -->
                     <rect x="9" y="9" width="13" height="13" rx="2" />
                     <!-- front document (with notch cut implied by the overlap) -->
@@ -151,15 +151,12 @@ const copyShareLink = () => {
     display: flex;
     flex-direction: column;
     gap: 8px;
-
-    margin: 10px;
 }
 
 .image-actions-buttons {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .icon-spinner {
@@ -186,7 +183,7 @@ const copyShareLink = () => {
 
     padding: 0.5rem 0.75rem;
     background: rgba(255, 255, 255, 0.06);
-    color: var(--text, #eee);
+    color: var(--text);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 10px;
 
@@ -195,11 +192,11 @@ const copyShareLink = () => {
 }
 
 .share-link-placeholder::placeholder {
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--muted);
 }
 
 .share-link-error {
-    color: #ff8a8a;
+    color: var(--danger);
     font-size: 0.9rem;
     flex-shrink: 0;
 }
