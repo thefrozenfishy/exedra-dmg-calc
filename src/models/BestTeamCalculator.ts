@@ -255,15 +255,24 @@ export async function findBestTeam({
                                     .filter(v => v !== null) as number[];
                                 if (!roleIndexes.length) continue;
 
-                                const roleCombos = combinations(activePool, Math.min(activePool.length, roleIndexes.length));
+                                const maxAssignable = Math.min(activePool.length, roleIndexes.length);
+
+                                const roleCombosBySize: any[][][] = [];
+                                for (let size = 0; size <= maxAssignable; size++) {
+                                    roleCombosBySize.push(combinations(activePool, size));
+                                }
 
                                 const expanded: any[][] = [];
                                 for (const existing of supportSupports) {
-                                    for (const combo of roleCombos) {
-                                        for (const perm of permute(combo)) {
-                                            const arr = [...existing];
-                                            for (let i = 0; i < perm.length; i++) arr[roleIndexes[i]] = perm[i];
-                                            expanded.push(arr);
+                                    for (const combos of roleCombosBySize) {
+                                        for (const combo of combos) {
+                                            for (const slotSubset of combinations(roleIndexes, combo.length)) {
+                                                for (const perm of permute(combo)) {
+                                                    const arr = [...existing];
+                                                    for (let i = 0; i < perm.length; i++) arr[slotSubset[i]] = perm[i];
+                                                    expanded.push(arr);
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -384,6 +393,14 @@ function generateRoleDistributions(otherCount: number, minHealer: number, minDef
             if (breakers >= minBreaker) {
                 distributions.push({ healers, defenders, breakers });
             }
+        }
+    }
+    if (!distributions.length && otherCount >= 0) {
+        const healers = Math.min(minHealer, otherCount);
+        const defenders = Math.min(minDefender, otherCount - healers);
+        const breakers = otherCount - healers - defenders;
+        if (breakers >= 0) {
+            distributions.push({ healers, defenders, breakers });
         }
     }
     return distributions;

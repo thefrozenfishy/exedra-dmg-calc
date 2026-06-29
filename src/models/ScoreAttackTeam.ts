@@ -9,7 +9,8 @@ const DPS_IDX = 2;
 export const knownBoosts = {
     DWN_DEF_ACCUM_RATIO: "Accumulated DEFf%-",
     DWN_DEF_RATIO: "DEF%-",
-    DWN_ELEMENT_RESIST_ACCUM_RATIO: "Elemental Resistance-",
+    DWN_ELEMENT_RESIST_ACCUM_RATIO: "Accumulated Elemental Resistance-",
+    DWN_ELEMENT_RESIST_RATIO: "Elemental Resistance-",
     FLAT_ATK: "Flat ATK",
     UP_AIM_RCV_DMG_RATIO: "Element Specific DMG Taken%+",
     UP_ATK_ACCUM_RATIO: "Accumulated ATK%+",
@@ -37,10 +38,10 @@ export const knownBoosts = {
 };
 
 const skippable = new Set([
-    "ADD_BUFF_TURN",
-    "ADD_DEBUFF_TURN",
     "ADD_BUFF_TURN_IMM",
+    "ADD_BUFF_TURN",
     "ADD_DEBUFF_TURN_IMM",
+    "ADD_DEBUFF_TURN",
     "ADDITIONAL_SKILL_ACT",
     "ADDITIONAL_TURN_UNIT_ACT",
     "BARRIER",
@@ -79,6 +80,8 @@ const skippable = new Set([
     "REMOVE_ALL_ABNORMAL",
     "REMOVE_ALL_BUFF",
     "REMOVE_ALL_DEBUFF",
+    "RESET_UNIQUE_BUFF",
+    "RESET_UNIQUE_DEBUFF",
     "SHIELD",
     "SLOW",
     "STUN",
@@ -92,8 +95,7 @@ const skippable = new Set([
     "UNIQUE_BUFF",
     "UNIQUE_DEBUFF_ACCUM",
     "UNIQUE_DEBUFF",
-    "RESET_UNIQUE_BUFF",
-    "RESET_UNIQUE_DEBUFF",
+    "UNIQUE_ZONE",
     "UP_ABNORMAL_HIT_RATE_RATIO",
     "UP_BREAK_DAMAGE_RECEIVE_RATIO",
     "UP_BREAK_EFFECT",
@@ -113,8 +115,9 @@ const skippable = new Set([
     "UP_SPD_ACCUM_RATIO",
     "UP_SPD_FIXED",
     "UP_SPD_RATIO",
-    "ZONE_STACK",
     "VORTEX_ATK",
+    "ZONE_EXPAND",
+    "ZONE_STACK",
 ]);
 
 const bannedEffects: Set<string> = new Set([
@@ -282,7 +285,6 @@ export class ScoreAttackTeam {
         }
 
         for (let ei = 0; ei < 5; ei++) {
-            this.debuffPools[ei]["DWN_DEF_ACCUM_RATIO"] = 1;
             this.debuffPools[ei]["DWN_DEF_RATIO"] = 1;
             this.debuffPools[ei]["WEAKNESS"] = 0;
         }
@@ -329,7 +331,8 @@ export class ScoreAttackTeam {
             const sourceCtx = this.allyContexts[sourceIdx];
 
             for (const detail of sourceKioku.effects) {
-                if (skippable.has(detail.abilityEffectType)) continue;
+                const baseEff = this.reduceEffect(detail.abilityEffectType)
+                if (skippable.has(baseEff)) continue;
                 if (effectIsBanned(detail)) continue;
                 if (
                     detail.startConditionSetIdCsv
@@ -337,10 +340,10 @@ export class ScoreAttackTeam {
                         .some(id => !isStartCondRelevantForScoreAttack(id, sourceKioku.maxMagicStacks, 5, this.dps.data.role))
                 ) continue;
 
-                const isDebuff = detail.abilityEffectType.startsWith("DWN_")
-                    || detail.abilityEffectType.startsWith("DOWN_")
-                    || detail.abilityEffectType.replace("AIM_", "") === "UP_RCV_DMG_RATIO"
-                    || detail.abilityEffectType === "WEAKNESS";
+                const isDebuff = baseEff.startsWith("DWN_")
+                    || baseEff.startsWith("DOWN_")
+                    || baseEff === "UP_RCV_DMG_RATIO"
+                    || baseEff === "WEAKNESS";
 
                 if (isDebuff) {
                     if (detail.element && elementMap[detail.element] !== this.dps.data.element) continue;
@@ -485,52 +488,59 @@ export class ScoreAttackTeam {
                 this.dps.maxMagicStacks,
             );
 
+            const baseEff = this.reduceEffect(detail.abilityEffectType)
             if (typeof isActiveCond === "boolean") {
                 if (!isActiveCond) return;
                 for (const dbg of [debugContributionsToDps, debugContributionsToSelf, debugDebuffContributions]) {
                     if (!dbg) continue;
-                    if (!(detail.abilityEffectType in dbg)) dbg[detail.abilityEffectType] = [];
-                    dbg[detail.abilityEffectType].push([detail, valueTotal, sourceName, dotTargetCharId, dotTargetName]);
+                    if (!(baseEff in dbg)) dbg[baseEff] = [];
+                    dbg[baseEff].push([detail, valueTotal, sourceName, dotTargetCharId, dotTargetName]);
                 }
                 if (!userBanned) {
-                    this.accumulateIntoPool(detail.abilityEffectType, valueTotal, pool);
+                    this.accumulateIntoPool(baseEff, valueTotal, pool);
                 }
             } else {
-                if (!(detail.abilityEffectType in extraPool)) {
-                    extraPool[detail.abilityEffectType] = [];
+                if (!(baseEff in extraPool)) {
+                    extraPool[baseEff] = [];
                 }
                 if (!userBanned) {
-                    extraPool[detail.abilityEffectType].push([isActiveCond, valueTotal]);
+                    extraPool[baseEff].push([isActiveCond, valueTotal]);
                 }
                 for (const dbg of [debugContributionsToDps, debugContributionsToSelf, debugDebuffContributions]) {
                     if (!dbg) continue;
-                    if (!(detail.abilityEffectType in dbg)) dbg[detail.abilityEffectType] = [];
-                    dbg[detail.abilityEffectType].push([detail, valueTotal, sourceName, dotTargetCharId, dotTargetName]);
+                    if (!(baseEff in dbg)) dbg[baseEff] = [];
+                    dbg[baseEff].push([detail, valueTotal, sourceName, dotTargetCharId, dotTargetName]);
                 }
             }
         });
     }
 
-    private accumulateIntoPool(effectType: string, value: number, pool: EffectPool) {
-        if (effectType in pool) {
-            if (["DWN_DEF_RATIO", "DWN_DEF_ACCUM_RATIO"].includes(effectType)) {
-                pool[effectType] *= 1 - value / 1000;
-            } else if (effectType === "WEAKNESS") {
-                pool[effectType] += 1;
+    private reduceEffect(eff: string) {
+        return eff.replace("_ACCUM", "").replace("_CONSUME", "").replace("_AIM", "")
+    }
+
+    private accumulateIntoPool(eff: string, value: number, pool: EffectPool) {
+        const baseEff = this.reduceEffect(eff)
+        if (baseEff in pool) {
+            if (baseEff.startsWith("DWN")) {
+                pool[baseEff] *= 1 - value / 1000;
+            } else if (baseEff === "WEAKNESS") {
+                pool[baseEff] += 1;
             } else {
-                pool[effectType] += value;
+                pool[baseEff] += value;
             }
         } else {
-            pool[effectType] = value;
+            pool[baseEff] = value;
         }
     }
 
     private getAllyEffect(allyIdx: number, eff: string, amountOfEnemies: number, maxBreak: number): number {
+        const baseEff = this.reduceEffect(eff)
         const ctx = this.allyContexts[allyIdx];
-        let val = ctx.effects[eff] ?? 0;
-        ctx.extraEffects[eff]?.forEach(([fun, v]) => {
+        let val = ctx.effects[baseEff] ?? 0;
+        ctx.extraEffects[baseEff]?.forEach(([fun, v]) => {
             if (fun(amountOfEnemies, maxBreak)) {
-                if (["DWN_DEF_RATIO", "DWN_DEF_ACCUM_RATIO"].includes(eff)) {
+                if (baseEff.startsWith("DWN")) {
                     val *= 1 - v / 1000;
                 } else {
                     val += v;
@@ -541,10 +551,11 @@ export class ScoreAttackTeam {
     }
 
     private getDebuffEffect(eff: string, enemyIdx: number, amountOfEnemies: number, maxBreak: number): number {
-        let val = this.debuffPools[enemyIdx][eff] ?? 0;
-        this.extraDebuffPools[enemyIdx][eff]?.forEach(([fun, v]) => {
+        const baseEff = this.reduceEffect(eff)
+        let val = this.debuffPools[enemyIdx][baseEff] ?? 0;
+        this.extraDebuffPools[enemyIdx][baseEff]?.forEach(([fun, v]) => {
             if (fun(amountOfEnemies, maxBreak)) {
-                if (["DWN_DEF_RATIO", "DWN_DEF_ACCUM_RATIO"].includes(eff)) {
+                if (baseEff.startsWith("DWN")) {
                     val *= 1 - v / 1000;
                 } else {
                     val += v;
@@ -570,9 +581,7 @@ export class ScoreAttackTeam {
         const statKey = useDef ? "DEF" : "ATK";
 
         const atkPlus =
-            (this.getAllyEffect(allyIdx, `UP_${statKey}_RATIO`, amountOfEnemies, maxBreak) +
-                this.getAllyEffect(allyIdx, `UP_${statKey}_CONSUME_RATIO`, amountOfEnemies, maxBreak) +
-                this.getAllyEffect(allyIdx, `UP_${statKey}_ACCUM_RATIO`, amountOfEnemies, maxBreak)) /
+            (this.getAllyEffect(allyIdx, `UP_${statKey}_RATIO`, amountOfEnemies, maxBreak)) /
             1000;
 
         const flatAtk = this.getAllyEffect(allyIdx, `UP_${statKey}_FIXED`, amountOfEnemies, maxBreak);
@@ -595,11 +604,10 @@ export class ScoreAttackTeam {
         let total = 0;
 
         const def_remaining =
-            this.getDebuffEffect("DWN_DEF_ACCUM_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) *
             this.getDebuffEffect("DWN_DEF_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) *
             (0.9 ** this.debuffPools[enemyIdx]["WEAKNESS"]);
         const elem_res_down =
-            this.getDebuffEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) / 1000;
+            this.getDebuffEffect("DWN_ELEMENT_RESIST_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) / 1000;
         const break_factor = enemy.isBreak ? enemy.maxBreak / 100 : 1;
 
         for (let allyIdx = 0; allyIdx < 5; allyIdx++) {
@@ -635,7 +643,6 @@ export class ScoreAttackTeam {
 
                 const dmg_dealt =
                     (this.getAllyEffect(allyIdx, "UP_GIV_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
-                        this.getAllyEffect(allyIdx, "UP_GIV_DMG_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak) +
                         this.getAllyEffect(allyIdx, "UP_GIV_SLIP_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
                         this.getAllyEffect(allyIdx, "UP_GIV_VORTEX_DMG_RATIO", amountOfEnemies, enemy.maxBreak) +
                         this.getAllyEffect(allyIdx, "UP_ELEMENT_DMG_RATE_RATIO", amountOfEnemies, enemy.maxBreak)) /
@@ -653,8 +660,7 @@ export class ScoreAttackTeam {
                 const crit_dmg =
                     (this.allyContexts[allyIdx].kioku.baseCritDamage +
                         this.getAllyEffect(allyIdx, "UP_CTD_FIXED", amountOfEnemies, enemy.maxBreak) +
-                        this.getAllyEffect(allyIdx, "UP_CTD_RATIO", amountOfEnemies, enemy.maxBreak) +
-                        this.getAllyEffect(allyIdx, "UP_CTD_ACCUM_RATIO", amountOfEnemies, enemy.maxBreak)) /
+                        this.getAllyEffect(allyIdx, "UP_CTD_RATIO", amountOfEnemies, enemy.maxBreak)) /
                     1000;
 
                 total +=
@@ -837,13 +843,10 @@ export class ScoreAttackTeam {
         const atk_total = this.resolveAllyAtk(DPS_IDX, uses_def, currentAmountOfEnemies, enemy.maxBreak, atk_down);
         const flat_atk = this.getAllyEffect(DPS_IDX, `UP_${uses_def ? "DEF" : "ATK"}_FIXED`, currentAmountOfEnemies, enemy.maxBreak);
         const atk_pluss =
-            (this.getAllyEffect(DPS_IDX, `UP_${uses_def ? "DEF" : "ATK"}_RATIO`, currentAmountOfEnemies, enemy.maxBreak) +
-                this.getAllyEffect(DPS_IDX, `UP_${uses_def ? "DEF" : "ATK"}_CONSUME_RATIO`, currentAmountOfEnemies, enemy.maxBreak) +
-                this.getAllyEffect(DPS_IDX, `UP_${uses_def ? "DEF" : "ATK"}_ACCUM_RATIO`, currentAmountOfEnemies, enemy.maxBreak)) /
+            (this.getAllyEffect(DPS_IDX, `UP_${uses_def ? "DEF" : "ATK"}_RATIO`, currentAmountOfEnemies, enemy.maxBreak)) /
             1000;
 
         let def_remaining =
-            this.getDebuffEffect("DWN_DEF_ACCUM_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) *
             this.getDebuffEffect("DWN_DEF_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) *
             (0.9 ** this.debuffPools[idx]["WEAKNESS"]);
 
@@ -851,7 +854,6 @@ export class ScoreAttackTeam {
 
         const uncapped_crit_rate =
             (this.dps.baseCritRate +
-                this.getAllyEffect(DPS_IDX, "UP_CTR_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
                 this.getAllyEffect(DPS_IDX, "UP_CTR_FIXED", currentAmountOfEnemies, enemy.maxBreak) +
                 this.getAllyEffect(DPS_IDX, "UP_RCV_CTR_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
                 this.getAllyEffect(DPS_IDX, "UP_CTR_RATIO", currentAmountOfEnemies, enemy.maxBreak)) /
@@ -860,13 +862,11 @@ export class ScoreAttackTeam {
         const crit_dmg =
             (this.dps.baseCritDamage +
                 this.getAllyEffect(DPS_IDX, "UP_CTD_FIXED", currentAmountOfEnemies, enemy.maxBreak) +
-                this.getAllyEffect(DPS_IDX, "UP_CTD_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
-                this.getAllyEffect(DPS_IDX, "UP_CTD_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak)) /
+                this.getAllyEffect(DPS_IDX, "UP_CTD_RATIO", currentAmountOfEnemies, enemy.maxBreak)) /
             1000;
 
         const dmg_pluss =
             (this.getAllyEffect(DPS_IDX, "UP_GIV_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
-                this.getAllyEffect(DPS_IDX, "UP_GIV_DMG_ACCUM_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
                 this.getAllyEffect(DPS_IDX, "UP_ELEMENT_DMG_RATE_RATIO", currentAmountOfEnemies, enemy.maxBreak)) /
             1000;
         const elem_dmg_up =
@@ -876,7 +876,7 @@ export class ScoreAttackTeam {
                 this.getDebuffEffect("UP_AIM_RCV_DMG_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak)) /
             1000;
         const elem_res_down =
-            this.getDebuffEffect("DWN_ELEMENT_RESIST_ACCUM_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) / 1000;
+            this.getDebuffEffect("DWN_ELEMENT_RESIST_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) / 1000;
 
         const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
         const crit_factor = 1 + (enemy.isCrit ? crit_dmg : 0);
