@@ -91,7 +91,7 @@ export class Kioku {
         const normalSkillTerm = (this.attackLvl * 30) / 1000.0;
         const activeSkillTerm = (this.skillLvl * 120) / 1000.0;
         const passiveSkillTerm = (this.abilityLvl * 100) / 1000.0;
-        const specialAttackTerm = this.data.rarity === 3 ? 0 : (this.specialLvl * 150) / 1000.0;
+        const specialAttackTerm = (this.specialLvl * 150) / 1000.0;
 
         const skillModifierBracket = baseSkillVal + normalSkillTerm + activeSkillTerm + passiveSkillTerm + specialAttackTerm;
 
@@ -124,7 +124,7 @@ export class Kioku {
         this.kiokuLvl = kiokuLvl;
         this.magicLvl = magicLvl;
         this.heartphialLvl = heartphialLvl;
-        this.specialLvl = specialLvl;
+        this.specialLvl = this.data.rarity === 3 ? 0 : specialLvl;
         this.maxMagicStacks = this.data.maxMagicStacks ?? 0
         this.baseCritDamage = this.data.minCritDmg * 10
         this.baseCritRate = this.data.minCritRate * 10

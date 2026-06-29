@@ -1,6 +1,9 @@
 <template>
   <div class="setup-page">
-    <h1 class="page-title">Kioku Setup</h1>
+    <h1 class="page-title">
+      Kioku Setup
+
+    </h1>
 
     <section class="toolbar card">
       <div class="toolbar-left">
@@ -9,6 +12,12 @@
           Import
           <input type="file" accept="application/json" @change="handleFileChange" />
         </label>
+
+        <button v-if="highestTeam" class="btn" :class="{ 'btn-active': showHighestTeam }"
+          @click="showHighestTeam = !showHighestTeam">
+          {{ showHighestTeam ? 'Hide Highest PWR Team' : 'Show Highest PWR Team' }}
+        </button>
+        <span v-if="calculating" class="calc-indicator">(Calculating optimal builds...)</span>
       </div>
       <div class="toolbar-right rarity-toggles">
         <label class="chip" :class="{ active: show4stars }">
@@ -17,6 +26,16 @@
         <label class="chip" :class="{ active: show3stars }">
           <input type="checkbox" v-model="show3stars" /> ★★★
         </label>
+      </div>
+    </section>
+
+    <section v-if="showHighestTeam && highestTeam" class="best-team-panel card">
+      <div class="best-team-header">
+        <span class="filters-heading highlight">Highest Possible Team PWR</span>
+        <span class="pwr-display"> <strong>{{ highestPwr?.toLocaleString() }}</strong></span>
+      </div>
+      <div class="team-rows">
+        <TeamRow :team="highestTeam" />
       </div>
     </section>
 
@@ -102,18 +121,49 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, reactive } from 'vue'
+import { defineComponent, computed, reactive, ref, onMounted, onBeforeUnmount } from 'vue'
 import CharacterCard from '../components/CharacterCard.vue'
+import TeamRow from '../components/TeamRow.vue'
 import { useCharacterStore } from '../store/characterStore.js'
 import { Character, KiokuConstants } from '../types/KiokuTypes.js'
 import { useSetting } from '../store/settingsStore.js'
+import { FinalTeam } from '../types/BestTeamTypes.js'
 
 export default defineComponent({
-  components: { CharacterCard },
+  components: { CharacterCard, TeamRow },
   setup() {
     const store = useCharacterStore()
     const show4stars = useSetting('show4stars', false)
     const show3stars = useSetting('show3stars', false)
+    const showHighestTeam = useSetting('showHighestPwrTeam', true)
+
+    const highestPwr = ref<number | null>(null)
+    const highestTeam = ref<FinalTeam>()
+    const calculating = ref(true)
+    let worker: Worker | null = null
+
+    const runHighestPowerCalc = () => {
+      const chars = store.characters.filter(c => c.rarity === 5 && c.enabled)
+
+      calculating.value = true
+      worker?.terminate()
+      worker = new Worker(new URL('../workers/highestPowerWorker.ts', import.meta.url), { type: 'module' })
+      worker.postMessage(JSON.parse(JSON.stringify(chars)))
+      worker.onmessage = (e: MessageEvent) => {
+        const { bestTeam, maxTeamPower } = e.data
+        highestTeam.value = bestTeam
+        highestPwr.value = maxTeamPower
+        calculating.value = false
+      }
+    }
+
+    onMounted(() => {
+      runHighestPowerCalc()
+    })
+
+    onBeforeUnmount(() => {
+      worker?.terminate()
+    })
 
     const filters = reactive<{
       hideUnowned: boolean
@@ -199,12 +249,15 @@ export default defineComponent({
           return updated
         })
       )
+      runHighestPowerCalc()
     }
 
     function handleFileChange(e: Event) {
       const file = (e.target as HTMLInputElement).files?.[0]
       if (file) {
-        store.importCharacters(file).catch(err => alert('Import failed: ' + err.message))
+        store.importCharacters(file).then(() => {
+          runHighestPowerCalc()
+        }).catch(err => alert('Import failed: ' + err.message))
       }
     }
 
@@ -223,13 +276,16 @@ export default defineComponent({
       applyBulk,
       handleFileChange,
       exportCharacters: store.exportCharacters,
+      highestPwr,
+      highestTeam,
+      showHighestTeam,
+      calculating,
     }
   },
 })
 </script>
 
 <style scoped>
-/* ── Page ── */
 .setup-page {
   max-width: 1100px;
   margin: 0 auto;
@@ -240,9 +296,77 @@ export default defineComponent({
   font-size: 2rem;
   margin: 0 0 1.25rem;
   color: var(--text);
+  display: flex;
+  align-items: center;
 }
 
-/* ── Cards ── */
+.calc-indicator {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-left: 1rem;
+  font-weight: normal;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.team-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  scale: 170%;
+}
+
+.best-team-panel {
+  flex-direction: column;
+  align-items: stretch;
+  border-color: var(--border-strong);
+  background: linear-gradient(180deg, var(--accent-glow) 0%, transparent 100%), var(--panel);
+}
+
+.best-team-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.filters-heading.highlight {
+  color: var(--accent);
+  opacity: 1;
+  font-weight: 700;
+}
+
+.pwr-display {
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.pwr-display strong {
+  font-size: 1rem;
+  color: var(--accent);
+}
+
+.btn-active {
+  background: var(--panel);
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+}
+
 .card {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -255,7 +379,6 @@ export default defineComponent({
   gap: 0.5rem;
 }
 
-/* ── Toolbar ── */
 .toolbar {
   justify-content: space-between;
 }
@@ -267,7 +390,6 @@ export default defineComponent({
   gap: 0.5rem;
 }
 
-/* ── Buttons ── */
 .btn {
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -307,7 +429,6 @@ export default defineComponent({
   border-color: var(--accent-strong);
 }
 
-/* ── Chips ── */
 .chip {
   display: inline-flex;
   align-items: center;
@@ -327,7 +448,7 @@ export default defineComponent({
 }
 
 .chip.active {
-  background: rgba(246, 212, 133, 0.1);
+  background: var(--accent-glow);
   border-color: var(--border-strong);
   color: var(--accent);
 }
@@ -351,7 +472,6 @@ export default defineComponent({
   margin-left: auto;
 }
 
-/* ── Filter bar ── */
 .filters-heading {
   font-size: 0.68rem;
   text-transform: uppercase;
@@ -376,7 +496,6 @@ export default defineComponent({
   margin-right: 2px;
 }
 
-/* ── Bulk set ── */
 .bulk-fields {
   display: flex;
   flex-wrap: wrap;
@@ -404,7 +523,6 @@ export default defineComponent({
   text-align: center;
 }
 
-/* ── Column header (sticky) ── */
 .list-header {
   display: grid;
   grid-template-columns: 180px auto 140px 1fr;
@@ -423,7 +541,6 @@ export default defineComponent({
   opacity: 0.8;
 }
 
-/* ── Role sections ── */
 .role-section {
   margin-bottom: 0.4rem;
 }

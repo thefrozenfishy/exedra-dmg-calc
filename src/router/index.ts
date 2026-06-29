@@ -23,7 +23,7 @@ const base = import.meta.env.BASE_URL
 
 const routes = [
     { path: '/profile', name: 'Profile + Friends', component: ProfilePage, meta: { version: 0 } },
-    { path: '/team-setup', name: 'Kioku Setup', component: TeamSetupPage, meta: { version: 1 } },
+    { path: '/team-setup', name: 'Kioku Setup', component: TeamSetupPage, meta: { version: 2 } },
     { path: '/account-compare', name: 'Account Comparison', component: AccountComparisonPage, meta: { version: 0 } },
     { path: '/sa-simulator-multiple', name: 'Best SA Team Calculator', component: BestTeamPage, meta: { version: 0 } },
     { path: '/sa-simulator-single', name: 'Single Battle Calculator', component: SingleTeamPage, meta: { version: 0 } },

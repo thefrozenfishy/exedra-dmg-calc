@@ -47,12 +47,12 @@ export enum KiokuRole {
 }
 
 export const roleMap: Record<string, KiokuRole> = {
-  1: KiokuRole.Attacker,
-  2: KiokuRole.Breaker,
-  3: KiokuRole.Healer,
-  4: KiokuRole.Buffer,
-  5: KiokuRole.Debuffer,
-  6: KiokuRole.Defender,
+    1: KiokuRole.Attacker,
+    2: KiokuRole.Breaker,
+    3: KiokuRole.Healer,
+    4: KiokuRole.Buffer,
+    5: KiokuRole.Debuffer,
+    6: KiokuRole.Defender,
 };
 
 export type SupportKey = KiokuRole | KiokuElement
@@ -110,6 +110,26 @@ export const portraitsBestOnly = (elem: KiokuElement, optimizeAverageDamage: boo
     elem === KiokuElement.Flame ? "Monogatari Collab Celebration 2" : null,
     optimizeAverageDamage ? "Farewell to a Future Unseen" : null,
 ].filter(c => !!c) as string[]
+
+export const highestPwrPortraits = [
+    "A Dream of a Little Mermaid",
+    "After-School Moment",
+    "As Long as You're by My Side",
+    "Because...I'm Not Alone Anymore",
+    "Farewell to a Future Unseen",
+    "For Hope That Lies Ahead",
+    "Granting Impossible Miracles",
+    "It's Cake Party Time!",
+    "Kyoko's Everyday Life",
+    "Maiden's Might",
+    "Mitama's Homemade Delights",
+    "Parting with a Smile",
+    "Surely Again Someday",
+    "The Protected Ones",
+    "The Savior's Apostle",
+    "Under a Cherry Blossom Tree",
+    "Who Is the Round Cake?",
+]
 
 const dmgUpPortraits = {
     [KiokuElement.Flame]: "A Reluctant Coach Steps Up",
