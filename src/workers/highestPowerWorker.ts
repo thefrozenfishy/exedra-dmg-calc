@@ -1,8 +1,9 @@
 import { Kioku } from "../models/Kioku";
-import { Character, highestPwrPortraits, KiokuArgs } from "../types/KiokuTypes";
+import { ScoreAttackKioku } from "../models/ScoreAttackKioku";
+import { Character, highestPwrPortraits } from "../types/KiokuTypes";
 
-const MAIN_CANDIDATES = 10;
-const SUPPORT_CANDIDATES = 40;
+const MAIN_CANDIDATES = 7;
+const SUPPORT_CANDIDATES = 20;
 
 interface Candidate {
     char: Character;
@@ -32,13 +33,21 @@ self.onmessage = function (e: MessageEvent) {
     const ranked: Candidate[] = [...characters]
         .map(char => ({
             char,
-            kioku: new Kioku({ ...char, portrait: null }),
+            kioku: new ScoreAttackKioku({ ...char, portrait: undefined }),
+        }))
+        .map(c => ({ ...c, pwr: c.kioku.getTotalPower() }))
+        .sort((a, b) => b.pwr - a.pwr);
+
+    const no_special_ranked: Candidate[] = [...characters]
+        .map(char => ({
+            char,
+            kioku: new ScoreAttackKioku({ ...char, portrait: undefined, specialLvl: 0 }),
         }))
         .map(c => ({ ...c, pwr: c.kioku.getTotalPower() }))
         .sort((a, b) => b.pwr - a.pwr);
 
     const mains = ranked.slice(0, MAIN_CANDIDATES);
-    const supportPool = ranked.slice(0, SUPPORT_CANDIDATES);
+    const supportPool = no_special_ranked.slice(0, SUPPORT_CANDIDATES);
 
     const scoreCache = new Map<string, Map<string, Map<string, number>>>();
 
@@ -59,10 +68,10 @@ self.onmessage = function (e: MessageEvent) {
             for (const support of supportPool) {
                 if (support.char.name === main.char.name) continue;
 
-                const power = new Kioku({
+                const power = new ScoreAttackKioku({
                     ...main.char,
                     portrait,
-                    support: support.kioku
+                    supportKey: support.kioku.getKey()
                 }).getTotalPower();
 
                 supportMap.set(support.char.name, power);

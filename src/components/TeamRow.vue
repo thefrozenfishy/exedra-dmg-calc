@@ -77,8 +77,8 @@ const props = defineProps<{
     weakElements?: { name: KiokuElement, enabled: boolean }[],
     offElementBuffMultReduction?: number,
     offElementDebuffMultReduction?: number
-    loading: boolean,
-    optimalSubCrys: boolean
+    loading?: boolean,
+    optimalSubCrys?: boolean
 }>()
 const teamStore = useTeamStore()
 const router = useRouter()

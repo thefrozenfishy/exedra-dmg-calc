@@ -1,5 +1,6 @@
 import { KiokuArgs, KiokuData, KiokuRole, Portrait, StyleParamUpEffect } from '../types/KiokuTypes';
 import { portraits, kiokuData, crystalises, characterHeart, characterHeartParamUpGroup, styleParamUpEffect, styleParamUp } from '../utils/helpers';
+import { fromKey } from '../models/BestTeamCalculator';
 
 const KIOKU_LEVEL_BREAKPOINTS = [1, 120, 140, 160, 180, 200] as const;
 
@@ -101,7 +102,7 @@ export class Kioku {
 
     constructor({
         name,
-        support,
+        supportKey,
         portrait,
         ascension,
         kiokuLvl,
@@ -115,7 +116,7 @@ export class Kioku {
         this.data = kiokuData[name];
 
         if (portrait) this.portrait = portraits[portrait]
-        if (support) this.support = support;
+        if (supportKey) this.support = fromKey(supportKey);
 
         this.inputCrysIDs = crysIDs?.filter(Boolean) ?? [];
         this.inputSubCrysIDs = subCrysIDs?.filter(Boolean) ?? [];
@@ -237,22 +238,5 @@ export class Kioku {
             this.inputCrysIDs,
             this.inputSubCrysIDs,
         ];
-    }
-
-    static fromKey(key: any[]): Kioku {
-        if (!key || key.length === 0) return undefined as any;
-
-        return new Kioku({
-            name: key[0],
-            support: key[1] ? Kioku.fromKey(key[1]) : undefined,
-            portrait: key[2],
-            ascension: key[3],
-            kiokuLvl: key[4],
-            magicLvl: key[5],
-            heartphialLvl: key[6],
-            specialLvl: key[7],
-            crysIDs: key[8],
-            subCrysIDs: key[9],
-        });
     }
 }

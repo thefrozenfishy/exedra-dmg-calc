@@ -71,7 +71,7 @@ function getKioku({
     if (!cache.has(key)) {
         cache.set(key, new ScoreAttackKioku({
             name,
-            support: supportKey ? fromKey(supportKey) : undefined,
+            supportKey,
             portrait,
             ascension,
             kiokuLvl,
@@ -208,7 +208,6 @@ export async function findBestTeam({
 
     for (const attacker of availableChars[KiokuRole.Attacker]) {
         const kiokuWhoShouldHavePortrait = new Set<string>([])
-        const hasDotPop = fetchKioku({ ...attacker }).effects.some(e => e.abilityEffectType === "IMM_SLIP_DMG")
         perAttackerResults[attacker.name] = new Heap(customPriorityComparator)
         perAttackerResults[attacker.name].limit = LIMIT
         const availablePortraits = portraitsBestOnly(attacker.element, optimizeAverageDamage)
@@ -287,16 +286,18 @@ export async function findBestTeam({
                                     for (const supportSupport of supportSupports) {
                                         for (const attackerCrys of combinations(getBestCrystalises(attacker), 3)) {
                                             try {
+                                                const attackerKioku = fetchKioku({
+                                                    ...attacker,
+                                                    portrait: attackerPortrait,
+                                                    crysIDs: attackerCrys.map(c => c.selectionAbilityMstId),
+                                                    subCrysIDs: optimalSubCrys
+                                                        ? KiokuConstants.optimalAttackerSubCrys
+                                                        : Object.values(attacker.crysOptions).filter(c => c.useIndex !== 0).flatMap(c => c.subCrys),
+                                                    supportKey: attackerSupportKey,
+                                                })
+                                                const hasDotPop = attackerKioku.effects.some(e => e.abilityEffectType === "IMM_SLIP_DMG")
                                                 const team = new ScoreAttackTeam(
-                                                    fetchKioku({
-                                                        ...attacker,
-                                                        portrait: attackerPortrait,
-                                                        crysIDs: attackerCrys.map(c => c.selectionAbilityMstId),
-                                                        subCrysIDs: optimalSubCrys
-                                                            ? KiokuConstants.optimalAttackerSubCrys
-                                                            : Object.values(attacker.crysOptions).filter(c => c.useIndex !== 0).flatMap(c => c.subCrys),
-                                                        supportKey: attackerSupportKey,
-                                                    })!,
+                                                    attackerKioku,
                                                     totalSupports.map((s, i) => {
                                                         const k = fetchKioku({
                                                             ...s,

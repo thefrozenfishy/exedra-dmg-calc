@@ -73,7 +73,7 @@ const portraitPriority = (elem?: KiokuElement): string[] => [
     "Farewell to a Future Unseen",
     "For Hope That Lies Ahead",
     "Proof of Friends Again",
-    ...(elem ? [dmgUpPortraits[elem]] : []),
+    ...(elem ? dmgUpPortraits[elem] : []),
     "",
 ];
 
@@ -132,12 +132,12 @@ export const highestPwrPortraits = [
 ]
 
 const dmgUpPortraits = {
-    [KiokuElement.Flame]: "A Reluctant Coach Steps Up",
-    [KiokuElement.Aqua]: "Futures Felt in Photographs",
-    [KiokuElement.Forest]: "Special Stage Persona",
-    [KiokuElement.Light]: "High Five for Harmony",
+    [KiokuElement.Flame]: ["A Reluctant Coach Steps Up"],
+    [KiokuElement.Aqua]: ["Futures Felt in Photographs"],
+    [KiokuElement.Forest]: ["Special Stage Persona"],
+    [KiokuElement.Light]: ["High Five for Harmony"],
     [KiokuElement.Dark]: ["One Time Team-up!", "Because...I'm Not Alone Anymore"],
-    [KiokuElement.Void]: "Pride on the Line",
+    [KiokuElement.Void]: ["Pride on the Line"],
 }
 
 export interface Portrait {
@@ -445,7 +445,7 @@ export interface KiokuArgs {
     magicLvl: number;
     heartphialLvl: number;
     portrait?: string;
-    support?: any;
+    supportKey?: any[];
     crysIDs: number[];
     subCrysIDs: number[]
     ascension: number;
