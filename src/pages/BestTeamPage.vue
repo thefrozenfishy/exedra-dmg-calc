@@ -1,203 +1,195 @@
 <template>
-    <div class="gallery-page">
+    <div class="setup-page gallery-page">
+        <h1 class="page-title">Best Team Finder</h1>
 
         <EnemySelector />
 
-        <div style="height: 40px;"></div>
-
-        <div class="options-panel">
-            <h2>Simulation Options</h2>
-
-            <label>
-                Top Teams to display
+        <section class="card numeric-row">
+            <span class="filters-heading">Results</span>
+            <label class="field">
+                <span class="field-label">Top teams to display</span>
                 <input type="number" v-model="topTeams" />
             </label>
-
-            <label>
-                Top Teams to display per dps
+            <label class="field">
+                <span class="field-label">Top teams per DPS</span>
                 <input type="number" v-model="topTeamsPerKioku" />
             </label>
+        </section>
 
-            <label>
-                <input type="checkbox" v-model="include4StarAttackers" />
-                Include 4★ Attackers
+        <section class="filters card">
+            <span class="filters-heading">Options</span>
+
+            <label class="chip" :class="{ active: include4StarAttackers }">
+                <input type="checkbox" v-model="include4StarAttackers" /> 4★ Attackers
             </label>
-
-            <label>
-                <input type="checkbox" v-model="include4StarSupports" />
-                Include 4★ Supports
+            <label class="chip" :class="{ active: include4StarSupports }">
+                <input type="checkbox" v-model="include4StarSupports" /> 4★ Supports
             </label>
-
-            <label>
-                <input type="checkbox" v-model="include4StarOthers" />
-                Include 4★ Others
+            <label class="chip" :class="{ active: include4StarOthers }">
+                <input type="checkbox" v-model="include4StarOthers" /> 4★ Others
             </label>
-
-            <label title="Optimizes for average damage over many hits, instead of assuming crit">
-                <input type="checkbox" v-model="optimizeAverageDamage" />
-                Optimize for Average Damage (LR)
+            <label class="chip" :class="{ active: optimizeAverageDamage }"
+                title="Optimizes for average damage over many hits, instead of assuming crit">
+                <input type="checkbox" v-model="optimizeAverageDamage" /> Average damage (LR)
             </label>
-
-            <label>
-                <input type="checkbox" v-model="onlyConsiderOnElements" />
-                Only consider Kioku which are on-element
+            <label class="chip" :class="{ active: onlyConsiderOnElements }">
+                <input type="checkbox" v-model="onlyConsiderOnElements" /> On-element only
             </label>
-
-            <label>
-                <input type="checkbox" v-model="optimalSubCrys" />
-                Calculate using perfect Crit rate, Crit Damage & atk crystalis substats
+            <label class="chip" :class="{ active: optimalSubCrys }"
+                title="Calculate using perfect Crit rate, Crit Damage & atk crystalis substats">
+                <input type="checkbox" v-model="optimalSubCrys" /> Perfect crit &amp; substats
             </label>
+        </section>
 
+        <section class="card section-card">
             <DamageReductionInputs />
-
             <ArenaBuffs />
+        </section>
 
-            <div>
-                <h3>Role Distribution</h3>
-                <div class="role-grid">
-                    <div class="role-box">
-                        <img :src="'/exedra-dmg-calc/roles/Attacker.png'" alt="Attacker" />
-                        <span>Damage Dealer</span>
-                        <div class="number">1</div>
+        <section class="card section-card">
+            <h3 class="section-title">Role Distribution</h3>
+            <div class="role-grid">
+                <div class="role-box">
+                    <img :src="'/exedra-dmg-calc/roles/Attacker.png'" alt="Attacker" />
+                    <span>Damage Dealer</span>
+                    <div class="number">1</div>
+                </div>
+
+                <div class="role-box">
+                    <div class="icons">
+                        <img :src="'/exedra-dmg-calc/roles/Buffer.png'" alt="Buffer" />
+                        <img :src="'/exedra-dmg-calc/roles/Debuffer.png'" alt="Debuffer" />
                     </div>
+                    <span>Buffer+Debuffer</span>
+                    <input type="number" v-model.number="deBufferCount" min="0"
+                        :max="4 - minHealer - minDefender - minBreaker" />
+                </div>
 
-                    <div class="role-box">
-                        <div class="icons">
-                            <img :src="'/exedra-dmg-calc/roles/Buffer.png'" alt="Buffer" />
-                            <img :src="'/exedra-dmg-calc/roles/Debuffer.png'" alt="Debuffer" />
-                        </div>
-                        <span>Buffer+Debuffer</span>
-                        <input type="number" v-model.number="deBufferCount" min="0"
-                            :max="4 - minHealer - minDefender - minBreaker" />
-                    </div>
+                <div class="role-box" :class="{ 'role-disabled': disabledOtherRoles.includes(KiokuRole.Healer) }"
+                    @click="toggleOtherRole(KiokuRole.Healer)" style="cursor:pointer;"
+                    title="Click to disable Healers from flex spots">
+                    <img :src="'/exedra-dmg-calc/roles/Healer.png'" alt=KiokuRole.Healer />
+                    <span>Healer (min)</span>
+                    <input type="number" v-model.number="minHealer" min="0" :max="otherCount - minDefender - minBreaker"
+                        @click.stop />
+                </div>
 
-                    <div class="role-box" :class="{ 'role-disabled': disabledOtherRoles.includes(KiokuRole.Healer) }"
-                        @click="toggleOtherRole(KiokuRole.Healer)" style="cursor:pointer;"
-                        title="Click to disable Healers from flex spots">
-                        <img :src="'/exedra-dmg-calc/roles/Healer.png'" alt=KiokuRole.Healer />
-                        <span>Healer (min)</span>
-                        <input type="number" v-model.number="minHealer" min="0"
-                            :max="otherCount - minDefender - minBreaker" @click.stop />
-                    </div>
+                <div class="role-box" :class="{ 'role-disabled': disabledOtherRoles.includes(KiokuRole.Defender) }"
+                    @click="toggleOtherRole(KiokuRole.Defender)" style="cursor:pointer;"
+                    title="Click to disable Defenders from flex spots">
+                    <img :src="'/exedra-dmg-calc/roles/Defender.png'" alt=KiokuRole.Defender />
+                    <span>Defender (min)</span>
+                    <input type="number" v-model.number="minDefender" min="0" :max="otherCount - minHealer - minBreaker"
+                        @click.stop />
+                </div>
 
-                    <div class="role-box" :class="{ 'role-disabled': disabledOtherRoles.includes(KiokuRole.Defender) }"
-                        @click="toggleOtherRole(KiokuRole.Defender)" style="cursor:pointer;"
-                        title="Click to disable Defenders from flex spots">
-                        <img :src="'/exedra-dmg-calc/roles/Defender.png'" alt=KiokuRole.Defender />
-                        <span>Defender (min)</span>
-                        <input type="number" v-model.number="minDefender" min="0"
-                            :max="otherCount - minHealer - minBreaker" @click.stop />
-                    </div>
+                <div class="role-box" :class="{ 'role-disabled': disabledOtherRoles.includes(KiokuRole.Breaker) }"
+                    @click="toggleOtherRole(KiokuRole.Breaker)" style="cursor:pointer;"
+                    title="Click to disable Breakers from flex spots">
+                    <img :src="'/exedra-dmg-calc/roles/Breaker.png'" alt=KiokuRole.Breaker />
+                    <span>Breaker (min)</span>
+                    <input type="number" v-model.number="minBreaker" min="0" :max="otherCount - minDefender - minHealer"
+                        @click.stop />
+                </div>
 
-                    <div class="role-box" :class="{ 'role-disabled': disabledOtherRoles.includes(KiokuRole.Breaker) }"
-                        @click="toggleOtherRole(KiokuRole.Breaker)" style="cursor:pointer;"
-                        title="Click to disable Breakers from flex spots">
-                        <img :src="'/exedra-dmg-calc/roles/Breaker.png'" alt=KiokuRole.Breaker />
-                        <span>Breaker (min)</span>
-                        <input type="number" v-model.number="minBreaker" min="0"
-                            :max="otherCount - minDefender - minHealer" @click.stop />
-                    </div>
-
-                    <div class="role-box total-box" style="grid-column: 3 / span 3; width: 400px;">
-                        <span>Flex spot ({{ flexRoleLabel }})</span>
-                        <div class="number">{{
-                            otherCount
-                            - (disabledOtherRoles.includes(KiokuRole.Defender) ? 0 : minDefender)
-                            - (disabledOtherRoles.includes(KiokuRole.Healer) ? 0 : minHealer)
-                            - (disabledOtherRoles.includes(KiokuRole.Breaker) ? 0 : minBreaker)
+                <div class="role-box total-box" style="grid-column: 3 / span 3; width: 400px;">
+                    <span>Flex spot ({{ flexRoleLabel }})</span>
+                    <div class="number">{{
+                        otherCount
+                        - (disabledOtherRoles.includes(KiokuRole.Defender) ? 0 : minDefender)
+                        - (disabledOtherRoles.includes(KiokuRole.Healer) ? 0 : minHealer)
+                        - (disabledOtherRoles.includes(KiokuRole.Breaker) ? 0 : minBreaker)
                         }}</div>
-                    </div>
                 </div>
             </div>
+        </section>
 
-            <div class="weak-elements">
-                <h3>Weak Elements</h3>
-                <div class="element-aliment-grid">
-                    <div v-for="element in weakElements" :key="element.name" class="element"
-                        :class="{ disabled: !element.enabled }" @click="toggleElement(element)">
-                        <img :src="`/exedra-dmg-calc/elements/${element.name}.png`" :alt="element.name"
-                            :title="element.name" />
-                        <span>{{ element.name }}</span>
-                    </div>
+        <section class="card section-card weak-elements">
+            <h3 class="section-title">Weak Elements</h3>
+            <div class="element-aliment-grid">
+                <div v-for="element in weakElements" :key="element.name" class="element"
+                    :class="{ disabled: !element.enabled }" @click="toggleElement(element)">
+                    <img :src="`/exedra-dmg-calc/elements/${element.name}.png`" :alt="element.name"
+                        :title="element.name" />
+                    <span>{{ element.name }}</span>
                 </div>
             </div>
 
             <AlimentToggler ref="alimentRef" />
+        </section>
 
-            <div class="kioku-selector">
-                <h3>Ignored Kioku</h3>
-                <p>These are Kioku that do not have any dmg boosting effects, and by default will be ignored to speed up
-                    computing time</p>
+        <section class="card section-card kioku-selector">
+            <h3 class="section-title">Ignored Kioku</h3>
+            <p class="section-hint">These are Kioku that do not have any dmg boosting effects, and by default will be
+                ignored to speed up computing time</p>
 
-                <div class="selected-kioku">
-                    <div @click="removeIgnoredKioku(char)" v-for="char in ignoredKioku" :key="char.id" class="chip">
-                        <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
-                        <span>{{ char.name }}</span>
-                    </div>
-                </div>
-
-                <div class="kioku-select">
-                    <input type="text" v-model="ignoredKiokuQuery"
-                        placeholder="Kioku that will be ignored during calculations..."
-                        @focus="showIgnoredKiokuDropdown = true" @blur="hideIgnoredKiokuDropdown" />
-                    <ul v-if="showIgnoredKiokuDropdown && filteredIgnoredKioku.length" class="dropdown">
-                        <li v-for="char in filteredIgnoredKioku" :key="char.id"
-                            @mousedown.prevent="addIgnoredKioku(char)">
-                            <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
-                            {{ char.name }}
-                        </li>
-                    </ul>
+            <div class="selected-kioku">
+                <div @click="removeIgnoredKioku(char)" v-for="char in ignoredKioku" :key="char.id" class="kioku-chip">
+                    <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+                    <span>{{ char.name }}</span>
                 </div>
             </div>
 
-            <div class="kioku-selector">
-                <h3>Obligatory Kioku</h3>
-
-                <div class="selected-kioku">
-                    <div @click="removeObligatoryKioku(char)" v-for="char in obligatoryKioku" :key="char.id"
-                        class="chip">
+            <div class="kioku-select">
+                <input type="text" v-model="ignoredKiokuQuery"
+                    placeholder="Kioku that will be ignored during calculations..."
+                    @focus="showIgnoredKiokuDropdown = true" @blur="hideIgnoredKiokuDropdown" />
+                <ul v-if="showIgnoredKiokuDropdown && filteredIgnoredKioku.length" class="dropdown">
+                    <li v-for="char in filteredIgnoredKioku" :key="char.id" @mousedown.prevent="addIgnoredKioku(char)">
                         <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
-                        <span>{{ char.name }}</span>
-                    </div>
-                </div>
+                        {{ char.name }}
+                    </li>
+                </ul>
+            </div>
+        </section>
 
-                <div class="kioku-select">
-                    <input type="text" v-model="obligatoryKiokuQuery"
-                        placeholder="Kioku that must be included in final team..."
-                        @focus="showObligatoryKiokuDropdown = true" @blur="hideObligatoryKiokuDropdown" />
-                    <ul v-if="showObligatoryKiokuDropdown && filteredKioku.length" class="dropdown">
-                        <li v-for="char in filteredKioku" :key="char.id" @mousedown.prevent="addObligatoryKioku(char)">
-                            <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
-                            {{ char.name }}
-                        </li>
-                    </ul>
+        <section class="card section-card kioku-selector">
+            <h3 class="section-title">Obligatory Kioku</h3>
+
+            <div class="selected-kioku">
+                <div @click="removeObligatoryKioku(char)" v-for="char in obligatoryKioku" :key="char.id"
+                    class="kioku-chip">
+                    <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+                    <span>{{ char.name }}</span>
                 </div>
             </div>
 
-            <div class="kioku-selector">
-                <h3>Non-Attacker Damage Dealers</h3>
-
-                <div class="selected-kioku">
-                    <div @click="removeExtraAttacker(char)" v-for="char in extraAttackers" :key="char.id" class="chip">
+            <div class="kioku-select">
+                <input type="text" v-model="obligatoryKiokuQuery"
+                    placeholder="Kioku that must be included in final team..."
+                    @focus="showObligatoryKiokuDropdown = true" @blur="hideObligatoryKiokuDropdown" />
+                <ul v-if="showObligatoryKiokuDropdown && filteredKioku.length" class="dropdown">
+                    <li v-for="char in filteredKioku" :key="char.id" @mousedown.prevent="addObligatoryKioku(char)">
                         <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
-                        <span>{{ char.name }}</span>
-                    </div>
-                </div>
+                        {{ char.name }}
+                    </li>
+                </ul>
+            </div>
+        </section>
 
-                <div class="kioku-select">
-                    <input type="text" v-model="extraAttackerQuery"
-                        placeholder="Use non-attackers as extra damage dealers, by default only attackers are checked..."
-                        @focus="showExtraAttackerDropdown = true" @blur="hideExtraAttackerDropdown" />
-                    <ul v-if="showExtraAttackerDropdown && filteredAttackers.length" class="dropdown">
-                        <li v-for="char in filteredAttackers" :key="char.id"
-                            @mousedown.prevent="addExtraAttacker(char)">
-                            <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
-                            {{ char.name }}
-                        </li>
-                    </ul>
+        <section class="card section-card kioku-selector">
+            <h3 class="section-title">Non-Attacker Damage Dealers</h3>
+
+            <div class="selected-kioku">
+                <div @click="removeExtraAttacker(char)" v-for="char in extraAttackers" :key="char.id"
+                    class="kioku-chip">
+                    <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+                    <span>{{ char.name }}</span>
                 </div>
             </div>
-        </div>
+
+            <div class="kioku-select">
+                <input type="text" v-model="extraAttackerQuery"
+                    placeholder="Use non-attackers as extra damage dealers, by default only attackers are checked..."
+                    @focus="showExtraAttackerDropdown = true" @blur="hideExtraAttackerDropdown" />
+                <ul v-if="showExtraAttackerDropdown && filteredAttackers.length" class="dropdown">
+                    <li v-for="char in filteredAttackers" :key="char.id" @mousedown.prevent="addExtraAttacker(char)">
+                        <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+                        {{ char.name }}
+                    </li>
+                </ul>
+            </div>
+        </section>
 
         <div class="team-row-wrapper loading-bar" v-if="running">
             <TeamRow style="margin: 0 auto;" :team="progress" :loading="true" :optimalSubCrys />
@@ -207,15 +199,17 @@
             </div>
         </div>
 
-        <button v-else @click="startSimulation" :disabled="running">
+        <button v-else class="btn btn-start" @click="startSimulation" :disabled="running">
             {{ running ? "Running" : 'Start Simulation' }}
         </button>
 
         <div v-if="topResults.length">
-            <div class="btn-container">
-                <ImageActionsToolbar target=".results" filename="best_sa_team.png" :export-options="exportOpts"
-                    :share-options="shareOptionsForBestTeam" />
-            </div>
+            <section class="toolbar card">
+                <div class="toolbar-left">
+                    <ImageActionsToolbar target=".results" filename="best_sa_team.png" :export-options="exportOpts"
+                        :share-options="shareOptionsForBestTeam" />
+                </div>
+            </section>
             <div class="results">
                 <h2>Top Teams Overall</h2>
                 <ResultsHeader :optimizeAverageDamage />
@@ -529,14 +523,152 @@ async function startSimulation() {
 </script>
 
 <style scoped>
-.options-panel {
-    margin-bottom: 1rem;
-    padding: 1rem;
+/* ── Page (shared design system) ── */
+.setup-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 0 4rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    margin: 0 0 1.25rem;
+    color: var(--text);
+}
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.65rem 1rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toolbar {
+    justify-content: space-between;
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: var(--muted);
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+    user-select: none;
+}
+
+.chip input {
+    display: none;
+}
+
+.chip.active {
+    background: var(--accent-glow);
+    border-color: var(--border-strong);
+    color: var(--accent);
+}
+
+.filters-heading {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-right: 0.25rem;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+/* ── Buttons ── */
+.btn {
+    border-radius: 14px;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
+    padding: 0.4em 0.9em;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: var(--border-strong);
+}
+
+.btn-start {
+    display: block;
+    margin: 0.75rem auto 1rem;
+    padding: 0.7em 2.2em;
+    font-size: 1rem;
+    background: var(--accent-glow);
+    border: 1px solid var(--border-strong);
+    color: var(--accent);
+}
+
+.btn-start:hover:not(:disabled) {
+    background: var(--accent-glow-strong);
+    border-color: var(--accent);
+}
+
+.btn-start:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+/* ── Numeric field row ── */
+.numeric-row {
+    gap: 1rem;
+}
+
+.field {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+}
+
+.field-label {
+    font-size: 0.74rem;
+    color: var(--muted);
+}
+
+.field input {
+    width: 90px;
+}
+
+/* ── Generic section card ── */
+.section-card {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.section-title {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    color: var(--accent-soft);
+}
+
+.section-hint {
+    margin: 0 0 0.75rem;
+    font-size: 0.82rem;
+    color: var(--muted);
 }
 
 .weak-elements {
@@ -548,6 +680,7 @@ async function startSimulation() {
     gap: 1rem;
     flex-wrap: wrap;
     justify-content: center;
+    margin-bottom: 0.5rem;
 }
 
 .element {
@@ -577,7 +710,7 @@ async function startSimulation() {
 }
 
 .kioku-selector {
-    margin-top: 1rem;
+    margin-top: 0;
 }
 
 .selected-kioku {
@@ -589,16 +722,26 @@ async function startSimulation() {
     justify-content: center;
 }
 
-.chip {
+.kioku-chip {
     display: flex;
     align-items: center;
     border-radius: 20px;
-    padding: 0.2rem 0.5rem;
-    gap: 0.3rem;
+    padding: 0.2rem 0.5rem 0.2rem 0.2rem;
+    gap: 0.4rem;
     cursor: pointer;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.82rem;
+    transition: background 0.15s, border-color 0.15s;
 }
 
-.chip img {
+.kioku-chip:hover {
+    background: var(--accent-glow);
+    border-color: var(--border-strong);
+}
+
+.kioku-chip img {
     width: 24px;
     height: 24px;
     border-radius: 50%;
@@ -617,13 +760,14 @@ async function startSimulation() {
 .dropdown {
     position: absolute;
     z-index: 10;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     width: 80%;
     max-height: 200px;
     overflow-y: auto;
     margin-top: 0.2rem;
     margin-left: 36px;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: var(--panel-strong);
+    border: 1px solid var(--border);
 }
 
 .dropdown li {
@@ -635,7 +779,7 @@ async function startSimulation() {
 }
 
 .dropdown li:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--bg-soft);
 }
 
 .dropdown img {

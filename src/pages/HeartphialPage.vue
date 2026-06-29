@@ -230,7 +230,7 @@ const shareOptions = () => ({
 
 .page-title {
     font-size: 2rem;
-    margin: 0 0 0.25rem;
+    margin: 0 0 1.25rem;
     color: var(--text);
 }
 

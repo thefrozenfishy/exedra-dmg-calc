@@ -72,7 +72,7 @@
       </div>
     </div>
 
-    <div class="team-grid">
+    <div class="team-setup-grid">
       <div v-for="(slot, index) in team.slots" :key="index" class="team-slot">
         <h2>
           {{ index === attackerIndex ? 'Damage Dealer' : 'Member' }}
@@ -461,11 +461,10 @@ async function copyToClipboard(text: string) {
   width: 100%;
 }
 
-.team-grid {
+.team-setup-grid {
   display: grid;
-  gap: 2rem;
+  gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  max-width: 1200px;
   width: 100%;
 }
 

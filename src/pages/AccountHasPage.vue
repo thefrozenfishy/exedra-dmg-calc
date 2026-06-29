@@ -705,7 +705,7 @@ const onTouchEnd = (e: TouchEvent) => {
 
 .page-title {
     font-size: 2rem;
-    margin: 0 0 0.25rem;
+    margin: 0 0 1.25rem;
     color: var(--text);
 }
 
@@ -845,9 +845,9 @@ td {
 .asc-cell {
     width: 85px;
     font-weight: bold;
-    background-color: rgba(255, 255, 255, 0.06);
+    background-color: var(--accent-glow);
     font-size: 1.2rem;
-    color: var(--text);
+    color: var(--accent);
     vertical-align: middle;
     box-sizing: border-box;
 }
@@ -1160,7 +1160,7 @@ td {
 .back-to-own {
     margin-left: auto;
     padding: 0.3rem 0.75rem;
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--accent-glow);
     border: 1px solid var(--border-strong);
     border-radius: 999px;
     color: var(--accent-soft);
@@ -1173,13 +1173,13 @@ td {
 }
 
 .back-to-own:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--accent-glow-strong);
 }
 
 .compare-to-own {
     margin-right: auto;
     padding: 0.3rem 0.75rem;
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--accent-glow);
     border: 1px solid var(--border-strong);
     border-radius: 999px;
     color: var(--accent-soft);
@@ -1192,7 +1192,7 @@ td {
 }
 
 .compare-to-own:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--accent-glow-strong);
 }
 
 .viewing-banner-own {
@@ -1202,14 +1202,14 @@ td {
     margin-bottom: 1rem;
     padding: 0.5rem 0.9rem;
     border-radius: var(--radius-sm);
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
+    background: var(--accent-glow);
+    border: 1px solid var(--border-strong);
 }
 
 .viewing-own-label {
     font-size: 0.82rem;
     font-weight: 700;
-    color: var(--muted);
+    color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 0.06em;
 }
@@ -1217,10 +1217,10 @@ td {
 .view-friend-btn {
     margin-left: auto;
     padding: 0.3rem 0.75rem;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--bg-soft);
+    border: 1px solid var(--border-strong);
     border-radius: 999px;
-    color: var(--muted);
+    color: var(--accent-soft);
     font-size: 0.82rem;
     font-weight: 600;
     cursor: pointer;
@@ -1229,8 +1229,8 @@ td {
 }
 
 .view-friend-btn:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.14);
-    color: var(--text);
+    background: var(--accent-glow-strong);
+    border-color: var(--accent);
+    color: var(--accent);
 }
 </style>

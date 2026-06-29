@@ -4,7 +4,7 @@
 
     <div v-for="isAlliedTeam in [1, 0]">
       <h2>{{ isAlliedTeam ? "Allied" : "Enemy" }} Team</h2>
-      <div class="team-grid">
+      <div class="team-setup-grid">
         <div v-for="(slot, index) in team.slots[isAlliedTeam]" :key="index" class="team-slot">
           <h2> {{ isAlliedTeam ? "Ally" : "Enemy" }} {{ index + 1 }}</h2>
 
@@ -153,7 +153,7 @@ function runSimulation() {
   justify-content: center;
 }
 
-.team-grid {
+.team-setup-grid {
   display: grid;
   gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
