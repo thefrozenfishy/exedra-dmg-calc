@@ -418,13 +418,13 @@ export const getSubCrystalises: () => CrystalisData[] = () => {
         },
         ...Object.values(crystalises).filter(c => c.selectionAbilityType === 2),
     ].sort((a, b) => {
-            if (a.rarity !== b.rarity) {
-                if (a.rarity === 10) return -1
-                if (b.rarity === 10) return 1
-            }
-            if (a.selectionAbilityEffectId !== b.selectionAbilityEffectId) return a.selectionAbilityEffectId - b.selectionAbilityEffectId
-            return a.sortOrder - b.sortOrder
-        })
+        if (a.rarity !== b.rarity) {
+            if (a.rarity === 10) return -1
+            if (b.rarity === 10) return 1
+        }
+        if (a.selectionAbilityEffectId !== b.selectionAbilityEffectId) return a.selectionAbilityEffectId - b.selectionAbilityEffectId
+        return a.sortOrder - b.sortOrder
+    })
         .map(c => ({ ...c, description: subCrysTranslate(c.description) }))
 };
 
