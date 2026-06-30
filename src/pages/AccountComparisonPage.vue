@@ -641,13 +641,16 @@ const copyHyperLink = async () => {
 }
 
 .graph-container {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 
-    width: fit-content;
-    max-width: max-content;
+    margin: 0 auto;
+}
 
+.graph-container>.diff-groups {
     margin: 0 auto;
 }
 

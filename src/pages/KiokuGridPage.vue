@@ -1,44 +1,68 @@
 <template>
-    <div>
-        <div class="options-bar">
-            <div class="options-row">
-                <ImageActionsToolbar
-                    target=".grid-scroll"
-                    filename="grid.png"
-                    :export-options="exportOpts"
+    <div class="setup-page">
+        <h1 class="page-title">Kioku Grid</h1>
+
+        <section class="toolbar card">
+            <div class="toolbar-left">
+                <ImageActionsToolbar target=".grid-scroll" filename="grid.png" :export-options="exportOpts"
                     :share-options="shareOptionsForGrid" />
             </div>
-            <div class="options-row">
-                <label> <input type="checkbox" v-model="show5stars" /> Include 5-stars </label>
-                <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
-                <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
-                <label> <input type="checkbox" v-model="showUnowned" /> Include Unowned </label>
-            </div>
-            <div class="options-row">
-                <label> <input type="checkbox" v-model="showLevels" /> Show Magic &amp; Special levels </label>
-                <label> <input type="checkbox" v-model="showHearts" /> Show Heartphial levels </label>
-                <label> <input type="checkbox" v-model="colourLevels" :disabled="!(showLevels || showHearts)" /> Colour
-                    max levels </label>
-                <label> <input type="checkbox" v-model="splitAttackerRange" /> Split Attacker ranges </label>
-            </div>
-            <div class="options-row">
-                <label>
-                    Rows:
-                    <select :value="yAxisKey" class="axis-select" @change="onYChange">
-                        <option v-for="opt in axisOptions" :key="opt.key" :value="opt.key">
-                            {{ opt.label }} {{ opt.key === xAxisKey ? "🗘" : "" }}
-                        </option>
-                    </select>
-                </label>
-                <label>
-                    Columns:
-                    <select :value="xAxisKey" class="axis-select" @change="onXChange">
-                        <option v-for="opt in axisOptions" :key="opt.key" :value="opt.key">
-                            {{ opt.label }} {{ opt.key === yAxisKey ? "🗘" : "" }}
-                        </option>
-                    </select>
-                </label>
-            </div>
+        </section>
+
+        <section class="filters card">
+            <span class="filters-heading">Roster</span>
+            <label class="filter-chip" :class="{ active: show5stars }">
+                <input type="checkbox" v-model="show5stars" /> ★★★★★
+            </label>
+            <label class="filter-chip" :class="{ active: show4stars }">
+                <input type="checkbox" v-model="show4stars" /> ★★★★
+            </label>
+            <label class="filter-chip" :class="{ active: show3stars }">
+                <input type="checkbox" v-model="show3stars" /> ★★★
+            </label>
+            <label class="filter-chip" :class="{ active: showUnowned }">
+                <input type="checkbox" v-model="showUnowned" /> Unowned
+            </label>
+        </section>
+
+        <section class="filters card">
+            <span class="filters-heading">Display</span>
+            <label class="filter-chip" :class="{ active: showLevels }">
+                <input type="checkbox" v-model="showLevels" /> Magic &amp; Special levels
+            </label>
+            <label class="filter-chip" :class="{ active: showHearts }">
+                <input type="checkbox" v-model="showHearts" /> Heartphial levels
+            </label>
+            <label class="filter-chip" :class="{ active: colourLevels, disabled: !(showLevels || showHearts) }">
+                <input type="checkbox" v-model="colourLevels" :disabled="!(showLevels || showHearts)" /> Colour max
+                levels
+            </label>
+            <label class="filter-chip" :class="{ active: splitAttackerRange }">
+                <input type="checkbox" v-model="splitAttackerRange" /> Split Attacker ranges
+            </label>
+        </section>
+
+        <section class="card axis-row">
+            <span class="filters-heading">Axes</span>
+            <label class="field">
+                <span class="field-label">Rows</span>
+                <select :value="yAxisKey" class="axis-select" @change="onYChange">
+                    <option v-for="opt in axisOptions" :key="opt.key" :value="opt.key">
+                        {{ opt.label }} {{ opt.key === xAxisKey ? "🗘" : "" }}
+                    </option>
+                </select>
+            </label>
+            <label class="field">
+                <span class="field-label">Columns</span>
+                <select :value="xAxisKey" class="axis-select" @change="onXChange">
+                    <option v-for="opt in axisOptions" :key="opt.key" :value="opt.key">
+                        {{ opt.label }} {{ opt.key === yAxisKey ? "🗘" : "" }}
+                    </option>
+                </select>
+            </label>
+        </section>
+
+        <div class="options-bar">
             <div class="options-row">
                 <button v-for="el in allElementValues" :key="el" class="chip"
                     :class="hiddenElements.includes(el) ? 'chip--hidden' : 'chip--visible'"
@@ -55,7 +79,7 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualAttacker(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                            }}</span>
+                        }}</span>
                     </div>
                 </button>
             </div>
@@ -79,7 +103,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ xVal === "-1" ? "Not Owned" : `A${xVal}`
-                                }}</span>
+                            }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -99,7 +123,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ yVal === "-1" ? "Not Owned" : `A${yVal}`
-                                }}</span>
+                            }}</span>
                         </td>
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
                             <template v-for="r in [5, 4, 3]" :key="r">
@@ -437,6 +461,98 @@ const shareOptionsForGrid = () => ({
 </script>
 
 <style scoped>
+.setup-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 0 4rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    margin: 0 0 1.25rem;
+    color: var(--text);
+}
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.65rem 1rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.toolbar {
+    justify-content: space-between;
+}
+
+.toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 auto;
+}
+
+.filters-heading {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-right: 0.25rem;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: var(--muted);
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+    user-select: none;
+}
+
+.filter-chip input {
+    display: none;
+}
+
+.filter-chip.active {
+    background: var(--accent-glow);
+    border-color: var(--border-strong);
+    color: var(--accent);
+}
+
+.filter-chip.disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.axis-row {
+    gap: 1.25rem;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: 0.85rem;
+    align-items: flex-start;
+}
+
+.field-label {
+    font-size: 0.74rem;
+    color: var(--muted);
+}
+
 .exporting {
     overflow: visible !important;
 }
@@ -467,12 +583,11 @@ const shareOptionsForGrid = () => ({
 }
 
 .axis-select {
-    margin-left: 0.3rem;
     background: rgba(255, 255, 255, 0.05);
     color: var(--text);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    padding: 0.15rem 0.3rem;
+    border-radius: var(--radius-sm);
+    padding: 0.25rem 0.4rem;
     font-size: 0.85rem;
     cursor: pointer;
 }
@@ -606,6 +721,10 @@ const shareOptionsForGrid = () => ({
     border-collapse: collapse;
     min-width: max-content;
     margin: 0 auto;
+}
+
+.grid-scroll {
+    overflow-x: visible;
 }
 
 .corner-cell,

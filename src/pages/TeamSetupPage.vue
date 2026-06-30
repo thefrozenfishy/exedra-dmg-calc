@@ -1,9 +1,6 @@
 <template>
   <div class="setup-page">
-    <h1 class="page-title">
-      Kioku Setup
-
-    </h1>
+    <h1 class="page-title">Kioku Setup</h1>
 
     <section class="toolbar card">
       <div class="toolbar-left">
@@ -286,6 +283,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
+/* ── Page ── */
 .setup-page {
   max-width: 1100px;
   margin: 0 auto;
@@ -296,8 +294,6 @@ export default defineComponent({
   font-size: 2rem;
   margin: 0 0 1.25rem;
   color: var(--text);
-  display: flex;
-  align-items: center;
 }
 
 .calc-indicator {

@@ -220,7 +220,7 @@
             <div class="stat-row">
                 <span class="stat-label">Chance of non-A5 on standard pull</span>
                 <span class="stat-value">{{ standardPool.length - ownedA5StandardPool.length }} / {{ standardPool.length
-                    }}
+                }}
                     ({{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100)
                     }}%)</span>
             </div>
@@ -781,10 +781,21 @@ const onTouchEnd = (e: TouchEvent) => {
 
 .stat-row {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 0.4rem 1rem;
     font-size: 0.88rem;
     padding: 0.15rem 0;
+}
+
+@media (max-width: 480px) {
+    .stat-row {
+        font-size: 0.82rem;
+    }
+
+    .stat-value {
+        text-align: left;
+    }
 }
 
 .stat-row-sub {

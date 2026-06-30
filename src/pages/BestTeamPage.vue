@@ -92,7 +92,7 @@
                         @click.stop />
                 </div>
 
-                <div class="role-box total-box" style="grid-column: 3 / span 3; width: 400px;">
+                <div class="role-box total-box">
                     <span>Flex spot ({{ flexRoleLabel }})</span>
                     <div class="number">{{
                         otherCount
@@ -702,6 +702,9 @@ async function startSimulation() {
 
 .team-row-wrapper {
     display: flex;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .results {
@@ -823,6 +826,20 @@ async function startSimulation() {
     margin: 0 auto;
 }
 
+@media (max-width: 768px) {
+    .role-grid {
+        width: 100%;
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .role-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+}
+
 .role-box {
     display: flex;
     flex-direction: column;
@@ -862,6 +879,16 @@ async function startSimulation() {
 
 .total-box {
     font-weight: bold;
+    grid-column: 3 / span 3;
+    width: 100%;
+    max-width: 400px;
+}
+
+@media (max-width: 768px) {
+    .total-box {
+        grid-column: 1 / -1;
+        max-width: none;
+    }
 }
 
 .icons {

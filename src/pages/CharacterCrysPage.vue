@@ -1,11 +1,11 @@
 <template>
-    <div class="page">
-        <h2>Character Crystalis Selections</h2>
+    <div class="setup-page page">
+        <h1 class="page-title">Character Crystalis Selections</h1>
         <CharacterSelector v-if="!characterId || !character" :selected="selectedCharacter" @select="onSelectCharacter"
             :filter="ch => ch.enabled" />
 
         <div v-if="characterId && character">
-            <div class="bulk-actions">
+            <section class="toolbar card bulk-actions">
                 <CharacterSelector :selected="selectedCharacter" @select="onSelectCharacter"
                     :filter="ch => ch.enabled" />
                 <div class="mass-edit-panel" :class="{ disabled: !massEditSelection.size }">
@@ -13,7 +13,7 @@
                         <span class="mass-edit-title">
                             Multi edit sub-crys
                             <span v-if="massEditSelection.size" class="mass-edit-count">({{ massEditSelection.size
-                            }})</span>
+                                }})</span>
                         </span>
                         <button v-if="massEditSelection.size" class="mass-edit-clear" @click="clearMassEditSelection">
                             Clear
@@ -36,7 +36,7 @@
                     <SubCrysBar :sub-crys="massEditSubCrys" :grouped-sub-crys="groupedSubCrys"
                         @update="applyMassEditSubCrys" />
                 </div>
-            </div>
+            </section>
             <div class="crys-grid">
                 <div v-for="crys in options" :key="crys.selectionAbilityMstId" class="crys-card"
                     :class="{ disabled: !crys.enabled, offElement: offElementalCrys(crys) }">
@@ -73,15 +73,21 @@
             </div>
         </div>
         <div v-else class="missing-element-grid">
-            <h2>Kioku missing their elemental crys (For crys farming teambuilding)</h2>
-            <div>
-                <label> <input type="checkbox" v-model="show3stars" /> Include 3-stars </label>
-                <label> <input type="checkbox" v-model="show4stars" /> Include 4-stars </label>
-                <label v-if="showOffElementalOnesOption">
-                    <input type="checkbox" v-model="showOffElementalOnes" />
-                    Include off elemental kioku
+            <h2 class="section-title">Kioku missing their elemental crys (For crys farming teambuilding)</h2>
+
+            <section class="filters card">
+                <span class="filters-heading">Roster</span>
+                <label class="chip" :class="{ active: show3stars }">
+                    <input type="checkbox" v-model="show3stars" /> ★★★
                 </label>
-            </div>
+                <label class="chip" :class="{ active: show4stars }">
+                    <input type="checkbox" v-model="show4stars" /> ★★★★
+                </label>
+                <label v-if="showOffElementalOnesOption" class="chip" :class="{ active: showOffElementalOnes }">
+                    <input type="checkbox" v-model="showOffElementalOnes" /> Off-elemental kioku
+                </label>
+            </section>
+
             <table class="element-table">
                 <tbody>
                     <tr v-for="elem in KiokuElement" :key="elem" class="element-row">
@@ -321,15 +327,88 @@ const setUseIndex = (effectId: number, useIndex: number) => {
 </script>
 
 <style scoped>
+.setup-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 0 4rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    margin: 0 0 1.25rem;
+    color: var(--text);
+}
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.65rem 1rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toolbar {
+    justify-content: space-between;
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: var(--muted);
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+    user-select: none;
+}
+
+.chip input {
+    display: none;
+}
+
+.chip.active {
+    background: var(--accent-glow);
+    border-color: var(--border-strong);
+    color: var(--accent);
+}
+
+.filters-heading {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-right: 0.25rem;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    margin: 0 0 0.75rem;
+    color: var(--accent-soft);
+}
+
 .page {
     padding: 12px;
 }
 
 .bulk-actions {
-    display: flex;
     align-items: flex-start;
     gap: 8px;
-    margin-top: 8px;
 }
 
 .toggle-all-btn {
@@ -348,8 +427,8 @@ const setUseIndex = (effectId: number, useIndex: number) => {
 }
 
 .toggle-all-btn:hover {
-    border-color: rgba(246, 214, 130, 0.55);
-    background: rgba(246, 214, 130, 0.10);
+    border-color: var(--border-strong);
+    background: var(--accent-glow);
 }
 
 .toggle-all-icon {
@@ -481,6 +560,18 @@ const setUseIndex = (effectId: number, useIndex: number) => {
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
     margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+    .crys-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .crys-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .crys-card {

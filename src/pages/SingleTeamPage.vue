@@ -1,27 +1,39 @@
 <template>
   <div class="team-page">
-    <h1>Simulate Single Battle</h1>
+    <h1 class="page-title">Simulate Single Battle</h1>
 
-    <div class="battle-output">
-      <h2>Battle Result</h2>
-      <h3>{{ formatDmg(battleOutput) }}</h3>
-      <h4>
-        Score Attack score: {{ sa_score }} given:
-        <input style="width: 3em;" v-model.number="hp_percentage_team" type="number" step="1" max="100" min="0" />%
-        health remaining,
-        <input style="width: 3em;" v-model.number="turns" type="number" step="1" min="1" max="16" /> turns, and
-        <span
+    <section class="card battle-output">
+      <h2 class="section-title">Battle Result</h2>
+      <p class="result-line">{{ formatDmg(battleOutput) }}</p>
+
+      <div class="sa-score-row">
+        <span class="sa-score-label">Score Attack score</span>
+        <span class="sa-score-value">{{ sa_score }}</span>
+      </div>
+
+      <div class="sa-fields">
+        <label class="field">
+          <span class="field-label">Health remaining (%)</span>
+          <input v-model.number="hp_percentage_team" type="number" step="1" max="100" min="0" />
+        </label>
+        <label class="field">
+          <span class="field-label">Turns</span>
+          <input v-model.number="turns" type="number" step="1" min="1" max="16" />
+        </label>
+        <label class="field"
           title="To find score multiplier, calculate (dmg_dealt / points_from_dmg_done) in an SA run, this changes for each SA">
-          score multiplier of
-          <input style="width: 4em;" v-model.number="scoreMultiplier" type="number" step="0.1" min="0" />
-        </span>
-      </h4>
-    </div>
+          <span class="field-label">Score multiplier</span>
+          <input v-model.number="scoreMultiplier" type="number" step="0.1" min="0" />
+        </label>
+      </div>
+    </section>
 
-    <div class="share-card-actions">
-      <ImageActionsToolbar :target="() => shareCardRef!" filename="single-team-share.png" :export-options="exportOpts"
-        :share-options="shareOptionsForTeamCard" :disabled="!shareCardAvailable" />
-    </div>
+    <section class="toolbar card share-card-actions">
+      <div class="toolbar-left">
+        <ImageActionsToolbar :target="() => shareCardRef!" filename="single-team-share.png" :export-options="exportOpts"
+          :share-options="shareOptionsForTeamCard" :disabled="!shareCardAvailable" />
+      </div>
+    </section>
 
     <div class="share-card-preview" ref="shareCardRef">
       <div>{{ formatDmg(battleOutput) }}</div>
@@ -72,12 +84,12 @@
       </div>
     </div>
 
-    <div class="team-setup-grid">
+    <div class="team-grid">
       <div v-for="(slot, index) in team.slots" :key="index" class="team-slot">
-        <h2>
+        <h3 class="slot-title">
           {{ index === attackerIndex ? 'Damage Dealer' : 'Member' }}
           {{ index < attackerIndex ? index + 1 : index > attackerIndex ? index : "" }}
-        </h2>
+        </h3>
         <CharacterEditor :index="index" :slot="slot" :setMain="team.setMain" :setSupport="team.setSupport" />
       </div>
     </div>
@@ -86,20 +98,22 @@
   <EnemySelector />
 
   <div class="team-page">
-    <h2>Extra settings</h2>
-    <DamageReductionInputs />
-    <ArenaBuffs />
-    <div class="weak-elements">
-      <AlimentToggler ref="alimentRef">
-        <template #heading>
-          <h4>Active aliments</h4>
-        </template>
-      </AlimentToggler>
-    </div>
+    <section class="card section-card extra-settings">
+      <h2 class="section-title">Extra Settings</h2>
+      <DamageReductionInputs />
+      <ArenaBuffs />
+      <div class="weak-elements">
+        <AlimentToggler ref="alimentRef">
+          <template #heading>
+            <h4 class="subsection-title">Active aliments</h4>
+          </template>
+        </AlimentToggler>
+      </div>
+    </section>
   </div>
 
   <div class="team-page">
-    <h1>Detailed info</h1>
+    <h1 class="page-title">Detailed Info</h1>
 
     <div v-if="hasBannedEffects" class="banned-banner">
       <span>Note: {{ bannedCount }} effect{{ bannedCount === 1 ? '' : 's' }} excluded from calculation</span>
@@ -454,6 +468,113 @@ async function copyToClipboard(text: string) {
 </script>
 
 <style scoped>
+.page-title {
+  font-size: 2rem;
+  margin: 0 0 1.25rem;
+  color: var(--text);
+  text-align: center;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.toolbar {
+  display: flex;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  color: var(--accent-soft);
+  margin: 0 0 0.75rem;
+  text-align: center;
+}
+
+.subsection-title {
+  font-size: 0.95rem;
+  color: var(--accent-soft);
+  margin: 0 0 0.5rem;
+}
+
+.slot-title {
+  font-size: 0.95rem;
+  color: var(--accent-soft);
+  text-align: center;
+  margin: 0 0 0.5rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.field-label {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.field input {
+  width: 80px;
+}
+
+/* ── Battle result card ── */
+.result-line {
+  text-align: center;
+  font-size: 1.05rem;
+  margin: 0 0 0.75rem;
+  color: var(--text);
+}
+
+.sa-score-row {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.sa-score-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.sa-score-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.sa-fields {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.sa-fields .field {
+  align-items: center;
+}
+
+.extra-settings {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .team-page {
   display: flex;
   flex-direction: column;
@@ -461,10 +582,11 @@ async function copyToClipboard(text: string) {
   width: 100%;
 }
 
-.team-setup-grid {
+.team-grid {
   display: grid;
-  gap: 1rem;
+  gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  max-width: 1200px;
   width: 100%;
 }
 
@@ -634,7 +756,7 @@ async function copyToClipboard(text: string) {
 }
 
 .subcrys-chip {
-  background: rgba(246, 214, 130, 0.15);
+  background: var(--accent-glow);
 }
 
 .share-slot-portrait-icon {
@@ -658,11 +780,10 @@ async function copyToClipboard(text: string) {
   gap: 1rem;
   margin-bottom: 1rem;
   padding: 0.5rem 1rem;
-  background: rgba(180, 40, 40, 0.12);
-  border: 1px solid rgba(200, 60, 60, 0.28);
-  border-radius: 6px;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-sm);
   font-size: 0.85rem;
-  color: var(--danger-soft);
+  color: var(--text);
   max-width: 1200px;
   width: 100%;
 }
@@ -670,16 +791,16 @@ async function copyToClipboard(text: string) {
 .clear-banned-btn {
   margin-left: auto;
   padding: 0.2rem 0.75rem;
-  background: rgba(200, 60, 60, 0.2);
-  border: 1px solid rgba(200, 60, 60, 0.45);
-  border-radius: 4px;
-  color: var(--danger-soft);
+  background: rgba(255, 155, 143, 0.25);
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-sm);
+  color: var(--danger);
   cursor: pointer;
   font-size: 0.8rem;
 }
 
 .clear-banned-btn:hover {
-  background: rgba(200, 60, 60, 0.35);
+  background: rgba(255, 155, 143, 0.4);
 }
 
 .debug-sections {

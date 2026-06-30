@@ -470,178 +470,283 @@ const downloadFullHistoryHorizontal = async () => {
 </script>
 
 <template>
-    <div class="controls">
-        <label>
-            Pickup Rate (%)
-            <input type="number" v-model.number="pickupRate" step="0.01" />
-        </label>
+    <div class="setup-page">
+        <h1 class="page-title">Gacha Rate Simulator</h1>
 
-        <label>
-            Spark Interval
-            <input type="number" v-model.number="sparkInterval" />
-        </label>
+        <section class="card numeric-row">
+            <span class="filters-heading">Spark Curve</span>
+            <label class="field">
+                <span class="field-label">Pickup Rate (%)</span>
+                <input type="number" v-model.number="pickupRate" step="0.01" />
+            </label>
+            <label class="field">
+                <span class="field-label">Spark Interval</span>
+                <input type="number" v-model.number="sparkInterval" />
+            </label>
+            <label class="field">
+                <span class="field-label">Spark Interval Reduction</span>
+                <input type="number" v-model.number="sparkIntervalReduction" />
+            </label>
+            <label class="field">
+                <span class="field-label">100 Gauge Soft Pity At</span>
+                <input type="number" v-model.number="softPityAt" />
+            </label>
+            <label class="field">
+                <span class="field-label">100 Gauge Soft Pity Rate (%)</span>
+                <input type="number" v-model.number="softPityRate" />
+            </label>
 
-        <label>
-            Spark Interval Reduction per spark
-            <input type="number" v-model.number="sparkIntervalReduction" />
-        </label>
+            <label class="chip" :class="{ active: isDualPickup }">
+                <input type="checkbox" v-model.boolean="isDualPickup" /> Dual pickup
+            </label>
+            <label class="chip" :class="{ active: hasRetryingSoftPity }">
+                <input type="checkbox" v-model.boolean="hasRetryingSoftPity" /> Retrying soft pity
+            </label>
+        </section>
 
-        <label>
-            100 Gauge Soft Pity Pull at
-            <input type="number" v-model.number="softPityAt" />
-        </label>
-
-        <label>
-            100 Gauge Soft Pity Rate (%)
-            <input type="number" v-model.number="softPityRate" />
-        </label>
-
-        <label>
-            Is Dual Pickup
-            <input type="checkbox" v-model.boolean="isDualPickup" />
-        </label>
-
-        <label>
-            Has retrying soft pity system
-            <input type="checkbox" v-model.boolean="hasRetryingSoftPity" />
-        </label>
-    </div>
-
-    <div class="chart-wrapper">
-        <canvas ref="canvasRef"></canvas>
-    </div>
-
-    <div class="controls">
-        <label>
-            SSR Rate (%)
-            <input type="number" v-model.number="rate" step="0.01" />
-        </label>
-
-        <div class="control">
-            <span class="control-label">Pickup Character</span>
-            <CharacterSelector :selected="pickupCharacter" @select="pickupCharacter = $event"
-                :filter="c => c.rarity === 5 && c.name !== 'Lux☆Magica'" />
-        </div>
-    </div>
-
-    <div class="simulator">
-        <h3>🎰 Gacha Simulator</h3>
-
-        <div class="sim-controls">
-            <button @click="pullSingle">1 Pull</button>
-            <button @click="pullTen">10 Pulls</button>
-            <button @click="pullHundred">100 Pulls</button>
-            <button class="reset" @click="resetSimulator"> Reset </button>
+        <div class="chart-wrapper">
+            <canvas ref="canvasRef"></canvas>
         </div>
 
-        <div class="sim-stats">
-            <div>Total: {{ simPulls }}</div>
-            <div>🔵 3★: {{ blueCount }}</div>
-            <div>🟣 4★: {{ purpleCount }}</div>
-            <div>🟡 5★: {{ goldCount }}</div>
-            <div>⭐ Rate-up: {{ rateUpCount }}</div>
-        </div>
+        <section class="card numeric-row">
+            <span class="filters-heading">Pickup</span>
+            <label class="field">
+                <span class="field-label">SSR Rate (%)</span>
+                <input type="number" v-model.number="rate" step="0.01" />
+            </label>
 
-        <div class="history-header">
-            <button class="history-toggle" @click="showFullHistory = !showFullHistory">
-                {{ showFullHistory ? 'Hide full history' : 'Show full history' }}
-                ({{ pullResults.length }} pulls)
-            </button>
-            <button class="history-toggle"
-                @click="clipboardSupported ? copyFullHistoryHorizontal() : openFullHistoryHorizontalNewTab()">
-                {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
-            </button>
-            <button class="history-toggle" @click="downloadFullHistoryHorizontal">Download</button>
-        </div>
+            <div class="field">
+                <span class="field-label">Pickup Character</span>
+                <CharacterSelector :selected="pickupCharacter" @select="pickupCharacter = $event"
+                    :filter="c => c.rarity === 5 && c.name !== 'Lux☆Magica'" />
+            </div>
+        </section>
 
-        <div class="pull-grid">
-            <template v-for="(p, i) in visiblePulls" :key="i">
-                <div v-if="i % 10 === 0 && i !== 0" class="ten-separator">
-                    {{ pullResults.length - i }} pulls ago
-                </div>
+        <div class="simulator">
+            <h3 class="section-title">🎰 Gacha Simulator</h3>
 
-                <div class="pull-card" :class="{ 'gold-card': p.rarity === 5, 'plat-card': p.isRateUp }">
-                    <div :title="p.char?.name">
-                        <a :href="`https://exedra.wiki/wiki/${p.char?.name}`" target="_blank">
-                            <img class="pull-img" :class="{
-                                'blue-border': p.rarity === 3,
-                                'purple-border': p.rarity === 4,
-                                'gold-border': p.rarity === 5
-                            }" :src="`/exedra-dmg-calc/kioku_images/${p.char?.id}_thumbnail.png`" />
-                            <div v-if="p.isRateUp" class="rateup-badge">
-                                UP
-                            </div>
-                        </a>
+            <div class="sim-controls">
+                <button class="btn btn-accent" @click="pullSingle">1 Pull</button>
+                <button class="btn btn-accent" @click="pullTen">10 Pulls</button>
+                <button class="btn btn-accent" @click="pullHundred">100 Pulls</button>
+                <button class="btn reset" @click="resetSimulator"> Reset </button>
+            </div>
+
+            <div class="sim-stats">
+                <div class="stat-pill">Total: <strong>{{ simPulls }}</strong></div>
+                <div class="stat-pill">🔵 3★: <strong>{{ blueCount }}</strong></div>
+                <div class="stat-pill">🟣 4★: <strong>{{ purpleCount }}</strong></div>
+                <div class="stat-pill">🟡 5★: <strong>{{ goldCount }}</strong></div>
+                <div class="stat-pill">⭐ Rate-up: <strong>{{ rateUpCount }}</strong></div>
+            </div>
+
+            <div class="history-header">
+                <button class="btn history-toggle" @click="showFullHistory = !showFullHistory">
+                    {{ showFullHistory ? 'Hide full history' : 'Show full history' }}
+                    ({{ pullResults.length }} pulls)
+                </button>
+                <button class="btn history-toggle"
+                    @click="clipboardSupported ? copyFullHistoryHorizontal() : openFullHistoryHorizontalNewTab()">
+                    {{ clipboardSupported ? 'Copy image to clipboard' : 'Open image in new tab' }}
+                </button>
+                <button class="btn history-toggle" @click="downloadFullHistoryHorizontal">Download</button>
+            </div>
+
+            <div class="pull-grid">
+                <template v-for="(p, i) in visiblePulls" :key="i">
+                    <div v-if="i % 10 === 0 && i !== 0" class="ten-separator">
+                        {{ pullResults.length - i }} pulls ago
                     </div>
-                </div>
-            </template>
-        </div>
 
+                    <div class="pull-card" :class="{ 'gold-card': p.rarity === 5, 'plat-card': p.isRateUp }">
+                        <div :title="p.char?.name">
+                            <a :href="`https://exedra.wiki/wiki/${p.char?.name}`" target="_blank">
+                                <img class="pull-img" :class="{
+                                    'blue-border': p.rarity === 3,
+                                    'purple-border': p.rarity === 4,
+                                    'gold-border': p.rarity === 5
+                                }" :src="`/exedra-dmg-calc/kioku_images/${p.char?.id}_thumbnail.png`" />
+                                <div v-if="p.isRateUp" class="rateup-badge">
+                                    UP
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+        </div>
     </div>
 </template>
 
 
 <style scoped>
-.controls {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.75rem;
-    margin-bottom: 1rem;
+.setup-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 0 4rem;
 }
 
-label {
+.page-title {
+    font-size: 2rem;
+    margin: 0 0 1.25rem;
+    color: var(--text);
+}
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.65rem 1rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: var(--muted);
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+    user-select: none;
+}
+
+.chip input {
+    display: none;
+}
+
+.chip.active {
+    background: var(--accent-glow);
+    border-color: var(--border-strong);
+    color: var(--accent);
+}
+
+.filters-heading {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-right: 0.25rem;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.section-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.1rem;
+    color: var(--accent-soft);
+}
+
+/* ── Buttons ── */
+.btn {
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.4em 0.9em;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: var(--border-strong);
+}
+
+.btn-accent {
+    background: var(--accent-glow);
+    border: 1px solid var(--border-strong);
+    color: var(--accent);
+}
+
+.btn-accent:hover {
+    background: var(--accent-glow-strong);
+    border-color: var(--accent);
+}
+
+.numeric-row {
+    align-items: flex-end;
+}
+
+.field {
     display: flex;
     flex-direction: column;
+    gap: 0.25rem;
     font-size: 0.85rem;
+}
+
+.field-label {
+    font-size: 0.74rem;
+    color: var(--muted);
+}
+
+.field input[type="number"] {
+    width: 100px;
 }
 
 .chart-wrapper {
     position: relative;
+    margin-bottom: 0.6rem;
 }
 
 .simulator {
-    margin-top: 2rem;
+    margin-top: 1rem;
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
     background: var(--panel);
     width: 100%;
     display: flex;
     flex-direction: column;
 }
 
-.simulator h3 {
-    margin-bottom: 0.75rem;
-}
-
 .sim-controls {
     display: flex;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-}
-
-.sim-controls button {
-    padding: 0.4rem 0.75rem;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--text);
-    border: none;
-    cursor: pointer;
-}
-
-.sim-controls button:hover {
-    background: rgba(255, 255, 255, 0.08);
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 0.85rem;
 }
 
 .sim-controls .reset {
     margin-left: auto;
-    background: rgba(255, 105, 105, 0.18);
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.sim-controls .reset:hover {
+    background: rgba(255, 155, 143, 0.35);
 }
 
 .sim-stats {
     display: flex;
-    gap: 1.5rem;
-    margin-bottom: 0.75rem;
-    font-size: 0.9rem;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 0.85rem;
+}
+
+.stat-pill {
+    font-size: 0.85rem;
+    color: var(--muted);
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0.25rem 0.7rem;
+}
+
+.stat-pill strong {
+    color: var(--text);
+    font-weight: 700;
 }
 
 .sim-log {
@@ -662,6 +767,14 @@ label {
     margin-top: 1rem;
     padding: 16px;
     box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+    .pull-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5rem;
+        padding: 8px;
+    }
 }
 
 .pull-card {
@@ -718,32 +831,16 @@ label {
     border-radius: 6px;
 }
 
-.control {
-    display: flex;
-    flex-direction: column;
-    font-size: 0.85rem;
-    gap: 0.25rem;
-}
-
 .history-header {
     display: flex;
     justify-content: center;
     margin-bottom: 0.5rem;
     gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .history-toggle {
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--text);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 6px;
-    padding: 0.4rem 0.75rem;
-    cursor: pointer;
     font-size: 0.85rem;
-}
-
-.history-toggle:hover {
-    background: rgba(255, 255, 255, 0.12);
 }
 
 .ten-separator {

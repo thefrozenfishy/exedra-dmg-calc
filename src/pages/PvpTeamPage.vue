@@ -1,12 +1,12 @@
 <template>
-  <div class="team-page">
-    <h1>PvP Action Order calculator</h1>
+  <div class="setup-page team-page">
+    <h1 class="page-title">PvP Action Order Calculator</h1>
 
     <div v-for="isAlliedTeam in [1, 0]">
-      <h2>{{ isAlliedTeam ? "Allied" : "Enemy" }} Team</h2>
-      <div class="team-setup-grid">
+      <h2 class="section-title">{{ isAlliedTeam ? "Allied" : "Enemy" }} Team</h2>
+      <div class="team-grid">
         <div v-for="(slot, index) in team.slots[isAlliedTeam]" :key="index" class="team-slot">
-          <h2> {{ isAlliedTeam ? "Ally" : "Enemy" }} {{ index + 1 }}</h2>
+          <h3 class="slot-title"> {{ isAlliedTeam ? "Ally" : "Enemy" }} {{ index + 1 }}</h3>
 
           <CharacterEditor :index="index" :slot="slot"
             :extraData="battleOutput[0]?.[isAlliedTeam ? 'allies' : 'enemies']?.team?.find(b => b.name === slot.main?.name)"
@@ -14,58 +14,65 @@
         </div>
       </div>
     </div>
-  </div>
-  <div>
-    <h2>Battle Order</h2>
-    <p style="color: red;">UNDER CONSTRUCTION</p>
-    <button @click="runSimulation" :disabled="!isFullBattle">Run Simulation</button>
-    <p style="color: red;">Take this with a big grain of salt, as my understanding of the mechanics here are not
-      perfect, nor do I want to use the time to special case all different attacks, targeting etc</p>
-    <p>Use this to get a gut feel for how characters and speed vs AV vs AA works and how speed ties resolve</p>
-    <p>I'll try to make sure all common pvp characters work identical to in-game, but niche picks are at your own risk
-    </p>
-    <p>If anything looks weird, just give me a poke with an example team!</p>
-    <div class="battle-output">
-      <div v-for="(state, idx) in battleOutput" :key="idx" class="battle-state">
-        <div class="matchup-divider">
-          <div v-if="idx > 0" class="ten-separator" :class="state.lastTeamIsTeam1 ? 'ally' : 'enemy'">
-            <span class="turn">Action {{ idx }}</span>
-            <span class="actor">{{ state.lastActor }}</span>
-            <span class="action"> {{ skillTranslate[state.lastTargetType] }} </span>
-          </div>
-          <div v-else>
 
-            <span class="action"> Initial State </span>
-          </div>
-        </div>
+    <section class="card battle-order-card">
+      <h2 class="section-title">Battle Order</h2>
 
-        <div v-for="side of [state.allies, state.enemies]">
-          <div class="row">
-            {{ side.sp }}
-            <div v-for="char in side.team" :key="char.id" class="character">
-              <a :href="`https://exedra.wiki/wiki/${char.name}`" target="_blank" style="display: block;"
-                :class="{ broken: char.breakCurrent <= 0 }">
-                <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name"
-                  :class="{ 'at-zero': char.secondsLeft - 0.001 <= 0 }" />
-              </a>
-              <div class="progress-bar" :title="char.mp + ' / ' + char.maxMp">
-                MP
-                <progress :value="char.mp" :max="char.maxMp">MP</progress>
+      <div class="notice-banner">
+        <h3 class="notice-tag">Under construction</h3>
+        <p>Take this with a big grain of salt, as my understanding of the mechanics here are not perfect, nor do I
+          want to use the time to special case all different attacks, targeting etc.</p>
+      </div>
+
+      <p class="hint-text">Use this to get a gut feel for how characters and speed vs AV vs AA works and how speed
+        ties resolve. I'll try to make sure all common pvp characters work identical to in-game, but niche picks are
+        at your own risk. If anything looks weird, just give me a poke with an example team!</p>
+
+      <button class="btn btn-accent run-sim-btn" @click="runSimulation" :disabled="!isFullBattle">Run
+        Simulation</button>
+
+      <div class="battle-output">
+        <div v-for="(state, idx) in battleOutput" :key="idx" class="battle-state">
+          <div class="matchup-divider">
+            <div v-if="idx > 0" class="ten-separator" :class="state.lastTeamIsTeam1 ? 'ally' : 'enemy'">
+              <span class="turn">Action {{ idx }}</span>
+              <span class="actor">{{ state.lastActor }}</span>
+              <span class="action"> {{ skillTranslate[state.lastTargetType] }} </span>
+            </div>
+            <div v-else>
+
+              <span class="action"> Initial State </span>
+            </div>
+          </div>
+
+          <div v-for="side of [state.allies, state.enemies]">
+            <div class="row">
+              {{ side.sp }}
+              <div v-for="char in side.team" :key="char.id" class="character">
+                <a :href="`https://exedra.wiki/wiki/${char.name}`" target="_blank" style="display: block;"
+                  :class="{ broken: char.breakCurrent <= 0 }">
+                  <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name"
+                    :class="{ 'at-zero': char.secondsLeft - 0.001 <= 0 }" />
+                </a>
+                <div class="progress-bar" :title="char.mp + ' / ' + char.maxMp">
+                  MP
+                  <progress :value="char.mp" :max="char.maxMp">MP</progress>
+                </div>
+                <div class="progress-bar" :title="char.breakCurrent + ' / ' + char.maxBreakGauge">
+                  Break
+                  <progress :value="char.breakCurrent" :max="char.maxBreakGauge"></progress>
+                </div>
+                <div class="distance">Magic: {{ char.magicStacks }} / {{ char.maxMagicStacks }}</div>
+                <div class="distance">{{ round(char.secondsLeft) }} AV ({{ round(char.distanceLeft / 100) }} AA)</div>
+                <div class="distance" :title="formatSpdBuffs(char.currSpdBuffs)">{{ round(char.spd) }} spd</div>
+                <div class="distance" :title="char.buffs.join('\n')">{{ char.buffs.length }} buffs</div>
+                <div class="distance" :title="char.debuffs.join('\n')">{{ char.debuffs.length }} debuffs</div>
               </div>
-              <div class="progress-bar" :title="char.breakCurrent + ' / ' + char.maxBreakGauge">
-                Break
-                <progress :value="char.breakCurrent" :max="char.maxBreakGauge"></progress>
-              </div>
-              <div class="distance">Magic: {{ char.magicStacks }} / {{ char.maxMagicStacks }}</div>
-              <div class="distance">{{ round(char.secondsLeft) }} AV ({{ round(char.distanceLeft / 100) }} AA)</div>
-              <div class="distance" :title="formatSpdBuffs(char.currSpdBuffs)">{{ round(char.spd) }} spd</div>
-              <div class="distance" :title="char.buffs.join('\n')">{{ char.buffs.length }} buffs</div>
-              <div class="distance" :title="char.debuffs.join('\n')">{{ char.debuffs.length }} debuffs</div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -149,11 +156,121 @@ function runSimulation() {
 </script>
 
 <style scoped>
+/* ── Page (shared design system) ── */
+.setup-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0 4rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  margin: 0 0 1.25rem;
+  color: var(--text);
+  text-align: center;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  color: var(--accent-soft);
+  margin: 1.5rem 0 0.75rem;
+  text-align: center;
+}
+
+.slot-title {
+  font-size: 0.95rem;
+  color: var(--accent-soft);
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+.btn {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.5em 1.2em;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-accent {
+  background: var(--accent-glow);
+  border: 1px solid var(--border-strong);
+  color: var(--accent);
+}
+
+.btn-accent:hover:not(:disabled) {
+  background: var(--accent-glow-strong);
+  border-color: var(--accent);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.run-sim-btn {
+  display: block;
+  margin: 0 auto 1.5rem;
+}
+
+.battle-order-card {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.notice-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.notice-tag {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--danger);
+  background: rgba(255, 155, 143, 0.18);
+  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
+  margin-top: 0.1rem;
+}
+
+.notice-banner p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.hint-text {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0 0 1rem;
+}
+
 .team-page {
   justify-content: center;
 }
 
-.team-setup-grid {
+.team-grid {
   display: grid;
   gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

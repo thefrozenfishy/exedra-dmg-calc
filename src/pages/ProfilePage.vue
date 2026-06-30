@@ -1,32 +1,42 @@
 <template>
-    <div class="profile-page">
-        <div>
-            <button @click="showGraph = !showGraph">{{ showGraph ? 'Hide' : 'Show' }} graph</button>
+    <div class="setup-page profile-page">
+        <h1 class="page-title">Profile &amp; Friends</h1>
 
-            <section v-if="showGraph" class="profile-section analytics-section">
-                <h2>Power Analytics</h2>
-                <div class="btn-container">
-                    <ImageActionsToolbar target=".chart-wrapper" :filename="`${fileName}.png`"
-                        :share-options="shareOptionsForChart">
-                        <button class="icon-btn" :title="exportedCSV ? 'Exported!' : 'Export csv'"
-                            :aria-label="exportedCSV ? 'Exported!' : 'Export csv'" @click="exportData">
-                            <svg v-if="exportedCSV" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <path d="M20 6L9 17l-5-5" />
-                            </svg>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                <polyline points="14 2 14 8 20 8" />
-                                <line x1="12" y1="11" x2="12" y2="17" />
-                                <polyline points="9 14 12 17 15 14" />
-                            </svg>
-                        </button>
-                    </ImageActionsToolbar>
-                </div>
-                <div class="analytics-controls">
-                    <label>
-                        Graph Mode
+        <div>
+            <button class="btn btn-toggle-graph" @click="showGraph = !showGraph">
+                {{ showGraph ? 'Hide' : 'Show' }} graph
+            </button>
+
+            <section v-if="showGraph" class="profile-section analytics-section card section-card">
+                <h2 class="section-title">Power Analytics</h2>
+
+                <section class="toolbar card">
+                    <div class="toolbar-left">
+                        <ImageActionsToolbar target=".chart-wrapper" :filename="`${fileName}.png`"
+                            :share-options="shareOptionsForChart">
+                            <button class="icon-btn icon-btn--accent" :title="exportedCSV ? 'Exported!' : 'Export csv'"
+                                :aria-label="exportedCSV ? 'Exported!' : 'Export csv'" @click="exportData">
+                                <svg v-if="exportedCSV" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                                    aria-hidden="true">
+                                    <path d="M20 6L9 17l-5-5" />
+                                </svg>
+                                <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="12" y1="11" x2="12" y2="17" />
+                                    <polyline points="9 14 12 17 15 14" />
+                                </svg>
+                            </button>
+                        </ImageActionsToolbar>
+                    </div>
+                </section>
+
+                <section class="card analytics-controls">
+                    <span class="filters-heading">Axes</span>
+                    <label class="field">
+                        <span class="field-label">Graph Mode</span>
                         <select v-model="graphMode">
                             <option value="scatter">
                                 Scatter Plot
@@ -38,8 +48,8 @@
                         </select>
                     </label>
 
-                    <label>
-                        X Axis
+                    <label class="field">
+                        <span class="field-label">X Axis</span>
                         <select v-model="selectedXAxis">
                             <option v-for="opt in graphOptions" :key="opt.value" :value="opt.value">
                                 {{ opt.label }}
@@ -47,15 +57,15 @@
                         </select>
                     </label>
 
-                    <label v-if="graphMode === 'scatter'">
-                        Y Axis
+                    <label class="field" v-if="graphMode === 'scatter'">
+                        <span class="field-label">Y Axis</span>
                         <select v-model="selectedYAxis">
                             <option v-for="opt in graphOptions" :key="opt.value" :value="opt.value">
                                 {{ opt.label }}
                             </option>
                         </select>
                     </label>
-                </div>
+                </section>
 
                 <div class="chart-wrapper" ref="chartContainerRef">
                     <div class="analytics-chart">
@@ -92,9 +102,8 @@
                                         <a :href="href" target="_blank" rel="noopener noreferrer"
                                             class="chart-tooltip-action-btn" title="View profile"
                                             aria-label="View profile" @click.stop>
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                                 <circle cx="12" cy="12" r="3" />
                                             </svg>
@@ -106,11 +115,10 @@
                                         query: { left: store.friendCode, right: tooltip.player.friendId }
                                     }" custom>
                                         <a :href="href" target="_blank" rel="noopener noreferrer"
-                                            class="chart-tooltip-action-btn" title="Compare"
-                                            aria-label="Compare" @click.stop>
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                aria-hidden="true">
+                                            class="chart-tooltip-action-btn" title="Compare" aria-label="Compare"
+                                            @click.stop>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                 <polyline points="16 3 21 3 21 8" />
                                                 <line x1="21" y1="3" x2="14" y2="10" />
                                                 <polyline points="8 21 3 21 3 16" />
@@ -153,15 +161,13 @@
                 </div>
             </section>
         </div>
-        <h1>Profile & Friends</h1>
-
         <div v-if="!userId" class="offline-box">
             Enable cloud sync first to use profiles and friends.
         </div>
 
         <template v-else>
-            <section class="profile-section">
-                <h2>Profile</h2>
+            <section class="profile-section card section-card">
+                <h2 class="section-title">Profile</h2>
 
                 <div class="friend-card self-card">
                     <div class="friend-left">
@@ -329,32 +335,38 @@
                 </div>
             </section>
 
-            <section class="friend-section">
-                <h2>Friends</h2>
+            <section class="friend-section card section-card">
+                <h2 class="section-title">Friends</h2>
 
-                <div class="add-friend-row">
+                <section class="toolbar card add-friend-row">
+                    <div class="toolbar-left">
+                        <label class="field">
+                            <span class="field-label">Show</span>
+                            <select v-model="listScope" id="listScope">
+                                <option value="mine">Friends + Union</option>
+                                <option value="all">Everyone</option>
+                            </select>
+                        </label>
 
-                    <label for="listScope">Show:</label>
-                    <select v-model="listScope" id="listScope">
-                        <option value="mine">Friends + Union</option>
-                        <option value="all">Everyone</option>
-                    </select>
+                        <label class="field">
+                            <span class="field-label">Sort by</span>
+                            <select v-model="sortMode" id="sortMode">
+                                <option value="default">Default</option>
+                                <option v-for="opt in graphOptions" :key="opt.value" :value="opt.value">
+                                    {{ opt.label }}
+                                </option>
+                            </select>
+                        </label>
+                    </div>
 
-                    <label for="sortMode">Sort by:</label>
-                    <select v-model="sortMode" id="sortMode">
-                        <option value="default">Default</option>
-                        <option v-for="opt in graphOptions" :key="opt.value" :value="opt.value">
-                            {{ opt.label }}
-                        </option>
-                    </select>
+                    <div class="toolbar-right">
+                        <input v-model="friendCode" placeholder="Enter friend code" maxlength="5" />
 
-                    <input v-model="friendCode" placeholder="Enter friend code" maxlength="5" />
-
-                    <button @click="addFriend">
-                        Follow
-                    </button>
-
-                </div>
+                        <button class="btn btn-accent" @click="addFriend">
+                            Follow
+                        </button>
+                    </div>
+                </section>
 
                 <p v-if="listLoading" class="list-loading-hint">Loading…</p>
 
@@ -521,7 +533,8 @@
                                         friend: friend.friend_id
                                     }
                                 }" custom>
-                                    <a :href="href" target="_blank" rel="noopener noreferrer">
+                                    <a :href="href" target="_blank" rel="noopener noreferrer"
+                                        class="btn friend-action-link">
                                         View Kioku
                                     </a>
                                 </router-link>
@@ -533,16 +546,18 @@
                                         right: friend.friend_id,
                                     }
                                 }" custom>
-                                    <a :href="href" target="_blank" rel="noopener noreferrer">
+                                    <a :href="href" target="_blank" rel="noopener noreferrer"
+                                        class="btn friend-action-link">
                                         Compare
                                     </a>
                                 </router-link>
 
-                                <button v-if="!friend.isFriend" @click="store.addFriend(friend.friend_id)">
+                                <button v-if="!friend.isFriend" class="btn btn-accent"
+                                    @click="store.addFriend(friend.friend_id)">
                                     Follow
                                 </button>
 
-                                <button v-else class="remove-btn" @click="store.deleteFriend(friend.friend_id)">
+                                <button v-else class="btn remove-btn" @click="store.deleteFriend(friend.friend_id)">
                                     Remove
                                 </button>
                             </div>
@@ -1569,23 +1584,106 @@ pre {
     margin: 0;
 }
 
-/* =========================
-   Sections
-========================= */
+.setup-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 0 4rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    margin: 0 0 1.25rem;
+    color: var(--text);
+}
+
+.card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.65rem 1rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toolbar {
+    justify-content: space-between;
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.filters-heading {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-right: 0.25rem;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.section-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.2rem;
+    color: var(--accent-soft);
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+}
+
+.field-label {
+    font-size: 0.74rem;
+    color: var(--muted);
+}
+
+.btn-accent {
+    background: var(--accent-glow);
+    border-color: var(--border-strong);
+    color: var(--accent);
+}
+
+.btn-accent:hover {
+    background: var(--accent-glow-strong);
+    border-color: var(--accent);
+}
+
+.btn-toggle-graph {
+    margin-bottom: 0.75rem;
+}
+
+.friend-action-link {
+    font-size: 0.85rem;
+}
 
 .profile-section,
 .friend-section {
-    margin-top: 2rem;
-    padding: 1.2rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 16px;
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 1rem;
+}
+
+.section-card {
+    flex-direction: column;
+    align-items: stretch;
 }
 
 @media (max-width: 768px) {
 
     .profile-section,
     .friend-section {
-        margin-top: 1.5rem;
+        margin-top: 0.75rem;
         padding: 0.8rem;
     }
 }
@@ -1607,9 +1705,6 @@ option {
 
 button,
 a {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: var(--text);
     padding: 0.3rem 0.5rem;
     border-radius: 10px;
     text-decoration: none;
@@ -1642,26 +1737,11 @@ a.link {
     justify-content: center;
 }
 
-/* =========================
-   Header Row
-========================= */
-
-.add-friend-row {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    flex-wrap: wrap;
-}
-
 .add-friend-row input {
     width: 160px;
 }
 
 @media (max-width: 480px) {
-    .add-friend-row {
-        gap: 0.5rem;
-    }
-
     .add-friend-row input {
         width: 100%;
     }
@@ -2198,28 +2278,24 @@ img.lim-icon {
 }
 
 .friend-actions a {
-    background: rgba(246, 214, 130, 0.18);
-    border-color: rgba(246, 214, 130, 0.35);
+    background: var(--accent-glow);
+    border-color: var(--border-strong);
 
     font-weight: 600;
 }
 
 .friend-actions a:hover {
-    background: rgba(246, 214, 130, 0.26);
+    background: var(--accent-glow-strong);
 }
 
 .remove-btn {
-    background: rgba(255, 105, 105, 0.14);
-    border-color: rgba(255, 105, 105, 0.24);
+    border-color: var(--danger);
+    color: var(--danger);
 }
 
 .remove-btn:hover {
-    background: rgba(255, 105, 105, 0.2);
+    background: rgba(255, 155, 143, 0.4);
 }
-
-/* =========================
-   Avatar Picker
-========================= */
 
 .avatar-picker {
     position: absolute;
@@ -2230,6 +2306,7 @@ img.lim-icon {
     z-index: 100;
 
     width: 340px;
+    max-width: calc(100vw - 2.5rem);
 
     padding: 1rem;
 
@@ -2307,41 +2384,21 @@ img.lim-icon {
     transform: scale(0.96);
 }
 
-/* =========================
-   Misc
-========================= */
-
 .offline-box {
-    margin-top: 2rem;
+    margin-top: 1rem;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 12px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
 }
 
-/* =========================
-   Graphs
-========================= */
-
 .analytics-section {
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
 
 .analytics-controls {
-    display: flex;
-    flex-wrap: wrap;
     gap: 1rem;
-    margin-bottom: 1rem;
 }
-
-.analytics-controls label {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-}
-
-/* =========================
-   Chart Tooltip Overlay
-========================= */
 
 .chart-wrapper {
     position: relative;
