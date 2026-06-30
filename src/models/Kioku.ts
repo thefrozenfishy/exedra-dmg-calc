@@ -86,15 +86,14 @@ export class Kioku {
         const defTerm = (300 / 1000) * this.getBaseDef() * (roleCoeff.def / 1000);
         const baseStatsBracket = hpTerm + atkTerm + defTerm;
 
-        const critModifierBracket = ((this.baseCritRate / 1000) * (this.baseCritDamage / 1000)) + 1.0;
+        const critModifierBracket = 1 + ((this.baseCritRate / 1000) * (this.baseCritDamage / 1000));
 
-        const baseSkillVal = 1000 / 1000.0;
-        const normalSkillTerm = (this.attackLvl * 30) / 1000.0;
-        const activeSkillTerm = (this.skillLvl * 120) / 1000.0;
-        const passiveSkillTerm = (this.abilityLvl * 100) / 1000.0;
-        const specialAttackTerm = (this.specialLvl * 150) / 1000.0;
+        const normalSkillTerm = this.attackLvl * 30 / 1000;
+        const activeSkillTerm = this.skillLvl * 120 / 1000;
+        const passiveSkillTerm = this.abilityLvl * 100 / 1000;
+        const specialAttackTerm = this.specialLvl * 150 / 1000;
 
-        const skillModifierBracket = baseSkillVal + normalSkillTerm + activeSkillTerm + passiveSkillTerm + specialAttackTerm;
+        const skillModifierBracket = 1 + normalSkillTerm + activeSkillTerm + passiveSkillTerm + specialAttackTerm;
 
         const finalPowerFloat = baseStatsBracket * critModifierBracket * skillModifierBracket;
         return Math.floor(finalPowerFloat);
