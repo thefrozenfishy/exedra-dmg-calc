@@ -32,7 +32,7 @@ function buildSharePageHtml(entry: ShareEntry, shareUrl: string): string {
     const resolvedBackUrl = entry.backUrl?.trim() || TOOLBOX_URL
     const safeBackUrl = escapeHtml(resolvedBackUrl)
 
-    const description = "Shared from Exedra Damage Calculator"
+    const description = "Shared from TFF's Exedra Toolbox"
 
     return `<!DOCTYPE html>
 <html lang="en">
