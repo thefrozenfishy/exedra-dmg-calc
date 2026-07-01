@@ -147,6 +147,15 @@ const bannedEffects: Set<string> = new Set([
     "150301011",
     "850441002",
     "850441003",
+
+    // Myako passive
+    "150661008",
+    "150661005",
+    "150661006",
+
+    // Eroha
+    "65301002",
+    "65311003",
 ]);
 
 const effectIsBanned = (detail: SkillDetail): boolean => {
