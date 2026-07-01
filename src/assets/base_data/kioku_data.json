@@ -265,7 +265,7 @@
         "minHp": 322,
         "minSpd": 120,
         "obtain": "Permanent",
-        "permaDate": "June 30, 2026",
+        "permaDate": "",
         "rarity": 5,
         "releaseDate": "2026-06-29",
         "role": "Debuffer",
