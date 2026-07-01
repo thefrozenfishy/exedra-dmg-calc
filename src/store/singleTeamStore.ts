@@ -136,8 +136,17 @@ export const useEnemyStore = defineStore('enemies', {
     },
     load() {
       const saved = localStorage.getItem('lastEnemies')
-      if (saved) {
-        this.enemies = JSON.parse(saved)
+      if (!saved) return
+
+      try {
+        const parsed = JSON.parse(saved) as Partial<Enemy>[]
+
+        this.enemies = this.enemies.map((defaultEnemy) => {
+          const savedEnemy = parsed.find((e) => e.name === defaultEnemy.name)
+          return savedEnemy ? { ...defaultEnemy, ...savedEnemy } : defaultEnemy
+        })
+      } catch (e) {
+        console.error('Failed to load saved enemies, falling back to defaults', e)
       }
     }
   }
