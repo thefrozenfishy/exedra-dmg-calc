@@ -8,6 +8,16 @@
             <section class="toolbar card bulk-actions">
                 <CharacterSelector :selected="selectedCharacter" @select="onSelectCharacter"
                     :filter="ch => ch.enabled" />
+
+                <div class="toolbar-right">
+                    <span class="filters-heading">Filters</span>
+
+                    <label class="chip" :class="{ active: hideOffElementalCrys }">
+                        <input type="checkbox" v-model="hideOffElementalCrys" />
+                        Hide off-element
+                    </label>
+                </div>
+
                 <div class="mass-edit-panel" :class="{ disabled: !massEditSelection.size }">
                     <div class="mass-edit-header">
                         <span class="mass-edit-title">
@@ -147,6 +157,7 @@ const characterId = ref(Number(route.query.character_id) || 0)
 const selectedCharacter = ref<Character | undefined>(store.characters.find(c => c.id === characterId.value))
 const show4stars = useSetting("show4stars", false);
 const show3stars = useSetting("show3stars", false);
+const hideOffElementalCrys = useSetting("hideOffElementalCrys", false)
 const showOffElementalOnes = useSetting("showOffElementalCrysCollection", false)
 const showOffElementalOnesOption = computed(() => store.characters.some(char => {
     if (!char.enabled) return false
@@ -181,7 +192,9 @@ const options = computed(() => {
             useIndex: selection?.useIndex ?? 0,
             subCrys: selection?.subCrys?.length === 3 ? selection.subCrys : [0, 0, 0],
         }
-    }).sort((a, b) => b.rarity - a.rarity || b.sortOrder - a.sortOrder)
+    })
+        .filter(c => !hideOffElementalCrys.value || !offElementalCrys(c))
+        .sort((a, b) => b.rarity - a.rarity || b.sortOrder - a.sortOrder)
 })
 
 function missingElementCharacters(elem: KiokuElement, showOffElement: boolean) {
@@ -360,6 +373,7 @@ const setUseIndex = (effectId: number, useIndex: number) => {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    margin-left: auto;
 }
 
 .chip {
