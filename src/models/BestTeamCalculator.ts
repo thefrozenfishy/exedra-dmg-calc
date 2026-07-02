@@ -194,6 +194,7 @@ export async function findBestTeam({
             .filter(Boolean)
             .map(c => c.getKey());
     }
+    relevantSupportData[KiokuRole.Debuffer]?.push(highestAtkSupportKey)
 
     let completedRuns = 0;
     const expectedTotalRuns =
@@ -303,7 +304,7 @@ export async function findBestTeam({
                                                             ...s,
                                                             portrait: "The Savior's Apostle",
                                                             crysIDs: [getEX(s.id)?.selectionAbilityMstId].filter(c => c != null),
-                                                            supportKey: supportSupport[i] ?? highestAtkSupportKey,
+                                                            supportKey: supportSupport[i],
                                                         })
                                                         if (k.idealSupportPortrait === SupportIdealPortrait.ADD_DMG
                                                             || (hasDotPop && k.idealSupportPortrait === SupportIdealPortrait.DOT_APPLIER)) {
@@ -328,10 +329,7 @@ export async function findBestTeam({
                                                     ...attackerCrys.map(c => c.selectionAbilityMstId),
                                                     ...totalSupports.flatMap((s, i) => [
                                                         s.name,
-                                                        supportSupport[i]?.[0] ?? (
-                                                            kiokuWhoShouldHavePortrait.has(s.name)
-                                                                ? highestAtkSupportKey?.[0]
-                                                                : undefined),
+                                                        supportSupport[i]?.[0],
                                                         kiokuWhoShouldHavePortrait.has(s.name) ? getKioku(s).idealSupportPortrait : undefined
                                                     ]),
                                                 ]
