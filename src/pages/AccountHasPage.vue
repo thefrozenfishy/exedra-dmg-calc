@@ -832,13 +832,32 @@ const onTouchEnd = (e: TouchEvent) => {
     width: 900px !important;
 }
 
+.exporting .characters-cell {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 0.5rem;
+    min-height: 0;
+}
+
+.exporting .character-img-wrapper {
+    width: 100%;
+}
+
+.exporting .character-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+}
+
+.exporting .asc-cell {
+    width: 85px;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+}
+
 @media (max-width: 768px) {
     .ascension-list {
         max-width: 100%;
-    }
-
-    .exporting {
-        width: 830px !important;
     }
 }
 
