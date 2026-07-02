@@ -17,6 +17,19 @@
             <!-- Extra icon slot (between share and copy) -->
             <slot />
 
+            <!-- Copy image to clipboard -->
+            <button class="icon-btn icon-btn--accent" :disabled="copyImageLoading || disabled"
+                :aria-label="copyImageLoading ? 'Copying image…' : 'Copy image to clipboard'"
+                :title="copyImageLoading ? 'Copying image…' : 'Copy image to clipboard'" @click="handleCopyImage">
+                <span v-if="copyImageLoading" class="icon-spinner" aria-hidden="true" />
+                <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="4" y="4" width="16" height="16" rx="2" />
+                    <circle cx="9" cy="10" r="1.5" />
+                    <path d="M4 16l4.5-4.5a2 2 0 0 1 2.8 0L14 14l1.5-1.5a2 2 0 0 1 2.8 0L20 14" />
+                </svg>
+            </button>
+
             <!-- Share -->
             <button class="icon-btn icon-btn--accent" :disabled="shareLinkLoading || disabled"
                 :aria-label="shareLinkLoading ? 'Generating share link…' : 'Share image'"
@@ -68,6 +81,8 @@ import {
     downloadImage,
     generateShareLink,
     generateShareLinkFromCanvas,
+    copyImageToClipboardOrShareLink,
+    copyCanvasToClipboard,
     copyTextToClipboard,
     type ImageExportOptions,
     type ShareLinkOptions,
@@ -88,6 +103,7 @@ const resolve = <T,>(value: MaybeFn<T> | undefined): T | undefined =>
     typeof value === "function" ? (value as () => T)() : value
 
 const downloadLoading = ref(false)
+const copyImageLoading = ref(false)
 const shareLinkLoading = ref(false)
 const shareLinkUrl = ref<string | null>(null)
 const shareLinkError = ref<string | null>(null)
@@ -108,6 +124,36 @@ const handleDownload = async () => {
         console.error("Failed to download image:", err)
     } finally {
         downloadLoading.value = false
+    }
+}
+
+const handleCopyImage = async () => {
+    copyImageLoading.value = true
+
+    try {
+        const canvas = resolve(props.canvas)
+        const shareOptions = resolve(props.shareOptions) ?? {}
+
+        if (canvas) {
+            const filename = resolve(props.filename) ?? "image.png"
+            await copyCanvasToClipboard(filename, canvas)
+            return
+        }
+
+        const target = resolve(props.target)
+        const exportOptions = resolve(props.exportOptions) ?? {}
+
+        if (!target) throw new Error("No copy target resolved")
+
+        const result = await copyImageToClipboardOrShareLink(target, exportOptions, shareOptions)
+        if (!result.copied) {
+            shareLinkUrl.value = result.shareUrl
+            shareLinkError.value = null
+        }
+    } catch (err) {
+        console.error("Failed to copy image:", err)
+    } finally {
+        copyImageLoading.value = false
     }
 }
 

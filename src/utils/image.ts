@@ -15,7 +15,7 @@ const MAX_CANVAS_SIDE_PX = 16_000
 const SHARE_MAX_BYTES = 50 * 1024 * 1024 * 0.8
 
 const safeSettings = (el: HTMLElement, pixelRatio: number, maxBytes = Infinity) => {
-    const naturalWidth  = el.scrollWidth
+    const naturalWidth = el.scrollWidth
     const naturalHeight = el.scrollHeight
 
     const scaledWidth = naturalWidth * pixelRatio
@@ -29,14 +29,14 @@ const safeSettings = (el: HTMLElement, pixelRatio: number, maxBytes = Infinity) 
     return {
         ...BASE_IMG_SETTINGS,
         pixelRatio,
-        width:  naturalWidth,
+        width: naturalWidth,
         height: clampedHeight,
     }
 }
 
-const imgSettings     = (el: HTMLElement) => safeSettings(el, 2)
+const imgSettings = (el: HTMLElement) => safeSettings(el, 2)
 const highResSettings = (el: HTMLElement) => safeSettings(el, 2)
-const shareSettings   = (el: HTMLElement) => safeSettings(el, 2, SHARE_MAX_BYTES)
+const shareSettings = (el: HTMLElement) => safeSettings(el, 2, SHARE_MAX_BYTES)
 
 export interface ImageExportOptions {
     exportClass?: string;
@@ -263,6 +263,57 @@ export const generateShareLink = async (
 
     const { publicUrl, shareId } = await uploadBlobForSharing(blob)
     return await createSharePage(shareId, publicUrl, shareOpts)
+}
+
+export const copyImageToClipboardOrShareLink = async (
+    target: string | HTMLElement,
+    options?: ImageExportOptions,
+    shareOpts?: ShareLinkOptions
+): Promise<{ copied: true } | { copied: false; shareUrl: string }> => {
+    const el = getElement(target)
+    if (!el) {
+        toast.error("Target element not found", { position: toast.POSITION.TOP_RIGHT })
+        throw new Error("Target element not found")
+    }
+
+    const toastId = toast.loading("Copying to clipboard...", { position: toast.POSITION.TOP_RIGHT, icon: false })
+
+    let blob: Blob
+    try {
+        blob = await withExportState(el, options, async (element) => {
+            const dataUrl = await toPng(element, imgSettings(element))
+            return fetch(dataUrl).then(r => r.blob())
+        })
+    } catch (err) {
+        console.error("Image generation failed:", err)
+        toast.update(toastId, { render: "Image export failed", type: "error", isLoading: false, autoClose: 3000 })
+        throw err
+    }
+
+    try {
+        await navigator.clipboard.write([
+            new ClipboardItem({ "image/png": blob })
+        ])
+        toast.update(toastId, { render: "Copied to clipboard!", type: "success", isLoading: false, autoClose: 3000 })
+        return { copied: true }
+    } catch (err) {
+        console.error("Clipboard write failed, falling back to share link:", err)
+        try {
+            const { publicUrl, shareId } = await uploadBlobForSharing(blob)
+            const shareUrl = await createSharePage(shareId, publicUrl, shareOpts)
+            toast.update(toastId, {
+                render: "Couldn't save image to clipboard — use the copy button next to the link instead",
+                type: "error",
+                isLoading: false,
+                autoClose: 6000,
+            })
+            return { copied: false, shareUrl }
+        } catch (fallbackErr) {
+            console.error("Share link fallback failed:", fallbackErr)
+            toast.update(toastId, { render: "Couldn't copy image or create a share link", type: "error", isLoading: false, autoClose: 3000 })
+            throw fallbackErr
+        }
+    }
 }
 
 export const generateShareLinkFromCanvas = async (
