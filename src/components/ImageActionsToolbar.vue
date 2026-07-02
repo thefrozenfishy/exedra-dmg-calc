@@ -197,6 +197,7 @@ const copyShareLink = () => {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    width: 100%;
 }
 
 .image-actions-buttons {
@@ -224,8 +225,7 @@ const copyShareLink = () => {
 
 .share-link-input {
     flex: 1 1 0;
-    min-width: 80px;
-    max-width: 320px;
+    width: 100%;
 
     padding: 0.5rem 0.75rem;
     height: calc(42px - 1rem);
