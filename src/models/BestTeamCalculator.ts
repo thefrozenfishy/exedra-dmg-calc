@@ -1,7 +1,7 @@
 import { Heap } from "heap-js";
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { ScoreAttackTeam } from "./ScoreAttackTeam";
-import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises, KiokuConstants, getEX } from "../types/KiokuTypes";
+import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises, KiokuConstants, getEX, SupportIdealPortrait } from "../types/KiokuTypes";
 import { ScoreAttackKioku } from "./ScoreAttackKioku";
 
 const cache = new Map<string, ScoreAttackKioku>();
@@ -305,7 +305,8 @@ export async function findBestTeam({
                                                             crysIDs: [getEX(s.id)?.selectionAbilityMstId].filter(c => c != null),
                                                             supportKey: supportSupport[i] ?? highestAtkSupportKey,
                                                         })
-                                                        if (k.shouldUseSupportAndPortraitReason === 1 || (hasDotPop && k.shouldUseSupportAndPortraitReason === 2)) {
+                                                        if (k.idealSupportPortrait === SupportIdealPortrait.ADD_DMG
+                                                            || (hasDotPop && k.idealSupportPortrait === SupportIdealPortrait.DOT_APPLIER)) {
                                                             kiokuWhoShouldHavePortrait.add(s.name)
                                                         }
                                                         return k!
@@ -331,7 +332,7 @@ export async function findBestTeam({
                                                             kiokuWhoShouldHavePortrait.has(s.name)
                                                                 ? highestAtkSupportKey?.[0]
                                                                 : undefined),
-                                                        kiokuWhoShouldHavePortrait.has(s.name) ? "The Savior's Apostle" : undefined
+                                                        kiokuWhoShouldHavePortrait.has(s.name) ? getKioku(s).idealSupportPortrait : undefined
                                                     ]),
                                                 ]
                                                 if (perAttackerResults[attacker.name].size() < LIMIT)

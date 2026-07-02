@@ -1007,7 +1007,7 @@ enemy died      - ${enemyDied}`;
                     .map(key => {
                         let val = (kiokuAtPosition as any)[key];
                         if (key.startsWith("base") || key.endsWith("Def") || key.endsWith("Hp")) return;
-                        if (key === "shouldUseSupportAndPortraitReason") return;
+                        if (key === "idealSupportPortrait") return;
                         if (["effects", "crys", "data", "inputCrys", "inputCrysSub", "name", "scalableEffects", "unscalableEffects"].includes(key)) return;
                         if (key === "portrait") { val = val?.["stats"]?.["atk"]; key = "PortraitAtk"; }
                         if (key === "ascension") { val = (kiokuAtPosition as any)?.["kiokuAtk"] * (0.02 * val); key = "AscensionAtk"; }

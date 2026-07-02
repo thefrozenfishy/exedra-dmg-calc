@@ -311,6 +311,12 @@ export interface KiokuData {
     ascension_5_effect_2_id?: number
 }
 
+export enum SupportIdealPortrait {
+    ADD_DMG = "Farewell to a Future Unseen",
+    DOT_APPLIER = "The Savior's Apostle",
+    NONE = 0
+}
+
 export interface CrystalisData {
     abilityEffectType: string
     description: string

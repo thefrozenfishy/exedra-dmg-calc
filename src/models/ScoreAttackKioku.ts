@@ -1,11 +1,11 @@
-import { ActiveSkill, Aliment, KiokuArgs, KiokuData, SkillDetail, skillDetailId, SkillKey } from '../types/KiokuTypes';
+import { ActiveSkill, Aliment, KiokuArgs, KiokuData, SkillDetail, skillDetailId, SkillKey, SupportIdealPortrait } from '../types/KiokuTypes';
 import { passiveDetails, skillDetails } from '../utils/helpers';
 import { Kioku } from './Kioku';
 
 
 export class ScoreAttackKioku extends Kioku {
     effects: SkillDetail[];
-    shouldUseSupportAndPortraitReason = 0;
+    idealSupportPortrait: SupportIdealPortrait = SupportIdealPortrait.NONE;
     private scalableEffects: Record<string, SkillDetail> = {};
     private unscalableEffects: Record<string, SkillDetail> = {};
     private buffMult = 1;
@@ -80,9 +80,9 @@ export class ScoreAttackKioku extends Kioku {
             const dotType = e.abilityEffectType.replace("_ATK", "");
 
             if (e.abilityEffectType === "ADDITIONAL_DAMAGE") {
-                this.shouldUseSupportAndPortraitReason = 1;
+                this.idealSupportPortrait = SupportIdealPortrait.ADD_DMG;
             } else if (dotType !== Aliment.WEAKNESS && Object.values(Aliment).includes(dotType as Aliment)) {
-                this.shouldUseSupportAndPortraitReason = 2;
+                this.idealSupportPortrait = SupportIdealPortrait.DOT_APPLIER;
             }
         });
     }
