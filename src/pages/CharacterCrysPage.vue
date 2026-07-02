@@ -111,11 +111,7 @@
                         <td class="character-list">
                             <template v-if="missingElementCharacters(elem, showOffElementalOnes).length">
                                 <div v-for="char in missingElementCharacters(elem, showOffElementalOnes)" :key="char.id"
-                                    class="character-chip" :class="{
-                                        limited: char.obtain && char.obtain !== 'Permanent',
-                                        'not-perma': !char.obtain || new Date(char.permaDate) > new Date()
-                                    }">
-
+                                    class="character-chip">
                                     <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`"
                                         class="character-icon" :title="char.name" />
                                 </div>
@@ -216,7 +212,7 @@ function missingElementCharacters(elem: KiokuElement, showOffElement: boolean) {
         })
 
         return !hasElementalCrys
-    })
+    }).sort((a, b) => a.id - b.id)
 }
 
 function updateSubCrys(effectId: number, newSubCrys: number[]) {
