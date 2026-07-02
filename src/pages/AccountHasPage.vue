@@ -1124,7 +1124,7 @@ td {
 }
 
 .notMaxLvlMissingElemCrys {
-    color: saddlebrown;
+    color: rgb(255, 0, 234);
 }
 
 .notMaxLvl {
