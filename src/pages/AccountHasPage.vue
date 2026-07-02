@@ -220,7 +220,7 @@
             <div class="stat-row">
                 <span class="stat-label">Chance of non-A5 on standard pull</span>
                 <span class="stat-value">{{ standardPool.length - ownedA5StandardPool.length }} / {{ standardPool.length
-                }}
+                    }}
                     ({{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100)
                     }}%)</span>
             </div>
@@ -265,14 +265,16 @@
         <section class="card about-card">
             <span class="filters-heading">About</span>
             <p>
-                You can edit, export, and import your kioku on the Team Setup page, or edit here directly.<br />
+                You can edit, export, and import your kioku on the <b>Kioku Setup</b> page, or edit here directly.<br />
                 Red borders indicate limited characters, yellow borders indicate characters not yet added to the
                 permanent roster, and transparent borders indicate standard permanent characters.
-                For crys counter, red indicates some crys are missing, yellow that some are missing but the elemental
+                For crys counter, red indicates some crys are missing, pink that some are missing but the elemental
                 crys has been collected, and green that all on-element crys have been collected.
                 Maxed out kioku are given a golden glow to indicate their completeness.
                 <template v-if="showOffElementalOnesOption">Truly perfected kioku with all crys, including
-                    off-elemental ones, are given a diamond border!</template>
+                    off-elemental ones, are given a diamond border! Obtaining one of these also enables you to include
+                    off elemental crys in the crys count. Think of it as a little easter egg for the true
+                    perfectionists.</template>
             </p>
         </section>
     </div>
