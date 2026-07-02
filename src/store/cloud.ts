@@ -450,16 +450,32 @@ async function _getFriends() {
     const friendCodes = relations.map(r => r.friend_id)
 
     const { data: profiles, error: profileError } = await supabase
-        .from('public_profiles_ranked')
+        .from('public_profiles')
         .select('*')
         .in('friend_id', friendCodes)
 
     if (profileError) throw profileError
 
+    const { data: rankedProfiles, error: rankedError } = await supabase
+        .from('public_profiles_ranked')
+        .select('friend_id, global_rank, total_players')
+        .in('friend_id', friendCodes)
+
+    if (rankedError) throw rankedError
+
+    const rankByFriendId = new Map(
+        (rankedProfiles ?? []).map(r => [r.friend_id, r])
+    )
+
+    const mergedProfiles = (profiles ?? []).map(p => ({
+        ...p,
+        ...rankByFriendId.get(p.friend_id),
+    }))
+
     const myFriendId = await getFriendCode()
     const withSimilarity = myFriendId
-        ? await attachSimilarity(myFriendId, profiles ?? [])
-        : (profiles ?? [])
+        ? await attachSimilarity(myFriendId, mergedProfiles)
+        : mergedProfiles
 
     return relations.map(friend => {
         const profile = withSimilarity.find(
