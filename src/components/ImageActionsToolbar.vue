@@ -228,6 +228,7 @@ const copyShareLink = () => {
     max-width: 320px;
 
     padding: 0.5rem 0.75rem;
+    height: calc(42px - 1rem);
     background: rgba(255, 255, 255, 0.06);
     color: var(--text);
     border: 1px solid rgba(255, 255, 255, 0.08);

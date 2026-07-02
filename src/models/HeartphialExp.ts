@@ -95,3 +95,9 @@ export function getHeartphialRows(
 export function sortHeartphialRows(rows: HeartphialRow[]): HeartphialRow[] {
     return [...rows].sort((a, b) => b.remainingExp - a.remainingExp)
 }
+
+export function playsUntilMaxed(row: HeartphialRow, expPerPlay: number | undefined | null): number | null {
+    if (!expPerPlay || expPerPlay <= 0) return null
+    if (row.isMaxed) return 0
+    return Math.ceil(row.remainingExp / expPerPlay)
+}

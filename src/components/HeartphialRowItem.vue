@@ -31,7 +31,10 @@
           &middot;
           {{ formatExp(row.currentExp) }} / {{ formatExp(row.maxExp) }}
           <template v-if="!row.isMaxed">
-            ({{ formatExp(row.remainingExp) }} remaining)
+            ({{ formatExp(row.remainingExp) }} remaining<template
+              v-if="playsUntilMaxed !== null && playsUntilMaxed !== undefined">
+              &middot; {{ playsUntilMaxed }} {{ playsUntilMaxed === 1 ? 'play' : 'plays' }} &middot; {{ daysUntilMaxed
+              }} {{ daysUntilMaxed === 1 ? 'day' : 'days' }}</template>)
           </template>
           <span v-else class="maxed-tag">Maxed</span>
         </div>
@@ -41,14 +44,18 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import type { HeartphialRow } from "../models/HeartphialExp"
 
-defineProps<{
+const props = defineProps<{
   row: HeartphialRow
   maxLevel: number
   progressPercent: number
   formatExp: (n: number) => string
+  playsUntilMaxed?: number | null
 }>()
+
+const daysUntilMaxed = computed(() => props.playsUntilMaxed ? Math.ceil(props.playsUntilMaxed / 5) : null)
 
 const emit = defineEmits<{
   (e: 'update-level', level: number): void

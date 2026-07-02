@@ -9,6 +9,8 @@ import characterHeartParamUpGroupJson from '../assets/base_data/getCharacterHear
 import characterHeartJson from '../assets/base_data/getCharacterHeartMstList.json';
 import characterHeartLevelUpJson from '../assets/base_data/getCharacterHeartLevelUpMstList.json';
 import kiokuDataJson from '../assets/base_data/kioku_data.json';
+import questStageJson from '../assets/base_data/getQuestStageMstList.json';
+import questEnemyAppearanceJson from '../assets/base_data/getQuestEnemyAppearanceMstList.json';
 import { Portrait, CrystalisData, KiokuData, PortraitLvlData, StyleParamUpEffect, CharacterHeart, CharacterHeartParamUpGroup, ActiveSkill, PassiveSkill, StyleParamUp } from '../types/KiokuTypes';
 
 const portraitLevels = Object.fromEntries(
@@ -59,3 +61,29 @@ for (let lvl = 1; lvl <= 50; lvl++) {
 }
 
 export const kiokuData = kiokuDataJson as unknown as Record<string, KiokuData>;
+
+export interface HeartExpStage {
+    questStageMstId: number;
+    name: string;
+    exp: number;
+    icon: string | null;
+}
+
+export const heartExpStages: HeartExpStage[] = (questStageJson as any[])
+    .filter(stage => stage.characterHeartExp > 0)
+    .map(stage => {
+        const enemies = (questEnemyAppearanceJson as any[]).filter(
+            e => e.questStageMstId === stage.questStageMstId
+        );
+        const enemy = enemies.find(e => e.isMainTargetEnemy) ?? enemies[0];
+
+        return {
+            questStageMstId: stage.questStageMstId,
+            name: stage.name,
+            exp: stage.characterHeartExp,
+            icon: enemy ? `enemy/${enemy.enemyMstId}_thumbnail.png` : null,
+        };
+    })
+    .sort((a, b) => b.exp - a.exp);
+
+export const bestHeartExpStage: HeartExpStage | null = heartExpStages[0] ?? null;

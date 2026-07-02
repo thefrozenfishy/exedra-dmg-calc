@@ -6,6 +6,40 @@
             <div class="toolbar-left">
                 <ImageActionsToolbar target=".heartphial-list" filename="heartphial_exp.png"
                     :export-options="exportOpts" :share-options="shareOptions" />
+
+                <div class="stage-picker-wrapper" ref="stagePickerRef">
+                    <button class="stage-picker-button" ref="stageButtonRef"
+                        @click="showStagePicker = !showStagePicker">
+                        <img v-if="selectedStage?.icon" :src="stageIcon(selectedStage)" :alt="selectedStage.name"
+                            class="stage-icon" />
+                        <span class="stage-picker-label">
+                            <span class="stage-picker-title">{{ selectedStage?.name ?? 'Select farming stage' }}</span>
+                            <span v-if="selectedStage" class="stage-picker-exp">{{ formatExp(selectedStage.exp) }}
+                                exp/play</span>
+                        </span>
+                        <span class="stage-picker-chevron">▾</span>
+                    </button>
+
+                    <transition name="fade-scale">
+                        <div v-if="showStagePicker" class="stage-picker">
+                            <div class="stage-picker-heading">Select Farming Stage</div>
+
+                            <div class="stage-grid">
+                                <button v-for="stage in heartExpStages" :key="stage.questStageMstId"
+                                    class="stage-option"
+                                    :class="{ selected: stage.questStageMstId === selectedStage?.questStageMstId }"
+                                    @click="selectStage(stage)">
+                                    <img v-if="stage.icon" :src="stageIcon(stage)" :alt="stage.name"
+                                        class="stage-option-img" />
+                                    <div class="stage-option-info">
+                                        <div class="stage-option-name">{{ stage.name }}</div>
+                                        <div class="stage-option-exp">{{ formatExp(stage.exp) }} exp</div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </transition>
+                </div>
             </div>
             <div class="toolbar-right rarity-toggles">
                 <label class="chip" :class="{ active: show4stars }">
@@ -75,6 +109,7 @@
                     <div v-show="!collapsedGroups[group.name]" class="role-body">
                         <HeartphialRowItem v-for="row in group.visible" :key="rowKey(row)" :row="row"
                             :max-level="maxLevel" :progress-percent="progressPercent(row)" :format-exp="formatExp"
+                            :plays-until-maxed="playsUntilMaxed(row)"
                             @update-level="level => updateLevel(row, level)" />
                     </div>
                 </div>
@@ -83,14 +118,14 @@
             <template v-else>
                 <HeartphialRowItem v-for="row in rows" :key="rowKey(row)" :row="row" :max-level="maxLevel"
                     :progress-percent="progressPercent(row)" :format-exp="formatExp"
-                    @update-level="level => updateLevel(row, level)" />
+                    :plays-until-maxed="playsUntilMaxed(row)" @update-level="level => updateLevel(row, level)" />
             </template>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from "vue"
+import { computed, reactive, ref, onMounted, onBeforeUnmount } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { KiokuConstants } from "../types/KiokuTypes"
 import { useSetting } from "../store/settingsStore"
@@ -99,9 +134,11 @@ import HeartphialRowItem from "../components/HeartphialRowItem.vue"
 import {
     getHeartphialRows,
     sortHeartphialRows,
+    playsUntilMaxed as calcPlaysUntilMaxed,
     type HeartphialRow,
     type HeartphialSegmentMode,
 } from "../models/HeartphialExp"
+import { heartExpStages, bestHeartExpStage, type HeartExpStage } from "../utils/helpers"
 import { useFriendStore } from "../store/friendStore"
 
 const store = useCharacterStore()
@@ -114,6 +151,49 @@ const segmentBy = useSetting<HeartphialSegmentMode>("heartphilSegmentBy", "none"
 const sortBy = useSetting<'id' | 'exp'>("heartphialSortBy", "exp")
 
 const maxLevel = KiokuConstants.maxHeartphialLvl
+
+const selectedStageId = useSetting<number>(
+    "heartphialFarmStageId",
+    bestHeartExpStage?.questStageMstId ?? 0
+)
+
+const selectedStage = computed<HeartExpStage | undefined>(() =>
+    heartExpStages.find(s => s.questStageMstId === selectedStageId.value) ?? bestHeartExpStage ?? undefined
+)
+
+const stageIcon = (stage: HeartExpStage) => `/exedra-dmg-calc/${stage.icon}`
+
+const showStagePicker = ref(false)
+const stagePickerRef = ref<HTMLElement | null>(null)
+const stageButtonRef = ref<HTMLElement | null>(null)
+
+function selectStage(stage: HeartExpStage) {
+    selectedStageId.value = stage.questStageMstId
+    showStagePicker.value = false
+}
+
+function handleStageClickOutside(event: MouseEvent) {
+    const target = event.target as Node
+    if (
+        stagePickerRef.value &&
+        !stagePickerRef.value.contains(target) &&
+        stageButtonRef.value &&
+        !stageButtonRef.value.contains(target)
+    ) {
+        showStagePicker.value = false
+    }
+}
+
+onMounted(() => {
+    document.addEventListener("mousedown", handleStageClickOutside)
+})
+
+onBeforeUnmount(() => {
+    document.removeEventListener("mousedown", handleStageClickOutside)
+})
+
+const playsUntilMaxed = (row: HeartphialRow) =>
+    calcPlaysUntilMaxed(row, selectedStage.value?.exp)
 
 const rows = computed<HeartphialRow[]>(() => {
     const built = getHeartphialRows(store.characters, {
@@ -370,5 +450,149 @@ const shareOptions = () => ({
     color: var(--muted);
     opacity: 0.7;
     font-size: 0.9rem;
+}
+
+.stage-picker-wrapper {
+    position: relative;
+}
+
+.stage-picker-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-soft);
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
+}
+
+.stage-picker-button:hover {
+    background: var(--panel);
+    border-color: var(--border-strong);
+}
+
+.stage-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.stage-picker-label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
+}
+
+.stage-picker-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.stage-picker-exp {
+    font-size: 0.7rem;
+    color: var(--muted);
+}
+
+.stage-picker-chevron {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-left: 0.15rem;
+}
+
+.stage-picker {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 100;
+    width: 320px;
+    max-width: calc(100vw - 2.5rem);
+    max-height: 360px;
+    padding: 0.85rem;
+    border-radius: 16px;
+    background: var(--panel);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.stage-picker-heading {
+    margin-bottom: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.stage-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    max-height: 290px;
+    overflow-y: auto;
+}
+
+.stage-option {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.35rem 0.5rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.12s, border-color 0.12s;
+}
+
+.stage-option:hover {
+    background: var(--bg-soft);
+}
+
+.stage-option.selected {
+    border-color: var(--border-strong);
+    background: rgba(246, 212, 133, 0.1);
+}
+
+.stage-option-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.stage-option-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    min-width: 0;
+}
+
+.stage-option-name {
+    font-size: 0.82rem;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.stage-option-exp {
+    font-size: 0.72rem;
+    color: var(--muted);
+}
+
+.fade-scale-enter-active,
+.fade-scale-leave-active {
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.fade-scale-enter-from,
+.fade-scale-leave-to {
+    opacity: 0;
+    transform: scale(0.96);
 }
 </style>
