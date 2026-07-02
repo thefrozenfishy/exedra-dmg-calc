@@ -39,18 +39,20 @@ router.afterEach((to) => {
 })
 
 const group1Paths = [
-  '/profile',
   '/team-setup',
-  beta ? '/heartphial' : null,
-  '/character-crys',
   '/my-kioku',
+  '/heartphial',
+  '/character-crys',
   '/kioku-grid',
-  '/account-compare',
 ].filter(Boolean)
 const group2Paths = [
+  '/profile',
+  '/account-compare',
   '/sa-simulator-multiple',
   '/sa-simulator-single',
   '/pvp-simulator',
+].filter(Boolean)
+const group3Paths = [
   '/pvp-how-to',
   '/gacha-rate',
   '/link-raid',
@@ -72,16 +74,8 @@ function routeForPath(path: string) {
         <h1>TFF's Exedra Toolbox</h1>
       </div>
       <nav>
-        <div>
-          <template v-for="path in group1Paths" :key="path">
-            <router-link :to="path" :class="{ 'nav-new': isNew(path) }">
-              {{ routeForPath(path)?.name }}
-              <span v-if="isNew(path)" class="new-sparkle" aria-label="Updated">✨</span>
-            </router-link>
-          </template>
-        </div>
-        <div>
-          <template v-for="path in group2Paths" :key="path">
+        <div v-for="paths in [group1Paths, group2Paths, group3Paths]">
+          <template v-for="path in paths" :key="path">
             <router-link :to="path" :class="{ 'nav-new': isNew(path) }">
               {{ routeForPath(path)?.name }}
               <span v-if="isNew(path)" class="new-sparkle" aria-label="Updated">✨</span>

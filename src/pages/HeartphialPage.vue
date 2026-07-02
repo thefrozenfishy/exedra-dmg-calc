@@ -454,6 +454,7 @@ const shareOptions = () => ({
 
 .stage-picker-wrapper {
     position: relative;
+    height: 44px;
 }
 
 .stage-picker-button {
@@ -461,6 +462,8 @@ const shareOptions = () => ({
     align-items: center;
     gap: 0.5rem;
     padding: 0.3rem 0.6rem;
+    height: 44px;
+    overflow: hidden;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     background: var(--bg-soft);
