@@ -167,6 +167,7 @@ function saveToStore(idx: number) {
 }
 
 .image-wrapper {
+    position: relative;
     padding: .3em;
     margin: auto;
 }

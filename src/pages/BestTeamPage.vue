@@ -712,6 +712,11 @@ async function startSimulation() {
     flex-direction: column;
 }
 
+.exporting {
+    width: 900px;
+    margin: 0 auto;
+}
+
 .kioku-selector {
     margin-top: 0;
 }
