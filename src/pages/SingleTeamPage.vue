@@ -89,6 +89,12 @@
         <h3 class="slot-title">
           {{ index === attackerIndex ? 'Damage Dealer' : 'Member' }}
           {{ index < attackerIndex ? index + 1 : index > attackerIndex ? index : "" }}
+            <button v-if="index === attackerIndex" type="button" class="optimize-attacker-btn"
+              :class="{ spinning: optimizingAttacker }" :disabled="optimizingAttacker || !isFullTeam"
+              :title="isFullTeam ? 'Find the best portrait & support for this attacker, given the rest of the team' : 'Fill out the full team first'"
+              @click="optimizeAttackerLoadout">
+              🛠️
+            </button>
         </h3>
         <CharacterEditor :index="index" :slot="slot" :setMain="team.setMain" :setSupport="team.setSupport" />
       </div>
@@ -221,6 +227,8 @@ import { useSetting } from '../store/settingsStore'
 import { KiokuArgs, Character, SkillDetail, skillDetailId } from '../types/KiokuTypes'
 import { crystalises, passiveDetails, portraits } from "../utils/helpers";
 import { useFriendStore } from '../store/friendStore'
+import { useCharacterStore } from '../store/characterStore'
+import type { AttackerLoadoutResult } from '../models/BestTeamCalculator'
 
 const attackerIndex = 2
 
@@ -456,6 +464,93 @@ const battleOutput = computed(() => {
   return teamInstance.value.calculate_max_dmg(enemies.enemies, 0)
 })
 
+const characterStore = useCharacterStore()
+const optimizingAttacker = ref(false)
+
+function optimizeAttackerLoadout() {
+  if (!isFullTeam.value || optimizingAttacker.value) return
+
+  const attackerSlot = team.slots[attackerIndex]
+  if (!attackerSlot.main) return
+
+  optimizingAttacker.value = true
+
+  const worker = new Worker(new URL('../workers/AttackerLoadoutWorker.js', import.meta.url), { type: 'module' })
+
+  const arenaEffectsMap: Record<string, number> = {}
+  for (const { type, value } of arenaEffects.value) {
+    if (!type) continue
+    arenaEffectsMap[type] = (arenaEffectsMap[type] ?? 0) + value
+  }
+
+  worker.onmessage = (e) => {
+    if (e.data.type === 'done') {
+      applyBestAttackerLoadout(e.data.results)
+      optimizingAttacker.value = false
+      worker.terminate()
+    } else if (e.data.type === 'error') {
+      toast.error(e.data.error, { position: toast.POSITION.TOP_RIGHT, icon: false })
+      console.error("Failed to optimize attacker loadout:", e.data.error)
+      optimizingAttacker.value = false
+      worker.terminate()
+    }
+  }
+
+  worker.postMessage({
+    options: {
+      attacker: {
+        main: JSON.parse(JSON.stringify(attackerSlot.main)),
+        support: attackerSlot.support ? JSON.parse(JSON.stringify(attackerSlot.support)) : undefined,
+        buffMultReduction: attackerSlot.buffMultReduction,
+        debuffMultReduction: attackerSlot.debuffMultReduction,
+      },
+      otherMembers: team.slots
+        .filter((_, i) => i !== attackerIndex)
+        .map(m => ({
+          main: JSON.parse(JSON.stringify(m.main)),
+          support: m.support ? JSON.parse(JSON.stringify(m.support)) : undefined,
+          buffMultReduction: m.buffMultReduction,
+          debuffMultReduction: m.debuffMultReduction,
+        })),
+      enemies: JSON.parse(JSON.stringify(enemies.enemies)),
+      attackerHealth: attackerHealth.value,
+      activeAliments: alimentRef.value?.aliments.filter(a => a.enabled).map(a => a.name) ?? [],
+      arenaEffectsMap,
+      buffMultReduction: buffMultReduction.value,
+      debuffMultReduction: debuffMultReduction.value,
+      enabledCharacters: JSON.parse(JSON.stringify(characterStore.characters.filter(c => c.enabled))),
+      bannedEffectIds: Object.keys(bannedEffectIds).map(Number),
+      enabledDotAllyEffects: Object.keys(enabledDotAllyEffects),
+      stackOverrides: Array.from(stackOverrides.entries()),
+      disabledEnemyDebuffs: Array.from(disabledEnemyDebuffs),
+      debuffStackOverrides: Array.from(debuffStackOverrides.entries()),
+    }
+  })
+}
+
+function applyBestAttackerLoadout(results: AttackerLoadoutResult[]) {
+  const best = results[0]
+  if (!best) {
+    toast.error("Couldn't find a valid support for this attacker", { position: toast.POSITION.TOP_RIGHT, icon: false })
+    return
+  }
+
+  const attackerSlot = team.slots[attackerIndex]
+  const prevDmg = typeof battleOutput.value !== 'string' ? battleOutput.value[0] : undefined
+
+  if (attackerSlot.main) attackerSlot.main.portrait = best.portrait
+
+  const supportChar = characterStore.characters.find(c => c.name === best.supportName)
+  if (supportChar) team.setSupport(attackerIndex, supportChar)
+
+  const portraitLabel = best.portrait || 'No portrait'
+  const dmgChange = prevDmg ? ` (was ${prevDmg.toLocaleString()})` : ''
+  toast.success(
+    `Best loadout: ${portraitLabel} + ${best.supportName} → ${best.dmg.toLocaleString()} dmg${dmgChange}`,
+    { position: toast.POSITION.TOP_RIGHT, icon: false },
+  )
+}
+
 async function copyToClipboard(text: string) {
   try {
     await navigator.clipboard.writeText(text)
@@ -509,6 +604,50 @@ async function copyToClipboard(text: string) {
   color: var(--accent-soft);
   text-align: center;
   margin: 0 0 0.5rem;
+}
+
+.optimize-attacker-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.3rem;
+  padding: 0;
+  width: 1.4rem;
+  height: 1.4rem;
+  vertical-align: middle;
+  font-size: 0.9rem;
+  line-height: 1;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.optimize-attacker-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 209, 110, 0.5);
+  transform: scale(1.08);
+}
+
+.optimize-attacker-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.optimize-attacker-btn.spinning {
+  animation: optimize-attacker-spin 1s linear infinite;
+}
+
+@keyframes optimize-attacker-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .field {

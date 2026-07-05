@@ -1,8 +1,9 @@
 import { Heap } from "heap-js";
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { ScoreAttackTeam } from "./ScoreAttackTeam";
-import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises, KiokuConstants, getEX, SupportIdealPortrait } from "../types/KiokuTypes";
+import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises, KiokuConstants, getEX, SupportIdealPortrait, Aliment, KiokuArgs } from "../types/KiokuTypes";
 import { ScoreAttackKioku } from "./ScoreAttackKioku";
+import { Enemy } from "../types/EnemyTypes";
 
 const cache = new Map<string, ScoreAttackKioku>();
 const customPriorityComparator = (a: any[], b: any[]) => a[0] - b[0];
@@ -38,7 +39,7 @@ export function fromKey(key: any[]) {
     });
 }
 
-function getKioku({
+export function getKioku({
     name,
     supportKey,
     portrait,
@@ -353,6 +354,179 @@ export async function findBestTeam({
 
     return Object.values(perAttackerResults)
         .flatMap(heap => heap.toArray().sort((a, b) => b[0] - a[0]))
+}
+
+// ── Mini attacker-only optimizer ──
+// Given a fixed team of 4 (buffers/debuffers/healers/etc), finds the best
+// portrait + support for just the 5th (attacker) slot.
+
+export interface AttackerLoadoutMember {
+    main: Character
+    support?: Character
+    buffMultReduction?: number
+    debuffMultReduction?: number
+}
+
+export interface FindBestAttackerLoadoutOptions {
+    attacker: AttackerLoadoutMember
+    otherMembers: AttackerLoadoutMember[]
+    enemies: Enemy[]
+    attackerHealth: number
+    activeAliments: Aliment[]
+    arenaEffectsMap: Record<string, number>
+    buffMultReduction: number
+    debuffMultReduction: number
+    enabledCharacters: Character[]
+    bannedEffectIds: number[]
+    enabledDotAllyEffects: string[]
+    stackOverrides: [number, number][]
+    disabledEnemyDebuffs: string[]
+    debuffStackOverrides: [string, number][]
+    onProgress?: (completed: number, total: number) => void
+    onError?: (error: any) => void
+}
+
+export interface AttackerLoadoutResult {
+    portrait: string
+    supportName: string
+    dmg: number
+    critRate: number
+    avgDmg: number
+}
+
+export function buildMemberKioku(member: AttackerLoadoutMember, defaultBuffMultReduction = 0, defaultDebuffMultReduction = 0): ScoreAttackKioku {
+    const support = member.support ? new ScoreAttackKioku({ ...member.support } as KiokuArgs) : null
+    const crys = Object.entries(member.main.crysOptions).filter(([, v]) => v.useIndex > 0)
+
+    return new ScoreAttackKioku({
+        ...member.main,
+        crysIDs: crys.map(([id]) => Number(id)),
+        subCrysIDs: crys.flatMap(([, v]) => v.subCrys),
+        supportKey: support?.getKey(),
+    } as KiokuArgs,
+        (member.buffMultReduction || defaultBuffMultReduction) ?? 0,
+        (member.debuffMultReduction || defaultDebuffMultReduction) ?? 0,
+    )
+}
+
+export function getAttackerSupportCandidates(attacker: Character, enabledCharacters: Character[], excludeNames: string[] = []): any[][] {
+    const all5Star = enabledCharacters
+        .filter(c => c.rarity === 5)
+        .map(c => getKioku(c))
+        .filter(Boolean) as ScoreAttackKioku[]
+
+    if (!all5Star.length) return []
+
+    const highestAtk = all5Star.reduce((max, k) => (k.getBaseAtk() > max.getBaseAtk() ? k : max))
+    const matches = all5Star.filter(k => k.data.support_target === attacker.element || k.data.support_target === attacker.role)
+
+    const candidateKeys = [highestAtk, ...matches]
+        .map(k => k.getKey())
+        .filter(key => key && key[0] !== attacker.name && !excludeNames.includes(key[0]))
+
+    const unique = new Map<string, any[]>()
+    for (const key of candidateKeys) {
+        if (!unique.has(key[0])) unique.set(key[0], key)
+    }
+
+    if (!unique.size) {
+        const fallbackChar = enabledCharacters.find(c => c.name === "White Camellia")
+        const fallbackKioku = getKioku(fallbackChar ?? ({ name: "White Camellia" } as Character))
+        if (fallbackKioku) unique.set(fallbackKioku.getKey()[0], fallbackKioku.getKey())
+    }
+
+    return Array.from(unique.values())
+}
+
+export async function findBestAttackerLoadout({
+    attacker,
+    otherMembers,
+    enemies,
+    attackerHealth,
+    activeAliments,
+    arenaEffectsMap,
+    buffMultReduction,
+    debuffMultReduction,
+    enabledCharacters,
+    bannedEffectIds,
+    enabledDotAllyEffects,
+    stackOverrides,
+    disabledEnemyDebuffs,
+    debuffStackOverrides,
+    onProgress,
+    onError,
+}: FindBestAttackerLoadoutOptions): Promise<AttackerLoadoutResult[]> {
+    const otherKiokus = otherMembers.map(m => buildMemberKioku(m, buffMultReduction, debuffMultReduction))
+
+    const excludeNames = [attacker.main.name, ...otherMembers.map(m => m.main.name)]
+    const portraitCandidates = portraitsBestOnly(attacker.main.element, false)
+    const supportCandidates = getAttackerSupportCandidates(attacker.main, enabledCharacters, excludeNames)
+
+    if (!supportCandidates.length) {
+        throw new Error("No valid support candidates found for this attacker")
+    }
+
+    const attackerCrys = Object.entries(attacker.main.crysOptions).filter(([, v]) => v.useIndex > 0)
+    const crysIDs = attackerCrys.map(([id]) => Number(id))
+    const subCrysIDs = attackerCrys.flatMap(([, v]) => v.subCrys)
+
+    const bannedSet = new Set(bannedEffectIds)
+    const dotAllySet = new Set(enabledDotAllyEffects)
+    const stackOverrideMap = new Map(stackOverrides)
+    const disabledEnemyDebuffSet = new Set(disabledEnemyDebuffs)
+    const debuffStackOverrideMap = new Map(debuffStackOverrides)
+
+    const results: AttackerLoadoutResult[] = []
+    const total = portraitCandidates.length * supportCandidates.length
+    let completed = 0
+
+    for (const portrait of portraitCandidates) {
+        for (const supportKey of supportCandidates) {
+            try {
+                const attackerKioku = new ScoreAttackKioku({
+                    ...attacker.main,
+                    portrait,
+                    crysIDs,
+                    subCrysIDs,
+                    supportKey,
+                } as KiokuArgs,
+                    (attacker.buffMultReduction || buffMultReduction) ?? 0,
+                    (attacker.debuffMultReduction || debuffMultReduction) ?? 0,
+                )
+
+                const team = new ScoreAttackTeam(
+                    attackerKioku,
+                    otherKiokus,
+                    attackerHealth,
+                    activeAliments,
+                    arenaEffectsMap,
+                    true,
+                    bannedSet as any,
+                    dotAllySet as any,
+                    stackOverrideMap as any,
+                    disabledEnemyDebuffSet as any,
+                    debuffStackOverrideMap as any,
+                )
+
+                const [max_dmg, avg_dmg, critRate] = team.calculate_max_dmg(enemies, 0)
+
+                results.push({
+                    portrait,
+                    supportName: supportKey[0],
+                    dmg: max_dmg | 0,
+                    critRate,
+                    avgDmg: avg_dmg | 0,
+                })
+            } catch (e) {
+                onError?.(e)
+            }
+
+            completed += 1
+            onProgress?.(completed, total)
+        }
+    }
+
+    return results.sort((a, b) => b.dmg - a.dmg)
 }
 
 function permute(arr: any[]): any[][] {
