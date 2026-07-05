@@ -382,6 +382,7 @@ export interface FindBestAttackerLoadoutOptions {
     stackOverrides: [number, number][]
     disabledEnemyDebuffs: string[]
     debuffStackOverrides: [string, number][]
+    optimizeAverageDamage: boolean
     onProgress?: (completed: number, total: number) => void
     onError?: (error: any) => void
 }
@@ -389,10 +390,14 @@ export interface FindBestAttackerLoadoutOptions {
 export interface AttackerLoadoutResult {
     portrait: string
     supportName: string
+    crysIds: number[]
+    crysNames: string[]
     dmg: number
     critRate: number
     avgDmg: number
 }
+
+const DEFAULT_SUB_CRYS = [4034, 4044, 4054]
 
 export function buildMemberKioku(member: AttackerLoadoutMember, defaultBuffMultReduction = 0, defaultDebuffMultReduction = 0): ScoreAttackKioku {
     const support = member.support ? new ScoreAttackKioku({ ...member.support } as KiokuArgs) : null
@@ -453,6 +458,7 @@ export async function findBestAttackerLoadout({
     stackOverrides,
     disabledEnemyDebuffs,
     debuffStackOverrides,
+    optimizeAverageDamage,
     onProgress,
     onError,
 }: FindBestAttackerLoadoutOptions): Promise<AttackerLoadoutResult[]> {
@@ -461,14 +467,14 @@ export async function findBestAttackerLoadout({
     const excludeNames = [attacker.main.name, ...otherMembers.map(m => m.main.name)]
     const portraitCandidates = portraitsBestOnly(attacker.main.element, false)
     const supportCandidates = getAttackerSupportCandidates(attacker.main, enabledCharacters, excludeNames)
+    const crysCandidates = combinations(getBestCrystalises(attacker.main), 3)
 
     if (!supportCandidates.length) {
         throw new Error("No valid support candidates found for this attacker")
     }
-
-    const attackerCrys = Object.entries(attacker.main.crysOptions).filter(([, v]) => v.useIndex > 0)
-    const crysIDs = attackerCrys.map(([id]) => Number(id))
-    const subCrysIDs = attackerCrys.flatMap(([, v]) => v.subCrys)
+    if (!crysCandidates.length) {
+        throw new Error("No valid crystalis combination found for this attacker")
+    }
 
     const bannedSet = new Set(bannedEffectIds)
     const dotAllySet = new Set(enabledDotAllyEffects)
@@ -477,52 +483,63 @@ export async function findBestAttackerLoadout({
     const debuffStackOverrideMap = new Map(debuffStackOverrides)
 
     const results: AttackerLoadoutResult[] = []
-    const total = portraitCandidates.length * supportCandidates.length
+    const total = portraitCandidates.length * supportCandidates.length * crysCandidates.length
     let completed = 0
 
     for (const portrait of portraitCandidates) {
         for (const supportKey of supportCandidates) {
-            try {
-                const attackerKioku = new ScoreAttackKioku({
-                    ...attacker.main,
-                    portrait,
-                    crysIDs,
-                    subCrysIDs,
-                    supportKey,
-                } as KiokuArgs,
-                    (attacker.buffMultReduction || buffMultReduction) ?? 0,
-                    (attacker.debuffMultReduction || debuffMultReduction) ?? 0,
-                )
+            for (const crysCombo of crysCandidates) {
+                try {
+                    const crysIDs = crysCombo.map(c => c.selectionAbilityMstId)
+                    const subCrysIDs = crysCombo.flatMap(c => {
+                        const existing = attacker.main.crysOptions[c.selectionAbilityMstId]?.subCrys
+                        return existing?.length === 3 ? existing : DEFAULT_SUB_CRYS
+                    })
 
-                const team = new ScoreAttackTeam(
-                    attackerKioku,
-                    otherKiokus,
-                    attackerHealth,
-                    activeAliments,
-                    arenaEffectsMap,
-                    true,
-                    bannedSet as any,
-                    dotAllySet as any,
-                    stackOverrideMap as any,
-                    disabledEnemyDebuffSet as any,
-                    debuffStackOverrideMap as any,
-                )
+                    const attackerKioku = new ScoreAttackKioku({
+                        ...attacker.main,
+                        portrait,
+                        crysIDs,
+                        subCrysIDs,
+                        supportKey,
+                    } as KiokuArgs,
+                        (attacker.buffMultReduction || buffMultReduction) ?? 0,
+                        (attacker.debuffMultReduction || debuffMultReduction) ?? 0,
+                    )
 
-                const [max_dmg, avg_dmg, critRate] = team.calculate_max_dmg(enemies, 0)
+                    const team = new ScoreAttackTeam(
+                        attackerKioku,
+                        otherKiokus,
+                        attackerHealth,
+                        activeAliments,
+                        arenaEffectsMap,
+                        true,
+                        bannedSet as any,
+                        dotAllySet as any,
+                        stackOverrideMap as any,
+                        disabledEnemyDebuffSet as any,
+                        debuffStackOverrideMap as any,
+                    )
 
-                results.push({
-                    portrait,
-                    supportName: supportKey[0],
-                    dmg: max_dmg | 0,
-                    critRate,
-                    avgDmg: avg_dmg | 0,
-                })
-            } catch (e) {
-                onError?.(e)
+                    let [max_dmg, avg_dmg, critRate] = team.calculate_max_dmg(enemies, 0)
+                    if (optimizeAverageDamage) [avg_dmg, max_dmg] = [max_dmg, avg_dmg]
+
+                    results.push({
+                        portrait,
+                        supportName: supportKey[0],
+                        crysIds: crysIDs,
+                        crysNames: crysCombo.map(c => c.name),
+                        dmg: max_dmg | 0,
+                        critRate,
+                        avgDmg: avg_dmg | 0,
+                    })
+                } catch (e) {
+                    onError?.(e)
+                }
+
+                completed += 1
+                onProgress?.(completed, total)
             }
-
-            completed += 1
-            onProgress?.(completed, total)
         }
     }
 

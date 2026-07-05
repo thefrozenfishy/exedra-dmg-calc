@@ -89,12 +89,60 @@
         <h3 class="slot-title">
           {{ index === attackerIndex ? 'Damage Dealer' : 'Member' }}
           {{ index < attackerIndex ? index + 1 : index > attackerIndex ? index : "" }}
-            <button v-if="index === attackerIndex" type="button" class="optimize-attacker-btn"
-              :class="{ spinning: optimizingAttacker }" :disabled="optimizingAttacker || !isFullTeam"
-              :title="isFullTeam ? 'Find the best portrait & support for this attacker, given the rest of the team' : 'Fill out the full team first'"
-              @click="optimizeAttackerLoadout">
-              🛠️
-            </button>
+            <span v-if="index === attackerIndex" class="attacker-optimizer" :class="{ collapsed: optimizingAttacker }">
+              <button type="button" class="optimize-attacker-btn" :disabled="optimizingAttacker || !isFullTeam"
+                :title="isFullTeam ? 'Find the best portrait, support & crystalis for this attacker (max dmg)' : 'Fill out the full team first'"
+                @click="optimizeAttackerLoadout('max')">
+                <svg viewBox="0 0 24 24" width="18" height="18" class="smith-icon"
+                  :class="{ hammering: optimizingAttacker }" aria-hidden="true">
+                  <!-- anvil base -->
+                  <rect class="anvil-part" x="4" y="18.4" width="16" height="1.6" rx="0.5" />
+                  <!-- anvil body -->
+                  <polygon class="anvil-part" points="6,18.4 18,18.4 20,14.8 4,14.8" />
+                  <!-- anvil neck -->
+                  <rect class="anvil-part" x="10.3" y="12.6" width="3.4" height="2.6" />
+                  <!-- ingot -->
+                  <rect class="ingot" x="8.6" y="11" width="6.8" height="1.9" rx="0.35" />
+                  <!-- spark burst on impact -->
+                  <g class="spark" stroke="currentColor" stroke-width="0.6" stroke-linecap="round">
+                    <line x1="12" y1="9.6" x2="12" y2="7.7" />
+                    <line x1="9.3" y1="10.7" x2="7.8" y2="9.6" />
+                    <line x1="14.7" y1="10.7" x2="16.2" y2="9.6" />
+                  </g>
+                  <!-- hammer -->
+                  <g class="hammer-group">
+                    <rect class="tool-part" x="14.2" y="1.6" width="1.6" height="10.4" rx="0.7" />
+                    <rect class="tool-part" x="10.6" y="0" width="8.4" height="3.4" rx="0.9" />
+                  </g>
+                </svg>
+              </button>
+              <button type="button" class="optimize-attacker-btn secondary"
+                :disabled="optimizingAttacker || !isFullTeam" title="Maximize average dmg (LR)"
+                @click="optimizeAttackerLoadout('avg')">
+                <svg viewBox="0 0 24 24" width="18" height="18" class="smith-icon avg-variant"
+                  :class="{ hammering: optimizingAttacker }" aria-hidden="true">
+                  <!-- anvil base -->
+                  <rect class="anvil-part" x="4" y="18.4" width="16" height="1.6" rx="0.5" />
+                  <!-- anvil body -->
+                  <polygon class="anvil-part" points="6,18.4 18,18.4 20,14.8 4,14.8" />
+                  <!-- anvil neck -->
+                  <rect class="anvil-part" x="10.3" y="12.6" width="3.4" height="2.6" />
+                  <!-- ingot -->
+                  <rect class="ingot" x="8.6" y="11" width="6.8" height="1.9" rx="0.35" />
+                  <!-- spark burst on impact -->
+                  <g class="spark" stroke="currentColor" stroke-width="0.6" stroke-linecap="round">
+                    <line x1="12" y1="9.6" x2="12" y2="7.7" />
+                    <line x1="9.3" y1="10.7" x2="7.8" y2="9.6" />
+                    <line x1="14.7" y1="10.7" x2="16.2" y2="9.6" />
+                  </g>
+                  <!-- hammer -->
+                  <g class="hammer-group">
+                    <rect class="tool-part" x="14.2" y="1.6" width="1.6" height="10.4" rx="0.7" />
+                    <rect class="tool-part" x="10.6" y="0" width="8.4" height="3.4" rx="0.9" />
+                  </g>
+                </svg>
+              </button>
+            </span>
         </h3>
         <CharacterEditor :index="index" :slot="slot" :setMain="team.setMain" :setSupport="team.setSupport" />
       </div>
@@ -465,15 +513,16 @@ const battleOutput = computed(() => {
 })
 
 const characterStore = useCharacterStore()
-const optimizingAttacker = ref(false)
+const optimizingAttackerMode = ref<'max' | 'avg' | null>(null)
+const optimizingAttacker = computed(() => optimizingAttackerMode.value !== null)
 
-function optimizeAttackerLoadout() {
+function optimizeAttackerLoadout(mode: 'max' | 'avg' = 'max') {
   if (!isFullTeam.value || optimizingAttacker.value) return
 
   const attackerSlot = team.slots[attackerIndex]
   if (!attackerSlot.main) return
 
-  optimizingAttacker.value = true
+  optimizingAttackerMode.value = mode
 
   const worker = new Worker(new URL('../workers/AttackerLoadoutWorker.js', import.meta.url), { type: 'module' })
 
@@ -485,13 +534,13 @@ function optimizeAttackerLoadout() {
 
   worker.onmessage = (e) => {
     if (e.data.type === 'done') {
-      applyBestAttackerLoadout(e.data.results)
-      optimizingAttacker.value = false
+      applyBestAttackerLoadout(e.data.results, mode)
+      optimizingAttackerMode.value = null
       worker.terminate()
     } else if (e.data.type === 'error') {
       toast.error(e.data.error, { position: toast.POSITION.TOP_RIGHT, icon: false })
       console.error("Failed to optimize attacker loadout:", e.data.error)
-      optimizingAttacker.value = false
+      optimizingAttackerMode.value = null
       worker.terminate()
     }
   }
@@ -524,11 +573,24 @@ function optimizeAttackerLoadout() {
       stackOverrides: Array.from(stackOverrides.entries()),
       disabledEnemyDebuffs: Array.from(disabledEnemyDebuffs),
       debuffStackOverrides: Array.from(debuffStackOverrides.entries()),
+      optimizeAverageDamage: mode === 'avg',
     }
   })
 }
 
-function applyBestAttackerLoadout(results: AttackerLoadoutResult[]) {
+function applyCrysSelection(main: Character, crysIds: number[]) {
+  Object.values(main.crysOptions).forEach(c => {
+    if (c.useIndex > 0) c.useIndex = 0
+  })
+  crysIds.forEach((id, i) => {
+    const entry = main.crysOptions[id]
+    if (!entry) return
+    entry.useIndex = i + 1
+    if (!entry.subCrys || entry.subCrys.length !== 3) entry.subCrys = [4034, 4044, 4054]
+  })
+}
+
+function applyBestAttackerLoadout(results: AttackerLoadoutResult[], mode: 'max' | 'avg') {
   const best = results[0]
   if (!best) {
     toast.error("Couldn't find a valid support for this attacker", { position: toast.POSITION.TOP_RIGHT, icon: false })
@@ -536,19 +598,16 @@ function applyBestAttackerLoadout(results: AttackerLoadoutResult[]) {
   }
 
   const attackerSlot = team.slots[attackerIndex]
-  const prevDmg = typeof battleOutput.value !== 'string' ? battleOutput.value[0] : undefined
+  const metricIndex = mode === 'avg' ? 1 : 0
+  const prevDmg = typeof battleOutput.value !== 'string' ? battleOutput.value[metricIndex] : undefined
 
-  if (attackerSlot.main) attackerSlot.main.portrait = best.portrait
+  if (attackerSlot.main) {
+    attackerSlot.main.portrait = best.portrait
+    applyCrysSelection(attackerSlot.main, best.crysIds)
+  }
 
   const supportChar = characterStore.characters.find(c => c.name === best.supportName)
   if (supportChar) team.setSupport(attackerIndex, supportChar)
-
-  const portraitLabel = best.portrait || 'No portrait'
-  const dmgChange = prevDmg ? ` (was ${prevDmg.toLocaleString()})` : ''
-  toast.success(
-    `Best loadout: ${portraitLabel} + ${best.supportName} → ${best.dmg.toLocaleString()} dmg${dmgChange}`,
-    { position: toast.POSITION.TOP_RIGHT, icon: false },
-  )
 }
 
 async function copyToClipboard(text: string) {
@@ -606,17 +665,25 @@ async function copyToClipboard(text: string) {
   margin: 0 0 0.5rem;
 }
 
+.attacker-optimizer {
+  position: relative;
+  display: inline-block;
+  width: calc(1.6rem * 2 + 0.35rem);
+  height: 1.6rem;
+  vertical-align: middle;
+  margin-left: 0.3rem;
+}
+
 .optimize-attacker-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-left: 0.3rem;
   padding: 0;
-  width: 1.4rem;
-  height: 1.4rem;
-  vertical-align: middle;
-  font-size: 0.9rem;
-  line-height: 1;
+  width: 1.6rem;
+  height: 1.6rem;
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
@@ -636,17 +703,144 @@ async function copyToClipboard(text: string) {
   cursor: default;
 }
 
-.optimize-attacker-btn.spinning {
-  animation: optimize-attacker-spin 1s linear infinite;
+.optimize-attacker-btn.secondary {
+  left: calc(1.6rem + 0.35rem);
+  z-index: -1;
+  opacity: 0;
+  transform: translate(calc(-100% - 0.35rem), 6px) scale(0.65);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.3s ease, z-index 0s 0.3s;
 }
 
-@keyframes optimize-attacker-spin {
-  from {
-    transform: rotate(0deg);
+.attacker-optimizer:hover .optimize-attacker-btn.secondary {
+  opacity: 1;
+  z-index: 1;
+  transform: translate(0, 0) scale(1);
+  pointer-events: auto;
+  transition: opacity 0.25s ease, transform 0.3s ease, z-index 0s;
+}
+
+.attacker-optimizer.collapsed .optimize-attacker-btn.secondary {
+  opacity: 0 !important;
+  z-index: -1 !important;
+  transform: translate(calc(-100% - 0.35rem), 6px) scale(0.65) !important;
+  pointer-events: none !important;
+}
+
+.smith-icon .anvil-part,
+.smith-icon .tool-part {
+  fill: currentColor;
+}
+
+.smith-icon .ingot {
+  fill: #d9622b;
+}
+
+.smith-icon.avg-variant .ingot {
+  fill: #2f6fae;
+}
+
+.smith-icon .spark {
+  opacity: 0;
+}
+
+.smith-icon .hammer-group {
+  transform-box: fill-box;
+  transform-origin: 52% 96%;
+  transform: rotate(-30deg);
+  transition: transform 0.2s ease;
+}
+
+.smith-icon.hammering .hammer-group {
+  animation: smith-strike 0.65s infinite;
+}
+
+.smith-icon.hammering .ingot {
+  animation: smith-ingot-glow 0.65s infinite;
+}
+
+.smith-icon.avg-variant.hammering .ingot {
+  animation: smith-ingot-glow-cool 0.65s infinite;
+}
+
+.smith-icon.hammering .spark {
+  animation: smith-spark 0.65s infinite;
+}
+
+@keyframes smith-strike {
+  0% {
+    transform: rotate(-30deg);
+    animation-timing-function: ease-in;
   }
 
-  to {
-    transform: rotate(360deg);
+  35% {
+    transform: rotate(-30deg);
+    animation-timing-function: cubic-bezier(0.6, 0, 1, 1);
+  }
+
+  50% {
+    transform: rotate(10deg);
+    animation-timing-function: ease-out;
+  }
+
+  62% {
+    transform: rotate(10deg);
+  }
+
+  100% {
+    transform: rotate(-30deg);
+  }
+}
+
+@keyframes smith-ingot-glow {
+
+  0%,
+  46% {
+    fill: #b6501f;
+  }
+
+  50% {
+    fill: #ffb04d;
+  }
+
+  64%,
+  100% {
+    fill: #d9622b;
+  }
+}
+
+@keyframes smith-ingot-glow-cool {
+
+  0%,
+  46% {
+    fill: #1f5686;
+  }
+
+  50% {
+    fill: #59a8e6;
+  }
+
+  64%,
+  100% {
+    fill: #2f6fae;
+  }
+}
+
+@keyframes smith-spark {
+
+  0%,
+  46% {
+    opacity: 0;
+  }
+
+  50%,
+  56% {
+    opacity: 1;
+  }
+
+  64%,
+  100% {
+    opacity: 0;
   }
 }
 
