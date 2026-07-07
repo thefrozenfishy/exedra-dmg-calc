@@ -645,12 +645,7 @@ const exportData = () => {
         'display name',
         'union name',
         'total',
-        'attacker',
-        'buffer',
-        'debuffer',
-        'breaker',
-        'defender',
-        'healer',
+        ...Object.values(KiokuRole),
         'whale',
         'similarity',
         'standard_kioku',
@@ -667,12 +662,7 @@ const exportData = () => {
             store.displayName,
             store.unionName,
             myPower.value.total,
-            myPower.value[KiokuRole.Attacker],
-            myPower.value[KiokuRole.Buffer],
-            myPower.value[KiokuRole.Debuffer],
-            myPower.value[KiokuRole.Breaker],
-            myPower.value[KiokuRole.Defender],
-            myPower.value[KiokuRole.Healer],
+            ...Object.values(KiokuRole).map(r => myPower.value[r]),
             myPower.value.whale,
             '',
             myChars.value.perm,
@@ -690,12 +680,7 @@ const exportData = () => {
             f.display_name,
             f.union_name,
             f.power?.total,
-            f.power?.[KiokuRole.Attacker],
-            f.power?.[KiokuRole.Buffer],
-            f.power?.[KiokuRole.Debuffer],
-            f.power?.[KiokuRole.Breaker],
-            f.power?.[KiokuRole.Defender],
-            f.power?.[KiokuRole.Healer],
+            ...Object.values(KiokuRole).map(r => f.power?.[r]),
             f.power?.whale,
             f.accountSimilarity,
             f.kioku_count?.perm,
@@ -823,12 +808,7 @@ type SortModes = 'default'
     | 'name'
     | 'total'
     | 'whale'
-    | 'attacker'
-    | 'buffer'
-    | 'debuffer'
-    | 'breaker'
-    | 'defender'
-    | 'healer'
+    | KiokuRole
     | "similarity"
     | "lim"
     | "limAs"
@@ -889,27 +869,27 @@ const sortedFriends = computed(() => {
                 diff = (b.power?.whale || 0) - (a.power?.whale || 0)
                 break
 
-            case 'attacker':
+            case KiokuRole.Attacker:
                 diff = (b.power?.[KiokuRole.Attacker] || 0) - (a.power?.[KiokuRole.Attacker] || 0)
                 break
 
-            case 'buffer':
+            case KiokuRole.Buffer:
                 diff = (b.power?.[KiokuRole.Buffer] || 0) - (a.power?.[KiokuRole.Buffer] || 0)
                 break
 
-            case 'debuffer':
+            case KiokuRole.Debuffer:
                 diff = (b.power?.[KiokuRole.Debuffer] || 0) - (a.power?.[KiokuRole.Debuffer] || 0)
                 break
 
-            case 'breaker':
+            case KiokuRole.Breaker:
                 diff = (b.power?.[KiokuRole.Breaker] || 0) - (a.power?.[KiokuRole.Breaker] || 0)
                 break
 
-            case 'defender':
+            case KiokuRole.Defender:
                 diff = (b.power?.[KiokuRole.Defender] || 0) - (a.power?.[KiokuRole.Defender] || 0)
                 break
 
-            case 'healer':
+            case KiokuRole.Healer:
                 diff = (b.power?.[KiokuRole.Healer] || 0) - (a.power?.[KiokuRole.Healer] || 0)
                 break
 
@@ -1219,30 +1199,7 @@ const graphOptions = [
         label: 'Total Power',
         value: 'total'
     },
-    {
-        label: 'Attacker',
-        value: KiokuRole.Attacker
-    },
-    {
-        label: 'Breaker',
-        value: KiokuRole.Breaker
-    },
-    {
-        label: 'Buffer',
-        value: KiokuRole.Buffer
-    },
-    {
-        label: 'Debuffer',
-        value: KiokuRole.Debuffer
-    },
-    {
-        label: 'Defender',
-        value: KiokuRole.Defender
-    },
-    {
-        label: 'Healer',
-        value: KiokuRole.Healer
-    },
+    ...Object.values(KiokuRole).map(k => ({label: k, value: k})),
     {
         label: 'Whale',
         value: 'whale'
