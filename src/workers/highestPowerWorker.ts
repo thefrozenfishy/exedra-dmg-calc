@@ -48,6 +48,7 @@ self.onmessage = function (e: MessageEvent) {
 
     const mains = ranked.slice(0, MAIN_CANDIDATES);
     const supportPool = no_special_ranked.slice(0, SUPPORT_CANDIDATES);
+    console.log("Considering main pool", mains, "and supports", supportPool)
 
     const scoreCache = new Map<string, Map<string, Map<string, number>>>();
 
