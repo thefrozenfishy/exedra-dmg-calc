@@ -28,6 +28,7 @@ function combinations<T>(arr: T[], k: number): T[][] {
 }
 
 self.onmessage = function (e: MessageEvent) {
+  try {
     const characters: Character[] = e.data;
 
     const ranked: Candidate[] = [...characters]
@@ -47,6 +48,13 @@ self.onmessage = function (e: MessageEvent) {
         .sort((a, b) => b.pwr - a.pwr);
 
     const mains = ranked.slice(0, MAIN_CANDIDATES);
+    const teams = combinations(mains, 5);
+
+    // Cache-building is one step per (main, portrait) pair, team evaluation is one step per team.
+    const expectedTotalRuns = mains.length * highestPwrPortraits.length + teams.length;
+    let completedRuns = 0;
+
+    self.postMessage({ type: 'progress', completedRuns, expectedTotalRuns });
 
     const scoreCache = new Map<string, Map<string, Map<string, number>>>();
 
@@ -75,10 +83,12 @@ self.onmessage = function (e: MessageEvent) {
 
                 supportMap.set(support.char.name, power);
             }
+
+            completedRuns++;
+            self.postMessage({ type: 'progress', completedRuns, expectedTotalRuns });
         }
     }
 
-    const teams = combinations(mains, 5);
     let maxTeamPower = -Infinity;
     let bestTeamSetup: [string, string, string][] = [];
 
@@ -175,6 +185,9 @@ self.onmessage = function (e: MessageEvent) {
         }
 
         fastDfs(0, 0);
+
+        completedRuns++;
+        self.postMessage({ type: 'progress', completedRuns, expectedTotalRuns });
     }
 
     const bestTeam = {
@@ -194,5 +207,8 @@ self.onmessage = function (e: MessageEvent) {
         supp4supp: characters.find(c => c.name === bestTeamSetup[4][1]),
         supp4portrait: bestTeamSetup[4][2],
     }
-    self.postMessage({ bestTeam, maxTeamPower });
+    self.postMessage({ type: 'done', bestTeam, maxTeamPower });
+  } catch (err) {
+    self.postMessage({ type: 'error', error: err instanceof Error ? err.message : String(err) });
+  }
 };

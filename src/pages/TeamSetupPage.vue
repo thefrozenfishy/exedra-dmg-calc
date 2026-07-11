@@ -14,7 +14,13 @@
           @click="showHighestTeam = !showHighestTeam">
           {{ showHighestTeam ? 'Hide Highest PWR Team' : 'Show Highest PWR Team' }}
         </button>
-        <span v-if="calculating" class="calc-indicator">(Calculating optimal builds...)</span>
+        <div v-if="calculating" class="calc-progress">
+          <span class="calc-indicator">Calculating optimal builds...</span>
+          <div class="progress-wrapper">
+            <progress :value="completedRuns" :max="expectedRuns" class="progress-bar"></progress>
+            <span class="progress-text">{{ completedRuns }} / {{ expectedRuns }}</span>
+          </div>
+        </div>
       </div>
       <div class="toolbar-right rarity-toggles">
         <label class="chip" :class="{ active: show4stars }">
@@ -137,20 +143,31 @@ export default defineComponent({
     const highestPwr = ref<number | null>(null)
     const highestTeam = ref<FinalTeam>()
     const calculating = ref(true)
+    const completedRuns = ref(0)
+    const expectedRuns = ref(0)
     let worker: Worker | null = null
 
     const runHighestPowerCalc = () => {
       const chars = store.characters.filter(c => c.rarity === 5 && c.enabled)
 
       calculating.value = true
+      completedRuns.value = 0
+      expectedRuns.value = 0
       worker?.terminate()
       worker = new Worker(new URL('../workers/highestPowerWorker.ts', import.meta.url), { type: 'module' })
       worker.postMessage(JSON.parse(JSON.stringify(chars)))
       worker.onmessage = (e: MessageEvent) => {
-        const { bestTeam, maxTeamPower } = e.data
-        highestTeam.value = bestTeam
-        highestPwr.value = maxTeamPower
-        calculating.value = false
+        if (e.data.type === 'progress') {
+          completedRuns.value = e.data.completedRuns
+          expectedRuns.value = e.data.expectedTotalRuns
+        } else if (e.data.type === 'done') {
+          highestTeam.value = e.data.bestTeam
+          highestPwr.value = e.data.maxTeamPower
+          calculating.value = false
+        } else if (e.data.type === 'error') {
+          console.error("Failed to calculate highest PWR team:", e.data.error)
+          calculating.value = false
+        }
       }
     }
 
@@ -277,6 +294,8 @@ export default defineComponent({
       highestTeam,
       showHighestTeam,
       calculating,
+      completedRuns,
+      expectedRuns,
     }
   },
 })
@@ -296,12 +315,38 @@ export default defineComponent({
   color: var(--text);
 }
 
+.calc-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
 .calc-indicator {
   font-size: 0.8rem;
   color: var(--muted);
-  margin-left: 1rem;
   font-weight: normal;
+  white-space: nowrap;
   animation: pulse 2s infinite;
+}
+
+.progress-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress-bar {
+  width: 140px;
+  height: 12px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.progress-text {
+  font-size: 0.78rem;
+  color: var(--muted);
+  white-space: nowrap;
 }
 
 @keyframes pulse {
