@@ -40,6 +40,12 @@
             <label class="filter-chip" :class="{ active: splitAttackerRange }">
                 <input type="checkbox" v-model="splitAttackerRange" /> Split Attacker ranges
             </label>
+            <label class="filter-chip" :class="{ active: splitBreakerRange }">
+                <input type="checkbox" v-model="splitBreakerRange" /> Split Breaker ranges
+            </label>
+            <label class="filter-chip" :class="{ active: splitDebufferRange }">
+                <input type="checkbox" v-model="splitDebufferRange" /> Split Debuffer ranges
+            </label>
         </section>
 
         <section class="card axis-row">
@@ -78,7 +84,7 @@
                     :title="hiddenVirtualRoles.includes(vRole) ? `Show ${virtualRoleLabel(vRole)}` : `Hide ${virtualRoleLabel(vRole)}`">
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
-                        <span v-if="isVirtualAttacker(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
+                        <span v-if="isVirtualSplitRole(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
                         }}</span>
                     </div>
                 </button>
@@ -98,7 +104,7 @@
                                     :title="`Hide ${virtualRoleLabel(xVal)}`">
                                     <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(xVal)}.png`" :alt="xVal"
                                         class="header-icon header-icon-btn" />
-                                    <span v-if="isVirtualAttacker(xVal)" class="role-header-label">{{
+                                    <span v-if="isVirtualSplitRole(xVal)" class="role-header-label">{{
                                         virtualRoleRangeTag(xVal) }}</span>
                                 </div>
                             </template>
@@ -118,7 +124,7 @@
                                     :title="`Hide ${virtualRoleLabel(yVal)}`">
                                     <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(yVal)}.png`" :alt="yVal"
                                         class="header-icon header-icon-btn" />
-                                    <span v-if="isVirtualAttacker(yVal)" class="role-header-label">{{
+                                    <span v-if="isVirtualSplitRole(yVal)" class="role-header-label">{{
                                         virtualRoleRangeTag(yVal) }}</span>
                                 </div>
                             </template>
@@ -162,11 +168,11 @@
                                                         :alt="ch.element" class="info-badge-icon" />
                                                 </div>
                                                 <div class="ascension-badge level-badge"
-                                                    v-else-if="infoAxisKey === 'role' && ch.role === KiokuRole.Attacker && splitAttackerRange">
+                                                    v-else-if="infoAxisKey === 'role' && shouldShowRangeBadge(ch)">
                                                     <div class="role-badge-inner">
                                                         <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`"
                                                             :alt="ch.role" class="info-badge-icon" />
-                                                        <span class="role-badge-tag">{{ rangeTag(ch.range)[0] }}</span>
+                                                        <span class="role-badge-tag">{{ rangeTag(ch.range, ch.role )[0] }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="ascension-badge level-badge info-badge-img"
@@ -241,41 +247,55 @@ const showLevels = useSetting("showLevels", true)
 const showHearts = useSetting("showHearts", false)
 const colourLevels = useSetting("colourLevels", true)
 const splitAttackerRange = useSetting("splitAttackerRange", true)
+const splitBreakerRange = useSetting("splitBreakerRange", true)
+const splitDebufferRange = useSetting("splitDebufferRange", true)
 
 type VirtualRole = string
 
-const VIRTUAL_ATTACKER_ST = "Attacker-ST"
-const VIRTUAL_ATTACKER_P = "Attacker-Prox"
-const VIRTUAL_ATTACKER_AOE = "Attacker-AOE"
+const SPLITTABLE_ROLES: string[] = [KiokuRole.Attacker, KiokuRole.Debuffer, KiokuRole.Breaker]
 
-const rangeTag = (range: number): string => {
-    if (range === 2) return "Prox"
+const splitSettingForRole = (role: string) => {
+    if (role === KiokuRole.Attacker) return splitAttackerRange
+    if (role === KiokuRole.Breaker) return splitBreakerRange
+    if (role === KiokuRole.Debuffer) return splitDebufferRange
+    return null
+}
+
+const rangeTag = (range: number, role: KiokuRole): string => {
+    if (range === 1) return "ST"
     if (range === 3) return "AOE"
-    return "ST"
+    if (role === KiokuRole.Breaker) return "AOE"
+    return "Prox"
 }
 
 const virtualRoleForChar = (ch: { role: string; range: number }): VirtualRole => {
-    if (ch.role === KiokuRole.Attacker && splitAttackerRange.value) {
-        return `Attacker-${rangeTag(ch.range)}`
+    const setting = splitSettingForRole(ch.role)
+    if (setting && setting.value) {
+        return `${ch.role}-${rangeTag(ch.range, ch.role)}`
     }
     return ch.role
 }
 
-const isVirtualAttacker = (vRole: VirtualRole): boolean =>
-    vRole === VIRTUAL_ATTACKER_ST || vRole === VIRTUAL_ATTACKER_P || vRole === VIRTUAL_ATTACKER_AOE
+const isVirtualSplitRole = (vRole: VirtualRole): boolean =>
+    SPLITTABLE_ROLES.some(role => vRole === `${role}-ST` || vRole === `${role}-Prox` || vRole === `${role}-AOE`)
 
-const virtualRoleBase = (vRole: VirtualRole): string =>
-    isVirtualAttacker(vRole) ? KiokuRole.Attacker : vRole
-
-const virtualRoleRangeTag = (vRole: VirtualRole): string => {
-    if (vRole === VIRTUAL_ATTACKER_ST) return "ST"
-    if (vRole === VIRTUAL_ATTACKER_P) return "Prox"
-    if (vRole === VIRTUAL_ATTACKER_AOE) return "AOE"
-    return ""
+const virtualRoleBase = (vRole: VirtualRole): string => {
+    const role = SPLITTABLE_ROLES.find(r => vRole === `${r}-ST` || vRole === `${r}-Prox` || vRole === `${r}-AOE`)
+    return role ?? vRole
 }
 
+const virtualRoleRangeTag = (vRole: VirtualRole): string =>
+    isVirtualSplitRole(vRole) ? vRole.slice(vRole.lastIndexOf("-") + 1) : ""
+
 const virtualRoleLabel = (vRole: VirtualRole): string =>
-    isVirtualAttacker(vRole) ? `Attacker (${virtualRoleRangeTag(vRole)})` : vRole
+    isVirtualSplitRole(vRole) ? `${virtualRoleBase(vRole)} (${virtualRoleRangeTag(vRole)})` : vRole
+
+const isSplittableRole = (role: string): boolean => splitSettingForRole(role) !== null
+
+const shouldShowRangeBadge = (ch: { role: string }): boolean => {
+    const setting = splitSettingForRole(ch.role)
+    return !!setting && setting.value
+}
 
 const hiddenElements = useSetting<KiokuElement[]>("hiddenGridElements", [])
 const hiddenVirtualRoles = useSetting<VirtualRole[]>("hiddenGridRoles", [])
@@ -302,23 +322,23 @@ const skillDetailsBySkillMstId = (() => {
     return map
 })()
 
+const computeSkillRange = (c: Character): number => {
+    const k = new Kioku({ ...c })
+    const effects = skillDetailsBySkillMstId.get(k.data.special_id * 100 + 10) ?? []
+    const relevant = effects.filter(e => e.abilityEffectType.startsWith("DMG_")) 
+    const highest = relevant.reduce((max, e) => (e.value1 > max ? e.value1 : max), 1)
+    let range = 1
+    for (const e of relevant) {
+        if (e.value1 >= highest * 0.6) range = Math.max(range, e.range)
+    }
+    return range
+}
+
 const markedCharacters = computed(() => store.characters.map(c => {
     let range = 1
     if (c.name === "Lux☆Magica") c.rarity = 4
     if (!c.enabled) c.ascension = -1
-    if (c.role === KiokuRole.Attacker) {
-        const k = new Kioku({ ...c })
-        const effects = skillDetailsBySkillMstId.get(k.data.special_id * 100 + 10) ?? []
-        const highest = effects.reduce(
-            (max, e) => e.abilityEffectType.startsWith("DMG_") && e.value1 > max ? e.value1 : max,
-            1
-        )
-        for (const e of effects) {
-            if (e.abilityEffectType.startsWith("DMG_") && e.value1 >= highest * 0.6) {
-                range = Math.max(range, e.range)
-            }
-        }
-    }
+    range = computeSkillRange(c as unknown as Character)
     const enriched = { ...c, range }
     return {
         ...enriched,
@@ -341,8 +361,13 @@ const baseRoleOrder = computed(() =>
 const allVirtualRoleValues = computed<VirtualRole[]>(() => {
     const result: VirtualRole[] = []
     for (const role of baseRoleOrder.value) {
-        if (role === KiokuRole.Attacker && splitAttackerRange.value) {
-            result.push(VIRTUAL_ATTACKER_ST, VIRTUAL_ATTACKER_P, VIRTUAL_ATTACKER_AOE)
+        const setting = splitSettingForRole(role)
+        if (setting && setting.value) {
+            if (role === KiokuRole.Breaker) {
+                result.push(`${role}-ST`, `${role}-AOE`)
+            } else {    
+            result.push(`${role}-ST`, `${role}-Prox`, `${role}-AOE`)
+            } 
         } else {
             result.push(role)
         }
