@@ -2,8 +2,7 @@ import { Kioku } from "../models/Kioku";
 import { ScoreAttackKioku } from "../models/ScoreAttackKioku";
 import { Character, highestPwrPortraits } from "../types/KiokuTypes";
 
-const MAIN_CANDIDATES = 7;
-const SUPPORT_CANDIDATES = 20;
+const MAIN_CANDIDATES = 8;
 
 interface Candidate {
     char: Character;
@@ -39,7 +38,7 @@ self.onmessage = function (e: MessageEvent) {
         .map(c => ({ ...c, pwr: c.kioku.getTotalPower() }))
         .sort((a, b) => b.pwr - a.pwr);
 
-    const no_special_ranked: Candidate[] = [...characters]
+    const supportPool: Candidate[] = [...characters]
         .map(char => ({
             char,
             kioku: new ScoreAttackKioku({ ...char, portrait: undefined, specialLvl: 0 }),
@@ -48,19 +47,6 @@ self.onmessage = function (e: MessageEvent) {
         .sort((a, b) => b.pwr - a.pwr);
 
     const mains = ranked.slice(0, MAIN_CANDIDATES);
-    const supportPool = no_special_ranked.slice(0, SUPPORT_CANDIDATES);
-    console.log(
-        "Considering main pool\n", 
-        mains.map(m => [m.char.name, m.pwr]), 
-        "\nand supports\n", 
-        supportPool.map(m => [m.char.name, m.pwr]),
-    )
-    console.log(
-        "Available was:\n", 
-        ranked.map(m => [m.char.name, m.pwr]), 
-        "\nand supports\n", 
-        no_special_ranked.map(m => [m.char.name, m.pwr]),
-    )
 
     const scoreCache = new Map<string, Map<string, Map<string, number>>>();
 
