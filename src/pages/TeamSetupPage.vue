@@ -535,6 +535,7 @@ export default defineComponent({
   background: var(--bg);
   z-index: 10;
   opacity: 0.8;
+  text-align: center;
 }
 
 .role-section {

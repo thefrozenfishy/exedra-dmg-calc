@@ -271,9 +271,9 @@ export default defineComponent({
   margin-top: 1px;
 }
 
-/* ── Col 2: Stats (Asc + 4 levels in one horizontal row) ── */
 .col-stats {
   flex-shrink: 0;
+  align-items: center;
 }
 
 .stats-grid {
