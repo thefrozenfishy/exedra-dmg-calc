@@ -8,6 +8,7 @@ const SUPPORT_CANDIDATES = 20;
 interface Candidate {
     char: Character;
     kioku: Kioku;
+    pwr: number;
 }
 
 function combinations<T>(arr: T[], k: number): T[][] {
@@ -48,7 +49,18 @@ self.onmessage = function (e: MessageEvent) {
 
     const mains = ranked.slice(0, MAIN_CANDIDATES);
     const supportPool = no_special_ranked.slice(0, SUPPORT_CANDIDATES);
-    console.log("Considering main pool", mains, "and supports", supportPool)
+    console.log(
+        "Considering main pool\n", 
+        mains.map(m => [m.char.name, m.pwr]), 
+        "\nand supports\n", 
+        supportPool.map(m => [m.char.name, m.pwr]),
+    )
+    console.log(
+        "Available was:\n", 
+        ranked.map(m => [m.char.name, m.pwr]), 
+        "\nand supports\n", 
+        no_special_ranked.map(m => [m.char.name, m.pwr]),
+    )
 
     const scoreCache = new Map<string, Map<string, Map<string, number>>>();
 
