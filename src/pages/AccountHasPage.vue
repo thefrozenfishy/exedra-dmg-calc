@@ -358,7 +358,7 @@ const totalPossibleLimiteds = computed(() => fiveStarMembers.value.filter(ch => 
 const standardPool = computed(() => fiveStarMembers.value.filter(ch => new Date() > new Date(ch.permaDate)))
 const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.enabled && ch.ascension === 5))
 const extraCollected = useSetting("extraCollected", 0)
-const extraTotal = computed(() => (showDupes.value ? ownedFiveStars.value.reduce((sum, ch) => sum + ch.dupes, 0) : extraCollected.value))
+const extraTotal = computed(() => (showDupes.value ? ownedFiveStars.value.filter(ch => ch.ascension === 5).reduce((sum, ch) => sum + ch.dupes, 0) : extraCollected.value))
 
 const missingCrys5stars = computed(() => fiveStarMembers.value.reduce((p, c) => p + (c.enabled ? (maxCrysCount.value - getCrysCount(c, true)) : 0), 0))
 const missingCrys4stars = computed(() => fourStarMembers.value.reduce((p, c) => p + (maxCrysCount.value - getCrysCount(c, true)), 0))
