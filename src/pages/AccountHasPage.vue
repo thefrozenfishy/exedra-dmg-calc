@@ -196,7 +196,7 @@
             <span class="filters-heading">+500s collected</span>
             <input type="number" v-model.number="extraCollected" />
         </div>
-        <section class="card stats-card">
+        <section class="card stats-card info-section">
             <span class="filters-heading">Collection stats</span>
             <div class="stat-row">
                 <span class="stat-label">Total SSRs collected</span>
@@ -779,6 +779,10 @@ const onTouchEnd = (e: TouchEvent) => {
     flex-direction: column;
     align-items: stretch;
     gap: 0.3rem;
+}
+
+.info-section {
+    margin-top: 0.5rem;
 }
 
 .stat-row {
