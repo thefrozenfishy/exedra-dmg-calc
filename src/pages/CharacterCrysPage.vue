@@ -1,20 +1,22 @@
 <template>
     <div class="setup-page page">
         <h1 class="page-title">Character Crystalis Selections</h1>
-        <CharacterSelector v-if="!characterId || !character" :selected="selectedCharacter" @select="onSelectCharacter"
-            :filter="ch => ch.enabled" />
 
         <div v-if="characterId && character">
             <section class="toolbar card bulk-actions">
-                <CharacterSelector :selected="selectedCharacter" @select="onSelectCharacter"
-                    :filter="ch => ch.enabled" />
+                <div class="selected-character-header">
+                    <img :src="`/exedra-dmg-calc/kioku_images/${character.id}_thumbnail.png`" :alt="character.name"
+                        class="selected-character-icon" />
+                    <span class="selected-character-name">{{ character.name }}</span>
+                    <button class="close-btn" title="Back to overview" @click="onSelectCharacter(undefined)">✖</button>
+                </div>
 
                 <div class="toolbar-right">
                     <span class="filters-heading">Filters</span>
 
                     <label class="chip" :class="{ active: hideOffElementalCrys }">
                         <input type="checkbox" v-model="hideOffElementalCrys" />
-                        Hide off-element
+                        Hide off-elemental crystalis
                     </label>
                 </div>
 
@@ -85,45 +87,95 @@
         <div v-else class="missing-element-grid">
             <h2 class="section-title">Kioku missing their elemental crys (For crys farming teambuilding)</h2>
 
-            <section class="filters card">
+            <section class="toolbar card">
                 <span class="filters-heading">Roster</span>
-                <label class="chip" :class="{ active: show3stars }">
-                    <input type="checkbox" v-model="show3stars" /> ★★★
+                <div class="toolbar-right rarity-toggles">
+                    <label class="chip" :class="{ active: show4stars }">
+                        <input type="checkbox" v-model="show4stars" /> ★★★★
+                    </label>
+                    <label class="chip" :class="{ active: show3stars }">
+                        <input type="checkbox" v-model="show3stars" /> ★★★
+                    </label>
+                </div>
+            </section>
+
+            <section class="filters card">
+                <span class="filters-heading">Filters</span>
+
+                <label class="chip" :class="{ active: hideCompletedCrys }">
+                    <input type="checkbox" v-model="hideCompletedCrys" /> Hide completed
                 </label>
-                <label class="chip" :class="{ active: show4stars }">
-                    <input type="checkbox" v-model="show4stars" /> ★★★★
-                </label>
+
                 <label v-if="showOffElementalOnesOption" class="chip" :class="{ active: showOffElementalOnes }">
                     <input type="checkbox" v-model="showOffElementalOnes" /> Off-elemental kioku
                 </label>
+
+                <div v-if="!showOffElementalOnes" class="filter-group">
+                    <label class="chip" :class="{ active: missingOwnElementalFilter }">
+                        <input type="checkbox" name="own-elemental-filter"
+                            v-model="missingOwnElementalFilter" /> Show only girls missing elemental crys
+                    </label>
+                </div>
+
+                <div v-else class="filter-group">
+                    <span class="filter-group-label">Missing element crys</span>
+                    <label v-for="elem in KiokuElement" :key="elem" class="chip"
+                        :class="{ active: elementCrysFilter.includes(elem) }">
+                        <input type="checkbox" :value="elem" v-model="elementCrysFilter" />
+                        {{ elem }}
+                    </label>
+                </div>
             </section>
 
-            <table class="element-table">
-                <tbody>
-                    <tr v-for="elem in KiokuElement" :key="elem" class="element-row">
-                        <td class="element-cell">
-                            <div class="element-header">
-                                <img :src="`/exedra-dmg-calc/elements/${elem}.png`" class="element-icon" />
-                                <span>{{ elem }}</span>
-                            </div>
-                        </td>
+            <div class="list-header crys-table-header">
+                <span class="crys-header-name">Kioku</span>
+                <span class="crys-header-crys">Crystalis</span>
+            </div>
 
-                        <td class="character-list">
-                            <template v-if="missingElementCharacters(elem, showOffElementalOnes).length">
-                                <div v-for="char in missingElementCharacters(elem, showOffElementalOnes)" :key="char.id"
-                                    class="character-chip">
-                                    <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`"
-                                        class="character-icon" :title="char.name" />
+            <div v-for="(rows, elem) in groupedCharacterCrysRows" :key="elem" class="element-section">
+                <button class="element-header" @click="toggleElement(elem)" :aria-expanded="!collapsedElements[elem]">
+                    <span class="element-chevron" :class="{ rotated: collapsedElements[elem] }">▾</span>
+                    <span class="element-name">{{ elem }}</span>
+                    <span class="element-count">{{ groupedRosterCharacterCrysRows[elem].filter(r => r.completed).length }} / {{ groupedRosterCharacterCrysRows[elem].length }}</span>
+                </button>
+
+                <div v-show="!collapsedElements[elem]" class="character-crys-list element-body">
+                    <div v-for="row in rows" :key="row.char.id" class="character-crys-row"
+                        @click="onSelectCharacter(row.char)">
+                        <div class="character-crys-header">
+                            <img :src="`/exedra-dmg-calc/kioku_images/${row.char.id}_thumbnail.png`"
+                                class="character-icon-lg" :title="row.char.name" />
+                            <span class="character-crys-name">{{ row.char.name }}</span>
+                        </div>
+
+                        <div class="character-crys-body">
+                            <div class="off-element-grid">
+                                <div v-for="c in row.offElementCrys" :key="c.selectionAbilityMstId" class="mini-crys"
+                                    :class="{ owned: c.enabled }" :title="c.name">
+                                    <img :src="`/exedra-dmg-calc/selection_ability/${c.resourceIconName}.png`"
+                                        :alt="c.name" class="mini-crys-img" />
                                 </div>
-                            </template>
-
-                            <div v-else class="empty-text">
-                                All collected
                             </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+
+                            <div class="elemental-pocket">
+                                <template v-for="slot in row.elementalSlots" :key="slot.elem">
+                                    <div v-if="showOffElementalOnes || slot.isOwnElement" class="mini-crys elemental"
+                                        :class="{ owned: slot.owned, offElement: !slot.isOwnElement }" :title="slot.elem">
+                                        <img v-if="slot.crys" :src="`/exedra-dmg-calc/selection_ability/${slot.crys.resourceIconName}.png`"
+                                            :alt="slot.elem" class="mini-crys-img" />
+                                        <img v-else :src="`/exedra-dmg-calc/elements/${slot.elem}.png`" :alt="slot.elem"
+                                            class="mini-crys-img placeholder-icon" />
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="!rows.length" class="empty-state">
+                        No Kioku match the current filters in this element.
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -132,15 +184,18 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { relevantCrys, getSubCrystalises, elementMap, KiokuElement } from '../types/KiokuTypes'
-import CharacterSelector from '../components/CharacterSelector.vue'
 import SubCrysBar from '../components/SubCrysBar.vue'
 import { useCharacterStore } from '../store/characterStore'
 import type { Character, CrystalisData } from '../types/KiokuTypes'
 import { passiveDetails } from '../utils/helpers'
 import { useSetting } from "../store/settingsStore"
 
+function getCrysElement(crys: CrystalisData): KiokuElement | undefined {
+    return elementMap[passiveDetails[crys.value1 * 100 + 1].element]
+}
+
 const offElementalCrys = (crys: CrystalisData) => {
-    const elem = elementMap[passiveDetails[crys.value1 * 100 + 1].element]
+    const elem = getCrysElement(crys)
     if (elem) return elem !== character.value?.element
     return false
 }
@@ -150,11 +205,13 @@ const router = useRouter()
 const store = useCharacterStore()
 
 const characterId = ref(Number(route.query.character_id) || 0)
-const selectedCharacter = ref<Character | undefined>(store.characters.find(c => c.id === characterId.value))
 const show4stars = useSetting("show4stars", false);
 const show3stars = useSetting("show3stars", false);
 const hideOffElementalCrys = useSetting("hideOffElementalCrys", false)
 const showOffElementalOnes = useSetting("showOffElementalCrysCollection", false)
+const hideCompletedCrys = useSetting("hideCompletedMissingElementCrys", false)
+const missingOwnElementalFilter = useSetting<boolean | null>("missingElementHasOwnFilter", null)
+const elementCrysFilter = useSetting<KiokuElement[]>("missingElementCrysFilter", [])
 const showOffElementalOnesOption = computed(() => store.characters.some(char => {
     if (!char.enabled) return false
     return Object.values(char.crysOptions).every((c) => c.enabled == null || c.enabled)
@@ -193,27 +250,94 @@ const options = computed(() => {
         .sort((a, b) => b.rarity - a.rarity || b.sortOrder - a.sortOrder)
 })
 
-function missingElementCharacters(elem: KiokuElement, showOffElement: boolean) {
-    return store.characters.filter(char => {
-        if (!char?.enabled) return false
-        if (!showOffElement && char.element !== elem) return false
-        if (char.rarity === 3 && !show3stars.value) return false
-        if ((char.rarity === 4 || char.name === "Lux☆Magica") && !show4stars.value) return false
-
-        const hasElementalCrys = Object.entries(char.crysOptions).some(([id, crys]) => {
-            if (!crys?.enabled) return false
-
-            const crysData = relevantCrys(char.id).find(c => c.selectionAbilityMstId === Number(id))
-            if (!crysData) return false
-
-            const crysElem = elementMap[passiveDetails[crysData.value1 * 100 + 1].element]
-
-            return crysElem === elem
+const rosterCharacterCrysRows = computed(() => {
+    return store.characters
+        .filter(char => {
+            if (!char.enabled) return false
+            if (char.rarity === 3 && !show3stars.value) return false
+            if ((char.rarity === 4 || char.name === "Lux☆Magica") && !show4stars.value) return false
+            return true
         })
+        .sort((a, b) => a.id - b.id)
+        .map(char => {
+            const crys = relevantCrys(char.id).map(c => ({
+                ...c,
+                enabled: char.crysOptions[c.selectionAbilityMstId]?.enabled ?? false,
+            }))
 
-        return !hasElementalCrys
-    }).sort((a, b) => a.id - b.id)
+            const offElementCrys = crys
+                .filter(c => !getCrysElement(c))
+                .sort((a, b) => b.rarity - a.rarity || b.sortOrder - a.sortOrder)
+
+            const elementalSlots = Object.values(KiokuElement).map(elem => {
+                const crysForElem = crys.find(c => getCrysElement(c) === elem)
+                return {
+                    elem,
+                    crys: crysForElem,
+                    owned: crysForElem?.enabled ?? false,
+                    isOwnElement: elem === char.element,
+                }
+            })
+
+            const relevantSlots = showOffElementalOnes.value
+                ? elementalSlots
+                : elementalSlots.filter(s => s.isOwnElement)
+            const completed = offElementCrys.every(c => c.enabled) && relevantSlots.every(s => s.owned)
+
+            return { char, offElementCrys, elementalSlots, completed }
+        })
+})
+
+const characterCrysRows = computed(() => {
+    return rosterCharacterCrysRows.value
+        .filter(row => {
+            if (hideCompletedCrys.value && row.completed) return false
+
+            if (!showOffElementalOnes.value && missingOwnElementalFilter.value !== null) {
+                const ownSlot = row.elementalSlots.find(s => s.isOwnElement)
+                console.log(row.char.name, ownSlot?.owned, missingOwnElementalFilter.value)
+                if (missingOwnElementalFilter.value && (ownSlot?.owned ?? false)) return false
+            }
+
+            if (showOffElementalOnes.value && elementCrysFilter.value.length > 0) {
+                const missingAny = elementCrysFilter.value.some(elem => {
+                    const slot = row.elementalSlots.find(s => s.elem === elem)
+                    return !slot?.owned
+                })
+                if (!missingAny) return false
+            }
+
+            return true
+        })
+})
+
+const collapsedElements = useSetting<Record<string, boolean>>("collapsedCrysElements", {})
+function toggleElement(elem: string) {
+    collapsedElements.value[elem] = !collapsedElements.value[elem]
 }
+
+const groupedCharacterCrysRows = computed(() => {
+    const groups: Record<string, typeof characterCrysRows.value> = {}
+    for (const elem of Object.values(KiokuElement)) {
+        groups[elem] = []
+    }
+    for (const row of characterCrysRows.value) {
+        groups[row.char.element].push(row)
+    }
+    return groups
+})
+
+const groupedRosterCharacterCrysRows = computed(() => {
+    const groups: Record<string, typeof rosterCharacterCrysRows.value> = {}
+    for (const elem of Object.values(KiokuElement)) {
+        groups[elem] = []
+    }
+    for (const row of rosterCharacterCrysRows.value) {
+        groups[row.char.element].push(row)
+    }
+    return groups
+})
+
 
 function updateSubCrys(effectId: number, newSubCrys: number[]) {
     const char = character.value
@@ -313,14 +437,12 @@ function applyMassEditSubCrys(newSubCrys: number[]) {
 
 const onSelectCharacter = async (char?: Character) => {
     if (!char) {
-        selectedCharacter.value = undefined
         characterId.value = 0
         clearMassEditSelection()
         await router.replace({ query: {} })
         return
     }
     characterId.value = char.id
-    selectedCharacter.value = char
     clearMassEditSelection()
     await router.replace({ query: { character_id: char.id } })
 }
@@ -419,6 +541,47 @@ const setUseIndex = (effectId: number, useIndex: number) => {
 .bulk-actions {
     align-items: flex-start;
     gap: 8px;
+}
+
+.selected-character-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.selected-character-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.selected-character-name {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: none;
+    color: var(--muted);
+    font-size: 0.7rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.close-btn:hover {
+    color: var(--danger);
+    border-color: var(--danger);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .toggle-all-btn {
@@ -675,73 +838,335 @@ const setUseIndex = (effectId: number, useIndex: number) => {
 }
 
 .missing-element-grid {
-    max-width: 900px;
+    max-width: 1100px;
     margin: 16px auto 0;
 }
 
-.element-row {
-    display: table-row;
-}
-
-.element-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.element-cell {
-    width: 110px;
-    font-weight: bold;
-    background-color: rgba(255, 255, 255, 0.06);
-    font-size: 1rem;
-    color: var(--text);
-    vertical-align: middle;
-    box-sizing: border-box;
-
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 0.5rem;
-}
-
-.character-list {
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 0.5rem;
-
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    min-height: 68px;
+.filter-group {
+    display: inline-flex;
     align-items: center;
+    gap: 4px;
+    border-left: 1px solid var(--border);
+    padding-left: 0.65rem;
+    flex-wrap: wrap;
+}
+
+.filter-group-label {
+    font-size: 0.74rem;
+    color: var(--muted);
+    margin-right: 2px;
+}
+
+.btn {
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.4em 0.9em;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: var(--border-strong);
+}
+
+.btn-sm {
+    padding: 0.28rem 0.65rem;
+    font-size: 0.78rem;
+}
+
+.clear-chip {
+    background: none;
+    border-color: transparent;
+    color: var(--muted);
+    padding: 0.1rem 0.4rem;
+    opacity: 0.7;
+}
+
+.clear-chip:hover {
+    opacity: 1;
+    color: var(--danger);
+    border-color: transparent;
+    background: none;
+}
+
+.clear-all-btn {
+    margin-left: auto;
+}
+
+.list-header {
+    display: grid;
+    grid-template-columns: 180px auto 140px 1fr;
+    gap: 0 0.75rem;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.64rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border-strong);
+    margin-bottom: 0.2rem;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+    opacity: 0.8;
+    text-align: center;
+}
+
+.crys-table-header {
+    grid-template-columns: 74px 1fr;
+}
+
+.crys-header-name {
+    text-align: center;
+}
+
+.character-crys-list {
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.element-section {
+    margin-bottom: 0.4rem;
 }
 
 .element-header {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition: background 0.15s, border-color 0.15s;
 }
 
-.element-icon {
-    width: 48px;
-    height: 48px;
-    object-fit: contain;
+.element-header:hover {
+    background: var(--bg-soft);
+    border-color: var(--border-strong);
 }
 
-.character-chip {
-    position: relative;
-    display: inline-block;
-}
-
-.character-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 2px solid transparent;
-    display: block;
-    transition: transform 0.15s ease;
-}
-
-.empty-text {
-    opacity: 0.45;
-    font-size: 0.9rem;
+.element-chevron {
+    font-size: 1rem;
+    line-height: 1;
+    transition: transform 0.2s;
     color: var(--muted);
+}
+
+.element-chevron.rotated {
+    transform: rotate(-90deg);
+}
+
+.element-name {
+    flex: 1;
+    color: var(--accent-soft);
+}
+
+.element-count {
+    font-size: 0.74rem;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+.element-body.character-crys-list {
+    border-top: none;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+}
+
+.character-crys-row {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.5rem 0.85rem;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.character-crys-row:last-child {
+    border-bottom: none;
+}
+
+.character-crys-row:hover {
+    background: var(--bg-soft);
+}
+
+.character-crys-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    width: 74px;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.character-icon-lg {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    object-fit: cover;
+}
+
+.character-crys-name {
+    font-size: 0.66rem;
+    color: var(--muted);
+    line-height: 1.15;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.character-crys-body {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex: 1;
+    min-width: 0;
+}
+
+/* Wide screens: everything fits on a single row */
+.off-element-grid {
+    display: grid;
+    grid-template-columns: repeat(24, 24px);
+    grid-auto-rows: 24px;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+.elemental-pocket {
+    display: grid;
+    grid-template-columns: repeat(6, 24px);
+    grid-auto-rows: 24px;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+.mini-crys {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+
+/* Medium screens: collapse to 2 rows */
+@media (max-width: 1050px) {
+    .off-element-grid {
+        grid-template-columns: repeat(12, 28px);
+        grid-auto-rows: 28px;
+    }
+
+    .elemental-pocket {
+        grid-template-columns: repeat(3, 28px);
+        grid-auto-rows: 28px;
+    }
+
+    .mini-crys {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+/* Mobile: collapse to 3 rows */
+@media (max-width: 700px) {
+    .off-element-grid {
+        grid-template-columns: repeat(8, 26px);
+        grid-auto-rows: 26px;
+    }
+
+    .elemental-pocket {
+        grid-template-columns: repeat(2, 26px);
+        grid-auto-rows: 26px;
+    }
+
+    .mini-crys {
+        width: 26px;
+        height: 26px;
+    }
+}
+
+@media (max-width: 480px) {
+    .off-element-grid {
+        grid-template-columns: repeat(4, 26px);
+        grid-auto-rows: 26px;
+    }
+
+    .elemental-pocket {
+        grid-template-columns: repeat(1, 26px);
+        grid-auto-rows: 26px;
+    }
+
+    .mini-crys {
+        width: 26px;
+        height: 26px;
+    }
+
+    .character-crys-body {
+        gap: 16px;
+    }
+}
+
+.mini-crys-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.28;
+    filter: grayscale(0.7);
+    transition: opacity 0.15s, filter 0.15s;
+}
+
+.mini-crys.owned {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.mini-crys.owned .mini-crys-img {
+    opacity: 1;
+    filter: none;
+}
+
+.mini-crys.elemental.offElement {
+    background: rgba(80, 18, 24, 0.1);
+    border-color: rgba(80, 18, 24, 0.3);
+}
+
+.mini-crys.elemental.offElement.owned {
+    background: rgba(80, 18, 24, 0.22);
+    border-color: rgba(80, 18, 24, 0.5);
+}
+
+.placeholder-icon {
+    opacity: 0.2 !important;
+}
+
+.empty-state {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--muted);
+    opacity: 0.7;
+    font-size: 0.9rem;
 }
 
 .details {
