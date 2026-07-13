@@ -127,55 +127,62 @@
                 </div>
             </section>
 
+            <section class="toolbar card">
+                <span class="filters-heading">Image Share</span>
+                <ImageActionsToolbar target=".element-section" filename="collected_crys.png" :share-options="shareOptionsForAscensionList" />
+            </section>
+
             <div class="list-header crys-table-header">
                 <span class="crys-header-name">Kioku</span>
                 <span class="crys-header-crys">Crystalis</span>
             </div>
 
-            <div v-for="(rows, elem) in groupedCharacterCrysRows" :key="elem" class="element-section">
-                <button class="element-header" @click="toggleElement(elem)" :aria-expanded="!collapsedElements[elem]">
-                    <span class="element-chevron" :class="{ rotated: collapsedElements[elem] }">▾</span>
-                    <span class="element-name">{{ elem }}</span>
-                    <span class="element-count">{{ groupedRosterCharacterCrysRows[elem].filter(r => r.completed).length }} / {{ groupedRosterCharacterCrysRows[elem].length }}</span>
-                </button>
+            <section class="element-section">
+                <div v-for="(rows, elem) in groupedCharacterCrysRows" :key="elem" class="element-row">
+                    <button class="element-header" @click="toggleElement(elem)" :aria-expanded="!collapsedElements[elem]">
+                        <span class="element-chevron" :class="{ rotated: collapsedElements[elem] }">▾</span>
+                        <span class="element-name">{{ elem }}</span>
+                        <span title="Completed Kioku out of Total Kioku" class="element-count">{{ groupedRosterCharacterCrysRows[elem].filter(r => r.completed).length }} / {{ groupedRosterCharacterCrysRows[elem].length }}</span>
+                    </button>
 
-                <div v-show="!collapsedElements[elem]" class="character-crys-list element-body">
-                    <div v-for="row in rows" :key="row.char.id" class="character-crys-row"
-                        @click="onSelectCharacter(row.char)">
-                        <div class="character-crys-header">
-                            <img :src="`/exedra-dmg-calc/kioku_images/${row.char.id}_thumbnail.png`"
-                                class="character-icon-lg" :title="row.char.name" />
-                            <span class="character-crys-name">{{ row.char.name }}</span>
-                        </div>
+                    <div v-show="!collapsedElements[elem]" class="character-crys-list element-body">
+                        <div v-for="row in rows" :key="row.char.id" class="character-crys-row"
+                            @click="onSelectCharacter(row.char)">
+                            <div class="character-crys-header">
+                                <img :src="`/exedra-dmg-calc/kioku_images/${row.char.id}_thumbnail.png`"
+                                    class="character-icon-lg" :title="row.char.name" />
+                                <span class="character-crys-name">{{ row.char.name }}</span>
+                            </div>
 
-                        <div class="character-crys-body">
-                            <div class="off-element-grid">
-                                <div v-for="c in row.offElementCrys" :key="c.selectionAbilityMstId" class="mini-crys"
-                                    :class="{ owned: c.enabled }" :title="c.name">
-                                    <img :src="`/exedra-dmg-calc/selection_ability/${c.resourceIconName}.png`"
-                                        :alt="c.name" class="mini-crys-img" />
+                            <div class="character-crys-body">
+                                <div class="off-element-grid">
+                                    <div v-for="c in row.offElementCrys" :key="c.selectionAbilityMstId" class="mini-crys"
+                                        :class="{ owned: c.enabled }" :title="c.name">
+                                        <img :src="`/exedra-dmg-calc/selection_ability/${c.resourceIconName}.png`"
+                                            :alt="c.name" class="mini-crys-img" />
+                                    </div>
+                                </div>
+
+                                <div class="elemental-pocket">
+                                    <template v-for="slot in row.elementalSlots" :key="slot.elem">
+                                        <div v-if="showOffElementalOnes || slot.isOwnElement" class="mini-crys elemental"
+                                            :class="{ owned: slot.owned, offElement: !slot.isOwnElement }" :title="slot.elem">
+                                            <img v-if="slot.crys" :src="`/exedra-dmg-calc/selection_ability/${slot.crys.resourceIconName}.png`"
+                                                :alt="slot.elem" class="mini-crys-img" />
+                                            <img v-else :src="`/exedra-dmg-calc/elements/${slot.elem}.png`" :alt="slot.elem"
+                                                class="mini-crys-img placeholder-icon" />
+                                        </div>
+                                    </template>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="elemental-pocket">
-                                <template v-for="slot in row.elementalSlots" :key="slot.elem">
-                                    <div v-if="showOffElementalOnes || slot.isOwnElement" class="mini-crys elemental"
-                                        :class="{ owned: slot.owned, offElement: !slot.isOwnElement }" :title="slot.elem">
-                                        <img v-if="slot.crys" :src="`/exedra-dmg-calc/selection_ability/${slot.crys.resourceIconName}.png`"
-                                            :alt="slot.elem" class="mini-crys-img" />
-                                        <img v-else :src="`/exedra-dmg-calc/elements/${slot.elem}.png`" :alt="slot.elem"
-                                            class="mini-crys-img placeholder-icon" />
-                                    </div>
-                                </template>
-                            </div>
+                        <div v-if="!rows.length" class="empty-state">
+                            No Kioku match the current filters in this element.
                         </div>
                     </div>
-
-                    <div v-if="!rows.length" class="empty-state">
-                        No Kioku match the current filters in this element.
-                    </div>
                 </div>
-            </div>
+            </section>
         </div>
     </div>
 </template>
@@ -189,10 +196,17 @@ import { useCharacterStore } from '../store/characterStore'
 import type { Character, CrystalisData } from '../types/KiokuTypes'
 import { passiveDetails } from '../utils/helpers'
 import { useSetting } from "../store/settingsStore"
+import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
+import { useFriendStore } from "../store/friendStore"
 
 function getCrysElement(crys: CrystalisData): KiokuElement | undefined {
     return elementMap[passiveDetails[crys.value1 * 100 + 1].element]
 }
+
+const shareOptionsForAscensionList = () => ({
+    title: `${useFriendStore().getFormattedDisplayNamePossessive()} Crystalis Collection Progress`,
+    backUrl: window.location.href,
+})
 
 const offElementalCrys = (crys: CrystalisData) => {
     const elem = getCrysElement(crys)
@@ -935,7 +949,7 @@ const setUseIndex = (effectId: number, useIndex: number) => {
     overflow: hidden;
 }
 
-.element-section {
+.element-row {
     margin-bottom: 0.4rem;
 }
 
