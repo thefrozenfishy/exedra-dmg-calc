@@ -99,6 +99,20 @@
                 </div>
             </section>
 
+            <section class="toolbar card">
+                <span class="filters-heading">Sort</span>
+                <div class="toolbar-right rarity-toggles">
+                    <label class="chip" :class="{ active: sortMode === 'element' }">
+                        <input type="radio" name="sort-mode" value="element" v-model="sortMode" />
+                        Group by element
+                    </label>
+                    <label class="chip" :class="{ active: sortMode === 'crysCount' }">
+                        <input type="radio" name="sort-mode" value="crysCount" v-model="sortMode" />
+                        Sort by crys count
+                    </label>
+                </div>
+            </section>
+
             <section class="filters card">
                 <span class="filters-heading">Filters</span>
 
@@ -138,15 +152,56 @@
             </div>
 
             <section class="element-section">
-                <div v-for="(rows, elem) in groupedCharacterCrysRows" :key="elem" class="element-row">
-                    <button class="element-header" @click="toggleElement(elem)" :aria-expanded="!collapsedElements[elem]">
-                        <span class="element-chevron" :class="{ rotated: collapsedElements[elem] }">▾</span>
-                        <span class="element-name">{{ elem }}</span>
-                        <span title="Completed Kioku out of Total Kioku" class="element-count">{{ groupedRosterCharacterCrysRows[elem].filter(r => r.completed).length }} / {{ groupedRosterCharacterCrysRows[elem].length }}</span>
-                    </button>
+                <template v-if="sortMode === 'element'">
+                    <div v-for="(rows, elem) in groupedCharacterCrysRows" :key="elem" class="element-row">
+                        <button class="element-header" @click="toggleElement(elem)" :aria-expanded="!collapsedElements[elem]">
+                            <span class="element-chevron" :class="{ rotated: collapsedElements[elem] }">▾</span>
+                            <span class="element-name">{{ elem }}</span>
+                            <span title="Completed Kioku out of Total Kioku" class="element-count">{{ groupedRosterCharacterCrysRows[elem].filter(r => r.completed).length }} / {{ groupedRosterCharacterCrysRows[elem].length }}</span>
+                        </button>
 
-                    <div v-show="!collapsedElements[elem]" class="character-crys-list element-body">
-                        <div v-for="row in rows" :key="row.char.id" class="character-crys-row"
+                        <div v-show="!collapsedElements[elem]" class="character-crys-list element-body">
+                            <div v-for="row in rows" :key="row.char.id" class="character-crys-row"
+                                @click="onSelectCharacter(row.char)">
+                                <div class="character-crys-header">
+                                    <img :src="`/exedra-dmg-calc/kioku_images/${row.char.id}_thumbnail.png`"
+                                        class="character-icon-lg" :title="row.char.name" />
+                                    <span class="character-crys-name">{{ row.char.name }}</span>
+                                </div>
+
+                                <div class="character-crys-body">
+                                    <div class="off-element-grid">
+                                        <div v-for="c in row.offElementCrys" :key="c.selectionAbilityMstId" class="mini-crys"
+                                            :class="{ owned: c.enabled }" :title="c.name">
+                                            <img :src="`/exedra-dmg-calc/selection_ability/${c.resourceIconName}.png`"
+                                                :alt="c.name" class="mini-crys-img" />
+                                        </div>
+                                    </div>
+
+                                    <div class="elemental-pocket">
+                                        <template v-for="slot in row.elementalSlots" :key="slot.elem">
+                                            <div v-if="showOffElementalOnes || slot.isOwnElement" class="mini-crys elemental"
+                                                :class="{ owned: slot.owned, offElement: !slot.isOwnElement }" :title="slot.elem">
+                                                <img v-if="slot.crys" :src="`/exedra-dmg-calc/selection_ability/${slot.crys.resourceIconName}.png`"
+                                                    :alt="slot.elem" class="mini-crys-img" />
+                                                <img v-else :src="`/exedra-dmg-calc/elements/${slot.elem}.png`" :alt="slot.elem"
+                                                    class="mini-crys-img placeholder-icon" />
+                                            </div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div v-if="!rows.length" class="empty-state">
+                                No Kioku match the current filters in this element.
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <template v-else>
+                    <div class="character-crys-list">
+                        <div v-for="row in sortedCharacterCrysRows" :key="row.char.id" class="character-crys-row"
                             @click="onSelectCharacter(row.char)">
                             <div class="character-crys-header">
                                 <img :src="`/exedra-dmg-calc/kioku_images/${row.char.id}_thumbnail.png`"
@@ -177,11 +232,11 @@
                             </div>
                         </div>
 
-                        <div v-if="!rows.length" class="empty-state">
-                            No Kioku match the current filters in this element.
+                        <div v-if="!sortedCharacterCrysRows.length" class="empty-state">
+                            No Kioku match the current filters.
                         </div>
                     </div>
-                </div>
+                </template>
             </section>
         </div>
     </div>
@@ -226,6 +281,7 @@ const showOffElementalOnes = useSetting("showOffElementalCrysCollection", false)
 const hideCompletedCrys = useSetting("hideCompletedMissingElementCrys", false)
 const missingOwnElementalFilter = useSetting<boolean | null>("missingElementHasOwnFilter", null)
 const elementCrysFilter = useSetting<KiokuElement[]>("missingElementCrysFilter", [])
+const sortMode = useSetting<"element" | "crysCount">("missingElementSortMode", "element")
 const showOffElementalOnesOption = computed(() => store.characters.some(char => {
     if (!char.enabled) return false
     return Object.values(char.crysOptions).every((c) => c.enabled == null || c.enabled)
@@ -298,7 +354,16 @@ const rosterCharacterCrysRows = computed(() => {
                 : elementalSlots.filter(s => s.isOwnElement)
             const completed = offElementCrys.every(c => c.enabled) && relevantSlots.every(s => s.owned)
 
-            return { char, offElementCrys, elementalSlots, completed }
+            const countedCrys = showOffElementalOnes.value
+                ? crys
+                : crys.filter(c => {
+                    const elem = getCrysElement(c)
+                    return !elem || elem === char.element
+                })
+            const ownedCrysCount = countedCrys.filter(c => c.enabled).length
+            const totalCrysCount = countedCrys.length
+
+            return { char, offElementCrys, elementalSlots, completed, ownedCrysCount, totalCrysCount }
         })
 })
 
@@ -323,6 +388,14 @@ const characterCrysRows = computed(() => {
 
             return true
         })
+})
+
+const sortedCharacterCrysRows = computed(() => {
+    return [...characterCrysRows.value].sort((a, b) => {
+        if (a.ownedCrysCount !== b.ownedCrysCount) return a.ownedCrysCount - b.ownedCrysCount
+        if (a.totalCrysCount !== b.totalCrysCount) return b.totalCrysCount - a.totalCrysCount
+        return a.char.id - b.char.id
+    })
 })
 
 const collapsedElements = useSetting<Record<string, boolean>>("collapsedCrysElements", {})
@@ -472,6 +545,16 @@ const setUseIndex = (effectId: number, useIndex: number) => {
 </script>
 
 <style scoped>
+.crys-count-badge {
+    font-size: 0.62rem;
+    color: var(--accent-soft);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.05rem 0.4rem;
+    white-space: nowrap;
+}
+
 .setup-page {
     max-width: 1100px;
     margin: 0 auto;
