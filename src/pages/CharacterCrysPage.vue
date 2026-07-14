@@ -85,8 +85,6 @@
             </div>
         </div>
         <div v-else class="missing-element-grid">
-            <h2 class="section-title">Kioku missing their elemental crys (For crys farming teambuilding)</h2>
-
             <section class="toolbar card">
                 <span class="filters-heading">Roster</span>
                 <div class="toolbar-right rarity-toggles">
@@ -133,17 +131,17 @@
 
                 <div v-else class="filter-group">
                     <span class="filter-group-label">Missing element crys</span>
-                    <label v-for="elem in KiokuElement" :key="elem" class="chip"
+                    <label v-for="elem in KiokuElement" :key="elem" class="chip element-chip"
                         :class="{ active: elementCrysFilter.includes(elem) }">
                         <input type="checkbox" :value="elem" v-model="elementCrysFilter" />
-                        {{ elem }}
+                        <img :src="`/exedra-dmg-calc/elements/${elem}.png`" :alt="elem" class="element-chip-icon" />
                     </label>
                 </div>
             </section>
 
             <section class="toolbar card">
                 <span class="filters-heading">Image Share</span>
-                <ImageActionsToolbar target=".element-section" filename="collected_crys.png" :share-options="shareOptionsForAscensionList" />
+                <ImageActionsToolbar target=".element-section" filename="collected_crys.png" :share-options="shareOptionsForAscensionList" :export-options="exportOpts" />
             </section>
 
             <div class="list-header crys-table-header">
@@ -156,7 +154,9 @@
                     <div v-for="(rows, elem) in groupedCharacterCrysRows" :key="elem" class="element-row">
                         <button class="element-header" @click="toggleElement(elem)" :aria-expanded="!collapsedElements[elem]">
                             <span class="element-chevron" :class="{ rotated: collapsedElements[elem] }">▾</span>
-                            <span class="element-name">{{ elem }}</span>
+                            <span class="element-name">
+                                <img :src="`/exedra-dmg-calc/elements/${elem}.png`" :alt="elem" :title="elem" class="element-header-icon" />
+                            </span>
                             <span title="Completed Kioku out of Total Kioku" class="element-count">{{ groupedRosterCharacterCrysRows[elem].filter(r => r.completed).length }} / {{ groupedRosterCharacterCrysRows[elem].length }}</span>
                         </button>
 
@@ -262,6 +262,16 @@ const shareOptionsForAscensionList = () => ({
     title: `${useFriendStore().getFormattedDisplayNamePossessive()} Crystalis Collection Progress`,
     backUrl: window.location.href,
 })
+
+const exportOpts = { 
+    exportClass: "exporting",    
+    onBefore: () => {
+        document.querySelector(".element-section")?.classList.add(showOffElementalOnes.value ? "allElemExport" : "nonAllElemExport")
+    },
+    onAfter: () => {
+        document.querySelector(".element-section")?.classList.remove(showOffElementalOnes.value ? "allElemExport" : "nonAllElemExport")
+    }
+}
 
 const offElementalCrys = (crys: CrystalisData) => {
     const elem = getCrysElement(crys)
@@ -844,6 +854,10 @@ const setUseIndex = (effectId: number, useIndex: number) => {
     }
 }
 
+.exporting .crys-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+}
+
 .crys-card {
     border: 1px solid rgba(255, 255, 255, 0.10);
     border-radius: 6px;
@@ -952,6 +966,20 @@ const setUseIndex = (effectId: number, useIndex: number) => {
     font-size: 0.74rem;
     color: var(--muted);
     margin-right: 2px;
+}
+
+.element-chip-icon {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    opacity: 0.35;
+    filter: grayscale(0.8);
+    transition: opacity 0.15s, filter 0.15s;
+}
+
+.element-chip.active .element-chip-icon {
+    opacity: 1;
+    filter: none;
 }
 
 .btn {
@@ -1072,6 +1100,15 @@ const setUseIndex = (effectId: number, useIndex: number) => {
 .element-name {
     flex: 1;
     color: var(--accent-soft);
+    display: flex;
+    align-items: center;
+}
+
+.element-header-icon {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    display: block;
 }
 
 .element-count {
@@ -1223,6 +1260,43 @@ const setUseIndex = (effectId: number, useIndex: number) => {
     .character-crys-body {
         gap: 16px;
     }
+}
+
+.exporting .character-icon-lg {
+    width: 24px !important;
+    height: 24px !important;
+}
+
+.exporting .character-crys-row {
+    padding-bottom: 0 !important;
+    padding-top: 0 !important;
+}
+
+.allElemExport .character-crys-list {
+    width: 950px !important;
+}
+
+.nonAllElemExport .character-crys-list {
+    width: 820px !important;
+}
+
+.exporting .off-element-grid {
+    grid-template-columns: repeat(24, 24px) !important;
+    grid-auto-rows: 24px !important;
+}
+
+.exporting .elemental-pocket {
+    grid-template-columns: repeat(6, 24px) !important;
+    grid-auto-rows: 24px !important;
+}
+
+.exporting .mini-crys {
+    width: 24px !important;
+    height: 24px !important;
+}
+
+.exporting .character-crys-body {
+    gap: 32px !important;
 }
 
 .mini-crys-img {
