@@ -6,8 +6,9 @@
             <span class="character-crys-name">{{ row.char.name }}</span>
         </div>
 
-        <div class="character-crys-body">
-            <div class="off-element-grid">
+        <div class="character-crys-body" ref="bodyRef">
+            <div class="off-element-grid"
+                :style="{ flexGrow: offCols, gridTemplateColumns: `repeat(${offCols}, minmax(0, 1fr))` }">
                 <div v-for="c in row.offElementCrys" :key="c.selectionAbilityMstId" class="mini-crys"
                     :class="{ owned: c.enabled }" :title="c.name">
                     <img :src="`/exedra-dmg-calc/selection_ability/${c.resourceIconName}.png`"
@@ -15,7 +16,8 @@
                 </div>
             </div>
 
-            <div class="elemental-pocket">
+            <div class="elemental-pocket"
+                :style="{ flexGrow: elemCols, gridTemplateColumns: `repeat(${elemCols}, minmax(0, 1fr))` }">
                 <template v-for="slot in row.elementalSlots" :key="slot.elem">
                     <div v-if="showOffElementalOnes || slot.isOwnElement" class="mini-crys elemental"
                         :class="{ owned: slot.owned, offElement: !slot.isOwnElement }" :title="slot.elem">
@@ -31,6 +33,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import type { Character, CrystalisData, KiokuElement } from '../types/KiokuTypes'
 
 interface ElementalSlot {
@@ -49,7 +52,7 @@ interface CharacterCrysRowData {
     totalCrysCount: number
 }
 
-defineProps<{
+const props = defineProps<{
     row: CharacterCrysRowData
     showOffElementalOnes: boolean
 }>()
@@ -57,6 +60,44 @@ defineProps<{
 const emit = defineEmits<{
     select: [char: Character]
 }>()
+
+const ROW_BREAKPOINTS = [
+    { minWidth: 620, rows: 1 },
+    { minWidth: 380, rows: 2 },
+    { minWidth: 230, rows: 3 },
+    { minWidth: 160, rows: 4 },
+    { minWidth: 0, rows: 6 },
+]
+
+const bodyRef = ref<HTMLElement | null>(null)
+const bodyWidth = ref(0)
+let resizeObserver: ResizeObserver | null = null
+
+onMounted(() => {
+    if (!bodyRef.value) return
+    bodyWidth.value = bodyRef.value.getBoundingClientRect().width
+    resizeObserver = new ResizeObserver(entries => {
+        const entry = entries[0]
+        if (entry) bodyWidth.value = entry.contentRect.width
+    })
+    resizeObserver.observe(bodyRef.value)
+})
+
+onBeforeUnmount(() => {
+    resizeObserver?.disconnect()
+})
+
+const visibleElementalCount = computed(() =>
+    props.row.elementalSlots.filter(s => props.showOffElementalOnes || s.isOwnElement).length
+)
+
+const rows = computed(() => {
+    const tier = ROW_BREAKPOINTS.find(b => bodyWidth.value >= b.minWidth)
+    return tier ? tier.rows : 1
+})
+
+const offCols = computed(() => Math.max(1, Math.ceil(props.row.offElementCrys.length / rows.value)))
+const elemCols = computed(() => Math.max(1, Math.ceil(visibleElementalCount.value / rows.value)))
 </script>
 
 <style scoped>
@@ -124,23 +165,21 @@ const emit = defineEmits<{
 
 .off-element-grid {
     display: grid;
-    grid-template-columns: repeat(24, 24px);
-    grid-auto-rows: 24px;
     gap: 3px;
-    flex-shrink: 0;
+    flex-basis: 0;
+    min-width: 0;
 }
 
 .elemental-pocket {
     display: grid;
-    grid-template-columns: repeat(6, 24px);
-    grid-auto-rows: 24px;
     gap: 3px;
-    flex-shrink: 0;
+    flex-basis: 0;
+    min-width: 0;
 }
 
 .mini-crys {
-    width: 24px;
-    height: 24px;
+    width: 100%;
+    aspect-ratio: 1;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -150,58 +189,7 @@ const emit = defineEmits<{
     overflow: hidden;
 }
 
-/* Medium screens: collapse to 2 rows */
-@media (max-width: 1050px) {
-    .off-element-grid {
-        grid-template-columns: repeat(12, 28px);
-        grid-auto-rows: 28px;
-    }
-
-    .elemental-pocket {
-        grid-template-columns: repeat(3, 28px);
-        grid-auto-rows: 28px;
-    }
-
-    .mini-crys {
-        width: 28px;
-        height: 28px;
-    }
-}
-
-/* Mobile: collapse to 3 rows */
-@media (max-width: 700px) {
-    .off-element-grid {
-        grid-template-columns: repeat(8, 26px);
-        grid-auto-rows: 26px;
-    }
-
-    .elemental-pocket {
-        grid-template-columns: repeat(2, 26px);
-        grid-auto-rows: 26px;
-    }
-
-    .mini-crys {
-        width: 26px;
-        height: 26px;
-    }
-}
-
 @media (max-width: 480px) {
-    .off-element-grid {
-        grid-template-columns: repeat(4, 26px);
-        grid-auto-rows: 26px;
-    }
-
-    .elemental-pocket {
-        grid-template-columns: repeat(1, 26px);
-        grid-auto-rows: 26px;
-    }
-
-    .mini-crys {
-        width: 26px;
-        height: 26px;
-    }
-
     .character-crys-body {
         gap: 16px;
     }
@@ -250,6 +238,11 @@ const emit = defineEmits<{
     padding-top: 0 !important;
 }
 
+.exporting .off-element-grid,
+.exporting .elemental-pocket {
+    flex: 0 0 auto !important;
+}
+
 .exporting .off-element-grid {
     grid-template-columns: repeat(24, 24px) !important;
     grid-auto-rows: 24px !important;
@@ -263,6 +256,7 @@ const emit = defineEmits<{
 .exporting .mini-crys {
     width: 24px !important;
     height: 24px !important;
+    aspect-ratio: unset !important;
 }
 
 .exporting .character-crys-body {
