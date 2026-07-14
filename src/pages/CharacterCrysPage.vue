@@ -162,7 +162,7 @@
 
                         <div v-show="!collapsedElements[elem]" class="character-crys-list element-body">
                             <div v-for="row in rows" :key="row.char.id" class="character-crys-row"
-                                @click="onSelectCharacter(row.char)">
+                                :class="{ completed: row.completed }" @click="onSelectCharacter(row.char)">
                                 <div class="character-crys-header">
                                     <img :src="`/exedra-dmg-calc/kioku_images/${row.char.id}_thumbnail.png`"
                                         class="character-icon-lg" :title="row.char.name" />
@@ -202,7 +202,7 @@
                 <template v-else>
                     <div class="character-crys-list">
                         <div v-for="row in sortedCharacterCrysRows" :key="row.char.id" class="character-crys-row"
-                            @click="onSelectCharacter(row.char)">
+                            :class="{ completed: row.completed }" @click="onSelectCharacter(row.char)">
                             <div class="character-crys-header">
                                 <img :src="`/exedra-dmg-calc/kioku_images/${row.char.id}_thumbnail.png`"
                                     class="character-icon-lg" :title="row.char.name" />
@@ -1138,6 +1138,14 @@ const setUseIndex = (effectId: number, useIndex: number) => {
 
 .character-crys-row:hover {
     background: var(--bg-soft);
+}
+
+.character-crys-row.completed {
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.12), rgba(255, 190, 0, 0.03));
+}
+
+.character-crys-row.completed:hover {
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.18), rgba(255, 190, 0, 0.06));
 }
 
 .character-crys-header {
