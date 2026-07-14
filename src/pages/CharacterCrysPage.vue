@@ -1272,11 +1272,11 @@ const setUseIndex = (effectId: number, useIndex: number) => {
     padding-top: 0 !important;
 }
 
-.allElemExport .character-crys-list {
+.setup-page .allElemExport {
     width: 950px !important;
 }
 
-.nonAllElemExport .character-crys-list {
+.setup-page .nonAllElemExport  {
     width: 820px !important;
 }
 
