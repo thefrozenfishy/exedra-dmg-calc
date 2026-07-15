@@ -3,7 +3,9 @@
         <div class="character-crys-header">
             <img :src="`/exedra-dmg-calc/kioku_images/${row.char.id}_thumbnail.png`"
                 class="character-icon-lg" :title="row.char.name" />
+            <span class="crys-count-badge">{{ row.ownedCrysCount }} / {{ row.totalCrysCount }}</span>
             <span class="character-crys-name">{{ row.char.name }}</span>
+            <span class="character-crys-name">{{ row.char.character_en }}</span>
         </div>
 
         <div class="character-crys-body" ref="bodyRef">
@@ -145,6 +147,16 @@ const elemCols = computed(() => Math.max(1, Math.ceil(visibleElementalCount.valu
     object-fit: cover;
 }
 
+.crys-count-badge {
+    font-size: 0.6rem;
+    color: var(--accent-soft);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.03rem 0.35rem;
+    white-space: nowrap;
+}
+
 .character-crys-name {
     font-size: 0.66rem;
     color: var(--muted);
@@ -268,6 +280,10 @@ const elemCols = computed(() => Math.max(1, Math.ceil(visibleElementalCount.valu
 }
 
 .exporting .character-crys-name {
+    display: none !important;
+}
+
+.exporting .crys-count-badge {
     display: none !important;
 }
 </style>
