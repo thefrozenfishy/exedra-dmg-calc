@@ -4303,5 +4303,20 @@
         "targetType": 2,
         "value1": 1150067,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "While Tidal Focus is applied:<br>Decreases DMG taken by 10%.<br><br>On enemy break:<br>Increases SPD by 10% (1 turn).",
+        "name": "I'll Strive for the Long, Deep Dive!",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 152,
+        "selectionAbilityMstId": 7068,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10090301,
+        "targetType": 2,
+        "value1": 1150068,
+        "value2": 0
     }
 ]

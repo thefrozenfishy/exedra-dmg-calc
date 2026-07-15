@@ -16224,6 +16224,22 @@
         "description": "敵軍のデバフ数が3以上"
     },
     {
+        "battleConditionMstId": 2047,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "24",
+        "description": "水着やちよ専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 2048,
+        "compareContent": 17,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1000",
+        "description": "トークンが1000のとき"
+    },
+    {
         "battleConditionMstId": 2052,
         "compareContent": 14,
         "compareOperator": 1,
@@ -16270,5 +16286,13 @@
         "compareTarget": 5,
         "compareValue": "5",
         "description": "自軍のデバフ数が5以上"
+    },
+    {
+        "battleConditionMstId": 2066,
+        "compareContent": 303,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "3",
+        "description": "クリティカル発生が3体以上の場合"
     }
 ]

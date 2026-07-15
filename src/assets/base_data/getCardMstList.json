@@ -1990,6 +1990,23 @@
     },
     {
         "advPosition": 0,
+        "cardMstId": 4200087,
+        "characterMstId": 0,
+        "element": 0,
+        "illustrator": "",
+        "name": "Fame-Ready Photo",
+        "passiveSkill1": 4177,
+        "passiveSkill2": 0,
+        "passiveSkill3": 0,
+        "rarity": 5,
+        "releaseTime": "2026-07-15T12:00:00+09:00",
+        "resourceName": "art_04_01_0030",
+        "source": "",
+        "unlockIdCsv": "58",
+        "unlockTypeCsv": "2"
+    },
+    {
+        "advPosition": 0,
         "cardMstId": 4300001,
         "characterMstId": 0,
         "element": 0,

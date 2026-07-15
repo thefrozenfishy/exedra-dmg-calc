@@ -16615,6 +16615,21 @@
         "description": "行動者は敵 AND 一度の攻撃で自軍に5体クリティカルダメージが発生したとき AND 行動タイプが必殺技"
     },
     {
+        "battleConditionMstIdCsv": "2047",
+        "battleConditionSetMstId": 3375,
+        "description": "水着やちよ専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,6,878",
+        "battleConditionSetMstId": 3379,
+        "description": "自身の魔力20以上+戦闘スキル発動"
+    },
+    {
+        "battleConditionMstIdCsv": "2047,648",
+        "battleConditionSetMstId": 3380,
+        "description": "自身の魔力10以上+水着やちよ専用バフが付与されているとき"
+    },
+    {
         "battleConditionMstIdCsv": "401,1507",
         "battleConditionSetMstId": 3383,
         "description": "トークンが10のとき AND 自身がカウントダウン発動中のとき"
@@ -16650,8 +16665,38 @@
         "description": "自軍のデバフ数が5以上"
     },
     {
+        "battleConditionMstIdCsv": "971,987",
+        "battleConditionSetMstId": 3400,
+        "description": "行動者は火属性 AND 対象は木属性"
+    },
+    {
         "battleConditionMstIdCsv": "7,916,3,435",
         "battleConditionSetMstId": 3401,
         "description": "行動タイプが必殺技 AND 攻撃した+行動者は自分+毒状態の敵が1体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2,2066,2032",
+        "battleConditionSetMstId": 3403,
+        "description": "クリティカル発生が3体以上の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "974,987",
+        "battleConditionSetMstId": 3416,
+        "description": "行動者は光属性 AND 対象は木属性"
+    },
+    {
+        "battleConditionMstIdCsv": "973,985",
+        "battleConditionSetMstId": 3417,
+        "description": "行動者は木属性 AND 対象は火属性"
+    },
+    {
+        "battleConditionMstIdCsv": "973,988",
+        "battleConditionSetMstId": 3418,
+        "description": "行動者は木属性 AND 対象は光属性"
+    },
+    {
+        "battleConditionMstIdCsv": "973,987",
+        "battleConditionSetMstId": 3419,
+        "description": "行動者は木属性 AND 対象は木属性"
     }
 ]
