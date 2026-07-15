@@ -4,10 +4,14 @@ import { ref, onMounted } from "vue"
 import { getSupabase } from "./supabase"
 import { getUserId } from "../store/user"
 
+const MISSING_IMAGE_PLACEHOLDER =
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
+
 const BASE_IMG_SETTINGS = {
     cacheBust: true,
     backgroundColor: "#242424",
     skipFonts: false,
+    imagePlaceholder: MISSING_IMAGE_PLACEHOLDER,
 }
 
 const MAX_CANVAS_SIDE_PX = 16_000
@@ -38,10 +42,97 @@ const imgSettings = (el: HTMLElement) => safeSettings(el, 2)
 const highResSettings = (el: HTMLElement) => safeSettings(el, 2)
 const shareSettings = (el: HTMLElement) => safeSettings(el, 2, SHARE_MAX_BYTES)
 
+const escapeSvgText = (text: string): string =>
+    text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;")
+
+const wrapPlaceholderText = (text: string, maxCharsPerLine = 12, maxLines = 3): string[] => {
+    const words = text.split(/\s+/).filter(Boolean)
+    const lines: string[] = []
+    let current = ""
+
+    for (const word of words) {
+        const candidate = current ? `${current} ${word}` : word
+        if (candidate.length > maxCharsPerLine && current) {
+            lines.push(current)
+            current = word
+        } else {
+            current = candidate
+        }
+    }
+    if (current) lines.push(current)
+
+    if (lines.length > maxLines) {
+        return [...lines.slice(0, maxLines - 1), `${lines[maxLines - 1]}…`]
+    }
+    return lines
+}
+
+export const buildBrokenImagePlaceholder = (label?: string | null): string => {
+    const trimmedLabel = (label ?? "").trim()
+    const isFallback = trimmedLabel === ""
+    const lines = isFallback ? ["?"] : wrapPlaceholderText(trimmedLabel)
+    const fontSize = isFallback ? 40 : 13
+    const lineHeight = fontSize * 1.2
+    const startY = 50 - ((lines.length - 1) * lineHeight) / 2
+
+    const tspans = lines
+        .map((line, i) => `<tspan x="50" y="${startY + i * lineHeight}">${escapeSvgText(line)}</tspan>`)
+        .join("")
+
+    const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" fill="#3a3a3a"/>
+  <text font-size="${fontSize}" fill="#888" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif">${tspans}</text>
+</svg>`
+
+    return `data:image/svg+xml,${encodeURIComponent(svg)}`
+}
+
+export const BROKEN_IMAGE_PLACEHOLDER = buildBrokenImagePlaceholder()
+
+export const onImgError = (event: Event) => {
+    const img = event.target as HTMLImageElement
+    if (img.dataset.brokenImage) return
+    img.dataset.brokenImage = "true"
+    img.onerror = null
+    img.src = buildBrokenImagePlaceholder(img.alt)
+}
+
 export interface ImageExportOptions {
     exportClass?: string;
     onBefore?: () => void | Promise<void>;
     onAfter?: () => void | Promise<void>;
+}
+
+const isBrokenImage = (img: HTMLImageElement) => img.complete && img.naturalWidth === 0
+
+const sanitizeBrokenImages = (root: HTMLElement): (() => void) => {
+    const images = Array.from(root.querySelectorAll("img")) as HTMLImageElement[]
+    if (root instanceof HTMLImageElement) images.push(root)
+
+    const restores: Array<() => void> = []
+
+    for (const img of images) {
+        if (!isBrokenImage(img)) continue
+
+        const originalSrc = img.src
+        const originalSrcset = img.srcset
+
+        img.srcset = ""
+        img.src = buildBrokenImagePlaceholder(img.alt)
+
+        restores.push(() => {
+            img.src = originalSrc
+            img.srcset = originalSrcset
+        })
+    }
+
+    return () => restores.forEach(restore => restore())
 }
 
 export const useClipboardSupport = () => {
@@ -90,9 +181,12 @@ const withExportState = async <T>(el: HTMLElement, options: ImageExportOptions =
         await new Promise(requestAnimationFrame)
     }
 
+    const restoreImages = sanitizeBrokenImages(el)
+
     try {
         return await fn(el)
     } finally {
+        restoreImages()
         if (options.exportClass) el.classList.remove(options.exportClass)
         if (options.onAfter) await options.onAfter()
     }
