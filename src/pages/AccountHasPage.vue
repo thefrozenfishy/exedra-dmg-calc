@@ -120,7 +120,7 @@
                                 <template v-if="showCrys && (chars as any).label !== 'Not Owned'">
                                     <router-link v-if="!isTouchDevice" class="crys-count-badge level-badge crys-link"
                                         :to="{
-                                            path: '/character-crys',
+                                            path: '/character-crys-edit',
                                             query: { character_id: ch.id }
                                         }" @click.stop :class="colourLevels
                                             ? getCrysCount(ch, true) >= maxCrysCount ? 'maxLvl' : hasElementalCrys(ch) ? 'notMaxLvlMissingElemCrys' : 'notMaxLvl'
