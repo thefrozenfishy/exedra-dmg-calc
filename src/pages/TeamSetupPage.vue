@@ -15,7 +15,7 @@
           {{ showHighestTeam ? 'Hide Highest PWR Team' : 'Show Highest PWR Team' }}
         </button>
         <div v-if="calculating" class="calc-progress">
-          <span class="calc-indicator">Calculating optimal builds...</span>
+          <span class="calc-indicator">Calculating max pwr team...</span>
           <div class="progress-wrapper">
             <progress :value="completedRuns" :max="expectedRuns" class="progress-bar"></progress>
             <span class="progress-text">{{ completedRuns }} / {{ expectedRuns }}</span>
