@@ -4,8 +4,15 @@
 
         <div class="missing-element-grid">
             <section class="toolbar card">
-                <span class="filters-heading">Roster</span>
+                <span class="filters-heading">Char Filter</span>
                 <div class="toolbar-right rarity-toggles">
+                <input
+                    ref="charSearchInputRef"
+                    type="text"
+                    v-model="charNameFilter"
+                    placeholder="Search name..."
+                    class="char-search-input"
+                />
                     <label class="chip" :class="{ active: show4stars }">
                         <input type="checkbox" v-model="show4stars" /> ★★★★
                     </label>
@@ -105,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { relevantCrys, elementMap, KiokuElement } from '../types/KiokuTypes'
 import CharacterCrysRow from '../components/CharacterCrysRow.vue'
@@ -140,6 +147,12 @@ const store = useCharacterStore()
 
 const show4stars = useSetting("show4stars", false);
 const show3stars = useSetting("show3stars", false);
+const charNameFilter = ref("")
+const charSearchInputRef = ref<HTMLInputElement | null>(null)
+
+onMounted(() => {
+    charSearchInputRef.value?.focus()
+})
 const showOffElementalOnes = useSetting("showOffElementalCrysCollection", false)
 const hideCompletedCrys = useSetting("hideCompletedMissingElementCrys", false)
 const missingOwnElementalFilter = useSetting<boolean | null>("missingElementHasOwnFilter", null)
@@ -156,6 +169,14 @@ const rosterCharacterCrysRows = computed(() => {
             if (!char.enabled) return false
             if (char.rarity === 3 && !show3stars.value) return false
             if ((char.rarity === 4 || char.name === "Lux☆Magica") && !show4stars.value) return false
+
+            const query = charNameFilter.value.trim().toLowerCase()
+            if (query) {
+                const matchesName = char.name?.toLowerCase().includes(query)
+                const matchesEn = char.character_en?.toLowerCase().includes(query)
+                if (!matchesName && !matchesEn) return false
+            }
+
             return true
         })
         .sort((a, b) => a.id - b.id)
@@ -262,6 +283,28 @@ const onSelectCharacter = (char: Character) => {
 </script>
 
 <style scoped>
+.char-search-input {
+    padding: 0.45rem 0.75rem;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    outline: none;
+    min-width: 160px;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.char-search-input::placeholder {
+    color: var(--muted);
+}
+
+.char-search-input:focus {
+    border-color: var(--border-strong);
+    background: rgba(255, 255, 255, 0.09);
+}
+
 .setup-page {
     max-width: 1100px;
     margin: 0 auto;
@@ -286,16 +329,12 @@ const onSelectCharacter = (char: Character) => {
     gap: 0.5rem;
 }
 
-.toolbar {
-    justify-content: space-between;
-}
-
 .toolbar-left,
 .toolbar-right {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-left: auto;
+    flex-wrap: wrap;
 }
 
 .chip {
@@ -327,9 +366,10 @@ const onSelectCharacter = (char: Character) => {
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--muted);
-    margin-right: 0.25rem;
-    flex-shrink: 0;
     opacity: 0.7;
+    flex-shrink: 0;
+    width: 100px;
+    min-width: 100px;
 }
 
 .section-title {
