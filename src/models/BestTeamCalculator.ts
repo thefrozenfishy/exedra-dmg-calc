@@ -1,9 +1,10 @@
 import { Heap } from "heap-js";
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { ScoreAttackTeam } from "./ScoreAttackTeam";
-import { KiokuRole, portraitsBestOnly, Character, KiokuElement, SupportKey, getBestCrystalises, KiokuConstants, getEX, SupportIdealPortrait, Aliment, KiokuArgs } from "../types/KiokuTypes";
+import { portraitsBestOnly, Character, getBestCrystalises, KiokuConstants, getEX, SupportIdealPortrait, KiokuArgs } from "../types/KiokuTypes";
 import { ScoreAttackKioku } from "./ScoreAttackKioku";
 import { Enemy } from "../types/EnemyTypes";
+import { KiokuElement, KiokuRole, SupportKey, Aliment } from "../types/enums";
 
 const cache = new Map<string, ScoreAttackKioku>();
 const customPriorityComparator = (a: any[], b: any[]) => a[0] - b[0];

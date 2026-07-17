@@ -114,10 +114,10 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { relevantCrys, elementMap, KiokuElement } from '../types/KiokuTypes'
+import { relevantCrys, type Character, type CrystalisData } from '../types/KiokuTypes'
+import { elementMap, KiokuElement } from '../types/enums'
 import CharacterCrysRow from '../components/CharacterCrysRow.vue'
 import { useCharacterStore } from '../store/characterStore'
-import type { Character, CrystalisData } from '../types/KiokuTypes'
 import { passiveDetails } from '../utils/helpers'
 import { useSetting } from "../store/settingsStore"
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'

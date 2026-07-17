@@ -1,7 +1,8 @@
 import { ScoreAttackKioku } from "./ScoreAttackKioku";
 import { EnemyTargetTypes, Enemy } from "../types/EnemyTypes";
 import { isActiveConditionRelevantForScoreAttack, isStartCondRelevantForScoreAttack } from "./BattleConditionParser";
-import { ActiveSkill, Aliment, elementMap, roleMap, SkillDetail, skillDetailId } from "../types/KiokuTypes";
+import { ActiveSkill, SkillDetail, skillDetailId } from "../types/KiokuTypes";
+import { Aliment, elementMap, roleMap } from "../types/enums";
 
 
 const DPS_IDX = 2;

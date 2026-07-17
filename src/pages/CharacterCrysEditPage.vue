@@ -96,10 +96,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { relevantCrys, getSubCrystalises, elementMap, KiokuElement } from '../types/KiokuTypes'
+import { relevantCrys, getSubCrystalises, type CrystalisData } from '../types/KiokuTypes'
+import { elementMap, KiokuElement } from '../types/enums'
 import SubCrysBar from '../components/SubCrysBar.vue'
 import { useCharacterStore } from '../store/characterStore'
-import type { CrystalisData } from '../types/KiokuTypes'
 import { passiveDetails } from '../utils/helpers'
 import { useSetting } from "../store/settingsStore"
 

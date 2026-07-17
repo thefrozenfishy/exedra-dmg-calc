@@ -18,8 +18,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { relevantCrys } from '../types/KiokuTypes'
-import type { CrystalisData } from '../types/KiokuTypes'
+import { relevantCrys, type CrystalisData } from '../types/KiokuTypes'
 import { crystalises } from '../utils/helpers'
 
 const props = defineProps<{

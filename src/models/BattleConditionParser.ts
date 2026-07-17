@@ -1,7 +1,8 @@
 import battleConditionSetsJson from '../assets/base_data/getBattleConditionSetMstList.json';
 import battleConditionsJson from '../assets/base_data/getBattleConditionMstList.json';
-import { BattleState, KiokuRole, PassiveSkill, SkillDetail } from '../types/KiokuTypes';
+import { BattleState, PassiveSkill, SkillDetail } from '../types/KiokuTypes';
 import { KiokuState } from './PvPTeam';
+import { KiokuRole } from '../types/enums';
 
 interface BattleCondition {
     battleConditionMstId: number

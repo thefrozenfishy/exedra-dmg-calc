@@ -1,5 +1,5 @@
 import { useBeta } from "../store/betaStore"
-import { KiokuRole } from "../types/KiokuTypes";
+import { KiokuRole } from "../types/enums";
 
 export function useBetaNumber(
     key: keyof typeof BETA_DEFAULTS

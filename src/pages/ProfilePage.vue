@@ -583,7 +583,6 @@ import { getUserId } from '../store/user'
 import { countCharsObtained, getPowerScores } from '../models/PowerValue'
 import { useCharacterStore } from '../store/characterStore'
 import { useSetting } from '../store/settingsStore'
-import { KiokuRole } from '../types/KiokuTypes'
 import {
     Chart,
     LineController,
@@ -597,6 +596,7 @@ import {
 } from 'chart.js'
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import { MyRank } from '../store/friendStore'
+import { KiokuRole } from '../types/enums'
 
 const store = useFriendStore()
 const characterStore = useCharacterStore()

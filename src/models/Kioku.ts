@@ -1,6 +1,7 @@
-import { KiokuArgs, KiokuData, KiokuRole, Portrait, StyleParamUpEffect } from '../types/KiokuTypes';
+import { KiokuArgs, KiokuData, Portrait, StyleParamUpEffect } from '../types/KiokuTypes';
 import { portraits, kiokuData, crystalises, characterHeart, characterHeartParamUpGroup, styleParamUpEffect, styleParamUp } from '../utils/helpers';
 import { fromKey } from '../models/BestTeamCalculator';
+import { KiokuRole } from '../types/enums';
 
 const KIOKU_LEVEL_BREAKPOINTS = [1, 120, 140, 160, 180, 200] as const;
 

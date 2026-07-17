@@ -63,7 +63,8 @@
 import { FinalTeam } from '../types/BestTeamTypes';
 import { crystalises, portraits } from '../utils/helpers';
 import { useTeamStore } from '../store/singleTeamStore';
-import { KiokuElement, maxDmgSubCrys } from '../types/KiokuTypes';
+import { maxDmgSubCrys } from '../types/KiokuTypes';
+import { KiokuElement } from '../types/enums'
 import { useRouter } from 'vue-router'
 
 const presentCrysName = (id: number) => {

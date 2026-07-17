@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import { Enemy } from '../types/EnemyTypes'
 import { TeamSlot } from '../types/BestTeamTypes'
-import { Character, correctCharacterParams } from '../types/KiokuTypes'
-import { relevantCrys } from '../types/KiokuTypes'
+import { Character, correctCharacterParams, relevantCrys } from '../types/KiokuTypes'
 
 function normalizeCharacter(member?: Character) {
   if (!member) return undefined

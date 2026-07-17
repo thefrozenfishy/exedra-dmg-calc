@@ -1,4 +1,5 @@
-import { BattleState, aggro, defaultbreak, KiokuRole, maxMeters, mpGainFromAction, PassiveSkill, SkillDetail, skillDetailId, SkillKey, targetRange, TargetType, targetTypeToLvl, TargetTypeLookup, Aliment, } from "../types/KiokuTypes";
+import { Aliment, KiokuRole } from "../types/enums";
+import { BattleState, aggro, defaultbreak, maxMeters, mpGainFromAction, PassiveSkill, SkillDetail, skillDetailId, SkillKey, targetRange, TargetType, targetTypeToLvl, TargetTypeLookup } from "../types/KiokuTypes";
 import { skillDetails } from "../utils/helpers";
 import { isConditionSetActive, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
 import { PvPKioku } from "./PvPKioku";

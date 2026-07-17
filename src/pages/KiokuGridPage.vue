@@ -196,7 +196,8 @@
 <script setup lang="ts">
 import { computed } from "vue"
 import { useCharacterStore } from "../store/characterStore"
-import { Character, KiokuElement, KiokuRole, KiokuConstants } from "../types/KiokuTypes"
+import { Character, KiokuConstants } from "../types/KiokuTypes"
+import { KiokuElement, KiokuRole } from '../types/enums'
 import { useSetting } from "../store/settingsStore"
 import { Kioku } from "../models/Kioku"
 import { skillDetails } from "../utils/helpers"

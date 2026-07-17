@@ -12,6 +12,7 @@ import kiokuDataJson from '../assets/base_data/kioku_data.json';
 import questStageJson from '../assets/base_data/getQuestStageMstList.json';
 import questEnemyAppearanceJson from '../assets/base_data/getQuestEnemyAppearanceMstList.json';
 import { Portrait, CrystalisData, KiokuData, PortraitLvlData, StyleParamUpEffect, CharacterHeart, CharacterHeartParamUpGroup, ActiveSkill, PassiveSkill, StyleParamUp } from '../types/KiokuTypes';
+import { elementMap, KiokuElement } from '../types/enums';
 
 const portraitLevels = Object.fromEntries(
     portraitLevelsJson.map((item: any) => [item.cardLimitBreakMstId, item])
@@ -67,6 +68,7 @@ export interface HeartExpStage {
     name: string;
     exp: number;
     icon: string | null;
+    weakElements: KiokuElement[]
 }
 
 export const heartExpStages: HeartExpStage[] = (questStageJson as any[])
@@ -82,6 +84,7 @@ export const heartExpStages: HeartExpStage[] = (questStageJson as any[])
             name: stage.name,
             exp: stage.characterHeartExp,
             icon: enemy ? `enemy/${enemy.enemyMstId}_thumbnail.png` : null,
+            weakElements: [...Array(5).keys()].map(i => enemy[`weakElement${i}`]).filter(e => e).map(e => elementMap[e])
         };
     })
     .sort((a, b) => b.exp - a.exp);

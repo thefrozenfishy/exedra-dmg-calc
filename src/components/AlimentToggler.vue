@@ -16,8 +16,8 @@
 
 <script lang="ts" setup>
 import { reactive } from 'vue'
-import { Aliment } from '../types/KiokuTypes'
 import { useSetting } from '../store/settingsStore'
+import { Aliment } from '../types/enums';
 
 const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1).toLowerCase()
 

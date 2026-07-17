@@ -1,5 +1,6 @@
 import { Enemy } from "./EnemyTypes";
-import { Aliment, Character, KiokuElement, KiokuRole } from "./KiokuTypes";
+import { Character } from "./KiokuTypes";
+import { Aliment, KiokuElement, KiokuRole } from '../types/enums'
 
 export interface TeamSlot {
     main: Character | undefined

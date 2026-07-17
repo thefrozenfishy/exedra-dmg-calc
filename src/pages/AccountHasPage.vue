@@ -283,7 +283,8 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import { useCharacterStore } from "../store/characterStore"
-import { Character, elementMap, KiokuConstants, KiokuElement, relevantCrys } from "../types/KiokuTypes"
+import { Character, KiokuConstants, relevantCrys } from "../types/KiokuTypes"
+import { elementMap, KiokuElement } from '../types/enums'
 import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"

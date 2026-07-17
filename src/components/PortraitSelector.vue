@@ -20,7 +20,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { getPortraits, KiokuElement, Portrait } from "../types/KiokuTypes";
+import { KiokuElement } from '../types/enums'
+import { getPortraits, Portrait } from "../types/KiokuTypes";
 import { portraits } from "../utils/helpers";
 import { passiveDetails } from '../utils/helpers';
 

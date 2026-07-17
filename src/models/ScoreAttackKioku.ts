@@ -1,4 +1,5 @@
-import { ActiveSkill, Aliment, KiokuArgs, KiokuData, SkillDetail, skillDetailId, SkillKey, SupportIdealPortrait } from '../types/KiokuTypes';
+import { Aliment } from '../types/enums';
+import { ActiveSkill, KiokuArgs, KiokuData, SkillDetail, skillDetailId, SkillKey, SupportIdealPortrait } from '../types/KiokuTypes';
 import { passiveDetails, skillDetails } from '../utils/helpers';
 import { Kioku } from './Kioku';
 

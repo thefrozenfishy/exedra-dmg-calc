@@ -92,8 +92,7 @@ import PortraitSelector from './PortraitSelector.vue';
 import SubCrysBar from './SubCrysBar.vue'
 import { crystalises } from '../utils/helpers';
 import StatInputs from './StatInputs.vue'
-import { Character, TeamSnapshot } from '../types/KiokuTypes';
-import { getSubCrystalises } from '../types/KiokuTypes'
+import { Character, TeamSnapshot, getSubCrystalises } from '../types/KiokuTypes'
 
 const round = (spd: number) => spd.toFixed(2)
 

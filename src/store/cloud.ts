@@ -2,8 +2,8 @@ import { getSupabase } from "../utils/supabase"
 import { getUserId } from "./user"
 import { logEvent } from '../utils/analytics'
 import type { Character } from "../types/KiokuTypes"
-import { KiokuRole } from "../types/KiokuTypes"
 import { countCharsObtained, getPowerScores } from "../models/PowerValue"
+import { KiokuRole } from "../types/enums"
 
 export class NameRequiredError extends Error {
     constructor() {

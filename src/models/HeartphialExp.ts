@@ -1,4 +1,5 @@
-import { Character, KiokuElement, KiokuRole, KiokuConstants } from "../types/KiokuTypes"
+import { Character, KiokuConstants } from "../types/KiokuTypes"
+import { KiokuElement, KiokuRole } from '../types/enums'
 import { cumulativeHeartphialExp, maxHeartphialExp } from "../utils/helpers"
 
 export type HeartphialSegmentMode = "none" | "element" | "role"

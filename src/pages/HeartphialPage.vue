@@ -2,8 +2,8 @@
     <div class="setup-page">
         <h1 class="page-title">Heartphial Progress</h1>
 
-        <section class="toolbar card">
-            <div class="toolbar-left">
+        <section class="card">
+            <div class="toolbar">
                 <ImageActionsToolbar target=".heartphial-list" filename="heartphial_exp.png"
                     :export-options="exportOpts" :share-options="shareOptions" />
 
@@ -16,6 +16,9 @@
                             <span class="stage-picker-title">{{ selectedStage?.name ?? 'Select farming stage' }}</span>
                             <span v-if="selectedStage" class="stage-picker-exp">{{ formatExp(selectedStage.exp) }}
                                 exp/play</span>
+                        </span>
+                        <span class="stage-picker-elements">
+                            <img v-for="elem in selectedStage?.weakElements" :src="`/exedra-dmg-calc/elements/${elem}.png`" :alt="elem" class="element-chip-icon" />
                         </span>
                         <span class="stage-picker-chevron">▾</span>
                     </button>
@@ -35,13 +38,14 @@
                                         <div class="stage-option-name">{{ stage.name }}</div>
                                         <div class="stage-option-exp">{{ formatExp(stage.exp) }} exp</div>
                                     </div>
+                                    <span class="stage-picker-elements">
+                                        <img v-for="elem in stage?.weakElements" :src="`/exedra-dmg-calc/elements/${elem}.png`" :alt="elem" class="element-chip-icon" />
+                                    </span>
                                 </button>
                             </div>
                         </div>
                     </transition>
                 </div>
-            </div>
-            <div class="toolbar-right rarity-toggles">
                 <label class="chip" :class="{ active: show4stars }">
                     <input type="checkbox" v-model="show4stars" /> ★★★★
                 </label>
@@ -327,14 +331,26 @@ const shareOptions = () => ({
 }
 
 .toolbar {
-    justify-content: space-between;
-}
-
-.toolbar-left,
-.toolbar-right {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .toolbar {
+        flex-wrap: wrap;
+    }
+}
+
+.stage-picker-elements {
+    margin-left: auto;
+}
+
+.element-chip-icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: center;
 }
 
 .chip {
@@ -463,6 +479,7 @@ const shareOptions = () => ({
     gap: 0.5rem;
     padding: 0.3rem 0.6rem;
     height: 44px;
+    width: 350px;
     overflow: hidden;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
@@ -470,6 +487,12 @@ const shareOptions = () => ({
     color: var(--text);
     cursor: pointer;
     transition: background 0.12s, border-color 0.12s;
+}
+
+@media (max-width: 768px) {
+    .stage-picker-button {
+        width: auto;
+    }
 }
 
 .stage-picker-button:hover {
@@ -506,7 +529,7 @@ const shareOptions = () => ({
 .stage-picker-chevron {
     font-size: 0.8rem;
     color: var(--muted);
-    margin-left: 0.15rem;
+    margin-right: 0;
 }
 
 .stage-picker {
@@ -514,9 +537,6 @@ const shareOptions = () => ({
     top: calc(100% + 8px);
     left: 0;
     z-index: 100;
-    width: 320px;
-    max-width: calc(100vw - 2.5rem);
-    max-height: 360px;
     padding: 0.85rem;
     border-radius: 16px;
     background: var(--panel);
@@ -573,6 +593,7 @@ const shareOptions = () => ({
     flex-direction: column;
     line-height: 1.25;
     min-width: 0;
+    max-width: 190px;
 }
 
 .stage-option-name {

@@ -1,4 +1,5 @@
-import { KiokuConstants, KiokuElement, KiokuRole, type Character } from "../types/KiokuTypes"
+import { KiokuConstants, type Character } from "../types/KiokuTypes"
+import { KiokuElement, KiokuRole } from '../types/enums'
 import { useBetaNumber, useBetaValue } from "../utils/betaSettings"
 import { skewnormCdf } from "../utils/mathFuncs"
 

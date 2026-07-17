@@ -36,7 +36,8 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import type { Character, CrystalisData, KiokuElement } from '../types/KiokuTypes'
+import type { Character, CrystalisData } from '../types/KiokuTypes'
+import { KiokuElement } from '../types/enums'
 
 interface ElementalSlot {
     elem: KiokuElement
