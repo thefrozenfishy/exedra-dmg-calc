@@ -240,7 +240,7 @@
                             </div>
 
                             <input v-if="editingUnionName" v-model="pendingUnionName" class="nickname-inline-input"
-                                placeholder="No Union" maxlength="32" list="union-list" @blur="finishUnionEdit"
+                                placeholder="No Union" maxlength="32" list="union-list" @blur="finishUnionEdit" v-focus
                                 @keydown.enter.prevent="($event.target as HTMLInputElement).blur()" />
 
                             <datalist id="union-list">
@@ -248,11 +248,11 @@
                             </datalist>
 
                             <input v-if="editingFriendCode" v-model="pendingFriendCode" class="nickname-inline-input"
-                                placeholder="Friend code" maxlength="5" @blur="finishFriendCodeEdit"
+                                placeholder="Friend code" maxlength="5" @blur="finishFriendCodeEdit" v-focus
                                 @keydown.enter.prevent="($event.target as HTMLInputElement).blur()" />
 
                             <input v-if="editingSelfName" v-model="pendingDisplayName" class="nickname-inline-input"
-                                placeholder="Display name" maxlength="32" @blur="finishDisplayNameEdit"
+                                placeholder="Display name" maxlength="32" @blur="finishDisplayNameEdit" v-focus
                                 @keydown.enter.prevent="($event.target as HTMLInputElement).blur()" />
                         </div>
                     </div>
@@ -433,7 +433,7 @@
 
                                     <input v-if="editingFriend === friend.friend_id" v-model="pendingNickname"
                                         class="nickname-inline-input" placeholder="Nickname" maxlength="24"
-                                        @blur="finishNicknameEdit(friend)"
+                                        @blur="finishNicknameEdit(friend)" v-focus
                                         @keydown.enter.prevent="($event.target as HTMLInputElement).blur()" />
                                 </div>
                             </div>
@@ -597,6 +597,8 @@ import {
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import { MyRank } from '../store/friendStore'
 import { KiokuRole } from '../types/enums'
+
+const vFocus = { mounted: (el: HTMLInputElement) => el.focus() }
 
 const store = useFriendStore()
 const characterStore = useCharacterStore()
