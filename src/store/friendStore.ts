@@ -246,8 +246,9 @@ export const useFriendStore = defineStore('friendStore', () => {
 
         if (existing) {
             existing.isFriend = true
+        } else {
+            await loadFriends()
         }
-        await loadFriends()
     }
 
     const saveFriendCode = async () => {
