@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import CloudSyncWidget from './components/CloudSyncWidget.vue'
+import NewBadge from './components/NewBadge.vue'
 import { isBeta } from './utils/betaSettings';
 import { useRouter } from 'vue-router'
 import { computed } from 'vue'
@@ -78,7 +79,7 @@ function routeForPath(path: string) {
           <template v-for="path in paths" :key="path">
             <router-link :to="path" :class="{ 'nav-new': isNew(path) }">
               {{ routeForPath(path)?.name }}
-              <span v-if="isNew(path)" class="new-sparkle" aria-label="Updated">✨</span>
+              <NewBadge v-if="isNew(path)" />
             </router-link>
           </template>
         </div>
@@ -145,17 +146,6 @@ nav a.nav-new.router-link-active {
   -webkit-text-fill-color: transparent;
 }
 
-.new-sparkle {
-  display: inline-block;
-  animation: sparkle-pop 1.4s ease-in-out infinite;
-  -webkit-text-fill-color: initial;
-  background: none;
-  -webkit-background-clip: initial;
-  background-clip: initial;
-  font-style: normal;
-  margin-left: 1px;
-}
-
 @keyframes shimmer {
   0% {
     background-position: 200% center;
@@ -163,18 +153,6 @@ nav a.nav-new.router-link-active {
 
   100% {
     background-position: -200% center;
-  }
-}
-
-@keyframes sparkle-pop {
-
-  0%,
-  100% {
-    transform: scale(1) rotate(-5deg);
-  }
-
-  50% {
-    transform: scale(1.25) rotate(8deg);
   }
 }
 

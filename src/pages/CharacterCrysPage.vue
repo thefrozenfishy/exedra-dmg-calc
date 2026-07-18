@@ -63,11 +63,19 @@
                 <span class="filters-heading">Import</span>
                 <div class="toolbar-right">
                     <button class="btn btn-sm" @click="triggerImportFile">Import Crys Data</button>
+                    <NewBadge id="import-crys-data" />
                     <input ref="importFileInputRef" type="file" accept=".json,application/json"
                         class="hidden-file-input" @change="onImportFileChange" />
                 </div>
-                <a href="https://github.com/thefrozenfishy/exedra-crys-reader" class="filter-group-label">
+                <a href="https://github.com/thefrozenfishy/exedra-crys-reader" class="external-link" target="_blank"
+                    rel="noopener noreferrer">
                     Use this crys reader to generate your import file automatically
+                    <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                        <polyline points="15 3 21 3 21 9" />
+                        <line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
                 </a>
             </section>
 
@@ -131,6 +139,7 @@ import { useRouter } from 'vue-router'
 import { relevantCrys, type Character, type CrystalisData } from '../types/KiokuTypes'
 import { elementMap, KiokuElement } from '../types/enums'
 import CharacterCrysRow from '../components/CharacterCrysRow.vue'
+import NewBadge from '../components/NewBadge.vue'
 import { useCharacterStore } from '../store/characterStore'
 import { passiveDetails } from '../utils/helpers'
 import { useSetting } from "../store/settingsStore"
@@ -466,6 +475,28 @@ function onApplyImport(selectedKeys: Set<string>) {
     font-size: 0.74rem;
     color: var(--muted);
     margin-right: 2px;
+}
+
+.external-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.74rem;
+    color: var(--accent-soft);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    margin-right: 2px;
+    transition: color 0.15s ease;
+}
+
+.external-link:hover {
+    color: var(--accent);
+}
+
+.external-link-icon {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
 }
 
 .element-chip-icon {

@@ -34,7 +34,7 @@ const routes = [
     { path: '/heartphial', name: 'Heartphial', component: HeartphialPage, meta: { version: 1 } },
     { path: '/link-raid', name: 'Link Raid Tool', component: LinkRaid, meta: { version: 0 } },
     { path: '/crys-reroll', name: 'Crystalis Reroller', component: CrysReroll, meta: { version: 0 } },
-    { path: '/character-crys', name: 'Character Crystalis', component: CharacterCrysPage, meta: { version: 1 } },
+    { path: '/character-crys', name: 'Character Crystalis', component: CharacterCrysPage, meta: { version: 2 } },
     { path: '/character-crys-edit', name: 'Character Crystalis Edit', component: CharacterCrysEditPage, meta: { version: 1 } },
     { path: '/tier-lists', name: 'Tier Lists', component: TierLists, meta: { version: 0 } },
     { path: '/about', name: 'About', component: About, meta: { version: 0 } },
