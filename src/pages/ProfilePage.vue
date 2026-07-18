@@ -241,7 +241,7 @@
 
                             <input v-if="editingUnionName" v-model="pendingUnionName" class="nickname-inline-input"
                                 placeholder="No Union" maxlength="32" list="union-list" @blur="finishUnionEdit"
-                                @keydown.enter="finishUnionEdit" />
+                                @keydown.enter.prevent="($event.target as HTMLInputElement).blur()" />
 
                             <datalist id="union-list">
                                 <option v-for="u in store.unionOptions" :key="u" :value="u" />
@@ -249,11 +249,11 @@
 
                             <input v-if="editingFriendCode" v-model="pendingFriendCode" class="nickname-inline-input"
                                 placeholder="Friend code" maxlength="5" @blur="finishFriendCodeEdit"
-                                @keydown.enter="finishFriendCodeEdit" />
+                                @keydown.enter.prevent="($event.target as HTMLInputElement).blur()" />
 
                             <input v-if="editingSelfName" v-model="pendingDisplayName" class="nickname-inline-input"
                                 placeholder="Display name" maxlength="32" @blur="finishDisplayNameEdit"
-                                @keydown.enter="finishDisplayNameEdit" />
+                                @keydown.enter.prevent="($event.target as HTMLInputElement).blur()" />
                         </div>
                     </div>
 
@@ -434,7 +434,7 @@
                                     <input v-if="editingFriend === friend.friend_id" v-model="pendingNickname"
                                         class="nickname-inline-input" placeholder="Nickname" maxlength="24"
                                         @blur="finishNicknameEdit(friend)"
-                                        @keydown.enter.prevent="finishNicknameEdit(friend)" />
+                                        @keydown.enter.prevent="($event.target as HTMLInputElement).blur()" />
                                 </div>
                             </div>
 
@@ -675,7 +675,7 @@ const exportData = () => {
     for (const f of store.friends) {
         pushRow([
             f.friend_id,
-            f.rank,
+            f.rank!,
             f.nickname,
             f.display_name,
             f.union_name,
@@ -1199,7 +1199,7 @@ const graphOptions = [
         label: 'Total Power',
         value: 'total'
     },
-    ...Object.values(KiokuRole).map(k => ({label: k, value: k})),
+    ...Object.values(KiokuRole).map(k => ({ label: k, value: k })),
     {
         label: 'Whale',
         value: 'whale'
