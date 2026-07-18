@@ -34,8 +34,12 @@
                             {{ entry.items.length }}</span>
                     </label>
 
+                    <div v-if="entry.equipOrderUnmatched.length" class="equip-order-warning">
+                        ⚠ equipOrder names not recognized for this character: {{ entry.equipOrderUnmatched.join(", ") }}
+                    </div>
+
                     <label v-for="item in entry.items" :key="item.key" class="diff-item"
-                        :class="{ excluded: !selectedKeys.has(item.key) }">
+                        :class="{ excluded: !selectedKeys.has(item.key), 'row-disabling': item.oldEnabled && !item.newEnabled }">
                         <input type="checkbox" class="diff-checkbox" :checked="selectedKeys.has(item.key)"
                             @change="toggleItem(item.key)" />
 
@@ -44,11 +48,18 @@
 
                             <div class="diff-row" v-if="item.oldEnabled !== item.newEnabled">
                                 <span class="diff-label">Status</span>
-                                <span class="diff-value diff-old" :class="{ off: !item.oldEnabled }">{{
+                                <span class="diff-value" :class="item.oldEnabled ? 'state-enabled' : 'state-disabled'">{{
                                     item.oldEnabled ? 'Enabled' : 'Disabled' }}</span>
                                 <span class="diff-arrow">→</span>
-                                <span class="diff-value diff-new" :class="{ off: !item.newEnabled }">{{
+                                <span class="diff-value" :class="item.newEnabled ? 'state-enabled' : 'state-disabled'">{{
                                     item.newEnabled ? 'Enabled' : 'Disabled' }}</span>
+                            </div>
+
+                            <div class="diff-row" v-if="item.oldUseIndex !== item.newUseIndex">
+                                <span class="diff-label">Equip Slot</span>
+                                <span class="diff-value diff-old">{{ item.oldUseIndex ? `Slot ${item.oldUseIndex}` : 'Unequipped' }}</span>
+                                <span class="diff-arrow">→</span>
+                                <span class="diff-value diff-new">{{ item.newUseIndex ? `Slot ${item.newUseIndex}` : 'Unequipped' }}</span>
                             </div>
 
                             <div class="diff-row" v-for="(slot, idx) in item.subSlots.filter(s => s.changed)"
@@ -347,14 +358,20 @@ function onApply() {
     display: flex;
     gap: 0.6rem;
     align-items: flex-start;
-    padding: 0.5rem 0.7rem;
+    padding: 0.5rem 0.7rem 0.5rem calc(0.7rem - 3px);
     border-bottom: 1px solid var(--border);
+    border-left: 3px solid transparent;
     cursor: pointer;
-    transition: opacity 0.15s;
+    transition: opacity 0.15s, background 0.15s, border-color 0.15s;
 }
 
 .diff-item:last-child {
     border-bottom: none;
+}
+
+.diff-item.row-disabling {
+    background: rgba(224, 106, 106, 0.12);
+    border-left-color: var(--danger, #e06a6a);
 }
 
 .diff-item.excluded {
@@ -412,9 +429,13 @@ function onApply() {
     color: var(--accent, #6ae0a0);
 }
 
-.diff-value.off {
-    opacity: 0.6;
-    text-decoration: line-through;
+.state-enabled {
+    color: #e8d16a;
+}
+
+.state-disabled {
+    color: var(--danger, #e06a6a);
+    opacity: 0.85;
 }
 
 .diff-arrow {
@@ -426,6 +447,14 @@ function onApply() {
     margin-top: 0.3rem;
     font-size: 0.72rem;
     color: #e0b06a;
+}
+
+.equip-order-warning {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.72rem;
+    color: #e0b06a;
+    background: rgba(224, 176, 106, 0.08);
+    border-bottom: 1px solid var(--border);
 }
 
 .crys-import-footer {
