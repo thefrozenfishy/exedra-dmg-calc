@@ -6,13 +6,8 @@
             <section class="toolbar card">
                 <span class="filters-heading">Char Filter</span>
                 <div class="toolbar-right rarity-toggles">
-                <input
-                    ref="charSearchInputRef"
-                    type="text"
-                    v-model="charNameFilter"
-                    placeholder="Search name..."
-                    class="char-search-input"
-                />
+                    <input ref="charSearchInputRef" type="text" v-model="charNameFilter" placeholder="Search name..."
+                        class="char-search-input" />
                     <label class="chip" :class="{ active: show4stars }">
                         <input type="checkbox" v-model="show4stars" /> ★★★★
                     </label>
@@ -49,8 +44,8 @@
 
                 <div v-if="!showOffElementalOnes" class="filter-group">
                     <label class="chip" :class="{ active: missingOwnElementalFilter }">
-                        <input type="checkbox" name="own-elemental-filter"
-                            v-model="missingOwnElementalFilter" /> Show only girls missing elemental crys
+                        <input type="checkbox" name="own-elemental-filter" v-model="missingOwnElementalFilter" /> Show
+                        only girls missing elemental crys
                     </label>
                 </div>
 
@@ -65,8 +60,21 @@
             </section>
 
             <section class="toolbar card">
+                <span class="filters-heading">Import</span>
+                <div class="toolbar-right">
+                    <button class="btn btn-sm" @click="triggerImportFile">Import Crys Data</button>
+                    <input ref="importFileInputRef" type="file" accept=".json,application/json"
+                        class="hidden-file-input" @change="onImportFileChange" />
+                </div>
+                <a href="https://github.com/thefrozenfishy/exedra-crys-reader" class="filter-group-label">
+                    Use this crys reader to generate your import file automatically
+                </a>
+            </section>
+
+            <section class="toolbar card">
                 <span class="filters-heading">Image Share</span>
-                <ImageActionsToolbar target=".element-section" filename="collected_crys.png" :share-options="shareOptionsForAscensionList" :export-options="exportOpts" />
+                <ImageActionsToolbar target=".element-section" filename="collected_crys.png"
+                    :share-options="shareOptionsForAscensionList" :export-options="exportOpts" />
             </section>
 
             <div class="list-header crys-table-header">
@@ -77,12 +85,16 @@
             <section class="element-section">
                 <template v-if="sortMode === 'element'">
                     <div v-for="(rows, elem) in groupedCharacterCrysRows" :key="elem" class="element-row">
-                        <button class="element-header" @click="toggleElement(elem)" :aria-expanded="!collapsedElements[elem]">
+                        <button class="element-header" @click="toggleElement(elem)"
+                            :aria-expanded="!collapsedElements[elem]">
                             <span class="element-chevron" :class="{ rotated: collapsedElements[elem] }">▾</span>
                             <span class="element-name">
-                                <img :src="`/exedra-dmg-calc/elements/${elem}.png`" :alt="elem" :title="elem" class="element-header-icon" />
+                                <img :src="`/exedra-dmg-calc/elements/${elem}.png`" :alt="elem" :title="elem"
+                                    class="element-header-icon" />
                             </span>
-                            <span title="Completed Kioku out of Total Kioku" class="element-count">{{ groupedRosterCharacterCrysRows[elem].filter(r => r.completed).length }} / {{ groupedRosterCharacterCrysRows[elem].length }}</span>
+                            <span title="Completed Kioku out of Total Kioku" class="element-count">{{
+                                groupedRosterCharacterCrysRows[elem].filter(r => r.completed).length}} / {{
+                                    groupedRosterCharacterCrysRows[elem].length }}</span>
                         </button>
 
                         <div v-show="!collapsedElements[elem]" class="character-crys-list element-body">
@@ -108,6 +120,8 @@
                 </template>
             </section>
         </div>
+
+        <CrysImportModal v-model="showImportModal" :diff-characters="importDiff" @apply="onApplyImport" />
     </div>
 </template>
 
@@ -122,6 +136,8 @@ import { passiveDetails } from '../utils/helpers'
 import { useSetting } from "../store/settingsStore"
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import { useFriendStore } from "../store/friendStore"
+import CrysImportModal from '../components/CrysImportModal.vue'
+import { buildCrysImportDiff, applyCrysImportDiff, type CrysDiffCharacter, type CrysImportData } from '../utils/crysImport'
 
 function getCrysElement(crys: CrystalisData): KiokuElement | undefined {
     return elementMap[passiveDetails[crys.value1 * 100 + 1].element]
@@ -132,8 +148,8 @@ const shareOptionsForAscensionList = () => ({
     backUrl: window.location.href,
 })
 
-const exportOpts = { 
-    exportClass: "exporting",    
+const exportOpts = {
+    exportClass: "exporting",
     onBefore: () => {
         document.querySelector(".element-section")?.classList.add(showOffElementalOnes.value ? "allElemExport" : "nonAllElemExport")
     },
@@ -280,6 +296,52 @@ const groupedRosterCharacterCrysRows = computed(() => {
 const onSelectCharacter = (char: Character) => {
     router.push({ path: '/character-crys-edit', query: { character_id: char.id } })
 }
+
+const importFileInputRef = ref<HTMLInputElement | null>(null)
+const showImportModal = ref(false)
+const importDiff = ref<CrysDiffCharacter[]>([])
+
+function triggerImportFile() {
+    importFileInputRef.value?.click()
+}
+
+function onImportFileChange(e: Event) {
+    const input = e.target as HTMLInputElement
+    const file = input.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+        try {
+            const parsed = JSON.parse(ev.target?.result as string) as CrysImportData
+            const diff = buildCrysImportDiff(store.characters, parsed)
+
+            if (!diff.length) {
+                alert("No differences found between your saved data and this file.")
+                return
+            }
+
+            importDiff.value = diff
+            showImportModal.value = true
+        } catch (err) {
+            console.error("Failed to parse crys import file:", err)
+            alert("Couldn't read that file. Make sure it's a valid crys export JSON.")
+        }
+    }
+    reader.onerror = () => {
+        console.error("Failed to read crys import file:", reader.error)
+        alert("Couldn't read that file.")
+    }
+    reader.readAsText(file)
+
+    // reset so selecting the same file again still fires change
+    input.value = ""
+}
+
+function onApplyImport(selectedKeys: Set<string>) {
+    applyCrysImportDiff(store.updateChar, importDiff.value, selectedKeys)
+    importDiff.value = []
+}
 </script>
 
 <style scoped>
@@ -335,6 +397,10 @@ const onSelectCharacter = (char: Character) => {
     align-items: center;
     gap: 0.5rem;
     flex-wrap: wrap;
+}
+
+.hidden-file-input {
+    display: none;
 }
 
 .chip {
@@ -560,7 +626,7 @@ const onSelectCharacter = (char: Character) => {
     width: 900px !important;
 }
 
-.setup-page .nonAllElemExport  {
+.setup-page .nonAllElemExport {
     width: 770px !important;
 }
 
