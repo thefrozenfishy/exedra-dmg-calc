@@ -714,12 +714,19 @@ const myPower = computed(() => getPowerScores(characterStore.characters))
 const myChars = computed(() => countCharsObtained(characterStore.characters))
 const editingFriend = ref<string | null>(null)
 const pendingNickname = ref('')
+let nicknameEditOriginal = ''
 
 const finishNicknameEdit = async (
     friend: SocialProfile
 ) => {
     try {
-        await saveNickname(friend.friend_id, pendingNickname.value.trim())
+        const trimmed = pendingNickname.value.trim()
+
+        if (trimmed === nicknameEditOriginal) {
+            return
+        }
+
+        await saveNickname(friend.friend_id, trimmed)
     } finally {
         editingFriend.value = null
         pendingNickname.value = ''
@@ -729,6 +736,7 @@ const finishNicknameEdit = async (
 const startEditingNickname = (friend: SocialProfile) => {
     editingFriend.value = friend.friend_id
     pendingNickname.value = friend.nickname?.trim() || friend.display_name?.trim() || ''
+    nicknameEditOriginal = pendingNickname.value
 }
 
 const userId = getUserId()
@@ -943,6 +951,10 @@ watch(
 
 const finishDisplayNameEdit = async () => {
     try {
+        if (pendingDisplayName.value === store.displayName) {
+            return
+        }
+
         store.displayName = pendingDisplayName.value
 
         await store.saveDisplayName()
@@ -965,9 +977,15 @@ const finishDisplayNameEdit = async () => {
 
 const finishFriendCodeEdit = async () => {
     try {
-        store.friendCode = pendingFriendCode.value
+        const trimmed = pendingFriendCode.value
             .trim()
             .toUpperCase()
+
+        if (trimmed === store.friendCode) {
+            return
+        }
+
+        store.friendCode = trimmed
 
         await store.saveFriendCode()
 
@@ -999,7 +1017,13 @@ const finishFriendCodeEdit = async () => {
 
 const finishUnionEdit = async () => {
     try {
-        store.unionName = pendingUnionName.value.trim()
+        const trimmed = pendingUnionName.value.trim()
+
+        if (trimmed === store.unionName) {
+            return
+        }
+
+        store.unionName = trimmed
 
         await store.saveUnionName()
 
