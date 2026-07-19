@@ -620,8 +620,9 @@ export class ScoreAttackTeam {
         const def_remaining =
             this.getDebuffEffect("DWN_DEF_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) *
             (0.9 ** this.debuffPools[enemyIdx]["WEAKNESS"]);
-        const elem_res_down =
-            this.getDebuffEffect("DWN_ELEMENT_RESIST_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) / 1000;
+        const elem_res_down = Math.max(-1, Math.min(1,
+            this.getDebuffEffect("DWN_ELEMENT_RESIST_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) / 1000
+        ));
         const break_factor = enemy.isBreak ? enemy.maxBreak / 100 : 1;
 
         for (let allyIdx = 0; allyIdx < 5; allyIdx++) {
@@ -662,10 +663,7 @@ export class ScoreAttackTeam {
                         this.getAllyEffect(allyIdx, "UP_ELEMENT_DMG_RATE_RATIO", amountOfEnemies, enemy.maxBreak)) /
                     1000;
 
-                const dmg_taken =
-                    (this.getDebuffEffect("UP_RCV_DMG_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) +
-                        this.getDebuffEffect("UP_AIM_RCV_DMG_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak)) /
-                    1000;
+                const dmg_taken = this.getDebuffEffect("UP_RCV_DMG_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) / 1000;
 
                 const elem_dmg_up =
                     this.getAllyEffect(allyIdx, "UP_WEAK_ELEMENT_DMG_RATIO", amountOfEnemies, enemy.maxBreak) / 1000;
@@ -727,8 +725,10 @@ export class ScoreAttackTeam {
                     if (!isActiveCond(nrHitThatKills > 1 ? currentAmountOfEnemies : currentAmountOfEnemies - 1, maxBreak)) return;
                 }
 
-                if (detail.abilityEffectType === "DMG_RANDOM" && targetType === EnemyTargetTypes.TARGET) {
-                    delta_dmg = detail.value1 * detail.value2;
+                if (detail.abilityEffectType === "DMG_RANDOM") {
+                    if (targetType === EnemyTargetTypes.TARGET) {
+                        delta_dmg = detail.value1 * detail.value2;
+                    }
                 } else if (detail.range === 3) {
                     delta_dmg = detail.value1;
                 } else if (
@@ -885,12 +885,11 @@ export class ScoreAttackTeam {
             1000;
         const elem_dmg_up =
             this.getAllyEffect(DPS_IDX, "UP_WEAK_ELEMENT_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak) / 1000;
-        const dmg_taken =
-            (this.getDebuffEffect("UP_RCV_DMG_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) +
-                this.getDebuffEffect("UP_AIM_RCV_DMG_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak)) /
-            1000;
-        const elem_res_down =
-            this.getDebuffEffect("DWN_ELEMENT_RESIST_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) / 1000;
+        const dmg_taken = this.getDebuffEffect("UP_RCV_DMG_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) / 1000;
+
+        const elem_res_down = Math.max(-1, Math.min(1,
+            this.getDebuffEffect("DWN_ELEMENT_RESIST_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) / 1000
+        ));
 
         const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
         const crit_factor = 1 + (enemy.isCrit ? crit_dmg : 0);
@@ -954,6 +953,7 @@ export class ScoreAttackTeam {
 Base ${uses_def ? "Def" : "Atk"}        - ${(base_atk | 0).toLocaleString()}
 ${uses_def ? "Def" : "Atk"} Up %        - ${atk_pluss * 100 | 0}%
 ${uses_def ? "Def" : "Atk"} Up flat     - ${flat_atk | 0}
+Sum extra ${uses_def ? "Def" : "Atk"}   - ${(base_atk * atk_pluss + flat_atk | 0).toLocaleString()}
 Total ${uses_def ? "Def" : "Atk"}       - ${(atk_total | 0).toLocaleString()}
 Def down%       - ${(1 - def_remaining) * 100 | 0}%
 Total def       - ${(def_total | 0).toLocaleString()}
