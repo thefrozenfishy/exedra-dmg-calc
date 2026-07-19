@@ -21,15 +21,15 @@
 
                 <div v-for="entry in diffCharacters" :key="entry.char.id" class="char-diff-section">
                     <label class="char-diff-header">
-                        <input type="checkbox" class="char-diff-checkbox"
-                            :checked="charSelectionState(entry) === 'all'"
+                        <input type="checkbox" class="char-diff-checkbox" :checked="charSelectionState(entry) === 'all'"
                             :ref="(el) => setIndeterminate(el, charSelectionState(entry) === 'some')"
                             @change="toggleCharacter(entry)" />
                         <img :src="`/exedra-dmg-calc/kioku_images/${entry.char.id}_thumbnail.png`"
                             :alt="entry.char.name" class="char-diff-icon" />
                         <span class="char-diff-name">{{ entry.char.name }}</span>
-                        <span v-if="entry.char.character_en" class="char-diff-name-en">{{ entry.char.character_en
-                            }}</span>
+                        <span v-if="entry.char.character_en" class="char-diff-name-en">
+                            {{ entry.char.character_en }}
+                        </span>
                         <span class="char-diff-count">{{entry.items.filter(i => selectedKeys.has(i.key)).length}} /
                             {{ entry.items.length }}</span>
                     </label>
@@ -38,8 +38,11 @@
                         ⚠ equipOrder names not recognized for this character: {{ entry.equipOrderUnmatched.join(", ") }}
                     </div>
 
-                    <label v-for="item in entry.items" :key="item.key" class="diff-item"
-                        :class="{ excluded: !selectedKeys.has(item.key), 'row-disabling': item.oldEnabled && !item.newEnabled }">
+                    <label v-for="item in entry.items" :key="item.key" class="diff-item" :class="{
+                        excluded: !selectedKeys.has(item.key),
+                        'row-disabling': item.oldEnabled && !item.newEnabled,
+                        'row-enabling': !item.oldEnabled && item.newEnabled
+                    }">
                         <input type="checkbox" class="diff-checkbox" :checked="selectedKeys.has(item.key)"
                             @change="toggleItem(item.key)" />
 
@@ -48,18 +51,20 @@
 
                             <div class="diff-row" v-if="item.oldEnabled !== item.newEnabled">
                                 <span class="diff-label">Status</span>
-                                <span class="diff-value" :class="item.oldEnabled ? 'state-enabled' : 'state-disabled'">{{
-                                    item.oldEnabled ? 'Enabled' : 'Disabled' }}</span>
+                                <span class="diff-value" :class="item.oldEnabled ? 'state-enabled' : 'state-disabled'">
+                                    {{ item.oldEnabled ? 'Enabled' : 'Disabled' }}</span>
                                 <span class="diff-arrow">→</span>
-                                <span class="diff-value" :class="item.newEnabled ? 'state-enabled' : 'state-disabled'">{{
-                                    item.newEnabled ? 'Enabled' : 'Disabled' }}</span>
+                                <span class="diff-value" :class="item.newEnabled ? 'state-enabled' : 'state-disabled'">
+                                    {{ item.newEnabled ? 'Enabled' : 'Disabled' }}</span>
                             </div>
 
                             <div class="diff-row" v-if="item.oldUseIndex !== item.newUseIndex">
                                 <span class="diff-label">Equip Slot</span>
-                                <span class="diff-value diff-old">{{ item.oldUseIndex ? `Slot ${item.oldUseIndex}` : 'Unequipped' }}</span>
+                                <span class="diff-value diff-old">
+                                    {{ item.oldUseIndex ? `Slot ${item.oldUseIndex}` : 'Unequipped' }}</span>
                                 <span class="diff-arrow">→</span>
-                                <span class="diff-value diff-new">{{ item.newUseIndex ? `Slot ${item.newUseIndex}` : 'Unequipped' }}</span>
+                                <span class="diff-value diff-new">
+                                    {{ item.newUseIndex ? `Slot ${item.newUseIndex}` : 'Unequipped' }}</span>
                             </div>
 
                             <div class="diff-row" v-for="(slot, idx) in item.subSlots.filter(s => s.changed)"
@@ -372,6 +377,11 @@ function onApply() {
 .diff-item.row-disabling {
     background: rgba(224, 106, 106, 0.12);
     border-left-color: var(--danger, #e06a6a);
+}
+
+.diff-item.row-enabling {
+    background: rgba(106, 224, 116, 0.12);
+    border-left-color: var(--success, #79d5aa);
 }
 
 .diff-item.excluded {

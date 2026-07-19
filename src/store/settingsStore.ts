@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, watch, type Ref } from 'vue'
+import { ref, watch, type Ref, effectScope } from 'vue'
 
 const settingRefs = new Map<string, ReturnType<typeof ref>>()
 
@@ -15,9 +15,11 @@ export function useSetting<T>(key: string, defaultValue: T): Ref<T> {
 
   settingRefs.set(key, localRef)
 
-  watch(localRef, (val) => {
-    store.set(key, val)
-  }, { deep: true })
+  effectScope(true).run(() => {
+    watch(localRef, (val) => {
+      store.set(key, val)
+    }, { deep: true })
+  })
 
   return localRef
 }
