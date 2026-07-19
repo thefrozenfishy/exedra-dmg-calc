@@ -60,7 +60,7 @@ export function buildCrysImportDiff(characters: Character[], importData: CrysImp
         const allCrys = relevantCrys(char.id)
 
         const equipOrderUnmatched = equipOrder
-            ? equipOrder.filter(name => !allCrys.some(c => c.name === name))
+            ? equipOrder.filter(name => name !== null && !allCrys.some(c => c.name === name))
             : []
 
         const items: CrysDiffItem[] = []
