@@ -466,7 +466,7 @@ export async function findBestAttackerLoadout({
     const otherKiokus = otherMembers.map(m => buildMemberKioku(m, buffMultReduction, debuffMultReduction))
 
     const excludeNames = [attacker.main.name, ...otherMembers.map(m => m.main.name)]
-    const portraitCandidates = portraitsBestOnly(attacker.main.element, false)
+    const portraitCandidates = portraitsBestOnly(attacker.main.element, optimizeAverageDamage)
     const supportCandidates = getAttackerSupportCandidates(attacker.main, enabledCharacters, excludeNames)
     const crysCandidates = combinations(getBestCrystalises(attacker.main), 3)
 
