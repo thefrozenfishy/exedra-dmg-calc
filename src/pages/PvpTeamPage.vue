@@ -2,6 +2,80 @@
   <div class="setup-page team-page">
     <h1 class="page-title">PvP Action Order Calculator</h1>
 
+    <section class="toolbar card share-card-actions">
+      <div class="toolbar-left">
+        <ImageActionsToolbar :target="() => shareCardRef!" filename="pvp-team-share.png" :export-options="exportOpts"
+          :share-options="shareOptionsForTeamCard" :disabled="!shareCardAvailable" />
+      </div>
+    </section>
+
+    <div class="share-card-preview" ref="shareCardRef">
+      <div v-for="teamGroup in shareTeams" :key="teamGroup.isAlliedTeam" class="share-team-section">
+        <div class="share-team-heading" :class="teamGroup.isAlliedTeam ? 'ally' : 'enemy'">{{ teamGroup.label }} Team
+        </div>
+        <div class="share-card-grid">
+          <div v-for="(entry, index) in teamGroup.entries" :key="index" class="share-slot"
+            :class="{ 'share-slot-starter': isStarter(entry.extraData) }">
+            <template v-if="entry.slot.main">
+              <div class="share-slot-top">
+                <div class="share-slot-kioku-image">
+                  <img :src="kiokuImage(entry.slot.main)" :alt="entry.slot.main.name" />
+                  <div class="share-overlay-badges">
+                    <span class="share-overlay-badge ascension">A{{ entry.slot.main.ascension }}</span>
+                    <span class="share-overlay-badge heart">H{{ entry.slot.main.heartphialLvl }}</span>
+                    <span class="share-overlay-badge magic">ML{{ entry.slot.main.magicLvl }}</span>
+                    <span v-if="entry.slot.main.rarity !== 3" class="share-overlay-badge special">SP{{
+                      entry.slot.main.specialLvl }}</span>
+                  </div>
+                </div>
+                <div v-if="isStarter(entry.extraData)" class="share-starter-tag">Starts</div>
+              </div>
+
+              <div class="share-slot-portrait-support">
+                <div class="share-slot-portrait-block" v-if="entry.slot.main?.portrait">
+                  <img class="share-slot-portrait-icon" :src="portraitImage(entry.slot.main.portrait)"
+                    :alt="entry.slot.main.portrait" />
+                  <div class="share-slot-portrait-label">{{ entry.slot.main.portrait }}</div>
+                </div>
+                <div class="share-slot-support-block" v-if="entry.slot.support">
+                  <img class="share-slot-support-image" :src="kiokuImage(entry.slot.support)"
+                    :alt="entry.slot.support.name" />
+                  <div class="share-slot-support-label">{{ entry.slot.support.name }}</div>
+                </div>
+              </div>
+
+              <div class="share-slot-crys-row">
+                <span class="share-chip" v-for="([crysId], idx) in Object.entries(entry.slot.main.crysOptions)
+                  .filter(([, value]) => value.useIndex > 0).sort(([, a], [, b]) => a.useIndex - b.useIndex)"
+                  :key="`cry-${idx}`">
+                  {{ crystalises[Number(crysId)]?.styleMstId ? "EX" : crystalises[Number(crysId)]?.name }}
+                </span>
+              </div>
+
+              <div class="share-slot-subcrys-row">
+                <span class="share-chip subcrys-chip" v-for="(item, idx) in summarizeSubCrys(entry.slot.main)"
+                  :key="`sub-${idx}`">
+                  {{ item }}
+                </span>
+              </div>
+
+              <div class="share-slot-pvp-stats" v-if="entry.extraData">
+                <div class="share-pvp-stat">
+                  Spd: {{ round(entry.extraData.spd) }}
+                  ({{ entry.extraData.baseSpd }}
+                  <span class="share-spd-bonus">+ {{ round(entry.extraData.spd - entry.extraData.baseSpd) }}</span>)
+                </div>
+                <div class="share-pvp-stat">
+                  Initial AV: {{ round(entry.extraData.secondsLeft) }}
+                </div>
+              </div>
+            </template>
+            <div v-else class="share-slot-empty">Empty</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div v-for="isAlliedTeam in [1, 0]">
       <h2 class="section-title">{{ isAlliedTeam ? "Allied" : "Enemy" }} Team</h2>
       <div class="team-grid">
@@ -79,12 +153,15 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { usePvPStore } from '../store/singleTeamStore'
-import { BattleSnapshot, TargetType } from '../types/KiokuTypes'
+import { BattleSnapshot, TargetType, TeamSnapshot, Character } from '../types/KiokuTypes'
 import { PvPBattle } from '../models/PvPBattle'
 import { PvPTeam } from '../models/PvPTeam'
 import CharacterEditor from '../components/CharacterEditor.vue'
+import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import { toast } from 'vue3-toastify'
 import { PvPKioku } from '../models/PvPKioku'
+import { useFriendStore } from '../store/friendStore'
+import { crystalises, passiveDetails, portraits } from "../utils/helpers"
 
 const skillTranslate = {
   [TargetType.attackId]: "Basic Attack",
@@ -104,13 +181,8 @@ const formatSpdBuffs = (buffs: [number, string, string?][]) => buffs.map(buff =>
 const isFullBattle = computed(() => team.slots[0].every(t => t?.main) && team.slots[1].every(t => t?.main))
 const battleInstance = ref<PvPBattle | null>(null)
 
-watch(team, () => {
-  if (!isFullBattle.value) {
-    battleOutput.value = []
-    battleInstance.value = null
-    return
-  }
-  const [alliedTeam, enemyTeam] = [1, 0].map(idx =>
+function buildTeams(): [PvPKioku[], PvPKioku[]] {
+  return [1, 0].map(idx =>
     team.slots[idx].map(m => {
       const crys = m.main
         ? Object.entries(m.main.crysOptions)
@@ -126,11 +198,85 @@ watch(team, () => {
           : undefined,
       })
     })
-  )
+  ) as [PvPKioku[], PvPKioku[]]
+}
+
+watch(team, () => {
+  if (!isFullBattle.value) {
+    battleOutput.value = []
+    battleInstance.value = null
+    return
+  }
+  const [alliedTeam, enemyTeam] = buildTeams()
   const battle = new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"))
   battleInstance.value = battle
   battleOutput.value = [battle.getCurrentState()]
 }, { immediate: true, deep: true })
+
+function isStarter(extraData?: TeamSnapshot) {
+  return !!extraData && extraData.secondsLeft === 0
+}
+
+function getExtraData(isAlliedTeam: number, mainName?: string): TeamSnapshot | undefined {
+  if (!mainName) return undefined
+  return battleOutput.value[0]?.[isAlliedTeam ? 'allies' : 'enemies']?.team?.find(b => b.name === mainName)
+}
+
+const shareTeams = computed(() => [1, 0].map(isAlliedTeam => ({
+  isAlliedTeam,
+  label: isAlliedTeam ? 'Allied' : 'Enemy',
+  entries: team.slots[isAlliedTeam].map(slot => ({
+    slot,
+    extraData: getExtraData(isAlliedTeam, slot.main?.name),
+  })),
+})))
+
+const shareCardRef = ref<HTMLElement | null>(null)
+const shareCardAvailable = computed(() => team.slots[0].some(s => !!s.main) || team.slots[1].some(s => !!s.main))
+const exportOpts = { exportClass: "exporting" }
+
+const shareOptionsForTeamCard = () => ({
+  title: `${useFriendStore().getFormattedDisplayNamePossessive()} PvP Team Setup`,
+  backUrl: window.location.href,
+})
+
+const kiokuImage = (member: Character) =>
+  `/exedra-dmg-calc/kioku_images/${member.id}_thumbnail.png`
+
+const portraitImage = (portrait?: string) => {
+  if (!portrait) return ''
+  return `/exedra-dmg-calc/portrait_images/${portraits[portrait].resourceName}_thumbnail.png`
+}
+
+const summarizeSubCrys = (ch: Character) => {
+  const items = Object.values(ch.crysOptions)
+    .filter(c => c.useIndex > 0)
+    .flatMap(option => option.subCrys)
+    .filter(Boolean)
+    .map(c => Object.values(crystalises).find(cx => cx.selectionAbilityMstId === c))
+    .filter(c => c?.abilityEffectType === "UP_SPD_FIXED")
+    .map(c => Object.values(passiveDetails).find(v => (v as any).passiveSkillMstId === c?.value1))
+    .filter(c => !!c)
+
+  if (!items.length) return []
+  const counts = items.reduce((acc, eff) => {
+    if (eff.abilityEffectType in acc) {
+      acc[eff.abilityEffectType][1] = acc[eff.abilityEffectType][1] + eff.value1
+    } else {
+      acc[eff.abilityEffectType] = [
+        eff.description
+          .replace(eff.value1, "XXXXX")
+          .replace((eff.value1 / 10).toFixed(1), "XXXXX")
+          .replace((eff.value1 / 10).toFixed(0), "XXXXX"),
+        eff.value1
+      ]
+    }
+
+    return acc
+  }, {} as Record<string, number>)
+
+  return Object.entries(counts).map(([effType, [desc, nr]]) => desc.replace("XXXXX", (desc as string).includes("%") ? nr / 10 : nr))
+}
 
 function runSimulation() {
   if (!isFullBattle.value || !battleInstance.value) {
@@ -268,6 +414,267 @@ function runSimulation() {
 
 .team-page {
   justify-content: center;
+}
+
+.toolbar {
+  display: flex;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.exporting {
+  display: block !important;
+}
+
+.share-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin: 0 0 1.25rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.share-card-preview {
+  display: none;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 1rem;
+  background: rgba(18, 13, 25, 0.95);
+  color: var(--text);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.35);
+}
+
+.share-team-section+.share-team-section {
+  margin-top: 1.25rem;
+}
+
+.share-team-heading {
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.6rem;
+  color: var(--accent-soft);
+}
+
+.share-team-heading.ally {
+  color: rgba(128, 198, 153, 0.9);
+}
+
+.share-team-heading.enemy {
+  color: rgba(255, 154, 154, 0.9);
+}
+
+.share-card-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.share-slot {
+  position: relative;
+  background: rgba(15, 11, 21, 0.95);
+  border: 1px solid rgba(255, 209, 110, 0.15);
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 300px;
+}
+
+.share-slot-starter {
+  border: 2px solid rgba(255, 209, 110, 0.9);
+  box-shadow: 0 0 12px rgba(255, 209, 110, 0.5);
+}
+
+.share-starter-tag {
+  position: absolute;
+  top: -0.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 209, 110, 0.95);
+  color: #2a1e05;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 999px;
+  padding: 0.1rem 0.6rem;
+  white-space: nowrap;
+}
+
+.share-slot-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.share-slot-kioku-image {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 14px;
+  background: radial-gradient(circle at top, rgba(255, 207, 109, 0.14), rgba(14, 10, 21, 1));
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-slot-kioku-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.share-overlay-badges {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.share-overlay-badge {
+  position: absolute;
+  min-width: 34px;
+  transform: translateX(-50%);
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 12, 20, 0.88);
+  color: var(--text);
+  font-size: 0.74rem;
+  text-align: center;
+  border-radius: 999px;
+  font-weight: 700;
+  padding: 0 0.35rem;
+}
+
+.share-overlay-badge.ascension {
+  left: 80%;
+  top: 0;
+}
+
+.share-overlay-badge.heart {
+  left: 20%;
+  top: 0;
+}
+
+.share-overlay-badge.magic {
+  left: 20%;
+  bottom: 0;
+}
+
+.share-overlay-badge.special {
+  left: 80%;
+  bottom: 0;
+}
+
+.share-slot-portrait-support {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.share-slot-portrait-block,
+.share-slot-support-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.share-slot-portrait-icon {
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--panel);
+}
+
+.share-slot-support-image {
+  height: 40px;
+  object-fit: cover;
+}
+
+.share-slot-portrait-label,
+.share-slot-support-label {
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-align: center;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.share-slot-crys-row,
+.share-slot-subcrys-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  min-height: 2rem;
+}
+
+.share-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--accent);
+  font-size: 0.78rem;
+}
+
+.subcrys-chip {
+  background: var(--accent-glow);
+}
+
+.share-slot-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.share-slot-pvp-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.share-pvp-stat {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.share-spd-bonus {
+  color: aqua;
+}
+
+.share-slot-empty {
+  margin: auto;
+  font-size: 0.8rem;
+  color: var(--muted);
 }
 
 .team-grid {
