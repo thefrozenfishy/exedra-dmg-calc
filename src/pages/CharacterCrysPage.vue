@@ -1,6 +1,6 @@
 <template>
     <div class="setup-page page">
-        <h1 class="page-title">Character Crystalis Selections</h1>
+        <h1 class="page-title">Crystalis</h1>
 
         <div class="missing-element-grid">
             <section class="toolbar card">

@@ -5,14 +5,17 @@
     <StatInputs :member="slot.main" :isSupport="false" @update="setMain(index, $event)" />
   </div>
 
-  <div v-if="extraData" class="stats" :title="formatSpdBuffs(extraData.currSpdBuffs)">
+  <div v-if="extraData" class="stats helper" :title="formatSpdBuffs(extraData.currSpdBuffs)">
     <div class="stat">
       Spd: {{ round(extraData.spd) }} ({{ extraData.baseSpd }}
       <span style="color: aqua">+ {{ round(extraData.spd - extraData.baseSpd) }}</span>)
     </div>
-    <div class="stat" title="AV the girl will have at the start of the match">
+    <div v-if="extraData.secondsLeft > 0.001 || extraData.secondsLeft === 0" class="stat" title="AV the girl will have at the start of the match">
       Initial AV: {{ round(extraData.secondsLeft) }}
     </div>
+    <div class="not-zero-but-zero" v-else
+      title="Due to floating point precision error this will lose the 0 AV race, reorder your speed buffs!">
+      Initial AV: Barely not 0!</div>
     <div class="stat" title="How much AA will be required to bring the girl to 0 AV">
       AA needed to act: {{ round(extraData.distanceLeft / 100) }}
     </div>
@@ -236,6 +239,12 @@ function getSubCrys(slotIndex: number): number[] {
 </script>
 
 <style scoped>
+.not-zero-but-zero {
+  color: var(--accent-soft);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .crys-section {
   width: 100%;
 }
@@ -249,6 +258,10 @@ function getSubCrys(slotIndex: number): number[] {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
+}
+
+.helper {
+  cursor: help;
 }
 
 .support-section {

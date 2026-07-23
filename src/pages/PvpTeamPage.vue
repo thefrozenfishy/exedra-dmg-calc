@@ -66,7 +66,9 @@
                   <span class="share-spd-bonus">+ {{ round(entry.extraData.spd - entry.extraData.baseSpd) }}</span>)
                 </div>
                 <div class="share-pvp-stat">
-                  Initial AV: {{ round(entry.extraData.secondsLeft) }}
+                  Initial AV: {{ entry.extraData.secondsLeft > 0.001 || entry.extraData.secondsLeft === 0 ?
+                    round(entry.extraData.secondsLeft) :
+                  'Initial AV: Barely not 0!' }}
                 </div>
               </div>
             </template>
@@ -126,7 +128,7 @@
                 <a :href="`https://exedra.wiki/wiki/${char.name}`" target="_blank" style="display: block;"
                   :class="{ broken: char.breakCurrent <= 0 }">
                   <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name"
-                    :class="{ 'at-zero': char.secondsLeft - 0.001 <= 0 }" />
+                    :class="{ 'at-zero': char.secondsLeft <= 0 }" />
                 </a>
                 <div class="progress-bar" :title="char.mp + ' / ' + char.maxMp">
                   MP
@@ -211,6 +213,7 @@ watch(team, () => {
   const battle = new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"))
   battleInstance.value = battle
   battleOutput.value = [battle.getCurrentState()]
+  console.log("State is", battleOutput.value)
 }, { immediate: true, deep: true })
 
 function isStarter(extraData?: TeamSnapshot) {

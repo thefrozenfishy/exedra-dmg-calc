@@ -5,14 +5,22 @@ import { Kioku } from './Kioku';
 
 export class PvPKioku extends Kioku {
     effects: SkillDetail[];
-    private scalableEffects: Record<number, SkillDetail> = {};
-    private unscalableEffects: Record<number, SkillDetail> = {};
+    private scalableEffects: Map<string, SkillDetail> = new Map()
+    private unscalableEffects: Map<string, SkillDetail> = new Map()
     private buffMult = 1;
     private debuffMult = 1;
 
     constructor(args: KiokuArgs) {
         super(args);
-        // NOTE: Passives are applied in order: (ability or ascension effect), portrait, support ability, crystalis
+        // NOTE: Passives are applied in order: 
+        //  (ability or ascension effect), portrait, support ability, crystalis, 
+        //  but to reprocde the floating error FIXED spd has to go first, 
+        //  idk if this is special cased or if the order is just different for fixed stats? 
+        //  Anyways just have crys first, legit only matters for Tsukasa anyways...
+
+        this.crys.forEach(c => {
+            this.addEffect(passiveDetails, "passiveSkillMstId", 0, c, false);
+        });
 
         this.addEffect(passiveDetails, "passiveSkillMstId", this.data.ability_id, this.abilityLvl, true);
 
@@ -30,11 +38,7 @@ export class PvPKioku extends Kioku {
             this.addEffect(passiveDetails, "passiveSkillMstId", this.support.data.support_id, this.support.supportLvl, false);
         }
 
-        this.crys.forEach(c => {
-            this.addEffect(passiveDetails, "passiveSkillMstId", 0, c, false);
-        });
-
-        [...Object.values(this.unscalableEffects), ...Object.values(this.scalableEffects)].forEach(e => {
+        [...this.unscalableEffects.values(), ...this.scalableEffects.values()].forEach(e => {
             if (e.abilityEffectType === "UP_BUFF_EFFECT_VALUE") {
                 this.buffMult += e.value1 / 1000;
             } else if (e.abilityEffectType === "UP_DEBUFF_EFFECT_VALUE") {
@@ -42,7 +46,7 @@ export class PvPKioku extends Kioku {
             }
         });
 
-        this.effects = Object.values(this.unscalableEffects).concat(Object.values(this.scalableEffects).map(e => {
+        this.effects = [...this.unscalableEffects.values(), ...this.scalableEffects.values()].map(e => {
             let v = e.value1;
             if (e.abilityEffectType.startsWith("DWN_") || e.abilityEffectType.startsWith("DOWN_") || e.abilityEffectType === "UP_RCV_DMG_RATIO") {
                 v *= this.debuffMult;
@@ -50,18 +54,19 @@ export class PvPKioku extends Kioku {
                 v *= this.buffMult;
             }
             return { ...e, value1: v }
-        }));
+        });
     }
 
     addEffect(map: Record<any, SkillDetail>, key: SkillKey, id: number, lvl: number, affectedByMult: boolean) {
         const target = affectedByMult ? this.scalableEffects : this.unscalableEffects
         for (const eff of Object.values(map).filter(v => (v as any)[key] === id * 100 + lvl)) {
             // Merge crys with same ID, nothing else has same ID so this is not risky
-            if (skillDetailId(eff) in target) {
-                const old = target[skillDetailId(eff)]
-                target[skillDetailId(eff)] = { ...old, value1: old.value1 + eff.value1 }
+            const key = String(skillDetailId(eff))
+            if (target.has(key)) {
+                const old = target.get(key)!
+                target.set(key, { ...old, value1: old.value1 + eff.value1 })
             } else {
-                target[skillDetailId(eff)] = eff
+                target.set(key, eff)
             }
         }
     }
