@@ -68,7 +68,7 @@
                 <div class="share-pvp-stat">
                   Initial AV: {{ entry.extraData.secondsLeft > 0.001 || entry.extraData.secondsLeft === 0 ?
                     round(entry.extraData.secondsLeft) :
-                  'Initial AV: Barely not 0!' }}
+                  'Barely not 0!' }}
                 </div>
               </div>
             </template>
