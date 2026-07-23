@@ -1,5 +1,5 @@
 import { BattleSnapshot, TargetType } from "../types/KiokuTypes";
-import { KiokuState, PvPTeam } from "./PvPTeam";
+import { compareTurnOrder, KiokuState, PvPTeam } from "./PvPTeam";
 
 export class PvPBattle {
     private team1: PvPTeam;
@@ -71,12 +71,22 @@ export class PvPBattle {
     traverseToNextActor(): PvPTeam {
         const seconds1 = this.team1.getSecondsUntilNextReadyKioku()
         const seconds2 = this.team2.getSecondsUntilNextReadyKioku()
-        const secondsTraveled = seconds2 > seconds1 ? seconds1 : seconds2
+        console.log(seconds1, seconds2)
+        const secondsTraveled = Math.min(seconds1, seconds2)
         console.log("Next actors in", seconds1, "seconds for team 1 and", seconds2, "seconds for team 2. Traversing", secondsTraveled)
         this.team1.traverseSeconds(secondsTraveled)
         this.team2.traverseSeconds(secondsTraveled)
-        if (seconds2 > seconds1) return this.team1
-        return this.team2
+
+        // Pick the actual next actor across BOTH teams with the real
+        // TurnReferee.SortByTurnOrder comparator (gauge asc, priority desc,
+        // team asc, id asc), instead of just comparing the two team-level
+        // minimums: that comparison can't express a tie between a team1 unit
+        // and a team2 unit at all, and previously handed every exact tie to
+        // team2 (`seconds2 > seconds1 ? team1 : team2`), when the game's
+        // team-ascending tiebreak actually favors team1.
+        const allUnits = [...this.team1.kiokuStates, ...this.team2.kiokuStates]
+        const winner = allUnits.reduce((best, k) => compareTurnOrder(k, best, this.team1) < 0 ? k : best)
+        return winner.team === this.team1 ? this.team1 : this.team2
     }
 
     executeNextAction(): void {

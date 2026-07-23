@@ -4,6 +4,18 @@ import { skillDetails } from "../utils/helpers";
 import { isConditionSetActive, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
 import { PvPKioku } from "./PvPKioku";
 
+// The client stores speed/gauge values as C# `float` (32-bit) and does its
+// arithmetic in that precision, not 64-bit double like JS numbers default to.
+// Wrapping each touch point in f32() reproduces the same style of rounding
+// (and therefore the same near-tie flips) even though the formulas around it
+// below aren't byte-identical to the client's internals.
+const f32 = Math.fround;
+
+// Mirrors ReDriveBattleCore.UnitTurnGauge.TurnOrderPriority: a counter stamped
+// onto a unit whenever something INSTANTLY shifts its gauge (Haste/Slow-type
+// effects), used only as a tiebreaker when two units are exactly tied on
+// time-to-act. Natural time passing does NOT touch it (see tickMeters below).
+let globalTurnShiftCounter = 0;
 
 const friendlySkills = [
     "CONSUME_CHARGE_POINT", //TODO:  HANDLE
@@ -76,6 +88,8 @@ export class KiokuState {
     currSpdEffects: [number, string, string?][] = []
 
     isBroken = false
+    // Tiebreak stamp for exact-tie turn order, see globalTurnShiftCounter above.
+    turnOrderPriority = 0
 
     stateGen: (actor: KiokuState, target: KiokuState, actionType?: TargetType) => BattleState
 
@@ -94,7 +108,11 @@ export class KiokuState {
     resolveBreak() {
         if (this.currentRemainingBreakGauge <= 0 && !this.isBroken) {
             this.isBroken = true
-            this.progressMeters(-2500)
+            // Matches UnitTurnGauge.DecreaseGaugeValue(..., isTurnShiftDecrease: false),
+            // which stamps a NEGATIVE priority - the opposite tiebreak direction from
+            // Haste/Slow, so a broken unit loses exact ties instead of winning them.
+            this.currentMetersRemaining = Math.max(f32(this.currentMetersRemaining + 2500), 0)
+            this.turnOrderPriority = -(++globalTurnShiftCounter)
         }
     }
 
@@ -107,6 +125,9 @@ export class KiokuState {
 
     resetDistanceRemaining() {
         this.currentMetersRemaining = maxMeters
+        // UnitTurnGauge.Reset() zeroes TurnOrderPriority when a unit's gauge
+        // is refilled after acting.
+        this.turnOrderPriority = 0
     }
 
     decrementActiveEffects() {
@@ -133,32 +154,55 @@ export class KiokuState {
     }
 
 
+    // -----------------------------------------------------------------------
+    // Mirrors ReDriveBattleCore.BattleUnit.GetProcessedSpeed(), which is NOT a
+    // plain sum of buffs. It's a sequential fold: each active state's
+    // ISpeedVariation.GetSpeedVariation(unit, currentRunningSpeed) is called
+    // with the RUNNING TOTAL so far (not the base stat), and the result is
+    // added on - in the order the buff was applied. That makes stacking
+    // order-dependent whenever a percentage-type buff is involved, which is
+    // the exact bug you originally asked about: the old version above grouped
+    // all buffs by type and summed each against the base stat, which is
+    // order-independent by construction and so could never reproduce it.
+    //
+    // CONFIRMED from the decompile: the fold shape, and the final floor at 0.
+    // ASSUMED (the actual ISpeedVariation.GetSpeedVariation override wasn't in
+    // the dump you found - it's likely a shared method between Up/Down
+    // *SpeedUnitStateBase reading their Direction/Addition flags):
+    //   - "_FIXED" effects add a flat amount, independent of the running total.
+    //   - "_RATIO" effects add (runningTotal * value1/1000) - i.e. they
+    //     compound against whatever's already been applied, not the base
+    //     stat. If you manage to pull the real GetSpeedVariation body, this is
+    //     the one thing worth double-checking against it.
+    // -----------------------------------------------------------------------
     updateSpd(): void {
         this.currSpdEffects = []
-        let spd = this.kioku.data.minSpd
-        const effs = this.filteredEffects()
-        console.log("Speed effects for", this.kioku.name, effs)
-        for (const detail of Object.values(effs["UP_SPD_RATIO"] ?? {})) {
-            const step = (this.kioku.data.minSpd * detail.value1 / 1000)
-            spd += step
+        let spd = f32(this.kioku.data.minSpd)
+
+        const speedTypes = ["UP_SPD_RATIO", "DWN_SPD_RATIO", "UP_SPD_FIXED", "DWN_SPD_FIXED"]
+        const speedEffects = this.orderedActiveEffects().filter(d => speedTypes.includes(d.abilityEffectType))
+        console.log("Speed effects for", this.teamLabel, this.kioku.name, speedEffects)
+
+        for (const detail of speedEffects) {
+            const sign = detail.abilityEffectType.startsWith("UP_") ? 1 : -1
+            const isFixed = detail.abilityEffectType.endsWith("_FIXED")
+            const step = isFixed
+                ? sign * detail.value1
+                : f32(spd * f32(sign * detail.value1 / 1000))
+            spd = f32(spd + step)
             this.currSpdEffects.push([step, detail.description, detail.applier])
         }
-        for (const detail of Object.values(effs["DWN_SPD_RATIO"] ?? {})) {
-            const step = (this.kioku.data.minSpd * detail.value1 / 1000)
-            spd -= step
-            this.currSpdEffects.push([step, detail.description, detail.applier])
-        }
-        for (const detail of Object.values(effs["UP_SPD_FIXED"] ?? {})) {
-            const step = detail.value1
-            spd += step
-            this.currSpdEffects.push([step, detail.description, detail.applier])
-        }
-        for (const detail of Object.values(effs["DWN_SPD_FIXED"] ?? {})) {
-            const step = detail.value1
-            spd -= step
-            this.currSpdEffects.push([step, detail.description, detail.applier])
-        }
-        this.currentSpd = spd
+
+        this.currentSpd = Math.max(spd, 0) // GetProcessedSpeed floors at 0 too
+    }
+
+    // Same source list and same condition filter as filteredEffects() below,
+    // but kept as a flat list in application order instead of bucketed by
+    // abilityEffectType - bucketing is exactly what throws away the ordering
+    // information updateSpd's fold depends on.
+    private orderedActiveEffects(): SkillDetail[] {
+        return [...Object.values(this.passiveEffectDetails), ...Object.values(this.activeEffectDetails)]
+            .filter(detail => isConditionSetActive(detail, this.stateGen(this, this)))
     }
 
     updateMPGain(): void {
@@ -179,15 +223,29 @@ export class KiokuState {
     }
 
     secondsUntilAbleToAct(): number {
-        return this.currentMetersRemaining / this.currentSpd
+        return f32(this.currentMetersRemaining / this.currentSpd)
     }
 
+    // Natural time flowing forward for everyone each tick. Matches
+    // TurnReferee.ShiftNextTurn's DecreaseGaugeValue(consumed, priority,
+    // isTurnShiftDecrease: true) call: the gauge drops, floors at 0, and
+    // TurnOrderPriority is left untouched.
     traverseSeconds(seconds: number): void {
-        this.progressMeters(seconds * this.currentSpd)
+        this.tickMeters(f32(seconds * this.currentSpd))
     }
 
+    private tickMeters(metersWalked: number): void {
+        this.currentMetersRemaining = Math.max(f32(this.currentMetersRemaining - metersWalked), 0)
+    }
+
+    // An instant, non-time-based shove of the gauge - Haste/Slow-type effects
+    // (pass a negative value to delay instead), and the CUTOUT extra-action
+    // effect. Matches UnitTurnGauge.AddGaugeValue/SubtractGaugeValue, which
+    // both stamp TurnOrderPriority with a fresh, increasing counter value so
+    // exact ties resolve in favor of whichever unit was shifted most recently.
     progressMeters(metersWalked: number): void {
-        this.currentMetersRemaining = Math.max(this.currentMetersRemaining - metersWalked, 0)
+        this.currentMetersRemaining = Math.max(f32(this.currentMetersRemaining - metersWalked), 0)
+        this.turnOrderPriority = ++globalTurnShiftCounter
     }
 
     filteredEffects(): Record<string, SkillDetail[]> {
@@ -242,6 +300,8 @@ export class KiokuState {
         } else if (detail.abilityEffectType === "HASTE") {
             console.warn(this.kioku.name, "HASTING", detail, effTargets.map(k => k.kioku.name))
             effTargets.forEach(t => t.progressMeters(detail.value1 * 10))
+        } else if (detail.abilityEffectType === "SLOW") {
+            effTargets.forEach(t => t.progressMeters(-(detail.value1 * 10)))
         } else if (detail.abilityEffectType === "GAIN_EP_RATIO") {
             effTargets.forEach(t => t.getMp(target.maxMp * detail.value1 / 1000))
         } else if (detail.abilityEffectType === "GAIN_EP_FIXED") {
@@ -265,6 +325,25 @@ export class KiokuState {
     }
 }
 
+
+// Mirrors TurnReferee.SortByTurnOrder's four-key comparator exactly:
+//   1. gauge value ascending      (here: secondsUntilAbleToAct ascending)
+//   2. TurnOrderPriority descending
+//   3. Team ascending (whichever team `team1Ref` resolves to sorts first)
+//   4. Id ascending (posIdx - only ever decisive within the same team)
+// `team1Ref` just needs to be a stable anchor: pass a PvPTeam's own team1
+// reference for cross-team comparisons, or the team itself for intra-team
+// comparisons (where every candidate shares the same team, so key 3 never
+// actually distinguishes anything and it falls through to posIdx).
+export function compareTurnOrder(a: KiokuState, b: KiokuState, team1Ref: PvPTeam): number {
+    const secDiff = a.secondsUntilAbleToAct() - b.secondsUntilAbleToAct()
+    if (secDiff !== 0) return secDiff
+    if (a.turnOrderPriority !== b.turnOrderPriority) return b.turnOrderPriority - a.turnOrderPriority
+    const aTeam = a.team === team1Ref ? 0 : 1
+    const bTeam = b.team === team1Ref ? 0 : 1
+    if (aTeam !== bTeam) return aTeam - bTeam
+    return a.posIdx - b.posIdx
+}
 
 function getDetails(map: Record<any, SkillDetail>, key: SkillKey, id: number, lvl: number): SkillDetail[] {
     return Object.values(map).filter(v => (v as any)[key] === id * 100 + lvl);
@@ -337,7 +416,10 @@ export class PvPTeam {
     }
 
     getNextActor(): KiokuState {
-        return this.kiokuStates.filter(k => k.currentMetersRemaining - 0.001 <= 0)[0]
+        // Previously just took the array-order-first unit under a 0.001
+        // epsilon, which silently ignored TurnOrderPriority entirely and only
+        // ever tiebroke by posIdx. This uses the real comparator instead.
+        return this.kiokuStates.reduce((best, k) => compareTurnOrder(k, best, this) < 0 ? k : best)
     }
 
     sliceTargets(actor: KiokuState, possibleTargets: KiokuState[], detail: SkillDetail): KiokuState[] {
