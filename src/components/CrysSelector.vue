@@ -19,13 +19,16 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { relevantCrys, type CrystalisData } from '../types/KiokuTypes'
-import { crystalises } from '../utils/helpers'
+import { crystalises, passiveDetails } from '../utils/helpers'
+import { elementMap, KiokuElement } from '../types/enums';
 
 const props = defineProps<{
     characterId: number
-    modelValue?: number   // selectionAbilityMstId of currently selected crys, 0 = none
-    slot?: number         // if set, only show crys available for this slot
+    characterElement: KiokuElement
+    modelValue?: number
+    slot?: number
     placeholder?: string
+    includeLowRarity: boolean
 }>()
 
 const emit = defineEmits<{
@@ -37,10 +40,25 @@ const emit = defineEmits<{
 const query = ref('')
 const show = ref(false)
 
+const isRelevantCrys = ({ selectionAbilityMstId }) => {
+    if (!(selectionAbilityMstId in crystalises)) {
+        console.warn(selectionAbilityMstId, "not in crystalises")
+        return true
+    }
+    return [0, props.characterElement].includes(elementMap[passiveDetails[crystalises[selectionAbilityMstId].value1 * 100 + 1].element] ?? 0)
+}
+
 const allCrys = computed(() =>
-    relevantCrys(props.characterId)
+    relevantCrys(props.characterId, props.includeLowRarity)
         .map(c => ({ ...crystalises[c.selectionAbilityMstId], ...c }))
-        .sort((a, b) => (b.styleMstId ?? 0) - (a.styleMstId ?? 0) || b.sortOrder - a.sortOrder)
+        .filter(isRelevantCrys)
+        .sort((a, b) => {
+            const styleDiff = (b.styleMstId ?? 0) - (a.styleMstId ?? 0)
+            if (styleDiff) return styleDiff
+            const sortDiff = b.sortOrder - a.sortOrder
+            if (sortDiff) return sortDiff
+            return b.rarity - a.rarity
+        })
 )
 
 const selectedCrys = computed(() =>

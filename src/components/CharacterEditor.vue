@@ -10,7 +10,8 @@
       Spd: {{ round(extraData.spd) }} ({{ extraData.baseSpd }}
       <span style="color: aqua">+ {{ round(extraData.spd - extraData.baseSpd) }}</span>)
     </div>
-    <div v-if="extraData.secondsLeft > 0.001 || extraData.secondsLeft === 0" class="stat" title="AV the girl will have at the start of the match">
+    <div v-if="extraData.secondsLeft > 0.001 || extraData.secondsLeft === 0" class="stat"
+      title="AV the girl will have at the start of the match">
       Initial AV: {{ round(extraData.secondsLeft) }}
     </div>
     <div class="not-zero-but-zero" v-else
@@ -37,16 +38,8 @@
       Crystalis:
       <div class="crys-section">
         <div v-for="slotIndex in 3" :key="slotIndex" class="crys-slot">
-          <select :value="getSelectedCrys(slotIndex)"
-            @change="setCrys(slotIndex, Number(($event.target as HTMLSelectElement).value))">
-
-            <option :value="0"></option>
-
-            <option v-for="crys in crysOptions(slotIndex)" :key="crys.selectionAbilityMstId"
-              :value="crys.selectionAbilityMstId">
-              {{ crys.name }}
-            </option>
-          </select>
+          <CrysSelector :character-id="slot.main.id" :model-value="getSelectedCrys(slotIndex)" placeholder="—"
+            @update:model-value="id => setCrys(slotIndex, id)" include-low-rarity :character-element="slot.main.element" />
           <SubCrysBar v-if="getSelectedCrys(slotIndex)" :sub-crys="getSubCrys(slotIndex)"
             :grouped-sub-crys="groupedSubCrys" @update="newSubCrys => updateSubCrys(slotIndex, newSubCrys)" />
         </div>
@@ -93,7 +86,7 @@ import { TeamSlot } from '../types/BestTeamTypes';
 import CharacterSelector from './CharacterSelector.vue'
 import PortraitSelector from './PortraitSelector.vue';
 import SubCrysBar from './SubCrysBar.vue'
-import { crystalises } from '../utils/helpers';
+import CrysSelector from './CrysSelector.vue'
 import StatInputs from './StatInputs.vue'
 import { Character, TeamSnapshot, getSubCrystalises } from '../types/KiokuTypes'
 
@@ -155,29 +148,6 @@ function getSelectedCrys(slotIndex: number) {
     .find(([, c]) => c.useIndex === slotIndex)
 
   return entry ? Number(entry[0]) : 0
-}
-
-function crysOptions(slotIndex: number) {
-  if (!props.slot.main) {
-    return []
-  }
-
-  return Object.entries(props.slot.main.crysOptions)
-    .filter(([_, crys]) => crys.useIndex === 0 || crys.useIndex === slotIndex)
-    .map(([id]) => crystalises[Number(id)])
-    .map((crys) => ({
-      ...crys,
-      name: crys.styleMstId ? "EX" : crys.name
-    }))
-    .sort((a, b) => {
-      const sDiff = b.styleMstId - a.styleMstId
-
-      if (sDiff) {
-        return sDiff
-      }
-
-      return b.sortOrder - a.sortOrder
-    })
 }
 
 function setCrys(slotIndex: number, newId: number) {
@@ -254,12 +224,6 @@ function getSubCrys(slotIndex: number): number[] {
   display: block;
 }
 
-.stats select {
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-}
-
 .helper {
   cursor: help;
 }
@@ -268,10 +232,6 @@ function getSubCrys(slotIndex: number): number[] {
   margin-top: 1rem;
   padding-top: 0.5rem;
   border-top: 1px dashed #999;
-}
-
-.stats select {
-  width: 90%;
 }
 
 .input-with-clear {

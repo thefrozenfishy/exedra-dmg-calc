@@ -32,7 +32,7 @@
         <span class="col-heading">Crystalis</span>
         <div class="crys-slots">
           <CrysSelector v-for="slot in 3" :key="slot" :character-id="character.id" :model-value="getSelectedCrys(slot)"
-            placeholder="—" @update:model-value="id => setCrys(slot, id)" />
+            placeholder="—" @update:model-value="id => setCrys(slot, id)" :include-low-rarity="false" :character-element="character.element" />
         </div>
       </div>
 
