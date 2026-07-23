@@ -149,7 +149,7 @@ export class KiokuState {
             const sign = detail.abilityEffectType.startsWith("UP_") ? 1 : -1
             const isFixed = detail.abilityEffectType.endsWith("_FIXED")
             const step = isFixed
-                ? sign * detail.value1
+                ? f32(sign * detail.value1)
                 : f32(spd * f32(sign * detail.value1 / 1000))
             spd = f32(spd + step)
             this.currSpdEffects.push([step, detail.description, detail.applier])
