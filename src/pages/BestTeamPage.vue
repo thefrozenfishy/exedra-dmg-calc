@@ -244,7 +244,7 @@ import ResultsHeader from '../components/ResultsHeader.vue'
 import { useEnemyStore } from '../store/singleTeamStore'
 import { useCharacterStore } from '../store/characterStore'
 import { Character } from '../types/KiokuTypes'
-import { KiokuRole, KiokuElement, elementAlimentMap } from '../types/enums'
+import { KiokuRole, KiokuElement, elementAlimentMap, LuxMagica } from '../types/enums'
 import { toast } from "vue3-toastify"
 import { FinalTeam } from '../types/BestTeamTypes'
 import { useSetting } from '../store/settingsStore'
@@ -265,7 +265,7 @@ const attackers = computed(() => store.characters.filter(c => (c.enabled && c.ro
 let prevAttackers: Character[] = []
 let prevObligatoryKioku: Character[] = []
 
-const defaultIgnoredKioku = members.value.filter(c => ["Nightmare Stinger", "Lynx Impact", "Circle Of Fire", "Glittering Hurricane", "Surging Laser", "Verdant Shower", "Diamond Splash", "Purple Will-o'-Wisp", "Folter Gefängnis", "Vampire Fang", "Strada Futuro", "Lux☆Magica", "Infinite Poseidon", "Neo Genesis"].includes(c.name))
+const defaultIgnoredKioku = members.value.filter(c => ["Nightmare Stinger", "Lynx Impact", "Circle Of Fire", "Glittering Hurricane", "Surging Laser", "Verdant Shower", "Diamond Splash", "Purple Will-o'-Wisp", "Folter Gefängnis", "Vampire Fang", "Strada Futuro", LuxMagica, "Infinite Poseidon", "Neo Genesis"].includes(c.name))
 
 const workerRef = ref<Worker | null>(null)
 const progress = ref<FinalTeam>({})

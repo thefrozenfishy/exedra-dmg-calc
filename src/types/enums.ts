@@ -54,3 +54,5 @@ export const elementMap: Record<string, KiokuElement> = {
     5: KiokuElement.Dark,
     6: KiokuElement.Void,
 };
+
+export const LuxMagica = "Lux☆Magica"

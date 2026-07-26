@@ -137,7 +137,7 @@
 import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { relevantCrys, type Character, type CrystalisData } from '../types/KiokuTypes'
-import { elementMap, KiokuElement } from '../types/enums'
+import { elementMap, KiokuElement, LuxMagica } from '../types/enums'
 import CharacterCrysRow from '../components/CharacterCrysRow.vue'
 import NewBadge from '../components/NewBadge.vue'
 import { useCharacterStore } from '../store/characterStore'
@@ -193,7 +193,7 @@ const rosterCharacterCrysRows = computed(() => {
         .filter(char => {
             if (!char.enabled) return false
             if (char.rarity === 3 && !show3stars.value) return false
-            if ((char.rarity === 4 || char.name === "Lux☆Magica") && !show4stars.value) return false
+            if ((char.rarity === 4 || char.name === LuxMagica) && !show4stars.value) return false
 
             const query = charNameFilter.value.trim().toLowerCase()
             if (query) {

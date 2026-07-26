@@ -197,7 +197,7 @@
 import { computed } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { Character, KiokuConstants } from "../types/KiokuTypes"
-import { KiokuElement, KiokuRole } from '../types/enums'
+import { KiokuElement, KiokuRole, LuxMagica } from '../types/enums'
 import { useSetting } from "../store/settingsStore"
 import { Kioku } from "../models/Kioku"
 import { skillDetails } from "../utils/helpers"
@@ -337,7 +337,7 @@ const computeSkillRange = (c: Character): number => {
 
 const markedCharacters = computed(() => store.characters.map(c => {
     let range = 1
-    if (c.name === "Lux☆Magica") c.rarity = 4
+    if (c.name === LuxMagica) c.rarity = 4
     if (!c.enabled) c.ascension = -1
     range = computeSkillRange(c as unknown as Character)
     const enriched = { ...c, range }
@@ -453,7 +453,7 @@ const bandRows = (yVal: string, rarity: number): number => {
 const today = new Date()
 
 const borderClass = (ch: Character): string => {
-    if (ch.name === "Lux☆Magica") return "default-border"
+    if (ch.name === LuxMagica) return "default-border"
     if (ch.obtain && ch.obtain !== "Permanent") return "limited-border"
     if (today > new Date(ch.permaDate)) return "default-border"
     return "not-limited-border"
@@ -461,7 +461,7 @@ const borderClass = (ch: Character): string => {
 
 const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
-    if (ch.name === "Lux☆Magica") { }
+    if (ch.name === LuxMagica) { }
     else if (ch.obtain && ch.obtain !== "Permanent") {
         title += ` - ${ch.obtain}`
     } else if (ch.permaDate == "") {

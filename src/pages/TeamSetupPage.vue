@@ -15,11 +15,12 @@
           {{ showHighestTeam ? 'Hide Highest PWR Team' : 'Show Highest PWR Team' }}
         </button>
         <div v-if="calculating" class="calc-progress">
-          <span class="calc-indicator">Calculating max pwr team...</span>
+          <span class="calc-indicator">Calculating max pwr team {{ currentBestPwr }}...</span>
           <div class="progress-wrapper">
             <progress :value="completedRuns" :max="expectedRuns" class="progress-bar"></progress>
             <span class="progress-text">{{ completedRuns }} / {{ expectedRuns }}</span>
           </div>
+          <TeamRow v-if="currentBestTeam" class="live-team-row" :team="currentBestTeam" />
         </div>
       </div>
       <div class="toolbar-right rarity-toggles">
@@ -131,6 +132,7 @@ import { useCharacterStore } from '../store/characterStore.js'
 import { Character, KiokuConstants } from '../types/KiokuTypes.js'
 import { useSetting } from '../store/settingsStore.js'
 import { FinalTeam } from '../types/BestTeamTypes.js'
+import { LuxMagica } from '../types/enums.js'
 
 export default defineComponent({
   components: { CharacterCard, TeamRow },
@@ -145,14 +147,17 @@ export default defineComponent({
     const calculating = ref(true)
     const completedRuns = ref(0)
     const expectedRuns = ref(0)
+    const currentBestTeam = ref<FinalTeam>()
+    const currentBestPwr = ref<number | null>(null)
     let worker: Worker | null = null
 
     const runHighestPowerCalc = () => {
-      const chars = store.characters.filter(c => c.rarity === 5 && c.enabled)
+      const chars = store.characters.filter(c => c.rarity === 5 && c.enabled).concat(store.characters.filter(c => c.name === LuxMagica))
 
       calculating.value = true
       completedRuns.value = 0
       expectedRuns.value = 0
+      currentBestTeam.value = undefined
       worker?.terminate()
       worker = new Worker(new URL('../workers/highestPowerWorker.ts', import.meta.url), { type: 'module' })
       worker.postMessage(JSON.parse(JSON.stringify(chars)))
@@ -160,10 +165,15 @@ export default defineComponent({
         if (e.data.type === 'progress') {
           completedRuns.value = e.data.completedRuns
           expectedRuns.value = e.data.expectedTotalRuns
+          if (e.data.currentBestTeam) {
+            currentBestTeam.value = e.data.currentBestTeam
+            currentBestPwr.value = e.data.currentBestPwr
+          }
         } else if (e.data.type === 'done') {
           highestTeam.value = e.data.bestTeam
           highestPwr.value = e.data.maxTeamPower
           calculating.value = false
+          showHighestTeam.value = true
         } else if (e.data.type === 'error') {
           console.error("Failed to calculate highest PWR team:", e.data.error)
           calculating.value = false
@@ -224,7 +234,7 @@ export default defineComponent({
 
     function isCharVisible(char: Character): boolean {
       if (char.rarity === 3 && !show3stars.value) return false
-      if ((char.rarity === 4 || char.name === 'Lux☆Magica') && !show4stars.value) return false
+      if ((char.rarity === 4 || char.name === LuxMagica) && !show4stars.value) return false
       if (filters.hideUnowned && !char.enabled) return false
       if (char.enabled) {
         if (filters.heartphialMax === true && char.heartphialLvl < KiokuConstants.maxHeartphialLvl) return false
@@ -296,6 +306,8 @@ export default defineComponent({
       calculating,
       completedRuns,
       expectedRuns,
+      currentBestTeam,
+      currentBestPwr,
     }
   },
 })
@@ -317,9 +329,24 @@ export default defineComponent({
 
 .calc-progress {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-left: 1rem;
+}
+
+.live-best-preview {
+  display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-left: 1rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--border);
+}
+
+.live-team-row {
+  scale: 65%;
+  margin: 0;
+  width: initial;
 }
 
 .calc-indicator {

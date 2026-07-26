@@ -152,6 +152,7 @@ import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 import { getAccountSimilarityScore } from "../models/AccountSimilarityScore"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { toast } from "vue3-toastify"
+import { LuxMagica } from "../types/enums"
 
 const friendStore = useFriendStore()
 
@@ -255,7 +256,7 @@ const comparedCharacters = computed<ComparedCharacter[]>(() => {
 
     return store.characters
         .filter(ch => ch.rarity === 5)
-        .filter(ch => ch.name !== "Lux☆Magica")
+        .filter(ch => ch.name !== LuxMagica)
         .map(base => {
             const left = leftMap.get(base.id)
             const right = rightMap.get(base.id)

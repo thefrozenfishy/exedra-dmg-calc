@@ -284,7 +284,7 @@
 import { computed, ref } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { Character, KiokuConstants, relevantCrys } from "../types/KiokuTypes"
-import { elementMap, KiokuElement } from '../types/enums'
+import { elementMap, KiokuElement, LuxMagica } from '../types/enums'
 import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
@@ -342,8 +342,8 @@ const loadFriendKioku = async (code: string) => {
     viewingProfile.value = profile
 }
 
-const fiveStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 5 && c.name !== "Lux☆Magica"))
-const fourStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 4 || c.name === "Lux☆Magica"))
+const fiveStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 5 && c.name !== LuxMagica))
+const fourStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 4 || c.name === LuxMagica))
 const threeStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 3))
 
 const maxed5starChars = computed(() => fiveStarMembers.value.filter(isCompleted))
@@ -416,7 +416,7 @@ const isMaxMagicAndSpecialLevel = (ch: Character): boolean => showLevels.value ?
     // Since Fuuka sp10 breaks her for pvp allow sp9 to also be considered completed
     && ((ch.name === "Final Fatebloom" && ch.ascension === 5 ? 9 : getMaxSpecialLvl(ch)) <= ch.specialLvl || ch.rarity === 3) : true
 const isMaxCrysCollected = (ch: Character): boolean => showCrys.value ? getCrysCount(ch, true) === maxCrysCount.value : true
-const isCompleted = (ch: Character): boolean => (ch.enabled || ch.rarity !== 5 || ch.name === "Lux☆Magica") && isMaxHeartLevel(ch) && isMaxMagicAndSpecialLevel(ch) && isMaxCrysCollected(ch)
+const isCompleted = (ch: Character): boolean => (ch.enabled || ch.rarity !== 5 || ch.name === LuxMagica) && isMaxHeartLevel(ch) && isMaxMagicAndSpecialLevel(ch) && isMaxCrysCollected(ch)
 const shouldHighlightCompleted = (ch: Character): boolean => highlightCompleted.value && isCompleted(ch)
 const shouldShinyHighlightCompleted = (ch: Character): boolean => highlightCompleted.value && showCrys.value && isCompleted(ch) && getCrysCount(ch, false) === relevantCrys(ch.id).length
 const showOffElementalOnesOption = computed(() => displayedCharactersComputed.value.some(char => {
@@ -439,7 +439,7 @@ const groupedByAscension = computed(() => {
     groups[8].label = "3 Stars"
 
     for (const ch of displayedCharactersComputed.value) {
-        if (ch.rarity === 4 || ch.name === "Lux☆Magica") {
+        if (ch.rarity === 4 || ch.name === LuxMagica) {
             groups[7].push(ch)
         } else if (ch.rarity === 3) {
             groups[8].push(ch)
@@ -463,7 +463,7 @@ const groupedByAscension = computed(() => {
 
 const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
-    if (ch.name === "Lux☆Magica") { }
+    if (ch.name === LuxMagica) { }
     else if (ch.obtain && ch.obtain !== "Permanent") {
         title += ` -  ${ch.obtain}`
     } else if (ch.permaDate == "") {
@@ -475,7 +475,7 @@ const makeTitle = (ch: Character): string => {
 }
 
 const borderClass = (ch: Character): string => {
-    if (ch.name === "Lux☆Magica") return "default-border"
+    if (ch.name === LuxMagica) return "default-border"
     if (ch.obtain && ch.obtain !== "Permanent") return "limited-border"
     if (new Date() > new Date(ch.permaDate)) return "default-border"
     return "not-limited-border"

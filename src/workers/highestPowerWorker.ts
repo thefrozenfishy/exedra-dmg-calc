@@ -1,8 +1,12 @@
 import { Kioku } from "../models/Kioku";
 import { ScoreAttackKioku } from "../models/ScoreAttackKioku";
+import { LuxMagica } from "../types/enums";
 import { Character, highestPwrPortraits } from "../types/KiokuTypes";
 
 const MAIN_CANDIDATES = 8;
+const PREVIEW_SIZE = 5;
+const PLACEHOLDER_ATTACKER = LuxMagica;
+const PLACEHOLDER_PORTRAIT = "A Distant Ideal";
 
 interface Candidate {
     char: Character;
@@ -27,9 +31,33 @@ function combinations<T>(arr: T[], k: number): T[][] {
     return result;
 }
 
+function buildTeamObject(setup: [string, string, string][], characters: Character[]) {
+    return {
+        attacker: characters.find(c => c.name === setup[0][0]),
+        portrait: setup[0][2],
+        atk_supp: characters.find(c => c.name === setup[0][1]),
+        supp1: characters.find(c => c.name === setup[1][0]),
+        supp1supp: characters.find(c => c.name === setup[1][1]),
+        supp1portrait: setup[1][2],
+        supp2: characters.find(c => c.name === setup[2][0]),
+        supp2supp: characters.find(c => c.name === setup[2][1]),
+        supp2portrait: setup[2][2],
+        supp3: characters.find(c => c.name === setup[3][0]),
+        supp3supp: characters.find(c => c.name === setup[3][1]),
+        supp3portrait: setup[3][2],
+        supp4: characters.find(c => c.name === setup[4][0]),
+        supp4supp: characters.find(c => c.name === setup[4][1]),
+        supp4portrait: setup[4][2],
+    };
+}
+
 self.onmessage = function (e: MessageEvent) {
     try {
         const characters: Character[] = e.data;
+
+        function postProgress(completedRuns: number, expectedTotalRuns: number, extra: Record<string, unknown> = {}) {
+            self.postMessage({ type: 'progress', completedRuns, expectedTotalRuns, ...extra });
+        }
 
         const ranked: Candidate[] = [...characters]
             .map(char => ({
@@ -45,18 +73,40 @@ self.onmessage = function (e: MessageEvent) {
                 kioku: new ScoreAttackKioku({ ...char, portrait: undefined, specialLvl: 0 }),
             }))
             .map(c => ({ ...c, pwr: c.kioku.getTotalPower() }))
-            .sort((a, b) => b.pwr - a.pwr);
+            .sort((a, b) => b.pwr - a.pwr)
+            .reverse();
 
-        const mains = ranked.slice(0, MAIN_CANDIDATES);
+        const mains = ranked.slice(0, MAIN_CANDIDATES).reverse();
         const teams = combinations(mains, 5);
 
         // Cache-building is one step per (main, portrait) pair, team evaluation is one step per team.
         const expectedTotalRuns = mains.length * highestPwrPortraits.length + teams.length;
         let completedRuns = 0;
 
-        self.postMessage({ type: 'progress', completedRuns, expectedTotalRuns });
-
         const scoreCache = new Map<string, Map<string, Map<string, number>>>();
+
+        const topCurrent = mains.map(m => m.char.name);
+        const topFiveSet = new Set(topCurrent);
+        const bestPerMain = new Map<string, { portrait: string; supportName: string; power: number }>();
+
+        function buildCurrentBestFiveSetup(): [string, string, string, number][] {
+            return topCurrent.map(name => {
+                const best = bestPerMain.get(name);
+                return best
+                    ? [name, best.supportName, best.portrait, best.power]
+                    : [PLACEHOLDER_ATTACKER, PLACEHOLDER_ATTACKER, PLACEHOLDER_PORTRAIT, 0];
+            }).sort((a, b) => b[3] - a[3]);
+        }
+
+        const postCurrentProgress = () => {
+            const currTeam = buildCurrentBestFiveSetup()
+            postProgress(completedRuns, expectedTotalRuns, {
+                currentBestTeam: buildTeamObject(currTeam, characters),
+                currentBestPwr: currTeam.slice(0, PREVIEW_SIZE).reduce((p, c) => p + c[3], 0)
+            });
+        }
+
+        postCurrentProgress()
 
         for (const main of mains) {
             let portraitMap = scoreCache.get(main.char.name);
@@ -64,16 +114,15 @@ self.onmessage = function (e: MessageEvent) {
                 portraitMap = new Map();
                 scoreCache.set(main.char.name, portraitMap);
             }
+            for (const support of supportPool) {
+                if (support.char.name === main.char.name) continue;
 
-            for (const portrait of highestPwrPortraits) {
-                let supportMap = portraitMap.get(portrait);
-                if (!supportMap) {
-                    supportMap = new Map();
-                    portraitMap.set(portrait, supportMap);
-                }
-
-                for (const support of supportPool) {
-                    if (support.char.name === main.char.name) continue;
+                for (const portrait of highestPwrPortraits) {
+                    let supportMap = portraitMap.get(portrait);
+                    if (!supportMap) {
+                        supportMap = new Map();
+                        portraitMap.set(portrait, supportMap);
+                    }
 
                     const power = new ScoreAttackKioku({
                         ...main.char,
@@ -82,10 +131,17 @@ self.onmessage = function (e: MessageEvent) {
                     }).getTotalPower();
 
                     supportMap.set(support.char.name, power);
+
+                    if (topFiveSet.has(main.char.name)) {
+                        const existing = bestPerMain.get(main.char.name);
+                        if (!existing || power > existing.power) {
+                            bestPerMain.set(main.char.name, { portrait, supportName: support.char.name, power });
+                        }
+                    }
                 }
 
                 completedRuns++;
-                self.postMessage({ type: 'progress', completedRuns, expectedTotalRuns });
+                postCurrentProgress()
             }
         }
 
@@ -187,26 +243,13 @@ self.onmessage = function (e: MessageEvent) {
             fastDfs(0, 0);
 
             completedRuns++;
-            self.postMessage({ type: 'progress', completedRuns, expectedTotalRuns });
+            postProgress(completedRuns, expectedTotalRuns, {
+                currentBestTeam: bestTeamSetup.length === 5 ? buildTeamObject(bestTeamSetup, characters) : undefined,
+                currentBestPwr: bestTeamSetup.length === 5 ? maxTeamPower : undefined,
+            });
         }
 
-        const bestTeam = {
-            attacker: characters.find(c => c.name === bestTeamSetup[0][0]),
-            portrait: bestTeamSetup[0][2],
-            atk_supp: characters.find(c => c.name === bestTeamSetup[0][1]),
-            supp1: characters.find(c => c.name === bestTeamSetup[1][0]),
-            supp1supp: characters.find(c => c.name === bestTeamSetup[1][1]),
-            supp1portrait: bestTeamSetup[1][2],
-            supp2: characters.find(c => c.name === bestTeamSetup[2][0]),
-            supp2supp: characters.find(c => c.name === bestTeamSetup[2][1]),
-            supp2portrait: bestTeamSetup[2][2],
-            supp3: characters.find(c => c.name === bestTeamSetup[3][0]),
-            supp3supp: characters.find(c => c.name === bestTeamSetup[3][1]),
-            supp3portrait: bestTeamSetup[3][2],
-            supp4: characters.find(c => c.name === bestTeamSetup[4][0]),
-            supp4supp: characters.find(c => c.name === bestTeamSetup[4][1]),
-            supp4portrait: bestTeamSetup[4][2],
-        }
+        const bestTeam = buildTeamObject(bestTeamSetup, characters);
         self.postMessage({ type: 'done', bestTeam, maxTeamPower });
     } catch (err) {
         self.postMessage({ type: 'error', error: err instanceof Error ? err.message : String(err) });

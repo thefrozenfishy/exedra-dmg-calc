@@ -1,10 +1,10 @@
 import { KiokuConstants, type Character } from "../types/KiokuTypes"
-import { KiokuElement, KiokuRole } from '../types/enums'
+import { KiokuElement, KiokuRole, LuxMagica } from '../types/enums'
 import { useBetaNumber, useBetaValue } from "../utils/betaSettings"
 import { skewnormCdf } from "../utils/mathFuncs"
 
 export function countCharsObtained(chars: Character[]): { lim: number,limAs: number, perm: number, permAs: number } {
-    const relevant = chars.filter(c => c.rarity === 5 && c.enabled && c.name !== "Lux☆Magica")
+    const relevant = chars.filter(c => c.rarity === 5 && c.enabled && c.name !== LuxMagica)
     const lims = relevant.filter(c => c.obtain === "Exclusive")
     const perms = relevant.filter(c => c.obtain !== "Exclusive")
     const limAs = lims.reduce((sum, ch) => sum + ch.ascension + 1, 0)
@@ -213,7 +213,7 @@ type WeightedEntry = {
 
 export function getPowerScores(chars: Character[]): PowerScores {
     const fiveStars = chars.filter(
-        (ch) => ch.rarity === 5 && ch.name !== "Lux☆Magica"
+        (ch) => ch.rarity === 5 && ch.name !== LuxMagica
     )
 
     const roleCurrent = {

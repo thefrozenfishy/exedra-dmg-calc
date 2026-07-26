@@ -60,6 +60,7 @@ import PortraitSelector from './PortraitSelector.vue'
 import CrysSelector from './CrysSelector.vue'
 import { Character, KiokuConstants } from '../types/KiokuTypes'
 import { crystalises } from '../utils/helpers'
+import { LuxMagica } from '../types/enums'
 
 export default defineComponent({
   name: 'CharacterCard',
@@ -106,7 +107,7 @@ export default defineComponent({
     const isVisible = computed(() => {
       const c = props.character
       if (c.rarity === 3 && !props.show3stars) return false
-      if ((c.rarity === 4 || c.name === 'Lux☆Magica') && !props.show4stars) return false
+      if ((c.rarity === 4 || c.name === LuxMagica) && !props.show4stars) return false
       if (props.filters.hideUnowned && !c.enabled) return false
       if (c.enabled) {
         const f = props.filters
