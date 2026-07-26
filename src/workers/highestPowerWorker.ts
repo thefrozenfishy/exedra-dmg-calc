@@ -79,8 +79,7 @@ self.onmessage = function (e: MessageEvent) {
         const mains = ranked.slice(0, MAIN_CANDIDATES).reverse();
         const teams = combinations(mains, 5);
 
-        // Cache-building is one step per (main, portrait) pair, team evaluation is one step per team.
-        const expectedTotalRuns = mains.length * highestPwrPortraits.length + teams.length;
+        const expectedTotalRuns = mains.length * (supportPool.length - 1) + teams.length;
         let completedRuns = 0;
 
         const scoreCache = new Map<string, Map<string, Map<string, number>>>();
