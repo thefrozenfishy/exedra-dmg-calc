@@ -4,7 +4,8 @@ import { LuxMagica } from "../types/enums";
 import { Character, highestPwrPortraits } from "../types/KiokuTypes";
 
 const MAIN_CANDIDATES = 8;
-const PREVIEW_SIZE = 5;
+const TEAM_SIZE = 5;
+const SUPPORT_PWR_THRESHOLD = 300;
 const PLACEHOLDER_ATTACKER = LuxMagica;
 const PLACEHOLDER_PORTRAIT = "A Distant Ideal";
 
@@ -58,6 +59,13 @@ self.onmessage = function (e: MessageEvent) {
         function postProgress(completedRuns: number, expectedTotalRuns: number, extra: Record<string, unknown> = {}) {
             self.postMessage({ type: 'progress', completedRuns, expectedTotalRuns, ...extra });
         }
+        const placeholder_pwr = new ScoreAttackKioku({
+            ...characters.find(c => c.name === LuxMagica),
+            portrait: PLACEHOLDER_PORTRAIT,
+            supportKey: new ScoreAttackKioku({
+                ...characters.find(c => c.name === LuxMagica),
+            }).getKey()
+        }).getTotalPower()
 
         const ranked: Candidate[] = [...characters]
             .map(char => ({
@@ -67,20 +75,22 @@ self.onmessage = function (e: MessageEvent) {
             .map(c => ({ ...c, pwr: c.kioku.getTotalPower() }))
             .sort((a, b) => b.pwr - a.pwr);
 
-        const supportPool: Candidate[] = [...characters]
+        const supportPoolCandidates: Candidate[] = [...characters]
             .map(char => ({
                 char,
                 kioku: new ScoreAttackKioku({ ...char, portrait: undefined, specialLvl: 0 }),
             }))
             .map(c => ({ ...c, pwr: c.kioku.getTotalPower() }))
-            .sort((a, b) => b.pwr - a.pwr)
-            .reverse();
+            .sort((a, b) => b.pwr - a.pwr);
+        const supportPwrThreshold = (supportPoolCandidates.at(TEAM_SIZE * 2)?.pwr || 0) - SUPPORT_PWR_THRESHOLD
+        const supportPool = supportPoolCandidates.filter(c => c.pwr > supportPwrThreshold).reverse()
 
         const mains = ranked.slice(0, MAIN_CANDIDATES).reverse();
         const teams = combinations(mains, 5);
 
         const expectedTotalRuns = mains.length * (supportPool.length - 1) + teams.length;
         let completedRuns = 0;
+        console.log()
 
         const scoreCache = new Map<string, Map<string, Map<string, number>>>();
 
@@ -93,7 +103,7 @@ self.onmessage = function (e: MessageEvent) {
                 const best = bestPerMain.get(name);
                 return best
                     ? [name, best.supportName, best.portrait, best.power]
-                    : [PLACEHOLDER_ATTACKER, PLACEHOLDER_ATTACKER, PLACEHOLDER_PORTRAIT, 0];
+                    : [PLACEHOLDER_ATTACKER, PLACEHOLDER_ATTACKER, PLACEHOLDER_PORTRAIT, placeholder_pwr];
             }).sort((a, b) => b[3] - a[3]);
         }
 
@@ -101,7 +111,8 @@ self.onmessage = function (e: MessageEvent) {
             const currTeam = buildCurrentBestFiveSetup()
             postProgress(completedRuns, expectedTotalRuns, {
                 currentBestTeam: buildTeamObject(currTeam, characters),
-                currentBestPwr: currTeam.slice(0, PREVIEW_SIZE).reduce((p, c) => p + c[3], 0)
+                currentBestPwr: (currTeam.slice(0, TEAM_SIZE).reduce((p, c) => p + c[3], 0) * 0.95).toFixed(0)
+                // Reduce it a bit so that the user doesn't notice the "power falling"
             });
         }
 

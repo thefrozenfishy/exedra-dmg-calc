@@ -152,7 +152,7 @@ export default defineComponent({
     let worker: Worker | null = null
 
     const runHighestPowerCalc = () => {
-      const chars = store.characters.filter(c => c.rarity === 5 && c.enabled).concat(store.characters.filter(c => c.name === LuxMagica))
+      const chars = store.characters.filter(c => c.rarity === 5 && c.enabled).concat(store.characters.filter(c => c.rarity != 5))
 
       calculating.value = true
       completedRuns.value = 0
