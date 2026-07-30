@@ -113,7 +113,7 @@ export default defineComponent({
     ]
 
     const derivedStats = computed(() => {
-      const kioku = new ScoreAttackKioku(props.character)
+      const kioku = new ScoreAttackKioku({...props.character, portrait: undefined})
 
       return [
         { short: 'HP', value: kioku.getBaseHp() },

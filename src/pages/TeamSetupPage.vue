@@ -253,7 +253,7 @@ export default defineComponent({
       }>()
 
       for (const c of store.characters) {
-        const kioku = new ScoreAttackKioku(c)
+        const kioku = new ScoreAttackKioku({...c, portrait: undefined})
 
         map.set(c.id, {
           atk: kioku.getBaseAtk(),
