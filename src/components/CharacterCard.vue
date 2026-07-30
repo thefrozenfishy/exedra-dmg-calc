@@ -12,19 +12,29 @@
     <template v-if="character.enabled">
       <div class="col col-stats">
         <span class="col-heading">Stats</span>
-        <div class="stats-grid">
-          <label class="stat-cell">
-            <span class="cell-label">Asc</span>
-            <input type="number" :min="0" :max="maxAscension" :value="character.ascension"
-              :class="{ 'at-max': character.ascension >= maxAscension }"
-              @input="updateStat('ascension', 0, maxAscension, $event?.target?.valueAsNumber)" />
-          </label>
-          <label v-for="s in levelStats" :key="s.key" class="stat-cell">
-            <span class="cell-label">{{ s.short }}</span>
-            <input type="number" :min="s.min" :max="s.max" :value="character[s.key]"
-              :class="{ 'at-max': character[s.key] >= s.max }"
-              @input="updateStat(s.key, s.min, s.max, $event?.target?.valueAsNumber)" />
-          </label>
+        <div class="stats-section">
+          <div class="stats-grid">
+            <label class="stat-cell">
+              <span class="cell-label">Asc</span>
+              <input type="number" :min="0" :max="maxAscension" :value="character.ascension"
+                :class="{ 'at-max': character.ascension >= maxAscension }"
+                @input="updateStat('ascension', 0, maxAscension, $event?.target?.valueAsNumber)" />
+            </label>
+
+            <label v-for="s in levelStats" :key="s.key" class="stat-cell">
+              <span class="cell-label">{{ s.short }}</span>
+              <input type="number" :min="s.min" :max="s.max" :value="character[s.key]"
+                :class="{ 'at-max': character[s.key] >= s.max }"
+                @input="updateStat(s.key, s.min, s.max, $event?.target?.valueAsNumber)" />
+            </label>
+          </div>
+
+          <div class="derived-grid">
+            <div v-for="stat in derivedStats" :key="stat.short" class="derived-cell">
+              <span class="cell-label">{{ stat.short }}</span>
+              <span class="derived-value">{{ stat.value }}</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -32,7 +42,8 @@
         <span class="col-heading">Crystalis</span>
         <div class="crys-slots">
           <CrysSelector v-for="slot in 3" :key="slot" :character-id="character.id" :model-value="getSelectedCrys(slot)"
-            placeholder="—" @update:model-value="id => setCrys(slot, id)" :include-low-rarity="false" :character-element="character.element" />
+            placeholder="—" @update:model-value="id => setCrys(slot, id)" :include-low-rarity="false"
+            :character-element="character.element" />
         </div>
       </div>
 
@@ -61,6 +72,7 @@ import CrysSelector from './CrysSelector.vue'
 import { Character, KiokuConstants } from '../types/KiokuTypes'
 import { crystalises } from '../utils/helpers'
 import { LuxMagica } from '../types/enums'
+import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
 
 export default defineComponent({
   name: 'CharacterCard',
@@ -99,6 +111,17 @@ export default defineComponent({
       { key: 'heartphialLvl', short: 'HP', min: 1, max: KiokuConstants.maxHeartphialLvl },
       { key: 'specialLvl', short: 'SP', min: 1, max: KiokuConstants.maxSpecialLvl },
     ]
+
+    const derivedStats = computed(() => {
+      const kioku = new ScoreAttackKioku(props.character)
+
+      return [
+        { short: 'HP', value: kioku.getBaseHp() },
+        { short: 'ATK', value: kioku.getBaseAtk() },
+        { short: 'DEF', value: kioku.getBaseDef() },
+        { short: 'PWR', value: kioku.getTotalPower() },
+      ]
+    })
 
     const imgSrc = computed(
       () => `/exedra-dmg-calc/kioku_images/${props.character.id}_thumbnail.png`
@@ -163,6 +186,7 @@ export default defineComponent({
     return {
       maxAscension,
       levelStats,
+      derivedStats,
       imgSrc,
       isVisible,
       toggleCharacter,
@@ -227,6 +251,26 @@ export default defineComponent({
   user-select: none;
 }
 
+.stats-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stats-grid,
+.derived-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 45px);
+  gap: 2rem;
+}
+
+.stat-cell,
+.derived-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .char-thumb {
   width: 44px;
   height: 44px;
@@ -273,14 +317,8 @@ export default defineComponent({
 }
 
 .col-stats {
-  flex-shrink: 0;
   align-items: center;
-}
-
-.stats-grid {
-  display: flex;
-  flex-direction: row;
-  gap: 6px;
+  margin: auto 1rem;
 }
 
 .stat-cell {
@@ -301,7 +339,7 @@ export default defineComponent({
 .stat-cell input {
   width: 42px;
   text-align: center;
-  padding: 0.25rem 0.3rem;
+  padding: 0.25rem 0.2rem;
   font-size: 0.82rem;
 }
 

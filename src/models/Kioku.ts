@@ -63,8 +63,8 @@ export class Kioku {
     private heartDef: number = 0;
     private heartHp: number = 0;
 
-    baseCritRate: number
-    baseCritDamage: number;
+    critRate: number
+    critDamage: number;
 
     maxMagicStacks = 0;
 
@@ -87,7 +87,7 @@ export class Kioku {
         const defTerm = (300 / 1000) * this.getBaseDef() * (roleCoeff.def / 1000);
         const baseStatsBracket = hpTerm + atkTerm + defTerm;
 
-        const critModifierBracket = 1 + ((this.baseCritRate / 1000) * (this.baseCritDamage / 1000));
+        const critModifierBracket = 1 + ((this.critRate / 1000) * (this.critDamage / 1000));
 
         const normalSkillTerm = this.attackLvl * 30 / 1000;
         const activeSkillTerm = this.skillLvl * 120 / 1000;
@@ -127,8 +127,8 @@ export class Kioku {
         this.heartphialLvl = heartphialLvl;
         this.specialLvl = this.data.rarity === 3 ? 0 : specialLvl;
         this.maxMagicStacks = this.data.maxMagicStacks ?? 0
-        this.baseCritDamage = this.data.minCritDmg * 10
-        this.baseCritRate = this.data.minCritRate * 10
+        this.critDamage = this.data.minCritDmg * 10
+        this.critRate = this.data.minCritRate * 10
 
         this.kiokuAtk = Math.floor(
             kiokuStat(this.kiokuLvl, [
@@ -203,10 +203,10 @@ export class Kioku {
                 else this.heartHp += eff.value1
                 break;
             case "UP_CTR_FIXED":
-                this.baseCritRate += eff.value1
+                this.critRate += eff.value1
                 break;
             case "UP_CTD_FIXED":
-                this.baseCritDamage += eff.value1
+                this.critDamage += eff.value1
                 break;
             case "Support Ability Lvl. Up":
                 this.supportLvl += 1;

@@ -87,6 +87,24 @@
       <button class="btn btn-sm clear-all-btn" v-if="anyFilterActive" @click="clearFilters">Clear all</button>
     </section>
 
+    <section class="filters card">
+      <span class="filters-heading">Sort</span>
+      <div class="filter-group">
+        <select class="selector" v-model="sortBy">
+          <option value="name">Name</option>
+          <option value="atk">ATK</option>
+          <option value="def">DEF</option>
+          <option value="hp">HP</option>
+          <option value="pwr">PWR</option>
+        </select>
+      </div>
+
+      <label class="chip" :class="{ active: groupByRole }">
+        <input type="checkbox" v-model="groupByRole" />
+        Group by Role
+      </label>
+    </section>
+
     <section class="bulk-set card">
       <span class="filters-heading">Set for all visible Kioku</span>
       <div class="bulk-fields">
@@ -133,6 +151,7 @@ import { Character, KiokuConstants } from '../types/KiokuTypes.js'
 import { useSetting } from '../store/settingsStore.js'
 import { FinalTeam } from '../types/BestTeamTypes.js'
 import { LuxMagica } from '../types/enums.js'
+import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
 
 export default defineComponent({
   components: { CharacterCard, TeamRow },
@@ -149,6 +168,12 @@ export default defineComponent({
     const expectedRuns = ref(0)
     const currentBestTeam = ref<FinalTeam>()
     const currentBestPwr = ref<number | null>(null)
+    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp' | 'pwr'>(
+      'characterSortBy',
+      'name'
+    )
+    const groupByRole = useSetting('groupCharactersByRole', true)
+
     let worker: Worker | null = null
 
     const runHighestPowerCalc = () => {
@@ -219,16 +244,60 @@ export default defineComponent({
     function toggleRole(role: string) {
       collapsedRoles.value[role] = !collapsedRoles.value[role]
     }
+    const sortCache = computed(() => {
+      const map = new Map<string, {
+        atk: number
+        def: number
+        hp: number
+        pwr: number
+      }>()
+
+      for (const c of store.characters) {
+        const kioku = new ScoreAttackKioku(c)
+
+        map.set(c.id, {
+          atk: kioku.getBaseAtk(),
+          def: kioku.getBaseDef(),
+          hp: kioku.getBaseHp(),
+          pwr: kioku.getTotalPower(),
+        })
+      }
+
+      return map
+    })
+
+    function sortCharacters(chars: Character[]) {
+      const cache = sortCache.value
+
+      return chars.slice().sort((a, b) => {
+        if (sortBy.value === "name")
+          return a.name.localeCompare(b.name)
+
+        return (
+          cache.get(b.id)![sortBy.value] -
+          cache.get(a.id)![sortBy.value]
+        )
+      })
+    }
 
     const groupedCharacters = computed(() => {
-      const groups: Record<string, typeof store.characters> = {}
+      if (!groupByRole.value) {
+        return {
+          All: sortCharacters(store.characters),
+        }
+      }
+
+      const groups: Record<string, Character[]> = {}
+
       store.characters.forEach(char => {
         if (!groups[char.role]) groups[char.role] = []
         groups[char.role].push(char)
       })
-      for (const role in groups) {
-        groups[role] = groups[role].slice().sort((a, b) => a.id - b.id)
-      }
+
+      Object.keys(groups).forEach(role => {
+        groups[role] = sortCharacters(groups[role])
+      })
+
       return groups
     })
 
@@ -308,6 +377,8 @@ export default defineComponent({
       expectedRuns,
       currentBestTeam,
       currentBestPwr,
+      sortBy,
+      groupByRole,
     }
   },
 })
@@ -670,5 +741,13 @@ export default defineComponent({
   color: var(--muted);
   font-style: italic;
   opacity: 0.6;
+}
+
+.selector {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.3rem 1rem;
+    gap: 0.5rem;
 }
 </style>

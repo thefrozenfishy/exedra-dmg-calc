@@ -669,12 +669,6 @@ export class ScoreAttackTeam {
                     this.getAllyEffect(allyIdx, "UP_WEAK_ELEMENT_DMG_RATIO", amountOfEnemies, enemy.maxBreak) / 1000;
                 const effect_elem_factor = 1 + (enemy.isWeak ? 0.2 + elem_dmg_up : 0);
 
-                const crit_dmg =
-                    (this.allyContexts[allyIdx].kioku.baseCritDamage +
-                        this.getAllyEffect(allyIdx, "UP_CTD_FIXED", amountOfEnemies, enemy.maxBreak) +
-                        this.getAllyEffect(allyIdx, "UP_CTD_RATIO", amountOfEnemies, enemy.maxBreak)) /
-                    1000;
-
                 total +=
                     base *
                     ally_def_factor *
@@ -867,14 +861,14 @@ export class ScoreAttackTeam {
         const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;
 
         const uncapped_crit_rate =
-            (this.dps.baseCritRate +
+            (this.dps.critRate +
                 this.getAllyEffect(DPS_IDX, "UP_CTR_FIXED", currentAmountOfEnemies, enemy.maxBreak) +
                 this.getAllyEffect(DPS_IDX, "UP_RCV_CTR_RATIO", currentAmountOfEnemies, enemy.maxBreak) +
                 this.getAllyEffect(DPS_IDX, "UP_CTR_RATIO", currentAmountOfEnemies, enemy.maxBreak)) /
             1000;
         const crit_rate = Math.min(1, uncapped_crit_rate);
         const crit_dmg =
-            (this.dps.baseCritDamage +
+            (this.dps.critDamage +
                 this.getAllyEffect(DPS_IDX, "UP_CTD_FIXED", currentAmountOfEnemies, enemy.maxBreak) +
                 this.getAllyEffect(DPS_IDX, "UP_CTD_RATIO", currentAmountOfEnemies, enemy.maxBreak)) /
             1000;
