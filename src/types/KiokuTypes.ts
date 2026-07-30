@@ -374,8 +374,8 @@ export const getSubCrystalises: () => CrystalisData[] = () => {
 
 export const maxDmgSubCrys = [4020, 4044, 4054]
 export const KiokuConstants = {
-    maxKiokuLvl: 140,
-    maxMagicLvl: 130,
+    maxKiokuLvl: 160,
+    maxMagicLvl: 140,
     maxAscension: 5,
     maxHeartphialLvl: 50,
     maxSpecialLvl: 10,
