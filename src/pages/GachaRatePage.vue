@@ -49,9 +49,9 @@ const pickupRate = ref(.75)
 const sparkInterval = ref(200)
 const sparkIntervalReduction = ref(0)
 const softPityAt = ref(100)
-const softPityRate = ref(12)
+const softPityRate = ref(60)
 const isDualPickup = ref(false)
-const hasRetryingSoftPity = ref(false)
+const hasRetryingSoftPity = ref(true)
 
 const sparkPoints = computed(() => {
     let currentPull = 0
