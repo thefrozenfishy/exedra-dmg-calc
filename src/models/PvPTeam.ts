@@ -139,23 +139,25 @@ export class KiokuState {
 
     updateSpd(): void {
         this.currSpdEffects = []
-        let spd = f32(this.kioku.data.minSpd)
+        const baseSpd = f32(this.kioku.data.minSpd)
+        let spd = baseSpd
 
         const speedTypes = ["UP_SPD_RATIO", "DWN_SPD_RATIO", "UP_SPD_FIXED", "DWN_SPD_FIXED"]
         const speedEffects = this.orderedActiveEffects().filter(d => speedTypes.includes(d.abilityEffectType))
-        console.log("Speed effects for", this.teamLabel, this.kioku.name, speedEffects)
 
         for (const detail of speedEffects) {
-            const sign = detail.abilityEffectType.startsWith("UP_") ? 1 : -1
+            const isUp = detail.abilityEffectType.startsWith("UP_")
             const isFixed = detail.abilityEffectType.endsWith("_FIXED")
             const step = isFixed
-                ? f32(sign * detail.value1)
-                : f32(spd * f32(sign * detail.value1 / 1000))
+                ? f32((isUp ? 1 : -1) * detail.value1)
+                : isUp
+                    ? f32(baseSpd * f32(detail.value1 / 1000))       // UP ratio: always off base
+                    : f32(-(spd * f32(detail.value1 / 1000)))        // DWN ratio: off running total
             spd = f32(spd + step)
             this.currSpdEffects.push([step, detail.description, detail.applier])
         }
 
-        this.currentSpd = Math.max(spd, 0) // GetProcessedSpeed floors at 0 too
+        this.currentSpd = Math.max(spd, 0)
     }
 
     private orderedActiveEffects(): SkillDetail[] {
