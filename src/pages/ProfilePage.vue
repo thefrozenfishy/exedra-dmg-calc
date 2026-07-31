@@ -1316,10 +1316,10 @@ const getMetricValue = (player: any, metric: string) => {
 const getAxisLabel = (value: string) => graphOptions.find(o => o.value === value)?.label ?? value
 
 const getMaxTick = (axisLabel: string) => {
-    if (axisLabel === "perm") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== LuxMagica && c.obtain !== "Exclusive").length
-    if (axisLabel === "permAs") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== LuxMagica && c.obtain !== "Exclusive").length * 6
-    if (axisLabel === "lim") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== LuxMagica && c.obtain === "Exclusive").length
-    if (axisLabel === "limAs") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== LuxMagica && c.obtain === "Exclusive").length * 6
+    if (axisLabel === "perm") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== LuxMagica && c.isStandardChar).length
+    if (axisLabel === "permAs") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== LuxMagica && c.isStandardChar).length * 6
+    if (axisLabel === "lim") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== LuxMagica && !c.isStandardChar).length
+    if (axisLabel === "limAs") return characterStore.characters.filter(c => c.rarity === 5 && c.name !== LuxMagica && !c.isStandardChar).length * 6
     if (axisLabel === "rank") return store.myRank?.totalPlayers
     return 100
 }

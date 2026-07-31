@@ -40,7 +40,7 @@ const eligible4stars = computed(() =>
 const eligible5stars = computed(() =>
     characterStore.characters.filter(c =>
         c.name !== pickupCharacter.value?.name &&
-        (c.rarity === 5 && c.name !== LuxMagica && new Date() > new Date(c.permaDate))
+        (c.rarity === 5 && c.name !== LuxMagica && c.isStandardChar)
     )
 )
 

@@ -329,9 +329,8 @@ const formatArrowState = (leftScore: number, rightScore: number) => {
 }
 
 const borderClass = (ch: Character): string => {
-    if (ch.obtain && ch.obtain !== "Permanent") return "limited-border"
-    if (new Date() > new Date(ch.permaDate)) return "default-border"
-    return "not-limited-border"
+    if (ch.obtain && !ch.isStandardChar) return "limited-border"
+    return "default-border"
 }
 
 const diffColor = (diff: number) => {
@@ -806,10 +805,6 @@ const copyHyperLink = async () => {
 
 .limited-border {
     border: 2px solid red;
-}
-
-.not-limited-border {
-    border: 2px solid yellow;
 }
 
 .default-border {

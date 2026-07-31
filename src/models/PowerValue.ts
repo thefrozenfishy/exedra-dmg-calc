@@ -5,8 +5,8 @@ import { skewnormCdf } from "../utils/mathFuncs"
 
 export function countCharsObtained(chars: Character[]): { lim: number,limAs: number, perm: number, permAs: number } {
     const relevant = chars.filter(c => c.rarity === 5 && c.enabled && c.name !== LuxMagica)
-    const lims = relevant.filter(c => c.obtain === "Exclusive")
-    const perms = relevant.filter(c => c.obtain !== "Exclusive")
+    const lims = relevant.filter(c => !c.isStandardChar)
+    const perms = relevant.filter(c => c.isStandardChar)
     const limAs = lims.reduce((sum, ch) => sum + ch.ascension + 1, 0)
     const permAs = perms.reduce((sum, ch) => sum + ch.ascension + 1, 0)
     return {

@@ -158,6 +158,7 @@ export interface Character {
     name: string
     obtain: string
     permaDate: string
+    isStandardChar: boolean
     releaseDate: string
     portrait?: string
     rarity: number

@@ -266,9 +266,7 @@
             <span class="filters-heading">About</span>
             <p>
                 You can edit, export, and import your kioku on the <b>Kioku Setup</b> page, or edit here directly.<br />
-                Red borders indicate limited characters, yellow borders indicate characters not yet added to the
-                permanent roster, and transparent borders indicate standard permanent characters.
-                For crys counter, red indicates some crys are missing, pink that some are missing but the elemental
+                Red borders indicate limited characters. For crys counter, red indicates some crys are missing, pink that some are missing but the elemental
                 crys has been collected, and green that all on-element crys have been collected.
                 Maxed out kioku are given a golden glow to indicate their completeness.
                 <template v-if="showOffElementalOnesOption">Truly perfected kioku with all crys, including
@@ -352,11 +350,11 @@ const maxed3starChars = computed(() => threeStarMembers.value.filter(isCompleted
 
 const ownedFiveStars = computed(() => fiveStarMembers.value.filter(c => c.enabled))
 const totalAscensions = computed(() => ownedFiveStars.value.reduce((sum, ch) => sum + ch.ascension + 1, 0))
-const totalStandards = computed(() => ownedFiveStars.value.filter(ch => ch.obtain === "Permanent").reduce((sum, ch) => sum + ch.ascension + 1, 0))
-const totalPossibleStandards = computed(() => fiveStarMembers.value.filter(ch => ch.obtain === "Permanent").reduce((sum, _) => sum + 6, 0))
-const totalLimiteds = computed(() => ownedFiveStars.value.filter(ch => ch.obtain !== "Permanent").reduce((sum, ch) => sum + ch.ascension + 1, 0))
-const totalPossibleLimiteds = computed(() => fiveStarMembers.value.filter(ch => ch.obtain !== "Permanent").reduce((sum, _) => sum + 6, 0))
-const standardPool = computed(() => fiveStarMembers.value.filter(ch => new Date() > new Date(ch.permaDate)))
+const totalStandards = computed(() => ownedFiveStars.value.filter(ch => ch.isStandardChar).reduce((sum, ch) => sum + ch.ascension + 1, 0))
+const totalPossibleStandards = computed(() => fiveStarMembers.value.filter(ch => ch.isStandardChar).reduce((sum, _) => sum + 6, 0))
+const totalLimiteds = computed(() => ownedFiveStars.value.filter(ch => !ch.isStandardChar).reduce((sum, ch) => sum + ch.ascension + 1, 0))
+const totalPossibleLimiteds = computed(() => fiveStarMembers.value.filter(ch => !ch.isStandardChar).reduce((sum, _) => sum + 6, 0))
+const standardPool = computed(() => fiveStarMembers.value.filter(ch => ch.isStandardChar))
 const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.enabled && ch.ascension === 5))
 const extraCollected = useSetting("extraCollected", 0)
 const extraTotal = computed(() => (showDupes.value ? ownedFiveStars.value.filter(ch => ch.ascension === 5).reduce((sum, ch) => sum + ch.dupes, 0) : extraCollected.value))
@@ -464,21 +462,16 @@ const groupedByAscension = computed(() => {
 const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
     if (ch.name === LuxMagica) { }
-    else if (ch.obtain && ch.obtain !== "Permanent") {
-        title += ` -  ${ch.obtain}`
-    } else if (ch.permaDate == "") {
-        title += " -  Not added to permanent yet"
-    } else if (new Date(ch.permaDate) > new Date()) {
-        title += " -  Added to standard pool on " + new Date(ch.permaDate).toLocaleDateString()
+    else if (ch.obtain && !ch.isStandardChar) {
+        title += ` - ${ch.obtain}`
     }
     return title
 }
 
 const borderClass = (ch: Character): string => {
     if (ch.name === LuxMagica) return "default-border"
-    if (ch.obtain && ch.obtain !== "Permanent") return "limited-border"
-    if (new Date() > new Date(ch.permaDate)) return "default-border"
-    return "not-limited-border"
+    if (ch.obtain && !ch.isStandardChar) return "limited-border"
+    return "default-border"
 }
 
 type EditableField = "magicLvl" | "heartphialLvl" | "specialLvl" | "dupes"
@@ -943,10 +936,6 @@ td {
 
 .limited-border {
     border-color: red !important;
-}
-
-.not-limited-border {
-    border-color: rgb(255, 255, 0) !important;
 }
 
 .completed-glow {

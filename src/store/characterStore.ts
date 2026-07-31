@@ -59,6 +59,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
         obtain: data.obtain,
         permaDate: data.permaDate,
         releaseDate: data.releaseDate,
+        isStandardChar: data.obtain === "Permanent",
     }]));
 
     const basicSetting = (ch: Character) => ({

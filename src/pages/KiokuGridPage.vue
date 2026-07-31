@@ -172,7 +172,8 @@
                                                     <div class="role-badge-inner">
                                                         <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`"
                                                             :alt="ch.role" class="info-badge-icon" />
-                                                        <span class="role-badge-tag">{{ rangeTag(ch.range, ch.role )[0] }}</span>
+                                                        <span class="role-badge-tag">{{ rangeTag(ch.range, ch.role)[0]
+                                                        }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="ascension-badge level-badge info-badge-img"
@@ -326,7 +327,7 @@ const skillDetailsBySkillMstId = (() => {
 const computeSkillRange = (c: Character): number => {
     const k = new Kioku({ ...c })
     const effects = skillDetailsBySkillMstId.get(k.data.special_id * 100 + 10) ?? []
-    const relevant = effects.filter(e => e.abilityEffectType.startsWith("DMG_")) 
+    const relevant = effects.filter(e => e.abilityEffectType.startsWith("DMG_"))
     const highest = relevant.reduce((max, e) => (e.value1 > max ? e.value1 : max), 1)
     let range = 1
     for (const e of relevant) {
@@ -366,9 +367,9 @@ const allVirtualRoleValues = computed<VirtualRole[]>(() => {
         if (setting && setting.value) {
             if (role === KiokuRole.Breaker) {
                 result.push(`${role}-ST`, `${role}-AOE`)
-            } else {    
-            result.push(`${role}-ST`, `${role}-Prox`, `${role}-AOE`)
-            } 
+            } else {
+                result.push(`${role}-ST`, `${role}-Prox`, `${role}-AOE`)
+            }
         } else {
             result.push(role)
         }
@@ -450,24 +451,17 @@ const bandRows = (yVal: string, rarity: number): number => {
     return Math.max(1, Math.ceil(maxInRow / 2))
 }
 
-const today = new Date()
-
 const borderClass = (ch: Character): string => {
     if (ch.name === LuxMagica) return "default-border"
     if (ch.obtain && ch.obtain !== "Permanent") return "limited-border"
-    if (today > new Date(ch.permaDate)) return "default-border"
-    return "not-limited-border"
+    return "default-border"
 }
 
 const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
     if (ch.name === LuxMagica) { }
-    else if (ch.obtain && ch.obtain !== "Permanent") {
+    else if (ch.obtain && !ch.isStandardChar) {
         title += ` - ${ch.obtain}`
-    } else if (ch.permaDate == "") {
-        title += " - Not added to permanent yet"
-    } else if (new Date(ch.permaDate) > today) {
-        title += " - Added to standard pool on " + new Date(ch.permaDate).toLocaleDateString()
     }
     return title
 }
@@ -816,10 +810,6 @@ const shareOptionsForGrid = () => ({
 
 .limited-border {
     border: 2px solid red;
-}
-
-.not-limited-border {
-    border: 2px solid rgb(255, 255, 0);
 }
 
 .default-border {
