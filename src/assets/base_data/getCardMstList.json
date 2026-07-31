@@ -2007,6 +2007,23 @@
     },
     {
         "advPosition": 0,
+        "cardMstId": 4200088,
+        "characterMstId": 0,
+        "element": 0,
+        "illustrator": "",
+        "name": "Friends Through Fables",
+        "passiveSkill1": 4178,
+        "passiveSkill2": 0,
+        "passiveSkill3": 0,
+        "rarity": 5,
+        "releaseTime": "2026-07-31T12:00:00+09:00",
+        "resourceName": "art_04_01_0032",
+        "source": "",
+        "unlockIdCsv": "59",
+        "unlockTypeCsv": "2"
+    },
+    {
+        "advPosition": 0,
         "cardMstId": 4300001,
         "characterMstId": 0,
         "element": 0,

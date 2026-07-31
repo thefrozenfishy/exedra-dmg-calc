@@ -64,6 +64,54 @@
         "value2": 0
     },
     {
+        "abilityEffectType": "UP_HP_FIXED",
+        "name": "HP +150",
+        "styleParamUpEffectMstId": 109,
+        "targetType": 1,
+        "value1": 150,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_ATK_FIXED",
+        "name": "ATK +60",
+        "styleParamUpEffectMstId": 110,
+        "targetType": 1,
+        "value1": 60,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_DEF_FIXED",
+        "name": "DEF +60",
+        "styleParamUpEffectMstId": 111,
+        "targetType": 1,
+        "value1": 60,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_HP_FIXED",
+        "name": "HP +140",
+        "styleParamUpEffectMstId": 112,
+        "targetType": 1,
+        "value1": 140,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_ATK_FIXED",
+        "name": "ATK +56",
+        "styleParamUpEffectMstId": 113,
+        "targetType": 1,
+        "value1": 56,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "UP_DEF_FIXED",
+        "name": "DEF +56",
+        "styleParamUpEffectMstId": 114,
+        "targetType": 1,
+        "value1": 56,
+        "value2": 0
+    },
+    {
         "abilityEffectType": "",
         "name": "Basic Attack Lvl. Up",
         "styleParamUpEffectMstId": 201,

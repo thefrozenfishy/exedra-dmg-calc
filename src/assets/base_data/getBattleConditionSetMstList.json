@@ -16615,9 +16615,114 @@
         "description": "行動者は敵 AND 一度の攻撃で自軍に5体クリティカルダメージが発生したとき AND 行動タイプが必殺技"
     },
     {
+        "battleConditionMstIdCsv": "2035",
+        "battleConditionSetMstId": 3356,
+        "description": "自身にクシュ専用バフ累積1回がある"
+    },
+    {
+        "battleConditionMstIdCsv": "2036",
+        "battleConditionSetMstId": 3357,
+        "description": "自身にクシュ専用バフ累積2回がある"
+    },
+    {
+        "battleConditionMstIdCsv": "2037",
+        "battleConditionSetMstId": 3358,
+        "description": "自身にクシュ専用バフ累積3回がある"
+    },
+    {
+        "battleConditionMstIdCsv": "2038",
+        "battleConditionSetMstId": 3359,
+        "description": "自身にクシュ専用バフ累積4回がある"
+    },
+    {
+        "battleConditionMstIdCsv": "2039",
+        "battleConditionSetMstId": 3360,
+        "description": "自身にクシュ専用バフがある"
+    },
+    {
+        "battleConditionMstIdCsv": "2040",
+        "battleConditionSetMstId": 3361,
+        "description": "自身のクシュ専用デバフが累積1回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2041",
+        "battleConditionSetMstId": 3362,
+        "description": "自身のクシュ専用デバフが累積2回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2042",
+        "battleConditionSetMstId": 3363,
+        "description": "自身のクシュ専用デバフが累積3回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2043",
+        "battleConditionSetMstId": 3364,
+        "description": "自身のクシュ専用デバフが累積4回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2044",
+        "battleConditionSetMstId": 3365,
+        "description": "自身のクシュ専用デバフが累積5回のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2045",
+        "battleConditionSetMstId": 3366,
+        "description": "自身にクシュ専用デバフがあるとき"
+    },
+    {
+        "battleConditionMstIdCsv": "7,3,2039",
+        "battleConditionSetMstId": 3367,
+        "description": "自身が必殺技を発動+クシュの専用バフがある"
+    },
+    {
+        "battleConditionMstIdCsv": "7,3,2046",
+        "battleConditionSetMstId": 3368,
+        "description": "自身が必殺技を発動+相手にクシュの専用デバフがある"
+    },
+    {
+        "battleConditionMstIdCsv": "281,3,5",
+        "battleConditionSetMstId": 3369,
+        "description": "自身のクリティカルダメージが発生したとき+通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "281,3,6",
+        "battleConditionSetMstId": 3370,
+        "description": "自身のクリティカルダメージが発生したとき+戦闘スキル"
+    },
+    {
+        "battleConditionMstIdCsv": "281,3,7",
+        "battleConditionSetMstId": 3371,
+        "description": "自身のクリティカルダメージが発生したとき+必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "1,522,5,655",
+        "battleConditionSetMstId": 3372,
+        "description": "自分以外の味方が行動者+通常攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "1,522,6,655",
+        "battleConditionSetMstId": 3373,
+        "description": "自分以外の味方が行動者+戦闘スキル"
+    },
+    {
+        "battleConditionMstIdCsv": "1,522,7,655",
+        "battleConditionSetMstId": 3374,
+        "description": "自分以外の味方が行動者+必殺技"
+    },
+    {
         "battleConditionMstIdCsv": "2047",
         "battleConditionSetMstId": 3375,
         "description": "水着やちよ専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2046",
+        "battleConditionSetMstId": 3377,
+        "description": "行動対象にクシュの専用デバフがある"
+    },
+    {
+        "battleConditionMstIdCsv": "2068",
+        "battleConditionSetMstId": 3378,
+        "description": "敵全体でクシュ専用デバフが付与されている敵が1体以上いる"
     },
     {
         "battleConditionMstIdCsv": "3,6,878",
@@ -16645,6 +16750,26 @@
         "description": "自分のキャラクターが「木崎衣美里」"
     },
     {
+        "battleConditionMstIdCsv": "2054",
+        "battleConditionSetMstId": 3386,
+        "description": "自分のHPが51％以上"
+    },
+    {
+        "battleConditionMstIdCsv": "972,1,655,5,962",
+        "battleConditionSetMstId": 3387,
+        "description": "行動者は水属性+行動者は仲間+行動者は自身以外+通常攻撃+敵チームへのトータル1以上DMG"
+    },
+    {
+        "battleConditionMstIdCsv": "972,1,655,6,962",
+        "battleConditionSetMstId": 3388,
+        "description": "行動者は水属性+行動者は仲間+行動者は自身以外+戦闘スキル+敵チームへのトータル1以上DMG"
+    },
+    {
+        "battleConditionMstIdCsv": "972,1,655,7,962",
+        "battleConditionSetMstId": 3389,
+        "description": "行動者は水属性+行動者は仲間+行動者は自身以外+必殺技+敵チームへのトータル1以上DMG"
+    },
+    {
         "battleConditionMstIdCsv": "2055",
         "battleConditionSetMstId": 3390,
         "description": "自軍のデバフ数が2以上"
@@ -16665,6 +16790,36 @@
         "description": "自軍のデバフ数が5以上"
     },
     {
+        "battleConditionMstIdCsv": "2059",
+        "battleConditionSetMstId": 3394,
+        "description": "敵軍のデバフ数が1"
+    },
+    {
+        "battleConditionMstIdCsv": "2060",
+        "battleConditionSetMstId": 3395,
+        "description": "敵軍のデバフ数が2"
+    },
+    {
+        "battleConditionMstIdCsv": "2061",
+        "battleConditionSetMstId": 3396,
+        "description": "敵軍のデバフ数が3"
+    },
+    {
+        "battleConditionMstIdCsv": "2062",
+        "battleConditionSetMstId": 3397,
+        "description": "敵軍のデバフ数が4"
+    },
+    {
+        "battleConditionMstIdCsv": "2063",
+        "battleConditionSetMstId": 3398,
+        "description": "さやか（叛逆）専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1617,1,2071",
+        "battleConditionSetMstId": 3399,
+        "description": "自身または味方が回復したとき+行動者に叛逆さやかの専用バフがついているとき"
+    },
+    {
         "battleConditionMstIdCsv": "971,987",
         "battleConditionSetMstId": 3400,
         "description": "行動者は火属性 AND 対象は木属性"
@@ -16675,9 +16830,74 @@
         "description": "行動タイプが必殺技 AND 攻撃した+行動者は自分+毒状態の敵が1体以上"
     },
     {
+        "battleConditionMstIdCsv": "2065",
+        "battleConditionSetMstId": 3402,
+        "description": "自身が回復したとき"
+    },
+    {
         "battleConditionMstIdCsv": "2,2066,2032",
         "battleConditionSetMstId": 3403,
         "description": "クリティカル発生が3体以上の場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,280",
+        "battleConditionSetMstId": 3404,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自身、回復したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,306,2039",
+        "battleConditionSetMstId": 3405,
+        "description": "行動者が自身 + 追撃・反撃・援護を発動したとき+クシュの専用バフが付与されている"
+    },
+    {
+        "battleConditionMstIdCsv": "2045,975",
+        "battleConditionSetMstId": 3406,
+        "description": "自身にクシュ専用デバフがあるとき+行動者は闇属性"
+    },
+    {
+        "battleConditionMstIdCsv": "2067",
+        "battleConditionSetMstId": 3407,
+        "description": "マミ(叛逆)専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "973,1,655,5,962",
+        "battleConditionSetMstId": 3408,
+        "description": "行動者は木属性+行動者は仲間+行動者は自身以外+通常攻撃+敵チームへのトータル1以上DMG"
+    },
+    {
+        "battleConditionMstIdCsv": "973,1,655,6,962",
+        "battleConditionSetMstId": 3409,
+        "description": "行動者は木属性+行動者は仲間+行動者は自身以外+戦闘スキル+敵チームへのトータル1以上DMG"
+    },
+    {
+        "battleConditionMstIdCsv": "973,1,655,7,962",
+        "battleConditionSetMstId": 3410,
+        "description": "行動者は木属性+行動者は仲間+行動者は自身以外+必殺技+敵チームへのトータル1以上DMG"
+    },
+    {
+        "battleConditionMstIdCsv": "992",
+        "battleConditionSetMstId": 3411,
+        "description": "行動者は自分 + 対象のHPが20%未満のとき + 対象が攻撃を受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "2,2069,892",
+        "battleConditionSetMstId": 3412,
+        "description": "行動者は敵 + 行動者のHPが20%未満のとき + 攻撃を受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,2065",
+        "battleConditionSetMstId": 3413,
+        "description": "自身がプレイヤー側のユニットのとき、自身が回復したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,2072,892",
+        "battleConditionSetMstId": 3414,
+        "description": "行動者は敵 + 行動者のHPが30%未満のとき + 攻撃を受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "1618",
+        "battleConditionSetMstId": 3415,
+        "description": "自身のHPが10%以上のとき"
     },
     {
         "battleConditionMstIdCsv": "974,987",
@@ -16698,5 +16918,100 @@
         "battleConditionMstIdCsv": "973,987",
         "battleConditionSetMstId": 3419,
         "description": "行動者は木属性 AND 対象は木属性"
+    },
+    {
+        "battleConditionMstIdCsv": "2,2073,892",
+        "battleConditionSetMstId": 3420,
+        "description": "行動者は敵 + 行動者のHPが40%未満のとき + 攻撃を受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "987,463",
+        "battleConditionSetMstId": 3427,
+        "description": "対象が木属性のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1650,3,6",
+        "battleConditionSetMstId": 3428,
+        "description": "トークンが1000以上のとき+行動者は自分+行動タイプは必殺技"
+    },
+    {
+        "battleConditionMstIdCsv": "5,1,281",
+        "battleConditionSetMstId": 3429,
+        "description": "通常攻撃で味方がクリティカル発生させたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "6,1,281",
+        "battleConditionSetMstId": 3430,
+        "description": "戦闘スキルで味方がクリティカル発生させたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "7,1,281",
+        "battleConditionSetMstId": 3431,
+        "description": "必殺技で味方がクリティカル発生させたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "463,2067",
+        "battleConditionSetMstId": 3432,
+        "description": "マミ(叛逆)専用バフが付与されているとき+バリアが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,655,2079,1363",
+        "battleConditionSetMstId": 3433,
+        "description": "行動者は味方+敵チームに与えるトータルダメージは1以上+行動者：マミ(叛逆)専用バフが付与されているとき+対象個別のアクターか"
+    },
+    {
+        "battleConditionMstIdCsv": "464,3",
+        "battleConditionSetMstId": 3445,
+        "description": "行動者は自分AND奇数ターン"
+    },
+    {
+        "battleConditionMstIdCsv": "423,3",
+        "battleConditionSetMstId": 3446,
+        "description": "行動者は自分AND偶数ターン"
+    },
+    {
+        "battleConditionMstIdCsv": "1390",
+        "battleConditionSetMstId": 3447,
+        "description": "自身のHPが60%以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1391",
+        "battleConditionSetMstId": 3448,
+        "description": "自身のHPが70%以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1392",
+        "battleConditionSetMstId": 3449,
+        "description": "自身のHPが80%以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1393",
+        "battleConditionSetMstId": 3450,
+        "description": "自身のHPが90%以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1394",
+        "battleConditionSetMstId": 3451,
+        "description": "自身のHPが100%以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "5,655,281",
+        "battleConditionSetMstId": 3452,
+        "description": "行動タイプは通常攻撃+クリティカルが発生した+敵チームに与えるトータルダメージは1以上"
+    },
+    {
+        "battleConditionMstIdCsv": "6,655,281",
+        "battleConditionSetMstId": 3453,
+        "description": "行動タイプは戦闘スキル+クリティカルが発生した+敵チームに与えるトータルダメージは1以上"
+    },
+    {
+        "battleConditionMstIdCsv": "7,655,281",
+        "battleConditionSetMstId": 3454,
+        "description": "行動タイプは必殺技+クリティカルが発生した+敵チームに与えるトータルダメージは1以上"
+    },
+    {
+        "battleConditionMstIdCsv": "7,3,2068",
+        "battleConditionSetMstId": 3488,
+        "description": "敵全体でクシュ専用デバフが付与されている敵が1体以上いる"
     }
 ]

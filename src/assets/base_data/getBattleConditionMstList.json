@@ -16224,6 +16224,102 @@
         "description": "敵軍のデバフ数が3以上"
     },
     {
+        "battleConditionMstId": 2035,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "25,1",
+        "description": "クシュ専用バフが1のとき"
+    },
+    {
+        "battleConditionMstId": 2036,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "25,2",
+        "description": "クシュ専用バフが2のとき"
+    },
+    {
+        "battleConditionMstId": 2037,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "25,3",
+        "description": "クシュ専用バフが3のとき"
+    },
+    {
+        "battleConditionMstId": 2038,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "25,4",
+        "description": "クシュ専用バフが4のとき"
+    },
+    {
+        "battleConditionMstId": 2039,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "25",
+        "description": "クシュ専用バフがあるとき"
+    },
+    {
+        "battleConditionMstId": 2040,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "26,1",
+        "description": "自身のクシュ専用デバフが1のとき"
+    },
+    {
+        "battleConditionMstId": 2041,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "26,2",
+        "description": "自身のクシュ専用デバフが2のとき"
+    },
+    {
+        "battleConditionMstId": 2042,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "26,3",
+        "description": "自身のクシュ専用デバフが3のとき"
+    },
+    {
+        "battleConditionMstId": 2043,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "26,4",
+        "description": "自身のクシュ専用デバフが4のとき"
+    },
+    {
+        "battleConditionMstId": 2044,
+        "compareContent": 27,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "26,5",
+        "description": "自身のクシュ専用デバフが5のとき"
+    },
+    {
+        "battleConditionMstId": 2045,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "26",
+        "description": "自身にクシュ専用デバフがあるとき"
+    },
+    {
+        "battleConditionMstId": 2046,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 8,
+        "compareValue": "26",
+        "description": "行動対象にクシュ専用デバフがあるとき"
+    },
+    {
         "battleConditionMstId": 2047,
         "compareContent": 26,
         "compareOperator": 7,
@@ -16240,6 +16336,14 @@
         "description": "トークンが1000のとき"
     },
     {
+        "battleConditionMstId": 2049,
+        "compareContent": 210,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "26,1",
+        "description": "敵全体でクシュ専用デバフが付与されている敵が1体以上いる"
+    },
+    {
         "battleConditionMstId": 2052,
         "compareContent": 14,
         "compareOperator": 1,
@@ -16254,6 +16358,14 @@
         "compareTarget": 1,
         "compareValue": "1062",
         "description": "自分のキャラクターが「木崎衣美里」"
+    },
+    {
+        "battleConditionMstId": 2054,
+        "compareContent": 2,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "50",
+        "description": "自分のHPが50％以上"
     },
     {
         "battleConditionMstId": 2055,
@@ -16288,11 +16400,139 @@
         "description": "自軍のデバフ数が5以上"
     },
     {
+        "battleConditionMstId": 2059,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "敵軍のデバフ数が1"
+    },
+    {
+        "battleConditionMstId": 2060,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "2",
+        "description": "敵軍のデバフ数が2"
+    },
+    {
+        "battleConditionMstId": 2061,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "3",
+        "description": "敵軍のデバフ数が3"
+    },
+    {
+        "battleConditionMstId": 2062,
+        "compareContent": 208,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "4",
+        "description": "敵軍のデバフ数が4"
+    },
+    {
+        "battleConditionMstId": 2063,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "27",
+        "description": "さやか（叛逆）専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 2065,
+        "compareContent": 104,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "TRUE",
+        "description": "自身が回復したとき"
+    },
+    {
         "battleConditionMstId": 2066,
         "compareContent": 303,
         "compareOperator": 4,
         "compareTarget": 5,
         "compareValue": "3",
         "description": "クリティカル発生が3体以上の場合"
+    },
+    {
+        "battleConditionMstId": 2067,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "28",
+        "description": "マミ(叛逆)専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 2068,
+        "compareContent": 210,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "26,1",
+        "description": "敵全体でクシュ専用デバフが付与されている敵が1体以上いる"
+    },
+    {
+        "battleConditionMstId": 2069,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 2,
+        "compareValue": "20",
+        "description": "行動者のHPが20％未満"
+    },
+    {
+        "battleConditionMstId": 2070,
+        "compareContent": 104,
+        "compareOperator": 1,
+        "compareTarget": 3,
+        "compareValue": "TRUE",
+        "description": "メインの行動対象が回復したか"
+    },
+    {
+        "battleConditionMstId": 2071,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 8,
+        "compareValue": "27",
+        "description": "行動者にさやか（叛逆）専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 2072,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 2,
+        "compareValue": "30",
+        "description": "行動者のHPが30％未満"
+    },
+    {
+        "battleConditionMstId": 2073,
+        "compareContent": 2,
+        "compareOperator": 5,
+        "compareTarget": 2,
+        "compareValue": "40",
+        "description": "行動者のHPが40％未満"
+    },
+    {
+        "battleConditionMstId": 2074,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "28",
+        "description": "叛逆マミの専用バフがあるとき"
+    },
+    {
+        "battleConditionMstId": 2079,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 2,
+        "compareValue": "28",
+        "description": "行動者：マミ(叛逆)専用バフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 2086,
+        "compareContent": 313,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "攻撃が命中した敵数が1体以上のとき"
     }
 ]

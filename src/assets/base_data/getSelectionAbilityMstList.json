@@ -4318,5 +4318,50 @@
         "targetType": 2,
         "value1": 1150068,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "While Divine Might is applied to self:<br>Increases follow-up attack DMG dealt by 20%.",
+        "name": "Evil Will Get Its Just Desserts!",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 153,
+        "selectionAbilityMstId": 7069,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11140201,
+        "targetType": 2,
+        "value1": 1150069,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "On special attack, increases all allies' critical rate by 10% (2 turns).<br><br>While Crescendo is applied:<br>Increases DEF by 20%.",
+        "name": "Nothing Beats Days like These",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 154,
+        "selectionAbilityMstId": 7070,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10040701,
+        "targetType": 2,
+        "value1": 1150070,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "At battle start, increases charge by 20%.<br>Increases chance of being targeted.<br>When attacked by an enemy, increases SPD by 2% (1 turn / Stacks 5 times).",
+        "name": "It's Okay, I Have Friends",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 155,
+        "selectionAbilityMstId": 7071,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10030601,
+        "targetType": 2,
+        "value1": 1150071,
+        "value2": 0
     }
 ]
