@@ -50,6 +50,10 @@ export class ScoreAttackKioku extends Kioku {
                 this.buffMult += e.value1 / 1000;
             } else if (e.abilityEffectType === "UP_DEBUFF_EFFECT_VALUE") {
                 this.debuffMult += e.value1 / 1000;
+            } else if (e.abilityEffectType === "DWN_BUFF_EFFECT_VALUE") {
+                this.buffMult -= e.value1 / 1000;
+            } else if (e.abilityEffectType === "DWN_DEBUFF_EFFECT_VALUE") {
+                this.debuffMult -= e.value1 / 1000;
             } else if (e.abilityEffectType === "ADDITIONAL_SKILL_ACT") {
                 this.addEffect(skillDetails, "skillMstId", 0, e.value1, true);
             } else if (e.abilityEffectType === "ADD_DEBUFF_TURN") {
@@ -78,7 +82,7 @@ export class ScoreAttackKioku extends Kioku {
             return { ...e, value1: v, turn: e.turn + this.debuffTurnBonus }
         }));
         this.effects.forEach(e => {
-            const dotType = e.abilityEffectType.replace("_ATK", "");
+            const dotType = e.abilityEffectType.replace(/_(ATK|DEF|HP)$/, "");
 
             if (e.abilityEffectType === "ADDITIONAL_DAMAGE") {
                 this.idealSupportPortrait = SupportIdealPortrait.ADD_DMG;

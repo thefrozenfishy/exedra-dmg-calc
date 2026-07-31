@@ -47,7 +47,11 @@ const skippable = new Set([
     "ADDITIONAL_TURN_UNIT_ACT",
     "BARRIER",
     "BLEED_ATK",
+    "BLEED_DEF",
+    "BLEED_HP",
     "BURN_ATK",
+    "BURN_DEF",
+    "BURN_HP",
     "CHARGE",
     "CONSUME_CHARGE_POINT",
     "CONSUME_COUNT_POINT",
@@ -55,6 +59,8 @@ const skippable = new Set([
     "CONTINUOUS_RECOVERY",
     "COUNT",
     "CURSE_ATK",
+    "CURSE_DEF",
+    "CURSE_HP",
     "CUTOUT",
     "DMG_ATK",
     "DMG_DEF",
@@ -73,6 +79,8 @@ const skippable = new Set([
     "HASTE",
     "IMM_SLIP_DMG",
     "POISON_ATK",
+    "POISON_DEF",
+    "POISON_HP",
     "RE_ACTION_TURN_UNIT_ACT",
     "RECOVERY_HP_ATK",
     "RECOVERY_HP",
@@ -101,8 +109,9 @@ const skippable = new Set([
     "UP_BREAK_DAMAGE_RECEIVE_RATIO",
     "UP_BREAK_EFFECT",
     "UP_BUFF_EFFECT_VALUE",
-    "UP_BUFF_EFFECT_VALUE",
     "UP_DEBUFF_EFFECT_VALUE",
+    "DWN_BUFF_EFFECT_VALUE",
+    "DWN_DEBUFF_EFFECT_VALUE",
     "UP_EFFECT_HIT_RATE_RATIO",
     "UP_EFFECT_PARRY_RATE_RATIO",
     "UP_EP_RECOVER_RATE_RATIO",
@@ -311,7 +320,7 @@ export class ScoreAttackTeam {
             for (const nonDpsIdx of [0, 1, 3, 4]) {
                 const kioku = alliesOrdered[nonDpsIdx];
                 const hasDot = kioku.effects.some(eff => {
-                    const dotType = eff.abilityEffectType.replace("_ATK", "");
+                    const dotType = eff.abilityEffectType.replace(/_(ATK|DEF|HP)$/, "");
                     return (
                         dotType !== Aliment.WEAKNESS &&
                         Object.values(Aliment).includes(dotType as Aliment) &&
@@ -630,7 +639,8 @@ export class ScoreAttackTeam {
             let active_done = false;
 
             for (const eff of this.allyContexts[allyIdx].kioku.effects) {
-                const dotType = eff.abilityEffectType.replace("_ATK", "") as Aliment;
+                const dotStatSuffix = eff.abilityEffectType.match(/_(ATK|DEF|HP)$/)?.[1];
+                const dotType = eff.abilityEffectType.replace(/_(ATK|DEF|HP)$/, "") as Aliment;
                 if (dotType === Aliment.VORTEX) {
                     if (!isVortex) continue
                     if (skillDetailId(eff).toString().startsWith("1185")) continue
@@ -651,7 +661,12 @@ export class ScoreAttackTeam {
                 }
 
                 const allyTotalAtk = this.resolveAllyAtk(allyIdx, false, amountOfEnemies, enemy.maxBreak);
-                const base = this.calc_base_dmg(eff.turn * eff.value1 / 1000, this.allyContexts[allyIdx].kioku.getBaseAtk());
+                const dotScalingStat = dotStatSuffix === "DEF"
+                    ? this.allyContexts[allyIdx].kioku.getBaseDef()
+                    : dotStatSuffix === "HP"
+                        ? this.allyContexts[allyIdx].kioku.getBaseHp()
+                        : this.allyContexts[allyIdx].kioku.getBaseAtk();
+                const base = this.calc_base_dmg(eff.turn * eff.value1 / 1000, dotScalingStat);
 
                 const def_total = enemy.defense * (1 + enemy.defenseUp / 100) * def_remaining;
                 const ally_def_factor = Math.min(2, ((allyTotalAtk + 10) / (def_total + 10)) * 0.12);
