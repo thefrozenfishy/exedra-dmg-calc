@@ -90,11 +90,15 @@
       <span class="filters-heading">Sort</span>
       <div class="filter-group">
         <select class="selector" v-model="sortBy">
-          <option value="name">Name</option>
+          <option value="name">Kioku Name</option>
           <option value="atk">ATK</option>
           <option value="def">DEF</option>
           <option value="hp">HP</option>
           <option value="pwr">PWR</option>
+          <option value="ch_name">Character</option>
+          <option value="releaseDate">Release Date</option>
+          <option value="kiokuLvl">Kioku Level</option>
+          <option value="magicLvl">Magic Level</option>
         </select>
       </div>
 
@@ -168,7 +172,7 @@ export default defineComponent({
     const expectedRuns = ref(0)
     const currentBestTeam = ref<FinalTeam>()
     const currentBestPwr = ref<number | null>(null)
-    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp' | 'pwr'>(
+    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp' | 'pwr' | 'ch_name' |'releaseDate' |'kiokuLvl' |'magicLvl'>(
       'characterSortBy',
       'name'
     )
@@ -296,6 +300,10 @@ export default defineComponent({
     function sortCharacters(chars: Character[]) {
       return chars.slice().sort((a, b) => {
         if (sortBy.value === "name") return a.name.localeCompare(b.name)
+        if (sortBy.value === "ch_name") return a.character_en.localeCompare(b.character_en)
+        if (sortBy.value === "releaseDate") return new Date(a.releaseDate) > new Date(b.releaseDate)
+        if (sortBy.value === "kiokuLvl") return a.kiokuLvl - b.kiokuLvl
+        if (sortBy.value === "magicLvl") return a.magicLvl - b.magicLvl
         const statA = getCachedStats(a)?.[sortBy.value] ?? -Infinity
         const statB = getCachedStats(b)?.[sortBy.value] ?? -Infinity
         return statB - statA

@@ -289,6 +289,9 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   gap: 1px;
+  align-items: center;
+  text-align: center;
+  flex: 1;
   min-width: 0;
 }
 
