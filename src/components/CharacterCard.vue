@@ -32,7 +32,7 @@
           <div class="derived-grid">
             <div v-for="stat in derivedStats" :key="stat.short" class="derived-cell">
               <span class="cell-label">{{ stat.short }}</span>
-              <span class="derived-value">{{ stat.value }}</span>
+              <span class="derived-value">{{ stat.value ?? '…' }}</span>
             </div>
           </div>
         </div>
@@ -72,7 +72,7 @@ import CrysSelector from './CrysSelector.vue'
 import { Character, KiokuConstants } from '../types/KiokuTypes'
 import { crystalises } from '../utils/helpers'
 import { LuxMagica } from '../types/enums'
-import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
+import { getCachedStats, scheduleBackfill } from '../utils/statsBackfill'
 
 export default defineComponent({
   name: 'CharacterCard',
@@ -113,13 +113,13 @@ export default defineComponent({
     ]
 
     const derivedStats = computed(() => {
-      const kioku = new ScoreAttackKioku({...props.character, portrait: undefined})
-
+      const cached = getCachedStats(props.character)
+      if (!cached) scheduleBackfill([props.character], { priority: true })
       return [
-        { short: 'HP', value: kioku.getBaseHp() },
-        { short: 'ATK', value: kioku.getBaseAtk() },
-        { short: 'DEF', value: kioku.getBaseDef() },
-        { short: 'PWR', value: kioku.getTotalPower() },
+        { short: 'HP', value: cached?.hp },
+        { short: 'ATK', value: cached?.atk },
+        { short: 'DEF', value: cached?.def },
+        { short: 'PWR', value: cached?.pwr },
       ]
     })
 

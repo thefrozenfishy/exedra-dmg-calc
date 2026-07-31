@@ -10,8 +10,7 @@
           <input type="file" accept="application/json" @change="handleFileChange" />
         </label>
 
-        <button class="btn" :class="{ 'btn-active': showHighestTeam }"
-          @click="showHighestTeam = !showHighestTeam">
+        <button class="btn" :class="{ 'btn-active': showHighestTeam }" @click="showHighestTeam = !showHighestTeam">
           {{ showHighestTeam ? 'Hide Highest PWR Team' : 'Show Highest PWR Team' }}
         </button>
         <div v-if="calculating" class="calc-progress">
@@ -152,6 +151,7 @@ import { useSetting } from '../store/settingsStore.js'
 import { FinalTeam } from '../types/BestTeamTypes.js'
 import { LuxMagica } from '../types/enums.js'
 import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
+import { getCachedStats, scheduleBackfill } from '../utils/statsBackfill'
 
 export default defineComponent({
   components: { CharacterCard, TeamRow },
@@ -275,7 +275,7 @@ export default defineComponent({
       }>()
 
       for (const c of store.characters) {
-        const kioku = new ScoreAttackKioku({...c, portrait: undefined})
+        const kioku = new ScoreAttackKioku({ ...c, portrait: undefined })
 
         map.set(c.id, {
           atk: kioku.getBaseAtk(),
@@ -288,17 +288,16 @@ export default defineComponent({
       return map
     })
 
+    onMounted(() => {
+      scheduleBackfill(store.characters)
+    })
+
     function sortCharacters(chars: Character[]) {
-      const cache = sortCache.value
-
       return chars.slice().sort((a, b) => {
-        if (sortBy.value === "name")
-          return a.name.localeCompare(b.name)
-
-        return (
-          cache.get(b.id)![sortBy.value] -
-          cache.get(a.id)![sortBy.value]
-        )
+        if (sortBy.value === "name") return a.name.localeCompare(b.name)
+        const statA = getCachedStats(a)?.[sortBy.value] ?? -Infinity
+        const statB = getCachedStats(b)?.[sortBy.value] ?? -Infinity
+        return statB - statA
       })
     }
 
@@ -766,10 +765,10 @@ export default defineComponent({
 }
 
 .selector {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 0.3rem 1rem;
-    gap: 0.5rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.3rem 1rem;
+  gap: 0.5rem;
 }
 </style>
