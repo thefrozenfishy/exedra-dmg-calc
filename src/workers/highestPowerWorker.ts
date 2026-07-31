@@ -250,7 +250,7 @@ self.onmessage = function (e: MessageEvent) {
 
         const bestTeam = buildTeamObject(bestTeamSetup.reverse(), characters);
         self.postMessage({ type: 'done', bestTeam, maxTeamPower });
-    } catch (err) {
-        self.postMessage({ type: 'error', error: err instanceof Error ? err.message : String(err) });
+    } catch (error) {
+        self.postMessage({ type: 'error', error });
     }
 };
