@@ -88,6 +88,12 @@
             <div class="list-header crys-table-header">
                 <span class="crys-header-name">Kioku</span>
                 <span class="crys-header-crys">Crystalis</span>
+                <span class="element-count" v-if="sortedCharacterCrysRows.length === rosterCharacterCrysRows.length"
+                    title="Completed Kioku out of total Kioku">{{
+                        sortedCharacterCrysRows.filter(r => r.completed).length}} / {{
+                        sortedCharacterCrysRows.length }}</span>
+                <span class="element-count" v-else title="Remaining Kioku in the current filter">{{
+                    sortedCharacterCrysRows.length }}</span>
             </div>
 
             <section class="element-section">
@@ -575,7 +581,7 @@ function onApplyImport(selectedKeys: Set<string>) {
 }
 
 .crys-table-header {
-    grid-template-columns: 74px 1fr;
+    grid-template-columns: auto 1fr auto;
 }
 
 .crys-header-name {
