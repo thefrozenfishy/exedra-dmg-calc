@@ -10,7 +10,7 @@
           <input type="file" accept="application/json" @change="handleFileChange" />
         </label>
 
-        <button v-if="highestTeam" class="btn" :class="{ 'btn-active': showHighestTeam }"
+        <button class="btn" :class="{ 'btn-active': showHighestTeam }"
           @click="showHighestTeam = !showHighestTeam">
           {{ showHighestTeam ? 'Hide Highest PWR Team' : 'Show Highest PWR Team' }}
         </button>
@@ -143,7 +143,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, reactive, ref, onMounted, onBeforeUnmount } from 'vue'
+import { defineComponent, computed, reactive, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import CharacterCard from '../components/CharacterCard.vue'
 import TeamRow from '../components/TeamRow.vue'
 import { useCharacterStore } from '../store/characterStore.js'
@@ -163,7 +163,7 @@ export default defineComponent({
 
     const highestPwr = ref<number | null>(null)
     const highestTeam = ref<FinalTeam>()
-    const calculating = ref(true)
+    const calculating = ref(showHighestTeam.value)
     const completedRuns = ref(0)
     const expectedRuns = ref(0)
     const currentBestTeam = ref<FinalTeam>()
@@ -175,10 +175,12 @@ export default defineComponent({
     const groupByRole = useSetting('groupCharactersByRole', true)
 
     let worker: Worker | null = null
+    const needsRecalc = ref(true)
 
     const runHighestPowerCalc = () => {
       const chars = store.characters.filter(c => c.rarity === 5 && c.enabled).concat(store.characters.filter(c => c.rarity != 5))
 
+      needsRecalc.value = false
       calculating.value = true
       completedRuns.value = 0
       expectedRuns.value = 0
@@ -198,7 +200,6 @@ export default defineComponent({
           highestTeam.value = e.data.bestTeam
           highestPwr.value = e.data.maxTeamPower
           calculating.value = false
-          showHighestTeam.value = true
         } else if (e.data.type === 'error') {
           console.error("Failed to calculate highest PWR team:", e.data.error)
           calculating.value = false
@@ -206,8 +207,29 @@ export default defineComponent({
       }
     }
 
+    function triggerRecalc() {
+      needsRecalc.value = true
+      if (showHighestTeam.value) {
+        runHighestPowerCalc()
+      }
+    }
+
+    watch(showHighestTeam, (isOn) => {
+      if (isOn) {
+        if (needsRecalc.value) {
+          runHighestPowerCalc()
+        }
+      } else {
+        worker?.terminate()
+        worker = null
+        calculating.value = false
+      }
+    })
+
     onMounted(() => {
-      runHighestPowerCalc()
+      if (showHighestTeam.value) {
+        runHighestPowerCalc()
+      }
     })
 
     onBeforeUnmount(() => {
@@ -342,14 +364,14 @@ export default defineComponent({
           return updated
         })
       )
-      runHighestPowerCalc()
+      triggerRecalc()
     }
 
     function handleFileChange(e: Event) {
       const file = (e.target as HTMLInputElement).files?.[0]
       if (file) {
         store.importCharacters(file).then(() => {
-          runHighestPowerCalc()
+          triggerRecalc()
         }).catch(err => alert('Import failed: ' + err.message))
       }
     }
