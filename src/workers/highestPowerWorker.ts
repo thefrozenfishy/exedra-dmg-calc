@@ -5,7 +5,7 @@ import { Character, highestPwrPortraits } from "../types/KiokuTypes";
 
 const MAIN_CANDIDATES = 8;
 const TEAM_SIZE = 5;
-const SUPPORT_PWR_THRESHOLD = 300;
+const SUPPORT_PWR_THRESHOLD = 400;
 const PLACEHOLDER_ATTACKER = LuxMagica;
 const PLACEHOLDER_PORTRAIT = "A Distant Ideal";
 
@@ -203,18 +203,7 @@ self.onmessage = function (e: MessageEvent) {
             const usedSupports = new Set<string>();
             const current: [string, string, string][] = [];
 
-            let localCalls = 0;
-            let localAborted = false;
-
-            function fastDfs(index: number, currentPower: number) {
-                if (localAborted) return;
-                localCalls++;
-
-                if (localCalls > 15000) {
-                    localAborted = true;
-                    return;
-                }
-
+            function dfs(index: number, currentPower: number) {
                 if (index === 5) {
                     if (currentPower > maxTeamPower) {
                         maxTeamPower = currentPower;
@@ -242,7 +231,7 @@ self.onmessage = function (e: MessageEvent) {
                     usedSupports.add(option.supportName);
                     current.push([team[index].char.name, option.supportName, option.portrait]);
 
-                    fastDfs(index + 1, currentPower + option.power);
+                    dfs(index + 1, currentPower + option.power);
 
                     current.pop();
                     usedPortraits.delete(option.portrait);
@@ -250,7 +239,7 @@ self.onmessage = function (e: MessageEvent) {
                 }
             }
 
-            fastDfs(0, 0);
+            dfs(0, 0);
 
             completedRuns++;
             postProgress(completedRuns, expectedTotalRuns, {
