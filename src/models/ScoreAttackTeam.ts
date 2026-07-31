@@ -363,10 +363,7 @@ export class ScoreAttackTeam {
                         .some(id => !isStartCondRelevantForScoreAttack(id, sourceKioku.maxMagicStacks, 5, this.dps.data.role))
                 ) continue;
 
-                const isDebuff = baseEff.startsWith("DWN_")
-                    || baseEff.startsWith("DOWN_")
-                    || baseEff === "UP_RCV_DMG_RATIO"
-                    || baseEff === "WEAKNESS";
+                const isDebuff = this.isDebuffEffect(baseEff);
 
                 if (isDebuff) {
                     if (detail.element && elementMap[detail.element] !== this.dps.data.element) continue;
@@ -457,8 +454,15 @@ export class ScoreAttackTeam {
 
         for (const [effectType, value] of Object.entries(this.arenaEffects)) {
             if (!value) continue;
-            for (let i = 0; i < 5; i++) {
-                this.accumulateIntoPool(effectType, value * 10, this.allyContexts[i].effects);
+            const baseEff = this.reduceEffect(effectType);
+            if (this.isDebuffEffect(baseEff)) {
+                for (let i = 0; i < 5; i++) {
+                    this.accumulateIntoPool(effectType, value * 10, this.debuffPools[i]);
+                }
+            } else {
+                for (let i = 0; i < 5; i++) {
+                    this.accumulateIntoPool(effectType, value * 10, this.allyContexts[i].effects);
+                }
             }
         }
 
@@ -540,6 +544,13 @@ export class ScoreAttackTeam {
 
     private reduceEffect(eff: string) {
         return eff.replace("_ACCUM", "").replace("_CONSUME", "").replace("_AIM", "")
+    }
+
+    private isDebuffEffect(baseEff: string): boolean {
+        return baseEff.startsWith("DWN_")
+            || baseEff.startsWith("DOWN_")
+            || baseEff === "UP_RCV_DMG_RATIO"
+            || baseEff === "WEAKNESS";
     }
 
     private accumulateIntoPool(eff: string, value: number, pool: EffectPool) {
