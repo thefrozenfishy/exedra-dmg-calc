@@ -306,7 +306,7 @@ export default defineComponent({
         if (sortBy.value === "magicLvl") return a.magicLvl - b.magicLvl
         const statA = getCachedStats(a)?.[sortBy.value] ?? -Infinity
         const statB = getCachedStats(b)?.[sortBy.value] ?? -Infinity
-        return statB - statA
+        return statA - statB
       })
     }
 
