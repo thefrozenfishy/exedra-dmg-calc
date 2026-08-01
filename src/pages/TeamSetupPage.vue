@@ -302,11 +302,11 @@ export default defineComponent({
         if (sortBy.value === "name") return a.name.localeCompare(b.name)
         if (sortBy.value === "ch_name") return a.character_en.localeCompare(b.character_en)
         if (sortBy.value === "releaseDate") return new Date(a.releaseDate) > new Date(b.releaseDate)
-        if (sortBy.value === "kiokuLvl") return a.kiokuLvl - b.kiokuLvl
-        if (sortBy.value === "magicLvl") return a.magicLvl - b.magicLvl
+        if (sortBy.value === "kiokuLvl") return b.kiokuLvl - a.kiokuLvl
+        if (sortBy.value === "magicLvl") return b.magicLvl - a.magicLvl
         const statA = getCachedStats(a)?.[sortBy.value] ?? -Infinity
         const statB = getCachedStats(b)?.[sortBy.value] ?? -Infinity
-        return statA - statB
+        return statB - statA
       })
     }
 
