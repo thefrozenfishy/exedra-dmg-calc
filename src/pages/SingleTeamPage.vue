@@ -925,6 +925,7 @@ async function copyToClipboard(text: string) {
 
 .exporting {
   display: block !important;
+  width: 1200px !important;
 }
 
 .share-card-actions {
