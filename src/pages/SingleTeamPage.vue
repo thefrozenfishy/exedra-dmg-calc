@@ -34,9 +34,23 @@
           :share-options="shareOptionsForTeamCard" :disabled="!shareCardAvailable" />
       </div>
       <div class="toolbar-right">
-        <button type="button" class="icon-btn icon-btn--accent import-screenshot-btn" tabindex="0" :disabled="importingScreenshot"
-          title="Upload a screenshot of your in-game party screen, or focus this button and press Ctrl+V to paste one, and this will auto-fill the team below"
-          @click="triggerScreenshotImport" @paste="onScreenshotPaste">
+        <button type="button" class="icon-btn icon-btn--accent import-screenshot-btn" tabindex="0"
+          v-if="!importingScreenshot"
+          title="Click to read an image directly from your clipboard and auto-fill the team below"
+          @click="importTeamFromClipboard">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" class="import-screenshot-icon">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>Copy Team from Clipboard</span>
+        </button>
+
+        <button type="button" class="icon-btn icon-btn--accent import-screenshot-btn" tabindex="0"
+          :disabled="importingScreenshot"
+          title="Upload a screenshot of your in-game party screen, or press Ctrl+V to paste one, and this will auto-fill the team below"
+          @click="triggerScreenshotImport">
           <span v-if="importingScreenshot" class="import-spinner" aria-hidden="true" />
           <svg v-else viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" class="import-screenshot-icon">
             <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="2"
@@ -45,7 +59,7 @@
             <path d="M7 8l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" />
           </svg>
-          <span v-if="!importingScreenshot">Import from Screenshot</span>
+          <span v-if="!importingScreenshot">Import Team from Screenshot</span>
           <span v-else>Matching {{ importProgress.done }}/{{ importProgress.total }}…</span>
         </button>
         <input ref="screenshotInputRef" type="file" accept="image/*" class="screenshot-file-input"
@@ -278,7 +292,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
 import { ScoreAttackTeam, type DebugSections, type DotAllyCompositeKey, type EnemyDebuffCompositeKey } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
@@ -661,13 +675,59 @@ async function onScreenshotFileChosen(e: Event) {
   if (file) await importTeamFromImageFile(file)
 }
 
-async function onScreenshotPaste(e: ClipboardEvent) {
+async function importTeamFromClipboard() {
+  if (importingScreenshot.value) return
+  try {
+    if (!navigator.clipboard?.read) {
+      toast.error('Clipboard reading is not supported by your browser', { position: toast.POSITION.TOP_RIGHT, icon: false })
+      return
+    }
+
+    const items = await navigator.clipboard.read()
+    let imageBlob: Blob | null = null
+
+    for (const item of items) {
+      const type = item.types.find(t => t.startsWith('image/'))
+      if (type) {
+        imageBlob = await item.getType(type)
+        break
+      }
+    }
+
+    if (!imageBlob) {
+      toast.error('No image found in clipboard', { position: toast.POSITION.TOP_RIGHT, icon: false })
+      return
+    }
+
+    const file = new File([imageBlob], 'clipboard-screenshot.png', { type: imageBlob.type })
+    await importTeamFromImageFile(file)
+  } catch (err) {
+    console.error('Failed to read image from clipboard:', err)
+    toast.error('Failed to access clipboard image. Please grant clipboard permissions.', { position: toast.POSITION.TOP_RIGHT, icon: false })
+  }
+}
+
+function handleGlobalPaste(e: ClipboardEvent) {
+  const target = e.target as HTMLElement
+  if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) {
+    return
+  }
+
   const item = Array.from(e.clipboardData?.items ?? []).find(i => i.type.startsWith('image/'))
   const file = item?.getAsFile()
-  if (!file) return
-  e.preventDefault()
-  await importTeamFromImageFile(file)
+  if (file) {
+    e.preventDefault()
+    importTeamFromImageFile(file)
+  }
 }
+
+onMounted(() => {
+  window.addEventListener('paste', handleGlobalPaste)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('paste', handleGlobalPaste)
+})
 
 async function importTeamFromImageFile(file: File) {
   if (importingScreenshot.value) return
@@ -715,6 +775,9 @@ async function importTeamFromImageFile(file: File) {
           : null
       ].filter(s => s != null).join("\n")
       toast.success(`Imported ${matchedCount}/15 slots from screenshot\n${suffix}`, { position: toast.POSITION.TOP_RIGHT, icon: false })
+      if (lowMainConfidenceCount + lowPortraitConfidenceCount + lowSupportConfidenceCount > 5) {
+        toast.info("To improve accuracy, increase the resolution, or take a picture in full screen mode (Alt + Enter)")
+      }
     }
   } catch (err) {
     console.error('Failed to import team from screenshot:', err)
