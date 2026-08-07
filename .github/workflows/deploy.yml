@@ -39,7 +39,7 @@ jobs:
 
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          version: "2.111.0"
 
       - name: Link project
         run: supabase link --project-ref $SUPABASE_PROJECT_REF
