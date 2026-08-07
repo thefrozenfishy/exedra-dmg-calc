@@ -1,4 +1,3 @@
-import { LuxMagica } from '../types/enums';
 import { kiokuData, portraits } from './helpers';
 import { downloadCanvas } from './image';
 
@@ -21,26 +20,29 @@ export async function loadPrecomputedCandidates() {
   }));
 }
 
-export function computeEmbedding(image: HTMLCanvasElement | HTMLImageElement): Promise<Float32Array> {
+export function warmUpEmbeddingModel() {
+  const c = document.createElement('canvas');
+  c.width = c.height = 8;
+  return computeEmbeddingsBatch([c]).catch(() => { });
+}
+
+export function computeEmbeddingsBatch(images: (HTMLCanvasElement | HTMLImageElement)[]): Promise<Float32Array[]> {
   return new Promise((resolve, reject) => {
     const id = crypto.randomUUID();
-
-    const imageUrl = image instanceof HTMLImageElement ? image.src : image.toDataURL();
+    const imageUrls = images.map(img =>
+      img instanceof HTMLImageElement ? img.src : img.toDataURL()
+    );
 
     const onMessage = (event: MessageEvent) => {
       if (event.data.id === id) {
         worker.removeEventListener('message', onMessage);
-
-        if (event.data.error) {
-          reject(new Error(event.data.error));
-        } else {
-          resolve(event.data.embedding as Float32Array);
-        }
+        if (event.data.error) reject(new Error(event.data.error));
+        else resolve(event.data.embeddings as Float32Array[]);
       }
     };
 
     worker.addEventListener('message', onMessage);
-    worker.postMessage({ id, imageUrl });
+    worker.postMessage({ id, imageUrls });
   });
 }
 
@@ -123,7 +125,7 @@ function cropRegion(
     }
   }
 
-  downloadCanvas(`${isCircle}_${sx}_${sy}_${sw}_${sh}.png`, canvas);
+  if (false) downloadCanvas(`${isCircle}_${sx}_${sy}_${sw}_${sh}.png`, canvas);
   return canvas;
 }
 
@@ -139,73 +141,57 @@ export interface ExtractedSlotResult {
   portraitDistance?: number;
 }
 
+type Role = 'main' | 'portrait' | 'support';
+interface CropJob { slot: number; role: Role; canvas: HTMLCanvasElement }
+
 export async function extractTeamFromScreenshot(
   img: HTMLImageElement,
   onProgress?: (done: number, total: number) => void
 ): Promise<ExtractedSlotResult[]> {
-  const REF_WIDTH = 1920;
-  const REF_HEIGHT = 1080;
-
+  const REF_WIDTH = 1920, REF_HEIGHT = 1080;
   const scaleX = img.naturalWidth / REF_WIDTH;
   const scaleY = img.naturalHeight / REF_HEIGHT;
-  const BASE = 340;
-  const SPACE = 356;
-  const totalOps = 5 * 3;
-  let currentDone = 0;
+  const BASE = 340, SPACE = 356;
 
-  const updateProgress = () => {
-    currentDone++;
-    if (onProgress) onProgress(Math.min(currentDone, totalOps), totalOps);
-  };
-
-  const results: ExtractedSlotResult[] = [];
+  const jobs: CropJob[] = [];
 
   for (let i = 0; i < 5; i++) {
     const xCenter = BASE + i * SPACE;
-    const yOffset = i === 0 ? 4 : 0; // The leftmost is too fucking high AAAAAAAAAAAAAAAAAAA
+    const yOffset = i === 0 ? 4 : 0;
 
-    const mainCrop = {
-      sx: Math.round((xCenter - 240) * scaleX),
-      sy: Math.round(200 * scaleY),
-      sw: Math.round(290 * scaleX),
-      sh: Math.round(260 * scaleY),
-    };
+    const mainCrop = { sx: Math.round((xCenter - 240) * scaleX), sy: Math.round(200 * scaleY), sw: Math.round(290 * scaleX), sh: Math.round(260 * scaleY) };
+    const portraitCrop = { sx: Math.round((xCenter - 170) * scaleX), sy: Math.round((675 - yOffset) * scaleY), sw: Math.round(150 * scaleX), sh: Math.round(90 * scaleY) };
+    const supportCrop = { sx: Math.round((xCenter - 133) * scaleX), sy: Math.round((818 - yOffset) * scaleY), sw: Math.round(80 * scaleX), sh: Math.round(80 * scaleY) };
 
-    const portraitCrop = {
-      sx: Math.round((xCenter - 170) * scaleX),
-      sy: Math.round((675 - yOffset) * scaleY),
-      sw: Math.round(150 * scaleX),
-      sh: Math.round(90 * scaleY),
-    };
-
-    const supportCrop = {
-      sx: Math.round((xCenter - 133) * scaleX),
-      sy: Math.round((818 - yOffset) * scaleY),
-      sw: Math.round(80 * scaleX),
-      sh: Math.round(80 * scaleY),
-    };
-
-    const mainCanvas = cropRegion(img, mainCrop.sx, mainCrop.sy, mainCrop.sw, mainCrop.sh);
-    // const portraitCanvas = cropRegion(img, portraitCrop.sx, portraitCrop.sy, portraitCrop.sw, portraitCrop.sh);
-    // const supportCanvas = cropRegion(img, supportCrop.sx, supportCrop.sy, supportCrop.sw, supportCrop.sh, true);
-
-    const mainBest = await findBestMatch(mainCanvas, candidates);
-    const portraitBest = { value: "art_00_01_0001", score: 1 } // await findBestMatch(portraitCanvas, candidates);
-    const supportBest = { value: "10980101", score: 1 } //await findBestMatch(supportCanvas, candidates);
-    console.log(mainBest)
-
-    updateProgress();
-
-    results.push({
-      index: i,
-      portraitName: Object.values(portraits).find(p => p.resourceName === portraitBest.value)?.name,
-      portraitDistance: portraitBest.score,
-      characterName: LuxMagica,
-      characterDistance: 1,
-      supportName: Object.entries(kiokuData).find(([n, k]) => Number(supportBest.value) == k.id)?.[0],
-      supportDistance: supportBest.score,
-    });
+    jobs.push({ slot: i, role: 'main', canvas: cropRegion(img, mainCrop.sx, mainCrop.sy, mainCrop.sw, mainCrop.sh) });
+    jobs.push({ slot: i, role: 'portrait', canvas: cropRegion(img, portraitCrop.sx, portraitCrop.sy, portraitCrop.sw, portraitCrop.sh) });
+    jobs.push({ slot: i, role: 'support', canvas: cropRegion(img, supportCrop.sx, supportCrop.sy, supportCrop.sw, supportCrop.sh, true) });
   }
 
-  return results;
+  onProgress?.(0, jobs.length);
+  const embeddings = await computeEmbeddingsBatch(jobs.map(j => j.canvas));
+  onProgress?.(jobs.length, jobs.length);
+
+  const bySlot: Record<number, Partial<Record<Role, { value: string; score: number }>>> = {};
+
+  jobs.forEach((job, idx) => {
+    const query = embeddings[idx];
+    let bestScore = -Infinity, best: string | undefined;
+    for (const candidate of candidates) {
+      const score = cosineSimilarity(query, candidate.embedding);
+      if (score > bestScore) { bestScore = score; best = candidate.value; }
+    }
+    if (job.role === "main")       best = best?.slice(0, 8);
+    (bySlot[job.slot] ??= {})[job.role] = { value: best!, score: bestScore };
+  });
+
+  return Array.from({ length: 5 }, (_, i) => ({
+    index: i,
+    portraitName: Object.values(portraits).find(p => p.resourceName === bySlot[i]?.portrait?.value)?.name,
+    portraitDistance: bySlot[i]?.portrait?.score,
+    characterName: Object.entries(kiokuData).find(([, k]) => Number(bySlot[i]?.main?.value) === k.id)?.[0],
+    characterDistance: bySlot[i]?.main?.score,
+    supportName: Object.entries(kiokuData).find(([, k]) => Number(bySlot[i]?.support?.value) === k.id)?.[0],
+    supportDistance: bySlot[i]?.support?.score,
+  }));
 }

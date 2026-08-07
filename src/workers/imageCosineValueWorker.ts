@@ -7,7 +7,7 @@ const device = (typeof navigator !== 'undefined' && 'gpu' in navigator)
     : 'wasm';
 
 self.onmessage = async (event) => {
-    const { id, imageUrl } = event.data;
+    const { id, imageUrls } = event.data;
 
     try {
         if (!extractorPromise) {
@@ -19,19 +19,21 @@ self.onmessage = async (event) => {
         }
 
         const extractor = await extractorPromise;
-        const result = await extractor(imageUrl, {
+        const result = await extractor(imageUrls, {
             pooling: "mean",
             normalize: true,
         });
 
-        self.postMessage({
-            id,
-            embedding: result.data
-        });
+        const [n, dim] = result.dims;
+        const embeddings: Float32Array[] = [];
+        for (let i = 0; i < n; i++) {
+            embeddings.push(result.data.slice(i * dim, (i + 1) * dim));
+        }
+
+        self.postMessage({ id, embeddings });
 
     } catch (error) {
         console.error("Worker Error:", error);
-
         self.postMessage({
             id,
             error: error instanceof Error ? error.message : "Unknown worker error"

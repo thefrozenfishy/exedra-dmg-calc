@@ -65,7 +65,7 @@
                   <span class="share-overlay-badge heart">H{{ slot.main.heartphialLvl }}</span>
                   <span class="share-overlay-badge magic">ML{{ slot.main.magicLvl }}</span>
                   <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">SP{{ slot.main.specialLvl
-                  }}</span>
+                    }}</span>
                 </div>
               </div>
             </div>
@@ -294,7 +294,7 @@ import { crystalises, passiveDetails, portraits } from "../utils/helpers";
 import { useFriendStore } from '../store/friendStore'
 import { useCharacterStore } from '../store/characterStore'
 import type { AttackerLoadoutResult } from '../models/BestTeamCalculator'
-import { extractTeamFromScreenshot, loadImageFromFile, loadPrecomputedCandidates, LOW_CONFIDENCE_THRESHOLD } from '../utils/screenshotTeamImport'
+import { extractTeamFromScreenshot, loadImageFromFile, loadPrecomputedCandidates, LOW_CONFIDENCE_THRESHOLD, warmUpEmbeddingModel } from '../utils/screenshotTeamImport'
 
 const attackerIndex = 2
 
@@ -552,7 +552,7 @@ function optimizeAttackerLoadout(mode: 'max' | 'avg' = 'max') {
 
   worker.onmessage = (e) => {
     if (e.data.type === 'done') {
-      applyBestAttackerLoadout(e.data.results, mode)
+      applyBestAttackerLoadout(e.data.results)
       optimizingAttackerMode.value = null
       worker.terminate()
     } else if (e.data.type === 'error') {
@@ -608,7 +608,7 @@ function applyCrysSelection(main: Character, crysIds: number[]) {
   })
 }
 
-function applyBestAttackerLoadout(results: AttackerLoadoutResult[], mode: 'max' | 'avg') {
+function applyBestAttackerLoadout(results: AttackerLoadoutResult[]) {
   const best = results[0]
   if (!best) {
     toast.error("Couldn't find a valid support for this attacker", { position: toast.POSITION.TOP_RIGHT, icon: false })
@@ -616,8 +616,6 @@ function applyBestAttackerLoadout(results: AttackerLoadoutResult[], mode: 'max' 
   }
 
   const attackerSlot = team.slots[attackerIndex]
-  const metricIndex = mode === 'avg' ? 1 : 0
-  const prevDmg = typeof battleOutput.value !== 'string' ? battleOutput.value[metricIndex] : undefined
 
   if (attackerSlot.main) {
     attackerSlot.main.portrait = best.portrait
@@ -644,7 +642,7 @@ const importProgress = reactive({ done: 0, total: 0 })
 
 onMounted(async () => {
   try {
-    await loadPrecomputedCandidates()
+    await Promise.all([loadPrecomputedCandidates(), warmUpEmbeddingModel()])
   } catch (err) {
     console.error("Failed to preload screenshot matching data:", err)
   }
@@ -684,8 +682,11 @@ async function importTeamFromImageFile(file: File) {
       img,
       (done, total) => { importProgress.done = done; importProgress.total = total },
     )
+    console.debug("import results was", results)
 
-    let lowConfidenceCount = 0
+    let lowMainConfidenceCount = 0
+    let lowPortraitConfidenceCount = 0
+    let lowSupportConfidenceCount = 0
     for (const r of results) {
       if (!r.characterName) continue
 
@@ -695,18 +696,25 @@ async function importTeamFromImageFile(file: File) {
 
       if (r.supportName) team.setSupport(r.index, characterStore.characters.find(c => c.name === r.supportName))
 
-      const distances = [r.characterDistance, r.supportDistance, r.portraitDistance]
-      if (distances.some(d => (d ?? Infinity) > LOW_CONFIDENCE_THRESHOLD)) lowConfidenceCount++
+      if ((r.characterDistance ?? Infinity) < LOW_CONFIDENCE_THRESHOLD) lowMainConfidenceCount++
+      if ((r.portraitDistance ?? Infinity) < LOW_CONFIDENCE_THRESHOLD) lowPortraitConfidenceCount++
+      if ((r.supportDistance ?? Infinity) < LOW_CONFIDENCE_THRESHOLD) lowSupportConfidenceCount++
     }
 
-    const matchedCount = results.filter(r => r.characterName).length
+    const matchedCount = results.filter(r => r.characterName).length + results.filter(r => r.portraitName).length + results.filter(r => r.supportName).length
     if (matchedCount === 0) {
       toast.error("Couldn't recognize any characters in that screenshot", { position: toast.POSITION.TOP_RIGHT, icon: false })
     } else {
-      const suffix = lowConfidenceCount > 0
-        ? ` — please double-check ${lowConfidenceCount} slot${lowConfidenceCount === 1 ? '' : 's'} with low match confidence`
-        : ''
-      toast.success(`Imported ${matchedCount}/5 slots from screenshot${suffix}`, { position: toast.POSITION.TOP_RIGHT, icon: false })
+       const suffix = [lowMainConfidenceCount > 0
+        ? `- please double-check ${lowMainConfidenceCount} slot${lowMainConfidenceCount === 1 ? '' : 's'} main kioku with low match confidence`
+        : '',
+       lowPortraitConfidenceCount > 0
+        ? `- please double-check ${lowPortraitConfidenceCount} slot${lowPortraitConfidenceCount === 1 ? '' : 's'} portraits with low match confidence`
+        : '',
+       lowSupportConfidenceCount > 0
+        ? `- please double-check ${lowSupportConfidenceCount} slot${lowSupportConfidenceCount === 1 ? '' : 's'} support kioku with low match confidence`
+        : ''].filter(Boolean).join("\n")
+      toast.success(`Imported ${matchedCount}/15 slots from screenshot${suffix}`, { position: toast.POSITION.TOP_RIGHT, icon: false })
     }
   } catch (err) {
     console.error('Failed to import team from screenshot:', err)

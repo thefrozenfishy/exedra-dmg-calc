@@ -1,17 +1,20 @@
 import fs from 'fs/promises';
 import path from 'path';
+import sharp from 'sharp';
 import { pipeline } from '@huggingface/transformers';
 
-// Update these to match your actual folder paths
 const IMAGE_FOLDERS = [
-    ['./public/portrait_images', 0, 1],
-    ['./public/kioku_images', 0, 1],
-    ['./public/kioku_party_images', 0, 1],
+    ['./public/portrait_images', 0, 0],
+    ['./public/kioku_images', 0, 0],
+    ['./public/kioku_party_images', 0.37, 0.10],
 ];
+
 const OUTPUT_FILE = './public/candidates.json';
+const CROPPED_OUTPUT_FOLDER = './public/cropped_candidates';
 
 async function generate() {
     let cache = {};
+
     try {
         const fileData = await fs.readFile(OUTPUT_FILE, 'utf-8');
         cache = JSON.parse(fileData);
@@ -25,11 +28,22 @@ async function generate() {
 
     for (const [folder, bottom, top] of IMAGE_FOLDERS) {
         let files = [];
+
         try {
             files = await fs.readdir(folder);
         } catch (e) {
             console.warn(`Could not read folder: ${folder}`);
             continue;
+        }
+
+        const folderName = path.basename(folder);
+        const croppedFolder = path.join(
+            CROPPED_OUTPUT_FOLDER,
+            folderName
+        );
+
+        if (top > 0 || bottom > 0) {
+            await fs.mkdir(croppedFolder, { recursive: true });
         }
 
         for (const file of files) {
@@ -48,7 +62,51 @@ async function generate() {
             }
 
             const filePath = path.join(folder, file);
-            const result = await extractor(filePath, {
+            let imageInput = filePath;
+
+            if (top > 0 || bottom > 0) {
+                const metadata = await sharp(filePath).metadata();
+
+                if (!metadata.width || !metadata.height) {
+                    console.warn(`Could not determine dimensions for ${filePath}`);
+                    continue;
+                }
+
+                const cropTop = Math.round(metadata.height * top);
+                const cropBottom = Math.round(metadata.height * bottom);
+
+                const cropHeight =
+                    metadata.height - cropTop - cropBottom;
+
+                if (cropHeight <= 0) {
+                    console.warn(`Invalid crop for ${filePath}`);
+                    continue;
+                }
+
+                const croppedPath = path.join(
+                    croppedFolder,
+                    file
+                );
+
+                await sharp(filePath)
+                    .extract({
+                        left: 0,
+                        top: cropTop,
+                        width: metadata.width,
+                        height: cropHeight,
+                    })
+                    .png()
+                    .toFile(croppedPath);
+
+                console.log(
+                    `Cropped ${file} → ${croppedPath} ` +
+                    `(top: ${top * 100}%, bottom: ${bottom * 100}%)`
+                );
+
+                imageInput = croppedPath;
+            }
+
+            const result = await extractor(imageInput, {
                 pooling: "mean",
                 normalize: true,
             });
