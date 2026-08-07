@@ -26,7 +26,10 @@ export async function warmUpEmbeddingModel() {
   return computeEmbeddingsBatch([c]).catch(() => { });
 }
 
-export function computeEmbeddingsBatch(images: (HTMLCanvasElement | HTMLImageElement)[]): Promise<Float32Array[]> {
+export function computeEmbeddingsBatch(
+  images: (HTMLCanvasElement | HTMLImageElement)[],
+  onProgress?: (done: number, total: number) => void
+): Promise<Float32Array[]> {
   return new Promise((resolve, reject) => {
     const id = crypto.randomUUID();
     const imageUrls = images.map(img =>
@@ -34,11 +37,16 @@ export function computeEmbeddingsBatch(images: (HTMLCanvasElement | HTMLImageEle
     );
 
     const onMessage = (event: MessageEvent) => {
-      if (event.data.id === id) {
-        worker.removeEventListener('message', onMessage);
-        if (event.data.error) reject(new Error(event.data.error));
-        else resolve(event.data.embeddings as Float32Array[]);
+      if (event.data.id !== id) return;
+
+      if (event.data.progress) {
+        onProgress?.(event.data.progress.done, event.data.progress.total);
+        return;
       }
+
+      worker.removeEventListener('message', onMessage);
+      if (event.data.error) reject(new Error(event.data.error));
+      else resolve(event.data.embeddings as Float32Array[]);
     };
 
     worker.addEventListener('message', onMessage);
@@ -273,8 +281,7 @@ export async function extractTeamFromScreenshot(
   }
 
   onProgress?.(0, jobs.length);
-  const embeddings = await computeEmbeddingsBatch(jobs.map(j => j.canvas));
-  onProgress?.(jobs.length, jobs.length);
+  const embeddings = await computeEmbeddingsBatch(jobs.map(j => j.canvas), onProgress);
 
   const bySlot: Record<number, Partial<Record<Role, { value: string; score: number }>>> = {};
 

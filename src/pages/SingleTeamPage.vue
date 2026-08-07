@@ -34,10 +34,11 @@
           :share-options="shareOptionsForTeamCard" :disabled="!shareCardAvailable" />
       </div>
       <div class="toolbar-right">
-        <button type="button" class="import-screenshot-btn" tabindex="0" :disabled="importingScreenshot"
+        <button type="button" class="icon-btn icon-btn--accent import-screenshot-btn" tabindex="0" :disabled="importingScreenshot"
           title="Upload a screenshot of your in-game party screen, or focus this button and press Ctrl+V to paste one, and this will auto-fill the team below"
           @click="triggerScreenshotImport" @paste="onScreenshotPaste">
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" class="import-screenshot-icon">
+          <span v-if="importingScreenshot" class="import-spinner" aria-hidden="true" />
+          <svg v-else viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" class="import-screenshot-icon">
             <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round" />
             <path d="M12 3v12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
@@ -688,13 +689,10 @@ async function importTeamFromImageFile(file: File) {
     let lowPortraitConfidenceCount = 0
     let lowSupportConfidenceCount = 0
     for (const r of results) {
-      if (!r.characterName) continue
-
       const mainClone = characterStore.characters.find(c => c.name === r.characterName)
-      if (mainClone && r.portraitName) mainClone.portrait = r.portraitName
+      if (mainClone) mainClone.portrait = r.portraitName
       team.setMain(r.index, mainClone)
-
-      if (r.supportName) team.setSupport(r.index, characterStore.characters.find(c => c.name === r.supportName))
+      team.setSupport(r.index, characterStore.characters.find(c => c.name === r.supportName))
 
       if ((r.characterDistance ?? Infinity) < LOW_CONFIDENCE_THRESHOLD) lowMainConfidenceCount++
       if ((r.portraitDistance ?? Infinity) < LOW_CONFIDENCE_THRESHOLD) lowPortraitConfidenceCount++
@@ -762,30 +760,26 @@ async function importTeamFromImageFile(file: File) {
 .import-screenshot-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.45rem;
-  padding: 0.4rem 0.85rem;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text);
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  width: max-content;
+  padding: 1rem;
 }
 
-.import-screenshot-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 209, 110, 0.5);
-}
-
-.import-screenshot-btn:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-
-.import-screenshot-icon {
+.import-spinner {
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
-  color: var(--accent-soft);
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: import-spinner-spin 0.7s linear infinite;
+}
+
+@keyframes import-spinner-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .screenshot-file-input {
