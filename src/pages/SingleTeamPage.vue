@@ -65,7 +65,7 @@
                   <span class="share-overlay-badge heart">H{{ slot.main.heartphialLvl }}</span>
                   <span class="share-overlay-badge magic">ML{{ slot.main.magicLvl }}</span>
                   <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">SP{{ slot.main.specialLvl
-                    }}</span>
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -705,16 +705,18 @@ async function importTeamFromImageFile(file: File) {
     if (matchedCount === 0) {
       toast.error("Couldn't recognize any characters in that screenshot", { position: toast.POSITION.TOP_RIGHT, icon: false })
     } else {
-       const suffix = [lowMainConfidenceCount > 0
-        ? `- please double-check ${lowMainConfidenceCount} slot${lowMainConfidenceCount === 1 ? '' : 's'} main kioku with low match confidence`
-        : '',
-       lowPortraitConfidenceCount > 0
-        ? `- please double-check ${lowPortraitConfidenceCount} slot${lowPortraitConfidenceCount === 1 ? '' : 's'} portraits with low match confidence`
-        : '',
-       lowSupportConfidenceCount > 0
-        ? `- please double-check ${lowSupportConfidenceCount} slot${lowSupportConfidenceCount === 1 ? '' : 's'} support kioku with low match confidence`
-        : ''].filter(Boolean).join("\n")
-      toast.success(`Imported ${matchedCount}/15 slots from screenshot${suffix}`, { position: toast.POSITION.TOP_RIGHT, icon: false })
+      const suffix = [
+        lowMainConfidenceCount > 0
+          ? `- please double-check ${lowMainConfidenceCount} main kioku${lowMainConfidenceCount === 1 ? '' : 's'} with low match confidence`
+          : null,
+        lowPortraitConfidenceCount > 0
+          ? `- please double-check ${lowPortraitConfidenceCount} portrait${lowPortraitConfidenceCount === 1 ? '' : 's'} with low match confidence`
+          : null,
+        lowSupportConfidenceCount > 0
+          ? `- please double-check ${lowSupportConfidenceCount} support kioku${lowSupportConfidenceCount === 1 ? '' : 's'} with low match confidence`
+          : null
+      ].filter(s => s != null).join("\n")
+      toast.success(`Imported ${matchedCount}/15 slots from screenshot\n${suffix}`, { position: toast.POSITION.TOP_RIGHT, icon: false })
     }
   } catch (err) {
     console.error('Failed to import team from screenshot:', err)

@@ -20,7 +20,7 @@ export async function loadPrecomputedCandidates() {
   }));
 }
 
-export function warmUpEmbeddingModel() {
+export async function warmUpEmbeddingModel() {
   const c = document.createElement('canvas');
   c.width = c.height = 8;
   return computeEmbeddingsBatch([c]).catch(() => { });
@@ -92,7 +92,7 @@ export function loadImageFromFile(file: File): Promise<HTMLImageElement> {
 }
 
 function cropRegion(
-  srcImg: HTMLImageElement,
+  srcImg: HTMLCanvasElement | HTMLImageElement,
   sx: number,
   sy: number,
   sw: number,
@@ -129,6 +129,44 @@ function cropRegion(
   return canvas;
 }
 
+
+function normalizeScreenshotTo16x9(
+  img: HTMLImageElement
+): HTMLCanvasElement | HTMLImageElement {
+  const targetHeight = img.naturalWidth * 9 / 16;
+
+  if (img.naturalHeight <= targetHeight) {
+    return img;
+  }
+
+  const excessHeight = img.naturalHeight - targetHeight;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = img.naturalWidth;
+  canvas.height = Math.round(targetHeight);
+
+  const ctx = canvas.getContext('2d');
+
+  if (!ctx) {
+    throw new Error('Could not create canvas context.');
+  }
+
+  // Skip the excess pixels at the TOP.
+  ctx.drawImage(
+    img,
+    0,
+    excessHeight,
+    img.naturalWidth,
+    targetHeight,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  return canvas;
+}
+
 export const LOW_CONFIDENCE_THRESHOLD = 0.90;
 
 export interface ExtractedSlotResult {
@@ -148,10 +186,26 @@ export async function extractTeamFromScreenshot(
   img: HTMLImageElement,
   onProgress?: (done: number, total: number) => void
 ): Promise<ExtractedSlotResult[]> {
-  const REF_WIDTH = 1920, REF_HEIGHT = 1080;
-  const scaleX = img.naturalWidth / REF_WIDTH;
-  const scaleY = img.naturalHeight / REF_HEIGHT;
-  const BASE = 340, SPACE = 356;
+  const REF_WIDTH = 1920;
+  const REF_HEIGHT = 1080;
+
+  const normalizedImg = normalizeScreenshotTo16x9(img);
+
+  const sourceWidth =
+    normalizedImg instanceof HTMLImageElement
+      ? normalizedImg.naturalWidth
+      : normalizedImg.width;
+
+  const sourceHeight =
+    normalizedImg instanceof HTMLImageElement
+      ? normalizedImg.naturalHeight
+      : normalizedImg.height;
+
+  const scaleX = sourceWidth / REF_WIDTH;
+  const scaleY = sourceHeight / REF_HEIGHT;
+
+  const BASE = 340;
+  const SPACE = 356;
 
   const jobs: CropJob[] = [];
 
@@ -159,13 +213,63 @@ export async function extractTeamFromScreenshot(
     const xCenter = BASE + i * SPACE;
     const yOffset = i === 0 ? 4 : 0;
 
-    const mainCrop = { sx: Math.round((xCenter - 240) * scaleX), sy: Math.round(200 * scaleY), sw: Math.round(290 * scaleX), sh: Math.round(260 * scaleY) };
-    const portraitCrop = { sx: Math.round((xCenter - 170) * scaleX), sy: Math.round((675 - yOffset) * scaleY), sw: Math.round(150 * scaleX), sh: Math.round(90 * scaleY) };
-    const supportCrop = { sx: Math.round((xCenter - 133) * scaleX), sy: Math.round((818 - yOffset) * scaleY), sw: Math.round(80 * scaleX), sh: Math.round(80 * scaleY) };
+    const mainCrop = {
+      sx: Math.round((xCenter - 240) * scaleX),
+      sy: Math.round(200 * scaleY),
+      sw: Math.round(290 * scaleX),
+      sh: Math.round(260 * scaleY),
+    };
 
-    jobs.push({ slot: i, role: 'main', canvas: cropRegion(img, mainCrop.sx, mainCrop.sy, mainCrop.sw, mainCrop.sh) });
-    jobs.push({ slot: i, role: 'portrait', canvas: cropRegion(img, portraitCrop.sx, portraitCrop.sy, portraitCrop.sw, portraitCrop.sh) });
-    jobs.push({ slot: i, role: 'support', canvas: cropRegion(img, supportCrop.sx, supportCrop.sy, supportCrop.sw, supportCrop.sh, true) });
+    const portraitCrop = {
+      sx: Math.round((xCenter - 170) * scaleX),
+      sy: Math.round((675 - yOffset) * scaleY),
+      sw: Math.round(150 * scaleX),
+      sh: Math.round(90 * scaleY),
+    };
+
+    const supportCrop = {
+      sx: Math.round((xCenter - 133) * scaleX),
+      sy: Math.round((818 - yOffset) * scaleY),
+      sw: Math.round(80 * scaleX),
+      sh: Math.round(80 * scaleY),
+    };
+
+    jobs.push({
+      slot: i,
+      role: 'main',
+      canvas: cropRegion(
+        normalizedImg,
+        mainCrop.sx,
+        mainCrop.sy,
+        mainCrop.sw,
+        mainCrop.sh
+      ),
+    });
+
+    jobs.push({
+      slot: i,
+      role: 'portrait',
+      canvas: cropRegion(
+        normalizedImg,
+        portraitCrop.sx,
+        portraitCrop.sy,
+        portraitCrop.sw,
+        portraitCrop.sh
+      ),
+    });
+
+    jobs.push({
+      slot: i,
+      role: 'support',
+      canvas: cropRegion(
+        normalizedImg,
+        supportCrop.sx,
+        supportCrop.sy,
+        supportCrop.sw,
+        supportCrop.sh,
+        true
+      ),
+    });
   }
 
   onProgress?.(0, jobs.length);
@@ -181,7 +285,7 @@ export async function extractTeamFromScreenshot(
       const score = cosineSimilarity(query, candidate.embedding);
       if (score > bestScore) { bestScore = score; best = candidate.value; }
     }
-    if (job.role === "main")       best = best?.slice(0, 8);
+    if (job.role === "main") best = best?.slice(0, 8);
     (bySlot[job.slot] ??= {})[job.role] = { value: best!, score: bestScore };
   });
 
