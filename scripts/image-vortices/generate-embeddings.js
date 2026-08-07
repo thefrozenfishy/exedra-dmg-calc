@@ -4,13 +4,21 @@ import sharp from 'sharp';
 import { pipeline } from '@huggingface/transformers';
 
 const IMAGE_FOLDERS = [
-    ['./public/portrait_images', 0, 0],
-    ['./public/kioku_images', 0, 0],
-    ['./public/kioku_party_images', 0.37, 0.10],
+    ['./public/portrait_images', 0, 0, false],
+    ['./public/kioku_images', 0, 0, true],
+    ['./public/kioku_party_images', 0.37, 0.10, false],
 ];
 
 const OUTPUT_FILE = './public/candidates.json';
 const CROPPED_OUTPUT_FOLDER = './public/cropped_candidates';
+
+function createCircleMask(width, height) {
+    const radius = Math.min(width, height) / 2;
+    const svg = `<svg width="${width}" height="${height}">
+        <circle cx="${width / 2}" cy="${height / 2}" r="${radius}" fill="#fff" />
+    </svg>`;
+    return Buffer.from(svg);
+}
 
 async function generate() {
     let cache = {};
@@ -26,7 +34,7 @@ async function generate() {
     let isUpdated = false;
     let extractor = null;
 
-    for (const [folder, bottom, top] of IMAGE_FOLDERS) {
+    for (const [folder, bottom, top, isCircle] of IMAGE_FOLDERS) {
         let files = [];
 
         try {
@@ -42,7 +50,7 @@ async function generate() {
             folderName
         );
 
-        if (top > 0 || bottom > 0) {
+        if (top > 0 || bottom > 0 || isCircle) {
             await fs.mkdir(croppedFolder, { recursive: true });
         }
 
@@ -64,7 +72,7 @@ async function generate() {
             const filePath = path.join(folder, file);
             let imageInput = filePath;
 
-            if (top > 0 || bottom > 0) {
+            if (top > 0 || bottom > 0 || isCircle) {
                 const metadata = await sharp(filePath).metadata();
 
                 if (!metadata.width || !metadata.height) {
@@ -74,33 +82,37 @@ async function generate() {
 
                 const cropTop = Math.round(metadata.height * top);
                 const cropBottom = Math.round(metadata.height * bottom);
-
-                const cropHeight =
-                    metadata.height - cropTop - cropBottom;
+                const cropHeight = metadata.height - cropTop - cropBottom;
 
                 if (cropHeight <= 0) {
                     console.warn(`Invalid crop for ${filePath}`);
                     continue;
                 }
 
-                const croppedPath = path.join(
-                    croppedFolder,
-                    file
-                );
+                const croppedPath = path.join(croppedFolder, file);
 
-                await sharp(filePath)
+                let pipelineSharp = sharp(filePath)
                     .extract({
                         left: 0,
                         top: cropTop,
                         width: metadata.width,
                         height: cropHeight,
-                    })
-                    .png()
-                    .toFile(croppedPath);
+                    });
+
+                if (isCircle) {
+                    const circleMask = createCircleMask(metadata.width, cropHeight);
+                    const extractedBuffer = await pipelineSharp.png().toBuffer();
+                    pipelineSharp = sharp(extractedBuffer).composite([{
+                        input: circleMask,
+                        blend: 'dest-in'
+                    }]);
+                }
+
+                await pipelineSharp.png().toFile(croppedPath);
 
                 console.log(
                     `Cropped ${file} → ${croppedPath} ` +
-                    `(top: ${top * 100}%, bottom: ${bottom * 100}%)`
+                    `(top: ${top * 100}%, bottom: ${bottom * 100}%, circle: ${isCircle})`
                 );
 
                 imageInput = croppedPath;
@@ -117,7 +129,7 @@ async function generate() {
     }
 
     if (isUpdated) {
-        await fs.writeFile(OUTPUT_FILE, JSON.stringify(cache));
+        await fs.writeFile(OUTPUT_FILE, JSON.stringify(cache,));
         console.log("Successfully saved updated candidates.json!");
     } else {
         console.log("All images are already up to date. Nothing to save.");

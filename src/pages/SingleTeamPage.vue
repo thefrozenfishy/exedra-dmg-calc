@@ -80,7 +80,7 @@
                   <span class="share-overlay-badge heart">H{{ slot.main.heartphialLvl }}</span>
                   <span class="share-overlay-badge magic">ML{{ slot.main.magicLvl }}</span>
                   <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">SP{{ slot.main.specialLvl
-                  }}</span>
+                    }}</span>
                 </div>
               </div>
             </div>
@@ -671,7 +671,8 @@ function triggerScreenshotImport() {
 async function onScreenshotFileChosen(e: Event) {
   const input = e.target as HTMLInputElement
   const file = input.files?.[0]
-  input.value = '' // allow choosing the same file again later
+  input.value = ''
+
   if (file) await importTeamFromImageFile(file)
 }
 
@@ -679,46 +680,55 @@ async function importTeamFromClipboard() {
   if (importingScreenshot.value) return
   try {
     if (!navigator.clipboard?.read) {
-      toast.error('Clipboard reading is not supported by your browser', { position: toast.POSITION.TOP_RIGHT, icon: false })
+      toast.error(
+        'Clipboard reading is not supported by your browser',
+        { position: toast.POSITION.TOP_RIGHT, icon: false }
+      )
       return
     }
 
     const items = await navigator.clipboard.read()
-    let imageBlob: Blob | null = null
 
     for (const item of items) {
-      const type = item.types.find(t => t.startsWith('image/'))
-      if (type) {
-        imageBlob = await item.getType(type)
-        break
-      }
-    }
+      const imageType = item.types.find(type => type.startsWith('image/'))
 
-    if (!imageBlob) {
-      toast.error('No image found in clipboard', { position: toast.POSITION.TOP_RIGHT, icon: false })
+      if (!imageType) continue
+
+      const blob = await item.getType(imageType)
+
+      const file = new File([blob], 'clipboard-image.png', { type: blob.type })
+      await importTeamFromImageFile(file)
       return
     }
 
-    const file = new File([imageBlob], 'clipboard-screenshot.png', { type: imageBlob.type })
-    await importTeamFromImageFile(file)
+    toast.error(
+      'No image found in clipboard',
+      { position: toast.POSITION.TOP_RIGHT, icon: false }
+    )
   } catch (err) {
     console.error('Failed to read image from clipboard:', err)
-    toast.error('Failed to access clipboard image. Please grant clipboard permissions.', { position: toast.POSITION.TOP_RIGHT, icon: false })
+
+    toast.error(
+      'Failed to access clipboard image. Please grant clipboard permissions.',
+      { position: toast.POSITION.TOP_RIGHT, icon: false }
+    )
   }
 }
 
 function handleGlobalPaste(e: ClipboardEvent) {
-  const target = e.target as HTMLElement
-  if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) {
-    return
-  }
+  const target = e.target as HTMLElement | null
 
-  const item = Array.from(e.clipboardData?.items ?? []).find(i => i.type.startsWith('image/'))
+  if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
+  if (importingScreenshot.value) return
+
+  const item = Array.from(e.clipboardData?.items ?? []).find(item => item.type.startsWith('image/'))
   const file = item?.getAsFile()
-  if (file) {
-    e.preventDefault()
-    importTeamFromImageFile(file)
-  }
+  if (!file) return
+
+  e.preventDefault()
+  e.stopPropagation()
+
+  void importTeamFromImageFile(file)
 }
 
 onMounted(() => {
