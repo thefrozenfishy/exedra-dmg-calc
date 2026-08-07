@@ -117,7 +117,22 @@
     </div>
 
     <div class="team-grid">
-      <div v-for="(slot, index) in team.slots" :key="index" class="team-slot">
+      <div v-for="(slot, index) in team.slots" :key="index" class="team-slot"
+        :class="{ 'swap-source': swapSourceIndex === index }">
+        <button type="button" class="swap-slot-btn" :class="{ active: swapSourceIndex === index }"
+          :title="swapSourceIndex === null ? 'Select this member to swap' : swapSourceIndex === index ? 'Cancel swap' : 'Swap with selected member'"
+          @click="handleSwapClick(index)">
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+            <path d="M6 3L2 7l4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M2 7h13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M18 21l4-4-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M22 17H9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
         <h3 class="slot-title">
           {{ index === attackerIndex ? 'Damage Dealer' : 'Member' }}
           {{ index < attackerIndex ? index + 1 : index > attackerIndex ? index : "" }}
@@ -490,6 +505,35 @@ const debugSlotTitle = (idx: number) => ['L Other', 'L Proximity', 'Target', 'R 
 const team = useTeamStore()
 const enemies = useEnemyStore()
 const isFullTeam = computed(() => team.slots.map(slot => slot.main).filter(Boolean).length === 5)
+
+const swapSourceIndex = ref<number | null>(null)
+
+const swapSlots = (a: number, b: number) => {
+  const slotA = team.slots[a]
+  const slotB = team.slots[b]
+  const aMain = slotA.main
+  const aSupport = slotA.support
+  const bMain = slotB.main
+  const bSupport = slotB.support
+
+  team.setMain(a, bMain)
+  team.setSupport(a, bSupport)
+  team.setMain(b, aMain)
+  team.setSupport(b, aSupport)
+}
+
+const handleSwapClick = (index: number) => {
+  if (swapSourceIndex.value === null) {
+    swapSourceIndex.value = index
+    return
+  }
+  if (swapSourceIndex.value === index) {
+    swapSourceIndex.value = null
+    return
+  }
+  swapSlots(swapSourceIndex.value, index)
+  swapSourceIndex.value = null
+}
 
 const teamInstance = computed(() => {
   if (!isFullTeam.value) return
@@ -1316,10 +1360,48 @@ async function importTeamFromImageFile(file: File) {
 }
 
 .team-slot {
+  position: relative;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
   padding: 1rem;
   min-width: 0;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.team-slot.swap-source {
+  border-color: rgba(255, 209, 110, 0.7);
+  box-shadow: 0 0 0 1px rgba(255, 209, 110, 0.35), 0 0 12px rgba(255, 209, 110, 0.2);
+}
+
+.swap-slot-btn {
+  position: absolute;
+  top: -0.6rem;
+  left: -0.6rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s, color 0.15s;
+}
+
+.swap-slot-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 209, 110, 0.5);
+  transform: scale(1.08);
+}
+
+.swap-slot-btn.active {
+  background: rgba(255, 209, 110, 0.18);
+  border-color: rgba(255, 209, 110, 0.75);
+  color: var(--accent);
 }
 
 .banned-banner {
