@@ -21,7 +21,7 @@ jobs:
           node-version: '20'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci --legacy-peer-deps
 
       - name: Run Embedding Generator
         run: node scripts/image-vortices/generate-embeddings.js
