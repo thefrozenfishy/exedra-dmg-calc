@@ -41,7 +41,6 @@ function getSubName(id: number): string {
 function isRareSub(id: number): boolean {
     if (id === 0) return false
     const rarity = subCrysFlatList.find(s => s.selectionAbilityMstId === id)?.rarity
-    console.log(id, rarity)
     if (rarity == null) return false
     return [9, 10].includes(rarity)
 }

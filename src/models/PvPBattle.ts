@@ -71,9 +71,9 @@ export class PvPBattle {
     traverseToNextActor(): PvPTeam {
         const seconds1 = this.team1.getSecondsUntilNextReadyKioku()
         const seconds2 = this.team2.getSecondsUntilNextReadyKioku()
-        console.log(seconds1, seconds2)
+        console.debug(seconds1, seconds2)
         const secondsTraveled = Math.min(seconds1, seconds2)
-        console.log(
+        console.debug(
             "Next actors in",
             seconds1,
             "seconds for team 1 and",
@@ -110,6 +110,6 @@ export class PvPBattle {
     resolveEndOfTurn(): void {
         this.team2.resolveEndOfTurn()
         this.team1.resolveEndOfTurn()
-        console.log("===========================================================================")
+        console.debug("===========================================================================")
     }
 }

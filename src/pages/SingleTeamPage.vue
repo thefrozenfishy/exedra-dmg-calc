@@ -33,6 +33,23 @@
         <ImageActionsToolbar :target="() => shareCardRef!" filename="single-team-share.png" :export-options="exportOpts"
           :share-options="shareOptionsForTeamCard" :disabled="!shareCardAvailable" />
       </div>
+      <div class="toolbar-right">
+        <button type="button" class="import-screenshot-btn" tabindex="0" :disabled="importingScreenshot"
+          title="Upload a screenshot of your in-game party screen, or focus this button and press Ctrl+V to paste one, and this will auto-fill the team below"
+          @click="triggerScreenshotImport" @paste="onScreenshotPaste">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" class="import-screenshot-icon">
+            <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12 3v12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+            <path d="M7 8l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          <span v-if="!importingScreenshot">Import from Screenshot</span>
+          <span v-else>Matching {{ importProgress.done }}/{{ importProgress.total }}…</span>
+        </button>
+        <input ref="screenshotInputRef" type="file" accept="image/*" class="screenshot-file-input"
+          @change="onScreenshotFileChosen" />
+      </div>
     </section>
 
     <div class="share-card-preview" ref="shareCardRef">
@@ -260,7 +277,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
 import { ScoreAttackTeam, type DebugSections, type DotAllyCompositeKey, type EnemyDebuffCompositeKey } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
@@ -277,6 +294,7 @@ import { crystalises, passiveDetails, portraits } from "../utils/helpers";
 import { useFriendStore } from '../store/friendStore'
 import { useCharacterStore } from '../store/characterStore'
 import type { AttackerLoadoutResult } from '../models/BestTeamCalculator'
+import { extractTeamFromScreenshot, loadImageFromFile, loadPrecomputedCandidates, LOW_CONFIDENCE_THRESHOLD } from '../utils/screenshotTeamImport'
 
 const attackerIndex = 2
 
@@ -619,6 +637,85 @@ async function copyToClipboard(text: string) {
     toast.error("Failed to copy", { position: toast.POSITION.TOP_RIGHT, icon: false })
   }
 }
+
+const screenshotInputRef = ref<HTMLInputElement | null>(null)
+const importingScreenshot = ref(false)
+const importProgress = reactive({ done: 0, total: 0 })
+
+onMounted(async () => {
+  try {
+    await loadPrecomputedCandidates()
+  } catch (err) {
+    console.error("Failed to preload screenshot matching data:", err)
+  }
+})
+
+function triggerScreenshotImport() {
+  if (importingScreenshot.value) return
+  screenshotInputRef.value?.click()
+}
+
+async function onScreenshotFileChosen(e: Event) {
+  const input = e.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = '' // allow choosing the same file again later
+  if (file) await importTeamFromImageFile(file)
+}
+
+async function onScreenshotPaste(e: ClipboardEvent) {
+  const item = Array.from(e.clipboardData?.items ?? []).find(i => i.type.startsWith('image/'))
+  const file = item?.getAsFile()
+  if (!file) return
+  e.preventDefault()
+  await importTeamFromImageFile(file)
+}
+
+async function importTeamFromImageFile(file: File) {
+  if (importingScreenshot.value) return
+  importingScreenshot.value = true
+  importProgress.done = 0
+  importProgress.total = 15
+
+  let img: HTMLImageElement | null = null
+  try {
+    img = await loadImageFromFile(file)
+
+    const results = await extractTeamFromScreenshot(
+      img,
+      (done, total) => { importProgress.done = done; importProgress.total = total },
+    )
+
+    let lowConfidenceCount = 0
+    for (const r of results) {
+      if (!r.characterName) continue
+
+      const mainClone = characterStore.characters.find(c => c.name === r.characterName)
+      if (mainClone && r.portraitName) mainClone.portrait = r.portraitName
+      team.setMain(r.index, mainClone)
+
+      if (r.supportName) team.setSupport(r.index, characterStore.characters.find(c => c.name === r.supportName))
+
+      const distances = [r.characterDistance, r.supportDistance, r.portraitDistance]
+      if (distances.some(d => (d ?? Infinity) > LOW_CONFIDENCE_THRESHOLD)) lowConfidenceCount++
+    }
+
+    const matchedCount = results.filter(r => r.characterName).length
+    if (matchedCount === 0) {
+      toast.error("Couldn't recognize any characters in that screenshot", { position: toast.POSITION.TOP_RIGHT, icon: false })
+    } else {
+      const suffix = lowConfidenceCount > 0
+        ? ` — please double-check ${lowConfidenceCount} slot${lowConfidenceCount === 1 ? '' : 's'} with low match confidence`
+        : ''
+      toast.success(`Imported ${matchedCount}/5 slots from screenshot${suffix}`, { position: toast.POSITION.TOP_RIGHT, icon: false })
+    }
+  } catch (err) {
+    console.error('Failed to import team from screenshot:', err)
+    toast.error('Failed to read that screenshot', { position: toast.POSITION.TOP_RIGHT, icon: false })
+  } finally {
+    if (img) URL.revokeObjectURL(img.src)
+    importingScreenshot.value = false
+  }
+}
 </script>
 
 <style scoped>
@@ -643,6 +740,46 @@ async function copyToClipboard(text: string) {
 .toolbar-left {
   display: flex;
   align-items: center;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.import-screenshot-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.85rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.import-screenshot-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 209, 110, 0.5);
+}
+
+.import-screenshot-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.import-screenshot-icon {
+  flex-shrink: 0;
+  color: var(--accent-soft);
+}
+
+.screenshot-file-input {
+  display: none;
 }
 
 .section-title {

@@ -90,7 +90,6 @@ export const useTeamStore = defineStore('team', {
       this.slots[slotIndex].support = normalizeCharacter(member)
     },
     save() {
-      console.log("Saving")
       localStorage.setItem('lastTeam', JSON.stringify(this.slots))
     },
     load() {

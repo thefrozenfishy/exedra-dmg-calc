@@ -10,6 +10,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@huggingface/transformers": "^4.2.0",
     "@supabase/supabase-js": "^2.105.4",
     "chart.js": "^4.5.1",
     "d3": "^7.9.0",

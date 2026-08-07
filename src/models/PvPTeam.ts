@@ -327,7 +327,7 @@ export class PvPTeam {
             k.passiveEffectDetails.forEach(detail => {
                 if (conditionSetRequiresActorIsSelf(detail) && (!lastActor || lastActor !== k)) return
                 if (isTimingCorrect(timing, detail)) {
-                    console.log("Appying effect from", lastActor, "to", k)
+                    console.debug("Appying effect from", lastActor, "to", k)
                     if (enemySkills.includes(detail.abilityEffectType)) {
                         this.otherTeam.kiokuStates.forEach(target => {
                             k.applyEffect(target, detail, lastAction)
@@ -340,12 +340,12 @@ export class PvPTeam {
             })
         }
         this.kiokuStates.forEach(k => {
-            console.log("Post-passive effects for", k.kioku.name, k.activeEffectDetails)
+            console.debug("Post-passive effects for", k.kioku.name, k.activeEffectDetails)
             k.updateMPGain()
             k.updateSpd()
             k.resolveBreak()
         })
-        console.log("Additional acts triggered:", Object.keys(additionalAct))
+        console.debug("Additional acts triggered:", Object.keys(additionalAct))
         return additionalAct;
     }
 
@@ -404,7 +404,7 @@ export class PvPTeam {
     }
 
     completeAction(actor: KiokuState, effectName: TargetType, details: SkillDetail[]) {
-        console.log("Completing action for", actor.kioku.name, effectName, details)
+        console.debug("Completing action for", actor.kioku.name, effectName, details)
         let possibleTargets: KiokuState[] = []
         for (const detail of details) {
             if (friendlySkills.includes(detail.abilityEffectType)) {
@@ -415,9 +415,9 @@ export class PvPTeam {
                 console.warn("Unknown effect type", detail.abilityEffectType, detail, "assuming enemy targets")
                 possibleTargets = this.otherTeam.kiokuStates
             }
-            console.log("Possible targets for", detail.abilityEffectType, "are", this.sliceTargets(actor, possibleTargets, detail).map(k => k.kioku.name))
+            console.debug("Possible targets for", detail.abilityEffectType, "are", this.sliceTargets(actor, possibleTargets, detail).map(k => k.kioku.name))
             for (const target of this.sliceTargets(actor, possibleTargets, detail)) {
-                console.log(actor.kioku.name, "applies", detail.abilityEffectType, "to", target.kioku.name, "w eff", effectName)
+                console.debug(actor.kioku.name, "applies", detail.abilityEffectType, "to", target.kioku.name, "w eff", effectName)
                 actor.applyEffect(target, detail, effectName)
             }
         }
@@ -438,7 +438,7 @@ export class PvPTeam {
     }
 
     useAttackOrSkill(): [KiokuState, TargetType] {
-        console.log(this.kiokuStates.map(k => k.activeEffectDetails))
+        console.debug(this.kiokuStates.map(k => k.activeEffectDetails))
         const actor = this.getNextActor()
         actor.resetDistanceRemaining()
         actor.exitBreak()
@@ -448,7 +448,7 @@ export class PvPTeam {
         console.warn("TRIGGERING PASSIVES AFTER", actor.kioku.name, actor, effType)
         const actionIds = this.triggerPassives(ProcessTiming.ATTACK_END, effType, actor)
         this.triggerFua(actionIds)
-        console.log(this.teamLabel, "actor is", actor.kioku.name, "using", effType)
+        console.debug(this.teamLabel, "actor is", actor.kioku.name, "using", effType)
         actor.decrementActiveEffects()
         return [actor, effType]
     }

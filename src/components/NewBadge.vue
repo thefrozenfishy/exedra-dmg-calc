@@ -9,7 +9,6 @@ const props = defineProps<{
 const seen = props.id ? useSetting<boolean>(`new_badge_seen:${props.id}`, false) : null
 const show = computed(() => !seen || !seen.value)
 
-console.log(props.id, seen?.value, show.value)
 if (seen) {
   onUnmounted(() => {
     seen.value = true

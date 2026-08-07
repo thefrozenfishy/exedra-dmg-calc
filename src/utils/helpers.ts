@@ -19,7 +19,7 @@ const portraitLevels = Object.fromEntries(
 ) as Record<string, PortraitLvlData>;
 
 export const portraits = Object.fromEntries(
-    portraitsJson.filter(item => item.rarity === 5).map((item: any) => [item.name, { ...item, stats: portraitLevels[item.cardMstId * 10 + 5] }])
+    portraitsJson.map((item: any) => [item.name, { ...item, stats: portraitLevels[item.cardMstId * 10 + 5] }])
 ) as Record<string, Portrait>;
 
 export const passiveDetails = Object.fromEntries(

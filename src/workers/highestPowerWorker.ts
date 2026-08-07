@@ -90,7 +90,6 @@ self.onmessage = function (e: MessageEvent) {
 
         const expectedTotalRuns = mains.length * (supportPool.length - 1) + teams.length;
         let completedRuns = 0;
-        console.log()
 
         const scoreCache = new Map<string, Map<string, Map<string, number>>>();
 

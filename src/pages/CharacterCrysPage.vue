@@ -256,7 +256,6 @@ const characterCrysRows = computed(() => {
 
             if (!showOffElementalOnes.value && missingOwnElementalFilter.value !== null) {
                 const ownSlot = row.elementalSlots.find(s => s.isOwnElement)
-                console.log(row.char.name, ownSlot?.owned, missingOwnElementalFilter.value)
                 if (missingOwnElementalFilter.value && (ownSlot?.owned ?? false)) return false
             }
 

@@ -213,7 +213,7 @@ watch(team, () => {
   const battle = new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"))
   battleInstance.value = battle
   battleOutput.value = [battle.getCurrentState()]
-  console.log("State is", battleOutput.value)
+  console.debug("State is", battleOutput.value)
 }, { immediate: true, deep: true })
 
 function isStarter(extraData?: TeamSnapshot) {

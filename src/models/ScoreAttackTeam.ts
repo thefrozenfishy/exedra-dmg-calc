@@ -469,11 +469,11 @@ export class ScoreAttackTeam {
         if (this.debug) {
             for (let i = 0; i < 5; i++) {
 
-                console.log(
+                console.debug(
                     `Enemy[${i}] debuff pool`,
                     Object.fromEntries(Object.entries(this.debuffPools[i]).filter(([key]) => key in knownBoosts)),
                 );
-                console.log(
+                console.debug(
                     `Ally[${i}] buff pool`,
                     Object.fromEntries(Object.entries(this.allyContexts[i].effects).filter(([key]) => key in knownBoosts)),
                 );
