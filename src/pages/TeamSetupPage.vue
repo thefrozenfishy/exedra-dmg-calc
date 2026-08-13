@@ -181,10 +181,24 @@
         </select>
       </div>
 
-      <label class="chip" :class="{ active: groupByRole }">
-        <input type="checkbox" v-model="groupByRole" />
-        Group by Role
-      </label>
+      <div class="group-by-options">
+        <span class="filter-group-label">Group by</span>
+
+        <label class="chip" :class="{ active: groupBy === 'none' }">
+          <input type="radio" name="group-by" value="none" v-model="groupBy" />
+          None
+        </label>
+
+        <label class="chip" :class="{ active: groupBy === 'role' }">
+          <input type="radio" name="group-by" value="role" v-model="groupBy" />
+          Role
+        </label>
+
+        <label class="chip" :class="{ active: groupBy === 'element' }">
+          <input type="radio" name="group-by" value="element" v-model="groupBy" />
+          Element
+        </label>
+      </div>
     </section>
 
     <section class="bulk-set card">
@@ -215,20 +229,27 @@
       <span>Portrait</span>
     </div>
 
-    <div v-for="(chars, role) in groupedCharacters" :key="role" class="role-section">
-      <button class="role-header" @click="toggleRole(role)" :aria-expanded="!collapsedRoles[role]">
-        <span class="role-chevron" :class="{ rotated: collapsedRoles[role] }">▾</span>
-        <span class="role-name">{{ role }}</span>
+    <div v-for="(chars, roleElementAll) in groupedCharacters" :key="roleElementAll" class="role-section">
+      <button class="role-header" @click="groupBy === 'none' ? undefined : toggleRole(roleElementAll)"
+        :aria-expanded="!collapsedRoles[roleElementAll]">
+        <span v-if="groupBy !== 'none'" class="role-chevron"
+          :class="{ rotated: collapsedRoles[roleElementAll] }">▾</span>
+        <img v-if="groupBy === 'element'" class="role-icon" :src="`/exedra-dmg-calc/elements/${roleElementAll}.png`"
+          :alt="`${roleElementAll}`">
+        <img v-if="groupBy === 'role'" class="role-icon" :src="`/exedra-dmg-calc/roles/${roleElementAll}.png`"
+          :alt="`${roleElementAll}`">
         <div>
           <span class="role-resources" @click.stop="toggleMissingAndWhole">
             <span class="role-resource-label">Kioku level</span>
             <span class="resource-chip">
               <img :src="`/exedra-dmg-calc/items/exp.png`" alt="Kioku Exp" /> {{
-                formatAmount(tabKiokuLevelResourceSums[role].exp.current, tabKiokuLevelResourceSums[role].exp.max) }}
+                formatAmount(tabKiokuLevelResourceSums[roleElementAll].exp.current,
+                  tabKiokuLevelResourceSums[roleElementAll].exp.max) }}
             </span>
             <span class="resource-chip">
               <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" /> {{
-                formatAmount(tabKiokuLevelResourceSums[role].gold.current, tabKiokuLevelResourceSums[role].gold.max)
+                formatAmount(tabKiokuLevelResourceSums[roleElementAll].gold.current,
+                  tabKiokuLevelResourceSums[roleElementAll].gold.max)
               }}
             </span>
           </span>
@@ -240,8 +261,8 @@
                 <span v-for="i in [1, 2, 3, 7]" :key="i" class="resource-chip">
                   <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" /> {{
                     formatAmount(
-                      tabMagicLevelResourceSums[role].items.current[i],
-                      tabMagicLevelResourceSums[role].items.max[i]
+                      tabMagicLevelResourceSums[roleElementAll].items.current[i],
+                      tabMagicLevelResourceSums[roleElementAll].items.max[i]
                     )
                   }}
                 </span>
@@ -251,8 +272,8 @@
                 <span v-for="i in [4, 5, 6, 8]" :key="i" class="resource-chip">
                   <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" /> {{
                     formatAmount(
-                      tabMagicLevelResourceSums[role].items.current[i],
-                      tabMagicLevelResourceSums[role].items.max[i]
+                      tabMagicLevelResourceSums[roleElementAll].items.current[i],
+                      tabMagicLevelResourceSums[roleElementAll].items.max[i]
                     )
                   }}
                 </span>
@@ -262,8 +283,8 @@
                 <span class="resource-chip">
                   <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" /> {{
                     formatAmount(
-                      tabMagicLevelResourceSums[role].gold.current,
-                      tabMagicLevelResourceSums[role].gold.max
+                      tabMagicLevelResourceSums[roleElementAll].gold.current,
+                      tabMagicLevelResourceSums[roleElementAll].gold.max
                     )
                   }}
                 </span>
@@ -274,7 +295,7 @@
         <span class="role-count">{{ visibleCountFor(chars) }} / {{ chars.length }}</span>
       </button>
 
-      <div v-show="!collapsedRoles[role]" class="role-body">
+      <div v-show="!collapsedRoles[roleElementAll]" class="role-body">
         <CharacterCard v-for="char in chars" :key="char.id" :character="char" :show3stars="show3stars"
           :show4stars="show4stars" :filters="filters" />
         <div v-if="visibleCountFor(chars) === 0" class="empty-role">
@@ -317,7 +338,10 @@ export default defineComponent({
       'characterSortBy',
       'name'
     )
-    const groupByRole = useSetting('groupCharactersByRole', true)
+    const groupBy = useSetting<'none' | 'role' | 'element'>(
+      'groupCharactersBy',
+      'role'
+    )
     const playerLevel = useSetting('playerLevel', 1)
 
     const bigNumberDisplayMode = useSetting<'shortHas' | 'shortMiss' | 'longHas' | 'longMiss' | 'percentage'>("bigNumberDisplayMode", "shortHas")
@@ -466,7 +490,7 @@ export default defineComponent({
     }
 
     const groupedCharacters = computed(() => {
-      if (!groupByRole.value) {
+      if (groupBy.value === 'none') {
         return {
           All: sortCharacters(store.characters),
         }
@@ -475,12 +499,16 @@ export default defineComponent({
       const groups: Record<string, Character[]> = {}
 
       store.characters.forEach(char => {
-        if (!groups[char.role]) groups[char.role] = []
-        groups[char.role].push(char)
+        const group = groupBy.value === 'role'
+          ? char.role
+          : char.element
+
+        if (!groups[group]) groups[group] = []
+        groups[group].push(char)
       })
 
-      Object.keys(groups).forEach(role => {
-        groups[role] = sortCharacters(groups[role])
+      Object.keys(groups).forEach(group => {
+        groups[group] = sortCharacters(groups[group])
       })
 
       return groups
@@ -666,7 +694,7 @@ export default defineComponent({
       currentBestTeam,
       currentBestPwr,
       sortBy,
-      groupByRole,
+      groupBy,
       playerLevel,
       maxPlayerLevel,
       playerExpUsage,
@@ -919,6 +947,14 @@ export default defineComponent({
   opacity: 0.7;
 }
 
+.group-by-options {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-left: 1px solid var(--border);
+  padding-left: 0.65rem;
+}
+
 .filter-group {
   display: inline-flex;
   align-items: center;
@@ -1016,9 +1052,8 @@ export default defineComponent({
   transform: rotate(-90deg);
 }
 
-.role-name {
-  flex: 1;
-  color: var(--accent-soft);
+.role-icon {
+  width: 30px;
 }
 
 .role-count {
