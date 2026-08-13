@@ -39,11 +39,11 @@
           <div v-if="showResourceCosts" class="resource-block">
             <div class="resource-row">
               <span class="resource-chip" @click="toggleMissingAndWhole">
-                <img src="`/exedra-dmg-calc/items/exp.png`" alt="Kioku Exp" />
+                <img :src="`/exedra-dmg-calc/items/exp.png`" alt="Kioku Exp" />
                 {{ formatAmount(kiokuLevelCost.exp.current, kiokuLevelCost.exp.max) }}
               </span>
               <span class="resource-chip" @click="toggleMissingAndWhole">
-                <img src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
+                <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
                 {{ formatAmount(kiokuLevelCost.gold.current, kiokuLevelCost.gold.max) }}
               </span>
             </div>
@@ -53,7 +53,7 @@
                 {{ formatAmount(magicLevelCost.items.current[i] ?? 0, magicLevelCost.items.max[i] ?? 0) }}
               </span>
               <span class="resource-chip" @click="toggleMissingAndWhole">
-                <img src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
+                <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
                 {{ formatAmount(magicLevelCost.gold.current, magicLevelCost.gold.max) }}
               </span>
             </div>
