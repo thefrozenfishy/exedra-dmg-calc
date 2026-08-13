@@ -16520,6 +16520,30 @@
         "description": "叛逆マミの専用バフがあるとき"
     },
     {
+        "battleConditionMstId": 2076,
+        "compareContent": 304,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "3000000",
+        "description": "自軍が3000000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstId": 2077,
+        "compareContent": 304,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "1500000",
+        "description": "自軍が1500000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstId": 2078,
+        "compareContent": 304,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "1000000",
+        "description": "自軍が1000000以上のダメージを受けた"
+    },
+    {
         "battleConditionMstId": 2079,
         "compareContent": 26,
         "compareOperator": 7,
@@ -16534,5 +16558,13 @@
         "compareTarget": 6,
         "compareValue": "1",
         "description": "攻撃が命中した敵数が1体以上のとき"
+    },
+    {
+        "battleConditionMstId": 2094,
+        "compareContent": 30,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "5",
+        "description": "自身のブレイク回数が5回以上のとき"
     }
 ]

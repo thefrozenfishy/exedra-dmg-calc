@@ -1607,6 +1607,13 @@
         "scoreAttackConfig": {
             "outOfRankingViewNumber": 50000,
             "resetScoreAttackSkipNum": 3,
+            "specialDirectionInfoList": [
+                {
+                    "movieResourceName": "Movie/3DMovie/mv01_bgmoff.m3u8",
+                    "scoreAttackMstId": 26,
+                    "soundMstId": 3001202
+                }
+            ],
             "topRankingViewNumber": 50,
             "validSkipScoreAttackMstId": 14
         },
@@ -3564,6 +3571,7 @@
             ]
         },
         "towerConfig": {
+            "bulkSkipMaxFloor": 50,
             "floorSkip": [
                 {
                     "newFloor": 15,

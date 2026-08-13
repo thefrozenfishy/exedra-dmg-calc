@@ -16925,6 +16925,21 @@
         "description": "行動者は敵 + 行動者のHPが40%未満のとき + 攻撃を受けた"
     },
     {
+        "battleConditionMstIdCsv": "7,2076",
+        "battleConditionSetMstId": 3424,
+        "description": "敵の必殺技で自軍が3000000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "7,2077",
+        "battleConditionSetMstId": 3425,
+        "description": "敵の必殺技で自軍が1500000以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "7,2078",
+        "battleConditionSetMstId": 3426,
+        "description": "敵の必殺技で自軍が1000000以上のダメージを受けた"
+    },
+    {
         "battleConditionMstIdCsv": "987,463",
         "battleConditionSetMstId": 3427,
         "description": "対象が木属性のとき"
@@ -17010,8 +17025,78 @@
         "description": "行動タイプは必殺技+クリティカルが発生した+敵チームに与えるトータルダメージは1以上"
     },
     {
+        "battleConditionMstIdCsv": "770,269",
+        "battleConditionSetMstId": 3455,
+        "description": "自身の経過ターンが2ターン以上、3ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1003,265",
+        "battleConditionSetMstId": 3456,
+        "description": "自身の経過ターンが3ターン以上、4ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1004,259",
+        "battleConditionSetMstId": 3457,
+        "description": "自身の経過ターンが4ターン以上、5ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1005,1056",
+        "battleConditionSetMstId": 3458,
+        "description": "自身の経過ターンが5ターン以上、6ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1006,1057",
+        "battleConditionSetMstId": 3459,
+        "description": "自身の経過ターンが6ターン以上、7ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1007,1058",
+        "battleConditionSetMstId": 3460,
+        "description": "自身の経過ターンが7ターン以上、8ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1008,1059",
+        "battleConditionSetMstId": 3461,
+        "description": "自身の経過ターンが8ターン以上、9ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1009,1060",
+        "battleConditionSetMstId": 3462,
+        "description": "自身の経過ターンが9ターン以上、10ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "57,274,349",
+        "battleConditionSetMstId": 3483,
+        "description": "自分が3ターンごとに（ターン1から）、味方が4体存在する場合（自分を除く） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "57,274,350",
+        "battleConditionSetMstId": 3484,
+        "description": "自分が3ターンごとに（ターン1から）、味方が4体未満の場合（自分を除く）AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "59,274,349",
+        "battleConditionSetMstId": 3485,
+        "description": "自分が3ターンごとに（ターン3から）、味方が4体存在する場合（自分を除く） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "59,274,350",
+        "battleConditionSetMstId": 3486,
+        "description": "自分が3ターンごとに（ターン3から）、味方が4体未満の場合（自分を除く）AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "2094",
+        "battleConditionSetMstId": 3487,
+        "description": "自身のブレイク回数が5回以上のとき"
+    },
+    {
         "battleConditionMstIdCsv": "7,3,2068",
         "battleConditionSetMstId": 3488,
         "description": "敵全体でクシュ専用デバフが付与されている敵が1体以上いる"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6",
+        "battleConditionSetMstId": 3493,
+        "description": "行動者は敵、戦闘スキルが発動したとき"
     }
 ]
