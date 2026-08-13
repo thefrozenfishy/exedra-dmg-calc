@@ -35,6 +35,29 @@
               <span class="derived-value">{{ stat.value ?? '…' }}</span>
             </div>
           </div>
+
+          <div v-if="showResourceCosts" class="resource-block">
+            <div class="resource-row">
+              <span class="resource-chip" @click="toggleMissingAndWhole">
+                <img src="/exedra-dmg-calc/items/exp.png" alt="Kioku Exp" />
+                {{ formatAmount(kiokuLevelCost.exp.current, kiokuLevelCost.exp.max) }}
+              </span>
+              <span class="resource-chip" @click="toggleMissingAndWhole">
+                <img src="/exedra-dmg-calc/items/gold.png" alt="AQ Coins" />
+                {{ formatAmount(kiokuLevelCost.gold.current, kiokuLevelCost.gold.max) }}
+              </span>
+            </div>
+            <div class="resource-row">
+              <span v-for="i in [1, 2, 3, 4, 5, 6, 7, 8]" :key="i" class="resource-chip" @click="toggleMissingAndWhole">
+                <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" />
+                {{ formatAmount(magicLevelCost.items.current[i] ?? 0, magicLevelCost.items.max[i] ?? 0) }}
+              </span>
+              <span class="resource-chip" @click="toggleMissingAndWhole">
+                <img src="/exedra-dmg-calc/items/gold.png" alt="AQ Coins" />
+                {{ formatAmount(magicLevelCost.gold.current, magicLevelCost.gold.max) }}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -65,12 +88,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, PropType } from 'vue'
 import { useCharacterStore } from '../store/characterStore'
 import PortraitSelector from './PortraitSelector.vue'
 import CrysSelector from './CrysSelector.vue'
 import { Character, KiokuConstants } from '../types/KiokuTypes'
-import { crystalises } from '../utils/helpers'
+import { crystalises, kiokuLevelCosts, magicLevelCosts } from '../utils/helpers'
 import { LuxMagica } from '../types/enums'
 import { getCachedStats, scheduleBackfill } from '../utils/statsBackfill'
 
@@ -99,6 +122,26 @@ export default defineComponent({
       },
       required: true,
     },
+    showResourceCosts: {
+      type: Boolean,
+      required: true,
+    },
+    formatAmount: {
+      type: Function as PropType<(current: number, max: number) => string>,
+      required: true,
+    },
+    toggleMissingAndWhole: {
+      type: Function as PropType<() => void>,
+      default: () => { },
+    },
+    usePlayerLevelAsKiokuMaxLevel: {
+      type: Boolean,
+      required: true,
+    },
+    playerLevel: {
+      type: Number,
+      required: true,
+    },
   },
   setup(props) {
     const store = useCharacterStore()
@@ -122,6 +165,36 @@ export default defineComponent({
         { short: 'PWR', value: cached?.pwr },
       ]
     })
+
+    const kiokuLevelCost = computed(() => {
+      const kiokuMaxLvl = props.usePlayerLevelAsKiokuMaxLevel
+        ? props.playerLevel
+        : KiokuConstants.maxKiokuLvl
+
+      const currLvl = Math.min(Math.max(props.character.kiokuLvl ?? 0, 1), kiokuMaxLvl)
+      const current = kiokuLevelCosts[currLvl] ?? kiokuLevelCosts[0]
+      const max = kiokuLevelCosts[kiokuMaxLvl] ?? current
+
+      return {
+        exp: { current: current.exp, max: max.exp },
+        gold: { current: current.gold, max: max.gold },
+      }
+
+    })
+
+    const magicLevelCost = computed(() => {
+      const currLvl = Math.min(Math.max(props.character.magicLvl ?? 0, 0), KiokuConstants.maxMagicLvl)
+      const current = magicLevelCosts[props.character.id]?.[currLvl] ?? magicLevelCosts[10010101]?.[currLvl]
+      const max = magicLevelCosts[props.character.id]?.[KiokuConstants.maxMagicLvl] ?? current
+      return {
+        gold: { current: current.gold, max: max.gold },
+        items: { current: current.items, max: max.items },
+      }
+    })
+
+    function itemIdxToImg(idx: number) {
+      return `/exedra-dmg-calc/items/${props.character.element?.toLowerCase()}/${idx}.png`
+    }
 
     const imgSrc = computed(
       () => `/exedra-dmg-calc/kioku_images/${props.character.id}_thumbnail.png`
@@ -187,6 +260,9 @@ export default defineComponent({
       maxAscension,
       levelStats,
       derivedStats,
+      kiokuLevelCost,
+      magicLevelCost,
+      itemIdxToImg,
       imgSrc,
       isVisible,
       toggleCharacter,
@@ -203,15 +279,7 @@ export default defineComponent({
 /* ── Row ── */
 .character-row {
   display: grid;
-  grid-template-columns:
-    180px
-    /* identity: thumb + stacked names */
-    auto
-    /* stats: asc + 4 levels in one row */
-    140px
-    /* crystalis: narrow */
-    1fr;
-  /* portrait: wider */
+  grid-template-columns: 240px 400px 160px 1fr;
   align-items: center;
   gap: 0 0.75rem;
   padding: 0.4rem 0.75rem;
@@ -344,6 +412,46 @@ export default defineComponent({
   text-align: center;
   padding: 0.25rem 0.2rem;
   font-size: 0.82rem;
+}
+
+.resource-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 353px;
+  /* matches the width of the stats-grid / derived-grid above it */
+  margin-top: 2px;
+}
+
+.resource-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+}
+
+.resource-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.68rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.resource-chip:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.resource-chip img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 /* ── Col 3: Crystalis (narrow) ── */

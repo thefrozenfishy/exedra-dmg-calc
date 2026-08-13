@@ -23,6 +23,12 @@
         </div>
       </div>
       <div class="toolbar-right rarity-toggles">
+        <label class="chip" :class="{ active: showPerKiokuResourceCosts }">
+          <input type="checkbox" v-model="showPerKiokuResourceCosts" /> Per kioku resource costs
+        </label>
+        <label class="chip" :class="{ active: showResourceCosts }">
+          <input type="checkbox" v-model="showResourceCosts" /> Total resource costs
+        </label>
         <label class="chip" :class="{ active: show4stars }">
           <input type="checkbox" v-model="show4stars" /> ★★★★
         </label>
@@ -32,7 +38,7 @@
       </div>
     </section>
 
-    <section class="resource-summary card">
+    <section v-if="showResourceCosts" class="resource-summary card">
       <span class="filters-heading">Resource Totals</span>
       <template v-for="r in [5, 4, 3]">
         <div v-if="r === 5 || (r === 4 && show4stars) || (r === 3 && show3stars)" :key="r" class="resource-summary-row"
@@ -44,7 +50,7 @@
             <div class="resource-summary-section">
               <span class="resource-summary-section-label">Kioku level</span>
 
-              <span class="resource-chip">
+              <span class="resource-chip" :title="formatTitle()">
                 <img :src="`/exedra-dmg-calc/items/exp.png`" alt="Kioku Exp" />
                 {{
                   formatAmount(
@@ -54,7 +60,7 @@
                 }}
               </span>
 
-              <span class="resource-chip">
+              <span class="resource-chip" :title="formatTitle()">
                 <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
                 {{
                   formatAmount(
@@ -70,7 +76,7 @@
 
               <div class="magic-resource-groups">
                 <div class="magic-resource-group">
-                  <span v-for="i in [1, 2, 3, 7]" :key="i" class="resource-chip">
+                  <span v-for="i in [1, 2, 3, 7]" :key="i" class="resource-chip" :title="formatTitle()">
                     <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" />
                     {{
                       formatAmount(
@@ -82,7 +88,7 @@
                 </div>
 
                 <div class="magic-resource-group">
-                  <span v-for="i in [4, 5, 6, 8]" :key="i" class="resource-chip">
+                  <span v-for="i in [4, 5, 6, 8]" :key="i" class="resource-chip" :title="formatTitle()">
                     <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" />
                     {{
                       formatAmount(
@@ -94,7 +100,7 @@
                 </div>
 
                 <div class="magic-resource-group magic-gold">
-                  <span class="resource-chip">
+                  <span class="resource-chip" :title="formatTitle()">
                     <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
                     {{
                       formatAmount(
@@ -211,13 +217,16 @@
         </label>
         <button class="btn btn-apply" @click="applyBulk">Apply</button>
 
-        <div class="right-leaning resource-chip player-exp-chip" @click="toggleMissingAndWhole">
+        <div class="right-leaning resource-chip player-exp-chip" @click="toggleMissingAndWhole" :title="formatTitle()">
           <img :src="`/exedra-dmg-calc/items/player.png`" alt="Player Exp" /> {{ formatAmount(playerExpUsage.current,
             playerExpUsage.max) }}
         </div>
         <label class="bulk-field">
           <span class="bulk-label">Player Level</span>
           <input type="number" min="1" :max="maxPlayerLevel" v-model.number="playerLevel" />
+        </label>
+        <label class="chip" :class="{ active: usePlayerLevelAsKiokuMaxLevel }">
+          <input type="checkbox" v-model="usePlayerLevelAsKiokuMaxLevel" /> Use Player Level as max Kioku Level
         </label>
       </div>
     </section>
@@ -238,16 +247,16 @@
           :alt="`${roleElementAll}`">
         <img v-if="groupBy === 'role'" class="role-icon" :src="`/exedra-dmg-calc/roles/${roleElementAll}.png`"
           :alt="`${roleElementAll}`">
-        <div>
+        <div v-if="showResourceCosts">
           <span class="role-resources" @click.stop="toggleMissingAndWhole">
             <span class="role-resource-label">Kioku level</span>
             <span class="resource-chip">
-              <img :src="`/exedra-dmg-calc/items/exp.png`" alt="Kioku Exp" /> {{
+              <img :src="`/exedra-dmg-calc/items/exp.png`" alt="Kioku Exp" :title="formatTitle()" /> {{
                 formatAmount(tabKiokuLevelResourceSums[roleElementAll].exp.current,
                   tabKiokuLevelResourceSums[roleElementAll].exp.max) }}
             </span>
             <span class="resource-chip">
-              <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" /> {{
+              <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" :title="formatTitle()" /> {{
                 formatAmount(tabKiokuLevelResourceSums[roleElementAll].gold.current,
                   tabKiokuLevelResourceSums[roleElementAll].gold.max)
               }}
@@ -258,8 +267,8 @@
 
             <div class="magic-resource-groups">
               <div class="magic-resource-group">
-                <span v-for="i in [1, 2, 3, 7]" :key="i" class="resource-chip">
-                  <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" /> {{
+                <span v-for="i in [1, 2, 3, 7]" :key="i" class="resource-chip" :title="formatTitle()">
+                  <img :src="itemIdxToImg(i, roleElementAll)" :alt="`Item idx ${i}`" /> {{
                     formatAmount(
                       tabMagicLevelResourceSums[roleElementAll].items.current[i],
                       tabMagicLevelResourceSums[roleElementAll].items.max[i]
@@ -269,8 +278,8 @@
               </div>
 
               <div class="magic-resource-group">
-                <span v-for="i in [4, 5, 6, 8]" :key="i" class="resource-chip">
-                  <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" /> {{
+                <span v-for="i in [4, 5, 6, 8]" :key="i" class="resource-chip" :title="formatTitle()">
+                  <img :src="itemIdxToImg(i, roleElementAll)" :alt="`Item idx ${i}`" /> {{
                     formatAmount(
                       tabMagicLevelResourceSums[roleElementAll].items.current[i],
                       tabMagicLevelResourceSums[roleElementAll].items.max[i]
@@ -280,7 +289,7 @@
               </div>
 
               <div class="magic-resource-group magic-gold">
-                <span class="resource-chip">
+                <span class="resource-chip" :title="formatTitle()">
                   <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" /> {{
                     formatAmount(
                       tabMagicLevelResourceSums[roleElementAll].gold.current,
@@ -297,7 +306,9 @@
 
       <div v-show="!collapsedRoles[roleElementAll]" class="role-body">
         <CharacterCard v-for="char in chars" :key="char.id" :character="char" :show3stars="show3stars"
-          :show4stars="show4stars" :filters="filters" />
+          :show4stars="show4stars" :filters="filters" :show-resource-costs="showPerKiokuResourceCosts"
+          :format-amount="formatAmount" :toggle-missing-and-whole="toggleMissingAndWhole" :player-level="playerLevel"
+          :use-player-level-as-kioku-max-level="usePlayerLevelAsKiokuMaxLevel" />
         <div v-if="visibleCountFor(chars) === 0" class="empty-role">
           No Kioku match the current filters in this group.
         </div>
@@ -314,8 +325,7 @@ import { useCharacterStore } from '../store/characterStore.js'
 import { Character, KiokuConstants } from '../types/KiokuTypes.js'
 import { useSetting } from '../store/settingsStore.js'
 import { FinalTeam } from '../types/BestTeamTypes.js'
-import { LuxMagica, maxPlayerLevel } from '../types/enums.js'
-import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
+import { KiokuElement, LuxMagica, maxPlayerLevel } from '../types/enums.js'
 import { getCachedStats, scheduleBackfill } from '../utils/statsBackfill'
 import { kiokuLevelCosts, magicLevelCosts, playerLevelCosts } from '../utils/helpers'
 
@@ -343,17 +353,20 @@ export default defineComponent({
       'role'
     )
     const playerLevel = useSetting('playerLevel', 1)
+    const usePlayerLevelAsKiokuMaxLevel = useSetting('usePlayerLevelAsKiokuMaxLevel', false)
+    const showResourceCosts = useSetting('showResourceCosts', true)
+    const showPerKiokuResourceCosts = useSetting('showPerKiokuResourceCosts', true)
 
     const bigNumberDisplayMode = useSetting<'shortHas' | 'shortMiss' | 'longHas' | 'longMiss' | 'percentage'>("bigNumberDisplayMode", "shortHas")
     function toggleMissingAndWhole() {
       switch (bigNumberDisplayMode.value) {
         case 'shortHas':
-          bigNumberDisplayMode.value = 'shortMiss'
-          break
-        case 'shortMiss':
           bigNumberDisplayMode.value = 'longHas'
           break
         case 'longHas':
+          bigNumberDisplayMode.value = 'shortMiss'
+          break
+        case 'shortMiss':
           bigNumberDisplayMode.value = 'longMiss'
           break
         case 'longMiss':
@@ -376,6 +389,17 @@ export default defineComponent({
       if (bigNumberDisplayMode.value === "percentage") return `${(100 * current / max).toFixed(2)}%`
       if (bigNumberDisplayMode.value === "shortMiss" || bigNumberDisplayMode.value === "longMiss") value = -Math.max(max - current, 0)
       return `${formatValue(value)} / ${formatValue(max)}`
+    }
+    function formatTitle() {
+      switch (bigNumberDisplayMode.value) {
+        case 'shortHas':
+        case 'longHas':
+        case 'percentage':
+          return "Spent resources"
+        case 'shortMiss':
+        case 'longMiss':
+          return "Required resources to max"
+      }
     }
 
     let worker: Worker | null = null
@@ -549,9 +573,14 @@ export default defineComponent({
     })
 
     function getKiokuLevelCost(char: Character) {
-      const currLvl = Math.min(Math.max(char.kiokuLvl ?? 0, 1), KiokuConstants.maxKiokuLvl)
+      const kiokuMaxLvl = usePlayerLevelAsKiokuMaxLevel.value
+        ? playerLevel.value
+        : KiokuConstants.maxKiokuLvl
+
+      const currLvl = Math.min(Math.max(char.kiokuLvl ?? 0, 1), kiokuMaxLvl)
       const current = kiokuLevelCosts[currLvl] ?? kiokuLevelCosts[0]
-      const max = kiokuLevelCosts[KiokuConstants.maxKiokuLvl] ?? current
+      const max = kiokuLevelCosts[kiokuMaxLvl] ?? current
+
       return {
         exp: { current: current.exp, max: max.exp },
         gold: { current: current.gold, max: max.gold },
@@ -665,8 +694,12 @@ export default defineComponent({
       }
     }
 
-    function itemIdxToImg(idx: number) {
-      return `/exedra-dmg-calc/items/${idx}.png`
+    function itemIdxToImg(idx: number, maybeElement?: KiokuElement | string) {
+      let key = "light"
+      if (Object.values(KiokuElement).includes(maybeElement)) {
+        key = maybeElement!.toLowerCase()
+      }
+      return `/exedra-dmg-calc/items/${key}/${idx}.png`
     }
 
     return {
@@ -696,10 +729,14 @@ export default defineComponent({
       sortBy,
       groupBy,
       playerLevel,
+      usePlayerLevelAsKiokuMaxLevel,
       maxPlayerLevel,
+      showResourceCosts,
+      showPerKiokuResourceCosts,
       playerExpUsage,
       toggleMissingAndWhole,
       formatAmount,
+      formatTitle,
       tabKiokuLevelResourceSums,
       tabMagicLevelResourceSums,
       rarityKiokuLevelSums,
@@ -998,7 +1035,7 @@ export default defineComponent({
 
 .list-header {
   display: grid;
-  grid-template-columns: 180px auto 140px 1fr;
+  grid-template-columns: 240px 400px 160px 1fr;
   gap: 0 0.75rem;
   padding: 0.3rem 0.75rem;
   font-size: 0.64rem;
