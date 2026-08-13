@@ -62,7 +62,7 @@
             <section class="toolbar card">
                 <span class="filters-heading">Import</span>
                 <div class="toolbar-right">
-                    <button class="btn btn-sm" @click="triggerImportFile">Import Crys Data</button>
+                    <button class="btn btn-sm" @click="triggerImportFile">Import Crys Data and Kioku Levels</button>
                     <NewBadge id="import-crys-data" />
                     <input ref="importFileInputRef" type="file" accept=".json,application/json"
                         class="hidden-file-input" @change="onImportFileChange" />
@@ -135,7 +135,8 @@
             </section>
         </div>
 
-        <CrysImportModal v-model="showImportModal" :diff-characters="importDiff" @apply="onApplyImport" />
+        <CrysImportModal v-model="showImportModal" :diff-characters="importDiff" @apply="onApplyImport"
+            :version-warning="importVersionWarning" />
     </div>
 </template>
 
@@ -152,7 +153,7 @@ import { useSetting } from "../store/settingsStore"
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import { useFriendStore } from "../store/friendStore"
 import CrysImportModal from '../components/CrysImportModal.vue'
-import { buildCrysImportDiff, applyCrysImportDiff, type CrysDiffCharacter, type CrysImportData } from '../utils/crysImport'
+import { buildCrysImportDiff, applyCrysImportDiff, extractImportVersion, type CrysDiffCharacter, type CrysImportData } from '../utils/crysImport'
 
 function getCrysElement(crys: CrystalisData): KiokuElement | undefined {
     return elementMap[passiveDetails[crys.value1 * 100 + 1].element]
@@ -319,15 +320,46 @@ function triggerImportFile() {
     importFileInputRef.value?.click()
 }
 
+const importVersionWarning = ref<{ message: string; url: string } | null>(null)
+
+async function checkGitVersionMatch(importedVersion: string) {
+    try {
+        const res = await fetch("https://api.github.com/repos/thefrozenfishy/exedra-crys-reader/releases/latest")
+        if (res.ok) {
+            const data = await res.json()
+            const gitVersion = (data.tag_name || "").replace(/^version-/, "").replace(/^v/, "")
+            const cleanImported = importedVersion.replace(/^version-/, "").replace(/^v/, "")
+
+            if (Number(gitVersion) > Number(cleanImported)) {
+                importVersionWarning.value = {
+                    message: `New version available: v${gitVersion}, you are on ${importedVersion}`,
+                    url: `https://github.com/thefrozenfishy/exedra-crys-reader/releases/tag/version-${gitVersion}`
+                }
+            } else {
+                importVersionWarning.value = null
+            }
+        }
+    } catch (e) {
+        console.error("Failed to get git version", e)
+    }
+}
+
 function onImportFileChange(e: Event) {
     const input = e.target as HTMLInputElement
     const file = input.files?.[0]
     if (!file) return
 
     const reader = new FileReader()
-    reader.onload = (ev) => {
+    reader.onload = async (ev) => {
         try {
             const parsed = JSON.parse(ev.target?.result as string) as CrysImportData
+
+            importVersionWarning.value = null
+            const importedVersion = extractImportVersion(parsed)
+            if (importedVersion) {
+                await checkGitVersionMatch(importedVersion.toString())
+            }
+
             const diff = buildCrysImportDiff(store.characters, parsed)
 
             if (!diff.length) {
@@ -348,7 +380,6 @@ function onImportFileChange(e: Event) {
     }
     reader.readAsText(file)
 
-    // reset so selecting the same file again still fires change
     input.value = ""
 }
 

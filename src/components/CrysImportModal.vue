@@ -5,6 +5,12 @@
                 <h2 class="crys-import-title">Review Import</h2>
                 <button class="close-btn" title="Cancel" @click="onCancel">✖</button>
             </div>
+            <div v-if="versionWarning" class="version-warning-banner">
+                ⚠️ {{ versionWarning.message }}.
+                <a :href="versionWarning.url" target="_blank" rel="noopener noreferrer">
+                    Get it on GitHub
+                </a>
+            </div>
 
             <div class="crys-import-toolbar">
                 <span class="import-summary">{{ selectedCount }} / {{ totalCount }} changes selected</span>
@@ -30,13 +36,79 @@
                         <span v-if="entry.char.character_en" class="char-diff-name-en">
                             {{ entry.char.character_en }}
                         </span>
-                        <span class="char-diff-count">{{entry.items.filter(i => selectedKeys.has(i.key)).length}} /
-                            {{ entry.items.length }}</span>
+                        <span class="char-diff-count">
+                            {{getEntryKeys(entry).filter(k => selectedKeys.has(k)).length}} / {{
+                                getEntryKeys(entry).length }}
+                        </span>
                     </label>
 
                     <div v-if="entry.equipOrderUnmatched.length" class="equip-order-warning">
                         ⚠ equipOrder names not recognized for this character: {{ entry.equipOrderUnmatched.join(", ") }}
                     </div>
+
+                    <label v-if="entry.kiokuLvl !== undefined && entry.kiokuLvl !== entry.char.kiokuLvl"
+                        class="diff-item" :class="{ excluded: !selectedKeys.has(`${entry.char.id}-kiokuLvl`) }">
+                        <input type="checkbox" class="diff-checkbox"
+                            :checked="selectedKeys.has(`${entry.char.id}-kiokuLvl`)"
+                            @change="toggleItem(`${entry.char.id}-kiokuLvl`)" />
+                        <div class="diff-content">
+                            <div class="diff-crys-name">Kioku Level</div>
+                            <div class="diff-row">
+                                <span class="diff-label">Kioku Level</span>
+                                <span class="diff-value diff-old">Lvl {{ entry.char.kiokuLvl }}</span>
+                                <span class="diff-arrow">→</span>
+                                <span class="diff-value diff-new">Lvl {{ entry.kiokuLvl }}</span>
+                            </div>
+                        </div>
+                    </label>
+
+                    <label v-if="entry.magicLvl !== undefined && entry.magicLvl !== entry.char.magicLvl"
+                        class="diff-item" :class="{ excluded: !selectedKeys.has(`${entry.char.id}-magicLvl`) }">
+                        <input type="checkbox" class="diff-checkbox"
+                            :checked="selectedKeys.has(`${entry.char.id}-magicLvl`)"
+                            @change="toggleItem(`${entry.char.id}-magicLvl`)" />
+                        <div class="diff-content">
+                            <div class="diff-crys-name">Magic Level</div>
+                            <div class="diff-row">
+                                <span class="diff-label">Magic Level</span>
+                                <span class="diff-value diff-old">Lvl {{ entry.char.magicLvl }}</span>
+                                <span class="diff-arrow">→</span>
+                                <span class="diff-value diff-new">Lvl {{ entry.magicLvl }}</span>
+                            </div>
+                        </div>
+                    </label>
+
+                    <label v-if="entry.specialLvl !== undefined && entry.specialLvl !== entry.char.specialLvl"
+                        class="diff-item" :class="{ excluded: !selectedKeys.has(`${entry.char.id}-specialLvl`) }">
+                        <input type="checkbox" class="diff-checkbox"
+                            :checked="selectedKeys.has(`${entry.char.id}-specialLvl`)"
+                            @change="toggleItem(`${entry.char.id}-specialLvl`)" />
+                        <div class="diff-content">
+                            <div class="diff-crys-name">Special Level</div>
+                            <div class="diff-row">
+                                <span class="diff-label">Special Level</span>
+                                <span class="diff-value diff-old">Lvl {{ entry.char.specialLvl }}</span>
+                                <span class="diff-arrow">→</span>
+                                <span class="diff-value diff-new">Lvl {{ entry.specialLvl }}</span>
+                            </div>
+                        </div>
+                    </label>
+
+                    <label v-if="entry.ascension !== undefined && entry.ascension !== entry.char.ascension"
+                        class="diff-item" :class="{ excluded: !selectedKeys.has(`${entry.char.id}-ascension`) }">
+                        <input type="checkbox" class="diff-checkbox"
+                            :checked="selectedKeys.has(`${entry.char.id}-ascension`)"
+                            @change="toggleItem(`${entry.char.id}-ascension`)" />
+                        <div class="diff-content">
+                            <div class="diff-crys-name">Ascension</div>
+                            <div class="diff-row">
+                                <span class="diff-label">Ascension</span>
+                                <span class="diff-value diff-old">A{{ entry.char.ascension }}</span>
+                                <span class="diff-arrow">→</span>
+                                <span class="diff-value diff-new">A{{ entry.ascension }}</span>
+                            </div>
+                        </div>
+                    </label>
 
                     <label v-for="item in entry.items" :key="item.key" class="diff-item" :class="{
                         excluded: !selectedKeys.has(item.key),
@@ -99,7 +171,8 @@ import type { CrysDiffCharacter } from '../utils/crysImport'
 
 const props = defineProps<{
     modelValue: boolean
-    diffCharacters: CrysDiffCharacter[]
+    diffCharacters: CrysDiffCharacter[],
+    versionWarning?: { message: string; url: string } | null,
 }>()
 
 const emit = defineEmits<{
@@ -110,16 +183,33 @@ const emit = defineEmits<{
 
 const selectedKeys = ref<Set<string>>(new Set())
 
+function getEntryKeys(entry: CrysDiffCharacter): string[] {
+    const keys = entry.items.map(i => i.key)
+    if (entry.kiokuLvl !== undefined && !isNaN(entry.kiokuLvl) && entry.kiokuLvl !== entry.char.kiokuLvl) {
+        keys.push(`${entry.char.id}-kiokuLvl`)
+    }
+    if (entry.magicLvl !== undefined && !isNaN(entry.magicLvl) && entry.magicLvl !== entry.char.magicLvl) {
+        keys.push(`${entry.char.id}-magicLvl`)
+    }
+    if (entry.specialLvl !== undefined && !isNaN(entry.specialLvl) && entry.specialLvl !== entry.char.specialLvl) {
+        keys.push(`${entry.char.id}-specialLvl`)
+    }
+    if (entry.ascension !== undefined && !isNaN(entry.ascension) && entry.ascension !== entry.char.ascension) {
+        keys.push(`${entry.char.id}-ascension`)
+    }
+    return keys
+}
+
 // Default: everything selected, reset whenever a fresh diff comes in.
 watch(() => props.diffCharacters, (list) => {
     const all = new Set<string>()
     for (const entry of list) {
-        for (const item of entry.items) all.add(item.key)
+        for (const key of getEntryKeys(entry)) all.add(key)
     }
     selectedKeys.value = all
 }, { immediate: true })
 
-const totalCount = computed(() => props.diffCharacters.reduce((sum, e) => sum + e.items.length, 0))
+const totalCount = computed(() => props.diffCharacters.reduce((sum, e) => sum + getEntryKeys(e).length, 0))
 const selectedCount = computed(() => selectedKeys.value.size)
 
 function toggleItem(key: string) {
@@ -130,9 +220,10 @@ function toggleItem(key: string) {
 }
 
 function charSelectionState(entry: CrysDiffCharacter): 'all' | 'none' | 'some' {
-    const selected = entry.items.filter(i => selectedKeys.value.has(i.key)).length
+    const keys = getEntryKeys(entry)
+    const selected = keys.filter(k => selectedKeys.value.has(k)).length
     if (selected === 0) return 'none'
-    if (selected === entry.items.length) return 'all'
+    if (selected === keys.length) return 'all'
     return 'some'
 }
 
@@ -143,9 +234,9 @@ function setIndeterminate(el: Element | null, indeterminate: boolean) {
 function toggleCharacter(entry: CrysDiffCharacter) {
     const selectAll = charSelectionState(entry) !== 'all'
     const next = new Set(selectedKeys.value)
-    for (const item of entry.items) {
-        if (selectAll) next.add(item.key)
-        else next.delete(item.key)
+    for (const key of getEntryKeys(entry)) {
+        if (selectAll) next.add(key)
+        else next.delete(key)
     }
     selectedKeys.value = next
 }
@@ -157,7 +248,7 @@ function toggleAll(on: boolean) {
     }
     const all = new Set<string>()
     for (const entry of props.diffCharacters) {
-        for (const item of entry.items) all.add(item.key)
+        for (const key of getEntryKeys(entry)) all.add(key)
     }
     selectedKeys.value = all
 }
@@ -473,5 +564,21 @@ function onApply() {
     gap: 0.5rem;
     padding: 0.7rem 1.1rem;
     border-top: 1px solid var(--border);
+}
+
+.version-warning-banner {
+    background: rgba(245, 204, 117, 0.18);
+    border-left-color: rgba(244, 206, 102, 0.55);
+    color: var(--warning);
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+}
+
+.version-warning-banner a {
+    color: #fff;
+    text-decoration: underline;
+    margin-left: 0.3rem;
 }
 </style>

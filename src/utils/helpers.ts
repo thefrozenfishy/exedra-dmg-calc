@@ -104,7 +104,6 @@ export const magicLevelCosts: Record<string, Record<number, MagicLevelCost>> = {
         magicLevelCosts[styleMstId] = perStyle;
     });
 }
-console.log(magicLevelCosts)
 
 export const characterHeartParamUpGroup = Object.fromEntries(
     characterHeartParamUpGroupJson.map((item: any) => [item.characterHeartParamUpGroupMstId, item])
@@ -162,7 +161,6 @@ export const kiokuLevelCosts: Record<number, { exp: number; gold: number }> = { 
         gold: kiokuLevelCosts[item.level - 1].gold + item.goldPerExp,
     }
 })
-console.log(kiokuLevelCosts)
 
 export const playerLevelCosts: Record<number, { exp: number }> = { 1: { exp: 0 } };
 Object.values(userLevelUpJson).forEach((item: any) => {
@@ -170,4 +168,3 @@ Object.values(userLevelUpJson).forEach((item: any) => {
         exp: playerLevelCosts[item.level].exp + item.levelUpExp,
     }
 })
-console.log(playerLevelCosts)

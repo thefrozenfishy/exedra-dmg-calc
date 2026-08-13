@@ -1,11 +1,16 @@
 import { relevantCrys, getSubCrystalises, subCrysTranslate, type Character, type CrystalisSelection } from '../types/KiokuTypes'
 
-export type CrysImportMeta = {
-    equipOrder?: string[]
+type CrysImportMeta = {
+    equipOrder?: string[],
+    kiokuLevel?: string | number,
+    magicLevel?: string | number,
+    specialLvl?: string | number,
+    ascension?: string | number,
+    version?: string,
 }
 export type CrysImportData = Record<string, Record<string, any>>
 
-export interface CrysDiffSubSlot {
+interface CrysDiffSubSlot {
     oldId: number
     newId: number
     oldLabel: string
@@ -13,7 +18,7 @@ export interface CrysDiffSubSlot {
     changed: boolean
 }
 
-export interface CrysDiffItem {
+interface CrysDiffItem {
     key: string
     selectionAbilityMstId: number
     crysName: string
@@ -29,6 +34,10 @@ export interface CrysDiffCharacter {
     char: Character
     items: CrysDiffItem[]
     equipOrderUnmatched: string[]
+    kiokuLvl?: number
+    magicLvl?: number
+    specialLvl?: number,
+    ascension?: number,
 }
 
 function buildSubCrysMaps() {
@@ -46,6 +55,19 @@ function splitMeta(entry: Record<string, any>): { meta?: CrysImportMeta; crysMap
     return { meta, crysMap }
 }
 
+export function extractImportVersion(importData: CrysImportData): number {
+    let highestVer = -Infinity
+    for (const rawEntry of Object.values(importData)) {
+        if (rawEntry?.meta?.version) {
+            let ver = String(rawEntry.meta.version)
+            if (ver.startsWith("v")) ver = ver.slice(1)
+            if (ver === "DEV") ver = "1000"
+            if (Number(ver) && Number(ver) > highestVer) highestVer = Number(ver)
+        }
+    }
+    return highestVer
+}
+
 export function buildCrysImportDiff(characters: Character[], importData: CrysImportData): CrysDiffCharacter[] {
     const { descToId, idToLabel } = buildSubCrysMaps()
 
@@ -56,7 +78,13 @@ export function buildCrysImportDiff(characters: Character[], importData: CrysImp
         if (!char) continue
 
         const { meta, crysMap } = splitMeta(rawEntry)
+
         const equipOrder = meta?.equipOrder ?? null
+        const importedKiokuLvl = meta?.kiokuLevel != null ? Number(meta.kiokuLevel) : undefined
+        const importedMagicLvl = meta?.magicLevel != null ? Number(meta.magicLevel) : undefined
+        const importedSpecialLvl = meta?.specialLvl != null ? Number(meta.specialLvl) : undefined
+        const importedAscension = meta?.ascension != null ? Number(meta.ascension) : undefined
+
         const allCrys = relevantCrys(char.id)
 
         const equipOrderUnmatched = equipOrder
@@ -67,8 +95,8 @@ export function buildCrysImportDiff(characters: Character[], importData: CrysImp
 
         for (const crys of allCrys) {
             const rawSubs: string[] | undefined = crysMap[crys.name]
-            const impliedByEquip = !!equipOrder && rawSubs === undefined && equipOrder.includes(crys.name)
-            const newEnabled = rawSubs !== undefined || impliedByEquip
+            const impliedByEquip = !!equipOrder && rawSubs == null && equipOrder.includes(crys.name)
+            const newEnabled = rawSubs != null || impliedByEquip
 
             const existing = char.crysOptions[crys.selectionAbilityMstId]
             const oldEnabled = existing?.enabled ?? false
@@ -86,7 +114,7 @@ export function buildCrysImportDiff(characters: Character[], importData: CrysImp
                     if (!raw) return 0
                     const translated = subCrysTranslate(raw)
                     const id = descToId[translated]
-                    if (id === undefined) {
+                    if (id == null) {
                         unmatched.push(raw)
                         return 0
                     }
@@ -128,7 +156,22 @@ export function buildCrysImportDiff(characters: Character[], importData: CrysImp
             })
         }
 
-        if (items.length) result.push({ char, items, equipOrderUnmatched })
+        const kiokuChanged = importedKiokuLvl != null && !isNaN(importedKiokuLvl) && importedKiokuLvl !== char.kiokuLvl
+        const magicChanged = importedMagicLvl != null && !isNaN(importedMagicLvl) && importedMagicLvl !== char.magicLvl
+        const specialChanged = importedSpecialLvl != null && !isNaN(importedSpecialLvl) && importedSpecialLvl !== char.specialLvl
+        const ascensionChanged = importedAscension != null && !isNaN(importedAscension) && importedAscension !== char.ascension
+
+        if (items.length || kiokuChanged || magicChanged || specialChanged||ascensionChanged) {
+            result.push({
+                char,
+                items,
+                equipOrderUnmatched,
+                kiokuLvl: importedKiokuLvl,
+                magicLvl: importedMagicLvl,
+                specialLvl: importedSpecialLvl,
+                ascension: importedAscension,
+            })
+        }
     }
 
     return result.sort((a, b) => a.char.id - b.char.id)
@@ -139,9 +182,9 @@ export function applyCrysImportDiff(
     diffCharacters: CrysDiffCharacter[],
     selectedKeys: Set<string>
 ) {
-    for (const { char, items } of diffCharacters) {
+    for (const { char, items, kiokuLvl, magicLvl, specialLvl,ascension } of diffCharacters) {
         const selectedItems = items.filter(i => selectedKeys.has(i.key))
-        if (!selectedItems.length) continue
+        if (items.length > 0 && !selectedItems.length) continue
 
         const updatedOptions: Record<number, CrystalisSelection> = { ...char.crysOptions }
         for (const item of selectedItems) {
@@ -152,6 +195,24 @@ export function applyCrysImportDiff(
             }
         }
 
-        updateChar({ ...char, crysOptions: updatedOptions })
+        const updatedChar: Character = {
+            ...char,
+            crysOptions: updatedOptions,
+        }
+
+        if (kiokuLvl != null && !isNaN(kiokuLvl)) {
+            updatedChar.kiokuLvl = kiokuLvl
+        }
+        if (magicLvl != null && !isNaN(magicLvl)) {
+            updatedChar.magicLvl = magicLvl
+        }
+        if (specialLvl != null && !isNaN(specialLvl)) {
+            updatedChar.specialLvl = specialLvl
+        }
+        if (ascension != null && !isNaN(ascension)) {
+            updatedChar.ascension = ascension
+        }
+
+        updateChar(updatedChar)
     }
 }
