@@ -35,17 +35,77 @@
     <section class="resource-summary card">
       <span class="filters-heading">Resource Totals</span>
       <template v-for="r in [5, 4, 3]">
-        <div v-if="r === 5 || r === 4 && show4stars || r === 3 && show3stars" :key="r" class="resource-summary-group"
-          @click="toggleMissingAndWhole" title="Click to toggle current / missing">
-          <span class="resource-summary-label">{{ r }}★ Total</span>
-          <span class="resource-chip">
-            <img :src="`/exedra-dmg-calc/items/exp.png`" alt="Kioku Exp" /> {{
-              formatAmount(rarityKiokuLevelSums[r].exp.current, rarityKiokuLevelSums[r].exp.max) }}
-          </span>
-          <span class="resource-chip">
-            <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" /> {{
-              formatAmount(rarityKiokuLevelSums[r].gold.current, rarityKiokuLevelSums[r].gold.max) }}
-          </span>
+        <div v-if="r === 5 || (r === 4 && show4stars) || (r === 3 && show3stars)" :key="r" class="resource-summary-row"
+          @click="toggleMissingAndWhole">
+          <span class="resource-summary-label">{{ r }}★</span>
+
+          <!-- Kioku Level -->
+          <div class="resource-summary-section">
+            <span class="resource-summary-section-label">Kioku level</span>
+
+            <span class="resource-chip">
+              <img :src="`/exedra-dmg-calc/items/exp.png`" alt="Kioku Exp" />
+              {{
+                formatAmount(
+                  rarityKiokuLevelSums[r].exp.current,
+                  rarityKiokuLevelSums[r].exp.max
+                )
+              }}
+            </span>
+
+            <span class="resource-chip">
+              <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
+              {{
+                formatAmount(
+                  rarityKiokuLevelSums[r].gold.current,
+                  rarityKiokuLevelSums[r].gold.max
+                )
+              }}
+            </span>
+          </div>
+
+          <!-- Magic Level -->
+          <div class="resource-summary-section magic-summary-section">
+            <span class="resource-summary-section-label">Magic level</span>
+
+            <div class="magic-resource-groups">
+              <div class="magic-resource-group">
+                <span v-for="i in [1, 2, 3, 7]" :key="i" class="resource-chip">
+                  <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" />
+                  {{
+                    formatAmount(
+                      rarityMagicLevelSums[r].items.current[i] ?? 0,
+                      rarityMagicLevelSums[r].items.max[i] ?? 0
+                    )
+                  }}
+                </span>
+              </div>
+
+              <div class="magic-resource-group">
+                <span v-for="i in [4, 5, 6, 8]" :key="i" class="resource-chip">
+                  <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" />
+                  {{
+                    formatAmount(
+                      rarityMagicLevelSums[r].items.current[i] ?? 0,
+                      rarityMagicLevelSums[r].items.max[i] ?? 0
+                    )
+                  }}
+                </span>
+              </div>
+
+              <div class="magic-resource-group magic-gold">
+                <span class="resource-chip">
+                  <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
+                  {{
+                    formatAmount(
+                      rarityMagicLevelSums[r].gold.current,
+                      rarityMagicLevelSums[r].gold.max
+                    )
+                  }}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </template>
     </section>
@@ -136,7 +196,7 @@
         </label>
         <button class="btn btn-apply" @click="applyBulk">Apply</button>
 
-        <div class="right-leaning resource-chip" @click="toggleMissingAndWhole">
+        <div class="right-leaning resource-chip player-exp-chip" @click="toggleMissingAndWhole">
           <img :src="`/exedra-dmg-calc/items/player.png`" alt="Player Exp" /> {{ formatAmount(playerExpUsage.current,
             playerExpUsage.max) }}
         </div>
@@ -1005,16 +1065,85 @@ export default defineComponent({
   margin: -10px 0 -5px -5px;
 }
 
-.resource-summary-group {
-  display: inline-flex;
+.resource-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
+}
+
+.resource-summary>.filters-heading {
+  margin-bottom: 0.1rem;
+}
+
+.resource-summary-row {
+  display: grid;
+  grid-template-columns: 55px auto minmax(0, 1fr);
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   padding: 0.3rem 0.65rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   cursor: pointer;
   user-select: none;
   transition: background 0.12s, border-color 0.12s;
+}
+
+.resource-summary-row:hover {
+  background: var(--bg-soft);
+  border-color: var(--border-strong);
+}
+
+.resource-summary-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-soft);
+  text-align: center;
+}
+
+.resource-summary-section {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.resource-summary-section-label {
+  width: 78px;
+  flex: 0 0 78px;
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  opacity: 0.75;
+}
+
+.magic-summary-section {
+  min-width: 0;
+}
+
+.magic-summary-section .magic-resource-groups {
+  flex: 1;
+}
+
+.magic-resource-groups {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.magic-resource-group {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 0 0 auto;
+}
+
+.magic-gold {
+  margin-left: 0;
 }
 
 .resource-summary-label {
@@ -1037,9 +1166,25 @@ export default defineComponent({
 
 .player-exp-chip {
   cursor: pointer;
-  font-size: 0.85rem;
-  padding: 0.35rem 0.9rem;
+  height: 29px;
+  box-sizing: border-box;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+
+  font-size: 0.74rem;
   user-select: none;
+  white-space: nowrap;
+}
+
+.player-exp-chip img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  margin: 0;
+  flex-shrink: 0;
 }
 
 .player-exp-chip:hover {
