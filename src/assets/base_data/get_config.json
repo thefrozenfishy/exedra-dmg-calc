@@ -1,0 +1,4219 @@
+{
+    "payload": {
+        "alternativeStoryConfig": {
+            "menuReleaseTime": "2026-03-27T22:00:00+09:00",
+            "menuThumbnailResourcePath": "quest_sub_menu/alternative_story/thumbnail",
+            "menuTitleResourcePath": "quest_sub_menu/alternative_story/title"
+        },
+        "cameraConfig": {
+            "aqBackgroundColor": "#CCF02A",
+            "aqStyle3dCharacterMstId": 113501,
+            "aqStyleLive2dCostumeMstId": 113500,
+            "bebeBackgroundColor": "#B192C0",
+            "bebeEventEndTime": "2026-02-28T11:59:59+09:00",
+            "bebeEventStartTime": "2026-01-30T12:00:00+09:00",
+            "bebeStyle3dCharacterMstId": 114801,
+            "cameraStartTime": "2025-09-26T12:00:00+09:00",
+            "logSendNum": 100,
+            "namaeBackgroundColor": "#FFFFFF",
+            "namaeStyle3dCharacterMstId": 113401,
+            "namaeStyleLive2dCostumeMstId": 113400,
+            "yodakaBackgroundColor": "#7280EB",
+            "yodakaStyle3dCharacterMstId": 113601,
+            "yodakaStyleLive2dCostumeMstId": 113600
+        },
+        "cardConfig": {
+            "cardLimitBreakRarityInfo": [
+                {
+                    "itemMstId": 122002,
+                    "num": 10,
+                    "rarity": 4
+                },
+                {
+                    "itemMstId": 122003,
+                    "num": 5,
+                    "rarity": 5
+                }
+            ],
+            "genericLimitBreakInfo": [
+                {
+                    "itemMstId": 99993,
+                    "rarity": 1
+                },
+                {
+                    "itemMstId": 99994,
+                    "rarity": 2
+                },
+                {
+                    "itemMstId": 99995,
+                    "rarity": 3
+                },
+                {
+                    "itemMstId": 99996,
+                    "rarity": 4
+                },
+                {
+                    "itemMstId": 99997,
+                    "rarity": 5
+                }
+            ],
+            "maxLevelInfo": [
+                {
+                    "limitBreakCount": 0,
+                    "maxLevel": 50,
+                    "rarity": 3
+                },
+                {
+                    "limitBreakCount": 1,
+                    "maxLevel": 60,
+                    "rarity": 3
+                },
+                {
+                    "limitBreakCount": 2,
+                    "maxLevel": 70,
+                    "rarity": 3
+                },
+                {
+                    "limitBreakCount": 3,
+                    "maxLevel": 80,
+                    "rarity": 3
+                },
+                {
+                    "limitBreakCount": 4,
+                    "maxLevel": 90,
+                    "rarity": 3
+                },
+                {
+                    "limitBreakCount": 5,
+                    "maxLevel": 100,
+                    "rarity": 3
+                },
+                {
+                    "limitBreakCount": 0,
+                    "maxLevel": 50,
+                    "rarity": 4
+                },
+                {
+                    "limitBreakCount": 1,
+                    "maxLevel": 60,
+                    "rarity": 4
+                },
+                {
+                    "limitBreakCount": 2,
+                    "maxLevel": 70,
+                    "rarity": 4
+                },
+                {
+                    "limitBreakCount": 3,
+                    "maxLevel": 80,
+                    "rarity": 4
+                },
+                {
+                    "limitBreakCount": 4,
+                    "maxLevel": 90,
+                    "rarity": 4
+                },
+                {
+                    "limitBreakCount": 5,
+                    "maxLevel": 100,
+                    "rarity": 4
+                },
+                {
+                    "limitBreakCount": 0,
+                    "maxLevel": 50,
+                    "rarity": 5
+                },
+                {
+                    "limitBreakCount": 1,
+                    "maxLevel": 60,
+                    "rarity": 5
+                },
+                {
+                    "limitBreakCount": 2,
+                    "maxLevel": 70,
+                    "rarity": 5
+                },
+                {
+                    "limitBreakCount": 3,
+                    "maxLevel": 80,
+                    "rarity": 5
+                },
+                {
+                    "limitBreakCount": 4,
+                    "maxLevel": 90,
+                    "rarity": 5
+                },
+                {
+                    "limitBreakCount": 5,
+                    "maxLevel": 100,
+                    "rarity": 5
+                }
+            ],
+            "passiveSkillSortCategoryReleaseTime": "2026-06-29T12:00:00+09:00",
+            "sellCardInfo": [
+                {
+                    "gold": 1000,
+                    "itemMstId": 201,
+                    "num": 4,
+                    "rarity": 1
+                },
+                {
+                    "gold": 2000,
+                    "itemMstId": 202,
+                    "num": 1,
+                    "rarity": 2
+                },
+                {
+                    "gold": 5000,
+                    "itemMstId": 203,
+                    "num": 3,
+                    "rarity": 3
+                },
+                {
+                    "gold": 10000,
+                    "itemMstId": 203,
+                    "num": 6,
+                    "rarity": 4
+                },
+                {
+                    "gold": 20000,
+                    "itemMstId": 203,
+                    "num": 9,
+                    "rarity": 5
+                }
+            ],
+            "subCardReflectRate": [
+                {
+                    "equippedNum": 1,
+                    "rate": 200
+                },
+                {
+                    "equippedNum": 2,
+                    "rate": 500
+                }
+            ],
+            "unlockSubCardDataSlot": [
+                {
+                    "achievedLevel": 50,
+                    "slot": 1
+                },
+                {
+                    "achievedLevel": 100,
+                    "slot": 2
+                }
+            ]
+        },
+        "characterConfig": {
+            "awakeCostInfo": [
+                {
+                    "awakeLevel": 1,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 50
+                },
+                {
+                    "awakeLevel": 2,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 50
+                },
+                {
+                    "awakeLevel": 3,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 50
+                },
+                {
+                    "awakeLevel": 4,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 50
+                },
+                {
+                    "awakeLevel": 5,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 50
+                },
+                {
+                    "awakeLevel": 6,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 70
+                },
+                {
+                    "awakeLevel": 7,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 70
+                },
+                {
+                    "awakeLevel": 8,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 70
+                },
+                {
+                    "awakeLevel": 9,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 70
+                },
+                {
+                    "awakeLevel": 10,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 70
+                },
+                {
+                    "awakeLevel": 11,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 100
+                },
+                {
+                    "awakeLevel": 12,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 100
+                },
+                {
+                    "awakeLevel": 13,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 100
+                },
+                {
+                    "awakeLevel": 14,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 100
+                },
+                {
+                    "awakeLevel": 15,
+                    "genericMaterialNum": 600,
+                    "onlyMaterialNum": 100
+                }
+            ],
+            "genericAwakeItemMstId": 111001,
+            "levelUpCost": [
+                {
+                    "exp": 10,
+                    "goldPerExp": 1,
+                    "level": 1
+                },
+                {
+                    "exp": 40,
+                    "goldPerExp": 1,
+                    "level": 2
+                },
+                {
+                    "exp": 70,
+                    "goldPerExp": 1,
+                    "level": 3
+                },
+                {
+                    "exp": 100,
+                    "goldPerExp": 1,
+                    "level": 4
+                },
+                {
+                    "exp": 200,
+                    "goldPerExp": 1,
+                    "level": 5
+                },
+                {
+                    "exp": 400,
+                    "goldPerExp": 1,
+                    "level": 6
+                },
+                {
+                    "exp": 800,
+                    "goldPerExp": 1,
+                    "level": 7
+                },
+                {
+                    "exp": 1500,
+                    "goldPerExp": 1,
+                    "level": 8
+                },
+                {
+                    "exp": 2304,
+                    "goldPerExp": 1,
+                    "level": 9
+                },
+                {
+                    "exp": 2560,
+                    "goldPerExp": 1,
+                    "level": 10
+                },
+                {
+                    "exp": 2816,
+                    "goldPerExp": 1,
+                    "level": 11
+                },
+                {
+                    "exp": 3072,
+                    "goldPerExp": 1,
+                    "level": 12
+                },
+                {
+                    "exp": 3328,
+                    "goldPerExp": 1,
+                    "level": 13
+                },
+                {
+                    "exp": 3584,
+                    "goldPerExp": 1,
+                    "level": 14
+                },
+                {
+                    "exp": 3840,
+                    "goldPerExp": 1,
+                    "level": 15
+                },
+                {
+                    "exp": 4096,
+                    "goldPerExp": 1,
+                    "level": 16
+                },
+                {
+                    "exp": 4352,
+                    "goldPerExp": 1,
+                    "level": 17
+                },
+                {
+                    "exp": 4608,
+                    "goldPerExp": 1,
+                    "level": 18
+                },
+                {
+                    "exp": 4864,
+                    "goldPerExp": 1,
+                    "level": 19
+                },
+                {
+                    "exp": 5376,
+                    "goldPerExp": 1,
+                    "level": 20
+                },
+                {
+                    "exp": 5888,
+                    "goldPerExp": 1,
+                    "level": 21
+                },
+                {
+                    "exp": 6400,
+                    "goldPerExp": 1,
+                    "level": 22
+                },
+                {
+                    "exp": 6912,
+                    "goldPerExp": 1,
+                    "level": 23
+                },
+                {
+                    "exp": 7424,
+                    "goldPerExp": 1,
+                    "level": 24
+                },
+                {
+                    "exp": 7936,
+                    "goldPerExp": 1,
+                    "level": 25
+                },
+                {
+                    "exp": 8448,
+                    "goldPerExp": 1,
+                    "level": 26
+                },
+                {
+                    "exp": 8960,
+                    "goldPerExp": 1,
+                    "level": 27
+                },
+                {
+                    "exp": 9472,
+                    "goldPerExp": 1,
+                    "level": 28
+                },
+                {
+                    "exp": 9984,
+                    "goldPerExp": 1,
+                    "level": 29
+                },
+                {
+                    "exp": 10496,
+                    "goldPerExp": 1,
+                    "level": 30
+                },
+                {
+                    "exp": 11008,
+                    "goldPerExp": 1,
+                    "level": 31
+                },
+                {
+                    "exp": 11520,
+                    "goldPerExp": 1,
+                    "level": 32
+                },
+                {
+                    "exp": 12032,
+                    "goldPerExp": 1,
+                    "level": 33
+                },
+                {
+                    "exp": 12544,
+                    "goldPerExp": 1,
+                    "level": 34
+                },
+                {
+                    "exp": 13056,
+                    "goldPerExp": 1,
+                    "level": 35
+                },
+                {
+                    "exp": 13568,
+                    "goldPerExp": 1,
+                    "level": 36
+                },
+                {
+                    "exp": 14080,
+                    "goldPerExp": 1,
+                    "level": 37
+                },
+                {
+                    "exp": 14592,
+                    "goldPerExp": 1,
+                    "level": 38
+                },
+                {
+                    "exp": 15104,
+                    "goldPerExp": 1,
+                    "level": 39
+                },
+                {
+                    "exp": 16128,
+                    "goldPerExp": 1,
+                    "level": 40
+                },
+                {
+                    "exp": 17152,
+                    "goldPerExp": 1,
+                    "level": 41
+                },
+                {
+                    "exp": 18176,
+                    "goldPerExp": 1,
+                    "level": 42
+                },
+                {
+                    "exp": 19200,
+                    "goldPerExp": 1,
+                    "level": 43
+                },
+                {
+                    "exp": 20224,
+                    "goldPerExp": 1,
+                    "level": 44
+                },
+                {
+                    "exp": 21248,
+                    "goldPerExp": 1,
+                    "level": 45
+                },
+                {
+                    "exp": 22272,
+                    "goldPerExp": 1,
+                    "level": 46
+                },
+                {
+                    "exp": 23296,
+                    "goldPerExp": 1,
+                    "level": 47
+                },
+                {
+                    "exp": 24320,
+                    "goldPerExp": 1,
+                    "level": 48
+                },
+                {
+                    "exp": 25344,
+                    "goldPerExp": 1,
+                    "level": 49
+                },
+                {
+                    "exp": 26368,
+                    "goldPerExp": 1,
+                    "level": 50
+                },
+                {
+                    "exp": 27392,
+                    "goldPerExp": 1,
+                    "level": 51
+                },
+                {
+                    "exp": 28416,
+                    "goldPerExp": 1,
+                    "level": 52
+                },
+                {
+                    "exp": 29440,
+                    "goldPerExp": 1,
+                    "level": 53
+                },
+                {
+                    "exp": 30464,
+                    "goldPerExp": 1,
+                    "level": 54
+                },
+                {
+                    "exp": 31488,
+                    "goldPerExp": 1,
+                    "level": 55
+                },
+                {
+                    "exp": 32512,
+                    "goldPerExp": 1,
+                    "level": 56
+                },
+                {
+                    "exp": 33536,
+                    "goldPerExp": 1,
+                    "level": 57
+                },
+                {
+                    "exp": 34560,
+                    "goldPerExp": 1,
+                    "level": 58
+                },
+                {
+                    "exp": 35584,
+                    "goldPerExp": 1,
+                    "level": 59
+                },
+                {
+                    "exp": 36608,
+                    "goldPerExp": 1,
+                    "level": 60
+                },
+                {
+                    "exp": 37632,
+                    "goldPerExp": 1,
+                    "level": 61
+                },
+                {
+                    "exp": 38656,
+                    "goldPerExp": 1,
+                    "level": 62
+                },
+                {
+                    "exp": 39680,
+                    "goldPerExp": 1,
+                    "level": 63
+                },
+                {
+                    "exp": 40704,
+                    "goldPerExp": 1,
+                    "level": 64
+                },
+                {
+                    "exp": 41728,
+                    "goldPerExp": 1,
+                    "level": 65
+                },
+                {
+                    "exp": 42752,
+                    "goldPerExp": 1,
+                    "level": 66
+                },
+                {
+                    "exp": 43776,
+                    "goldPerExp": 1,
+                    "level": 67
+                },
+                {
+                    "exp": 44800,
+                    "goldPerExp": 1,
+                    "level": 68
+                },
+                {
+                    "exp": 45824,
+                    "goldPerExp": 1,
+                    "level": 69
+                },
+                {
+                    "exp": 47657,
+                    "goldPerExp": 1,
+                    "level": 70
+                },
+                {
+                    "exp": 49563,
+                    "goldPerExp": 1,
+                    "level": 71
+                },
+                {
+                    "exp": 51546,
+                    "goldPerExp": 1,
+                    "level": 72
+                },
+                {
+                    "exp": 53608,
+                    "goldPerExp": 1,
+                    "level": 73
+                },
+                {
+                    "exp": 55752,
+                    "goldPerExp": 1,
+                    "level": 74
+                },
+                {
+                    "exp": 57982,
+                    "goldPerExp": 1,
+                    "level": 75
+                },
+                {
+                    "exp": 60301,
+                    "goldPerExp": 1,
+                    "level": 76
+                },
+                {
+                    "exp": 62713,
+                    "goldPerExp": 1,
+                    "level": 77
+                },
+                {
+                    "exp": 65222,
+                    "goldPerExp": 1,
+                    "level": 78
+                },
+                {
+                    "exp": 67831,
+                    "goldPerExp": 1,
+                    "level": 79
+                },
+                {
+                    "exp": 70544,
+                    "goldPerExp": 1,
+                    "level": 80
+                },
+                {
+                    "exp": 73366,
+                    "goldPerExp": 1,
+                    "level": 81
+                },
+                {
+                    "exp": 76301,
+                    "goldPerExp": 1,
+                    "level": 82
+                },
+                {
+                    "exp": 79353,
+                    "goldPerExp": 1,
+                    "level": 83
+                },
+                {
+                    "exp": 82527,
+                    "goldPerExp": 1,
+                    "level": 84
+                },
+                {
+                    "exp": 85828,
+                    "goldPerExp": 1,
+                    "level": 85
+                },
+                {
+                    "exp": 89261,
+                    "goldPerExp": 1,
+                    "level": 86
+                },
+                {
+                    "exp": 92831,
+                    "goldPerExp": 1,
+                    "level": 87
+                },
+                {
+                    "exp": 96544,
+                    "goldPerExp": 1,
+                    "level": 88
+                },
+                {
+                    "exp": 100406,
+                    "goldPerExp": 1,
+                    "level": 89
+                },
+                {
+                    "exp": 104422,
+                    "goldPerExp": 1,
+                    "level": 90
+                },
+                {
+                    "exp": 108599,
+                    "goldPerExp": 1,
+                    "level": 91
+                },
+                {
+                    "exp": 112943,
+                    "goldPerExp": 1,
+                    "level": 92
+                },
+                {
+                    "exp": 117461,
+                    "goldPerExp": 1,
+                    "level": 93
+                },
+                {
+                    "exp": 122159,
+                    "goldPerExp": 1,
+                    "level": 94
+                },
+                {
+                    "exp": 127045,
+                    "goldPerExp": 1,
+                    "level": 95
+                },
+                {
+                    "exp": 132127,
+                    "goldPerExp": 1,
+                    "level": 96
+                },
+                {
+                    "exp": 137412,
+                    "goldPerExp": 1,
+                    "level": 97
+                },
+                {
+                    "exp": 142908,
+                    "goldPerExp": 1,
+                    "level": 98
+                },
+                {
+                    "exp": 148624,
+                    "goldPerExp": 1,
+                    "level": 99
+                },
+                {
+                    "exp": 157541,
+                    "goldPerExp": 1,
+                    "level": 100
+                },
+                {
+                    "exp": 166993,
+                    "goldPerExp": 1,
+                    "level": 101
+                },
+                {
+                    "exp": 177013,
+                    "goldPerExp": 1,
+                    "level": 102
+                },
+                {
+                    "exp": 187634,
+                    "goldPerExp": 1,
+                    "level": 103
+                },
+                {
+                    "exp": 198892,
+                    "goldPerExp": 1,
+                    "level": 104
+                },
+                {
+                    "exp": 210826,
+                    "goldPerExp": 1,
+                    "level": 105
+                },
+                {
+                    "exp": 223476,
+                    "goldPerExp": 1,
+                    "level": 106
+                },
+                {
+                    "exp": 236885,
+                    "goldPerExp": 1,
+                    "level": 107
+                },
+                {
+                    "exp": 251098,
+                    "goldPerExp": 1,
+                    "level": 108
+                },
+                {
+                    "exp": 266164,
+                    "goldPerExp": 1,
+                    "level": 109
+                },
+                {
+                    "exp": 282134,
+                    "goldPerExp": 1,
+                    "level": 110
+                },
+                {
+                    "exp": 299062,
+                    "goldPerExp": 1,
+                    "level": 111
+                },
+                {
+                    "exp": 317006,
+                    "goldPerExp": 1,
+                    "level": 112
+                },
+                {
+                    "exp": 336026,
+                    "goldPerExp": 1,
+                    "level": 113
+                },
+                {
+                    "exp": 356188,
+                    "goldPerExp": 1,
+                    "level": 114
+                },
+                {
+                    "exp": 377559,
+                    "goldPerExp": 1,
+                    "level": 115
+                },
+                {
+                    "exp": 400213,
+                    "goldPerExp": 1,
+                    "level": 116
+                },
+                {
+                    "exp": 424226,
+                    "goldPerExp": 1,
+                    "level": 117
+                },
+                {
+                    "exp": 449680,
+                    "goldPerExp": 1,
+                    "level": 118
+                },
+                {
+                    "exp": 476661,
+                    "goldPerExp": 1,
+                    "level": 119
+                },
+                {
+                    "exp": 0,
+                    "goldPerExp": 0,
+                    "level": 120
+                }
+            ],
+            "namaeCharacterMstId": 1000,
+            "namaeObjectRewardGroupId": 1000,
+            "region": [
+                {
+                    "name": "Not set",
+                    "regionId": 0
+                },
+                {
+                    "name": "Kamihama City",
+                    "regionId": 1
+                },
+                {
+                    "name": "Mitakihara City",
+                    "regionId": 2
+                },
+                {
+                    "name": "Tokime Clan",
+                    "regionId": 3
+                },
+                {
+                    "name": "Futatsugi City",
+                    "regionId": 4
+                },
+                {
+                    "name": "Other",
+                    "regionId": 5
+                }
+            ],
+            "series": [
+                {
+                    "name": "Not set",
+                    "seriesId": 0
+                },
+                {
+                    "name": "Puella Magi Madoka Magica",
+                    "seriesId": 1
+                },
+                {
+                    "name": "Magia Record: Puella Magi Madoka Magica Side Story",
+                    "seriesId": 2
+                },
+                {
+                    "name": "Puella Magi Oriko Magica",
+                    "seriesId": 3
+                },
+                {
+                    "name": "Puella Magi Madoka Magica: Magia Exedra",
+                    "seriesId": 4
+                },
+                {
+                    "name": "Puella Magi Madoka Magica -Rebellion-",
+                    "seriesId": 9
+                },
+                {
+                    "name": "Puella Magi Darc Magica: The Legend of \"Jeanne d'Arc\"",
+                    "seriesId": 10
+                },
+                {
+                    "name": "Collab",
+                    "seriesId": 90
+                },
+                {
+                    "name": "Other",
+                    "seriesId": 999
+                }
+            ]
+        },
+        "chatConfig": {
+            "chatBlockUserLimit": 100,
+            "chatsExpireDays": 30,
+            "directChatRoomListLimit": 100,
+            "groupChatRoomCreationLimit": 15,
+            "groupChatRoomListLimit": 100,
+            "groupChatRoomMemberLimit": 15
+        },
+        "collectionConfig": {
+            "gainGemNum": 10,
+            "hiddenGalleryCardMstIdList": [
+                9900002,
+                9900003,
+                9900004,
+                9900005,
+                9900001
+            ],
+            "notDispCollectionStyleFigureMstIds": [
+                100107
+            ]
+        },
+        "dollhouseConfig": {
+            "addRegularCharacterStartTime": "2026-04-24T12:00:00+09:00",
+            "dollhouseStartTime": "2025-10-02T12:00:00+09:00"
+        },
+        "firestoreConfig": {
+            "firestoreCollectionPath": "worlds/en_production"
+        },
+        "friendConfig": {
+            "friendMedal": [
+                {
+                    "num": 40,
+                    "type": "StyleRental"
+                },
+                {
+                    "num": 100,
+                    "type": "StyleRentalByFriend"
+                },
+                {
+                    "num": 100,
+                    "type": "ExecLike"
+                },
+                {
+                    "num": 40,
+                    "type": "SoloStyleRental"
+                },
+                {
+                    "num": 70,
+                    "type": "StyleRentalByFollowAndFollower"
+                },
+                {
+                    "num": 100,
+                    "type": "SoloStyleRentalByFriend"
+                },
+                {
+                    "num": 70,
+                    "type": "SoloStyleRentalByFollowAndFollower"
+                },
+                {
+                    "num": 100,
+                    "type": "MultiStyleRentalByFriend"
+                },
+                {
+                    "num": 70,
+                    "type": "MultiStyleRentalByFollowAndFollower"
+                },
+                {
+                    "num": 40,
+                    "type": "MultiStyleRental"
+                }
+            ],
+            "friendReleaseDateTime": "2026-03-27T22:00:00+09:00",
+            "gainTodayFriendMedalMaxNum": 10000,
+            "maxBlock": 100,
+            "maxFollow": 70,
+            "maxFollower": 1000
+        },
+        "gachaConfig": {
+            "gachaBonusPointMax": 9990
+        },
+        "gatheringConfig": {
+            "gatheringMaxHours": 24,
+            "gatheringShortcutCount": {
+                "incAmount": [
+                    {
+                        "amount": 0,
+                        "times": 0
+                    },
+                    {
+                        "amount": 10,
+                        "times": 1
+                    },
+                    {
+                        "amount": 10,
+                        "times": 2
+                    },
+                    {
+                        "amount": 20,
+                        "times": 3
+                    },
+                    {
+                        "amount": 30,
+                        "times": 4
+                    },
+                    {
+                        "amount": 30,
+                        "times": 5
+                    },
+                    {
+                        "amount": 50,
+                        "times": 6
+                    }
+                ]
+            },
+            "gatheringShortcutHours": 6,
+            "perMinutes": 60
+        },
+        "guildConfig": {
+            "guildRoleMstIdOfGuildMaster": 1,
+            "guildRoleMstIdOfGuildSubMaster": 2,
+            "guildRoleMstIdOfMember": 0,
+            "masterMigrateNotLoginDay": 30,
+            "maxGuildMemberNum": 10,
+            "maxGuildSubMasterNum": 1,
+            "maxJoinRequestNum": 100,
+            "maxReceiveJoinRequestNum": 100,
+            "maxReceiveScoutNum": 100,
+            "maxScoutNum": 100,
+            "validator": {
+                "guildDescription": {
+                    "length": {
+                        "max": 60,
+                        "min": 0
+                    }
+                },
+                "guildName": {
+                    "length": {
+                        "max": 20,
+                        "min": 1
+                    }
+                },
+                "guildNameOrId": {
+                    "length": {
+                        "max": 20,
+                        "min": 1
+                    }
+                }
+            }
+        },
+        "gveConfig": {
+            "chainInitialLevel": 0,
+            "chainMaxLevel": 9,
+            "damageApiInterval": 3,
+            "dayPlayCount": 3,
+            "participationMedal": {
+                "num": 100,
+                "objectId": 201001,
+                "objectReceiveType": 6
+            }
+        },
+        "gvgConfig": {
+            "preLeagueMatchDayList": [
+                1,
+                2,
+                3,
+                4
+            ]
+        },
+        "isPreRelease": false,
+        "itemConfig": {
+            "forceItemExpiryNotificationList": [
+                {
+                    "expiryTime": "2025-11-04T11:59:59+09:00",
+                    "itemMstId": 201037
+                },
+                {
+                    "expiryTime": "2025-11-25T11:59:59+09:00",
+                    "itemMstId": 232058
+                },
+                {
+                    "expiryTime": "2040-01-01T23:59:59+09:00",
+                    "itemMstId": 2100001
+                }
+            ],
+            "itemExpiryNotificationDay": 7
+        },
+        "loginBonusConfig": {
+            "loginBonusRefreshHour": 5
+        },
+        "lotteryConfig": {
+            "lotteryReceivableLastHalfStartTime": "2026-01-01T05:00:00+09:00"
+        },
+        "missionConfig": {
+            "beginnerMissionFirstMissionTitleMstId": 4,
+            "missionCategoryTitleList": [
+                {
+                    "missionCategory": 6,
+                    "title": "1st Anniversary"
+                }
+            ],
+            "subscriptionMissionDoubleTermRewardScale": 2
+        },
+        "multiRaidConfig": {
+            "battleClearNumForDailyBonusReward": 3,
+            "battleTimeLimitSec": 10800,
+            "callAddDamageSec": 10,
+            "callSyncBattleInfoSec": 300,
+            "exModeDifficulty": 21,
+            "inferiorItemMstId": 201030,
+            "maxJoinRoomCount": 20,
+            "maxJoinUserCount": 10,
+            "maxPlayCountPerDay": 6,
+            "maxStamina": 120,
+            "resultDisplayLimitDays": 3,
+            "scoreCalcConstant": 100,
+            "staminaBoostRate": 2,
+            "staminaMaxCountInDay": 10,
+            "staminaRecoverNum": 5,
+            "staminaRecoverSec": 3600,
+            "staminaUpperLimit": 99999,
+            "styleRentalReleaseDateTime": "2026-06-16T12:00:00+09:00",
+            "styleRentalUsableUpperDifficulty": 12,
+            "superiorItemMstId": 201029,
+            "validStageSortOrderMultiRaidMstId": 3
+        },
+        "partyConfig": {
+            "defaultBattlePartyName": "Match Party %s",
+            "defaultSoloPartyName": "Party %s",
+            "defaultSoloRaidPartyName": "Party %s",
+            "nameLengthMax": 40,
+            "partyNumMax": 10,
+            "partyNumMaxPreset": 20,
+            "powerRate": {
+                "fixParams": {
+                    "atk": 300,
+                    "def": 300,
+                    "hp": 100,
+                    "speed": 1000
+                },
+                "normalAttack": {
+                    "addConst": 9,
+                    "baseConst": 1.1,
+                    "coefficientPerLevel": [
+                        {
+                            "coefficient": 9,
+                            "skillLevel": 1
+                        },
+                        {
+                            "coefficient": 11,
+                            "skillLevel": 2
+                        },
+                        {
+                            "coefficient": 15,
+                            "skillLevel": 3
+                        },
+                        {
+                            "coefficient": 21,
+                            "skillLevel": 4
+                        },
+                        {
+                            "coefficient": 27,
+                            "skillLevel": 5
+                        },
+                        {
+                            "coefficient": 39,
+                            "skillLevel": 6
+                        },
+                        {
+                            "coefficient": 52,
+                            "skillLevel": 7
+                        },
+                        {
+                            "coefficient": 73,
+                            "skillLevel": 8
+                        },
+                        {
+                            "coefficient": 92,
+                            "skillLevel": 9
+                        },
+                        {
+                            "coefficient": 120,
+                            "skillLevel": 10
+                        }
+                    ],
+                    "exponent": 1.1
+                },
+                "normalAttackCoefficient": 30,
+                "passiveSkill": {
+                    "addConst": 18,
+                    "baseConst": 1.4,
+                    "coefficientPerLevel": [
+                        {
+                            "coefficient": 9,
+                            "skillLevel": 1
+                        },
+                        {
+                            "coefficient": 11,
+                            "skillLevel": 2
+                        },
+                        {
+                            "coefficient": 13,
+                            "skillLevel": 3
+                        },
+                        {
+                            "coefficient": 17,
+                            "skillLevel": 4
+                        },
+                        {
+                            "coefficient": 21,
+                            "skillLevel": 5
+                        },
+                        {
+                            "coefficient": 29,
+                            "skillLevel": 6
+                        },
+                        {
+                            "coefficient": 36,
+                            "skillLevel": 7
+                        },
+                        {
+                            "coefficient": 48,
+                            "skillLevel": 8
+                        },
+                        {
+                            "coefficient": 61,
+                            "skillLevel": 9
+                        },
+                        {
+                            "coefficient": 82,
+                            "skillLevel": 10
+                        }
+                    ],
+                    "exponent": 1.4
+                },
+                "passiveSkillCoefficient": 100,
+                "rateParams": {
+                    "breakDamageRate": 500,
+                    "criticalDamageRate": 500,
+                    "criticalRate": 500,
+                    "effectHitRate": 500,
+                    "effectParryRate": 500,
+                    "healRate": 500,
+                    "recoveryEpRate": 500
+                },
+                "roleCoefficientInfoList": [
+                    {
+                        "atk": 1100,
+                        "def": 950,
+                        "hp": 950,
+                        "role": 1
+                    },
+                    {
+                        "atk": 1000,
+                        "def": 1000,
+                        "hp": 1000,
+                        "role": 2
+                    },
+                    {
+                        "atk": 1000,
+                        "def": 1000,
+                        "hp": 1000,
+                        "role": 3
+                    },
+                    {
+                        "atk": 1000,
+                        "def": 1000,
+                        "hp": 1000,
+                        "role": 4
+                    },
+                    {
+                        "atk": 1000,
+                        "def": 1000,
+                        "hp": 1000,
+                        "role": 5
+                    },
+                    {
+                        "atk": 800,
+                        "def": 1150,
+                        "hp": 1050,
+                        "role": 6
+                    }
+                ],
+                "skill": {
+                    "addConst": 25,
+                    "baseConst": 1.4,
+                    "coefficientPerLevel": [
+                        {
+                            "coefficient": 9,
+                            "skillLevel": 1
+                        },
+                        {
+                            "coefficient": 11,
+                            "skillLevel": 2
+                        },
+                        {
+                            "coefficient": 13,
+                            "skillLevel": 3
+                        },
+                        {
+                            "coefficient": 17,
+                            "skillLevel": 4
+                        },
+                        {
+                            "coefficient": 21,
+                            "skillLevel": 5
+                        },
+                        {
+                            "coefficient": 29,
+                            "skillLevel": 6
+                        },
+                        {
+                            "coefficient": 36,
+                            "skillLevel": 7
+                        },
+                        {
+                            "coefficient": 48,
+                            "skillLevel": 8
+                        },
+                        {
+                            "coefficient": 61,
+                            "skillLevel": 9
+                        },
+                        {
+                            "coefficient": 82,
+                            "skillLevel": 10
+                        }
+                    ],
+                    "exponent": 1.5
+                },
+                "skillCoefficient": 120,
+                "skillPowerBaseValue": 1000,
+                "specialAttack": {
+                    "addConst": 121,
+                    "baseConst": 3.0,
+                    "coefficientPerLevel": [
+                        {
+                            "coefficient": 2,
+                            "skillLevel": 1
+                        },
+                        {
+                            "coefficient": 5,
+                            "skillLevel": 2
+                        },
+                        {
+                            "coefficient": 7,
+                            "skillLevel": 3
+                        },
+                        {
+                            "coefficient": 11,
+                            "skillLevel": 4
+                        },
+                        {
+                            "coefficient": 18,
+                            "skillLevel": 5
+                        },
+                        {
+                            "coefficient": 26,
+                            "skillLevel": 6
+                        },
+                        {
+                            "coefficient": 26,
+                            "skillLevel": 7
+                        },
+                        {
+                            "coefficient": 26,
+                            "skillLevel": 8
+                        },
+                        {
+                            "coefficient": 26,
+                            "skillLevel": 9
+                        },
+                        {
+                            "coefficient": 26,
+                            "skillLevel": 10
+                        }
+                    ],
+                    "exponent": 2.0
+                },
+                "specialAttackCoefficient": 150
+            },
+            "presetReleaseTime": "2026-05-20T12:00:00+09:00",
+            "subStyleDataParamRate": 100,
+            "subStyleDataParamRateInfo": [
+                {
+                    "achievedLevel": 1,
+                    "rate": 120,
+                    "slot": 1
+                },
+                {
+                    "achievedLevel": 70,
+                    "rate": 130,
+                    "slot": 1
+                },
+                {
+                    "achievedLevel": 80,
+                    "rate": 140,
+                    "slot": 1
+                },
+                {
+                    "achievedLevel": 90,
+                    "rate": 150,
+                    "slot": 1
+                },
+                {
+                    "achievedLevel": 100,
+                    "rate": 160,
+                    "slot": 1
+                },
+                {
+                    "achievedLevel": 1,
+                    "rate": 120,
+                    "slot": 2
+                },
+                {
+                    "achievedLevel": 70,
+                    "rate": 130,
+                    "slot": 2
+                },
+                {
+                    "achievedLevel": 80,
+                    "rate": 140,
+                    "slot": 2
+                },
+                {
+                    "achievedLevel": 90,
+                    "rate": 150,
+                    "slot": 2
+                },
+                {
+                    "achievedLevel": 100,
+                    "rate": 160,
+                    "slot": 2
+                },
+                {
+                    "achievedLevel": 1,
+                    "rate": 120,
+                    "slot": 3
+                },
+                {
+                    "achievedLevel": 70,
+                    "rate": 130,
+                    "slot": 3
+                },
+                {
+                    "achievedLevel": 80,
+                    "rate": 140,
+                    "slot": 3
+                },
+                {
+                    "achievedLevel": 90,
+                    "rate": 150,
+                    "slot": 3
+                },
+                {
+                    "achievedLevel": 100,
+                    "rate": 160,
+                    "slot": 3
+                }
+            ]
+        },
+        "presentBoxConfig": {
+            "defaultExpireTime": "2050-12-31T23:59:59+09:00"
+        },
+        "purgeConfig": {
+            "purgeDataList": [
+                {
+                    "id": 1,
+                    "pathList": [
+                        "Scenarios"
+                    ],
+                    "purgeType": 1,
+                    "target": 2
+                }
+            ]
+        },
+        "pvpConfig": {
+            "addPlayCountGemNum": 20,
+            "maxFreePlayCountPerDay": 5,
+            "maxPlayCountPerDay": 10,
+            "outOfRangeRanking": 30000,
+            "rewardItemMstId": 201009,
+            "shopSeriesMstId": 1002,
+            "winStreakBonusRateList": [
+                {
+                    "correctedBonusRate": 8,
+                    "winStreakCount": 2
+                },
+                {
+                    "correctedBonusRate": 12,
+                    "winStreakCount": 3
+                },
+                {
+                    "correctedBonusRate": 16,
+                    "winStreakCount": 4
+                },
+                {
+                    "correctedBonusRate": 20,
+                    "winStreakCount": 5
+                },
+                {
+                    "correctedBonusRate": 24,
+                    "winStreakCount": 6
+                },
+                {
+                    "correctedBonusRate": 28,
+                    "winStreakCount": 7
+                },
+                {
+                    "correctedBonusRate": 32,
+                    "winStreakCount": 8
+                },
+                {
+                    "correctedBonusRate": 36,
+                    "winStreakCount": 9
+                },
+                {
+                    "correctedBonusRate": 40,
+                    "winStreakCount": 10
+                }
+            ]
+        },
+        "questConfig": {
+            "backGroundPlayAddLapTimeSeconds": 0,
+            "characterHeartDailyBattleClearLimit": 5,
+            "dropNumUpRate": {
+                "subscription": {
+                    "premium": 1600,
+                    "regular": 1400
+                }
+            },
+            "inBattleScenarioInfoList": [
+                {
+                    "advMstId": 16360014,
+                    "battleFailedText": "\"Crépuscule de la Reine\" is impervious to your attacks right now.\nDon't give up—endure until the moment to strike arrives.",
+                    "moviePath": "Movie/3DMovie/mv3038",
+                    "playType": 1,
+                    "startRound": 1,
+                    "targetQuestStageMstId": 132131
+                },
+                {
+                    "advMstId": 20005104,
+                    "battleFailedText": "",
+                    "moviePath": "",
+                    "playType": 2,
+                    "startRound": 0,
+                    "targetQuestStageMstId": 1308102
+                }
+            ],
+            "validDailySkipSpecialAttackDirectionTime": "2025-09-11T12:00:00+09:00"
+        },
+        "resourceCheckConfig": {
+            "scenes": "Gacha,MultiRaid"
+        },
+        "scoreAttackConfig": {
+            "outOfRankingViewNumber": 50000,
+            "resetScoreAttackSkipNum": 3,
+            "topRankingViewNumber": 50,
+            "validSkipScoreAttackMstId": 14
+        },
+        "selectionAbilityConfig": {
+            "canUseSelectionAbilityMultiLotteryItemDifficulty": 4,
+            "enableMainSelectionAbility": [
+                {
+                    "itemNum": 5,
+                    "selectionAbilityNum": 2
+                },
+                {
+                    "itemNum": 10,
+                    "selectionAbilityNum": 3
+                }
+            ],
+            "enableMainSelectionAbilityItemMstId": 180001,
+            "enableMainSelectionAbilityItemNum": 10,
+            "learnMainAbilityValidDateTime": "2025-08-28T12:00:00+09:00",
+            "learnMainExAbilityItemMstId": 181004,
+            "learnSubSelectionAbilityGoldNum": 500,
+            "learnSubSelectionAbilityItemMstId": 180003,
+            "learnSubSelectionAbilityItemNum": 200,
+            "lockSubSelectionAbilityItemMstId": 180004,
+            "lockSubSelectionAbilityItemNum": 10,
+            "mainRarityInfoList": [
+                {
+                    "gainSubSelectionAbilityItemNum": 10,
+                    "maxSubSelectionAbilityNum": 1,
+                    "rarity": 1
+                },
+                {
+                    "gainSubSelectionAbilityItemNum": 20,
+                    "maxSubSelectionAbilityNum": 2,
+                    "rarity": 2
+                },
+                {
+                    "gainSubSelectionAbilityItemNum": 30,
+                    "maxSubSelectionAbilityNum": 3,
+                    "rarity": 3
+                },
+                {
+                    "gainSubSelectionAbilityItemNum": 50,
+                    "maxSubSelectionAbilityNum": 3,
+                    "rarity": 4
+                }
+            ],
+            "maxMainSelectionAbilityNum": 3,
+            "maxStockSelectionAbilityNum": 100,
+            "maxUseSelectionAbilityMultiLotteryItemNum": 5,
+            "permanentLockSubSelectionAbilityItemMstId": 180005,
+            "permanentLockSubSelectionAbilityItemNum": 10,
+            "permanentLockSubSelectionAbilityItemValidDateTime": "2025-09-28T20:00:00+09:00",
+            "repeatLearnSubSelectionAbilityMaxCountPerApi": 20,
+            "repeatLearnSubSelectionAbilityMaxTotalCount": 500,
+            "repeatLearnSubSelectionAbilityReleaseTime": "2026-06-29T12:00:00+09:00",
+            "selectionAbilityMultiLotteryItemMstId": 282001,
+            "selectionAbilityMultiLotteryItemReleaseTime": "2025-12-21T18:30:00+09:00",
+            "subRarityInfoList": [
+                {
+                    "gainSubSelectionAbilityItemNum": 3,
+                    "rarity": 1
+                },
+                {
+                    "gainSubSelectionAbilityItemNum": 4,
+                    "rarity": 2
+                },
+                {
+                    "gainSubSelectionAbilityItemNum": 5,
+                    "rarity": 3
+                },
+                {
+                    "gainSubSelectionAbilityItemNum": 6,
+                    "rarity": 4
+                },
+                {
+                    "gainSubSelectionAbilityItemNum": 7,
+                    "rarity": 5
+                },
+                {
+                    "gainSubSelectionAbilityItemNum": 8,
+                    "rarity": 6
+                },
+                {
+                    "gainSubSelectionAbilityItemNum": 9,
+                    "rarity": 7
+                },
+                {
+                    "gainSubSelectionAbilityItemNum": 10,
+                    "rarity": 8
+                },
+                {
+                    "gainSubSelectionAbilityItemNum": 11,
+                    "rarity": 9
+                },
+                {
+                    "gainSubSelectionAbilityItemNum": 12,
+                    "rarity": 10
+                }
+            ],
+            "swapSystemReleaseTime": "2026-05-11T12:00:00+09:00",
+            "useItemMaxForLearnSelectionAbility": 100
+        },
+        "shopConfig": {
+            "timeSaleLimitHours": 72
+        },
+        "soloRaidConfig": {
+            "aroundMyselfRankingViewNumber": 50,
+            "battleTimeLimitSec": 3600,
+            "commonBuffPointChargePassiveSkillMstId": 1600000,
+            "maxPlayCountPerDay": 3,
+            "menuReleaseTime": "2026-03-27T22:00:00+09:00",
+            "menuThumbnailResourcePath": "quest_sub_menu/solo_raid/thumbnail",
+            "menuTitleResourcePath": "quest_sub_menu/solo_raid/title",
+            "outOfRankingViewNumber": 50000,
+            "styleRentalUsableUpperDifficulty": 4,
+            "topRankingViewNumber": 100
+        },
+        "storyEventConfig": {
+            "archiveEventItemId": 201006,
+            "keyItemMstId": 262001,
+            "keyItemNum": 1,
+            "maxPlayCountPerDay": 5,
+            "maxPlayCountPerDayArchive": 5,
+            "playCountRecoverGemInfoGemNum": 50,
+            "playCountRecoverGemInfoMaxCount": 99,
+            "playCountRecoverGemInfoMaxCountInDay": 3,
+            "playCountRecoverGemInfoRecoverAmount": 1
+        },
+        "styleConfig": {
+            "defaultSpecialAttackMaxLevel": 4,
+            "levelUpCost": [
+                {
+                    "exp": 30,
+                    "goldPerExp": 100,
+                    "level": 1
+                },
+                {
+                    "exp": 42,
+                    "goldPerExp": 100,
+                    "level": 2
+                },
+                {
+                    "exp": 57,
+                    "goldPerExp": 100,
+                    "level": 3
+                },
+                {
+                    "exp": 75,
+                    "goldPerExp": 100,
+                    "level": 4
+                },
+                {
+                    "exp": 95,
+                    "goldPerExp": 100,
+                    "level": 5
+                },
+                {
+                    "exp": 117,
+                    "goldPerExp": 110,
+                    "level": 6
+                },
+                {
+                    "exp": 142,
+                    "goldPerExp": 110,
+                    "level": 7
+                },
+                {
+                    "exp": 170,
+                    "goldPerExp": 110,
+                    "level": 8
+                },
+                {
+                    "exp": 200,
+                    "goldPerExp": 110,
+                    "level": 9
+                },
+                {
+                    "exp": 232,
+                    "goldPerExp": 110,
+                    "level": 10
+                },
+                {
+                    "exp": 267,
+                    "goldPerExp": 130,
+                    "level": 11
+                },
+                {
+                    "exp": 305,
+                    "goldPerExp": 130,
+                    "level": 12
+                },
+                {
+                    "exp": 345,
+                    "goldPerExp": 130,
+                    "level": 13
+                },
+                {
+                    "exp": 445,
+                    "goldPerExp": 130,
+                    "level": 14
+                },
+                {
+                    "exp": 547,
+                    "goldPerExp": 130,
+                    "level": 15
+                },
+                {
+                    "exp": 652,
+                    "goldPerExp": 150,
+                    "level": 16
+                },
+                {
+                    "exp": 760,
+                    "goldPerExp": 150,
+                    "level": 17
+                },
+                {
+                    "exp": 870,
+                    "goldPerExp": 150,
+                    "level": 18
+                },
+                {
+                    "exp": 982,
+                    "goldPerExp": 150,
+                    "level": 19
+                },
+                {
+                    "exp": 1097,
+                    "goldPerExp": 150,
+                    "level": 20
+                },
+                {
+                    "exp": 1215,
+                    "goldPerExp": 180,
+                    "level": 21
+                },
+                {
+                    "exp": 1335,
+                    "goldPerExp": 180,
+                    "level": 22
+                },
+                {
+                    "exp": 1457,
+                    "goldPerExp": 180,
+                    "level": 23
+                },
+                {
+                    "exp": 1582,
+                    "goldPerExp": 180,
+                    "level": 24
+                },
+                {
+                    "exp": 1710,
+                    "goldPerExp": 180,
+                    "level": 25
+                },
+                {
+                    "exp": 1840,
+                    "goldPerExp": 210,
+                    "level": 26
+                },
+                {
+                    "exp": 1972,
+                    "goldPerExp": 210,
+                    "level": 27
+                },
+                {
+                    "exp": 2107,
+                    "goldPerExp": 210,
+                    "level": 28
+                },
+                {
+                    "exp": 2245,
+                    "goldPerExp": 210,
+                    "level": 29
+                },
+                {
+                    "exp": 2385,
+                    "goldPerExp": 210,
+                    "level": 30
+                },
+                {
+                    "exp": 2527,
+                    "goldPerExp": 250,
+                    "level": 31
+                },
+                {
+                    "exp": 2672,
+                    "goldPerExp": 250,
+                    "level": 32
+                },
+                {
+                    "exp": 2820,
+                    "goldPerExp": 250,
+                    "level": 33
+                },
+                {
+                    "exp": 2970,
+                    "goldPerExp": 250,
+                    "level": 34
+                },
+                {
+                    "exp": 3122,
+                    "goldPerExp": 250,
+                    "level": 35
+                },
+                {
+                    "exp": 3277,
+                    "goldPerExp": 290,
+                    "level": 36
+                },
+                {
+                    "exp": 3435,
+                    "goldPerExp": 290,
+                    "level": 37
+                },
+                {
+                    "exp": 3595,
+                    "goldPerExp": 290,
+                    "level": 38
+                },
+                {
+                    "exp": 3757,
+                    "goldPerExp": 290,
+                    "level": 39
+                },
+                {
+                    "exp": 3922,
+                    "goldPerExp": 290,
+                    "level": 40
+                },
+                {
+                    "exp": 4090,
+                    "goldPerExp": 340,
+                    "level": 41
+                },
+                {
+                    "exp": 4260,
+                    "goldPerExp": 340,
+                    "level": 42
+                },
+                {
+                    "exp": 4432,
+                    "goldPerExp": 340,
+                    "level": 43
+                },
+                {
+                    "exp": 4607,
+                    "goldPerExp": 340,
+                    "level": 44
+                },
+                {
+                    "exp": 4785,
+                    "goldPerExp": 340,
+                    "level": 45
+                },
+                {
+                    "exp": 4965,
+                    "goldPerExp": 390,
+                    "level": 46
+                },
+                {
+                    "exp": 5147,
+                    "goldPerExp": 390,
+                    "level": 47
+                },
+                {
+                    "exp": 5332,
+                    "goldPerExp": 390,
+                    "level": 48
+                },
+                {
+                    "exp": 5520,
+                    "goldPerExp": 390,
+                    "level": 49
+                },
+                {
+                    "exp": 5820,
+                    "goldPerExp": 390,
+                    "level": 50
+                },
+                {
+                    "exp": 6125,
+                    "goldPerExp": 450,
+                    "level": 51
+                },
+                {
+                    "exp": 6435,
+                    "goldPerExp": 450,
+                    "level": 52
+                },
+                {
+                    "exp": 6750,
+                    "goldPerExp": 450,
+                    "level": 53
+                },
+                {
+                    "exp": 7070,
+                    "goldPerExp": 450,
+                    "level": 54
+                },
+                {
+                    "exp": 7395,
+                    "goldPerExp": 450,
+                    "level": 55
+                },
+                {
+                    "exp": 7725,
+                    "goldPerExp": 510,
+                    "level": 56
+                },
+                {
+                    "exp": 8060,
+                    "goldPerExp": 510,
+                    "level": 57
+                },
+                {
+                    "exp": 8400,
+                    "goldPerExp": 510,
+                    "level": 58
+                },
+                {
+                    "exp": 8745,
+                    "goldPerExp": 510,
+                    "level": 59
+                },
+                {
+                    "exp": 9095,
+                    "goldPerExp": 510,
+                    "level": 60
+                },
+                {
+                    "exp": 9450,
+                    "goldPerExp": 580,
+                    "level": 61
+                },
+                {
+                    "exp": 9810,
+                    "goldPerExp": 580,
+                    "level": 62
+                },
+                {
+                    "exp": 10175,
+                    "goldPerExp": 580,
+                    "level": 63
+                },
+                {
+                    "exp": 10545,
+                    "goldPerExp": 580,
+                    "level": 64
+                },
+                {
+                    "exp": 10920,
+                    "goldPerExp": 580,
+                    "level": 65
+                },
+                {
+                    "exp": 11300,
+                    "goldPerExp": 650,
+                    "level": 66
+                },
+                {
+                    "exp": 11685,
+                    "goldPerExp": 650,
+                    "level": 67
+                },
+                {
+                    "exp": 12075,
+                    "goldPerExp": 650,
+                    "level": 68
+                },
+                {
+                    "exp": 12440,
+                    "goldPerExp": 650,
+                    "level": 69
+                },
+                {
+                    "exp": 12940,
+                    "goldPerExp": 650,
+                    "level": 70
+                },
+                {
+                    "exp": 13450,
+                    "goldPerExp": 730,
+                    "level": 71
+                },
+                {
+                    "exp": 13970,
+                    "goldPerExp": 730,
+                    "level": 72
+                },
+                {
+                    "exp": 14500,
+                    "goldPerExp": 730,
+                    "level": 73
+                },
+                {
+                    "exp": 15040,
+                    "goldPerExp": 730,
+                    "level": 74
+                },
+                {
+                    "exp": 15590,
+                    "goldPerExp": 730,
+                    "level": 75
+                },
+                {
+                    "exp": 16150,
+                    "goldPerExp": 810,
+                    "level": 76
+                },
+                {
+                    "exp": 16720,
+                    "goldPerExp": 810,
+                    "level": 77
+                },
+                {
+                    "exp": 17300,
+                    "goldPerExp": 810,
+                    "level": 78
+                },
+                {
+                    "exp": 17890,
+                    "goldPerExp": 810,
+                    "level": 79
+                },
+                {
+                    "exp": 18490,
+                    "goldPerExp": 810,
+                    "level": 80
+                },
+                {
+                    "exp": 19100,
+                    "goldPerExp": 900,
+                    "level": 81
+                },
+                {
+                    "exp": 19720,
+                    "goldPerExp": 900,
+                    "level": 82
+                },
+                {
+                    "exp": 20350,
+                    "goldPerExp": 900,
+                    "level": 83
+                },
+                {
+                    "exp": 20990,
+                    "goldPerExp": 900,
+                    "level": 84
+                },
+                {
+                    "exp": 21640,
+                    "goldPerExp": 900,
+                    "level": 85
+                },
+                {
+                    "exp": 22300,
+                    "goldPerExp": 990,
+                    "level": 86
+                },
+                {
+                    "exp": 22970,
+                    "goldPerExp": 990,
+                    "level": 87
+                },
+                {
+                    "exp": 23650,
+                    "goldPerExp": 990,
+                    "level": 88
+                },
+                {
+                    "exp": 24340,
+                    "goldPerExp": 990,
+                    "level": 89
+                },
+                {
+                    "exp": 25040,
+                    "goldPerExp": 990,
+                    "level": 90
+                },
+                {
+                    "exp": 25750,
+                    "goldPerExp": 1090,
+                    "level": 91
+                },
+                {
+                    "exp": 26470,
+                    "goldPerExp": 1090,
+                    "level": 92
+                },
+                {
+                    "exp": 27200,
+                    "goldPerExp": 1090,
+                    "level": 93
+                },
+                {
+                    "exp": 27940,
+                    "goldPerExp": 1090,
+                    "level": 94
+                },
+                {
+                    "exp": 28690,
+                    "goldPerExp": 1090,
+                    "level": 95
+                },
+                {
+                    "exp": 29450,
+                    "goldPerExp": 1190,
+                    "level": 96
+                },
+                {
+                    "exp": 30220,
+                    "goldPerExp": 1190,
+                    "level": 97
+                },
+                {
+                    "exp": 31000,
+                    "goldPerExp": 1190,
+                    "level": 98
+                },
+                {
+                    "exp": 31800,
+                    "goldPerExp": 1190,
+                    "level": 99
+                },
+                {
+                    "exp": 32610,
+                    "goldPerExp": 1500,
+                    "level": 100
+                },
+                {
+                    "exp": 33430,
+                    "goldPerExp": 1750,
+                    "level": 101
+                },
+                {
+                    "exp": 34260,
+                    "goldPerExp": 2000,
+                    "level": 102
+                },
+                {
+                    "exp": 35100,
+                    "goldPerExp": 2250,
+                    "level": 103
+                },
+                {
+                    "exp": 35950,
+                    "goldPerExp": 2500,
+                    "level": 104
+                },
+                {
+                    "exp": 36810,
+                    "goldPerExp": 2750,
+                    "level": 105
+                },
+                {
+                    "exp": 37680,
+                    "goldPerExp": 3000,
+                    "level": 106
+                },
+                {
+                    "exp": 38560,
+                    "goldPerExp": 3250,
+                    "level": 107
+                },
+                {
+                    "exp": 39450,
+                    "goldPerExp": 3500,
+                    "level": 108
+                },
+                {
+                    "exp": 40350,
+                    "goldPerExp": 3750,
+                    "level": 109
+                },
+                {
+                    "exp": 41260,
+                    "goldPerExp": 4000,
+                    "level": 110
+                },
+                {
+                    "exp": 42180,
+                    "goldPerExp": 4250,
+                    "level": 111
+                },
+                {
+                    "exp": 43110,
+                    "goldPerExp": 4500,
+                    "level": 112
+                },
+                {
+                    "exp": 44050,
+                    "goldPerExp": 4750,
+                    "level": 113
+                },
+                {
+                    "exp": 45000,
+                    "goldPerExp": 5000,
+                    "level": 114
+                },
+                {
+                    "exp": 45960,
+                    "goldPerExp": 5500,
+                    "level": 115
+                },
+                {
+                    "exp": 46930,
+                    "goldPerExp": 6000,
+                    "level": 116
+                },
+                {
+                    "exp": 47910,
+                    "goldPerExp": 6500,
+                    "level": 117
+                },
+                {
+                    "exp": 48900,
+                    "goldPerExp": 7000,
+                    "level": 118
+                },
+                {
+                    "exp": 49900,
+                    "goldPerExp": 7500,
+                    "level": 119
+                },
+                {
+                    "exp": 70800,
+                    "goldPerExp": 10000,
+                    "level": 120
+                },
+                {
+                    "exp": 71820,
+                    "goldPerExp": 11000,
+                    "level": 121
+                },
+                {
+                    "exp": 72860,
+                    "goldPerExp": 12000,
+                    "level": 122
+                },
+                {
+                    "exp": 73920,
+                    "goldPerExp": 13000,
+                    "level": 123
+                },
+                {
+                    "exp": 75000,
+                    "goldPerExp": 14000,
+                    "level": 124
+                },
+                {
+                    "exp": 86080,
+                    "goldPerExp": 16000,
+                    "level": 125
+                },
+                {
+                    "exp": 87180,
+                    "goldPerExp": 18000,
+                    "level": 126
+                },
+                {
+                    "exp": 88310,
+                    "goldPerExp": 20000,
+                    "level": 127
+                },
+                {
+                    "exp": 89470,
+                    "goldPerExp": 22000,
+                    "level": 128
+                },
+                {
+                    "exp": 90660,
+                    "goldPerExp": 24000,
+                    "level": 129
+                },
+                {
+                    "exp": 106850,
+                    "goldPerExp": 27000,
+                    "level": 130
+                },
+                {
+                    "exp": 108060,
+                    "goldPerExp": 30000,
+                    "level": 131
+                },
+                {
+                    "exp": 109310,
+                    "goldPerExp": 33000,
+                    "level": 132
+                },
+                {
+                    "exp": 110600,
+                    "goldPerExp": 36000,
+                    "level": 133
+                },
+                {
+                    "exp": 111930,
+                    "goldPerExp": 39000,
+                    "level": 134
+                },
+                {
+                    "exp": 133260,
+                    "goldPerExp": 43000,
+                    "level": 135
+                },
+                {
+                    "exp": 134610,
+                    "goldPerExp": 47000,
+                    "level": 136
+                },
+                {
+                    "exp": 136010,
+                    "goldPerExp": 51000,
+                    "level": 137
+                },
+                {
+                    "exp": 137460,
+                    "goldPerExp": 55000,
+                    "level": 138
+                },
+                {
+                    "exp": 138960,
+                    "goldPerExp": 59000,
+                    "level": 139
+                },
+                {
+                    "exp": 140620,
+                    "goldPerExp": 63000,
+                    "level": 140
+                },
+                {
+                    "exp": 142280,
+                    "goldPerExp": 63000,
+                    "level": 141
+                },
+                {
+                    "exp": 143930,
+                    "goldPerExp": 63000,
+                    "level": 142
+                },
+                {
+                    "exp": 145570,
+                    "goldPerExp": 63000,
+                    "level": 143
+                },
+                {
+                    "exp": 147200,
+                    "goldPerExp": 63000,
+                    "level": 144
+                },
+                {
+                    "exp": 148970,
+                    "goldPerExp": 67000,
+                    "level": 145
+                },
+                {
+                    "exp": 150730,
+                    "goldPerExp": 67000,
+                    "level": 146
+                },
+                {
+                    "exp": 152480,
+                    "goldPerExp": 67000,
+                    "level": 147
+                },
+                {
+                    "exp": 154220,
+                    "goldPerExp": 67000,
+                    "level": 148
+                },
+                {
+                    "exp": 155940,
+                    "goldPerExp": 67000,
+                    "level": 149
+                },
+                {
+                    "exp": 157810,
+                    "goldPerExp": 71000,
+                    "level": 150
+                },
+                {
+                    "exp": 159680,
+                    "goldPerExp": 71000,
+                    "level": 151
+                },
+                {
+                    "exp": 161530,
+                    "goldPerExp": 71000,
+                    "level": 152
+                },
+                {
+                    "exp": 163370,
+                    "goldPerExp": 71000,
+                    "level": 153
+                },
+                {
+                    "exp": 165200,
+                    "goldPerExp": 71000,
+                    "level": 154
+                },
+                {
+                    "exp": 167180,
+                    "goldPerExp": 75000,
+                    "level": 155
+                },
+                {
+                    "exp": 169160,
+                    "goldPerExp": 75000,
+                    "level": 156
+                },
+                {
+                    "exp": 171120,
+                    "goldPerExp": 75000,
+                    "level": 157
+                },
+                {
+                    "exp": 173070,
+                    "goldPerExp": 75000,
+                    "level": 158
+                },
+                {
+                    "exp": 175010,
+                    "goldPerExp": 75000,
+                    "level": 159
+                },
+                {
+                    "exp": 39215,
+                    "goldPerExp": 1780,
+                    "level": 160
+                },
+                {
+                    "exp": 39244,
+                    "goldPerExp": 1780,
+                    "level": 161
+                },
+                {
+                    "exp": 39272,
+                    "goldPerExp": 1780,
+                    "level": 162
+                },
+                {
+                    "exp": 39299,
+                    "goldPerExp": 1780,
+                    "level": 163
+                },
+                {
+                    "exp": 39325,
+                    "goldPerExp": 1780,
+                    "level": 164
+                },
+                {
+                    "exp": 39350,
+                    "goldPerExp": 1780,
+                    "level": 165
+                },
+                {
+                    "exp": 39374,
+                    "goldPerExp": 1780,
+                    "level": 166
+                },
+                {
+                    "exp": 39397,
+                    "goldPerExp": 1780,
+                    "level": 167
+                },
+                {
+                    "exp": 39419,
+                    "goldPerExp": 1780,
+                    "level": 168
+                },
+                {
+                    "exp": 39440,
+                    "goldPerExp": 1780,
+                    "level": 169
+                },
+                {
+                    "exp": 39460,
+                    "goldPerExp": 1780,
+                    "level": 170
+                },
+                {
+                    "exp": 39479,
+                    "goldPerExp": 1780,
+                    "level": 171
+                },
+                {
+                    "exp": 39497,
+                    "goldPerExp": 1780,
+                    "level": 172
+                },
+                {
+                    "exp": 39514,
+                    "goldPerExp": 1780,
+                    "level": 173
+                },
+                {
+                    "exp": 39530,
+                    "goldPerExp": 1780,
+                    "level": 174
+                },
+                {
+                    "exp": 39545,
+                    "goldPerExp": 1780,
+                    "level": 175
+                },
+                {
+                    "exp": 39559,
+                    "goldPerExp": 1780,
+                    "level": 176
+                },
+                {
+                    "exp": 39572,
+                    "goldPerExp": 1780,
+                    "level": 177
+                },
+                {
+                    "exp": 39584,
+                    "goldPerExp": 1780,
+                    "level": 178
+                },
+                {
+                    "exp": 39595,
+                    "goldPerExp": 1780,
+                    "level": 179
+                },
+                {
+                    "exp": 39605,
+                    "goldPerExp": 1780,
+                    "level": 180
+                },
+                {
+                    "exp": 39614,
+                    "goldPerExp": 1780,
+                    "level": 181
+                },
+                {
+                    "exp": 39623,
+                    "goldPerExp": 1780,
+                    "level": 182
+                },
+                {
+                    "exp": 39632,
+                    "goldPerExp": 1780,
+                    "level": 183
+                },
+                {
+                    "exp": 39640,
+                    "goldPerExp": 1780,
+                    "level": 184
+                },
+                {
+                    "exp": 39647,
+                    "goldPerExp": 1780,
+                    "level": 185
+                },
+                {
+                    "exp": 39654,
+                    "goldPerExp": 1780,
+                    "level": 186
+                },
+                {
+                    "exp": 39661,
+                    "goldPerExp": 1780,
+                    "level": 187
+                },
+                {
+                    "exp": 39667,
+                    "goldPerExp": 1780,
+                    "level": 188
+                },
+                {
+                    "exp": 39672,
+                    "goldPerExp": 1780,
+                    "level": 189
+                },
+                {
+                    "exp": 39677,
+                    "goldPerExp": 1780,
+                    "level": 190
+                },
+                {
+                    "exp": 39682,
+                    "goldPerExp": 1780,
+                    "level": 191
+                },
+                {
+                    "exp": 39686,
+                    "goldPerExp": 1780,
+                    "level": 192
+                },
+                {
+                    "exp": 39689,
+                    "goldPerExp": 1780,
+                    "level": 193
+                },
+                {
+                    "exp": 39692,
+                    "goldPerExp": 1780,
+                    "level": 194
+                },
+                {
+                    "exp": 39695,
+                    "goldPerExp": 1780,
+                    "level": 195
+                },
+                {
+                    "exp": 39697,
+                    "goldPerExp": 1780,
+                    "level": 196
+                },
+                {
+                    "exp": 39698,
+                    "goldPerExp": 1780,
+                    "level": 197
+                },
+                {
+                    "exp": 39699,
+                    "goldPerExp": 1780,
+                    "level": 198
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 199
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 200
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 201
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 202
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 203
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 204
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 205
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 206
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 207
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 208
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 209
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 210
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 211
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 212
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 213
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 214
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 215
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 216
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 217
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 218
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 219
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 220
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 221
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 222
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 223
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 224
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 225
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 226
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 227
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 228
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 229
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 230
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 231
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 232
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 233
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 234
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 235
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 236
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 237
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 238
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 239
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 240
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 241
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 242
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 243
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 244
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 245
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 246
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 247
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 248
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 249
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 250
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 251
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 252
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 253
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 254
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 255
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 256
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 257
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 258
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 259
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 260
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 261
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 262
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 263
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 264
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 265
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 266
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 267
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 268
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 269
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 270
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 271
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 272
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 273
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 274
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 275
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 276
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 277
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 278
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 279
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 280
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 281
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 282
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 283
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 284
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 285
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 286
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 287
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 288
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 289
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 290
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 291
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 292
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 293
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 294
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 295
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 296
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 297
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 298
+                },
+                {
+                    "exp": 40000,
+                    "goldPerExp": 1780,
+                    "level": 299
+                }
+            ],
+            "limitBreakBonus": [
+                {
+                    "bonus": 50,
+                    "limitBreakCount": 1
+                },
+                {
+                    "bonus": 80,
+                    "limitBreakCount": 2
+                },
+                {
+                    "bonus": 100,
+                    "limitBreakCount": 3
+                },
+                {
+                    "bonus": 120,
+                    "limitBreakCount": 4
+                },
+                {
+                    "bonus": 150,
+                    "limitBreakCount": 5
+                }
+            ],
+            "limitBreakCharacterMaxLevel": [
+                {
+                    "limitBreakCount": 0,
+                    "maxLevel": 50,
+                    "rarity": 3
+                },
+                {
+                    "limitBreakCount": 1,
+                    "maxLevel": 60,
+                    "rarity": 3
+                },
+                {
+                    "limitBreakCount": 2,
+                    "maxLevel": 70,
+                    "rarity": 3
+                },
+                {
+                    "limitBreakCount": 3,
+                    "maxLevel": 80,
+                    "rarity": 3
+                },
+                {
+                    "limitBreakCount": 4,
+                    "maxLevel": 90,
+                    "rarity": 3
+                },
+                {
+                    "limitBreakCount": 5,
+                    "maxLevel": 100,
+                    "rarity": 3
+                },
+                {
+                    "limitBreakCount": 0,
+                    "maxLevel": 60,
+                    "rarity": 4
+                },
+                {
+                    "limitBreakCount": 1,
+                    "maxLevel": 70,
+                    "rarity": 4
+                },
+                {
+                    "limitBreakCount": 2,
+                    "maxLevel": 80,
+                    "rarity": 4
+                },
+                {
+                    "limitBreakCount": 3,
+                    "maxLevel": 90,
+                    "rarity": 4
+                },
+                {
+                    "limitBreakCount": 4,
+                    "maxLevel": 100,
+                    "rarity": 4
+                },
+                {
+                    "limitBreakCount": 5,
+                    "maxLevel": 110,
+                    "rarity": 4
+                },
+                {
+                    "limitBreakCount": 0,
+                    "maxLevel": 70,
+                    "rarity": 5
+                },
+                {
+                    "limitBreakCount": 1,
+                    "maxLevel": 80,
+                    "rarity": 5
+                },
+                {
+                    "limitBreakCount": 2,
+                    "maxLevel": 90,
+                    "rarity": 5
+                },
+                {
+                    "limitBreakCount": 3,
+                    "maxLevel": 100,
+                    "rarity": 5
+                },
+                {
+                    "limitBreakCount": 4,
+                    "maxLevel": 110,
+                    "rarity": 5
+                },
+                {
+                    "limitBreakCount": 5,
+                    "maxLevel": 120,
+                    "rarity": 5
+                }
+            ],
+            "limitBreakCostInfo": [
+                {
+                    "itemMstId": 100006,
+                    "num": 10,
+                    "rarity": 1
+                },
+                {
+                    "itemMstId": 100006,
+                    "num": 20,
+                    "rarity": 2
+                },
+                {
+                    "itemMstId": 100006,
+                    "num": 30,
+                    "rarity": 3
+                },
+                {
+                    "itemMstId": 100006,
+                    "num": 40,
+                    "rarity": 4
+                },
+                {
+                    "itemMstId": 100006,
+                    "num": 50,
+                    "rarity": 5
+                }
+            ],
+            "limitBreakPassiveSkill1TargetCount": 1,
+            "limitBreakSpecialAttackEffectTargetCount": 3,
+            "limitBreakSpecialAttackMaxLevel": [
+                {
+                    "limitBreakCount": 0,
+                    "maxLevel": 2
+                },
+                {
+                    "limitBreakCount": 1,
+                    "maxLevel": 3
+                },
+                {
+                    "limitBreakCount": 2,
+                    "maxLevel": 4
+                },
+                {
+                    "limitBreakCount": 3,
+                    "maxLevel": 6
+                },
+                {
+                    "limitBreakCount": 4,
+                    "maxLevel": 8
+                },
+                {
+                    "limitBreakCount": 5,
+                    "maxLevel": 10
+                }
+            ],
+            "maxSkillLevel": 10,
+            "paramUpMaxPriorityInfo": [
+                {
+                    "maxPriority": 30,
+                    "styleLevel": 1
+                },
+                {
+                    "maxPriority": 60,
+                    "styleLevel": 30
+                },
+                {
+                    "maxPriority": 90,
+                    "styleLevel": 60
+                },
+                {
+                    "maxPriority": 120,
+                    "styleLevel": 90
+                },
+                {
+                    "maxPriority": 125,
+                    "styleLevel": 101
+                },
+                {
+                    "maxPriority": 130,
+                    "styleLevel": 110
+                },
+                {
+                    "maxPriority": 135,
+                    "styleLevel": 136
+                },
+                {
+                    "maxPriority": 140,
+                    "styleLevel": 146
+                },
+                {
+                    "maxPriority": 1000000,
+                    "styleLevel": 999
+                }
+            ],
+            "styleLimitBreakRarityInfo": [
+                {
+                    "itemMstId": 201011,
+                    "num": 5,
+                    "rarity": 3
+                },
+                {
+                    "itemMstId": 201011,
+                    "num": 25,
+                    "rarity": 4
+                },
+                {
+                    "itemMstId": 201011,
+                    "num": 500,
+                    "rarity": 5
+                }
+            ],
+            "unlockSubStyleDataSlot": [
+                {
+                    "achievedLevel": 1,
+                    "conditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #14: Stage Witch final battle to unlock.",
+                    "fieldStageMstId": 612001,
+                    "miniTutorialNumber": 200,
+                    "slot": 1,
+                    "styleLevel": 1
+                },
+                {
+                    "achievedLevel": 1,
+                    "conditionTxt": "Coming Soon",
+                    "fieldStageMstId": 99999999,
+                    "miniTutorialNumber": 201,
+                    "slot": 2,
+                    "styleLevel": 1
+                },
+                {
+                    "achievedLevel": 1,
+                    "conditionTxt": "Coming Soon",
+                    "fieldStageMstId": 99999999,
+                    "miniTutorialNumber": 202,
+                    "slot": 3,
+                    "styleLevel": 1
+                }
+            ],
+            "unlockSubStyleFieldStageMstId": 608001
+        },
+        "styleRentalConfig": {
+            "maxDailyBorrowableCountPerUser": 1,
+            "releaseTime": "2026-04-14T12:00:00+09:00",
+            "replacingPartyPositionIndex": 5
+        },
+        "subscriptionConfig": {
+            "serviceList": [
+                {
+                    "description": [
+                        "\"Exedra Pass\" (a collective term for \"Premium Pass\" and \"Regular Pass\") is a subscription that offers various benefits from the day you subscribe.\n*Please read the Notes below before you subscribe.\n\n<color=#ecd19c>■Confirmation of a Contract</color>\n・When you subscribe to Regular Pass, $5.99 (incl. tax) will be automatically withdrawn every 1 month.\n・When you subscribe to Regular Pass, be sure to check the information below.\n\n<color=#ecd19c>■Contents of benefits </color>\n・Add Monthly Missions for Regular Pass subscribers only\n　【First month of subscription】You can earn up to 1,200 Magica Stones (free) by completing the mission.\n　【Continued Subscription for 2 months or more】You can earn up to 2,400 Magica Stones (free) by completing the mission.\n*If you cancel the subscription and subscribe again, it will not be considered as the Continued Subscription, and the First month benefit will be applied.\n・The amount of drop rewards that can be acquired in the Upgrade Quests is increased by 40%.\n< Accumulated Subscription Benefits you can get if you have subscribed to Premium Pass for more than 2 months in total. >\n・Get “4★ or Higher Kioku Guaranteed Magia Key (Exedra Pass)” x3\n*The free trial period is included in the subscription period. As for Accumulated Subscription Benefits, the start of the free trial is counted as the first subscription, and the Accumulated Subscription period is counted by the cumulative number of subscriptions. As for Accumulated Subscription Benefits, any subsequent subscriptions after the free trial are counted as the second month or more.\n\n<color=#ecd19c>■Details of benefits</color>\nDuring a subscription period, you will receive the following benefits:\n・You can challenge Monthly Missions exclusive to Exedra Pass.\n*If you subscribe to Premium Pass and Regular Pass in the same month, you can receive benefits for both passes you subscribed to. (Maximum of 9,400 Magica Stones (free). Breakdown - Premium Pass: maximum of 7,000 Magica Stones (free); and Regular Pass: maximum of 2,400 Magica Stones (free)).\n*The first Monthly Mission will reset at 5:00 A.M. (JST) on May 1, 2025.\n*If you miss the Monthly Mission reset time without receiving a benefit, you will not receive the previous month's benefit.\n・The amount of drop rewards that can be acquired in the Upgrade Quests is increased by 40%.\n  *The quests eligible for this benefit are Kioku Upgrade Material Quests, Magic Unlock Material Quests and Crystalis Quests.\n  *If you subscribe to both Premium Pass and Regular Pass at the same time, both benefits will be effective and the amount of drop rewards increases by 100%.\n・When you subscribe to Regular Pass for more than 2 months in cumulative total, you can get \"4★ or Higher Kioku Guaranteed Magia Key (Exedra Pass)\" x3, which can be used in Exedra Pass exclusive Fate Weave, as the Accumulated Subscription Benefits, in addition to the regular benefits.\n*Please note that \"4★ or Higher Kioku Guaranteed Magia Key (Exedra Pass)\" cannot be acquired in the first month of \"Regular Pass\" subscription.\n*Please note that \"4★ or Higher Kioku Guaranteed Magia Key (Exedra Pass)\" has both a deadline for receipt and a deadline for use.\n(Deadline for receipt: 90 days after distribution to the Gift Box; Deadline for use: 180 days after distribution to the Gift Box)\n*As for time deadline calculations, one day passes at 5:00 A.M. (JST) every day. The distribution date is considered day 1, and the item becomes unavailable at 5:00 A.M. (JST) on day 180.\n・The contents of “4★ or Higher Kioku Guaranteed Magia Key (Exedra Pass) Fate Weave” Fate Weave may be changed. Changes will be announced in advance.\n\n<color=#ecd19c>■About the free trial</color>\n・If you subscribe to Regular Pass for the first time, you can subscribe for free for 1 month.\n・At the end of the free trial period, you will automatically be transferred to a paid Regular Pass subscription, which will be automatically renewed thereafter.\n・If you want to use your subscription only for the free trial period, please cancel the subscription 48 hours before the end of the free trial period. For details on how to cancel the subscription, refer to \"How to check the expiration date and how to cancel (stop automatic renewal)\" below.\n・If you repeatedly use the free trial in ways that we do not intend, we may take measures such as suspension of your use of the app or deletion of your account.\n\n"
+                    ],
+                    "firstFree": true,
+                    "label": "subscription.regular",
+                    "notesAndroid": [
+                        "<color=#ecd19c>■Notes</color>\n・If the user is a minor, parental consent is required to pay for items. \n・If you cancel your subscription, the subscription will be cancelled at the expiration of the subscription period, and no reimbursement or refund will be made to the maximum extent permitted under applicable law. For more information, please refer to the Terms of Use.\n・The subscription is valid for one month from the date of subscription or automatic renewal.\n・Regular Pass is a subscription automatically renewed every month. Unless you cancel your subscription, your subscription is automatically renewed.\n・There may be a delay in the processing of granting benefits on the day of subscription renewal. If you are unable to obtain benefits, please restart the app at a later time.\n・If you wish to cancel your subscription, please cancel at least 48 hours before the expiration date. If you cancel before the expiration date, you will still be able to receive benefits until the expiration date.\n・Regular Pass is valid only for the account of the app used at the time of subscription (“Subscription Account”). If you create a new account, e.g., by deleting the app, you will not be able to take over the right to receive the benefits of the Subscription Account.\n・Even if you delete the app or the Subscription Account, your Regular Pass will not be canceled. If you no longer need the app, such as not using the app at all, please cancel the subscription.\n・Even if game data is transferred on the same platform or to a device on another platform (such as Google, Apple and Steam), the subscription continues. However, subscriptions you subscribe to on the platform before data transfer continue on the platform before data transfer. Because insufficient cancellation procedures can lead to unintended automatic renewals of the subscription, we recommend that you cancel the subscription in advance and subscribe to Regular Pass again after data transfer. After data transfer, you can subscribe to a new Regular Pass after the Regular Pass you subscribed to before data transfer ends.\n\n< For Android users >\n・Even if you make multiple or duplicate subscriptions of the same Regular Pass, you will not be able to receive multiple benefits.\n・If you subscribe to multiple Regular Passes for the same app account with different Google Play accounts, you will not be able to cancel the payment for multiple or duplicate subscriptions.\n・Due to the Google Play Store's mechanism, if the renewal date of Exedra Pass is near the beginning of the month or near the end of the month, payment may occur once at the beginning and end of the month and then twice within the same month.\n\n<color=#ecd19c>■How to check the expiration date and how to cancel (stop automatic renewal)</color>\nYou can check the expiration date and cancel the Regular Pass by the following procedure.\nIf you cancel your subscription, it will be canceled at the end of the subscription period.\n*Please note that the procedure may differ depending on your device, OS version, etc.\n\n1. Tap your profile icon from the Play Store.\n2. Tap “Payment & Subscription” and Tap “Subscription.”\n3. You can check the expiration date of the item you want to check. If you want to cancel, tap the item.\n4. Tap “Cancel Subscription,” then follow the on-screen instructions.\n"
+                    ],
+                    "notesIos": [
+                        "<color=#ecd19c>■Notes</color>\n・If the user is a minor, parental consent is required to pay for items. \n・If you cancel your subscription, the subscription will be cancelled at the expiration of the subscription period, and no reimbursement or refund will be made to the maximum extent permitted under applicable law. For more information, please refer to the Terms of Use.\n・The subscription is valid for one month from the date of subscription or automatic renewal.\n・Regular Pass is a subscription automatically renewed every month. Unless you cancel your subscription, your subscription is automatically renewed.\n・There may be a delay in the processing of granting benefits on the day of subscription renewal. If you are unable to obtain benefits, please restart the app at a later time.\n・If you wish to cancel your subscription, please cancel at least 48 hours before the expiration date. If you cancel before the expiration date, you will still be able to receive benefits until the expiration date.\n・Regular Pass is valid only for the account of the app used at the time of subscription (“Subscription Account”). If you create a new account, e.g., by deleting the app, you will not be able to take over the right to receive the benefits of the Subscription Account.\n・Even if you delete the app or the Subscription Account, your Regular Pass will not be canceled. If you no longer need the app, such as not using the app at all, please cancel the subscription.\n・Even if game data is transferred on the same platform or to a device on another platform (such as Google, Apple and Steam), the subscription continues. However, subscriptions you subscribe to on the platform before data transfer continue on the platform before data transfer. Because insufficient cancellation procedures can lead to unintended automatic renewals of the subscription, we recommend that you cancel the subscription in advance and subscribe to Regular Pass again after data transfer. After data transfer, you can subscribe to a new Regular Pass after the Regular Pass you subscribed to before data transfer ends.\n\n\n< For iOS users >\n・Even if you make multiple or duplicate subscriptions of the same Regular Pass, you will not be able to receive multiple benefits.\n・If you subscribe to multiple Regular Passes for the same app account with different Apple ID accounts, you will not be able to cancel the payment for multiple or duplicate subscriptions.\n・Due to the App Store's mechanism, if the renewal date of Exedra Pass is near the beginning of the month or near the end of the month, payment may occur once at the beginning and end of the month and then twice within the same month.\n\n<color=#ecd19c>■How to check the expiration date and how to cancel (stop automatic renewal)</color>\nYou can cancel the Regular Pass by the following procedure.\nIf you cancel your subscription, it will be canceled at the end of the subscription period.\n*Please note that the procedure may differ depending on your device, OS version, etc.\n\n1. Open \"Settings\" in iOS.\n2. Tap \"your user name (Apple ID) \" and Tap \"Subscription.\"\n3. The subscription is valid until the \"renewal date\" of the item you want to check. If you want to cancel, tap the item.\n4. Tap \"Cancel Subscription\" to cancel the subscription.\n"
+                    ],
+                    "resourceName": "subscription_regular",
+                    "rewardDetailAnnounceMstId": 1333,
+                    "titleDescription": "A subscription that offers various bonuses for a great deal at $5.99 per month.\n* Once purchased, the subscription will be automatically renewed monthly unless you cancel."
+                },
+                {
+                    "description": [
+                        "\"Exedra Pass\" (a collective term for \"Premium Pass\" and \"Regular Pass\") is a subscription that offers various benefits from the day you subscribe.\n*Please read the Notes below before you subscribe.\n\n<color=#ecd19c>■Confirmation of a Contract</color>\n・When you subscribe to Premium Pass, $29.99 (incl. tax) will be automatically withdrawn every 1 month.\n・When you subscribe to Premium Pass, be sure to check the information below.\n\n<color=#ecd19c>■Contents of benefits </color>\n・Add Monthly Missions for Premium Pass subscribers only\n　【First month of subscription】You can earn up to 3,500 Magica Stones (free) by completing the mission.\n　【Continued Subscription for 2 months or more】You can earn up to 7,000 Magica Stones (free) by completing the mission.\n*If you cancel the subscription and subscribe again, it will not be considered as the Continued Subscription, and the First month benefit will be applied.\n・Get “5★ Kioku Guaranteed Magia Key Shard (Exedra Pass)\" x10\n・The amount of drop rewards that can be acquired in the Upgrade Quests is increased by 60%.\n< Accumulated Subscription Benefits you can get if you have subscribed to Premium Pass for more than 2 months in total. >\n・Get “One 4★ or Higher Kioku Guaranteed Magia Key Set (Exedra Pass)” x1\n・Get “4★ or Higher Kioku Guaranteed Magia Key (Exedra Pass)” x1\n*The free trial period is included in the subscription period. As for Accumulated Subscription Benefits, the start of the free trial is counted as the first subscription, and the Accumulated Subscription period is counted by the cumulative number of subscriptions. As for Accumulated Subscription Benefits, any subsequent subscriptions after the free trial are counted as the second month or more.\n\n<color=#ecd19c>■Details of benefits</color>\nDuring a subscription period, you will receive the following benefits:\n・You can challenge Monthly Missions exclusive to Exedra Pass.\n*If you subscribe to Premium Pass and Regular Pass in the same month, you can receive benefits for both passes you subscribed to. (Maximum of 9,400 Magica Stones (free). Breakdown - Premium Pass: maximum of 7,000 Magica Stones (free); and Regular Pass: maximum of 2,400 Magica Stones (free)).\n*The first Monthly Mission will reset at 5:00 A.M. (JST) on May 1, 2025.\n*If you miss the Monthly Mission reset time without receiving a benefit, you will not receive the previous month's benefit.\n*The Magia Key that can be acquired with this benefit is an item that can be used for Exedra Pass exclusive Fate Weave by using the specified amount. There are the following three types of Exedra Pass exclusive Fate Weave;\n“5★ Kioku Guaranteed Magia Key Shard (Exedra Pass) Fate Weave”;\n“One 4★ or Higher Kioku Guaranteed Magia Key Set (Exedra Pass) Fate Weave”; and\n“4★ or Higher Kioku Guaranteed Magia Key (Exedra Pass) Fate Weave”\n\n・When you subscribe to \"Premium Pass,\" you can get “5★ Kioku Guaranteed Magia Key Shard (Exedra Pass)” x10 which can be used in Exedra Pass exclusive Fate Weave.\n*“5★ Kioku Guaranteed Magia Key Shard (Exedra Pass)” will be added directly to the \"Inventory List.\" It will be added when the app is restarted, so please restart the app after subscribing.\n*The expiration date of “5★ Kioku Guaranteed Magia Key Shard (Exedra Pass)” is 180 days from the subscription date of \"Premium Pass.\"\n・The amount of drop rewards that can be acquired in the Upgrade Quests is increased by 60%.\n  *The quests eligible for this benefit are Kioku Upgrade Material Quests, Magic Unlock Material Quests and Crystalis Quests.\n  *If you subscribe to both Premium Pass and Regular Pass at the same time, both benefits will be effective and the amount of drop rewards increases by 100%.\n・When you subscribe to Premium Pass for more than 2 months in cumulative total, you can get \"One 4★ or Higher Kioku Guaranteed Magia Key Set (Exedra Pass)\" x1 and \"4★ or Higher Kioku Guaranteed Magia Key (Exedra Pass)\" x1, which can be used in Exedra Pass exclusive Fate Weave, as the Accumulated Subscription Benefits, in addition to the regular benefits.\n*Please note that \"One 4★ or Higher Kioku Guaranteed Magia Key Set (Exedra Pass)\" and \"4★ or Higher Kioku Guaranteed Magia Key (Exedra Pass)\" cannot be acquired in the first month of \"Premium Pass\" subscription.\n*Please note that \"One 4★ or Higher Kioku Guaranteed Magia Key Set (Exedra Pass)\" and \"4★ or Higher Kioku Guaranteed Magia Key (Exedra Pass)\" have both a deadline for receipt and a deadline for use.\n(Deadline for receipt: 90 days after distribution to the Gift Box; Deadline for use: 180 days after distribution to the Gift Box)\n*As for time deadline calculations, one day passes at 5:00 A.M. (JST) every day. The distribution date is considered day 1, and the item becomes unavailable at 5:00 A.M. (JST) on day 180.\n・The contents of each Exedra Pass exclusive Fate Weave may be changed. Changes will be announced in advance.\n\n<color=#ecd19c>■About the free trial</color>\n・If you subscribe to Premium Pass for the first time, you can subscribe for free for 1 month.\n・At the end of the free trial period, you will automatically be transferred to a paid Premium Pass subscription, which will be automatically renewed thereafter.\n・If you want to use your subscription only for the free trial period, please cancel the subscription 48 hours before the end of the free trial period. For details on how to cancel the subscription, refer to \"How to check the expiration date and how to cancel (stop automatic renewal)\" below.\n・If you repeatedly use the free trial in ways that we do not intend, we may take measures such as suspension of your use of the app or deletion of your account.\n\n"
+                    ],
+                    "firstFree": true,
+                    "label": "subscription.premium",
+                    "notesAndroid": [
+                        "<color=#ecd19c>■Notes</color>\n・If the user is a minor, parental consent is required to pay for items. \n*Users under the age of 16 cannot subscribe to \"Premium Pass.\"\n・If you cancel your subscription, the subscription will be cancelled at the expiration of the subscription period, and no reimbursement or refund will be made to the maximum extent permitted under applicable law. For more information, please refer to the Terms of Use.\n・The subscription is valid for one month from the date of subscription or automatic renewal.\n・Premium Pass is a subscription automatically renewed every month. Unless you cancel your subscription, your subscription is automatically renewed.\n・There may be a delay in the processing of granting benefits on the day of subscription renewal. If you are unable to obtain benefits, please restart the app at a later time.\n・If you wish to cancel your subscription, please cancel at least 48 hours before the expiration date. If you cancel before the expiration date, you will still be able to receive benefits until the expiration date.\n・Premium Pass is valid only for the account of the app used at the time of subscription (“Subscription Account”). If you create a new account, e.g., by deleting the app, you will not be able to take over the right to receive the benefits of the Subscription Account.\n・Even if you delete the app or the Subscription Account, your Premium Pass will not be canceled. If you no longer need the app, such as not using the app at all, please cancel the subscription.\n・Even if game data is transferred on the same platform or to a device on another platform (such as Google, Apple and Steam), the subscription continues. However, subscriptions you subscribe to on the platform before data transfer continue on the platform before data transfer. Because insufficient cancellation procedures can lead to unintended automatic renewals of the subscription, we recommend that you cancel the subscription in advance and subscribe to Premium Pass again after data transfer. After data transfer, you can subscribe to a new Premium Pass after the Premium Pass you subscribed to before data transfer ends.\n\n\n< For Android users >\n・Even if you make multiple or duplicate subscriptions of the same Premium Pass, you will not be able to receive multiple benefits.\n・If you subscribe to multiple Premium Passes for the same app account with different Google Play accounts, you will not be able to cancel the payment for multiple or duplicate subscriptions.\n・Due to the Google Play Store's mechanism, if the renewal date of Exedra Pass is near the beginning of the month or near the end of the month, payment may occur once at the beginning and end of the month and then twice within the same month.\n\n<color=#ecd19c>■How to check the expiration date and how to cancel (stop automatic renewal)</color>\nYou can check the expiration date and cancel the Premium Pass by the following procedure.\nIf you cancel your subscription, it will be canceled at the end of the subscription period.\n*Please note that the procedure may differ depending on your device, OS version, etc.\n\n1. Tap your profile icon from the Play Store.\n2. Tap “Payment & Subscription” and Tap “Subscription.”\n3. You can check the expiration date of the item you want to check. If you want to cancel, tap the item.\n4. Tap “Cancel Subscription,” then follow the on-screen instructions.\n"
+                    ],
+                    "notesIos": [
+                        "<color=#ecd19c>■Notes</color>\n・If the user is a minor, parental consent is required to pay for items. \n*Users under the age of 16 cannot subscribe to \"Premium Pass.\"\n・If you cancel your subscription, the subscription will be cancelled at the expiration of the subscription period, and no reimbursement or refund will be made to the maximum extent permitted under applicable law. For more information, please refer to the Terms of Use.\n・The subscription is valid for one month from the date of subscription or automatic renewal.\n・Premium Pass is a subscription automatically renewed every month. Unless you cancel your subscription, your subscription is automatically renewed.\n・There may be a delay in the processing of granting benefits on the day of subscription renewal. If you are unable to obtain benefits, please restart the app at a later time.\n・If you wish to cancel your subscription, please cancel at least 48 hours before the expiration date. If you cancel before the expiration date, you will still be able to receive benefits until the expiration date.\n・Premium Pass is valid only for the account of the app used at the time of subscription (“Subscription Account”). If you create a new account, e.g., by deleting the app, you will not be able to take over the right to receive the benefits of the Subscription Account.\n・Even if you delete the app or the Subscription Account, your Premium Pass will not be canceled. If you no longer need the app, such as not using the app at all, please cancel the subscription.\n・Even if game data is transferred on the same platform or to a device on another platform (such as Google, Apple and Steam), the subscription continues. However, subscriptions you subscribe to on the platform before data transfer continue on the platform before data transfer. Because insufficient cancellation procedures can lead to unintended automatic renewals of the subscription, we recommend that you cancel the subscription in advance and subscribe to Premium Pass again after data transfer. After data transfer, you can subscribe to a new Premium Pass after the Premium Pass you subscribed to before data transfer ends.\n\n\n< For iOS users >\n・Even if you make multiple or duplicate subscriptions of the same Premium Pass, you will not be able to receive multiple benefits.\n・If you subscribe to multiple Premium Passes for the same app account with different Apple ID accounts, you will not be able to cancel the payment for multiple or duplicate subscriptions.\n・Due to the App Store's mechanism, if the renewal date of Exedra Pass is near the beginning of the month or near the end of the month, payment may occur once at the beginning and end of the month and then twice within the same month.\n\n<color=#ecd19c>■How to check the expiration date and how to cancel (stop automatic renewal)</color>\nYou can cancel the Premium Pass by the following procedure.\nIf you cancel your subscription, it will be canceled at the end of the subscription period.\n*Please note that the procedure may differ depending on your device, OS version, etc.\n\n1. Open \"Settings\" in iOS.\n2. Tap \"your user name (Apple ID) \" and Tap \"Subscription.\"\n3. The subscription is valid until the \"renewal date\" of the item you want to check. If you want to cancel, tap the item.\n4. Tap \"Cancel Subscription\" to cancel the subscription.\n"
+                    ],
+                    "resourceName": "subscription_premium",
+                    "rewardDetailAnnounceMstId": 1333,
+                    "titleDescription": "A subscription that offers various bonuses for a great deal at $29.99 per month.\n* Once purchased, the subscription will be automatically renewed monthly unless you cancel."
+                }
+            ],
+            "subscriptionLabelList": [
+                "subscription.regular",
+                "subscription.premium"
+            ]
+        },
+        "talismanConfig": {
+            "maxSellNum": 100,
+            "rarityInfo": [
+                {
+                    "gold": 3000,
+                    "levelUpCostGold": 118800,
+                    "rarity": 3
+                },
+                {
+                    "gold": 4000,
+                    "levelUpCostGold": 252000,
+                    "rarity": 4
+                },
+                {
+                    "gold": 5000,
+                    "levelUpCostGold": 360000,
+                    "rarity": 5
+                }
+            ],
+            "talismanNumLimit": 1000,
+            "useLevelUpTalismanNum": 15
+        },
+        "termsConfig": {
+            "latestTermNumChat": 1,
+            "termsUpdatedTextChat": [
+                {
+                    "termsNum": 1,
+                    "text": ""
+                }
+            ]
+        },
+        "towerConfig": {
+            "floorSkip": [
+                {
+                    "newFloor": 15,
+                    "prevFloor": 20
+                },
+                {
+                    "newFloor": 20,
+                    "prevFloor": 25
+                },
+                {
+                    "newFloor": 25,
+                    "prevFloor": 30
+                },
+                {
+                    "newFloor": 30,
+                    "prevFloor": 35
+                },
+                {
+                    "newFloor": 35,
+                    "prevFloor": 40
+                },
+                {
+                    "newFloor": 40,
+                    "prevFloor": 45
+                },
+                {
+                    "newFloor": 45,
+                    "prevFloor": 50
+                },
+                {
+                    "newFloor": 50,
+                    "prevFloor": 55
+                },
+                {
+                    "newFloor": 55,
+                    "prevFloor": 60
+                },
+                {
+                    "newFloor": 60,
+                    "prevFloor": 65
+                },
+                {
+                    "newFloor": 65,
+                    "prevFloor": 70
+                },
+                {
+                    "newFloor": 70,
+                    "prevFloor": 75
+                },
+                {
+                    "newFloor": 75,
+                    "prevFloor": 80
+                },
+                {
+                    "newFloor": 80,
+                    "prevFloor": 85
+                },
+                {
+                    "newFloor": 85,
+                    "prevFloor": 90
+                },
+                {
+                    "newFloor": 90,
+                    "prevFloor": 95
+                },
+                {
+                    "newFloor": 95,
+                    "prevFloor": 100
+                },
+                {
+                    "newFloor": 100,
+                    "prevFloor": 105
+                },
+                {
+                    "newFloor": 105,
+                    "prevFloor": 110
+                },
+                {
+                    "newFloor": 110,
+                    "prevFloor": 115
+                },
+                {
+                    "newFloor": 115,
+                    "prevFloor": 120
+                },
+                {
+                    "newFloor": 120,
+                    "prevFloor": 125
+                },
+                {
+                    "newFloor": 125,
+                    "prevFloor": 130
+                },
+                {
+                    "newFloor": 130,
+                    "prevFloor": 135
+                },
+                {
+                    "newFloor": 135,
+                    "prevFloor": 140
+                },
+                {
+                    "newFloor": 140,
+                    "prevFloor": 145
+                },
+                {
+                    "newFloor": 145,
+                    "prevFloor": 150
+                },
+                {
+                    "newFloor": 150,
+                    "prevFloor": 155
+                },
+                {
+                    "newFloor": 155,
+                    "prevFloor": 160
+                },
+                {
+                    "newFloor": 160,
+                    "prevFloor": 165
+                },
+                {
+                    "newFloor": 165,
+                    "prevFloor": 170
+                },
+                {
+                    "newFloor": 170,
+                    "prevFloor": 175
+                },
+                {
+                    "newFloor": 175,
+                    "prevFloor": 180
+                },
+                {
+                    "newFloor": 180,
+                    "prevFloor": 185
+                },
+                {
+                    "newFloor": 185,
+                    "prevFloor": 190
+                },
+                {
+                    "newFloor": 190,
+                    "prevFloor": 195
+                },
+                {
+                    "newFloor": 195,
+                    "prevFloor": 200
+                }
+            ],
+            "maxSkipNumForItemRecoveryInADay": 3,
+            "maxTowerSkipNumForItem": 99,
+            "resetTowerSkipNum": 3,
+            "saveFloor": [
+                10,
+                20,
+                30,
+                40
+            ]
+        },
+        "tutorialConfig": {
+            "battleMstList": [
+                "getAbilityEffectTypeMstList",
+                "getBattleConditionMstList",
+                "getBattleConditionSetMstList",
+                "getCharacterMstList",
+                "getEnemyConditionSetsAndActionMstList",
+                "getEnemyMstList",
+                "getPassiveSkillDetailMstList",
+                "getPassiveSkillMstList",
+                "getQuestEnemyAppearanceMstList",
+                "getBreakMstList",
+                "getQuestEnemySkillSetMstList",
+                "getQuestGroupMstList",
+                "getQuestStageMstList",
+                "getSkillDetailMstList",
+                "getSkillMstList",
+                "getStyleMstList",
+                "getStyleFigureMstList"
+            ],
+            "dungeonMstList": [
+                "getDungeonMstList",
+                "getDungeonEventMstList",
+                "getDungeonRoomMstList",
+                "getDungeonTypeMstList",
+                "getMovieReplaceMstList",
+                "getStreamableBgmMstList"
+            ],
+            "finishTutorialStep": 2200,
+            "releaseStageTalkConfigList": [
+                {
+                    "releaseFlag": 100,
+                    "releaseStageName": "Rose Garden Witch Part II - Mami Tomoe's Memory",
+                    "releaseTalkFlag": 101,
+                    "talkId": 70000040
+                },
+                {
+                    "releaseFlag": 102,
+                    "releaseStageName": "Darkness Witch - Mami Tomoe's Memory",
+                    "releaseTalkFlag": 103,
+                    "talkId": 70000041
+                },
+                {
+                    "releaseFlag": 104,
+                    "releaseStageName": "Dessert Witch - Mami Tomoe's Memory",
+                    "releaseTalkFlag": 105,
+                    "talkId": 70000042
+                },
+                {
+                    "releaseFlag": 106,
+                    "releaseStageName": "Box Witch - Sayaka Miki's Memory",
+                    "releaseTalkFlag": 107,
+                    "talkId": 70000043
+                },
+                {
+                    "releaseFlag": 108,
+                    "releaseStageName": "Graffiti Witch - Sayaka Miki's Memory",
+                    "releaseTalkFlag": 109,
+                    "talkId": 70000044
+                },
+                {
+                    "releaseFlag": 110,
+                    "releaseStageName": "Silver Witch - Kyoko Sakura's Memory",
+                    "releaseTalkFlag": 111,
+                    "talkId": 70000045
+                },
+                {
+                    "releaseFlag": 112,
+                    "releaseStageName": "Shadow Witch - Sayaka Miki's Memory",
+                    "releaseTalkFlag": 113,
+                    "talkId": 70000046
+                },
+                {
+                    "releaseFlag": 114,
+                    "releaseStageName": "Dog Witch - Sayaka Miki's Memory",
+                    "releaseTalkFlag": 115,
+                    "talkId": 70000047
+                },
+                {
+                    "releaseFlag": 116,
+                    "releaseStageName": "Mermaid Witch - Kyoko Sakura's Memory",
+                    "releaseTalkFlag": 117,
+                    "talkId": 70000048
+                },
+                {
+                    "releaseFlag": 118,
+                    "releaseStageName": "Artist Witch - Homura Akemi's Memory",
+                    "releaseTalkFlag": 119,
+                    "talkId": 70000049
+                },
+                {
+                    "releaseFlag": 120,
+                    "releaseStageName": "Chairperson Witch - Homura Akemi's Memory",
+                    "releaseTalkFlag": 121,
+                    "talkId": 70000050
+                },
+                {
+                    "releaseFlag": 130,
+                    "releaseStageName": "Sandbox Witch",
+                    "releaseTalkFlag": 131,
+                    "talkId": 70000053
+                },
+                {
+                    "releaseFlag": 124,
+                    "releaseStageName": "Stage Witch - Homura Akemi's Memory",
+                    "releaseTalkFlag": 125,
+                    "talkId": 70000052
+                },
+                {
+                    "releaseFlag": 134,
+                    "releaseStageName": "Rumor of the Anonymous AI",
+                    "releaseTalkFlag": 135,
+                    "talkId": 70000055
+                },
+                {
+                    "releaseFlag": 142,
+                    "releaseStageName": "Needle Witch",
+                    "releaseTalkFlag": 143,
+                    "talkId": 70000059
+                },
+                {
+                    "releaseFlag": 144,
+                    "releaseStageName": "Mabayu Aki's Memory Part I",
+                    "releaseTalkFlag": 145,
+                    "talkId": 70000235
+                },
+                {
+                    "releaseFlag": 148,
+                    "releaseStageName": "Wraith",
+                    "releaseTalkFlag": 149,
+                    "talkId": 70000253
+                },
+                {
+                    "releaseFlag": 156,
+                    "releaseStageName": "Momoko Togame's Memory",
+                    "releaseTalkFlag": 157,
+                    "talkId": 70000260
+                },
+                {
+                    "releaseFlag": 174,
+                    "releaseStageName": "Nightmare",
+                    "releaseTalkFlag": 175,
+                    "talkId": 70000284
+                },
+                {
+                    "releaseFlag": 184,
+                    "releaseStageName": "Corbeau",
+                    "releaseTalkFlag": 185,
+                    "talkId": 70000302
+                },
+                {
+                    "releaseFlag": 132,
+                    "releaseStageName": "Rumor of the Commoner's Horse",
+                    "releaseTalkFlag": 133,
+                    "talkId": 70000054
+                },
+                {
+                    "releaseFlag": 122,
+                    "releaseStageName": "Birdcage Witch - Homura Akemi's Memory",
+                    "releaseTalkFlag": 123,
+                    "talkId": 70000051
+                },
+                {
+                    "releaseFlag": 136,
+                    "releaseStageName": "Rumor of the Chelation Land Ferris Wheel",
+                    "releaseTalkFlag": 137,
+                    "talkId": 70000056
+                },
+                {
+                    "releaseFlag": 138,
+                    "releaseStageName": "Blessed Witch",
+                    "releaseTalkFlag": 139,
+                    "talkId": 70000057
+                },
+                {
+                    "releaseFlag": 140,
+                    "releaseStageName": "Witch of Good Fortune",
+                    "releaseTalkFlag": 141,
+                    "talkId": 70000058
+                },
+                {
+                    "releaseFlag": 146,
+                    "releaseStageName": "Mabayu Aki's Memory Part II",
+                    "releaseTalkFlag": 147,
+                    "talkId": 70000246
+                },
+                {
+                    "releaseFlag": 164,
+                    "releaseStageName": "Mabayu Aki's Memory Part III",
+                    "releaseTalkFlag": 165,
+                    "talkId": 70000271
+                },
+                {
+                    "releaseFlag": 166,
+                    "releaseStageName": "Tsuruno Yui's Memory",
+                    "releaseTalkFlag": 167,
+                    "talkId": 70000278
+                },
+                {
+                    "releaseFlag": 176,
+                    "releaseStageName": "Nutcracker Witch",
+                    "releaseTalkFlag": 177,
+                    "talkId": 70000290
+                },
+                {
+                    "releaseFlag": 186,
+                    "releaseStageName": "Critic Witch",
+                    "releaseTalkFlag": 187,
+                    "talkId": 70000316
+                },
+                {
+                    "releaseFlag": 188,
+                    "releaseStageName": "Crépuscule de la Reine",
+                    "releaseTalkFlag": 189,
+                    "talkId": 70000323
+                }
+            ],
+            "tutorialBattleFixedAllyInfoList": [
+                {
+                    "questStageMstId": 1001101,
+                    "styleMstId": 200,
+                    "styleMstIds": [
+                        200
+                    ]
+                },
+                {
+                    "questStageMstId": 101101,
+                    "styleMstId": 300,
+                    "styleMstIds": [
+                        300,
+                        400
+                    ]
+                },
+                {
+                    "questStageMstId": 101102,
+                    "styleMstId": 500,
+                    "styleMstIds": [
+                        500,
+                        600,
+                        700
+                    ]
+                },
+                {
+                    "questStageMstId": 101103,
+                    "styleMstId": 500,
+                    "styleMstIds": [
+                        500,
+                        600,
+                        700,
+                        800,
+                        900
+                    ]
+                },
+                {
+                    "questStageMstId": 101104,
+                    "styleMstId": 500,
+                    "styleMstIds": [
+                        500,
+                        600,
+                        700,
+                        800,
+                        900
+                    ]
+                },
+                {
+                    "questStageMstId": 117120,
+                    "styleMstId": 300,
+                    "styleMstIds": [
+                        300
+                    ]
+                }
+            ],
+            "tutorialStepList": [
+                {
+                    "name": "init",
+                    "value": 0
+                },
+                {
+                    "name": "finishPrologueCountdown",
+                    "value": 100
+                },
+                {
+                    "name": "finishPrologueMovie1",
+                    "value": 200
+                },
+                {
+                    "name": "finishPrologueDungeon",
+                    "value": 300
+                },
+                {
+                    "name": "finishPrologueMovie2",
+                    "value": 400
+                },
+                {
+                    "name": "finishPrologueBattle",
+                    "value": 500
+                },
+                {
+                    "name": "finishPrologueMovie3",
+                    "value": 600
+                },
+                {
+                    "name": "finishResourceDownload",
+                    "value": 700
+                },
+                {
+                    "name": "finishWorldMovie1",
+                    "value": 800
+                },
+                {
+                    "name": "finishWorldMovie2",
+                    "value": 900
+                },
+                {
+                    "name": "finishUnlockCollectionIllust",
+                    "value": 1000
+                },
+                {
+                    "name": "finishWorldDialogue1",
+                    "value": 1100
+                },
+                {
+                    "name": "finishExplanationCollectionIllust",
+                    "value": 1200
+                },
+                {
+                    "name": "finishWorldDialogue2",
+                    "value": 1300
+                },
+                {
+                    "name": "beginExplorationDungeon",
+                    "value": 1400
+                },
+                {
+                    "name": "finishExplorationDungeon",
+                    "value": 1500
+                },
+                {
+                    "name": "finishExplorationBattle1",
+                    "value": 1600
+                },
+                {
+                    "name": "finishExplorationBattle2",
+                    "value": 1700
+                },
+                {
+                    "name": "finishExplorationDungeon2",
+                    "value": 1800
+                },
+                {
+                    "name": "beforeGacha",
+                    "value": 1830
+                },
+                {
+                    "name": "gachaRedraw",
+                    "value": 1850
+                },
+                {
+                    "name": "finishGacha",
+                    "value": 1900
+                },
+                {
+                    "name": "finishPresentBox",
+                    "value": 1950
+                },
+                {
+                    "name": "finishEditParty",
+                    "value": 2000
+                },
+                {
+                    "name": "finishExchange",
+                    "value": 2030
+                },
+                {
+                    "name": "finishGathering",
+                    "value": 2060
+                },
+                {
+                    "name": "setUserName",
+                    "value": 2100
+                },
+                {
+                    "name": "finishTutorial",
+                    "value": 2200
+                }
+            ],
+            "unlockConditionTxtInfoList": [
+                {
+                    "miniTutorialNumber": 24,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #1: Rose Garden Witch Part I - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 38,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #3: Darkness Witch - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 50,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #4: Dessert Witch - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 26,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #8: Shadow Witch - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 30,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #4: Dessert Witch - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 18,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #6: Graffiti Witch - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 34,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #12: Chairperson Witch - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 1,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #7: Silver Witch - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 20,
+                    "unlockConditionTxt": "Coming Soon"
+                },
+                {
+                    "miniTutorialNumber": 32,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #14: Stage Witch - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 22,
+                    "unlockConditionTxt": "Coming Soon"
+                },
+                {
+                    "miniTutorialNumber": 44,
+                    "unlockConditionTxt": "Unlock the Tower feature"
+                },
+                {
+                    "miniTutorialNumber": 52,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #2: Rose Garden Witch Part II - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 55,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #2: Rose Garden Witch Part II - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 80,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Nightmare)\nWindow Into Memory #1: Rose Garden Witch Part I - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 82,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Nightmare)\nWindow Into Memory #1: Rose Garden Witch Part I - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 90,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #7: Silver Witch - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 92,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #4: Dessert Witch - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 94,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #4: Dessert Witch - BOSS to unlock."
+                },
+                {
+                    "miniTutorialNumber": 96,
+                    "unlockConditionTxt": "Clear Exedra Quest: Prologue - Story 1 to unlock."
+                },
+                {
+                    "miniTutorialNumber": 353,
+                    "unlockConditionTxt": "Clear main quest Puella Magi Madoka Magica (Standard)\nWindow Into Memory #14: Stage Witch final battle to unlock."
+                }
+            ]
+        },
+        "userConfig": {
+            "defaultUserTitleMstId": 20000000,
+            "maxCommentLength": 120,
+            "maxStamina": 120,
+            "maxUserNameLength": 20,
+            "playerIdDigitNum": 12,
+            "restrictSetNameDays": 3,
+            "staminaRecoverGemInfoGemNum": 50,
+            "staminaRecoverGemInfoMaxCountInDay": 8,
+            "staminaRecoverGemInfoRecoverAmount": 120,
+            "staminaRecoverMaxCountInDay": 8,
+            "staminaRecoverSec": 180,
+            "staminaUpperLimit": 99999,
+            "storeReviewMinPendingDays": 120,
+            "userExpMax": 999999999
+        }
+    },
+    "status": 200,
+    "url": "/api/config/get_config"
+}

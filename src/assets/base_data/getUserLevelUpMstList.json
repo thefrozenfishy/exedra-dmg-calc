@@ -1,0 +1,1282 @@
+[
+    {
+        "backGroundPlayLimitSeconds": 28800,
+        "level": 1,
+        "levelUpExp": 10,
+        "maxStamina": 10,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 3
+    },
+    {
+        "backGroundPlayLimitSeconds": 28800,
+        "level": 2,
+        "levelUpExp": 16,
+        "maxStamina": 12,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 3
+    },
+    {
+        "backGroundPlayLimitSeconds": 28800,
+        "level": 3,
+        "levelUpExp": 23,
+        "maxStamina": 14,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 3
+    },
+    {
+        "backGroundPlayLimitSeconds": 28800,
+        "level": 4,
+        "levelUpExp": 31,
+        "maxStamina": 16,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 3
+    },
+    {
+        "backGroundPlayLimitSeconds": 28800,
+        "level": 5,
+        "levelUpExp": 40,
+        "maxStamina": 19,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 3
+    },
+    {
+        "backGroundPlayLimitSeconds": 28800,
+        "level": 6,
+        "levelUpExp": 50,
+        "maxStamina": 21,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 3
+    },
+    {
+        "backGroundPlayLimitSeconds": 28800,
+        "level": 7,
+        "levelUpExp": 61,
+        "maxStamina": 23,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 3
+    },
+    {
+        "backGroundPlayLimitSeconds": 28800,
+        "level": 8,
+        "levelUpExp": 73,
+        "maxStamina": 25,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 3
+    },
+    {
+        "backGroundPlayLimitSeconds": 28800,
+        "level": 9,
+        "levelUpExp": 86,
+        "maxStamina": 27,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 3
+    },
+    {
+        "backGroundPlayLimitSeconds": 43200,
+        "level": 10,
+        "levelUpExp": 100,
+        "maxStamina": 30,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 4
+    },
+    {
+        "backGroundPlayLimitSeconds": 43200,
+        "level": 11,
+        "levelUpExp": 115,
+        "maxStamina": 32,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 4
+    },
+    {
+        "backGroundPlayLimitSeconds": 43200,
+        "level": 12,
+        "levelUpExp": 131,
+        "maxStamina": 34,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 4
+    },
+    {
+        "backGroundPlayLimitSeconds": 43200,
+        "level": 13,
+        "levelUpExp": 148,
+        "maxStamina": 36,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 4
+    },
+    {
+        "backGroundPlayLimitSeconds": 43200,
+        "level": 14,
+        "levelUpExp": 166,
+        "maxStamina": 38,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 4
+    },
+    {
+        "backGroundPlayLimitSeconds": 43200,
+        "level": 15,
+        "levelUpExp": 185,
+        "maxStamina": 40,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 5
+    },
+    {
+        "backGroundPlayLimitSeconds": 43200,
+        "level": 16,
+        "levelUpExp": 205,
+        "maxStamina": 42,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 5
+    },
+    {
+        "backGroundPlayLimitSeconds": 43200,
+        "level": 17,
+        "levelUpExp": 227,
+        "maxStamina": 44,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 5
+    },
+    {
+        "backGroundPlayLimitSeconds": 43200,
+        "level": 18,
+        "levelUpExp": 251,
+        "maxStamina": 46,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 5
+    },
+    {
+        "backGroundPlayLimitSeconds": 43200,
+        "level": 19,
+        "levelUpExp": 277,
+        "maxStamina": 48,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 5
+    },
+    {
+        "backGroundPlayLimitSeconds": 57600,
+        "level": 20,
+        "levelUpExp": 305,
+        "maxStamina": 51,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 6
+    },
+    {
+        "backGroundPlayLimitSeconds": 57600,
+        "level": 21,
+        "levelUpExp": 335,
+        "maxStamina": 52,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 6
+    },
+    {
+        "backGroundPlayLimitSeconds": 57600,
+        "level": 22,
+        "levelUpExp": 367,
+        "maxStamina": 53,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 6
+    },
+    {
+        "backGroundPlayLimitSeconds": 57600,
+        "level": 23,
+        "levelUpExp": 401,
+        "maxStamina": 54,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 6
+    },
+    {
+        "backGroundPlayLimitSeconds": 57600,
+        "level": 24,
+        "levelUpExp": 437,
+        "maxStamina": 55,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 6
+    },
+    {
+        "backGroundPlayLimitSeconds": 57600,
+        "level": 25,
+        "levelUpExp": 475,
+        "maxStamina": 57,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 7
+    },
+    {
+        "backGroundPlayLimitSeconds": 57600,
+        "level": 26,
+        "levelUpExp": 515,
+        "maxStamina": 58,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 7
+    },
+    {
+        "backGroundPlayLimitSeconds": 57600,
+        "level": 27,
+        "levelUpExp": 557,
+        "maxStamina": 59,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 7
+    },
+    {
+        "backGroundPlayLimitSeconds": 57600,
+        "level": 28,
+        "levelUpExp": 601,
+        "maxStamina": 60,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 7
+    },
+    {
+        "backGroundPlayLimitSeconds": 57600,
+        "level": 29,
+        "levelUpExp": 647,
+        "maxStamina": 61,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 7
+    },
+    {
+        "backGroundPlayLimitSeconds": 72000,
+        "level": 30,
+        "levelUpExp": 695,
+        "maxStamina": 63,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 8
+    },
+    {
+        "backGroundPlayLimitSeconds": 72000,
+        "level": 31,
+        "levelUpExp": 745,
+        "maxStamina": 64,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 8
+    },
+    {
+        "backGroundPlayLimitSeconds": 72000,
+        "level": 32,
+        "levelUpExp": 797,
+        "maxStamina": 65,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 8
+    },
+    {
+        "backGroundPlayLimitSeconds": 72000,
+        "level": 33,
+        "levelUpExp": 851,
+        "maxStamina": 66,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 8
+    },
+    {
+        "backGroundPlayLimitSeconds": 72000,
+        "level": 34,
+        "levelUpExp": 907,
+        "maxStamina": 67,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 8
+    },
+    {
+        "backGroundPlayLimitSeconds": 72000,
+        "level": 35,
+        "levelUpExp": 965,
+        "maxStamina": 69,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 9
+    },
+    {
+        "backGroundPlayLimitSeconds": 72000,
+        "level": 36,
+        "levelUpExp": 1025,
+        "maxStamina": 70,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 9
+    },
+    {
+        "backGroundPlayLimitSeconds": 72000,
+        "level": 37,
+        "levelUpExp": 1087,
+        "maxStamina": 71,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 9
+    },
+    {
+        "backGroundPlayLimitSeconds": 72000,
+        "level": 38,
+        "levelUpExp": 1151,
+        "maxStamina": 72,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 9
+    },
+    {
+        "backGroundPlayLimitSeconds": 72000,
+        "level": 39,
+        "levelUpExp": 1217,
+        "maxStamina": 73,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 9
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 40,
+        "levelUpExp": 1286,
+        "maxStamina": 75,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 41,
+        "levelUpExp": 1358,
+        "maxStamina": 76,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 42,
+        "levelUpExp": 1433,
+        "maxStamina": 77,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 43,
+        "levelUpExp": 1511,
+        "maxStamina": 78,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 44,
+        "levelUpExp": 1592,
+        "maxStamina": 79,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 45,
+        "levelUpExp": 1676,
+        "maxStamina": 81,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 46,
+        "levelUpExp": 1763,
+        "maxStamina": 82,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 47,
+        "levelUpExp": 1853,
+        "maxStamina": 82,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 48,
+        "levelUpExp": 1946,
+        "maxStamina": 82,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 49,
+        "levelUpExp": 2042,
+        "maxStamina": 83,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 50,
+        "levelUpExp": 2141,
+        "maxStamina": 83,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 51,
+        "levelUpExp": 2243,
+        "maxStamina": 83,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 52,
+        "levelUpExp": 2348,
+        "maxStamina": 84,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 53,
+        "levelUpExp": 2456,
+        "maxStamina": 84,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 54,
+        "levelUpExp": 2567,
+        "maxStamina": 84,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 55,
+        "levelUpExp": 2681,
+        "maxStamina": 85,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 56,
+        "levelUpExp": 2798,
+        "maxStamina": 85,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 57,
+        "levelUpExp": 2918,
+        "maxStamina": 85,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 58,
+        "levelUpExp": 3041,
+        "maxStamina": 86,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 59,
+        "levelUpExp": 3167,
+        "maxStamina": 86,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 60,
+        "levelUpExp": 3296,
+        "maxStamina": 86,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 61,
+        "levelUpExp": 3428,
+        "maxStamina": 87,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 62,
+        "levelUpExp": 3563,
+        "maxStamina": 87,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 63,
+        "levelUpExp": 3701,
+        "maxStamina": 87,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 64,
+        "levelUpExp": 3842,
+        "maxStamina": 88,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 65,
+        "levelUpExp": 3986,
+        "maxStamina": 88,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 66,
+        "levelUpExp": 4133,
+        "maxStamina": 88,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 67,
+        "levelUpExp": 4283,
+        "maxStamina": 89,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 68,
+        "levelUpExp": 4436,
+        "maxStamina": 89,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 69,
+        "levelUpExp": 4592,
+        "maxStamina": 89,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 70,
+        "levelUpExp": 4751,
+        "maxStamina": 90,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 71,
+        "levelUpExp": 4913,
+        "maxStamina": 90,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 72,
+        "levelUpExp": 5078,
+        "maxStamina": 90,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 73,
+        "levelUpExp": 5246,
+        "maxStamina": 91,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 74,
+        "levelUpExp": 5417,
+        "maxStamina": 91,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 75,
+        "levelUpExp": 5591,
+        "maxStamina": 91,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 76,
+        "levelUpExp": 5768,
+        "maxStamina": 92,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 77,
+        "levelUpExp": 5948,
+        "maxStamina": 92,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 78,
+        "levelUpExp": 6131,
+        "maxStamina": 92,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 79,
+        "levelUpExp": 6317,
+        "maxStamina": 93,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 80,
+        "levelUpExp": 6507,
+        "maxStamina": 93,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 81,
+        "levelUpExp": 6701,
+        "maxStamina": 93,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 82,
+        "levelUpExp": 6899,
+        "maxStamina": 94,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 83,
+        "levelUpExp": 7101,
+        "maxStamina": 94,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 84,
+        "levelUpExp": 7307,
+        "maxStamina": 94,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 85,
+        "levelUpExp": 7517,
+        "maxStamina": 95,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 86,
+        "levelUpExp": 7731,
+        "maxStamina": 95,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 87,
+        "levelUpExp": 7949,
+        "maxStamina": 95,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 88,
+        "levelUpExp": 8171,
+        "maxStamina": 96,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 89,
+        "levelUpExp": 8397,
+        "maxStamina": 96,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 90,
+        "levelUpExp": 8627,
+        "maxStamina": 96,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 91,
+        "levelUpExp": 8861,
+        "maxStamina": 97,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 92,
+        "levelUpExp": 9099,
+        "maxStamina": 97,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 93,
+        "levelUpExp": 9341,
+        "maxStamina": 97,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 94,
+        "levelUpExp": 9587,
+        "maxStamina": 98,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 95,
+        "levelUpExp": 9837,
+        "maxStamina": 98,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 96,
+        "levelUpExp": 10091,
+        "maxStamina": 98,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 97,
+        "levelUpExp": 10349,
+        "maxStamina": 99,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 98,
+        "levelUpExp": 10611,
+        "maxStamina": 99,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 99,
+        "levelUpExp": 10877,
+        "maxStamina": 99,
+        "startTime": "2000-01-01T00:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 100,
+        "levelUpExp": 40000,
+        "maxStamina": 100,
+        "startTime": "2000-01-01T17:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 101,
+        "levelUpExp": 40050,
+        "maxStamina": 102,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 102,
+        "levelUpExp": 40125,
+        "maxStamina": 104,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 103,
+        "levelUpExp": 40225,
+        "maxStamina": 106,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 104,
+        "levelUpExp": 40350,
+        "maxStamina": 108,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 105,
+        "levelUpExp": 55000,
+        "maxStamina": 110,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 106,
+        "levelUpExp": 55150,
+        "maxStamina": 112,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 107,
+        "levelUpExp": 55325,
+        "maxStamina": 114,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 108,
+        "levelUpExp": 55525,
+        "maxStamina": 116,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 109,
+        "levelUpExp": 55750,
+        "maxStamina": 118,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 110,
+        "levelUpExp": 70000,
+        "maxStamina": 120,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 111,
+        "levelUpExp": 70250,
+        "maxStamina": 122,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 112,
+        "levelUpExp": 70525,
+        "maxStamina": 124,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 113,
+        "levelUpExp": 70825,
+        "maxStamina": 126,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 114,
+        "levelUpExp": 71150,
+        "maxStamina": 128,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 115,
+        "levelUpExp": 85000,
+        "maxStamina": 130,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 116,
+        "levelUpExp": 85350,
+        "maxStamina": 132,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 117,
+        "levelUpExp": 85725,
+        "maxStamina": 134,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 118,
+        "levelUpExp": 86125,
+        "maxStamina": 136,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 119,
+        "levelUpExp": 86550,
+        "maxStamina": 138,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 120,
+        "levelUpExp": 114300,
+        "maxStamina": 140,
+        "startTime": "2025-07-16T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 121,
+        "levelUpExp": 114800,
+        "maxStamina": 143,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 122,
+        "levelUpExp": 115350,
+        "maxStamina": 144,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 123,
+        "levelUpExp": 115950,
+        "maxStamina": 145,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 124,
+        "levelUpExp": 116600,
+        "maxStamina": 148,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 125,
+        "levelUpExp": 175000,
+        "maxStamina": 149,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 126,
+        "levelUpExp": 175700,
+        "maxStamina": 150,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 127,
+        "levelUpExp": 176450,
+        "maxStamina": 153,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 128,
+        "levelUpExp": 177250,
+        "maxStamina": 154,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 129,
+        "levelUpExp": 178100,
+        "maxStamina": 155,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 130,
+        "levelUpExp": 237000,
+        "maxStamina": 158,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 131,
+        "levelUpExp": 237900,
+        "maxStamina": 159,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 132,
+        "levelUpExp": 238850,
+        "maxStamina": 160,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 133,
+        "levelUpExp": 239850,
+        "maxStamina": 163,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 134,
+        "levelUpExp": 240900,
+        "maxStamina": 164,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 135,
+        "levelUpExp": 300000,
+        "maxStamina": 165,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 136,
+        "levelUpExp": 301100,
+        "maxStamina": 168,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 137,
+        "levelUpExp": 302250,
+        "maxStamina": 169,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 138,
+        "levelUpExp": 303450,
+        "maxStamina": 170,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 139,
+        "levelUpExp": 304700,
+        "maxStamina": 173,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 140,
+        "levelUpExp": 305925,
+        "maxStamina": 174,
+        "startTime": "2026-01-30T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 141,
+        "levelUpExp": 307150,
+        "maxStamina": 175,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 142,
+        "levelUpExp": 308380,
+        "maxStamina": 177,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 143,
+        "levelUpExp": 309620,
+        "maxStamina": 178,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 144,
+        "levelUpExp": 310860,
+        "maxStamina": 179,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 145,
+        "levelUpExp": 312730,
+        "maxStamina": 181,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 146,
+        "levelUpExp": 314610,
+        "maxStamina": 182,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 147,
+        "levelUpExp": 316500,
+        "maxStamina": 183,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 148,
+        "levelUpExp": 318400,
+        "maxStamina": 185,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 149,
+        "levelUpExp": 320320,
+        "maxStamina": 186,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 150,
+        "levelUpExp": 322890,
+        "maxStamina": 187,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 151,
+        "levelUpExp": 325480,
+        "maxStamina": 189,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 152,
+        "levelUpExp": 328090,
+        "maxStamina": 190,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 153,
+        "levelUpExp": 330720,
+        "maxStamina": 191,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 154,
+        "levelUpExp": 333370,
+        "maxStamina": 193,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 155,
+        "levelUpExp": 336710,
+        "maxStamina": 194,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 156,
+        "levelUpExp": 340080,
+        "maxStamina": 195,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 157,
+        "levelUpExp": 343490,
+        "maxStamina": 197,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 158,
+        "levelUpExp": 346930,
+        "maxStamina": 198,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 159,
+        "levelUpExp": 350400,
+        "maxStamina": 199,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    },
+    {
+        "backGroundPlayLimitSeconds": 86400,
+        "level": 160,
+        "levelUpExp": 0,
+        "maxStamina": 200,
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "subStyleSlotNum": 10
+    }
+]

@@ -11,6 +11,9 @@ import characterHeartLevelUpJson from '../assets/base_data/getCharacterHeartLeve
 import kiokuDataJson from '../assets/base_data/kioku_data.json';
 import questStageJson from '../assets/base_data/getQuestStageMstList.json';
 import questEnemyAppearanceJson from '../assets/base_data/getQuestEnemyAppearanceMstList.json';
+import configJson from '../assets/base_data/get_config.json'
+import styleParamUpCostJson from '../assets/base_data/getStyleParamUpCostMstList.json'
+import userLevelUpJson from '../assets/base_data/getUserLevelUpMstList.json'
 import { Portrait, CrystalisData, KiokuData, PortraitLvlData, StyleParamUpEffect, CharacterHeart, CharacterHeartParamUpGroup, ActiveSkill, PassiveSkill, StyleParamUp } from '../types/KiokuTypes';
 import { elementMap, KiokuElement } from '../types/enums';
 
@@ -41,6 +44,67 @@ export const styleParamUpEffect = Object.fromEntries(
 export const styleParamUp = Object.fromEntries(
     styleParamUpJson.map((item: any) => [item.styleParamUpMstId, item])
 ) as Record<string, StyleParamUp>;
+
+interface StyleParamUpCost {
+    styleParamUpCostMstId: number;
+    useItemMstId1: number;
+    useItemMstId2: number;
+    useItemMstId3: number;
+    useItemMstId4: number;
+    useItemMstId5: number;
+    useItemMstId6: number;
+    useItemMstId7: number;
+    useItemMstId8: number;
+    useItemNum1: number;
+    useItemNum2: number;
+    useItemNum3: number;
+    useItemNum4: number;
+    useItemNum5: number;
+    useItemNum6: number;
+    useItemNum7: number;
+    useItemNum8: number;
+    useMoney: number;
+}
+
+const styleParamUpCost = Object.fromEntries(
+    styleParamUpCostJson.map((item: any) => [item.styleParamUpCostMstId, item])
+) as Record<string, StyleParamUpCost>;
+
+export interface MagicLevelCost {
+    gold: number;
+    items: Record<number, number>;
+}
+
+export const magicLevelCosts: Record<string, Record<number, MagicLevelCost>> = {};
+{
+    const styleParamUpByStyle: Record<string, any[]> = {};
+    (styleParamUpJson as any[]).forEach((item: any) => {
+        (styleParamUpByStyle[item.styleMstId] ??= []).push(item);
+    });
+
+    Object.entries(styleParamUpByStyle).forEach(([styleMstId, levels]) => {
+        const sortedLevels = [...levels].sort((a, b) => a.priority - b.priority);
+        const perStyle: Record<number, MagicLevelCost> = { 0: { gold: 0, items: {} } };
+
+        sortedLevels.forEach((lvl: any) => {
+            const cost = styleParamUpCost[lvl.styleParamUpCostMstId];
+            const prev = perStyle[lvl.priority - 1] ?? { gold: 0, items: {} };
+            const items: Record<number, number> = { ...prev.items };
+
+            for (let j = 1; j <= 8; j++) {
+                items[j] = (items[j] ?? 0) + ((cost as any)?.[`useItemNum${j}`] ?? 0);
+            }
+
+            perStyle[lvl.priority] = {
+                gold: prev.gold + (cost?.useMoney ?? 0),
+                items,
+            };
+        });
+
+        magicLevelCosts[styleMstId] = perStyle;
+    });
+}
+console.log(magicLevelCosts)
 
 export const characterHeartParamUpGroup = Object.fromEntries(
     characterHeartParamUpGroupJson.map((item: any) => [item.characterHeartParamUpGroupMstId, item])
@@ -90,3 +154,20 @@ export const heartExpStages: HeartExpStage[] = (questStageJson as any[])
     .sort((a, b) => b.exp - a.exp);
 
 export const bestHeartExpStage: HeartExpStage | null = heartExpStages[0] ?? null;
+
+export const kiokuLevelCosts: Record<number, { exp: number; gold: number }> = { 0: { exp: 0, gold: 0 } };
+((configJson as any)?.payload?.styleConfig?.levelUpCost || []).forEach((item: any) => {
+    kiokuLevelCosts[item.level] = {
+        exp: kiokuLevelCosts[item.level - 1].exp + item.exp,
+        gold: kiokuLevelCosts[item.level - 1].gold + item.goldPerExp,
+    }
+})
+console.log(kiokuLevelCosts)
+
+export const playerLevelCosts: Record<number, { exp: number }> = { 1: { exp: 0 } };
+Object.values(userLevelUpJson).forEach((item: any) => {
+    playerLevelCosts[item.level + 1] = {
+        exp: playerLevelCosts[item.level].exp + item.levelUpExp,
+    }
+})
+console.log(playerLevelCosts)

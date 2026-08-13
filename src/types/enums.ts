@@ -56,3 +56,5 @@ export const elementMap: Record<string, KiokuElement> = {
 };
 
 export const LuxMagica = "Lux☆Magica"
+
+export const maxPlayerLevel = 160

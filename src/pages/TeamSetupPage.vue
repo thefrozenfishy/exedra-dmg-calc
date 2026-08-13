@@ -32,6 +32,24 @@
       </div>
     </section>
 
+    <section class="resource-summary card">
+      <span class="filters-heading">Resource Totals</span>
+      <template v-for="r in [5, 4, 3]">
+        <div v-if="r === 5 || r === 4 && show4stars || r === 3 && show3stars" :key="r" class="resource-summary-group"
+          @click="toggleMissingAndWhole" title="Click to toggle current / missing">
+          <span class="resource-summary-label">{{ r }}★ Total</span>
+          <span class="resource-chip">
+            <img :src="`/exedra-dmg-calc/items/exp.png`" alt="Kioku Exp" /> {{
+              formatAmount(rarityKiokuLevelSums[r].exp.current, rarityKiokuLevelSums[r].exp.max) }}
+          </span>
+          <span class="resource-chip">
+            <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" /> {{
+              formatAmount(rarityKiokuLevelSums[r].gold.current, rarityKiokuLevelSums[r].gold.max) }}
+          </span>
+        </div>
+      </template>
+    </section>
+
     <section v-if="showHighestTeam && highestTeam" class="best-team-panel card">
       <div class="best-team-header">
         <span class="filters-heading highlight">Highest Possible Team PWR</span>
@@ -117,6 +135,15 @@
             @input="e => pendingBulk[stat.key] = (e.target as HTMLInputElement).valueAsNumber" />
         </label>
         <button class="btn btn-apply" @click="applyBulk">Apply</button>
+
+        <div class="right-leaning resource-chip" @click="toggleMissingAndWhole">
+          <img :src="`/exedra-dmg-calc/items/player.png`" alt="Player Exp" /> {{ formatAmount(playerExpUsage.current,
+            playerExpUsage.max) }}
+        </div>
+        <label class="bulk-field">
+          <span class="bulk-label">Player Level</span>
+          <input type="number" min="1" :max="maxPlayerLevel" v-model.number="playerLevel" />
+        </label>
       </div>
     </section>
 
@@ -131,6 +158,58 @@
       <button class="role-header" @click="toggleRole(role)" :aria-expanded="!collapsedRoles[role]">
         <span class="role-chevron" :class="{ rotated: collapsedRoles[role] }">▾</span>
         <span class="role-name">{{ role }}</span>
+        <div>
+          <span class="role-resources" @click.stop="toggleMissingAndWhole">
+            <span class="role-resource-label">Kioku level</span>
+            <span class="resource-chip">
+              <img :src="`/exedra-dmg-calc/items/exp.png`" alt="Kioku Exp" /> {{
+                formatAmount(tabKiokuLevelResourceSums[role].exp.current, tabKiokuLevelResourceSums[role].exp.max) }}
+            </span>
+            <span class="resource-chip">
+              <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" /> {{
+                formatAmount(tabKiokuLevelResourceSums[role].gold.current, tabKiokuLevelResourceSums[role].gold.max)
+              }}
+            </span>
+          </span>
+          <span class="role-resources" @click.stop="toggleMissingAndWhole">
+            <span class="role-resource-label">Magic level</span>
+
+            <div class="magic-resource-groups">
+              <div class="magic-resource-group">
+                <span v-for="i in [1, 2, 3, 7]" :key="i" class="resource-chip">
+                  <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" /> {{
+                    formatAmount(
+                      tabMagicLevelResourceSums[role].items.current[i],
+                      tabMagicLevelResourceSums[role].items.max[i]
+                    )
+                  }}
+                </span>
+              </div>
+
+              <div class="magic-resource-group">
+                <span v-for="i in [4, 5, 6, 8]" :key="i" class="resource-chip">
+                  <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" /> {{
+                    formatAmount(
+                      tabMagicLevelResourceSums[role].items.current[i],
+                      tabMagicLevelResourceSums[role].items.max[i]
+                    )
+                  }}
+                </span>
+              </div>
+
+              <div class="magic-resource-group magic-gold">
+                <span class="resource-chip">
+                  <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" /> {{
+                    formatAmount(
+                      tabMagicLevelResourceSums[role].gold.current,
+                      tabMagicLevelResourceSums[role].gold.max
+                    )
+                  }}
+                </span>
+              </div>
+            </div>
+          </span>
+        </div>
         <span class="role-count">{{ visibleCountFor(chars) }} / {{ chars.length }}</span>
       </button>
 
@@ -153,9 +232,10 @@ import { useCharacterStore } from '../store/characterStore.js'
 import { Character, KiokuConstants } from '../types/KiokuTypes.js'
 import { useSetting } from '../store/settingsStore.js'
 import { FinalTeam } from '../types/BestTeamTypes.js'
-import { LuxMagica } from '../types/enums.js'
+import { LuxMagica, maxPlayerLevel } from '../types/enums.js'
 import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
 import { getCachedStats, scheduleBackfill } from '../utils/statsBackfill'
+import { kiokuLevelCosts, magicLevelCosts, playerLevelCosts } from '../utils/helpers'
 
 export default defineComponent({
   components: { CharacterCard, TeamRow },
@@ -172,11 +252,46 @@ export default defineComponent({
     const expectedRuns = ref(0)
     const currentBestTeam = ref<FinalTeam>()
     const currentBestPwr = ref<number | null>(null)
-    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp' | 'pwr' | 'ch_name' |'releaseDate' |'kiokuLvl' |'magicLvl'>(
+    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp' | 'pwr' | 'ch_name' | 'releaseDate' | 'kiokuLvl' | 'magicLvl'>(
       'characterSortBy',
       'name'
     )
     const groupByRole = useSetting('groupCharactersByRole', true)
+    const playerLevel = useSetting('playerLevel', 1)
+
+    const bigNumberDisplayMode = useSetting<'shortHas' | 'shortMiss' | 'longHas' | 'longMiss' | 'percentage'>("bigNumberDisplayMode", "shortHas")
+    function toggleMissingAndWhole() {
+      switch (bigNumberDisplayMode.value) {
+        case 'shortHas':
+          bigNumberDisplayMode.value = 'shortMiss'
+          break
+        case 'shortMiss':
+          bigNumberDisplayMode.value = 'longHas'
+          break
+        case 'longHas':
+          bigNumberDisplayMode.value = 'longMiss'
+          break
+        case 'longMiss':
+          bigNumberDisplayMode.value = 'percentage'
+          break
+        case 'percentage':
+          bigNumberDisplayMode.value = 'shortHas'
+          break
+      }
+    }
+    function formatValue(nr: number) {
+      if (bigNumberDisplayMode.value === "longHas" || bigNumberDisplayMode.value === "longMiss") return (nr ?? 0).toLocaleString()
+      return (nr ?? 0).toLocaleString(undefined, {
+        notation: "compact",
+        maximumFractionDigits: 1,
+      })
+    }
+    function formatAmount(current: number, max: number) {
+      let value = current
+      if (bigNumberDisplayMode.value === "percentage") return `${(100 * current / max).toFixed(2)}%`
+      if (bigNumberDisplayMode.value === "shortMiss" || bigNumberDisplayMode.value === "longMiss") value = -Math.max(max - current, 0)
+      return `${formatValue(value)} / ${formatValue(max)}`
+    }
 
     let worker: Worker | null = null
     const needsRecalc = ref(true)
@@ -271,27 +386,6 @@ export default defineComponent({
     function toggleRole(role: string) {
       collapsedRoles.value[role] = !collapsedRoles.value[role]
     }
-    const sortCache = computed(() => {
-      const map = new Map<string, {
-        atk: number
-        def: number
-        hp: number
-        pwr: number
-      }>()
-
-      for (const c of store.characters) {
-        const kioku = new ScoreAttackKioku({ ...c, portrait: undefined })
-
-        map.set(c.id, {
-          atk: kioku.getBaseAtk(),
-          def: kioku.getBaseDef(),
-          hp: kioku.getBaseHp(),
-          pwr: kioku.getTotalPower(),
-        })
-      }
-
-      return map
-    })
 
     onMounted(() => {
       scheduleBackfill(store.characters)
@@ -331,9 +425,13 @@ export default defineComponent({
       return groups
     })
 
-    function isCharVisible(char: Character): boolean {
+    function isRarityToggleVisible(char: Character): boolean {
       if (char.rarity === 3 && !show3stars.value) return false
       if ((char.rarity === 4 || char.name === LuxMagica) && !show4stars.value) return false
+      return true
+    }
+
+    function matchesFilters(char: Character): boolean {
       if (filters.hideUnowned && !char.enabled) return false
       if (char.enabled) {
         if (filters.heartphialMax === true && char.heartphialLvl < KiokuConstants.maxHeartphialLvl) return false
@@ -346,9 +444,103 @@ export default defineComponent({
       return true
     }
 
+    function isCharVisible(char: Character): boolean {
+      return char.enabled && isRarityToggleVisible(char) && matchesFilters(char)
+    }
+
     function visibleCountFor(chars: typeof store.characters) {
       return chars.filter(isCharVisible).length
     }
+
+    const playerExpUsage = computed(() => {
+      const lvl = Math.min(Math.max(playerLevel.value ?? 0, 1), maxPlayerLevel)
+      const current = playerLevelCosts[lvl]?.exp ?? 1
+      const max = playerLevelCosts[maxPlayerLevel]?.exp ?? 1
+      return { current, max }
+    })
+
+    function getKiokuLevelCost(char: Character) {
+      const currLvl = Math.min(Math.max(char.kiokuLvl ?? 0, 1), KiokuConstants.maxKiokuLvl)
+      const current = kiokuLevelCosts[currLvl] ?? kiokuLevelCosts[0]
+      const max = kiokuLevelCosts[KiokuConstants.maxKiokuLvl] ?? current
+      return {
+        exp: { current: current.exp, max: max.exp },
+        gold: { current: current.gold, max: max.gold },
+      }
+    }
+
+    function sumKiokuLevelResources(chars: Character[]) {
+      return chars.reduce((sum, c) => {
+        const cost = getKiokuLevelCost(c)
+        sum.exp.current += cost.exp.current
+        sum.exp.max += cost.exp.max
+        sum.gold.current += cost.gold.current
+        sum.gold.max += cost.gold.max
+        return sum
+      }, { exp: { current: 0, max: 0 }, gold: { current: 0, max: 0 } })
+    }
+
+    const tabKiokuLevelResourceSums = computed(() => {
+      const sums: Record<string, ReturnType<typeof sumKiokuLevelResources>> = {}
+      for (const [role, chars] of Object.entries(groupedCharacters.value)) {
+        sums[role] = sumKiokuLevelResources(chars.filter(isCharVisible))
+      }
+      return sums
+    })
+
+    const rarityKiokuLevelSums = computed(() => ({
+      5: sumKiokuLevelResources(store.characters.filter(c => c.rarity === 5 && isCharVisible(c))),
+      4: sumKiokuLevelResources(store.characters.filter(c => c.rarity === 4 && isCharVisible(c))),
+      3: sumKiokuLevelResources(store.characters.filter(c => c.rarity === 3 && isCharVisible(c))),
+    }))
+
+    function getMagicLevelCost(char: Character) {
+      const currLvl = Math.min(Math.max(char.magicLvl ?? 0, 0), KiokuConstants.maxMagicLvl)
+      const current = magicLevelCosts[char.id]?.[currLvl] ?? magicLevelCosts[10010101]?.[currLvl]
+      const max = magicLevelCosts[char.id]?.[KiokuConstants.maxMagicLvl] ?? current
+      return {
+        gold: { current: current.gold, max: max.gold },
+        items: { current: current.items, max: max.items },
+      }
+    }
+
+    function addRecords(
+      a: Record<number, number>,
+      b: Record<number, number>
+    ): Record<number, number> {
+      const result: Record<number, number> = { ...a }
+
+      for (const [key, value] of Object.entries(b)) {
+        result[Number(key)] = (result[Number(key)] ?? 0) + value
+      }
+
+      return result
+    }
+
+    function sumMagicLevelResources(chars: Character[]) {
+      return chars.reduce((sum, c) => {
+        const cost = getMagicLevelCost(c)
+        sum.items.current = addRecords(sum.items.current, cost.items.current)
+        sum.items.max = addRecords(sum.items.max, cost.items.max)
+        sum.gold.current += cost.gold.current
+        sum.gold.max += cost.gold.max
+        return sum
+      }, { items: { current: {} as Record<number, number>, max: {} as Record<number, number> }, gold: { current: 0, max: 0 } })
+    }
+
+    const tabMagicLevelResourceSums = computed(() => {
+      const sums: Record<string, ReturnType<typeof sumMagicLevelResources>> = {}
+      for (const [role, chars] of Object.entries(groupedCharacters.value)) {
+        sums[role] = sumMagicLevelResources(chars.filter(isCharVisible))
+      }
+      return sums
+    })
+
+    const rarityMagicLevelSums = computed(() => ({
+      5: sumMagicLevelResources(store.characters.filter(c => c.rarity === 5 && isCharVisible(c))),
+      4: sumMagicLevelResources(store.characters.filter(c => c.rarity === 4 && isCharVisible(c))),
+      3: sumMagicLevelResources(store.characters.filter(c => c.rarity === 3 && isCharVisible(c))),
+    }))
 
     const stats = [
       { key: 'ascension', label: 'Ascension', min: 0, max: KiokuConstants.maxAscension },
@@ -384,6 +576,10 @@ export default defineComponent({
       }
     }
 
+    function itemIdxToImg(idx: number) {
+      return `/exedra-dmg-calc/items/${idx}.png`
+    }
+
     return {
       show4stars,
       show3stars,
@@ -394,6 +590,7 @@ export default defineComponent({
       toggleRole,
       groupedCharacters,
       visibleCountFor,
+      isCharVisible,
       stats,
       pendingBulk,
       applyBulk,
@@ -409,6 +606,16 @@ export default defineComponent({
       currentBestPwr,
       sortBy,
       groupByRole,
+      playerLevel,
+      maxPlayerLevel,
+      playerExpUsage,
+      toggleMissingAndWhole,
+      formatAmount,
+      tabKiokuLevelResourceSums,
+      tabMagicLevelResourceSums,
+      rarityKiokuLevelSums,
+      rarityMagicLevelSums,
+      itemIdxToImg,
     }
   },
 })
@@ -779,5 +986,110 @@ export default defineComponent({
   border-radius: var(--radius);
   padding: 0.3rem 1rem;
   gap: 0.5rem;
+}
+
+/* ── Resource tracking ── */
+.resource-chip {
+  display: inline-block;
+  font-size: 0.74rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.resource-chip img {
+  width: 20px;
+  margin: -10px 0 -5px -5px;
+}
+
+.resource-summary-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.resource-summary-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-soft);
+  margin-right: 0.15rem;
+}
+
+.player-level-input {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.player-level-input input {
+  width: 90px;
+  text-align: center;
+}
+
+.player-exp-chip {
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.9rem;
+  user-select: none;
+}
+
+.player-exp-chip:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.role-resources {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.role-resources:hover .resource-chip {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.role-resource-label {
+  width: 85px;
+  flex: 0 0 85px;
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  opacity: 0.75;
+  padding-top: 0.2rem;
+}
+
+.right-leaning {
+  margin-left: auto;
+}
+
+.magic-resource-groups {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.magic-resource-group {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 0 0 auto;
+}
+
+.magic-gold {
+  margin-left: 0;
 }
 </style>
