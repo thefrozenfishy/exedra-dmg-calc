@@ -39,70 +39,71 @@
           @click="toggleMissingAndWhole">
           <span class="resource-summary-label">{{ r }}★</span>
 
-          <!-- Kioku Level -->
-          <div class="resource-summary-section">
-            <span class="resource-summary-section-label">Kioku level</span>
+          <div class="resource-summary-details">
+            <!-- Kioku Level -->
+            <div class="resource-summary-section">
+              <span class="resource-summary-section-label">Kioku level</span>
 
-            <span class="resource-chip">
-              <img :src="`/exedra-dmg-calc/items/exp.png`" alt="Kioku Exp" />
-              {{
-                formatAmount(
-                  rarityKiokuLevelSums[r].exp.current,
-                  rarityKiokuLevelSums[r].exp.max
-                )
-              }}
-            </span>
+              <span class="resource-chip">
+                <img :src="`/exedra-dmg-calc/items/exp.png`" alt="Kioku Exp" />
+                {{
+                  formatAmount(
+                    rarityKiokuLevelSums[r].exp.current,
+                    rarityKiokuLevelSums[r].exp.max
+                  )
+                }}
+              </span>
 
-            <span class="resource-chip">
-              <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
-              {{
-                formatAmount(
-                  rarityKiokuLevelSums[r].gold.current,
-                  rarityKiokuLevelSums[r].gold.max
-                )
-              }}
-            </span>
-          </div>
+              <span class="resource-chip">
+                <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
+                {{
+                  formatAmount(
+                    rarityKiokuLevelSums[r].gold.current,
+                    rarityKiokuLevelSums[r].gold.max
+                  )
+                }}
+              </span>
+            </div>
 
-          <!-- Magic Level -->
-          <div class="resource-summary-section magic-summary-section">
-            <span class="resource-summary-section-label">Magic level</span>
+            <div class="resource-summary-section magic-summary-section">
+              <span class="resource-summary-section-label">Magic level</span>
 
-            <div class="magic-resource-groups">
-              <div class="magic-resource-group">
-                <span v-for="i in [1, 2, 3, 7]" :key="i" class="resource-chip">
-                  <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" />
-                  {{
-                    formatAmount(
-                      rarityMagicLevelSums[r].items.current[i] ?? 0,
-                      rarityMagicLevelSums[r].items.max[i] ?? 0
-                    )
-                  }}
-                </span>
-              </div>
+              <div class="magic-resource-groups">
+                <div class="magic-resource-group">
+                  <span v-for="i in [1, 2, 3, 7]" :key="i" class="resource-chip">
+                    <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" />
+                    {{
+                      formatAmount(
+                        rarityMagicLevelSums[r].items.current[i] ?? 0,
+                        rarityMagicLevelSums[r].items.max[i] ?? 0
+                      )
+                    }}
+                  </span>
+                </div>
 
-              <div class="magic-resource-group">
-                <span v-for="i in [4, 5, 6, 8]" :key="i" class="resource-chip">
-                  <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" />
-                  {{
-                    formatAmount(
-                      rarityMagicLevelSums[r].items.current[i] ?? 0,
-                      rarityMagicLevelSums[r].items.max[i] ?? 0
-                    )
-                  }}
-                </span>
-              </div>
+                <div class="magic-resource-group">
+                  <span v-for="i in [4, 5, 6, 8]" :key="i" class="resource-chip">
+                    <img :src="itemIdxToImg(i)" :alt="`Item idx ${i}`" />
+                    {{
+                      formatAmount(
+                        rarityMagicLevelSums[r].items.current[i] ?? 0,
+                        rarityMagicLevelSums[r].items.max[i] ?? 0
+                      )
+                    }}
+                  </span>
+                </div>
 
-              <div class="magic-resource-group magic-gold">
-                <span class="resource-chip">
-                  <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
-                  {{
-                    formatAmount(
-                      rarityMagicLevelSums[r].gold.current,
-                      rarityMagicLevelSums[r].gold.max
-                    )
-                  }}
-                </span>
+                <div class="magic-resource-group magic-gold">
+                  <span class="resource-chip">
+                    <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
+                    {{
+                      formatAmount(
+                        rarityMagicLevelSums[r].gold.current,
+                        rarityMagicLevelSums[r].gold.max
+                      )
+                    }}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -1078,10 +1079,10 @@ export default defineComponent({
 
 .resource-summary-row {
   display: grid;
-  grid-template-columns: 55px auto minmax(0, 1fr);
+  grid-template-columns: 55px minmax(0, 1fr);
   align-items: center;
   gap: 0.6rem;
-  padding: 0.3rem 0.65rem;
+  padding: 0.4rem 0.65rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -1099,6 +1100,13 @@ export default defineComponent({
   font-weight: 700;
   color: var(--accent-soft);
   text-align: center;
+}
+
+.resource-summary-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
 }
 
 .resource-summary-section {
@@ -1120,10 +1128,6 @@ export default defineComponent({
 
 .magic-summary-section {
   min-width: 0;
-}
-
-.magic-summary-section .magic-resource-groups {
-  flex: 1;
 }
 
 .magic-resource-groups {
