@@ -1334,9 +1334,9 @@ enum Relation {
 
 const legendItems = computed(() => [
     { label: 'You', color: Relation.SELF },
+    { label: 'Favourite', color: Relation.FAVOURITE },
     { label: 'Union member', color: Relation.UNION },
     { label: 'Following', color: Relation.FRIEND },
-    { label: 'Favourite', color: Relation.FAVOURITE },
     { label: 'Other', color: Relation.DEFAULT },
 ])
 
