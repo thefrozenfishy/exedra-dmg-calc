@@ -38,6 +38,7 @@ export interface CrysDiffCharacter {
     magicLvl?: number
     specialLvl?: number,
     ascension?: number,
+    enabled?: boolean,
 }
 
 function buildSubCrysMaps() {
@@ -161,7 +162,7 @@ export function buildCrysImportDiff(characters: Character[], importData: CrysImp
         const specialChanged = importedSpecialLvl != null && !isNaN(importedSpecialLvl) && importedSpecialLvl !== char.specialLvl
         const ascensionChanged = importedAscension != null && !isNaN(importedAscension) && importedAscension !== char.ascension
 
-        if (items.length || kiokuChanged || magicChanged || specialChanged||ascensionChanged) {
+        if (items.length || kiokuChanged || magicChanged || specialChanged||ascensionChanged || !char.enabled) {
             result.push({
                 char,
                 items,
@@ -170,6 +171,7 @@ export function buildCrysImportDiff(characters: Character[], importData: CrysImp
                 magicLvl: importedMagicLvl,
                 specialLvl: importedSpecialLvl,
                 ascension: importedAscension,
+                enabled: char.enabled,
             })
         }
     }
@@ -211,6 +213,9 @@ export function applyCrysImportDiff(
         }
         if (ascension != null && !isNaN(ascension)) {
             updatedChar.ascension = ascension
+        }
+        if (!char.enabled) {
+            updatedChar.enabled = true
         }
 
         updateChar(updatedChar)

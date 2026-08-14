@@ -46,6 +46,22 @@
                         ⚠ equipOrder names not recognized for this character: {{ entry.equipOrderUnmatched.join(", ") }}
                     </div>
 
+                    <label v-if="!entry.char.enabled" class="diff-item"
+                        :class="{ excluded: !selectedKeys.has(`${entry.char.id}-enabled`) }">
+                        <input type="checkbox" class="diff-checkbox"
+                            :checked="selectedKeys.has(`${entry.char.id}-enabled`)"
+                            @change="toggleItem(`${entry.char.id}-enabled`)" />
+                        <div class="diff-content">
+                            <div class="diff-crys-name">Owned</div>
+                            <div class="diff-row">
+                                <span class="diff-label">Owned</span>
+                                <span class="diff-value diff-old">Disabled</span>
+                                <span class="diff-arrow">→</span>
+                                <span class="diff-value diff-new">Enabled</span>
+                            </div>
+                        </div>
+                    </label>
+
                     <label v-if="entry.kiokuLvl !== undefined && entry.kiokuLvl !== entry.char.kiokuLvl"
                         class="diff-item" :class="{ excluded: !selectedKeys.has(`${entry.char.id}-kiokuLvl`) }">
                         <input type="checkbox" class="diff-checkbox"
@@ -196,6 +212,9 @@ function getEntryKeys(entry: CrysDiffCharacter): string[] {
     }
     if (entry.ascension !== undefined && !isNaN(entry.ascension) && entry.ascension !== entry.char.ascension) {
         keys.push(`${entry.char.id}-ascension`)
+    }
+    if (!entry.char.enabled) {
+        keys.push(`${entry.char.id}-enabled`)
     }
     return keys
 }
