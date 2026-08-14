@@ -6,12 +6,16 @@
       <h2 class="section-title">Battle Result</h2>
       <p class="result-line">{{ formatDmg(battleOutput) }}</p>
 
-      <div class="sa-score-row">
+      <div class="sa-score-row" :title="sa_score_title">
         <span class="sa-score-label">Score Attack score</span>
         <span class="sa-score-value">{{ sa_score }}</span>
       </div>
 
       <div class="sa-fields">
+        <label class="field" title="To find check the final score screen, this changes for each difficulty">
+          <span class="field-label">Difficulty Score</span>
+          <input v-model.number="difficulty_score" type="number" />
+        </label>
         <label class="field">
           <span class="field-label">Health remaining (%)</span>
           <input v-model.number="hp_percentage_team" type="number" step="1" max="100" min="0" />
@@ -80,7 +84,7 @@
                   <span class="share-overlay-badge heart">H{{ slot.main.heartphialLvl }}</span>
                   <span class="share-overlay-badge magic">ML{{ slot.main.magicLvl }}</span>
                   <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">SP{{ slot.main.specialLvl
-                    }}</span>
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -334,6 +338,7 @@ const attackerHealth = useSetting("attackerHealth", 100)
 const scoreMultiplier = useSetting("scoreMultiplier", 35)
 const turns = useSetting("turns", 3)
 const hp_percentage_team = useSetting("hp_percentage_team", 20)
+const difficulty_score = useSetting("difficulty_score", 6_000_000)
 const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
 
 const alimentRef = ref<InstanceType<typeof AlimentToggler> | null>(null)
@@ -388,7 +393,11 @@ const shareOptionsForTeamCard = () => ({
 const sortEffectType = (effects: object) => Object.fromEntries(Object.entries(effects).sort(([a], [b]) => a.localeCompare(b)))
 const sa_score = computed(() => {
   if (typeof battleOutput.value === 'string') return "unknown"
-  return (800_000 + Number((20 * ((battleOutput.value[0] as number) / scoreMultiplier.value + (90000 - 5000 * turns.value) + 15000 * hp_percentage_team.value / 100)).toFixed(0))).toLocaleString()
+  return (difficulty_score.value + Number((20 * ((battleOutput.value[0] as number) / scoreMultiplier.value + (90000 - 5000 * turns.value) + 15000 * hp_percentage_team.value / 100)).toFixed(0))).toLocaleString()
+})
+const sa_score_title = computed(() => {
+  if (typeof battleOutput.value === 'string') return "unknown"
+  return `${difficulty_score.value} + 20 * (${battleOutput.value[0]} / ${scoreMultiplier.value} + (90000 - 5000 * ${turns.value}) + 15000 * 0.${hp_percentage_team.value})`
 })
 
 const formatDmg = (out: string | [number, number, number, any[]]) =>
