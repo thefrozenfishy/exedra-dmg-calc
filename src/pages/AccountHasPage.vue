@@ -132,9 +132,12 @@
                                         : ''">{{ getCrysCount(ch, true) }}</div>
                                 </template>
                                 <div class="dupe-badge level-badge editable"
+                                    :class="{ 'editing-dupe': isEditing(ch, 'dupes') }"
                                     v-if="showDupes && (chars as any).label === 'A5'"
                                     @click.stop="startEdit(ch, 'dupes', $event)">
                                     <template v-if="isEditing(ch, 'dupes')">
+                                        <button type="button" class="dupe-increment-btn" @mousedown.prevent
+                                            @click.stop="editValue = (editValue ?? 0) + 1">+</button>
                                         <input type="number" v-model.number="editValue" @click.stop
                                             @blur="commitEdit(ch, 'dupes')"
                                             @keydown.enter.prevent="commitEdit(ch, 'dupes')" />
@@ -266,7 +269,8 @@
             <span class="filters-heading">About</span>
             <p>
                 You can edit, export, and import your kioku on the <b>Kioku Setup</b> page, or edit here directly.<br />
-                Red borders indicate limited characters. For crys counter, red indicates some crys are missing, pink that some are missing but the elemental
+                Red borders indicate limited characters. For crys counter, red indicates some crys are missing,
+                pink that some are missing but the elemental
                 crys has been collected, and green that all on-element crys have been collected.
                 Maxed out kioku are given a golden glow to indicate their completeness.
                 <template v-if="showOffElementalOnesOption">Truly perfected kioku with all crys, including
@@ -1103,6 +1107,38 @@ td {
     left: 80%;
     top: 0;
     opacity: 1 !important;
+}
+
+.dupe-badge.editing-dupe {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    width: auto;
+    padding: 1px 3px;
+    border-radius: 8px;
+}
+
+.dupe-increment-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+    font-size: 0.65rem;
+    line-height: 1;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.dupe-increment-btn:hover {
+    background: var(--accent-glow-strong);
+    border-color: var(--accent);
+    color: var(--accent);
 }
 
 .crys-count-badge {
