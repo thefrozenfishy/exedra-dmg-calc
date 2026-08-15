@@ -2,133 +2,9 @@ import { ScoreAttackKioku } from "./ScoreAttackKioku";
 import { EnemyTargetTypes, Enemy } from "../types/EnemyTypes";
 import { isActiveConditionRelevantForScoreAttack, isStartCondRelevantForScoreAttack } from "./BattleConditionParser";
 import { ActiveSkill, SkillDetail, skillDetailId } from "../types/KiokuTypes";
-import { Aliment, elementMap, roleMap } from "../types/enums";
-
+import { Aliment, elementMap, scoreAttackRelevantBuffsAndDebuffs, roleMap, otherBuffsAndDebuffs } from "../types/enums";
 
 const DPS_IDX = 2;
-
-export const knownBoosts = {
-    DWN_DEF_ACCUM_RATIO: "Accumulated DEFf%-",
-    DWN_DEF_RATIO: "DEF%-",
-    DWN_ELEMENT_RESIST_ACCUM_RATIO: "Accumulated Elemental Resistance-",
-    DWN_ELEMENT_RESIST_RATIO: "Elemental Resistance-",
-    FLAT_ATK: "Flat ATK",
-    UP_AIM_RCV_DMG_RATIO: "Element Specific DMG Taken%+",
-    UP_ATK_ACCUM_RATIO: "Accumulated ATK%+",
-    UP_ATK_FIXED: "ATK+",
-    UP_ATK_RATIO: "ATK%+",
-    UP_ATK_CONSUME_RATIO: "One Turn ATK%+",
-    UP_CTD_ACCUM_RATIO: "Accumulated Crit Damage%+",
-    UP_CTD_FIXED: "Crit Damage+",
-    UP_CTD_RATIO: "Crit Damage%+",
-    UP_CTR_ACCUM_RATIO: "Accumulated Crit Rate%+",
-    UP_CTR_FIXED: "Crit Rate+",
-    UP_CTR_RATIO: "Crit Rate%+",
-    UP_DEF_ACCUM_RATIO: "Accumulated DEF%+",
-    UP_DEF_FIXED: "Flat DEF",
-    UP_DEF_RATIO: "DEF%+",
-    ADDITIONAL_DAMAGE: "Additional Dmg",
-    UP_ELEMENT_DMG_RATE_RATIO: "Elemental Dmg Dealt%+",
-    UP_GIV_DMG_RATIO: "DMG Dealt%+",
-    UP_GIV_DMG_ACCUM_RATIO: "Accumulated DMG Dealt%+",
-    UP_GIV_SLIP_DMG_RATIO: "DOT DMG%+",
-    UP_RCV_CTR_RATIO: "Hit Crit Rate%+",
-    UP_RCV_DMG_RATIO: "DMG Taken%+",
-    UP_WEAK_ELEMENT_DMG_RATIO: "Elemental Dmg%+",
-    WEAKNESS: "Weakness Count",
-};
-
-const skippable = new Set([
-    "ADD_BUFF_TURN_IMM",
-    "ADD_BUFF_TURN",
-    "ADD_DEBUFF_TURN_IMM",
-    "ADD_DEBUFF_TURN",
-    "ADDITIONAL_SKILL_ACT",
-    "ADDITIONAL_TURN_UNIT_ACT",
-    "BARRIER",
-    "BLEED_ATK",
-    "BLEED_DEF",
-    "BLEED_HP",
-    "BURN_ATK",
-    "BURN_DEF",
-    "BURN_HP",
-    "CHARGE",
-    "CONSUME_CHARGE_POINT",
-    "CONSUME_COUNT_POINT",
-    "CONSUME_ZONE_STACK",
-    "CONTINUOUS_RECOVERY",
-    "COUNT",
-    "CURSE_ATK",
-    "CURSE_DEF",
-    "CURSE_HP",
-    "CUTOUT",
-    "DMG_ATK",
-    "DMG_DEF",
-    "DMG_RANDOM",
-    "DOWN_SPD_RATIO",
-    "DWN_ATK_RATIO",
-    "DWN_RCV_DMG_RATIO",
-    "DWN_SPD_ACCUM_RATIO",
-    "DWN_SPD_RATIO",
-    "GAIN_CHARGE_POINT",
-    "GAIN_COUNT_POINT",
-    "GAIN_EP_FIXED",
-    "GAIN_EP_RATIO",
-    "GAIN_SP_FIXED",
-    "GAIN_ZONE_STACK",
-    "HASTE",
-    "IMM_SLIP_DMG",
-    "POISON_ATK",
-    "POISON_DEF",
-    "POISON_HP",
-    "RE_ACTION_TURN_UNIT_ACT",
-    "RECOVERY_HP_ATK",
-    "RECOVERY_HP",
-    "REFLECTION_RATIO",
-    "REGAIN_ATK",
-    "REMOVE_ALL_ABNORMAL",
-    "REMOVE_ALL_BUFF",
-    "REMOVE_ALL_DEBUFF",
-    "RESET_UNIQUE_BUFF",
-    "RESET_UNIQUE_DEBUFF",
-    "SHIELD",
-    "SLOW",
-    "STUN",
-    "SWITCH_SKILL",
-    "TSUBAME_CORE",
-    "TSUBAME_LINK",
-    "TSUBAME",
-    "UNIQUE_10030301",
-    "UNIQUE_10070201",
-    "UNIQUE_BUFF_ACCUM",
-    "UNIQUE_BUFF",
-    "UNIQUE_DEBUFF_ACCUM",
-    "UNIQUE_DEBUFF",
-    "UNIQUE_ZONE",
-    "UP_ABNORMAL_HIT_RATE_RATIO",
-    "UP_BREAK_DAMAGE_RECEIVE_RATIO",
-    "UP_BREAK_EFFECT",
-    "UP_BUFF_EFFECT_VALUE",
-    "UP_DEBUFF_EFFECT_VALUE",
-    "DWN_BUFF_EFFECT_VALUE",
-    "DWN_DEBUFF_EFFECT_VALUE",
-    "UP_EFFECT_HIT_RATE_RATIO",
-    "UP_EFFECT_PARRY_RATE_RATIO",
-    "UP_EP_RECOVER_RATE_RATIO",
-    "UP_GIV_BREAK_POINT_DMG_FIXED",
-    "UP_GIV_VORTEX_DMG_RATIO",
-    "UP_HATE",
-    "UP_HEAL_RATE_RATIO",
-    "UP_HP_FIXED",
-    "UP_HP_RATIO",
-    "UP_RCV_BREAK_POINT_DMG_RATIO",
-    "UP_SPD_ACCUM_RATIO",
-    "UP_SPD_FIXED",
-    "UP_SPD_RATIO",
-    "VORTEX_ATK",
-    "ZONE_EXPAND",
-    "ZONE_STACK",
-]);
 
 const bannedEffects: Set<string> = new Set([
     // Sakurako passive is listed multiple places
@@ -355,7 +231,7 @@ export class ScoreAttackTeam {
 
             for (const detail of sourceKioku.effects) {
                 const baseEff = this.reduceEffect(detail.abilityEffectType)
-                if (skippable.has(baseEff)) continue;
+                if ((baseEff in otherBuffsAndDebuffs)) continue;
                 if (effectIsBanned(detail)) continue;
                 if (
                     detail.startConditionSetIdCsv
@@ -471,11 +347,11 @@ export class ScoreAttackTeam {
 
                 console.debug(
                     `Enemy[${i}] debuff pool`,
-                    Object.fromEntries(Object.entries(this.debuffPools[i]).filter(([key]) => key in knownBoosts)),
+                    Object.fromEntries(Object.entries(this.debuffPools[i]).filter(([key]) => key in scoreAttackRelevantBuffsAndDebuffs)),
                 );
                 console.debug(
                     `Ally[${i}] buff pool`,
-                    Object.fromEntries(Object.entries(this.allyContexts[i].effects).filter(([key]) => key in knownBoosts)),
+                    Object.fromEntries(Object.entries(this.allyContexts[i].effects).filter(([key]) => key in scoreAttackRelevantBuffsAndDebuffs)),
                 );
             }
         }
@@ -485,7 +361,7 @@ export class ScoreAttackTeam {
             ...this.allyContexts.flatMap(ctx => Object.keys(ctx.effects)),
         ];
         const leftover = [...new Set(allPoolKeys)].filter(
-            key => !(key in knownBoosts) && !skippable.has(key),
+            key => !(key in scoreAttackRelevantBuffsAndDebuffs) && !(key in otherBuffsAndDebuffs),
         );
         if (leftover.length > 0) {
             throw new Error(`Found unknown effects: ${leftover.join(", ")}`);

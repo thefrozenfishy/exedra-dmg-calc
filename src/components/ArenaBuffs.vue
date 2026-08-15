@@ -3,7 +3,7 @@
     <h4>Stage Buffs <span class="arena-buffs-subtitle">(applied to all units)</span></h4>
     <div v-for="(entry, idx) in arenaEffects" :key="idx" class="arena-buff-row">
       <select :value="entry.type" @change="e => updateArenaEffect(idx, 'type', (e.target as HTMLSelectElement).value)">
-        <option v-for="(label, key) in knownBoosts" :key="key" :value="key">
+        <option v-for="(label, key) in scoreAttackRelevantBuffsAndDebuffs" :key="key" :value="key">
           {{ key }} ({{ label }})
         </option>
       </select>
@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import { knownBoosts } from '../models/ScoreAttackTeam'
+import { scoreAttackRelevantBuffsAndDebuffs } from '../types/enums';
 import { useSetting } from '../store/settingsStore'
 
 const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
@@ -27,7 +27,7 @@ function updateArenaEffect(idx: number, field: 'type' | 'value', val: string | n
 }
 
 function addArenaEffect() {
-  arenaEffects.value = [...arenaEffects.value, { type: Object.keys(knownBoosts)[0], value: 0 }]
+  arenaEffects.value = [...arenaEffects.value, { type: Object.keys(scoreAttackRelevantBuffsAndDebuffs)[0], value: 0 }]
 }
 
 function removeArenaEffect(idx: number) {

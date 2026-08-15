@@ -21,15 +21,17 @@
             <span class="derived-value">{{ stat.value ?? '…' }}</span>
           </div>
         </div>
-        <span v-for="item in itemCosts" :key="item.idx" class="resource-chip" :title="formatTitle()"
-          @click="toggleMissingAndWhole">
-          <img :src="itemIdxToImg(item.idx, elementName)" :alt="`Item idx ${item.idx}`" />
-          {{ formatAmount(item.current, item.max) }}
-        </span>
-        <span class="resource-chip" :title="formatTitle()" @click="toggleMissingAndWhole">
-          <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
-          {{ formatAmount(ascensionCost.gold.current, ascensionCost.gold.max) }}
-        </span>
+        <template v-if="showResourceCosts">
+          <span v-for="item in itemCosts" :key="item.idx" class="resource-chip" :title="formatTitle()"
+            @click="toggleMissingAndWhole">
+            <img :src="itemIdxToImg(item.idx, elementName)" :alt="`Item idx ${item.idx}`" />
+            {{ formatAmount(item.current, item.max) }}
+          </span>
+          <span class="resource-chip" :title="formatTitle()" @click="toggleMissingAndWhole">
+            <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
+            {{ formatAmount(ascensionCost.gold.current, ascensionCost.gold.max) }}
+          </span>
+        </template>
       </div>
     </div>
 
@@ -76,6 +78,10 @@ export default defineComponent({
     onToggleE5: {
       type: Function as PropType<() => void>,
       default: () => { },
+    },
+    showResourceCosts: {
+      type: Boolean,
+      default: true,
     },
   },
   setup(props) {

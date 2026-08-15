@@ -6,9 +6,15 @@
       <label class="chip" :class="{ active: showE5ForAll }">
         <input type="checkbox" v-model="showE5ForAll" /> Show E5 effect for all portraits
       </label>
+      <label class="chip" :class="{ active: showPerPortraitResourceCosts }">
+        <input type="checkbox" v-model="showPerPortraitResourceCosts" /> Per portrait resource costs
+      </label>
+      <label class="chip" :class="{ active: showResourceCosts }">
+        <input type="checkbox" v-model="showResourceCosts" /> Total resource costs
+      </label>
     </section>
 
-    <section class="resource-summary card">
+    <section v-if="showResourceCosts" class="resource-summary card">
       <span class="filters-heading">Resource Totals ({{ e5Count }} marked E5)</span>
 
       <div v-for="r in ascendableRarities" :key="r" class="resource-summary-row" @click="toggleMissingAndWhole">
@@ -24,11 +30,6 @@
             {{ formatAmount(rarityTotals[r].gold.current, rarityTotals[r].gold.max) }}
           </span>
         </div>
-      </div>
-
-      <div v-if="nonAscendableCount > 0" class="resource-summary-row resource-summary-row--muted">
-        <span class="resource-summary-label">Other ({{ nonAscendableCount }})</span>
-        <span class="no-enchantment">No enchantment cost for these rarities</span>
       </div>
     </section>
 
@@ -77,7 +78,8 @@
       <div v-show="!collapsedGroups[groupKey]" class="role-body">
         <PortraitCard v-for="portrait in list" :key="portrait.cardMstId" :portrait="portrait"
           :level="effectiveLevel(portrait)" :is-e5="isE5(portrait)" :on-toggle-e5="() => toggleE5(portrait)"
-          :format-amount="formatAmount" :toggle-missing-and-whole="toggleMissingAndWhole" :format-title="formatTitle" />
+          :show-resource-costs="showPerPortraitResourceCosts" :format-amount="formatAmount"
+          :toggle-missing-and-whole="toggleMissingAndWhole" :format-title="formatTitle" />
       </div>
     </div>
   </div>
@@ -87,12 +89,14 @@
 import { defineComponent, computed } from 'vue'
 import PortraitCard from '../components/PortraitCard.vue'
 import { portraits as portraitData, portraitEnchantmentCosts } from '../utils/helpers'
-import { KiokuConstants, Portrait, portraitMaxLimitBreak, getPortraitEffectType } from '../types/KiokuTypes'
+import { Portrait, portraitMaxLimitBreak, getPortraitEffectType } from '../types/KiokuTypes'
 import { useSetting } from '../store/settingsStore.js'
+import { otherBuffsAndDebuffs, scoreAttackRelevantBuffsAndDebuffs } from '../types/enums.js'
 
 export default defineComponent({
   components: { PortraitCard },
   setup() {
+    // Master portrait data only — no per-portrait saved state, everyone has the same set.
     const allPortraits = computed<Portrait[]>(() =>
       Object.values(portraitData).filter((p): p is Portrait => !!p?.name)
     )
@@ -112,14 +116,14 @@ export default defineComponent({
 
     const e5Count = computed(() => allPortraits.value.filter(isE5).length)
 
+    const showResourceCosts = useSetting('portraitShowResourceCosts', true)
+    const showPerPortraitResourceCosts = useSetting('portraitShowPerPortraitResourceCosts', true)
+
     const sortBy = useSetting<'name' | 'rarity' | 'atk' | 'def' | 'hp'>(
       'portraitSortBy',
       'name'
     )
-    const groupBy = useSetting<'none' | 'effect'>(
-      'groupPortraitsBy',
-      'effect'
-    )
+    const groupBy = useSetting<'none' | 'effect'>('groupPortraitsBy', 'effect')
 
     const bigNumberDisplayMode = useSetting<'shortHas' | 'shortMiss' | 'longHas' | 'longMiss' | 'percentage'>(
       "portraitBigNumberDisplayMode",
@@ -169,9 +173,6 @@ export default defineComponent({
       }
     }
 
-    // Matches TeamSetupPage.vue's itemIdxToImg. Summary chips aren't tied to one
-    // portrait's element, so this uses the default ("light") bucket — adjust if your
-    // enchantment items are actually shared/non-elemental icons rather than per-element.
     function itemIdxToImg(idx: number) {
       return `/exedra-dmg-calc/items/light/${idx}.png`
     }
@@ -192,17 +193,17 @@ export default defineComponent({
     }
 
     const groupedPortraits = computed(() => {
-      if (groupBy.value === 'none') {
-        return { All: sortPortraits(allPortraits.value) }
-      }
-
       if (groupBy.value === 'effect') {
         const groups: Record<string, { portrait: Portrait, value: number }[]> = {}
 
         allPortraits.value.forEach(p => {
           const effects = getPortraitEffectType(p, effectiveLevel(p))
           Object.entries(effects).forEach(([effectType, value]) => {
-            (groups[effectType] ??= []).push({ portrait: p, value })
+            (groups[
+              scoreAttackRelevantBuffsAndDebuffs[effectType]
+              ?? otherBuffsAndDebuffs[effectType]
+              ?? effectType
+            ] ??= []).push({ portrait: p, value })
           })
         })
 
@@ -215,19 +216,7 @@ export default defineComponent({
 
         return sortedGroups
       }
-
-      const groups: Record<string, Portrait[]> = {}
-      allPortraits.value.forEach(p => {
-        const group = String(p.element);
-        (groups[group] ??= []).push(p)
-      })
-
-      const sortedGroups: Record<string, Portrait[]> = {}
-      Object.keys(groups).sort((a, b) => a.localeCompare(b)).forEach(group => {
-        sortedGroups[group] = sortPortraits(groups[group])
-      })
-
-      return sortedGroups
+      return { All: sortPortraits(allPortraits.value) }
     })
 
     // Only rarities present as keys in portraitEnchantmentCosts actually ascend.
@@ -243,15 +232,11 @@ export default defineComponent({
       return counts
     })
 
-    const nonAscendableCount = computed(() =>
-      allPortraits.value.filter(p => !portraitEnchantmentCosts[p.rarity]).length
-    )
-
     function getRarityEnchantmentCost(rarity: number, level: number) {
       const table = portraitEnchantmentCosts[rarity]
-      const currLvl = Math.min(Math.max(level ?? 0, 0), KiokuConstants.maxAscension)
+      const currLvl = Math.min(Math.max(level ?? 0, 0), portraitMaxLimitBreak)
       const current = table[currLvl] ?? table[0]
-      const max = table[KiokuConstants.maxAscension] ?? current
+      const max = table[portraitMaxLimitBreak] ?? current
 
       return {
         item1: { current: current.item1, max: max.item1 },
@@ -299,6 +284,8 @@ export default defineComponent({
       toggleE5,
       effectiveLevel,
       e5Count,
+      showResourceCosts,
+      showPerPortraitResourceCosts,
       collapsedGroups,
       toggleGroup,
       groupedPortraits,
@@ -306,7 +293,6 @@ export default defineComponent({
       groupBy,
       ascendableRarities,
       countByRarity,
-      nonAscendableCount,
       rarityTotals,
       itemIdxToImg,
       toggleMissingAndWhole,
