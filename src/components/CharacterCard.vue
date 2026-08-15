@@ -57,6 +57,16 @@
                 {{ formatAmount(magicLevelCost.gold.current, magicLevelCost.gold.max) }}
               </span>
             </div>
+            <div v-if="character.rarity !== 3" class="resource-row">
+              <span v-for="i in [1, 2, 3]" :key="i" class="resource-chip" @click="toggleMissingAndWhole">
+                <img :src="specialItemIdxToImg(i)" :alt="`Special item idx ${i}`" />
+                {{ formatAmount(specialLevelCost.items.current[i] ?? 0, specialLevelCost.items.max[i] ?? 0) }}
+              </span>
+              <span class="resource-chip" @click="toggleMissingAndWhole">
+                <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
+                {{ formatAmount(specialLevelCost.gold.current, specialLevelCost.gold.max) }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -93,7 +103,7 @@ import { useCharacterStore } from '../store/characterStore'
 import PortraitSelector from './PortraitSelector.vue'
 import CrysSelector from './CrysSelector.vue'
 import { Character, KiokuConstants } from '../types/KiokuTypes'
-import { crystalises, kiokuLevelCosts, magicLevelCosts } from '../utils/helpers'
+import { crystalises, kiokuLevelCosts, magicLevelCosts, specialUpgradeCosts } from '../utils/helpers'
 import { LuxMagica } from '../types/enums'
 import { getCachedStats, scheduleBackfill } from '../utils/statsBackfill'
 
@@ -192,8 +202,27 @@ export default defineComponent({
       }
     })
 
+    const specialLevelCost = computed(() => {
+      const currLvl = Math.min(Math.max(props.character.specialLvl ?? 1, 1), KiokuConstants.maxSpecialLvl - 1)
+      const rarityCosts = specialUpgradeCosts[props.character.rarity] ?? specialUpgradeCosts[4]
+      const current = rarityCosts[currLvl] ?? rarityCosts[4]
+      const max = rarityCosts[KiokuConstants.maxSpecialLvl - 1] ?? current
+
+      return {
+        gold: { current: current.gold, max: max.gold },
+        items: {
+          current: { 1: current.item1, 2: current.item2, 3: current.item3 },
+          max: { 1: max.item1, 2: max.item2, 3: max.item3 },
+        },
+      }
+    })
+
     function itemIdxToImg(idx: number) {
       return `/exedra-dmg-calc/items/${props.character.element?.toLowerCase()}/${idx}.png`
+    }
+
+    function specialItemIdxToImg(idx: number) {
+      return `/exedra-dmg-calc/items/specials/${idx}.png`
     }
 
     const imgSrc = computed(
@@ -262,7 +291,9 @@ export default defineComponent({
       derivedStats,
       kiokuLevelCost,
       magicLevelCost,
+      specialLevelCost,
       itemIdxToImg,
+      specialItemIdxToImg,
       imgSrc,
       isVisible,
       toggleCharacter,

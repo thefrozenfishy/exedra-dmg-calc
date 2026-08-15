@@ -112,6 +112,30 @@
                 </div>
               </div>
             </div>
+
+            <div v-if="r !== 3" class="resource-summary-section">
+              <span class="resource-summary-section-label">Special level</span>
+
+              <span v-for="i in [1, 2, 3]" :key="i" class="resource-chip" :title="formatTitle()">
+                <img :src="specialItemIdxToImg(i)" :alt="`Special item idx ${i}`" />
+                {{
+                  formatAmount(
+                    raritySpecialLevelSums[r].items.current[i] ?? 0,
+                    raritySpecialLevelSums[r].items.max[i] ?? 0
+                  )
+                }}
+              </span>
+
+              <span class="resource-chip" :title="formatTitle()">
+                <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
+                {{
+                  formatAmount(
+                    raritySpecialLevelSums[r].gold.current,
+                    raritySpecialLevelSums[r].gold.max
+                  )
+                }}
+              </span>
+            </div>
           </div>
         </div>
       </template>
@@ -317,6 +341,25 @@
               </div>
             </div>
           </span>
+          <span class="role-resources" @click.stop="toggleMissingAndWhole">
+            <span class="role-resource-label">Special level</span>
+            <span v-for="i in [1, 2, 3]" :key="i" class="resource-chip" :title="formatTitle()">
+              <img :src="specialItemIdxToImg(i)" :alt="`Special item idx ${i}`" /> {{
+                formatAmount(
+                  tabSpecialLevelResourceSums[roleElementAll].items.current[i],
+                  tabSpecialLevelResourceSums[roleElementAll].items.max[i]
+                )
+              }}
+            </span>
+            <span class="resource-chip" :title="formatTitle()">
+              <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" /> {{
+                formatAmount(
+                  tabSpecialLevelResourceSums[roleElementAll].gold.current,
+                  tabSpecialLevelResourceSums[roleElementAll].gold.max
+                )
+              }}
+            </span>
+          </span>
         </div>
         <span class="role-count">{{ visibleCountFor(chars) }} / {{ chars.length }}</span>
       </button>
@@ -344,7 +387,7 @@ import { useSetting } from '../store/settingsStore.js'
 import { FinalTeam } from '../types/BestTeamTypes.js'
 import { KiokuElement, LuxMagica, maxPlayerLevel } from '../types/enums.js'
 import { getCachedStats, scheduleBackfill } from '../utils/statsBackfill'
-import { kiokuLevelCosts, magicLevelCosts, playerLevelCosts } from '../utils/helpers'
+import { kiokuLevelCosts, magicLevelCosts, playerLevelCosts, specialUpgradeCosts } from '../utils/helpers'
 
 export default defineComponent({
   components: { CharacterCard, TeamRow },
@@ -677,6 +720,50 @@ export default defineComponent({
       3: sumMagicLevelResources(store.characters.filter(c => c.rarity === 3 && isCharVisible(c))),
     }))
 
+    function getSpecialLevelCost(char: Character) {
+      const currLvl = Math.min(Math.max(char.specialLvl ?? 1, 1), KiokuConstants.maxSpecialLvl - 1)
+      const rarityCosts = specialUpgradeCosts[char.rarity] ?? specialUpgradeCosts[4]
+      const current = rarityCosts[currLvl] ?? rarityCosts[4]
+      const max = rarityCosts[KiokuConstants.maxSpecialLvl - 1] ?? current
+
+      return {
+        gold: { current: current.gold, max: max.gold },
+        items: {
+          current: { 1: current.item1, 2: current.item2, 3: current.item3 },
+          max: { 1: max.item1, 2: max.item2, 3: max.item3 },
+        },
+      }
+    }
+
+    function sumSpecialLevelResources(chars: Character[]) {
+      return chars.reduce((sum, c) => {
+        const cost = getSpecialLevelCost(c)
+        sum.items.current = addRecords(sum.items.current, cost.items.current)
+        sum.items.max = addRecords(sum.items.max, cost.items.max)
+        sum.gold.current += cost.gold.current
+        sum.gold.max += cost.gold.max
+        return sum
+      }, { items: { current: {} as Record<number, number>, max: {} as Record<number, number> }, gold: { current: 0, max: 0 } })
+    }
+
+    const tabSpecialLevelResourceSums = computed(() => {
+      const sums: Record<string, ReturnType<typeof sumSpecialLevelResources>> = {}
+      for (const [role, chars] of Object.entries(groupedCharacters.value)) {
+        sums[role] = sumSpecialLevelResources(chars.filter(isCharVisible))
+      }
+      return sums
+    })
+
+    const raritySpecialLevelSums = computed(() => ({
+      5: sumSpecialLevelResources(store.characters.filter(c => c.rarity === 5 && isCharVisible(c))),
+      4: sumSpecialLevelResources(store.characters.filter(c => c.rarity === 4 && isCharVisible(c))),
+      3: sumSpecialLevelResources(store.characters.filter(c => c.rarity === 3 && isCharVisible(c))),
+    }))
+
+    function specialItemIdxToImg(idx: number) {
+      return `/exedra-dmg-calc/items/specials/${idx}.png`
+    }
+
     const stats = [
       { key: 'ascension', label: 'Ascension', min: 0, max: KiokuConstants.maxAscension },
       { key: 'kiokuLvl', label: 'Kioku Lvl', min: 1, max: KiokuConstants.maxKiokuLvl },
@@ -756,9 +843,12 @@ export default defineComponent({
       formatTitle,
       tabKiokuLevelResourceSums,
       tabMagicLevelResourceSums,
+      tabSpecialLevelResourceSums,
       rarityKiokuLevelSums,
       rarityMagicLevelSums,
+      raritySpecialLevelSums,
       itemIdxToImg,
+      specialItemIdxToImg,
     }
   },
 })
