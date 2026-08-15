@@ -62,9 +62,23 @@
           Effect
         </label>
       </div>
+
+      <div class="group-by-options">
+        <span class="filter-group-label">View</span>
+
+        <label class="chip" :class="{ active: viewMode === 'list' }">
+          <input type="radio" name="view-mode" value="list" v-model="viewMode" />
+          List
+        </label>
+
+        <label class="chip" :class="{ active: viewMode === 'grid' }">
+          <input type="radio" name="view-mode" value="grid" v-model="viewMode" />
+          Grid
+        </label>
+      </div>
     </section>
 
-    <div class="list-header">
+    <div v-if="viewMode === 'list'" class="list-header">
       <span>Image</span>
       <span>Portrait</span>
       <span>Stats · Cost</span>
@@ -79,11 +93,18 @@
         <span class="role-count">{{ list.length }}</span>
       </button>
 
-      <div v-show="!collapsedGroups[groupKey]" class="role-body">
-        <PortraitCard v-for="portrait in list" :key="portrait.cardMstId" :portrait="portrait"
-          :level="effectiveLevel(portrait)" :is-e5="isE5(portrait)" :on-toggle-e5="() => toggleE5(portrait)"
-          :show-resource-costs="showPerPortraitResourceCosts" :format-amount="formatAmount"
-          :toggle-missing-and-whole="toggleMissingAndWhole" :format-title="formatTitle" />
+      <div v-show="!collapsedGroups[groupKey]">
+        <div v-if="viewMode === 'list'" class="role-body">
+          <PortraitCard v-for="portrait in list" :key="portrait.cardMstId" :portrait="portrait"
+            :level="effectiveLevel(portrait)" :is-e5="isE5(portrait)" :on-toggle-e5="() => toggleE5(portrait)"
+            :show-resource-costs="showPerPortraitResourceCosts" :format-amount="formatAmount"
+            :toggle-missing-and-whole="toggleMissingAndWhole" :format-title="formatTitle" />
+        </div>
+
+        <div v-else class="role-body grid-body">
+          <PortraitGridCard v-for="portrait in list" :key="portrait.cardMstId" :portrait="portrait"
+            :level="effectiveLevel(portrait)" />
+        </div>
       </div>
     </div>
   </div>
@@ -92,15 +113,17 @@
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
 import PortraitCard from '../components/PortraitCard.vue'
+import PortraitGridCard from '../components/PortraitGridCard.vue'
 import { portraits as portraitData, portraitEnchantmentCosts } from '../utils/helpers'
 import { Portrait, portraitMaxLimitBreak, getPortraitEffectType } from '../types/KiokuTypes'
 import { useSetting } from '../store/settingsStore.js'
 import { otherBuffsAndDebuffs, scoreAttackRelevantBuffsAndDebuffs } from '../types/enums.js'
 
 export default defineComponent({
-  components: { PortraitCard },
+  components: { PortraitCard, PortraitGridCard },
   setup() {
     const showRarity4 = useSetting<boolean>('showPortraitRarity4', true)
+    const viewMode = useSetting<'list' | 'grid'>('portraitViewMode', 'list')
 
     const allPortraits = computed<Portrait[]>(() =>
       Object.values(portraitData).filter(
@@ -286,6 +309,7 @@ export default defineComponent({
     return {
       allPortraits,
       showRarity4,
+      viewMode,
       showE5ForAll,
       isE5,
       toggleE5,
@@ -665,6 +689,13 @@ export default defineComponent({
   border: 1px solid var(--border);
   border-top: none;
   border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+}
+
+.grid-body {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  padding: 0.75rem;
 }
 
 .empty-role {
