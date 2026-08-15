@@ -109,7 +109,7 @@ export default defineComponent({
     )
 
     const portraitE5 = useSetting<Record<number, boolean>>('portraitE5States', {})
-    const showE5ForAll = useSetting<boolean>('showE5ForAllPortraits', false)
+    const showE5ForAll = useSetting<boolean>('showE5ForAllPortraits', true)
 
     function isE5(p: Portrait) {
       return !!portraitE5.value[p.cardMstId]
@@ -128,7 +128,7 @@ export default defineComponent({
 
     const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp'>(
       'portraitSortBy',
-      'name'
+      'atk'
     )
     const groupBy = useSetting<'none' | 'effect'>('groupPortraitsBy', 'effect')
 
