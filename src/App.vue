@@ -44,6 +44,7 @@ const group1Paths = [
   '/my-kioku',
   '/heartphial',
   '/character-crys',
+  '/portraits',
   '/kioku-grid',
 ].filter(Boolean)
 const group2Paths = [

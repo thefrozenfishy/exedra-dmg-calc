@@ -1,18 +1,19 @@
-import selectionAbilityJson from '../assets/base_data/getSelectionAbilityMstList.json';
-import portraitsJson from '../assets/base_data/getCardMstList.json';
-import portraitLevelsJson from '../assets/base_data/getCardLimitBreakMstList.json';
-import passiveDetailsJson from '../assets/base_data/getPassiveSkillDetailMstList.json';
-import skillDetailsJson from '../assets/base_data/getSkillDetailMstList.json';
-import styleParamUpJson from '../assets/base_data/getStyleParamUpMstList.json';
-import styleParamUpEffectJson from '../assets/base_data/getStyleParamUpEffectMstList.json';
-import characterHeartParamUpGroupJson from '../assets/base_data/getCharacterHeartParamUpGroupMstList.json';
 import characterHeartJson from '../assets/base_data/getCharacterHeartMstList.json';
 import characterHeartLevelUpJson from '../assets/base_data/getCharacterHeartLevelUpMstList.json';
-import kiokuDataJson from '../assets/base_data/kioku_data.json';
-import questStageJson from '../assets/base_data/getQuestStageMstList.json';
-import questEnemyAppearanceJson from '../assets/base_data/getQuestEnemyAppearanceMstList.json';
+import characterHeartParamUpGroupJson from '../assets/base_data/getCharacterHeartParamUpGroupMstList.json';
 import configJson from '../assets/base_data/get_config.json'
+import getSkillLevelUpConditionJson from '../assets/base_data/getSkillLevelUpConditionMstList.json'
+import kiokuDataJson from '../assets/base_data/kioku_data.json';
+import passiveDetailsJson from '../assets/base_data/getPassiveSkillDetailMstList.json';
+import portraitLevelsJson from '../assets/base_data/getCardLimitBreakMstList.json';
+import portraitsJson from '../assets/base_data/getCardMstList.json';
+import questEnemyAppearanceJson from '../assets/base_data/getQuestEnemyAppearanceMstList.json';
+import questStageJson from '../assets/base_data/getQuestStageMstList.json';
+import selectionAbilityJson from '../assets/base_data/getSelectionAbilityMstList.json';
+import skillDetailsJson from '../assets/base_data/getSkillDetailMstList.json';
 import styleParamUpCostJson from '../assets/base_data/getStyleParamUpCostMstList.json'
+import styleParamUpEffectJson from '../assets/base_data/getStyleParamUpEffectMstList.json';
+import styleParamUpJson from '../assets/base_data/getStyleParamUpMstList.json';
 import userLevelUpJson from '../assets/base_data/getUserLevelUpMstList.json'
 import { Portrait, CrystalisData, KiokuData, PortraitLvlData, StyleParamUpEffect, CharacterHeart, CharacterHeartParamUpGroup, ActiveSkill, PassiveSkill, StyleParamUp } from '../types/KiokuTypes';
 import { elementMap, KiokuElement } from '../types/enums';
@@ -166,5 +167,24 @@ export const playerLevelCosts: Record<number, { exp: number }> = { 1: { exp: 0 }
 Object.values(userLevelUpJson).forEach((item: any) => {
     playerLevelCosts[item.level + 1] = {
         exp: playerLevelCosts[item.level].exp + item.levelUpExp,
+    }
+})
+
+export const portraitEnchantmentCosts: Record<number, Record<number, { item1: number, item2: number, item3: number, gold: number }>> = {
+    4: { 0: { item1: 0, item2: 0, item3: 0, gold: 0 } },
+    5: { 0: { item1: 0, item2: 0, item3: 0, gold: 0 } },
+};
+export const specialUpgradeCosts: Record<number, Record<number, { item1: number, item2: number, item3: number, gold: number }>> = {
+    4: { 0: { item1: 0, item2: 0, item3: 0, gold: 0 } },
+    5: { 0: { item1: 0, item2: 0, item3: 0, gold: 0 } },
+};
+// 1 is special levels, 2 is portrait
+getSkillLevelUpConditionJson.forEach((item: any) => {
+    const dest = item.skillLevelUpType === 1 ? specialUpgradeCosts : portraitEnchantmentCosts;
+    dest[item.rarity][item.minLevel] = {
+        item1: dest[item.rarity][item.minLevel - 1].item1 + item.itemNum1,
+        item2: dest[item.rarity][item.minLevel - 1].item2 + item.itemNum2,
+        item3: dest[item.rarity][item.minLevel - 1].item3 + item.itemNum3,
+        gold: dest[item.rarity][item.minLevel - 1].gold + item.useMoney,
     }
 })

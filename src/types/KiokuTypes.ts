@@ -1,5 +1,5 @@
 import { PvPTeam, KiokuState } from "../models/PvPTeam";
-import { crystalises, portraits } from "../utils/helpers";
+import { crystalises, portraits, passiveDetails } from "../utils/helpers";
 import { KiokuElement, KiokuRole, SupportKey } from "./enums";
 
 
@@ -92,6 +92,29 @@ export interface PortraitLvlData {
     atk: number;
     def: number;
     hp: number;
+}
+
+export const portraitMaxLimitBreak = 5;
+
+export function getPortraitDescription(p: Portrait, enchantmentLevel = portraitMaxLimitBreak): string {
+    const eff = Object.values(passiveDetails).filter((v: any) => v.passiveSkillMstId === p.passiveSkill1 * 100 + 1 + enchantmentLevel)
+    const best: any = eff[Math.max(...Object.keys(eff).map(Number))]
+
+    if (!best) return ""
+
+    if (p.name === "Faith We'll Meet Again Someday") {
+        // This for some reason has the wrong description, so we override it manually... z_z
+        return "Increases DMG dealt when targeting elemental weakness by 20%."
+    }
+    if (p.name === "Maiden's Transcendence") {
+        // Just has spd in not percentile
+        return best.description
+    }
+    if (!best.description.includes((best.value1 / 10).toString())) {
+        console.warn("Description is wrong? ", p, best)
+        return best.description + ` (ERROR. Root data is wrong value should be ${(best.value1 / 10).toString()}). Tell TFF to fix`
+    }
+    return best.description
 }
 
 export interface MagicLevel {

@@ -21,9 +21,8 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { KiokuElement } from '../types/enums'
-import { getPortraits, Portrait } from "../types/KiokuTypes";
+import { getPortraits, getPortraitDescription, Portrait } from "../types/KiokuTypes";
 import { portraits } from "../utils/helpers";
-import { passiveDetails } from '../utils/helpers';
 
 const props = defineProps<{
     element?: KiokuElement;
@@ -39,20 +38,7 @@ const filtered = computed(() => {
     return getPortraits(props.element)
         .map((p) => portraits[p])
         .filter(Boolean)
-        .map((p) => {
-            const eff = Object.values(passiveDetails).filter(v => (v as any).passiveSkillMstId === p.passiveSkill1 * 100 + 6)
-            const best = eff[Math.max(...Object.keys(eff).map(Number))];
-
-            if (p.name === "Faith We'll Meet Again Someday") {
-                // This for some reason has the wrong description, so we override it manually... z_z
-                best.description = "Increases DMG dealt when targeting elemental weakness by 20%."
-            } else if (p.name === "Maiden's Transcendence") { /* Just has spd in not percentile */ }
-            else if (!best.description.includes((best.value1 / 10).toString())) {
-                console.error("Description is wrong? ", p, best)
-                best.description += ` (ERROR. Root data is wrong value should be ${(best.value1 / 10).toString()}). Tell TFF to fix`
-            }
-            return { ...p, description: best.description };
-        })
+        .map((p) => ({ ...p, description: getPortraitDescription(p) }))
         .filter(
             (p) =>
                 p.name.toLowerCase().includes(q) ||
