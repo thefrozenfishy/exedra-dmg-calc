@@ -328,5 +328,6 @@ export default defineComponent({
   color: var(--text);
   line-height: 1.35;
   margin: 0;
+  white-space: pre-line;
 }
 </style>

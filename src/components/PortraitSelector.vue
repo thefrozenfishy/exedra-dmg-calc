@@ -11,7 +11,7 @@
                 <img :src="portraitImage(p)" />
                 <div class="details">
                     <p>{{ p.name }}</p>
-                    <p>{{ p.description }}</p>
+                    <p class="portrait-description">{{ p.description }}</p>
                 </div>
             </li>
         </ul>
@@ -66,3 +66,9 @@ function hide() {
     setTimeout(() => (show.value = false), 150);
 }
 </script>
+
+<style scoped>
+.portrait-description {
+    white-space: pre-line;
+}
+</style>
