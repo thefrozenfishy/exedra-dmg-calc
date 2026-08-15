@@ -191,7 +191,7 @@ export default defineComponent({
 
     function comparePortraits(a: Portrait, b: Portrait) {
       if (sortBy.value === "name") return a.name.localeCompare(b.name)
-      return (b.stats?.[sortBy.value] ?? 0) - (a.stats?.[sortBy.value] ?? 0)
+      return (b.stats?.[effectiveLevel(b)]?.[sortBy.value] ?? 0) - (a.stats?.[effectiveLevel(a)]?.[sortBy.value] ?? 0)
     }
 
     function sortPortraits(list: Portrait[]) {

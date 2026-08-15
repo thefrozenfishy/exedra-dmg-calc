@@ -69,15 +69,15 @@ export class Kioku {
     maxMagicStacks = 0;
 
     getBaseAtk(): number {
-        return Math.floor(this.kiokuAtk * (1 + 0.02 * this.ascension)) + Math.floor((this.support?.getBaseAtk() ?? 0) * 0.16) + (this.portrait?.stats?.atk ?? 0) + this.magicAtk + this.heartAtk;
+        return Math.floor(this.kiokuAtk * (1 + 0.02 * this.ascension)) + Math.floor((this.support?.getBaseAtk() ?? 0) * 0.16) + (this.portrait?.stats?.[5]?.atk ?? 0) + this.magicAtk + this.heartAtk;
     }
 
     getBaseDef(): number {
-        return Math.floor(this.kiokuDef * (1 + 0.02 * this.ascension)) + Math.floor((this.support?.getBaseDef() ?? 0) * 0.16) + (this.portrait?.stats?.def ?? 0) + this.magicDef + this.heartDef;
+        return Math.floor(this.kiokuDef * (1 + 0.02 * this.ascension)) + Math.floor((this.support?.getBaseDef() ?? 0) * 0.16) + (this.portrait?.stats?.[5]?.def ?? 0) + this.magicDef + this.heartDef;
     }
 
     getBaseHp(): number {
-        return Math.floor(this.kiokuHp * (1 + 0.02 * this.ascension)) + Math.floor((this.support?.getBaseHp() ?? 0) * 0.16) + (this.portrait?.stats?.hp ?? 0) + this.magicHp + this.heartHp;
+        return Math.floor(this.kiokuHp * (1 + 0.02 * this.ascension)) + Math.floor((this.support?.getBaseHp() ?? 0) * 0.16) + (this.portrait?.stats?.[5]?.hp ?? 0) + this.magicHp + this.heartHp;
     }
 
     getTotalPower(): number {

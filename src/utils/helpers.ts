@@ -24,7 +24,9 @@ const portraitLevels = Object.fromEntries(
 ) as Record<string, PortraitLvlData>;
 
 export const portraits = Object.fromEntries(
-    portraitsJson.map((item: any) => [item.name, { ...item, stats: portraitLevels[item.cardMstId * 10 + 5] }])
+    portraitsJson.map((item: any) => [item.name, {
+        ...item, stats: [...Array(6).keys()].map(i => portraitLevels[item.cardMstId * 10 + i])
+    }])
 ) as Record<string, Portrait>;
 
 export const passiveBase = Object.fromEntries(

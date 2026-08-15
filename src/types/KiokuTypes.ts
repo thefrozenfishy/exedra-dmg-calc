@@ -85,7 +85,7 @@ export interface Portrait {
     rarity: number;
     name: string;
     resourceName: string;
-    stats: PortraitLvlData
+    stats: Record<number, PortraitLvlData>
 }
 
 export interface PortraitLvlData {

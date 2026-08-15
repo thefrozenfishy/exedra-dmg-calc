@@ -86,9 +86,9 @@ export default defineComponent({
   },
   setup(props) {
     const derivedStats = computed(() => [
-      { short: 'ATK', value: props.portrait.stats?.atk },
-      { short: 'DEF', value: props.portrait.stats?.def },
-      { short: 'HP', value: props.portrait.stats?.hp },
+      { short: 'ATK', value: props.portrait.stats?.[props.level]?.atk },
+      { short: 'DEF', value: props.portrait.stats?.[props.level]?.def },
+      { short: 'HP', value: props.portrait.stats?.[props.level]?.hp },
     ])
 
     const description = computed(() => getPortraitDescription(props.portrait, props.level))
