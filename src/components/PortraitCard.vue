@@ -44,7 +44,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue'
-import { KiokuConstants, Portrait, getPortraitDescription, getPortraitPwr, getPortraitPwrTitle } from '../types/KiokuTypes'
+import { KiokuConstants, Portrait, getPortraitDescription, getPortraitMaxPwr, getPortraitPwrTitle } from '../types/KiokuTypes'
 import { KiokuElement, elementMap } from '../types/enums'
 import { portraitEnchantmentCosts } from '../utils/helpers'
 
@@ -91,7 +91,7 @@ export default defineComponent({
       { short: 'HP', value: props.portrait.stats?.[props.level]?.hp },
       {
         short: 'PWR',
-        value: getPortraitPwr(props.portrait, props.level).toLocaleString(),
+        value: getPortraitMaxPwr(props.portrait, props.level).toLocaleString(),
         title: getPortraitPwrTitle(props.portrait, props.level),
       },
     ])

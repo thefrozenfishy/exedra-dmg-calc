@@ -129,9 +129,17 @@ export function getPortraitPwr(p: Portrait, level: number, role: KiokuRole = Kio
     return getStatPwr(stats.atk, stats.def, stats.hp, role);
 }
 
+export function getPortraitMaxPwr(p: Portrait, level: number): number {
+    return Math.max(
+        ...(Object.keys(ROLE_COEFFICIENTS) as KiokuRole[]).map(role => getPortraitPwr(p, level, role))
+    );
+}
+
 export function getPortraitPwrTitle(p: Portrait, level: number): string {
     return (Object.keys(ROLE_COEFFICIENTS) as KiokuRole[])
-        .map(role => `${role}: ${getPortraitPwr(p, level, role).toLocaleString()}`)
+        .map(role => ({ role, value: getPortraitPwr(p, level, role) }))
+        .sort((a, b) => b.value - a.value)
+        .map(({ role, value }) => `${role}: ${value.toLocaleString()}`)
         .join("\n");
 }
 

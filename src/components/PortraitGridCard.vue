@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue'
-import { Portrait, getPortraitDescription, getPortraitPwr, getPortraitPwrTitle } from '../types/KiokuTypes'
+import { Portrait, getPortraitDescription, getPortraitMaxPwr, getPortraitPwrTitle } from '../types/KiokuTypes'
 
 export default defineComponent({
     name: 'PortraitGridCard',
@@ -37,7 +37,7 @@ export default defineComponent({
             { short: 'HP', value: props.portrait.stats?.[props.level]?.hp },
             {
                 short: 'PWR',
-                value: getPortraitPwr(props.portrait, props.level).toLocaleString(),
+                value: getPortraitMaxPwr(props.portrait, props.level).toLocaleString(),
                 title: getPortraitPwrTitle(props.portrait, props.level),
             },
         ])
