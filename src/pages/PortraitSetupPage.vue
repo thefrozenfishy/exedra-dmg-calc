@@ -12,25 +12,30 @@
       <label class="chip" :class="{ active: showResourceCosts }">
         <input type="checkbox" v-model="showResourceCosts" /> Total resource costs
       </label>
+      <label class="chip" :class="{ active: showRarity4 }">
+        <input type="checkbox" v-model="showRarity4" /> ★★★★
+      </label>
     </section>
 
     <section v-if="showResourceCosts" class="resource-summary card">
       <span class="filters-heading">Resource Totals ({{ e5Count }} marked E5)</span>
 
-      <div v-for="r in ascendableRarities" :key="r" class="resource-summary-row" @click="toggleMissingAndWhole">
-        <span class="resource-summary-label">{{ r }}★ ({{ countByRarity[r] ?? 0 }})</span>
+      <template v-for="r in ascendableRarities">
+        <div v-if="r !== 4 || showRarity4" :key="r" class="resource-summary-row" @click="toggleMissingAndWhole">
+          <span class="resource-summary-label">{{ r }}★ ({{ countByRarity[r] ?? 0 }})</span>
 
-        <div class="resource-summary-details">
-          <span v-for="item in rarityTotals[r].items" :key="item.idx" class="resource-chip" :title="formatTitle()">
-            <img :src="itemIdxToImg(item.idx)" :alt="`Item idx ${item.idx}`" />
-            {{ formatAmount(item.current, item.max) }}
-          </span>
-          <span class="resource-chip" :title="formatTitle()">
-            <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
-            {{ formatAmount(rarityTotals[r].gold.current, rarityTotals[r].gold.max) }}
-          </span>
+          <div class="resource-summary-details">
+            <span v-for="item in rarityTotals[r].items" :key="item.idx" class="resource-chip" :title="formatTitle()">
+              <img :src="itemIdxToImg(item.idx)" :alt="`Item idx ${item.idx}`" />
+              {{ formatAmount(item.current, item.max) }}
+            </span>
+            <span class="resource-chip" :title="formatTitle()">
+              <img :src="`/exedra-dmg-calc/items/gold.png`" alt="AQ Coins" />
+              {{ formatAmount(rarityTotals[r].gold.current, rarityTotals[r].gold.max) }}
+            </span>
+          </div>
         </div>
-      </div>
+      </template>
     </section>
 
     <section class="filters card">
@@ -38,7 +43,6 @@
       <div class="filter-group">
         <select class="selector" v-model="sortBy">
           <option value="name">Name</option>
-          <option value="rarity">Rarity</option>
           <option value="atk">ATK</option>
           <option value="def">DEF</option>
           <option value="hp">HP</option>
@@ -96,9 +100,12 @@ import { otherBuffsAndDebuffs, scoreAttackRelevantBuffsAndDebuffs } from '../typ
 export default defineComponent({
   components: { PortraitCard },
   setup() {
-    // Master portrait data only — no per-portrait saved state, everyone has the same set.
+    const showRarity4 = useSetting<boolean>('showPortraitRarity4', true)
+
     const allPortraits = computed<Portrait[]>(() =>
-      Object.values(portraitData).filter((p): p is Portrait => !!p?.name)
+      Object.values(portraitData).filter(
+        (p): p is Portrait => !!p?.name && (showRarity4.value || p.rarity === 5)
+      )
     )
 
     const portraitE5 = useSetting<Record<number, boolean>>('portraitE5States', {})
@@ -119,7 +126,7 @@ export default defineComponent({
     const showResourceCosts = useSetting('portraitShowResourceCosts', true)
     const showPerPortraitResourceCosts = useSetting('portraitShowPerPortraitResourceCosts', true)
 
-    const sortBy = useSetting<'name' | 'rarity' | 'atk' | 'def' | 'hp'>(
+    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp'>(
       'portraitSortBy',
       'name'
     )
@@ -174,7 +181,7 @@ export default defineComponent({
     }
 
     function itemIdxToImg(idx: number) {
-      return `/exedra-dmg-calc/items/light/${idx}.png`
+      return `/exedra-dmg-calc/items/portraits/${idx}.png`
     }
 
     const collapsedGroups = useSetting<Record<string, boolean>>("collapsedPortraitGroups", {})
@@ -184,7 +191,6 @@ export default defineComponent({
 
     function comparePortraits(a: Portrait, b: Portrait) {
       if (sortBy.value === "name") return a.name.localeCompare(b.name)
-      if (sortBy.value === "rarity") return b.rarity - a.rarity
       return (b.stats?.[sortBy.value] ?? 0) - (a.stats?.[sortBy.value] ?? 0)
     }
 
@@ -279,6 +285,7 @@ export default defineComponent({
 
     return {
       allPortraits,
+      showRarity4,
       showE5ForAll,
       isE5,
       toggleE5,
@@ -731,7 +738,6 @@ export default defineComponent({
 
 .resource-summary-details {
   display: flex;
-  flex-direction: column;
   gap: 0.35rem;
   min-width: 0;
 }
