@@ -1,5 +1,5 @@
 import { PvPTeam, KiokuState } from "../models/PvPTeam";
-import { crystalises, portraits, passiveDetails } from "../utils/helpers";
+import { crystalises, portraits, passiveDetails, passiveBase } from "../utils/helpers";
 import { KiokuElement, KiokuRole, SupportKey } from "./enums";
 
 
@@ -97,25 +97,15 @@ export interface PortraitLvlData {
 export const portraitMaxLimitBreak = 5;
 
 export function getPortraitDescription(p: Portrait, enchantmentLevel = portraitMaxLimitBreak): string {
-    const eff = Object.values(passiveDetails).filter((v: any) => v.passiveSkillMstId === p.passiveSkill1 * 100 + 1 + enchantmentLevel)
-    const best: any = eff[Math.max(...Object.keys(eff).map(Number))]
-
-    if (!best) return ""
-
-    if (p.name === "Faith We'll Meet Again Someday") {
-        // This for some reason has the wrong description, so we override it manually... z_z
-        return "Increases DMG dealt when targeting elemental weakness by 20%."
-    }
-    if (p.name === "Maiden's Transcendence") {
-        // Just has spd in not percentile
-        return best.description
-    }
-    if (!best.description.includes((best.value1 / 10).toString())) {
-        console.warn("Description is wrong? ", p, best)
-        return best.description + ` (ERROR. Root data is wrong value should be ${(best.value1 / 10).toString()}). Tell TFF to fix`
-    }
-    return best.description
+    return passiveBase[p.passiveSkill1 * 100 + 1 + enchantmentLevel].description.replaceAll("<br>", "\n")
 }
+
+export function getPortraitEffectType(p: Portrait, enchantmentLevel = portraitMaxLimitBreak): Record<string, number> {
+    const details = Object.values(passiveDetails).filter((v: any) => v.passiveSkillMstId === p.passiveSkill1 * 100 + 1 + enchantmentLevel)
+    const effects = Object.fromEntries(details.map(b => [b.abilityEffectType, b.value1]))
+    return Object.keys(effects).length ? effects : { "Unknown": 0 }
+}
+
 
 export interface MagicLevel {
     eff: string
@@ -140,6 +130,15 @@ export interface PassiveSkill {
     value2: number
     value3: number
     applier?: string
+}
+
+export interface PassiveBaseSkill {
+    conditionElement: number
+    conditionRole: number
+    description: string
+    level: number
+    name: string
+    passiveSkillMstId: number
 }
 
 export interface ActiveSkill {

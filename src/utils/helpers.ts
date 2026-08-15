@@ -4,6 +4,7 @@ import characterHeartParamUpGroupJson from '../assets/base_data/getCharacterHear
 import configJson from '../assets/base_data/get_config.json'
 import getSkillLevelUpConditionJson from '../assets/base_data/getSkillLevelUpConditionMstList.json'
 import kiokuDataJson from '../assets/base_data/kioku_data.json';
+import passiveJson from '../assets/base_data/getPassiveSkillMstList.json';
 import passiveDetailsJson from '../assets/base_data/getPassiveSkillDetailMstList.json';
 import portraitLevelsJson from '../assets/base_data/getCardLimitBreakMstList.json';
 import portraitsJson from '../assets/base_data/getCardMstList.json';
@@ -15,7 +16,7 @@ import styleParamUpCostJson from '../assets/base_data/getStyleParamUpCostMstList
 import styleParamUpEffectJson from '../assets/base_data/getStyleParamUpEffectMstList.json';
 import styleParamUpJson from '../assets/base_data/getStyleParamUpMstList.json';
 import userLevelUpJson from '../assets/base_data/getUserLevelUpMstList.json'
-import { Portrait, CrystalisData, KiokuData, PortraitLvlData, StyleParamUpEffect, CharacterHeart, CharacterHeartParamUpGroup, ActiveSkill, PassiveSkill, StyleParamUp } from '../types/KiokuTypes';
+import { Portrait, CrystalisData, KiokuData, PortraitLvlData, StyleParamUpEffect, CharacterHeart, CharacterHeartParamUpGroup, ActiveSkill, PassiveSkill, StyleParamUp, PassiveBaseSkill } from '../types/KiokuTypes';
 import { elementMap, KiokuElement } from '../types/enums';
 
 const portraitLevels = Object.fromEntries(
@@ -25,6 +26,10 @@ const portraitLevels = Object.fromEntries(
 export const portraits = Object.fromEntries(
     portraitsJson.map((item: any) => [item.name, { ...item, stats: portraitLevels[item.cardMstId * 10 + 5] }])
 ) as Record<string, Portrait>;
+
+export const passiveBase = Object.fromEntries(
+    passiveJson.map((item: any) => [item.passiveSkillMstId, item])
+) as Record<string, PassiveBaseSkill>;
 
 export const passiveDetails = Object.fromEntries(
     passiveDetailsJson.map((item: any) => [item.passiveSkillDetailMstId, item])

@@ -3,16 +3,13 @@
     <h1 class="page-title">Portraits</h1>
 
     <section class="toolbar card">
-      <div class="toolbar-left level-control">
-        <label for="enchantment-level">Enchantment Level</label>
-        <select id="enchantment-level" class="selector" v-model.number="enchantmentLevel">
-          <option v-for="n in levelOptions" :key="n" :value="n">{{ n }}</option>
-        </select>
-      </div>
+      <label class="chip" :class="{ active: showE5ForAll }">
+        <input type="checkbox" v-model="showE5ForAll" /> Show E5 effect for all portraits
+      </label>
     </section>
 
     <section class="resource-summary card">
-      <span class="filters-heading">Resource Totals @ level {{ enchantmentLevel }}</span>
+      <span class="filters-heading">Resource Totals ({{ e5Count }} marked E5)</span>
 
       <div v-for="r in ascendableRarities" :key="r" class="resource-summary-row" @click="toggleMissingAndWhole">
         <span class="resource-summary-label">{{ r }}★ ({{ countByRarity[r] ?? 0 }})</span>
@@ -55,9 +52,9 @@
           None
         </label>
 
-        <label class="chip" :class="{ active: groupBy === 'element' }">
-          <input type="radio" name="group-by" value="element" v-model="groupBy" />
-          Element
+        <label class="chip" :class="{ active: groupBy === 'effect' }">
+          <input type="radio" name="group-by" value="effect" v-model="groupBy" />
+          Effect
         </label>
       </div>
     </section>
@@ -73,13 +70,13 @@
       <button class="role-header" @click="groupBy === 'none' ? undefined : toggleGroup(groupKey)"
         :aria-expanded="!collapsedGroups[groupKey]">
         <span v-if="groupBy !== 'none'" class="role-chevron" :class="{ rotated: collapsedGroups[groupKey] }">▾</span>
-        <img v-if="groupBy === 'element'" class="role-icon" :src="`/exedra-dmg-calc/elements/${groupKey}.png`"
-          :alt="`${groupKey}`">
+        <span v-if="groupBy === 'effect'" class="role-effect-label">{{ groupKey }}</span>
         <span class="role-count">{{ list.length }}</span>
       </button>
 
       <div v-show="!collapsedGroups[groupKey]" class="role-body">
-        <PortraitCard v-for="portrait in list" :key="portrait.cardMstId" :portrait="portrait" :level="enchantmentLevel"
+        <PortraitCard v-for="portrait in list" :key="portrait.cardMstId" :portrait="portrait"
+          :level="effectiveLevel(portrait)" :is-e5="isE5(portrait)" :on-toggle-e5="() => toggleE5(portrait)"
           :format-amount="formatAmount" :toggle-missing-and-whole="toggleMissingAndWhole" :format-title="formatTitle" />
       </div>
     </div>
@@ -87,31 +84,41 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue'
+import { defineComponent, computed } from 'vue'
 import PortraitCard from '../components/PortraitCard.vue'
 import { portraits as portraitData, portraitEnchantmentCosts } from '../utils/helpers'
-import { KiokuConstants, Portrait, portraitMaxLimitBreak } from '../types/KiokuTypes'
+import { KiokuConstants, Portrait, portraitMaxLimitBreak, getPortraitEffectType } from '../types/KiokuTypes'
 import { useSetting } from '../store/settingsStore.js'
 
 export default defineComponent({
   components: { PortraitCard },
   setup() {
-    // Master portrait data only — no per-portrait saved state, everyone has the same set.
     const allPortraits = computed<Portrait[]>(() =>
       Object.values(portraitData).filter((p): p is Portrait => !!p?.name)
     )
 
-    const levelOptions = Array.from({ length: portraitMaxLimitBreak + 1 }, (_, i) => i)
-    // Not persisted — deliberately not "saved progress", just the level you're viewing.
-    const enchantmentLevel = ref(0)
+    const portraitE5 = useSetting<Record<number, boolean>>('portraitE5States', {})
+    const showE5ForAll = useSetting<boolean>('showE5ForAllPortraits', false)
+
+    function isE5(p: Portrait) {
+      return !!portraitE5.value[p.cardMstId]
+    }
+    function toggleE5(p: Portrait) {
+      portraitE5.value[p.cardMstId] = !portraitE5.value[p.cardMstId]
+    }
+    function effectiveLevel(p: Portrait) {
+      return showE5ForAll.value || isE5(p) ? portraitMaxLimitBreak : 0
+    }
+
+    const e5Count = computed(() => allPortraits.value.filter(isE5).length)
 
     const sortBy = useSetting<'name' | 'rarity' | 'atk' | 'def' | 'hp'>(
       'portraitSortBy',
       'name'
     )
-    const groupBy = useSetting<'none' | 'element'>(
+    const groupBy = useSetting<'none' | 'effect'>(
       'groupPortraitsBy',
-      'element'
+      'effect'
     )
 
     const bigNumberDisplayMode = useSetting<'shortHas' | 'shortMiss' | 'longHas' | 'longMiss' | 'percentage'>(
@@ -174,12 +181,14 @@ export default defineComponent({
       collapsedGroups.value[group] = !collapsedGroups.value[group]
     }
 
+    function comparePortraits(a: Portrait, b: Portrait) {
+      if (sortBy.value === "name") return a.name.localeCompare(b.name)
+      if (sortBy.value === "rarity") return b.rarity - a.rarity
+      return (b.stats?.[sortBy.value] ?? 0) - (a.stats?.[sortBy.value] ?? 0)
+    }
+
     function sortPortraits(list: Portrait[]) {
-      return list.slice().sort((a, b) => {
-        if (sortBy.value === "name") return a.name.localeCompare(b.name)
-        if (sortBy.value === "rarity") return b.rarity - a.rarity
-        return (b.stats?.[sortBy.value] ?? 0) - (a.stats?.[sortBy.value] ?? 0)
-      })
+      return list.slice().sort(comparePortraits)
     }
 
     const groupedPortraits = computed(() => {
@@ -187,19 +196,38 @@ export default defineComponent({
         return { All: sortPortraits(allPortraits.value) }
       }
 
+      if (groupBy.value === 'effect') {
+        const groups: Record<string, { portrait: Portrait, value: number }[]> = {}
+
+        allPortraits.value.forEach(p => {
+          const effects = getPortraitEffectType(p, effectiveLevel(p))
+          Object.entries(effects).forEach(([effectType, value]) => {
+            (groups[effectType] ??= []).push({ portrait: p, value })
+          })
+        })
+
+        const sortedGroups: Record<string, Portrait[]> = {}
+        Object.keys(groups).sort((a, b) => a.localeCompare(b)).forEach(effectType => {
+          sortedGroups[effectType] = groups[effectType]
+            .sort((a, b) => b.value - a.value || comparePortraits(a.portrait, b.portrait))
+            .map(entry => entry.portrait)
+        })
+
+        return sortedGroups
+      }
+
       const groups: Record<string, Portrait[]> = {}
-
       allPortraits.value.forEach(p => {
-        const group = String(p.element)
-        if (!groups[group]) groups[group] = []
-        groups[group].push(p)
+        const group = String(p.element);
+        (groups[group] ??= []).push(p)
       })
 
-      Object.keys(groups).forEach(group => {
-        groups[group] = sortPortraits(groups[group])
+      const sortedGroups: Record<string, Portrait[]> = {}
+      Object.keys(groups).sort((a, b) => a.localeCompare(b)).forEach(group => {
+        sortedGroups[group] = sortPortraits(groups[group])
       })
 
-      return groups
+      return sortedGroups
     })
 
     // Only rarities present as keys in portraitEnchantmentCosts actually ascend.
@@ -221,9 +249,9 @@ export default defineComponent({
 
     function getRarityEnchantmentCost(rarity: number, level: number) {
       const table = portraitEnchantmentCosts[rarity]
-      const currLvl = Math.min(Math.max(level ?? 0, 0), KiokuConstants.maxEnchantment)
+      const currLvl = Math.min(Math.max(level ?? 0, 0), KiokuConstants.maxAscension)
       const current = table[currLvl] ?? table[0]
-      const max = table[KiokuConstants.maxEnchantment] ?? current
+      const max = table[KiokuConstants.maxAscension] ?? current
 
       return {
         item1: { current: current.item1, max: max.item1 },
@@ -240,23 +268,25 @@ export default defineComponent({
       }> = {}
 
       ascendableRarities.value.forEach(r => {
-        const perPortrait = getRarityEnchantmentCost(r, enchantmentLevel.value)
-        const count = countByRarity.value[r] ?? 0
-
         totals[r] = {
-          items: [1, 2, 3].map(idx => {
-            const key = `item${idx}` as 'item1' | 'item2' | 'item3'
-            return {
-              idx,
-              current: perPortrait[key].current * count,
-              max: perPortrait[key].max * count,
-            }
-          }),
-          gold: {
-            current: perPortrait.gold.current * count,
-            max: perPortrait.gold.max * count,
-          },
+          items: [1, 2, 3].map(idx => ({ idx, current: 0, max: 0 })),
+          gold: { current: 0, max: 0 },
         }
+      })
+
+      allPortraits.value.forEach(p => {
+        const bucket = totals[p.rarity]
+        if (!bucket) return
+
+        const cost = getRarityEnchantmentCost(p.rarity, effectiveLevel(p))
+        bucket.items[0].current += cost.item1.current
+        bucket.items[0].max += cost.item1.max
+        bucket.items[1].current += cost.item2.current
+        bucket.items[1].max += cost.item2.max
+        bucket.items[2].current += cost.item3.current
+        bucket.items[2].max += cost.item3.max
+        bucket.gold.current += cost.gold.current
+        bucket.gold.max += cost.gold.max
       })
 
       return totals
@@ -264,8 +294,11 @@ export default defineComponent({
 
     return {
       allPortraits,
-      levelOptions,
-      enchantmentLevel,
+      showE5ForAll,
+      isE5,
+      toggleE5,
+      effectiveLevel,
+      e5Count,
       collapsedGroups,
       toggleGroup,
       groupedPortraits,
@@ -571,8 +604,8 @@ export default defineComponent({
 
 .list-header {
   display: grid;
-  grid-template-columns: 120px 250px 230px calc(100% - 600px)  1fr;
-  gap: 0 0.75rem; 
+  grid-template-columns: 120px 250px 230px calc(100% - 600px) 1fr;
+  gap: 0 0.75rem;
   padding: 0.3rem 0.75rem;
   font-size: 0.64rem;
   text-transform: uppercase;
@@ -872,11 +905,10 @@ export default defineComponent({
   flex-shrink: 0;
 }
 
-.level-control {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: 0.85rem;
+.role-effect-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .resource-summary-row--muted {

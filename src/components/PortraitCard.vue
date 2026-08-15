@@ -5,6 +5,10 @@
       <div class="portrait-names">
         <span class="portrait-name">{{ portrait.name }}</span>
         <span class="rarity-stars">{{ '★'.repeat(portrait.rarity) }}</span>
+        <label class="e5-toggle" :class="{ active: isE5 }" @click.stop>
+          <input type="checkbox" :checked="isE5" @change="onToggleE5" />
+          Is E5
+        </label>
       </div>
     </div>
 
@@ -17,7 +21,6 @@
             <span class="derived-value">{{ stat.value ?? '…' }}</span>
           </div>
         </div>
-
         <span v-for="item in itemCosts" :key="item.idx" class="resource-chip" :title="formatTitle()"
           @click="toggleMissingAndWhole">
           <img :src="itemIdxToImg(item.idx, elementName)" :alt="`Item idx ${item.idx}`" />
@@ -65,6 +68,14 @@ export default defineComponent({
     formatTitle: {
       type: Function as PropType<() => string | undefined>,
       default: () => undefined,
+    },
+    isE5: {
+      type: Boolean,
+      default: false,
+    },
+    onToggleE5: {
+      type: Function as PropType<() => void>,
+      default: () => { },
     },
   },
   setup(props) {
@@ -198,6 +209,33 @@ export default defineComponent({
   color: var(--accent);
   letter-spacing: -1px;
   margin-top: 1px;
+}
+
+.e5-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 4px;
+  padding: 0.1rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.e5-toggle input {
+  display: none;
+}
+
+.e5-toggle.active {
+  background: var(--accent-glow);
+  border-color: var(--border-strong);
+  color: var(--accent);
 }
 
 /* ── Col 2: Stats ── */
