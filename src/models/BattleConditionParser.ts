@@ -226,7 +226,6 @@ export const isStartCondRelevantForScoreAttack = (
         const battleCondition = battleConditions[activeCondId]
         if (!(activeCondId in logged)) {
             logged[activeCondId] = true
-            console.debug(startConditionId, battleConditionSet, battleCondition)
         }
 
         if (battleCondition.compareContent === CompareContent.CHARGE_POINT) {

@@ -196,7 +196,6 @@ export async function findBestTeam({
             .filter(Boolean)
             .map(c => c.getKey());
     }
-    relevantSupportData[KiokuRole.Debuffer]?.push(highestAtkSupportKey)
 
     let completedRuns = 0;
     const expectedTotalRuns =
@@ -225,6 +224,15 @@ export async function findBestTeam({
                 name: "White Camellia",
             }).getKey())
         }
+        const attackerHasDotPop = fetchKioku(attacker).effects.some(e => e.abilityEffectType === "IMM_SLIP_DMG")
+
+        const attackerRelevantSupportData: Partial<Record<KiokuRole, any[][]>> = { ...relevantSupportData }
+        if (attackerHasDotPop && highestAtkSupportKey) {
+            attackerRelevantSupportData[KiokuRole.Debuffer] = [
+                ...(relevantSupportData[KiokuRole.Debuffer] ?? []),
+                highestAtkSupportKey,
+            ]
+        }
         for (const dist of availableOtherDistributions) {
             for (const healerCombo of combinations(availableChars[KiokuRole.Healer], dist.healers)) {
                 for (const defenderCombo of combinations(availableChars[KiokuRole.Defender], dist.defenders)) {
@@ -248,7 +256,7 @@ export async function findBestTeam({
 
                             const supportSupports: any[][] = [new Array(totalSupports.length).fill(undefined)];
 
-                            for (const [role, supportPool] of Object.entries(relevantSupportData) as [KiokuRole, any[][]][]) {
+                            for (const [role, supportPool] of Object.entries(attackerRelevantSupportData) as [KiokuRole, any[][]][]) {
                                 const activePool = supportPool.filter(s => !deBufferCombo.map(c => c.name).includes(s[0]));
                                 if (!activePool.length) continue;
 
@@ -259,21 +267,16 @@ export async function findBestTeam({
 
                                 const maxAssignable = Math.min(activePool.length, roleIndexes.length);
 
-                                const roleCombosBySize: any[][][] = [];
-                                for (let size = 0; size <= maxAssignable; size++) {
-                                    roleCombosBySize.push(combinations(activePool, size));
-                                }
+                                const combos = combinations(activePool, maxAssignable);
 
                                 const expanded: any[][] = [];
                                 for (const existing of supportSupports) {
-                                    for (const combos of roleCombosBySize) {
-                                        for (const combo of combos) {
-                                            for (const slotSubset of combinations(roleIndexes, combo.length)) {
-                                                for (const perm of permute(combo)) {
-                                                    const arr = [...existing];
-                                                    for (let i = 0; i < perm.length; i++) arr[slotSubset[i]] = perm[i];
-                                                    expanded.push(arr);
-                                                }
+                                    for (const combo of combos) {
+                                        for (const slotSubset of combinations(roleIndexes, combo.length)) {
+                                            for (const perm of permute(combo)) {
+                                                const arr = [...existing];
+                                                for (let i = 0; i < perm.length; i++) arr[slotSubset[i]] = perm[i];
+                                                expanded.push(arr);
                                             }
                                         }
                                     }
