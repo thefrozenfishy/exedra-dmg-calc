@@ -150,7 +150,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* ── Row ── */
 .portrait-row {
   display: grid;
   grid-template-columns: 380px 240px calc(100% - 620px) 1fr;
@@ -164,7 +163,6 @@ export default defineComponent({
   background: var(--bg-soft);
 }
 
-/* ── Column base ── */
 .col {
   display: flex;
   flex-direction: column;
@@ -179,7 +177,6 @@ export default defineComponent({
   margin-bottom: 1px;
 }
 
-/* ── Col 1: Identity ── */
 .col-identity {
   flex-direction: row;
   align-items: center;
@@ -244,7 +241,6 @@ export default defineComponent({
   color: var(--accent);
 }
 
-/* ── Col 2: Stats ── */
 .col-stats {
   align-items: center;
   margin: auto 1rem;
@@ -318,7 +314,6 @@ export default defineComponent({
   margin-top: 2px;
 }
 
-/* ── Col 3: Description ── */
 .col-description {
   min-width: 0;
 }
