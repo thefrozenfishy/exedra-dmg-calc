@@ -1,6 +1,6 @@
 import { PvPTeam, KiokuState } from "../models/PvPTeam";
 import { crystalises, portraits, passiveDetails, passiveBase } from "../utils/helpers";
-import { KiokuElement, KiokuRole, SupportKey } from "./enums";
+import { elementMap, KiokuElement, KiokuRole, SupportKey } from "./enums";
 
 
 
@@ -102,7 +102,7 @@ export function getPortraitDescription(p: Portrait, enchantmentLevel = portraitM
 
 export function getPortraitEffectType(p: Portrait, enchantmentLevel = portraitMaxLimitBreak): Record<string, number> {
     const details = Object.values(passiveDetails).filter((v: any) => v.passiveSkillMstId === p.passiveSkill1 * 100 + 1 + enchantmentLevel)
-    const effects = Object.fromEntries(details.map(b => [b.abilityEffectType, b.value1]))
+    const effects = Object.fromEntries(details.map(b => [`${b.abilityEffectType}${b.element ? "_" + elementMap[b.element].toUpperCase() : ""}`, b.value1]))
     return Object.keys(effects).length ? effects : { "Unknown": 0 }
 }
 
