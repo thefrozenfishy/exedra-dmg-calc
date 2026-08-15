@@ -16,7 +16,7 @@
       <span class="col-heading">Stats</span>
       <div class="stats-section">
         <div class="derived-grid">
-          <div v-for="stat in derivedStats" :key="stat.short" class="derived-cell">
+          <div v-for="stat in derivedStats" :key="stat.short" class="derived-cell" :title="stat.title">
             <span class="cell-label">{{ stat.short }}</span>
             <span class="derived-value">{{ stat.value ?? '…' }}</span>
           </div>
@@ -44,7 +44,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue'
-import { KiokuConstants, Portrait, getPortraitDescription } from '../types/KiokuTypes'
+import { KiokuConstants, Portrait, getPortraitDescription, getPortraitPwr, getPortraitPwrTitle } from '../types/KiokuTypes'
 import { KiokuElement, elementMap } from '../types/enums'
 import { portraitEnchantmentCosts } from '../utils/helpers'
 
@@ -89,6 +89,11 @@ export default defineComponent({
       { short: 'ATK', value: props.portrait.stats?.[props.level]?.atk },
       { short: 'DEF', value: props.portrait.stats?.[props.level]?.def },
       { short: 'HP', value: props.portrait.stats?.[props.level]?.hp },
+      {
+        short: 'PWR',
+        value: getPortraitPwr(props.portrait, props.level).toLocaleString(),
+        title: getPortraitPwrTitle(props.portrait, props.level),
+      },
     ])
 
     const description = computed(() => getPortraitDescription(props.portrait, props.level))
@@ -255,7 +260,7 @@ export default defineComponent({
 
 .derived-grid {
   display: grid;
-  grid-template-columns: repeat(3, 45px);
+  grid-template-columns: repeat(4, 45px);
   gap: 0.5rem;
 }
 
@@ -272,6 +277,10 @@ export default defineComponent({
   text-transform: uppercase;
   letter-spacing: 0.04em;
   white-space: nowrap;
+}
+
+.derived-cell[title] {
+  cursor: help;
 }
 
 .resource-block {

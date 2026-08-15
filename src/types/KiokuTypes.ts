@@ -106,6 +106,35 @@ export function getPortraitEffectType(p: Portrait, enchantmentLevel = portraitMa
     return Object.keys(effects).length ? effects : { "Unknown": 0 }
 }
 
+export const ROLE_COEFFICIENTS: Record<KiokuRole, { hp: number; atk: number; def: number }> = {
+    [KiokuRole.Attacker]: { hp: 950, atk: 1100, def: 950 },
+    [KiokuRole.Breaker]: { hp: 1000, atk: 1000, def: 1000 },
+    [KiokuRole.Healer]: { hp: 1000, atk: 1000, def: 1000 },
+    [KiokuRole.Buffer]: { hp: 1000, atk: 1000, def: 1000 },
+    [KiokuRole.Debuffer]: { hp: 1000, atk: 1000, def: 1000 },
+    [KiokuRole.Defender]: { hp: 1050, atk: 800, def: 1150 },
+};
+
+export function getStatPwr(atk: number, def: number, hp: number, role: KiokuRole = KiokuRole.Buffer): number {
+    const roleCoeff = ROLE_COEFFICIENTS[role];
+    const hpTerm = (100 / 1000) * hp * (roleCoeff.hp / 1000);
+    const atkTerm = (300 / 1000) * atk * (roleCoeff.atk / 1000);
+    const defTerm = (300 / 1000) * def * (roleCoeff.def / 1000);
+    return Math.floor(hpTerm + atkTerm + defTerm);
+}
+
+export function getPortraitPwr(p: Portrait, level: number, role: KiokuRole = KiokuRole.Buffer): number {
+    const stats = p.stats?.[level];
+    if (!stats) return 0;
+    return getStatPwr(stats.atk, stats.def, stats.hp, role);
+}
+
+export function getPortraitPwrTitle(p: Portrait, level: number): string {
+    return (Object.keys(ROLE_COEFFICIENTS) as KiokuRole[])
+        .map(role => `${role}: ${getPortraitPwr(p, level, role).toLocaleString()}`)
+        .join("\n");
+}
+
 
 export interface MagicLevel {
     eff: string

@@ -46,6 +46,7 @@
           <option value="atk">ATK</option>
           <option value="def">DEF</option>
           <option value="hp">HP</option>
+          <option value="pwr">PWR</option>
         </select>
       </div>
 
@@ -115,7 +116,7 @@ import { defineComponent, computed } from 'vue'
 import PortraitCard from '../components/PortraitCard.vue'
 import PortraitGridCard from '../components/PortraitGridCard.vue'
 import { portraits as portraitData, portraitEnchantmentCosts } from '../utils/helpers'
-import { Portrait, portraitMaxLimitBreak, getPortraitEffectType } from '../types/KiokuTypes'
+import { Portrait, portraitMaxLimitBreak, getPortraitEffectType, getPortraitPwr } from '../types/KiokuTypes'
 import { useSetting } from '../store/settingsStore.js'
 import { otherBuffsAndDebuffs, scoreAttackRelevantBuffsAndDebuffs } from '../types/enums.js'
 
@@ -149,7 +150,7 @@ export default defineComponent({
     const showResourceCosts = useSetting('portraitShowResourceCosts', true)
     const showPerPortraitResourceCosts = useSetting('portraitShowPerPortraitResourceCosts', true)
 
-    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp'>(
+    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp' | 'pwr'>(
       'portraitSortBy',
       'atk'
     )
@@ -214,6 +215,7 @@ export default defineComponent({
 
     function comparePortraits(a: Portrait, b: Portrait) {
       if (sortBy.value === "name") return a.name.localeCompare(b.name)
+      if (sortBy.value === "pwr") return getPortraitPwr(b, effectiveLevel(b)) - getPortraitPwr(a, effectiveLevel(a))
       return (b.stats?.[effectiveLevel(b)]?.[sortBy.value] ?? 0) - (a.stats?.[effectiveLevel(a)]?.[sortBy.value] ?? 0)
     }
 

@@ -3,7 +3,7 @@
         <img :src="imgSrc" :alt="portrait.name" class="grid-thumb" />
         <span class="grid-name">{{ portrait.name }}</span>
         <div class="grid-stats">
-            <div v-for="stat in derivedStats" :key="stat.short" class="grid-stat-cell">
+            <div v-for="stat in derivedStats" :key="stat.short" class="grid-stat-cell" :title="stat.title">
                 <span class="grid-stat-label">{{ stat.short }}</span>
                 <span class="grid-stat-value">{{ stat.value ?? '…' }}</span>
             </div>
@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, PropType } from 'vue'
-import { Portrait, getPortraitDescription } from '../types/KiokuTypes'
+import { Portrait, getPortraitDescription, getPortraitPwr, getPortraitPwrTitle } from '../types/KiokuTypes'
 
 export default defineComponent({
     name: 'PortraitGridCard',
@@ -35,6 +35,11 @@ export default defineComponent({
             { short: 'ATK', value: props.portrait.stats?.[props.level]?.atk },
             { short: 'DEF', value: props.portrait.stats?.[props.level]?.def },
             { short: 'HP', value: props.portrait.stats?.[props.level]?.hp },
+            {
+                short: 'PWR',
+                value: getPortraitPwr(props.portrait, props.level).toLocaleString(),
+                title: getPortraitPwrTitle(props.portrait, props.level),
+            },
         ])
 
         const imgSrc = computed(
@@ -92,8 +97,10 @@ export default defineComponent({
 
 .grid-stats {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 0.6rem;
+    padding: 4px 0;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     width: 100%;
@@ -104,6 +111,10 @@ export default defineComponent({
     flex-direction: column;
     align-items: center;
     gap: 2px;
+}
+
+.grid-stat-cell[title] {
+    cursor: help;
 }
 
 .grid-stat-label {

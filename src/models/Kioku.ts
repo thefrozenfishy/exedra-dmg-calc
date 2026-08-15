@@ -1,19 +1,8 @@
-import { KiokuArgs, KiokuData, Portrait, StyleParamUpEffect } from '../types/KiokuTypes';
+import { KiokuArgs, KiokuData, Portrait, StyleParamUpEffect, ROLE_COEFFICIENTS } from '../types/KiokuTypes';
 import { portraits, kiokuData, crystalises, characterHeart, characterHeartParamUpGroup, styleParamUpEffect, styleParamUp } from '../utils/helpers';
 import { fromKey } from '../models/BestTeamCalculator';
-import { KiokuRole } from '../types/enums';
 
 const KIOKU_LEVEL_BREAKPOINTS = [1, 120, 140, 160, 180, 200] as const;
-
-// Fetched from config.json cause I'm lazy
-const ROLE_COEFFICIENTS: Record<string, { hp: number; atk: number; def: number }> = {
-    [KiokuRole.Attacker]: { hp: 950, atk: 1100, def: 950 },
-    [KiokuRole.Breaker]: { hp: 1000, atk: 1000, def: 1000 },
-    [KiokuRole.Healer]: { hp: 1000, atk: 1000, def: 1000 },
-    [KiokuRole.Buffer]: { hp: 1000, atk: 1000, def: 1000 },
-    [KiokuRole.Debuffer]: { hp: 1000, atk: 1000, def: 1000 },
-    [KiokuRole.Defender]: { hp: 1050, atk: 800, def: 1150 }
-};
 
 const linear_interpolation = (a: number, b: number, t: number) =>
     a + (b - a) * t;
