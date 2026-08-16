@@ -73,7 +73,7 @@
                 <input type="checkbox" v-model="showHearts" /> Heartphial levels
             </label>
             <label class="chip" :class="{ active: showDupes }">
-                <input type="checkbox" v-model="showDupes" /> Dupes
+                <input type="checkbox" v-model="showDupes" /> Dupes/+500s
             </label>
             <label class="chip" :class="{ active: showCrys }">
                 <input type="checkbox" v-model="showCrys" /> Crys counter
@@ -86,6 +86,8 @@
                 levels
             </label>
         </section>
+
+        <p v-if="isTouchDevice" class="help-text"> Hold icons to enter edit mode, then move by dragging </p>
 
         <table class="ascension-table" @click.self="isTouchJiggleMode = false">
             <tbody @click.self="isTouchJiggleMode = false">
@@ -196,7 +198,7 @@
             </tbody>
         </table>
         <div class="card extra-input" v-if="!showDupes">
-            <span class="filters-heading">+500s collected</span>
+            <span class="filters-heading">dupes/+500s collected</span>
             <input type="number" v-model.number="extraCollected" />
         </div>
         <section class="card stats-card info-section">
@@ -211,7 +213,7 @@
                     ({{ round(totalStandards / totalPossibleStandards * 100) }}%)</span>
             </div>
             <div class="stat-row stat-row-sub">
-                <span class="stat-label">— of which +500s</span>
+                <span class="stat-label">— of which dupes/+500s</span>
                 <span class="stat-value">{{ extraTotal }}
                     ({{ round(extraTotal / (totalStandards + extraTotal) * 100) }}%)</span>
             </div>
@@ -1285,5 +1287,13 @@ td {
     background: var(--accent-glow-strong);
     border-color: var(--accent);
     color: var(--accent);
+}
+
+
+.help-text {
+    background: var(--panel);
+    margin-bottom: 0.6rem;
+    font-size: 0.7rem;
+    color: var(--muted);
 }
 </style>
