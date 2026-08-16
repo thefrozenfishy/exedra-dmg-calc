@@ -42,6 +42,7 @@
       <span class="filters-heading">Sort</span>
       <div class="filter-group">
         <select class="selector" v-model="sortBy">
+          <option value="id">Default</option>
           <option value="name">Name</option>
           <option value="atk">ATK</option>
           <option value="def">DEF</option>
@@ -150,9 +151,9 @@ export default defineComponent({
     const showResourceCosts = useSetting('portraitShowResourceCosts', true)
     const showPerPortraitResourceCosts = useSetting('portraitShowPerPortraitResourceCosts', true)
 
-    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp' | 'pwr'>(
+    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp' | 'pwr' | 'id'>(
       'portraitSortBy',
-      'atk'
+      'id'
     )
     const groupBy = useSetting<'none' | 'effect'>('groupPortraitsBy', 'effect')
 
@@ -214,6 +215,7 @@ export default defineComponent({
     }
 
     function comparePortraits(a: Portrait, b: Portrait) {
+      if (sortBy.value === "id") return a.cardMstId - b.cardMstId
       if (sortBy.value === "name") return a.name.localeCompare(b.name)
       if (sortBy.value === "pwr") return getPortraitMaxPwr(b, effectiveLevel(b)) - getPortraitMaxPwr(a, effectiveLevel(a))
       return (b.stats?.[effectiveLevel(b)]?.[sortBy.value] ?? 0) - (a.stats?.[effectiveLevel(a)]?.[sortBy.value] ?? 0)

@@ -199,6 +199,7 @@
       <span class="filters-heading">Sort</span>
       <div class="filter-group">
         <select class="selector" v-model="sortBy">
+          <option value="id">Default</option>
           <option value="name">Kioku Name</option>
           <option value="atk">ATK</option>
           <option value="def">DEF</option>
@@ -404,9 +405,9 @@ export default defineComponent({
     const expectedRuns = ref(0)
     const currentBestTeam = ref<FinalTeam>()
     const currentBestPwr = ref<number | null>(null)
-    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp' | 'pwr' | 'ch_name' | 'releaseDate' | 'kiokuLvl' | 'magicLvl'>(
+    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp' | 'pwr' | 'id' | 'ch_name' | 'releaseDate' | 'kiokuLvl' | 'magicLvl'>(
       'characterSortBy',
-      'name'
+      'id'
     )
     const groupBy = useSetting<'none' | 'role' | 'element'>(
       'groupCharactersBy',
@@ -562,6 +563,7 @@ export default defineComponent({
 
     function sortCharacters(chars: Character[]) {
       return chars.slice().sort((a, b) => {
+        if (sortBy.value === "id") return a.id - b.id
         if (sortBy.value === "name") return a.name.localeCompare(b.name)
         if (sortBy.value === "ch_name") return a.character_en.localeCompare(b.character_en)
         if (sortBy.value === "releaseDate") return new Date(a.releaseDate) > new Date(b.releaseDate)
