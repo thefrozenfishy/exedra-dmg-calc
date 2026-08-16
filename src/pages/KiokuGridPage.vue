@@ -134,7 +134,7 @@
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
                             <template v-for="r in [5, 4, 3]" :key="r">
                                 <div v-if="shouldShow(r)" class="rarity-band" :class="`rarity-${r}`"
-                                    :style="{ '--band-rows': bandRows(yVal, r) }">
+                                    :style="{ '--band-rows': bandRows(yVal, r), '--band-cols': bandCols(xVal) }">
                                     <div v-for="ch in getChars(xVal, yVal, r)" :key="ch.id" class="char-thumb">
                                         <div class="character-img-wrapper">
                                             <div>
@@ -445,6 +445,27 @@ const maxCharsPerRarityPerRow = computed(() => {
     }
     return result
 })
+
+const maxCharsPerColumn = computed(() => {
+    const result: Record<string, number> = {}
+    for (const xVal of visibleXValues.value) {
+        let max = 0
+        for (const yVal of visibleYValues.value) {
+            for (const r of [3, 4, 5] as const) {
+                if (!shouldShow(r)) continue
+                const count = (charMap.value.get(`${xVal}|${yVal}|${r}`) ?? []).length
+                if (count > max) max = count
+            }
+        }
+        result[xVal] = max
+    }
+    return result
+})
+
+const bandCols = (xVal: string): number => {
+    const maxInColumn = maxCharsPerColumn.value[xVal] ?? 0
+    return maxInColumn <= 1 ? 1 : 2
+}
 
 const bandRows = (yVal: string, rarity: number): number => {
     const maxInRow = maxCharsPerRarityPerRow.value[yVal]?.[rarity] ?? 0
@@ -765,7 +786,7 @@ const shareOptionsForGrid = () => ({
     --gap: 2px;
     --pad: 3px;
     display: grid;
-    grid-template-columns: repeat(2, var(--icon));
+    grid-template-columns: repeat(var(--band-cols, 2), var(--icon));
     padding: var(--pad) 4px;
     min-height: calc(var(--band-rows, 1) * var(--icon) + (var(--band-rows, 1) - 1) * var(--gap) + 2 * var(--pad));
     border-radius: 4px;
