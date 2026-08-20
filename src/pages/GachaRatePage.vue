@@ -61,6 +61,39 @@ const step3Cost = ref(3000)
 const step3Rate = ref(10)
 const bonusRateUpChance = ref(10)
 
+const bannerPreset = ref('limited')
+
+const BANNER_PRESETS = {
+    limited: {
+        label: 'Limited',
+        hasRetryingSoftPity: true,
+        softPityRate: 60,
+        bonusRateUpChance: 10,
+    },
+    standard: {
+        label: 'Standard',
+        hasRetryingSoftPity: true,
+        softPityRate: 60,
+        bonusRateUpChance: 100,
+    },
+    legacy: {
+        label: 'Legacy',
+        hasRetryingSoftPity: false,
+        softPityRate: 12,
+        bonusRateUpChance: 10,
+    },
+}
+
+function applyBannerPreset(preset) {
+    const config = BANNER_PRESETS[preset]
+    if (!config) return
+
+    bannerPreset.value = preset
+    hasRetryingSoftPity.value = config.hasRetryingSoftPity
+    softPityRate.value = config.softPityRate
+    bonusRateUpChance.value = config.bonusRateUpChance
+}
+
 const xAxisMode = ref('pulls') // 'pulls' | 'gems'
 
 const sparkPoints = computed(() => {
@@ -232,7 +265,26 @@ function computeExpectedSSRCounts(maxPulls) {
     for (let p = 1; p <= maxPulls; p++) {
         cum += ssrRateForPull(p) / 100
 
-        if (stepUpEnabled.value && p === 30) cum += 1
+        if (stepUpEnabled.value && p === 30) {
+            cum += 1
+        }
+
+        if (p === 50) {
+            cum += 1
+        }
+
+        if (p === 100 && hasRetryingSoftPity.value) {
+            cum += 1
+        }
+
+        if (p === 100) {
+            // TODO: This is to model the soft pity thing, so it should prolly not be static at 100 but instead use something similar to the isSoftWindow to find the end logic
+            cum += 1
+        }
+
+        if (sparkPoints.value.has(p)) {
+            cum += 1
+        }
 
         counts[p] = cum
     }
@@ -610,6 +662,22 @@ const downloadFullHistoryHorizontal = async () => {
     <div class="setup-page">
         <h1 class="page-title">Gacha Rate Simulator</h1>
 
+        <section class="card banner-presets">
+            <span class="filters-heading">Banner Preset</span>
+            <div class="segmented">
+                <button v-for="(preset, key) in BANNER_PRESETS" :key="key" type="button" class="segment"
+                    :class="{ active: bannerPreset === key }" @click="applyBannerPreset(key)">
+                    {{ preset.label }}
+                </button>
+            </div>
+            <span class="preset-description">
+                {{ BANNER_PRESETS[bannerPreset].hasRetryingSoftPity
+                    ? `${BANNER_PRESETS[bannerPreset].softPityRate}% repeating soft pity`
+                    : `${BANNER_PRESETS[bannerPreset].softPityRate}% 100-gauge pity`
+                }} · Step-up pickup {{ BANNER_PRESETS[bannerPreset].bonusRateUpChance }}%
+            </span>
+        </section>
+
         <section class="card numeric-row">
             <span class="filters-heading">Spark Curve</span>
             <label class="field">
@@ -806,6 +874,16 @@ const downloadFullHistoryHorizontal = async () => {
     background: var(--accent-glow);
     border-color: var(--border-strong);
     color: var(--accent);
+}
+
+.banner-presets {
+    align-items: center;
+}
+
+.preset-description {
+    font-size: 0.76rem;
+    color: var(--muted);
+    opacity: 0.85;
 }
 
 .filters-heading {
