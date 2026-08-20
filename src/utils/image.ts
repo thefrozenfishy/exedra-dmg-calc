@@ -1,4 +1,4 @@
-import { toPng } from "html-to-image"
+import { toPng, toBlob } from "html-to-image"
 import { toast } from "vue3-toastify"
 import { ref, onMounted } from "vue"
 import { getSupabase } from "./supabase"
@@ -17,6 +17,16 @@ const BASE_IMG_SETTINGS = {
 const MAX_CANVAS_SIDE_PX = 16_000
 
 const SHARE_MAX_BYTES = 50 * 1024 * 1024 * 0.8
+const EXPORT_MIME = "image/webp"
+const EXPORT_EXT = "webp"
+const EXPORT_QUALITY = 0.92
+const CLIPBOARD_MIME = "image/png"
+
+function withExtension(filename: string, ext: string): string {
+    const dot = filename.lastIndexOf(".")
+    const base = dot > 0 ? filename.slice(0, dot) : filename
+    return `${base}.${ext}`
+}
 
 const safeSettings = (el: HTMLElement, pixelRatio: number, maxBytes = Infinity) => {
     const naturalWidth = el.scrollWidth
@@ -145,7 +155,7 @@ export const useClipboardSupport = () => {
 
 export const canWriteToClipboard = async (): Promise<boolean> => {
     if (!navigator.clipboard || !window.ClipboardItem) return false
-    if (ClipboardItem.supports && !ClipboardItem.supports("image/png")) return false
+    if (ClipboardItem.supports && !ClipboardItem.supports(CLIPBOARD_MIME)) return false
 
     const isFirefoxAndroid = /Android.*Firefox/i.test(navigator.userAgent)
     if (isFirefoxAndroid) return false
@@ -206,7 +216,7 @@ const writeBlobPromiseToClipboard = async (filename: string, blobPromise: Promis
 
     try {
         await navigator.clipboard.write([
-            new ClipboardItem({ "image/png": blobPromise })
+            new ClipboardItem({ [CLIPBOARD_MIME]: blobPromise })
         ])
         toast.update(toastId, { render: "Copied to clipboard!", type: "success", isLoading: false, autoClose: 3000 })
     } catch (err) {
@@ -258,8 +268,8 @@ export const openImageInNewTab = async (target: string | HTMLElement, options?: 
 
     try {
         const url = await withExportState(el, options, async (element) => {
-            const dataUrl = await toPng(element, highResSettings(element))
-            const blob = await fetch(dataUrl).then(r => r.blob())
+            const blob = await toBlob(element, { ...highResSettings(element), type: EXPORT_MIME, quality: EXPORT_QUALITY })
+            if (!blob) throw new Error("Image generation failed")
             return URL.createObjectURL(blob)
         })
 
@@ -299,12 +309,12 @@ const uploadBlobForSharing = async (blob: Blob): Promise<{ path: string, publicU
     const userId = getUserId() ?? "anon"
     const shareId = randomId()
 
-    const path = `${userId}/${Date.now()}-${shareId}.png`
+    const path = `${userId}/${Date.now()}-${shareId}.${EXPORT_EXT}`
 
     const { error: uploadError } = await supabase.storage
         .from(SHARE_BUCKET)
         .upload(path, blob, {
-            contentType: "image/png",
+            contentType: EXPORT_MIME,
             cacheControl: "31536000", // 1 year -- this file never changes once uploaded
         })
 
@@ -351,8 +361,9 @@ export const generateShareLink = async (
     }
 
     const blob = await withExportState(el, options, async (element) => {
-        const dataUrl = await toPng(element, shareSettings(element))
-        return fetch(dataUrl).then(r => r.blob())
+        const b = await toBlob(element, { ...shareSettings(element), type: EXPORT_MIME, quality: EXPORT_QUALITY })
+        if (!b) throw new Error("Image generation failed")
+        return b
     })
 
     const { publicUrl, shareId } = await uploadBlobForSharing(blob)
@@ -386,14 +397,21 @@ export const copyImageToClipboardOrShareLink = async (
 
     try {
         await navigator.clipboard.write([
-            new ClipboardItem({ "image/png": blob })
+            new ClipboardItem({ [CLIPBOARD_MIME]: blob })
         ])
         toast.update(toastId, { render: "Copied to clipboard!", type: "success", isLoading: false, autoClose: 3000 })
         return { copied: true }
     } catch (err) {
         console.error("Clipboard write failed, falling back to share link:", err)
         try {
-            const { publicUrl, shareId } = await uploadBlobForSharing(blob)
+            // Re-render as webp rather than re-using the PNG clipboard blob,
+            // so the share link that gets stored is still space-efficient.
+            const shareBlob = await withExportState(el, options, async (element) => {
+                const b = await toBlob(element, { ...shareSettings(element), type: EXPORT_MIME, quality: EXPORT_QUALITY })
+                if (!b) throw new Error("Image generation failed")
+                return b
+            })
+            const { publicUrl, shareId } = await uploadBlobForSharing(shareBlob)
             const shareUrl = await createSharePage(shareId, publicUrl, shareOpts)
             toast.update(toastId, {
                 render: "Couldn't save image to clipboard — use the copy button next to the link instead",
@@ -415,7 +433,7 @@ export const generateShareLinkFromCanvas = async (
     shareOpts?: ShareLinkOptions
 ): Promise<string> => {
     const blob = await new Promise<Blob>((resolve, reject) =>
-        canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png")
+        canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), EXPORT_MIME, EXPORT_QUALITY)
     )
 
     const { publicUrl, shareId } = await uploadBlobForSharing(blob)
@@ -441,14 +459,15 @@ export const downloadImage = async (filename: string, target: string | HTMLEleme
         return
     }
 
+    const outFilename = withExtension(filename, EXPORT_EXT)
     const toastId = toast.loading("Downloading...", { position: toast.POSITION.TOP_RIGHT, icon: false })
     try {
         await withExportState(el, options, async (element) => {
-            const dataUrl = await toPng(element, highResSettings(element))
-            const blob = await fetch(dataUrl).then(r => r.blob())
-            await downloadBlob(filename, blob)
+            const blob = await toBlob(element, { ...highResSettings(element), type: EXPORT_MIME, quality: EXPORT_QUALITY })
+            if (!blob) throw new Error("Image generation failed")
+            await downloadBlob(outFilename, blob)
         })
-        toast.update(toastId, { render: `Downloaded as ${filename}`, type: "success", isLoading: false, autoClose: 3000 })
+        toast.update(toastId, { render: `Downloaded as ${outFilename}`, type: "success", isLoading: false, autoClose: 3000 })
     } catch (err) {
         console.error("Download failed:", err)
         toast.update(toastId, { render: "Download failed", type: "error", isLoading: false, autoClose: 3000 })
@@ -457,7 +476,7 @@ export const downloadImage = async (filename: string, target: string | HTMLEleme
 
 export const copyCanvasToClipboard = async (filename: string, canvas: HTMLCanvasElement) => {
     const blobPromise = new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png")
+        canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), CLIPBOARD_MIME)
     })
     await writeBlobPromiseToClipboard(filename, blobPromise)
 }
@@ -465,7 +484,7 @@ export const copyCanvasToClipboard = async (filename: string, canvas: HTMLCanvas
 export const openCanvasInImage = async (canvas: HTMLCanvasElement) => {
     const toastId = toast.loading("Opening image...", { position: toast.POSITION.TOP_RIGHT, icon: false })
     try {
-        const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png"))
+        const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), EXPORT_MIME, EXPORT_QUALITY))
         const url = URL.createObjectURL(blob)
         window.open(url, "_blank")
         toast.update(toastId, { render: "Opened image!", type: "success", isLoading: false, autoClose: 3000 })
@@ -477,11 +496,12 @@ export const openCanvasInImage = async (canvas: HTMLCanvasElement) => {
 }
 
 export const downloadCanvas = async (filename: string, canvas: HTMLCanvasElement) => {
+    const outFilename = withExtension(filename, EXPORT_EXT)
     const toastId = toast.loading("Downloading...", { position: toast.POSITION.TOP_RIGHT, icon: false })
     try {
-        const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), "image/png"))
-        await downloadBlob(filename, blob)
-        toast.update(toastId, { render: `Downloaded as ${filename}`, type: "success", isLoading: false, autoClose: 3000 })
+        const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(b => b ? resolve(b) : reject(new Error("toBlob failed")), EXPORT_MIME, EXPORT_QUALITY))
+        await downloadBlob(outFilename, blob)
+        toast.update(toastId, { render: `Downloaded as ${outFilename}`, type: "success", isLoading: false, autoClose: 3000 })
     } catch (err) {
         console.error(err)
         toast.update(toastId, { render: "Download failed", type: "error", isLoading: false, autoClose: 3000 })
