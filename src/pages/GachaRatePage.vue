@@ -6,9 +6,9 @@ import {
     LineElement,
     PointElement,
     LinearScale,
-    CategoryScale,
     Tooltip,
-    Legend
+    Legend,
+    Filler,
 } from 'chart.js'
 import { useSetting } from '../store/settingsStore'
 import CharacterSelector from '../components/CharacterSelector.vue'
@@ -22,9 +22,9 @@ Chart.register(
     LineElement,
     PointElement,
     LinearScale,
-    CategoryScale,
     Tooltip,
-    Legend
+    Legend,
+    Filler
 )
 
 const pickupCharacter = useSetting("pickupCharacter", undefined)
@@ -53,6 +53,16 @@ const softPityRate = ref(60)
 const isDualPickup = ref(false)
 const hasRetryingSoftPity = ref(true)
 
+const stepUpEnabled = useSetting('stepUpEnabled', false)
+const step1Cost = ref(1500)
+const step2Cost = ref(2000)
+const step2Rate = ref(5)
+const step3Cost = ref(3000)
+const step3Rate = ref(10)
+const bonusRateUpChance = ref(10)
+
+const xAxisMode = ref('pulls') // 'pulls' | 'gems'
+
 const sparkPoints = computed(() => {
     let currentPull = 0
     let currentInterval = sparkInterval.value
@@ -78,9 +88,15 @@ const curveColors = [
 
 const STATE = { ELIGIBLE: 0, LOCKED: 1 }
 
+const MAX_PULLS = 999
+const PULL_GRID_STEP = 50
+const GEM_GRID_STEP = 20000
+const PROB_GRID_STEP = 0.1
+
 function computeDPTable(maxPulls, maxCopies) {
     const pickupP = pickupRate.value / 100
     const softP = softPityRate.value / 100
+    const bonusP = bonusRateUpChance.value / 100
 
     let dp = Array.from({ length: maxCopies + 1 }, () => [0, 0])
     dp[0][STATE.ELIGIBLE] = 1
@@ -161,6 +177,24 @@ function computeDPTable(maxPulls, maxCopies) {
 
         dp = next
 
+        if (stepUpEnabled.value && p === 30) {
+            let afterBonus = Array.from({ length: maxCopies + 1 }, () => [0, 0])
+
+            for (let k = 0; k <= maxCopies; k++) {
+                for (let s = 0; s <= 1; s++) {
+                    const prob = dp[k][s]
+                    if (prob === 0) continue
+
+                    const nk = Math.min(k + 1, maxCopies)
+
+                    afterBonus[nk][s] += prob * bonusP
+                    afterBonus[k][s] += prob * (1 - bonusP)
+                }
+            }
+
+            dp = afterBonus
+        }
+
         for (let k = 0; k <= maxCopies; k++) {
             let sum = 0
             for (let kk = k; kk <= maxCopies; kk++) {
@@ -173,33 +207,90 @@ function computeDPTable(maxPulls, maxCopies) {
     return result
 }
 
+function ssrRateForPull(p) {
+    if (stepUpEnabled.value && p <= 30) {
+        if (p <= 10) return rate.value
+        if (p <= 20) return step2Rate.value
+        return step3Rate.value
+    }
+    return rate.value
+}
+
+function gemCostForPull(p) {
+    if (stepUpEnabled.value && p <= 30) {
+        if (p <= 10) return step1Cost.value / 10
+        if (p <= 20) return step2Cost.value / 10
+        return step3Cost.value / 10
+    }
+    return 300
+}
+
+function computeExpectedSSRCounts(maxPulls) {
+    const counts = new Array(maxPulls + 1).fill(0)
+    let cum = 0
+
+    for (let p = 1; p <= maxPulls; p++) {
+        cum += ssrRateForPull(p) / 100
+
+        if (stepUpEnabled.value && p === 30) cum += 1
+
+        counts[p] = cum
+    }
+
+    return counts
+}
+
+function computeCumulativeGems(maxPulls) {
+    const gems = new Array(maxPulls + 1).fill(0)
+    let cum = 0
+
+    for (let p = 1; p <= maxPulls; p++) {
+        cum += gemCostForPull(p)
+        gems[p] = cum
+    }
+
+    return gems
+}
+
 function renderChart() {
     if (chart) chart.destroy()
 
-    const labels = Array.from({ length: 1000 }, (_, i) => i)
+    const dpTable = computeDPTable(MAX_PULLS, 6)
+    const ssrCounts = computeExpectedSSRCounts(MAX_PULLS)
+    const gemsCum = computeCumulativeGems(MAX_PULLS)
 
-    const dpTable = computeDPTable(1000, 6)
+    const xValues = xAxisMode.value === 'gems' ? gemsCum : Array.from({ length: MAX_PULLS + 1 }, (_, i) => i)
 
     const datasets = []
+
+    datasets.push({
+        label: 'Expected SSR Count',
+        data: xValues.map((x, p) => ({ x, y: ssrCounts[p] })),
+        borderColor: '#e1bf87',
+        backgroundColor: '#e1bf87',
+        borderDash: [4, 4],
+        borderWidth: 1.5,
+        pointRadius: 0,
+        tension: 0.15,
+        yAxisID: 'y1',
+    })
 
     for (let t = 1; t <= 6; t++) {
         datasets.push({
             label: `a${t - 1}+`,
-            data: labels.map(p => dpTable[p][t]),
+            data: xValues.map((x, p) => ({ x, y: dpTable[p][t] })),
             borderColor: curveColors[t - 1],
             backgroundColor: curveColors[t - 1],
             tension: 0.2,
             pointRadius: 0,
-            borderWidth: 2
+            borderWidth: 2,
+            yAxisID: 'y'
         })
     }
 
     chart = new Chart(canvasRef.value, {
         type: 'line',
-        data: {
-            labels,
-            datasets
-        },
+        data: { datasets },
         options: {
             responsive: true,
             animation: false,
@@ -211,21 +302,41 @@ function renderChart() {
                 tooltip: {
                     callbacks: {
                         label(ctx) {
-                            const x = ctx.parsed.x
+                            const p = ctx.dataIndex
+                            const gems = Math.round(gemsCum[p] ?? 0)
+                            const where = `${p} pulls / ${gems.toLocaleString(undefined, {
+                                notation: "compact",
+                                maximumFractionDigits: 1,
+                            })} gems`
+
+                            if (ctx.dataset.yAxisID === 'y1') {
+                                return `${ctx.dataset.label} — ${where}: ${ctx.parsed.y.toFixed(2)} SSRs`
+                            }
+
                             const y = (ctx.parsed.y * 100).toFixed(2)
-                            return `${ctx.dataset.label} — Pulls: ${x}, Prob: ${y}%`
+                            return `${ctx.dataset.label} — ${where}: ${y}%`
                         }
                     }
                 }
             },
             scales: {
                 x: {
+                    type: 'linear',
                     title: {
                         display: true,
-                        text: 'Number of Pulls'
+                        text: xAxisMode.value === 'gems' ? 'Gems Spent' : 'Number of Pulls'
+                    },
+                    ticks: {
+                        stepSize: xAxisMode.value === 'gems' ? GEM_GRID_STEP : PULL_GRID_STEP,
+                        callback: v => xAxisMode.value === 'gems' ? Number(v).toLocaleString() : v
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
                     }
                 },
                 y: {
+                    type: 'linear',
+                    position: 'left',
                     min: 0,
                     max: 1,
                     title: {
@@ -233,7 +344,24 @@ function renderChart() {
                         text: 'Probability'
                     },
                     ticks: {
+                        stepSize: PROB_GRID_STEP,
                         callback: v => `${Math.round(v * 100)}%`
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    position: 'right',
+                    min: 0,
+                    max: 50,
+                    grid: {
+                        drawOnChartArea: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Expected SSR Count'
                     }
                 }
             }
@@ -250,7 +378,15 @@ watch(
         softPityAt,
         softPityRate,
         isDualPickup,
-        hasRetryingSoftPity
+        hasRetryingSoftPity,
+        stepUpEnabled,
+        step1Cost,
+        step2Cost,
+        step2Rate,
+        step3Cost,
+        step3Rate,
+        bonusRateUpChance,
+        xAxisMode
     ],
     renderChart
 )
@@ -505,6 +641,48 @@ const downloadFullHistoryHorizontal = async () => {
             </label>
         </section>
 
+        <section class="card numeric-row">
+            <span class="filters-heading">Step-Up Banner</span>
+            <label class="chip" :class="{ active: stepUpEnabled }">
+                <input type="checkbox" v-model.boolean="stepUpEnabled" /> Enable step-up
+            </label>
+
+            <label class="field">
+                <span class="field-label">Step 1 Gem Cost</span>
+                <input type="number" v-model.number="step1Cost" />
+            </label>
+            <label class="field">
+                <span class="field-label">Step 2 Gem Cost</span>
+                <input type="number" v-model.number="step2Cost" />
+            </label>
+            <label class="field">
+                <span class="field-label">Step 2 SSR Rate (%)</span>
+                <input type="number" v-model.number="step2Rate" step="0.01" />
+            </label>
+            <label class="field">
+                <span class="field-label">Step 3 Gem Cost</span>
+                <input type="number" v-model.number="step3Cost" />
+            </label>
+            <label class="field">
+                <span class="field-label">Step 3 SSR Rate (%)</span>
+                <input type="number" v-model.number="step3Rate" step="0.01" />
+            </label>
+            <label class="field">
+                <span class="field-label">Bonus Rate-up Chance (%)</span>
+                <input type="number" v-model.number="bonusRateUpChance" />
+            </label>
+        </section>
+
+        <div class="chart-toolbar">
+            <span class="filters-heading">X-Axis</span>
+            <div class="segmented">
+                <button type="button" class="segment" :class="{ active: xAxisMode === 'pulls' }"
+                    @click="xAxisMode = 'pulls'">Pulls</button>
+                <button type="button" class="segment" :class="{ active: xAxisMode === 'gems' }"
+                    @click="xAxisMode = 'gems'">Gems Spent</button>
+            </div>
+        </div>
+
         <div class="chart-wrapper">
             <canvas ref="canvasRef"></canvas>
         </div>
@@ -640,6 +818,15 @@ const downloadFullHistoryHorizontal = async () => {
     opacity: 0.7;
 }
 
+.hint {
+    flex-basis: 100%;
+    margin: 0.25rem 0 0;
+    font-size: 0.76rem;
+    line-height: 1.4;
+    color: var(--muted);
+    opacity: 0.85;
+}
+
 .section-title {
     margin: 0 0 0.75rem;
     font-size: 1.1rem;
@@ -694,6 +881,41 @@ const downloadFullHistoryHorizontal = async () => {
 
 .field input[type="number"] {
     width: 100px;
+}
+
+.chart-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.segmented {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.segment {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: inherit;
+    padding: 0.3rem 0.8rem;
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease;
+}
+
+.segment:not(:last-child) {
+    border-right: 1px solid var(--border);
+}
+
+.segment.active {
+    background: var(--accent-glow);
+    color: var(--accent);
 }
 
 .chart-wrapper {
