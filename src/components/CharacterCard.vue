@@ -550,4 +550,97 @@ input.at-max {
   color: var(--accent);
   border-color: var(--border-strong);
 }
+
+@media (max-width: 600px) {
+  .character-row {
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    gap: 0.6rem;
+    padding: 0.6rem;
+  }
+
+  .character-row>*,
+  .col {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .col-identity {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .col-stats {
+    margin: 0;
+    align-items: stretch;
+  }
+
+  .stats-section {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .stats-grid,
+  .derived-grid {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.25rem;
+  }
+
+  .stat-cell,
+  .derived-cell {
+    min-width: 0;
+  }
+
+  .stat-cell input {
+    width: 100%;
+    max-width: 42px;
+    box-sizing: border-box;
+  }
+
+  .resource-block {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .resource-row {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .resource-chip {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .col-crystalis,
+  .col-portrait {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .crys-slots {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .edit-port-btn,
+  .edit-crys-btn {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
 </style>

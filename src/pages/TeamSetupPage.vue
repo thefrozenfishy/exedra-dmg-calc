@@ -1444,4 +1444,117 @@ export default defineComponent({
   height: 12px;
   flex-shrink: 0;
 }
+
+
+/* ── Mobile overflow fixes ── */
+@media (max-width: 600px) {
+  .setup-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .list-header {
+    display: none;
+  }
+
+  .role-header {
+    min-width: 0;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+  }
+
+  .role-header>* {
+    min-width: 0;
+  }
+
+  .role-header>div {
+    flex: 1 1 100%;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .role-resources {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .role-resource-label {
+    width: auto;
+    min-width: 78px;
+    flex: 0 0 78px;
+  }
+
+  .role-resources .magic-resource-groups {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .magic-resource-group {
+    flex-wrap: wrap;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .resource-chip {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .resource-summary {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .resource-summary-row {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    grid-template-columns: 35px minmax(0, 1fr);
+    gap: 0.4rem;
+    padding: 0.4rem;
+  }
+
+  .resource-summary-details {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .resource-summary-section {
+    width: 100%;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .resource-summary-section-label {
+    width: 68px;
+    flex: 0 0 68px;
+  }
+
+  .resource-summary-section>.resource-chip {
+    flex: 0 0 auto;
+  }
+
+  .magic-resource-groups {
+    flex: 1 1 0;
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .magic-resource-group {
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+}
 </style>
