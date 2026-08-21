@@ -61,7 +61,7 @@ const step3Cost = ref(3000)
 const step3Rate = ref(10)
 const bonusRateUpChance = ref(10)
 
-const bannerPreset = ref('limited')
+const bannerPreset = useSetting('bannerPreset', 'limited')
 
 const BANNER_PRESETS = {
     limited: {
