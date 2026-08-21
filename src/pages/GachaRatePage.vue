@@ -126,6 +126,12 @@ const PULL_GRID_STEP = 50
 const GEM_GRID_STEP = 20000
 const PROB_GRID_STEP = 0.1
 
+function isSoftPityWindow(p) {
+    return hasRetryingSoftPity.value
+        ? (p >= softPityAt.value && p % 10 === 0)
+        : (p === softPityAt.value)
+}
+
 function computeDPTable(maxPulls, maxCopies) {
     const pickupP = pickupRate.value / 100
     const softP = softPityRate.value / 100
@@ -153,11 +159,7 @@ function computeDPTable(maxPulls, maxCopies) {
             }
         }
 
-        const isSoftWindow =
-            (hasRetryingSoftPity.value
-                ? (p >= softPityAt.value && p % 10 === 0)
-                : (p === softPityAt.value)
-            )
+        const isSoftWindow = isSoftPityWindow(p)
 
         let afterSoft = Array.from({ length: maxCopies + 1 }, () => [0, 0])
 
@@ -446,10 +448,20 @@ watch(
 onMounted(renderChart)
 
 const simPulls = ref(0)
+const simGemsSpent = ref(0)
 const blueCount = ref(0)
 const purpleCount = ref(0)
 const goldCount = ref(0)
 const rateUpCount = ref(0)
+const softPityWindowLocked = ref(false)
+
+const TAG_LABELS = {
+    pity: 'SOFT PITY',
+    stepup: 'STEPUP BONUS',
+    halfpity: '50-KEY',
+    gauge: '100-GAUGE/KEY',
+    spark: 'SPARK',
+}
 
 const pullResults = ref([])
 let last_pull_count = ref(0)
@@ -457,14 +469,71 @@ let image_idx_zero = ref(0)
 
 const visiblePulls = computed(() => {
     const list = pullResults.value
-    return showFullHistory.value
+    const raw = showFullHistory.value
         ? list
         : list.slice(image_idx_zero.value, last_pull_count.value)
+
+    let realSeen = 0
+    let pendingSeparator = false
+
+    return raw.map((p) => {
+        const separatorPullsAgo = pendingSeparator ? realSeen : null
+        pendingSeparator = false
+
+        if (!p.tag) {
+            realSeen++
+            if (realSeen % 10 === 0) pendingSeparator = true
+        }
+
+        return { ...p, separatorPullsAgo }
+    })
 })
+
+function rollStandardGoldChar() {
+    return {
+        rarity: 5,
+        isRateUp: false,
+        char: eligible5stars.value[Math.floor(Math.random() * eligible5stars.value.length)]
+    }
+}
+
+function recordResult(result) {
+    if (result.rarity === 3) blueCount.value++
+    if (result.rarity === 4) purpleCount.value++
+    if (result.rarity === 5) goldCount.value++
+    if (result.isRateUp) rateUpCount.value++
+
+    pullResults.value.unshift(result)
+}
+
+function grantBonuses(p) {
+    if (p === 50) {
+        recordResult({ ...rollStandardGoldChar(), tag: 'halfpity' })
+    }
+
+    if (hasRetryingSoftPity.value) {
+        if (p === softPityAt.value) {
+            recordResult({ ...rollStandardGoldChar(), tag: 'gauge' })
+        }
+    }
+
+    if (pickupCharacter.value && sparkPoints.value.has(p)) {
+        recordResult({ rarity: 5, isRateUp: true, char: pickupCharacter.value, tag: 'spark' })
+    }
+}
 
 function pull(blueToPurple = false) {
     simPulls.value++
-    let result = { isRateUp: false }
+    const p = simPulls.value
+
+    const ssrRate = ssrRateForPull(p)
+    simGemsSpent.value += gemCostForPull(p)
+
+    const softPityOpen = pickupCharacter.value
+        && isSoftPityWindow(p)
+        && !softPityWindowLocked.value
+
+    let result = { isRateUp: false, tag: null }
 
     const hitRoll = Math.random()
 
@@ -472,12 +541,12 @@ function pull(blueToPurple = false) {
         result.rarity = 5
         result.isRateUp = true
         result.char = pickupCharacter.value
-    } else if (hitRoll < rate.value / 100) {
+    } else if (!softPityOpen && hitRoll < ssrRate / 100) {
         result.rarity = 5
         result.char = eligible5stars.value[
             Math.floor(Math.random() * eligible5stars.value.length)
         ]
-    } else if (blueToPurple || hitRoll < 0.15) {
+    } else if (blueToPurple || hitRoll >= 0.83) { // 17% for purple
         result.rarity = 4
         result.char = eligible4stars.value[
             Math.floor(Math.random() * eligible4stars.value.length)
@@ -489,39 +558,80 @@ function pull(blueToPurple = false) {
         ]
     }
 
-    if (result.rarity === 3) blueCount.value++
-    if (result.rarity === 4) purpleCount.value++
-    if (result.rarity === 5) goldCount.value++
-    if (result.isRateUp) rateUpCount.value++
+    recordResult(result)
 
-    pullResults.value.unshift(result)
+    if (softPityOpen) {
+        if (Math.random() < softPityRate.value / 100) {
+            softPityWindowLocked.value = true
+            recordResult({ rarity: 5, isRateUp: true, char: pickupCharacter.value, tag: 'pity' })
+        } else {
+            let extra = { isRateUp: false, tag: 'pity' }
+            if (hasRetryingSoftPity.value) {
+                if (hitRoll >= 0.83) { // 17% for purple
+                    extra.rarity = 4
+                    extra.char = eligible4stars.value[
+                        Math.floor(Math.random() * eligible4stars.value.length)
+                    ]
+                } else {
+                    extra.rarity = 3
+                    extra.char = eligible3stars.value[
+                        Math.floor(Math.random() * eligible3stars.value.length)
+                    ]
+                }
+            } else {
+                extra = {...rollStandardGoldChar(), ...extra}
+                softPityWindowLocked.value = true
+            }
+            console.log("Addds extra", extra)
+            recordResult(extra)
+        }
+    }
+
+    grantBonuses(p)
+
+    if (stepUpEnabled.value && p === 30) {
+        const isPickup = pickupCharacter.value && Math.random() < bonusRateUpChance.value / 100
+        recordResult({
+            rarity: 5,
+            isRateUp: !!isPickup,
+            char: isPickup
+                ? pickupCharacter.value
+                : eligible5stars.value[Math.floor(Math.random() * eligible5stars.value.length)],
+            tag: 'stepup'
+        })
+    }
 }
 
 function pullSingle() {
-    last_pull_count.value = 1
+    const before = pullResults.value.length
     pull(false)
+    last_pull_count.value = pullResults.value.length - before
 }
 
 function pullTen() {
-    last_pull_count.value = 10
+    const before = pullResults.value.length
     for (let i = 0; i < 10; i++) {
         pull(i === 0)
     }
+    last_pull_count.value = pullResults.value.length - before
 }
 
 function pullHundred() {
-    last_pull_count.value = 100
+    const before = pullResults.value.length
     for (let i = 0; i < 100; i++) {
         pull((i % 10) === 0)
     }
+    last_pull_count.value = pullResults.value.length - before
 }
 
 function resetSimulator() {
     simPulls.value = 0
+    simGemsSpent.value = 0
     blueCount.value = 0
     purpleCount.value = 0
     goldCount.value = 0
     rateUpCount.value = 0
+    softPityWindowLocked.value = false
     pullResults.value = []
 }
 
@@ -770,7 +880,8 @@ const downloadFullHistoryHorizontal = async () => {
         </section>
 
         <div class="simulator">
-            <h3 class="section-title">🎰 Gacha Simulator</h3>
+            <h3 style="margin: 0;" class="section-title">Gacha Simulator</h3>
+            <p style="margin: 0;" class="ten-separator">Using the settings displayed in the graph above</p>
 
             <div class="sim-controls">
                 <button class="btn btn-accent" @click="pullSingle">1 Pull</button>
@@ -780,7 +891,8 @@ const downloadFullHistoryHorizontal = async () => {
             </div>
 
             <div class="sim-stats">
-                <div class="stat-pill">Total: <strong>{{ simPulls }}</strong></div>
+                <div class="stat-pill">Total: <strong>{{ simPulls }}</strong> pulls</div>
+                <div class="stat-pill"><strong>{{ Math.round(simGemsSpent).toLocaleString() }}</strong> gems</div>
                 <div class="stat-pill">🔵 3★: <strong>{{ blueCount }}</strong></div>
                 <div class="stat-pill">🟣 4★: <strong>{{ purpleCount }}</strong></div>
                 <div class="stat-pill">🟡 5★: <strong>{{ goldCount }}</strong></div>
@@ -801,11 +913,25 @@ const downloadFullHistoryHorizontal = async () => {
 
             <div class="pull-grid">
                 <template v-for="(p, i) in visiblePulls" :key="i">
-                    <div v-if="i % 10 === 0 && i !== 0" class="ten-separator">
-                        {{ pullResults.length - i }} pulls ago
+                    <div v-if="p.separatorPullsAgo !== null" class="ten-separator">
+                        {{ p.separatorPullsAgo }} pulls ago
                     </div>
 
-                    <div class="pull-card" :class="{ 'gold-card': p.rarity === 5, 'plat-card': p.isRateUp }">
+                    <div v-if="p.tag" class="special-row" :class="`row-${p.tag}`">
+                        <span class="special-row-label">{{ TAG_LABELS[p.tag] }}</span>
+                        <a :href="`https://exedra.wiki/wiki/${p.char?.name}`" target="_blank" :title="p.char?.name"
+                            class="special-row-link">
+                            <img class="pull-img special-row-img" :class="{
+                                'blue-border': p.rarity === 3,
+                                'purple-border': p.rarity === 4,
+                                'gold-border': p.rarity === 5
+                            }" :src="`/exedra-dmg-calc/kioku_images/${p.char?.id}_thumbnail.png`" />
+                        </a>
+                        <span class="special-row-name">{{ p.char?.name }}</span>
+                        <span v-if="p.isRateUp" class="special-row-uptext">Rate-up</span>
+                    </div>
+
+                    <div v-else class="pull-card" :class="{ 'gold-card': p.rarity === 5, 'plat-card': p.isRateUp }">
                         <div :title="p.char?.name">
                             <a :href="`https://exedra.wiki/wiki/${p.char?.name}`" target="_blank">
                                 <img class="pull-img" :class="{
@@ -1060,9 +1186,9 @@ const downloadFullHistoryHorizontal = async () => {
 }
 
 .pull-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(2, auto);
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
     gap: 0.75rem;
     width: 100%;
     margin-top: 1rem;
@@ -1072,7 +1198,6 @@ const downloadFullHistoryHorizontal = async () => {
 
 @media (max-width: 480px) {
     .pull-grid {
-        grid-template-columns: repeat(4, 1fr);
         gap: 0.5rem;
         padding: 8px;
     }
@@ -1083,6 +1208,14 @@ const downloadFullHistoryHorizontal = async () => {
     justify-content: center;
     align-items: center;
     position: relative;
+    flex: 0 0 calc((100% - 4 * 0.75rem) / 5);
+    box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+    .pull-card {
+        flex: 0 0 calc((100% - 3 * 0.5rem) / 4);
+    }
 }
 
 .pull-card:hover {
@@ -1132,6 +1265,85 @@ const downloadFullHistoryHorizontal = async () => {
     border-radius: 6px;
 }
 
+.special-row {
+    flex: 1 0 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 10px;
+    border: 1px dashed var(--border-strong);
+    font-size: 0.78rem;
+}
+
+.special-row-label {
+    font-weight: bold;
+    font-size: 0.66rem;
+    letter-spacing: 0.03em;
+    padding: 2px 6px;
+    border-radius: 6px;
+    color: #1e1e1e;
+    white-space: nowrap;
+}
+
+.special-row-img {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+}
+
+.special-row-name {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.special-row-uptext {
+    color: gold;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.row-pity {
+    background: rgba(185, 131, 255, 0.12);
+}
+
+.row-pity .special-row-label {
+    background: #b983ff;
+}
+
+.row-stepup {
+    background: rgba(255, 143, 163, 0.12);
+}
+
+.row-stepup .special-row-label {
+    background: #ff8fa3;
+}
+
+.row-halfpity {
+    background: rgba(126, 232, 250, 0.12);
+}
+
+.row-halfpity .special-row-label {
+    background: #7ee8fa;
+}
+
+.row-gauge {
+    background: rgba(76, 201, 240, 0.12);
+}
+
+.row-gauge .special-row-label {
+    background: #4cc9f0;
+}
+
+.row-spark {
+    background: rgba(255, 209, 102, 0.12);
+}
+
+.row-spark .special-row-label {
+    background: #ffd166;
+}
+
 .history-header {
     display: flex;
     justify-content: center;
@@ -1145,7 +1357,7 @@ const downloadFullHistoryHorizontal = async () => {
 }
 
 .ten-separator {
-    grid-column: 1 / -1;
+    flex: 1 0 100%;
     text-align: center;
     font-size: 0.7rem;
     color: var(--muted);
