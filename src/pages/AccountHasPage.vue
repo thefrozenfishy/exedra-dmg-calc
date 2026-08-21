@@ -61,6 +61,9 @@
             <label class="chip" :class="{ active: showLimiteds }">
                 <input type="checkbox" v-model="showLimiteds" /> Limiteds
             </label>
+            <label class="chip" :class="{ active: showStandards }">
+                <input type="checkbox" v-model="showStandards" /> Standards
+            </label>
             <label v-if="showOffElementalOnesOption" class="chip" :class="{ active: showOffElementalOnes }">
                 <input type="checkbox" v-model="showOffElementalOnes" /> Off-elemental crys in count
             </label>
@@ -384,6 +387,7 @@ const show4stars = useSetting("show4stars", false);
 const show3stars = useSetting("show3stars", false);
 const showUnowned = useSetting("showUnowned", true);
 const showLimiteds = useSetting("showLimiteds", true);
+const showStandards = useSetting("showStandards", true);
 
 const round = (nr: number) => nr.toFixed(2)
 
@@ -448,6 +452,7 @@ const groupedByAscension = computed(() => {
 
     for (const ch of displayedCharactersComputed.value) {
         if (!showLimiteds.value && !ch.isStandardChar) continue
+        if (!showStandards.value && ch.isStandardChar) continue
 
         if (ch.rarity === 4 || ch.name === LuxMagica) {
             groups[7].push(ch)
