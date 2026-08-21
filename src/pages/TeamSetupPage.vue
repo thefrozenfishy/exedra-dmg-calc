@@ -13,6 +13,10 @@
         <button class="btn" :class="{ 'btn-active': showHighestTeam }" @click="showHighestTeam = !showHighestTeam">
           {{ showHighestTeam ? 'Hide Highest PWR Team' : 'Show Highest PWR Team' }}
         </button>
+        <label class="chip" :class="{ active: simulateMaxAccountLevels }"
+          title="Simulate using max possible kioku level and magic level based on player level. Kioku level is capped at your Player Level, and Magic level is capped at whatever your simulated Kioku level allows.">
+          <input type="checkbox" v-model="simulateMaxAccountLevels" /> Simulate using max possible levels
+        </label>
         <div v-if="calculating" class="calc-progress">
           <span class="calc-indicator">Calculating max pwr team {{ currentBestPwr }}...</span>
           <div class="progress-wrapper">
@@ -35,6 +39,19 @@
         <label class="chip" :class="{ active: show3stars }">
           <input type="checkbox" v-model="show3stars" /> ★★★
         </label>
+      </div>
+    </section>
+
+    <section v-if="showHighestTeam && highestTeam" class="best-team-panel card">
+      <div class="best-team-header">
+        <span class="filters-heading highlight">
+          Highest Possible Team PWR
+          <span v-if="simulateMaxAccountLevels" class="simulated-badge" title="Kioku and Magic levels are simulated at the max your account could reach, not your current levels">(Simulated)</span>
+        </span>
+        <span class="pwr-display"> <strong>{{ highestPwr?.toLocaleString() }}</strong></span>
+      </div>
+      <div class="team-rows">
+        <TeamRow :team="highestTeam" />
       </div>
     </section>
 
@@ -139,16 +156,6 @@
           </div>
         </div>
       </template>
-    </section>
-
-    <section v-if="showHighestTeam && highestTeam" class="best-team-panel card">
-      <div class="best-team-header">
-        <span class="filters-heading highlight">Highest Possible Team PWR</span>
-        <span class="pwr-display"> <strong>{{ highestPwr?.toLocaleString() }}</strong></span>
-      </div>
-      <div class="team-rows">
-        <TeamRow :team="highestTeam" />
-      </div>
     </section>
 
     <section class="filters card">
@@ -383,7 +390,7 @@ import { defineComponent, computed, reactive, ref, watch, onMounted, onBeforeUnm
 import CharacterCard from '../components/CharacterCard.vue'
 import TeamRow from '../components/TeamRow.vue'
 import { useCharacterStore } from '../store/characterStore.js'
-import { Character, KiokuConstants } from '../types/KiokuTypes.js'
+import { Character, KiokuConstants, withMaxLevelsForPlayerLevel } from '../types/KiokuTypes.js'
 import { useSetting } from '../store/settingsStore.js'
 import { FinalTeam } from '../types/BestTeamTypes.js'
 import { KiokuElement, LuxMagica, maxPlayerLevel } from '../types/enums.js'
@@ -415,6 +422,7 @@ export default defineComponent({
     )
     const playerLevel = useSetting('playerLevel', 1)
     const usePlayerLevelAsKiokuMaxLevel = useSetting('usePlayerLevelAsKiokuMaxLevel', false)
+    const simulateMaxAccountLevels = useSetting('simulateMaxAccountLevels', false)
     const showResourceCosts = useSetting('showResourceCosts', true)
     const showPerKiokuResourceCosts = useSetting('showPerKiokuResourceCosts', true)
 
@@ -470,6 +478,7 @@ export default defineComponent({
       const chars = store.characters.filter(c => c.rarity === 5 && c.enabled)
         .concat(store.characters.filter(c => c.rarity != 5))
         .concat(store.characters.filter(c => c.name === LuxMagica))
+        .map(c => simulateMaxAccountLevels.value ? withMaxLevelsForPlayerLevel(c, playerLevel.value) : c)
       needsRecalc.value = false
       calculating.value = true
       completedRuns.value = 0
@@ -513,6 +522,16 @@ export default defineComponent({
         worker?.terminate()
         worker = null
         calculating.value = false
+      }
+    })
+
+    watch(simulateMaxAccountLevels, () => {
+      triggerRecalc()
+    })
+
+    watch(playerLevel, () => {
+      if (simulateMaxAccountLevels.value) {
+        triggerRecalc()
       }
     })
 
@@ -836,6 +855,7 @@ export default defineComponent({
       groupBy,
       playerLevel,
       usePlayerLevelAsKiokuMaxLevel,
+      simulateMaxAccountLevels,
       maxPlayerLevel,
       showResourceCosts,
       showPerKiokuResourceCosts,
@@ -960,6 +980,15 @@ export default defineComponent({
   color: var(--accent);
   opacity: 1;
   font-weight: 700;
+}
+
+.simulated-badge {
+  margin-left: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--muted);
+  opacity: 0.85;
+  cursor: help;
 }
 
 .pwr-display {

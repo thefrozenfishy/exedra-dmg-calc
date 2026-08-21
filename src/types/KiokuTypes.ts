@@ -442,6 +442,45 @@ export const KiokuConstants = {
     optimalAttackerSubCrys: Array(3).fill(maxDmgSubCrys).flat()
 }
 
+export interface MagicLevelBreakpoint {
+    minKiokuLvl: number
+    maxMagicLvl: number
+}
+
+export const magicLevelBreakpoints: MagicLevelBreakpoint[] = [
+    { minKiokuLvl: 1, maxMagicLvl: 30 },
+    { minKiokuLvl: 30, maxMagicLvl: 60 },
+    { minKiokuLvl: 60, maxMagicLvl: 90 },
+    { minKiokuLvl: 90, maxMagicLvl: 120 },
+    { minKiokuLvl: 101, maxMagicLvl: 125 },
+    { minKiokuLvl: 110, maxMagicLvl: 130 },
+    { minKiokuLvl: 136, maxMagicLvl: 135 },
+    { minKiokuLvl: 146, maxMagicLvl: 140 },
+]
+
+export function getMaxMagicLevelForKiokuLevel(kiokuLvl: number): number {
+    let cap = magicLevelBreakpoints[0].maxMagicLvl
+    for (const bp of magicLevelBreakpoints) {
+        if (kiokuLvl < bp.minKiokuLvl) break
+        cap = bp.maxMagicLvl
+    }
+    return Math.min(cap, KiokuConstants.maxMagicLvl)
+}
+
+export function getMaxKiokuLevelForPlayerLevel(playerLevel: number): number {
+    return Math.min(Math.max(playerLevel || 0, 1), KiokuConstants.maxKiokuLvl)
+}
+
+export function withMaxLevelsForPlayerLevel<T extends { kiokuLvl: number; magicLvl: number }>(
+    char: T,
+    playerLevel: number
+): T {
+    const simulatedKiokuLvl = getMaxKiokuLevelForPlayerLevel(playerLevel)
+    const kiokuLvl = Math.max(char.kiokuLvl ?? 0, simulatedKiokuLvl)
+    const magicLvl = Math.max(char.magicLvl ?? 0, getMaxMagicLevelForKiokuLevel(kiokuLvl))
+    return { ...char, kiokuLvl, magicLvl }
+}
+
 export interface KiokuArgs {
     name: string;
     kiokuLvl: number;
