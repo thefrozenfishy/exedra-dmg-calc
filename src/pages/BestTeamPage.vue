@@ -14,6 +14,10 @@
                 <span class="field-label">Top teams per DPS</span>
                 <input type="number" v-model="topTeamsPerKioku" />
             </label>
+            <label class="field">
+                <span class="field-label">Player Level</span>
+                <input type="number" min="1" :max="maxPlayerLevel" v-model.number="playerLevel" />
+            </label>
         </section>
 
         <section class="filters card">
@@ -35,9 +39,13 @@
             <label class="chip" :class="{ active: onlyConsiderOnElements }">
                 <input type="checkbox" v-model="onlyConsiderOnElements" /> On-element only
             </label>
-            <label class="chip" :class="{ active: optimalSubCrys }"
+            <label class="chip" style="cursor: help;" :class="{ active: optimalSubCrys }"
                 title="Calculate using perfect Crit rate, Crit Damage & atk crystalis substats">
                 <input type="checkbox" v-model="optimalSubCrys" /> Perfect crit &amp; substats
+            </label>
+            <label class="chip" style="cursor: help;" :class="{ active: useMaxAccountLevels }"
+                title="Calculate using the max Kioku level and Magic level your account could theoretically reach based on your Player Level, instead of each Kioku's current level">
+                <input type="checkbox" v-model="useMaxAccountLevels" /> Use max possible kioku and magic level
             </label>
         </section>
 
@@ -243,8 +251,8 @@ import DamageReductionInputs from '../components/DamageReductionInputs.vue'
 import ResultsHeader from '../components/ResultsHeader.vue'
 import { useEnemyStore } from '../store/singleTeamStore'
 import { useCharacterStore } from '../store/characterStore'
-import { Character } from '../types/KiokuTypes'
-import { KiokuRole, KiokuElement, elementAlimentMap, LuxMagica } from '../types/enums'
+import { Character, KiokuConstants, withMaxLevelsForPlayerLevel } from '../types/KiokuTypes'
+import { KiokuRole, KiokuElement, elementAlimentMap, LuxMagica, maxPlayerLevel } from '../types/enums'
 import { toast } from "vue3-toastify"
 import { FinalTeam } from '../types/BestTeamTypes'
 import { useSetting } from '../store/settingsStore'
@@ -284,6 +292,8 @@ const offElementDebuffMultReduction = useSetting("offElementDebuffMultReduction"
 const optimizeAverageDamage = useSetting("optimizeAverageDamage", false)
 const attackerHealth = useSetting("attackerHealth", 100)
 const optimalSubCrys = useSetting("optimalSubCrys", true)
+const useMaxAccountLevels = useSetting("useMaxAccountLevels", false)
+const playerLevel = useSetting("playerLevel", KiokuConstants.maxKiokuLvl)
 const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
 const onlyConsiderOnElements = useSetting("onlyConsiderOnElements", false)
 
@@ -509,7 +519,11 @@ async function startSimulation() {
             minDefender: safeInt(minDefender.value, 0, 0, 4),
             minBreaker: safeInt(minBreaker.value, 0, 0, 4),
             optimalSubCrys: optimalSubCrys.value,
-            enabledCharacters: JSON.parse(JSON.stringify(members.value)),
+            enabledCharacters: JSON.parse(JSON.stringify(
+                useMaxAccountLevels.value
+                    ? members.value.map(c => withMaxLevelsForPlayerLevel(c, playerLevel.value))
+                    : members.value
+            )),
             buffMultReduction: buffMultReduction.value,
             offElementBuffMultReduction: offElementBuffMultReduction.value,
             debuffMultReduction: debuffMultReduction.value,

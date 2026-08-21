@@ -46,7 +46,8 @@
       <div class="best-team-header">
         <span class="filters-heading highlight">
           Highest Possible Team PWR
-          <span v-if="simulateMaxAccountLevels" class="simulated-badge" title="Kioku and Magic levels are simulated at the max your account could reach, not your current levels">(Simulated)</span>
+          <span v-if="simulateMaxAccountLevels" class="simulated-badge"
+            title="Kioku and Magic levels are simulated at the max your account could reach, not your current levels">(Simulated)</span>
         </span>
         <span class="pwr-display"> <strong>{{ highestPwr?.toLocaleString() }}</strong></span>
       </div>
@@ -420,7 +421,7 @@ export default defineComponent({
       'groupCharactersBy',
       'role'
     )
-    const playerLevel = useSetting('playerLevel', 1)
+    const playerLevel = useSetting('playerLevel', KiokuConstants.maxKiokuLvl)
     const usePlayerLevelAsKiokuMaxLevel = useSetting('usePlayerLevelAsKiokuMaxLevel', false)
     const simulateMaxAccountLevels = useSetting('simulateMaxAccountLevels', false)
     const showResourceCosts = useSetting('showResourceCosts', true)
