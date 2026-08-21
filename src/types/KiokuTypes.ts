@@ -475,9 +475,8 @@ export function withMaxLevelsForPlayerLevel<T extends { kiokuLvl: number; magicL
     char: T,
     playerLevel: number
 ): T {
-    const simulatedKiokuLvl = getMaxKiokuLevelForPlayerLevel(playerLevel)
-    const kiokuLvl = Math.max(char.kiokuLvl ?? 0, simulatedKiokuLvl)
-    const magicLvl = Math.max(char.magicLvl ?? 0, getMaxMagicLevelForKiokuLevel(kiokuLvl))
+    const kiokuLvl = getMaxKiokuLevelForPlayerLevel(playerLevel)
+    const magicLvl = getMaxMagicLevelForKiokuLevel(kiokuLvl)
     return { ...char, kiokuLvl, magicLvl }
 }
 
