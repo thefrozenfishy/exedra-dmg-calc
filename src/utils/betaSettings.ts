@@ -423,10 +423,9 @@ export const BETA_SECTIONS = [
                         },
                     },
                     { name: "Doppel of Silence", ascension: 4, },
-                    { name: "Soul Salvation", ascension: 5, },
-                    { name: "Pluvia☆Magica", ascension: 5, },
                     { name: "Luce della Speranza", ascension: 5, },
-
+                    { name: "Pluvia☆Magica", ascension: 5, },
+                    { name: "Soul Salvation", ascension: 5, },
 
                     // Good supports
                     { name: "La Lumière", ascension: 0 },
@@ -494,12 +493,6 @@ export const BETA_SECTIONS = [
                     { name: "Cherry Ballad", ascension: 4, },
                     { name: "Atomo Arrabbiato", ascension: 4, },
                     { name: "La Danse Macabre", ascension: 4, },
-                    { name: "Nine Phases", ascension: 5, },
-                    { name: "Groundhog Daze", ascension: 4, },
-
-                    // Do people use these outside of pvp..?
-                    { name: "Infinite Poseidon", ascension: 5, },
-                    { name: "Structure Destruction", ascension: 4, },
 
                     // Feli, Sana etc not on the list, never the right call to wishlist them
                 ] as WishlistEntry[],
