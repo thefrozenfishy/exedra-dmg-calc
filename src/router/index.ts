@@ -51,16 +51,12 @@ const router = createRouter({
     routes
 })
 
-router.beforeEach((to, from) => {
+router.afterEach((to, from) => {
     if (from.meta?.reloadOnLeave) {
-        const target = window.location.origin + base + '#' + to.fullPath
-        window.location.href = target
-        setTimeout(() => window.location.reload(), 50)
-        return false
+        window.location.reload()
+        return
     }
-})
 
-router.afterEach((to) => {
     try {
         logEvent('page_view', { path: to.fullPath, name: to.name })
     } catch (err) {
