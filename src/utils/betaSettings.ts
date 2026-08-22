@@ -375,6 +375,7 @@ export const BETA_SECTIONS = [
                     { name: "Absolute Rain", ascension: 5 },
                     { name: "Baldamente Fortissimo", ascension: 4 },
                     { name: "Cherry Ballad", ascension: 4 },
+                    { name: "Atomo Arrabbiato", ascension: 4 },
                     { name: "Judgement Earth", ascension: 4 },
                     { name: "Flame Waltz", ascension: 4 },
                     { name: "Soul Salvation", ascension: 5 },
@@ -416,12 +417,9 @@ export const BETA_SECTIONS = [
                     // Niche uses
                     { name: "Magic Cake Dish", ascension: 4 },
                     { name: "My Gigantic Heart", ascension: 4 },
-
-                    { name: "Atomo Arrabbiato", ascension: 4 },
                     { name: "My Creations", ascension: 4 },
                     { name: "Kugatachi", ascension: 5 },
                     { name: "Vampire Fang", ascension: 4 },
-
                     { name: "Groundhog Daze", ascension: 5 },
                     {
                         name: "Tiro Finale Liberation",
