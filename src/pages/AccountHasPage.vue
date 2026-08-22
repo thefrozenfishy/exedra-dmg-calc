@@ -401,7 +401,7 @@ const show3stars = useSetting("show3stars", false);
 const showUnowned = useSetting("showUnowned", true);
 const showLimiteds = useSetting("showLimiteds", true);
 const showStandards = useSetting("showStandards", true);
-const showWishlistPriority = useSetting("showWishlistPriority", false)
+const showWishlistPriority = useSetting("showWishlistWizard", true)
 
 const round = (nr: number) => nr.toFixed(2)
 
