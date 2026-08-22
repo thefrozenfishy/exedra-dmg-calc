@@ -162,11 +162,12 @@ From the six yellow numbers choose the three you think you have the most use for
                                     </template>
                                 </div>
                                 <div class="wishlist-badge level-badge" v-if="showWishlistPriority && wishlistTier(ch)"
-                                    :class="wishlistTier(ch) === 'high' ? 'wishlist-high' : 'wishlist-mid'">
+                                    :class="wishlistTier(ch) === 'high' ? 'wishlist-high' : 'wishlist-mid'"
+                                    :title="`This character should have a ${wishlistTier(ch)} priority in your kioku wishlist`">
                                     {{ wishlistRankByName.get(ch.name) }}
                                 </div>
                                 <div class="heart-level-badge level-badge editable"
-                                    v-if="showHearts && (chars as any).label !== 'Not Owned'" :class="colourLevels
+                                    v-if="showHearts && (chars as any).label !== ' Not Owned'" :class="colourLevels
                                         ? ch.heartphialLvl === KiokuConstants.maxHeartphialLvl ? 'maxLvl' : 'notMaxLvl'
                                         : ''" @click.stop="startEdit(ch, 'heartphialLvl', $event)">
                                     <template v-if="isEditing(ch, 'heartphialLvl')">
@@ -1186,6 +1187,7 @@ td {
     top: 0;
     opacity: 1 !important;
     font-weight: 800;
+    cursor: help;
 }
 
 .wishlist-badge.wishlist-high {
