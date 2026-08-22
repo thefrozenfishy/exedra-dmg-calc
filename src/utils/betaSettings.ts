@@ -1,7 +1,16 @@
 import { useBeta } from "../store/betaStore"
 import { KiokuRole } from "../types/enums";
 
-export type WishlistEntry = { name: string, ascension: number }
+export type WishlistEntry = {
+    name: string
+    ascension: number
+    exceptions?: WishlistException
+}
+
+export type WishlistException = {
+    mode?: "and" | "or"
+    conditions: WishlistEntry[]
+}
 
 export function useBetaNumber(
     key: keyof typeof BETA_DEFAULTS
@@ -329,12 +338,6 @@ export const BETA_SECTIONS = [
                     // For debuffer and buffer A4 is enough, except if they are used as pseudo attackers or have great ult scaling (Ren)
                     // Supports A0 are super strong so recommend early to give options
 
-                    // Great supports 
-                    { name: "Flame Waltz", ascension: 0 },
-                    { name: "Désintégration", ascension: 0 },
-                    { name: "L'Ombre", ascension: 0 },
-                    { name: "Doppel of Invitations", ascension: 0 },
-
                     // Gamebreaking Ascensions
                     { name: "Hollow Woman", ascension: 4 },
                     { name: "Time Stop Strike", ascension: 4 },
@@ -344,8 +347,31 @@ export const BETA_SECTIONS = [
                     { name: "Nine Phases", ascension: 4 },
                     { name: "Tiro Finale", ascension: 5 }, // Extra MP% gives important breakpoints
 
+                    // Great supports 
+                    { name: "Flame Waltz", ascension: 0 },
+                    { name: "Désintégration", ascension: 0 },
+                    {
+                        name: "L'Ombre",
+                        ascension: 0,
+                        exceptions: {
+                            mode: "or",
+                            conditions: [
+                                { name: "Scorchin' Summer Spike", ascension: 0 },
+                                { name: "Buon Natale Grazioso", ascension: 0 },
+                            ]
+                        },
+                    },
+
                     // Really strong Ascensions, much used characters so A4->A5 is not bad
-                    { name: "A Tale of Cherry Blossoms", ascension: 5 },
+                    {
+                        name: "A Tale of Cherry Blossoms",
+                        ascension: 5,
+                        exceptions: {
+                            conditions: [
+                                { name: "Evoluzione Presente", ascension: 5 },
+                            ],
+                        },
+                    },
                     { name: "Absolute Rain", ascension: 5 },
                     { name: "Baldamente Fortissimo", ascension: 4 },
                     { name: "Cherry Ballad", ascension: 4 },
@@ -356,14 +382,34 @@ export const BETA_SECTIONS = [
                     { name: "Luce della Speranza", ascension: 5 },
                     { name: "Nine Phases", ascension: 5 },
 
+                    // Good supports
+                    { name: "La Lumière", ascension: 0 },
+
                     // Pretty strong
-                    { name: "Thoughtless", ascension: 4 },
+                    {
+                        name: "Thoughtless",
+                        ascension: 4,
+                        exceptions: {
+                            mode: "and",
+                            conditions: [
+                                { name: "Falsified Phenomena", ascension: 4 },
+                                { name: "Splashin' Kyubey Blast", ascension: 4 },
+                            ],
+                        },
+                    },
+                    { name: "L'Ombre", ascension: 4 },
                     { name: "La Danse Macabre", ascension: 4 },
                     { name: "Assault Paranoia", ascension: 5 },
-                    { name: "L'Ombre", ascension: 4 },
                     { name: "Luminous Tenet", ascension: 5 },
                     { name: "Light of Reckoning", ascension: 5 },
-                    { name: "Oracle Ray", ascension: 5 },
+                    {
+                        name: "Oracle Ray", ascension: 5,
+                        exceptions: {
+                            conditions: [
+                                { name: "La Porte du Paradis", ascension: 5 },
+                            ],
+                        },
+                    },
                     { name: "Doppel of Silence", ascension: 4 },
                     { name: "Désintégration", ascension: 4 },
 
@@ -377,9 +423,24 @@ export const BETA_SECTIONS = [
                     { name: "Vampire Fang", ascension: 4 },
 
                     { name: "Groundhog Daze", ascension: 5 },
-                    { name: "Tiro Finale Liberation", ascension: 5 },
+                    {
+                        name: "Tiro Finale Liberation",
+                        ascension: 5,
+                        exceptions: {
+                            conditions: [
+                                { name: "Falsified Phenomena", ascension: 4 },
+                            ],
+                        },
+                    },
                     { name: "The Universe's Edge", ascension: 5 },
-                    { name: "Cherry Blizzard", ascension: 5 },
+                    {
+                        name: "Cherry Blizzard", ascension: 5,
+                        exceptions: {
+                            conditions: [
+                                { name: "Final Fatebloom", ascension: 4 },
+                            ],
+                        },
+                    },
 
                     // Do people use these outside of pvp..?
                     { name: "Infinite Poseidon", ascension: 5 },

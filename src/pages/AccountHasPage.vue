@@ -314,7 +314,7 @@ import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 import { crystalises, passiveDetails } from "../utils/helpers"
-import { useBetaValue, WishlistEntry, isBeta } from "../utils/betaSettings"
+import { useBetaValue, WishlistEntry, WishlistCondition, isBeta } from "../utils/betaSettings"
 import NewBadge from '../components/NewBadge.vue'
 
 const route = useRoute()
@@ -488,9 +488,14 @@ const groupedByAscension = computed(() => {
     return groups
 })
 
-console.log(standardPool.value.map(s => `{ name: "${s.name}", ascension: 5 },`).join("\n"))
-
 const wishlistPriority = useBetaValue<WishlistEntry[]>("wishlistPriority")
+
+const isConditionMet = (cond: WishlistCondition): boolean => {
+    const condCh = displayedCharactersComputed.value.find(c => c.name === cond.name)
+    if (!condCh) return false
+    const condAscension = condCh.enabled ? condCh.ascension : -1
+    return condAscension >= cond.ascension
+}
 
 const wishlistActive = computed(() => {
     const resolved = new Set<string>()
@@ -504,6 +509,14 @@ const wishlistActive = computed(() => {
 
         const currentAscension = ch.enabled ? ch.ascension : -1
         if (currentAscension >= entry.ascension) continue
+
+        const exceptions = entry.exceptions
+        const exceptionsMet = exceptions && exceptions.conditions.length > 0
+            ? (exceptions.mode === "and"
+                ? exceptions.conditions.every(isConditionMet)
+                : exceptions.conditions.some(isConditionMet))
+            : false
+        if (exceptionsMet) continue
 
         active.push(entry)
         resolved.add(entry.name)
