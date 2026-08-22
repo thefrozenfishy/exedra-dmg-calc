@@ -341,6 +341,8 @@ export const BETA_SECTIONS = [
 
                     // Gamebreaking Ascensions
                     { name: "Time Stop Strike", ascension: 0 },
+                    { name: "Hollow Woman", ascension: 0 },
+                    { name: "Luce della Speranza", ascension: 0 },
                     { name: "Tiro Finale", ascension: 2 },
                     { name: "Hollow Woman", ascension: 4, },
                     { name: "Time Stop Strike", ascension: 4, },
