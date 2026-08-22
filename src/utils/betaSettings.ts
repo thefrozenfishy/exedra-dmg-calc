@@ -325,48 +325,67 @@ export const BETA_SECTIONS = [
                 key: "wishlistPriority",
                 label: "Wishlist Priority — ordered list; only the first unmet entry per kioku counts. Standard 5★ only.",
                 defaultValue: [
-                    // Must have
+                    // Philosophy Attackers just recommend A5 for those that's actually used, such an account boost.
+                    // For debuffer and buffer A4 is enough, except if they are used as pseudo attackers or have great ult scaling (Ren)
+                    // Supports A0 are super strong so recommend early to give options
+
+                    // Great supports 
+                    { name: "Flame Waltz", ascension: 0 },
+                    { name: "Désintégration", ascension: 0 },
+                    { name: "L'Ombre", ascension: 0 },
+                    { name: "Doppel of Invitations", ascension: 0 },
+
+                    // Gamebreaking Ascensions
                     { name: "Hollow Woman", ascension: 4 },
                     { name: "Time Stop Strike", ascension: 4 },
-                    { name: "Pluvia☆Magica", ascension: 5 },
-                    { name: "A Tale of Cherry Blossoms", ascension: 5 },
+                    { name: "Pluvia☆Magica", ascension: 4 },
                     { name: "Soul Salvation", ascension: 4 },
-                    { name: "Luce della Speranza", ascension: 5 },
-                    { name: "Nine Phases", ascension: 5 },
-                    { name: "Tiro Finale", ascension: 5 },
+                    { name: "Luce della Speranza", ascension: 4 },
+                    { name: "Nine Phases", ascension: 4 },
+                    { name: "Tiro Finale", ascension: 5 }, // Extra MP% gives important breakpoints
+
+                    // Really strong Ascensions, much used characters so A4->A5 is not bad
+                    { name: "A Tale of Cherry Blossoms", ascension: 5 },
+                    { name: "Absolute Rain", ascension: 5 },
                     { name: "Baldamente Fortissimo", ascension: 4 },
                     { name: "Cherry Ballad", ascension: 4 },
                     { name: "Judgement Earth", ascension: 4 },
                     { name: "Flame Waltz", ascension: 4 },
                     { name: "Soul Salvation", ascension: 5 },
+                    { name: "Pluvia☆Magica", ascension: 5 },
+                    { name: "Luce della Speranza", ascension: 5 },
+                    { name: "Nine Phases", ascension: 5 },
 
-                    { name: "Absolute Rain", ascension: 5 },
+                    // Pretty strong
+                    { name: "Thoughtless", ascension: 4 },
+                    { name: "La Danse Macabre", ascension: 4 },
                     { name: "Assault Paranoia", ascension: 5 },
                     { name: "L'Ombre", ascension: 4 },
+                    { name: "Luminous Tenet", ascension: 5 },
+                    { name: "Light of Reckoning", ascension: 5 },
+                    { name: "Oracle Ray", ascension: 5 },
+                    { name: "Doppel of Silence", ascension: 4 },
+                    { name: "Désintégration", ascension: 4 },
+
+                    // Niche uses
                     { name: "Magic Cake Dish", ascension: 4 },
-                    { name: "La Danse Macabre", ascension: 4 },
-                    { name: "Thoughtless", ascension: 4 },
                     { name: "My Gigantic Heart", ascension: 4 },
 
-
-                    { name: "Light of Reckoning", ascension: 5 },
-                    { name: "Luminous Tenet", ascension: 5 },
                     { name: "Atomo Arrabbiato", ascension: 4 },
-                    { name: "Doppel of Silence", ascension: 4 },
-                    { name: "Oracle Ray", ascension: 5 },
-                    { name: "Désintégration", ascension: 4 },
+                    { name: "My Creations", ascension: 4 },
                     { name: "Kugatachi", ascension: 5 },
-                    { name: "Cherry Blizzard", ascension: 5 },
-                    { name: "The Universe's Edge", ascension: 5 },
                     { name: "Vampire Fang", ascension: 4 },
 
                     { name: "Groundhog Daze", ascension: 5 },
                     { name: "Tiro Finale Liberation", ascension: 5 },
+                    { name: "The Universe's Edge", ascension: 5 },
+                    { name: "Cherry Blizzard", ascension: 5 },
+
+                    // Do people use these outside of pvp..?
                     { name: "Infinite Poseidon", ascension: 5 },
-                    { name: "My Creations", ascension: 4 },
                     { name: "Structure Destruction", ascension: 4 },
 
-
+                    // Feli, Sana etc not on the list, never the right call to wishlist them
                 ] as WishlistEntry[],
             },
         ],
