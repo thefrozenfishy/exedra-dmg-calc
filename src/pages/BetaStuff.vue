@@ -10,11 +10,18 @@
 
             <div v-for="setting in section.settings" :key="setting.key" class="setting">
                 <div class="setting-header">
-                    <label :for="setting.key">
-                        {{ setting.label }}
+                    <div class="setting-title">
+                        <label :for="setting.key">
+                            {{ setting.label }}
+                        </label>
 
                         <span v-if="hasChanged(setting)" class="changed-dot" title="Changed from default" />
-                    </label>
+
+                        <button v-if="hasChanged(setting)" type="button" class="reset-btn"
+                            title="Revert to default" @click="resetSetting(setting)">
+                            Reset
+                        </button>
+                    </div>
 
                     <span class="default">
                         Default: {{ setting.defaultValue }}
@@ -32,10 +39,11 @@
 </template>
 
 <script lang="ts" setup>
-import { useBeta } from "../store/betaStore"
+import { useBeta, useBetaStore } from "../store/betaStore"
 import { BETA_SECTIONS } from "../utils/betaSettings"
 
 const sections = BETA_SECTIONS
+const betaStore = useBetaStore()
 
 const values: Record<string, ReturnType<typeof useBeta>> = {}
 
@@ -106,17 +114,52 @@ function onJsonChange(key: string, event: Event) {
         console.error(`Invalid JSON for ${key}`, err)
     }
 }
+
+function resetSetting(setting: { key: string; defaultValue: unknown }) {
+    betaStore.remove(setting.key)
+
+    if (isJsonSetting(setting.defaultValue)) {
+        jsonValues[setting.key] = JSON.stringify(setting.defaultValue, null, 2)
+    }
+}
 </script>
 
 <style scoped>
 .changed-dot {
     display: inline-block;
-    width: 8px;
-    height: 8px;
+    flex: 0 0 auto;
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    min-height: 10px;
     margin-left: 8px;
     border-radius: 50%;
-    background: rgba(255, 209, 110, 0.3);
-    box-shadow: 0 0 8px rgba(255, 209, 110, 0.45);
+    background: #ffd16e;
+    box-shadow: 0 0 10px rgba(255, 209, 110, 0.9), 0 0 2px rgba(255, 209, 110, 0.9);
+}
+
+.reset-btn {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 4px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 209, 110, 0.4);
+    background: rgba(255, 209, 110, 0.08);
+    color: rgba(255, 209, 110, 0.9);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.reset-btn:hover {
+    background: rgba(255, 209, 110, 0.18);
+    border-color: rgba(255, 209, 110, 0.6);
+}
+
+.reset-btn:active {
+    background: rgba(255, 209, 110, 0.28);
 }
 
 .json-editor {
@@ -172,6 +215,11 @@ function onJsonChange(key: string, event: Event) {
     align-items: center;
     margin-bottom: 6px;
     gap: 16px;
+}
+
+.setting-title {
+    display: flex;
+    align-items: center;
 }
 
 label {
