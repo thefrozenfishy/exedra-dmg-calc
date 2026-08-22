@@ -348,6 +348,7 @@ export const BETA_SECTIONS = [
                     { name: "Soul Salvation", ascension: 4, },
                     { name: "Luce della Speranza", ascension: 4, },
                     { name: "Nine Phases", ascension: 4, },
+                    { name: "Tiro Finale", ascension: 4, },
                     { name: "Tiro Finale", ascension: 5, }, // Extra MP% gives important breakpoints
 
                     // Great supports 
@@ -423,9 +424,6 @@ export const BETA_SECTIONS = [
                         },
                     },
                     { name: "Doppel of Silence", ascension: 4, },
-                    { name: "Luce della Speranza", ascension: 5, },
-                    { name: "Pluvia☆Magica", ascension: 5, },
-                    { name: "Soul Salvation", ascension: 5, },
 
                     // Good supports
                     { name: "La Lumière", ascension: 0 },
