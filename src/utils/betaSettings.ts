@@ -472,7 +472,6 @@ export const BETA_SECTIONS = [
                     { name: "My Creations", ascension: 4, },
                     { name: "Kugatachi", ascension: 5, },
                     { name: "Magic Cake Dish", ascension: 4, },
-                    { name: "Vampire Fang", ascension: 4, },
                     {
                         name: "Tiro Finale Liberation", ascension: 5,
                         exceptions: {
