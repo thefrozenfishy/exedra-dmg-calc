@@ -163,8 +163,12 @@ From the six yellow numbers choose the three you think you have the most use for
                                 </div>
                                 <div class="wishlist-badge level-badge" v-if="showWishlistPriority && wishlistTier(ch)"
                                     :class="wishlistTier(ch) === 'high' ? 'wishlist-high' : 'wishlist-mid'"
-                                    :title="wishlistTooltip(ch)">
+                                    :title="wishlistTooltip(ch)" @click.stop="toggleWishlistTooltip(ch)">
                                     {{ wishlistRankByName.get(ch.name) }}
+                                    <div v-if="wishlistTooltipCharId === ch.id" class="wishlist-tooltip-popup"
+                                        @click.stop>
+                                        {{ wishlistTooltip(ch) }}
+                                    </div>
                                 </div>
                                 <div class="heart-level-badge level-badge editable"
                                     v-if="showHearts && (chars as any).label !== ' Not Owned'" :class="colourLevels
@@ -734,6 +738,7 @@ const MOVE_CANCEL_THRESHOLD = 8
 onMounted(() => {
     isTouchDevice.value = window.matchMedia("(pointer: coarse)").matches
     document.addEventListener("touchstart", onDocumentTouchToExitJiggle, { passive: true })
+    document.addEventListener("touchstart", onDocumentTouchToCloseWishlistTooltip, { passive: true })
 })
 
 const onDocumentTouchToExitJiggle = (e: TouchEvent) => {
@@ -741,6 +746,21 @@ const onDocumentTouchToExitJiggle = (e: TouchEvent) => {
     const target = e.target as HTMLElement
     if (!target.closest(".jiggling") && !target.closest(".asc-row")) {
         isTouchJiggleMode.value = false
+    }
+}
+
+const wishlistTooltipCharId = ref<number | null>(null)
+
+const toggleWishlistTooltip = (ch: Character) => {
+    if (!isTouchDevice.value) return
+    wishlistTooltipCharId.value = wishlistTooltipCharId.value === ch.id ? null : ch.id
+}
+
+const onDocumentTouchToCloseWishlistTooltip = (e: TouchEvent) => {
+    if (wishlistTooltipCharId.value === null) return
+    const target = e.target as HTMLElement
+    if (!target.closest(".wishlist-badge")) {
+        wishlistTooltipCharId.value = null
     }
 }
 
@@ -1228,8 +1248,29 @@ td {
     left: 80%;
     top: 0;
     opacity: 1 !important;
+    pointer-events: auto !important;
     font-weight: 800;
     cursor: help;
+}
+
+.wishlist-tooltip-popup {
+    position: absolute;
+    top: 135%;
+    right: -8px;
+    width: 160px;
+    padding: 0.45rem 0.55rem;
+    background: rgba(12, 12, 16, 0.97);
+    color: var(--text);
+    font-size: 0.66rem;
+    font-weight: 500;
+    line-height: 1.35;
+    text-align: left;
+    white-space: normal;
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+    z-index: 30;
+    cursor: default;
 }
 
 .wishlist-badge.wishlist-high {
