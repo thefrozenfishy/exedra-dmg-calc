@@ -243,7 +243,7 @@ From the six yellow numbers choose the three you think you have the most use for
             <div class="stat-row">
                 <span class="stat-label">Chance of non-A5 on standard pull</span>
                 <span class="stat-value">{{ standardPool.length - ownedA5StandardPool.length }} / {{ standardPool.length
-                }}
+                    }}
                     ({{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100)
                     }}%)</span>
             </div>
@@ -317,7 +317,7 @@ import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 import { crystalises, passiveDetails } from "../utils/helpers"
-import { useBetaValue, WishlistEntry } from "../utils/betaSettings"
+import { useBetaValue, WishlistEntry, WishlistException } from "../utils/betaSettings"
 import NewBadge from '../components/NewBadge.vue'
 
 const route = useRoute()
@@ -500,6 +500,14 @@ const isConditionMet = (cond: WishlistEntry): boolean => {
     return condAscension >= cond.ascension
 }
 
+const conditionsMet = (conditions?: WishlistException): boolean => {
+    if (!conditions || conditions.conditions.length === 0) return false
+
+    return conditions.mode === "and"
+        ? conditions.conditions.every(isConditionMet)
+        : conditions.conditions.some(isConditionMet)
+}
+
 const wishlistActive = computed(() => {
     const resolved = new Set<string>()
     const active: WishlistEntry[] = []
@@ -513,13 +521,9 @@ const wishlistActive = computed(() => {
         const currentAscension = ch.enabled ? ch.ascension : -1
         if (currentAscension >= entry.ascension) continue
 
-        const exceptions = entry.exceptions
-        const exceptionsMet = exceptions && exceptions.conditions.length > 0
-            ? (exceptions.mode === "and"
-                ? exceptions.conditions.every(isConditionMet)
-                : exceptions.conditions.some(isConditionMet))
-            : false
-        if (exceptionsMet) continue
+        if (entry.ifHave && !conditionsMet(entry.ifHave)) continue
+
+        if (conditionsMet(entry.exceptions)) continue
 
         active.push(entry)
         resolved.add(entry.name)

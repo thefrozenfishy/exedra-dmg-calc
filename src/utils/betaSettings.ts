@@ -5,6 +5,7 @@ export type WishlistEntry = {
     name: string
     ascension: number
     exceptions?: WishlistException
+    ifHave?: WishlistException
 }
 
 export type WishlistException = {
@@ -339,13 +340,15 @@ export const BETA_SECTIONS = [
                     // Supports A0 are super strong so recommend early to give options
 
                     // Gamebreaking Ascensions
-                    { name: "Hollow Woman", ascension: 4 },
-                    { name: "Time Stop Strike", ascension: 4 },
-                    { name: "Pluvia☆Magica", ascension: 4 },
-                    { name: "Soul Salvation", ascension: 4 },
-                    { name: "Luce della Speranza", ascension: 4 },
-                    { name: "Nine Phases", ascension: 4 },
-                    { name: "Tiro Finale", ascension: 5 }, // Extra MP% gives important breakpoints
+                    { name: "Time Stop Strike", ascension: 0 },
+                    { name: "Tiro Finale", ascension: 2 },
+                    { name: "Hollow Woman", ascension: 4, },
+                    { name: "Time Stop Strike", ascension: 4, },
+                    { name: "Pluvia☆Magica", ascension: 4, },
+                    { name: "Soul Salvation", ascension: 4, },
+                    { name: "Luce della Speranza", ascension: 4, },
+                    { name: "Nine Phases", ascension: 4, },
+                    { name: "Tiro Finale", ascension: 5, }, // Extra MP% gives important breakpoints
 
                     // Great supports 
                     { name: "Flame Waltz", ascension: 0 },
@@ -368,28 +371,57 @@ export const BETA_SECTIONS = [
                         ascension: 5,
                         exceptions: {
                             conditions: [
-                                { name: "Evoluzione Presente", ascension: 5 },
+                                { name: "Evoluzione Presente", ascension: 5, },
                             ],
                         },
                     },
-                    { name: "Absolute Rain", ascension: 5 },
-                    { name: "Baldamente Fortissimo", ascension: 4 },
-                    { name: "Cherry Ballad", ascension: 4 },
-                    { name: "Atomo Arrabbiato", ascension: 4 },
-                    { name: "Judgement Earth", ascension: 4 },
-                    { name: "Flame Waltz", ascension: 4 },
+                    { name: "Absolute Rain", ascension: 5, },
+                    { name: "Baldamente Fortissimo", ascension: 4, },
                     {
-                        name: "Oracle Ray", ascension: 5,
+                        name: "Cherry Ballad",
+                        ascension: 4,
+                        exceptions: {
+                            mode: "or",
+                            conditions: [
+                                { name: "Oracle Ray", ascension: 5, },
+                                { name: "La Porte du Paradis", ascension: 3 },
+                                { name: "Nothing to Despair, Ever", ascension: 3 },
+                                { name: "Concentrated Missile Fire", ascension: 5, },
+                                { name: "Tiro Finale Liberation", ascension: 5, },
+                            ],
+                        },
+                    },
+                    {
+                        name: "Atomo Arrabbiato",
+                        ascension: 4,
                         exceptions: {
                             conditions: [
-                                { name: "La Porte du Paradis", ascension: 5 },
+                                { name: "Floral Ironspike", ascension: 3 },
                             ],
                         },
                     },
-                    { name: "Soul Salvation", ascension: 5 },
-                    { name: "Pluvia☆Magica", ascension: 5 },
-                    { name: "Luce della Speranza", ascension: 5 },
-                    { name: "Nine Phases", ascension: 5 },
+                    { name: "Assault Paranoia", ascension: 4, },
+                    { name: "Judgement Earth", ascension: 4, },
+                    {
+                        name: "Flame Waltz",
+                        ascension: 4,
+                        exceptions: {
+                            conditions: [
+                                { name: "Pluvia☆Neujahr", ascension: 4, },
+                            ],
+                        },
+
+                    },
+                    {
+                        name: "Oracle Ray",
+                        ascension: 5,
+                        exceptions: {
+                            conditions: [
+                                { name: "La Porte du Paradis", ascension: 5, },
+                            ],
+                        },
+                    },
+                    { name: "Doppel of Silence", ascension: 4, },
 
                     // Good supports
                     { name: "La Lumière", ascension: 0 },
@@ -401,48 +433,64 @@ export const BETA_SECTIONS = [
                         exceptions: {
                             mode: "and",
                             conditions: [
-                                { name: "Falsified Phenomena", ascension: 4 },
-                                { name: "Splashin' Kyubey Blast", ascension: 4 },
+                                { name: "Falsified Phenomena", ascension: 4, },
+                                { name: "Splashin' Kyubey Blast", ascension: 4, },
                             ],
                         },
                     },
-                    { name: "L'Ombre", ascension: 4 },
-                    { name: "Light of Reckoning", ascension: 5 },
-                    { name: "La Danse Macabre", ascension: 4 },
-                    { name: "Luminous Tenet", ascension: 5 },
-                    { name: "Doppel of Silence", ascension: 4 },
-                    { name: "Désintégration", ascension: 4 },
-                    { name: "Assault Paranoia", ascension: 5 },
+                    { name: "L'Ombre", ascension: 4, },
+                    { name: "Light of Reckoning", ascension: 5, },
+                    {
+                        name: "La Danse Macabre",
+                        ascension: 4,
+                        ifHave: {
+                            mode: "or",
+                            conditions: [
+                                { name: "Soul Salvation", ascension: 5, },
+                                { name: "Light of Reckoning", ascension: 5, },
+                                { name: "Dark Art Dominion", ascension: 5, },
+                            ],
+                        },
+                    },
+                    { name: "Luminous Tenet", ascension: 5, },
+                    { name: "Désintégration", ascension: 4, },
+                    { name: "Flame Waltz", ascension: 4, },
+                    { name: "Soul Salvation", ascension: 5, },
+                    { name: "Pluvia☆Magica", ascension: 5, },
+                    { name: "Luce della Speranza", ascension: 5, },
 
                     // Niche uses
-                    { name: "My Gigantic Heart", ascension: 4 },
-                    { name: "My Creations", ascension: 4 },
-                    { name: "Kugatachi", ascension: 5 },
-                    { name: "Magic Cake Dish", ascension: 4 },
-                    { name: "Vampire Fang", ascension: 4 },
+                    { name: "My Gigantic Heart", ascension: 4, },
+                    { name: "My Creations", ascension: 4, },
+                    { name: "Kugatachi", ascension: 5, },
+                    { name: "Magic Cake Dish", ascension: 4, },
+                    { name: "Vampire Fang", ascension: 4, },
                     {
                         name: "Tiro Finale Liberation",
                         ascension: 5,
                         exceptions: {
                             conditions: [
-                                { name: "Falsified Phenomena", ascension: 4 },
+                                { name: "Falsified Phenomena", ascension: 4, },
                             ],
                         },
                     },
-                    { name: "The Universe's Edge", ascension: 5 },
+                    { name: "Cherry Ballad", ascension: 4, },
+                    { name: "Atomo Arrabbiato", ascension: 4, },
+                    { name: "The Universe's Edge", ascension: 5, },
                     {
                         name: "Cherry Blizzard", ascension: 5,
                         exceptions: {
                             conditions: [
-                                { name: "Final Fatebloom", ascension: 4 },
+                                { name: "Final Fatebloom", ascension: 4, },
                             ],
                         },
                     },
-                    { name: "Groundhog Daze", ascension: 5 },
+                    { name: "Nine Phases", ascension: 5, },
+                    { name: "Groundhog Daze", ascension: 4, },
 
                     // Do people use these outside of pvp..?
-                    { name: "Infinite Poseidon", ascension: 5 },
-                    { name: "Structure Destruction", ascension: 4 },
+                    { name: "Infinite Poseidon", ascension: 5, },
+                    { name: "Structure Destruction", ascension: 4, },
 
                     // Feli, Sana etc not on the list, never the right call to wishlist them
                 ] as WishlistEntry[],
