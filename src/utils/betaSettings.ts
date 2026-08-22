@@ -396,7 +396,14 @@ export const BETA_SECTIONS = [
                             ],
                         },
                     },
-                    { name: "Assault Paranoia", ascension: 4, },
+                    {
+                        name: "Assault Paranoia", ascension: 4,
+                        exceptions: {
+                            conditions: [
+                                { name: "Final Fatebloom", ascension: 4 },
+                            ],
+                        },
+                    },
                     { name: "Judgement Earth", ascension: 4, },
                     {
                         name: "Flame Waltz", ascension: 4,
