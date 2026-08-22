@@ -378,6 +378,14 @@ export const BETA_SECTIONS = [
                     { name: "Atomo Arrabbiato", ascension: 4 },
                     { name: "Judgement Earth", ascension: 4 },
                     { name: "Flame Waltz", ascension: 4 },
+                    {
+                        name: "Oracle Ray", ascension: 5,
+                        exceptions: {
+                            conditions: [
+                                { name: "La Porte du Paradis", ascension: 5 },
+                            ],
+                        },
+                    },
                     { name: "Soul Salvation", ascension: 5 },
                     { name: "Pluvia☆Magica", ascension: 5 },
                     { name: "Luce della Speranza", ascension: 5 },
@@ -399,28 +407,19 @@ export const BETA_SECTIONS = [
                         },
                     },
                     { name: "L'Ombre", ascension: 4 },
-                    { name: "La Danse Macabre", ascension: 4 },
-                    { name: "Assault Paranoia", ascension: 5 },
-                    { name: "Luminous Tenet", ascension: 5 },
                     { name: "Light of Reckoning", ascension: 5 },
-                    {
-                        name: "Oracle Ray", ascension: 5,
-                        exceptions: {
-                            conditions: [
-                                { name: "La Porte du Paradis", ascension: 5 },
-                            ],
-                        },
-                    },
+                    { name: "La Danse Macabre", ascension: 4 },
+                    { name: "Luminous Tenet", ascension: 5 },
                     { name: "Doppel of Silence", ascension: 4 },
                     { name: "Désintégration", ascension: 4 },
+                    { name: "Assault Paranoia", ascension: 5 },
 
                     // Niche uses
-                    { name: "Magic Cake Dish", ascension: 4 },
                     { name: "My Gigantic Heart", ascension: 4 },
                     { name: "My Creations", ascension: 4 },
                     { name: "Kugatachi", ascension: 5 },
+                    { name: "Magic Cake Dish", ascension: 4 },
                     { name: "Vampire Fang", ascension: 4 },
-                    { name: "Groundhog Daze", ascension: 5 },
                     {
                         name: "Tiro Finale Liberation",
                         ascension: 5,
@@ -439,6 +438,7 @@ export const BETA_SECTIONS = [
                             ],
                         },
                     },
+                    { name: "Groundhog Daze", ascension: 5 },
 
                     // Do people use these outside of pvp..?
                     { name: "Infinite Poseidon", ascension: 5 },
