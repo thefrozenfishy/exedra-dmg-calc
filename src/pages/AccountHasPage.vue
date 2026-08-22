@@ -75,6 +75,11 @@
             <label class="chip" :class="{ active: showLevels }">
                 <input type="checkbox" v-model="showLevels" /> Magic &amp; Special levels
             </label>
+            <label v-if="isBeta()" style="cursor: help;" class="chip" :class="{ active: showWishlistPriority }"
+                title="Wishlist wizard marks a suggested priority for Kioku Ascensions, take this as a guideline rather than an absolute">
+                <NewBadge id="wishlist-helper" />
+                <input type="checkbox" v-model="showWishlistPriority" /> Wishlist Wizard
+            </label>
             <label class="chip" :class="{ active: showHearts }">
                 <input type="checkbox" v-model="showHearts" /> Heartphial levels
             </label>
@@ -153,6 +158,10 @@
                                     <template v-else>
                                         + {{ ch.dupes }}
                                     </template>
+                                </div>
+                                <div class="wishlist-badge level-badge" v-if="showWishlistPriority && wishlistTier(ch)"
+                                    :class="wishlistTier(ch) === 'high' ? 'wishlist-high' : 'wishlist-mid'">
+                                    {{ wishlistRankByName.get(ch.name) }}
                                 </div>
                                 <div class="heart-level-badge level-badge editable"
                                     v-if="showHearts && (chars as any).label !== 'Not Owned'" :class="colourLevels
@@ -305,6 +314,8 @@ import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 import { crystalises, passiveDetails } from "../utils/helpers"
+import { useBetaValue, WishlistEntry, isBeta } from "../utils/betaSettings"
+import NewBadge from '../components/NewBadge.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -388,6 +399,7 @@ const show3stars = useSetting("show3stars", false);
 const showUnowned = useSetting("showUnowned", true);
 const showLimiteds = useSetting("showLimiteds", true);
 const showStandards = useSetting("showStandards", true);
+const showWishlistPriority = useSetting("showWishlistPriority", false)
 
 const round = (nr: number) => nr.toFixed(2)
 
@@ -475,6 +487,44 @@ const groupedByAscension = computed(() => {
 
     return groups
 })
+
+console.log(standardPool.value.map(s => `{ name: "${s.name}", ascension: 5 },`).join("\n"))
+
+const wishlistPriority = useBetaValue<WishlistEntry[]>("wishlistPriority")
+
+const wishlistActive = computed(() => {
+    const resolved = new Set<string>()
+    const active: WishlistEntry[] = []
+
+    for (const entry of wishlistPriority) {
+        if (resolved.has(entry.name)) continue
+
+        const ch = displayedCharactersComputed.value.find(c => c.name === entry.name)
+        if (!ch || !ch.isStandardChar || ch.rarity !== 5) continue
+
+        const currentAscension = ch.enabled ? ch.ascension : -1
+        if (currentAscension >= entry.ascension) continue
+
+        active.push(entry)
+        resolved.add(entry.name)
+    }
+
+    return active
+})
+
+const wishlistRankByName = computed(() => {
+    const ranks = new Map<string, number>()
+    wishlistActive.value.forEach((entry, i) => ranks.set(entry.name, i + 1))
+    return ranks
+})
+
+const wishlistTier = (ch: Character): "high" | "mid" | null => {
+    const rank = wishlistRankByName.value.get(ch.name)
+    if (!rank) return null
+    if (rank <= 8) return "high"
+    if (rank <= 13) return "mid"
+    return null
+}
 
 const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
@@ -1114,6 +1164,23 @@ td {
 .heart-level-badge {
     left: 20%;
     top: 0;
+}
+
+.wishlist-badge {
+    left: 80%;
+    top: 0;
+    opacity: 1 !important;
+    font-weight: 800;
+}
+
+.wishlist-badge.wishlist-high {
+    background: rgba(46, 204, 113, 0.92);
+    color: #06341c;
+}
+
+.wishlist-badge.wishlist-mid {
+    background: rgba(241, 196, 15, 0.92);
+    color: #453800;
 }
 
 .dupe-badge {
