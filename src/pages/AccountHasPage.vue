@@ -75,8 +75,10 @@
             <label class="chip" :class="{ active: showLevels }">
                 <input type="checkbox" v-model="showLevels" /> Magic &amp; Special levels
             </label>
-            <label v-if="isBeta()" style="cursor: help;" class="chip" :class="{ active: showWishlistPriority }"
-                title="Wishlist wizard marks a suggested priority for Kioku Ascensions, take this as a guideline rather than an absolute">
+            <label style="cursor: help;" class="chip" :class="{ active: showWishlistPriority }" title="Wishlist wizard marks a suggested priority for Kioku Ascensions, 
+take this as a guideline rather than an absolute. 
+Green numbers indicate very strong ascensions for your account, 
+From the six yellow numbers choose the three you think you have the most use for.">
                 <NewBadge id="wishlist-helper" />
                 <input type="checkbox" v-model="showWishlistPriority" /> Wishlist Wizard
             </label>
@@ -240,7 +242,7 @@
             <div class="stat-row">
                 <span class="stat-label">Chance of non-A5 on standard pull</span>
                 <span class="stat-value">{{ standardPool.length - ownedA5StandardPool.length }} / {{ standardPool.length
-                    }}
+                }}
                     ({{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100)
                     }}%)</span>
             </div>
@@ -314,7 +316,7 @@ import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 import { crystalises, passiveDetails } from "../utils/helpers"
-import { useBetaValue, WishlistEntry, WishlistCondition, isBeta } from "../utils/betaSettings"
+import { useBetaValue, WishlistEntry } from "../utils/betaSettings"
 import NewBadge from '../components/NewBadge.vue'
 
 const route = useRoute()
@@ -490,7 +492,7 @@ const groupedByAscension = computed(() => {
 
 const wishlistPriority = useBetaValue<WishlistEntry[]>("wishlistPriority")
 
-const isConditionMet = (cond: WishlistCondition): boolean => {
+const isConditionMet = (cond: WishlistEntry): boolean => {
     const condCh = displayedCharactersComputed.value.find(c => c.name === cond.name)
     if (!condCh) return false
     const condAscension = condCh.enabled ? condCh.ascension : -1

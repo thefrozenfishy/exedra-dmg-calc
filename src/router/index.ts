@@ -40,7 +40,7 @@ const routes = [
     { path: '/character-crys-edit', name: 'Crystalis Edit', component: CharacterCrysEditPage, meta: { version: 1 } },
     { path: '/tier-lists', name: 'Tier Lists', component: TierLists, meta: { version: 0 } },
     { path: '/about', name: 'About', component: About, meta: { version: 0 } },
-    { path: '/my-kioku', name: 'My Kioku Viewer', component: AccountHasPage, meta: { version: 0 } },
+    { path: '/my-kioku', name: 'My Kioku Viewer', component: AccountHasPage, meta: { version: 1 } },
     { path: '/gacha-rate', name: 'Gacha Rate+Sim', component: GachaRatePage, meta: { version: 0 } },
     { path: '/analytics', name: 'Analytics Dashboard', component: AnalyticsDashboard },
     { path: '/beta', name: 'Beta Settings', component: BetaStuff, meta: { reloadOnLeave: true } },
