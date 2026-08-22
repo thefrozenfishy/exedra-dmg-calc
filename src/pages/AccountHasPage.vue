@@ -243,7 +243,7 @@ From the six yellow numbers choose the three you think you have the most use for
             <div class="stat-row">
                 <span class="stat-label">Chance of non-A5 on standard pull</span>
                 <span class="stat-value">{{ standardPool.length - ownedA5StandardPool.length }} / {{ standardPool.length
-                    }}
+                }}
                     ({{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100)
                     }}%)</span>
             </div>
@@ -508,28 +508,49 @@ const conditionsMet = (conditions?: WishlistException): boolean => {
         : conditions.conditions.some(isConditionMet)
 }
 
+const wishlistEntryQualifies = (entry: WishlistEntry): { qualifies: boolean, currentAscension: number } => {
+    const ch = displayedCharactersComputed.value.find(c => c.name === entry.name)
+    if (!ch || !ch.isStandardChar || ch.rarity !== 5) return { qualifies: false, currentAscension: -1 }
+
+    const currentAscension = ch.enabled ? ch.ascension : -1
+    if (currentAscension >= entry.ascension) return { qualifies: false, currentAscension }
+
+    if (entry.ifHave && !conditionsMet(entry.ifHave)) return { qualifies: false, currentAscension }
+
+    if (conditionsMet(entry.exceptions)) return { qualifies: false, currentAscension }
+
+    return { qualifies: true, currentAscension }
+}
+
 const wishlistActive = computed(() => {
     const resolved = new Set<string>()
-    const active: WishlistEntry[] = []
+    const almostThere: WishlistEntry[] = []
+    const everyoneElse: WishlistEntry[] = []
 
+    // First pass: characters that are exactly one ascension away from their target get bumped to the front.
     for (const entry of wishlistPriority) {
         if (resolved.has(entry.name)) continue
 
-        const ch = displayedCharactersComputed.value.find(c => c.name === entry.name)
-        if (!ch || !ch.isStandardChar || ch.rarity !== 5) continue
+        const { qualifies, currentAscension } = wishlistEntryQualifies(entry)
+        if (!qualifies) continue
+        if (currentAscension !== entry.ascension - 1) continue
 
-        const currentAscension = ch.enabled ? ch.ascension : -1
-        if (currentAscension >= entry.ascension) continue
-
-        if (entry.ifHave && !conditionsMet(entry.ifHave)) continue
-
-        if (conditionsMet(entry.exceptions)) continue
-
-        active.push(entry)
+        almostThere.push(entry)
         resolved.add(entry.name)
     }
 
-    return active
+    // Second pass: everything else, using the original logic (skipping characters already resolved above).
+    for (const entry of wishlistPriority) {
+        if (resolved.has(entry.name)) continue
+
+        const { qualifies } = wishlistEntryQualifies(entry)
+        if (!qualifies) continue
+
+        everyoneElse.push(entry)
+        resolved.add(entry.name)
+    }
+
+    return [...almostThere, ...everyoneElse]
 })
 
 const wishlistRankByName = computed(() => {
