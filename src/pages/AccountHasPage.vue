@@ -163,7 +163,7 @@ From the six yellow numbers choose the three you think you have the most use for
                                 </div>
                                 <div class="wishlist-badge level-badge" v-if="showWishlistPriority && wishlistTier(ch)"
                                     :class="wishlistTier(ch) === 'high' ? 'wishlist-high' : 'wishlist-mid'"
-                                    :title="`Getting this character to A${wishlistAscensionByName.get(ch.name)} should have a ${wishlistTier(ch)} priority in your kioku wishlist`">
+                                    :title="wishlistTooltip(ch)">
                                     {{ wishlistRankByName.get(ch.name) }}
                                 </div>
                                 <div class="heart-level-badge level-badge editable"
@@ -571,6 +571,17 @@ const wishlistTier = (ch: Character): "high" | "mid" | null => {
     if (rank <= 8) return "high"
     if (rank <= 13) return "mid"
     return null
+}
+
+const wishlistTooltip = (ch: Character): string => {
+    const tier = wishlistTier(ch)
+    const targetAscension = wishlistAscensionByName.value.get(ch.name)
+
+    if (targetAscension === 0 && !ch.enabled) {
+        return `Owning this character so you can use it as a support should have a ${tier} priority in your kioku wishlist`
+    }
+
+    return `Getting this character to A${targetAscension} should have a ${tier} priority in your kioku wishlist`
 }
 
 const makeTitle = (ch: Character): string => {

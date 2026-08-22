@@ -352,6 +352,7 @@ export const BETA_SECTIONS = [
                     { name: "Tiro Finale", ascension: 5, }, // Extra MP% gives important breakpoints
 
                     // Great supports 
+                    { name: "Tiro Finale", ascension: 0 },
                     { name: "Flame Waltz", ascension: 0 },
                     { name: "Désintégration", ascension: 0 },
                     {
@@ -427,6 +428,11 @@ export const BETA_SECTIONS = [
 
                     // Good supports
                     { name: "La Lumière", ascension: 0 },
+                    { name: "Tiro Finale Liberation", ascension: 0, },
+                    { name: "A Tale of Cherry Blossoms", ascension: 0 },
+                    { name: "Oracle Ray", ascension: 0 },
+                    { name: "Ultra Great Big Hammer", ascension: 0 },
+                    { name: "Cherry Blizzard", ascension: 0 },
 
                     // Pretty strong
                     {
