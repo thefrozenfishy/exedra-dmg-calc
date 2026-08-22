@@ -422,6 +422,10 @@ export const BETA_SECTIONS = [
                         },
                     },
                     { name: "Doppel of Silence", ascension: 4, },
+                    { name: "Soul Salvation", ascension: 5, },
+                    { name: "Pluvia☆Magica", ascension: 5, },
+                    { name: "Luce della Speranza", ascension: 5, },
+
 
                     // Good supports
                     { name: "La Lumière", ascension: 0 },
@@ -455,9 +459,6 @@ export const BETA_SECTIONS = [
                     { name: "Luminous Tenet", ascension: 5, },
                     { name: "Désintégration", ascension: 4, },
                     { name: "Flame Waltz", ascension: 4, },
-                    { name: "Soul Salvation", ascension: 5, },
-                    { name: "Pluvia☆Magica", ascension: 5, },
-                    { name: "Luce della Speranza", ascension: 5, },
 
                     // Niche uses
                     { name: "My Gigantic Heart", ascension: 4, },
