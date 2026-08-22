@@ -380,7 +380,7 @@ export const BETA_SECTIONS = [
                     {
                         name: "Cherry Ballad",
                         ascension: 4,
-                        exceptions: {
+                        ifHave: {
                             mode: "or",
                             conditions: [
                                 { name: "Oracle Ray", ascension: 5, },
@@ -394,7 +394,7 @@ export const BETA_SECTIONS = [
                     {
                         name: "Atomo Arrabbiato",
                         ascension: 4,
-                        exceptions: {
+                        ifHave: {
                             conditions: [
                                 { name: "Floral Ironspike", ascension: 3 },
                             ],
@@ -474,8 +474,6 @@ export const BETA_SECTIONS = [
                             ],
                         },
                     },
-                    { name: "Cherry Ballad", ascension: 4, },
-                    { name: "Atomo Arrabbiato", ascension: 4, },
                     { name: "The Universe's Edge", ascension: 5, },
                     {
                         name: "Cherry Blizzard", ascension: 5,
@@ -485,6 +483,9 @@ export const BETA_SECTIONS = [
                             ],
                         },
                     },
+                    { name: "Cherry Ballad", ascension: 4, },
+                    { name: "Atomo Arrabbiato", ascension: 4, },
+                    { name: "La Danse Macabre", ascension: 4, },
                     { name: "Nine Phases", ascension: 5, },
                     { name: "Groundhog Daze", ascension: 4, },
 
