@@ -354,8 +354,7 @@ export const BETA_SECTIONS = [
                     { name: "Flame Waltz", ascension: 0 },
                     { name: "Désintégration", ascension: 0 },
                     {
-                        name: "L'Ombre",
-                        ascension: 0,
+                        name: "L'Ombre", ascension: 0,
                         exceptions: {
                             mode: "or",
                             conditions: [
@@ -367,8 +366,7 @@ export const BETA_SECTIONS = [
 
                     // Really strong Ascensions, much used characters so A4->A5 is not bad
                     {
-                        name: "A Tale of Cherry Blossoms",
-                        ascension: 5,
+                        name: "A Tale of Cherry Blossoms", ascension: 5,
                         exceptions: {
                             conditions: [
                                 { name: "Evoluzione Presente", ascension: 5, },
@@ -378,8 +376,7 @@ export const BETA_SECTIONS = [
                     { name: "Absolute Rain", ascension: 5, },
                     { name: "Baldamente Fortissimo", ascension: 4, },
                     {
-                        name: "Cherry Ballad",
-                        ascension: 4,
+                        name: "Cherry Ballad", ascension: 4,
                         ifHave: {
                             mode: "or",
                             conditions: [
@@ -392,8 +389,7 @@ export const BETA_SECTIONS = [
                         },
                     },
                     {
-                        name: "Atomo Arrabbiato",
-                        ascension: 4,
+                        name: "Atomo Arrabbiato", ascension: 4,
                         ifHave: {
                             conditions: [
                                 { name: "Floral Ironspike", ascension: 3 },
@@ -403,8 +399,7 @@ export const BETA_SECTIONS = [
                     { name: "Assault Paranoia", ascension: 4, },
                     { name: "Judgement Earth", ascension: 4, },
                     {
-                        name: "Flame Waltz",
-                        ascension: 4,
+                        name: "Flame Waltz", ascension: 4,
                         exceptions: {
                             conditions: [
                                 { name: "Pluvia☆Neujahr", ascension: 4, },
@@ -413,8 +408,7 @@ export const BETA_SECTIONS = [
 
                     },
                     {
-                        name: "Oracle Ray",
-                        ascension: 5,
+                        name: "Oracle Ray", ascension: 5,
                         exceptions: {
                             conditions: [
                                 { name: "La Porte du Paradis", ascension: 5, },
@@ -432,8 +426,7 @@ export const BETA_SECTIONS = [
 
                     // Pretty strong
                     {
-                        name: "Thoughtless",
-                        ascension: 4,
+                        name: "Thoughtless", ascension: 4,
                         exceptions: {
                             mode: "and",
                             conditions: [
@@ -445,8 +438,7 @@ export const BETA_SECTIONS = [
                     { name: "L'Ombre", ascension: 4, },
                     { name: "Light of Reckoning", ascension: 5, },
                     {
-                        name: "La Danse Macabre",
-                        ascension: 4,
+                        name: "La Danse Macabre", ascension: 4,
                         ifHave: {
                             mode: "or",
                             conditions: [
@@ -456,7 +448,16 @@ export const BETA_SECTIONS = [
                             ],
                         },
                     },
-                    { name: "Luminous Tenet", ascension: 5, },
+                    {
+                        name: "Luminous Tenet", ascension: 5,
+                        exceptions: {
+                            mode: "or",
+                            conditions: [
+                                { name: "Falsified Phenomena", ascension: 4, },
+                                { name: "Bebe-O'-Lantern", ascension: 4, },
+                            ],
+                        },
+                    },
                     { name: "Désintégration", ascension: 4, },
                     { name: "Flame Waltz", ascension: 4, },
 
@@ -467,8 +468,7 @@ export const BETA_SECTIONS = [
                     { name: "Magic Cake Dish", ascension: 4, },
                     { name: "Vampire Fang", ascension: 4, },
                     {
-                        name: "Tiro Finale Liberation",
-                        ascension: 5,
+                        name: "Tiro Finale Liberation", ascension: 5,
                         exceptions: {
                             conditions: [
                                 { name: "Falsified Phenomena", ascension: 4, },
