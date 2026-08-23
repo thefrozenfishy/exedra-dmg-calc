@@ -354,7 +354,6 @@ export const BETA_SECTIONS = [
                     { name: "Tiro Finale", ascension: 5, }, // Extra MP% gives important breakpoints
 
                     // Great supports 
-                    { name: "Tiro Finale", ascension: 0 },
                     { name: "Flame Waltz", ascension: 0 },
                     { name: "Désintégration", ascension: 0 },
                     {
