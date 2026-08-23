@@ -476,7 +476,7 @@ export default defineComponent({
     const needsRecalc = ref(true)
 
     const runHighestPowerCalc = () => {
-      const chars = store.characters.filter(c => c.rarity === 5 && c.enabled)
+      const chars = store.characters.filter(c => c.rarity === 5 && c.enabled && c.name !== LuxMagica)
         .concat(store.characters.filter(c => c.rarity != 5))
         .concat(store.characters.filter(c => c.name === LuxMagica))
         .map(c => simulateMaxAccountLevels.value ? withMaxLevelsForPlayerLevel(c, playerLevel.value) : c)
