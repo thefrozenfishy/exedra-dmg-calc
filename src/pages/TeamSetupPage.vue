@@ -14,7 +14,7 @@
           {{ showHighestTeam ? 'Hide Highest PWR Team' : 'Show Highest PWR Team' }}
         </button>
         <label class="chip" :class="{ active: simulateMaxAccountLevels }"
-          title="Simulate using max possible kioku level and magic level based on player level. Kioku level is capped at your Player Level, and Magic level is capped at whatever your simulated Kioku level allows.">
+          title="Simulate using the max Kioku, Magic, Heartphial and Special level your account could theoretically reach based on your Player Level, instead of each Kioku's current levels">
           <input type="checkbox" v-model="simulateMaxAccountLevels" /> Simulate using max possible levels
         </label>
         <div v-if="calculating" class="calc-progress">

@@ -480,13 +480,21 @@ export function getMaxKiokuLevelForPlayerLevel(playerLevel: number): number {
     return Math.min(Math.max(playerLevel || 0, 1), KiokuConstants.maxKiokuLvl)
 }
 
-export function withMaxLevelsForPlayerLevel<T extends { kiokuLvl: number; magicLvl: number }>(
+export function getMaxSpecialLevelForAscension(ascension: number): number {
+    if (ascension < 3) return 4
+    if (ascension < 5) return 7
+    return KiokuConstants.maxSpecialLvl
+}
+
+export function withMaxLevelsForPlayerLevel<T extends { kiokuLvl: number; magicLvl: number; heartphialLvl: number; specialLvl: number; ascension: number }>(
     char: T,
     playerLevel: number
 ): T {
     const kiokuLvl = getMaxKiokuLevelForPlayerLevel(playerLevel)
     const magicLvl = getMaxMagicLevelForKiokuLevel(kiokuLvl)
-    return { ...char, kiokuLvl, magicLvl }
+    const heartphialLvl = KiokuConstants.maxHeartphialLvl
+    const specialLvl = getMaxSpecialLevelForAscension(char.ascension)
+    return { ...char, kiokuLvl, magicLvl, heartphialLvl, specialLvl }
 }
 
 export interface KiokuArgs {
@@ -504,11 +512,7 @@ export interface KiokuArgs {
 
 export const correctCharacterParams = (character?: Character) => {
     if (character) {
-        if (character.ascension < 3) {
-            character.specialLvl = Math.min(character.specialLvl, 4)
-        } else if (character.ascension < 5) {
-            character.specialLvl = Math.min(character.specialLvl, 7)
-        }
+        character.specialLvl = Math.min(character.specialLvl, getMaxSpecialLevelForAscension(character.ascension))
     }
     return character
 }

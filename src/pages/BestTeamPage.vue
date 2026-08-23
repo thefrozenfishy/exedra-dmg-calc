@@ -44,8 +44,8 @@
                 <input type="checkbox" v-model="optimalSubCrys" /> Perfect crit &amp; substats
             </label>
             <label class="chip" style="cursor: help;" :class="{ active: useMaxAccountLevels }"
-                title="Calculate using the max Kioku level and Magic level your account could theoretically reach based on your Player Level, instead of each Kioku's current level">
-                <input type="checkbox" v-model="useMaxAccountLevels" /> Use max possible kioku and magic level
+                title="Calculate using the max Kioku, Magic, Heartphial and Special level your account could theoretically reach based on your Player Level, instead of each Kioku's current levels">
+                <input type="checkbox" v-model="useMaxAccountLevels" /> Use max possible levels
             </label>
         </section>
 
