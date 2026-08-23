@@ -100,9 +100,18 @@ export function getPortraitDescription(p: Portrait, enchantmentLevel = portraitM
     return passiveBase[p.passiveSkill1 * 100 + 1 + enchantmentLevel].description.replaceAll("<br>", "\n")
 }
 
+function splitBattleSkill(description: string) {
+    const lowDesc = description.toLowerCase()
+    if (!lowDesc.includes("dmg dealt")) return ""
+    if (lowDesc.includes("battle")) return "_BATTLE"
+    if (lowDesc.includes("special")) return "_SPECIAL"
+    if (lowDesc.includes("follow")) return "_FUA"
+    return ""
+}
+
 export function getPortraitEffectType(p: Portrait, enchantmentLevel = portraitMaxLimitBreak): Record<string, number> {
     const details = Object.values(passiveDetails).filter((v: any) => v.passiveSkillMstId === p.passiveSkill1 * 100 + 1 + enchantmentLevel)
-    const effects = Object.fromEntries(details.map(b => [`${b.abilityEffectType}${b.element ? "_" + elementMap[b.element].toUpperCase() : ""}`, b.value1]))
+    const effects = Object.fromEntries(details.map(b => [`${b.abilityEffectType}${splitBattleSkill(b.description)}${b.element ? "_" + elementMap[b.element].toUpperCase() : ""}`, b.value1]))
     return Object.keys(effects).length ? effects : { "Unknown": 0 }
 }
 
