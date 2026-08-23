@@ -702,7 +702,7 @@ export default defineComponent({
   padding: 0.75rem;
 }
 
-.grid-body > * {
+.grid-body>* {
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
