@@ -163,12 +163,8 @@ From the six yellow numbers choose the three you think you have the most use for
                                 </div>
                                 <div class="wishlist-badge level-badge" v-if="showWishlistPriority && wishlistTier(ch)"
                                     :class="wishlistTier(ch) === 'high' ? 'wishlist-high' : 'wishlist-mid'"
-                                    :title="wishlistTooltip(ch)" @click.stop="toggleWishlistTooltip(ch)">
+                                    :title="wishlistTooltip(ch)" @click.stop="toggleWishlistTooltip(ch, $event)">
                                     {{ wishlistRankByName.get(ch.name) }}
-                                    <div v-if="wishlistTooltipCharId === ch.id" class="wishlist-tooltip-popup"
-                                        @click.stop>
-                                        {{ wishlistTooltip(ch) }}
-                                    </div>
                                 </div>
                                 <div class="heart-level-badge level-badge editable"
                                     v-if="showHearts && (chars as any).label !== 'Not Owned'" :class="colourLevels
@@ -219,6 +215,14 @@ From the six yellow numbers choose the three you think you have the most use for
                 </tr>
             </tbody>
         </table>
+
+        <Teleport to="body">
+            <div v-if="wishlistTooltipChar" class="wishlist-tooltip-popup"
+                :style="{ top: wishlistTooltipPos?.top + 'px', left: wishlistTooltipPos?.left + 'px' }" @click.stop>
+                {{ wishlistTooltip(wishlistTooltipChar) }}
+            </div>
+        </Teleport>
+
         <div class="card extra-input" v-if="!showDupes">
             <span class="filters-heading">dupes/+500s collected</span>
             <input type="number" v-model.number="extraCollected" />
@@ -247,7 +251,7 @@ From the six yellow numbers choose the three you think you have the most use for
             <div class="stat-row">
                 <span class="stat-label">Chance of non-A5 on standard pull</span>
                 <span class="stat-value">{{ standardPool.length - ownedA5StandardPool.length }} / {{ standardPool.length
-                    }}
+                }}
                     ({{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100)
                     }}%)</span>
             </div>
@@ -314,7 +318,7 @@ import { elementMap, KiokuElement, LuxMagica } from '../types/enums'
 import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
-import { onMounted } from "vue"
+import { onMounted, onUnmounted } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
@@ -718,6 +722,15 @@ onMounted(() => {
     isTouchDevice.value = window.matchMedia("(pointer: coarse)").matches
     document.addEventListener("touchstart", onDocumentTouchToExitJiggle, { passive: true })
     document.addEventListener("touchstart", onDocumentTouchToCloseWishlistTooltip, { passive: true })
+    window.addEventListener("scroll", closeWishlistTooltip, { passive: true, capture: true })
+    window.addEventListener("resize", closeWishlistTooltip, { passive: true })
+})
+
+onUnmounted(() => {
+    document.removeEventListener("touchstart", onDocumentTouchToExitJiggle)
+    document.removeEventListener("touchstart", onDocumentTouchToCloseWishlistTooltip)
+    window.removeEventListener("scroll", closeWishlistTooltip, true)
+    window.removeEventListener("resize", closeWishlistTooltip)
 })
 
 const onDocumentTouchToExitJiggle = (e: TouchEvent) => {
@@ -728,18 +741,42 @@ const onDocumentTouchToExitJiggle = (e: TouchEvent) => {
     }
 }
 
-const wishlistTooltipCharId = ref<number | null>(null)
+const wishlistTooltipChar = ref<Character | null>(null)
+const wishlistTooltipPos = ref<{ top: number; left: number } | null>(null)
 
-const toggleWishlistTooltip = (ch: Character) => {
+const closeWishlistTooltip = () => {
+    wishlistTooltipChar.value = null
+    wishlistTooltipPos.value = null
+}
+
+const toggleWishlistTooltip = (ch: Character, e: MouseEvent) => {
     if (!isTouchDevice.value) return
-    wishlistTooltipCharId.value = wishlistTooltipCharId.value === ch.id ? null : ch.id
+
+    if (wishlistTooltipChar.value?.id === ch.id) {
+        closeWishlistTooltip()
+        return
+    }
+
+    const badgeEl = e.currentTarget as HTMLElement
+    const rect = badgeEl.getBoundingClientRect()
+    const TOOLTIP_WIDTH = 160
+    const MARGIN = 8
+
+    const left = Math.min(
+        Math.max(rect.left + rect.width / 2 - TOOLTIP_WIDTH / 2, MARGIN),
+        window.innerWidth - TOOLTIP_WIDTH - MARGIN
+    )
+    const top = rect.bottom + 6
+
+    wishlistTooltipPos.value = { top, left }
+    wishlistTooltipChar.value = ch
 }
 
 const onDocumentTouchToCloseWishlistTooltip = (e: TouchEvent) => {
-    if (wishlistTooltipCharId.value === null) return
+    if (wishlistTooltipChar.value === null) return
     const target = e.target as HTMLElement
-    if (!target.closest(".wishlist-badge")) {
-        wishlistTooltipCharId.value = null
+    if (!target.closest(".wishlist-badge") && !target.closest(".wishlist-tooltip-popup")) {
+        closeWishlistTooltip()
     }
 }
 
@@ -802,6 +839,7 @@ const onTouchEnd = (e: TouchEvent) => {
     }
 
     if (!isTouchJiggleMode.value) {
+        e.preventDefault()
         const touch = e.changedTouches[0]
         const target = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLElement | null
         target?.click()
@@ -1233,9 +1271,7 @@ td {
 }
 
 .wishlist-tooltip-popup {
-    position: absolute;
-    top: 135%;
-    right: -8px;
+    position: fixed;
     width: 160px;
     padding: 0.45rem 0.55rem;
     background: rgba(12, 12, 16, 0.97);
@@ -1248,7 +1284,7 @@ td {
     border: 1px solid var(--border-strong);
     border-radius: 8px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
-    z-index: 30;
+    z-index: 1000;
     cursor: default;
 }
 
