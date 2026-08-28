@@ -16552,6 +16552,22 @@
         "description": "行動者：マミ(叛逆)専用バフが付与されているとき"
     },
     {
+        "battleConditionMstId": 2081,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "29",
+        "description": "自身ヘブンまどかの専用デバフが付与されているとき"
+    },
+    {
+        "battleConditionMstId": 2082,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 3,
+        "compareValue": "29",
+        "description": "行動対象(メイン)ヘブンまどかの専用デバフが付与されているとき"
+    },
+    {
         "battleConditionMstId": 2086,
         "compareContent": 313,
         "compareOperator": 4,
@@ -16560,11 +16576,91 @@
         "description": "攻撃が命中した敵数が1体以上のとき"
     },
     {
+        "battleConditionMstId": 2088,
+        "compareContent": 316,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "デバフ効果を付与したとき"
+    },
+    {
+        "battleConditionMstId": 2089,
+        "compareContent": 31,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "20001,1",
+        "description": "ライトチェインLv1のとき"
+    },
+    {
+        "battleConditionMstId": 2090,
+        "compareContent": 31,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "20001,2",
+        "description": "ライトチェインLv2のとき"
+    },
+    {
+        "battleConditionMstId": 2091,
+        "compareContent": 31,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "20001,3",
+        "description": "ライトチェインLv3のとき"
+    },
+    {
+        "battleConditionMstId": 2092,
+        "compareContent": 31,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "20001,4",
+        "description": "ライトチェインLv4のとき"
+    },
+    {
+        "battleConditionMstId": 2093,
+        "compareContent": 31,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "20001,5",
+        "description": "ライトチェインLv5のとき"
+    },
+    {
         "battleConditionMstId": 2094,
         "compareContent": 30,
         "compareOperator": 4,
         "compareTarget": 1,
         "compareValue": "5",
         "description": "自身のブレイク回数が5回以上のとき"
+    },
+    {
+        "battleConditionMstId": 2096,
+        "compareContent": 208,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "4",
+        "description": "敵軍のデバフ数が4"
+    },
+    {
+        "battleConditionMstId": 2097,
+        "compareContent": 208,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "4",
+        "description": "敵全体のデバフ数が4以上"
+    },
+    {
+        "battleConditionMstId": 2098,
+        "compareContent": 116,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "1",
+        "description": "自分にデバフ効果が付与されたとき"
+    },
+    {
+        "battleConditionMstId": 2101,
+        "compareContent": 25,
+        "compareOperator": 4,
+        "compareTarget": 8,
+        "compareValue": "5",
+        "description": "対象のデバフ数が5以上"
     }
 ]

@@ -4363,5 +4363,35 @@
         "targetType": 2,
         "value1": 1150071,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases DEF by 15%.<br>On own battle skill use, increases SPD by 10 (1 turn).",
+        "name": "Don't Push Until You Break",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 156,
+        "selectionAbilityMstId": 7072,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10100201,
+        "targetType": 2,
+        "value1": 1150072,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "Increases DEF by 5% and SPD by 5%.<br>On basic attack, increases own charge by 10%.",
+        "name": "I Go with Hope and Hope Comes with You",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 157,
+        "selectionAbilityMstId": 7073,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 10010801,
+        "targetType": 2,
+        "value1": 1150073,
+        "value2": 0
     }
 ]

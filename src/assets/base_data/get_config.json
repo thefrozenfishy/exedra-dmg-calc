@@ -976,6 +976,10 @@
             "addRegularCharacterStartTime": "2026-04-24T12:00:00+09:00",
             "dollhouseStartTime": "2025-10-02T12:00:00+09:00"
         },
+        "explorationConfig": {
+            "bulkSkipReleaseTime": "2026-08-28T22:00:00+09:00",
+            "totalPowerSkipRate": 100
+        },
         "firestoreConfig": {
             "firestoreCollectionPath": "worlds/en_production"
         },
@@ -1067,6 +1071,9 @@
             },
             "gatheringShortcutHours": 6,
             "perMinutes": 60
+        },
+        "gemRewardConfig": {
+            "releaseDateTime": "2026-08-28T22:00:00+09:00"
         },
         "guildConfig": {
             "guildRoleMstIdOfGuildMaster": 1,
@@ -1165,6 +1172,7 @@
             "maxPlayCountPerDay": 6,
             "maxStamina": 120,
             "resultDisplayLimitDays": 3,
+            "saveCharacterBuildDetailReleaseMultiRaidMstId": 27,
             "scoreCalcConstant": 100,
             "staminaBoostRate": 2,
             "staminaMaxCountInDay": 10,
@@ -1432,6 +1440,7 @@
                 "specialAttackCoefficient": 150
             },
             "presetReleaseTime": "2026-05-20T12:00:00+09:00",
+            "recommendPartyDataV2ReleaseTime": "2026-08-28T22:00:00+09:00",
             "subStyleDataParamRate": 100,
             "subStyleDataParamRateInfo": [
                 {

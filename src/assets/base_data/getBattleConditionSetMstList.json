@@ -16715,6 +16715,11 @@
         "description": "水着やちよ専用バフが付与されているとき"
     },
     {
+        "battleConditionMstIdCsv": "2048",
+        "battleConditionSetMstId": 3376,
+        "description": "トークンが1000のとき"
+    },
+    {
         "battleConditionMstIdCsv": "2046",
         "battleConditionSetMstId": 3377,
         "description": "行動対象にクシュの専用デバフがある"
@@ -16975,6 +16980,21 @@
         "description": "行動者は味方+敵チームに与えるトータルダメージは1以上+行動者：マミ(叛逆)専用バフが付与されているとき+対象個別のアクターか"
     },
     {
+        "battleConditionMstIdCsv": "3,7,1252",
+        "battleConditionSetMstId": 3435,
+        "description": "行動対象自身+必殺技発動したとき+行動対象(メイン)に攻撃したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2081",
+        "battleConditionSetMstId": 3436,
+        "description": "自身ヘブンまどかの専用デバフが付与されているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2082,3,7,916",
+        "battleConditionSetMstId": 3437,
+        "description": "行動対象(個別)+ダメージを受けた+行動対象(メイン)がヘブンまどかの専用デバフが付与されているとき+行動者は自身+必殺技発動したとき"
+    },
+    {
         "battleConditionMstIdCsv": "464,3",
         "battleConditionSetMstId": 3445,
         "description": "行動者は自分AND奇数ターン"
@@ -17065,6 +17085,76 @@
         "description": "自身の経過ターンが9ターン以上、10ターン未満"
     },
     {
+        "battleConditionMstIdCsv": "1603,1,5",
+        "battleConditionSetMstId": 3468,
+        "description": "行動者は自身以外＋敵全体で1以上のダメージを与えたとき+通常攻撃発動時+トークン500未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1603,1,6",
+        "battleConditionSetMstId": 3469,
+        "description": "行動者は自身以外＋敵全体で1以上のダメージを与えたとき+戦闘スキル発動時+トークン500未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1603,1,7",
+        "battleConditionSetMstId": 3470,
+        "description": "行動者は自身以外＋敵全体で1以上のダメージを与えたとき+必殺技発動時+トークン500未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,2088",
+        "battleConditionSetMstId": 3472,
+        "description": "自身または味方が敵にデバフ効果を付与したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2089",
+        "battleConditionSetMstId": 3473,
+        "description": "ライトチェインLv1のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2090",
+        "battleConditionSetMstId": 3474,
+        "description": "ライトチェインLv2のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2091",
+        "battleConditionSetMstId": 3475,
+        "description": "ライトチェインLv3のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2092",
+        "battleConditionSetMstId": 3476,
+        "description": "ライトチェインLv4のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2093",
+        "battleConditionSetMstId": 3477,
+        "description": "ライトチェインLv5のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,655,5,962",
+        "battleConditionSetMstId": 3478,
+        "description": "自身以外の味方がダメージを与えたとき(通常攻撃発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "1,655,6,962",
+        "battleConditionSetMstId": 3479,
+        "description": "自身以外の味方がダメージを与えたとき(戦闘スキル発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "1,655,7,962",
+        "battleConditionSetMstId": 3480,
+        "description": "自身以外の味方がダメージを与えたとき(必殺技発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "6,280",
+        "battleConditionSetMstId": 3481,
+        "description": "行動タイプがスキル攻撃+自身が回復したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "7,280",
+        "battleConditionSetMstId": 3482,
+        "description": "行動タイプは必殺技+自身が回復したとき"
+    },
+    {
         "battleConditionMstIdCsv": "57,274,349",
         "battleConditionSetMstId": 3483,
         "description": "自分が3ターンごとに（ターン1から）、味方が4体存在する場合（自分を除く） AND 連続行動の2回目"
@@ -17098,5 +17188,135 @@
         "battleConditionMstIdCsv": "2,6",
         "battleConditionSetMstId": 3493,
         "description": "行動者は敵、戦闘スキルが発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2096",
+        "battleConditionSetMstId": 3494,
+        "description": "敵軍のデバフ数が4以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,2086,1265",
+        "battleConditionSetMstId": 3498,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃が命中した敵数が1体以上、敵全体のデバフ数が0"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,2086,2059",
+        "battleConditionSetMstId": 3499,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃が命中した敵数が1体以上、敵全体のデバフ数が1"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,2086,2060",
+        "battleConditionSetMstId": 3500,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃が命中した敵数が1体以上、敵全体のデバフ数が2"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,2086,2061",
+        "battleConditionSetMstId": 3501,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃が命中した敵数が1体以上、敵全体のデバフ数が3"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,2086,2097",
+        "battleConditionSetMstId": 3502,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻攻撃が命中した敵数が1体以上、敵全体のデバフ数が4以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,2086,1281",
+        "battleConditionSetMstId": 3503,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃が命中した敵数が1体以上、敵全体のデバフ数が1以上"
+    },
+    {
+        "battleConditionMstIdCsv": "420,7,1388",
+        "battleConditionSetMstId": 3504,
+        "description": "ブレイク状態ではない + 敵の必殺技で自軍が1以上のダメージを受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,2086",
+        "battleConditionSetMstId": 3505,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、戦闘スキルを使用、攻撃が命中した敵数が1体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,752",
+        "battleConditionSetMstId": 3506,
+        "description": "自身がプレイヤー側のユニットのとき、対象のデバフ数が1"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,753",
+        "battleConditionSetMstId": 3507,
+        "description": "自身がプレイヤー側のユニットのとき、対象のデバフ数が2"
+    },
+    {
+        "battleConditionMstIdCsv": "3,7,1332",
+        "battleConditionSetMstId": 3510,
+        "description": "攻撃した対象+行動者は自身+必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1507,2,2098",
+        "battleConditionSetMstId": 3511,
+        "description": "自身がカウントダウン発動中のとき + 行動者は敵 + 自分にデバフ効果が付与されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "972,987",
+        "battleConditionSetMstId": 3512,
+        "description": "行動者は水属性 AND 対象は木属性"
+    },
+    {
+        "battleConditionMstIdCsv": "973,986",
+        "battleConditionSetMstId": 3513,
+        "description": "行動者は木属性 AND 対象は水属性"
+    },
+    {
+        "battleConditionMstIdCsv": "973,989",
+        "battleConditionSetMstId": 3514,
+        "description": "行動者は木属性 AND 対象は闇属性"
+    },
+    {
+        "battleConditionMstIdCsv": "975,987",
+        "battleConditionSetMstId": 3515,
+        "description": "行動者は闇属性 AND 対象は木属性"
+    },
+    {
+        "battleConditionMstIdCsv": "3,271,1055",
+        "battleConditionSetMstId": 3516,
+        "description": "自身の経過ターンが3ターン以上、5ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1005",
+        "battleConditionSetMstId": 3517,
+        "description": "自身が5ターン以上経過している"
+    },
+    {
+        "battleConditionMstIdCsv": "762,2,2098",
+        "battleConditionSetMstId": 3525,
+        "description": "自身がブレイク状態のとき + 行動者は敵 + 自分にデバフ効果が付与されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,2101",
+        "battleConditionSetMstId": 3527,
+        "description": "自身がプレイヤー側のユニットのとき、対象のデバフ数が5以上"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1665",
+        "battleConditionSetMstId": 3533,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、戦闘スキルを使用、攻撃が命中した敵数が1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1666",
+        "battleConditionSetMstId": 3534,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、戦闘スキルを使用、攻撃が命中した敵数が2体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1667",
+        "battleConditionSetMstId": 3535,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、戦闘スキルを使用、攻撃が命中した敵数が3体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1668",
+        "battleConditionSetMstId": 3536,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、戦闘スキルを使用、攻撃が命中した敵数が1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1669",
+        "battleConditionSetMstId": 3537,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、戦闘スキルを使用、攻撃が命中した敵数が5体のとき"
     }
 ]

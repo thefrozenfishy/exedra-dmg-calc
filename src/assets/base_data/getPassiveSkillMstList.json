@@ -401,6 +401,36 @@
     },
     {
         "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "For each debuff applied to an enemy, increases elemental weakness DMG by 40% (Max 200%), and increases MP recovery rate by 30%.",
+        "level": 1,
+        "name": "Season Buffs",
+        "passiveSkillMstId": 1040,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1040
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Increases debuff hit rate by 50%, adds 2 turns to the duration of debuff effects, and increases MP recovery rate by 30%.",
+        "level": 1,
+        "name": "Season Buffs",
+        "passiveSkillMstId": 1041,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1041
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 2,
+        "description": "Increases break gauge depletion by 30%, break bonus amount by 30%, and MP recovery rate by 30%.",
+        "level": 1,
+        "name": "Season Buffs",
+        "passiveSkillMstId": 1042,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1042
+    },
+    {
+        "conditionElement": 0,
         "conditionRole": 0,
         "description": "Increases DEF by 5%.",
         "level": 1,
@@ -11382,6 +11412,186 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "Increases break effect by 10%.<br>Increases HP recovery amount by 7.5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 418401,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4184
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases break effect by 12%.<br>Increases HP recovery amount by 9%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 418402,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4184
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases break effect by 14%.<br>Increases HP recovery amount by 10.5%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 418403,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4184
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases break effect by 16%.<br>Increases HP recovery amount by 12%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 418404,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4184
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases break effect by 18%.<br>Increases HP recovery amount by 13.5%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 418405,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4184
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases break effect by 20%.<br>Increases HP recovery amount by 15%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 418406,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4184
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases max HP by 2.5%.<br>Equipped to Defender:<br>Also increases MP recovery rate by 1%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 418501,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4185
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases max HP by 3.5%.<br>Equipped to Defender:<br>Also increases MP recovery rate by 1.4%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 418502,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4185
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases max HP by 4.5%.<br>Equipped to Defender:<br>Also increases MP recovery rate by 1.8%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 418503,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4185
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases max HP by 5.5%.<br>Equipped to Defender:<br>Also increases MP recovery rate by 2.2%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 418504,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4185
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases max HP by 6.5%.<br>Equipped to Defender:<br>Also increases MP recovery rate by 2.6%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 418505,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4185
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases max HP by 7.5%.<br>Equipped to Defender:<br>Also increases MP recovery rate by 3%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 418506,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4185
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases light DMG dealt by 7.5%.<br>Equipped to Debuffer:<br>Also increases SPD by 5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 418601,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4186
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases light DMG dealt by 8.5%.<br>Equipped to Debuffer:<br>Also increases SPD by 6%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 418602,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4186
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases light DMG dealt by 9.5%.<br>Equipped to Debuffer:<br>Also increases SPD by 7%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 418603,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4186
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases light DMG dealt by 10.5%.<br>Equipped to Debuffer:<br>Also increases SPD by 8%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 418604,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4186
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases light DMG dealt by 11.5%.<br>Equipped to Debuffer:<br>Also increases SPD by 9%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 418605,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4186
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases light DMG dealt by 12.5%.<br>Equipped to Debuffer:<br>Also increases SPD by 10%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 418606,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4186
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Increases DEF by 15%.",
         "level": 1,
         "name": "Ability",
@@ -19748,6 +19958,26 @@
         "passiveSkillMstId": 1150071,
         "skillButtonIcon": "",
         "skillUniqueId": 1150071
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases DEF by 15%.<br>On own battle skill use, increases SPD by 10 (1 turn).",
+        "level": 1,
+        "name": "Don't Push Until You Break",
+        "passiveSkillMstId": 1150072,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1150072
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases DEF by 5% and SPD by 5%.<br>On basic attack, increases own charge by 10%.",
+        "level": 1,
+        "name": "I Go with Hope and Hope Comes with You",
+        "passiveSkillMstId": 1150073,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1150073
     },
     {
         "conditionElement": 0,
@@ -30752,6 +30982,206 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "At battle start, increases SPD by 30% (1 turn).<br><br>Increases DMG dealt by 15% for all allies with a barrier.<br><br>When 2 or more debuffs are applied to enemies:<br>Increases SPD by 15%.",
+        "level": 1,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 1507301,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases SPD by 31% (1 turn).<br><br>Increases DMG dealt by 15% for all allies with a barrier.<br><br>When 2 or more debuffs are applied to enemies:<br>Increases SPD by 15%.",
+        "level": 2,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 1507302,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases SPD by 33% (1 turn).<br><br>Increases DMG dealt by 15% for all allies with a barrier.<br><br>When 2 or more debuffs are applied to enemies:<br>Increases SPD by 15%.",
+        "level": 3,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 1507303,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases SPD by 35% (1 turn).<br><br>Increases DMG dealt by 15% for all allies with a barrier.<br><br>When 2 or more debuffs are applied to enemies:<br>Increases SPD by 15%.",
+        "level": 4,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 1507304,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases SPD by 37% (1 turn).<br><br>Increases DMG dealt by 15% for all allies with a barrier.<br><br>When 2 or more debuffs are applied to enemies:<br>Increases SPD by 15%.",
+        "level": 5,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 1507305,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases SPD by 40% (1 turn).<br><br>Increases DMG dealt by 15% for all allies with a barrier.<br><br>When 2 or more debuffs are applied to enemies:<br>Increases SPD by 15%.",
+        "level": 6,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 1507306,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases SPD by 42% (1 turn).<br><br>Increases DMG dealt by 15% for all allies with a barrier.<br><br>When 2 or more debuffs are applied to enemies:<br>Increases SPD by 15%.",
+        "level": 7,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 1507307,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases SPD by 44% (1 turn).<br><br>Increases DMG dealt by 15% for all allies with a barrier.<br><br>When 2 or more debuffs are applied to enemies:<br>Increases SPD by 15%.",
+        "level": 8,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 1507308,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases SPD by 47% (1 turn).<br><br>Increases DMG dealt by 15% for all allies with a barrier.<br><br>When 2 or more debuffs are applied to enemies:<br>Increases SPD by 15%.",
+        "level": 9,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 1507309,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases SPD by 50% (1 turn).<br><br>Increases DMG dealt by 15% for all allies with a barrier.<br><br>When 2 or more debuffs are applied to enemies:<br>Increases SPD by 15%.",
+        "level": 10,
+        "name": "Blast Haste",
+        "passiveSkillMstId": 1507310,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 40% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "level": 1,
+        "name": "Haste",
+        "passiveSkillMstId": 1507401,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 41% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "level": 2,
+        "name": "Haste",
+        "passiveSkillMstId": 1507402,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 42% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "level": 3,
+        "name": "Haste",
+        "passiveSkillMstId": 1507403,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 43% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "level": 4,
+        "name": "Haste",
+        "passiveSkillMstId": 1507404,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 44% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "level": 5,
+        "name": "Haste",
+        "passiveSkillMstId": 1507405,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 45% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "level": 6,
+        "name": "Haste",
+        "passiveSkillMstId": 1507406,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 46% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "level": 7,
+        "name": "Haste",
+        "passiveSkillMstId": 1507407,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 47% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "level": 8,
+        "name": "Haste",
+        "passiveSkillMstId": 1507408,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 48% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "level": 9,
+        "name": "Haste",
+        "passiveSkillMstId": 1507409,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 50% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "level": 10,
+        "name": "Haste",
+        "passiveSkillMstId": 1507410,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "On defeating an enemy, grants 5 Vanguard points.<br>On breaking an enemy, grants 3 Vanguard points.",
         "level": 1,
         "name": "Vanguard Base Points",
@@ -31048,6 +31478,56 @@
         "passiveSkillMstId": 1600029,
         "skillButtonIcon": "battle_icon_season_skill",
         "skillUniqueId": 1600029
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On battle skill attack to enemy, grants 5 Vanguard points.",
+        "level": 1,
+        "name": "Vanguard Points",
+        "passiveSkillMstId": 1600030,
+        "skillButtonIcon": "battle_icon_season_skill",
+        "skillUniqueId": 1600030
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On DMG dealt to an enemy, increases critical DMG by 2% (Max 50%).",
+        "level": 1,
+        "name": "Vanguard Execution Phase",
+        "passiveSkillMstId": 1600031,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1600031
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical rate by 30% and battle skill DMG dealt by 30%.<br>On shift to Vanguard Activation Phase, increases SPD by 100% (1 turn).<br>Attacker: Increases DMG dealt when targeting elemental weakness by 30%.<br>Breaker: Increases break gauge depletion by 40%.<br>Debuffer: Increases ailment and debuff effects applied by 40% (* excluding action order delay effects), and adds 1 turn to the duration of ailment and debuff effects applied (* excluding ailments that block actions).",
+        "level": 1,
+        "name": "Vanguard Activation Phase",
+        "passiveSkillMstId": 1600032,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1600032
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases SPD by 20%.<br>On attack to a debuffed enemy, increases critical DMG by 10% (Stacks 3 times / 2 turns).",
+        "level": 1,
+        "name": "Debuff Effect",
+        "passiveSkillMstId": 1600033,
+        "skillButtonIcon": "battle_icon_choice_atk_up",
+        "skillUniqueId": 1600033
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On attack to an enemy, grants 2 Vanguard points (Scales with the total number of all enemy debuffs; max 10).",
+        "level": 1,
+        "name": "Vanguard Points",
+        "passiveSkillMstId": 1600034,
+        "skillButtonIcon": "battle_icon_season_skill",
+        "skillUniqueId": 1600034
     },
     {
         "conditionElement": 0,
@@ -32568,6 +33048,36 @@
         "passiveSkillMstId": 2005042,
         "skillButtonIcon": "",
         "skillUniqueId": 2005042
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "When an ally is defeated, greatly decreases own DMG taken for 1 turn.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 2005043,
+        "skillButtonIcon": "",
+        "skillUniqueId": 2005043
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "When an ally is defeated, decreases own DMG taken for 1 turn.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 2005044,
+        "skillButtonIcon": "",
+        "skillUniqueId": 2005044
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "When an ally is defeated, slightly decreases own DMG taken for 1 turn.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 2005045,
+        "skillButtonIcon": "",
+        "skillUniqueId": 2005045
     },
     {
         "conditionElement": 0,
@@ -35652,6 +36162,156 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Triggers a counterattack each time own Magic reaches max.<br>On enemy action when DMG is not taken by self, grants 1 Magic.<br><br>Counterattack:<br>Deals void DMG [L] (DEF-based) to all enemies.<br>When self not afflicted with debuff, greatly delays targets' action order.<br>Consumes 3 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001213,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001213
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>While barrier active on self, greatly increases SPD and break gauge depletion RES.<br>Guaranteed to decrease MP recovery rate of enemies with each passing enemy turn.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001214,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001214
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>At battle start, greatly advances own action order.<br><br>When own Magic is 1 or higher, significantly increases break gauge depletion RES, and greatly decreases DMG taken.<br>Each time a debuff is applied while the countdown is active or while in break, consumes 1 Magic.<br><br>Guaranteed to decrease enemies' MP recovery rate with each passing enemy turn.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001215,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001215
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br><br>Increases DEF and SPD based on number of buffs applied to self.<br>Guaranteed to significantly decrease buff effects used by all enemies.<br>Guaranteed to decrease MP recovery rate.<br>Increases debuff RES.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001216,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001216
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br><br>Increases DEF and SPD based on number of buffs applied to self.<br>Guaranteed to decrease buff effects used by all enemies.<br>Guaranteed to decrease MP recovery rate.<br>Increases debuff RES.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001217,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001217
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br><br>Increases SPD based on number of buffs applied to self.<br>Guaranteed to decrease buff effects used by all enemies.<br>Guaranteed to decrease MP recovery rate.<br>Increases debuff RES.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001218,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001218
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br><br>Increases SPD based on number of buffs applied to self.<br>Guaranteed to decrease buff effects used by all enemies.<br>Guaranteed to decrease MP recovery rate.<br>Increases debuff RES.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001219,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001219
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br><br>Increases SPD based on number of buffs applied to self.<br>Guaranteed to decrease MP recovery rate.<br>Increases debuff RES.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001220,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001220
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br><br>Increases SPD based on number of buffs applied to self.<br>Increases debuff RES.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001221,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001221
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Triggers a counterattack each time own Magic reaches max.<br>On enemy action when DMG is not taken by self, grants 1 Magic.<br><br>Counterattack:<br>Deals void DMG [L] (DEF-based) to all enemies.<br>When self not afflicted with debuff, delays targets' action order.<br>Consumes 3 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001227,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001227
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Triggers a counterattack each time own Magic reaches max.<br>On enemy action when DMG is not taken by self, grants 1 Magic.<br><br>Counterattack:<br>Deals void DMG [L] (DEF-based) to all enemies.<br>When self not afflicted with debuff, slightly delays targets' action order.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001228,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001228
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>While barrier active on self, increases SPD, and greatly increases break gauge depletion RES.<br>Guaranteed to decrease MP recovery rate of enemies with each passing enemy turn.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001229,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001229
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>While barrier active on self, increases SPD and break gauge depletion RES.<br>Guaranteed to decrease MP recovery rate of enemies with each passing enemy turn.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001230,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001230
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>At battle start, greatly advances own action order.<br><br>When own Magic is 1 or higher, greatly increases break gauge depletion RES, and decreases DMG taken.<br>Each time a debuff is applied while the countdown is active or while in break, consumes 1 Magic.<br><br>Guaranteed to decrease enemies' MP recovery rate with each passing enemy turn.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001231,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001231
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>At battle start, greatly advances own action order.<br><br>When own Magic is 1 or higher, greatly increases break gauge depletion RES.<br>Each time a debuff is applied while the countdown is active or while in break, consumes 1 Magic.<br><br>Guaranteed to decrease enemies' MP recovery rate with each passing enemy turn.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001232,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001232
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "If attack target is cursed, grants 1 extra action.",
         "level": 1,
         "name": "Ability IV",
@@ -36098,6 +36758,36 @@
         "passiveSkillMstId": 7001024,
         "skillButtonIcon": "",
         "skillUniqueId": 7001024
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Activates assist each time own Magic reaches max.<br>Each time an ally is attacked with a special attack when self not in break, grants 1 Magic.<br><br>Assist:<br>Delays all enemies' action order.<br>Guaranteed to greatly decrease MP recovery rate for 5 turns.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001025,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001025
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Activates assist each time own Magic reaches max.<br>Each time an ally is attacked with a special attack when self not in break, grants 1 Magic.<br><br>Assist:<br>Delays all enemies' action order.<br>Guaranteed to decrease MP recovery rate for 5 turns.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001026,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001026
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Activates assist each time own Magic reaches max.<br>Each time an ally is attacked with a special attack when self not in break, grants 1 Magic.<br><br>Assist:<br>Delays all enemies' action order.<br>Guaranteed to decrease MP recovery rate for 5 turns.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001027,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001027
     },
     {
         "conditionElement": 0,
@@ -38058,6 +38748,46 @@
         "passiveSkillMstId": 8508901,
         "skillButtonIcon": "",
         "skillUniqueId": 85089
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases MP by 40.<br>Increases ATK by 10% for all allies with a barrier.",
+        "level": 1,
+        "name": "Ascension Effects",
+        "passiveSkillMstId": 8509001,
+        "skillButtonIcon": "",
+        "skillUniqueId": 85090
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Adds 1 turn to the duration of ailment and debuff effects applied (* excluding ailments that block actions).<br>On special attack, delays target's action order by 10%.",
+        "level": 1,
+        "name": "Ascension Effects",
+        "passiveSkillMstId": 8509101,
+        "skillButtonIcon": "",
+        "skillUniqueId": 85091
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ailment and debuff effects applied by 20% (* excluding action order delay effects).<br>+6 BP at battle start.",
+        "level": 1,
+        "name": "Ascension Effects",
+        "passiveSkillMstId": 8509201,
+        "skillButtonIcon": "",
+        "skillUniqueId": 85092
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ailment and debuff effects applied by 30% (* excluding action order delay effects).<br>On special attack, increases own charge by 10%.",
+        "level": 1,
+        "name": "Ascension Effects",
+        "passiveSkillMstId": 8509301,
+        "skillButtonIcon": "",
+        "skillUniqueId": 85093
     },
     {
         "conditionElement": 0,
@@ -49058,5 +49788,205 @@
         "passiveSkillMstId": 9507110,
         "skillButtonIcon": "battle_icon_supportpassive_buff",
         "skillUniqueId": 95071
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 6,
+        "description": "Equipped to Defender:<br>Increases SPD by 10.<br>On own special attack, decreases DMG taken by 6% (2 turns).",
+        "level": 1,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 9507201,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95072
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 6,
+        "description": "Equipped to Defender:<br>Increases SPD by 10.<br>On own special attack, decreases DMG taken by 6.7% (2 turns).",
+        "level": 2,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 9507202,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95072
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 6,
+        "description": "Equipped to Defender:<br>Increases SPD by 10.<br>On own special attack, decreases DMG taken by 7.3% (2 turns).",
+        "level": 3,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 9507203,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95072
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 6,
+        "description": "Equipped to Defender:<br>Increases SPD by 10.<br>On own special attack, decreases DMG taken by 8% (2 turns).",
+        "level": 4,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 9507204,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95072
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 6,
+        "description": "Equipped to Defender:<br>Increases SPD by 10.<br>On own special attack, decreases DMG taken by 8.7% (2 turns).",
+        "level": 5,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 9507205,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95072
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 6,
+        "description": "Equipped to Defender:<br>Increases SPD by 10.<br>On own special attack, decreases DMG taken by 9.3% (2 turns).",
+        "level": 6,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 9507206,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95072
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 6,
+        "description": "Equipped to Defender:<br>Increases SPD by 10.<br>On own special attack, decreases DMG taken by 10% (2 turns).",
+        "level": 7,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 9507207,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95072
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 6,
+        "description": "Equipped to Defender:<br>Increases SPD by 10.<br>On own special attack, decreases DMG taken by 10.6% (2 turns).",
+        "level": 8,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 9507208,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95072
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 6,
+        "description": "Equipped to Defender:<br>Increases SPD by 10.<br>On own special attack, decreases DMG taken by 11.3% (2 turns).",
+        "level": 9,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 9507209,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95072
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 6,
+        "description": "Equipped to Defender:<br>Increases SPD by 10.<br>On own special attack, decreases DMG taken by 12% (2 turns).",
+        "level": 10,
+        "name": "Defense Haste",
+        "passiveSkillMstId": 9507210,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95072
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 5%.<br>Increases self-applied debuff effects by 10% (* excluding action order delay effects).",
+        "level": 1,
+        "name": "Haste Severity",
+        "passiveSkillMstId": 9507301,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 6%.<br>Increases self-applied debuff effects by 10% (* excluding action order delay effects).",
+        "level": 2,
+        "name": "Haste Severity",
+        "passiveSkillMstId": 9507302,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 7%.<br>Increases self-applied debuff effects by 10% (* excluding action order delay effects).",
+        "level": 3,
+        "name": "Haste Severity",
+        "passiveSkillMstId": 9507303,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 8%.<br>Increases self-applied debuff effects by 10% (* excluding action order delay effects).",
+        "level": 4,
+        "name": "Haste Severity",
+        "passiveSkillMstId": 9507304,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 9%.<br>Increases self-applied debuff effects by 10% (* excluding action order delay effects).",
+        "level": 5,
+        "name": "Haste Severity",
+        "passiveSkillMstId": 9507305,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 10%.<br>Increases self-applied debuff effects by 10% (* excluding action order delay effects).",
+        "level": 6,
+        "name": "Haste Severity",
+        "passiveSkillMstId": 9507306,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 11%.<br>Increases self-applied debuff effects by 10% (* excluding action order delay effects).",
+        "level": 7,
+        "name": "Haste Severity",
+        "passiveSkillMstId": 9507307,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 12%.<br>Increases self-applied debuff effects by 10% (* excluding action order delay effects).",
+        "level": 8,
+        "name": "Haste Severity",
+        "passiveSkillMstId": 9507308,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 13%.<br>Increases self-applied debuff effects by 10% (* excluding action order delay effects).",
+        "level": 9,
+        "name": "Haste Severity",
+        "passiveSkillMstId": 9507309,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 5,
+        "description": "Equipped to Debuffer:<br>Increases SPD by 15%.<br>Increases self-applied debuff effects by 10% (* excluding action order delay effects).",
+        "level": 10,
+        "name": "Haste Severity",
+        "passiveSkillMstId": 9507310,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95073
     }
 ]
