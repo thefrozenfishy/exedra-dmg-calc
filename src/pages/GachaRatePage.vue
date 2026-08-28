@@ -116,8 +116,11 @@ const curveColors = [
     '#4361EE', // indigo
     '#7209B7', // purple
     '#F72585', // pink
-    '#FFB703'  // amber
+    '#FFB703',  // amber
+    '#ff1493', // pink
 ]
+
+const MAX_ROLLS = 6
 
 const STATE = { ELIGIBLE: 0, LOCKED: 1 }
 
@@ -309,7 +312,7 @@ function computeCumulativeGems(maxPulls) {
 function renderChart() {
     if (chart) chart.destroy()
 
-    const dpTable = computeDPTable(MAX_PULLS, 6)
+    const dpTable = computeDPTable(MAX_PULLS, MAX_ROLLS)
     const ssrCounts = computeExpectedSSRCounts(MAX_PULLS)
     const gemsCum = computeCumulativeGems(MAX_PULLS)
 
@@ -329,7 +332,7 @@ function renderChart() {
         yAxisID: 'y1',
     })
 
-    for (let t = 1; t <= 6; t++) {
+    for (let t = 1; t <= MAX_ROLLS; t++) {
         datasets.push({
             label: `a${t - 1}+`,
             data: xValues.map((x, p) => ({ x, y: dpTable[p][t] })),
@@ -579,7 +582,7 @@ function pull(blueToPurple = false) {
                     ]
                 }
             } else {
-                extra = {...rollStandardGoldChar(), ...extra}
+                extra = { ...rollStandardGoldChar(), ...extra }
                 softPityWindowLocked.value = true
             }
             console.log("Addds extra", extra)
