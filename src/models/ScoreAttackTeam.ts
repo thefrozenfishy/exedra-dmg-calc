@@ -426,6 +426,7 @@ export class ScoreAttackTeam {
         return baseEff.startsWith("DWN_")
             || baseEff.startsWith("DOWN_")
             || baseEff === "UP_RCV_DMG_RATIO"
+            || baseEff === "RCV_FINAL_DAMAGE"
             || baseEff === "WEAKNESS";
     }
 
@@ -787,6 +788,8 @@ export class ScoreAttackTeam {
             this.getDebuffEffect("DWN_ELEMENT_RESIST_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) / 1000
         ));
 
+        const final_recieve_dmg = 1 + this.getDebuffEffect("RCV_FINAL_DAMAGE", idx, currentAmountOfEnemies, enemy.maxBreak) / 1000;
+
         const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
         const crit_factor = 1 + (enemy.isCrit ? crit_dmg : 0);
         const crit_add_factor = 1 + (enemy.isAddDmgCrit ? crit_dmg : 0);
@@ -805,7 +808,9 @@ export class ScoreAttackTeam {
             dmg_taken_factor *
             elem_resist_factor *
             effect_elem_factor *
-            break_factor
+            break_factor *
+            final_recieve_dmg;
+
         let dot_total_dmg = 0;
         let add_dmg = 0;
         if (special > 0 && enemy.enabled) {
