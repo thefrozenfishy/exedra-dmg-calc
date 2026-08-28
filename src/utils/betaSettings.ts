@@ -390,6 +390,11 @@ export const BETA_SECTIONS = [
                                 { name: "Tiro Finale Liberation", ascension: 5, },
                             ],
                         },
+                        exceptions: {
+                            conditions: [
+                                { name: "Vinctio☆Magica", ascension: 2, },
+                            ],
+                        }
                     },
                     {
                         name: "Atomo Arrabbiato", ascension: 4,
