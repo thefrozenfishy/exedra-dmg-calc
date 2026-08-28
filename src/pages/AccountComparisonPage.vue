@@ -4,7 +4,35 @@
 
         <div class="header">
             <div class="subtitle" v-if="leftCode && rightCode">
-                <FriendPickerBadge side="left" :current-code="leftCode" placeholder="Left account" @pick="onPickLeft" />
+                <div class="picker-column">
+                    <FriendPickerBadge side="left" :current-code="leftCode" placeholder="Left account"
+                        @pick="onPickLeft" />
+
+                    <div v-if="leftPower" class="power-block">
+                        <div class="power-badges">
+                            <div class="power-badge" title="Power rating">
+                                <img :src="'/exedra-dmg-calc/pwr.png'" alt="Total" />
+                                <span>{{ leftPower.total }}</span>
+                            </div>
+
+                            <div class="power-badge power-badge-whale" title="Whale power">
+                                <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale power" />
+                                <span>{{ leftPower.whale }}</span>
+                            </div>
+                        </div>
+
+                        <div class="power-roles">
+                            <button v-for="role in powerRoles" :key="role" class="power-role-btn"
+                                :class="hiddenCompareRoles.includes(role) ? 'power-role-btn--hidden' : 'power-role-btn--visible'"
+                                :title="hiddenCompareRoles.includes(role) ? `Show ${role}` : `Hide ${role}`"
+                                @click="toggleCompareRole(role)">
+                                <img :src="`/exedra-dmg-calc/roles/${role}.png`" :alt="role" />
+                                <span>{{ leftPower[role] }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="graph-meta">
                     vs
                     <div class="score-pill floating-score">
@@ -15,8 +43,35 @@
                         </span>
                     </div>
                 </div>
-                <FriendPickerBadge :profile="rightProfile" :friends="friends" :side="'right'" :current-code="rightCode"
-                    :self="selfEntry" @pick="onPickRight" />
+
+                <div class="picker-column">
+                    <FriendPickerBadge :profile="rightProfile" :friends="friends" :side="'right'"
+                        :current-code="rightCode" :self="selfEntry" @pick="onPickRight" />
+
+                    <div v-if="rightPower" class="power-block">
+                        <div class="power-badges">
+                            <div class="power-badge" title="Power rating">
+                                <img :src="'/exedra-dmg-calc/pwr.png'" alt="Total" />
+                                <span>{{ rightPower.total }}</span>
+                            </div>
+
+                            <div class="power-badge power-badge-whale" title="Whale power">
+                                <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale power" />
+                                <span>{{ rightPower.whale }}</span>
+                            </div>
+                        </div>
+
+                        <div class="power-roles">
+                            <button v-for="role in powerRoles" :key="role" class="power-role-btn"
+                                :class="hiddenCompareRoles.includes(role) ? 'power-role-btn--hidden' : 'power-role-btn--visible'"
+                                :title="hiddenCompareRoles.includes(role) ? `Show ${role}` : `Hide ${role}`"
+                                @click="toggleCompareRole(role)">
+                                <img :src="`/exedra-dmg-calc/roles/${role}.png`" :alt="role" />
+                                <span>{{ rightPower[role] }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div v-else class="subtitle missing-codes">
@@ -71,12 +126,38 @@
 
             <div class="export-header">
                 <div class="export-side left-side">
-                    <img v-if="leftProfile?.profile_icon"
-                        :src="`/exedra-dmg-calc/kioku_images/${leftProfile.profile_icon}_thumbnail.png`"
-                        class="export-avatar" />
+                    <div class="export-side-main">
+                        <img v-if="leftProfile?.profile_icon"
+                            :src="`/exedra-dmg-calc/kioku_images/${leftProfile.profile_icon}_thumbnail.png`"
+                            class="export-avatar" />
 
-                    <div class="export-name">
-                        {{ leftProfile?.display_name || leftCode }}
+                        <div class="export-name">
+                            {{ leftProfile?.display_name || leftCode }}
+                        </div>
+                    </div>
+
+                    <div v-if="leftPower" class="power-block">
+                        <div class="power-badges">
+                            <div class="power-badge" title="Power rating">
+                                <img :src="'/exedra-dmg-calc/pwr.png'" alt="Total" />
+                                <span>{{ leftPower.total }}</span>
+                            </div>
+
+                            <div class="power-badge power-badge-whale" title="Whale power">
+                                <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale power" />
+                                <span>{{ leftPower.whale }}</span>
+                            </div>
+                        </div>
+
+                        <div class="power-roles">
+                            <button v-for="role in powerRoles" :key="role" class="power-role-btn"
+                                :class="hiddenCompareRoles.includes(role) ? 'power-role-btn--hidden' : 'power-role-btn--visible'"
+                                :title="hiddenCompareRoles.includes(role) ? `Show ${role}` : `Hide ${role}`"
+                                @click="toggleCompareRole(role)">
+                                <img :src="`/exedra-dmg-calc/roles/${role}.png`" :alt="role" />
+                                <span>{{ leftPower[role] }}</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -92,13 +173,39 @@
                 </div>
 
                 <div class="export-side right-side">
-                    <div class="export-name">
-                        {{ rightProfile?.display_name || rightCode }}
+                    <div class="export-side-main">
+                        <div class="export-name">
+                            {{ rightProfile?.display_name || rightCode }}
+                        </div>
+
+                        <img v-if="rightProfile?.profile_icon"
+                            :src="`/exedra-dmg-calc/kioku_images/${rightProfile.profile_icon}_thumbnail.png`"
+                            class="export-avatar" />
                     </div>
 
-                    <img v-if="rightProfile?.profile_icon"
-                        :src="`/exedra-dmg-calc/kioku_images/${rightProfile.profile_icon}_thumbnail.png`"
-                        class="export-avatar" />
+                    <div v-if="rightPower" class="power-block">
+                        <div class="power-badges">
+                            <div class="power-badge" title="Power rating">
+                                <img :src="'/exedra-dmg-calc/pwr.png'" alt="Total" />
+                                <span>{{ rightPower.total }}</span>
+                            </div>
+
+                            <div class="power-badge power-badge-whale" title="Whale power">
+                                <img :src="'/exedra-dmg-calc/gem.png'" alt="Whale power" />
+                                <span>{{ rightPower.whale }}</span>
+                            </div>
+                        </div>
+
+                        <div class="power-roles">
+                            <button v-for="role in powerRoles" :key="role" class="power-role-btn"
+                                :class="hiddenCompareRoles.includes(role) ? 'power-role-btn--hidden' : 'power-role-btn--visible'"
+                                :title="hiddenCompareRoles.includes(role) ? `Show ${role}` : `Hide ${role}`"
+                                @click="toggleCompareRole(role)">
+                                <img :src="`/exedra-dmg-calc/roles/${role}.png`" :alt="role" />
+                                <span>{{ rightPower[role] }}</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -150,9 +257,10 @@ import FriendPickerBadge from "../components/FriendPickerBadge.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 import { getAccountSimilarityScore } from "../models/AccountSimilarityScore"
+import { getPowerScores } from "../models/PowerValue"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { toast } from "vue3-toastify"
-import { LuxMagica } from "../types/enums"
+import { KiokuRole, LuxMagica } from "../types/enums"
 
 const friendStore = useFriendStore()
 
@@ -196,6 +304,23 @@ const rightCharacters = ref<Character[]>([])
 const showEqual = useSetting("showEqualCompareAcc", true)
 const collapseEmptyRows = useSetting("collapseEmptyComparisonRows", false)
 const showUnowned = useSetting("showComparisonBothUnowned", false)
+
+const powerRoles = Object.values(KiokuRole)
+
+const leftPower = computed(() =>
+    leftCharacters.value.length ? getPowerScores(leftCharacters.value) : null
+)
+const rightPower = computed(() =>
+    rightCharacters.value.length ? getPowerScores(rightCharacters.value) : null
+)
+
+const hiddenCompareRoles = useSetting<KiokuRole[]>("hiddenCompareRoles", [])
+
+const toggleCompareRole = (role: KiokuRole) => {
+    hiddenCompareRoles.value = hiddenCompareRoles.value.includes(role)
+        ? hiddenCompareRoles.value.filter(r => r !== role)
+        : [...hiddenCompareRoles.value, role]
+}
 
 onMounted(async () => {
     if (!leftCode.value || !rightCode.value) return
@@ -257,6 +382,7 @@ const comparedCharacters = computed<ComparedCharacter[]>(() => {
     return store.characters
         .filter(ch => ch.rarity === 5)
         .filter(ch => ch.name !== LuxMagica)
+        .filter(ch => !hiddenCompareRoles.value.includes(ch.role))
         .map(base => {
             const left = leftMap.get(base.id)
             const right = rightMap.get(base.id)
@@ -523,18 +649,121 @@ const copyHyperLink = async () => {
 
 .export-side {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.5rem;
 
     min-width: 180px;
 }
 
+.export-side-main {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
 .left-side {
-    justify-content: flex-end;
+    align-items: flex-end;
 }
 
 .right-side {
-    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.power-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.power-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.power-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+
+    background: var(--panel);
+    border: 1px solid rgba(246, 214, 130, 0.35);
+
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+}
+
+.power-badge img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+.power-badge-whale {
+    border-color: rgba(120, 200, 255, 0.35);
+}
+
+.power-roles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.3rem;
+
+    max-width: 190px;
+}
+
+.power-role-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.22rem;
+
+    padding: 2px 0.4rem;
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    font-family: monospace;
+    font-size: 0.72rem;
+    font-weight: bold;
+    color: var(--text);
+    line-height: 1.4;
+
+    cursor: pointer;
+    opacity: 0.55;
+    transition: opacity 0.15s ease, background 0.15s ease, filter 0.15s ease;
+}
+
+.power-role-btn--visible {
+    opacity: 1;
+}
+
+.power-role-btn--hidden {
+    opacity: 0.3;
+    filter: grayscale(60%);
+}
+
+.power-role-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.power-role-btn img {
+    width: 13px;
+    height: 13px;
+    object-fit: contain;
+}
+
+.power-badge span,
+.power-role-btn span {
+    pointer-events: none;
 }
 
 .export-avatar {
@@ -716,6 +945,13 @@ const copyHyperLink = async () => {
     gap: 0.75rem;
 }
 
+.picker-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+}
+
 .inline-pickers {
     display: flex;
     align-items: center;
@@ -867,6 +1103,23 @@ const copyHyperLink = async () => {
     .subtitle {
         gap: 0.6rem;
         font-size: 0.95rem;
+    }
+
+    .power-badge {
+        font-size: 0.76rem;
+        padding: 0.2rem 0.5rem;
+    }
+
+    .export-side {
+        min-width: 0;
+    }
+
+    .power-roles {
+        max-width: 150px;
+    }
+
+    .power-role-btn {
+        font-size: 0.65rem;
     }
 }
 </style>
