@@ -84,6 +84,7 @@ enum CompareContent {
     SELF_IS_KIOKU = 28,
     FIELD_IS_UP = 29,
     BREAK_COUNT = 30,
+    CHAIN_LVL = 31,
 
     DMG = 101,
     DMG_RATIO = 102,
@@ -99,6 +100,7 @@ enum CompareContent {
     HAS_ALIMENT = 112,
     FIELD_START = 113,
     FIELD_END = 114,
+    HAS_DEBUFF_EFFECT_VALUE = 116,
 
     SP = 201,
     ALIVE_UNIT_COUNT = 202,
@@ -124,6 +126,7 @@ enum CompareContent {
 
     DMG_TAKEN = 313,
     BROKEN_UNITS_ATTACKED = 314,
+    WITH_DEBUFF_EFFECT_VALUE = 316,
 
     ACTOR_SKILL_TYPE = 401,
     COMBO_ACTION_STEP = 402,
@@ -279,6 +282,11 @@ export const isActiveConditionRelevantForScoreAttack = (activeConditionSetId: st
         }
         if (battleCondition.compareContent === CompareContent.HP_RATIO) {
             if (!isCondActive(battleCondition, attackerHealth)) return false
+        }
+
+        if (battleCondition.compareContent === CompareContent.CHAIN_LVL) {
+            if (battleCondition.battleConditionMstId === 2093) return true // WDoka
+            return false
         }
 
         if (battleCondition.compareContent === CompareContent.UNIQUE_DEBUFF_COUNT) {
