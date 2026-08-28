@@ -6,15 +6,23 @@
                     <img :src="`/exedra-dmg-calc/kioku_images/${team.attacker.id}_thumbnail.png`"
                         :alt="team.attacker.name" :title="team.attacker.name" class="character-image" />
                 </a>
-                <a v-if="!loading && team.atk_supp" :href="`https://exedra.wiki/wiki/${team.atk_supp.name}`"
-                    target="_blank" class="supp-image">
-                    <img :src="`/exedra-dmg-calc/kioku_images/${team.atk_supp.id}_thumbnail.png`"
-                        :alt="team.atk_supp.name" :title="team.atk_supp.name" />
+                <a v-if="!loading && team.atk_supp" :href="`https://exedra.wiki/wiki/${asList(team.atk_supp)[0].name}`"
+                    target="_blank" class="supp-image" :class="{ split: asList(team.atk_supp).length > 1 }">
+                    <img v-for="(supp, idx) in asList(team.atk_supp)" :key="supp.id"
+                        :src="`/exedra-dmg-calc/kioku_images/${supp.id}_thumbnail.png`" :alt="supp.name"
+                        :title="asList(team.atk_supp).map(s => s.name).join(' / ')"
+                        :style="splitClip(idx, asList(team.atk_supp).length)" />
+                    <span v-for="pos in dividerPositions(asList(team.atk_supp).length)" :key="pos" class="split-divider"
+                        :style="{ left: pos + '%' }"></span>
                 </a>
-                <a v-if="!loading && team.portrait" :href="`https://exedra.wiki/wiki/${team.portrait}`" target="_blank"
-                    class="portrait-image">
-                    <img :src="`/exedra-dmg-calc/portrait_images/${portraits[team.portrait].resourceName}_thumbnail.png`"
-                        :alt="team.portrait" :title="team.portrait" />
+                <a v-if="!loading && team.portrait" :href="`https://exedra.wiki/wiki/${asList(team.portrait)[0]}`"
+                    target="_blank" class="portrait-image" :class="{ split: asList(team.portrait).length > 1 }">
+                    <img v-for="(p, idx) in asList(team.portrait)" :key="p"
+                        :src="`/exedra-dmg-calc/portrait_images/${portraits[p].resourceName}_thumbnail.png`" :alt="p"
+                        :title="asList(team.portrait).join(' / ')"
+                        :style="splitClip(idx, asList(team.portrait).length)" />
+                    <span v-for="pos in dividerPositions(asList(team.portrait).length)" :key="pos" class="split-divider"
+                        :style="{ left: pos + '%' }"></span>
                 </a>
             </div>
             <div v-for="i in 4" :key="i" class="image-wrapper">
@@ -22,15 +30,23 @@
                     <img :src="`/exedra-dmg-calc/kioku_images/${team[`supp${i}`].id}_thumbnail.png`"
                         :title="team[`supp${i}`].name" :alt="team[`supp${i}`].name" class="character-image" />
                 </a>
-                <a v-if="team[`supp${i}supp`]" :href="`https://exedra.wiki/wiki/${team[`supp${i}supp`].name}`"
-                    target="_blank" class="supp-image">
-                    <img :src="`/exedra-dmg-calc/kioku_images/${team[`supp${i}supp`].id}_thumbnail.png`"
-                        :title="team[`supp${i}supp`].name" :alt="team[`supp${i}supp`].name" />
+                <a v-if="team[`supp${i}supp`]" :href="`https://exedra.wiki/wiki/${asList(team[`supp${i}supp`])[0].name}`"
+                    target="_blank" class="supp-image" :class="{ split: asList(team[`supp${i}supp`]).length > 1 }">
+                    <img v-for="(supp, idx) in asList(team[`supp${i}supp`])" :key="supp.id"
+                        :src="`/exedra-dmg-calc/kioku_images/${supp.id}_thumbnail.png`" :alt="supp.name"
+                        :title="asList(team[`supp${i}supp`]).map(s => s.name).join(' / ')"
+                        :style="splitClip(idx, asList(team[`supp${i}supp`]).length)" />
+                    <span v-for="pos in dividerPositions(asList(team[`supp${i}supp`]).length)" :key="pos"
+                        class="split-divider" :style="{ left: pos + '%' }"></span>
                 </a>
-                <a v-if="team[`supp${i}portrait`]" :href="`https://exedra.wiki/wiki/${team[`supp${i}portrait`]}`"
-                    target="_blank" class="portrait-image">
-                    <img :src="`/exedra-dmg-calc/portrait_images/${portraits[team[`supp${i}portrait`]].resourceName}_thumbnail.png`"
-                        :alt="team[`supp${i}portrait`]" :title="team[`supp${i}portrait`]" />
+                <a v-if="team[`supp${i}portrait`]" :href="`https://exedra.wiki/wiki/${asList(team[`supp${i}portrait`])[0]}`"
+                    target="_blank" class="portrait-image" :class="{ split: asList(team[`supp${i}portrait`]).length > 1 }">
+                    <img v-for="(p, idx) in asList(team[`supp${i}portrait`])" :key="p"
+                        :src="`/exedra-dmg-calc/portrait_images/${portraits[p].resourceName}_thumbnail.png`" :alt="p"
+                        :title="asList(team[`supp${i}portrait`]).join(' / ')"
+                        :style="splitClip(idx, asList(team[`supp${i}portrait`]).length)" />
+                    <span v-for="pos in dividerPositions(asList(team[`supp${i}portrait`]).length)" :key="pos"
+                        class="split-divider" :style="{ left: pos + '%' }"></span>
                 </a>
             </div>
         </div>
@@ -73,6 +89,27 @@ const presentCrysName = (id: number) => {
     return crys.name
 }
 
+function asList<T>(val: T | T[] | undefined): T[] {
+    if (val == null) return []
+    return Array.isArray(val) ? val : [val]
+}
+
+function splitClip(idx: number, total: number): Record<string, string> {
+    if (total <= 1) return {}
+    const start = (idx / total) * 100
+    const end = ((idx + 1) / total) * 100
+    return { clipPath: `inset(0 ${100 - end}% 0 ${start}%)` }
+}
+
+function dividerPositions(total: number): number[] {
+    if (total <= 1) return []
+    return Array.from({ length: total - 1 }, (_, i) => ((i + 1) / total) * 100)
+}
+
+function first<T>(val: T | T[] | undefined): T | undefined {
+    return Array.isArray(val) ? val[0] : val
+}
+
 const props = defineProps<{
     team: FinalTeam,
     weakElements?: { name: KiokuElement, enabled: boolean }[],
@@ -87,8 +124,8 @@ const router = useRouter()
 function saveToStore(idx: number) {
     const { team, weakElements, offElementBuffMultReduction, offElementDebuffMultReduction } = props
     const offElements = weakElements!.filter(w => w.enabled).map(w => w.name)
-    teamStore.setMain(0, { ...team.supp1, portrait: team.supp1portrait })
-    teamStore.setSupport(0, team.supp1supp)
+    teamStore.setMain(0, { ...team.supp1, portrait: first(team.supp1portrait) })
+    teamStore.setSupport(0, first(team.supp1supp))
     if (!offElements.includes(team.supp1.element)) {
         teamStore.setCharBuffReduction(0, offElementBuffMultReduction)
         teamStore.setCharDebuffReduction(0, offElementDebuffMultReduction)
@@ -97,8 +134,8 @@ function saveToStore(idx: number) {
         teamStore.setCharDebuffReduction(0, undefined)
     }
 
-    teamStore.setMain(1, { ...team.supp2, portrait: team.supp2portrait })
-    teamStore.setSupport(1, team.supp2supp)
+    teamStore.setMain(1, { ...team.supp2, portrait: first(team.supp2portrait) })
+    teamStore.setSupport(1, first(team.supp2supp))
     if (!offElements.includes(team.supp2.element)) {
         teamStore.setCharBuffReduction(1, offElementBuffMultReduction)
         teamStore.setCharDebuffReduction(1, offElementDebuffMultReduction)
@@ -111,11 +148,11 @@ function saveToStore(idx: number) {
     crysOptions[team.attacker_crys1[idx]] = { ...(crysOptions[team.attacker_crys1[idx]] || {}), useIndex: 1, subCrys: maxDmgSubCrys }
     crysOptions[team.attacker_crys2[idx]] = { ...(crysOptions[team.attacker_crys2[idx]] || {}), useIndex: 2, subCrys: maxDmgSubCrys }
     crysOptions[team.attacker_crys3[idx]] = { ...(crysOptions[team.attacker_crys3[idx]] || {}), useIndex: 3, subCrys: maxDmgSubCrys }
-    teamStore.setMain(2, { ...team.attacker, portrait: team.portrait, crysOptions })
-    teamStore.setSupport(2, team.atk_supp)
+    teamStore.setMain(2, { ...team.attacker, portrait: first(team.portrait), crysOptions })
+    teamStore.setSupport(2, first(team.atk_supp))
 
-    teamStore.setMain(3, { ...team.supp3, portrait: team.supp3portrait })
-    teamStore.setSupport(3, team.supp3supp)
+    teamStore.setMain(3, { ...team.supp3, portrait: first(team.supp3portrait) })
+    teamStore.setSupport(3, first(team.supp3supp))
     if (!offElements.includes(team.supp3.element)) {
         teamStore.setCharBuffReduction(3, offElementBuffMultReduction)
         teamStore.setCharDebuffReduction(3, offElementDebuffMultReduction)
@@ -124,8 +161,8 @@ function saveToStore(idx: number) {
         teamStore.setCharDebuffReduction(3, undefined)
     }
 
-    teamStore.setMain(4, { ...team.supp4, portrait: team.supp4portrait })
-    teamStore.setSupport(4, team.supp4supp)
+    teamStore.setMain(4, { ...team.supp4, portrait: first(team.supp4portrait) })
+    teamStore.setSupport(4, first(team.supp4supp))
     if (!offElements.includes(team.supp4.element)) {
         teamStore.setCharBuffReduction(4, offElementBuffMultReduction)
         teamStore.setCharDebuffReduction(4, offElementDebuffMultReduction)
@@ -165,6 +202,28 @@ function saveToStore(idx: number) {
 .portrait-image {
     margin-top: -15px;
     margin-left: -5px;
+}
+
+.supp-image.split,
+.portrait-image.split {
+    width: 25px;
+    height: 25px;
+}
+
+.supp-image.split img,
+.portrait-image.split img {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.split-divider {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.85);
+    pointer-events: none;
 }
 
 .image-wrapper {

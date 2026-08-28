@@ -39,26 +39,28 @@ export interface FindBestTeamOptions {
     onError?: (error: any) => void
 }
 
+export type Tied<T> = T | T[]
+
 export interface FinalTeam {
     optimized_dmg: number[]
     crit_rate: number[]
     attacker: Character
-    portrait: string
-    atk_supp: Character
+    portrait: Tied<string>
+    atk_supp: Tied<Character>
     attacker_crys1: number[]
     attacker_crys2: number[]
     attacker_crys3: number[]
     supp1: Character
-    supp1supp: Character | undefined
-    supp1portrait: string | undefined
+    supp1supp: Tied<Character> | undefined
+    supp1portrait: Tied<string> | undefined
     supp2: Character
-    supp2supp: Character | undefined
-    supp2portrait: string | undefined
+    supp2supp: Tied<Character> | undefined
+    supp2portrait: Tied<string> | undefined
     supp3: Character
-    supp3supp: Character | undefined
-    supp3portrait: string | undefined
+    supp3supp: Tied<Character> | undefined
+    supp3portrait: Tied<string> | undefined
     supp4: Character
-    supp4supp: Character | undefined
-    supp4portrait: string | undefined
+    supp4supp: Tied<Character> | undefined
+    supp4portrait: Tied<string> | undefined
     alt_dmg: number[]
 }

@@ -457,13 +457,59 @@ function mergeCells(results: any[]): FinalTeam[] {
     return merged.map(populateTeam)
 }
 
-const topResults = computed(() => mergeCells(sortedResults.value).slice(0, topTeams.value))
+const TIED_FIELDS = [
+    'portrait',
+    'atk_supp',
+    'supp1supp',
+    'supp1portrait',
+    'supp2supp',
+    'supp2portrait',
+    'supp3supp',
+    'supp3portrait',
+    'supp4supp',
+    'supp4portrait',
+] as const
+
+function mergeTiedVariants(teams: FinalTeam[]): FinalTeam[] {
+    const groups = new Map<string, FinalTeam[]>()
+    const order: string[] = []
+
+    for (const team of teams) {
+        const sig = JSON.stringify([
+            team.attacker.name, team.supp1.name, team.supp2.name, team.supp3.name, team.supp4.name,
+            team.optimized_dmg, team.crit_rate, team.alt_dmg,
+            team.attacker_crys1, team.attacker_crys2, team.attacker_crys3,
+        ])
+        if (!groups.has(sig)) { groups.set(sig, []); order.push(sig) }
+        groups.get(sig)!.push(team)
+    }
+
+    return order.map(sig => {
+        const group = groups.get(sig)!
+        if (group.length === 1) return group[0]
+
+        const merged = { ...group[0] } as any
+        for (const field of TIED_FIELDS) {
+            const seen = new Map<string, any>()
+            for (const team of group) {
+                const val = (team as any)[field]
+                if (val == null) continue
+                const name = typeof val === 'object' ? val.name : val
+                if (!seen.has(name)) seen.set(name, val)
+            }
+            if (seen.size > 1) merged[field] = Array.from(seen.values())
+        }
+        return merged as FinalTeam
+    })
+}
+
+const topResults = computed(() => mergeTiedVariants(mergeCells(sortedResults.value)).slice(0, topTeams.value))
 
 const topTeamsByAttacker = computed(() => {
     const map: Record<string, FinalTeam[]> = {}
     prevAttackers.forEach(a => {
         const filtered = sortedResults.value.filter(r => r[3] === a.name)
-        if (filtered.length) map[a.name] = mergeCells(filtered).slice(0, topTeamsPerKioku.value)
+        if (filtered.length) map[a.name] = mergeTiedVariants(mergeCells(filtered)).slice(0, topTeamsPerKioku.value)
     })
     const highestAtk = Object.fromEntries(Object.entries(map).map(([a, b]) => [a, Math.max(...b.map(t => t.optimized_dmg[0]))]))
     return Object.entries(map).sort((a, b) => highestAtk[b[0]] - highestAtk[a[0]])
