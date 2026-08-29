@@ -4,6 +4,7 @@ import { downloadCanvas } from './image';
 type Embedding = Float32Array;
 
 let worker: Worker | null = null;
+let candidatesPromise: Promise<Candidate<string>[]> | null = null;
 
 function getEmbeddingWorker() {
   if (!worker) {
@@ -17,6 +18,12 @@ export function releaseEmbeddingWorker() {
   worker = null;
 }
 
+export function releaseEmbeddingResources() {
+  releaseEmbeddingWorker();
+  candidates = [];
+  candidatesPromise = null;
+}
+
 export let candidates: Candidate<string>[] = [];
 
 export interface Candidate<T> {
@@ -25,13 +32,23 @@ export interface Candidate<T> {
 }
 
 export async function loadPrecomputedCandidates() {
-  const response = await fetch('./candidates.json');
-  const data: Record<string, number[]> = await response.json();
+  if (candidates.length) return;
+  if (!candidatesPromise) {
+    candidatesPromise = (async () => {
+      const response = await fetch('./candidates.json');
+      const data: Record<string, number[]> = await response.json();
 
-  candidates = Object.entries(data).map(([key, arrayData]) => ({
-    value: key,
-    embedding: new Float32Array(arrayData),
-  }));
+      const loaded = Object.entries(data).map(([key, arrayData]) => ({
+        value: key,
+        embedding: new Float32Array(arrayData),
+      }));
+
+      candidates = loaded;
+      return loaded;
+    })();
+  }
+
+  await candidatesPromise;
 }
 
 export async function warmUpEmbeddingModel() {

@@ -709,11 +709,7 @@ const importingScreenshot = ref(false)
 const importProgress = reactive({ done: 0, total: 0 })
 
 onMounted(async () => {
-  try {
-    await loadPrecomputedCandidates()
-  } catch (err) {
-    console.error("Failed to preload screenshot matching data:", err)
-  }
+  // Keep candidate loading lazy so the image-matching model does not sit in memory while the app is idle.
 })
 
 function triggerScreenshotImport() {
@@ -848,6 +844,7 @@ async function importTeamFromImageFile(file: File) {
   } finally {
     if (img) URL.revokeObjectURL(img.src)
     importingScreenshot.value = false
+    releaseEmbeddingResources()
   }
 }
 </script>
