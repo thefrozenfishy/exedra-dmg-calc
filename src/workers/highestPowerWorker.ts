@@ -32,23 +32,28 @@ function combinations<T>(arr: T[], k: number): T[][] {
     return result;
 }
 
-function buildTeamObject(setup: [string, string, string][], characters: Character[]) {
+function buildTeamObject(setup: [string, string, string, number][], characters: Character[]) {
     return {
         attacker: characters.find(c => c.name === setup[0][0]),
         portrait: setup[0][2],
         atk_supp: characters.find(c => c.name === setup[0][1]),
+        pwr: setup[0][3],
         supp1: characters.find(c => c.name === setup[1][0]),
         supp1supp: characters.find(c => c.name === setup[1][1]),
         supp1portrait: setup[1][2],
+        supp1pwr: setup[1][3],
         supp2: characters.find(c => c.name === setup[2][0]),
         supp2supp: characters.find(c => c.name === setup[2][1]),
         supp2portrait: setup[2][2],
+        supp2pwr: setup[2][3],
         supp3: characters.find(c => c.name === setup[3][0]),
         supp3supp: characters.find(c => c.name === setup[3][1]),
         supp3portrait: setup[3][2],
+        supp3pwr: setup[3][3],
         supp4: characters.find(c => c.name === setup[4][0]),
         supp4supp: characters.find(c => c.name === setup[4][1]),
         supp4portrait: setup[4][2],
+        supp4pwr: setup[4][3],
     };
 }
 
@@ -110,7 +115,7 @@ self.onmessage = function (e: MessageEvent) {
             const currTeam = buildCurrentBestFiveSetup()
             postProgress(completedRuns, expectedTotalRuns, {
                 currentBestTeam: buildTeamObject(currTeam, characters),
-                currentBestPwr: (currTeam.slice(0, TEAM_SIZE).reduce((p, c) => p + c[3], 0) * 0.95).toFixed(0)
+                currentBestPwr: (currTeam.slice(0, TEAM_SIZE).reduce((p, c) => p + c[3], 0) * 0.99).toFixed(0)
                 // Reduce it a bit so that the user doesn't notice the "power falling"
             });
         }
@@ -155,7 +160,7 @@ self.onmessage = function (e: MessageEvent) {
         }
 
         let maxTeamPower = -Infinity;
-        let bestTeamSetup: [string, string, string][] = [];
+        let bestTeamSetup: [string, string, string, number][] = [];
 
         teams.sort((teamA, teamB) => {
             const powerA = teamA.reduce((sum, c) => sum + c.kioku.getTotalPower(), 0);
@@ -200,7 +205,7 @@ self.onmessage = function (e: MessageEvent) {
 
             const usedPortraits = new Set<string>();
             const usedSupports = new Set<string>();
-            const current: [string, string, string][] = [];
+            const current: [string, string, string, number][] = [];
 
             function dfs(index: number, currentPower: number) {
                 if (index === 5) {
@@ -228,7 +233,7 @@ self.onmessage = function (e: MessageEvent) {
 
                     usedPortraits.add(option.portrait);
                     usedSupports.add(option.supportName);
-                    current.push([team[index].char.name, option.supportName, option.portrait]);
+                    current.push([team[index].char.name, option.supportName, option.portrait, option.power]);
 
                     dfs(index + 1, currentPower + option.power);
 
