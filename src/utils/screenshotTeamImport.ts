@@ -2,7 +2,21 @@ import { kiokuData, portraits } from './helpers';
 import { downloadCanvas } from './image';
 
 type Embedding = Float32Array;
-const worker = new Worker(new URL('../workers/imageCosineValueWorker.ts', import.meta.url), { type: 'module' })
+
+let worker: Worker | null = null;
+
+function getEmbeddingWorker() {
+  if (!worker) {
+    worker = new Worker(new URL('../workers/imageCosineValueWorker.ts', import.meta.url), { type: 'module' });
+  }
+  return worker;
+}
+
+export function releaseEmbeddingWorker() {
+  worker?.terminate();
+  worker = null;
+}
+
 export let candidates: Candidate<string>[] = [];
 
 export interface Candidate<T> {
@@ -21,9 +35,8 @@ export async function loadPrecomputedCandidates() {
 }
 
 export async function warmUpEmbeddingModel() {
-  const c = document.createElement('canvas');
-  c.width = c.height = 8;
-  return computeEmbeddingsBatch([c]).catch(() => { });
+  // Intentionally lazy: the model is loaded only when the screenshot import feature is used.
+  return;
 }
 
 export function computeEmbeddingsBatch(
@@ -36,6 +49,8 @@ export function computeEmbeddingsBatch(
       img instanceof HTMLImageElement ? img.src : img.toDataURL()
     );
 
+    const activeWorker = getEmbeddingWorker();
+
     const onMessage = (event: MessageEvent) => {
       if (event.data.id !== id) return;
 
@@ -44,13 +59,15 @@ export function computeEmbeddingsBatch(
         return;
       }
 
-      worker.removeEventListener('message', onMessage);
+      activeWorker.removeEventListener('message', onMessage);
+      releaseEmbeddingWorker();
+
       if (event.data.error) reject(new Error(event.data.error));
       else resolve(event.data.embeddings as Float32Array[]);
     };
 
-    worker.addEventListener('message', onMessage);
-    worker.postMessage({ id, imageUrls });
+    activeWorker.addEventListener('message', onMessage);
+    activeWorker.postMessage({ id, imageUrls });
   });
 }
 

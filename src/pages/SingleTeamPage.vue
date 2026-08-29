@@ -328,7 +328,7 @@ import { crystalises, passiveDetails, portraits } from "../utils/helpers";
 import { useFriendStore } from '../store/friendStore'
 import { useCharacterStore } from '../store/characterStore'
 import type { AttackerLoadoutResult } from '../models/BestTeamCalculator'
-import { extractTeamFromScreenshot, loadImageFromFile, loadPrecomputedCandidates, LOW_CONFIDENCE_THRESHOLD, warmUpEmbeddingModel } from '../utils/screenshotTeamImport'
+import { extractTeamFromScreenshot, loadImageFromFile, loadPrecomputedCandidates, LOW_CONFIDENCE_THRESHOLD } from '../utils/screenshotTeamImport'
 
 const attackerIndex = 2
 
@@ -710,7 +710,7 @@ const importProgress = reactive({ done: 0, total: 0 })
 
 onMounted(async () => {
   try {
-    await Promise.all([loadPrecomputedCandidates(), warmUpEmbeddingModel()])
+    await loadPrecomputedCandidates()
   } catch (err) {
     console.error("Failed to preload screenshot matching data:", err)
   }
