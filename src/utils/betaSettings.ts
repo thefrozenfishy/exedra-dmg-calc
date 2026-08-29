@@ -241,6 +241,7 @@ export const BETA_SECTIONS = [
 
                     // Defenders
                     "Baldamente Fortissimo": 1.5,
+                    "Thunderous Waltz": 1.5,
                     "Folter Gefängnis": 0.75,
 
                     // Healers
