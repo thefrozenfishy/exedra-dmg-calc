@@ -386,13 +386,29 @@ export const BETA_SECTIONS = [
                                 { name: "Oracle Ray", ascension: 5, },
                                 { name: "La Porte du Paradis", ascension: 3 },
                                 { name: "Nothing to Despair, Ever", ascension: 3 },
-                                { name: "Concentrated Missile Fire", ascension: 5, },
-                                { name: "Tiro Finale Liberation", ascension: 5, },
                             ],
                         },
                         exceptions: {
                             conditions: [
-                                { name: "Vinctio☆Magica", ascension: 2, },
+                                { name: "Vinctio☆Magica", ascension: 0, },
+                            ],
+                        }
+                    },
+                    {
+                        name: "Cherry Ballad", ascension: 4,
+                        ifHave: {
+                            mode: "or",
+                            conditions: [
+                                { name: "Concentrated Missile Fire", ascension: 5, },
+                                { name: "Tiro Finale Liberation", ascension: 5, },
+                                { name: "Falsified Phenomena", ascension: 3, },
+                            ],
+                        },
+                        exceptions: {
+                            mode: "or",
+                            conditions: [
+                                { name: "Splashin' Kyubey Blast", ascension: 0, },
+                                { name: "Thoughtless", ascension: 4, },
                             ],
                         }
                     },
