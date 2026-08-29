@@ -378,6 +378,7 @@ export const BETA_SECTIONS = [
                     },
                     { name: "Absolute Rain", ascension: 5, },
                     { name: "Baldamente Fortissimo", ascension: 4, },
+                    { name: "Thunderous Waltz", ascension: 4, },
                     {
                         name: "Cherry Ballad", ascension: 4,
                         ifHave: {
