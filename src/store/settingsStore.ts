@@ -1,27 +1,28 @@
 import { defineStore } from 'pinia'
-import { ref, watch, type Ref, effectScope } from 'vue'
+import { computed, watch, effectScope, type WritableComputedRef } from 'vue'
 
-const settingRefs = new Map<string, ReturnType<typeof ref>>()
+const persistedKeys = new Set<string>()
 
-export function useSetting<T>(key: string, defaultValue: T): Ref<T> {
+export function useSetting<T>(key: string | (() => string), defaultValue: T): WritableComputedRef<T> {
   const store = useSettingsStore()
+  const resolveKey = typeof key === 'function' ? key : () => key
 
-  if (settingRefs.has(key)) {
-    return settingRefs.get(key) as Ref<T>
-  }
-
-  const stored = store.get(key, defaultValue) as T
-  const localRef = ref<T>(stored)
-
-  settingRefs.set(key, localRef)
-
-  effectScope(true).run(() => {
-    watch(localRef, (val) => {
-      store.set(key, val)
-    }, { deep: true })
+  return computed<T>({
+    get: () => {
+      const k = resolveKey()
+      ensureAutosave(store, k)
+      return store.get(k, defaultValue) as T
+    },
+    set: (val) => store.set(resolveKey(), val)
   })
+}
 
-  return localRef
+function ensureAutosave(store: ReturnType<typeof useSettingsStore>, key: string) {
+  if (persistedKeys.has(key)) return
+  persistedKeys.add(key)
+  effectScope(true).run(() => {
+    watch(() => store.data[key], () => store.save(), { deep: true })
+  })
 }
 
 export const useSettingsStore = defineStore('settings', {

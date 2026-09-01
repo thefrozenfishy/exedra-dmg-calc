@@ -4,10 +4,17 @@
     <div class="search-row" v-if="!selected">
       <input type="text" v-model="query" placeholder="Search character..." class="search-input" />
 
-      <label class="relevant-toggle" v-if="main">
-        <input type="checkbox" v-model="onlyRelevant" />
-        Show only Kioku with active support ability
-      </label>
+      <div v-if="main" class="relevant-toggle">
+        <label>
+          <input type="checkbox" v-model="onlyRelevant" />
+          Show only Kioku with active support ability
+        </label>
+
+        <label>
+          <input type="checkbox" v-model="onlyFiveStar" />
+          Show only 5★ Kioku
+        </label>
+      </div>
     </div>
 
     <div v-if="selected" class="selected-character">
@@ -36,6 +43,8 @@
 import { ref, computed } from 'vue'
 import { useCharacterStore } from '../store/characterStore'
 import { Character } from '../types/KiokuTypes'
+import { useSetting } from '../store/settingsStore';
+import { LuxMagica } from '../types/enums';
 
 const props = defineProps<{
   selected: Character | undefined
@@ -51,7 +60,8 @@ const store = useCharacterStore()
 const characters = store.characters
 
 const query = ref('')
-const onlyRelevant = ref(true)
+const onlyRelevant = useSetting(() => `${props.main?.id}.onlyRelevant`, true)
+const onlyFiveStar = useSetting(() => `${props.main?.id}.onlyFiveStar`, true)
 
 const filteredChars = computed(() => {
   let list = characters
@@ -68,8 +78,12 @@ const filteredChars = computed(() => {
 
   if (onlyRelevant.value && props.main) {
     list = list.filter(c =>
-      [props.main.role, props.main.element].includes(c.supportTarget)
+      [props.main!.role, props.main!.element].includes(c.supportTarget)
     )
+  }
+
+  if (onlyFiveStar.value && props.main) {
+    list = list.filter(c => c.rarity === 5 && ![LuxMagica, "Strada Futuro"].includes(c.name))
   }
 
   return list.sort((a, b) => a.id - b.id)
@@ -99,6 +113,7 @@ function clear() {
 
 .search-input {
   width: 100%;
+  margin-top: 1.1rem;
 }
 
 .relevant-toggle {
@@ -106,7 +121,15 @@ function clear() {
   top: -1.5rem;
   font-size: 0.5rem;
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.relevant-toggle label {
+  display: flex;
   align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
 }
 
 .character-options {

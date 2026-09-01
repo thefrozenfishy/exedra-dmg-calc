@@ -4,7 +4,7 @@ import { TeamSlot } from '../types/BestTeamTypes'
 import { Character, correctCharacterParams, relevantCrys } from '../types/KiokuTypes'
 
 function normalizeCharacter(member?: Character) {
-  if (!member) return undefined
+  if (!member?.id) return undefined
 
   const corrected = correctCharacterParams(member) as Character
 
