@@ -402,7 +402,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 1,
-        "description": "For each debuff applied to an enemy, increases elemental weakness DMG by 40% (Max 200%), and increases MP recovery rate by 30%.",
+        "description": "For each debuff applied to an enemy, increases DMG dealt by 40% (Max 200%), and increases MP recovery rate by 30%.",
         "level": 1,
         "name": "Season Buffs",
         "passiveSkillMstId": 1040,
