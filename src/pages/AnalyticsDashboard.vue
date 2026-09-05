@@ -548,23 +548,34 @@ const fetchAnalytics = async () => {
     const supabase = getSupabase()
     const windowStart = new Date(Date.now() - selectedWindow.value * 86400000).toISOString()
     const pageSize = 1000
-    let offset = 0
+    let cursor: { created_at: string; id: string } | null = null
     const fetchedRows: AnalyticsRow[] = []
 
     while (true) {
-      const { data, error: fetchError } = await supabase
+      let query = supabase
         .from('analytics')
         .select('*')
         .gte('created_at', windowStart)
         .order('created_at', { ascending: false })
-        .range(offset, offset + pageSize - 1)
+        .order('id', { ascending: false })
+        .limit(pageSize)
+
+      if (cursor) {
+        query = query.or(
+          `created_at.lt.${cursor.created_at},and(created_at.eq.${cursor.created_at},id.lt.${cursor.id})`
+        )
+      }
+
+      const { data, error: fetchError } = await query
 
       if (fetchError) throw fetchError
       if (!data || data.length === 0) break
 
       fetchedRows.push(...data)
       if (data.length < pageSize) break
-      offset += pageSize
+
+      const last = data[data.length - 1]
+      cursor = { created_at: last.created_at, id: last.id }
     }
 
     rows.value = fetchedRows.map((row: AnalyticsRow) => ({
