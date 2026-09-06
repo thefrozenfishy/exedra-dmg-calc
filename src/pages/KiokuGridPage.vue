@@ -257,7 +257,7 @@ const archetypeRules: ArchetypeRule[] = [
     {
         id: "mp",
         label: "MP",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 1 && [
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 0 && [
             "GAIN_EP_FIXED",
             "GAIN_EP_RATIO",
             "UP_EP_RECOVER_RATE_RATIO"
@@ -271,7 +271,7 @@ const archetypeRules: ArchetypeRule[] = [
     {
         id: "crit",
         label: "Crit",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType.includes("_CT"))
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 0 && e.abilityEffectType.includes("_CT"))
     },
     {
         id: "ailment",
@@ -298,7 +298,7 @@ const archetypeRules: ArchetypeRule[] = [
     {
         id: "aa",
         label: "Action Advance",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType === "HASTE")
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 0 && e.abilityEffectType === "HASTE")
     },
 ]
 
