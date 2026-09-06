@@ -78,7 +78,7 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualSplitRole(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                            }}</span>
+                        }}</span>
                     </div>
                 </button>
             </div>
@@ -116,7 +116,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ xVal === "-1" ? "Not Owned" : `A${xVal}`
-                            }}</span>
+                                }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -136,7 +136,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ yVal === "-1" ? "Not Owned" : `A${yVal}`
-                            }}</span>
+                                }}</span>
                         </td>
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
                             <template v-for="r in [5, 4, 3]" :key="r">
@@ -165,7 +165,7 @@
                                                         <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`"
                                                             :alt="ch.role" class="info-badge-icon" />
                                                         <span class="role-badge-tag">{{ rangeTag(ch.range, ch.role)[0]
-                                                        }}</span>
+                                                            }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="axis-info-badge level-badge info-badge-img"
@@ -174,7 +174,8 @@
                                                         class="info-badge-icon" />
                                                 </div>
                                             </div>
-                                            <div v-if="displayArchetypes && ch._archetypes.length" class="archetype-icons">
+                                            <div v-if="displayArchetypes && ch._archetypes.length"
+                                                class="archetype-icons">
                                                 <img v-for="arche in ch._archetypes" :key="arche.id"
                                                     :src="`/exedra-dmg-calc/archetypes/${arche.id}.png`"
                                                     :alt="arche.label" :title="arche.label" class="archetype-icon" />
@@ -877,7 +878,7 @@ const shareOptionsForGrid = () => ({
     display: grid;
     grid-template-columns: repeat(var(--band-cols, 2), var(--icon));
     padding: var(--pad) 4px;
-    min-height: calc(var(--band-rows, 1) * var(--icon) + (var(--band-rows, 1) - 1) * var(--gap) + 2 * var(--pad));
+    min-height: calc(var(--band-rows, 1) * var(--icon) + (var(--band-rows, 1) - 1) * var(--gap) + 4 * var(--pad));
     border-radius: 4px;
     box-sizing: border-box;
 }
@@ -885,7 +886,7 @@ const shareOptionsForGrid = () => ({
 @media (max-width: 768px) {
     .rarity-band {
         grid-template-columns: repeat(1, var(--icon));
-        min-height: calc(2 * var(--band-rows, 1) * var(--icon) + (var(--band-rows, 1) - 1) * var(--gap) + 2 * var(--pad));
+        min-height: calc(2 * var(--band-rows, 1) * var(--icon) + (var(--band-rows, 1) - 1) * var(--gap) + 4 * var(--pad));
     }
 }
 
