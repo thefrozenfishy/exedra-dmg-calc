@@ -85,8 +85,16 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualSplitRole(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                        }}</span>
+                            }}</span>
                     </div>
+                </button>
+            </div>
+            <div class="options-row" v-if="archetypeRules.length">
+                <button v-for="rule in archetypeRules" :key="rule.id" class="chip"
+                    :class="hiddenArchetypes.includes(rule.id) ? 'chip--hidden' : 'chip--visible'"
+                    @click="toggleArchetype(rule.id)"
+                    :title="hiddenArchetypes.includes(rule.id) ? `Show ${rule.label}` : `Hide ${rule.label}`">
+                    <img :src="`/exedra-dmg-calc/archetypes/${rule.id}.png`" :alt="rule.label" />
                 </button>
             </div>
         </div>
@@ -137,37 +145,22 @@
                                     :style="{ '--band-rows': bandRows(yVal, r), '--band-cols': bandCols(xVal) }">
                                     <div v-for="ch in getChars(xVal, yVal, r)" :key="ch.id" class="char-thumb">
                                         <div class="character-img-wrapper">
-                                            <div>
+                                            <div class="avatar-slot">
                                                 <a :href="`https://exedra.wiki/wiki/${ch.name}`" target="_blank">
                                                     <img :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`"
                                                         :alt="ch.name" :title="ch._title" class="char-img"
                                                         :class="ch._borderClass" />
                                                 </a>
-                                                <div class="heart-level-badge level-badge"
-                                                    v-if="showHearts && ch.enabled"
-                                                    :class="colourLevels ? (ch.heartphialLvl === KiokuConstants.maxHeartphialLvl ? 'maxLvl' : 'notMaxLvl') : ''">
-                                                    {{ ch.heartphialLvl }}
-                                                </div>
-                                                <div class="magic-level-badge level-badge"
-                                                    v-if="showLevels && ch.enabled"
-                                                    :class="colourLevels ? (ch.magicLvl === KiokuConstants.maxMagicLvl ? 'maxLvl' : 'notMaxLvl') : ''">
-                                                    {{ ch.magicLvl }}
-                                                </div>
-                                                <div class="special-level-badge level-badge"
-                                                    v-if="showLevels && ch.enabled"
-                                                    :class="colourLevels ? (ch._isMaxSpecial ? 'maxLvl' : 'notMaxLvl') : ''">
-                                                    {{ ch.specialLvl }}
-                                                </div>
-                                                <div class="ascension-badge level-badge"
+                                                <div class="axis-info-badge level-badge"
                                                     v-if="infoAxisKey === 'ascension'">
                                                     {{ ch.ascension === -1 ? "X" : `A${ch.ascension}` }}
                                                 </div>
-                                                <div class="ascension-badge level-badge info-badge-img"
+                                                <div class="axis-info-badge level-badge info-badge-img"
                                                     v-else-if="infoAxisKey === 'element'">
                                                     <img :src="`/exedra-dmg-calc/elements/${ch.element}.png`"
                                                         :alt="ch.element" class="info-badge-icon" />
                                                 </div>
-                                                <div class="ascension-badge level-badge"
+                                                <div class="axis-info-badge level-badge"
                                                     v-else-if="infoAxisKey === 'role' && shouldShowRangeBadge(ch)">
                                                     <div class="role-badge-inner">
                                                         <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`"
@@ -176,12 +169,18 @@
                                                         }}</span>
                                                     </div>
                                                 </div>
-                                                <div class="ascension-badge level-badge info-badge-img"
+                                                <div class="axis-info-badge level-badge info-badge-img"
                                                     v-else-if="infoAxisKey === 'role'">
                                                     <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`" :alt="ch.role"
                                                         class="info-badge-icon" />
                                                 </div>
                                             </div>
+                                            <div v-if="ch._archetypes.length" class="archetype-icons">
+                                                <img v-for="arche in ch._archetypes" :key="arche.id"
+                                                    :src="`/exedra-dmg-calc/archetypes/${arche.id}.png`"
+                                                    :alt="arche.label" :title="arche.label" class="archetype-icon" />
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -197,10 +196,10 @@
 <script setup lang="ts">
 import { computed } from "vue"
 import { useCharacterStore } from "../store/characterStore"
-import { Character, KiokuConstants } from "../types/KiokuTypes"
+import { Character } from "../types/KiokuTypes"
 import { KiokuElement, KiokuRole, LuxMagica } from '../types/enums'
 import { useSetting } from "../store/settingsStore"
-import { Kioku } from "../models/Kioku"
+import { ScoreAttackKioku } from "../models/ScoreAttackKioku"
 import { skillDetails } from "../utils/helpers"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { useFriendStore } from "../store/friendStore"
@@ -270,7 +269,7 @@ const rangeTag = (range: number, role: KiokuRole): string => {
     return "Prox"
 }
 
-const virtualRoleForChar = (ch: { role: string; range: number }): VirtualRole => {
+const virtualRoleForChar = (ch: { role: KiokuRole; range: number }): VirtualRole => {
     const setting = splitSettingForRole(ch.role)
     if (setting && setting.value) {
         return `${ch.role}-${rangeTag(ch.range, ch.role)}`
@@ -292,8 +291,6 @@ const virtualRoleRangeTag = (vRole: VirtualRole): string =>
 const virtualRoleLabel = (vRole: VirtualRole): string =>
     isVirtualSplitRole(vRole) ? `${virtualRoleBase(vRole)} (${virtualRoleRangeTag(vRole)})` : vRole
 
-const isSplittableRole = (role: string): boolean => splitSettingForRole(role) !== null
-
 const shouldShowRangeBadge = (ch: { role: string }): boolean => {
     const setting = splitSettingForRole(ch.role)
     return !!setting && setting.value
@@ -301,6 +298,7 @@ const shouldShowRangeBadge = (ch: { role: string }): boolean => {
 
 const hiddenElements = useSetting<KiokuElement[]>("hiddenGridElements", [])
 const hiddenVirtualRoles = useSetting<VirtualRole[]>("hiddenGridRoles", [])
+const hiddenArchetypes = useSetting<string[]>("hiddenGridArchetypes", [])
 
 const toggleElement = (el: KiokuElement) => {
     hiddenElements.value = hiddenElements.value.includes(el)
@@ -314,6 +312,12 @@ const toggleVirtualRole = (vRole: VirtualRole) => {
         : [...hiddenVirtualRoles.value, vRole]
 }
 
+const toggleArchetype = (id: string) => {
+    hiddenArchetypes.value = hiddenArchetypes.value.includes(id)
+        ? hiddenArchetypes.value.filter(a => a !== id)
+        : [...hiddenArchetypes.value, id]
+}
+
 const skillDetailsBySkillMstId = (() => {
     const map = new Map<number, (typeof skillDetails[keyof typeof skillDetails])[]>()
     for (const v of Object.values(skillDetails)) {
@@ -324,8 +328,7 @@ const skillDetailsBySkillMstId = (() => {
     return map
 })()
 
-const computeSkillRange = (c: Character): number => {
-    const k = new Kioku({ ...c })
+const computeSkillRange = (k: ScoreAttackKioku): number => {
     const effects = skillDetailsBySkillMstId.get(k.data.special_id * 100 + 10) ?? []
     const relevant = effects.filter(e => e.abilityEffectType.startsWith("DMG_"))
     const highest = relevant.reduce((max, e) => (e.value1 > max ? e.value1 : max), 1)
@@ -336,17 +339,57 @@ const computeSkillRange = (c: Character): number => {
     return range
 }
 
+interface ArchetypeRule {
+    id: string
+    label: string
+    match: (k: ScoreAttackKioku) => boolean
+}
+
+const archetypeRules: ArchetypeRule[] = [
+    {
+        id: "mono",
+        label: "Mono Element",
+        match: (k: ScoreAttackKioku) => k.effects.some(e =>
+            e.abilityEffectType.includes("AIM")
+            || (!e.abilityEffectType.includes("DMG") && e.element)
+        )
+    },
+    {
+        id: "mp",
+        label: "MP",
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 1 && [
+            "GAIN_EP_FIXED",
+            "GAIN_EP_RATIO",
+            "UP_EP_RECOVER_RATE_RATIO"
+        ].includes(e.abilityEffectType))
+    },
+    {
+        id: "fua",
+        label: "Fua",
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType === "ADDITIONAL_SKILL_ACT")
+    },
+    {
+        id: "crit",
+        label: "Crit",
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType.includes("_CT"))
+    },
+]
+
+const archetypesFor = (k: ScoreAttackKioku): ArchetypeRule[] =>
+    archetypeRules.filter(rule => rule.match(k))
+
 const markedCharacters = computed(() => store.characters.map(c => {
     let range = 1
     if (c.name === LuxMagica) c.rarity = 4
     if (!c.enabled) c.ascension = -1
-    range = computeSkillRange(c as unknown as Character)
-    const enriched = { ...c, range }
+    const k = new ScoreAttackKioku(c)
+    range = computeSkillRange(k)
     return {
-        ...enriched,
-        _borderClass: borderClass(enriched as unknown as Character),
-        _title: makeTitle(enriched as unknown as Character),
-        _isMaxSpecial: isMaxSpecialLvl(enriched as unknown as Character),
+        ...c,
+        range,
+        _borderClass: borderClass(c),
+        _title: makeTitle(c),
+        _archetypes: archetypesFor(k),
     }
 }))
 
@@ -386,6 +429,7 @@ const allChars = computed(() =>
         .filter(c => showUnowned.value ? true : c.enabled)
         .filter(c => !hiddenElements.value.includes(c.element as KiokuElement))
         .filter(c => !hiddenVirtualRoles.value.includes(virtualRoleForChar(c)))
+        .filter(c => !c._archetypes.some(a => hiddenArchetypes.value.includes(a.id)))
 )
 
 const allElementValues = computed(() => Object.values(KiokuElement))
@@ -485,12 +529,6 @@ const makeTitle = (ch: Character): string => {
         title += ` - ${ch.obtain}`
     }
     return title
-}
-
-const isMaxSpecialLvl = (ch: Character): boolean => {
-    if (ch.ascension === 5) return ch.specialLvl === 10
-    if (ch.ascension >= 3) return ch.specialLvl === 7
-    return ch.specialLvl === 4
 }
 
 const exportOpts = { exportClass: "exporting" }
@@ -793,6 +831,13 @@ const shareOptionsForGrid = () => ({
     box-sizing: border-box;
 }
 
+@media (max-width: 768px) {
+    .rarity-band {
+        grid-template-columns: repeat(1, var(--icon));
+        min-height: calc(2 * var(--band-rows, 1) * var(--icon) + (var(--band-rows, 1) - 1) * var(--gap) + 2 * var(--pad));
+    }
+}
+
 .rarity-5 {
     background: rgba(255, 215, 0, 0.07);
 }
@@ -814,7 +859,7 @@ const shareOptionsForGrid = () => ({
     display: inline-block;
 }
 
-.character-img-wrapper>div {
+.character-img-wrapper>.avatar-slot {
     position: inherit;
 }
 
@@ -849,32 +894,30 @@ const shareOptionsForGrid = () => ({
     font-weight: bold;
 }
 
-.heart-level-badge {
+.axis-info-badge {
     left: 22%;
     top: 0;
 }
 
-.magic-level-badge {
-    left: 22%;
-    bottom: 0;
-}
-
-.special-level-badge {
-    left: 78%;
-    bottom: 0;
-}
-
-.ascension-badge {
-    left: 78%;
+.archetype-icons {
+    position: absolute;
+    right: -2px;
     top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
+    z-index: 2;
+    cursor: help;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 15rem;
 }
 
-.maxLvl {
-    color: palegreen;
-}
-
-.notMaxLvl {
-    color: pink;
+.archetype-icon {
+    width: 16px;
+    height: 16px;
+    display: block;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.85));
 }
 
 .copy-btn {
