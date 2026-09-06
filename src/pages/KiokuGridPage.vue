@@ -93,7 +93,7 @@
                     :class="activeArchetypes.includes(NONE_ARCHETYPE_ID) ? 'chip--visible' : 'chip--hidden'"
                     @click="toggleArchetype(NONE_ARCHETYPE_ID)"
                     :title="activeArchetypes.includes(NONE_ARCHETYPE_ID) ? 'Hide characters with no archetype' : 'Show characters with no archetype'">
-                    <span class="archetype-none-label">None</span>
+                    <img :src="`/exedra-dmg-calc/archetypes/none.png`" alt="None" />
                 </button>
             </div>
         </div>
