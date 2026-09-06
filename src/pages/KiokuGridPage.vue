@@ -197,7 +197,7 @@
 import { computed } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { Character } from "../types/KiokuTypes"
-import { KiokuElement, KiokuRole, LuxMagica } from '../types/enums'
+import { Aliment, KiokuElement, KiokuRole, LuxMagica } from '../types/enums'
 import { useSetting } from "../store/settingsStore"
 import { ScoreAttackKioku } from "../models/ScoreAttackKioku"
 import { skillDetails } from "../utils/helpers"
@@ -372,6 +372,28 @@ const archetypeRules: ArchetypeRule[] = [
         id: "crit",
         label: "Crit",
         match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType.includes("_CT"))
+    },
+    {
+        id: "ailment",
+        label: "Ailment",
+        match: (k: ScoreAttackKioku) => k.effects.some(e => Object.values(Aliment).includes(
+            e.abilityEffectType.replace(/_(ATK|DEF|HP)$/, "") as Aliment
+        )),
+    },
+    {
+        id: "ailment_remove",
+        label: "Ailment Remove",
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType === "REMOVE_ALL_ABNORMAL")
+    },
+    {
+        id: "buff_remove",
+        label: "Buff Remove",
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType === "REMOVE_ALL_BUFF")
+    },
+    {
+        id: "debuff_remove",
+        label: "Debuff Remove",
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType === "REMOVE_ALL_DEBUFF")
     },
 ]
 
