@@ -265,6 +265,11 @@ const archetypeRules: ArchetypeRule[] = [
         ].includes(e.abilityEffectType))
     },
     {
+        id: "sp",
+        label: "SP",
+        match: (k: ScoreAttackKioku) => k.effects.some(e => "GAIN_SP_FIXED" === e.abilityEffectType)
+    },
+    {
         id: "fua",
         label: "Fua",
         match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType === "ADDITIONAL_SKILL_ACT")
