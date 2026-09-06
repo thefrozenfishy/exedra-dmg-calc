@@ -91,10 +91,16 @@
             </div>
             <div class="options-row" v-if="archetypeRules.length">
                 <button v-for="rule in archetypeRules" :key="rule.id" class="chip"
-                    :class="hiddenArchetypes.includes(rule.id) ? 'chip--hidden' : 'chip--visible'"
+                    :class="activeArchetypes.includes(rule.id) ? 'chip--visible' : 'chip--hidden'"
                     @click="toggleArchetype(rule.id)"
-                    :title="hiddenArchetypes.includes(rule.id) ? `Show ${rule.label}` : `Hide ${rule.label}`">
+                    :title="activeArchetypes.includes(rule.id) ? `Hide ${rule.label}` : `Show ${rule.label}`">
                     <img :src="`/exedra-dmg-calc/archetypes/${rule.id}.png`" :alt="rule.label" />
+                </button>
+                <button class="chip archetype-none-chip"
+                    :class="activeArchetypes.includes(NONE_ARCHETYPE_ID) ? 'chip--visible' : 'chip--hidden'"
+                    @click="toggleArchetype(NONE_ARCHETYPE_ID)"
+                    :title="activeArchetypes.includes(NONE_ARCHETYPE_ID) ? 'Hide characters with no archetype' : 'Show characters with no archetype'">
+                    <span class="archetype-none-label">None</span>
                 </button>
             </div>
         </div>
@@ -240,105 +246,6 @@ const shouldShow = (r: number) => {
     return false
 }
 
-const show5stars = useSetting("showGrid5stars", true)
-const show4stars = useSetting("showGrid4stars", false)
-const show3stars = useSetting("showGrid3stars", false)
-const showUnowned = useSetting("showGridUnowned", true)
-const showLevels = useSetting("showLevels", true)
-const showHearts = useSetting("showHearts", false)
-const colourLevels = useSetting("colourLevels", true)
-const splitAttackerRange = useSetting("splitAttackerRange", true)
-const splitBreakerRange = useSetting("splitBreakerRange", true)
-const splitDebufferRange = useSetting("splitDebufferRange", true)
-
-type VirtualRole = string
-
-const SPLITTABLE_ROLES: string[] = [KiokuRole.Attacker, KiokuRole.Debuffer, KiokuRole.Breaker]
-
-const splitSettingForRole = (role: string) => {
-    if (role === KiokuRole.Attacker) return splitAttackerRange
-    if (role === KiokuRole.Breaker) return splitBreakerRange
-    if (role === KiokuRole.Debuffer) return splitDebufferRange
-    return null
-}
-
-const rangeTag = (range: number, role: KiokuRole): string => {
-    if (range === 1) return "ST"
-    if (range === 3) return "AOE"
-    if (role === KiokuRole.Breaker) return "AOE"
-    return "Prox"
-}
-
-const virtualRoleForChar = (ch: { role: KiokuRole; range: number }): VirtualRole => {
-    const setting = splitSettingForRole(ch.role)
-    if (setting && setting.value) {
-        return `${ch.role}-${rangeTag(ch.range, ch.role)}`
-    }
-    return ch.role
-}
-
-const isVirtualSplitRole = (vRole: VirtualRole): boolean =>
-    SPLITTABLE_ROLES.some(role => vRole === `${role}-ST` || vRole === `${role}-Prox` || vRole === `${role}-AOE`)
-
-const virtualRoleBase = (vRole: VirtualRole): string => {
-    const role = SPLITTABLE_ROLES.find(r => vRole === `${r}-ST` || vRole === `${r}-Prox` || vRole === `${r}-AOE`)
-    return role ?? vRole
-}
-
-const virtualRoleRangeTag = (vRole: VirtualRole): string =>
-    isVirtualSplitRole(vRole) ? vRole.slice(vRole.lastIndexOf("-") + 1) : ""
-
-const virtualRoleLabel = (vRole: VirtualRole): string =>
-    isVirtualSplitRole(vRole) ? `${virtualRoleBase(vRole)} (${virtualRoleRangeTag(vRole)})` : vRole
-
-const shouldShowRangeBadge = (ch: { role: string }): boolean => {
-    const setting = splitSettingForRole(ch.role)
-    return !!setting && setting.value
-}
-
-const hiddenElements = useSetting<KiokuElement[]>("hiddenGridElements", [])
-const hiddenVirtualRoles = useSetting<VirtualRole[]>("hiddenGridRoles", [])
-const hiddenArchetypes = useSetting<string[]>("hiddenGridArchetypes", [])
-
-const toggleElement = (el: KiokuElement) => {
-    hiddenElements.value = hiddenElements.value.includes(el)
-        ? hiddenElements.value.filter(e => e !== el)
-        : [...hiddenElements.value, el]
-}
-
-const toggleVirtualRole = (vRole: VirtualRole) => {
-    hiddenVirtualRoles.value = hiddenVirtualRoles.value.includes(vRole)
-        ? hiddenVirtualRoles.value.filter(r => r !== vRole)
-        : [...hiddenVirtualRoles.value, vRole]
-}
-
-const toggleArchetype = (id: string) => {
-    hiddenArchetypes.value = hiddenArchetypes.value.includes(id)
-        ? hiddenArchetypes.value.filter(a => a !== id)
-        : [...hiddenArchetypes.value, id]
-}
-
-const skillDetailsBySkillMstId = (() => {
-    const map = new Map<number, (typeof skillDetails[keyof typeof skillDetails])[]>()
-    for (const v of Object.values(skillDetails)) {
-        const arr = map.get(v.skillMstId) ?? []
-        arr.push(v)
-        map.set(v.skillMstId, arr)
-    }
-    return map
-})()
-
-const computeSkillRange = (k: ScoreAttackKioku): number => {
-    const effects = skillDetailsBySkillMstId.get(k.data.special_id * 100 + 10) ?? []
-    const relevant = effects.filter(e => e.abilityEffectType.startsWith("DMG_"))
-    const highest = relevant.reduce((max, e) => (e.value1 > max ? e.value1 : max), 1)
-    let range = 1
-    for (const e of relevant) {
-        if (e.value1 >= highest * 0.6) range = Math.max(range, e.range)
-    }
-    return range
-}
-
 interface ArchetypeRule {
     id: string
     label: string
@@ -397,6 +304,109 @@ const archetypeRules: ArchetypeRule[] = [
     },
 ]
 
+const show5stars = useSetting("showGrid5stars", true)
+const show4stars = useSetting("showGrid4stars", false)
+const show3stars = useSetting("showGrid3stars", false)
+const showUnowned = useSetting("showGridUnowned", true)
+const showLevels = useSetting("showLevels", true)
+const showHearts = useSetting("showHearts", false)
+const colourLevels = useSetting("colourLevels", true)
+const splitAttackerRange = useSetting("splitAttackerRange", true)
+const splitBreakerRange = useSetting("splitBreakerRange", true)
+const splitDebufferRange = useSetting("splitDebufferRange", true)
+
+type VirtualRole = string
+
+const SPLITTABLE_ROLES: string[] = [KiokuRole.Attacker, KiokuRole.Debuffer, KiokuRole.Breaker]
+
+const splitSettingForRole = (role: string) => {
+    if (role === KiokuRole.Attacker) return splitAttackerRange
+    if (role === KiokuRole.Breaker) return splitBreakerRange
+    if (role === KiokuRole.Debuffer) return splitDebufferRange
+    return null
+}
+
+const rangeTag = (range: number, role: KiokuRole): string => {
+    if (range === 1) return "ST"
+    if (range === 3) return "AOE"
+    if (role === KiokuRole.Breaker) return "AOE"
+    return "Prox"
+}
+
+const virtualRoleForChar = (ch: { role: KiokuRole; range: number }): VirtualRole => {
+    const setting = splitSettingForRole(ch.role)
+    if (setting && setting.value) {
+        return `${ch.role}-${rangeTag(ch.range, ch.role)}`
+    }
+    return ch.role
+}
+
+const isVirtualSplitRole = (vRole: VirtualRole): boolean =>
+    SPLITTABLE_ROLES.some(role => vRole === `${role}-ST` || vRole === `${role}-Prox` || vRole === `${role}-AOE`)
+
+const virtualRoleBase = (vRole: VirtualRole): string => {
+    const role = SPLITTABLE_ROLES.find(r => vRole === `${r}-ST` || vRole === `${r}-Prox` || vRole === `${r}-AOE`)
+    return role ?? vRole
+}
+
+const virtualRoleRangeTag = (vRole: VirtualRole): string =>
+    isVirtualSplitRole(vRole) ? vRole.slice(vRole.lastIndexOf("-") + 1) : ""
+
+const virtualRoleLabel = (vRole: VirtualRole): string =>
+    isVirtualSplitRole(vRole) ? `${virtualRoleBase(vRole)} (${virtualRoleRangeTag(vRole)})` : vRole
+
+const shouldShowRangeBadge = (ch: { role: string }): boolean => {
+    const setting = splitSettingForRole(ch.role)
+    return !!setting && setting.value
+}
+
+const hiddenElements = useSetting<KiokuElement[]>("hiddenGridElements", [])
+const hiddenVirtualRoles = useSetting<VirtualRole[]>("hiddenGridRoles", [])
+const NONE_ARCHETYPE_ID = "__no_archetype__"
+const activeArchetypes = useSetting<string[]>(
+    "activeGridArchetypes",
+    [...archetypeRules.map(r => r.id), NONE_ARCHETYPE_ID]
+)
+
+const toggleElement = (el: KiokuElement) => {
+    hiddenElements.value = hiddenElements.value.includes(el)
+        ? hiddenElements.value.filter(e => e !== el)
+        : [...hiddenElements.value, el]
+}
+
+const toggleVirtualRole = (vRole: VirtualRole) => {
+    hiddenVirtualRoles.value = hiddenVirtualRoles.value.includes(vRole)
+        ? hiddenVirtualRoles.value.filter(r => r !== vRole)
+        : [...hiddenVirtualRoles.value, vRole]
+}
+
+const toggleArchetype = (id: string) => {
+    activeArchetypes.value = activeArchetypes.value.includes(id)
+        ? activeArchetypes.value.filter(a => a !== id)
+        : [...activeArchetypes.value, id]
+}
+
+const skillDetailsBySkillMstId = (() => {
+    const map = new Map<number, (typeof skillDetails[keyof typeof skillDetails])[]>()
+    for (const v of Object.values(skillDetails)) {
+        const arr = map.get(v.skillMstId) ?? []
+        arr.push(v)
+        map.set(v.skillMstId, arr)
+    }
+    return map
+})()
+
+const computeSkillRange = (k: ScoreAttackKioku): number => {
+    const effects = skillDetailsBySkillMstId.get(k.data.special_id * 100 + 10) ?? []
+    const relevant = effects.filter(e => e.abilityEffectType.startsWith("DMG_"))
+    const highest = relevant.reduce((max, e) => (e.value1 > max ? e.value1 : max), 1)
+    let range = 1
+    for (const e of relevant) {
+        if (e.value1 >= highest * 0.6) range = Math.max(range, e.range)
+    }
+    return range
+}
+
 const archetypesFor = (k: ScoreAttackKioku): ArchetypeRule[] =>
     archetypeRules.filter(rule => rule.match(k))
 
@@ -451,7 +461,11 @@ const allChars = computed(() =>
         .filter(c => showUnowned.value ? true : c.enabled)
         .filter(c => !hiddenElements.value.includes(c.element as KiokuElement))
         .filter(c => !hiddenVirtualRoles.value.includes(virtualRoleForChar(c)))
-        .filter(c => !c._archetypes.some(a => hiddenArchetypes.value.includes(a.id)))
+        .filter(c => {
+            if (activeArchetypes.value.length === 0) return false
+            if (c._archetypes.length === 0) return activeArchetypes.value.includes(NONE_ARCHETYPE_ID)
+            return c._archetypes.some(a => activeArchetypes.value.includes(a.id))
+        })
 )
 
 const allElementValues = computed(() => Object.values(KiokuElement))
@@ -806,6 +820,17 @@ const shareOptionsForGrid = () => ({
 .chip img {
     height: 28px;
     display: block;
+}
+
+.archetype-none-label {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text);
 }
 
 .header-icon-btn {
