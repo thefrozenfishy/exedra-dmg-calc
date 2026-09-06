@@ -32,7 +32,7 @@ const routes = [
     { path: '/sa-simulator-single', name: 'Single Battle Calculator', component: SingleTeamPage, meta: { version: 0 } },
     { path: '/pvp-simulator', name: 'PvP Calculator', component: PvpTeamPage, meta: { version: 0 } },
     { path: '/pvp-how-to', name: 'PvP 101', component: Pvp101Page, meta: { version: 0 } },
-    { path: '/kioku-grid', name: 'Kioku Grid', component: KiokuGridPage, meta: { version: 0 } },
+    { path: '/kioku-grid', name: 'Kioku Grid', component: KiokuGridPage, meta: { version: 1 } },
     { path: '/heartphial', name: 'Heartphial', component: HeartphialPage, meta: { version: 1 } },
     { path: '/link-raid', name: 'Link Raid Tool', component: LinkRaid, meta: { version: 0 } },
     { path: '/crys-reroll', name: 'Crystalis Reroller', component: CrysReroll, meta: { version: 0 } },

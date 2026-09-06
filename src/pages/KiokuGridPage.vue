@@ -27,16 +27,6 @@
 
         <section class="filters card">
             <span class="filters-heading">Display</span>
-            <label class="filter-chip" :class="{ active: showLevels }">
-                <input type="checkbox" v-model="showLevels" /> Magic &amp; Special levels
-            </label>
-            <label class="filter-chip" :class="{ active: showHearts }">
-                <input type="checkbox" v-model="showHearts" /> Heartphial levels
-            </label>
-            <label class="filter-chip" :class="{ active: colourLevels, disabled: !(showLevels || showHearts) }">
-                <input type="checkbox" v-model="colourLevels" :disabled="!(showLevels || showHearts)" /> Colour max
-                levels
-            </label>
             <label class="filter-chip" :class="{ active: splitAttackerRange }">
                 <input type="checkbox" v-model="splitAttackerRange" /> Split Attacker ranges
             </label>
@@ -45,6 +35,9 @@
             </label>
             <label class="filter-chip" :class="{ active: splitDebufferRange }">
                 <input type="checkbox" v-model="splitDebufferRange" /> Split Debuffer ranges
+            </label>
+            <label class="filter-chip" :class="{ active: displayArchetypes }">
+                <input type="checkbox" v-model="displayArchetypes" /> Display Archetypes
             </label>
         </section>
 
@@ -85,11 +78,11 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualSplitRole(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                        }}</span>
+                            }}</span>
                     </div>
                 </button>
             </div>
-            <div class="options-row" v-if="archetypeRules.length">
+            <div class="options-row" v-if="displayArchetypes && archetypeRules.length">
                 <button v-for="rule in archetypeRules" :key="rule.id" class="chip"
                     :class="activeArchetypes.includes(rule.id) ? 'chip--visible' : 'chip--hidden'"
                     @click="toggleArchetype(rule.id)"
@@ -123,7 +116,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ xVal === "-1" ? "Not Owned" : `A${xVal}`
-                                }}</span>
+                            }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -143,7 +136,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ yVal === "-1" ? "Not Owned" : `A${yVal}`
-                                }}</span>
+                            }}</span>
                         </td>
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
                             <template v-for="r in [5, 4, 3]" :key="r">
@@ -172,7 +165,7 @@
                                                         <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`"
                                                             :alt="ch.role" class="info-badge-icon" />
                                                         <span class="role-badge-tag">{{ rangeTag(ch.range, ch.role)[0]
-                                                            }}</span>
+                                                        }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="axis-info-badge level-badge info-badge-img"
@@ -181,7 +174,7 @@
                                                         class="info-badge-icon" />
                                                 </div>
                                             </div>
-                                            <div v-if="ch._archetypes.length" class="archetype-icons">
+                                            <div v-if="displayArchetypes && ch._archetypes.length" class="archetype-icons">
                                                 <img v-for="arche in ch._archetypes" :key="arche.id"
                                                     :src="`/exedra-dmg-calc/archetypes/${arche.id}.png`"
                                                     :alt="arche.label" :title="arche.label" class="archetype-icon" />
@@ -313,12 +306,10 @@ const show5stars = useSetting("showGrid5stars", true)
 const show4stars = useSetting("showGrid4stars", false)
 const show3stars = useSetting("showGrid3stars", false)
 const showUnowned = useSetting("showGridUnowned", true)
-const showLevels = useSetting("showLevels", true)
-const showHearts = useSetting("showHearts", false)
-const colourLevels = useSetting("colourLevels", true)
 const splitAttackerRange = useSetting("splitAttackerRange", true)
 const splitBreakerRange = useSetting("splitBreakerRange", true)
 const splitDebufferRange = useSetting("splitDebufferRange", true)
+const displayArchetypes = useSetting("displayArchetypes", true)
 
 type VirtualRole = string
 
