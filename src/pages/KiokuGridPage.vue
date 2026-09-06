@@ -954,20 +954,22 @@ const shareOptionsForGrid = () => ({
     position: absolute;
     right: -2px;
     top: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(4, auto);
+    grid-auto-columns: 16px;
+    direction: rtl;
     gap: 1px;
     z-index: 2;
     cursor: help;
-    background: rgba(0, 0, 0, 0.8);
-    border-radius: 15rem;
 }
 
 .archetype-icon {
     width: 16px;
     height: 16px;
     display: block;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 50%;
     filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.85));
 }
 
