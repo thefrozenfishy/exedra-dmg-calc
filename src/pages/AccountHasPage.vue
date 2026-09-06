@@ -46,6 +46,8 @@
             </div>
         </section>
 
+        <CrysDataImport v-if="!isReadonly" />
+
         <section class="filters card">
             <span class="filters-heading">Roster</span>
 
@@ -334,6 +336,7 @@ import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 import { crystalises, passiveDetails } from "../utils/helpers"
 import { useBetaValue, WishlistEntry, WishlistException } from "../utils/betaSettings"
 import NewBadge from '../components/NewBadge.vue'
+import CrysDataImport from '../components/CrysDataImport.vue'
 
 const route = useRoute()
 const router = useRouter()

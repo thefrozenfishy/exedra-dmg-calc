@@ -56,6 +56,8 @@
       </div>
     </section>
 
+    <CrysDataImport />
+
     <section v-if="showResourceCosts" class="resource-summary card">
       <span class="filters-heading">Resource Totals</span>
       <template v-for="r in [5, 4, 3]">
@@ -240,23 +242,6 @@
       </div>
     </section>
 
-    <section class="card">
-      <span class="filters-heading">Import</span>
-      <router-link v-slot="{ href }" :to="{
-        path: '/character-crys',
-      }" custom>
-        <a :href="href" target="_blank" rel="noopener noreferrer" class="external-link">
-          Use the crys reader to read your crys, kioku, and magic levels automatically
-          <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-            <polyline points="15 3 21 3 21 9" />
-            <line x1="10" y1="14" x2="21" y2="3" />
-          </svg>
-        </a>
-      </router-link>
-    </section>
-
     <section class="bulk-set card">
       <span class="filters-heading">Set for all visible Kioku</span>
       <div class="bulk-fields">
@@ -390,6 +375,7 @@
 import { defineComponent, computed, reactive, ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import CharacterCard from '../components/CharacterCard.vue'
 import TeamRow from '../components/TeamRow.vue'
+import CrysDataImport from '../components/CrysDataImport.vue'
 import { useCharacterStore } from '../store/characterStore.js'
 import { Character, KiokuConstants, withMaxLevelsForPlayerLevel } from '../types/KiokuTypes.js'
 import { useSetting } from '../store/settingsStore.js'
@@ -399,7 +385,7 @@ import { getCachedStats, scheduleBackfill } from '../utils/statsBackfill'
 import { kiokuLevelCosts, magicLevelCosts, playerLevelCosts, specialUpgradeCosts } from '../utils/helpers'
 
 export default defineComponent({
-  components: { CharacterCard, TeamRow },
+  components: { CharacterCard, TeamRow, CrysDataImport },
   setup() {
     const store = useCharacterStore()
     const show4stars = useSetting('show4stars', false)
@@ -1451,28 +1437,6 @@ export default defineComponent({
 
 .magic-gold {
   margin-left: 0;
-}
-
-.external-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.74rem;
-  color: var(--accent-soft);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  margin-right: 2px;
-  transition: color 0.15s ease;
-}
-
-.external-link:hover {
-  color: var(--accent);
-}
-
-.external-link-icon {
-  width: 12px;
-  height: 12px;
-  flex-shrink: 0;
 }
 
 
