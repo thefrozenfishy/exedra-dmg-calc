@@ -670,8 +670,8 @@ const shareOptionsForGrid = () => ({
     overflow: visible !important;
 }
 
-.exporting .grid-scroll {
-    overflow: visible !important;
+.grid-scroll.exporting {
+    display: block !important;
 }
 
 .exporting .er-grid {
@@ -844,10 +844,11 @@ const shareOptionsForGrid = () => ({
 .er-grid {
     border-collapse: collapse;
     min-width: max-content;
-    margin: 0 auto;
 }
 
 .grid-scroll {
+    display: flex;
+    justify-content: center;
     overflow-x: visible;
 }
 
