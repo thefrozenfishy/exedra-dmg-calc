@@ -257,7 +257,7 @@ const archetypeRules: ArchetypeRule[] = [
     },
     {
         id: "mp",
-        label: "MP",
+        label: "MP Generator",
         match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 0 && [
             "GAIN_EP_FIXED",
             "GAIN_EP_RATIO",
@@ -266,7 +266,7 @@ const archetypeRules: ArchetypeRule[] = [
     },
     {
         id: "sp",
-        label: "SP",
+        label: "SP Generator",
         match: (k: ScoreAttackKioku) => k.effects.some(e => "GAIN_SP_FIXED" === e.abilityEffectType)
     },
     {
