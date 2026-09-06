@@ -20,6 +20,7 @@ import {
     getUserId
 } from "../store/user"
 import { getAccountSimilarityScore } from "../models/AccountSimilarityScore"
+import { LuxMagica } from '../types/enums'
 
 const base = {
     ascension: KiokuConstants.maxAscension,
@@ -55,7 +56,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
         supportDescription: data.support_effect,
         character_en: data.character_en,
         heartphial: data.heartphial || data.character_en,
-        rarity: data.rarity,
+        rarity: name === LuxMagica ? 4 : data.rarity,
         obtain: data.obtain,
         permaDate: data.permaDate,
         releaseDate: data.releaseDate,
@@ -75,6 +76,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
             if (c.ascension < 0) c.ascension = 0
             if (c.ascension > KiokuConstants.maxAscension) c.ascension = KiokuConstants.maxAscension
             if (c.rarity < 5) c.ascension = KiokuConstants.maxAscension
+            if (c.name === LuxMagica) c.rarity = 4
             return c
         })
             .filter(k => "name" in k && "id" in k && "enabled" in k && "role" in k && "element" in k && "character_en" in k && "rarity" in k)
@@ -167,6 +169,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
             if (char.rarity < 5) char.ascension = KiokuConstants.maxAscension;
             if (char.ascension > KiokuConstants.maxAscension) char.ascension = KiokuConstants.maxAscension;
             if (char.ascension < 0) char.ascension = 0;
+            if (char.name === LuxMagica) char.rarity = 4
         })
     }
 

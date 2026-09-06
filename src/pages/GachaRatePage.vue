@@ -15,7 +15,6 @@ import CharacterSelector from '../components/CharacterSelector.vue'
 import { useCharacterStore } from '../store/characterStore'
 import { toPng } from "html-to-image"
 import { copyCanvasToClipboard, useClipboardSupport, openCanvasInImage, downloadCanvas } from '../utils/image'
-import { LuxMagica } from '../types/enums'
 
 Chart.register(
     LineController,
@@ -40,7 +39,7 @@ const eligible4stars = computed(() =>
 const eligible5stars = computed(() =>
     characterStore.characters.filter(c =>
         c.name !== pickupCharacter.value?.name &&
-        (c.rarity === 5 && c.name !== LuxMagica && c.isStandardChar)
+        (c.rarity === 5  && c.isStandardChar)
     )
 )
 
@@ -878,7 +877,7 @@ const downloadFullHistoryHorizontal = async () => {
             <div class="field">
                 <span class="field-label">Pickup Character</span>
                 <CharacterSelector :selected="pickupCharacter" @select="pickupCharacter = $event"
-                    :filter="c => c.rarity === 5 && c.name !== LuxMagica" />
+                    :filter="c => c.rarity === 5" />
             </div>
         </section>
 

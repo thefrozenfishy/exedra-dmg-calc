@@ -44,7 +44,6 @@ import { ref, computed } from 'vue'
 import { useCharacterStore } from '../store/characterStore'
 import { Character } from '../types/KiokuTypes'
 import { useSetting } from '../store/settingsStore';
-import { LuxMagica } from '../types/enums';
 
 const props = defineProps<{
   selected: Character | undefined
@@ -83,7 +82,7 @@ const filteredChars = computed(() => {
   }
 
   if (onlyFiveStar.value && props.main) {
-    list = list.filter(c => c.rarity === 5 && ![LuxMagica, "Strada Futuro"].includes(c.name))
+    list = list.filter(c => c.rarity === 5 && !["Strada Futuro"].includes(c.name))
   }
 
   return list.sort((a, b) => a.id - b.id)

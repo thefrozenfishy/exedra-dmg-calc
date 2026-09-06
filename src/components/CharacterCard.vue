@@ -104,7 +104,6 @@ import PortraitSelector from './PortraitSelector.vue'
 import CrysSelector from './CrysSelector.vue'
 import { Character, KiokuConstants } from '../types/KiokuTypes'
 import { crystalises, kiokuLevelCosts, magicLevelCosts, specialUpgradeCosts } from '../utils/helpers'
-import { LuxMagica } from '../types/enums'
 import { getCachedStats, scheduleBackfill } from '../utils/statsBackfill'
 
 export default defineComponent({
@@ -232,7 +231,7 @@ export default defineComponent({
     const isVisible = computed(() => {
       const c = props.character
       if (c.rarity === 3 && !props.show3stars) return false
-      if ((c.rarity === 4 || c.name === LuxMagica) && !props.show4stars) return false
+      if ((c.rarity === 4) && !props.show4stars) return false
       if (props.filters.hideUnowned && !c.enabled) return false
       if (c.enabled) {
         const f = props.filters

@@ -260,7 +260,7 @@ import { getAccountSimilarityScore } from "../models/AccountSimilarityScore"
 import { getPowerScores } from "../models/PowerValue"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { toast } from "vue3-toastify"
-import { KiokuRole, LuxMagica } from "../types/enums"
+import { KiokuRole } from "../types/enums"
 
 const friendStore = useFriendStore()
 
@@ -381,7 +381,6 @@ const comparedCharacters = computed<ComparedCharacter[]>(() => {
 
     return store.characters
         .filter(ch => ch.rarity === 5)
-        .filter(ch => ch.name !== LuxMagica)
         .filter(ch => !hiddenCompareRoles.value.includes(ch.role))
         .map(base => {
             const left = leftMap.get(base.id)

@@ -462,8 +462,8 @@ export default defineComponent({
     const needsRecalc = ref(true)
 
     const runHighestPowerCalc = () => {
-      const chars = store.characters.filter(c => c.rarity === 5 && c.enabled && c.name !== LuxMagica)
-        .concat(store.characters.filter(c => c.rarity != 5))
+      const chars = store.characters.filter(c => c.rarity === 5 && c.enabled)
+        .concat(store.characters.filter(c => c.rarity != 5  && c.name !== LuxMagica))
         .concat(store.characters.filter(c => c.name === LuxMagica))
         .map(c => simulateMaxAccountLevels.value ? withMaxLevelsForPlayerLevel(c, playerLevel.value) : c)
       needsRecalc.value = false
@@ -608,7 +608,7 @@ export default defineComponent({
 
     function isRarityToggleVisible(char: Character): boolean {
       if (char.rarity === 3 && !show3stars.value) return false
-      if ((char.rarity === 4 || char.name === LuxMagica) && !show4stars.value) return false
+      if ((char.rarity === 4 ) && !show4stars.value) return false
       return true
     }
 
