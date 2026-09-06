@@ -132,7 +132,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
         } catch (err) {
             console.error("Failed to save characters:", err)
         }
-    }, 3000)
+    }, 1000)
 
     watch(
         characters,
