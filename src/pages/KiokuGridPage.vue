@@ -251,6 +251,7 @@ const archetypeRules: ArchetypeRule[] = [
         label: "Mono Element",
         match: (k: ScoreAttackKioku) => k.effects.some(e =>
             e.abilityEffectType.includes("AIM")
+            || e.abilityEffectType.includes("ZONE")
             || (!e.abilityEffectType.includes("DMG") && e.element)
         )
     },
@@ -271,7 +272,8 @@ const archetypeRules: ArchetypeRule[] = [
     {
         id: "crit",
         label: "Crit",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 0 && e.abilityEffectType.includes("_CT"))
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType.includes("_CT"))
+        // Self crit is also crit archetype
     },
     {
         id: "ailment",
