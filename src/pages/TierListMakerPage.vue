@@ -479,7 +479,7 @@ const filteredPool = computed(() =>
     store.characters
         .filter(c => !placedIds.value.has(c.id))
         .filter(matchesFilters)
-        .sort((a, b) => b.rarity - a.rarity || a.name.localeCompare(b.name))
+        .sort((a, b) => a.id - b.id)
 )
 
 // ── Drag & drop (mouse / pointer) ──
