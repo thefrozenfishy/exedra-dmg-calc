@@ -333,8 +333,7 @@ function onListDrop(targetIndex: number) {
     if (fromIndex === -1) return resetListDragState()
 
     ids.splice(fromIndex, 1)
-    const insertIndex = targetIndex > fromIndex ? targetIndex - 1 : targetIndex
-    ids.splice(Math.max(0, Math.min(insertIndex, ids.length)), 0, draggedId)
+    ids.splice(Math.max(0, Math.min(targetIndex, ids.length)), 0, draggedId)
     listOrder.value = ids
     resetListDragState()
 }
