@@ -20,8 +20,7 @@ import BetaStuff from '../pages/BetaStuff.vue'
 import AnalyticsDashboard from '../pages/AnalyticsDashboard.vue'
 import logEvent from '../utils/analytics'
 import PortraitSetupPage from '../pages/PortraitSetupPage.vue'
-
-const base = import.meta.env.BASE_URL
+import TierListMakerPage from '../pages/TierListMakerPage.vue'
 
 const routes = [
     { path: '/profile', name: 'Profile + Friends', component: ProfilePage, meta: { version: 0 } },
@@ -42,6 +41,7 @@ const routes = [
     { path: '/about', name: 'About', component: About, meta: { version: 0 } },
     { path: '/my-kioku', name: 'My Kioku Viewer', component: AccountHasPage, meta: { version: 1 } },
     { path: '/gacha-rate', name: 'Gacha Rate+Sim', component: GachaRatePage, meta: { version: 0 } },
+    { path: '/tier-list-maker', name: 'Tier List Maker', component: TierListMakerPage, meta: { version: 1 } },
     { path: '/analytics', name: 'Analytics Dashboard', component: AnalyticsDashboard },
     { path: '/beta', name: 'Beta Settings', component: BetaStuff, meta: { reloadOnLeave: true } },
 ]

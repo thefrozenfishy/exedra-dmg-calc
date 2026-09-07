@@ -59,6 +59,7 @@ const group3Paths = [
   '/gacha-rate',
   '/link-raid',
   '/crys-reroll',
+  beta ? '/tier-list-maker' : null,
   '/about',
 ].filter(Boolean)
 
