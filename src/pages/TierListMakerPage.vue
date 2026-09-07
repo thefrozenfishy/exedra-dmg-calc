@@ -11,8 +11,11 @@
 
         <section class="card list-manager">
             <span class="filters-heading">Your lists</span>
-            <button v-for="l in listOptions" :key="l.id" class="chip list-chip"
-                :class="{ active: l.id === activeListId }" @click="activeListId = l.id">
+            <button v-for="(l, index) in listOptions" :key="l.id" class="chip list-chip"
+                :class="{ active: l.id === activeListId, 'list-chip-drag-over': dragOverListIndex === index }"
+                draggable="true" @click="activeListId = l.id" @dragstart="onListDragStart(l.id, $event)"
+                @dragover.prevent="onListDragOver(index)" @drop.prevent="onListDrop(index)"
+                @dragend="resetListDragState">
                 {{ l.name || 'Untitled list' }}
             </button>
             <button class="icon-btn icon-btn--accent" title="Create a new list" aria-label="Create a new list"
@@ -39,7 +42,8 @@
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                 </svg>
             </button>
-            <button class="icon-btn" :class="{ 'icon-btn--danger': confirmingDelete }" :title="confirmingDelete ? 'Click again to confirm deletion' : 'Delete this list'"
+            <button class="icon-btn" :class="{ 'icon-btn--danger': confirmingDelete }"
+                :title="confirmingDelete ? 'Click again to confirm deletion' : 'Delete this list'"
                 :aria-label="confirmingDelete ? 'Click again to confirm deletion' : 'Delete this list'"
                 @click="handleDeleteClick">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -55,7 +59,7 @@
         <template v-if="currentList">
             <section class="card tier-maker-board">
                 <button class="add-row-btn" @click="addRow">+ Add tier</button>
-    
+
                 <div class="tier-rows-wrap">
                     <div class="tier-row" v-for="(row, rIdx) in currentList.rows" :key="row.id">
                         <div class="tier-row-label-cell" :style="{
@@ -63,8 +67,7 @@
                         }">
                             <span class="row-count">{{ (currentList.placements[row.id] || []).length }}</span>
                             <textarea class="row-label-input" :ref="(el) => setLabelRef(row.id, el as Element)"
-                                :value="row.label" placeholder="Tier name" rows="1"
-                                @input="onLabelInput($event)"
+                                :value="row.label" placeholder="Tier name" rows="1" @input="onLabelInput($event)"
                                 @change="updateRowLabel(row.id, ($event.target as HTMLTextAreaElement).value)"
                                 @keydown.enter.prevent="($event.target as HTMLTextAreaElement).blur()"></textarea>
                             <div class="row-controls">
@@ -89,16 +92,19 @@
                             </div>
                         </div>
                         <div class="tier-row-dropzone" :data-drop-zone="row.id"
-                            :class="{ 'drag-over': dragOverZone === row.id }" @dragover.prevent="onZoneDragOver(row.id, $event)"
-                            @dragleave="onZoneDragLeave($event)" @drop.prevent="onZoneDrop(row.id)">
+                            :class="{ 'drag-over': dragOverZone === row.id }"
+                            @dragover.prevent="onZoneDragOver(row.id, $event)" @dragleave="onZoneDragLeave($event)"
+                            @drop.prevent="onZoneDrop(row.id)">
                             <template v-for="(charId, i) in (currentList.placements[row.id] || [])" :key="charId">
-                                <span class="insertion-marker" v-if="dragOverZone === row.id && dragOverIndex === i"></span>
+                                <span class="insertion-marker"
+                                    v-if="dragOverZone === row.id && dragOverIndex === i"></span>
                                 <div class="tier-chip" :data-char-id="charId"
                                     :class="{ dragging: draggedCharId === charId }" draggable="true"
                                     @dragstart="onChipDragStart(charId, row.id, $event)" @dragend="resetDragState"
                                     @touchstart="onChipTouchStart(charId, row.id, $event)"
                                     @touchmove="onChipTouchMove($event)" @touchend="onChipTouchEnd($event)">
-                                    <img class="chip-img" :src="`/exedra-dmg-calc/kioku_images/${charId}_thumbnail.png`"
+                                    <img class="chip-img" :class="characterBorderClass(charById.get(charId))"
+                                        :src="`/exedra-dmg-calc/kioku_images/${charId}_thumbnail.png`"
                                         :alt="charById.get(charId)?.name" :title="charById.get(charId)?.name" />
                                     <button class="chip-remove" title="Send back to pool" aria-label="Send back to pool"
                                         @click.stop="removeFromRow(charId)">×</button>
@@ -121,6 +127,18 @@
                 @drop.prevent="onZoneDrop(null)">
                 <div class="pool-heading-row">
                     <span class="filters-heading">Unranked ({{ filteredPool.length }})</span>
+                    <label class="pool-sort-label">
+                        <span>Sort</span>
+                        <select v-model="poolSort" class="selector" aria-label="Sort unranked characters">
+                            <option value="id">ID</option>
+                            <option value="releaseDate">Release date</option>
+                            <option value="character_en">Character name</option>
+                            <option value="name">Kioku name</option>
+                        </select>
+                        <label class="chip sort-inverse-chip" :class="{ active: poolSortInverse }">
+                            <input type="checkbox" v-model="poolSortInverse" /> Sort inverse
+                        </label>
+                    </label>
                     <button v-if="filteredPool.length" class="add-all-btn"
                         title="Add every shown character to the bottom tier" @click="addAllPoolToBottomRow">
                         + Add all to bottom tier
@@ -132,8 +150,9 @@
                         @dragstart="onChipDragStart(ch.id, null, $event)" @dragend="resetDragState"
                         @touchstart="onChipTouchStart(ch.id, null, $event)" @touchmove="onChipTouchMove($event)"
                         @touchend="onChipTouchEnd($event)">
-                        <img class="chip-img" :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`"
-                            :alt="ch.name" :title="ch.name" />
+                        <img class="chip-img" :class="characterBorderClass(ch)"
+                            :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
+                            :title="ch.name" />
                     </div>
                     <p v-if="!filteredPool.length" class="pool-empty-hint">No characters match your filters.</p>
                 </div>
@@ -229,16 +248,56 @@ function labelTextColor(hex: string): string {
 // ── Persisted lists ──
 const tierLists = useSetting<Record<string, SavedTierList>>("tierMakerLists", {})
 const activeListId = useSetting<string>("tierMakerActiveListId", "")
+const listOrder = useSetting<string[]>("tierMakerListOrder", [])
 
-const listOptions = computed(() =>
-    Object.values(tierLists.value).sort((a, b) => a.createdAt - b.createdAt)
-)
+const listOptions = computed(() => {
+    const byId = tierLists.value
+    const seen = new Set<string>()
+    const ordered: SavedTierList[] = []
+
+    for (const id of listOrder.value) {
+        const list = byId[id]
+        if (list) {
+            ordered.push(list)
+            seen.add(id)
+        }
+    }
+
+    Object.values(byId)
+        .filter(list => !seen.has(list.id))
+        .sort((a, b) => a.createdAt - b.createdAt || a.id.localeCompare(b.id))
+        .forEach(list => ordered.push(list))
+
+    return ordered
+})
 
 const currentList = computed<SavedTierList | null>(() =>
     activeListId.value ? tierLists.value[activeListId.value] ?? null : null
 )
 
+function normalizeListOrder() {
+    const existingIds = new Set(Object.keys(tierLists.value))
+    const seen = new Set<string>()
+    const next: string[] = []
+
+    for (const id of listOrder.value) {
+        if (!existingIds.has(id) || seen.has(id)) continue
+        seen.add(id)
+        next.push(id)
+    }
+
+    Object.values(tierLists.value)
+        .filter(list => !seen.has(list.id))
+        .sort((a, b) => a.createdAt - b.createdAt || a.id.localeCompare(b.id))
+        .forEach(list => next.push(list.id))
+
+    if (next.length !== listOrder.value.length || next.some((id, i) => id !== listOrder.value[i])) {
+        listOrder.value = next
+    }
+}
+
 onMounted(() => {
+    normalizeListOrder()
     if (!currentList.value && listOptions.value.length) {
         activeListId.value = listOptions.value[0].id
     }
@@ -247,6 +306,42 @@ onMounted(() => {
 
 function saveList(list: SavedTierList) {
     tierLists.value = { ...tierLists.value, [list.id]: { ...list, updatedAt: Date.now() } }
+}
+
+const draggedListId = ref<string | null>(null)
+const dragOverListIndex = ref<number | null>(null)
+
+function onListDragStart(listId: string, e: DragEvent) {
+    draggedListId.value = listId
+    if (e.dataTransfer) {
+        e.dataTransfer.setData("text/plain", listId)
+        e.dataTransfer.effectAllowed = "move"
+    }
+}
+
+function onListDragOver(index: number) {
+    if (draggedListId.value == null) return
+    dragOverListIndex.value = index
+}
+
+function onListDrop(targetIndex: number) {
+    const draggedId = draggedListId.value
+    if (!draggedId) return resetListDragState()
+
+    const ids = listOptions.value.map(list => list.id)
+    const fromIndex = ids.indexOf(draggedId)
+    if (fromIndex === -1) return resetListDragState()
+
+    ids.splice(fromIndex, 1)
+    const insertIndex = targetIndex > fromIndex ? targetIndex - 1 : targetIndex
+    ids.splice(Math.max(0, Math.min(insertIndex, ids.length)), 0, draggedId)
+    listOrder.value = ids
+    resetListDragState()
+}
+
+function resetListDragState() {
+    draggedListId.value = null
+    dragOverListIndex.value = null
 }
 
 const defaultTierPalette: { label: string; color: string }[] = [
@@ -274,6 +369,7 @@ function createList() {
         updatedAt: Date.now(),
     }
     tierLists.value = { ...tierLists.value, [list.id]: list }
+    listOrder.value = [...listOrder.value.filter(id => id !== list.id), list.id]
     activeListId.value = list.id
     toast.success("New list created!", { position: toast.POSITION.TOP_RIGHT, icon: false })
 }
@@ -290,6 +386,7 @@ function duplicateList() {
         updatedAt: Date.now(),
     }
     tierLists.value = { ...tierLists.value, [copy.id]: copy }
+    listOrder.value = [...listOrder.value.filter(id => id !== copy.id), copy.id]
     activeListId.value = copy.id
     toast.success("List duplicated!", { position: toast.POSITION.TOP_RIGHT, icon: false })
 }
@@ -307,9 +404,11 @@ function handleDeleteClick() {
     if (confirmDeleteTimeout) clearTimeout(confirmDeleteTimeout)
     confirmingDelete.value = false
 
-    const { [currentList.value.id]: _removed, ...rest } = tierLists.value
+    const deletedId = currentList.value.id
+    const { [deletedId]: _removed, ...rest } = tierLists.value
     tierLists.value = rest
-    activeListId.value = Object.values(rest).sort((a, b) => a.createdAt - b.createdAt)[0]?.id ?? ""
+    listOrder.value = listOrder.value.filter(id => id !== deletedId)
+    activeListId.value = listOrder.value[0] ?? Object.values(rest).sort((a, b) => a.createdAt - b.createdAt || a.id.localeCompare(b.id))[0]?.id ?? ""
     toast.success("List deleted", { position: toast.POSITION.TOP_RIGHT, icon: false })
 }
 
@@ -351,7 +450,7 @@ function moveRow(rowId: string, dir: -1 | 1) {
     const idx = rows.findIndex(r => r.id === rowId)
     const newIdx = idx + dir
     if (idx === -1 || newIdx < 0 || newIdx >= rows.length) return
-    ;[rows[idx], rows[newIdx]] = [rows[newIdx], rows[idx]]
+        ;[rows[idx], rows[newIdx]] = [rows[newIdx], rows[idx]]
     saveList({ ...currentList.value, rows })
 }
 
@@ -454,6 +553,12 @@ const poolShow3 = useSetting("tierMakerShow3", true)
 const poolShowStandards = useSetting("tierMakerShowStandards", true)
 const poolShowLimiteds = useSetting("tierMakerShowLimiteds", true)
 const hiddenElements = useSetting<KiokuElement[]>("tierMakerHiddenElements", [])
+const poolSort = useSetting<"id" | "releaseDate" | "character_en" | "name">("tierMakerPoolSort", "id")
+const poolSortInverse = useSetting("tierMakerPoolSortInverse", false)
+
+function characterBorderClass(ch?: Character): string {
+    return ch?.obtain && !ch.isStandardChar ? "limited-border" : "default-border"
+}
 
 const allElementValues = computed(() => Object.values(KiokuElement))
 
@@ -475,11 +580,34 @@ function matchesFilters(c: Character): boolean {
     return true
 }
 
+function comparePoolCharacters(a: Character, b: Character): number {
+    let result = 0
+
+    switch (poolSort.value) {
+        case "releaseDate":
+            result = (a.releaseDate || "").localeCompare(b.releaseDate || "")
+            break
+        case "character_en":
+            result = (a.character_en || "").localeCompare(b.character_en || "")
+            break
+        case "name":
+            result = a.name.localeCompare(b.name)
+            break
+        case "id":
+        default:
+            result = a.id - b.id
+            break
+    }
+
+    result = result || a.id - b.id
+    return poolSortInverse.value ? -result : result
+}
+
 const filteredPool = computed(() =>
     store.characters
         .filter(c => !placedIds.value.has(c.id))
         .filter(matchesFilters)
-        .sort((a, b) => a.id - b.id)
+        .sort(comparePoolCharacters)
 )
 
 // ── Drag & drop (mouse / pointer) ──
@@ -684,6 +812,11 @@ const shareOptionsForTierList = () => ({
     display: none;
 }
 
+.sort-inverse-chip {
+    width: 10rem;
+    justify-content: center;
+}
+
 .chip.active {
     background: var(--accent-glow);
     border-color: var(--border-strong);
@@ -692,6 +825,23 @@ const shareOptionsForTierList = () => ({
 
 .list-chip {
     font-weight: 600;
+}
+
+.list-chip-drag-over {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+}
+
+.pool-sort-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+}
+
+.pool-sort-label .selector {
+    padding: 0.3rem 1rem;
 }
 
 /* ── List manager ── */
@@ -772,7 +922,7 @@ const shareOptionsForTierList = () => ({
     overflow: hidden;
 }
 
-.tier-row + .tier-row {
+.tier-row+.tier-row {
     border-top: none;
 }
 
@@ -986,6 +1136,14 @@ const shareOptionsForTierList = () => ({
     display: block;
     border: 1px solid rgba(255, 255, 255, 0.18);
     background: var(--panel-strong);
+}
+
+.chip-img.limited-border {
+    border-color: red !important;
+}
+
+.chip-img.default-border {
+    border-color: rgba(255, 255, 255, 0.18);
 }
 
 .chip-remove {
