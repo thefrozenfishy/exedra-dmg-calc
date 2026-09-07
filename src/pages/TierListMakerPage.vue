@@ -54,16 +54,14 @@
 
         <template v-if="currentList">
             <section class="card tier-maker-board">
+                <button class="add-row-btn" @click="addRow">+ Add tier</button>
                 <div class="tier-row" v-for="(row, rIdx) in currentList.rows" :key="row.id">
-                    <div class="tier-row-header" :style="{ '--row-color': row.color }">
-                        <label class="row-color-swatch" :style="{ background: row.color }" title="Row colour">
-                            <input type="color" :value="row.color"
-                                @change="updateRowColor(row.id, ($event.target as HTMLInputElement).value)" />
-                        </label>
+                    <div class="tier-row-label-cell"
+                        :style="{ background: row.color, color: labelTextColor(row.color) }">
+                        <span class="row-count">{{ (currentList.placements[row.id] || []).length }}</span>
                         <input type="text" class="row-label-input" :value="row.label" placeholder="Tier name"
                             @change="updateRowLabel(row.id, ($event.target as HTMLInputElement).value)"
                             @keydown.enter="($event.target as HTMLInputElement).blur()" />
-                        <span class="row-count">{{ (currentList.placements[row.id] || []).length }}</span>
                         <div class="row-controls">
                             <button class="row-ctrl-btn" title="Move tier up" aria-label="Move tier up"
                                 :disabled="rIdx === 0" @click="moveRow(row.id, -1)">↑</button>
@@ -73,6 +71,18 @@
                             <button class="row-ctrl-btn row-ctrl-btn--danger" title="Remove tier"
                                 aria-label="Remove tier" @click="removeRow(row.id)">×</button>
                         </div>
+                        <label class="row-color-edit" title="Row colour">
+                            <input type="color" :value="row.color"
+                                @change="updateRowColor(row.id, ($event.target as HTMLInputElement).value)" />
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path
+                                    d="M12 19l7-7 3 3-7 7-3-3z" />
+                                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
+                                <path d="M2 2l7.586 7.586" />
+                                <circle cx="11" cy="11" r="2" />
+                            </svg>
+                        </label>
                     </div>
                     <div class="tier-row-dropzone" :data-drop-zone="row.id"
                         :class="{ 'drag-over': dragOverZone === row.id }" @dragover.prevent="onZoneDragOver(row.id, $event)"
@@ -97,7 +107,23 @@
                     </div>
                 </div>
 
-                <button class="add-row-btn" @click="addRow">+ Add tier</button>
+            </section>
+
+            <section class="card pool-section" data-drop-zone="pool" :class="{ 'drag-over': dragOverZone === 'pool' }"
+                @dragover.prevent="onZoneDragOver(null, $event)" @dragleave="onZoneDragLeave($event)"
+                @drop.prevent="onZoneDrop(null)">
+                <span class="filters-heading">Unranked ({{ filteredPool.length }})</span>
+                <div class="pool-chips">
+                    <div v-for="ch in filteredPool" :key="ch.id" class="tier-chip pool-chip" :data-char-id="ch.id"
+                        :class="{ dragging: draggedCharId === ch.id }" draggable="true"
+                        @dragstart="onChipDragStart(ch.id, null, $event)" @dragend="resetDragState"
+                        @touchstart="onChipTouchStart(ch.id, null, $event)" @touchmove="onChipTouchMove($event)"
+                        @touchend="onChipTouchEnd($event)">
+                        <img class="chip-img" :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`"
+                            :alt="ch.name" :title="ch.name" />
+                    </div>
+                    <p v-if="!filteredPool.length" class="pool-empty-hint">No characters match your filters.</p>
+                </div>
             </section>
 
             <section class="filters card">
@@ -121,30 +147,12 @@
                 <label class="chip" :class="{ active: poolShowLimiteds }">
                     <input type="checkbox" v-model="poolShowLimiteds" /> Limiteds
                 </label>
-            </section>
-
-            <section class="card element-filter-row">
-                <button v-for="el in allElementValues" :key="el" class="chip element-chip"
-                    :class="hiddenElements.includes(el) ? 'chip--hidden' : 'chip--visible'"
-                    :title="hiddenElements.includes(el) ? `Show ${el}` : `Hide ${el}`" @click="toggleElement(el)">
-                    <img :src="`/exedra-dmg-calc/elements/${el}.png`" :alt="el" />
-                </button>
-            </section>
-
-            <section class="card pool-section" data-drop-zone="pool" :class="{ 'drag-over': dragOverZone === 'pool' }"
-                @dragover.prevent="onZoneDragOver(null, $event)" @dragleave="onZoneDragLeave($event)"
-                @drop.prevent="onZoneDrop(null)">
-                <span class="filters-heading">Unranked ({{ filteredPool.length }})</span>
-                <div class="pool-chips">
-                    <div v-for="ch in filteredPool" :key="ch.id" class="tier-chip pool-chip" :data-char-id="ch.id"
-                        :class="{ dragging: draggedCharId === ch.id }" draggable="true"
-                        @dragstart="onChipDragStart(ch.id, null, $event)" @dragend="resetDragState"
-                        @touchstart="onChipTouchStart(ch.id, null, $event)" @touchmove="onChipTouchMove($event)"
-                        @touchend="onChipTouchEnd($event)">
-                        <img class="chip-img" :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`"
-                            :alt="ch.name" :title="ch.name" />
-                    </div>
-                    <p v-if="!filteredPool.length" class="pool-empty-hint">No characters match your filters.</p>
+                <div>
+                    <button v-for="el in allElementValues" :key="el" class="chip element-chip"
+                        :class="hiddenElements.includes(el) ? 'chip--hidden' : 'chip--visible'"
+                        :title="hiddenElements.includes(el) ? `Show ${el}` : `Hide ${el}`" @click="toggleElement(el)">
+                        <img :src="`/exedra-dmg-calc/elements/${el}.png`" :alt="el" />
+                    </button>
                 </div>
             </section>
 
@@ -194,6 +202,16 @@ interface SavedTierList {
 const store = useCharacterStore()
 
 const charById = computed(() => new Map(store.characters.map(c => [c.id, c] as const)))
+
+function labelTextColor(hex: string): string {
+    const c = (hex || "").replace("#", "")
+    if (c.length !== 6) return "#ffffff"
+    const r = parseInt(c.substring(0, 2), 16)
+    const g = parseInt(c.substring(2, 4), 16)
+    const b = parseInt(c.substring(4, 6), 16)
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+    return luminance > 0.6 ? "#1a1a1a" : "#ffffff"
+}
 
 // ── Persisted lists ──
 const tierLists = useSetting<Record<string, SavedTierList>>("tierMakerLists", {})
@@ -659,112 +677,147 @@ const shareOptionsForTierList = () => ({
 .tier-maker-board {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.6rem;
+    gap: 0;
     padding: 0.75rem;
 }
 
 .tier-row {
+    display: flex;
+    align-items: stretch;
     border: 1px solid var(--border);
-    border-left: 6px solid var(--row-color, var(--accent));
-    border-radius: var(--radius-sm);
     background: rgba(255, 255, 255, 0.02);
     overflow: hidden;
 }
 
-.tier-row-header {
+.tier-row + .tier-row {
+    border-top: none;
+}
+
+.tier-row:first-child {
+    border-top-left-radius: var(--radius-sm);
+    border-top-right-radius: var(--radius-sm);
+}
+
+.tier-row:last-child {
+    border-bottom-left-radius: var(--radius-sm);
+    border-bottom-right-radius: var(--radius-sm);
+}
+
+/* ── Label column ── */
+.tier-row-label-cell {
+    position: relative;
+    width: 96px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    padding: 0.5rem 0.45rem;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.row-count {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    opacity: 0.75;
+}
+
+.row-label-input {
+    width: 100%;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: inherit;
+    font-weight: 800;
+    font-size: 1rem;
+    font-family: inherit;
+    text-align: center;
+    padding: 0.2rem 0.3rem;
+}
+
+.row-label-input:hover {
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+.row-label-input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.row-controls {
+    display: flex;
+    gap: 0.2rem;
+    flex-shrink: 0;
+}
+
+.row-ctrl-btn {
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border-radius: 7px;
+    font-size: 0.75rem;
+    line-height: 1;
+    background: rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: inherit;
+}
+
+.row-ctrl-btn--danger:hover:not(:disabled) {
+    background: rgba(255, 90, 70, 0.35);
+    border-color: rgba(255, 90, 70, 0.6);
+}
+
+.row-color-edit {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.4rem 0.6rem;
-    background: rgba(255, 255, 255, 0.03);
-    border-bottom: 1px solid var(--border);
-}
-
-.row-color-swatch {
-    position: relative;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.28);
     cursor: pointer;
-    flex-shrink: 0;
-    overflow: hidden;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+    opacity: 0.65;
+    transition: opacity 0.12s;
 }
 
-.row-color-swatch input[type="color"] {
+.row-color-edit:hover {
+    opacity: 1;
+}
+
+.row-color-edit svg {
+    width: 11px;
+    height: 11px;
+}
+
+.row-color-edit input[type="color"] {
     position: absolute;
-    inset: -6px;
-    width: calc(100% + 12px);
-    height: calc(100% + 12px);
+    inset: 0;
+    width: 100%;
+    height: 100%;
     border: none;
     padding: 0;
     cursor: pointer;
     opacity: 0;
 }
 
-.row-label-input {
-    flex: 1 1 auto;
-    min-width: 60px;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    color: var(--text);
-    font-weight: 700;
-    font-size: 1rem;
-    font-family: inherit;
-    padding: 0.25rem 0.4rem;
-}
-
-.row-label-input:hover {
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-.row-label-input:focus {
-    outline: none;
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 209, 110, 0.4);
-}
-
-.row-count {
-    font-size: 0.75rem;
-    color: var(--muted);
-    flex-shrink: 0;
-    min-width: 1.2rem;
-    text-align: right;
-}
-
-.row-controls {
-    display: flex;
-    gap: 0.25rem;
-    flex-shrink: 0;
-}
-
-.row-ctrl-btn {
-    width: 26px;
-    height: 26px;
-    padding: 0;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    line-height: 1;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: var(--text);
-}
-
-.row-ctrl-btn--danger:hover:not(:disabled) {
-    background: rgba(255, 155, 143, 0.18);
-    border-color: rgba(255, 155, 143, 0.4);
-    color: var(--danger);
-}
-
+/* ── Content column ── */
 .tier-row-dropzone {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem;
-    min-height: 68px;
+    gap: 0.5rem;
+    padding: 0.6rem;
+    min-height: 84px;
+    flex: 1 1 auto;
+    min-width: 0;
+    border-left: 1px solid var(--border);
     transition: background 0.12s;
 }
 
@@ -782,6 +835,7 @@ const shareOptionsForTierList = () => ({
 
 .add-row-btn {
     align-self: flex-start;
+    margin-top: 0.6rem;
     background: rgba(255, 255, 255, 0.06);
     border: 1px dashed var(--border-strong);
     color: var(--accent);
@@ -805,8 +859,8 @@ const shareOptionsForTierList = () => ({
 }
 
 .chip-img {
-    width: 52px;
-    height: 52px;
+    width: 68px;
+    height: 68px;
     object-fit: cover;
     border-radius: 50%;
     display: block;
@@ -841,7 +895,7 @@ const shareOptionsForTierList = () => ({
 .insertion-marker {
     width: 3px;
     align-self: stretch;
-    min-height: 52px;
+    min-height: 68px;
     border-radius: 2px;
     background: var(--accent);
     box-shadow: 0 0 6px var(--accent);
@@ -862,13 +916,10 @@ const shareOptionsForTierList = () => ({
     font-family: inherit;
 }
 
-.element-filter-row {
-    gap: 0.4rem;
-}
-
 .element-chip {
     padding: 3px;
     opacity: 0.55;
+    margin: auto 0.15rem;
 }
 
 .element-chip.chip--visible {
@@ -902,8 +953,8 @@ const shareOptionsForTierList = () => ({
 }
 
 .pool-chip .chip-img {
-    width: 48px;
-    height: 48px;
+    width: 60px;
+    height: 60px;
 }
 
 .pool-empty-hint {
@@ -929,7 +980,7 @@ const shareOptionsForTierList = () => ({
 /* ── Export snapshot tweaks ── */
 .exporting .chip-remove,
 .exporting .row-controls,
-.exporting .row-color-swatch input[type="color"] {
+.exporting .row-color-edit {
     display: none;
 }
 
@@ -940,17 +991,22 @@ const shareOptionsForTierList = () => ({
 
 @media (max-width: 480px) {
     .chip-img {
-        width: 44px;
-        height: 44px;
+        width: 52px;
+        height: 52px;
     }
 
     .pool-chip .chip-img {
-        width: 40px;
-        height: 40px;
+        width: 46px;
+        height: 46px;
     }
 
-    .tier-row-header {
-        flex-wrap: wrap;
+    .tier-row-label-cell {
+        width: 74px;
+        padding: 0.4rem 0.3rem;
+    }
+
+    .row-label-input {
+        font-size: 0.88rem;
     }
 }
 </style>
