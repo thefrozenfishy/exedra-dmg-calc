@@ -55,56 +55,63 @@
         <template v-if="currentList">
             <section class="card tier-maker-board">
                 <button class="add-row-btn" @click="addRow">+ Add tier</button>
-                <div class="tier-row" v-for="(row, rIdx) in currentList.rows" :key="row.id">
-                    <div class="tier-row-label-cell"
-                        :style="{ background: row.color, color: labelTextColor(row.color) }">
-                        <span class="row-count">{{ (currentList.placements[row.id] || []).length }}</span>
-                        <input type="text" class="row-label-input" :value="row.label" placeholder="Tier name"
-                            @change="updateRowLabel(row.id, ($event.target as HTMLInputElement).value)"
-                            @keydown.enter="($event.target as HTMLInputElement).blur()" />
-                        <div class="row-controls">
-                            <button class="row-ctrl-btn" title="Move tier up" aria-label="Move tier up"
-                                :disabled="rIdx === 0" @click="moveRow(row.id, -1)">↑</button>
-                            <button class="row-ctrl-btn" title="Move tier down" aria-label="Move tier down"
-                                :disabled="rIdx === currentList.rows.length - 1"
-                                @click="moveRow(row.id, 1)">↓</button>
-                            <button class="row-ctrl-btn row-ctrl-btn--danger" title="Remove tier"
-                                aria-label="Remove tier" @click="removeRow(row.id)">×</button>
-                        </div>
-                        <label class="row-color-edit" title="Row colour">
-                            <input type="color" :value="row.color"
-                                @change="updateRowColor(row.id, ($event.target as HTMLInputElement).value)" />
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <path
-                                    d="M12 19l7-7 3 3-7 7-3-3z" />
-                                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
-                                <path d="M2 2l7.586 7.586" />
-                                <circle cx="11" cy="11" r="2" />
-                            </svg>
-                        </label>
-                    </div>
-                    <div class="tier-row-dropzone" :data-drop-zone="row.id"
-                        :class="{ 'drag-over': dragOverZone === row.id }" @dragover.prevent="onZoneDragOver(row.id, $event)"
-                        @dragleave="onZoneDragLeave($event)" @drop.prevent="onZoneDrop(row.id)">
-                        <template v-for="(charId, i) in (currentList.placements[row.id] || [])" :key="charId">
-                            <span class="insertion-marker" v-if="dragOverZone === row.id && dragOverIndex === i"></span>
-                            <div class="tier-chip" :data-char-id="charId"
-                                :class="{ dragging: draggedCharId === charId }" draggable="true"
-                                @dragstart="onChipDragStart(charId, row.id, $event)" @dragend="resetDragState"
-                                @touchstart="onChipTouchStart(charId, row.id, $event)"
-                                @touchmove="onChipTouchMove($event)" @touchend="onChipTouchEnd($event)">
-                                <img class="chip-img" :src="`/exedra-dmg-calc/kioku_images/${charId}_thumbnail.png`"
-                                    :alt="charById.get(charId)?.name" :title="charById.get(charId)?.name" />
-                                <button class="chip-remove" title="Send back to pool" aria-label="Send back to pool"
-                                    @click.stop="removeFromRow(charId)">×</button>
+    
+                <div class="tier-rows-wrap">
+                    <div class="tier-row" v-for="(row, rIdx) in currentList.rows" :key="row.id">
+                        <div class="tier-row-label-cell" :style="{
+                            background: row.color, color: labelTextColor(row.color), width: labelColWidth + 'px'
+                        }">
+                            <span class="row-count">{{ (currentList.placements[row.id] || []).length }}</span>
+                            <textarea class="row-label-input" :ref="(el) => setLabelRef(row.id, el as Element)"
+                                :value="row.label" placeholder="Tier name" rows="1"
+                                @input="onLabelInput($event)"
+                                @change="updateRowLabel(row.id, ($event.target as HTMLTextAreaElement).value)"
+                                @keydown.enter.prevent="($event.target as HTMLTextAreaElement).blur()"></textarea>
+                            <div class="row-controls">
+                                <button class="row-ctrl-btn" title="Move tier up" aria-label="Move tier up"
+                                    :disabled="rIdx === 0" @click="moveRow(row.id, -1)">↑</button>
+                                <button class="row-ctrl-btn" title="Move tier down" aria-label="Move tier down"
+                                    :disabled="rIdx === currentList.rows.length - 1"
+                                    @click="moveRow(row.id, 1)">↓</button>
+                                <button class="row-ctrl-btn row-ctrl-btn--danger" title="Remove tier"
+                                    aria-label="Remove tier" @click="removeRow(row.id)">×</button>
+                                <label class="row-color-edit" title="Row colour">
+                                    <input type="color" :value="row.color"
+                                        @change="updateRowColor(row.id, ($event.target as HTMLInputElement).value)" />
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M12 19l7-7 3 3-7 7-3-3z" />
+                                        <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
+                                        <path d="M2 2l7.586 7.586" />
+                                        <circle cx="11" cy="11" r="2" />
+                                    </svg>
+                                </label>
                             </div>
-                        </template>
-                        <span class="insertion-marker"
-                            v-if="dragOverZone === row.id && dragOverIndex === (currentList.placements[row.id] || []).length"></span>
-                        <span v-if="!(currentList.placements[row.id] || []).length" class="row-empty-hint">Drag
-                            characters here</span>
+                        </div>
+                        <div class="tier-row-dropzone" :data-drop-zone="row.id"
+                            :class="{ 'drag-over': dragOverZone === row.id }" @dragover.prevent="onZoneDragOver(row.id, $event)"
+                            @dragleave="onZoneDragLeave($event)" @drop.prevent="onZoneDrop(row.id)">
+                            <template v-for="(charId, i) in (currentList.placements[row.id] || [])" :key="charId">
+                                <span class="insertion-marker" v-if="dragOverZone === row.id && dragOverIndex === i"></span>
+                                <div class="tier-chip" :data-char-id="charId"
+                                    :class="{ dragging: draggedCharId === charId }" draggable="true"
+                                    @dragstart="onChipDragStart(charId, row.id, $event)" @dragend="resetDragState"
+                                    @touchstart="onChipTouchStart(charId, row.id, $event)"
+                                    @touchmove="onChipTouchMove($event)" @touchend="onChipTouchEnd($event)">
+                                    <img class="chip-img" :src="`/exedra-dmg-calc/kioku_images/${charId}_thumbnail.png`"
+                                        :alt="charById.get(charId)?.name" :title="charById.get(charId)?.name" />
+                                    <button class="chip-remove" title="Send back to pool" aria-label="Send back to pool"
+                                        @click.stop="removeFromRow(charId)">×</button>
+                                </div>
+                            </template>
+                            <span class="insertion-marker"
+                                v-if="dragOverZone === row.id && dragOverIndex === (currentList.placements[row.id] || []).length"></span>
+                            <span v-if="!(currentList.placements[row.id] || []).length" class="row-empty-hint">Drag
+                                characters here</span>
+                        </div>
                     </div>
+                    <div class="tier-col-resizer" :style="{ left: (labelColWidth - 3) + 'px' }"
+                        title="Drag to resize the name column" @pointerdown="onResizerPointerDown"></div>
                 </div>
 
             </section>
@@ -112,7 +119,13 @@
             <section class="card pool-section" data-drop-zone="pool" :class="{ 'drag-over': dragOverZone === 'pool' }"
                 @dragover.prevent="onZoneDragOver(null, $event)" @dragleave="onZoneDragLeave($event)"
                 @drop.prevent="onZoneDrop(null)">
-                <span class="filters-heading">Unranked ({{ filteredPool.length }})</span>
+                <div class="pool-heading-row">
+                    <span class="filters-heading">Unranked ({{ filteredPool.length }})</span>
+                    <button v-if="filteredPool.length" class="add-all-btn"
+                        title="Add every shown character to the bottom tier" @click="addAllPoolToBottomRow">
+                        + Add all to bottom tier
+                    </button>
+                </div>
                 <div class="pool-chips">
                     <div v-for="ch in filteredPool" :key="ch.id" class="tier-chip pool-chip" :data-char-id="ch.id"
                         :class="{ dragging: draggedCharId === ch.id }" draggable="true"
@@ -176,7 +189,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, nextTick, onMounted, onUnmounted } from "vue"
+import { computed, ref, nextTick, onMounted, onUnmounted, watch } from "vue"
 import { toast } from "vue3-toastify"
 import { useCharacterStore } from "../store/characterStore"
 import { useSetting } from "../store/settingsStore"
@@ -229,6 +242,7 @@ onMounted(() => {
     if (!currentList.value && listOptions.value.length) {
         activeListId.value = listOptions.value[0].id
     }
+    nextTick(resizeAllLabelTextareas)
 })
 
 function saveList(list: SavedTierList) {
@@ -351,6 +365,58 @@ function updateRowColor(rowId: string, color: string) {
     saveList({ ...currentList.value, rows: currentList.value.rows.map(r => r.id === rowId ? { ...r, color } : r) })
 }
 
+// ── Label column resize ──
+const labelColWidth = useSetting<number>("tierMakerLabelColWidth", 96)
+let resizeStartX = 0
+let resizeStartWidth = 96
+
+function onResizerPointerDown(e: PointerEvent) {
+    e.preventDefault()
+    resizeStartX = e.clientX
+    resizeStartWidth = labelColWidth.value
+    window.addEventListener("pointermove", onResizerPointerMove)
+    window.addEventListener("pointerup", onResizerPointerUp)
+}
+
+function onResizerPointerMove(e: PointerEvent) {
+    const delta = e.clientX - resizeStartX
+    labelColWidth.value = Math.min(240, Math.max(64, Math.round(resizeStartWidth + delta)))
+}
+
+function onResizerPointerUp() {
+    window.removeEventListener("pointermove", onResizerPointerMove)
+    window.removeEventListener("pointerup", onResizerPointerUp)
+}
+
+onUnmounted(() => {
+    window.removeEventListener("pointermove", onResizerPointerMove)
+    window.removeEventListener("pointerup", onResizerPointerUp)
+})
+
+// ── Label textarea auto-resize ──
+const labelTextareas = new Map<string, HTMLTextAreaElement>()
+
+function setLabelRef(rowId: string, el: Element | null) {
+    if (el) labelTextareas.set(rowId, el as HTMLTextAreaElement)
+    else labelTextareas.delete(rowId)
+}
+
+function resizeLabelTextarea(el: HTMLTextAreaElement) {
+    el.style.height = "auto"
+    el.style.height = `${el.scrollHeight}px`
+}
+
+function resizeAllLabelTextareas() {
+    labelTextareas.forEach(el => resizeLabelTextarea(el))
+}
+
+function onLabelInput(e: Event) {
+    resizeLabelTextarea(e.target as HTMLTextAreaElement)
+}
+
+watch(activeListId, () => nextTick(resizeAllLabelTextareas))
+watch(labelColWidth, () => nextTick(resizeAllLabelTextareas))
+
 // ── Placement helpers ──
 function withoutCharacter(list: SavedTierList, charId: number): Record<string, number[]> {
     const next: Record<string, number[]> = {}
@@ -363,6 +429,19 @@ function withoutCharacter(list: SavedTierList, charId: number): Record<string, n
 function removeFromRow(charId: number) {
     if (!currentList.value) return
     saveList({ ...currentList.value, placements: withoutCharacter(currentList.value, charId) })
+}
+
+function addAllPoolToBottomRow() {
+    if (!currentList.value || !currentList.value.rows.length) return
+    const list = currentList.value
+    const bottomRow = list.rows[list.rows.length - 1]
+    const idsToAdd = filteredPool.value.map(c => c.id)
+    if (!idsToAdd.length) return
+    const nextPlacements = { ...list.placements }
+    nextPlacements[bottomRow.id] = [...(nextPlacements[bottomRow.id] || []), ...idsToAdd]
+    saveList({ ...list, placements: nextPlacements })
+    toast.success(`Added ${idsToAdd.length} to "${bottomRow.label || 'bottom tier'}"`,
+        { position: toast.POSITION.TOP_RIGHT, icon: false })
 }
 
 const placedIds = computed(() => new Set(Object.values(currentList.value?.placements ?? {}).flat()))
@@ -681,6 +760,10 @@ const shareOptionsForTierList = () => ({
     padding: 0.75rem;
 }
 
+.tier-rows-wrap {
+    position: relative;
+}
+
 .tier-row {
     display: flex;
     align-items: stretch;
@@ -706,14 +789,13 @@ const shareOptionsForTierList = () => ({
 /* ── Label column ── */
 .tier-row-label-cell {
     position: relative;
-    width: 96px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.3rem;
-    padding: 0.5rem 0.45rem;
+    gap: 0.25rem;
+    padding: 0.55rem 0.4rem 0.4rem;
     box-sizing: border-box;
     text-align: center;
 }
@@ -738,6 +820,12 @@ const shareOptionsForTierList = () => ({
     font-family: inherit;
     text-align: center;
     padding: 0.2rem 0.3rem;
+    resize: none;
+    overflow: hidden;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.25;
 }
 
 .row-label-input:hover {
@@ -752,16 +840,19 @@ const shareOptionsForTierList = () => ({
 
 .row-controls {
     display: flex;
-    gap: 0.2rem;
+    align-items: center;
+    gap: 0.15rem;
     flex-shrink: 0;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .row-ctrl-btn {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
     padding: 0;
-    border-radius: 7px;
-    font-size: 0.75rem;
+    border-radius: 6px;
+    font-size: 0.65rem;
     line-height: 1;
     background: rgba(0, 0, 0, 0.18);
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -775,8 +866,8 @@ const shareOptionsForTierList = () => ({
 
 .row-color-edit {
     position: relative;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -785,6 +876,7 @@ const shareOptionsForTierList = () => ({
     cursor: pointer;
     opacity: 0.65;
     transition: opacity 0.12s;
+    flex-shrink: 0;
 }
 
 .row-color-edit:hover {
@@ -792,8 +884,8 @@ const shareOptionsForTierList = () => ({
 }
 
 .row-color-edit svg {
-    width: 11px;
-    height: 11px;
+    width: 10px;
+    height: 10px;
 }
 
 .row-color-edit input[type="color"] {
@@ -805,6 +897,34 @@ const shareOptionsForTierList = () => ({
     padding: 0;
     cursor: pointer;
     opacity: 0;
+}
+
+/* ── Column resizer ── */
+.tier-col-resizer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    cursor: col-resize;
+    touch-action: none;
+    z-index: 2;
+}
+
+.tier-col-resizer::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 2px;
+    width: 2px;
+    border-radius: 2px;
+    background: transparent;
+    transition: background 0.12s;
+}
+
+.tier-col-resizer:hover::after,
+.tier-col-resizer:active::after {
+    background: var(--accent);
 }
 
 /* ── Content column ── */
@@ -963,6 +1083,29 @@ const shareOptionsForTierList = () => ({
     margin: 0.25rem;
 }
 
+.pool-heading-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.add-all-btn {
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    background: var(--accent-glow);
+    border: 1px solid var(--border-strong);
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.add-all-btn:hover {
+    background: var(--accent-glow-strong);
+}
+
 /* ── About ── */
 .about-card {
     flex-direction: column;
@@ -980,7 +1123,8 @@ const shareOptionsForTierList = () => ({
 /* ── Export snapshot tweaks ── */
 .exporting .chip-remove,
 .exporting .row-controls,
-.exporting .row-color-edit {
+.exporting .row-color-edit,
+.exporting .tier-col-resizer {
     display: none;
 }
 
@@ -1001,7 +1145,7 @@ const shareOptionsForTierList = () => ({
     }
 
     .tier-row-label-cell {
-        width: 74px;
+        max-width: 45vw;
         padding: 0.4rem 0.3rem;
     }
 
