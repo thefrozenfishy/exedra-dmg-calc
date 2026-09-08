@@ -88,6 +88,16 @@ export const useCharacterStore = defineStore('characterStore', () => {
             }))
     }
 
+    const PENDING_SYNC_KEY = 'characters_pending_sync'
+    const cloudSyncPending = ref<boolean>(localStorage.getItem(PENDING_SYNC_KEY) === 'true')
+
+    const markPending = (val: boolean) => {
+        cloudSyncPending.value = val
+        localStorage.setItem(PENDING_SYNC_KEY, val ? 'true' : 'false')
+    }
+
+    let applyingCloudData = false
+
     const precomputeSimilarities = async () => {
         const userId = getUserId()
 
@@ -130,6 +140,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
         try {
             if (!getUserId()) return
             await saveCharacters(characters.value)
+            markPending(false)
             await precomputeSimilarities()
         } catch (err) {
             console.error("Failed to save characters:", err)
@@ -140,37 +151,46 @@ export const useCharacterStore = defineStore('characterStore', () => {
         characters,
         (newVal) => {
             localStorage.setItem('characters', JSON.stringify(newVal))
+
+            if (applyingCloudData) return
+
+            markPending(true)
             debouncedCloudSave()
         },
         { deep: true }
     )
 
     const applyCloudCharacters = (rows: any[]) => {
-        rows.forEach((row) => {
-            const char = characters.value.find(c => c.id === row.character_id)
+        applyingCloudData = true
+        try {
+            rows.forEach((row) => {
+                const char = characters.value.find(c => c.id === row.character_id)
 
-            if (!char) return
+                if (!char) return
 
-            Object.assign(char, {
-                enabled: row.enabled,
+                Object.assign(char, {
+                    enabled: row.enabled,
 
-                dupes: row.dupes,
-                ascension: row.ascension,
+                    dupes: row.dupes,
+                    ascension: row.ascension,
 
-                kiokuLvl: row.kioku_lvl,
-                magicLvl: row.magic_lvl,
-                heartphialLvl: row.heartphial_lvl,
-                specialLvl: row.special_lvl,
+                    kiokuLvl: row.kioku_lvl,
+                    magicLvl: row.magic_lvl,
+                    heartphialLvl: row.heartphial_lvl,
+                    specialLvl: row.special_lvl,
 
-                portrait: row.portrait,
+                    portrait: row.portrait,
 
-                crysOptions: buildCrysOptions(row.character_id, row.crys_options ?? {}),
+                    crysOptions: buildCrysOptions(row.character_id, row.crys_options ?? {}),
+                })
+                if (char.rarity < 5) char.ascension = KiokuConstants.maxAscension;
+                if (char.ascension > KiokuConstants.maxAscension) char.ascension = KiokuConstants.maxAscension;
+                if (char.ascension < 0) char.ascension = 0;
+                if (char.name === LuxMagica) char.rarity = 4
             })
-            if (char.rarity < 5) char.ascension = KiokuConstants.maxAscension;
-            if (char.ascension > KiokuConstants.maxAscension) char.ascension = KiokuConstants.maxAscension;
-            if (char.ascension < 0) char.ascension = 0;
-            if (char.name === LuxMagica) char.rarity = 4
-        })
+        } finally {
+            applyingCloudData = false
+        }
     }
 
     const createCloudAccount = async () => {
@@ -179,6 +199,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
         await createCloudUser(userId)
 
         await saveCharacters(characters.value)
+        markPending(false)
 
         return userId
     }
@@ -191,12 +212,18 @@ export const useCharacterStore = defineStore('characterStore', () => {
         const rows = await loadCharacters()
 
         applyCloudCharacters(rows)
+        markPending(false)
     }
 
     const initializeCloud = async () => {
         if (!getUserId()) return
 
         try {
+            if (cloudSyncPending.value) {
+                await saveCharacters(characters.value)
+                markPending(false)
+            }
+
             const rows = await loadCharacters()
 
             if (rows.length > 0) {
