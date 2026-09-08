@@ -188,6 +188,7 @@ async function main() {
     const converted = []
     let totalOldBytes = 0
     let totalNewBytes = 0
+    let failures = 0
 
     for (const path of pngPaths) {
         try {
@@ -199,6 +200,7 @@ async function main() {
             console.log(`  converted ${path} (${result.oldBytes}B -> ${result.newBytes}B)`)
         } catch (err) {
             console.error(`  FAILED converting ${path}:`, err.message)
+            failures++
         }
     }
 
@@ -247,6 +249,11 @@ async function main() {
         }
     } else {
         console.log("Old PNGs left in place. Re-run with --write --delete-old once you've confirmed shares still work.")
+    }
+
+    if (failures > 0) {
+        console.error(`\n${failures} file(s) failed to convert -- see FAILED lines above.`)
+        process.exitCode = 1
     }
 }
 

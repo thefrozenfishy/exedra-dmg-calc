@@ -1,0 +1,38 @@
+name: Migrate PNG share images to WebP
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+# Don't let two runs overlap against the same storage bucket / KV namespace.
+concurrency:
+  group: migrate-png-to-webp
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  migrate-images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install script dependencies
+        working-directory: scripts/convert-png-to-webp
+        run: npm install @supabase/supabase-js sharp
+
+      - name: Run migration
+        working-directory: scripts/convert-png-to-webp
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_KV_NAMESPACE_ID: ${{ secrets.CLOUDFLARE_KV_NAMESPACE_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: node migrate-png-to-webp.mjs --write --delete-old
