@@ -8,7 +8,8 @@
                     <span class="crys-count-badge">{{ ownedCrysCount }} / {{ totalCrysCount }}</span>
                     <div class="selected-character-names">
                         <span class="selected-character-name">{{ character.name }}</span>
-                        <span v-if="character.character_en" class="selected-character-name">{{ character.character_en }}</span>
+                        <span v-if="character.character_en" class="selected-character-name">{{ character.character_en
+                            }}</span>
                     </div>
                     <button class="close-btn" title="Back to overview" @click="goBack">✖</button>
                 </div>
@@ -27,7 +28,7 @@
                         <span class="mass-edit-title">
                             Multi edit sub-crys
                             <span v-if="massEditSelection.size" class="mass-edit-count">({{ massEditSelection.size
-                                }})</span>
+                            }})</span>
                         </span>
                         <button v-if="massEditSelection.size" class="mass-edit-clear" @click="clearMassEditSelection">
                             Clear
@@ -51,6 +52,13 @@
                         @update="applyMassEditSubCrys" />
                 </div>
             </section>
+
+            <section class="toolbar card">
+                <span class="filters-heading">Image Share</span>
+                <ImageActionsToolbar target=".crys-compact-card" :filename="compactFilename"
+                    :share-options="shareOptionsForCompactCrys" :export-options="compactExportOpts" />
+            </section>
+
             <div class="crys-grid">
                 <div v-for="crys in options" :key="crys.selectionAbilityMstId" class="crys-card"
                     :class="{ disabled: !crys.enabled, offElement: offElementalCrys(crys) }">
@@ -85,6 +93,50 @@
                         @update="newSubCrys => updateSubCrys(crys.selectionAbilityMstId, newSubCrys)" />
                 </div>
             </div>
+
+            <div class="crys-compact-card exporting">
+                <div class="compact-header">
+                    <img :src="`/exedra-dmg-calc/kioku_images/${character.id}_thumbnail.png`" :alt="character.name"
+                        class="compact-character-icon" />
+                    <div class="compact-character-names">
+                        <span class="compact-character-name">{{ character.name }}</span>
+                        <span v-if="character.character_en" class="compact-character-name-en">{{
+                            character.character_en }}</span>
+                    </div>
+                    <span class="compact-crys-count">{{ ownedCrysCount }} / {{ totalCrysCount }}</span>
+                </div>
+
+                <div class="compact-list">
+                    <div class="compact-list-header">
+                        <span>Crystalis</span>
+                        <span>Sub 1</span>
+                        <span>Sub 2</span>
+                        <span>Sub 3</span>
+                    </div>
+
+                    <div v-for="crys in options" :key="crys.selectionAbilityMstId" class="compact-row"
+                        :class="{ disabled: !crys.enabled, offElement: offElementalCrys(crys) }">
+                        <div class="compact-crys-name">
+                            <img :src="`/exedra-dmg-calc/selection_ability/${crys.resourceIconName}.png`"
+                                :alt="crys.name" class="compact-crys-icon" :class="{ disabled: !crys.enabled }" />
+                            <span>{{ crys.name }}</span>
+                        </div>
+
+                        <div class="compact-subcrys">
+                            <div v-for="(id, idx) in crys.subCrys" :key="idx" class="compact-subcrys-slot"
+                                :class="{ empty: !id, disabled: !crys.enabled }">
+                                <span v-if="id && subCrysInfoById[id]" class="compact-subcrys-name">{{
+                                    subCrysInfoById[id].name }}</span>
+                                <span v-else class="compact-subcrys-empty">—</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="!options.length" class="empty-state">
+                        No relevant Crystalis for this Kioku.
+                    </div>
+                </div>
+            </div>
         </div>
         <div v-else class="not-found-state">
             <p>That Kioku couldn't be found.</p>
@@ -94,11 +146,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { relevantCrys, getSubCrystalises, type CrystalisData } from '../types/KiokuTypes'
 import { elementMap, KiokuElement } from '../types/enums'
 import SubCrysBar from '../components/SubCrysBar.vue'
+import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import { useCharacterStore } from '../store/characterStore'
 import { passiveDetails } from '../utils/helpers'
 import { useSetting } from "../store/settingsStore"
@@ -138,6 +191,16 @@ const groupedSubCrys = computed(() => {
     return Object.values(groups)
 })
 
+const subCrysInfoById = computed(() => {
+    const map: Record<number, { name: string; resourceIconName: string }> = {}
+    for (const group of groupedSubCrys.value) {
+        for (const s of group.subs) {
+            map[s.selectionAbilityMstId] = { name: group.name || s.name, resourceIconName: s.resourceIconName }
+        }
+    }
+    return map
+})
+
 const options = computed(() => {
     if (!characterId.value || !character.value) return []
     return relevantCrys(characterId.value).map(c => {
@@ -158,6 +221,20 @@ const ownedCrysCount = computed(() => {
     if (!characterId.value || !character.value) return 0
     return relevantCrys(characterId.value).filter(c => character.value!.crysOptions[c.selectionAbilityMstId]?.enabled).length
 })
+
+const compactFilename = computed(() => {
+    const label = character.value?.character_en || character.value?.name || 'kioku'
+    return `${label.replace(/[^a-z0-9]+/gi, '_')}_crys.png`
+})
+
+const shareOptionsForCompactCrys = () => ({
+    title: `${character.value?.character_en || character.value?.name} Crystalis Progress`,
+    backUrl: window.location.href,
+})
+
+const compactExportOpts = {
+    exportClass: "exporting",
+}
 
 function updateSubCrys(effectId: number, newSubCrys: number[]) {
     const char = character.value
@@ -660,5 +737,190 @@ function goBack() {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+}
+
+.crys-compact-card {
+    width: 580px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: none;
+}
+
+.crys-compact-card.exporting {
+    display: block;
+    width: fit-content;
+}
+
+.compact-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--border-strong);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.compact-character-icon {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.compact-character-names {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    flex: 1;
+    min-width: 0;
+}
+
+.compact-character-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.95rem;
+}
+
+.compact-character-name-en {
+    font-size: 0.74rem;
+    color: var(--muted);
+}
+
+.compact-crys-count {
+    font-size: 0.72rem;
+    color: var(--accent-soft);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.1rem 0.5rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.compact-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.compact-list-header {
+    display: grid;
+    grid-template-columns: 150px repeat(3, 1fr);
+    gap: 0.5rem;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    opacity: 0.7;
+    border-bottom: 1px solid var(--border-strong);
+}
+
+.compact-row {
+    display: grid;
+    grid-template-columns: 150px repeat(3, 1fr);
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+    transition: opacity 0.15s;
+}
+
+.compact-row:last-child {
+    border-bottom: none;
+}
+
+.compact-row.offElement {
+    background: rgba(80, 18, 24, 0.10);
+}
+
+.compact-row.disabled {
+    opacity: 0.55;
+}
+
+.compact-crys-name {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+    min-width: 0;
+}
+
+.compact-crys-name span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.compact-crys-icon {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.compact-crys-icon.disabled {
+    opacity: 0.35;
+    filter: grayscale(0.8);
+}
+
+/* Makes the 3 subcrys slots direct grid children of .compact-row,
+   so they line up under the Sub 1 / Sub 2 / Sub 3 header columns. */
+.compact-subcrys {
+    display: contents;
+}
+
+.compact-subcrys-slot {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.7rem;
+    color: var(--text);
+    min-width: 0;
+}
+
+.compact-subcrys-slot span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.compact-subcrys-slot.empty {
+    color: var(--muted);
+    opacity: 0.5;
+}
+
+.compact-subcrys-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.compact-subcrys-icon.disabled {
+    opacity: 0.35;
+    filter: grayscale(0.8);
+}
+
+.compact-subcrys-empty {
+    font-size: 0.75rem;
+}
+
+.compact-subcrys-name {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.compact-subcrys-name.rare {
+    border-color: rgba(246, 214, 130, 0.45);
+    background: rgba(246, 213, 130, 0.3);
+}
+
+.compact-subcrys-name.uncommon {
+    border-color: rgba(194, 130, 246, 0.45);
+    background: rgba(158, 124, 209, 0.3);
 }
 </style>
