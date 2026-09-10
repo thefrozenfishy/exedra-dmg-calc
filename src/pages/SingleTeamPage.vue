@@ -118,6 +118,29 @@
           </div>
         </div>
       </div>
+
+      <div class="share-enemies-grid">
+        <div v-for="(enemy, index) in enemies.enemies" :key="index" class="share-enemy-slot">
+          <template v-if="enemy.enabled || enemy.name === 'Target'">
+            <div class="share-enemy-name">{{ enemy.name }}</div>
+            <div class="share-enemy-stats">
+              <span class="share-enemy-stat">
+                <span class="share-enemy-stat-label">Break</span>
+                <span class="share-enemy-stat-value">{{ enemy.maxBreak }}%</span>
+              </span>
+              <span class="share-enemy-stat">
+                <span class="share-enemy-stat-label">Def</span>
+                <span class="share-enemy-stat-value">{{ enemy.defense }} + {{ enemy.defenseUp }}%</span>
+              </span>
+            </div>
+            <div class="share-enemy-toggles">
+              <span v-if="enemy.isBreak" class="share-chip">Broken</span>
+              <span v-if="enemy.isCrit" class="share-chip">Crit</span>
+              <span v-if="enemy.isAddDmgCrit" class="share-chip">Add Dmg Crit</span>
+            </div>
+          </template>
+        </div>
+      </div>
     </div>
 
     <div class="team-grid">
@@ -1363,6 +1386,69 @@ async function importTeamFromImageFile(file: File) {
   object-fit: cover;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: var(--panel);
+}
+
+.share-enemies-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-top: 0.75rem;
+}
+
+.share-enemy-slot {
+  background: rgba(15, 11, 21, 0.95);
+  border: 1px solid rgba(255, 209, 110, 0.15);
+  border-radius: 12px;
+  padding: 0.75rem;
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.share-enemy-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.share-enemy-stats {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.share-enemy-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.share-enemy-stat-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+
+.share-enemy-stat-value {
+  font-size: 0.85rem;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.share-enemy-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: center;
 }
 
 .team-slot {
