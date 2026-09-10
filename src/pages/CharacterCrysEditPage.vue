@@ -94,7 +94,7 @@
                 </div>
             </div>
 
-            <div class="crys-compact-card exporting">
+            <div class="crys-compact-card">
                 <div class="compact-header">
                     <img :src="`/exedra-dmg-calc/kioku_images/${character.id}_thumbnail.png`" :alt="character.name"
                         class="compact-character-icon" />
@@ -123,10 +123,12 @@
                         </div>
 
                         <div class="compact-subcrys">
-                            <div v-for="(id, idx) in crys.subCrys" :key="idx" class="compact-subcrys-slot"
-                                :class="{ empty: !id, disabled: !crys.enabled }">
-                                <span v-if="id && subCrysInfoById[id]" class="compact-subcrys-name">{{
-                                    subCrysInfoById[id].name }}</span>
+                            <div v-for="(id, idx) in crys.subCrys.sort()" :key="idx" class="compact-subcrys-slot" :class="{
+                                empty: !id,
+                                rare: subCrysTier(id) === 'rare',
+                                uncommon: subCrysTier(id) === 'uncommon'
+                            }">
+                                <span v-if="id" class="compact-subcrys-name">{{ subCrysById[id]?.name ?? '?' }}</span>
                                 <span v-else class="compact-subcrys-empty">—</span>
                             </div>
                         </div>
@@ -191,15 +193,22 @@ const groupedSubCrys = computed(() => {
     return Object.values(groups)
 })
 
-const subCrysInfoById = computed(() => {
-    const map: Record<number, { name: string; resourceIconName: string }> = {}
-    for (const group of groupedSubCrys.value) {
-        for (const s of group.subs) {
-            map[s.selectionAbilityMstId] = { name: group.name || s.name, resourceIconName: s.resourceIconName }
-        }
+const subCrysById = computed(() => {
+    const map: Record<number, CrystalisData> = {}
+    for (const s of subCrysFlatList) {
+        map[s.selectionAbilityMstId] = s
     }
     return map
 })
+
+function subCrysTier(id: number): 'rare' | 'uncommon' | 'common' {
+    if (!id) return 'common'
+    const rarity = subCrysById.value[id]?.rarity
+    if (rarity == null) return 'common'
+    if ([9, 10].includes(rarity)) return 'rare'
+    if ([6, 7, 8].includes(rarity)) return 'uncommon'
+    return 'common'
+}
 
 const options = computed(() => {
     if (!characterId.value || !character.value) return []
@@ -877,50 +886,38 @@ function goBack() {
 .compact-subcrys-slot {
     display: flex;
     align-items: center;
-    gap: 0.3rem;
-    font-size: 0.7rem;
+    justify-content: center;
+    height: 24px;
+    padding: 0 0.4rem;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 0.68rem;
     color: var(--text);
     min-width: 0;
 }
 
-.compact-subcrys-slot span {
+.compact-subcrys-slot.rare {
+    border-color: rgba(246, 214, 130, 0.45);
+    background: rgba(246, 213, 130, 0.3);
+}
+
+.compact-subcrys-slot.uncommon {
+    border-color: rgba(194, 130, 246, 0.45);
+    background: rgba(158, 124, 209, 0.3);
+}
+
+.compact-subcrys-slot.empty {
+    color: var(--muted);
+}
+
+.compact-subcrys-name {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.compact-subcrys-slot.empty {
-    color: var(--muted);
-    opacity: 0.5;
-}
-
-.compact-subcrys-icon {
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
-    flex-shrink: 0;
-}
-
-.compact-subcrys-icon.disabled {
-    opacity: 0.35;
-    filter: grayscale(0.8);
-}
-
 .compact-subcrys-empty {
-    font-size: 0.75rem;
-}
-
-.compact-subcrys-name {
-    background: rgba(255, 255, 255, 0.04);
-}
-
-.compact-subcrys-name.rare {
-    border-color: rgba(246, 214, 130, 0.45);
-    background: rgba(246, 213, 130, 0.3);
-}
-
-.compact-subcrys-name.uncommon {
-    border-color: rgba(194, 130, 246, 0.45);
-    background: rgba(158, 124, 209, 0.3);
+    opacity: 0.3;
 }
 </style>
