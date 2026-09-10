@@ -27,12 +27,12 @@ async function createProfile(userId: string) {
 const withAnalytics = <T extends (...args: any[]) => Promise<any>>(
     fn: T,
     event: string,
-    metadataFn: (args: Parameters<T>) => any = args => ({ ...args })
+    metadataFn: (args: Parameters<T>, result: Awaited<ReturnType<T>>) => any = () => ({})
 ) => {
     return async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> => {
         const result = await fn(...args)
         try {
-            await logEvent(event, metadataFn(args))
+            await logEvent(event, metadataFn(args, result))
         } catch (err) {
             console.error(`Failed logging analytics ${event}`, err)
         }
@@ -41,7 +41,65 @@ const withAnalytics = <T extends (...args: any[]) => Promise<any>>(
     }
 }
 
+type CharacterRow = {
+    user_id: string
+    character_id: number
+    enabled: boolean
+    dupes: number
+    ascension: number
+    kioku_lvl: number
+    magic_lvl: number
+    heartphial_lvl: number
+    special_lvl: number
+    portrait: string
+    crys_options: any
+}
+
+const TRACKED_CHARACTER_FIELDS: (keyof CharacterRow)[] = [
+    'enabled', 'dupes', 'ascension', 'kioku_lvl', 'magic_lvl', 'heartphial_lvl', 'special_lvl', 'portrait'
+]
+
+let lastKnownCharacterRows: Map<number, CharacterRow> | null = null
+
+function summarizeCharacterSave(rows: CharacterRow[]) {
+    const totalCharacters = rows.length
+    const enabledCount = rows.filter(r => r.enabled).length
+
+    if (!lastKnownCharacterRows) {
+        return { isInitialSync: true, totalCharacters, enabledCount }
+    }
+
+    const fieldChanges: Array<{ characterId: number; field: string; from: any; to: any }> = []
+    const crysOptionsChangedIds: number[] = []
+
+    for (const row of rows) {
+        const prev = lastKnownCharacterRows.get(row.character_id)
+        if (!prev) continue
+
+        for (const field of TRACKED_CHARACTER_FIELDS) {
+            if (prev[field] !== row[field]) {
+                fieldChanges.push({ characterId: row.character_id, field, from: prev[field], to: row[field] })
+            }
+        }
+
+        if (JSON.stringify(prev.crys_options) !== JSON.stringify(row.crys_options)) {
+            crysOptionsChangedIds.push(row.character_id)
+        }
+    }
+
+    return {
+        isInitialSync: false,
+        totalCharacters,
+        enabledCount,
+        changedCharacterCount: new Set([...fieldChanges.map(c => c.characterId), ...crysOptionsChangedIds]).size,
+        fieldChanges: fieldChanges.slice(0, 50), // cap payload size on freak bulk-edits/imports
+        crysOptionsChangedIds,
+    }
+}
+
 async function _createCloudUser(userId: string) {
+    lastKnownCharacterRows = null
+
     const supabase = getSupabase()
 
     const { error } = await supabase
@@ -62,7 +120,7 @@ async function _saveCharacters(chars: Character[]) {
 
     const supabase = getSupabase()
 
-    const rows = chars.map(c => ({
+    const rows: CharacterRow[] = chars.map(c => ({
         user_id: userId,
 
         character_id: c.id,
@@ -82,13 +140,19 @@ async function _saveCharacters(chars: Character[]) {
         crys_options: c.crysOptions || {} // This for some reason was null for a user, unsure why but see if this fixes it? 
     }))
 
+    const summary = summarizeCharacterSave(rows)
+
     const { error } = await supabase
         .from("user_characters")
         .upsert(rows)
 
     if (error) throw error
 
+    lastKnownCharacterRows = new Map(rows.map(r => [r.character_id, r]))
+
     await _updateMyScore(userId, chars)
+
+    return summary
 }
 
 async function _updateMyScore(userId: string, chars: Character[]) {
@@ -132,6 +196,8 @@ async function _loadCharacters() {
         .eq("user_id", userId)
 
     if (error) throw error
+
+    lastKnownCharacterRows = new Map((data ?? []).map((r: any) => [r.character_id, r]))
 
     return data
 }
@@ -196,6 +262,12 @@ async function _updateDisplayName(displayName: string) {
 
     const supabase = getSupabase()
 
+    const { data: existing } = await supabase
+        .from('user_profiles')
+        .select('display_name')
+        .eq('user_id', userId)
+        .maybeSingle()
+
     const { error } = await supabase
         .from('user_profiles')
         .upsert({
@@ -204,6 +276,8 @@ async function _updateDisplayName(displayName: string) {
         })
 
     if (error) throw error
+
+    return { from: existing?.display_name ?? null, to: displayName, changed: (existing?.display_name ?? null) !== displayName }
 }
 
 async function _updateprofile_icon(profile_icon: number) {
@@ -213,12 +287,20 @@ async function _updateprofile_icon(profile_icon: number) {
 
     const supabase = getSupabase()
 
+    const { data: existing } = await supabase
+        .from('user_profiles')
+        .select('profile_icon')
+        .eq('user_id', userId)
+        .maybeSingle()
+
     const { error } = await supabase
         .from('user_profiles')
         .update({ profile_icon })
         .eq('user_id', userId)
 
     if (error) throw error
+
+    return { from: existing?.profile_icon ?? null, to: profile_icon, changed: (existing?.profile_icon ?? null) !== profile_icon }
 }
 
 async function _getSimilarityRelations(myFriendId: string) {
@@ -275,7 +357,7 @@ async function _getMyRank() {
 
     const supabase = getSupabase()
 
-    const myCode = await getFriendCode()
+    const myCode = await _getFriendCode()
 
     if (!myCode) return null
 
@@ -324,6 +406,12 @@ async function _updateUnionName(unionName: string) {
 
     const supabase = getSupabase()
 
+    const { data: existing } = await supabase
+        .from('user_profiles')
+        .select('union_name')
+        .eq('user_id', userId)
+        .maybeSingle()
+
     const { error } = await supabase
         .from('user_profiles')
         .update({
@@ -332,6 +420,8 @@ async function _updateUnionName(unionName: string) {
         .eq('user_id', userId)
 
     if (error) throw error
+
+    return { from: existing?.union_name ?? null, to: unionName, changed: (existing?.union_name ?? null) !== unionName }
 }
 
 async function _saveFriendNickname(
@@ -344,6 +434,13 @@ async function _saveFriendNickname(
 
     const supabase = getSupabase()
 
+    const { data: existing } = await supabase
+        .from('user_friends')
+        .select('nickname')
+        .eq('user_id', userId)
+        .eq('friend_id', friendId)
+        .maybeSingle()
+
     const { error } = await supabase
         .from('user_friends')
         .update({
@@ -353,6 +450,8 @@ async function _saveFriendNickname(
         .eq('friend_id', friendId)
 
     if (error) throw error
+
+    return { friendId, from: existing?.nickname ?? null, to: nickname, changed: (existing?.nickname ?? null) !== nickname }
 }
 
 async function _setFriendFavorite(
@@ -365,6 +464,13 @@ async function _setFriendFavorite(
 
     const supabase = getSupabase()
 
+    const { data: existing } = await supabase
+        .from('user_friends')
+        .select('favorite')
+        .eq('user_id', userId)
+        .eq('friend_id', friendId)
+        .maybeSingle()
+
     const { error } = await supabase
         .from('user_friends')
         .update({
@@ -374,6 +480,8 @@ async function _setFriendFavorite(
         .eq('friend_id', friendId)
 
     if (error) throw error
+
+    return { friendId, from: existing?.favorite ?? null, to: favorite, changed: (existing?.favorite ?? null) !== favorite }
 }
 
 export function scoreFromProfile(profile: any) {
@@ -472,7 +580,7 @@ async function _getFriends() {
         ...rankByFriendId.get(p.friend_id),
     }))
 
-    const myFriendId = await getFriendCode()
+    const myFriendId = await _getFriendCode()
     const withSimilarity = myFriendId
         ? await attachSimilarity(myFriendId, mergedProfiles)
         : mergedProfiles
@@ -524,7 +632,7 @@ async function _getProfile(friend_id: string) {
 
 async function _loadAllPlayers() {
     const userId = getUserId()
-    const myFriendId = await getFriendCode()
+    const myFriendId = await _getFriendCode()
 
     if (userId) {
         const supabase = getSupabase()
@@ -596,7 +704,7 @@ async function _addFriendByCode(friendCode: string) {
 
     friendCode = friendCode.toUpperCase()
 
-    const myCode = await getFriendCode()
+    const myCode = await _getFriendCode()
 
     if (friendCode === myCode) {
         throw new Error('Cannot add yourself')
@@ -688,7 +796,9 @@ async function _updateFriendCode(
         .trim()
         .toUpperCase()
 
-    if (friendCode === await getFriendCode()) return
+    const currentCode = await _getFriendCode()
+
+    if (friendCode === currentCode) return { from: currentCode, to: friendCode, changed: false }
 
     if (!/^[A-Z0-9]{5}$/.test(friendCode)) {
         throw new Error(
@@ -708,47 +818,56 @@ async function _updateFriendCode(
     if (error) {
         throw error
     }
+
+    return { from: currentCode, to: friendCode, changed: true }
 }
 
 export const createCloudUser = withAnalytics(
     _createCloudUser,
-    'create_cloud_user'
+    'create_cloud_user',
+    ([userId]) => ({ userId })
 )
 
 export const saveCharacters = withAnalytics(
     _saveCharacters,
     'save_characters',
-    ([chars]) => ({ characterCount: chars?.length ?? 0 })
+    (_args, result) => result ?? {}
 )
 
 export const updateDisplayName = withAnalytics(
     _updateDisplayName,
-    'update_display_name'
+    'update_display_name',
+    (_args, result) => result ?? {}
 )
 
 export const updateprofile_icon = withAnalytics(
     _updateprofile_icon,
-    'update_profile_icon'
+    'update_profile_icon',
+    (_args, result) => result ?? {}
 )
 
 export const updateUnionName = withAnalytics(
     _updateUnionName,
-    'update_union_name'
+    'update_union_name',
+    (_args, result) => result ?? {}
 )
 
 export const saveFriendNickname = withAnalytics(
     _saveFriendNickname,
-    'save_friend_nickname'
+    'save_friend_nickname',
+    (_args, result) => result ?? {}
 )
 
 export const setFriendFavorite = withAnalytics(
     _setFriendFavorite,
-    'set_friend_favorite'
+    'set_friend_favorite',
+    (_args, result) => result ?? {}
 )
 
 export const loadAllPlayers = withAnalytics(
     _loadAllPlayers,
-    'load_all_players'
+    'load_all_players',
+    (_args, result) => ({ playerCount: result?.length ?? 0 })
 )
 
 export const addFriendByCode = withAnalytics(
@@ -760,7 +879,7 @@ export const addFriendByCode = withAnalytics(
 export const loadCharactersByFriendCode = withAnalytics(
     _loadCharactersByFriendCode,
     'load_characters_by_friend_code',
-    ([friendCode]) => ({ friendCode })
+    ([friendCode], result) => ({ friendCode, characterCount: result?.length ?? 0 })
 )
 
 export const removeFriend = withAnalytics(
@@ -771,64 +890,76 @@ export const removeFriend = withAnalytics(
 
 export const getFriendCode = withAnalytics(
     _getFriendCode,
-    'get_friend_code'
+    'get_friend_code',
+    (_args, result) => ({ friendCode: result ?? null })
 )
 
 export const loadCharacters = withAnalytics(
     _loadCharacters,
-    'load_characters'
+    'load_characters',
+    (_args, result) => ({ characterCount: result?.length ?? 0 })
 )
 
 export const restoreCloudAccount = withAnalytics(
     _restoreCloudAccount,
-    'restore_cloud_account'
+    'restore_cloud_account',
+    ([userId], result) => ({ userId, success: !!result })
 )
 
 export const getMyProfile = withAnalytics(
     _getMyProfile,
-    'get_my_profile'
+    'get_my_profile',
+    (_args, result) => ({ hasProfile: !!result, displayName: result?.display_name ?? null })
 )
 
 export const getMyRank = withAnalytics(
     _getMyRank,
-    'get_my_rank'
+    'get_my_rank',
+    (_args, result) => ({
+        rank: result?.rank ?? null,
+        totalPlayers: result?.totalPlayers ?? null,
+        percentile: result?.percentile ?? null,
+    })
 )
 
 export const getSimilarityRelations = withAnalytics(
     _getSimilarityRelations,
-    'get_similarity_relations'
+    'get_similarity_relations',
+    ([myFriendId], result) => ({ myFriendId, relatedCount: result?.length ?? 0 })
 )
 
 export const upsertSimilarity = withAnalytics(
     _upsertSimilarity,
     'upsert_similarity',
-    ([, otherFriendId]) => ({ otherFriendId })
+    ([, otherFriendId, similarity]) => ({ otherFriendId, similarity })
 )
 
 export const getAllUnionNames = withAnalytics(
     _getAllUnionNames,
-    'get_all_union_names'
+    'get_all_union_names',
+    (_args, result) => ({ unionCount: result?.length ?? 0 })
 )
 
 export const getFriends = withAnalytics(
     _getFriends,
-    'get_friends'
+    'get_friends',
+    (_args, result) => ({ friendCount: result?.length ?? 0 })
 )
 
 export const getProfile = withAnalytics(
     _getProfile,
     'get_profile',
-    ([friend_id]) => ({ friend_id })
+    ([friend_id], result) => ({ friend_id, found: !!result })
 )
 
 export const getUnionMembers = withAnalytics(
     _getUnionMembers,
     'get_union_members',
-    ([unionName]) => ({ unionName })
+    ([unionName], result) => ({ unionName, memberCount: result?.length ?? 0 })
 )
 
 export const updateFriendCode = withAnalytics(
     _updateFriendCode,
     'update_friend_code',
-    ([friendCode]) => ({ friendCode })
+    (_args, result) => result ?? {}
 )
