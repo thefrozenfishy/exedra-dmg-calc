@@ -81,6 +81,9 @@
                         }}</span>
                     </div>
                 </button>
+                <button class="chip chip-all" @click="toggleAllVirtualRoles" title="Enable/Disable all roles">
+                    <span class="chip-all-label">All</span>
+                </button>
             </div>
             <div class="options-row" v-if="displayArchetypes && archetypeRules.length">
                 <button v-for="rule in archetypeRules" :key="rule.id" class="chip"
@@ -94,6 +97,9 @@
                     @click="toggleArchetype(NONE_ARCHETYPE_ID)"
                     :title="activeArchetypes.includes(NONE_ARCHETYPE_ID) ? 'Hide characters with no archetype' : 'Show characters with no archetype'">
                     <img :src="`/exedra-dmg-calc/archetypes/none.png`" alt="None" />
+                </button>
+                <button class="chip chip-all" @click="toggleAllArchetypes" title="Enable/Disable all archetypes">
+                    <span class="chip-all-label">All</span>
                 </button>
             </div>
         </div>
@@ -388,6 +394,19 @@ const toggleArchetype = (id: string) => {
     activeArchetypes.value = activeArchetypes.value.includes(id)
         ? activeArchetypes.value.filter(a => a !== id)
         : [...activeArchetypes.value, id]
+}
+
+const toggleAllVirtualRoles = () => {
+    hiddenVirtualRoles.value = hiddenVirtualRoles.value.length === 0
+        ? [...allVirtualRoleValues.value]
+        : []
+}
+
+const toggleAllArchetypes = () => {
+    const allArchetypeIds = [...archetypeRules.map(r => r.id), NONE_ARCHETYPE_ID]
+    activeArchetypes.value = activeArchetypes.value.length === allArchetypeIds.length
+        ? []
+        : allArchetypeIds
 }
 
 const skillDetailsBySkillMstId = (() => {
@@ -824,6 +843,18 @@ const shareOptionsForGrid = () => ({
 .chip img {
     height: 28px;
     display: block;
+}
+
+.chip-all-label {
+    height: 28px;
+    width: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--text);
 }
 
 .archetype-none-label {
