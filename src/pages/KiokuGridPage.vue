@@ -81,7 +81,8 @@
                         }}</span>
                     </div>
                 </button>
-                <button class="chip chip-all" @click="toggleAllVirtualRoles" title="Enable/Disable all roles">
+                <button class="chip chip-all" :class="allVirtualRolesVisible ? 'chip--visible' : 'chip--hidden'"
+                    @click="toggleAllVirtualRoles" title="Enable/Disable all roles">
                     <span class="chip-all-label">All</span>
                 </button>
             </div>
@@ -98,7 +99,8 @@
                     :title="activeArchetypes.includes(NONE_ARCHETYPE_ID) ? 'Hide characters with no archetype' : 'Show characters with no archetype'">
                     <img :src="`/exedra-dmg-calc/archetypes/none.png`" alt="None" />
                 </button>
-                <button class="chip chip-all" @click="toggleAllArchetypes" title="Enable/Disable all archetypes">
+                <button class="chip chip-all" :class="allArchetypesVisible ? 'chip--visible' : 'chip--hidden'"
+                    @click="toggleAllArchetypes" title="Enable/Disable all archetypes">
                     <span class="chip-all-label">All</span>
                 </button>
             </div>
@@ -402,12 +404,18 @@ const toggleAllVirtualRoles = () => {
         : []
 }
 
+const allVirtualRolesVisible = computed(() => hiddenVirtualRoles.value.length === 0)
+
 const toggleAllArchetypes = () => {
     const allArchetypeIds = [...archetypeRules.map(r => r.id), NONE_ARCHETYPE_ID]
     activeArchetypes.value = activeArchetypes.value.length === allArchetypeIds.length
         ? []
         : allArchetypeIds
 }
+
+const allArchetypesVisible = computed(() =>
+    activeArchetypes.value.length === archetypeRules.length + 1
+)
 
 const skillDetailsBySkillMstId = (() => {
     const map = new Map<number, (typeof skillDetails[keyof typeof skillDetails])[]>()
@@ -697,6 +705,7 @@ const shareOptionsForGrid = () => ({
 
 .grid-scroll.exporting {
     display: block !important;
+    width: max-content !important;
 }
 
 .exporting .er-grid {
