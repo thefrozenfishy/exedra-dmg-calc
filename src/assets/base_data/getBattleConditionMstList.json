@@ -16632,6 +16632,14 @@
         "description": "自身のブレイク回数が5回以上のとき"
     },
     {
+        "battleConditionMstId": 2095,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "31",
+        "description": "アシュリー（KAWAII）専用バフが付与されているとき"
+    },
+    {
         "battleConditionMstId": 2096,
         "compareContent": 208,
         "compareOperator": 4,
@@ -16656,11 +16664,83 @@
         "description": "自分にデバフ効果が付与されたとき"
     },
     {
+        "battleConditionMstId": 2100,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 2,
+        "compareValue": "31",
+        "description": "アシュリー（KAWAII）専用バフが付与されているとき"
+    },
+    {
         "battleConditionMstId": 2101,
         "compareContent": 25,
         "compareOperator": 4,
         "compareTarget": 8,
         "compareValue": "5",
         "description": "対象のデバフ数が5以上"
+    },
+    {
+        "battleConditionMstId": 2102,
+        "compareContent": 110,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "FALSE",
+        "description": "自身が攻撃を受けなかった"
+    },
+    {
+        "battleConditionMstId": 2108,
+        "compareContent": 12,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "UP_SPD_RATIO",
+        "description": "自分にスピード上昇が付与されている場合"
+    },
+    {
+        "battleConditionMstId": 2197,
+        "compareContent": 202,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "敵が1体以上の場合"
+    },
+    {
+        "battleConditionMstId": 2198,
+        "compareContent": 202,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "2",
+        "description": "敵が2体以上の場合"
+    },
+    {
+        "battleConditionMstId": 2199,
+        "compareContent": 202,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "3",
+        "description": "敵が3体以上の場合"
+    },
+    {
+        "battleConditionMstId": 2200,
+        "compareContent": 202,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "4",
+        "description": "敵が4体以上の場合"
+    },
+    {
+        "battleConditionMstId": 2201,
+        "compareContent": 202,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "5",
+        "description": "敵が5体以上の場合"
+    },
+    {
+        "battleConditionMstId": 2261,
+        "compareContent": 101,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "1",
+        "description": "自分が1以上のダメージ未満"
     }
 ]

@@ -4393,5 +4393,20 @@
         "targetType": 2,
         "value1": 1150073,
         "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "description": "At battle start, increases own charge by 50%.<br>Decreases DMG taken by 10% for all allies with Plushie Cheer applied.",
+        "name": "Kawaii Will Give Me Strength",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 158,
+        "selectionAbilityMstId": 7074,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11070201,
+        "targetType": 2,
+        "value1": 1150074,
+        "value2": 0
     }
 ]
