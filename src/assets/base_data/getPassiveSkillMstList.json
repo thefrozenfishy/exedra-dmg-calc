@@ -11592,6 +11592,126 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "Increases critical rate by 2.5%.<br>Equipped to Buffer:<br>Also increases SPD by 5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 418701,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4187
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical rate by 3.5%.<br>Equipped to Buffer:<br>Also increases SPD by 6%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 418702,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4187
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical rate by 4.5%.<br>Equipped to Buffer:<br>Also increases SPD by 7%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 418703,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4187
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical rate by 5.5%.<br>Equipped to Buffer:<br>Also increases SPD by 8%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 418704,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4187
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical rate by 6.5%.<br>Equipped to Buffer:<br>Also increases SPD by 9%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 418705,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4187
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical rate by 7.5%.<br>Equipped to Buffer:<br>Also increases SPD by 10%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 418706,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4187
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases HP recovery amount by 7.5%.<br>Equipped to Healer:<br>Also increases max HP by 2.5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 418801,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4188
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases HP recovery amount by 9%.<br>Equipped to Healer:<br>Also increases max HP by 3.5%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 418802,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4188
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases HP recovery amount by 10.5%.<br>Equipped to Healer:<br>Also increases max HP by 4.5%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 418803,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4188
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases HP recovery amount by 12%.<br>Equipped to Healer:<br>Also increases max HP by 5.5%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 418804,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4188
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases HP recovery amount by 13.5%.<br>Equipped to Healer:<br>Also increases max HP by 6.5%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 418805,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4188
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases HP recovery amount by 15%.<br>Equipped to Healer:<br>Also increases max HP by 7.5%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 418806,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4188
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Increases DEF by 15%.",
         "level": 1,
         "name": "Ability",
@@ -19978,6 +20098,16 @@
         "passiveSkillMstId": 1150073,
         "skillButtonIcon": "",
         "skillUniqueId": 1150073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases own charge by 50%.<br>Decreases DMG taken by 10% for all allies with Plushie Cheer applied.",
+        "level": 1,
+        "name": "Kawaii Will Give Me Strength",
+        "passiveSkillMstId": 1150074,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1150074
     },
     {
         "conditionElement": 0,
@@ -31082,7 +31212,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets charge to 40% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "description": "At battle start, sets charge to 40% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving HP recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
         "level": 1,
         "name": "Haste",
         "passiveSkillMstId": 1507401,
@@ -31092,7 +31222,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets charge to 41% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "description": "At battle start, sets charge to 41% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving HP recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
         "level": 2,
         "name": "Haste",
         "passiveSkillMstId": 1507402,
@@ -31102,7 +31232,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets charge to 42% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "description": "At battle start, sets charge to 42% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving HP recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
         "level": 3,
         "name": "Haste",
         "passiveSkillMstId": 1507403,
@@ -31112,7 +31242,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets charge to 43% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "description": "At battle start, sets charge to 43% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving HP recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
         "level": 4,
         "name": "Haste",
         "passiveSkillMstId": 1507404,
@@ -31122,7 +31252,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets charge to 44% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "description": "At battle start, sets charge to 44% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving HP recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
         "level": 5,
         "name": "Haste",
         "passiveSkillMstId": 1507405,
@@ -31132,7 +31262,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets charge to 45% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "description": "At battle start, sets charge to 45% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving HP recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
         "level": 6,
         "name": "Haste",
         "passiveSkillMstId": 1507406,
@@ -31142,7 +31272,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets charge to 46% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "description": "At battle start, sets charge to 46% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving HP recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
         "level": 7,
         "name": "Haste",
         "passiveSkillMstId": 1507407,
@@ -31152,7 +31282,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets charge to 47% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "description": "At battle start, sets charge to 47% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving HP recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
         "level": 8,
         "name": "Haste",
         "passiveSkillMstId": 1507408,
@@ -31162,7 +31292,7 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets charge to 48% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "description": "At battle start, sets charge to 48% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving HP recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
         "level": 9,
         "name": "Haste",
         "passiveSkillMstId": 1507409,
@@ -31172,12 +31302,112 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
-        "description": "At battle start, sets charge to 50% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving a recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
+        "description": "At battle start, sets charge to 50% (Max 100%).<br>On DMG dealt to an enemy by allies other than self, increases charge by 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When attacked by an enemy, grants 1 BP to self.<br>On receiving HP recovery effect, grants 2 BP to self.<br>* Only applies to battle skill.<br><br>When 1 or more debuffs are applied to enemies:<br>Increases SPD by 5% (Effect scales based on number of debuffs; max 20%).",
         "level": 10,
         "name": "Haste",
         "passiveSkillMstId": 1507410,
         "skillButtonIcon": "battle_icon_passive_buff",
         "skillUniqueId": 15074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 0% (Max 100%), and increases all allies' SPD by 5%.<br><br>On critical hit by allies other than self, increases own charge by 10%.<br>On void DMG dealt by that attack, increases own charge by a further 1%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When own charge is 10% or higher:<br>Increases own SPD by 3% (Effect increases each time charge increases by 10%; max 15%).",
+        "level": 1,
+        "name": "Haste",
+        "passiveSkillMstId": 1507501,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15075
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 0% (Max 100%), and increases all allies' SPD by 5%.<br><br>On critical hit by allies other than self, increases own charge by 10%.<br>On void DMG dealt by that attack, increases own charge by a further 2%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When own charge is 10% or higher:<br>Increases own SPD by 3% (Effect increases each time charge increases by 10%; max 15%).",
+        "level": 2,
+        "name": "Haste",
+        "passiveSkillMstId": 1507502,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15075
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 0% (Max 100%), and increases all allies' SPD by 6%.<br><br>On critical hit by allies other than self, increases own charge by 10%.<br>On void DMG dealt by that attack, increases own charge by a further 2%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When own charge is 10% or higher:<br>Increases own SPD by 3% (Effect increases each time charge increases by 10%; max 15%).",
+        "level": 3,
+        "name": "Haste",
+        "passiveSkillMstId": 1507503,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15075
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 0% (Max 100%), and increases all allies' SPD by 6%.<br><br>On critical hit by allies other than self, increases own charge by 10%.<br>On void DMG dealt by that attack, increases own charge by a further 3%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When own charge is 10% or higher:<br>Increases own SPD by 3% (Effect increases each time charge increases by 10%; max 15%).",
+        "level": 4,
+        "name": "Haste",
+        "passiveSkillMstId": 1507504,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15075
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 0% (Max 100%), and increases all allies' SPD by 7%.<br><br>On critical hit by allies other than self, increases own charge by 10%.<br>On void DMG dealt by that attack, increases own charge by a further 3%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When own charge is 10% or higher:<br>Increases own SPD by 3% (Effect increases each time charge increases by 10%; max 15%).",
+        "level": 5,
+        "name": "Haste",
+        "passiveSkillMstId": 1507505,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15075
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 0% (Max 100%), and increases all allies' SPD by 7%.<br><br>On critical hit by allies other than self, increases own charge by 10%.<br>On void DMG dealt by that attack, increases own charge by a further 4%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When own charge is 10% or higher:<br>Increases own SPD by 3% (Effect increases each time charge increases by 10%; max 15%).",
+        "level": 6,
+        "name": "Haste",
+        "passiveSkillMstId": 1507506,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15075
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 0% (Max 100%), and increases all allies' SPD by 8%.<br><br>On critical hit by allies other than self, increases own charge by 10%.<br>On void DMG dealt by that attack, increases own charge by a further 4%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When own charge is 10% or higher:<br>Increases own SPD by 3% (Effect increases each time charge increases by 10%; max 15%).",
+        "level": 7,
+        "name": "Haste",
+        "passiveSkillMstId": 1507507,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15075
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 0% (Max 100%), and increases all allies' SPD by 9%.<br><br>On critical hit by allies other than self, increases own charge by 10%.<br>On void DMG dealt by that attack, increases own charge by a further 4%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When own charge is 10% or higher:<br>Increases own SPD by 3% (Effect increases each time charge increases by 10%; max 15%).",
+        "level": 8,
+        "name": "Haste",
+        "passiveSkillMstId": 1507508,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15075
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 0% (Max 100%), and increases all allies' SPD by 9%.<br><br>On critical hit by allies other than self, increases own charge by 10%.<br>On void DMG dealt by that attack, increases own charge by a further 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When own charge is 10% or higher:<br>Increases own SPD by 3% (Effect increases each time charge increases by 10%; max 15%).",
+        "level": 9,
+        "name": "Haste",
+        "passiveSkillMstId": 1507509,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15075
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, sets charge to 0% (Max 100%), and increases all allies' SPD by 10%.<br><br>On critical hit by allies other than self, increases own charge by 10%.<br>On void DMG dealt by that attack, increases own charge by a further 5%.<br>* Only applies to basic attack / battle skill / special attack.<br><br>When own charge is 10% or higher:<br>Increases own SPD by 3% (Effect increases each time charge increases by 10%; max 15%).",
+        "level": 10,
+        "name": "Haste",
+        "passiveSkillMstId": 1507510,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15075
     },
     {
         "conditionElement": 0,
@@ -36252,6 +36482,56 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "When no allies are present, grants 2 actions.<br>When no allies are present, greatly increases ATK and SPD, and significantly decreases DEF and break gauge depletion RES.<br><br>When self not in break, significantly decreases DMG taken.<br><br>When an ally is defeated, grants 2 Magic.<br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, grants 1 Magic.<br>Activates assist each time own Magic reaches max.<br><br>Assist:<br>Guaranteed to slightly decrease all enemies' MP recovery rate for 3 turns.<br>Consumes 4 of own Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001222,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001222
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "When no allies are present, grants 2 actions.<br>When no allies are present, significantly decreases DEF and break gauge depletion RES.<br><br>When self not in break, significantly decreases DMG taken.<br><br>When an ally is defeated, grants 2 Magic.<br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, grants 1 Magic.<br>Activates assist each time own Magic reaches max.<br><br>Assist:<br>Guaranteed to slightly decrease all enemies' MP recovery rate for 3 turns.<br>Consumes 4 of own Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001223,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001223
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "When no allies are present, grants 2 actions.<br>Also greatly decreases DEF and break gauge depletion RES.<br>When self not in break, greatly decreases DMG taken.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001224,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001224
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "When self not in break, decreases DMG taken.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001225,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001225
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases all allies' SPD.<br>If own HP 50% or higher, further increases own SPD.<br>While barrier active on all allies, grants effect that increases own break gauge depletion RES.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001226,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001226
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Grants 2 actions.<br>Triggers a counterattack each time own Magic reaches max.<br>On enemy action when DMG is not taken by self, grants 1 Magic.<br><br>Counterattack:<br>Deals void DMG [L] (DEF-based) to all enemies.<br>When self not afflicted with debuff, delays targets' action order.<br>Consumes 3 Magic.",
         "level": 1,
         "name": "Ability IV",
@@ -36308,6 +36588,216 @@
         "passiveSkillMstId": 5001232,
         "skillButtonIcon": "",
         "skillUniqueId": 5001232
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br><br>Decreases DMG taken based on own Magic value and increases break gauge depletion RES.<br>On ally taking critical DMG from the basic attack, battle skill, or special attack of an enemy aligned with the user's elemental weakness, consumes 1 Magic.<br>Magic decrease amount increases based on the number of allies who took critical DMG simultaneously.<br>At own turn start, grants 5 Magic.<br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, grants 3 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001234,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001234
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br><br>Decreases DMG taken based on own Magic value and increases break gauge depletion RES.<br>On ally taking critical DMG from the basic attack, battle skill, or special attack of an enemy aligned with the user's elemental weakness, consumes 1 Magic.<br>Magic decrease amount increases based on the number of allies who took critical DMG simultaneously.<br>At own turn start, grants 5 Magic.<br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, grants 3 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001235,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001235
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br><br>Decreases DMG taken based on own Magic value and increases break gauge RES.<br>On ally taking critical DMG from the basic attack, battle skill, or special attack of an enemy aligned with the user's elemental weakness, consumes 1 Magic.<br>Magic decrease amount increases based on the number of allies who took critical DMG simultaneously.<br>At own turn start, grants 10 Magic.<br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, grants 3 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001236,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001236
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases all allies' SPD.<br>If own HP 50% or higher, further increases own SPD.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001237,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001237
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "If own HP 50% or higher, increases SPD.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001238,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001238
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases own SPD for 2 turns.<br>While barrier active on all allies, grants effect that decreases own DMG taken.<br>Triggers a counterattack each time own Magic reaches max.<br>On self taking DMG, grants 1 Magic.<br>On allies other than self taking DMG, grants 2 Magic.<br><br>Counterattack:<br>Deals aqua DMG [XL] to a single enemy.<br>Consumes 10 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001239,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001239
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, increases SPD for 1 turn.<br>While barrier active on all allies, grants effect that decreases own DMG taken.<br>Triggers a counterattack each time own Magic reaches max.<br>On self taking DMG, grants 1 Magic.<br>On allies other than self taking DMG, grants 2 Magic.<br><br>Counterattack:<br>Deals aqua DMG [XL] to a single enemy.<br>Consumes 10 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001240,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001240
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Triggers a counterattack each time own Magic reaches max.<br>On self taking DMG, grants 1 Magic.<br>On allies other than self taking DMG, grants 2 Magic.<br><br>Counterattack:<br>Deals aqua DMG [L] to a single enemy.<br>Consumes 10 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001241,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001241
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Triggers a counterattack each time own Magic reaches max.<br>On taking DMG, grants 1 Magic.<br><br>Counterattack:<br>Deals aqua DMG [L] to a single enemy.<br>Consumes 10 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001242,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001242
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "While barrier active on all allies, grants effect that increases own DEF.<br>If HP 80% or higher, increases own SPD.<br>Increases ATK and SPD with each passing turn, and decreases all enemies' flame RES.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001243,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001243
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "While barrier active on all allies, grants effect that increases own DEF.<br>If HP 80% or higher, increases own SPD.<br>Increases ATK and SPD with each passing turn, and decreases all enemies' flame RES.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001244,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001244
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "While barrier active on all allies, grants effect that increases own DEF.<br>If HP 80% or higher, increases own SPD.<br>Increases ATK and SPD with each passing turn.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001245,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001245
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ATK with each passing turn.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001246,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001246
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>If SPD UP effect is applied to all allies, grants effect that increases ATK.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001247,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001247
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>If SPD UP effect is applied to all allies, grants effect that increases ATK.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001248,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001248
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001249,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001249
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Grants 3 actions when own Magic at max.<br>Each time a debuff is applied to an enemy, grants 1 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001250,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001250
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Grants 3 actions when own Magic at max.<br>Each time a debuff is applied to an enemy, grants 1 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001251,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001251
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Grants 3 actions when own Magic at max.<br>Each time a debuff is applied to an enemy, grants 1 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001252,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001252
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001253,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001253
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br><br>Decreases DMG taken based on own Magic value and increases break gauge depletion RES.<br>On ally taking critical DMG from the basic attack, battle skill, or special attack of an enemy aligned with the user's elemental weakness, consumes 1 Magic.<br>Magic decrease amount increases based on the number of allies who took critical DMG simultaneously.<br>At own turn start, grants 3 Magic.<br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, grants 3 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001258,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001258
     },
     {
         "conditionElement": 0,
@@ -36788,6 +37278,46 @@
         "passiveSkillMstId": 7001027,
         "skillButtonIcon": "",
         "skillUniqueId": 7001027
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Extremely high HP makes it difficult to defeat.<br><br>Triggers a counterattack each time own Magic reaches max.<br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, grants 1 Magic.<br><br>Counterattack:<br>Deals forest DMG [M] to all enemies.<br>Damage increases for enemies not aligned with the user's elemental weakness.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001028,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001028
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Extremely high HP makes it difficult to defeat.<br><br>Triggers a counterattack each time own Magic reaches max.<br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, grants 1 Magic.<br><br>Counterattack:<br>Deals forest DMG [M] to all enemies.<br>Damage increases for enemies not aligned with the user's elemental weakness.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001035,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001035
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Extremely high HP makes it difficult to defeat.<br><br>Triggers a counterattack each time own Magic reaches max.<br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, grants 1 Magic.<br><br>Counterattack:<br>Deals forest DMG [M] to all enemies.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001036,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001036
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Extremely high HP makes it difficult to defeat.<br><br>Triggers a counterattack each time own Magic reaches max.<br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, grants 1 Magic.<br><br>Counterattack:<br>Deals forest DMG [M] to all enemies.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001037,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001037
     },
     {
         "conditionElement": 0,
@@ -38788,6 +39318,16 @@
         "passiveSkillMstId": 8509301,
         "skillButtonIcon": "",
         "skillUniqueId": 85093
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "When charge at 100%:<br>Increases SPD by 10%.<br><br>On maxed enemy break bonus:<br>Increases MP by 25% and charge by 50%.",
+        "level": 1,
+        "name": "Ascension Effects",
+        "passiveSkillMstId": 8509401,
+        "skillButtonIcon": "",
+        "skillUniqueId": 85094
     },
     {
         "conditionElement": 0,
@@ -49988,5 +50528,105 @@
         "passiveSkillMstId": 9507310,
         "skillButtonIcon": "battle_icon_supportpassive_buff",
         "skillUniqueId": 95073
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 4,
+        "description": "Equipped to Buffer:<br>Increases all allies' critical rate by 5%.<br>On own special attack, increases all allies' DMG dealt when targeting elemental weakness by 5% (2 turns).",
+        "level": 1,
+        "name": "Edge Enchantment",
+        "passiveSkillMstId": 9507401,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 4,
+        "description": "Equipped to Buffer:<br>Increases all allies' critical rate by 5%.<br>On own special attack, increases all allies' DMG dealt when targeting elemental weakness by 6% (2 turns).",
+        "level": 2,
+        "name": "Edge Enchantment",
+        "passiveSkillMstId": 9507402,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 4,
+        "description": "Equipped to Buffer:<br>Increases all allies' critical rate by 5%.<br>On own special attack, increases all allies' DMG dealt when targeting elemental weakness by 7% (2 turns).",
+        "level": 3,
+        "name": "Edge Enchantment",
+        "passiveSkillMstId": 9507403,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 4,
+        "description": "Equipped to Buffer:<br>Increases all allies' critical rate by 5%.<br>On own special attack, increases all allies' DMG dealt when targeting elemental weakness by 8% (2 turns).",
+        "level": 4,
+        "name": "Edge Enchantment",
+        "passiveSkillMstId": 9507404,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 4,
+        "description": "Equipped to Buffer:<br>Increases all allies' critical rate by 5%.<br>On own special attack, increases all allies' DMG dealt when targeting elemental weakness by 9% (2 turns).",
+        "level": 5,
+        "name": "Edge Enchantment",
+        "passiveSkillMstId": 9507405,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 4,
+        "description": "Equipped to Buffer:<br>Increases all allies' critical rate by 5%.<br>On own special attack, increases all allies' DMG dealt when targeting elemental weakness by 10% (2 turns).",
+        "level": 6,
+        "name": "Edge Enchantment",
+        "passiveSkillMstId": 9507406,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 4,
+        "description": "Equipped to Buffer:<br>Increases all allies' critical rate by 5%.<br>On own special attack, increases all allies' DMG dealt when targeting elemental weakness by 11% (2 turns).",
+        "level": 7,
+        "name": "Edge Enchantment",
+        "passiveSkillMstId": 9507407,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 4,
+        "description": "Equipped to Buffer:<br>Increases all allies' critical rate by 5%.<br>On own special attack, increases all allies' DMG dealt when targeting elemental weakness by 12% (2 turns).",
+        "level": 8,
+        "name": "Edge Enchantment",
+        "passiveSkillMstId": 9507408,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 4,
+        "description": "Equipped to Buffer:<br>Increases all allies' critical rate by 5%.<br>On own special attack, increases all allies' DMG dealt when targeting elemental weakness by 13% (2 turns).",
+        "level": 9,
+        "name": "Edge Enchantment",
+        "passiveSkillMstId": 9507409,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 4,
+        "description": "Equipped to Buffer:<br>Increases all allies' critical rate by 5%.<br>On own special attack, increases all allies' DMG dealt when targeting elemental weakness by 15% (2 turns).",
+        "level": 10,
+        "name": "Edge Enchantment",
+        "passiveSkillMstId": 9507410,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95074
     }
 ]
