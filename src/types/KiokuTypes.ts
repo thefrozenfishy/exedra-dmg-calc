@@ -1,5 +1,5 @@
 import { PvPTeam, KiokuState } from "../models/PvPTeam";
-import { crystalises, portraits, passiveDetails, passiveBase } from "../utils/helpers";
+import { crystalises, crystalisesByStyle, portraits, passiveDetails, passiveBase } from "../utils/helpers";
 import { elementMap, KiokuElement, KiokuRole, SupportKey } from "./enums";
 
 
@@ -346,11 +346,11 @@ export interface CrystalisSelection {
     subCrys: number[]
 }
 
-export const getEX = (characterId: number) => Object.values(crystalises).find(c => c.styleMstId === characterId)
+export const getEX = (characterId: number) => crystalisesByStyle[characterId]?.[0]
 
 export function relevantCrys(characterId: number, includeLowRarityCrys = false): CrystalisData[] {
     return [getEX(characterId),
-    ...Object.values(crystalises).filter(c => c.styleMstId === 0 && c.selectionAbilityType === 1 && (includeLowRarityCrys ? true : c.rarity === 3))
+    ...(crystalisesByStyle[0] ?? []).filter(c => c.selectionAbilityType === 1 && (includeLowRarityCrys ? true : c.rarity === 3))
     ].filter(c => !!c)
 }
 

@@ -114,6 +114,11 @@ export class ScoreAttackTeam {
     private dps: ScoreAttackKioku;
 
     private allyContexts: AllyContext[] = [];
+    // Per-evaluation filtered view of each ally's effects, indexed to match alliesOrdered/allyContexts.
+    // Built fresh in setup() every time. IMPORTANT: never write back to kioku.effects itself — the
+    // ScoreAttackKioku instances here come from a shared cache and are reused across many different
+    // team evaluations, so mutating them would leak state between unrelated searches.
+    private activeEffects: SkillDetail[][] = [];
     private debuffPools: EffectPool[] = Array(5).fill(null).map(() => ({}));
     private extraDebuffPools: ExtraEffectPool[] = Array(5).fill(null).map(() => ({}));
 
@@ -149,7 +154,11 @@ export class ScoreAttackTeam {
         this.dps = dps;
         this.debug = debug;
         this.attackerHealth = attackerHealth;
-        this.activeBuffsAndDebuffs = activeAliments;
+        // Clone rather than alias: findBestTeam passes the same activeAliments array reference to
+        // every ScoreAttackTeam it constructs, and this array grows via .push() below as new effect
+        // types are discovered. Aliasing it would leak that growth across every other team evaluation
+        // in the run, making results depend on the order combos happen to be visited in.
+        this.activeBuffsAndDebuffs = [...activeAliments];
         this.userBannedEffects = userBannedEffects;
         this.enabledDotAllyEffects = enabledDotAllyEffects;
         this.stackOverrides = stackOverrides;
@@ -169,7 +178,7 @@ export class ScoreAttackTeam {
         ];
 
         for (const kioku of alliesOrdered) {
-            kioku.effects = kioku.effects.filter(detail => {
+            this.activeEffects.push(kioku.effects.filter(detail => {
                 if (
                     Aliment.WEAKNESS === detail.abilityEffectType &&
                     !this.activeBuffsAndDebuffs.includes(Aliment.WEAKNESS)
@@ -180,7 +189,7 @@ export class ScoreAttackTeam {
                     this.activeBuffsAndDebuffs.push(detail.abilityEffectType);
                 }
                 return true;
-            });
+            }));
         }
 
         for (let ei = 0; ei < 5; ei++) {
@@ -188,14 +197,14 @@ export class ScoreAttackTeam {
             this.debuffPools[ei]["WEAKNESS"] = 0;
         }
 
-        this.hasDpsDotPop = this.dps.effects.some(
+        this.hasDpsDotPop = this.activeEffects[DPS_IDX].some(
             eff => eff.abilityEffectType === "IMM_SLIP_DMG",
         );
 
         if (this.hasDpsDotPop) {
             for (const nonDpsIdx of [0, 1, 3, 4]) {
                 const kioku = alliesOrdered[nonDpsIdx];
-                const hasDot = kioku.effects.some(eff => {
+                const hasDot = this.activeEffects[nonDpsIdx].some(eff => {
                     const dotType = eff.abilityEffectType.replace(/_(ATK|DEF|HP)$/, "");
                     return (
                         dotType !== Aliment.WEAKNESS &&
@@ -229,7 +238,7 @@ export class ScoreAttackTeam {
             const sourceKioku = alliesOrdered[sourceIdx];
             const sourceCtx = this.allyContexts[sourceIdx];
 
-            for (const detail of sourceKioku.effects) {
+            for (const detail of this.activeEffects[sourceIdx]) {
                 const baseEff = this.reduceEffect(detail.abilityEffectType)
                 if ((baseEff in otherBuffsAndDebuffs)) continue;
                 if (effectIsBanned(detail)) continue;
@@ -501,8 +510,10 @@ export class ScoreAttackTeam {
 
     add_additional_dmg(): number {
         let base_dmg = 0;
-        for (const ally of this.team) {
-            for (const eff of ally.effects) {
+        for (let i = 0; i < 5; i++) {
+            if (i === DPS_IDX) continue;
+            const ally = this.allyContexts[i].kioku;
+            for (const eff of this.activeEffects[i]) {
                 if (eff.abilityEffectType === "ADDITIONAL_DAMAGE") {
                     base_dmg += this.calc_base_dmg(eff.value1 / 1000, ally.getBaseAtk());
                 }
@@ -526,7 +537,7 @@ export class ScoreAttackTeam {
             let passive_done = false;
             let active_done = false;
 
-            for (const eff of this.allyContexts[allyIdx].kioku.effects) {
+            for (const eff of this.activeEffects[allyIdx]) {
                 const dotStatSuffix = eff.abilityEffectType.match(/_(ATK|DEF|HP)$/)?.[1];
                 const dotType = eff.abilityEffectType.replace(/_(ATK|DEF|HP)$/, "") as Aliment;
                 if (dotType === Aliment.VORTEX) {
@@ -596,7 +607,7 @@ export class ScoreAttackTeam {
         let total_dmg = 0;
         let uses_def = false;
 
-        for (const detail of this.dps.effects) {
+        for (const detail of this.activeEffects[DPS_IDX]) {
             if (
                 detail.startConditionSetIdCsv
                     .split(",")
@@ -662,7 +673,7 @@ export class ScoreAttackTeam {
         const allDebugSections: DebugSections[] = Array(5).fill(null).map(emptyDebugSections);
 
         let targetTypeAtPosition
-        const isAoeDps = this.dps.effects.some(eff => {
+        const isAoeDps = this.activeEffects[DPS_IDX].some(eff => {
             if ((eff as ActiveSkill).skillDetailMstId === this.dmg_id * 10000 + 1001) return eff.range === 3
         })
         if (isAoeDps) {
@@ -820,7 +831,7 @@ export class ScoreAttackTeam {
             }
             if (this.dps.name === "Melodia Appassionata") {
                 dot_total_dmg = this.calc_base_dmg(
-                    (this.dps.effects.find(e => e.abilityEffectType === "VORTEX_ATK" && skillDetailId(e).toString().startsWith("1185"))?.value1 ?? 0) / 1000, base_atk
+                    (this.activeEffects[DPS_IDX].find(e => e.abilityEffectType === "VORTEX_ATK" && skillDetailId(e).toString().startsWith("1185"))?.value1 ?? 0) / 1000, base_atk
                 ) * dmg_mult * crit_factor;
             } else {
                 dot_total_dmg += this.add_dot_dmg(enemy, idx, currentAmountOfEnemies, true);

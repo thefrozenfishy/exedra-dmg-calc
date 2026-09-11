@@ -37,13 +37,36 @@ export const passiveDetails = Object.fromEntries(
     passiveDetailsJson.map((item: any) => [item.passiveSkillDetailMstId, item])
 ) as Record<string, PassiveSkill>;
 
+// Indexed by passiveSkillMstId*100+lvl (the composite key ScoreAttackKioku.addEffect looks up by),
+// built once here instead of re-scanning every entry on every lookup.
+export const passiveDetailsByMstId = new Map<number, PassiveSkill[]>();
+for (const v of Object.values(passiveDetails)) {
+    const k = (v as any).passiveSkillMstId;
+    (passiveDetailsByMstId.get(k) ?? passiveDetailsByMstId.set(k, []).get(k)!).push(v);
+}
+
 export const skillDetails = Object.fromEntries(
     skillDetailsJson.map((item: any) => [item.skillDetailMstId, item])
 ) as Record<string, ActiveSkill>;
 
+// Indexed by skillMstId*100+lvl (the composite key ScoreAttackKioku.addEffect looks up by),
+// built once here instead of re-scanning every entry on every lookup.
+export const skillDetailsByMstId = new Map<number, ActiveSkill[]>();
+for (const v of Object.values(skillDetails)) {
+    const k = (v as any).skillMstId;
+    (skillDetailsByMstId.get(k) ?? skillDetailsByMstId.set(k, []).get(k)!).push(v);
+}
+
 export const crystalises = Object.fromEntries(
     selectionAbilityJson.map((item: any) => [item.selectionAbilityMstId, item])
 ) as Record<string, CrystalisData>;
+
+// Indexed by styleMstId (0 = the generic/shared crys pool, otherwise a character-specific EX crys),
+// built once here instead of scanning the whole table on every getEX/relevantCrys call.
+export const crystalisesByStyle: Record<number, CrystalisData[]> = {};
+for (const v of Object.values(crystalises)) {
+    (crystalisesByStyle[v.styleMstId] ??= []).push(v);
+}
 
 export const styleParamUpEffect = Object.fromEntries(
     styleParamUpEffectJson.map((item: any) => [item.styleParamUpEffectMstId, item])
@@ -52,6 +75,13 @@ export const styleParamUpEffect = Object.fromEntries(
 export const styleParamUp = Object.fromEntries(
     styleParamUpJson.map((item: any) => [item.styleParamUpMstId, item])
 ) as Record<string, StyleParamUp>;
+
+// Indexed by styleMstId (character id), built once here instead of scanning every character's
+// magic-level entries to find one character's on every Kioku construction.
+export const styleParamUpByStyleId: Record<number, StyleParamUp[]> = {};
+for (const v of Object.values(styleParamUp)) {
+    (styleParamUpByStyleId[v.styleMstId] ??= []).push(v);
+}
 
 interface StyleParamUpCost {
     styleParamUpCostMstId: number;
@@ -116,6 +146,13 @@ export const magicLevelCosts: Record<string, Record<number, MagicLevelCost>> = {
 export const characterHeartParamUpGroup = Object.fromEntries(
     characterHeartParamUpGroupJson.map((item: any) => [item.characterHeartParamUpGroupMstId, item])
 ) as Record<string, CharacterHeartParamUpGroup>;
+
+// Indexed by paramUpGroupId, built once here instead of scanning every character's heart-level
+// entries to find one character's group on every Kioku construction.
+export const characterHeartParamUpGroupByGroupId: Record<number, CharacterHeartParamUpGroup[]> = {};
+for (const v of Object.values(characterHeartParamUpGroup)) {
+    (characterHeartParamUpGroupByGroupId[v.paramUpGroupId] ??= []).push(v);
+}
 
 export const characterHeart = Object.fromEntries(
     characterHeartJson.map((item: any) => [item.characterMstId, item])

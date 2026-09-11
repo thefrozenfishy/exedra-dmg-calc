@@ -121,6 +121,8 @@ export async function findBestTeam({
     optimizeAverageDamage,
     disabledOtherRoles,
     arenaEffectsMap,
+    enablePruning = true,
+    pruningMargin = 15,
     onProgress,
     onError
 }: FindBestTeamOptions): Promise<any[]> {
@@ -208,6 +210,10 @@ export async function findBestTeam({
                 nCr(availableChars[KiokuRole.Breaker].length, dist.breakers);
         }, 0);
 
+    // 0-100. Rosters whose pass-1 estimate is more than this many percent behind the best estimate
+    // found for the same attacker are skipped in pass 2. 100 keeps everything (no effective pruning).
+    const marginFraction = Math.min(Math.max(pruningMargin, 0), 100) / 100;
+
     for (const attacker of availableChars[KiokuRole.Attacker]) {
         const kiokuWhoShouldHavePortrait = new Set<string>([])
         perAttackerResults[attacker.name] = new Heap(customPriorityComparator)
@@ -224,6 +230,11 @@ export async function findBestTeam({
                 name: "White Camellia",
             }).getKey())
         }
+        // getBestCrystalises(attacker) only depends on the attacker (never on portrait/support/support-of-
+        // support), so — same as availablePortraits above — it belongs out here, not inside the search
+        // loops where it used to get rebuilt (crys-table scan included) on every inner iteration.
+        const attackerCrysCombinations = combinations(getBestCrystalises(attacker), 3)
+
         const attackerHasDotPop = fetchKioku(attacker).effects.some(e => e.abilityEffectType === "IMM_SLIP_DMG")
 
         const attackerRelevantSupportData: Partial<Record<KiokuRole, any[][]>> = { ...relevantSupportData }
@@ -233,11 +244,71 @@ export async function findBestTeam({
                 highestAtkSupportKey,
             ]
         }
+
+        // Same expansion logic the search always used, just fed a stand-in "roleProbe" array instead of
+        // a real totalSupports. Only Buffer/Debuffer roles are ever matched here, and healer/defender/
+        // breaker combo members are never those roles — so a match can only land in the deBufferCombo
+        // tail. combinations() always returns arrays of exactly dist.healers/defenders/breakers members,
+        // so that tail's starting offset (and therefore every roleIndexes result, and therefore all of
+        // supportSupports) is fully determined by (dist, deBufferCombo) alone — which specific healers/
+        // defenders/breakers get chosen never changes it. Pulling this out from under those three loops
+        // means it now runs once per (dist, deBufferCombo) pair instead of once per every healerCombo x
+        // defenderCombo x breakerCombo triple underneath them.
+        const computeSupportSupports = (
+            dist: { healers: number, defenders: number, breakers: number },
+            deBufferCombo: Character[],
+        ): any[][] => {
+            const roleProbe: any[] = [
+                ...Array(dist.healers).fill({ role: KiokuRole.Healer }),
+                ...Array(dist.defenders).fill({ role: KiokuRole.Defender }),
+                ...Array(dist.breakers).fill({ role: KiokuRole.Breaker }),
+                ...deBufferCombo,
+            ]
+
+            let supportSupports: any[][] = [new Array(roleProbe.length).fill(undefined)];
+
+            for (const [role, supportPool] of Object.entries(attackerRelevantSupportData) as [KiokuRole, any[][]][]) {
+                const activePool = supportPool.filter(s => !deBufferCombo.map(c => c.name).includes(s[0]));
+                if (!activePool.length) continue;
+
+                const roleIndexes = roleProbe
+                    .map((c, idx) => c.role === role ? idx : null)
+                    .filter(v => v !== null) as number[];
+                if (!roleIndexes.length) continue;
+
+                const maxAssignable = Math.min(activePool.length, roleIndexes.length);
+                const combos = combinations(activePool, maxAssignable);
+
+                const expanded: any[][] = [];
+                for (const existing of supportSupports) {
+                    for (const combo of combos) {
+                        for (const slotSubset of combinations(roleIndexes, combo.length)) {
+                            for (const perm of permute(combo)) {
+                                const arr = [...existing];
+                                for (let i = 0; i < perm.length; i++) arr[slotSubset[i]] = perm[i];
+                                expanded.push(arr);
+                            }
+                        }
+                    }
+                }
+                supportSupports = expanded;
+            }
+
+            return supportSupports
+        }
+
+        // ── Pass 1: enumerate every valid roster (the other 4 team slots) for this attacker. This is
+        // the same enumeration + the same onProgress/completedRuns bookkeeping the search always did —
+        // unchanged in what it visits or how progress is reported. ──
+        const rosterCandidates: { totalSupports: Character[], supportSupports: any[][], teamNames: string[] }[] = []
+
         for (const dist of availableOtherDistributions) {
-            for (const healerCombo of combinations(availableChars[KiokuRole.Healer], dist.healers)) {
-                for (const defenderCombo of combinations(availableChars[KiokuRole.Defender], dist.defenders)) {
-                    for (const breakerCombo of combinations(availableChars[KiokuRole.Breaker], dist.breakers)) {
-                        for (const deBufferCombo of availableSupportCombinations) {
+            for (const deBufferCombo of availableSupportCombinations) {
+                const supportSupports = computeSupportSupports(dist, deBufferCombo)
+
+                for (const healerCombo of combinations(availableChars[KiokuRole.Healer], dist.healers)) {
+                    for (const defenderCombo of combinations(availableChars[KiokuRole.Defender], dist.defenders)) {
+                        for (const breakerCombo of combinations(availableChars[KiokuRole.Breaker], dist.breakers)) {
                             completedRuns += 1;
 
                             const totalSupports = [
@@ -247,107 +318,142 @@ export async function findBestTeam({
                                 ...deBufferCombo
                             ]
 
-                            if (totalSupports.map(c => c.name).includes(attacker.name)) continue;
+                            if (totalSupports.some(c => c.name === attacker.name)) continue;
 
                             const teamNames = [attacker, ...totalSupports].map(c => c.name).sort();
-                            if (obligatoryKioku.length) {
-                                if (!obligatoryKioku.every(k => teamNames.includes(k))) continue;
-                            }
-
-                            const supportSupports: any[][] = [new Array(totalSupports.length).fill(undefined)];
-
-                            for (const [role, supportPool] of Object.entries(attackerRelevantSupportData) as [KiokuRole, any[][]][]) {
-                                const activePool = supportPool.filter(s => !deBufferCombo.map(c => c.name).includes(s[0]));
-                                if (!activePool.length) continue;
-
-                                const roleIndexes = totalSupports
-                                    .map((c, idx) => c.role === role ? idx : null)
-                                    .filter(v => v !== null) as number[];
-                                if (!roleIndexes.length) continue;
-
-                                const maxAssignable = Math.min(activePool.length, roleIndexes.length);
-
-                                const combos = combinations(activePool, maxAssignable);
-
-                                const expanded: any[][] = [];
-                                for (const existing of supportSupports) {
-                                    for (const combo of combos) {
-                                        for (const slotSubset of combinations(roleIndexes, combo.length)) {
-                                            for (const perm of permute(combo)) {
-                                                const arr = [...existing];
-                                                for (let i = 0; i < perm.length; i++) arr[slotSubset[i]] = perm[i];
-                                                expanded.push(arr);
-                                            }
-                                        }
-                                    }
-                                }
-                                supportSupports.splice(0, supportSupports.length, ...expanded);
-                            }
+                            if (obligatoryKioku.length && !obligatoryKioku.every(k => teamNames.includes(k))) continue;
 
                             onProgress?.([attacker.name, ...totalSupports.map(s => s.name)], completedRuns, expectedTotalRuns)
 
-                            for (const attackerSupportKey of availableSupportKeys) {
-                                if (teamNames.includes(attackerSupportKey[0])) continue;
-                                for (const attackerPortrait of availablePortraits) {
-                                    for (const supportSupport of supportSupports) {
-                                        for (const attackerCrys of combinations(getBestCrystalises(attacker), 3)) {
-                                            try {
-                                                const attackerKioku = fetchKioku({
-                                                    ...attacker,
-                                                    portrait: attackerPortrait,
-                                                    crysIDs: attackerCrys.map(c => c.selectionAbilityMstId),
-                                                    subCrysIDs: optimalSubCrys
-                                                        ? KiokuConstants.optimalAttackerSubCrys
-                                                        : Object.values(attacker.crysOptions).filter(c => c.useIndex !== 0).flatMap(c => c.subCrys),
-                                                    supportKey: attackerSupportKey,
-                                                })
-                                                const hasDotPop = attackerKioku.effects.some(e => e.abilityEffectType === "IMM_SLIP_DMG")
-                                                const team = new ScoreAttackTeam(
-                                                    attackerKioku,
-                                                    totalSupports.map((s, i) => {
-                                                        const k = fetchKioku({
-                                                            ...s,
-                                                            portrait: "The Savior's Apostle",
-                                                            crysIDs: [getEX(s.id)?.selectionAbilityMstId].filter(c => c != null),
-                                                            supportKey: supportSupport[i],
-                                                        })
-                                                        if (k.idealSupportPortrait === SupportIdealPortrait.ADD_DMG
-                                                            || (hasDotPop && k.idealSupportPortrait === SupportIdealPortrait.DOT_APPLIER)) {
-                                                            kiokuWhoShouldHavePortrait.add(s.name)
-                                                        }
-                                                        return k!
-                                                    }),
-                                                    attackerHealth,
-                                                    activeAliments,
-                                                    arenaEffectsMap,
-                                                );
-                                                let [max_dmg, average_dmg, critRate] = team.calculate_max_dmg(enemies, 0)
-                                                if (optimizeAverageDamage) [average_dmg, max_dmg] = [max_dmg, average_dmg]
+                            rosterCandidates.push({ totalSupports, supportSupports, teamNames })
+                        }
+                    }
+                }
+            }
+        }
 
-                                                const entry = [
-                                                    max_dmg | 0,
-                                                    critRate,
-                                                    average_dmg | 0,
-                                                    attacker.name,
-                                                    attackerPortrait,
-                                                    attackerSupportKey?.[0],
-                                                    ...attackerCrys.map(c => c.selectionAbilityMstId),
-                                                    ...totalSupports.flatMap((s, i) => [
-                                                        s.name,
-                                                        supportSupport[i]?.[0],
-                                                        kiokuWhoShouldHavePortrait.has(s.name) ? getKioku(s).idealSupportPortrait : undefined
-                                                    ]),
-                                                ]
-                                                if (perAttackerResults[attacker.name].size() < LIMIT)
-                                                    perAttackerResults[attacker.name].push(entry)
-                                                else if (entry[0] > perAttackerResults[attacker.name].peek()[0])
-                                                    perAttackerResults[attacker.name].replace(entry)
-                                            } catch (e) {
-                                                onError?.(e)
-                                            }
-                                        }
+        // ── Pass 2: fully optimize portrait x support x support-of-support x crys, but only for the
+        // rosters worth the expense. Every roster gets a fast pass-1 estimate using one realistic guess
+        // (first candidate portrait/support/crys — all already curated lists, not arbitrary/worst-case
+        // picks), and rosters whose estimate is within `pruningMargin`% of the best estimate seen for
+        // this attacker go on to the full treatment below.
+        //
+        // This is a heuristic, not a proof: it never re-examines a roster whose single realistic guess
+        // already looked clearly worse than another roster's guess. That's usually right, but portrait/
+        // crys/support-of-support choices can matter very differently from character to character, so a
+        // roster that looks mediocre on one guess could in principle still close the gap once fully
+        // optimized — pruning trades a small, tunable chance of that for a large cut in search time.
+        // Set pruningMargin higher (up to 100, which keeps every roster) to make that trade more
+        // conservative, or turn enablePruning off to fall back to the exhaustive search below, identical
+        // in outcome to before these changes (just faster, thanks to the hoisting above). ──
+        const canEstimate = enablePruning
+            && attackerCrysCombinations.length > 0
+            && availablePortraits.length > 0
+            && availableSupportKeys.length > 0
+
+        let survivingRosters = rosterCandidates
+        if (canEstimate && rosterCandidates.length > 1) {
+            const estimated = rosterCandidates.map(roster => {
+                try {
+                    const attackerKioku = fetchKioku({
+                        ...attacker,
+                        portrait: availablePortraits[0],
+                        crysIDs: attackerCrysCombinations[0].map(c => c.selectionAbilityMstId),
+                        subCrysIDs: optimalSubCrys
+                            ? KiokuConstants.optimalAttackerSubCrys
+                            : Object.values(attacker.crysOptions).filter(c => c.useIndex !== 0).flatMap(c => c.subCrys),
+                        supportKey: availableSupportKeys[0],
+                    })
+                    const guessSupportSupport = roster.supportSupports[0]
+                    const members = roster.totalSupports.map((s, i) => fetchKioku({
+                        ...s,
+                        portrait: "The Savior's Apostle",
+                        crysIDs: [getEX(s.id)?.selectionAbilityMstId].filter(c => c != null),
+                        supportKey: guessSupportSupport[i],
+                    }))
+                    const team = new ScoreAttackTeam(attackerKioku, members, attackerHealth, activeAliments, arenaEffectsMap)
+                    const [max_dmg, average_dmg] = team.calculate_max_dmg(enemies, 0)
+                    return { roster, estimate: optimizeAverageDamage ? average_dmg : max_dmg }
+                } catch (e) {
+                    // Don't let a pruning-estimate failure hide a roster that might otherwise be valid —
+                    // treat it as unknown/worth checking and let pass 2's own try/catch decide for real.
+                    return { roster, estimate: Infinity }
+                }
+            })
+
+            const bestEstimate = Math.max(...estimated.map(e => e.estimate).filter(e => Number.isFinite(e)))
+            const threshold = Number.isFinite(bestEstimate) ? bestEstimate * (1 - marginFraction) : -Infinity
+            survivingRosters = estimated.filter(e => e.estimate >= threshold).map(e => e.roster)
+        }
+
+        for (const { totalSupports, supportSupports, teamNames } of survivingRosters) {
+            // Each member Kioku only depends on (totalSupports[i], supportSupport[i]) — never on the
+            // attacker's own portrait/support/crys choice — so build the member set once per
+            // supportSupport here, instead of rebuilding an identical set on every attackerCrys
+            // iteration below (they used to get rebuilt attackerCrysCombinations.length times over).
+            const membersBySupportSupport = new Map<any[], ScoreAttackKioku[]>()
+            for (const supportSupport of supportSupports) {
+                membersBySupportSupport.set(supportSupport, totalSupports.map((s, i) => fetchKioku({
+                    ...s,
+                    portrait: "The Savior's Apostle",
+                    crysIDs: [getEX(s.id)?.selectionAbilityMstId].filter(c => c != null),
+                    supportKey: supportSupport[i],
+                })))
+            }
+
+            for (const attackerSupportKey of availableSupportKeys) {
+                if (teamNames.includes(attackerSupportKey[0])) continue;
+                for (const attackerPortrait of availablePortraits) {
+                    for (const supportSupport of supportSupports) {
+                        const members = membersBySupportSupport.get(supportSupport)!
+                        for (const attackerCrys of attackerCrysCombinations) {
+                            try {
+                                const attackerKioku = fetchKioku({
+                                    ...attacker,
+                                    portrait: attackerPortrait,
+                                    crysIDs: attackerCrys.map(c => c.selectionAbilityMstId),
+                                    subCrysIDs: optimalSubCrys
+                                        ? KiokuConstants.optimalAttackerSubCrys
+                                        : Object.values(attacker.crysOptions).filter(c => c.useIndex !== 0).flatMap(c => c.subCrys),
+                                    supportKey: attackerSupportKey,
+                                })
+                                const hasDotPop = attackerKioku.effects.some(e => e.abilityEffectType === "IMM_SLIP_DMG")
+                                members.forEach((k, i) => {
+                                    if (k.idealSupportPortrait === SupportIdealPortrait.ADD_DMG
+                                        || (hasDotPop && k.idealSupportPortrait === SupportIdealPortrait.DOT_APPLIER)) {
+                                        kiokuWhoShouldHavePortrait.add(totalSupports[i].name)
                                     }
-                                }
+                                })
+                                const team = new ScoreAttackTeam(
+                                    attackerKioku,
+                                    members,
+                                    attackerHealth,
+                                    activeAliments,
+                                    arenaEffectsMap,
+                                );
+                                let [max_dmg, average_dmg, critRate] = team.calculate_max_dmg(enemies, 0)
+                                if (optimizeAverageDamage) [average_dmg, max_dmg] = [max_dmg, average_dmg]
+
+                                const entry = [
+                                    max_dmg | 0,
+                                    critRate,
+                                    average_dmg | 0,
+                                    attacker.name,
+                                    attackerPortrait,
+                                    attackerSupportKey?.[0],
+                                    ...attackerCrys.map(c => c.selectionAbilityMstId),
+                                    ...totalSupports.flatMap((s, i) => [
+                                        s.name,
+                                        supportSupport[i]?.[0],
+                                        kiokuWhoShouldHavePortrait.has(s.name) ? members[i].idealSupportPortrait : undefined
+                                    ]),
+                                ]
+                                if (perAttackerResults[attacker.name].size() < LIMIT)
+                                    perAttackerResults[attacker.name].push(entry)
+                                else if (entry[0] > perAttackerResults[attacker.name].peek()[0])
+                                    perAttackerResults[attacker.name].replace(entry)
+                            } catch (e) {
+                                onError?.(e)
                             }
                         }
                     }

@@ -47,6 +47,17 @@
                 title="Calculate using the max Kioku, Magic, Heartphial and Special level your account could theoretically reach based on your Player Level, instead of each Kioku's current levels">
                 <input type="checkbox" v-model="useMaxAccountLevels" /> Use max possible levels
             </label>
+            <label class="chip" style="cursor: help;" :class="{ active: enablePruning }"
+                title="Ranks candidate teams with a quick estimate first, then only fully optimizes the strongest ones. Much faster; only turn off to double-check a result against the exhaustive search.">
+                <input type="checkbox" v-model="enablePruning" /> Fast search
+            </label>
+            <label class="field" v-if="enablePruning" style="cursor: help;"
+                title="How far behind the best estimated team (for the same attacker) a team can be and still get the full search. 
+Lower = faster but more likely to skip a team that could have closed the gap. 
+15% with Fast search enabled is strongy recommended unless you have a lot of characters excluded from search">
+                <span class="field-label">Pruning margin %</span>
+                <input type="number" min="0" max="100" v-model.number="pruningMargin" style="width: 70px;" />
+            </label>
         </section>
 
         <section class="card section-card">
@@ -293,6 +304,8 @@ const optimizeAverageDamage = useSetting("optimizeAverageDamage", false)
 const attackerHealth = useSetting("attackerHealth", 100)
 const optimalSubCrys = useSetting("optimalSubCrys", true)
 const useMaxAccountLevels = useSetting("useMaxAccountLevels", false)
+const enablePruning = useSetting("enablePruning", true)
+const pruningMargin = useSetting("pruningMargin", 15)
 const playerLevel = useSetting("playerLevel", KiokuConstants.maxKiokuLvl)
 const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
 const onlyConsiderOnElements = useSetting("onlyConsiderOnElements", false)
@@ -407,36 +420,41 @@ function hideExtraAttackerDropdown() { setTimeout(() => (showExtraAttackerDropdo
 function hideObligatoryKiokuDropdown() { setTimeout(() => (showObligatoryKiokuDropdown.value = false), 150) }
 function hideIgnoredKiokuDropdown() { setTimeout(() => (showIgnoredKiokuDropdown.value = false), 150) }
 
+// populateTeam/populateStatusTeam look up several members per result row by name; a Map is O(1) per
+// lookup instead of O(members.value.length) per .find() call, and this recomputes only when
+// members.value itself changes rather than once per lookup.
+const membersByName = computed(() => new Map(members.value.map(m => [m.name, m])))
+
 const populateTeam = (result: any[]): FinalTeam => ({
     optimized_dmg: result[0],
     crit_rate: result[1],
     alt_dmg: result[2],
-    attacker: members.value.find(m => m.name === result[3])!,
+    attacker: membersByName.value.get(result[3])!,
     portrait: result[4],
-    atk_supp: members.value.find(m => m.name === result[5])!,
+    atk_supp: membersByName.value.get(result[5])!,
     attacker_crys1: result[6],
     attacker_crys2: result[7],
     attacker_crys3: result[8],
-    supp1: members.value.find(m => m.name === result[9])!,
-    supp1supp: members.value.find(m => m.name === result[10]),
+    supp1: membersByName.value.get(result[9])!,
+    supp1supp: membersByName.value.get(result[10]),
     supp1portrait: result[11],
-    supp2: members.value.find(m => m.name === result[12])!,
-    supp2supp: members.value.find(m => m.name === result[13]),
+    supp2: membersByName.value.get(result[12])!,
+    supp2supp: membersByName.value.get(result[13]),
     supp2portrait: result[14],
-    supp3: members.value.find(m => m.name === result[15])!,
-    supp3supp: members.value.find(m => m.name === result[16]),
+    supp3: membersByName.value.get(result[15])!,
+    supp3supp: membersByName.value.get(result[16]),
     supp3portrait: result[17],
-    supp4: members.value.find(m => m.name === result[18])!,
-    supp4supp: members.value.find(m => m.name === result[19]),
+    supp4: membersByName.value.get(result[18])!,
+    supp4supp: membersByName.value.get(result[19]),
     supp4portrait: result[20],
 })
 
 const populateStatusTeam = (result: any[]) => ({
-    attacker: members.value.find(m => m.name === result[0])!,
-    supp1: members.value.find(m => m.name === result[1])!,
-    supp2: members.value.find(m => m.name === result[2])!,
-    supp3: members.value.find(m => m.name === result[3])!,
-    supp4: members.value.find(m => m.name === result[4])!,
+    attacker: membersByName.value.get(result[0])!,
+    supp1: membersByName.value.get(result[1])!,
+    supp2: membersByName.value.get(result[2])!,
+    supp3: membersByName.value.get(result[3])!,
+    supp4: membersByName.value.get(result[4])!,
 })
 
 const sortedResults: ComputedRef<any[][]> = computed(() => [...results].sort((a, b) => b[0] - a[0]))
@@ -578,6 +596,8 @@ async function startSimulation() {
             optimizeAverageDamage: optimizeAverageDamage.value,
             disabledOtherRoles: [...disabledOtherRoles.value],
             arenaEffectsMap,
+            enablePruning: enablePruning.value,
+            pruningMargin: safeInt(pruningMargin.value, 15, 0, 100),
         }
     })
 }

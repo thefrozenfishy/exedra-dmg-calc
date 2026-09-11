@@ -1,5 +1,5 @@
 import { KiokuArgs, KiokuData, Portrait, StyleParamUpEffect, ROLE_COEFFICIENTS } from '../types/KiokuTypes';
-import { portraits, kiokuData, crystalises, characterHeart, characterHeartParamUpGroup, styleParamUpEffect, styleParamUp } from '../utils/helpers';
+import { portraits, kiokuData, crystalises, characterHeart, characterHeartParamUpGroupByGroupId, styleParamUpEffect, styleParamUpByStyleId } from '../utils/helpers';
 import { fromKey } from '../models/BestTeamCalculator';
 
 const KIOKU_LEVEL_BREAKPOINTS = [1, 120, 140, 160, 180, 200] as const;
@@ -154,14 +154,14 @@ export class Kioku {
 
 
         const heartGroup = characterHeart[this.data.id / 10_000]?.paramUpGroupId ?? 1;
-        for (const v of Object.values(characterHeartParamUpGroup)) {
-            if (v.paramUpGroupId === heartGroup && this.heartphialLvl >= v.heartLevel) {
+        for (const v of characterHeartParamUpGroupByGroupId[heartGroup] ?? []) {
+            if (this.heartphialLvl >= v.heartLevel) {
                 this.addStat(v.styleParamUpEffectMstId, false);
             }
         }
 
-        for (const v of Object.values(styleParamUp)) {
-            if (v.styleMstId === this.data.id && v.priority <= this.magicLvl) {
+        for (const v of styleParamUpByStyleId[this.data.id] ?? []) {
+            if (v.priority <= this.magicLvl) {
                 this.addStat(v.styleParamUpEffectMstId, true);
             }
         }

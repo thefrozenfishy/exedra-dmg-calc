@@ -1,6 +1,6 @@
 import { Aliment } from '../types/enums';
-import { ActiveSkill, KiokuArgs, KiokuData, SkillDetail, skillDetailId, SkillKey, SupportIdealPortrait } from '../types/KiokuTypes';
-import { passiveDetails, skillDetails } from '../utils/helpers';
+import { ActiveSkill, KiokuArgs, KiokuData, SkillDetail, skillDetailId, SupportIdealPortrait } from '../types/KiokuTypes';
+import { passiveDetailsByMstId, skillDetailsByMstId } from '../utils/helpers';
 import { Kioku } from './Kioku';
 
 
@@ -19,31 +19,31 @@ export class ScoreAttackKioku extends Kioku {
         this.debuffMult -= debuffMultReduction / 100;
 
         if (this.support && [this.data.role, this.data.element].includes(this.support.data.support_target)) {
-            this.addEffect(passiveDetails, "passiveSkillMstId", this.support.data.support_id, this.support.supportLvl, false);
+            this.addEffect(passiveDetailsByMstId, this.support.data.support_id, this.support.supportLvl, false);
         }
         if (this.portrait) {
-            this.addEffect(passiveDetails, "passiveSkillMstId", this.portrait.passiveSkill1, 6, false);
+            this.addEffect(passiveDetailsByMstId, this.portrait.passiveSkill1, 6, false);
         }
         for (let i = 1; i <= this.ascension; i++) {
             const passiveId = this.data[`ascension_${i}_effect_2_id` as keyof KiokuData] as number;
-            if (passiveId) this.addEffect(passiveDetails, "passiveSkillMstId", passiveId, 1, true);
+            if (passiveId) this.addEffect(passiveDetailsByMstId, passiveId, 1, true);
 
         }
         this.crys.forEach(c => {
-            this.addEffect(passiveDetails, "passiveSkillMstId", 0, c, false, true);
+            this.addEffect(passiveDetailsByMstId, 0, c, false, true);
         });
 
-        this.addEffect(skillDetails, "skillMstId", this.data.special_id, this.specialLvl, true);
-        this.addEffect(skillDetails, "skillMstId", this.data.attack_id, this.attackLvl, true);
+        this.addEffect(skillDetailsByMstId, this.data.special_id, this.specialLvl, true);
+        this.addEffect(skillDetailsByMstId, this.data.attack_id, this.attackLvl, true);
 
-        this.addEffect(passiveDetails, "passiveSkillMstId", this.data.ability_id, this.abilityLvl, true);
+        this.addEffect(passiveDetailsByMstId, this.data.ability_id, this.abilityLvl, true);
         let skillId = this.data.skill_id;
         Object.values(this.scalableEffects).forEach(e => {
             if ((e as ActiveSkill).abilityEffectType === "SWITCH_SKILL") {
                 skillId = e.value1
             }
         });
-        this.addEffect(skillDetails, "skillMstId", skillId, this.skillLvl, true);
+        this.addEffect(skillDetailsByMstId, skillId, this.skillLvl, true);
 
         [...Object.values(this.unscalableEffects), ...Object.values(this.scalableEffects)].forEach(e => {
             if (e.abilityEffectType === "UP_BUFF_EFFECT_VALUE") {
@@ -55,7 +55,7 @@ export class ScoreAttackKioku extends Kioku {
             } else if (e.abilityEffectType === "DWN_DEBUFF_EFFECT_VALUE") {
                 this.debuffMult -= e.value1 / 1000;
             } else if (e.abilityEffectType === "ADDITIONAL_SKILL_ACT") {
-                this.addEffect(skillDetails, "skillMstId", 0, e.value1, true);
+                this.addEffect(skillDetailsByMstId, 0, e.value1, true);
             } else if (e.abilityEffectType === "ADD_DEBUFF_TURN") {
                 this.debuffTurnBonus += e.value1; // Also increases buffs atm, but since those can't pop it doesn't matter. This is for dot pop
             }
@@ -92,8 +92,10 @@ export class ScoreAttackKioku extends Kioku {
         });
     }
 
-    addEffect(map: Record<any, SkillDetail>, key: SkillKey, id: number, lvl: number, affectedByMult: boolean, retainDupes = false) {
-        const obj = Object.values(map).filter(v => (v as any)[key] === id * 100 + lvl);
+    // map is a pre-built index from (id*100+lvl) to matching effect rows (see passiveDetailsByMstId /
+    // skillDetailsByMstId in utils/helpers.ts) — O(1) lookup instead of scanning the whole table.
+    addEffect(map: Map<number, SkillDetail[]>, id: number, lvl: number, affectedByMult: boolean, retainDupes = false) {
+        const obj = map.get(id * 100 + lvl) ?? [];
         const target = affectedByMult ? this.scalableEffects : this.unscalableEffects;
         for (const e of obj) {
             let key = skillDetailId(e).toString();

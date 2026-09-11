@@ -35,6 +35,16 @@ export interface FindBestTeamOptions {
     optimizeAverageDamage: boolean
     disabledOtherRoles: KiokuRole[]
     arenaEffectsMap: Record<string, number>
+    // When true (default), each roster gets a cheap one-shot damage estimate first, and only rosters
+    // within pruningMargin% of the best estimate for that attacker get the full portrait/crys/support/
+    // support-of-support search. Set to false to fall back to the exhaustive search (slower, but every
+    // roster gets the full treatment — useful for spot-checking pruning against the old behavior).
+    enablePruning?: boolean
+    // 0-100. How far behind the best pass-1 estimate (for the same attacker) a roster is still allowed
+    // to be and still get the full search. Lower = faster but more willing to skip a roster that could
+    // have closed the gap once fully optimized. 100 effectively disables pruning even if enablePruning
+    // is true. Defaults to 15.
+    pruningMargin?: number
     onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number) => void,
     onError?: (error: any) => void
 }
