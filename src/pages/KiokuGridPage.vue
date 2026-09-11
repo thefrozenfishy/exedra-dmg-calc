@@ -23,6 +23,12 @@
             <label class="filter-chip" :class="{ active: showUnowned }">
                 <input type="checkbox" v-model="showUnowned" /> Unowned
             </label>
+            <label class="filter-chip" :class="{ active: showLimiteds }">
+                <input type="checkbox" v-model="showLimiteds" /> Limiteds
+            </label>
+            <label class="filter-chip" :class="{ active: showStandards }">
+                <input type="checkbox" v-model="showStandards" /> Standards
+            </label>
         </section>
 
         <section class="filters card">
@@ -332,6 +338,8 @@ const show5stars = useSetting("showGrid5stars", true)
 const show4stars = useSetting("showGrid4stars", false)
 const show3stars = useSetting("showGrid3stars", false)
 const showUnowned = useSetting("showGridUnowned", true)
+const showLimiteds = useSetting("showGridLimiteds", true)
+const showStandards = useSetting("showGridStandards", true)
 const splitAttackerRange = useSetting("splitAttackerRange", true)
 const splitBreakerRange = useSetting("splitBreakerRange", true)
 const splitDebufferRange = useSetting("splitDebufferRange", true)
@@ -500,6 +508,8 @@ const displayedVirtualRoles = computed(() =>
 const allChars = computed(() =>
     markedCharacters.value
         .filter(c => showUnowned.value ? true : c.enabled)
+        .filter(c => showLimiteds.value ? true : c.isStandardChar)
+        .filter(c => showStandards.value ? true : !c.isStandardChar)
         .filter(c => !hiddenElements.value.includes(c.element as KiokuElement))
         .filter(c => !hiddenVirtualRoles.value.includes(virtualRoleForChar(c)))
         .filter(c => {
