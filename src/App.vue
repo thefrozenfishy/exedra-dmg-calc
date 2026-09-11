@@ -88,6 +88,7 @@ function routeForPath(path: string) {
         <div v-if="beta">
           <router-link to="/beta">Beta Settings</router-link>
           <router-link to="/analytics">Analytics</router-link>
+          <router-link to="/analytics-user">User Analytics</router-link>
         </div>
       </nav>
     </header>
