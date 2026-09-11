@@ -58,7 +58,11 @@
               <span v-else>1</span>
             </td>
             <td class="mono dim">
-              <span v-for="(u, i) in err.users" :key="u" class="user-tag">{{ u }}</span>
+              <template v-for="u in err.users" :key="u.label">
+                <router-link v-if="u.userId" :to="{ path: '/analytics-user', query: { user: u.userId } }"
+                  class="user-tag user-tag-link" @click.stop>{{ u.label }}</router-link>
+                <span v-else class="user-tag">{{ u.label }}</span>
+              </template>
             </td>
             <td class="error-message-cell">{{ err.message }}</td>
             <td class="mono dim stack-cell">
@@ -196,9 +200,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="([user, count], index) in topUserRows" :key="index">
-            <td>{{ user }}</td>
-            <td>{{ count }}</td>
+          <tr v-for="(u, index) in topUserRows" :key="index">
+            <td>
+              <router-link v-if="u.userId" :to="{ path: '/analytics-user', query: { user: u.userId } }"
+                class="user-link">{{
+                u.label }}</router-link>
+              <span v-else>{{ u.label }}</span>
+            </td>
+            <td>{{ u.count }}</td>
           </tr>
         </tbody>
       </table>
@@ -236,7 +245,7 @@ type AnalyticsRowWithDisplay = AnalyticsRow & {
 type ErrorGroup = {
   message: string
   stack: string
-  users: string[]
+  users: { label: string; userId: string | null }[]
   count: number
   lastSeen: string
 }
@@ -265,7 +274,7 @@ const toggleErrorExpanded = (key: string) => {
 const errorRows = computed<(ErrorGroup & { key: string })[]>(() => {
   const errorEvents = rows.value.filter(r => r.event === 'js_error' || r.event === 'console_error')
 
-  const groups = new Map<string, ErrorGroup & { userSet: Set<string> }>()
+  const groups = new Map<string, ErrorGroup & { userMap: Map<string, string | null> }>()
 
   for (const row of errorEvents) {
     const message = row.metadata?.message ?? String(row.metadata ?? '')
@@ -278,7 +287,7 @@ const errorRows = computed<(ErrorGroup & { key: string })[]>(() => {
 
     if (existing) {
       existing.count++
-      existing.userSet.add(row.display_user)
+      existing.userMap.set(row.display_user, row.user_id)
       if (ts > new Date(existing.lastSeen)) {
         existing.lastSeen = row.created_at
         existing.stack = stack
@@ -288,7 +297,7 @@ const errorRows = computed<(ErrorGroup & { key: string })[]>(() => {
         message,
         stack,
         users: [],
-        userSet: new Set([row.display_user]),
+        userMap: new Map([[row.display_user, row.user_id]]),
         count: 1,
         lastSeen: row.created_at,
         page,
@@ -297,7 +306,11 @@ const errorRows = computed<(ErrorGroup & { key: string })[]>(() => {
   }
 
   return [...groups.entries()]
-    .map(([key, g]) => ({ ...g, key, users: [...g.userSet] }))
+    .map(([key, g]) => ({
+      ...g,
+      key,
+      users: [...g.userMap.entries()].map(([label, userId]) => ({ label, userId })),
+    }))
     .sort((a, b) => new Date(b.lastSeen).getTime() - new Date(a.lastSeen).getTime())
     .map(g => ({
       ...g,
@@ -467,12 +480,14 @@ const timelineSeries = computed(() => {
 const uniqueEventCount = computed(() => new Set(rows.value.map(r => r.event)).size)
 const uniqueUsersCount = computed(() => new Set(rows.value.map(r => getDisplayUser(r))).size)
 const topUserRows = computed(() => {
-  const counts: Record<string, number> = {}
+  const counts = new Map<string, { label: string; userId: string | null; count: number }>()
   for (const row of rows.value) {
-    const user = getDisplayUser(row)
-    counts[user] = (counts[user] ?? 0) + 1
+    const key = row.user_id ?? 'anonymous'
+    const entry = counts.get(key)
+    if (entry) entry.count++
+    else counts.set(key, { label: getDisplayUser(row), userId: row.user_id, count: 1 })
   }
-  return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 20)
+  return [...counts.values()].sort((a, b) => b.count - a.count).slice(0, 20)
 })
 
 let pageChart: Chart | null = null
@@ -816,5 +831,24 @@ button:hover {
 
 .error-message {
   color: var(--danger);
+}
+
+.user-tag-link {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.user-tag-link:hover {
+  border-color: var(--accent-soft);
+  color: var(--accent-soft);
+}
+
+.user-link {
+  color: var(--accent-soft);
+  text-decoration: none;
+}
+
+.user-link:hover {
+  text-decoration: underline;
 }
 </style>

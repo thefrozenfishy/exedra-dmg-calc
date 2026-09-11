@@ -18,6 +18,7 @@ import ProfilePage from '../pages/ProfilePage.vue'
 import AccountComparisonPage from '../pages/AccountComparisonPage.vue'
 import BetaStuff from '../pages/BetaStuff.vue'
 import AnalyticsDashboard from '../pages/AnalyticsDashboard.vue'
+import AnalyticsUserPage from '../pages/AnalyticsUserPage.vue'
 import logEvent from '../utils/analytics'
 import PortraitSetupPage from '../pages/PortraitSetupPage.vue'
 import TierListMakerPage from '../pages/TierListMakerPage.vue'
@@ -43,6 +44,7 @@ const routes = [
     { path: '/gacha-rate', name: 'Gacha Rate+Sim', component: GachaRatePage, meta: { version: 0 } },
     { path: '/tier-list-maker', name: 'Tier List Maker', component: TierListMakerPage, meta: { version: 1 } },
     { path: '/analytics', name: 'Analytics Dashboard', component: AnalyticsDashboard },
+    { path: '/analytics-user', name: 'User Analytics Dashboard', component: AnalyticsUserPage },
     { path: '/beta', name: 'Beta Settings', component: BetaStuff, meta: { reloadOnLeave: true } },
 ]
 
