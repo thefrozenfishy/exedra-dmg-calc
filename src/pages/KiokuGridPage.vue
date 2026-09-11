@@ -265,6 +265,17 @@ const archetypeRules: ArchetypeRule[] = [
         )
     },
     {
+        id: "fua",
+        label: "Fua",
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType === "ADDITIONAL_SKILL_ACT")
+    },
+    {
+        id: "crit",
+        label: "Crit",
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType.includes("_CT"))
+        // Self crit is also crit archetype
+    },
+    {
         id: "mp",
         label: "MP Generator",
         match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 0 && [
@@ -279,15 +290,19 @@ const archetypeRules: ArchetypeRule[] = [
         match: (k: ScoreAttackKioku) => k.effects.some(e => "GAIN_SP_FIXED" === e.abilityEffectType)
     },
     {
-        id: "fua",
-        label: "Fua",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType === "ADDITIONAL_SKILL_ACT")
+        id: "aa",
+        label: "Action Advance",
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 0 && e.abilityEffectType === "HASTE")
     },
     {
-        id: "crit",
-        label: "Crit",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType.includes("_CT"))
-        // Self crit is also crit archetype
+        id: "spd_up",
+        label: "AoE SPD buff",
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 0 && e.abilityEffectType.includes("UP_SPD"))
+    },
+    {
+        id: "spd_down",
+        label: "SPD debuff",
+        match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 0 && e.abilityEffectType.includes("N_SPD"))
     },
     {
         id: "ailment",
@@ -310,11 +325,6 @@ const archetypeRules: ArchetypeRule[] = [
         id: "debuff_remove",
         label: "Debuff Remove",
         match: (k: ScoreAttackKioku) => k.effects.some(e => e.abilityEffectType === "REMOVE_ALL_DEBUFF")
-    },
-    {
-        id: "aa",
-        label: "Action Advance",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => e.range > 0 && e.abilityEffectType === "HASTE")
     },
 ]
 
