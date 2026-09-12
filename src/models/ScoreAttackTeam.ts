@@ -577,7 +577,7 @@ export class ScoreAttackTeam {
                         this.getAllyEffect(allyIdx, "UP_ELEMENT_DMG_RATE_RATIO", amountOfEnemies, enemy.maxBreak)) /
                     1000;
 
-                const dmg_taken = this.getDebuffEffect("UP_RCV_DMG_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) / 1000;
+                const dmg_taken = (1 + this.getDebuffEffect("UP_RCV_DMG_RATIO", enemyIdx, amountOfEnemies, enemy.maxBreak) / 1000) * (1 - enemy.dmgTakenDown / 100) - 1;
 
                 const elem_dmg_up =
                     this.getAllyEffect(allyIdx, "UP_WEAK_ELEMENT_DMG_RATIO", amountOfEnemies, enemy.maxBreak) / 1000;
@@ -793,7 +793,7 @@ export class ScoreAttackTeam {
             1000;
         const elem_dmg_up =
             this.getAllyEffect(DPS_IDX, "UP_WEAK_ELEMENT_DMG_RATIO", currentAmountOfEnemies, enemy.maxBreak) / 1000;
-        const dmg_taken = this.getDebuffEffect("UP_RCV_DMG_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) / 1000;
+        const dmg_taken = (1 + this.getDebuffEffect("UP_RCV_DMG_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) / 1000) * (1 - enemy.dmgTakenDown / 100) - 1;
 
         const elem_res_down = Math.max(-1, Math.min(1,
             this.getDebuffEffect("DWN_ELEMENT_RESIST_RATIO", idx, currentAmountOfEnemies, enemy.maxBreak) / 1000
@@ -869,22 +869,22 @@ Sum extra ${uses_def ? "Def" : "Atk"}   - ${(base_atk * atk_pluss + flat_atk | 0
 Total ${uses_def ? "Def" : "Atk"}       - ${(atk_total | 0).toLocaleString()}
 Def down%       - ${(1 - def_remaining) * 100 | 0}%
 Total def       - ${(def_total | 0).toLocaleString()}
-Crit rate       - ${uncapped_crit_rate * 100 | 0}%
-Crit dmg        - ${crit_dmg * 100 | 0}%
-Dmg Dealt       - ${dmg_pluss * 100 | 0}%
-Elem dmg up     - ${elem_dmg_up * 100 | 0}%
-Dmg Taken       - ${dmg_taken * 100 | 0}%
-Elem Res        - ${elem_res_down * 100 | 0}%
-atk down        - ${atk_down * 100 | 0}%
+Crit rate       - ${Math.round(uncapped_crit_rate * 100)}%
+Crit dmg        - ${Math.round(crit_dmg * 100)}%
+Dmg Dealt       - ${Math.round(dmg_pluss * 100)}%
+Elem dmg up     - ${Math.round(elem_dmg_up * 100)}%
+Dmg Taken       - ${Math.round(dmg_taken * 100)}%
+Elem Res        - ${Math.round(elem_res_down * 100)}%
+atk down        - ${Math.round(atk_down * 100)}%
    
 Ability dmg     - ${(base_dmg | 0).toLocaleString()}
-Def Factor      - ${def_factor * 100 | 0}%
-Crit Factor     - ${crit_factor * 100 | 0}%
-Dmg Dlt Fact    - ${dmg_dealt_factor * 100 | 0}%
-Dmg Tkn Fact    - ${dmg_taken_factor * 100 | 0}%
-Elem ResFact    - ${elem_resist_factor * 100 | 0}%
-EffElem Fact    - ${effect_elem_factor * 100 | 0}%
-Break Factor    - ${break_factor * 100 | 0}%
+Def Factor      - ${Math.round(def_factor * 100)}%
+Crit Factor     - ${Math.round(crit_factor * 100)}%
+Dmg Dlt Fact    - ${Math.round(dmg_dealt_factor * 100)}%
+Dmg Tkn Fact    - ${Math.round(dmg_taken_factor * 100)}%
+Elem ResFact    - ${Math.round(elem_resist_factor * 100)}%
+EffElem Fact    - ${Math.round(effect_elem_factor * 100)}%
+Break Factor    - ${Math.round(break_factor * 100)}%
 Dot             - ${Math.ceil(dot_total_dmg).toLocaleString()}
 pre-add-dmg     - ${Math.ceil(pre_dot_total).toLocaleString()}
 add-dmg         - ${Math.ceil(pre_dot_add_total).toLocaleString()}

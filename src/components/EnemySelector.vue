@@ -29,6 +29,11 @@
                             @change="enemies.updateEnemy(index, { defenseUp: enemy.defenseUp })" />
                     </label>
                     <label>
+                        Dmg taken down:
+                        <input type="number" v-model.number="enemy.dmgTakenDown"
+                            @change="enemies.updateEnemy(index, { dmgTakenDown: enemy.dmgTakenDown })" />
+                    </label>
+                    <label>
                         Hits to kill:
                         <input type="number" v-model.number="enemy.hitsToKill"
                             @change="enemies.updateEnemy(index, { hitsToKill: enemy.hitsToKill })" />

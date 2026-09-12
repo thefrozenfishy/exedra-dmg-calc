@@ -11,6 +11,7 @@ export interface Enemy {
     maxBreak: number
     defense: number
     defenseUp: number
+    dmgTakenDown: number
     hitsToKill: number
     enabled: boolean
     isBreak: boolean

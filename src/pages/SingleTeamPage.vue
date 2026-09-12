@@ -129,8 +129,8 @@
                 <span class="share-enemy-stat-value">{{ enemy.maxBreak }}%</span>
               </span>
               <span class="share-enemy-stat">
-                <span class="share-enemy-stat-label">Def</span>
-                <span class="share-enemy-stat-value">{{ enemy.defense }} + {{ enemy.defenseUp }}%</span>
+                <span class="share-enemy-stat-label">Def(%+)(Dmg taken-)</span>
+                <span class="share-enemy-stat-value">{{ enemy.defense }} + {{ enemy.defenseUp }}% - {{ enemy.dmgTakenDown }}%</span>
               </span>
             </div>
             <div class="share-enemy-toggles">
