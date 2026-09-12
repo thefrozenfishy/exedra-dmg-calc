@@ -3,8 +3,8 @@ import { findBestTeam } from '../models/BestTeamCalculator'
 self.onmessage = async (e) => {
     const { options } = e.data
 
-    const onProgress = (currChars, completedRuns, expectedTotalRuns) => {
-        self.postMessage({ type: 'progress', currChars, completedRuns, expectedTotalRuns })
+    const onProgress = (currChars, completedRuns, expectedTotalRuns, preprocessing = false) => {
+        self.postMessage({ type: 'progress', currChars, completedRuns, expectedTotalRuns, preprocessing })
     }
     const onError = (error) => {
         self.postMessage({ type: 'error', error })

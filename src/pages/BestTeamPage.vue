@@ -47,7 +47,8 @@
                 :title="testAllA5MaxLevel
                     ? 'Already implied by \'Test with all A5 & max level Kioku\''
                     : 'Calculate using the max Kioku, Magic, Heartphial and Special level your account could theoretically reach based on your Player Level, instead of each Kioku\'s current levels'">
-                <input type="checkbox" v-model="useMaxAccountLevels" :disabled="testAllA5MaxLevel" /> Use max possible levels
+                <input type="checkbox" v-model="useMaxAccountLevels" :disabled="testAllA5MaxLevel" /> Use max possible
+                levels
             </label>
             <label class="chip" style="cursor: help;" :class="{ active: testAllA5MaxLevel }"
                 title="Ignores your roster entirely: every Kioku is treated as enabled and at max Ascension (A5), with max Heartphial and max Kioku/Magic/Special level based on your Player Level. Useful for theorycrafting the ceiling regardless of what you actually own or have leveled.">
@@ -57,8 +58,7 @@
                 title="Ranks candidate teams with a quick estimate first, then only fully optimizes the strongest ones. Much faster; only turn off to double-check a result against the exhaustive search.">
                 <input type="checkbox" v-model="enablePruning" /> Fast search
             </label>
-            <label class="field" v-if="enablePruning" style="cursor: help;"
-                title="How far behind the best estimated team (for the same attacker) a team can be and still get the full search. 
+            <label class="field" v-if="enablePruning" style="cursor: help;" title="How far behind the best estimated team (for the same attacker) a team can be and still get the full search. 
 Lower = faster but more likely to skip a team that could have closed the gap. 
 15% with Fast search enabled is strongy recommended unless you have a lot of characters excluded from search">
                 <span class="field-label">Pruning margin %</span>
@@ -124,7 +124,7 @@ Lower = faster but more likely to skip a team that could have closed the gap.
                         - (disabledOtherRoles.includes(KiokuRole.Defender) ? 0 : minDefender)
                         - (disabledOtherRoles.includes(KiokuRole.Healer) ? 0 : minHealer)
                         - (disabledOtherRoles.includes(KiokuRole.Breaker) ? 0 : minBreaker)
-                        }}</div>
+                    }}</div>
                 </div>
             </div>
         </section>
@@ -245,6 +245,7 @@ Lower = faster but more likely to skip a team that could have closed the gap.
 
         <div class="team-row-wrapper loading-bar" v-if="running">
             <TeamRow style="margin: 0 auto;" :team="progress" :loading="true" :optimalSubCrys />
+            <p v-if="preprocessing" class="section-hint">Preprocessing attacker teams</p>
             <div class="progress-wrapper">
                 <progress :value="completedRuns" :max="expectedRuns" class="progress-bar"></progress>
                 <span class="progress-text">{{ completedRuns }} / {{ expectedRuns }}</span>
@@ -314,6 +315,7 @@ const friendStore = useFriendStore()
 const running = ref(false)
 const expectedRuns = ref(0)
 const completedRuns = ref(0)
+const preprocessing = ref(false)
 const results = reactive<{ attackerId: string, team: any, dmg: number }[][]>([])
 
 const testAllA5MaxLevel = useSetting("testAllA5MaxLevel", false)
@@ -640,6 +642,8 @@ async function startSimulation() {
             progress.value = populateStatusTeam(e.data.currChars)
             completedRuns.value = e.data.completedRuns
             expectedRuns.value = e.data.expectedTotalRuns
+            console.log(e.data)
+            preprocessing.value = e.data.preprocessing
         } else if (e.data.type === 'done') {
             results.push(...e.data.results)
             running.value = false

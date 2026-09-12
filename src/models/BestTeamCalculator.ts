@@ -204,22 +204,48 @@ export async function findBestTeam({
     // found for the same attacker are skipped in pass 2. 100 keeps everything (no effective pruning).
     const marginFraction = Math.min(Math.max(pruningMargin, 0), 100) / 100;
 
-    // ── Phase A: planning. For every attacker, enumerate its candidate rosters and run the cheap
-    // pruning estimate (same logic as before) — but don't score anything for real yet, and don't
-    // report progress here. This phase is fast relative to Phase B (the actual portrait x support x
-    // support-of-support x crys evaluation), so folding its count into the progress total would just
-    // make the bar leap ahead misleadingly early, and reporting it separately caused expectedTotalRuns
-    // to grow attacker-by-attacker later — visible as the bar jumping backwards every time a new
-    // attacker's work got discovered. Planning everything first means the exact grand total for Phase
-    // B is known before any of it runs, so the bar only ever climbs, never dips. ──
-    interface AttackerPlan {
+    interface RosterCandidate {
+        totalSupports: Character[]
+        supportSupports: any[][]
+        teamNames: string[]
+    }
+
+    // Report roughly REPORT_TARGET_UPDATES times total per phase, regardless of search size —
+    // frequent enough that the bar reads as continuously moving rather than frozen between updates,
+    // without flooding the worker->main-thread postMessage channel on huge searches. Shared by both
+    // the planning pass below and Phase B further down.
+    const REPORT_TARGET_UPDATES = 500
+
+    // ── Phase A: planning, split into two passes so the progress bar has something real to report
+    // from the first attacker onward instead of going dark until every attacker is planned.
+    //
+    // Pass A1 enumerates each attacker's candidate rosters — pure combinatorics, no scoring — which
+    // gives us rosterCandidates.length per attacker and therefore an exact, fixed total for Pass A2
+    // before any of it runs.
+    //
+    // Pass A2 runs the pass-1 pruning estimate for those rosters, and this part is NOT cheap: it's
+    // one real `calculate_max_dmg` call per roster (the same function Phase B uses), just against a
+    // single realistic guess instead of the full portrait x support x support-of-support x crys
+    // sweep. For attackers with a narrow sweep, or many roster candidates, that can take as long as
+    // Phase B itself, so it gets progress reporting against Pass A1's fixed total instead of leaving
+    // the bar frozen at 0/0 for however long planning takes.
+    //
+    // Phase B still gets its own separate total (expectedTotalRuns, computed once planning finishes)
+    // rather than folding into Pass A2's total: expectedTotalRuns depends on survivingRosters, which
+    // is Pass A2's *output*, so it can't be known until Pass A2 is done. That means the bar resets
+    // once, from 100% of planning to the start of execution — a single, expected phase change, not
+    // the repeated backward jumps we'd get if expectedTotalRuns kept growing attacker-by-attacker as
+    // new work was discovered mid-run. ──
+    interface AttackerRosterInfo {
         attacker: Character
         availablePortraits: string[]
         availableSupportKeys: any[][]
         attackerCrysCombinations: any[][]
-        survivingRosters: { totalSupports: Character[], supportSupports: any[][], teamNames: string[] }[]
+        rosterCandidates: RosterCandidate[]
+        canEstimate: boolean
     }
-    const plans: AttackerPlan[] = []
+    const rosterInfos: AttackerRosterInfo[] = []
+    let totalPlanningEstimates = 0
 
     for (const attacker of availableChars[KiokuRole.Attacker]) {
         const availablePortraits = portraitsBestOnly(attacker.element, optimizeAverageDamage)
@@ -301,9 +327,8 @@ export async function findBestTeam({
             return supportSupports
         }
 
-        // Enumerate every valid roster (the other 4 team slots) for this attacker — same enumeration
-        // as before, just no longer scored or progress-reported here (see Phase B).
-        const rosterCandidates: { totalSupports: Character[], supportSupports: any[][], teamNames: string[] }[] = []
+        // Enumerate every valid roster (the other 4 team slots) for this attacker.
+        const rosterCandidates: RosterCandidate[] = []
 
         for (const dist of availableOtherDistributions) {
             for (const deBufferCombo of availableSupportCombinations) {
@@ -331,28 +356,48 @@ export async function findBestTeam({
             }
         }
 
-        // ── Pass 2: fully optimize portrait x support x support-of-support x crys, but only for the
-        // rosters worth the expense. Every roster gets a fast pass-1 estimate using one realistic guess
-        // (first candidate portrait/support/crys — all already curated lists, not arbitrary/worst-case
-        // picks), and rosters whose estimate is within `pruningMargin`% of the best estimate seen for
-        // this attacker go on to the full treatment in Phase B.
-        //
-        // This is a heuristic, not a proof: it never re-examines a roster whose single realistic guess
-        // already looked clearly worse than another roster's guess. That's usually right, but portrait/
-        // crys/support-of-support choices can matter very differently from character to character, so a
-        // roster that looks mediocre on one guess could in principle still close the gap once fully
-        // optimized — pruning trades a small, tunable chance of that for a large cut in search time.
-        // Set pruningMargin higher (up to 100, which keeps every roster) to make that trade more
-        // conservative, or turn enablePruning off to fall back to the exhaustive search in Phase B,
-        // identical in outcome to before these changes (just faster, thanks to the hoisting above). ──
         const canEstimate = enablePruning
             && attackerCrysCombinations.length > 0
             && availablePortraits.length > 0
             && availableSupportKeys.length > 0
+            && rosterCandidates.length > 1
 
+        if (canEstimate) totalPlanningEstimates += rosterCandidates.length
+
+        rosterInfos.push({ attacker, availablePortraits, availableSupportKeys, attackerCrysCombinations, rosterCandidates, canEstimate })
+    }
+
+    const PLANNING_REPORT_INTERVAL = Math.max(1, Math.floor(totalPlanningEstimates / REPORT_TARGET_UPDATES))
+
+    // ── Pass 2: fully optimize portrait x support x support-of-support x crys, but only for the
+    // rosters worth the expense. Every roster gets a fast pass-1 estimate using one realistic guess
+    // (first candidate portrait/support/crys — all already curated lists, not arbitrary/worst-case
+    // picks), and rosters whose estimate is within `pruningMargin`% of the best estimate seen for
+    // this attacker go on to the full treatment in Phase B.
+    //
+    // This is a heuristic, not a proof: it never re-examines a roster whose single realistic guess
+    // already looked clearly worse than another roster's guess. That's usually right, but portrait/
+    // crys/support-of-support choices can matter very differently from character to character, so a
+    // roster that looks mediocre on one guess could in principle still close the gap once fully
+    // optimized — pruning trades a small, tunable chance of that for a large cut in search time.
+    // Set pruningMargin higher (up to 100, which keeps every roster) to make that trade more
+    // conservative, or turn enablePruning off to fall back to the exhaustive search in Phase B,
+    // identical in outcome to before these changes (just faster, thanks to the hoisting above). ──
+    interface AttackerPlan {
+        attacker: Character
+        availablePortraits: string[]
+        availableSupportKeys: any[][]
+        attackerCrysCombinations: any[][]
+        survivingRosters: RosterCandidate[]
+    }
+    const plans: AttackerPlan[] = []
+    let planningCompleted = 0
+
+    for (const { attacker, availablePortraits, availableSupportKeys, attackerCrysCombinations, rosterCandidates, canEstimate } of rosterInfos) {
         let survivingRosters = rosterCandidates
-        if (canEstimate && rosterCandidates.length > 1) {
-            const estimated = rosterCandidates.map(roster => {
+        if (canEstimate) {
+            const estimated: { roster: RosterCandidate, estimate: number }[] = []
+            for (const roster of rosterCandidates) {
                 try {
                     const attackerKioku = fetchKioku({
                         ...attacker,
@@ -372,13 +417,18 @@ export async function findBestTeam({
                     }))
                     const team = new ScoreAttackTeam(attackerKioku, members, attackerHealth, activeAliments, arenaEffectsMap)
                     const [max_dmg, average_dmg] = team.calculate_max_dmg(enemies, 0)
-                    return { roster, estimate: optimizeAverageDamage ? average_dmg : max_dmg }
+                    estimated.push({ roster, estimate: optimizeAverageDamage ? average_dmg : max_dmg })
                 } catch (e) {
                     // Don't let a pruning-estimate failure hide a roster that might otherwise be valid —
                     // treat it as unknown/worth checking and let Phase B's own try/catch decide for real.
-                    return { roster, estimate: Infinity }
+                    estimated.push({ roster, estimate: Infinity })
                 }
-            })
+
+                planningCompleted += 1
+                if (planningCompleted % PLANNING_REPORT_INTERVAL === 0 || planningCompleted === totalPlanningEstimates) {
+                    onProgress?.([attacker.name], planningCompleted, totalPlanningEstimates, true)
+                }
+            }
 
             const bestEstimate = Math.max(...estimated.map(e => e.estimate).filter(e => Number.isFinite(e)))
             const threshold = Number.isFinite(bestEstimate) ? bestEstimate * (1 - marginFraction) : -Infinity
@@ -399,10 +449,6 @@ export async function findBestTeam({
         }
     }
 
-    // Report roughly REPORT_TARGET_UPDATES times total, regardless of search size — frequent enough
-    // that the bar reads as continuously moving rather than frozen between updates, without flooding
-    // the worker->main-thread postMessage channel on huge searches.
-    const REPORT_TARGET_UPDATES = 500
     const PASS2_REPORT_INTERVAL = Math.max(1, Math.floor(expectedTotalRuns / REPORT_TARGET_UPDATES))
 
     // ── Phase B: execute. Same nested loops and same per-attacker state (kiokuWhoShouldHavePortrait,
