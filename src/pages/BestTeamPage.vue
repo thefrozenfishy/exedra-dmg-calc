@@ -162,6 +162,33 @@ Lower = faster but more likely to skip a team that could have closed the gap.
             </div>
         </section>
 
+        <section class="card section-card kioku-selector" v-if="onlyConsiderOnElements">
+            <h3 class="section-title">On-element Exceptions</h3>
+            <p class="section-hint">These off-element Kioku stay eligible even with "On-element only" enabled. They
+                aren't forced into the team like Obligatory Kioku — they're just allowed to be considered again.</p>
+
+            <div class="selected-kioku">
+                <div @click="removeOnElementException(char)" v-for="char in onElementExceptions" :key="char.id"
+                    class="kioku-chip">
+                    <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+                    <span>{{ char.name }}</span>
+                </div>
+            </div>
+
+            <div class="kioku-select">
+                <input type="text" v-model="onElementExceptionQuery"
+                    placeholder="Off-element Kioku that should stay eligible..."
+                    @focus="showOnElementExceptionDropdown = true" @blur="hideOnElementExceptionDropdown" />
+                <ul v-if="showOnElementExceptionDropdown && filteredOnElementExceptions.length" class="dropdown">
+                    <li v-for="char in filteredOnElementExceptions" :key="char.id"
+                        @mousedown.prevent="addOnElementException(char)">
+                        <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name" />
+                        {{ char.name }}
+                    </li>
+                </ul>
+            </div>
+        </section>
+
         <section class="card section-card kioku-selector">
             <h3 class="section-title">Obligatory Kioku</h3>
 
@@ -378,6 +405,10 @@ const obligatoryKioku = useSetting<Character[]>("obligatoryKioku", [])
 const obligatoryKiokuQuery = ref("")
 const showObligatoryKiokuDropdown = ref(false)
 
+const onElementExceptions = useSetting<Character[]>("onElementExceptions", [])
+const onElementExceptionQuery = ref("")
+const showOnElementExceptionDropdown = ref(false)
+
 const ignoredKioku = useSetting<Character[]>("ignoredKioku", defaultIgnoredKioku)
 const ignoredKiokuQuery = ref("")
 const showIgnoredKiokuDropdown = ref(false)
@@ -399,6 +430,17 @@ const filteredKioku = computed(() => {
         (m.name.toLowerCase().includes(q) || m.character_en.toLowerCase().includes(q) || (m.name === "Time Stop Strike" && q.startsWith("moe")))
     )
 })
+const filteredOnElementExceptions = computed(() => {
+    const q = onElementExceptionQuery.value.toLowerCase()
+    const enabledElements = weakElements.filter(el => el.enabled).map(el => el.name)
+    return members.value.filter(m =>
+        !onElementExceptions.value.some(a => a.id === m.id) &&
+        m.rarity !== 3 &&
+        m.role !== KiokuRole.Attacker &&
+        !enabledElements.includes(m.element) &&
+        (m.name.toLowerCase().includes(q) || m.character_en.toLowerCase().includes(q) || (m.name === "Time Stop Strike" && q.startsWith("moe")))
+    )
+})
 const filteredIgnoredKioku = computed(() => {
     const q = ignoredKiokuQuery.value.toLowerCase()
     return members.value.filter(m =>
@@ -411,14 +453,17 @@ const filteredIgnoredKioku = computed(() => {
 function addExtraAttacker(char: Character) { extraAttackers.value = [...extraAttackers.value, char]; extraAttackerQuery.value = ""; showExtraAttackerDropdown.value = false }
 function addObligatoryKioku(char: Character) { obligatoryKioku.value = [...obligatoryKioku.value, char]; obligatoryKiokuQuery.value = ""; showObligatoryKiokuDropdown.value = false }
 function addIgnoredKioku(char: Character) { ignoredKioku.value = [...ignoredKioku.value, char]; ignoredKiokuQuery.value = ""; showIgnoredKiokuDropdown.value = false }
+function addOnElementException(char: Character) { onElementExceptions.value = [...onElementExceptions.value, char]; onElementExceptionQuery.value = ""; showOnElementExceptionDropdown.value = false }
 
 function removeExtraAttacker(char: Character) { extraAttackers.value = extraAttackers.value.filter(a => a.id !== char.id) }
 function removeObligatoryKioku(char: Character) { obligatoryKioku.value = obligatoryKioku.value.filter(a => a.id !== char.id) }
 function removeIgnoredKioku(char: Character) { ignoredKioku.value = ignoredKioku.value.filter(a => a.id !== char.id) }
+function removeOnElementException(char: Character) { onElementExceptions.value = onElementExceptions.value.filter(a => a.id !== char.id) }
 
 function hideExtraAttackerDropdown() { setTimeout(() => (showExtraAttackerDropdown.value = false), 150) }
 function hideObligatoryKiokuDropdown() { setTimeout(() => (showObligatoryKiokuDropdown.value = false), 150) }
 function hideIgnoredKiokuDropdown() { setTimeout(() => (showIgnoredKiokuDropdown.value = false), 150) }
+function hideOnElementExceptionDropdown() { setTimeout(() => (showOnElementExceptionDropdown.value = false), 150) }
 
 // populateTeam/populateStatusTeam look up several members per result row by name; a Map is O(1) per
 // lookup instead of O(members.value.length) per .find() call, and this recomputes only when
@@ -573,6 +618,7 @@ async function startSimulation() {
             include4StarOthers: include4StarOthers.value,
             weakElements: weakElements.filter(el => el.enabled).map(el => el.name),
             onlyConsiderOnElements: onlyConsiderOnElements.value,
+            onElementExceptions: onElementExceptions.value.map(c => c.name),
             activeAliments: alimentRef.value?.aliments.filter(a => a.enabled).map(a => a.name) ?? [],
             extraAttackers: extraAttackers.value.map(c => c.name),
             obligatoryKioku: obligatoryKioku.value.map(c => c.name),

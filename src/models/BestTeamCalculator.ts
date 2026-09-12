@@ -103,6 +103,7 @@ export async function findBestTeam({
     extraAttackers,
     weakElements,
     onlyConsiderOnElements,
+    onElementExceptions = [],
     activeAliments,
     enabledCharacters,
     obligatoryKioku,
@@ -152,7 +153,7 @@ export async function findBestTeam({
                     ((include4StarSupports && [KiokuRole.Buffer, KiokuRole.Debuffer].includes(char.role))
                         || (include4StarOthers && [KiokuRole.Healer, KiokuRole.Defender, KiokuRole.Breaker].includes(char.role)))
                 )) {
-                if (!onlyConsiderOnElements || (onlyConsiderOnElements && weakElements.includes(char.element))) availableChars[char.role].push(char)
+                if (!onlyConsiderOnElements || weakElements.includes(char.element) || onElementExceptions.includes(char.name)) availableChars[char.role].push(char)
             }
             if (extraAttackers.includes(char.name)) availableChars[KiokuRole.Attacker].push(char)
         }
@@ -200,7 +201,14 @@ export async function findBestTeam({
     }
 
     let completedRuns = 0;
-    const expectedTotalRuns =
+    // Starts as just the pass-1 (roster enumeration) count. Pass-2 (the expensive portrait x support
+    // x support-of-support x crys evaluation) is far bigger and its size depends on per-attacker
+    // pruning results we don't know yet, so it can't be included here — instead each attacker's exact
+    // pass-2 iteration count gets added to this running total right after that attacker's rosters are
+    // pruned (see below), just before that attacker's pass-2 work begins. The total only ever grows,
+    // so the progress bar never jumps backwards, and by the time the last attacker's pass-2 starts,
+    // expectedTotalRuns already reflects the true grand total.
+    let expectedTotalRuns =
         availableChars[KiokuRole.Attacker].length *
         availableSupportCombinations.length *
         availableOtherDistributions.reduce((sum, dist) => {
@@ -209,6 +217,14 @@ export async function findBestTeam({
                 nCr(availableChars[KiokuRole.Defender].length, dist.defenders) *
                 nCr(availableChars[KiokuRole.Breaker].length, dist.breakers);
         }, 0);
+
+    // Pass-2 is where basically all of the compute time goes, but previously reported no progress at
+    // all during it — the bar would race through pass-1, then sit frozen for the entire heavy
+    // computation. Reporting on literally every pass-2 evaluation would flood the worker->main-thread
+    // postMessage channel, so progress is only actually emitted every PASS2_REPORT_INTERVAL
+    // evaluations (plus always on the very last one), while completedRuns itself is still tracked
+    // exactly on every iteration.
+    const PASS2_REPORT_INTERVAL = 200;
 
     // 0-100. Rosters whose pass-1 estimate is more than this many percent behind the best estimate
     // found for the same attacker are skipped in pass 2. 100 keeps everything (no effective pruning).
@@ -386,6 +402,15 @@ export async function findBestTeam({
             survivingRosters = estimated.filter(e => e.estimate >= threshold).map(e => e.roster)
         }
 
+        // Exact count of pass-2 evaluations this attacker is about to run — no scoring involved, just
+        // the same nested-loop shape below counted up front — so the progress bar's denominator can
+        // grow to the true total right before the expensive work starts, instead of after the fact.
+        const pass2RunsForAttacker = survivingRosters.reduce((sum, roster) => {
+            const usableSupportKeys = availableSupportKeys.filter(k => !roster.teamNames.includes(k[0])).length
+            return sum + usableSupportKeys * availablePortraits.length * roster.supportSupports.length * attackerCrysCombinations.length
+        }, 0)
+        expectedTotalRuns += pass2RunsForAttacker
+
         for (const { totalSupports, supportSupports, teamNames } of survivingRosters) {
             // Each member Kioku only depends on (totalSupports[i], supportSupport[i]) — never on the
             // attacker's own portrait/support/crys choice — so build the member set once per
@@ -454,6 +479,11 @@ export async function findBestTeam({
                                     perAttackerResults[attacker.name].replace(entry)
                             } catch (e) {
                                 onError?.(e)
+                            }
+
+                            completedRuns += 1
+                            if (completedRuns % PASS2_REPORT_INTERVAL === 0 || completedRuns === expectedTotalRuns) {
+                                onProgress?.([attacker.name, ...totalSupports.map(s => s.name)], completedRuns, expectedTotalRuns)
                             }
                         }
                     }
