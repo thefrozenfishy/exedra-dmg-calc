@@ -200,40 +200,28 @@ export async function findBestTeam({
             .map(c => c.getKey());
     }
 
-    let completedRuns = 0;
-    // Starts as just the pass-1 (roster enumeration) count. Pass-2 (the expensive portrait x support
-    // x support-of-support x crys evaluation) is far bigger and its size depends on per-attacker
-    // pruning results we don't know yet, so it can't be included here — instead each attacker's exact
-    // pass-2 iteration count gets added to this running total right after that attacker's rosters are
-    // pruned (see below), just before that attacker's pass-2 work begins. The total only ever grows,
-    // so the progress bar never jumps backwards, and by the time the last attacker's pass-2 starts,
-    // expectedTotalRuns already reflects the true grand total.
-    let expectedTotalRuns =
-        availableChars[KiokuRole.Attacker].length *
-        availableSupportCombinations.length *
-        availableOtherDistributions.reduce((sum, dist) => {
-            return sum +
-                nCr(availableChars[KiokuRole.Healer].length, dist.healers) *
-                nCr(availableChars[KiokuRole.Defender].length, dist.defenders) *
-                nCr(availableChars[KiokuRole.Breaker].length, dist.breakers);
-        }, 0);
-
-    // Pass-2 is where basically all of the compute time goes, but previously reported no progress at
-    // all during it — the bar would race through pass-1, then sit frozen for the entire heavy
-    // computation. Reporting on literally every pass-2 evaluation would flood the worker->main-thread
-    // postMessage channel, so progress is only actually emitted every PASS2_REPORT_INTERVAL
-    // evaluations (plus always on the very last one), while completedRuns itself is still tracked
-    // exactly on every iteration.
-    const PASS2_REPORT_INTERVAL = 200;
-
     // 0-100. Rosters whose pass-1 estimate is more than this many percent behind the best estimate
     // found for the same attacker are skipped in pass 2. 100 keeps everything (no effective pruning).
     const marginFraction = Math.min(Math.max(pruningMargin, 0), 100) / 100;
 
+    // ── Phase A: planning. For every attacker, enumerate its candidate rosters and run the cheap
+    // pruning estimate (same logic as before) — but don't score anything for real yet, and don't
+    // report progress here. This phase is fast relative to Phase B (the actual portrait x support x
+    // support-of-support x crys evaluation), so folding its count into the progress total would just
+    // make the bar leap ahead misleadingly early, and reporting it separately caused expectedTotalRuns
+    // to grow attacker-by-attacker later — visible as the bar jumping backwards every time a new
+    // attacker's work got discovered. Planning everything first means the exact grand total for Phase
+    // B is known before any of it runs, so the bar only ever climbs, never dips. ──
+    interface AttackerPlan {
+        attacker: Character
+        availablePortraits: string[]
+        availableSupportKeys: any[][]
+        attackerCrysCombinations: any[][]
+        survivingRosters: { totalSupports: Character[], supportSupports: any[][], teamNames: string[] }[]
+    }
+    const plans: AttackerPlan[] = []
+
     for (const attacker of availableChars[KiokuRole.Attacker]) {
-        const kiokuWhoShouldHavePortrait = new Set<string>([])
-        perAttackerResults[attacker.name] = new Heap(customPriorityComparator)
-        perAttackerResults[attacker.name].limit = LIMIT
         const availablePortraits = portraitsBestOnly(attacker.element, optimizeAverageDamage)
         const availableSupportKeys: any[][] = Array.from([highestAtkSupportKey, ...possibleAtkSupportKeys[attacker.element], ...possibleAtkSupportKeys[attacker.role]].filter(s => s?.[0] !== attacker.name).reduce((map, item) => {
             if (item && !map.has(item[0])) {
@@ -313,9 +301,8 @@ export async function findBestTeam({
             return supportSupports
         }
 
-        // ── Pass 1: enumerate every valid roster (the other 4 team slots) for this attacker. This is
-        // the same enumeration + the same onProgress/completedRuns bookkeeping the search always did —
-        // unchanged in what it visits or how progress is reported. ──
+        // Enumerate every valid roster (the other 4 team slots) for this attacker — same enumeration
+        // as before, just no longer scored or progress-reported here (see Phase B).
         const rosterCandidates: { totalSupports: Character[], supportSupports: any[][], teamNames: string[] }[] = []
 
         for (const dist of availableOtherDistributions) {
@@ -325,8 +312,6 @@ export async function findBestTeam({
                 for (const healerCombo of combinations(availableChars[KiokuRole.Healer], dist.healers)) {
                     for (const defenderCombo of combinations(availableChars[KiokuRole.Defender], dist.defenders)) {
                         for (const breakerCombo of combinations(availableChars[KiokuRole.Breaker], dist.breakers)) {
-                            completedRuns += 1;
-
                             const totalSupports = [
                                 ...healerCombo,
                                 ...defenderCombo,
@@ -339,8 +324,6 @@ export async function findBestTeam({
                             const teamNames = [attacker, ...totalSupports].map(c => c.name).sort();
                             if (obligatoryKioku.length && !obligatoryKioku.every(k => teamNames.includes(k))) continue;
 
-                            onProgress?.([attacker.name, ...totalSupports.map(s => s.name)], completedRuns, expectedTotalRuns)
-
                             rosterCandidates.push({ totalSupports, supportSupports, teamNames })
                         }
                     }
@@ -352,7 +335,7 @@ export async function findBestTeam({
         // rosters worth the expense. Every roster gets a fast pass-1 estimate using one realistic guess
         // (first candidate portrait/support/crys — all already curated lists, not arbitrary/worst-case
         // picks), and rosters whose estimate is within `pruningMargin`% of the best estimate seen for
-        // this attacker go on to the full treatment below.
+        // this attacker go on to the full treatment in Phase B.
         //
         // This is a heuristic, not a proof: it never re-examines a roster whose single realistic guess
         // already looked clearly worse than another roster's guess. That's usually right, but portrait/
@@ -360,8 +343,8 @@ export async function findBestTeam({
         // roster that looks mediocre on one guess could in principle still close the gap once fully
         // optimized — pruning trades a small, tunable chance of that for a large cut in search time.
         // Set pruningMargin higher (up to 100, which keeps every roster) to make that trade more
-        // conservative, or turn enablePruning off to fall back to the exhaustive search below, identical
-        // in outcome to before these changes (just faster, thanks to the hoisting above). ──
+        // conservative, or turn enablePruning off to fall back to the exhaustive search in Phase B,
+        // identical in outcome to before these changes (just faster, thanks to the hoisting above). ──
         const canEstimate = enablePruning
             && attackerCrysCombinations.length > 0
             && availablePortraits.length > 0
@@ -392,7 +375,7 @@ export async function findBestTeam({
                     return { roster, estimate: optimizeAverageDamage ? average_dmg : max_dmg }
                 } catch (e) {
                     // Don't let a pruning-estimate failure hide a roster that might otherwise be valid —
-                    // treat it as unknown/worth checking and let pass 2's own try/catch decide for real.
+                    // treat it as unknown/worth checking and let Phase B's own try/catch decide for real.
                     return { roster, estimate: Infinity }
                 }
             })
@@ -402,14 +385,34 @@ export async function findBestTeam({
             survivingRosters = estimated.filter(e => e.estimate >= threshold).map(e => e.roster)
         }
 
-        // Exact count of pass-2 evaluations this attacker is about to run — no scoring involved, just
-        // the same nested-loop shape below counted up front — so the progress bar's denominator can
-        // grow to the true total right before the expensive work starts, instead of after the fact.
-        const pass2RunsForAttacker = survivingRosters.reduce((sum, roster) => {
-            const usableSupportKeys = availableSupportKeys.filter(k => !roster.teamNames.includes(k[0])).length
-            return sum + usableSupportKeys * availablePortraits.length * roster.supportSupports.length * attackerCrysCombinations.length
-        }, 0)
-        expectedTotalRuns += pass2RunsForAttacker
+        plans.push({ attacker, availablePortraits, availableSupportKeys, attackerCrysCombinations, survivingRosters })
+    }
+
+    // Exact count of every Phase B evaluation across every attacker — no scoring involved, just the
+    // same nested-loop shape counted up front — so the progress bar gets a fixed, accurate denominator
+    // before any of the expensive work starts.
+    let expectedTotalRuns = 0
+    for (const plan of plans) {
+        for (const roster of plan.survivingRosters) {
+            const usableSupportKeys = plan.availableSupportKeys.filter(k => !roster.teamNames.includes(k[0])).length
+            expectedTotalRuns += usableSupportKeys * plan.availablePortraits.length * roster.supportSupports.length * plan.attackerCrysCombinations.length
+        }
+    }
+
+    // Report roughly REPORT_TARGET_UPDATES times total, regardless of search size — frequent enough
+    // that the bar reads as continuously moving rather than frozen between updates, without flooding
+    // the worker->main-thread postMessage channel on huge searches.
+    const REPORT_TARGET_UPDATES = 500
+    const PASS2_REPORT_INTERVAL = Math.max(1, Math.floor(expectedTotalRuns / REPORT_TARGET_UPDATES))
+
+    // ── Phase B: execute. Same nested loops and same per-attacker state (kiokuWhoShouldHavePortrait,
+    // perAttackerResults) as before — just driven off the pre-built plans, against the fixed total
+    // computed above. ──
+    let completedRuns = 0
+    for (const { attacker, availablePortraits, availableSupportKeys, attackerCrysCombinations, survivingRosters } of plans) {
+        const kiokuWhoShouldHavePortrait = new Set<string>([])
+        perAttackerResults[attacker.name] = new Heap(customPriorityComparator)
+        perAttackerResults[attacker.name].limit = LIMIT
 
         for (const { totalSupports, supportSupports, teamNames } of survivingRosters) {
             // Each member Kioku only depends on (totalSupports[i], supportSupport[i]) — never on the
@@ -735,14 +738,4 @@ function generateRoleDistributions(otherCount: number, minHealer: number, minDef
         }
     }
     return distributions;
-}
-
-function nCr(n: number, r: number): number {
-    if (r < 0 || r > n) return 0;
-    if (r === 0 || r === n) return 1;
-    let res = 1;
-    for (let i = 1; i <= r; i++) {
-        res = res * (n - i + 1) / i;
-    }
-    return res;
 }
