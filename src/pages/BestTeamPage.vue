@@ -603,7 +603,11 @@ const topTeamsByAttacker = computed(() => {
     const map: Record<string, FinalTeam[]> = {}
     prevAttackers.forEach(a => {
         const filtered = sortedResults.value.filter(r => r[3] === a.name)
-        if (filtered.length) map[a.name] = mergeTiedVariants(mergeCells(filtered)).slice(0, topTeamsPerKioku.value)
+        if (filtered.length) {
+            const merged = mergeTiedVariants(mergeCells(filtered))
+            const deduped = collapseMainDifferences.value ? collapseToFirstPerMainTeam(merged) : merged
+            map[a.name] = deduped.slice(0, topTeamsPerKioku.value)
+        }
     })
     const highestAtk = Object.fromEntries(Object.entries(map).map(([a, b]) => [a, Math.max(...b.map(t => t.optimized_dmg[0]))]))
     return Object.entries(map).sort((a, b) => highestAtk[b[0]] - highestAtk[a[0]])
