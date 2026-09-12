@@ -43,9 +43,15 @@
                 title="Calculate using perfect Crit rate, Crit Damage & atk crystalis substats">
                 <input type="checkbox" v-model="optimalSubCrys" /> Perfect crit &amp; substats
             </label>
-            <label class="chip" style="cursor: help;" :class="{ active: useMaxAccountLevels }"
-                title="Calculate using the max Kioku, Magic, Heartphial and Special level your account could theoretically reach based on your Player Level, instead of each Kioku's current levels">
-                <input type="checkbox" v-model="useMaxAccountLevels" /> Use max possible levels
+            <label class="chip" style="cursor: help;" :class="{ active: testAllA5MaxLevel || useMaxAccountLevels }"
+                :title="testAllA5MaxLevel
+                    ? 'Already implied by \'Test with all A5 & max level Kioku\''
+                    : 'Calculate using the max Kioku, Magic, Heartphial and Special level your account could theoretically reach based on your Player Level, instead of each Kioku\'s current levels'">
+                <input type="checkbox" v-model="useMaxAccountLevels" :disabled="testAllA5MaxLevel" /> Use max possible levels
+            </label>
+            <label class="chip" style="cursor: help;" :class="{ active: testAllA5MaxLevel }"
+                title="Ignores your roster entirely: every Kioku is treated as enabled and at max Ascension (A5), with max Heartphial and max Kioku/Magic/Special level based on your Player Level. Useful for theorycrafting the ceiling regardless of what you actually own or have leveled.">
+                <input type="checkbox" v-model="testAllA5MaxLevel" /> Test with all A5 &amp; max level Kioku
             </label>
             <label class="chip" style="cursor: help;" :class="{ active: enablePruning }"
                 title="Ranks candidate teams with a quick estimate first, then only fully optimizes the strongest ones. Much faster; only turn off to double-check a result against the exhaustive search.">
@@ -310,8 +316,15 @@ const expectedRuns = ref(0)
 const completedRuns = ref(0)
 const results = reactive<{ attackerId: string, team: any, dmg: number }[][]>([])
 
-const members = computed(() => store.characters.filter(c => c.enabled))
-const attackers = computed(() => store.characters.filter(c => (c.enabled && c.role === KiokuRole.Attacker) || extraAttackers.value.map(c => c.name).includes(c.name)))
+const testAllA5MaxLevel = useSetting("testAllA5MaxLevel", false)
+
+const effectiveCharacters = computed<Character[]>(() => {
+    if (!testAllA5MaxLevel.value) return store.characters
+    return store.characters.map(c => ({ ...c, enabled: true, ascension: KiokuConstants.maxAscension }))
+})
+
+const members = computed(() => effectiveCharacters.value.filter(c => c.enabled))
+const attackers = computed(() => effectiveCharacters.value.filter(c => (c.enabled && c.role === KiokuRole.Attacker) || extraAttackers.value.map(c => c.name).includes(c.name)))
 let prevAttackers: Character[] = []
 let prevObligatoryKioku: Character[] = []
 
@@ -665,7 +678,7 @@ async function startSimulation() {
             minBreaker: safeInt(minBreaker.value, 0, 0, 4),
             optimalSubCrys: optimalSubCrys.value,
             enabledCharacters: JSON.parse(JSON.stringify(
-                useMaxAccountLevels.value
+                (useMaxAccountLevels.value || testAllA5MaxLevel.value)
                     ? members.value.map(c => withMaxLevelsForPlayerLevel(c, playerLevel.value))
                     : members.value
             )),
