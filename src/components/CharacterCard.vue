@@ -158,10 +158,10 @@ export default defineComponent({
     const maxAscension = KiokuConstants.maxAscension
 
     const levelStats = [
-      { key: 'kiokuLvl', short: 'Kioku', min: 1, max: KiokuConstants.maxKiokuLvl },
-      { key: 'magicLvl', short: 'Magic', min: 0, max: KiokuConstants.maxMagicLvl },
-      { key: 'heartphialLvl', short: 'HP', min: 1, max: KiokuConstants.maxHeartphialLvl },
-      { key: 'specialLvl', short: 'SP', min: 1, max: KiokuConstants.maxSpecialLvl },
+      { key: 'kiokuLvl', short: 'Kioku', min: KiokuConstants.minKiokuLvl , max: KiokuConstants.maxKiokuLvl },
+      { key: 'magicLvl', short: 'Magic', min: KiokuConstants.minMagicLvl , max: KiokuConstants.maxMagicLvl },
+      { key: 'heartphialLvl', short: 'HP', min: KiokuConstants.minHeartphialLvl , max: KiokuConstants.maxHeartphialLvl },
+      { key: 'specialLvl', short: 'SP', min: KiokuConstants.minSpecialLvl , max: KiokuConstants.maxSpecialLvl },
     ]
 
     const derivedStats = computed(() => {
@@ -180,7 +180,7 @@ export default defineComponent({
         ? props.playerLevel
         : KiokuConstants.maxKiokuLvl
 
-      const currLvl = Math.min(Math.max(props.character.kiokuLvl ?? 0, 1), kiokuMaxLvl)
+      const currLvl = Math.min(Math.max(props.character.kiokuLvl ?? 0, KiokuConstants.minKiokuLvl), kiokuMaxLvl)
       const current = kiokuLevelCosts[currLvl] ?? kiokuLevelCosts[0]
       const max = kiokuLevelCosts[kiokuMaxLvl] ?? current
 
@@ -192,7 +192,7 @@ export default defineComponent({
     })
 
     const magicLevelCost = computed(() => {
-      const currLvl = Math.min(Math.max(props.character.magicLvl ?? 0, 0), KiokuConstants.maxMagicLvl)
+      const currLvl = Math.min(Math.max(props.character.magicLvl ?? 0, KiokuConstants.minMagicLvl), KiokuConstants.maxMagicLvl)
       const current = magicLevelCosts[props.character.id]?.[currLvl] ?? magicLevelCosts[10010101]?.[currLvl]
       const max = magicLevelCosts[props.character.id]?.[KiokuConstants.maxMagicLvl] ?? current
       return {
@@ -202,7 +202,7 @@ export default defineComponent({
     })
 
     const specialLevelCost = computed(() => {
-      const currLvl = Math.min(Math.max(props.character.specialLvl ?? 1, 1), KiokuConstants.maxSpecialLvl - 1)
+      const currLvl = Math.min(Math.max(props.character.specialLvl ?? 1, KiokuConstants.minSpecialLvl), KiokuConstants.maxSpecialLvl - 1)
       const rarityCosts = specialUpgradeCosts[props.character.rarity] ?? specialUpgradeCosts[4]
       const current = rarityCosts[currLvl] ?? rarityCosts[4]
       const max = rarityCosts[KiokuConstants.maxSpecialLvl - 1] ?? current

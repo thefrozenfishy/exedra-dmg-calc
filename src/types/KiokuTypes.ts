@@ -443,10 +443,15 @@ export const getSubCrystalises: () => CrystalisData[] = () => {
 
 export const maxDmgSubCrys = [4020, 4044, 4054]
 export const KiokuConstants = {
+    minKiokuLvl: 1,
     maxKiokuLvl: 160,
+    minMagicLvl: 0,
     maxMagicLvl: 140,
+    minAscension: 0,
     maxAscension: 5,
+    minHeartphialLvl: 1,
     maxHeartphialLvl: 50,
+    minSpecialLvl: 1,
     maxSpecialLvl: 10,
     optimalAttackerSubCrys: Array(3).fill(maxDmgSubCrys).flat()
 }
@@ -477,7 +482,7 @@ export function getMaxMagicLevelForKiokuLevel(kiokuLvl: number): number {
 }
 
 export function getMaxKiokuLevelForPlayerLevel(playerLevel: number): number {
-    return Math.min(Math.max(playerLevel || 0, 1), KiokuConstants.maxKiokuLvl)
+    return Math.min(Math.max(playerLevel || 0, KiokuConstants.minKiokuLvl), KiokuConstants.maxKiokuLvl)
 }
 
 export function getMaxSpecialLevelForAscension(ascension: number): number {

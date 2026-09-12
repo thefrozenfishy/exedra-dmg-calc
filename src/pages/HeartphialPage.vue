@@ -112,7 +112,7 @@
 
                     <div v-show="!collapsedGroups[group.name]" class="role-body">
                         <HeartphialRowItem v-for="row in group.visible" :key="rowKey(row)" :row="row"
-                            :max-level="maxLevel" :progress-percent="progressPercent(row)" :format-exp="formatExp"
+                            :max-level="KiokuConstants.maxHeartphialLvl" :progress-percent="progressPercent(row)" :format-exp="formatExp"
                             :plays-until-maxed="playsUntilMaxed(row)"
                             @update-level="level => updateLevel(row, level)" />
                     </div>
@@ -120,7 +120,7 @@
             </template>
 
             <template v-else>
-                <HeartphialRowItem v-for="row in rows" :key="rowKey(row)" :row="row" :max-level="maxLevel"
+                <HeartphialRowItem v-for="row in rows" :key="rowKey(row)" :row="row" :max-level="KiokuConstants.maxHeartphialLvl"
                     :progress-percent="progressPercent(row)" :format-exp="formatExp"
                     :plays-until-maxed="playsUntilMaxed(row)" @update-level="level => updateLevel(row, level)" />
             </template>
@@ -153,8 +153,6 @@ const showUnowned = useSetting("showUnowned", true)
 const showCompleted = useSetting("showHeartphialCompleted", true)
 const segmentBy = useSetting<HeartphialSegmentMode>("heartphilSegmentBy", "none")
 const sortBy = useSetting<'id' | 'exp'>("heartphialSortBy", "exp")
-
-const maxLevel = KiokuConstants.maxHeartphialLvl
 
 const selectedStageId = useSetting<number>(
     "heartphialFarmStageId",

@@ -645,7 +645,7 @@ export default defineComponent({
         ? playerLevel.value
         : KiokuConstants.maxKiokuLvl
 
-      const currLvl = Math.min(Math.max(char.kiokuLvl ?? 0, 1), kiokuMaxLvl)
+      const currLvl = Math.min(Math.max(char.kiokuLvl ?? 0, KiokuConstants.minKiokuLvl), kiokuMaxLvl)
       const current = kiokuLevelCosts[currLvl] ?? kiokuLevelCosts[0]
       const max = kiokuLevelCosts[kiokuMaxLvl] ?? current
 
@@ -681,7 +681,7 @@ export default defineComponent({
     }))
 
     function getMagicLevelCost(char: Character) {
-      const currLvl = Math.min(Math.max(char.magicLvl ?? 0, 0), KiokuConstants.maxMagicLvl)
+      const currLvl = Math.min(Math.max(char.magicLvl ?? 0, KiokuConstants.minMagicLvl), KiokuConstants.maxMagicLvl)
       const current = magicLevelCosts[char.id]?.[currLvl] ?? magicLevelCosts[10010101]?.[currLvl]
       const max = magicLevelCosts[char.id]?.[KiokuConstants.maxMagicLvl] ?? current
       return {
@@ -729,7 +729,7 @@ export default defineComponent({
     }))
 
     function getSpecialLevelCost(char: Character) {
-      const currLvl = Math.min(Math.max(char.specialLvl ?? 1, 1), KiokuConstants.maxSpecialLvl - 1)
+      const currLvl = Math.min(Math.max(char.specialLvl ?? 1, KiokuConstants.minSpecialLvl), KiokuConstants.maxSpecialLvl - 1)
       const rarityCosts = specialUpgradeCosts[char.rarity] ?? specialUpgradeCosts[4]
       const current = rarityCosts[currLvl] ?? rarityCosts[4]
       const max = rarityCosts[KiokuConstants.maxSpecialLvl - 1] ?? current
@@ -773,11 +773,11 @@ export default defineComponent({
     }
 
     const stats = [
-      { key: 'ascension', label: 'Ascension', min: 0, max: KiokuConstants.maxAscension },
-      { key: 'kiokuLvl', label: 'Kioku Lvl', min: 1, max: KiokuConstants.maxKiokuLvl },
-      { key: 'magicLvl', label: 'Magic Lvl', min: 0, max: KiokuConstants.maxMagicLvl },
-      { key: 'heartphialLvl', label: 'HP Lvl', min: 1, max: KiokuConstants.maxHeartphialLvl },
-      { key: 'specialLvl', label: 'SP Lvl', min: 1, max: KiokuConstants.maxSpecialLvl },
+      { key: 'ascension', label: 'Ascension', min: KiokuConstants.minAscension, max: KiokuConstants.maxAscension },
+      { key: 'kiokuLvl', label: 'Kioku Lvl', min: KiokuConstants.minKiokuLvl, max: KiokuConstants.maxKiokuLvl },
+      { key: 'magicLvl', label: 'Magic Lvl', min: KiokuConstants.minMagicLvl, max: KiokuConstants.maxMagicLvl },
+      { key: 'heartphialLvl', label: 'HP Lvl', min: KiokuConstants.minHeartphialLvl, max: KiokuConstants.maxHeartphialLvl },
+      { key: 'specialLvl', label: 'SP Lvl', min: KiokuConstants.minSpecialLvl, max: KiokuConstants.maxSpecialLvl },
     ]
 
     const pendingBulk = reactive<Record<string, number>>({})

@@ -23,12 +23,12 @@ import { getAccountSimilarityScore } from "../models/AccountSimilarityScore"
 import { LuxMagica } from '../types/enums'
 
 const base = {
-    ascension: KiokuConstants.maxAscension,
+    ascension: KiokuConstants.minAscension,
     portrait: "",
-    kiokuLvl: KiokuConstants.maxKiokuLvl,
-    magicLvl: KiokuConstants.maxMagicLvl,
-    heartphialLvl: KiokuConstants.maxHeartphialLvl,
-    specialLvl: KiokuConstants.maxSpecialLvl,
+    kiokuLvl: KiokuConstants.minKiokuLvl,
+    magicLvl: KiokuConstants.minMagicLvl,
+    heartphialLvl: KiokuConstants.minHeartphialLvl,
+    specialLvl: KiokuConstants.minSpecialLvl,
 }
 
 const buildCrysOptions = (id: number, stored: Record<string, any> = {}) =>
@@ -73,7 +73,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
     if (saved) {
         const oldChars: Character[] = JSON.parse(saved)
         characters.value = oldChars.map(c => {
-            if (c.ascension < 0) c.ascension = 0
+            if (c.ascension < 0) c.ascension = KiokuConstants.minAscension
             if (c.ascension > KiokuConstants.maxAscension) c.ascension = KiokuConstants.maxAscension
             if (c.rarity < 5) c.ascension = KiokuConstants.maxAscension
             if (c.name === LuxMagica) c.rarity = 4
@@ -185,7 +185,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
                 })
                 if (char.rarity < 5) char.ascension = KiokuConstants.maxAscension;
                 if (char.ascension > KiokuConstants.maxAscension) char.ascension = KiokuConstants.maxAscension;
-                if (char.ascension < 0) char.ascension = 0;
+                if (char.ascension < 0) char.ascension = KiokuConstants.minAscension;
                 if (char.name === LuxMagica) char.rarity = 4
             })
         } finally {

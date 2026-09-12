@@ -22,11 +22,11 @@ const emit = defineEmits<{
 }>()
 
 const stats = [
-  { key: 'ascension', label: 'Ascension', min: 0, max: KiokuConstants.maxAscension, hideForSupport: false },
-  { key: 'kiokuLvl', label: 'Kioku Level', min: 1, max: KiokuConstants.maxKiokuLvl, hideForSupport: false },
-  { key: 'magicLvl', label: 'Magic Level', min: 0, max: KiokuConstants.maxMagicLvl, hideForSupport: false },
-  { key: 'heartphialLvl', label: 'Heartphial Level', min: 1, max: KiokuConstants.maxHeartphialLvl, hideForSupport: false },
-  { key: 'specialLvl', label: 'Special Level', min: 1, max: KiokuConstants.maxSpecialLvl, hideForSupport: true }
+  { key: 'ascension', label: 'Ascension', min: KiokuConstants.minAscension, max: KiokuConstants.maxAscension, hideForSupport: false },
+  { key: 'kiokuLvl', label: 'Kioku Level', min: KiokuConstants.minKiokuLvl, max: KiokuConstants.maxKiokuLvl, hideForSupport: false },
+  { key: 'magicLvl', label: 'Magic Level', min: KiokuConstants.minMagicLvl, max: KiokuConstants.maxMagicLvl, hideForSupport: false },
+  { key: 'heartphialLvl', label: 'Heartphial Level', min: KiokuConstants.minHeartphialLvl, max: KiokuConstants.maxHeartphialLvl, hideForSupport: false },
+  { key: 'specialLvl', label: 'Special Level', min: KiokuConstants.minSpecialLvl, max: KiokuConstants.maxSpecialLvl, hideForSupport: true }
 ]
 
 function update(key: string, min: number, max: number, value?: number) {
