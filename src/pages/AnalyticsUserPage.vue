@@ -47,9 +47,13 @@
       <section v-if="eventBreakdown.length" class="card breakdown-card">
         <span class="filters-heading">Event types</span>
         <span v-for="[event, count] in eventBreakdown" :key="event" class="chip breakdown-chip"
-          :class="{ 'is-error': ERROR_EVENTS.has(event) }">
+          :class="{ 'is-error': ERROR_EVENTS.has(event), active: selectedEventTypes.includes(event) }"
+          @click="toggleEventTypeFilter(event)">
           {{ event }} · {{ count }}
         </span>
+        <button v-if="selectedEventTypes.length" class="clear-filter-btn ghost-btn" @click="selectedEventTypes = []">
+          Clear filter
+        </button>
       </section>
 
       <section class="card filters">
@@ -64,11 +68,6 @@
         <div class="section-header">
           <h2>Actions in series</h2>
         </div>
-
-        <button v-if="hasMore" class="load-older" :disabled="loadingMore" @click="loadOlder">
-          {{ loadingMore ? 'Loading…' : 'Load earlier activity' }}
-        </button>
-        <p v-else-if="rows.length" class="timeline-edge">— start of recorded activity —</p>
 
         <p v-if="!rows.length" class="no-errors">No recorded activity for this user yet.</p>
 
@@ -89,6 +88,11 @@
             </div>
           </div>
         </div>
+
+        <button v-if="hasMore" class="load-older" :disabled="loadingMore" @click="loadOlder">
+          {{ loadingMore ? 'Loading…' : 'Load earlier activity' }}
+        </button>
+        <p v-else-if="rows.length" class="timeline-edge">— start of recorded activity —</p>
       </section>
     </template>
   </div>
@@ -98,6 +102,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getSupabase } from '../utils/supabase'
+import { useSetting } from '../store/settingsStore'
 
 type AnalyticsRow = {
   id: string
@@ -133,8 +138,15 @@ const oldestCursor = ref<Cursor | null>(null)
 const expanded = ref<Set<string>>(new Set())
 const onlyErrors = ref(false)
 const linkCopied = ref(false)
+const selectedEventTypes = useSetting<string[]>('analyticsEventTypeFilter', [])
 
 const isErrorEvent = (row: AnalyticsRow) => ERROR_EVENTS.has(row.event)
+
+function toggleEventTypeFilter(event: string) {
+  selectedEventTypes.value = selectedEventTypes.value.includes(event)
+    ? selectedEventTypes.value.filter((e) => e !== event)
+    : [...selectedEventTypes.value, event]
+}
 
 const toggleExpanded = (id: string) => {
   const next = new Set(expanded.value)
@@ -143,9 +155,13 @@ const toggleExpanded = (id: string) => {
   expanded.value = next
 }
 
-const visibleRows = computed(() =>
-  onlyErrors.value ? rows.value.filter(isErrorEvent) : rows.value
-)
+const visibleRows = computed(() => {
+  let filtered = rows.value
+  if (onlyErrors.value) filtered = filtered.filter(isErrorEvent)
+  if (selectedEventTypes.value.length) filtered = filtered.filter((row) => selectedEventTypes.value.includes(row.event))
+  // rows is kept in ascending (chronological) order; reverse for newest-first display
+  return [...filtered].reverse()
+})
 
 const errorCount = computed(() => rows.value.filter(isErrorEvent).length)
 
@@ -538,13 +554,24 @@ button:disabled {
 }
 
 .breakdown-chip {
-  cursor: default;
   color: var(--muted);
 }
 
 .breakdown-chip.is-error {
   border-color: rgba(220, 38, 38, 0.35);
   color: var(--danger);
+}
+
+.breakdown-chip.is-error.active {
+  background: rgba(220, 38, 38, 0.16);
+  border-color: rgba(220, 38, 38, 0.4);
+  color: var(--danger);
+}
+
+.clear-filter-btn {
+  margin-left: auto;
+  font-size: 0.72rem;
+  padding: 0.3rem 0.65rem;
 }
 
 /* ── Timeline ── */
@@ -570,14 +597,14 @@ button:disabled {
 .load-older {
   display: block;
   width: 100%;
-  margin-bottom: 0.75rem;
+  margin-top: 0.75rem;
 }
 
 .timeline-edge {
   text-align: center;
   color: var(--muted);
   font-size: 0.8rem;
-  margin: 0 0 0.75rem;
+  margin: 0.75rem 0 0;
   opacity: 0.7;
 }
 
