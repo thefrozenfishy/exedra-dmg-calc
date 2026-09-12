@@ -356,7 +356,14 @@ export const BETA_SECTIONS = [
 
                     // Great supports 
                     { name: "Flame Waltz", ascension: 0 },
-                    { name: "Désintégration", ascension: 0 },
+                    {
+                        name: "Désintégration", ascension: 0,
+                        exceptions: {
+                            conditions: [
+                                { name: "Vinctio☆Magica", ascension: 0 },
+                            ]
+                        },
+                    },
                     {
                         name: "L'Ombre", ascension: 0,
                         exceptions: {
@@ -457,6 +464,7 @@ export const BETA_SECTIONS = [
                     { name: "Oracle Ray", ascension: 0 },
                     { name: "Ultra Great Big Hammer", ascension: 0 },
                     { name: "Cherry Blizzard", ascension: 0 },
+                    { name: "Désintégration", ascension: 0 },
 
                     // Pretty strong
                     {
