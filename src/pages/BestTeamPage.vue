@@ -258,6 +258,10 @@ Lower = faster but more likely to skip a team that could have closed the gap.
             </section>
             <div class="results">
                 <h2>Top Teams Overall</h2>
+                <label class="chip collapse-toggle" :class="{ active: collapseMainDifferences }"
+                    title="Only show the best-scoring row for each unique combination of the 5 main characters, hiding rows that only differ by portrait, support, or crystalis choice">
+                    <input type="checkbox" v-model="collapseMainDifferences" /> Show one line per unique team setup
+                </label>
                 <ResultsHeader :optimizeAverageDamage />
                 <div class="team-row-wrapper" v-for="(team, idx) in topResults" :key="idx">
                     <TeamRow :team :weakElements :offElementBuffMultReduction :offElementDebuffMultReduction
@@ -320,6 +324,7 @@ const alimentRef = ref<InstanceType<typeof AlimentToggler> | null>(null)
 
 const topTeamsPerKioku = useSetting("topTeamsPerKioku", 5)
 const topTeams = useSetting("topTeams", 20)
+const collapseMainDifferences = useSetting("collapseMainDifferences", false)
 const include4StarAttackers = useSetting("include4StarAttackers", false)
 const include4StarSupports = useSetting("include4StarSupports", false)
 const include4StarOthers = useSetting("include4StarOthers", false)
@@ -335,7 +340,7 @@ const enablePruning = useSetting("enablePruning", true)
 const pruningMargin = useSetting("pruningMargin", 15)
 const playerLevel = useSetting("playerLevel", KiokuConstants.maxKiokuLvl)
 const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
-const onlyConsiderOnElements = useSetting("onlyConsiderOnElements", false)
+const onlyConsiderOnElements = useSetting("onlyConsiderOnElements", true)
 
 const weakElements = reactive([
     { name: KiokuElement.Flame, enabled: useSetting("flame-enabled", true) },
@@ -566,7 +571,33 @@ function mergeTiedVariants(teams: FinalTeam[]): FinalTeam[] {
     })
 }
 
-const topResults = computed(() => mergeTiedVariants(mergeCells(sortedResults.value)).slice(0, topTeams.value))
+// The "main" team is just which 5 characters are on it (attacker + the 4 supports) — independent of
+// which portrait/support/crystalis got picked for them. Sorting the 5 names makes the signature
+// independent of which support slot (healer/defender/breaker/deBuffer) each one landed in.
+function mainTeamSignature(team: FinalTeam): string {
+    return [team.attacker.name, team.supp1.name, team.supp2.name, team.supp3.name, team.supp4.name].sort().join('|')
+}
+
+// Keeps only the first (i.e. highest-damage, since teams is already sorted desc) row seen for each
+// unique main-team signature, dropping every other row that's just a portrait/support/crys variant
+// of a combination already shown.
+function collapseToFirstPerMainTeam(teams: FinalTeam[]): FinalTeam[] {
+    const seen = new Set<string>()
+    const result: FinalTeam[] = []
+    for (const team of teams) {
+        const sig = mainTeamSignature(team)
+        if (seen.has(sig)) continue
+        seen.add(sig)
+        result.push(team)
+    }
+    return result
+}
+
+const topResults = computed(() => {
+    const merged = mergeTiedVariants(mergeCells(sortedResults.value))
+    const deduped = collapseMainDifferences.value ? collapseToFirstPerMainTeam(merged) : merged
+    return deduped.slice(0, topTeams.value)
+})
 
 const topTeamsByAttacker = computed(() => {
     const map: Record<string, FinalTeam[]> = {}
@@ -837,6 +868,11 @@ async function startSimulation() {
 .results {
     display: flex;
     flex-direction: column;
+}
+
+.collapse-toggle {
+    align-self: flex-start;
+    margin: 0.25rem 0 0.6rem;
 }
 
 .exporting {
