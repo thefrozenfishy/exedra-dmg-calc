@@ -324,7 +324,7 @@ const alimentRef = ref<InstanceType<typeof AlimentToggler> | null>(null)
 
 const topTeamsPerKioku = useSetting("topTeamsPerKioku", 5)
 const topTeams = useSetting("topTeams", 20)
-const collapseMainDifferences = useSetting("collapseMainDifferences", false)
+const collapseMainDifferences = useSetting("collapseMainDifferences", true)
 const include4StarAttackers = useSetting("include4StarAttackers", false)
 const include4StarSupports = useSetting("include4StarSupports", false)
 const include4StarOthers = useSetting("include4StarOthers", false)
