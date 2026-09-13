@@ -1,10 +1,11 @@
 import { Heap } from "heap-js";
 import { FindBestTeamOptions } from "../types/BestTeamTypes";
 import { ScoreAttackTeam } from "./ScoreAttackTeam";
-import { portraitsBestOnly, Character, getBestCrystalises, KiokuConstants, getEX, SupportIdealPortrait, KiokuArgs } from "../types/KiokuTypes";
+import { portraitsBestOnly, Character, getBestCrystalises, KiokuConstants, getEX, SupportIdealPortrait, KiokuArgs, CrystalisData } from "../types/KiokuTypes";
 import { ScoreAttackKioku } from "./ScoreAttackKioku";
 import { Enemy } from "../types/EnemyTypes";
 import { KiokuElement, KiokuRole, SupportKey, Aliment } from "../types/enums";
+import { crystalises } from "../utils/helpers";
 
 const cache = new Map<string, ScoreAttackKioku>();
 const customPriorityComparator = (a: any[], b: any[]) => a[0] - b[0];
@@ -632,6 +633,40 @@ export function getAttackerSupportCandidates(attacker: Character, enabledCharact
     return Array.from(unique.values())
 }
 
+// Crys entries marked `locked` (see CrystalisSelection) are forced into every candidate combo below;
+// only the remaining, unlocked slots are searched. A crys with useIndex === 0 is not currently
+// equipped, so its locked flag (if any) is ignored. A locked crys does NOT need to be one of the
+// "optimal" candidates getBestCrystalises() would otherwise search — it's fine (and common) for a
+// locked pick to be off the beaten path; it's resolved against the full crys table instead, and only
+// the remaining unlocked slots get restricted to the optimal pool.
+function buildCrysCandidates(main: Character): CrystalisData[][] {
+    const allCandidates = getBestCrystalises(main)
+
+    const lockedIds = Object.entries(main.crysOptions ?? {})
+        .filter(([, v]) => v.useIndex > 0 && v.locked)
+        .map(([id]) => Number(id))
+
+    if (lockedIds.length > 3) {
+        throw new Error("At most 3 crystalises can be locked")
+    }
+    if (!lockedIds.length) {
+        return combinations(allCandidates, 3)
+    }
+
+    const lockedCrys = lockedIds.map(id => crystalises[id] ?? allCandidates.find(c => c.selectionAbilityMstId === id))
+    if (lockedCrys.some(c => !c)) {
+        throw new Error("One or more locked crystalises could not be found")
+    }
+
+    const remainingSlots = 3 - lockedCrys.length
+    const remainingCandidates = allCandidates.filter(
+        c => !lockedIds.includes(c.selectionAbilityMstId)
+    )
+
+    return combinations(remainingCandidates, remainingSlots)
+        .map(combo => [...(lockedCrys as CrystalisData[]), ...combo])
+}
+
 export async function findBestAttackerLoadout({
     attacker,
     otherMembers,
@@ -656,7 +691,7 @@ export async function findBestAttackerLoadout({
     const excludeNames = [attacker.main.name, ...otherMembers.map(m => m.main.name)]
     const portraitCandidates = portraitsBestOnly(attacker.main.element, optimizeAverageDamage)
     const supportCandidates = getAttackerSupportCandidates(attacker.main, enabledCharacters, excludeNames)
-    const crysCandidates = combinations(getBestCrystalises(attacker.main), 3)
+    const crysCandidates = buildCrysCandidates(attacker.main)
 
     if (!supportCandidates.length) {
         throw new Error("No valid support candidates found for this attacker")

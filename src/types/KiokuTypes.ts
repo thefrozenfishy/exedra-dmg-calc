@@ -344,6 +344,9 @@ export interface CrystalisSelection {
     enabled: boolean
     useIndex: number
     subCrys: number[]
+    // When true, findBestAttackerLoadout treats this crys as forced: it's kept as-is and only the
+    // remaining (unlocked) crys slots are searched. Ignored for crys entries with useIndex === 0.
+    locked?: boolean
 }
 
 export const getEX = (characterId: number) => crystalisesByStyle[characterId]?.[0]

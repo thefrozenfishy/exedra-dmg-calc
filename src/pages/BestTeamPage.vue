@@ -250,6 +250,7 @@ Lower = faster but more likely to skip a team that could have closed the gap.
                 <progress :value="completedRuns" :max="expectedRuns" class="progress-bar"></progress>
                 <span class="progress-text">{{ completedRuns }} / {{ expectedRuns }}</span>
             </div>
+            <button class="btn btn-cancel" @click="cancelSimulation">Cancel</button>
         </div>
 
         <button v-else class="btn btn-start" @click="startSimulation" :disabled="running">
@@ -628,6 +629,14 @@ const topTeamsByAttacker = computed(() => {
     return Object.entries(map).sort((a, b) => highestAtk[b[0]] - highestAtk[a[0]])
 })
 
+function cancelSimulation() {
+    workerRef.value?.terminate()
+    workerRef.value = null
+    running.value = false
+    preprocessing.value = false
+    progress.value = {}
+}
+
 async function startSimulation() {
     prevObligatoryKioku = [...obligatoryKioku.value]
     prevAttackers = [...attackers.value, ...extraAttackers.value]
@@ -809,6 +818,20 @@ async function startSimulation() {
 .btn-start:disabled {
     opacity: 0.6;
     cursor: default;
+}
+
+.btn-cancel {
+    display: block;
+    margin: 0.6rem auto 0;
+    padding: 0.4em 1.4em;
+    background: rgba(255, 80, 80, 0.1);
+    border: 1px solid rgba(255, 80, 80, 0.35);
+    color: #ff6b6b;
+}
+
+.btn-cancel:hover {
+    background: rgba(255, 80, 80, 0.18);
+    border-color: rgba(255, 80, 80, 0.55);
 }
 
 /* ── Numeric field row ── */
