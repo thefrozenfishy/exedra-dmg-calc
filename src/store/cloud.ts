@@ -113,7 +113,12 @@ async function _createCloudUser(userId: string) {
     await createProfile(userId)
 }
 
-async function _saveCharacters(chars: Character[]) {
+type SaveCharacterResultRow = Omit<CharacterRow, 'user_id'> & { conflict: boolean; updated_at: string }
+
+async function _saveCharacters(
+    chars: Character[],
+    knownUpdatedAt: Record<number, string | undefined> = {}
+) {
     const userId = getUserId()
 
     if (!userId) return
@@ -142,17 +147,66 @@ async function _saveCharacters(chars: Character[]) {
 
     const summary = summarizeCharacterSave(rows)
 
-    const { error } = await supabase
-        .from("user_characters")
-        .upsert(rows)
+    // Row-level optimistic concurrency: each row carries the updated_at this
+    // client last confirmed for that character (or null if it's never
+    // confirmed one). save_characters_safe rejects - and hands back the
+    // server's current value for - any row where the DB has a newer write
+    // than that, e.g. a stale tab/device that hasn't seen a change made
+    // elsewhere. This replaces a blind .upsert() of every row, which always
+    // overwrote the whole account with whatever this client currently had,
+    // stale or not.
+    const payload = rows.map(r => ({
+        character_id: r.character_id,
+        enabled: r.enabled,
+        dupes: r.dupes,
+        ascension: r.ascension,
+        kioku_lvl: r.kioku_lvl,
+        magic_lvl: r.magic_lvl,
+        heartphial_lvl: r.heartphial_lvl,
+        special_lvl: r.special_lvl,
+        portrait: r.portrait,
+        crys_options: r.crys_options,
+        known_updated_at: knownUpdatedAt[r.character_id] ?? null,
+    }))
+
+    const { data, error } = await supabase.rpc('save_characters_safe', {
+        target_user_id: userId,
+        payload,
+    })
 
     if (error) throw error
 
-    lastKnownCharacterRows = new Map(rows.map(r => [r.character_id, r]))
+    const resultRows: SaveCharacterResultRow[] = data ?? []
+
+    // Use what the server actually accepted (including its resolution of
+    // any conflicted rows), not what this client attempted to send, so the
+    // next save's analytics diff reflects reality even after a conflict.
+    lastKnownCharacterRows = new Map(
+        resultRows.map(r => [r.character_id, {
+            user_id: userId,
+            character_id: r.character_id,
+            enabled: r.enabled,
+            dupes: r.dupes,
+            ascension: r.ascension,
+            kioku_lvl: r.kioku_lvl,
+            magic_lvl: r.magic_lvl,
+            heartphial_lvl: r.heartphial_lvl,
+            special_lvl: r.special_lvl,
+            portrait: r.portrait,
+            crys_options: r.crys_options,
+        } as CharacterRow])
+    )
 
     await _updateMyScore(userId, chars)
 
-    return summary
+    const conflictRows = resultRows.filter(r => r.conflict)
+
+    return {
+        ...summary,
+        conflictCount: conflictRows.length,
+        conflictCharacterIds: conflictRows.map(r => r.character_id),
+        rows: resultRows,
+    }
 }
 
 async function _updateMyScore(userId: string, chars: Character[]) {
@@ -831,7 +885,15 @@ export const createCloudUser = withAnalytics(
 export const saveCharacters = withAnalytics(
     _saveCharacters,
     'save_characters',
-    (_args, result) => result ?? {}
+    (_args, result) => {
+        if (!result) return {}
+        // withAnalytics still returns the full `result` (including `rows`,
+        // which the store needs to reconcile local state) to the caller -
+        // this only trims what actually gets logged, so we're not writing
+        // every character's full row to the analytics table on every save.
+        const { rows, ...summary } = result
+        return summary
+    }
 )
 
 export const updateDisplayName = withAnalytics(

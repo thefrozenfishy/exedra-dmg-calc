@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import { Character, KiokuConstants, correctCharacterParams, relevantCrys } from '../types/KiokuTypes'
 import { kiokuData } from '../utils/helpers'
 import debounce from "lodash.debounce"
@@ -96,6 +96,29 @@ export const useCharacterStore = defineStore('characterStore', () => {
         localStorage.setItem(PENDING_SYNC_KEY, val ? 'true' : 'false')
     }
 
+    // Per-character `updated_at` this client last confirmed from the cloud
+    // (via a load, or a save that went through cleanly). Sent back with
+    // every save as a compare-and-swap token so a stale tab/device can't
+    // blindly overwrite a change made elsewhere - see save_characters_safe.
+    // Kept separate from `characters` so it never leaks into export/import.
+    const SYNC_META_KEY = 'characters_sync_meta'
+    const syncMeta = ref<Record<number, string>>(
+        JSON.parse(localStorage.getItem(SYNC_META_KEY) || '{}')
+    )
+
+    const persistSyncMeta = () => {
+        localStorage.setItem(SYNC_META_KEY, JSON.stringify(syncMeta.value))
+    }
+
+    // Gates cloud saves until this session has either reconciled with the
+    // cloud (initializeCloud/loadExistingCloudAccount) or established there's
+    // no cloud account to reconcile with. Without this, the synchronous
+    // "add any newly-released characters" step below fires the deep watcher
+    // at store setup, and its debounce can win a race against the async
+    // cloud fetch - saving whatever this session's local storage happened to
+    // have before it's had a chance to catch up.
+    const hydrated = ref(false)
+
     let applyingCloudData = false
 
     const precomputeSimilarities = async () => {
@@ -136,16 +159,41 @@ export const useCharacterStore = defineStore('characterStore', () => {
         }
     }
 
+    // After a save, save_characters_safe returns every row's authoritative
+    // current state plus a `conflict` flag: true means this client's write
+    // for that character was rejected because the server had a newer value
+    // than what we last knew about, and the row returned is that server
+    // value, not what we sent. Reconciling means folding conflicted rows
+    // back into local state (instead of trusting our stale copy) and, for
+    // everything else, just recording the fresh updated_at so the next save
+    // has an accurate compare-and-swap token.
+    const reconcileSaveResult = (result: any) => {
+        if (!result?.rows) return
+
+        const conflictRows = result.rows.filter((r: any) => r.conflict)
+        const okRows = result.rows.filter((r: any) => !r.conflict)
+
+        if (conflictRows.length) {
+            applyCloudCharacters(conflictRows)
+        }
+
+        okRows.forEach((r: any) => {
+            syncMeta.value[r.character_id] = r.updated_at
+        })
+        persistSyncMeta()
+    }
+
     const debouncedCloudSave = debounce(async () => {
         try {
             if (!getUserId()) return
-            await saveCharacters(characters.value)
+            const result = await saveCharacters(characters.value, syncMeta.value)
             markPending(false)
+            reconcileSaveResult(result)
             await precomputeSimilarities()
         } catch (err) {
             console.error("Failed to save characters:", err)
         }
-    }, 500)
+    }, 1500)
 
     watch(
         characters,
@@ -155,7 +203,13 @@ export const useCharacterStore = defineStore('characterStore', () => {
             if (applyingCloudData) return
 
             markPending(true)
-            debouncedCloudSave()
+
+            // Don't push to the cloud until we've hydrated - see `hydrated`
+            // above. The pending flag still gets set, so nothing is lost:
+            // once hydration finishes it flushes any pending change itself.
+            if (hydrated.value) {
+                debouncedCloudSave()
+            }
         },
         { deep: true }
     )
@@ -165,6 +219,10 @@ export const useCharacterStore = defineStore('characterStore', () => {
         try {
             rows.forEach((row) => {
                 const char = characters.value.find(c => c.id === row.character_id)
+
+                if (row.updated_at) {
+                    syncMeta.value[row.character_id] = row.updated_at
+                }
 
                 if (!char) return
 
@@ -188,8 +246,14 @@ export const useCharacterStore = defineStore('characterStore', () => {
                 if (char.ascension < 0) char.ascension = KiokuConstants.minAscension;
                 if (char.name === LuxMagica) char.rarity = 4
             })
+            persistSyncMeta()
         } finally {
-            applyingCloudData = false
+            // watch(..., { deep: true }) fires on the next tick, not
+            // synchronously, so resetting this flag right here (before that
+            // tick) makes it a no-op guard - by the time the watcher's
+            // callback actually checks it, it's already back to false.
+            // Deferring the reset past that tick makes the guard real.
+            nextTick(() => { applyingCloudData = false })
         }
     }
 
@@ -198,8 +262,10 @@ export const useCharacterStore = defineStore('characterStore', () => {
 
         await createCloudUser(userId)
 
-        await saveCharacters(characters.value)
+        const result = await saveCharacters(characters.value, syncMeta.value)
         markPending(false)
+        reconcileSaveResult(result)
+        hydrated.value = true
 
         return userId
     }
@@ -213,15 +279,22 @@ export const useCharacterStore = defineStore('characterStore', () => {
 
         applyCloudCharacters(rows)
         markPending(false)
+        hydrated.value = true
     }
 
     const initializeCloud = async () => {
-        if (!getUserId()) return
+        if (!getUserId()) {
+            // Nothing to reconcile with - a purely local account is ready
+            // to save (to localStorage only) immediately.
+            hydrated.value = true
+            return
+        }
 
         try {
             if (cloudSyncPending.value) {
-                await saveCharacters(characters.value)
+                const result = await saveCharacters(characters.value, syncMeta.value)
                 markPending(false)
+                reconcileSaveResult(result)
             }
 
             const rows = await loadCharacters()
@@ -231,7 +304,18 @@ export const useCharacterStore = defineStore('characterStore', () => {
             }
         } catch (err) {
             console.error("Failed to initialize cloud characters:", err)
+        } finally {
+            hydrated.value = true
+
+            // Something may have changed characters.value while we were
+            // still hydrating (e.g. newly-released characters getting
+            // pushed in at store setup, below) without triggering a save,
+            // since the watcher was holding off until now. Flush it.
+            if (cloudSyncPending.value) {
+                debouncedCloudSave()
+            }
         }
+
         touchLastSeen()
     }
 
@@ -315,5 +399,7 @@ export const useCharacterStore = defineStore('characterStore', () => {
         loadExistingCloudAccount,
         initializeCloud,
         mergeChars,
+        hydrated,
+        cloudSyncPending,
     }
 })
