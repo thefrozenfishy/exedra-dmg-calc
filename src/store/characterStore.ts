@@ -195,6 +195,21 @@ export const useCharacterStore = defineStore('characterStore', () => {
         }
     }, 1500)
 
+    const flushPendingSave = () => {
+        if (cloudSyncPending.value) {
+            debouncedCloudSave.flush()
+        }
+    }
+
+    if (typeof document !== 'undefined') {
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                flushPendingSave()
+            }
+        })
+        window.addEventListener('pagehide', flushPendingSave)
+    }
+
     watch(
         characters,
         (newVal) => {
