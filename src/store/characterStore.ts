@@ -201,15 +201,6 @@ export const useCharacterStore = defineStore('characterStore', () => {
         }
     }
 
-    if (typeof document !== 'undefined') {
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'hidden') {
-                flushPendingSave()
-            }
-        })
-        window.addEventListener('pagehide', flushPendingSave)
-    }
-
     watch(
         characters,
         (newVal) => {
@@ -270,6 +261,37 @@ export const useCharacterStore = defineStore('characterStore', () => {
             // Deferring the reset past that tick makes the guard real.
             nextTick(() => { applyingCloudData = false })
         }
+    }
+
+    const refreshFromCloud = async () => {
+        if (!getUserId() || !hydrated.value) return
+
+        try {
+            const rows = await loadCharacters()
+
+            const staleRows = rows.filter((row: any) => {
+                const known = syncMeta.value[row.character_id]
+                return row.updated_at && (!known || row.updated_at > known)
+            })
+
+            if (staleRows.length) {
+                applyCloudCharacters(staleRows)
+            }
+        } catch (err) {
+            console.error("Failed to refresh characters from cloud:", err)
+        }
+    }
+
+    if (typeof document !== 'undefined') {
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                flushPendingSave()
+            } else {
+                refreshFromCloud()
+            }
+        })
+        window.addEventListener('pagehide', flushPendingSave)
+        window.addEventListener('focus', refreshFromCloud)
     }
 
     const createCloudAccount = async () => {
@@ -416,5 +438,6 @@ export const useCharacterStore = defineStore('characterStore', () => {
         mergeChars,
         hydrated,
         cloudSyncPending,
+        refreshFromCloud,
     }
 })
