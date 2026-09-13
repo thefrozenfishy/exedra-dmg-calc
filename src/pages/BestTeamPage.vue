@@ -645,7 +645,7 @@ async function startSimulation() {
             console.log(e.data)
             preprocessing.value = e.data.preprocessing
         } else if (e.data.type === 'done') {
-            results.push(...e.data.results)
+            for (const r of e.data.results) results.push(r)
             running.value = false
             workerRef.value?.terminate()
             workerRef.value = null
