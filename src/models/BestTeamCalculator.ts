@@ -532,7 +532,7 @@ export async function findBestTeam({
 
                             completedRuns += 1
                             if (completedRuns % PASS2_REPORT_INTERVAL === 0 || completedRuns === expectedTotalRuns) {
-                                onProgress?.([attacker.name, ...totalSupports.map(s => s.name)], completedRuns, expectedTotalRuns)
+                                onProgress?.([attacker.name, ...totalSupports.map(s => s.name)], completedRuns, expectedTotalRuns, false)
                             }
                         }
                     }

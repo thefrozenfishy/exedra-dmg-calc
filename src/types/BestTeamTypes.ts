@@ -17,6 +17,7 @@ export interface FindBestTeamOptions {
     extraAttackers: string[];
     obligatoryKioku: string[];
     ignoredKioku: string[];
+    onElementExceptions: string[];
     weakElements: KiokuElement[]
     onlyConsiderOnElements: boolean
     activeAliments: Aliment[]
@@ -45,7 +46,7 @@ export interface FindBestTeamOptions {
     // have closed the gap once fully optimized. 100 effectively disables pruning even if enablePruning
     // is true. Defaults to 15.
     pruningMargin?: number
-    onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number, preprocessing?: boolean) => void,
+    onProgress?: (currChars: string[], completedRuns: number, expectedTotalRuns: number, preprocessing: boolean) => void,
     onError?: (error: any) => void
 }
 
