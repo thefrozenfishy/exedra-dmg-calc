@@ -728,9 +728,10 @@ const shareOptionsForGrid = () => ({
     width: max-content !important;
 }
 
-.exporting .er-grid {
-    margin: 0 !important;
-    width: max-content !important;
+.er-grid {
+    border-collapse: collapse;
+    min-width: max-content;
+    margin: 0 auto;
 }
 
 .options-bar {
@@ -916,6 +917,13 @@ const shareOptionsForGrid = () => ({
     display: flex;
     justify-content: center;
     overflow-x: visible;
+}
+
+@media (max-width: 768px) {
+    .grid-scroll {
+        display: block;
+        overflow-x: auto;
+    }
 }
 
 .corner-cell,
