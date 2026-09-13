@@ -8,7 +8,7 @@ import { KiokuElement, KiokuRole, SupportKey, Aliment } from "../types/enums";
 
 const cache = new Map<string, ScoreAttackKioku>();
 const customPriorityComparator = (a: any[], b: any[]) => a[0] - b[0];
-const LIMIT = 50_000;
+const LIMIT = 10_000;
 
 interface KiokuGeneratorArgs {
     name: string;
