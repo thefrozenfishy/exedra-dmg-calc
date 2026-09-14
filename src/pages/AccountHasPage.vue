@@ -257,12 +257,11 @@ From the six yellow numbers choose the three you think you have the most use for
                     ({{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100)
                     }}%)</span>
             </div>
-            <div style="cursor: help;" class="stat-row stat-row-sub" title="Wishlist keys become more cost efficient than standard 5★ gold key 
-from the legacy shop once your change of hitting a non-A5 standard goes below 60%.
-Of course, if you are aiming for any particular ascension, prefer wishlist keys sooner.">
-                <span class="stat-label">— Meaning you should prefer buying {{ ((standardPool.length -
-                    ownedA5StandardPool.length) / standardPool.length) > 0.6 ? 'Standard' : 'Wishlist' }} keys
-                    from the legacy shop</span>
+            <div class="stat-row stat-row-sub">
+                <span class="stat-label">— Meaning if you wish to maximize amount of non-A5 kioku pulled per legacy medal spent, you want to prefer <b>{{ ((standardPool.length -
+                    ownedA5StandardPool.length) / standardPool.length) > 0.6 ? 'Standard' : 'Wishlist' }}</b> keys
+                    from the legacy shop.<br />
+                    As wishlist keys become more cost efficient once the A5 pull rate goes below 60%.</span>
             </div>
         </section>
 
