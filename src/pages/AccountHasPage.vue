@@ -154,7 +154,7 @@ From the six yellow numbers choose the three you think you have the most use for
                                     @click.stop="startEdit(ch, 'dupes', $event)">
                                     <template v-if="isEditing(ch, 'dupes')">
                                         <button type="button" class="dupe-increment-btn" @mousedown.prevent
-                                            @click.stop="editValue = (editValue ?? 0) + 1">+</button>
+                                            @click.stop="incrementDupes(ch)">+</button>
                                         <input type="number" v-model.number="editValue" @click.stop
                                             @blur="commitEdit(ch, 'dupes')"
                                             @keydown.enter.prevent="commitEdit(ch, 'dupes')" />
@@ -600,17 +600,15 @@ const editValue = ref<number>(0)
 
 const startEdit = async (ch: Character, field: EditableField, e: MouseEvent) => {
     if (isReadonly.value) return
+
+    const host = e.currentTarget as HTMLElement | null
+
     editing.value = { id: ch.id, field }
     editValue.value = ch[field]
 
     await nextTick()
 
-    if (e.currentTarget == null) {
-        console.error("Could not find target", e, ch, field)
-        return
-    }
-
-    const input = (e.currentTarget as HTMLElement).querySelector("input")
+    const input = host?.querySelector("input")
     input?.focus()
     input?.select()
 }
@@ -639,6 +637,16 @@ const commitEdit = async (ch: Character, field: EditableField) => {
 
     store.updateChar({ ...ch, [field]: value })
     editing.value = null
+}
+
+const incrementDupes = (ch: Character) => {
+    if (isReadonly.value) return
+
+    const max = getMax(ch, "dupes")
+    const value = Math.max(0, Math.min((editValue.value ?? 0) + 1, max))
+
+    editValue.value = value
+    store.updateChar({ ...ch, dupes: value })
 }
 
 const draggedChar = ref<Character | null>(null)
