@@ -29,18 +29,13 @@ Chart.register(
 const pickupCharacter = useSetting("pickupCharacter", undefined)
 const showFullHistory = ref(false)
 
-const characterStore = useCharacterStore()
-const eligible3stars = computed(() =>
-    characterStore.characters.filter(c => c.rarity === 3)
+const characters = useCharacterStore().characters.filter(c => c.isStandardChar)
+const eligible3stars = computed(() => characters.filter(c => c.rarity === 3)
 )
-const eligible4stars = computed(() =>
-    characterStore.characters.filter(c => c.rarity === 4)
+const eligible4stars = computed(() => characters.filter(c => c.rarity === 4)
 )
-const eligible5stars = computed(() =>
-    characterStore.characters.filter(c =>
-        c.name !== pickupCharacter.value?.name &&
-        (c.rarity === 5  && c.isStandardChar)
-    )
+const eligible5stars = computed(() => characters.filter(c => c.rarity === 5)
+    .filter(c => c.name !== pickupCharacter.value?.name)
 )
 
 const rate = ref(3)
@@ -454,6 +449,7 @@ const simGemsSpent = ref(0)
 const blueCount = ref(0)
 const purpleCount = ref(0)
 const goldCount = ref(0)
+const guaranteedGoldCount = ref(0)
 const rateUpCount = ref(0)
 const softPityWindowLocked = ref(false)
 
@@ -504,6 +500,7 @@ function recordResult(result) {
     if (result.rarity === 4) purpleCount.value++
     if (result.rarity === 5) goldCount.value++
     if (result.isRateUp) rateUpCount.value++
+    if (result.tag) guaranteedGoldCount.value++
 
     pullResults.value.unshift(result)
 }
@@ -633,6 +630,7 @@ function resetSimulator() {
     purpleCount.value = 0
     goldCount.value = 0
     rateUpCount.value = 0
+    guaranteedGoldCount.value = 0
     softPityWindowLocked.value = false
     pullResults.value = []
 }
@@ -897,8 +895,9 @@ const downloadFullHistoryHorizontal = async () => {
                 <div class="stat-pill"><strong>{{ Math.round(simGemsSpent).toLocaleString() }}</strong> gems</div>
                 <div class="stat-pill">🔵 3★: <strong>{{ blueCount }}</strong></div>
                 <div class="stat-pill">🟣 4★: <strong>{{ purpleCount }}</strong></div>
-                <div class="stat-pill">🟡 5★: <strong>{{ goldCount }}</strong></div>
-                <div class="stat-pill">⭐ Rate-up: <strong>{{ rateUpCount }}</strong></div>
+                <div class="stat-pill">🟡 5★: <strong>{{ goldCount }}</strong>, of which <strong>{{ guaranteedGoldCount
+                        }}</strong> were guaranteed and <strong>{{ rateUpCount }}</strong> were <strong>{{
+                            pickupCharacter?.name }}</strong></div>
             </div>
 
             <div class="history-header">
