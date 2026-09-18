@@ -572,7 +572,7 @@ export default defineComponent({
         if (sortBy.value === "id") return a.id - b.id
         if (sortBy.value === "name") return a.name.localeCompare(b.name)
         if (sortBy.value === "ch_name") return a.character_en.localeCompare(b.character_en)
-        if (sortBy.value === "releaseDate") return new Date(a.releaseDate) > new Date(b.releaseDate)
+        if (sortBy.value === "releaseDate") return new Date(a.releaseDate) > new Date(b.releaseDate) ? 1 : -1
         if (sortBy.value === "kiokuLvl") return b.kiokuLvl - a.kiokuLvl
         if (sortBy.value === "magicLvl") return b.magicLvl - a.magicLvl
         const statA = getCachedStats(a)?.[sortBy.value] ?? -Infinity

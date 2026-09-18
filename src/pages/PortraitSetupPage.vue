@@ -48,6 +48,7 @@
           <option value="def">DEF</option>
           <option value="hp">HP</option>
           <option value="pwr">PWR</option>
+          <option value="releaseDate">Release Date</option>
         </select>
       </div>
 
@@ -151,7 +152,7 @@ export default defineComponent({
     const showResourceCosts = useSetting('portraitShowResourceCosts', true)
     const showPerPortraitResourceCosts = useSetting('portraitShowPerPortraitResourceCosts', true)
 
-    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp' | 'pwr' | 'id'>(
+    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp' | 'pwr' | 'id' | 'releaseDate'>(
       'portraitSortBy',
       'id'
     )
@@ -217,6 +218,7 @@ export default defineComponent({
     function comparePortraits(a: Portrait, b: Portrait) {
       if (sortBy.value === "id") return a.cardMstId - b.cardMstId
       if (sortBy.value === "name") return a.name.localeCompare(b.name)
+      if (sortBy.value === "releaseDate") return new Date(a.releaseTime) > new Date(b.releaseTime) ? 1 : -1
       if (sortBy.value === "pwr") return getPortraitMaxPwr(b, effectiveLevel(b)) - getPortraitMaxPwr(a, effectiveLevel(a))
       return (b.stats?.[effectiveLevel(b)]?.[sortBy.value] ?? 0) - (a.stats?.[effectiveLevel(a)]?.[sortBy.value] ?? 0)
     }
