@@ -141,7 +141,10 @@ export default defineComponent({
       return !!portraitE5.value[p.cardMstId]
     }
     function toggleE5(p: Portrait) {
-      portraitE5.value[p.cardMstId] = !portraitE5.value[p.cardMstId]
+      portraitE5.value = {
+        ...portraitE5.value,
+        [p.cardMstId]: !portraitE5.value[p.cardMstId],
+      }
     }
     function effectiveLevel(p: Portrait) {
       return showE5ForAll.value || isE5(p) ? portraitMaxLimitBreak : 0
@@ -212,7 +215,10 @@ export default defineComponent({
 
     const collapsedGroups = useSetting<Record<string, boolean>>("collapsedPortraitGroups", {})
     function toggleGroup(group: string) {
-      collapsedGroups.value[group] = !collapsedGroups.value[group]
+      collapsedGroups.value = {
+        ...collapsedGroups.value,
+        [group]: !collapsedGroups.value[group],
+      }
     }
 
     function comparePortraits(a: Portrait, b: Portrait) {
