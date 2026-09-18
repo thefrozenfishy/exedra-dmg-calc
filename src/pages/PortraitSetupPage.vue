@@ -245,7 +245,11 @@ export default defineComponent({
         const sortedGroups: Record<string, Portrait[]> = {}
         Object.keys(groups).sort((a, b) => a.localeCompare(b)).forEach(effectType => {
           sortedGroups[effectType] = groups[effectType]
-            .sort((a, b) => b.value - a.value || comparePortraits(a.portrait, b.portrait))
+            .sort((a, b) =>
+              sortBy.value === 'id'
+                ? b.value - a.value || comparePortraits(a.portrait, b.portrait)
+                : comparePortraits(a.portrait, b.portrait) || b.value - a.value
+            )
             .map(entry => entry.portrait)
         })
 
