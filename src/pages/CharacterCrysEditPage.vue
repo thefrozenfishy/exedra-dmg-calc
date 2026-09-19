@@ -123,7 +123,7 @@
                         </div>
 
                         <div class="compact-subcrys">
-                            <div v-for="(id, idx) in crys.subCrys.sort()" :key="idx" class="compact-subcrys-slot" :class="{
+                            <div v-for="(id, idx) in crys.subCrys.toSorted()" :key="idx" class="compact-subcrys-slot" :class="{
                                 empty: !id,
                                 rare: subCrysTier(id) === 'rare',
                                 uncommon: subCrysTier(id) === 'uncommon'
@@ -758,7 +758,7 @@ function goBack() {
 
 .crys-compact-card.exporting {
     display: block;
-    width: fit-content;
+    width: 900px;
 }
 
 .compact-header {
