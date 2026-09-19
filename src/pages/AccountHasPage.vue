@@ -564,7 +564,7 @@ const wishlistAscensionByName = computed(() => {
 const wishlistTier = (ch: Character): "high" | "mid" | null => {
     const rank = wishlistRankByName.value.get(ch.name)
     if (!rank) return null
-    if (rank <= 8) return "high"
+    if (rank < 8) return "high"
     if (rank <= 13) return "mid"
     return null
 }
