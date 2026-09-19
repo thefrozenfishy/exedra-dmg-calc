@@ -304,7 +304,27 @@ function randomId(): string {
     return crypto.randomUUID().replace(/-/g, "").slice(0, 12)
 }
 
-const uploadBlobForSharing = async (blob: Blob): Promise<{ path: string, publicUrl: string, shareId: string }> => {
+async function ensureWebp(blob: Blob): Promise<Blob> {
+    if (blob.type === EXPORT_MIME) return blob
+
+    // Safari can't encode WebP via canvas and silently returns a PNG
+    const { encode } = await import("@jsquash/webp")
+
+    const bitmap = await createImageBitmap(blob)
+    const canvas = document.createElement("canvas")
+    canvas.width = bitmap.width
+    canvas.height = bitmap.height
+    const ctx = canvas.getContext("2d")!
+    ctx.drawImage(bitmap, 0, 0)
+    bitmap.close()
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    const buffer = await encode(imageData, { quality: EXPORT_QUALITY * 100 })
+    return new Blob([buffer], { type: EXPORT_MIME })
+}
+
+const uploadBlobForSharing = async (rawBlob: Blob): Promise<{ path: string, publicUrl: string, shareId: string }>  => {
+    const blob = await ensureWebp(rawBlob)
     const supabase = getSupabase()
     const userId = getUserId() ?? "anon"
     const shareId = randomId()

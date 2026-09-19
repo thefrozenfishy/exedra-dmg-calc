@@ -11,6 +11,7 @@ export default defineConfig({
   build: {
     sourcemap: true
   },
+  optimizeDeps: { exclude: ["@jsquash/webp"] },
   plugins: [
     vue({
       include: [/\.vue$/, /\.md$/],
