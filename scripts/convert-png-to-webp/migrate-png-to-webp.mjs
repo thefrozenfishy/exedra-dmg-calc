@@ -8,6 +8,12 @@
 // untouched, only the `imageUrl` stored inside each KV entry changes.
 // Anyone who already has a share link keeps using the exact same link.
 //
+// PNGs are detected by the object's stored content type, NOT by file
+// extension: an older client build uploaded PNG data under a .webp name
+// (canvas.toBlob silently falls back to PNG in browsers that can't encode
+// WebP). Those files are re-encoded IN PLACE (same path, same URL), so they
+// need no KV update and must never be deleted afterwards.
+//
 // SAFE BY DEFAULT: runs in dry-run mode (no writes) unless you pass
 // --write. Old PNGs are only deleted if you also pass --delete-old,
 // and only after both the webp upload AND the KV update for that file
@@ -67,37 +73,60 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 // Supabase Storage: recursively list every .png under the bucket
 // ---------------------------------------------------------------------------
 
+// The extension can lie (PNG bytes stored as *.webp), so go by the stored
+// content type. Only fall back to the extension if there's no usable mimetype.
+function needsConversion(item) {
+    const mime = (item.metadata?.mimetype ?? "").toLowerCase()
+    if (mime === "image/png") return true
+    return mime !== "image/webp" && item.name.toLowerCase().endsWith(".png")
+}
+
 async function listAllPngs(prefix = "") {
     const results = []
-    const { data, error } = await supabase.storage.from(BUCKET).list(prefix, {
-        limit: 1000,
-        sortBy: { column: "name", order: "asc" },
-    })
-    if (error) throw new Error(`list(${prefix}) failed: ${error.message}`)
+    const PAGE_SIZE = 1000
 
-    for (const item of data ?? []) {
-        const fullPath = prefix ? `${prefix}/${item.name}` : item.name
-        // Supabase Storage returns folders with id === null and no metadata.
-        const isFolder = item.id === null && !item.metadata
-        if (isFolder) {
-            results.push(...(await listAllPngs(fullPath)))
-        } else if (item.name.toLowerCase().endsWith(".png")) {
-            results.push(fullPath)
+    for (let offset = 0; ; offset += PAGE_SIZE) {
+        const { data, error } = await supabase.storage.from(BUCKET).list(prefix, {
+            limit: PAGE_SIZE,
+            offset,
+            sortBy: { column: "name", order: "asc" },
+        })
+        if (error) throw new Error(`list(${prefix}) failed: ${error.message}`)
+
+        for (const item of data ?? []) {
+            const fullPath = prefix ? `${prefix}/${item.name}` : item.name
+            // Supabase Storage returns folders with id === null and no metadata.
+            const isFolder = item.id === null && !item.metadata
+            if (isFolder) {
+                results.push(...(await listAllPngs(fullPath)))
+            } else if (needsConversion(item)) {
+                results.push(fullPath)
+            }
         }
+
+        if (!data || data.length < PAGE_SIZE) break
     }
     return results
 }
 
+// foo.png -> foo.webp (new path, URL changes). Anything else (e.g. PNG data
+// already stored as foo.webp) keeps its path and is overwritten in place.
 function pngPathToWebp(path) {
-    return path.replace(/\.png$/i, ".webp")
+    return /\.png$/i.test(path) ? path.replace(/\.png$/i, ".webp") : path
 }
 
 async function convertOne(path) {
     const webpPath = pngPathToWebp(path)
+    const inPlace = webpPath === path
 
     const { data: downloaded, error: downloadError } = await supabase.storage.from(BUCKET).download(path)
     if (downloadError) throw new Error(`download(${path}) failed: ${downloadError.message}`)
     const pngBuffer = Buffer.from(await downloaded.arrayBuffer())
+
+    // Trust the actual bytes over the metadata: if this is already WebP,
+    // leave it alone (re-encoding lossy -> lossy would only degrade it).
+    const { format } = await sharp(pngBuffer).metadata()
+    if (format === "webp") return { skipped: true }
 
     const webpBuffer = await sharp(pngBuffer).webp({ quality: WEBP_QUALITY }).toBuffer()
 
@@ -116,6 +145,7 @@ async function convertOne(path) {
     return {
         oldPath: path,
         webpPath,
+        inPlace,
         oldUrl: oldUrlData.publicUrl,
         newUrl: newUrlData.publicUrl,
         oldBytes: pngBuffer.length,
@@ -189,11 +219,18 @@ async function main() {
     let totalOldBytes = 0
     let totalNewBytes = 0
     let failures = 0
+    let skipped = 0
 
     for (const path of pngPaths) {
         try {
             const result = await convertOne(path)
-            urlMap.set(result.oldUrl, result.newUrl)
+            if (result.skipped) {
+                console.log(`  skipped ${path} (already WebP data)`)
+                skipped++
+                continue
+            }
+            // In-place conversions keep the same URL, so there's nothing to repoint.
+            if (!result.inPlace) urlMap.set(result.oldUrl, result.newUrl)
             converted.push(result)
             totalOldBytes += result.oldBytes
             totalNewBytes += result.newBytes
@@ -205,13 +242,18 @@ async function main() {
     }
 
     const pct = totalOldBytes ? (100 * (1 - totalNewBytes / totalOldBytes)).toFixed(1) : "0"
-    console.log(`\nStorage: ${converted.length}/${pngPaths.length} converted, ${totalOldBytes} -> ${totalNewBytes} bytes (${pct}% smaller)\n`)
-
-    console.log("Listing Cloudflare KV keys...")
-    const kvKeys = await cfListAllKeys()
-    console.log(`Found ${kvKeys.length} KV entr${kvKeys.length === 1 ? "y" : "ies"}.\n`)
+    console.log(`\nStorage: ${converted.length}/${pngPaths.length} converted (${skipped} skipped), ${totalOldBytes} -> ${totalNewBytes} bytes (${pct}% smaller)\n`)
 
     let updated = 0
+    let kvKeys = []
+    if (urlMap.size === 0) {
+        console.log("No file URLs changed, skipping the Cloudflare KV scan.\n")
+    } else {
+        console.log("Listing Cloudflare KV keys...")
+        kvKeys = await cfListAllKeys()
+        console.log(`Found ${kvKeys.length} KV entr${kvKeys.length === 1 ? "y" : "ies"}.\n`)
+    }
+
     for (const { name, expiration } of kvKeys) {
         const raw = await cfGetValue(name)
         if (!raw) continue
@@ -239,13 +281,18 @@ async function main() {
     if (DELETE_OLD) {
         if (!WRITE) {
             console.log("Skipping delete: --delete-old only takes effect together with --write.")
-        } else if (converted.length === 0) {
-            console.log("Nothing to delete.")
         } else {
-            console.log(`Deleting ${converted.length} old PNG file(s)...`)
-            const { error } = await supabase.storage.from(BUCKET).remove(converted.map((c) => c.oldPath))
-            if (error) console.error("  delete failed:", error.message)
-            else console.log("  done.")
+            // NEVER include in-place conversions here: their old path IS the new
+            // WebP file, so deleting it would destroy the converted image.
+            const toDelete = converted.filter((c) => !c.inPlace).map((c) => c.oldPath)
+            if (toDelete.length === 0) {
+                console.log("Nothing to delete.")
+            } else {
+                console.log(`Deleting ${toDelete.length} old PNG file(s)...`)
+                const { error } = await supabase.storage.from(BUCKET).remove(toDelete)
+                if (error) console.error("  delete failed:", error.message)
+                else console.log("  done.")
+            }
         }
     } else {
         console.log("Old PNGs left in place. Re-run with --write --delete-old once you've confirmed shares still work.")

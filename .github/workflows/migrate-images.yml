@@ -25,7 +25,7 @@ jobs:
 
       - name: Install script dependencies
         working-directory: scripts/convert-png-to-webp
-        run: npm install @supabase/supabase-js sharp --legacy-peer-deps
+        run: npm ci
 
       - name: Run migration
         working-directory: scripts/convert-png-to-webp

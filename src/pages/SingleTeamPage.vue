@@ -37,38 +37,6 @@
         <ImageActionsToolbar :target="() => shareCardRef!" filename="single-team-share.png" :export-options="exportOpts"
           :share-options="shareOptionsForTeamCard" :disabled="!shareCardAvailable" />
       </div>
-      <div class="toolbar-right">
-        <button type="button" class="icon-btn icon-btn--accent import-screenshot-btn" tabindex="0"
-          v-if="!importingScreenshot"
-          title="Click to read an image directly from your clipboard and auto-fill the team below"
-          @click="importTeamFromClipboard">
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" class="import-screenshot-icon">
-            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-          <span>Copy Team from Clipboard</span>
-        </button>
-
-        <button type="button" class="icon-btn icon-btn--accent import-screenshot-btn" tabindex="0"
-          :disabled="importingScreenshot"
-          title="Upload a screenshot of your in-game party screen, or press Ctrl+V to paste one, and this will auto-fill the team below"
-          @click="triggerScreenshotImport">
-          <span v-if="importingScreenshot" class="import-spinner" aria-hidden="true" />
-          <svg v-else viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" class="import-screenshot-icon">
-            <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" />
-            <path d="M12 3v12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-            <path d="M7 8l5-5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-          <span v-if="!importingScreenshot">Import Team from Screenshot</span>
-          <span v-else>Matching {{ importProgress.done }}/{{ importProgress.total }}…</span>
-        </button>
-        <input ref="screenshotInputRef" type="file" accept="image/*" class="screenshot-file-input"
-          @change="onScreenshotFileChosen" />
-      </div>
     </section>
 
     <div class="share-card-preview" ref="shareCardRef">
@@ -334,7 +302,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
 import { ScoreAttackTeam, type DebugSections, type DotAllyCompositeKey, type EnemyDebuffCompositeKey } from '../models/ScoreAttackTeam'
 import EnemySelector from '../components/EnemySelector.vue'
@@ -351,7 +319,6 @@ import { crystalises, passiveDetails, portraits } from "../utils/helpers";
 import { useFriendStore } from '../store/friendStore'
 import { useCharacterStore } from '../store/characterStore'
 import type { AttackerLoadoutResult } from '../models/BestTeamCalculator'
-import { extractTeamFromScreenshot, loadImageFromFile, loadPrecomputedCandidates, LOW_CONFIDENCE_THRESHOLD } from '../utils/screenshotTeamImport'
 
 const attackerIndex = 2
 
@@ -724,150 +691,6 @@ async function copyToClipboard(text: string) {
   } catch (err) {
     console.error("Failed to copy:", err)
     toast.error("Failed to copy", { position: toast.POSITION.TOP_RIGHT, icon: false })
-  }
-}
-
-const screenshotInputRef = ref<HTMLInputElement | null>(null)
-const importingScreenshot = ref(false)
-const importProgress = reactive({ done: 0, total: 0 })
-
-onMounted(async () => {
-  // Keep candidate loading lazy so the image-matching model does not sit in memory while the app is idle.
-})
-
-function triggerScreenshotImport() {
-  if (importingScreenshot.value) return
-  screenshotInputRef.value?.click()
-}
-
-async function onScreenshotFileChosen(e: Event) {
-  const input = e.target as HTMLInputElement
-  const file = input.files?.[0]
-  input.value = ''
-
-  if (file) await importTeamFromImageFile(file)
-}
-
-async function importTeamFromClipboard() {
-  if (importingScreenshot.value) return
-  try {
-    if (!navigator.clipboard?.read) {
-      toast.error(
-        'Clipboard reading is not supported by your browser',
-        { position: toast.POSITION.TOP_RIGHT, icon: false }
-      )
-      return
-    }
-
-    const items = await navigator.clipboard.read()
-
-    for (const item of items) {
-      const imageType = item.types.find(type => type.startsWith('image/'))
-
-      if (!imageType) continue
-
-      const blob = await item.getType(imageType)
-
-      const file = new File([blob], 'clipboard-image.png', { type: blob.type })
-      await importTeamFromImageFile(file)
-      return
-    }
-
-    toast.error(
-      'No image found in clipboard',
-      { position: toast.POSITION.TOP_RIGHT, icon: false }
-    )
-  } catch (err) {
-    console.error('Failed to read image from clipboard:', err)
-
-    toast.error(
-      'Failed to access clipboard image. Please grant clipboard permissions.',
-      { position: toast.POSITION.TOP_RIGHT, icon: false }
-    )
-  }
-}
-
-function handleGlobalPaste(e: ClipboardEvent) {
-  const target = e.target as HTMLElement | null
-
-  if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
-  if (importingScreenshot.value) return
-
-  const item = Array.from(e.clipboardData?.items ?? []).find(item => item.type.startsWith('image/'))
-  const file = item?.getAsFile()
-  if (!file) return
-
-  e.preventDefault()
-  e.stopPropagation()
-
-  void importTeamFromImageFile(file)
-}
-
-onMounted(() => {
-  window.addEventListener('paste', handleGlobalPaste)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('paste', handleGlobalPaste)
-})
-
-async function importTeamFromImageFile(file: File) {
-  if (importingScreenshot.value) return
-  importingScreenshot.value = true
-  importProgress.done = 0
-  importProgress.total = 15
-
-  let img: HTMLImageElement | null = null
-  try {
-    img = await loadImageFromFile(file)
-
-    const results = await extractTeamFromScreenshot(
-      img,
-      (done, total) => { importProgress.done = done; importProgress.total = total },
-    )
-    console.debug("import results was", results)
-
-    let lowMainConfidenceCount = 0
-    let lowPortraitConfidenceCount = 0
-    let lowSupportConfidenceCount = 0
-    for (const r of results) {
-      const mainClone = characterStore.characters.find(c => c.name === r.characterName)
-      if (mainClone) mainClone.portrait = r.portraitName
-      team.setMain(r.index, mainClone)
-      team.setSupport(r.index, characterStore.characters.find(c => c.name === r.supportName))
-
-      if ((r.characterDistance ?? Infinity) < LOW_CONFIDENCE_THRESHOLD) lowMainConfidenceCount++
-      if ((r.portraitDistance ?? Infinity) < LOW_CONFIDENCE_THRESHOLD) lowPortraitConfidenceCount++
-      if ((r.supportDistance ?? Infinity) < LOW_CONFIDENCE_THRESHOLD) lowSupportConfidenceCount++
-    }
-
-    const matchedCount = results.filter(r => r.characterName).length + results.filter(r => r.portraitName).length + results.filter(r => r.supportName).length
-    if (matchedCount === 0) {
-      toast.error("Couldn't recognize any characters in that screenshot", { position: toast.POSITION.TOP_RIGHT, icon: false })
-    } else {
-      const suffix = [
-        lowMainConfidenceCount > 0
-          ? `- please double-check ${lowMainConfidenceCount} main kioku${lowMainConfidenceCount === 1 ? '' : 's'} with low match confidence`
-          : null,
-        lowPortraitConfidenceCount > 0
-          ? `- please double-check ${lowPortraitConfidenceCount} portrait${lowPortraitConfidenceCount === 1 ? '' : 's'} with low match confidence`
-          : null,
-        lowSupportConfidenceCount > 0
-          ? `- please double-check ${lowSupportConfidenceCount} support kioku${lowSupportConfidenceCount === 1 ? '' : 's'} with low match confidence`
-          : null
-      ].filter(s => s != null).join("\n")
-      toast.success(`Imported ${matchedCount}/15 slots from screenshot\n${suffix}`, { position: toast.POSITION.TOP_RIGHT, icon: false })
-      if (lowMainConfidenceCount + lowPortraitConfidenceCount + lowSupportConfidenceCount > 5) {
-        toast.info("To improve accuracy, increase the resolution, or take a picture in full screen mode (Alt + Enter)")
-      }
-    }
-  } catch (err) {
-    console.error('Failed to import team from screenshot:', err)
-    toast.error('Failed to read that screenshot', { position: toast.POSITION.TOP_RIGHT, icon: false })
-  } finally {
-    if (img) URL.revokeObjectURL(img.src)
-    importingScreenshot.value = false
-    releaseEmbeddingResources()
   }
 }
 </script>
