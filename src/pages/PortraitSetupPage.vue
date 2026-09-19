@@ -48,6 +48,7 @@
           <option value="def">DEF</option>
           <option value="hp">HP</option>
           <option value="pwr">PWR</option>
+          <option value="releaseDate">Release Date</option>
         </select>
       </div>
 
@@ -140,7 +141,10 @@ export default defineComponent({
       return !!portraitE5.value[p.cardMstId]
     }
     function toggleE5(p: Portrait) {
-      portraitE5.value[p.cardMstId] = !portraitE5.value[p.cardMstId]
+      portraitE5.value = {
+        ...portraitE5.value,
+        [p.cardMstId]: !portraitE5.value[p.cardMstId],
+      }
     }
     function effectiveLevel(p: Portrait) {
       return showE5ForAll.value || isE5(p) ? portraitMaxLimitBreak : 0
@@ -151,7 +155,7 @@ export default defineComponent({
     const showResourceCosts = useSetting('portraitShowResourceCosts', true)
     const showPerPortraitResourceCosts = useSetting('portraitShowPerPortraitResourceCosts', true)
 
-    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp' | 'pwr' | 'id'>(
+    const sortBy = useSetting<'name' | 'atk' | 'def' | 'hp' | 'pwr' | 'id' | 'releaseDate'>(
       'portraitSortBy',
       'id'
     )
@@ -211,12 +215,16 @@ export default defineComponent({
 
     const collapsedGroups = useSetting<Record<string, boolean>>("collapsedPortraitGroups", {})
     function toggleGroup(group: string) {
-      collapsedGroups.value[group] = !collapsedGroups.value[group]
+      collapsedGroups.value = {
+        ...collapsedGroups.value,
+        [group]: !collapsedGroups.value[group],
+      }
     }
 
     function comparePortraits(a: Portrait, b: Portrait) {
       if (sortBy.value === "id") return a.cardMstId - b.cardMstId
       if (sortBy.value === "name") return a.name.localeCompare(b.name)
+      if (sortBy.value === "releaseDate") return new Date(a.releaseTime) > new Date(b.releaseTime) ? 1 : -1
       if (sortBy.value === "pwr") return getPortraitMaxPwr(b, effectiveLevel(b)) - getPortraitMaxPwr(a, effectiveLevel(a))
       return (b.stats?.[effectiveLevel(b)]?.[sortBy.value] ?? 0) - (a.stats?.[effectiveLevel(a)]?.[sortBy.value] ?? 0)
     }
@@ -243,7 +251,11 @@ export default defineComponent({
         const sortedGroups: Record<string, Portrait[]> = {}
         Object.keys(groups).sort((a, b) => a.localeCompare(b)).forEach(effectType => {
           sortedGroups[effectType] = groups[effectType]
-            .sort((a, b) => b.value - a.value || comparePortraits(a.portrait, b.portrait))
+            .sort((a, b) =>
+              sortBy.value === 'id'
+                ? b.value - a.value || comparePortraits(a.portrait, b.portrait)
+                : comparePortraits(a.portrait, b.portrait) || b.value - a.value
+            )
             .map(entry => entry.portrait)
         })
 

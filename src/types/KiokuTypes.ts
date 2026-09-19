@@ -79,12 +79,21 @@ const dmgUpPortraits = {
 }
 
 export interface Portrait {
+    advPosition: number;
     cardMstId: number;
-    passiveSkill1: number;
+    characterMstId: number;
     element: number;
-    rarity: number;
+    illustrator: string;
     name: string;
+    passiveSkill1: number;
+    passiveSkill2: number;
+    passiveSkill3: number;
+    rarity: number;
+    releaseTime: string;
     resourceName: string;
+    source: string;
+    unlockIdCsv: string;
+    unlockTypeCsv: string;
     stats: Record<number, PortraitLvlData>
 }
 
