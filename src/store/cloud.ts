@@ -1,7 +1,7 @@
 import { getSupabase } from "../utils/supabase"
 import { getUserId } from "./user"
 import { logEvent } from '../utils/analytics'
-import type { Character } from "../types/KiokuTypes"
+import { Character, KiokuConstants } from "../types/KiokuTypes"
 import { countCharsObtained, getPowerScores } from "../models/PowerValue"
 import { KiokuRole } from "../types/enums"
 
@@ -127,22 +127,16 @@ async function _saveCharacters(
 
     const rows: CharacterRow[] = chars.map(c => ({
         user_id: userId,
-
         character_id: c.id,
-
-        enabled: c.enabled,
-
-        dupes: c.dupes,
-        ascension: c.ascension,
-
-        kioku_lvl: c.kiokuLvl,
-        magic_lvl: c.magicLvl,
-        heartphial_lvl: c.heartphialLvl,
-        special_lvl: c.specialLvl,
-
-        portrait: c.portrait,
-
-        crys_options: c.crysOptions || {} // This for some reason was null for a user, unsure why but see if this fixes it? 
+        enabled: c.enabled ?? false,
+        dupes: c.dupes ?? 0,
+        ascension: c.ascension ?? KiokuConstants.minAscension,
+        kioku_lvl: c.kiokuLvl ?? KiokuConstants.minKiokuLvl,
+        magic_lvl: c.magicLvl ?? KiokuConstants.minMagicLvl,
+        heartphial_lvl: c.heartphialLvl ?? KiokuConstants.minHeartphialLvl,
+        special_lvl: c.specialLvl ?? KiokuConstants.minSpecialLvl,
+        portrait: c.portrait ?? "",
+        crys_options: c.crysOptions ?? {},
     }))
 
     const summary = summarizeCharacterSave(rows)

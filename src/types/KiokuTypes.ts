@@ -528,10 +528,24 @@ export interface KiokuArgs {
 }
 
 export const correctCharacterParams = (character?: Character) => {
-    if (character) {
-        character.specialLvl = Math.min(character.specialLvl, getMaxSpecialLevelForAscension(character.ascension))
-    }
-    return character
+  if (!character) return character
+
+  character.enabled ??= false
+  character.dupes ??= 0
+  character.ascension ??= KiokuConstants.minAscension
+  character.kiokuLvl ??= KiokuConstants.minKiokuLvl
+  character.magicLvl ??= KiokuConstants.minMagicLvl
+  character.heartphialLvl ??= KiokuConstants.minHeartphialLvl
+  character.specialLvl ??= KiokuConstants.minSpecialLvl
+  character.portrait ??= ""
+  character.crysOptions ??= {}
+
+  character.specialLvl = Math.min(
+    character.specialLvl,
+    getMaxSpecialLevelForAscension(character.ascension)
+  )
+
+  return character
 }
 
 export const maxMeters = 10_000
