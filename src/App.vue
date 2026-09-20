@@ -14,6 +14,8 @@ const titles: [string, number, number?][] = [
   ["TFF's Exedra Toolbox", 9],
   ["TFF's Mess of a Toolbox", 1, 6],
   ["TFF's Ever Changing Beta Toolbox", 0, 10],
+  ["TFF is not a whale!", 0, 2],
+  ["🐳", 0, 1],
 ]
 
 function pickWeightedTitle(titles: [string, number, number?][]): string {
