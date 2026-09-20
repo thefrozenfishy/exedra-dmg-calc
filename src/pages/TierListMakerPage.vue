@@ -2,14 +2,50 @@
     <div class="setup-page tier-maker-page">
         <h1 class="page-title">Tier List Maker</h1>
 
-        <section class="toolbar card" v-if="currentList">
+        <div v-if="isReadonly && shared" class="viewing-banner">
+            <span class="viewing-label">Shared list</span>
+            <span class="viewing-name">{{ shared.list.name || 'Untitled list' }}</span>
+            <span class="viewing-owner">by {{ shared.ownerName || 'a player' }}</span>
+            <button class="save-copy-btn" @click="saveSharedCopy">Save a copy to my lists</button>
+            <router-link :to="{ path: '/tier-list-maker' }" class="back-to-own" title="Back to your tier lists">
+                ← My tier lists
+            </router-link>
+        </div>
+
+        <section class="toolbar card" v-if="viewList">
             <div class="toolbar-left">
                 <ImageActionsToolbar target=".tier-maker-board" filename="tier-list.png" :export-options="exportOpts"
-                    :share-options="shareOptionsForTierList" />
+                    :share-options="shareOptionsForTierList">
+                    <button class="icon-btn icon-btn--accent"
+                        :title="linkCopied ? 'Copied!' : isReadonly ? 'Copy link' : 'Copy share link'"
+                        :aria-label="linkCopied ? 'Copied!' : isReadonly ? 'Copy link' : 'Copy share link'"
+                        @click="copyShareLink">
+                        <svg v-if="linkCopied" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M20 6L9 17l-5-5" />
+                        </svg>
+                        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                        </svg>
+                    </button>
+                </ImageActionsToolbar>
             </div>
+            <span v-if="!isReadonly" class="sync-status" :class="`sync-status--${syncStatus}`">
+                <template v-if="syncStatus === 'off'">
+                    Saved on this device only · create or load a cloud profile (top of the page) to back up and
+                    share lists
+                </template>
+                <template v-else-if="syncStatus === 'syncing'">Syncing…</template>
+                <template v-else-if="syncStatus === 'error'">
+                    Not synced yet · <button class="link-btn" @click="retrySync">retry</button>
+                </template>
+                <template v-else>Saved to the cloud</template>
+            </span>
         </section>
 
-        <section class="card list-manager">
+        <section v-if="!isReadonly" class="card list-manager">
             <span class="filters-heading">Your lists</span>
             <button v-for="(l, index) in listOptions" :key="l.id" class="chip list-chip"
                 :class="{ active: l.id === activeListId, 'list-chip-drag-over': dragOverListIndex === index }"
@@ -27,12 +63,18 @@
             </button>
         </section>
 
-        <section v-if="currentList" class="card current-list-controls">
+        <section v-if="currentList && !isReadonly" class="card current-list-controls">
             <label class="field grow-field">
                 <span class="field-label">List name</span>
                 <input class="list-name-input" :value="currentList.name" placeholder="My Tier List"
+                    :maxlength="MAX_NAME_LENGTH"
                     @change="updateListName(($event.target as HTMLInputElement).value)"
                     @keydown.enter="($event.target as HTMLInputElement).blur()" />
+            </label>
+            <label class="chip" :class="{ active: currentList.shared, disabled: !cloudEnabled }"
+                :title="cloudEnabled ? 'Anyone with the link can view this list. Only you can edit it.' : 'Create or load a cloud profile (top of the page) to share lists'">
+                <input type="checkbox" :checked="!!currentList.shared" :disabled="!cloudEnabled"
+                    @change="setListShared(($event.target as HTMLInputElement).checked)" /> Link sharing
             </label>
             <button class="icon-btn" title="Duplicate this list" aria-label="Duplicate this list"
                 @click="duplicateList">
@@ -56,25 +98,27 @@
             </button>
         </section>
 
-        <template v-if="currentList">
+        <template v-if="viewList">
             <section class="card tier-maker-board">
-                <button class="add-row-btn" @click="addRow">+ Add tier</button>
+                <button v-if="!isReadonly" class="add-row-btn" :disabled="viewList.rows.length >= MAX_TIER_ROWS"
+                    @click="addRow">+ Add tier</button>
 
                 <div class="tier-rows-wrap">
-                    <div class="tier-row" v-for="(row, rIdx) in currentList.rows" :key="row.id">
+                    <div class="tier-row" v-for="(row, rIdx) in viewList.rows" :key="row.id">
                         <div class="tier-row-label-cell" :style="{
                             background: row.color, color: labelTextColor(row.color), width: labelColWidth + 'px'
                         }">
-                            <span class="row-count">{{ (currentList.placements[row.id] || []).length }}</span>
+                            <span class="row-count">{{ (viewList.placements[row.id] || []).length }}</span>
                             <textarea class="row-label-input" :ref="(el) => setLabelRef(row.id, el as Element)"
-                                :value="row.label" placeholder="Tier name" rows="1" @input="onLabelInput($event)"
+                                :value="row.label" placeholder="Tier name" rows="1" :readonly="isReadonly"
+                                :maxlength="MAX_LABEL_LENGTH" @input="onLabelInput($event)"
                                 @change="updateRowLabel(row.id, ($event.target as HTMLTextAreaElement).value)"
                                 @keydown.enter.prevent="($event.target as HTMLTextAreaElement).blur()"></textarea>
-                            <div class="row-controls">
+                            <div v-if="!isReadonly" class="row-controls">
                                 <button class="row-ctrl-btn" title="Move tier up" aria-label="Move tier up"
                                     :disabled="rIdx === 0" @click="moveRow(row.id, -1)">↑</button>
                                 <button class="row-ctrl-btn" title="Move tier down" aria-label="Move tier down"
-                                    :disabled="rIdx === currentList.rows.length - 1"
+                                    :disabled="rIdx === viewList.rows.length - 1"
                                     @click="moveRow(row.id, 1)">↓</button>
                                 <button class="row-ctrl-btn row-ctrl-btn--danger" title="Remove tier"
                                     aria-label="Remove tier" @click="removeRow(row.id)">×</button>
@@ -95,24 +139,24 @@
                             :class="{ 'drag-over': dragOverZone === row.id }"
                             @dragover.prevent="onZoneDragOver(row.id, $event)" @dragleave="onZoneDragLeave($event)"
                             @drop.prevent="onZoneDrop(row.id)">
-                            <template v-for="(charId, i) in (currentList.placements[row.id] || [])" :key="charId">
+                            <template v-for="(charId, i) in (viewList.placements[row.id] || [])" :key="charId">
                                 <span class="insertion-marker"
                                     v-if="dragOverZone === row.id && dragOverIndex === i"></span>
                                 <div class="tier-chip" :data-char-id="charId"
-                                    :class="{ dragging: draggedCharId === charId }" draggable="true"
+                                    :class="{ dragging: draggedCharId === charId }" :draggable="!isReadonly"
                                     @dragstart="onChipDragStart(charId, row.id, $event)" @dragend="resetDragState"
                                     @touchstart="onChipTouchStart(charId, row.id, $event)"
                                     @touchmove="onChipTouchMove($event)" @touchend="onChipTouchEnd($event)">
                                     <img class="chip-img" :class="characterBorderClass(charById.get(charId))"
                                         :src="`/exedra-dmg-calc/kioku_images/${charId}_thumbnail.png`"
                                         :alt="charById.get(charId)?.name" :title="charById.get(charId)?.name" />
-                                    <button class="chip-remove" title="Send back to pool" aria-label="Send back to pool"
+                                    <button v-if="!isReadonly" class="chip-remove" title="Send back to pool" aria-label="Send back to pool"
                                         @click.stop="removeFromRow(charId)">×</button>
                                 </div>
                             </template>
                             <span class="insertion-marker"
-                                v-if="dragOverZone === row.id && dragOverIndex === (currentList.placements[row.id] || []).length"></span>
-                            <span v-if="!(currentList.placements[row.id] || []).length" class="row-empty-hint">Drag
+                                v-if="dragOverZone === row.id && dragOverIndex === (viewList.placements[row.id] || []).length"></span>
+                            <span v-if="!(viewList.placements[row.id] || []).length && !isReadonly" class="row-empty-hint">Drag
                                 characters here</span>
                         </div>
                     </div>
@@ -122,6 +166,7 @@
 
             </section>
 
+            <template v-if="!isReadonly">
             <section class="card pool-section" data-drop-zone="pool" :class="{ 'drag-over': dragOverZone === 'pool' }"
                 @dragover.prevent="onZoneDragOver(null, $event)" @dragleave="onZoneDragLeave($event)"
                 @drop.prevent="onZoneDrop(null)">
@@ -188,17 +233,37 @@
                 </div>
             </section>
 
+            </template>
+
             <section class="card about-card">
                 <span class="filters-heading">About</span>
-                <p>
+                <p v-if="isReadonly">
+                    This is a tier list shared by {{ shared?.ownerName || 'another player' }}, so it's view-only. Use
+                    "Save a copy to my lists" to get an editable copy of your own, or the toolbar to export it as an
+                    image.
+                </p>
+                <p v-else>
                     Drag characters from the pool into a tier, and drag between or within tiers to reorder them —
                     where you drop a character is exactly where it lands. Tap the × on a character to send it back
                     to the pool. Tap a tier's colour circle to change it, or edit its name directly. This is a
-                    freeform list for your own opinions — it isn't tied to your account data. Everything is saved
-                    to this browser, and you can keep as many lists as you like using the switcher above.
+                    freeform list for your own opinions — it isn't tied to your account data. Lists are saved in
+                    this browser, and backed up to the cloud when you have a cloud profile (see the top of the page). Turn on
+                    "Link sharing" for a list and use the link button in the toolbar to share it: anyone with the link
+                    can view it and save their own copy, but only you can edit it. You can keep as many lists as you
+                    like using the switcher above.
                 </p>
             </section>
         </template>
+
+        <section v-else-if="isReadonly" class="card empty-state">
+            <p v-if="sharedState === 'loading'">Loading shared tier list…</p>
+            <template v-else>
+                <p v-if="sharedState === 'error'">Couldn't load this tier list. Check your connection and try again.</p>
+                <p v-else>This tier list doesn't exist, or its owner has stopped sharing it.</p>
+                <button v-if="sharedState === 'error'" class="copy-btn" @click="openSharedFromRoute">Try again</button>
+                <router-link :to="{ path: '/tier-list-maker' }" class="back-to-own">← My tier lists</router-link>
+            </template>
+        </section>
 
         <section v-else class="card empty-state">
             <p>You don't have any tier lists yet.</p>
@@ -209,27 +274,17 @@
 
 <script setup lang="ts">
 import { computed, ref, nextTick, onMounted, onUnmounted, watch } from "vue"
+import { useRoute, useRouter } from "vue-router"
 import { toast } from "vue3-toastify"
 import { useCharacterStore } from "../store/characterStore"
 import { useSetting } from "../store/settingsStore"
 import { Character } from "../types/KiokuTypes"
 import { KiokuElement } from "../types/enums"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
-
-interface TierRow {
-    id: string
-    label: string
-    color: string
-}
-
-interface SavedTierList {
-    id: string
-    name: string
-    rows: TierRow[]
-    placements: Record<string, number[]>
-    createdAt: number
-    updatedAt: number
-}
+import { useTierListSync } from "../store/tierListSync"
+import { loadSharedTierList } from "../store/cloud"
+import { MAX_LABEL_LENGTH, MAX_NAME_LENGTH, MAX_TIER_ROWS, clampName, isUuid } from "../utils/tierList"
+import type { SavedTierList, SharedTierList, TierRow } from "../types/TierListTypes"
 
 const store = useCharacterStore()
 
@@ -275,6 +330,56 @@ const currentList = computed<SavedTierList | null>(() =>
     activeListId.value ? tierLists.value[activeListId.value] ?? null : null
 )
 
+// ── Cloud sync + shared (read-only) view ──
+
+const route = useRoute()
+const router = useRouter()
+const sync = useTierListSync(tierLists, listOrder)
+const syncStatus = sync.status
+const cloudEnabled = sync.active()
+
+// `?list=<id>` opens a list by link. If it's one of my own lists it just opens for editing; otherwise
+// it's someone else's shared list, shown read-only (`isReadonly`).
+const sharedListId = computed(() => {
+    const id = route.query.list
+    return isUuid(id) ? id.toLowerCase() : null
+})
+const isReadonly = computed(() => !!sharedListId.value && !tierLists.value[sharedListId.value])
+const shared = ref<SharedTierList | null>(null)
+const sharedState = ref<"loading" | "notfound" | "error">("loading")
+
+/** What the board shows: the shared list when viewing one, otherwise the active list of my own. */
+const viewList = computed<SavedTierList | null>(() =>
+    isReadonly.value ? shared.value?.list ?? null : currentList.value
+)
+
+async function openSharedFromRoute() {
+    shared.value = null
+    const id = sharedListId.value
+    if (!id) return
+    if (tierLists.value[id]) {
+        activeListId.value = id
+        return
+    }
+    sharedState.value = "loading"
+    try {
+        const result = await loadSharedTierList(id)
+        if (sharedListId.value !== id) return // navigated elsewhere while loading
+        if (!result) {
+            sharedState.value = "notfound"
+            return
+        }
+        shared.value = result
+        await nextTick()
+        resizeAllLabelTextareas()
+    } catch (err) {
+        console.error("Failed to load shared tier list:", err)
+        if (sharedListId.value === id) sharedState.value = "error"
+    }
+}
+
+watch(sharedListId, openSharedFromRoute)
+
 function normalizeListOrder() {
     const existingIds = new Set(Object.keys(tierLists.value))
     const seen = new Set<string>()
@@ -296,12 +401,25 @@ function normalizeListOrder() {
     }
 }
 
-onMounted(() => {
+function ensureActiveList() {
     normalizeListOrder()
     if (!currentList.value && listOptions.value.length) {
         activeListId.value = listOptions.value[0].id
     }
+}
+
+onMounted(async () => {
+    ensureActiveList()
     nextTick(resizeAllLabelTextareas)
+
+    // The local lists show immediately; the cloud merge lands a moment later.
+    const pulling = sync.pull().then(() => {
+        ensureActiveList()
+        nextTick(resizeAllLabelTextareas)
+    })
+    // Opening my own share link should land on the synced list, so wait for the merge in that case.
+    if (sharedListId.value) await pulling
+    await openSharedFromRoute()
 })
 
 function saveList(list: SavedTierList) {
@@ -357,6 +475,12 @@ function createDefaultRows(): TierRow[] {
     return defaultTierPalette.map(p => ({ id: crypto.randomUUID(), label: p.label, color: p.color }))
 }
 
+function addList(list: SavedTierList) {
+    tierLists.value = { ...tierLists.value, [list.id]: list }
+    listOrder.value = [...listOrder.value.filter(id => id !== list.id), list.id]
+    activeListId.value = list.id
+}
+
 function createList() {
     const rows = createDefaultRows()
     const list: SavedTierList = {
@@ -367,9 +491,7 @@ function createList() {
         createdAt: Date.now(),
         updatedAt: Date.now(),
     }
-    tierLists.value = { ...tierLists.value, [list.id]: list }
-    listOrder.value = [...listOrder.value.filter(id => id !== list.id), list.id]
-    activeListId.value = list.id
+    addList(list)
     toast.success("New list created!", { position: toast.POSITION.TOP_RIGHT, icon: false })
 }
 
@@ -378,15 +500,13 @@ function duplicateList() {
     const src = currentList.value
     const copy: SavedTierList = {
         id: crypto.randomUUID(),
-        name: `${src.name} (copy)`,
+        name: clampName(`${src.name} (copy)`),
         rows: src.rows.map(r => ({ ...r })),
         placements: Object.fromEntries(Object.entries(src.placements).map(([k, v]) => [k, [...v]])),
         createdAt: Date.now(),
         updatedAt: Date.now(),
     }
-    tierLists.value = { ...tierLists.value, [copy.id]: copy }
-    listOrder.value = [...listOrder.value.filter(id => id !== copy.id), copy.id]
-    activeListId.value = copy.id
+    addList(copy)
     toast.success("List duplicated!", { position: toast.POSITION.TOP_RIGHT, icon: false })
 }
 
@@ -408,18 +528,20 @@ function handleDeleteClick() {
     tierLists.value = rest
     listOrder.value = listOrder.value.filter(id => id !== deletedId)
     activeListId.value = listOrder.value[0] ?? Object.values(rest).sort((a, b) => a.createdAt - b.createdAt || a.id.localeCompare(b.id))[0]?.id ?? ""
+    void sync.remove(deletedId)
     toast.success("List deleted", { position: toast.POSITION.TOP_RIGHT, icon: false })
 }
 
 function updateListName(name: string) {
     if (!currentList.value) return
-    saveList({ ...currentList.value, name })
+    saveList({ ...currentList.value, name: clampName(name) })
 }
 
 // ── Row CRUD ──
 function addRow() {
     if (!currentList.value) return
     const list = currentList.value
+    if (list.rows.length >= MAX_TIER_ROWS) return
     const newRow: TierRow = {
         id: crypto.randomUUID(),
         label: "New Tier",
@@ -512,7 +634,7 @@ function onLabelInput(e: Event) {
     resizeLabelTextarea(e.target as HTMLTextAreaElement)
 }
 
-watch(activeListId, () => nextTick(resizeAllLabelTextareas))
+watch(() => viewList.value?.id, () => nextTick(resizeAllLabelTextareas))
 watch(labelColWidth, () => nextTick(resizeAllLabelTextareas))
 
 // ── Placement helpers ──
@@ -626,7 +748,7 @@ function computeInsertionIndex(container: HTMLElement, x: number, y: number, exc
 }
 
 function onChipDragStart(charId: number, fromRowId: string | null, e: DragEvent) {
-    if (!currentList.value) return
+    if (!currentList.value || isReadonly.value) return
     draggedCharId.value = charId
     draggedFromRowId.value = fromRowId
     if (e.dataTransfer) {
@@ -682,7 +804,7 @@ const HOLD_DURATION = 350
 const MOVE_CANCEL_THRESHOLD = 8
 
 function onChipTouchStart(charId: number, fromRowId: string | null, e: TouchEvent) {
-    if (!currentList.value) return
+    if (!currentList.value || isReadonly.value) return
     touchStartPos.value = { x: e.touches[0].clientX, y: e.touches[0].clientY }
     touchHoldTimer.value = setTimeout(() => {
         draggedCharId.value = charId
@@ -743,9 +865,70 @@ onUnmounted(() => {
 
 // ── Export ──
 const exportOpts = { exportClass: "exporting" }
-const shareOptionsForTierList = () => ({
-    title: `${currentList.value?.name || "My"} Tier List`,
-})
+const listUrl = (id: string) => `${window.location.origin}/exedra-dmg-calc/#/tier-list-maker?list=${id}`
+
+const shareOptionsForTierList = () => {
+    const list = viewList.value
+    return {
+        title: `${list?.name || "My"} Tier List`,
+        // The shared image page can link back to the list itself, when the list has a link.
+        backUrl: list && (isReadonly.value || list.shared) ? listUrl(list.id) : undefined,
+    }
+}
+
+// ── Sharing ──
+
+function setListShared(value: boolean) {
+    if (!currentList.value || !cloudEnabled) return
+    saveList({ ...currentList.value, shared: value })
+}
+
+const linkCopied = ref(false)
+
+async function copyShareLink() {
+    const list = viewList.value
+    if (!list) return
+    try {
+        const alreadyShared = isReadonly.value || !!list.shared
+        if (!isReadonly.value) {
+            if (!cloudEnabled) throw new Error("Create or load a cloud profile first (top of the page), so your list has somewhere to be shared from.")
+            if (!list.shared) setListShared(true)
+            // The link only works once the server has the list with sharing switched on.
+            await sync.flush()
+            if (!sync.isSynced(list.id) || !tierLists.value[list.id]?.shared) {
+                throw new Error("Couldn't upload this list. Check your connection and try again.")
+            }
+        }
+        await navigator.clipboard.writeText(listUrl(list.id))
+        linkCopied.value = true
+        setTimeout(() => { linkCopied.value = false }, 1500)
+        toast.success(alreadyShared ? "Link copied!" : "Link copied. Anyone with it can now view this list.",
+            { position: toast.POSITION.TOP_RIGHT, icon: false })
+    } catch (err) {
+        console.error("Failed to copy share link:", err)
+        toast.error(err instanceof Error ? err.message : String(err), { position: toast.POSITION.TOP_RIGHT, icon: false })
+    }
+}
+
+function saveSharedCopy() {
+    const src = shared.value?.list
+    if (!src) return
+    const now = Date.now()
+    addList({
+        id: crypto.randomUUID(),
+        name: clampName(`${src.name || "Untitled list"} (copy)`),
+        rows: src.rows.map(r => ({ ...r })),
+        placements: Object.fromEntries(Object.entries(src.placements).map(([k, v]) => [k, [...v]])),
+        createdAt: now,
+        updatedAt: now,
+    })
+    router.replace({ path: route.path }) // leave the shared view; the copy is now the active list
+    toast.success("Saved to your lists!", { position: toast.POSITION.TOP_RIGHT, icon: false })
+}
+
+function retrySync() {
+    void sync.pull()
+}
 </script>
 
 <style scoped>
@@ -1309,5 +1492,100 @@ const shareOptionsForTierList = () => ({
     .row-label-input {
         font-size: 0.88rem;
     }
+}
+
+/* ── Cloud sync status + shared (read-only) view ── */
+.sync-status {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.sync-status a,
+.link-btn {
+    color: var(--accent-soft);
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.sync-status--error {
+    color: var(--danger);
+}
+
+.chip.disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.viewing-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    padding: 0.6rem 0.9rem;
+    border-radius: var(--radius-sm);
+    background: var(--panel);
+    border: 1px solid var(--border-strong);
+}
+
+.viewing-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--accent-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+}
+
+.viewing-name {
+    font-weight: 700;
+    color: var(--text);
+}
+
+.viewing-owner {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.save-copy-btn,
+.back-to-own {
+    padding: 0.3rem 0.75rem;
+    background: var(--accent-glow);
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    color: var(--accent-soft);
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+
+.save-copy-btn:hover,
+.back-to-own:hover {
+    background: var(--accent-glow-strong);
+}
+
+.viewing-banner .back-to-own {
+    margin-left: auto;
+}
+
+.row-label-input[readonly] {
+    cursor: default;
+}
+
+.row-label-input[readonly]:hover,
+.row-label-input[readonly]:focus {
+    background: transparent;
+    border-color: transparent;
 }
 </style>

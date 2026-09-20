@@ -4,6 +4,8 @@ import { logEvent } from '../utils/analytics'
 import { Character, correctCharacterParams } from "../types/KiokuTypes"
 import { countCharsObtained, getPowerScores } from "../models/PowerValue"
 import { KiokuRole } from "../types/enums"
+import type { SavedTierList, SharedTierList, TierListRow } from "../types/TierListTypes"
+import { clampName, isUuid, sanitizeBoard } from "../utils/tierList"
 
 export class NameRequiredError extends Error {
     constructor() {
@@ -874,6 +876,118 @@ async function _updateFriendCode(
     return { from: currentCode, to: friendCode, changed: true }
 }
 
+type SaveTierListResultRow = TierListRow & { conflict: boolean }
+
+async function _loadMyTierLists(): Promise<TierListRow[]> {
+    const userId = getUserId()
+
+    if (!userId) return []
+
+    const supabase = getSupabase()
+
+    const { data, error } = await supabase
+        .from("user_tier_lists")
+        .select("*")
+        .eq("user_id", userId)
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: true })
+
+    if (error) throw error
+
+    return data ?? []
+}
+
+// Optimistic concurrency, like _saveCharacters: `knownUpdatedAt` is the server updated_at this client last
+// confirmed for the list (null if none). If the server has something newer the write is rejected and the
+// server's current row comes back with `conflict: true`.
+async function _saveTierList(
+    list: SavedTierList,
+    sortOrder: number,
+    knownUpdatedAt: string | null
+): Promise<SaveTierListResultRow | null> {
+    const userId = getUserId()
+
+    if (!userId) return null
+
+    const supabase = getSupabase()
+
+    const { data, error } = await supabase.rpc('save_tier_list_safe', {
+        target_user_id: userId,
+        p_list_id: list.id,
+        p_name: list.name,
+        p_rows: list.rows,
+        p_placements: list.placements,
+        p_is_shared: !!list.shared,
+        p_sort_order: sortOrder,
+        p_known_updated_at: knownUpdatedAt,
+    })
+
+    if (error) throw error
+
+    return (data as SaveTierListResultRow[] | null)?.[0] ?? null
+}
+
+async function _saveTierListOrder(orderedIds: string[]) {
+    const userId = getUserId()
+
+    if (!userId) return
+
+    const supabase = getSupabase()
+
+    const { error } = await supabase.rpc('set_tier_list_order', {
+        target_user_id: userId,
+        ordered_ids: orderedIds,
+    })
+
+    if (error) throw error
+}
+
+async function _deleteTierList(listId: string) {
+    const userId = getUserId()
+
+    if (!userId) return
+
+    const supabase = getSupabase()
+
+    const { error } = await supabase
+        .from("user_tier_lists")
+        .delete()
+        .eq("user_id", userId)
+        .eq("list_id", listId)
+
+    if (error) throw error
+}
+
+// Works without a cloud account: anyone with the link can view a shared list.
+async function _loadSharedTierList(listId: string): Promise<SharedTierList | null> {
+    if (!isUuid(listId)) return null
+
+    const supabase = getSupabase()
+
+    const { data, error } = await supabase.rpc('get_shared_tier_list', {
+        target_list_id: listId
+    })
+
+    if (error) throw error
+
+    const row = (data as any[] | null)?.[0]
+
+    if (!row) return null
+
+    return {
+        list: {
+            id: row.list_id,
+            name: clampName(row.name),
+            ...sanitizeBoard(row.rows, row.placements),
+            createdAt: Date.parse(row.created_at) || Date.now(),
+            updatedAt: Date.parse(row.updated_at) || Date.now(),
+        },
+        ownerName: typeof row.owner_display_name === "string" ? row.owner_display_name.trim().slice(0, 100) : "",
+        ownerFriendId: row.owner_friend_id ? String(row.owner_friend_id) : null,
+        isOwner: !!row.is_owner,
+    }
+}
+
 export const createCloudUser = withAnalytics(
     _createCloudUser,
     'create_cloud_user',
@@ -1022,4 +1136,34 @@ export const updateFriendCode = withAnalytics(
     _updateFriendCode,
     'update_friend_code',
     (_args, result) => result ?? {}
+)
+
+export const loadMyTierLists = withAnalytics(
+    _loadMyTierLists,
+    'load_tier_lists',
+    (_args, result) => ({ listCount: result?.length ?? 0 })
+)
+
+export const saveTierList = withAnalytics(
+    _saveTierList,
+    'save_tier_list',
+    ([list], result) => ({ listId: list.id, shared: !!list.shared, conflict: result?.conflict ?? false })
+)
+
+export const saveTierListOrder = withAnalytics(
+    _saveTierListOrder,
+    'save_tier_list_order',
+    ([orderedIds]) => ({ listCount: orderedIds.length })
+)
+
+export const deleteTierList = withAnalytics(
+    _deleteTierList,
+    'delete_tier_list',
+    ([listId]) => ({ listId })
+)
+
+export const loadSharedTierList = withAnalytics(
+    _loadSharedTierList,
+    'load_shared_tier_list',
+    ([listId], result) => ({ listId, found: !!result, isOwner: result?.isOwner ?? false })
 )
