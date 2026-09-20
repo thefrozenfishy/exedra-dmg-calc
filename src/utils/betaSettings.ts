@@ -506,7 +506,14 @@ export const BETA_SECTIONS = [
                     // Niche uses
                     { name: "My Gigantic Heart", ascension: 4, },
                     { name: "My Creations", ascension: 4, },
-                    { name: "Kugatachi", ascension: 5, },
+                    { 
+                        name: "Kugatachi", ascension: 5,
+                        exceptions: {
+                            conditions: [
+                                { name: "The Universe's Edge", ascension: 5, },
+                            ],
+                        },
+                    },
                     { name: "Magic Cake Dish", ascension: 4, },
                     {
                         name: "Tiro Finale Liberation", ascension: 5,
@@ -516,7 +523,14 @@ export const BETA_SECTIONS = [
                             ],
                         },
                     },
-                    { name: "The Universe's Edge", ascension: 5, },
+                    { 
+                        name: "The Universe's Edge", ascension: 5,
+                        exceptions: {
+                            conditions: [
+                                { name: "Kugatachi", ascension: 5, },
+                            ],
+                        },
+                    },
                     {
                         name: "Cherry Blizzard", ascension: 5,
                         exceptions: {
