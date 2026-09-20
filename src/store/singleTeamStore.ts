@@ -117,11 +117,11 @@ export const useTeamStore = defineStore('team', {
 export const useEnemyStore = defineStore('enemies', {
   state: () => ({
     enemies: [
-      { name: 'Left Other', maxBreak: 300, defense: 1500, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 1 },
-      { name: 'Left Proximity', maxBreak: 300, defense: 1500, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 1 },
-      { name: 'Target', maxBreak: 300, defense: 1500, enabled: true, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 1 },
-      { name: 'Right Proximity', maxBreak: 0, defense: 1500, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 1 },
-      { name: 'Right Other', maxBreak: 300, defense: 1500, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 1 },
+      { name: 'Left Other', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+      { name: 'Left Proximity', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+      { name: 'Target', maxBreak: 500, defense: 3000, enabled: true, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 1 },
+      { name: 'Right Proximity', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+      { name: 'Right Other', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
     ] as Enemy[]
   }),
   actions: {
