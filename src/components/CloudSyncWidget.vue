@@ -160,7 +160,7 @@ const restoreAccount = async () => {
     } catch (err) {
         console.error("Failed to load profile:", err)
 
-        toast.error("Failed to load profile", {
+        toast.error("Failed to load profile. Are you sure you used your secret ID (36 characters long) instead of your friendCode (5 characters long)? If you have lost your secret ID, contact @TFF on discord", {
             position: toast.POSITION.TOP_RIGHT,
             icon: false,
         })
