@@ -10,6 +10,33 @@ const icon = (document.getElementById('app-icon') as HTMLLinkElement | null)?.hr
 const beta = isBeta()
 const router = useRouter()
 
+const titles: [string, number, number?][] = [
+  ["TFF's Exedra Toolbox", 9],
+  ["TFF's Mess of a Toolbox", 1, 6],
+  ["TFF's Ever Changing Beta Toolbox", 0, 10],
+]
+
+function pickWeightedTitle(titles: [string, number, number?][]): string {
+  const weights = titles.map(([title, normalWeight, betaWeight]) => ({
+    title,
+    weight: beta ? (betaWeight ?? normalWeight) : normalWeight,
+  }))
+
+  const totalWeight = weights.reduce((sum, { weight }) => sum + weight, 0)
+  let random = Math.random() * totalWeight
+
+  for (const { title, weight } of weights) {
+    random -= weight
+    if (random < 0) {
+      return title
+    }
+  }
+
+  return weights[0].title
+}
+
+const title = pickWeightedTitle(titles)
+
 const navRoutes = computed(() =>
   router.getRoutes().filter(r => r.meta?.version != null)
 )
@@ -74,7 +101,7 @@ function routeForPath(path: string) {
       <CloudSyncWidget />
       <div class="title-row">
         <img :src="icon" alt="App Icon" class="app-icon" />
-        <h1>TFF's Exedra Toolbox</h1>
+        <h1>{{ title }}</h1>
       </div>
       <nav>
         <div v-for="paths in [group1Paths, group2Paths, group3Paths]">
