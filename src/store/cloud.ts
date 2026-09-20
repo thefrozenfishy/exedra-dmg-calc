@@ -267,7 +267,7 @@ async function _restoreCloudAccount(userId: string) {
     )
 
     if (error || !data) {
-        throw new Error("Account not found")
+        throw new Error(`Account not found: ${userId}`)
     }
 
     return true
