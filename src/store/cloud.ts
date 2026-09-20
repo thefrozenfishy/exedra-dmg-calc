@@ -1,7 +1,7 @@
 import { getSupabase } from "../utils/supabase"
 import { getUserId } from "./user"
 import { logEvent } from '../utils/analytics'
-import { Character, KiokuConstants } from "../types/KiokuTypes"
+import { Character, correctCharacterParams } from "../types/KiokuTypes"
 import { countCharsObtained, getPowerScores } from "../models/PowerValue"
 import { KiokuRole } from "../types/enums"
 
@@ -125,19 +125,23 @@ async function _saveCharacters(
 
     const supabase = getSupabase()
 
-    const rows: CharacterRow[] = chars.map(c => ({
-        user_id: userId,
-        character_id: c.id,
-        enabled: c.enabled ?? false,
-        dupes: c.dupes ?? 0,
-        ascension: c.ascension ?? KiokuConstants.minAscension,
-        kioku_lvl: c.kiokuLvl ?? KiokuConstants.minKiokuLvl,
-        magic_lvl: c.magicLvl ?? KiokuConstants.minMagicLvl,
-        heartphial_lvl: c.heartphialLvl ?? KiokuConstants.minHeartphialLvl,
-        special_lvl: c.specialLvl ?? KiokuConstants.minSpecialLvl,
-        portrait: c.portrait ?? "",
-        crys_options: c.crysOptions ?? {},
-    }))
+    const rows: CharacterRow[] = chars.map(c => {
+        const character = correctCharacterParams({ ...c })
+
+        return {
+            user_id: userId,
+            character_id: character.id,
+            enabled: character.enabled,
+            dupes: character.dupes,
+            ascension: character.ascension,
+            kioku_lvl: character.kiokuLvl,
+            magic_lvl: character.magicLvl,
+            heartphial_lvl: character.heartphialLvl,
+            special_lvl: character.specialLvl,
+            portrait: character.portrait,
+            crys_options: character.crysOptions ?? {},
+        }
+    })
 
     const summary = summarizeCharacterSave(rows)
 

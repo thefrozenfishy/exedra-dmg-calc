@@ -232,20 +232,24 @@ export const useCharacterStore = defineStore('characterStore', () => {
 
                 if (!char) return
 
-                Object.assign(char, {
-                    enabled: row.enabled ?? false,
-                    dupes: row.dupes ?? 0,
-                    ascension: row.ascension ?? KiokuConstants.minAscension,
-                    kiokuLvl: row.kioku_lvl ?? KiokuConstants.minKiokuLvl,
-                    magicLvl: row.magic_lvl ?? KiokuConstants.minMagicLvl,
-                    heartphialLvl: row.heartphial_lvl ?? KiokuConstants.minHeartphialLvl,
-                    specialLvl: row.special_lvl ?? KiokuConstants.minSpecialLvl,
-                    portrait: row.portrait ?? "",
-                    crysOptions: buildCrysOptions(row.character_id, row.crys_options ?? {}),
-                })
-                if (char.rarity < 5) char.ascension = KiokuConstants.maxAscension;
-                if (char.ascension > KiokuConstants.maxAscension) char.ascension = KiokuConstants.maxAscension;
-                if (char.ascension < 0) char.ascension = KiokuConstants.minAscension;
+                Object.assign(
+                    char,
+                    correctCharacterParams({
+                        ...char,
+                        enabled: row.enabled,
+                        dupes: row.dupes,
+                        ascension: row.ascension,
+                        kiokuLvl: row.kioku_lvl,
+                        magicLvl: row.magic_lvl,
+                        heartphialLvl: row.heartphial_lvl,
+                        specialLvl: row.special_lvl,
+                        portrait: row.portrait,
+                        crysOptions: buildCrysOptions(
+                            row.character_id,
+                            row.crys_options ?? {}
+                        ),
+                    })
+                )
                 if (char.name === LuxMagica) char.rarity = 4
             })
             persistSyncMeta()

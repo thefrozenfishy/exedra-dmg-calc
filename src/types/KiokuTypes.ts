@@ -527,7 +527,7 @@ export interface KiokuArgs {
     specialLvl: number;
 }
 
-export const correctCharacterParams = (character?: Character) => {
+export const correctCharacterParams = (character: Partial<Character>): Character => {
   if (!character) return character
 
   character.enabled ??= false
