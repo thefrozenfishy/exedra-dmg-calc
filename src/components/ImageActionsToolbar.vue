@@ -30,8 +30,6 @@
                 </svg>
             </button>
 
-            <!-- Share (calls shareHandler when provided — e.g. a persistent, embeddable link —
-                 otherwise falls back to the built-in one-shot snapshot link) -->
             <button v-if="showShareButton" class="icon-btn icon-btn--accent" :disabled="shareLinkLoading || disabled"
                 :aria-label="shareLinkLoading ? 'Generating share link…' : shareLabel"
                 :title="shareLinkLoading ? 'Generating share link…' : shareLabel" @click="handleShare">
@@ -46,9 +44,6 @@
                 </svg>
             </button>
 
-            <!-- URL input — shrinks to fill remaining space. Still shown even with the share
-                 button hidden: handleCopyImage falls back to populating this on browsers that
-                 can't write images to the clipboard directly. -->
             <template v-if="shareLinkUrl">
                 <input class="share-link-input" type="text" readonly :value="shareLinkUrl"
                     @click="($event.target as HTMLInputElement).select()" />
@@ -57,7 +52,6 @@
             <input v-else-if="showShareButton" class="share-link-input share-link-placeholder" type="text" readonly
                 value="" placeholder="Click share to generate a link" />
 
-            <!-- Copy icon button -->
             <button v-if="shareLinkUrl" class="icon-btn icon-btn--accent" :aria-label="copied ? 'Copied!' : 'Copy link'"
                 :title="copied ? 'Copied!' : 'Copy link'" @click="copyShareLink">
                 <!-- Checkmark when just copied -->
@@ -93,7 +87,7 @@ import {
 
 type MaybeFn<T> = T | (() => T)
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     target: MaybeFn<string | HTMLElement>
     canvas?: MaybeFn<HTMLCanvasElement | undefined>
     filename: MaybeFn<string>
@@ -111,9 +105,10 @@ const props = defineProps<{
     // Label shown on the Share button and its input placeholder. Defaults to "Share image" to
     // match the original one-shot behaviour; override when shareHandler shares something else.
     shareLabel?: string
-}>()
+}>(), {
+    showShareButton: true,
+})
 
-const showShareButton = computed(() => props.showShareButton ?? true)
 const shareLabel = computed(() => props.shareLabel ?? "Share image")
 
 const resolve = <T,>(value: MaybeFn<T> | undefined): T | undefined =>
