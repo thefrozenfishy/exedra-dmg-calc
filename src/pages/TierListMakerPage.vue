@@ -15,21 +15,8 @@
         <section class="toolbar card" v-if="viewList">
             <div class="toolbar-left">
                 <ImageActionsToolbar target=".tier-maker-board" filename="tier-list.png" :export-options="exportOpts"
-                    :share-options="shareOptionsForTierList" :show-share-button="false">
-                    <button class="icon-btn icon-btn--accent"
-                        :title="linkCopied ? 'Copied!' : isReadonly ? 'Copy link' : 'Copy share link'"
-                        :aria-label="linkCopied ? 'Copied!' : isReadonly ? 'Copy link' : 'Copy share link'"
-                        @click="copyShareLink">
-                        <svg v-if="linkCopied" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M20 6L9 17l-5-5" />
-                        </svg>
-                        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                        </svg>
-                    </button>
+                    :share-options="shareOptionsForTierList" :share-handler="generateTierListShareUrl"
+                    share-label="Share list">
                 </ImageActionsToolbar>
             </div>
             <span v-if="!isReadonly" class="sync-status" :class="`sync-status--${syncStatus}`">
@@ -884,49 +871,34 @@ function setListShared(value: boolean) {
     saveList({ ...currentList.value, shared: value })
 }
 
-const linkCopied = ref(false)
-
-async function copyShareLink() {
+async function generateTierListShareUrl(): Promise<string> {
     const list = viewList.value
-    if (!list) return
-    try {
-        const alreadyShared = isReadonly.value || !!list.shared
-        let url: string
+    if (!list) throw new Error("No list to share")
 
-        if (isReadonly.value) {
-            // Viewer: don't write anything. Reconstruct the SAME deterministic slug the
-            // owner's client would have computed, from data get_shared_tier_list already gave us.
-            const friendCode = shared.value?.ownerFriendId
-            url = friendCode ? prettyUrl(prettyShareId(friendCode, list.name)) : listUrl(list.id)
-        } else {
-            if (!cloudEnabled) throw new Error("Create or load a cloud profile first (top of the page), so your list has somewhere to be shared from.")
-            if (!list.shared) setListShared(true)
-            // The link only works once the server has the list with sharing switched on.
-            await sync.flush()
-            if (!sync.isSynced(list.id) || !tierLists.value[list.id]?.shared) {
-                throw new Error("Couldn't upload this list. Check your connection and try again.")
-            }
-
-            // List is confirmed synced+shared -- now make sure a fresh preview exists
-            // before handing out a URL that promises one.
-            const friendCode = await getFriendCode()
-            if (!friendCode) throw new Error("Couldn't resolve your friend code.")
-            const shareId = prettyShareId(friendCode, list.name)
-            url = await refreshSharePreview(".tier-maker-board", shareId, {
-                ...shareOptionsForTierList(),
-                redirectHumans: true,
-            })
-        }
-
-        await navigator.clipboard.writeText(url)
-        linkCopied.value = true
-        setTimeout(() => { linkCopied.value = false }, 1500)
-        toast.success(alreadyShared ? "Link copied!" : "Link copied. Anyone with it can now view this list.",
-            { position: toast.POSITION.TOP_RIGHT, icon: false })
-    } catch (err) {
-        console.error("Failed to copy share link:", err)
-        toast.error(err instanceof Error ? err.message : String(err), { position: toast.POSITION.TOP_RIGHT, icon: false })
+    if (isReadonly.value) {
+        // Viewer: don't write anything. Reconstruct the SAME deterministic slug the owner's
+        // client would have computed, from data get_shared_tier_list already gave us.
+        const friendCode = shared.value?.ownerFriendId
+        return friendCode ? prettyUrl(prettyShareId(friendCode, list.name)) : listUrl(list.id)
     }
+
+    if (!cloudEnabled) throw new Error("Create or load a cloud profile first (top of the page), so your list has somewhere to be shared from.")
+    if (!list.shared) setListShared(true)
+    // The link only works once the server has the list with sharing switched on.
+    await sync.flush()
+    if (!sync.isSynced(list.id) || !tierLists.value[list.id]?.shared) {
+        throw new Error("Couldn't upload this list. Check your connection and try again.")
+    }
+
+    // List is confirmed synced+shared -- now make sure a fresh preview exists
+    // before handing out a URL that promises one.
+    const friendCode = await getFriendCode()
+    if (!friendCode) throw new Error("Couldn't resolve your friend code.")
+    const shareId = prettyShareId(friendCode, list.name)
+    return await refreshSharePreview(".tier-maker-board", shareId, {
+        ...shareOptionsForTierList(),
+        redirectHumans: true,
+    })
 }
 
 function saveSharedCopy() {

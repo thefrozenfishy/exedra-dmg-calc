@@ -29,19 +29,8 @@
         <section class="toolbar card">
             <div class="toolbar-left">
                 <ImageActionsToolbar target=".ascension-table" filename="ascension.png" :export-options="exportOpts"
-                    :share-options="shareOptionsForAscensionList" :show-share-button="false">
-                    <button class="icon-btn icon-btn--accent" :title="hyperlinkCopied ? 'Copied!' : 'Copy page link'"
-                        :aria-label="hyperlinkCopied ? 'Copied!' : 'Copy page link'" @click="copyHyperLink">
-                        <svg v-if="hyperlinkCopied" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M20 6L9 17l-5-5" />
-                        </svg>
-                        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                        </svg>
-                    </button>
+                    :share-options="shareOptionsForAscensionList" :share-handler="generateAscensionShareUrl"
+                    share-label="Share page">
                 </ImageActionsToolbar>
             </div>
         </section>
@@ -708,30 +697,20 @@ const shareOptionsForAscensionList = () => ({
     backUrl: currentPageUrl(),
 })
 
-const hyperlinkCopied = ref(false)
+const generateAscensionShareUrl = async (): Promise<string> => {
+    const friendId = viewingFriendCode.value ?? friendCode.value
+    if (!friendId) throw new Error("You need to sync your friend code first!")
 
-const copyHyperLink = async () => {
-    try {
-        const friendId = viewingFriendCode.value ?? friendCode.value
-        if (!friendId) throw new Error("You need to sync your friend code first!")
-
-        const url = viewingFriendCode.value
-            // Viewing a friend's kioku: reuse their existing link, don't regenerate it on their behalf.
-            ? prettyUrl(friendId.toLowerCase())
-            // Your own kioku: confirm/refresh the preview, then copy the pretty link.
-            : await refreshSharePreview(".ascension-table", friendId.toLowerCase(), {
-                  ...shareOptionsForAscensionList(),
-                  redirectHumans: true,
-              })
-
-        await navigator.clipboard.writeText(url)
-        hyperlinkCopied.value = true
-        setTimeout(() => { hyperlinkCopied.value = false }, 1500)
-        toast.success("Copied to clipboard!", { position: toast.POSITION.TOP_RIGHT, icon: false })
-    } catch (err) {
-        console.error("Clipboard failed:", err)
-        toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
+    if (viewingFriendCode.value) {
+        // Viewing a friend's kioku: reuse their existing link, don't regenerate it on their behalf.
+        return prettyUrl(friendId.toLowerCase())
     }
+
+    // Your own kioku: confirm/refresh the preview, then hand back the pretty link.
+    return await refreshSharePreview(".ascension-table", friendId.toLowerCase(), {
+        ...shareOptionsForAscensionList(),
+        redirectHumans: true,
+    })
 }
 
 const isTouchDevice = ref(false)

@@ -30,11 +30,11 @@
                 </svg>
             </button>
 
-            <!-- Share (built-in one-shot snapshot link — hidden on pages that supply their own
-                 persistent, embeddable share link via the slot above instead) -->
+            <!-- Share (calls shareHandler when provided — e.g. a persistent, embeddable link —
+                 otherwise falls back to the built-in one-shot snapshot link) -->
             <button v-if="showShareButton" class="icon-btn icon-btn--accent" :disabled="shareLinkLoading || disabled"
-                :aria-label="shareLinkLoading ? 'Generating share link…' : 'Share image'"
-                :title="shareLinkLoading ? 'Generating share link…' : 'Share image'" @click="handleShare">
+                :aria-label="shareLinkLoading ? 'Generating share link…' : shareLabel"
+                :title="shareLinkLoading ? 'Generating share link…' : shareLabel" @click="handleShare">
                 <span v-if="shareLinkLoading" class="icon-spinner" aria-hidden="true" />
                 <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -103,9 +103,18 @@ const props = defineProps<{
     // Set to false on pages that provide their own persistent, embeddable share link (via the
     // slot) instead of this component's one-shot snapshot link — e.g. tier lists, account pages.
     showShareButton?: boolean
+    // Overrides the built-in one-shot snapshot flow: called instead of generateShareLink /
+    // generateShareLinkFromCanvas when the Share button is clicked, and must resolve to the URL
+    // to display in the input / copy. Use this for a persistent "live" link instead of a static
+    // snapshot — the rest of the UI (loading state, input, copy button) is unchanged either way.
+    shareHandler?: () => Promise<string>
+    // Label shown on the Share button and its input placeholder. Defaults to "Share image" to
+    // match the original one-shot behaviour; override when shareHandler shares something else.
+    shareLabel?: string
 }>()
 
 const showShareButton = computed(() => props.showShareButton ?? true)
+const shareLabel = computed(() => props.shareLabel ?? "Share image")
 
 const resolve = <T,>(value: MaybeFn<T> | undefined): T | undefined =>
     typeof value === "function" ? (value as () => T)() : value
@@ -171,6 +180,11 @@ const handleShare = async () => {
     shareLinkError.value = null
 
     try {
+        if (props.shareHandler) {
+            shareLinkUrl.value = await props.shareHandler()
+            return
+        }
+
         const shareOptions = resolve(props.shareOptions) ?? {}
         const canvas = resolve(props.canvas)
 
@@ -185,7 +199,7 @@ const handleShare = async () => {
         }
     } catch (err) {
         console.error("Failed to generate share link:", err)
-        shareLinkError.value = "Failed to generate share link. Please try again."
+        shareLinkError.value = err instanceof Error ? err.message : "Failed to generate share link. Please try again."
     } finally {
         shareLinkLoading.value = false
     }
