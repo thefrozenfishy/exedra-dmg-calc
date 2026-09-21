@@ -270,7 +270,7 @@ import { KiokuElement } from "../types/enums"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { useTierListSync } from "../store/tierListSync"
 import { loadSharedTierList, getFriendCode } from "../store/cloud"
-import { refreshSharePreview, prettyShareId, latestPrettyUrl } from "../utils/image"
+import { refreshSharePreview, prettyShareId, latestPrettyUrl, generateShareLink } from "../utils/image"
 import { MAX_LABEL_LENGTH, MAX_NAME_LENGTH, MAX_TIER_ROWS, clampName, isUuid } from "../utils/tierList"
 import type { SavedTierList, SharedTierList, TierRow } from "../types/TierListTypes"
 
@@ -882,7 +882,12 @@ async function generateTierListShareUrl(): Promise<string> {
         return friendCode ? await latestPrettyUrl(prettyShareId(friendCode, list.name)) : listUrl(list.id)
     }
 
-    if (!cloudEnabled) throw new Error("Create or load a cloud profile first (top of the page), so your list has somewhere to be shared from.")
+    if (!cloudEnabled) {
+        // Not synced, so the list has nowhere to live and no friend code to build a pretty link from.
+        // Fall back to the legacy one-shot snapshot link (random id, a frozen image of the board as it is
+        // right now).
+        return await generateShareLink(".tier-maker-board", exportOpts, shareOptionsForTierList())
+    }
     if (!list.shared) setListShared(true)
     // The link only works once the server has the list with sharing switched on.
     await sync.flush()

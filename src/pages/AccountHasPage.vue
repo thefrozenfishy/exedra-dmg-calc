@@ -322,7 +322,7 @@ import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 import { crystalises, passiveDetails } from "../utils/helpers"
-import { refreshSharePreview, latestPrettyUrl } from "../utils/image"
+import { refreshSharePreview, latestPrettyUrl, generateShareLink } from "../utils/image"
 import { useBetaValue, WishlistEntry, WishlistException } from "../utils/betaSettings"
 import NewBadge from '../components/NewBadge.vue'
 import CrysDataImport from '../components/CrysDataImport.vue'
@@ -699,7 +699,12 @@ const shareOptionsForAscensionList = () => ({
 
 const generateAscensionShareUrl = async (): Promise<string> => {
     const friendId = viewingFriendCode.value ?? friendCode.value
-    if (!friendId) throw new Error("You need to sync your friend code first!")
+
+    if (!friendId) {
+        // Not synced, so there's no friend code to build a pretty link from. Fall back to the legacy
+        // one-shot snapshot link (random id, a frozen image of the table as it is right now).
+        return await generateShareLink(".ascension-table", exportOpts, shareOptionsForAscensionList())
+    }
 
     if (viewingFriendCode.value) {
         // Viewing a friend's kioku: reuse their existing link, don't regenerate it on their behalf.
