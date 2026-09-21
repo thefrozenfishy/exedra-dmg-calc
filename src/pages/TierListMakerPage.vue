@@ -270,7 +270,7 @@ import { KiokuElement } from "../types/enums"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { useTierListSync } from "../store/tierListSync"
 import { loadSharedTierList, getFriendCode } from "../store/cloud"
-import { refreshSharePreview, prettyShareId, prettyUrl } from "../utils/image"
+import { refreshSharePreview, prettyShareId, latestPrettyUrl } from "../utils/image"
 import { MAX_LABEL_LENGTH, MAX_NAME_LENGTH, MAX_TIER_ROWS, clampName, isUuid } from "../utils/tierList"
 import type { SavedTierList, SharedTierList, TierRow } from "../types/TierListTypes"
 
@@ -879,7 +879,7 @@ async function generateTierListShareUrl(): Promise<string> {
         // Viewer: don't write anything. Reconstruct the SAME deterministic slug the owner's
         // client would have computed, from data get_shared_tier_list already gave us.
         const friendCode = shared.value?.ownerFriendId
-        return friendCode ? prettyUrl(prettyShareId(friendCode, list.name)) : listUrl(list.id)
+        return friendCode ? await latestPrettyUrl(prettyShareId(friendCode, list.name)) : listUrl(list.id)
     }
 
     if (!cloudEnabled) throw new Error("Create or load a cloud profile first (top of the page), so your list has somewhere to be shared from.")

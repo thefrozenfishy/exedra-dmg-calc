@@ -354,6 +354,15 @@ export interface ShareLinkOptions {
     redirectHumans?: boolean
 }
 
+// Raw storage URLs are only handed out when the worker is unreachable. refreshSharePreview
+// overwrites a fixed path, so give the fallback a fresh query string too -- otherwise
+// Discord & co. would keep showing the previous image for that link.
+const cacheBusted = (url: string): string => {
+    const u = new URL(url)
+    u.searchParams.set("v", Math.floor(Date.now() / 1000).toString(36))
+    return u.toString()
+}
+
 const createSharePage = async (shareId: string, imageUrl: string, opts: ShareLinkOptions = {}): Promise<string> => {
     const supabase = getSupabase()
 
@@ -369,10 +378,10 @@ const createSharePage = async (shareId: string, imageUrl: string, opts: ShareLin
 
     if (error) {
         console.error("create-share-page failed, falling back to raw image URL:", error)
-        return imageUrl
+        return cacheBusted(imageUrl)
     }
 
-    return data?.url ?? imageUrl
+    return data?.url ?? cacheBusted(imageUrl)
 }
 
 // Your Cloudflare Worker's own domain (the reverse proxy), not the GitHub Pages one.
@@ -382,6 +391,21 @@ const SHARE_WORKER_ORIGIN = "https://exedra-share-worker.thefrozenfishy.workers.
 // trip -- used when a viewer copies a link to something they don't own, so nothing gets
 // regenerated/overwritten on their behalf.
 export const prettyUrl = (shareId: string): string => `${SHARE_WORKER_ORIGIN}/${shareId}`
+
+// Same idea as prettyUrl, but asks the worker for the CURRENT versioned link (`/tffff?v=t5g3xk`).
+// Link-preview caches (Discord etc.) key on the full URL, so the bare `/tffff` can keep showing an
+// embed cached from before the owner's last refresh. Read-only -- nothing gets written on the
+// owner's behalf. Falls back to the bare link if the worker can't be reached.
+export const latestPrettyUrl = async (shareId: string): Promise<string> => {
+    try {
+        const res = await fetch(`${prettyUrl(shareId)}?json=1`)
+        if (!res.ok) return prettyUrl(shareId)
+        const data: { url?: string } = await res.json()
+        return data.url ?? prettyUrl(shareId)
+    } catch {
+        return prettyUrl(shareId)
+    }
+}
 
 const slugify = (input: string): string => {
     const slug = input

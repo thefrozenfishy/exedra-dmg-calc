@@ -322,7 +322,7 @@ import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 import { crystalises, passiveDetails } from "../utils/helpers"
-import { refreshSharePreview, prettyUrl } from "../utils/image"
+import { refreshSharePreview, latestPrettyUrl } from "../utils/image"
 import { useBetaValue, WishlistEntry, WishlistException } from "../utils/betaSettings"
 import NewBadge from '../components/NewBadge.vue'
 import CrysDataImport from '../components/CrysDataImport.vue'
@@ -703,7 +703,7 @@ const generateAscensionShareUrl = async (): Promise<string> => {
 
     if (viewingFriendCode.value) {
         // Viewing a friend's kioku: reuse their existing link, don't regenerate it on their behalf.
-        return prettyUrl(friendId.toLowerCase())
+        return await latestPrettyUrl(friendId.toLowerCase())
     }
 
     // Your own kioku: confirm/refresh the preview, then hand back the pretty link.

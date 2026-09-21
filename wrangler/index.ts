@@ -7,6 +7,11 @@
 //
 // Everything under the original `/share/:id` and `POST /share` routes is unchanged in
 // behaviour for existing callers -- this is additive.
+//
+// Cache busting for the pretty URLs: every POST /share stamps the entry with a short version
+// and hands back `/:owner?v=<version>`. Discord & co. cache an unfurl per URL (and the og:image
+// per image URL), so a re-share must look like a brand-new URL to them. The path alone
+// identifies the share; ?v= is only ever a cache key, never used for lookup.
 
 export interface Env {
     SHARE_PAGES: KVNamespace
@@ -21,6 +26,9 @@ interface ShareEntry {
     // actual app rather than the static image page. Bots still get the static page either way,
     // so link unfurls keep working.
     redirectHumans?: boolean
+    // Version stamp of the last POST, pretty shares only (legacy hex snapshots are immutable and
+    // never get one). Base36 unix seconds, e.g. "t5g3xk" -- 6 chars, so links stay short.
+    v?: string
 }
 
 const TOOLBOX_URL = "https://thefrozenfishy.github.io/exedra-dmg-calc/"
@@ -44,8 +52,21 @@ function escapeHtml(input: string): string {
         .replace(/'/g, "&#039;")
 }
 
-function buildSharePageHtml(entry: ShareEntry, shareUrl: string): string {
-    const safeImage = escapeHtml(entry.imageUrl)
+const VERSION_RE = /^[a-z0-9]{1,12}$/
+
+const newVersion = (): string => Math.floor(Date.now() / 1000).toString(36)
+
+// Appends ?v= to the storage image URL. The file lives at a fixed, overwritten path
+// (previews/<shareId>.webp), so without this Discord/Twitter/CDNs keep serving the old bytes.
+function withVersion(imageUrl: string, v?: string): string {
+    if (!v) return imageUrl
+    const u = new URL(imageUrl)
+    u.searchParams.set("v", v)
+    return u.toString()
+}
+
+function buildSharePageHtml(entry: ShareEntry, shareUrl: string, imageUrl: string = entry.imageUrl): string {
+    const safeImage = escapeHtml(imageUrl)
     const safeShare = escapeHtml(shareUrl)
 
     const resolvedTitle = entry.title?.trim() || "My Shared Image"
@@ -153,12 +174,16 @@ function json(data: unknown, status = 200): Response {
     })
 }
 
-function html(body: string, status = 200): Response {
+function html(body: string, status = 200, extraHeaders: Record<string, string> = {}): Response {
     return new Response(body, {
         status,
-        headers: { "Content-Type": "text/html;charset=UTF-8" },
+        headers: { "Content-Type": "text/html;charset=UTF-8", ...extraHeaders },
     })
 }
+
+// Pretty pages change over time and answer bots and humans differently (OG page vs redirect),
+// so nothing between us and the client may cache one and hand it to the other.
+const LIVE_PAGE_HEADERS = { "Cache-Control": "no-cache", Vary: "User-Agent" }
 
 // Pretty-path slugs: lowercase, alnum + hyphen, DNS-label-ish (no leading/trailing hyphen).
 // Same pattern used both when validating on write and when routing on read.
@@ -221,6 +246,7 @@ export default {
 
             let kvKey: string
             let publicPath: string
+            let version: string | undefined // pretty shares only
 
             // IMPORTANT: check the legacy hex shape first. A random hex id like "3f9a2b7c"
             // also satisfies PRETTY_SHARE_ID (it's just lowercase alnum, no hyphens) -- if that
@@ -242,9 +268,10 @@ export default {
                 }
                 kvKey = prettyKvKey(owner, slug)
                 publicPath = slug ? `/${owner}/${slug}` : `/${owner}`
+                version = newVersion()
             }
 
-            const entry: ShareEntry = { imageUrl, title, backUrl, redirectHumans }
+            const entry: ShareEntry = { imageUrl, title, backUrl, redirectHumans, v: version }
 
             // TTL of 1 year — shares don't need to last forever, and re-putting the same key
             // resets the clock, so an actively-edited list/account link never quietly expires.
@@ -252,7 +279,9 @@ export default {
                 expirationTtl: 60 * 60 * 24 * 365,
             })
 
-            const shareUrl = `${url.origin}${publicPath}`
+            // Pretty shares get a fresh ?v= on every post, which is what makes a re-share look
+            // like a new URL to link-preview caches. Legacy hex links stay exactly as they were.
+            const shareUrl = `${url.origin}${publicPath}${version ? `?v=${version}` : ""}`
             return json({ url: shareUrl, shareId })
         }
 
@@ -285,16 +314,36 @@ export default {
             }
 
             const entry: ShareEntry = JSON.parse(raw)
-            const shareUrl = `${url.origin}${url.pathname}`
+            const cleanPath = url.pathname.replace(/\/$/, "")
+
+            // ?json=1 -- lets the app fetch the current versioned link for someone else's share
+            // (viewers copying a link don't post anything, but should still get a fresh-looking URL).
+            if (url.searchParams.get("json") === "1") {
+                const current = `${url.origin}${cleanPath}${entry.v ? `?v=${entry.v}` : ""}`
+                return json({ url: current })
+            }
+
+            // Prefer the ?v= the crawler asked for over the one in KV: KV is eventually
+            // consistent, so right after a re-share an edge that hasn't caught up can still hold
+            // the previous entry. Deriving the image version from the request means the URL a
+            // crawler was given always maps to the image of that share, never to a stale one.
+            const requested = url.searchParams.get("v")
+            const v = requested && VERSION_RE.test(requested) ? requested : entry.v
+            const shareUrl = `${url.origin}${cleanPath}${v ? `?v=${v}` : ""}`
+            const imageUrl = withVersion(entry.imageUrl, v)
 
             // Crawlers (Discord, Twitter, Slack, ...) don't run JS -- they only ever see this
             // response, so they always get the OG-tagged page regardless of redirectHumans.
             // Real browsers, for a "live" share, skip straight to the actual app.
+            // (Built by hand: Response.redirect() returns immutable headers, so no Vary/no-store.)
             if (entry.redirectHumans && entry.backUrl && !isBot(request)) {
-                return Response.redirect(entry.backUrl, 302)
+                return new Response(null, {
+                    status: 302,
+                    headers: { Location: entry.backUrl, "Cache-Control": "no-store", Vary: "User-Agent" },
+                })
             }
 
-            return html(buildSharePageHtml(entry, shareUrl))
+            return html(buildSharePageHtml(entry, shareUrl, imageUrl), 200, LIVE_PAGE_HEADERS)
         }
 
         return json({ error: "Not found" }, 404)
