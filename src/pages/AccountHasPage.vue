@@ -29,7 +29,7 @@
         <section class="toolbar card">
             <div class="toolbar-left">
                 <ImageActionsToolbar target=".ascension-table" filename="ascension.png" :export-options="exportOpts"
-                    :share-options="shareOptionsForAscensionList">
+                    :share-options="shareOptionsForAscensionList" :show-share-button="false">
                     <button class="icon-btn icon-btn--accent" :title="hyperlinkCopied ? 'Copied!' : 'Copy page link'"
                         :aria-label="hyperlinkCopied ? 'Copied!' : 'Copy page link'" @click="copyHyperLink">
                         <svg v-if="hyperlinkCopied" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -333,6 +333,7 @@ import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { useFriendStore, SocialProfile } from "../store/friendStore"
 import { getProfile, loadCharactersByFriendCode } from "../store/cloud"
 import { crystalises, passiveDetails } from "../utils/helpers"
+import { refreshSharePreview, prettyUrl } from "../utils/image"
 import { useBetaValue, WishlistEntry, WishlistException } from "../utils/betaSettings"
 import NewBadge from '../components/NewBadge.vue'
 import CrysDataImport from '../components/CrysDataImport.vue'
@@ -713,7 +714,17 @@ const copyHyperLink = async () => {
     try {
         const friendId = viewingFriendCode.value ?? friendCode.value
         if (!friendId) throw new Error("You need to sync your friend code first!")
-        await navigator.clipboard.writeText(currentPageUrl())
+
+        const url = viewingFriendCode.value
+            // Viewing a friend's kioku: reuse their existing link, don't regenerate it on their behalf.
+            ? prettyUrl(friendId.toLowerCase())
+            // Your own kioku: confirm/refresh the preview, then copy the pretty link.
+            : await refreshSharePreview(".ascension-table", friendId.toLowerCase(), {
+                  ...shareOptionsForAscensionList(),
+                  redirectHumans: true,
+              })
+
+        await navigator.clipboard.writeText(url)
         hyperlinkCopied.value = true
         setTimeout(() => { hyperlinkCopied.value = false }, 1500)
         toast.success("Copied to clipboard!", { position: toast.POSITION.TOP_RIGHT, icon: false })

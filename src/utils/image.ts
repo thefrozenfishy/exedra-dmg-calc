@@ -348,6 +348,10 @@ const uploadBlobForSharing = async (rawBlob: Blob): Promise<{ path: string, publ
 export interface ShareLinkOptions {
     title?: string
     backUrl?: string
+    // For "live" shares (tier lists, accounts) where a real visitor should land in the actual
+    // app rather than the static image page. Bots still get the static page either way, so
+    // link unfurls keep working regardless.
+    redirectHumans?: boolean
 }
 
 const createSharePage = async (shareId: string, imageUrl: string, opts: ShareLinkOptions = {}): Promise<string> => {
@@ -359,6 +363,7 @@ const createSharePage = async (shareId: string, imageUrl: string, opts: ShareLin
             imageUrl,
             title: opts.title,
             backUrl: opts.backUrl,
+            redirectHumans: opts.redirectHumans,
         },
     })
 
@@ -368,6 +373,58 @@ const createSharePage = async (shareId: string, imageUrl: string, opts: ShareLin
     }
 
     return data?.url ?? imageUrl
+}
+
+// Your Cloudflare Worker's own domain (the reverse proxy), not the GitHub Pages one.
+const SHARE_WORKER_ORIGIN = "https://exedra-share-worker.thefrozenfishy.workers.dev"
+
+// For reconstructing an already-established pretty URL client-side with no network round
+// trip -- used when a viewer copies a link to something they don't own, so nothing gets
+// regenerated/overwritten on their behalf.
+export const prettyUrl = (shareId: string): string => `${SHARE_WORKER_ORIGIN}/${shareId}`
+
+const slugify = (input: string): string => {
+    const slug = input
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 48)
+        .replace(/-+$/g, "")
+    return slug || "list"
+}
+
+// friendCode is already a 5-char [A-Z0-9] code (see getFriendCode()) -- lowercase it for the URL.
+export const prettyShareId = (friendCode: string, listName: string): string =>
+    `${friendCode.toLowerCase()}/${slugify(listName)}`
+
+// Unlike uploadBlobForSharing (random id + Date.now() path, 1yr cache, "never changes"),
+// this always writes to the SAME storage path for a given shareId, so a re-call overwrites
+// it in place -- this is what makes edits refresh an already-shared preview.
+export const refreshSharePreview = async (
+    target: string | HTMLElement,
+    shareId: string, // e.g. prettyShareId(friendCode, list.name), or just a friend code alone
+    shareOpts: ShareLinkOptions = {},
+): Promise<string> => {
+    const el = getElement(target)
+    if (!el) throw new Error("Target element not found")
+
+    const blob = await withExportState(el, { exportClass: "exporting" }, async (element) => {
+        const b = await toBlob(element, { ...shareSettings(element), type: EXPORT_MIME, quality: EXPORT_QUALITY })
+        if (!b) throw new Error("Image generation failed")
+        return b
+    })
+
+    const path = `previews/${shareId}.${EXPORT_EXT}` // deterministic -- same path every call
+    const supabase = getSupabase()
+    const { error } = await supabase.storage.from(SHARE_BUCKET).upload(path, await ensureWebp(blob), {
+        contentType: EXPORT_MIME,
+        cacheControl: "300", // short -- this file DOES change, unlike the one-shot snapshot path
+        upsert: true, // lets a re-call overwrite instead of erroring
+    })
+    if (error) throw error
+
+    const { data } = supabase.storage.from(SHARE_BUCKET).getPublicUrl(path)
+    return await createSharePage(shareId, data.publicUrl, shareOpts)
 }
 
 export const generateShareLink = async (

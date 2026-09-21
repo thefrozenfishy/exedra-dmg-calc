@@ -30,8 +30,9 @@
                 </svg>
             </button>
 
-            <!-- Share -->
-            <button class="icon-btn icon-btn--accent" :disabled="shareLinkLoading || disabled"
+            <!-- Share (built-in one-shot snapshot link — hidden on pages that supply their own
+                 persistent, embeddable share link via the slot above instead) -->
+            <button v-if="showShareButton" class="icon-btn icon-btn--accent" :disabled="shareLinkLoading || disabled"
                 :aria-label="shareLinkLoading ? 'Generating share link…' : 'Share image'"
                 :title="shareLinkLoading ? 'Generating share link…' : 'Share image'" @click="handleShare">
                 <span v-if="shareLinkLoading" class="icon-spinner" aria-hidden="true" />
@@ -45,14 +46,16 @@
                 </svg>
             </button>
 
-            <!-- URL input — shrinks to fill remaining space -->
+            <!-- URL input — shrinks to fill remaining space. Still shown even with the share
+                 button hidden: handleCopyImage falls back to populating this on browsers that
+                 can't write images to the clipboard directly. -->
             <template v-if="shareLinkUrl">
                 <input class="share-link-input" type="text" readonly :value="shareLinkUrl"
                     @click="($event.target as HTMLInputElement).select()" />
             </template>
             <span v-else-if="shareLinkError" class="share-link-error">{{ shareLinkError }}</span>
-            <input v-else class="share-link-input share-link-placeholder" type="text" readonly value=""
-                placeholder="Click share to generate a link" />
+            <input v-else-if="showShareButton" class="share-link-input share-link-placeholder" type="text" readonly
+                value="" placeholder="Click share to generate a link" />
 
             <!-- Copy icon button -->
             <button v-if="shareLinkUrl" class="icon-btn icon-btn--accent" :aria-label="copied ? 'Copied!' : 'Copy link'"
@@ -76,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import {
     downloadImage,
     generateShareLink,
@@ -97,7 +100,12 @@ const props = defineProps<{
     exportOptions?: MaybeFn<ImageExportOptions>
     shareOptions?: MaybeFn<ShareLinkOptions>
     disabled?: boolean
+    // Set to false on pages that provide their own persistent, embeddable share link (via the
+    // slot) instead of this component's one-shot snapshot link — e.g. tier lists, account pages.
+    showShareButton?: boolean
 }>()
+
+const showShareButton = computed(() => props.showShareButton ?? true)
 
 const resolve = <T,>(value: MaybeFn<T> | undefined): T | undefined =>
     typeof value === "function" ? (value as () => T)() : value

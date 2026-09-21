@@ -10,6 +10,7 @@ interface CreateSharePageRequest {
     imageUrl: string
     title?: string
     backUrl?: string
+    redirectHumans?: boolean
 }
 
 const corsHeaders = {
@@ -64,6 +65,7 @@ serve(async (req) => {
                 imageUrl: body.imageUrl,
                 title: body.title ?? "",
                 backUrl: body.backUrl ?? "",
+                redirectHumans: body.redirectHumans ?? false,
             }),
         })
 
