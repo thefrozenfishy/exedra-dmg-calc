@@ -633,9 +633,6 @@ const allMembersDamage = computed<MemberDmgBreakdown[] | undefined>(() => {
     try {
       const otherMembers = members.filter((_, j) => j !== i)
 
-      // debug=false on both: these are throwaway instances used purely for the summary numbers,
-      // so skip the (fairly expensive) per-effect debug-string building calculate_single_dmg does
-      // when debug is on.
       const withConsume = new ScoreAttackTeam(
         members[i], otherMembers, attackerHealth.value, activeAliments, arenaEffectsMap.value,
         false, banned, dotAllySet, stackOverridesMap, disabledDebuffs, debuffStackOverridesMap, false,
@@ -649,8 +646,6 @@ const allMembersDamage = computed<MemberDmgBreakdown[] | undefined>(() => {
       const special = toDmgPair(withConsume.calculate_max_dmg(enemies.enemies, 0))
       withConsume.setDamageAbility("skill")
       const skill = toDmgPair(withConsume.calculate_max_dmg(enemies.enemies, 0))
-      // TODO: currently a placeholder that reuses Special dmg's id (see setDamageAbility) until
-      // Follow-up Attack gets its own ability id.
       withConsume.setDamageAbility("followUp")
       const followUp = toDmgPair(withConsume.calculate_max_dmg(enemies.enemies, 0))
 
@@ -658,11 +653,13 @@ const allMembersDamage = computed<MemberDmgBreakdown[] | undefined>(() => {
       const specialNoConsume = toDmgPair(withoutConsume.calculate_max_dmg(enemies.enemies, 0))
       withoutConsume.setDamageAbility("skill")
       const skillNoConsume = toDmgPair(withoutConsume.calculate_max_dmg(enemies.enemies, 0))
+      withoutConsume.setDamageAbility("followUp")
+      const followUpNoConsume = toDmgPair(withoutConsume.calculate_max_dmg(enemies.enemies, 0))
 
       breakdown.push({
         index: i,
         name: team.slots[i]?.main?.name ?? `Member ${i + 1}`,
-        special, specialNoConsume, skill, skillNoConsume, followUp,
+        special, specialNoConsume, skill, skillNoConsume, followUp, followUpNoConsume,
       })
     } catch (err) {
       console.error(`Failed to compute damage breakdown for member ${i}:`, err)

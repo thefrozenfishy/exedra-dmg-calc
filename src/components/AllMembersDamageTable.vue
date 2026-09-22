@@ -11,8 +11,11 @@
             <h4 class="all-members-dmg-slot-title">{{ m.name }}</h4>
             <div class="all-members-dmg-value">
               <div class="all-members-dmg-max">{{ dmgStat(m, group.key).max.toLocaleString() }}</div>
-              <div class="all-members-dmg-avg">avg {{ dmgStat(m, group.key).avg.toLocaleString() }}</div>
-              <div class="all-members-dmg-crit">{{ dmgStat(m, group.key).crit }}% crit</div>
+              <template v-if="dmgStat(m, group.key).avg !== 0">
+                <div class="all-members-dmg-avg">avg {{ dmgStat(m, group.key).avg.toLocaleString() }}</div>
+                <div class="all-members-dmg-crit">{{ dmgStat(m, group.key).crit }}% crit</div>
+              </template>
+              <div v-else-if="group.key === 'skill'" class="all-members-dmg-crit">Swap skills (Akumura BS, Sumire BS etc is currently bugged, coming soon)</div>
             </div>
           </div>
         </div>
@@ -24,20 +27,22 @@
             <div v-for="m in members" :key="m.index" class="all-members-dmg-slot all-members-dmg-slot-compact">
               <div class="all-members-dmg-value">
                 <div class="all-members-dmg-max">{{ dmgStat(m, group.noConsumeKey).max.toLocaleString() }}</div>
-                <div class="all-members-dmg-avg">avg {{ dmgStat(m, group.noConsumeKey).avg.toLocaleString() }}</div>
-                <div class="all-members-dmg-crit">{{ dmgStat(m, group.noConsumeKey).crit }}% crit</div>
+                <template v-if="dmgStat(m, group.key).avg !== 0">
+                  <div class="all-members-dmg-avg">avg {{ dmgStat(m, group.noConsumeKey).avg.toLocaleString() }}</div>
+                  <div class="all-members-dmg-crit">{{ dmgStat(m, group.noConsumeKey).crit }}% crit</div>
+                </template>
               </div>
             </div>
           </div>
         </template>
       </div>
+      <div class="all-members-dmg-header">Follow Up Damage</div>
+      <div class="all-members-dmg-subheader">Coming soon</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// Shape produced per team member by SingleTeamPage's `allMembersDamage` computed. Kept here so the
-// grid and its data source share one definition instead of two copies drifting apart.
 export interface DmgPair {
   max: number
   avg: number
@@ -52,13 +57,14 @@ export interface MemberDmgBreakdown {
   skill: DmgPair
   skillNoConsume: DmgPair
   followUp: DmgPair
+  followUpNoConsume: DmgPair
 }
 
 defineProps<{
   members: MemberDmgBreakdown[] | undefined
 }>()
 
-type DmgStatKey = 'special' | 'specialNoConsume' | 'skill' | 'skillNoConsume' | 'followUp'
+type DmgStatKey = 'special' | 'specialNoConsume' | 'skill' | 'skillNoConsume' | 'followUp' | 'followUpNoConsume'
 
 interface DmgGroup {
   key: DmgStatKey
@@ -75,7 +81,7 @@ const dmgGroups: DmgGroup[] = [
     title: "Damage dealt by this member's Special, if they were the one attacking",
     noConsumeKey: 'specialNoConsume',
     noConsumeTitle:
-      "Same as Special dmg, but without any one-turn / CONSUME buffs (e.g. 'One Turn ATK%+') that get used up",
+      "Same as Special dmg, but without any one-turn buffs (e.g. 'One Turn ATK%+') that get used up",
   },
   {
     key: 'skill',
@@ -83,14 +89,15 @@ const dmgGroups: DmgGroup[] = [
     title: "Damage dealt by this member's Skill, if they were the one attacking",
     noConsumeKey: 'skillNoConsume',
     noConsumeTitle:
-      "Same as Skill dmg, but without any one-turn / CONSUME buffs (e.g. 'One Turn ATK%+') that get used up",
+      "Same as Skill dmg, but without any one-turn buffs (e.g. 'One Turn ATK%+') that get used up",
   },
   /*{ TODO: Implement for fua
     key: 'followUp',
     label: 'Follow-up dmg',
     title: "Damage dealt by this member's Follow-up Attack, if they were the one attacking",
-    noConsumeKey: null,
-    noConsumeTitle: '',
+    noConsumeKey: 'followUpNoConsume',
+    noConsumeTitle:
+      "Same as Follow-up dmg, but without any one-turn buffs (e.g. 'One Turn ATK%+') that get used up",
   },*/
 ]
 
@@ -176,7 +183,7 @@ const dmgStat = (m: MemberDmgBreakdown, key: DmgStatKey): DmgPair => m[key]
 }
 
 .all-members-dmg-max {
-  color: var(--info);
+  color: var(--accent);
   font-weight: 600;
   font-size: 0.8rem;
 }
