@@ -2,7 +2,7 @@
   <div class="team-page">
     <h1 class="page-title">Simulate Single Battle</h1>
 
-    <section class="card battle-output">
+    <section class="card" :class="{ 'expanded-dmg': showAllMembersDmg }">
       <h2 class="section-title">Battle Result</h2>
       <p class="result-line">{{ formatDmg(battleOutput) }}</p>
 
@@ -30,6 +30,15 @@
           <input v-model.number="scoreMultiplier" type="number" step="0.1" min="0" />
         </label>
       </div>
+
+      <div class="all-members-toggle-row">
+        <label class="all-members-toggle">
+          <input type="checkbox" v-model="showAllMembersDmg" />
+          <span>Show damage breakdown for all 5 members</span>
+        </label>
+      </div>
+
+      <AllMembersDamageTable v-if="showAllMembersDmg" :members="allMembersDamage" />
     </section>
 
     <section class="toolbar card share-card-actions">
@@ -109,6 +118,8 @@
           </template>
         </div>
       </div>
+
+      <AllMembersDamageTable v-if="showAllMembersDmg" :members="allMembersDamage" />
     </div>
 
     <div class="team-grid">
@@ -312,6 +323,7 @@ import DamageReductionInputs from '../components/DamageReductionInputs.vue'
 import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
+import AllMembersDamageTable, { type DmgPair, type MemberDmgBreakdown } from '../components/AllMembersDamageTable.vue'
 import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
 import { useSetting } from '../store/settingsStore'
 import { KiokuArgs, Character, SkillDetail, skillDetailId } from '../types/KiokuTypes'
@@ -330,6 +342,7 @@ const turns = useSetting("turns", 3)
 const hp_percentage_team = useSetting("hp_percentage_team", 20)
 const difficulty_score = useSetting("difficulty_score", 6_000_000)
 const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
+const showAllMembersDmg = useSetting("showAllMembersDmg", false)
 
 const alimentRef = ref<InstanceType<typeof AlimentToggler> | null>(null)
 const shareCardRef = ref<HTMLElement | null>(null)
@@ -390,7 +403,9 @@ const sa_score_title = computed(() => {
   return `${difficulty_score.value} + 20 * (${battleOutput.value[0]} / ${scoreMultiplier.value} + (90000 - 5000 * ${turns.value}) + 15000 * 0.${hp_percentage_team.value})`
 })
 
-const formatDmg = (out: string | [number, number, number, any[]]) =>
+type BattleOutput = ReturnType<ScoreAttackTeam['calculate_max_dmg']>
+
+const formatDmg = (out: string | BattleOutput) =>
   typeof out !== 'string'
     ? `Max Damage: ${out[0].toLocaleString()} with a ${out[2]}% crit rate - (Average Damage: ${out[1].toLocaleString()})`
     : out
@@ -534,10 +549,12 @@ const handleSwapClick = (index: number) => {
   swapSourceIndex.value = null
 }
 
-const teamInstance = computed(() => {
-  if (!isFullTeam.value) return
+// The 5 members turned into calc-ready ScoreAttackKioku instances - shared by the attacker-only
+// teamInstance below and by the all-members damage breakdown, so both build on the same data.
+const transformedMembers = computed<ScoreAttackKioku[] | undefined>(() => {
+  if (!isFullTeam.value) return undefined
   try {
-    const transformedMembers = team.slots.map(m => {
+    return team.slots.map(m => {
       const support = m.support ? new ScoreAttackKioku({ ...m.support }) : null
 
       const crys = m.main
@@ -556,19 +573,33 @@ const teamInstance = computed(() => {
         (m.debuffMultReduction || debuffMultReduction.value) ?? 0,
       )
     }) as ScoreAttackKioku[]
+  } catch (err) {
+    toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
+    console.error("Failed to initialize team members:", err)
+    for (let i = 0; i < 5; i++) team.setMain(i, undefined)
+    return undefined
+  }
+})
 
-    const arenaEffectsMap: Record<string, number> = {}
-    for (const { type, value } of arenaEffects.value) {
-      if (!type) continue
-      arenaEffectsMap[type] = (arenaEffectsMap[type] ?? 0) + value
-    }
+const arenaEffectsMap = computed<Record<string, number>>(() => {
+  const map: Record<string, number> = {}
+  for (const { type, value } of arenaEffects.value) {
+    if (!type) continue
+    map[type] = (map[type] ?? 0) + value
+  }
+  return map
+})
 
+const teamInstance = computed(() => {
+  const members = transformedMembers.value
+  if (!members) return
+  try {
     return new ScoreAttackTeam(
-      transformedMembers[attackerIndex],
-      transformedMembers.filter((_, i) => i !== attackerIndex),
+      members[attackerIndex],
+      members.filter((_, i) => i !== attackerIndex),
       attackerHealth.value,
       alimentRef.value?.aliments.filter(a => a.enabled).map(a => a.name) ?? [],
-      arenaEffectsMap,
+      arenaEffectsMap.value,
       true,
       new Set(Object.keys(bannedEffectIds).map(Number)),
       new Set(Object.keys(enabledDotAllyEffects) as DotAllyCompositeKey[]),
@@ -581,6 +612,63 @@ const teamInstance = computed(() => {
     console.error("Failed to initialize team instance:", err)
     for (let i = 0; i < 5; i++) team.setMain(i, undefined)
   }
+})
+
+const allMembersDamage = computed<MemberDmgBreakdown[] | undefined>(() => {
+  if (!showAllMembersDmg.value) return undefined
+  const members = transformedMembers.value
+  if (!members) return undefined
+
+  const activeAliments = alimentRef.value?.aliments.filter(a => a.enabled).map(a => a.name) ?? []
+  const banned = new Set(Object.keys(bannedEffectIds).map(Number))
+  const dotAllySet = new Set(Object.keys(enabledDotAllyEffects) as DotAllyCompositeKey[])
+  const stackOverridesMap = new Map(stackOverrides)
+  const disabledDebuffs = new Set(disabledEnemyDebuffs)
+  const debuffStackOverridesMap = new Map(debuffStackOverrides) as Map<EnemyDebuffCompositeKey, number>
+
+  const toDmgPair = (result: BattleOutput): DmgPair => ({ max: result[0], avg: result[1], crit: result[2] })
+
+  const breakdown: MemberDmgBreakdown[] = []
+  for (let i = 0; i < members.length; i++) {
+    try {
+      const otherMembers = members.filter((_, j) => j !== i)
+
+      // debug=false on both: these are throwaway instances used purely for the summary numbers,
+      // so skip the (fairly expensive) per-effect debug-string building calculate_single_dmg does
+      // when debug is on.
+      const withConsume = new ScoreAttackTeam(
+        members[i], otherMembers, attackerHealth.value, activeAliments, arenaEffectsMap.value,
+        false, banned, dotAllySet, stackOverridesMap, disabledDebuffs, debuffStackOverridesMap, false,
+      )
+      const withoutConsume = new ScoreAttackTeam(
+        members[i], otherMembers, attackerHealth.value, activeAliments, arenaEffectsMap.value,
+        false, banned, dotAllySet, stackOverridesMap, disabledDebuffs, debuffStackOverridesMap, true,
+      )
+
+      withConsume.setDamageAbility("special")
+      const special = toDmgPair(withConsume.calculate_max_dmg(enemies.enemies, 0))
+      withConsume.setDamageAbility("skill")
+      const skill = toDmgPair(withConsume.calculate_max_dmg(enemies.enemies, 0))
+      // TODO: currently a placeholder that reuses Special dmg's id (see setDamageAbility) until
+      // Follow-up Attack gets its own ability id.
+      withConsume.setDamageAbility("followUp")
+      const followUp = toDmgPair(withConsume.calculate_max_dmg(enemies.enemies, 0))
+
+      withoutConsume.setDamageAbility("special")
+      const specialNoConsume = toDmgPair(withoutConsume.calculate_max_dmg(enemies.enemies, 0))
+      withoutConsume.setDamageAbility("skill")
+      const skillNoConsume = toDmgPair(withoutConsume.calculate_max_dmg(enemies.enemies, 0))
+
+      breakdown.push({
+        index: i,
+        name: team.slots[i]?.main?.name ?? `Member ${i + 1}`,
+        special, specialNoConsume, skill, skillNoConsume, followUp,
+      })
+    } catch (err) {
+      console.error(`Failed to compute damage breakdown for member ${i}:`, err)
+    }
+  }
+  return breakdown
 })
 
 const battleOutput = computed(() => {
@@ -708,6 +796,10 @@ async function copyToClipboard(text: string) {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1rem;
+}
+
+.expanded-dmg {
+  width: 100%;
 }
 
 .toolbar {
@@ -1008,6 +1100,37 @@ async function copyToClipboard(text: string) {
 
 .sa-fields .field {
   align-items: center;
+}
+
+.all-members-toggle-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border);
+}
+
+.all-members-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.all-members-toggle input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.all-members-hint {
+  font-size: 0.74rem;
+  color: var(--muted);
+  text-align: center;
 }
 
 .extra-settings {

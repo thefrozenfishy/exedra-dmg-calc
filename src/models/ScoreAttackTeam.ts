@@ -136,6 +136,7 @@ export class ScoreAttackTeam {
     private dotAllyIndices: { idx: number; charId: string; name: string }[] = [];
 
     private dmg_id: number = 0; // Just the special_id for all except 3*, to allow 3* to use the calc
+    private excludeConsumeBuffs: boolean;
 
     constructor(
         dps: ScoreAttackKioku,
@@ -149,15 +150,12 @@ export class ScoreAttackTeam {
         stackOverrides: Map<number, number> = new Map(),
         disabledEnemyDebuffs: Set<EnemyDebuffCompositeKey> = new Set(),
         debuffStackOverrides: Map<EnemyDebuffCompositeKey, number> = new Map(),
+        excludeConsumeBuffs: boolean = false,
     ) {
         this.team = team;
         this.dps = dps;
         this.debug = debug;
         this.attackerHealth = attackerHealth;
-        // Clone rather than alias: findBestTeam passes the same activeAliments array reference to
-        // every ScoreAttackTeam it constructs, and this array grows via .push() below as new effect
-        // types are discovered. Aliasing it would leak that growth across every other team evaluation
-        // in the run, making results depend on the order combos happen to be visited in.
         this.activeBuffsAndDebuffs = [...activeAliments];
         this.userBannedEffects = userBannedEffects;
         this.enabledDotAllyEffects = enabledDotAllyEffects;
@@ -165,7 +163,18 @@ export class ScoreAttackTeam {
         this.disabledEnemyDebuffs = disabledEnemyDebuffs;
         this.debuffStackOverrides = debuffStackOverrides;
         this.arenaEffects = arenaEffects;
+        this.excludeConsumeBuffs = excludeConsumeBuffs;
         this.setup();
+    }
+
+    setDamageAbility(source: "auto" | "special" | "skill" | "followUp" = "auto") {
+        if (source === "special") this.dmg_id = this.dps.data.special_id;
+        else if (source === "skill") this.dmg_id = this.dps.data.skill_id;
+        // TODO: Follow-up Attack has its own ability id, distinct from Special/Skill. Point this at
+        // that field (e.g. this.dps.data.fuaId) once it's added to KiokuData/getKiokuMstList - for
+        // now it's calculated the same way as Special dmg as a placeholder.
+        else if (source === "followUp") this.dmg_id = this.dps.data.special_id;
+        else this.dmg_id = this.dps.data.rarity === 3 ? this.dps.data.skill_id : this.dps.data.special_id;
     }
 
     private setup() {
@@ -179,6 +188,9 @@ export class ScoreAttackTeam {
 
         for (const kioku of alliesOrdered) {
             this.activeEffects.push(kioku.effects.filter(detail => {
+                if (this.excludeConsumeBuffs && detail.abilityEffectType.includes("_CONSUME")) {
+                    return false;
+                }
                 if (
                     Aliment.WEAKNESS === detail.abilityEffectType &&
                     !this.activeBuffsAndDebuffs.includes(Aliment.WEAKNESS)
@@ -376,7 +388,7 @@ export class ScoreAttackTeam {
             throw new Error(`Found unknown effects: ${leftover.join(", ")}`);
         }
 
-        this.dmg_id = this.dps.data.rarity === 3 ? this.dps.data.skill_id : this.dps.data.special_id
+        this.setDamageAbility("auto");
     }
 
     private distributeEffect(
