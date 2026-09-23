@@ -619,18 +619,26 @@ interface DealerContext {
     tags: DealerTag[]
 }
 
+interface DmgResult {
+    max: number
+    avg: number
+    critRate: string
+}
+
 interface Dealer {
     char: Character
     context: DealerContext
     tags: DealerTag[]
     dps: ScoreAttackKioku
-    baseline: number
+    baseline: DmgResult
 }
 
 interface DealerGain {
     dealer: Dealer
-    dmg: number
+    result: DmgResult
     gain: number
+    maxGain: number
+    avgGain: number
 }
 
 const dealerLabel = (d: Dealer) => `${d.char.name}${d.tags.length ? ` (${d.tags.map(t => t.value).join("/")})` : ""}`
@@ -705,20 +713,27 @@ const gainChart = computed(() => {
         supports: ScoreAttackKioku[],
         activeAilment?: Ailment,
         noConsume = false,
-    ) => new ScoreAttackTeam(
-        dps,
-        supports,
-        100,
-        activeAilment ? [activeAilment] : [],
-        {},
-        false,
-        new Set(),
-        new Set(),
-        new Map(),
-        new Set(),
-        new Map(),
-        noConsume,
-    ).calculate_max_dmg(exampleEnemies, 0)[barGraphAverageDmg.value ? 1 : 0]
+    ): DmgResult => {
+        const [max, avg, critRate] = new ScoreAttackTeam(
+            dps,
+            supports,
+            100,
+            activeAilment ? [activeAilment] : [],
+            {},
+            false,
+            new Set(),
+            new Set(),
+            new Map(),
+            new Set(),
+            new Map(),
+            noConsume,
+        ).calculate_max_dmg(exampleEnemies, 0)
+
+        return { max, avg, critRate }
+    }
+
+    const selectedDmg = (r: DmgResult) => barGraphAverageDmg.value ? r.avg : r.max
+    const pctGain = (value: number, base: number) => base > 0 ? (value / base - 1) * 100 : 0
 
     const notes: string[] = []
 
@@ -796,7 +811,7 @@ const gainChart = computed(() => {
                 context.noConsume,
             )
 
-            if (baseline > 0) {
+            if (selectedDmg(baseline) > 0) {
                 dealers.push({
                     char: lux,
                     context,
@@ -824,10 +839,19 @@ const gainChart = computed(() => {
         ch: typeof allChars.value[0]
         tags: DealerTag[]
         gain: number
+        maxGain: number
+        avgGain: number
+        critRate: string
     }
 
     const fmt = (g: number) =>
         `${g > 0 ? "+" : ""}${g.toFixed(1)}%`
+
+    const makeBarTitle = (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">) => [
+        `Avg dmg increase: ${fmt(row.avgGain)}`,
+        `Max dmg increase: ${fmt(row.maxGain)}`,
+        `Crit rate: ${row.critRate}%`,
+    ].join("\n")
 
     const results: {
         main: GainRow
@@ -845,7 +869,7 @@ const gainChart = computed(() => {
 
             for (const dealer of dealers) {
                 try {
-                    const dmg = calculate_dmg(
+                    const result = calculate_dmg(
                         dealer.dps,
                         [support, filler, filler, filler],
                         dealer.context.ailment,
@@ -854,8 +878,10 @@ const gainChart = computed(() => {
 
                     gains.push({
                         dealer,
-                        dmg,
-                        gain: (dmg / dealer.baseline - 1) * 100,
+                        result,
+                        gain: pctGain(selectedDmg(result), selectedDmg(dealer.baseline)),
+                        maxGain: pctGain(result.max, dealer.baseline.max),
+                        avgGain: pctGain(result.avg, dealer.baseline.avg),
                     })
                 } catch (err) {
                     failed++
@@ -904,6 +930,9 @@ const gainChart = computed(() => {
                 ch,
                 tags: [],
                 gain: noneGain.gain,
+                maxGain: noneGain.maxGain,
+                avgGain: noneGain.avgGain,
+                critRate: noneGain.result.critRate,
             }
 
             const variantMap = new Map<string, GainRow>()
@@ -928,6 +957,9 @@ const gainChart = computed(() => {
                         ch,
                         tags: meaningfulTags,
                         gain: gain.gain,
+                        maxGain: gain.maxGain,
+                        avgGain: gain.avgGain,
+                        critRate: gain.result.critRate,
                     })
                 }
             }
@@ -967,7 +999,7 @@ const gainChart = computed(() => {
     const min = Math.min(0, ...gains)
     const span = max - min || 1
 
-    const bars = rows.map(({ ch, tags, gain }) => ({
+    const bars = rows.map(({ ch, tags, gain, maxGain, avgGain, critRate }) => ({
         id: `${ch.id}:${tags.map(t => `${t.kind}-${t.value}`).join("|") || "none"}`,
 
         name: tags.length
@@ -984,6 +1016,7 @@ const gainChart = computed(() => {
         gain,
         variant: tags.length > 0,
         label: fmt(gain),
+        title: makeBarTitle({ avgGain, maxGain, critRate }),
 
         style: gain < 0
             ? {
