@@ -1506,30 +1506,28 @@ const shareOptionsForGrid = () => ({
 
 .gain-name {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 2px;
     margin-top: 0.35rem;
     width: 32px;
     transform: none;
 }
 
-.gain-char-icon {
+.gain-char-icon,
+.gain-tag-icon {
     width: 28px;
     height: 28px;
-    border-radius: 50%;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
 }
 
+.gain-char-icon {
+    border-radius: 50%;
+}
+
 .gain-tag-icon {
-    width: 14px;
-    height: 14px;
-    object-fit: contain;
-    display: block;
-    margin-left: -8px;
-    margin-top: 12px;
-    background: rgba(0, 0, 0, 0.8);
     border-radius: 50%;
 }
 </style>
