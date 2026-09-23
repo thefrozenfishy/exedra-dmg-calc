@@ -240,7 +240,14 @@
                                     <span class="gain-value">{{ bar.label }}</span>
                                 </div>
                             </div>
-                            <div class="gain-name">{{ bar.name }}</div>
+                            <div class="gain-name">
+                                <img class="gain-char-icon"
+                                    :src="`/exedra-dmg-calc/kioku_images/${bar.charId}_thumbnail.png`" :alt="bar.name"
+                                    :title="bar.name" />
+
+                                <img v-if="bar.tagIcon" class="gain-tag-icon" :src="bar.tagIcon" :alt="bar.tag"
+                                    :title="bar.tag" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -598,6 +605,7 @@ interface Dealer {
     tags: string[]
     dps: ScoreAttackKioku
     baseline: number
+    ailment?: Ailment
 }
 
 interface DealerGain {
@@ -631,6 +639,8 @@ const exampleEnemies = [
     { name: 'Right Other', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
 ] as Enemy[]
 
+const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1).toLowerCase()
+
 const gainChart = computed(() => {
     const empty = {
         bars: [] as any[],
@@ -644,8 +654,8 @@ const gainChart = computed(() => {
     const lux = store.characters.find(c => c.name === LuxMagica)
     if (!lux) return { ...empty, error: `${LuxMagica} was not found in your roster.` }
 
-    const avgDmg = (dps: ScoreAttackKioku, supports: ScoreAttackKioku[], activeAilments: Ailment[]) =>
-        new ScoreAttackTeam(dps, supports, 100, activeAilments, {}).calculate_max_dmg(exampleEnemies, 0)[1]
+    const avgDmg = (dps: ScoreAttackKioku, supports: ScoreAttackKioku[], activeAilment?: Ailment) =>
+        new ScoreAttackTeam(dps, supports, 100, activeAilment ? [activeAilment] : [], {}).calculate_max_dmg(exampleEnemies, 0)[1]
 
     const notes: string[] = []
     const filler = toKioku(prepareForChart(lux), { role: undefined, element: undefined })
@@ -685,6 +695,23 @@ const gainChart = computed(() => {
         }
     }
 
+    for (const ailment of Object.values(Ailment)) {
+        try {
+            const baseline = avgDmg(filler, [filler, filler, filler, filler], ailment)
+            if (baseline > 0) {
+                dealers.push({
+                    char: lux,
+                    tags: [ailment],
+                    dps: filler,
+                    baseline,
+                    ailment: ailment,
+                })
+            }
+        } catch (err) {
+            console.error(`Failed to calculate the Lux Magica ailment test for ${ailment}:`, err)
+        }
+    }
+
     if (!dealers.length) {
         return { ...empty, error: ["No Lux Magica test context could be calculated.", ...notes].join(" ") }
     }
@@ -708,7 +735,7 @@ const gainChart = computed(() => {
 
             for (const dealer of dealers) {
                 try {
-                    const dmg = avgDmg(dealer.dps, [support, filler, filler, filler])
+                    const dmg = avgDmg(dealer.dps, [support, filler, filler, filler], dealer.ailment)
                     gains.push({
                         dealer,
                         dmg,
@@ -763,18 +790,38 @@ const gainChart = computed(() => {
     const min = Math.min(0, ...gains)
     const span = max - min || 1
 
-    const bars = rows.map(({ ch, tag, gain }) => ({
-        id: tag ? `${ch.id}:${tag}` : `${ch.id}`,
-        name: tag ? `${ch.name} (${tag})` : ch.name,
-        role: ch.role as string,
-        isStandardChar: ch.isStandardChar,
-        gain,
-        variant: !!tag,
-        label: fmt(gain),
-        style: gain < 0
-            ? { top: `${(max / span) * 100}%`, height: `${(-gain / span) * 100}%` }
-            : { bottom: `${(-min / span) * 100}%`, height: `${(gain / span) * 100}%` },
-    }))
+    const bars = rows.map(({ ch, tag, gain }) => {
+        const tagIcon = tag
+            ? Object.values(KiokuElement).includes(tag as KiokuElement)
+                ? `/exedra-dmg-calc/elements/${tag}.png`
+                : Object.values(KiokuRole).includes(tag as KiokuRole)
+                    ? `/exedra-dmg-calc/roles/${tag}.png`
+                    : `/exedra-dmg-calc/aliments/${capitalize(tag)}.png`
+            : null
+
+        return {
+            id: tag ? `${ch.id}:${tag}` : `${ch.id}`,
+            name: tag ? `${ch.name} (${tag})` : ch.name,
+            charId: ch.id,
+            tag,
+            tagIcon,
+            role: ch.role as string,
+            isStandardChar: ch.isStandardChar,
+            gain,
+            variant: !!tag,
+            label: fmt(gain),
+            style: gain < 0
+                ? {
+                    top: `${(max / span) * 100}%`,
+                    height: `${(-gain / span) * 100}%`,
+                }
+                : {
+                    bottom: `${(-min / span) * 100}%`,
+                    height: `${(gain / span) * 100}%`,
+                },
+        }
+    })
+
 
     const presentRoles = new Set(bars.map(b => b.role))
     return {
@@ -1458,16 +1505,31 @@ const shareOptionsForGrid = () => ({
 }
 
 .gain-name {
-    max-width: 11rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
     margin-top: 0.35rem;
-    margin-left: 1.1rem;
-    align-self: flex-start;
-    transform: rotate(45deg);
-    transform-origin: top left;
-    font-size: 0.8rem;
-    color: var(--text);
+    width: 32px;
+    transform: none;
+}
+
+.gain-char-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+.gain-tag-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    display: block;
+    margin-left: -8px;
+    margin-top: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 50%;
 }
 </style>
