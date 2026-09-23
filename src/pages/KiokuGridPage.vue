@@ -851,22 +851,6 @@ const gainChart = computed(() => {
                         dealer.context.ailment,
                         dealer.context.noConsume,
                     )
-                    if (support.name === "Pluvia☆Neujahr") {
-                        console.log(dealer.context.noConsume, dealer.dps.data.element, dealer.dps.data.role, new ScoreAttackTeam(
-                            dealer.dps,
-                            [support, filler, filler, filler],
-                            100,
-                            [],
-                            {},
-                            false,
-                            new Set(),
-                            new Set(),
-                            new Map(),
-                            new Set(),
-                            new Map(),
-                            dealer.context.noConsume,
-                        ).calculate_max_dmg(exampleEnemies, 0))
-                    }
 
                     gains.push({
                         dealer,
