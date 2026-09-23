@@ -84,7 +84,7 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualSplitRole(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                        }}</span>
+                            }}</span>
                     </div>
                 </button>
                 <button class="chip chip-all" :class="allVirtualRolesVisible ? 'chip--visible' : 'chip--hidden'"
@@ -130,7 +130,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ xVal === "-1" ? "Not Owned" : `A${xVal}`
-                                }}</span>
+                            }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -150,7 +150,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ yVal === "-1" ? "Not Owned" : `A${yVal}`
-                                }}</span>
+                            }}</span>
                         </td>
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
                             <template v-for="r in [5, 4, 3]" :key="r">
@@ -179,7 +179,7 @@
                                                         <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`"
                                                             :alt="ch.role" class="info-badge-icon" />
                                                         <span class="role-badge-tag">{{ rangeTag(ch.range, ch.role)[0]
-                                                            }}</span>
+                                                        }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="axis-info-badge level-badge info-badge-img"
@@ -208,12 +208,17 @@
         <section class="card gain-section">
             <div class="gain-header filters-heading">Relative buff strength</div>
             <p class="gain-desc">Comparison of relative buff strength on a character with no other buffs. Only buffs to
-                special
-                dmg
-                is being compared. All characters being compared are A5 and max level.</p>
+                special dmg is being compared. All characters being compared are A5 and max level.</p>
             <p class="gain-desc">One enemy with 3000 def is used as basis for dmg calculation.</p>
+            <p class="gain-desc">Be careful when directly comparing buffers and debuffs, as they scale differently on
+                eachother.
+            </p>
             <p class="gain-desc">Buffs which are only active under some circumstances have dashed bars.</p>
 
+            <label class="filter-chip" style="width: fit-content; margin: 0 auto;"
+                :class="{ active: barGraphAverageDmg }">
+                <input type="checkbox" v-model="barGraphAverageDmg" /> Display average dmg instead of max dmg increase
+            </label>
             <p v-if="gainChart.error" class="gain-empty">{{ gainChart.error }}</p>
             <p v-else-if="!gainChart.bars.length" class="gain-empty">No characters to show with the current filters.
             </p>
@@ -393,6 +398,7 @@ const splitAttackerRange = useSetting("splitAttackerRange", true)
 const splitBreakerRange = useSetting("splitBreakerRange", true)
 const splitDebufferRange = useSetting("splitDebufferRange", true)
 const displayArchetypes = useSetting("displayArchetypes", true)
+const barGraphAverageDmg = useSetting("barGraphAverageDmg", false)
 
 type VirtualRole = string
 
@@ -597,7 +603,7 @@ const toKioku = (c: Character, targetContext?: ChartTargetContext): ScoreAttackK
     )
 }
 
-type ContextKind = "element" | "role" | "ailment"
+type ContextKind = "element" | "role" | "ailment" | "noConsume"
 
 interface DealerTag {
     kind: ContextKind
@@ -609,6 +615,7 @@ interface DealerContext {
     element?: KiokuElement
     role?: KiokuRole
     ailment?: Ailment
+    noConsume?: boolean
     tags: DealerTag[]
 }
 
@@ -628,12 +635,6 @@ interface DealerGain {
 
 const dealerLabel = (d: Dealer) => `${d.char.name}${d.tags.length ? ` (${d.tags.map(t => t.value).join("/")})` : ""}`
 
-const median = (values: number[]): number => {
-    const sorted = [...values].sort((a, b) => a - b)
-    const mid = Math.floor(sorted.length / 2)
-    return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
-}
-
 const exampleEnemies = [
     { name: 'Left Other', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
     { name: 'Left Proximity', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
@@ -652,21 +653,26 @@ const makeTag = (kind: ContextKind, value: string): DealerTag => ({
             ? `/exedra-dmg-calc/elements/${value}.png`
             : kind === "role"
                 ? `/exedra-dmg-calc/roles/${value}.png`
-                : `/exedra-dmg-calc/aliments/${capitalize(value)}.png`,
+                : kind === "ailment"
+                    ? `/exedra-dmg-calc/aliments/${capitalize(value)}.png`
+                    : `/exedra-dmg-calc/no-consume.png`,
 })
 
 const makeContext = (
     element?: KiokuElement,
     role?: KiokuRole,
     ailment?: Ailment,
+    noConsume = false,
 ): DealerContext => ({
     element,
     role,
     ailment,
+    noConsume,
     tags: [
         element !== undefined ? makeTag("element", element) : null,
         role !== undefined ? makeTag("role", role) : null,
         ailment !== undefined ? makeTag("ailment", ailment) : null,
+        noConsume ? makeTag("noConsume", "No 1 time buffs") : null,
     ].filter((tag): tag is DealerTag => tag !== null),
 })
 
@@ -675,6 +681,7 @@ const contextKey = (context: DealerContext): string =>
         context.element ?? null,
         context.role ?? null,
         context.ailment ?? null,
+        context.noConsume ?? false,
     ])
 
 const gainChart = computed(() => {
@@ -693,18 +700,25 @@ const gainChart = computed(() => {
         return { ...empty, error: `${LuxMagica} was not found in your roster.` }
     }
 
-    const avgDmg = (
+    const calculate_dmg = (
         dps: ScoreAttackKioku,
         supports: ScoreAttackKioku[],
         activeAilment?: Ailment,
-    ) =>
-        new ScoreAttackTeam(
-            dps,
-            supports,
-            100,
-            activeAilment ? [activeAilment] : [],
-            {},
-        ).calculate_max_dmg(exampleEnemies, 0)[1]
+        noConsume = false,
+    ) => new ScoreAttackTeam(
+        dps,
+        supports,
+        100,
+        activeAilment ? [activeAilment] : [],
+        {},
+        false,
+        new Set(),
+        new Set(),
+        new Map(),
+        new Set(),
+        new Map(),
+        noConsume,
+    ).calculate_max_dmg(exampleEnemies, 0)[barGraphAverageDmg.value ? 1 : 0]
 
     const notes: string[] = []
 
@@ -715,42 +729,50 @@ const gainChart = computed(() => {
 
     const dealerContexts: DealerContext[] = [
         makeContext(),
+        makeContext(undefined, undefined, undefined, true),
 
-        ...Object.values(KiokuElement).map(element =>
-            makeContext(element)
-        ),
+        ...Object.values(KiokuElement).flatMap(element => [
+            makeContext(element),
+            makeContext(element, undefined, undefined, true),
+        ]),
 
-        ...Object.values(KiokuRole).map(role =>
-            makeContext(undefined, role)
-        ),
+        ...Object.values(KiokuRole).flatMap(role => [
+            makeContext(undefined, role),
+            makeContext(undefined, role, undefined, true),
+        ]),
 
-        ...Object.values(Ailment).map(ailment =>
-            makeContext(undefined, undefined, ailment)
+        ...Object.values(Ailment).flatMap(ailment => [
+            makeContext(undefined, undefined, ailment),
+            makeContext(undefined, undefined, ailment, true),
+        ]),
+
+        ...Object.values(KiokuElement).flatMap(element =>
+            Object.values(KiokuRole).flatMap(role => [
+                makeContext(element, role),
+                makeContext(element, role, undefined, true),
+            ])
         ),
 
         ...Object.values(KiokuElement).flatMap(element =>
-            Object.values(KiokuRole).map(role =>
-                makeContext(element, role)
-            )
-        ),
-
-        ...Object.values(KiokuElement).flatMap(element =>
-            Object.values(Ailment).map(ailment =>
-                makeContext(element, undefined, ailment)
-            )
+            Object.values(Ailment).flatMap(ailment => [
+                makeContext(element, undefined, ailment),
+                makeContext(element, undefined, ailment, true),
+            ])
         ),
 
         ...Object.values(KiokuRole).flatMap(role =>
-            Object.values(Ailment).map(ailment =>
-                makeContext(undefined, role, ailment)
-            )
+            Object.values(Ailment).flatMap(ailment => [
+                makeContext(undefined, role, ailment),
+                makeContext(undefined, role, ailment, true),
+            ])
         ),
 
         ...Object.values(KiokuElement).flatMap(element =>
             Object.values(KiokuRole).flatMap(role =>
-                Object.values(Ailment).map(ailment =>
-                    makeContext(element, role, ailment)
-                )
+                Object.values(Ailment).flatMap(ailment => [
+                    makeContext(element, role, ailment),
+                    makeContext(element, role, ailment, true),
+                ])
             )
         ),
     ]
@@ -767,10 +789,11 @@ const gainChart = computed(() => {
                 },
             )
 
-            const baseline = avgDmg(
+            const baseline = calculate_dmg(
                 dps,
                 [filler, filler, filler, filler],
                 context.ailment,
+                context.noConsume,
             )
 
             if (baseline > 0) {
@@ -822,11 +845,28 @@ const gainChart = computed(() => {
 
             for (const dealer of dealers) {
                 try {
-                    const dmg = avgDmg(
+                    const dmg = calculate_dmg(
                         dealer.dps,
                         [support, filler, filler, filler],
                         dealer.context.ailment,
+                        dealer.context.noConsume,
                     )
+                    if (support.name === "Pluvia☆Neujahr") {
+                        console.log(dealer.context.noConsume, dealer.dps.data.element, dealer.dps.data.role, new ScoreAttackTeam(
+                            dealer.dps,
+                            [support, filler, filler, filler],
+                            100,
+                            [],
+                            {},
+                            false,
+                            new Set(),
+                            new Set(),
+                            new Map(),
+                            new Set(),
+                            new Map(),
+                            dealer.context.noConsume,
+                        ).calculate_max_dmg(exampleEnemies, 0))
+                    }
 
                     gains.push({
                         dealer,
