@@ -84,7 +84,7 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualSplitRole(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                            }}</span>
+                        }}</span>
                     </div>
                 </button>
                 <button class="chip chip-all" :class="allVirtualRolesVisible ? 'chip--visible' : 'chip--hidden'"
@@ -130,7 +130,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ xVal === "-1" ? "Not Owned" : `A${xVal}`
-                            }}</span>
+                                }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -150,7 +150,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ yVal === "-1" ? "Not Owned" : `A${yVal}`
-                            }}</span>
+                                }}</span>
                         </td>
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
                             <template v-for="r in [5, 4, 3]" :key="r">
@@ -179,7 +179,7 @@
                                                         <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`"
                                                             :alt="ch.role" class="info-badge-icon" />
                                                         <span class="role-badge-tag">{{ rangeTag(ch.range, ch.role)[0]
-                                                        }}</span>
+                                                            }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="axis-info-badge level-badge info-badge-img"
@@ -207,12 +207,12 @@
 
         <section class="card gain-section">
             <div class="gain-header filters-heading">Relative buff strength</div>
-            <p class="gain-desc">Comparison of relative buff strength on a character with no other buffs. Special dmg
-                only is
-                being compared</p>
-            <p class="gain-desc">Do not compare buffs and debuffs with eachother, as debuffs can have higher impact on
-                lower
-                numbers</p>
+            <p class="gain-desc">Comparison of relative buff strength on a character with no other buffs. Only buffs to
+                special
+                dmg
+                is being compared. All characters being compared are A5 and max level.</p>
+            <p class="gain-desc">One enemy with 3000 def is used as basis for dmg calculation.</p>
+            <p class="gain-desc">Buffs which are only active under some circumstances have dashed bars.</p>
 
             <p v-if="gainChart.error" class="gain-empty">{{ gainChart.error }}</p>
             <p v-else-if="!gainChart.bars.length" class="gain-empty">No characters to show with the current filters.
@@ -222,10 +222,6 @@
                     <span v-for="role in gainChart.roles" :key="role" class="gain-legend-item">
                         <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{ role }}
                     </span>
-                    <span v-if="gainChart.hasVariants" class="gain-legend-item">
-                        <span class="gain-legend-swatch striped"></span>Differs for a Lux Magica element / role test
-                        context
-                    </span>
                 </div>
                 <div class="gain-scroll">
                     <div class="gain-chart">
@@ -234,19 +230,20 @@
                             <div class="gain-track">
                                 <div class="gain-zero" :style="{ bottom: `${gainChart.zeroPct}%` }"></div>
                                 <div class="gain-bar-wrap" :style="bar.style">
-                                    <div class="gain-bar" :class="{ limited: !bar.isStandardChar }"
-                                        :style="{ backgroundColor: roleColor(bar.role) }">
+                                    <div class="gain-bar" :style="{ backgroundColor: roleColor(bar.role) }">
                                     </div>
                                     <span class="gain-value">{{ bar.label }}</span>
                                 </div>
                             </div>
-                            <div class="gain-name">
-                                <img class="gain-char-icon"
-                                    :src="`/exedra-dmg-calc/kioku_images/${bar.charId}_thumbnail.png`" :alt="bar.name"
-                                    :title="bar.name" />
+                            <div class="gain-name" :title="bar.name">
+                                <img class="gain-char-icon" :class="bar._borderClass"
+                                    :src="`/exedra-dmg-calc/kioku_images/${bar.charId}_thumbnail.png`"
+                                    :alt="bar.name" />
 
-                                <img v-if="bar.tagIcon" class="gain-tag-icon" :src="bar.tagIcon" :alt="bar.tag"
-                                    :title="bar.tag" />
+                                <div v-if="bar.tags.length" class="gain-tag-icons">
+                                    <img v-for="tag in bar.tags" :key="`${tag.kind}:${tag.value}`" class="gain-tag-icon"
+                                        :src="tag.icon" :alt="tag.value" :title="tag.value" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -600,12 +597,27 @@ const toKioku = (c: Character, targetContext?: ChartTargetContext): ScoreAttackK
     )
 }
 
+type ContextKind = "element" | "role" | "ailment"
+
+interface DealerTag {
+    kind: ContextKind
+    value: string
+    icon: string
+}
+
+interface DealerContext {
+    element?: KiokuElement
+    role?: KiokuRole
+    ailment?: Ailment
+    tags: DealerTag[]
+}
+
 interface Dealer {
     char: Character
-    tags: string[]
+    context: DealerContext
+    tags: DealerTag[]
     dps: ScoreAttackKioku
     baseline: number
-    ailment?: Ailment
 }
 
 interface DealerGain {
@@ -614,21 +626,12 @@ interface DealerGain {
     gain: number
 }
 
-const dealerLabel = (d: Dealer) => `${d.char.name} (${d.tags.join("/")})`
+const dealerLabel = (d: Dealer) => `${d.char.name}${d.tags.length ? ` (${d.tags.map(t => t.value).join("/")})` : ""}`
 
 const median = (values: number[]): number => {
     const sorted = [...values].sort((a, b) => a - b)
     const mid = Math.floor(sorted.length / 2)
     return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
-}
-
-const referenceGain = (gains: DealerGain[]): number => {
-    let best: number[] = []
-    for (const g of gains) {
-        const group = gains.filter(o => Math.abs(o.gain - g.gain) < 1).map(o => o.gain)
-        if (group.length > best.length || (group.length === best.length && median(group) < median(best))) best = group
-    }
-    return median(best)
 }
 
 const exampleEnemies = [
@@ -641,6 +644,39 @@ const exampleEnemies = [
 
 const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1).toLowerCase()
 
+const makeTag = (kind: ContextKind, value: string): DealerTag => ({
+    kind,
+    value,
+    icon:
+        kind === "element"
+            ? `/exedra-dmg-calc/elements/${value}.png`
+            : kind === "role"
+                ? `/exedra-dmg-calc/roles/${value}.png`
+                : `/exedra-dmg-calc/aliments/${capitalize(value)}.png`,
+})
+
+const makeContext = (
+    element?: KiokuElement,
+    role?: KiokuRole,
+    ailment?: Ailment,
+): DealerContext => ({
+    element,
+    role,
+    ailment,
+    tags: [
+        element !== undefined ? makeTag("element", element) : null,
+        role !== undefined ? makeTag("role", role) : null,
+        ailment !== undefined ? makeTag("ailment", ailment) : null,
+    ].filter((tag): tag is DealerTag => tag !== null),
+})
+
+const contextKey = (context: DealerContext): string =>
+    JSON.stringify([
+        context.element ?? null,
+        context.role ?? null,
+        context.ailment ?? null,
+    ])
+
 const gainChart = computed(() => {
     const empty = {
         bars: [] as any[],
@@ -652,78 +688,129 @@ const gainChart = computed(() => {
     }
 
     const lux = store.characters.find(c => c.name === LuxMagica)
-    if (!lux) return { ...empty, error: `${LuxMagica} was not found in your roster.` }
 
-    const avgDmg = (dps: ScoreAttackKioku, supports: ScoreAttackKioku[], activeAilment?: Ailment) =>
-        new ScoreAttackTeam(dps, supports, 100, activeAilment ? [activeAilment] : [], {}).calculate_max_dmg(exampleEnemies, 0)[1]
+    if (!lux) {
+        return { ...empty, error: `${LuxMagica} was not found in your roster.` }
+    }
+
+    const avgDmg = (
+        dps: ScoreAttackKioku,
+        supports: ScoreAttackKioku[],
+        activeAilment?: Ailment,
+    ) =>
+        new ScoreAttackTeam(
+            dps,
+            supports,
+            100,
+            activeAilment ? [activeAilment] : [],
+            {},
+        ).calculate_max_dmg(exampleEnemies, 0)[1]
 
     const notes: string[] = []
-    const filler = toKioku(prepareForChart(lux), { role: undefined, element: undefined })
+
+    const filler = toKioku(
+        prepareForChart(lux),
+        { role: undefined, element: undefined },
+    )
+
+    const dealerContexts: DealerContext[] = [
+        makeContext(),
+
+        ...Object.values(KiokuElement).map(element =>
+            makeContext(element)
+        ),
+
+        ...Object.values(KiokuRole).map(role =>
+            makeContext(undefined, role)
+        ),
+
+        ...Object.values(Ailment).map(ailment =>
+            makeContext(undefined, undefined, ailment)
+        ),
+
+        ...Object.values(KiokuElement).flatMap(element =>
+            Object.values(KiokuRole).map(role =>
+                makeContext(element, role)
+            )
+        ),
+
+        ...Object.values(KiokuElement).flatMap(element =>
+            Object.values(Ailment).map(ailment =>
+                makeContext(element, undefined, ailment)
+            )
+        ),
+
+        ...Object.values(KiokuRole).flatMap(role =>
+            Object.values(Ailment).map(ailment =>
+                makeContext(undefined, role, ailment)
+            )
+        ),
+
+        ...Object.values(KiokuElement).flatMap(element =>
+            Object.values(KiokuRole).flatMap(role =>
+                Object.values(Ailment).map(ailment =>
+                    makeContext(element, role, ailment)
+                )
+            )
+        ),
+    ]
+
     const dealers: Dealer[] = []
 
-    for (const element of Object.values(KiokuElement)) {
+    for (const context of dealerContexts) {
         try {
-            const dps = toKioku(prepareForChart(lux), { element, role: undefined })
-            const baseline = avgDmg(dps, [filler, filler, filler, filler])
+            const dps = toKioku(
+                prepareForChart(lux),
+                {
+                    element: context.element,
+                    role: context.role,
+                },
+            )
+
+            const baseline = avgDmg(
+                dps,
+                [filler, filler, filler, filler],
+                context.ailment,
+            )
+
             if (baseline > 0) {
                 dealers.push({
                     char: lux,
-                    tags: [element],
+                    context,
+                    tags: context.tags,
                     dps,
                     baseline,
                 })
             }
         } catch (err) {
-            console.error(`Failed to calculate the Lux Magica element test for ${element}:`, err)
-        }
-    }
-
-    for (const role of Object.values(KiokuRole)) {
-        try {
-            const dps = toKioku(prepareForChart(lux), { element: undefined, role })
-            const baseline = avgDmg(dps, [filler, filler, filler, filler])
-            if (baseline > 0) {
-                dealers.push({
-                    char: lux,
-                    tags: [role],
-                    dps,
-                    baseline,
-                })
-            }
-        } catch (err) {
-            console.error(`Failed to calculate the Lux Magica role test for ${role}:`, err)
-        }
-    }
-
-    for (const ailment of Object.values(Ailment)) {
-        try {
-            const baseline = avgDmg(filler, [filler, filler, filler, filler], ailment)
-            if (baseline > 0) {
-                dealers.push({
-                    char: lux,
-                    tags: [ailment],
-                    dps: filler,
-                    baseline,
-                    ailment: ailment,
-                })
-            }
-        } catch (err) {
-            console.error(`Failed to calculate the Lux Magica ailment test for ${ailment}:`, err)
+            console.error(
+                `Failed to calculate Lux Magica context ${context.tags.map(t => t.value).join("/") || "none"}:`,
+                err,
+            )
         }
     }
 
     if (!dealers.length) {
-        return { ...empty, error: ["No Lux Magica test context could be calculated.", ...notes].join(" ") }
+        return {
+            ...empty,
+            error: ["No Lux Magica test context could be calculated.", ...notes].join(" "),
+        }
     }
 
     interface GainRow {
         ch: typeof allChars.value[0]
-        tag: string
+        tags: DealerTag[]
         gain: number
     }
 
-    const fmt = (g: number) => `${g > 0 ? "+" : ""}${g.toFixed(1)}%`
-    const results: { main: GainRow; variants: GainRow[] }[] = []
+    const fmt = (g: number) =>
+        `${g > 0 ? "+" : ""}${g.toFixed(1)}%`
+
+    const results: {
+        main: GainRow
+        variants: GainRow[]
+    }[] = []
+
     let failed = 0
 
     for (const ch of allChars.value) {
@@ -735,7 +822,12 @@ const gainChart = computed(() => {
 
             for (const dealer of dealers) {
                 try {
-                    const dmg = avgDmg(dealer.dps, [support, filler, filler, filler], dealer.ailment)
+                    const dmg = avgDmg(
+                        dealer.dps,
+                        [support, filler, filler, filler],
+                        dealer.context.ailment,
+                    )
+
                     gains.push({
                         dealer,
                         dmg,
@@ -743,6 +835,7 @@ const gainChart = computed(() => {
                     })
                 } catch (err) {
                     failed++
+
                     console.warn(
                         `Support chart: failed to calculate ${ch.name} in ${dealerLabel(dealer)}:`,
                         err,
@@ -752,78 +845,135 @@ const gainChart = computed(() => {
 
             if (!gains.length) continue
 
-            const ref = referenceGain(gains)
-            const main: GainRow = {
-                ch,
-                tag: "",
-                gain: ref,
+            const gainByContext = new Map<string, DealerGain>()
+
+            for (const gain of gains) {
+                gainByContext.set(
+                    contextKey(gain.dealer.context),
+                    gain,
+                )
             }
 
-            const variants: GainRow[] = gains
-                .filter(g => Math.abs(g.gain - ref) >= 1)
-                .map(g => ({
-                    ch,
-                    tag: g.dealer.tags.join("/"),
-                    gain: g.gain,
-                }))
+            const noneGain = gainByContext.get(
+                contextKey(makeContext()),
+            )
 
-            results.push({ main, variants })
+            if (!noneGain) continue
+
+            const meaningfulTagsFor = (gain: DealerGain): DealerTag[] =>
+                gain.dealer.tags.filter(tag => {
+                    const reducedContext: DealerContext = {
+                        ...gain.dealer.context,
+                        [tag.kind]: undefined,
+                    }
+
+                    const reducedGain = gainByContext.get(
+                        contextKey(reducedContext),
+                    )
+
+                    if (!reducedGain) return true
+
+                    return Math.abs(gain.gain - reducedGain.gain) >= 1
+                })
+
+            const main: GainRow = {
+                ch,
+                tags: [],
+                gain: noneGain.gain,
+            }
+
+            const variantMap = new Map<string, GainRow>()
+
+            for (const gain of gains) {
+                if (gain.dealer.tags.length === 0) continue
+
+                if (Math.abs(gain.gain - noneGain.gain) < 1) continue
+
+                const meaningfulTags = meaningfulTagsFor(gain)
+
+                if (!meaningfulTags.length) continue
+
+                const tagKey = meaningfulTags
+                    .map(tag => `${tag.kind}:${tag.value}`)
+                    .join("|")
+
+                const existing = variantMap.get(tagKey)
+
+                if (!existing || gain.gain > existing.gain) {
+                    variantMap.set(tagKey, {
+                        ch,
+                        tags: meaningfulTags,
+                        gain: gain.gain,
+                    })
+                }
+            }
+
+            results.push({
+                main,
+                variants: [...variantMap.values()],
+            })
+
         } catch (err) {
             failed++
-            console.warn(`Support chart: failed to calculate ${ch.name}:`, err)
+
+            console.warn(
+                `Support chart: failed to calculate ${ch.name}:`,
+                err,
+            )
         }
     }
 
-    if (failed) notes.push(`${failed} calculation(s) failed (see console).`)
+    if (failed) {
+        notes.push(`${failed} calculation(s) failed (see console).`)
+    }
 
     const rows = [
         ...results
             .map(r => r.main)
             .filter(m => m.gain > 1),
+
         ...results
             .flatMap(r => r.variants)
-            .filter(v => v.gain > 1)
+            .filter(v => v.gain > 1),
     ].sort((a, b) => a.gain - b.gain)
 
     const gains = rows.map(r => r.gain)
+
     const max = Math.max(0, ...gains)
     const min = Math.min(0, ...gains)
     const span = max - min || 1
 
-    const bars = rows.map(({ ch, tag, gain }) => {
-        const tagIcon = tag
-            ? Object.values(KiokuElement).includes(tag as KiokuElement)
-                ? `/exedra-dmg-calc/elements/${tag}.png`
-                : Object.values(KiokuRole).includes(tag as KiokuRole)
-                    ? `/exedra-dmg-calc/roles/${tag}.png`
-                    : `/exedra-dmg-calc/aliments/${capitalize(tag)}.png`
-            : null
+    const bars = rows.map(({ ch, tags, gain }) => ({
+        id: `${ch.id}:${tags.map(t => `${t.kind}-${t.value}`).join("|") || "none"}`,
 
-        return {
-            id: tag ? `${ch.id}:${tag}` : `${ch.id}`,
-            name: tag ? `${ch.name} (${tag})` : ch.name,
-            charId: ch.id,
-            tag,
-            tagIcon,
-            role: ch.role as string,
-            isStandardChar: ch.isStandardChar,
-            gain,
-            variant: !!tag,
-            label: fmt(gain),
-            style: gain < 0
-                ? {
-                    top: `${(max / span) * 100}%`,
-                    height: `${(-gain / span) * 100}%`,
-                }
-                : {
-                    bottom: `${(-min / span) * 100}%`,
-                    height: `${(gain / span) * 100}%`,
-                },
-        }
-    })
+        name: tags.length
+            ? `${ch.name} (${tags.map(t => t.value).join("/")})`
+            : ch.name,
 
+        charId: ch.id,
+        tags,
+
+        role: ch.role as string,
+        isStandardChar: ch.isStandardChar,
+        _borderClass: borderClass(ch),
+
+        gain,
+        variant: tags.length > 0,
+        label: fmt(gain),
+
+        style: gain < 0
+            ? {
+                top: `${(max / span) * 100}%`,
+                height: `${(-gain / span) * 100}%`,
+            }
+            : {
+                bottom: `${(-min / span) * 100}%`,
+                height: `${(gain / span) * 100}%`,
+            },
+    }))
 
     const presentRoles = new Set(bars.map(b => b.role))
+
     return {
         bars,
         roles: baseRoleOrder.value.filter(r => presentRoles.has(r)) as string[],
@@ -1309,8 +1459,12 @@ const shareOptionsForGrid = () => ({
     transform: scale(1.1);
 }
 
-.limited-border {
+.limited-border.char-img {
     border: 2px solid red;
+}
+
+.limited-border.gain-char-icon {
+    border: 1px solid red;
 }
 
 .default-border {
@@ -1481,10 +1635,6 @@ const shareOptionsForGrid = () => ({
     border-radius: 3px 3px 0 0;
 }
 
-.gain-bar.limited {
-    box-shadow: 0 -2px 0 2px red;
-}
-
 .gain-col:hover .gain-bar {
     filter: brightness(1.25);
 }
@@ -1511,7 +1661,7 @@ const shareOptionsForGrid = () => ({
     justify-content: flex-start;
     gap: 2px;
     margin-top: 0.35rem;
-    width: 32px;
+    width: 28px;
     transform: none;
 }
 
@@ -1523,11 +1673,15 @@ const shareOptionsForGrid = () => ({
     display: block;
 }
 
-.gain-char-icon {
+.gain-char-icon,
+.gain-tag-icon {
     border-radius: 50%;
 }
 
-.gain-tag-icon {
-    border-radius: 50%;
+.gain-tag-icons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
 }
 </style>
