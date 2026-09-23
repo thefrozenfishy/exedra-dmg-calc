@@ -231,7 +231,9 @@
                 <div class="gain-scroll">
                     <div class="gain-chart">
                         <div v-for="bar in gainChart.bars" :key="bar.id" class="gain-col"
-                            :class="{ variant: bar.variant }" :title="bar.title">
+                            :class="{ variant: bar.variant, active: activeBarTip?.id === bar.id }"
+                            :title="activeBarTip?.id === bar.id ? undefined : bar.title"
+                            @click.stop="toggleBarTip(bar, $event)">
                             <div class="gain-track">
                                 <div class="gain-zero" :style="{ bottom: `${gainChart.zeroPct}%` }"></div>
                                 <div class="gain-bar-wrap" :style="bar.style">
@@ -253,6 +255,10 @@
                         </div>
                     </div>
                 </div>
+                <div v-if="activeBarTip" class="gain-tip" :class="{ below: activeBarTip.below }"
+                    :style="{ left: `${activeBarTip.x}px`, top: `${activeBarTip.y}px` }" @click.stop="closeBarTip">
+                    {{ activeBarTip.text }}
+                </div>
                 <p v-for="note in gainChart.notes" :key="note" class="gain-desc">{{ note }}</p>
             </template>
         </section>
@@ -260,7 +266,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue"
+import { computed, onBeforeUnmount, onMounted, ref } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { Character, KiokuConstants, withMaxLevelsForPlayerLevel } from "../types/KiokuTypes"
 import { Ailment, KiokuElement, KiokuRole, LuxMagica } from '../types/enums'
@@ -1041,6 +1047,41 @@ const gainChart = computed(() => {
     }
 })
 
+// Click/tap tooltip for the bar chart (native `title` tooltips don't work on touch screens)
+const activeBarTip = ref<{ id: string; text: string; x: number; y: number; below: boolean } | null>(null)
+
+const closeBarTip = () => {
+    activeBarTip.value = null
+}
+
+const toggleBarTip = (bar: { id: string; title: string }, e: MouseEvent) => {
+    if (activeBarTip.value?.id === bar.id) {
+        closeBarTip()
+        return
+    }
+
+    const halfWidth = 110 // half the tooltip's max width, keeps it fully on screen
+    activeBarTip.value = {
+        id: bar.id,
+        text: bar.title,
+        x: Math.min(Math.max(e.clientX, halfWidth + 8), window.innerWidth - halfWidth - 8),
+        y: e.clientY,
+        below: e.clientY < 110, // flip under the finger when too close to the top
+    }
+}
+
+onMounted(() => {
+    document.addEventListener("click", closeBarTip)
+    window.addEventListener("scroll", closeBarTip, true) // capture: also fires for the chart's own scroll
+    window.addEventListener("resize", closeBarTip)
+})
+
+onBeforeUnmount(() => {
+    document.removeEventListener("click", closeBarTip)
+    window.removeEventListener("scroll", closeBarTip, true)
+    window.removeEventListener("resize", closeBarTip)
+})
+
 const allElementValues = computed(() => Object.values(KiokuElement))
 const displayedElements = computed(() => allElementValues.value.filter(el => !hiddenElements.value.includes(el)))
 
@@ -1663,6 +1704,7 @@ const shareOptionsForGrid = () => ({
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
 }
 
 .gain-track {
@@ -1692,8 +1734,31 @@ const shareOptionsForGrid = () => ({
     border-radius: 3px 3px 0 0;
 }
 
-.gain-col:hover .gain-bar {
+.gain-col:hover .gain-bar,
+.gain-col.active .gain-bar {
     filter: brightness(1.25);
+}
+
+.gain-tip {
+    position: fixed;
+    z-index: 1000;
+    width: max-content;
+    max-width: 220px;
+    padding: 0.4rem 0.6rem;
+    transform: translate(-50%, calc(-100% - 12px));
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    font-size: 0.8rem;
+    line-height: 1.4;
+    text-align: left;
+    white-space: pre-line;
+}
+
+.gain-tip.below {
+    transform: translate(-50%, 12px);
 }
 
 .gain-value {
