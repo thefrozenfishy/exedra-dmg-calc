@@ -1,4 +1,4 @@
-import { Aliment, KiokuRole } from "../types/enums";
+import { Ailment, KiokuRole } from "../types/enums";
 import { BattleState, aggro, defaultbreak, maxMeters, mpGainFromAction, PassiveSkill, SkillDetail, skillDetailId, SkillKey, targetRange, TargetType, targetTypeToLvl, TargetTypeLookup } from "../types/KiokuTypes";
 import { skillDetails } from "../utils/helpers";
 import { isConditionSetActive, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
@@ -131,7 +131,7 @@ export class KiokuState {
 
     currentDebuffs(): string[] {
         return [...this.activeEffectDetails.values()]
-            .filter(d => !Object.values(Aliment).includes(d.abilityEffectType as Aliment)
+            .filter(d => !Object.values(Ailment).includes(d.abilityEffectType as Ailment)
                 && enemySkills.includes(d.abilityEffectType))
             .map(d => `${d.applier} - ${d.description}`)
     }

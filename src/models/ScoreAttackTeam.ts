@@ -2,7 +2,7 @@ import { ScoreAttackKioku } from "./ScoreAttackKioku";
 import { EnemyTargetTypes, Enemy } from "../types/EnemyTypes";
 import { isActiveConditionRelevantForScoreAttack, isStartCondRelevantForScoreAttack } from "./BattleConditionParser";
 import { ActiveSkill, SkillDetail, skillDetailId } from "../types/KiokuTypes";
-import { Aliment, elementMap, scoreAttackRelevantBuffsAndDebuffs, roleMap, otherBuffsAndDebuffs } from "../types/enums";
+import { Ailment, elementMap, scoreAttackRelevantBuffsAndDebuffs, roleMap, otherBuffsAndDebuffs } from "../types/enums";
 
 const DPS_IDX = 2;
 
@@ -142,7 +142,7 @@ export class ScoreAttackTeam {
         dps: ScoreAttackKioku,
         team: ScoreAttackKioku[],
         attackerHealth: number,
-        activeAliments: Aliment[],
+        activeAliments: Ailment[],
         arenaEffects: Record<string, number>,
         debug = false,
         userBannedEffects: Set<number> = new Set(),
@@ -192,8 +192,8 @@ export class ScoreAttackTeam {
                     return false;
                 }
                 if (
-                    Aliment.WEAKNESS === detail.abilityEffectType &&
-                    !this.activeBuffsAndDebuffs.includes(Aliment.WEAKNESS)
+                    Ailment.WEAKNESS === detail.abilityEffectType &&
+                    !this.activeBuffsAndDebuffs.includes(Ailment.WEAKNESS)
                 ) {
                     return false;
                 }
@@ -219,8 +219,8 @@ export class ScoreAttackTeam {
                 const hasDot = this.activeEffects[nonDpsIdx].some(eff => {
                     const dotType = eff.abilityEffectType.replace(/_(ATK|DEF|HP)$/, "");
                     return (
-                        dotType !== Aliment.WEAKNESS &&
-                        Object.values(Aliment).includes(dotType as Aliment) &&
+                        dotType !== Ailment.WEAKNESS &&
+                        Object.values(Ailment).includes(dotType as Ailment) &&
                         this.activeBuffsAndDebuffs.includes(dotType)
                     );
                 });
@@ -551,15 +551,15 @@ export class ScoreAttackTeam {
 
             for (const eff of this.activeEffects[allyIdx]) {
                 const dotStatSuffix = eff.abilityEffectType.match(/_(ATK|DEF|HP)$/)?.[1];
-                const dotType = eff.abilityEffectType.replace(/_(ATK|DEF|HP)$/, "") as Aliment;
-                if (dotType === Aliment.VORTEX) {
+                const dotType = eff.abilityEffectType.replace(/_(ATK|DEF|HP)$/, "") as Ailment;
+                if (dotType === Ailment.VORTEX) {
                     if (!isVortex) continue
                     if (skillDetailId(eff).toString().startsWith("1185")) continue
                 }
                 else { if (isVortex) continue }
 
                 if (
-                    !Object.values(Aliment).includes(dotType) ||
+                    !Object.values(Ailment).includes(dotType) ||
                     !this.activeBuffsAndDebuffs.includes(dotType)
                 ) continue;
 

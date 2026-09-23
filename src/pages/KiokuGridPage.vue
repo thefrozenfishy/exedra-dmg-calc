@@ -84,7 +84,7 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualSplitRole(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                        }}</span>
+                            }}</span>
                     </div>
                 </button>
                 <button class="chip chip-all" :class="allVirtualRolesVisible ? 'chip--visible' : 'chip--hidden'"
@@ -130,7 +130,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ xVal === "-1" ? "Not Owned" : `A${xVal}`
-                                }}</span>
+                            }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -150,7 +150,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ yVal === "-1" ? "Not Owned" : `A${yVal}`
-                                }}</span>
+                            }}</span>
                         </td>
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
                             <template v-for="r in [5, 4, 3]" :key="r">
@@ -179,7 +179,7 @@
                                                         <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`"
                                                             :alt="ch.role" class="info-badge-icon" />
                                                         <span class="role-badge-tag">{{ rangeTag(ch.range, ch.role)[0]
-                                                            }}</span>
+                                                        }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="axis-info-badge level-badge info-badge-img"
@@ -204,19 +204,64 @@
                 </tbody>
             </table>
         </div>
+
+        <section class="card gain-section">
+            <div class="gain-header filters-heading">Relative buff strength</div>
+            <p class="gain-desc">Comparison of relative buff strength on a character with no other buffs. Special dmg
+                only is
+                being compared</p>
+            <p class="gain-desc">Do not compare buffs and debuffs with eachother, as debuffs can have higher impact on
+                lower
+                numbers</p>
+
+            <p v-if="gainChart.error" class="gain-empty">{{ gainChart.error }}</p>
+            <p v-else-if="!gainChart.bars.length" class="gain-empty">No characters to show with the current filters.
+            </p>
+            <template v-else>
+                <div class="gain-legend">
+                    <span v-for="role in gainChart.roles" :key="role" class="gain-legend-item">
+                        <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{ role }}
+                    </span>
+                    <span v-if="gainChart.hasVariants" class="gain-legend-item">
+                        <span class="gain-legend-swatch striped"></span>Differs for a Lux Magica element / role test
+                        context
+                    </span>
+                </div>
+                <div class="gain-scroll">
+                    <div class="gain-chart">
+                        <div v-for="bar in gainChart.bars" :key="bar.id" class="gain-col"
+                            :class="{ variant: bar.variant }" :title="bar.title">
+                            <div class="gain-track">
+                                <div class="gain-zero" :style="{ bottom: `${gainChart.zeroPct}%` }"></div>
+                                <div class="gain-bar-wrap" :style="bar.style">
+                                    <div class="gain-bar" :class="{ limited: !bar.isStandardChar }"
+                                        :style="{ backgroundColor: roleColor(bar.role) }">
+                                    </div>
+                                    <span class="gain-value">{{ bar.label }}</span>
+                                </div>
+                            </div>
+                            <div class="gain-name">{{ bar.name }}</div>
+                        </div>
+                    </div>
+                </div>
+                <p v-for="note in gainChart.notes" :key="note" class="gain-desc">{{ note }}</p>
+            </template>
+        </section>
     </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue"
 import { useCharacterStore } from "../store/characterStore"
-import { Character } from "../types/KiokuTypes"
-import { Aliment, KiokuElement, KiokuRole, LuxMagica } from '../types/enums'
+import { Character, KiokuConstants, withMaxLevelsForPlayerLevel } from "../types/KiokuTypes"
+import { Ailment, KiokuElement, KiokuRole, LuxMagica } from '../types/enums'
 import { useSetting } from "../store/settingsStore"
 import { ScoreAttackKioku } from "../models/ScoreAttackKioku"
+import { ScoreAttackTeam } from "../models/ScoreAttackTeam"
 import { skillDetails } from "../utils/helpers"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { useFriendStore } from "../store/friendStore"
+import { Enemy } from "../types/EnemyTypes"
 
 const store = useCharacterStore()
 
@@ -313,8 +358,8 @@ const archetypeRules: ArchetypeRule[] = [
     {
         id: "ailment",
         label: "Ailment",
-        match: (k: ScoreAttackKioku) => k.effects.some(e => Object.values(Aliment).includes(
-            e.abilityEffectType.replace(/_(ATK|DEF|HP)$/, "") as Aliment
+        match: (k: ScoreAttackKioku) => k.effects.some(e => Object.values(Ailment).includes(
+            e.abilityEffectType.replace(/_(ATK|DEF|HP)$/, "") as Ailment
         )),
     },
     {
@@ -512,12 +557,235 @@ const allChars = computed(() =>
         .filter(c => showStandards.value ? true : !c.isStandardChar)
         .filter(c => !hiddenElements.value.includes(c.element as KiokuElement))
         .filter(c => !hiddenVirtualRoles.value.includes(virtualRoleForChar(c)))
+        .filter(c => shouldShow(c.rarity))
         .filter(c => {
             if (activeArchetypes.value.length === 0) return false
             if (c._archetypes.length === 0) return activeArchetypes.value.includes(NONE_ARCHETYPE_ID)
             return c._archetypes.some(a => activeArchetypes.value.includes(a.id))
         })
 )
+
+const ROLE_COLORS: Record<string, string> = {
+    [KiokuRole.Attacker]: "#926262",
+    [KiokuRole.Breaker]: "#9d955d",
+    [KiokuRole.Buffer]: "#8f6f55",
+    [KiokuRole.Debuffer]: "#7a6986",
+    [KiokuRole.Healer]: "#658169",
+    [KiokuRole.Defender]: "#5e638c",
+}
+const roleColor = (role: string) => ROLE_COLORS[role] ?? "#9ca3af"
+
+const prepareForChart = (c: Character): Character => {
+    return withMaxLevelsForPlayerLevel({ ...c, ascension: KiokuConstants.maxAscension }, KiokuConstants.maxKiokuLvl)
+}
+
+type ChartTargetContext = {
+    role?: KiokuRole
+    element?: KiokuElement
+}
+
+const toKioku = (c: Character, targetContext?: ChartTargetContext): ScoreAttackKioku => {
+    return new ScoreAttackKioku(
+        c,
+        0,
+        0,
+        targetContext,
+    )
+}
+
+interface Dealer {
+    char: Character
+    tags: string[]
+    dps: ScoreAttackKioku
+    baseline: number
+}
+
+interface DealerGain {
+    dealer: Dealer
+    dmg: number
+    gain: number
+}
+
+const dealerLabel = (d: Dealer) => `${d.char.name} (${d.tags.join("/")})`
+
+const median = (values: number[]): number => {
+    const sorted = [...values].sort((a, b) => a - b)
+    const mid = Math.floor(sorted.length / 2)
+    return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
+}
+
+const referenceGain = (gains: DealerGain[]): number => {
+    let best: number[] = []
+    for (const g of gains) {
+        const group = gains.filter(o => Math.abs(o.gain - g.gain) < 1).map(o => o.gain)
+        if (group.length > best.length || (group.length === best.length && median(group) < median(best))) best = group
+    }
+    return median(best)
+}
+
+const exampleEnemies = [
+    { name: 'Left Other', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+    { name: 'Left Proximity', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+    { name: 'Target', maxBreak: 500, defense: 3000, enabled: true, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 1 },
+    { name: 'Right Proximity', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+    { name: 'Right Other', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+] as Enemy[]
+
+const gainChart = computed(() => {
+    const empty = {
+        bars: [] as any[],
+        roles: [] as string[],
+        zeroPct: 0,
+        hasVariants: false,
+        notes: [] as string[],
+        error: "",
+    }
+
+    const lux = store.characters.find(c => c.name === LuxMagica)
+    if (!lux) return { ...empty, error: `${LuxMagica} was not found in your roster.` }
+
+    const avgDmg = (dps: ScoreAttackKioku, supports: ScoreAttackKioku[], activeAilments: Ailment[]) =>
+        new ScoreAttackTeam(dps, supports, 100, activeAilments, {}).calculate_max_dmg(exampleEnemies, 0)[1]
+
+    const notes: string[] = []
+    const filler = toKioku(prepareForChart(lux), { role: undefined, element: undefined })
+    const dealers: Dealer[] = []
+
+    for (const element of Object.values(KiokuElement)) {
+        try {
+            const dps = toKioku(prepareForChart(lux), { element, role: undefined })
+            const baseline = avgDmg(dps, [filler, filler, filler, filler])
+            if (baseline > 0) {
+                dealers.push({
+                    char: lux,
+                    tags: [element],
+                    dps,
+                    baseline,
+                })
+            }
+        } catch (err) {
+            console.error(`Failed to calculate the Lux Magica element test for ${element}:`, err)
+        }
+    }
+
+    for (const role of Object.values(KiokuRole)) {
+        try {
+            const dps = toKioku(prepareForChart(lux), { element: undefined, role })
+            const baseline = avgDmg(dps, [filler, filler, filler, filler])
+            if (baseline > 0) {
+                dealers.push({
+                    char: lux,
+                    tags: [role],
+                    dps,
+                    baseline,
+                })
+            }
+        } catch (err) {
+            console.error(`Failed to calculate the Lux Magica role test for ${role}:`, err)
+        }
+    }
+
+    if (!dealers.length) {
+        return { ...empty, error: ["No Lux Magica test context could be calculated.", ...notes].join(" ") }
+    }
+
+    interface GainRow {
+        ch: typeof allChars.value[0]
+        tag: string
+        gain: number
+    }
+
+    const fmt = (g: number) => `${g > 0 ? "+" : ""}${g.toFixed(1)}%`
+    const results: { main: GainRow; variants: GainRow[] }[] = []
+    let failed = 0
+
+    for (const ch of allChars.value) {
+        if (ch.name === LuxMagica) continue
+
+        try {
+            const support = toKioku(prepareForChart(ch))
+            const gains: DealerGain[] = []
+
+            for (const dealer of dealers) {
+                try {
+                    const dmg = avgDmg(dealer.dps, [support, filler, filler, filler])
+                    gains.push({
+                        dealer,
+                        dmg,
+                        gain: (dmg / dealer.baseline - 1) * 100,
+                    })
+                } catch (err) {
+                    failed++
+                    console.warn(
+                        `Support chart: failed to calculate ${ch.name} in ${dealerLabel(dealer)}:`,
+                        err,
+                    )
+                }
+            }
+
+            if (!gains.length) continue
+
+            const ref = referenceGain(gains)
+            const main: GainRow = {
+                ch,
+                tag: "",
+                gain: ref,
+            }
+
+            const variants: GainRow[] = gains
+                .filter(g => Math.abs(g.gain - ref) >= 1)
+                .map(g => ({
+                    ch,
+                    tag: g.dealer.tags.join("/"),
+                    gain: g.gain,
+                }))
+
+            results.push({ main, variants })
+        } catch (err) {
+            failed++
+            console.warn(`Support chart: failed to calculate ${ch.name}:`, err)
+        }
+    }
+
+    if (failed) notes.push(`${failed} calculation(s) failed (see console).`)
+
+    const rows = [
+        ...results
+            .map(r => r.main)
+            .filter(m => m.gain > 1),
+        ...results
+            .flatMap(r => r.variants)
+            .filter(v => v.gain > 1)
+    ].sort((a, b) => a.gain - b.gain)
+
+    const gains = rows.map(r => r.gain)
+    const max = Math.max(0, ...gains)
+    const min = Math.min(0, ...gains)
+    const span = max - min || 1
+
+    const bars = rows.map(({ ch, tag, gain }) => ({
+        id: tag ? `${ch.id}:${tag}` : `${ch.id}`,
+        name: tag ? `${ch.name} (${tag})` : ch.name,
+        role: ch.role as string,
+        isStandardChar: ch.isStandardChar,
+        gain,
+        variant: !!tag,
+        label: fmt(gain),
+        style: gain < 0
+            ? { top: `${(max / span) * 100}%`, height: `${(-gain / span) * 100}%` }
+            : { bottom: `${(-min / span) * 100}%`, height: `${(gain / span) * 100}%` },
+    }))
+
+    const presentRoles = new Set(bars.map(b => b.role))
+    return {
+        bars,
+        roles: baseRoleOrder.value.filter(r => presentRoles.has(r)) as string[],
+        zeroPct: (-min / span) * 100,
+        hasVariants: bars.some(b => b.variant),
+        notes,
+        error: "",
+    }
+})
 
 const allElementValues = computed(() => Object.values(KiokuElement))
 const displayedElements = computed(() => allElementValues.value.filter(el => !hiddenElements.value.includes(el)))
@@ -1056,5 +1324,150 @@ const shareOptionsForGrid = () => ({
 .copy-btn:hover {
     background: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 209, 110, 0.35);
+}
+
+.gain-section {
+    flex-direction: column;
+    align-items: stretch;
+    margin-top: 1rem;
+}
+
+.gain-header {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.gain-desc,
+.gain-empty {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.gain-legend {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 0.9rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.gain-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.gain-legend-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.gain-legend-swatch.striped,
+.gain-col.variant .gain-bar {
+    background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.4) 0 3px, transparent 3px 6px);
+}
+
+.gain-legend-swatch.striped {
+    background-color: var(--muted);
+}
+
+.gain-col.variant .gain-name {
+    font-style: italic;
+}
+
+.gain-scroll {
+    width: 100%;
+    height: 500px;
+    overflow-x: scroll;
+}
+
+.gain-chart {
+    --track-height: 240px;
+    display: flex;
+    align-items: flex-start;
+    width: max-content;
+    margin: 0 auto;
+    padding-top: 3.5rem;
+}
+
+.gain-col {
+    width: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gain-track {
+    position: relative;
+    width: 100%;
+    height: var(--track-height);
+}
+
+.gain-zero {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border-strong);
+}
+
+.gain-bar-wrap {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+}
+
+.gain-bar {
+    width: 100%;
+    height: 100%;
+    min-height: 1px;
+    border-radius: 3px 3px 0 0;
+}
+
+.gain-bar.limited {
+    box-shadow: 0 -2px 0 2px red;
+}
+
+.gain-col:hover .gain-bar {
+    filter: brightness(1.25);
+}
+
+.gain-value {
+    position: absolute;
+    left: 50%;
+    font-size: 0.72rem;
+    white-space: nowrap;
+    color: var(--text);
+}
+
+.gain-bar-wrap .gain-value {
+    bottom: 100%;
+    margin-bottom: 2px;
+    transform: rotate(-45deg);
+    transform-origin: left bottom;
+}
+
+.gain-name {
+    max-width: 11rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 0.35rem;
+    margin-left: 1.1rem;
+    align-self: flex-start;
+    transform: rotate(45deg);
+    transform-origin: top left;
+    font-size: 0.8rem;
+    color: var(--text);
 }
 </style>

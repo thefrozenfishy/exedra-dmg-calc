@@ -17,18 +17,18 @@
 <script lang="ts" setup>
 import { reactive } from 'vue'
 import { useSetting } from '../store/settingsStore'
-import { Aliment } from '../types/enums';
+import { Ailment } from '../types/enums';
 
 const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1).toLowerCase()
 
 const aliments = reactive([
-  { name: Aliment.BURN, display: capitalize(Aliment.BURN), enabled: useSetting("burn-enabled", true) },
-  { name: Aliment.WEAKNESS, display: capitalize(Aliment.WEAKNESS), enabled: useSetting("weakness-enabled", true) },
-  { name: Aliment.POISON, display: capitalize(Aliment.POISON), enabled: useSetting("poison-enabled", true) },
-  { name: Aliment.STUN, display: capitalize(Aliment.STUN), enabled: useSetting("stun-enabled", true) },
-  { name: Aliment.CURSE, display: capitalize(Aliment.CURSE), enabled: useSetting("curse-enabled", true) },
-  { name: Aliment.WOUND, display: capitalize(Aliment.WOUND), enabled: useSetting("wound-enabled", true) },
-  { name: Aliment.VORTEX, display: capitalize(Aliment.VORTEX), enabled: useSetting("vortex-enabled", true) },
+  { name: Ailment.BURN, display: capitalize(Ailment.BURN), enabled: useSetting("burn-enabled", true) },
+  { name: Ailment.WEAKNESS, display: capitalize(Ailment.WEAKNESS), enabled: useSetting("weakness-enabled", true) },
+  { name: Ailment.POISON, display: capitalize(Ailment.POISON), enabled: useSetting("poison-enabled", true) },
+  { name: Ailment.STUN, display: capitalize(Ailment.STUN), enabled: useSetting("stun-enabled", true) },
+  { name: Ailment.CURSE, display: capitalize(Ailment.CURSE), enabled: useSetting("curse-enabled", true) },
+  { name: Ailment.WOUND, display: capitalize(Ailment.WOUND), enabled: useSetting("wound-enabled", true) },
+  { name: Ailment.VORTEX, display: capitalize(Ailment.VORTEX), enabled: useSetting("vortex-enabled", true) },
 ])
 
 defineExpose({ aliments })

@@ -1,6 +1,6 @@
 import { Enemy } from "./EnemyTypes";
 import { Character } from "./KiokuTypes";
-import { Aliment, KiokuElement, KiokuRole } from '../types/enums'
+import { Ailment, KiokuElement, KiokuRole } from '../types/enums'
 
 export interface TeamSlot {
     main: Character | undefined
@@ -20,7 +20,7 @@ export interface FindBestTeamOptions {
     onElementExceptions: string[];
     weakElements: KiokuElement[]
     onlyConsiderOnElements: boolean
-    activeAliments: Aliment[]
+    activeAliments: Ailment[]
     deBufferCount: number
     otherCount: number
     minHealer: number

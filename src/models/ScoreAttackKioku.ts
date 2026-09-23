@@ -1,5 +1,6 @@
-import { Aliment } from '../types/enums';
+import { Ailment } from '../types/enums';
 import { ActiveSkill, KiokuArgs, KiokuData, SkillDetail, skillDetailId, SupportIdealPortrait } from '../types/KiokuTypes';
+import { KiokuElement, KiokuRole } from '../types/enums';
 import { passiveDetailsByMstId, skillDetailsByMstId } from '../utils/helpers';
 import { Kioku } from './Kioku';
 
@@ -13,8 +14,26 @@ export class ScoreAttackKioku extends Kioku {
     private debuffMult = 1;
     private debuffTurnBonus = 0;
 
-    constructor(args: KiokuArgs, buffMultReduction = 0, debuffMultReduction = 0) {
+    constructor(
+        args: KiokuArgs,
+        buffMultReduction = 0,
+        debuffMultReduction = 0,
+        targetContext?: { role?: KiokuRole; element?: KiokuElement },
+    ) {
         super(args);
+
+        // Some calculations need to evaluate a Kioku's support effects against a
+        // synthetic role/element without pretending that the underlying character
+        // actually has that role/element. This is primarily used by the Kioku Grid
+        // support-value chart, where Lux Magica is used for every test context.
+        if (targetContext) {
+            this.data = {
+                ...this.data,
+                role: targetContext.role as KiokuData["role"],
+                element: targetContext.element as KiokuData["element"],
+            };
+        }
+
         this.buffMult -= buffMultReduction / 100;
         this.debuffMult -= debuffMultReduction / 100;
 
@@ -86,7 +105,7 @@ export class ScoreAttackKioku extends Kioku {
 
             if (e.abilityEffectType === "ADDITIONAL_DAMAGE") {
                 this.idealSupportPortrait = SupportIdealPortrait.ADD_DMG;
-            } else if (dotType !== Aliment.WEAKNESS && Object.values(Aliment).includes(dotType as Aliment)) {
+            } else if (dotType !== Ailment.WEAKNESS && Object.values(Ailment).includes(dotType as Ailment)) {
                 this.idealSupportPortrait = SupportIdealPortrait.DOT_APPLIER;
             }
         });

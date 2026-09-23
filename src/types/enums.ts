@@ -7,7 +7,7 @@ export enum KiokuElement {
     Void = "Void"
 }
 
-export enum Aliment {
+export enum Ailment {
     BURN = "BURN",
     CURSE = "CURSE",
     POISON = "POISON",
@@ -17,13 +17,13 @@ export enum Aliment {
     WOUND = "BLEED",
 }
 
-export const elementAlimentMap: Record<KiokuElement, Aliment> = {
-    [KiokuElement.Flame]: Aliment.BURN,
-    [KiokuElement.Aqua]: Aliment.WEAKNESS,
-    [KiokuElement.Forest]: Aliment.POISON,
-    [KiokuElement.Light]: Aliment.STUN,
-    [KiokuElement.Dark]: Aliment.CURSE,
-    [KiokuElement.Void]: Aliment.WOUND,
+export const elementAlimentMap: Record<KiokuElement, Ailment> = {
+    [KiokuElement.Flame]: Ailment.BURN,
+    [KiokuElement.Aqua]: Ailment.WEAKNESS,
+    [KiokuElement.Forest]: Ailment.POISON,
+    [KiokuElement.Light]: Ailment.STUN,
+    [KiokuElement.Dark]: Ailment.CURSE,
+    [KiokuElement.Void]: Ailment.WOUND,
 };
 
 export enum KiokuRole {

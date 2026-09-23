@@ -4,7 +4,7 @@ import { ScoreAttackTeam } from "./ScoreAttackTeam";
 import { portraitsBestOnly, Character, getBestCrystalises, KiokuConstants, getEX, SupportIdealPortrait, KiokuArgs, CrystalisData } from "../types/KiokuTypes";
 import { ScoreAttackKioku } from "./ScoreAttackKioku";
 import { Enemy } from "../types/EnemyTypes";
-import { KiokuElement, KiokuRole, SupportKey, Aliment } from "../types/enums";
+import { KiokuElement, KiokuRole, SupportKey, Ailment } from "../types/enums";
 import { crystalises } from "../utils/helpers";
 
 const cache = new Map<string, ScoreAttackKioku>();
@@ -562,7 +562,7 @@ export interface FindBestAttackerLoadoutOptions {
     otherMembers: AttackerLoadoutMember[]
     enemies: Enemy[]
     attackerHealth: number
-    activeAliments: Aliment[]
+    activeAliments: Ailment[]
     arenaEffectsMap: Record<string, number>
     buffMultReduction: number
     debuffMultReduction: number
