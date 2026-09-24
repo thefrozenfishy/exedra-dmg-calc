@@ -501,8 +501,8 @@ const fightMode = useSetting<FightMode>("fightMode", "aoe")
 const fightModeIndex = computed(() => fightModeOptions.findIndex(opt => opt.value === fightMode.value))
 
 const metricOptions = [
-    { value: false, label: "Max Damage", title: "Show the max dmg increase" },
-    { value: true, label: "Average Damage", title: "Show the average dmg instead of the max dmg" },
+    { value: false, label: "Max Burst", title: "Calculates the dmg difference if all hits crit" },
+    { value: true, label: "Average Burst", title: "Calculates the dmg difference using the average crit rate" },
 ] as const
 const metricIndex = computed(() => metricOptions.findIndex(opt => opt.value === barGraphAverageDmg.value))
 
