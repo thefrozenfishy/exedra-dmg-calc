@@ -258,13 +258,75 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="activeBarTip" class="gain-tip" :class="{ below: activeBarTip.below }"
-                    :style="{ left: `${activeBarTip.x}px`, top: `${activeBarTip.y}px` }" @click.stop="closeBarTip">
-                    {{ activeBarTip.text }}
-                </div>
                 <p v-for="note in gainChart.notes" :key="note" class="gain-desc">{{ note }}</p>
             </template>
         </section>
+
+        <section class="card gain-section">
+            <div class="gain-header filters-heading">Attacker strength compared to Lux</div>
+            <p class="gain-desc">Damage each character deals as the attacker, compared to {{ LuxMagica }} in the same
+                spot. {{ LuxMagica }} is the 0% line; -50% means half of her damage.</p>
+            <p class="gain-desc">Every character uses their own element and role, has no other buffs and is supported by
+                four {{ LuxMagica }}. All characters are A5 and max level.</p>
+            <p class="gain-desc">One enemy with 3000 def is used as basis for dmg calculation.</p>
+            <p class="gain-desc">Bars that only apply under some circumstances, such as a certain ailment being
+                active on the enemy or one-time buffs being left out, are dashed. Each is compared to
+                {{ LuxMagica }} under those same circumstances.</p>
+
+            <div style="width: fit-content; margin: 0 auto;">
+                <label class="filter-chip" :class="{ active: barGraphAverageDmg }">
+                    <input type="checkbox" v-model="barGraphAverageDmg" /> Display average dmg instead of max dmg
+                </label>
+
+                <label class="filter-chip" :class="{ active: enemiesAreAoe }">
+                    <input type="checkbox" v-model="enemiesAreAoe" /> Calculate using AoE instead of ST fight
+                </label>
+            </div>
+            <p v-if="attackerChart.error" class="gain-empty">{{ attackerChart.error }}</p>
+            <p v-else-if="attackerLoading && !attackerChart.bars.length" class="gain-empty">Calculating…</p>
+            <p v-else-if="!attackerChart.bars.length" class="gain-empty">No characters to show with the current
+                filters.</p>
+            <template v-else>
+                <div class="gain-legend">
+                    <span v-for="role in attackerChart.roles" :key="role" class="gain-legend-item">
+                        <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{ role }}
+                    </span>
+                </div>
+                <div class="gain-scroll">
+                    <div class="gain-chart">
+                        <div v-for="bar in attackerChart.bars" :key="bar.id" class="gain-col"
+                            :class="{ variant: bar.variant, active: activeBarTip?.id === bar.id }"
+                            :title="activeBarTip?.id === bar.id ? undefined : bar.title"
+                            @click.stop="toggleBarTip(bar, $event)">
+                            <div class="gain-track">
+                                <div class="gain-zero" :style="{ bottom: `${attackerChart.zeroPct}%` }"></div>
+                                <div class="gain-bar-wrap" :style="bar.style">
+                                    <div class="gain-bar" :style="{ backgroundColor: roleColor(bar.role) }">
+                                    </div>
+                                    <span class="gain-value">{{ bar.label }}</span>
+                                </div>
+                            </div>
+                            <div class="gain-name" :title="bar.name">
+                                <img class="gain-char-icon" :class="bar._borderClass"
+                                    :src="`/exedra-dmg-calc/kioku_images/${bar.charId}_thumbnail.png`"
+                                    :alt="bar.name" />
+
+                                <div v-if="bar.tags.length" class="gain-tag-icons">
+                                    <img v-for="tag in bar.tags" :key="`${tag.kind}:${tag.value}`" class="gain-tag-icon"
+                                        :src="tag.icon" :alt="tag.value" :title="tag.value" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p v-for="note in attackerChart.notes" :key="note" class="gain-desc">{{ note }}</p>
+            </template>
+        </section>
+
+        <div v-if="activeBarTip" class="gain-tip" :class="{ below: activeBarTip.below }"
+            :style="{ left: `${activeBarTip.x}px`, top: `${activeBarTip.y}px` }" @click.stop="closeBarTip">
+            {{ activeBarTip.text }}
+        </div>
     </div>
 </template>
 
@@ -408,6 +470,7 @@ const splitBreakerRange = useSetting("splitBreakerRange", true)
 const splitDebufferRange = useSetting("splitDebufferRange", true)
 const displayArchetypes = useSetting("displayArchetypes", true)
 const barGraphAverageDmg = useSetting("barGraphAverageDmg", false)
+const enemiesAreAoe = useSetting("calculateUsingAoe", true)
 
 type VirtualRole = string
 
@@ -651,13 +714,13 @@ interface DealerGain {
 
 const dealerLabel = (d: Dealer) => `${d.char.name}${d.tags.length ? ` (${d.tags.map(t => t.value).join("/")})` : ""}`
 
-const exampleEnemies = [
-    { name: 'Left Other', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
-    { name: 'Left Proximity', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+const exampleEnemies =  computed(() => [
+    { name: 'Left Other', maxBreak: 500, defense: 3000, enabled: enemiesAreAoe.value, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+    { name: 'Left Proximity', maxBreak: 500, defense: 3000, enabled: enemiesAreAoe.value, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
     { name: 'Target', maxBreak: 500, defense: 3000, enabled: true, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 1 },
-    { name: 'Right Proximity', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
-    { name: 'Right Other', maxBreak: 500, defense: 3000, enabled: false, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
-] as Enemy[]
+    { name: 'Right Proximity', maxBreak: 500, defense: 3000, enabled: enemiesAreAoe.value, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+    { name: 'Right Other', maxBreak: 500, defense: 3000, enabled: enemiesAreAoe.value, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+] as Enemy[])
 
 const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1).toLowerCase()
 
@@ -725,12 +788,19 @@ interface SupportGainEntry {
     avg: CharGainResult
 }
 
+// Same shape, but for the attacker chart: `gain` is the dmg the character deals as the
+// attacker compared to Lux in the same spot (0% = as much as Lux).
+type AttackerGainEntry = SupportGainEntry
+
 const fmt = (g: number) =>
     `${g > 0 ? "+" : ""}${g.toFixed(1)}%`
 
-const makeBarTitle = (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">) => [
-    `Avg dmg increase: ${fmt(row.avgGain)}`,
-    `Max dmg increase: ${fmt(row.maxGain)}`,
+const makeBarTitle = (
+    row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">,
+    label = "dmg increase",
+) => [
+    `Avg ${label}: ${fmt(row.avgGain)}`,
+    `Max ${label}: ${fmt(row.maxGain)}`,
     `Crit rate: ${row.critRate}%`,
 ].join("\n")
 
@@ -755,7 +825,7 @@ const calculateDmg = (
         new Set(),
         new Map(),
         noConsume,
-    ).calculate_max_dmg(exampleEnemies, 0)
+    ).calculate_max_dmg(exampleEnemies.value, 0)
 
     return { max, avg, critRate }
 }
@@ -883,6 +953,10 @@ const gainLoading = ref(false)
 const gainProgress = ref(0)
 let gainRun = 0
 
+const attackerResults = shallowRef<AttackerGainEntry[]>([])
+const attackerStatus = shallowRef({ error: "", notes: [] as string[] })
+const attackerLoading = ref(false)
+
 const SLICE_MS = 12
 
 const yieldToMain = (): Promise<void> => {
@@ -892,12 +966,116 @@ const yieldToMain = (): Promise<void> => {
         : new Promise<void>(resolve => setTimeout(resolve, 0))
 }
 
+// Attacker chart: every character is put in the attacker slot with four Lux as supports and
+// compared to Lux in the same setup. Element and role are the character's own, so the only thing
+// varied is which ailment is active on the enemy and whether one-time buffs are excluded.
+// Cheap (one calc per character per context),
+// so it runs before the support chart and shows up first.
+const attackerContexts: DealerContext[] = [
+    makeContext(),
+    makeContext(undefined, undefined, undefined, true),
+    ...Object.values(Ailment).flatMap(ailment => [
+        makeContext(undefined, undefined, ailment),
+        makeContext(undefined, undefined, ailment, true),
+    ]),
+]
+
+// Returns false if a newer run superseded this one and the caller should bail out.
+const computeAttackerGains = async (
+    lux: Character,
+    filler: ScoreAttackKioku,
+    shouldStop: () => Promise<boolean>,
+): Promise<boolean> => {
+    const supports = [filler, filler, filler, filler]
+    const luxDps = toKioku(prepareForChart(lux))
+
+    const finishAttacker = (results: AttackerGainEntry[], error = "", notes: string[] = []) => {
+        attackerResults.value = results
+        attackerStatus.value = { error, notes }
+        attackerLoading.value = false
+    }
+
+    // Lux's own dmg in each ailment context is what everyone is compared against.
+    // (Reusing the `Dealer` shape here: "dealer" is the reference Lux, `baseline` its dmg.)
+    const references: Dealer[] = []
+
+    for (const context of attackerContexts) {
+        if (await shouldStop()) return false
+
+        try {
+            const baseline = calculateDmg(luxDps, supports, context.ailment, context.noConsume)
+
+            if (baseline.max > 0 || baseline.avg > 0) {
+                references.push({ char: lux, context, tags: context.tags, dps: luxDps, baseline })
+            }
+        } catch (err) {
+            console.error(
+                `Attacker chart: failed to calculate Lux Magica in ${context.tags.map(t => t.value).join("/") || "none"}:`,
+                err,
+            )
+        }
+    }
+
+    if (!references.some(r => contextKey(r.context) === NONE_CONTEXT_KEY)) {
+        finishAttacker([], "No Lux Magica baseline could be calculated.")
+        return true
+    }
+
+    const chars = markedCharacters.value.filter(c => c.name !== LuxMagica)
+    const results: AttackerGainEntry[] = []
+    let failed = 0
+
+    for (const ch of chars) {
+        try {
+            const dps = toKioku(prepareForChart(ch))
+            const gains: DealerGain[] = []
+
+            for (const reference of references) {
+                if (await shouldStop()) return false
+
+                try {
+                    const result = calculateDmg(dps, supports, reference.context.ailment, reference.context.noConsume)
+
+                    gains.push({
+                        dealer: reference,
+                        result,
+                        maxGain: pctGain(result.max, reference.baseline.max),
+                        avgGain: pctGain(result.avg, reference.baseline.avg),
+                    })
+                } catch (err) {
+                    failed++
+
+                    console.warn(
+                        `Attacker chart: failed to calculate ${ch.name} in ${dealerLabel(reference)}:`,
+                        err,
+                    )
+                }
+            }
+
+            if (!gains.length) continue
+
+            const max = buildCharGainResult(ch, gains, "max")
+            const avg = buildCharGainResult(ch, gains, "avg")
+
+            if (max && avg) results.push({ ch, max, avg })
+        } catch (err) {
+            failed++
+
+            console.warn(`Attacker chart: failed to calculate ${ch.name}:`, err)
+        }
+    }
+
+    finishAttacker(results, "", failed ? [`${failed} calculation(s) failed (see console).`] : [])
+    return true
+}
+
 const computeGains = async () => {
     const run = ++gainRun
     const cancelled = () => run !== gainRun
 
     gainLoading.value = true
     gainProgress.value = 0
+    attackerLoading.value = true
 
     // Let the browser paint/handle input before starting any heavy work.
     await yieldToMain()
@@ -924,7 +1102,11 @@ const computeGains = async () => {
     const lux = store.characters.find(c => c.name === LuxMagica)
 
     if (!lux) {
-        finish([], `${LuxMagica} was not found in your roster.`)
+        const error = `${LuxMagica} was not found in your roster.`
+        attackerResults.value = []
+        attackerStatus.value = { error, notes: [] }
+        attackerLoading.value = false
+        finish([], error)
         return
     }
 
@@ -932,6 +1114,8 @@ const computeGains = async () => {
         prepareForChart(lux),
         { role: undefined, element: undefined },
     )
+
+    if (!(await computeAttackerGains(lux, filler, shouldStop))) return
 
     const dealers: Dealer[] = []
 
@@ -1041,45 +1225,22 @@ onBeforeUnmount(() => {
 
 // --- Cheap part: runs on every filter change --------------------------------------------
 
-const gainChart = computed(() => {
-    const empty = {
-        bars: [] as any[],
-        roles: [] as string[],
-        zeroPct: 0,
-        hasVariants: false,
-        notes: [] as string[],
-        error: "",
-    }
+// Turns rows of { character, tags, gain } into everything the bar chart template needs.
+// Negative gains are drawn below the zero line.
+const buildBarChart = (
+    rows: GainRow[],
+    { idPrefix = "", titleLabel = "dmg increase" }: { idPrefix?: string; titleLabel?: string } = {},
+) => {
+    const sorted = [...rows].sort((a, b) => a.gain - b.gain)
 
-    const { error, notes } = gainStatus.value
-
-    if (error) return { ...empty, notes, error }
-
-    const metric: Metric = barGraphAverageDmg.value ? "avg" : "max"
-    const visibleIds = new Set(allChars.value.map(c => c.id))
-
-    const picked = gainResults.value
-        .filter(entry => visibleIds.has(entry.ch.id))
-        .map(entry => entry[metric])
-
-    const rows = [
-        ...picked
-            .map(r => r.main)
-            .filter(m => m.gain > 1),
-
-        ...picked
-            .flatMap(r => r.variants)
-            .filter(v => v.gain > 1),
-    ].sort((a, b) => a.gain - b.gain)
-
-    const gains = rows.map(r => r.gain)
+    const gains = sorted.map(r => r.gain)
 
     const max = Math.max(0, ...gains)
     const min = Math.min(0, ...gains)
     const span = max - min || 1
 
-    const bars = rows.map(({ ch, tags, gain, maxGain, avgGain, critRate }) => ({
-        id: `${ch.id}:${tags.map(t => `${t.kind}-${t.value}`).join("|") || "none"}`,
+    const bars = sorted.map(({ ch, tags, gain, maxGain, avgGain, critRate }) => ({
+        id: `${idPrefix}${ch.id}:${tags.map(t => `${t.kind}-${t.value}`).join("|") || "none"}`,
 
         name: tags.length
             ? `${ch.name} (${tags.map(t => t.value).join("/")})`
@@ -1095,7 +1256,7 @@ const gainChart = computed(() => {
         gain,
         variant: tags.length > 0,
         label: fmt(gain),
-        title: makeBarTitle({ avgGain, maxGain, critRate }),
+        title: makeBarTitle({ avgGain, maxGain, critRate }, titleLabel),
 
         style: gain < 0
             ? {
@@ -1115,6 +1276,62 @@ const gainChart = computed(() => {
         roles: baseRoleOrder.value.filter(r => presentRoles.has(r)) as string[],
         zeroPct: (-min / span) * 100,
         hasVariants: bars.some(b => b.variant),
+    }
+}
+
+const emptyBarChart = () => ({
+    bars: [] as ReturnType<typeof buildBarChart>["bars"],
+    roles: [] as string[],
+    zeroPct: 0,
+    hasVariants: false,
+})
+
+const gainChart = computed(() => {
+    const { error, notes } = gainStatus.value
+
+    if (error) return { ...emptyBarChart(), notes, error }
+
+    const metric: Metric = barGraphAverageDmg.value ? "avg" : "max"
+    const visibleIds = new Set(allChars.value.map(c => c.id))
+
+    const picked = gainResults.value
+        .filter(entry => visibleIds.has(entry.ch.id))
+        .map(entry => entry[metric])
+
+    const rows = [
+        ...picked
+            .map(r => r.main)
+            .filter(m => m.gain > 1),
+
+        ...picked
+            .flatMap(r => r.variants)
+            .filter(v => v.gain > 1),
+    ]
+
+    return { ...buildBarChart(rows), notes, error: "" }
+})
+
+// Unlike the support chart, negative values are meaningful here (weaker than Lux), so nothing is
+// filtered out by gain. Use the role/element filters to narrow it down.
+const attackerChart = computed(() => {
+    const { error, notes } = attackerStatus.value
+
+    if (error) return { ...emptyBarChart(), notes, error }
+
+    const metric: Metric = barGraphAverageDmg.value ? "avg" : "max"
+    const visibleIds = new Set(allChars.value.map(c => c.id))
+
+    const picked = attackerResults.value
+        .filter(entry => visibleIds.has(entry.ch.id))
+        .map(entry => entry[metric])
+
+    const rows = [
+        ...picked.map(r => r.main),
+        ...picked.flatMap(r => r.variants),
+    ]
+
+    return {
+        ...buildBarChart(rows, { idPrefix: "attacker:", titleLabel: "dmg vs Lux" }),
         notes,
         error: "",
     }
@@ -1261,7 +1478,7 @@ const shareOptionsForGrid = () => ({
     backUrl: window.location.href,
 })
 
-watch(markedCharacters, computeGains, { immediate: true })
+watch([markedCharacters, enemiesAreAoe], computeGains, { immediate: true })
 </script>
 
 <style scoped>
