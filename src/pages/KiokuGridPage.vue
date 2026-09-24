@@ -268,19 +268,24 @@
                 spot. {{ LuxMagica }} is the 0% line; -50% means half of her damage.</p>
             <p class="gain-desc">Every character uses their own element and role, has no other buffs and is supported by
                 four {{ LuxMagica }}. All characters are A5 and max level.</p>
-            <p class="gain-desc">One enemy with 3000 def is used as basis for dmg calculation.</p>
-            <p class="gain-desc">Bars that only apply under some circumstances, such as a certain ailment being
-                active on the enemy or one-time buffs being left out, are dashed. Each is compared to
-                {{ LuxMagica }} under those same circumstances.</p>
+            <p class="gain-desc">{{ fightMode === 'st' ? 'One enemy' : fightMode === 'aoe' ? 'Five enemies' : 'Three enemies'}} with 3000 def is used as basis for dmg calculation.</p>
 
-            <div style="width: fit-content; margin: 0 auto;">
+            <div style="width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem;">
                 <label class="filter-chip" :class="{ active: barGraphAverageDmg }">
                     <input type="checkbox" v-model="barGraphAverageDmg" /> Display average dmg instead of max dmg
                 </label>
 
-                <label class="filter-chip" :class="{ active: enemiesAreAoe }">
-                    <input type="checkbox" v-model="enemiesAreAoe" /> Calculate using AoE instead of ST fight
-                </label>
+                <div class="fight-mode-row">
+                    <span class="fight-mode-label">Fight type</span>
+                    <div class="fight-mode-toggle" role="radiogroup" aria-label="Fight type">
+                        <div class="fight-mode-highlight" :style="{ transform: `translateX(${fightModeIndex * 100}%)` }"></div>
+                        <button v-for="opt in fightModeOptions" :key="opt.value" type="button" class="fight-mode-option"
+                            :class="{ active: fightMode === opt.value }" :title="opt.title"
+                            @click="fightMode = opt.value">
+                            {{ opt.label }}
+                        </button>
+                    </div>
+                </div>
             </div>
             <p v-if="attackerChart.error" class="gain-empty">{{ attackerChart.error }}</p>
             <p v-else-if="attackerLoading && !attackerChart.bars.length" class="gain-empty">Calculating…</p>
@@ -470,7 +475,15 @@ const splitBreakerRange = useSetting("splitBreakerRange", true)
 const splitDebufferRange = useSetting("splitDebufferRange", true)
 const displayArchetypes = useSetting("displayArchetypes", true)
 const barGraphAverageDmg = useSetting("barGraphAverageDmg", false)
-const enemiesAreAoe = useSetting("calculateUsingAoe", true)
+
+const fightModeOptions = [
+    { value: "st", label: "ST", title: "Single target — only the center enemy takes damage" },
+    { value: "prox", label: "Prox", title: "Proximity — the center enemy and its two neighbors take damage" },
+    { value: "aoe", label: "AoE", title: "Area of effect — all five enemies take damage" },
+] as const
+type FightMode = typeof fightModeOptions[number]["value"]
+const fightMode = useSetting<FightMode>("fightMode", "aoe")
+const fightModeIndex = computed(() => fightModeOptions.findIndex(opt => opt.value === fightMode.value))
 
 type VirtualRole = string
 
@@ -714,13 +727,17 @@ interface DealerGain {
 
 const dealerLabel = (d: Dealer) => `${d.char.name}${d.tags.length ? ` (${d.tags.map(t => t.value).join("/")})` : ""}`
 
-const exampleEnemies =  computed(() => [
-    { name: 'Left Other', maxBreak: 500, defense: 3000, enabled: enemiesAreAoe.value, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
-    { name: 'Left Proximity', maxBreak: 500, defense: 3000, enabled: enemiesAreAoe.value, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
-    { name: 'Target', maxBreak: 500, defense: 3000, enabled: true, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 1 },
-    { name: 'Right Proximity', maxBreak: 500, defense: 3000, enabled: enemiesAreAoe.value, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
-    { name: 'Right Other', maxBreak: 500, defense: 3000, enabled: enemiesAreAoe.value, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
-] as Enemy[])
+const exampleEnemies = computed(() => {
+    const outerEnabled = fightMode.value === "aoe"
+    const proxEnabled = fightMode.value === "aoe" || fightMode.value === "prox"
+    return [
+        { name: 'Left Other', maxBreak: 500, defense: 3000, enabled: outerEnabled, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+        { name: 'Left Proximity', maxBreak: 500, defense: 3000, enabled: proxEnabled, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+        { name: 'Target', maxBreak: 500, defense: 3000, enabled: true, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 1 },
+        { name: 'Right Proximity', maxBreak: 500, defense: 3000, enabled: proxEnabled, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+        { name: 'Right Other', maxBreak: 500, defense: 3000, enabled: outerEnabled, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
+    ] as Enemy[]
+})
 
 const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1).toLowerCase()
 
@@ -1478,7 +1495,7 @@ const shareOptionsForGrid = () => ({
     backUrl: window.location.href,
 })
 
-watch([markedCharacters, enemiesAreAoe], computeGains, { immediate: true })
+watch([markedCharacters, fightMode], computeGains, { immediate: true })
 </script>
 
 <style scoped>
@@ -1555,6 +1572,59 @@ watch([markedCharacters, enemiesAreAoe], computeGains, { immediate: true })
 .filter-chip.disabled {
     opacity: 0.5;
     cursor: default;
+}
+
+.fight-mode-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.fight-mode-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.fight-mode-toggle {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 3px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--panel);
+}
+
+.fight-mode-highlight {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: calc((100% - 6px) / 3);
+    border-radius: 16px;
+    background: var(--accent-glow);
+    border: 1px solid var(--border-strong);
+    transition: transform 0.2s ease;
+    z-index: 0;
+}
+
+.fight-mode-option {
+    position: relative;
+    z-index: 1;
+    padding: 0.2rem 0.9rem;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-family: inherit;
+    cursor: pointer;
+    border-radius: 16px;
+    transition: color 0.12s;
+    white-space: nowrap;
+}
+
+.fight-mode-option.active {
+    color: var(--accent);
 }
 
 .axis-row {
