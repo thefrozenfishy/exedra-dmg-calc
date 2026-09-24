@@ -59,6 +59,23 @@ export const LuxMagica = "Lux☆Magica"
 
 export const maxPlayerLevel = 160
 
+export const ELEM_WILDCARD = 'ELEM_WILDCARD'
+export const EX_CRYS = 'EX'
+
+const default_wanted_crys = [EX_CRYS, "Heroic Grace++",]
+const support_wanted_crys = ["Focused Guard++", "Indomitable Guard++", "Mana Infusion++", "Quickstep++",]
+const attack__wanted_crys = [ELEM_WILDCARD, "Dominant Blow++", "Mighty Hit++", "Mighty Hit++", "Direct Hit++", "Towering Offense++",]
+
+export const IMPORTANT_CRYS: Record<KiokuRole, string[]> = {
+    [KiokuRole.Attacker]: [...default_wanted_crys, ...attack__wanted_crys],
+    [KiokuRole.Breaker]: [...default_wanted_crys, ...support_wanted_crys,],
+    [KiokuRole.Healer]: [...default_wanted_crys, ...support_wanted_crys,],
+    [KiokuRole.Buffer]: [...default_wanted_crys, ...support_wanted_crys,],
+    [KiokuRole.Debuffer]: [...default_wanted_crys, ...attack__wanted_crys],
+    [KiokuRole.Defender]: [...default_wanted_crys, ...support_wanted_crys, "Towering Bulwark++",],
+}
+
+
 export const scoreAttackRelevantBuffsAndDebuffs = {
     ADDITIONAL_DAMAGE: "Additional DMG",
     DWN_DEF_ACCUM_RATIO: "Accumulated DEFf%-",
@@ -66,7 +83,7 @@ export const scoreAttackRelevantBuffsAndDebuffs = {
     DWN_ELEMENT_RESIST_ACCUM_RATIO: "Accumulated Elemental Resistance-",
     DWN_ELEMENT_RESIST_RATIO: "Elemental Resistance-",
     FLAT_ATK: "Flat ATK",
-    RCV_FINAL_DAMAGE: "RCV_FINAL_DAMAGE", 
+    RCV_FINAL_DAMAGE: "RCV_FINAL_DAMAGE",
     UP_AIM_RCV_DMG_RATIO: "Element Specific DMG Taken%+",
     UP_ATK_ACCUM_RATIO: "Accumulated ATK%+",
     UP_ATK_CONSUME_RATIO: "One Turn ATK%+",
@@ -161,7 +178,7 @@ export const otherBuffsAndDebuffs = {
     UNIQUE_BUFF: "UNIQUE_BUFF",
     UNIQUE_DEBUFF_ACCUM: "UNIQUE_DEBUFF_ACCUM",
     UNIQUE_DEBUFF: "UNIQUE_DEBUFF",
-    UNIQUE_ELEMENT_STACK: "UNIQUE_ELEMENT_STACK", 
+    UNIQUE_ELEMENT_STACK: "UNIQUE_ELEMENT_STACK",
     UNIQUE_ZONE: "UNIQUE_ZONE",
     UP_ABNORMAL_HIT_RATE_RATIO: "Ailment Hit Rate",
     UP_ABNORMAL_PARRY_RATE_RATIO: "Ailment Dodge Rate",

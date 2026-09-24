@@ -1,8 +1,8 @@
 <template>
     <div class="character-crys-row" :class="{ completed: row.completed }" @click="emit('select', row.char)">
         <div class="character-crys-header">
-            <img :src="`/exedra-dmg-calc/kioku_images/${row.char.id}_thumbnail.png`"
-                class="character-icon-lg" :title="row.char.name" />
+            <img :src="`/exedra-dmg-calc/kioku_images/${row.char.id}_thumbnail.png`" class="character-icon-lg"
+                :title="row.char.name" />
             <span class="crys-count-badge">{{ row.ownedCrysCount }} / {{ row.totalCrysCount }}</span>
             <span class="character-crys-name">{{ row.char.name }}</span>
             <span class="character-crys-name">{{ row.char.character_en }}</span>
@@ -12,9 +12,10 @@
             <div class="off-element-grid"
                 :style="{ flexGrow: offCols, gridTemplateColumns: `repeat(${offCols}, minmax(0, 1fr))` }">
                 <div v-for="c in row.offElementCrys" :key="c.selectionAbilityMstId" class="mini-crys"
-                    :class="{ owned: c.enabled }" :title="c.name">
-                    <img :src="`/exedra-dmg-calc/selection_ability/${c.resourceIconName}.png`"
-                        :alt="c.name" class="mini-crys-img" />
+                    :class="{ owned: c.enabled, important: row.importantIds.has(c.selectionAbilityMstId) }"
+                    :title="c.name">
+                    <img :src="`/exedra-dmg-calc/selection_ability/${c.resourceIconName}.png`" :alt="c.name"
+                        class="mini-crys-img" />
                 </div>
             </div>
 
@@ -22,8 +23,10 @@
                 :style="{ flexGrow: elemCols, gridTemplateColumns: `repeat(${elemCols}, minmax(0, 1fr))` }">
                 <template v-for="slot in row.elementalSlots" :key="slot.elem">
                     <div v-if="showOffElementalOnes || slot.isOwnElement" class="mini-crys elemental"
-                        :class="{ owned: slot.owned, offElement: !slot.isOwnElement }" :title="slot.elem">
-                        <img v-if="slot.crys" :src="`/exedra-dmg-calc/selection_ability/${slot.crys.resourceIconName}.png`"
+                        :class="{ owned: slot.owned, offElement: !slot.isOwnElement, important: !!slot.crys && row.importantIds.has(slot.crys.selectionAbilityMstId) }"
+                        :title="slot.elem">
+                        <img v-if="slot.crys"
+                            :src="`/exedra-dmg-calc/selection_ability/${slot.crys.resourceIconName}.png`"
                             :alt="slot.elem" class="mini-crys-img" />
                         <img v-else :src="`/exedra-dmg-calc/elements/${slot.elem}.png`" :alt="slot.elem"
                             class="mini-crys-img placeholder-icon" />
@@ -53,6 +56,8 @@ interface CharacterCrysRowData {
     completed: boolean
     ownedCrysCount: number
     totalCrysCount: number
+    importantIds: Set<number>
+    missingImportant: boolean
 }
 
 const props = defineProps<{
@@ -225,6 +230,11 @@ const elemCols = computed(() => Math.max(1, Math.ceil(visibleElementalCount.valu
 .mini-crys.owned .mini-crys-img {
     opacity: 1;
     filter: none;
+}
+
+.mini-crys.important {
+    border-color: #4ade80;
+    box-shadow: 0 0 0 1px #4ade80;
 }
 
 .mini-crys.elemental.offElement {

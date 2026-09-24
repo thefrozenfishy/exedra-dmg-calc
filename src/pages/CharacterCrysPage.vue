@@ -45,6 +45,10 @@
                 <label class="chip" :class="{ active: hideCompletedCrys }">
                     <input type="checkbox" v-model="hideCompletedCrys" /> Hide completed
                 </label>
+                <label class="chip" :class="{ active: missingImportantFilter }"
+                    title="Only show Kioku missing any of the crys marked with a green border">
+                    <input type="checkbox" v-model="missingImportantFilter" /> Show Only Kioku Missing Important Crys
+                </label>
 
                 <label v-if="showOffElementalOnesOption" class="chip" :class="{ active: showOffElementalOnes }">
                     <input type="checkbox" v-model="showOffElementalOnes" /> Include Off-elemental Crystalis
@@ -123,7 +127,7 @@
 import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { relevantCrys, type Character, type CrystalisData } from '../types/KiokuTypes'
-import { elementMap, KiokuElement } from '../types/enums'
+import { elementMap, KiokuElement, IMPORTANT_CRYS, ELEM_WILDCARD, EX_CRYS } from '../types/enums'
 import CharacterCrysRow from '../components/CharacterCrysRow.vue'
 import { useCharacterStore } from '../store/characterStore'
 import { passiveDetails } from '../utils/helpers'
@@ -167,6 +171,7 @@ const hideCompletedCrys = useSetting("hideCompletedMissingElementCrys", false)
 const missingOwnElementalFilter = useSetting<boolean | null>("missingElementHasOwnFilter", null)
 const elementCrysFilter = useSetting<KiokuElement[]>("missingElementCrysFilter", [])
 const sortMode = useSetting<"element" | "crysCount">("missingElementSortMode", "element")
+const missingImportantFilter = useSetting("missingImportantCrysFilter", false)
 const showOffElementalOnesOption = computed(() => store.characters.some(char => {
     if (!char.enabled) return false
     return Object.values(char.crysOptions).every((c) => c.enabled == null || c.enabled)
@@ -177,7 +182,7 @@ const rosterCharacterCrysRows = computed(() => {
         .filter(char => {
             if (!char.enabled) return false
             if (char.rarity === 3 && !show3stars.value) return false
-            if ((char.rarity === 4 ) && !show4stars.value) return false
+            if ((char.rarity === 4) && !show4stars.value) return false
 
             const query = charNameFilter.value.trim().toLowerCase()
             if (query) {
@@ -223,7 +228,19 @@ const rosterCharacterCrysRows = computed(() => {
             const ownedCrysCount = countedCrys.filter(c => c.enabled).length
             const totalCrysCount = countedCrys.length
 
-            return { char, offElementCrys, elementalSlots, completed, ownedCrysCount, totalCrysCount }
+            const wanted = new Set((IMPORTANT_CRYS[char.role] ?? []).map(n => n.toLowerCase()))
+            const wantsElem = wanted.has(ELEM_WILDCARD.toLowerCase())
+            const wantsEX = wanted.has(EX_CRYS.toLowerCase())
+
+            const importantCrys = countedCrys.filter(c =>
+                wanted.has(c.name.toLowerCase())
+                || (wantsElem && getCrysElement(c) === char.element)
+                || (wantsEX && c.styleMstId)
+            )
+            const importantIds = new Set(importantCrys.map(c => c.selectionAbilityMstId))
+            const missingImportant = importantCrys.some(c => !c.enabled)
+
+            return { char, offElementCrys, elementalSlots, completed, ownedCrysCount, totalCrysCount, importantIds, missingImportant }
         })
 })
 
@@ -231,6 +248,7 @@ const characterCrysRows = computed(() => {
     return rosterCharacterCrysRows.value
         .filter(row => {
             if (hideCompletedCrys.value && row.completed) return false
+            if (missingImportantFilter.value && !row.missingImportant) return false
 
             if (!showOffElementalOnes.value && missingOwnElementalFilter.value !== null) {
                 const ownSlot = row.elementalSlots.find(s => s.isOwnElement)
