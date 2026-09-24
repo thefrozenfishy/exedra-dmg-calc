@@ -71,7 +71,7 @@ export const IMPORTANT_CRYS: Record<KiokuRole, string[]> = {
     [KiokuRole.Breaker]: [...default_wanted_crys, ...support_wanted_crys,],
     [KiokuRole.Healer]: [...default_wanted_crys, ...support_wanted_crys,],
     [KiokuRole.Buffer]: [...default_wanted_crys, ...support_wanted_crys,],
-    [KiokuRole.Debuffer]: [...default_wanted_crys, ...attack__wanted_crys],
+    [KiokuRole.Debuffer]: [...default_wanted_crys, ...support_wanted_crys, ...attack__wanted_crys,],
     [KiokuRole.Defender]: [...default_wanted_crys, ...support_wanted_crys, "Towering Bulwark++",],
 }
 
