@@ -220,9 +220,12 @@
                 <input type="checkbox" v-model="barGraphAverageDmg" /> Display average dmg instead of max dmg increase
             </label>
             <p v-if="gainChart.error" class="gain-empty">{{ gainChart.error }}</p>
+            <p v-else-if="gainLoading && !gainChart.bars.length" class="gain-empty">Calculating… {{ gainProgress }}%
+            </p>
             <p v-else-if="!gainChart.bars.length" class="gain-empty">No characters to show with the current filters.
             </p>
             <template v-else>
+                <p v-if="gainLoading" class="gain-desc">Updating… {{ gainProgress }}%</p>
                 <div class="gain-legend">
                     <span v-for="role in gainChart.roles" :key="role" class="gain-legend-item">
                         <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{ role }}
@@ -266,7 +269,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from "vue"
+import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { Character, KiokuConstants, withMaxLevelsForPlayerLevel } from "../types/KiokuTypes"
 import { Ailment, KiokuElement, KiokuRole, LuxMagica } from '../types/enums'
@@ -642,7 +645,6 @@ interface Dealer {
 interface DealerGain {
     dealer: Dealer
     result: DmgResult
-    gain: number
     maxGain: number
     avgGain: number
 }
@@ -698,109 +700,244 @@ const contextKey = (context: DealerContext): string =>
         context.noConsume ?? false,
     ])
 
-const gainChart = computed(() => {
-    const empty = {
-        bars: [] as any[],
-        roles: [] as string[],
-        zeroPct: 0,
-        hasVariants: false,
-        notes: [] as string[],
-        error: "",
+type Metric = "max" | "avg"
+type MarkedChar = (typeof markedCharacters.value)[number]
+
+interface GainRow {
+    ch: MarkedChar
+    tags: DealerTag[]
+    gain: number
+    maxGain: number
+    avgGain: number
+    critRate: string
+}
+
+interface CharGainResult {
+    main: GainRow
+    variants: GainRow[]
+}
+
+// One entry per support character. Both metrics are computed in the same pass, so
+// flipping the "average dmg" toggle is instant and never re-runs the simulation.
+interface SupportGainEntry {
+    ch: MarkedChar
+    max: CharGainResult
+    avg: CharGainResult
+}
+
+const fmt = (g: number) =>
+    `${g > 0 ? "+" : ""}${g.toFixed(1)}%`
+
+const makeBarTitle = (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">) => [
+    `Avg dmg increase: ${fmt(row.avgGain)}`,
+    `Max dmg increase: ${fmt(row.maxGain)}`,
+    `Crit rate: ${row.critRate}%`,
+].join("\n")
+
+const pctGain = (value: number, base: number) => base > 0 ? (value / base - 1) * 100 : 0
+
+const calculateDmg = (
+    dps: ScoreAttackKioku,
+    supports: ScoreAttackKioku[],
+    activeAilment?: Ailment,
+    noConsume = false,
+): DmgResult => {
+    const [max, avg, critRate] = new ScoreAttackTeam(
+        dps,
+        supports,
+        100,
+        activeAilment ? [activeAilment] : [],
+        {},
+        false,
+        new Set(),
+        new Set(),
+        new Map(),
+        new Set(),
+        new Map(),
+        noConsume,
+    ).calculate_max_dmg(exampleEnemies, 0)
+
+    return { max, avg, critRate }
+}
+
+// Static: only depends on the enums, so build it once.
+const dealerContexts: DealerContext[] = [
+    makeContext(),
+    makeContext(undefined, undefined, undefined, true),
+
+    ...Object.values(KiokuElement).flatMap(element => [
+        makeContext(element),
+        makeContext(element, undefined, undefined, true),
+    ]),
+
+    ...Object.values(KiokuRole).flatMap(role => [
+        makeContext(undefined, role),
+        makeContext(undefined, role, undefined, true),
+    ]),
+
+    ...Object.values(Ailment).flatMap(ailment => [
+        makeContext(undefined, undefined, ailment),
+        makeContext(undefined, undefined, ailment, true),
+    ]),
+
+    ...Object.values(KiokuElement).flatMap(element =>
+        Object.values(KiokuRole).flatMap(role => [
+            makeContext(element, role),
+            makeContext(element, role, undefined, true),
+        ])
+    ),
+
+    ...Object.values(KiokuElement).flatMap(element =>
+        Object.values(Ailment).flatMap(ailment => [
+            makeContext(element, undefined, ailment),
+            makeContext(element, undefined, ailment, true),
+        ])
+    ),
+
+    ...Object.values(KiokuRole).flatMap(role =>
+        Object.values(Ailment).flatMap(ailment => [
+            makeContext(undefined, role, ailment),
+            makeContext(undefined, role, ailment, true),
+        ])
+    ),
+
+    ...Object.values(KiokuElement).flatMap(element =>
+        Object.values(KiokuRole).flatMap(role =>
+            Object.values(Ailment).flatMap(ailment => [
+                makeContext(element, role, ailment),
+                makeContext(element, role, ailment, true),
+            ])
+        )
+    ),
+]
+
+const NONE_CONTEXT_KEY = contextKey(makeContext())
+
+const buildCharGainResult = (
+    ch: MarkedChar,
+    gains: DealerGain[],
+    metric: Metric,
+): CharGainResult | null => {
+    const gainOf = (g: DealerGain) => metric === "avg" ? g.avgGain : g.maxGain
+
+    const toRow = (g: DealerGain, tags: DealerTag[]): GainRow => ({
+        ch,
+        tags,
+        gain: gainOf(g),
+        maxGain: g.maxGain,
+        avgGain: g.avgGain,
+        critRate: g.result.critRate,
+    })
+
+    const gainByContext = new Map<string, DealerGain>()
+    for (const g of gains) {
+        gainByContext.set(contextKey(g.dealer.context), g)
+    }
+
+    const noneGain = gainByContext.get(NONE_CONTEXT_KEY)
+    if (!noneGain) return null
+
+    const meaningfulTagsFor = (g: DealerGain): DealerTag[] =>
+        g.dealer.tags.filter(tag => {
+            const reducedContext: DealerContext = {
+                ...g.dealer.context,
+                [tag.kind]: undefined,
+            }
+
+            const reducedGain = gainByContext.get(contextKey(reducedContext))
+
+            if (!reducedGain) return true
+
+            return Math.abs(gainOf(g) - gainOf(reducedGain)) >= 1
+        })
+
+    const variantMap = new Map<string, GainRow>()
+
+    for (const g of gains) {
+        if (g.dealer.tags.length === 0) continue
+        if (Math.abs(gainOf(g) - gainOf(noneGain)) < 1) continue
+
+        const meaningfulTags = meaningfulTagsFor(g)
+        if (!meaningfulTags.length) continue
+
+        const tagKey = meaningfulTags
+            .map(tag => `${tag.kind}:${tag.value}`)
+            .join("|")
+
+        const existing = variantMap.get(tagKey)
+
+        if (!existing || gainOf(g) > existing.gain) {
+            variantMap.set(tagKey, toRow(g, meaningfulTags))
+        }
+    }
+
+    return { main: toRow(noneGain, []), variants: [...variantMap.values()] }
+}
+
+// --- Heavy part: runs in the background, in time-sliced chunks -------------------------
+// It only depends on the roster, NOT on the filters or the avg/max toggle.
+
+const gainResults = shallowRef<SupportGainEntry[]>([])
+const gainStatus = shallowRef({ error: "", notes: [] as string[] })
+const gainLoading = ref(false)
+const gainProgress = ref(0)
+let gainRun = 0
+
+const SLICE_MS = 12
+
+const yieldToMain = (): Promise<void> => {
+    const sched = (globalThis as any).scheduler
+    return typeof sched?.yield === "function"
+        ? sched.yield()
+        : new Promise<void>(resolve => setTimeout(resolve, 0))
+}
+
+const computeGains = async () => {
+    const run = ++gainRun
+    const cancelled = () => run !== gainRun
+
+    gainLoading.value = true
+    gainProgress.value = 0
+
+    // Let the browser paint/handle input before starting any heavy work.
+    await yieldToMain()
+    if (cancelled()) return
+
+    let sliceStart = performance.now()
+    // Yields to the browser when the current slice is used up.
+    // Returns true if a newer run superseded this one and we should bail out.
+    const shouldStop = async (): Promise<boolean> => {
+        if (performance.now() - sliceStart > SLICE_MS) {
+            await yieldToMain()
+            sliceStart = performance.now()
+        }
+        return cancelled()
+    }
+
+    const finish = (results: SupportGainEntry[], error = "", notes: string[] = []) => {
+        gainResults.value = results
+        gainStatus.value = { error, notes }
+        gainProgress.value = 100
+        gainLoading.value = false
     }
 
     const lux = store.characters.find(c => c.name === LuxMagica)
 
     if (!lux) {
-        return { ...empty, error: `${LuxMagica} was not found in your roster.` }
+        finish([], `${LuxMagica} was not found in your roster.`)
+        return
     }
-
-    const calculate_dmg = (
-        dps: ScoreAttackKioku,
-        supports: ScoreAttackKioku[],
-        activeAilment?: Ailment,
-        noConsume = false,
-    ): DmgResult => {
-        const [max, avg, critRate] = new ScoreAttackTeam(
-            dps,
-            supports,
-            100,
-            activeAilment ? [activeAilment] : [],
-            {},
-            false,
-            new Set(),
-            new Set(),
-            new Map(),
-            new Set(),
-            new Map(),
-            noConsume,
-        ).calculate_max_dmg(exampleEnemies, 0)
-
-        return { max, avg, critRate }
-    }
-
-    const selectedDmg = (r: DmgResult) => barGraphAverageDmg.value ? r.avg : r.max
-    const pctGain = (value: number, base: number) => base > 0 ? (value / base - 1) * 100 : 0
-
-    const notes: string[] = []
 
     const filler = toKioku(
         prepareForChart(lux),
         { role: undefined, element: undefined },
     )
 
-    const dealerContexts: DealerContext[] = [
-        makeContext(),
-        makeContext(undefined, undefined, undefined, true),
-
-        ...Object.values(KiokuElement).flatMap(element => [
-            makeContext(element),
-            makeContext(element, undefined, undefined, true),
-        ]),
-
-        ...Object.values(KiokuRole).flatMap(role => [
-            makeContext(undefined, role),
-            makeContext(undefined, role, undefined, true),
-        ]),
-
-        ...Object.values(Ailment).flatMap(ailment => [
-            makeContext(undefined, undefined, ailment),
-            makeContext(undefined, undefined, ailment, true),
-        ]),
-
-        ...Object.values(KiokuElement).flatMap(element =>
-            Object.values(KiokuRole).flatMap(role => [
-                makeContext(element, role),
-                makeContext(element, role, undefined, true),
-            ])
-        ),
-
-        ...Object.values(KiokuElement).flatMap(element =>
-            Object.values(Ailment).flatMap(ailment => [
-                makeContext(element, undefined, ailment),
-                makeContext(element, undefined, ailment, true),
-            ])
-        ),
-
-        ...Object.values(KiokuRole).flatMap(role =>
-            Object.values(Ailment).flatMap(ailment => [
-                makeContext(undefined, role, ailment),
-                makeContext(undefined, role, ailment, true),
-            ])
-        ),
-
-        ...Object.values(KiokuElement).flatMap(element =>
-            Object.values(KiokuRole).flatMap(role =>
-                Object.values(Ailment).flatMap(ailment => [
-                    makeContext(element, role, ailment),
-                    makeContext(element, role, ailment, true),
-                ])
-            )
-        ),
-    ]
-
     const dealers: Dealer[] = []
 
     for (const context of dealerContexts) {
+        if (await shouldStop()) return
+
         try {
             const dps = toKioku(
                 prepareForChart(lux),
@@ -810,14 +947,14 @@ const gainChart = computed(() => {
                 },
             )
 
-            const baseline = calculate_dmg(
+            const baseline = calculateDmg(
                 dps,
                 [filler, filler, filler, filler],
                 context.ailment,
                 context.noConsume,
             )
 
-            if (selectedDmg(baseline) > 0) {
+            if (baseline.max > 0 || baseline.avg > 0) {
                 dealers.push({
                     char: lux,
                     context,
@@ -835,47 +972,26 @@ const gainChart = computed(() => {
     }
 
     if (!dealers.length) {
-        return {
-            ...empty,
-            error: ["No Lux Magica test context could be calculated.", ...notes].join(" "),
-        }
+        finish([], "No Lux Magica test context could be calculated.")
+        return
     }
 
-    interface GainRow {
-        ch: typeof allChars.value[0]
-        tags: DealerTag[]
-        gain: number
-        maxGain: number
-        avgGain: number
-        critRate: string
-    }
-
-    const fmt = (g: number) =>
-        `${g > 0 ? "+" : ""}${g.toFixed(1)}%`
-
-    const makeBarTitle = (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">) => [
-        `Avg dmg increase: ${fmt(row.avgGain)}`,
-        `Max dmg increase: ${fmt(row.maxGain)}`,
-        `Crit rate: ${row.critRate}%`,
-    ].join("\n")
-
-    const results: {
-        main: GainRow
-        variants: GainRow[]
-    }[] = []
-
+    const chars = markedCharacters.value.filter(c => c.name !== LuxMagica)
+    const results: SupportGainEntry[] = []
     let failed = 0
 
-    for (const ch of allChars.value) {
-        if (ch.name === LuxMagica) continue
+    for (const [i, ch] of chars.entries()) {
+        gainProgress.value = Math.round((i / chars.length) * 100)
 
         try {
             const support = toKioku(prepareForChart(ch))
             const gains: DealerGain[] = []
 
             for (const dealer of dealers) {
+                if (await shouldStop()) return
+
                 try {
-                    const result = calculate_dmg(
+                    const result = calculateDmg(
                         dealer.dps,
                         [support, filler, filler, filler],
                         dealer.context.ailment,
@@ -885,7 +1001,6 @@ const gainChart = computed(() => {
                     gains.push({
                         dealer,
                         result,
-                        gain: pctGain(selectedDmg(result), selectedDmg(dealer.baseline)),
                         maxGain: pctGain(result.max, dealer.baseline.max),
                         avgGain: pctGain(result.avg, dealer.baseline.avg),
                     })
@@ -901,80 +1016,10 @@ const gainChart = computed(() => {
 
             if (!gains.length) continue
 
-            const gainByContext = new Map<string, DealerGain>()
+            const max = buildCharGainResult(ch, gains, "max")
+            const avg = buildCharGainResult(ch, gains, "avg")
 
-            for (const gain of gains) {
-                gainByContext.set(
-                    contextKey(gain.dealer.context),
-                    gain,
-                )
-            }
-
-            const noneGain = gainByContext.get(
-                contextKey(makeContext()),
-            )
-
-            if (!noneGain) continue
-
-            const meaningfulTagsFor = (gain: DealerGain): DealerTag[] =>
-                gain.dealer.tags.filter(tag => {
-                    const reducedContext: DealerContext = {
-                        ...gain.dealer.context,
-                        [tag.kind]: undefined,
-                    }
-
-                    const reducedGain = gainByContext.get(
-                        contextKey(reducedContext),
-                    )
-
-                    if (!reducedGain) return true
-
-                    return Math.abs(gain.gain - reducedGain.gain) >= 1
-                })
-
-            const main: GainRow = {
-                ch,
-                tags: [],
-                gain: noneGain.gain,
-                maxGain: noneGain.maxGain,
-                avgGain: noneGain.avgGain,
-                critRate: noneGain.result.critRate,
-            }
-
-            const variantMap = new Map<string, GainRow>()
-
-            for (const gain of gains) {
-                if (gain.dealer.tags.length === 0) continue
-
-                if (Math.abs(gain.gain - noneGain.gain) < 1) continue
-
-                const meaningfulTags = meaningfulTagsFor(gain)
-
-                if (!meaningfulTags.length) continue
-
-                const tagKey = meaningfulTags
-                    .map(tag => `${tag.kind}:${tag.value}`)
-                    .join("|")
-
-                const existing = variantMap.get(tagKey)
-
-                if (!existing || gain.gain > existing.gain) {
-                    variantMap.set(tagKey, {
-                        ch,
-                        tags: meaningfulTags,
-                        gain: gain.gain,
-                        maxGain: gain.maxGain,
-                        avgGain: gain.avgGain,
-                        critRate: gain.result.critRate,
-                    })
-                }
-            }
-
-            results.push({
-                main,
-                variants: [...variantMap.values()],
-            })
-
+            if (max && avg) results.push({ ch, max, avg })
         } catch (err) {
             failed++
 
@@ -985,16 +1030,47 @@ const gainChart = computed(() => {
         }
     }
 
-    if (failed) {
-        notes.push(`${failed} calculation(s) failed (see console).`)
+    if (cancelled()) return
+
+    finish(results, "", failed ? [`${failed} calculation(s) failed (see console).`] : [])
+}
+
+// Re-run only when the roster changes (not on filter / axis / avg-toggle changes).
+watch(markedCharacters, computeGains, { immediate: true })
+
+onBeforeUnmount(() => {
+    gainRun++ // cancel any in-flight calculation
+})
+
+// --- Cheap part: runs on every filter change --------------------------------------------
+
+const gainChart = computed(() => {
+    const empty = {
+        bars: [] as any[],
+        roles: [] as string[],
+        zeroPct: 0,
+        hasVariants: false,
+        notes: [] as string[],
+        error: "",
     }
 
+    const { error, notes } = gainStatus.value
+
+    if (error) return { ...empty, notes, error }
+
+    const metric: Metric = barGraphAverageDmg.value ? "avg" : "max"
+    const visibleIds = new Set(allChars.value.map(c => c.id))
+
+    const picked = gainResults.value
+        .filter(entry => visibleIds.has(entry.ch.id))
+        .map(entry => entry[metric])
+
     const rows = [
-        ...results
+        ...picked
             .map(r => r.main)
             .filter(m => m.gain > 1),
 
-        ...results
+        ...picked
             .flatMap(r => r.variants)
             .filter(v => v.gain > 1),
     ].sort((a, b) => a.gain - b.gain)
