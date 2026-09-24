@@ -215,10 +215,17 @@
             </p>
             <p class="gain-desc">Buffs which are only active under some circumstances have dashed bars.</p>
 
-            <label class="filter-chip" style="width: fit-content; margin: 0 auto;"
-                :class="{ active: barGraphAverageDmg }">
-                <input type="checkbox" v-model="barGraphAverageDmg" /> Display average dmg instead of max dmg increase
-            </label>
+            <div class="fight-mode-row" style="width: fit-content; margin: 0 auto;">
+                <span class="fight-mode-label">Display</span>
+                <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Damage metric">
+                    <div class="fight-mode-highlight" :style="{ transform: `translateX(${metricIndex * 100}%)` }"></div>
+                    <button v-for="opt in metricOptions" :key="opt.label" type="button" class="fight-mode-option"
+                        :class="{ active: barGraphAverageDmg === opt.value }" :title="opt.title"
+                        @click="barGraphAverageDmg = opt.value">
+                        {{ opt.label }}
+                    </button>
+                </div>
+            </div>
             <p v-if="gainChart.error" class="gain-empty">{{ gainChart.error }}</p>
             <p v-else-if="gainLoading && !gainChart.bars.length" class="gain-empty">Calculating… {{ gainProgress }}%
             </p>
@@ -271,9 +278,17 @@
             <p class="gain-desc">{{ fightMode === 'st' ? 'One enemy' : fightMode === 'aoe' ? 'Five enemies' : 'Three enemies'}} with 3000 def is used as basis for dmg calculation.</p>
 
             <div style="width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem;">
-                <label class="filter-chip" :class="{ active: barGraphAverageDmg }">
-                    <input type="checkbox" v-model="barGraphAverageDmg" /> Display average dmg instead of max dmg
-                </label>
+                <div class="fight-mode-row">
+                    <span class="fight-mode-label">Display</span>
+                    <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Damage metric">
+                        <div class="fight-mode-highlight" :style="{ transform: `translateX(${metricIndex * 100}%)` }"></div>
+                        <button v-for="opt in metricOptions" :key="opt.label" type="button" class="fight-mode-option"
+                            :class="{ active: barGraphAverageDmg === opt.value }" :title="opt.title"
+                            @click="barGraphAverageDmg = opt.value">
+                            {{ opt.label }}
+                        </button>
+                    </div>
+                </div>
 
                 <div class="fight-mode-row">
                     <span class="fight-mode-label">Fight type</span>
@@ -484,6 +499,12 @@ const fightModeOptions = [
 type FightMode = typeof fightModeOptions[number]["value"]
 const fightMode = useSetting<FightMode>("fightMode", "aoe")
 const fightModeIndex = computed(() => fightModeOptions.findIndex(opt => opt.value === fightMode.value))
+
+const metricOptions = [
+    { value: false, label: "Max Damage", title: "Show the max dmg increase" },
+    { value: true, label: "Average Damage", title: "Show the average dmg instead of the max dmg" },
+] as const
+const metricIndex = computed(() => metricOptions.findIndex(opt => opt.value === barGraphAverageDmg.value))
 
 type VirtualRole = string
 
@@ -1653,7 +1674,7 @@ watch([markedCharacters, fightMode], computeGains, { immediate: true })
 .fight-mode-toggle {
     position: relative;
     display: inline-grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--count, 3), minmax(0, 1fr));
     padding: 3px;
     border: 1px solid var(--border);
     border-radius: 20px;
@@ -1665,7 +1686,7 @@ watch([markedCharacters, fightMode], computeGains, { immediate: true })
     top: 3px;
     bottom: 3px;
     left: 3px;
-    width: calc((100% - 6px) / 3);
+    width: calc((100% - 6px) / var(--count, 3));
     border-radius: 16px;
     background: var(--accent-glow);
     border: 1px solid var(--border-strong);
