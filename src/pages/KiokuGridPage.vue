@@ -228,7 +228,7 @@
                 <p v-if="gainLoading" class="gain-desc">Updating… {{ gainProgress }}%</p>
                 <div class="gain-legend">
                     <span v-for="role in gainChart.roles" :key="role" class="gain-legend-item">
-                        <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{ role }}
+                        <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{ virtualRoleLabel(role) }}
                     </span>
                 </div>
                 <div class="gain-scroll">
@@ -240,7 +240,7 @@
                             <div class="gain-track">
                                 <div class="gain-zero" :style="{ bottom: `${gainChart.zeroPct}%` }"></div>
                                 <div class="gain-bar-wrap" :style="bar.style">
-                                    <div class="gain-bar" :style="{ backgroundColor: roleColor(bar.role) }">
+                                    <div class="gain-bar" :style="{ backgroundColor: roleColor(bar.vRole) }">
                                     </div>
                                     <span class="gain-value">{{ bar.label }}</span>
                                 </div>
@@ -294,7 +294,7 @@
             <template v-else>
                 <div class="gain-legend">
                     <span v-for="role in attackerChart.roles" :key="role" class="gain-legend-item">
-                        <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{ role }}
+                        <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{ virtualRoleLabel(role) }}
                     </span>
                 </div>
                 <div class="gain-scroll">
@@ -306,7 +306,7 @@
                             <div class="gain-track">
                                 <div class="gain-zero" :style="{ bottom: `${attackerChart.zeroPct}%` }"></div>
                                 <div class="gain-bar-wrap" :style="bar.style">
-                                    <div class="gain-bar" :style="{ backgroundColor: roleColor(bar.role) }">
+                                    <div class="gain-bar" :style="{ backgroundColor: roleColor(bar.vRole) }">
                                     </div>
                                     <span class="gain-value">{{ bar.label }}</span>
                                 </div>
@@ -668,7 +668,22 @@ const ROLE_COLORS: Record<string, string> = {
     [KiokuRole.Healer]: "#658169",
     [KiokuRole.Defender]: "#5e638c",
 }
-const roleColor = (role: string) => ROLE_COLORS[role] ?? "#9ca3af"
+
+// Colours used by the bar charts when a role's range split is enabled (same split as the grid).
+// Keys match the virtual roles, e.g. "Attacker-ST". Placeholder colours, change as you like.
+const SPLIT_ROLE_COLORS: Record<string, string> = {
+    [`${KiokuRole.Attacker}-ST`]: "#a83a3a",
+    [`${KiokuRole.Attacker}-Prox`]: "#d97a4e",
+    [`${KiokuRole.Attacker}-AOE`]: "#e8a9a9",
+    [`${KiokuRole.Breaker}-ST`]: "#a8902a",
+    [`${KiokuRole.Breaker}-AOE`]: "#dfd26f",
+    [`${KiokuRole.Debuffer}-ST`]: "#5b4a85",
+    [`${KiokuRole.Debuffer}-Prox`]: "#8b6fc0",
+    [`${KiokuRole.Debuffer}-AOE`]: "#bfa8e3",
+}
+// Accepts either a plain role ("Buffer") or a virtual split role ("Attacker-Prox")
+const roleColor = (vRole: string) =>
+    SPLIT_ROLE_COLORS[vRole] ?? ROLE_COLORS[vRole] ?? "#9ca3af"
 
 const prepareForChart = (c: Character): Character => {
     return withMaxLevelsForPlayerLevel({ ...c, ascension: KiokuConstants.maxAscension }, KiokuConstants.maxKiokuLvl)
@@ -1316,6 +1331,7 @@ const buildBarChart = (
         tags,
 
         role: ch.role as string,
+        vRole: virtualRoleForChar(ch) as string,
         isStandardChar: ch.isStandardChar,
         _borderClass: borderClass(ch),
 
@@ -1335,11 +1351,11 @@ const buildBarChart = (
             },
     }))
 
-    const presentRoles = new Set(bars.map(b => b.role))
+    const presentRoles = new Set(bars.map(b => b.vRole))
 
     return {
         bars,
-        roles: baseRoleOrder.value.filter(r => presentRoles.has(r)) as string[],
+        roles: allVirtualRoleValues.value.filter(r => presentRoles.has(r)) as string[],
         zeroPct: (-min / span) * 100,
         hasVariants: bars.some(b => b.variant),
     }
