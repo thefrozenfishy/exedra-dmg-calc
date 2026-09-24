@@ -1035,9 +1035,6 @@ const computeGains = async () => {
     finish(results, "", failed ? [`${failed} calculation(s) failed (see console).`] : [])
 }
 
-// Re-run only when the roster changes (not on filter / axis / avg-toggle changes).
-watch(markedCharacters, computeGains, { immediate: true })
-
 onBeforeUnmount(() => {
     gainRun++ // cancel any in-flight calculation
 })
@@ -1263,6 +1260,8 @@ const shareOptionsForGrid = () => ({
     title: `${useFriendStore().getFormattedDisplayNamePossessive()} Kioku Grid`,
     backUrl: window.location.href,
 })
+
+watch(markedCharacters, computeGains, { immediate: true })
 </script>
 
 <style scoped>
