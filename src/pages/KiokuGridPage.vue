@@ -983,6 +983,46 @@ const yieldToMain = (): Promise<void> => {
         : new Promise<void>(resolve => setTimeout(resolve, 0))
 }
 
+// The bar charts are only published once their icons are in the browser cache, so the bars and
+// their character/tag icons appear together instead of the icons popping in afterwards.
+const IMAGE_PRELOAD_TIMEOUT_MS = 3000
+
+const preloadImages = (urls: Iterable<string>): Promise<void> => {
+    const loads = [...urls].map(url => new Promise<void>(resolve => {
+        const img = new Image()
+        img.onload = () => resolve()
+        img.onerror = () => resolve() // a missing icon must never block the chart
+        img.src = url
+    }))
+
+    let timer: ReturnType<typeof setTimeout>
+    const timeout = new Promise<void>(resolve => {
+        timer = setTimeout(resolve, IMAGE_PRELOAD_TIMEOUT_MS) // don't hang on a stalled request
+    })
+
+    return Promise.race([Promise.all(loads), timeout]).finally(() => clearTimeout(timer))
+}
+
+// Every icon a chart can show: the character thumbnails plus the tag icons of their variants.
+// Covers both metrics so flipping the avg/max toggle never loads anything new.
+// `minGain` mirrors the chart's own cut-off, so characters that are never drawn aren't loaded.
+const chartImageUrls = (entries: SupportGainEntry[], minGain: number): Set<string> => {
+    const urls = new Set<string>()
+
+    for (const entry of entries) {
+        for (const metric of [entry.max, entry.avg]) {
+            for (const row of [metric.main, ...metric.variants]) {
+                if (row.gain <= minGain) continue
+
+                urls.add(`/exedra-dmg-calc/kioku_images/${row.ch.id}_thumbnail.png`)
+                row.tags.forEach(tag => urls.add(tag.icon))
+            }
+        }
+    }
+
+    return urls
+}
+
 // Attacker chart: every character is put in the attacker slot with four Lux as supports and
 // compared to Lux in the same setup. Element and role are the character's own, so the only thing
 // varied is which ailment is active on the enemy and whether one-time buffs are excluded.
@@ -1081,6 +1121,10 @@ const computeAttackerGains = async (
             console.warn(`Attacker chart: failed to calculate ${ch.name}:`, err)
         }
     }
+
+    // Keep the "Calculating…" state until the icons are ready, then show bars + icons together.
+    await preloadImages(chartImageUrls(results, -Infinity))
+    if (await shouldStop()) return false
 
     finishAttacker(results, "", failed ? [`${failed} calculation(s) failed (see console).`] : [])
     return true
@@ -1231,6 +1275,11 @@ const computeGains = async () => {
         }
     }
 
+    if (cancelled()) return
+
+    // Keep the "Calculating…" state until the icons are ready, then show bars + icons together.
+    gainProgress.value = 100
+    await preloadImages(chartImageUrls(results, 1))
     if (cancelled()) return
 
     finish(results, "", failed ? [`${failed} calculation(s) failed (see console).`] : [])
