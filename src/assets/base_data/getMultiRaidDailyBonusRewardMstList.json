@@ -1,0 +1,338 @@
+[
+    {
+        "groupId": 101,
+        "multiRaidDailyBonusRewardMstId": 10101,
+        "num": 1,
+        "objectId": 121003,
+        "objectReceiveType": 6
+    },
+    {
+        "groupId": 101,
+        "multiRaidDailyBonusRewardMstId": 10102,
+        "num": 2,
+        "objectId": 121003,
+        "objectReceiveType": 6
+    },
+    {
+        "groupId": 101,
+        "multiRaidDailyBonusRewardMstId": 10103,
+        "num": 1,
+        "objectId": 121022,
+        "objectReceiveType": 6
+    },
+    {
+        "groupId": 101,
+        "multiRaidDailyBonusRewardMstId": 10104,
+        "num": 5,
+        "objectId": 232030,
+        "objectReceiveType": 6
+    },
+    {
+        "groupId": 102,
+        "multiRaidDailyBonusRewardMstId": 10201,
+        "num": 100,
+        "objectId": 121002,
+        "objectReceiveType": 6
+    },
+    {
+        "groupId": 102,
+        "multiRaidDailyBonusRewardMstId": 10202,
+        "num": 1,
+        "objectId": 121003,
+        "objectReceiveType": 6
+    },
+    {
+        "groupId": 102,
+        "multiRaidDailyBonusRewardMstId": 10203,
+        "num": 1,
+        "objectId": 121022,
+        "objectReceiveType": 6
+    },
+    {
+        "groupId": 102,
+        "multiRaidDailyBonusRewardMstId": 10204,
+        "num": 5,
+        "objectId": 232030,
+        "objectReceiveType": 6
+    },
+    {
+        "groupId": 103,
+        "multiRaidDailyBonusRewardMstId": 10301,
+        "num": 50,
+        "objectId": 121002,
+        "objectReceiveType": 6
+    },
+    {
+        "groupId": 103,
+        "multiRaidDailyBonusRewardMstId": 10302,
+        "num": 1,
+        "objectId": 121003,
+        "objectReceiveType": 6
+    },
+    {
+        "groupId": 103,
+        "multiRaidDailyBonusRewardMstId": 10303,
+        "num": 1,
+        "objectId": 121022,
+        "objectReceiveType": 6
+    },
+    {
+        "groupId": 103,
+        "multiRaidDailyBonusRewardMstId": 10304,
+        "num": 5,
+        "objectId": 232030,
+        "objectReceiveType": 6
+    },
+    {
+        "groupId": 104,
+        "multiRaidDailyBonusRewardMstId": 10401,
+        "num": 1,
+        "objectId": 121003,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 104,
+        "multiRaidDailyBonusRewardMstId": 10402,
+        "num": 2,
+        "objectId": 121003,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 104,
+        "multiRaidDailyBonusRewardMstId": 10403,
+        "num": 1,
+        "objectId": 121022,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 104,
+        "multiRaidDailyBonusRewardMstId": 10404,
+        "num": 5,
+        "objectId": 232030,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 105,
+        "multiRaidDailyBonusRewardMstId": 10501,
+        "num": 100,
+        "objectId": 121002,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 105,
+        "multiRaidDailyBonusRewardMstId": 10502,
+        "num": 1,
+        "objectId": 121003,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 105,
+        "multiRaidDailyBonusRewardMstId": 10503,
+        "num": 1,
+        "objectId": 121022,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 105,
+        "multiRaidDailyBonusRewardMstId": 10504,
+        "num": 5,
+        "objectId": 232030,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 106,
+        "multiRaidDailyBonusRewardMstId": 10601,
+        "num": 50,
+        "objectId": 121002,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 106,
+        "multiRaidDailyBonusRewardMstId": 10602,
+        "num": 1,
+        "objectId": 121003,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 106,
+        "multiRaidDailyBonusRewardMstId": 10603,
+        "num": 1,
+        "objectId": 121022,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 106,
+        "multiRaidDailyBonusRewardMstId": 10604,
+        "num": 5,
+        "objectId": 232030,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 107,
+        "multiRaidDailyBonusRewardMstId": 10701,
+        "num": 1,
+        "objectId": 121003,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 107,
+        "multiRaidDailyBonusRewardMstId": 10702,
+        "num": 2,
+        "objectId": 121003,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 107,
+        "multiRaidDailyBonusRewardMstId": 10703,
+        "num": 1,
+        "objectId": 121022,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 107,
+        "multiRaidDailyBonusRewardMstId": 10704,
+        "num": 5,
+        "objectId": 232030,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 108,
+        "multiRaidDailyBonusRewardMstId": 10801,
+        "num": 100,
+        "objectId": 121002,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 108,
+        "multiRaidDailyBonusRewardMstId": 10802,
+        "num": 1,
+        "objectId": 121003,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 108,
+        "multiRaidDailyBonusRewardMstId": 10803,
+        "num": 1,
+        "objectId": 121022,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 108,
+        "multiRaidDailyBonusRewardMstId": 10804,
+        "num": 5,
+        "objectId": 232030,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 109,
+        "multiRaidDailyBonusRewardMstId": 10901,
+        "num": 50,
+        "objectId": 121002,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 109,
+        "multiRaidDailyBonusRewardMstId": 10902,
+        "num": 1,
+        "objectId": 121003,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 109,
+        "multiRaidDailyBonusRewardMstId": 10903,
+        "num": 1,
+        "objectId": 121022,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 109,
+        "multiRaidDailyBonusRewardMstId": 10904,
+        "num": 5,
+        "objectId": 232030,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 110,
+        "multiRaidDailyBonusRewardMstId": 11001,
+        "num": 2,
+        "objectId": 121003,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 110,
+        "multiRaidDailyBonusRewardMstId": 11002,
+        "num": 4,
+        "objectId": 121003,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 110,
+        "multiRaidDailyBonusRewardMstId": 11003,
+        "num": 2,
+        "objectId": 121022,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 110,
+        "multiRaidDailyBonusRewardMstId": 11004,
+        "num": 10,
+        "objectId": 232030,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 111,
+        "multiRaidDailyBonusRewardMstId": 11101,
+        "num": 200,
+        "objectId": 121002,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 111,
+        "multiRaidDailyBonusRewardMstId": 11102,
+        "num": 2,
+        "objectId": 121003,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 111,
+        "multiRaidDailyBonusRewardMstId": 11103,
+        "num": 2,
+        "objectId": 121022,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 111,
+        "multiRaidDailyBonusRewardMstId": 11104,
+        "num": 10,
+        "objectId": 232030,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 112,
+        "multiRaidDailyBonusRewardMstId": 11201,
+        "num": 100,
+        "objectId": 121002,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 112,
+        "multiRaidDailyBonusRewardMstId": 11202,
+        "num": 2,
+        "objectId": 121003,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 112,
+        "multiRaidDailyBonusRewardMstId": 11203,
+        "num": 2,
+        "objectId": 121022,
+        "objectReceiveType": 5
+    },
+    {
+        "groupId": 112,
+        "multiRaidDailyBonusRewardMstId": 11204,
+        "num": 10,
+        "objectId": 232030,
+        "objectReceiveType": 5
+    }
+]

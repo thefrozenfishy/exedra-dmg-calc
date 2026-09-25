@@ -1,0 +1,20 @@
+[
+    {
+        "guildMissionMstId": 15002,
+        "guildMissionTransitionMstId": 15002,
+        "transitionSceneName": "MainQuest",
+        "transitionSceneParam": 0
+    },
+    {
+        "guildMissionMstId": 15003,
+        "guildMissionTransitionMstId": 15003,
+        "transitionSceneName": "EnhanceQuest",
+        "transitionSceneParam": 0
+    },
+    {
+        "guildMissionMstId": 15004,
+        "guildMissionTransitionMstId": 15004,
+        "transitionSceneName": "PvP",
+        "transitionSceneParam": 0
+    }
+]

@@ -1,0 +1,272 @@
+[
+    {
+        "conditionType": 1,
+        "grade": 1,
+        "lotteryMstId": 1,
+        "lotteryRewardMstGroupId": 1,
+        "lotteryWinningMstId": 1,
+        "name": "Special Prize",
+        "patternCount": 1
+    },
+    {
+        "conditionType": 1,
+        "grade": 2,
+        "lotteryMstId": 1,
+        "lotteryRewardMstGroupId": 2,
+        "lotteryWinningMstId": 2,
+        "name": "1st Prize",
+        "patternCount": 3
+    },
+    {
+        "conditionType": 1,
+        "grade": 3,
+        "lotteryMstId": 1,
+        "lotteryRewardMstGroupId": 3,
+        "lotteryWinningMstId": 3,
+        "name": "2nd Prize",
+        "patternCount": 3
+    },
+    {
+        "conditionType": 1,
+        "grade": 4,
+        "lotteryMstId": 1,
+        "lotteryRewardMstGroupId": 4,
+        "lotteryWinningMstId": 4,
+        "name": "3rd Prize",
+        "patternCount": 3
+    },
+    {
+        "conditionType": 1,
+        "grade": 5,
+        "lotteryMstId": 1,
+        "lotteryRewardMstGroupId": 5,
+        "lotteryWinningMstId": 5,
+        "name": "4th Prize",
+        "patternCount": 5
+    },
+    {
+        "conditionType": 1,
+        "grade": 6,
+        "lotteryMstId": 1,
+        "lotteryRewardMstGroupId": 6,
+        "lotteryWinningMstId": 6,
+        "name": "5th Prize",
+        "patternCount": 1
+    },
+    {
+        "conditionType": 0,
+        "grade": 7,
+        "lotteryMstId": 1,
+        "lotteryRewardMstGroupId": 7,
+        "lotteryWinningMstId": 7,
+        "name": "Participation Prize",
+        "patternCount": 0
+    },
+    {
+        "conditionType": 1,
+        "grade": 1,
+        "lotteryMstId": 2,
+        "lotteryRewardMstGroupId": 21,
+        "lotteryWinningMstId": 21,
+        "name": "Special Prize",
+        "patternCount": 1
+    },
+    {
+        "conditionType": 1,
+        "grade": 2,
+        "lotteryMstId": 2,
+        "lotteryRewardMstGroupId": 22,
+        "lotteryWinningMstId": 22,
+        "name": "1st Prize",
+        "patternCount": 3
+    },
+    {
+        "conditionType": 1,
+        "grade": 3,
+        "lotteryMstId": 2,
+        "lotteryRewardMstGroupId": 23,
+        "lotteryWinningMstId": 23,
+        "name": "2nd Prize",
+        "patternCount": 3
+    },
+    {
+        "conditionType": 1,
+        "grade": 4,
+        "lotteryMstId": 2,
+        "lotteryRewardMstGroupId": 24,
+        "lotteryWinningMstId": 24,
+        "name": "3rd Prize",
+        "patternCount": 3
+    },
+    {
+        "conditionType": 1,
+        "grade": 5,
+        "lotteryMstId": 2,
+        "lotteryRewardMstGroupId": 25,
+        "lotteryWinningMstId": 25,
+        "name": "4th Prize",
+        "patternCount": 5
+    },
+    {
+        "conditionType": 1,
+        "grade": 6,
+        "lotteryMstId": 2,
+        "lotteryRewardMstGroupId": 26,
+        "lotteryWinningMstId": 26,
+        "name": "5th Prize",
+        "patternCount": 1
+    },
+    {
+        "conditionType": 0,
+        "grade": 7,
+        "lotteryMstId": 2,
+        "lotteryRewardMstGroupId": 27,
+        "lotteryWinningMstId": 27,
+        "name": "Participation Prize",
+        "patternCount": 0
+    },
+    {
+        "conditionType": 1,
+        "grade": 1,
+        "lotteryMstId": 3,
+        "lotteryRewardMstGroupId": 31,
+        "lotteryWinningMstId": 31,
+        "name": "Special Prize",
+        "patternCount": 10
+    },
+    {
+        "conditionType": 1,
+        "grade": 2,
+        "lotteryMstId": 3,
+        "lotteryRewardMstGroupId": 32,
+        "lotteryWinningMstId": 32,
+        "name": "1st Prize",
+        "patternCount": 10
+    },
+    {
+        "conditionType": 1,
+        "grade": 3,
+        "lotteryMstId": 3,
+        "lotteryRewardMstGroupId": 33,
+        "lotteryWinningMstId": 33,
+        "name": "2nd Prize A",
+        "patternCount": 5
+    },
+    {
+        "conditionType": 1,
+        "grade": 3,
+        "lotteryMstId": 3,
+        "lotteryRewardMstGroupId": 34,
+        "lotteryWinningMstId": 34,
+        "name": "2nd Prize B",
+        "patternCount": 5
+    },
+    {
+        "conditionType": 1,
+        "grade": 3,
+        "lotteryMstId": 3,
+        "lotteryRewardMstGroupId": 35,
+        "lotteryWinningMstId": 35,
+        "name": "2nd Prize C",
+        "patternCount": 5
+    },
+    {
+        "conditionType": 1,
+        "grade": 4,
+        "lotteryMstId": 3,
+        "lotteryRewardMstGroupId": 36,
+        "lotteryWinningMstId": 36,
+        "name": "3rd Prize A",
+        "patternCount": 1
+    },
+    {
+        "conditionType": 1,
+        "grade": 4,
+        "lotteryMstId": 3,
+        "lotteryRewardMstGroupId": 37,
+        "lotteryWinningMstId": 37,
+        "name": "3rd Prize B",
+        "patternCount": 1
+    },
+    {
+        "conditionType": 1,
+        "grade": 4,
+        "lotteryMstId": 3,
+        "lotteryRewardMstGroupId": 38,
+        "lotteryWinningMstId": 38,
+        "name": "3rd Prize C",
+        "patternCount": 1
+    },
+    {
+        "conditionType": 0,
+        "grade": 5,
+        "lotteryMstId": 3,
+        "lotteryRewardMstGroupId": 39,
+        "lotteryWinningMstId": 39,
+        "name": "Participation Prize",
+        "patternCount": 0
+    },
+    {
+        "conditionType": 1,
+        "grade": 1,
+        "lotteryMstId": 4,
+        "lotteryRewardMstGroupId": 41,
+        "lotteryWinningMstId": 40,
+        "name": "Special Prize",
+        "patternCount": 1
+    },
+    {
+        "conditionType": 1,
+        "grade": 2,
+        "lotteryMstId": 4,
+        "lotteryRewardMstGroupId": 42,
+        "lotteryWinningMstId": 41,
+        "name": "1st Prize",
+        "patternCount": 3
+    },
+    {
+        "conditionType": 1,
+        "grade": 3,
+        "lotteryMstId": 4,
+        "lotteryRewardMstGroupId": 43,
+        "lotteryWinningMstId": 42,
+        "name": "2nd Prize",
+        "patternCount": 3
+    },
+    {
+        "conditionType": 1,
+        "grade": 4,
+        "lotteryMstId": 4,
+        "lotteryRewardMstGroupId": 44,
+        "lotteryWinningMstId": 43,
+        "name": "3rd Prize",
+        "patternCount": 3
+    },
+    {
+        "conditionType": 1,
+        "grade": 5,
+        "lotteryMstId": 4,
+        "lotteryRewardMstGroupId": 45,
+        "lotteryWinningMstId": 44,
+        "name": "4th Prize",
+        "patternCount": 5
+    },
+    {
+        "conditionType": 1,
+        "grade": 6,
+        "lotteryMstId": 4,
+        "lotteryRewardMstGroupId": 46,
+        "lotteryWinningMstId": 45,
+        "name": "5th Prize",
+        "patternCount": 1
+    },
+    {
+        "conditionType": 0,
+        "grade": 7,
+        "lotteryMstId": 4,
+        "lotteryRewardMstGroupId": 47,
+        "lotteryWinningMstId": 46,
+        "name": "Participation Prize",
+        "patternCount": 0
+    }
+]

@@ -1,0 +1,52 @@
+[
+    {
+        "characterTeamMstId": 1,
+        "name": "Mikazuki Villa",
+        "sortOrder": 1
+    },
+    {
+        "characterTeamMstId": 2,
+        "name": "Daito Apartment Complex",
+        "sortOrder": 2
+    },
+    {
+        "characterTeamMstId": 3,
+        "name": "Azalea House",
+        "sortOrder": 3
+    },
+    {
+        "characterTeamMstId": 4,
+        "name": "Team Nanaka",
+        "sortOrder": 4
+    },
+    {
+        "characterTeamMstId": 5,
+        "name": "Team Momoko",
+        "sortOrder": 5
+    },
+    {
+        "characterTeamMstId": 6,
+        "name": "Emily's Counseling Room",
+        "sortOrder": 6
+    },
+    {
+        "characterTeamMstId": 7,
+        "name": "Blossom",
+        "sortOrder": 7
+    },
+    {
+        "characterTeamMstId": 8,
+        "name": "Team Yachiyo",
+        "sortOrder": 8
+    },
+    {
+        "characterTeamMstId": 9,
+        "name": "Wings of Magius",
+        "sortOrder": 9
+    },
+    {
+        "characterTeamMstId": 900,
+        "name": "No Affiliation",
+        "sortOrder": 900
+    }
+]

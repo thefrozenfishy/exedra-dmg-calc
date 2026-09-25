@@ -1,0 +1,62 @@
+[
+    {
+        "passiveSkillSortCategoryMstId": 102,
+        "priority": 1,
+        "role": 1,
+        "rolePriorityAbilityCategoryMstId": 101
+    },
+    {
+        "passiveSkillSortCategoryMstId": 118,
+        "priority": 2,
+        "role": 1,
+        "rolePriorityAbilityCategoryMstId": 102
+    },
+    {
+        "passiveSkillSortCategoryMstId": 101,
+        "priority": 1,
+        "role": 2,
+        "rolePriorityAbilityCategoryMstId": 201
+    },
+    {
+        "passiveSkillSortCategoryMstId": 100,
+        "priority": 2,
+        "role": 2,
+        "rolePriorityAbilityCategoryMstId": 202
+    },
+    {
+        "passiveSkillSortCategoryMstId": 122,
+        "priority": 1,
+        "role": 3,
+        "rolePriorityAbilityCategoryMstId": 300
+    },
+    {
+        "passiveSkillSortCategoryMstId": 101,
+        "priority": 1,
+        "role": 4,
+        "rolePriorityAbilityCategoryMstId": 401
+    },
+    {
+        "passiveSkillSortCategoryMstId": 100,
+        "priority": 2,
+        "role": 4,
+        "rolePriorityAbilityCategoryMstId": 402
+    },
+    {
+        "passiveSkillSortCategoryMstId": 101,
+        "priority": 1,
+        "role": 5,
+        "rolePriorityAbilityCategoryMstId": 501
+    },
+    {
+        "passiveSkillSortCategoryMstId": 100,
+        "priority": 2,
+        "role": 5,
+        "rolePriorityAbilityCategoryMstId": 502
+    },
+    {
+        "passiveSkillSortCategoryMstId": 103,
+        "priority": 1,
+        "role": 6,
+        "rolePriorityAbilityCategoryMstId": 600
+    }
+]

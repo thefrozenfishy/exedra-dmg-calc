@@ -1,0 +1,83 @@
+[
+    {
+        "dungeonTypeMstId": 101,
+        "room1LengthType": 2,
+        "room2LengthType": 2,
+        "room3LengthType": 0,
+        "room4LengthType": 0,
+        "room5LengthType": 0,
+        "structureType": 101
+    },
+    {
+        "dungeonTypeMstId": 102,
+        "room1LengthType": 2,
+        "room2LengthType": 2,
+        "room3LengthType": 2,
+        "room4LengthType": 0,
+        "room5LengthType": 0,
+        "structureType": 102
+    },
+    {
+        "dungeonTypeMstId": 103,
+        "room1LengthType": 2,
+        "room2LengthType": 2,
+        "room3LengthType": 2,
+        "room4LengthType": 0,
+        "room5LengthType": 0,
+        "structureType": 103
+    },
+    {
+        "dungeonTypeMstId": 104,
+        "room1LengthType": 2,
+        "room2LengthType": 0,
+        "room3LengthType": 0,
+        "room4LengthType": 0,
+        "room5LengthType": 0,
+        "structureType": 104
+    },
+    {
+        "dungeonTypeMstId": 10000,
+        "room1LengthType": 1,
+        "room2LengthType": 0,
+        "room3LengthType": 0,
+        "room4LengthType": 0,
+        "room5LengthType": 0,
+        "structureType": 0
+    },
+    {
+        "dungeonTypeMstId": 10010,
+        "room1LengthType": 4,
+        "room2LengthType": 0,
+        "room3LengthType": 0,
+        "room4LengthType": 0,
+        "room5LengthType": 0,
+        "structureType": 0
+    },
+    {
+        "dungeonTypeMstId": 10011,
+        "room1LengthType": 1,
+        "room2LengthType": 0,
+        "room3LengthType": 0,
+        "room4LengthType": 0,
+        "room5LengthType": 0,
+        "structureType": 104
+    },
+    {
+        "dungeonTypeMstId": 10012,
+        "room1LengthType": 3,
+        "room2LengthType": 0,
+        "room3LengthType": 0,
+        "room4LengthType": 0,
+        "room5LengthType": 0,
+        "structureType": 104
+    },
+    {
+        "dungeonTypeMstId": 10102,
+        "room1LengthType": 2,
+        "room2LengthType": 1,
+        "room3LengthType": 2,
+        "room4LengthType": 0,
+        "room5LengthType": 0,
+        "structureType": 102
+    }
+]

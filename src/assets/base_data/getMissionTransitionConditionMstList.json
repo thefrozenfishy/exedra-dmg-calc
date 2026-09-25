@@ -1,0 +1,17 @@
+[
+    {
+        "conditionType": 1801,
+        "missionTransitionConditionMstId": 1,
+        "transitionType": 19
+    },
+    {
+        "conditionType": 1802,
+        "missionTransitionConditionMstId": 2,
+        "transitionType": 19
+    },
+    {
+        "conditionType": 152,
+        "missionTransitionConditionMstId": 4,
+        "transitionType": 6
+    }
+]

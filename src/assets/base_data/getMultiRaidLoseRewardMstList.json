@@ -1,0 +1,74 @@
+[
+    {
+        "groupId": 101,
+        "multiRaidLoseRewardMstId": 10101,
+        "num": 10,
+        "objectId": 201030,
+        "objectReceiveType": 5,
+        "rank": 0
+    },
+    {
+        "groupId": 102,
+        "multiRaidLoseRewardMstId": 10102,
+        "num": 20,
+        "objectId": 201030,
+        "objectReceiveType": 5,
+        "rank": 0
+    },
+    {
+        "groupId": 103,
+        "multiRaidLoseRewardMstId": 10103,
+        "num": 40,
+        "objectId": 201030,
+        "objectReceiveType": 5,
+        "rank": 0
+    },
+    {
+        "groupId": 104,
+        "multiRaidLoseRewardMstId": 10104,
+        "num": 50,
+        "objectId": 201030,
+        "objectReceiveType": 5,
+        "rank": 0
+    },
+    {
+        "groupId": 105,
+        "multiRaidLoseRewardMstId": 10105,
+        "num": 60,
+        "objectId": 201030,
+        "objectReceiveType": 5,
+        "rank": 0
+    },
+    {
+        "groupId": 106,
+        "multiRaidLoseRewardMstId": 10106,
+        "num": 70,
+        "objectId": 201030,
+        "objectReceiveType": 5,
+        "rank": 0
+    },
+    {
+        "groupId": 107,
+        "multiRaidLoseRewardMstId": 10107,
+        "num": 90,
+        "objectId": 201030,
+        "objectReceiveType": 5,
+        "rank": 0
+    },
+    {
+        "groupId": 108,
+        "multiRaidLoseRewardMstId": 10108,
+        "num": 100,
+        "objectId": 201030,
+        "objectReceiveType": 5,
+        "rank": 0
+    },
+    {
+        "groupId": 109,
+        "multiRaidLoseRewardMstId": 10109,
+        "num": 120,
+        "objectId": 201030,
+        "objectReceiveType": 5,
+        "rank": 0
+    }
+]

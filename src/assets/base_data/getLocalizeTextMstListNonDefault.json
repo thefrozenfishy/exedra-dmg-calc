@@ -1,0 +1,406 @@
+[
+    {
+        "text": "Set",
+        "textMstId": "029c0df654365705694155ea3dedf6962"
+    },
+    {
+        "text": "Increases DEF by 45.",
+        "textMstId": "08031d6b9baafa8b463fd7dca0392ee72"
+    },
+    {
+        "text": "Decreases critical rate.",
+        "textMstId": "0a7c9042bea290d9640228c6cad8f7f52"
+    },
+    {
+        "text": "Increases ATK by 120.",
+        "textMstId": "0d5e2d7a9166e4b8515796bba0f69c762"
+    },
+    {
+        "text": "Increases max HP by 288.",
+        "textMstId": "104282e9687006d10c6a509574da2fdb2"
+    },
+    {
+        "text": "Increases DEF by 10.",
+        "textMstId": "14c1877b792da484c4cd3c4f15a8c2922"
+    },
+    {
+        "text": "Increases DEF by 15.",
+        "textMstId": "1afd37a0ab15dde77dc0a904a64927992"
+    },
+    {
+        "text": "Increases max HP by 420.",
+        "textMstId": "1ce1b9f0737024ad241233be3e1975572"
+    },
+    {
+        "text": "Increases max HP by 166.",
+        "textMstId": "1ce5e47904686bd7b4573d8fcc8f629b2"
+    },
+    {
+        "text": "Increases ATK by 15%.",
+        "textMstId": "1d197f26b22b9708c00953597d4b68cc2"
+    },
+    {
+        "text": "Increases ATK by 60.",
+        "textMstId": "20c279edc1cdf5b08fd2c189974968f82"
+    },
+    {
+        "text": "Increases debuff RES.",
+        "textMstId": "258f8a235a77ea36ca089499fc2c28282"
+    },
+    {
+        "text": "Assigning Parties",
+        "textMstId": "28a9de62ffa0e785a4909ea8ead54ccd2"
+    },
+    {
+        "text": "Increases ATK by 30.",
+        "textMstId": "292164c8e7984630737103a17633dafd2"
+    },
+    {
+        "text": "Increases DEF by 7.",
+        "textMstId": "2b7c9066e7b1253223d8184d7bdff73e2"
+    },
+    {
+        "text": "Increases DEF by 10%.",
+        "textMstId": "328773a65303a9afb979a33c14a4b9702"
+    },
+    {
+        "text": "Special",
+        "textMstId": "32c9821efbf6619a78789106cb7f577111"
+    },
+    {
+        "text": "No Regrets",
+        "textMstId": "35fae0392d788a58f16a71fd97d817222"
+    },
+    {
+        "text": "Increases HP by 124.",
+        "textMstId": "35fcefb856dd8cc1ea79dd9e7066e2c02"
+    },
+    {
+        "text": "Increases DEF.",
+        "textMstId": "3c9c142a2384e772d12ab9d6eab509da2"
+    },
+    {
+        "text": "Increases HP by 251.",
+        "textMstId": "407ae3705ce7ffe0b0cd4135fc71895a2"
+    },
+    {
+        "text": "Increases debuff hit rate.",
+        "textMstId": "41d9ff3f4c26214f98f0c57ced7c3b342"
+    },
+    {
+        "text": "Increases max HP by 251.",
+        "textMstId": "42e87fb1464fa06881026196402c8f812"
+    },
+    {
+        "text": "Increases ATK by 10.",
+        "textMstId": "434a20be1753d3f3677c20940d8c270e2"
+    },
+    {
+        "text": "Increases HP by 450.",
+        "textMstId": "4634ad4da15617e2040b5c1e20d587862"
+    },
+    {
+        "text": "Increases ATK by 7.",
+        "textMstId": "4a38211307fd8d99f3821bbe4001fc732"
+    },
+    {
+        "text": "Increases DEF by 11.",
+        "textMstId": "4cc2e8ecc9e809e71f5c68b0872c26d62"
+    },
+    {
+        "text": "Increases HP by 166.",
+        "textMstId": "4f22beb56bbfb6b1190f4f80ac4be7dd2"
+    },
+    {
+        "text": "Decreases MP recovery rate.",
+        "textMstId": "51dc901ceb425068781fbe9bc0de844c2"
+    },
+    {
+        "text": "Increases max HP by 377.",
+        "textMstId": "528be7bd245a01d72136e836d8801f0b2"
+    },
+    {
+        "text": "Crystalis",
+        "textMstId": "55b999fa85339bd872695ee98dba4dc92"
+    },
+    {
+        "text": "Increases ATK by 15.",
+        "textMstId": "5914a36f49d87bf4b3559481b41dd0902"
+    },
+    {
+        "text": "Increases ATK by 25%.",
+        "textMstId": "5e048fbfe8eef6ca197fe5c5ab7cd0622"
+    },
+    {
+        "text": "Increases HP by 288.",
+        "textMstId": "683e32ae7fb3caae9b9c00cf8f58b8122"
+    },
+    {
+        "text": "Increases DEF by 8.",
+        "textMstId": "68cc55653cb06e48689dce0587b283252"
+    },
+    {
+        "text": "Increases DEF by 5.",
+        "textMstId": "6a4527575ef28ca03c11c4608a2a844c2"
+    },
+    {
+        "text": "Increases DEF by 9.",
+        "textMstId": "6a9a637329e268a38e5f3591227be3c92"
+    },
+    {
+        "text": "Increases ailment RES.",
+        "textMstId": "6bb0a058f798e2aaa705d14eaf1a8b192"
+    },
+    {
+        "text": "Increases ATK by 20.",
+        "textMstId": "6c48bd3a0f1f64dc82344d7c85ed5dd02"
+    },
+    {
+        "text": "Mirror Layer 1",
+        "textMstId": "729cdaf94b96864e05f39f98eb0072cc2"
+    },
+    {
+        "text": "Increases DEF by 75.",
+        "textMstId": "73770bcacd20e7b75f464e12b9953e9a2"
+    },
+    {
+        "text": "Suggested Elements",
+        "textMstId": "751ef0ab997151d543362828b26fb76411"
+    },
+    {
+        "text": "Increases HP by 377.",
+        "textMstId": "7590c5a4279b3af4da2b7b9c2724a9052"
+    },
+    {
+        "text": "Increases ATK by 8.",
+        "textMstId": "76269d6bea787e7eaf87839662fb92a22"
+    },
+    {
+        "text": "Increases DEF by 23.",
+        "textMstId": "7738b1159eb59bd19b3a7afae72044a32"
+    },
+    {
+        "text": "Increases ailment hit rate.",
+        "textMstId": "7b36f745107360f12e993304fe93fcf32"
+    },
+    {
+        "text": "Increases DEF by 40.",
+        "textMstId": "7b3a1826150cadf5f699ee601603fe912"
+    },
+    {
+        "text": "Increases max HP by 124.",
+        "textMstId": "7b8e4836888d3c694e578eb6dbb7638e2"
+    },
+    {
+        "text": "Increases ATK.",
+        "textMstId": "7e2d3996d1a1f2c1608a50e6133e8a6c2"
+    },
+    {
+        "text": "Increases HP by 293.",
+        "textMstId": "817eaaad30ac60c627dcb35ce903bf292"
+    },
+    {
+        "text": "Decreases DMG taken.",
+        "textMstId": "83ff580d3896a6ff6805c0c558b74ca92"
+    },
+    {
+        "text": "Increases ATK by 20%.",
+        "textMstId": "84193975c7a99ea55cbfde518758d57e2"
+    },
+    {
+        "text": "Increases ATK by 8%.",
+        "textMstId": "859e82ce0437c8cc78f5c9ba3a6cb3ae2"
+    },
+    {
+        "text": "Increases HP by 360.",
+        "textMstId": "8b21ec15e9ffb04f1cbb4cd97cb483992"
+    },
+    {
+        "text": "Increases break gauge depletion.",
+        "textMstId": "8b945b3d53100be43f012e4c5c8ed47c2"
+    },
+    {
+        "text": "▼ Players residing in Japan:<br>\nMagica Stones can be purchased at the shop.<br>\nWhen making your first purchase, you must register your date of birth.<br>\nPlease note that your birthday cannot be changed later.<br>\nMonthly purchase limits are set according to age calculated from your date of birth.<br>\n<br>\n・Under 16: Up to 5,000 JPY (tax incl.) per month<br>\n・16 to 17: Up to 10,000 JPY (tax incl.) per month<br>\n・18 or over: No Restrictions<br>\n<br>\nIf you are underage, please get permission from your parent or guardian before purchasing Magica Stones, and be sure to make the purchase with them.<br>\n<br>\n<br>\n▼ Players residing outside Japan:<br>\nMagica Stones can be purchased at the shop.<br>",
+        "textMstId": "8e65d17de8f71a2920298013fac748692"
+    },
+    {
+        "text": "Increases max HP by 450.",
+        "textMstId": "91dfe703ac62b655e120b754f5bc92692"
+    },
+    {
+        "text": "Increases DMG dealt.",
+        "textMstId": "94ff04da02a1310a2b72295ae1ad4ee82"
+    },
+    {
+        "text": "Increases max HP by 208.",
+        "textMstId": "9da5fe03e814fcd0f9e428c2d852addd2"
+    },
+    {
+        "text": "Magic Unlock",
+        "textMstId": "9edf6eeb2858fc019e1ee3cff54a971b2"
+    },
+    {
+        "text": "Recommended",
+        "textMstId": "a0415844ff4a544a507e9b561b914bbe2"
+    },
+    {
+        "text": "Increases max HP by 293.",
+        "textMstId": "a4fe56ab51837f96a41668945fa3e3d32"
+    },
+    {
+        "text": "Increases HP by 40.",
+        "textMstId": "a6c21cd0381da3411eb996581277b9592"
+    },
+    {
+        "text": "Increases buff effects.",
+        "textMstId": "a727fae002ec389320c9cadd5e5e17d42"
+    },
+    {
+        "text": "Increases HP by 420.",
+        "textMstId": "a9838efde1e210e5463a4e517d130dc52"
+    },
+    {
+        "text": "Increases ATK by 30%.",
+        "textMstId": "b124d5d7928145a25b2acf1c9594137a2"
+    },
+    {
+        "text": "Increases max HP by 335.",
+        "textMstId": "b21a34664027bf1da05ad25bd84dc8682"
+    },
+    {
+        "text": " and ",
+        "textMstId": "b505660a97c0ddf7d7209d22bc498ed12"
+    },
+    {
+        "text": "Decreases DEF.",
+        "textMstId": "b50dfca72aae1f98c988c856284be0d82"
+    },
+    {
+        "text": "Increases HP by 82.",
+        "textMstId": "bd2f1442aab1c126c7e66ae9ab205bef2"
+    },
+    {
+        "text": "Decreases SPD.",
+        "textMstId": "c221f1326d8e03b02ecd36c2f973090a2"
+    },
+    {
+        "text": "Increases SPD.",
+        "textMstId": "c469a9f54300df614b67abee9dd186222"
+    },
+    {
+        "text": "Increases max HP by 82.",
+        "textMstId": "c8518fa3cce20a18881a80418b2d00ec2"
+    },
+    {
+        "text": "Increases ATK by 6.",
+        "textMstId": "c9d40a40f842887498b53ff0ff351cf62"
+    },
+    {
+        "text": "Suggested",
+        "textMstId": "cbf53dcb51e3e3892ac679ed1d63e5e42"
+    },
+    {
+        "text": "Increases ATK by 75.",
+        "textMstId": "ccfd3668f0f4c2a690091a8ff15b8b952"
+    },
+    {
+        "text": "Heartphial",
+        "textMstId": "d15ca533ec861cd3c0d98590e3c15fe32"
+    },
+    {
+        "text": "Decreases DMG dealt.",
+        "textMstId": "d3aed8b23edf7e9351ec355b88715dbc2"
+    },
+    {
+        "text": "Decreases debuff effects.",
+        "textMstId": "d41223f8f3dcbd9cd46e81ceea690ccf2"
+    },
+    {
+        "text": "Increases DEF by 5%.",
+        "textMstId": "d6d03fb69708e265a0a09951278e6cb62"
+    },
+    {
+        "text": "Elemental Bonus",
+        "textMstId": "d81ce6857077f8ddca62b9a0bc1cdbc211"
+    },
+    {
+        "text": "Increases DEF by 15%.",
+        "textMstId": "d919d63af878c9bb00cdde623bd7f7b82"
+    },
+    {
+        "text": "Increases DEF by 6.",
+        "textMstId": "d948e23a41b56f13aee83568aca267842"
+    },
+    {
+        "text": "Increases DMG taken.",
+        "textMstId": "db99ffff81c1a332c31d768d6accfdfa2"
+    },
+    {
+        "text": "Increases HP by 10%.",
+        "textMstId": "dcfcae78a26a334ad11bf1fad3707f6b2"
+    },
+    {
+        "text": "At turn start, takes dark DMG.",
+        "textMstId": "de77374ed1761a2f36e4f1d63af1e7b72"
+    },
+    {
+        "text": "Increases DEF by 120.",
+        "textMstId": "dfe6039c494f2779948df2474983e7782"
+    },
+    {
+        "text": "Increases ATK by 12.",
+        "textMstId": "e07385a6f2c8c46e3c7d23a6c16d242d2"
+    },
+    {
+        "text": "Increases ATK by 10%.",
+        "textMstId": "e41c30384224bf9ca5d6e30091c49e212"
+    },
+    {
+        "text": "Decreases critical DMG.",
+        "textMstId": "e47f8998dde3a6b06399fbd90f0b473b2"
+    },
+    {
+        "text": "Join",
+        "textMstId": "e64d9b72e503a4497fdabf405e0f8bc32"
+    },
+    {
+        "text": "Backup",
+        "textMstId": "e64d9b72e503a4497fdabf405e0f8bc33"
+    },
+    {
+        "text": "Joined",
+        "textMstId": "e64d9b72e503a4497fdabf405e0f8bc34"
+    },
+    {
+        "text": "Increases max HP by 40.",
+        "textMstId": "e739dd0451dd8e71c060735f3b08e82d2"
+    },
+    {
+        "text": "Increases ATK by 9.",
+        "textMstId": "e8085d0e82979cd2f7b77ea2862966512"
+    },
+    {
+        "text": "Decreases ATK.",
+        "textMstId": "eb943c279ca0864f5263bf9cd807fd5c2"
+    },
+    {
+        "text": "Increases HP by 335.",
+        "textMstId": "ebedff78a7271ab73e0ed9d7b346d67d2"
+    },
+    {
+        "text": "Increases HP by 208.",
+        "textMstId": "f42d302f06846be471c270d8fe109cf42"
+    },
+    {
+        "text": "Increases ATK by 40.",
+        "textMstId": "f7e29c1fb8677a59265686bc1fa7bcc82"
+    },
+    {
+        "text": "Triggered",
+        "textMstId": "fc040de871f310ae9c3f7262991a5e6a2"
+    },
+    {
+        "text": "Increases max HP by 360.",
+        "textMstId": "fd8ef80a4e603cf410b04b455583f5142"
+    }
+]

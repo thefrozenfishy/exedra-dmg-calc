@@ -1,0 +1,250 @@
+[
+    {
+        "description": "A Magical Girl who goes to school in Mitakihara City. The power from her wish has been placed within a kimono, and now she can battle while wearing it. Her weapon is now a hanetsuki paddle, good at both close and long range. Look closely at the paddle and you may see someone you recognize...",
+        "enCapsName": "MADOKA KANAME",
+        "name": "Madoka Kaname",
+        "releaseTime": "2026-01-01T00:00:00+09:00",
+        "schoolName": "Mitakihara Middle School",
+        "styleMstId": 10010301
+    },
+    {
+        "description": "A Magical Girl sparkling under the summer sun. She's traded her trusty bow for one shaped liked a water pistol, but anyone who mistakes it for a toy is in for a surprise. While she's worried about how to make the best of her summer, she's still trying to have fun. She secretly loves her new ponytail look.",
+        "enCapsName": "MADOKA KANAME",
+        "name": "Madoka Kaname",
+        "releaseTime": "2025-09-28T20:00:00+09:00",
+        "schoolName": "Mitakihara Middle School",
+        "styleMstId": 10010601
+    },
+    {
+        "description": "A girl who wished for the salvation of all Magical Girls and became the godlike entity known as the Law of the Cycle. Near the end of Rebellion, Homura removed the records of Madoka Kaname's existence from the Law of the Cycle. She now lives an ordinary life as a second-year student at Mitakihara Middle School.",
+        "enCapsName": "MADOKA KANAME",
+        "name": "Madoka Kaname",
+        "releaseTime": "2026-08-28T22:00:00+09:00",
+        "schoolName": "Mitakihara Middle School",
+        "styleMstId": 10010801
+    },
+    {
+        "description": "A timid Magical Girl who wished to protect Madoka, Homura is an 8th grader at Mitakihara Middle School. She turns back time repeatedly in an attempt to prevent Madoka from becoming a Witch.",
+        "enCapsName": "HOMURA AKEMI",
+        "name": "Homura Akemi",
+        "releaseTime": "2025-09-28T20:00:00+09:00",
+        "schoolName": "Mitakihara Middle School",
+        "styleMstId": 10020101
+    },
+    {
+        "description": "In a world of altered laws, only she remembers that Madoka ever existed. Upholding Madoka's wish, she continues to fight on as a Magical Girl.",
+        "enCapsName": "HOMURA AKEMI",
+        "name": "Homura Akemi",
+        "releaseTime": "2025-09-28T20:00:00+09:00",
+        "schoolName": "Mitakihara Middle School",
+        "styleMstId": 10020301
+    },
+    {
+        "description": "A Magical Guardian who protects the peace of Magia Island. Her swimsuit serves as her Guardian garb, allowing her to be combat-ready at a moment's notice. Cruising the seas on her jet ski, she uses underwater mines to corner enemies. She shows no mercy to those who dare disturb the island's peace or pose a threat to Madoka.",
+        "enCapsName": "HOMURA AKEMI",
+        "name": "Homura Akemi",
+        "releaseTime": "2026-05-29T12:00:00+09:00",
+        "schoolName": "―",
+        "styleMstId": 10020701
+    },
+    {
+        "description": "A Sorceress who fights evil Witches with a mischievous Witch. She's also a baking genius who can craft anyone's favorite treat. Since she loves Halloween, she keeps a jack-o'-lantern at her door, eagerly awaiting visitors to her home.",
+        "enCapsName": "MAMI TOMOE",
+        "name": "Mami Tomoe",
+        "releaseTime": "2025-10-30T12:00:00+09:00",
+        "schoolName": "―",
+        "styleMstId": 10030201
+    },
+    {
+        "description": "A Magical Girl in a dazzling new summer look. The rocket launcher on her shoulder isn't what it seems—it actually conjures up fireworks through magic. She continues to grow stronger as a Magical Girl and keeps on inspiring the younger girls who look up to her.",
+        "enCapsName": "MAMI TOMOE",
+        "name": "Mami Tomoe",
+        "releaseTime": "2025-09-28T20:00:00+09:00",
+        "schoolName": "Mitakihara Middle School",
+        "styleMstId": 10030301
+    },
+    {
+        "description": "A Sorceress running a pastry shop in Mitaki Hara. Her greatest joy in life is creating smiles with her magical sweets. She treats herself with a warm cup of tea at the end of each shift. Mami lives on the 2nd floor of the shop with her former pupil, Kyoko.",
+        "enCapsName": "MAMI TOMOE",
+        "name": "Mami Tomoe",
+        "releaseTime": "2026-02-27T12:00:00+09:00",
+        "schoolName": "―",
+        "styleMstId": 10030401
+    },
+    {
+        "description": "A Magical Girl bound to the Doppel of Invitations. Its form is dressing up. The master of this emotion doesn't trust it but battles on, regardless of its presence.",
+        "enCapsName": "MAMI TOMOE",
+        "name": "Mami Tomoe",
+        "releaseTime": "2026-05-20T12:00:00+09:00",
+        "schoolName": "Mitakihara Middle School",
+        "styleMstId": 10030501
+    },
+    {
+        "description": "A Magical Girl senpai to Madoka, Sayaka, and the others in Mitakihara. Although she lost her life battling the Dessert Witch, this tragic fate comes to be avoided thanks to Madoka's wish, and so she continues being a Magical Girl.",
+        "enCapsName": "MAMI TOMOE",
+        "name": "Mami Tomoe",
+        "releaseTime": "2026-07-31T12:00:00+09:00",
+        "schoolName": "Mitakihara Middle School",
+        "styleMstId": 10030601
+    },
+    {
+        "description": "A Magical Girl enjoying her seaside vacation. Her surfboard doubles as a weapon which she rides with a magical flair. As a total beginner though, she's unaware that her effortless switch stance and off-the-lip turns would usually take years to master.",
+        "enCapsName": "SAYAKA MIKI",
+        "name": "Sayaka Miki",
+        "releaseTime": "2025-09-28T20:00:00+09:00",
+        "schoolName": "Mitakihara Middle School",
+        "styleMstId": 10040201
+    },
+    {
+        "description": "A Magical Girl in St. Magica Academy's Nice Santa Club. Her heart's aflutter thinking about delivering gifts to all the good children, but she's ready to give her all on that fateful night, riding her specially made glider. For Sayaka, there's nothing better than all those smiles come Christmas morning.",
+        "enCapsName": "SAYAKA MIKI",
+        "name": "Sayaka Miki",
+        "releaseTime": "2025-11-29T12:00:00+09:00",
+        "schoolName": "St. Magica Academy",
+        "styleMstId": 10040301
+    },
+    {
+        "description": "Madoka's best friend who became a Magical Girl to restore the health of someone close to her. But in wishing for the happiness of another, she brought a curse upon herself. She ultimately became a Witch and lost her life along with Kyoko. Thanks to Madoka's wish, however, she was able to come to a peaceful end.",
+        "enCapsName": "SAYAKA MIKI",
+        "name": "Sayaka Miki",
+        "releaseTime": "2026-07-31T12:00:00+09:00",
+        "schoolName": "Mitakihara Middle School",
+        "styleMstId": 10040701
+    },
+    {
+        "description": "A Magical Girl enjoying the summer sun and sea. Although she usually can't swim, this Magical Girl form allows her to do so, so well she can even catch fish while doing it. Powerful as ever, she uses her beachball to rain fire upon her enemies, especially Mitama.",
+        "enCapsName": "KYOKO SAKURA",
+        "name": "Kyoko Sakura",
+        "releaseTime": "2026-06-16T12:00:00+09:00",
+        "schoolName": "―",
+        "styleMstId": 10050201
+    },
+    {
+        "description": "A Magical Girl in St. Magica Academy's Naughty Santa Club tasked with delivering \"punishment potatoes\" to naughty kids. Although she's confident that she can slip past any anti-Santa trap in her way, keeping her horns from getting caught on something every time she enters a room is another story.",
+        "enCapsName": "KYOKO SAKURA",
+        "name": "Kyoko Sakura",
+        "releaseTime": "2025-12-11T12:00:00+09:00",
+        "schoolName": "St. Magica Academy",
+        "styleMstId": 10050301
+    },
+    {
+        "description": "A Sorceress who works as a pastry chef in Mitaki Hara. She whips up magical therapeutic sweets, as well as the occasional prank, and will eat anything as long as it's tasty. Kyoko lives with her former baking mentor, Mami.",
+        "enCapsName": "KYOKO SAKURA",
+        "name": "Kyoko Sakura",
+        "releaseTime": "2026-02-17T12:00:00+09:00",
+        "schoolName": "―",
+        "styleMstId": 10050401
+    },
+    {
+        "description": "A Magical Girl who races alongside Homura to save Madoka. She can glimpse into the future and \"cut film\" to erase memories. After so many takes, she's perfected latte art between scenes.",
+        "enCapsName": "MABAYU AKI",
+        "name": "Mabayu Aki",
+        "releaseTime": "2025-11-18T12:00:00+09:00",
+        "schoolName": "Mitakihara Middle School",
+        "styleMstId": 10070201
+    },
+    {
+        "description": "A Magical Girl bound to the Doppel of Silence. Its feature is that of a cuckoo. The master of this emotion is aware of how pitiful this Doppel is, but refuses to look at it.",
+        "enCapsName": "IROHA TAMAKI",
+        "name": "Iroha Tamaki",
+        "releaseTime": "2025-09-28T20:00:00+09:00",
+        "schoolName": "Kamihama University Affiliated School",
+        "styleMstId": 10080102
+    },
+    {
+        "description": "A Magical Girl enjoying summer vacation with her friends. Her swimsuit is a Magical Girl outfit, so she can fight at any time, but she's keeps her swim float in case of water battles as an incident when she was younger left her unable to swim... She can also use it to escape in an emergency by twisting it like a screw.",
+        "enCapsName": "IROHA TAMAKI",
+        "name": "Iroha Tamaki",
+        "releaseTime": "2026-06-29T12:00:00+09:00",
+        "schoolName": "Kamihama University Affiliated School",
+        "styleMstId": 10080401
+    },
+    {
+        "description": "A Magical Girl looking after her friends as they clean a pool. Her swimsuit is a Magical Girl outfit, so she can fight at any time. She attacks using a seashell-shaped swim float that's so large everyone can climb on it and play together.",
+        "enCapsName": "YACHIYO NANAMI",
+        "name": "Yachiyo Nanami",
+        "releaseTime": "2026-07-15T12:00:00+09:00",
+        "schoolName": "Kamihama City University",
+        "styleMstId": 10090301
+    },
+    {
+        "description": "A Magical Girl fused with the Uwasa of the Chelation Land Mascot. Her goal is to make the amusement park a haven of relaxation for all, and she invites visiting Magical Girls to forget their worries and take it easy. Those who refuse soon find themselves facing crackling bolts and offbeat attacks that make full use of the park's attractions.",
+        "enCapsName": "UWASA TSURUNO",
+        "name": "Uwasa Tsuruno",
+        "releaseTime": "2026-08-28T22:00:00+09:00",
+        "schoolName": "Kamihama University Affiliated School",
+        "styleMstId": 10100201
+    },
+    {
+        "description": "As the ruler of Artland has vanished, this ghost now reigns as regent. She transforms people's hearts into art, striking fear into everyone. Although she usually moves about on two legs, she can float if she puts her mind to it. Note: Calling her a \"ghoul\" makes her angry.",
+        "enCapsName": "ALINA GRAY",
+        "name": "Alina Gray",
+        "releaseTime": "2025-11-06T12:00:00+09:00",
+        "schoolName": "―",
+        "styleMstId": 10210201
+    },
+    {
+        "description": "A Magical Girl who brings happiness to a tinsel-trimmed town. From making cakes to auroras, anything is possible when her and Rika's hearts are in sync. She is thinking of inviting her dear friend to a giant snow globe that she's fond of for a party on Christmas Day.",
+        "enCapsName": "REN ISUZU",
+        "name": "Ren Isuzu",
+        "releaseTime": "2025-12-22T12:00:00+09:00",
+        "schoolName": "Kamihama University Affiliated School",
+        "styleMstId": 10800201
+    },
+    {
+        "description": "A Magical Girl who brings happiness to a tinsel-trimmed town. From making cakes to auroras, anything is possible when her and Ren's hearts are in sync. On the night of Christmas Eve, she sets out on a flying sleigh to deliver a special magic created by the two of them. The sleigh itself holds a special meaning as well.",
+        "enCapsName": "RIKA AYANO",
+        "name": "Rika Ayano",
+        "releaseTime": "2025-12-22T12:00:00+09:00",
+        "schoolName": "Chuo Academy",
+        "styleMstId": 10860201
+    },
+    {
+        "description": "A Magical Girl from America looking for treasured \"kawaii.\" Thanks to Mitama's talents and her deep bond with Kumanosuke, a plushie bear from her father, she develops a special look, and continues her pursuit of even more kawaii discoveries.",
+        "enCapsName": "ASHLEY TAYLOR",
+        "name": "Ashley Taylor",
+        "releaseTime": "2026-09-10T12:00:00+09:00",
+        "schoolName": "Kosho Academy",
+        "styleMstId": 11070201
+    },
+    {
+        "description": "A Magical Girl with a vivid imagination. As she spent her childhood moving from one country to the next, fairy tales became her constant companions. \"Fable of Farewell\" is her favorite, and her Magical Girl form is inspired by its protagonist, the Last Inquisitor.",
+        "enCapsName": "KUSH IRINA",
+        "name": "Kush Irina",
+        "releaseTime": "2026-07-31T12:00:00+09:00",
+        "schoolName": "St. Liliana Academy",
+        "styleMstId": 11140201
+    },
+    {
+        "description": "A Goddess who watches over Magical Girls from the furthest reaches of the universe's present, past, and future. She knows all there is to know about Magical Girls, and provides blessings for all of them.",
+        "enCapsName": "ULTIMATE MADOKA",
+        "name": "Ultimate Madoka",
+        "releaseTime": "2025-09-28T20:00:00+09:00",
+        "schoolName": "―",
+        "styleMstId": 11370101
+    },
+    {
+        "description": "A being who disrupts providence and acts as an agitator for this world. Having seized a fragment of the \"Law of the Cycle,\" she proclaims herself a devil. While forcing the Incubators into cooperation, she shows no hesitation in turning hostile toward the Magical Girls she was once connected to.",
+        "enCapsName": "DEVIL HOMURA",
+        "name": "Devil Homura",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "schoolName": "―",
+        "styleMstId": 11380101
+    },
+    {
+        "description": "A Magical Girl from Mitakihara, and a mentor to Madoka and her friends. Though she was once proud of hunting Witches and saving people, she relocated to Kamihama, where she works to lead Magical Girls to liberation.",
+        "enCapsName": "HOLY MAMI",
+        "name": "Holy Mami",
+        "releaseTime": "2025-09-28T20:00:00+09:00",
+        "schoolName": "Mitakihara Middle School",
+        "styleMstId": 11390101
+    },
+    {
+        "description": "Darc (Jeanne d'Arc) has awakened as a true hero, transforming people's hopes and threads of fate into strength. Along with the power of light, her dark gauntlet harbors the power of shadows. Manifested through a fleeting miracle born from a certain wish, this \"perfect irregular\" transcends the bounds of a Magical Girl.",
+        "enCapsName": "DARC",
+        "name": "Darc (Final)",
+        "releaseTime": "2026-04-30T12:00:00+09:00",
+        "schoolName": "―",
+        "styleMstId": 11440101
+    }
+]

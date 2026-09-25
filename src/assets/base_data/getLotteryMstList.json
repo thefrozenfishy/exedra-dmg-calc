@@ -1,0 +1,54 @@
+[
+    {
+        "backgroundImagePath": "1",
+        "endTime": "2026-01-15T11:59:59+09:00",
+        "iconImagePath": "1",
+        "lotteryMstId": 1,
+        "lotteryNumberUpperLimit": 9999999999,
+        "lotteryReceivableEndTime": "2026-01-07T11:59:59+09:00",
+        "lotteryType": 0,
+        "name": "Magia Exedraw",
+        "rewardReceivableStartTime": "2026-01-09T12:00:00+09:00",
+        "startTime": "2025-12-22T12:00:00+09:00",
+        "ticketItemMstId": 2100001
+    },
+    {
+        "backgroundImagePath": "1",
+        "endTime": "2026-04-30T11:59:59+09:00",
+        "iconImagePath": "2",
+        "lotteryMstId": 2,
+        "lotteryNumberUpperLimit": 9999999999,
+        "lotteryReceivableEndTime": "2026-04-22T04:59:59+09:00",
+        "lotteryType": 0,
+        "name": "1st Anniversary Magia Exedraw",
+        "rewardReceivableStartTime": "2026-04-24T12:00:00+09:00",
+        "startTime": "2026-03-27T22:00:00+09:00",
+        "ticketItemMstId": 2100002
+    },
+    {
+        "backgroundImagePath": "2",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "iconImagePath": "3",
+        "lotteryMstId": 3,
+        "lotteryNumberUpperLimit": 999999,
+        "lotteryReceivableEndTime": "2026-08-31T11:59:59+09:00",
+        "lotteryType": 1,
+        "name": "Magitem Exedraw",
+        "rewardReceivableStartTime": "2026-09-01T12:00:00+09:00",
+        "startTime": "2026-07-31T12:00:00+09:00",
+        "ticketItemMstId": 2100003
+    },
+    {
+        "backgroundImagePath": "1",
+        "endTime": "2026-10-22T11:59:59+09:00",
+        "iconImagePath": "4",
+        "lotteryMstId": 4,
+        "lotteryNumberUpperLimit": 9999999999,
+        "lotteryReceivableEndTime": "2026-10-15T11:59:59+09:00",
+        "lotteryType": 0,
+        "name": "1.5th Anniversary Magia Exedraw",
+        "rewardReceivableStartTime": "2026-10-16T12:00:00+09:00",
+        "startTime": "2026-09-10T12:00:00+09:00",
+        "ticketItemMstId": 2100004
+    }
+]

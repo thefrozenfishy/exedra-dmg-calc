@@ -1,0 +1,22 @@
+[
+    {
+        "objectType": 1,
+        "payType": 1
+    },
+    {
+        "objectType": 7,
+        "payType": 2
+    },
+    {
+        "objectType": 3,
+        "payType": 3
+    },
+    {
+        "objectType": 11,
+        "payType": 4
+    },
+    {
+        "objectType": 2,
+        "payType": 5
+    }
+]

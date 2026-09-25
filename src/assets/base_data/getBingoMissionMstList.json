@@ -1,0 +1,12 @@
+[
+    {
+        "bingoMissionMstId": 4,
+        "firstMissionTitleMstId": 2007,
+        "sortOrder": 100
+    },
+    {
+        "bingoMissionMstId": 5,
+        "firstMissionTitleMstId": 2017,
+        "sortOrder": 100
+    }
+]

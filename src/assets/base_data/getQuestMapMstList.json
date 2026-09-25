@@ -1,0 +1,114 @@
+[
+    {
+        "conditionGroupId": 0,
+        "name": "Puella Magi Madoka Magica",
+        "openEffectFlagMiniTutorialNumber": 0,
+        "openFlagMiniTutorialNumber": 0,
+        "questCategoryMstId": 1,
+        "questMapMstId": 1
+    },
+    {
+        "conditionGroupId": 0,
+        "name": "Magia Record",
+        "openEffectFlagMiniTutorialNumber": 35,
+        "openFlagMiniTutorialNumber": 34,
+        "questCategoryMstId": 1,
+        "questMapMstId": 2
+    },
+    {
+        "conditionGroupId": 0,
+        "name": "Puella Magi Oriko Magica",
+        "openEffectFlagMiniTutorialNumber": 33,
+        "openFlagMiniTutorialNumber": 32,
+        "questCategoryMstId": 1,
+        "questMapMstId": 3
+    },
+    {
+        "conditionGroupId": 0,
+        "name": "Puella Magi Madoka Magica: Scene 0",
+        "openEffectFlagMiniTutorialNumber": 85,
+        "openFlagMiniTutorialNumber": 84,
+        "questCategoryMstId": 1,
+        "questMapMstId": 5
+    },
+    {
+        "conditionGroupId": 0,
+        "name": "Chaos",
+        "openEffectFlagMiniTutorialNumber": 79,
+        "openFlagMiniTutorialNumber": 78,
+        "questCategoryMstId": 1,
+        "questMapMstId": 6
+    },
+    {
+        "conditionGroupId": 0,
+        "name": "Puella Magi Madoka Magica: Wraith Arc",
+        "openEffectFlagMiniTutorialNumber": 151,
+        "openFlagMiniTutorialNumber": 150,
+        "questCategoryMstId": 1,
+        "questMapMstId": 7
+    },
+    {
+        "conditionGroupId": 0,
+        "name": "Magia Record: Puella Magi Madoka Magica Side Story Crescent Memoria",
+        "openEffectFlagMiniTutorialNumber": 159,
+        "openFlagMiniTutorialNumber": 158,
+        "questCategoryMstId": 1,
+        "questMapMstId": 8
+    },
+    {
+        "conditionGroupId": 0,
+        "name": "Puella Magi Madoka Magica -Rebellion-",
+        "openEffectFlagMiniTutorialNumber": 169,
+        "openFlagMiniTutorialNumber": 168,
+        "questCategoryMstId": 1,
+        "questMapMstId": 9
+    },
+    {
+        "conditionGroupId": 0,
+        "name": "Puella Magi Darc Magica: The Legend of \"Jeanne d'Arc\"",
+        "openEffectFlagMiniTutorialNumber": 179,
+        "openFlagMiniTutorialNumber": 178,
+        "questCategoryMstId": 1,
+        "questMapMstId": 10
+    },
+    {
+        "conditionGroupId": 0,
+        "name": "Kioku Upgrade Material Quest",
+        "openEffectFlagMiniTutorialNumber": 0,
+        "openFlagMiniTutorialNumber": 0,
+        "questCategoryMstId": 4,
+        "questMapMstId": 41
+    },
+    {
+        "conditionGroupId": 0,
+        "name": "Magic Unlock Material Quest",
+        "openEffectFlagMiniTutorialNumber": 0,
+        "openFlagMiniTutorialNumber": 0,
+        "questCategoryMstId": 4,
+        "questMapMstId": 42
+    },
+    {
+        "conditionGroupId": 0,
+        "name": "Crystalis Quests",
+        "openEffectFlagMiniTutorialNumber": 0,
+        "openFlagMiniTutorialNumber": 0,
+        "questCategoryMstId": 4,
+        "questMapMstId": 43
+    },
+    {
+        "conditionGroupId": 0,
+        "name": "Heartphial Quests",
+        "openEffectFlagMiniTutorialNumber": 0,
+        "openFlagMiniTutorialNumber": 0,
+        "questCategoryMstId": 10,
+        "questMapMstId": 101
+    },
+    {
+        "conditionGroupId": 0,
+        "name": "Exedra Quest",
+        "openEffectFlagMiniTutorialNumber": 0,
+        "openFlagMiniTutorialNumber": 0,
+        "questCategoryMstId": 13,
+        "questMapMstId": 131
+    }
+]

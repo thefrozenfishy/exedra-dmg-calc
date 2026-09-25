@@ -1,0 +1,126 @@
+[
+    {
+        "name": "MP Recovery Rate+",
+        "passiveSkillSortCategoryMstId": 100
+    },
+    {
+        "name": "SPD+",
+        "passiveSkillSortCategoryMstId": 101
+    },
+    {
+        "name": "ATK+",
+        "passiveSkillSortCategoryMstId": 102
+    },
+    {
+        "name": "DEF+",
+        "passiveSkillSortCategoryMstId": 103
+    },
+    {
+        "name": "Max HP+",
+        "passiveSkillSortCategoryMstId": 104
+    },
+    {
+        "name": "DMG Dealt on Flame Attack+",
+        "passiveSkillSortCategoryMstId": 105
+    },
+    {
+        "name": "DMG Dealt on Aqua Attack+",
+        "passiveSkillSortCategoryMstId": 106
+    },
+    {
+        "name": "DMG Dealt on Forest Attack+",
+        "passiveSkillSortCategoryMstId": 107
+    },
+    {
+        "name": "DMG Dealt on Light Attack+",
+        "passiveSkillSortCategoryMstId": 108
+    },
+    {
+        "name": "DMG Dealt on Dark Attack+",
+        "passiveSkillSortCategoryMstId": 109
+    },
+    {
+        "name": "DMG Dealt on Void Attack+",
+        "passiveSkillSortCategoryMstId": 110
+    },
+    {
+        "name": "DMG Dealt When Targeting Elemental Weakness+",
+        "passiveSkillSortCategoryMstId": 111
+    },
+    {
+        "name": "Battle Skill DMG Dealt+",
+        "passiveSkillSortCategoryMstId": 112
+    },
+    {
+        "name": "Special Attack DMG Dealt+",
+        "passiveSkillSortCategoryMstId": 113
+    },
+    {
+        "name": "Follow-Up Attack/Counterattack DMG Dealt+",
+        "passiveSkillSortCategoryMstId": 114
+    },
+    {
+        "name": "Ongoing DMG Dealt+",
+        "passiveSkillSortCategoryMstId": 115
+    },
+    {
+        "name": "DMG Dealt+",
+        "passiveSkillSortCategoryMstId": 116
+    },
+    {
+        "name": "Critical Rate+",
+        "passiveSkillSortCategoryMstId": 117
+    },
+    {
+        "name": "Critical DMG+",
+        "passiveSkillSortCategoryMstId": 118
+    },
+    {
+        "name": "Debuff Hit Rate+",
+        "passiveSkillSortCategoryMstId": 119
+    },
+    {
+        "name": "Ailment Hit Rate+",
+        "passiveSkillSortCategoryMstId": 120
+    },
+    {
+        "name": "Ailment RES+",
+        "passiveSkillSortCategoryMstId": 121
+    },
+    {
+        "name": "HP Recovery Amount+",
+        "passiveSkillSortCategoryMstId": 122
+    },
+    {
+        "name": "Break Effect+",
+        "passiveSkillSortCategoryMstId": 123
+    },
+    {
+        "name": "Max HP+, ATK+",
+        "passiveSkillSortCategoryMstId": 124
+    },
+    {
+        "name": "DMG Dealt+, DEF+",
+        "passiveSkillSortCategoryMstId": 125
+    },
+    {
+        "name": "ATK+, DEF+",
+        "passiveSkillSortCategoryMstId": 126
+    },
+    {
+        "name": "Max HP+, DEF+",
+        "passiveSkillSortCategoryMstId": 127
+    },
+    {
+        "name": "Max HP+, SPD+",
+        "passiveSkillSortCategoryMstId": 128
+    },
+    {
+        "name": "Debuff Hit Rate+, SPD+",
+        "passiveSkillSortCategoryMstId": 129
+    },
+    {
+        "name": "Magical Girl Unique Ability",
+        "passiveSkillSortCategoryMstId": 130
+    }
+]

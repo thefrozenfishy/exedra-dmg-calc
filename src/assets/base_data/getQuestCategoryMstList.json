@@ -1,0 +1,57 @@
+[
+    {
+        "name": "メインストーリー",
+        "questCategoryMstId": 1,
+        "resourceName": ""
+    },
+    {
+        "name": "強化クエスト",
+        "questCategoryMstId": 4,
+        "resourceName": ""
+    },
+    {
+        "name": "鏡層",
+        "questCategoryMstId": 5,
+        "resourceName": ""
+    },
+    {
+        "name": "ストーリーイベント",
+        "questCategoryMstId": 9,
+        "resourceName": ""
+    },
+    {
+        "name": "こころの器",
+        "questCategoryMstId": 10,
+        "resourceName": ""
+    },
+    {
+        "name": "スコアアタック",
+        "questCategoryMstId": 11,
+        "resourceName": ""
+    },
+    {
+        "name": "リンクレイド",
+        "questCategoryMstId": 12,
+        "resourceName": ""
+    },
+    {
+        "name": "エクセドラクエスト",
+        "questCategoryMstId": 13,
+        "resourceName": ""
+    },
+    {
+        "name": "エクセドラクライシス",
+        "questCategoryMstId": 14,
+        "resourceName": ""
+    },
+    {
+        "name": "魔法少女タワー",
+        "questCategoryMstId": 15,
+        "resourceName": ""
+    },
+    {
+        "name": "チュートリアル",
+        "questCategoryMstId": 999,
+        "resourceName": ""
+    }
+]

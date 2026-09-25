@@ -1,0 +1,80 @@
+[
+    {
+        "announceMstId": 1898,
+        "battleEndTime": "2026-04-08T23:59:59+09:00",
+        "endTime": "2026-04-13T04:59:59+09:00",
+        "inferiorItemMstId": 0,
+        "rankingRewardGroupId": 1,
+        "soloRaidMstId": 1,
+        "soloRaidPartyBuffGroupId": 1,
+        "soloRaidSeasonBuffGroupId": 1,
+        "startTime": "2026-04-01T12:00:00+09:00",
+        "superiorItemMstId": 0,
+        "totalScoreRewardGroupId": 1
+    },
+    {
+        "announceMstId": 1953,
+        "battleEndTime": "2026-05-08T23:59:59+09:00",
+        "endTime": "2026-05-12T04:59:59+09:00",
+        "inferiorItemMstId": 0,
+        "rankingRewardGroupId": 2,
+        "soloRaidMstId": 2,
+        "soloRaidPartyBuffGroupId": 2,
+        "soloRaidSeasonBuffGroupId": 2,
+        "startTime": "2026-05-01T12:00:00+09:00",
+        "superiorItemMstId": 0,
+        "totalScoreRewardGroupId": 2
+    },
+    {
+        "announceMstId": 2015,
+        "battleEndTime": "2026-06-08T23:59:59+09:00",
+        "endTime": "2026-06-12T04:59:59+09:00",
+        "inferiorItemMstId": 0,
+        "rankingRewardGroupId": 3,
+        "soloRaidMstId": 3,
+        "soloRaidPartyBuffGroupId": 3,
+        "soloRaidSeasonBuffGroupId": 3,
+        "startTime": "2026-06-01T12:00:00+09:00",
+        "superiorItemMstId": 0,
+        "totalScoreRewardGroupId": 3
+    },
+    {
+        "announceMstId": 2073,
+        "battleEndTime": "2026-07-08T23:59:59+09:00",
+        "endTime": "2026-07-13T04:59:59+09:00",
+        "inferiorItemMstId": 201106,
+        "rankingRewardGroupId": 4,
+        "soloRaidMstId": 4,
+        "soloRaidPartyBuffGroupId": 4,
+        "soloRaidSeasonBuffGroupId": 4,
+        "startTime": "2026-07-01T12:00:00+09:00",
+        "superiorItemMstId": 201105,
+        "totalScoreRewardGroupId": 4
+    },
+    {
+        "announceMstId": 2150,
+        "battleEndTime": "2026-08-08T23:59:59+09:00",
+        "endTime": "2026-08-12T04:59:59+09:00",
+        "inferiorItemMstId": 201118,
+        "rankingRewardGroupId": 5,
+        "soloRaidMstId": 5,
+        "soloRaidPartyBuffGroupId": 5,
+        "soloRaidSeasonBuffGroupId": 5,
+        "startTime": "2026-08-01T12:00:00+09:00",
+        "superiorItemMstId": 201117,
+        "totalScoreRewardGroupId": 5
+    },
+    {
+        "announceMstId": 2249,
+        "battleEndTime": "2026-09-08T23:59:59+09:00",
+        "endTime": "2026-09-11T04:59:59+09:00",
+        "inferiorItemMstId": 201122,
+        "rankingRewardGroupId": 6,
+        "soloRaidMstId": 6,
+        "soloRaidPartyBuffGroupId": 6,
+        "soloRaidSeasonBuffGroupId": 6,
+        "startTime": "2026-09-01T12:00:00+09:00",
+        "superiorItemMstId": 201121,
+        "totalScoreRewardGroupId": 6
+    }
+]

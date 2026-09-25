@@ -1,0 +1,32 @@
+[
+    {
+        "description": "The Countdown to Calamity progresses when the boss that activated it takes its turn.<br>When the Countdown to Calamity ends, the boss will perform an action that deals major damage.<br>You can remove the Countdown to Calamity by dealing a set amount of damage.",
+        "imagePath": "common/skill/battle_icon_skill_countdown",
+        "title": "Countdown to Calamity",
+        "toolTipsMstId": 1
+    },
+    {
+        "description": "An effect that nullifies Action Order UP and Action Order DOWN effects for a set number of turns.<br>This debuff cannot be removed.<br>* Extra actions / additional turns are not affected by Stop.",
+        "imagePath": "battle/ability_effect/battle_icon_lock_turn_order",
+        "title": "Stop",
+        "toolTipsMstId": 2
+    },
+    {
+        "description": "When the boss's HP falls below a certain threshold, it enters its Apex Form, causing its stats and actions to change.<br>When its HP falls below another threshold while in Apex Form, it enters its Apex Overdrive Form, further changing its stats and actions.",
+        "imagePath": "battle/gimmick_icon/icon_modechange",
+        "title": "Awakened",
+        "toolTipsMstId": 3
+    },
+    {
+        "description": "You can reduce Linked HP by defeating enemies.<br>Once Linked HP reaches 0, you will progress to the next wave.<br>Even if enemies are defeated, new ones will continue to appear until Linked HP reaches 0.<br>The amount of Linked HP reduced when an enemy is defeated varies depending on the enemy.",
+        "imagePath": "tool_tips/icon_tips_common",
+        "title": "HP Link",
+        "toolTipsMstId": 4
+    },
+    {
+        "description": "HP is shared among all enemies on the field.<br>You can reduce Linked HP by dealing damage to enemies.<br>Reduce Linked HP to 0 to defeat all enemies on the field.<br>Each enemy has its own break gauge, which is not shared.",
+        "imagePath": "battle/gimmick_icon/icon_boss_hplink",
+        "title": "Boss HP Link",
+        "toolTipsMstId": 5
+    }
+]
