@@ -131,6 +131,9 @@
                 <b class="dmg-text">{{ fmt(ev.amount) }}</b>
                 <span v-if="ev.isCritical" class="crit-tag">crit</span>
                 <span v-if="ev.barrierAbsorbed" class="barrier-text"> ({{ fmt(ev.barrierAbsorbed) }} into barrier)</span>
+                <span v-if="ev.breakDamage" class="break-text"> · break −{{ ev.breakDamage }}</span>
+                <span v-if="ev.broke" class="break-tag">BREAK</span>
+                <span v-if="ev.breakRateUp" class="break-text"> · broken dmg +{{ ev.breakRateUp }}%</span>
               </template>
             </li>
           </ul>
@@ -163,7 +166,7 @@
                   </template>
                   <span v-if="char.barrier > 0" class="status-chip barrier-chip" :title="`Barrier ${fmt(char.barrier)} / ${fmt(char.maxBarrier)}`">Barrier {{ fmt(char.barrier) }}</span>
                   <span v-if="char.shields" class="status-chip shield" :title="`${char.shields} active shield(s): damage cut per hit`">Shield ×{{ char.shields }}</span>
-                  <span v-if="char.isBroken" class="status-chip broken-chip">Broken</span>
+                  <span v-if="char.isBroken" class="status-chip broken-chip" title="Damage taken while broken">Broken {{ char.breakedDamageReceiveRate ?? 100 }}%</span>
                   <span v-if="char.stunned" class="status-chip stun">Stunned</span>
                 </div>
                 <div class="progress-bar" :title="char.mp + ' / ' + char.maxMp">
@@ -889,6 +892,17 @@ function runSimulation() {
 .status-chip.shield { color: var(--info); border-color: var(--info); }
 .status-chip.broken-chip { color: var(--warning); border-color: var(--warning); }
 .status-chip.stun { color: var(--danger); border-color: var(--danger); }
+
+.break-text { color: var(--warning); font-size: 0.9em; }
+.break-tag {
+  margin-left: 0.3rem;
+  font-size: 0.75em;
+  font-weight: 700;
+  color: var(--warning);
+  border: 1px solid var(--warning);
+  border-radius: 999px;
+  padding: 0 0.35rem;
+}
 
 .crit-tag {
   margin-left: 0.3rem;

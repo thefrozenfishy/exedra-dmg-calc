@@ -1,5 +1,5 @@
 import { Ailment, KiokuRole } from "../types/enums";
-import { type AffectedUnitNotice, type BattleEvent, BattleState, aggro, defaultbreak, maxMeters, mpGainFromAction, PassiveSkill, SkillDetail, skillDetailId, SkillKey, targetRange, TargetType, targetTypeToLvl, TargetTypeLookup } from "../types/KiokuTypes";
+import { type AffectedUnitNotice, type BattleEvent, BattleState, aggro, maxMeters, mpGainFromAction, PassiveSkill, SkillDetail, skillDetailId, SkillKey, targetRange, TargetType, targetTypeToLvl, TargetTypeLookup } from "../types/KiokuTypes";
 import { skillDetails } from "../utils/helpers";
 import { isConditionSetActive, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
 import { PvPKioku } from "./PvPKioku";
@@ -7,7 +7,16 @@ import { damageBaseTypeFromEffectType, getAttackDamageResult, getSlipDamageResul
 import { mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum, getFinalDamageRatio, getProcessedSpeedWithBreakdown } from "./UnitStateEngine";
 import { elementMap } from "../types/enums";
 import { EFFECT_TARGET_SIDE } from "./EffectTargetSide";
-import { selectFullAutoTarget, expandProximity } from "./AITargetSelector";
+import { selectFullAutoTarget, expandProximity, filterAlive } from "./AITargetSelector";
+import { SkillType, getVariationBreakPoint, decreaseBreakPoint, increaseBreakedDamageReceiveRate } from "./BreakPoint";
+
+// Which BreakPoint.GetDecreaseValue table an action uses (SetActiveSkillInfo's SkillType).
+function skillTypeOf(t?: TargetType): SkillType {
+    if (t === TargetType.skillId) return SkillType.ActiveSkill
+    if (t === TargetType.specialId) return SkillType.SpecialAttack
+    if (t === TargetType.fuaId) return SkillType.AdditionalSkill
+    return SkillType.NormalAttack
+}
 
 const f32 = Math.fround;
 let globalTurnShiftCounter = 0;
@@ -300,6 +309,7 @@ export class KiokuState {
     currSpdEffects: [number, string, string?][] = []
 
     isBroken = false
+    breakCount = 0
     // Tiebreak stamp for exact-tie turn order, see globalTurnShiftCounter above.
     //
     // VERIFIED against ReDriveBattleCore.TurnReferee$$SortByTurnOrder /
@@ -405,23 +415,33 @@ export class KiokuState {
         return healed
     }
 
-    resolveBreak() {
-        if (this.currentRemainingBreakGauge <= 0 && !this.isBroken) {
-            this.isBroken = true
-            // Break pushes the gauge back by breakTurnGaugeSlowRatio (policy id 20: 250 -> 0.25 of a
-            // full gauge), via UnitTurnGauge.AddGaugeValue.
-            this.addGaugeRate(0.25, -(++globalTurnShiftCounter))
-            // [CONFIRMED] ReDriveBattleCore.TurnReferee (team-level tally, consumed by
-            // BattleConditionParser's CompareContent.BREAK_UNIT_TOTAL_COUNT, 306) -
-            // cumulative across the whole battle, never reset.
-            this.team.breakedUnitTotalCount++
-        }
+    // [CONFIRMED 3.19] BreakPoint$$Decrease, on the gauge reaching 0 (called from BreakPoint.ts).
+    onBreak() {
+        if (this.isBroken) return
+        this.isBroken = true
+        this.breakCount++
+        // Turn gauge pushed back by BreakTurnGaugeSlowRatio/1000 (PvP policy id 20: 250 -> 0.25).
+        this.addGaugeRate(0.25, -(++globalTurnShiftCounter))
+        // BreakedDamageReceiveRate = InitialBreakedDamageReceiveRate / 10 (policy id 21: 1000 -> 100%).
+        this.breakedDamageReceiveRate = PVP_POLICY.initialBreakDamageReceiveRate / 10
+        // [CONFIRMED] ReDriveBattleCore.TurnReferee (team-level tally, consumed by
+        // BattleConditionParser's CompareContent.BREAK_UNIT_TOTAL_COUNT, 306) -
+        // cumulative across the whole battle, never reset.
+        this.team.breakedUnitTotalCount++
     }
 
+    // Safety net for gauge changes outside BreakPoint.decreaseBreakPoint.
+    resolveBreak() {
+        if (this.maxBreakGauge >= 1 && this.currentRemainingBreakGauge < 1) this.onBreak()
+    }
+
+    // [CONFIRMED 3.19] ActExecutor$$TurnBegin: a broken unit gets BreakPoint.ResetValue (gauge back
+    // to max) and BreakedDamageReceiveRate = 0 at the start of its own turn.
     exitBreak() {
         if (this.isBroken) {
             this.isBroken = false
             this.currentRemainingBreakGauge = this.maxBreakGauge
+            this.breakedDamageReceiveRate = 0
         }
     }
 
@@ -639,10 +659,6 @@ export class KiokuState {
         if (!isEligibleForEffect(detail, target)) return
 
         if (detail.abilityEffectType.startsWith("DMG_")) {
-            let breakVal = detail.value3 || defaultbreak[targetType][detail.range]
-            breakVal += Object.values(this.filteredEffects()).flat()
-                .reduce((sum, detail) => detail.abilityEffectType === "UP_GIV_BREAK_POINT_DMG_FIXED" ? sum + detail.value1 : sum, 0)
-            target.currentRemainingBreakGauge -= breakVal
             target.getMp(5)
 
             const damageBaseType = damageBaseTypeFromEffectType(detail.abilityEffectType)
@@ -679,11 +695,22 @@ export class KiokuState {
             const finalExtra = getFinalDamageExtra(totalDamage, getFinalDamageRatio(target, this))
             if (finalExtra > 0) totalDamage += damageCutByBarrier(target, finalExtra).remainingDamage
 
+            // [CONFIRMED 3.19] DamageAbilityEffectBase$$Triggering order: the damage above was
+            // calculated with the target's break state BEFORE this hit; then the broken-damage
+            // rate grows (only if already broken), then the break gauge is reduced. The break
+            // value is Item1 for the main target and Item2 for the others of a range-2 skill.
+            // See BreakPoint.ts.
+            const [mainBreak, subBreak] = getVariationBreakPoint(detail, skillTypeOf(targetType), this.kioku.data.role)
+            const breakValue = detail.range === targetRange.PROXIMITY && !isMainTarget ? subBreak : mainBreak
+            const rateUp = increaseBreakedDamageReceiveRate(this, target, detail)
+            const brk = decreaseBreakPoint(this, target, detail.element ?? 0, breakValue)
+
             const hpLost = target.takeDamage(totalDamage)
             this.team.eventLog.push({
                 kind: "hit", source: this.kioku.name, target: target.kioku.name, amount: hpLost,
                 barrierAbsorbed: result.barrierAbsorbed, isCritical: result.isCritical,
                 sourceIsTeam1: this.team.isTeam1, targetIsTeam1: target.team.isTeam1,
+                breakDamage: brk.decreased, broke: brk.broke, breakRateUp: rateUp || undefined,
             })
             target.lastNotice = result.notice;
             this.team.lastActionNotices.push(result.notice);
@@ -1208,8 +1235,11 @@ export class PvPTeam {
             }
             return expandProximity(primary, possibleTargets)
         }
-        if (detail.range === targetRange.ALL) return possibleTargets
-        if (detail.range === targetRange.SELF) return [actor]
+        // [CONFIRMED 3.19] SelectTargets: candidates are the side's units filtered by !IsDead
+        // (unless IsIncludeDeadUnitInTarget); range 3 = every candidate, range -1 = the user
+        // if it is a candidate.
+        if (detail.range === targetRange.ALL) return filterAlive(possibleTargets)
+        if (detail.range === targetRange.SELF) return actor.isDead ? [] : [actor]
         console.warn("Unknown target", detail)
         return []
     }

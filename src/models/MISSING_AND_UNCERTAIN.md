@@ -1,3 +1,59 @@
+# Revision 6 - targeting and break (3.19.0)
+
+Trigger: Final Fatebloom's range-3 skill/ultimate only hit 2 of 5 enemies and broke them unevenly.
+
+## R6.1 Targeting - the element/role gate was wrong (big)
+
+- `AbilityEffectBase$$SelectTargets` (0x18e7e60) never filters by element or role. Candidates =
+  units of the effect's side, minus dead ones unless `IsIncludeDeadUnitInTarget`. Range -1 = the
+  user; 3 = all candidates; 1 = the chosen unit; 2 = chosen unit + nearest alive unit below and
+  above it by position (lambdas b__4/b__6 + OrderBy/OrderByDescending). `expandProximity` already
+  matched; range 3 now also skips dead units.
+- A detail's `element` on DMG_* is the **attack element** (`DamageAbilityEffectBase.ctor`
+  0x18f0630: info.TargetElement -> attackElement). 6,110 DMG_ATK rows carry one, so the old
+  `isEligibleForEffect` gate (copied from ScoreAttackTeam's buff loop) made nearly every damage
+  skill hit only enemies of its own element.
+- For states the filter is `UnitStateBase.CanAddTo` and depends on the class. Generated into
+  `StateAddFilter.ts` from the dump:
+  - `0x15b8090` (DamageBetter/Worse, ParameterVariation, BreakPointDamageVariation, Regain, slip,
+    recovery, DwnBarrier): role AND element must match.
+  - `0x15b9e40` (Up/DownElementDamageRate): role only; the element is the boosted damage element.
+  - `0x76f830` (UnitStateBase default, Up/DownElementResist, UpRcvCtr/Ctd, aim states, ...): always.
+  Non-state effects (HASTE, RECOVERY_HP, ...) never filter.
+
+## R6.2 Break - rewritten in `BreakPoint.ts`
+
+- Order per hit (`DamageAbilityEffectBase$$Triggering` 0x18ef650): damage first, then
+  `IncreaseBreakedDamageReceiveRate` if the target is already broken, then `BreakPoint.Decrease`.
+- Break value = (value3, value4) when value3 != 0, else `BreakPoint$$GetDecreaseValue` (0x14928a0)
+  by skill type, range and **attacker role** (Breakers use a bigger table). Item2 applies to the
+  non-main targets of range 2. Follow-ups (AdditionalSkill) use the normal-attack table (the old
+  code used 0). Tables are in `BreakPoint.ts`.
+- `CalculateProcessedBreakPointDamage` (0x14914c0): attacker give-break states Up then Down, floor
+  0; x1.2 if the attack element is one of the defender's WeakElements (only quest enemies have
+  any, so never in PvP); defender receive-break states Up then Down; Ceiling. State values
+  (0x16cf3d0): Ratio = (Up ? base : running) * value1/1000, Fixed = value1, Down negated.
+  Previously only UP_GIV_BREAK_POINT_DMG_FIXED was counted.
+- `Decrease` (0x1492530): no effect while broken; gauge clamped to [0, max] (the old code went
+  negative). On 0: turn gauge +0.25 (policy 20), BreakedDamageReceiveRate = 100 (policy 21/10).
+- Broken rate growth (0x18eecd0): floor(1 * (1 + attackerRatio/100) * base), base = value5/10 or
+  role default (Attacker 5, Breaker 20, Healer/Defender 10, Buffer/Debuffer 12); cap 200 (policy
+  22/10). attackerRatio from UP/DWN_BREAKED_DAMAGE_RECEIVE_RATIO (0x15bbf20 / 0x15bc690).
+  Characters' increase rate is fixed 1000 in `CharacterParameter.ctor`.
+- Turn start of a broken unit (`ActExecutor$$TurnBegin`): gauge reset to max, rate = 0.
+- UI: battle log shows break removed / BREAK / broken-rate increase; chip shows "Broken N%".
+
+## R6.3 Still open
+
+1. **Break bonus damage** (`BattleDamageCalculator$$GetBreakDamage` 0x137d340) is NOT applied.
+   Formula: (attacker.LevelReactionBreakDamageValue/10) * ((maxGauge+0.5)/360) *
+   (1 + (style breakDamageRate/10 + UP_BREAK_EFFECT v/10)/100) -> DEF correction -> receive
+   variations -> element resist -> x correlation -> Max(1) -> Ceiling (no crit, no PvP x0.25).
+   `LevelReactionBreakDamageValue` is passed into `CharacterParameter` from outside the battle
+   engine and is not in the Mst files we have. One in-game break-bonus number per attacker level
+   would let us back-solve it.
+2. Break gauge regen per turn (`BreakPointRecoveryPerTurn`) is 0 for characters; enemies differ.
+
 # Missing / Uncertain Items (Revision 5 - game version 3.19.0)
 
 Revision 5 moves the engine from the 1.5.0 Android decompilation to the **3.19.0 Windows

@@ -39,6 +39,7 @@ import { KiokuState, isAlimentEffect } from "./PvPTeam";
 import { SkillDetail, aggro } from "../types/KiokuTypes";
 import { elementMap, roleMap } from "../types/enums";
 import { CsDecimal, dec, f32 } from "./BattleMath";
+import { STATE_ADD_FILTER } from "./StateAddFilter";
 
 type StateDetail = SkillDetail & { _accumCount?: number };
 
@@ -595,22 +596,23 @@ export function rollAppliesEffect(detail: SkillDetail, caster: KiokuState | unde
 }
 
 // ---------------------------------------------------------------------------
-// Generic buff/debuff target eligibility: element/role filters
+// Element/role eligibility  [CONFIRMED 3.19 - supersedes the ScoreAttackTeam-derived gate]
 // ---------------------------------------------------------------------------
-// [CONFIRMED] ScoreAttackTeam.ts's buff-distribution loop filters every buff/debuff by
-// `detail.element` and `detail.role` against the RECIPIENT's own character data before
-// applying it at all:
-//     if (detail.element && elementMap[detail.element] !== targetCtx.kioku.data.element) continue;
-//     if (detail.role && roleMap[detail.role] !== targetCtx.kioku.data.role) continue;
-// This is a GENERIC eligibility gate (e.g. "only Flame characters get this buff", "only
-// Attackers get this buff") that applies BEFORE any ability-effect-type-specific logic,
-// and applies to every buff/debuff type uniformly - not something the revision-1 port
-// implemented at all (no element/role filtering existed anywhere). Exported so
-// PvPTeam.ts's applyEffect can gate target eligibility the same way for every effect,
-// not just the ones this file happens to compute stats for.
+// AbilityEffectBase$$SelectTargets (0x18e7e60) never filters by element or role. The detail's
+// element/role end up in two different places:
+//  - DMG_* effects: DamageAbilityEffectBase.ctor stores info.TargetElement as `attackElement`
+//    (the element of the hit). It is NOT a target filter - the old gate made every damage
+//    skill hit only enemies of its own element (e.g. Final Fatebloom's AoE hit 2/5 units).
+//  - States: UnitStateBase copies TargetRole/TargetElement, and StateAbilityEffect only adds
+//    the state if `CanAddTo(unit)` passes. Which classes check what is generated into
+//    StateAddFilter.ts (RoleAndElement / RoleOnly); every other state is always added
+//    (e.g. "flame RES +10%" goes on every ally - the element is the resisted element).
 export function isEligibleForEffect(detail: SkillDetail, target: KiokuState): boolean {
-    if (detail.element && elementMap[detail.element] !== target.kioku.data.element) return false;
-    if ((detail as any).role && roleMap[(detail as any).role] !== target.kioku.data.role) return false;
+    const filter = STATE_ADD_FILTER[detail.abilityEffectType];
+    if (!filter) return true;
+    const role = (detail as any).role;
+    if (role && roleMap[role] !== target.kioku.data.role) return false;
+    if (filter === "RoleAndElement" && detail.element && elementMap[detail.element] !== target.kioku.data.element) return false;
     return true;
 }
 

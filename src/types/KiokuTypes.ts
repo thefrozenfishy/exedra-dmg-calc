@@ -280,6 +280,7 @@ export interface TeamSnapshot {
     shields: number      // active SHIELD states (damage-cut %, consumed per hit)
     stunned: boolean     // UnitCondition.CanNotAction
     isBroken: boolean
+    breakedDamageReceiveRate?: number
 }
 
 // One thing that happened during an action, for the battle log in the UI.
@@ -292,6 +293,9 @@ export interface BattleEvent {
     isCritical?: boolean
     sourceIsTeam1?: boolean
     targetIsTeam1: boolean
+    breakDamage?: number     // break gauge removed by this hit (after give/receive modifiers)
+    broke?: boolean          // this hit broke the target
+    breakRateUp?: number     // +% to the target's damage-taken-while-broken rate
 }
 
 export interface BattleSnapshot {
@@ -611,6 +615,8 @@ export enum targetRange {
     ALL = 3,
 }
 
+// Superseded by BreakPoint.getDecreaseValue (3.19 table incl. Breaker role and range-2 side
+// targets); kept only for any external reference.
 export const defaultbreak = {
     [TargetType.specialId]: { [targetRange.TARGET]: 35, [targetRange.PROXIMITY]: 30, [targetRange.ALL]: 25 },
     [TargetType.skillId]: { [targetRange.TARGET]: 20, [targetRange.PROXIMITY]: 15, [targetRange.ALL]: 12 },

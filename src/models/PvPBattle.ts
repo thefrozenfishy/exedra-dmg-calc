@@ -79,6 +79,7 @@ export class PvPBattle {
                     shields: [...k.activeEffectDetails.values()].filter(d => d.abilityEffectType === "SHIELD").length,
                     stunned: k.canNotAction,
                     isBroken: k.isBroken,
+                    breakedDamageReceiveRate: k.breakedDamageReceiveRate,
                 }))
             },
             enemies: {
@@ -108,6 +109,7 @@ export class PvPBattle {
                     shields: [...k.activeEffectDetails.values()].filter(d => d.abilityEffectType === "SHIELD").length,
                     stunned: k.canNotAction,
                     isBroken: k.isBroken,
+                    breakedDamageReceiveRate: k.breakedDamageReceiveRate,
                 }))
             },
             lastActor: this.lastActor?.kioku.name,
