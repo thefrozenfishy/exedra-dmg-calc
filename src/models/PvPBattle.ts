@@ -1,6 +1,7 @@
 import { BattleSnapshot, TargetType } from "../types/KiokuTypes";
 import { compareTurnOrder, KiokuState, PvPTeam } from "./PvPTeam";
 import { ProcessTiming } from "./BattleConditionParser";
+import { seededRng } from "./BattleMath";
 
 export class PvPBattle {
     private team1: PvPTeam;
@@ -10,10 +11,19 @@ export class PvPBattle {
     private lastTargetType?: TargetType = undefined;
     private lastTeamIsTeam1: boolean = false;
 
-    constructor(team1: PvPTeam, team2: PvPTeam, debug = false) {
+    readonly seed: number;
+
+    // `seed`: every random roll in the battle comes from one seeded generator, so the same
+    // teams + seed always replay identically. Omit for a random seed (still recorded in
+    // `this.seed` so an interesting run can be reproduced).
+    constructor(team1: PvPTeam, team2: PvPTeam, debug = false, seed?: number) {
         this.team1 = team1;
         this.team2 = team2;
         this.debug = debug;
+        this.seed = seed ?? Math.floor(Math.random() * 2 ** 32);
+        const rng = seededRng(this.seed);
+        this.team1.rng = rng;
+        this.team2.rng = rng;
 
         // [STRUCTURAL FIX, revision 3 - see report] Each phase now runs for BOTH teams
         // before the next phase starts for EITHER team. Previously team1 ran its full

@@ -3,8 +3,10 @@ import { type AffectedUnitNotice, BattleState, aggro, defaultbreak, maxMeters, m
 import { skillDetails } from "../utils/helpers";
 import { isConditionSetActive, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
 import { PvPKioku } from "./PvPKioku";
-import { damageBaseTypeFromEffectType, getAttackDamageResult, getSlipDamageResult, DamageBaseType, BattleType } from "./DamageCalculator";
-import { mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum } from "./UnitStateEngine";
+import { damageBaseTypeFromEffectType, getAttackDamageResult, getSlipDamageResult, getAdditionalDamageBase, getFinalDamageExtra, damageCutByBarrier, DamageBaseType, BattleType, PVP_POLICY } from "./DamageCalculator";
+import { mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum, getFinalDamageRatio } from "./UnitStateEngine";
+import { elementMap } from "../types/enums";
+import { EFFECT_TARGET_SIDE } from "./EffectTargetSide";
 import { selectFullAutoTarget, expandProximity } from "./AITargetSelector";
 
 const f32 = Math.fround;
@@ -182,6 +184,22 @@ function mergeFuaMaps(a: FuaMap, b: FuaMap): FuaMap {
     return { ...a, ...b };
 }
 
+export function isFriendlyEffect(type: string): boolean {
+    const side = EFFECT_TARGET_SIDE[type]
+    return side ? side === "Friend" : friendlySkills.includes(type)
+}
+export function isOpponentEffect(type: string): boolean {
+    const side = EFFECT_TARGET_SIDE[type]
+    return side ? side === "Opponent" : enemySkills.includes(type)
+}
+
+// Attack element for ADDITIONAL_DAMAGE: the attacker's own character element as the
+// numeric TargetElementType used in skill data (inverse of enums.elementMap).
+function elementNumberOf(unit: KiokuState): number {
+    const hit = Object.entries(elementMap).find(([, name]) => name === unit.kioku.data.element)
+    return hit ? Number(hit[0]) : 0
+}
+
 export class KiokuState {
     posIdx: number;
     teamLabel: string
@@ -245,6 +263,13 @@ export class KiokuState {
     // something up to push into this array. See DamageCalculator.ts's
     // isMatchWeakElement and MISSING_AND_UNCERTAIN.md.
     weakElements: number[] = []
+
+    // [CONFIRMED 3.19] BattleUnit.BreakedDamageReceiveRate (+0x80): damage multiplier in % while
+    // broken (GetAppliedDamageOfBreakSituation). PvP start value from the policy table
+    // (initialBreakDamageReceiveRate 1000 = 100.0%, max 2000 = 200.0%). The per-hit increase
+    // while broken (DamageAbilityEffectBase$$IncreaseBreakedDamageReceiveRate) is not modelled
+    // yet - see MISSING_AND_UNCERTAIN.md.
+    breakedDamageReceiveRate = PVP_POLICY.initialBreakDamageReceiveRate / 10
 
     // Incremented by an active ADDITIONAL_TURN_UNIT_ACT (or RE_ACTION_TURN_UNIT_ACT -
     // treated as an alias, see MISSING_AND_UNCERTAIN.md) effect. Grants the SAME unit an
@@ -343,8 +368,14 @@ export class KiokuState {
     // gauge fully resets vs. partially carries over, which this file currently doesn't
     // special-case at all - see useAttackOrSkill), TurnActSystem/TurnReferee would need
     // decompiling next.
+    // [CONFIRMED 3.19] UnitCondition$$get_CanNotAction (RVA 0x7388e0) just returns a stored
+    // bool field (+0x38) that is set when an unable-action state (STUN) is added - it does
+    // NOT re-evaluate condition sets. The previous version went through filteredEffects(),
+    // i.e. evaluated every condition set, and a condition that itself checks
+    // CompareContent.CAN_NOT_ACTION recursed forever (stack overflow on real teams).
     get canNotAction(): boolean {
-        return (this.filteredEffects()["STUN"]?.length ?? 0) > 0
+        for (const d of this.activeEffectDetails.values()) if (d.abilityEffectType === "STUN") return true
+        return false
     }
 
     // [CONFIRMED] ReDriveBattleCore.BattleUnit$$SetHP (clamp) + $$Attack (delta + return
@@ -452,14 +483,14 @@ export class KiokuState {
 
     currentBuffs(): string[] {
         return [...this.activeEffectDetails.values()]
-            .filter(d => friendlySkills.includes(d.abilityEffectType))
+            .filter(d => isFriendlyEffect(d.abilityEffectType))
             .map(d => `${d.applier} - ${d.description}`)
     }
 
     currentDebuffs(): string[] {
         return [...this.activeEffectDetails.values()]
             .filter(d => !isAlimentEffect(d.abilityEffectType)
-                && enemySkills.includes(d.abilityEffectType))
+                && isOpponentEffect(d.abilityEffectType))
             .map(d => `${d.applier} - ${d.description}`)
     }
 
@@ -571,7 +602,7 @@ export class KiokuState {
         // role/element match) before applyEffect's branches ever run, so there's nothing
         // further to add at this specific call site - noted here so the connection
         // between that pre-existing filter and this newly-read C# method isn't lost.
-        if (!rollAppliesEffect(detail, applierState, t)) return false;
+        if (!rollAppliesEffect(detail, applierState, t, this.team.rng)) return false;
         const key = String(skillDetailId(detail))
         const existing = t.activeEffectDetails.get(key)
         if (existing && ACCUM_RATIO_EFFECT_TYPES.has(detail.abilityEffectType)) {
@@ -582,7 +613,7 @@ export class KiokuState {
         return true
     }
 
-    applyEffect(target: KiokuState, detail: SkillDetail, targetType?: TargetType, trueActorUnit?: KiokuState): number | undefined {
+    applyEffect(target: KiokuState, detail: SkillDetail, targetType?: TargetType, trueActorUnit?: KiokuState, mainTarget?: KiokuState): number | undefined {
         /**
          * @returns action id if additional act should be triggered, otherwise returns null
          */
@@ -600,27 +631,47 @@ export class KiokuState {
             target.getMp(5)
 
             const damageBaseType = damageBaseTypeFromEffectType(detail.abilityEffectType)
-            const result = getAttackDamageResult(this, target, detail, damageBaseType, this.team.battleType)
+            const battleType = this.team.battleType
+            // [CONFIRMED 3.19] DamageAbilityEffectBase$$Triggering: on a range-2 (proximity)
+            // skill only the main target takes value1 power; the others take value2.
+            const isMainTarget = mainTarget === undefined || mainTarget === target
+            const rng = this.team.rng
+            const result = getAttackDamageResult(this, target, detail, damageBaseType, {
+                battleType, isMainTarget, rng,
+                forceCrit: this.team.critOverride?.(this, target, detail),
+            })
+            let totalDamage = result.finalDamage
 
-            // [CONFIRMED via ScoreAttackTeam.ts's add_additional_dmg] ADDITIONAL_DAMAGE:
-            // a flat bonus hit folded onto the next attack, scaling off the ATTACKER's
-            // own ATK using the same base-damage formula as a normal hit (not gated by
-            // the target's DEF/resist/etc. per ScoreAttackTeam.ts's implementation,
-            // which computes it as a fully separate calc_base_dmg call added straight
-            // into total_dmg).
-            let bonusDamage = 0;
+            // [CONFIRMED 3.19] ADDITIONAL_DAMAGE is a full extra hit through the whole damage
+            // pipeline (DEF, give/receive, crit, PvP suppression, shield, barrier), with its
+            // damage base taken from the ATK of the unit that applied the state - see
+            // DamageCalculator.getAdditionalDamageBase. (The previous revision added a raw
+            // base-damage number that skipped every modifier.)
             for (const bonus of this.filteredEffects()["ADDITIONAL_DAMAGE"] ?? []) {
-                bonusDamage += Math.ceil(bonus.value1 / 1000 * this.kioku.getBaseAtk() * (Math.pow(this.kioku.getBaseAtk() / 124, 1.2) + 12) / 20);
+                const applier: KiokuState = (bonus as any)._applierState ?? this
+                const extra = getAttackDamageResult(this, target, bonus, DamageBaseType.ATK, {
+                    battleType, rng,
+                    damageBaseOverride: getAdditionalDamageBase(applier, bonus),
+                    attackElementOverride: elementNumberOf(this),
+                    forceCrit: this.team.critOverride?.(this, target, bonus),
+                })
+                totalDamage += extra.finalDamage
             }
 
-            target.takeDamage(result.finalDamage + bonusDamage)
+            // [CONFIRMED 3.19] RCV_FINAL_DAMAGE: an extra ceil(damage x ratio) hit after the
+            // skill (CalcFinalDamageNoticeBundle). The game sums the whole skill's damage per
+            // target first; applied per damage effect here, which can differ by 1 from rounding.
+            const finalExtra = getFinalDamageExtra(totalDamage, getFinalDamageRatio(target, this))
+            if (finalExtra > 0) totalDamage += damageCutByBarrier(target, finalExtra).remainingDamage
+
+            target.takeDamage(totalDamage)
             target.lastNotice = result.notice;
             this.team.lastActionNotices.push(result.notice);
             this.team.appliedSkillEffectTypesThisAction.add(detail.abilityEffectType);
             if (result.shieldMultiplierApplied) {
                 target.consumeShieldCharges()
             }
-            console.debug(this.kioku.name, "hit", target.kioku.name, "for", result.finalDamage + bonusDamage,
+            console.debug(this.kioku.name, "hit", target.kioku.name, "for", totalDamage,
                 result.isCritical ? "(crit)" : "", result.isWeakHit ? "(weak)" : "",
                 "- HP now", target.currentHp, "/", target.maxHp)
             return;
@@ -692,9 +743,9 @@ export class KiokuState {
             const wantDebuffs = detail.abilityEffectType.startsWith("ADD_DEBUFF");
             effTargets.forEach(t => {
                 t.activeEffectDetails.forEach((d, key) => {
-                    const isDebuff = !isAlimentEffect(d.abilityEffectType) && enemySkills.includes(d.abilityEffectType);
+                    const isDebuff = !isAlimentEffect(d.abilityEffectType) && isOpponentEffect(d.abilityEffectType);
                     const isAliment = isAlimentEffect(d.abilityEffectType);
-                    const matches = wantDebuffs ? (isDebuff || isAliment) : friendlySkills.includes(d.abilityEffectType);
+                    const matches = wantDebuffs ? (isDebuff || isAliment) : isFriendlyEffect(d.abilityEffectType);
                     if (matches) t.activeEffectDetails.set(key, { ...d, turn: d.turn + detail.value1 });
                 })
             });
@@ -747,7 +798,7 @@ export class KiokuState {
         // non-Ailment" (Aliments are REMOVE_ALL_ABNORMAL's job - see ADD_DEBUFF_TURN's
         // identical isDebuff/isAliment split elsewhere in this file).
         if (detail.abilityEffectType === "REMOVE_ALL_DEBUFF") {
-            removeMatchingStates(effTargets, t => !isAlimentEffect(t) && enemySkills.includes(t))
+            removeMatchingStates(effTargets, t => !isAlimentEffect(t) && isOpponentEffect(t))
             return;
         }
         // [CONFIRMED string + AI chain, RECONSTRUCTED removal predicate] REMOVE_ALL_BUFF:
@@ -758,7 +809,7 @@ export class KiokuState {
         // targeting, not in what gets removed once a target is chosen (which is still
         // "every matching buff", same as the other two).
         if (detail.abilityEffectType === "REMOVE_ALL_BUFF") {
-            removeMatchingStates(effTargets, t => friendlySkills.includes(t))
+            removeMatchingStates(effTargets, t => isFriendlyEffect(t))
             return;
         }
         // [NEWLY ADDED - was entirely absent] REMOVE_ALL_UNABLE_ACTION: the fourth member
@@ -943,6 +994,13 @@ export class PvPTeam {
     // (2) per the person's message; pass BattleType.Solo/Gve/etc. to run a non-PvP
     // simulation through the same engine - see DamageCalculator.ts.
     battleType: BattleType
+    // Random source for every roll this team makes (crit, ...). Math.random by default;
+    // PvPBattle can replace it with a seeded generator (BattleMath.seededRng) so a battle
+    // is reproducible from its seed.
+    rng: () => number = Math.random
+    // Optional manual override for crit outcomes (UI "force crit / no crit"): return
+    // true/false to force, undefined to roll normally.
+    critOverride?: (attacker: KiokuState, defender: KiokuState, detail: SkillDetail) => boolean | undefined
 
     // NEW team-level state, needed for BattleConditionParser.ts's team-scoped
     // CompareContent checks (201-210, 301-309) - see
@@ -1008,7 +1066,7 @@ export class PvPTeam {
             k.passiveEffectDetails.forEach(detail => {
                 if (conditionSetRequiresActorIsSelf(detail) && (!lastActor || lastActor !== k)) return
                 if (isTimingCorrect(timing, detail)) {
-                    if (enemySkills.includes(detail.abilityEffectType)) {
+                    if (isOpponentEffect(detail.abilityEffectType)) {
                         this.otherTeam.kiokuStates.forEach(target => {
                             const fua = k.applyEffect(target, detail, lastAction, lastActor)
                             if (fua) additionalAct[fua] = { caster: k, triggerTarget: target }
@@ -1094,7 +1152,7 @@ export class PvPTeam {
             // --- Generic FULL AUTO targeting AI (covers DMG_ATK/DEF/HP/RANDOM and every
             // other single-target effect type, per its own confirmed or best-effort
             // generic chain - see AITargetSelector.ts) ---
-            return selectFullAutoTarget(detail, possibleTargets)
+            return selectFullAutoTarget(detail, possibleTargets, this.rng)
         }
         if (detail.range === targetRange.TARGET) {
             const picked = resolvePrimaryTarget()
@@ -1137,16 +1195,20 @@ export class PvPTeam {
         let possibleTargets: KiokuState[] = []
         let additionalAct: FuaMap = {}
         for (const detail of details) {
-            if (friendlySkills.includes(detail.abilityEffectType)) {
+            // [CONFIRMED 3.19] side comes from the game's own effect classes (EffectTargetSide.ts);
+            // the hand-maintained friendlySkills/enemySkills lists are only a fallback now.
+            const side = EFFECT_TARGET_SIDE[detail.abilityEffectType]
+            if (side === "Friend" || (!side && friendlySkills.includes(detail.abilityEffectType))) {
                 possibleTargets = [actor]
-            } else if (enemySkills.includes(detail.abilityEffectType)) {
+            } else if (side === "Opponent" || isOpponentEffect(detail.abilityEffectType)) {
                 possibleTargets = this.otherTeam.kiokuStates
             } else {
                 console.warn("Unknown effect type", detail.abilityEffectType, detail, "assuming enemy targets")
                 possibleTargets = this.otherTeam.kiokuStates
             }
-            for (const target of this.sliceTargets(actor, possibleTargets, detail)) {
-                const fua = actor.applyEffect(target, detail, effectName, actor)
+            const targets = this.sliceTargets(actor, possibleTargets, detail)
+            for (const target of targets) {
+                const fua = actor.applyEffect(target, detail, effectName, actor, targets[0])
                 if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
             }
         }
@@ -1263,9 +1325,9 @@ export class PvPTeam {
         let additionalAct: FuaMap = {}
         for (const detail of details) {
             const isSingleTarget = detail.range === targetRange.TARGET
-            const targets = isSingleTarget ? [preferredTarget] : this.sliceTargets(actor, friendlySkills.includes(detail.abilityEffectType) ? [actor] : this.otherTeam.kiokuStates, detail)
+            const targets = isSingleTarget ? [preferredTarget] : this.sliceTargets(actor, isFriendlyEffect(detail.abilityEffectType) ? [actor] : this.otherTeam.kiokuStates, detail)
             for (const target of targets) {
-                const fua = actor.applyEffect(target, detail, effectName, actor)
+                const fua = actor.applyEffect(target, detail, effectName, actor, targets[0])
                 if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
             }
         }

@@ -1,52 +1,49 @@
 /**
  * DamageCalculator.ts
  * ====================
- * Ported from the decompiled (Ghidra/IL2CPP) sources of:
- *   - ReDriveBattleCore.BattleDamageCalculator   (ReDriveBattleCore.c, functions at index
- *     00358-00394 in the provided dump)
- *   - ReDriveBattleCore.AbilityEffect.DamageAbilityEffectBase$$Triggering / GetDamageBase
- *   - ReDriveBattleCore.CorrelationEffect (element weakness math)
- *   - ReDriveBattleCore.BreakPoint (break-situation multiplier only; the break-GAUGE
- *     mechanics themselves are already implemented in PvPTeam.ts and were left alone)
+ * The game's damage formula, ported from ReDriveBattleCore (game version 3.19.0).
  *
- * REVISION 2 - updated against:
- *   - dump.cs / dump_processed.cs (Il2CppDumper signature dump - real field names/types,
- *     no method bodies, but resolves a lot of the ambiguity flagged in revision 1)
- *   - The person's own ScoreAttackTeam.ts/ScoreAttackKioku.ts, an independently-built,
- *     gameplay-validated single-hit damage calculator. Where it directly confirms a
- *     formula I'd flagged as unresolved, I've said so explicitly and cited the exact
- *     line, since that's a much stronger source than my own decompilation reading.
- *   - Two constants the person confirmed directly from Ghidra's raw bytes: the
- *     GetDamageBase exponent (1.2) and the CorrelationEffect (normal, weak) tuple
- *     (1.0, 1.2).
+ * REVISION 5 (3.19.0): rewritten against the 3.19 decompilation, using the game's own
+ * number types (BattleMath.ts): the whole pipeline is System.Decimal (emulated exactly),
+ * crit and weak-element ratios are float32. Every step cites the method it ports; the
+ * decompiled bodies are in E:\unpackedExedra\3.19.0\decompiled\ReDriveBattleCore.c
+ * (search for the `// ==== ReDriveBattleCore.BattleDamageCalculator$$...` header).
  *
- * CONFIDENCE LEVELS
- * ------------------
- *   [CONFIRMED]     - control flow and arithmetic both read unambiguously from the
- *                      decompiled IL, or have since been independently validated against
- *                      the person's ScoreAttackTeam.ts / their own Ghidra byte reads.
- *   [RECONSTRUCTED] - the *shape* of the formula is clear but some part is still only
- *                      inferred, not independently verified.
- *   [UNKNOWN CONST] - references a raw binary constant not yet confirmed.
+ * Tags: [CONFIRMED 3.19] = read from the 3.19 decompilation. [RECONSTRUCTED] = shape
+ * confirmed, some detail inferred (the comment says which). [DATA] = value from base_data.
  *
- * See MISSING_AND_UNCERTAIN.md for the full list of open items.
+ * Main path, BattleDamageCalculator$$GetAttackDamageResult (RVA 0x137cb10):
+ *   base   = GetDamageBase(initial stat, power)                       (decimal)
+ *   d = GetAppliedDamageOfBreakSituation(defender, base)
+ *   d = GetDefenseCorrectedDamage(...)
+ *   d = GetProcessedGiveDamage(...)
+ *   d = GetProcessedReceiveDamage(...)
+ *   d = GetElementResistDamage(...)
+ *   d = d * (decimal)CorrelationEffect.ElementDamageRatio            (float -> decimal)
+ *   crit roll: (float)(Random.NextDouble() * 100) < RcvCtr + Ctr     (float32)
+ *   if crit: d = GetAddedCriticalDamage(...)
+ *   d = GetDifficultyCorrectedDamage(...)                              (PvE only)
+ *   d = GetProcessedFinalGiveDamage(...)                               (GvE only, then max(d,0))
+ *   if PvP/GvG: d = DamageCutByPvpOrGvgSuppression(d)                  (x 0.25 in PvP!)
+ *   d = DamageCutByShield(d, defender)
+ *   d = Math.Max(1, d)
+ *   if IsDamageDisabled(defender): d = 0                               (one PvE boss only)
+ *   damage = (int)Decimal.Ceiling(d)
+ *   DamageCutByBarrier(damage, defender)
  */
 
 import { KiokuState } from "./PvPTeam";
 import { SkillDetail, type AffectedUnitNotice } from "../types/KiokuTypes";
-import { getProcessedAtk, getProcessedDef, getProcessedCtr, getProcessedRcvCtr, getProcessedCtd, getGiveDamageRatioBonus, getSlipGiveDamageRatioBonus, getReceiveDamageRatioBonus, getElementResistRate, getWeakElementBonus } from "./UnitStateEngine";
-
-const f32 = Math.fround;
+import { CsDecimal, dec, f32 } from "./BattleMath";
+import {
+    getProcessedAtkDecimal, getProcessedDefDecimal, getProcessedCtr, getProcessedRcvCtr, getProcessedCtd, getProcessedRcvCtd,
+    getProcessedElementResistRate, giveDamageVariation, receiveDamageVariation, elementDamageRateVariation, slipGiveDamageVariation,
+    weakElementUpRatios, activeShieldRatios, statesOf,
+} from "./UnitStateEngine";
 
 // ---------------------------------------------------------------------------
-// BattleType
+// BattleType - Network.Definition.Battle.BattleType (dump.cs)
 // ---------------------------------------------------------------------------
-// [CONFIRMED] Network.Definition.Battle.BattleType (dump.cs, TypeDefIndex 994). Threaded
-// through so the same engine can run PvP battles (what this codebase is for) and
-// non-PvP simulations (e.g. against a PvE Solo/Gve encounter) with the battle-type-gated
-// steps (GetDifficultyCorrectedDamage, DamageCutByPvpOrGvgSuppression) behaving
-// correctly for each. Per the person's message, PvP simulations should pass
-// BattleType.Pvp (2).
 export const enum BattleType {
     Solo = 1,
     Pvp = 2,
@@ -58,15 +55,8 @@ export const enum BattleType {
 }
 
 // ---------------------------------------------------------------------------
-// DamageBaseType
+// DamageBaseType - 1 ATK, 2 DEF, 3 HP (BattleUnit$$GetInitialDamageBaseParamValue 0x1384310)
 // ---------------------------------------------------------------------------
-// [CONFIRMED] ReDriveBattleCore.BattleUnit$$GetInitialDamageBaseParamValue switches on
-// this int: 1 => ATK, 2 => DEF, 3 => HP. dump.cs confirms `DamageBaseType` is a real,
-// dedicated enum type (not just a bare int) with exactly these three members. The
-// concrete effect classes are DmgAtkAbilityEffect / DmgDefAbilityEffect /
-// DmgHpAbilityEffect, matching the game data's abilityEffectType strings DMG_ATK /
-// DMG_DEF / DMG_HP - we derive DamageBaseType from that string rather than a separate
-// data field.
 export const enum DamageBaseType {
     ATK = 1,
     DEF = 2,
@@ -74,388 +64,311 @@ export const enum DamageBaseType {
 }
 
 export function damageBaseTypeFromEffectType(abilityEffectType: string): DamageBaseType {
-    if (abilityEffectType === "DMG_ATK") return DamageBaseType.ATK;
+    if (abilityEffectType === "DMG_ATK" || abilityEffectType === "DMG_RANDOM" || abilityEffectType === "ADDITIONAL_DAMAGE") return DamageBaseType.ATK;
     if (abilityEffectType === "DMG_DEF") return DamageBaseType.DEF;
     if (abilityEffectType === "DMG_HP") return DamageBaseType.HP;
     console.warn("Unknown damage ability effect type, defaulting to ATK-scaling:", abilityEffectType);
     return DamageBaseType.ATK;
 }
 
-// [CONFIRMED] ReDriveBattleCore.BattleUnit$$GetInitialDamageBaseParamValue
-// Returns the unit's *unbuffed* base stat panel value (BattleParameter.ATK/DEF/HP),
-// i.e. the same "raw" stat used by UpAtkRatioUnitState etc. for their percentage math
-// (BattleUnit.get_ATK, not GetProcessedAtk). In this codebase that's kioku.getBaseAtk()
-// / getBaseDef() / getBaseHp() from Kioku.ts, which already bakes in level/ascension/
-// portrait/support/crystalis but NOT in-battle buffs.
+// ---------------------------------------------------------------------------
+// PvP balance table [DATA] getCalculationPointPolicyMstList.json (3.18), policyType 3.
+// Read by CalculationPointPolicyMstReader$$GetModelByCoefficientName; used by
+// DamageCutByPvpOrGvgSuppression (0x137bff0), GetSlipDamageValue (0x1380f20) and the
+// barrier/heal formulas. Hard-coded here (with the row ids) because that file isn't part
+// of the synced base_data yet - move to a data import once it is.
+// ---------------------------------------------------------------------------
+export const PVP_POLICY = {
+    damageSuppresionRatio: 750,          // id 23: damage x (1 - 750/1000) = x 0.25
+    healValueSuppresionRatio: 500,       // id 24
+    barrierEnduranceSuppresionRatio: 500,// id 25
+    initialBreakDamageReceiveRate: 1000, // id 21
+    maxBreakDamageReceiveRate: 2000,     // id 22
+} as const;
+
+export function isSuppressedBattleType(bt: BattleType): boolean {
+    return bt === BattleType.Pvp || bt === BattleType.Gvg; // `battleType == 2 || battleType == 4`
+}
+
+// ---------------------------------------------------------------------------
+// GetInitialDamageBaseParamValue - the unit's UNBUFFED panel stat, as a float
+// ---------------------------------------------------------------------------
+// [CONFIRMED 3.19] BattleUnit$$GetInitialDamageBaseParamValue returns (float)Param.ATK /
+// DEF / HP. Buffs only enter the formula through GetDefenseCorrectedDamage.
 export function getInitialDamageBaseParamValue(unit: KiokuState, damageBaseType: DamageBaseType): number {
     switch (damageBaseType) {
-        case DamageBaseType.ATK: return unit.kioku.getBaseAtk();
-        case DamageBaseType.DEF: return unit.kioku.getBaseDef();
-        case DamageBaseType.HP: return unit.kioku.getBaseHp();
+        case DamageBaseType.ATK: return f32(unit.kioku.getBaseAtk());
+        case DamageBaseType.DEF: return f32(unit.kioku.getBaseDef());
+        case DamageBaseType.HP: return f32(unit.kioku.getBaseHp());
     }
 }
 
 // ---------------------------------------------------------------------------
 // GetDamageBase
 // ---------------------------------------------------------------------------
-// [CONFIRMED] Source: ReDriveBattleCore.AbilityEffect.DamageAbilityEffectBase$$GetDamageBase
-//
-//   damageBase = power * statValue * ((statValue/124)^1.2 + 12) / 20
-//
-// The exponent (1.2) was confirmed by the person directly from Ghidra's raw bytes at
-// DAT_7b9445cb50, AND independently matches ScoreAttackTeam.ts's own
-// `calc_base_dmg(ability_percentage, base_atk)`:
-//     return ability_percentage * base_atk * ((base_atk / 124) ** 1.2 + 12) / 20
-// which is a gameplay-validated reference implementation, not decompilation - this is
-// about as confirmed as a formula in this file gets.
-//
-// `power` = detail.value1 / 1000 (a fraction, e.g. value1=2000 -> power=2.0 for a
-// "200% ATK" nuke). Revision 1 of this file used raw `detail.value1` (no /1000) for
-// direct hits, reasoning from a DOT-vs-direct-hit asymmetry that turned out to be wrong:
-// ScoreAttackTeam.ts's `get_special_dmg` divides the summed value1's by 1000 too
-// (`return [total_dmg / 1000, ...]`), for a DIRECT hit skill - so direct hits use the
-// same /1000 scaling as DOT after all. Fixed below.
-const DAMAGE_BASE_POW_EXPONENT = 1.2; // [CONFIRMED - see comment above]
+// [CONFIRMED 3.19] BattleDamageCalculator$$GetDamageBase(float paramValue, float power)
+// (0x137d8a0):
+//   (decimal)(paramValue * power)                        <- float32 multiply, then 7-digit decimal
+//   * (((decimal)Math.Pow((double)paramValue / 124.0, 1.2) + 12) / 20)   <- double pow, 15-digit decimal
+// Evaluation order in the binary: ((pow + 12) / 20) first, then multiplied by the first term.
+// Math.Pow note: V8's Math.pow and MSVC's pow can differ in the last bit; the 15-digit
+// decimal conversion absorbs that except in astronomically rare cases.
+export function getDamageBase(paramValue: number, power: number): CsDecimal {
+    const p = f32(paramValue), pw = f32(power);
+    const first = dec.float(f32(p * pw));
+    const pow = dec.double(Math.pow(p / 124.0, 1.2));
+    return pow.add(dec.int(12)).div(dec.int(20)).mul(first);
+}
 
-// [FLOAT-PRECISION FIX, revision 3] The decompiled signature is
-// `GetDamageBase(BattleUnit unit, float power)` and its local holding statValue
-// (`fVar4`) is also a native `float` - so `fVar4 * power` happens in float32 BEFORE
-// being widened to decimal for the rest of the formula (`(double)fVar4/124.0` is a
-// SEPARATE, explicitly double-cast expression - Math.pow itself needs no change).
-// `power` is only ever produced from a `value1/1000`-shaped division upstream, so by the
-// time it reaches this (float-typed) parameter in the source it's already been rounded
-// to float32 regardless of how it was computed - Math.fround replicates that truncation
-// here rather than carrying extra float64 precision the original engine never had. This
-// is a small, one-shot rounding difference (not an accumulation loop like Ctr/Ctd), so
-// in practice it only flips the final Math.ceil'd damage in rare boundary cases - but
-// it's a confirmed decompiled fact, so it's fixed rather than left approximate.
-export function getDamageBase(power: number, statValue: number): number {
-    const f32Power = f32(power);
-    const valueA = f32(statValue * f32Power);
-    const valueB = Math.pow(statValue / 124, DAMAGE_BASE_POW_EXPONENT) + 12;
-    return valueA * (valueB / 20);
+// Damage power for a DMG_* effect: DamageAbilityEffectBase$$.ctor (0x18f0630) stores
+// damagePower = ((float)EffectValue1 / 1000f, (float)EffectValue2 / 1000f). Triggering
+// (0x18ef650) uses Item1 for the main target and Item2 for every OTHER target when
+// EffectRange == SelectMultiple (2) - i.e. value2 is the splash/proximity power.
+export function damagePower(detail: SkillDetail, isMainTarget: boolean): number {
+    const useSplash = detail.range === 2 && !isMainTarget;
+    return f32(f32(useSplash ? detail.value2 : detail.value1) / 1000);
 }
 
 // ---------------------------------------------------------------------------
-// GetAppliedDamageOfBreakSituation
+// GetAppliedDamageOfBreakSituation  [CONFIRMED 3.19] (0x137c950)
 // ---------------------------------------------------------------------------
-// [CONFIRMED] ReDriveBattleCore.BattleDamageCalculator$$GetAppliedDamageOfBreakSituation
-// If the defender has no break gauge at all (maxPointValue <= 0), damage passes through
-// unchanged. Otherwise: if the defender is currently broken (PointValue < 1), damage is
-// multiplied by their BreakedDamageReceiveRate% (a per-unit stat, typically >100%,
-// representing "takes more damage while broken"); if not broken, multiplied by 1 (no-op).
-// Cross-validated: ScoreAttackTeam.ts's `break_factor = enemy.isBreak ? enemy.maxBreak/100 : 1`
-// is exactly this shape (its "maxBreak" there is a per-scenario break-damage-rate input,
-// confusingly named, not gauge capacity).
-//
-// `BreakedDamageReceiveRate` still isn't in the provided type files as a per-Kioku data
-// field. Defaults to 100 (no bonus) with a one-time warning if absent.
-export function getAppliedDamageOfBreakSituation(target: KiokuState, damage: number): number {
-    const maxPointValue = target.maxBreakGauge;
-    if (maxPointValue <= 0) return damage;
-    if (target.currentRemainingBreakGauge < 1) {
-        const rate = (target.kioku.data as any).breakedDamageReceiveRate;
-        if (rate == null) {
-            console.warn("BreakedDamageReceiveRate missing on", target.kioku.name, "- assuming 100 (no bonus). See MISSING_AND_UNCERTAIN.md");
+// If the defender is broken (BreakPoint.IsBreak: maxPoint >= 1 && point < 1):
+//   d * ((decimal)BreakedDamageReceiveRate / 100)
+// else d * 1.0 (BreakPoint static NormalRate). doForceToNormal is never set on this path.
+// BreakedDamageReceiveRate is a per-unit int; see KiokuState.breakedDamageReceiveRate.
+export function getAppliedDamageOfBreakSituation(defender: KiokuState, damage: CsDecimal): CsDecimal {
+    const isBreak = defender.maxBreakGauge >= 1 && defender.currentRemainingBreakGauge < 1;
+    if (!isBreak) return damage;
+    return damage.mul(dec.int(defender.breakedDamageReceiveRate).div(dec.int(100)));
+}
+
+// ---------------------------------------------------------------------------
+// GetDefenseCorrectedDamage  [CONFIRMED 3.19] (0x137da30)
+// ---------------------------------------------------------------------------
+//   atk = attacker GetProcessedAtkDecimal (type ATK) / GetProcessedDefDecimal (DEF) /
+//         (decimal)HP (type HP, unbuffed)
+//   d * Min(((10 + atk) / (10 + defender.GetProcessedDefDecimal)) * 0.12, 2)
+export function getDefenseCorrectedDamage(attacker: KiokuState, defender: KiokuState, damage: CsDecimal, damageBaseType: DamageBaseType, defenderDefOverride?: CsDecimal): CsDecimal {
+    let atk: CsDecimal;
+    if (damageBaseType === DamageBaseType.ATK) atk = getProcessedAtkDecimal(attacker);
+    else if (damageBaseType === DamageBaseType.DEF) atk = getProcessedDefDecimal(attacker);
+    else atk = dec.int(attacker.kioku.getBaseHp());
+    const def = defenderDefOverride ?? getProcessedDefDecimal(defender);
+    const ten = dec.int(10);
+    const factor = CsDecimal.min(ten.add(atk).div(ten.add(def)).mul(dec.int(12).div(dec.int(100)) /* new decimal(12, 0, 0, false, 2) = 0.12m */), dec.int(2));
+    return damage.mul(factor);
+}
+
+// ---------------------------------------------------------------------------
+// GetProcessedGiveDamage  [CONFIRMED 3.19] (0x137ed10)
+// ---------------------------------------------------------------------------
+//   result = damage (+ damage * Param.ElementDamageRates[element]/1000 - none for characters)
+//   pass Up:   each active IGiveDamageVariation (Up)       result += var(damage, result)
+//              each active IElementDamageRateVariation     result += damage * (rate / 100)
+//              each active IGiveSlipDamageVariation (slip) result += var(...)
+//   pass Down: the Down variants of the same, on the running result
+//   clamp >= 0
+export function getProcessedGiveDamage(attacker: KiokuState, defender: KiokuState, damage: CsDecimal, attackElement: number, slipEffectType?: string): CsDecimal {
+    const states = statesOf(attacker);
+    let result = damage;
+    for (const pass of ["Up", "Down"] as const) {
+        for (const d of states) {
+            const g = giveDamageVariation(d, attacker, defender, damage, result);
+            if (g) { if (g.addition === pass) result = result.add(g.value); continue; }
+            if (pass === "Up" && attackElement) {
+                const r = elementDamageRateVariation(d, attackElement);
+                if (r) { if (!r.isZero()) result = result.add(damage.mul(r.div(dec.int(100)))); continue; }
+            }
+            if (slipEffectType) {
+                const s = slipGiveDamageVariation(d, slipEffectType, damage, result);
+                if (s && s.addition === pass) result = result.add(s.value);
+            }
         }
-        return damage * ((rate ?? 100) / 100);
     }
+    return result.le(CsDecimal.Zero) ? CsDecimal.Zero : result;
+}
+
+// ---------------------------------------------------------------------------
+// GetProcessedReceiveDamage  [CONFIRMED 3.19] (0x137fad0) - defender's states, Up then Down
+// ---------------------------------------------------------------------------
+export function getProcessedReceiveDamage(attacker: KiokuState, defender: KiokuState, damage: CsDecimal): CsDecimal {
+    const states = statesOf(defender);
+    let result = damage;
+    for (const pass of ["Up", "Down"] as const) {
+        for (const d of states) {
+            const r = receiveDamageVariation(d, attacker, damage, result);
+            if (r && r.addition === pass) result = result.add(r.value);
+        }
+    }
+    return result.le(CsDecimal.Zero) ? CsDecimal.Zero : result;
+}
+
+// ---------------------------------------------------------------------------
+// GetElementResistDamage  [CONFIRMED 3.19] (0x137e130)
+// ---------------------------------------------------------------------------
+//   if element == 0: unchanged
+//   r = Clamp(defender.GetProcessedElementResistRate(element), -100, 100)
+//   d - d * (r / 100), clamp >= 0
+export function getElementResistDamage(defender: KiokuState, damage: CsDecimal, attackElement: number): CsDecimal {
+    if (!attackElement) return damage;
+    const r = CsDecimal.clamp(getProcessedElementResistRate(defender, attackElement), dec.int(-100), dec.int(100));
+    const out = damage.sub(damage.mul(r.div(dec.int(100))));
+    return out.le(CsDecimal.Zero) ? CsDecimal.Zero : out;
+}
+
+// ---------------------------------------------------------------------------
+// CorrelationEffect  [CONFIRMED 3.19] (.ctor 0x1493f80, .cctor 0x1493f30)
+// ---------------------------------------------------------------------------
+// Weak hit iff the attacker is a character (CharacterParameter), attackElement != 0 and
+// attackElement is in defender.WeakElements. Ratio (float32): normal 1.0f; weak starts at
+// 1.2f (0x3f99999a) and adds each active weak-element state's get_UpRatio()/100f.
+export function isMatchWeakElement(attackElement: number, defender: KiokuState): boolean {
+    return !!attackElement && defender.weakElements.includes(attackElement);
+}
+export interface CorrelationEffectResult {
+    elementDamageRatio: number; // float32
+    isWeakHit: boolean;
+}
+export function computeCorrelationEffect(attacker: KiokuState, defender: KiokuState, attackElement: number): CorrelationEffectResult {
+    if (!isMatchWeakElement(attackElement, defender)) return { elementDamageRatio: 1, isWeakHit: false };
+    let ratio = f32(1.2);
+    for (const up of weakElementUpRatios(attacker)) ratio = f32(f32(up / 100) + ratio);
+    return { elementDamageRatio: ratio, isWeakHit: true };
+}
+
+// ---------------------------------------------------------------------------
+// Crit  [CONFIRMED 3.19]
+// ---------------------------------------------------------------------------
+// Roll (inside GetAttackDamageResult): isCrit = (float)(rng.NextDouble() * 100) < RcvCtr + Ctr
+// (float32 sum). Skipped entirely for AdditionalSkill hits of type 5.
+// GetAddedCriticalDamage (0x137c720): d * ((1 + (decimal)Ctd/100) * (1 + (decimal)RcvCtd/100))
+export function critChance(attacker: KiokuState, defender: KiokuState): number {
+    return f32(getProcessedRcvCtr(defender, attacker) + getProcessedCtr(attacker));
+}
+export function rollCritical(attacker: KiokuState, defender: KiokuState, rng: () => number): boolean {
+    return f32(rng() * 100) < critChance(attacker, defender);
+}
+export function getAddedCriticalDamage(attacker: KiokuState, defender: KiokuState, damage: CsDecimal): CsDecimal {
+    const ctd = dec.float(getProcessedCtd(attacker)).div(dec.int(100));
+    const rcvCtd = dec.float(getProcessedRcvCtd(defender, attacker)).div(dec.int(100));
+    return damage.mul(CsDecimal.One.add(ctd).mul(CsDecimal.One.add(rcvCtd)));
+}
+
+// ---------------------------------------------------------------------------
+// GetDifficultyCorrectedDamage (0x137dd90) - only for PvE quest enemies; no-op for PvP.
+// ---------------------------------------------------------------------------
+export function getDifficultyCorrectedDamage(_attacker: KiokuState, _defender: KiokuState, damage: CsDecimal): CsDecimal {
     return damage;
 }
 
 // ---------------------------------------------------------------------------
-// GetDefenseCorrectedDamage
+// DamageCutByPvpOrGvgSuppression  [CONFIRMED 3.19 + DATA] (0x137bff0)
 // ---------------------------------------------------------------------------
-// [CONFIRMED] Previously the biggest gap in this file (revision 1 shipped this as an
-// outright no-op because the decompiled Decimal chain was too ambiguous to trust).
-// ScoreAttackTeam.ts resolves it completely:
-//     const def_factor = Math.min(2, ((atk_total + 10) / (def_total + 10)) * 0.12);
-// which lines up with what WAS legible from decompilation (a Decimal(10) added to both
-// sides, a 0.12-shaped constant, and a Min(...) call) - the missing piece was just which
-// operand went where. atk_total/def_total there are the ATTACKER's processed (buffed)
-// ATK-or-DEF-per-damageBaseType and the DEFENDER's processed (buffed) DEF, respectively.
-export function getDefenseCorrectedDamage(attacker: KiokuState, defender: KiokuState, damage: number, damageBaseType: DamageBaseType): number {
-    const attackStat = damageBaseType === DamageBaseType.DEF ? getProcessedDef(attacker) : getProcessedAtk(attacker);
-    const defStat = getProcessedDef(defender);
-    const defFactor = Math.min(2, ((attackStat + 10) / (defStat + 10)) * 0.12);
-    return damage * defFactor;
+//   d * (1 - (decimal)policy("damageSuppresionRatio").value / 1000)
+export function damageCutByPvpOrGvgSuppression(damage: CsDecimal): CsDecimal {
+    return damage.mul(CsDecimal.One.sub(dec.int(PVP_POLICY.damageSuppresionRatio).div(dec.int(1000))));
 }
 
 // ---------------------------------------------------------------------------
-// GetProcessedGiveDamage / GetProcessedReceiveDamage
+// DamageCutByShield  [CONFIRMED 3.19] (0x137c160)
 // ---------------------------------------------------------------------------
-// [CONFIRMED architecture, RECONSTRUCTED per-state formula] Both walk the relevant
-// unit's active states, sum every active give/receive-damage-ratio contribution, and
-// add it as a percentage on top of running damage. ScoreAttackTeam.ts confirms
-// UP_ELEMENT_DMG_RATE_RATIO folds unconditionally into the SAME give-damage-ratio bucket
-// as UP_GIV_DMG_RATIO (not gated behind a weak-element hit) - see UnitStateEngine.ts's
-// getGiveDamageRatioBonus, which now includes it.
-export function getProcessedGiveDamage(attacker: KiokuState, damage: number): number {
-    const ratio = getGiveDamageRatioBonus(attacker); // e.g. 0.15 for +15%
-    return damage + damage * ratio;
-}
-
-export function getProcessedReceiveDamage(defender: KiokuState, damage: number): number {
-    const ratio = getReceiveDamageRatioBonus(defender); // e.g. 0.15 for +15% received
-    return damage + damage * ratio;
+//   m = 1f; for each active SHIELD: m = m * (1f - ratio); shield.ConsumeRemainCount()
+//   d * (decimal)m          (float32 product, 7-digit decimal conversion)
+export function damageCutByShield(defender: KiokuState, damage: CsDecimal): { damage: CsDecimal, applied: boolean } {
+    const ratios = activeShieldRatios(defender);
+    if (ratios.length === 0) return { damage, applied: false };
+    let m = f32(1);
+    for (const r of ratios) m = f32(m * f32(1 - r));
+    return { damage: damage.mul(dec.float(m)), applied: true };
 }
 
 // ---------------------------------------------------------------------------
-// GetElementResistDamage
+// DamageCutByBarrier  [CONFIRMED 3.19] (0x137bc90) - plain int arithmetic
 // ---------------------------------------------------------------------------
-// [RECONSTRUCTED] ReDriveBattleCore.BattleDamageCalculator$$GetElementResistDamage
-// Shape: if the attack has an element, look up the defender's processed element-resist
-// rate for that element, clamp it to [-100, 100], then: damage -= damage*clampedResist/100.
-// Cross-validated against ScoreAttackTeam.ts's
-//     elem_res_down = clamp(-1, 1, DWN_ELEMENT_RESIST_RATIO/1000)
-//     elem_resist_factor = 1 + elem_res_down
-// which is the same net effect under a sign convention where "resist" is expressed as a
-// negative debuff amount rather than a signed "resistance level" - see
-// UnitStateEngine.ts's getElementResistRate for the reconciliation.
-export function getElementResistDamage(attacker: KiokuState, defender: KiokuState, damage: number, attackElement: number): number {
-    if (!attackElement) return damage;
-    const rawResist = getElementResistRate(defender, attackElement);
-    const clamped = Math.max(-100, Math.min(100, rawResist));
-    return damage - (damage * clamped) / 100;
-}
-
-// ---------------------------------------------------------------------------
-// CorrelationEffect (element weakness multiplier)
-// ---------------------------------------------------------------------------
-// [CONFIRMED] ReDriveBattleCore.CorrelationEffect .ctor / GetDamageType
-// GetDamageType: DamageType = 2 ("weak hit") iff attacker is a character AND
-// attackElement is in defender.WeakElements (dump.cs confirms `BattleUnit.WeakElements:
-// ElementType[]` is a real, mutable runtime property - see KiokuState.weakElements in
-// PvPTeam.ts). ElementDamageRatio starts at 1.0 (normal) or, on a weak hit, 1.2 - BOTH
-// numbers confirmed directly by the person from Ghidra's raw bytes at DAT_7b9445dab8,
-// AND independently matching ScoreAttackTeam.ts's
-//     effect_elem_factor = 1 + (enemy.isWeak ? 0.2 + elem_dmg_up : 0)
-// (1 + 0.2 = 1.2 on a weak hit), where `elem_dmg_up` is
-// UP_WEAK_ELEMENT_DMG_RATIO/1000 summed across the attacker's active buffs - confirming
-// both the constant AND that "UP_WEAK_ELEMENT_DMG_RATIO" (my original revision-1 name,
-// which I'd second-guessed) is the correct, real ability effect type for this specific
-// weak-hit-only bonus. (UP_ELEMENT_DMG_RATE_RATIO is a DIFFERENT, unconditional
-// elemental damage buff - see getProcessedGiveDamage above.)
-const ELEMENT_DAMAGE_RATIO_NORMAL = 1.0; // [CONFIRMED]
-const ELEMENT_DAMAGE_RATIO_WEAK = 1.2;   // [CONFIRMED]
-
-// [CROSS-CHECKED against a full CorrelationEffect.c re-dump] The .ctor confirms the exact
-// mechanism this function models: a fresh CorrelationEffect is built per-hit from the
-// attacker's CURRENTLY-active UpWeakElementDmgRatioUnitState states specifically (walking
-// Condition.StateList, type-checked via the IL2CPP typeHierarchy array, each gated on its
-// own IsActive(attacker)) - not a cached/precomputed value. It also confirms
-// GetDamageType additionally requires `attacker.BattleParameter is CharacterParameter`
-// before DamageType can become 2 - always true for every unit in this simulator (PvP is
-// Kiokus only), so it doesn't change behavior here, just narrows what "weak hit" can mean
-// in general.
-// One thing worth flagging rather than silently reconciling: the ctor computes the
-// per-state bonus as `existing + UpWeakElementDmgRatioUnitState.get_UpRatio() / 100.0`, a
-// straight /100 division in the raw bytes - not the /1000 this function uses via
-// getWeakElementBonus. Not changed here, because the /1000 scale has STRONGER,
-// independent confirmation from two other sources (a direct Ghidra byte-read of
-// DAT_7b9445dab8 by the person, and the separately-validated ScoreAttackTeam.ts reference
-// formula) - the likeliest reconciliation is that get_UpRatio() itself already divides by
-// 10 internally (its own body wasn't read), making the two /100 and /1000 readings
-// consistent rather than contradictory. Flagged instead of guessed at further; if you want
-// this fully nailed down, UpWeakElementDmgRatioUnitState$$get_UpRatio's own body is the
-// next thing to decompile.
-export interface CorrelationEffectResult {
-    isWeakHit: boolean;
-    elementDamageRatio: number;
-}
-
-export function computeCorrelationEffect(attacker: KiokuState, defender: KiokuState, attackElement: number): CorrelationEffectResult {
-    const isWeakHit = attackElement !== 0 && isMatchWeakElement(attackElement, defender);
-    if (!isWeakHit) {
-        return { isWeakHit: false, elementDamageRatio: ELEMENT_DAMAGE_RATIO_NORMAL };
-    }
-    let ratio = ELEMENT_DAMAGE_RATIO_WEAK;
-    ratio += getWeakElementBonus(attacker); // sum of active UP_WEAK_ELEMENT_DMG_RATIO / 1000
-    return { isWeakHit: true, elementDamageRatio: ratio };
-}
-
-// [CONFIRMED field, RECONSTRUCTED population] `BattleUnit.WeakElements` (dump.cs) is a
-// real, mutable per-unit runtime list, NOT a static per-character trait - there's no
-// such field in KiokuData/heartExpStages (those "weakElements" are for PvE QUEST STAGE
-// enemies, a different concept entirely). For player-controlled Kiokus in PvP, nothing
-// in the provided files populates this list, so it defaults to empty (never weak) unless
-// something (an "expose weakness"-style debuff, if one exists in your kit data) adds to
-// KiokuState.weakElements at runtime. See PvPTeam.ts.
-// Exported (was module-private) so AITargetSelector.ts's FULL AUTO damage-targeting
-// filter chain (DamageAbilityEffectBase's confirmed UnitFilterMatchWeakElement step) can
-// reuse the exact same weak-element check rather than duplicating it.
-export function isMatchWeakElement(attackElement: number, defender: KiokuState): boolean {
-    return defender.weakElements.includes(attackElement);
-}
-
-// ---------------------------------------------------------------------------
-// IsCriticalDamage / GetAddedCriticalDamage
-// ---------------------------------------------------------------------------
-// [CONFIRMED] ReDriveBattleCore.BattleDamageCalculator$$IsCriticalDamage
-//   roll = Random() * 100   (0-100)
-//   isCrit = roll < attacker.GetProcessedCtr() + defender.GetProcessedRcvCtr(attacker)
-export function isCriticalDamage(attacker: KiokuState, defender: KiokuState): boolean {
-    const ctr = getProcessedCtr(attacker);
-    const rcvCtr = getProcessedRcvCtr(defender, attacker);
-    const roll = Math.random() * 100;
-    return roll < ctr + rcvCtr;
-}
-
-// [CONFIRMED] ReDriveBattleCore.BattleDamageCalculator$$GetAddedCriticalDamage
-//   damage * (1 + ctd/100)
-export function getAddedCriticalDamage(attacker: KiokuState, damage: number): number {
-    const ctd = getProcessedCtd(attacker);
-    return damage * (1 + ctd / 100);
-}
-
-// ---------------------------------------------------------------------------
-// GetDifficultyCorrectedDamage
-// ---------------------------------------------------------------------------
-// [CONFIRMED - scope only] ReDriveBattleCore.BattleDamageCalculator$$GetDifficultyCorrectedDamage
-// Only applies when the ATTACKER's BattleParameter is specifically a
-// QuestEnemyAppearanceParameter (PvE quest-enemy difficulty scaling). Now properly
-// gated behind `battleType` instead of being hardcoded PvP-only: for BattleType.Pvp (and
-// any battle type where the attacker isn't a quest-enemy-controlled unit) this is a
-// no-op. If you run this engine for a Solo/Gve simulation where a quest enemy attacks,
-// this would need the actual difficulty-scaling table wired in - not implemented (would
-// need the quest/enemy difficulty data files, which weren't provided).
-export function getDifficultyCorrectedDamage(_attacker: KiokuState, _defender: KiokuState, damage: number, _battleType: BattleType): number {
-    return damage; // Not implemented for non-quest-enemy attackers - see comment above.
-}
-
-// ---------------------------------------------------------------------------
-// DamageCutByPvpOrGvgSuppression
-// ---------------------------------------------------------------------------
-// [CONFIRMED gating, UNRESOLVED formula] ReDriveBattleCore.BattleDamageCalculator
-// $$GetAttackDamageResult calls this only `if (battleType == BattleType.Pvp ||
-// battleType == BattleType.Gvg)`. Per the person's message this IS relevant (PvP is
-// battleType 2), so the gate is now wired in. The function body itself looks up a
-// `CalculationPointPolicyMstModel` (a game-data table for PvP/GvG damage suppression
-// rates, filtered by a predicate I don't have the body of) and computes a ratio from two
-// of its fields. I do NOT have that data table (no matching JSON was provided), so this
-// is implemented as a flagged no-op (multiplier = 1) rather than a fabricated rate. The
-// gate itself (when this function fires) is real; only the internal rate lookup is
-// missing. See MISSING_AND_UNCERTAIN.md.
-let _warnedPvpSuppression = false;
-export function damageCutByPvpOrGvgSuppression(damage: number, battleType: BattleType): number {
-    if (battleType !== BattleType.Pvp && battleType !== BattleType.Gvg) return damage;
-    if (!_warnedPvpSuppression) {
-        console.warn("[DamageCalculator] DamageCutByPvpOrGvgSuppression's rate table (CalculationPointPolicyMst) isn't available - applying no suppression (1x). See MISSING_AND_UNCERTAIN.md.");
-        _warnedPvpSuppression = true;
-    }
-    return damage; // * (unknown policy-driven rate)
-}
-
-// ---------------------------------------------------------------------------
-// DamageCutByShield
-// ---------------------------------------------------------------------------
-// [CONFIRMED] ReDriveBattleCore.BattleDamageCalculator$$DamageCutByShield
-// For every active ShieldUnitState on the defender: damage *= (1 - shield.DecreaseRatio),
-// multiplicatively stacked across all shields. dump.cs confirms `ShieldUnitState` is a
-// real class with a `DecreaseRatio` property (get/set) - matches what was assumed here.
-// Each shield's hit-count is decremented via consumeShieldCharges() in PvPTeam.ts, now
-// using the real `remainCount` field confirmed on SkillDetail (PassiveSkill/ActiveSkill
-// both have it) rather than a fallback.
-export function damageCutByShield(defender: KiokuState, damage: number): number {
-    const shields = [...defender.activeEffectDetails.values()].filter(d => d.abilityEffectType === "SHIELD");
-    if (!shields.length) return damage;
-    let multiplier = 1.0;
-    for (const shield of shields) {
-        const decreaseRatio = shield.value1 / 1000;
-        multiplier *= (1 - decreaseRatio);
-    }
-    return damage * multiplier;
-}
-
-// ---------------------------------------------------------------------------
-// DamageCutByBarrier
-// ---------------------------------------------------------------------------
-// [CONFIRMED] ReDriveBattleCore.BattleDamageCalculator$$DamageCutByBarrier
-// A barrier is a flat HP-pool that absorbs incoming (already-computed, integer) damage
-// 1:1. If the hit is >= remaining barrier endurance, the barrier fully breaks (removed,
-// its Endurance/MaxEndurance zeroed) and the excess spills through to HP; otherwise the
-// whole hit is absorbed and Endurance is reduced by the hit amount.
 export interface BarrierCutResult {
     remainingDamage: number;
     absorbedByBarrier: number;
     barrierBroke: boolean;
 }
-
 export function damageCutByBarrier(defender: KiokuState, damageValue: number): BarrierCutResult {
-    const barrierEndurance = defender.barrierEndurance;
-    if (barrierEndurance < 1) {
-        return { remainingDamage: damageValue, absorbedByBarrier: 0, barrierBroke: false };
-    }
-    if (damageValue >= barrierEndurance) {
-        const absorbed = barrierEndurance;
-        const remaining = damageValue - barrierEndurance;
-        defender.barrierEndurance = 0;
-        defender.maxBarrierEndurance = 0;
-        defender.activeEffectDetails.forEach((d, key) => {
-            if (d.abilityEffectType === "BARRIER") defender.activeEffectDetails.delete(key);
-        });
-        return { remainingDamage: remaining, absorbedByBarrier: absorbed, barrierBroke: true };
-    } else {
-        defender.barrierEndurance = barrierEndurance - damageValue;
+    const barrier = defender.barrierEndurance;
+    if (barrier <= 0) return { remainingDamage: damageValue, absorbedByBarrier: 0, barrierBroke: false };
+    if (damageValue < barrier) {
+        defender.barrierEndurance = barrier - damageValue;
         return { remainingDamage: 0, absorbedByBarrier: damageValue, barrierBroke: false };
     }
+    defender.barrierEndurance = 0;
+    defender.maxBarrierEndurance = 0;
+    return { remainingDamage: damageValue - barrier, absorbedByBarrier: barrier, barrierBroke: true };
 }
 
 // ---------------------------------------------------------------------------
-// Full pipeline: GetAttackDamageResult
+// GetAttackDamageResult  [CONFIRMED 3.19] (0x137cb10)
 // ---------------------------------------------------------------------------
-// [CONFIRMED order] Order of operations is confirmed from
-// ReDriveBattleCore.BattleDamageCalculator$$GetAttackDamageResult; individual steps
-// carry their own confidence markers above. Now also returns an AffectedUnitNotice so
-// BattleConditionParser.ts's per-unit "what just happened" conditions (DMG, IS_KILLED,
-// IS_WEAK_ELEMENT_ATTACKED, etc.) have real data to read - see PvPTeam.ts, which stores
-// this on the target as `lastNotice`.
+export interface DamageOptions {
+    battleType?: BattleType;
+    // DMG_* with range 2: the main target uses value1 power, the others value2.
+    isMainTarget?: boolean;
+    // Force the crit outcome (manual override in the UI); otherwise rolled with `rng`.
+    forceCrit?: boolean;
+    rng?: () => number;
+    // Precomputed damage base (AdditionalDamageAbilityEffect overrides GetDamageBase).
+    damageBaseOverride?: CsDecimal;
+    // Attack element override (additional damage uses the attacker's own element).
+    attackElementOverride?: number;
+    // AdditionalSkill with type 5: no crit roll, no barrier cut.
+    isNoCritNoBarrier?: boolean;
+}
+
 export interface DamageResult {
-    finalDamage: number;       // HP damage after everything, >= 0, integer (Ceiling'd)
+    finalDamage: number;       // int damage after barrier
+    preBarrierDamage: number;  // (int)Ceiling(d) before barrier
+    exactDamage: CsDecimal;    // decimal damage right before Ceiling, for debugging
     isCritical: boolean;
+    critChance: number;        // percent (float32), for display
     isWeakHit: boolean;
     barrierAbsorbed: number;
     shieldMultiplierApplied: boolean;
     notice: AffectedUnitNotice;
+    steps: { label: string, value: string }[]; // decimal after each pipeline step
 }
 
-export function getAttackDamageResult(attacker: KiokuState, defender: KiokuState, detail: SkillDetail, damageBaseType: DamageBaseType, battleType: BattleType = BattleType.Pvp): DamageResult {
-    // [CONFIRMED] `detail.element` (a plain number field on SkillDetail, confirmed to
-    // exist in KiokuTypes.ts) is the SKILL's own configured element - used here rather
-    // than the caster's character element (kioku.data.element), since a character's
-    // attacks aren't guaranteed to share their own element (support/portrait/crystalis
-    // effects can be a different element than the caster).
-    const attackElement: number = detail.element ?? 0;
-    const power = detail.value1 / 1000; // [CONFIRMED] see getDamageBase's header comment
+export function getAttackDamageResult(attacker: KiokuState, defender: KiokuState, detail: SkillDetail, damageBaseType: DamageBaseType, battleTypeOrOpts: BattleType | DamageOptions = BattleType.Pvp): DamageResult {
+    const opts: DamageOptions = typeof battleTypeOrOpts === "object" ? battleTypeOrOpts : { battleType: battleTypeOrOpts };
+    const battleType = opts.battleType ?? BattleType.Pvp;
+    const attackElement: number = opts.attackElementOverride ?? detail.element ?? 0;
+    const steps: { label: string, value: string }[] = [];
+    const step = (label: string, v: CsDecimal) => { steps.push({ label, value: v.toString() }); return v; };
 
-    const statValue = getInitialDamageBaseParamValue(attacker, damageBaseType);
-    let damage = getDamageBase(power, statValue);
-
-    damage = getAppliedDamageOfBreakSituation(defender, damage);
-    damage = getDefenseCorrectedDamage(attacker, defender, damage, damageBaseType);
-    damage = getProcessedGiveDamage(attacker, damage);
-    damage = getProcessedReceiveDamage(defender, damage);
-    damage = getElementResistDamage(attacker, defender, damage, attackElement);
-
+    let d = opts.damageBaseOverride ?? getDamageBase(getInitialDamageBaseParamValue(attacker, damageBaseType), damagePower(detail, opts.isMainTarget ?? true));
+    step("base", d);
+    d = step("break", getAppliedDamageOfBreakSituation(defender, d));
+    d = step("defense", getDefenseCorrectedDamage(attacker, defender, d, damageBaseType));
+    d = step("give", getProcessedGiveDamage(attacker, defender, d, attackElement));
+    d = step("receive", getProcessedReceiveDamage(attacker, defender, d));
+    d = step("elementResist", getElementResistDamage(defender, d, attackElement));
     const correlation = computeCorrelationEffect(attacker, defender, attackElement);
-    damage *= correlation.elementDamageRatio;
+    d = step("weakElement", d.mul(dec.float(correlation.elementDamageRatio)));
 
-    const isCritical = isCriticalDamage(attacker, defender);
-    if (isCritical) {
-        damage = getAddedCriticalDamage(attacker, damage);
-    }
+    const chance = critChance(attacker, defender);
+    const isCritical = opts.isNoCritNoBarrier ? false
+        : opts.forceCrit !== undefined ? opts.forceCrit
+            : f32((opts.rng ?? Math.random)() * 100) < chance;
+    if (isCritical) d = step("crit", getAddedCriticalDamage(attacker, defender, d));
 
-    damage = getDifficultyCorrectedDamage(attacker, defender, damage, battleType);
-    damage = damageCutByPvpOrGvgSuppression(damage, battleType);
-
-    const shieldMultiplierApplied = [...defender.activeEffectDetails.values()].some(d => d.abilityEffectType === "SHIELD");
-    damage = damageCutByShield(defender, damage);
-
-    damage = Math.max(damage, 0);
-    const intDamage = Math.ceil(damage);
+    d = step("difficulty", getDifficultyCorrectedDamage(attacker, defender, d));
+    if (d.lt(CsDecimal.Zero)) d = CsDecimal.Zero; // GetProcessedFinalGiveDamage: GvE-only states, then clamp
+    if (isSuppressedBattleType(battleType)) d = step("pvpSuppression", damageCutByPvpOrGvgSuppression(d));
+    const shield = damageCutByShield(defender, d);
+    d = step("shield", shield.damage);
+    d = CsDecimal.max(CsDecimal.One, d);
+    const exactDamage = d;
+    const preBarrierDamage = d.ceiling().toInt();
 
     const wasBarrierActiveBefore = defender.barrierEndurance > 0;
-    const barrierResult = damageCutByBarrier(defender, intDamage);
+    const barrierResult = opts.isNoCritNoBarrier
+        ? { remainingDamage: preBarrierDamage, absorbedByBarrier: 0, barrierBroke: false }
+        : damageCutByBarrier(defender, preBarrierDamage);
     const isDeadAfter = defender.currentHp - barrierResult.remainingDamage <= 0;
 
     const notice: AffectedUnitNotice = {
@@ -467,8 +380,6 @@ export function getAttackDamageResult(attacker: KiokuState, defender: KiokuState
         isBarrierAdded: false,
         isBarrierAttacked: wasBarrierActiveBefore,
         isBarrierDestroyed: barrierResult.barrierBroke,
-        // [UNCONFIRMED] "becomes max break-damage-receive-rate" - not implemented, see
-        // MISSING_AND_UNCERTAIN.md; always false here.
         isBreakedDamageReceiveRateBecomeMax: false,
         isReceivedReflection: false,
         isReceivedAttack: true,
@@ -476,54 +387,64 @@ export function getAttackDamageResult(attacker: KiokuState, defender: KiokuState
 
     return {
         finalDamage: barrierResult.remainingDamage,
+        preBarrierDamage,
+        exactDamage,
         isCritical,
+        critChance: chance,
         isWeakHit: correlation.isWeakHit,
         barrierAbsorbed: barrierResult.absorbedByBarrier,
-        shieldMultiplierApplied,
+        shieldMultiplierApplied: shield.applied,
         notice,
+        steps,
     };
 }
 
 // ---------------------------------------------------------------------------
-// Slip (DOT) damage: poison / burn / bleed / curse ticks
+// ADDITIONAL_DAMAGE  [CONFIRMED 3.19]
 // ---------------------------------------------------------------------------
-// [CONFIRMED shape] ReDriveBattleCore.BattleDamageCalculator$$GetSlipDamageValue +
-// ReDriveBattleCore.UnitState.ReceiveSlipDamageUnitStateBase$$GetDamageBase. Runs the
-// SAME pipeline as a direct attack, but skips crit and shield/barrier (per the
-// decompiled call chain, confirmed no such calls appear), and does not interact with the
-// break gauge.
-//
-// IMPORTANT CORRECTION from revision 1: the DOT's `dotOwner` parameter must be the unit
-// that APPLIED the DOT (whose ATK/DEF/HP stat it scales off), NOT the unit currently
-// suffering it. Revision 1 got this backwards, reasoning from the decompiled method
-// signature `GetDamageBase(BattleUnit userUnit)` which I couldn't confirm the call-site
-// binding for. ScoreAttackTeam.ts's `add_dot_dmg` settles it unambiguously: it scales
-// each DOT tick off `resolveAllyAtk(allyIdx, ...)` for the ALLY who owns the
-// DOT-inducing effect, iterating `this.allyContexts[allyIdx].kioku.effects` (the
-// applier's own effect list), not the enemy's. See PvPTeam.ts's tickDotEffects(), which
-// now tracks and uses the applier's KiokuState.
+// AdditionalDamageUnitState (.ctor 0x15b5130: ratio = (float)v / 10f) holds an
+// AdditionalDamageAbilityEffect. GetAdditionalDamageResult (0x15b4840), called after an
+// attack, runs a full extra hit on every unit the attack damaged:
+//   damageBase = GetDamageBase((float)ATK of the unit that APPLIED the state, ratio / 100f)
+//   element    = the attacker's character element
+//   then the normal DamageAbilityEffectBase.Triggering path -> GetAttackDamageResult
+//   (so DEF, give/receive, resist, weak element, crit, suppression, shield, barrier all apply).
+export function getAdditionalDamageBase(stateApplier: KiokuState, detail: SkillDetail): CsDecimal {
+    const ratio = f32(f32(detail.value1) / 10);
+    return getDamageBase(f32(stateApplier.kioku.getBaseAtk()), f32(ratio / 100));
+}
+
+// ---------------------------------------------------------------------------
+// RCV_FINAL_DAMAGE  [CONFIRMED 3.19]
+// ---------------------------------------------------------------------------
+// BattleDamageCalculator$$CalcFinalDamageNoticeBundle (0x137b110): after a skill resolves,
+// for each damaged target with active IReceiveFinalDamage states:
+//   extra = (int)Ceiling(Σ damage dealt to it by the skill * Σ GetFinalDamageRatio(attacker))
+// applied as one more damage notice (through the barrier). See UnitStateEngine.getFinalDamageRatio.
+export function getFinalDamageExtra(totalDamage: number, ratio: CsDecimal): number {
+    if (ratio.isZero() || totalDamage <= 0) return 0;
+    return dec.int(totalDamage).mul(ratio).ceiling().toInt();
+}
+
+// ---------------------------------------------------------------------------
+// GetSlipDamageValue  [CONFIRMED 3.19] (0x1380f20) - DOT ticks
+// ---------------------------------------------------------------------------
+// damageBase = ReceiveSlipDamageUnitStateBase$$GetDamageBase (0x15bf5b0):
+//     GetDamageBase((float)applier's initial ATK/DEF/HP, (float)v / 1000f)
+// then: break -> defense -> give (with slip variations) -> receive -> element resist
+//       -> x correlation ratio -> difficulty -> PvP suppression -> Max(1, d) -> Ceiling.
+// No crit, no shield, no barrier cut in this function.
 export function getSlipDamageResult(dotOwner: KiokuState, target: KiokuState, detail: SkillDetail, damageBaseType: DamageBaseType, battleType: BattleType = BattleType.Pvp): number {
     const attackElement: number = detail.element ?? 0;
-    const power = detail.value1 / 1000; // [CONFIRMED]
-
-    const statValue = getInitialDamageBaseParamValue(dotOwner, damageBaseType);
-    let damage = getDamageBase(power, statValue);
-
-    damage = getAppliedDamageOfBreakSituation(target, damage);
-    damage = getDefenseCorrectedDamage(dotOwner, target, damage, damageBaseType);
-    // NOTE: uses getSlipGiveDamageRatioBonus (includes UP_GIV_SLIP_DMG_RATIO, "DOT DMG+")
-    // rather than the direct-hit getProcessedGiveDamage/getGiveDamageRatioBonus - see
-    // UnitStateEngine.ts's GIVE_SLIP_DMG_RATIO_TYPES.
-    damage = damage + damage * getSlipGiveDamageRatioBonus(dotOwner);
-    damage = getProcessedReceiveDamage(target, damage);
-    damage = getElementResistDamage(dotOwner, target, damage, attackElement);
-
-    const correlation = computeCorrelationEffect(dotOwner, target, attackElement);
-    damage *= correlation.elementDamageRatio;
-
-    damage = getDifficultyCorrectedDamage(dotOwner, target, damage, battleType);
-    damage = damageCutByPvpOrGvgSuppression(damage, battleType);
-
-    damage = Math.max(damage, 0);
-    return Math.ceil(damage);
+    let d = getDamageBase(getInitialDamageBaseParamValue(dotOwner, damageBaseType), f32(f32(detail.value1) / 1000));
+    d = getAppliedDamageOfBreakSituation(target, d);
+    d = getDefenseCorrectedDamage(dotOwner, target, d, damageBaseType);
+    d = getProcessedGiveDamage(dotOwner, target, d, attackElement, detail.abilityEffectType);
+    d = getProcessedReceiveDamage(dotOwner, target, d);
+    d = getElementResistDamage(target, d, attackElement);
+    d = d.mul(dec.float(computeCorrelationEffect(dotOwner, target, attackElement).elementDamageRatio));
+    d = getDifficultyCorrectedDamage(dotOwner, target, d);
+    if (isSuppressedBattleType(battleType)) d = damageCutByPvpOrGvgSuppression(d);
+    d = CsDecimal.max(CsDecimal.One, d);
+    return d.ceiling().toInt();
 }
