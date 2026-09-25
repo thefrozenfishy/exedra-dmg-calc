@@ -1,3 +1,145 @@
+# Missing / Uncertain Items (Revision 5 - game version 3.19.0)
+
+Revision 5 moves the engine from the 1.5.0 Android decompilation to the **3.19.0 Windows
+build**. The whole `ReDriveBattleCore` namespace (5,416 functions, including compiler-
+generated lambdas) is decompiled into `E:\unpackedExedra\3.19.0\decompiled\*.c`, with the
+same `// ==== Namespace.Class$$Method ====` headers as before, plus an RVA and C# signature
+line. `E:\unpackedExedra\Ghidra\README_headless.md` explains how to regenerate or extend it.
+Citations below give the RVA so any claim can be checked in seconds.
+
+1.5.0 -> 3.19.0 diff at signature level (`E:\unpackedExedra\3.19.0\battlecore_diff_1.5.0_to_3.19.0.json`):
+487 -> 628 types, 151 added, 10 removed, 110 changed. Several items that earlier revisions
+called "character-specific, no class found" simply did not exist in 1.5.0 (TSUBAME_*,
+ZONE_*, UNIQUE_*, COUNT, REGAIN_*, VORTEX_ATK, ...). All of them have real classes in
+3.19. See GAME_TABLES_3.19.md for the full string -> class table.
+
+## R5.1 Numbers: the game computes damage in System.Decimal, not float/double
+
+`BattleMath.ts` (new) emulates C# `decimal` bit-exactly: .NET Core DecCalc, which is the
+version the game ships (`System.Decimal.DecCalc$$VarDecFromR4` RVA 0x4b07020 was decompiled
+and matches the .NET Core source). Key behaviours that JS doubles get wrong:
+- `(decimal)someFloat` rounds to **7 significant digits** (so `(decimal)1.2f` is exactly 1.2), and
+  `(decimal)someDouble` rounds to 15 digits.
+- Decimal arithmetic is exact at these magnitudes: `0.1m * 3 = 0.3m`, where doubles give
+  0.30000000000000004, which after the final `Math.Ceiling` becomes +1 damage.
+
+Which quantities use which type (all [CONFIRMED 3.19]):
+
+| decimal | float32 |
+|---|---|
+| ATK, DEF, SPD, the damage pipeline, give/receive/element-resist | crit rate/damage (Ctr/Ctd/RcvCtr/RcvCtd), weak-element ratio, shield product, turn gauge, barrier amount, `GetDamageBase`'s `stat*power` |
+
+Check: `scripts/sim/compareFormula.ts` runs 3000 random cases through the engine and through
+ScoreAttackTeam's closed-form formula with identical inputs: 2981 give identical results, 19
+are off by exactly 1. Those 19 are double-vs-decimal rounding at a `ceil` boundary, and
+the engine matches the game there.
+
+## R5.2 Damage pipeline (DamageCalculator.ts) - rewritten, every step cited
+
+`BattleDamageCalculator$$GetAttackDamageResult` (0x137cb10) order: break -> defense ->
+give -> receive -> element resist -> x weak-element ratio -> crit -> difficulty (PvE) ->
+final-give (GvE) -> **PvP/GvG suppression** -> shield -> `Max(1, d)` -> `Ceiling` -> barrier.
+
+Changes vs revision 4, each a behaviour change:
+- **PvP damage x0.25.** `DamageCutByPvpOrGvgSuppression` uses
+  `CalculationPointPolicyMst` "damageSuppresionRatio" = 750 (row 23, 3.18 data), so the
+  factor is 1 - 750/1000. Revision 4 applied x1 (no data). Barrier (row 25) and heal (row 24)
+  are x0.5 in PvP. Values are hard-coded in `PVP_POLICY` because that JSON isn't synced into
+  base_data yet.
+- **Splash power:** `DamageAbilityEffectBase$$Triggering` (0x18ef650) uses value2/1000 for
+  every non-main target of a range-2 skill. 450+ DMG rows have value2 != value1.
+- **Crit damage** = `(1 + Ctd/100) * (1 + defender RcvCtd/100)`, a new 3.x defender stat.
+  Crit roll: `(float)(NextDouble()*100) < RcvCtr + Ctr`.
+- **Floor is `Max(1, d)`**, not 0.
+- **ADDITIONAL_DAMAGE** is a full extra hit through the whole pipeline
+  (`AdditionalDamageUnitState$$GetAdditionalDamageResult` 0x15b4840), with its base from the
+  ATK of the unit that applied the state at power `(v/10f)/100f`. Revision 4 added a raw
+  base-damage number.
+- **RCV_FINAL_DAMAGE**: an extra `ceil(total x ratio)` hit (`CalcFinalDamageNoticeBundle`
+  0x137b110), gated on attacker role/element.
+- **Barrier** (`BarrierUnitState` .ctor 0x15b5ed0): value1 and value3 are per-mille
+  (/1000). Revision 4 used them raw, making barriers 1000x too large. The value-slot question
+  from B2 is now resolved. Endurance is `ceil(f)`, and PvP is x0.5.
+- DOT (`GetSlipDamageValue` 0x1380f20): same pipeline minus crit and shield.
+- `IsDamageDisabled` only concerns one PvE boss (UniqueEnemy639002): a no-op for PvP.
+- Weak elements: `BattleUnit.WeakElements` is only ever filled from
+  QuestEnemyAppearanceParameter. **Characters have none, so no weak hits in PvP** (B3 resolved).
+
+## R5.3 Stats (UnitStateEngine.ts) - two real bugs fixed
+
+- **Buffs before debuffs.** Every `GetProcessedX` does one pass over Up states, then one over
+  Down states on the running value. Revision 4 interleaved them in insertion order.
+- **Accum states multiply by the CURRENT stack count** (AccumCount +0x94, starts at 1), not
+  AccumCountMax (+0x90 = value2). In 3.19 every *AccumRatio class reads +0x94 (e.g.
+  UpAtkAccumRatioUnitState 0x16e06a0). Revision 4's "always fully stacked" reading came
+  from 1.5.0, and those classes changed since.
+- `UP_CTR_RATIO` / `UP_CTD_RATIO` / `DWN_CTR_RATIO` / `DWN_CTD_RATIO` DO exist and map to
+  the *Fixed* classes, so they share the same formula (UnitStateFactory table). Revision 3
+  had dropped them.
+- New 3.x types wired in: *_CONSUME_* (only while RemainCount > 0), UP_RCV_CTD_RATIO,
+  UP_ELEMENT_RESIST_RATIO, *_AIM_* (role/element-gated give/receive), per-DOT-type give
+  bonuses (UP_GIV_BURN_DMG_RATIO etc.).
+- SPD is decimal with the same shape as ATK: ratio `(v/10)/100` of base, fixed `v`. Revision
+  4 used float32 with v/1000. **Note for the person:** PvPKioku.ts says fixed SPD must go
+  first "to reproduce the floating error". With decimal speed, order cannot matter, so any
+  rounding quirk seen in-game most likely comes from the turn gauge (R5.4). Worth re-testing.
+
+## R5.4 Turn order - time-based gauge
+
+`UnitTurnGauge` (3.19) stores the TIME until acting: `Reset` gives `10000f / speed`, and
+`TurnReferee$$ShiftNextTurn` (0x15c1c20) subtracts `dt` = the first unit's gauge from everyone
+(float32, one op). Speed changes rescale by `old/new` unless `Mathf.Approximately`;
+haste/slow add or subtract `(10000/speed) * (v/1000)`, floored at 0. Revision 4 tracked
+"meters remaining" and divided by speed each time: the same in exact maths, but it rounds
+differently in float32. That matters exactly at ties (B1). Tie-break order is unchanged
+(gauge, priority desc, team, id).
+
+## R5.5 Other fixes
+
+- **Target side** for all 196 effect types now comes from the game's classes
+  (`EffectTargetSide.ts`, generated): StateAbilityEffect's TargetSide = state Direction.
+  Revision 4's hand lists missed UP_CTR_FIXED and others, which were then applied to the
+  ENEMY team.
+- **`canNotAction` infinite recursion** fixed. In the game it's a stored flag
+  (`UnitCondition$$get_CanNotAction` 0x7388e0). The old getter evaluated condition sets, and a
+  CAN_NOT_ACTION condition called back into it. Every real 10-unit battle tried overflowed
+  the stack.
+- `RE_ACTION_TURN_UNIT_ACT` is NOT an alias of ADDITIONAL_TURN_UNIT_ACT: it has its own
+  classes (ReActionTurnUnitActAbilityEffect, Act.ReActionTurnUnitAct). Still implemented as
+  the alias - see open items.
+- Seeded RNG: `new PvPBattle(t1, t2, debug, seed)` makes a battle replayable. Crit outcomes
+  can be forced per hit via `PvPTeam.critOverride` (for the planned UI toggles).
+
+## R5.6 Still open (most useful next)
+
+1. **Break damage-receive rate increase per hit**
+   (`DamageAbilityEffectBase$$IncreaseBreakedDamageReceiveRate` 0x18eecd0):
+   `floor((target increaseRate/1000) * (1 + attacker bonus/100) * base)`, where base is the
+   skill's value5/10 or a per-role default (5/20/10/12). The unit keeps a fixed 100% for now.
+   Needs the character-side increaseRate source (CharacterParameter .ctor).
+2. **DMG_RANDOM** (`DmgRandomAbilityEffect$$Triggering` 0x18f08b0) is treated as one hit. It
+   should be value2 random hits.
+3. **RCV_FINAL_DAMAGE** is applied per damage effect, but the game sums the whole skill per
+   target first (possible +-1).
+4. **Probability roll / hit & parry rates** (`UnitStateBase$$GetProcessedProbability`, uses
+   `MathExtension.Floor(float, 2)` - a float-rounding hotspot) not re-read for 3.19. Per-ailment
+   parry now exists (`BattleUnit$$GetAbnormalParryRate(Type)`).
+5. Character mechanics with real classes now, not yet ported: TSUBAME_CORE/LINK (also an
+   ATK and SPD variation), ZONE_*, UNIQUE_* (+ UniqueStateLevelMst/PatternMst data),
+   COUNT/COUNTDOWN_*, REGAIN_*, LOCK_TURN_ORDER, LOCK_SPECIAL_ATTACK, REFLECTION_RATIO,
+   VORTEX_ATK, SWITCH_SKILL.
+6. Heal suppression x0.5 in PvP: `healValueSuppresionRatio`; HpRecoveryCalculator not yet read.
+7. UP/DWN_BUFF_EFFECT_VALUE (buff effectiveness) and `IHasUpdateableEffectValue`: the game can
+   rescale a state's value after creation. The port only scales the unit's own kit at
+   construction.
+8. Merging ScoreAttackTeam onto this engine: the game has one engine plus per-mode directors
+   (`ScoreAttackGameDirector`, `PvpGameDirector`, ...). ScoreAttackTeam could become a thin
+   "director" that builds the enemy and pools buffs, then calls DamageCalculator.
+
+---
+
+The revision 4 notes below are kept for history. Where R5 contradicts them, R5 wins.
+
 # Missing / Uncertain Items (Revision 4)
 
 Revision 4 was given properly-scoped decompiled dumps (BattleUnit.c/UnitState.c/
