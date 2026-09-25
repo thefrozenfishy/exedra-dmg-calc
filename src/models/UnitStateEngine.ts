@@ -154,6 +154,46 @@ export function getProcessedAtk(unit: KiokuState): number { return getProcessedA
 export function getProcessedDef(unit: KiokuState): number { return getProcessedDefDecimal(unit).toFloat(); }
 
 // ---------------------------------------------------------------------------
+// SPD (System.Decimal)
+// ---------------------------------------------------------------------------
+// [CONFIRMED 3.19] BattleUnit$$GetProcessedSpeed (0x13871f0): same two-pass decimal shape as
+// ATK. Base = (decimal)Param.Speed (int). Returned as (float) at the end.
+//   UP_SPD_RATIO        + base * ((decimal)(v/10f) / 100)                    0x16e71b0
+//   UP_SPD_ACCUM_RATIO  + base * (((decimal)(v/10f) * AccumCount) / 100)     0x16e6e10
+//   UP_SPD_FIXED        + (decimal)(float)v                                  0x16e6f80
+//   DWN_SPD_RATIO       - running * ((decimal)(v/10f) / 100)                 0x15bf110
+//   DWN_SPD_ACCUM_RATIO - running * (((decimal)(v/10f) * AccumCount) / 100)  0x15bed30
+//   DWN_SPD_FIXED       - (decimal)(float)v                                  0x15befd0
+// Previous revision: float32 per step with v/1000 - a different (rounding-prone) formula.
+// Not modelled: TSUBAME_LINK's ISpeedVariation (character-specific).
+export function getProcessedSpeedWithBreakdown(unit: KiokuState): { speed: number, steps: [number, SkillDetail][] } {
+    const base = dec.int(Math.round(unit.kioku.data.minSpd));
+    const states = orderedActiveEffectsInApplicationOrder(unit);
+    let result = base;
+    const steps: [number, SkillDetail][] = [];
+    for (const d of states) {
+        let v: CsDecimal | null = null;
+        switch (d.abilityEffectType) {
+            case "UP_SPD_RATIO": v = base.mul(decTenth(d).div(D100)); break;
+            case "UP_SPD_ACCUM_RATIO": v = base.mul(decTenth(d).mul(dec.int(accumCount(d))).div(D100)); break;
+            case "UP_SPD_FIXED": v = dec.float(f32(d.value1)); break;
+        }
+        if (v) { result = result.add(v); steps.push([v.toFloat(), d]); }
+    }
+    for (const d of states) {
+        let v: CsDecimal | null = null;
+        switch (d.abilityEffectType) {
+            case "DWN_SPD_RATIO": v = result.mul(decTenth(d).div(D100)).neg(); break;
+            case "DWN_SPD_ACCUM_RATIO": v = result.mul(decTenth(d).mul(dec.int(accumCount(d))).div(D100)).neg(); break;
+            case "DWN_SPD_FIXED": v = dec.float(f32(d.value1)).neg(); break;
+        }
+        if (v) { result = result.add(v); steps.push([v.toFloat(), d]); }
+    }
+    if (result.lt(CsDecimal.Zero)) result = CsDecimal.Zero;
+    return { speed: result.toFloat(), steps };
+}
+
+// ---------------------------------------------------------------------------
 // Crit rate / crit damage (float32)
 // ---------------------------------------------------------------------------
 // [CONFIRMED 3.19] BattleUnit$$GetProcessedCtr (0x1385160) / GetProcessedCtd (0x1384e40):

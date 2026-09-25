@@ -4,7 +4,7 @@ import { skillDetails } from "../utils/helpers";
 import { isConditionSetActive, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
 import { PvPKioku } from "./PvPKioku";
 import { damageBaseTypeFromEffectType, getAttackDamageResult, getSlipDamageResult, getAdditionalDamageBase, getFinalDamageExtra, damageCutByBarrier, DamageBaseType, BattleType, PVP_POLICY } from "./DamageCalculator";
-import { mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum, getFinalDamageRatio } from "./UnitStateEngine";
+import { mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum, getFinalDamageRatio, getProcessedSpeedWithBreakdown } from "./UnitStateEngine";
 import { elementMap } from "../types/enums";
 import { EFFECT_TARGET_SIDE } from "./EffectTargetSide";
 import { selectFullAutoTarget, expandProximity } from "./AITargetSelector";
@@ -184,6 +184,11 @@ function mergeFuaMaps(a: FuaMap, b: FuaMap): FuaMap {
     return { ...a, ...b };
 }
 
+export // UnityEngine.Mathf.Approximately(a, b)
+function mathfApproximately(a: number, b: number): boolean {
+    return Math.abs(b - a) < Math.max(1e-6 * Math.max(Math.abs(a), Math.abs(b)), 1.401298e-45 * 8)
+}
+
 export function isFriendlyEffect(type: string): boolean {
     const side = EFFECT_TARGET_SIDE[type]
     return side ? side === "Friend" : friendlySkills.includes(type)
@@ -220,8 +225,14 @@ export class KiokuState {
     activeEffectDetails: Map<string, SkillDetail & { _accumCount?: number; _isExemptPassingTurnOnce?: boolean; _applierState?: KiokuState }> = new Map()
 
     currentRemainingBreakGauge: number
-    currentMetersRemaining = maxMeters
-    currentSpd = 0  // Spd is m/s
+    currentSpd = 0  // processed speed (float, BattleUnit.GetProcessedSpeed)
+    // [CONFIRMED 3.19] UnitTurnGauge: GaugeValue (+0x14) is the TIME until this unit acts,
+    // Reset to RawGaugeResetValue (10000f) / speed; Speed (+0x18) is the speed the gauge was
+    // last computed with. See turn-gauge methods below.
+    turnGauge = 0
+    turnGaugeSpeed = 0
+    // Kept for the UI ("distance left"): what the previous revision tracked directly.
+    get currentMetersRemaining(): number { return f32(this.turnGauge * this.turnGaugeSpeed) }
     currentMp = 0
     currentHpPercent = 100
     currentMpGain = 1
@@ -395,8 +406,9 @@ export class KiokuState {
     resolveBreak() {
         if (this.currentRemainingBreakGauge <= 0 && !this.isBroken) {
             this.isBroken = true
-            this.currentMetersRemaining = Math.max(f32(this.currentMetersRemaining + 2500), 0)
-            this.turnOrderPriority = -(++globalTurnShiftCounter)
+            // Break pushes the gauge back by breakTurnGaugeSlowRatio (policy id 20: 250 -> 0.25 of a
+            // full gauge), via UnitTurnGauge.AddGaugeValue.
+            this.addGaugeRate(0.25, -(++globalTurnShiftCounter))
             // [CONFIRMED] ReDriveBattleCore.TurnReferee (team-level tally, consumed by
             // BattleConditionParser's CompareContent.BREAK_UNIT_TOTAL_COUNT, 306) -
             // cumulative across the whole battle, never reset.
@@ -411,9 +423,23 @@ export class KiokuState {
         }
     }
 
+    // [CONFIRMED 3.19] UnitTurnGauge$$Reset (0x15cf070): speed = GetProcessedSpeed(),
+    // TurnOrderPriority = 0, GaugeValue = 10000f / speed.
     resetDistanceRemaining() {
-        this.currentMetersRemaining = maxMeters
+        this.updateSpd(false)
+        this.turnGaugeSpeed = this.currentSpd
         this.turnOrderPriority = 0
+        this.turnGauge = f32(maxMeters / this.turnGaugeSpeed)
+    }
+
+    // [CONFIRMED 3.19] UnitTurnGauge$$AddGaugeValue / SubtractGaugeValue (0x15cee60 / 0x15cf1d0)
+    // -> GetResultGaugeValueOfRateVariation (0x15ceff0): gauge = max(0, (10000f/speed) * rate + gauge).
+    // SLOW adds (float)v/1000f, HASTE subtracts it; both set TurnOrderPriority.
+    addGaugeRate(rate: number, priority: number) {
+        const baseValue = f32(maxMeters / this.turnGaugeSpeed)
+        const g = f32(f32(baseValue * f32(rate)) + this.turnGauge)
+        this.turnGauge = g <= 0 ? 0 : g
+        this.turnOrderPriority = priority
     }
 
     // [CONFIRMED] ReDriveBattleCore.UnitState.UnitStateBase$$PassingTurn:
@@ -425,7 +451,7 @@ export class KiokuState {
         this.tickHotEffects()
         const updated: typeof this.activeEffectDetails = new Map();
         for (const [key, detail] of this.activeEffectDetails) {
-            if (detail.abilityEffectType == "CUTOUT") this.progressMeters(maxMeters)
+            if (detail.abilityEffectType == "CUTOUT") this.progressMeters()
             let turn = detail.turn;
             if (detail._isExemptPassingTurnOnce) {
                 detail._isExemptPassingTurnOnce = false
@@ -495,33 +521,19 @@ export class KiokuState {
     }
 
 
-    updateSpd(): void {
-        this.currSpdEffects = []
-        const baseSpd = f32(this.kioku.data.minSpd)
-        let spd = baseSpd
-
-        const speedTypes = ["UP_SPD_RATIO", "DWN_SPD_RATIO", "UP_SPD_FIXED", "DWN_SPD_FIXED"]
-        const speedEffects = this.orderedActiveEffects().filter(d => speedTypes.includes(d.abilityEffectType))
-
-        for (const detail of speedEffects) {
-            const isUp = detail.abilityEffectType.startsWith("UP_")
-            const isFixed = detail.abilityEffectType.endsWith("_FIXED")
-            const step = isFixed
-                ? f32((isUp ? 1 : -1) * detail.value1)
-                : isUp
-                    ? f32(baseSpd * f32(detail.value1 / 1000))       // UP ratio: always off base
-                    : f32(-(spd * f32(detail.value1 / 1000)))        // DWN ratio: off running total
-            spd = f32(spd + step)
-            this.currSpdEffects.push([step, detail.description, detail.applier])
+    // [CONFIRMED 3.19] speed = GetProcessedSpeed (decimal, UnitStateEngine.getProcessedSpeedWithBreakdown).
+    // BattleUnit$$UpdateTurnGaugeBySpeed (0x1389210) -> UnitTurnGauge$$SetSpeedAndUpdateGaugeValue
+    // (0x15cf110): unless Mathf.Approximately(old, new), gauge = (oldSpeed / newSpeed) * gauge.
+    updateSpd(updateGauge = true): void {
+        const { speed, steps } = getProcessedSpeedWithBreakdown(this)
+        this.currSpdEffects = steps.map(([step, d]) => [step, d.description, (d as any).applier])
+        this.currentSpd = speed
+        if (updateGauge && this.turnGaugeSpeed > 0 && !mathfApproximately(this.turnGaugeSpeed, speed)) {
+            this.turnGauge = f32(f32(this.turnGaugeSpeed / speed) * this.turnGauge)
+            this.turnGaugeSpeed = speed
         }
-
-        this.currentSpd = Math.max(spd, 0)
     }
 
-    private orderedActiveEffects(): SkillDetail[] {
-        return [...this.passiveEffectDetails.values(), ...this.activeEffectDetails.values()]
-            .filter(detail => isConditionSetActive(detail, this.stateGen(this, this)))
-    }
 
     // Public wrapper so UnitStateEngine.ts (which lives outside this class) can reuse
     // the exact same "is this effect currently active" check that updateSpd() and
@@ -548,19 +560,19 @@ export class KiokuState {
     }
 
     secondsUntilAbleToAct(): number {
-        return f32(this.currentMetersRemaining / this.currentSpd)
+        return this.turnGauge
     }
 
+    // [CONFIRMED 3.19] TurnReferee$$ShiftNextTurn (0x15c1c20): the first unit in turn order
+    // defines dt = its GaugeValue; every active unit: gauge = dt <= gauge ? gauge - dt : 0.
     traverseSeconds(seconds: number): void {
-        this.tickMeters(f32(seconds * this.currentSpd))
+        const dt = f32(seconds)
+        this.turnGauge = dt <= this.turnGauge ? f32(this.turnGauge - dt) : 0
     }
 
-    private tickMeters(metersWalked: number): void {
-        this.currentMetersRemaining = Math.max(f32(this.currentMetersRemaining - metersWalked), 0)
-    }
-
-    progressMeters(metersWalked: number): void {
-        this.currentMetersRemaining = Math.max(f32(this.currentMetersRemaining - metersWalked), 0)
+    // CUTOUT: act immediately (gauge to 0, jumps the tie-break queue).
+    progressMeters(): void {
+        this.turnGauge = 0
         this.turnOrderPriority = ++globalTurnShiftCounter
     }
 
@@ -869,9 +881,11 @@ export class KiokuState {
                 this.passiveEffectDetails.delete(String(skillDetailId(detail)))
             }
         } else if (detail.abilityEffectType === "HASTE") {
-            effTargets.forEach(t => t.progressMeters(detail.value1 * 10))
+            // [CONFIRMED 3.19] HasteAbilityEffect$$Triggering (0x18f4840): SubtractGaugeValue((float)v/1000f)
+            effTargets.forEach(t => t.addGaugeRate(-f32(f32(detail.value1) / 1000), ++globalTurnShiftCounter))
         } else if (detail.abilityEffectType === "SLOW") {
-            effTargets.forEach(t => t.progressMeters(-(detail.value1 * 10)))
+            // [CONFIRMED 3.19] SlowAbilityEffect$$Triggering (0x1900f80): AddGaugeValue((float)v/1000f)
+            effTargets.forEach(t => t.addGaugeRate(f32(f32(detail.value1) / 1000), ++globalTurnShiftCounter))
         } else if (detail.abilityEffectType === "GAIN_EP_RATIO") {
             effTargets.forEach(t => t.getMp(target.maxMp * detail.value1 / 1000))
         } else if (detail.abilityEffectType === "GAIN_EP_FIXED") {
@@ -1087,6 +1101,8 @@ export class PvPTeam {
         this.kiokuStates.forEach(k => {
             k.updateMPGain()
             k.updateSpd()
+            // First computation (battle start, after BATTLE_START passives): UnitTurnGauge.Reset.
+            if (k.turnGaugeSpeed === 0) k.resetDistanceRemaining()
             k.resolveBreak()
         })
     }
