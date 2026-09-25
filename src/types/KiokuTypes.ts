@@ -173,7 +173,9 @@ export interface PassiveSkill {
     description: string
     descriptionType: number
     element: number
+    isFixedProbability: boolean // confirmed present in getPassiveSkillDetailMstList.json; see rollAppliesEffect (UnitStateEngine.ts)
     passiveSkillDetailMstId: number
+    probability: number // confirmed present in getPassiveSkillDetailMstList.json
     passiveSkillMstId: number
     range: number
     remainCount: number
@@ -202,6 +204,7 @@ export interface ActiveSkill {
     description: string
     descriptionType: number
     element: number
+    isFixedProbability: boolean // confirmed present in getSkillDetailMstList.json
     probability: number
     range: number
     remainCount: number
@@ -214,6 +217,7 @@ export interface ActiveSkill {
     value2: number
     value3: number
     value4: number
+    value5: number // AbilityEffectInfo.EffectValue1..5 are all plain int
     applier?: string
 }
 
@@ -268,6 +272,11 @@ export interface TeamSnapshot {
     mp: number
     maxMp: number
     name: string
+    hp: number
+    maxHp: number
+    isDead: boolean
+    barrier: number
+    maxBarrier: number
 }
 
 export interface BattleSnapshot {
@@ -600,10 +609,32 @@ export const mpGainFromAction = {
     [TargetType.fuaId]: 0,
 }
 
+// Mirrors ReDriveBattleCore.AffectedUnitNotice: "what just happened to this unit" for the
+// per-unit CompareContent checks 101-110 in BattleConditionParser.ts.
+export interface AffectedUnitNotice {
+    totalDamageValue: number       // CompareContent.DMG (101)
+    isCritical: boolean
+    isWeakElementAttacked: boolean // 109
+    isDead: boolean                // with totalDamageValue>=1 -> IS_KILLED (103)
+    isReceivedRecovery: boolean    // 104
+    isBarrierAdded: boolean        // 105
+    isBarrierAttacked: boolean     // 106
+    isBarrierDestroyed: boolean    // 107
+    isBreakedDamageReceiveRateBecomeMax: boolean // 108
+    isReceivedReflection: boolean
+    isReceivedAttack: boolean      // 110
+}
+
 export interface BattleState {
     actorTeam: PvPTeam,
     enemyTeam: PvPTeam,
     actor: KiokuState,
     target: KiokuState,
     actionType?: TargetType
+    // trueActorUnit: unit performing the CURRENT action (CompareTarget.ACTOR);
+    // mainTargetUnit: primary target of the action (CompareTarget.MAIN_TARGET);
+    // notice: what just happened to `target` this action.
+    trueActorUnit?: KiokuState
+    mainTargetUnit?: KiokuState
+    notice?: AffectedUnitNotice
 }

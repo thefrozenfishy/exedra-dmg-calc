@@ -1,16 +1,36 @@
 import { Ailment, KiokuRole } from "../types/enums";
-import { BattleState, aggro, defaultbreak, maxMeters, mpGainFromAction, PassiveSkill, SkillDetail, skillDetailId, SkillKey, targetRange, TargetType, targetTypeToLvl, TargetTypeLookup } from "../types/KiokuTypes";
+import { type AffectedUnitNotice, BattleState, aggro, defaultbreak, maxMeters, mpGainFromAction, PassiveSkill, SkillDetail, skillDetailId, SkillKey, targetRange, TargetType, targetTypeToLvl, TargetTypeLookup } from "../types/KiokuTypes";
 import { skillDetails } from "../utils/helpers";
 import { isConditionSetActive, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
 import { PvPKioku } from "./PvPKioku";
+import { damageBaseTypeFromEffectType, getAttackDamageResult, getSlipDamageResult, DamageBaseType, BattleType } from "./DamageCalculator";
+import { mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum } from "./UnitStateEngine";
+import { selectFullAutoTarget, expandProximity } from "./AITargetSelector";
 
 const f32 = Math.fround;
 let globalTurnShiftCounter = 0;
 
+/**
+ * REVISION 2 effect-list notes
+ * ==============================
+ * Cross-checked against the person's real enums.ts (`otherBuffsAndDebuffs` +
+ * `scoreAttackRelevantBuffsAndDebuffs`), which lists every ability effect type string
+ * actually used by their tooling. Anything below marked [CONFIRMED] appears verbatim in
+ * one of those two objects. Anything marked [IMPLEMENTED] has real gameplay logic in
+ * applyEffect(). Anything marked [RECOGNIZED ONLY] is classified here (so targeting and
+ * buff/debuff counting work) but has NO gameplay effect yet - it hits applyEffect's
+ * fallback branch, which logs a warning instead of silently doing nothing. See
+ * MISSING_AND_UNCERTAIN.md for the full rationale on why each RECOGNIZED-ONLY mechanic
+ * wasn't implemented (mostly: needs game-specific data/mechanics not present in any
+ * provided file - ZONE/TSUBAME/UNIQUE_* character-specific systems). CHARGE is
+ * implemented as of this pass (see applyEffect), and the probability-roll-to-apply system
+ * mentioned in earlier revisions of this comment is now implemented too - see
+ * rollAppliesEffect (UnitStateEngine.ts) and storeTimedEffect.
+ */
 const friendlySkills = [
-    "CONSUME_CHARGE_POINT", //TODO:  HANDLE
+    "CONSUME_CHARGE_POINT", // [CONFIRMED] [IMPLEMENTED] see applyEffect + AITargetSelector.ts
     "CUTOUT",
-    "GAIN_CHARGE_POINT", //TODO:  HANDLE
+    "GAIN_CHARGE_POINT", // [CONFIRMED] [IMPLEMENTED, FIXED] see applyEffect + AITargetSelector.ts
     "GAIN_EP_RATIO",
     "GAIN_EP_FIXED",
     "HASTE",
@@ -23,17 +43,114 @@ const friendlySkills = [
     "UP_SPD_RATIO",
     "RECOVERY_HP",
     "REMOVE_ALL_DEBUFF",
+    "ADDITIONAL_TURN_UNIT_ACT", // [CONFIRMED] grants the unit itself an immediate extra action - see performAction()
+    "RE_ACTION_TURN_UNIT_ACT",  // [CONFIRMED string, RECONSTRUCTED semantics] treated as an alias of ADDITIONAL_TURN_UNIT_ACT - see MISSING_AND_UNCERTAIN.md
+    "SHIELD",   // [CONFIRMED class ShieldUnitState exists] %-based damage cut, limited # of hits (remainCount)
+    "BARRIER",  // [CONFIRMED class BarrierUnitState exists] flat HP-pool damage absorption
+    "UP_WEAK_ELEMENT_DMG_RATIO", // [CONFIRMED via ScoreAttackTeam.ts] adds onto the weak-hit multiplier only
+    "UP_ELEMENT_DMG_RATE_RATIO", // [CONFIRMED] unconditional elemental give-damage bonus, filtered by element via isEligibleForEffect
+    "UP_GIV_DMG_ACCUM_RATIO",    // [CONFIRMED] "Accumulated DMG+"
+    "UP_GIV_SLIP_DMG_RATIO",     // [CONFIRMED] "DOT DMG+" - only affects DOT ticks, see UnitStateEngine.ts
+    "DWN_RCV_DMG_RATIO",         // [CONFIRMED] "Decrease DMG Taken" - a defensive buff despite the DWN_ prefix
+    "UP_HP_RATIO",               // [CONFIRMED] [RECOGNIZED ONLY] max-HP-% increase - not implemented, see MISSING_AND_UNCERTAIN.md
+    "ADD_BUFF_TURN", "ADD_BUFF_TURN_IMM",     // [CONFIRMED] [IMPLEMENTED] extends active buff durations - see applyEffect
+    "GAIN_SP_FIXED",   // [CONFIRMED] [IMPLEMENTED] flat add to the attack/skill alternation counter
+    "REMOVE_ALL_ABNORMAL", // [CONFIRMED] [IMPLEMENTED] cleanses Ailment-type states, mirrors REMOVE_ALL_DEBUFF
+    "ADDITIONAL_DAMAGE",   // [CONFIRMED] [IMPLEMENTED] flat bonus damage folded into the next hit - see applyEffect's DMG_ branch
+    "RECOVERY_HP_ATK",     // [CONFIRMED] [IMPLEMENTED] heal scaling off the healer's own ATK
+    "CONTINUOUS_RECOVERY", // [CONFIRMED] [IMPLEMENTED] heal-over-time, mirrors the DOT tick pattern
+    "UP_HATE",             // [CONFIRMED] [IMPLEMENTED, CORRECTED] contributes to getThreatWeight() while active - see UnitStateEngine.ts. No longer a permanent mutation of `aggro`, which was both unreachable for real (timed) instances and wrong even for a hypothetical untimed one - see applyEffect's comment.
+    "DWN_HATE",            // [CONFIRMED string exists in UnitStateFactory's dispatch table] [IMPLEMENTED] the debuff mirror of UP_HATE - subtracts from getThreatWeight() while active. Placed in friendlySkills by assumed symmetry with UP_HATE (a unit reducing its OWN or an ally's threat is a supportive act); not independently confirmed which side it targets.
+    "CHARGE",              // [CONFIRMED] [IMPLEMENTED] see applyEffect + AITargetSelector.ts
+    "REVIVAL_RATIO",       // [CONFIRMED] [NEWLY IMPLEMENTED - was entirely absent] see applyEffect + AITargetSelector.ts's revivalChain
+    "COMBO",               // [CONFIRMED] [NEWLY IMPLEMENTED - required restructuring the turn loop, was entirely absent] grants `value1` total actions this turn (the MAX active COMBO effect wins, they don't stack additively) - see useAttackOrSkill, getMaxComboActionNum (UnitStateEngine.ts), and AITargetSelector.ts's comboChain. Not rare: 259 real occurrences across active+passive skill data.
+    "REMOVE_ALL_BUFF",     // [CONFIRMED] [IMPLEMENTED] see applyEffect - dispels active friendlySkills-classified effects. Its AI targeting chain is independently confirmed (AITargetSelector.ts); the removal logic itself mirrors REMOVE_ALL_DEBUFF/REMOVE_ALL_ABNORMAL rather than being separately decompiled.
+    "REMOVE_ALL_UNABLE_ACTION", // [NEWLY ADDED] [IMPLEMENTED] confirmed real (AbilityEffectFactory dispatch table) but was entirely unclassified/unhandled before this pass - cleanses STUN. See applyEffect + AITargetSelector.ts (shares REMOVE_ALL_DEBUFF/ABNORMAL's base targeting chain).
+    "UP_EFFECT_HIT_RATE_RATIO", "UP_ABNORMAL_HIT_RATE_RATIO", // [CONFIRMED] [IMPLEMENTED] now consumed by rollAppliesEffect (UnitStateEngine.ts) as the caster-side hit-rate bonus for the buff/debuff/aliment probability-to-apply roll - moved out of RECOGNIZED-ONLY now that roll exists. A generic stat-buff UnitState with no bespoke Triggering of its own, so "implemented" here means "correctly stored and then read back", not a dedicated handler branch in applyEffect.
+    "UP_EFFECT_PARRY_RATE_RATIO", "UP_ABNORMAL_PARRY_RATE_RATIO", // [CONFIRMED] [IMPLEMENTED] same as above but the target-side resist half of the same roll (reduces the caster's effective hit rate against this unit specifically).
+    // --- RECOGNIZED ONLY below (classified for targeting/counting; no gameplay logic) ---
+    // CONSUME_COUNT_POINT/GAIN_COUNT_POINT/COUNT: [CORRECTED] these are REAL strings (all
+    // three appear in the actual base_data JSON skill/passive tables - confirmed by
+    // direct inspection, not just absence-of-evidence), but they are NOT part of either
+    // generic dispatch table found in BattleUnit.c (AbilityEffectFactory's 27 special
+    // types, or UnitStateFactory's 93 generic UnitState types - both exhaustively
+    // enumerated, see MISSING_AND_UNCERTAIN.md). They occur a combined ~11 times total
+    // out of 32,000+ effect-detail rows, all with value1=value2=0 and description text
+    // describing a bespoke "sigil" mechanic (+1 per hit received, cap 20) that isn't
+    // expressible via the standard value1-5 slots at all. This is the same shape as
+    // TSUBAME/ZONE_STACK/UNIQUE_* below: a character-specific hardcoded mechanic, not a
+    // generic engine system - implementing it generically (as this scaffolding implies)
+    // would be inventing behavior. Left classified (so targeting/counting doesn't choke
+    // on them) but not implemented; if a specific roster character actually needs this,
+    // that character's own class would need to be found and decompiled.
+    "CONSUME_COUNT_POINT", "GAIN_COUNT_POINT", "COUNT",
+    "CONSUME_ZONE_STACK", "GAIN_ZONE_STACK", "ZONE_EXPAND", "ZONE_STACK", "UNIQUE_ZONE",
+    "SWITCH_SKILL", "TSUBAME", "TSUBAME_CORE", "TSUBAME_LINK",
+    "UNIQUE_BUFF", "UNIQUE_BUFF_ACCUM", "UNIQUE_10030301", "UNIQUE_10070201",
+    "RESET_UNIQUE_BUFF",
+    "UP_BREAK_EFFECT", "UP_HEAL_RATE_RATIO", "REGAIN_ATK",
+    "UP_BUFF_EFFECT_VALUE", "DWN_BUFF_EFFECT_VALUE", // pre-battle stat-scaling traits, already applied once in PvPKioku.ts - listed here only so they're classified if they somehow appear as in-battle effects too
 ]
 
 const enemySkills = [
     "DMG_ATK",
     "DMG_DEF",
+    "DMG_HP", // [CONFIRMED via ReDriveBattleCore.AbilityEffect.DmgHpAbilityEffect]
     "DWN_ATK_RATIO",
     "DWN_SPD_RATIO",
     "DWN_DEF_RATIO",
-    "WEAKNESS",
+    "WEAKNESS", // [CONFIRMED] this is the Aqua-element Ailment (elementAlimentMap), not a generic "vulnerability" flag - see Ailment handling below
     "SLOW",
+    "UP_RCV_DMG_RATIO", // [CONFIRMED] "DMG Taken%+" - a debuff despite the UP_ prefix
+    "STUN", // [CONFIRMED string] [IMPLEMENTED, RECONSTRUCTED turn-skip mechanics] now wired into the turn engine - see KiokuState.canNotAction and useAttackOrSkill/useUltimate. The bool field's existence/read-site is confirmed; the exact turn-consumption mechanics (does the gauge fully reset, do TURN_START passives still fire, etc.) are a reasonable reconstruction, not decompiled - see MISSING_AND_UNCERTAIN.md
+    "POISON_ATK", "POISON_DEF", "POISON_HP", // [CONFIRMED classes exist] DOT, ticks at end of turn
+    "BURN_ATK", "BURN_DEF", "BURN_HP",       // [CONFIRMED classes exist]
+    "BLEED_ATK", "BLEED_DEF", "BLEED_HP",    // [CONFIRMED classes exist]
+    "CURSE_ATK", "CURSE_DEF", "CURSE_HP",    // [CONFIRMED classes exist]
+    "VORTEX_ATK", // [CONFIRMED string; RECOGNIZED ONLY - not wired into tickDotEffects, no _DEF/_HP variant confirmed to exist]
+    "UP_GIV_VORTEX_DMG_RATIO", // [CONFIRMED string; RECOGNIZED ONLY, pairs with VORTEX_ATK]
+    "ADD_DEBUFF_TURN", "ADD_DEBUFF_TURN_IMM", // [CONFIRMED] [IMPLEMENTED] extends active debuff durations
+    "DWN_ELEMENT_RESIST_RATIO", "DWN_ELEMENT_RESIST_ACCUM_RATIO", // [CONFIRMED] see UnitStateEngine.getElementResistRate
+    "IMM_SLIP_DMG", // [CONFIRMED string] [IMPLEMENTED] DOT immunity - see tickDotEffects
+    "REFLECTION_RATIO", // [CONFIRMED string; RECOGNIZED ONLY] damage reflection - not implemented, needs a "reflect N% of the next hit back at the attacker" hook that touches the DMG_ pipeline in applyEffect; flagged rather than guessed at
+    "RESET_UNIQUE_DEBUFF", "UNIQUE_DEBUFF", "UNIQUE_DEBUFF_ACCUM", // RECOGNIZED ONLY, character-specific
+    "UP_EFFECT_PARRY_RATE_RATIO", "UP_ABNORMAL_PARRY_RATE_RATIO", // [CONFIRMED] [IMPLEMENTED] see friendlySkills' copy of this same pair for what changed - this entry is pre-existing and now redundant (friendlySkills.includes is checked first in completeAction, so this array's copy is presently unreachable) rather than wrong; left in place rather than deleted since it's not causing any issue and this pass isn't the place to relitigate which side these belong on.
+    "UP_RCV_BREAK_POINT_DMG_RATIO", // RECOGNIZED ONLY
+    "UP_DEBUFF_EFFECT_VALUE", "DWN_DEBUFF_EFFECT_VALUE", // pre-battle trait scaling, classified only
 ]
+
+// Ability effect types whose damage is dealt as a DOT tick at end-of-turn rather than
+// on direct application. See ReceiveSlipDamageUnitStateBase in DamageCalculator.ts's
+// getSlipDamageResult(). Mapped to the DamageBaseType their name encodes (Atk/Def/Hp).
+const DOT_EFFECT_DAMAGE_BASE_TYPE: Record<string, DamageBaseType> = {
+    POISON_ATK: DamageBaseType.ATK, POISON_DEF: DamageBaseType.DEF, POISON_HP: DamageBaseType.HP,
+    BURN_ATK: DamageBaseType.ATK, BURN_DEF: DamageBaseType.DEF, BURN_HP: DamageBaseType.HP,
+    BLEED_ATK: DamageBaseType.ATK, BLEED_DEF: DamageBaseType.DEF, BLEED_HP: DamageBaseType.HP,
+    CURSE_ATK: DamageBaseType.ATK, CURSE_DEF: DamageBaseType.DEF, CURSE_HP: DamageBaseType.HP,
+}
+
+// [CONFIRMED via the person's real Ailment enum] The 7 status-ailment ("abnormal
+// state") type prefixes/exact-names. Used for CompareContent.ABNORMAL_STATE_COUNT (see
+// BattleConditionParser.ts) and REMOVE_ALL_ABNORMAL. Matches
+// ReDriveBattleCore.UnitState.AbnormalUnitStateBase's type-hierarchy check
+// (b__8_1 predicate) reconstructed as a name-based check since this port has no class
+// hierarchy to check `instanceof` against.
+const ALIMENT_PREFIXES = Object.values(Ailment) as string[]; // ["BURN","CURSE","POISON","STUN","VORTEX","WEAKNESS","BLEED"]
+export function isAlimentEffect(abilityEffectType: string): boolean {
+    return ALIMENT_PREFIXES.some(prefix => abilityEffectType === prefix || abilityEffectType.startsWith(prefix + "_"));
+}
+
+// Ability effect types that use IAccum stacking semantics (see UnitStateEngine.ts's
+// mergeAccumEffect). [CONFIRMED to exist as game content per enums.ts, though the exact
+// per-family completeness (e.g. whether DWN_ATK_ACCUM_RATIO exists) is still
+// per-entry-flagged in UnitStateEngine.ts].
+const ACCUM_RATIO_EFFECT_TYPES = new Set([
+    "UP_ATK_ACCUM_RATIO", "DWN_ATK_ACCUM_RATIO",
+    "UP_DEF_ACCUM_RATIO", "DWN_DEF_ACCUM_RATIO",
+    "UP_CTR_ACCUM_RATIO", "UP_CTD_ACCUM_RATIO",
+    "UP_GIV_DMG_ACCUM_RATIO", "DWN_ELEMENT_RESIST_ACCUM_RATIO",
+    "UP_SPD_ACCUM_RATIO", "DWN_SPD_ACCUM_RATIO",
+])
 
 function maxBreak(rarity: number, role: KiokuRole): number {
     switch (role) {
@@ -50,6 +167,21 @@ function maxBreak(rarity: number, role: KiokuRole): number {
     }
 }
 
+// A FUA (ADDITIONAL_SKILL_ACT) trigger record: which unit performs the follow-up skill,
+// and which unit was involved in triggering it (so the FUA can target them specifically -
+// see ReDriveBattleCore.UnitState.AdditionalSkillActTriggerUnitStateBase$$GetAdditionalSkillAct,
+// which splits targetUnitId/targetFriendUnitId by whether the trigger-target shares the
+// caster's team).
+interface FuaTrigger {
+    caster: KiokuState;
+    triggerTarget?: KiokuState;
+}
+type FuaMap = Record<number, FuaTrigger>;
+
+function mergeFuaMaps(a: FuaMap, b: FuaMap): FuaMap {
+    return { ...a, ...b };
+}
+
 export class KiokuState {
     posIdx: number;
     teamLabel: string
@@ -62,7 +194,12 @@ export class KiokuState {
     team: PvPTeam
 
     passiveEffectDetails: Map<string, PassiveSkill> = new Map()
-    activeEffectDetails: Map<string, SkillDetail> = new Map()
+    // NEW: `_applierState` tracks the KiokuState that applied this effect (not just
+    // their display name, already tracked separately as `applier: string`) - needed so
+    // DOT ticks can scale off the APPLIER's stat rather than the sufferer's, per the
+    // corrected reading of ReceiveSlipDamageUnitStateBase - see tickDotEffects() and
+    // DamageCalculator.ts's getSlipDamageResult header comment.
+    activeEffectDetails: Map<string, SkillDetail & { _accumCount?: number; _isExemptPassingTurnOnce?: boolean; _applierState?: KiokuState }> = new Map()
 
     currentRemainingBreakGauge: number
     currentMetersRemaining = maxMeters
@@ -70,18 +207,102 @@ export class KiokuState {
     currentMp = 0
     currentHpPercent = 100
     currentMpGain = 1
+    // [CONFIRMED] ReDriveBattleCore.UnitCondition's `ChargePoint`/`MaxChargePoint` int
+    // pair (read together as one 8-byte load in ChargeAbilityEffect$$Triggering - see
+    // applyEffect's CHARGE case). Unlike maxMp/maxHp, the MAX side of this pair is NOT a
+    // fixed character stat - CHARGE can overwrite it at runtime (e.g. a support effect
+    // that grants a charge gauge to a Kioku whose kit doesn't innately have one), so it
+    // has to live here as mutable per-battle state rather than being read straight off
+    // `kioku.maxMagicStacks` everywhere. Starts at whatever the character's own master
+    // data says (0 for anyone without an innate charge-gauge kit).
     currentMagic = 0
+    currentMaxMagic: number
+
+    // [CONFIRMED] ReDriveBattleCore.Act.ComboTurnUnitAct$$get_ActionStep/set_ActionStep:
+    // a 1-indexed "which action of the current combo burst is this" counter, confirmed
+    // via ActReferee$$AddComboUnitTurnActs's own loop (`for (actionStep = 1; actionStep
+    // <= actionNum; actionStep++)`). 0 = not currently mid-combo-burst (a plain single
+    // action doesn't go through ComboTurnUnitAct at all, only TurnUnitAct, which has no
+    // such property) - set to i+1 for each sub-action inside useAttackOrSkill's combo
+    // loop, reset to 0 once the whole burst finishes. Backs CompareContent.
+    // COMBO_ACTION_STEP in BattleConditionParser.ts.
+    currentComboActionStep = 0
+
+    // Real HP tracking. Ported from ReDriveBattleCore.BattleUnit's
+    // _HP_k__BackingField / _MaxHP_k__BackingField / Attack() / SetHP().
+    maxHp: number
+    currentHp: number
+
+    // Flat HP-pool barrier (ReDriveBattleCore.UnitState.BarrierUnitState). Separate
+    // from the % based Shield, which lives entirely inside activeEffectDetails.
+    barrierEndurance = 0
+    maxBarrierEndurance = 0
+
+    // [CONFIRMED field] `BattleUnit.WeakElements: ElementType[]` (dump.cs) - a REAL,
+    // mutable per-unit runtime list, not a static character trait. Empty by default;
+    // nothing in the provided files populates it for PvP (no "expose weakness"-style
+    // effect was found), so weak-hit bonus damage never triggers unless you wire
+    // something up to push into this array. See DamageCalculator.ts's
+    // isMatchWeakElement and MISSING_AND_UNCERTAIN.md.
+    weakElements: number[] = []
+
+    // Incremented by an active ADDITIONAL_TURN_UNIT_ACT (or RE_ACTION_TURN_UNIT_ACT -
+    // treated as an alias, see MISSING_AND_UNCERTAIN.md) effect. Grants the SAME unit an
+    // immediate extra action - see PvPTeam.performAction.
+    pendingBonusTurns = 0
+
+    // NEW: what happened to this unit the last time it was the target of an action -
+    // read by BattleConditionParser.ts's per-unit CompareContent checks (101-110:
+    // DMG/DMG_RATIO/IS_KILLED/IS_RECOVERY/IS_BARRIER_*/IS_WEAK_ELEMENT_ATTACKED/
+    // IS_DURING_ATTACK). Cleared at the start of each new action (see
+    // PvPTeam.performAction) so a stale notice from 3 turns ago doesn't leak into an
+    // unrelated condition check - matches the source's notice being a fresh,
+    // single-action-scoped object (ReDriveBattleCore.AffectedUnitNotice).
+    lastNotice?: AffectedUnitNotice
 
     // Debug helpers
     currSpdEffects: [number, string, string?][] = []
 
     isBroken = false
     // Tiebreak stamp for exact-tie turn order, see globalTurnShiftCounter above.
+    //
+    // VERIFIED against ReDriveBattleCore.TurnReferee$$SortByTurnOrder /
+    // <SortByTurnOrder>b__24_0..3 (all four tiebreak lambdas individually decompiled,
+    // no ambiguity): the source's chain is exactly
+    //   OrderBy(GaugeValue).ThenByDescending(TurnOrderPriority)
+    //     .ThenBy(u => u.Team == BattleUnit.TeamType.Enemy(1) ? 1 : 0).ThenBy(u => u.Id)
+    // BattleUnit.TeamType is confirmed (dump.cs): Ally = 0, Enemy = 1. So on an EXACT
+    // tie (same gauge value, same priority), Team==Ally(0) sorts BEFORE Team==Enemy(1) -
+    // i.e. the ALLY side (team1 in this file's convention, matching PvPBattle.ts's
+    // team1->"allies") goes first. compareTurnOrder() below already implements exactly
+    // this (`aTeam = a.team === team1Ref ? 0 : 1`) - NO CODE CHANGE was needed here.
+    //
+    // *** Addressing your note about mirror matchups: per this decompiled evidence, the
+    // ALLY side should win an exact tie, not the enemy - the opposite of what you've
+    // observed empirically. I don't have a way to resolve that contradiction from the
+    // decompilation alone, but I'd bet on your OWN "floating point precision" hypothesis
+    // over a mistake in this specific tie-break reading, for a concrete reason: the
+    // PRIMARY sort key (GaugeValue, i.e. secondsUntilAbleToAct here) is computed as
+    // `metersRemaining / speed` in float32 (Math.fround throughout this file). Two
+    // "identical" mirrored teams only produce BIT-IDENTICAL float32 results if every
+    // floating-point operation that fed into each unit's speed/gauge happens in the
+    // EXACT same order for both sides. If your team-setup code (or this file's own
+    // Map/array iteration for passives/buffs) ever processes team1's units and team2's
+    // units through code paths that sum buffs in a different order - even
+    // mathematically-equivalent orders - IEEE 754 rounding can make one side's speed a
+    // few ULPs higher or lower, which is enough to break the "tie" before this
+    // tiebreaker chain is ever consulted. That would make the enemy-goes-first pattern
+    // you're seeing a side effect of setup/iteration order, not this tiebreak rule. To
+    // confirm: log `a.secondsUntilAbleToAct().toPrecision(20)` for both units on a
+    // mirror-tie turn and see if they're actually unequal at the bit level despite
+    // "looking" tied when displayed normally. If they truly are bit-equal and the enemy
+    // STILL acts first in-game, then this specific tiebreak reading needs revisiting -
+    // please let me know and I'll re-examine the four lambda bodies.
     turnOrderPriority = 0
 
-    stateGen: (actor: KiokuState, target: KiokuState, actionType?: TargetType) => BattleState
+    stateGen: (actor: KiokuState, target: KiokuState, actionType?: TargetType, trueActorUnit?: KiokuState, mainTargetUnit?: KiokuState, notice?: AffectedUnitNotice) => BattleState
 
-    constructor(posIdx: number, teamLabel: string, team: PvPTeam, kioku: PvPKioku, stateGen: (actor: KiokuState, target: KiokuState, actionType?: TargetType) => BattleState) {
+    constructor(posIdx: number, teamLabel: string, team: PvPTeam, kioku: PvPKioku, stateGen: KiokuState["stateGen"]) {
         this.posIdx = posIdx
         this.teamLabel = teamLabel
         this.team = team
@@ -90,7 +311,54 @@ export class KiokuState {
         this.maxBreakGauge = this.currentRemainingBreakGauge
         this.aggro = aggro[kioku.data.role]
         this.maxMp = kioku.data.ep
+        this.currentMaxMagic = kioku.maxMagicStacks
         this.stateGen = stateGen
+        // ReDriveBattleCore.BattleUnit's HP is initialized from the character's base HP
+        // stat (BattleParameter.HP), i.e. kioku.getBaseHp() here - no in-battle buffs
+        // apply to the starting HP pool itself, only to incoming/outgoing damage.
+        this.maxHp = kioku.getBaseHp()
+        this.currentHp = this.maxHp
+    }
+
+    // [CONFIRMED] ReDriveBattleCore.BattleUnit$$get_IsDead : `HP <= 0` (the source also
+    // checks a multi-gauge-HP-bar CurrentHpGaugeCount<2 condition used for PvE raid
+    // bosses with multiple HP bars; not applicable to this 1v1 PvP context, so omitted).
+    get isDead(): boolean {
+        return this.currentHp <= 0
+    }
+
+    // [RECONSTRUCTED] ReDriveBattleCore.UnitCondition$$get_CanNotAction/set_CanNotAction
+    // is a plain mutable bool field in the source, not a computed property - confirmed
+    // it exists and is exactly what BattleConditionParser.ts's CAN_NOT_ACTION condition
+    // reads, but NOT confirmed exactly where/how the source SETS it to true (StunUnitState
+    // itself has no Triggering/IsActive override of its own in the provided dump - only a
+    // ctor and cosmetic icon/VFX-name getters - so the actual set-site lives somewhere
+    // this dump didn't surface, most likely UnitCondition.AddUnitState/RemoveUnitState or
+    // a shared "abnormal condition" base class checking for StunUnitState specifically).
+    // Implemented here as a computed getter instead of a mirrored mutable field - "does
+    // this unit currently have an active Stun effect" - which should be behaviorally
+    // equivalent for every case this simulator can reach (no code path removes a state
+    // without it leaving activeEffectDetails), and avoids needing a second field to keep
+    // in sync. If you want the exact source mechanics (e.g. whether a stunned unit's turn
+    // gauge fully resets vs. partially carries over, which this file currently doesn't
+    // special-case at all - see useAttackOrSkill), TurnActSystem/TurnReferee would need
+    // decompiling next.
+    get canNotAction(): boolean {
+        return (this.filteredEffects()["STUN"]?.length ?? 0) > 0
+    }
+
+    // [CONFIRMED] ReDriveBattleCore.BattleUnit$$SetHP (clamp) + $$Attack (delta + return
+    // actual amount lost).
+    takeDamage(damage: number): number {
+        const before = this.currentHp
+        this.currentHp = Math.max(0, Math.min(this.maxHp, before - damage))
+        return before - this.currentHp
+    }
+
+    heal(amount: number): number {
+        const before = this.currentHp
+        this.currentHp = Math.max(0, Math.min(this.maxHp, before + amount))
+        return this.currentHp - before
     }
 
     resolveBreak() {
@@ -98,6 +366,10 @@ export class KiokuState {
             this.isBroken = true
             this.currentMetersRemaining = Math.max(f32(this.currentMetersRemaining + 2500), 0)
             this.turnOrderPriority = -(++globalTurnShiftCounter)
+            // [CONFIRMED] ReDriveBattleCore.TurnReferee (team-level tally, consumed by
+            // BattleConditionParser's CompareContent.BREAK_UNIT_TOTAL_COUNT, 306) -
+            // cumulative across the whole battle, never reset.
+            this.team.breakedUnitTotalCount++
         }
     }
 
@@ -113,14 +385,69 @@ export class KiokuState {
         this.turnOrderPriority = 0
     }
 
+    // [CONFIRMED] ReDriveBattleCore.UnitState.UnitStateBase$$PassingTurn:
+    //   if (IsExemptPassingTurnOnce) { turnNum--; IsExemptPassingTurnOnce = false }
+    //   RemainingTurn = max(0, RemainingTurn - turnNum)
+    // Also ticks DOT/HoT - see tickDotEffects()/tickHotEffects().
     decrementActiveEffects() {
-        const updated: Map<string, SkillDetail> = new Map();
+        this.tickDotEffects()
+        this.tickHotEffects()
+        const updated: typeof this.activeEffectDetails = new Map();
         for (const [key, detail] of this.activeEffectDetails) {
             if (detail.abilityEffectType == "CUTOUT") this.progressMeters(maxMeters)
-            const turn = detail.turn - 1;
-            if (turn) updated.set(key, { ...detail, turn })
+            let turn = detail.turn;
+            if (detail._isExemptPassingTurnOnce) {
+                detail._isExemptPassingTurnOnce = false
+            } else {
+                turn = turn - 1
+            }
+            if (turn > 0) updated.set(key, { ...detail, turn })
         }
         this.activeEffectDetails = updated;
+    }
+
+    // [CONFIRMED shape] ReDriveBattleCore.BattleDamageCalculator$$GetSlipDamageValue via
+    // ReceiveSlipDamageUnitStateBase - see DamageCalculator.getSlipDamageResult. DOT
+    // damage does not crit, does not interact with break gauge, and is not reduced by
+    // shields/barriers.
+    //
+    // CORRECTED in revision 2: scales off the APPLIER's stat (tracked via
+    // `_applierState`, set in storeTimedEffect), not the sufferer's own stat - see
+    // DamageCalculator.ts's getSlipDamageResult header comment for why. Falls back to
+    // `this` (old, incorrect revision-1 behavior) with a warning if for some reason no
+    // applier was tracked (shouldn't normally happen).
+    //
+    // Respects IMM_SLIP_DMG [CONFIRMED string]: a unit with an active IMM_SLIP_DMG
+    // effect takes no DOT damage at all this tick. (Whether IMM_SLIP_DMG should also
+    // PREVENT new DOTs from being applied in the first place, vs. just no-op existing
+    // ones, isn't confirmed - implemented as the less invasive "no-op ticks" reading.)
+    private tickDotEffects(): void {
+        const immune = [...this.activeEffectDetails.values()].some(d => d.abilityEffectType === "IMM_SLIP_DMG");
+        if (immune) return;
+        for (const detail of this.activeEffectDetails.values()) {
+            const damageBaseType = DOT_EFFECT_DAMAGE_BASE_TYPE[detail.abilityEffectType]
+            if (damageBaseType === undefined) continue
+            const applier = detail._applierState ?? this;
+            const dmg = getSlipDamageResult(applier, this, detail, damageBaseType, this.team.battleType)
+            this.takeDamage(dmg)
+        }
+    }
+
+    // [RECONSTRUCTED by analogy] CONTINUOUS_RECOVERY ("HoT") - not independently
+    // decompiled (I didn't locate a dedicated ReDriveBattleCore.UnitState class for it
+    // in the functions I extracted), but architecturally it should mirror the DOT tick
+    // pattern (a stored, timed effect that fires every end-of-turn) with the sign
+    // flipped (heal instead of damage). Uses the same getDamageBase-style
+    // power/statValue scaling via RECOVERY_HP_ATK's formula (see applyEffect) since no
+    // other heal-scaling formula is confirmed. Flagged as a reconstruction, not a
+    // decompiled fact - see MISSING_AND_UNCERTAIN.md.
+    private tickHotEffects(): void {
+        for (const detail of this.activeEffectDetails.values()) {
+            if (detail.abilityEffectType !== "CONTINUOUS_RECOVERY") continue
+            const applier = detail._applierState ?? this;
+            const healAmount = Math.floor(applier.kioku.getBaseAtk() * (detail.value1 / 1000));
+            this.heal(healAmount);
+        }
     }
 
     currentBuffs(): string[] {
@@ -131,7 +458,7 @@ export class KiokuState {
 
     currentDebuffs(): string[] {
         return [...this.activeEffectDetails.values()]
-            .filter(d => !Object.values(Ailment).includes(d.abilityEffectType as Ailment)
+            .filter(d => !isAlimentEffect(d.abilityEffectType)
                 && enemySkills.includes(d.abilityEffectType))
             .map(d => `${d.applier} - ${d.description}`)
     }
@@ -163,6 +490,13 @@ export class KiokuState {
     private orderedActiveEffects(): SkillDetail[] {
         return [...this.passiveEffectDetails.values(), ...this.activeEffectDetails.values()]
             .filter(detail => isConditionSetActive(detail, this.stateGen(this, this)))
+    }
+
+    // Public wrapper so UnitStateEngine.ts (which lives outside this class) can reuse
+    // the exact same "is this effect currently active" check that updateSpd() and
+    // filteredEffects() already use internally.
+    isEffectCurrentlyActive(detail: SkillDetail): boolean {
+        return isConditionSetActive(detail, this.stateGen(this, this))
     }
 
     updateMPGain(): void {
@@ -218,22 +552,77 @@ export class KiokuState {
         }
     }
 
-    applyEffect(target: KiokuState, detail: SkillDetail, targetType?: TargetType): number | undefined {
+    // Stores a timed buff/debuff onto `t`, honoring IAccum stacking semantics for
+    // ACCUM_RATIO effect types, marking fresh (non-merged) applications exempt from
+    // this turn's decrement, and tracking the applying KiokuState (`applierState`) so
+    // DOT/HoT ticks can scale off the right unit's stats (see tickDotEffects/
+    // tickHotEffects and DamageCalculator.ts's getSlipDamageResult).
+    private storeTimedEffect(t: KiokuState, detail: SkillDetail, applier: string, applierState: KiokuState): boolean {
+        // [CONFIRMED] ReDriveBattleCore.UnitCondition$$AddUnitState's actual order: a
+        // per-state `CanAddTo(targetUnit)` gate FIRST, then the probability roll (see
+        // rollAppliesEffect, UnitStateEngine.ts, for that formula and citations).
+        // CanAddTo's base implementation (UnitStateBase) is an unconditional `true`; the
+        // overrides seen (DownSpeedUnitStateBase and siblings covering the other
+        // Down*/Dwn* debuff families) follow the identical template:
+        //     CanAddTo = targetUnit.IsMatch(this.TargetRole) && targetUnit.IsMatch(this.TargetElement)
+        // where IsMatch(0) is ALWAYS true (0 = wildcard/"any"). This CONFIRMS, rather than
+        // introduces, something already implemented elsewhere: `effTargets` is already
+        // filtered through `isEligibleForEffect` (UnitStateEngine.ts - the identical
+        // role/element match) before applyEffect's branches ever run, so there's nothing
+        // further to add at this specific call site - noted here so the connection
+        // between that pre-existing filter and this newly-read C# method isn't lost.
+        if (!rollAppliesEffect(detail, applierState, t)) return false;
+        const key = String(skillDetailId(detail))
+        const existing = t.activeEffectDetails.get(key)
+        if (existing && ACCUM_RATIO_EFFECT_TYPES.has(detail.abilityEffectType)) {
+            mergeAccumEffect(existing, detail)
+            return true
+        }
+        t.activeEffectDetails.set(key, { applier, ...detail, _isExemptPassingTurnOnce: true, _accumCount: 1, _applierState: applierState })
+        return true
+    }
+
+    applyEffect(target: KiokuState, detail: SkillDetail, targetType?: TargetType, trueActorUnit?: KiokuState): number | undefined {
         /**
          * @returns action id if additional act should be triggered, otherwise returns null
          */
-        if (detail.abilityEffectType === "DWN_SPD_RATIO") {
-            console.warn(this.kioku.name, "SLOWED", detail, target.kioku.name)
-        }
-        if (!isConditionSetActive(detail, this.stateGen(this, target, targetType))) return
+        if (!isConditionSetActive(detail, this.stateGen(this, target, targetType, trueActorUnit))) return
+
+        // [NEW, CONFIRMED via ScoreAttackTeam.ts] Generic element/role eligibility gate,
+        // applied BEFORE any effect-type-specific logic - see UnitStateEngine.isEligibleForEffect.
+        if (!isEligibleForEffect(detail, target)) return
+
         if (detail.abilityEffectType.startsWith("DMG_")) {
-            // TODO: Proximity should use value4, prolly doesn't matter much tho
-            // TODO: Random dmg special case it?
             let breakVal = detail.value3 || defaultbreak[targetType][detail.range]
             breakVal += Object.values(this.filteredEffects()).flat()
                 .reduce((sum, detail) => detail.abilityEffectType === "UP_GIV_BREAK_POINT_DMG_FIXED" ? sum + detail.value1 : sum, 0)
             target.currentRemainingBreakGauge -= breakVal
             target.getMp(5)
+
+            const damageBaseType = damageBaseTypeFromEffectType(detail.abilityEffectType)
+            const result = getAttackDamageResult(this, target, detail, damageBaseType, this.team.battleType)
+
+            // [CONFIRMED via ScoreAttackTeam.ts's add_additional_dmg] ADDITIONAL_DAMAGE:
+            // a flat bonus hit folded onto the next attack, scaling off the ATTACKER's
+            // own ATK using the same base-damage formula as a normal hit (not gated by
+            // the target's DEF/resist/etc. per ScoreAttackTeam.ts's implementation,
+            // which computes it as a fully separate calc_base_dmg call added straight
+            // into total_dmg).
+            let bonusDamage = 0;
+            for (const bonus of this.filteredEffects()["ADDITIONAL_DAMAGE"] ?? []) {
+                bonusDamage += Math.ceil(bonus.value1 / 1000 * this.kioku.getBaseAtk() * (Math.pow(this.kioku.getBaseAtk() / 124, 1.2) + 12) / 20);
+            }
+
+            target.takeDamage(result.finalDamage + bonusDamage)
+            target.lastNotice = result.notice;
+            this.team.lastActionNotices.push(result.notice);
+            this.team.appliedSkillEffectTypesThisAction.add(detail.abilityEffectType);
+            if (result.shieldMultiplierApplied) {
+                target.consumeShieldCharges()
+            }
+            console.debug(this.kioku.name, "hit", target.kioku.name, "for", result.finalDamage + bonusDamage,
+                result.isCritical ? "(crit)" : "", result.isWeakHit ? "(weak)" : "",
+                "- HP now", target.currentHp, "/", target.maxHp)
             return;
         }
         let effTargets
@@ -242,14 +631,193 @@ export class KiokuState {
         } else {
             effTargets = [target]
         }
+        // Re-apply the element/role eligibility gate per resolved target too (the first
+        // check above only covered the originally-passed `target`; sliceTargets can
+        // widen this to a team, e.g. for self-buffs re-targeted via range=SELF/ALL).
+        effTargets = effTargets.filter(t => isEligibleForEffect(detail, t))
 
+        if (detail.abilityEffectType === "BARRIER") {
+            effTargets.forEach(t => {
+                // [FIXED] the roll (now inside storeTimedEffect) must be checked BEFORE
+                // barrier stats are applied - previously these were set unconditionally
+                // ahead of storing the effect, so even a probability-roll failure (once
+                // that existed at all) would have left the barrier stats applied anyway.
+                if (!this.storeTimedEffect(t, detail, this.kioku.name, this)) return;
+                // [CONFIRMED formula shape, RECONSTRUCTED value-slot mapping] A full
+                // re-read of BarrierUnitState$$CalculateEndurance/CalculateMaxEndurance
+                // (SetTriggeringInfo calls both once, up front, before AddUnitState's
+                // stacking logic below even runs) replaces the previous flat-`value1`
+                // approximation with the real formula:
+                //     grant = BarrierFixed + BarrierRatio * target.GetProcessedDef()
+                //     cap   = MaxBarrierRatio == 0 ? grant : MaxBarrierRatio * target's RAW (unbuffed) DEF
+                // Note the cap intentionally uses RAW def where the grant uses PROCESSED
+                // (buffed) def - confirmed as two different reads in the source, not a
+                // typo carried over here. value1/value2/value3 -> BarrierRatio/
+                // BarrierFixed/MaxBarrierRatio is a reasonable-order guess (no
+                // UnitStateFactory construction site calling the setters was found in
+                // this pass's dumps to confirm it directly) - if barrier amounts still
+                // look off, this specific mapping is the first thing to re-check.
+                //
+                // NOT implemented: both methods ALSO multiply their result by
+                // `(1 - CalculationPointPolicyMstModel.Value/1000)` whenever
+                // `battleType` is 2 (confirmed PvP, per dump.cs's BattleType enum) or 4
+                // (unidentified - some other non-PvE mode). This is a genuine, newly-
+                // discovered PvP-specific suppression/balance table - the exact
+                // "CalculationPointPolicyMst" master data isn't present anywhere in
+                // base_data, and the lookup key used to pick a record wasn't resolved
+                // from the decompiled bytes alone, so there's no value to apply. Net
+                // effect: barrier amounts computed here are likely an OVERESTIMATE for
+                // real PvP by whatever that table's PvP entry says, until either that
+                // JSON export exists or the lookup predicate gets decompiled.
+                const rawDef = t.kioku.getBaseDef();
+                const grant = detail.value2 + detail.value1 * getProcessedDef(t);
+                const cap = detail.value3 === 0 ? grant : detail.value3 * rawDef;
+                const newMax = Math.max(t.maxBarrierEndurance, cap)
+                t.maxBarrierEndurance = newMax
+                t.barrierEndurance = Math.min(newMax, t.barrierEndurance + grant)
+                t.lastNotice = { ...emptyNotice(), isBarrierAdded: true };
+            })
+            return;
+        }
+
+        // [CONFIRMED strings] [IMPLEMENTED] ADD_BUFF_TURN/ADD_DEBUFF_TURN(+_IMM):
+        // extends the remaining duration of the target's currently-active buffs (or
+        // debuffs) by `value1` turns. Distinguished from AddTurnUnitStateBase's
+        // "grant a bonus turn" cousin classes by name only - see MISSING_AND_UNCERTAIN.md
+        // for why these two are NOT the same mechanic as ADDITIONAL_TURN_UNIT_ACT
+        // despite superficially similar naming (revision 1 conflated them).
+        // The "_IMM" variant's distinguishing behavior isn't confirmed - implemented
+        // identically to the non-IMM version.
+        if (["ADD_BUFF_TURN", "ADD_BUFF_TURN_IMM", "ADD_DEBUFF_TURN", "ADD_DEBUFF_TURN_IMM"].includes(detail.abilityEffectType)) {
+            const wantDebuffs = detail.abilityEffectType.startsWith("ADD_DEBUFF");
+            effTargets.forEach(t => {
+                t.activeEffectDetails.forEach((d, key) => {
+                    const isDebuff = !isAlimentEffect(d.abilityEffectType) && enemySkills.includes(d.abilityEffectType);
+                    const isAliment = isAlimentEffect(d.abilityEffectType);
+                    const matches = wantDebuffs ? (isDebuff || isAliment) : friendlySkills.includes(d.abilityEffectType);
+                    if (matches) t.activeEffectDetails.set(key, { ...d, turn: d.turn + detail.value1 });
+                })
+            });
+            return;
+        }
+
+        // [CONFIRMED] ReDriveBattleCore.AbilityEffect.RemoveStateAbilityEffectBase$$
+        // Triggering (the SHARED base Triggering inherited by all four
+        // RemoveAllBuff/RemoveAllDebuff/RemoveAllAbnormal/RemoveAllUnableAction classes -
+        // confirmed none of the latter three override Triggering themselves): removal is
+        // NOT "delete every matching state unconditionally". It takes the unit's matching
+        // states in REVERSE order (most-recently-applied first - StateList.Where(match)
+        // .Reverse()) and only removes the first `value1` of them (`this.field_0x4c`,
+        // read from AbilityEffectInfo.EffectValue1 same as every other effect's value1;
+        // 0 means unlimited - `if (count == 0) count = matchingStates.Count`). In
+        // practice every REMOVE_ALL_* skill this simulator has seen uses value1=0, so
+        // this degrades to "remove all matches" - but a hypothetical value1>0 skill
+        // (partial-dispel) is now handled correctly instead of silently over-removing.
+        // "Most recently applied" is approximated here as "last inserted into
+        // activeEffectDetails, reversed" - exact for a state seen for the first time,
+        // approximate if a Map.set() on an already-existing key (a buff refresh) kept its
+        // ORIGINAL insertion slot rather than moving to the end (JS Map semantics) - the
+        // source's own StateList is a real ordered list that a refresh presumably DOES
+        // move/re-append to, so this could diverge from the source in that specific
+        // refresh-then-partial-dispel edge case. Each of the four variants differs only
+        // in which states are considered a "match" (RemoveStateAbilityEffectBase$$
+        // IsRemovable, overridden per subclass, each additionally gated on
+        // `state.EffectOrigin==1` in the source - approximated here via this codebase's
+        // own friendlySkills/enemySkills/isAlimentEffect classification instead of a real
+        // EffectOrigin field, which isn't modeled in this port).
+        const removeMatchingStates = (targets: KiokuState[], isMatch: (abilityEffectType: string) => boolean) => {
+            targets.forEach(t => {
+                const matching = [...t.activeEffectDetails.entries()].filter(([, d]) => isMatch(d.abilityEffectType));
+                matching.reverse(); // approximate "most recently applied first"
+                const removeCount = detail.value1 > 0 ? detail.value1 : matching.length;
+                matching.slice(0, removeCount).forEach(([key]) => t.activeEffectDetails.delete(key));
+            })
+        }
+
+        // [CONFIRMED string] [IMPLEMENTED] REMOVE_ALL_ABNORMAL: cleanses Ailment-type
+        // states (Burn/Curse/Poison/Stun/Vortex/Weakness/Bleed) - RemoveAllAbnormalAbilityEffect$$
+        // IsRemovable checks `state is AbnormalUnitStateBase`, approximated here via
+        // isAlimentEffect (this codebase's existing equivalent classification).
+        if (detail.abilityEffectType === "REMOVE_ALL_ABNORMAL") {
+            removeMatchingStates(effTargets, isAlimentEffect)
+            return;
+        }
+        // [CONFIRMED string] [IMPLEMENTED] REMOVE_ALL_DEBUFF: RemoveAllDebuffAbilityEffect$$
+        // IsRemovable checks `state is IDebuff`, approximated as "enemySkills-classified,
+        // non-Ailment" (Aliments are REMOVE_ALL_ABNORMAL's job - see ADD_DEBUFF_TURN's
+        // identical isDebuff/isAliment split elsewhere in this file).
+        if (detail.abilityEffectType === "REMOVE_ALL_DEBUFF") {
+            removeMatchingStates(effTargets, t => !isAlimentEffect(t) && enemySkills.includes(t))
+            return;
+        }
+        // [CONFIRMED string + AI chain, RECONSTRUCTED removal predicate] REMOVE_ALL_BUFF:
+        // RemoveAllBuffAbilityEffect$$IsRemovable checks `state is IBuff`, approximated as
+        // "friendlySkills-classified". Its targeting chain additionally prioritizes
+        // dispelling whoever has an ATK buff, then DEF, then any stat buff (see
+        // AITargetSelector.ts's removeAllBuffChain) - that priority lives entirely in
+        // targeting, not in what gets removed once a target is chosen (which is still
+        // "every matching buff", same as the other two).
+        if (detail.abilityEffectType === "REMOVE_ALL_BUFF") {
+            removeMatchingStates(effTargets, t => friendlySkills.includes(t))
+            return;
+        }
+        // [NEWLY ADDED - was entirely absent] REMOVE_ALL_UNABLE_ACTION: the fourth member
+        // of this family (RemoveAllUnableActionAbilityEffect, confirmed via the
+        // AbilityEffectFactory dispatch table; confirmed to inherit the same base
+        // Triggering/targeting as the other three - it only overrides the ctor and
+        // IsRemovable) wasn't classified or handled anywhere in this file at all before
+        // this pass. IsRemovable checks `state is UnableActionUnitStateBase` -
+        // approximated here as "STUN specifically", since that's the only
+        // CanNotAction-causing state type this port currently models (see
+        // KiokuState.canNotAction) - broaden this predicate if more such effect types are
+        // ever added.
+        if (detail.abilityEffectType === "REMOVE_ALL_UNABLE_ACTION") {
+            removeMatchingStates(effTargets, t => t === "STUN")
+            return;
+        }
+
+        // [CONFIRMED] [IMPLEMENTED] ReDriveBattleCore.AbilityEffect.ChargeAbilityEffect$$
+        // Triggering: a hard SET (not an increment) of BOTH the current and max charge
+        // gauge, read together as one 8-byte (InitChargePoint, MaxChargePoint) pair -
+        // confirmed against dump.cs's AbilityEffectInfo showing EffectValue1/EffectValue2
+        // are adjacent plain `int` fields, so the pair-read isn't a float-bit-reinterpret
+        // hazard. This is how a Kioku without an innate charge-gauge kit gets one at all
+        // (see currentMaxMagic's own comment) - it's also how one WITH a kit could have
+        // it reset/resized mid-battle, since nothing here restricts it to "first use only".
+        if (detail.abilityEffectType === "CHARGE") {
+            effTargets.forEach(t => {
+                t.currentMagic = detail.value1;
+                t.currentMaxMagic = detail.value2;
+            })
+            return;
+        }
+        // [CONFIRMED] [IMPLEMENTED] ReDriveBattleCore.AbilityEffect.
+        // ConsumeChargePointAbilityEffect$$Triggering: `Clamp(ChargePoint - value1, 0, MaxChargePoint)`.
+        if (detail.abilityEffectType === "CONSUME_CHARGE_POINT") {
+            effTargets.forEach(t => {
+                t.currentMagic = Math.max(0, Math.min(t.currentMaxMagic, t.currentMagic - detail.value1));
+            })
+            return;
+        }
+
+        // [CORRECTED] UP_HATE (and its DWN_HATE debuff counterpart) used to have its own
+        // branch below this point that did `t.aggro += detail.value1` PERMANENTLY -
+        // unreachable for any real, timed hate buff anyway (this `if (detail.turn)`
+        // branch runs first and returns before reaching it), and wrong even for the
+        // turn=0 edge case: ReDriveBattleCore.AI.AISkillTargetSelector$$GetUnitWeightDic
+        // recomputes weight FRESH every target-selection call as roleWeight + sum of
+        // currently-ACTIVE hate effects, not a running total that outlives the buff. Both
+        // now flow entirely through this generic timed-effect path instead - see
+        // getThreatWeight in UnitStateEngine.ts, which sums active UP_HATE/DWN_HATE off
+        // of activeEffectDetails on demand, and AITargetSelector.ts's
+        // filterByRoleAtWeightedRandomWithHate, which is what actually consumes it now
+        // (previously nothing did - `aggro` was write-only).
         if (detail.turn) {
-            effTargets.forEach(t => t.activeEffectDetails.set(String(skillDetailId(detail)), { applier: this.kioku.name, ...detail }))
+            effTargets.forEach(t => this.storeTimedEffect(t, detail, this.kioku.name, this))
             if ("passiveSkillDetailMstId" in detail) {
                 this.passiveEffectDetails.delete(String(skillDetailId(detail)))
             }
         } else if (detail.abilityEffectType === "HASTE") {
-            console.warn(this.kioku.name, "HASTING", detail, effTargets.map(k => k.kioku.name))
             effTargets.forEach(t => t.progressMeters(detail.value1 * 10))
         } else if (detail.abilityEffectType === "SLOW") {
             effTargets.forEach(t => t.progressMeters(-(detail.value1 * 10)))
@@ -257,12 +825,59 @@ export class KiokuState {
             effTargets.forEach(t => t.getMp(target.maxMp * detail.value1 / 1000))
         } else if (detail.abilityEffectType === "GAIN_EP_FIXED") {
             effTargets.forEach(t => t.getMp(detail.value1))
+        } else if (detail.abilityEffectType === "GAIN_SP_FIXED") {
+            // [CONFIRMED string] [IMPLEMENTED] flat add to the attack/skill alternation
+            // counter (`currentSp`) - matches GAIN_EP_FIXED's pattern one level up (team,
+            // not unit, since currentSp lives on PvPTeam).
+            this.team.currentSp += detail.value1;
         } else if (detail.abilityEffectType === "CUTOUT") {
             effTargets.forEach(t => t.activeEffectDetails.set(String(skillDetailId(detail)), { ...detail, applier: this.kioku.name, turn: 1 }))
+        } else if (detail.abilityEffectType === "RECOVERY_HP") {
+            effTargets.forEach(t => t.heal(detail.value1))
+        } else if (detail.abilityEffectType === "RECOVERY_HP_ATK") {
+            // [CONFIRMED string] [IMPLEMENTED] heal scaling off the HEALER's (this) own
+            // ATK, using the same base-damage formula as a normal hit (by analogy with
+            // ADDITIONAL_DAMAGE's confirmed calc_base_dmg usage - no dedicated heal
+            // formula was independently confirmed, flagged as a reconstruction).
+            const healAmount = Math.floor(detail.value1 / 1000 * this.kioku.getBaseAtk() * (Math.pow(this.kioku.getBaseAtk() / 124, 1.2) + 12) / 20);
+            effTargets.forEach(t => {
+                const healed = t.heal(healAmount);
+                if (healed > 0) t.lastNotice = { ...emptyNotice(), isReceivedRecovery: true };
+            })
+        } else if (detail.abilityEffectType === "REVIVAL_RATIO") {
+            // [NEWLY IMPLEMENTED - was entirely absent] ReDriveBattleCore.AbilityEffect.
+            // RevivalRatioAbilityEffect$$Triggering, confirmed byte-for-byte: skips any
+            // resolved target that ISN'T currently dead (the source loops past them
+            // rather than erroring - matched here by filtering effTargets first), then
+            // revives with `Math.Ceiling((value1 / 100.0) * target.MaxHP)` HP - a plain
+            // percentage of max HP, ceiling-rounded. No clamp is needed beyond what
+            // heal() already does, since a dead unit's current HP is always 0.
+            // TargetSide=0 (friendly) and IsIncludeDeadUnitInTarget=true are both
+            // confirmed on the info-based ctor - see AITargetSelector.ts's revivalChain
+            // for the AI targeting half (uniform random among the dead).
+            effTargets.filter(t => t.isDead).forEach(t => {
+                const hp = Math.ceil((detail.value1 / 100) * t.maxHp);
+                t.heal(hp);
+                t.lastNotice = { ...emptyNotice(), isReceivedRecovery: true };
+            })
         } else if (detail.abilityEffectType === "ADDITIONAL_SKILL_ACT") {
             return detail.value1;
+        } else if (detail.abilityEffectType === "ADDITIONAL_TURN_UNIT_ACT" || detail.abilityEffectType === "RE_ACTION_TURN_UNIT_ACT") {
+            // [CONFIRMED shape for ADDITIONAL_TURN_UNIT_ACT via AdditionalTurnUnitActTriggerUnitStateBase]
+            // RE_ACTION_TURN_UNIT_ACT is treated as an alias (RECONSTRUCTED, not
+            // independently decompiled - see MISSING_AND_UNCERTAIN.md).
+            effTargets.forEach(t => { t.pendingBonusTurns++ })
         } else if (detail.abilityEffectType === "GAIN_CHARGE_POINT") {
-            this.currentMagic += detail.value1;
+            // [FIXED] [CONFIRMED] ReDriveBattleCore.AbilityEffect.
+            // GainChargePointAbilityEffect$$Triggering: `Clamp(ChargePoint + value1, 0,
+            // MaxChargePoint)`, applied to effTargets. Previously this mutated `this`
+            // (the CASTER) unconditionally instead of the resolved target(s) - every
+            // other branch in this chain uses `effTargets.forEach`, this one alone used
+            // `this.currentMagic +=` - and had no ceiling clamp at all, so repeated casts
+            // could push a unit's charge past its own max. Both fixed here.
+            effTargets.forEach(t => {
+                t.currentMagic = Math.max(0, Math.min(t.currentMaxMagic, t.currentMagic + detail.value1));
+            })
         } else if ("passiveSkillDetailMstId" in detail) {
             if (targetType === TargetType.init) {
                 effTargets.forEach(t => t.passiveEffectDetails.set(String(skillDetailId(detail)), detail))
@@ -270,13 +885,39 @@ export class KiokuState {
                 console.warn("Passive was triggered late, handle?", this, effTargets, detail)
             }
         } else {
-            console.warn("Active without turn", detail)
+            console.warn("Active without turn (possibly a RECOGNIZED-ONLY effect type not yet implemented - see PvPTeam.ts's friendlySkills/enemySkills header notes and MISSING_AND_UNCERTAIN.md):", detail)
         }
         return;
     }
+
+    // [CONFIRMED] each active Shield absorbs a limited number of hits, decremented by 1
+    // every time it contributes to a damage calc. Now uses the REAL, confirmed
+    // `remainCount` field on SkillDetail directly (revision 1 fell back to `d.turn`
+    // when a nonexistent field was absent - `remainCount` is a required field on both
+    // PassiveSkill and ActiveSkill per the real KiokuTypes.ts, so that fallback is no
+    // longer needed).
+    consumeShieldCharges(): void {
+        this.activeEffectDetails.forEach((d, key) => {
+            if (d.abilityEffectType !== "SHIELD") return
+            const remaining = d.remainCount - 1
+            if (remaining <= 0) this.activeEffectDetails.delete(key)
+            else this.activeEffectDetails.set(key, { ...d, remainCount: remaining })
+        })
+    }
 }
 
+function emptyNotice(): AffectedUnitNotice {
+    return {
+        totalDamageValue: 0, isCritical: false, isWeakElementAttacked: false, isDead: false,
+        isReceivedRecovery: false, isBarrierAdded: false, isBarrierAttacked: false,
+        isBarrierDestroyed: false, isBreakedDamageReceiveRateBecomeMax: false,
+        isReceivedReflection: false, isReceivedAttack: false,
+    };
+}
 
+// [VERIFIED - see turnOrderPriority's doc comment above for the full citation and the
+// note addressing the person's empirical "enemy acts first" observation] NO CHANGE from
+// revision 1 - this already matches the decompiled 4-level sort exactly.
 export function compareTurnOrder(a: KiokuState, b: KiokuState, team1Ref: PvPTeam): number {
     const secDiff = a.secondsUntilAbleToAct() - b.secondsUntilAbleToAct()
     if (secDiff !== 0) return secDiff
@@ -298,54 +939,108 @@ export class PvPTeam {
     teamLabel: string
     currentSp = 5
 
-    generateState = (actor: KiokuState, target: KiokuState, actionType?: TargetType): BattleState => ({
+    // [CONFIRMED enum] Network.Definition.Battle.BattleType (dump.cs). Defaults to Pvp
+    // (2) per the person's message; pass BattleType.Solo/Gve/etc. to run a non-PvP
+    // simulation through the same engine - see DamageCalculator.ts.
+    battleType: BattleType
+
+    // NEW team-level state, needed for BattleConditionParser.ts's team-scoped
+    // CompareContent checks (201-210, 301-309) - see
+    // ReDriveBattleCore.BattleCondition.BattleUnitTeamConditionChecker$$Check.
+    // `breakedUnitTotalCount` is cumulative across the whole battle (never reset);
+    // `appliedSkillEffectTypesThisAction`/`lastActionNotices` are reset at the start of
+    // every action (see performAction) since the source's equivalents
+    // (appliedSkillEffectTypes / affectedUnitNotices) are scoped to "this action" too.
+    breakedUnitTotalCount = 0
+    appliedSkillEffectTypesThisAction: Set<string> = new Set()
+    lastActionNotices: AffectedUnitNotice[] = []
+
+    generateState = (actor: KiokuState, target: KiokuState, actionType?: TargetType, trueActorUnit?: KiokuState, mainTargetUnit?: KiokuState, notice?: AffectedUnitNotice): BattleState => ({
         actorTeam: this,
         enemyTeam: this.otherTeam,
         actor,
         target,
         actionType,
+        trueActorUnit,
+        mainTargetUnit,
+        notice,
     })
 
-    constructor(kiokus: PvPKioku[], teamLabel: string, debug = false) {
+    constructor(kiokus: PvPKioku[], teamLabel: string, debug = false, battleType: BattleType = BattleType.Pvp) {
         this.kiokuStates = kiokus.map((k, i) => new KiokuState(i, teamLabel, this, k, this.generateState))
         this.debug = debug;
         this.teamLabel = teamLabel;
+        this.battleType = battleType;
     }
 
+    // [STRUCTURAL FIX, revision 3 - see report for the full writeup] Previously this
+    // method also loaded effects into the bank AND immediately ran BATTLE_START passives
+    // AND immediately recomputed SPD/MP/break, all before returning - and PvPBattle's
+    // constructor called this once per team, sequentially (team1 fully, then team2
+    // fully). Since BATTLE_START passives can cross-apply to the enemy team (see
+    // applyPassivesForTiming below), that ordering meant team1's battle-start passives
+    // were already visible to team2's FIRST SPD computation, while team2's battle-start
+    // passives could never be visible to team1's first computation (already computed
+    // and moved past by the time team2 ran). Two IDENTICAL mirrored teams could then
+    // legitimately end up with different starting SPD/turn order - not a rounding
+    // artifact, an ordering bug. Now split into three phases that PvPBattle's
+    // constructor runs for BOTH teams before advancing to the next phase: setup ->
+    // addEffectsToBank -> applyPassivesForTiming(BATTLE_START) -> recomputeDerivedStats.
+    // This method now only records the enemy team reference.
     finishSetup(otherTeam: PvPTeam) {
         this.otherTeam = otherTeam
+    }
 
+    addEffectsToBank(): void {
         this.kiokuStates.forEach(k => k.kioku.effects.forEach(e => {
             k.addEffectToBank(e)
         }))
-        this.triggerPassives(ProcessTiming.BATTLE_START, TargetType.init)
     }
 
-    triggerPassives(timing: ProcessTiming, lastAction?: TargetType, lastActor?: KiokuState): Record<number, KiokuState> {
-        let additionalAct: Record<number, KiokuState> = {};
+    // The effect-application half of what triggerPassives used to do in one shot -
+    // split out so PvPBattle's constructor can run this for BOTH teams before either
+    // team's recomputeDerivedStats() (see the class-level comment above). Behaviorally
+    // identical to the old triggerPassives for this part - nothing here changed except
+    // that the derived-stat recompute no longer happens inline.
+    applyPassivesForTiming(timing: ProcessTiming, lastAction?: TargetType, lastActor?: KiokuState): FuaMap {
+        let additionalAct: FuaMap = {};
         for (const k of this.kiokuStates) {
             k.passiveEffectDetails.forEach(detail => {
                 if (conditionSetRequiresActorIsSelf(detail) && (!lastActor || lastActor !== k)) return
                 if (isTimingCorrect(timing, detail)) {
-                    console.debug("Appying effect from", lastActor, "to", k)
                     if (enemySkills.includes(detail.abilityEffectType)) {
                         this.otherTeam.kiokuStates.forEach(target => {
-                            k.applyEffect(target, detail, lastAction)
+                            const fua = k.applyEffect(target, detail, lastAction, lastActor)
+                            if (fua) additionalAct[fua] = { caster: k, triggerTarget: target }
                         })
                     } else {
-                        const fua = k.applyEffect(k, detail, lastAction)
-                        if (fua) additionalAct[fua] = k
+                        const fua = k.applyEffect(k, detail, lastAction, lastActor)
+                        if (fua) additionalAct[fua] = { caster: k, triggerTarget: lastActor }
                     }
                 }
             })
         }
+        return additionalAct;
+    }
+
+    // The recompute half of what triggerPassives used to do in one shot - see the
+    // class-level comment above finishSetup for why this is now separate.
+    recomputeDerivedStats(): void {
         this.kiokuStates.forEach(k => {
-            console.debug("Post-passive effects for", k.kioku.name, k.activeEffectDetails)
             k.updateMPGain()
             k.updateSpd()
             k.resolveBreak()
         })
-        console.debug("Additional acts triggered:", Object.keys(additionalAct))
+    }
+
+    // Convenience wrapper preserving the exact previous combined behavior - used by
+    // every OTHER call site (TURN_START/ATTACK_END, mid-battle, one action at a time),
+    // where applying effects and immediately recomputing derived stats for just THIS
+    // team before the next thing happens is the correct, already-working sequential
+    // model. Only the one-time BATTLE_START setup needed the two halves decoupled.
+    triggerPassives(timing: ProcessTiming, lastAction?: TargetType, lastActor?: KiokuState): FuaMap {
+        const additionalAct = this.applyPassivesForTiming(timing, lastAction, lastActor)
+        this.recomputeDerivedStats()
         return additionalAct;
     }
 
@@ -361,37 +1056,69 @@ export class PvPTeam {
         return this.kiokuStates.reduce((best, k) => compareTurnOrder(k, best, this) < 0 ? k : best)
     }
 
+    // [CONFIRMED algorithm + damage chain, see AITargetSelector.ts] range===TARGET
+    // (RangeType.SelectSingle) single-target resolution now runs the actual FULL AUTO
+    // targeting AI instead of always picking possibleTargets[0] - see this file's header
+    // note on why `possibleTargets` is already the correct candidate pool (own team or
+    // enemy team) regardless of which of the two call sites (completeAction directly, or
+    // applyEffect's `this===target` re-expansion for friendly effects) got us here.
+    //
+    // [CONFIRMED] ReDriveBattleCore.AbilityEffect.AbilityEffectBase$$SelectTargets: a
+    // PROXIMITY (RangeType.SelectMultiple) effect resolves its "primary" unit through the
+    // EXACT SAME path as a TARGET effect (the character-specific hardcoded cases below,
+    // or the FULL AUTO AI) - it does NOT have its own separate targeting heuristic. Only
+    // afterward does it expand to that primary's positional neighbors (expandProximity in
+    // AITargetSelector.ts). This is why both branches share `resolvePrimaryTarget` below.
     sliceTargets(actor: KiokuState, possibleTargets: KiokuState[], detail: SkillDetail): KiokuState[] {
         const effectId = skillDetailId(detail) / 10000 | 0
-        if (detail.range === targetRange.TARGET) {
-            if (detail.abilityEffectType.startsWith("DMG_")) return [possibleTargets[0]]
-            // TODO How to handle aggro? Make this select into a graph?
-
+        const resolvePrimaryTarget = (): KiokuState | null => {
+            // --- Character-specific hardcoded kit targeting (pre-existing, unrelated to
+            // the generic FULL AUTO system below - these bespoke rules take priority over
+            // it exactly like the source's own character-unique classes would). ---
             const eligableTargets = this.kiokuStates.filter(k => k !== actor)
             if (effectId === 1066) { // Hazuki skill
-                return [eligableTargets
-                    .reduce((s, k) => s.secondsUntilAbleToAct() < k.secondsUntilAbleToAct() ? k : s, { secondsUntilAbleToAct: () => 0 }) as KiokuState]
+                return eligableTargets
+                    .filter(k => [KiokuRole.Attacker, KiokuRole.Breaker].includes(k.kioku.data.role))
+                    .reduce((s, k) => s.secondsUntilAbleToAct() < k.secondsUntilAbleToAct() ? k : s, { secondsUntilAbleToAct: () => 0 }) as KiokuState
             }
             if (effectId === 1161) { // Mabayu skill
-                return [eligableTargets
-                    .reduce((s, k) => s.kioku.getBaseAtk() < k.kioku.getBaseAtk() ? k : s, { kioku: { getBaseAtk: () => 0 } }) as KiokuState]
+                return eligableTargets
+                    .filter(k => [KiokuRole.Attacker, ].includes(k.kioku.data.role))
+                    .reduce((s, k) => s.kioku.getBaseAtk() < k.kioku.getBaseAtk() ? k : s, { kioku: { getBaseAtk: () => 0 } }) as KiokuState
             }
             if (effectId === 1072) { // Rika skill
-                return [eligableTargets
+                return eligableTargets
                     .filter(k => [KiokuRole.Attacker, KiokuRole.Breaker].includes(k.kioku.data.role))
-                    .reduce((s, k) => s.currentMp > k.currentMp ? k : s, { currentMp: 999 }) as KiokuState]
+                    .reduce((s, k) => s.currentMp > k.currentMp ? k : s, { currentMp: 999 }) as KiokuState
             }
-            console.warn(actor.kioku.name, detail, "has range 1, who to target?")
-            return [possibleTargets[0]]
+            // --- Generic FULL AUTO targeting AI (covers DMG_ATK/DEF/HP/RANDOM and every
+            // other single-target effect type, per its own confirmed or best-effort
+            // generic chain - see AITargetSelector.ts) ---
+            return selectFullAutoTarget(detail, possibleTargets)
         }
-        if (detail.range === targetRange.PROXIMITY) return possibleTargets.slice(0, 3) // TODO: Handle proximity / Random
+        if (detail.range === targetRange.TARGET) {
+            const picked = resolvePrimaryTarget()
+            if (!picked) {
+                console.warn(actor.kioku.name, detail, "FULL AUTO targeting found no eligible target (all candidates dead/ineligible?)")
+                return []
+            }
+            return [picked]
+        }
+        if (detail.range === targetRange.PROXIMITY) {
+            const primary = resolvePrimaryTarget()
+            if (!primary) {
+                console.warn(actor.kioku.name, detail, "PROXIMITY targeting found no eligible primary target")
+                return []
+            }
+            return expandProximity(primary, possibleTargets)
+        }
         if (detail.range === targetRange.ALL) return possibleTargets
         if (detail.range === targetRange.SELF) return [actor]
         console.warn("Unknown target", detail)
         return []
     }
 
-    act(actor: KiokuState, effectName: TargetType): void {
+    act(actor: KiokuState, effectName: TargetType): FuaMap {
         if (effectName === TargetType.attackId) {
             this.currentSp++;
         } else if (effectName === TargetType.skillId) {
@@ -400,12 +1127,15 @@ export class PvPTeam {
             actor.currentMp = 0;
         }
         const details = getDetails(skillDetails, "skillMstId", actor.kioku.data[TargetTypeLookup[effectName]], actor.kioku[targetTypeToLvl[effectName]])
-        this.completeAction(actor, effectName, details)
+        return this.completeAction(actor, effectName, details)
     }
 
-    completeAction(actor: KiokuState, effectName: TargetType, details: SkillDetail[]) {
-        console.debug("Completing action for", actor.kioku.name, effectName, details)
+    // Returns a FuaMap of any ADDITIONAL_SKILL_ACT triggers fired by the effects
+    // applied here (fixed in revision 1 - previously silently dropped when triggered
+    // from an active skill's own effect list rather than a passive).
+    completeAction(actor: KiokuState, effectName: TargetType, details: SkillDetail[]): FuaMap {
         let possibleTargets: KiokuState[] = []
+        let additionalAct: FuaMap = {}
         for (const detail of details) {
             if (friendlySkills.includes(detail.abilityEffectType)) {
                 possibleTargets = [actor]
@@ -415,13 +1145,13 @@ export class PvPTeam {
                 console.warn("Unknown effect type", detail.abilityEffectType, detail, "assuming enemy targets")
                 possibleTargets = this.otherTeam.kiokuStates
             }
-            console.debug("Possible targets for", detail.abilityEffectType, "are", this.sliceTargets(actor, possibleTargets, detail).map(k => k.kioku.name))
             for (const target of this.sliceTargets(actor, possibleTargets, detail)) {
-                console.debug(actor.kioku.name, "applies", detail.abilityEffectType, "to", target.kioku.name, "w eff", effectName)
-                actor.applyEffect(target, detail, effectName)
+                const fua = actor.applyEffect(target, detail, effectName, actor)
+                if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
             }
         }
         actor.getMpFromType(effectName)
+        return additionalAct
     }
 
     useUltimate(): [KiokuState, TargetType] | undefined {
@@ -429,28 +1159,89 @@ export class PvPTeam {
             .filter(k => k.currentMp >= k.maxMp)
             .filter(k => k.maxMp > 0)
             .filter(k => k.currentRemainingBreakGauge > 0)
+            // [RECONSTRUCTED - see KiokuState.canNotAction] a stunned unit can't fire an
+            // otherwise-ready ultimate. Excluded here (rather than "ready but does
+            // nothing") so their MP stays banked and the ult goes off once stun wears off,
+            // instead of being burned on a no-op - not confirmed against the source, but
+            // it's the reading least likely to feel like a bug either way this resolves.
+            .filter(k => !k.canNotAction)
         if (!readyKiokus.length) return;
         const actor = readyKiokus[0]
-        this.act(actor, TargetType.specialId)
-        const actionIds = this.triggerPassives(ProcessTiming.ATTACK_END, TargetType.specialId, actor)
-        this.triggerFua(actionIds)
+        this.performAction(actor, TargetType.specialId)
         return [actor, TargetType.specialId]
     }
 
     useAttackOrSkill(): [KiokuState, TargetType] {
-        console.debug(this.kiokuStates.map(k => k.activeEffectDetails))
         const actor = this.getNextActor()
         actor.resetDistanceRemaining()
         actor.exitBreak()
-        const effType = this.currentSp ? TargetType.skillId : TargetType.attackId
+        let effType = this.currentSp ? TargetType.skillId : TargetType.attackId
         this.triggerPassives(ProcessTiming.TURN_START, effType)
-        this.act(actor, effType)
-        console.warn("TRIGGERING PASSIVES AFTER", actor.kioku.name, actor, effType)
-        const actionIds = this.triggerPassives(ProcessTiming.ATTACK_END, effType, actor)
-        this.triggerFua(actionIds)
-        console.debug(this.teamLabel, "actor is", actor.kioku.name, "using", effType)
-        actor.decrementActiveEffects()
+        // [RECONSTRUCTED - see KiokuState.canNotAction] a stunned unit's turn still comes
+        // up (gauge already reset above) and TURN_START passives still fire, but the
+        // actual attack/skill is skipped entirely - no target resolution, no damage, no
+        // MP gain from acting. Whether the real source also suppresses TURN_START
+        // passives, or resets/holds the gauge differently for a stunned turn, isn't
+        // confirmed - see canNotAction's comment for what would need decompiling
+        // (TurnActSystem/TurnReferee) to pin this down further.
+        //
+        // [CONFIRMED] [NEWLY IMPLEMENTED] ReDriveBattleCore.TurnActSystem$$Forward: before
+        // queuing a unit's turn, checks UnitCondition.GetMaximumActionNumComboUnitState
+        // (the active COMBO effect with the highest value1 - see getMaxComboActionNum,
+        // UnitStateEngine.ts; multiple stacks take the MAX, they don't add) and queues
+        // that many separate actions for the SAME unit in a row
+        // (Act.ActReferee$$AddComboUnitTurnActs) instead of one, whenever it's 2 or more.
+        // TURN_START (above) and TURN_END fire ONCE for the whole burst, not once per
+        // sub-action - confirmed by the source building exactly one TurnBeginAct and one
+        // TurnEndAct around N per-action entries, not N complete turn cycles. Each of the
+        // N actions gets its own independent skill-vs-attack choice (`effType`
+        // recomputed every iteration) and its own full target resolution via
+        // performAction, since `this.currentSp` (does the TEAM currently have a banked
+        // skill turn) can change partway through a burst. `getMaxComboActionNum`
+        // defaults to 1, so this loop is a no-op (exactly today's single-action
+        // behavior) for the overwhelming majority of turns where no COMBO effect is active.
+        if (!actor.canNotAction) {
+            const actionNum = getMaxComboActionNum(actor)
+            for (let i = 0; i < actionNum; i++) {
+                // Only a REAL combo burst (actionNum >= 2, matching TurnActSystem.
+                // Forward's own `< 2` branch) goes through ComboTurnUnitAct at all - a
+                // plain single action uses TurnUnitAct instead, which has no ActionStep
+                // property, so leave this at its neutral 0 rather than calling a normal
+                // turn "step 1".
+                actor.currentComboActionStep = actionNum >= 2 ? i + 1 : 0
+                effType = this.currentSp ? TargetType.skillId : TargetType.attackId
+                this.performAction(actor, effType)
+            }
+            actor.currentComboActionStep = 0
+        }
         return [actor, effType]
+    }
+
+    // Shared by useUltimate/useAttackOrSkill: runs the action, its ATTACK_END passives,
+    // and any FUAs they trigger, then loops the SAME actor through another
+    // attack/skill action for every pending ADDITIONAL_TURN_UNIT_ACT/
+    // RE_ACTION_TURN_UNIT_ACT bonus turn they've accumulated.
+    private performAction(actor: KiokuState, effType: TargetType): void {
+        // Reset per-action team-level tallies - see BattleConditionParser.ts's
+        // team-scoped notice/effect-type conditions, which are meant to read "what
+        // happened THIS action", not a stale accumulation from turns ago.
+        this.appliedSkillEffectTypesThisAction = new Set();
+        this.lastActionNotices = [];
+        this.otherTeam.appliedSkillEffectTypesThisAction = new Set();
+        this.otherTeam.lastActionNotices = [];
+
+        let fuas = this.act(actor, effType)
+        fuas = mergeFuaMaps(fuas, this.triggerPassives(ProcessTiming.ATTACK_END, effType, actor))
+        this.triggerFua(fuas)
+        actor.decrementActiveEffects()
+
+        while (actor.pendingBonusTurns > 0 && !actor.isDead) {
+            actor.pendingBonusTurns--
+            const bonusEffType = this.currentSp ? TargetType.skillId : TargetType.attackId
+            let bonusFuas = this.act(actor, bonusEffType)
+            bonusFuas = mergeFuaMaps(bonusFuas, this.triggerPassives(ProcessTiming.ATTACK_END, bonusEffType, actor))
+            this.triggerFua(bonusFuas)
+        }
     }
 
     resolveEndOfTurn(): void {
@@ -458,11 +1249,27 @@ export class PvPTeam {
         this.triggerFua(actionIds)
     }
 
-    triggerFua(actionIds: Record<string, KiokuState>): void {
-        Object.entries(actionIds).forEach(([actionId, k]) => {
+    triggerFua(actionIds: FuaMap): void {
+        Object.entries(actionIds).forEach(([actionId, { caster, triggerTarget }]) => {
             const details = Object.values(skillDetails).filter(v => (v as any).skillMstId === Number(actionId))
-            this.completeAction(k, TargetType.fuaId, details)
-            this.triggerPassives(ProcessTiming.ATTACK_END, TargetType.fuaId, k)
+            const fuas = this.completeActionWithPreferredTarget(caster, TargetType.fuaId, details, triggerTarget)
+            this.triggerFua(fuas)
+            this.triggerPassives(ProcessTiming.ATTACK_END, TargetType.fuaId, caster)
         })
+    }
+
+    private completeActionWithPreferredTarget(actor: KiokuState, effectName: TargetType, details: SkillDetail[], preferredTarget: KiokuState | undefined): FuaMap {
+        if (!preferredTarget) return this.completeAction(actor, effectName, details)
+        let additionalAct: FuaMap = {}
+        for (const detail of details) {
+            const isSingleTarget = detail.range === targetRange.TARGET
+            const targets = isSingleTarget ? [preferredTarget] : this.sliceTargets(actor, friendlySkills.includes(detail.abilityEffectType) ? [actor] : this.otherTeam.kiokuStates, detail)
+            for (const target of targets) {
+                const fua = actor.applyEffect(target, detail, effectName, actor)
+                if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
+            }
+        }
+        actor.getMpFromType(effectName)
+        return additionalAct
     }
 }
