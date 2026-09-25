@@ -732,9 +732,20 @@ export class KiokuState {
                 // effect: barrier amounts computed here are likely an OVERESTIMATE for
                 // real PvP by whatever that table's PvP entry says, until either that
                 // JSON export exists or the lookup predicate gets decompiled.
-                const rawDef = t.kioku.getBaseDef();
-                const grant = detail.value2 + detail.value1 * getProcessedDef(t);
-                const cap = detail.value3 === 0 ? grant : detail.value3 * rawDef;
+                // [CONFIRMED 3.19 - supersedes the notes above] BarrierUnitState$$.ctor (0x15b5ed0):
+                //   ratio = (float)value1/1000f, fixed = (float)value2, maxRatio = (float)value3/1000f
+                // (the previous code used value1/value3 without /1000 -> barriers 1000x too big).
+                // CalculateEndurance (0x15b52b0): f = (float)ProcessedDef * ratio + fixed
+                // CalculateMaxEndurance (0x15b54e0): maxRatio == 0 ? CalculateEndurance
+                //                                    : f = (float)Param.DEF * maxRatio
+                // PvP/GvG: f *= 1 - policy("barrierEnduranceSuppresionRatio" = 500)/1000f;
+                // result = (int)Math.Ceiling(f) (FUN_1807029f0 is Math.Ceiling).
+                const bt = this.team.battleType
+                const suppress = (f: number) => (bt === BattleType.Pvp || bt === BattleType.Gvg)
+                    ? f32(f * f32(1 - f32(PVP_POLICY.barrierEnduranceSuppresionRatio / 1000))) : f
+                const ratio = f32(f32(detail.value1) / 1000), fixed = f32(detail.value2), maxRatio = f32(f32(detail.value3) / 1000)
+                const grant = Math.ceil(suppress(f32(f32(getProcessedDef(t) * ratio) + fixed)))
+                const cap = maxRatio === 0 ? grant : Math.ceil(suppress(f32(f32(t.kioku.getBaseDef()) * maxRatio)))
                 const newMax = Math.max(t.maxBarrierEndurance, cap)
                 t.maxBarrierEndurance = newMax
                 t.barrierEndurance = Math.min(newMax, t.barrierEndurance + grant)
