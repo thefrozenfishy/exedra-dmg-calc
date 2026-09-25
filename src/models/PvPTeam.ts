@@ -1,5 +1,5 @@
 import { Ailment, KiokuRole } from "../types/enums";
-import { type AffectedUnitNotice, BattleState, aggro, defaultbreak, maxMeters, mpGainFromAction, PassiveSkill, SkillDetail, skillDetailId, SkillKey, targetRange, TargetType, targetTypeToLvl, TargetTypeLookup } from "../types/KiokuTypes";
+import { type AffectedUnitNotice, type BattleEvent, BattleState, aggro, defaultbreak, maxMeters, mpGainFromAction, PassiveSkill, SkillDetail, skillDetailId, SkillKey, targetRange, TargetType, targetTypeToLvl, TargetTypeLookup } from "../types/KiokuTypes";
 import { skillDetails } from "../utils/helpers";
 import { isConditionSetActive, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
 import { PvPKioku } from "./PvPKioku";
@@ -397,10 +397,12 @@ export class KiokuState {
         return before - this.currentHp
     }
 
-    heal(amount: number): number {
+    heal(amount: number, source?: KiokuState): number {
         const before = this.currentHp
         this.currentHp = Math.max(0, Math.min(this.maxHp, before + amount))
-        return this.currentHp - before
+        const healed = this.currentHp - before
+        if (healed > 0) this.team.eventLog.push({ kind: "heal", source: source?.kioku.name, target: this.kioku.name, amount: healed, sourceIsTeam1: source?.team.isTeam1, targetIsTeam1: this.team.isTeam1 })
+        return healed
     }
 
     resolveBreak() {
@@ -486,7 +488,8 @@ export class KiokuState {
             if (damageBaseType === undefined) continue
             const applier = detail._applierState ?? this;
             const dmg = getSlipDamageResult(applier, this, detail, damageBaseType, this.team.battleType)
-            this.takeDamage(dmg)
+            const lost = this.takeDamage(dmg)
+            this.team.eventLog.push({ kind: "dot", source: applier.kioku.name, target: this.kioku.name, amount: lost, sourceIsTeam1: applier.team.isTeam1, targetIsTeam1: this.team.isTeam1 })
         }
     }
 
@@ -503,7 +506,7 @@ export class KiokuState {
             if (detail.abilityEffectType !== "CONTINUOUS_RECOVERY") continue
             const applier = detail._applierState ?? this;
             const healAmount = Math.floor(applier.kioku.getBaseAtk() * (detail.value1 / 1000));
-            this.heal(healAmount);
+            this.heal(healAmount, applier);
         }
     }
 
@@ -676,7 +679,12 @@ export class KiokuState {
             const finalExtra = getFinalDamageExtra(totalDamage, getFinalDamageRatio(target, this))
             if (finalExtra > 0) totalDamage += damageCutByBarrier(target, finalExtra).remainingDamage
 
-            target.takeDamage(totalDamage)
+            const hpLost = target.takeDamage(totalDamage)
+            this.team.eventLog.push({
+                kind: "hit", source: this.kioku.name, target: target.kioku.name, amount: hpLost,
+                barrierAbsorbed: result.barrierAbsorbed, isCritical: result.isCritical,
+                sourceIsTeam1: this.team.isTeam1, targetIsTeam1: target.team.isTeam1,
+            })
             target.lastNotice = result.notice;
             this.team.lastActionNotices.push(result.notice);
             this.team.appliedSkillEffectTypesThisAction.add(detail.abilityEffectType);
@@ -909,7 +917,7 @@ export class KiokuState {
         } else if (detail.abilityEffectType === "CUTOUT") {
             effTargets.forEach(t => t.activeEffectDetails.set(String(skillDetailId(detail)), { ...detail, applier: this.kioku.name, turn: 1 }))
         } else if (detail.abilityEffectType === "RECOVERY_HP") {
-            effTargets.forEach(t => t.heal(detail.value1))
+            effTargets.forEach(t => t.heal(detail.value1, this))
         } else if (detail.abilityEffectType === "RECOVERY_HP_ATK") {
             // [CONFIRMED string] [IMPLEMENTED] heal scaling off the HEALER's (this) own
             // ATK, using the same base-damage formula as a normal hit (by analogy with
@@ -917,7 +925,7 @@ export class KiokuState {
             // formula was independently confirmed, flagged as a reconstruction).
             const healAmount = Math.floor(detail.value1 / 1000 * this.kioku.getBaseAtk() * (Math.pow(this.kioku.getBaseAtk() / 124, 1.2) + 12) / 20);
             effTargets.forEach(t => {
-                const healed = t.heal(healAmount);
+                const healed = t.heal(healAmount, this);
                 if (healed > 0) t.lastNotice = { ...emptyNotice(), isReceivedRecovery: true };
             })
         } else if (detail.abilityEffectType === "REVIVAL_RATIO") {
@@ -933,7 +941,7 @@ export class KiokuState {
             // for the AI targeting half (uniform random among the dead).
             effTargets.filter(t => t.isDead).forEach(t => {
                 const hp = Math.ceil((detail.value1 / 100) * t.maxHp);
-                t.heal(hp);
+                t.heal(hp, this);
                 t.lastNotice = { ...emptyNotice(), isReceivedRecovery: true };
             })
         } else if (detail.abilityEffectType === "ADDITIONAL_SKILL_ACT") {
@@ -1019,10 +1027,13 @@ export class PvPTeam {
     // (2) per the person's message; pass BattleType.Solo/Gve/etc. to run a non-PvP
     // simulation through the same engine - see DamageCalculator.ts.
     battleType: BattleType
+    isTeam1 = false
     // Random source for every roll this team makes (crit, ...). Math.random by default;
     // PvPBattle can replace it with a seeded generator (BattleMath.seededRng) so a battle
     // is reproducible from its seed.
     rng: () => number = Math.random
+    // Shared with the opposing team by PvPBattle; drained into each BattleSnapshot.
+    eventLog: BattleEvent[] = []
     // Optional manual override for crit outcomes (UI "force crit / no crit"): return
     // true/false to force, undefined to roll normally.
     critOverride?: (attacker: KiokuState, defender: KiokuState, detail: SkillDetail) => boolean | undefined

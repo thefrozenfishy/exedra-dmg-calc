@@ -277,6 +277,21 @@ export interface TeamSnapshot {
     isDead: boolean
     barrier: number
     maxBarrier: number
+    shields: number      // active SHIELD states (damage-cut %, consumed per hit)
+    stunned: boolean     // UnitCondition.CanNotAction
+    isBroken: boolean
+}
+
+// One thing that happened during an action, for the battle log in the UI.
+export interface BattleEvent {
+    kind: "hit" | "dot" | "heal"
+    source?: string          // unit name (attacker / DOT applier / healer)
+    target: string
+    amount: number           // HP actually lost (hit/dot) or gained (heal)
+    barrierAbsorbed?: number
+    isCritical?: boolean
+    sourceIsTeam1?: boolean
+    targetIsTeam1: boolean
 }
 
 export interface BattleSnapshot {
@@ -285,6 +300,7 @@ export interface BattleSnapshot {
     lastActor?: string
     lastTeamIsTeam1?: boolean
     lastTargetType?: TargetType
+    events?: BattleEvent[]   // what the last action did (hits, DOT ticks, heals)
 }
 
 export interface KiokuData {

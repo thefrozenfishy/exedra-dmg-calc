@@ -24,6 +24,8 @@ export class PvPBattle {
         const rng = seededRng(this.seed);
         this.team1.rng = rng;
         this.team2.rng = rng;
+        this.team1.isTeam1 = true;
+        this.team2.eventLog = this.team1.eventLog; // one shared, ordered log
 
         // [STRUCTURAL FIX, revision 3 - see report] Each phase now runs for BOTH teams
         // before the next phase starts for EITHER team. Previously team1 ran its full
@@ -74,6 +76,9 @@ export class PvPBattle {
                     isDead: k.isDead,
                     barrier: k.barrierEndurance,
                     maxBarrier: k.maxBarrierEndurance,
+                    shields: [...k.activeEffectDetails.values()].filter(d => d.abilityEffectType === "SHIELD").length,
+                    stunned: k.canNotAction,
+                    isBroken: k.isBroken,
                 }))
             },
             enemies: {
@@ -100,11 +105,15 @@ export class PvPBattle {
                     isDead: k.isDead,
                     barrier: k.barrierEndurance,
                     maxBarrier: k.maxBarrierEndurance,
+                    shields: [...k.activeEffectDetails.values()].filter(d => d.abilityEffectType === "SHIELD").length,
+                    stunned: k.canNotAction,
+                    isBroken: k.isBroken,
                 }))
             },
             lastActor: this.lastActor?.kioku.name,
             lastTeamIsTeam1: this.lastTeamIsTeam1,
-            lastTargetType: this.lastTargetType
+            lastTargetType: this.lastTargetType,
+            events: this.team1.eventLog.splice(0),
         }
     }
 
