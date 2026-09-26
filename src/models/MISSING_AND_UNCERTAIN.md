@@ -78,6 +78,20 @@ Trigger: Thunder Torrent's battle-start HASTE had no effect on this branch.
   kyubey-battle-start-follow-up.json). Not checked: whether AfterProcess (9) also runs after
   TriggeringOnBattleStart.
 
+## R7.9 Turn gauge rescaled after every state add (f32 rounding decides mirrored ties)
+- [CONFIRMED 3.19] `StateAbilityEffect$$Triggering` calls `BattleUnit$$UpdateTurnGaugeBySpeed`
+  (0x1389210) after each state it adds: `gauge = (oldSpeed / newSpeed) * gauge` in f32, skipped
+  when `Mathf.Approximately(old, new)`. The engine used to rescale once after a whole batch.
+  `KiokuState.updateSpd()` now runs right after every store/merge in `storeTimedEffect` and
+  `storePermanentState`.
+- Why it matters: two units with the same speed and the same buffs can end up with gauges that
+  differ in the last f32 bit when their states land in a different order (e.g. a mirrored team
+  with the unit in slot 1 on one side and slot 0 on the other). Fixture
+  mirrored-thunder-torrent-ally-first.json: in game the allied Thunder Torrent acts first; the
+  old batched rescale gave the enemy one.
+- Still not modelled: TriggeringOnBattleStart stable-sorts battle-start effects by
+  TriggerPriority (desc) and runs AfterProcess (9) per trigger info. Current order is unit order.
+
 ## R7.4 Still open
 - HoT/DOT ticks stay in `decrementActiveEffects` (now at TurnEnd). The game runs
   `ContinuousRecoveryProcess` at TurnBegin; slip damage timing not re-read.
