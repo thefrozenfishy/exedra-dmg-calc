@@ -522,11 +522,19 @@ function genericFallbackChain(): AIChain {
 export function selectFullAutoTarget(
     detail: SkillDetail,
     candidates: KiokuState[],
-    rng: () => number = Math.random
+    rng: () => number = Math.random,
+    actor?: KiokuState,
 ): KiokuState | null {
     const previous = activeRng
     activeRng = rng
     try {
+        // [CONFIRMED 3.19] DamageAbilityEffectBase.SelectTargetInAIAction (0x18ef290): an ENEMY attacker uses
+        // only UnitFilterByRoleAtWeightedRandomWithHate (role weight + hate states), no break / main target /
+        // weak-element filters.
+        if (actor?.enemy && detail.abilityEffectType.startsWith("DMG_")) {
+            const alive = filterAlive(candidates)
+            return alive.length ? selectTargetUnitInOrder(alive, [filterByRoleAtWeightedRandomWithHate(rng)], rng) : null
+        }
         return selectFullAutoTargetInner(detail, candidates, rng)
     } finally {
         activeRng = previous

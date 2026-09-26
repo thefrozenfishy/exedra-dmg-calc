@@ -1,789 +1,354 @@
 <template>
   <div class="team-page">
-    <h1 class="page-title">Simulate Single Battle</h1>
+    <h1 class="page-title">Single Battle Calculator</h1>
 
-    <section class="card" :class="{ 'expanded-dmg': showAllMembersDmg }">
-      <h2 class="section-title">Battle Result</h2>
-      <p class="result-line">{{ formatDmg(battleOutput) }}</p>
+    <!-- Stage + enemies -->
+    <section class="card">
+      <h2 class="section-title">Stage</h2>
+      <StagePicker v-model="stageId" />
 
-      <div class="sa-score-row" :title="sa_score_title">
-        <span class="sa-score-label">Score Attack score</span>
-        <span class="sa-score-value">{{ sa_score }}</span>
+      <div v-if="waves.length" class="wave-tabs">
+        <span class="muted">Wave:</span>
+        <button v-for="(w, i) in waves" :key="i" type="button" class="chip-btn" :class="{ active: waveIdx === i }"
+          @click="waveIdx = i">{{ i + 1 }} <span class="muted">({{ w.length }})</span></button>
+        <span class="muted hint">Max damage uses the selected wave; the battle simulator plays every wave.</span>
       </div>
 
-      <div class="sa-fields">
-        <label class="field" title="To find check the final score screen, this changes for each difficulty">
-          <span class="field-label">Difficulty Score</span>
-          <input v-model.number="difficulty_score" type="number" />
-        </label>
-        <label class="field">
-          <span class="field-label">Health remaining (%)</span>
-          <input v-model.number="hp_percentage_team" type="number" step="1" max="100" min="0" />
-        </label>
-        <label class="field">
-          <span class="field-label">Turns</span>
-          <input v-model.number="turns" type="number" step="1" min="1" max="16" />
-        </label>
-        <label class="field"
-          title="To find score multiplier, calculate (dmg_dealt / points_from_dmg_done) in an SA run, this changes for each SA">
-          <span class="field-label">Score multiplier</span>
-          <input v-model.number="scoreMultiplier" type="number" step="0.1" min="0" />
-        </label>
-      </div>
-
-      <div class="all-members-toggle-row">
-        <label class="all-members-toggle">
-          <input type="checkbox" v-model="showAllMembersDmg" />
-          <span>Show damage breakdown for all 5 members</span>
-        </label>
-      </div>
-
-      <AllMembersDamageTable v-if="showAllMembersDmg" :members="allMembersDamage" />
-    </section>
-
-    <section class="toolbar card share-card-actions">
-      <div class="toolbar-left">
-        <ImageActionsToolbar :target="() => shareCardRef!" filename="single-team-share.png" :export-options="exportOpts"
-          :share-options="shareOptionsForTeamCard" :disabled="!shareCardAvailable" />
-      </div>
-    </section>
-
-    <div class="share-card-preview" ref="shareCardRef">
-      <div>{{ formatDmg(battleOutput) }}</div>
-      <div class="share-card-grid">
-        <div v-for="(slot, index) in team.slots" :key="index" class="share-slot">
-          <div v-if="slot?.main">
-            <div class="share-slot-top">
-              <div class="share-slot-kioku-image">
-                <img :src="kiokuImage(slot.main)" :alt="slot.main.name" />
-                <div class="share-overlay-badges">
-                  <span class="share-overlay-badge ascension">A{{ slot.main.ascension }}</span>
-                  <span class="share-overlay-badge heart">H{{ slot.main.heartphialLvl }}</span>
-                  <span class="share-overlay-badge magic">ML{{ slot.main.magicLvl }}</span>
-                  <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">SP{{ slot.main.specialLvl
-                  }}</span>
-                </div>
-              </div>
+      <div class="enemy-grid">
+        <div v-for="(e, i) in enemyInfo" :key="e.id" class="enemy-card" :class="{ main: mainTargetIdx === i }">
+          <img class="enemy-img" :src="`/exedra-dmg-calc/enemy/${e.enemyMstId}_thumbnail.png`" :alt="e.name"
+            @error="hideImg" />
+          <div class="enemy-body">
+            <div class="enemy-name" :title="e.name">{{ e.name }}</div>
+            <div class="enemy-stats">
+              <span>HP {{ fmt(e.hp) }}<span v-if="e.gauges > 1" class="muted"> ×{{ e.gauges }}</span></span>
+              <span>ATK {{ fmt(e.atk) }}</span>
+              <span>DEF {{ fmt(e.def) }}</span>
+              <span>SPD {{ e.spd }}</span>
             </div>
-
-            <div class="share-slot-portrait-support">
-              <div class="share-slot-portrait-block" v-if="slot.main?.portrait">
-                <img class="share-slot-portrait-icon" :src="portraitImage(slot.main.portrait)"
-                  :alt="slot.main.portrait" />
-                <div class="share-slot-portrait-label">{{ slot.main.portrait }}</div>
-              </div>
-              <div class="share-slot-support-block" v-if="slot.support">
-                <img class="share-slot-support-image" :src="kiokuImage(slot.support)" :alt="slot.support.name" />
-                <div class="share-slot-support-label">{{ slot.support.name }}</div>
-              </div>
-            </div>
-
-            <div class="share-slot-crys-row">
-              <span class="share-chip" v-for="([crysId], idx) in Object.entries(slot.main.crysOptions)
-                .filter(([, value]) => value.useIndex > 0).sort(([, a], [, b]) => a.useIndex - b.useIndex)"
-                :key="`cry-${idx}`">
-                {{ crystalises[Number(crysId)]?.styleMstId ? "EX" : crystalises[Number(crysId)]?.name }}
+            <div class="enemy-stats">
+              <span v-if="e.weak.length" class="weak">Weak
+                <img v-for="w in e.weak" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w" :title="w"
+                  class="elem-icon" />
+              </span>
+              <span v-for="r in e.resists" :key="r.el" class="resist" :title="`${r.el} resist`">
+                <img :src="`/exedra-dmg-calc/elements/${r.el}.png`" :alt="r.el" class="elem-icon" /> −{{ r.pct }}%
               </span>
             </div>
-
-            <div class="share-slot-subcrys-row">
-              <span class="share-chip subcrys-chip" v-for="(item, idx) in summarizeSubCrys(slot.main)"
-                :key="`sub-${idx}`">
-                {{ item }}
-              </span>
+            <div class="enemy-stats">
+              <span v-if="e.breakPoint > 0">Break {{ e.breakPoint }} · broken {{ e.initRate }}–{{ e.maxRate }}%</span>
+              <span v-else class="muted">Unbreakable</span>
+            </div>
+            <div class="enemy-controls">
+              <label title="Single-target skills hit this enemy">
+                <input type="radio" :checked="mainTargetIdx === i" @change="mainTargetIdx = i" /> Target
+              </label>
+              <label v-if="e.breakPoint > 0">
+                <input type="checkbox" :checked="!!broken[i]" @change="setBroken(i, ($event.target as HTMLInputElement).checked)" /> Broken
+              </label>
+              <label v-if="e.breakPoint > 0 && broken[i]" title="Broken damage rate (%)">
+                <input class="num" type="number" min="100" :max="e.maxRate" :value="breakRate[i] ?? e.maxRate"
+                  @change="setBreakRate(i, Number(($event.target as HTMLInputElement).value), e.maxRate)" />%
+              </label>
             </div>
           </div>
         </div>
       </div>
+    </section>
 
-      <div class="share-enemies-grid">
-        <div v-for="(enemy, index) in enemies.enemies" :key="index" class="share-enemy-slot">
-          <template v-if="enemy.enabled || enemy.name === 'Target'">
-            <div class="share-enemy-name">{{ enemy.name }}</div>
-            <div class="share-enemy-stats">
-              <span class="share-enemy-stat">
-                <span class="share-enemy-stat-label">Break</span>
-                <span class="share-enemy-stat-value">{{ enemy.maxBreak }}%</span>
-              </span>
-              <span class="share-enemy-stat">
-                <span class="share-enemy-stat-label">Def(%+)(Dmg taken-)</span>
-                <span class="share-enemy-stat-value">{{ enemy.defense }} + {{ enemy.defenseUp }}% - {{ enemy.dmgTakenDown }}%</span>
-              </span>
-            </div>
-            <div class="share-enemy-toggles">
-              <span v-if="enemy.isBreak" class="share-chip">Broken</span>
-              <span v-if="enemy.isCrit" class="share-chip">Crit</span>
-              <span v-if="enemy.isAddDmgCrit" class="share-chip">Add Dmg Crit</span>
-            </div>
-          </template>
-        </div>
-      </div>
-
-      <AllMembersDamageTable v-if="showAllMembersDmg" :members="allMembersDamage" />
-    </div>
-
+    <!-- Team -->
+    <h2 class="section-title">Team</h2>
     <div class="team-grid">
-      <div v-for="(slot, index) in team.slots" :key="index" class="team-slot"
-        :class="{ 'swap-source': swapSourceIndex === index }">
-        <button type="button" class="swap-slot-btn" :class="{ active: swapSourceIndex === index }"
-          :title="swapSourceIndex === null ? 'Select this member to swap' : swapSourceIndex === index ? 'Cancel swap' : 'Swap with selected member'"
-          @click="handleSwapClick(index)">
-          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-            <path d="M6 3L2 7l4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-            <path d="M2 7h13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-            <path d="M18 21l4-4-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-            <path d="M22 17H9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-        </button>
+      <div v-for="(slot, index) in team.slots" :key="index" class="team-slot">
         <h3 class="slot-title">
-          {{ index === attackerIndex ? 'Damage Dealer' : 'Member' }}
-          {{ index < attackerIndex ? index + 1 : index > attackerIndex ? index : "" }}
-            <span v-if="index === attackerIndex" class="attacker-optimizer" :class="{ collapsed: optimizingAttacker }">
-              <button type="button" class="optimize-attacker-btn" :disabled="optimizingAttacker || !isFullTeam"
-                :title="isFullTeam ? 'Find the best portrait, support & crystalis for this attacker (max dmg)' : 'Fill out the full team first'"
-                @click="optimizeAttackerLoadout('max')">
-                <svg viewBox="0 0 24 24" width="18" height="18" class="smith-icon"
-                  :class="{ hammering: optimizingAttacker }" aria-hidden="true">
-                  <!-- anvil base -->
-                  <rect class="anvil-part" x="4" y="18.4" width="16" height="1.6" rx="0.5" />
-                  <!-- anvil body -->
-                  <polygon class="anvil-part" points="6,18.4 18,18.4 20,14.8 4,14.8" />
-                  <!-- anvil neck -->
-                  <rect class="anvil-part" x="10.3" y="12.6" width="3.4" height="2.6" />
-                  <!-- ingot -->
-                  <rect class="ingot" x="8.6" y="11" width="6.8" height="1.9" rx="0.35" />
-                  <!-- spark burst on impact -->
-                  <g class="spark" stroke="currentColor" stroke-width="0.6" stroke-linecap="round">
-                    <line x1="12" y1="9.6" x2="12" y2="7.7" />
-                    <line x1="9.3" y1="10.7" x2="7.8" y2="9.6" />
-                    <line x1="14.7" y1="10.7" x2="16.2" y2="9.6" />
-                  </g>
-                  <!-- hammer -->
-                  <g class="hammer-group">
-                    <rect class="tool-part" x="14.2" y="1.6" width="1.6" height="10.4" rx="0.7" />
-                    <rect class="tool-part" x="10.6" y="0" width="8.4" height="3.4" rx="0.9" />
-                  </g>
-                </svg>
-              </button>
-              <button type="button" class="optimize-attacker-btn secondary"
-                :disabled="optimizingAttacker || !isFullTeam" title="Maximize average dmg (LR)"
-                @click="optimizeAttackerLoadout('avg')">
-                <svg viewBox="0 0 24 24" width="18" height="18" class="smith-icon avg-variant"
-                  :class="{ hammering: optimizingAttacker }" aria-hidden="true">
-                  <!-- anvil base -->
-                  <rect class="anvil-part" x="4" y="18.4" width="16" height="1.6" rx="0.5" />
-                  <!-- anvil body -->
-                  <polygon class="anvil-part" points="6,18.4 18,18.4 20,14.8 4,14.8" />
-                  <!-- anvil neck -->
-                  <rect class="anvil-part" x="10.3" y="12.6" width="3.4" height="2.6" />
-                  <!-- ingot -->
-                  <rect class="ingot" x="8.6" y="11" width="6.8" height="1.9" rx="0.35" />
-                  <!-- spark burst on impact -->
-                  <g class="spark" stroke="currentColor" stroke-width="0.6" stroke-linecap="round">
-                    <line x1="12" y1="9.6" x2="12" y2="7.7" />
-                    <line x1="9.3" y1="10.7" x2="7.8" y2="9.6" />
-                    <line x1="14.7" y1="10.7" x2="16.2" y2="9.6" />
-                  </g>
-                  <!-- hammer -->
-                  <g class="hammer-group">
-                    <rect class="tool-part" x="14.2" y="1.6" width="1.6" height="10.4" rx="0.7" />
-                    <rect class="tool-part" x="10.6" y="0" width="8.4" height="3.4" rx="0.9" />
-                  </g>
-                </svg>
-              </button>
-            </span>
+          <button type="button" class="dealer-btn" :class="{ active: attackerIndex === index }"
+            :title="attackerIndex === index ? 'Damage dealer' : 'Make this the damage dealer'" @click="attackerIndex = index">
+            {{ attackerIndex === index ? '★ Damage Dealer' : `Member ${index + 1}` }}
+          </button>
         </h3>
         <CharacterEditor :index="index" :slot="slot" :setMain="team.setMain" :setSupport="team.setSupport" />
       </div>
     </div>
-  </div>
 
-  <EnemySelector />
+    <!-- Max damage -->
+    <section class="card">
+      <h2 class="section-title">Max Damage</h2>
+      <p class="hint-text">Every buff and debuff the team can produce is applied at full stacks with its conditions
+        assumed met, then each skill is run through the battle engine's damage formula against the selected wave.
+        Click an effect below to leave it out.</p>
 
-  <div class="team-page">
-    <section class="card section-card extra-settings">
-      <h2 class="section-title">Extra Settings</h2>
-      <DamageReductionInputs />
-      <ArenaBuffs />
-      <div class="weak-elements">
-        <AlimentToggler ref="alimentRef">
-          <template #heading>
-            <h4 class="subsection-title">Active aliments</h4>
-          </template>
-        </AlimentToggler>
-      </div>
-    </section>
-  </div>
-
-  <div class="team-page">
-    <h1 class="page-title">Detailed Info</h1>
-
-    <div v-if="hasBannedEffects" class="banned-banner">
-      <span>Note: {{ bannedCount }} effect{{ bannedCount === 1 ? '' : 's' }} excluded from calculation</span>
-      <button class="clear-banned-btn" @click="clearBanned">Include all</button>
-    </div>
-
-    <div class="debug-sections">
-      <template v-for="key in debugSectionOrder" :key="key">
-        <div v-if="visibleDebugSections[key]" class="debug-section-row">
-          <div class="debug-section-header">
-            {{ debugSectionLabels[key] }}
+      <p v-if="!teamKiokus.length" class="muted">Add team members to calculate damage.</p>
+      <template v-else-if="maxDmg">
+        <div v-if="dealer?.best" class="headline">
+          <div class="headline-main">
+            {{ dealer.name }} · {{ dealer.best.label }}:
+            <b>{{ fmt(dealer.best.total.crit) }}</b> <span class="muted">crit</span>
           </div>
-
-          <div class="debug-section-grid">
-            <div v-for="(enemy, index) in enemies.enemies" :key="index" class="debug-slot">
-              <h3 class="debug-slot-title">{{ debugSlotTitle(index) }}</h3>
-
-              <template v-if="Array.isArray(battleOutput)">
-                <template v-if="rawSectionKey(key)">
-                  <div class="debug-contrib-table">
-                    <template
-                      v-for="(entries, effectType) in sortEffectType(battleOutput[3][index][rawSectionKey(key)!])"
-                      :key="effectType">
-                      <div class="debug-contrib-group">
-                        <div class="debug-contrib-group-label">{{ effectType }}</div>
-
-                        <div v-for="[detail, value, sourceName, dotTargetCharId, dotTargetName] in entries"
-                          :key="`${skillDetailId(detail)}_${dotTargetCharId ?? 'dps'}`" class="debug-contrib-row"
-                          :class="contribRowClass(detail, dotTargetCharId, rawSectionKey(key)!, index)"
-                          @click="handleContribRowClick(detail, dotTargetCharId, rawSectionKey(key)!, index)">
-                          <span class="debug-contrib-source">{{ sourceName }}</span>
-
-                          <span v-if="dotTargetName && rawSectionKey(key) === 'rawContributed'"
-                            class="debug-contrib-dot-target">
-                            → {{ dotTargetName }}
-                          </span>
-
-                          <span class="debug-contrib-value">
-                            {{ prettyDisplay(value, detail) }}
-                          </span>
-
-                          <div v-if="detail.description" class="debug-contrib-desc">
-                            {{ detail.description }}
-                          </div>
-
-                          <div v-if="detail.value2 > 1" class="debug-contrib-stacks" @click.stop>
-                            <label>
-                              Stacks:
-                              <input type="number" :min="0" :max="detail.value2"
-                                :value="getStackOverride(detail, isDebuffSection(rawSectionKey(key)!) ? index : undefined)"
-                                @change="e => onStackChange(e, detail, isDebuffSection(rawSectionKey(key)!) ? index : undefined)"
-                                style="width: 3.5em;" />
-                              / {{ detail.value2 }}
-                            </label>
-                          </div>
-
-                          <div class="debug-contrib-meta">
-                            <span class="debug-contrib-id clickable-id"
-                              @click.stop="copyToClipboard(String(skillDetailId(detail)))">
-                              {{ skillDetailId(detail) }}
-                            </span>
-                            <span v-if="detail.activeConditionSetIdCsv" class="debug-contrib-cond">
-                              A{{ detail.activeConditionSetIdCsv }}
-                            </span>
-                            <span v-if="detail.startConditionSetIdCsv" class="debug-contrib-cond">
-                              S{{ detail.startConditionSetIdCsv }}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </template>
-
-                    <div v-if="!Object.keys(battleOutput[3][index][rawSectionKey(key)!] ?? {}).length"
-                      class="debug-contrib-empty">
-                      (none)
-                    </div>
-                  </div>
-                </template>
-
-                <pre v-else class="debug-pre">{{ battleOutput[3][index][key] }}</pre>
-              </template>
-
-              <pre v-else class="debug-pre">{{ battleOutput }}</pre>
-            </div>
+          <div class="muted">
+            {{ fmt(dealer.best.total.normal) }} without crit · {{ fmt(dealer.best.total.avg) }} average at
+            {{ dealer.best.critChance.toFixed(1) }}% crit
           </div>
         </div>
+
+        <div class="sa-fields" v-if="isScoreAttack">
+          <div class="sa-score-row" :title="saScoreTitle">
+            <span class="muted">Score Attack score (estimate)</span> <b>{{ saScore }}</b>
+          </div>
+          <label class="field"><span class="field-label">Difficulty score</span>
+            <input v-model.number="difficultyScore" type="number" /></label>
+          <label class="field"><span class="field-label">HP remaining (%)</span>
+            <input v-model.number="hpPercentTeam" type="number" min="0" max="100" /></label>
+          <label class="field"><span class="field-label">Turns</span>
+            <input v-model.number="saTurns" type="number" min="1" max="16" /></label>
+          <label class="field"><span class="field-label">Score multiplier</span>
+            <input v-model.number="scoreMultiplier" type="number" step="0.1" min="0" /></label>
+        </div>
+
+        <div class="table-wrap">
+          <table class="dmg-table">
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th v-for="[, label] in skillCols" :key="label">{{ label }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="m in maxDmg.members" :key="m.pos" :class="{ dealer: m.pos === attackerIndex }">
+                <td>{{ m.name }}</td>
+                <td v-for="[type] in skillCols" :key="type">
+                  <template v-if="skillOf(m, type)">
+                    <div :title="perEnemyTitle(skillOf(m, type)!)"><b>{{ fmt(skillOf(m, type)!.total.crit) }}</b></div>
+                    <div class="muted small">{{ fmt(skillOf(m, type)!.total.normal) }} · avg {{ fmt(skillOf(m, type)!.total.avg) }}</div>
+                  </template>
+                  <span v-else class="muted">–</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted small">Totals over every enemy the skill hits: crit / no crit · average. Hover a value for the
+          per-enemy split.</p>
+
+        <details class="effects">
+          <summary>Effects applied ({{ activeEffectCount }} / {{ maxDmg.effects.length }})
+            <button v-if="excluded.size" type="button" class="link-btn" @click.prevent="excluded.clear()">include all</button>
+          </summary>
+          <div class="effect-cols">
+            <div v-for="side in (['ally', 'enemy'] as const)" :key="side">
+              <h4 class="subsection-title">{{ side === 'ally' ? 'Buffs on the attacker' : 'Debuffs on the enemies' }}</h4>
+              <div v-for="e in effectsBySide(side)" :key="e.key" class="effect-row"
+                :class="{ off: excluded.has(e.key), na: !e.applies }" @click="toggleEffect(e.key)"
+                :title="e.applies ? 'Click to include / exclude' : 'Self-only effect of another member (not applied)'">
+                <span class="effect-src">{{ e.casterName }} · {{ e.source }}</span>
+                <span class="effect-type">{{ e.detail.abilityEffectType }}</span>
+                <span class="effect-desc">{{ e.detail.description }}</span>
+                <label v-if="e.maxStacks > 1" class="stacks" @click.stop>
+                  <input class="num" type="number" min="0" :max="e.maxStacks" :value="stacks.get(e.key) ?? e.maxStacks"
+                    @change="setStacks(e.key, Number(($event.target as HTMLInputElement).value), e.maxStacks)" /> / {{ e.maxStacks }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </details>
       </template>
-    </div>
+    </section>
+
+    <!-- Battle simulator -->
+    <section class="card">
+      <h2 class="section-title">Battle Simulator</h2>
+      <p class="hint-text">Plays the stage with the battle engine: enemy skills follow their skill rotation and
+        conditions, enemies pick targets by role aggro, and later waves appear when a wave is cleared. Summons and form
+        changes are not simulated yet.</p>
+      <div class="sim-tools">
+        <button class="btn btn-accent" @click="runSimulation" :disabled="!teamKiokus.length || !stageId">Run Simulation</button>
+        <span class="muted">Seed {{ battle?.seed ?? '-' }}</span>
+        <button class="btn" @click="newSeed" :disabled="!teamKiokus.length || !stageId">New seed</button>
+        <label class="field inline"><span class="field-label">Turns</span>
+          <input v-model.number="simTurns" type="number" min="1" max="200" /></label>
+        <span v-if="battleResult" class="result" :class="battleResult">{{ battleResult === 'win' ? 'Cleared' : 'Defeated' }}</span>
+      </div>
+      <BattleTimeline :states="battleOutput" :show-sp="false" />
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
-import { useTeamStore, useEnemyStore } from '../store/singleTeamStore'
-import { ScoreAttackTeam, type DebugSections, type DotAllyCompositeKey, type EnemyDebuffCompositeKey } from '../models/ScoreAttackTeam'
-import EnemySelector from '../components/EnemySelector.vue'
-import ArenaBuffs from '../components/ArenaBuffs.vue'
-import AlimentToggler from '../components/AlimentToggler.vue'
-import DamageReductionInputs from '../components/DamageReductionInputs.vue'
-import { toast } from "vue3-toastify"
-import CharacterEditor from '../components/CharacterEditor.vue'
-import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
-import AllMembersDamageTable, { type DmgPair, type MemberDmgBreakdown } from '../components/AllMembersDamageTable.vue'
-import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
+import { computed, markRaw, reactive, ref, shallowRef, watch } from 'vue'
+import { useTeamStore } from '../store/singleTeamStore'
 import { useSetting } from '../store/settingsStore'
-import { KiokuArgs, Character, SkillDetail, skillDetailId } from '../types/KiokuTypes'
-import { crystalises, passiveDetails, portraits } from "../utils/helpers";
-import { useFriendStore } from '../store/friendStore'
-import { useCharacterStore } from '../store/characterStore'
-import type { AttackerLoadoutResult } from '../models/BestTeamCalculator'
-
-const attackerIndex = 2
-
-const buffMultReduction = useSetting("buffMultReduction", 0)
-const debuffMultReduction = useSetting("debuffMultReduction", 0)
-const attackerHealth = useSetting("attackerHealth", 100)
-const scoreMultiplier = useSetting("scoreMultiplier", 35)
-const turns = useSetting("turns", 3)
-const hp_percentage_team = useSetting("hp_percentage_team", 20)
-const difficulty_score = useSetting("difficulty_score", 6_000_000)
-const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
-const showAllMembersDmg = useSetting("showAllMembersDmg", false)
-
-const alimentRef = ref<InstanceType<typeof AlimentToggler> | null>(null)
-const shareCardRef = ref<HTMLElement | null>(null)
-const shareCardAvailable = computed(() => team.slots.some(slot => !!slot.main))
-
-const portraitImage = (portrait?: string) => {
-  if (!portrait) return ''
-  return `/exedra-dmg-calc/portrait_images/${portraits[portrait].resourceName}_thumbnail.png`;
-}
-
-const kiokuImage = (member: Character) =>
-  `/exedra-dmg-calc/kioku_images/${member.id}_thumbnail.png`
-
-const summarizeSubCrys = (ch: Character) => {
-
-  const items = Object.values(ch.crysOptions)
-    .filter(c => c.useIndex > 0)
-    .flatMap(option => option.subCrys)
-    .filter(Boolean)
-    .map(c => Object.values(crystalises).find(cx => cx.selectionAbilityMstId === c))
-    .map(c => Object.values(passiveDetails).find(v => (v as any).passiveSkillMstId === c?.value1))
-    .filter(c => !!c)
-
-  if (!items.length) return []
-  const counts = items.reduce((acc, eff) => {
-    if (eff.abilityEffectType in acc) {
-      acc[eff.abilityEffectType][1] = acc[eff.abilityEffectType][1] + eff.value1
-    } else {
-      acc[eff.abilityEffectType] = [
-        eff.description
-          .replace(eff.value1, "XXXXX")
-          .replace((eff.value1 / 10).toFixed(1), "XXXXX")
-          .replace((eff.value1 / 10).toFixed(0), "XXXXX"),
-        eff.value1
-      ]
-    }
-
-    return acc
-  }, {} as Record<string, number>)
-
-  return Object.entries(counts).map(([effType, [desc, nr]]) => desc.replace("XXXXX", (desc as string).includes("%") ? nr / 10 : nr))
-}
-
-const exportOpts = { exportClass: "exporting" }
-
-const shareOptionsForTeamCard = () => ({
-  title: `${useFriendStore().getFormattedDisplayNamePossessive()} Team Setup`,
-  backUrl: window.location.href,
-})
-
-const sortEffectType = (effects: object) => Object.fromEntries(Object.entries(effects).sort(([a], [b]) => a.localeCompare(b)))
-const sa_score = computed(() => {
-  if (typeof battleOutput.value === 'string') return "unknown"
-  return (difficulty_score.value + Number((20 * ((battleOutput.value[0] as number) / scoreMultiplier.value + (90000 - 5000 * turns.value) + 15000 * hp_percentage_team.value / 100)).toFixed(0))).toLocaleString()
-})
-const sa_score_title = computed(() => {
-  if (typeof battleOutput.value === 'string') return "unknown"
-  return `${difficulty_score.value} + 20 * (${battleOutput.value[0]} / ${scoreMultiplier.value} + (90000 - 5000 * ${turns.value}) + 15000 * 0.${hp_percentage_team.value})`
-})
-
-type BattleOutput = ReturnType<ScoreAttackTeam['calculate_max_dmg']>
-
-const formatDmg = (out: string | BattleOutput) =>
-  typeof out !== 'string'
-    ? `Max Damage: ${out[0].toLocaleString()} with a ${out[2]}% crit rate - (Average Damage: ${out[1].toLocaleString()})`
-    : out
-
-const stackOverrides = reactive<Map<number, number>>(new Map())
-const debuffStackOverrides = reactive<Map<string, number>>(new Map())
-
-function isDebuffSection(rawKey: RawKey): boolean {
-  return rawKey === 'rawDebuffs' || rawKey === 'rawEnemyDebuffs'
-}
-
-function getStackOverride(detail: SkillDetail, enemyIdx?: number): number {
-  if (enemyIdx !== undefined) {
-    return debuffStackOverrides.get(`${skillDetailId(detail)}_enemy${enemyIdx}`) ?? detail.value2
-  }
-  return stackOverrides.get(skillDetailId(detail)) ?? detail.value2
-}
-
-function onStackChange(e: Event, detail: SkillDetail, enemyIdx?: number) {
-  const clamped = Math.max(0, Math.min(detail.value2, Number((e.target as HTMLInputElement).value)))
-  if (enemyIdx !== undefined) {
-    const key = `${skillDetailId(detail)}_enemy${enemyIdx}`
-    if (clamped === detail.value2) debuffStackOverrides.delete(key)
-    else debuffStackOverrides.set(key, clamped)
-  } else {
-    if (clamped === detail.value2) stackOverrides.delete(skillDetailId(detail))
-    else stackOverrides.set(skillDetailId(detail), clamped)
-  }
-}
-
-const bannedEffectIds = reactive<Record<number, true>>({})
-const toggleBannedEffect = (id: number) => { if (bannedEffectIds[id]) delete bannedEffectIds[id]; else bannedEffectIds[id] = true }
-const clearBanned = () => { for (const key of Object.keys(bannedEffectIds)) delete bannedEffectIds[Number(key)] }
-const bannedCount = computed(() => Object.keys(bannedEffectIds).length)
-const hasBannedEffects = computed(() => bannedCount.value > 0)
-
-const enabledDotAllyEffects = reactive<Record<DotAllyCompositeKey, true>>({})
-const dotCompositeKey = (detail: SkillDetail, dotTargetCharId: string): DotAllyCompositeKey =>
-  `${skillDetailId(detail)}_${dotTargetCharId}` as DotAllyCompositeKey
-const toggleDotAllyEffect = (detail: SkillDetail, dotTargetCharId: string) => {
-  const key = dotCompositeKey(detail, dotTargetCharId)
-  if (enabledDotAllyEffects[key]) delete enabledDotAllyEffects[key]; else enabledDotAllyEffects[key] = true
-}
-const isDotAllyEnabled = (detail: SkillDetail, dotTargetCharId: string) =>
-  !!enabledDotAllyEffects[dotCompositeKey(detail, dotTargetCharId)]
-
-const disabledEnemyDebuffs = reactive<Set<EnemyDebuffCompositeKey>>(new Set())
-const enemyDebuffCompositeKey = (detail: SkillDetail, enemyIdx: number): EnemyDebuffCompositeKey =>
-  `${skillDetailId(detail)}_enemy${enemyIdx}` as EnemyDebuffCompositeKey
-const toggleEnemyDebuffDisabled = (detail: SkillDetail, enemyIdx: number) => {
-  const key = enemyDebuffCompositeKey(detail, enemyIdx)
-  if (disabledEnemyDebuffs.has(key)) disabledEnemyDebuffs.delete(key); else disabledEnemyDebuffs.add(key)
-}
-const isEnemyDebuffEnabled = (detail: SkillDetail, enemyIdx: number) =>
-  !disabledEnemyDebuffs.has(enemyDebuffCompositeKey(detail, enemyIdx))
-
-type RawKey = 'rawReceived' | 'rawContributed' | 'rawDebuffs' | 'rawEnemyDebuffs'
-
-function isDotAllyRow(dotTargetCharId: string | undefined, rawKey: RawKey): boolean {
-  return !!dotTargetCharId && rawKey !== 'rawDebuffs' && rawKey !== 'rawEnemyDebuffs'
-}
-
-function contribRowClass(detail: SkillDetail, dotTargetCharId: string | undefined, rawKey: RawKey, enemyIdx: number) {
-  const isEnemyDebuff = rawKey === 'rawEnemyDebuffs'
-  return {
-    'is-disabled':
-      (rawKey === 'rawDebuffs' && !!bannedEffectIds[skillDetailId(detail)]) ||
-      (isEnemyDebuff && !isEnemyDebuffEnabled(detail, enemyIdx)) ||
-      (!isEnemyDebuff && !isDotAllyRow(dotTargetCharId, rawKey) && !!bannedEffectIds[skillDetailId(detail)]),
-    'is-dot-off': isDotAllyRow(dotTargetCharId, rawKey) && !isDotAllyEnabled(detail, dotTargetCharId!),
-    'is-dot-on': isDotAllyRow(dotTargetCharId, rawKey) && isDotAllyEnabled(detail, dotTargetCharId!),
-  }
-}
-
-function handleContribRowClick(detail: SkillDetail, dotTargetCharId: string | undefined, rawKey: RawKey, enemyIdx: number) {
-  if (rawKey === 'rawEnemyDebuffs') toggleEnemyDebuffDisabled(detail, enemyIdx)
-  else if (rawKey === 'rawDebuffs') toggleBannedEffect(skillDetailId(detail))
-  else if (isDotAllyRow(dotTargetCharId, rawKey)) toggleDotAllyEffect(detail, dotTargetCharId!)
-  else toggleBannedEffect(skillDetailId(detail))
-}
-
-function prettyDisplay(value: number, detail?: SkillDetail): string {
-  const nr = Math.round((value / 10 + Number.EPSILON) * 100) / 100
-  if (detail?.description === "") return `${value.toLocaleString()} or ${nr}%`
-  if (!detail?.description?.includes("%")) return value.toLocaleString()
-  return `${nr}%`
-}
-
-type SectionKey = keyof DebugSections
-const debugSectionOrder: SectionKey[] = ['calc', 'enemy', 'kiokuStats', 'kiokuReceived', 'kiokuContributed', 'kiokuDebuffs', 'kiokuEnemyDebuffs']
-const debugSectionLabels: Record<SectionKey, string> = {
-  calc: 'DMG Calculation', enemy: 'Enemy Stats', kiokuStats: 'Kioku Stats',
-  kiokuReceived: 'Buffs Received', kiokuContributed: 'Contributed to DPS',
-  kiokuDebuffs: 'Debuffs Applied by Char', kiokuEnemyDebuffs: 'Debuffs on This Enemy',
-  rawReceived: '', rawContributed: '', rawDebuffs: '', rawEnemyDebuffs: '',
-}
-const rawSectionKey = (key: SectionKey): RawKey | null => {
-  if (key === 'kiokuReceived') return 'rawReceived'
-  if (key === 'kiokuContributed') return 'rawContributed'
-  if (key === 'kiokuDebuffs') return 'rawDebuffs'
-  if (key === 'kiokuEnemyDebuffs') return 'rawEnemyDebuffs'
-  return null
-}
-const visibleDebugSections = reactive<Record<SectionKey, boolean>>({
-  calc: true, enemy: true, kiokuStats: true, kiokuReceived: true,
-  kiokuContributed: true, kiokuDebuffs: false, kiokuEnemyDebuffs: true,
-  rawReceived: false, rawContributed: false, rawDebuffs: false, rawEnemyDebuffs: false,
-})
-const debugSlotTitle = (idx: number) => ['L Other', 'L Proximity', 'Target', 'R Proximity', 'R Other'][idx] ?? `Slot ${idx}`
+import CharacterEditor from '../components/CharacterEditor.vue'
+import StagePicker from '../components/StagePicker.vue'
+import BattleTimeline from '../components/BattleTimeline.vue'
+import { toast } from 'vue3-toastify'
+import { TargetType, type BattleSnapshot } from '../types/KiokuTypes'
+import { elementMap } from '../types/enums'
+import { stageWaves, enemyName, breakMstOf, ELEMENT_KEYS } from '../models/PvE'
+import { createPvEBattle, stageBattleType } from '../models/PvEBattle'
+import { getScoreAttackStage } from '../models/PvEScore'
+import { computeMaxDamage, type MaxDmgResult, type MemberDamage, type SkillDamage, type EffectSide } from '../models/MaxDamage'
+import { buildSlotKioku } from '../utils/pvpExport'
+import type { PvPBattle } from '../models/PvPBattle'
+import type { PvPKioku } from '../models/PvPKioku'
 
 const team = useTeamStore()
-const enemies = useEnemyStore()
-const isFullTeam = computed(() => team.slots.map(slot => slot.main).filter(Boolean).length === 5)
+const stageId = useSetting<number>('pveStageId', 982250)
+const attackerIndex = useSetting('pveAttackerIndex', 2)
+const scoreMultiplier = useSetting('scoreMultiplier', 35)
+const saTurns = useSetting('turns', 3)
+const hpPercentTeam = useSetting('hp_percentage_team', 20)
+const difficultyScore = useSetting('difficulty_score', 6_000_000)
+const simTurns = useSetting('pveSimTurns', 40)
 
-const swapSourceIndex = ref<number | null>(null)
+const fmt = (n: number) => Math.round(n).toLocaleString()
+const hideImg = (ev: Event) => { (ev.target as HTMLImageElement).style.visibility = 'hidden' }
 
-const swapSlots = (a: number, b: number) => {
-  const slotA = team.slots[a]
-  const slotB = team.slots[b]
-  const aMain = slotA.main
-  const aSupport = slotA.support
-  const bMain = slotB.main
-  const bSupport = slotB.support
+// ---- stage / enemies ----
+const waveIdx = ref(0)
+const waves = computed(() => stageId.value ? stageWaves(stageId.value) : [])
+const wave = computed(() => waves.value[Math.min(waveIdx.value, waves.value.length - 1)] ?? [])
+const mainTargetIdx = ref(0)
+const broken = ref<boolean[]>([])
+const breakRate = ref<(number | undefined)[]>([])
 
-  team.setMain(a, bMain)
-  team.setSupport(a, bSupport)
-  team.setMain(b, aMain)
-  team.setSupport(b, aSupport)
+watch(stageId, () => { waveIdx.value = 0 })
+watch(wave, w => {
+  const main = w.findIndex(a => a.isMainTargetEnemy)
+  mainTargetIdx.value = main >= 0 ? main : 0
+  broken.value = w.map(a => (breakMstOf(a)?.breakPoint ?? 0) > 0)
+  breakRate.value = w.map(() => undefined)
+}, { immediate: true })
+
+const setBroken = (i: number, v: boolean) => { const b = [...broken.value]; b[i] = v; broken.value = b }
+const setBreakRate = (i: number, v: number, max: number) => {
+  const r = [...breakRate.value]; r[i] = Number.isFinite(v) ? Math.max(100, Math.min(max, v)) : undefined; breakRate.value = r
 }
 
-const handleSwapClick = (index: number) => {
-  if (swapSourceIndex.value === null) {
-    swapSourceIndex.value = index
-    return
+const enemyInfo = computed(() => wave.value.map(a => {
+  const b = breakMstOf(a)
+  return {
+    id: a.questEnemyAppearanceMstId, enemyMstId: a.enemyMstId, name: enemyName(a),
+    hp: a.hp, atk: a.atk, def: a.def, spd: a.speed,
+    gauges: a.startHpGaugeCount > 0 ? a.startHpGaugeCount : a.hpGaugeCount,
+    weak: [1, 2, 3, 4, 5, 6].map(i => a[`weakElement${i}`]).filter((x: number) => x >= 1 && x <= 6).map((x: number) => elementMap[x]),
+    resists: ELEMENT_KEYS.map((k, el) => ({ el: elementMap[el], pct: k ? (a[`${k}ResistRate`] ?? 0) / 10 : 0 })).filter(r => r.pct > 0),
+    breakPoint: b?.breakPoint ?? 0,
+    initRate: Math.trunc((b?.initialBreakedDamageReceiveRate ?? 1000) / 10),
+    maxRate: Math.trunc((b?.maxBreakedDamageReceiveRate ?? 1000) / 10),
   }
-  if (swapSourceIndex.value === index) {
-    swapSourceIndex.value = null
-    return
-  }
-  swapSlots(swapSourceIndex.value, index)
-  swapSourceIndex.value = null
-}
+}))
 
-// The 5 members turned into calc-ready ScoreAttackKioku instances - shared by the attacker-only
-// teamInstance below and by the all-members damage breakdown, so both build on the same data.
-const transformedMembers = computed<ScoreAttackKioku[] | undefined>(() => {
-  if (!isFullTeam.value) return undefined
+// ---- team ----
+// Members in slot order; an empty slot is skipped (quests can be played with fewer than 5).
+const filledSlots = computed(() => team.slots.map((s, i) => [s, i] as const).filter(([s]) => !!s.main))
+const teamKiokus = computed<PvPKioku[]>(() => {
   try {
-    return team.slots.map(m => {
-      const support = m.support ? new ScoreAttackKioku({ ...m.support }) : null
+    return filledSlots.value.map(([s]) => markRaw(buildSlotKioku(s)))
+  } catch (e) {
+    console.warn('Could not build team', e)
+    return []
+  }
+})
+const dealerPos = computed(() => Math.max(0, filledSlots.value.findIndex(([, i]) => i === attackerIndex.value)))
 
-      const crys = m.main
-        ? Object.entries(m.main.crysOptions)
-          .filter(([, v]) => v.useIndex > 0)
-        : []
+// ---- max damage ----
+const excluded = reactive(new Set<string>())
+const stacks = reactive(new Map<string, number>())
+const toggleEffect = (k: string) => { if (excluded.has(k)) excluded.delete(k); else excluded.add(k) }
+const setStacks = (k: string, v: number, max: number) => {
+  const n = Math.max(0, Math.min(max, Number.isFinite(v) ? v : max))
+  if (n === max) stacks.delete(k); else stacks.set(k, n)
+}
 
-      return new ScoreAttackKioku(
-        {
-          ...m.main,
-          crysIDs: crys.map(c => Number(c[0])),
-          subCrysIDs: crys.flatMap(c => c[1].subCrys),
-          supportKey: support?.getKey(),
-        } as KiokuArgs,
-        (m.buffMultReduction || buffMultReduction.value) ?? 0,
-        (m.debuffMultReduction || debuffMultReduction.value) ?? 0,
-      )
-    }) as ScoreAttackKioku[]
-  } catch (err) {
-    toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
-    console.error("Failed to initialize team members:", err)
-    for (let i = 0; i < 5; i++) team.setMain(i, undefined)
+const maxDmg = computed<MaxDmgResult | undefined>(() => {
+  if (!teamKiokus.value.length || !wave.value.length) return undefined
+  try {
+    return computeMaxDamage(teamKiokus.value, wave.value, dealerPos.value, {
+      battleType: stageBattleType(stageId.value),
+      excluded: new Set(excluded), stacks: new Map(stacks),
+      broken: broken.value, breakRate: breakRate.value, mainTargetIdx: mainTargetIdx.value,
+    })
+  } catch (e) {
+    console.warn('Max damage failed', e)
     return undefined
   }
 })
+const dealer = computed(() => maxDmg.value?.members[dealerPos.value])
+const skillCols: [TargetType, string][] = [[TargetType.specialId, 'Ultimate'], [TargetType.skillId, 'Battle Skill'], [TargetType.attackId, 'Basic Attack']]
+const skillOf = (m: MemberDamage, t: TargetType) => m.skills.find(s => s.type === t)
+const perEnemyTitle = (s: SkillDamage) => s.perEnemy.map((x, i) => x.crit ? `${enemyInfo.value[i]?.name}: ${fmt(x.crit)} crit / ${fmt(x.normal)} / avg ${fmt(x.avg)}` : '').filter(Boolean).join('\n')
+const effectsBySide = (side: EffectSide) => (maxDmg.value?.effects ?? []).filter(e => e.side === side)
+const activeEffectCount = computed(() => (maxDmg.value?.effects ?? []).filter(e => e.applies && !excluded.has(e.key)).length)
 
-const arenaEffectsMap = computed<Record<string, number>>(() => {
-  const map: Record<string, number> = {}
-  for (const { type, value } of arenaEffects.value) {
-    if (!type) continue
-    map[type] = (map[type] ?? 0) + value
-  }
-  return map
-})
+// Score Attack score, same estimate as the previous version of this page.
+const isScoreAttack = computed(() => !!getScoreAttackStage(stageId.value))
+const saDamage = computed(() => dealer.value?.best?.total.crit ?? 0)
+const saScore = computed(() => (difficultyScore.value + Number((20 * (saDamage.value / scoreMultiplier.value + (90000 - 5000 * saTurns.value) + 15000 * hpPercentTeam.value / 100)).toFixed(0))).toLocaleString())
+const saScoreTitle = computed(() => `${difficultyScore.value} + 20 * (${saDamage.value} / ${scoreMultiplier.value} + (90000 - 5000 * ${saTurns.value}) + 15000 * ${hpPercentTeam.value / 100})`)
 
-const teamInstance = computed(() => {
-  const members = transformedMembers.value
-  if (!members) return
-  try {
-    return new ScoreAttackTeam(
-      members[attackerIndex],
-      members.filter((_, i) => i !== attackerIndex),
-      attackerHealth.value,
-      alimentRef.value?.aliments.filter(a => a.enabled).map(a => a.name) ?? [],
-      arenaEffectsMap.value,
-      true,
-      new Set(Object.keys(bannedEffectIds).map(Number)),
-      new Set(Object.keys(enabledDotAllyEffects) as DotAllyCompositeKey[]),
-      new Map(stackOverrides),
-      new Set(disabledEnemyDebuffs),
-      new Map(debuffStackOverrides) as Map<EnemyDebuffCompositeKey, number>,
-    )
-  } catch (err) {
-    toast.error(err, { position: toast.POSITION.TOP_RIGHT, icon: false })
-    console.error("Failed to initialize team instance:", err)
-    for (let i = 0; i < 5; i++) team.setMain(i, undefined)
-  }
-})
+// ---- battle simulator ----
+// shallowRef + markRaw: keep the engine out of Vue reactivity (object identity matters, see PvP page).
+const battle = shallowRef<PvPBattle | null>(null)
+const battleOutput = ref<BattleSnapshot[]>([])
+const battleResult = ref<'win' | 'lose' | undefined>()
+const seed = ref<number | undefined>(undefined)
 
-const allMembersDamage = computed<MemberDmgBreakdown[] | undefined>(() => {
-  if (!showAllMembersDmg.value) return undefined
-  const members = transformedMembers.value
-  if (!members) return undefined
-
-  const activeAliments = alimentRef.value?.aliments.filter(a => a.enabled).map(a => a.name) ?? []
-  const banned = new Set(Object.keys(bannedEffectIds).map(Number))
-  const dotAllySet = new Set(Object.keys(enabledDotAllyEffects) as DotAllyCompositeKey[])
-  const stackOverridesMap = new Map(stackOverrides)
-  const disabledDebuffs = new Set(disabledEnemyDebuffs)
-  const debuffStackOverridesMap = new Map(debuffStackOverrides) as Map<EnemyDebuffCompositeKey, number>
-
-  const toDmgPair = (result: BattleOutput): DmgPair => ({ max: result[0], avg: result[1], crit: result[2] })
-
-  const breakdown: MemberDmgBreakdown[] = []
-  for (let i = 0; i < members.length; i++) {
-    try {
-      const otherMembers = members.filter((_, j) => j !== i)
-
-      const withConsume = new ScoreAttackTeam(
-        members[i], otherMembers, attackerHealth.value, activeAliments, arenaEffectsMap.value,
-        false, banned, dotAllySet, stackOverridesMap, disabledDebuffs, debuffStackOverridesMap, false,
-      )
-      const withoutConsume = new ScoreAttackTeam(
-        members[i], otherMembers, attackerHealth.value, activeAliments, arenaEffectsMap.value,
-        false, banned, dotAllySet, stackOverridesMap, disabledDebuffs, debuffStackOverridesMap, true,
-      )
-
-      withConsume.setDamageAbility("special")
-      const special = toDmgPair(withConsume.calculate_max_dmg(enemies.enemies, 0))
-      withConsume.setDamageAbility("skill")
-      const skill = toDmgPair(withConsume.calculate_max_dmg(enemies.enemies, 0))
-      withConsume.setDamageAbility("followUp")
-      const followUp = toDmgPair(withConsume.calculate_max_dmg(enemies.enemies, 0))
-
-      withoutConsume.setDamageAbility("special")
-      const specialNoConsume = toDmgPair(withoutConsume.calculate_max_dmg(enemies.enemies, 0))
-      withoutConsume.setDamageAbility("skill")
-      const skillNoConsume = toDmgPair(withoutConsume.calculate_max_dmg(enemies.enemies, 0))
-      withoutConsume.setDamageAbility("followUp")
-      const followUpNoConsume = toDmgPair(withoutConsume.calculate_max_dmg(enemies.enemies, 0))
-
-      breakdown.push({
-        index: i,
-        name: team.slots[i]?.main?.name ?? `Member ${i + 1}`,
-        special, specialNoConsume, skill, skillNoConsume, followUp, followUpNoConsume,
-      })
-    } catch (err) {
-      console.error(`Failed to compute damage breakdown for member ${i}:`, err)
-    }
-  }
-  return breakdown
-})
-
-const battleOutput = computed(() => {
-  if (!teamInstance.value) return 'Select 5 characters to calculate'
-  return teamInstance.value.calculate_max_dmg(enemies.enemies, 0)
-})
-
-const characterStore = useCharacterStore()
-const optimizingAttackerMode = ref<'max' | 'avg' | null>(null)
-const optimizingAttacker = computed(() => optimizingAttackerMode.value !== null)
-
-function optimizeAttackerLoadout(mode: 'max' | 'avg' = 'max') {
-  if (!isFullTeam.value || optimizingAttacker.value) return
-
-  const attackerSlot = team.slots[attackerIndex]
-  if (!attackerSlot.main) return
-
-  optimizingAttackerMode.value = mode
-
-  const worker = new Worker(new URL('../workers/AttackerLoadoutWorker.js', import.meta.url), { type: 'module' })
-
-  const arenaEffectsMap: Record<string, number> = {}
-  for (const { type, value } of arenaEffects.value) {
-    if (!type) continue
-    arenaEffectsMap[type] = (arenaEffectsMap[type] ?? 0) + value
-  }
-
-  worker.onmessage = (e) => {
-    if (e.data.type === 'done') {
-      applyBestAttackerLoadout(e.data.results)
-      optimizingAttackerMode.value = null
-      worker.terminate()
-    } else if (e.data.type === 'error') {
-      toast.error(e.data.error, { position: toast.POSITION.TOP_RIGHT, icon: false })
-      console.error("Failed to optimize attacker loadout:", e.data.error)
-      optimizingAttackerMode.value = null
-      worker.terminate()
-    }
-  }
-
-  worker.postMessage({
-    options: {
-      attacker: {
-        main: JSON.parse(JSON.stringify(attackerSlot.main)),
-        support: attackerSlot.support ? JSON.parse(JSON.stringify(attackerSlot.support)) : undefined,
-        buffMultReduction: attackerSlot.buffMultReduction,
-        debuffMultReduction: attackerSlot.debuffMultReduction,
-      },
-      otherMembers: team.slots
-        .filter((_, i) => i !== attackerIndex)
-        .map(m => ({
-          main: JSON.parse(JSON.stringify(m.main)),
-          support: m.support ? JSON.parse(JSON.stringify(m.support)) : undefined,
-          buffMultReduction: m.buffMultReduction,
-          debuffMultReduction: m.debuffMultReduction,
-        })),
-      enemies: JSON.parse(JSON.stringify(enemies.enemies)),
-      attackerHealth: attackerHealth.value,
-      activeAliments: alimentRef.value?.aliments.filter(a => a.enabled).map(a => a.name) ?? [],
-      arenaEffectsMap,
-      buffMultReduction: buffMultReduction.value,
-      debuffMultReduction: debuffMultReduction.value,
-      enabledCharacters: JSON.parse(JSON.stringify(characterStore.characters.filter(c => c.enabled))),
-      bannedEffectIds: Object.keys(bannedEffectIds).map(Number),
-      enabledDotAllyEffects: Object.keys(enabledDotAllyEffects),
-      stackOverrides: Array.from(stackOverrides.entries()),
-      disabledEnemyDebuffs: Array.from(disabledEnemyDebuffs),
-      debuffStackOverrides: Array.from(debuffStackOverrides.entries()),
-      optimizeAverageDamage: mode === 'avg',
-    }
-  })
-}
-
-function applyCrysSelection(main: Character, crysIds: number[]) {
-  Object.values(main.crysOptions).forEach(c => {
-    if (c.useIndex > 0) c.useIndex = 0
-  })
-  crysIds.forEach((id, i) => {
-    const entry = main.crysOptions[id]
-    if (!entry) return
-    entry.useIndex = i + 1
-    if (!entry.subCrys || entry.subCrys.length !== 3) entry.subCrys = [4034, 4044, 4054]
-  })
-}
-
-function applyBestAttackerLoadout(results: AttackerLoadoutResult[]) {
-  const best = results[0]
-  if (!best) {
-    toast.error("Couldn't find a valid support for this attacker", { position: toast.POSITION.TOP_RIGHT, icon: false })
+function buildBattle() {
+  battleResult.value = undefined
+  if (!teamKiokus.value.length || !stageId.value || !waves.value.length) {
+    battle.value = null
+    battleOutput.value = []
     return
   }
-
-  const attackerSlot = team.slots[attackerIndex]
-
-  if (attackerSlot.main) {
-    attackerSlot.main.portrait = best.portrait
-    applyCrysSelection(attackerSlot.main, best.crysIds)
+  try {
+    // Fresh units: a battle mutates its units' state.
+    const allies = filledSlots.value.map(([s]) => buildSlotKioku(s))
+    battle.value = markRaw(createPvEBattle(allies, stageId.value, seed.value))
+    battleOutput.value = [battle.value.getCurrentState()]
+  } catch (e) {
+    console.warn('Could not build battle', e)
+    battle.value = null
+    battleOutput.value = []
   }
+}
+watch([() => team.slots, stageId], buildBattle, { deep: true, immediate: true })
 
-  const supportChar = characterStore.characters.find(c => c.name === best.supportName)
-  if (supportChar) team.setSupport(attackerIndex, supportChar)
+function runSimulation() {
+  buildBattle()
+  const b = battle.value
+  if (!b) return
+  const states: BattleSnapshot[] = [b.getCurrentState()]
+  for (let t = 0; t < simTurns.value && !b.isOver; t++) {
+    try {
+      states.push(...b.executeNextAction())
+    } catch (e) {
+      toast.warning(String(e))
+      console.warn('Failed to execute next action:', e)
+      break
+    }
+  }
+  battleOutput.value = states
+  battleResult.value = b.result
 }
 
-async function copyToClipboard(text: string) {
-  try {
-    await navigator.clipboard.writeText(text)
-    toast.success(`Copied: ${text}`, { position: toast.POSITION.TOP_RIGHT, icon: false })
-  } catch (err) {
-    console.error("Failed to copy:", err)
-    toast.error("Failed to copy", { position: toast.POSITION.TOP_RIGHT, icon: false })
-  }
+function newSeed() {
+  seed.value = Math.floor(Math.random() * 2 ** 32)
+  runSimulation()
 }
 </script>
 
 <style scoped>
+.team-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .page-title {
   font-size: 2rem;
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.5rem;
   color: var(--text);
   text-align: center;
 }
@@ -795,878 +360,256 @@ async function copyToClipboard(text: string) {
   padding: 1rem;
 }
 
-.expanded-dmg {
-  width: 100%;
-}
-
-.toolbar {
-  display: flex;
-}
-
-.toolbar-left {
-  display: flex;
-  align-items: center;
-}
-
-.toolbar-right {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-left: auto;
-}
-
-.import-screenshot-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  width: max-content;
-  padding: 1rem;
-}
-
-.import-spinner {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  border: 2px solid currentColor;
-  border-right-color: transparent;
-  border-radius: 50%;
-  animation: import-spinner-spin 0.7s linear infinite;
-}
-
-@keyframes import-spinner-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.screenshot-file-input {
-  display: none;
-}
-
 .section-title {
   font-size: 1.2rem;
   color: var(--accent-soft);
-  margin: 0 0 0.75rem;
+  margin: 0.5rem 0 0.75rem;
   text-align: center;
 }
 
 .subsection-title {
-  font-size: 0.95rem;
+  margin: 0.5rem 0;
   color: var(--accent-soft);
-  margin: 0 0 0.5rem;
-}
-
-.slot-title {
   font-size: 0.95rem;
-  color: var(--accent-soft);
-  text-align: center;
-  margin: 0 0 0.5rem;
 }
 
-.attacker-optimizer {
-  position: relative;
-  display: inline-block;
-  width: calc(1.6rem * 2 + 0.35rem);
-  height: 1.6rem;
-  vertical-align: middle;
-  margin-left: 0.3rem;
-}
+.muted { color: var(--muted); }
+.small { font-size: 0.8rem; }
+.hint-text { color: var(--muted); font-size: 0.9rem; margin: 0 0 0.75rem; }
 
-.optimize-attacker-btn {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  width: 1.6rem;
-  height: 1.6rem;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 6px;
-  color: var(--text);
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, transform 0.1s;
-}
-
-.optimize-attacker-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 209, 110, 0.5);
-  transform: scale(1.08);
-}
-
-.optimize-attacker-btn:disabled {
-  opacity: 0.4;
-  cursor: default;
-}
-
-.optimize-attacker-btn.secondary {
-  left: calc(1.6rem + 0.35rem);
-  z-index: -1;
-  opacity: 0;
-  transform: translate(calc(-100% - 0.35rem), 6px) scale(0.65);
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.3s ease, z-index 0s 0.3s;
-}
-
-.attacker-optimizer:hover .optimize-attacker-btn.secondary {
-  opacity: 1;
-  z-index: 1;
-  transform: translate(0, 0) scale(1);
-  pointer-events: auto;
-  transition: opacity 0.25s ease, transform 0.3s ease, z-index 0s;
-}
-
-.attacker-optimizer.collapsed .optimize-attacker-btn.secondary {
-  opacity: 0 !important;
-  z-index: -1 !important;
-  transform: translate(calc(-100% - 0.35rem), 6px) scale(0.65) !important;
-  pointer-events: none !important;
-}
-
-.smith-icon .anvil-part,
-.smith-icon .tool-part {
-  fill: currentColor;
-}
-
-.smith-icon .ingot {
-  fill: #d9622b;
-}
-
-.smith-icon.avg-variant .ingot {
-  fill: #2f6fae;
-}
-
-.smith-icon .spark {
-  opacity: 0;
-}
-
-.smith-icon .hammer-group {
-  transform-box: fill-box;
-  transform-origin: 52% 96%;
-  transform: rotate(-30deg);
-  transition: transform 0.2s ease;
-}
-
-.smith-icon.hammering .hammer-group {
-  animation: smith-strike 0.65s infinite;
-}
-
-.smith-icon.hammering .ingot {
-  animation: smith-ingot-glow 0.65s infinite;
-}
-
-.smith-icon.avg-variant.hammering .ingot {
-  animation: smith-ingot-glow-cool 0.65s infinite;
-}
-
-.smith-icon.hammering .spark {
-  animation: smith-spark 0.65s infinite;
-}
-
-@keyframes smith-strike {
-  0% {
-    transform: rotate(-30deg);
-    animation-timing-function: ease-in;
-  }
-
-  35% {
-    transform: rotate(-30deg);
-    animation-timing-function: cubic-bezier(0.6, 0, 1, 1);
-  }
-
-  50% {
-    transform: rotate(10deg);
-    animation-timing-function: ease-out;
-  }
-
-  62% {
-    transform: rotate(10deg);
-  }
-
-  100% {
-    transform: rotate(-30deg);
-  }
-}
-
-@keyframes smith-ingot-glow {
-
-  0%,
-  46% {
-    fill: #b6501f;
-  }
-
-  50% {
-    fill: #ffb04d;
-  }
-
-  64%,
-  100% {
-    fill: #d9622b;
-  }
-}
-
-@keyframes smith-ingot-glow-cool {
-
-  0%,
-  46% {
-    fill: #1f5686;
-  }
-
-  50% {
-    fill: #59a8e6;
-  }
-
-  64%,
-  100% {
-    fill: #2f6fae;
-  }
-}
-
-@keyframes smith-spark {
-
-  0%,
-  46% {
-    opacity: 0;
-  }
-
-  50%,
-  56% {
-    opacity: 1;
-  }
-
-  64%,
-  100% {
-    opacity: 0;
-  }
-}
-
-.field {
+.wave-tabs {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.85rem;
-}
-
-.field-label {
-  font-size: 0.74rem;
-  color: var(--muted);
-}
-
-.field input {
-  width: 80px;
-}
-
-/* ── Battle result card ── */
-.result-line {
-  text-align: center;
-  font-size: 1.05rem;
-  margin: 0 0 0.75rem;
-  color: var(--text);
-}
-
-.sa-score-row {
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.sa-score-label {
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-}
-
-.sa-score-value {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.sa-fields {
-  display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  gap: 1.25rem;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.75rem 0 0;
 }
 
-.sa-fields .field {
-  align-items: center;
-}
+.wave-tabs .hint { font-size: 0.8rem; margin-left: 0.5rem; }
 
-.all-members-toggle-row {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  margin-top: 1rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid var(--border);
-}
-
-.all-members-toggle {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.88rem;
+.chip-btn {
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--text);
+  padding: 0.15rem 0.7rem;
+  font: inherit;
   cursor: pointer;
 }
 
-.all-members-toggle input {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
+.chip-btn.active {
+  border-color: var(--accent-soft);
+  color: var(--accent-soft);
 }
 
-.all-members-hint {
-  font-size: 0.74rem;
-  color: var(--muted);
-  text-align: center;
+.enemy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.75rem;
 }
 
-.extra-settings {
-  width: 100%;
-  max-width: 1200px;
+.enemy-card {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  gap: 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem;
+  min-width: 0;
 }
 
-.team-page {
+.enemy-card.main { border-color: var(--accent-soft); }
+
+.enemy-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.enemy-body { min-width: 0; display: flex; flex-direction: column; gap: 0.2rem; }
+.enemy-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.enemy-stats {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.6rem;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.elem-icon { width: 16px; height: 16px; vertical-align: -3px; }
+.resist { color: var(--muted); }
+
+.enemy-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.8rem;
+  font-size: 0.82rem;
+  margin-top: 0.15rem;
+}
+
+.num {
+  width: 4.2em;
+  padding: 0.1rem 0.25rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font: inherit;
 }
 
 .team-grid {
   display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  max-width: 1200px;
-  width: 100%;
-}
-
-.exporting {
-  display: block !important;
-  width: 1200px !important;
-}
-
-.share-card-actions {
-  display: flex;
-  flex-wrap: wrap;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 0.75rem;
-  justify-content: center;
-  margin: 1rem 0;
-  width: 100%;
-  max-width: 1200px;
-}
-
-.share-card-preview {
-  display: none;
-  width: 100%;
-  max-width: 1200px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  padding: 1rem;
-  background: rgba(18, 13, 25, 0.95);
-  color: var(--text);
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.35);
-  margin-bottom: 1.5rem;
-}
-
-.share-card-grid {
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
-.share-slot {
-  background: rgba(15, 11, 21, 0.95);
-  border: 1px solid rgba(255, 209, 110, 0.15);
-  border-radius: 12px;
-  padding: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  min-height: 220px;
-}
-
-.share-slot-top {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.share-slot-kioku-image {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  border-radius: 14px;
-  background: radial-gradient(circle at top, rgba(255, 207, 109, 0.14), rgba(14, 10, 21, 1));
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.share-slot-kioku-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.share-overlay-badges {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.share-overlay-badge {
-  position: absolute;
-  min-width: 34px;
-  transform: translateX(-50%);
-  height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(15, 12, 20, 0.88);
-  color: var(--text);
-  font-size: 0.74rem;
-  text-align: center;
-  border-radius: 999px;
-  font-weight: 700;
-  padding: 0 0.35rem;
-}
-
-.share-overlay-badge.ascension {
-  left: 80%;
-  top: 0;
-}
-
-.share-overlay-badge.heart {
-  left: 20%;
-  top: 0;
-}
-
-.share-overlay-badge.magic {
-  left: 20%;
-  bottom: 0;
-}
-
-.share-overlay-badge.special {
-  left: 80%;
-  bottom: 0;
-}
-
-.share-slot-portrait-support {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.share-slot-portrait-block,
-.share-slot-support-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.share-slot-portrait-icon,
-.share-slot-support-image {
-  height: 40px;
-  object-fit: cover;
-}
-
-.share-slot-portrait-label,
-.share-slot-support-label {
-  font-size: 0.78rem;
-  color: var(--muted);
-  text-align: center;
-  max-width: 100px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.share-slot-crys-row,
-.share-slot-subcrys-row {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 0.4rem;
-  justify-content: center;
-  align-items: center;
-  min-height: 2rem;
-}
-
-.share-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.25rem 0.65rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--accent);
-  font-size: 0.78rem;
-}
-
-.subcrys-chip {
-  background: var(--accent-glow);
-}
-
-.share-slot-portrait-icon {
-  height: 40px;
-  border-radius: 8px;
-  object-fit: cover;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: var(--panel);
-}
-
-.share-enemies-grid {
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  margin-top: 0.75rem;
-}
-
-.share-enemy-slot {
-  background: rgba(15, 11, 21, 0.95);
-  border: 1px solid rgba(255, 209, 110, 0.15);
-  border-radius: 12px;
-  padding: 0.75rem;
-  min-height: 90px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.share-enemy-name {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text);
-  text-align: center;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.share-enemy-stats {
-  display: flex;
-  gap: 1.25rem;
-}
-
-.share-enemy-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.15rem;
-}
-
-.share-enemy-stat-label {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: var(--muted);
-}
-
-.share-enemy-stat-value {
-  font-size: 0.85rem;
-  color: var(--text);
-  font-variant-numeric: tabular-nums;
-}
-
-.share-enemy-toggles {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  justify-content: center;
 }
 
 .team-slot {
-  position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 20px;
-  padding: 1rem;
-  min-width: 0;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-
-.team-slot.swap-source {
-  border-color: rgba(255, 209, 110, 0.7);
-  box-shadow: 0 0 0 1px rgba(255, 209, 110, 0.35), 0 0 12px rgba(255, 209, 110, 0.2);
-}
-
-.swap-slot-btn {
-  position: absolute;
-  top: -0.6rem;
-  left: -0.6rem;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.6rem;
-  height: 1.6rem;
-  padding: 0;
   background: var(--panel);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 50%;
-  color: var(--text);
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, transform 0.1s, color 0.15s;
-}
-
-.swap-slot-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 209, 110, 0.5);
-  transform: scale(1.08);
-}
-
-.swap-slot-btn.active {
-  background: rgba(255, 209, 110, 0.18);
-  border-color: rgba(255, 209, 110, 0.75);
-  color: var(--accent);
-}
-
-.banned-banner {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--danger);
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  color: var(--text);
-  max-width: 1200px;
-  width: 100%;
-}
-
-.clear-banned-btn {
-  margin-left: auto;
-  padding: 0.2rem 0.75rem;
-  background: rgba(255, 155, 143, 0.25);
-  border: 1px solid var(--danger);
-  border-radius: var(--radius-sm);
-  color: var(--danger);
-  cursor: pointer;
-  font-size: 0.8rem;
-}
-
-.clear-banned-btn:hover {
-  background: rgba(255, 155, 143, 0.4);
-}
-
-.debug-sections {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 1200px;
-  width: 100%;
-}
-
-.debug-section-row {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.debug-section-header {
-  padding: 0.4rem 0.75rem;
-  background: rgba(255, 255, 255, 0.04);
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.debug-section-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
-.debug-section-grid .debug-slot {
-  border-right: 1px solid rgba(255, 255, 255, 0.04);
-  padding: 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5rem;
   min-width: 0;
 }
 
-.debug-section-grid .debug-slot:last-child {
-  border-right: none;
-}
+.slot-title { text-align: center; margin: 0.25rem 0 0.5rem; }
 
-.debug-slot {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.debug-slot-title {
-  margin: 0.4rem 0 0.2rem;
-  padding: 0 0.5rem;
-  font-size: 0.95rem;
-  color: var(--text);
-}
-
-.debug-pre {
-  text-align: left;
-  margin: 0;
-  font-size: 0.78rem;
-  overflow-x: auto;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.debug-contrib-table {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.3rem 0.4rem;
-}
-
-.debug-contrib-empty {
-  font-size: 0.75rem;
+.dealer-btn {
+  background: none;
+  border: 1px dashed var(--border);
+  border-radius: 999px;
   color: var(--muted);
-  padding: 0.2rem;
-}
-
-.debug-contrib-group {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.debug-contrib-group-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--muted);
-  padding: 0.1rem 0.2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.debug-contrib-row {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 0.25rem 0.35rem;
-  border-radius: 4px;
-  border-left: 2px solid rgba(255, 255, 255, 0.05);
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.15rem 0.8rem;
   cursor: pointer;
-  font-size: 0.75rem;
-  background: rgba(255, 255, 255, 0.03);
-  transition: background 0.12s, border-color 0.12s;
 }
 
-.debug-contrib-row:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-left-color: rgba(255, 209, 110, 0.55);
-}
-
-.debug-contrib-row.is-disabled {
-  background: rgba(180, 40, 40, 0.18);
-  border-left-color: rgba(200, 60, 60, 0.65);
-  color: var(--danger-soft);
-}
-
-.debug-contrib-row.is-dot-off {
-  background: rgba(245, 204, 117, 0.18);
-  border-left-color: rgba(244, 206, 102, 0.55);
-  color: var(--warning);
-}
-
-.debug-contrib-row.is-dot-on {
-  background: rgba(20, 100, 40, 0.18);
-  border-left-color: var(--success);
-  color: var(--success-soft);
-}
-
-.debug-contrib-source {
+.dealer-btn.active {
+  border-style: solid;
+  border-color: var(--accent-soft);
+  color: var(--accent-soft);
   font-weight: 600;
-  color: var(--text-light);
 }
 
-.debug-contrib-value {
-  color: var(--info);
-  font-weight: 600;
+.headline {
+  text-align: center;
+  margin: 0.5rem 0 1rem;
+}
+
+.headline-main { font-size: 1.25rem; }
+
+.sa-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: end;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.sa-score-row { width: 100%; text-align: center; }
+
+.field { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.82rem; }
+.field.inline { flex-direction: row; align-items: center; gap: 0.4rem; }
+.field input {
+  width: 8rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font: inherit;
+}
+.field.inline input { width: 4.5rem; }
+.field-label { color: var(--muted); }
+
+.table-wrap { overflow-x: auto; }
+
+.dmg-table {
+  width: 100%;
+  border-collapse: collapse;
   font-variant-numeric: tabular-nums;
 }
 
-.debug-contrib-desc {
-  font-size: 0.72rem;
-  color: var(--muted);
-  padding-left: 0.8rem;
-  line-height: 1.3;
+.dmg-table th, .dmg-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+  white-space: nowrap;
 }
 
-.debug-contrib-dot-target {
-  font-size: 0.7rem;
-  font-style: italic;
-  color: var(--muted);
-}
+.dmg-table th:first-child, .dmg-table td:first-child { text-align: left; }
+.dmg-table th { color: var(--muted); font-weight: 500; }
+.dmg-table tr.dealer td { background: rgba(255, 255, 255, 0.05); }
 
-.debug-contrib-meta {
-  display: flex;
-  gap: 0.4rem;
-  padding-left: 0.8rem;
-  flex-wrap: wrap;
-}
+.effects { margin-top: 1rem; }
+.effects summary { cursor: pointer; color: var(--accent-soft); }
 
-.debug-contrib-id {
+.link-btn {
+  background: none;
+  border: none;
   color: var(--muted);
-  font-size: 0.65rem;
-  font-family: monospace;
+  text-decoration: underline;
   cursor: pointer;
-  transition: color 0.12s, text-shadow 0.12s;
+  font: inherit;
+  margin-left: 0.5rem;
 }
 
-.debug-contrib-row:not(.is-disabled) .debug-contrib-id:hover {
-  color: var(--success);
-  text-shadow: 0 0 4px rgba(122, 247, 173, 0.55);
+.effect-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 1rem;
 }
 
-.debug-contrib-row.is-disabled .debug-contrib-id:hover {
-  color: var(--info-soft);
-  text-shadow: 0 0 4px rgba(184, 219, 255, 0.45);
+.effect-row {
+  text-align: left;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.1rem 0.5rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  margin-bottom: 0.35rem;
+  cursor: pointer;
+  font-size: 0.85rem;
 }
 
-.debug-contrib-cond {
-  color: var(--muted);
-  font-size: 0.65rem;
-  font-family: monospace;
-}
+.effect-row:hover { background: rgba(255, 255, 255, 0.04); }
+.effect-row.off { opacity: 0.45; text-decoration: line-through; }
+.effect-row.na { opacity: 0.35; cursor: default; }
+.effect-src { color: var(--muted); }
+.effect-cols .subsection-title { text-align: left; }
+.effect-type { font-family: monospace; font-size: 0.78rem; color: var(--accent-soft); text-align: right; }
+.effect-desc { grid-column: 1 / -1; }
+.stacks { grid-column: 1 / -1; color: var(--muted); }
 
-.debug-contrib-stacks {
+.sim-tools {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.3rem;
-  font-size: 0.72rem;
-  color: var(--muted);
-  padding-left: 0.8rem;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
 }
 
-.debug-contrib-stacks input {
-  width: 3.5em;
-  background: rgba(255, 255, 255, 0.05);
+.btn {
+  border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
+  padding: 0.5em 1.2em;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.08);
   color: var(--text);
-  padding: 0.1rem 0.2rem;
-  font-size: 0.72rem;
+  cursor: pointer;
 }
 
-.debug-contrib-stacks input:focus {
-  outline: 1px solid rgba(255, 209, 110, 0.45);
-  border-color: rgba(255, 209, 110, 0.45);
-}
+.btn-accent { background: var(--accent); color: #fff; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.result { font-weight: 600; }
+.result.win { color: var(--success); }
+.result.lose { color: var(--danger); }
 </style>

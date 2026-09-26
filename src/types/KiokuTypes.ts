@@ -281,6 +281,8 @@ export interface TeamSnapshot {
     stunned: boolean     // UnitCondition.CanNotAction
     isBroken: boolean
     breakedDamageReceiveRate?: number
+    isEnemyUnit?: boolean    // PvE enemy (portrait from /enemy/<id>_thumbnail.png)
+    hpGauges?: number        // remaining HP gauges of a multi-gauge enemy
 }
 
 // One thing that happened during an action, for the battle log in the UI.
@@ -308,6 +310,7 @@ export interface BattleSnapshot {
     lastTargetType?: TargetType
     actionLabel?: string     // "Follow-up" / "Extra action" / "Combo 2" (undefined for the turn's own action)
     events?: BattleEvent[]   // what the last action did (hits, DOT ticks, heals)
+    wave?: number            // set on the entry where a new enemy wave appeared
 }
 
 export interface KiokuData {

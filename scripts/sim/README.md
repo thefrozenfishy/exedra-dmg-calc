@@ -24,6 +24,13 @@ number of turns, a readable `sequence` (one line per event / unit row) and the r
 Put notes on what looks wrong in the file's `notes` field. Same seed + same teams = same battle
 (every random roll uses the seeded generator; the page keeps the battle out of Vue reactivity).
 
+## PvE
+
+    npx tsx scripts/sim/runPvE.ts <questStageMstId> [seed] [teamExport.json] [turns]
+
+Plays a quest stage with the allied team of a PvP export (default: the Heroic Grace fixture), e.g.
+509140 (Sandbox Witch, combo + rotation), 110112 (Mermaid Witch, 2 HP gauges), 509196 (3 waves).
+
 ## In-game regression fixtures
 
 `scripts/sim/fixtures/*.json` are exports (snapshots stripped) of situations checked in-game; the
