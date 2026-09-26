@@ -155,11 +155,15 @@
           <div v-for="(side, sideIdx) of [state.allies, state.enemies]">
             <div class="row">
               {{ side.sp }}
-              <div v-for="char in side.team" :key="char.id" class="character" :class="{ ko: char.isDead }">
+              <div v-for="(char, charIdx) in side.team" :key="charIdx" class="character" :class="{ ko: char.isDead }">
                 <a :href="`https://exedra.wiki/wiki/${char.name}`" target="_blank" style="display: block;"
                   :class="{ broken: char.breakCurrent <= 0 }">
                   <img :src="`/exedra-dmg-calc/kioku_images/${char.id}_thumbnail.png`" :alt="char.name"
-                    :class="{ 'at-zero': char.secondsLeft <= 0 }" />
+                    :class="{
+                      'is-actor': idx > 0 && isActor(state, sideIdx === 0, charIdx),
+                      'acts-first': idx === 0 && char.secondsLeft <= 0,
+                    }"
+                    :title="idx > 0 && isActor(state, sideIdx === 0, charIdx) ? 'Acting in this action' : (idx === 0 && char.secondsLeft <= 0 ? 'Acts first' : undefined)" />
                 </a>
                 <div class="hp-block"
                   :title="`HP ${fmt(char.hp)} / ${fmt(char.maxHp)}` + (char.barrier > 0 ? `\nBarrier ${fmt(char.barrier)} / ${fmt(char.maxBarrier)}` : '')">
@@ -175,8 +179,8 @@
                 </div>
                 <div class="status-row">
                   <template v-if="idx > 0">
-                    <span v-if="damageTo(state, sideIdx === 0, char.name)" class="dmg-text">−{{ fmt(damageTo(state, sideIdx === 0, char.name)) }}</span>
-                    <span v-if="healTo(state, sideIdx === 0, char.name)" class="heal-text">+{{ fmt(healTo(state, sideIdx === 0, char.name)) }}</span>
+                    <span v-if="damageTo(state, sideIdx === 0, charIdx, char.name)" class="dmg-text">−{{ fmt(damageTo(state, sideIdx === 0, charIdx, char.name)) }}</span>
+                    <span v-if="healTo(state, sideIdx === 0, charIdx, char.name)" class="heal-text">+{{ fmt(healTo(state, sideIdx === 0, charIdx, char.name)) }}</span>
                   </template>
                   <span v-if="char.barrier > 0" class="status-chip barrier-chip" :title="`Barrier ${fmt(char.barrier)} / ${fmt(char.maxBarrier)}`">Barrier {{ fmt(char.barrier) }}</span>
                   <span v-if="char.shields" class="status-chip shield" :title="`${char.shields} active shield(s): damage cut per hit`">Shield ×{{ char.shields }}</span>
@@ -337,15 +341,21 @@ function hpClass(hp: number, maxHp: number) {
   const r = maxHp > 0 ? hp / maxHp : 0
   return r > 0.5 ? 'hp-high' : r > 0.25 ? 'hp-mid' : 'hp-low'
 }
+// The unit performing this entry's action (matched by team + slot, since names can repeat).
+function isActor(state: BattleSnapshot, isAllies: boolean, charIdx: number) {
+  return state.lastTeamIsTeam1 === isAllies && state.lastActorPos === charIdx
+}
+
 // Sum of what the last action did to this unit (the snapshot's events belong to lastActor's action).
-function eventsFor(state: BattleSnapshot, isAllies: boolean, name: string) {
-  return (state.events ?? []).filter(e => e.target === name && e.targetIsTeam1 === isAllies)
+// Matched by team + slot (older exports without targetPos fall back to the name).
+function eventsFor(state: BattleSnapshot, isAllies: boolean, pos: number, name: string) {
+  return (state.events ?? []).filter(e => e.targetIsTeam1 === isAllies && (e.targetPos !== undefined ? e.targetPos === pos : e.target === name))
 }
-function damageTo(state: BattleSnapshot, isAllies: boolean, name: string) {
-  return eventsFor(state, isAllies, name).filter(e => e.kind !== 'heal').reduce((s, e) => s + e.amount, 0)
+function damageTo(state: BattleSnapshot, isAllies: boolean, pos: number, name: string) {
+  return eventsFor(state, isAllies, pos, name).filter(e => e.kind !== 'heal').reduce((s, e) => s + e.amount, 0)
 }
-function healTo(state: BattleSnapshot, isAllies: boolean, name: string) {
-  return eventsFor(state, isAllies, name).filter(e => e.kind === 'heal').reduce((s, e) => s + e.amount, 0)
+function healTo(state: BattleSnapshot, isAllies: boolean, pos: number, name: string) {
+  return eventsFor(state, isAllies, pos, name).filter(e => e.kind === 'heal').reduce((s, e) => s + e.amount, 0)
 }
 
 function runSimulation() {
@@ -871,10 +881,18 @@ async function importBattle(ev: Event) {
   border: 2px solid transparent;
 }
 
-.character img.at-zero {
+.character img.is-actor {
   border-color: var(--success);
   border-radius: 50%;
   border-width: 5px;
+  box-shadow: 0 0 10px var(--success);
+}
+
+.character img.acts-first {
+  border-color: var(--success);
+  border-style: dashed;
+  border-radius: 50%;
+  border-width: 3px;
 }
 
 .broken {

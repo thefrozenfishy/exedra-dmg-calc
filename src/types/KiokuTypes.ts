@@ -293,6 +293,7 @@ export interface BattleEvent {
     isCritical?: boolean
     sourceIsTeam1?: boolean
     targetIsTeam1: boolean
+    targetPos?: number       // target's slot index (names can repeat on a team)
     breakDamage?: number     // break gauge removed by this hit (after give/receive modifiers)
     broke?: boolean          // this hit broke the target
     breakRateUp?: number     // +% to the target's damage-taken-while-broken rate
@@ -303,6 +304,7 @@ export interface BattleSnapshot {
     enemies: TeamSnapshotList
     lastActor?: string
     lastTeamIsTeam1?: boolean
+    lastActorPos?: number    // slot index of the acting unit on its team (names can repeat)
     lastTargetType?: TargetType
     actionLabel?: string     // "Follow-up" / "Extra action" / "Combo 2" (undefined for the turn's own action)
     events?: BattleEvent[]   // what the last action did (hits, DOT ticks, heals)

@@ -129,6 +129,7 @@ export class PvPBattle {
             },
             lastActor: as ? as.actor.kioku.name : this.lastActor?.kioku.name,
             lastTeamIsTeam1: as ? as.actor.team.isTeam1 : this.lastTeamIsTeam1,
+            lastActorPos: as ? as.actor.posIdx : this.lastActor?.posIdx,
             lastTargetType: as ? as.type : this.lastTargetType,
             actionLabel: as?.label,
             events: this.team1.eventLog.splice(0),
@@ -181,7 +182,7 @@ export class PvPBattle {
         const last = snaps.pop()
         if (last) {
             const final = this.getCurrentState()
-            snaps.push({ ...final, lastActor: last.lastActor, lastTeamIsTeam1: last.lastTeamIsTeam1, lastTargetType: last.lastTargetType, actionLabel: last.actionLabel, events: [...(last.events ?? []), ...(final.events ?? [])] })
+            snaps.push({ ...final, lastActor: last.lastActor, lastTeamIsTeam1: last.lastTeamIsTeam1, lastActorPos: last.lastActorPos, lastTargetType: last.lastTargetType, actionLabel: last.actionLabel, events: [...(last.events ?? []), ...(final.events ?? [])] })
         } else {
             snaps.push(this.getCurrentState()) // e.g. a stunned unit's skipped turn
         }

@@ -449,7 +449,7 @@ export class KiokuState {
         const before = this.currentHp
         this.currentHp = Math.max(0, Math.min(this.maxHp, before + amount))
         const healed = this.currentHp - before
-        if (healed > 0) this.team.eventLog.push({ kind: "heal", source: source?.kioku.name, target: this.kioku.name, amount: healed, sourceIsTeam1: source?.team.isTeam1, targetIsTeam1: this.team.isTeam1 })
+        if (healed > 0) this.team.eventLog.push({ kind: "heal", source: source?.kioku.name, target: this.kioku.name, amount: healed, sourceIsTeam1: source?.team.isTeam1, targetIsTeam1: this.team.isTeam1, targetPos: this.posIdx })
         return healed
     }
 
@@ -548,7 +548,7 @@ export class KiokuState {
             const applier = detail._applierState ?? this;
             const dmg = getSlipDamageResult(applier, this, detail, damageBaseType, this.team.battleType)
             const lost = this.takeDamage(dmg)
-            this.team.eventLog.push({ kind: "dot", source: applier.kioku.name, target: this.kioku.name, amount: lost, sourceIsTeam1: applier.team.isTeam1, targetIsTeam1: this.team.isTeam1 })
+            this.team.eventLog.push({ kind: "dot", source: applier.kioku.name, target: this.kioku.name, amount: lost, sourceIsTeam1: applier.team.isTeam1, targetIsTeam1: this.team.isTeam1, targetPos: this.posIdx })
         }
     }
 
@@ -779,7 +779,7 @@ export class KiokuState {
             this.team.eventLog.push({
                 kind: "hit", source: this.kioku.name, target: target.kioku.name, amount: hpLost,
                 barrierAbsorbed: result.barrierAbsorbed, isCritical: result.isCritical,
-                sourceIsTeam1: this.team.isTeam1, targetIsTeam1: target.team.isTeam1,
+                sourceIsTeam1: this.team.isTeam1, targetIsTeam1: target.team.isTeam1, targetPos: target.posIdx,
                 breakDamage: brk.decreased, broke: brk.broke, breakRateUp: rateUp || undefined,
             })
             // Notice flags read by AttackEnd conditions: 302 counts notices that carry break
