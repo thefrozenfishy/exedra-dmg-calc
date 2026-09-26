@@ -24,6 +24,32 @@ number of turns, a readable `sequence` (one line per event / unit row) and the r
 Put notes on what looks wrong in the file's `notes` field. Same seed + same teams = same battle
 (every random roll uses the seeded generator; the page keeps the battle out of Vue reactivity).
 
+## PvE
+
+    npx tsx scripts/sim/runPvE.ts <questStageMstId> [seed] [teamExport.json] [turns]
+
+Plays a quest stage with the allied team of a PvP export (default: the Heroic Grace fixture), e.g.
+509140 (Sandbox Witch, combo + rotation), 110112 (Mermaid Witch, 2 HP gauges), 509196 (3 waves).
+
+## RNG modes and manual targeting
+
+Every random decision goes through `src/models/BattleRng.ts`: yes/no rolls (crit, buff/debuff chance) and
+choices (AI target picks, enemy skill picks). Rolls at 0% / 100% and single-option choices are decided
+directly and never touch the generator. `new PvPBattle(t1, t2, false, seed, { rngMode, decisions,
+manualTargeting })`:
+
+- `rngMode`: `"seed"` (default), `"hit"` (every real roll succeeds), `"miss"` (every real roll fails), or
+  `"manual"` (rolls follow `decisions`, else hit at >= 50%). In `hit`/`miss`, choices take the most likely option.
+- `decisions`: roll index -> `{ kind, label, value }`; only applied when the roll at that index still has the
+  same kind and label. Every snapshot carries the rolls made during it in `rngEvents`.
+- `manualTargeting` (PvE page "Manual"): target decisions throw `PendingDecision` until a pick for that
+  point is in `decisions`; the page shows the options and replays the battle from the start with the pick.
+
+Exports store `rngMode` and `decisions`, plus a readable `decisionLog` (every pick and changed roll, with
+its action number); `replayExport.ts` and `checkFixtures.ts` use them. The PvE Simulator page has its own
+export (`format: "exedra-pve-sim"`: stage, team slots, control mode, RNG settings, decisions, the decision
+the battle stopped at if any); `replayExport.ts` replays both kinds.
+
 ## In-game regression fixtures
 
 `scripts/sim/fixtures/*.json` are exports (snapshots stripped) of situations checked in-game; the

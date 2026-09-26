@@ -32,6 +32,7 @@
  *   DamageCutByBarrier(damage, defender)
  */
 
+import { rollChance, type RngSource } from "./BattleRng";
 import { KiokuState } from "./PvPTeam";
 import { SkillDetail, type AffectedUnitNotice } from "../types/KiokuTypes";
 import { CsDecimal, dec, f32 } from "./BattleMath";
@@ -211,7 +212,9 @@ export function getProcessedReceiveDamage(attacker: KiokuState, defender: KiokuS
 //   d - d * (r / 100), clamp >= 0
 export function getElementResistDamage(defender: KiokuState, damage: CsDecimal, attackElement: number): CsDecimal {
     if (!attackElement) return damage;
-    const r = CsDecimal.clamp(getProcessedElementResistRate(defender, attackElement), dec.int(-100), dec.int(100));
+    // Param.ElementResistRates[element] / 10 (decimal): enemies only (QuestEnemyAppearanceParameter).
+    const intrinsic = defender.enemy ? dec.int(defender.enemy.resistRates[attackElement] ?? 0).div(dec.int(10)) : CsDecimal.Zero;
+    const r = CsDecimal.clamp(getProcessedElementResistRate(defender, attackElement, intrinsic), dec.int(-100), dec.int(100));
     const out = damage.sub(damage.mul(r.div(dec.int(100))));
     return out.le(CsDecimal.Zero) ? CsDecimal.Zero : out;
 }
@@ -230,7 +233,7 @@ export interface CorrelationEffectResult {
     isWeakHit: boolean;
 }
 export function computeCorrelationEffect(attacker: KiokuState, defender: KiokuState, attackElement: number): CorrelationEffectResult {
-    if (!isMatchWeakElement(attackElement, defender)) return { elementDamageRatio: 1, isWeakHit: false };
+    if (attacker.enemy || !isMatchWeakElement(attackElement, defender)) return { elementDamageRatio: 1, isWeakHit: false };
     let ratio = f32(1.2);
     for (const up of weakElementUpRatios(attacker)) ratio = f32(f32(up / 100) + ratio);
     return { elementDamageRatio: ratio, isWeakHit: true };
@@ -257,8 +260,14 @@ export function getAddedCriticalDamage(attacker: KiokuState, defender: KiokuStat
 // ---------------------------------------------------------------------------
 // GetDifficultyCorrectedDamage (0x137dd90) - only for PvE quest enemies; no-op for PvP.
 // ---------------------------------------------------------------------------
-export function getDifficultyCorrectedDamage(_attacker: KiokuState, _defender: KiokuState, damage: CsDecimal): CsDecimal {
-    return damage;
+// [CONFIRMED 3.19] BattleDamageCalculator.GetDifficultyCorrectedDamage (0x137dd90): an enemy attacker
+// against a character: d + d * (ElementAimDamageRates[defender.Element] / 1000) ("Aim").
+const ELEMENT_NUMBER: Record<string, number> = { Flame: 1, Aqua: 2, Forest: 3, Light: 4, Dark: 5, Void: 6 };
+export function getDifficultyCorrectedDamage(attacker: KiokuState, defender: KiokuState, damage: CsDecimal): CsDecimal {
+    if (!attacker.enemy || defender.enemy) return damage;
+    const rate = attacker.enemy.aimDamageRates[ELEMENT_NUMBER[defender.kioku.data.element as string] ?? 0] ?? 0;
+    if (!rate) return damage;
+    return damage.add(damage.mul(dec.int(rate).div(dec.int(1000))));
 }
 
 // ---------------------------------------------------------------------------
@@ -311,7 +320,9 @@ export interface DamageOptions {
     isMainTarget?: boolean;
     // Force the crit outcome (manual override in the UI); otherwise rolled with `rng`.
     forceCrit?: boolean;
-    rng?: () => number;
+    rng?: RngSource;
+    // Shown for the crit roll in the battle's RNG log (BattleRng).
+    rngLabel?: string;
     // Precomputed damage base (AdditionalDamageAbilityEffect overrides GetDamageBase).
     damageBaseOverride?: CsDecimal;
     // Attack element override (additional damage uses the attacker's own element).
@@ -353,7 +364,7 @@ export function getAttackDamageResult(attacker: KiokuState, defender: KiokuState
     const chance = critChance(attacker, defender);
     const isCritical = opts.isNoCritNoBarrier ? false
         : opts.forceCrit !== undefined ? opts.forceCrit
-            : f32((opts.rng ?? Math.random)() * 100) < chance;
+            : rollChance(opts.rng ?? Math.random, chance, "crit", () => opts.rngLabel ?? `${attacker.kioku.name} → ${defender.kioku.name} crit`, r => f32(r * 100) < chance);
     if (isCritical) d = step("crit", getAddedCriticalDamage(attacker, defender, d));
 
     d = step("difficulty", getDifficultyCorrectedDamage(attacker, defender, d));

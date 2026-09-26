@@ -35,6 +35,8 @@
  * there is no DWN_ATK_FIXED / DWN_DEF_FIXED / DWN_ELEMENT_RESIST_RATIO class at all.
  */
 
+import { NEGATIVE_STATE_TYPES } from "./EffectTargetSide";
+import { rollChance, type RngSource } from "./BattleRng";
 import { KiokuState, isAlimentEffect } from "./PvPTeam";
 import { SkillDetail, aggro } from "../types/KiokuTypes";
 import { elementMap, roleMap } from "../types/enums";
@@ -470,7 +472,7 @@ function sumRatioTypes(unit: KiokuState, types: string[], scale: number): number
 // AbilityEffectInfo.EffectValue1 is `int`, not a /1000 or /10 ratio), matching
 // CompareContent.CHARGE_POINT's sibling read of `currentMagic` also being unscaled.
 export function getThreatWeight(unit: KiokuState): number {
-    let weight = aggro[unit.kioku.data.role];
+    let weight = aggro[unit.kioku.data.role as keyof typeof aggro] ?? 0; // enemies: not in GetUnitWeightDic (CharacterParameter only)
     for (const d of orderedActiveEffectsInApplicationOrder(unit)) {
         if (d.abilityEffectType === "UP_HATE") weight += d.value1;
         else if (d.abilityEffectType === "DWN_HATE") weight -= d.value1;
@@ -528,12 +530,12 @@ export function getMaxComboActionNum(unit: KiokuState): number {
 //
 // GetTotalEffectHitRate (BattleUnit$$GetTotalEffectHitRate), [CONFIRMED shape]:
 //     rate = 0
-//     if (<a vtable condition on the state not fully identified>) rate += GetProcessedEffectHitRate()   // this unit's own accumulated UP_EFFECT_HIT_RATE_RATIO-style bonus
+//     if (state.Direction == Negative) rate += GetProcessedEffectHitRate()   // [CONFIRMED 3.19] vtable slot 6 = get_Direction   // this unit's own accumulated UP_EFFECT_HIT_RATE_RATIO-style bonus
 //     if (state is AbnormalUnitStateBase) rate += GetAllAbnormalHitRate() / 100              // additional bonus, aliments only
 //     return Max(rate + 1, 0)
 //
 // GetTotalEffectParryRate (BattleUnit$$GetTotalEffectParryRate), [CONFIRMED shape]:
-//     rate = <same vtable condition> ? GetProcessedEffectParryRate() : 0
+//     rate = state.Direction == Negative ? GetProcessedEffectParryRate() : 0
 //     return Clamp(1 - rate, 0, 1)
 //
 // GetTotalSecondaryEffectParryRate (BattleUnit$$GetTotalSecondaryEffectParryRate),
@@ -583,16 +585,25 @@ function getTotalSecondaryEffectParryRate(target: KiokuState, isAliment: boolean
  * applying the effect (its hit-rate bonuses apply); `target` is the unit it's being
  * applied to (its parry/resist bonuses apply). Returns true = applies normally.
  */
-export function rollAppliesEffect(detail: SkillDetail, caster: KiokuState | undefined, target: KiokuState, rng: () => number = Math.random): boolean {
+export function rollAppliesEffect(detail: SkillDetail, caster: KiokuState | undefined, target: KiokuState, rng: RngSource = Math.random): boolean {
+    const label = () => `${caster ? unitLabel(caster) : "?"} → ${unitLabel(target)}: ${detail.abilityEffectType}${detail.description ? ` (${detail.description})` : ""}`
     if (detail.isFixedProbability) {
-        return rng() * 100 < detail.probability;
+        return rollChance(rng, detail.probability, "effect", label, r => r * 100 < detail.probability);
     }
     const isAliment = isAlimentEffect(detail.abilityEffectType);
-    const hitRate = caster ? getTotalEffectHitRate(caster, isAliment) : 1;
-    const parryRate = getTotalEffectParryRate(target);
+    // [CONFIRMED 3.19] hit rate and parry rate only apply to Negative-direction states (debuffs);
+    // previously a buff on an ally with some debuff resistance became e.g. a 97% roll.
+    const isNegative = NEGATIVE_STATE_TYPES.has(detail.abilityEffectType);
+    const hitRate = caster && isNegative ? getTotalEffectHitRate(caster, isAliment) : 1;
+    const parryRate = isNegative ? getTotalEffectParryRate(target) : 1;
     const secondaryParryRate = getTotalSecondaryEffectParryRate(target, isAliment);
     const finalProbability = Math.min(Math.max(hitRate * parryRate * secondaryParryRate * detail.probability, 0), 100);
-    return rng() * 1000 < finalProbability * 10;
+    return rollChance(rng, finalProbability, "effect", label, r => r * 1000 < finalProbability * 10);
+}
+
+// "Name (Ally 2)" - names repeat (mirrored teams), so the side and slot are part of the label.
+export function unitLabel(k: KiokuState): string {
+    return `${k.kioku.name} (${k.team?.isTeam1 ? "Ally" : "Enemy"} ${k.posIdx + 1})`
 }
 
 // ---------------------------------------------------------------------------

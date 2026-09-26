@@ -7,7 +7,7 @@ Also take note that you get 5 MP each time you get attacked by the enemy, and as
 
 ### Breaker teams
 
-This is by far the most common setup, and probably what you should aim for and also what your opponents usually will be playing. The two key aspects to consider are: AV at battle start and AA (Action advance) on BS (Battle Skill) and break. Check your values in a PvE match, or using the [PvP Calculator](http://localhost:5173/exedra-dmg-calc/#/pvp-simulator). Your win condition is simple, if you break before you get broken you are in a winning position.
+This is by far the most common setup, and probably what you should aim for and also what your opponents usually will be playing. The two key aspects to consider are: AV at battle start and AA (Action advance) on BS (Battle Skill) and break. Check your values in a PvE match, or using the [PvP Simulator](http://localhost:5173/exedra-dmg-calc/#/pvp-simulator). Your win condition is simple, if you break before you get broken you are in a winning position.
 
 The reason breaking is so important is because breaking a Kioku applies a 25% AD (Slow / Action Delay / Opposite of AA) to the target(s) and triggers your on break effects. Notable on break effects being Pluvia☆Magica's 10 MP on break, HG (Heroic Grace)'s AA on break, and breaker A4 (Ascension 4) AA on break. Break effects trigger after any action, meaning they can be triggered multiple times as long as you don't break all enemies in the same attack.
 

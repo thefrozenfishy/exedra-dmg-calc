@@ -1,3 +1,58 @@
+# Revision 8 - PvE: quest stages on the battle engine (3.19.0)
+
+Trigger: the Single Battle Calculator page moves from the old ScoreAttackTeam formula to the engine, with
+stage selection, a max-damage view and a battle simulator. Porting specs from the decompile:
+`PVE_PARAMS_3.19.md` (unit parameters, break, policies) and `PVE_ENEMY_AI_3.19.md` (enemy AI).
+Master data: merged the local `main` commit "Add more Mst for testing" (EnemyMst, BreakMst, QuestGroupMst,
+QuestEnemySkillSetMst, EnemyConditionSetsAndActionMst, ScoreAttackStageMst, ...). PvP replays are unchanged.
+
+## R8.1 Enemy units (`PvE.ts`, `EnemyKioku`)
+- [CONFIRMED] QuestEnemyAppearanceParameter: raw atk/def/hp/speed, crit per-mille like characters, no
+  element / role / EP. Passive = passiveSkillMstId at level 1 (keyed directly, not id*100+lvl). Skill details
+  of enemy skills are keyed by the skill id itself.
+- [CONFIRMED] Element resist (rate/10, clamped +-100) now uses the enemy's intrinsic rates; weak hits need a
+  character attacker; "Aim" (GetDifficultyCorrectedDamage): enemy -> character damage x (1 + aim/1000) by the
+  character's element.
+- [CONFIRMED] Break from BreakMst: gauge = breakPoint (0 = unbreakable), slow ratio, initial/max broken rate,
+  rate increase (only from character hits), per-turn regen at TurnBegin while not broken. `KiokuState.breakParams`
+  replaces the hard-coded PvP policy values. Broken + unable to act stays broken at TurnBegin (all units).
+- [CONFIRMED] Characters have no break gauge outside PvP/GvG (CharacterParameter isPvpOrGvg = false).
+- [CONFIRMED] DMG_RATIO: floor(HP * v1/1000) (or MaxHP * v2/1000), capped at HP - 1, no modifiers.
+- [CONFIRMED] HP gauges: dead only at 0 HP with < 2 gauges left; revive after the act (full HP, break reset,
+  debuffs removed). [UNCERTAIN] the revive's turn gauge is read as "acts next".
+- Enemies gain no EP.
+
+## R8.2 Enemy AI
+- [CONFIRMED] Condition rows (priority asc, OR over condition sets, one-shot rows consumed) first, then a
+  weighted pick over skills with a target (weight -1 = condition-only, all-0 weights = uniform). Broken
+  enemies skip their action. Damage targeting: pure role aggro roll (Defender 15, Healer/Buffer/Debuffer 10,
+  Attacker/Breaker 5, + hate states).
+- [CONFIRMED] BattleStart/WaveStart condition rows run once as start-timing acts before the first turn.
+- [CONFIRMED] Combo enemies act N times per turn with ComboActionStep conditions.
+- [RESOLVED] TurnNum is +1 per finished turn, not per act: Forward's +1 is undone by a -1 right after
+  CreateTurnActUnitOrderInfo; the real increment is BattleUnit.PassingTurn in ActExecutor.TurnEnd. See
+  PVE_ENEMY_AI_3.19.md section 1.4.
+- Not simulated: summons (SUMMON skills are never picked), mode changes, countdowns, link HP.
+- Waves: the next wave replaces a cleared one; [APPROXIMATION] its passives run as BATTLE_START.
+
+## R8.3 Engine changes that also apply to PvP
+- `KiokuState.turnNum` (starts 1, +1 per finished turn at TurnEnd) drives TURN (7) / EVERY_N_TURN (13) conditions, which
+  were always evaluated with TurnNum 0 before.
+- [CONFIRMED] UnitBrain.TargetingUnits: one opponent and one friendly target per skill; every single /
+  proximity effect on that side uses it (`actionPrimaryTargets`). Before, each effect picked its own target,
+  e.g. Assault Paranoia's crit-received-up and curse could land on a different enemy than its damage. The four
+  in-game fixtures and the user exports replay identically.
+- Open: the parser ANDs the condition sets of a csv (`isConditionSetActiveForPvP`), the game ORs them
+  (IsMatchConditionSets = sets.Any). Enemy actions use OR; character effects are unchanged for now.
+
+## R8.4 Max damage (`MaxDamage.ts`)
+- Every state the team can produce (active skills, passives, crystalis, portraits, supports, follow-up
+  skills) at full stacks with conditions assumed met; self-range effects only on their caster; self-range
+  debuffs (drawbacks) are not put on enemies. Each member's ultimate / skill / basic attack goes through
+  getAttackDamageResult (+ ADDITIONAL_DAMAGE hits) against the selected wave, with and without crit.
+- Score Attack score: same estimate formula as the old page (the real formula is server/UI side, not in the
+  battle core - see PVE_PARAMS_3.19.md section 4).
+
 # Revision 7 - passive triggers (3.19.0)
 
 Trigger: Thunder Torrent's battle-start HASTE had no effect on this branch.

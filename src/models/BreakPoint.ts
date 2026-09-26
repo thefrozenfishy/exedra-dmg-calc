@@ -10,7 +10,6 @@ import type { KiokuState } from "./PvPTeam";
 import type { SkillDetail } from "../types/KiokuTypes";
 import { KiokuRole } from "../types/enums";
 import { statesOf } from "./UnitStateEngine";
-import { PVP_POLICY } from "./DamageCalculator";
 
 // Network.Definition.Battle.SkillType
 export const SkillType = { ActiveSkill: 1, SpecialAttack: 2, NormalAttack: 3, AdditionalSkill: 4, EtherBlow: 5 } as const
@@ -129,7 +128,6 @@ const ROLE_BASE: Record<string, number> = {
     [KiokuRole.Attacker]: 5, [KiokuRole.Breaker]: 20, [KiokuRole.Healer]: 10,
     [KiokuRole.Defender]: 10, [KiokuRole.Buffer]: 12, [KiokuRole.Debuffer]: 12,
 };
-const INCREASE_RATE = 1000;
 
 function processedBreakedDamageReceiveRatio(attacker: KiokuState): number {
     let r = 100;
@@ -147,11 +145,14 @@ function processedBreakedDamageReceiveRatio(attacker: KiokuState): number {
 
 export function increaseBreakedDamageReceiveRate(attacker: KiokuState, defender: KiokuState, detail: SkillDetail): number {
     if (!(defender.maxBreakGauge >= 1 && defender.currentRemainingBreakGauge < 1)) return 0;
+    // Only hits from characters (BattleUnit.isCharacter) grow the rate.
+    if (attacker.enemy) return 0;
+    const params = defender.breakParams;
     const v5: number = (detail as any).value5 ?? 0;
     const base = v5 ? f32(v5 / 10) : (ROLE_BASE[attacker.kioku.data.role] ?? 0);
     const ratio = processedBreakedDamageReceiveRatio(attacker);
-    const inc = Math.floor(f32(f32(f32(INCREASE_RATE / 1000) * f32(f32(ratio / 100) + 1)) * base));
-    const max = PVP_POLICY.maxBreakDamageReceiveRate / 10;
+    const inc = Math.floor(f32(f32(f32(params.increaseRate / 1000) * f32(f32(ratio / 100) + 1)) * base));
+    const max = Math.trunc(params.maxRate / 10);
     const before = defender.breakedDamageReceiveRate;
     defender.breakedDamageReceiveRate = Math.min(before + inc, max);
     return defender.breakedDamageReceiveRate - before;

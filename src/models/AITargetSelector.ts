@@ -80,10 +80,11 @@
  * re-checked; anything in "NOT YET PORTED" above has not been read at all).
  */
 
+import { rollChoice, type RngSource } from "./BattleRng";
 import { KiokuState, compareTurnOrder } from "./PvPTeam";
 import { SkillDetail } from "../types/KiokuTypes";
 import { KiokuRole } from "../types/enums";
-import { getProcessedAtk, getThreatWeight } from "./UnitStateEngine";
+import { getProcessedAtk, getThreatWeight, unitLabel } from "./UnitStateEngine";
 import { isMatchWeakElement } from "./DamageCalculator";
 
 export type UnitFilter = (units: KiokuState[]) => KiokuState[];
@@ -91,8 +92,12 @@ export type UnitFilter = (units: KiokuState[]) => KiokuState[];
 // The battle's seeded RNG while selectFullAutoTarget runs. Filter chains are built by
 // per-effect-type factories that don't take an rng, and the weighted-random filter used to fall
 // back to Math.random - so the same seed could pick different targets (exports didn't replay).
-let activeRng: () => number = Math.random;
-const currentRng = () => activeRng();
+// Now an RngSource (a BattleRng records every real pick as a "target" event); `activeLabel`
+// names the decision in that record (set by selectFullAutoTarget).
+let activeRng: RngSource = Math.random;
+let activeLabel = "target";
+const currentRng = (): RngSource => activeRng;
+const namesOf = (units: KiokuState[]) => () => units.map(unitLabel);
 
 // =============================================================================
 // Core algorithm - ReDriveBattleCore.AI.AISkillTargetSelector$$SelectTargetUnitInOrder
@@ -100,7 +105,7 @@ const currentRng = () => activeRng();
 export function selectTargetUnitInOrder(
     initialCandidates: KiokuState[],
     filterChain: UnitFilter[],
-    rng: () => number = currentRng
+    rng: RngSource = currentRng()
 ): KiokuState | null {
     let candidates = initialCandidates;
     for (const filterFn of filterChain) {
@@ -110,7 +115,7 @@ export function selectTargetUnitInOrder(
         // filtered.length === 0: this filter would leave nobody - skip it, candidates unchanged.
     }
     if (candidates.length === 0) return null;
-    return candidates[Math.floor(rng() * candidates.length)];
+    return candidates[rollChoice(rng, candidates.map(() => 1), "target", () => activeLabel, namesOf(candidates))];
 }
 
 // =============================================================================
@@ -191,19 +196,14 @@ export const filterMatchWeakElement = (element: number): UnitFilter =>
 // [0, totalWeight)), then walk the dictionary summing weights until the running total
 // EXCEEDS roll (strict >), returning whichever unit's weight pushed it over. See
 // getThreatWeight (UnitStateEngine.ts) for the per-unit weight (role base + active hate).
-export const filterByRoleAtWeightedRandomWithHate = (rng: () => number = currentRng): UnitFilter =>
+export const filterByRoleAtWeightedRandomWithHate = (rng?: RngSource): UnitFilter =>
     (units) => {
         if (units.length === 0) return units;
         const weights = units.map(getThreatWeight);
         const totalWeight = weights.reduce((a, b) => a + b, 0);
         if (totalWeight <= 0) return [];
-        const roll = Math.floor(rng() * totalWeight); // [0, totalWeight)
-        let cumulative = 0;
-        for (let i = 0; i < units.length; i++) {
-            cumulative += weights[i];
-            if (cumulative > roll) return [units[i]];
-        }
-        return [units[units.length - 1]]; // unreachable if totalWeight > 0; defensive only
+        // roll = floor(r * totalWeight) in [0, totalWeight), first unit whose running total exceeds it.
+        return [units[rollChoice(rng ?? currentRng(), weights, "target", () => `${activeLabel} (aggro)`, namesOf(units))]];
     };
 
 // [CONFIRMED] Haste/Slow's own local filter functions both delegate to
@@ -522,18 +522,41 @@ function genericFallbackChain(): AIChain {
 export function selectFullAutoTarget(
     detail: SkillDetail,
     candidates: KiokuState[],
-    rng: () => number = Math.random
+    rng: RngSource = Math.random,
+    actor?: KiokuState,
 ): KiokuState | null {
     const previous = activeRng
+    const previousLabel = activeLabel
     activeRng = rng
+    activeLabel = `${actor ? unitLabel(actor) : "?"} target: ${detail.abilityEffectType}`
     try {
+        // [CONFIRMED 3.19] DamageAbilityEffectBase.SelectTargetInAIAction (0x18ef290): an ENEMY attacker uses
+        // only UnitFilterByRoleAtWeightedRandomWithHate (role weight + hate states), no break / main target /
+        // weak-element filters.
+        if (actor?.enemy && detail.abilityEffectType.startsWith("DMG_")) {
+            const alive = filterAlive(candidates)
+            return alive.length ? selectTargetUnitInOrder(alive, [filterByRoleAtWeightedRandomWithHate(rng)], rng) : null
+        }
         return selectFullAutoTargetInner(detail, candidates, rng)
     } finally {
         activeRng = previous
+        activeLabel = previousLabel
     }
 }
 
-function selectFullAutoTargetInner(detail: SkillDetail, candidates: KiokuState[], rng: () => number): KiokuState | null {
+// Manual targeting (PvE "Manual" mode): every unit the player could pick for this effect, before the
+// AI's preference filters - the living units of the side (the dead for revival), narrowed by the
+// effect's own GetAIFilteredTargets pre-filter when it has one.
+export function legalTargetPool(detail: SkillDetail, candidates: KiokuState[]): KiokuState[] {
+    if (detail.abilityEffectType.startsWith("DMG_")) return filterAlive(candidates)
+    const getChain = CHAIN_BY_EFFECT_TYPE[detail.abilityEffectType];
+    const { preFilter, wantsDead } = (getChain ?? genericFallbackChain)();
+    const base = wantsDead ? candidates.filter(u => u.isDead) : filterAlive(candidates);
+    const eligible = preFilter ? preFilter(base) : base;
+    return eligible.length ? eligible : base
+}
+
+function selectFullAutoTargetInner(detail: SkillDetail, candidates: KiokuState[], rng: RngSource): KiokuState | null {
     if (detail.abilityEffectType.startsWith("DMG_")) {
         const alive = filterAlive(candidates);
         if (alive.length === 0) return null;

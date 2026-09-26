@@ -1,3 +1,4 @@
+import type { RngEvent } from "../models/BattleRng";
 import { PvPTeam, KiokuState } from "../models/PvPTeam";
 import { crystalises, crystalisesByStyle, portraits, passiveDetails, passiveBase } from "../utils/helpers";
 import { elementMap, KiokuElement, KiokuRole, SupportKey } from "./enums";
@@ -262,6 +263,7 @@ export interface TeamSnapshot {
     baseSpd: number
     buffs: string[]
     debuffs: string[]
+    ailments?: string[]      // burn / curse / poison / stun / vortex / weakness / wound (not in debuffs)
     magicStacks: number
     maxMagicStacks: number
     secondsLeft: number
@@ -281,6 +283,8 @@ export interface TeamSnapshot {
     stunned: boolean     // UnitCondition.CanNotAction
     isBroken: boolean
     breakedDamageReceiveRate?: number
+    isEnemyUnit?: boolean    // PvE enemy (portrait from /enemy/<id>_thumbnail.png)
+    hpGauges?: number        // remaining HP gauges of a multi-gauge enemy
 }
 
 // One thing that happened during an action, for the battle log in the UI.
@@ -308,6 +312,8 @@ export interface BattleSnapshot {
     lastTargetType?: TargetType
     actionLabel?: string     // "Follow-up" / "Extra action" / "Combo 2" (undefined for the turn's own action)
     events?: BattleEvent[]   // what the last action did (hits, DOT ticks, heals)
+    wave?: number            // set on the entry where a new enemy wave appeared
+    rngEvents?: RngEvent[]   // real random rolls made during this action (BattleRng)
 }
 
 export interface KiokuData {

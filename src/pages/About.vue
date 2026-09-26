@@ -24,7 +24,7 @@
                 Calculator</b>. The damage calc is based on the <a
                 href="https://docs.google.com/spreadsheets/d/1AZhIqAazG_B99bxPWBbsMxKJ_hF24wwiXProgSshsmk/edit?usp=sharing">Exedra
                 Damage Calculator Sheet</a> if you wish to input data manually</p>
-        <p><b>PvP Calculator</b> is made to calculate spd and turn orders, but do be aware that there are many quicks in
+        <p><b>PvP Simulator</b> is made to calculate spd and turn orders, but do be aware that there are many quicks in
             pvp, not all are captured in the calculator, so trust the first few actions mostly.</p>
 
         <h1>Debug stuff</h1>

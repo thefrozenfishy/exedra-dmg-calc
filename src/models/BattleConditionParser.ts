@@ -422,11 +422,9 @@ function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state
         case CompareContent.EP:
             return compareInt(cond.compareOperator, battleUnit.currentMp, cond.compareValue);
         case CompareContent.TURN:
-            // [RECONSTRUCTED] "TurnNum" - the source's own turn counter on BattleUnit.
-            // This port doesn't track a per-unit "how many turns have I taken" counter
-            // anywhere - approximated as 0 (i.e. this condition will only match
-            // `TURN == 0`-style checks correctly). Flagged - see MISSING_AND_UNCERTAIN.md.
-            return compareInt(cond.compareOperator, 0, cond.compareValue);
+            // [CONFIRMED 3.19] BattleUnitConditionChecker$$Check case 7 reads BattleUnit.TurnNum
+            // (+0x88): starts at 1, +1 per finished turn - see KiokuState.turnNum.
+            return compareInt(cond.compareOperator, battleUnit.turnNum, cond.compareValue);
         case CompareContent.IS_ACTOR:
             // [CONFIRMED shape, RECONSTRUCTED wiring] leftValue = (trueActorUnit != null
             // && trueActorUnit.Id == battleUnit.Id). This needs `state.trueActorUnit` -
@@ -449,21 +447,21 @@ function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state
             return compareAbilityEffectList(cond.compareOperator, types, cond.compareValue);
         }
         case CompareContent.EVERY_N_TURN: {
-            // [CONFIRMED] CompareValue parsed as "N" or "N,offset" (offset defaults to
-            // 1). True iff TurnNum >= offset AND (TurnNum - offset) % N == 0. Uses the
-            // same approximated TurnNum=0 as CompareContent.TURN above - flagged.
+            // [CONFIRMED] CompareValue parsed as "N" or "N,offset" (offset missing, empty or < 1 -> 1).
+            // True iff TurnNum >= offset AND (TurnNum - offset) % N == 0.
             const parts = cond.compareValue.split(",");
-            const n = Math.max(1, Number(parts[0]));
-            const offset = parts.length > 1 && !Number.isNaN(Number(parts[1])) ? Number(parts[1]) : 1;
-            const turnNum = 0; // see CompareContent.TURN note above
+            const n = Math.max(1, Number(parts[0]) || 1);
+            const parsedOffset = parts.length > 1 ? Number(parts[1]) : NaN;
+            const offset = Number.isNaN(parsedOffset) || parsedOffset < 1 ? 1 : parsedOffset;
+            const turnNum = battleUnit.turnNum;
             if (turnNum < offset) return false;
             return (turnNum - offset) % n === 0;
         }
         case CompareContent.CHARACTER:
             return compareInt(cond.compareOperator, battleUnit.kioku.data.id, cond.compareValue);
         case CompareContent.HP_GAUGE_COUNT:
-            // [NOT IMPLEMENTED] multi-HP-gauge PvE boss mechanic, not applicable to 1v1 PvP.
-            return false;
+            // [CONFIRMED 3.19] CurrentHpGaugeCount (enemies; characters have none).
+            return compareInt(cond.compareOperator, battleUnit.enemy?.hpGaugeCount ?? 0, cond.compareValue);
         case CompareContent.IS_BREAK:
             return compareBool(cond.compareOperator, battleUnit.isBroken, cond.compareValue);
         case CompareContent.CHARGE_POINT:

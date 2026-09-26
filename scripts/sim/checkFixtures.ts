@@ -19,7 +19,7 @@ let failed = 0;
 for (const c of CASES) {
     const d = parseExport(fs.readFileSync(new URL(`./fixtures/${c.file}`, import.meta.url), "utf8"));
     const [a, e] = buildPvPKiokus(d.slots);
-    const b = new PvPBattle(new PvPTeam(a, "Ally"), new PvPTeam(e, "Enemy"), false, d.seed);
+    const b = new PvPBattle(new PvPTeam(a, "Ally"), new PvPTeam(e, "Enemy"), false, d.seed, { rngMode: d.rngMode, decisions: d.decisions });
     const snaps: BattleSnapshot[] = [b.getCurrentState()];
     while (snaps.length <= c.action && !b.isOver) snaps.push(...b.executeNextAction());
     const s = snaps[c.action] ?? { lastActor: "<battle over>" } as BattleSnapshot;
