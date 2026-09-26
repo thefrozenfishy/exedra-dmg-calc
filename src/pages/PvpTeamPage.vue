@@ -114,6 +114,7 @@
               <span class="turn">Action {{ idx }}</span>
               <span class="actor">{{ state.lastActor }}</span>
               <span class="action"> {{ skillTranslate[state.lastTargetType] }} </span>
+              <span v-if="state.actionLabel && state.lastTargetType !== TargetType.fuaId" class="sub-action-tag">{{ state.actionLabel }}</span>
             </div>
             <div v-else>
 
@@ -208,6 +209,7 @@ const skillTranslate = {
   [TargetType.attackId]: "Basic Attack",
   [TargetType.specialId]: "Ultimate",
   [TargetType.skillId]: "Battle Skill",
+  [TargetType.fuaId]: "Follow-up",
 
 }
 
@@ -344,15 +346,16 @@ function runSimulation() {
   }
   if (battleOutput.value.length > 1) return // Only run sim once
 
-  const states = []
-  for (let index = 0; index < 30; index++) {
-    battleInstance.value.traverseToNextActor()
-    states.push(battleInstance.value.getCurrentState())
+  // One entry per executed skill: turn actions, ultimates, extra actions, combo steps and
+  // follow-ups each get their own "Action N" (executeNextAction returns them in order).
+  const states: BattleSnapshot[] = [battleInstance.value.getCurrentState()]
+  for (let turn = 0; turn < 30; turn++) {
     try {
-      battleInstance.value.executeNextAction()
+      states.push(...battleInstance.value.executeNextAction())
     } catch (e) {
       toast.warning(e)
       console.warn("Failed to execute next action:", e)
+      break
     }
   }
   battleOutput.value = states
@@ -892,6 +895,17 @@ function runSimulation() {
 .status-chip.shield { color: var(--info); border-color: var(--info); }
 .status-chip.broken-chip { color: var(--warning); border-color: var(--warning); }
 .status-chip.stun { color: var(--danger); border-color: var(--danger); }
+
+.sub-action-tag {
+  margin-left: 0.5rem;
+  font-size: 0.7em;
+  font-weight: 600;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  opacity: 0.85;
+  vertical-align: middle;
+}
 
 .break-text { color: var(--warning); font-size: 0.9em; }
 .break-tag {

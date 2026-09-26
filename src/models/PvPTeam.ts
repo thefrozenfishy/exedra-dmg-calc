@@ -189,6 +189,18 @@ interface FuaTrigger {
 }
 type FuaMap = Record<number, FuaTrigger>;
 
+// AffectedUnitNotice op_Addition: one notice per unit per skill, hits summed and flags OR-ed.
+function mergeNotice(a: AffectedUnitNotice | undefined, b: AffectedUnitNotice): AffectedUnitNotice {
+    if (!a) return b
+    const out: any = { ...a }
+    for (const [key, v] of Object.entries(b)) {
+        if (typeof v === "number") out[key] = (out[key] ?? 0) + v
+        else if (typeof v === "boolean") out[key] = !!out[key] || v
+        else if (v !== undefined) out[key] = v
+    }
+    return out
+}
+
 // Follow-ups currently executing (see triggerFua).
 const runningFollowUps = new Set<string>()
 
@@ -738,7 +750,7 @@ export class KiokuState {
             // bonus info (the unit broke THIS skill), 108/308 the broken rate reaching its max.
             result.notice.isBreak = brk.broke
             if (rateUp > 0 && target.breakedDamageReceiveRate >= PVP_POLICY.maxBreakDamageReceiveRate / 10) result.notice.isBreakedDamageReceiveRateBecomeMax = true
-            target.lastNotice = result.notice;
+            target.lastNotice = mergeNotice(target.lastNotice, result.notice);
             // [CONFIRMED 3.19] Condition$$IsMatchCondition builds a team check from the notices
             // whose affected unit belongs to THAT team (lambda b__12), so a notice belongs to the
             // TARGET's team. (It used to go to the attacker's team, inverting FriendTeam /
@@ -814,7 +826,7 @@ export class KiokuState {
                 const newMax = Math.max(t.maxBarrierEndurance, cap)
                 t.maxBarrierEndurance = newMax
                 t.barrierEndurance = Math.min(newMax, t.barrierEndurance + grant)
-                t.lastNotice = { ...emptyNotice(), isBarrierAdded: true };
+                t.lastNotice = mergeNotice(t.lastNotice, { ...emptyNotice(), isBarrierAdded: true });
             })
             return;
         }
@@ -982,7 +994,7 @@ export class KiokuState {
             const healAmount = Math.floor(detail.value1 / 1000 * this.kioku.getBaseAtk() * (Math.pow(this.kioku.getBaseAtk() / 124, 1.2) + 12) / 20);
             effTargets.forEach(t => {
                 const healed = t.heal(healAmount, this);
-                if (healed > 0) t.lastNotice = { ...emptyNotice(), isReceivedRecovery: true };
+                if (healed > 0) t.lastNotice = mergeNotice(t.lastNotice, { ...emptyNotice(), isReceivedRecovery: true });
             })
         } else if (detail.abilityEffectType === "REVIVAL_RATIO") {
             // [NEWLY IMPLEMENTED - was entirely absent] ReDriveBattleCore.AbilityEffect.
@@ -998,7 +1010,7 @@ export class KiokuState {
             effTargets.filter(t => t.isDead).forEach(t => {
                 const hp = Math.ceil((detail.value1 / 100) * t.maxHp);
                 t.heal(hp, this);
-                t.lastNotice = { ...emptyNotice(), isReceivedRecovery: true };
+                t.lastNotice = mergeNotice(t.lastNotice, { ...emptyNotice(), isReceivedRecovery: true });
             })
         } else if (detail.abilityEffectType === "ADDITIONAL_SKILL_ACT") {
             return detail.value1;
@@ -1163,9 +1175,15 @@ export class PvPTeam {
                 if (!isTimingCorrect(timing, detail)) return
                 if (conditionSetRequiresActorIsSelf(detail) && (!lastActor || lastActor !== k)) return
                 if (isOpponentEffect(detail.abilityEffectType)) {
+                    // [CONFIRMED 3.19] AdditionalSkillActAbilityEffectBase$$Triggering: value2 is the
+                    // AdditionalSkillTargetType. Type 1 with an ENEMY actor targets that actor (a
+                    // counter); otherwise the team's selected target, which the port approximates
+                    // with its normal auto-targeting (no preferred target). Previously the
+                    // follow-up was aimed at whichever enemy the loop visited last.
+                    const counterTarget = detail.value2 === 1 && lastActor && lastActor.team !== k.team && !lastActor.isDead ? lastActor : undefined
                     filterAlive(this.otherTeam.kiokuStates).forEach(target => {
                         const fua = k.applyEffect(target, detail, lastAction, lastActor, mainTarget)
-                        if (fua) additionalAct[fua] = { caster: k, triggerTarget: target }
+                        if (fua) additionalAct[fua] = { caster: k, triggerTarget: counterTarget }
                     })
                 } else {
                     const fua = k.applyEffect(k, detail, lastAction, lastActor, mainTarget)
@@ -1185,12 +1203,22 @@ export class PvPTeam {
     // living unit on both teams, then AfterProcess (9) for every living unit (lambda b__5 of
     // PassiveSkill.Triggering runs Launcher.Triggering(9, ...) right after), then derived stats,
     // then each team's queued follow-up skills (AdditionalSkillAct).
-    fireTiming(timing: ProcessTiming, actor?: KiokuState, mainTarget?: KiokuState, actionType?: TargetType): void {
+    // `beforeFollowUps` runs once the timing's own effects are resolved but before any follow-up
+    // it queued executes (used to record the finished action for the battle display).
+    fireTiming(timing: ProcessTiming, actor?: KiokuState, mainTarget?: KiokuState, actionType?: TargetType, beforeFollowUps?: () => void): void {
         const teams = this.bothTeams
         const fuas = teams.map(t => t.applyPassivesForTiming(timing, actionType, actor, mainTarget))
         teams.forEach((t, i) => { fuas[i] = mergeFuaMaps(fuas[i], t.applyPassivesForTiming(ProcessTiming.AFTER_PROCESS, actionType, actor, mainTarget)) })
         teams.forEach(t => t.recomputeDerivedStats())
+        beforeFollowUps?.()
         teams.forEach((t, i) => t.triggerFua(fuas[i]))
+    }
+
+    // Set by PvPBattle: called after every executed skill (turn action, ultimate, extra action,
+    // combo step, follow-up) so the display can show each as its own entry.
+    snapshotHook?: (actor: KiokuState, type: TargetType, label?: string) => void
+    private recordAction(actor: KiokuState, type: TargetType, label?: string) {
+        this.snapshotHook?.(actor, type, label)
     }
 
     // The recompute half of what triggerPassives used to do in one shot - see the
@@ -1424,7 +1452,8 @@ export class PvPTeam {
         // [CONFIRMED 3.19] ActExecutor$$ExecuteSkill: the skill, then AttackEnd passives for every
         // living unit (actor, main target, skill passed along), then queued follow-ups.
         const skillFuas = this.act(actor, effType)
-        this.fireTiming(ProcessTiming.ATTACK_END, actor, this.lastMainTarget, effType)
+        const comboLabel = actor.currentComboActionStep ? `Combo ${actor.currentComboActionStep}` : undefined
+        this.fireTiming(ProcessTiming.ATTACK_END, actor, this.lastMainTarget, effType, () => this.recordAction(actor, effType, comboLabel))
         this.triggerFua(skillFuas)
 
         while (actor.pendingBonusTurns > 0 && !actor.isDead) {
@@ -1432,7 +1461,7 @@ export class PvPTeam {
             const bonusEffType = this.currentSp ? TargetType.skillId : TargetType.attackId
             this.resetActionTallies()
             const bonusFuas = this.act(actor, bonusEffType)
-            this.fireTiming(ProcessTiming.ATTACK_END, actor, this.lastMainTarget, bonusEffType)
+            this.fireTiming(ProcessTiming.ATTACK_END, actor, this.lastMainTarget, bonusEffType, () => this.recordAction(actor, bonusEffType, "Extra action"))
             this.triggerFua(bonusFuas)
         }
     }
@@ -1448,6 +1477,10 @@ export class PvPTeam {
         for (const t of [this, this.otherTeam]) {
             t.appliedSkillEffectTypesThisAction = new Set();
             t.lastActionNotices = [];
+            // Per-unit conditions (101 "took damage", 104 "was healed", ...) read this skill's
+            // notice for the unit; it used to persist across actions, so e.g. Baldamente
+            // Fortissimo countered attacks that hadn't touched it.
+            t.kiokuStates.forEach(k => { k.lastNotice = undefined })
         }
     }
 
@@ -1465,7 +1498,7 @@ export class PvPTeam {
             try {
             caster.team.resetActionTallies()
             const fuas = caster.team.completeActionWithPreferredTarget(caster, TargetType.fuaId, details, triggerTarget)
-            caster.team.fireTiming(ProcessTiming.ATTACK_END, caster, caster.team.lastMainTarget, TargetType.fuaId)
+            caster.team.fireTiming(ProcessTiming.ATTACK_END, caster, caster.team.lastMainTarget, TargetType.fuaId, () => caster.team.recordAction(caster, TargetType.fuaId, "Follow-up"))
             caster.team.triggerFua(fuas)
             } finally { runningFollowUps.delete(key) }
         })

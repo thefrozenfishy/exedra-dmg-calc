@@ -13,6 +13,9 @@ export class PvPBattle {
 
     readonly seed: number;
 
+    // Snapshots of every skill executed during the current executeNextAction call, in order.
+    private actionSnapshots: BattleSnapshot[] = [];
+
     // `seed`: every random roll in the battle comes from one seeded generator, so the same
     // teams + seed always replay identically. Omit for a random seed (still recorded in
     // `this.seed` so an interesting run can be reproduced).
@@ -25,6 +28,11 @@ export class PvPBattle {
         this.team1.rng = rng;
         this.team2.rng = rng;
         this.team1.isTeam1 = true;
+        const hook = (actor: KiokuState, type: TargetType, label?: string) => {
+            this.actionSnapshots.push(this.getCurrentState({ actor, type, label }))
+        }
+        this.team1.snapshotHook = hook;
+        this.team2.snapshotHook = hook;
         this.team2.eventLog = this.team1.eventLog; // one shared, ordered log
 
         // [STRUCTURAL FIX, revision 3 - see report] Each phase now runs for BOTH teams
@@ -55,7 +63,7 @@ export class PvPBattle {
         this.traverseToNextActor()
     }
 
-    getCurrentState(): BattleSnapshot {
+    getCurrentState(as?: { actor: KiokuState, type: TargetType, label?: string }): BattleSnapshot {
         return {
             allies: {
                 sp: this.team1.currentSp,
@@ -119,9 +127,10 @@ export class PvPBattle {
                     breakedDamageReceiveRate: k.breakedDamageReceiveRate,
                 }))
             },
-            lastActor: this.lastActor?.kioku.name,
-            lastTeamIsTeam1: this.lastTeamIsTeam1,
-            lastTargetType: this.lastTargetType,
+            lastActor: as ? as.actor.kioku.name : this.lastActor?.kioku.name,
+            lastTeamIsTeam1: as ? as.actor.team.isTeam1 : this.lastTeamIsTeam1,
+            lastTargetType: as ? as.type : this.lastTargetType,
+            actionLabel: as?.label,
             events: this.team1.eventLog.splice(0),
         }
     }
@@ -148,7 +157,11 @@ export class PvPBattle {
         return allUnits.reduce((best, k) => compareTurnOrder(k, best, this.team1) < 0 ? k : best).team
     }
 
-    executeNextAction(): void {
+    // Runs the next turn (or ultimate) and returns one snapshot per executed skill: the action
+    // itself, then every follow-up, extra action and combo step, in the order they happened.
+    // End-of-turn effects (TurnEnd passives, DOT ticks, buff expiry) are folded into the last one.
+    executeNextAction(): BattleSnapshot[] {
+        this.actionSnapshots = []
         this.lastTeamIsTeam1 = false
         let eff: [KiokuState, TargetType] | undefined = this.team2.useUltimate()
         if (!eff) {
@@ -163,6 +176,17 @@ export class PvPBattle {
         this.lastActor = eff[0]
         this.lastTargetType = eff[1]
         this.resolveEndOfTurn()
+
+        const snaps = this.actionSnapshots
+        const last = snaps.pop()
+        if (last) {
+            const final = this.getCurrentState()
+            snaps.push({ ...final, lastActor: last.lastActor, lastTeamIsTeam1: last.lastTeamIsTeam1, lastTargetType: last.lastTargetType, actionLabel: last.actionLabel, events: [...(last.events ?? []), ...(final.events ?? [])] })
+        } else {
+            snaps.push(this.getCurrentState()) // e.g. a stunned unit's skipped turn
+        }
+        this.actionSnapshots = []
+        return snaps
     }
 
     resolveEndOfTurn(): void {

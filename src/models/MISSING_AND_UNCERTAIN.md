@@ -40,6 +40,16 @@ Trigger: Thunder Torrent's battle-start HASTE had no effect on this branch.
   unable-to-act unit, none while the same unit's same follow-up is running/queued.
 - Fixed a crash in the hard-coded ally targeting for skills 1066 (Thunder Torrent), 1161, 1072.
 
+## R7.5 Display and follow-up fixes
+- `PvPBattle.executeNextAction()` now returns one snapshot per executed skill (turn action,
+  ultimate, extra action, combo step, follow-up), recorded after that skill's AttackEnd reactions
+  and before any follow-up it queued; end-of-turn effects fold into the turn's last entry.
+- Follow-up target (`value2` = AdditionalSkillTargetType): type 1 with an enemy actor counters
+  that actor; otherwise auto-targeting stands in for the director's selected target.
+- Per-unit notices (`KiokuState.lastNotice`) are per skill now (reset and summed like
+  AffectedUnitNotice op_Addition); they used to persist, so "took damage" conditions fired on
+  later actions that never touched the unit.
+
 ## R7.4 Still open
 - HoT/DOT ticks stay in `decrementActiveEffects` (now at TurnEnd). The game runs
   `ContinuousRecoveryProcess` at TurnBegin; slip damage timing not re-read.

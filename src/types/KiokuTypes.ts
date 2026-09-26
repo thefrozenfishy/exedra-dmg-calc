@@ -304,6 +304,7 @@ export interface BattleSnapshot {
     lastActor?: string
     lastTeamIsTeam1?: boolean
     lastTargetType?: TargetType
+    actionLabel?: string     // "Follow-up" / "Extra action" / "Combo 2" (undefined for the turn's own action)
     events?: BattleEvent[]   // what the last action did (hits, DOT ticks, heals)
 }
 
