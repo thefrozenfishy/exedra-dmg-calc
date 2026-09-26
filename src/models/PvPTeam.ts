@@ -1,13 +1,14 @@
 import { Ailment, KiokuRole } from "../types/enums";
 import { type AffectedUnitNotice, type BattleEvent, BattleState, aggro, maxMeters, mpGainFromAction, PassiveSkill, SkillDetail, skillDetailId, SkillKey, targetRange, TargetType, targetTypeToLvl, TargetTypeLookup } from "../types/KiokuTypes";
 import { skillDetails } from "../utils/helpers";
-import { isConditionSetActive, isActiveConditionSetMet, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
+import { isConditionSetActive, isConditionSetActiveForPvP, isActiveConditionSetMet, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
 import { PvPKioku } from "./PvPKioku";
 import { damageBaseTypeFromEffectType, getAttackDamageResult, getSlipDamageResult, getAdditionalDamageBase, getFinalDamageExtra, damageCutByBarrier, DamageBaseType, BattleType, PVP_POLICY } from "./DamageCalculator";
 import { mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum, getFinalDamageRatio, getProcessedSpeedWithBreakdown } from "./UnitStateEngine";
 import { elementMap } from "../types/enums";
 import { EFFECT_TARGET_SIDE } from "./EffectTargetSide";
 import { selectFullAutoTarget, expandProximity, filterAlive } from "./AITargetSelector";
+import { UNIT_STATE_TYPES } from "./StateAddFilter";
 import { SkillType, getVariationBreakPoint, decreaseBreakPoint, increaseBreakedDamageReceiveRate } from "./BreakPoint";
 
 // Which BreakPoint.GetDecreaseValue table an action uses (SetActiveSkillInfo's SkillType).
@@ -581,6 +582,17 @@ export class KiokuState {
     // Public wrapper so UnitStateEngine.ts (which lives outside this class) can reuse
     // the exact same "is this effect currently active" check that updateSpd() and
     // filteredEffects() already use internally.
+    // Active SWITCH_SKILL state for this action type, if any (last applied wins).
+    switchedSkillId(actionType: TargetType): number | undefined {
+        const wanted = actionType === TargetType.skillId ? 1 : actionType === TargetType.specialId ? 2 : actionType === TargetType.attackId ? 3 : 0
+        if (!wanted) return undefined
+        let id: number | undefined
+        for (const d of [...this.passiveEffectDetails.values(), ...this.activeEffectDetails.values()]) {
+            if (d.abilityEffectType === "SWITCH_SKILL" && d.value3 === wanted && this.isEffectCurrentlyActive(d)) id = d.value1
+        }
+        return id
+    }
+
     // [CONFIRMED 3.19] UnitStateBase$$IsActive checks only the state's ActiveConditionSet. The
     // start conditions belong to the trigger and were already checked when it fired.
     isEffectCurrentlyActive(detail: SkillDetail): boolean {
@@ -686,7 +698,13 @@ export class KiokuState {
         /**
          * @returns action id if additional act should be triggered, otherwise returns null
          */
-        if (!isConditionSetActive(detail, this.stateGen(this, target, targetType, trueActorUnit))) return
+        // [CONFIRMED 3.19] A state's ActiveConditionSet is re-checked continuously
+        // (UnitStateBase.IsActive), not at the moment it is added: only the start conditions gate
+        // adding a state. Instant effects (damage, EP, HASTE, ...) check both now.
+        const triggerState = this.stateGen(this, target, targetType, trueActorUnit, mainTarget)
+        if (UNIT_STATE_TYPES.has(detail.abilityEffectType)
+            ? !isConditionSetActiveForPvP((detail.startConditionSetIdCsv ?? "").split(","), triggerState)
+            : !isConditionSetActive(detail, triggerState)) return
 
         // [NEW, CONFIRMED via ScoreAttackTeam.ts] Generic element/role eligibility gate,
         // applied BEFORE any effect-type-specific logic - see UnitStateEngine.isEligibleForEffect.
@@ -1337,7 +1355,12 @@ export class PvPTeam {
         } else {
             actor.currentMp = 0;
         }
-        const details = getDetails(skillDetails, "skillMstId", actor.kioku.data[TargetTypeLookup[effectName]], actor.kioku[targetTypeToLvl[effectName]])
+        // [CONFIRMED 3.19] SwitchSkillUnitState (value1 = switch-to skill unique id, value3 = the
+        // SkillType it replaces; BattleUnit$$IsSwitchingActiveSkill / GetSwitchableSkills build it
+        // at the same level as the original). E.g. Final Fatebloom's battle skill becomes 7008
+        // (+10 EP) while Abyssal Rose (UNIQUE_BUFF 18) is on her.
+        const skillId = actor.switchedSkillId(effectName) ?? actor.kioku.data[TargetTypeLookup[effectName]]
+        const details = getDetails(skillDetails, "skillMstId", skillId, actor.kioku[targetTypeToLvl[effectName]])
         return this.completeAction(actor, effectName, details)
     }
 

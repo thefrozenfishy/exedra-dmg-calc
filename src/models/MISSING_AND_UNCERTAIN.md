@@ -50,6 +50,16 @@ Trigger: Thunder Torrent's battle-start HASTE had no effect on this branch.
   AffectedUnitNotice op_Addition); they used to persist, so "took damage" conditions fired on
   later actions that never touched the unit.
 
+## R7.6 Skill switching and state start conditions
+- SWITCH_SKILL (`SwitchSkillUnitState`: value1 = switch-to skill unique id, value3 = SkillType it
+  replaces, same skill level) is implemented: `KiokuState.switchedSkillId` in `PvPTeam.act`.
+  Final Fatebloom's battle skill becomes 7008 (+10 EP) while Abyssal Rose is on her.
+- CompareContent 26 (HAS_BUFF) is implemented per 3.19 (`BattleUnitConditionChecker` case 0x1a):
+  the unit's unique states' UniqueStatePatternMstId (value1) list, CONTAIN / NOT_CONTAIN.
+- Adding a state checks only its START conditions; its ACTIVE conditions gate it afterwards.
+  The R7.2 rework checked both at trigger time, so every battle-start passive with an active
+  condition (e.g. "while Abyssal Rose", "if HP >= 50%") was never added.
+
 ## R7.4 Still open
 - HoT/DOT ticks stay in `decrementActiveEffects` (now at TurnEnd). The game runs
   `ContinuousRecoveryProcess` at TurnBegin; slip damage timing not re-read.

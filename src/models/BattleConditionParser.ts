@@ -222,6 +222,10 @@ Object.values(battleConditions).forEach(c => {
 // `false`. rightValue is `Convert.ToInt32/Single(compareValue)` - i.e. the condition's
 // raw CompareValue string parsed as a plain number, NOT split on commas here (some
 // specific CompareContent cases parse it themselves beforehand, e.g. EVERY_N_TURN).
+// UniqueUnitStateBase subclasses (UnitStateFactory).
+const UNIQUE_STATE_TYPES = new Set(["UNIQUE_BUFF", "UNIQUE_DEBUFF", "UNIQUE_BUFF_ACCUM", "UNIQUE_DEBUFF_ACCUM",
+    "UNIQUE_ELEMENT_STACK", "UNIQUE_ELEMENT_BREAK", "UNIQUE_ZONE", "UNIQUE_ENEMY_639002"])
+
 function compareInt(op: CompareOperator, leftValue: number, compareValueStr: string): boolean {
     const rightValue = Number(compareValueStr);
     switch (op) {
@@ -502,7 +506,19 @@ function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state
             // from DEBUFF_COUNT (they're counted separately under
             // ABNORMAL_STATE_COUNT) - battleUnit.currentDebuffs() already does this.
             return compareInt(cond.compareOperator, battleUnit.currentDebuffs().length, cond.compareValue);
-        case CompareContent.HAS_BUFF:
+        case CompareContent.HAS_BUFF: {
+            // [CONFIRMED 3.19] BattleUnitConditionChecker$$Check case 0x1a: the unit's
+            // UniqueUnitStateBase states -> UniqueStatePatternMstId (value1) list, compared with
+            // IntListComparer (7 CONTAIN / 8 NOT_CONTAIN). E.g. 2791 "Fuka's unique buff
+            // (Abyssal Rose, 18) is applied". (The old note said the 1.5.0 checker had no case.)
+            const ids = [...battleUnit.passiveEffectDetails.values(), ...battleUnit.activeEffectDetails.values()]
+                .filter(d => UNIQUE_STATE_TYPES.has(d.abilityEffectType))
+                .map(d => d.value1)
+            const v = Number(cond.compareValue)
+            if (cond.compareOperator === CompareOperator.CONTAIN) return ids.includes(v)
+            if (cond.compareOperator === CompareOperator.NOT_CONTAIN) return !ids.includes(v)
+            return ids.some(id => compareInt(cond.compareOperator, id, cond.compareValue))
+        }
         case CompareContent.UNIQUE_DEBUFF_COUNT:
         case CompareContent.SELF_IS_KIOKU:
         case CompareContent.FIELD_IS_UP:
