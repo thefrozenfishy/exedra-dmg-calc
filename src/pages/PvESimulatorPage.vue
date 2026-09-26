@@ -171,6 +171,11 @@
           title="Forget every decision you made and start the battle over">Reset {{ pickCount }} decision{{ pickCount === 1 ? '' : 's' }}</button>
         <label class="field inline"><span class="field-label">Turns</span>
           <input v-model.number="simTurns" type="number" min="1" max="200" /></label>
+        <button class="btn" @click="exportBattle" :disabled="!canRun"
+          title="Save the stage, team, control and RNG settings, every decision and the simulated sequence to a file">Export to file</button>
+        <button class="btn" @click="importInput?.click()"
+          title="Load stage, team, settings and decisions from an exported file and re-run the simulation">Import file</button>
+        <input ref="importInput" type="file" accept=".json,application/json" class="hidden-file" @change="importBattle" />
         <span v-if="pending" class="result waiting">Waiting for your decision</span>
         <span v-else-if="battleResult" class="result" :class="battleResult">{{ battleResult === 'win' ? 'Cleared' : 'Defeated' }}</span>
       </div>
@@ -205,11 +210,11 @@ import { PendingDecision, type RngDecision, type RngEvent, type RngMode } from '
 import { toast } from 'vue3-toastify'
 import { TargetType, type BattleSnapshot } from '../types/KiokuTypes'
 import { elementMap } from '../types/enums'
-import { stageWaves, enemyName, breakMstOf, ELEMENT_KEYS } from '../models/PvE'
+import { stageWaves, enemyName, breakMstOf, ELEMENT_KEYS, questStages } from '../models/PvE'
 import { createPvEBattle, stageBattleType } from '../models/PvEBattle'
 import { getScoreAttackStage } from '../models/PvEScore'
 import { computeMaxDamage, type MaxDmgResult, type MemberDamage, type SkillDamage, type EffectSide } from '../models/MaxDamage'
-import { buildSlotKioku } from '../utils/pvpExport'
+import { buildSlotKioku, buildPvEExport, parsePvEExport, downloadText } from '../utils/pvpExport'
 import type { PvPBattle } from '../models/PvPBattle'
 import type { PvPKioku } from '../models/PvPKioku'
 
@@ -426,6 +431,46 @@ function resetRolls() {
 function resetPicks() {
   decisions.value = new Map([...decisions.value].filter(([, d]) => !d.pick))
   runSimulation()
+}
+
+// ---- export / import (utils/pvpExport.ts: buildPvEExport / parsePvEExport) ----
+const importInput = ref<HTMLInputElement | null>(null)
+
+function exportBattle() {
+  if (!canRun.value) return
+  if (!hasRun()) runSimulation()
+  const data = buildPvEExport({
+    stageId: stageId.value, stageName: questStages.get(stageId.value)?.name,
+    control: targetMode.value, rngMode: rngMode.value, seed: seed.value, turns: simTurns.value,
+    decisions: decisions.value, slots: team.slots, snapshots: battleOutput.value, pending: pending.value,
+  })
+  const tag = rngMode.value === 'seed' ? `seed${seed.value}` : rngMode.value
+  downloadText(`pve-sim-${stageId.value}-${targetMode.value}-${tag}.json`, JSON.stringify(data, null, 2))
+  toast.success(`Exported the run${data.decisionLog.length ? ` with ${data.decisionLog.length} decision${data.decisionLog.length === 1 ? '' : 's'}` : ''}`)
+}
+
+async function importBattle(ev: Event) {
+  const input = ev.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ''
+  if (!file) return
+  try {
+    const data = parsePvEExport(await file.text())
+    if (!stageWaves(data.stageId).length) throw new Error(`stage ${data.stageId} is not in this build's data`)
+    stageId.value = data.stageId
+    team.importSlots(data.slots)
+    await nextTick() // lets the team/stage watcher reset its state first
+    seed.value = data.seed
+    simTurns.value = data.turns
+    rngMode.value = data.rngMode ?? 'seed'
+    targetMode.value = data.control ?? 'auto'
+    decisions.value = new Map(Object.entries(data.decisions ?? {}).map(([k, v]) => [Number(k), v]))
+    await nextTick() // the mode watchers re-run first; run once more with everything in place
+    runSimulation()
+    toast.success(`Imported ${data.stageName ?? `stage ${data.stageId}`} (${data.control} control, ${data.rngMode} RNG)`)
+  } catch (e) {
+    toast.error(`Could not import: ${(e as Error).message}`)
+  }
 }
 
 // "Name (Enemy 2)" -> that unit's HP in the latest state, for the pick buttons.
@@ -715,6 +760,8 @@ function hpOf(label: string): string {
 .result.win { color: var(--success); }
 .result.lose { color: var(--danger); }
 .result.waiting { color: var(--accent); }
+
+.hidden-file { display: none; }
 
 .sim-controls {
   display: flex;

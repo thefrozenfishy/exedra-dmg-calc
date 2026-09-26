@@ -5,7 +5,7 @@ import { PvPKioku } from "../models/PvPKioku"
 import type { BattleSnapshot, TeamSnapshot } from "../types/KiokuTypes"
 import { TargetType } from "../types/KiokuTypes"
 import type { TeamSlot } from "../types/BestTeamTypes"
-import type { RngDecision, RngMode } from "../models/BattleRng"
+import type { RngDecision, RngEvent, RngMode } from "../models/BattleRng"
 
 export const PVP_EXPORT_FORMAT = "exedra-pvp-sim"
 export const PVP_EXPORT_VERSION = 1
@@ -19,6 +19,7 @@ export interface PvPExport {
     rngMode?: RngMode         // default "seed" (files from before the RNG modes)
     decisions?: Record<number, RngDecision> // Manual mode: changed rolls, by roll index
     turns: number             // turns simulated (each can produce several actions)
+    decisionLog?: string[]    // readable: every roll changed by hand (Manual RNG), with its action
     slots: TeamSlot[][]       // usePvPStore().slots as-is: [enemy team, allied team]
     notes?: string
     sequence: string[]        // readable log, one line per row
@@ -116,6 +117,7 @@ export function buildExport(slots: TeamSlot[][], seed: number, turns: number, sn
         decisions: rng?.decisions?.size ? Object.fromEntries(rng.decisions) : undefined,
         turns,
         notes: "",                                 // free text: what looks wrong
+        decisionLog: formatDecisions(snapshots),   // what was decided by hand
         sequence: formatSequence(snapshots),       // readable log (read this first)
         slots: JSON.parse(JSON.stringify(slots)),  // exact team setup (for import / replay)
         snapshots: JSON.parse(JSON.stringify(snapshots)),
@@ -139,4 +141,87 @@ export function downloadText(filename: string, text: string, mime = "application
     a.click()
     a.remove()
     setTimeout(() => URL.revokeObjectURL(url), 1000)
+}
+
+// ---------------------------------------------------------------------------------------------
+// Decisions made by hand, readable: manual-control picks (targets, Battle Skill / Basic Attack,
+// ultimates) and rolls changed in Manual RNG mode (with the default they replaced). "Action N" is
+// the entry number used by formatSequence. `pending`: the decision the battle is waiting for.
+export function formatDecisions(snapshots: BattleSnapshot[], pending?: RngEvent | null): string[] {
+    const lines: string[] = []
+    snapshots.forEach((s, idx) => {
+        const where = idx === 0 ? "Battle start" : `Action ${idx}`
+        for (const r of s.rngEvents ?? []) {
+            if (!r.userPick && !r.decided) continue
+            if (r.options) {
+                const chosen = r.options[r.outcome as number]?.label
+                lines.push(r.userPick
+                    ? `${where}: ${r.label} -> ${chosen}`
+                    : `${where}: ${r.label} -> ${chosen} (changed roll #${r.index}, default ${r.options[r.defaultOutcome as number]?.label})`)
+            } else {
+                lines.push(`${where}: ${r.label} -> ${r.outcome ? "hit" : "miss"} (changed roll #${r.index}, ${r.probability?.toFixed(1)}% chance, default ${r.defaultOutcome ? "hit" : "miss"})`)
+            }
+        }
+    })
+    if (pending) lines.push(`WAITING after action ${snapshots.length - 1}: ${pending.label} [${(pending.options ?? []).map(o => o.label).join(" | ")}]`)
+    return lines
+}
+
+// ---------------------------------------------------------------------------------------------
+// PvE simulator export/import (the PvE Simulator page): stage, team, control mode, RNG settings and
+// every decision, plus the readable sequence, so a run replays exactly (scripts/sim/replayExport.ts).
+export const PVE_EXPORT_FORMAT = "exedra-pve-sim"
+export const PVE_EXPORT_VERSION = 1
+
+export interface PvEExport {
+    format: typeof PVE_EXPORT_FORMAT
+    version: number
+    exportedAt: string
+    engine: string
+    stageId: number
+    stageName?: string
+    control: "auto" | "manual" // manual: the user plays the allies and picks every target
+    rngMode: RngMode
+    seed: number
+    turns: number
+    decisions?: Record<number, RngDecision> // by decision index (manual picks and changed rolls)
+    notes?: string
+    decisionLog: string[]      // readable: every decision taken, with its action (read this with the sequence)
+    pending?: { label: string, options: string[] } // the decision the battle stopped at, if any
+    slots: TeamSlot[]          // useTeamStore().slots as-is (empty slots included)
+    sequence: string[]
+    snapshots: BattleSnapshot[]
+}
+
+export function buildPvEExport(args: {
+    stageId: number, stageName?: string, control: "auto" | "manual", rngMode: RngMode, seed: number, turns: number,
+    decisions: Map<number, RngDecision>, slots: TeamSlot[], snapshots: BattleSnapshot[], pending?: RngEvent | null,
+}): PvEExport {
+    return {
+        format: PVE_EXPORT_FORMAT,
+        version: PVE_EXPORT_VERSION,
+        exportedAt: new Date().toISOString(),
+        engine: "battle-engine-3.19",
+        stageId: args.stageId,
+        stageName: args.stageName,
+        control: args.control,
+        rngMode: args.rngMode,
+        seed: args.seed,
+        turns: args.turns,
+        decisions: args.decisions.size ? Object.fromEntries(args.decisions) : undefined,
+        notes: "",
+        decisionLog: formatDecisions(args.snapshots, args.pending),
+        pending: args.pending ? { label: args.pending.label, options: (args.pending.options ?? []).map(o => o.label) } : undefined,
+        slots: JSON.parse(JSON.stringify(args.slots)),
+        sequence: formatSequence(args.snapshots),
+        snapshots: JSON.parse(JSON.stringify(args.snapshots)),
+    }
+}
+
+export function parsePvEExport(text: string): PvEExport {
+    const data = JSON.parse(text)
+    if (data?.format !== PVE_EXPORT_FORMAT || !Array.isArray(data.slots) || typeof data.stageId !== "number" || typeof data.seed !== "number") {
+        throw new Error(data?.format === PVP_EXPORT_FORMAT ? "This is a PvP simulator export (use the PvP Simulator page)" : "Not a PvE simulator export file")
+    }
+    return data as PvEExport
 }

@@ -87,6 +87,14 @@ export const useTeamStore = defineStore('team', {
     slots: Array(5).fill(null).map(() => ({})) as TeamSlot[]
   }),
   actions: {
+    // Replace the team with slots from a PvE simulator export file (normalized like load()).
+    importSlots(slots: TeamSlot[]) {
+      this.slots = slots.map(slot => ({
+        ...slot,
+        main: normalizeCharacter(slot.main),
+        support: normalizeCharacter(slot.support),
+      }))
+    },
     setCharBuffReduction(index: number, value?: number) {
       this.slots[index].buffMultReduction = value
     },

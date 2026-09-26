@@ -45,7 +45,10 @@ manualTargeting })`:
 - `manualTargeting` (PvE page "Manual"): target decisions throw `PendingDecision` until a pick for that
   point is in `decisions`; the page shows the options and replays the battle from the start with the pick.
 
-Exports store `rngMode` and `decisions`; `replayExport.ts` and `checkFixtures.ts` use them.
+Exports store `rngMode` and `decisions`, plus a readable `decisionLog` (every pick and changed roll, with
+its action number); `replayExport.ts` and `checkFixtures.ts` use them. The PvE Simulator page has its own
+export (`format: "exedra-pve-sim"`: stage, team slots, control mode, RNG settings, decisions, the decision
+the battle stopped at if any); `replayExport.ts` replays both kinds.
 
 ## In-game regression fixtures
 
