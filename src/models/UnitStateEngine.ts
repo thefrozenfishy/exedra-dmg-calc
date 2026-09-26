@@ -564,41 +564,92 @@ export function getMaxComboActionNum(unit: KiokuState): number {
 // data) is read here as "skip all of the above, use the base `probability` value
 // directly" - not decompiled, but the only reading of "Fixed" that makes sense paired
 // with a hit/parry-modifiable default.
-function getTotalEffectHitRate(caster: KiokuState, isAliment: boolean): number {
-    let rate = sumRatioTypes(caster, ["UP_EFFECT_HIT_RATE_RATIO"], 1000);
-    if (isAliment) rate += sumRatioTypes(caster, ["UP_ABNORMAL_HIT_RATE_RATIO"], 1000);
-    return Math.max(rate + 1, 0);
+// [CONFIRMED 3.19] StateAbilityEffect / UnitStateBase.GetProcessedProbability (0x16dfa50) and its rate getters.
+// Base EffectHitRate/EffectParryRate (per-mille) come from the unit's parameter: an enemy's appearance row
+// (effectHitRate / effectParryRate); characters' style values aren't in our data (0).
+const baseRate = (unit: KiokuState, col: "effectHitRate" | "effectParryRate"): number =>
+    Number(unit.enemy?.appearance[col] ?? 0)
+// ProcessedEffectHitRate (0x1385aa0) = Clamp((Param.EffectHitRate/10 + sum of UP_EFFECT_HIT_RATE_RATIO v1/10)/100, 0, 1)
+function processedEffectHitRate(unit: KiokuState): number {
+    return Math.min(Math.max(f32(f32(f32(baseRate(unit, "effectHitRate")) / 10) + sumRatioTypes(unit, ["UP_EFFECT_HIT_RATE_RATIO"], 10)) / 100, 0), 1)
 }
-function getTotalEffectParryRate(target: KiokuState): number {
-    const rate = sumRatioTypes(target, ["UP_EFFECT_PARRY_RATE_RATIO"], 1000);
-    return Math.min(Math.max(1 - rate, 0), 1);
+// ProcessedEffectParryRate (0x1385df0), same shape with EffectParryRate / UP_EFFECT_PARRY_RATE_RATIO.
+function processedEffectParryRate(unit: KiokuState): number {
+    return Math.min(Math.max(f32(f32(f32(baseRate(unit, "effectParryRate")) / 10) + sumRatioTypes(unit, ["UP_EFFECT_PARRY_RATE_RATIO"], 10)) / 100, 0), 1)
 }
-function getTotalSecondaryEffectParryRate(target: KiokuState, isAliment: boolean): number {
-    if (!isAliment) return 1;
-    const rate = sumRatioTypes(target, ["UP_ABNORMAL_PARRY_RATE_RATIO"], 1000);
-    return Math.min(Math.max(1 - rate, 0), 1);
+// GetTotalEffectHitRate (0x1387b90): Max((negative ? processed hit : 0) + (ailment ? AllAbnormalHitRate/100 : 0) + 1, 0)
+function getTotalEffectHitRate(caster: KiokuState, isNegative: boolean, isAliment: boolean): number {
+    let h = isNegative ? processedEffectHitRate(caster) : 0;
+    if (isAliment) h += sumRatioTypes(caster, ["UP_ABNORMAL_HIT_RATE_RATIO"], 10) / 100;
+    return Math.max(h + 1, 0);
+}
+// GetTotalEffectParryRate (0x1387cd0): Clamp(1 - (negative ? processed parry : 0), 0, 1)
+function getTotalEffectParryRate(target: KiokuState, isNegative: boolean): number {
+    return Math.min(Math.max(1 - (isNegative ? processedEffectParryRate(target) : 0), 0), 1);
+}
+// Quest-enemy per-ailment parry columns (per-mille; 1000 = immune), AbnormalEffectParryRate<T> (0x16d3e70).
+const AILMENT_PARRY_COLUMN: Record<string, string> = {
+    BURN: "burnParryRate", WEAKNESS: "weaknessParryRate", POISON: "poisonParryRate", STUN: "stunParryRate",
+    CURSE: "curseParryRate", BLEED: "bleedParryRate", VORTEX: "vortexParryRate",
+}
+// GetTotalSecondaryEffectParryRate (0x1387d90):
+//   x = (stun ? RepeatStunParryRate/100 : 0) + (ailment ? Clamp(perType/10/100, 0, 1) + AllAbnormalParryRate/100 : 0)
+//   return Clamp(1 - x, 0, 1)
+function getTotalSecondaryEffectParryRate(target: KiokuState, type: string, isAliment: boolean): number {
+    let x = 0;
+    if (type === "STUN") x += (target.repeatStunParryRate ?? 0) / 100;
+    if (isAliment) {
+        const prefix = Object.keys(AILMENT_PARRY_COLUMN).find(p => type === p || type.startsWith(p + "_"));
+        const perType = prefix ? Number(target.enemy?.appearance[AILMENT_PARRY_COLUMN[prefix]] ?? 0) : 0;
+        x += Math.min(Math.max(f32(f32(perType) / 10) / 100, 0), 1) + sumRatioTypes(target, ["UP_ABNORMAL_PARRY_RATE_RATIO"], 10) / 100;
+    }
+    return Math.min(Math.max(1 - x, 0), 1);
 }
 
 /**
- * [CONFIRMED formula, RECONSTRUCTED rate internals - see block comment above] Rolls
- * whether a buff/debuff/aliment application succeeds at all. `caster` is the unit
- * applying the effect (its hit-rate bonuses apply); `target` is the unit it's being
- * applied to (its parry/resist bonuses apply). Returns true = applies normally.
+ * [CONFIRMED 3.19] UnitCondition.AddUnitState (0x15c8a30): the state is added unless
+ * `p*10 <= Random.Next(1000)`, p = GetProcessedProbability: the fixed probability as-is, otherwise
+ * Clamp(Floor2(probability * hit * parry * secondaryParry), 0, 100) (MathExtension.Floor to 2 decimals).
+ * `caster` is the unit applying the effect, `target` the unit it goes on. Returns true = applies.
  */
 export function rollAppliesEffect(detail: SkillDetail, caster: KiokuState | undefined, target: KiokuState, rng: RngSource = Math.random): boolean {
     const label = () => `${caster ? unitLabel(caster) : "?"} → ${unitLabel(target)}: ${detail.abilityEffectType}${detail.description ? ` (${detail.description})` : ""}`
     if (detail.isFixedProbability) {
         return rollChance(rng, detail.probability, "effect", label, r => r * 100 < detail.probability);
     }
-    const isAliment = isAlimentEffect(detail.abilityEffectType);
-    // [CONFIRMED 3.19] hit rate and parry rate only apply to Negative-direction states (debuffs);
-    // previously a buff on an ally with some debuff resistance became e.g. a 97% roll.
-    const isNegative = NEGATIVE_STATE_TYPES.has(detail.abilityEffectType);
-    const hitRate = caster && isNegative ? getTotalEffectHitRate(caster, isAliment) : 1;
-    const parryRate = isNegative ? getTotalEffectParryRate(target) : 1;
-    const secondaryParryRate = getTotalSecondaryEffectParryRate(target, isAliment);
-    const finalProbability = Math.min(Math.max(hitRate * parryRate * secondaryParryRate * detail.probability, 0), 100);
+    const type = detail.abilityEffectType;
+    const isAliment = isAlimentEffect(type);
+    // Hit and parry rates only apply to Negative-direction states (debuffs).
+    const isNegative = NEGATIVE_STATE_TYPES.has(type);
+    const hitRate = caster ? getTotalEffectHitRate(caster, isNegative, isAliment) : 1;
+    const parryRate = getTotalEffectParryRate(target, isNegative);
+    const secondaryParryRate = getTotalSecondaryEffectParryRate(target, type, isAliment);
+    const raw = f32(f32(f32(f32(detail.probability) * f32(hitRate)) * f32(parryRate)) * f32(secondaryParryRate));
+    const finalProbability = Math.min(Math.max(f32(Math.floor(f32(raw * 100)) / 100), 0), 100);
     return rollChance(rng, finalProbability, "effect", label, r => r * 1000 < finalProbability * 10);
+}
+
+// ---------------------------------------------------------------------------
+// Healing  [CONFIRMED 3.19] HpRecoveryCalculator.GetProcessedRecoveryValue (0x149de70)
+// ---------------------------------------------------------------------------
+// BattleUnit.GetProcessedHealRatio (0x13869f0), healer side, float32: R = HealRate/10 (quest enemies: the
+// appearance's healRate; characters: not in our data, 0); UP_HEAL_RATE_RATIO adds v1/10; then every
+// DWN_HEAL_RATE_RATIO in turn: R += (v1/10 * -R) / 100 (so it only shrinks an existing bonus).
+export function getProcessedHealRatio(unit: KiokuState): number {
+    let r = f32(f32(Number(unit.enemy?.appearance.healRate ?? 0)) / 10);
+    const fx = unit.filteredEffects();
+    for (const d of fx["UP_HEAL_RATE_RATIO"] ?? []) r = f32(r + f32(f32(d.value1) / 10));
+    for (const d of fx["DWN_HEAL_RATE_RATIO"] ?? []) r = f32(r + f32(f32(f32(f32(d.value1) / 10) * -r) / 100));
+    return r;
+}
+// v * (1 + R/100); then the TARGET's receive-recovery states (DWN_RCV_RECOVERY_RATIO: p -= p * v1/1000, one after
+// another); PvP/GvG skill heals x (1 - 500/1000); Max(0). The caller rounds (Ceiling).
+export function getProcessedRecoveryValue(user: KiokuState, target: KiokuState, v: number, shouldSuppress: boolean): number {
+    const base = v * (1 + getProcessedHealRatio(user) / 100);
+    let p = base;
+    for (const d of target.filteredEffects()["DWN_RCV_RECOVERY_RATIO"] ?? []) p += -(p * (f32(f32(d.value1) / 10) / 100));
+    if (shouldSuppress) p *= 1 - 500 / 1000;
+    return Math.max(p, 0);
 }
 
 // "Name (Ally 2)" - names repeat (mirrored teams), so the side and slot are part of the label.

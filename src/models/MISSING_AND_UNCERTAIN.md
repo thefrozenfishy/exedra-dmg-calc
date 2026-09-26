@@ -1,3 +1,55 @@
+# Revision 9 - missing enemy mechanics, heal/EP/ailment formulas, DMG_RANDOM (3.19.0)
+
+Trigger: "fix SUMMON and other non implemented functions". Everything below is from the 3.19 decompile
+(RVAs in the code comments).
+
+## R9.1 Enemy / stage mechanics
+- [CONFIRMED] SUMMON: positions walked 3,2,4,1,5; an occupied position is skipped, otherwise the next summon id
+  spawns there (unknown id = consumed). New units: turn gauge reset + their battle-start passives.
+  [APPROXIMATION] other units' battle-start state passives are not re-applied to them.
+- [CONFIRMED] Board positions: `KiokuState.positionId` (allies slot+1, enemies 3-n/2+i, summons as above);
+  proximity targeting uses it.
+- [CONFIRMED] Wave list (GetModelListForBattleStart): conditionType 0 only, ordered by id, only step-1 forms of
+  mode-change bosses, then the main target is moved to the middle (index count/2).
+- [CONFIRMED] Boss form changes (QuestEnemyModeChangeMst, 37 bosses incl. every Solo Raid): a hit on the
+  current form can't push HP past the next threshold (x1000 HP ratio); at/under it the unit is replaced by the
+  next form (same position, HP and turn gauge, fresh states, battle-start passives run). Runs as its own entry
+  after the action ("Form change").
+- [CONFIRMED] Solo Raid Link HP: type 1 (endless minions): pool 100, each defeated enemy -linkHpWeight, empty
+  positions 1-5 refilled round-robin before time moves on; the wave ends when the pool is < 1.
+  [APPROXIMATION] remaining minions are removed at that point. Type 2: shared pool = main target HP; each act
+  subtracts damage dealt to the wave (minus healing) and syncs every enemy to min(pool, max HP).
+- [CONFIRMED] Solo Raid countdown: COUNTDOWN_START (countdown = turn-1, cancel threshold = value1), damage to the
+  holder accumulates, COUNTDOWN_DECREASE -1, conditions 1201 (countdown value) / 1202 (cancel reached),
+  ADDITIONAL_COUNTDOWN_ZERO/CANCEL_SKILL_ACT queue the act and end the countdown. Reset on form change.
+- [CONFIRMED] LOSE_EP_RATIO/FIXED, DEC/ADD_BUFF/DEBUFF_TURN_IMM (amount value2, value1 = state id filter,
+  ailments/Cutaway excluded), ADD_BUFF/DEBUFF_TURN are caster states (+value1 turns on buffs/debuffs it gives),
+  HASTE/SLOW do nothing while the caster has LOCK_TURN_ORDER, GAIN/LOSE_BP no battle effect.
+- Not done: Solo Raid party/season buffs, the round limit, score.
+
+## R9.2 Engine-wide fixes (PvP too)
+- [CONFIRMED] Condition-set csv lists are OR'd (IsMatchConditionSets = Any); conditions inside a set AND'd.
+- [CONFIRMED] Unit/team "has state" conditions also see permanent states.
+- [CONFIRMED] State-add roll: base hit/parry (enemy effectHitRate/effectParryRate), clamps, per-ailment enemy
+  parry columns (per-mille, 1000 = immune), repeat-stun parry (+25 per stun on quest enemies, max 80), Floor to
+  2 decimals. PREVENT_ABNORMAL blocks new ailments (incl. stun), one count each.
+- [CONFIRMED] EP: every gain goes through the recover-rate pipeline (UP adds v1/10, DWN multiplies), clamp to
+  MaxEP, computed live (was fixed at battle start). Hit taken: 15/10/5 by HP% after the hit (<10/<40), kill +10,
+  DOT tick +2.
+- [CONFIRMED] Healing: RECOVERY_HP = healer MaxHP*v1/1000+v2, RECOVERY_HP_ATK = processed ATK*v1/1000+v2,
+  x (1 + healRatio/100) (UP/DWN_HEAL_RATE_RATIO, enemy healRate), receiver DWN_RCV_RECOVERY_RATIO, PvP x0.5,
+  Ceiling. HoT = holder MaxHP*(v1/10)/100+v2 at the start of the holder's turn. Revival in float32.
+- [CONFIRMED] UP_HP_RATIO raises MaxHP (and HP by the gain). DWN_BARRIER_VALUE on a caster shrinks barriers it
+  gives. DWN_CTR/CTD_ACCUM_RATIO stack as IAccum.
+- [CONFIRMED] DMG_RANDOM: value2 hits on random targets (repeats allowed), per hit crit / break (v3, 1 if 0) /
+  break-rate growth (base v4/10).
+- [UNCERTAIN] character-side HealRate, RecoveryEpRate and EffectHit/ParryRate come from styles not in our
+  data (treated as 0). Whether EP-on-hit is per hit or per act (applied per damage effect here).
+
+## R9.3 Not implemented (no kioku in kioku_data.json uses them)
+TSUBAME_*, ZONE_*, UNIQUE_* (except the ones already wired), COUNT/*_COUNT_POINT beyond revision 3,
+REGAIN_ATK, REFLECTION_RATIO, VORTEX_ATK. They matter once newer kiokus are added to kioku_data.json.
+
 # Revision 8 - PvE: quest stages on the battle engine (3.19.0)
 
 Trigger: the Single Battle Calculator page moves from the old ScoreAttackTeam formula to the engine, with
