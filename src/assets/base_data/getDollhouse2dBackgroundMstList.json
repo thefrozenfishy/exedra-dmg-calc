@@ -1,0 +1,2732 @@
+[
+    {
+        "dollhouse2dBackgroundMstId": 10011,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mitakihara Middle School - Passage (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90151_01",
+        "seriesId": 1,
+        "sortOrder": 10011
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10023,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mami's Place - Living Room (Evening)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10001_01",
+        "seriesId": 1,
+        "sortOrder": 10023
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10031,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Mitakihara Middle School - Classroom (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90165_01",
+        "seriesId": 1,
+        "sortOrder": 10031
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10043,
+        "isDefault": true,
+        "lightingType": 2,
+        "name": "Station Platform (Night)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90349_01",
+        "seriesId": 1,
+        "sortOrder": 10043
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10051,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Arcade",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90350_01",
+        "seriesId": 1,
+        "sortOrder": 10051
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10061,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Footpath (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90352_01",
+        "seriesId": 1,
+        "sortOrder": 10061
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10071,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Fast Food Shop",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90353_01",
+        "seriesId": 1,
+        "sortOrder": 10071
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10083,
+        "isDefault": true,
+        "lightingType": 2,
+        "name": "Overpass (Night)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90358_01",
+        "seriesId": 1,
+        "sortOrder": 10083
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10091,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Submerged City (Dawn)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10014_01",
+        "seriesId": 1,
+        "sortOrder": 10091
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10101,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Mitakihara Middle School - Gate (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90166_01",
+        "seriesId": 1,
+        "sortOrder": 10101
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10111,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Madoka's Place - Madoka's Room (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90161_03",
+        "seriesId": 1,
+        "sortOrder": 10111
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10121,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Mitakihara Middle School - Roof (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90164_01",
+        "seriesId": 1,
+        "sortOrder": 10121
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10131,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Homura's Room",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90348_01",
+        "seriesId": 1,
+        "sortOrder": 10131
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10142,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Church (Evening)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90356_01",
+        "seriesId": 1,
+        "sortOrder": 10142
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10153,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Bus Stop (Night)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90357_01",
+        "seriesId": 1,
+        "sortOrder": 10153
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10161,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Homura's Hospital Room (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90360_01",
+        "seriesId": 1,
+        "sortOrder": 10161
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10171,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Hospital - Roof (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90368_01",
+        "seriesId": 1,
+        "sortOrder": 10171
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10181,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Madoka's Place - Washroom (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10005_01",
+        "seriesId": 1,
+        "sortOrder": 10181
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10191,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Madoka's Place - Living Room (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10006_01",
+        "seriesId": 1,
+        "sortOrder": 10191
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10201,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Sayaka's Place - Sayaka's Room (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10007_01",
+        "seriesId": 1,
+        "sortOrder": 10201
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10212,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Sayaka's Place - Entrance (Evening)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10008_01",
+        "seriesId": 1,
+        "sortOrder": 10212
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10221,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Hospital - Bike Parking (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10009_01",
+        "seriesId": 1,
+        "sortOrder": 10221
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10231,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Shelter",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10012_01",
+        "seriesId": 1,
+        "sortOrder": 10231
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10241,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mabayu's Room (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90362_01",
+        "seriesId": 1,
+        "sortOrder": 10241
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10251,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Récompense - Outside (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90364_01",
+        "seriesId": 1,
+        "sortOrder": 10251
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10261,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Récompense - Inside (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90365_01",
+        "seriesId": 1,
+        "sortOrder": 10261
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10262,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Backstage",
+        "releaseTime": "2025-11-29T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90374_01",
+        "seriesId": 1,
+        "sortOrder": 10262
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10263,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Bovine Witch",
+        "releaseTime": "2025-11-29T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90468_01",
+        "seriesId": 1,
+        "sortOrder": 10263
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10271,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mami & Kyoko's Patisserie",
+        "releaseTime": "2026-02-17T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10094_01",
+        "seriesId": 1,
+        "sortOrder": 10271
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10281,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Sayaka's Place - Sayaka's Room (Night)",
+        "releaseTime": "2026-07-31T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10007_03",
+        "seriesId": 1,
+        "sortOrder": 10204
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10291,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mami's Place - Kitchen (Night)",
+        "releaseTime": "2026-07-31T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90354_02",
+        "seriesId": 1,
+        "sortOrder": 10291
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10301,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Birdcage Witch - Deepest Layer",
+        "releaseTime": "2026-08-28T22:00:00+09:00",
+        "resourceName": "bg_adv_00_10042_01",
+        "seriesId": 1,
+        "sortOrder": 10301
+    },
+    {
+        "dollhouse2dBackgroundMstId": 10311,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Birdcage Witch - Deepest Layer - Time Stop",
+        "releaseTime": "2026-08-28T22:00:00+09:00",
+        "resourceName": "bg_adv_00_10042_02",
+        "seriesId": 1,
+        "sortOrder": 10311
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20011,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Coordinator - Shop Area",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90005_01",
+        "seriesId": 2,
+        "sortOrder": 20011
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20021,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mikazuki Villa - Living Room (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90279_01",
+        "seriesId": 2,
+        "sortOrder": 20021
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20031,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Banbanzai - Inside (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90280_01",
+        "seriesId": 2,
+        "sortOrder": 20031
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20041,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Radio Tower - Observation Deck (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90045_01",
+        "seriesId": 2,
+        "sortOrder": 20041
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20051,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Maid Cafe",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90059_01",
+        "seriesId": 2,
+        "sortOrder": 20051
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20061,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Hotel Fendt Hope - Room (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90116_01",
+        "seriesId": 2,
+        "sortOrder": 20061
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20071,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Rumor of the Eternal Sakura",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90117_02",
+        "seriesId": 2,
+        "sortOrder": 20071
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20081,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Suitoku Shopping Center (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90035_01",
+        "seriesId": 2,
+        "sortOrder": 20081
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20091,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Coordinator - Living Area (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90004_01",
+        "seriesId": 2,
+        "sortOrder": 20091
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20101,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Mizuna Ward - Street (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90015_01",
+        "seriesId": 2,
+        "sortOrder": 20101
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20111,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Mizuna Girls' Academy - Gate (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90019_01",
+        "seriesId": 2,
+        "sortOrder": 20111
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20121,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Mizuna Girls' Academy - Grounds (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90020_01",
+        "seriesId": 2,
+        "sortOrder": 20121
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20131,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Sankyo Ward - Street (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90027_01",
+        "seriesId": 2,
+        "sortOrder": 20131
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20141,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Sankyoin Academy - Gate (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90029_01",
+        "seriesId": 2,
+        "sortOrder": 20141
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20151,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Sankyoin Academy - Grounds (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90030_01",
+        "seriesId": 2,
+        "sortOrder": 20151
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20171,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Chuo Ward - Street (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90043_01",
+        "seriesId": 2,
+        "sortOrder": 20171
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20181,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Hokuyo Ward - Observation Deck (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90115_01",
+        "seriesId": 2,
+        "sortOrder": 20181
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20191,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Chuo Academy - Gate (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90048_01",
+        "seriesId": 2,
+        "sortOrder": 20191
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20201,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Sakae Ward - Street (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90054_01",
+        "seriesId": 2,
+        "sortOrder": 20201
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20211,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Sakae Academy - Gate (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90060_01",
+        "seriesId": 2,
+        "sortOrder": 20211
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20221,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Kosho Academy - Gate (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90069_01",
+        "seriesId": 2,
+        "sortOrder": 20221
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20231,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Kosho Ward - Electric Town (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90074_01",
+        "seriesId": 2,
+        "sortOrder": 20231
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20251,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Minagi Ward - Street (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90100_01",
+        "seriesId": 2,
+        "sortOrder": 20251
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20261,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Hotel Fendt Hope - Hall (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90134_01",
+        "seriesId": 2,
+        "sortOrder": 20261
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20281,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Banbanzai - Outside (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90287_01",
+        "seriesId": 2,
+        "sortOrder": 20281
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20291,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mikazuki Villa - Outside (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90325_01",
+        "seriesId": 2,
+        "sortOrder": 20291
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20301,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Toyozuru City - Clock Tower (Noon)",
+        "releaseTime": "2025-10-20T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10083_01",
+        "seriesId": 2,
+        "sortOrder": 20301
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20311,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Toyozuru City - Residential Area (Noon)",
+        "releaseTime": "2025-10-20T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10084_01",
+        "seriesId": 2,
+        "sortOrder": 20311
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20331,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Snow Dome",
+        "releaseTime": "2025-12-22T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90203_01",
+        "seriesId": 2,
+        "sortOrder": 20331
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20341,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Snow Dome - Inverted",
+        "releaseTime": "2025-12-22T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90203_02",
+        "seriesId": 2,
+        "sortOrder": 20341
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20351,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Sankyo Ward - Shopping Center - Christmas (Night)",
+        "releaseTime": "2025-12-22T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90025_06",
+        "seriesId": 2,
+        "sortOrder": 20351
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20361,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mizuna Ward - Shrine - Gate - New Year's (Noon)",
+        "releaseTime": "2026-01-01T00:00:00+09:00",
+        "resourceName": "bg_adv_01_90017_03",
+        "seriesId": 2,
+        "sortOrder": 20361
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20371,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mizuna Ward - Shrine - Grounds - New Year's (Noon)",
+        "releaseTime": "2026-01-01T00:00:00+09:00",
+        "resourceName": "bg_adv_01_90018_06",
+        "seriesId": 2,
+        "sortOrder": 20371
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20381,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mizuna Ward - Street - New Year's (Noon)",
+        "releaseTime": "2026-01-01T00:00:00+09:00",
+        "resourceName": "bg_adv_01_90015_08",
+        "seriesId": 2,
+        "sortOrder": 20381
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20393,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Toyozuru City - Clock Tower (Night)",
+        "releaseTime": "2026-01-09T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10083_02",
+        "seriesId": 2,
+        "sortOrder": 20393
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20403,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Toyozuru City - Clock Tower (Midnight)",
+        "releaseTime": "2026-01-09T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10083_03",
+        "seriesId": 2,
+        "sortOrder": 20403
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20413,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Toyozuru City - Residential Area (Midnight)",
+        "releaseTime": "2026-01-09T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10084_03",
+        "seriesId": 2,
+        "sortOrder": 20313
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20421,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Toyozuru City - Residential Area 2 (Noon)",
+        "releaseTime": "2026-01-09T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10085_01",
+        "seriesId": 2,
+        "sortOrder": 20421
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20433,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Toyozuru City - Residential Area 2 (Midnight)",
+        "releaseTime": "2026-01-09T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10085_03",
+        "seriesId": 2,
+        "sortOrder": 20431
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20441,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Sumire's Place - Living Room (Noon)",
+        "releaseTime": "2026-01-09T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10086_01",
+        "seriesId": 2,
+        "sortOrder": 20441
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20451,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Toyozuru City - Park by the Sea (Noon)",
+        "releaseTime": "2026-01-09T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10087_01",
+        "seriesId": 2,
+        "sortOrder": 20451
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20462,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Toyozuru City - Seaside Park (Dawn)",
+        "releaseTime": "2026-01-09T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10087_04",
+        "seriesId": 2,
+        "sortOrder": 20462
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20472,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mikazuki Villa - Living Room (Dawn)",
+        "releaseTime": "2026-01-09T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90279_08",
+        "seriesId": 2,
+        "sortOrder": 20028
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20481,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Bunny Eared Witch - Floor 1",
+        "releaseTime": "2026-01-09T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10088_01",
+        "seriesId": 2,
+        "sortOrder": 20481
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20491,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Bunny Eared Witch - Deepest Layer",
+        "releaseTime": "2026-01-09T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10088_02",
+        "seriesId": 2,
+        "sortOrder": 20491
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20501,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Coordinator - Living Area (Night)",
+        "releaseTime": "2026-02-10T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90004_03",
+        "seriesId": 2,
+        "sortOrder": 20093
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20511,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Chocolate Witch Labyrinth - Deepest Layer",
+        "releaseTime": "2026-02-17T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90467_01",
+        "seriesId": 2,
+        "sortOrder": 20511
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20523,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Mikazuki Villa - Outside (Night)",
+        "releaseTime": "2026-04-06T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90325_02",
+        "seriesId": 2,
+        "sortOrder": 20293
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20531,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mikazuki Villa - Kitchen (Noon)",
+        "releaseTime": "2026-04-06T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90286_01",
+        "seriesId": 2,
+        "sortOrder": 20531
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20541,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mikazuki Villa - Kitchen (Night)",
+        "releaseTime": "2026-04-06T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90286_03",
+        "seriesId": 2,
+        "sortOrder": 20541
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20551,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Ashita's (Noon)",
+        "releaseTime": "2026-04-06T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90039_01",
+        "seriesId": 2,
+        "sortOrder": 20551
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20562,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Ashita's (Evening)",
+        "releaseTime": "2026-04-06T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90039_02",
+        "seriesId": 2,
+        "sortOrder": 20562
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20572,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Sankyo Ward - Street (Evening)",
+        "releaseTime": "2026-04-06T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90028_02",
+        "seriesId": 2,
+        "sortOrder": 20572
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20582,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Sankyo Ward - Path (Evening)",
+        "releaseTime": "2026-04-06T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90027_02",
+        "seriesId": 2,
+        "sortOrder": 20132
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20591,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Box Camera Witch - Deepest Layer",
+        "releaseTime": "2026-04-14T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10097_01",
+        "seriesId": 2,
+        "sortOrder": 20591
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20601,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mikazuki Villa - Living Room (Night)",
+        "releaseTime": "2026-04-14T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90279_03",
+        "seriesId": 2,
+        "sortOrder": 20023
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20612,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Shinsei Ward - Path (Evening)",
+        "releaseTime": "2026-04-14T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90003_02",
+        "seriesId": 2,
+        "sortOrder": 20612
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20621,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Kamihama University Affiliated School - Gate (Noon)",
+        "releaseTime": "2026-04-14T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90006_01",
+        "seriesId": 2,
+        "sortOrder": 20621
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20632,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Sakae Ward - Street (Evening)",
+        "releaseTime": "2026-04-14T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90054_02",
+        "seriesId": 2,
+        "sortOrder": 20632
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20641,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Sandbox Witch - Deepest Layer",
+        "releaseTime": "2026-04-06T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10043_02",
+        "seriesId": 2,
+        "sortOrder": 20641
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20652,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Toyozuru City - Seaside Park (Evening)",
+        "releaseTime": "2026-03-27T22:00:00+09:00",
+        "resourceName": "bg_adv_01_10087_02",
+        "seriesId": 2,
+        "sortOrder": 20452
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20663,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Toyozuru City - Seaside Park (Night)",
+        "releaseTime": "2026-03-27T22:00:00+09:00",
+        "resourceName": "bg_adv_01_10087_03",
+        "seriesId": 2,
+        "sortOrder": 20453
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20671,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Sumire's Place - Living Room (Evening)",
+        "releaseTime": "2026-03-27T22:00:00+09:00",
+        "resourceName": "bg_adv_01_10086_02",
+        "seriesId": 2,
+        "sortOrder": 20442
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20681,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Sumire's Place - Living Room (Night)",
+        "releaseTime": "2026-03-27T22:00:00+09:00",
+        "resourceName": "bg_adv_01_10086_03",
+        "seriesId": 2,
+        "sortOrder": 20443
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20692,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Toyozuru City - Residential Area (Evening)",
+        "releaseTime": "2026-03-27T22:00:00+09:00",
+        "resourceName": "bg_adv_01_10084_02",
+        "seriesId": 2,
+        "sortOrder": 20312
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20702,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Toyozuru City - Residential Area 2 (Evening)",
+        "releaseTime": "2026-03-27T22:00:00+09:00",
+        "resourceName": "bg_adv_01_10085_02",
+        "seriesId": 2,
+        "sortOrder": 20422
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20711,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Lighthouse - April Fools' 2026",
+        "releaseTime": "2026-04-01T00:00:00+09:00",
+        "resourceName": "bg_adv_04_05_0003",
+        "seriesId": 999,
+        "sortOrder": 20711
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20723,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Daito Ward - Lake (Night)",
+        "releaseTime": "2026-05-11T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90079_03",
+        "seriesId": 2,
+        "sortOrder": 20723
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20733,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Daito Ward - Path (Night)",
+        "releaseTime": "2026-05-11T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90078_03",
+        "seriesId": 2,
+        "sortOrder": 20733
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20743,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Cemetery (Night)",
+        "releaseTime": "2026-05-11T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90319_03",
+        "seriesId": 999,
+        "sortOrder": 990303
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20751,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Daito Academy - Gate (Noon)",
+        "releaseTime": "2026-05-11T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90091_01",
+        "seriesId": 2,
+        "sortOrder": 20751
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20761,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Community Center - Room (Noon)",
+        "releaseTime": "2026-05-20T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90330_01",
+        "seriesId": 2,
+        "sortOrder": 20761
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20771,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Community Center - Outside (Noon)",
+        "releaseTime": "2026-05-20T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90329_01",
+        "seriesId": 2,
+        "sortOrder": 20771
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20781,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Emily's Counseling Room",
+        "releaseTime": "2026-06-29T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90034_01",
+        "seriesId": 2,
+        "sortOrder": 20781
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20791,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Minagi Liberty Academy - Gate (Noon)",
+        "releaseTime": "2026-06-29T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90103_01",
+        "seriesId": 2,
+        "sortOrder": 20791
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20801,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Chuo Ward - Path (Noon)",
+        "releaseTime": "2026-06-29T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90042_01",
+        "seriesId": 2,
+        "sortOrder": 20801
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20811,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mikazuki Villa - Living Room (Evening)",
+        "releaseTime": "2026-06-29T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90279_02",
+        "seriesId": 2,
+        "sortOrder": 20022
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20821,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Natsume Books",
+        "releaseTime": "2026-07-31T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90033_01",
+        "seriesId": 2,
+        "sortOrder": 20821
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20831,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Banbanzai - Inside - Lights Off",
+        "releaseTime": "2026-08-28T22:00:00+09:00",
+        "resourceName": "bg_adv_01_90280_02",
+        "seriesId": 2,
+        "sortOrder": 20035
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20841,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Daito Ward - Ferris Wheel Entrance (Night)",
+        "releaseTime": "2026-08-28T22:00:00+09:00",
+        "resourceName": "bg_adv_01_90087_01",
+        "seriesId": 2,
+        "sortOrder": 20841
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20851,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Uwasa of Chelation Land - Emerging 1",
+        "releaseTime": "2026-08-28T22:00:00+09:00",
+        "resourceName": "bg_adv_01_90088_02",
+        "seriesId": 2,
+        "sortOrder": 20851
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20861,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Uwasa of Chelation Land - Emerging 2",
+        "releaseTime": "2026-08-28T22:00:00+09:00",
+        "resourceName": "bg_adv_01_90088_03",
+        "seriesId": 2,
+        "sortOrder": 20861
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20871,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Decrepit Building - 3 Doors",
+        "releaseTime": "2026-09-10T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90223_01",
+        "seriesId": 2,
+        "sortOrder": 20871
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20881,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Decrepit Building - 1 Door - Tied Shut",
+        "releaseTime": "2026-09-10T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90224_01",
+        "seriesId": 2,
+        "sortOrder": 20881
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20891,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Decrepit Building - 1 Door - Untied",
+        "releaseTime": "2026-09-10T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90224_02",
+        "seriesId": 2,
+        "sortOrder": 20891
+    },
+    {
+        "dollhouse2dBackgroundMstId": 20901,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Sakae Ward - 1090 Tower Front (Noon)",
+        "releaseTime": "2026-09-10T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90062_01",
+        "seriesId": 2,
+        "sortOrder": 20901
+    },
+    {
+        "dollhouse2dBackgroundMstId": 30011,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Shiraha Girls' Academy - Grounds (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_03_10022_01",
+        "seriesId": 3,
+        "sortOrder": 30011
+    },
+    {
+        "dollhouse2dBackgroundMstId": 30021,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Oriko's Father's Study (Noon)",
+        "releaseTime": "2025-10-02T12:00:00+09:00",
+        "resourceName": "bg_adv_03_90395_01",
+        "seriesId": 3,
+        "sortOrder": 30021
+    },
+    {
+        "dollhouse2dBackgroundMstId": 30031,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Chicklet Witch - Deepest Layer",
+        "releaseTime": "2026-01-19T12:00:00+09:00",
+        "resourceName": "bg_adv_03_10023_01",
+        "seriesId": 3,
+        "sortOrder": 30031
+    },
+    {
+        "dollhouse2dBackgroundMstId": 30041,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Oriko Magica Witch Labyrinth",
+        "releaseTime": "2026-01-19T12:00:00+09:00",
+        "resourceName": "bg_adv_03_10026_01",
+        "seriesId": 3,
+        "sortOrder": 30041
+    },
+    {
+        "dollhouse2dBackgroundMstId": 30051,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Elegance Witch - Deepest Layer",
+        "releaseTime": "2026-01-19T12:00:00+09:00",
+        "resourceName": "bg_adv_03_10027_01",
+        "seriesId": 3,
+        "sortOrder": 30051
+    },
+    {
+        "dollhouse2dBackgroundMstId": 30061,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Oriko Magica Witch Labyrinth 2",
+        "releaseTime": "2026-01-19T12:00:00+09:00",
+        "resourceName": "bg_adv_03_10028_01",
+        "seriesId": 3,
+        "sortOrder": 30061
+    },
+    {
+        "dollhouse2dBackgroundMstId": 30071,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Flytrap Witch - Deepest Layer",
+        "releaseTime": "2026-01-19T12:00:00+09:00",
+        "resourceName": "bg_adv_03_10030_01",
+        "seriesId": 3,
+        "sortOrder": 30071
+    },
+    {
+        "dollhouse2dBackgroundMstId": 30081,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Needle Witch - Floor 2",
+        "releaseTime": "2026-01-19T12:00:00+09:00",
+        "resourceName": "bg_adv_03_10044_01",
+        "seriesId": 3,
+        "sortOrder": 30081
+    },
+    {
+        "dollhouse2dBackgroundMstId": 30091,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Needle Witch - Deepest Layer",
+        "releaseTime": "2026-01-19T12:00:00+09:00",
+        "resourceName": "bg_adv_03_10044_02",
+        "seriesId": 3,
+        "sortOrder": 30091
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90001,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Floating Cafe (Noon)",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90369_01",
+        "seriesId": 9,
+        "sortOrder": 90001
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90013,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Top of Bridge (Night)",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90370_01",
+        "seriesId": 9,
+        "sortOrder": 90013
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90023,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "4-Way Intersection (Night)",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90372_01",
+        "seriesId": 9,
+        "sortOrder": 90023
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90031,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Kumanoko no Yume",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10051_01",
+        "seriesId": 9,
+        "sortOrder": 90031
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90041,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Yaginoko no Yume - Floor 1",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10052_01",
+        "seriesId": 9,
+        "sortOrder": 90041
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90051,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Yaginoko no Yume - Floor 2",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10052_02",
+        "seriesId": 9,
+        "sortOrder": 90051
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90061,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Yaginoko no Yume - Deepest Layer",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10052_04",
+        "seriesId": 9,
+        "sortOrder": 90061
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90071,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Ghost Town",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10053_01",
+        "seriesId": 9,
+        "sortOrder": 90071
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90083,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Ghost Town - Sign",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10054_01",
+        "seriesId": 9,
+        "sortOrder": 90083
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90093,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Ghost Town - Sign - Time Stop",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10054_02",
+        "seriesId": 9,
+        "sortOrder": 90093
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90103,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Park With a Hill (Night)",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10057_01",
+        "seriesId": 9,
+        "sortOrder": 90103
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90112,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Park With a Hill (Dawn)",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10057_02",
+        "seriesId": 9,
+        "sortOrder": 90112
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90123,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Park With a Hill - Blooming (Night)",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10057_03",
+        "seriesId": 9,
+        "sortOrder": 90123
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90133,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Park With a Hill - Blooming 2 (Night)",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10057_04",
+        "seriesId": 9,
+        "sortOrder": 90133
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90143,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Park With a Hill - Barren (Night)",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10057_05",
+        "seriesId": 9,
+        "sortOrder": 90143
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90152,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Bus - Floor 2 - Mitakihara Block 2 (Evening)",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10058_01",
+        "seriesId": 9,
+        "sortOrder": 90152
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90163,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Bus - Floor 2 - Mitakihara Block 2 (Night)",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10058_02",
+        "seriesId": 9,
+        "sortOrder": 90163
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90172,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Bus - Floor 2 - Mitakihara Block 3 (Evening)",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10058_03",
+        "seriesId": 9,
+        "sortOrder": 90172
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90183,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Bus - Floor 2 - Top of Bridge",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10058_04",
+        "seriesId": 9,
+        "sortOrder": 90183
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90192,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Bus Stop - Mitakihara Block 2 (Evening)",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10059_01",
+        "seriesId": 9,
+        "sortOrder": 90192
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90203,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Bus Stop - Mitakihara Block 2 (Night)",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10059_02",
+        "seriesId": 9,
+        "sortOrder": 90203
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90212,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Bus Stop - Mitakihara Block 3 (Evening)",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10059_03",
+        "seriesId": 9,
+        "sortOrder": 90212
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90223,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Bus Stop - Top of Bridge",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10059_04",
+        "seriesId": 9,
+        "sortOrder": 90223
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90231,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Footpath - Cherry Blossoms (Noon)",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90352_04",
+        "seriesId": 9,
+        "sortOrder": 90231
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90241,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Tower of Mayu Interior",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90471_01",
+        "seriesId": 9,
+        "sortOrder": 90241
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90251,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Nutcracker Witch - Floor 1",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10055_01",
+        "seriesId": 9,
+        "sortOrder": 90251
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90261,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Nutcracker Witch - Floor 2",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10055_02",
+        "seriesId": 9,
+        "sortOrder": 90261
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90271,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Nutcracker Witch - Deepest Layer",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10055_03",
+        "seriesId": 9,
+        "sortOrder": 90271
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90281,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Limitless White Void",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10056_01",
+        "seriesId": 9,
+        "sortOrder": 90281
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90293,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Desert Ruins",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10060_01",
+        "seriesId": 9,
+        "sortOrder": 90293
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90303,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Desert Ruins - Post-Collapse",
+        "releaseTime": "2026-02-06T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10060_02",
+        "seriesId": 9,
+        "sortOrder": 90303
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90311,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Apparel Shop",
+        "releaseTime": "2026-02-10T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90299_01",
+        "seriesId": 999,
+        "sortOrder": 990191
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90321,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Office (Noon)",
+        "releaseTime": "2026-02-10T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90305_01",
+        "seriesId": 999,
+        "sortOrder": 990201
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90331,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Living Room (Noon)",
+        "releaseTime": "2026-02-10T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90263_01",
+        "seriesId": 999,
+        "sortOrder": 990211
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90342,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Upscale Residential Area (Evening)",
+        "releaseTime": "2026-02-17T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90167_02",
+        "seriesId": 999,
+        "sortOrder": 990222
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90351,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Back Alley 2 (Noon)",
+        "releaseTime": "2026-02-27T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90314_01",
+        "seriesId": 999,
+        "sortOrder": 990231
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90363,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Back Alley 2 (Night)",
+        "releaseTime": "2026-02-17T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90314_03",
+        "seriesId": 999,
+        "sortOrder": 990243
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90371,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Sidewalk (Noon)",
+        "releaseTime": "2026-02-27T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90148_01",
+        "seriesId": 999,
+        "sortOrder": 990251
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90381,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Yaginoko no Yume - Floor 2 - Time Stop",
+        "releaseTime": "2026-08-13T22:00:00+09:00",
+        "resourceName": "bg_adv_00_10052_03",
+        "seriesId": 9,
+        "sortOrder": 90055
+    },
+    {
+        "dollhouse2dBackgroundMstId": 90391,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Ghost Town - Time Stop",
+        "releaseTime": "2026-08-13T22:00:00+09:00",
+        "resourceName": "bg_adv_00_10053_02",
+        "seriesId": 9,
+        "sortOrder": 90075
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100001,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Forest (Noon)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90152_01",
+        "seriesId": 10,
+        "sortOrder": 100001
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100012,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "France - Forest (Evening)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90152_02",
+        "seriesId": 10,
+        "sortOrder": 100012
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100023,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "France - Forest (Night)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90152_03",
+        "seriesId": 10,
+        "sortOrder": 100023
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100031,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Rural Town (Noon)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90153_01",
+        "seriesId": 10,
+        "sortOrder": 100031
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100042,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "France - Rural Town (Evening)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90153_02",
+        "seriesId": 10,
+        "sortOrder": 100042
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100053,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "France - Rural Town (Night)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90153_03",
+        "seriesId": 10,
+        "sortOrder": 100053
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100061,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Rural Town - Indoors - (Noon)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10071_01",
+        "seriesId": 10,
+        "sortOrder": 100061
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100071,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "France - Rural Town - Indoors - (Evening)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10071_02",
+        "seriesId": 10,
+        "sortOrder": 100071
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100081,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "France - Rural Town - Indoors - (Night)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10071_03",
+        "seriesId": 10,
+        "sortOrder": 100081
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100091,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Fortress - Outside (Noon)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90154_01",
+        "seriesId": 10,
+        "sortOrder": 100091
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100102,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "France - Camp (Evening)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90155_02",
+        "seriesId": 10,
+        "sortOrder": 100102
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100113,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "France - Camp (Night)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90155_03",
+        "seriesId": 10,
+        "sortOrder": 100113
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100121,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Cathedral - Inside (Noon)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90157_01",
+        "seriesId": 10,
+        "sortOrder": 100121
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100131,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Town (Noon)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90394_01",
+        "seriesId": 10,
+        "sortOrder": 100131
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100141,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Tourelles Fortress (Noon)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10078_01",
+        "seriesId": 10,
+        "sortOrder": 100141
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100151,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Tourelles Fortress - Post-Collapse (Noon)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10078_02",
+        "seriesId": 10,
+        "sortOrder": 100151
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100163,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "France - Tourelles Fortress (Night)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90156_02",
+        "seriesId": 10,
+        "sortOrder": 100163
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100171,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Darc Magica Witch Labyrinth",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10070_01",
+        "seriesId": 10,
+        "sortOrder": 100171
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100181,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Plains (Noon)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10075_01",
+        "seriesId": 10,
+        "sortOrder": 100181
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100192,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "France - Plains (Evening)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10075_02",
+        "seriesId": 10,
+        "sortOrder": 100192
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100201,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Fortress - Inside (Noon)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10076_01",
+        "seriesId": 10,
+        "sortOrder": 100201
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100211,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Fortress - Outside 2 (Noon)",
+        "releaseTime": "2026-03-10T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10077_01",
+        "seriesId": 10,
+        "sortOrder": 100211
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100221,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Camp (Noon)",
+        "releaseTime": "2026-04-24T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90155_01",
+        "seriesId": 10,
+        "sortOrder": 100101
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100231,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Cathedral - Inside (Night)",
+        "releaseTime": "2026-04-24T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90157_02",
+        "seriesId": 10,
+        "sortOrder": 100122
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100242,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "France - Town (Evening)",
+        "releaseTime": "2026-04-24T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90394_02",
+        "seriesId": 10,
+        "sortOrder": 100132
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100253,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "France - Town (Night)",
+        "releaseTime": "2026-04-24T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90394_03",
+        "seriesId": 10,
+        "sortOrder": 100133
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100262,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "France - Fortress - Outside (Evening)",
+        "releaseTime": "2026-04-24T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90154_02",
+        "seriesId": 10,
+        "sortOrder": 100092
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100273,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "France - Fortress - Outside (Night)",
+        "releaseTime": "2026-04-24T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90154_03",
+        "seriesId": 10,
+        "sortOrder": 100093
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100281,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Castle - Hallway (Night)",
+        "releaseTime": "2026-04-24T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90391_01",
+        "seriesId": 10,
+        "sortOrder": 100281
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100291,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Castle - Throne Room (Noon)",
+        "releaseTime": "2026-04-24T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10072_01",
+        "seriesId": 10,
+        "sortOrder": 100291
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100301,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Plains - Corbeau Battle",
+        "releaseTime": "2026-04-24T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10080_01",
+        "seriesId": 10,
+        "sortOrder": 100301
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100311,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Plains - Lapine Battle",
+        "releaseTime": "2026-04-24T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10079_01",
+        "seriesId": 10,
+        "sortOrder": 100311
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100321,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Prison - (Noon)",
+        "releaseTime": "2026-04-30T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90158_02",
+        "seriesId": 10,
+        "sortOrder": 100321
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100333,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "France - Prison - (Night)",
+        "releaseTime": "2026-04-30T12:00:00+09:00",
+        "resourceName": "bg_adv_04_90158_01",
+        "seriesId": 10,
+        "sortOrder": 100333
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100341,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Castle - Throne Room (Night)",
+        "releaseTime": "2026-04-30T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10072_02",
+        "seriesId": 10,
+        "sortOrder": 100292
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100353,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "France - Castle - Throne Room - Dark",
+        "releaseTime": "2026-04-30T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10072_03",
+        "seriesId": 10,
+        "sortOrder": 100293
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100361,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Castle - Bedroom (Noon)",
+        "releaseTime": "2026-04-30T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10073_01",
+        "seriesId": 10,
+        "sortOrder": 100361
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100373,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "France - Castle - Bedroom (Night)",
+        "releaseTime": "2026-04-30T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10073_02",
+        "seriesId": 10,
+        "sortOrder": 100373
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100381,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Darc Magica Witch Labyrinth 2",
+        "releaseTime": "2026-04-30T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10074_01",
+        "seriesId": 10,
+        "sortOrder": 100381
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100391,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Darc Magica Witch Labyrinth 3",
+        "releaseTime": "2026-04-30T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10074_02",
+        "seriesId": 10,
+        "sortOrder": 100391
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100401,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Rouen",
+        "releaseTime": "2026-04-30T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10081_01",
+        "seriesId": 10,
+        "sortOrder": 100401
+    },
+    {
+        "dollhouse2dBackgroundMstId": 100411,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "France - Rouen 2",
+        "releaseTime": "2026-04-30T12:00:00+09:00",
+        "resourceName": "bg_adv_04_10082_01",
+        "seriesId": 10,
+        "sortOrder": 100411
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990011,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Private Beach (Noon)",
+        "releaseTime": "2026-07-15T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90172_01",
+        "seriesId": 999,
+        "sortOrder": 990585
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990021,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Waterpark - Waterslide (Noon)",
+        "releaseTime": "2026-07-15T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90206_01",
+        "seriesId": 999,
+        "sortOrder": 990545
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990031,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Event Space (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90316_01",
+        "seriesId": 999,
+        "sortOrder": 990031
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990041,
+        "isDefault": true,
+        "lightingType": 0,
+        "name": "Train Car (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90318_01",
+        "seriesId": 999,
+        "sortOrder": 990041
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990053,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Candyland (Night)",
+        "releaseTime": "2025-10-30T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10064_01",
+        "seriesId": 999,
+        "sortOrder": 990053
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990063,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Artland (Night)",
+        "releaseTime": "2025-11-06T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10067_01",
+        "seriesId": 999,
+        "sortOrder": 990063
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990071,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Movie Theater",
+        "releaseTime": "2025-11-29T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90194_02",
+        "seriesId": 999,
+        "sortOrder": 990071
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990081,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "St. Magica Academy - Roof (Noon)",
+        "releaseTime": "2025-11-29T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90164_02",
+        "seriesId": 999,
+        "sortOrder": 990081
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990091,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "St. Magica Academy - Gate (Noon)",
+        "releaseTime": "2025-11-29T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90166_03",
+        "seriesId": 999,
+        "sortOrder": 990091
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990101,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Street - Christmas (Noon)",
+        "releaseTime": "2025-11-29T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90147_06",
+        "seriesId": 999,
+        "sortOrder": 990101
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990111,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Upscale Residential Area - Christmas (Noon)",
+        "releaseTime": "2025-11-29T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10002_02",
+        "seriesId": 999,
+        "sortOrder": 990111
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990121,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Rose Garden Witch - Deepest Layer - Christmas",
+        "releaseTime": "2025-11-29T12:00:00+09:00",
+        "resourceName": "bg_adv_00_10031_08",
+        "seriesId": 999,
+        "sortOrder": 990121
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990131,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Street - Christmas (Night)",
+        "releaseTime": "2025-12-11T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90147_07",
+        "seriesId": 999,
+        "sortOrder": 990131
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990141,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Upscale Residential Area - Christmas (Night)",
+        "releaseTime": "2025-12-11T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10002_03",
+        "seriesId": 999,
+        "sortOrder": 990141
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990151,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Big Christmas Tree",
+        "releaseTime": "2025-12-11T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90373_02",
+        "seriesId": 999,
+        "sortOrder": 990151
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990161,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Shopping Mall - Christmas",
+        "releaseTime": "2025-12-22T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90260_02",
+        "seriesId": 999,
+        "sortOrder": 990161
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990171,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Shopping Center - Christmas (Noon)",
+        "releaseTime": "2025-12-22T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90283_06",
+        "seriesId": 999,
+        "sortOrder": 990171
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990181,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Big Park - New Year's (Noon)",
+        "releaseTime": "2026-01-01T00:00:00+09:00",
+        "resourceName": "bg_adv_99_90300_04",
+        "seriesId": 999,
+        "sortOrder": 990181
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990261,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Station Entrance (Noon)",
+        "releaseTime": "2026-04-06T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90328_01",
+        "seriesId": 999,
+        "sortOrder": 990261
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990271,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Shopping Mall",
+        "releaseTime": "2026-04-14T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90260_01",
+        "seriesId": 999,
+        "sortOrder": 990271
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990281,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Rooftop (Noon)",
+        "releaseTime": "2026-04-14T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90312_01",
+        "seriesId": 999,
+        "sortOrder": 990281
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990293,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Deserted Place (Night)",
+        "releaseTime": "2026-04-14T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90274_03",
+        "seriesId": 999,
+        "sortOrder": 990293
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990302,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Cemetery (Evening)",
+        "releaseTime": "2026-04-14T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90319_02",
+        "seriesId": 999,
+        "sortOrder": 990302
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990313,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Unfinished Building (Night)",
+        "releaseTime": "2026-04-14T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90202_02",
+        "seriesId": 999,
+        "sortOrder": 990313
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990321,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Fishing Port (Noon)",
+        "releaseTime": "2026-03-27T22:00:00+09:00",
+        "resourceName": "bg_adv_99_10095_01",
+        "seriesId": 999,
+        "sortOrder": 990321
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990332,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Fishing Port (Evening)",
+        "releaseTime": "2026-03-27T22:00:00+09:00",
+        "resourceName": "bg_adv_99_10095_02",
+        "seriesId": 999,
+        "sortOrder": 990332
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990343,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Fishing Port (Night)",
+        "releaseTime": "2026-03-27T22:00:00+09:00",
+        "resourceName": "bg_adv_99_10095_03",
+        "seriesId": 999,
+        "sortOrder": 990343
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990351,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Empty Room",
+        "releaseTime": "2026-03-27T22:00:00+09:00",
+        "resourceName": "bg_adv_99_10096_01",
+        "seriesId": 999,
+        "sortOrder": 990351
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990361,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Magia Island - Beach (Noon)",
+        "releaseTime": "2026-05-29T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10109_01",
+        "seriesId": 999,
+        "sortOrder": 990361
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990372,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Magia Island - Beach (Evening)",
+        "releaseTime": "2026-05-29T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10109_02",
+        "seriesId": 999,
+        "sortOrder": 990363
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990381,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Old Schoolhouse - Classroom (Noon)",
+        "releaseTime": "2026-05-29T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10111_01",
+        "seriesId": 999,
+        "sortOrder": 990381
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990391,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Magia Island - Spirit Statue",
+        "releaseTime": "2026-05-29T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10110_01",
+        "seriesId": 999,
+        "sortOrder": 990391
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990403,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Magia Island - Beach (Night)",
+        "releaseTime": "2026-06-16T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10109_03",
+        "seriesId": 999,
+        "sortOrder": 990365
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990412,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Magia Island - Beach - Eruption",
+        "releaseTime": "2026-06-16T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10109_04",
+        "seriesId": 999,
+        "sortOrder": 990367
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990421,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Magia Island - Spirit Statue - No Orb",
+        "releaseTime": "2026-06-16T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10110_02",
+        "seriesId": 999,
+        "sortOrder": 990393
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990431,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Magia Island - Spirit Statue - Witch Labyrinth",
+        "releaseTime": "2026-06-16T12:00:00+09:00",
+        "resourceName": "bg_adv_01_10110_03",
+        "seriesId": 999,
+        "sortOrder": 990395
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990441,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Seaside Mountain Trail (Noon)",
+        "releaseTime": "2026-06-16T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90196_01",
+        "seriesId": 999,
+        "sortOrder": 990441
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990451,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Mountain Trail - Halfway Point (Noon)",
+        "releaseTime": "2026-06-16T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90114_01",
+        "seriesId": 999,
+        "sortOrder": 990451
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990462,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Mountain Trail - Halfway Point (Evening)",
+        "releaseTime": "2026-06-16T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90114_02",
+        "seriesId": 999,
+        "sortOrder": 990462
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990471,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Cave (Noon)",
+        "releaseTime": "2026-06-16T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90201_01",
+        "seriesId": 999,
+        "sortOrder": 990471
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990481,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Science Lab",
+        "releaseTime": "2026-06-29T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90256_01",
+        "seriesId": 999,
+        "sortOrder": 990481
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990491,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Western-Style Building - Inside (Noon)",
+        "releaseTime": "2026-06-29T12:00:00+09:00",
+        "resourceName": "bg_adv_01_90347_01",
+        "seriesId": 999,
+        "sortOrder": 990491
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990501,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Shopping Mall - Shopfronts",
+        "releaseTime": "2026-06-29T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90298_01",
+        "seriesId": 999,
+        "sortOrder": 990501
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990511,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Water Park - Lounge Area",
+        "releaseTime": "2026-06-29T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90207_01",
+        "seriesId": 999,
+        "sortOrder": 990511
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990521,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Waterpark - Lazy River (Grimy)",
+        "releaseTime": "2026-06-29T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10112_01",
+        "seriesId": 999,
+        "sortOrder": 990521
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990531,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Waterpark - Lazy River (Noon)",
+        "releaseTime": "2026-06-29T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10112_02",
+        "seriesId": 999,
+        "sortOrder": 990531
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990542,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Waterpark - Lazy River (Evening)",
+        "releaseTime": "2026-07-15T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10112_03",
+        "seriesId": 999,
+        "sortOrder": 990542
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990571,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Waterpark - Indoor Pool (Noon)",
+        "releaseTime": "2026-07-15T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90209_01",
+        "seriesId": 999,
+        "sortOrder": 990571
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990581,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Waterpark - Poolside (Noon)",
+        "releaseTime": "2026-07-15T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90210_02",
+        "seriesId": 999,
+        "sortOrder": 990581
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990591,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Residence - Room (Night)",
+        "releaseTime": "2026-07-31T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90262_03",
+        "seriesId": 999,
+        "sortOrder": 990591
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990603,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Residence - Room - Lights Off",
+        "releaseTime": "2026-07-31T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90262_05",
+        "seriesId": 999,
+        "sortOrder": 990603
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990611,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Library (Evening)",
+        "releaseTime": "2026-07-31T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90308_02",
+        "seriesId": 999,
+        "sortOrder": 990611
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990621,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Manor - Room (Evening)",
+        "releaseTime": "2026-07-31T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90304_02",
+        "seriesId": 999,
+        "sortOrder": 990621
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990631,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Lakefront - Boat",
+        "releaseTime": "2026-07-31T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10142_01",
+        "seriesId": 999,
+        "sortOrder": 990631
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990641,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Lakefront",
+        "releaseTime": "2026-08-07T12:00:00+09:00",
+        "resourceName": "bg_adv_99_10143_01",
+        "seriesId": 999,
+        "sortOrder": 990641
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990651,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Amusement Park (Noon)",
+        "releaseTime": "2026-07-31T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90472_01",
+        "seriesId": 999,
+        "sortOrder": 990651
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990663,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Back Alley (Night)",
+        "releaseTime": "2026-07-31T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90273_03",
+        "seriesId": 999,
+        "sortOrder": 990663
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990671,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Back Alley (Noon)",
+        "releaseTime": "2026-08-28T22:00:00+09:00",
+        "resourceName": "bg_adv_99_90273_01",
+        "seriesId": 999,
+        "sortOrder": 990661
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990681,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Manor - Room (Noon)",
+        "releaseTime": "2026-09-10T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90304_01",
+        "seriesId": 999,
+        "sortOrder": 990620
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990691,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Cafe Terrace (Noon)",
+        "releaseTime": "2026-09-10T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90293_01",
+        "seriesId": 999,
+        "sortOrder": 990691
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990733,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Traditional Home - Kitchen (Night) - Lights Off",
+        "releaseTime": "2026-09-10T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90289_05",
+        "seriesId": 999,
+        "sortOrder": 990733
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990741,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Little Park (Noon)",
+        "releaseTime": "2026-09-10T12:00:00+09:00",
+        "resourceName": "bg_adv_99_90269_01",
+        "seriesId": 999,
+        "sortOrder": 990701
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990752,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Hospital - Hospital Room (Evening)",
+        "releaseTime": "2026-09-10T12:00:00+09:00",
+        "resourceName": "bg_adv_00_90253_02",
+        "seriesId": 999,
+        "sortOrder": 990751
+    }
+]

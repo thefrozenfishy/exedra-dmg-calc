@@ -1,0 +1,27 @@
+[
+    {
+        "overrideCharacterName": "Ultimate Madoka",
+        "replaceCharacterNameMstId": 1,
+        "styleMstId": 11370101
+    },
+    {
+        "overrideCharacterName": "Holy Mami",
+        "replaceCharacterNameMstId": 2,
+        "styleMstId": 11390101
+    },
+    {
+        "overrideCharacterName": "Devil Homura",
+        "replaceCharacterNameMstId": 3,
+        "styleMstId": 11380101
+    },
+    {
+        "overrideCharacterName": "Darc (Final)",
+        "replaceCharacterNameMstId": 4,
+        "styleMstId": 11440101
+    },
+    {
+        "overrideCharacterName": "Uwasa Tsuruno",
+        "replaceCharacterNameMstId": 5,
+        "styleMstId": 10100201
+    }
+]

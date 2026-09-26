@@ -1,0 +1,1856 @@
+[
+    {
+        "title": "Lux☆Magica",
+        "titleType": 1,
+        "userTitleMstId": 10010101,
+        "value1": 10010101
+    },
+    {
+        "title": "Pluvia☆Neujahr",
+        "titleType": 1,
+        "userTitleMstId": 10010301,
+        "value1": 10010301
+    },
+    {
+        "title": "Pluvia☆Clara",
+        "titleType": 1,
+        "userTitleMstId": 10010601,
+        "value1": 10010601
+    },
+    {
+        "title": "Pluvia☆Magica",
+        "titleType": 1,
+        "userTitleMstId": 10010701,
+        "value1": 10010701
+    },
+    {
+        "title": "Vinctio☆Magica",
+        "titleType": 1,
+        "userTitleMstId": 10010801,
+        "value1": 10010801
+    },
+    {
+        "title": "Time Stop Strike",
+        "titleType": 1,
+        "userTitleMstId": 10020101,
+        "value1": 10020101
+    },
+    {
+        "title": "Concentrated Missile Fire",
+        "titleType": 1,
+        "userTitleMstId": 10020201,
+        "value1": 10020201
+    },
+    {
+        "title": "Dark Art Dominion",
+        "titleType": 1,
+        "userTitleMstId": 10020301,
+        "value1": 10020301
+    },
+    {
+        "title": "Splashin' Kyubey Blast",
+        "titleType": 1,
+        "userTitleMstId": 10020701,
+        "value1": 10020701
+    },
+    {
+        "title": "Tiro Finale",
+        "titleType": 1,
+        "userTitleMstId": 10030101,
+        "value1": 10030101
+    },
+    {
+        "title": "Bebe-O'-Lantern",
+        "titleType": 1,
+        "userTitleMstId": 10030201,
+        "value1": 10030201
+    },
+    {
+        "title": "Fiore Finale",
+        "titleType": 1,
+        "userTitleMstId": 10030301,
+        "value1": 10030301
+    },
+    {
+        "title": "Panna Vorticosa",
+        "titleType": 1,
+        "userTitleMstId": 10030401,
+        "value1": 10030401
+    },
+    {
+        "title": "Doppel of Invitations",
+        "titleType": 1,
+        "userTitleMstId": 10030501,
+        "value1": 10030501
+    },
+    {
+        "title": "Spietata Scarica",
+        "titleType": 1,
+        "userTitleMstId": 10030601,
+        "value1": 10030601
+    },
+    {
+        "title": "Baldamente Fortissimo",
+        "titleType": 1,
+        "userTitleMstId": 10040101,
+        "value1": 10040101
+    },
+    {
+        "title": "Melodia Appassionata",
+        "titleType": 1,
+        "userTitleMstId": 10040201,
+        "value1": 10040201
+    },
+    {
+        "title": "Buon Natale Grazioso",
+        "titleType": 1,
+        "userTitleMstId": 10040301,
+        "value1": 10040301
+    },
+    {
+        "title": "Grandioso Sinfonia",
+        "titleType": 1,
+        "userTitleMstId": 10040701,
+        "value1": 10040701
+    },
+    {
+        "title": "Kugatachi",
+        "titleType": 1,
+        "userTitleMstId": 10050101,
+        "value1": 10050101
+    },
+    {
+        "title": "Scorchin' Summer Spike",
+        "titleType": 1,
+        "userTitleMstId": 10050201,
+        "value1": 10050201
+    },
+    {
+        "title": "Yuletide Gift",
+        "titleType": 1,
+        "userTitleMstId": 10050301,
+        "value1": 10050301
+    },
+    {
+        "title": "Crimson Confectioner",
+        "titleType": 1,
+        "userTitleMstId": 10050401,
+        "value1": 10050401
+    },
+    {
+        "title": "Magic Cake Dish",
+        "titleType": 1,
+        "userTitleMstId": 10060101,
+        "value1": 10060101
+    },
+    {
+        "title": "Hollow Woman",
+        "titleType": 1,
+        "userTitleMstId": 10070101,
+        "value1": 10070101
+    },
+    {
+        "title": "Groundhog Daze",
+        "titleType": 1,
+        "userTitleMstId": 10070201,
+        "value1": 10070201
+    },
+    {
+        "title": "Strada Futuro",
+        "titleType": 1,
+        "userTitleMstId": 10080101,
+        "value1": 10080101
+    },
+    {
+        "title": "Doppel of Silence",
+        "titleType": 1,
+        "userTitleMstId": 10080102,
+        "value1": 10080102
+    },
+    {
+        "title": "Evoluzione Presente",
+        "titleType": 1,
+        "userTitleMstId": 10080401,
+        "value1": 10080401
+    },
+    {
+        "title": "Absolute Rain",
+        "titleType": 1,
+        "userTitleMstId": 10090101,
+        "value1": 10090101
+    },
+    {
+        "title": "Absolute Venus",
+        "titleType": 1,
+        "userTitleMstId": 10090301,
+        "value1": 10090301
+    },
+    {
+        "title": "Flame Waltz",
+        "titleType": 1,
+        "userTitleMstId": 10100101,
+        "value1": 10100101
+    },
+    {
+        "title": "Thunderous Waltz",
+        "titleType": 1,
+        "userTitleMstId": 10100201,
+        "value1": 10100201
+    },
+    {
+        "title": "Folter Gefängnis",
+        "titleType": 1,
+        "userTitleMstId": 10110101,
+        "value1": 10110101
+    },
+    {
+        "title": "Ultra Great Big Hammer",
+        "titleType": 1,
+        "userTitleMstId": 10120101,
+        "value1": 10120101
+    },
+    {
+        "title": "Assault Paranoia",
+        "titleType": 1,
+        "userTitleMstId": 10130101,
+        "value1": 10130101
+    },
+    {
+        "title": "The Universe's Edge",
+        "titleType": 1,
+        "userTitleMstId": 10140101,
+        "value1": 10140101
+    },
+    {
+        "title": "Infinite Poseidon",
+        "titleType": 1,
+        "userTitleMstId": 10150101,
+        "value1": 10150101
+    },
+    {
+        "title": "Judgement Earth",
+        "titleType": 1,
+        "userTitleMstId": 10160101,
+        "value1": 10160101
+    },
+    {
+        "title": "Neo Genesis",
+        "titleType": 1,
+        "userTitleMstId": 10190101,
+        "value1": 10190101
+    },
+    {
+        "title": "My Creations",
+        "titleType": 1,
+        "userTitleMstId": 10200101,
+        "value1": 10200101
+    },
+    {
+        "title": "Nine Phases",
+        "titleType": 1,
+        "userTitleMstId": 10210101,
+        "value1": 10210101
+    },
+    {
+        "title": "Marigold Dadaism",
+        "titleType": 1,
+        "userTitleMstId": 10210201,
+        "value1": 10210201
+    },
+    {
+        "title": "Luce della Speranza",
+        "titleType": 1,
+        "userTitleMstId": 10220101,
+        "value1": 10220101
+    },
+    {
+        "title": "Light of Reckoning",
+        "titleType": 1,
+        "userTitleMstId": 10230101,
+        "value1": 10230101
+    },
+    {
+        "title": "Structure Destruction",
+        "titleType": 1,
+        "userTitleMstId": 10240101,
+        "value1": 10240101
+    },
+    {
+        "title": "Cherry Blizzard",
+        "titleType": 1,
+        "userTitleMstId": 10250101,
+        "value1": 10250101
+    },
+    {
+        "title": "Cherry Ballad",
+        "titleType": 1,
+        "userTitleMstId": 10260101,
+        "value1": 10260101
+    },
+    {
+        "title": "Atomo Arrabbiato",
+        "titleType": 1,
+        "userTitleMstId": 10590101,
+        "value1": 10590101
+    },
+    {
+        "title": "My Gigantic Heart",
+        "titleType": 1,
+        "userTitleMstId": 10620101,
+        "value1": 10620101
+    },
+    {
+        "title": "Soul Salvation",
+        "titleType": 1,
+        "userTitleMstId": 10800101,
+        "value1": 10800101
+    },
+    {
+        "title": "Sacred Gift",
+        "titleType": 1,
+        "userTitleMstId": 10800201,
+        "value1": 10800201
+    },
+    {
+        "title": "Glitterjoy Snow Globe",
+        "titleType": 1,
+        "userTitleMstId": 10860201,
+        "value1": 10860201
+    },
+    {
+        "title": "Tenebrous Arcana",
+        "titleType": 1,
+        "userTitleMstId": 10920101,
+        "value1": 10920101
+    },
+    {
+        "title": "A Tale of Cherry Blossoms",
+        "titleType": 1,
+        "userTitleMstId": 10980101,
+        "value1": 10980101
+    },
+    {
+        "title": "Thoughtless",
+        "titleType": 1,
+        "userTitleMstId": 11040101,
+        "value1": 11040101
+    },
+    {
+        "title": "Carnival Cuddleboom",
+        "titleType": 1,
+        "userTitleMstId": 11070201,
+        "value1": 11070201
+    },
+    {
+        "title": "Luminous Tenet",
+        "titleType": 1,
+        "userTitleMstId": 11140201,
+        "value1": 11140201
+    },
+    {
+        "title": "La Lumière",
+        "titleType": 1,
+        "userTitleMstId": 11150101,
+        "value1": 11150101
+    },
+    {
+        "title": "L'Ombre",
+        "titleType": 1,
+        "userTitleMstId": 11160101,
+        "value1": 11160101
+    },
+    {
+        "title": "Désintégration",
+        "titleType": 1,
+        "userTitleMstId": 11170101,
+        "value1": 11170101
+    },
+    {
+        "title": "La Danse Macabre",
+        "titleType": 1,
+        "userTitleMstId": 11200101,
+        "value1": 11200101
+    },
+    {
+        "title": "Oracle Ray",
+        "titleType": 1,
+        "userTitleMstId": 11240101,
+        "value1": 11240101
+    },
+    {
+        "title": "Vampire Fang",
+        "titleType": 1,
+        "userTitleMstId": 11250101,
+        "value1": 11250101
+    },
+    {
+        "title": "Soaring Storyteller",
+        "titleType": 1,
+        "userTitleMstId": 11330101,
+        "value1": 11330101
+    },
+    {
+        "title": "Nothing to Despair, Ever",
+        "titleType": 1,
+        "userTitleMstId": 11370101,
+        "value1": 11370101
+    },
+    {
+        "title": "Falsified Phenomena",
+        "titleType": 1,
+        "userTitleMstId": 11380101,
+        "value1": 11380101
+    },
+    {
+        "title": "Tiro Finale Liberation",
+        "titleType": 1,
+        "userTitleMstId": 11390101,
+        "value1": 11390101
+    },
+    {
+        "title": "La Porte du Paradis",
+        "titleType": 1,
+        "userTitleMstId": 11440101,
+        "value1": 11440101
+    },
+    {
+        "title": "Floral Ironspike",
+        "titleType": 1,
+        "userTitleMstId": 11450101,
+        "value1": 11450101
+    },
+    {
+        "title": "Final Fatebloom",
+        "titleType": 1,
+        "userTitleMstId": 11460101,
+        "value1": 11460101
+    },
+    {
+        "title": "Unlimited Rulebook",
+        "titleType": 1,
+        "userTitleMstId": 11490101,
+        "value1": 11490101
+    },
+    {
+        "title": "Screw Zone",
+        "titleType": 1,
+        "userTitleMstId": 11500101,
+        "value1": 11500101
+    },
+    {
+        "title": "Kiss-shot",
+        "titleType": 1,
+        "userTitleMstId": 11510101,
+        "value1": 11510101
+    },
+    {
+        "title": "Nameless Girl",
+        "titleType": 0,
+        "userTitleMstId": 20000000,
+        "value1": 0
+    },
+    {
+        "title": "Rose Garden Witch Part I (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20101001,
+        "value1": 0
+    },
+    {
+        "title": "Rose Garden Witch Part II (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20101002,
+        "value1": 0
+    },
+    {
+        "title": "Darkness Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20101003,
+        "value1": 0
+    },
+    {
+        "title": "Dessert Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20101004,
+        "value1": 0
+    },
+    {
+        "title": "Box Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20101005,
+        "value1": 0
+    },
+    {
+        "title": "Graffiti Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20101006,
+        "value1": 0
+    },
+    {
+        "title": "Silver Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20101007,
+        "value1": 0
+    },
+    {
+        "title": "Shadow Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20101008,
+        "value1": 0
+    },
+    {
+        "title": "Dog Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20101009,
+        "value1": 0
+    },
+    {
+        "title": "Mermaid Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20101010,
+        "value1": 0
+    },
+    {
+        "title": "Artist Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20101011,
+        "value1": 0
+    },
+    {
+        "title": "Chairperson Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20101012,
+        "value1": 0
+    },
+    {
+        "title": "Birdcage Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20101013,
+        "value1": 0
+    },
+    {
+        "title": "Stage Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20101014,
+        "value1": 0
+    },
+    {
+        "title": "Rose Garden Witch Part I (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20102001,
+        "value1": 0
+    },
+    {
+        "title": "Rose Garden Witch Part II (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20102002,
+        "value1": 0
+    },
+    {
+        "title": "Darkness Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20102003,
+        "value1": 0
+    },
+    {
+        "title": "Dessert Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20102004,
+        "value1": 0
+    },
+    {
+        "title": "Box Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20102005,
+        "value1": 0
+    },
+    {
+        "title": "Graffiti Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20102006,
+        "value1": 0
+    },
+    {
+        "title": "Silver Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20102007,
+        "value1": 0
+    },
+    {
+        "title": "Shadow Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20102008,
+        "value1": 0
+    },
+    {
+        "title": "Dog Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20102009,
+        "value1": 0
+    },
+    {
+        "title": "Mermaid Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20102010,
+        "value1": 0
+    },
+    {
+        "title": "Artist Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20102011,
+        "value1": 0
+    },
+    {
+        "title": "Chairperson Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20102012,
+        "value1": 0
+    },
+    {
+        "title": "Birdcage Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20102013,
+        "value1": 0
+    },
+    {
+        "title": "Stage Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20102014,
+        "value1": 0
+    },
+    {
+        "title": "Rose Garden Witch Part I (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20103001,
+        "value1": 0
+    },
+    {
+        "title": "Rose Garden Witch Part II (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20103002,
+        "value1": 0
+    },
+    {
+        "title": "Darkness Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20103003,
+        "value1": 0
+    },
+    {
+        "title": "Dessert Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20103004,
+        "value1": 0
+    },
+    {
+        "title": "Box Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20103005,
+        "value1": 0
+    },
+    {
+        "title": "Graffiti Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20103006,
+        "value1": 0
+    },
+    {
+        "title": "Silver Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20103007,
+        "value1": 0
+    },
+    {
+        "title": "Shadow Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20103008,
+        "value1": 0
+    },
+    {
+        "title": "Dog Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20103009,
+        "value1": 0
+    },
+    {
+        "title": "Mermaid Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20103010,
+        "value1": 0
+    },
+    {
+        "title": "Artist Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20103011,
+        "value1": 0
+    },
+    {
+        "title": "Chairperson Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20103012,
+        "value1": 0
+    },
+    {
+        "title": "Birdcage Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20103013,
+        "value1": 0
+    },
+    {
+        "title": "Stage Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20103014,
+        "value1": 0
+    },
+    {
+        "title": "Rose Garden Witch (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20104002,
+        "value1": 0
+    },
+    {
+        "title": "Darkness Witch (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20104003,
+        "value1": 0
+    },
+    {
+        "title": "Dessert Witch (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20104004,
+        "value1": 0
+    },
+    {
+        "title": "Box Witch (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20104005,
+        "value1": 0
+    },
+    {
+        "title": "Graffiti Witch (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20104006,
+        "value1": 0
+    },
+    {
+        "title": "Silver Witch (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20104007,
+        "value1": 0
+    },
+    {
+        "title": "Shadow Witch (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20104008,
+        "value1": 0
+    },
+    {
+        "title": "Dog Witch (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20104009,
+        "value1": 0
+    },
+    {
+        "title": "Mermaid Witch (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20104010,
+        "value1": 0
+    },
+    {
+        "title": "Artist Witch (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20104011,
+        "value1": 0
+    },
+    {
+        "title": "Chairperson Witch (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20104012,
+        "value1": 0
+    },
+    {
+        "title": "Sandbox Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20201001,
+        "value1": 0
+    },
+    {
+        "title": "Rumor of the Commoner's Horse (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20201002,
+        "value1": 0
+    },
+    {
+        "title": "Rumor of the Anonymous AI (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20201003,
+        "value1": 0
+    },
+    {
+        "title": "Chelation Land Ferris Wheel (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20201004,
+        "value1": 0
+    },
+    {
+        "title": "Blessed Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20201005,
+        "value1": 0
+    },
+    {
+        "title": "Witch of Good Fortune (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20201006,
+        "value1": 0
+    },
+    {
+        "title": "Sandbox Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20202001,
+        "value1": 0
+    },
+    {
+        "title": "Rumor of the Commoner's Horse (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20202002,
+        "value1": 0
+    },
+    {
+        "title": "Rumor of the Anonymous AI (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20202003,
+        "value1": 0
+    },
+    {
+        "title": "Chelation Land Ferris Wheel (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20202004,
+        "value1": 0
+    },
+    {
+        "title": "Blessed Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20202005,
+        "value1": 0
+    },
+    {
+        "title": "Witch of Good Fortune (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20202006,
+        "value1": 0
+    },
+    {
+        "title": "Sandbox Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20203001,
+        "value1": 0
+    },
+    {
+        "title": "Rumor of the Commoner's Horse (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20203002,
+        "value1": 0
+    },
+    {
+        "title": "Rumor of the Anonymous AI (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20203003,
+        "value1": 0
+    },
+    {
+        "title": "Chelation Land Ferris Wheel (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20203004,
+        "value1": 0
+    },
+    {
+        "title": "Blessed Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20203005,
+        "value1": 0
+    },
+    {
+        "title": "Witch of Good Fortune (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20203006,
+        "value1": 0
+    },
+    {
+        "title": "Sandbox Witch (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20204001,
+        "value1": 0
+    },
+    {
+        "title": "Needle Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20301001,
+        "value1": 0
+    },
+    {
+        "title": "Needle Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20302001,
+        "value1": 0
+    },
+    {
+        "title": "Needle Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20303001,
+        "value1": 0
+    },
+    {
+        "title": "Scene 0 Part I (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20401001,
+        "value1": 0
+    },
+    {
+        "title": "Scene 0 Part II (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20401002,
+        "value1": 0
+    },
+    {
+        "title": "Scene 0 Part III (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20401003,
+        "value1": 0
+    },
+    {
+        "title": "Scene 0 Part I (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20402001,
+        "value1": 0
+    },
+    {
+        "title": "Scene 0 Part II (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20402002,
+        "value1": 0
+    },
+    {
+        "title": "Scene 0 Part III (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20402003,
+        "value1": 0
+    },
+    {
+        "title": "Scene 0 Part I (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20403001,
+        "value1": 0
+    },
+    {
+        "title": "Scene 0 Part II (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20403002,
+        "value1": 0
+    },
+    {
+        "title": "Scene 0 Part III (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20403003,
+        "value1": 0
+    },
+    {
+        "title": "Wraith Arc (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20501001,
+        "value1": 0
+    },
+    {
+        "title": "Wraith Arc (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20502001,
+        "value1": 0
+    },
+    {
+        "title": "Wraith Arc (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20503001,
+        "value1": 0
+    },
+    {
+        "title": "Crescent Memoria: Momoko's Memory (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20601001,
+        "value1": 0
+    },
+    {
+        "title": "Crescent Memoria: Tsuruno Yui's Memory (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20601002,
+        "value1": 0
+    },
+    {
+        "title": "Crescent Memoria Critic Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20601003,
+        "value1": 0
+    },
+    {
+        "title": "Crescent Memoria: Momoko's Memory (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20602001,
+        "value1": 0
+    },
+    {
+        "title": "Crescent Memoria: Tsuruno Yui's Memory (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20602002,
+        "value1": 0
+    },
+    {
+        "title": "Crescent Memoria Critic Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20602003,
+        "value1": 0
+    },
+    {
+        "title": "Crescent Memoria: Momoko's Memory (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20603001,
+        "value1": 0
+    },
+    {
+        "title": "Crescent Memoria: Tsuruno Yui's Memory (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20603002,
+        "value1": 0
+    },
+    {
+        "title": "Crescent Memoria Critic Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20603003,
+        "value1": 0
+    },
+    {
+        "title": "Rebellion Nightmare (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20701001,
+        "value1": 0
+    },
+    {
+        "title": "Rebellion Nutcracker Witch (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20701002,
+        "value1": 0
+    },
+    {
+        "title": "Rebellion Nightmare (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20702001,
+        "value1": 0
+    },
+    {
+        "title": "Rebellion Nutcracker Witch (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20702002,
+        "value1": 0
+    },
+    {
+        "title": "Rebellion Nightmare (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20703001,
+        "value1": 0
+    },
+    {
+        "title": "Rebellion Nutcracker Witch (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20703002,
+        "value1": 0
+    },
+    {
+        "title": "Darc Magica: Corbeau (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20801001,
+        "value1": 0
+    },
+    {
+        "title": "Darc: Crépuscule de la Reine (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20801002,
+        "value1": 0
+    },
+    {
+        "title": "Darc Magica: Corbeau (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20802001,
+        "value1": 0
+    },
+    {
+        "title": "Darc: Crépuscule de la Reine (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20802002,
+        "value1": 0
+    },
+    {
+        "title": "Darc Magica: Corbeau (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20803001,
+        "value1": 0
+    },
+    {
+        "title": "Darc: Crépuscule de la Reine (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20803002,
+        "value1": 0
+    },
+    {
+        "title": "Player Match No.1",
+        "titleType": 3,
+        "userTitleMstId": 30010001,
+        "value1": 0
+    },
+    {
+        "title": "Player Match No.2",
+        "titleType": 3,
+        "userTitleMstId": 30010002,
+        "value1": 0
+    },
+    {
+        "title": "Player Match No.3",
+        "titleType": 3,
+        "userTitleMstId": 30010003,
+        "value1": 0
+    },
+    {
+        "title": "Player Match No.4",
+        "titleType": 3,
+        "userTitleMstId": 30010004,
+        "value1": 0
+    },
+    {
+        "title": "Player Match No.5",
+        "titleType": 3,
+        "userTitleMstId": 30010005,
+        "value1": 0
+    },
+    {
+        "title": "Player Match No.6",
+        "titleType": 3,
+        "userTitleMstId": 30010006,
+        "value1": 0
+    },
+    {
+        "title": "Player Match No.7",
+        "titleType": 3,
+        "userTitleMstId": 30010007,
+        "value1": 0
+    },
+    {
+        "title": "Player Match No.8",
+        "titleType": 3,
+        "userTitleMstId": 30010008,
+        "value1": 0
+    },
+    {
+        "title": "Player Match No.9",
+        "titleType": 3,
+        "userTitleMstId": 30010009,
+        "value1": 0
+    },
+    {
+        "title": "Player Match No.10",
+        "titleType": 3,
+        "userTitleMstId": 30010010,
+        "value1": 0
+    },
+    {
+        "title": "Player Match Top 50",
+        "titleType": 3,
+        "userTitleMstId": 30010011,
+        "value1": 0
+    },
+    {
+        "title": "Player Match Top 100",
+        "titleType": 3,
+        "userTitleMstId": 30010012,
+        "value1": 0
+    },
+    {
+        "title": "Player Match Top 500",
+        "titleType": 3,
+        "userTitleMstId": 30010013,
+        "value1": 0
+    },
+    {
+        "title": "Player Match Top 1,000",
+        "titleType": 3,
+        "userTitleMstId": 30010014,
+        "value1": 0
+    },
+    {
+        "title": "Player Match Top 2,000",
+        "titleType": 3,
+        "userTitleMstId": 30010015,
+        "value1": 0
+    },
+    {
+        "title": "Player Match Top 5,000",
+        "titleType": 3,
+        "userTitleMstId": 30010016,
+        "value1": 0
+    },
+    {
+        "title": "Player Match Top 10,000",
+        "titleType": 3,
+        "userTitleMstId": 30010017,
+        "value1": 0
+    },
+    {
+        "title": "Player Match Top 20,000",
+        "titleType": 3,
+        "userTitleMstId": 30010018,
+        "value1": 0
+    },
+    {
+        "title": "Player Match Top 50,000",
+        "titleType": 3,
+        "userTitleMstId": 30010019,
+        "value1": 0
+    },
+    {
+        "title": "Steady Steps Forward: Magical Girl Dreams Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000001,
+        "value1": 4200019
+    },
+    {
+        "title": "Farewell Story Part I Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000002,
+        "value1": 4200001
+    },
+    {
+        "title": "Farewell Story Part II Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000003,
+        "value1": 4200003
+    },
+    {
+        "title": "Sunny Day Life Part I Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000004,
+        "value1": 4200005
+    },
+    {
+        "title": "Sunny Day Life Part II Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000005,
+        "value1": 4200007
+    },
+    {
+        "title": "Case 1: The Many-Worlds Interpretation Poesy Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000006,
+        "value1": 4200009
+    },
+    {
+        "title": "Memories of You Part I Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000007,
+        "value1": 4200011
+    },
+    {
+        "title": "Case 2: A Drifting Narrative Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000008,
+        "value1": 4200015
+    },
+    {
+        "title": "Puella Magi Madoka Magica: Scene 0 Part I Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000009,
+        "value1": 4200024
+    },
+    {
+        "title": "Memories of You Part II Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000010,
+        "value1": 4200013
+    },
+    {
+        "title": "Two Hands in Harmony Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000011,
+        "value1": 4200022
+    },
+    {
+        "title": "Case 3: Cozy Cosmology Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000012,
+        "value1": 4200017
+    },
+    {
+        "title": "Eternal Summer Days Part I Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000013,
+        "value1": 4200026
+    },
+    {
+        "title": "Eternal Summer Days Part II Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000014,
+        "value1": 4200027
+    },
+    {
+        "title": "Case 4: Moratorium on Misdelivery Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000015,
+        "value1": 4200029
+    },
+    {
+        "title": "Case 5: Invisible Epiphany Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000016,
+        "value1": 4200031
+    },
+    {
+        "title": "The Rumored Temp Counselor Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000017,
+        "value1": 4200033
+    },
+    {
+        "title": "Puella Magi Madoka Magica: Scene 0 Part II Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000018,
+        "value1": 4200034
+    },
+    {
+        "title": "Defying Destiny: Forbidden Cards Call Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000019,
+        "value1": 4200035
+    },
+    {
+        "title": "Puella Magi Madoka Magica: Wraith Arc Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000020,
+        "value1": 4200036
+    },
+    {
+        "title": "A Taste of Hospitality Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000021,
+        "value1": 4200039
+    },
+    {
+        "title": "Magia Record Crescent Memoria Part 1 Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000022,
+        "value1": 4200040
+    },
+    {
+        "title": "Forever Halloween Night Part I Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000023,
+        "value1": 4200042
+    },
+    {
+        "title": "Forever Halloween Night Part II Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000024,
+        "value1": 4200043
+    },
+    {
+        "title": "Puella Magi Madoka Magica: Scene 0 Part III Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000025,
+        "value1": 4200044
+    },
+    {
+        "title": "A St. Magica Academy Christmas: Part Nice Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000026,
+        "value1": 4200045
+    },
+    {
+        "title": "A St. Magica Academy Christmas: Part Naughty Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000027,
+        "value1": 4200046
+    },
+    {
+        "title": "Yuletide Tale: Where Our Hearts Begin Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000028,
+        "value1": 4200047
+    },
+    {
+        "title": "Prayers and Play Keep Sickness Away Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000029,
+        "value1": 4200049
+    },
+    {
+        "title": "Magia Record Crescent Memoria Part 2 Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000030,
+        "value1": 4200051
+    },
+    {
+        "title": "Next Act: In Search of an Ordinary Life Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000031,
+        "value1": 4200052
+    },
+    {
+        "title": "Puella Magi Madoka Magica -Rebellion- Part I Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000032,
+        "value1": 4200053
+    },
+    {
+        "title": "Puella Magi Madoka Magica -Rebellion- Part II Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000033,
+        "value1": 4200054
+    },
+    {
+        "title": "Sweet Magic from the Heart Part I Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000034,
+        "value1": 4200057
+    },
+    {
+        "title": "Sweet Magic from the Heart Part II Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000035,
+        "value1": 4200058
+    },
+    {
+        "title": "Puella Magi Darc Magica Part I Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000036,
+        "value1": 4200059
+    },
+    {
+        "title": "Magia Record Crescent Memoria Part 3 Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000037,
+        "value1": 4200061
+    },
+    {
+        "title": "Monogatari Series Collab Part I Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000038,
+        "value1": 4200073
+    },
+    {
+        "title": "Monogatari Series Collab Part II Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000039,
+        "value1": 4200075
+    },
+    {
+        "title": "Puella Magi Darc Magica Part II Act I Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000040,
+        "value1": 4200078
+    },
+    {
+        "title": "Puella Magi Darc Magica Part II Act II Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000041,
+        "value1": 4200076
+    },
+    {
+        "title": "Rise of the Waning Moon Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000042,
+        "value1": 4200079
+    },
+    {
+        "title": "Mami Tomoe: A Doppel Tale Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000043,
+        "value1": 4200080
+    },
+    {
+        "title": "Welcome to Magia Island Part I Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000044,
+        "value1": 4200081
+    },
+    {
+        "title": "Welcome to Magia Island Part II Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000045,
+        "value1": 4200082
+    },
+    {
+        "title": "Finding Our Formula Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000046,
+        "value1": 4200085
+    },
+    {
+        "title": "Hotel Pool Rescue: Poolside Panic Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000047,
+        "value1": 4200086
+    },
+    {
+        "title": "Hotel Pool Rescue: Staffing Snafu Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000048,
+        "value1": 4200087
+    },
+    {
+        "title": "A Waking Dreamer After Dark Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000049,
+        "value1": 4200088
+    },
+    {
+        "title": "Devil Homura Score Attack Ace",
+        "titleType": 0,
+        "userTitleMstId": 60000050,
+        "value1": 0
+    },
+    {
+        "title": "Devil Homura Score Attack Rank 50 Ace",
+        "titleType": 0,
+        "userTitleMstId": 60000051,
+        "value1": 0
+    },
+    {
+        "title": "Rebellion Nightmare Story Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000052,
+        "value1": 5100046
+    },
+    {
+        "title": "[Redux] Puella Magi Madoka Magica -Rebellion- Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000053,
+        "value1": 4200091
+    },
+    {
+        "title": "Hollow Utopia Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000054,
+        "value1": 4200095
+    },
+    {
+        "title": "Sweet Dreams and Shifting Realities Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000055,
+        "value1": 4200096
+    },
+    {
+        "title": "Missing My Bear: Where Are You, Kumanosuke? Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000056,
+        "value1": 4200097
+    },
+    {
+        "title": "Nagisa's Wish Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000057,
+        "value1": 4200103
+    },
+    {
+        "title": "Mirrors Ranking S☆☆☆",
+        "titleType": 0,
+        "userTitleMstId": 70000001,
+        "value1": 0
+    },
+    {
+        "title": "Mirrors Ranking S☆☆",
+        "titleType": 0,
+        "userTitleMstId": 70000002,
+        "value1": 0
+    },
+    {
+        "title": "Mirrors Ranking S☆",
+        "titleType": 0,
+        "userTitleMstId": 70000003,
+        "value1": 0
+    },
+    {
+        "title": "Mirrors Ranking A☆☆☆",
+        "titleType": 0,
+        "userTitleMstId": 70000004,
+        "value1": 0
+    },
+    {
+        "title": "Mirrors Ranking A☆☆",
+        "titleType": 0,
+        "userTitleMstId": 70000005,
+        "value1": 0
+    },
+    {
+        "title": "Mirrors Ranking A☆",
+        "titleType": 0,
+        "userTitleMstId": 70000006,
+        "value1": 0
+    },
+    {
+        "title": "Mirrors Ranking B☆☆☆",
+        "titleType": 0,
+        "userTitleMstId": 70000007,
+        "value1": 0
+    },
+    {
+        "title": "Mirrors Ranking B☆☆",
+        "titleType": 0,
+        "userTitleMstId": 70000008,
+        "value1": 0
+    },
+    {
+        "title": "Mirrors Ranking B☆",
+        "titleType": 0,
+        "userTitleMstId": 70000009,
+        "value1": 0
+    },
+    {
+        "title": "Mirrors Ranking C☆☆☆",
+        "titleType": 0,
+        "userTitleMstId": 70000010,
+        "value1": 0
+    },
+    {
+        "title": "Mirrors Ranking C☆☆",
+        "titleType": 0,
+        "userTitleMstId": 70000011,
+        "value1": 0
+    },
+    {
+        "title": "Mirrors Ranking C☆",
+        "titleType": 0,
+        "userTitleMstId": 70000012,
+        "value1": 0
+    },
+    {
+        "title": "Mirrors Ranking D☆☆☆",
+        "titleType": 0,
+        "userTitleMstId": 70000013,
+        "value1": 0
+    },
+    {
+        "title": "Mirrors Ranking D☆☆",
+        "titleType": 0,
+        "userTitleMstId": 70000014,
+        "value1": 0
+    },
+    {
+        "title": "Mirrors Ranking D☆",
+        "titleType": 0,
+        "userTitleMstId": 70000015,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR No.1",
+        "titleType": 0,
+        "userTitleMstId": 70000016,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR No.2",
+        "titleType": 0,
+        "userTitleMstId": 70000017,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR No.3",
+        "titleType": 0,
+        "userTitleMstId": 70000018,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR No.4",
+        "titleType": 0,
+        "userTitleMstId": 70000019,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR No.5",
+        "titleType": 0,
+        "userTitleMstId": 70000020,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR No.6",
+        "titleType": 0,
+        "userTitleMstId": 70000021,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR No.7",
+        "titleType": 0,
+        "userTitleMstId": 70000022,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR No.8",
+        "titleType": 0,
+        "userTitleMstId": 70000023,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR No.9",
+        "titleType": 0,
+        "userTitleMstId": 70000024,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR No.10",
+        "titleType": 0,
+        "userTitleMstId": 70000025,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR Top 50",
+        "titleType": 0,
+        "userTitleMstId": 70000026,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR Top 100",
+        "titleType": 0,
+        "userTitleMstId": 70000027,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR Top 500",
+        "titleType": 0,
+        "userTitleMstId": 70000028,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR Top 1,000",
+        "titleType": 0,
+        "userTitleMstId": 70000029,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR Top 5,000",
+        "titleType": 0,
+        "userTitleMstId": 70000030,
+        "value1": 0
+    },
+    {
+        "title": "Magia Record Total PWR Top 10,000",
+        "titleType": 0,
+        "userTitleMstId": 70000031,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Champion",
+        "titleType": 4,
+        "userTitleMstId": 80010001,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 2",
+        "titleType": 4,
+        "userTitleMstId": 80010002,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 3",
+        "titleType": 4,
+        "userTitleMstId": 80010003,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 4",
+        "titleType": 4,
+        "userTitleMstId": 80010004,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 5",
+        "titleType": 4,
+        "userTitleMstId": 80010005,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 6",
+        "titleType": 4,
+        "userTitleMstId": 80010006,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 7",
+        "titleType": 4,
+        "userTitleMstId": 80010007,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 8",
+        "titleType": 4,
+        "userTitleMstId": 80010008,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 9",
+        "titleType": 4,
+        "userTitleMstId": 80010009,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 10",
+        "titleType": 4,
+        "userTitleMstId": 80010010,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 50",
+        "titleType": 4,
+        "userTitleMstId": 80010011,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 100",
+        "titleType": 4,
+        "userTitleMstId": 80010012,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 500",
+        "titleType": 4,
+        "userTitleMstId": 80010013,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 1,000",
+        "titleType": 4,
+        "userTitleMstId": 80010014,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 3,000",
+        "titleType": 4,
+        "userTitleMstId": 80010015,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 10,000",
+        "titleType": 4,
+        "userTitleMstId": 80010016,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 30,000",
+        "titleType": 4,
+        "userTitleMstId": 80010017,
+        "value1": 0
+    },
+    {
+        "title": "Exedra Crisis Top 50,000",
+        "titleType": 4,
+        "userTitleMstId": 80010018,
+        "value1": 0
+    },
+    {
+        "title": "Madoka Magica Tower Extra Mirror Layer 3 Ace",
+        "titleType": 0,
+        "userTitleMstId": 90010001,
+        "value1": 0
+    }
+]

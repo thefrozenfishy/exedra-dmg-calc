@@ -1,0 +1,50 @@
+[
+    {
+        "alternativeStoryMstId": 1,
+        "chapterNum": 0,
+        "comingSoonMovieAssetBundleName": "Movie/3DMovie/mv3044.m3u8",
+        "description": "There is a lighthouse that serves as a beacon for\nthe souls of Magical Girls. One day, a girl who\nlost her memories wandered in. As peaceful days\npassed, a disturbance that threatens the Memsparks\nbegan quietly creeping closer.",
+        "firstClearRewardGroupId": 102,
+        "iconAssetBundleName": "chapter_icon_00",
+        "name": "Prologue",
+        "nextChapterMovieAssetBundleName": "Movie/3DMovie/alternative_story_open_01.m3u8",
+        "partName": "",
+        "prevAlternativeStoryMstId": 0,
+        "questMapMstId": 131,
+        "sortOrder": 1,
+        "startTime": "2026-03-27T22:00:00+09:00",
+        "title": "Sensing Myself"
+    },
+    {
+        "alternativeStoryMstId": 2,
+        "chapterNum": 1,
+        "comingSoonMovieAssetBundleName": "Movie/3DMovie/mv3061.m3u8",
+        "description": "Girls set out on a journey in search of corroded\nMemsparks and arrive in Mitakihara, But in this\nMitakihara, which exists neither in records nor\nmemories, something seems slightly off...",
+        "firstClearRewardGroupId": 102,
+        "iconAssetBundleName": "chapter_icon_01_01",
+        "name": "Chapter 1",
+        "nextChapterMovieAssetBundleName": "",
+        "partName": " Part I",
+        "prevAlternativeStoryMstId": 1,
+        "questMapMstId": 131,
+        "sortOrder": 2,
+        "startTime": "2026-06-16T12:00:00+09:00",
+        "title": "I Want to Protect Them"
+    },
+    {
+        "alternativeStoryMstId": 3,
+        "chapterNum": 1,
+        "comingSoonMovieAssetBundleName": "",
+        "description": "",
+        "firstClearRewardGroupId": 102,
+        "iconAssetBundleName": "chapter_icon_01_02",
+        "name": "Chapter 1",
+        "nextChapterMovieAssetBundleName": "",
+        "partName": " Part II",
+        "prevAlternativeStoryMstId": 2,
+        "questMapMstId": 131,
+        "sortOrder": 3,
+        "startTime": "2050-01-01T00:00:00+09:00",
+        "title": ""
+    }
+]

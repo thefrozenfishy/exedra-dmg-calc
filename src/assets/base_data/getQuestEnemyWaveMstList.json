@@ -1,0 +1,872 @@
+[
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5091961,
+        "questStageMstId": 509196,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5091962,
+        "questStageMstId": 509196,
+        "stagePrefabName": "bg_3d_636_00_02_061",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5091963,
+        "questStageMstId": 509196,
+        "stagePrefabName": "bg_3d_636_00_02_017",
+        "wave": 3
+    },
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5091971,
+        "questStageMstId": 509197,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5091972,
+        "questStageMstId": 509197,
+        "stagePrefabName": "bg_3d_636_00_02_009",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5091973,
+        "questStageMstId": 509197,
+        "stagePrefabName": "bg_3d_636_00_02_021",
+        "wave": 3
+    },
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5091981,
+        "questStageMstId": 509198,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5091982,
+        "questStageMstId": 509198,
+        "stagePrefabName": "bg_3d_636_00_02_037",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5091983,
+        "questStageMstId": 509198,
+        "stagePrefabName": "bg_3d_636_00_02_073",
+        "wave": 3
+    },
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5091991,
+        "questStageMstId": 509199,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5091992,
+        "questStageMstId": 509199,
+        "stagePrefabName": "bg_3d_636_00_02_033",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5091993,
+        "questStageMstId": 509199,
+        "stagePrefabName": "bg_3d_636_00_02_013",
+        "wave": 3
+    },
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5092001,
+        "questStageMstId": 509200,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5092002,
+        "questStageMstId": 509200,
+        "stagePrefabName": "bg_3d_636_00_02_046",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 0,
+        "enemyTipsText": "",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 5092003,
+        "questStageMstId": 509200,
+        "stagePrefabName": "bg_3d_636_00_02_041",
+        "wave": 3
+    },
+    {
+        "dioramaBackGroundMstId": 110313,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14011011,
+        "questStageMstId": 1401101,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110319,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Dessert Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Dessert Witch<br>Uses <tooltips_id=1>.<br>Note that while <tooltips_id=1> is active, its SPD will increase.<br><br>- Dessert Witch (Apex Form)<br>Inflicts multiple ailments and triggers a follow-up attack that removes buffs each time it takes damage a set number of times.<br>It also has an ability that decreases the buff effects of Kioku.<br><br>- Dessert Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>It is hard to deplete its break gauge outside the Labyrinth Vanguard Activation Phase, so be sure to build up your Labyrinth Vanguard Points whenever you can.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14011012,
+        "questStageMstId": 1401101,
+        "stagePrefabName": "bg_3d_602_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110313,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14011021,
+        "questStageMstId": 1401102,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110319,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Dessert Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Dessert Witch<br>Uses <tooltips_id=1>.<br>Note that while <tooltips_id=1> is active, its SPD will increase.<br><br>- Dessert Witch (Apex Form)<br>Inflicts multiple ailments and triggers a follow-up attack that removes buffs each time it takes damage a set number of times.<br>It also has an ability that decreases the buff effects of Kioku.<br><br>- Dessert Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>It is hard to deplete its break gauge outside the Labyrinth Vanguard Activation Phase, so be sure to build up your Labyrinth Vanguard Points whenever you can.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14011022,
+        "questStageMstId": 1401102,
+        "stagePrefabName": "bg_3d_602_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110313,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14011031,
+        "questStageMstId": 1401103,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110319,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Dessert Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Dessert Witch<br>Uses <tooltips_id=1>.<br>Note that while <tooltips_id=1> is active, its SPD will increase.<br><br>- Dessert Witch (Apex Form)<br>Inflicts multiple ailments and triggers a follow-up attack that removes buffs each time it takes damage a set number of times.<br>It also has an ability that decreases the buff effects of Kioku.<br><br>- Dessert Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>It is hard to deplete its break gauge outside the Labyrinth Vanguard Activation Phase, so be sure to build up your Labyrinth Vanguard Points whenever you can.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14011032,
+        "questStageMstId": 1401103,
+        "stagePrefabName": "bg_3d_602_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110313,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14011041,
+        "questStageMstId": 1401104,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110319,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Dessert Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Dessert Witch<br>Uses <tooltips_id=1>.<br>While <tooltips_id=1> is active, its SPD will increase and it will be harder to deal DMG and deplete its break gauge, so be sure to shut it down quickly.<br><br>- Dessert Witch (Apex Form)<br>Inflicts multiple ailments and triggers a follow-up attack that removes buffs each time it takes damage a set number of times.<br>It also has an ability that decreases the buff effects of Kioku.<br><br>- Dessert Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>It is hard to deal damage or deplete its break gauge outside the Labyrinth Vanguard Activation Phase, so shift to this phase as soon as you can.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14011042,
+        "questStageMstId": 1401104,
+        "stagePrefabName": "bg_3d_602_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110313,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14011051,
+        "questStageMstId": 1401105,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110319,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Dessert Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Dessert Witch<br>Uses <tooltips_id=1>.<br>While <tooltips_id=1> is active, its SPD will increase and it will be harder to deal DMG and deplete its break gauge, so be sure to shut it down quickly.<br><br>- Dessert Witch (Apex Form)<br>Inflicts multiple ailments and triggers a follow-up attack that removes buffs each time it takes damage a set number of times.<br>It also has an ability that decreases the buff effects of Kioku.<br><br>- Dessert Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>It is hard to deal damage or deplete its break gauge outside the Labyrinth Vanguard Activation Phase, so shift to this phase as soon as you can.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14011052,
+        "questStageMstId": 1401105,
+        "stagePrefabName": "bg_3d_602_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110313,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14011061,
+        "questStageMstId": 1401106,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110319,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Dessert Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Dessert Witch<br>Uses <tooltips_id=1>.<br>While <tooltips_id=1> is active, its SPD will increase and it will be harder to deal DMG and deplete its break gauge, so be sure to shut it down quickly.<br><br>- Dessert Witch (Apex Form)<br>Inflicts multiple ailments and triggers a follow-up attack that removes buffs each time it takes damage a set number of times.<br>It also has an ability that decreases the buff effects of Kioku.<br><br>- Dessert Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>It is hard to deal damage or deplete its break gauge outside the Labyrinth Vanguard Activation Phase, so shift to this phase as soon as you can.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14011062,
+        "questStageMstId": 1401106,
+        "stagePrefabName": "bg_3d_602_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 111013,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14021011,
+        "questStageMstId": 1402101,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 111019,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Artist Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Artist Witch<br>Uses <tooltips_id=1>.<br>Uses a barrier, and while the barrier is active, its ability will trigger multiple buffs and debuffs.<br><br>- Artist Witch (Apex Form)<br>Uses <tooltips_id=1>.<br>The boss enhances itself based on its Magic.<br>Be especially careful right after the start of battle when its Magic is high.<br><br>- Artist Witch (Apex Overdrive Form)<br>Critical rate decreases outside the Labyrinth Vanguard Activation Phase.<br>So be sure to use skills that increase critical rate and buffs gained during the Execution Phase to maintain as high a critical rate as possible.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14021012,
+        "questStageMstId": 1402101,
+        "stagePrefabName": "bg_3d_609_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 111013,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14021021,
+        "questStageMstId": 1402102,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 111019,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Artist Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Artist Witch<br>Uses <tooltips_id=1>.<br>Uses a barrier, and while the barrier is active, its ability will trigger multiple buffs and debuffs.<br><br>- Artist Witch (Apex Form)<br>Uses <tooltips_id=1>.<br>The boss enhances itself based on its Magic.<br>Be especially careful right after the start of battle when its Magic is high.<br><br>- Artist Witch (Apex Overdrive Form)<br>Critical rate decreases outside the Labyrinth Vanguard Activation Phase.<br>So be sure to use skills that increase critical rate and buffs gained during the Execution Phase to maintain as high a critical rate as possible.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14021022,
+        "questStageMstId": 1402102,
+        "stagePrefabName": "bg_3d_609_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 111013,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14021031,
+        "questStageMstId": 1402103,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 111019,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Artist Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Artist Witch<br>Uses <tooltips_id=1>.<br>Uses a barrier, and while the barrier is active, its ability will trigger multiple buffs and debuffs.<br><br>- Artist Witch (Apex Form)<br>Uses <tooltips_id=1>.<br>The boss enhances itself based on its Magic.<br>Be especially careful right after the start of battle when its Magic is high.<br><br>- Artist Witch (Apex Overdrive Form)<br>Critical rate decreases outside the Labyrinth Vanguard Activation Phase.<br>So be sure to use skills that increase critical rate and buffs gained during the Execution Phase to maintain as high a critical rate as possible.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14021032,
+        "questStageMstId": 1402103,
+        "stagePrefabName": "bg_3d_609_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 111013,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14021041,
+        "questStageMstId": 1402104,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 111019,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Artist Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Artist Witch<br>Uses <tooltips_id=1>.<br>Uses a barrier, and while the barrier is active, its ability will trigger multiple buffs and debuffs.<br><br>- Artist Witch (Apex Form)<br>Uses <tooltips_id=1>.<br>The boss enhances itself based on its Magic.<br>Be especially careful right after the start of battle when its Magic is high.<br><br>- Artist Witch (Apex Overdrive Form)<br>Critical rate decreases outside the Labyrinth Vanguard Activation Phase.<br>So be sure to use skills that increase critical rate and buffs gained during the Execution Phase to maintain as high a critical rate as possible.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14021042,
+        "questStageMstId": 1402104,
+        "stagePrefabName": "bg_3d_609_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 111013,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14021051,
+        "questStageMstId": 1402105,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 111019,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Artist Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Artist Witch<br>Uses <tooltips_id=1>.<br>Uses a barrier, and while the barrier is active, its ability will trigger multiple buffs and debuffs.<br><br>- Artist Witch (Apex Form)<br>Uses <tooltips_id=1>.<br>The boss enhances itself based on its Magic.<br>Be especially careful right after the start of battle when its Magic is high.<br><br>- Artist Witch (Apex Overdrive Form)<br>Critical rate decreases outside the Labyrinth Vanguard Activation Phase.<br>So be sure to use skills that increase critical rate and buffs gained during the Execution Phase to maintain as high a critical rate as possible.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14021052,
+        "questStageMstId": 1402105,
+        "stagePrefabName": "bg_3d_609_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 111013,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14021061,
+        "questStageMstId": 1402106,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 111019,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Artist Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Artist Witch<br>Uses <tooltips_id=1>.<br>Uses a barrier, and while the barrier is active, its ability will trigger multiple buffs and debuffs.<br><br>- Artist Witch (Apex Form)<br>Uses <tooltips_id=1>.<br>The boss enhances itself based on its Magic.<br>Be especially careful right after the start of battle when its Magic is high.<br><br>- Artist Witch (Apex Overdrive Form)<br>Critical rate decreases outside the Labyrinth Vanguard Activation Phase.<br>So be sure to use skills that increase critical rate and buffs gained during the Execution Phase to maintain as high a critical rate as possible.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14021062,
+        "questStageMstId": 1402106,
+        "stagePrefabName": "bg_3d_609_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110213,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14031011,
+        "questStageMstId": 1403101,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110219,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Darkness Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Darkness Witch<br>Uses <tooltips_id=1>.<br>Using special attacks will advance the boss' action order.<br><br>- Darkness Witch (Apex Form)<br>The boss enhances itself based of how few debuffs are applied to it.<br>Defeating it with few debuffs applied to it will be difficult, so be sure to assign Kioku capable of applying debuffs to your party.<br><br>- Darkness Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>DMG decreases with fewer allies in break.<br>Time your special attacks to when multiple enemies are in break to deal damage efficiently.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14031012,
+        "questStageMstId": 1403101,
+        "stagePrefabName": "bg_3d_601_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110213,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14031021,
+        "questStageMstId": 1403102,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110219,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Darkness Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Darkness Witch<br>Uses <tooltips_id=1>.<br>Using special attacks will advance the boss' action order.<br><br>- Darkness Witch (Apex Form)<br>The boss enhances itself based of how few debuffs are applied to it.<br>Defeating it with few debuffs applied to it will be difficult, so be sure to assign Kioku capable of applying debuffs to your party.<br><br>- Darkness Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>DMG decreases with fewer allies in break.<br>Time your special attacks to when multiple enemies are in break to deal damage efficiently.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14031022,
+        "questStageMstId": 1403102,
+        "stagePrefabName": "bg_3d_601_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110213,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14031031,
+        "questStageMstId": 1403103,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110219,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Darkness Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Darkness Witch<br>Uses <tooltips_id=1>.<br>Using special attacks will advance the boss' action order.<br><br>- Darkness Witch (Apex Form)<br>The boss enhances itself based of how few debuffs are applied to it.<br>Defeating it with few debuffs applied to it will be difficult, so be sure to assign Kioku capable of applying debuffs to your party.<br><br>- Darkness Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>DMG decreases with fewer allies in break.<br>Time your special attacks to when multiple enemies are in break to deal damage efficiently.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14031032,
+        "questStageMstId": 1403103,
+        "stagePrefabName": "bg_3d_601_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110213,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14031041,
+        "questStageMstId": 1403104,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110219,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Darkness Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Darkness Witch<br>Uses <tooltips_id=1>.<br>Using special attacks will advance the boss' action order.<br><br>- Darkness Witch (Apex Form)<br>The boss enhances itself based of how few debuffs are applied to it.<br>Defeating it with few debuffs applied to it will be difficult, so be sure to assign Kioku capable of applying debuffs to your party.<br><br>- Darkness Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>DMG decreases with fewer allies in break.<br>Time your special attacks to when multiple enemies are in break to deal damage efficiently.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14031042,
+        "questStageMstId": 1403104,
+        "stagePrefabName": "bg_3d_601_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110213,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14031051,
+        "questStageMstId": 1403105,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110219,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Darkness Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Darkness Witch<br>Uses <tooltips_id=1>.<br>Using special attacks will advance the boss' action order.<br><br>- Darkness Witch (Apex Form)<br>The boss enhances itself based of how few debuffs are applied to it.<br>Defeating it with few debuffs applied to it will be difficult, so be sure to assign Kioku capable of applying debuffs to your party.<br><br>- Darkness Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>DMG decreases with fewer allies in break.<br>Time your special attacks to when multiple enemies are in break to deal damage efficiently.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14031052,
+        "questStageMstId": 1403105,
+        "stagePrefabName": "bg_3d_601_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110213,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14031061,
+        "questStageMstId": 1403106,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110219,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> will be applied at battle start.<br><br>The Darkness Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Darkness Witch<br>Uses <tooltips_id=1>.<br>Using special attacks will advance the boss' action order.<br><br>- Darkness Witch (Apex Form)<br>The boss enhances itself based of how few debuffs are applied to it.<br>Defeating it with few debuffs applied to it will be difficult, so be sure to assign Kioku capable of applying debuffs to your party.<br><br>- Darkness Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>DMG decreases with fewer allies in break.<br>Time your special attacks to when multiple enemies are in break to deal damage efficiently.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14031062,
+        "questStageMstId": 1403106,
+        "stagePrefabName": "bg_3d_601_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110813,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14041011,
+        "questStageMstId": 1404101,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110819,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> is guaranteed to be applied at battle start.<br><br>The Dog Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Dog Witch<br>Uses <tooltips_id=1>.<br>Try interrupting the boss by putting it into break or dealing heavy damage.<br><br>- Dog Witch (Apex Form)<br>Its Magic decreases based on the number of allies that take critical DMG.<br>The damage and effects of some skills decrease as its Magic decreases, so try assigning Kioku to your party capable of increasing critical rate and performing all-target attacks.<br><br>- Dog Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>During the countdown, it uses counterattacks based on the number of passing enemy turns, so try interrupting the boss by putting it into break or by swiftly dealing heavy damage.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14041012,
+        "questStageMstId": 1404101,
+        "stagePrefabName": "bg_3d_607_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110813,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14041021,
+        "questStageMstId": 1404102,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110819,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> is guaranteed to be applied at battle start.<br><br>The Dog Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Dog Witch<br>Uses <tooltips_id=1>.<br>Try interrupting the boss by putting it into break or dealing heavy damage.<br><br>- Dog Witch (Apex Form)<br>Its Magic decreases based on the number of allies that take critical DMG.<br>The damage and effects of some skills decrease as its Magic decreases, so try assigning Kioku to your party capable of increasing critical rate and performing all-target attacks.<br><br>- Dog Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>During the countdown, it uses counterattacks based on the number of passing enemy turns, so try interrupting the boss by putting it into break or by swiftly dealing heavy damage.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14041022,
+        "questStageMstId": 1404102,
+        "stagePrefabName": "bg_3d_607_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110813,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14041031,
+        "questStageMstId": 1404103,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110819,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> is guaranteed to be applied at battle start.<br><br>The Dog Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Dog Witch<br>Uses <tooltips_id=1>.<br>Try interrupting the boss by putting it into break or dealing heavy damage.<br><br>- Dog Witch (Apex Form)<br>Its Magic decreases based on the number of allies that take critical DMG.<br>The damage and effects of some skills decrease as its Magic decreases, so try assigning Kioku to your party capable of increasing critical rate and performing all-target attacks.<br><br>- Dog Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>During the countdown, it uses counterattacks based on the number of passing enemy turns, so try interrupting the boss by putting it into break or by swiftly dealing heavy damage.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14041032,
+        "questStageMstId": 1404103,
+        "stagePrefabName": "bg_3d_607_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110813,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14041041,
+        "questStageMstId": 1404104,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110819,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> is guaranteed to be applied at battle start.<br><br>The Dog Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Dog Witch<br>Uses <tooltips_id=1>.<br>Try interrupting the boss by putting it into break or dealing heavy damage.<br><br>- Dog Witch (Apex Form)<br>Its Magic decreases based on the number of allies that take critical DMG.<br>The damage and effects of some skills decrease as its Magic decreases, so try assigning Kioku to your party capable of increasing critical rate and performing all-target attacks.<br><br>- Dog Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>Its break gauge depletion RES increases while the countdown is active, making it harder to interrupt with a break.<br>Instead, try interrupting it by swiftly dealing heavy damage.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14041042,
+        "questStageMstId": 1404104,
+        "stagePrefabName": "bg_3d_607_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110813,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14041051,
+        "questStageMstId": 1404105,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110819,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> is guaranteed to be applied at battle start.<br><br>The Dog Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Dog Witch<br>Uses <tooltips_id=1>.<br>Try interrupting the boss by putting it into break or dealing heavy damage.<br><br>- Dog Witch (Apex Form)<br>Its Magic decreases based on the number of allies that take critical DMG.<br>The damage and effects of some skills decrease as its Magic decreases, so try assigning Kioku to your party capable of increasing critical rate and performing all-target attacks.<br><br>- Dog Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>Its break gauge depletion RES increases while the countdown is active, making it harder to interrupt with a break.<br>Instead, try interrupting it by swiftly dealing heavy damage.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14041052,
+        "questStageMstId": 1404105,
+        "stagePrefabName": "bg_3d_607_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110813,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14041061,
+        "questStageMstId": 1404106,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110819,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br>Note that <tooltips_id=2> is guaranteed to be applied at battle start.<br><br>The Dog Witch has different skills and stats in its <tooltips_id=3> form.<br><br>- Dog Witch<br>Uses <tooltips_id=1>.<br>Try interrupting the boss by putting it into break or dealing heavy damage.<br><br>- Dog Witch (Apex Form)<br>Its Magic decreases based on the number of allies that take critical DMG.<br>The damage and effects of some skills decrease as its Magic decreases, so try assigning Kioku to your party capable of increasing critical rate and performing all-target attacks.<br><br>- Dog Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>Its break gauge depletion RES increases while the countdown is active, making it harder to interrupt with a break.<br>Instead, try interrupting it by swiftly dealing heavy damage.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14041062,
+        "questStageMstId": 1404106,
+        "stagePrefabName": "bg_3d_607_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110413,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14051011,
+        "questStageMstId": 1405101,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110419,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Box Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Box Witch<br>When attacked by an enemy with less than 20% HP, restores a small amount of HP and advances action order.<br><br>- Box Witch (Apex Form)<br>Decreases all enemies' ATK, DEF, and SPD each time Magic reaches max.<br>Its Magic increases when attacked by an enemy with less than 30% HP, so be sure to assign Kioku capable of restoring HP to your party.<br><br>- Box Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>When attacked by an enemy with less than 40% HP, guaranteed to decrease all enemies' SPD.<br>Its SPD also increases when an enemy with a debuff is present, so try not to attack the Box Witch with Kioku who have low HP.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14051012,
+        "questStageMstId": 1405101,
+        "stagePrefabName": "bg_3d_603_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110413,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14051021,
+        "questStageMstId": 1405102,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110419,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Box Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Box Witch<br>When attacked by an enemy with less than 20% HP, restores a small amount of HP and advances action order.<br><br>- Box Witch (Apex Form)<br>Decreases all enemies' ATK, DEF, and SPD each time Magic reaches max.<br>Its Magic increases when attacked by an enemy with less than 30% HP, so be sure to assign Kioku capable of restoring HP to your party.<br><br>- Box Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>When attacked by an enemy with less than 40% HP, guaranteed to decrease all enemies' SPD.<br>Its SPD also increases when an enemy with a debuff is present, so try not to attack the Box Witch with Kioku who have low HP.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14051022,
+        "questStageMstId": 1405102,
+        "stagePrefabName": "bg_3d_603_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110413,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14051031,
+        "questStageMstId": 1405103,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110419,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Box Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Box Witch<br>When attacked by an enemy with less than 20% HP, restores a small amount of HP and advances action order.<br><br>- Box Witch (Apex Form)<br>Decreases all enemies' ATK, DEF, and SPD each time Magic reaches max.<br>Its Magic increases when attacked by an enemy with less than 30% HP, so be sure to assign Kioku capable of restoring HP to your party.<br><br>- Box Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>When attacked by an enemy with less than 40% HP, guaranteed to decrease all enemies' SPD.<br>Its SPD also increases when an enemy with a debuff is present, so try not to attack the Box Witch with Kioku who have low HP.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14051032,
+        "questStageMstId": 1405103,
+        "stagePrefabName": "bg_3d_603_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110413,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14051041,
+        "questStageMstId": 1405104,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110419,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Box Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Box Witch<br>When attacked by an enemy with less than 20% HP, restores a small amount of HP and advances action order.<br><br>- Box Witch (Apex Form)<br>Decreases all enemies' ATK, DEF, and SPD each time Magic reaches max.<br>Its Magic increases when attacked by an enemy with less than 30% HP, so be sure to assign Kioku capable of restoring HP to your party.<br><br>- Box Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>When attacked by an enemy with less than 40% HP, guaranteed to decrease all enemies' SPD.<br>Its SPD also increases when an enemy with a debuff is present, so try not to attack the Box Witch with Kioku who have low HP.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14051042,
+        "questStageMstId": 1405104,
+        "stagePrefabName": "bg_3d_603_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110413,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14051051,
+        "questStageMstId": 1405105,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110419,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Box Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Box Witch<br>When attacked by an enemy with less than 20% HP, restores a small amount of HP and advances action order.<br><br>- Box Witch (Apex Form)<br>Decreases all enemies' ATK, DEF, and SPD each time Magic reaches max.<br>Its Magic increases when attacked by an enemy with less than 30% HP, so be sure to assign Kioku capable of restoring HP to your party.<br><br>- Box Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>When attacked by an enemy with less than 40% HP, guaranteed to decrease all enemies' SPD.<br>Its SPD also increases when an enemy with a debuff is present, so try not to attack the Box Witch with Kioku who have low HP.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14051052,
+        "questStageMstId": 1405105,
+        "stagePrefabName": "bg_3d_603_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110413,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14051061,
+        "questStageMstId": 1405106,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110419,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Box Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Box Witch<br>When attacked by an enemy with less than 20% HP, restores a small amount of HP and advances action order.<br><br>- Box Witch (Apex Form)<br>Decreases all enemies' ATK, DEF, and SPD each time Magic reaches max.<br>Its Magic increases when attacked by an enemy with less than 30% HP, so be sure to assign Kioku capable of restoring HP to your party.<br><br>- Box Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>When attacked by an enemy with less than 40% HP, guaranteed to decrease all enemies' SPD.<br>Its SPD also increases when an enemy with a debuff is present, so try not to attack the Box Witch with Kioku who have low HP.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14051062,
+        "questStageMstId": 1405106,
+        "stagePrefabName": "bg_3d_603_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110613,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14061011,
+        "questStageMstId": 1406101,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110619,
+        "enemyTipsText": "In Wave 2, only the Witch appears.<br>The Silver Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Silver Witch<br>On enemy actions when it does not take damage, it accumulates Magic, and a counterattack triggers each time its Magic reaches max.<br>Be careful, because if you are hit by a counterattack when the Witch has no debuffs, it will delay your action order.<br><br>- Silver Witch (Apex Form)<br>While it has a barrier active, its SPD and break gauge depletion RES increases.<br>It receives a barrier every set number of turns, so be ready to remove the buff or break it with Attackers.<br><br>- Silver Witch (Apex Overdrive Form)<br><tooltips_id=1>Uses .<br>When its Magic reaches 0, its break gauge depletion RES decreases.<br>The Witch's Magic decreases each time a debuff is applied while the countdown is active or it is in break.<br>Once the countdown starts, be ready to quickly apply debuffs to drain the Witch's Magic.",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 14061012,
+        "questStageMstId": 1406101,
+        "stagePrefabName": "bg_3d_605_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110613,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14061021,
+        "questStageMstId": 1406102,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110619,
+        "enemyTipsText": "In Wave 2, only the Witch appears.<br>The Silver Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Silver Witch<br>On enemy actions when it does not take damage, it accumulates Magic, and a counterattack triggers each time its Magic reaches max.<br>Be careful, because if you are hit by a counterattack when the Witch has no debuffs, it will delay your action order.<br><br>- Silver Witch (Apex Form)<br>While it has a barrier active, its SPD and break gauge depletion RES increases.<br>It receives a barrier every set number of turns, so be ready to remove the buff or break it with Attackers.<br><br>- Silver Witch (Apex Overdrive Form)<br><tooltips_id=1>Uses .<br>When its Magic reaches 0, its break gauge depletion RES decreases.<br>The Witch's Magic decreases each time a debuff is applied while the countdown is active or it is in break.<br>Once the countdown starts, be ready to quickly apply debuffs to drain the Witch's Magic.",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 14061022,
+        "questStageMstId": 1406102,
+        "stagePrefabName": "bg_3d_605_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110613,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14061031,
+        "questStageMstId": 1406103,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110619,
+        "enemyTipsText": "In Wave 2, only the Witch appears.<br>The Silver Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Silver Witch<br>On enemy actions when it does not take damage, it accumulates Magic, and a counterattack triggers each time its Magic reaches max.<br>Be careful, because if you are hit by a counterattack when the Witch has no debuffs, it will delay your action order.<br><br>- Silver Witch (Apex Form)<br>While it has a barrier active, its SPD and break gauge depletion RES increases.<br>It receives a barrier every set number of turns, so be ready to remove the buff or break it with Attackers.<br><br>- Silver Witch (Apex Overdrive Form)<br><tooltips_id=1>Uses .<br>When its Magic reaches 0, its break gauge depletion RES decreases.<br>The Witch's Magic decreases each time a debuff is applied while the countdown is active or it is in break.<br>Once the countdown starts, be ready to quickly apply debuffs to drain the Witch's Magic.",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 14061032,
+        "questStageMstId": 1406103,
+        "stagePrefabName": "bg_3d_605_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110613,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14061041,
+        "questStageMstId": 1406104,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110619,
+        "enemyTipsText": "In Wave 2, only the Witch appears.<br>The Silver Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Silver Witch<br>On enemy actions when it does not take damage, it accumulates Magic, and a counterattack triggers each time its Magic reaches max.<br>Be careful, because if you are hit by a counterattack when the Witch has no debuffs, it will delay your action order.<br><br>- Silver Witch (Apex Form)<br>While it has a barrier active, its SPD and break gauge depletion RES increases.<br>It receives a barrier every set number of turns, so be ready to remove the buff or break it with Attackers.<br><br>- Silver Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>When its Magic reaches 0, its break gauge depletion RES decreases, and its damage taken increases.<br>The Witch's Magic decreases each time a debuff is applied while the countdown is active or it is in break.<br>Once the countdown starts, be ready to quickly apply debuffs to drain the Witch's Magic.",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 14061042,
+        "questStageMstId": 1406104,
+        "stagePrefabName": "bg_3d_605_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110613,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14061051,
+        "questStageMstId": 1406105,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110619,
+        "enemyTipsText": "In Wave 2, only the Witch appears.<br>The Silver Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Silver Witch<br>On enemy actions when it does not take damage, it accumulates Magic, and a counterattack triggers each time its Magic reaches max.<br>Be careful, because if you are hit by a counterattack when the Witch has no debuffs, it will delay your action order.<br><br>- Silver Witch (Apex Form)<br>While it has a barrier active, its SPD and break gauge depletion RES increases.<br>It receives a barrier every set number of turns, so be ready to remove the buff or break it with Attackers.<br><br>- Silver Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>When its Magic reaches 0, its break gauge depletion RES decreases, and its damage taken increases.<br>The Witch's Magic decreases each time a debuff is applied while the countdown is active or it is in break.<br>Once the countdown starts, be ready to quickly apply debuffs to drain the Witch's Magic.",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 14061052,
+        "questStageMstId": 1406105,
+        "stagePrefabName": "bg_3d_605_00_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 110613,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14061061,
+        "questStageMstId": 1406106,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 110619,
+        "enemyTipsText": "In Wave 2, only the Witch appears.<br>The Silver Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Silver Witch<br>On enemy actions when it does not take damage, it accumulates Magic, and a counterattack triggers each time its Magic reaches max.<br>Be careful, because if you are hit by a counterattack when the Witch has no debuffs, it will delay your action order.<br><br>- Silver Witch (Apex Form)<br>While it has a barrier active, its SPD and break gauge depletion RES increases.<br>It receives a barrier every set number of turns, so be ready to remove the buff or break it with Attackers.<br><br>- Silver Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>When its Magic reaches 0, its break gauge depletion RES decreases, and its damage taken increases.<br>The Witch's Magic decreases each time a debuff is applied while the countdown is active or it is in break.<br>Once the countdown starts, be ready to quickly apply debuffs to drain the Witch's Magic.",
+        "linkHpName": "",
+        "linkHpType": 0,
+        "questEnemyWaveMstId": 14061062,
+        "questStageMstId": 1406106,
+        "stagePrefabName": "bg_3d_605_00_00_001",
+        "wave": 2
+    }
+]

@@ -1,0 +1,100 @@
+[
+    {
+        "alternativeStoryPointSequenceMstId": 10101,
+        "inBattleArchiveAdvMstId": 0,
+        "prevPointSequenceMstId": 0,
+        "sequenceType": 2,
+        "sequenceValue": 70000310
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 10102,
+        "inBattleArchiveAdvMstId": 0,
+        "prevPointSequenceMstId": 10101,
+        "sequenceType": 2,
+        "sequenceValue": 20004001
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 10103,
+        "inBattleArchiveAdvMstId": 0,
+        "prevPointSequenceMstId": 10102,
+        "sequenceType": 2,
+        "sequenceValue": 70000311
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 10104,
+        "inBattleArchiveAdvMstId": 0,
+        "prevPointSequenceMstId": 10103,
+        "sequenceType": 2,
+        "sequenceValue": 20004002
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 10105,
+        "inBattleArchiveAdvMstId": 0,
+        "prevPointSequenceMstId": 10104,
+        "sequenceType": 1,
+        "sequenceValue": 1307101
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 11001,
+        "inBattleArchiveAdvMstId": 0,
+        "prevPointSequenceMstId": 0,
+        "sequenceType": 2,
+        "sequenceValue": 70000314
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 11002,
+        "inBattleArchiveAdvMstId": 0,
+        "prevPointSequenceMstId": 11001,
+        "sequenceType": 2,
+        "sequenceValue": 20004006
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 11003,
+        "inBattleArchiveAdvMstId": 0,
+        "prevPointSequenceMstId": 11002,
+        "sequenceType": 2,
+        "sequenceValue": 70000315
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 20401,
+        "inBattleArchiveAdvMstId": 0,
+        "prevPointSequenceMstId": 0,
+        "sequenceType": 2,
+        "sequenceValue": 20005103
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 20402,
+        "inBattleArchiveAdvMstId": 20005105,
+        "prevPointSequenceMstId": 20401,
+        "sequenceType": 1,
+        "sequenceValue": 1308102
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 20403,
+        "inBattleArchiveAdvMstId": 0,
+        "prevPointSequenceMstId": 20402,
+        "sequenceType": 2,
+        "sequenceValue": 20005106
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 20801,
+        "inBattleArchiveAdvMstId": 0,
+        "prevPointSequenceMstId": 0,
+        "sequenceType": 2,
+        "sequenceValue": 20005110
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 20802,
+        "inBattleArchiveAdvMstId": 0,
+        "prevPointSequenceMstId": 20801,
+        "sequenceType": 1,
+        "sequenceValue": 1308103
+    },
+    {
+        "alternativeStoryPointSequenceMstId": 20803,
+        "inBattleArchiveAdvMstId": 0,
+        "prevPointSequenceMstId": 20802,
+        "sequenceType": 2,
+        "sequenceValue": 20005111
+    }
+]

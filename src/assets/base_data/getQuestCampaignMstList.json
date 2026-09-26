@@ -1,0 +1,704 @@
+[
+    {
+        "campaignType": 2,
+        "campaignValue": 1001,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 100,
+        "questMapMstId": 409101,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 1002,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 101,
+        "questMapMstId": 409102,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 1003,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 102,
+        "questMapMstId": 409103,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 1004,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 103,
+        "questMapMstId": 409104,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 1005,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 104,
+        "questMapMstId": 409105,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 2001,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 105,
+        "questMapMstId": 410101,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 2002,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 106,
+        "questMapMstId": 410102,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 2003,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 107,
+        "questMapMstId": 410103,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 2004,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 108,
+        "questMapMstId": 410104,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 2005,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 109,
+        "questMapMstId": 410105,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 3001,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 110,
+        "questMapMstId": 411101,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 3002,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 111,
+        "questMapMstId": 411102,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 3003,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 112,
+        "questMapMstId": 411103,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 3004,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 113,
+        "questMapMstId": 411104,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 3005,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 114,
+        "questMapMstId": 411105,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 4001,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 115,
+        "questMapMstId": 412101,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 4002,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 116,
+        "questMapMstId": 412102,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 4003,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 117,
+        "questMapMstId": 412103,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 4004,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 118,
+        "questMapMstId": 412104,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 4005,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 119,
+        "questMapMstId": 412105,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 5001,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 120,
+        "questMapMstId": 413101,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 5002,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 121,
+        "questMapMstId": 413102,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 5003,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 122,
+        "questMapMstId": 413103,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 5004,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 123,
+        "questMapMstId": 413104,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 5005,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 124,
+        "questMapMstId": 413105,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 6001,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 125,
+        "questMapMstId": 414101,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 6002,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 126,
+        "questMapMstId": 414102,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 6003,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 127,
+        "questMapMstId": 414103,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 6004,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 128,
+        "questMapMstId": 414104,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 6005,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-05-26T11:59:59+09:00",
+        "questCampaignMstId": 129,
+        "questMapMstId": 414105,
+        "startTime": "2026-05-11T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 1001,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 130,
+        "questMapMstId": 409101,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 1002,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 131,
+        "questMapMstId": 409102,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 1003,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 132,
+        "questMapMstId": 409103,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 1004,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 133,
+        "questMapMstId": 409104,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 1005,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 134,
+        "questMapMstId": 409105,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 2001,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 135,
+        "questMapMstId": 410101,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 2002,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 136,
+        "questMapMstId": 410102,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 2003,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 137,
+        "questMapMstId": 410103,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 2004,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 138,
+        "questMapMstId": 410104,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 2005,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 139,
+        "questMapMstId": 410105,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 3001,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 140,
+        "questMapMstId": 411101,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 3002,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 141,
+        "questMapMstId": 411102,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 3003,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 142,
+        "questMapMstId": 411103,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 3004,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 143,
+        "questMapMstId": 411104,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 3005,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 144,
+        "questMapMstId": 411105,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 4001,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 145,
+        "questMapMstId": 412101,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 4002,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 146,
+        "questMapMstId": 412102,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 4003,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 147,
+        "questMapMstId": 412103,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 4004,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 148,
+        "questMapMstId": 412104,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 4005,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 149,
+        "questMapMstId": 412105,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 5001,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 150,
+        "questMapMstId": 413101,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 5002,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 151,
+        "questMapMstId": 413102,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 5003,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 152,
+        "questMapMstId": 413103,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 5004,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 153,
+        "questMapMstId": 413104,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 5005,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 154,
+        "questMapMstId": 413105,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 6001,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 155,
+        "questMapMstId": 414101,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 6002,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 156,
+        "questMapMstId": 414102,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 6003,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 157,
+        "questMapMstId": 414103,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 6004,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 158,
+        "questMapMstId": 414104,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 2,
+        "campaignValue": 6005,
+        "description": "Crystalis ability\ndrop rate boosted!",
+        "endTime": "2026-09-08T11:59:59+09:00",
+        "questCampaignMstId": 159,
+        "questMapMstId": 414105,
+        "startTime": "2026-09-01T12:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2025-07-31T11:59:59+09:00",
+        "questCampaignMstId": 1001,
+        "questMapMstId": 41,
+        "startTime": "2025-07-16T12:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2025-07-31T11:59:59+09:00",
+        "questCampaignMstId": 1002,
+        "questMapMstId": 42,
+        "startTime": "2025-07-16T12:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2025-07-31T11:59:59+09:00",
+        "questCampaignMstId": 1003,
+        "questMapMstId": 43,
+        "startTime": "2025-07-16T12:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2025-10-14T11:59:59+09:00",
+        "questCampaignMstId": 1004,
+        "questMapMstId": 41,
+        "startTime": "2025-09-29T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2025-10-14T11:59:59+09:00",
+        "questCampaignMstId": 1005,
+        "questMapMstId": 42,
+        "startTime": "2025-09-29T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2025-10-14T11:59:59+09:00",
+        "questCampaignMstId": 1006,
+        "questMapMstId": 43,
+        "startTime": "2025-09-29T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-01-15T11:59:59+09:00",
+        "questCampaignMstId": 1007,
+        "questMapMstId": 41,
+        "startTime": "2026-01-01T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-01-15T11:59:59+09:00",
+        "questCampaignMstId": 1008,
+        "questMapMstId": 42,
+        "startTime": "2026-01-01T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-01-15T11:59:59+09:00",
+        "questCampaignMstId": 1009,
+        "questMapMstId": 43,
+        "startTime": "2026-01-01T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-04-15T11:59:59+09:00",
+        "questCampaignMstId": 1010,
+        "questMapMstId": 41,
+        "startTime": "2026-04-01T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-04-15T11:59:59+09:00",
+        "questCampaignMstId": 1011,
+        "questMapMstId": 42,
+        "startTime": "2026-04-01T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-04-15T11:59:59+09:00",
+        "questCampaignMstId": 1012,
+        "questMapMstId": 43,
+        "startTime": "2026-04-01T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-06-15T11:59:59+09:00",
+        "questCampaignMstId": 1013,
+        "questMapMstId": 41,
+        "startTime": "2026-06-01T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-06-15T11:59:59+09:00",
+        "questCampaignMstId": 1014,
+        "questMapMstId": 42,
+        "startTime": "2026-06-01T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-06-15T11:59:59+09:00",
+        "questCampaignMstId": 1015,
+        "questMapMstId": 43,
+        "startTime": "2026-06-01T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-08-15T11:59:59+09:00",
+        "questCampaignMstId": 1016,
+        "questMapMstId": 41,
+        "startTime": "2026-08-01T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-08-15T11:59:59+09:00",
+        "questCampaignMstId": 1017,
+        "questMapMstId": 42,
+        "startTime": "2026-08-01T05:00:00+09:00"
+    },
+    {
+        "campaignType": 1,
+        "campaignValue": 50,
+        "description": "Half QP!",
+        "endTime": "2026-08-15T11:59:59+09:00",
+        "questCampaignMstId": 1018,
+        "questMapMstId": 43,
+        "startTime": "2026-08-01T05:00:00+09:00"
+    }
+]

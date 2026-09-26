@@ -1,0 +1,555 @@
+[
+    {
+        "conditionGroupId": 3001,
+        "conditionType": 3,
+        "questConditionMstId": 3001,
+        "value1": 1,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3002,
+        "conditionType": 3,
+        "questConditionMstId": 3002,
+        "value1": 3,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3003,
+        "conditionType": 3,
+        "questConditionMstId": 3003,
+        "value1": 5,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3004,
+        "conditionType": 3,
+        "questConditionMstId": 3004,
+        "value1": 7,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3005,
+        "conditionType": 3,
+        "questConditionMstId": 3005,
+        "value1": 9,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3006,
+        "conditionType": 3,
+        "questConditionMstId": 3006,
+        "value1": 11,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3007,
+        "conditionType": 3,
+        "questConditionMstId": 3007,
+        "value1": 13,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3008,
+        "conditionType": 3,
+        "questConditionMstId": 3008,
+        "value1": 15,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3009,
+        "conditionType": 3,
+        "questConditionMstId": 3009,
+        "value1": 18,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3010,
+        "conditionType": 3,
+        "questConditionMstId": 3010,
+        "value1": 21,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3011,
+        "conditionType": 3,
+        "questConditionMstId": 3011,
+        "value1": 26,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3012,
+        "conditionType": 3,
+        "questConditionMstId": 3012,
+        "value1": 34,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3013,
+        "conditionType": 3,
+        "questConditionMstId": 3013,
+        "value1": 43,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3014,
+        "conditionType": 3,
+        "questConditionMstId": 3014,
+        "value1": 47,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3015,
+        "conditionType": 3,
+        "questConditionMstId": 3015,
+        "value1": 53,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3016,
+        "conditionType": 3,
+        "questConditionMstId": 3016,
+        "value1": 59,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3017,
+        "conditionType": 3,
+        "questConditionMstId": 3017,
+        "value1": 68,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3018,
+        "conditionType": 3,
+        "questConditionMstId": 3018,
+        "value1": 78,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3019,
+        "conditionType": 3,
+        "questConditionMstId": 3019,
+        "value1": 91,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 3020,
+        "conditionType": 3,
+        "questConditionMstId": 3020,
+        "value1": 99,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 105401,
+        "conditionType": 5,
+        "questConditionMstId": 105401,
+        "value1": 6,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 106401,
+        "conditionType": 5,
+        "questConditionMstId": 106401,
+        "value1": 6,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 107401,
+        "conditionType": 5,
+        "questConditionMstId": 107401,
+        "value1": 6,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 108401,
+        "conditionType": 5,
+        "questConditionMstId": 108401,
+        "value1": 12,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 109401,
+        "conditionType": 5,
+        "questConditionMstId": 109401,
+        "value1": 12,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 110401,
+        "conditionType": 5,
+        "questConditionMstId": 110401,
+        "value1": 12,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 111401,
+        "conditionType": 5,
+        "questConditionMstId": 111401,
+        "value1": 18,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 112401,
+        "conditionType": 5,
+        "questConditionMstId": 112401,
+        "value1": 18,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 114401,
+        "conditionType": 5,
+        "questConditionMstId": 114401,
+        "value1": 18,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101010,
+        "conditionType": 4,
+        "questConditionMstId": 1101010,
+        "value1": 102113,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101040,
+        "conditionType": 4,
+        "questConditionMstId": 1101040,
+        "value1": 103112,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101070,
+        "conditionType": 4,
+        "questConditionMstId": 1101070,
+        "value1": 104113,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101100,
+        "conditionType": 4,
+        "questConditionMstId": 1101100,
+        "value1": 105113,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101130,
+        "conditionType": 4,
+        "questConditionMstId": 1101130,
+        "value1": 106112,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101160,
+        "conditionType": 4,
+        "questConditionMstId": 1101160,
+        "value1": 107113,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101190,
+        "conditionType": 4,
+        "questConditionMstId": 1101190,
+        "value1": 108112,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101220,
+        "conditionType": 4,
+        "questConditionMstId": 1101220,
+        "value1": 109112,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101250,
+        "conditionType": 4,
+        "questConditionMstId": 1101250,
+        "value1": 110113,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101280,
+        "conditionType": 4,
+        "questConditionMstId": 1101280,
+        "value1": 111113,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101310,
+        "conditionType": 4,
+        "questConditionMstId": 1101310,
+        "value1": 112113,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101340,
+        "conditionType": 4,
+        "questConditionMstId": 1101340,
+        "value1": 114121,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101370,
+        "conditionType": 4,
+        "questConditionMstId": 1101370,
+        "value1": 116126,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101400,
+        "conditionType": 4,
+        "questConditionMstId": 1101400,
+        "value1": 113113,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101430,
+        "conditionType": 4,
+        "questConditionMstId": 1101430,
+        "value1": 117119,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101460,
+        "conditionType": 4,
+        "questConditionMstId": 1101460,
+        "value1": 115119,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101490,
+        "conditionType": 4,
+        "questConditionMstId": 1101490,
+        "value1": 118126,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101520,
+        "conditionType": 4,
+        "questConditionMstId": 1101520,
+        "value1": 119134,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101550,
+        "conditionType": 4,
+        "questConditionMstId": 1101550,
+        "value1": 121132,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101580,
+        "conditionType": 4,
+        "questConditionMstId": 1101580,
+        "value1": 122131,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101610,
+        "conditionType": 4,
+        "questConditionMstId": 1101610,
+        "value1": 124111,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101640,
+        "conditionType": 4,
+        "questConditionMstId": 1101640,
+        "value1": 125112,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101670,
+        "conditionType": 4,
+        "questConditionMstId": 1101670,
+        "value1": 129142,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101700,
+        "conditionType": 4,
+        "questConditionMstId": 1101700,
+        "value1": 131128,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1101730,
+        "conditionType": 4,
+        "questConditionMstId": 1101730,
+        "value1": 132133,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123010,
+        "conditionType": 4,
+        "questConditionMstId": 1123010,
+        "value1": 102316,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123040,
+        "conditionType": 4,
+        "questConditionMstId": 1123040,
+        "value1": 103318,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123070,
+        "conditionType": 4,
+        "questConditionMstId": 1123070,
+        "value1": 104318,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123100,
+        "conditionType": 4,
+        "questConditionMstId": 1123100,
+        "value1": 105317,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123130,
+        "conditionType": 4,
+        "questConditionMstId": 1123130,
+        "value1": 106317,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123160,
+        "conditionType": 4,
+        "questConditionMstId": 1123160,
+        "value1": 107317,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123190,
+        "conditionType": 4,
+        "questConditionMstId": 1123190,
+        "value1": 108317,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123220,
+        "conditionType": 4,
+        "questConditionMstId": 1123220,
+        "value1": 109317,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123250,
+        "conditionType": 4,
+        "questConditionMstId": 1123250,
+        "value1": 110318,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123280,
+        "conditionType": 4,
+        "questConditionMstId": 1123280,
+        "value1": 111318,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123310,
+        "conditionType": 4,
+        "questConditionMstId": 1123310,
+        "value1": 112318,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123340,
+        "conditionType": 4,
+        "questConditionMstId": 1123340,
+        "value1": 114318,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123370,
+        "conditionType": 4,
+        "questConditionMstId": 1123370,
+        "value1": 116316,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123400,
+        "conditionType": 4,
+        "questConditionMstId": 1123400,
+        "value1": 113318,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123430,
+        "conditionType": 4,
+        "questConditionMstId": 1123430,
+        "value1": 117323,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123460,
+        "conditionType": 4,
+        "questConditionMstId": 1123460,
+        "value1": 115319,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123490,
+        "conditionType": 4,
+        "questConditionMstId": 1123490,
+        "value1": 118317,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123520,
+        "conditionType": 4,
+        "questConditionMstId": 1123520,
+        "value1": 119319,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123550,
+        "conditionType": 4,
+        "questConditionMstId": 1123550,
+        "value1": 121318,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123580,
+        "conditionType": 4,
+        "questConditionMstId": 1123580,
+        "value1": 122324,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123610,
+        "conditionType": 4,
+        "questConditionMstId": 1123610,
+        "value1": 124311,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123640,
+        "conditionType": 4,
+        "questConditionMstId": 1123640,
+        "value1": 125315,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123670,
+        "conditionType": 4,
+        "questConditionMstId": 1123670,
+        "value1": 129326,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123700,
+        "conditionType": 4,
+        "questConditionMstId": 1123700,
+        "value1": 131320,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 1123730,
+        "conditionType": 4,
+        "questConditionMstId": 1123730,
+        "value1": 132323,
+        "value2": 0
+    }
+]

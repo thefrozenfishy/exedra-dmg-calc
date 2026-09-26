@@ -1,0 +1,6506 @@
+[
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010001,
+        "objectReceiveType": 15,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 101
+    },
+    {
+        "groupId": 1,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 102
+    },
+    {
+        "groupId": 1,
+        "num": 25000,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 103
+    },
+    {
+        "groupId": 1,
+        "num": 60000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 104
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010002,
+        "objectReceiveType": 15,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 105
+    },
+    {
+        "groupId": 1,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 106
+    },
+    {
+        "groupId": 1,
+        "num": 25000,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 107
+    },
+    {
+        "groupId": 1,
+        "num": 60000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 108
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010003,
+        "objectReceiveType": 15,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 109
+    },
+    {
+        "groupId": 1,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 110
+    },
+    {
+        "groupId": 1,
+        "num": 25000,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 111
+    },
+    {
+        "groupId": 1,
+        "num": 60000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 112
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010004,
+        "objectReceiveType": 15,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 113
+    },
+    {
+        "groupId": 1,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 114
+    },
+    {
+        "groupId": 1,
+        "num": 25000,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 115
+    },
+    {
+        "groupId": 1,
+        "num": 60000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 116
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010005,
+        "objectReceiveType": 15,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 117
+    },
+    {
+        "groupId": 1,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 118
+    },
+    {
+        "groupId": 1,
+        "num": 25000,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 119
+    },
+    {
+        "groupId": 1,
+        "num": 60000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 120
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010006,
+        "objectReceiveType": 15,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 121
+    },
+    {
+        "groupId": 1,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 122
+    },
+    {
+        "groupId": 1,
+        "num": 25000,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 123
+    },
+    {
+        "groupId": 1,
+        "num": 60000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 124
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010007,
+        "objectReceiveType": 15,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 125
+    },
+    {
+        "groupId": 1,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 126
+    },
+    {
+        "groupId": 1,
+        "num": 25000,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 127
+    },
+    {
+        "groupId": 1,
+        "num": 60000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 128
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010008,
+        "objectReceiveType": 15,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 129
+    },
+    {
+        "groupId": 1,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 130
+    },
+    {
+        "groupId": 1,
+        "num": 25000,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 131
+    },
+    {
+        "groupId": 1,
+        "num": 60000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 132
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010009,
+        "objectReceiveType": 15,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 133
+    },
+    {
+        "groupId": 1,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 134
+    },
+    {
+        "groupId": 1,
+        "num": 25000,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 135
+    },
+    {
+        "groupId": 1,
+        "num": 60000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 136
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010010,
+        "objectReceiveType": 15,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 137
+    },
+    {
+        "groupId": 1,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 138
+    },
+    {
+        "groupId": 1,
+        "num": 25000,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 139
+    },
+    {
+        "groupId": 1,
+        "num": 60000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 140
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010011,
+        "objectReceiveType": 15,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 141
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370091,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 142
+    },
+    {
+        "groupId": 1,
+        "num": 4200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 143
+    },
+    {
+        "groupId": 1,
+        "num": 22500,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 144
+    },
+    {
+        "groupId": 1,
+        "num": 55000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 145
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010012,
+        "objectReceiveType": 15,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 146
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370092,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 147
+    },
+    {
+        "groupId": 1,
+        "num": 3800,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 148
+    },
+    {
+        "groupId": 1,
+        "num": 22500,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 149
+    },
+    {
+        "groupId": 1,
+        "num": 55000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 150
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010013,
+        "objectReceiveType": 15,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 151
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 152
+    },
+    {
+        "groupId": 1,
+        "num": 3400,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 153
+    },
+    {
+        "groupId": 1,
+        "num": 20000,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 154
+    },
+    {
+        "groupId": 1,
+        "num": 50000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 155
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010014,
+        "objectReceiveType": 15,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 156
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 157
+    },
+    {
+        "groupId": 1,
+        "num": 3000,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 158
+    },
+    {
+        "groupId": 1,
+        "num": 17500,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 159
+    },
+    {
+        "groupId": 1,
+        "num": 45000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 160
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010015,
+        "objectReceiveType": 15,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 161
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 162
+    },
+    {
+        "groupId": 1,
+        "num": 2600,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 163
+    },
+    {
+        "groupId": 1,
+        "num": 17500,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 164
+    },
+    {
+        "groupId": 1,
+        "num": 45000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 165
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010016,
+        "objectReceiveType": 15,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 166
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 167
+    },
+    {
+        "groupId": 1,
+        "num": 2200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 168
+    },
+    {
+        "groupId": 1,
+        "num": 15000,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 169
+    },
+    {
+        "groupId": 1,
+        "num": 40000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 170
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010017,
+        "objectReceiveType": 15,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 171
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 172
+    },
+    {
+        "groupId": 1,
+        "num": 1800,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 173
+    },
+    {
+        "groupId": 1,
+        "num": 12500,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 174
+    },
+    {
+        "groupId": 1,
+        "num": 35000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 175
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 80010018,
+        "objectReceiveType": 15,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 176
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 177
+    },
+    {
+        "groupId": 1,
+        "num": 1200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 178
+    },
+    {
+        "groupId": 1,
+        "num": 12500,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 179
+    },
+    {
+        "groupId": 1,
+        "num": 35000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 180
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 181
+    },
+    {
+        "groupId": 1,
+        "num": 10000,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 182
+    },
+    {
+        "groupId": 1,
+        "num": 30000,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 183
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010001,
+        "objectReceiveType": 15,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 184
+    },
+    {
+        "groupId": 2,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 185
+    },
+    {
+        "groupId": 2,
+        "num": 25000,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 186
+    },
+    {
+        "groupId": 2,
+        "num": 60000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 187
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370098,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 188
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370099,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 189
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 190
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 191
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 192
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010002,
+        "objectReceiveType": 15,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 193
+    },
+    {
+        "groupId": 2,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 194
+    },
+    {
+        "groupId": 2,
+        "num": 25000,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 195
+    },
+    {
+        "groupId": 2,
+        "num": 60000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 196
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370098,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 197
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370099,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 198
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 199
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 200
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 201
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010003,
+        "objectReceiveType": 15,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 202
+    },
+    {
+        "groupId": 2,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 203
+    },
+    {
+        "groupId": 2,
+        "num": 25000,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 204
+    },
+    {
+        "groupId": 2,
+        "num": 60000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 205
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370098,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 206
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370099,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 207
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 208
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 209
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 210
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010004,
+        "objectReceiveType": 15,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 211
+    },
+    {
+        "groupId": 2,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 212
+    },
+    {
+        "groupId": 2,
+        "num": 25000,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 213
+    },
+    {
+        "groupId": 2,
+        "num": 60000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 214
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370098,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 215
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370099,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 216
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 217
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 218
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 219
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010005,
+        "objectReceiveType": 15,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 220
+    },
+    {
+        "groupId": 2,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 221
+    },
+    {
+        "groupId": 2,
+        "num": 25000,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 222
+    },
+    {
+        "groupId": 2,
+        "num": 60000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 223
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370098,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 224
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370099,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 225
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 226
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 227
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 228
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010006,
+        "objectReceiveType": 15,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 229
+    },
+    {
+        "groupId": 2,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 230
+    },
+    {
+        "groupId": 2,
+        "num": 25000,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 231
+    },
+    {
+        "groupId": 2,
+        "num": 60000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 232
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370098,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 233
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370099,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 234
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 235
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 236
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 237
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010007,
+        "objectReceiveType": 15,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 238
+    },
+    {
+        "groupId": 2,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 239
+    },
+    {
+        "groupId": 2,
+        "num": 25000,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 240
+    },
+    {
+        "groupId": 2,
+        "num": 60000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 241
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370098,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 242
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370099,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 243
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 244
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 245
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 246
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010008,
+        "objectReceiveType": 15,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 247
+    },
+    {
+        "groupId": 2,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 248
+    },
+    {
+        "groupId": 2,
+        "num": 25000,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 249
+    },
+    {
+        "groupId": 2,
+        "num": 60000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 250
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370098,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 251
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370099,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 252
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 253
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 254
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 255
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010009,
+        "objectReceiveType": 15,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 256
+    },
+    {
+        "groupId": 2,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 257
+    },
+    {
+        "groupId": 2,
+        "num": 25000,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 258
+    },
+    {
+        "groupId": 2,
+        "num": 60000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 259
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370098,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 260
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370099,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 261
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 262
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 263
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 264
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010010,
+        "objectReceiveType": 15,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 265
+    },
+    {
+        "groupId": 2,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 266
+    },
+    {
+        "groupId": 2,
+        "num": 25000,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 267
+    },
+    {
+        "groupId": 2,
+        "num": 60000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 268
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370098,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 269
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370099,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 270
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 271
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 272
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 273
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010011,
+        "objectReceiveType": 15,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 274
+    },
+    {
+        "groupId": 2,
+        "num": 4200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 275
+    },
+    {
+        "groupId": 2,
+        "num": 22500,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 276
+    },
+    {
+        "groupId": 2,
+        "num": 55000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 277
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370098,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 278
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370099,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 279
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 280
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 281
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 282
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010012,
+        "objectReceiveType": 15,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 283
+    },
+    {
+        "groupId": 2,
+        "num": 3800,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 284
+    },
+    {
+        "groupId": 2,
+        "num": 22500,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 285
+    },
+    {
+        "groupId": 2,
+        "num": 55000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 286
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370099,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 287
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 288
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 289
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 290
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010013,
+        "objectReceiveType": 15,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 291
+    },
+    {
+        "groupId": 2,
+        "num": 3400,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 292
+    },
+    {
+        "groupId": 2,
+        "num": 20000,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 293
+    },
+    {
+        "groupId": 2,
+        "num": 50000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 294
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 295
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 296
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 297
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010014,
+        "objectReceiveType": 15,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 298
+    },
+    {
+        "groupId": 2,
+        "num": 3000,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 299
+    },
+    {
+        "groupId": 2,
+        "num": 17500,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 300
+    },
+    {
+        "groupId": 2,
+        "num": 45000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 301
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 302
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 303
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 304
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010015,
+        "objectReceiveType": 15,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 305
+    },
+    {
+        "groupId": 2,
+        "num": 2600,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 306
+    },
+    {
+        "groupId": 2,
+        "num": 17500,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 307
+    },
+    {
+        "groupId": 2,
+        "num": 45000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 308
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 309
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 310
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010016,
+        "objectReceiveType": 15,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 311
+    },
+    {
+        "groupId": 2,
+        "num": 2200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 312
+    },
+    {
+        "groupId": 2,
+        "num": 15000,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 313
+    },
+    {
+        "groupId": 2,
+        "num": 40000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 314
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 315
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 316
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010017,
+        "objectReceiveType": 15,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 317
+    },
+    {
+        "groupId": 2,
+        "num": 1800,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 318
+    },
+    {
+        "groupId": 2,
+        "num": 12500,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 319
+    },
+    {
+        "groupId": 2,
+        "num": 35000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 320
+    },
+    {
+        "groupId": 2,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 321
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 80010018,
+        "objectReceiveType": 15,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 322
+    },
+    {
+        "groupId": 2,
+        "num": 1200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 323
+    },
+    {
+        "groupId": 2,
+        "num": 12500,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 324
+    },
+    {
+        "groupId": 2,
+        "num": 35000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 325
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 326
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 327
+    },
+    {
+        "groupId": 2,
+        "num": 10000,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 328
+    },
+    {
+        "groupId": 2,
+        "num": 30000,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 329
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010001,
+        "objectReceiveType": 15,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 330
+    },
+    {
+        "groupId": 3,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 331
+    },
+    {
+        "groupId": 3,
+        "num": 25000,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 332
+    },
+    {
+        "groupId": 3,
+        "num": 60000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 333
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370104,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 334
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370105,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 335
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 336
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 337
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 338
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010002,
+        "objectReceiveType": 15,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 339
+    },
+    {
+        "groupId": 3,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 340
+    },
+    {
+        "groupId": 3,
+        "num": 25000,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 341
+    },
+    {
+        "groupId": 3,
+        "num": 60000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 342
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370104,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 343
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370105,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 344
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 345
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 346
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 347
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010003,
+        "objectReceiveType": 15,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 348
+    },
+    {
+        "groupId": 3,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 349
+    },
+    {
+        "groupId": 3,
+        "num": 25000,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 350
+    },
+    {
+        "groupId": 3,
+        "num": 60000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 351
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370104,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 352
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370105,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 353
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 354
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 355
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 356
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010004,
+        "objectReceiveType": 15,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 357
+    },
+    {
+        "groupId": 3,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 358
+    },
+    {
+        "groupId": 3,
+        "num": 25000,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 359
+    },
+    {
+        "groupId": 3,
+        "num": 60000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 360
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370104,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 361
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370105,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 362
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 363
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 364
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 365
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010005,
+        "objectReceiveType": 15,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 366
+    },
+    {
+        "groupId": 3,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 367
+    },
+    {
+        "groupId": 3,
+        "num": 25000,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 368
+    },
+    {
+        "groupId": 3,
+        "num": 60000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 369
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370104,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 370
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370105,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 371
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 372
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 373
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 374
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010006,
+        "objectReceiveType": 15,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 375
+    },
+    {
+        "groupId": 3,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 376
+    },
+    {
+        "groupId": 3,
+        "num": 25000,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 377
+    },
+    {
+        "groupId": 3,
+        "num": 60000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 378
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370104,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 379
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370105,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 380
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 381
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 382
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 383
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010007,
+        "objectReceiveType": 15,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 384
+    },
+    {
+        "groupId": 3,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 385
+    },
+    {
+        "groupId": 3,
+        "num": 25000,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 386
+    },
+    {
+        "groupId": 3,
+        "num": 60000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 387
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370104,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 388
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370105,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 389
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 390
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 391
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 392
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010008,
+        "objectReceiveType": 15,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 393
+    },
+    {
+        "groupId": 3,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 394
+    },
+    {
+        "groupId": 3,
+        "num": 25000,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 395
+    },
+    {
+        "groupId": 3,
+        "num": 60000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 396
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370104,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 397
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370105,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 398
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 399
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 400
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 401
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010009,
+        "objectReceiveType": 15,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 402
+    },
+    {
+        "groupId": 3,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 403
+    },
+    {
+        "groupId": 3,
+        "num": 25000,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 404
+    },
+    {
+        "groupId": 3,
+        "num": 60000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 405
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370104,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 406
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370105,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 407
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 408
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 409
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 410
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010010,
+        "objectReceiveType": 15,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 411
+    },
+    {
+        "groupId": 3,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 412
+    },
+    {
+        "groupId": 3,
+        "num": 25000,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 413
+    },
+    {
+        "groupId": 3,
+        "num": 60000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 414
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370104,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 415
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370105,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 416
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 417
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 418
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 419
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010011,
+        "objectReceiveType": 15,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 420
+    },
+    {
+        "groupId": 3,
+        "num": 4200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 421
+    },
+    {
+        "groupId": 3,
+        "num": 22500,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 422
+    },
+    {
+        "groupId": 3,
+        "num": 55000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 423
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370104,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 424
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370105,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 425
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 426
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 427
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 428
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010012,
+        "objectReceiveType": 15,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 429
+    },
+    {
+        "groupId": 3,
+        "num": 3800,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 430
+    },
+    {
+        "groupId": 3,
+        "num": 22500,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 431
+    },
+    {
+        "groupId": 3,
+        "num": 55000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 432
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370105,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 433
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 434
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 435
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 436
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010013,
+        "objectReceiveType": 15,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 437
+    },
+    {
+        "groupId": 3,
+        "num": 3400,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 438
+    },
+    {
+        "groupId": 3,
+        "num": 20000,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 439
+    },
+    {
+        "groupId": 3,
+        "num": 50000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 440
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 441
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 442
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 443
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010014,
+        "objectReceiveType": 15,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 444
+    },
+    {
+        "groupId": 3,
+        "num": 3000,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 445
+    },
+    {
+        "groupId": 3,
+        "num": 17500,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 446
+    },
+    {
+        "groupId": 3,
+        "num": 45000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 447
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 448
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 449
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 450
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010015,
+        "objectReceiveType": 15,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 451
+    },
+    {
+        "groupId": 3,
+        "num": 2600,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 452
+    },
+    {
+        "groupId": 3,
+        "num": 17500,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 453
+    },
+    {
+        "groupId": 3,
+        "num": 45000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 454
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 455
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 456
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010016,
+        "objectReceiveType": 15,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 457
+    },
+    {
+        "groupId": 3,
+        "num": 2200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 458
+    },
+    {
+        "groupId": 3,
+        "num": 15000,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 459
+    },
+    {
+        "groupId": 3,
+        "num": 40000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 460
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 461
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 462
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010017,
+        "objectReceiveType": 15,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 463
+    },
+    {
+        "groupId": 3,
+        "num": 1800,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 464
+    },
+    {
+        "groupId": 3,
+        "num": 12500,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 465
+    },
+    {
+        "groupId": 3,
+        "num": 35000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 466
+    },
+    {
+        "groupId": 3,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 467
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 80010018,
+        "objectReceiveType": 15,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 468
+    },
+    {
+        "groupId": 3,
+        "num": 1200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 469
+    },
+    {
+        "groupId": 3,
+        "num": 12500,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 470
+    },
+    {
+        "groupId": 3,
+        "num": 35000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 471
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 472
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 473
+    },
+    {
+        "groupId": 3,
+        "num": 10000,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 474
+    },
+    {
+        "groupId": 3,
+        "num": 30000,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 475
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010001,
+        "objectReceiveType": 15,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 476
+    },
+    {
+        "groupId": 4,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 477
+    },
+    {
+        "groupId": 4,
+        "num": 25000,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 478
+    },
+    {
+        "groupId": 4,
+        "num": 60000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 479
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370110,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 480
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370111,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 481
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 482
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 483
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 484
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010002,
+        "objectReceiveType": 15,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 485
+    },
+    {
+        "groupId": 4,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 486
+    },
+    {
+        "groupId": 4,
+        "num": 25000,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 487
+    },
+    {
+        "groupId": 4,
+        "num": 60000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 488
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370110,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 489
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370111,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 490
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 491
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 492
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 493
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010003,
+        "objectReceiveType": 15,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 494
+    },
+    {
+        "groupId": 4,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 495
+    },
+    {
+        "groupId": 4,
+        "num": 25000,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 496
+    },
+    {
+        "groupId": 4,
+        "num": 60000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 497
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370110,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 498
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370111,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 499
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 500
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 501
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 502
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010004,
+        "objectReceiveType": 15,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 503
+    },
+    {
+        "groupId": 4,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 504
+    },
+    {
+        "groupId": 4,
+        "num": 25000,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 505
+    },
+    {
+        "groupId": 4,
+        "num": 60000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 506
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370110,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 507
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370111,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 508
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 509
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 510
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 511
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010005,
+        "objectReceiveType": 15,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 512
+    },
+    {
+        "groupId": 4,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 513
+    },
+    {
+        "groupId": 4,
+        "num": 25000,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 514
+    },
+    {
+        "groupId": 4,
+        "num": 60000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 515
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370110,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 516
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370111,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 517
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 518
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 519
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 520
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010006,
+        "objectReceiveType": 15,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 521
+    },
+    {
+        "groupId": 4,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 522
+    },
+    {
+        "groupId": 4,
+        "num": 25000,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 523
+    },
+    {
+        "groupId": 4,
+        "num": 60000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 524
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370110,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 525
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370111,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 526
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 527
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 528
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 529
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010007,
+        "objectReceiveType": 15,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 530
+    },
+    {
+        "groupId": 4,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 531
+    },
+    {
+        "groupId": 4,
+        "num": 25000,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 532
+    },
+    {
+        "groupId": 4,
+        "num": 60000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 533
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370110,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 534
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370111,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 535
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 536
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 537
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 538
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010008,
+        "objectReceiveType": 15,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 539
+    },
+    {
+        "groupId": 4,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 540
+    },
+    {
+        "groupId": 4,
+        "num": 25000,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 541
+    },
+    {
+        "groupId": 4,
+        "num": 60000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 542
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370110,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 543
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370111,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 544
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 545
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 546
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 547
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010009,
+        "objectReceiveType": 15,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 548
+    },
+    {
+        "groupId": 4,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 549
+    },
+    {
+        "groupId": 4,
+        "num": 25000,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 550
+    },
+    {
+        "groupId": 4,
+        "num": 60000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 551
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370110,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 552
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370111,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 553
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 554
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 555
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 556
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010010,
+        "objectReceiveType": 15,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 557
+    },
+    {
+        "groupId": 4,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 558
+    },
+    {
+        "groupId": 4,
+        "num": 25000,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 559
+    },
+    {
+        "groupId": 4,
+        "num": 60000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 560
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370110,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 561
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370111,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 562
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 563
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 564
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 565
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010011,
+        "objectReceiveType": 15,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 566
+    },
+    {
+        "groupId": 4,
+        "num": 4200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 567
+    },
+    {
+        "groupId": 4,
+        "num": 22500,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 568
+    },
+    {
+        "groupId": 4,
+        "num": 55000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 569
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370110,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 570
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370111,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 571
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 572
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 573
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 574
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010012,
+        "objectReceiveType": 15,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 575
+    },
+    {
+        "groupId": 4,
+        "num": 3800,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 576
+    },
+    {
+        "groupId": 4,
+        "num": 22500,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 577
+    },
+    {
+        "groupId": 4,
+        "num": 55000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 578
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370111,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 579
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 580
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 581
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 582
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010013,
+        "objectReceiveType": 15,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 583
+    },
+    {
+        "groupId": 4,
+        "num": 3400,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 584
+    },
+    {
+        "groupId": 4,
+        "num": 20000,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 585
+    },
+    {
+        "groupId": 4,
+        "num": 50000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 586
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 587
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 588
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 589
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010014,
+        "objectReceiveType": 15,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 590
+    },
+    {
+        "groupId": 4,
+        "num": 3000,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 591
+    },
+    {
+        "groupId": 4,
+        "num": 17500,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 592
+    },
+    {
+        "groupId": 4,
+        "num": 45000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 593
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 594
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 595
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 596
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010015,
+        "objectReceiveType": 15,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 597
+    },
+    {
+        "groupId": 4,
+        "num": 2600,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 598
+    },
+    {
+        "groupId": 4,
+        "num": 17500,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 599
+    },
+    {
+        "groupId": 4,
+        "num": 45000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 600
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 601
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 602
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010016,
+        "objectReceiveType": 15,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 603
+    },
+    {
+        "groupId": 4,
+        "num": 2200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 604
+    },
+    {
+        "groupId": 4,
+        "num": 15000,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 605
+    },
+    {
+        "groupId": 4,
+        "num": 40000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 606
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 607
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 608
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010017,
+        "objectReceiveType": 15,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 609
+    },
+    {
+        "groupId": 4,
+        "num": 1800,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 610
+    },
+    {
+        "groupId": 4,
+        "num": 12500,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 611
+    },
+    {
+        "groupId": 4,
+        "num": 35000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 612
+    },
+    {
+        "groupId": 4,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 613
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 80010018,
+        "objectReceiveType": 15,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 614
+    },
+    {
+        "groupId": 4,
+        "num": 1200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 615
+    },
+    {
+        "groupId": 4,
+        "num": 12500,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 616
+    },
+    {
+        "groupId": 4,
+        "num": 35000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 617
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 618
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 619
+    },
+    {
+        "groupId": 4,
+        "num": 10000,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 620
+    },
+    {
+        "groupId": 4,
+        "num": 30000,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 621
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010001,
+        "objectReceiveType": 15,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 622
+    },
+    {
+        "groupId": 5,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 623
+    },
+    {
+        "groupId": 5,
+        "num": 25000,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 624
+    },
+    {
+        "groupId": 5,
+        "num": 60000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 625
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370116,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 626
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370117,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 627
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 628
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 629
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 630
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010002,
+        "objectReceiveType": 15,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 631
+    },
+    {
+        "groupId": 5,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 632
+    },
+    {
+        "groupId": 5,
+        "num": 25000,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 633
+    },
+    {
+        "groupId": 5,
+        "num": 60000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 634
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370116,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 635
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370117,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 636
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 637
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 638
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 639
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010003,
+        "objectReceiveType": 15,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 640
+    },
+    {
+        "groupId": 5,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 641
+    },
+    {
+        "groupId": 5,
+        "num": 25000,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 642
+    },
+    {
+        "groupId": 5,
+        "num": 60000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 643
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370116,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 644
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370117,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 645
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 646
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 647
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 648
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010004,
+        "objectReceiveType": 15,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 649
+    },
+    {
+        "groupId": 5,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 650
+    },
+    {
+        "groupId": 5,
+        "num": 25000,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 651
+    },
+    {
+        "groupId": 5,
+        "num": 60000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 652
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370116,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 653
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370117,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 654
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 655
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 656
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 657
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010005,
+        "objectReceiveType": 15,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 658
+    },
+    {
+        "groupId": 5,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 659
+    },
+    {
+        "groupId": 5,
+        "num": 25000,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 660
+    },
+    {
+        "groupId": 5,
+        "num": 60000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 661
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370116,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 662
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370117,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 663
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 664
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 665
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 666
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010006,
+        "objectReceiveType": 15,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 667
+    },
+    {
+        "groupId": 5,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 668
+    },
+    {
+        "groupId": 5,
+        "num": 25000,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 669
+    },
+    {
+        "groupId": 5,
+        "num": 60000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 670
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370116,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 671
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370117,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 672
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 673
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 674
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 675
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010007,
+        "objectReceiveType": 15,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 676
+    },
+    {
+        "groupId": 5,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 677
+    },
+    {
+        "groupId": 5,
+        "num": 25000,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 678
+    },
+    {
+        "groupId": 5,
+        "num": 60000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 679
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370116,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 680
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370117,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 681
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 682
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 683
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 684
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010008,
+        "objectReceiveType": 15,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 685
+    },
+    {
+        "groupId": 5,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 686
+    },
+    {
+        "groupId": 5,
+        "num": 25000,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 687
+    },
+    {
+        "groupId": 5,
+        "num": 60000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 688
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370116,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 689
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370117,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 690
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 691
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 692
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 693
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010009,
+        "objectReceiveType": 15,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 694
+    },
+    {
+        "groupId": 5,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 695
+    },
+    {
+        "groupId": 5,
+        "num": 25000,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 696
+    },
+    {
+        "groupId": 5,
+        "num": 60000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 697
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370116,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 698
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370117,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 699
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 700
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 701
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 702
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010010,
+        "objectReceiveType": 15,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 703
+    },
+    {
+        "groupId": 5,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 704
+    },
+    {
+        "groupId": 5,
+        "num": 25000,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 705
+    },
+    {
+        "groupId": 5,
+        "num": 60000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 706
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370116,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 707
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370117,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 708
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 709
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 710
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 711
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010011,
+        "objectReceiveType": 15,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 712
+    },
+    {
+        "groupId": 5,
+        "num": 4200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 713
+    },
+    {
+        "groupId": 5,
+        "num": 22500,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 714
+    },
+    {
+        "groupId": 5,
+        "num": 55000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 715
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370116,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 716
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370117,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 717
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 718
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 719
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 720
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010012,
+        "objectReceiveType": 15,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 721
+    },
+    {
+        "groupId": 5,
+        "num": 3800,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 722
+    },
+    {
+        "groupId": 5,
+        "num": 22500,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 723
+    },
+    {
+        "groupId": 5,
+        "num": 55000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 724
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370117,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 725
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 726
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 727
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 728
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010013,
+        "objectReceiveType": 15,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 729
+    },
+    {
+        "groupId": 5,
+        "num": 3400,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 730
+    },
+    {
+        "groupId": 5,
+        "num": 20000,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 731
+    },
+    {
+        "groupId": 5,
+        "num": 50000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 732
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 733
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 734
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 735
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010014,
+        "objectReceiveType": 15,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 736
+    },
+    {
+        "groupId": 5,
+        "num": 3000,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 737
+    },
+    {
+        "groupId": 5,
+        "num": 17500,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 738
+    },
+    {
+        "groupId": 5,
+        "num": 45000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 739
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 740
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 741
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 742
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010015,
+        "objectReceiveType": 15,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 743
+    },
+    {
+        "groupId": 5,
+        "num": 2600,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 744
+    },
+    {
+        "groupId": 5,
+        "num": 17500,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 745
+    },
+    {
+        "groupId": 5,
+        "num": 45000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 746
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 747
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 748
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010016,
+        "objectReceiveType": 15,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 749
+    },
+    {
+        "groupId": 5,
+        "num": 2200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 750
+    },
+    {
+        "groupId": 5,
+        "num": 15000,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 751
+    },
+    {
+        "groupId": 5,
+        "num": 40000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 752
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 753
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 754
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010017,
+        "objectReceiveType": 15,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 755
+    },
+    {
+        "groupId": 5,
+        "num": 1800,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 756
+    },
+    {
+        "groupId": 5,
+        "num": 12500,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 757
+    },
+    {
+        "groupId": 5,
+        "num": 35000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 758
+    },
+    {
+        "groupId": 5,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 759
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 80010018,
+        "objectReceiveType": 15,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 760
+    },
+    {
+        "groupId": 5,
+        "num": 1200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 761
+    },
+    {
+        "groupId": 5,
+        "num": 12500,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 762
+    },
+    {
+        "groupId": 5,
+        "num": 35000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 763
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 764
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 765
+    },
+    {
+        "groupId": 5,
+        "num": 10000,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 766
+    },
+    {
+        "groupId": 5,
+        "num": 30000,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 767
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010001,
+        "objectReceiveType": 15,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 768
+    },
+    {
+        "groupId": 6,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 769
+    },
+    {
+        "groupId": 6,
+        "num": 25000,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 770
+    },
+    {
+        "groupId": 6,
+        "num": 60000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 771
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370122,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 772
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370123,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 773
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 774
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 775
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 1,
+        "soloRaidRankingRewardMstId": 776
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010002,
+        "objectReceiveType": 15,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 777
+    },
+    {
+        "groupId": 6,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 778
+    },
+    {
+        "groupId": 6,
+        "num": 25000,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 779
+    },
+    {
+        "groupId": 6,
+        "num": 60000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 780
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370122,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 781
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370123,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 782
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 783
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 784
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 2,
+        "soloRaidRankingRewardMstId": 785
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010003,
+        "objectReceiveType": 15,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 786
+    },
+    {
+        "groupId": 6,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 787
+    },
+    {
+        "groupId": 6,
+        "num": 25000,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 788
+    },
+    {
+        "groupId": 6,
+        "num": 60000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 789
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370122,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 790
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370123,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 791
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 792
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 793
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 3,
+        "soloRaidRankingRewardMstId": 794
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010004,
+        "objectReceiveType": 15,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 795
+    },
+    {
+        "groupId": 6,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 796
+    },
+    {
+        "groupId": 6,
+        "num": 25000,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 797
+    },
+    {
+        "groupId": 6,
+        "num": 60000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 798
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370122,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 799
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370123,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 800
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 801
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 802
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 4,
+        "soloRaidRankingRewardMstId": 803
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010005,
+        "objectReceiveType": 15,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 804
+    },
+    {
+        "groupId": 6,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 805
+    },
+    {
+        "groupId": 6,
+        "num": 25000,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 806
+    },
+    {
+        "groupId": 6,
+        "num": 60000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 807
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370122,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 808
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370123,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 809
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 810
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 811
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 5,
+        "soloRaidRankingRewardMstId": 812
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010006,
+        "objectReceiveType": 15,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 813
+    },
+    {
+        "groupId": 6,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 814
+    },
+    {
+        "groupId": 6,
+        "num": 25000,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 815
+    },
+    {
+        "groupId": 6,
+        "num": 60000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 816
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370122,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 817
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370123,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 818
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 819
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 820
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 6,
+        "soloRaidRankingRewardMstId": 821
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010007,
+        "objectReceiveType": 15,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 822
+    },
+    {
+        "groupId": 6,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 823
+    },
+    {
+        "groupId": 6,
+        "num": 25000,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 824
+    },
+    {
+        "groupId": 6,
+        "num": 60000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 825
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370122,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 826
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370123,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 827
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 828
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 829
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 7,
+        "soloRaidRankingRewardMstId": 830
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010008,
+        "objectReceiveType": 15,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 831
+    },
+    {
+        "groupId": 6,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 832
+    },
+    {
+        "groupId": 6,
+        "num": 25000,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 833
+    },
+    {
+        "groupId": 6,
+        "num": 60000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 834
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370122,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 835
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370123,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 836
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 837
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 838
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 8,
+        "soloRaidRankingRewardMstId": 839
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010009,
+        "objectReceiveType": 15,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 840
+    },
+    {
+        "groupId": 6,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 841
+    },
+    {
+        "groupId": 6,
+        "num": 25000,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 842
+    },
+    {
+        "groupId": 6,
+        "num": 60000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 843
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370122,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 844
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370123,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 845
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 846
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 847
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 9,
+        "soloRaidRankingRewardMstId": 848
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010010,
+        "objectReceiveType": 15,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 849
+    },
+    {
+        "groupId": 6,
+        "num": 4500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 850
+    },
+    {
+        "groupId": 6,
+        "num": 25000,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 851
+    },
+    {
+        "groupId": 6,
+        "num": 60000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 852
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370122,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 853
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370123,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 854
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 855
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 856
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 10,
+        "soloRaidRankingRewardMstId": 857
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010011,
+        "objectReceiveType": 15,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 858
+    },
+    {
+        "groupId": 6,
+        "num": 4200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 859
+    },
+    {
+        "groupId": 6,
+        "num": 22500,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 860
+    },
+    {
+        "groupId": 6,
+        "num": 55000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 861
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370122,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 862
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370123,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 863
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 864
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 865
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 50,
+        "soloRaidRankingRewardMstId": 866
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010012,
+        "objectReceiveType": 15,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 867
+    },
+    {
+        "groupId": 6,
+        "num": 3800,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 868
+    },
+    {
+        "groupId": 6,
+        "num": 22500,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 869
+    },
+    {
+        "groupId": 6,
+        "num": 55000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 870
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370123,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 871
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 872
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 873
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 100,
+        "soloRaidRankingRewardMstId": 874
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010013,
+        "objectReceiveType": 15,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 875
+    },
+    {
+        "groupId": 6,
+        "num": 3400,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 876
+    },
+    {
+        "groupId": 6,
+        "num": 20000,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 877
+    },
+    {
+        "groupId": 6,
+        "num": 50000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 878
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 879
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 880
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 500,
+        "soloRaidRankingRewardMstId": 881
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010014,
+        "objectReceiveType": 15,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 882
+    },
+    {
+        "groupId": 6,
+        "num": 3000,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 883
+    },
+    {
+        "groupId": 6,
+        "num": 17500,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 884
+    },
+    {
+        "groupId": 6,
+        "num": 45000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 885
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370093,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 886
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 887
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 1000,
+        "soloRaidRankingRewardMstId": 888
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010015,
+        "objectReceiveType": 15,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 889
+    },
+    {
+        "groupId": 6,
+        "num": 2600,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 890
+    },
+    {
+        "groupId": 6,
+        "num": 17500,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 891
+    },
+    {
+        "groupId": 6,
+        "num": 45000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 892
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 893
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 3000,
+        "soloRaidRankingRewardMstId": 894
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010016,
+        "objectReceiveType": 15,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 895
+    },
+    {
+        "groupId": 6,
+        "num": 2200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 896
+    },
+    {
+        "groupId": 6,
+        "num": 15000,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 897
+    },
+    {
+        "groupId": 6,
+        "num": 40000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 898
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370094,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 899
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 10000,
+        "soloRaidRankingRewardMstId": 900
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010017,
+        "objectReceiveType": 15,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 901
+    },
+    {
+        "groupId": 6,
+        "num": 1800,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 902
+    },
+    {
+        "groupId": 6,
+        "num": 12500,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 903
+    },
+    {
+        "groupId": 6,
+        "num": 35000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 904
+    },
+    {
+        "groupId": 6,
+        "num": 2,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 30000,
+        "soloRaidRankingRewardMstId": 905
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 80010018,
+        "objectReceiveType": 15,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 906
+    },
+    {
+        "groupId": 6,
+        "num": 1200,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 907
+    },
+    {
+        "groupId": 6,
+        "num": 12500,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 908
+    },
+    {
+        "groupId": 6,
+        "num": 35000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 909
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370095,
+        "objectReceiveType": 5,
+        "ranking": 50000,
+        "soloRaidRankingRewardMstId": 910
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 911
+    },
+    {
+        "groupId": 6,
+        "num": 10000,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 912
+    },
+    {
+        "groupId": 6,
+        "num": 30000,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "ranking": 150000,
+        "soloRaidRankingRewardMstId": 913
+    }
+]

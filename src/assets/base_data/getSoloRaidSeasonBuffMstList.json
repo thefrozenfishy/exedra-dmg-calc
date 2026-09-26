@@ -1,0 +1,62 @@
+[
+    {
+        "buffPointChargePassiveSkillMstId": 1600003,
+        "enhancedPassiveSkillMstId": 1600002,
+        "enhancedSkillTurnGaugeValue": 60,
+        "groupId": 1,
+        "maxBuffPoint": 100,
+        "maxBuffPointOnEnhanced": 30,
+        "passiveSkillMstId": 1600001,
+        "soloRaidSeasonBuffMstId": 100
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600010,
+        "enhancedPassiveSkillMstId": 1600012,
+        "enhancedSkillTurnGaugeValue": 60,
+        "groupId": 2,
+        "maxBuffPoint": 100,
+        "maxBuffPointOnEnhanced": 30,
+        "passiveSkillMstId": 1600011,
+        "soloRaidSeasonBuffMstId": 200
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600015,
+        "enhancedPassiveSkillMstId": 1600017,
+        "enhancedSkillTurnGaugeValue": 60,
+        "groupId": 3,
+        "maxBuffPoint": 100,
+        "maxBuffPointOnEnhanced": 30,
+        "passiveSkillMstId": 1600016,
+        "soloRaidSeasonBuffMstId": 300
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600020,
+        "enhancedPassiveSkillMstId": 1600022,
+        "enhancedSkillTurnGaugeValue": 60,
+        "groupId": 4,
+        "maxBuffPoint": 100,
+        "maxBuffPointOnEnhanced": 30,
+        "passiveSkillMstId": 1600021,
+        "soloRaidSeasonBuffMstId": 400
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600025,
+        "enhancedPassiveSkillMstId": 1600027,
+        "enhancedSkillTurnGaugeValue": 35,
+        "groupId": 5,
+        "maxBuffPoint": 100,
+        "maxBuffPointOnEnhanced": 30,
+        "passiveSkillMstId": 1600026,
+        "soloRaidSeasonBuffMstId": 500
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600030,
+        "enhancedPassiveSkillMstId": 1600032,
+        "enhancedSkillTurnGaugeValue": 50,
+        "groupId": 6,
+        "maxBuffPoint": 100,
+        "maxBuffPointOnEnhanced": 30,
+        "passiveSkillMstId": 1600031,
+        "soloRaidSeasonBuffMstId": 600
+    }
+]

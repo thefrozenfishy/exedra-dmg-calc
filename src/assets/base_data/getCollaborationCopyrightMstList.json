@@ -1,0 +1,62 @@
+[
+    {
+        "collaborationCopyrightMstId": 1,
+        "collaborationMstId": 1,
+        "targetObjectId": 0,
+        "targetObjectType": 1
+    },
+    {
+        "collaborationCopyrightMstId": 2,
+        "collaborationMstId": 1,
+        "targetObjectId": 115101,
+        "targetObjectType": 2
+    },
+    {
+        "collaborationCopyrightMstId": 3,
+        "collaborationMstId": 1,
+        "targetObjectId": 115100,
+        "targetObjectType": 3
+    },
+    {
+        "collaborationCopyrightMstId": 4,
+        "collaborationMstId": 1,
+        "targetObjectId": 115101,
+        "targetObjectType": 3
+    },
+    {
+        "collaborationCopyrightMstId": 5,
+        "collaborationMstId": 1,
+        "targetObjectId": 115001,
+        "targetObjectType": 2
+    },
+    {
+        "collaborationCopyrightMstId": 6,
+        "collaborationMstId": 1,
+        "targetObjectId": 115000,
+        "targetObjectType": 3
+    },
+    {
+        "collaborationCopyrightMstId": 7,
+        "collaborationMstId": 1,
+        "targetObjectId": 115001,
+        "targetObjectType": 3
+    },
+    {
+        "collaborationCopyrightMstId": 8,
+        "collaborationMstId": 1,
+        "targetObjectId": 114901,
+        "targetObjectType": 2
+    },
+    {
+        "collaborationCopyrightMstId": 9,
+        "collaborationMstId": 1,
+        "targetObjectId": 114900,
+        "targetObjectType": 3
+    },
+    {
+        "collaborationCopyrightMstId": 10,
+        "collaborationMstId": 1,
+        "targetObjectId": 114901,
+        "targetObjectType": 3
+    }
+]

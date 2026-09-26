@@ -1,0 +1,234 @@
+[
+    {
+        "dailyBonusLotteryRarityGroupId": 101,
+        "endTime": "2025-09-11T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 1,
+        "multiRaidMstId": 1,
+        "seasonId": 1,
+        "startTime": "2025-08-28T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 102,
+        "endTime": "2025-09-25T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 2,
+        "multiRaidMstId": 2,
+        "seasonId": 2,
+        "startTime": "2025-09-11T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 102,
+        "endTime": "2025-10-09T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 1,
+        "multiRaidMstId": 3,
+        "seasonId": 1,
+        "startTime": "2025-09-25T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2025-10-23T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 3,
+        "multiRaidMstId": 4,
+        "seasonId": 3,
+        "startTime": "2025-10-09T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2025-11-06T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 2,
+        "multiRaidMstId": 5,
+        "seasonId": 2,
+        "startTime": "2025-10-23T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2025-11-20T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 4,
+        "multiRaidMstId": 6,
+        "seasonId": 4,
+        "startTime": "2025-11-06T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2025-12-04T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 1,
+        "multiRaidMstId": 7,
+        "seasonId": 1,
+        "startTime": "2025-11-20T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2025-12-18T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 3,
+        "multiRaidMstId": 8,
+        "seasonId": 3,
+        "startTime": "2025-12-04T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-01-01T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 4,
+        "multiRaidMstId": 9,
+        "seasonId": 4,
+        "startTime": "2025-12-18T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-01-15T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 2,
+        "multiRaidMstId": 10,
+        "seasonId": 2,
+        "startTime": "2026-01-01T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 104,
+        "endTime": "2026-01-29T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 5,
+        "multiRaidMstId": 11,
+        "seasonId": 5,
+        "startTime": "2026-01-15T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-02-12T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 1,
+        "multiRaidMstId": 12,
+        "seasonId": 1,
+        "startTime": "2026-01-29T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-02-26T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 6,
+        "multiRaidMstId": 13,
+        "seasonId": 6,
+        "startTime": "2026-02-12T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-03-12T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 3,
+        "multiRaidMstId": 14,
+        "seasonId": 3,
+        "startTime": "2026-02-26T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-03-26T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 4,
+        "multiRaidMstId": 15,
+        "seasonId": 4,
+        "startTime": "2026-03-12T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-04-09T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 5,
+        "multiRaidMstId": 16,
+        "seasonId": 5,
+        "startTime": "2026-03-26T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-04-24T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 2,
+        "multiRaidMstId": 17,
+        "seasonId": 2,
+        "startTime": "2026-04-09T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-05-07T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 7,
+        "multiRaidMstId": 18,
+        "seasonId": 7,
+        "startTime": "2026-04-24T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-05-21T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 3,
+        "multiRaidMstId": 19,
+        "seasonId": 3,
+        "startTime": "2026-05-07T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-06-04T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 6,
+        "multiRaidMstId": 20,
+        "seasonId": 6,
+        "startTime": "2026-05-21T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-06-16T04:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 4,
+        "multiRaidMstId": 21,
+        "seasonId": 4,
+        "startTime": "2026-06-04T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-07-02T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 2,
+        "multiRaidMstId": 22,
+        "seasonId": 2,
+        "startTime": "2026-06-16T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-07-16T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 1,
+        "multiRaidMstId": 23,
+        "seasonId": 1,
+        "startTime": "2026-07-02T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-07-31T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 5,
+        "multiRaidMstId": 24,
+        "seasonId": 5,
+        "startTime": "2026-07-16T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-08-14T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 8,
+        "multiRaidMstId": 25,
+        "seasonId": 8,
+        "startTime": "2026-07-31T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-08-29T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 6,
+        "multiRaidMstId": 26,
+        "seasonId": 6,
+        "startTime": "2026-08-14T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-09-10T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 9,
+        "multiRaidMstId": 27,
+        "seasonId": 9,
+        "startTime": "2026-08-29T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-09-24T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 1,
+        "multiRaidMstId": 28,
+        "seasonId": 1,
+        "startTime": "2026-09-10T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-10-08T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 2,
+        "multiRaidMstId": 29,
+        "seasonId": 2,
+        "startTime": "2026-09-24T12:00:00+09:00"
+    }
+]

@@ -1,0 +1,102 @@
+[
+    {
+        "bannerLabelMstId": 1,
+        "labelBgColor": "#b15076",
+        "labelContent": "Fate Weave"
+    },
+    {
+        "bannerLabelMstId": 2,
+        "labelBgColor": "#4f8b97",
+        "labelContent": "Events"
+    },
+    {
+        "bannerLabelMstId": 3,
+        "labelBgColor": "#8c5588",
+        "labelContent": "Campaign"
+    },
+    {
+        "bannerLabelMstId": 4,
+        "labelBgColor": "#d77856",
+        "labelContent": "Update"
+    },
+    {
+        "bannerLabelMstId": 5,
+        "labelBgColor": "#686b9f",
+        "labelContent": "Sale"
+    },
+    {
+        "bannerLabelMstId": 6,
+        "labelBgColor": "#c95f6a",
+        "labelContent": "Important"
+    },
+    {
+        "bannerLabelMstId": 8,
+        "labelBgColor": "#bc758c",
+        "labelContent": "Featured"
+    },
+    {
+        "bannerLabelMstId": 9,
+        "labelBgColor": "#5f758c",
+        "labelContent": "Step"
+    },
+    {
+        "bannerLabelMstId": 10,
+        "labelBgColor": "#be8379",
+        "labelContent": "Magia Key"
+    },
+    {
+        "bannerLabelMstId": 11,
+        "labelBgColor": "#5f8f7f",
+        "labelContent": "5★ Guaranteed"
+    },
+    {
+        "bannerLabelMstId": 12,
+        "labelBgColor": "#be8379",
+        "labelContent": "Shard Fate Weave"
+    },
+    {
+        "bannerLabelMstId": 13,
+        "labelBgColor": "#b15076",
+        "labelContent": "Welcome Back"
+    },
+    {
+        "bannerLabelMstId": 14,
+        "labelBgColor": "#b15076",
+        "labelContent": "Free Fate Weave"
+    },
+    {
+        "bannerLabelMstId": 15,
+        "labelBgColor": "#b15076",
+        "labelContent": "Exedra Pass"
+    },
+    {
+        "bannerLabelMstId": 16,
+        "labelBgColor": "#4f8a64",
+        "labelContent": "Maintenance"
+    },
+    {
+        "bannerLabelMstId": 17,
+        "labelBgColor": "#5f8f7f",
+        "labelContent": "Exclusive Kioku Featured"
+    },
+    {
+        "bannerLabelMstId": 18,
+        "labelBgColor": "#5f8f7f",
+        "labelContent": "5★ Rates Doubled"
+    },
+    {
+        "bannerLabelMstId": 19,
+        "labelBgColor": "#bc758c",
+        "labelContent": "Showcase Fate Weave"
+    },
+    {
+        "bannerLabelMstId": 20,
+        "labelBgColor": "#5f8f7f",
+        "labelContent": "5★ draw rate 50%!"
+    },
+    {
+        "bannerLabelMstId": 21,
+        "labelBgColor": "#be8379",
+        "labelContent": "Wishlist Fate Weave"
+    }
+]

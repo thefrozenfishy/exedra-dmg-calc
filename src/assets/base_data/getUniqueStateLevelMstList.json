@@ -1,0 +1,26 @@
+[
+    {
+        "conditionCount": 3,
+        "groupId": 20001,
+        "level": 2,
+        "uniqueStateLevelMstId": 200011
+    },
+    {
+        "conditionCount": 8,
+        "groupId": 20001,
+        "level": 3,
+        "uniqueStateLevelMstId": 200012
+    },
+    {
+        "conditionCount": 10,
+        "groupId": 20001,
+        "level": 4,
+        "uniqueStateLevelMstId": 200013
+    },
+    {
+        "conditionCount": 20,
+        "groupId": 20001,
+        "level": 5,
+        "uniqueStateLevelMstId": 200014
+    }
+]

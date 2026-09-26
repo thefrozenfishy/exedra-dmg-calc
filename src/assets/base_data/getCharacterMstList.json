@@ -1,0 +1,522 @@
+[
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1000,
+        "colorCode": "#FFFFFF",
+        "enCapsName": "",
+        "iconResourceName": "1000",
+        "name": "Name"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1001,
+        "colorCode": "#FA71BD",
+        "enCapsName": "MADOKA KANAME",
+        "iconResourceName": "1001",
+        "name": "Madoka Kaname"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1002,
+        "colorCode": "#B56ABF",
+        "enCapsName": "HOMURA AKEMI",
+        "iconResourceName": "1002",
+        "name": "Homura Akemi"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1003,
+        "colorCode": "#EA9C54",
+        "enCapsName": "MAMI TOMOE",
+        "iconResourceName": "1003",
+        "name": "Mami Tomoe"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1004,
+        "colorCode": "#64C5E6",
+        "enCapsName": "SAYAKA MIKI",
+        "iconResourceName": "1004",
+        "name": "Sayaka Miki"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1005,
+        "colorCode": "#E64545",
+        "enCapsName": "KYOKO SAKURA",
+        "iconResourceName": "1005",
+        "name": "Kyoko Sakura"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1006,
+        "colorCode": "#B192C0",
+        "enCapsName": "NAGISA MOMOE",
+        "iconResourceName": "1006",
+        "name": "Nagisa Momoe"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1007,
+        "colorCode": "#EBA4F0",
+        "enCapsName": "MABAYU AKI",
+        "iconResourceName": "1007",
+        "name": "Mabayu Aki"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1008,
+        "colorCode": "#F57689",
+        "enCapsName": "IROHA TAMAKI",
+        "iconResourceName": "1008",
+        "name": "Iroha Tamaki"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1009,
+        "colorCode": "#1A9AB7",
+        "enCapsName": "YACHIYO NANAMI",
+        "iconResourceName": "1009",
+        "name": "Yachiyo Nanami"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1010,
+        "colorCode": "#FF5F4B",
+        "enCapsName": "TSURUNO YUI",
+        "iconResourceName": "1010",
+        "name": "Tsuruno Yui"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1011,
+        "colorCode": "#6dd1b5",
+        "enCapsName": "SANA FUTABA",
+        "iconResourceName": "1011",
+        "name": "Sana Futaba"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1012,
+        "colorCode": "#8D6AD2",
+        "enCapsName": "FELICIA MITSUKI",
+        "iconResourceName": "1012",
+        "name": "Felicia Mitsuki"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1013,
+        "colorCode": "#7c8aa7",
+        "enCapsName": "MIFUYU AZUSA",
+        "iconResourceName": "1013",
+        "name": "Mifuyu Azusa"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1014,
+        "colorCode": "#FC7459",
+        "enCapsName": "MOMOKO TOGAME",
+        "iconResourceName": "1014",
+        "name": "Momoko Togame"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1015,
+        "colorCode": "#9BDAEB",
+        "enCapsName": "RENA MINAMI",
+        "iconResourceName": "1015",
+        "name": "Rena Minami"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1016,
+        "colorCode": "#CE3225",
+        "enCapsName": "KAEDE AKINO",
+        "iconResourceName": "1016",
+        "name": "Kaede Akino"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1017,
+        "colorCode": "#FFCF3D",
+        "enCapsName": "KARIN MISONO",
+        "iconResourceName": "1017",
+        "name": "Karin Misono"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1018,
+        "colorCode": "#4A8DE4",
+        "enCapsName": "ASUKA TATSUKI",
+        "iconResourceName": "1018",
+        "name": "Asuka Tatsuki"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1019,
+        "colorCode": "#E73D24",
+        "enCapsName": "TOUKA SATOMI",
+        "iconResourceName": "1019",
+        "name": "Touka Satomi"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1020,
+        "colorCode": "#EAB088",
+        "enCapsName": "NEMU HIIRAGI",
+        "iconResourceName": "1020",
+        "name": "Nemu Hiiragi"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1021,
+        "colorCode": "#CCF02A",
+        "enCapsName": "ALINA GRAY",
+        "iconResourceName": "1021",
+        "name": "Alina Gray"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1022,
+        "colorCode": "#d14c69",
+        "enCapsName": "UI TAMAKI",
+        "iconResourceName": "1022",
+        "name": "Ui Tamaki"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1023,
+        "colorCode": "#929196",
+        "enCapsName": "KANAGI IZUMI",
+        "iconResourceName": "1023",
+        "name": "Kanagi Izumi"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1024,
+        "colorCode": "#3d78c1",
+        "enCapsName": "MITAMA YAKUMO",
+        "iconResourceName": "1024",
+        "name": "Mitama Yakumo"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1025,
+        "colorCode": "#EF3775",
+        "enCapsName": "TSUKUYO AMANE",
+        "iconResourceName": "1025",
+        "name": "Tsukuyo Amane"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1026,
+        "colorCode": "#EF3775",
+        "enCapsName": "TSUKASA AMANE",
+        "iconResourceName": "1026",
+        "name": "Tsukasa Amane"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1058,
+        "colorCode": "#B8DAFF",
+        "enCapsName": "NATSUKI UTSUHO",
+        "iconResourceName": "1058",
+        "name": "Natsuki Utsuho"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1059,
+        "colorCode": "#49922d",
+        "enCapsName": "HINANO MIYAKO",
+        "iconResourceName": "1059",
+        "name": "Hinano Miyako"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1061,
+        "colorCode": "#FF5B7E",
+        "enCapsName": "NANAKA TOKIWA",
+        "iconResourceName": "1061",
+        "name": "Nanaka Tokiwa"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1062,
+        "colorCode": "#f4a738",
+        "enCapsName": "EMIRI KISAKI",
+        "iconResourceName": "1062",
+        "name": "Emiri Kisaki"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1067,
+        "colorCode": "#53FEC9",
+        "enCapsName": "KAKO NATSUME",
+        "iconResourceName": "1067",
+        "name": "Kako Natsume"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1068,
+        "colorCode": "#4E80C2",
+        "enCapsName": "MEIYUI CHUN",
+        "iconResourceName": "1068",
+        "name": "Meiyui Chun"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1069,
+        "colorCode": "#E38D84",
+        "enCapsName": "REIRA IBUKI",
+        "iconResourceName": "1069",
+        "name": "Reira Ibuki"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1070,
+        "colorCode": "#8AA5CA",
+        "enCapsName": "SEIKA KUMI",
+        "iconResourceName": "1070",
+        "name": "Seika Kumi"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1071,
+        "colorCode": "#7DAC7C",
+        "enCapsName": "MITO AINO",
+        "iconResourceName": "1071",
+        "name": "Mito Aino"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1072,
+        "colorCode": "#AAF43B",
+        "enCapsName": "KOKORO AWANE",
+        "iconResourceName": "1072",
+        "name": "Kokoro Awane"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1074,
+        "colorCode": "#ED7CA2",
+        "enCapsName": "HANNA SASARA",
+        "iconResourceName": "1074",
+        "name": "Hanna Sarasa"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1076,
+        "colorCode": "#D14969",
+        "enCapsName": "HIMIKA MAO",
+        "iconResourceName": "1076",
+        "name": "Himika Mao"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1080,
+        "colorCode": "#5564A7",
+        "enCapsName": "REN ISUZU",
+        "iconResourceName": "1080",
+        "name": "Ren Isuzu"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1081,
+        "colorCode": "#6E29FF",
+        "enCapsName": "KONOHA SHIZUMI",
+        "iconResourceName": "1081",
+        "name": "Konoha Shizumi"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1082,
+        "colorCode": "#FBDD00",
+        "enCapsName": "HAZUKI YUSA",
+        "iconResourceName": "1082",
+        "name": "Hazuki Yusa"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1083,
+        "colorCode": "#8CE70E",
+        "enCapsName": "AYAME MIKURI",
+        "iconResourceName": "1083",
+        "name": "Ayame Mikuri"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1084,
+        "colorCode": "#8ABAF0",
+        "enCapsName": "MASARA KAGAMI",
+        "iconResourceName": "1084",
+        "name": "Masara Kagami"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1086,
+        "colorCode": "#EF4D77",
+        "enCapsName": "RIKA AYANO",
+        "iconResourceName": "1086",
+        "name": "Rika Ayano"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1090,
+        "colorCode": "#39ADE1",
+        "enCapsName": "RIKO CHIAKI",
+        "iconResourceName": "1090",
+        "name": "Riko Chiaki"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1092,
+        "colorCode": "#4EF6D5",
+        "enCapsName": "MEL ANNA",
+        "iconResourceName": "1092",
+        "name": "Mel Anna"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1098,
+        "colorCode": "#FFAEDC",
+        "enCapsName": "ETERNAL SAKURA",
+        "iconResourceName": "1098",
+        "name": "Eternal Sakura"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1104,
+        "colorCode": "#EB4877",
+        "enCapsName": "KANAE YUKINO",
+        "iconResourceName": "1104",
+        "name": "Kanae Yukino"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1107,
+        "colorCode": "#FF4227",
+        "enCapsName": "ASHLEY TAYLOR",
+        "iconResourceName": "1107",
+        "name": "Ashley Taylor"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1114,
+        "colorCode": "#EB2B28",
+        "enCapsName": "KUSH IRINA",
+        "iconResourceName": "1114",
+        "name": "Kush Irina"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1115,
+        "colorCode": "#64DD5D",
+        "enCapsName": "DARC",
+        "iconResourceName": "1115",
+        "name": "Darc"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1116,
+        "colorCode": "#f7ba5d",
+        "enCapsName": "LIZ HAWKWOOD",
+        "iconResourceName": "1116",
+        "name": "Liz Hawkwood"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1117,
+        "colorCode": "#91afd6",
+        "enCapsName": "MELISSA DE VIGNOLLES",
+        "iconResourceName": "1117",
+        "name": "Melissa de Vignolles"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1120,
+        "colorCode": "#ffffff",
+        "enCapsName": "CORBEAU",
+        "iconResourceName": "1120",
+        "name": "Corbeau"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1124,
+        "colorCode": "#D7DAE6",
+        "enCapsName": "ORIKO MIKUNI",
+        "iconResourceName": "1124",
+        "name": "Oriko Mikuni"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1125,
+        "colorCode": "#A79DD6",
+        "enCapsName": "KIRIKA KURE",
+        "iconResourceName": "1125",
+        "name": "Kirika Kure"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1126,
+        "colorCode": "#ACCDA1",
+        "enCapsName": "YUMA CHITOSE",
+        "iconResourceName": "1126",
+        "name": "Yuma Chitose"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1133,
+        "colorCode": "#FF61CC",
+        "enCapsName": "KOITO ASAKO",
+        "iconResourceName": "1133",
+        "name": "Koito Asako"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1145,
+        "colorCode": "#B96AF1",
+        "enCapsName": "SUMIRE YOAKE",
+        "iconResourceName": "1145",
+        "name": "Sumire Yoake"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1146,
+        "colorCode": "#6C6299",
+        "enCapsName": "FUKA HIGURE",
+        "iconResourceName": "1146",
+        "name": "Fuka Higure"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1149,
+        "colorCode": "#87C8B0",
+        "enCapsName": "YOTSUGI ONONOKI",
+        "iconResourceName": "1149",
+        "name": "Yotsugi Ononoki"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1150,
+        "colorCode": "#FFB0B7",
+        "enCapsName": "MAYOI HACHIKUJI",
+        "iconResourceName": "1150",
+        "name": "Mayoi Hachikuji"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1151,
+        "colorCode": "#FDE101",
+        "enCapsName": "SHINOBU OSHINO",
+        "iconResourceName": "1151",
+        "name": "Shinobu Oshino"
+    },
+    {
+        "awakeItemMstId": 0,
+        "characterMstId": 1152,
+        "colorCode": "#F36D97",
+        "enCapsName": "MADOKA-SENPAI",
+        "iconResourceName": "1152",
+        "name": "Madoka-senpai"
+    }
+]

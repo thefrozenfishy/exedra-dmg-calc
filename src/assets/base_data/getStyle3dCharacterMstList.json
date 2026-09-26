@@ -1,0 +1,1012 @@
+[
+    {
+        "homeMotionResourceName": "chara_10010701_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Madoka Kaname - Magical Girl",
+        "resourceName": "chara_100107_battle_unit",
+        "sortOrder": 100101,
+        "style3dCharacterMstId": 100101,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11370101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Ultimate Madoka - Magical Girl",
+        "resourceName": "chara_113701_battle_unit",
+        "sortOrder": 100102,
+        "style3dCharacterMstId": 100102,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10010601_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Madoka Kaname - Swimsuit",
+        "resourceName": "chara_100106_battle_unit",
+        "sortOrder": 100103,
+        "style3dCharacterMstId": 100103,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10010301_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Madoka Kaname - Kimono",
+        "resourceName": "chara_100103_battle_unit",
+        "sortOrder": 100104,
+        "style3dCharacterMstId": 100104,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10010801_home",
+        "isDefault": true,
+        "isExistVoice": false,
+        "name": "Madoka Kaname - Walpurgisnacht Rising",
+        "resourceName": "chara_100108_battle_unit",
+        "sortOrder": 100105,
+        "style3dCharacterMstId": 100105,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10010201_home",
+        "isDefault": false,
+        "isExistVoice": true,
+        "name": "Madoka Kaname - School Uniform",
+        "resourceName": "chara_100102_battle_unit",
+        "sortOrder": 100106,
+        "style3dCharacterMstId": 100106,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10020201_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Homura Akemi - Magical Girl",
+        "resourceName": "chara_100202_battle_unit",
+        "sortOrder": 100201,
+        "style3dCharacterMstId": 100201,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10020101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Homura Akemi - Magical Girl (Glasses)",
+        "resourceName": "chara_100201_battle_unit",
+        "sortOrder": 100202,
+        "style3dCharacterMstId": 100202,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10020301_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Homura Akemi - Magical Girl (Ribbon)",
+        "resourceName": "chara_100203_battle_unit",
+        "sortOrder": 100203,
+        "style3dCharacterMstId": 100203,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10020501_home",
+        "isDefault": false,
+        "isExistVoice": true,
+        "name": "Homura Akemi - School Uniform (Glasses)",
+        "resourceName": "chara_100205_battle_unit",
+        "sortOrder": 100204,
+        "style3dCharacterMstId": 100204,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10020701_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Homura Akemi - Swimsuit",
+        "resourceName": "chara_100207_battle_unit",
+        "sortOrder": 100206,
+        "style3dCharacterMstId": 100206,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10030101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Mami Tomoe - Magical Girl",
+        "resourceName": "chara_100301_battle_unit",
+        "sortOrder": 100301,
+        "style3dCharacterMstId": 100301,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10030301_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Mami Tomoe - Swimsuit",
+        "resourceName": "chara_100303_battle_unit",
+        "sortOrder": 100302,
+        "style3dCharacterMstId": 100302,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11390101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Holy Mami - Magical Girl",
+        "resourceName": "chara_113901_battle_unit",
+        "sortOrder": 100303,
+        "style3dCharacterMstId": 100303,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10030201_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Mami Tomoe - Halloween",
+        "resourceName": "chara_100302_battle_unit",
+        "sortOrder": 100304,
+        "style3dCharacterMstId": 100304,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10030401_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Mami Tomoe (Pastry Chef)",
+        "resourceName": "chara_100304_battle_unit",
+        "sortOrder": 100305,
+        "style3dCharacterMstId": 100305,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10030501_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Mami Tomoe - Doppel",
+        "resourceName": "chara_100305_battle_unit",
+        "sortOrder": 100306,
+        "style3dCharacterMstId": 100306,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10030601_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Mami Tomoe - Magical Girl 2",
+        "resourceName": "chara_100306_battle_unit",
+        "sortOrder": 100307,
+        "style3dCharacterMstId": 100307,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10040101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Sayaka Miki - Magical Girl",
+        "resourceName": "chara_100401_battle_unit",
+        "sortOrder": 100401,
+        "style3dCharacterMstId": 100401,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10040201_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Sayaka Miki - Swimsuit",
+        "resourceName": "chara_100402_battle_unit",
+        "sortOrder": 100402,
+        "style3dCharacterMstId": 100402,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10040301_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Sayaka Miki - Christmas",
+        "resourceName": "chara_100403_battle_unit",
+        "sortOrder": 100403,
+        "style3dCharacterMstId": 100403,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10040701_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Sayaka Miki - Magical Girl 2",
+        "resourceName": "chara_100407_battle_unit",
+        "sortOrder": 100404,
+        "style3dCharacterMstId": 100404,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10050101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Kyoko Sakura - Magical Girl",
+        "resourceName": "chara_100501_battle_unit",
+        "sortOrder": 100501,
+        "style3dCharacterMstId": 100501,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10050301_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Kyoko Sakura - Christmas",
+        "resourceName": "chara_100503_battle_unit",
+        "sortOrder": 100502,
+        "style3dCharacterMstId": 100502,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10050401_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Kyoko Sakura - Pastry Chef",
+        "resourceName": "chara_100504_battle_unit",
+        "sortOrder": 100502,
+        "style3dCharacterMstId": 100503,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10050201_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Kyoko Sakura - Swimsuit",
+        "resourceName": "chara_100502_battle_unit",
+        "sortOrder": 100504,
+        "style3dCharacterMstId": 100504,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10060101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Nagisa Momoe - Magical Girl",
+        "resourceName": "chara_100601_battle_unit",
+        "sortOrder": 100601,
+        "style3dCharacterMstId": 100601,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10070101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Mabayu Aki - Magical Girl",
+        "resourceName": "chara_100701_battle_unit",
+        "sortOrder": 100701,
+        "style3dCharacterMstId": 100701,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10070201_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Mabayu Aki - Magical Girl 2",
+        "resourceName": "chara_100702_battle_unit",
+        "sortOrder": 100702,
+        "style3dCharacterMstId": 100702,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10080101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Iroha Tamaki - Magical Girl",
+        "resourceName": "chara_100801_battle_unit",
+        "sortOrder": 100801,
+        "style3dCharacterMstId": 100801,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10080501_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Iroha Tamaki - Magical Girl (Doppel)",
+        "resourceName": "chara_100805_battle_unit",
+        "sortOrder": 100802,
+        "style3dCharacterMstId": 100802,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10080401_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Iroha Tamaki - Swimsuit",
+        "resourceName": "chara_100804_battle_unit",
+        "sortOrder": 100803,
+        "style3dCharacterMstId": 100803,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10090101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Yachiyo Nanami - Magical Girl",
+        "resourceName": "chara_100901_battle_unit",
+        "sortOrder": 100901,
+        "style3dCharacterMstId": 100901,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10090301_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Yachiyo Nanami - Swimsuit",
+        "resourceName": "chara_100903_battle_unit",
+        "sortOrder": 100902,
+        "style3dCharacterMstId": 100902,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10100101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Tsuruno Yui - Magical Girl",
+        "resourceName": "chara_101001_battle_unit",
+        "sortOrder": 101001,
+        "style3dCharacterMstId": 101001,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10100201_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Uwasa Tsuruno - Magical Girl",
+        "resourceName": "chara_101002_battle_unit",
+        "sortOrder": 101002,
+        "style3dCharacterMstId": 101002,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10110101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Sana Futaba - Magical Girl",
+        "resourceName": "chara_101101_battle_unit",
+        "sortOrder": 101101,
+        "style3dCharacterMstId": 101101,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10120101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Felicia Mitsuki - Magical Girl",
+        "resourceName": "chara_101201_battle_unit",
+        "sortOrder": 101201,
+        "style3dCharacterMstId": 101201,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10130101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Mifuyu Azusa - Magical Girl",
+        "resourceName": "chara_101301_battle_unit",
+        "sortOrder": 101301,
+        "style3dCharacterMstId": 101301,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10140101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Momoko Togame - Magical Girl",
+        "resourceName": "chara_101401_battle_unit",
+        "sortOrder": 101401,
+        "style3dCharacterMstId": 101401,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10150101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Rena Minami - Magical Girl",
+        "resourceName": "chara_101501_battle_unit",
+        "sortOrder": 101501,
+        "style3dCharacterMstId": 101501,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10160101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Kaede Akino - Magical Girl",
+        "resourceName": "chara_101601_battle_unit",
+        "sortOrder": 101601,
+        "style3dCharacterMstId": 101601,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10170101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Karin Misono - Magical Girl",
+        "resourceName": "chara_101701_battle_unit",
+        "sortOrder": 101701,
+        "style3dCharacterMstId": 101701,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10180101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Asuka Tatsuki - Magical Girl",
+        "resourceName": "chara_101801_battle_unit",
+        "sortOrder": 101801,
+        "style3dCharacterMstId": 101801,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10190101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Touka Satomi - Magical Girl",
+        "resourceName": "chara_101901_battle_unit",
+        "sortOrder": 101901,
+        "style3dCharacterMstId": 101901,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10200101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Nemu Hiiragi - Magical Girl",
+        "resourceName": "chara_102001_battle_unit",
+        "sortOrder": 102001,
+        "style3dCharacterMstId": 102001,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10210101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Alina Gray - Magical Girl",
+        "resourceName": "chara_102101_battle_unit",
+        "sortOrder": 102101,
+        "style3dCharacterMstId": 102101,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10210201_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Alina Gray - Halloween",
+        "resourceName": "chara_102102_battle_unit",
+        "sortOrder": 102102,
+        "style3dCharacterMstId": 102102,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10220101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Ui Tamaki - Magical Girl",
+        "resourceName": "chara_102201_battle_unit",
+        "sortOrder": 102201,
+        "style3dCharacterMstId": 102201,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10230101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Kanagi Izumi - Magical Girl",
+        "resourceName": "chara_102301_battle_unit",
+        "sortOrder": 102301,
+        "style3dCharacterMstId": 102301,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10240101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Mitama Yakumo - Magical Girl",
+        "resourceName": "chara_102401_battle_unit",
+        "sortOrder": 102401,
+        "style3dCharacterMstId": 102401,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10250101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Tsukuyo Amane - Magical Girl",
+        "resourceName": "chara_102501_battle_unit",
+        "sortOrder": 102501,
+        "style3dCharacterMstId": 102501,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10260101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Tsukasa Amane - Magical Girl",
+        "resourceName": "chara_102601_battle_unit",
+        "sortOrder": 102601,
+        "style3dCharacterMstId": 102601,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10580101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Natsuki Utsuho - Magical Girl",
+        "resourceName": "chara_105801_battle_unit",
+        "sortOrder": 105801,
+        "style3dCharacterMstId": 105801,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10590101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Hinano Miyako - Magical Girl",
+        "resourceName": "chara_105901_battle_unit",
+        "sortOrder": 105901,
+        "style3dCharacterMstId": 105901,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10610101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Nanaka Tokiwa - Magical Girl",
+        "resourceName": "chara_106101_battle_unit",
+        "sortOrder": 106101,
+        "style3dCharacterMstId": 106101,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10620101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Emiri Kisaki - Magical Girl",
+        "resourceName": "chara_106201_battle_unit",
+        "sortOrder": 106201,
+        "style3dCharacterMstId": 106201,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10670101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Kako Natsume - Magical Girl",
+        "resourceName": "chara_106701_battle_unit",
+        "sortOrder": 106701,
+        "style3dCharacterMstId": 106701,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10680101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Meiyui Chun - Magical Girl",
+        "resourceName": "chara_106801_battle_unit",
+        "sortOrder": 106801,
+        "style3dCharacterMstId": 106801,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10690101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Reira Ibuki - Magical Girl",
+        "resourceName": "chara_106901_battle_unit",
+        "sortOrder": 106901,
+        "style3dCharacterMstId": 106901,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10700101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Seika Kumi - Magical Girl",
+        "resourceName": "chara_107001_battle_unit",
+        "sortOrder": 107001,
+        "style3dCharacterMstId": 107001,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10710101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Mito Aino - Magical Girl",
+        "resourceName": "chara_107101_battle_unit",
+        "sortOrder": 107101,
+        "style3dCharacterMstId": 107101,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10720101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Kokoro Awane - Magical Girl",
+        "resourceName": "chara_107201_battle_unit",
+        "sortOrder": 107201,
+        "style3dCharacterMstId": 107201,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10740101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Hanna Sarasa - Magical Girl",
+        "resourceName": "chara_107401_battle_unit",
+        "sortOrder": 107401,
+        "style3dCharacterMstId": 107401,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10760101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Himika Mao - Magical Girl",
+        "resourceName": "chara_107601_battle_unit",
+        "sortOrder": 107601,
+        "style3dCharacterMstId": 107601,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10800101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Ren Isuzu - Magical Girl",
+        "resourceName": "chara_108001_battle_unit",
+        "sortOrder": 108001,
+        "style3dCharacterMstId": 108001,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10800201_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Ren Isuzu - Christmas",
+        "resourceName": "chara_108002_battle_unit",
+        "sortOrder": 108002,
+        "style3dCharacterMstId": 108002,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10810101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Konoha Shizumi - Magical Girl",
+        "resourceName": "chara_108101_battle_unit",
+        "sortOrder": 108101,
+        "style3dCharacterMstId": 108101,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10820101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Hazuki Yusa - Magical Girl",
+        "resourceName": "chara_108201_battle_unit",
+        "sortOrder": 108201,
+        "style3dCharacterMstId": 108201,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10830101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Ayame Mikuri - Magical Girl",
+        "resourceName": "chara_108301_battle_unit",
+        "sortOrder": 108301,
+        "style3dCharacterMstId": 108301,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10840101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Masara Kagami - Magical Girl",
+        "resourceName": "chara_108401_battle_unit",
+        "sortOrder": 108401,
+        "style3dCharacterMstId": 108401,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10860101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Rika Ayano - Magical Girl",
+        "resourceName": "chara_108601_battle_unit",
+        "sortOrder": 108601,
+        "style3dCharacterMstId": 108601,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10860201_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Rika Ayano - Christmas",
+        "resourceName": "chara_108602_battle_unit",
+        "sortOrder": 108602,
+        "style3dCharacterMstId": 108602,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10900101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Riko Chiaki - Magical Girl",
+        "resourceName": "chara_109001_battle_unit",
+        "sortOrder": 109001,
+        "style3dCharacterMstId": 109001,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10920101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Mel Anna - Magical Girl",
+        "resourceName": "chara_109201_battle_unit",
+        "sortOrder": 109201,
+        "style3dCharacterMstId": 109201,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_10980101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Eternal Sakura - Magical Girl",
+        "resourceName": "chara_109801_battle_unit",
+        "sortOrder": 109801,
+        "style3dCharacterMstId": 109801,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11040101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Kanae Yukino - Magical Girl",
+        "resourceName": "chara_110401_battle_unit",
+        "sortOrder": 110401,
+        "style3dCharacterMstId": 110401,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11070101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Ashley Taylor - Magical Girl",
+        "resourceName": "chara_110701_battle_unit",
+        "sortOrder": 110701,
+        "style3dCharacterMstId": 110701,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11070201_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Ashley Taylor (Gurokawa)",
+        "resourceName": "chara_110702_battle_unit",
+        "sortOrder": 110702,
+        "style3dCharacterMstId": 110702,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11140101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Kush Irina - Magical Girl",
+        "resourceName": "chara_111401_battle_unit",
+        "sortOrder": 111401,
+        "style3dCharacterMstId": 111401,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11140201_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Kush Irina - Magical Girl 2",
+        "resourceName": "chara_111402_battle_unit",
+        "sortOrder": 111402,
+        "style3dCharacterMstId": 111402,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11150101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Darc - Magical Girl",
+        "resourceName": "chara_111501_battle_unit",
+        "sortOrder": 111501,
+        "style3dCharacterMstId": 111501,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11160101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Liz Hawkwood - Magical Girl",
+        "resourceName": "chara_111601_battle_unit",
+        "sortOrder": 111601,
+        "style3dCharacterMstId": 111601,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11170101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Melissa de Vignolles - Magical Girl",
+        "resourceName": "chara_111701_battle_unit",
+        "sortOrder": 111701,
+        "style3dCharacterMstId": 111701,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11200101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Corbeau - Magical Girl",
+        "resourceName": "chara_112001_battle_unit",
+        "sortOrder": 112001,
+        "style3dCharacterMstId": 112001,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11240101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Oriko Mikuni - Magical Girl",
+        "resourceName": "chara_112401_battle_unit",
+        "sortOrder": 112401,
+        "style3dCharacterMstId": 112401,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11250101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Kirika Kure - Magical Girl",
+        "resourceName": "chara_112501_battle_unit",
+        "sortOrder": 112501,
+        "style3dCharacterMstId": 112501,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11260101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Yuma Chitose - Magical Girl",
+        "resourceName": "chara_112601_battle_unit",
+        "sortOrder": 112601,
+        "style3dCharacterMstId": 112601,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11330101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Koito Asako - Magical Girl",
+        "resourceName": "chara_113301_battle_unit",
+        "sortOrder": 113301,
+        "style3dCharacterMstId": 113301,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Nameless Girl",
+        "resourceName": "chara_113401_model",
+        "sortOrder": 100,
+        "style3dCharacterMstId": 113401,
+        "type": 3
+    },
+    {
+        "homeMotionResourceName": "",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "A-Q",
+        "resourceName": "chara_113501_model",
+        "sortOrder": 200,
+        "style3dCharacterMstId": 113501,
+        "type": 3
+    },
+    {
+        "homeMotionResourceName": "",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Nighthawk",
+        "resourceName": "chara_113601_model",
+        "sortOrder": 300,
+        "style3dCharacterMstId": 113601,
+        "type": 3
+    },
+    {
+        "homeMotionResourceName": "chara_11380101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Devil Homura - Magical Girl",
+        "resourceName": "chara_113801_battle_unit",
+        "sortOrder": 100205,
+        "style3dCharacterMstId": 113801,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11440101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Darc (Final)",
+        "resourceName": "chara_114401_battle_unit",
+        "sortOrder": 111510,
+        "style3dCharacterMstId": 114401,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11450101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Sumire Yoake - Magical Girl",
+        "resourceName": "chara_114501_battle_unit",
+        "sortOrder": 114501,
+        "style3dCharacterMstId": 114501,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11460101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Fuka Higure - Magical Girl",
+        "resourceName": "chara_114601_battle_unit",
+        "sortOrder": 114601,
+        "style3dCharacterMstId": 114601,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Bebe",
+        "resourceName": "chara_114801_model",
+        "sortOrder": 400,
+        "style3dCharacterMstId": 114801,
+        "type": 2
+    },
+    {
+        "homeMotionResourceName": "chara_11490101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Yotsugi Ononoki - Magical Girl",
+        "resourceName": "chara_114901_battle_unit",
+        "sortOrder": 114901,
+        "style3dCharacterMstId": 114901,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11500101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Mayoi Hachikuji - Magical Girl",
+        "resourceName": "chara_115001_battle_unit",
+        "sortOrder": 115001,
+        "style3dCharacterMstId": 115001,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11510101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Shinobu Oshino - Magical Girl",
+        "resourceName": "chara_115101_battle_unit",
+        "sortOrder": 115101,
+        "style3dCharacterMstId": 115101,
+        "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11520101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Madoka-senpai - Magical Girl",
+        "resourceName": "chara_115201_battle_unit",
+        "sortOrder": 115201,
+        "style3dCharacterMstId": 115201,
+        "type": 1
+    }
+]

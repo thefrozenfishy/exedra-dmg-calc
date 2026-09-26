@@ -1,0 +1,42 @@
+[
+    {
+        "name": "Max HP",
+        "selectionAbilityEffectMstId": 31
+    },
+    {
+        "name": "ATK",
+        "selectionAbilityEffectMstId": 32
+    },
+    {
+        "name": "DEF",
+        "selectionAbilityEffectMstId": 33
+    },
+    {
+        "name": "SPD",
+        "selectionAbilityEffectMstId": 34
+    },
+    {
+        "name": "Critical Rate",
+        "selectionAbilityEffectMstId": 35
+    },
+    {
+        "name": "Critical DMG",
+        "selectionAbilityEffectMstId": 36
+    },
+    {
+        "name": "Break Effect",
+        "selectionAbilityEffectMstId": 37
+    },
+    {
+        "name": "HP Recovery Amount",
+        "selectionAbilityEffectMstId": 38
+    },
+    {
+        "name": "Debuff Hit Rate",
+        "selectionAbilityEffectMstId": 39
+    },
+    {
+        "name": "Debuff RES",
+        "selectionAbilityEffectMstId": 40
+    }
+]

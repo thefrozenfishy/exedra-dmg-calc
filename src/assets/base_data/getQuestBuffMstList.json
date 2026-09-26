@@ -1,0 +1,302 @@
+[
+    {
+        "buffType": 1,
+        "buffValue": 500,
+        "description": "Increases DMG dealt by 50%.",
+        "difficulty": 1,
+        "endTime": "2026-02-28T11:59:59+09:00",
+        "questBuffMstId": 1001,
+        "questCategoryMstId": 1,
+        "startTime": "2026-01-30T12:00:00+09:00"
+    },
+    {
+        "buffType": 1,
+        "buffValue": 500,
+        "description": "Increases DMG dealt by 50%.",
+        "difficulty": 1,
+        "endTime": "2026-04-30T11:59:59+09:00",
+        "questBuffMstId": 1002,
+        "questCategoryMstId": 1,
+        "startTime": "2026-03-27T22:00:00+09:00"
+    },
+    {
+        "buffType": 1,
+        "buffValue": 500,
+        "description": "Increases DMG dealt by 50%.",
+        "difficulty": 1,
+        "endTime": "2026-09-27T11:59:59+09:00",
+        "questBuffMstId": 1003,
+        "questCategoryMstId": 1,
+        "startTime": "2026-08-28T22:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Increases break gauge depletion by 50%.",
+        "difficulty": 1,
+        "endTime": "2026-02-28T11:59:59+09:00",
+        "questBuffMstId": 2001,
+        "questCategoryMstId": 1,
+        "startTime": "2026-01-30T12:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Increases break gauge depletion by 50%.",
+        "difficulty": 1,
+        "endTime": "2026-04-30T11:59:59+09:00",
+        "questBuffMstId": 2002,
+        "questCategoryMstId": 1,
+        "startTime": "2026-03-27T22:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Increases break gauge depletion by 50%.",
+        "difficulty": 1,
+        "endTime": "2026-09-27T11:59:59+09:00",
+        "questBuffMstId": 2003,
+        "questCategoryMstId": 1,
+        "startTime": "2026-08-28T22:00:00+09:00"
+    },
+    {
+        "buffType": 1,
+        "buffValue": 1000,
+        "description": "DMG Dealt",
+        "difficulty": 1,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120101,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Break Gauge Depletion",
+        "difficulty": 1,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120102,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 1,
+        "buffValue": 1000,
+        "description": "DMG Dealt",
+        "difficulty": 2,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120201,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Break Gauge Depletion",
+        "difficulty": 2,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120202,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 1,
+        "buffValue": 1000,
+        "description": "DMG Dealt",
+        "difficulty": 3,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120301,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Break Gauge Depletion",
+        "difficulty": 3,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120302,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 1,
+        "buffValue": 1000,
+        "description": "DMG Dealt",
+        "difficulty": 4,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120401,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Break Gauge Depletion",
+        "difficulty": 4,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120402,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 1,
+        "buffValue": 1000,
+        "description": "DMG Dealt",
+        "difficulty": 5,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120501,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Break Gauge Depletion",
+        "difficulty": 5,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120502,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 1,
+        "buffValue": 1000,
+        "description": "DMG Dealt",
+        "difficulty": 6,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120601,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Break Gauge Depletion",
+        "difficulty": 6,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120602,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 1,
+        "buffValue": 1000,
+        "description": "DMG Dealt",
+        "difficulty": 7,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120701,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Break Gauge Depletion",
+        "difficulty": 7,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120702,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 1,
+        "buffValue": 1000,
+        "description": "DMG Dealt",
+        "difficulty": 8,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120801,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Break Gauge Depletion",
+        "difficulty": 8,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120802,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 1,
+        "buffValue": 1000,
+        "description": "DMG Dealt",
+        "difficulty": 9,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120901,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Break Gauge Depletion",
+        "difficulty": 9,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 120902,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 1,
+        "buffValue": 1000,
+        "description": "DMG Dealt",
+        "difficulty": 10,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 121001,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Break Gauge Depletion",
+        "difficulty": 10,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 121002,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 1,
+        "buffValue": 1000,
+        "description": "DMG Dealt",
+        "difficulty": 11,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 121101,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Break Gauge Depletion",
+        "difficulty": 11,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 121102,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 1,
+        "buffValue": 1000,
+        "description": "DMG Dealt",
+        "difficulty": 12,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 121201,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    },
+    {
+        "buffType": 2,
+        "buffValue": 500,
+        "description": "Break Gauge Depletion",
+        "difficulty": 12,
+        "endTime": "2051-01-01T16:59:59+09:00",
+        "questBuffMstId": 121202,
+        "questCategoryMstId": 12,
+        "startTime": "2026-01-01T00:00:00+09:00"
+    }
+]

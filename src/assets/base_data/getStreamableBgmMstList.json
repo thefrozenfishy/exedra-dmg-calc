@@ -1,0 +1,467 @@
+[
+    {
+        "cueName": "bgm_title_01",
+        "cueSheetName": "bgm_title",
+        "streamableBgmMstId": 1
+    },
+    {
+        "cueName": "bgm02_home_1",
+        "cueSheetName": "bgm_common",
+        "streamableBgmMstId": 2
+    },
+    {
+        "cueName": "bgm02_home_2",
+        "cueSheetName": "bgm_common",
+        "streamableBgmMstId": 3
+    },
+    {
+        "cueName": "bgm02_home_3",
+        "cueSheetName": "bgm_common",
+        "streamableBgmMstId": 4
+    },
+    {
+        "cueName": "bgm02_home_4",
+        "cueSheetName": "bgm_common",
+        "streamableBgmMstId": 5
+    },
+    {
+        "cueName": "bgm01_generic_lightroom",
+        "cueSheetName": "bgm_common",
+        "streamableBgmMstId": 6
+    },
+    {
+        "cueName": "bgm01_gacha_gachaTop",
+        "cueSheetName": "bgm_common",
+        "streamableBgmMstId": 7
+    },
+    {
+        "cueName": "bgm01_gacha_gachaMovie",
+        "cueSheetName": "bgm_common",
+        "streamableBgmMstId": 8
+    },
+    {
+        "cueName": "bgm01_generic_exchange",
+        "cueSheetName": "bgm_common",
+        "streamableBgmMstId": 9
+    },
+    {
+        "cueName": "bgm01_generic_contact",
+        "cueSheetName": "bgm_common",
+        "streamableBgmMstId": 10
+    },
+    {
+        "cueName": "bgm01_generic_GvETop",
+        "cueSheetName": "bgm_common",
+        "streamableBgmMstId": 11
+    },
+    {
+        "cueName": "bgm01_generic_GvGTop",
+        "cueSheetName": "bgm_common",
+        "streamableBgmMstId": 12
+    },
+    {
+        "cueName": "bgm01_generic_PvPTop",
+        "cueSheetName": "bgm_common",
+        "streamableBgmMstId": 13
+    },
+    {
+        "cueName": "bgm01_generic_towerTop",
+        "cueSheetName": "bgm_common",
+        "streamableBgmMstId": 14
+    },
+    {
+        "cueName": "bgm01_battle_towerBattle",
+        "cueSheetName": "bgm_battle",
+        "streamableBgmMstId": 15
+    },
+    {
+        "cueName": "bgm01_battle_levelupBattle",
+        "cueSheetName": "bgm_battle",
+        "streamableBgmMstId": 16
+    },
+    {
+        "cueName": "bgm02_dng_madoka_Suleika1",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 17
+    },
+    {
+        "cueName": "bgm02_dng_madoka_Suleika2",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 18
+    },
+    {
+        "cueName": "bgm02_dng_madoka_Suleika3",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 19
+    },
+    {
+        "cueName": "bgm02_dng_madoka_Dora1",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 20
+    },
+    {
+        "cueName": "bgm02_dng_madoka_Dora2",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 21
+    },
+    {
+        "cueName": "bgm02_dng_madoka_Dora3",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 22
+    },
+    {
+        "cueName": "bgm02_dng_madoka_Patricia1",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 23
+    },
+    {
+        "cueName": "bgm02_dng_madoka_Patricia2",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 24
+    },
+    {
+        "cueName": "bgm02_dng_madoka_Patricia3",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 25
+    },
+    {
+        "cueName": "bgm02_dng_madoka_Mathieu1",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 26
+    },
+    {
+        "cueName": "bgm02_dng_madoka_Mathieu2",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 27
+    },
+    {
+        "cueName": "bgm02_dng_madoka_Mathieu3",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 28
+    },
+    {
+        "cueName": "bgm02_dng_oriko1",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 29
+    },
+    {
+        "cueName": "bgm02_dng_oriko2",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 30
+    },
+    {
+        "cueName": "bgm02_dng_oriko3",
+        "cueSheetName": "bgm_dng",
+        "streamableBgmMstId": 31
+    },
+    {
+        "cueName": "bgm02_battle_madoka_Suleika",
+        "cueSheetName": "bgm_battle",
+        "streamableBgmMstId": 32
+    },
+    {
+        "cueName": "bgm02_battle_madoka_Dora",
+        "cueSheetName": "bgm_battle",
+        "streamableBgmMstId": 33
+    },
+    {
+        "cueName": "bgm02_battle_madoka_Patricia",
+        "cueSheetName": "bgm_battle",
+        "streamableBgmMstId": 34
+    },
+    {
+        "cueName": "bgm02_battle_madoka_Mathieu",
+        "cueSheetName": "bgm_battle",
+        "streamableBgmMstId": 35
+    },
+    {
+        "cueName": "bgm02_battle_oriko",
+        "cueSheetName": "bgm_battle",
+        "streamableBgmMstId": 36
+    },
+    {
+        "cueName": "bgm01_battle_teshita_madoka",
+        "cueSheetName": "bgm_battle",
+        "streamableBgmMstId": 37
+    },
+    {
+        "cueName": "bgm01_battle_teshita_magireco",
+        "cueSheetName": "bgm_battle",
+        "streamableBgmMstId": 38
+    },
+    {
+        "cueName": "bgm01_battle_teshita_oriko",
+        "cueSheetName": "bgm_battle",
+        "streamableBgmMstId": 39
+    },
+    {
+        "cueName": "bgm01_battle_majo",
+        "cueSheetName": "bgm_battle",
+        "streamableBgmMstId": 40
+    },
+    {
+        "cueName": "bgm01_battle_pvp",
+        "cueSheetName": "bgm_battle",
+        "streamableBgmMstId": 41
+    },
+    {
+        "cueName": "bgm01_battle_gvg",
+        "cueSheetName": "bgm_battle",
+        "streamableBgmMstId": 42
+    },
+    {
+        "cueName": "bgm01_battle_result",
+        "cueSheetName": "bgm_battle",
+        "streamableBgmMstId": 43
+    },
+    {
+        "cueName": "bgm01_adv_everyday1",
+        "cueSheetName": "bgm_adv",
+        "streamableBgmMstId": 44
+    },
+    {
+        "cueName": "bgm01_adv_everyday2",
+        "cueSheetName": "bgm_adv",
+        "streamableBgmMstId": 45
+    },
+    {
+        "cueName": "bgm01_adv_comical1",
+        "cueSheetName": "bgm_adv",
+        "streamableBgmMstId": 46
+    },
+    {
+        "cueName": "bgm01_adv_comical2",
+        "cueSheetName": "bgm_adv",
+        "streamableBgmMstId": 47
+    },
+    {
+        "cueName": "bgm01_adv_sorrow",
+        "cueSheetName": "bgm_adv",
+        "streamableBgmMstId": 48
+    },
+    {
+        "cueName": "bgm01_adv_impression",
+        "cueSheetName": "bgm_adv",
+        "streamableBgmMstId": 49
+    },
+    {
+        "cueName": "bgm01_adv_emergency",
+        "cueSheetName": "bgm_adv",
+        "streamableBgmMstId": 50
+    },
+    {
+        "cueName": "bgm01_adv_unrest",
+        "cueSheetName": "bgm_adv",
+        "streamableBgmMstId": 51
+    },
+    {
+        "cueName": "bgm01_adv_battle",
+        "cueSheetName": "bgm_adv",
+        "streamableBgmMstId": 52
+    },
+    {
+        "cueName": "bgm01_adv_confront",
+        "cueSheetName": "bgm_adv",
+        "streamableBgmMstId": 53
+    },
+    {
+        "cueName": "bgm01_adv_despair",
+        "cueSheetName": "bgm_adv",
+        "streamableBgmMstId": 54
+    },
+    {
+        "cueName": "bgm01_battle_summer_teshita",
+        "cueSheetName": "bgm_battle_summer",
+        "streamableBgmMstId": 55
+    },
+    {
+        "cueName": "bgm01_battle_summer_majo",
+        "cueSheetName": "bgm_battle_summer",
+        "streamableBgmMstId": 56
+    },
+    {
+        "cueName": "bgm02_battle_magireco_shitori_egumo",
+        "cueSheetName": "bgm_battle_magireco",
+        "streamableBgmMstId": 57
+    },
+    {
+        "cueName": "bgm02_battle_majyu_teshita",
+        "cueSheetName": "bgm_battle_majyu",
+        "streamableBgmMstId": 58
+    },
+    {
+        "cueName": "bgm02_battle_majyu_boss",
+        "cueSheetName": "bgm_battle_majyu",
+        "streamableBgmMstId": 59
+    },
+    {
+        "cueName": "bgm_magireco0_main_theme",
+        "cueSheetName": "bgm_magireco0",
+        "streamableBgmMstId": 60
+    },
+    {
+        "cueName": "bgm_magireco0_114501",
+        "cueSheetName": "bgm_magireco0",
+        "streamableBgmMstId": 61
+    },
+    {
+        "cueName": "bgm_battle_magireco0_01_teshita_625002",
+        "cueSheetName": "bgm_battle_magireco0_01",
+        "streamableBgmMstId": 62
+    },
+    {
+        "cueName": "bgm_battle_magireco0_01_majo_625001",
+        "cueSheetName": "bgm_battle_magireco0_01",
+        "streamableBgmMstId": 63
+    },
+    {
+        "cueName": "bgm_battle_halloween_teshita",
+        "cueSheetName": "bgm_battle_halloween",
+        "streamableBgmMstId": 64
+    },
+    {
+        "cueName": "bgm_battle_halloween_majo",
+        "cueSheetName": "bgm_battle_halloween",
+        "streamableBgmMstId": 65
+    },
+    {
+        "cueName": "bgm_battle_christmas_teshita",
+        "cueSheetName": "bgm_battle_christma",
+        "streamableBgmMstId": 66
+    },
+    {
+        "cueName": "bgm_battle_christmas_majo",
+        "cueSheetName": "bgm_battle_christma",
+        "streamableBgmMstId": 67
+    },
+    {
+        "cueName": "bgm_adv_christmas_01",
+        "cueSheetName": "bgm_adv_christmas",
+        "streamableBgmMstId": 68
+    },
+    {
+        "cueName": "bgm_battle_newyear_teshita",
+        "cueSheetName": "bgm_battle_newyear",
+        "streamableBgmMstId": 69
+    },
+    {
+        "cueName": "bgm_battle_newyear_majo",
+        "cueSheetName": "bgm_battle_newyear",
+        "streamableBgmMstId": 70
+    },
+    {
+        "cueName": "bgm_adv_newyear_01",
+        "cueSheetName": "bgm_adv_newyear",
+        "streamableBgmMstId": 71
+    },
+    {
+        "cueName": "bgm_magireco0_114601",
+        "cueSheetName": "bgm_magireco0",
+        "streamableBgmMstId": 72
+    },
+    {
+        "cueName": "bgm_battle_magireco0_02_teshita_656004",
+        "cueSheetName": "bgm_battle_magireco0_02",
+        "streamableBgmMstId": 73
+    },
+    {
+        "cueName": "bgm_battle_magireco0_02_majo_656001",
+        "cueSheetName": "bgm_battle_magireco0_02",
+        "streamableBgmMstId": 74
+    },
+    {
+        "cueName": "bgm_dng_magireco0_01",
+        "cueSheetName": "bgm_dng_magireco0_01",
+        "streamableBgmMstId": 75
+    },
+    {
+        "cueName": "bgm_battle_magireco0_03_majo_656001",
+        "cueSheetName": "bgm_battle_magireco0_03",
+        "streamableBgmMstId": 76
+    },
+    {
+        "cueName": "bgm_lighthouse_theater_layer_01",
+        "cueSheetName": "bgm_lighthouse_theater",
+        "streamableBgmMstId": 77
+    },
+    {
+        "cueName": "bgm_lighthouse_theater_layer_02",
+        "cueSheetName": "bgm_lighthouse_theater",
+        "streamableBgmMstId": 78
+    },
+    {
+        "cueName": "bgm_lighthouse_theater_layer_03",
+        "cueSheetName": "bgm_lighthouse_theater",
+        "streamableBgmMstId": 79
+    },
+    {
+        "cueName": "bgm_lighthouse_theater_layer_04",
+        "cueSheetName": "bgm_lighthouse_theater",
+        "streamableBgmMstId": 80
+    },
+    {
+        "cueName": "bgm_lighthouse_theater_muteswitch_layer_01",
+        "cueSheetName": "bgm_lighthouse_theater",
+        "streamableBgmMstId": 81
+    },
+    {
+        "cueName": "bgm_lighthouse_theater_muteswitch_layer_02",
+        "cueSheetName": "bgm_lighthouse_theater",
+        "streamableBgmMstId": 82
+    },
+    {
+        "cueName": "bgm_lighthouse_theater_muteswitch_layer_03",
+        "cueSheetName": "bgm_lighthouse_theater",
+        "streamableBgmMstId": 83
+    },
+    {
+        "cueName": "bgm_lighthouse_theater_muteswitch_layer_04",
+        "cueSheetName": "bgm_lighthouse_theater",
+        "streamableBgmMstId": 84
+    },
+    {
+        "cueName": "bgm_lighthouse_theater_mutestart_layer_01",
+        "cueSheetName": "bgm_lighthouse_theater",
+        "streamableBgmMstId": 85
+    },
+    {
+        "cueName": "bgm_lighthouse_theater_mutestart_layer_02",
+        "cueSheetName": "bgm_lighthouse_theater",
+        "streamableBgmMstId": 86
+    },
+    {
+        "cueName": "bgm_lighthouse_theater_mutestart_layer_03",
+        "cueSheetName": "bgm_lighthouse_theater",
+        "streamableBgmMstId": 87
+    },
+    {
+        "cueName": "bgm_lighthouse_theater_mutestart_layer_04",
+        "cueSheetName": "bgm_lighthouse_theater",
+        "streamableBgmMstId": 88
+    },
+    {
+        "cueName": "bgm_battle_tart_majo_01",
+        "cueSheetName": "bgm_battle_tart",
+        "streamableBgmMstId": 89
+    },
+    {
+        "cueName": "bgm_battle_tart_majo_02",
+        "cueSheetName": "bgm_battle_tart",
+        "streamableBgmMstId": 90
+    },
+    {
+        "cueName": "bgm_battle_26summer_teshita",
+        "cueSheetName": "bgm_battle_26summer",
+        "streamableBgmMstId": 91
+    },
+    {
+        "cueName": "bgm_battle_26summer_majo",
+        "cueSheetName": "bgm_battle_26summer",
+        "streamableBgmMstId": 92
+    },
+    {
+        "cueName": "bgm02_battle_hangyaku_homucifer",
+        "cueSheetName": "bgm_battle_hangyaku",
+        "streamableBgmMstId": 93
+    }
+]

@@ -1,0 +1,206 @@
+[
+    {
+        "iconName": "battle_icon_unique_004",
+        "name": "Candyholic",
+        "stateFlipName": "Candyholic",
+        "uniqueStatePatternMstId": 1
+    },
+    {
+        "iconName": "battle_icon_unique_006",
+        "name": "Phantom Trick",
+        "stateFlipName": "Phantom Trick",
+        "uniqueStatePatternMstId": 2
+    },
+    {
+        "iconName": "battle_icon_unique_005",
+        "name": "Invisible",
+        "stateFlipName": "Invisible",
+        "uniqueStatePatternMstId": 3
+    },
+    {
+        "iconName": "battle_icon_unique_008",
+        "name": "Yuletide Gleam",
+        "stateFlipName": "Yuletide Gleam",
+        "uniqueStatePatternMstId": 4
+    },
+    {
+        "iconName": "battle_icon_unique_009",
+        "name": "Yuletide Trouble",
+        "stateFlipName": "Yuletide Trouble",
+        "uniqueStatePatternMstId": 5
+    },
+    {
+        "iconName": "battle_icon_unique_010",
+        "name": "Midwinter Blessing",
+        "stateFlipName": "Midwinter Blessing",
+        "uniqueStatePatternMstId": 6
+    },
+    {
+        "iconName": "battle_icon_unique_011",
+        "name": "Midwinter Mirage",
+        "stateFlipName": "Midwinter Mirage",
+        "uniqueStatePatternMstId": 7
+    },
+    {
+        "iconName": "battle_icon_unique_012",
+        "name": "Happy New Year",
+        "stateFlipName": "Happy New Year",
+        "uniqueStatePatternMstId": 8
+    },
+    {
+        "iconName": "battle_icon_unique_014",
+        "name": "Devil Sigil",
+        "stateFlipName": "Devil Sigil",
+        "uniqueStatePatternMstId": 9
+    },
+    {
+        "iconName": "battle_icon_unique_015",
+        "name": "Curious Cheese",
+        "stateFlipName": "Curious Cheese",
+        "uniqueStatePatternMstId": 10
+    },
+    {
+        "iconName": "battle_icon_unique_016",
+        "name": "Madeleine of Courage",
+        "stateFlipName": "Madeleine of Courage",
+        "uniqueStatePatternMstId": 11
+    },
+    {
+        "iconName": "battle_icon_unique_017",
+        "name": "Donut of Love",
+        "stateFlipName": "Donut of Love",
+        "uniqueStatePatternMstId": 12
+    },
+    {
+        "iconName": "battle_icon_unique_018",
+        "name": "Guiding Light",
+        "stateFlipName": "Guiding Light",
+        "uniqueStatePatternMstId": 13
+    },
+    {
+        "iconName": "battle_icon_unique_019",
+        "name": "Undead Magical Girl",
+        "stateFlipName": "Undead Magical Girl",
+        "uniqueStatePatternMstId": 14
+    },
+    {
+        "iconName": "battle_icon_unique_020",
+        "name": "Disorienting Magical Girl",
+        "stateFlipName": "Disorienting Magical Girl",
+        "uniqueStatePatternMstId": 15
+    },
+    {
+        "iconName": "battle_icon_unique_021",
+        "name": "Doll Magical Girl",
+        "stateFlipName": "Doll Magical Girl",
+        "uniqueStatePatternMstId": 16
+    },
+    {
+        "iconName": "battle_icon_unique_022",
+        "name": "Flowers Blooming in Full Splendor",
+        "stateFlipName": "Flowers Blooming in Full Splendor",
+        "uniqueStatePatternMstId": 17
+    },
+    {
+        "iconName": "battle_icon_unique_023",
+        "name": "Abyssal Rose",
+        "stateFlipName": "Abyssal Rose",
+        "uniqueStatePatternMstId": 18
+    },
+    {
+        "iconName": "battle_icon_unique_025",
+        "name": "Perfect Irregular",
+        "stateFlipName": "Perfect Irregular",
+        "uniqueStatePatternMstId": 19
+    },
+    {
+        "iconName": "battle_icon_unique_024",
+        "name": "Surging Wrath",
+        "stateFlipName": "Surging Wrath",
+        "uniqueStatePatternMstId": 20
+    },
+    {
+        "iconName": "battle_icon_unique_026",
+        "name": "Kyubey Blast",
+        "stateFlipName": "Kyubey Blast",
+        "uniqueStatePatternMstId": 21
+    },
+    {
+        "iconName": "battle_icon_unique_027",
+        "name": "Beachball's Boon",
+        "stateFlipName": "Beachball's Boon",
+        "uniqueStatePatternMstId": 22
+    },
+    {
+        "iconName": "battle_icon_unique_028",
+        "name": "Magical Floatie",
+        "stateFlipName": "Magical Floatie",
+        "uniqueStatePatternMstId": 23
+    },
+    {
+        "iconName": "battle_icon_unique_029",
+        "name": "Tidal Focus",
+        "stateFlipName": "Tidal Focus",
+        "uniqueStatePatternMstId": 24
+    },
+    {
+        "iconName": "battle_icon_unique_030",
+        "name": "Divine Might",
+        "stateFlipName": "Divine Might",
+        "uniqueStatePatternMstId": 25
+    },
+    {
+        "iconName": "battle_icon_unique_031",
+        "name": "Dissenter's Mark",
+        "stateFlipName": "Dissenter's Mark",
+        "uniqueStatePatternMstId": 26
+    },
+    {
+        "iconName": "battle_icon_unique_033",
+        "name": "Crescendo",
+        "stateFlipName": "Crescendo",
+        "uniqueStatePatternMstId": 27
+    },
+    {
+        "iconName": "battle_icon_unique_034",
+        "name": "Signal Shot for Victory",
+        "stateFlipName": "Signal Shot for Victory",
+        "uniqueStatePatternMstId": 28
+    },
+    {
+        "iconName": "battle_icon_unique_032",
+        "name": "Iridescent Chains",
+        "stateFlipName": "Iridescent Chains",
+        "uniqueStatePatternMstId": 29
+    },
+    {
+        "iconName": "battle_icon_unique_036",
+        "name": "Plushie Cheer",
+        "stateFlipName": "Plushie Cheer",
+        "uniqueStatePatternMstId": 31
+    },
+    {
+        "iconName": "battle_icon_unique_013",
+        "name": "Dark Field",
+        "stateFlipName": "Dark Field",
+        "uniqueStatePatternMstId": 10001
+    },
+    {
+        "iconName": "battle_icon_field_forest",
+        "name": "Forest Field",
+        "stateFlipName": "Forest Field",
+        "uniqueStatePatternMstId": 10002
+    },
+    {
+        "iconName": "battle_icon_field_aqua",
+        "name": "Aqua Field",
+        "stateFlipName": "Aqua Field",
+        "uniqueStatePatternMstId": 10003
+    },
+    {
+        "iconName": "battle_icon_element_damage_light",
+        "name": "Bound by Grace",
+        "stateFlipName": "Bound by Grace",
+        "uniqueStatePatternMstId": 20001
+    }
+]
