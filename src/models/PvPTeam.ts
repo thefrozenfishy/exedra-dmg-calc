@@ -4,7 +4,7 @@ import { skillDetails } from "../utils/helpers";
 import { isConditionSetActive, isConditionSetActiveForPvP, isActiveConditionSetMet, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
 import { PvPKioku } from "./PvPKioku";
 import { damageBaseTypeFromEffectType, getAttackDamageResult, getSlipDamageResult, getAdditionalDamageBase, getFinalDamageExtra, damageCutByBarrier, DamageBaseType, BattleType, PVP_POLICY } from "./DamageCalculator";
-import { mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum, getFinalDamageRatio, getProcessedSpeedWithBreakdown } from "./UnitStateEngine";
+import { getProcessedAtk, mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum, getFinalDamageRatio, getProcessedSpeedWithBreakdown } from "./UnitStateEngine";
 import { elementMap } from "../types/enums";
 import { EFFECT_TARGET_SIDE } from "./EffectTargetSide";
 import { selectFullAutoTarget, expandProximity, filterAlive } from "./AITargetSelector";
@@ -262,7 +262,7 @@ export class KiokuState {
     // DOT ticks can scale off the APPLIER's stat rather than the sufferer's, per the
     // corrected reading of ReceiveSlipDamageUnitStateBase - see tickDotEffects() and
     // DamageCalculator.ts's getSlipDamageResult header comment.
-    activeEffectDetails: Map<string, SkillDetail & { _accumCount?: number; _isExemptPassingTurnOnce?: boolean; _applierState?: KiokuState }> = new Map()
+    activeEffectDetails: Map<string, SkillDetail & { _accumCount?: number; _isExemptPassingTurnOnce?: boolean; _applierState?: KiokuState; _lockTurnOrder?: boolean }> = new Map()
 
     currentRemainingBreakGauge: number
     currentSpd = 0  // processed speed (float, BattleUnit.GetProcessedSpeed)
@@ -326,6 +326,8 @@ export class KiokuState {
     // treated as an alias, see MISSING_AND_UNCERTAIN.md) effect. Grants the SAME unit an
     // immediate extra action - see PvPTeam.performAction.
     pendingBonusTurns = 0
+    // Shown on the unit's next turn in the battle log (e.g. "Cutaway" after a Cutaway advance).
+    nextTurnLabel?: string
 
     // NEW: what happened to this unit the last time it was the target of an action -
     // read by BattleConditionParser.ts's per-unit CompareContent checks (101-110:
@@ -512,7 +514,6 @@ export class KiokuState {
         this.tickHotEffects()
         const updated: typeof this.activeEffectDetails = new Map();
         for (const [key, detail] of this.activeEffectDetails) {
-            if (detail.abilityEffectType == "CUTOUT") this.progressMeters()
             let turn = detail.turn;
             if (detail._isExemptPassingTurnOnce) {
                 detail._isExemptPassingTurnOnce = false
@@ -650,10 +651,30 @@ export class KiokuState {
         this.turnGauge = dt <= this.turnGauge ? f32(this.turnGauge - dt) : 0
     }
 
-    // CUTOUT: act immediately (gauge to 0, jumps the tie-break queue).
-    progressMeters(): void {
-        this.turnGauge = 0
-        this.turnOrderPriority = ++globalTurnShiftCounter
+    // [CONFIRMED 3.19] CutoutUnitState$$TriggeringAtTurnEnd (0x15b7840), run by ActExecutor$$TurnEnd
+    // for the ACTING unit's own states (ITurnEndTrigger, IsActive), after its TurnEnd passives and
+    // before PassingTurn. Only the first Cutaway fires; any other one on the unit is just removed
+    // (the Any(IsActivated) early-out). When it fires:
+    //   - its unit's skill-origin IDebuff states (ailments are not IDebuff), newest first, the first
+    //     DebuffRemoveNum (value2; 0 = all) are removed
+    //   - unless the unit had a LockTurnOrder state when Cutaway was added (SetTriggeringInfo):
+    //     gauge.SubtractGaugeValue(value1 / 1000) with a fresh NextTurnOrderPriority, i.e.
+    //     gauge = max(0, gauge - rate * 10000 / speed), speed before the debuffs are removed
+    //   - the Cutaway itself is removed.
+    // Returns true when a Cutaway fired.
+    triggerCutoutAtTurnEnd(): boolean {
+        const cutouts = [...this.activeEffectDetails.entries()].filter(([, d]) => d.abilityEffectType === "CUTOUT")
+        if (!cutouts.length) return false
+        const [, c] = cutouts[0]
+        if (!c._lockTurnOrder) this.addGaugeRate(-f32(f32(c.value1) / 1000), nextTurnOrderPriority())
+        const debuffs = [...this.activeEffectDetails.entries()]
+            .filter(([, d]) => !isAlimentEffect(d.abilityEffectType) && isOpponentEffect(d.abilityEffectType))
+            .reverse()
+        const removeNum = c.value2 > 0 ? c.value2 : debuffs.length
+        debuffs.slice(0, removeNum).forEach(([key]) => this.activeEffectDetails.delete(key))
+        cutouts.forEach(([key]) => this.activeEffectDetails.delete(key))
+        this.updateSpd()
+        return true
     }
 
     filteredEffects(): Record<string, SkillDetail[]> {
@@ -1029,7 +1050,12 @@ export class KiokuState {
             // not unit, since currentSp lives on PvPTeam).
             this.team.currentSp += detail.value1;
         } else if (detail.abilityEffectType === "CUTOUT") {
-            effTargets.forEach(t => t.activeEffectDetails.set(String(skillDetailId(detail)), { ...detail, applier: this.kioku.name, turn: 1 }))
+            // Kept until the holder's next TurnEnd (see triggerCutoutAtTurnEnd). IsUserUnitLockTurnOrder-
+            // UnitState is captured when the state is added (CutoutUnitState$$SetTriggeringInfo).
+            effTargets.forEach(t => t.activeEffectDetails.set(String(skillDetailId(detail)), {
+                ...detail, applier: this.kioku.name, turn: 1,
+                _lockTurnOrder: [...t.activeEffectDetails.values()].some(d => d.abilityEffectType === "LOCK_TURN_ORDER"),
+            }))
         } else if (detail.abilityEffectType === "RECOVERY_HP") {
             effTargets.forEach(t => t.heal(detail.value1, this))
         } else if (detail.abilityEffectType === "RECOVERY_HP_ATK") {
@@ -1295,12 +1321,22 @@ export class PvPTeam {
         this.kiokuStates.forEach(k => k.traverseSeconds(seconds))
     }
 
+    // [CONFIRMED 3.19] turn order is built from GameDirectorBase.ActiveUnitList (living units only):
+    // a KO'd unit has no turn until it is revived.
+    get aliveKiokus(): KiokuState[] {
+        return this.kiokuStates.filter(k => !k.isDead)
+    }
+
+    get isWiped(): boolean {
+        return this.kiokuStates.every(k => k.isDead)
+    }
+
     getSecondsUntilNextReadyKioku(): number {
-        return this.kiokuStates.reduce((s, k) => s < k.secondsUntilAbleToAct() ? s : k.secondsUntilAbleToAct(), maxMeters)
+        return this.aliveKiokus.reduce((s, k) => s < k.secondsUntilAbleToAct() ? s : k.secondsUntilAbleToAct(), Infinity)
     }
 
     getNextActor(): KiokuState {
-        return this.kiokuStates.reduce((best, k) => compareTurnOrder(k, best, this) < 0 ? k : best)
+        return this.aliveKiokus.reduce((best, k) => compareTurnOrder(k, best, this) < 0 ? k : best)
     }
 
     // [CONFIRMED algorithm + damage chain, see AITargetSelector.ts] range===TARGET
@@ -1333,9 +1369,13 @@ export class PvPTeam {
                     (a, b) => a.secondsUntilAbleToAct() > b.secondsUntilAbleToAct())
                 if (p) return p
             }
-            if (effectId === 1161) { // Mabayu skill: highest base ATK Attacker ally
+            if (effectId === 1161) { // Mabayu skill: every effect goes to the Cutaway target
+                // [CONFIRMED 3.19] CutoutUnitState$$GetUnitFilterFuncOrder (0x15b7520): UnitFilterByMainTarget,
+                // UnitFilterByRoleAttacker, UnitFilterWithMaxAtk (processed ATK, i.e. with buffs).
+                // Cutaway's start condition 1278 ("target is not self") rules Mabayu herself out.
                 const p = pick(eligableTargets.filter(k => k.kioku.data.role === KiokuRole.Attacker),
-                    (a, b) => a.kioku.getBaseAtk() > b.kioku.getBaseAtk())
+                    (a, b) => getProcessedAtk(a) > getProcessedAtk(b))
+                    ?? pick(eligableTargets, (a, b) => getProcessedAtk(a) > getProcessedAtk(b))
                 if (p) return p
             }
             if (effectId === 1072) { // Rika skill: Attacker/Breaker ally with the least MP
@@ -1428,7 +1468,7 @@ export class PvPTeam {
     }
 
     useUltimate(): [KiokuState, TargetType] | undefined {
-        const readyKiokus = this.kiokuStates
+        const readyKiokus = this.aliveKiokus
             .filter(k => k.currentMp >= k.maxMp)
             .filter(k => k.maxMp > 0)
             .filter(k => k.currentRemainingBreakGauge > 0)
@@ -1446,6 +1486,8 @@ export class PvPTeam {
 
     useAttackOrSkill(): [KiokuState, TargetType] {
         const actor = this.getNextActor()
+        const turnLabel = actor.nextTurnLabel
+        actor.nextTurnLabel = undefined
         // [CONFIRMED 3.19] ActExecutor: TurnBeginAct (break reset, TurnStart passives with this
         // unit as actor) -> TurnUnitAct (UnitTurnGauge.Reset, then ExecuteSkill) -> TurnEndAct.
         actor.exitBreak()
@@ -1485,7 +1527,7 @@ export class PvPTeam {
                 // turn "step 1".
                 actor.currentComboActionStep = actionNum >= 2 ? i + 1 : 0
                 effType = this.currentSp ? TargetType.skillId : TargetType.attackId
-                this.performAction(actor, effType)
+                this.performAction(actor, effType, i === 0 ? turnLabel : undefined)
             }
             actor.currentComboActionStep = 0
         }
@@ -1493,6 +1535,7 @@ export class PvPTeam {
         // unit's states pass one turn (BattleUnit.PassingTurn(1)). Ultimates and follow-ups have
         // no TurnEnd, so they don't tick durations.
         this.fireTiming(ProcessTiming.TURN_END, actor, undefined, effType)
+        if (!actor.isDead && actor.triggerCutoutAtTurnEnd()) actor.nextTurnLabel = "Cutaway"
         actor.decrementActiveEffects()
         return [actor, effType]
     }
@@ -1501,7 +1544,7 @@ export class PvPTeam {
     // and any FUAs they trigger, then loops the SAME actor through another
     // attack/skill action for every pending ADDITIONAL_TURN_UNIT_ACT/
     // RE_ACTION_TURN_UNIT_ACT bonus turn they've accumulated.
-    private performAction(actor: KiokuState, effType: TargetType): void {
+    private performAction(actor: KiokuState, effType: TargetType, turnLabel?: string): void {
         // Reset per-action team-level tallies - see BattleConditionParser.ts's
         // team-scoped notice/effect-type conditions, which are meant to read "what
         // happened THIS action", not a stale accumulation from turns ago.
@@ -1509,7 +1552,7 @@ export class PvPTeam {
         // [CONFIRMED 3.19] ActExecutor$$ExecuteSkill: the skill, then AttackEnd passives for every
         // living unit (actor, main target, skill passed along), then queued follow-ups.
         const skillFuas = this.act(actor, effType)
-        const comboLabel = actor.currentComboActionStep ? `Combo ${actor.currentComboActionStep}` : undefined
+        const comboLabel = actor.currentComboActionStep ? `Combo ${actor.currentComboActionStep}` : turnLabel
         this.fireTiming(ProcessTiming.ATTACK_END, actor, this.lastMainTarget, effType, () => this.recordAction(actor, effType, comboLabel))
         this.triggerFua(skillFuas)
 

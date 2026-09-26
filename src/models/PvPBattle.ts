@@ -67,7 +67,7 @@ export class PvPBattle {
         this.team1.recomputeDerivedStats()
         this.team2.recomputeDerivedStats()
 
-        this.traverseToNextActor()
+        if (!this.isOver) this.traverseToNextActor()
     }
 
     getCurrentState(as?: { actor: KiokuState, type: TargetType, label?: string }): BattleSnapshot {
@@ -161,15 +161,22 @@ export class PvPBattle {
         this.team1.traverseSeconds(secondsTraveled)
         this.team2.traverseSeconds(secondsTraveled)
 
-        const allUnits = [...this.team1.kiokuStates, ...this.team2.kiokuStates]
+        const allUnits = [...this.team1.aliveKiokus, ...this.team2.aliveKiokus]
         return allUnits.reduce((best, k) => compareTurnOrder(k, best, this.team1) < 0 ? k : best).team
     }
 
     // Runs the next turn (or ultimate) and returns one snapshot per executed skill: the action
     // itself, then every follow-up, extra action and combo step, in the order they happened.
     // End-of-turn effects (TurnEnd passives, DOT ticks, buff expiry) are folded into the last one.
+    // The battle ends as soon as one side has no living unit.
+    get isOver(): boolean {
+        return this.team1.isWiped || this.team2.isWiped
+    }
+
+    // Returns [] once the battle is over.
     executeNextAction(): BattleSnapshot[] {
         this.actionSnapshots = []
+        if (this.isOver) return []
         // First call: the battle-start follow-ups, as their own entries, before the first turn.
         const opening = this.battleStartFollowUps.filter(([, m]) => Object.keys(m).length)
         this.battleStartFollowUps = []
@@ -177,7 +184,7 @@ export class PvPBattle {
             for (const [team, fuas] of opening) team.triggerFua(fuas)
             const snaps = this.actionSnapshots
             this.actionSnapshots = []
-            this.traverseToNextActor()
+            if (!this.isOver) this.traverseToNextActor()
             if (snaps.length) return snaps
         }
         this.lastTeamIsTeam1 = false

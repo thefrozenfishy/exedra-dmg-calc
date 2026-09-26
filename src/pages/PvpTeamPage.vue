@@ -367,7 +367,7 @@ function runSimulation() {
   // One entry per executed skill: turn actions, ultimates, extra actions, combo steps and
   // follow-ups each get their own "Action N" (executeNextAction returns them in order).
   const states: BattleSnapshot[] = [battleInstance.value.getCurrentState()]
-  for (let turn = 0; turn < SIM_TURNS; turn++) {
+  for (let turn = 0; turn < SIM_TURNS && !battleInstance.value.isOver; turn++) {
     try {
       states.push(...battleInstance.value.executeNextAction())
     } catch (e) {
