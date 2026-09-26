@@ -586,6 +586,11 @@ export class KiokuState {
     // [CONFIRMED 3.19] speed = GetProcessedSpeed (decimal, UnitStateEngine.getProcessedSpeedWithBreakdown).
     // BattleUnit$$UpdateTurnGaugeBySpeed (0x1389210) -> UnitTurnGauge$$SetSpeedAndUpdateGaugeValue
     // (0x15cf110): unless Mathf.Approximately(old, new), gauge = (oldSpeed / newSpeed) * gauge.
+    // [CONFIRMED 3.19] StateAbilityEffect$$Triggering calls BattleUnit$$UpdateTurnGaugeBySpeed
+    // (0x1389210) right after adding a state: gauge = (oldSpeed / newSpeed) * gauge in float32,
+    // skipped when Mathf.Approximately. It runs after EVERY state (not once after all passives), so
+    // float rounding depends on the exact order of SPD states and HASTE/SLOW - which is what breaks
+    // exact ties between otherwise identical units (e.g. mirrored Thunder Torrents).
     updateSpd(updateGauge = true): void {
         const { speed, steps } = getProcessedSpeedWithBreakdown(this)
         this.currSpdEffects = steps.map(([step, d]) => [step, d.description, (d as any).applier])
@@ -694,9 +699,11 @@ export class KiokuState {
         const existing = t.activeEffectDetails.get(key)
         if (existing && ACCUM_RATIO_EFFECT_TYPES.has(detail.abilityEffectType)) {
             mergeAccumEffect(existing, detail)
+            t.updateSpd()
             return true
         }
         t.activeEffectDetails.set(key, { applier, ...detail, _isExemptPassingTurnOnce: true, _accumCount: 1, _applierState: applierState })
+        t.updateSpd()
         return true
     }
 
@@ -705,10 +712,11 @@ export class KiokuState {
         const key = String(skillDetailId(detail))
         const existing = t.passiveEffectDetails.get(key)
         if (existing) {
-            if (ACCUM_RATIO_EFFECT_TYPES.has(detail.abilityEffectType)) mergeAccumEffect(existing, detail)
+            if (ACCUM_RATIO_EFFECT_TYPES.has(detail.abilityEffectType)) { mergeAccumEffect(existing, detail); t.updateSpd() }
             return true
         }
         t.passiveEffectDetails.set(key, { applier, ...detail, _accumCount: 1, _applierState: applierState } as any)
+        t.updateSpd()
         return true
     }
 
