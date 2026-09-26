@@ -203,6 +203,7 @@ export const EFFECT_TARGET_SIDE: Record<string, TargetSide> = {
     ZONE_EXPAND: "Opponent", // ZoneExpandAbilityEffect
     ZONE_RELEASE: "Opponent", // ZoneReleaseAbilityEffect
     ZONE_STACK: "Friend", // ZoneStackAbilityEffect
+
 };
 
 // [CONFIRMED 3.19] UnitStateBase.Direction == Negative (1), from decompiled/state_direction.json
@@ -275,3 +276,4 @@ export const NEGATIVE_STATE_TYPES: ReadonlySet<string> = new Set([
     "VORTEX_ATK",
     "WEAKNESS",
 ])
+

@@ -609,15 +609,18 @@ function selectFullAutoTargetInner(detail: SkillDetail, candidates: KiokuState[]
  * codebase's own `KiokuState.posIdx` is already exactly that same concept (assigned as
  * the roster array index at team-build time, `kiokus.map((k, i) => new KiokuState(i,
  * ...))`, and already independently used as the final tiebreak level in `compareTurnOrder`)
- * - so posIdx is used directly here as PositionId with no translation needed.
+ * - posIdx WAS used directly as PositionId, but summoned enemies now join mid-battle
+ * (appended to the array or reusing a dead unit's slot), so the board position lives in
+ * `KiokuState.positionId` instead (allies: posIdx+1; enemies: the wave layout 3-n/2+i,
+ * summons: first free slot of [3,2,4,1,5]).
  */
 export function expandProximity(primary: KiokuState, sameSideCandidates: KiokuState[]): KiokuState[] {
     const alive = filterAlive(sameSideCandidates);
     const below = alive
-        .filter(u => u.posIdx < primary.posIdx)
-        .reduce<KiokuState | null>((best, u) => (!best || u.posIdx > best.posIdx) ? u : best, null);
+        .filter(u => u.positionId < primary.positionId)
+        .reduce<KiokuState | null>((best, u) => (!best || u.positionId > best.positionId) ? u : best, null);
     const above = alive
-        .filter(u => u.posIdx > primary.posIdx)
-        .reduce<KiokuState | null>((best, u) => (!best || u.posIdx < best.posIdx) ? u : best, null);
+        .filter(u => u.positionId > primary.positionId)
+        .reduce<KiokuState | null>((best, u) => (!best || u.positionId < best.positionId) ? u : best, null);
     return [primary, below, above].filter((u): u is KiokuState => u != null);
 }

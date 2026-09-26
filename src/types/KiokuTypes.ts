@@ -289,7 +289,7 @@ export interface TeamSnapshot {
 
 // One thing that happened during an action, for the battle log in the UI.
 export interface BattleEvent {
-    kind: "hit" | "dot" | "heal"
+    kind: "hit" | "dot" | "heal" | "summon"
     source?: string          // unit name (attacker / DOT applier / healer)
     target: string
     amount: number           // HP actually lost (hit/dot) or gained (heal)
@@ -301,6 +301,7 @@ export interface BattleEvent {
     breakDamage?: number     // break gauge removed by this hit (after give/receive modifiers)
     broke?: boolean          // this hit broke the target
     breakRateUp?: number     // +% to the target's damage-taken-while-broken rate
+    formChange?: boolean     // summon event: `source` changed form into `target`
 }
 
 export interface BattleSnapshot {
@@ -314,6 +315,8 @@ export interface BattleSnapshot {
     events?: BattleEvent[]   // what the last action did (hits, DOT ticks, heals)
     wave?: number            // set on the entry where a new enemy wave appeared
     rngEvents?: RngEvent[]   // real random rolls made during this action (BattleRng)
+    linkHp?: { type: number, name: string, current: number, max: number }   // Solo Raid Link HP pool of the enemy wave
+    countdown?: { value: number, max: number, cancelTotal: number, cancelMax: number, unit: string } // Solo Raid countdown
 }
 
 export interface KiokuData {

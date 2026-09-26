@@ -81,7 +81,8 @@ export function formatSequence(snapshots: BattleSnapshot[]): string[] {
             lines.push(`== Action ${idx}: ${s.lastActor} (${side}) - ${SKILL_NAMES[s.lastTargetType ?? ""] ?? s.lastTargetType}${s.actionLabel && s.lastTargetType !== TargetType.fuaId ? ` [${s.actionLabel}]` : ""} ==`)
         }
         for (const e of s.events ?? []) {
-            if (e.kind === "heal") lines.push(`  ${e.source ?? "?"} healed ${e.target} +${n(e.amount)}`)
+            if (e.kind === "summon") lines.push(e.formChange ? `  ${e.source ?? "?"} changed form: ${e.target}` : `  ${e.source ?? "?"} summoned ${e.target}`)
+            else if (e.kind === "heal") lines.push(`  ${e.source ?? "?"} healed ${e.target} +${n(e.amount)}`)
             else {
                 const extra = [
                     e.isCritical ? "crit" : "",

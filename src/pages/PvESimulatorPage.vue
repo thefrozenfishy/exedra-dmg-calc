@@ -157,8 +157,8 @@
     <section class="card">
       <h2 class="section-title">Battle Simulator</h2>
       <p class="hint-text">Plays the stage with the battle engine: enemy skills follow their skill rotation and
-        conditions, enemies pick targets by role aggro, and later waves appear when a wave is cleared. Summons and form
-        changes are not simulated yet.</p>
+        conditions, enemies pick targets by role aggro, and later waves appear when a wave is cleared. Summons, boss
+        form changes and Solo Raid linked HP / endless minions / countdowns are simulated.</p>
       <div class="sim-controls">
         <SegmentedToggle v-model="targetMode" :options="TARGET_MODE_OPTIONS" label="Control" />
         <p class="sim-hint">{{ TARGET_MODE_OPTIONS.find(o => o.value === targetMode)?.title }}</p>

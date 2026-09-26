@@ -10,6 +10,9 @@ import enemyConditionActionJson from "../assets/base_data/getEnemyConditionSetsA
 import questEnemyAppearanceJson from "../assets/base_data/getQuestEnemyAppearanceMstList.json";
 import questStageJson from "../assets/base_data/getQuestStageMstList.json";
 import skillMstJson from "../assets/base_data/getSkillMstList.json";
+import questEnemyWaveJson from "../assets/base_data/getQuestEnemyWaveMstList.json";
+import soloRaidStageJson from "../assets/base_data/getSoloRaidStageMstList.json";
+import modeChangeJson from "../assets/base_data/getQuestEnemyModeChangeMstList.json";
 import { passiveDetailsByMstId, skillDetailsByMstId } from "../utils/helpers";
 import type { PassiveSkill, SkillDetail } from "../types/KiokuTypes";
 import { isConditionSetActiveForPvP } from "./BattleConditionParser";
@@ -99,13 +102,76 @@ export function buildStageTree(): StageTreeCategory[] {
         }))
 }
 
-// [CONFIRMED 3.19] WaveReferee.CreateEnemyUnitList: the appearances of (stage, wave); rows with
-// conditionType 3 are summons and don't spawn at the start (AdditionalEnemyReferee.Initialize).
+// QuestEnemyModeChangeMst: an appearance that is one form (step) of a boss that changes form at an HP threshold.
+export interface ModeChangeRow { questEnemyAppearanceMstId: number, step: number, type: number, thresholdValue: number }
+const modeChangeRows = new Map<number, ModeChangeRow>((modeChangeJson as any[]).map(r => [r.questEnemyAppearanceMstId, r]))
+
+// [CONFIRMED 3.19] WaveReferee.CreateEnemyUnitList -> QuestEnemyAppearanceMstReader.GetModelListForBattleStart
+// (0x16d51c0): the appearances of (stage, wave) with conditionType 0 (3 = summons, AdditionalEnemyReferee), ordered
+// by id; ModeChangeReferee.RemoveModeChangeFirstOther drops every form but step 1; QuestEnemyAppearanceMstModel.Sort
+// (0x16d3b60) then puts the main target in the middle (index count/2; only the last main target is kept).
 export function stageWaves(questStageMstId: number): QuestEnemyAppearance[][] {
-    const rows = (appearancesByStage.get(questStageMstId) ?? []).filter(a => a.conditionType !== 3)
+    const rows = (appearancesByStage.get(questStageMstId) ?? []).filter(a => a.conditionType === 0)
     const waves = [...new Set(rows.map(a => a.wave))].sort((a, b) => a - b)
-    return waves.map(w => rows.filter(a => a.wave === w).sort((a, b) => a.questEnemyAppearanceMstId - b.questEnemyAppearanceMstId))
+    return waves.map(w => {
+        const list = rows.filter(a => a.wave === w && (modeChangeRows.get(a.questEnemyAppearanceMstId)?.step ?? 1) === 1)
+            .sort((a, b) => a.questEnemyAppearanceMstId - b.questEnemyAppearanceMstId)
+        const count = list.length
+        const out: QuestEnemyAppearance[] = []
+        let main: QuestEnemyAppearance | undefined
+        for (const a of list) if (a.isMainTargetEnemy) main = a; else out.push(a)
+        if (main) out.splice(Math.trunc(count / 2), 0, main)
+        return out
+    })
 }
+
+// [CONFIRMED 3.19] ModeChangeReferee.Init (0x149fea0): the main-target appearances of (stage, wave) are the boss's
+// forms; with fewer than two there is no form change. Ordered by step.
+export interface ModeChangeInfo { appearance: QuestEnemyAppearance, step: number, type: number, threshold: number }
+export function modeChangeInfos(questStageMstId: number, wave: number): ModeChangeInfo[] {
+    const mains = (appearancesByStage.get(questStageMstId) ?? []).filter(a => a.wave === wave && a.isMainTargetEnemy)
+    if (mains.length < 2) return []
+    return mains.flatMap(a => {
+        const r = modeChangeRows.get(a.questEnemyAppearanceMstId)
+        return r ? [{ appearance: a, step: r.step, type: r.type, threshold: r.thresholdValue }] : []
+    }).sort((a, b) => a.step - b.step)
+}
+
+// Per-wave Link HP settings (QuestEnemyWaveMst), aligned with stageWaves().
+// linkHpType 1 = "endless" wave: a shared pool of 100, each defeated enemy removes its linkHpWeight, and new
+// enemies keep coming round-robin from the wave's list until the pool is empty.
+// linkHpType 2 = every enemy of the wave shares one HP pool (the main target's HP).
+export interface WaveMeta { linkHpType: number, linkHpName: string, appearances: QuestEnemyAppearance[], modeChanges: ModeChangeInfo[] }
+const waveRows = new Map<string, { linkHpType: number, linkHpName: string }>(
+    (questEnemyWaveJson as any[]).map(w => [`${w.questStageMstId}:${w.wave}`, { linkHpType: w.linkHpType ?? 0, linkHpName: w.linkHpName ?? "" }]))
+export function stageWaveMeta(questStageMstId: number): WaveMeta[] {
+    return stageWaves(questStageMstId).map(apps => {
+        const row = waveRows.get(`${questStageMstId}:${apps[0]?.wave}`)
+        return { linkHpType: row?.linkHpType ?? 0, linkHpName: row?.linkHpName ?? "", appearances: apps, modeChanges: modeChangeInfos(questStageMstId, apps[0]?.wave) }
+    })
+}
+
+// Countdowns only run in Solo Raid battles (SoloRaidGameDirector).
+const soloRaidStageIds = new Set<number>((soloRaidStageJson as any[]).map(s => s.questStageMstId))
+export const isSoloRaidStage = (questStageMstId: number) => soloRaidStageIds.has(questStageMstId)
+
+// [CONFIRMED 3.19] AdditionalEnemyReferee.Initialize (0x1376f70): the stage's conditionType 3 rows are summon
+// templates, keyed by summonId (the first row per id wins - Dictionary.ContainsKey guard).
+export function summonTemplates(questStageMstId: number): Map<number, QuestEnemyAppearance> {
+    const out = new Map<number, QuestEnemyAppearance>()
+    const rows = (appearancesByStage.get(questStageMstId) ?? []).filter(a => a.conditionType === 3 && a.summonId > 0)
+        .sort((a, b) => a.questEnemyAppearanceMstId - b.questEnemyAppearanceMstId)
+    for (const a of rows) if (!out.has(a.summonId)) out.set(a.summonId, a)
+    return out
+}
+
+// [CONFIRMED 3.19] AdditionalEnemyReferee.GetAdditionalBattleUnitList(mstList) (0x13769c0): a wave's units get
+// consecutive position ids starting at 3 - n/2 (C# integer division): 1 unit -> 3, 3 -> 2..4, 5 -> 1..5.
+export const wavePositionIds = (n: number): number[] => Array.from({ length: n }, (_, i) => 3 - Math.trunc(n / 2) + i)
+
+// [CONFIRMED 3.19] SummonAbilityEffect static position order, read from global-metadata.dat
+// (<PrivateImplementationDetails> 79C1DCEC..., metadata offset 0x100C440): centre first, then outward.
+export const SUMMON_POSITION_ORDER = [3, 2, 4, 1, 5] as const
 
 export const enemyName = (a: QuestEnemyAppearance) => enemyNames.get(a.enemyMstId) ?? `Enemy ${a.enemyMstId}`
 export const skillName = (skillMstId: number) => skillNames.get(skillMstId) ?? `Skill ${skillMstId}`

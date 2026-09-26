@@ -164,6 +164,9 @@ enum CompareContent {
 
     ACTOR_SKILL_TYPE = 401,
     COMBO_ACTION_STEP = 402,
+    // [CONFIRMED 3.19] BattleOtherConditionChecker.Check 0x4b1/0x4b2 (Solo Raid countdown)
+    COUNTDOWN = 1201,              // IntValueComparer over CountdownReferee.Countdown
+    COUNTDOWN_CANCEL_REACHED = 1202, // CancelMaxTotalDamage > 0 && CancelMaxTotalDamage <= CancelTotalDamage
 
     PLAYER_TEAM = 1001,
 
@@ -403,6 +406,11 @@ export const conditionSetRequiresActorIsSelf = (eff: SkillDetail) =>
 // [CONFIRMED] ReDriveBattleCore.BattleCondition.BattleUnitConditionChecker$$Check.
 // `battleUnit` is whichever unit CompareTarget resolved to (see isMatchCondition's
 // dispatcher below) - NOT necessarily `state.target` the way the original file assumed.
+// Every state on the unit: timed (activeEffectDetails) and permanent (passiveEffectDetails, e.g. an enemy's
+// "cannot be removed" LOCK_TURN_ORDER). The game keeps both in one UnitCondition state list.
+const unitStateTypes = (u: KiokuState): string[] =>
+    [...u.activeEffectDetails.values(), ...u.passiveEffectDetails.values()].map(d => d.abilityEffectType)
+
 function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state: BattleState): boolean {
     const notice = battleUnit.lastNotice;
     switch (cond.compareContent as CompareContent) {
@@ -443,7 +451,7 @@ function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state
             // [CONFIRMED] AbilityEffectListComparer over the unit's active EffectType
             // list, prefix-matched (see compareAbilityEffectList above) - NOT the plain
             // Array.includes the original file used.
-            const types = [...battleUnit.activeEffectDetails.values()].map(d => d.abilityEffectType);
+            const types = unitStateTypes(battleUnit);
             return compareAbilityEffectList(cond.compareOperator, types, cond.compareValue);
         }
         case CompareContent.EVERY_N_TURN: {
@@ -584,7 +592,7 @@ function checkTeamCondition(team: PvPTeam, cond: BattleCondition): boolean {
             // SECOND CompareValue token (not the condition's own compareValue as a
             // whole) via IntValueComparer.
             const [prefix, threshold] = cond.compareValue.split(",");
-            const count = units.filter(u => [...u.activeEffectDetails.values()].some(d => d.abilityEffectType.startsWith(prefix))).length;
+            const count = units.filter(u => unitStateTypes(u).some(t => t.startsWith(prefix))).length;
             return compareInt(cond.compareOperator, count, threshold ?? "0");
         }
         case CompareContent.BREAK_DAMAGE_RECEIVE_RATE_GREATER_THAN_UNIT_COUNT:
@@ -622,7 +630,7 @@ function checkTeamCondition(team: PvPTeam, cond: BattleCondition): boolean {
             // meets the threshold.
             const [prefix, threshold] = cond.compareValue.split(",");
             const any = units.some(u =>
-                [...u.activeEffectDetails.values()].some(d => d.abilityEffectType.startsWith(prefix)) &&
+                unitStateTypes(u).some(t => t.startsWith(prefix)) &&
                 (u.lastNotice?.totalDamageValue ?? 0) >= Number(threshold ?? "0"));
             return compareBool(cond.compareOperator, any, "TRUE");
         }
@@ -636,7 +644,7 @@ function checkTeamCondition(team: PvPTeam, cond: BattleCondition): boolean {
             return compareInt(cond.compareOperator, team.lastActionNotices.filter(n => n.isBreakedDamageReceiveRateBecomeMax).length, cond.compareValue);
         case CompareContent.HAS_BUFF_APPLIED: {
             const [prefix, threshold] = cond.compareValue.split(",");
-            const count = units.filter(u => [...u.activeEffectDetails.values()].some(d => d.abilityEffectType.startsWith(prefix))).length;
+            const count = units.filter(u => unitStateTypes(u).some(t => t.startsWith(prefix))).length;
             return compareInt(cond.compareOperator, count, threshold ?? "0");
         }
         case CompareContent.ONGOING_DAMAGE:
@@ -682,6 +690,14 @@ function checkOtherCondition(state: BattleState, cond: BattleCondition): boolean
             // all, not "step 1"). Unrelated to TSUBAME_* (a separate, still-unimplemented
             // character-specific mechanic - see MISSING_AND_UNCERTAIN.md's B5).
             return compareInt(cond.compareOperator, state.trueActorUnit?.currentComboActionStep ?? 0, cond.compareValue);
+        case CompareContent.COUNTDOWN: {
+            const cd = state.actorTeam.countdown
+            return !!cd?.unit && compareInt(cond.compareOperator, cd.value, cond.compareValue);
+        }
+        case CompareContent.COUNTDOWN_CANCEL_REACHED: {
+            const cd = state.actorTeam.countdown
+            return compareBool(cond.compareOperator, !!cd?.unit && cd.cancelMax > 0 && cd.cancelMax <= cd.cancelTotal, cond.compareValue);
+        }
         default:
             return false;
     }
@@ -750,14 +766,19 @@ export const isConditionSetActive = (eff: SkillDetail, state: BattleState) =>
 export const isActiveConditionSetMet = (eff: SkillDetail, state: BattleState) =>
     isConditionSetActiveForPvP((eff.activeConditionSetIdCsv ?? "").split(","), state)
 
-export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], state: BattleState): boolean =>
-    conditionSetIdCsvList.every(conditionSetIdCsv => conditionSetIdCsv.split(",").every(conditionSetId => {
-        if (!conditionSetId.length || conditionSetId === "0") return true
-
+// [CONFIRMED 3.19] BattleConditionUtils.IsMatchConditionSets (0x17e30b0): an empty csv matches; otherwise the
+// csv's condition SETS are OR'd (Enumerable.Any) and the conditions inside one set are AND'd. (This used to AND
+// the sets, so e.g. an enemy's "when broken, stunned or the countdown cancel is met" never fired.)
+export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], state: BattleState): boolean => {
+    const ids = conditionSetIdCsvList.flatMap(csv => csv.split(",")).filter(id => id.length && id !== "0")
+    if (!ids.length) return true
+    return ids.some(conditionSetId => {
         const battleConditionSet = battleConditionSets[conditionSetId]
+        if (!battleConditionSet) return false
         for (const conditionId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
             const battleCondition = battleConditions[conditionId]
             if (!isMatchCondition(battleCondition, state)) return false
         }
         return true
-    }))
+    })
+}

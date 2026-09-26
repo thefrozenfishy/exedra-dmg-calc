@@ -3,7 +3,7 @@ import { compareTurnOrder, KiokuState, PvPTeam, type FuaMap } from "./PvPTeam";
 import { ProcessTiming } from "./BattleConditionParser";
 import { BattleRng, type RngMode, type RngDecision } from "./BattleRng";
 import type { PvPKioku } from "./PvPKioku";
-import { startTimingSkills } from "./PvE";
+import { startTimingSkills, type WaveMeta } from "./PvE";
 import { unitLabel } from "./UnitStateEngine";
 
 export interface BattleOptions {
@@ -11,6 +11,7 @@ export interface BattleOptions {
     rngMode?: RngMode                                           // default "seed"
     decisions?: Map<number, RngDecision> | Record<number, RngDecision> // manual RNG flips / target picks, by event index
     manualTargeting?: boolean                                   // PvE "Manual": the user picks every target
+    waveMeta?: WaveMeta[]                                       // PvE: Link HP settings of every wave (index 0 = first)
 }
 
 export class PvPBattle {
@@ -33,6 +34,7 @@ export class PvPBattle {
     // `this.seed` so an interesting run can be reproduced).
     // Later enemy waves (PvE): spawned when team2 is wiped.
     private pendingWaves: PvPKioku[][] = [];
+    private waveMeta: WaveMeta[] = [];
     currentWave = 1;
     // Enemy start-timing acts (BattleStart / WaveStart condition rows) still to run.
     private startTimingActs: [KiokuState, number][] = [];
@@ -42,6 +44,7 @@ export class PvPBattle {
 
     constructor(team1: PvPTeam, team2: PvPTeam, debug = false, seed?: number, opts?: BattleOptions) {
         this.pendingWaves = [...(opts?.waves ?? [])];
+        this.waveMeta = [...(opts?.waveMeta ?? [])];
         this.team1 = team1;
         this.team2 = team2;
         this.debug = debug;
@@ -52,6 +55,7 @@ export class PvPBattle {
         this.team1.manualTargeting = this.team2.manualTargeting = !!opts?.manualTargeting;
         this.team1.isTeam1 = true;
         const hook = (actor: KiokuState, type: TargetType, label?: string) => {
+            this.team2.syncLinkHp()
             this.actionSnapshots.push(this.getCurrentState({ actor, type, label }))
         }
         this.team1.snapshotHook = hook;
@@ -87,6 +91,7 @@ export class PvPBattle {
         ]
         this.team1.recomputeDerivedStats()
         this.team2.recomputeDerivedStats()
+        this.team2.setupLinkHp(this.waveMeta[0])
         this.startTimingActs = this.collectStartTimingActs()
 
         if (!this.isOver) this.traverseToNextActor()
@@ -135,6 +140,8 @@ export class PvPBattle {
             lastTargetType: as ? as.type : this.lastTargetType,
             actionLabel: as?.label,
             events: this.team1.eventLog.splice(0),
+            linkHp: this.team2.linkHp ? { ...this.team2.linkHp } : undefined,
+            countdown: this.team2.countdown?.unit ? { value: this.team2.countdown.value, max: this.team2.countdown.max, cancelTotal: this.team2.countdown.cancelTotal, cancelMax: this.team2.countdown.cancelMax, unit: this.team2.countdown.unit.kioku.name } : undefined,
             rngEvents: this.rng.drain(),
         }
     }
@@ -166,13 +173,13 @@ export class PvPBattle {
     // End-of-turn effects (TurnEnd passives, DOT ticks, buff expiry) are folded into the last one.
     // The battle ends as soon as one side has no living unit.
     get isOver(): boolean {
-        return this.team1.isWiped || (this.team2.isWiped && !this.pendingWaves.length)
+        return this.team1.isWiped || (this.team2.waveCleared && !this.pendingWaves.length)
     }
 
     // "win" / "lose" once the battle is over (team1 = allies).
     get result(): "win" | "lose" | undefined {
         if (this.team1.isWiped) return "lose"
-        if (this.team2.isWiped && !this.pendingWaves.length) return "win"
+        if (this.team2.waveCleared && !this.pendingWaves.length) return "win"
         return undefined
     }
 
@@ -194,6 +201,7 @@ export class PvPBattle {
         this.team2.addEffectsToBank()
         const fuas = this.team2.applyPassivesForTiming(ProcessTiming.BATTLE_START, TargetType.init)
         this.team2.recomputeDerivedStats()
+        this.team2.setupLinkHp(this.waveMeta[this.currentWave - 1])
         for (const k of this.team2.kiokuStates) k.resetDistanceRemaining()
         if (Object.keys(fuas).length) this.battleStartFollowUps.push([this.team2, fuas])
         this.startTimingActs = this.collectStartTimingActs()
@@ -216,11 +224,18 @@ export class PvPBattle {
         return this.team1.useUltimateOf(ready[i - 1])
     }
 
+    private supplyEndless(): BattleSnapshot[] | undefined {
+        if (!this.team2.supplyEndless().length) return undefined
+        const snap = { ...this.getCurrentState(), lastActor: this.team2.linkHp?.name || "Reinforcements", lastTeamIsTeam1: false, lastActorPos: undefined, lastTargetType: undefined }
+        this.actionSnapshots = []
+        return [snap]
+    }
+
     // Returns [] once the battle is over.
     executeNextAction(): BattleSnapshot[] {
         this.actionSnapshots = []
         if (this.isOver) return []
-        if (this.team2.isWiped && this.pendingWaves.length) {
+        if (this.team2.waveCleared && this.pendingWaves.length) {
             const waveSnap = this.spawnNextWave()
             this.traverseToNextActor()
             return [waveSnap]
@@ -237,7 +252,12 @@ export class PvPBattle {
             const snaps = this.actionSnapshots
             this.actionSnapshots = []
             if (!this.isOver) this.traverseToNextActor()
-            if (snaps.length) return snaps
+            if (snaps.length) return [...snaps, ...this.formChange()]
+        }
+        // (With every enemy down there is nothing to fire ultimates at: refill first.)
+        if (this.team2.isWiped) {
+            const supplied = this.supplyEndless()
+            if (supplied) return supplied
         }
         this.lastTeamIsTeam1 = false
         let eff: [KiokuState, TargetType] | undefined = this.team2.useUltimate()
@@ -246,6 +266,9 @@ export class PvPBattle {
             eff = this.team1.manualTargeting ? this.manualUltimateWindow() : this.team1.useUltimate()
         }
         if (!eff) {
+            // Endless (Link HP type 1) waves refill empty positions before time moves on - its own entry.
+            const supplied = this.supplyEndless()
+            if (supplied) return supplied
             const actorTeam = this.traverseToNextActor()
             eff = actorTeam.useAttackOrSkill()
             this.lastTeamIsTeam1 = this.team1 === actorTeam
@@ -264,12 +287,24 @@ export class PvPBattle {
             snaps.push(this.getCurrentState()) // e.g. a stunned unit's skipped turn
         }
         this.actionSnapshots = []
-        return snaps
+        return [...snaps, ...this.formChange()]
+    }
+
+    // Boss form change (ModeChangeAct): queued after the act that crossed the threshold, as its own entry.
+    private formChange(): BattleSnapshot[] {
+        if (this.isOver) return []
+        const unit = this.team2.checkModeChange()
+        if (!unit) return []
+        const snap: BattleSnapshot = { ...this.getCurrentState(), lastActor: unit.kioku.name, lastTeamIsTeam1: false, lastActorPos: unit.posIdx, lastTargetType: undefined, actionLabel: "Form change" }
+        const fuas = this.actionSnapshots
+        this.actionSnapshots = []
+        return [snap, ...fuas]
     }
 
     resolveEndOfTurn(): void {
         this.team2.resolveEndOfTurn()
         this.team1.resolveEndOfTurn()
+        this.team2.syncLinkHp()
         console.debug("===========================================================================")
     }
 }
