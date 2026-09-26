@@ -1502,7 +1502,14 @@ export class PvPTeam {
             return pool[(this.rng as BattleRng).pickTarget(label, pool.map(unitLabel))]
         }
         const resolveUncached = this.manualTargeting && this.rng instanceof BattleRng ? resolveManual : resolvePrimaryTarget
+        // completeAction resolves a friendly effect against [actor] first, then applyEffect widens it to
+        // the whole team (the `this === target` branch). In manual mode that placeholder is not a
+        // decision: pass the actor through uncached so the real pick happens against the team
+        // (previously the one-option pool made the actor the cached pick, e.g. Hollow Woman's
+        // battle skill landing on herself).
+        const isFriendPlaceholder = side === "friend" && possibleTargets.length === 1 && possibleTargets[0] === actor
         const resolveCached = (): KiokuState | null => {
+            if (this.manualTargeting && isFriendPlaceholder) return actor.isDead ? null : actor
             const hit = this.actionPrimaryTargets.get(side)
             if (hit && !hit.isDead && possibleTargets.includes(hit)) return hit
             const picked = resolveUncached()
@@ -1618,21 +1625,51 @@ export class PvPTeam {
         return additionalAct
     }
 
-    useUltimate(): [KiokuState, TargetType] | undefined {
-        const readyKiokus = this.aliveKiokus
+    // Units whose ultimate can fire right now (full MP, not broken, able to act), in slot order.
+    readyUltimates(): KiokuState[] {
+        return this.aliveKiokus
             .filter(k => k.currentMp >= k.maxMp)
             .filter(k => k.maxMp > 0)
-            .filter(k => k.currentRemainingBreakGauge > 0)
+            // Not broken. (Was `currentRemainingBreakGauge > 0`, which never holds for PvE allies:
+            // they have no break gauge at all, so their ultimates never fired in PvE.)
+            .filter(k => k.maxBreakGauge <= 0 || k.currentRemainingBreakGauge > 0)
             // [RECONSTRUCTED - see KiokuState.canNotAction] a stunned unit can't fire an
             // otherwise-ready ultimate. Excluded here (rather than "ready but does
             // nothing") so their MP stays banked and the ult goes off once stun wears off,
             // instead of being burned on a no-op - not confirmed against the source, but
             // it's the reading least likely to feel like a bug either way this resolves.
             .filter(k => !k.canNotAction)
-        if (!readyKiokus.length) return;
-        const actor = readyKiokus[0]
+    }
+
+    useUltimate(): [KiokuState, TargetType] | undefined {
+        const actor = this.readyUltimates()[0]
+        if (!actor) return;
+        return this.useUltimateOf(actor)
+    }
+
+    useUltimateOf(actor: KiokuState): [KiokuState, TargetType] {
         this.performAction(actor, TargetType.specialId)
         return [actor, TargetType.specialId]
+    }
+
+    // Manual control (PvE "Manual") of an ally's action: Battle Skill (when the team has SP) or Basic
+    // Attack, or fire one ready ultimate right away and then choose again. Returns undefined when the
+    // turn can't continue (the actor died or the enemy side was wiped by the ultimates).
+    private get isManualControl(): boolean {
+        return this.manualTargeting && this.rng instanceof BattleRng
+    }
+
+    private chooseAllyAction(actor: KiokuState, what: string): TargetType | undefined {
+        for (;;) {
+            if (actor.isDead || this.otherTeam.isWiped) return undefined
+            const options: { label: string, type?: TargetType, ult?: KiokuState }[] = []
+            if (this.currentSp > 0) options.push({ label: `Battle Skill (SP ${this.currentSp})`, type: TargetType.skillId })
+            options.push({ label: "Basic Attack", type: TargetType.attackId })
+            for (const u of this.readyUltimates()) options.push({ label: `Ultimate: ${unitLabel(u)}`, ult: u })
+            const choice = options[(this.rng as BattleRng).pick("action", `${unitLabel(actor)} · ${what}: choose an action`, options.map(o => o.label))]
+            if (!choice.ult) return choice.type
+            this.useUltimateOf(choice.ult)
+        }
     }
 
     useAttackOrSkill(): [KiokuState, TargetType] {
@@ -1686,7 +1723,11 @@ export class PvPTeam {
                     if (choice) this.performAction(actor, effType, i === 0 ? turnLabel : undefined, choice.skillMstId)
                     continue
                 }
-                effType = this.currentSp ? TargetType.skillId : TargetType.attackId
+                const chosen = this.isManualControl
+                    ? this.chooseAllyAction(actor, actionNum >= 2 ? `turn (combo ${i + 1})` : "turn")
+                    : this.currentSp ? TargetType.skillId : TargetType.attackId
+                if (chosen === undefined) break
+                effType = chosen
                 this.performAction(actor, effType, i === 0 ? turnLabel : undefined)
             }
             actor.currentComboActionStep = 0
@@ -1720,7 +1761,10 @@ export class PvPTeam {
 
         while (actor.pendingBonusTurns > 0 && !actor.isDead) {
             actor.pendingBonusTurns--
-            const bonusEffType = actor.enemy ? TargetType.skillId : this.currentSp ? TargetType.skillId : TargetType.attackId
+            const bonusEffType = actor.enemy ? TargetType.skillId
+                : this.isManualControl ? this.chooseAllyAction(actor, "extra action")
+                : this.currentSp ? TargetType.skillId : TargetType.attackId
+            if (bonusEffType === undefined) break
             const bonusChoice = actor.enemy ? selectEnemySkill(actor, this, this.rng, id => this.enemySkillHasTarget(actor, id)) : undefined
             if (actor.enemy && !bonusChoice) continue
             this.resetActionTallies()

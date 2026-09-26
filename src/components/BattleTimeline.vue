@@ -133,7 +133,7 @@ import type { RngEvent, RngKind } from '../models/BattleRng'
 const props = withDefaults(defineProps<{ states: BattleSnapshot[], showSp?: boolean, rngEditable?: boolean }>(), { showSp: true, rngEditable: false })
 const emit = defineEmits<{ decide: [event: RngEvent, value: boolean | number] }>()
 
-const KIND_LABEL: Record<RngKind, string> = { crit: 'Crit', effect: 'Effect', target: 'Target', skill: 'Skill' }
+const KIND_LABEL: Record<RngKind, string> = { crit: 'Crit', effect: 'Effect', target: 'Target', skill: 'Skill', action: 'Action' }
 const pctText = (p: number) => `${p >= 10 ? p.toFixed(1).replace(/\.0$/, '') : p.toFixed(2).replace(/0$/, '')}%`
 
 const skillTranslate = {

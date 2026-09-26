@@ -17,12 +17,13 @@
 // `decisions` and the battle is replayed from the start; a stored decision only applies if the
 // event at that index still has the same kind and label (earlier flips can change what happens).
 //
-// Manual targeting (PvE): pickTarget() asks for a stored decision and throws PendingDecision when
-// there is none, so the page can stop, ask the user, and replay with the answer.
+// Manual control (PvE): pick() asks for a stored decision (a target, the ally's action, whether to
+// fire an ultimate) and throws PendingDecision when there is none, so the page can stop, ask the
+// user, and replay with the answer.
 import { seededRng } from "./BattleMath";
 
 export type RngMode = "hit" | "miss" | "seed" | "manual"
-export type RngKind = "crit" | "effect" | "target" | "skill"
+export type RngKind = "crit" | "effect" | "target" | "skill" | "action"
 
 export interface RngOption { label: string, weight: number }
 
@@ -124,17 +125,22 @@ export class BattleRng {
         return outcome
     }
 
-    // Manual targeting: the user picks. Uses the stored decision for this point of the battle or
-    // throws PendingDecision (nothing is consumed or recorded before the throw).
-    pickTarget(label: string, optionLabels: string[]): number {
+    // Manual control: the user decides (a target, Battle Skill vs Basic Attack, whether to fire an
+    // ultimate). Uses the stored decision for this point of the battle or throws PendingDecision
+    // (nothing is consumed or recorded before the throw). A single option is taken without asking.
+    pick(kind: RngKind, label: string, optionLabels: string[]): number {
         if (optionLabels.length <= 1) return optionLabels.length - 1
-        const d = this.stored("target", label)
+        const d = this.stored(kind, label)
         const options = optionLabels.map(l => ({ label: l, weight: 100 / optionLabels.length }))
         if (!d || typeof d.value !== "number" || d.value < 0 || d.value >= optionLabels.length) {
-            throw new PendingDecision({ index: this.nextIndex, kind: "target", label, options, outcome: -1, defaultOutcome: -1, decided: false, userPick: true })
+            throw new PendingDecision({ index: this.nextIndex, kind, label, options, outcome: -1, defaultOutcome: -1, decided: false, userPick: true })
         }
-        this.record({ kind: "target", label, options, outcome: d.value, defaultOutcome: d.value, decided: true, userPick: true })
+        this.record({ kind, label, options, outcome: d.value, defaultOutcome: d.value, decided: true, userPick: true })
         return d.value
+    }
+
+    pickTarget(label: string, optionLabels: string[]): number {
+        return this.pick("target", label, optionLabels)
     }
 
     // Events recorded since the last drain (attached to the next battle snapshot).

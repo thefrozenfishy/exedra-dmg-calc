@@ -160,7 +160,7 @@
         conditions, enemies pick targets by role aggro, and later waves appear when a wave is cleared. Summons and form
         changes are not simulated yet.</p>
       <div class="sim-controls">
-        <SegmentedToggle v-model="targetMode" :options="TARGET_MODE_OPTIONS" label="Targeting" />
+        <SegmentedToggle v-model="targetMode" :options="TARGET_MODE_OPTIONS" label="Control" />
         <p class="sim-hint">{{ TARGET_MODE_OPTIONS.find(o => o.value === targetMode)?.title }}</p>
         <RngControls v-model:mode="rngMode" :seed="seed" :changed="changedRolls" :disabled="!canRun"
           @update:seed="setSeed" @reset="resetRolls" />
@@ -168,15 +168,16 @@
       <div class="sim-tools">
         <button class="btn btn-accent" @click="runSimulation" :disabled="!canRun">Run Simulation</button>
         <button v-if="pickCount" class="btn" @click="resetPicks" :disabled="!canRun"
-          title="Forget every target you picked and start the battle over">Reset {{ pickCount }} target pick{{ pickCount === 1 ? '' : 's' }}</button>
+          title="Forget every decision you made and start the battle over">Reset {{ pickCount }} decision{{ pickCount === 1 ? '' : 's' }}</button>
         <label class="field inline"><span class="field-label">Turns</span>
           <input v-model.number="simTurns" type="number" min="1" max="200" /></label>
-        <span v-if="pending" class="result waiting">Waiting for a target pick</span>
+        <span v-if="pending" class="result waiting">Waiting for your decision</span>
         <span v-else-if="battleResult" class="result" :class="battleResult">{{ battleResult === 'win' ? 'Cleared' : 'Defeated' }}</span>
       </div>
       <BattleTimeline :states="battleOutput" :show-sp="false" :rng-editable="rngMode === 'manual'" @decide="onDecide" />
       <div v-if="pending" ref="pickPanel" class="pick-panel">
-        <div class="pick-head">Pick a target <span class="muted">· after action {{ actionCount }}</span></div>
+        <div class="pick-head">{{ pending.kind === 'target' ? 'Pick a target' : pending.label.startsWith('Between') ? 'Fire an ultimate?' : 'Choose an action' }}
+          <span class="muted">· after action {{ actionCount }}</span></div>
         <div class="pick-label">{{ pending.label }}</div>
         <div class="pick-options">
           <button v-for="(o, i) in pending.options" :key="i" type="button" class="btn pick-btn" @click="pickTarget(i)">
@@ -184,8 +185,8 @@
             <span v-if="hpOf(o.label)" class="muted small">{{ hpOf(o.label) }}</span>
           </button>
         </div>
-        <p class="muted small">Every pick can be changed later from that action's roll list; the battle then re-runs from
-          the start.</p>
+        <p class="muted small">Every decision can be changed later from that action's roll list; the battle then re-runs
+          from the start.</p>
       </div>
     </section>
   </div>
@@ -318,8 +319,8 @@ const canRun = computed(() => !!teamKiokus.value.length && !!stageId.value)
 // rolls like any other. Manual: the battle stops at every target decision (either team) until
 // you pick; picks and changed rolls are replayed from the start (decisions, by roll index).
 const TARGET_MODE_OPTIONS = [
-  { value: 'auto', label: 'Auto', title: 'Targets follow the game\'s targeting rules (AI); where they pick at random, the RNG setting below decides.' },
-  { value: 'manual', label: 'Manual', title: 'The battle stops at every target decision, for both teams, until you pick the target.' },
+  { value: 'auto', label: 'Auto', title: 'Full auto: allies use Battle Skill whenever there is SP, fire ultimates as soon as they are ready, and targets follow the game\'s targeting rules (AI); where those pick at random, the RNG setting below decides.' },
+  { value: 'manual', label: 'Manual', title: 'You play the allies: on each ally turn choose Battle Skill or Basic Attack (or fire a ready ultimate first), choose which ultimates to fire between actions, and pick every target, for both teams. The battle stops at each decision until you choose.' },
 ] as const
 const targetMode = useSetting<'auto' | 'manual'>('pveTargetMode', 'auto')
 const rngMode = useSetting<RngMode>('pveRngMode', 'seed')

@@ -4,6 +4,7 @@ import { ProcessTiming } from "./BattleConditionParser";
 import { BattleRng, type RngMode, type RngDecision } from "./BattleRng";
 import type { PvPKioku } from "./PvPKioku";
 import { startTimingSkills } from "./PvE";
+import { unitLabel } from "./UnitStateEngine";
 
 export interface BattleOptions {
     waves?: PvPKioku[][]                                        // later PvE enemy waves
@@ -198,6 +199,22 @@ export class PvPBattle {
         return { ...this.getCurrentState(), lastActor: `Wave ${this.currentWave}`, lastActorPos: undefined, lastTargetType: undefined, wave: this.currentWave }
     }
 
+    // Manual control: between actions, before time moves on to the next actor, the player may fire any
+    // ready ultimate (one per prompt, in the order picked; each is its own action and the prompt comes
+    // back while ultimates are ready) or continue. "Continue" closes the prompt until the next turn.
+    private ultimateWindowPassed = false
+    private manualUltimateWindow(): [KiokuState, TargetType] | undefined {
+        if (this.ultimateWindowPassed) return undefined
+        const ready = this.team1.readyUltimates()
+        if (!ready.length) return undefined
+        const i = this.rng.pick("action", "Between actions: fire an ultimate?", ["Continue", ...ready.map(u => `Ultimate: ${unitLabel(u)}`)])
+        if (i <= 0) {
+            this.ultimateWindowPassed = true
+            return undefined
+        }
+        return this.team1.useUltimateOf(ready[i - 1])
+    }
+
     // Returns [] once the battle is over.
     executeNextAction(): BattleSnapshot[] {
         this.actionSnapshots = []
@@ -225,12 +242,13 @@ export class PvPBattle {
         let eff: [KiokuState, TargetType] | undefined = this.team2.useUltimate()
         if (!eff) {
             this.lastTeamIsTeam1 = true
-            eff = this.team1.useUltimate()
+            eff = this.team1.manualTargeting ? this.manualUltimateWindow() : this.team1.useUltimate()
         }
         if (!eff) {
             const actorTeam = this.traverseToNextActor()
             eff = actorTeam.useAttackOrSkill()
             this.lastTeamIsTeam1 = this.team1 === actorTeam
+            this.ultimateWindowPassed = false
         }
         this.lastActor = eff[0]
         this.lastTargetType = eff[1]
