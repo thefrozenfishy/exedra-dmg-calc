@@ -1,6 +1,6 @@
 <template>
   <div class="setup-page team-page">
-    <h1 class="page-title">PvP Action Order Calculator</h1>
+    <h1 class="page-title">PvP Simulator</h1>
 
     <section class="toolbar card share-card-actions">
       <div class="toolbar-left">
@@ -92,17 +92,16 @@
     </div>
 
     <section class="card battle-order-card">
-      <h2 class="section-title">Battle Order</h2>
+      <h2 class="section-title">Battle Simulator</h2>
+
+      <p class="hint-text">This simulates a battle, using a random seed. Custom seed & rng decisions coming soon!</p>
 
       <div class="notice-banner">
-        <h3 class="notice-tag">Under construction</h3>
-        <p>Take this with a big grain of salt, as my understanding of the mechanics here are not perfect, nor do I
-          want to use the time to special case all different attacks, targeting etc.</p>
+        <h3 class="notice-tag">PvP simulator is fully implemented</h3>
+        <p>The PvP simulator now has been fully rewritten and should simulate the game closely.</p>
+        <p>If you spot any situation where the simulator and in-game doesn't agree please notify me on discord. It's annoyingly hard to test due to the play count limit!</p>
+        <p>Just @TFF!</p>
       </div>
-
-      <p class="hint-text">Use this to get a gut feel for how characters and speed vs AV vs AA works and how speed
-        ties resolve. I'll try to make sure all common pvp characters work identical to in-game, but niche picks are
-        at your own risk. If anything looks weird, just give me a poke with an example team!</p>
 
       <button class="btn btn-accent run-sim-btn" @click="runSimulation" :disabled="!isFullBattle">Run
         Simulation</button>
@@ -521,7 +520,7 @@ async function importBattle(ev: Event) {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
-  border: 1px solid var(--danger);
+  border: 1px solid var(--success);
   border-radius: var(--radius-sm);
   padding: 0.6rem 0.85rem;
   margin-bottom: 0.75rem;
@@ -533,8 +532,8 @@ async function importBattle(ev: Event) {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-weight: 700;
-  color: var(--danger);
-  background: rgba(255, 155, 143, 0.18);
+  color: var(--success);
+  background: rgba(10, 78, 36, 0.18);
   border-radius: 999px;
   padding: 0.2rem 0.5rem;
   margin-top: 0.1rem;
