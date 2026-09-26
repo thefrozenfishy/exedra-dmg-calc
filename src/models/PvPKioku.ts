@@ -5,6 +5,16 @@ import { Kioku } from './Kioku';
 
 export class PvPKioku extends Kioku {
     effects: SkillDetail[];
+    // Same effects in passive TRIGGER order: ability, then crystalis, then ascensions/portrait/support.
+    // PassiveSkill.TriggeringOnBattleStart stable-sorts by IBattleStartTriggerPriority, and only
+    // barrier/effect-value-variation/add-turn states override the default, so everything else keeps
+    // this list order. Two constraints pin it: the kit's CHARGE (ability) must run before an EX crys
+    // GAIN_CHARGE_POINT (Tenebrous Arcana "+1 Magic at battle start" was wiped by CHARGE 0/3), and crys
+    // SPD states must come before the other SPD states for the f32 gauge tie-break
+    // (fixtures/mirrored-thunder-torrent-ally-first.json). `effects` itself stays crys-first for stats.
+    triggerOrderEffects: SkillDetail[];
+    private crysKeys = new Set<string>()
+    private abilityKeys = new Set<string>()
     private scalableEffects: Map<string, SkillDetail> = new Map()
     private unscalableEffects: Map<string, SkillDetail> = new Map()
     private buffMult = 1;
@@ -21,8 +31,10 @@ export class PvPKioku extends Kioku {
         this.crys.forEach(c => {
             this.addEffect(passiveDetails, "passiveSkillMstId", 0, c, false);
         });
+        this.unscalableEffects.forEach((_, key) => this.crysKeys.add(key));
 
         this.addEffect(passiveDetails, "passiveSkillMstId", this.data.ability_id, this.abilityLvl, true);
+        this.scalableEffects.forEach((_, key) => this.abilityKeys.add(key));
 
         for (let i = 1; i <= this.ascension; i++) {
             const passiveId = this.data[`ascension_${i}_effect_2_id` as keyof KiokuData] as number;
@@ -72,6 +84,11 @@ export class PvPKioku extends Kioku {
             }
             return { ...e, value1: v }
         });
+        const rank = (e: SkillDetail) => {
+            const key = String(skillDetailId(e))
+            return this.abilityKeys.has(key) ? 0 : this.crysKeys.has(key) ? 1 : 2
+        }
+        this.triggerOrderEffects = [0, 1, 2].flatMap(r => this.effects.filter(e => rank(e) === r));
     }
 
     addEffect(map: Record<any, SkillDetail>, key: SkillKey, id: number, lvl: number, affectedByMult: boolean) {

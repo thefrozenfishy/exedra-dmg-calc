@@ -26,6 +26,8 @@ GameDirectorBase.Forward [0x1499ab0]
         if !act.IsDecided -> skip like r==1
   Execute act; CheckHpGaugeRevive(); ...
   if act is TurnUnitActBase|SpecialAttackAct|AdditionalSkillAct|StartTimingAct: battleUnitDic[act.unitId].TurnNum += 1
+  info = TurnActSystem.CreateTurnActUnitOrderInfo(...)   (turn-order preview, sees TurnNum+1)
+  if same act types: battleUnitDic[act.unitId].TurnNum -= 1          (net 0)
 ```
 `AutoAction` calls `skill = UnitBrain.AutoSelectActiveSkillOrNormalAttack(bundle, unit, director, opponents, friends)` [0x17f1060]. For an enemy, opponents are the ally list and friends are the enemy list. Then `(oppTarget, friendTarget) = UnitBrain.TargetingUnits(teamTargetId, unit, skill, opponents, friends)` [0x17f2ea0]. If `oppTarget != 0 && oppTarget != current team target`, it calls `ChangeTarget(team, oppTarget)`. Finally `TurnUnitActBase.SetDecisionContent(skill.Id, friendTarget)`. If no skill comes back, the act is not decided and the turn passes with no action.
 
@@ -170,8 +172,7 @@ Contents actually used by enemy rows, with counts over all rows:
 
 Other checker cases: 15 HpGaugeCount = `CurrentHpGaugeCount`, 16 IsBreak.
 
-- **TurnNum** (unit+0x88) starts at **1** in the BattleUnit ctor. It is incremented by 1 in `GameDirectorBase.Forward` after every executed act owned by the unit of type TurnUnitActBase (TurnUnitAct, **ComboTurnUnitAct**, AdditionalTurnUnitAct, ReActionTurnUnitAct), SpecialAttackAct, AdditionalSkillAct (counters and triggered skills) or StartTimingAct. Skipped turns (break, stun) do **not** increment it.
-- **UNCERTAIN / verify in game:** the literal code increments TurnNum per combo step and per additional-skill act, which breaks the designers' apparent "turn k, step s" tables (see Example 2). Keep a switch in the simulator for "+1 per unit turn" versus "+1 per act".
+- **TurnNum** (unit+0x88) starts at **1** in the BattleUnit ctor. The only lasting increment is `BattleUnit.PassingTurn` [0x1388790] (`TurnNum += 1` after the states' PassingTurn), called once per turn by `ActExecutor.TurnEnd` [0x17e2160]. `GameDirectorBase.Forward` does `+1` after an executed TurnUnitActBase / SpecialAttackAct / AdditionalSkillAct / StartTimingAct, but only so `CreateTurnActUnitOrderInfo` previews the next turn, and does `-1` right after (net 0). So TurnNum = 1 + turns finished: combo steps, extra actions, ultimates and follow-ups don't count, and at a unit's first TurnStart it is 1 (condition 915 "own action is the 1st since battle start").
 
 ### 1.5 Start-timing actions (battle or wave start)
 - `LoadStartTimingConditionAction` [0x14964f0]: for each row, if any condition in its sets has content **2001** (BattleStart) or **2002** (WaveStart), it adds `StartConditionTimingAction{SkillMstId, timing}` for every skill id in the row.

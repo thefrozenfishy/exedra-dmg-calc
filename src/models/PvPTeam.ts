@@ -346,9 +346,13 @@ export class KiokuState {
     breakCount = 0
     // PvE enemy parameters (undefined for characters). See PvE.ts.
     enemy?: EnemyParams
-    // [CONFIRMED 3.19] BattleUnit.TurnNum (+0x88): starts at 1; GameDirectorBase.Forward adds 1 after every
-    // executed act of this unit (turn action incl. combo steps and extra turns, ultimate, follow-up,
-    // start-timing act). Read by the TURN (7) / EVERY_N_TURN (13) conditions.
+    // [CONFIRMED 3.19] BattleUnit.TurnNum (+0x88): 1 in every BattleUnit .ctor, +1 only in
+    // BattleUnit$$PassingTurn (called once by ActExecutor$$TurnEnd), i.e. "1 + turns this unit has
+    // finished". GameDirectorBase$$Forward does +1 after a TurnUnitActBase / SpecialAttackAct /
+    // AdditionalSkillAct / StartTimingAct, but only around CreateTurnActUnitOrderInfo (the turn-order
+    // preview) and takes it back with -1 right after (RVA 0x1499ab0, both blocks), so ultimates,
+    // follow-ups, combo steps and bonus actions don't count. Read by TURN (7) / EVERY_N_TURN (13),
+    // e.g. condition 915 "own action is the 1st since battle start" (Diamond Splash EX crys).
     turnNum = 1
     // Priority shared by every target of the effect currently being applied by this unit (set by
     // the caller that loops over targets, see nextTurnOrderPriority).
@@ -1312,7 +1316,9 @@ export class PvPTeam {
     }
 
     addEffectsToBank(): void {
-        this.kiokuStates.forEach(k => k.kioku.effects.forEach(e => {
+        // Trigger order, not stat order: see PvPKioku.triggerOrderEffects (ability before crystalis, so an
+        // EX crys GAIN_CHARGE_POINT lands after the kit's own CHARGE initialises the gauge).
+        this.kiokuStates.forEach(k => (k.kioku.triggerOrderEffects ?? k.kioku.effects).forEach(e => {
             k.addEffectToBank(e)
         }))
     }
@@ -1381,7 +1387,6 @@ export class PvPTeam {
     // combo step, follow-up) so the display can show each as its own entry.
     snapshotHook?: (actor: KiokuState, type: TargetType, label?: string) => void
     recordAction(actor: KiokuState, type: TargetType, label?: string) {
-        actor.turnNum++
         for (const u of [...this.kiokuStates, ...(this.otherTeam?.kiokuStates ?? [])]) u.checkHpGaugeRevive()
         this.snapshotHook?.(actor, type, label)
     }
@@ -1678,6 +1683,7 @@ export class PvPTeam {
         this.fireTiming(ProcessTiming.TURN_END, actor, undefined, effType)
         if (!actor.isDead && actor.triggerCutoutAtTurnEnd()) actor.nextTurnLabel = "Cutaway"
         actor.decrementActiveEffects()
+        actor.turnNum++ // BattleUnit.PassingTurn: after the states' PassingTurn
         return [actor, effType]
     }
 

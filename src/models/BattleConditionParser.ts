@@ -422,7 +422,8 @@ function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state
         case CompareContent.EP:
             return compareInt(cond.compareOperator, battleUnit.currentMp, cond.compareValue);
         case CompareContent.TURN:
-            // [CONFIRMED 3.19] BattleUnit.TurnNum (see KiokuState.turnNum).
+            // [CONFIRMED 3.19] BattleUnitConditionChecker$$Check case 7 reads BattleUnit.TurnNum
+            // (+0x88): starts at 1, +1 per finished turn - see KiokuState.turnNum.
             return compareInt(cond.compareOperator, battleUnit.turnNum, cond.compareValue);
         case CompareContent.IS_ACTOR:
             // [CONFIRMED shape, RECONSTRUCTED wiring] leftValue = (trueActorUnit != null

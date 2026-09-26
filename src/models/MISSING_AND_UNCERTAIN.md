@@ -29,13 +29,14 @@ QuestEnemySkillSetMst, EnemyConditionSetsAndActionMst, ScoreAttackStageMst, ...)
   Attacker/Breaker 5, + hate states).
 - [CONFIRMED] BattleStart/WaveStart condition rows run once as start-timing acts before the first turn.
 - [CONFIRMED] Combo enemies act N times per turn with ComboActionStep conditions.
-- [UNCERTAIN] TurnNum +1 per act (literal decompile) vs per turn: see PVE_ENEMY_AI_3.19.md section 1.4 and
-  example 2 (Sandbox Witch) - verify in game.
+- [RESOLVED] TurnNum is +1 per finished turn, not per act: Forward's +1 is undone by a -1 right after
+  CreateTurnActUnitOrderInfo; the real increment is BattleUnit.PassingTurn in ActExecutor.TurnEnd. See
+  PVE_ENEMY_AI_3.19.md section 1.4.
 - Not simulated: summons (SUMMON skills are never picked), mode changes, countdowns, link HP.
 - Waves: the next wave replaces a cleared one; [APPROXIMATION] its passives run as BATTLE_START.
 
 ## R8.3 Engine changes that also apply to PvP
-- `KiokuState.turnNum` (starts 1, +1 per executed act) drives TURN (7) / EVERY_N_TURN (13) conditions, which
+- `KiokuState.turnNum` (starts 1, +1 per finished turn at TurnEnd) drives TURN (7) / EVERY_N_TURN (13) conditions, which
   were always evaluated with TurnNum 0 before.
 - [CONFIRMED] UnitBrain.TargetingUnits: one opponent and one friendly target per skill; every single /
   proximity effect on that side uses it (`actionPrimaryTargets`). Before, each effect picked its own target,
