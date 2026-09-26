@@ -1,0 +1,5680 @@
+{
+ "format": "exedra-pvp-sim",
+ "version": 1,
+ "exportedAt": "2026-09-26T06:24:43.706Z",
+ "engine": "battle-engine-3.19",
+ "seed": 1465419472,
+ "turns": 30,
+ "notes": "Final Fatebloom, Rika and Mabayu all have Heroic Grace. Each Heroic Grace is its own later effect: the rightmost unit taken to 0 AV by Heroic Grace (Mabayu) acts first.",
+ "sequence": [
+  "== Initial state ==",
+  "  Allies (SP 5)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 60/90 | break 150/150 | spd 140.80 | AV 0.00 | magic 8/10",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 107.00 | AV 65.05 | magic 0/5",
+  "    Brilliant Beam               | HP 8,763/8,763  | MP 0/75 | break 137/137 | spd 123.00 | AV 28.50 | magic 0/5",
+  "    Hollow Woman                 | HP 10,120/10,120 | MP 0/75 | break 165/165 | spd 125.00 | AV 27.59",
+  "    Floral Ironspike             | HP 8,786/8,786  | MP 0/150 | break 150/150 | spd 100.00 | AV 71.59",
+  "  Enemies (SP 6)",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 155.15 | AV 36.04 | magic 0/5",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 155.15 | AV 36.04 | magic 0/5",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 155.15 | AV 36.04 | magic 0/5",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 155.15 | AV 36.04 | magic 0/5",
+  "    Time Stop Strike             | HP 9,790/9,790  | MP 0/75 | break 165/165 | spd 203.00 | AV 20.85 | magic 4/7",
+  "== Action 1: Final Fatebloom (Ally) - Battle Skill ==",
+  "  Final Fatebloom -> Lux\u2606Magica 701 (break -47)",
+  "  Final Fatebloom -> Lux\u2606Magica 701 (break -47)",
+  "  Final Fatebloom -> Lux\u2606Magica 701 (break -47)",
+  "  Final Fatebloom -> Lux\u2606Magica 701 (break -47)",
+  "  Final Fatebloom -> Time Stop Strike 704 (break -47)",
+  "  Allies (SP 4)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 90/90 | break 150/150 | spd 140.80 | AV 71.02 | magic 10/10",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 107.00 | AV 65.05 | magic 1/5",
+  "    Brilliant Beam               | HP 8,763/8,763  | MP 0/75 | break 137/137 | spd 123.00 | AV 28.50 | magic 0/5",
+  "    Hollow Woman                 | HP 10,120/10,120 | MP 0/75 | break 165/165 | spd 125.00 | AV 27.59",
+  "    Floral Ironspike             | HP 8,786/8,786  | MP 0/150 | break 150/150 | spd 100.00 | AV 71.59",
+  "  Enemies (SP 6)",
+  "    Lux\u2606Magica                   | HP 8,921/9,622  | MP 5/75 | break 103/150 | spd 155.15 | AV 36.04 | magic 0/5",
+  "    Lux\u2606Magica                   | HP 8,921/9,622  | MP 5/75 | break 103/150 | spd 155.15 | AV 36.04 | magic 0/5",
+  "    Lux\u2606Magica                   | HP 8,921/9,622  | MP 5/75 | break 103/150 | spd 155.15 | AV 36.04 | magic 0/5",
+  "    Lux\u2606Magica                   | HP 8,921/9,622  | MP 5/75 | break 103/150 | spd 155.15 | AV 36.04 | magic 0/5",
+  "    Time Stop Strike             | HP 9,086/9,790  | MP 5/75 | break 118/165 | spd 203.00 | AV 20.85 | magic 4/7",
+  "== Action 2: Final Fatebloom (Ally) - Ultimate ==",
+  "  Final Fatebloom -> Lux\u2606Magica 1,297 (break -103, BREAK)",
+  "  Final Fatebloom -> Lux\u2606Magica 1,297 (break -103, BREAK)",
+  "  Final Fatebloom -> Lux\u2606Magica 1,297 (break -103, BREAK)",
+  "  Final Fatebloom -> Lux\u2606Magica 1,297 (break -103, BREAK)",
+  "  Final Fatebloom -> Time Stop Strike 1,304 (break -113)",
+  "  Allies (SP 4)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 7/90 | break 150/150 | spd 186.40 | AV 32.19 | magic 2/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 127.00 | AV 39.06 | magic 1/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Brilliant Beam               | HP 8,763/8,763  | MP 0/75 | break 137/137 | spd 123.00 | AV 0.00 | magic 0/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 10,120/10,120 | MP 0/75 | break 165/165 | spd 125.00 | AV 0.00 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,786/8,786  | MP 15/150 | break 150/150 | spd 100.00 | AV 51.59 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.]",
+  "  Enemies (SP 6)",
+  "    Lux\u2606Magica                   | HP 7,624/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 7,624/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 7,624/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 7,624/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | HP 7,782/9,790  | MP 10/75 | break 5/165 | spd 203.00 | AV 20.85 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 3: Final Fatebloom (Ally) - Battle Skill [Extra action] ==",
+  "  Final Fatebloom -> Lux\u2606Magica 1,222 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux\u2606Magica 1,222 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux\u2606Magica 1,222 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux\u2606Magica 1,222 (broken dmg +20%)",
+  "  Final Fatebloom -> Time Stop Strike 1,227 (break -5, BREAK)",
+  "  Allies (SP 3)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 49/90 | break 150/150 | spd 186.40 | AV 10.73 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 127.00 | AV 23.31 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Brilliant Beam               | HP 8,763/8,763  | MP 0/75 | break 137/137 | spd 123.00 | AV 0.00 | magic 0/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 10,120/10,120 | MP 0/75 | break 165/165 | spd 125.00 | AV 0.00 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,786/8,786  | MP 30/150 | break 150/150 | spd 100.00 | AV 31.59 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.]",
+  "  Enemies (SP 6)",
+  "    Lux\u2606Magica                   | HP 6,402/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 6,402/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 6,402/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 6,402/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | HP 6,555/9,790  | MP 15/75 | break 0/165 BROKEN(100%) | spd 203.00 | AV 33.17 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 4: Hollow Woman (Ally) - Battle Skill ==",
+  "  Allies (SP 2)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 49/90 | break 150/150 | spd 186.40 | AV 5.36 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 0/75 | break 150/150 | spd 127.00 | AV 15.43 | magic 3/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Brilliant Beam               | HP 8,763/8,763  | MP 0/75 | break 137/137 | spd 123.00 | AV 0.00 | magic 0/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 10,120/10,120 | MP 30/75 | break 165/165 | spd 125.00 | AV 72.00 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,786/8,786  | MP 30/150 | break 150/150 | spd 100.00 | AV 21.59 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - At turn end, advances action order by 100%, and removes 2 debuffs.<br>On effect activation, Cutaway is removed.; Hollow Woman - Increases ATK by 50%.]",
+  "  Enemies (SP 6)",
+  "    Lux\u2606Magica                   | HP 6,402/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 6,402/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 6,402/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 6,402/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | HP 6,555/9,790  | MP 15/75 | break 0/165 BROKEN(100%) | spd 203.00 | AV 33.17 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 5: Brilliant Beam (Ally) - Battle Skill ==",
+  "  Allies (SP 1)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 49/90 | break 150/150 | spd 186.40 | AV 5.36 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 18/75 | break 150/150 | spd 127.00 | AV 15.43 | magic 4/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 8,763/8,763  | MP 33/75 | break 137/137 | spd 123.00 | AV 81.30 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 10,120/10,120 | MP 30/75 | break 165/165 | spd 125.00 | AV 72.00 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,786/8,786  | MP 30/150 | break 150/150 | spd 100.00 | AV 21.59 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - At turn end, advances action order by 100%, and removes 2 debuffs.<br>On effect activation, Cutaway is removed.; Hollow Woman - Increases ATK by 50%.]",
+  "  Enemies (SP 6)",
+  "    Lux\u2606Magica                   | HP 6,402/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 6,402/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 6,402/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 6,402/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 155.15 | AV 52.16 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | HP 6,555/9,790  | MP 15/75 | break 0/165 BROKEN(100%) | spd 203.00 | AV 33.17 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 6: Final Fatebloom (Ally) - Battle Skill ==",
+  "  Final Fatebloom -> Lux\u2606Magica 1,906 (crit, broken dmg +20%)",
+  "  Final Fatebloom -> Lux\u2606Magica 1,466 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux\u2606Magica 1,466 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux\u2606Magica 1,466 (broken dmg +20%)",
+  "  Final Fatebloom -> Time Stop Strike 1,596 (crit, broken dmg +20%)",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 91/90 | break 150/150 | spd 186.40 | AV 53.65 | magic 6/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 18/75 | break 150/150 | spd 127.00 | AV 10.07 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 8,763/8,763  | MP 33/75 | break 137/137 | spd 123.00 | AV 75.94 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 10,120/10,120 | MP 30/75 | break 165/165 | spd 125.00 | AV 66.64 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,786/8,786  | MP 30/150 | break 150/150 | spd 100.00 | AV 16.23 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - At turn end, advances action order by 100%, and removes 2 debuffs.<br>On effect activation, Cutaway is removed.; Hollow Woman - Increases ATK by 50%.]",
+  "  Enemies (SP 6)",
+  "    Lux\u2606Magica                   | HP 4,496/9,622  | MP 20/75 | break 0/150 BROKEN(140%) | spd 155.15 | AV 46.79 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 4,936/9,622  | MP 20/75 | break 0/150 BROKEN(140%) | spd 155.15 | AV 46.79 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 4,936/9,622  | MP 20/75 | break 0/150 BROKEN(140%) | spd 155.15 | AV 46.79 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 4,936/9,622  | MP 20/75 | break 0/150 BROKEN(140%) | spd 155.15 | AV 46.79 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | HP 4,959/9,790  | MP 20/75 | break 0/165 BROKEN(120%) | spd 203.00 | AV 27.80 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 7: Lux\u2606Magica (Ally) - Follow-up ==",
+  "  Lux\u2606Magica -> Lux\u2606Magica 352 (broken dmg +20%)",
+  "  Lux\u2606Magica -> Lux\u2606Magica 352 (broken dmg +20%)",
+  "  Lux\u2606Magica -> Lux\u2606Magica 352 (broken dmg +20%)",
+  "  Lux\u2606Magica -> Lux\u2606Magica 352 (broken dmg +20%)",
+  "  Lux\u2606Magica -> Time Stop Strike 304 (broken dmg +20%)",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 91/90 | break 150/150 | spd 186.40 | AV 53.65 | magic 6/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 18/75 | break 150/150 | spd 127.00 | AV 10.07 | magic 0/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 8,763/8,763  | MP 33/75 | break 137/137 | spd 123.00 | AV 75.94 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 10,120/10,120 | MP 30/75 | break 165/165 | spd 125.00 | AV 66.64 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,786/8,786  | MP 30/150 | break 150/150 | spd 100.00 | AV 16.23 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - At turn end, advances action order by 100%, and removes 2 debuffs.<br>On effect activation, Cutaway is removed.; Hollow Woman - Increases ATK by 50%.]",
+  "  Enemies (SP 6)",
+  "    Lux\u2606Magica                   | HP 4,144/9,622  | MP 25/75 | break 0/150 BROKEN(160%) | spd 155.15 | AV 46.79 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 4,584/9,622  | MP 25/75 | break 0/150 BROKEN(160%) | spd 155.15 | AV 46.79 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 4,584/9,622  | MP 25/75 | break 0/150 BROKEN(160%) | spd 155.15 | AV 46.79 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 4,584/9,622  | MP 25/75 | break 0/150 BROKEN(160%) | spd 155.15 | AV 46.79 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | HP 4,655/9,790  | MP 25/75 | break 0/165 BROKEN(140%) | spd 203.00 | AV 27.80 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 8: Final Fatebloom (Ally) - Ultimate ==",
+  "  Final Fatebloom -> Lux\u2606Magica 3,152 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux\u2606Magica 3,152 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux\u2606Magica 3,152 (broken dmg +20%)",
+  "  Final Fatebloom -> Lux\u2606Magica 3,152 (broken dmg +20%)",
+  "  Final Fatebloom -> Time Stop Strike 2,771 (broken dmg +20%)",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 7/90 | break 150/150 | spd 186.40 | AV 53.65 | magic 8/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 18/75 | break 150/150 | spd 127.00 | AV 10.07 | magic 0/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 8,763/8,763  | MP 33/75 | break 137/137 | spd 123.00 | AV 75.94 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 10,120/10,120 | MP 30/75 | break 165/165 | spd 125.00 | AV 66.64 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,786/8,786  | MP 30/150 | break 150/150 | spd 100.00 | AV 16.23 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - At turn end, advances action order by 100%, and removes 2 debuffs.<br>On effect activation, Cutaway is removed.; Hollow Woman - Increases ATK by 50%.]",
+  "  Enemies (SP 6)",
+  "    Lux\u2606Magica                   | HP 992/9,622    | MP 30/75 | break 0/150 BROKEN(180%) | spd 155.15 | AV 46.79 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 1,432/9,622  | MP 30/75 | break 0/150 BROKEN(180%) | spd 155.15 | AV 46.79 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 1,432/9,622  | MP 30/75 | break 0/150 BROKEN(180%) | spd 155.15 | AV 46.79 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 1,432/9,622  | MP 30/75 | break 0/150 BROKEN(180%) | spd 155.15 | AV 46.79 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | HP 1,884/9,790  | MP 30/75 | break 0/165 BROKEN(160%) | spd 203.00 | AV 27.80 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 9: Lux\u2606Magica (Ally) - Basic Attack ==",
+  "  Lux\u2606Magica -> Lux\u2606Magica 755 (broken dmg +20%)",
+  "  Allies (SP 1)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 7/90 | break 150/150 | spd 186.40 | AV 43.58 | magic 8/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 38/75 | break 150/150 | spd 127.00 | AV 78.74 | magic 0/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 8,763/8,763  | MP 33/75 | break 137/137 | spd 123.00 | AV 65.87 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 10,120/10,120 | MP 30/75 | break 165/165 | spd 125.00 | AV 56.57 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,786/8,786  | MP 30/150 | break 150/150 | spd 100.00 | AV 6.16 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - At turn end, advances action order by 100%, and removes 2 debuffs.<br>On effect activation, Cutaway is removed.; Hollow Woman - Increases ATK by 50%.]",
+  "  Enemies (SP 6)",
+  "    Lux\u2606Magica                   | HP 992/9,622    | MP 30/75 | break 0/150 BROKEN(180%) | spd 155.15 | AV 36.72 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 677/9,622    | MP 35/75 | break 0/150 BROKEN(200%) | spd 155.15 | AV 36.72 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 1,432/9,622  | MP 30/75 | break 0/150 BROKEN(180%) | spd 155.15 | AV 36.72 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | HP 1,432/9,622  | MP 30/75 | break 0/150 BROKEN(180%) | spd 155.15 | AV 36.72 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | HP 1,884/9,790  | MP 30/75 | break 0/165 BROKEN(160%) | spd 203.00 | AV 17.73 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 10: Floral Ironspike (Ally) - Battle Skill ==",
+  "  Floral Ironspike -> Lux\u2606Magica 992 (broken dmg +5%)",
+  "  Floral Ironspike -> Lux\u2606Magica 677",
+  "  Floral Ironspike -> Lux\u2606Magica 1,432 (crit, broken dmg +5%)",
+  "  Floral Ironspike -> Lux\u2606Magica 1,432 (broken dmg +5%)",
+  "  Floral Ironspike -> Time Stop Strike 1,884 (crit, broken dmg +5%)",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 7/90 | break 150/150 | spd 186.40 | AV 37.42 | magic 8/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 38/75 | break 150/150 | spd 127.00 | AV 72.58 | magic 1/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 8,763/8,763  | MP 33/75 | break 137/137 | spd 123.00 | AV 59.71 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 10,120/10,120 | MP 30/75 | break 165/165 | spd 125.00 | AV 50.41 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,786/8,786  | MP 60/150 | break 150/150 | spd 100.00 | AV 0.00 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).]",
+  "  Enemies (SP 6)",
+  "    Lux\u2606Magica                   | KO              | MP 35/75 | break 0/150 BROKEN(185%) | spd 155.15 | AV 30.57 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 40/75 | break 0/150 BROKEN(200%) | spd 155.15 | AV 30.57 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 35/75 | break 0/150 BROKEN(185%) | spd 155.15 | AV 30.57 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 35/75 | break 0/150 BROKEN(185%) | spd 155.15 | AV 30.57 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 35/75 | break 0/165 BROKEN(165%) | spd 203.00 | AV 11.58 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 11: Floral Ironspike (Ally) - Basic Attack ==",
+  "  Allies (SP 1)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 7/90 | break 150/150 | spd 186.40 | AV 37.42 | magic 8/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 9,622/9,622  | MP 38/75 | break 150/150 | spd 127.00 | AV 72.58 | magic 1/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 8,763/8,763  | MP 33/75 | break 137/137 | spd 123.00 | AV 59.71 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 10,120/10,120 | MP 30/75 | break 165/165 | spd 125.00 | AV 50.41 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,786/8,786  | MP 75/150 | break 150/150 | spd 100.00 | AV 100.00 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).]",
+  "  Enemies (SP 6)",
+  "    Lux\u2606Magica                   | KO              | MP 35/75 | break 0/150 BROKEN(185%) | spd 155.15 | AV 30.57 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 40/75 | break 0/150 BROKEN(200%) | spd 155.15 | AV 30.57 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 35/75 | break 0/150 BROKEN(185%) | spd 155.15 | AV 30.57 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 35/75 | break 0/150 BROKEN(185%) | spd 155.15 | AV 30.57 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 35/75 | break 0/165 BROKEN(165%) | spd 203.00 | AV 11.58 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 12: Time Stop Strike (Enemy) - Battle Skill ==",
+  "  Time Stop Strike -> Lux\u2606Magica 773 (break -20)",
+  "  Allies (SP 1)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 7/90 | break 150/150 | spd 186.40 | AV 25.85 | magic 8/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 8,849/9,622  | MP 43/75 | break 130/150 | spd 127.00 | AV 61.01 | magic 1/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 8,763/8,763  | MP 33/75 | break 137/137 | spd 123.00 | AV 48.13 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 10,120/10,120 | MP 30/75 | break 165/165 | spd 125.00 | AV 38.83 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,786/8,786  | MP 75/150 | break 150/150 | spd 100.00 | AV 88.42 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).]",
+  "  Enemies (SP 5)",
+  "    Lux\u2606Magica                   | KO              | MP 35/75 | break 0/150 BROKEN(185%) | spd 155.15 | AV 18.99 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 40/75 | break 0/150 BROKEN(200%) | spd 155.15 | AV 18.99 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 35/75 | break 0/150 BROKEN(185%) | spd 155.15 | AV 18.99 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 35/75 | break 0/150 BROKEN(185%) | spd 155.15 | AV 18.99 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 65/75 | break 165/165 | spd 203.00 | AV 49.26 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 13: Lux\u2606Magica (Enemy) - Battle Skill ==",
+  "  Lux\u2606Magica -> Brilliant Beam 475 (break -49)",
+  "  Lux\u2606Magica -> Lux\u2606Magica 323 (break -21)",
+  "  Lux\u2606Magica -> Hollow Woman 319 (break -21)",
+  "  Allies (SP 1)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 7/90 | break 150/150 | spd 186.40 | AV 6.85 | magic 8/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 8,526/9,622  | MP 48/75 | break 109/150 | spd 127.00 | AV 42.02 | magic 1/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 8,288/8,763  | MP 38/75 | break 88/137 | spd 123.00 | AV 29.14 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 9,801/10,120 | MP 35/75 | break 144/165 | spd 125.00 | AV 19.84 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,786/8,786  | MP 75/150 | break 150/150 | spd 100.00 | AV 69.43 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).]",
+  "  Enemies (SP 4)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 40/75 | break 0/150 BROKEN(200%) | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 35/75 | break 0/150 BROKEN(185%) | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 35/75 | break 0/150 BROKEN(185%) | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 65/75 | break 165/165 | spd 203.00 | AV 30.27 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 14: Lux\u2606Magica (Enemy) - Battle Skill ==",
+  "  Lux\u2606Magica -> Hollow Woman 428 (break -49)",
+  "  Lux\u2606Magica -> Brilliant Beam 354 (break -21)",
+  "  Lux\u2606Magica -> Floral Ironspike 338 (break -21)",
+  "  Allies (SP 1)",
+  "    Final Fatebloom              | HP 12,047/12,047 | MP 7/90 | break 150/150 | spd 186.40 | AV 6.85 | magic 8/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 8,526/9,622  | MP 48/75 | break 109/150 | spd 127.00 | AV 42.02 | magic 1/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 7,934/8,763  | MP 43/75 | break 67/137 | spd 123.00 | AV 29.14 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 9,373/10,120 | MP 40/75 | break 95/165 | spd 125.00 | AV 19.84 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,448/8,786  | MP 80/150 | break 129/150 | spd 100.00 | AV 69.43 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).]",
+  "  Enemies (SP 3)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 35/75 | break 0/150 BROKEN(185%) | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 35/75 | break 0/150 BROKEN(185%) | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 65/75 | break 165/165 | spd 203.00 | AV 30.27 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 15: Lux\u2606Magica (Enemy) - Battle Skill ==",
+  "  Lux\u2606Magica -> Lux\u2606Magica 433 (break -49)",
+  "  Lux\u2606Magica -> Final Fatebloom 225 (break -21)",
+  "  Lux\u2606Magica -> Brilliant Beam 354 (break -21)",
+  "  Allies (SP 1)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 12/90 | break 129/150 | spd 186.40 | AV 6.85 | magic 8/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 8,093/9,622  | MP 53/75 | break 60/150 | spd 127.00 | AV 42.02 | magic 1/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 7,580/8,763  | MP 48/75 | break 46/137 | spd 123.00 | AV 29.14 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 9,373/10,120 | MP 40/75 | break 95/165 | spd 125.00 | AV 19.84 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,448/8,786  | MP 80/150 | break 129/150 | spd 100.00 | AV 69.43 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).]",
+  "  Enemies (SP 2)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 35/75 | break 0/150 BROKEN(185%) | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 65/75 | break 165/165 | spd 203.00 | AV 30.27 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 16: Lux\u2606Magica (Enemy) - Battle Skill ==",
+  "  Lux\u2606Magica -> Hollow Woman 428 (break -49)",
+  "  Lux\u2606Magica -> Brilliant Beam 354 (break -21)",
+  "  Lux\u2606Magica -> Floral Ironspike 338 (break -21)",
+  "  Allies (SP 1)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 12/90 | break 129/150 | spd 186.40 | AV 6.85 | magic 8/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 8,093/9,622  | MP 53/75 | break 60/150 | spd 127.00 | AV 42.02 | magic 1/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 7,226/8,763  | MP 53/75 | break 25/137 | spd 123.00 | AV 29.14 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 8,945/10,120 | MP 45/75 | break 46/165 | spd 125.00 | AV 19.84 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,110/8,786  | MP 85/150 | break 108/150 | spd 100.00 | AV 69.43 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).]",
+  "  Enemies (SP 1)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 65/75 | break 165/165 | spd 203.00 | AV 30.27 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 17: Final Fatebloom (Ally) - Battle Skill ==",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 52/90 | break 129/150 | spd 186.40 | AV 53.65 | magic 10/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 8,093/9,622  | MP 53/75 | break 60/150 | spd 127.00 | AV 35.16 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 7,226/8,763  | MP 53/75 | break 25/137 | spd 123.00 | AV 22.29 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 8,945/10,120 | MP 45/75 | break 46/165 | spd 125.00 | AV 12.99 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Hollow Woman - Increases ATK by 20%.]",
+  "    Floral Ironspike             | HP 8,110/8,786  | MP 85/150 | break 108/150 | spd 100.00 | AV 62.58 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).]",
+  "  Enemies (SP 1)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 57.60 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 57.60 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 57.60 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 57.60 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 65/75 | break 165/165 | spd 203.00 | AV 23.42 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 18: Hollow Woman (Ally) - Basic Attack ==",
+  "  Allies (SP 1)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 52/90 | break 129/150 | spd 186.40 | AV 40.66 | magic 10/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 8,093/9,622  | MP 53/75 | break 60/150 | spd 127.00 | AV 22.18 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 7,226/8,763  | MP 53/75 | break 25/137 | spd 123.00 | AV 9.30 | magic 2/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 8,945/10,120 | MP 60/75 | break 46/165 | spd 125.00 | AV 64.00 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Floral Ironspike             | HP 8,110/8,786  | MP 85/150 | break 108/150 | spd 100.00 | AV 49.59 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).]",
+  "  Enemies (SP 1)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 44.61 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 44.61 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 44.61 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 44.61 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 65/75 | break 165/165 | spd 203.00 | AV 10.43 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 19: Brilliant Beam (Ally) - Battle Skill ==",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 74/90 | break 129/150 | spd 186.40 | AV 31.36 | magic 10/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Lux\u2606Magica                   | HP 8,093/9,622  | MP 53/75 | break 60/150 | spd 127.00 | AV 12.87 | magic 3/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.]",
+  "    Brilliant Beam               | HP 7,226/8,763  | MP 86/75 | break 25/137 | spd 123.00 | AV 81.30 | magic 4/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Hollow Woman                 | HP 8,945/10,120 | MP 60/75 | break 46/165 | spd 125.00 | AV 54.70 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.]",
+  "    Floral Ironspike             | HP 8,110/8,786  | MP 85/150 | break 108/150 | spd 100.00 | AV 40.29 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).]",
+  "  Enemies (SP 1)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 35.31 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 35.31 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 35.31 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 35.31 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 65/75 | break 165/165 | spd 203.00 | AV 1.13 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 20: Brilliant Beam (Ally) - Ultimate ==",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 74/90 | break 129/150 | spd 211.40 | AV 27.65 | magic 10/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Lux\u2606Magica                   | HP 8,093/9,622  | MP 53/75 | break 60/150 | spd 152.00 | AV 10.76 | magic 3/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Brilliant Beam               | HP 7,226/8,763  | MP 5/75 | break 25/137 | spd 148.00 | AV 67.57 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Hollow Woman                 | HP 8,945/10,120 | MP 60/75 | break 46/165 | spd 150.00 | AV 45.58 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Floral Ironspike             | HP 8,110/8,786  | MP 85/150 | break 108/150 | spd 125.00 | AV 32.23 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).; Brilliant Beam - Increases SPD by 25.]",
+  "  Enemies (SP 1)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 35.31 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 35.31 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 35.31 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 35.31 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 65/75 | break 165/165 | spd 203.00 | AV 1.13 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 21: Time Stop Strike (Enemy) - Battle Skill ==",
+  "  Time Stop Strike -> Hollow Woman 764 (break -20)",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 74/90 | break 129/150 | spd 211.40 | AV 26.52 | magic 10/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Lux\u2606Magica                   | HP 8,093/9,622  | MP 53/75 | break 60/150 | spd 152.00 | AV 9.63 | magic 3/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Brilliant Beam               | HP 7,226/8,763  | MP 5/75 | break 25/137 | spd 148.00 | AV 66.44 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Hollow Woman                 | HP 8,181/10,120 | MP 65/75 | break 26/165 | spd 150.00 | AV 44.46 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Floral Ironspike             | HP 8,110/8,786  | MP 85/150 | break 108/150 | spd 125.00 | AV 31.10 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).; Brilliant Beam - Increases SPD by 25.]",
+  "  Enemies (SP 0)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 34.18 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 34.18 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 34.18 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 34.18 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 95/75 | break 165/165 | spd 203.00 | AV 49.26 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 22: Time Stop Strike (Enemy) - Ultimate ==",
+  "  Time Stop Strike -> Lux\u2606Magica 1,373 (break -35)",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 74/90 | break 129/150 | spd 211.40 | AV 26.52 | magic 10/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Lux\u2606Magica                   | HP 6,720/9,622  | MP 58/75 | break 25/150 | spd 152.00 | AV 9.63 | magic 3/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Brilliant Beam               | HP 7,226/8,763  | MP 5/75 | break 25/137 | spd 148.00 | AV 66.44 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Hollow Woman                 | HP 8,181/10,120 | MP 65/75 | break 26/165 | spd 150.00 | AV 44.46 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Floral Ironspike             | HP 8,110/8,786  | MP 85/150 | break 108/150 | spd 125.00 | AV 31.10 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).; Brilliant Beam - Increases SPD by 25.]",
+  "  Enemies (SP 0)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 34.18 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 34.18 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 34.18 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 34.18 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 5/75 | break 165/165 | spd 203.00 | AV 49.26 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 23: Lux\u2606Magica (Ally) - Basic Attack ==",
+  "  Allies (SP 1)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 74/90 | break 129/150 | spd 211.40 | AV 16.89 | magic 10/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Lux\u2606Magica                   | HP 6,720/9,622  | MP 78/75 | break 25/150 | spd 152.00 | AV 65.79 | magic 3/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Brilliant Beam               | HP 7,226/8,763  | MP 5/75 | break 25/137 | spd 148.00 | AV 56.81 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Hollow Woman                 | HP 8,181/10,120 | MP 65/75 | break 26/165 | spd 150.00 | AV 34.83 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Floral Ironspike             | HP 8,110/8,786  | MP 85/150 | break 108/150 | spd 125.00 | AV 21.48 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).; Brilliant Beam - Increases SPD by 25.]",
+  "  Enemies (SP 0)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 24.55 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 24.55 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 24.55 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 24.55 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 5/75 | break 165/165 | spd 203.00 | AV 39.63 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 24: Lux\u2606Magica (Ally) - Ultimate ==",
+  "  Allies (SP 1)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 74/90 | break 129/150 | spd 211.40 | AV 16.89 | magic 10/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases SPD by 20%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Lux\u2606Magica                   | HP 6,720/9,622  | MP 5/75 | break 25/150 | spd 152.00 | AV 65.79 | magic 3/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Brilliant Beam               | HP 7,226/8,763  | MP 5/75 | break 25/137 | spd 148.00 | AV 56.81 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Hollow Woman                 | HP 8,181/10,120 | MP 65/75 | break 26/165 | spd 150.00 | AV 34.83 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Floral Ironspike             | HP 8,110/8,786  | MP 85/150 | break 108/150 | spd 125.00 | AV 21.48 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).; Brilliant Beam - Increases SPD by 25.]",
+  "  Enemies (SP 0)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 24.55 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 24.55 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 24.55 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 24.55 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 5/75 | break 165/165 | spd 203.00 | AV 39.63 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 25: Final Fatebloom (Ally) - Battle Skill ==",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 114/90 | break 129/150 | spd 211.40 | AV 47.30 | magic 10/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Lux\u2606Magica                   | HP 6,720/9,622  | MP 5/75 | break 25/150 | spd 152.00 | AV 48.89 | magic 4/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Brilliant Beam               | HP 7,226/8,763  | MP 5/75 | break 25/137 | spd 148.00 | AV 39.92 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Hollow Woman                 | HP 8,181/10,120 | MP 65/75 | break 26/165 | spd 150.00 | AV 17.93 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Floral Ironspike             | HP 8,110/8,786  | MP 85/150 | break 108/150 | spd 125.00 | AV 4.58 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).; Brilliant Beam - Increases SPD by 25.]",
+  "  Enemies (SP 0)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 7.66 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 7.66 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 7.66 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 7.66 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 5/75 | break 165/165 | spd 203.00 | AV 22.74 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 26: Final Fatebloom (Ally) - Ultimate ==",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 5/90 | break 129/150 | spd 188.60 | AV 53.02 | magic 2/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Lux\u2606Magica                   | HP 6,720/9,622  | MP 5/75 | break 25/150 | spd 152.00 | AV 48.89 | magic 4/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Brilliant Beam               | HP 7,226/8,763  | MP 5/75 | break 25/137 | spd 148.00 | AV 39.92 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Hollow Woman                 | HP 8,181/10,120 | MP 65/75 | break 26/165 | spd 150.00 | AV 17.93 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Floral Ironspike             | HP 8,110/8,786  | MP 85/150 | break 108/150 | spd 125.00 | AV 4.58 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).; Brilliant Beam - Increases SPD by 25.]",
+  "  Enemies (SP 0)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 7.66 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 7.66 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 7.66 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 7.66 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 5/75 | break 165/165 | spd 203.00 | AV 22.74 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 27: Final Fatebloom (Ally) - Basic Attack [Extra action] ==",
+  "  Allies (SP 1)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 20/90 | break 129/150 | spd 188.60 | AV 53.02 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Lux\u2606Magica                   | HP 6,720/9,622  | MP 5/75 | break 25/150 | spd 152.00 | AV 48.89 | magic 4/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Brilliant Beam               | HP 7,226/8,763  | MP 5/75 | break 25/137 | spd 148.00 | AV 39.92 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Hollow Woman                 | HP 8,181/10,120 | MP 65/75 | break 26/165 | spd 150.00 | AV 17.93 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Floral Ironspike             | HP 8,110/8,786  | MP 85/150 | break 108/150 | spd 125.00 | AV 4.58 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Floral Ironspike - Increases ATK by 20%.; Hollow Woman - Increases ATK by 50%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).; Brilliant Beam - Increases SPD by 25.]",
+  "  Enemies (SP 0)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 7.66 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 7.66 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 7.66 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 7.66 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 5/75 | break 165/165 | spd 203.00 | AV 22.74 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 28: Floral Ironspike (Ally) - Battle Skill ==",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 20/90 | break 129/150 | spd 188.60 | AV 48.44 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Lux\u2606Magica                   | HP 6,720/9,622  | MP 5/75 | break 25/150 | spd 152.00 | AV 44.31 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Brilliant Beam               | HP 7,226/8,763  | MP 5/75 | break 25/137 | spd 148.00 | AV 35.34 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Hollow Woman                 | HP 8,181/10,120 | MP 65/75 | break 26/165 | spd 150.00 | AV 13.35 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Floral Ironspike             | HP 8,110/8,786  | MP 115/150 | break 108/150 | spd 125.00 | AV 80.00 | buffs[Final Fatebloom - Increases ATK by 20%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).; Brilliant Beam - Increases SPD by 25.]",
+  "  Enemies (SP 0)",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 3.08 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 3.08 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 3.08 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 3.08 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 5/75 | break 165/165 | spd 203.00 | AV 18.16 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 29: Lux\u2606Magica (Enemy) - Basic Attack ==",
+  "  Lux\u2606Magica -> Brilliant Beam 288 (break -25, BREAK)",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 11,822/12,047 | MP 20/90 | break 129/150 | spd 188.60 | AV 45.36 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Lux\u2606Magica                   | HP 6,720/9,622  | MP 5/75 | break 25/150 | spd 152.00 | AV 41.24 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Brilliant Beam               | HP 6,938/8,763  | MP 10/75 | break 0/137 BROKEN(100%) | spd 148.00 | AV 49.15 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Hollow Woman                 | HP 8,181/10,120 | MP 65/75 | break 26/165 | spd 150.00 | AV 10.27 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Floral Ironspike             | HP 8,110/8,786  | MP 115/150 | break 108/150 | spd 125.00 | AV 76.92 | buffs[Final Fatebloom - Increases ATK by 20%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).; Brilliant Beam - Increases SPD by 25.]",
+  "  Enemies (SP 1)",
+  "    Lux\u2606Magica                   | KO              | MP 80/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 5/75 | break 165/165 | spd 203.00 | AV 15.08 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 30: Lux\u2606Magica (Enemy) - Ultimate ==",
+  "  Lux\u2606Magica -> Final Fatebloom 380 (break -54)",
+  "  Lux\u2606Magica -> Lux\u2606Magica 546 (break -25, BREAK)",
+  "  Lux\u2606Magica -> Brilliant Beam 599 (broken dmg +20%)",
+  "  Lux\u2606Magica -> Hollow Woman 539 (break -26, BREAK)",
+  "  Lux\u2606Magica -> Floral Ironspike 571 (break -54)",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 11,442/12,047 | MP 25/90 | break 75/150 | spd 188.60 | AV 45.36 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Lux\u2606Magica                   | HP 6,174/9,622  | MP 10/75 | break 0/150 BROKEN(100%) | spd 152.00 | AV 57.68 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Brilliant Beam               | HP 6,339/8,763  | MP 15/75 | break 0/137 BROKEN(120%) | spd 148.00 | AV 49.15 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Hollow Woman                 | HP 7,642/10,120 | MP 70/75 | break 0/165 BROKEN(100%) | spd 150.00 | AV 26.94 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Floral Ironspike             | HP 7,539/8,786  | MP 120/150 | break 54/150 | spd 125.00 | AV 76.92 | buffs[Final Fatebloom - Increases ATK by 20%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).; Brilliant Beam - Increases SPD by 25.]",
+  "  Enemies (SP 1)",
+  "    Lux\u2606Magica                   | KO              | MP 5/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 70/75 | break 150/150 | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 5/75 | break 165/165 | spd 203.00 | AV 15.08 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 31: Lux\u2606Magica (Enemy) - Battle Skill ==",
+  "  Lux\u2606Magica -> Brilliant Beam 570 (broken dmg +20%)",
+  "  Lux\u2606Magica -> Lux\u2606Magica 323 (broken dmg +20%)",
+  "  Lux\u2606Magica -> Hollow Woman 319 (broken dmg +20%)",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 11,442/12,047 | MP 25/90 | break 75/150 | spd 188.60 | AV 45.36 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Lux\u2606Magica                   | HP 5,851/9,622  | MP 15/75 | break 0/150 BROKEN(120%) | spd 152.00 | AV 57.68 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Brilliant Beam               | HP 5,769/8,763  | MP 20/75 | break 0/137 BROKEN(140%) | spd 148.00 | AV 49.15 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Hollow Woman                 | HP 7,323/10,120 | MP 75/75 | break 0/165 BROKEN(120%) | spd 150.00 | AV 26.94 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Floral Ironspike             | HP 7,539/8,786  | MP 120/150 | break 54/150 | spd 125.00 | AV 76.92 | buffs[Final Fatebloom - Increases ATK by 20%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).; Brilliant Beam - Increases SPD by 25.]",
+  "  Enemies (SP 0)",
+  "    Lux\u2606Magica                   | KO              | MP 5/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 100/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 5/75 | break 165/165 | spd 203.00 | AV 15.08 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 32: Lux\u2606Magica (Enemy) - Ultimate ==",
+  "  Lux\u2606Magica -> Final Fatebloom 380 (break -54)",
+  "  Lux\u2606Magica -> Lux\u2606Magica 786 (crit, broken dmg +20%)",
+  "  Lux\u2606Magica -> Brilliant Beam 838 (broken dmg +20%)",
+  "  Lux\u2606Magica -> Hollow Woman 647 (broken dmg +20%)",
+  "  Lux\u2606Magica -> Floral Ironspike 571 (break -54, BREAK)",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 11,062/12,047 | MP 30/90 | break 21/150 | spd 188.60 | AV 45.36 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Lux\u2606Magica                   | HP 5,065/9,622  | MP 20/75 | break 0/150 BROKEN(140%) | spd 152.00 | AV 57.68 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Brilliant Beam               | HP 4,931/8,763  | MP 25/75 | break 0/137 BROKEN(160%) | spd 148.00 | AV 49.15 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Hollow Woman                 | HP 6,676/10,120 | MP 80/75 | break 0/165 BROKEN(140%) | spd 150.00 | AV 26.94 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Floral Ironspike             | HP 6,968/8,786  | MP 125/150 | break 0/150 BROKEN(100%) | spd 125.00 | AV 96.92 | buffs[Final Fatebloom - Increases ATK by 20%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).; Brilliant Beam - Increases SPD by 25.]",
+  "  Enemies (SP 0)",
+  "    Lux\u2606Magica                   | KO              | MP 5/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 5/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 5/75 | break 165/165 | spd 203.00 | AV 15.08 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "== Action 33: Lux\u2606Magica (Enemy) - Basic Attack ==",
+  "  Lux\u2606Magica -> Lux\u2606Magica 368 (broken dmg +20%)",
+  "  Allies (SP 0)",
+  "    Final Fatebloom              | HP 11,062/12,047 | MP 30/90 | break 21/150 | spd 188.60 | AV 45.36 | magic 4/10 | buffs[Final Fatebloom - Increases SPD by 20%, and decreases DMG taken by 10%.; Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Lux\u2606Magica                   | HP 4,697/9,622  | MP 25/75 | break 0/150 BROKEN(160%) | spd 152.00 | AV 57.68 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Lux\u2606Magica - Increases SPD by 20.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases ATK by 40%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Brilliant Beam               | HP 4,931/8,763  | MP 25/75 | break 0/137 BROKEN(160%) | spd 148.00 | AV 49.15 | magic 5/5 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Hollow Woman                 | HP 6,676/10,120 | MP 80/75 | break 0/165 BROKEN(140%) | spd 150.00 | AV 26.94 | buffs[Final Fatebloom - Increases ATK by 20%.; Brilliant Beam - Increases ATK by 12%.; Brilliant Beam - Increases SPD by 25.]",
+  "    Floral Ironspike             | HP 6,968/8,786  | MP 125/150 | break 0/150 BROKEN(100%) | spd 125.00 | AV 96.92 | buffs[Final Fatebloom - Increases ATK by 20%.; Floral Ironspike - Decreases own DMG taken by 10%.<br>On critical hit by allies other than self, increases SPD by 2% (Stacks 10 times).; Brilliant Beam - Increases SPD by 25.]",
+  "  Enemies (SP 1)",
+  "    Lux\u2606Magica                   | KO              | MP 5/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 5/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 80/75 | break 150/150 | spd 155.15 | AV 64.45 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Lux\u2606Magica                   | KO              | MP 65/75 | break 150/150 | spd 155.15 | AV 0.00 | magic 0/5 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]",
+  "    Time Stop Strike             | KO              | MP 5/75 | break 165/165 | spd 203.00 | AV 15.08 | magic 4/7 | debuffs[Final Fatebloom - Increases chance to land critical hit by 9%.]"
+ ],
+ "slots": [
+  [
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux\u2606Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {
+      "1001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "7001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      }
+     }
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux\u2606Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {
+      "1001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "7001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      }
+     }
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux\u2606Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {
+      "1001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "7001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      }
+     }
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux\u2606Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {
+      "1001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "7001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      }
+     }
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 10,
+     "name": "Time Stop Strike",
+     "id": 10020101,
+     "role": "Buffer",
+     "element": "Void",
+     "supportTarget": "Buffer",
+     "supportDescription": "Increases SPD by 20%.<br>On battle skill use, advances all allies' action order by 5%.",
+     "character_en": "Homura Akemi",
+     "heartphial": "Homura Akemi",
+     "rarity": 5,
+     "obtain": "Permanent",
+     "permaDate": "June 30, 2025",
+     "releaseDate": "2025-04-25",
+     "isStandardChar": true,
+     "crysOptions": {
+      "1001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "7015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      }
+     }
+    }
+   }
+  ],
+  [
+   {
+    "main": {
+     "enabled": false,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 140,
+     "magicLvl": 140,
+     "heartphialLvl": 50,
+     "specialLvl": 9,
+     "name": "Final Fatebloom",
+     "id": 11460101,
+     "role": "Breaker",
+     "element": "Dark",
+     "supportTarget": "Breaker",
+     "supportDescription": "Increases break gauge depletion (2), and increases basic attack break bonus by 30%.<br>On battle skill use, increases own SPD by 25% (2 turns).",
+     "character_en": "Fuka Higure",
+     "heartphial": "Fuka Higure",
+     "rarity": 5,
+     "obtain": "Exclusive",
+     "permaDate": "",
+     "releaseDate": "2026-03-27",
+     "isStandardChar": false,
+     "crysOptions": {
+      "1001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": [
+        4034,
+        4044,
+        4054
+       ],
+       "locked": false
+      },
+      "2001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3028": {
+       "enabled": false,
+       "useIndex": 1,
+       "subCrys": [
+        4034,
+        4044,
+        4054
+       ],
+       "locked": false
+      },
+      "3029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "7054": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      }
+     }
+    },
+    "support": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 4,
+     "name": "Cherry Blizzard",
+     "id": 10250101,
+     "role": "Breaker",
+     "element": "Dark",
+     "supportTarget": "Breaker",
+     "supportDescription": "On DMG dealt to an enemy when 2 or more debuffs are applied to enemies, grants 2 MP.<br>Increases SPD by 20%.",
+     "character_en": "Tsukuyo Amane",
+     "heartphial": "Tsukuyo Amane",
+     "rarity": 5,
+     "obtain": "Permanent",
+     "permaDate": "July 31 , 2025",
+     "releaseDate": "2025-06-12",
+     "isStandardChar": true,
+     "crysOptions": {
+      "1001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "7022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      }
+     }
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 7,
+     "name": "Lux\u2606Magica",
+     "id": 10010101,
+     "role": "Breaker",
+     "element": "Light",
+     "supportTarget": "Light",
+     "supportDescription": "Increases break gauge depletion (2) and increases break effect by 10%.",
+     "character_en": "Madoka Kaname",
+     "heartphial": "Madoka Kaname",
+     "rarity": 4,
+     "obtain": "Free",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": false,
+     "crysOptions": {
+      "1001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "7001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      }
+     }
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 10,
+     "name": "Brilliant Beam",
+     "id": 10860101,
+     "role": "Buffer",
+     "element": "Flame",
+     "supportTarget": "Flame",
+     "supportDescription": "Decreases DMG taken by 5%.",
+     "character_en": "Rika Ayano",
+     "heartphial": "Rika Ayano",
+     "rarity": 4,
+     "obtain": "Permanent",
+     "permaDate": "2025-03-27",
+     "releaseDate": "2025-03-27",
+     "isStandardChar": true,
+     "crysOptions": {
+      "1001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3028": {
+       "enabled": false,
+       "useIndex": 1,
+       "subCrys": [
+        4034,
+        4044,
+        4054
+       ],
+       "locked": false
+      },
+      "3029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "6013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      }
+     }
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 5,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 4,
+     "name": "Hollow Woman",
+     "id": 10070101,
+     "role": "Buffer",
+     "element": "Light",
+     "supportTarget": "Buffer",
+     "supportDescription": "On basic attack, advances action order by 10%.<br>Increases SPD by 20%.",
+     "character_en": "Mabayu Aki",
+     "heartphial": "Mabayu Aki",
+     "rarity": 5,
+     "obtain": "Permanent",
+     "permaDate": "July 31 , 2025",
+     "releaseDate": "2025-05-30",
+     "isStandardChar": true,
+     "crysOptions": {
+      "1001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3028": {
+       "enabled": false,
+       "useIndex": 1,
+       "subCrys": [
+        4034,
+        4044,
+        4054
+       ],
+       "locked": false
+      },
+      "3029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "7021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      }
+     }
+    }
+   },
+   {
+    "main": {
+     "enabled": true,
+     "dupes": 0,
+     "ascension": 1,
+     "portrait": "",
+     "kiokuLvl": 138,
+     "magicLvl": 130,
+     "heartphialLvl": 50,
+     "specialLvl": 4,
+     "name": "Floral Ironspike",
+     "id": 11450101,
+     "role": "Attacker",
+     "element": "Forest",
+     "supportTarget": "Attacker",
+     "supportDescription": "Increases critical rate by 15% and ATK by 10%.<br>On own critical hit, grants 5 MP.",
+     "character_en": "Sumire Yoake",
+     "heartphial": "Sumire Yoake",
+     "rarity": 5,
+     "obtain": "Exclusive",
+     "permaDate": "",
+     "releaseDate": "2026-03-27",
+     "isStandardChar": false,
+     "crysOptions": {
+      "1001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "1029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "2029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3001": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3002": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3003": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3004": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3005": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3006": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3007": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3008": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3009": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3010": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3011": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3012": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3013": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3014": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3015": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3016": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3017": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3018": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3019": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3020": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3021": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3022": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3023": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3024": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3025": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3026": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3027": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3028": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "3029": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      },
+      "7053": {
+       "enabled": false,
+       "useIndex": 0,
+       "subCrys": []
+      }
+     }
+    }
+   }
+  ]
+ ]
+}

@@ -43,8 +43,25 @@ export class PvPKioku extends Kioku {
                 this.buffMult += e.value1 / 1000;
             } else if (e.abilityEffectType === "UP_DEBUFF_EFFECT_VALUE") {
                 this.debuffMult += e.value1 / 1000;
+            } else if (e.abilityEffectType === "DWN_BUFF_EFFECT_VALUE") {
+                // [ADDED] confirmed to exist in enums.ts and already handled by the
+                // sibling ScoreAttackKioku.ts (which this class doesn't share code
+                // with) - PvPKioku.ts was missing the down-side of this pair, so a
+                // "reduce this unit's own buff effectiveness" passive/ascension effect
+                // would have silently done nothing.
+                this.buffMult -= e.value1 / 1000;
+            } else if (e.abilityEffectType === "DWN_DEBUFF_EFFECT_VALUE") {
+                // [ADDED] same as above, for debuff effectiveness.
+                this.debuffMult -= e.value1 / 1000;
             }
         });
+
+        // [ADDED] matches ScoreAttackKioku.ts's own guard - now that
+        // DWN_BUFF_EFFECT_VALUE/DWN_DEBUFF_EFFECT_VALUE can push these below 1 (or even
+        // negative with a large enough debuff), floor at 0 so a buff/debuff's magnitude
+        // can't flip sign entirely.
+        if (this.buffMult < 0) this.buffMult = 0;
+        if (this.debuffMult < 0) this.debuffMult = 0;
 
         this.effects = [...this.unscalableEffects.values(), ...this.scalableEffects.values()].map(e => {
             let v = e.value1;

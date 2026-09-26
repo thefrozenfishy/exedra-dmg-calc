@@ -48,6 +48,16 @@ export const usePvPStore = defineStore('pvp', {
     save() {
       localStorage.setItem('lastPvP', JSON.stringify(this.slots))
     },
+    // Replace both teams with slots from a simulator export file (normalized like load()).
+    importSlots(slots: TeamSlot[][]) {
+      this.slots = slots.map((team: TeamSlot[]) =>
+        team.map(slot => ({
+          ...slot,
+          main: normalizeCharacter(slot.main),
+          support: normalizeCharacter(slot.support),
+        }))
+      )
+    },
     load() {
       const saved = localStorage.getItem('lastPvP')
       if (saved) {
