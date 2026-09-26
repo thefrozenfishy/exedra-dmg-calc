@@ -198,7 +198,7 @@ interface FuaTrigger {
     caster: KiokuState;
     triggerTarget?: KiokuState;
 }
-type FuaMap = Record<number, FuaTrigger>;
+export type FuaMap = Record<number, FuaTrigger>;
 
 // AffectedUnitNotice op_Addition: one notice per unit per skill, hits summed and flags OR-ed.
 function mergeNotice(a: AffectedUnitNotice | undefined, b: AffectedUnitNotice): AffectedUnitNotice {

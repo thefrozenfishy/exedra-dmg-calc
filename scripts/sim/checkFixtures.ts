@@ -10,6 +10,7 @@ import type { BattleSnapshot } from "../../src/types/KiokuTypes";
 const CASES: { file: string, action: number, actor: string }[] = [
     { file: "heroic-grace-rika-first.json", action: 4, actor: "Brilliant Beam" },
     { file: "heroic-grace-mabayu-first.json", action: 4, actor: "Hollow Woman" },
+    { file: "kyubey-battle-start-follow-up.json", action: 1, actor: "Splashin' Kyubey Blast" },
 ];
 
 console.warn = () => {}; console.debug = () => {};

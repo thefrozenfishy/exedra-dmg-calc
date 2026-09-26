@@ -71,6 +71,13 @@ Trigger: Thunder Torrent's battle-start HASTE had no effect on this branch.
   a break, units taken to 0 AV by the same effect act leftmost first; units whose own Heroic Grace
   (a separate, later effect per unit, triggered in unit order) took them to 0 AV act rightmost first.
 
+## R7.8 Battle-start follow-ups
+- Follow-ups queued by BattleStart passives (e.g. Splashin' Kyubey Blast's opening attack,
+  ADDITIONAL_SKILL_ACT timing 1) were discarded by the PvPBattle constructor. They now run as the
+  first entries of the first `executeNextAction()`, before the first turn (fixture
+  kyubey-battle-start-follow-up.json). Not checked: whether AfterProcess (9) also runs after
+  TriggeringOnBattleStart.
+
 ## R7.4 Still open
 - HoT/DOT ticks stay in `decrementActiveEffects` (now at TurnEnd). The game runs
   `ContinuousRecoveryProcess` at TurnBegin; slip damage timing not re-read.

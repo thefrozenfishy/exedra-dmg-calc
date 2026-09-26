@@ -1,5 +1,5 @@
 import { BattleSnapshot, TargetType } from "../types/KiokuTypes";
-import { compareTurnOrder, KiokuState, PvPTeam } from "./PvPTeam";
+import { compareTurnOrder, KiokuState, PvPTeam, type FuaMap } from "./PvPTeam";
 import { ProcessTiming } from "./BattleConditionParser";
 import { seededRng } from "./BattleMath";
 
@@ -12,6 +12,8 @@ export class PvPBattle {
     private lastTeamIsTeam1: boolean = false;
 
     readonly seed: number;
+
+    private battleStartFollowUps: [PvPTeam, FuaMap][] = [];
 
     // Snapshots of every skill executed during the current executeNextAction call, in order.
     private actionSnapshots: BattleSnapshot[] = [];
@@ -55,8 +57,13 @@ export class PvPBattle {
         // passives then rescale the gauge (StateAbilityEffect -> UpdateTurnGaugeBySpeed), which
         // recomputeDerivedStats' updateSpd() does.
         for (const k of [...this.team1.kiokuStates, ...this.team2.kiokuStates]) k.resetDistanceRemaining()
-        this.team1.applyPassivesForTiming(ProcessTiming.BATTLE_START, TargetType.init)
-        this.team2.applyPassivesForTiming(ProcessTiming.BATTLE_START, TargetType.init)
+        // Follow-ups queued by battle-start passives (e.g. Splashin' Kyubey Blast's opening
+        // attack) were discarded here; TriggeringOnBattleStart queues them as AdditionalSkillActs
+        // that run before the first turn, so they are kept and run by the first executeNextAction.
+        this.battleStartFollowUps = [
+            [this.team1, this.team1.applyPassivesForTiming(ProcessTiming.BATTLE_START, TargetType.init)],
+            [this.team2, this.team2.applyPassivesForTiming(ProcessTiming.BATTLE_START, TargetType.init)],
+        ]
         this.team1.recomputeDerivedStats()
         this.team2.recomputeDerivedStats()
 
@@ -163,6 +170,16 @@ export class PvPBattle {
     // End-of-turn effects (TurnEnd passives, DOT ticks, buff expiry) are folded into the last one.
     executeNextAction(): BattleSnapshot[] {
         this.actionSnapshots = []
+        // First call: the battle-start follow-ups, as their own entries, before the first turn.
+        const opening = this.battleStartFollowUps.filter(([, m]) => Object.keys(m).length)
+        this.battleStartFollowUps = []
+        if (opening.length) {
+            for (const [team, fuas] of opening) team.triggerFua(fuas)
+            const snaps = this.actionSnapshots
+            this.actionSnapshots = []
+            this.traverseToNextActor()
+            if (snaps.length) return snaps
+        }
         this.lastTeamIsTeam1 = false
         let eff: [KiokuState, TargetType] | undefined = this.team2.useUltimate()
         if (!eff) {
