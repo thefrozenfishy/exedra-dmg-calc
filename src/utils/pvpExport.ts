@@ -67,6 +67,7 @@ function unitLine(u: TeamSnapshot): string {
         u.stunned ? "STUNNED" : "",
         u.buffs.length ? `buffs[${u.buffs.join("; ")}]` : "",
         u.debuffs.length ? `debuffs[${u.debuffs.join("; ")}]` : "",
+        u.ailments?.length ? `ailments[${u.ailments.join("; ")}]` : "",
     ]
     return "    " + parts.filter(Boolean).join(" | ")
 }

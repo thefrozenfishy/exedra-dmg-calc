@@ -263,6 +263,7 @@ export interface TeamSnapshot {
     baseSpd: number
     buffs: string[]
     debuffs: string[]
+    ailments?: string[]      // burn / curse / poison / stun / vortex / weakness / wound (not in debuffs)
     magicStacks: number
     maxMagicStacks: number
     secondsLeft: number

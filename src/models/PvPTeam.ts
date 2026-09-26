@@ -160,6 +160,12 @@ const DOT_EFFECT_DAMAGE_BASE_TYPE: Record<string, DamageBaseType> = {
 // (b__8_1 predicate) reconstructed as a name-based check since this port has no class
 // hierarchy to check `instanceof` against.
 const ALIMENT_PREFIXES = Object.values(Ailment) as string[]; // ["BURN","CURSE","POISON","STUN","VORTEX","WEAKNESS","BLEED"]
+// In-game names: the Ailment enum's keys (BLEED is "Wound").
+const AILMENT_NAMES = new Map(Object.entries(Ailment).map(([name, prefix]) => [prefix as string, name.charAt(0) + name.slice(1).toLowerCase()]))
+export function ailmentName(abilityEffectType: string): string {
+    const prefix = ALIMENT_PREFIXES.find(p => abilityEffectType === p || abilityEffectType.startsWith(p + "_"))
+    return (prefix && AILMENT_NAMES.get(prefix)) ?? abilityEffectType
+}
 export function isAlimentEffect(abilityEffectType: string): boolean {
     return ALIMENT_PREFIXES.some(prefix => abilityEffectType === prefix || abilityEffectType.startsWith(prefix + "_"));
 }
@@ -647,6 +653,13 @@ export class KiokuState {
             .map(d => `${d.applier} - ${d.description}`)
     }
 
+    // Ailments (burn, curse, poison, stun, vortex, weakness, wound), listed apart from debuffs:
+    // "Wound (2 turns) - Soul Salvation - At turn start, takes void DMG."
+    currentAilments(): string[] {
+        return [...this.activeEffectDetails.values()]
+            .filter(d => isAlimentEffect(d.abilityEffectType))
+            .map(d => `${ailmentName(d.abilityEffectType)}${d.turn ? ` (${d.turn} turn${d.turn === 1 ? "" : "s"})` : ""} - ${d.applier}${d.description ? ` - ${d.description}` : ""}`)
+    }
     currentDebuffs(): string[] {
         return [...this.activeEffectDetails.values()]
             .filter(d => !isAlimentEffect(d.abilityEffectType)

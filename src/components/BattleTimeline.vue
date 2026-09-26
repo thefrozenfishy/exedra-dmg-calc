@@ -114,6 +114,7 @@
             <div class="distance" :title="formatSpdBuffs(char.currSpdBuffs)">{{ round(char.spd) }} spd</div>
             <div class="distance" :title="char.buffs.join('\n')">{{ char.buffs.length }} buffs</div>
             <div class="distance" :title="char.debuffs.join('\n')">{{ char.debuffs.length }} debuffs</div>
+            <div class="distance" :class="{ 'has-ailment': char.ailments?.length }" :title="(char.ailments ?? []).join('\n')">{{ char.ailments?.length ?? 0 }} ailments</div>
           </div>
         </div>
       </div>
@@ -419,6 +420,7 @@ function healTo(state: BattleSnapshot, isAllies: boolean, pos: number, name: str
 .rng-outcome.miss { color: var(--danger); }
 .rng-select { max-width: 100%; font-size: 0.95em; }
 .muted { color: var(--muted); }
+.distance.has-ailment { color: var(--warning); }
 
 .distance {
   margin-top: 0.25rem;

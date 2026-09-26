@@ -99,6 +99,7 @@ export class PvPBattle {
             currSpdBuffs: k.currSpdEffects,
             buffs: k.currentBuffs(),
             debuffs: k.currentDebuffs(),
+            ailments: k.currentAilments(),
             magicStacks: k.currentMagic,
             maxMagicStacks: k.currentMaxMagic, // [CONFIRMED] dynamic, not a static kioku stat - see currentMaxMagic's comment (CHARGE can resize it mid-battle)
             baseSpd: k.kioku.data.minSpd,
