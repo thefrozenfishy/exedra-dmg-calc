@@ -1,6 +1,7 @@
 // PvE (quest stage) support for the battle engine: stage/enemy master data, the enemy unit
 // adapter the engine runs on, and the enemy skill-selection AI.
 // Ported from 3.19.0; see MISSING_AND_UNCERTAIN.md "Revision 8" for sources (RVAs) and open points.
+import { rollChoice, type RngSource } from "./BattleRng";
 import enemyMstJson from "../assets/base_data/getEnemyMstList.json";
 import breakMstJson from "../assets/base_data/getBreakMstList.json";
 import questGroupJson from "../assets/base_data/getQuestGroupMstList.json";
@@ -247,7 +248,7 @@ function conditionRowMatches(row: EnemyConditionAction, state: any): boolean {
     return sets.some(set => isConditionSetActiveForPvP([set], state))
 }
 
-export function selectEnemySkill(unit: KiokuState, _team: PvPTeam, rng: () => number, hasTarget: (skillMstId: number) => boolean): EnemySkillChoice | null {
+export function selectEnemySkill(unit: KiokuState, _team: PvPTeam, rng: RngSource, hasTarget: (skillMstId: number) => boolean): EnemySkillChoice | null {
     const p = unit.enemy!
     const ids = new Set(p.skills.map(s => s.skillMstId))
     const state = unit.stateGen(unit, unit)
@@ -256,7 +257,8 @@ export function selectEnemySkill(unit: KiokuState, _team: PvPTeam, rng: () => nu
         if (!row.isSkillReusable && p.usedConditionActions.has(row.id)) continue
         if (!conditionRowMatches(row, { ...state, trueActorUnit: unit })) continue
         if (!row.isSkillReusable) p.usedConditionActions.add(row.id)
-        const pick = row.skillMstIds[Math.floor(rng() * row.skillMstIds.length)]
+        const pick = row.skillMstIds[rollChoice(rng, row.skillMstIds.map(() => 1), "skill",
+            () => `${unit.kioku.name} skill (condition row ${row.id})`, () => row.skillMstIds.map(skillName))]
         if (pick !== undefined && ids.has(pick)) return { skillMstId: pick, viaCondition: row.id }
         break // GetAction returned an id that isn't an active skill -> falls through to the random pick
     }
@@ -265,11 +267,10 @@ export function selectEnemySkill(unit: KiokuState, _team: PvPTeam, rng: () => nu
         && hasTarget(s.skillMstId))
     if (!candidates.length) return null
     const sum = candidates.reduce((s, c) => s + c.weight, 0)
-    if (sum < 1) return { skillMstId: candidates[Math.floor(rng() * candidates.length)].skillMstId }
-    const r = Math.floor(rng() * sum)
-    let acc = 0
-    for (const c of candidates) { acc += c.weight; if (r < acc) return { skillMstId: c.skillMstId } }
-    return { skillMstId: candidates[candidates.length - 1].skillMstId }
+    // sum < 1: uniform (rollChoice treats all-zero weights as uniform).
+    const idx = rollChoice(rng, sum < 1 ? candidates.map(() => 1) : candidates.map(c => c.weight), "skill",
+        () => `${unit.kioku.name} skill`, () => candidates.map(c => skillName(c.skillMstId)))
+    return { skillMstId: candidates[idx].skillMstId }
 }
 
 // [CONFIRMED 3.19] LoadStartTimingConditionAction (0x14964f0): every skill of a row with a BattleStart

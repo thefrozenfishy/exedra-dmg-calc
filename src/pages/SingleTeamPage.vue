@@ -159,26 +159,48 @@
       <p class="hint-text">Plays the stage with the battle engine: enemy skills follow their skill rotation and
         conditions, enemies pick targets by role aggro, and later waves appear when a wave is cleared. Summons and form
         changes are not simulated yet.</p>
+      <div class="sim-controls">
+        <SegmentedToggle v-model="targetMode" :options="TARGET_MODE_OPTIONS" label="Targeting" />
+        <p class="sim-hint">{{ TARGET_MODE_OPTIONS.find(o => o.value === targetMode)?.title }}</p>
+        <RngControls v-model:mode="rngMode" :seed="seed" :changed="changedRolls" :disabled="!canRun"
+          @update:seed="setSeed" @reset="resetRolls" />
+      </div>
       <div class="sim-tools">
-        <button class="btn btn-accent" @click="runSimulation" :disabled="!teamKiokus.length || !stageId">Run Simulation</button>
-        <span class="muted">Seed {{ battle?.seed ?? '-' }}</span>
-        <button class="btn" @click="newSeed" :disabled="!teamKiokus.length || !stageId">New seed</button>
+        <button class="btn btn-accent" @click="runSimulation" :disabled="!canRun">Run Simulation</button>
+        <button v-if="pickCount" class="btn" @click="resetPicks" :disabled="!canRun"
+          title="Forget every target you picked and start the battle over">Reset {{ pickCount }} target pick{{ pickCount === 1 ? '' : 's' }}</button>
         <label class="field inline"><span class="field-label">Turns</span>
           <input v-model.number="simTurns" type="number" min="1" max="200" /></label>
-        <span v-if="battleResult" class="result" :class="battleResult">{{ battleResult === 'win' ? 'Cleared' : 'Defeated' }}</span>
+        <span v-if="pending" class="result waiting">Waiting for a target pick</span>
+        <span v-else-if="battleResult" class="result" :class="battleResult">{{ battleResult === 'win' ? 'Cleared' : 'Defeated' }}</span>
       </div>
-      <BattleTimeline :states="battleOutput" :show-sp="false" />
+      <BattleTimeline :states="battleOutput" :show-sp="false" :rng-editable="rngMode === 'manual'" @decide="onDecide" />
+      <div v-if="pending" ref="pickPanel" class="pick-panel">
+        <div class="pick-head">Pick a target <span class="muted">· after action {{ actionCount }}</span></div>
+        <div class="pick-label">{{ pending.label }}</div>
+        <div class="pick-options">
+          <button v-for="(o, i) in pending.options" :key="i" type="button" class="btn pick-btn" @click="pickTarget(i)">
+            <span>{{ o.label }}</span>
+            <span v-if="hpOf(o.label)" class="muted small">{{ hpOf(o.label) }}</span>
+          </button>
+        </div>
+        <p class="muted small">Every pick can be changed later from that action's roll list; the battle then re-runs from
+          the start.</p>
+      </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, markRaw, reactive, ref, shallowRef, watch } from 'vue'
+import { computed, markRaw, nextTick, reactive, ref, shallowRef, watch } from 'vue'
 import { useTeamStore } from '../store/singleTeamStore'
 import { useSetting } from '../store/settingsStore'
 import CharacterEditor from '../components/CharacterEditor.vue'
 import StagePicker from '../components/StagePicker.vue'
 import BattleTimeline from '../components/BattleTimeline.vue'
+import SegmentedToggle from '../components/SegmentedToggle.vue'
+import RngControls from '../components/RngControls.vue'
+import { PendingDecision, type RngDecision, type RngEvent, type RngMode } from '../models/BattleRng'
 import { toast } from 'vue3-toastify'
 import { TargetType, type BattleSnapshot } from '../types/KiokuTypes'
 import { elementMap } from '../types/enums'
@@ -290,19 +312,44 @@ const saScoreTitle = computed(() => `${difficultyScore.value} + 20 * (${saDamage
 const battle = shallowRef<PvPBattle | null>(null)
 const battleOutput = ref<BattleSnapshot[]>([])
 const battleResult = ref<'win' | 'lose' | undefined>()
-const seed = ref<number | undefined>(undefined)
+const canRun = computed(() => !!teamKiokus.value.length && !!stageId.value)
 
+// RNG (models/BattleRng.ts) and targeting. Auto: the targeting AI picks, and its random picks are
+// rolls like any other. Manual: the battle stops at every target decision (either team) until
+// you pick; picks and changed rolls are replayed from the start (decisions, by roll index).
+const TARGET_MODE_OPTIONS = [
+  { value: 'auto', label: 'Auto', title: 'Targets follow the game\'s targeting rules (AI); where they pick at random, the RNG setting below decides.' },
+  { value: 'manual', label: 'Manual', title: 'The battle stops at every target decision, for both teams, until you pick the target.' },
+] as const
+const targetMode = useSetting<'auto' | 'manual'>('pveTargetMode', 'auto')
+const rngMode = useSetting<RngMode>('pveRngMode', 'seed')
+const seed = ref(Math.floor(Math.random() * 2 ** 32))
+const decisions = shallowRef(new Map<number, RngDecision>())
+const pending = shallowRef<RngEvent | null>(null)
+const pickPanel = ref<HTMLElement | null>(null)
+const changedRolls = computed(() => [...decisions.value.values()].filter(d => !d.pick).length)
+const pickCount = computed(() => [...decisions.value.values()].filter(d => d.pick).length)
+const actionCount = computed(() => battleOutput.value.slice(1).filter(s => !s.wave).length)
+
+function newBattle(): PvPBattle {
+  // Fresh units: a battle mutates its units' state.
+  const allies = filledSlots.value.map(([s]) => buildSlotKioku(s))
+  return markRaw(createPvEBattle(allies, stageId.value, seed.value, 0, {
+    rngMode: rngMode.value, decisions: decisions.value, manualTargeting: targetMode.value === 'manual',
+  }))
+}
+
+// Initial state only (no simulation yet).
 function buildBattle() {
   battleResult.value = undefined
-  if (!teamKiokus.value.length || !stageId.value || !waves.value.length) {
+  pending.value = null
+  if (!canRun.value || !waves.value.length) {
     battle.value = null
     battleOutput.value = []
     return
   }
   try {
-    // Fresh units: a battle mutates its units' state.
-    const allies = filledSlots.value.map(([s]) => buildSlotKioku(s))
-    battle.value = markRaw(createPvEBattle(allies, stageId.value, seed.value))
+    battle.value = newBattle()
     battleOutput.value = [battle.value.getCurrentState()]
   } catch (e) {
     console.warn('Could not build battle', e)
@@ -310,29 +357,83 @@ function buildBattle() {
     battleOutput.value = []
   }
 }
-watch([() => team.slots, stageId], buildBattle, { deep: true, immediate: true })
+watch([() => team.slots, stageId], () => {
+  decisions.value = new Map()
+  buildBattle()
+}, { deep: true, immediate: true })
 
 function runSimulation() {
-  buildBattle()
-  const b = battle.value
-  if (!b) return
+  if (!canRun.value || !waves.value.length) return buildBattle()
+  let b: PvPBattle
+  try {
+    b = newBattle()
+  } catch (e) {
+    console.warn('Could not build battle', e)
+    return buildBattle()
+  }
+  battle.value = b
+  pending.value = null
   const states: BattleSnapshot[] = [b.getCurrentState()]
   for (let t = 0; t < simTurns.value && !b.isOver; t++) {
     try {
       states.push(...b.executeNextAction())
     } catch (e) {
+      if (e instanceof PendingDecision) {
+        pending.value = e.event
+        break
+      }
       toast.warning(String(e))
       console.warn('Failed to execute next action:', e)
       break
     }
   }
   battleOutput.value = states
-  battleResult.value = b.result
+  battleResult.value = pending.value ? undefined : b.result
+  if (pending.value) nextTick(() => pickPanel.value?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }))
 }
 
-function newSeed() {
-  seed.value = Math.floor(Math.random() * 2 ** 32)
+const hasRun = () => battleOutput.value.length > 1 || !!pending.value
+watch([rngMode, targetMode], () => { if (hasRun()) runSimulation(); else buildBattle() })
+
+function setSeed(v: number) {
+  seed.value = v
   runSimulation()
+}
+
+function setDecision(index: number, d: RngDecision | undefined) {
+  const next = new Map(decisions.value)
+  if (d) next.set(index, d); else next.delete(index)
+  decisions.value = next
+  runSimulation()
+}
+
+function pickTarget(i: number) {
+  const ev = pending.value
+  if (ev) setDecision(ev.index, { kind: ev.kind, label: ev.label, value: i, pick: true })
+}
+
+function onDecide(ev: RngEvent, value: boolean | number) {
+  if (ev.userPick) return setDecision(ev.index, { kind: ev.kind, label: ev.label, value, pick: true })
+  setDecision(ev.index, value === ev.defaultOutcome ? undefined : { kind: ev.kind, label: ev.label, value })
+}
+
+function resetRolls() {
+  decisions.value = new Map([...decisions.value].filter(([, d]) => d.pick))
+  if (hasRun()) runSimulation(); else buildBattle()
+}
+
+function resetPicks() {
+  decisions.value = new Map([...decisions.value].filter(([, d]) => !d.pick))
+  runSimulation()
+}
+
+// "Name (Enemy 2)" -> that unit's HP in the latest state, for the pick buttons.
+function hpOf(label: string): string {
+  const m = /\((Ally|Enemy) (\d+)\)$/.exec(label)
+  const last = battleOutput.value[battleOutput.value.length - 1]
+  if (!m || !last) return ''
+  const u = (m[1] === 'Ally' ? last.allies : last.enemies).team[Number(m[2]) - 1]
+  return u ? `HP ${fmt(u.hp)} / ${fmt(u.maxHp)}` : ''
 }
 </script>
 
@@ -612,4 +713,52 @@ function newSeed() {
 .result { font-weight: 600; }
 .result.win { color: var(--success); }
 .result.lose { color: var(--danger); }
+.result.waiting { color: var(--accent); }
+
+.sim-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.sim-hint {
+  margin: 0 0 0.5rem;
+  max-width: 640px;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.pick-panel {
+  margin: 0.5rem auto 0;
+  max-width: 640px;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--bg-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  scroll-margin: 1rem;
+}
+
+.pick-head { font-weight: 700; color: var(--accent); }
+.pick-label { overflow-wrap: anywhere; }
+
+.pick-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pick-btn {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  text-align: left;
+}
 </style>

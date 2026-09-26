@@ -1,5 +1,5 @@
 // Builds an engine battle for a quest stage: the player's team (team1) against the stage's enemy waves.
-import { PvPBattle } from "./PvPBattle";
+import { PvPBattle, type BattleOptions } from "./PvPBattle";
 import { PvPTeam } from "./PvPTeam";
 import type { PvPKioku } from "./PvPKioku";
 import { BattleType } from "./DamageCalculator";
@@ -16,11 +16,11 @@ export function stageBattleType(questStageMstId: number): BattleType {
     return getScoreAttackStage(questStageMstId) ? BattleType.ScoreAttack : BattleType.Solo
 }
 
-export function createPvEBattle(allies: PvPKioku[], questStageMstId: number, seed?: number, firstWave = 0): PvPBattle {
+export function createPvEBattle(allies: PvPKioku[], questStageMstId: number, seed?: number, firstWave = 0, opts?: Omit<BattleOptions, "waves">): PvPBattle {
     const waves = stageWaves(questStageMstId).slice(firstWave)
     if (!waves.length) throw new Error(`Stage ${questStageMstId} has no enemies`)
     const bt = stageBattleType(questStageMstId)
     const team1 = new PvPTeam(allies, "Ally", false, bt)
     const team2 = new PvPTeam(enemyKiokus(waves[0]), "Enemy", false, bt)
-    return new PvPBattle(team1, team2, false, seed, { waves: waves.slice(1).map(enemyKiokus) })
+    return new PvPBattle(team1, team2, false, seed, { ...opts, waves: waves.slice(1).map(enemyKiokus) })
 }

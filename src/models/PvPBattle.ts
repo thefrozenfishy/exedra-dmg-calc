@@ -1,9 +1,16 @@
 import { BattleSnapshot, TargetType, type TeamSnapshot } from "../types/KiokuTypes";
 import { compareTurnOrder, KiokuState, PvPTeam, type FuaMap } from "./PvPTeam";
 import { ProcessTiming } from "./BattleConditionParser";
-import { seededRng } from "./BattleMath";
+import { BattleRng, type RngMode, type RngDecision } from "./BattleRng";
 import type { PvPKioku } from "./PvPKioku";
 import { startTimingSkills } from "./PvE";
+
+export interface BattleOptions {
+    waves?: PvPKioku[][]                                        // later PvE enemy waves
+    rngMode?: RngMode                                           // default "seed"
+    decisions?: Map<number, RngDecision> | Record<number, RngDecision> // manual RNG flips / target picks, by event index
+    manualTargeting?: boolean                                   // PvE "Manual": the user picks every target
+}
 
 export class PvPBattle {
     private team1: PvPTeam;
@@ -29,15 +36,19 @@ export class PvPBattle {
     // Enemy start-timing acts (BattleStart / WaveStart condition rows) still to run.
     private startTimingActs: [KiokuState, number][] = [];
 
-    constructor(team1: PvPTeam, team2: PvPTeam, debug = false, seed?: number, opts?: { waves?: PvPKioku[][] }) {
+    // Every random decision of the battle (see BattleRng.ts for the modes).
+    readonly rng: BattleRng;
+
+    constructor(team1: PvPTeam, team2: PvPTeam, debug = false, seed?: number, opts?: BattleOptions) {
         this.pendingWaves = [...(opts?.waves ?? [])];
         this.team1 = team1;
         this.team2 = team2;
         this.debug = debug;
         this.seed = seed ?? Math.floor(Math.random() * 2 ** 32);
-        const rng = seededRng(this.seed);
-        this.team1.rng = rng;
-        this.team2.rng = rng;
+        this.rng = new BattleRng(opts?.rngMode ?? "seed", this.seed, opts?.decisions);
+        this.team1.rng = this.rng;
+        this.team2.rng = this.rng;
+        this.team1.manualTargeting = this.team2.manualTargeting = !!opts?.manualTargeting;
         this.team1.isTeam1 = true;
         const hook = (actor: KiokuState, type: TargetType, label?: string) => {
             this.actionSnapshots.push(this.getCurrentState({ actor, type, label }))
@@ -122,6 +133,7 @@ export class PvPBattle {
             lastTargetType: as ? as.type : this.lastTargetType,
             actionLabel: as?.label,
             events: this.team1.eventLog.splice(0),
+            rngEvents: this.rng.drain(),
         }
     }
 
@@ -228,7 +240,7 @@ export class PvPBattle {
         const last = snaps.pop()
         if (last) {
             const final = this.getCurrentState()
-            snaps.push({ ...final, lastActor: last.lastActor, lastTeamIsTeam1: last.lastTeamIsTeam1, lastActorPos: last.lastActorPos, lastTargetType: last.lastTargetType, actionLabel: last.actionLabel, events: [...(last.events ?? []), ...(final.events ?? [])] })
+            snaps.push({ ...final, lastActor: last.lastActor, lastTeamIsTeam1: last.lastTeamIsTeam1, lastActorPos: last.lastActorPos, lastTargetType: last.lastTargetType, actionLabel: last.actionLabel, events: [...(last.events ?? []), ...(final.events ?? [])], rngEvents: [...(last.rngEvents ?? []), ...(final.rngEvents ?? [])] })
         } else {
             snaps.push(this.getCurrentState()) // e.g. a stunned unit's skipped turn
         }

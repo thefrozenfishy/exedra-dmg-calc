@@ -4,11 +4,12 @@ import { skillDetails } from "../utils/helpers";
 import { isConditionSetActive, isConditionSetActiveForPvP, isActiveConditionSetMet, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
 import { PvPKioku } from "./PvPKioku";
 import { damageBaseTypeFromEffectType, getAttackDamageResult, getSlipDamageResult, getAdditionalDamageBase, getFinalDamageExtra, damageCutByBarrier, DamageBaseType, BattleType, PVP_POLICY } from "./DamageCalculator";
-import { getProcessedAtk, mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum, getFinalDamageRatio, getProcessedSpeedWithBreakdown } from "./UnitStateEngine";
+import { getProcessedAtk, mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum, getFinalDamageRatio, getProcessedSpeedWithBreakdown, unitLabel } from "./UnitStateEngine";
 import { elementMap } from "../types/enums";
 import { type EnemyParams, enemyParams, isEnemyKioku, selectEnemySkill, enemySkillDetails, skillName } from "./PvE";
 import { EFFECT_TARGET_SIDE } from "./EffectTargetSide";
-import { selectFullAutoTarget, expandProximity, filterAlive } from "./AITargetSelector";
+import { selectFullAutoTarget, expandProximity, filterAlive, legalTargetPool } from "./AITargetSelector";
+import { BattleRng, type RngSource } from "./BattleRng";
 import { UNIT_STATE_TYPES } from "./StateAddFilter";
 import { SkillType, getVariationBreakPoint, decreaseBreakPoint, increaseBreakedDamageReceiveRate } from "./BreakPoint";
 
@@ -850,7 +851,7 @@ export class KiokuState {
             const isMainTarget = mainTarget === undefined || mainTarget === target
             const rng = this.team.rng
             const result = getAttackDamageResult(this, target, detail, damageBaseType, {
-                battleType, isMainTarget, rng,
+                battleType, isMainTarget, rng, rngLabel: `${unitLabel(this)} → ${unitLabel(target)} crit`,
                 forceCrit: this.team.critOverride?.(this, target, detail),
             })
             let totalDamage = result.finalDamage
@@ -863,7 +864,7 @@ export class KiokuState {
             for (const bonus of this.filteredEffects()["ADDITIONAL_DAMAGE"] ?? []) {
                 const applier: KiokuState = (bonus as any)._applierState ?? this
                 const extra = getAttackDamageResult(this, target, bonus, DamageBaseType.ATK, {
-                    battleType, rng,
+                    battleType, rng, rngLabel: `${unitLabel(this)} → ${unitLabel(target)} crit (additional damage)`,
                     damageBaseOverride: getAdditionalDamageBase(applier, bonus),
                     attackElementOverride: elementNumberOf(this),
                     forceCrit: this.team.critOverride?.(this, target, bonus),
@@ -1253,10 +1254,13 @@ export class PvPTeam {
     // simulation through the same engine - see DamageCalculator.ts.
     battleType: BattleType
     isTeam1 = false
-    // Random source for every roll this team makes (crit, ...). Math.random by default;
-    // PvPBattle can replace it with a seeded generator (BattleMath.seededRng) so a battle
-    // is reproducible from its seed.
-    rng: () => number = Math.random
+    // Random source for every roll this team makes (crit, effect hit, AI target / enemy skill picks).
+    // Math.random by default; PvPBattle sets its BattleRng (shared by both teams), which applies the
+    // RNG mode (always hit / always miss / seed / manual) and records every real roll.
+    rng: RngSource = Math.random
+    // PvE "Manual" targeting: every target decision (either team) is the user's pick via
+    // BattleRng.pickTarget instead of the targeting AI. Set by PvPBattle.
+    manualTargeting = false
     // Shared with the opposing team by PvPBattle; drained into each BattleSnapshot.
     eventLog: BattleEvent[] = []
     // Optional manual override for crit outcomes (UI "force crit / no crit"): return
@@ -1487,7 +1491,17 @@ export class PvPTeam {
         // are chosen per skill; every single/proximity effect on that side uses it (SelectTargets looks up
         // the selected id). Cached per action in `actionPrimaryTargets`.
         const side = possibleTargets[0]?.team === actor.team ? "friend" : "opp"
-        const resolveUncached = resolvePrimaryTarget
+        // Manual targeting: the user picks among every legal target (no AI preference, no kit-specific
+        // rule); BattleRng.pickTarget throws PendingDecision until a pick is stored for this point.
+        const resolveManual = (): KiokuState | null => {
+            const pool = legalTargetPool(detail, possibleTargets)
+            if (pool.length <= 1) return pool[0] ?? null
+            const skillMstId = (detail as any).skillMstId as number | undefined
+            const what = skillMstId ? skillName(skillMstId) : detail.abilityEffectType
+            const label = `${unitLabel(actor)} · ${what}: target on the ${pool[0].team.isTeam1 ? "allies" : "enemies"}`
+            return pool[(this.rng as BattleRng).pickTarget(label, pool.map(unitLabel))]
+        }
+        const resolveUncached = this.manualTargeting && this.rng instanceof BattleRng ? resolveManual : resolvePrimaryTarget
         const resolveCached = (): KiokuState | null => {
             const hit = this.actionPrimaryTargets.get(side)
             if (hit && !hit.isDead && possibleTargets.includes(hit)) return hit

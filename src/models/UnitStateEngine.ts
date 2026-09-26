@@ -35,6 +35,7 @@
  * there is no DWN_ATK_FIXED / DWN_DEF_FIXED / DWN_ELEMENT_RESIST_RATIO class at all.
  */
 
+import { rollChance, type RngSource } from "./BattleRng";
 import { KiokuState, isAlimentEffect } from "./PvPTeam";
 import { SkillDetail, aggro } from "../types/KiokuTypes";
 import { elementMap, roleMap } from "../types/enums";
@@ -583,16 +584,22 @@ function getTotalSecondaryEffectParryRate(target: KiokuState, isAliment: boolean
  * applying the effect (its hit-rate bonuses apply); `target` is the unit it's being
  * applied to (its parry/resist bonuses apply). Returns true = applies normally.
  */
-export function rollAppliesEffect(detail: SkillDetail, caster: KiokuState | undefined, target: KiokuState, rng: () => number = Math.random): boolean {
+export function rollAppliesEffect(detail: SkillDetail, caster: KiokuState | undefined, target: KiokuState, rng: RngSource = Math.random): boolean {
+    const label = () => `${caster ? unitLabel(caster) : "?"} → ${unitLabel(target)}: ${detail.abilityEffectType}${detail.description ? ` (${detail.description})` : ""}`
     if (detail.isFixedProbability) {
-        return rng() * 100 < detail.probability;
+        return rollChance(rng, detail.probability, "effect", label, r => r * 100 < detail.probability);
     }
     const isAliment = isAlimentEffect(detail.abilityEffectType);
     const hitRate = caster ? getTotalEffectHitRate(caster, isAliment) : 1;
     const parryRate = getTotalEffectParryRate(target);
     const secondaryParryRate = getTotalSecondaryEffectParryRate(target, isAliment);
     const finalProbability = Math.min(Math.max(hitRate * parryRate * secondaryParryRate * detail.probability, 0), 100);
-    return rng() * 1000 < finalProbability * 10;
+    return rollChance(rng, finalProbability, "effect", label, r => r * 1000 < finalProbability * 10);
+}
+
+// "Name (Ally 2)" - names repeat (mirrored teams), so the side and slot are part of the label.
+export function unitLabel(k: KiokuState): string {
+    return `${k.kioku.name} (${k.team?.isTeam1 ? "Ally" : "Enemy"} ${k.posIdx + 1})`
 }
 
 // ---------------------------------------------------------------------------

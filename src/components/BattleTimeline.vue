@@ -33,6 +33,35 @@
         </li>
       </ul>
 
+      <details v-if="state.rngEvents?.length" class="rng-log" :open="rngEditable || state.rngEvents.some(e => e.userPick)">
+        <summary>{{ state.rngEvents.length }} random roll{{ state.rngEvents.length === 1 ? '' : 's' }}<span
+            v-if="rngEditable" class="muted"> · click to change</span></summary>
+        <ul>
+          <li v-for="ev in state.rngEvents" :key="ev.index" :class="{ changed: ev.decided && !ev.userPick }">
+            <span class="rng-kind" :class="'kind-' + ev.kind">{{ ev.userPick ? 'Your pick' : KIND_LABEL[ev.kind] }}</span>
+            <template v-if="ev.options">
+              <span class="rng-label">{{ ev.label }}</span>
+              <select v-if="rngEditable || ev.userPick" class="rng-select" :value="ev.outcome"
+                @change="emit('decide', ev, Number(($event.target as HTMLSelectElement).value))">
+                <option v-for="(o, i) in ev.options" :key="i" :value="i" :disabled="!(o.weight > 0)">
+                  {{ o.label }}{{ ev.userPick ? '' : ` (${pctText(o.weight)})` }}</option>
+              </select>
+              <b v-else class="rng-outcome">{{ ev.options[ev.outcome as number]?.label }}
+                <span class="muted">({{ pctText(ev.options[ev.outcome as number]?.weight ?? 0) }})</span></b>
+            </template>
+            <template v-else>
+              <label class="rng-binary" :class="{ editable: rngEditable }">
+                <input v-if="rngEditable" type="checkbox" :checked="!!ev.outcome"
+                  @change="emit('decide', ev, ($event.target as HTMLInputElement).checked)" />
+                <span class="rng-label">{{ ev.label }}</span>
+                <span class="rng-chance">{{ pctText(ev.probability ?? 0) }}</span>
+                <b class="rng-outcome" :class="ev.outcome ? 'hit' : 'miss'">{{ ev.outcome ? 'hit' : 'miss' }}</b>
+              </label>
+            </template>
+          </li>
+        </ul>
+      </details>
+
       <div v-for="(side, sideIdx) of [state.allies, state.enemies]" :key="sideIdx">
         <div class="row">
           <span v-if="showSp || sideIdx === 0" class="sp-count" title="Skill points">{{ side.sp }}</span>
@@ -97,7 +126,15 @@
 // shared by the PvP and single battle pages.
 import { type BattleSnapshot, TargetType, type TeamSnapshot } from '../types/KiokuTypes'
 
-const props = withDefaults(defineProps<{ states: BattleSnapshot[], showSp?: boolean }>(), { showSp: true })
+import type { RngEvent, RngKind } from '../models/BattleRng'
+
+// rngEditable: Manual RNG mode - rolls get a checkbox / dropdown and emit `decide` when changed.
+// Manual targeting picks (userPick) are always changeable.
+const props = withDefaults(defineProps<{ states: BattleSnapshot[], showSp?: boolean, rngEditable?: boolean }>(), { showSp: true, rngEditable: false })
+const emit = defineEmits<{ decide: [event: RngEvent, value: boolean | number] }>()
+
+const KIND_LABEL: Record<RngKind, string> = { crit: 'Crit', effect: 'Effect', target: 'Target', skill: 'Skill' }
+const pctText = (p: number) => `${p >= 10 ? p.toFixed(1).replace(/\.0$/, '') : p.toFixed(2).replace(/0$/, '')}%`
 
 const skillTranslate = {
   [TargetType.attackId]: "Basic Attack",
@@ -320,6 +357,68 @@ function healTo(state: BattleSnapshot, isAllies: boolean, pos: number, name: str
 
 .battle-log li.ally { border-left-color: rgba(128, 198, 153, 0.6); }
 .battle-log li.enemy { border-left-color: rgba(255, 129, 129, 0.6); }
+
+.rng-log {
+  margin: 0 auto 0.75rem;
+  max-width: 640px;
+  width: 100%;
+  font-size: 0.85em;
+  color: var(--text);
+}
+
+.rng-log summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.95em;
+  text-align: center;
+}
+
+.rng-log ul {
+  list-style: none;
+  margin: 0.35rem 0 0;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--bg-soft);
+}
+
+.rng-log li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.12rem 0 0.12rem 0.5rem;
+  border-left: 3px solid transparent;
+}
+
+.rng-log li.changed { border-left-color: var(--accent); }
+
+.rng-binary {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.rng-binary.editable { cursor: pointer; }
+
+.rng-kind {
+  flex-shrink: 0;
+  min-width: 3.4rem;
+  font-size: 0.72em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.rng-kind.kind-crit { color: var(--warning); }
+.rng-kind.kind-target, .rng-kind.kind-skill { color: var(--info); }
+
+.rng-label { overflow-wrap: anywhere; }
+.rng-chance { color: var(--muted); font-variant-numeric: tabular-nums; }
+.rng-outcome.hit { color: var(--success); }
+.rng-outcome.miss { color: var(--danger); }
+.rng-select { max-width: 100%; font-size: 0.95em; }
+.muted { color: var(--muted); }
 
 .distance {
   margin-top: 0.25rem;

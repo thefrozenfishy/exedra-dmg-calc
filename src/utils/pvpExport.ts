@@ -5,6 +5,7 @@ import { PvPKioku } from "../models/PvPKioku"
 import type { BattleSnapshot, TeamSnapshot } from "../types/KiokuTypes"
 import { TargetType } from "../types/KiokuTypes"
 import type { TeamSlot } from "../types/BestTeamTypes"
+import type { RngDecision, RngMode } from "../models/BattleRng"
 
 export const PVP_EXPORT_FORMAT = "exedra-pvp-sim"
 export const PVP_EXPORT_VERSION = 1
@@ -15,6 +16,8 @@ export interface PvPExport {
     exportedAt: string
     engine: string            // simulator branch the file was made with
     seed: number
+    rngMode?: RngMode         // default "seed" (files from before the RNG modes)
+    decisions?: Record<number, RngDecision> // Manual mode: changed rolls, by roll index
     turns: number             // turns simulated (each can produce several actions)
     slots: TeamSlot[][]       // usePvPStore().slots as-is: [enemy team, allied team]
     notes?: string
@@ -88,6 +91,12 @@ export function formatSequence(snapshots: BattleSnapshot[]): string[] {
                 lines.push(`  ${e.source ?? "?"} ${e.kind === "dot" ? "DOT on" : "->"} ${e.target} ${n(e.amount)}${extra ? ` (${extra})` : ""}`)
             }
         }
+        for (const r of s.rngEvents ?? []) {
+            const result = r.options
+                ? `${r.options[r.outcome as number]?.label}${r.userPick ? " (picked)" : ` (${r.options[r.outcome as number]?.weight.toFixed(1)}%)`}`
+                : `${r.probability?.toFixed(1)}% ${r.outcome ? "hit" : "miss"}`
+            lines.push(`  roll #${r.index} ${r.kind}: ${r.label} -> ${result}${r.decided && !r.userPick ? " [changed]" : ""}`)
+        }
         lines.push(`  Allies (SP ${s.allies.sp})`)
         s.allies.team.forEach(u => lines.push(unitLine(u)))
         lines.push(`  Enemies (SP ${s.enemies.sp})`)
@@ -96,13 +105,15 @@ export function formatSequence(snapshots: BattleSnapshot[]): string[] {
     return lines
 }
 
-export function buildExport(slots: TeamSlot[][], seed: number, turns: number, snapshots: BattleSnapshot[]): PvPExport {
+export function buildExport(slots: TeamSlot[][], seed: number, turns: number, snapshots: BattleSnapshot[], rng?: { mode: RngMode, decisions?: Map<number, RngDecision> }): PvPExport {
     return {
         format: PVP_EXPORT_FORMAT,
         version: PVP_EXPORT_VERSION,
         exportedAt: new Date().toISOString(),
         engine: "battle-engine-3.19",
         seed,
+        rngMode: rng?.mode ?? "seed",
+        decisions: rng?.decisions?.size ? Object.fromEntries(rng.decisions) : undefined,
         turns,
         notes: "",                                 // free text: what looks wrong
         sequence: formatSequence(snapshots),       // readable log (read this first)

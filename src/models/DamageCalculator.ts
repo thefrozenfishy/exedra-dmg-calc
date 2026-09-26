@@ -32,6 +32,7 @@
  *   DamageCutByBarrier(damage, defender)
  */
 
+import { rollChance, type RngSource } from "./BattleRng";
 import { KiokuState } from "./PvPTeam";
 import { SkillDetail, type AffectedUnitNotice } from "../types/KiokuTypes";
 import { CsDecimal, dec, f32 } from "./BattleMath";
@@ -319,7 +320,9 @@ export interface DamageOptions {
     isMainTarget?: boolean;
     // Force the crit outcome (manual override in the UI); otherwise rolled with `rng`.
     forceCrit?: boolean;
-    rng?: () => number;
+    rng?: RngSource;
+    // Shown for the crit roll in the battle's RNG log (BattleRng).
+    rngLabel?: string;
     // Precomputed damage base (AdditionalDamageAbilityEffect overrides GetDamageBase).
     damageBaseOverride?: CsDecimal;
     // Attack element override (additional damage uses the attacker's own element).
@@ -361,7 +364,7 @@ export function getAttackDamageResult(attacker: KiokuState, defender: KiokuState
     const chance = critChance(attacker, defender);
     const isCritical = opts.isNoCritNoBarrier ? false
         : opts.forceCrit !== undefined ? opts.forceCrit
-            : f32((opts.rng ?? Math.random)() * 100) < chance;
+            : rollChance(opts.rng ?? Math.random, chance, "crit", () => opts.rngLabel ?? `${attacker.kioku.name} → ${defender.kioku.name} crit`, r => f32(r * 100) < chance);
     if (isCritical) d = step("crit", getAddedCriticalDamage(attacker, defender, d));
 
     d = step("difficulty", getDifficultyCorrectedDamage(attacker, defender, d));

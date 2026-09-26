@@ -94,7 +94,8 @@
     <section class="card battle-order-card">
       <h2 class="section-title">Battle Simulator</h2>
 
-      <p class="hint-text">This simulates a battle, using a random seed. Custom seed & rng decisions coming soon!</p>
+      <p class="hint-text">Simulates the battle turn by turn. Choose how random rolls (crits, buff/debuff chances, AI
+        target picks) are decided below.</p>
 
       <div class="notice-banner">
         <h3 class="notice-tag">PvP simulator is fully implemented</h3>
@@ -103,23 +104,21 @@
         <p>Just @TFF!</p>
       </div>
 
+      <RngControls class="sim-rng" v-model:mode="rngMode" :seed="seed" :changed="decisions.size" :disabled="!isFullBattle"
+        @update:seed="setSeed" @reset="resetDecisions" />
+
       <button class="btn btn-accent run-sim-btn" @click="runSimulation" :disabled="!isFullBattle">Run
         Simulation</button>
 
       <div class="sim-tools">
-        <span class="sim-seed" title="Every random roll (crits, effect chances, targeting) comes from this seed">
-          Seed {{ battleInstance?.seed ?? "-" }}<span v-if="forcedSeed !== undefined"> (fixed)</span>
-        </span>
-        <button class="btn" @click="rerollSeed" :disabled="!isFullBattle"
-          title="Use a new random seed">New seed</button>
         <button class="btn" @click="exportBattle" :disabled="!isFullBattle"
-          title="Save the team setup, seed and the full simulated sequence to a file">Export to file</button>
+          title="Save the team setup, RNG settings and the full simulated sequence to a file">Export to file</button>
         <button class="btn" @click="importInput?.click()"
-          title="Load teams and seed from an exported file and re-run the simulation">Import file</button>
+          title="Load teams and RNG settings from an exported file and re-run the simulation">Import file</button>
         <input ref="importInput" type="file" accept=".json,application/json" class="hidden-file" @change="importBattle" />
       </div>
 
-      <BattleTimeline :states="battleOutput" />
+      <BattleTimeline :states="battleOutput" :rng-editable="rngMode === 'manual'" @decide="onDecide" />
     </section>
   </div>
 </template>
@@ -133,6 +132,9 @@ import { PvPTeam } from '../models/PvPTeam'
 import CharacterEditor from '../components/CharacterEditor.vue'
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import BattleTimeline from '../components/BattleTimeline.vue'
+import RngControls from '../components/RngControls.vue'
+import { useSetting } from '../store/settingsStore'
+import type { RngDecision, RngEvent, RngMode } from '../models/BattleRng'
 import { toast } from 'vue3-toastify'
 import { PvPKioku } from '../models/PvPKioku'
 import { buildPvPKiokus, buildExport, parseExport, downloadText } from '../utils/pvpExport'
@@ -160,23 +162,63 @@ function buildTeams(): [PvPKioku[], PvPKioku[]] {
 
 // Turns simulated per run (each turn can produce several displayed actions).
 const SIM_TURNS = 30
-// Seed from an imported file (or kept after "New seed" is not pressed); undefined = random.
-const forcedSeed = ref<number | undefined>(undefined)
 const importInput = ref<HTMLInputElement | null>(null)
 
-watch(team, () => {
+// ---- RNG (see models/BattleRng.ts) ----
+const rngMode = useSetting<RngMode>('pvpRngMode', 'seed')
+const seed = ref(Math.floor(Math.random() * 2 ** 32))
+// Manual mode: rolls the user changed from their default, by roll index. Replayed from the start.
+const decisions = shallowRef(new Map<number, RngDecision>())
+
+function newBattle(): PvPBattle {
+  const [alliedTeam, enemyTeam] = buildTeams()
+  return markRaw(new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"), false, seed.value,
+    { rngMode: rngMode.value, decisions: decisions.value }))
+}
+
+// Initial state only (no simulation yet).
+function rebuildBattle() {
   if (!isFullBattle.value) {
     battleOutput.value = []
     battleInstance.value = null
     return
   }
-  const [alliedTeam, enemyTeam] = buildTeams()
-  const battle = markRaw(new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"), false, forcedSeed.value))
+  const battle = newBattle()
   battleInstance.value = battle
   if (import.meta.env.DEV) (window as any).__pvpBattle = battle // for debugging exports in dev
   battleOutput.value = [battle.getCurrentState()]
-  console.debug("State is", battleOutput.value)
+}
+
+watch(team, () => {
+  decisions.value = new Map()
+  rebuildBattle()
 }, { immediate: true, deep: true })
+
+// Changing how rolls are decided re-runs a battle that was already simulated.
+const hasRun = () => battleOutput.value.length > 1
+function rerun() {
+  if (hasRun()) runSimulation()
+  else rebuildBattle()
+}
+watch(rngMode, rerun)
+
+function setSeed(v: number) {
+  seed.value = v
+  runSimulation()
+}
+
+function onDecide(ev: RngEvent, value: boolean | number) {
+  const next = new Map(decisions.value)
+  if (value === ev.defaultOutcome) next.delete(ev.index)
+  else next.set(ev.index, { kind: ev.kind, label: ev.label, value })
+  decisions.value = next
+  runSimulation()
+}
+
+function resetDecisions() {
+  decisions.value = new Map()
+  rerun()
+}
 
 function isStarter(extraData?: TeamSnapshot) {
   return !!extraData && extraData.secondsLeft === 0
@@ -246,20 +288,21 @@ const summarizeSubCrys = (ch: Character) => {
 
 
 function runSimulation() {
-  if (!isFullBattle.value || !battleInstance.value) {
+  if (!isFullBattle.value) {
     battleOutput.value = []
     return
   }
-  if (battleOutput.value.length > 1) return // Only run sim once
-
+  // Always a fresh battle: a run mutates its units, and Manual mode replays from the start.
+  const battle = newBattle()
+  battleInstance.value = battle
   // One entry per executed skill: turn actions, ultimates, extra actions, combo steps and
   // follow-ups each get their own "Action N" (executeNextAction returns them in order).
-  const states: BattleSnapshot[] = [battleInstance.value.getCurrentState()]
-  for (let turn = 0; turn < SIM_TURNS && !battleInstance.value.isOver; turn++) {
+  const states: BattleSnapshot[] = [battle.getCurrentState()]
+  for (let turn = 0; turn < SIM_TURNS && !battle.isOver; turn++) {
     try {
-      states.push(...battleInstance.value.executeNextAction())
+      states.push(...battle.executeNextAction())
     } catch (e) {
-      toast.warning(e)
+      toast.warning(String(e))
       console.warn("Failed to execute next action:", e)
       break
     }
@@ -267,26 +310,12 @@ function runSimulation() {
   battleOutput.value = states
 }
 
-// Rebuild the battle with a fresh random seed (drops a seed fixed by an import).
-function rebuildBattle() {
-  if (!isFullBattle.value) return
-  const [alliedTeam, enemyTeam] = buildTeams()
-  battleInstance.value = markRaw(new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"), false, forcedSeed.value))
-  battleOutput.value = [battleInstance.value.getCurrentState()]
-}
-
-function rerollSeed() {
-  forcedSeed.value = undefined
-  rebuildBattle()
-}
-
 function exportBattle() {
-  if (!battleInstance.value) return
-  if (battleOutput.value.length <= 1) runSimulation()
-  const seed = battleInstance.value.seed
-  const data = buildExport(team.slots, seed, SIM_TURNS, battleOutput.value)
+  if (!isFullBattle.value) return
+  if (!hasRun()) runSimulation()
+  const data = buildExport(team.slots, seed.value, SIM_TURNS, battleOutput.value, { mode: rngMode.value, decisions: decisions.value })
   const first = (team.slots[1][0]?.main?.name ?? "team").replace(/[^A-Za-z0-9]+/g, "-")
-  downloadText(`pvp-sim-${first}-seed${seed}.json`, JSON.stringify(data, null, 2))
+  downloadText(`pvp-sim-${first}-${rngMode.value === 'seed' ? `seed${seed.value}` : rngMode.value}.json`, JSON.stringify(data, null, 2))
   toast.success("Exported team setup and simulated sequence")
 }
 
@@ -297,12 +326,13 @@ async function importBattle(ev: Event) {
   if (!file) return
   try {
     const data = parseExport(await file.text())
-    forcedSeed.value = data.seed
     team.importSlots(data.slots)
-    await nextTick()
-    rebuildBattle()
+    await nextTick() // lets the team watcher reset its state first
+    seed.value = data.seed
+    rngMode.value = data.rngMode ?? 'seed'
+    decisions.value = new Map(Object.entries(data.decisions ?? {}).map(([k, v]) => [Number(k), v]))
     runSimulation()
-    toast.success(`Imported teams, seed ${data.seed}`)
+    toast.success(`Imported teams (${data.rngMode ?? 'seed'} RNG${(data.rngMode ?? 'seed') === 'seed' ? `, seed ${data.seed}` : ''})`)
   } catch (e) {
     toast.error(`Could not import: ${(e as Error).message}`)
   }
@@ -388,10 +418,8 @@ async function importBattle(ev: Event) {
   margin: 0 auto 1.5rem;
 }
 
-.sim-seed {
-  font-size: 0.85em;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
+.sim-rng {
+  margin: 0 auto 1rem;
 }
 
 .hidden-file {
