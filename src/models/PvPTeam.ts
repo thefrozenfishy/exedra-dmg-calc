@@ -1491,27 +1491,28 @@ export class PvPTeam {
         // are chosen per skill; every single/proximity effect on that side uses it (SelectTargets looks up
         // the selected id). Cached per action in `actionPrimaryTargets`.
         const side = possibleTargets[0]?.team === actor.team ? "friend" : "opp"
+        // completeAction resolves a friendly effect against [actor] first, then applyEffect widens it to
+        // the whole team (the `this === target` branch). In manual mode the pick is made right away
+        // against the whole team: the placeholder is not a decision (it made the caster the cached
+        // pick), and passing the caster through fails "target is not self" start conditions checked
+        // on that first call (Hollow Woman's Cutaway, condition 1278, silently never applied).
+        const isFriendPlaceholder = side === "friend" && possibleTargets.length === 1 && possibleTargets[0] === actor
+        const manual = this.manualTargeting && this.rng instanceof BattleRng
+        const universe = manual && isFriendPlaceholder ? this.kiokuStates : possibleTargets
         // Manual targeting: the user picks among every legal target (no AI preference, no kit-specific
         // rule); BattleRng.pickTarget throws PendingDecision until a pick is stored for this point.
         const resolveManual = (): KiokuState | null => {
-            const pool = legalTargetPool(detail, possibleTargets)
+            const pool = legalTargetPool(detail, universe)
             if (pool.length <= 1) return pool[0] ?? null
             const skillMstId = (detail as any).skillMstId as number | undefined
             const what = skillMstId ? skillName(skillMstId) : detail.abilityEffectType
             const label = `${unitLabel(actor)} · ${what}: target on the ${pool[0].team.isTeam1 ? "allies" : "enemies"}`
             return pool[(this.rng as BattleRng).pickTarget(label, pool.map(unitLabel))]
         }
-        const resolveUncached = this.manualTargeting && this.rng instanceof BattleRng ? resolveManual : resolvePrimaryTarget
-        // completeAction resolves a friendly effect against [actor] first, then applyEffect widens it to
-        // the whole team (the `this === target` branch). In manual mode that placeholder is not a
-        // decision: pass the actor through uncached so the real pick happens against the team
-        // (previously the one-option pool made the actor the cached pick, e.g. Hollow Woman's
-        // battle skill landing on herself).
-        const isFriendPlaceholder = side === "friend" && possibleTargets.length === 1 && possibleTargets[0] === actor
+        const resolveUncached = manual ? resolveManual : resolvePrimaryTarget
         const resolveCached = (): KiokuState | null => {
-            if (this.manualTargeting && isFriendPlaceholder) return actor.isDead ? null : actor
             const hit = this.actionPrimaryTargets.get(side)
-            if (hit && !hit.isDead && possibleTargets.includes(hit)) return hit
+            if (hit && !hit.isDead && universe.includes(hit)) return hit
             const picked = resolveUncached()
             if (picked) this.actionPrimaryTargets.set(side, picked)
             return picked
@@ -1530,7 +1531,7 @@ export class PvPTeam {
                 console.warn(actor.kioku.name, detail, "PROXIMITY targeting found no eligible primary target")
                 return []
             }
-            return expandProximity(primary, possibleTargets)
+            return expandProximity(primary, universe)
         }
         // [CONFIRMED 3.19] SelectTargets: candidates are the side's units filtered by !IsDead
         // (unless IsIncludeDeadUnitInTarget); range 3 = every candidate, range -1 = the user
