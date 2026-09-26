@@ -88,13 +88,19 @@ import { isMatchWeakElement } from "./DamageCalculator";
 
 export type UnitFilter = (units: KiokuState[]) => KiokuState[];
 
+// The battle's seeded RNG while selectFullAutoTarget runs. Filter chains are built by
+// per-effect-type factories that don't take an rng, and the weighted-random filter used to fall
+// back to Math.random - so the same seed could pick different targets (exports didn't replay).
+let activeRng: () => number = Math.random;
+const currentRng = () => activeRng();
+
 // =============================================================================
 // Core algorithm - ReDriveBattleCore.AI.AISkillTargetSelector$$SelectTargetUnitInOrder
 // =============================================================================
 export function selectTargetUnitInOrder(
     initialCandidates: KiokuState[],
     filterChain: UnitFilter[],
-    rng: () => number = Math.random
+    rng: () => number = currentRng
 ): KiokuState | null {
     let candidates = initialCandidates;
     for (const filterFn of filterChain) {
@@ -185,7 +191,7 @@ export const filterMatchWeakElement = (element: number): UnitFilter =>
 // [0, totalWeight)), then walk the dictionary summing weights until the running total
 // EXCEEDS roll (strict >), returning whichever unit's weight pushed it over. See
 // getThreatWeight (UnitStateEngine.ts) for the per-unit weight (role base + active hate).
-export const filterByRoleAtWeightedRandomWithHate = (rng: () => number = Math.random): UnitFilter =>
+export const filterByRoleAtWeightedRandomWithHate = (rng: () => number = currentRng): UnitFilter =>
     (units) => {
         if (units.length === 0) return units;
         const weights = units.map(getThreatWeight);
@@ -516,6 +522,16 @@ export function selectFullAutoTarget(
     candidates: KiokuState[],
     rng: () => number = Math.random
 ): KiokuState | null {
+    const previous = activeRng
+    activeRng = rng
+    try {
+        return selectFullAutoTargetInner(detail, candidates, rng)
+    } finally {
+        activeRng = previous
+    }
+}
+
+function selectFullAutoTargetInner(detail: SkillDetail, candidates: KiokuState[], rng: () => number): KiokuState | null {
     if (detail.abilityEffectType.startsWith("DMG_")) {
         const alive = filterAlive(candidates);
         if (alive.length === 0) return null;

@@ -107,6 +107,19 @@
       <button class="btn btn-accent run-sim-btn" @click="runSimulation" :disabled="!isFullBattle">Run
         Simulation</button>
 
+      <div class="sim-tools">
+        <span class="sim-seed" title="Every random roll (crits, effect chances, targeting) comes from this seed">
+          Seed {{ battleInstance?.seed ?? "-" }}<span v-if="forcedSeed !== undefined"> (fixed)</span>
+        </span>
+        <button class="btn" @click="rerollSeed" :disabled="!isFullBattle"
+          title="Use a new random seed">New seed</button>
+        <button class="btn" @click="exportBattle" :disabled="!isFullBattle"
+          title="Save the team setup, seed and the full simulated sequence to a file">Export to file</button>
+        <button class="btn" @click="importInput?.click()"
+          title="Load teams and seed from an exported file and re-run the simulation">Import file</button>
+        <input ref="importInput" type="file" accept=".json,application/json" class="hidden-file" @change="importBattle" />
+      </div>
+
       <div class="battle-output">
         <div v-for="(state, idx) in battleOutput" :key="idx" class="battle-state">
           <div class="matchup-divider">
@@ -193,7 +206,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, markRaw, nextTick, ref, shallowRef, watch } from 'vue'
 import { usePvPStore } from '../store/singleTeamStore'
 import { BattleSnapshot, TargetType, TeamSnapshot, Character } from '../types/KiokuTypes'
 import { PvPBattle } from '../models/PvPBattle'
@@ -202,6 +215,7 @@ import CharacterEditor from '../components/CharacterEditor.vue'
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
 import { toast } from 'vue3-toastify'
 import { PvPKioku } from '../models/PvPKioku'
+import { buildPvPKiokus, buildExport, parseExport, downloadText } from '../utils/pvpExport'
 import { useFriendStore } from '../store/friendStore'
 import { crystalises, passiveDetails, portraits } from "../utils/helpers"
 
@@ -222,27 +236,21 @@ const round = (spd: number) => spd.toFixed(2)
 const formatSpdBuffs = (buffs: [number, string, string?][]) => buffs.map(buff => `${round(buff[0])} given by "${buff[1]}" applied by ${buff[2] ?? "UNKNOWN"}`).join("\n")
 
 const isFullBattle = computed(() => team.slots[0].every(t => t?.main) && team.slots[1].every(t => t?.main))
-const battleInstance = ref<PvPBattle | null>(null)
+// shallowRef + markRaw: the battle must NOT become a deep Vue reactive proxy. The engine relies
+// on object identity (lastActor !== unit, Map/Set lookups, team.kiokuStates.includes(unit)), and
+// proxies vs raw objects made page runs differ from the same seed run anywhere else.
+const battleInstance = shallowRef<PvPBattle | null>(null)
 
+// Shared with scripts/sim/replayExport.ts so an exported file replays with the same teams.
 function buildTeams(): [PvPKioku[], PvPKioku[]] {
-  return [1, 0].map(idx =>
-    team.slots[idx].map(m => {
-      const crys = m.main
-        ? Object.entries(m.main.crysOptions)
-          .filter(([, v]) => v.useIndex > 0)
-        : []
-
-      return new PvPKioku({
-        ...m.main,
-        crysIDs: crys.map(c => Number(c[0])),
-        subCrysIDs: crys.flatMap(c => c[1].subCrys),
-        supportKey: m.support
-          ? new PvPKioku(m.support).getKey()
-          : undefined,
-      })
-    })
-  ) as [PvPKioku[], PvPKioku[]]
+  return buildPvPKiokus(team.slots)
 }
+
+// Turns simulated per run (each turn can produce several displayed actions).
+const SIM_TURNS = 30
+// Seed from an imported file (or kept after "New seed" is not pressed); undefined = random.
+const forcedSeed = ref<number | undefined>(undefined)
+const importInput = ref<HTMLInputElement | null>(null)
 
 watch(team, () => {
   if (!isFullBattle.value) {
@@ -251,8 +259,9 @@ watch(team, () => {
     return
   }
   const [alliedTeam, enemyTeam] = buildTeams()
-  const battle = new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"))
+  const battle = markRaw(new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"), false, forcedSeed.value))
   battleInstance.value = battle
+  if (import.meta.env.DEV) (window as any).__pvpBattle = battle // for debugging exports in dev
   battleOutput.value = [battle.getCurrentState()]
   console.debug("State is", battleOutput.value)
 }, { immediate: true, deep: true })
@@ -349,7 +358,7 @@ function runSimulation() {
   // One entry per executed skill: turn actions, ultimates, extra actions, combo steps and
   // follow-ups each get their own "Action N" (executeNextAction returns them in order).
   const states: BattleSnapshot[] = [battleInstance.value.getCurrentState()]
-  for (let turn = 0; turn < 30; turn++) {
+  for (let turn = 0; turn < SIM_TURNS; turn++) {
     try {
       states.push(...battleInstance.value.executeNextAction())
     } catch (e) {
@@ -359,7 +368,47 @@ function runSimulation() {
     }
   }
   battleOutput.value = states
+}
 
+// Rebuild the battle with a fresh random seed (drops a seed fixed by an import).
+function rebuildBattle() {
+  if (!isFullBattle.value) return
+  const [alliedTeam, enemyTeam] = buildTeams()
+  battleInstance.value = markRaw(new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"), false, forcedSeed.value))
+  battleOutput.value = [battleInstance.value.getCurrentState()]
+}
+
+function rerollSeed() {
+  forcedSeed.value = undefined
+  rebuildBattle()
+}
+
+function exportBattle() {
+  if (!battleInstance.value) return
+  if (battleOutput.value.length <= 1) runSimulation()
+  const seed = battleInstance.value.seed
+  const data = buildExport(team.slots, seed, SIM_TURNS, battleOutput.value)
+  const first = (team.slots[1][0]?.main?.name ?? "team").replace(/[^A-Za-z0-9]+/g, "-")
+  downloadText(`pvp-sim-${first}-seed${seed}.json`, JSON.stringify(data, null, 2))
+  toast.success("Exported team setup and simulated sequence")
+}
+
+async function importBattle(ev: Event) {
+  const input = ev.target as HTMLInputElement
+  const file = input.files?.[0]
+  input.value = ""
+  if (!file) return
+  try {
+    const data = parseExport(await file.text())
+    forcedSeed.value = data.seed
+    team.importSlots(data.slots)
+    await nextTick()
+    rebuildBattle()
+    runSimulation()
+    toast.success(`Imported teams, seed ${data.seed}`)
+  } catch (e) {
+    toast.error(`Could not import: ${(e as Error).message}`)
+  }
 }
 </script>
 
@@ -430,7 +479,26 @@ function runSimulation() {
 
 .run-sim-btn {
   display: block;
+  margin: 0 auto 0.75rem;
+}
+
+.sim-tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
   margin: 0 auto 1.5rem;
+}
+
+.sim-seed {
+  font-size: 0.85em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.hidden-file {
+  display: none;
 }
 
 .battle-order-card {

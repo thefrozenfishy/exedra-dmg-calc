@@ -10,3 +10,16 @@ Run with `npx tsx <script>` from the repo root (no build needed).
 
 Both scripts import `BestTeamCalculator` first: outside Vite, the Kioku <-> BestTeamCalculator
 import cycle otherwise fails with "Cannot access 'Kioku' before initialization".
+
+## Replaying a browser export
+
+The PvP simulator page has **Export to file**: one JSON with the team setup, the RNG seed, the
+number of turns, a readable `sequence` (one line per event / unit row) and the raw snapshots.
+**Import file** on the page loads the same teams and seed again.
+
+    npx tsx scripts/sim/replayExport.ts pvp-sim-...json          # print the sequence with the current engine
+    npx tsx scripts/sim/replayExport.ts pvp-sim-...json --diff   # only lines that changed vs the file
+    npx tsx scripts/sim/replayExport.ts pvp-sim-...json --out now.txt
+
+Put notes on what looks wrong in the file's `notes` field. Same seed + same teams = same battle
+(every random roll uses the seeded generator; the page keeps the battle out of Vue reactivity).
