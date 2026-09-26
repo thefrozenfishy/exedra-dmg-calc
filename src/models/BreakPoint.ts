@@ -104,13 +104,13 @@ export function calculateProcessedBreakPointDamage(attacker: KiokuState, defende
 // gauge is pushed back by BreakTurnGaugeSlowRatio/1000 (PvP policy 250) and
 // BreakedDamageReceiveRate is set to InitialBreakedDamageReceiveRate/10 (PvP policy 1000 -> 100).
 export interface BreakResult { decreased: number, broke: boolean }
-export function decreaseBreakPoint(attacker: KiokuState, defender: KiokuState, attackElement: number, decreaseValue: number): BreakResult {
+export function decreaseBreakPoint(attacker: KiokuState, defender: KiokuState, attackElement: number, decreaseValue: number, turnOrderPriority?: number): BreakResult {
     if (defender.maxBreakGauge < 1 || defender.currentRemainingBreakGauge < 1) return { decreased: 0, broke: false };
     const processed = calculateProcessedBreakPointDamage(attacker, defender, decreaseValue, attackElement);
     const before = defender.currentRemainingBreakGauge;
     defender.currentRemainingBreakGauge = Math.min(defender.maxBreakGauge, Math.max(0, before - processed));
     const broke = defender.currentRemainingBreakGauge < 1;
-    if (broke) defender.onBreak();
+    if (broke) defender.onBreak(turnOrderPriority);
     return { decreased: before - defender.currentRemainingBreakGauge, broke };
 }
 

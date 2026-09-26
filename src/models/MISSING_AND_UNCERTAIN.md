@@ -60,6 +60,17 @@ Trigger: Thunder Torrent's battle-start HASTE had no effect on this branch.
   The R7.2 rework checked both at trigger time, so every battle-start passive with an active
   condition (e.g. "while Abyssal Rose", "if HP >= 50%") was never added.
 
+## R7.7 Turn-order priority (confirmed against in-game Heroic Grace behaviour)
+- `TurnReferee$$SortByTurnOrder`: gauge ascending, TurnOrderPriority DESCENDING, team, unit id.
+- `TurnReferee$$get_NextTurnOrderPriority` is ++counter, fetched ONCE per effect application
+  (Haste/Slow Triggering; once per damage effect for the break push-back) and shared by all its
+  targets. The port incremented it per target, so one "advance all allies" effect ordered its
+  targets right-to-left instead of tying (-> left-to-right by unit id). The break push-back also
+  used a negative priority instead of the damage effect's.
+- In-game check (fixtures in scripts/sim/fixtures, `npx tsx scripts/sim/checkFixtures.ts`): after
+  a break, units taken to 0 AV by the same effect act leftmost first; units whose own Heroic Grace
+  (a separate, later effect per unit, triggered in unit order) took them to 0 AV act rightmost first.
+
 ## R7.4 Still open
 - HoT/DOT ticks stay in `decrementActiveEffects` (now at TurnEnd). The game runs
   `ContinuousRecoveryProcess` at TurnBegin; slip damage timing not re-read.

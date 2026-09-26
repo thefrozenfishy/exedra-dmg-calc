@@ -23,3 +23,8 @@ number of turns, a readable `sequence` (one line per event / unit row) and the r
 
 Put notes on what looks wrong in the file's `notes` field. Same seed + same teams = same battle
 (every random roll uses the seeded generator; the page keeps the battle out of Vue reactivity).
+
+## In-game regression fixtures
+
+`scripts/sim/fixtures/*.json` are exports (snapshots stripped) of situations checked in-game; the
+`notes` field says what the game does. `npx tsx scripts/sim/checkFixtures.ts` asserts them.

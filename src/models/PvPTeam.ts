@@ -22,6 +22,16 @@ function skillTypeOf(t?: TargetType): SkillType {
 const f32 = Math.fround;
 let globalTurnShiftCounter = 0;
 
+// [CONFIRMED 3.19] TurnReferee$$get_NextTurnOrderPriority (0x15c27e0): ++counter. Fetched ONCE per
+// effect application (HasteAbilityEffect/SlowAbilityEffect$$Triggering, and once per damage effect
+// for the break push-back in DamageAbilityEffectBase$$Triggering), and that one value is given to
+// every target. SortByTurnOrder = gauge asc, priority DESC, team, unit id asc - so units moved by
+// the same effect tie and resolve left to right, while a later effect (e.g. each unit's own Heroic
+// Grace, triggered in unit order) puts its unit ahead: the rightmost one wins.
+export function nextTurnOrderPriority(): number {
+    return ++globalTurnShiftCounter
+}
+
 /**
  * REVISION 2 effect-list notes
  * ==============================
@@ -331,6 +341,13 @@ export class KiokuState {
 
     isBroken = false
     breakCount = 0
+    // Priority shared by every target of the effect currently being applied by this unit (set by
+    // the caller that loops over targets, see nextTurnOrderPriority).
+    effectTurnPriority?: number
+    turnPriorityForEffect(): number {
+        return this.effectTurnPriority ?? nextTurnOrderPriority()
+    }
+
     // Tiebreak stamp for exact-tie turn order, see globalTurnShiftCounter above.
     //
     // VERIFIED against ReDriveBattleCore.TurnReferee$$SortByTurnOrder /
@@ -437,12 +454,13 @@ export class KiokuState {
     }
 
     // [CONFIRMED 3.19] BreakPoint$$Decrease, on the gauge reaching 0 (called from BreakPoint.ts).
-    onBreak() {
+    onBreak(turnOrderPriority: number = nextTurnOrderPriority()) {
         if (this.isBroken) return
         this.isBroken = true
         this.breakCount++
         // Turn gauge pushed back by BreakTurnGaugeSlowRatio/1000 (PvP policy id 20: 250 -> 0.25).
-        this.addGaugeRate(0.25, -(++globalTurnShiftCounter))
+        // (Used a NEGATIVE priority before; the game passes the damage effect's NextTurnOrderPriority.)
+        this.addGaugeRate(0.25, turnOrderPriority)
         // BreakedDamageReceiveRate = InitialBreakedDamageReceiveRate / 10 (policy id 21: 1000 -> 100%).
         this.breakedDamageReceiveRate = PVP_POLICY.initialBreakDamageReceiveRate / 10
         // [CONFIRMED] ReDriveBattleCore.TurnReferee (team-level tally, consumed by
@@ -755,7 +773,7 @@ export class KiokuState {
             const [mainBreak, subBreak] = getVariationBreakPoint(detail, skillTypeOf(targetType), this.kioku.data.role)
             const breakValue = detail.range === targetRange.PROXIMITY && !isMainTarget ? subBreak : mainBreak
             const rateUp = increaseBreakedDamageReceiveRate(this, target, detail)
-            const brk = decreaseBreakPoint(this, target, detail.element ?? 0, breakValue)
+            const brk = decreaseBreakPoint(this, target, detail.element ?? 0, breakValue, this.turnPriorityForEffect())
 
             const hpLost = target.takeDamage(totalDamage)
             this.team.eventLog.push({
@@ -987,10 +1005,12 @@ export class KiokuState {
             effTargets.forEach(t => this.storeTimedEffect(t, detail, this.kioku.name, this))
         } else if (detail.abilityEffectType === "HASTE") {
             // [CONFIRMED 3.19] HasteAbilityEffect$$Triggering (0x18f4840): SubtractGaugeValue((float)v/1000f)
-            effTargets.forEach(t => t.addGaugeRate(-f32(f32(detail.value1) / 1000), ++globalTurnShiftCounter))
+            const prio = this.turnPriorityForEffect()
+            effTargets.forEach(t => t.addGaugeRate(-f32(f32(detail.value1) / 1000), prio))
         } else if (detail.abilityEffectType === "SLOW") {
             // [CONFIRMED 3.19] SlowAbilityEffect$$Triggering (0x1900f80): AddGaugeValue((float)v/1000f)
-            effTargets.forEach(t => t.addGaugeRate(f32(f32(detail.value1) / 1000), ++globalTurnShiftCounter))
+            const prio = this.turnPriorityForEffect()
+            effTargets.forEach(t => t.addGaugeRate(f32(f32(detail.value1) / 1000), prio))
         } else if (detail.abilityEffectType === "GAIN_EP_RATIO") {
             effTargets.forEach(t => t.getMp(target.maxMp * detail.value1 / 1000))
         } else if (detail.abilityEffectType === "GAIN_EP_FIXED") {
@@ -1192,6 +1212,8 @@ export class PvPTeam {
             k.passiveSkills.forEach(detail => {
                 if (!isTimingCorrect(timing, detail)) return
                 if (conditionSetRequiresActorIsSelf(detail) && (!lastActor || lastActor !== k)) return
+                k.effectTurnPriority = nextTurnOrderPriority()
+                try {
                 if (isOpponentEffect(detail.abilityEffectType)) {
                     // [CONFIRMED 3.19] AdditionalSkillActAbilityEffectBase$$Triggering: value2 is the
                     // AdditionalSkillTargetType. Type 1 with an ENEMY actor targets that actor (a
@@ -1207,6 +1229,7 @@ export class PvPTeam {
                     const fua = k.applyEffect(k, detail, lastAction, lastActor, mainTarget)
                     if (fua) additionalAct[fua] = { caster: k, triggerTarget: lastActor }
                 }
+                } finally { k.effectTurnPriority = undefined }
             })
         }
         return additionalAct;
@@ -1384,10 +1407,13 @@ export class PvPTeam {
             }
             const targets = this.sliceTargets(actor, possibleTargets, detail)
             if (detail.abilityEffectType.startsWith("DMG_") && targets[0] && !this.lastMainTarget) this.lastMainTarget = targets[0]
-            for (const target of targets) {
-                const fua = actor.applyEffect(target, detail, effectName, actor, targets[0])
-                if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
-            }
+            actor.effectTurnPriority = nextTurnOrderPriority()
+            try {
+                for (const target of targets) {
+                    const fua = actor.applyEffect(target, detail, effectName, actor, targets[0])
+                    if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
+                }
+            } finally { actor.effectTurnPriority = undefined }
         }
         actor.getMpFromType(effectName)
         return additionalAct
@@ -1535,10 +1561,13 @@ export class PvPTeam {
             const isSingleTarget = detail.range === targetRange.TARGET
             const targets = isSingleTarget ? [preferredTarget] : this.sliceTargets(actor, isFriendlyEffect(detail.abilityEffectType) ? [actor] : this.otherTeam.kiokuStates, detail)
             if (detail.abilityEffectType.startsWith("DMG_") && targets[0] && !this.lastMainTarget) this.lastMainTarget = targets[0]
-            for (const target of targets) {
-                const fua = actor.applyEffect(target, detail, effectName, actor, targets[0])
-                if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
-            }
+            actor.effectTurnPriority = nextTurnOrderPriority()
+            try {
+                for (const target of targets) {
+                    const fua = actor.applyEffect(target, detail, effectName, actor, targets[0])
+                    if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
+                }
+            } finally { actor.effectTurnPriority = undefined }
         }
         actor.getMpFromType(effectName)
         return additionalAct
