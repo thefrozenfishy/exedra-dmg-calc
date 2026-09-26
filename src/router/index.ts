@@ -30,7 +30,7 @@ const routes = [
     { path: '/account-compare', name: 'Account Comparison', component: AccountComparisonPage, meta: { version: 0 } },
     { path: '/sa-simulator-multiple', name: 'Best SA Team Calculator', component: BestTeamPage, meta: { version: 0 } },
     { path: '/sa-simulator-single', name: 'Single Battle Calculator', component: SingleTeamPage, meta: { version: 0 } },
-    { path: '/pvp-simulator', name: 'PvP Calculator', component: PvpTeamPage, meta: { version: 0 } },
+    { path: '/pvp-simulator', name: 'PvP Calculator', component: PvpTeamPage, meta: { version: 1 } },
     { path: '/pvp-how-to', name: 'PvP 101', component: Pvp101Page, meta: { version: 0 } },
     { path: '/kioku-grid', name: 'Kioku Grid', component: KiokuGridPage, meta: { version: 1 } },
     { path: '/heartphial', name: 'Heartphial', component: HeartphialPage, meta: { version: 1 } },
