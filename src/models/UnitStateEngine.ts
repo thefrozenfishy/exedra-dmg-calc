@@ -35,6 +35,7 @@
  * there is no DWN_ATK_FIXED / DWN_DEF_FIXED / DWN_ELEMENT_RESIST_RATIO class at all.
  */
 
+import { NEGATIVE_STATE_TYPES } from "./EffectTargetSide";
 import { rollChance, type RngSource } from "./BattleRng";
 import { KiokuState, isAlimentEffect } from "./PvPTeam";
 import { SkillDetail, aggro } from "../types/KiokuTypes";
@@ -529,12 +530,12 @@ export function getMaxComboActionNum(unit: KiokuState): number {
 //
 // GetTotalEffectHitRate (BattleUnit$$GetTotalEffectHitRate), [CONFIRMED shape]:
 //     rate = 0
-//     if (<a vtable condition on the state not fully identified>) rate += GetProcessedEffectHitRate()   // this unit's own accumulated UP_EFFECT_HIT_RATE_RATIO-style bonus
+//     if (state.Direction == Negative) rate += GetProcessedEffectHitRate()   // [CONFIRMED 3.19] vtable slot 6 = get_Direction   // this unit's own accumulated UP_EFFECT_HIT_RATE_RATIO-style bonus
 //     if (state is AbnormalUnitStateBase) rate += GetAllAbnormalHitRate() / 100              // additional bonus, aliments only
 //     return Max(rate + 1, 0)
 //
 // GetTotalEffectParryRate (BattleUnit$$GetTotalEffectParryRate), [CONFIRMED shape]:
-//     rate = <same vtable condition> ? GetProcessedEffectParryRate() : 0
+//     rate = state.Direction == Negative ? GetProcessedEffectParryRate() : 0
 //     return Clamp(1 - rate, 0, 1)
 //
 // GetTotalSecondaryEffectParryRate (BattleUnit$$GetTotalSecondaryEffectParryRate),
@@ -590,8 +591,11 @@ export function rollAppliesEffect(detail: SkillDetail, caster: KiokuState | unde
         return rollChance(rng, detail.probability, "effect", label, r => r * 100 < detail.probability);
     }
     const isAliment = isAlimentEffect(detail.abilityEffectType);
-    const hitRate = caster ? getTotalEffectHitRate(caster, isAliment) : 1;
-    const parryRate = getTotalEffectParryRate(target);
+    // [CONFIRMED 3.19] hit rate and parry rate only apply to Negative-direction states (debuffs);
+    // previously a buff on an ally with some debuff resistance became e.g. a 97% roll.
+    const isNegative = NEGATIVE_STATE_TYPES.has(detail.abilityEffectType);
+    const hitRate = caster && isNegative ? getTotalEffectHitRate(caster, isAliment) : 1;
+    const parryRate = isNegative ? getTotalEffectParryRate(target) : 1;
     const secondaryParryRate = getTotalSecondaryEffectParryRate(target, isAliment);
     const finalProbability = Math.min(Math.max(hitRate * parryRate * secondaryParryRate * detail.probability, 0), 100);
     return rollChance(rng, finalProbability, "effect", label, r => r * 1000 < finalProbability * 10);
