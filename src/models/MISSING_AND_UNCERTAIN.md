@@ -92,6 +92,26 @@ Trigger: Thunder Torrent's battle-start HASTE had no effect on this branch.
 - Still not modelled: TriggeringOnBattleStart stable-sorts battle-start effects by
   TriggerPriority (desc) and runs AfterProcess (9) per trigger info. Current order is unit order.
 
+## R7.10 Cutaway (CUTOUT, Hollow Woman's battle skill)
+- [CONFIRMED 3.19] CutoutUnitState (value1 = hasteRate, value2 = debuffRemoveNum, 0 = all) is an
+  ITurnEndTrigger: ActExecutor$$TurnEnd runs it for the acting unit's own states after the
+  TurnEnd passives and before PassingTurn. TriggeringAtTurnEnd (0x15b7840):
+  - if another Cutaway on the unit already fired this turn end, this one is just removed
+  - removes the newest `debuffRemoveNum` skill-origin IDebuff states (ailments are not IDebuff)
+  - unless the unit had LockTurnOrder when Cutaway was added (SetTriggeringInfo):
+    SubtractGaugeValue(value1 / 1000) with a new NextTurnOrderPriority
+  - removes itself.
+- Previously the sim only zeroed the gauge and never removed debuffs. Now
+  `KiokuState.triggerCutoutAtTurnEnd`; the turn it produces is labelled "Cutaway" in the log.
+- Targeting (GetUnitFilterFuncOrder 0x15b7520): MainTarget, RoleAttacker, MaxAtk. The Hollow
+  Woman rule compared base ATK; it now uses processed ATK (with buffs).
+
+## R7.11 KO'd units and battle end
+- KO'd units stayed in the turn order and kept acting (and firing ultimates). The turn order is
+  now built from living units only (GameDirectorBase.ActiveUnitList) and `PvPBattle.isOver` ends
+  the battle when one side is wiped; `executeNextAction()` then returns []. The page, the replay
+  script and checkFixtures stop there.
+
 ## R7.4 Still open
 - HoT/DOT ticks stay in `decrementActiveEffects` (now at TurnEnd). The game runs
   `ContinuousRecoveryProcess` at TurnBegin; slip damage timing not re-read.

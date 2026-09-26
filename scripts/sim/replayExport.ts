@@ -22,7 +22,7 @@ console.warn = () => {}; console.debug = () => {}; console.error = () => {};
 const [allies, enemies] = buildPvPKiokus(data.slots);
 const battle = new PvPBattle(new PvPTeam(allies, "Ally"), new PvPTeam(enemies, "Enemy"), false, data.seed);
 const snaps: BattleSnapshot[] = [battle.getCurrentState()];
-for (let t = 0; t < data.turns; t++) {
+for (let t = 0; t < data.turns && !battle.isOver; t++) {
     try { snaps.push(...battle.executeNextAction()); }
     catch (e) { snaps.push({ ...battle.getCurrentState(), lastActor: `ERROR: ${(e as Error).message}` }); break; }
 }

@@ -21,8 +21,8 @@ for (const c of CASES) {
     const [a, e] = buildPvPKiokus(d.slots);
     const b = new PvPBattle(new PvPTeam(a, "Ally"), new PvPTeam(e, "Enemy"), false, d.seed);
     const snaps: BattleSnapshot[] = [b.getCurrentState()];
-    while (snaps.length <= c.action) snaps.push(...b.executeNextAction());
-    const s = snaps[c.action];
+    while (snaps.length <= c.action && !b.isOver) snaps.push(...b.executeNextAction());
+    const s = snaps[c.action] ?? { lastActor: "<battle over>" } as BattleSnapshot;
     const side = (ally?: boolean) => ally === undefined ? "" : ally ? " (Ally)" : " (Enemy)";
     const got = s.lastActor + side(c.ally === undefined ? undefined : s.lastTeamIsTeam1);
     const ok = got === c.actor + side(c.ally);

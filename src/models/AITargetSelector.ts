@@ -483,6 +483,8 @@ const CHAIN_BY_EFFECT_TYPE: Record<string, () => AIChain> = {
     // behavior, not an oversight.
     HASTE: hasteChain,
     SLOW: slowChain,
+    // [CONFIRMED 3.19] CutoutUnitState$$GetUnitFilterFuncOrder (0x15b7520).
+    CUTOUT: () => ({ chain: [filterByMainTarget, filterByRole(KiokuRole.Attacker), filterWithMaxAtk] }),
 };
 
 // [CONFIRMED] ReDriveBattleCore.AbilityEffect.AbilityEffectBase - the base class's OWN
