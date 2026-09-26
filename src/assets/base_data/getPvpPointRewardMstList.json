@@ -1,0 +1,163 @@
+[
+    {
+        "num": 500,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 500,
+        "pvpPointRewardMstId": 10101
+    },
+    {
+        "num": 500,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 700,
+        "pvpPointRewardMstId": 10102
+    },
+    {
+        "num": 500,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 900,
+        "pvpPointRewardMstId": 10103
+    },
+    {
+        "num": 1000,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 1200,
+        "pvpPointRewardMstId": 10104
+    },
+    {
+        "num": 1000,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 1500,
+        "pvpPointRewardMstId": 10105
+    },
+    {
+        "num": 1000,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 2000,
+        "pvpPointRewardMstId": 10106
+    },
+    {
+        "num": 1000,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 2500,
+        "pvpPointRewardMstId": 10107
+    },
+    {
+        "num": 1000,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 3000,
+        "pvpPointRewardMstId": 10108
+    },
+    {
+        "num": 1000,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 3500,
+        "pvpPointRewardMstId": 10109
+    },
+    {
+        "num": 1000,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 4000,
+        "pvpPointRewardMstId": 10110
+    },
+    {
+        "num": 1000,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 4500,
+        "pvpPointRewardMstId": 10111
+    },
+    {
+        "num": 1500,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 5000,
+        "pvpPointRewardMstId": 10112
+    },
+    {
+        "num": 1500,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 5500,
+        "pvpPointRewardMstId": 10113
+    },
+    {
+        "num": 1500,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 6000,
+        "pvpPointRewardMstId": 10114
+    },
+    {
+        "num": 1500,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 6500,
+        "pvpPointRewardMstId": 10115
+    },
+    {
+        "num": 1500,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 7000,
+        "pvpPointRewardMstId": 10116
+    },
+    {
+        "num": 1500,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 7500,
+        "pvpPointRewardMstId": 10117
+    },
+    {
+        "num": 1500,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 8000,
+        "pvpPointRewardMstId": 10118
+    },
+    {
+        "num": 2000,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 8500,
+        "pvpPointRewardMstId": 10119
+    },
+    {
+        "num": 2000,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 9000,
+        "pvpPointRewardMstId": 10120
+    },
+    {
+        "num": 2000,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 10000,
+        "pvpPointRewardMstId": 10121
+    },
+    {
+        "num": 2000,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 11000,
+        "pvpPointRewardMstId": 10122
+    },
+    {
+        "num": 2000,
+        "objectId": 201009,
+        "objectReceiveType": 5,
+        "point": 12000,
+        "pvpPointRewardMstId": 10123
+    }
+]

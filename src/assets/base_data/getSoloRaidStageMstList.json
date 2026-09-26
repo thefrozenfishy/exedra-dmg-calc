@@ -1,0 +1,362 @@
+[
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><tooltips_id=2> is applied at battle start, so you'll need to prepare your party carefully.",
+        "difficulty": 1,
+        "dioramaBackgroundMstId": 110319,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60001,
+        "questStageMstId": 1401101,
+        "soloRaidMstId": 1,
+        "soloRaidStageMstId": 101
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><tooltips_id=2> is applied at battle start, so you'll need to prepare your party carefully.",
+        "difficulty": 2,
+        "dioramaBackgroundMstId": 110319,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60002,
+        "questStageMstId": 1401102,
+        "soloRaidMstId": 1,
+        "soloRaidStageMstId": 102
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><tooltips_id=2> is applied at battle start, so you'll need to prepare your party carefully.",
+        "difficulty": 3,
+        "dioramaBackgroundMstId": 110319,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60003,
+        "questStageMstId": 1401103,
+        "soloRaidMstId": 1,
+        "soloRaidStageMstId": 103
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><tooltips_id=2> is applied at battle start, so you'll need to prepare your party carefully.",
+        "difficulty": 4,
+        "dioramaBackgroundMstId": 110319,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60004,
+        "questStageMstId": 1401104,
+        "soloRaidMstId": 1,
+        "soloRaidStageMstId": 104
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><tooltips_id=2> is applied at battle start, so you'll need to prepare your party carefully.",
+        "difficulty": 5,
+        "dioramaBackgroundMstId": 110319,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60005,
+        "questStageMstId": 1401105,
+        "soloRaidMstId": 1,
+        "soloRaidStageMstId": 105
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><tooltips_id=2> is applied at battle start, so you'll need to prepare your party carefully.",
+        "difficulty": 6,
+        "dioramaBackgroundMstId": 110319,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60006,
+        "questStageMstId": 1401106,
+        "soloRaidMstId": 1,
+        "soloRaidStageMstId": 106
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><tooltips_id=2> is applied at battle start, so you'll need to prepare your party carefully.<br><br>Take note that the enemy's large break gauge makes putting it into break difficult.",
+        "difficulty": 1,
+        "dioramaBackgroundMstId": 111019,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60007,
+        "questStageMstId": 1402101,
+        "soloRaidMstId": 2,
+        "soloRaidStageMstId": 201
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><tooltips_id=2> is applied at battle start, so you'll need to prepare your party carefully.<br><br>Take note that the enemy's large break gauge makes putting it into break difficult.",
+        "difficulty": 2,
+        "dioramaBackgroundMstId": 111019,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60008,
+        "questStageMstId": 1402102,
+        "soloRaidMstId": 2,
+        "soloRaidStageMstId": 202
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><tooltips_id=2> is applied at battle start, so you'll need to prepare your party carefully.<br><br>Take note that the enemy's large break gauge makes putting it into break difficult.",
+        "difficulty": 3,
+        "dioramaBackgroundMstId": 111019,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60009,
+        "questStageMstId": 1402103,
+        "soloRaidMstId": 2,
+        "soloRaidStageMstId": 203
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><tooltips_id=2> is applied at battle start, so you'll need to prepare your party carefully.<br><br>Take note that the enemy's large break gauge makes putting it into break difficult.",
+        "difficulty": 4,
+        "dioramaBackgroundMstId": 111019,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60010,
+        "questStageMstId": 1402104,
+        "soloRaidMstId": 2,
+        "soloRaidStageMstId": 204
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><tooltips_id=2> is applied at battle start, so you'll need to prepare your party carefully.<br><br>Take note that the enemy's large break gauge makes putting it into break difficult.",
+        "difficulty": 5,
+        "dioramaBackgroundMstId": 111019,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60011,
+        "questStageMstId": 1402105,
+        "soloRaidMstId": 2,
+        "soloRaidStageMstId": 205
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br><tooltips_id=2> is applied at battle start, so you'll need to prepare your party carefully.<br><br>Take note that the enemy's large break gauge makes putting it into break difficult.",
+        "difficulty": 6,
+        "dioramaBackgroundMstId": 111019,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60012,
+        "questStageMstId": 1402106,
+        "soloRaidMstId": 2,
+        "soloRaidStageMstId": 206
+    },
+    {
+        "comment": "In Wave 1, the Witch's minions have <tooltips_id=4>.<br>Take note that at the start of an enemy turn or when taking damage, Magic increases and DMG decreases.",
+        "difficulty": 1,
+        "dioramaBackgroundMstId": 110219,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60013,
+        "questStageMstId": 1403101,
+        "soloRaidMstId": 3,
+        "soloRaidStageMstId": 301
+    },
+    {
+        "comment": "In Wave 1, the Witch's minions have <tooltips_id=4>.<br>Take note that at the start of an enemy turn or when taking damage, Magic increases and DMG decreases.",
+        "difficulty": 2,
+        "dioramaBackgroundMstId": 110219,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60014,
+        "questStageMstId": 1403102,
+        "soloRaidMstId": 3,
+        "soloRaidStageMstId": 302
+    },
+    {
+        "comment": "In Wave 1, the Witch's minions have <tooltips_id=4>.<br>Take note that at the start of an enemy turn or when taking damage, Magic increases and DMG decreases.",
+        "difficulty": 3,
+        "dioramaBackgroundMstId": 110219,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60015,
+        "questStageMstId": 1403103,
+        "soloRaidMstId": 3,
+        "soloRaidStageMstId": 303
+    },
+    {
+        "comment": "In Wave 1, the Witch's minions have <tooltips_id=4>.<br>Take note that at the start of an enemy turn or when taking damage, Magic increases and DMG decreases.<br>Magic does not increase from DMG dealt during the Labyrinth Vanguard Activation Phase, so be sure to rack up Vanguard points efficiently.",
+        "difficulty": 4,
+        "dioramaBackgroundMstId": 110219,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60016,
+        "questStageMstId": 1403104,
+        "soloRaidMstId": 3,
+        "soloRaidStageMstId": 304
+    },
+    {
+        "comment": "In Wave 1, the Witch's minions have <tooltips_id=4>.<br>Take note that at the start of an enemy turn or when taking damage, Magic increases and DMG decreases.<br>Magic does not increase from DMG dealt during the Labyrinth Vanguard Activation Phase, so be sure to rack up Vanguard points efficiently.",
+        "difficulty": 5,
+        "dioramaBackgroundMstId": 110219,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60017,
+        "questStageMstId": 1403105,
+        "soloRaidMstId": 3,
+        "soloRaidStageMstId": 305
+    },
+    {
+        "comment": "In Wave 1, the Witch's minions have <tooltips_id=4>.<br>Take note that at the start of an enemy turn or when taking damage, Magic increases and DMG decreases.<br>Magic does not increase from DMG dealt during the Labyrinth Vanguard Activation Phase, so be sure to rack up Vanguard points efficiently.",
+        "difficulty": 6,
+        "dioramaBackgroundMstId": 110219,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60018,
+        "questStageMstId": 1403106,
+        "soloRaidMstId": 3,
+        "soloRaidStageMstId": 306
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Some Minions' Magic decreases each time an ally is defeated.<br>Their DMG taken increases as their Magic decreases, so it's best to be mindful that you efficiently defeat other Minions.<br>",
+        "difficulty": 1,
+        "dioramaBackgroundMstId": 110819,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60019,
+        "questStageMstId": 1404101,
+        "soloRaidMstId": 4,
+        "soloRaidStageMstId": 401
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Some Minions' Magic decreases each time an ally is defeated.<br>Their DMG taken increases as their Magic decreases, so it's best to be mindful that you efficiently defeat other Minions.<br>",
+        "difficulty": 2,
+        "dioramaBackgroundMstId": 110819,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60020,
+        "questStageMstId": 1404102,
+        "soloRaidMstId": 4,
+        "soloRaidStageMstId": 402
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Some Minions' Magic decreases each time an ally is defeated.<br>Their DMG taken increases as their Magic decreases, so it's best to be mindful that you efficiently defeat other Minions.<br>",
+        "difficulty": 3,
+        "dioramaBackgroundMstId": 110819,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60021,
+        "questStageMstId": 1404103,
+        "soloRaidMstId": 4,
+        "soloRaidStageMstId": 403
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Some Minions' Magic decreases each time an ally is defeated.<br>Their DMG taken increases as their Magic decreases, so it's best to be mindful that you efficiently defeat other Minions.<br>",
+        "difficulty": 4,
+        "dioramaBackgroundMstId": 110819,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60022,
+        "questStageMstId": 1404104,
+        "soloRaidMstId": 4,
+        "soloRaidStageMstId": 404
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Some Minions' Magic decreases each time an ally is defeated.<br>Their DMG taken increases as their Magic decreases, so it's best to be mindful that you efficiently defeat other Minions.<br>",
+        "difficulty": 5,
+        "dioramaBackgroundMstId": 110819,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60023,
+        "questStageMstId": 1404105,
+        "soloRaidMstId": 4,
+        "soloRaidStageMstId": 405
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Some Minions' Magic decreases each time an ally is defeated.<br>Their DMG taken increases as their Magic decreases, so it's best to be mindful that you efficiently defeat other Minions.<br>",
+        "difficulty": 6,
+        "dioramaBackgroundMstId": 110819,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60024,
+        "questStageMstId": 1404106,
+        "soloRaidMstId": 4,
+        "soloRaidStageMstId": 406
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Each time a Minion is defeated, the others get tougher in various ways, such as their ATK increases, action order advances, and the effects of their buffs and debuffs increase.<br>It's best to be mindful of the order you defeat them in to minimize their enhancements.",
+        "difficulty": 1,
+        "dioramaBackgroundMstId": 110419,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60025,
+        "questStageMstId": 1405101,
+        "soloRaidMstId": 5,
+        "soloRaidStageMstId": 501
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Each time a Minion is defeated, the others get tougher in various ways, such as their ATK increases, action order advances, and the effects of their buffs and debuffs increase.<br>It's best to be mindful of the order you defeat them in to minimize their enhancements.",
+        "difficulty": 2,
+        "dioramaBackgroundMstId": 110419,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60026,
+        "questStageMstId": 1405102,
+        "soloRaidMstId": 5,
+        "soloRaidStageMstId": 502
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Each time a Minion is defeated, the others get tougher in various ways, such as their ATK increases, action order advances, and the effects of their buffs and debuffs increase.<br>It's best to be mindful of the order you defeat them in to minimize their enhancements.",
+        "difficulty": 3,
+        "dioramaBackgroundMstId": 110419,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60027,
+        "questStageMstId": 1405103,
+        "soloRaidMstId": 5,
+        "soloRaidStageMstId": 503
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Each time a Minion is defeated, the others get tougher in various ways, such as their ATK increases, action order advances, and the effects of their buffs and debuffs increase.<br>It's best to be mindful of the order you defeat them in to minimize their enhancements.",
+        "difficulty": 4,
+        "dioramaBackgroundMstId": 110419,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60028,
+        "questStageMstId": 1405104,
+        "soloRaidMstId": 5,
+        "soloRaidStageMstId": 504
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Each time a Minion is defeated, the others get tougher in various ways, such as their ATK increases, action order advances, and the effects of their buffs and debuffs increase.<br>It's best to be mindful of the order you defeat them in to minimize their enhancements.",
+        "difficulty": 5,
+        "dioramaBackgroundMstId": 110419,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60029,
+        "questStageMstId": 1405105,
+        "soloRaidMstId": 5,
+        "soloRaidStageMstId": 505
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Each time a Minion is defeated, the others get tougher in various ways, such as their ATK increases, action order advances, and the effects of their buffs and debuffs increase.<br>It's best to be mindful of the order you defeat them in to minimize their enhancements.",
+        "difficulty": 6,
+        "dioramaBackgroundMstId": 110419,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60030,
+        "questStageMstId": 1405106,
+        "soloRaidMstId": 5,
+        "soloRaidStageMstId": 506
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Some of the Witch's Minions will accumulate Magic when their allies not in break are attacked with a special attack, and an assist will activate each time their Magic reaches max.<br>Since the assist delays action order and decreases MP recovery rate, be careful about when you use your special attacks.",
+        "difficulty": 1,
+        "dioramaBackgroundMstId": 110619,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60031,
+        "questStageMstId": 1406101,
+        "soloRaidMstId": 6,
+        "soloRaidStageMstId": 601
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Some of the Witch's Minions will accumulate Magic when their allies not in break are attacked with a special attack, and an assist will activate each time their Magic reaches max.<br>Since the assist delays action order and decreases MP recovery rate, be careful about when you use your special attacks.",
+        "difficulty": 2,
+        "dioramaBackgroundMstId": 110619,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60032,
+        "questStageMstId": 1406102,
+        "soloRaidMstId": 6,
+        "soloRaidStageMstId": 602
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Some of the Witch's Minions will accumulate Magic when their allies not in break are attacked with a special attack, and an assist will activate each time their Magic reaches max.<br>Since the assist delays action order and decreases MP recovery rate, be careful about when you use your special attacks.",
+        "difficulty": 3,
+        "dioramaBackgroundMstId": 110619,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60033,
+        "questStageMstId": 1406103,
+        "soloRaidMstId": 6,
+        "soloRaidStageMstId": 603
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Some of the Witch's Minions will accumulate Magic when their allies not in break are attacked with a special attack, and an assist will activate each time their Magic reaches max.<br>Since the assist delays action order and decreases MP recovery rate, be careful about when you use your special attacks.",
+        "difficulty": 4,
+        "dioramaBackgroundMstId": 110619,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60034,
+        "questStageMstId": 1406104,
+        "soloRaidMstId": 6,
+        "soloRaidStageMstId": 604
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Some of the Witch's Minions will accumulate Magic when their allies not in break are attacked with a special attack, and an assist will activate each time their Magic reaches max.<br>Since the assist delays action order and decreases MP recovery rate, be careful about when you use your special attacks.",
+        "difficulty": 5,
+        "dioramaBackgroundMstId": 110619,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60035,
+        "questStageMstId": 1406105,
+        "soloRaidMstId": 6,
+        "soloRaidStageMstId": 605
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>Some of the Witch's Minions will accumulate Magic when their allies not in break are attacked with a special attack, and an assist will activate each time their Magic reaches max.<br>Since the assist delays action order and decreases MP recovery rate, be careful about when you use your special attacks.",
+        "difficulty": 6,
+        "dioramaBackgroundMstId": 110619,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60036,
+        "questStageMstId": 1406106,
+        "soloRaidMstId": 6,
+        "soloRaidStageMstId": 606
+    }
+]

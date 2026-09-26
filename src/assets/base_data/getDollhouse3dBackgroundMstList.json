@@ -1,0 +1,20 @@
+[
+    {
+        "dollhouse3dBackgroundMstId": 1001,
+        "isDefault": true,
+        "name": "Mitakihara Middle School - Roof (Noon)",
+        "releaseTime": "2025-09-01T12:00:00+09:00",
+        "resourceName": "bg_3d_661_00_00_001",
+        "sortOrder": 100,
+        "thumbnailName": "bg_3d_661_00_00_001"
+    },
+    {
+        "dollhouse3dBackgroundMstId": 1002,
+        "isDefault": false,
+        "name": "Mitakihara Middle School - Passage (Noon)",
+        "releaseTime": "2026-01-30T12:00:00+09:00",
+        "resourceName": "bg_3d_661_00_00_002",
+        "sortOrder": 101,
+        "thumbnailName": "bg_3d_661_00_00_002"
+    }
+]

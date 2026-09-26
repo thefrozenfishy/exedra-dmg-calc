@@ -1,0 +1,1074 @@
+[
+    {
+        "characterBuildDetail": {
+            "cardData": {
+                "cardDataId": 23971521822,
+                "cardMstId": 5400004,
+                "createdTime": "2026-07-02T20:10:27+09:00",
+                "isAlreadyView": true,
+                "isProtect": false,
+                "limitBreakCount": 4,
+                "passiveSkillLevel": 4,
+                "userId": 568923338080
+            },
+            "cardDataList": [
+                {
+                    "cardDataId": 23971521822,
+                    "cardMstId": 5400004,
+                    "createdTime": "2026-07-02T20:10:27+09:00",
+                    "isAlreadyView": true,
+                    "isProtect": false,
+                    "limitBreakCount": 4,
+                    "passiveSkillLevel": 4,
+                    "userId": 568923338080
+                }
+            ],
+            "characterData": {
+                "awakeLevel": 0,
+                "characterMstId": 1005,
+                "createdTime": "2026-06-26T17:12:58+09:00",
+                "heartExp": 0,
+                "heartLevel": 1,
+                "intimacyPoint": 0,
+                "levelResetCount": 0,
+                "useCount": 0,
+                "userId": 568923338080
+            },
+            "selectionAbilityData": {
+                "mainSelectionAbilityMstId1": 7013,
+                "mainSelectionAbilityMstId2": 3023,
+                "mainSelectionAbilityMstId2Enabled": true,
+                "mainSelectionAbilityMstId3": 3004,
+                "mainSelectionAbilityMstId3Enabled": true,
+                "mainSelectionAbilityMstId4": 0,
+                "mainSelectionAbilityMstId4Enabled": false,
+                "mainSelectionAbilityMstId5": 0,
+                "mainSelectionAbilityMstId5Enabled": false,
+                "stockSelectionAbilityMstIds": "",
+                "styleMstId": 10050101,
+                "subSelectionAbilityMstIds1": "",
+                "subSelectionAbilityMstIds2": "",
+                "subSelectionAbilityMstIds3": "",
+                "subSelectionAbilityMstIds4": "",
+                "subSelectionAbilityMstIds5": "",
+                "subSelectionLocks1": "",
+                "subSelectionLocks2": "",
+                "subSelectionLocks3": "",
+                "subSelectionLocks4": "",
+                "subSelectionLocks5": "",
+                "subSelectionTempLocksReserved1": "",
+                "subSelectionTempLocksReserved2": "",
+                "subSelectionTempLocksReserved3": "",
+                "subSelectionTempLocksReserved4": "",
+                "subSelectionTempLocksReserved5": "",
+                "userId": 568923338080
+            },
+            "styleData": {
+                "createdTime": "2026-06-26T17:12:56+09:00",
+                "exp": 0,
+                "isAlreadyView": true,
+                "lastParamUpPriority": 55,
+                "leaderSkillInfo": {
+                    "leaderSkillMstId": 12048,
+                    "level": 1
+                },
+                "level": 140,
+                "limitBreakCount": 0,
+                "limitBreakParamUpEffectInfoList": [],
+                "limitBreakPassiveSkill1Level": 0,
+                "limitBreakPassiveSkillInfoList": [],
+                "normalAttackInfo": {
+                    "level": 6,
+                    "skillMstId": 100906,
+                    "skillUniqueId": 1009
+                },
+                "normalAttackLevel": 1,
+                "paramUpEffectInfoList": [
+                    {
+                        "abilityEffectType": "UP_HP_FIXED",
+                        "totalValue1": 1300,
+                        "totalValue2": 0
+                    },
+                    {
+                        "abilityEffectType": "UP_ATK_FIXED",
+                        "totalValue1": 468,
+                        "totalValue2": 0
+                    },
+                    {
+                        "abilityEffectType": "UP_DEF_FIXED",
+                        "totalValue1": 468,
+                        "totalValue2": 0
+                    },
+                    {
+                        "abilityEffectType": "UP_CTD_FIXED",
+                        "totalValue1": 40,
+                        "totalValue2": 0
+                    }
+                ],
+                "paramUpTreeInfoList": [],
+                "passiveSkill1Level": 1,
+                "passiveSkillInfoList": [
+                    {
+                        "level": 5,
+                        "passiveSkillMstId": 1501205,
+                        "skillUniqueId": 15012
+                    }
+                ],
+                "selectionAbilityParamUpEffectInfoList": [],
+                "selectionAbilityPassiveSkillInfoList": [
+                    {
+                        "level": 1,
+                        "passiveSkillMstId": 1150013,
+                        "skillUniqueId": 1150013
+                    },
+                    {
+                        "level": 1,
+                        "passiveSkillMstId": 1003017,
+                        "skillUniqueId": 1003017
+                    },
+                    {
+                        "level": 1,
+                        "passiveSkillMstId": 1003027,
+                        "skillUniqueId": 1003027
+                    }
+                ],
+                "skill1Level": 1,
+                "skillInfoList": [
+                    {
+                        "level": 6,
+                        "skillMstId": 101006,
+                        "skillUniqueId": 1010
+                    }
+                ],
+                "specialAttackLevel": 4,
+                "specialAttackSkillInfo": {
+                    "level": 4,
+                    "maxLevel": 4,
+                    "skillMstId": 101104
+                },
+                "styleMstId": 10050101,
+                "subPassiveSkillInfo": {
+                    "level": 1,
+                    "passiveSkillMstId": 9501401,
+                    "skillUniqueId": 95014
+                },
+                "userId": 568923338080
+            },
+            "subCardDataList": [],
+            "subStyleCharacterDataList": [
+                {
+                    "awakeLevel": 0,
+                    "characterMstId": 1114,
+                    "createdTime": "2026-05-26T17:06:19+09:00",
+                    "heartExp": 0,
+                    "heartLevel": 1,
+                    "intimacyPoint": 0,
+                    "levelResetCount": 0,
+                    "useCount": 0,
+                    "userId": 568923338080
+                }
+            ],
+            "subStyleDataList": [
+                {
+                    "createdTime": "2026-06-26T17:12:56+09:00",
+                    "exp": 0,
+                    "isAlreadyView": true,
+                    "lastParamUpPriority": 55,
+                    "leaderSkillInfo": {
+                        "leaderSkillMstId": 12023,
+                        "level": 1
+                    },
+                    "level": 75,
+                    "limitBreakCount": 0,
+                    "limitBreakParamUpEffectInfoList": [],
+                    "limitBreakPassiveSkill1Level": 0,
+                    "limitBreakPassiveSkillInfoList": [],
+                    "normalAttackInfo": {
+                        "level": 6,
+                        "skillMstId": 112706,
+                        "skillUniqueId": 1127
+                    },
+                    "normalAttackLevel": 1,
+                    "paramUpEffectInfoList": [
+                        {
+                            "abilityEffectType": "UP_HP_FIXED",
+                            "totalValue1": 1170,
+                            "totalValue2": 0
+                        },
+                        {
+                            "abilityEffectType": "UP_ATK_FIXED",
+                            "totalValue1": 416,
+                            "totalValue2": 0
+                        },
+                        {
+                            "abilityEffectType": "UP_DEF_FIXED",
+                            "totalValue1": 416,
+                            "totalValue2": 0
+                        },
+                        {
+                            "abilityEffectType": "UP_CTD_FIXED",
+                            "totalValue1": 40,
+                            "totalValue2": 0
+                        }
+                    ],
+                    "paramUpTreeInfoList": [],
+                    "passiveSkill1Level": 1,
+                    "passiveSkillInfoList": [
+                        {
+                            "level": 5,
+                            "passiveSkillMstId": 1401605,
+                            "skillUniqueId": 14016
+                        }
+                    ],
+                    "selectionAbilityParamUpEffectInfoList": [],
+                    "selectionAbilityPassiveSkillInfoList": [
+                        {
+                            "level": 1,
+                            "passiveSkillMstId": 1140016,
+                            "skillUniqueId": 1140016
+                        },
+                        {
+                            "level": 1,
+                            "passiveSkillMstId": 1003017,
+                            "skillUniqueId": 1003017
+                        },
+                        {
+                            "level": 1,
+                            "passiveSkillMstId": 1003027,
+                            "skillUniqueId": 1003027
+                        }
+                    ],
+                    "skill1Level": 1,
+                    "skillInfoList": [
+                        {
+                            "level": 6,
+                            "skillMstId": 112806,
+                            "skillUniqueId": 1128
+                        }
+                    ],
+                    "specialAttackLevel": 4,
+                    "specialAttackSkillInfo": {
+                        "level": 4,
+                        "maxLevel": 4,
+                        "skillMstId": 112904
+                    },
+                    "styleMstId": 11140101,
+                    "subPassiveSkillInfo": {
+                        "level": 1,
+                        "passiveSkillMstId": 9401601,
+                        "skillUniqueId": 94016
+                    },
+                    "userId": 568923338080
+                }
+            ],
+            "talismanDataList": []
+        },
+        "memberIndex": 5,
+        "questGuestMemberMstId": 1308101,
+        "questStageMstId": 1308101
+    },
+    {
+        "characterBuildDetail": {
+            "cardData": {
+                "cardDataId": 22623401719,
+                "cardMstId": 5400018,
+                "createdTime": "2026-07-02T20:10:27+09:00",
+                "isAlreadyView": true,
+                "isProtect": false,
+                "limitBreakCount": 4,
+                "passiveSkillLevel": 4,
+                "userId": 568923338080
+            },
+            "cardDataList": [
+                {
+                    "cardDataId": 22623401719,
+                    "cardMstId": 5400018,
+                    "createdTime": "2026-07-02T20:10:27+09:00",
+                    "isAlreadyView": true,
+                    "isProtect": false,
+                    "limitBreakCount": 4,
+                    "passiveSkillLevel": 4,
+                    "userId": 568923338080
+                }
+            ],
+            "characterData": {
+                "awakeLevel": 0,
+                "characterMstId": 1012,
+                "createdTime": "2026-06-26T17:12:58+09:00",
+                "heartExp": 0,
+                "heartLevel": 1,
+                "intimacyPoint": 0,
+                "levelResetCount": 0,
+                "useCount": 0,
+                "userId": 568923338080
+            },
+            "selectionAbilityData": {
+                "mainSelectionAbilityMstId1": 7010,
+                "mainSelectionAbilityMstId2": 3006,
+                "mainSelectionAbilityMstId2Enabled": true,
+                "mainSelectionAbilityMstId3": 3020,
+                "mainSelectionAbilityMstId3Enabled": true,
+                "mainSelectionAbilityMstId4": 0,
+                "mainSelectionAbilityMstId4Enabled": false,
+                "mainSelectionAbilityMstId5": 0,
+                "mainSelectionAbilityMstId5Enabled": false,
+                "stockSelectionAbilityMstIds": "",
+                "styleMstId": 10120101,
+                "subSelectionAbilityMstIds1": "",
+                "subSelectionAbilityMstIds2": "",
+                "subSelectionAbilityMstIds3": "",
+                "subSelectionAbilityMstIds4": "",
+                "subSelectionAbilityMstIds5": "",
+                "subSelectionLocks1": "",
+                "subSelectionLocks2": "",
+                "subSelectionLocks3": "",
+                "subSelectionLocks4": "",
+                "subSelectionLocks5": "",
+                "subSelectionTempLocksReserved1": "",
+                "subSelectionTempLocksReserved2": "",
+                "subSelectionTempLocksReserved3": "",
+                "subSelectionTempLocksReserved4": "",
+                "subSelectionTempLocksReserved5": "",
+                "userId": 568923338080
+            },
+            "styleData": {
+                "createdTime": "2026-06-26T17:12:56+09:00",
+                "exp": 0,
+                "isAlreadyView": true,
+                "lastParamUpPriority": 55,
+                "leaderSkillInfo": {
+                    "leaderSkillMstId": 12000,
+                    "level": 1
+                },
+                "level": 140,
+                "limitBreakCount": 0,
+                "limitBreakParamUpEffectInfoList": [],
+                "limitBreakPassiveSkill1Level": 0,
+                "limitBreakPassiveSkillInfoList": [],
+                "normalAttackInfo": {
+                    "level": 6,
+                    "skillMstId": 115106,
+                    "skillUniqueId": 1151
+                },
+                "normalAttackLevel": 1,
+                "paramUpEffectInfoList": [
+                    {
+                        "abilityEffectType": "UP_HP_FIXED",
+                        "totalValue1": 1300,
+                        "totalValue2": 0
+                    },
+                    {
+                        "abilityEffectType": "UP_ATK_FIXED",
+                        "totalValue1": 468,
+                        "totalValue2": 0
+                    },
+                    {
+                        "abilityEffectType": "UP_DEF_FIXED",
+                        "totalValue1": 468,
+                        "totalValue2": 0
+                    },
+                    {
+                        "abilityEffectType": "UP_CTD_FIXED",
+                        "totalValue1": 40,
+                        "totalValue2": 0
+                    }
+                ],
+                "paramUpTreeInfoList": [],
+                "passiveSkill1Level": 1,
+                "passiveSkillInfoList": [
+                    {
+                        "level": 5,
+                        "passiveSkillMstId": 1501805,
+                        "skillUniqueId": 15018
+                    }
+                ],
+                "selectionAbilityParamUpEffectInfoList": [],
+                "selectionAbilityPassiveSkillInfoList": [
+                    {
+                        "level": 1,
+                        "passiveSkillMstId": 1150010,
+                        "skillUniqueId": 1150010
+                    },
+                    {
+                        "level": 1,
+                        "passiveSkillMstId": 1003029,
+                        "skillUniqueId": 1003029
+                    },
+                    {
+                        "level": 1,
+                        "passiveSkillMstId": 1003014,
+                        "skillUniqueId": 1003014
+                    }
+                ],
+                "skill1Level": 1,
+                "skillInfoList": [
+                    {
+                        "level": 6,
+                        "skillMstId": 115206,
+                        "skillUniqueId": 1152
+                    }
+                ],
+                "specialAttackLevel": 4,
+                "specialAttackSkillInfo": {
+                    "level": 4,
+                    "maxLevel": 4,
+                    "skillMstId": 115304
+                },
+                "styleMstId": 10120101,
+                "subPassiveSkillInfo": {
+                    "level": 1,
+                    "passiveSkillMstId": 9501101,
+                    "skillUniqueId": 95011
+                },
+                "userId": 568923338080
+            },
+            "subCardDataList": [],
+            "subStyleCharacterDataList": [
+                {
+                    "awakeLevel": 0,
+                    "characterMstId": 1074,
+                    "createdTime": "2026-06-26T17:12:58+09:00",
+                    "heartExp": 0,
+                    "heartLevel": 1,
+                    "intimacyPoint": 0,
+                    "levelResetCount": 0,
+                    "useCount": 0,
+                    "userId": 568923338080
+                }
+            ],
+            "subStyleDataList": [
+                {
+                    "createdTime": "2026-06-26T17:12:56+09:00",
+                    "exp": 0,
+                    "isAlreadyView": true,
+                    "lastParamUpPriority": 55,
+                    "leaderSkillInfo": {
+                        "leaderSkillMstId": 12015,
+                        "level": 1
+                    },
+                    "level": 75,
+                    "limitBreakCount": 0,
+                    "limitBreakParamUpEffectInfoList": [],
+                    "limitBreakPassiveSkill1Level": 0,
+                    "limitBreakPassiveSkillInfoList": [],
+                    "normalAttackInfo": {
+                        "level": 6,
+                        "skillMstId": 105906,
+                        "skillUniqueId": 1059
+                    },
+                    "normalAttackLevel": 1,
+                    "paramUpEffectInfoList": [
+                        {
+                            "abilityEffectType": "UP_HP_FIXED",
+                            "totalValue1": 1170,
+                            "totalValue2": 0
+                        },
+                        {
+                            "abilityEffectType": "UP_ATK_FIXED",
+                            "totalValue1": 416,
+                            "totalValue2": 0
+                        },
+                        {
+                            "abilityEffectType": "UP_DEF_FIXED",
+                            "totalValue1": 416,
+                            "totalValue2": 0
+                        },
+                        {
+                            "abilityEffectType": "UP_CTD_FIXED",
+                            "totalValue1": 40,
+                            "totalValue2": 0
+                        }
+                    ],
+                    "paramUpTreeInfoList": [],
+                    "passiveSkill1Level": 1,
+                    "passiveSkillInfoList": [
+                        {
+                            "level": 5,
+                            "passiveSkillMstId": 1400805,
+                            "skillUniqueId": 14008
+                        }
+                    ],
+                    "selectionAbilityParamUpEffectInfoList": [],
+                    "selectionAbilityPassiveSkillInfoList": [
+                        {
+                            "level": 1,
+                            "passiveSkillMstId": 1140008,
+                            "skillUniqueId": 1140008
+                        },
+                        {
+                            "level": 1,
+                            "passiveSkillMstId": 1003029,
+                            "skillUniqueId": 1003029
+                        },
+                        {
+                            "level": 1,
+                            "passiveSkillMstId": 1003005,
+                            "skillUniqueId": 1003005
+                        }
+                    ],
+                    "skill1Level": 1,
+                    "skillInfoList": [
+                        {
+                            "level": 6,
+                            "skillMstId": 106006,
+                            "skillUniqueId": 1060
+                        }
+                    ],
+                    "specialAttackLevel": 4,
+                    "specialAttackSkillInfo": {
+                        "level": 4,
+                        "maxLevel": 4,
+                        "skillMstId": 106104
+                    },
+                    "styleMstId": 10740101,
+                    "subPassiveSkillInfo": {
+                        "level": 1,
+                        "passiveSkillMstId": 9400801,
+                        "skillUniqueId": 94008
+                    },
+                    "userId": 568923338080
+                }
+            ],
+            "talismanDataList": []
+        },
+        "memberIndex": 5,
+        "questGuestMemberMstId": 1308102,
+        "questStageMstId": 1308102
+    },
+    {
+        "characterBuildDetail": {
+            "cardData": {
+                "cardDataId": 22623401719,
+                "cardMstId": 5400018,
+                "createdTime": "2026-07-02T20:10:27+09:00",
+                "isAlreadyView": true,
+                "isProtect": false,
+                "limitBreakCount": 4,
+                "passiveSkillLevel": 4,
+                "userId": 568923338080
+            },
+            "cardDataList": [
+                {
+                    "cardDataId": 22623401719,
+                    "cardMstId": 5400018,
+                    "createdTime": "2026-07-02T20:10:27+09:00",
+                    "isAlreadyView": true,
+                    "isProtect": false,
+                    "limitBreakCount": 4,
+                    "passiveSkillLevel": 4,
+                    "userId": 568923338080
+                }
+            ],
+            "characterData": {
+                "awakeLevel": 0,
+                "characterMstId": 1012,
+                "createdTime": "2026-06-26T17:12:58+09:00",
+                "heartExp": 0,
+                "heartLevel": 1,
+                "intimacyPoint": 0,
+                "levelResetCount": 0,
+                "useCount": 0,
+                "userId": 568923338080
+            },
+            "selectionAbilityData": {
+                "mainSelectionAbilityMstId1": 7010,
+                "mainSelectionAbilityMstId2": 3006,
+                "mainSelectionAbilityMstId2Enabled": true,
+                "mainSelectionAbilityMstId3": 3020,
+                "mainSelectionAbilityMstId3Enabled": true,
+                "mainSelectionAbilityMstId4": 0,
+                "mainSelectionAbilityMstId4Enabled": false,
+                "mainSelectionAbilityMstId5": 0,
+                "mainSelectionAbilityMstId5Enabled": false,
+                "stockSelectionAbilityMstIds": "",
+                "styleMstId": 10120101,
+                "subSelectionAbilityMstIds1": "",
+                "subSelectionAbilityMstIds2": "",
+                "subSelectionAbilityMstIds3": "",
+                "subSelectionAbilityMstIds4": "",
+                "subSelectionAbilityMstIds5": "",
+                "subSelectionLocks1": "",
+                "subSelectionLocks2": "",
+                "subSelectionLocks3": "",
+                "subSelectionLocks4": "",
+                "subSelectionLocks5": "",
+                "subSelectionTempLocksReserved1": "",
+                "subSelectionTempLocksReserved2": "",
+                "subSelectionTempLocksReserved3": "",
+                "subSelectionTempLocksReserved4": "",
+                "subSelectionTempLocksReserved5": "",
+                "userId": 568923338080
+            },
+            "styleData": {
+                "createdTime": "2026-06-26T17:12:56+09:00",
+                "exp": 0,
+                "isAlreadyView": true,
+                "lastParamUpPriority": 55,
+                "leaderSkillInfo": {
+                    "leaderSkillMstId": 12000,
+                    "level": 1
+                },
+                "level": 140,
+                "limitBreakCount": 0,
+                "limitBreakParamUpEffectInfoList": [],
+                "limitBreakPassiveSkill1Level": 0,
+                "limitBreakPassiveSkillInfoList": [],
+                "normalAttackInfo": {
+                    "level": 6,
+                    "skillMstId": 115106,
+                    "skillUniqueId": 1151
+                },
+                "normalAttackLevel": 1,
+                "paramUpEffectInfoList": [
+                    {
+                        "abilityEffectType": "UP_HP_FIXED",
+                        "totalValue1": 1300,
+                        "totalValue2": 0
+                    },
+                    {
+                        "abilityEffectType": "UP_ATK_FIXED",
+                        "totalValue1": 468,
+                        "totalValue2": 0
+                    },
+                    {
+                        "abilityEffectType": "UP_DEF_FIXED",
+                        "totalValue1": 468,
+                        "totalValue2": 0
+                    },
+                    {
+                        "abilityEffectType": "UP_CTD_FIXED",
+                        "totalValue1": 40,
+                        "totalValue2": 0
+                    }
+                ],
+                "paramUpTreeInfoList": [],
+                "passiveSkill1Level": 1,
+                "passiveSkillInfoList": [
+                    {
+                        "level": 5,
+                        "passiveSkillMstId": 1501805,
+                        "skillUniqueId": 15018
+                    }
+                ],
+                "selectionAbilityParamUpEffectInfoList": [],
+                "selectionAbilityPassiveSkillInfoList": [
+                    {
+                        "level": 1,
+                        "passiveSkillMstId": 1150010,
+                        "skillUniqueId": 1150010
+                    },
+                    {
+                        "level": 1,
+                        "passiveSkillMstId": 1003029,
+                        "skillUniqueId": 1003029
+                    },
+                    {
+                        "level": 1,
+                        "passiveSkillMstId": 1003014,
+                        "skillUniqueId": 1003014
+                    }
+                ],
+                "skill1Level": 1,
+                "skillInfoList": [
+                    {
+                        "level": 6,
+                        "skillMstId": 115206,
+                        "skillUniqueId": 1152
+                    }
+                ],
+                "specialAttackLevel": 4,
+                "specialAttackSkillInfo": {
+                    "level": 4,
+                    "maxLevel": 4,
+                    "skillMstId": 115304
+                },
+                "styleMstId": 10120101,
+                "subPassiveSkillInfo": {
+                    "level": 1,
+                    "passiveSkillMstId": 9501101,
+                    "skillUniqueId": 95011
+                },
+                "userId": 568923338080
+            },
+            "subCardDataList": [],
+            "subStyleCharacterDataList": [
+                {
+                    "awakeLevel": 0,
+                    "characterMstId": 1074,
+                    "createdTime": "2026-06-26T17:12:58+09:00",
+                    "heartExp": 0,
+                    "heartLevel": 1,
+                    "intimacyPoint": 0,
+                    "levelResetCount": 0,
+                    "useCount": 0,
+                    "userId": 568923338080
+                }
+            ],
+            "subStyleDataList": [
+                {
+                    "createdTime": "2026-06-26T17:12:56+09:00",
+                    "exp": 0,
+                    "isAlreadyView": true,
+                    "lastParamUpPriority": 55,
+                    "leaderSkillInfo": {
+                        "leaderSkillMstId": 12015,
+                        "level": 1
+                    },
+                    "level": 75,
+                    "limitBreakCount": 0,
+                    "limitBreakParamUpEffectInfoList": [],
+                    "limitBreakPassiveSkill1Level": 0,
+                    "limitBreakPassiveSkillInfoList": [],
+                    "normalAttackInfo": {
+                        "level": 6,
+                        "skillMstId": 105906,
+                        "skillUniqueId": 1059
+                    },
+                    "normalAttackLevel": 1,
+                    "paramUpEffectInfoList": [
+                        {
+                            "abilityEffectType": "UP_HP_FIXED",
+                            "totalValue1": 1170,
+                            "totalValue2": 0
+                        },
+                        {
+                            "abilityEffectType": "UP_ATK_FIXED",
+                            "totalValue1": 416,
+                            "totalValue2": 0
+                        },
+                        {
+                            "abilityEffectType": "UP_DEF_FIXED",
+                            "totalValue1": 416,
+                            "totalValue2": 0
+                        },
+                        {
+                            "abilityEffectType": "UP_CTD_FIXED",
+                            "totalValue1": 40,
+                            "totalValue2": 0
+                        }
+                    ],
+                    "paramUpTreeInfoList": [],
+                    "passiveSkill1Level": 1,
+                    "passiveSkillInfoList": [
+                        {
+                            "level": 5,
+                            "passiveSkillMstId": 1400805,
+                            "skillUniqueId": 14008
+                        }
+                    ],
+                    "selectionAbilityParamUpEffectInfoList": [],
+                    "selectionAbilityPassiveSkillInfoList": [
+                        {
+                            "level": 1,
+                            "passiveSkillMstId": 1140008,
+                            "skillUniqueId": 1140008
+                        },
+                        {
+                            "level": 1,
+                            "passiveSkillMstId": 1003029,
+                            "skillUniqueId": 1003029
+                        },
+                        {
+                            "level": 1,
+                            "passiveSkillMstId": 1003005,
+                            "skillUniqueId": 1003005
+                        }
+                    ],
+                    "skill1Level": 1,
+                    "skillInfoList": [
+                        {
+                            "level": 6,
+                            "skillMstId": 106006,
+                            "skillUniqueId": 1060
+                        }
+                    ],
+                    "specialAttackLevel": 4,
+                    "specialAttackSkillInfo": {
+                        "level": 4,
+                        "maxLevel": 4,
+                        "skillMstId": 106104
+                    },
+                    "styleMstId": 10740101,
+                    "subPassiveSkillInfo": {
+                        "level": 1,
+                        "passiveSkillMstId": 9400801,
+                        "skillUniqueId": 94008
+                    },
+                    "userId": 568923338080
+                }
+            ],
+            "talismanDataList": []
+        },
+        "memberIndex": 5,
+        "questGuestMemberMstId": 1308103,
+        "questStageMstId": 1308103
+    },
+    {
+        "characterBuildDetail": {
+            "cardData": {
+                "cardDataId": 22623401719,
+                "cardMstId": 5400018,
+                "createdTime": "2026-07-02T20:10:27+09:00",
+                "isAlreadyView": true,
+                "isProtect": false,
+                "limitBreakCount": 4,
+                "passiveSkillLevel": 4,
+                "userId": 568923338080
+            },
+            "cardDataList": [
+                {
+                    "cardDataId": 22623401719,
+                    "cardMstId": 5400018,
+                    "createdTime": "2026-07-02T20:10:27+09:00",
+                    "isAlreadyView": true,
+                    "isProtect": false,
+                    "limitBreakCount": 4,
+                    "passiveSkillLevel": 4,
+                    "userId": 568923338080
+                }
+            ],
+            "characterData": {
+                "awakeLevel": 0,
+                "characterMstId": 1012,
+                "createdTime": "2026-06-26T17:12:58+09:00",
+                "heartExp": 0,
+                "heartLevel": 1,
+                "intimacyPoint": 0,
+                "levelResetCount": 0,
+                "useCount": 0,
+                "userId": 568923338080
+            },
+            "selectionAbilityData": {
+                "mainSelectionAbilityMstId1": 7010,
+                "mainSelectionAbilityMstId2": 3006,
+                "mainSelectionAbilityMstId2Enabled": true,
+                "mainSelectionAbilityMstId3": 3020,
+                "mainSelectionAbilityMstId3Enabled": true,
+                "mainSelectionAbilityMstId4": 0,
+                "mainSelectionAbilityMstId4Enabled": false,
+                "mainSelectionAbilityMstId5": 0,
+                "mainSelectionAbilityMstId5Enabled": false,
+                "stockSelectionAbilityMstIds": "",
+                "styleMstId": 10120101,
+                "subSelectionAbilityMstIds1": "",
+                "subSelectionAbilityMstIds2": "",
+                "subSelectionAbilityMstIds3": "",
+                "subSelectionAbilityMstIds4": "",
+                "subSelectionAbilityMstIds5": "",
+                "subSelectionLocks1": "",
+                "subSelectionLocks2": "",
+                "subSelectionLocks3": "",
+                "subSelectionLocks4": "",
+                "subSelectionLocks5": "",
+                "subSelectionTempLocksReserved1": "",
+                "subSelectionTempLocksReserved2": "",
+                "subSelectionTempLocksReserved3": "",
+                "subSelectionTempLocksReserved4": "",
+                "subSelectionTempLocksReserved5": "",
+                "userId": 568923338080
+            },
+            "styleData": {
+                "createdTime": "2026-06-26T17:12:56+09:00",
+                "exp": 0,
+                "isAlreadyView": true,
+                "lastParamUpPriority": 55,
+                "leaderSkillInfo": {
+                    "leaderSkillMstId": 12000,
+                    "level": 1
+                },
+                "level": 140,
+                "limitBreakCount": 0,
+                "limitBreakParamUpEffectInfoList": [],
+                "limitBreakPassiveSkill1Level": 0,
+                "limitBreakPassiveSkillInfoList": [],
+                "normalAttackInfo": {
+                    "level": 6,
+                    "skillMstId": 115106,
+                    "skillUniqueId": 1151
+                },
+                "normalAttackLevel": 1,
+                "paramUpEffectInfoList": [
+                    {
+                        "abilityEffectType": "UP_HP_FIXED",
+                        "totalValue1": 1300,
+                        "totalValue2": 0
+                    },
+                    {
+                        "abilityEffectType": "UP_ATK_FIXED",
+                        "totalValue1": 468,
+                        "totalValue2": 0
+                    },
+                    {
+                        "abilityEffectType": "UP_DEF_FIXED",
+                        "totalValue1": 468,
+                        "totalValue2": 0
+                    },
+                    {
+                        "abilityEffectType": "UP_CTD_FIXED",
+                        "totalValue1": 40,
+                        "totalValue2": 0
+                    }
+                ],
+                "paramUpTreeInfoList": [],
+                "passiveSkill1Level": 1,
+                "passiveSkillInfoList": [
+                    {
+                        "level": 5,
+                        "passiveSkillMstId": 1501805,
+                        "skillUniqueId": 15018
+                    }
+                ],
+                "selectionAbilityParamUpEffectInfoList": [],
+                "selectionAbilityPassiveSkillInfoList": [
+                    {
+                        "level": 1,
+                        "passiveSkillMstId": 1150010,
+                        "skillUniqueId": 1150010
+                    },
+                    {
+                        "level": 1,
+                        "passiveSkillMstId": 1003029,
+                        "skillUniqueId": 1003029
+                    },
+                    {
+                        "level": 1,
+                        "passiveSkillMstId": 1003014,
+                        "skillUniqueId": 1003014
+                    }
+                ],
+                "skill1Level": 1,
+                "skillInfoList": [
+                    {
+                        "level": 6,
+                        "skillMstId": 115206,
+                        "skillUniqueId": 1152
+                    }
+                ],
+                "specialAttackLevel": 4,
+                "specialAttackSkillInfo": {
+                    "level": 4,
+                    "maxLevel": 4,
+                    "skillMstId": 115304
+                },
+                "styleMstId": 10120101,
+                "subPassiveSkillInfo": {
+                    "level": 1,
+                    "passiveSkillMstId": 9501101,
+                    "skillUniqueId": 95011
+                },
+                "userId": 568923338080
+            },
+            "subCardDataList": [],
+            "subStyleCharacterDataList": [
+                {
+                    "awakeLevel": 0,
+                    "characterMstId": 1074,
+                    "createdTime": "2026-06-26T17:12:58+09:00",
+                    "heartExp": 0,
+                    "heartLevel": 1,
+                    "intimacyPoint": 0,
+                    "levelResetCount": 0,
+                    "useCount": 0,
+                    "userId": 568923338080
+                }
+            ],
+            "subStyleDataList": [
+                {
+                    "createdTime": "2026-06-26T17:12:56+09:00",
+                    "exp": 0,
+                    "isAlreadyView": true,
+                    "lastParamUpPriority": 55,
+                    "leaderSkillInfo": {
+                        "leaderSkillMstId": 12015,
+                        "level": 1
+                    },
+                    "level": 75,
+                    "limitBreakCount": 0,
+                    "limitBreakParamUpEffectInfoList": [],
+                    "limitBreakPassiveSkill1Level": 0,
+                    "limitBreakPassiveSkillInfoList": [],
+                    "normalAttackInfo": {
+                        "level": 6,
+                        "skillMstId": 105906,
+                        "skillUniqueId": 1059
+                    },
+                    "normalAttackLevel": 1,
+                    "paramUpEffectInfoList": [
+                        {
+                            "abilityEffectType": "UP_HP_FIXED",
+                            "totalValue1": 1170,
+                            "totalValue2": 0
+                        },
+                        {
+                            "abilityEffectType": "UP_ATK_FIXED",
+                            "totalValue1": 416,
+                            "totalValue2": 0
+                        },
+                        {
+                            "abilityEffectType": "UP_DEF_FIXED",
+                            "totalValue1": 416,
+                            "totalValue2": 0
+                        },
+                        {
+                            "abilityEffectType": "UP_CTD_FIXED",
+                            "totalValue1": 40,
+                            "totalValue2": 0
+                        }
+                    ],
+                    "paramUpTreeInfoList": [],
+                    "passiveSkill1Level": 1,
+                    "passiveSkillInfoList": [
+                        {
+                            "level": 5,
+                            "passiveSkillMstId": 1400805,
+                            "skillUniqueId": 14008
+                        }
+                    ],
+                    "selectionAbilityParamUpEffectInfoList": [],
+                    "selectionAbilityPassiveSkillInfoList": [
+                        {
+                            "level": 1,
+                            "passiveSkillMstId": 1140008,
+                            "skillUniqueId": 1140008
+                        },
+                        {
+                            "level": 1,
+                            "passiveSkillMstId": 1003029,
+                            "skillUniqueId": 1003029
+                        },
+                        {
+                            "level": 1,
+                            "passiveSkillMstId": 1003005,
+                            "skillUniqueId": 1003005
+                        }
+                    ],
+                    "skill1Level": 1,
+                    "skillInfoList": [
+                        {
+                            "level": 6,
+                            "skillMstId": 106006,
+                            "skillUniqueId": 1060
+                        }
+                    ],
+                    "specialAttackLevel": 4,
+                    "specialAttackSkillInfo": {
+                        "level": 4,
+                        "maxLevel": 4,
+                        "skillMstId": 106104
+                    },
+                    "styleMstId": 10740101,
+                    "subPassiveSkillInfo": {
+                        "level": 1,
+                        "passiveSkillMstId": 9400801,
+                        "skillUniqueId": 94008
+                    },
+                    "userId": 568923338080
+                }
+            ],
+            "talismanDataList": []
+        },
+        "memberIndex": 5,
+        "questGuestMemberMstId": 1308104,
+        "questStageMstId": 1308104
+    }
+]

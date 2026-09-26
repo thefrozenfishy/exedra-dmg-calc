@@ -1,0 +1,353 @@
+[
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 1,
+        "prevMissionTitleMstId": 0,
+        "priority": 1,
+        "title": "Challenge Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2,
+        "prevMissionTitleMstId": 0,
+        "priority": 1,
+        "title": "Daily Mission"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 3,
+        "prevMissionTitleMstId": 0,
+        "priority": 1,
+        "title": "Weekly Mission"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 4,
+        "prevMissionTitleMstId": 0,
+        "priority": 1,
+        "title": "Beginner Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 10,
+        "prevMissionTitleMstId": 0,
+        "priority": 1,
+        "title": "Exedra Pass Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 15,
+        "prevMissionTitleMstId": 0,
+        "priority": 1,
+        "title": "Union Mission"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 1027,
+        "prevMissionTitleMstId": 0,
+        "priority": 1,
+        "title": "Season Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 1028,
+        "prevMissionTitleMstId": 0,
+        "priority": 1,
+        "title": "Season Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 1029,
+        "prevMissionTitleMstId": 0,
+        "priority": 1,
+        "title": "Season Missions"
+    },
+    {
+        "completeAppealDescription": "Get Portrait \"Walpurgisnacht Rising KV Part 1 Madoka\" x1!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2007,
+        "prevMissionTitleMstId": 0,
+        "priority": 130,
+        "title": "Walpurgisnacht Rising Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Get Portrait \"Walpurgisnacht Rising KV Part 1 Madoka\" x1!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2008,
+        "prevMissionTitleMstId": 2007,
+        "priority": 130,
+        "title": "Walpurgisnacht Rising Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Get Portrait \"Walpurgisnacht Rising KV Part 1 Madoka\" x1!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2009,
+        "prevMissionTitleMstId": 2008,
+        "priority": 130,
+        "title": "Walpurgisnacht Rising Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Get Portrait \"Walpurgisnacht Rising KV Part 1 Madoka\" x1!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2010,
+        "prevMissionTitleMstId": 2009,
+        "priority": 130,
+        "title": "Walpurgisnacht Rising Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x1,000!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2011,
+        "prevMissionTitleMstId": 2010,
+        "priority": 130,
+        "title": "Walpurgisnacht Rising Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Get Portrait \"Walpurgisnacht Rising KV Part 1 Madoka\" x1!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2012,
+        "prevMissionTitleMstId": 2011,
+        "priority": 130,
+        "title": "Walpurgisnacht Rising Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Get Portrait \"Walpurgisnacht Rising KV Part 1 Madoka\" x1!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2013,
+        "prevMissionTitleMstId": 2012,
+        "priority": 130,
+        "title": "Walpurgisnacht Rising Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Get Prism Core x1!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2014,
+        "prevMissionTitleMstId": 2013,
+        "priority": 130,
+        "title": "Walpurgisnacht Rising Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Get Prism Core x1!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2015,
+        "prevMissionTitleMstId": 2014,
+        "priority": 130,
+        "title": "Walpurgisnacht Rising Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Get Prism Core x1!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2016,
+        "prevMissionTitleMstId": 2015,
+        "priority": 130,
+        "title": "Walpurgisnacht Rising Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x500!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2017,
+        "prevMissionTitleMstId": 0,
+        "priority": 140,
+        "title": "Magica Stone Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5000,
+        "prevMissionTitleMstId": 0,
+        "priority": 1,
+        "title": "Steady Steps Forward: Magical Girl Dreams Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5044,
+        "prevMissionTitleMstId": 0,
+        "priority": 1,
+        "title": "Dollhouse Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5132,
+        "prevMissionTitleMstId": 0,
+        "priority": 1,
+        "title": "Welcome Back Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5138,
+        "prevMissionTitleMstId": 0,
+        "priority": 10006,
+        "title": "Exedra Quest Clear Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5139,
+        "prevMissionTitleMstId": 0,
+        "priority": 79,
+        "title": "-Rebellion- Nightmare Story Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5140,
+        "prevMissionTitleMstId": 0,
+        "priority": 81,
+        "title": "[Redux] Puella Magi Madoka Magica -Rebellion- Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5141,
+        "prevMissionTitleMstId": 0,
+        "priority": 82,
+        "title": "[Redux] Puella Magi Madoka Magica -Rebellion- Event Memorial Medal Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5144,
+        "prevMissionTitleMstId": 0,
+        "priority": 84,
+        "title": "Hollow Utopia Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5145,
+        "prevMissionTitleMstId": 0,
+        "priority": 85,
+        "title": "Hollow Utopia Event Memorial Medal Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5146,
+        "prevMissionTitleMstId": 0,
+        "priority": 86,
+        "title": "Sweet Dreams and Shifting Realities Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5147,
+        "prevMissionTitleMstId": 0,
+        "priority": 87,
+        "title": "Sweet Dreams and Shifting Realities Event Memorial Medal Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5149,
+        "prevMissionTitleMstId": 0,
+        "priority": 10008,
+        "title": "Main Quest Clear Missions Part 1"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5150,
+        "prevMissionTitleMstId": 0,
+        "priority": 10009,
+        "title": "Main Quest Clear Missions Part 2"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5151,
+        "prevMissionTitleMstId": 0,
+        "priority": 90,
+        "title": "Missing My Bear: Where Are You, Kumanosuke? Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5152,
+        "prevMissionTitleMstId": 0,
+        "priority": 91,
+        "title": "Missing My Bear: Where Are You, Kumanosuke? Event Memorial Medal Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 4,
+        "missionTitleMstId": 5153,
+        "prevMissionTitleMstId": 0,
+        "priority": 10010,
+        "title": "Kioku Crystal Release Celebration Shard Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5154,
+        "prevMissionTitleMstId": 0,
+        "priority": 10010,
+        "title": "1.5th Anniversary Countdown Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5155,
+        "prevMissionTitleMstId": 0,
+        "priority": 88,
+        "title": "Nagisa's Wish Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5156,
+        "prevMissionTitleMstId": 0,
+        "priority": 89,
+        "title": "Nagisa's Wish Event Memorial Medal Missions"
+    }
+]

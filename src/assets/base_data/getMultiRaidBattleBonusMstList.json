@@ -1,0 +1,247 @@
+[
+    {
+        "groupId": 9,
+        "multiRaidBattleBonusMstId": 906,
+        "passiveSkillMstId": 1042
+    },
+    {
+        "groupId": 9,
+        "multiRaidBattleBonusMstId": 905,
+        "passiveSkillMstId": 1041
+    },
+    {
+        "groupId": 9,
+        "multiRaidBattleBonusMstId": 904,
+        "passiveSkillMstId": 1040
+    },
+    {
+        "groupId": 9,
+        "multiRaidBattleBonusMstId": 903,
+        "passiveSkillMstId": 1019
+    },
+    {
+        "groupId": 9,
+        "multiRaidBattleBonusMstId": 902,
+        "passiveSkillMstId": 1017
+    },
+    {
+        "groupId": 9,
+        "multiRaidBattleBonusMstId": 901,
+        "passiveSkillMstId": 1016
+    },
+    {
+        "groupId": 8,
+        "multiRaidBattleBonusMstId": 807,
+        "passiveSkillMstId": 1039
+    },
+    {
+        "groupId": 8,
+        "multiRaidBattleBonusMstId": 806,
+        "passiveSkillMstId": 1038
+    },
+    {
+        "groupId": 8,
+        "multiRaidBattleBonusMstId": 805,
+        "passiveSkillMstId": 1037
+    },
+    {
+        "groupId": 8,
+        "multiRaidBattleBonusMstId": 804,
+        "passiveSkillMstId": 1036
+    },
+    {
+        "groupId": 8,
+        "multiRaidBattleBonusMstId": 803,
+        "passiveSkillMstId": 1021
+    },
+    {
+        "groupId": 8,
+        "multiRaidBattleBonusMstId": 802,
+        "passiveSkillMstId": 1018
+    },
+    {
+        "groupId": 8,
+        "multiRaidBattleBonusMstId": 801,
+        "passiveSkillMstId": 1017
+    },
+    {
+        "groupId": 7,
+        "multiRaidBattleBonusMstId": 704,
+        "passiveSkillMstId": 1035
+    },
+    {
+        "groupId": 7,
+        "multiRaidBattleBonusMstId": 703,
+        "passiveSkillMstId": 1034
+    },
+    {
+        "groupId": 7,
+        "multiRaidBattleBonusMstId": 702,
+        "passiveSkillMstId": 1033
+    },
+    {
+        "groupId": 7,
+        "multiRaidBattleBonusMstId": 701,
+        "passiveSkillMstId": 1032
+    },
+    {
+        "groupId": 6,
+        "multiRaidBattleBonusMstId": 607,
+        "passiveSkillMstId": 1031
+    },
+    {
+        "groupId": 6,
+        "multiRaidBattleBonusMstId": 606,
+        "passiveSkillMstId": 1030
+    },
+    {
+        "groupId": 6,
+        "multiRaidBattleBonusMstId": 605,
+        "passiveSkillMstId": 1029
+    },
+    {
+        "groupId": 6,
+        "multiRaidBattleBonusMstId": 604,
+        "passiveSkillMstId": 1028
+    },
+    {
+        "groupId": 6,
+        "multiRaidBattleBonusMstId": 603,
+        "passiveSkillMstId": 1020
+    },
+    {
+        "groupId": 6,
+        "multiRaidBattleBonusMstId": 602,
+        "passiveSkillMstId": 1017
+    },
+    {
+        "groupId": 6,
+        "multiRaidBattleBonusMstId": 601,
+        "passiveSkillMstId": 1016
+    },
+    {
+        "groupId": 5,
+        "multiRaidBattleBonusMstId": 505,
+        "passiveSkillMstId": 1027
+    },
+    {
+        "groupId": 5,
+        "multiRaidBattleBonusMstId": 504,
+        "passiveSkillMstId": 1026
+    },
+    {
+        "groupId": 5,
+        "multiRaidBattleBonusMstId": 503,
+        "passiveSkillMstId": 1019
+    },
+    {
+        "groupId": 5,
+        "multiRaidBattleBonusMstId": 502,
+        "passiveSkillMstId": 1018
+    },
+    {
+        "groupId": 5,
+        "multiRaidBattleBonusMstId": 501,
+        "passiveSkillMstId": 1017
+    },
+    {
+        "groupId": 4,
+        "multiRaidBattleBonusMstId": 405,
+        "passiveSkillMstId": 1025
+    },
+    {
+        "groupId": 4,
+        "multiRaidBattleBonusMstId": 404,
+        "passiveSkillMstId": 1024
+    },
+    {
+        "groupId": 4,
+        "multiRaidBattleBonusMstId": 403,
+        "passiveSkillMstId": 1021
+    },
+    {
+        "groupId": 4,
+        "multiRaidBattleBonusMstId": 402,
+        "passiveSkillMstId": 1020
+    },
+    {
+        "groupId": 4,
+        "multiRaidBattleBonusMstId": 401,
+        "passiveSkillMstId": 1016
+    },
+    {
+        "groupId": 3,
+        "multiRaidBattleBonusMstId": 305,
+        "passiveSkillMstId": 1023
+    },
+    {
+        "groupId": 3,
+        "multiRaidBattleBonusMstId": 304,
+        "passiveSkillMstId": 1022
+    },
+    {
+        "groupId": 3,
+        "multiRaidBattleBonusMstId": 303,
+        "passiveSkillMstId": 1020
+    },
+    {
+        "groupId": 3,
+        "multiRaidBattleBonusMstId": 302,
+        "passiveSkillMstId": 1018
+    },
+    {
+        "groupId": 3,
+        "multiRaidBattleBonusMstId": 301,
+        "passiveSkillMstId": 1017
+    },
+    {
+        "groupId": 2,
+        "multiRaidBattleBonusMstId": 205,
+        "passiveSkillMstId": 1015
+    },
+    {
+        "groupId": 2,
+        "multiRaidBattleBonusMstId": 204,
+        "passiveSkillMstId": 1014
+    },
+    {
+        "groupId": 2,
+        "multiRaidBattleBonusMstId": 203,
+        "passiveSkillMstId": 1019
+    },
+    {
+        "groupId": 2,
+        "multiRaidBattleBonusMstId": 202,
+        "passiveSkillMstId": 1018
+    },
+    {
+        "groupId": 2,
+        "multiRaidBattleBonusMstId": 201,
+        "passiveSkillMstId": 1016
+    },
+    {
+        "groupId": 1,
+        "multiRaidBattleBonusMstId": 105,
+        "passiveSkillMstId": 1013
+    },
+    {
+        "groupId": 1,
+        "multiRaidBattleBonusMstId": 104,
+        "passiveSkillMstId": 1012
+    },
+    {
+        "groupId": 1,
+        "multiRaidBattleBonusMstId": 103,
+        "passiveSkillMstId": 1021
+    },
+    {
+        "groupId": 1,
+        "multiRaidBattleBonusMstId": 102,
+        "passiveSkillMstId": 1020
+    },
+    {
+        "groupId": 1,
+        "multiRaidBattleBonusMstId": 101,
+        "passiveSkillMstId": 1017
+    }
+]

@@ -22,21 +22,22 @@ export interface PvPExport {
     snapshots: BattleSnapshot[]
 }
 
+// One team slot (main + support + equipped crystalis) as an engine unit.
+export function buildSlotKioku(m: TeamSlot): PvPKioku {
+    const crys = m.main
+        ? Object.entries((m.main as any).crysOptions ?? {}).filter(([, v]: any) => v.useIndex > 0)
+        : []
+    return new PvPKioku({
+        ...(m.main as any),
+        crysIDs: crys.map(c => Number(c[0])),
+        subCrysIDs: crys.flatMap((c: any) => c[1].subCrys),
+        supportKey: m.support ? new PvPKioku(m.support as any).getKey() : undefined,
+    })
+}
+
 // Same construction as PvpTeamPage (allied = slots[1], enemy = slots[0]).
 export function buildPvPKiokus(slots: TeamSlot[][]): [PvPKioku[], PvPKioku[]] {
-    return [1, 0].map(idx =>
-        slots[idx].map((m: any) => {
-            const crys = m.main
-                ? Object.entries(m.main.crysOptions ?? {}).filter(([, v]: any) => v.useIndex > 0)
-                : []
-            return new PvPKioku({
-                ...m.main,
-                crysIDs: crys.map(c => Number(c[0])),
-                subCrysIDs: crys.flatMap((c: any) => c[1].subCrys),
-                supportKey: m.support ? new PvPKioku(m.support).getKey() : undefined,
-            })
-        })
-    ) as [PvPKioku[], PvPKioku[]]
+    return [1, 0].map(idx => slots[idx].map(buildSlotKioku)) as [PvPKioku[], PvPKioku[]]
 }
 
 const SKILL_NAMES: Record<string, string> = {

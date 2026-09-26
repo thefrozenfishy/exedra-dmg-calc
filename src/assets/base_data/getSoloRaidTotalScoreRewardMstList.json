@@ -1,0 +1,4706 @@
+[
+    {
+        "groupId": 1,
+        "num": 1200,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 12000,
+        "soloRaidTotalScoreRewardMstId": 1001
+    },
+    {
+        "groupId": 1,
+        "num": 1200,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 24000,
+        "soloRaidTotalScoreRewardMstId": 1002
+    },
+    {
+        "groupId": 1,
+        "num": 1200,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 36000,
+        "soloRaidTotalScoreRewardMstId": 1003
+    },
+    {
+        "groupId": 1,
+        "num": 1200,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 48000,
+        "soloRaidTotalScoreRewardMstId": 1004
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 60000,
+        "soloRaidTotalScoreRewardMstId": 1005
+    },
+    {
+        "groupId": 1,
+        "num": 1200,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 96000,
+        "soloRaidTotalScoreRewardMstId": 1006
+    },
+    {
+        "groupId": 1,
+        "num": 1200,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 132000,
+        "soloRaidTotalScoreRewardMstId": 1007
+    },
+    {
+        "groupId": 1,
+        "num": 1200,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 168000,
+        "soloRaidTotalScoreRewardMstId": 1008
+    },
+    {
+        "groupId": 1,
+        "num": 400,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 204000,
+        "soloRaidTotalScoreRewardMstId": 1009
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 240000,
+        "soloRaidTotalScoreRewardMstId": 1010
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 312000,
+        "soloRaidTotalScoreRewardMstId": 1011
+    },
+    {
+        "groupId": 1,
+        "num": 1200,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 384000,
+        "soloRaidTotalScoreRewardMstId": 1012
+    },
+    {
+        "groupId": 1,
+        "num": 1200,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 456000,
+        "soloRaidTotalScoreRewardMstId": 1013
+    },
+    {
+        "groupId": 1,
+        "num": 400,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 528000,
+        "soloRaidTotalScoreRewardMstId": 1014
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 600000,
+        "soloRaidTotalScoreRewardMstId": 1015
+    },
+    {
+        "groupId": 1,
+        "num": 1200,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 720000,
+        "soloRaidTotalScoreRewardMstId": 1016
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 840000,
+        "soloRaidTotalScoreRewardMstId": 1017
+    },
+    {
+        "groupId": 1,
+        "num": 2100,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 960000,
+        "soloRaidTotalScoreRewardMstId": 1018
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 1080000,
+        "soloRaidTotalScoreRewardMstId": 1019
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 1200000,
+        "soloRaidTotalScoreRewardMstId": 1020
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 1380000,
+        "soloRaidTotalScoreRewardMstId": 1021
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 1560000,
+        "soloRaidTotalScoreRewardMstId": 1022
+    },
+    {
+        "groupId": 1,
+        "num": 2100,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 1740000,
+        "soloRaidTotalScoreRewardMstId": 1023
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 1920000,
+        "soloRaidTotalScoreRewardMstId": 1024
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 2100000,
+        "soloRaidTotalScoreRewardMstId": 1025
+    },
+    {
+        "groupId": 1,
+        "num": 2100,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 2340000,
+        "soloRaidTotalScoreRewardMstId": 1026
+    },
+    {
+        "groupId": 1,
+        "num": 600,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 2580000,
+        "soloRaidTotalScoreRewardMstId": 1027
+    },
+    {
+        "groupId": 1,
+        "num": 2100,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 2820000,
+        "soloRaidTotalScoreRewardMstId": 1028
+    },
+    {
+        "groupId": 1,
+        "num": 600,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 3060000,
+        "soloRaidTotalScoreRewardMstId": 1029
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 3300000,
+        "soloRaidTotalScoreRewardMstId": 1030
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 3600000,
+        "soloRaidTotalScoreRewardMstId": 1031
+    },
+    {
+        "groupId": 1,
+        "num": 600,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 3900000,
+        "soloRaidTotalScoreRewardMstId": 1032
+    },
+    {
+        "groupId": 1,
+        "num": 2400,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 4200000,
+        "soloRaidTotalScoreRewardMstId": 1033
+    },
+    {
+        "groupId": 1,
+        "num": 600,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 4500000,
+        "soloRaidTotalScoreRewardMstId": 1034
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 4800000,
+        "soloRaidTotalScoreRewardMstId": 1035
+    },
+    {
+        "groupId": 1,
+        "num": 2400,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 5160000,
+        "soloRaidTotalScoreRewardMstId": 1036
+    },
+    {
+        "groupId": 1,
+        "num": 600,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 5520000,
+        "soloRaidTotalScoreRewardMstId": 1037
+    },
+    {
+        "groupId": 1,
+        "num": 2400,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 5880000,
+        "soloRaidTotalScoreRewardMstId": 1038
+    },
+    {
+        "groupId": 1,
+        "num": 600,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 6240000,
+        "soloRaidTotalScoreRewardMstId": 1039
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 6600000,
+        "soloRaidTotalScoreRewardMstId": 1040
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 7080000,
+        "soloRaidTotalScoreRewardMstId": 1041
+    },
+    {
+        "groupId": 1,
+        "num": 600,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 7560000,
+        "soloRaidTotalScoreRewardMstId": 1042
+    },
+    {
+        "groupId": 1,
+        "num": 2400,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 8040000,
+        "soloRaidTotalScoreRewardMstId": 1043
+    },
+    {
+        "groupId": 1,
+        "num": 600,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 8520000,
+        "soloRaidTotalScoreRewardMstId": 1044
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 9000000,
+        "soloRaidTotalScoreRewardMstId": 1045
+    },
+    {
+        "groupId": 1,
+        "num": 600,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 9600000,
+        "soloRaidTotalScoreRewardMstId": 1046
+    },
+    {
+        "groupId": 1,
+        "num": 600,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 10200000,
+        "soloRaidTotalScoreRewardMstId": 1047
+    },
+    {
+        "groupId": 1,
+        "num": 600,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 10800000,
+        "soloRaidTotalScoreRewardMstId": 1048
+    },
+    {
+        "groupId": 1,
+        "num": 600,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 11400000,
+        "soloRaidTotalScoreRewardMstId": 1049
+    },
+    {
+        "groupId": 1,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 12000000,
+        "soloRaidTotalScoreRewardMstId": 1050
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 12600000,
+        "soloRaidTotalScoreRewardMstId": 1051
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 13200000,
+        "soloRaidTotalScoreRewardMstId": 1052
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 13800000,
+        "soloRaidTotalScoreRewardMstId": 1053
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 14400000,
+        "soloRaidTotalScoreRewardMstId": 1054
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 15000000,
+        "soloRaidTotalScoreRewardMstId": 1055
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 15600000,
+        "soloRaidTotalScoreRewardMstId": 1056
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 16200000,
+        "soloRaidTotalScoreRewardMstId": 1057
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 16800000,
+        "soloRaidTotalScoreRewardMstId": 1058
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 17400000,
+        "soloRaidTotalScoreRewardMstId": 1059
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 18000000,
+        "soloRaidTotalScoreRewardMstId": 1060
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 18600000,
+        "soloRaidTotalScoreRewardMstId": 1061
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 19200000,
+        "soloRaidTotalScoreRewardMstId": 1062
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 19800000,
+        "soloRaidTotalScoreRewardMstId": 1063
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 20400000,
+        "soloRaidTotalScoreRewardMstId": 1064
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 21000000,
+        "soloRaidTotalScoreRewardMstId": 1065
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 21600000,
+        "soloRaidTotalScoreRewardMstId": 1066
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 22200000,
+        "soloRaidTotalScoreRewardMstId": 1067
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 22800000,
+        "soloRaidTotalScoreRewardMstId": 1068
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 23400000,
+        "soloRaidTotalScoreRewardMstId": 1069
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 24000000,
+        "soloRaidTotalScoreRewardMstId": 1070
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 24600000,
+        "soloRaidTotalScoreRewardMstId": 1071
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 25200000,
+        "soloRaidTotalScoreRewardMstId": 1072
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 25800000,
+        "soloRaidTotalScoreRewardMstId": 1073
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 26400000,
+        "soloRaidTotalScoreRewardMstId": 1074
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 27000000,
+        "soloRaidTotalScoreRewardMstId": 1075
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 27600000,
+        "soloRaidTotalScoreRewardMstId": 1076
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 28200000,
+        "soloRaidTotalScoreRewardMstId": 1077
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 28800000,
+        "soloRaidTotalScoreRewardMstId": 1078
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 29400000,
+        "soloRaidTotalScoreRewardMstId": 1079
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 30000000,
+        "soloRaidTotalScoreRewardMstId": 1080
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 30600000,
+        "soloRaidTotalScoreRewardMstId": 1081
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 31200000,
+        "soloRaidTotalScoreRewardMstId": 1082
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 31800000,
+        "soloRaidTotalScoreRewardMstId": 1083
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 32400000,
+        "soloRaidTotalScoreRewardMstId": 1084
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 33000000,
+        "soloRaidTotalScoreRewardMstId": 1085
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 33600000,
+        "soloRaidTotalScoreRewardMstId": 1086
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 34200000,
+        "soloRaidTotalScoreRewardMstId": 1087
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 34800000,
+        "soloRaidTotalScoreRewardMstId": 1088
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 35400000,
+        "soloRaidTotalScoreRewardMstId": 1089
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 36000000,
+        "soloRaidTotalScoreRewardMstId": 1090
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 36600000,
+        "soloRaidTotalScoreRewardMstId": 1091
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 37200000,
+        "soloRaidTotalScoreRewardMstId": 1092
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 37800000,
+        "soloRaidTotalScoreRewardMstId": 1093
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 38400000,
+        "soloRaidTotalScoreRewardMstId": 1094
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 39000000,
+        "soloRaidTotalScoreRewardMstId": 1095
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 39600000,
+        "soloRaidTotalScoreRewardMstId": 1096
+    },
+    {
+        "groupId": 1,
+        "num": 500,
+        "objectId": 201051,
+        "objectReceiveType": 5,
+        "score": 40200000,
+        "soloRaidTotalScoreRewardMstId": 1097
+    },
+    {
+        "groupId": 1,
+        "num": 300,
+        "objectId": 201050,
+        "objectReceiveType": 5,
+        "score": 40800000,
+        "soloRaidTotalScoreRewardMstId": 1098
+    },
+    {
+        "groupId": 2,
+        "num": 1200,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 12000,
+        "soloRaidTotalScoreRewardMstId": 1099
+    },
+    {
+        "groupId": 2,
+        "num": 1200,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 24000,
+        "soloRaidTotalScoreRewardMstId": 1100
+    },
+    {
+        "groupId": 2,
+        "num": 1200,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 36000,
+        "soloRaidTotalScoreRewardMstId": 1101
+    },
+    {
+        "groupId": 2,
+        "num": 1200,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 48000,
+        "soloRaidTotalScoreRewardMstId": 1102
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 60000,
+        "soloRaidTotalScoreRewardMstId": 1103
+    },
+    {
+        "groupId": 2,
+        "num": 1200,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 96000,
+        "soloRaidTotalScoreRewardMstId": 1104
+    },
+    {
+        "groupId": 2,
+        "num": 1200,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 132000,
+        "soloRaidTotalScoreRewardMstId": 1105
+    },
+    {
+        "groupId": 2,
+        "num": 1200,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 168000,
+        "soloRaidTotalScoreRewardMstId": 1106
+    },
+    {
+        "groupId": 2,
+        "num": 400,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 204000,
+        "soloRaidTotalScoreRewardMstId": 1107
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 240000,
+        "soloRaidTotalScoreRewardMstId": 1108
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 312000,
+        "soloRaidTotalScoreRewardMstId": 1109
+    },
+    {
+        "groupId": 2,
+        "num": 1200,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 384000,
+        "soloRaidTotalScoreRewardMstId": 1110
+    },
+    {
+        "groupId": 2,
+        "num": 1200,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 456000,
+        "soloRaidTotalScoreRewardMstId": 1111
+    },
+    {
+        "groupId": 2,
+        "num": 400,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 528000,
+        "soloRaidTotalScoreRewardMstId": 1112
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 600000,
+        "soloRaidTotalScoreRewardMstId": 1113
+    },
+    {
+        "groupId": 2,
+        "num": 1200,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 720000,
+        "soloRaidTotalScoreRewardMstId": 1114
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 840000,
+        "soloRaidTotalScoreRewardMstId": 1115
+    },
+    {
+        "groupId": 2,
+        "num": 2100,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 960000,
+        "soloRaidTotalScoreRewardMstId": 1116
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 1080000,
+        "soloRaidTotalScoreRewardMstId": 1117
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 1200000,
+        "soloRaidTotalScoreRewardMstId": 1118
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 1380000,
+        "soloRaidTotalScoreRewardMstId": 1119
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 1560000,
+        "soloRaidTotalScoreRewardMstId": 1120
+    },
+    {
+        "groupId": 2,
+        "num": 2100,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 1740000,
+        "soloRaidTotalScoreRewardMstId": 1121
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 1920000,
+        "soloRaidTotalScoreRewardMstId": 1122
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 2100000,
+        "soloRaidTotalScoreRewardMstId": 1123
+    },
+    {
+        "groupId": 2,
+        "num": 2100,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 2340000,
+        "soloRaidTotalScoreRewardMstId": 1124
+    },
+    {
+        "groupId": 2,
+        "num": 600,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 2580000,
+        "soloRaidTotalScoreRewardMstId": 1125
+    },
+    {
+        "groupId": 2,
+        "num": 2100,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 2820000,
+        "soloRaidTotalScoreRewardMstId": 1126
+    },
+    {
+        "groupId": 2,
+        "num": 600,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 3060000,
+        "soloRaidTotalScoreRewardMstId": 1127
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 3300000,
+        "soloRaidTotalScoreRewardMstId": 1128
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 3600000,
+        "soloRaidTotalScoreRewardMstId": 1129
+    },
+    {
+        "groupId": 2,
+        "num": 600,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 3900000,
+        "soloRaidTotalScoreRewardMstId": 1130
+    },
+    {
+        "groupId": 2,
+        "num": 2400,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 4200000,
+        "soloRaidTotalScoreRewardMstId": 1131
+    },
+    {
+        "groupId": 2,
+        "num": 600,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 4500000,
+        "soloRaidTotalScoreRewardMstId": 1132
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 4800000,
+        "soloRaidTotalScoreRewardMstId": 1133
+    },
+    {
+        "groupId": 2,
+        "num": 2400,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 5160000,
+        "soloRaidTotalScoreRewardMstId": 1134
+    },
+    {
+        "groupId": 2,
+        "num": 600,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 5520000,
+        "soloRaidTotalScoreRewardMstId": 1135
+    },
+    {
+        "groupId": 2,
+        "num": 2400,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 5880000,
+        "soloRaidTotalScoreRewardMstId": 1136
+    },
+    {
+        "groupId": 2,
+        "num": 600,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 6240000,
+        "soloRaidTotalScoreRewardMstId": 1137
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 6600000,
+        "soloRaidTotalScoreRewardMstId": 1138
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 7080000,
+        "soloRaidTotalScoreRewardMstId": 1139
+    },
+    {
+        "groupId": 2,
+        "num": 600,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 7560000,
+        "soloRaidTotalScoreRewardMstId": 1140
+    },
+    {
+        "groupId": 2,
+        "num": 2400,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 8040000,
+        "soloRaidTotalScoreRewardMstId": 1141
+    },
+    {
+        "groupId": 2,
+        "num": 600,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 8520000,
+        "soloRaidTotalScoreRewardMstId": 1142
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 9000000,
+        "soloRaidTotalScoreRewardMstId": 1143
+    },
+    {
+        "groupId": 2,
+        "num": 600,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 9600000,
+        "soloRaidTotalScoreRewardMstId": 1144
+    },
+    {
+        "groupId": 2,
+        "num": 600,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 10200000,
+        "soloRaidTotalScoreRewardMstId": 1145
+    },
+    {
+        "groupId": 2,
+        "num": 600,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 10800000,
+        "soloRaidTotalScoreRewardMstId": 1146
+    },
+    {
+        "groupId": 2,
+        "num": 600,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 11400000,
+        "soloRaidTotalScoreRewardMstId": 1147
+    },
+    {
+        "groupId": 2,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 12000000,
+        "soloRaidTotalScoreRewardMstId": 1148
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 12600000,
+        "soloRaidTotalScoreRewardMstId": 1149
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 13200000,
+        "soloRaidTotalScoreRewardMstId": 1150
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 13800000,
+        "soloRaidTotalScoreRewardMstId": 1151
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 14400000,
+        "soloRaidTotalScoreRewardMstId": 1152
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 15000000,
+        "soloRaidTotalScoreRewardMstId": 1153
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 15600000,
+        "soloRaidTotalScoreRewardMstId": 1154
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 16200000,
+        "soloRaidTotalScoreRewardMstId": 1155
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 16800000,
+        "soloRaidTotalScoreRewardMstId": 1156
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 17400000,
+        "soloRaidTotalScoreRewardMstId": 1157
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 18000000,
+        "soloRaidTotalScoreRewardMstId": 1158
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 18600000,
+        "soloRaidTotalScoreRewardMstId": 1159
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 19200000,
+        "soloRaidTotalScoreRewardMstId": 1160
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 19800000,
+        "soloRaidTotalScoreRewardMstId": 1161
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 20400000,
+        "soloRaidTotalScoreRewardMstId": 1162
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 21000000,
+        "soloRaidTotalScoreRewardMstId": 1163
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 21600000,
+        "soloRaidTotalScoreRewardMstId": 1164
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 22200000,
+        "soloRaidTotalScoreRewardMstId": 1165
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 22800000,
+        "soloRaidTotalScoreRewardMstId": 1166
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 23400000,
+        "soloRaidTotalScoreRewardMstId": 1167
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 24000000,
+        "soloRaidTotalScoreRewardMstId": 1168
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 24600000,
+        "soloRaidTotalScoreRewardMstId": 1169
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 25200000,
+        "soloRaidTotalScoreRewardMstId": 1170
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 25800000,
+        "soloRaidTotalScoreRewardMstId": 1171
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 26400000,
+        "soloRaidTotalScoreRewardMstId": 1172
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 27000000,
+        "soloRaidTotalScoreRewardMstId": 1173
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 27600000,
+        "soloRaidTotalScoreRewardMstId": 1174
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 28200000,
+        "soloRaidTotalScoreRewardMstId": 1175
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 28800000,
+        "soloRaidTotalScoreRewardMstId": 1176
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 29400000,
+        "soloRaidTotalScoreRewardMstId": 1177
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 30000000,
+        "soloRaidTotalScoreRewardMstId": 1178
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 30600000,
+        "soloRaidTotalScoreRewardMstId": 1179
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 31200000,
+        "soloRaidTotalScoreRewardMstId": 1180
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 31800000,
+        "soloRaidTotalScoreRewardMstId": 1181
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 32400000,
+        "soloRaidTotalScoreRewardMstId": 1182
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 33000000,
+        "soloRaidTotalScoreRewardMstId": 1183
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 33600000,
+        "soloRaidTotalScoreRewardMstId": 1184
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 34200000,
+        "soloRaidTotalScoreRewardMstId": 1185
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 34800000,
+        "soloRaidTotalScoreRewardMstId": 1186
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 35400000,
+        "soloRaidTotalScoreRewardMstId": 1187
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 36000000,
+        "soloRaidTotalScoreRewardMstId": 1188
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 36600000,
+        "soloRaidTotalScoreRewardMstId": 1189
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 37200000,
+        "soloRaidTotalScoreRewardMstId": 1190
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 37800000,
+        "soloRaidTotalScoreRewardMstId": 1191
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 38400000,
+        "soloRaidTotalScoreRewardMstId": 1192
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 39000000,
+        "soloRaidTotalScoreRewardMstId": 1193
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 39600000,
+        "soloRaidTotalScoreRewardMstId": 1194
+    },
+    {
+        "groupId": 2,
+        "num": 500,
+        "objectId": 201091,
+        "objectReceiveType": 5,
+        "score": 40200000,
+        "soloRaidTotalScoreRewardMstId": 1195
+    },
+    {
+        "groupId": 2,
+        "num": 300,
+        "objectId": 201090,
+        "objectReceiveType": 5,
+        "score": 40800000,
+        "soloRaidTotalScoreRewardMstId": 1196
+    },
+    {
+        "groupId": 3,
+        "num": 1200,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 30000,
+        "soloRaidTotalScoreRewardMstId": 1197
+    },
+    {
+        "groupId": 3,
+        "num": 1200,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 60000,
+        "soloRaidTotalScoreRewardMstId": 1198
+    },
+    {
+        "groupId": 3,
+        "num": 1200,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 90000,
+        "soloRaidTotalScoreRewardMstId": 1199
+    },
+    {
+        "groupId": 3,
+        "num": 1200,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 120000,
+        "soloRaidTotalScoreRewardMstId": 1200
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 150000,
+        "soloRaidTotalScoreRewardMstId": 1201
+    },
+    {
+        "groupId": 3,
+        "num": 1200,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 240000,
+        "soloRaidTotalScoreRewardMstId": 1202
+    },
+    {
+        "groupId": 3,
+        "num": 1200,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 330000,
+        "soloRaidTotalScoreRewardMstId": 1203
+    },
+    {
+        "groupId": 3,
+        "num": 1200,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 420000,
+        "soloRaidTotalScoreRewardMstId": 1204
+    },
+    {
+        "groupId": 3,
+        "num": 400,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 510000,
+        "soloRaidTotalScoreRewardMstId": 1205
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 600000,
+        "soloRaidTotalScoreRewardMstId": 1206
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 780000,
+        "soloRaidTotalScoreRewardMstId": 1207
+    },
+    {
+        "groupId": 3,
+        "num": 1200,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 960000,
+        "soloRaidTotalScoreRewardMstId": 1208
+    },
+    {
+        "groupId": 3,
+        "num": 1200,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 1140000,
+        "soloRaidTotalScoreRewardMstId": 1209
+    },
+    {
+        "groupId": 3,
+        "num": 400,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 1320000,
+        "soloRaidTotalScoreRewardMstId": 1210
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 1500000,
+        "soloRaidTotalScoreRewardMstId": 1211
+    },
+    {
+        "groupId": 3,
+        "num": 1200,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 1800000,
+        "soloRaidTotalScoreRewardMstId": 1212
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 2100000,
+        "soloRaidTotalScoreRewardMstId": 1213
+    },
+    {
+        "groupId": 3,
+        "num": 2100,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 2400000,
+        "soloRaidTotalScoreRewardMstId": 1214
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 2700000,
+        "soloRaidTotalScoreRewardMstId": 1215
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 3000000,
+        "soloRaidTotalScoreRewardMstId": 1216
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 3450000,
+        "soloRaidTotalScoreRewardMstId": 1217
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 3900000,
+        "soloRaidTotalScoreRewardMstId": 1218
+    },
+    {
+        "groupId": 3,
+        "num": 2100,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 4350000,
+        "soloRaidTotalScoreRewardMstId": 1219
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 4800000,
+        "soloRaidTotalScoreRewardMstId": 1220
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 5250000,
+        "soloRaidTotalScoreRewardMstId": 1221
+    },
+    {
+        "groupId": 3,
+        "num": 2100,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 5850000,
+        "soloRaidTotalScoreRewardMstId": 1222
+    },
+    {
+        "groupId": 3,
+        "num": 600,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 6450000,
+        "soloRaidTotalScoreRewardMstId": 1223
+    },
+    {
+        "groupId": 3,
+        "num": 2100,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 7050000,
+        "soloRaidTotalScoreRewardMstId": 1224
+    },
+    {
+        "groupId": 3,
+        "num": 600,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 7650000,
+        "soloRaidTotalScoreRewardMstId": 1225
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 8250000,
+        "soloRaidTotalScoreRewardMstId": 1226
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 9000000,
+        "soloRaidTotalScoreRewardMstId": 1227
+    },
+    {
+        "groupId": 3,
+        "num": 600,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 9750000,
+        "soloRaidTotalScoreRewardMstId": 1228
+    },
+    {
+        "groupId": 3,
+        "num": 2400,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 10500000,
+        "soloRaidTotalScoreRewardMstId": 1229
+    },
+    {
+        "groupId": 3,
+        "num": 600,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 11250000,
+        "soloRaidTotalScoreRewardMstId": 1230
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 12000000,
+        "soloRaidTotalScoreRewardMstId": 1231
+    },
+    {
+        "groupId": 3,
+        "num": 2400,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 12900000,
+        "soloRaidTotalScoreRewardMstId": 1232
+    },
+    {
+        "groupId": 3,
+        "num": 600,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 13800000,
+        "soloRaidTotalScoreRewardMstId": 1233
+    },
+    {
+        "groupId": 3,
+        "num": 2400,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 14700000,
+        "soloRaidTotalScoreRewardMstId": 1234
+    },
+    {
+        "groupId": 3,
+        "num": 600,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 15600000,
+        "soloRaidTotalScoreRewardMstId": 1235
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 16500000,
+        "soloRaidTotalScoreRewardMstId": 1236
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 17700000,
+        "soloRaidTotalScoreRewardMstId": 1237
+    },
+    {
+        "groupId": 3,
+        "num": 600,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 18900000,
+        "soloRaidTotalScoreRewardMstId": 1238
+    },
+    {
+        "groupId": 3,
+        "num": 2400,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 20100000,
+        "soloRaidTotalScoreRewardMstId": 1239
+    },
+    {
+        "groupId": 3,
+        "num": 600,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 21300000,
+        "soloRaidTotalScoreRewardMstId": 1240
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 22500000,
+        "soloRaidTotalScoreRewardMstId": 1241
+    },
+    {
+        "groupId": 3,
+        "num": 600,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 24000000,
+        "soloRaidTotalScoreRewardMstId": 1242
+    },
+    {
+        "groupId": 3,
+        "num": 600,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 25500000,
+        "soloRaidTotalScoreRewardMstId": 1243
+    },
+    {
+        "groupId": 3,
+        "num": 600,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 27000000,
+        "soloRaidTotalScoreRewardMstId": 1244
+    },
+    {
+        "groupId": 3,
+        "num": 600,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 28500000,
+        "soloRaidTotalScoreRewardMstId": 1245
+    },
+    {
+        "groupId": 3,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 30000000,
+        "soloRaidTotalScoreRewardMstId": 1246
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 31500000,
+        "soloRaidTotalScoreRewardMstId": 1247
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 33000000,
+        "soloRaidTotalScoreRewardMstId": 1248
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 34500000,
+        "soloRaidTotalScoreRewardMstId": 1249
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 36000000,
+        "soloRaidTotalScoreRewardMstId": 1250
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 37500000,
+        "soloRaidTotalScoreRewardMstId": 1251
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 39000000,
+        "soloRaidTotalScoreRewardMstId": 1252
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 40500000,
+        "soloRaidTotalScoreRewardMstId": 1253
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 42000000,
+        "soloRaidTotalScoreRewardMstId": 1254
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 43500000,
+        "soloRaidTotalScoreRewardMstId": 1255
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 45000000,
+        "soloRaidTotalScoreRewardMstId": 1256
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 46500000,
+        "soloRaidTotalScoreRewardMstId": 1257
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 48000000,
+        "soloRaidTotalScoreRewardMstId": 1258
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 49500000,
+        "soloRaidTotalScoreRewardMstId": 1259
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 51000000,
+        "soloRaidTotalScoreRewardMstId": 1260
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 52500000,
+        "soloRaidTotalScoreRewardMstId": 1261
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 54000000,
+        "soloRaidTotalScoreRewardMstId": 1262
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 55500000,
+        "soloRaidTotalScoreRewardMstId": 1263
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 57000000,
+        "soloRaidTotalScoreRewardMstId": 1264
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 58500000,
+        "soloRaidTotalScoreRewardMstId": 1265
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 60000000,
+        "soloRaidTotalScoreRewardMstId": 1266
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 61500000,
+        "soloRaidTotalScoreRewardMstId": 1267
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 63000000,
+        "soloRaidTotalScoreRewardMstId": 1268
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 64500000,
+        "soloRaidTotalScoreRewardMstId": 1269
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 66000000,
+        "soloRaidTotalScoreRewardMstId": 1270
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 67500000,
+        "soloRaidTotalScoreRewardMstId": 1271
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 69000000,
+        "soloRaidTotalScoreRewardMstId": 1272
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 70500000,
+        "soloRaidTotalScoreRewardMstId": 1273
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 72000000,
+        "soloRaidTotalScoreRewardMstId": 1274
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 73500000,
+        "soloRaidTotalScoreRewardMstId": 1275
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 75000000,
+        "soloRaidTotalScoreRewardMstId": 1276
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 76500000,
+        "soloRaidTotalScoreRewardMstId": 1277
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 78000000,
+        "soloRaidTotalScoreRewardMstId": 1278
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 79500000,
+        "soloRaidTotalScoreRewardMstId": 1279
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 81000000,
+        "soloRaidTotalScoreRewardMstId": 1280
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 82500000,
+        "soloRaidTotalScoreRewardMstId": 1281
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 84000000,
+        "soloRaidTotalScoreRewardMstId": 1282
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 85500000,
+        "soloRaidTotalScoreRewardMstId": 1283
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 87000000,
+        "soloRaidTotalScoreRewardMstId": 1284
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 88500000,
+        "soloRaidTotalScoreRewardMstId": 1285
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 90000000,
+        "soloRaidTotalScoreRewardMstId": 1286
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 91500000,
+        "soloRaidTotalScoreRewardMstId": 1287
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 93000000,
+        "soloRaidTotalScoreRewardMstId": 1288
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 94500000,
+        "soloRaidTotalScoreRewardMstId": 1289
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 96000000,
+        "soloRaidTotalScoreRewardMstId": 1290
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 97500000,
+        "soloRaidTotalScoreRewardMstId": 1291
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 99000000,
+        "soloRaidTotalScoreRewardMstId": 1292
+    },
+    {
+        "groupId": 3,
+        "num": 500,
+        "objectId": 201098,
+        "objectReceiveType": 5,
+        "score": 100500000,
+        "soloRaidTotalScoreRewardMstId": 1293
+    },
+    {
+        "groupId": 3,
+        "num": 300,
+        "objectId": 201097,
+        "objectReceiveType": 5,
+        "score": 102000000,
+        "soloRaidTotalScoreRewardMstId": 1294
+    },
+    {
+        "groupId": 4,
+        "num": 1200,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 40000,
+        "soloRaidTotalScoreRewardMstId": 1295
+    },
+    {
+        "groupId": 4,
+        "num": 1200,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 80000,
+        "soloRaidTotalScoreRewardMstId": 1296
+    },
+    {
+        "groupId": 4,
+        "num": 1200,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 120000,
+        "soloRaidTotalScoreRewardMstId": 1297
+    },
+    {
+        "groupId": 4,
+        "num": 1200,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 160000,
+        "soloRaidTotalScoreRewardMstId": 1298
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 200000,
+        "soloRaidTotalScoreRewardMstId": 1299
+    },
+    {
+        "groupId": 4,
+        "num": 1200,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 320000,
+        "soloRaidTotalScoreRewardMstId": 1300
+    },
+    {
+        "groupId": 4,
+        "num": 1200,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 440000,
+        "soloRaidTotalScoreRewardMstId": 1301
+    },
+    {
+        "groupId": 4,
+        "num": 1200,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 560000,
+        "soloRaidTotalScoreRewardMstId": 1302
+    },
+    {
+        "groupId": 4,
+        "num": 400,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 680000,
+        "soloRaidTotalScoreRewardMstId": 1303
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 800000,
+        "soloRaidTotalScoreRewardMstId": 1304
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 1040000,
+        "soloRaidTotalScoreRewardMstId": 1305
+    },
+    {
+        "groupId": 4,
+        "num": 1200,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 1280000,
+        "soloRaidTotalScoreRewardMstId": 1306
+    },
+    {
+        "groupId": 4,
+        "num": 1200,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 1520000,
+        "soloRaidTotalScoreRewardMstId": 1307
+    },
+    {
+        "groupId": 4,
+        "num": 400,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 1760000,
+        "soloRaidTotalScoreRewardMstId": 1308
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 2000000,
+        "soloRaidTotalScoreRewardMstId": 1309
+    },
+    {
+        "groupId": 4,
+        "num": 1200,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 2400000,
+        "soloRaidTotalScoreRewardMstId": 1310
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 2800000,
+        "soloRaidTotalScoreRewardMstId": 1311
+    },
+    {
+        "groupId": 4,
+        "num": 2100,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 3200000,
+        "soloRaidTotalScoreRewardMstId": 1312
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 3600000,
+        "soloRaidTotalScoreRewardMstId": 1313
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 4000000,
+        "soloRaidTotalScoreRewardMstId": 1314
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 4600000,
+        "soloRaidTotalScoreRewardMstId": 1315
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 5200000,
+        "soloRaidTotalScoreRewardMstId": 1316
+    },
+    {
+        "groupId": 4,
+        "num": 2100,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 5800000,
+        "soloRaidTotalScoreRewardMstId": 1317
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 6400000,
+        "soloRaidTotalScoreRewardMstId": 1318
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 7000000,
+        "soloRaidTotalScoreRewardMstId": 1319
+    },
+    {
+        "groupId": 4,
+        "num": 2100,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 7800000,
+        "soloRaidTotalScoreRewardMstId": 1320
+    },
+    {
+        "groupId": 4,
+        "num": 600,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 8600000,
+        "soloRaidTotalScoreRewardMstId": 1321
+    },
+    {
+        "groupId": 4,
+        "num": 2100,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 9400000,
+        "soloRaidTotalScoreRewardMstId": 1322
+    },
+    {
+        "groupId": 4,
+        "num": 600,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 10200000,
+        "soloRaidTotalScoreRewardMstId": 1323
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 11000000,
+        "soloRaidTotalScoreRewardMstId": 1324
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 12000000,
+        "soloRaidTotalScoreRewardMstId": 1325
+    },
+    {
+        "groupId": 4,
+        "num": 600,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 13000000,
+        "soloRaidTotalScoreRewardMstId": 1326
+    },
+    {
+        "groupId": 4,
+        "num": 2400,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 14000000,
+        "soloRaidTotalScoreRewardMstId": 1327
+    },
+    {
+        "groupId": 4,
+        "num": 600,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 15000000,
+        "soloRaidTotalScoreRewardMstId": 1328
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 16000000,
+        "soloRaidTotalScoreRewardMstId": 1329
+    },
+    {
+        "groupId": 4,
+        "num": 2400,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 17200000,
+        "soloRaidTotalScoreRewardMstId": 1330
+    },
+    {
+        "groupId": 4,
+        "num": 600,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 18400000,
+        "soloRaidTotalScoreRewardMstId": 1331
+    },
+    {
+        "groupId": 4,
+        "num": 2400,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 19600000,
+        "soloRaidTotalScoreRewardMstId": 1332
+    },
+    {
+        "groupId": 4,
+        "num": 600,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 20800000,
+        "soloRaidTotalScoreRewardMstId": 1333
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 22000000,
+        "soloRaidTotalScoreRewardMstId": 1334
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 23600000,
+        "soloRaidTotalScoreRewardMstId": 1335
+    },
+    {
+        "groupId": 4,
+        "num": 600,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 25200000,
+        "soloRaidTotalScoreRewardMstId": 1336
+    },
+    {
+        "groupId": 4,
+        "num": 2400,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 26800000,
+        "soloRaidTotalScoreRewardMstId": 1337
+    },
+    {
+        "groupId": 4,
+        "num": 600,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 28400000,
+        "soloRaidTotalScoreRewardMstId": 1338
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 30000000,
+        "soloRaidTotalScoreRewardMstId": 1339
+    },
+    {
+        "groupId": 4,
+        "num": 600,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 32000000,
+        "soloRaidTotalScoreRewardMstId": 1340
+    },
+    {
+        "groupId": 4,
+        "num": 600,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 34000000,
+        "soloRaidTotalScoreRewardMstId": 1341
+    },
+    {
+        "groupId": 4,
+        "num": 600,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 36000000,
+        "soloRaidTotalScoreRewardMstId": 1342
+    },
+    {
+        "groupId": 4,
+        "num": 600,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 38000000,
+        "soloRaidTotalScoreRewardMstId": 1343
+    },
+    {
+        "groupId": 4,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 40000000,
+        "soloRaidTotalScoreRewardMstId": 1344
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 42000000,
+        "soloRaidTotalScoreRewardMstId": 1345
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 44000000,
+        "soloRaidTotalScoreRewardMstId": 1346
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 46000000,
+        "soloRaidTotalScoreRewardMstId": 1347
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 48000000,
+        "soloRaidTotalScoreRewardMstId": 1348
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 50000000,
+        "soloRaidTotalScoreRewardMstId": 1349
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 52000000,
+        "soloRaidTotalScoreRewardMstId": 1350
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 54000000,
+        "soloRaidTotalScoreRewardMstId": 1351
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 56000000,
+        "soloRaidTotalScoreRewardMstId": 1352
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 58000000,
+        "soloRaidTotalScoreRewardMstId": 1353
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 60000000,
+        "soloRaidTotalScoreRewardMstId": 1354
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 62000000,
+        "soloRaidTotalScoreRewardMstId": 1355
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 64000000,
+        "soloRaidTotalScoreRewardMstId": 1356
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 66000000,
+        "soloRaidTotalScoreRewardMstId": 1357
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 68000000,
+        "soloRaidTotalScoreRewardMstId": 1358
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 70000000,
+        "soloRaidTotalScoreRewardMstId": 1359
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 72000000,
+        "soloRaidTotalScoreRewardMstId": 1360
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 74000000,
+        "soloRaidTotalScoreRewardMstId": 1361
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 76000000,
+        "soloRaidTotalScoreRewardMstId": 1362
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 78000000,
+        "soloRaidTotalScoreRewardMstId": 1363
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 80000000,
+        "soloRaidTotalScoreRewardMstId": 1364
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 82000000,
+        "soloRaidTotalScoreRewardMstId": 1365
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 84000000,
+        "soloRaidTotalScoreRewardMstId": 1366
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 86000000,
+        "soloRaidTotalScoreRewardMstId": 1367
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 88000000,
+        "soloRaidTotalScoreRewardMstId": 1368
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 90000000,
+        "soloRaidTotalScoreRewardMstId": 1369
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 92000000,
+        "soloRaidTotalScoreRewardMstId": 1370
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 94000000,
+        "soloRaidTotalScoreRewardMstId": 1371
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 96000000,
+        "soloRaidTotalScoreRewardMstId": 1372
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 98000000,
+        "soloRaidTotalScoreRewardMstId": 1373
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 100000000,
+        "soloRaidTotalScoreRewardMstId": 1374
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 102000000,
+        "soloRaidTotalScoreRewardMstId": 1375
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 104000000,
+        "soloRaidTotalScoreRewardMstId": 1376
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 106000000,
+        "soloRaidTotalScoreRewardMstId": 1377
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 108000000,
+        "soloRaidTotalScoreRewardMstId": 1378
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 110000000,
+        "soloRaidTotalScoreRewardMstId": 1379
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 112000000,
+        "soloRaidTotalScoreRewardMstId": 1380
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 114000000,
+        "soloRaidTotalScoreRewardMstId": 1381
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 116000000,
+        "soloRaidTotalScoreRewardMstId": 1382
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 118000000,
+        "soloRaidTotalScoreRewardMstId": 1383
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 120000000,
+        "soloRaidTotalScoreRewardMstId": 1384
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 122000000,
+        "soloRaidTotalScoreRewardMstId": 1385
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 124000000,
+        "soloRaidTotalScoreRewardMstId": 1386
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 126000000,
+        "soloRaidTotalScoreRewardMstId": 1387
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 128000000,
+        "soloRaidTotalScoreRewardMstId": 1388
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 130000000,
+        "soloRaidTotalScoreRewardMstId": 1389
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 132000000,
+        "soloRaidTotalScoreRewardMstId": 1390
+    },
+    {
+        "groupId": 4,
+        "num": 500,
+        "objectId": 201106,
+        "objectReceiveType": 5,
+        "score": 134000000,
+        "soloRaidTotalScoreRewardMstId": 1391
+    },
+    {
+        "groupId": 4,
+        "num": 300,
+        "objectId": 201105,
+        "objectReceiveType": 5,
+        "score": 136000000,
+        "soloRaidTotalScoreRewardMstId": 1392
+    },
+    {
+        "groupId": 5,
+        "num": 1200,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 40000,
+        "soloRaidTotalScoreRewardMstId": 1393
+    },
+    {
+        "groupId": 5,
+        "num": 1200,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 80000,
+        "soloRaidTotalScoreRewardMstId": 1394
+    },
+    {
+        "groupId": 5,
+        "num": 1200,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 120000,
+        "soloRaidTotalScoreRewardMstId": 1395
+    },
+    {
+        "groupId": 5,
+        "num": 1200,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 160000,
+        "soloRaidTotalScoreRewardMstId": 1396
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 200000,
+        "soloRaidTotalScoreRewardMstId": 1397
+    },
+    {
+        "groupId": 5,
+        "num": 1200,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 320000,
+        "soloRaidTotalScoreRewardMstId": 1398
+    },
+    {
+        "groupId": 5,
+        "num": 1200,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 440000,
+        "soloRaidTotalScoreRewardMstId": 1399
+    },
+    {
+        "groupId": 5,
+        "num": 1200,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 560000,
+        "soloRaidTotalScoreRewardMstId": 1400
+    },
+    {
+        "groupId": 5,
+        "num": 400,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 680000,
+        "soloRaidTotalScoreRewardMstId": 1401
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 800000,
+        "soloRaidTotalScoreRewardMstId": 1402
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 1040000,
+        "soloRaidTotalScoreRewardMstId": 1403
+    },
+    {
+        "groupId": 5,
+        "num": 1200,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 1280000,
+        "soloRaidTotalScoreRewardMstId": 1404
+    },
+    {
+        "groupId": 5,
+        "num": 1200,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 1520000,
+        "soloRaidTotalScoreRewardMstId": 1405
+    },
+    {
+        "groupId": 5,
+        "num": 400,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 1760000,
+        "soloRaidTotalScoreRewardMstId": 1406
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 2000000,
+        "soloRaidTotalScoreRewardMstId": 1407
+    },
+    {
+        "groupId": 5,
+        "num": 1200,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 2400000,
+        "soloRaidTotalScoreRewardMstId": 1408
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 2800000,
+        "soloRaidTotalScoreRewardMstId": 1409
+    },
+    {
+        "groupId": 5,
+        "num": 2100,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 3200000,
+        "soloRaidTotalScoreRewardMstId": 1410
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 3600000,
+        "soloRaidTotalScoreRewardMstId": 1411
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 4000000,
+        "soloRaidTotalScoreRewardMstId": 1412
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 4600000,
+        "soloRaidTotalScoreRewardMstId": 1413
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 5200000,
+        "soloRaidTotalScoreRewardMstId": 1414
+    },
+    {
+        "groupId": 5,
+        "num": 2100,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 5800000,
+        "soloRaidTotalScoreRewardMstId": 1415
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 6400000,
+        "soloRaidTotalScoreRewardMstId": 1416
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 7000000,
+        "soloRaidTotalScoreRewardMstId": 1417
+    },
+    {
+        "groupId": 5,
+        "num": 2100,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 7800000,
+        "soloRaidTotalScoreRewardMstId": 1418
+    },
+    {
+        "groupId": 5,
+        "num": 600,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 8600000,
+        "soloRaidTotalScoreRewardMstId": 1419
+    },
+    {
+        "groupId": 5,
+        "num": 2100,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 9400000,
+        "soloRaidTotalScoreRewardMstId": 1420
+    },
+    {
+        "groupId": 5,
+        "num": 600,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 10200000,
+        "soloRaidTotalScoreRewardMstId": 1421
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 11000000,
+        "soloRaidTotalScoreRewardMstId": 1422
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 12000000,
+        "soloRaidTotalScoreRewardMstId": 1423
+    },
+    {
+        "groupId": 5,
+        "num": 600,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 13000000,
+        "soloRaidTotalScoreRewardMstId": 1424
+    },
+    {
+        "groupId": 5,
+        "num": 2400,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 14000000,
+        "soloRaidTotalScoreRewardMstId": 1425
+    },
+    {
+        "groupId": 5,
+        "num": 600,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 15000000,
+        "soloRaidTotalScoreRewardMstId": 1426
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 16000000,
+        "soloRaidTotalScoreRewardMstId": 1427
+    },
+    {
+        "groupId": 5,
+        "num": 2400,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 17200000,
+        "soloRaidTotalScoreRewardMstId": 1428
+    },
+    {
+        "groupId": 5,
+        "num": 600,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 18400000,
+        "soloRaidTotalScoreRewardMstId": 1429
+    },
+    {
+        "groupId": 5,
+        "num": 2400,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 19600000,
+        "soloRaidTotalScoreRewardMstId": 1430
+    },
+    {
+        "groupId": 5,
+        "num": 600,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 20800000,
+        "soloRaidTotalScoreRewardMstId": 1431
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 22000000,
+        "soloRaidTotalScoreRewardMstId": 1432
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 23600000,
+        "soloRaidTotalScoreRewardMstId": 1433
+    },
+    {
+        "groupId": 5,
+        "num": 600,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 25200000,
+        "soloRaidTotalScoreRewardMstId": 1434
+    },
+    {
+        "groupId": 5,
+        "num": 2400,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 26800000,
+        "soloRaidTotalScoreRewardMstId": 1435
+    },
+    {
+        "groupId": 5,
+        "num": 600,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 28400000,
+        "soloRaidTotalScoreRewardMstId": 1436
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 30000000,
+        "soloRaidTotalScoreRewardMstId": 1437
+    },
+    {
+        "groupId": 5,
+        "num": 600,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 32000000,
+        "soloRaidTotalScoreRewardMstId": 1438
+    },
+    {
+        "groupId": 5,
+        "num": 600,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 34000000,
+        "soloRaidTotalScoreRewardMstId": 1439
+    },
+    {
+        "groupId": 5,
+        "num": 600,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 36000000,
+        "soloRaidTotalScoreRewardMstId": 1440
+    },
+    {
+        "groupId": 5,
+        "num": 600,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 38000000,
+        "soloRaidTotalScoreRewardMstId": 1441
+    },
+    {
+        "groupId": 5,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 40000000,
+        "soloRaidTotalScoreRewardMstId": 1442
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 42000000,
+        "soloRaidTotalScoreRewardMstId": 1443
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 44000000,
+        "soloRaidTotalScoreRewardMstId": 1444
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 46000000,
+        "soloRaidTotalScoreRewardMstId": 1445
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 48000000,
+        "soloRaidTotalScoreRewardMstId": 1446
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 50000000,
+        "soloRaidTotalScoreRewardMstId": 1447
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 52000000,
+        "soloRaidTotalScoreRewardMstId": 1448
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 54000000,
+        "soloRaidTotalScoreRewardMstId": 1449
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 56000000,
+        "soloRaidTotalScoreRewardMstId": 1450
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 58000000,
+        "soloRaidTotalScoreRewardMstId": 1451
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 60000000,
+        "soloRaidTotalScoreRewardMstId": 1452
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 62000000,
+        "soloRaidTotalScoreRewardMstId": 1453
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 64000000,
+        "soloRaidTotalScoreRewardMstId": 1454
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 66000000,
+        "soloRaidTotalScoreRewardMstId": 1455
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 68000000,
+        "soloRaidTotalScoreRewardMstId": 1456
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 70000000,
+        "soloRaidTotalScoreRewardMstId": 1457
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 72000000,
+        "soloRaidTotalScoreRewardMstId": 1458
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 74000000,
+        "soloRaidTotalScoreRewardMstId": 1459
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 76000000,
+        "soloRaidTotalScoreRewardMstId": 1460
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 78000000,
+        "soloRaidTotalScoreRewardMstId": 1461
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 80000000,
+        "soloRaidTotalScoreRewardMstId": 1462
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 82000000,
+        "soloRaidTotalScoreRewardMstId": 1463
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 84000000,
+        "soloRaidTotalScoreRewardMstId": 1464
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 86000000,
+        "soloRaidTotalScoreRewardMstId": 1465
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 88000000,
+        "soloRaidTotalScoreRewardMstId": 1466
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 90000000,
+        "soloRaidTotalScoreRewardMstId": 1467
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 92000000,
+        "soloRaidTotalScoreRewardMstId": 1468
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 94000000,
+        "soloRaidTotalScoreRewardMstId": 1469
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 96000000,
+        "soloRaidTotalScoreRewardMstId": 1470
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 98000000,
+        "soloRaidTotalScoreRewardMstId": 1471
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 100000000,
+        "soloRaidTotalScoreRewardMstId": 1472
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 102000000,
+        "soloRaidTotalScoreRewardMstId": 1473
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 104000000,
+        "soloRaidTotalScoreRewardMstId": 1474
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 106000000,
+        "soloRaidTotalScoreRewardMstId": 1475
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 108000000,
+        "soloRaidTotalScoreRewardMstId": 1476
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 110000000,
+        "soloRaidTotalScoreRewardMstId": 1477
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 112000000,
+        "soloRaidTotalScoreRewardMstId": 1478
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 114000000,
+        "soloRaidTotalScoreRewardMstId": 1479
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 116000000,
+        "soloRaidTotalScoreRewardMstId": 1480
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 118000000,
+        "soloRaidTotalScoreRewardMstId": 1481
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 120000000,
+        "soloRaidTotalScoreRewardMstId": 1482
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 122000000,
+        "soloRaidTotalScoreRewardMstId": 1483
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 124000000,
+        "soloRaidTotalScoreRewardMstId": 1484
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 126000000,
+        "soloRaidTotalScoreRewardMstId": 1485
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 128000000,
+        "soloRaidTotalScoreRewardMstId": 1486
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 130000000,
+        "soloRaidTotalScoreRewardMstId": 1487
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 132000000,
+        "soloRaidTotalScoreRewardMstId": 1488
+    },
+    {
+        "groupId": 5,
+        "num": 500,
+        "objectId": 201118,
+        "objectReceiveType": 5,
+        "score": 134000000,
+        "soloRaidTotalScoreRewardMstId": 1489
+    },
+    {
+        "groupId": 5,
+        "num": 300,
+        "objectId": 201117,
+        "objectReceiveType": 5,
+        "score": 136000000,
+        "soloRaidTotalScoreRewardMstId": 1490
+    },
+    {
+        "groupId": 6,
+        "num": 1200,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 40000,
+        "soloRaidTotalScoreRewardMstId": 1491
+    },
+    {
+        "groupId": 6,
+        "num": 1200,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 80000,
+        "soloRaidTotalScoreRewardMstId": 1492
+    },
+    {
+        "groupId": 6,
+        "num": 1200,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 120000,
+        "soloRaidTotalScoreRewardMstId": 1493
+    },
+    {
+        "groupId": 6,
+        "num": 1200,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 160000,
+        "soloRaidTotalScoreRewardMstId": 1494
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 200000,
+        "soloRaidTotalScoreRewardMstId": 1495
+    },
+    {
+        "groupId": 6,
+        "num": 1200,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 320000,
+        "soloRaidTotalScoreRewardMstId": 1496
+    },
+    {
+        "groupId": 6,
+        "num": 1200,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 440000,
+        "soloRaidTotalScoreRewardMstId": 1497
+    },
+    {
+        "groupId": 6,
+        "num": 1200,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 560000,
+        "soloRaidTotalScoreRewardMstId": 1498
+    },
+    {
+        "groupId": 6,
+        "num": 400,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 680000,
+        "soloRaidTotalScoreRewardMstId": 1499
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 800000,
+        "soloRaidTotalScoreRewardMstId": 1500
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 1040000,
+        "soloRaidTotalScoreRewardMstId": 1501
+    },
+    {
+        "groupId": 6,
+        "num": 1200,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 1280000,
+        "soloRaidTotalScoreRewardMstId": 1502
+    },
+    {
+        "groupId": 6,
+        "num": 1200,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 1520000,
+        "soloRaidTotalScoreRewardMstId": 1503
+    },
+    {
+        "groupId": 6,
+        "num": 400,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 1760000,
+        "soloRaidTotalScoreRewardMstId": 1504
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370088,
+        "objectReceiveType": 5,
+        "score": 2000000,
+        "soloRaidTotalScoreRewardMstId": 1505
+    },
+    {
+        "groupId": 6,
+        "num": 1200,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 2400000,
+        "soloRaidTotalScoreRewardMstId": 1506
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 2800000,
+        "soloRaidTotalScoreRewardMstId": 1507
+    },
+    {
+        "groupId": 6,
+        "num": 2100,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 3200000,
+        "soloRaidTotalScoreRewardMstId": 1508
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 3600000,
+        "soloRaidTotalScoreRewardMstId": 1509
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 4000000,
+        "soloRaidTotalScoreRewardMstId": 1510
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 4600000,
+        "soloRaidTotalScoreRewardMstId": 1511
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 5200000,
+        "soloRaidTotalScoreRewardMstId": 1512
+    },
+    {
+        "groupId": 6,
+        "num": 2100,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 5800000,
+        "soloRaidTotalScoreRewardMstId": 1513
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 6400000,
+        "soloRaidTotalScoreRewardMstId": 1514
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 7000000,
+        "soloRaidTotalScoreRewardMstId": 1515
+    },
+    {
+        "groupId": 6,
+        "num": 2100,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 7800000,
+        "soloRaidTotalScoreRewardMstId": 1516
+    },
+    {
+        "groupId": 6,
+        "num": 600,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 8600000,
+        "soloRaidTotalScoreRewardMstId": 1517
+    },
+    {
+        "groupId": 6,
+        "num": 2100,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 9400000,
+        "soloRaidTotalScoreRewardMstId": 1518
+    },
+    {
+        "groupId": 6,
+        "num": 600,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 10200000,
+        "soloRaidTotalScoreRewardMstId": 1519
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370089,
+        "objectReceiveType": 5,
+        "score": 11000000,
+        "soloRaidTotalScoreRewardMstId": 1520
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 12000000,
+        "soloRaidTotalScoreRewardMstId": 1521
+    },
+    {
+        "groupId": 6,
+        "num": 600,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 13000000,
+        "soloRaidTotalScoreRewardMstId": 1522
+    },
+    {
+        "groupId": 6,
+        "num": 2400,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 14000000,
+        "soloRaidTotalScoreRewardMstId": 1523
+    },
+    {
+        "groupId": 6,
+        "num": 600,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 15000000,
+        "soloRaidTotalScoreRewardMstId": 1524
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 16000000,
+        "soloRaidTotalScoreRewardMstId": 1525
+    },
+    {
+        "groupId": 6,
+        "num": 2400,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 17200000,
+        "soloRaidTotalScoreRewardMstId": 1526
+    },
+    {
+        "groupId": 6,
+        "num": 600,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 18400000,
+        "soloRaidTotalScoreRewardMstId": 1527
+    },
+    {
+        "groupId": 6,
+        "num": 2400,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 19600000,
+        "soloRaidTotalScoreRewardMstId": 1528
+    },
+    {
+        "groupId": 6,
+        "num": 600,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 20800000,
+        "soloRaidTotalScoreRewardMstId": 1529
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 22000000,
+        "soloRaidTotalScoreRewardMstId": 1530
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 23600000,
+        "soloRaidTotalScoreRewardMstId": 1531
+    },
+    {
+        "groupId": 6,
+        "num": 600,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 25200000,
+        "soloRaidTotalScoreRewardMstId": 1532
+    },
+    {
+        "groupId": 6,
+        "num": 2400,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 26800000,
+        "soloRaidTotalScoreRewardMstId": 1533
+    },
+    {
+        "groupId": 6,
+        "num": 600,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 28400000,
+        "soloRaidTotalScoreRewardMstId": 1534
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 370090,
+        "objectReceiveType": 5,
+        "score": 30000000,
+        "soloRaidTotalScoreRewardMstId": 1535
+    },
+    {
+        "groupId": 6,
+        "num": 600,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 32000000,
+        "soloRaidTotalScoreRewardMstId": 1536
+    },
+    {
+        "groupId": 6,
+        "num": 600,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 34000000,
+        "soloRaidTotalScoreRewardMstId": 1537
+    },
+    {
+        "groupId": 6,
+        "num": 600,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 36000000,
+        "soloRaidTotalScoreRewardMstId": 1538
+    },
+    {
+        "groupId": 6,
+        "num": 600,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 38000000,
+        "soloRaidTotalScoreRewardMstId": 1539
+    },
+    {
+        "groupId": 6,
+        "num": 1,
+        "objectId": 201075,
+        "objectReceiveType": 5,
+        "score": 40000000,
+        "soloRaidTotalScoreRewardMstId": 1540
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 42000000,
+        "soloRaidTotalScoreRewardMstId": 1541
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 44000000,
+        "soloRaidTotalScoreRewardMstId": 1542
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 46000000,
+        "soloRaidTotalScoreRewardMstId": 1543
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 48000000,
+        "soloRaidTotalScoreRewardMstId": 1544
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 50000000,
+        "soloRaidTotalScoreRewardMstId": 1545
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 52000000,
+        "soloRaidTotalScoreRewardMstId": 1546
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 54000000,
+        "soloRaidTotalScoreRewardMstId": 1547
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 56000000,
+        "soloRaidTotalScoreRewardMstId": 1548
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 58000000,
+        "soloRaidTotalScoreRewardMstId": 1549
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 60000000,
+        "soloRaidTotalScoreRewardMstId": 1550
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 62000000,
+        "soloRaidTotalScoreRewardMstId": 1551
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 64000000,
+        "soloRaidTotalScoreRewardMstId": 1552
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 66000000,
+        "soloRaidTotalScoreRewardMstId": 1553
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 68000000,
+        "soloRaidTotalScoreRewardMstId": 1554
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 70000000,
+        "soloRaidTotalScoreRewardMstId": 1555
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 72000000,
+        "soloRaidTotalScoreRewardMstId": 1556
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 74000000,
+        "soloRaidTotalScoreRewardMstId": 1557
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 76000000,
+        "soloRaidTotalScoreRewardMstId": 1558
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 78000000,
+        "soloRaidTotalScoreRewardMstId": 1559
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 80000000,
+        "soloRaidTotalScoreRewardMstId": 1560
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 82000000,
+        "soloRaidTotalScoreRewardMstId": 1561
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 84000000,
+        "soloRaidTotalScoreRewardMstId": 1562
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 86000000,
+        "soloRaidTotalScoreRewardMstId": 1563
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 88000000,
+        "soloRaidTotalScoreRewardMstId": 1564
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 90000000,
+        "soloRaidTotalScoreRewardMstId": 1565
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 92000000,
+        "soloRaidTotalScoreRewardMstId": 1566
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 94000000,
+        "soloRaidTotalScoreRewardMstId": 1567
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 96000000,
+        "soloRaidTotalScoreRewardMstId": 1568
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 98000000,
+        "soloRaidTotalScoreRewardMstId": 1569
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 100000000,
+        "soloRaidTotalScoreRewardMstId": 1570
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 102000000,
+        "soloRaidTotalScoreRewardMstId": 1571
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 104000000,
+        "soloRaidTotalScoreRewardMstId": 1572
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 106000000,
+        "soloRaidTotalScoreRewardMstId": 1573
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 108000000,
+        "soloRaidTotalScoreRewardMstId": 1574
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 110000000,
+        "soloRaidTotalScoreRewardMstId": 1575
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 112000000,
+        "soloRaidTotalScoreRewardMstId": 1576
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 114000000,
+        "soloRaidTotalScoreRewardMstId": 1577
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 116000000,
+        "soloRaidTotalScoreRewardMstId": 1578
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 118000000,
+        "soloRaidTotalScoreRewardMstId": 1579
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 120000000,
+        "soloRaidTotalScoreRewardMstId": 1580
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 122000000,
+        "soloRaidTotalScoreRewardMstId": 1581
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 124000000,
+        "soloRaidTotalScoreRewardMstId": 1582
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 126000000,
+        "soloRaidTotalScoreRewardMstId": 1583
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 128000000,
+        "soloRaidTotalScoreRewardMstId": 1584
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 130000000,
+        "soloRaidTotalScoreRewardMstId": 1585
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 132000000,
+        "soloRaidTotalScoreRewardMstId": 1586
+    },
+    {
+        "groupId": 6,
+        "num": 500,
+        "objectId": 201122,
+        "objectReceiveType": 5,
+        "score": 134000000,
+        "soloRaidTotalScoreRewardMstId": 1587
+    },
+    {
+        "groupId": 6,
+        "num": 300,
+        "objectId": 201121,
+        "objectReceiveType": 5,
+        "score": 136000000,
+        "soloRaidTotalScoreRewardMstId": 1588
+    }
+]

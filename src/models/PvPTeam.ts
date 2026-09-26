@@ -6,6 +6,7 @@ import { PvPKioku } from "./PvPKioku";
 import { damageBaseTypeFromEffectType, getAttackDamageResult, getSlipDamageResult, getAdditionalDamageBase, getFinalDamageExtra, damageCutByBarrier, DamageBaseType, BattleType, PVP_POLICY } from "./DamageCalculator";
 import { getProcessedAtk, mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum, getFinalDamageRatio, getProcessedSpeedWithBreakdown } from "./UnitStateEngine";
 import { elementMap } from "../types/enums";
+import { type EnemyParams, enemyParams, isEnemyKioku, selectEnemySkill, enemySkillDetails, skillName } from "./PvE";
 import { EFFECT_TARGET_SIDE } from "./EffectTargetSide";
 import { selectFullAutoTarget, expandProximity, filterAlive } from "./AITargetSelector";
 import { UNIT_STATE_TYPES } from "./StateAddFilter";
@@ -343,6 +344,12 @@ export class KiokuState {
 
     isBroken = false
     breakCount = 0
+    // PvE enemy parameters (undefined for characters). See PvE.ts.
+    enemy?: EnemyParams
+    // [CONFIRMED 3.19] BattleUnit.TurnNum (+0x88): starts at 1; GameDirectorBase.Forward adds 1 after every
+    // executed act of this unit (turn action incl. combo steps and extra turns, ultimate, follow-up,
+    // start-timing act). Read by the TURN (7) / EVERY_N_TURN (13) conditions.
+    turnNum = 1
     // Priority shared by every target of the effect currently being applied by this unit (set by
     // the caller that loops over targets, see nextTurnOrderPriority).
     effectTurnPriority?: number
@@ -404,13 +411,63 @@ export class KiokuState {
         // apply to the starting HP pool itself, only to incoming/outgoing damage.
         this.maxHp = kioku.getBaseHp()
         this.currentHp = this.maxHp
+        if (isEnemyKioku(kioku)) {
+            // [CONFIRMED 3.19] BattleUnit.ctor(id, questEnemyAppearanceMstId, pos): BreakPoint.Initialize(
+            // BreakMst.breakPoint) (0 = no gauge), WeakElements from the appearance, no EP.
+            const p = enemyParams(kioku.appearance)
+            this.enemy = p
+            this.maxBreakGauge = p.breakMst.breakPoint
+            this.currentRemainingBreakGauge = this.maxBreakGauge
+            this.weakElements = [...p.weakElements]
+            this.maxMp = 0
+            this.aggro = 0
+        } else if (!isPvpLikeBattle(team.battleType)) {
+            // [CONFIRMED 3.19] CharacterParameter.ctor (0x138af80) with isPvpOrGvg = false: BreakPoint = 0,
+            // and the character BattleUnit ctor only initializes a gauge when it is > 0: characters
+            // can't be broken in quests / Score Attack.
+            this.maxBreakGauge = 0
+            this.currentRemainingBreakGauge = 0
+        }
+    }
+
+    // Break parameters (BattleParameter +0x4c..0x5c). Enemies: BreakMst. Characters: PvP policy rows
+    // (policyType 3) in PvP/GvG, CharacterParameter's PvE constants otherwise (dead data there, since
+    // PvE characters have no gauge).
+    get breakParams(): { slowRatio: number, initialRate: number, maxRate: number, increaseRate: number, recoveryPerTurn: number } {
+        if (this.enemy) {
+            const b = this.enemy.breakMst
+            return { slowRatio: b.breakTurnGaugeSlowRatio, initialRate: b.initialBreakedDamageReceiveRate, maxRate: b.maxBreakedDamageReceiveRate, increaseRate: b.breakedDamageReceiveRateIncreaseRate, recoveryPerTurn: b.breakPointRecoveryPerTurn }
+        }
+        if (isPvpLikeBattle(this.team.battleType)) {
+            return { slowRatio: 250, initialRate: PVP_POLICY.initialBreakDamageReceiveRate, maxRate: PVP_POLICY.maxBreakDamageReceiveRate, increaseRate: 1000, recoveryPerTurn: 0 }
+        }
+        return { slowRatio: 250, initialRate: 1300, maxRate: 2000, increaseRate: 1000, recoveryPerTurn: 0 }
     }
 
     // [CONFIRMED] ReDriveBattleCore.BattleUnit$$get_IsDead : `HP <= 0` (the source also
     // checks a multi-gauge-HP-bar CurrentHpGaugeCount<2 condition used for PvE raid
     // bosses with multiple HP bars; not applicable to this 1v1 PvP context, so omitted).
+    // Enemies with 2+ HP gauges left are not dead at 0 HP (they revive, see checkHpGaugeRevive).
     get isDead(): boolean {
-        return this.currentHp <= 0
+        return this.currentHp <= 0 && (this.enemy?.hpGaugeCount ?? 1) < 2
+    }
+
+    // [CONFIRMED 3.19] GameDirectorBase.CheckHpGaugeRevive (0x14991f0) after each act ->
+    // ActExecutor.ExecuteHpGaugeRevive (0x17df9f0): negative states removed, HP = MaxHP, break gauge
+    // reset, CurrentHpGaugeCount - 1. [UNCERTAIN] TurnGauge.DecreaseGaugeValue(own gauge, new priority)
+    // is read as "gauge to 0" (acts next).
+    checkHpGaugeRevive(): boolean {
+        if (!this.enemy || this.currentHp > 0 || this.enemy.hpGaugeCount < 2) return false
+        for (const [key, d] of [...this.activeEffectDetails]) if (isOpponentEffect(d.abilityEffectType)) this.activeEffectDetails.delete(key)
+        this.currentHp = this.maxHp
+        this.isBroken = false
+        this.currentRemainingBreakGauge = this.maxBreakGauge
+        this.breakedDamageReceiveRate = 0
+        this.enemy.hpGaugeCount--
+        this.updateSpd()
+        this.turnGauge = 0
+        this.turnOrderPriority = nextTurnOrderPriority()
+        return true
     }
 
     // [RECONSTRUCTED] ReDriveBattleCore.UnitCondition$$get_CanNotAction/set_CanNotAction
@@ -460,11 +517,12 @@ export class KiokuState {
         if (this.isBroken) return
         this.isBroken = true
         this.breakCount++
-        // Turn gauge pushed back by BreakTurnGaugeSlowRatio/1000 (PvP policy id 20: 250 -> 0.25).
-        // (Used a NEGATIVE priority before; the game passes the damage effect's NextTurnOrderPriority.)
-        this.addGaugeRate(0.25, turnOrderPriority)
-        // BreakedDamageReceiveRate = InitialBreakedDamageReceiveRate / 10 (policy id 21: 1000 -> 100%).
-        this.breakedDamageReceiveRate = PVP_POLICY.initialBreakDamageReceiveRate / 10
+        // Turn gauge pushed back by BreakTurnGaugeSlowRatio/1000 (PvP policy id 20: 250 -> 0.25; enemies:
+        // BreakMst). The game passes the damage effect's NextTurnOrderPriority.
+        const bp = this.breakParams
+        this.addGaugeRate(f32(f32(bp.slowRatio) / 1000), turnOrderPriority)
+        // BreakedDamageReceiveRate = InitialBreakedDamageReceiveRate / 10 (int division; PvP 1000 -> 100%).
+        this.breakedDamageReceiveRate = Math.trunc(bp.initialRate / 10)
         // [CONFIRMED] ReDriveBattleCore.TurnReferee (team-level tally, consumed by
         // BattleConditionParser's CompareContent.BREAK_UNIT_TOTAL_COUNT, 306) -
         // cumulative across the whole battle, never reset.
@@ -478,11 +536,19 @@ export class KiokuState {
 
     // [CONFIRMED 3.19] ActExecutor$$TurnBegin: a broken unit gets BreakPoint.ResetValue (gauge back
     // to max) and BreakedDamageReceiveRate = 0 at the start of its own turn.
+    // [CONFIRMED 3.19] ActExecutor.TurnBegin (0x17e1b30): broken and able to act -> gauge reset to max,
+    // rate 0; not broken -> BreakPoint.IncreaseValueByRatio(recoveryPerTurn / 1000f)
+    // (value += (int)(max * ratio), clamped); broken and unable to act -> stays broken.
     exitBreak() {
         if (this.isBroken) {
+            if (this.canNotAction) return
             this.isBroken = false
             this.currentRemainingBreakGauge = this.maxBreakGauge
             this.breakedDamageReceiveRate = 0
+        } else if (this.maxBreakGauge >= 1) {
+            const ratio = f32(f32(this.breakParams.recoveryPerTurn) / 1000)
+            if (ratio > 0) this.currentRemainingBreakGauge = Math.min(this.maxBreakGauge, Math.max(0,
+                this.currentRemainingBreakGauge + Math.trunc(f32(f32(this.maxBreakGauge) * ratio))))
         }
     }
 
@@ -637,6 +703,7 @@ export class KiokuState {
     }
 
     getMp(mp: number): void {
+        if (this.enemy) return // enemies have no EP (MaxEP 0)
         this.currentMp += Math.floor(mp * this.currentMpGain)
     }
 
@@ -757,6 +824,18 @@ export class KiokuState {
         // applied BEFORE any effect-type-specific logic - see UnitStateEngine.isEligibleForEffect.
         if (!isEligibleForEffect(detail, target)) return
 
+        // [CONFIRMED 3.19] DmgRatioAbilityEffect$$Triggering (0x18f1320): damage = Min(floor(HP * v1/1000),
+        // HP - 1) (or MaxHP * v2/1000 when v1 is 0); no modifiers, can't kill.
+        if (detail.abilityEffectType === "DMG_RATIO") {
+            const base = detail.value1 > 0 ? f32(target.currentHp * f32(f32(detail.value1) / 1000))
+                : f32(target.maxHp * f32(f32((detail as any).value2 ?? 0) / 1000))
+            const dmg = Math.max(0, Math.min(Math.floor(base), target.currentHp - 1))
+            const hpLost = target.takeDamage(dmg)
+            this.team.eventLog.push({ kind: "hit", source: this.kioku.name, target: target.kioku.name, amount: hpLost, sourceIsTeam1: this.team.isTeam1, targetIsTeam1: target.team.isTeam1, targetPos: target.posIdx })
+            target.lastNotice = mergeNotice(target.lastNotice, { ...emptyNotice(), totalDamageValue: hpLost, isReceivedAttack: true })
+            return
+        }
+
         if (detail.abilityEffectType.startsWith("DMG_")) {
             target.getMp(5)
 
@@ -814,7 +893,7 @@ export class KiokuState {
             // Notice flags read by AttackEnd conditions: 302 counts notices that carry break
             // bonus info (the unit broke THIS skill), 108/308 the broken rate reaching its max.
             result.notice.isBreak = brk.broke
-            if (rateUp > 0 && target.breakedDamageReceiveRate >= PVP_POLICY.maxBreakDamageReceiveRate / 10) result.notice.isBreakedDamageReceiveRateBecomeMax = true
+            if (rateUp > 0 && target.breakedDamageReceiveRate >= target.breakParams.maxRate / 10) result.notice.isBreakedDamageReceiveRateBecomeMax = true
             target.lastNotice = mergeNotice(target.lastNotice, result.notice);
             // [CONFIRMED 3.19] Condition$$IsMatchCondition builds a team check from the notices
             // whose affected unit belongs to THAT team (lambda b__12), so a notice belongs to the
@@ -1150,6 +1229,10 @@ export function compareTurnOrder(a: KiokuState, b: KiokuState, team1Ref: PvPTeam
     return a.posIdx - b.posIdx
 }
 
+export function isPvpLikeBattle(bt: BattleType): boolean {
+    return bt === BattleType.Pvp || bt === BattleType.Gvg
+}
+
 function getDetails(map: Record<any, SkillDetail>, key: SkillKey, id: number, lvl: number): SkillDetail[] {
     return Object.values(map).filter(v => (v as any)[key] === id * 100 + lvl);
 }
@@ -1199,10 +1282,10 @@ export class PvPTeam {
     })
 
     constructor(kiokus: PvPKioku[], teamLabel: string, debug = false, battleType: BattleType = BattleType.Pvp) {
-        this.kiokuStates = kiokus.map((k, i) => new KiokuState(i, teamLabel, this, k, this.generateState))
         this.debug = debug;
         this.teamLabel = teamLabel;
         this.battleType = battleType;
+        this.kiokuStates = kiokus.map((k, i) => new KiokuState(i, teamLabel, this, k, this.generateState))
     }
 
     // [STRUCTURAL FIX, revision 3 - see report for the full writeup] Previously this
@@ -1219,6 +1302,11 @@ export class PvPTeam {
     // constructor runs for BOTH teams before advancing to the next phase: setup ->
     // addEffectsToBank -> applyPassivesForTiming(BATTLE_START) -> recomputeDerivedStats.
     // This method now only records the enemy team reference.
+    // Next PvE wave: new units replace this team's (wiped) units.
+    replaceUnits(kiokus: PvPKioku[]): void {
+        this.kiokuStates = kiokus.map((k, i) => new KiokuState(i, this.teamLabel, this, k, this.generateState))
+    }
+
     finishSetup(otherTeam: PvPTeam) {
         this.otherTeam = otherTeam
     }
@@ -1292,7 +1380,9 @@ export class PvPTeam {
     // Set by PvPBattle: called after every executed skill (turn action, ultimate, extra action,
     // combo step, follow-up) so the display can show each as its own entry.
     snapshotHook?: (actor: KiokuState, type: TargetType, label?: string) => void
-    private recordAction(actor: KiokuState, type: TargetType, label?: string) {
+    recordAction(actor: KiokuState, type: TargetType, label?: string) {
+        actor.turnNum++
+        for (const u of [...this.kiokuStates, ...(this.otherTeam?.kiokuStates ?? [])]) u.checkHpGaugeRevive()
         this.snapshotHook?.(actor, type, label)
     }
 
@@ -1386,10 +1476,22 @@ export class PvPTeam {
             // --- Generic FULL AUTO targeting AI (covers DMG_ATK/DEF/HP/RANDOM and every
             // other single-target effect type, per its own confirmed or best-effort
             // generic chain - see AITargetSelector.ts) ---
-            return selectFullAutoTarget(detail, possibleTargets, this.rng)
+            return selectFullAutoTarget(detail, possibleTargets, this.rng, actor)
+        }
+        // [CONFIRMED 3.19] UnitBrain.TargetingUnits (0x17f2ea0): one opponent target and one friendly target
+        // are chosen per skill; every single/proximity effect on that side uses it (SelectTargets looks up
+        // the selected id). Cached per action in `actionPrimaryTargets`.
+        const side = possibleTargets[0]?.team === actor.team ? "friend" : "opp"
+        const resolveUncached = resolvePrimaryTarget
+        const resolveCached = (): KiokuState | null => {
+            const hit = this.actionPrimaryTargets.get(side)
+            if (hit && !hit.isDead && possibleTargets.includes(hit)) return hit
+            const picked = resolveUncached()
+            if (picked) this.actionPrimaryTargets.set(side, picked)
+            return picked
         }
         if (detail.range === targetRange.TARGET) {
-            const picked = resolvePrimaryTarget()
+            const picked = resolveCached()
             if (!picked) {
                 console.warn(actor.kioku.name, detail, "FULL AUTO targeting found no eligible target (all candidates dead/ineligible?)")
                 return []
@@ -1397,7 +1499,7 @@ export class PvPTeam {
             return [picked]
         }
         if (detail.range === targetRange.PROXIMITY) {
-            const primary = resolvePrimaryTarget()
+            const primary = resolveCached()
             if (!primary) {
                 console.warn(actor.kioku.name, detail, "PROXIMITY targeting found no eligible primary target")
                 return []
@@ -1417,8 +1519,34 @@ export class PvPTeam {
     // conditions such as IS_MAIN_TARGET.
     lastMainTarget: KiokuState | undefined
 
-    act(actor: KiokuState, effectName: TargetType): FuaMap {
+    // [CONFIRMED 3.19] UnitBrain.ShouldUseSkillBase (0x17f2a60): a skill is a random-pick candidate only
+    // if its first effect (lowest detail id) has an AI-valid target. Approximated as "a living unit on
+    // that effect's side" (dead units for revival effects).
+    enemySkillHasTarget(_actor: KiokuState, skillMstId: number): boolean {
+        const main = enemySkillDetails(skillMstId)[0]
+        if (!main) return false
+        if (main.abilityEffectType === "SUMMON") return false // summons are not simulated yet
+        const side = isFriendlyEffect(main.abilityEffectType) ? this.kiokuStates : this.otherTeam.kiokuStates
+        if (main.abilityEffectType.startsWith("REVIVAL")) return side.some(u => u.isDead)
+        return side.some(u => !u.isDead)
+    }
+
+    // [CONFIRMED 3.19] StartTimingAct: the BattleStart/WaveStart condition rows of each alive, unbroken
+    // enemy run once before the first turn (UnitBrain.RegisterEnemyUnitsStartConditionTimingAction).
+    runStartTimingAction(actor: KiokuState, skillMstId: number): void {
+        if (actor.isDead || actor.isBroken) return
+        this.resetActionTallies()
+        const fuas = this.act(actor, TargetType.skillId, skillMstId)
+        this.fireTiming(ProcessTiming.ATTACK_END, actor, this.lastMainTarget, TargetType.skillId, () => this.recordAction(actor, TargetType.skillId, `Battle start · ${skillName(skillMstId)}`))
+        this.triggerFua(fuas)
+    }
+
+    act(actor: KiokuState, effectName: TargetType, enemySkillId?: number): FuaMap {
         this.lastMainTarget = undefined
+        if (enemySkillId !== undefined) {
+            // Enemy active skill: no SP / MP bookkeeping (enemies have neither).
+            return this.completeAction(actor, effectName, enemySkillDetails(enemySkillId))
+        }
         if (effectName === TargetType.attackId) {
             this.currentSp++;
         } else if (effectName === TargetType.skillId) {
@@ -1438,7 +1566,11 @@ export class PvPTeam {
     // Returns a FuaMap of any ADDITIONAL_SKILL_ACT triggers fired by the effects
     // applied here (fixed in revision 1 - previously silently dropped when triggered
     // from an active skill's own effect list rather than a passive).
+    // Targets chosen for the action in progress (see sliceTargets).
+    actionPrimaryTargets = new Map<string, KiokuState>()
+
     completeAction(actor: KiokuState, effectName: TargetType, details: SkillDetail[]): FuaMap {
+        this.actionPrimaryTargets = new Map()
         let possibleTargets: KiokuState[] = []
         let additionalAct: FuaMap = {}
         for (const detail of details) {
@@ -1491,7 +1623,7 @@ export class PvPTeam {
         // [CONFIRMED 3.19] ActExecutor: TurnBeginAct (break reset, TurnStart passives with this
         // unit as actor) -> TurnUnitAct (UnitTurnGauge.Reset, then ExecuteSkill) -> TurnEndAct.
         actor.exitBreak()
-        let effType = this.currentSp ? TargetType.skillId : TargetType.attackId
+        let effType = actor.enemy || this.currentSp ? TargetType.skillId : TargetType.attackId
         this.fireTiming(ProcessTiming.TURN_START, actor, undefined, effType)
         actor.resetDistanceRemaining()
         // [RECONSTRUCTED - see KiokuState.canNotAction] a stunned unit's turn still comes
@@ -1526,6 +1658,15 @@ export class PvPTeam {
                 // property, so leave this at its neutral 0 rather than calling a normal
                 // turn "step 1".
                 actor.currentComboActionStep = actionNum >= 2 ? i + 1 : 0
+                if (actor.enemy) {
+                    // [CONFIRMED 3.19] ValidateCanExecuteAct (0x17e27a0): a broken enemy doesn't act; otherwise
+                    // the enemy AI picks the skill (no SP / MP / normal attack for enemies).
+                    if (actor.isBroken || actor.isDead) break
+                    effType = TargetType.skillId
+                    const choice = selectEnemySkill(actor, this, this.rng, id => this.enemySkillHasTarget(actor, id))
+                    if (choice) this.performAction(actor, effType, i === 0 ? turnLabel : undefined, choice.skillMstId)
+                    continue
+                }
                 effType = this.currentSp ? TargetType.skillId : TargetType.attackId
                 this.performAction(actor, effType, i === 0 ? turnLabel : undefined)
             }
@@ -1544,23 +1685,26 @@ export class PvPTeam {
     // and any FUAs they trigger, then loops the SAME actor through another
     // attack/skill action for every pending ADDITIONAL_TURN_UNIT_ACT/
     // RE_ACTION_TURN_UNIT_ACT bonus turn they've accumulated.
-    private performAction(actor: KiokuState, effType: TargetType, turnLabel?: string): void {
+    private performAction(actor: KiokuState, effType: TargetType, turnLabel?: string, enemySkillId?: number): void {
         // Reset per-action team-level tallies - see BattleConditionParser.ts's
         // team-scoped notice/effect-type conditions, which are meant to read "what
         // happened THIS action", not a stale accumulation from turns ago.
         this.resetActionTallies()
         // [CONFIRMED 3.19] ActExecutor$$ExecuteSkill: the skill, then AttackEnd passives for every
         // living unit (actor, main target, skill passed along), then queued follow-ups.
-        const skillFuas = this.act(actor, effType)
-        const comboLabel = actor.currentComboActionStep ? `Combo ${actor.currentComboActionStep}` : turnLabel
+        const skillFuas = this.act(actor, effType, enemySkillId)
+        const skillLabel = enemySkillId !== undefined ? skillName(enemySkillId) : undefined
+        const comboLabel = [actor.currentComboActionStep ? `Combo ${actor.currentComboActionStep}` : turnLabel, skillLabel].filter(Boolean).join(" · ") || undefined
         this.fireTiming(ProcessTiming.ATTACK_END, actor, this.lastMainTarget, effType, () => this.recordAction(actor, effType, comboLabel))
         this.triggerFua(skillFuas)
 
         while (actor.pendingBonusTurns > 0 && !actor.isDead) {
             actor.pendingBonusTurns--
-            const bonusEffType = this.currentSp ? TargetType.skillId : TargetType.attackId
+            const bonusEffType = actor.enemy ? TargetType.skillId : this.currentSp ? TargetType.skillId : TargetType.attackId
+            const bonusChoice = actor.enemy ? selectEnemySkill(actor, this, this.rng, id => this.enemySkillHasTarget(actor, id)) : undefined
+            if (actor.enemy && !bonusChoice) continue
             this.resetActionTallies()
-            const bonusFuas = this.act(actor, bonusEffType)
+            const bonusFuas = this.act(actor, bonusEffType, bonusChoice?.skillMstId)
             this.fireTiming(ProcessTiming.ATTACK_END, actor, this.lastMainTarget, bonusEffType, () => this.recordAction(actor, bonusEffType, "Extra action"))
             this.triggerFua(bonusFuas)
         }
@@ -1606,6 +1750,7 @@ export class PvPTeam {
 
     private completeActionWithPreferredTarget(actor: KiokuState, effectName: TargetType, details: SkillDetail[], preferredTarget: KiokuState | undefined): FuaMap {
         this.lastMainTarget = undefined
+        this.actionPrimaryTargets = new Map()
         if (!preferredTarget) return this.completeAction(actor, effectName, details)
         let additionalAct: FuaMap = {}
         for (const detail of details) {

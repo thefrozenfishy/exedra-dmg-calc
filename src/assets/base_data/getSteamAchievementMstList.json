@@ -1,0 +1,281 @@
+[
+    {
+        "achievementValueType": 0,
+        "apiName": "00000_clear_tutorial",
+        "conditionId": 300,
+        "conditionType": 1,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 1
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01010_clear_rose_garden_1_main",
+        "conditionId": 600001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 2
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01020_clear_rose_garden_2_main",
+        "conditionId": 600011,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 3
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01030_clear_darkness_main",
+        "conditionId": 601001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 4
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01040_clear_dessert_main",
+        "conditionId": 602001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 5
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01050_clear_box_main",
+        "conditionId": 603001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 6
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01060_clear_graffiti_main",
+        "conditionId": 604001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 7
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01070_clear_silver_main",
+        "conditionId": 605001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 8
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01080_clear_shadow_main",
+        "conditionId": 606001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 9
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01090_clear_dog_main",
+        "conditionId": 607001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 10
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01100_clear_mermaid_main",
+        "conditionId": 608001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 11
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01110_clear_artist_main",
+        "conditionId": 609001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 12
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01120_clear_chairperson_main",
+        "conditionId": 610001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 13
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01130_clear_sandbox_main",
+        "conditionId": 617001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 14
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01140_clear_rumor_of_the_commoners_horse_main",
+        "conditionId": 618001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 15
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01150_clear_birdcage_main",
+        "conditionId": 611001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 16
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01160_clear_stagecraft_main",
+        "conditionId": 612001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 17
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "01170_clear_needle_main",
+        "conditionId": 615001,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 18
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "02040_clear_dessert_battle",
+        "conditionId": 602002,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 19
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "02060_clear_graffiti_battle",
+        "conditionId": 604002,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 20
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "02100_clear_mermaid_battle",
+        "conditionId": 608002,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 21
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "02160_clear_stagecraft_battle",
+        "conditionId": 612002,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 22
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "03040_clear_dessert_nightmare",
+        "conditionId": 602003,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 23
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "03060_clear_graffiti_nightmare",
+        "conditionId": 604003,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 24
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "03100_clear_mermaid_nightmare",
+        "conditionId": 608003,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 25
+    },
+    {
+        "achievementValueType": 0,
+        "apiName": "03160_clear_stagecraft_nightmare",
+        "conditionId": 612003,
+        "conditionType": 2,
+        "max": 0,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 26
+    },
+    {
+        "achievementValueType": 1,
+        "apiName": "10010_player_level",
+        "conditionId": 0,
+        "conditionType": 3,
+        "max": 100,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 27
+    },
+    {
+        "achievementValueType": 1,
+        "apiName": "10020_party_power",
+        "conditionId": 0,
+        "conditionType": 4,
+        "max": 50000,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 28
+    },
+    {
+        "achievementValueType": 1,
+        "apiName": "10030_puellapictura_rank",
+        "conditionId": 0,
+        "conditionType": 5,
+        "max": 100,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 29
+    },
+    {
+        "achievementValueType": 1,
+        "apiName": "10040_character_heart_level",
+        "conditionId": 0,
+        "conditionType": 6,
+        "max": 50,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 30
+    },
+    {
+        "achievementValueType": 1,
+        "apiName": "10050_magic_level",
+        "conditionId": 0,
+        "conditionType": 7,
+        "max": 120,
+        "releaseTime": "1990-01-01T00:00:00+09:00",
+        "steamAchievementMstId": 31
+    }
+]

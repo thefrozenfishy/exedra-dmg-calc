@@ -1,0 +1,182 @@
+[
+    {
+        "bannerImageName": "permanent",
+        "endTime": "2025-05-02T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20250418,
+        "startTime": "2025-04-18T12:00:00+09:00",
+        "themeImageName": "permanent",
+        "towerMstId": 1,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2025-05-23T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20250509,
+        "startTime": "2025-05-09T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 2,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2025-06-20T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20250606,
+        "startTime": "2025-06-06T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 3,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2025-07-22T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20250704,
+        "startTime": "2025-07-04T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 4,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2025-08-21T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20250807,
+        "startTime": "2025-08-07T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 5,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2025-09-18T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20250904,
+        "startTime": "2025-09-04T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 6,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2025-10-17T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20251003,
+        "startTime": "2025-10-03T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 7,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2025-11-20T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20251106,
+        "startTime": "2025-11-06T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 8,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2025-12-25T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20251211,
+        "startTime": "2025-12-11T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 9,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2026-01-23T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20260109,
+        "startTime": "2026-01-09T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 10,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2026-02-20T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20260206,
+        "startTime": "2026-02-06T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 11,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2026-03-27T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20260310,
+        "startTime": "2026-03-10T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 12,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2026-05-07T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20260420,
+        "startTime": "2026-04-20T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 13,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2026-06-08T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20260520,
+        "startTime": "2026-05-20T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 14,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2026-07-06T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20260622,
+        "startTime": "2026-06-22T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 15,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2026-08-04T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20260721,
+        "startTime": "2026-07-21T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 16,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "",
+        "endTime": "2026-09-04T11:59:59+09:00",
+        "eventType": 1,
+        "reprintNum": 20260821,
+        "startTime": "2026-08-21T12:00:00+09:00",
+        "themeImageName": "",
+        "towerMstId": 17,
+        "towerThemeMstId": 0
+    },
+    {
+        "bannerImageName": "theme_0001",
+        "endTime": "2026-09-30T11:59:59+09:00",
+        "eventType": 3,
+        "reprintNum": 0,
+        "startTime": "2026-09-18T12:00:00+09:00",
+        "themeImageName": "theme_0001",
+        "towerMstId": 301001,
+        "towerThemeMstId": 1
+    }
+]

@@ -1,0 +1,110 @@
+[
+    {
+        "buffPointChargePassiveSkillMstId": 1600005,
+        "groupId": 1,
+        "passiveSkillMstId": 1600004,
+        "soloRaidPartyBuffMstId": 100
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600007,
+        "groupId": 1,
+        "passiveSkillMstId": 1600006,
+        "soloRaidPartyBuffMstId": 101
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600009,
+        "groupId": 1,
+        "passiveSkillMstId": 1600008,
+        "soloRaidPartyBuffMstId": 102
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600014,
+        "groupId": 2,
+        "passiveSkillMstId": 1600013,
+        "soloRaidPartyBuffMstId": 200
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600007,
+        "groupId": 2,
+        "passiveSkillMstId": 1600006,
+        "soloRaidPartyBuffMstId": 201
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600009,
+        "groupId": 2,
+        "passiveSkillMstId": 1600008,
+        "soloRaidPartyBuffMstId": 202
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600019,
+        "groupId": 3,
+        "passiveSkillMstId": 1600018,
+        "soloRaidPartyBuffMstId": 300
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600007,
+        "groupId": 3,
+        "passiveSkillMstId": 1600006,
+        "soloRaidPartyBuffMstId": 301
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600009,
+        "groupId": 3,
+        "passiveSkillMstId": 1600008,
+        "soloRaidPartyBuffMstId": 302
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600024,
+        "groupId": 4,
+        "passiveSkillMstId": 1600023,
+        "soloRaidPartyBuffMstId": 400
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600007,
+        "groupId": 4,
+        "passiveSkillMstId": 1600006,
+        "soloRaidPartyBuffMstId": 401
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600009,
+        "groupId": 4,
+        "passiveSkillMstId": 1600008,
+        "soloRaidPartyBuffMstId": 402
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600029,
+        "groupId": 5,
+        "passiveSkillMstId": 1600028,
+        "soloRaidPartyBuffMstId": 500
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600007,
+        "groupId": 5,
+        "passiveSkillMstId": 1600006,
+        "soloRaidPartyBuffMstId": 501
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600009,
+        "groupId": 5,
+        "passiveSkillMstId": 1600008,
+        "soloRaidPartyBuffMstId": 502
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600034,
+        "groupId": 6,
+        "passiveSkillMstId": 1600033,
+        "soloRaidPartyBuffMstId": 600
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600007,
+        "groupId": 6,
+        "passiveSkillMstId": 1600006,
+        "soloRaidPartyBuffMstId": 601
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600009,
+        "groupId": 6,
+        "passiveSkillMstId": 1600008,
+        "soloRaidPartyBuffMstId": 602
+    }
+]

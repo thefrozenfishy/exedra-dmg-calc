@@ -1,0 +1,1487 @@
+[
+    {
+        "advMstId": 0,
+        "description": "A union is a community of players. If you belong to a union, you can join in on union missions.",
+        "miniTutorialMstId": 201,
+        "miniTutorialNumber": 2,
+        "resourceName": "union_01",
+        "sortOrder": 1,
+        "title": "Union"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can join a union by searching for one or by creating a new one. Up to 10 players can join a union.",
+        "miniTutorialMstId": 202,
+        "miniTutorialNumber": 2,
+        "resourceName": "union_02",
+        "sortOrder": 2,
+        "title": "Union"
+    },
+    {
+        "advMstId": 0,
+        "description": "Union missions are missions that all members take on together. Missions are reset each week on a specific day and time. Once you join a union, there is a minimum wait period before you can contribute to missions.",
+        "miniTutorialMstId": 203,
+        "miniTutorialNumber": 2,
+        "resourceName": "union_03",
+        "sortOrder": 3,
+        "title": "Union"
+    },
+    {
+        "advMstId": 0,
+        "description": "Battle content for all union members to play is scheduled to come! Please wait for announcements coming soon!",
+        "miniTutorialMstId": 204,
+        "miniTutorialNumber": 2,
+        "resourceName": "union_04",
+        "sortOrder": 4,
+        "title": "Union"
+    },
+    {
+        "advMstId": 0,
+        "description": "When you acquire a Kioku already in your possession, the additional copies will be used for ascension. Each ascension increases the Kioku's Special Attack Lvl.",
+        "miniTutorialMstId": 301,
+        "miniTutorialNumber": 3,
+        "resourceName": "memory_03",
+        "sortOrder": 1,
+        "title": "Ascension"
+    },
+    {
+        "advMstId": 0,
+        "description": "Duplicate copies of a Portrait can be consumed to perform ascension. Ascending a Portrait will improve the effects of the Portrait's skill.",
+        "miniTutorialMstId": 503,
+        "miniTutorialNumber": 5,
+        "resourceName": "portrait_03",
+        "sortOrder": 3,
+        "title": "Ascension"
+    },
+    {
+        "advMstId": 0,
+        "description": "Rank will increase based on the number of Memsparks collected. There are benefits for each rank achieved, such as items, boosts to bonuses provided by Support Kioku, and unlocking of higher rank upgrade quests.",
+        "miniTutorialMstId": 701,
+        "miniTutorialNumber": 7,
+        "resourceName": "puella_001",
+        "sortOrder": 1,
+        "title": "Puella Pictura Rank"
+    },
+    {
+        "advMstId": 0,
+        "description": "In the Chamber of Light, you can view Puella Pictura and other collectibles (Gallery, Stories, Music) unlocked from obtaining Kioku and Memsparks.",
+        "miniTutorialMstId": 1401,
+        "miniTutorialNumber": 14,
+        "resourceName": "gallery_tutorial_01",
+        "sortOrder": 1,
+        "title": "The Chamber of Light"
+    },
+    {
+        "advMstId": 0,
+        "description": "When viewing collectibles in the Chamber of Light for the first time you can earn Magica Stones.",
+        "miniTutorialMstId": 1402,
+        "miniTutorialNumber": 14,
+        "resourceName": "gallery_tutorial_02",
+        "sortOrder": 2,
+        "title": "Rewards for Viewing Chamber of Light Collectibles"
+    },
+    {
+        "advMstId": 0,
+        "description": "\"Steady Steps Forward: Magical Girl Dreams\" is a permanent event. Limited-time events will also be released going forward. We hope you enjoy the upcoming event quests!",
+        "miniTutorialMstId": 1501,
+        "miniTutorialNumber": 15,
+        "resourceName": "event_appeal01",
+        "sortOrder": 1,
+        "title": "Event Quests"
+    },
+    {
+        "advMstId": 0,
+        "description": "In event quests, you can take on battles a set number of times each day. Play a little each day to make your way through events.",
+        "miniTutorialMstId": 1502,
+        "miniTutorialNumber": 15,
+        "resourceName": "event_appeal02",
+        "sortOrder": 2,
+        "title": "Event Quests"
+    },
+    {
+        "advMstId": 0,
+        "description": "In event quests, you can earn medals as battle rewards. Collect medals and trade them for Portraits and a variety of other items.",
+        "miniTutorialMstId": 1503,
+        "miniTutorialNumber": 15,
+        "resourceName": "event_appeal03",
+        "sortOrder": 3,
+        "title": "Event Quests"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can access the event trader from the banner on the top page of an event. Trade the medals you've collected for items such as Portraits and upgrade materials to help you progress through the game.",
+        "miniTutorialMstId": 1504,
+        "miniTutorialNumber": 15,
+        "resourceName": "event_appeal04",
+        "sortOrder": 4,
+        "title": "Event Quests"
+    },
+    {
+        "advMstId": 0,
+        "description": "Victory is the goal as you battle against other players! You'll compete for rankings during the event period based on points earned. New seasons begin at set intervals.",
+        "miniTutorialMstId": 1901,
+        "miniTutorialNumber": 19,
+        "resourceName": "pvp_04",
+        "sortOrder": 1,
+        "title": "Player Match"
+    },
+    {
+        "advMstId": 0,
+        "description": "In Player Match, all battles proceed in Full Auto mode. Additionally, a break gauge is added for the Magical Girls in your party. The break gauge amount varies according to the Kioku's rarity and role.",
+        "miniTutorialMstId": 1902,
+        "miniTutorialNumber": 19,
+        "resourceName": "pvp_05",
+        "sortOrder": 2,
+        "title": "Player Match"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can increase points earned from battles through different bonus conditions, such as defeating stronger opponents or having a win-streak. Aim to win by racking up points through these bonuses!",
+        "miniTutorialMstId": 1903,
+        "miniTutorialNumber": 19,
+        "resourceName": "pvp_06",
+        "sortOrder": 3,
+        "title": "Player Match"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can earn rewards based on your ranking and points earned. Match Medals earned from point rewards can be exchanged for various rewards at the trader.",
+        "miniTutorialMstId": 1904,
+        "miniTutorialNumber": 19,
+        "resourceName": "pvp_07",
+        "sortOrder": 4,
+        "title": "Player Match"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can play for free up to 5 times each day. You can also spend Magica Stones for additional plays. So be sure to play every day and shoot for grand rewards!",
+        "miniTutorialMstId": 1905,
+        "miniTutorialNumber": 19,
+        "resourceName": "pvp_08",
+        "sortOrder": 5,
+        "title": "Player Match"
+    },
+    {
+        "advMstId": 0,
+        "description": "In these quests, you can earn materials to upgrade your Kioku.\nHigher-difficulty quests yield higher-tier materials.",
+        "miniTutorialMstId": 2501,
+        "miniTutorialNumber": 25,
+        "resourceName": "traing_quest_01",
+        "sortOrder": 1,
+        "title": "Upgrade Quests: Kioku Upgrade"
+    },
+    {
+        "advMstId": 0,
+        "description": "In these quests, you can earn materials to upgrade your Kioku's Magic Lvl. Higher-difficulty quests yield higher-tier materials.",
+        "miniTutorialMstId": 2502,
+        "miniTutorialNumber": 25,
+        "resourceName": "traing_quest_03",
+        "sortOrder": 2,
+        "title": "Upgrade Quests: Magic Unlock"
+    },
+    {
+        "advMstId": 0,
+        "description": "The Tower is a limited-time event where you progress through Mirror Layers. Clear each layer to gain rewards, which get better the further you advance.",
+        "miniTutorialMstId": 2701,
+        "miniTutorialNumber": 27,
+        "resourceName": "tower_01",
+        "sortOrder": 1,
+        "title": "Tower"
+    },
+    {
+        "advMstId": 0,
+        "description": "You'll start from Mirror Layer 1 for each event, allowing you to earn first-clear rewards again upon clearing. Boost the power of your Kioku to clear more layers next time around!",
+        "miniTutorialMstId": 2702,
+        "miniTutorialNumber": 27,
+        "resourceName": "tower_03",
+        "sortOrder": 2,
+        "title": "Witch Tower"
+    },
+    {
+        "advMstId": 0,
+        "description": "Depending on your clear progress from last time, you can start ascending the Tower with certain mirror layers already cleared.\n",
+        "miniTutorialMstId": 2703,
+        "miniTutorialNumber": 27,
+        "resourceName": "tower_01",
+        "sortOrder": 3,
+        "title": "Quick Start"
+    },
+    {
+        "advMstId": 0,
+        "description": "Magical Girl Towers feature a variety of themes.\nYour clear progress will carry over to the next event without being reset.",
+        "miniTutorialMstId": 2704,
+        "miniTutorialNumber": 27,
+        "resourceName": "tower_04",
+        "sortOrder": 4,
+        "title": "Magical Girl Tower"
+    },
+    {
+        "advMstId": 0,
+        "description": "Clearing certain Mirror Layers will unlock Extra Mirror Layers.\nExtra Mirror Layers have an increased difficulty, so train your Kioku to make sure they're up to the challenge!",
+        "miniTutorialMstId": 2705,
+        "miniTutorialNumber": 27,
+        "resourceName": "tower_05",
+        "sortOrder": 5,
+        "title": "Magical Girl Tower"
+    },
+    {
+        "advMstId": 0,
+        "description": "Raising the Lvl. of a Kioku will increase its stats. Kioku Lvl. can be raised by consuming special materials.",
+        "miniTutorialMstId": 4101,
+        "miniTutorialNumber": 41,
+        "resourceName": "memory_05",
+        "sortOrder": 1,
+        "title": "Kioku Lvl. Upgrade"
+    },
+    {
+        "advMstId": 0,
+        "description": "Each Kioku has a level cap.\nIt will increase further each time you raise your Player Lvl.",
+        "miniTutorialMstId": 4102,
+        "miniTutorialNumber": 41,
+        "resourceName": "memory_06",
+        "sortOrder": 2,
+        "title": "Kioku Lvl. Upgrade"
+    },
+    {
+        "advMstId": 0,
+        "description": "This feature lets you enhance portraits. Raising their enhancement level will increase the effects of abilities.",
+        "miniTutorialMstId": 4301,
+        "miniTutorialNumber": 43,
+        "resourceName": "portraitability_training01",
+        "sortOrder": 1,
+        "title": "Portrait Enhancement"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can get the materials you need for raising portrait enhancement levels from event and Player Match rewards.",
+        "miniTutorialMstId": 4302,
+        "miniTutorialNumber": 43,
+        "resourceName": "portraitability_training02",
+        "sortOrder": 2,
+        "title": "Portrait Enhancement"
+    },
+    {
+        "advMstId": 0,
+        "description": "Event missions also offer fabulous rewards for clearing high-difficulty quests.",
+        "miniTutorialMstId": 4901,
+        "miniTutorialNumber": 49,
+        "resourceName": "event_quest_02",
+        "sortOrder": 1,
+        "title": "Story Event"
+    },
+    {
+        "advMstId": 70000033,
+        "description": "Story events will become locked once their initial availability period ends. All events, including those that are locked, can be replayed later. You can unlock them by using special items.",
+        "miniTutorialMstId": 4902,
+        "miniTutorialNumber": 49,
+        "resourceName": "event_quest_03",
+        "sortOrder": 2,
+        "title": "Story Event"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can now play quests that grant Magic Unlock materials. Clear battles to get the materials you need to upgrade the Magic Lvl. of your Kioku.",
+        "miniTutorialMstId": 5101,
+        "miniTutorialNumber": 51,
+        "resourceName": "memory_quest01",
+        "sortOrder": 1,
+        "title": "Magic Unlock Material Quest"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can earn more Magic Unlock materials by clearing higher rank quests. Quests of a certain rank or higher grant higher-grade Magic Unlock materials.",
+        "miniTutorialMstId": 5102,
+        "miniTutorialNumber": 51,
+        "resourceName": "memory_quest02",
+        "sortOrder": 2,
+        "title": "Magic Unlock Material Quest"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can increase your quest rank by raising your Puella Pictura to a certain rank.",
+        "miniTutorialMstId": 5103,
+        "miniTutorialNumber": 51,
+        "resourceName": "memory_quest03",
+        "sortOrder": 3,
+        "title": "Magic Unlock Material Quest"
+    },
+    {
+        "advMstId": 0,
+        "description": "Raising a Magical Girl's Heartphial Lvl. grants a variety of bonuses, such as boosts to Kioku stats and access to Magical Girl Stories, unique Portraits, voice content, and more. Each magical girl has one Heartphial.",
+        "miniTutorialMstId": 5301,
+        "miniTutorialNumber": 53,
+        "resourceName": "character_heart_01",
+        "sortOrder": 1,
+        "title": "Heartphials"
+    },
+    {
+        "advMstId": 0,
+        "description": "To raise Heartphial Lvl., you will need to use special materials. Materials can be obtained through Main Quests, Events, and other means.",
+        "miniTutorialMstId": 5302,
+        "miniTutorialNumber": 53,
+        "resourceName": "character_heart_02",
+        "sortOrder": 2,
+        "title": "Heartphials"
+    },
+    {
+        "advMstId": 0,
+        "description": "Portraits obtained from Heartphials have useful abilities that activate when equipped to a Magical Girl's Kioku. So be sure to raise the Heartphial Lvl. to obtain portraits!",
+        "miniTutorialMstId": 5303,
+        "miniTutorialNumber": 53,
+        "resourceName": "character_heart_03",
+        "sortOrder": 3,
+        "title": "Heartphials"
+    },
+    {
+        "advMstId": 0,
+        "description": "Score Attack is a feature where you defeat powerful enemies to earn scores based on the battle results. Depending on your score, you can earn high score and total score rewards.",
+        "miniTutorialMstId": 5401,
+        "miniTutorialNumber": 54,
+        "resourceName": "scoreattack_appeal01",
+        "sortOrder": 1,
+        "title": "Score Attack"
+    },
+    {
+        "advMstId": 0,
+        "description": "High score rewards are obtained based on the maximum score you earn during the Score Attack event. The higher the difficulty, the higher the score you can earn, and fulfilling certain conditions like clearing a battle quickly or minimizing damage taken will grant you an even higher score.",
+        "miniTutorialMstId": 5402,
+        "miniTutorialNumber": 54,
+        "resourceName": "scoreattack_appeal02",
+        "sortOrder": 2,
+        "title": "Score Attack"
+    },
+    {
+        "advMstId": 0,
+        "description": "Total score rewards are obtained based on the total value of scores earned during the Score Attack event. You don't need to earn a high score in a single battle, so you can clear battles repeatedly to boost your total.",
+        "miniTutorialMstId": 5403,
+        "miniTutorialNumber": 54,
+        "resourceName": "scoreattack_appeal03",
+        "sortOrder": 3,
+        "title": "Score Attack"
+    },
+    {
+        "advMstId": 0,
+        "description": "Clear Heartphial quest battles to earn Heartphial EXP for the Magical Girls assigned as Main Kioku to your party. So form a team with the Magical Girls you want to earn EXP with and take them into battle!",
+        "miniTutorialMstId": 5501,
+        "miniTutorialNumber": 55,
+        "resourceName": "character_heart_quest_01",
+        "sortOrder": 1,
+        "title": "Heartphial Quests"
+    },
+    {
+        "advMstId": 0,
+        "description": "These quests can be played a limited number of times per day.\nPlay consistently to keep raising Heartphial levels!",
+        "miniTutorialMstId": 5502,
+        "miniTutorialNumber": 55,
+        "resourceName": "character_heart_quest_02",
+        "sortOrder": 2,
+        "title": "Heartphial Quests"
+    },
+    {
+        "advMstId": 0,
+        "description": "Battles can be skipped once they've been cleared. Only parties that have cleared the battle can be used to skip.",
+        "miniTutorialMstId": 5503,
+        "miniTutorialNumber": 55,
+        "resourceName": "character_heart_quest_03",
+        "sortOrder": 3,
+        "title": "Heartphial Quests"
+    },
+    {
+        "advMstId": 0,
+        "description": "If you collect all the Memsparks (\"Story\" or \"Other\") within a Labyrinth, a piece of a Puella Pictura will be filled in.",
+        "miniTutorialMstId": 6901,
+        "miniTutorialNumber": 69,
+        "resourceName": "dungeon_howtopp_01",
+        "sortOrder": 1,
+        "title": "Puella Pictura Progress"
+    },
+    {
+        "advMstId": 0,
+        "description": "Tap the picture frame to check which Window Into Memory contains its pieces.",
+        "miniTutorialMstId": 6902,
+        "miniTutorialNumber": 69,
+        "resourceName": "dungeon_howtopp_02",
+        "sortOrder": 2,
+        "title": "Puella Pictura Progress"
+    },
+    {
+        "advMstId": 0,
+        "description": "This content is more difficult than standard mode.\nPlay in battler mode to gain the Memsparks you need to raise your Puella Pictura rank.\nYou'll earn a reward of Magica Stone x1,000 for completing a Puella Pictura.",
+        "miniTutorialMstId": 7001,
+        "miniTutorialNumber": 70,
+        "resourceName": "battlemode_tutorial01",
+        "sortOrder": 1,
+        "title": "Battler Mode"
+    },
+    {
+        "advMstId": 0,
+        "description": "In battler mode, you can get Witch-themed 5★ Portraits. You can also raise your player level by clearing each battle to gain player EXP. Raising your player level also lets you boost the level cap of Kioku, so be sure to take on this challenge.",
+        "miniTutorialMstId": 7002,
+        "miniTutorialNumber": 70,
+        "resourceName": "battlemode_tutorial02",
+        "sortOrder": 2,
+        "title": "Battler Mode"
+    },
+    {
+        "advMstId": 0,
+        "description": "The chat feature allows players to communicate with each other. Union chat, group chat, direct messages, and a blocklist are available for you to use.",
+        "miniTutorialMstId": 7301,
+        "miniTutorialNumber": 73,
+        "resourceName": "chat_01",
+        "sortOrder": 1,
+        "title": "Chat"
+    },
+    {
+        "advMstId": 0,
+        "description": "Union chat allows you to chat with fellow members of the same union. You must belong to a union to use this feature.",
+        "miniTutorialMstId": 7302,
+        "miniTutorialNumber": 73,
+        "resourceName": "chat_02",
+        "sortOrder": 2,
+        "title": "Chat"
+    },
+    {
+        "advMstId": 0,
+        "description": "Group chat allows you to chat with other players who've joined that group. You can create a new chat, or join up to 100 group chats you've been invited to. One group can have up to 15 players max.",
+        "miniTutorialMstId": 7303,
+        "miniTutorialNumber": 73,
+        "resourceName": "chat_03",
+        "sortOrder": 3,
+        "title": "Chat"
+    },
+    {
+        "advMstId": 0,
+        "description": "Direct messages allow you to chat with any player. You can be a part of up to 100 different direct messages.\n",
+        "miniTutorialMstId": 7304,
+        "miniTutorialNumber": 73,
+        "resourceName": "chat_04",
+        "sortOrder": 4,
+        "title": "Chat"
+    },
+    {
+        "advMstId": 0,
+        "description": "This feature lets you upgrade the Special Attack Lvl. of a Kioku. Increasing the Lvl. will make special attacks more powerful.",
+        "miniTutorialMstId": 7401,
+        "miniTutorialNumber": 74,
+        "resourceName": "specialskill_training01",
+        "sortOrder": 1,
+        "title": "Special Attack Upgrade"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can raise the Special Attack Lvl. cap by ascending a Kioku to certain stages. The materials for upgrading special attacks can be obtained as rewards from events and at the Match Medal Trader.",
+        "miniTutorialMstId": 7402,
+        "miniTutorialNumber": 74,
+        "resourceName": "specialskill_training02",
+        "sortOrder": 2,
+        "title": "Special Attack Upgrade"
+    },
+    {
+        "advMstId": 0,
+        "description": "Unlocking magic lets you power up your Kioku. It can provide a significant boost to stats and skill effects, so be sure to unlock magic when you can.",
+        "miniTutorialMstId": 7601,
+        "miniTutorialNumber": 76,
+        "resourceName": "memory_training01",
+        "sortOrder": 1,
+        "title": "Unlocking Magic"
+    },
+    {
+        "advMstId": 0,
+        "description": "Special materials are required to unlock magic. You can get these materials from Magic Unlock Material Quests in the Upgrade Quests section, and as event rewards.",
+        "miniTutorialMstId": 7602,
+        "miniTutorialNumber": 76,
+        "resourceName": "memory_training02",
+        "sortOrder": 2,
+        "title": "Unlocking Magic"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can set the battle to proceed on Auto mode. There's Semi Auto mode, in which actions other than special attacks are performed automatically, and there's Full Auto mode, in which all actions are performed automatically.",
+        "miniTutorialMstId": 7701,
+        "miniTutorialNumber": 77,
+        "resourceName": "battle_auto_01",
+        "sortOrder": 1,
+        "title": "Setting Auto Modes for Battle"
+    },
+    {
+        "advMstId": 0,
+        "description": "The enemies who await you in chaos mode are even more powerful than those in nightmare mode.\nEach quest in chaos mode includes Epic Missions, and playable quests may unlock after a set number of Epic Missions are cleared.\n* Chaos mode quests will be added regularly.",
+        "miniTutorialMstId": 7901,
+        "miniTutorialNumber": 79,
+        "resourceName": "chaosmode_tutorial01",
+        "sortOrder": 1,
+        "title": "Chaos Mode"
+    },
+    {
+        "advMstId": 0,
+        "description": "Epic Missions can be cleared by fulfilling certain conditions during a battle.\nEach chaos mode quest includes three Epic Missions.\nOnce you clear a mission, you do not need to clear it again, so keep battling to clear all of the Epic Missions!",
+        "miniTutorialMstId": 7902,
+        "miniTutorialNumber": 79,
+        "resourceName": "chaosmode_tutorial02",
+        "sortOrder": 2,
+        "title": "Epic Missions"
+    },
+    {
+        "advMstId": 0,
+        "description": "This is one of the ways you can train your Kioku.\nCrystalis abilities can be obtained by clearing Crystalis quests.\nCrystalis abilities can be further upgraded by rolling for boost effects.",
+        "miniTutorialMstId": 8101,
+        "miniTutorialNumber": 81,
+        "resourceName": "crystalability_quest_01",
+        "sortOrder": 1,
+        "title": "About \"Crystalis\""
+    },
+    {
+        "advMstId": 0,
+        "description": "When you clear Crystalis quests there is a chance you will gain Crystalis abilities.\nThe higher the difficulty, the greater the chance of obtaining Crystalis abilities of a higher rarity.\nYou can use QP to play battles, but skips are not available.",
+        "miniTutorialMstId": 8102,
+        "miniTutorialNumber": 81,
+        "resourceName": "crystalability_quest_02",
+        "sortOrder": 2,
+        "title": "Crystalis Quests (1/2)"
+    },
+    {
+        "advMstId": 0,
+        "description": "Crystalis abilities come in EX, S, A, and B rarities.\nAn EX rarity is unique to its Kioku, and all Kioku have exactly one EX Crystalis ability.",
+        "miniTutorialMstId": 8103,
+        "miniTutorialNumber": 81,
+        "resourceName": "crystalability_quest_03",
+        "sortOrder": 3,
+        "title": "Crystalis Quests (2/2)"
+    },
+    {
+        "advMstId": 0,
+        "description": "Only Kioku that take part in battle can gain Crystalis abilities.\nEach Kioku will stock Crystalis abilities, so add Kioku you want to train to your party.",
+        "miniTutorialMstId": 8104,
+        "miniTutorialNumber": 81,
+        "resourceName": "crystalability_quest_04",
+        "sortOrder": 4,
+        "title": "Obtaining Crystalis Abilities"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can now set Crystalis abilities.\nAt first, a single ability can be set, but you can unlock more slots using special items.\nUp to 3 abilities can be set to each Kioku.",
+        "miniTutorialMstId": 8301,
+        "miniTutorialNumber": 83,
+        "resourceName": "crystalability_tutorial_01",
+        "sortOrder": 1,
+        "title": "About \"Crystalis\""
+    },
+    {
+        "advMstId": 0,
+        "description": "Crystalis abilities are activated when set to a Kioku.\nTheir effects are only applied when the Kioku is assigned as a Main Kioku, not a support Kioku.",
+        "miniTutorialMstId": 8302,
+        "miniTutorialNumber": 83,
+        "resourceName": "crystalability_tutorial_02",
+        "sortOrder": 2,
+        "title": "Crystalis Abilities"
+    },
+    {
+        "advMstId": 0,
+        "description": "Unlock items enable use of the 2nd and 3rd Crystalis ability slots.\nUnlock items can be obtained from event quests, as well as Score Attack and Tower rewards.",
+        "miniTutorialMstId": 8303,
+        "miniTutorialNumber": 83,
+        "resourceName": "crystalability_tutorial_03",
+        "sortOrder": 3,
+        "title": "Ability Slot Unlock Items"
+    },
+    {
+        "advMstId": 0,
+        "description": "Each Kioku can stock up to 100 Crystalis abilities.\nWhen this limit is exceeded, older, lower rarity abilities will be converted into boost effect roll items.",
+        "miniTutorialMstId": 8304,
+        "miniTutorialNumber": 83,
+        "resourceName": "crystalability_tutorial_04",
+        "sortOrder": 4,
+        "title": "Stock"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can use roll items to add boost effects to a set Crystalis ability.\nThe number of effects varies according to the rarity of the ability, with EX/S granting 3, A granting 2, and B granting 1.\nThe same boost effect can have various effect values.",
+        "miniTutorialMstId": 8305,
+        "miniTutorialNumber": 83,
+        "resourceName": "crystalability_tutorial_05",
+        "sortOrder": 5,
+        "title": "Boost Effects"
+    },
+    {
+        "advMstId": 0,
+        "description": "Boost effects are determined by chance when you use a roll item.\nA single roll will grant a number of effects corresponding to the ability's rarity.\nRoll items can be obtained from event quests and Score Attack rewards.",
+        "miniTutorialMstId": 8306,
+        "miniTutorialNumber": 83,
+        "resourceName": "crystalability_tutorial_06",
+        "sortOrder": 6,
+        "title": "Boost Effect Roll Items"
+    },
+    {
+        "advMstId": 0,
+        "description": "These items allow you to lock current boost effects when rolling.\nLock items are consumed when performing a roll.\nLock items can be obtained from Score Attack and Tower rewards.",
+        "miniTutorialMstId": 8307,
+        "miniTutorialNumber": 83,
+        "resourceName": "crystalability_tutorial_07",
+        "sortOrder": 7,
+        "title": "Lock Items"
+    },
+    {
+        "advMstId": 0,
+        "description": "Up to 10 players can take on a powerful enemy in this co-op battle feature.\nEach season lasts a set period with different enemies featured each season.\nLP is consumed when playing a battle.\nIn addition, you can trigger up to 6 battles per day.",
+        "miniTutorialMstId": 9101,
+        "miniTutorialNumber": 91,
+        "resourceName": "multi_raid_01",
+        "sortOrder": 1,
+        "title": "Link Raid"
+    },
+    {
+        "advMstId": 0,
+        "description": "Link Raid battles have a time limit and a limited number of rounds.\nTry to inflict damage efficiently within these limitations.\nEnemy HP is shared across all participating players.",
+        "miniTutorialMstId": 9102,
+        "miniTutorialNumber": 91,
+        "resourceName": "multi_raid_02",
+        "sortOrder": 2,
+        "title": "How to Battle"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can send backup requests to other players before your battle and after your battle ends.\nUp to 10 players including yourself can participate in a battle.\nLP is consumed when joining a battle through a backup request.",
+        "miniTutorialMstId": 9103,
+        "miniTutorialNumber": 91,
+        "resourceName": "multi_raid_04",
+        "sortOrder": 3,
+        "title": "Backup"
+    },
+    {
+        "advMstId": 0,
+        "description": "Each season, bonus effects for certain elemental affinities and bonus effects for certain skills and actions are activated.",
+        "miniTutorialMstId": 9104,
+        "miniTutorialNumber": 91,
+        "resourceName": "multi_raid_03",
+        "sortOrder": 4,
+        "title": "Season Bonus"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can get the daily bonus by triggering and clearing a battle 3 times in one day.\nThe higher the difficulty of the cleared battles, the easier it is to obtain better items.\nPlus, if you belong to a union, you'll get one additional reward.",
+        "miniTutorialMstId": 9105,
+        "miniTutorialNumber": 91,
+        "resourceName": "multi_raid_05",
+        "sortOrder": 5,
+        "title": "Daily Bonus"
+    },
+    {
+        "advMstId": 0,
+        "description": "Link Raid has both play rewards and input rewards.\nPlay rewards can be obtained by clearing battles you have triggered.\nInput rewards increase the higher your input rank upon clearing a battle.\nHowever, you won't be able to receive input rewards if your input does not reach a certain amount.",
+        "miniTutorialMstId": 9106,
+        "miniTutorialNumber": 91,
+        "resourceName": "multi_raid_06",
+        "sortOrder": 6,
+        "title": "Battle Clear Rewards"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can earn Gold Link Medals and Silver Link Medals by clearing battles.\nMedals earned can be exchanged for various rewards at the trader.\nTrade limits at the trader are reset on the first day of each month (JST).\nMedals will be carried over to the following season.",
+        "miniTutorialMstId": 9107,
+        "miniTutorialNumber": 91,
+        "resourceName": "multi_raid_07",
+        "sortOrder": 7,
+        "title": "Trader"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can get Magica Stones, Gold Link Medals, and Silver Link Medals by clearing the missions held each season.\nMission progress is reset the following season so you can clear these missions again.",
+        "miniTutorialMstId": 9108,
+        "miniTutorialNumber": 91,
+        "resourceName": "multi_raid_08",
+        "sortOrder": 8,
+        "title": "Season Missions"
+    },
+    {
+        "advMstId": 0,
+        "description": "If your attack reduces an enemy's HP to 0, this will count as the last attack, and the minimum input of the cleared battle will be added to your input.\nEven if you didn't achieve much input in battle, a last attack may help you qualify for input rewards.",
+        "miniTutorialMstId": 9109,
+        "miniTutorialNumber": 91,
+        "resourceName": "multi_raid_09",
+        "sortOrder": 9,
+        "title": "Last Attack"
+    },
+    {
+        "advMstId": 70000250,
+        "description": "This is a feature where you can decorate the Home screen with Magical Girls and illustrations.\nMix and match the settings to your liking and create your very own personalized Home screen.",
+        "miniTutorialMstId": 9201,
+        "miniTutorialNumber": 92,
+        "resourceName": "dollhouse_01",
+        "sortOrder": 1,
+        "title": "Dollhouse"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can select the \"Lighthouse,\" or select from four decoration modes: \"3D Model,\" \"2D Model,\" \"Kioku,\" and \"Portrait.\"\nTry mixing and matching Magical Girls, illustrations, backgrounds, and music in each of these modes.",
+        "miniTutorialMstId": 9202,
+        "miniTutorialNumber": 92,
+        "resourceName": "dollhouse_02",
+        "sortOrder": 2,
+        "title": "Modes"
+    },
+    {
+        "advMstId": 0,
+        "description": "The Magical Girls, illustrations, backgrounds, and music, etc., that you can set on the Home screen each come setting requirements (such as obtaining Kioku, Memsparks, and Dollhouse items).\nSee Help for details.",
+        "miniTutorialMstId": 9203,
+        "miniTutorialNumber": 92,
+        "resourceName": "dollhouse_03",
+        "sortOrder": 3,
+        "title": "Setting Requirements"
+    },
+    {
+        "advMstId": 70000251,
+        "description": "With this feature, you can place a Magical Girl in real-world scenes or with a game background and take photos.\nThe photos can be saved to your device.",
+        "miniTutorialMstId": 9501,
+        "miniTutorialNumber": 95,
+        "resourceName": "camera_01",
+        "sortOrder": 1,
+        "title": "Camera"
+    },
+    {
+        "advMstId": 0,
+        "description": "Of the two shooting modes available, this mode is the easiest to use.\nYou can take photos by mixing and matching scenes or backgrounds with a Magical Girl.",
+        "miniTutorialMstId": 9502,
+        "miniTutorialNumber": 95,
+        "resourceName": "camera_02",
+        "sortOrder": 2,
+        "title": "Simple Shot Mode"
+    },
+    {
+        "advMstId": 0,
+        "description": "Of the two shooting modes available, this mode uses AR tech for taking photos.\nPlace a Magical Girl in real-world scenes and you can take photos that appear as if she's there before your eyes.\n* Depending on the detected position, characters may not appear as intended.",
+        "miniTutorialMstId": 9503,
+        "miniTutorialNumber": 95,
+        "resourceName": "camera_03",
+        "sortOrder": 3,
+        "title": "AR Mode"
+    },
+    {
+        "advMstId": 0,
+        "description": "Depending on the mode and background, you can use different functions for shooting your photos (choosing a Magical Girl's pose, zooming in/out, adjusting the lighting, etc.).\nSee Help for details.",
+        "miniTutorialMstId": 9504,
+        "miniTutorialNumber": 95,
+        "resourceName": "camera_04",
+        "sortOrder": 4,
+        "title": "Taking Photos"
+    },
+    {
+        "advMstId": 0,
+        "description": "Exedra Crisis is a feature where you take on powerful enemies and earn a score based on the results.\nYou can earn total score and ranking rewards based on your score.\nThe feature is available for a limited time, with different enemies appearing each season. You can take part in battles up to three times each day.",
+        "miniTutorialMstId": 9701,
+        "miniTutorialNumber": 97,
+        "resourceName": "exedra_crisis_01",
+        "sortOrder": 1,
+        "title": "Exedra Crisis"
+    },
+    {
+        "advMstId": 0,
+        "description": "Each season features buff effects that give your allies an edge in battle.\nBy meeting certain conditions and accumulating Vanguard Points, the battle enters the Vanguard Activation Phase, where these buff effects become even stronger.",
+        "miniTutorialMstId": 9702,
+        "miniTutorialNumber": 97,
+        "resourceName": "exedra_crisis_02",
+        "sortOrder": 2,
+        "title": "Labyrinth Vanguard"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can choose one effect to unleash during battle from three available options set for each season.\nChoose the effect that best suits your party to gain an advantage in battle.",
+        "miniTutorialMstId": 9703,
+        "miniTutorialNumber": 97,
+        "resourceName": "exedra_crisis_03",
+        "sortOrder": 3,
+        "title": "Name's Resolve"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can assign up to 10 parties separate from your standard ones.\nA Kioku that takes part in battle cannot be used again.\nHowever, Portraits and Support Kioku can be used multiple times.\nSet Name's Resolve to enable you to begin a run.",
+        "miniTutorialMstId": 9704,
+        "miniTutorialNumber": 97,
+        "resourceName": "exedra_crisis_04",
+        "sortOrder": 4,
+        "title": "Party Assignment"
+    },
+    {
+        "advMstId": 0,
+        "description": "Your score increases when you win with fewer attempts, fewer actions, and at higher difficulties.\nAim to clear battles at higher difficulties as quickly as possible to improve your ranking.",
+        "miniTutorialMstId": 9705,
+        "miniTutorialNumber": 97,
+        "resourceName": "exedra_crisis_05",
+        "sortOrder": 5,
+        "title": "Score"
+    },
+    {
+        "advMstId": 0,
+        "description": "Rankings are determined based on your highest score in battle.",
+        "miniTutorialMstId": 9706,
+        "miniTutorialNumber": 97,
+        "resourceName": "exedra_crisis_06",
+        "sortOrder": 6,
+        "title": "Rankings"
+    },
+    {
+        "advMstId": 0,
+        "description": "Rewards can be obtained by clearing battles, from rankings, and from your total score.\nYou can use medals that you have collected to trade for various rewards at the trader.",
+        "miniTutorialMstId": 9707,
+        "miniTutorialNumber": 97,
+        "resourceName": "exedra_crisis_07",
+        "sortOrder": 7,
+        "title": "Rewards"
+    },
+    {
+        "advMstId": 0,
+        "description": "Friends are players that you follow, and players that follow you.\nYou can follow players from the Friends screen and Profile screen.",
+        "miniTutorialMstId": 9901,
+        "miniTutorialNumber": 99,
+        "resourceName": "friend_01",
+        "sortOrder": 1,
+        "title": "Friends"
+    },
+    {
+        "advMstId": 0,
+        "description": "On the Friends screen, you can manage your friends.\nRecommended players are displayed on the Follow tab, so try following some other players.",
+        "miniTutorialMstId": 9902,
+        "miniTutorialNumber": 99,
+        "resourceName": "friend_02",
+        "sortOrder": 2,
+        "title": "Friends Screen"
+    },
+    {
+        "advMstId": 0,
+        "description": "Friend Medals can be obtained by sending \"Likes\" in Link Raid.\nFriend Medals you obtain can be exchanged for items at the trader.",
+        "miniTutorialMstId": 9903,
+        "miniTutorialNumber": 99,
+        "resourceName": "friend_03",
+        "sortOrder": 3,
+        "title": "Friend Medals"
+    },
+    {
+        "advMstId": 0,
+        "description": "On the Profile screen, you can set your name, a greeting, your favorite Kioku, and a title you earned.",
+        "miniTutorialMstId": 10401,
+        "miniTutorialNumber": 104,
+        "resourceName": "profile_01",
+        "sortOrder": 1,
+        "title": "Profile"
+    },
+    {
+        "advMstId": 0,
+        "description": "Titles can be earned from specific missions, event rewards, etc.",
+        "miniTutorialMstId": 10402,
+        "miniTutorialNumber": 104,
+        "resourceName": "profile_02",
+        "sortOrder": 2,
+        "title": "Profile"
+    },
+    {
+        "advMstId": 0,
+        "description": "Equipping a Support Kioku boosts stats and can activate support abilities.",
+        "miniTutorialMstId": 20301,
+        "miniTutorialNumber": 203,
+        "resourceName": "support_kioku_01",
+        "sortOrder": 1,
+        "title": "Support Kioku"
+    },
+    {
+        "advMstId": 0,
+        "description": "A Support Kioku's \"Stats Applied\" percentage can be increased by raising your Puella Pictura rank.",
+        "miniTutorialMstId": 20302,
+        "miniTutorialNumber": 203,
+        "resourceName": "support_kioku_03",
+        "sortOrder": 2,
+        "title": "Support Kioku"
+    },
+    {
+        "advMstId": 0,
+        "description": "Support Abilities have activation conditions, so check that the main Kioku meets those conditions when equipped. Additionally, their effects can be upgraded depending on Magic Lvl.",
+        "miniTutorialMstId": 20303,
+        "miniTutorialNumber": 203,
+        "resourceName": "support_kioku_04",
+        "sortOrder": 3,
+        "title": "Support Kioku"
+    },
+    {
+        "advMstId": 0,
+        "description": "This high-difficulty content unlocks original stories to read and offers 5★ portrait rewards. So power-up your party to play!",
+        "miniTutorialMstId": 20601,
+        "miniTutorialNumber": 206,
+        "resourceName": "main_nightmare_01",
+        "sortOrder": 1,
+        "title": "Nightmare Mode"
+    },
+    {
+        "advMstId": 0,
+        "description": "For all Labyrinths playable in Standard mode, there is an additional Nightmare mode. Labyrinths to be added in future updates will also feature Standard and Nightmare modes.",
+        "miniTutorialMstId": 20602,
+        "miniTutorialNumber": 206,
+        "resourceName": "main_nightmare_02",
+        "sortOrder": 2,
+        "title": "Nightmare Mode Addition"
+    },
+    {
+        "advMstId": 0,
+        "description": "There are several types of points within a Labyrinth.\nBattle Points: Only battles are encountered here.\nExploration Points: You'll take on a Kioku's form to explore within.\nFlashback Points: You'll fully engage with a memory.",
+        "miniTutorialMstId": 21001,
+        "miniTutorialNumber": 210,
+        "resourceName": "dungeon_map_0101",
+        "sortOrder": 1,
+        "title": "Labyrinth Map (Points)"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can check a list of Memsparks that can be obtained in the current Window Into Memory. Any Memsparks (Story) you obtain can be selected from the list to read immediately.",
+        "miniTutorialMstId": 21101,
+        "miniTutorialNumber": 211,
+        "resourceName": "dungeon_map_0201",
+        "sortOrder": 1,
+        "title": "Labyrinth Map (Memsparks)"
+    },
+    {
+        "advMstId": 0,
+        "description": "Collecting Memsparks fills in Puella Pictura pieces, which raises Puella Pictura rank.",
+        "miniTutorialMstId": 21102,
+        "miniTutorialNumber": 211,
+        "resourceName": "dungeon_map_0202",
+        "sortOrder": 2,
+        "title": "Labyrinth Map (Memsparks)"
+    },
+    {
+        "advMstId": 0,
+        "description": "Upon completing a Puella Pictura, you'll get the following rewards.\n- Magica Stone x1,000\n- A fully ascended portrait\nAnd in some cases, you can also get 5★ Kioku \"[Lux☆Magica] Madoka Kaname.\"",
+        "miniTutorialMstId": 21103,
+        "miniTutorialNumber": 211,
+        "resourceName": "dungeon_map_0203",
+        "sortOrder": 3,
+        "title": "Labyrinth Map (Memsparks)"
+    },
+    {
+        "advMstId": 0,
+        "description": "Each Kioku has a level, and their level cap is the same\nas your player level. Player level is mainly increased\nthrough playing various quests.",
+        "miniTutorialMstId": 21301,
+        "miniTutorialNumber": 213,
+        "resourceName": "dungeon_level_01",
+        "sortOrder": 1,
+        "title": "Kioku Level & Player Level"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can obtain Kioku EXP by battling or using exclusive items.",
+        "miniTutorialMstId": 21302,
+        "miniTutorialNumber": 213,
+        "resourceName": "dungeon_level_02",
+        "sortOrder": 2,
+        "title": "Kioku Level & Player Level"
+    },
+    {
+        "advMstId": 0,
+        "description": "When obtaining a duplicate of a portrait you already have, that portrait will be automatically ascended. There are 5 stages of ascension, and ascending portraits increases portrait stats.",
+        "miniTutorialMstId": 21501,
+        "miniTutorialNumber": 215,
+        "resourceName": "dungeon_portrait_01",
+        "sortOrder": 1,
+        "title": "Portrait Ascension"
+    },
+    {
+        "advMstId": 0,
+        "description": "A powerful boss awaits you at the end of your Labyrinth exploration. Auto mode cannot be used during Boss Point battles.",
+        "miniTutorialMstId": 21701,
+        "miniTutorialNumber": 217,
+        "resourceName": "dungeon_boss_01",
+        "sortOrder": 1,
+        "title": "Boss Points"
+    },
+    {
+        "advMstId": 0,
+        "description": "Once the final boss is defeated, the Labyrinth will be cleared and you'll get Magica Stone x300.",
+        "miniTutorialMstId": 21702,
+        "miniTutorialNumber": 217,
+        "resourceName": "dungeon_boss_02",
+        "sortOrder": 2,
+        "title": "Boss Points"
+    },
+    {
+        "advMstId": 0,
+        "description": "Area Boss Points will appear as you explore a Labyrinth. Enemies within Area Boss Points are more powerful than those you've faced.",
+        "miniTutorialMstId": 21901,
+        "miniTutorialNumber": 219,
+        "resourceName": "dungeon_areaboss_01",
+        "sortOrder": 1,
+        "title": "Area Boss Points"
+    },
+    {
+        "advMstId": 0,
+        "description": "When you clear a point, multiple points may be added to the map. These Extra Points are not directly related to the story's progress, but you can obtain items and Memsparks there.",
+        "miniTutorialMstId": 22101,
+        "miniTutorialNumber": 221,
+        "resourceName": "dungeon_extra_01",
+        "sortOrder": 1,
+        "title": "Extra Points"
+    },
+    {
+        "advMstId": 0,
+        "description": "If items remain within the point, the area around the point will sparkle. So use it as a visual guide when exploring a Labyrinth.",
+        "miniTutorialMstId": 22102,
+        "miniTutorialNumber": 221,
+        "resourceName": "dungeon_extra_02",
+        "sortOrder": 2,
+        "title": "Extra Points"
+    },
+    {
+        "advMstId": 0,
+        "description": "Each portrait has unique abilities. By equipping portraits that complement Kioku characteristics, you'll give your party an edge in battle.",
+        "miniTutorialMstId": 22501,
+        "miniTutorialNumber": 225,
+        "resourceName": "dungeon_portrait_up_01",
+        "sortOrder": 1,
+        "title": "Portrait Effects"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can clear Labyrinths by defeating bosses. Boss battles are more difficult than regular ones, so it's best to take them on after building up your Kioku.",
+        "miniTutorialMstId": 22701,
+        "miniTutorialNumber": 227,
+        "resourceName": "memory_quest_appeal01",
+        "sortOrder": 1,
+        "title": "Strategy Hints"
+    },
+    {
+        "advMstId": 0,
+        "description": "From the menu, go to Party > Training > Kioku List and select a Kioku. Tap the + button on the details screen to open the Kioku Upgrade screen. You can get the materials you need for upgrades from Kioku Upgrade Quests in the Upgrade Quests section.",
+        "miniTutorialMstId": 22702,
+        "miniTutorialNumber": 227,
+        "resourceName": "memory_quest_appeal02",
+        "sortOrder": 2,
+        "title": "Strategy Hints"
+    },
+    {
+        "advMstId": 0,
+        "description": "If an enemy seems too tough, keep the following points in mind.\n1) Use the break system to your advantage.\n2) Try forming a party with roles in mind.\n3) Use the unit details to check enemy info.",
+        "miniTutorialMstId": 22901,
+        "miniTutorialNumber": 229,
+        "resourceName": "battletutorial_1014",
+        "sortOrder": 1,
+        "title": "Strategy Hints"
+    },
+    {
+        "advMstId": 0,
+        "description": "In general, all battles follow the same basic flow: put the enemy in break, raise the break bonus to multiply damage dealt, then unleash powerful special attacks to deal maximum damage.",
+        "miniTutorialMstId": 22902,
+        "miniTutorialNumber": 229,
+        "resourceName": "battletutorial_1006",
+        "sortOrder": 2,
+        "title": "Battle Systems"
+    },
+    {
+        "advMstId": 0,
+        "description": "There are 6 unique roles in battle. Try to form parties that take advantage of each role's unique features.",
+        "miniTutorialMstId": 22903,
+        "miniTutorialNumber": 229,
+        "resourceName": "battletutorial_1007",
+        "sortOrder": 3,
+        "title": "Roles"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can check the enemy's skills and active effects during battle. Use this when you'd like to know more details.",
+        "miniTutorialMstId": 22910,
+        "miniTutorialNumber": 229,
+        "resourceName": "battletutorial_1015",
+        "sortOrder": 10,
+        "title": "Checking Enemy Info"
+    },
+    {
+        "advMstId": 0,
+        "description": "Battles in this feature have both a time limit and a round limit.\nMultiple waves of enemies will appear, and victory is achieved by defeating the boss at the end.\nEven if your party is defeated, battles can be replayed with enemy HP remaining unchanged.",
+        "miniTutorialMstId": 23001,
+        "miniTutorialNumber": 230,
+        "resourceName": "exedra_crisis_08",
+        "sortOrder": 1,
+        "title": "How to Battle"
+    },
+    {
+        "advMstId": 0,
+        "description": "In non-boss waves, defeating an enemy will deplete the HP gauge displayed at the top of the screen by a set amount.\nEnemies will continue to appear until that gauge reaches 0.",
+        "miniTutorialMstId": 23002,
+        "miniTutorialNumber": 230,
+        "resourceName": "exedra_crisis_09",
+        "sortOrder": 2,
+        "title": "Enemy HP Link"
+    },
+    {
+        "advMstId": 0,
+        "description": "During battle, Vanguard Points accumulate as various conditions are met.\nConditions are also set for Name's Resolve.\nTap the icon to view details regarding that effect.",
+        "miniTutorialMstId": 23003,
+        "miniTutorialNumber": 230,
+        "resourceName": "exedra_crisis_02",
+        "sortOrder": 3,
+        "title": "Labyrinth Vanguard (1)"
+    },
+    {
+        "advMstId": 0,
+        "description": "When you reach maximum Vanguard Points, the Vanguard Activation Phase begins.\nVanguard Activation Phase effects remain active until the Labyrinth Vanguard's turn.",
+        "miniTutorialMstId": 23004,
+        "miniTutorialNumber": 230,
+        "resourceName": "exedra_crisis_10",
+        "sortOrder": 4,
+        "title": "Labyrinth Vanguard (2)"
+    },
+    {
+        "advMstId": 0,
+        "description": "The boss's HP is shared with other enemies on the field.\nBoss HP will be depleted no matter which enemy you attack.\nAll enemies will be defeated once the boss's HP reaches 0.",
+        "miniTutorialMstId": 23101,
+        "miniTutorialNumber": 231,
+        "resourceName": "exedra_crisis_11",
+        "sortOrder": 1,
+        "title": "Boss HP"
+    },
+    {
+        "advMstId": 0,
+        "description": "The boss will \"awaken\" and transform into a new form once its HP falls below a certain threshold.\nThe stats and the actions of the boss will also change upon transformation.",
+        "miniTutorialMstId": 23301,
+        "miniTutorialNumber": 233,
+        "resourceName": "toudai_story_03",
+        "sortOrder": 1,
+        "title": "Witch Awakenings"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can set 7 Loan Kioku in total; one for each role, plus one for the \"All\" slot.\nYou can also use Auto Set to assign Kioku to all slots automatically.",
+        "miniTutorialMstId": 23401,
+        "miniTutorialNumber": 234,
+        "resourceName": "rental_01",
+        "sortOrder": 1,
+        "title": "Loan Kioku"
+    },
+    {
+        "advMstId": 0,
+        "description": "You can rent Kioku from other players for certain content, such as the main quest.\nKioku you rent will be added to the 5th slot of your party.\nPortraits and Support Kioku can also be assigned to Kioku you rent.",
+        "miniTutorialMstId": 23402,
+        "miniTutorialNumber": 234,
+        "resourceName": "rental_02",
+        "sortOrder": 2,
+        "title": "Kioku Rental"
+    },
+    {
+        "advMstId": 0,
+        "description": "In the main quest, you can also enable automatic Kioku rental.\nThis can be performed from Auto Rental Settings in the Party Menu.\nThese settings let you specify the criteria for which Kioku are prioritized when using Auto Rental.",
+        "miniTutorialMstId": 23403,
+        "miniTutorialNumber": 234,
+        "resourceName": "rental_03",
+        "sortOrder": 3,
+        "title": "Auto Rental Settings"
+    },
+    {
+        "advMstId": 0,
+        "description": "Friend Medals can be obtained by loaning your Kioku, or by renting Kioku from other players.\nThe amount of Friend Medals obtained is determined by the friend status between you and the other player.",
+        "miniTutorialMstId": 23404,
+        "miniTutorialNumber": 234,
+        "resourceName": "rental_04",
+        "sortOrder": 4,
+        "title": "Friend Medals"
+    },
+    {
+        "advMstId": 0,
+        "description": "Under Key Bindings, you can customize the keyboard controls for various actions.\nBind frequently used actions to easily accessible keys to improve your gameplay experience.",
+        "miniTutorialMstId": 31701,
+        "miniTutorialNumber": 317,
+        "resourceName": "keyconfig_tutorial01",
+        "sortOrder": 1,
+        "title": "Key Bindings"
+    },
+    {
+        "advMstId": 0,
+        "description": "Exedra Quest is a new main story centered around the Nameless Girl and the Lighthouse.\nProgress through the story to unlock Exedra Crisis.",
+        "miniTutorialMstId": 35401,
+        "miniTutorialNumber": 354,
+        "resourceName": "toudai_story_01",
+        "sortOrder": 1,
+        "title": "Exedra Quest"
+    },
+    {
+        "advMstId": 0,
+        "description": "In Exedra Quest battles, Kioku and Magic levels are capped at specific levels.\nThe level caps vary by chapter.\nThis applies when a Kioku's level or Magic level exceeds the level cap in effect.",
+        "miniTutorialMstId": 35402,
+        "miniTutorialNumber": 354,
+        "resourceName": "toudai_story_02",
+        "sortOrder": 2,
+        "title": "Level Lock"
+    },
+    {
+        "advMstId": 0,
+        "description": "Depleting an enemy's break gauge will cause it to enter Break status. With enemies in break, it is easy to turn the battle to your advantage. Increase an enemy's break bonus to deal damage more efficiently.",
+        "miniTutorialMstId": 100001,
+        "miniTutorialNumber": 1000,
+        "resourceName": "battletutorial_1001",
+        "sortOrder": 1,
+        "title": "Break"
+    },
+    {
+        "advMstId": 0,
+        "description": "Each Magical Girl has a role that represents her particular battle style.\nMadoka Kaname is a Breaker, skilled at depleting the enemy's break gauge and generating break bonus.\nHomura Akemi is an Attacker, skilled at dealing large amounts of DMG.",
+        "miniTutorialMstId": 100101,
+        "miniTutorialNumber": 1001,
+        "resourceName": "battletutorial_1002",
+        "sortOrder": 1,
+        "title": "Roles"
+    },
+    {
+        "advMstId": 0,
+        "description": "As a Buffer, Tsuruno Yui is adept at supporting allies and raising firepower with a variety of buff effects.",
+        "miniTutorialMstId": 100201,
+        "miniTutorialNumber": 1002,
+        "resourceName": "battletutorial_1003",
+        "sortOrder": 1,
+        "title": "Buffers"
+    },
+    {
+        "advMstId": 0,
+        "description": "As a Defender, Sana Futaba can boost endurance and is adept at protecting allies.",
+        "miniTutorialMstId": 100301,
+        "miniTutorialNumber": 1003,
+        "resourceName": "battletutorial_1004",
+        "sortOrder": 1,
+        "title": "Defenders"
+    },
+    {
+        "advMstId": 0,
+        "description": "As a Debuffer, Felicia Mitsuki is adept at turning the tides of battle by applying debuffs and ailments to enemies.",
+        "miniTutorialMstId": 100401,
+        "miniTutorialNumber": 1004,
+        "resourceName": "battletutorial_1005",
+        "sortOrder": 1,
+        "title": "Debuffers"
+    },
+    {
+        "advMstId": 0,
+        "description": "In general, all battles follow the same basic flow: put the enemy in break, raise the break bonus to multiply damage dealt, then unleash powerful special attacks to deal maximum damage.",
+        "miniTutorialMstId": 100501,
+        "miniTutorialNumber": 1005,
+        "resourceName": "battletutorial_1006",
+        "sortOrder": 1,
+        "title": "Battle Systems"
+    },
+    {
+        "advMstId": 0,
+        "description": "There are 6 unique roles in battle.",
+        "miniTutorialMstId": 100601,
+        "miniTutorialNumber": 1006,
+        "resourceName": "battletutorial_1007",
+        "sortOrder": 1,
+        "title": "Roles"
+    },
+    {
+        "advMstId": 0,
+        "description": "Has high firepower and specializes in dealing damage to enemies.",
+        "miniTutorialMstId": 100602,
+        "miniTutorialNumber": 1006,
+        "resourceName": "battletutorial_1008",
+        "sortOrder": 2,
+        "title": "ATTACKER"
+    },
+    {
+        "advMstId": 0,
+        "description": "Breakers excel at depleting the break gauge and increasing the break bonus.",
+        "miniTutorialMstId": 100603,
+        "miniTutorialNumber": 1006,
+        "resourceName": "battletutorial_1009",
+        "sortOrder": 3,
+        "title": "BREAKER"
+    },
+    {
+        "advMstId": 0,
+        "description": "Adept at supporting allies and raising firepower with a variety of buff effects.",
+        "miniTutorialMstId": 100604,
+        "miniTutorialNumber": 1006,
+        "resourceName": "battletutorial_1010",
+        "sortOrder": 4,
+        "title": "BUFFER"
+    },
+    {
+        "advMstId": 0,
+        "description": "Adept at turning the tides of battle by applying debuffs and ailments to enemies.",
+        "miniTutorialMstId": 100605,
+        "miniTutorialNumber": 1006,
+        "resourceName": "battletutorial_1011",
+        "sortOrder": 5,
+        "title": "DEBUFFER"
+    },
+    {
+        "advMstId": 0,
+        "description": "Adept at protecting allies, capable of shielding allies from attacks and boosting endurance.",
+        "miniTutorialMstId": 100606,
+        "miniTutorialNumber": 1006,
+        "resourceName": "battletutorial_1012",
+        "sortOrder": 6,
+        "title": "DEFENDER"
+    },
+    {
+        "advMstId": 0,
+        "description": "Adept at aiding allies with a variety of restoration skills.",
+        "miniTutorialMstId": 100607,
+        "miniTutorialNumber": 1006,
+        "resourceName": "battletutorial_1013",
+        "sortOrder": 7,
+        "title": "HEALER"
+    },
+    {
+        "advMstId": 0,
+        "description": "At exploration points, you will automatically explore inside the Witch's Labyrinth.",
+        "miniTutorialMstId": 200001,
+        "miniTutorialNumber": 2000,
+        "resourceName": "minitutorial_2000",
+        "sortOrder": 1,
+        "title": "Exploration Points： Movement"
+    },
+    {
+        "advMstId": 0,
+        "description": "You may sometimes find items inside exploration points. You can pick them up automatically by moving your Magical Girl.\n* If you Return or are unable to reach the goal point, these items will be lost.",
+        "miniTutorialMstId": 200101,
+        "miniTutorialNumber": 2001,
+        "resourceName": "minitutorial_2001",
+        "sortOrder": 1,
+        "title": "Exploration Points: Items"
+    },
+    {
+        "advMstId": 0,
+        "description": "Memsparks can be found inside Exploration Points. You can pick them up automatically by moving your Magical Girl.\n* If you return or are unable to reach the goal point, Memsparks will not be claimed.",
+        "miniTutorialMstId": 200201,
+        "miniTutorialNumber": 2002,
+        "resourceName": "minitutorial_2002",
+        "sortOrder": 1,
+        "title": "Exploration Points： Memsparks"
+    },
+    {
+        "advMstId": 0,
+        "description": "If you'd like to explore manually, you can take control of the Magical Girl at any time by tapping the \"Manual\" mode button.",
+        "miniTutorialMstId": 200301,
+        "miniTutorialNumber": 2003,
+        "resourceName": "minitutorial_2003",
+        "sortOrder": 1,
+        "title": "Exploration Points: Manual Mode"
+    },
+    {
+        "advMstId": 0,
+        "description": "Inside exploration points, paths will sometimes diverge.\nTap the arrow or flick the screen in the direction you want to move.\nSide paths may hide items as well as enemies.",
+        "miniTutorialMstId": 200401,
+        "miniTutorialNumber": 2004,
+        "resourceName": "minitutorial_2004",
+        "sortOrder": 1,
+        "title": "Exploration Points ：Branching Paths"
+    },
+    {
+        "advMstId": 0,
+        "description": "You may encounter enemies inside exploration points. Making contact with the enemy symbol will begin the battle.",
+        "miniTutorialMstId": 200501,
+        "miniTutorialNumber": 2005,
+        "resourceName": "minitutorial_2005",
+        "sortOrder": 1,
+        "title": "Exploration Points: Battles"
+    },
+    {
+        "advMstId": 0,
+        "description": "Memsparks (Other) may contain Portraits.",
+        "miniTutorialMstId": 200601,
+        "miniTutorialNumber": 2006,
+        "resourceName": "minitutorial_2006",
+        "sortOrder": 1,
+        "title": "Exploration Points: Memsparks (Other) - Portraits"
+    },
+    {
+        "advMstId": 0,
+        "description": "Memsparks (Other) may contain Music, as well as information on Witches, Minions, and Labyrinths.",
+        "miniTutorialMstId": 200701,
+        "miniTutorialNumber": 2007,
+        "resourceName": "minitutorial_2007",
+        "sortOrder": 1,
+        "title": "Exploration Points: Memsparks (Other) - Music"
+    },
+    {
+        "advMstId": 70000190,
+        "description": "In addition to items you can pick up along the way, you might also spot shiny objects on the ground while exploring. You can get an item by tapping them, so be sure to look around!",
+        "miniTutorialMstId": 201201,
+        "miniTutorialNumber": 2012,
+        "resourceName": "dungeon_secretitem_01",
+        "sortOrder": 1,
+        "title": "Hidden Items"
+    },
+    {
+        "advMstId": 0,
+        "description": "While exploring, you may find dropped switches along the way. Obtaining a switch will add new points on the Labyrinth map.",
+        "miniTutorialMstId": 201601,
+        "miniTutorialNumber": 2016,
+        "resourceName": "dungeon_secretpoint_01",
+        "sortOrder": 1,
+        "title": "Switches"
+    },
+    {
+        "advMstId": 0,
+        "description": "Bonus Points may sometimes appear as you explore a Labyrinth.\nThere are no encounters there, but you can obtain items and Memsparks.\nSo be sure to check each one you find!",
+        "miniTutorialMstId": 201602,
+        "miniTutorialNumber": 2016,
+        "resourceName": "dungeon_bonus_01",
+        "sortOrder": 2,
+        "title": "Bonus Points"
+    },
+    {
+        "advMstId": 0,
+        "description": "A party can consist of up to 5 Kioku. 1 Portrait per Kioku can also be equipped.",
+        "miniTutorialMstId": 400001,
+        "miniTutorialNumber": 4000,
+        "resourceName": "minitutorial_4000",
+        "sortOrder": 1,
+        "title": "Assign"
+    },
+    {
+        "advMstId": 0,
+        "description": "Select the Kioku you'd like to assign.\nYou can change the slot to assign using the icons below.",
+        "miniTutorialMstId": 400002,
+        "miniTutorialNumber": 4000,
+        "resourceName": "minitutorial_4000_2",
+        "sortOrder": 2,
+        "title": "Party: Kioku"
+    },
+    {
+        "advMstId": 0,
+        "description": "Select the Portrait you'd like to equip.\nPortraits cannot be equipped without first assigning a Main Kioku.\nYou can switch equip slots using the Kioku icons at the bottom of the screen.",
+        "miniTutorialMstId": 400003,
+        "miniTutorialNumber": 4000,
+        "resourceName": "minitutorial_4000_3",
+        "sortOrder": 3,
+        "title": "Party: Portraits"
+    },
+    {
+        "advMstId": 0,
+        "description": "Let's try using Auto Party.",
+        "miniTutorialMstId": 400004,
+        "miniTutorialNumber": 4000,
+        "resourceName": "minitutorial_4000_6",
+        "sortOrder": 4,
+        "title": "Party: Auto Party"
+    },
+    {
+        "advMstId": 0,
+        "description": "At the trader, you can trade points earned from Fate Weaves for Kioku, exchange event medals for various items, and more!\nSome trade items are only available for a limited time, so be sure to check regularly.",
+        "miniTutorialMstId": 500001,
+        "miniTutorialNumber": 5000,
+        "resourceName": "minitutorial_5000",
+        "sortOrder": 1,
+        "title": "Trader"
+    },
+    {
+        "advMstId": 0,
+        "description": "A-Q Chips, upgrade materials, and other items will accumulate over time (24 hrs max). You will be able to generate and collect more rewards as your Player Lvl. increases.",
+        "miniTutorialMstId": 600001,
+        "miniTutorialNumber": 6000,
+        "resourceName": "minitutorial_6000",
+        "sortOrder": 1,
+        "title": "Magia Box"
+    },
+    {
+        "advMstId": 0,
+        "description": "Up to 7 times a day, you can use Magica Stones to collect 6 hours' worth of rewards at once. For the first collection each day, you do not need to spend Magica Stones.",
+        "miniTutorialMstId": 600002,
+        "miniTutorialNumber": 6000,
+        "resourceName": "minitutorial_6000_2",
+        "sortOrder": 2,
+        "title": "Magia Box"
+    }
+]

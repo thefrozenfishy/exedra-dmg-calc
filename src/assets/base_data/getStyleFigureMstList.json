@@ -1,0 +1,778 @@
+[
+    {
+        "characterMstId": 1001,
+        "iconName": "100101",
+        "modelName": "chara_100101_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 100101,
+        "voiceCueSheetName": "cv_100101_{0}"
+    },
+    {
+        "characterMstId": 1001,
+        "iconName": "100103",
+        "modelName": "chara_100103_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 100103,
+        "voiceCueSheetName": "cv_100103_{0}"
+    },
+    {
+        "characterMstId": 1001,
+        "iconName": "100106",
+        "modelName": "chara_100106_battle_unit",
+        "sortOrder": 4,
+        "styleFigureMstId": 100106,
+        "voiceCueSheetName": "cv_100106_{0}"
+    },
+    {
+        "characterMstId": 1001,
+        "iconName": "100107",
+        "modelName": "chara_100107_battle_unit",
+        "sortOrder": 2,
+        "styleFigureMstId": 100107,
+        "voiceCueSheetName": "cv_100107_{0}"
+    },
+    {
+        "characterMstId": 1001,
+        "iconName": "100108",
+        "modelName": "chara_100108_battle_unit",
+        "sortOrder": 5,
+        "styleFigureMstId": 100108,
+        "voiceCueSheetName": "cv_100108_{0}"
+    },
+    {
+        "characterMstId": 1002,
+        "iconName": "100201",
+        "modelName": "chara_100201_battle_unit",
+        "sortOrder": 2,
+        "styleFigureMstId": 100201,
+        "voiceCueSheetName": "cv_100201_{0}"
+    },
+    {
+        "characterMstId": 1002,
+        "iconName": "100202",
+        "modelName": "chara_100202_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 100202,
+        "voiceCueSheetName": "cv_100202_{0}"
+    },
+    {
+        "characterMstId": 1002,
+        "iconName": "100203",
+        "modelName": "chara_100203_battle_unit",
+        "sortOrder": 3,
+        "styleFigureMstId": 100203,
+        "voiceCueSheetName": "cv_100203_{0}"
+    },
+    {
+        "characterMstId": 1002,
+        "iconName": "100207",
+        "modelName": "chara_100207_battle_unit",
+        "sortOrder": 5,
+        "styleFigureMstId": 100207,
+        "voiceCueSheetName": "cv_100207_{0}"
+    },
+    {
+        "characterMstId": 1003,
+        "iconName": "100301",
+        "modelName": "chara_100301_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 100301,
+        "voiceCueSheetName": "cv_100301_{0}"
+    },
+    {
+        "characterMstId": 1003,
+        "iconName": "100302",
+        "modelName": "chara_100302_battle_unit",
+        "sortOrder": 3,
+        "styleFigureMstId": 100302,
+        "voiceCueSheetName": "cv_100302_{0}"
+    },
+    {
+        "characterMstId": 1003,
+        "iconName": "100303",
+        "modelName": "chara_100303_battle_unit",
+        "sortOrder": 2,
+        "styleFigureMstId": 100303,
+        "voiceCueSheetName": "cv_100303_{0}"
+    },
+    {
+        "characterMstId": 1003,
+        "iconName": "100304",
+        "modelName": "chara_100304_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 100304,
+        "voiceCueSheetName": "cv_100304_{0}"
+    },
+    {
+        "characterMstId": 1003,
+        "iconName": "100305",
+        "modelName": "chara_100305_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 100305,
+        "voiceCueSheetName": "cv_100305_{0}"
+    },
+    {
+        "characterMstId": 1003,
+        "iconName": "100306",
+        "modelName": "chara_100306_battle_unit",
+        "sortOrder": 7,
+        "styleFigureMstId": 100306,
+        "voiceCueSheetName": "cv_100306_{0}"
+    },
+    {
+        "characterMstId": 1004,
+        "iconName": "100401",
+        "modelName": "chara_100401_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 100401,
+        "voiceCueSheetName": "cv_100401_{0}"
+    },
+    {
+        "characterMstId": 1004,
+        "iconName": "100402",
+        "modelName": "chara_100402_battle_unit",
+        "sortOrder": 2,
+        "styleFigureMstId": 100402,
+        "voiceCueSheetName": "cv_100402_{0}"
+    },
+    {
+        "characterMstId": 1004,
+        "iconName": "100403",
+        "modelName": "chara_100403_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 100403,
+        "voiceCueSheetName": "cv_100403_{0}"
+    },
+    {
+        "characterMstId": 1004,
+        "iconName": "100407",
+        "modelName": "chara_100407_battle_unit",
+        "sortOrder": 4,
+        "styleFigureMstId": 100407,
+        "voiceCueSheetName": "cv_100407_{0}"
+    },
+    {
+        "characterMstId": 1005,
+        "iconName": "100501",
+        "modelName": "chara_100501_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 100501,
+        "voiceCueSheetName": "cv_100501_{0}"
+    },
+    {
+        "characterMstId": 1005,
+        "iconName": "100502",
+        "modelName": "chara_100502_battle_unit",
+        "sortOrder": 4,
+        "styleFigureMstId": 100502,
+        "voiceCueSheetName": "cv_100502_{0}"
+    },
+    {
+        "characterMstId": 1005,
+        "iconName": "100503",
+        "modelName": "chara_100503_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 100503,
+        "voiceCueSheetName": "cv_100503_{0}"
+    },
+    {
+        "characterMstId": 1005,
+        "iconName": "100504",
+        "modelName": "chara_100504_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 100504,
+        "voiceCueSheetName": "cv_100504_{0}"
+    },
+    {
+        "characterMstId": 1006,
+        "iconName": "100601",
+        "modelName": "chara_100601_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 100601,
+        "voiceCueSheetName": "cv_100601_{0}"
+    },
+    {
+        "characterMstId": 1007,
+        "iconName": "100701",
+        "modelName": "chara_100701_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 100701,
+        "voiceCueSheetName": "cv_100701_{0}"
+    },
+    {
+        "characterMstId": 1007,
+        "iconName": "100702",
+        "modelName": "chara_100702_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 100702,
+        "voiceCueSheetName": "cv_100702_{0}"
+    },
+    {
+        "characterMstId": 1008,
+        "iconName": "100801",
+        "modelName": "chara_100801_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 100801,
+        "voiceCueSheetName": "cv_100801_{0}"
+    },
+    {
+        "characterMstId": 1008,
+        "iconName": "100801",
+        "modelName": "chara_100801_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 100803,
+        "voiceCueSheetName": "cv_100803_{0}"
+    },
+    {
+        "characterMstId": 1008,
+        "iconName": "100804",
+        "modelName": "chara_100804_battle_unit",
+        "sortOrder": 4,
+        "styleFigureMstId": 100804,
+        "voiceCueSheetName": "cv_100804_{0}"
+    },
+    {
+        "characterMstId": 1008,
+        "iconName": "100805",
+        "modelName": "chara_100805_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 100805,
+        "voiceCueSheetName": "cv_100805_{0}"
+    },
+    {
+        "characterMstId": 1009,
+        "iconName": "100901",
+        "modelName": "chara_100901_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 100901,
+        "voiceCueSheetName": "cv_100901_{0}"
+    },
+    {
+        "characterMstId": 1009,
+        "iconName": "100903",
+        "modelName": "chara_100903_battle_unit",
+        "sortOrder": 2,
+        "styleFigureMstId": 100903,
+        "voiceCueSheetName": "cv_100903_{0}"
+    },
+    {
+        "characterMstId": 1010,
+        "iconName": "101001",
+        "modelName": "chara_101001_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 101001,
+        "voiceCueSheetName": "cv_101001_{0}"
+    },
+    {
+        "characterMstId": 1010,
+        "iconName": "101002",
+        "modelName": "chara_101002_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 101002,
+        "voiceCueSheetName": "cv_101002_{0}"
+    },
+    {
+        "characterMstId": 1011,
+        "iconName": "101101",
+        "modelName": "chara_101101_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 101101,
+        "voiceCueSheetName": "cv_101101_{0}"
+    },
+    {
+        "characterMstId": 1012,
+        "iconName": "101201",
+        "modelName": "chara_101201_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 101201,
+        "voiceCueSheetName": "cv_101201_{0}"
+    },
+    {
+        "characterMstId": 1013,
+        "iconName": "101301",
+        "modelName": "chara_101301_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 101301,
+        "voiceCueSheetName": "cv_101301_{0}"
+    },
+    {
+        "characterMstId": 1014,
+        "iconName": "101401",
+        "modelName": "chara_101401_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 101401,
+        "voiceCueSheetName": "cv_101401_{0}"
+    },
+    {
+        "characterMstId": 1015,
+        "iconName": "101501",
+        "modelName": "chara_101501_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 101501,
+        "voiceCueSheetName": "cv_101501_{0}"
+    },
+    {
+        "characterMstId": 1016,
+        "iconName": "101601",
+        "modelName": "chara_101601_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 101601,
+        "voiceCueSheetName": "cv_101601_{0}"
+    },
+    {
+        "characterMstId": 1017,
+        "iconName": "101701",
+        "modelName": "chara_101701_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 101701,
+        "voiceCueSheetName": "cv_101701_{0}"
+    },
+    {
+        "characterMstId": 1018,
+        "iconName": "101801",
+        "modelName": "chara_101801_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 101801,
+        "voiceCueSheetName": "cv_101801_{0}"
+    },
+    {
+        "characterMstId": 1019,
+        "iconName": "101901",
+        "modelName": "chara_101901_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 101901,
+        "voiceCueSheetName": "cv_101901_{0}"
+    },
+    {
+        "characterMstId": 1020,
+        "iconName": "102001",
+        "modelName": "chara_102001_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 102001,
+        "voiceCueSheetName": "cv_102001_{0}"
+    },
+    {
+        "characterMstId": 1021,
+        "iconName": "102101",
+        "modelName": "chara_102101_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 102101,
+        "voiceCueSheetName": "cv_102101_{0}"
+    },
+    {
+        "characterMstId": 1021,
+        "iconName": "102102",
+        "modelName": "chara_102102_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 102102,
+        "voiceCueSheetName": "cv_102102_{0}"
+    },
+    {
+        "characterMstId": 1022,
+        "iconName": "102201",
+        "modelName": "chara_102201_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 102201,
+        "voiceCueSheetName": "cv_102201_{0}"
+    },
+    {
+        "characterMstId": 1023,
+        "iconName": "102301",
+        "modelName": "chara_102301_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 102301,
+        "voiceCueSheetName": "cv_102301_{0}"
+    },
+    {
+        "characterMstId": 1024,
+        "iconName": "102401",
+        "modelName": "chara_102401_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 102401,
+        "voiceCueSheetName": "cv_102401_{0}"
+    },
+    {
+        "characterMstId": 1025,
+        "iconName": "102501",
+        "modelName": "chara_102501_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 102501,
+        "voiceCueSheetName": "cv_102501_{0}"
+    },
+    {
+        "characterMstId": 1026,
+        "iconName": "102601",
+        "modelName": "chara_102601_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 102601,
+        "voiceCueSheetName": "cv_102601_{0}"
+    },
+    {
+        "characterMstId": 1058,
+        "iconName": "105801",
+        "modelName": "chara_105801_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 105801,
+        "voiceCueSheetName": "cv_105801_{0}"
+    },
+    {
+        "characterMstId": 1059,
+        "iconName": "105901",
+        "modelName": "chara_105901_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 105901,
+        "voiceCueSheetName": "cv_105901_{0}"
+    },
+    {
+        "characterMstId": 1061,
+        "iconName": "106101",
+        "modelName": "chara_106101_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 106101,
+        "voiceCueSheetName": "cv_106101_{0}"
+    },
+    {
+        "characterMstId": 1062,
+        "iconName": "106201",
+        "modelName": "chara_106201_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 106201,
+        "voiceCueSheetName": "cv_106201_{0}"
+    },
+    {
+        "characterMstId": 1067,
+        "iconName": "106701",
+        "modelName": "chara_106701_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 106701,
+        "voiceCueSheetName": "cv_106701_{0}"
+    },
+    {
+        "characterMstId": 1068,
+        "iconName": "106801",
+        "modelName": "chara_106801_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 106801,
+        "voiceCueSheetName": "cv_106801_{0}"
+    },
+    {
+        "characterMstId": 1069,
+        "iconName": "106901",
+        "modelName": "chara_106901_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 106901,
+        "voiceCueSheetName": "cv_106901_{0}"
+    },
+    {
+        "characterMstId": 1070,
+        "iconName": "107001",
+        "modelName": "chara_107001_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 107001,
+        "voiceCueSheetName": "cv_107001_{0}"
+    },
+    {
+        "characterMstId": 1071,
+        "iconName": "107101",
+        "modelName": "chara_107101_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 107101,
+        "voiceCueSheetName": "cv_107101_{0}"
+    },
+    {
+        "characterMstId": 1072,
+        "iconName": "107201",
+        "modelName": "chara_107201_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 107201,
+        "voiceCueSheetName": "cv_107201_{0}"
+    },
+    {
+        "characterMstId": 1074,
+        "iconName": "107401",
+        "modelName": "chara_107401_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 107401,
+        "voiceCueSheetName": "cv_107401_{0}"
+    },
+    {
+        "characterMstId": 1076,
+        "iconName": "107601",
+        "modelName": "chara_107601_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 107601,
+        "voiceCueSheetName": "cv_107601_{0}"
+    },
+    {
+        "characterMstId": 1080,
+        "iconName": "108001",
+        "modelName": "chara_108001_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 108001,
+        "voiceCueSheetName": "cv_108001_{0}"
+    },
+    {
+        "characterMstId": 1080,
+        "iconName": "108002",
+        "modelName": "chara_108002_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 108002,
+        "voiceCueSheetName": "cv_108002_{0}"
+    },
+    {
+        "characterMstId": 1081,
+        "iconName": "108101",
+        "modelName": "chara_108101_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 108101,
+        "voiceCueSheetName": "cv_108101_{0}"
+    },
+    {
+        "characterMstId": 1082,
+        "iconName": "108201",
+        "modelName": "chara_108201_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 108201,
+        "voiceCueSheetName": "cv_108201_{0}"
+    },
+    {
+        "characterMstId": 1083,
+        "iconName": "108301",
+        "modelName": "chara_108301_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 108301,
+        "voiceCueSheetName": "cv_108301_{0}"
+    },
+    {
+        "characterMstId": 1084,
+        "iconName": "108401",
+        "modelName": "chara_108401_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 108401,
+        "voiceCueSheetName": "cv_108401_{0}"
+    },
+    {
+        "characterMstId": 1086,
+        "iconName": "108601",
+        "modelName": "chara_108601_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 108601,
+        "voiceCueSheetName": "cv_108601_{0}"
+    },
+    {
+        "characterMstId": 1086,
+        "iconName": "108602",
+        "modelName": "chara_108602_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 108602,
+        "voiceCueSheetName": "cv_108602_{0}"
+    },
+    {
+        "characterMstId": 1090,
+        "iconName": "109001",
+        "modelName": "chara_109001_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 109001,
+        "voiceCueSheetName": "cv_109001_{0}"
+    },
+    {
+        "characterMstId": 1092,
+        "iconName": "109201",
+        "modelName": "chara_109201_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 109201,
+        "voiceCueSheetName": "cv_109201_{0}"
+    },
+    {
+        "characterMstId": 1098,
+        "iconName": "109801",
+        "modelName": "chara_109801_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 109801,
+        "voiceCueSheetName": "cv_109801_{0}"
+    },
+    {
+        "characterMstId": 1104,
+        "iconName": "110401",
+        "modelName": "chara_110401_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 110401,
+        "voiceCueSheetName": "cv_110401_{0}"
+    },
+    {
+        "characterMstId": 1107,
+        "iconName": "110701",
+        "modelName": "chara_110701_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 110701,
+        "voiceCueSheetName": "cv_110701_{0}"
+    },
+    {
+        "characterMstId": 1107,
+        "iconName": "110702",
+        "modelName": "chara_110702_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 110702,
+        "voiceCueSheetName": "cv_110702_{0}"
+    },
+    {
+        "characterMstId": 1114,
+        "iconName": "111401",
+        "modelName": "chara_111401_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 111401,
+        "voiceCueSheetName": "cv_111401_{0}"
+    },
+    {
+        "characterMstId": 1114,
+        "iconName": "111402",
+        "modelName": "chara_111402_battle_unit",
+        "sortOrder": 2,
+        "styleFigureMstId": 111402,
+        "voiceCueSheetName": "cv_111402_{0}"
+    },
+    {
+        "characterMstId": 1115,
+        "iconName": "111501",
+        "modelName": "chara_111501_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 111501,
+        "voiceCueSheetName": "cv_111501_{0}"
+    },
+    {
+        "characterMstId": 1116,
+        "iconName": "111601",
+        "modelName": "chara_111601_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 111601,
+        "voiceCueSheetName": "cv_111601_{0}"
+    },
+    {
+        "characterMstId": 1117,
+        "iconName": "111701",
+        "modelName": "chara_111701_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 111701,
+        "voiceCueSheetName": "cv_111701_{0}"
+    },
+    {
+        "characterMstId": 1120,
+        "iconName": "112001",
+        "modelName": "chara_112001_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 112001,
+        "voiceCueSheetName": "cv_112001_{0}"
+    },
+    {
+        "characterMstId": 1124,
+        "iconName": "112401",
+        "modelName": "chara_112401_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 112401,
+        "voiceCueSheetName": "cv_112401_{0}"
+    },
+    {
+        "characterMstId": 1125,
+        "iconName": "112501",
+        "modelName": "chara_112501_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 112501,
+        "voiceCueSheetName": "cv_112501_{0}"
+    },
+    {
+        "characterMstId": 1126,
+        "iconName": "112601",
+        "modelName": "chara_112601_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 112601,
+        "voiceCueSheetName": "cv_112601_{0}"
+    },
+    {
+        "characterMstId": 1133,
+        "iconName": "113301",
+        "modelName": "chara_113301_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 113301,
+        "voiceCueSheetName": "cv_113301_{0}"
+    },
+    {
+        "characterMstId": 1001,
+        "iconName": "113701",
+        "modelName": "chara_113701_battle_unit",
+        "sortOrder": 3,
+        "styleFigureMstId": 113701,
+        "voiceCueSheetName": "cv_113701_{0}"
+    },
+    {
+        "characterMstId": 1002,
+        "iconName": "113801",
+        "modelName": "chara_113801_battle_unit",
+        "sortOrder": 4,
+        "styleFigureMstId": 113801,
+        "voiceCueSheetName": "cv_113801_{0}"
+    },
+    {
+        "characterMstId": 1003,
+        "iconName": "113901",
+        "modelName": "chara_113901_battle_unit",
+        "sortOrder": 3,
+        "styleFigureMstId": 113901,
+        "voiceCueSheetName": "cv_113901_{0}"
+    },
+    {
+        "characterMstId": 1115,
+        "iconName": "114401",
+        "modelName": "chara_114401_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 114401,
+        "voiceCueSheetName": "cv_114401_{0}"
+    },
+    {
+        "characterMstId": 1145,
+        "iconName": "114501",
+        "modelName": "chara_114501_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 114501,
+        "voiceCueSheetName": "cv_114501_{0}"
+    },
+    {
+        "characterMstId": 1146,
+        "iconName": "114601",
+        "modelName": "chara_114601_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 114601,
+        "voiceCueSheetName": "cv_114601_{0}"
+    },
+    {
+        "characterMstId": 1149,
+        "iconName": "114901",
+        "modelName": "chara_114901_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 114901,
+        "voiceCueSheetName": "cv_114901_{0}"
+    },
+    {
+        "characterMstId": 1150,
+        "iconName": "115001",
+        "modelName": "chara_115001_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 115001,
+        "voiceCueSheetName": "cv_115001_{0}"
+    },
+    {
+        "characterMstId": 1151,
+        "iconName": "115101",
+        "modelName": "chara_115101_battle_unit",
+        "sortOrder": 1,
+        "styleFigureMstId": 115101,
+        "voiceCueSheetName": "cv_115101_{0}"
+    },
+    {
+        "characterMstId": 1152,
+        "iconName": "115201",
+        "modelName": "chara_115201_battle_unit",
+        "sortOrder": 0,
+        "styleFigureMstId": 115201,
+        "voiceCueSheetName": "cv_115201_{0}"
+    }
+]

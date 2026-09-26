@@ -1,0 +1,34 @@
+[
+    {
+        "collaborationBgmCueName": "music_music_02_01_mono_sutekimeppou_01",
+        "collaborationBgmCueSheetName": "music_music_02_01_mono_sutekimeppou",
+        "collaborationMstId": 1,
+        "collaborationMusicMstId": 1,
+        "defaultBgmCueName": "bgm01_adv_everyday2",
+        "defaultBgmCueSheetName": "bgm_adv"
+    },
+    {
+        "collaborationBgmCueName": "music_music_02_01_mono_sutekimeppou_02",
+        "collaborationBgmCueSheetName": "music_music_02_01_mono_sutekimeppou",
+        "collaborationMstId": 1,
+        "collaborationMusicMstId": 2,
+        "defaultBgmCueName": "bgm01_adv_everyday2",
+        "defaultBgmCueSheetName": "bgm_adv"
+    },
+    {
+        "collaborationBgmCueName": "music_music_02_02_mono_hyouri",
+        "collaborationBgmCueSheetName": "music_music_02_02_mono_hyouri",
+        "collaborationMstId": 1,
+        "collaborationMusicMstId": 3,
+        "defaultBgmCueName": "bgm02_dng_madoka_Patricia1",
+        "defaultBgmCueSheetName": "bgm_dng"
+    },
+    {
+        "collaborationBgmCueName": "music_music_02_03_mono_zaregoto",
+        "collaborationBgmCueSheetName": "music_music_02_03_mono_zaregoto",
+        "collaborationMstId": 1,
+        "collaborationMusicMstId": 4,
+        "defaultBgmCueName": "bgm01_adv_comical2",
+        "defaultBgmCueSheetName": "bgm_adv"
+    }
+]

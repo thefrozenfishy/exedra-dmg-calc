@@ -470,7 +470,7 @@ function sumRatioTypes(unit: KiokuState, types: string[], scale: number): number
 // AbilityEffectInfo.EffectValue1 is `int`, not a /1000 or /10 ratio), matching
 // CompareContent.CHARGE_POINT's sibling read of `currentMagic` also being unscaled.
 export function getThreatWeight(unit: KiokuState): number {
-    let weight = aggro[unit.kioku.data.role];
+    let weight = aggro[unit.kioku.data.role as keyof typeof aggro] ?? 0; // enemies: not in GetUnitWeightDic (CharacterParameter only)
     for (const d of orderedActiveEffectsInApplicationOrder(unit)) {
         if (d.abilityEffectType === "UP_HATE") weight += d.value1;
         else if (d.abilityEffectType === "DWN_HATE") weight -= d.value1;
