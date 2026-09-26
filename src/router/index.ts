@@ -5,6 +5,7 @@ import SingleTeamPage from '../pages/SingleTeamPage.vue'
 import About from '../pages/About.vue'
 import AccountHasPage from '../pages/AccountHasPage.vue'
 import PvpTeamPage from '../pages/PvpTeamPage.vue'
+import PvESimulatorPage from '../pages/PvESimulatorPage.vue'
 import Pvp101Page from '../pages/Pvp101Page.vue'
 import LinkRaid from '../pages/LinkRaid.vue'
 import CrysReroll from '../pages/CrysReroll.vue'
@@ -30,7 +31,9 @@ const routes = [
     { path: '/account-compare', name: 'Account Comparison', component: AccountComparisonPage, meta: { version: 0 } },
     { path: '/sa-simulator-multiple', name: 'Best SA Team Calculator', component: BestTeamPage, meta: { version: 0 } },
     { path: '/sa-simulator-single', name: 'Single Battle Calculator', component: SingleTeamPage, meta: { version: 0 } },
-    { path: '/pvp-simulator', name: 'PvP Calculator', component: PvpTeamPage, meta: { version: 1 } },
+    { path: '/pvp-simulator', name: 'PvP Simulator', component: PvpTeamPage, meta: { version: 1 } },
+    // Beta only (linked from the beta nav row in App.vue): the battle engine against quest stages.
+    { path: '/pve-simulator', name: 'PvE Simulator', component: PvESimulatorPage },
     { path: '/pvp-how-to', name: 'PvP 101', component: Pvp101Page, meta: { version: 0 } },
     { path: '/kioku-grid', name: 'Kioku Grid', component: KiokuGridPage, meta: { version: 1 } },
     { path: '/heartphial', name: 'Heartphial', component: HeartphialPage, meta: { version: 1 } },

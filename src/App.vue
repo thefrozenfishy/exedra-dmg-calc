@@ -115,6 +115,7 @@ function routeForPath(path: string) {
           </template>
         </div>
         <div v-if="beta">
+          <router-link to="/pve-simulator">PvE Simulator</router-link>
           <router-link to="/beta">Beta Settings</router-link>
           <router-link to="/analytics">Analytics</router-link>
           <router-link to="/analytics-user">User Analytics</router-link>
