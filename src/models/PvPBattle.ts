@@ -40,6 +40,13 @@ export class PvPBattle {
         this.team2.finishSetup(this.team1)
         this.team1.addEffectsToBank()
         this.team2.addEffectsToBank()
+        // [CONFIRMED 3.19] GameDirectorBase$$InitializeBattle: every unit's turn gauge is reset
+        // (b__46_2: speed = GetProcessedSpeed, gauge = 10000/speed) BEFORE
+        // PassiveSkill.TriggeringOnBattleStart, so battle-start HASTE/SLOW move a real gauge
+        // (previously the first reset ran afterwards and wiped them). SPD states added by the
+        // passives then rescale the gauge (StateAbilityEffect -> UpdateTurnGaugeBySpeed), which
+        // recomputeDerivedStats' updateSpd() does.
+        for (const k of [...this.team1.kiokuStates, ...this.team2.kiokuStates]) k.resetDistanceRemaining()
         this.team1.applyPassivesForTiming(ProcessTiming.BATTLE_START, TargetType.init)
         this.team2.applyPassivesForTiming(ProcessTiming.BATTLE_START, TargetType.init)
         this.team1.recomputeDerivedStats()

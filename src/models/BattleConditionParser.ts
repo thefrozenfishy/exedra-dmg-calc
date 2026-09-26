@@ -483,7 +483,7 @@ function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state
         case CompareContent.IS_ROLE_TYPE:
             return roleMap[cond.compareValue] === battleUnit.kioku.data.role;
         case CompareContent.BREAK_DAMAGE_RECEIVE_RATE: {
-            const rate = (battleUnit.kioku.data as any).breakedDamageReceiveRate ?? 100;
+            const rate = battleUnit.breakedDamageReceiveRate;
             return compareFloat(cond.compareOperator, rate, cond.compareValue);
         }
         case CompareContent.IS_MAX_BREAK_DAMAGE_RECEIVE_RATE: {
@@ -594,7 +594,10 @@ function checkTeamCondition(team: PvPTeam, cond: BattleCondition): boolean {
             // approximated as "currently broken" rather than "newly broken this
             // action" (the source's notice-based predicate likely distinguishes these;
             // not independently confirmed which).
-            return compareInt(cond.compareOperator, units.filter(u => u.isBroken).length, cond.compareValue);
+            // [CONFIRMED 3.19] BattleUnitTeamConditionChecker case 0x12e: Count(notices where
+            // BreakDamageInfo != null) - units broken BY this skill, not "currently broken" (that
+            // reading kept e.g. Concentrated Missile Fire's follow-up re-triggering forever).
+            return compareInt(cond.compareOperator, team.lastActionNotices.filter(n => n.isBreak).length, cond.compareValue);
         case CompareContent.CTD_UNIT_COUNT:
             return compareInt(cond.compareOperator, team.lastActionNotices.filter(n => n.isCritical).length, cond.compareValue);
         case CompareContent.TOTAL_DAMAGE:
@@ -728,6 +731,10 @@ function isMatchCondition(cond: BattleCondition, state: BattleState): boolean {
 export const isConditionSetActive = (eff: SkillDetail, state: BattleState) =>
     isConditionSetActiveForPvP(eff.activeConditionSetIdCsv.split(","), state)
     && isConditionSetActiveForPvP(eff.startConditionSetIdCsv.split(","), state)
+
+// State activity (UnitStateBase.IsActive): the active condition set only.
+export const isActiveConditionSetMet = (eff: SkillDetail, state: BattleState) =>
+    isConditionSetActiveForPvP((eff.activeConditionSetIdCsv ?? "").split(","), state)
 
 export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], state: BattleState): boolean =>
     conditionSetIdCsvList.every(conditionSetIdCsv => conditionSetIdCsv.split(",").every(conditionSetId => {

@@ -1,3 +1,52 @@
+# Revision 7 - passive triggers (3.19.0)
+
+Trigger: Thunder Torrent's battle-start HASTE had no effect on this branch.
+
+## R7.1 Battle start
+- `GameDirectorBase$$InitializeBattle`: every unit's turn gauge is reset (b__46_2, 10000/speed)
+  BEFORE `PassiveSkill.TriggeringOnBattleStart`. The port reset it afterwards, wiping every
+  battle-start HASTE/SLOW (Thunder Torrent, Dark Art Dominion, ...). Now reset first; SPD states
+  then rescale the gauge (StateAbilityEffect -> UpdateTurnGaugeBySpeed).
+- Not ported: `IBattleStartTriggerPriority` ordering inside TriggeringOnBattleStart (only matters
+  for effect-value-variation / add-turn / DwnBarrierValue states).
+
+## R7.2 Passives are triggers, not states
+- The port kept every passive detail in one bank that ALSO counted as active states, gated only by
+  the active condition. So every timed or conditional passive buff (e.g. "on attack end: SPD +10%
+  for 1 turn") was permanently active from battle start until its first trigger, and then deleted
+  so it never fired again. Stacking passives (UP_ATK_ACCUM_RATIO on attack end, 331 rows) sat at
+  one stack forever.
+- Now: `KiokuState.passiveSkills` = triggers; a trigger adds a timed state (activeEffectDetails)
+  or a permanent turn-0 state (passiveEffectDetails, IAccum stacks merge). Nothing is active
+  before it fires.
+- `UnitStateBase$$IsActive` checks only the ActiveConditionSet; the port also re-checked start
+  conditions on every stat read (`isActiveConditionSetMet`).
+
+## R7.3 Timing dispatch (`PvPTeam.fireTiming`)
+- `PassiveSkill$$Triggering` (static, 0x14a2c20): for a timing, EVERY living unit on BOTH teams
+  runs its passives (actor, main target, skill in the condition bundle), then every living unit
+  runs AfterProcess (9) (lambda b__5). The port fired only the acting team, never fired TurnEnd (6)
+  or AfterProcess (9, 421 rows), and fired an extra actor-less ATTACK_END for both teams after
+  every action.
+- `ActExecutor`: TurnBeginAct -> TurnStart (3); TurnUnitAct -> gauge reset, ExecuteSkill ->
+  AttackEnd (5); TurnEndAct -> TurnEnd (6) then `PassingTurn(1)`. Ultimates (SpecialAttackAct) and
+  follow-ups (AdditionalSkillAct) only get ExecuteSkill: no TurnStart/TurnEnd and no duration tick
+  (the port ticked durations after every action including ultimates).
+- Each ExecuteSkill has its own notice bundle: tallies reset before follow-ups too.
+- Team conditions (FriendTeam/OpponentTeam) read notices of units IN that team
+  (`IsMatchCondition` lambda b__12); notices were pushed to the attacker's team, inverting them.
+- 302 BREAK_UNIT_COUNT = notices with BreakDamageInfo (broken by this skill), not "currently broken".
+- Follow-ups (`AdditionalSkillActAbilityEffectBase$$Triggering` 0x18ea740): none from a broken or
+  unable-to-act unit, none while the same unit's same follow-up is running/queued.
+- Fixed a crash in the hard-coded ally targeting for skills 1066 (Thunder Torrent), 1161, 1072.
+
+## R7.4 Still open
+- HoT/DOT ticks stay in `decrementActiveEffects` (now at TurnEnd). The game runs
+  `ContinuousRecoveryProcess` at TurnBegin; slip damage timing not re-read.
+- FuaMap is keyed by skill id only, so two units with the same follow-up skill in one timing
+  collapse into one.
+- SeasonBuffActive (10) is solo-raid only; not fired.
+
 # Revision 6 - targeting and break (3.19.0)
 
 Trigger: Final Fatebloom's range-3 skill/ultimate only hit 2 of 5 enemies and broke them unevenly.

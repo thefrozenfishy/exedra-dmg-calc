@@ -1,7 +1,7 @@
 import { Ailment, KiokuRole } from "../types/enums";
 import { type AffectedUnitNotice, type BattleEvent, BattleState, aggro, maxMeters, mpGainFromAction, PassiveSkill, SkillDetail, skillDetailId, SkillKey, targetRange, TargetType, targetTypeToLvl, TargetTypeLookup } from "../types/KiokuTypes";
 import { skillDetails } from "../utils/helpers";
-import { isConditionSetActive, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
+import { isConditionSetActive, isActiveConditionSetMet, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
 import { PvPKioku } from "./PvPKioku";
 import { damageBaseTypeFromEffectType, getAttackDamageResult, getSlipDamageResult, getAdditionalDamageBase, getFinalDamageExtra, damageCutByBarrier, DamageBaseType, BattleType, PVP_POLICY } from "./DamageCalculator";
 import { mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum, getFinalDamageRatio, getProcessedSpeedWithBreakdown } from "./UnitStateEngine";
@@ -189,6 +189,9 @@ interface FuaTrigger {
 }
 type FuaMap = Record<number, FuaTrigger>;
 
+// Follow-ups currently executing (see triggerFua).
+const runningFollowUps = new Set<string>()
+
 function mergeFuaMaps(a: FuaMap, b: FuaMap): FuaMap {
     return { ...a, ...b };
 }
@@ -225,6 +228,11 @@ export class KiokuState {
 
     team: PvPTeam
 
+    // [CONFIRMED 3.19 - R7] Passive skills are TRIGGERS (PassiveSkill -> AbilityEffectLauncher),
+    // not states. `passiveSkills` is the trigger bank; nothing in it affects stats.
+    // `passiveEffectDetails` holds the PERMANENT (turn 0) states a trigger has actually added to
+    // this unit (UnitCondition.AddUnitState). Timed states go to activeEffectDetails.
+    passiveSkills: Map<string, PassiveSkill> = new Map()
     passiveEffectDetails: Map<string, PassiveSkill> = new Map()
     // NEW: `_applierState` tracks the KiokuState that applied this effect (not just
     // their display name, already tracked separately as `applier: string`) - needed so
@@ -561,8 +569,10 @@ export class KiokuState {
     // Public wrapper so UnitStateEngine.ts (which lives outside this class) can reuse
     // the exact same "is this effect currently active" check that updateSpd() and
     // filteredEffects() already use internally.
+    // [CONFIRMED 3.19] UnitStateBase$$IsActive checks only the state's ActiveConditionSet. The
+    // start conditions belong to the trigger and were already checked when it fired.
     isEffectCurrentlyActive(detail: SkillDetail): boolean {
-        return isConditionSetActive(detail, this.stateGen(this, this))
+        return isActiveConditionSetMet(detail, this.stateGen(this, this))
     }
 
     updateMPGain(): void {
@@ -603,7 +613,7 @@ export class KiokuState {
         const currents: Record<string, SkillDetail[]> = {};
         [...this.passiveEffectDetails.values(), ...this.activeEffectDetails.values()]
             .forEach(detail => {
-                if (!isConditionSetActive(detail, this.stateGen(this, this))) return
+                if (!isActiveConditionSetMet(detail, this.stateGen(this, this))) return
                 if (!(detail.abilityEffectType in currents)) currents[detail.abilityEffectType] = []
                 currents[detail.abilityEffectType].push(detail)
             })
@@ -612,7 +622,7 @@ export class KiokuState {
 
     addEffectToBank(detail: SkillDetail) {
         if ("passiveSkillMstId" in detail) {
-            this.passiveEffectDetails.set(String(skillDetailId(detail)), { ...detail, applier: this.kioku.name })
+            this.passiveSkills.set(String(skillDetailId(detail)), { ...detail, applier: this.kioku.name })
         } else {
             console.warn("An active thing was added to the bank??")
         }
@@ -645,6 +655,18 @@ export class KiokuState {
             return true
         }
         t.activeEffectDetails.set(key, { applier, ...detail, _isExemptPassingTurnOnce: true, _accumCount: 1, _applierState: applierState })
+        return true
+    }
+
+    private storePermanentState(t: KiokuState, detail: SkillDetail, applier: string, applierState: KiokuState): boolean {
+        if (!rollAppliesEffect(detail, applierState, t, this.team.rng)) return false;
+        const key = String(skillDetailId(detail))
+        const existing = t.passiveEffectDetails.get(key)
+        if (existing) {
+            if (ACCUM_RATIO_EFFECT_TYPES.has(detail.abilityEffectType)) mergeAccumEffect(existing, detail)
+            return true
+        }
+        t.passiveEffectDetails.set(key, { applier, ...detail, _accumCount: 1, _applierState: applierState } as any)
         return true
     }
 
@@ -712,8 +734,16 @@ export class KiokuState {
                 sourceIsTeam1: this.team.isTeam1, targetIsTeam1: target.team.isTeam1,
                 breakDamage: brk.decreased, broke: brk.broke, breakRateUp: rateUp || undefined,
             })
+            // Notice flags read by AttackEnd conditions: 302 counts notices that carry break
+            // bonus info (the unit broke THIS skill), 108/308 the broken rate reaching its max.
+            result.notice.isBreak = brk.broke
+            if (rateUp > 0 && target.breakedDamageReceiveRate >= PVP_POLICY.maxBreakDamageReceiveRate / 10) result.notice.isBreakedDamageReceiveRateBecomeMax = true
             target.lastNotice = result.notice;
-            this.team.lastActionNotices.push(result.notice);
+            // [CONFIRMED 3.19] Condition$$IsMatchCondition builds a team check from the notices
+            // whose affected unit belongs to THAT team (lambda b__12), so a notice belongs to the
+            // TARGET's team. (It used to go to the attacker's team, inverting FriendTeam /
+            // OpponentTeam conditions such as "an enemy took a crit".)
+            target.team.lastActionNotices.push(result.notice);
             this.team.appliedSkillEffectTypesThisAction.add(detail.abilityEffectType);
             if (result.shieldMultiplierApplied) {
                 target.consumeShieldCharges()
@@ -922,10 +952,9 @@ export class KiokuState {
         // filterByRoleAtWeightedRandomWithHate, which is what actually consumes it now
         // (previously nothing did - `aggro` was write-only).
         if (detail.turn) {
+            // (Timed passive states used to be deleted from the bank after their first trigger,
+            // so e.g. an "on attack end: SPD +10% for 1 turn" passive fired once per battle.)
             effTargets.forEach(t => this.storeTimedEffect(t, detail, this.kioku.name, this))
-            if ("passiveSkillDetailMstId" in detail) {
-                this.passiveEffectDetails.delete(String(skillDetailId(detail)))
-            }
         } else if (detail.abilityEffectType === "HASTE") {
             // [CONFIRMED 3.19] HasteAbilityEffect$$Triggering (0x18f4840): SubtractGaugeValue((float)v/1000f)
             effTargets.forEach(t => t.addGaugeRate(-f32(f32(detail.value1) / 1000), ++globalTurnShiftCounter))
@@ -990,11 +1019,9 @@ export class KiokuState {
                 t.currentMagic = Math.max(0, Math.min(t.currentMaxMagic, t.currentMagic + detail.value1));
             })
         } else if ("passiveSkillDetailMstId" in detail) {
-            if (targetType === TargetType.init) {
-                effTargets.forEach(t => t.passiveEffectDetails.set(String(skillDetailId(detail)), detail))
-            } else {
-                console.warn("Passive was triggered late, handle?", this, effTargets, detail)
-            }
+            // Permanent (turn 0) state added by a passive trigger, at any timing. Re-triggering
+            // an IAccum state adds a stack (e.g. UP_ATK_ACCUM_RATIO on every attack end).
+            effTargets.forEach(t => this.storePermanentState(t, detail, this.kioku.name, this))
         } else {
             console.warn("Active without turn (possibly a RECOGNIZED-ONLY effect type not yet implemented - see PvPTeam.ts's friendlySkills/enemySkills header notes and MISSING_AND_UNCERTAIN.md):", detail)
         }
@@ -1123,25 +1150,47 @@ export class PvPTeam {
     // team's recomputeDerivedStats() (see the class-level comment above). Behaviorally
     // identical to the old triggerPassives for this part - nothing here changed except
     // that the derived-stat recompute no longer happens inline.
-    applyPassivesForTiming(timing: ProcessTiming, lastAction?: TargetType, lastActor?: KiokuState): FuaMap {
+    // [CONFIRMED 3.19] PassiveSkill$$Triggering (static, 0x14a2c20): for the given timing, every
+    // LIVING unit's passive skills run through AbilityEffectLauncher with the acting unit, its
+    // main target and skill in the condition bundle; start conditions decide who reacts. Target
+    // side comes from the effect class (EffectTargetSide.ts); passives are range -1 (self) or 3
+    // (every living unit of that side) apart from follow-up triggers.
+    applyPassivesForTiming(timing: ProcessTiming, lastAction?: TargetType, lastActor?: KiokuState, mainTarget?: KiokuState): FuaMap {
         let additionalAct: FuaMap = {};
         for (const k of this.kiokuStates) {
-            k.passiveEffectDetails.forEach(detail => {
+            if (k.isDead) continue
+            k.passiveSkills.forEach(detail => {
+                if (!isTimingCorrect(timing, detail)) return
                 if (conditionSetRequiresActorIsSelf(detail) && (!lastActor || lastActor !== k)) return
-                if (isTimingCorrect(timing, detail)) {
-                    if (isOpponentEffect(detail.abilityEffectType)) {
-                        this.otherTeam.kiokuStates.forEach(target => {
-                            const fua = k.applyEffect(target, detail, lastAction, lastActor)
-                            if (fua) additionalAct[fua] = { caster: k, triggerTarget: target }
-                        })
-                    } else {
-                        const fua = k.applyEffect(k, detail, lastAction, lastActor)
-                        if (fua) additionalAct[fua] = { caster: k, triggerTarget: lastActor }
-                    }
+                if (isOpponentEffect(detail.abilityEffectType)) {
+                    filterAlive(this.otherTeam.kiokuStates).forEach(target => {
+                        const fua = k.applyEffect(target, detail, lastAction, lastActor, mainTarget)
+                        if (fua) additionalAct[fua] = { caster: k, triggerTarget: target }
+                    })
+                } else {
+                    const fua = k.applyEffect(k, detail, lastAction, lastActor, mainTarget)
+                    if (fua) additionalAct[fua] = { caster: k, triggerTarget: lastActor }
                 }
             })
         }
         return additionalAct;
+    }
+
+    // Team 1 first, then team 2 (BattleUnit dictionary order: allies before enemies).
+    private get bothTeams(): [PvPTeam, PvPTeam] {
+        return this.isTeam1 ? [this, this.otherTeam] : [this.otherTeam, this]
+    }
+
+    // One passive timing for the WHOLE battle, as the game does it: the timing itself for every
+    // living unit on both teams, then AfterProcess (9) for every living unit (lambda b__5 of
+    // PassiveSkill.Triggering runs Launcher.Triggering(9, ...) right after), then derived stats,
+    // then each team's queued follow-up skills (AdditionalSkillAct).
+    fireTiming(timing: ProcessTiming, actor?: KiokuState, mainTarget?: KiokuState, actionType?: TargetType): void {
+        const teams = this.bothTeams
+        const fuas = teams.map(t => t.applyPassivesForTiming(timing, actionType, actor, mainTarget))
+        teams.forEach((t, i) => { fuas[i] = mergeFuaMaps(fuas[i], t.applyPassivesForTiming(ProcessTiming.AFTER_PROCESS, actionType, actor, mainTarget)) })
+        teams.forEach(t => t.recomputeDerivedStats())
+        teams.forEach((t, i) => t.triggerFua(fuas[i]))
     }
 
     // The recompute half of what triggerPassives used to do in one shot - see the
@@ -1161,10 +1210,8 @@ export class PvPTeam {
     // where applying effects and immediately recomputing derived stats for just THIS
     // team before the next thing happens is the correct, already-working sequential
     // model. Only the one-time BATTLE_START setup needed the two halves decoupled.
-    triggerPassives(timing: ProcessTiming, lastAction?: TargetType, lastActor?: KiokuState): FuaMap {
-        const additionalAct = this.applyPassivesForTiming(timing, lastAction, lastActor)
-        this.recomputeDerivedStats()
-        return additionalAct;
+    triggerPassives(timing: ProcessTiming, lastAction?: TargetType, lastActor?: KiokuState): void {
+        this.fireTiming(timing, lastActor, this.lastMainTarget, lastAction)
     }
 
     traverseSeconds(seconds: number): void {
@@ -1199,20 +1246,25 @@ export class PvPTeam {
             // the generic FULL AUTO system below - these bespoke rules take priority over
             // it exactly like the source's own character-unique classes would). ---
             const eligableTargets = this.kiokuStates.filter(k => k !== actor)
-            if (effectId === 1066) { // Hazuki skill
-                return eligableTargets
-                    .filter(k => [KiokuRole.Attacker, KiokuRole.Breaker].includes(k.kioku.data.role))
-                    .reduce((s, k) => s.secondsUntilAbleToAct() < k.secondsUntilAbleToAct() ? k : s, { secondsUntilAbleToAct: () => 0 }) as KiokuState
+            // (Fixed: these used a placeholder object as the reduce seed and returned it when no
+            // ally qualified, crashing on e.g. an all-dead or all-ready team. Now they fall back
+            // to the generic AI.)
+            const pick = (units: KiokuState[], better: (a: KiokuState, b: KiokuState) => boolean) =>
+                units.filter(k => !k.isDead).reduce<KiokuState | null>((best, k) => !best || better(k, best) ? k : best, null)
+            if (effectId === 1066) { // Thunder Torrent battle skill: Attacker/Breaker ally furthest from acting
+                const p = pick(eligableTargets.filter(k => [KiokuRole.Attacker, KiokuRole.Breaker].includes(k.kioku.data.role)),
+                    (a, b) => a.secondsUntilAbleToAct() > b.secondsUntilAbleToAct())
+                if (p) return p
             }
-            if (effectId === 1161) { // Mabayu skill
-                return eligableTargets
-                    .filter(k => [KiokuRole.Attacker, ].includes(k.kioku.data.role))
-                    .reduce((s, k) => s.kioku.getBaseAtk() < k.kioku.getBaseAtk() ? k : s, { kioku: { getBaseAtk: () => 0 } }) as KiokuState
+            if (effectId === 1161) { // Mabayu skill: highest base ATK Attacker ally
+                const p = pick(eligableTargets.filter(k => k.kioku.data.role === KiokuRole.Attacker),
+                    (a, b) => a.kioku.getBaseAtk() > b.kioku.getBaseAtk())
+                if (p) return p
             }
-            if (effectId === 1072) { // Rika skill
-                return eligableTargets
-                    .filter(k => [KiokuRole.Attacker, KiokuRole.Breaker].includes(k.kioku.data.role))
-                    .reduce((s, k) => s.currentMp > k.currentMp ? k : s, { currentMp: 999 }) as KiokuState
+            if (effectId === 1072) { // Rika skill: Attacker/Breaker ally with the least MP
+                const p = pick(eligableTargets.filter(k => [KiokuRole.Attacker, KiokuRole.Breaker].includes(k.kioku.data.role)),
+                    (a, b) => a.currentMp < b.currentMp)
+                if (p) return p
             }
             // --- Generic FULL AUTO targeting AI (covers DMG_ATK/DEF/HP/RANDOM and every
             // other single-target effect type, per its own confirmed or best-effort
@@ -1244,7 +1296,12 @@ export class PvPTeam {
         return []
     }
 
+    // Main target of the last executed skill (first unit hit by its damage), for AttackEnd
+    // conditions such as IS_MAIN_TARGET.
+    lastMainTarget: KiokuState | undefined
+
     act(actor: KiokuState, effectName: TargetType): FuaMap {
+        this.lastMainTarget = undefined
         if (effectName === TargetType.attackId) {
             this.currentSp++;
         } else if (effectName === TargetType.skillId) {
@@ -1275,6 +1332,7 @@ export class PvPTeam {
                 possibleTargets = this.otherTeam.kiokuStates
             }
             const targets = this.sliceTargets(actor, possibleTargets, detail)
+            if (detail.abilityEffectType.startsWith("DMG_") && targets[0] && !this.lastMainTarget) this.lastMainTarget = targets[0]
             for (const target of targets) {
                 const fua = actor.applyEffect(target, detail, effectName, actor, targets[0])
                 if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
@@ -1303,10 +1361,12 @@ export class PvPTeam {
 
     useAttackOrSkill(): [KiokuState, TargetType] {
         const actor = this.getNextActor()
-        actor.resetDistanceRemaining()
+        // [CONFIRMED 3.19] ActExecutor: TurnBeginAct (break reset, TurnStart passives with this
+        // unit as actor) -> TurnUnitAct (UnitTurnGauge.Reset, then ExecuteSkill) -> TurnEndAct.
         actor.exitBreak()
         let effType = this.currentSp ? TargetType.skillId : TargetType.attackId
-        this.triggerPassives(ProcessTiming.TURN_START, effType)
+        this.fireTiming(ProcessTiming.TURN_START, actor, undefined, effType)
+        actor.resetDistanceRemaining()
         // [RECONSTRUCTED - see KiokuState.canNotAction] a stunned unit's turn still comes
         // up (gauge already reset above) and TURN_START passives still fire, but the
         // actual attack/skill is skipped entirely - no target resolution, no damage, no
@@ -1344,6 +1404,11 @@ export class PvPTeam {
             }
             actor.currentComboActionStep = 0
         }
+        // [CONFIRMED 3.19] ActExecutor$$TurnEnd: TurnEnd passives (actor = this unit), then the
+        // unit's states pass one turn (BattleUnit.PassingTurn(1)). Ultimates and follow-ups have
+        // no TurnEnd, so they don't tick durations.
+        this.fireTiming(ProcessTiming.TURN_END, actor, undefined, effType)
+        actor.decrementActiveEffects()
         return [actor, effType]
     }
 
@@ -1355,45 +1420,65 @@ export class PvPTeam {
         // Reset per-action team-level tallies - see BattleConditionParser.ts's
         // team-scoped notice/effect-type conditions, which are meant to read "what
         // happened THIS action", not a stale accumulation from turns ago.
-        this.appliedSkillEffectTypesThisAction = new Set();
-        this.lastActionNotices = [];
-        this.otherTeam.appliedSkillEffectTypesThisAction = new Set();
-        this.otherTeam.lastActionNotices = [];
-
-        let fuas = this.act(actor, effType)
-        fuas = mergeFuaMaps(fuas, this.triggerPassives(ProcessTiming.ATTACK_END, effType, actor))
-        this.triggerFua(fuas)
-        actor.decrementActiveEffects()
+        this.resetActionTallies()
+        // [CONFIRMED 3.19] ActExecutor$$ExecuteSkill: the skill, then AttackEnd passives for every
+        // living unit (actor, main target, skill passed along), then queued follow-ups.
+        const skillFuas = this.act(actor, effType)
+        this.fireTiming(ProcessTiming.ATTACK_END, actor, this.lastMainTarget, effType)
+        this.triggerFua(skillFuas)
 
         while (actor.pendingBonusTurns > 0 && !actor.isDead) {
             actor.pendingBonusTurns--
             const bonusEffType = this.currentSp ? TargetType.skillId : TargetType.attackId
-            let bonusFuas = this.act(actor, bonusEffType)
-            bonusFuas = mergeFuaMaps(bonusFuas, this.triggerPassives(ProcessTiming.ATTACK_END, bonusEffType, actor))
+            this.resetActionTallies()
+            const bonusFuas = this.act(actor, bonusEffType)
+            this.fireTiming(ProcessTiming.ATTACK_END, actor, this.lastMainTarget, bonusEffType)
             this.triggerFua(bonusFuas)
         }
     }
 
-    resolveEndOfTurn(): void {
-        const actionIds = this.triggerPassives(ProcessTiming.ATTACK_END)
-        this.triggerFua(actionIds)
+    // Previously fired a second, actor-less ATTACK_END for this team after every action; the
+    // game has no such step (every reaction happens inside fireTiming).
+    resolveEndOfTurn(): void {}
+
+    // Each ExecuteSkill has its own AffectedUnitNoticeBundle: reset the per-skill tallies that
+    // AttackEnd conditions read (crit/break/damage counts, effect types applied), including
+    // before follow-ups, so their AttackEnd doesn't re-count the previous skill's hits.
+    resetActionTallies(): void {
+        for (const t of [this, this.otherTeam]) {
+            t.appliedSkillEffectTypesThisAction = new Set();
+            t.lastActionNotices = [];
+        }
     }
 
     triggerFua(actionIds: FuaMap): void {
         Object.entries(actionIds).forEach(([actionId, { caster, triggerTarget }]) => {
             const details = Object.values(skillDetails).filter(v => (v as any).skillMstId === Number(actionId))
-            const fuas = this.completeActionWithPreferredTarget(caster, TargetType.fuaId, details, triggerTarget)
-            this.triggerFua(fuas)
-            this.triggerPassives(ProcessTiming.ATTACK_END, TargetType.fuaId, caster)
+            // [CONFIRMED 3.19] AdditionalSkillActAbilityEffectBase$$Triggering (0x18ea740): no
+            // follow-up from a unit that is broken or can't act, and none while the same unit's
+            // same follow-up skill is already executing or queued (this is what stops e.g. a
+            // "whenever an enemy is at max break bonus" follow-up from re-triggering itself).
+            if (caster.isDead || caster.isBroken || caster.canNotAction) return
+            const key = `${caster.team.isTeam1}:${caster.posIdx}:${actionId}`
+            if (runningFollowUps.has(key)) return
+            runningFollowUps.add(key)
+            try {
+            caster.team.resetActionTallies()
+            const fuas = caster.team.completeActionWithPreferredTarget(caster, TargetType.fuaId, details, triggerTarget)
+            caster.team.fireTiming(ProcessTiming.ATTACK_END, caster, caster.team.lastMainTarget, TargetType.fuaId)
+            caster.team.triggerFua(fuas)
+            } finally { runningFollowUps.delete(key) }
         })
     }
 
     private completeActionWithPreferredTarget(actor: KiokuState, effectName: TargetType, details: SkillDetail[], preferredTarget: KiokuState | undefined): FuaMap {
+        this.lastMainTarget = undefined
         if (!preferredTarget) return this.completeAction(actor, effectName, details)
         let additionalAct: FuaMap = {}
         for (const detail of details) {
             const isSingleTarget = detail.range === targetRange.TARGET
             const targets = isSingleTarget ? [preferredTarget] : this.sliceTargets(actor, isFriendlyEffect(detail.abilityEffectType) ? [actor] : this.otherTeam.kiokuStates, detail)
+            if (detail.abilityEffectType.startsWith("DMG_") && targets[0] && !this.lastMainTarget) this.lastMainTarget = targets[0]
             for (const target of targets) {
                 const fua = actor.applyEffect(target, detail, effectName, actor, targets[0])
                 if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }

@@ -645,6 +645,7 @@ export interface AffectedUnitNotice {
     isBreakedDamageReceiveRateBecomeMax: boolean // 108
     isReceivedReflection: boolean
     isReceivedAttack: boolean      // 110
+    isBreak?: boolean              // BreakDamageInfo != null: broke on this hit (team 302)
 }
 
 export interface BattleState {
