@@ -11712,6 +11712,246 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "Increases flame DMG dealt by 7.5%.<br>Equipped to Attacker:<br>Also increases critical DMG by 2.5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 418901,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4189
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases flame DMG dealt by 8.5%.<br>Equipped to Attacker:<br>Also increases critical DMG by 3.7%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 418902,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4189
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases flame DMG dealt by 9.5%.<br>Equipped to Attacker:<br>Also increases critical DMG by 4.9%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 418903,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4189
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases flame DMG dealt by 10.5%.<br>Equipped to Attacker:<br>Also increases critical DMG by 6.1%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 418904,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4189
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases flame DMG dealt by 11.5%.<br>Equipped to Attacker:<br>Also increases critical DMG by 7.3%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 418905,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4189
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases flame DMG dealt by 12.5%.<br>Equipped to Attacker:<br>Also increases critical DMG by 8.5%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 418906,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4189
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases battle skill DMG dealt by 7.5%.<br>Increases follow-up attack and counterattack DMG dealt by 7.5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 419001,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4190
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases battle skill DMG dealt by 8.5%.<br>Increases follow-up attack and counterattack DMG dealt by 8.5%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 419002,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4190
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases battle skill DMG dealt by 9.5%.<br>Increases follow-up attack and counterattack DMG dealt by 9.5%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 419003,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4190
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases battle skill DMG dealt by 10.5%.<br>Increases follow-up attack and counterattack DMG dealt by 10.5%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 419004,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4190
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases battle skill DMG dealt by 11.5%.<br>Increases follow-up attack and counterattack DMG dealt by 11.5%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 419005,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4190
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases battle skill DMG dealt by 12.5%.<br>Increases follow-up attack and counterattack DMG dealt by 12.5%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 419006,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4190
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ATK by 5%.<br>Increases SPD by 5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 419101,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4191
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ATK by 5.5%.<br>Increases SPD by 6%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 419102,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4191
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ATK by 6%.<br>Increases SPD by 7%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 419103,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4191
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ATK by 6.5%.<br>Increases SPD by 8%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 419104,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4191
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ATK by 7%.<br>Increases SPD by 9%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 419105,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4191
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases ATK by 7.5%.<br>Increases SPD by 10%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 419106,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4191
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases DEF by 5%.",
+        "level": 1,
+        "name": "Ability",
+        "passiveSkillMstId": 419201,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4192
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases DEF by 5.5%.",
+        "level": 2,
+        "name": "Ability",
+        "passiveSkillMstId": 419202,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4192
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases DEF by 6%.",
+        "level": 3,
+        "name": "Ability",
+        "passiveSkillMstId": 419203,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4192
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases DEF by 6.5%.",
+        "level": 4,
+        "name": "Ability",
+        "passiveSkillMstId": 419204,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4192
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases DEF by 7%.",
+        "level": 5,
+        "name": "Ability",
+        "passiveSkillMstId": 419205,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4192
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases DEF by 7.5%.",
+        "level": 6,
+        "name": "Ability",
+        "passiveSkillMstId": 419206,
+        "skillButtonIcon": "",
+        "skillUniqueId": 4192
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Increases DEF by 15%.",
         "level": 1,
         "name": "Ability",
@@ -20108,6 +20348,16 @@
         "passiveSkillMstId": 1150074,
         "skillButtonIcon": "",
         "skillUniqueId": 1150074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases SPD by 10% and ATK by 10%.<br><br>While Ember Feather is applied:<br>On special attack, increases own DMG dealt when targeting elemental weakness by 20%.",
+        "level": 1,
+        "name": "To See Her Again",
+        "passiveSkillMstId": 1150076,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1150076
     },
     {
         "conditionElement": 0,
@@ -31412,6 +31662,106 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "If own HP 50% or higher, increases SPD by 5%.<br>On flame DMG dealt to an enemy by self or ally, increases own SPD by 2% (Stacks 10 times) and ATK by 3% (Stacks 10 times).<br>* Only applies to basic attack / battle skill / special attack.<br><br>When allies other than self use a basic attack to deal flame DMG to an enemy, grants 1 BP.<br>When allies other than self use a battle skill to deal flame DMG to an enemy, grants 2 BP.<br><br>On enemy break or on own special attack while own flame field active:<br>Triggers Metal Monsoon.<br><br>Metal Monsoon:<br>Deals 80% flame DMG to all enemies.<br>Increases own Metal Monsoon DMG dealt by 5% (Stacks 5 times).",
+        "level": 1,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507701,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "If own HP 50% or higher, increases SPD by 6%.<br>On flame DMG dealt to an enemy by self or ally, increases own SPD by 2% (Stacks 10 times) and ATK by 3% (Stacks 10 times).<br>* Only applies to basic attack / battle skill / special attack.<br><br>When allies other than self use a basic attack to deal flame DMG to an enemy, grants 1 BP.<br>When allies other than self use a battle skill to deal flame DMG to an enemy, grants 2 BP.<br><br>On enemy break or on own special attack while own flame field active:<br>Triggers Metal Monsoon.<br><br>Metal Monsoon:<br>Deals 80% flame DMG to all enemies.<br>Increases own Metal Monsoon DMG dealt by 5% (Stacks 5 times).",
+        "level": 2,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507702,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "If own HP 50% or higher, increases SPD by 7%.<br>On flame DMG dealt to an enemy by self or ally, increases own SPD by 2% (Stacks 10 times) and ATK by 3% (Stacks 10 times).<br>* Only applies to basic attack / battle skill / special attack.<br><br>When allies other than self use a basic attack to deal flame DMG to an enemy, grants 1 BP.<br>When allies other than self use a battle skill to deal flame DMG to an enemy, grants 2 BP.<br><br>On enemy break or on own special attack while own flame field active:<br>Triggers Metal Monsoon.<br><br>Metal Monsoon:<br>Deals 80% flame DMG to all enemies.<br>Increases own Metal Monsoon DMG dealt by 5% (Stacks 5 times).",
+        "level": 3,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507703,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "If own HP 50% or higher, increases SPD by 8%.<br>On flame DMG dealt to an enemy by self or ally, increases own SPD by 2% (Stacks 10 times) and ATK by 3% (Stacks 10 times).<br>* Only applies to basic attack / battle skill / special attack.<br><br>When allies other than self use a basic attack to deal flame DMG to an enemy, grants 1 BP.<br>When allies other than self use a battle skill to deal flame DMG to an enemy, grants 2 BP.<br><br>On enemy break or on own special attack while own flame field active:<br>Triggers Metal Monsoon.<br><br>Metal Monsoon:<br>Deals 80% flame DMG to all enemies.<br>Increases own Metal Monsoon DMG dealt by 5% (Stacks 5 times).",
+        "level": 4,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507704,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "If own HP 50% or higher, increases SPD by 9%.<br>On flame DMG dealt to an enemy by self or ally, increases own SPD by 2% (Stacks 10 times) and ATK by 3% (Stacks 10 times).<br>* Only applies to basic attack / battle skill / special attack.<br><br>When allies other than self use a basic attack to deal flame DMG to an enemy, grants 1 BP.<br>When allies other than self use a battle skill to deal flame DMG to an enemy, grants 2 BP.<br><br>On enemy break or on own special attack while own flame field active:<br>Triggers Metal Monsoon.<br><br>Metal Monsoon:<br>Deals 80% flame DMG to all enemies.<br>Increases own Metal Monsoon DMG dealt by 5% (Stacks 5 times).",
+        "level": 5,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507705,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "If own HP 50% or higher, increases SPD by 10%.<br>On flame DMG dealt to an enemy by self or ally, increases own SPD by 2% (Stacks 10 times) and ATK by 3% (Stacks 10 times).<br>* Only applies to basic attack / battle skill / special attack.<br><br>When allies other than self use a basic attack to deal flame DMG to an enemy, grants 1 BP.<br>When allies other than self use a battle skill to deal flame DMG to an enemy, grants 2 BP.<br><br>On enemy break or on own special attack while own flame field active:<br>Triggers Metal Monsoon.<br><br>Metal Monsoon:<br>Deals 80% flame DMG to all enemies.<br>Increases own Metal Monsoon DMG dealt by 5% (Stacks 5 times).",
+        "level": 6,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507706,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "If own HP 50% or higher, increases SPD by 11%.<br>On flame DMG dealt to an enemy by self or ally, increases own SPD by 2% (Stacks 10 times) and ATK by 3% (Stacks 10 times).<br>* Only applies to basic attack / battle skill / special attack.<br><br>When allies other than self use a basic attack to deal flame DMG to an enemy, grants 1 BP.<br>When allies other than self use a battle skill to deal flame DMG to an enemy, grants 2 BP.<br><br>On enemy break or on own special attack while own flame field active:<br>Triggers Metal Monsoon.<br><br>Metal Monsoon:<br>Deals 80% flame DMG to all enemies.<br>Increases own Metal Monsoon DMG dealt by 5% (Stacks 5 times).",
+        "level": 7,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507707,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "If own HP 50% or higher, increases SPD by 12%.<br>On flame DMG dealt to an enemy by self or ally, increases own SPD by 2% (Stacks 10 times) and ATK by 3% (Stacks 10 times).<br>* Only applies to basic attack / battle skill / special attack.<br><br>When allies other than self use a basic attack to deal flame DMG to an enemy, grants 1 BP.<br>When allies other than self use a battle skill to deal flame DMG to an enemy, grants 2 BP.<br><br>On enemy break or on own special attack while own flame field active:<br>Triggers Metal Monsoon.<br><br>Metal Monsoon:<br>Deals 80% flame DMG to all enemies.<br>Increases own Metal Monsoon DMG dealt by 5% (Stacks 5 times).",
+        "level": 8,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507708,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "If own HP 50% or higher, increases SPD by 13%.<br>On flame DMG dealt to an enemy by self or ally, increases own SPD by 2% (Stacks 10 times) and ATK by 3% (Stacks 10 times).<br>* Only applies to basic attack / battle skill / special attack.<br><br>When allies other than self use a basic attack to deal flame DMG to an enemy, grants 1 BP.<br>When allies other than self use a battle skill to deal flame DMG to an enemy, grants 2 BP.<br><br>On enemy break or on own special attack while own flame field active:<br>Triggers Metal Monsoon.<br><br>Metal Monsoon:<br>Deals 80% flame DMG to all enemies.<br>Increases own Metal Monsoon DMG dealt by 5% (Stacks 5 times).",
+        "level": 9,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507709,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "If own HP 50% or higher, increases SPD by 15%.<br>On flame DMG dealt to an enemy by self or ally, increases own SPD by 2% (Stacks 10 times) and ATK by 3% (Stacks 10 times).<br>* Only applies to basic attack / battle skill / special attack.<br><br>When allies other than self use a basic attack to deal flame DMG to an enemy, grants 1 BP.<br>When allies other than self use a battle skill to deal flame DMG to an enemy, grants 2 BP.<br><br>On enemy break or on own special attack while own flame field active:<br>Triggers Metal Monsoon.<br><br>Metal Monsoon:<br>Deals 80% flame DMG to all enemies.<br>Increases own Metal Monsoon DMG dealt by 5% (Stacks 5 times).",
+        "level": 10,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 1507710,
+        "skillButtonIcon": "battle_icon_passive_buff",
+        "skillUniqueId": 15077
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "On defeating an enemy, grants 5 Vanguard points.<br>On breaking an enemy, grants 3 Vanguard points.",
         "level": 1,
         "name": "Vanguard Base Points",
@@ -31758,6 +32108,56 @@
         "passiveSkillMstId": 1600034,
         "skillButtonIcon": "battle_icon_season_skill",
         "skillUniqueId": 1600034
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Attacking an enemy with a basic attack, battle skill, or special attack grants 5 Vanguard points.",
+        "level": 1,
+        "name": "Vanguard Points",
+        "passiveSkillMstId": 1600035,
+        "skillButtonIcon": "battle_icon_season_skill",
+        "skillUniqueId": 1600035
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On DMG dealt to an enemy by a basic attack, battle skill, or special attack, decreases all enemies' elemental RES to the user's element by 2% (Max 20%).",
+        "level": 1,
+        "name": "Vanguard Execution Phase",
+        "passiveSkillMstId": 1600036,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1600036
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical rate by 30%.<br>Increases DMG dealt by basic attack, battle skill, special attack, or special DMG by 50%.<br>On shift to Vanguard Activation Phase, grants 5 SP.<br>Attacker: Increases DMG dealt when targeting elemental weakness by 30%.<br>Breaker: Increases break gauge depletion by 40%.",
+        "level": 1,
+        "name": "Vanguard Activation Phase",
+        "passiveSkillMstId": 1600037,
+        "skillButtonIcon": "",
+        "skillUniqueId": 1600037
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical DMG by 30%.<br>On critical hit, increases SPD by 5% (Stacks 6 times / 2 turns).",
+        "level": 1,
+        "name": "Critical",
+        "passiveSkillMstId": 1600038,
+        "skillButtonIcon": "battle_icon_choice_ctr",
+        "skillUniqueId": 1600038
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On critical hit with a basic attack, battle skill, or special attack, grants 1 Vanguard point (Scales with the number of targets; max 5).",
+        "level": 1,
+        "name": "Vanguard Points",
+        "passiveSkillMstId": 1600039,
+        "skillButtonIcon": "battle_icon_season_skill",
+        "skillUniqueId": 1600039
     },
     {
         "conditionElement": 0,
@@ -32442,6 +32842,16 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "Increases ATK and SPD with each passing turn.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 2001069,
+        "skillButtonIcon": "",
+        "skillUniqueId": 2001069
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Increases DEF with each passing turn.",
         "level": 1,
         "name": "Ability I",
@@ -32788,6 +33198,16 @@
         "passiveSkillMstId": 2003027,
         "skillButtonIcon": "",
         "skillUniqueId": 2003027
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases SPD with each passing turn.",
+        "level": 1,
+        "name": "Ability I",
+        "passiveSkillMstId": 2003028,
+        "skillButtonIcon": "",
+        "skillUniqueId": 2003028
     },
     {
         "conditionElement": 0,
@@ -36792,12 +37212,62 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "Guaranteed to stop all enemies.<br>Grants 2 actions.<br>Grants 3 actions every 3 turns.<br><br>Increases SPD and DMG dealt based on how few debuffs are applied.<br>While barrier or shield active, increases break gauge depletion RES.<br><br>Grants 1 Magic with each passing enemy turn.<br>Triggers a counterattack when attacked at max Magic.<br><br>Counterattack:<br>Deals flame DMG [XL] to all enemies.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001254,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001254
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br><br>Significantly increases all elemental RES.<br>Decreases all elemental RES and break gauge depletion RES and increases ailment RES based on the number of allies with burn or poison.<br><br>Decreases buff effects used by all enemies.<br><br>When an enemy not aligned with the user's elemental weakness takes an action, delays all enemies' action order.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001255,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001255
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Greatly increases ATK.<br>Effect is removed when afflicted with ailment.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001256,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001256
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Grants 2 actions.<br><br>Decreases DMG taken based on own Magic value and increases break gauge depletion RES.<br>On ally taking critical DMG from the basic attack, battle skill, or special attack of an enemy aligned with the user's elemental weakness, consumes 1 Magic.<br>Magic decrease amount increases based on the number of allies who took critical DMG simultaneously.<br>At own turn start, grants 3 Magic.<br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, grants 3 Magic.",
         "level": 1,
         "name": "Ability IV",
         "passiveSkillMstId": 5001258,
         "skillButtonIcon": "",
         "skillUniqueId": 5001258
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br><br>If the user does not take critical DMG from an enemy attack, grants 1 Magic.<br>When attacked by an enemy not aligned with the user's elemental weakness, grants 1 Magic.<br>When own Magic is at max, activates assist or triggers a counterattack.<br>If the user does not take critical DMG from a basic attack or battle skill, activates assist.<br>If the user does not take critical DMG from a special attack, triggers a counterattack.<br><br>Assist:<br>Guaranteed to delay all enemies' action order for 2 turns.<br>Consumes 5 Magic.<br><br>Counterattack:<br>Deals light DMG [XL] to all enemies.<br>Guaranteed to decrease all enemies' ATK for 3 turns.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001259,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001259
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>When self not afflicted with ailment, grants 3 actions.<br>Also increases DMG taken while in break based on number of ailments applied.<br><br>Significantly decreases all enemies' barrier durability.<br>Triggers a counterattack when an enemy not aligned with the user's elemental weakness takes an action.<br><br>Counterattack:<br>Deals light DMG [L] to a single enemy.",
+        "level": 1,
+        "name": "Ability IV",
+        "passiveSkillMstId": 5001266,
+        "skillButtonIcon": "",
+        "skillUniqueId": 5001266
     },
     {
         "conditionElement": 0,
@@ -37292,6 +37762,66 @@
     {
         "conditionElement": 0,
         "conditionRole": 0,
+        "description": "If own break bonus is under 700%, greatly decreases DMG taken.<br><br>Triggers a counterattack each time own Magic reaches max.<br>When attacked by a basic attack, battle skill, or special attack during an enemy's turn, consumes 1 Magic.<br>When not attacked during an enemy's turn, grants 2 Magic.<br><br>Counterattack:<br>Deals forest DMG [M] to all enemies.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001029,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001029
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "If own break bonus is under 700%, greatly decreases DMG taken.<br><br>Activates assist each time own Magic reaches max.<br>When attacked by a basic attack, battle skill, or special attack during an enemy's turn, consumes 1 Magic.<br>When not attacked during an enemy's turn, grants 2 Magic.<br><br>Assist:<br>Restores HP to all allies.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001030,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001030
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "If own break bonus is under 700%, greatly decreases DMG taken.<br><br>Triggers a counterattack each time own Magic reaches max.<br>When attacked by a basic attack, battle skill, or special attack during an enemy's turn, consumes 1 Magic.<br>When not attacked during an enemy's turn, grants 2 Magic.<br><br>Counterattack:<br>Deals forest DMG [S] to all enemies.<br>Greatly increases all allies' SPD for 2 turns.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001031,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001031
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, guaranteed to greatly decrease all enemies' MP recovery rate for 1 turn.<br><br>Triggers a counterattack each time own Magic reaches max.<br>Grants 1 Magic with each passing enemy turn.<br>If the acting enemy is not aligned with the user's elemental weakness, grants 1 additional Magic.<br><br>Counterattack:<br>Deals forest DMG [L] to all enemies.<br>Slightly increases own ATK and SPD permanently.<br>Effect increases if same type of effect already applied.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001032,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001032
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Increases DMG and effect of certain skills based on own Magic value.<br>Each time an ally is attacked with a battle skill, consumes 1 Magic.<br>Magic decreases more based on the number of allies attacked simultaneously.<br>Grants 30 Magic every 2 turns.<br><br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, guaranteed to poison [M] all enemies for 2 turns.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001033,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001033
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Slightly decreases all enemies' MP each time own Magic reaches max.<br>Effect increases for enemies not aligned with the user's elemental weakness.<br>Grants 1 Magic with each passing enemy turn.<br><br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, guaranteed to poison [M] all enemies for 2 turns.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001034,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001034
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
         "description": "Extremely high HP makes it difficult to defeat.<br><br>Triggers a counterattack each time own Magic reaches max.<br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, grants 1 Magic.<br><br>Counterattack:<br>Deals forest DMG [M] to all enemies.<br>Damage increases for enemies not aligned with the user's elemental weakness.<br>Consumes 5 Magic.",
         "level": 1,
         "name": "Ability VI",
@@ -37318,6 +37848,126 @@
         "passiveSkillMstId": 7001037,
         "skillButtonIcon": "",
         "skillUniqueId": 7001037
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Triggers a counterattack each time own Magic reaches max.<br>When attacked by a basic attack, battle skill, or special attack during an enemy's turn, consumes 1 Magic.<br>When not attacked during an enemy's turn, grants 2 Magic.<br><br>Counterattack:<br>Deals forest DMG [M] to all enemies.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001040,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001040
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Triggers a counterattack each time own Magic reaches max.<br>When attacked by a basic attack, battle skill, or special attack during an enemy's turn, consumes 1 Magic.<br>When not attacked during an enemy's turn, grants 2 Magic.<br><br>Counterattack:<br>Deals forest DMG [M] to all enemies.<br>Consumes 10 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001041,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001041
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Activates assist each time own Magic reaches max.<br>When attacked by a basic attack, battle skill, or special attack during an enemy's turn, consumes 1 Magic.<br>When not attacked during an enemy's turn, grants 2 Magic.<br><br>Assist:<br>Restores HP to all allies.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001042,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001042
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Activates assist each time own Magic reaches max.<br>When attacked by a basic attack, battle skill, or special attack during an enemy's turn, consumes 1 Magic.<br>When not attacked during an enemy's turn, grants 2 Magic.<br><br>Assist:<br>Restores HP to all allies.<br>Consumes 10 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001043,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001043
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Triggers a counterattack each time own Magic reaches max.<br>When attacked by a basic attack, battle skill, or special attack during an enemy's turn, consumes 1 Magic.<br>When not attacked during an enemy's turn, grants 2 Magic.<br><br>Counterattack:<br>Deals forest DMG [S] to all enemies.<br>Greatly increases all allies' SPD for 2 turns.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001044,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001044
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Triggers a counterattack each time own Magic reaches max.<br>When attacked by a basic attack, battle skill, or special attack during an enemy's turn, consumes 1 Magic.<br>When not attacked during an enemy's turn, grants 2 Magic.<br><br>Counterattack:<br>Deals forest DMG [S] to all enemies.<br>Increases all allies' SPD for 2 turns.<br>Consumes 10 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001045,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001045
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "At battle start, guaranteed to greatly decrease all enemies' MP recovery rate for 1 turn.<br><br>Triggers a counterattack each time own Magic reaches max.<br>Grants 1 Magic with each passing enemy turn.<br>If the acting enemy is not aligned with the user's elemental weakness, grants 1 additional Magic.<br><br>Counterattack:<br>Deals forest DMG [L] to all enemies.<br>Slightly increases own ATK and SPD permanently.<br>Effect increases if same type of effect already applied.<br>Consumes 5 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001046,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001046
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Triggers a counterattack each time own Magic reaches max.<br>Grants 1 Magic with each passing enemy turn.<br><br>Counterattack:<br>Deals forest DMG [L] to all enemies.<br>Slightly increases own ATK and SPD permanently.<br>Effect increases if same type of effect already applied.<br>Consumes 8 Magic.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001047,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001047
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Increases DMG and effect of certain skills based on own Magic value.<br>Each time an ally is attacked with a battle skill, consumes 1 Magic.<br>Magic decreases more based on the number of allies attacked simultaneously.<br>Grants 20 Magic every 2 turns.<br><br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, guaranteed to poison [M] all enemies for 2 turns.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001048,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001048
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Increases DMG and effect of certain skills based on own Magic value.<br>Each time an ally is attacked with a battle skill, consumes 1 Magic.<br>Magic decreases more based on the number of allies attacked simultaneously.<br>Grants 10 Magic every 2 turns.<br><br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, guaranteed to poison [M] all enemies for 2 turns.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001049,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001049
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Slightly decreases all enemies' MP each time own Magic reaches max.<br>Effect increases for enemies not aligned with the user's elemental weakness.<br>Grants 1 Magic with each passing enemy turn.<br><br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, guaranteed to poison [M] all enemies for 2 turns.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001050,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001050
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Grants 2 actions.<br>Slightly decreases all enemies' MP each time own Magic reaches max.<br>Grants 1 Magic with each passing enemy turn.<br><br>When an ally is attacked by an enemy not aligned with the user's elemental weakness, guaranteed to poison [M] all enemies for 2 turns.",
+        "level": 1,
+        "name": "Ability VI",
+        "passiveSkillMstId": 7001051,
+        "skillButtonIcon": "",
+        "skillUniqueId": 7001051
     },
     {
         "conditionElement": 0,
@@ -39328,6 +39978,26 @@
         "passiveSkillMstId": 8509401,
         "skillButtonIcon": "",
         "skillUniqueId": 85094
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases critical rate by 20%.<br><br>While own flame field active:<br>Increases own special attack DMG dealt by 30% and decreases DMG taken by 20%.",
+        "level": 1,
+        "name": "Ascension Effects",
+        "passiveSkillMstId": 8509801,
+        "skillButtonIcon": "",
+        "skillUniqueId": 85098
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "Increases Metal Monsoon DMG dealt by 50%.<br>On Metal Monsoon use, grants 1 BP.<br><br>While Ember Feather is applied:<br>On own battle skill use, triggers Metal Monsoon.",
+        "level": 1,
+        "name": "Ascension Effects",
+        "passiveSkillMstId": 8509901,
+        "skillButtonIcon": "",
+        "skillUniqueId": 85099
     },
     {
         "conditionElement": 0,
@@ -50628,5 +51298,105 @@
         "passiveSkillMstId": 9507410,
         "skillButtonIcon": "battle_icon_supportpassive_buff",
         "skillUniqueId": 95074
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Increases ATK by 5% and SPD by 5%.<br>If HP 50% or higher, decreases DMG taken by 10% and increases battle skill DMG dealt by 10%.",
+        "level": 1,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 9507601,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95076
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Increases ATK by 6% and SPD by 5%.<br>If HP 50% or higher, decreases DMG taken by 10% and increases battle skill DMG dealt by 10%.",
+        "level": 2,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 9507602,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95076
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Increases ATK by 6% and SPD by 6%.<br>If HP 50% or higher, decreases DMG taken by 10% and increases battle skill DMG dealt by 10%.",
+        "level": 3,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 9507603,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95076
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Increases ATK by 6% and SPD by 7%.<br>If HP 50% or higher, decreases DMG taken by 10% and increases battle skill DMG dealt by 10%.",
+        "level": 4,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 9507604,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95076
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Increases ATK by 7% and SPD by 7%.<br>If HP 50% or higher, decreases DMG taken by 10% and increases battle skill DMG dealt by 10%.",
+        "level": 5,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 9507605,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95076
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Increases ATK by 8% and SPD by 7%.<br>If HP 50% or higher, decreases DMG taken by 10% and increases battle skill DMG dealt by 10%.",
+        "level": 6,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 9507606,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95076
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Increases ATK by 8% and SPD by 8%.<br>If HP 50% or higher, decreases DMG taken by 10% and increases battle skill DMG dealt by 10%.",
+        "level": 7,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 9507607,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95076
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Increases ATK by 9% and SPD by 8%.<br>If HP 50% or higher, decreases DMG taken by 10% and increases battle skill DMG dealt by 10%.",
+        "level": 8,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 9507608,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95076
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Increases ATK by 9% and SPD by 9%.<br>If HP 50% or higher, decreases DMG taken by 10% and increases battle skill DMG dealt by 10%.",
+        "level": 9,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 9507609,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95076
+    },
+    {
+        "conditionElement": 0,
+        "conditionRole": 1,
+        "description": "Equipped to Attacker:<br>Increases ATK by 10% and SPD by 10%.<br>If HP 50% or higher, decreases DMG taken by 10% and increases battle skill DMG dealt by 10%.",
+        "level": 10,
+        "name": "Assault Haste",
+        "passiveSkillMstId": 9507610,
+        "skillButtonIcon": "battle_icon_supportpassive_buff",
+        "skillUniqueId": 95076
     }
 ]

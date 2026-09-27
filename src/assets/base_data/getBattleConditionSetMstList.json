@@ -16995,6 +16995,41 @@
         "description": "行動対象(個別)+ダメージを受けた+行動対象(メイン)がヘブンまどかの専用デバフが付与されているとき+行動者は自身+必殺技発動したとき"
     },
     {
+        "battleConditionMstIdCsv": "2083",
+        "battleConditionSetMstId": 3438,
+        "description": "ヘブンほむらのフィールドが発動しているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2084",
+        "battleConditionSetMstId": 3439,
+        "description": "ヘブンほむらのフィールドが発動していないとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2085",
+        "battleConditionSetMstId": 3440,
+        "description": "自身にヘブンほむらの専用バフがあるとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2083,7,3",
+        "battleConditionSetMstId": 3441,
+        "description": "ヘブンほむらのフィールドが発動しているとき＋必殺技発動したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "971,1,655,5",
+        "battleConditionSetMstId": 3442,
+        "description": "火属性の仲間がダメージを与えたとき(通常攻撃発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "971,1,655,6",
+        "battleConditionSetMstId": 3443,
+        "description": "火属性の仲間がダメージを与えたとき(戦闘スキル発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "971,1,655,7",
+        "battleConditionSetMstId": 3444,
+        "description": "火属性の仲間がダメージを与えたとき(必殺技発動したとき)"
+    },
+    {
         "battleConditionMstIdCsv": "464,3",
         "battleConditionSetMstId": 3445,
         "description": "行動者は自分AND奇数ターン"
@@ -17085,6 +17120,31 @@
         "description": "自身の経過ターンが9ターン以上、10ターン未満"
     },
     {
+        "battleConditionMstIdCsv": "3,1462",
+        "battleConditionSetMstId": 3463,
+        "description": "行動者が自分+行動タイプがエーテルブロウ"
+    },
+    {
+        "battleConditionMstIdCsv": "2085,2083",
+        "battleConditionSetMstId": 3464,
+        "description": "自身にヘブンほむらの専用バフがあるとき+ヘブンほむらのフィールドが発動しているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2087,2083",
+        "battleConditionSetMstId": 3465,
+        "description": "自身にヘブンほむらの専用バフがないとき+ヘブンほむらのフィールドが発動しているとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2085,2084",
+        "battleConditionSetMstId": 3466,
+        "description": "自身にヘブンほむらの専用バフがあるとき+ヘブンほむらのフィールドが発動していないとき"
+    },
+    {
+        "battleConditionMstIdCsv": "620,3,7",
+        "battleConditionSetMstId": 3467,
+        "description": "ブレイク中の敵が1体以上いる+行動者は自身+必殺技発動したとき"
+    },
+    {
         "battleConditionMstIdCsv": "1603,1,5",
         "battleConditionSetMstId": 3468,
         "description": "行動者は自身以外＋敵全体で1以上のダメージを与えたとき+通常攻撃発動時+トークン500未満のとき"
@@ -17098,6 +17158,11 @@
         "battleConditionMstIdCsv": "1603,1,7",
         "battleConditionSetMstId": 3470,
         "description": "行動者は自身以外＋敵全体で1以上のダメージを与えたとき+必殺技発動時+トークン500未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1,655,2079",
+        "battleConditionSetMstId": 3471,
+        "description": "行動者は味方+敵チームに与えるトータルダメージは1以上+行動者：マミ(叛逆)専用バフが付与されているとき"
     },
     {
         "battleConditionMstIdCsv": "1,2088",
@@ -17215,6 +17280,21 @@
         "description": "敵軍のデバフ数が4以上のとき"
     },
     {
+        "battleConditionMstIdCsv": "971,962,1,655,5,281",
+        "battleConditionSetMstId": 3495,
+        "description": "自身以外の火属性の仲間がダメージを与えクリティカルが発生したとき(通常攻撃発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "971,962,1,655,6,281",
+        "battleConditionSetMstId": 3496,
+        "description": "自身以外の火属性の仲間がダメージを与えクリティカルが発生したとき(戦闘スキル発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "971,962,1,655,7,281",
+        "battleConditionSetMstId": 3497,
+        "description": "自身以外の火属性の仲間がダメージを与えクリティカルが発生したとき(必殺技発動したとき)"
+    },
+    {
         "battleConditionMstIdCsv": "1513,3,2086,1265",
         "battleConditionSetMstId": 3498,
         "description": "自身がプレイヤー側のユニットのとき、行動者は自分、攻撃が命中した敵数が1体以上、敵全体のデバフ数が0"
@@ -17268,6 +17348,11 @@
         "battleConditionMstIdCsv": "2095,7,3",
         "battleConditionSetMstId": 3508,
         "description": "アシュリーKAWAII専用バフ付与時+必殺技を発動したとき+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "2085,6,3",
+        "battleConditionSetMstId": 3509,
+        "description": "ヘブンほむら専用バフ付与時+戦闘スキルを発動+行動者は自身"
     },
     {
         "battleConditionMstIdCsv": "3,7,1332",
@@ -17355,6 +17440,31 @@
         "description": "自身がプレイヤー側のユニットのとき、対象のデバフ数が5以上"
     },
     {
+        "battleConditionMstIdCsv": "2085,3,7",
+        "battleConditionSetMstId": 3528,
+        "description": "自身にヘブンほむらの専用バフがあるとき+必殺技を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "2087,3,6",
+        "battleConditionSetMstId": 3529,
+        "description": "ヘブンほむらの専用バフが付与されていない+行動者は自分+戦闘スキル"
+    },
+    {
+        "battleConditionMstIdCsv": "2087,3,1462",
+        "battleConditionSetMstId": 3530,
+        "description": "ヘブンほむらの専用バフが付与されていない+行動者は自分+エーテルブロウ"
+    },
+    {
+        "battleConditionMstIdCsv": "892,2085",
+        "battleConditionSetMstId": 3531,
+        "description": "ヘブンほむらの専用バフが付与されている+攻撃されたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2087,3,7",
+        "battleConditionSetMstId": 3532,
+        "description": "ヘブンほむらの専用バフが付与されていない+行動者は自分+必殺技"
+    },
+    {
         "battleConditionMstIdCsv": "1513,3,6,1665",
         "battleConditionSetMstId": 3533,
         "description": "自身がプレイヤー側のユニットのとき、行動者は自分、戦闘スキルを使用、攻撃が命中した敵数が1体のとき"
@@ -17378,6 +17488,241 @@
         "battleConditionMstIdCsv": "1513,3,6,1669",
         "battleConditionSetMstId": 3537,
         "description": "自身がプレイヤー側のユニットのとき、行動者は自分、戦闘スキルを使用、攻撃が命中した敵数が5体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2099,1,6,962",
+        "battleConditionSetMstId": 3538,
+        "description": "自身にバフ効果が付与されたとき+行動者は仲間+行動タイプは戦闘スキル"
+    },
+    {
+        "battleConditionMstIdCsv": "971,1,655,6,962",
+        "battleConditionSetMstId": 3539,
+        "description": "自身以外の火属性の仲間がダメージを与えたとき(戦闘スキル発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "971,1,655,5,962",
+        "battleConditionSetMstId": 3540,
+        "description": "自身以外の火属性の仲間がダメージを与えたとき(通常攻撃発動したとき)"
+    },
+    {
+        "battleConditionMstIdCsv": "3,7,2085",
+        "battleConditionSetMstId": 3541,
+        "description": "ヘブンほむらの専用バフが付与されているとき＋必殺技発動したとき＋行動者は自身"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,5,2086",
+        "battleConditionSetMstId": 3542,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、通常攻撃を使用、攻撃が命中した敵数が1体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,7,2086",
+        "battleConditionSetMstId": 3543,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、必殺技を使用、攻撃が命中した敵数が1体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,292,3,5,655",
+        "battleConditionSetMstId": 3544,
+        "description": "自身がプレイヤー側のユニットのとき、自分は火属性、自分は行動者、通常攻撃を使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,294,3,5,655",
+        "battleConditionSetMstId": 3545,
+        "description": "自身がプレイヤー側のユニットのとき、自分は水属性、自分は行動者、通常攻撃を使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,295,3,5,655",
+        "battleConditionSetMstId": 3546,
+        "description": "自身がプレイヤー側のユニットのとき、自分は木属性、自分は行動者、通常攻撃を使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,296,3,5,655",
+        "battleConditionSetMstId": 3547,
+        "description": "自身がプレイヤー側のユニットのとき、自分は光属性、自分は行動者、通常攻撃を使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,297,3,5,655",
+        "battleConditionSetMstId": 3548,
+        "description": "自身がプレイヤー側のユニットのとき、自分は闇属性、自分は行動者、通常攻撃を使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,298,3,5,655",
+        "battleConditionSetMstId": 3549,
+        "description": "自身がプレイヤー側のユニットのとき、自分は無属性、自分は行動者、通常攻撃を使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,292,3,6,655",
+        "battleConditionSetMstId": 3550,
+        "description": "自身がプレイヤー側のユニットのとき、自分は火属性、自分は行動者、戦闘スキルを使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,294,3,6,655",
+        "battleConditionSetMstId": 3551,
+        "description": "自身がプレイヤー側のユニットのとき、自分は水属性、自分は行動者、戦闘スキルを使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,295,3,6,655",
+        "battleConditionSetMstId": 3552,
+        "description": "自身がプレイヤー側のユニットのとき、自分は木属性、自分は行動者、戦闘スキルを使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,296,3,6,655",
+        "battleConditionSetMstId": 3553,
+        "description": "自身がプレイヤー側のユニットのとき、自分は光属性、自分は行動者、戦闘スキルを使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,297,3,6,655",
+        "battleConditionSetMstId": 3554,
+        "description": "自身がプレイヤー側のユニットのとき、自分は闇属性、自分は行動者、戦闘スキルを使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,298,3,6,655",
+        "battleConditionSetMstId": 3555,
+        "description": "自身がプレイヤー側のユニットのとき、自分は無属性、自分は行動者、戦闘スキルを使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,292,3,7,655",
+        "battleConditionSetMstId": 3556,
+        "description": "自身がプレイヤー側のユニットのとき、自分は火属性、自分は行動者、必殺技を使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,294,3,7,655",
+        "battleConditionSetMstId": 3557,
+        "description": "自身がプレイヤー側のユニットのとき、自分は水属性、自分は行動者、必殺技を使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,295,3,7,655",
+        "battleConditionSetMstId": 3558,
+        "description": "自身がプレイヤー側のユニットのとき、自分は木属性、自分は行動者、必殺技を使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,296,3,7,655",
+        "battleConditionSetMstId": 3559,
+        "description": "自身がプレイヤー側のユニットのとき、自分は光属性、自分は行動者、必殺技を使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,297,3,7,655",
+        "battleConditionSetMstId": 3560,
+        "description": "自身がプレイヤー側のユニットのとき、自分は闇属性、自分は行動者、必殺技を使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,298,3,7,655",
+        "battleConditionSetMstId": 3561,
+        "description": "自身がプレイヤー側のユニットのとき、自分は無属性、自分は行動者、必殺技を使用、敵軍に1以上のダメージを与えたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,5,3,1505",
+        "battleConditionSetMstId": 3562,
+        "description": "自身がプレイヤー側のユニットのとき+行動タイプが通常攻撃+行動者は自身+結界対策発揮フェーズのとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,7,3,1505",
+        "battleConditionSetMstId": 3563,
+        "description": "自身がプレイヤー側のユニットのとき+行動タイプが必殺技+行動者は自身+結界対策発揮フェーズのとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,5,1702",
+        "battleConditionSetMstId": 3564,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは通常攻撃、一度の攻撃で敵軍に1体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,5,1703",
+        "battleConditionSetMstId": 3565,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは通常攻撃、一度の攻撃で敵軍に2体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,5,1704",
+        "battleConditionSetMstId": 3566,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは通常攻撃、一度の攻撃で敵軍に3体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,5,1705",
+        "battleConditionSetMstId": 3567,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは通常攻撃、一度の攻撃で敵軍に4体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,5,1706",
+        "battleConditionSetMstId": 3568,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは通常攻撃、一度の攻撃で敵軍に5体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1702",
+        "battleConditionSetMstId": 3569,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは戦闘スキル、一度の攻撃で敵軍に1体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1703",
+        "battleConditionSetMstId": 3570,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは戦闘スキル、一度の攻撃で敵軍に2体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1704",
+        "battleConditionSetMstId": 3571,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは戦闘スキル、一度の攻撃で敵軍に3体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1705",
+        "battleConditionSetMstId": 3572,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは戦闘スキル、一度の攻撃で敵軍に4体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,6,1706",
+        "battleConditionSetMstId": 3573,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは戦闘スキル、一度の攻撃で敵軍に5体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,7,1702",
+        "battleConditionSetMstId": 3574,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは必殺技、一度の攻撃で敵軍に1体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,7,1703",
+        "battleConditionSetMstId": 3575,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは必殺技、一度の攻撃で敵軍に2体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,7,1704",
+        "battleConditionSetMstId": 3576,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは必殺技、一度の攻撃で敵軍に3体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,7,1705",
+        "battleConditionSetMstId": 3577,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは必殺技、一度の攻撃で敵軍に4体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "1513,3,7,1706",
+        "battleConditionSetMstId": 3578,
+        "description": "自身がプレイヤー側のユニットのとき、行動者は自分、行動タイプは必殺技、一度の攻撃で敵軍に5体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,5,892",
+        "battleConditionSetMstId": 3579,
+        "description": "行動者は敵 AND 行動タイプが通常 AND 自分が攻撃を受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,892",
+        "battleConditionSetMstId": 3580,
+        "description": "行動者は敵 AND 行動タイプがスキル AND 自分が攻撃を受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "2,7,892",
+        "battleConditionSetMstId": 3581,
+        "description": "行動者は敵 AND 行動タイプが必殺技 AND 自分が攻撃を受けた"
+    },
+    {
+        "battleConditionMstIdCsv": "2,5,2102",
+        "battleConditionSetMstId": 3582,
+        "description": "行動者は敵 AND 行動タイプが通常 AND 自分が攻撃を受けなかった"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,2102",
+        "battleConditionSetMstId": 3583,
+        "description": "行動者は敵 AND 行動タイプがスキル AND 自分が攻撃を受けなかった"
+    },
+    {
+        "battleConditionMstIdCsv": "2,7,2102",
+        "battleConditionSetMstId": 3584,
+        "description": "行動者は敵 AND 行動タイプが必殺技 AND 自分が攻撃を受けなかった"
     },
     {
         "battleConditionMstIdCsv": "3,2088",
@@ -17415,9 +17760,94 @@
         "description": "行動者は闇属性 AND 自軍が1以上のダメージを受けたとき"
     },
     {
+        "battleConditionMstIdCsv": "2,6,2103",
+        "battleConditionSetMstId": 3592,
+        "description": "行動者は敵 AND 行動タイプがスキル攻撃 AND 攻撃を受けた味方が1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,2104",
+        "battleConditionSetMstId": 3593,
+        "description": "行動者は敵 AND 行動タイプがスキル攻撃 AND 攻撃を受けた味方が2体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,2105",
+        "battleConditionSetMstId": 3594,
+        "description": "行動者は敵 AND 行動タイプがスキル攻撃 AND 攻撃を受けた味方が3体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,2106",
+        "battleConditionSetMstId": 3595,
+        "description": "行動者は敵 AND 行動タイプがスキル攻撃 AND 攻撃を受けた味方が4体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,6,2107",
+        "battleConditionSetMstId": 3596,
+        "description": "行動者は敵 AND 行動タイプがスキル攻撃 AND 攻撃を受けた味方が5体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "971,986",
+        "battleConditionSetMstId": 3597,
+        "description": "行動者は火属性 AND 対象は水属性"
+    },
+    {
+        "battleConditionMstIdCsv": "972,985",
+        "battleConditionSetMstId": 3598,
+        "description": "行動者は水属性 AND 対象は火属性"
+    },
+    {
+        "battleConditionMstIdCsv": "975,985",
+        "battleConditionSetMstId": 3599,
+        "description": "行動者は闇属性 AND 対象は火属性"
+    },
+    {
         "battleConditionMstIdCsv": "2108",
         "battleConditionSetMstId": 3600,
         "description": "自身にスピード上昇が付与されている場合"
+    },
+    {
+        "battleConditionMstIdCsv": "1748",
+        "battleConditionSetMstId": 3601,
+        "description": "トークンが16以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "3,771",
+        "battleConditionSetMstId": 3602,
+        "description": "自身のターン経過が12ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "9,6",
+        "battleConditionSetMstId": 3603,
+        "description": "自分のHPが50％以上+行動タイプがスキル攻撃"
+    },
+    {
+        "battleConditionMstIdCsv": "976,986",
+        "battleConditionSetMstId": 3607,
+        "description": "行動者は無属性 AND 対象は水属性"
+    },
+    {
+        "battleConditionMstIdCsv": "976,987",
+        "battleConditionSetMstId": 3608,
+        "description": "行動者は無属性 AND 対象は木属性"
+    },
+    {
+        "battleConditionMstIdCsv": "971,989",
+        "battleConditionSetMstId": 3609,
+        "description": "行動者は火属性 AND 対象は闇属性"
+    },
+    {
+        "battleConditionMstIdCsv": "972,990",
+        "battleConditionSetMstId": 3610,
+        "description": "行動者は水属性 AND 対象は無属性"
+    },
+    {
+        "battleConditionMstIdCsv": "973,990",
+        "battleConditionSetMstId": 3611,
+        "description": "行動者は木属性 AND 対象は無属性"
+    },
+    {
+        "battleConditionMstIdCsv": "298,1388,990",
+        "battleConditionSetMstId": 3612,
+        "description": "行動者は無属性 AND 自軍が1以上のダメージを受けたとき AND 対象は無属性"
     },
     {
         "battleConditionMstIdCsv": "972,5,1634",
@@ -17443,6 +17873,21 @@
         "battleConditionMstIdCsv": "972,5,1638",
         "battleConditionSetMstId": 3620,
         "description": "対象は水属性で行動タイプが通常攻撃で一度の攻撃で自軍に5体クリティカルダメージが発生したとき"
+    },
+    {
+        "battleConditionMstIdCsv": "974,1388",
+        "battleConditionSetMstId": 3621,
+        "description": "行動者は光属性 AND 自チームが1以上のトータルダメージを受けたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "975,1388",
+        "battleConditionSetMstId": 3622,
+        "description": "行動者は闇属性 AND 自チームが1以上のトータルダメージを受けたとき"
+    },
+    {
+        "battleConditionMstIdCsv": "976,1388",
+        "battleConditionSetMstId": 3623,
+        "description": "行動者は無属性 AND 自チームが1以上のトータルダメージを受けたとき"
     },
     {
         "battleConditionMstIdCsv": "972,6,1634",
@@ -17645,6 +18090,111 @@
         "description": "対象は無属性 AND 行動タイプが必殺技 AND一度の攻撃で自軍に5体クリティカルダメージが発生したとき"
     },
     {
+        "battleConditionMstIdCsv": "2118,2124",
+        "battleConditionSetMstId": 3674,
+        "description": "味方全体で毒が付与されている敵が1体未満 and 火傷が付与されている敵が1体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "2119,2124",
+        "battleConditionSetMstId": 3707,
+        "description": "味方全体で毒が付与されている敵が1体のとき\nAND 味方全体で火傷が付与されている敵が1体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2125,2118",
+        "battleConditionSetMstId": 3708,
+        "description": "味方全体で火傷が付与されている敵が1体のとき\nAND 味方全体で毒が付与されている敵が1体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2120,2124",
+        "battleConditionSetMstId": 3709,
+        "description": "味方全体で毒が付与されている敵が2体のとき\nAND 味方全体で火傷が付与されている敵が1体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2119,2125",
+        "battleConditionSetMstId": 3710,
+        "description": "味方全体で毒が付与されている体数が1体+火傷が1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2126,2118",
+        "battleConditionSetMstId": 3711,
+        "description": "味方全体で火傷が付与されている敵が2体のとき\nAND 味方全体で毒が付与されている敵が1体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2121,2124",
+        "battleConditionSetMstId": 3713,
+        "description": "味方全体で毒が付与されている体数が3体"
+    },
+    {
+        "battleConditionMstIdCsv": "2127,2118",
+        "battleConditionSetMstId": 3714,
+        "description": "味方全体で火傷が付与されている体数が3体"
+    },
+    {
+        "battleConditionMstIdCsv": "2119,2126",
+        "battleConditionSetMstId": 3715,
+        "description": "味方全体で毒が付与されている体数が1体+火傷が2体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2120,2125",
+        "battleConditionSetMstId": 3716,
+        "description": "味方全体で毒が付与されている体数が2体+火傷が1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2122,2124",
+        "battleConditionSetMstId": 3717,
+        "description": "味方全体で毒が付与されている敵が4体のとき\nAND 味方全体で火傷が付与されている敵が1体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2128,2118",
+        "battleConditionSetMstId": 3718,
+        "description": "味方全体で火傷が付与されている敵が4体のとき\nAND 味方全体で毒が付与されている敵が1体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2120,2126",
+        "battleConditionSetMstId": 3719,
+        "description": "味方全体で毒が付与されている体数が2体+火傷が2体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2119,2127",
+        "battleConditionSetMstId": 3720,
+        "description": "味方全体で毒が付与されている体数が1体+火傷が3体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2121,2125",
+        "battleConditionSetMstId": 3721,
+        "description": "味方全体で毒が付与されている体数が3体+火傷が1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2123,2124",
+        "battleConditionSetMstId": 3722,
+        "description": "味方全体で毒が付与されている敵が5体のとき\nAND 味方全体で火傷が付与されている敵が1体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2129,2118",
+        "battleConditionSetMstId": 3723,
+        "description": "味方全体で火傷が付与されている敵が5体のとき\nAND 味方全体で毒が付与されている敵が1体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2119,2128",
+        "battleConditionSetMstId": 3724,
+        "description": "味方全体で毒が付与されている体数が1体+火傷が4体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2122,2125",
+        "battleConditionSetMstId": 3725,
+        "description": "味方全体で毒が付与されている体数が4体+火傷が1体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2120,2127",
+        "battleConditionSetMstId": 3726,
+        "description": "味方全体で毒が付与されている体数が2体+火傷が3体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2121,2126",
+        "battleConditionSetMstId": 3727,
+        "description": "味方全体で毒が付与されている体数が3体+火傷が2体のとき"
+    },
+    {
         "battleConditionMstIdCsv": "82,275",
         "battleConditionSetMstId": 3729,
         "description": "自分が8ターンごとに（ターン1から） AND 連続行動の3回目"
@@ -17710,6 +18260,16 @@
         "description": "敵が5体以上の場合"
     },
     {
+        "battleConditionMstIdCsv": "2202",
+        "battleConditionSetMstId": 3747,
+        "description": "自分のブレイク補正倍率は700%未満"
+    },
+    {
+        "battleConditionMstIdCsv": "1425",
+        "battleConditionSetMstId": 3748,
+        "description": "トークンが21以上のとき"
+    },
+    {
         "battleConditionMstIdCsv": "2,25",
         "battleConditionSetMstId": 3806,
         "description": "行動者は敵 AND 自分が1以上のダメージを受けた"
@@ -17718,6 +18278,106 @@
         "battleConditionMstIdCsv": "2,2102,1388",
         "battleConditionSetMstId": 3807,
         "description": "行動者は敵  AND 攻撃を受けた味方が1体以上のとき、自分が攻撃を受けなかった"
+    },
+    {
+        "battleConditionMstIdCsv": "285,985",
+        "battleConditionSetMstId": 3811,
+        "description": "トークンが5のとき + 対象は火属性"
+    },
+    {
+        "battleConditionMstIdCsv": "285,986",
+        "battleConditionSetMstId": 3812,
+        "description": "トークンが5のとき + 対象は水属性"
+    },
+    {
+        "battleConditionMstIdCsv": "285,987",
+        "battleConditionSetMstId": 3813,
+        "description": "トークンが5のとき + 対象は木属性"
+    },
+    {
+        "battleConditionMstIdCsv": "285,988",
+        "battleConditionSetMstId": 3814,
+        "description": "トークンが5のとき + 対象は光属性"
+    },
+    {
+        "battleConditionMstIdCsv": "285,989",
+        "battleConditionSetMstId": 3815,
+        "description": "トークンが5のとき + 対象は闇属性"
+    },
+    {
+        "battleConditionMstIdCsv": "285,990",
+        "battleConditionSetMstId": 3816,
+        "description": "トークンが5のとき + 対象は無属性"
+    },
+    {
+        "battleConditionMstIdCsv": "75,273",
+        "battleConditionSetMstId": 3827,
+        "description": "7ターンごと（1ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "75,274",
+        "battleConditionSetMstId": 3828,
+        "description": "7ターンごと（1ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "76,273",
+        "battleConditionSetMstId": 3829,
+        "description": "7ターンごと（2ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "76,274",
+        "battleConditionSetMstId": 3830,
+        "description": "7ターンごと（2ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "77,273",
+        "battleConditionSetMstId": 3831,
+        "description": "7ターンごと（3ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "77,274",
+        "battleConditionSetMstId": 3832,
+        "description": "7ターンごと（3ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "78,273",
+        "battleConditionSetMstId": 3833,
+        "description": "7ターンごと（4ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "78,274",
+        "battleConditionSetMstId": 3834,
+        "description": "7ターンごと（4ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "79,273",
+        "battleConditionSetMstId": 3835,
+        "description": "7ターンごと（5ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "79,274",
+        "battleConditionSetMstId": 3836,
+        "description": "7ターンごと（5ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "80,273",
+        "battleConditionSetMstId": 3837,
+        "description": "7ターンごと（6ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "80,274",
+        "battleConditionSetMstId": 3838,
+        "description": "7ターンごと（6ターン目から） AND 連続行動の2回目"
+    },
+    {
+        "battleConditionMstIdCsv": "81,273",
+        "battleConditionSetMstId": 3839,
+        "description": "7ターンごと（7ターン目から） AND 連続行動の1回目"
+    },
+    {
+        "battleConditionMstIdCsv": "81,274",
+        "battleConditionSetMstId": 3840,
+        "description": "7ターンごと（7ターン目から） AND 連続行動の2回目"
     },
     {
         "battleConditionMstIdCsv": "972,2032",
@@ -17738,5 +18398,55 @@
         "battleConditionMstIdCsv": "2,2261,1388",
         "battleConditionSetMstId": 3845,
         "description": "行動者は敵  AND 攻撃を受けた味方が1体以上のとき、自分が攻撃を受けなかった"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1101,5,285,1388",
+        "battleConditionSetMstId": 3846,
+        "description": "行動者は敵AND自軍にクリティカルが発生しなかったAND行動タイプが通常ANDトークンが5のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1101,6,285,1388",
+        "battleConditionSetMstId": 3847,
+        "description": "行動者は敵AND自軍にクリティカルが発生しなかったAND行動タイプがスキルANDトークンが5のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1101,7,285,1388",
+        "battleConditionSetMstId": 3848,
+        "description": "行動者は敵AND自軍にクリティカルが発生しなかったAND行動タイプが必殺ANDトークンが5のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2,1101,1388",
+        "battleConditionSetMstId": 3849,
+        "description": "自軍にクリティカルダメージが発生しなかった場合"
+    },
+    {
+        "battleConditionMstIdCsv": "2,892,735",
+        "battleConditionSetMstId": 3850,
+        "description": "行動者は敵 AND 攻撃されたとき AND 魔力が99のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "971,2032",
+        "battleConditionSetMstId": 3852,
+        "description": "行動者は火属性,攻撃を受けた味方が1体以上の時"
+    },
+    {
+        "battleConditionMstIdCsv": "974,2032",
+        "battleConditionSetMstId": 3853,
+        "description": "行動者は光属性,攻撃を受けた味方が1体以上の時"
+    },
+    {
+        "battleConditionMstIdCsv": "3,272",
+        "battleConditionSetMstId": 3854,
+        "description": "自身のターン経過が6ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2124",
+        "battleConditionSetMstId": 3856,
+        "description": "火傷が付与されている敵が1体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1017",
+        "battleConditionSetMstId": 3921,
+        "description": "自身の経過ターンが17ターン以上"
     }
 ]

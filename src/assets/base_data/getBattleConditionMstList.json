@@ -16568,12 +16568,44 @@
         "description": "行動対象(メイン)ヘブンまどかの専用デバフが付与されているとき"
     },
     {
+        "battleConditionMstId": 2083,
+        "compareContent": 29,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "10004,TRUE",
+        "description": "ヘブンほむらのフィールドが発動しているとき"
+    },
+    {
+        "battleConditionMstId": 2084,
+        "compareContent": 29,
+        "compareOperator": 2,
+        "compareTarget": 1,
+        "compareValue": "10004,TRUE",
+        "description": "ヘブンほむらのフィールドが発動していないとき"
+    },
+    {
+        "battleConditionMstId": 2085,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "30",
+        "description": "ヘブンほむら専用バフが付与されているとき"
+    },
+    {
         "battleConditionMstId": 2086,
         "compareContent": 313,
         "compareOperator": 4,
         "compareTarget": 6,
         "compareValue": "1",
         "description": "攻撃が命中した敵数が1体以上のとき"
+    },
+    {
+        "battleConditionMstId": 2087,
+        "compareContent": 26,
+        "compareOperator": 8,
+        "compareTarget": 1,
+        "compareValue": "30",
+        "description": "ヘブンほむら専用バフが付与されていないとき"
     },
     {
         "battleConditionMstId": 2088,
@@ -16664,6 +16696,14 @@
         "description": "自分にデバフ効果が付与されたとき"
     },
     {
+        "battleConditionMstId": 2099,
+        "compareContent": 316,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "敵軍にデバフ効果が付与されたとき"
+    },
+    {
         "battleConditionMstId": 2100,
         "compareContent": 26,
         "compareOperator": 7,
@@ -16688,12 +16728,148 @@
         "description": "自身が攻撃を受けなかった"
     },
     {
+        "battleConditionMstId": 2103,
+        "compareContent": 313,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "1",
+        "description": "攻撃を受けた味方が1体のとき"
+    },
+    {
+        "battleConditionMstId": 2104,
+        "compareContent": 313,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "2",
+        "description": "攻撃を受けた味方が2体のとき"
+    },
+    {
+        "battleConditionMstId": 2105,
+        "compareContent": 313,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "3",
+        "description": "攻撃を受けた味方が3体のとき"
+    },
+    {
+        "battleConditionMstId": 2106,
+        "compareContent": 313,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "4",
+        "description": "攻撃を受けた味方が4体のとき"
+    },
+    {
+        "battleConditionMstId": 2107,
+        "compareContent": 313,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "5",
+        "description": "攻撃を受けた味方が5体以上のとき"
+    },
+    {
         "battleConditionMstId": 2108,
         "compareContent": 12,
         "compareOperator": 7,
         "compareTarget": 1,
         "compareValue": "UP_SPD_RATIO",
         "description": "自分にスピード上昇が付与されている場合"
+    },
+    {
+        "battleConditionMstId": 2118,
+        "compareContent": 205,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "POISON,1",
+        "description": "味方全体で毒が付与されている敵が1体未満のとき"
+    },
+    {
+        "battleConditionMstId": 2119,
+        "compareContent": 205,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "POISON,1",
+        "description": "味方全体で毒が付与されている敵が1体のとき"
+    },
+    {
+        "battleConditionMstId": 2120,
+        "compareContent": 205,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "POISON,2",
+        "description": "味方全体で毒が付与されている敵が2体のとき"
+    },
+    {
+        "battleConditionMstId": 2121,
+        "compareContent": 205,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "POISON,3",
+        "description": "味方全体で毒が付与されている敵が3体のとき"
+    },
+    {
+        "battleConditionMstId": 2122,
+        "compareContent": 205,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "POISON,4",
+        "description": "味方全体で毒が付与されている敵が4体のとき"
+    },
+    {
+        "battleConditionMstId": 2123,
+        "compareContent": 205,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "POISON,5",
+        "description": "味方全体で毒が付与されている敵が5体のとき"
+    },
+    {
+        "battleConditionMstId": 2124,
+        "compareContent": 205,
+        "compareOperator": 5,
+        "compareTarget": 5,
+        "compareValue": "BURN,1",
+        "description": "味方全体で火傷が付与されている敵が1体未満のとき"
+    },
+    {
+        "battleConditionMstId": 2125,
+        "compareContent": 205,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "BURN,1",
+        "description": "味方全体で火傷が付与されている敵が1体のとき"
+    },
+    {
+        "battleConditionMstId": 2126,
+        "compareContent": 205,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "BURN,2",
+        "description": "味方全体で火傷が付与されている敵が2体のとき"
+    },
+    {
+        "battleConditionMstId": 2127,
+        "compareContent": 205,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "BURN,3",
+        "description": "味方全体で火傷が付与されている敵が3体のとき"
+    },
+    {
+        "battleConditionMstId": 2128,
+        "compareContent": 205,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "BURN,4",
+        "description": "味方全体で火傷が付与されている敵が4体のとき"
+    },
+    {
+        "battleConditionMstId": 2129,
+        "compareContent": 205,
+        "compareOperator": 1,
+        "compareTarget": 5,
+        "compareValue": "BURN,5",
+        "description": "味方全体で火傷が付与されている敵が5体のとき"
     },
     {
         "battleConditionMstId": 2197,
@@ -16734,6 +16910,14 @@
         "compareTarget": 6,
         "compareValue": "5",
         "description": "敵が5体以上の場合"
+    },
+    {
+        "battleConditionMstId": 2202,
+        "compareContent": 21,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "700",
+        "description": "自分のブレイク補正倍率は700%未満"
     },
     {
         "battleConditionMstId": 2261,
