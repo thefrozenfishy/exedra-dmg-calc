@@ -86,7 +86,8 @@ export function buildCrysImportDiff(characters: Character[], importData: CrysImp
         const importedSpecialLvl = meta?.specialLvl != null ? Number(meta.specialLvl) : undefined
         const importedAscension = meta?.ascension != null ? Number(meta.ascension) : undefined
 
-        const allCrys = relevantCrys(char.id)
+        // No equipOrder in the import => leave crys untouched, only levels are imported
+        const allCrys = equipOrder ? relevantCrys(char.id) : []
 
         const equipOrderUnmatched = equipOrder
             ? equipOrder.filter(name => name !== null && !allCrys.some(c => c.name === name))
