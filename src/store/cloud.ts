@@ -6,6 +6,8 @@ import { countCharsObtained, getPowerScores } from "../models/PowerValue"
 import { KiokuRole } from "../types/enums"
 import type { SavedTierList, SharedTierList, TierListRow } from "../types/TierListTypes"
 import { clampName, isUuid, sanitizeBoard } from "../utils/tierList"
+import type { SavedTeam, SavedTeamKind, SavedTeamRow, SharedTeam } from "../types/SavedTeamTypes"
+import { sanitizeTeamSlots, teamData } from "../utils/savedTeams"
 
 export class NameRequiredError extends Error {
     constructor() {
@@ -988,6 +990,126 @@ async function _loadSharedTierList(listId: string): Promise<SharedTierList | nul
     }
 }
 
+type SaveTeamResultRow = SavedTeamRow & { conflict: boolean }
+
+// The table's key is team_id; the shared sync code expects list_id.
+const toSavedTeamRow = ({ team_id, ...rest }: any): SavedTeamRow => ({ ...rest, list_id: team_id })
+
+async function _loadMySavedTeams(kind: SavedTeamKind): Promise<SavedTeamRow[]> {
+    const userId = getUserId()
+
+    if (!userId) return []
+
+    const supabase = getSupabase()
+
+    const { data, error } = await supabase
+        .from("user_saved_teams")
+        .select("*")
+        .eq("user_id", userId)
+        .eq("kind", kind)
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: true })
+
+    if (error) throw error
+
+    return (data ?? []).map(toSavedTeamRow)
+}
+
+// Optimistic concurrency, like _saveTierList.
+async function _saveTeam(
+    kind: SavedTeamKind,
+    team: SavedTeam,
+    sortOrder: number,
+    knownUpdatedAt: string | null
+): Promise<SaveTeamResultRow | null> {
+    const userId = getUserId()
+
+    if (!userId) return null
+
+    const supabase = getSupabase()
+
+    const { data, error } = await supabase.rpc('save_team_safe', {
+        target_user_id: userId,
+        p_team_id: team.id,
+        p_kind: kind,
+        p_name: team.name,
+        p_data: { slots: team.slots },
+        p_is_shared: !!team.shared,
+        p_sort_order: sortOrder,
+        p_known_updated_at: knownUpdatedAt,
+    })
+
+    if (error) throw error
+
+    const row = (data as any[] | null)?.[0]
+    return row ? { ...toSavedTeamRow(row), conflict: !!row.conflict } : null
+}
+
+async function _saveTeamOrder(kind: SavedTeamKind, orderedIds: string[]) {
+    const userId = getUserId()
+
+    if (!userId) return
+
+    const supabase = getSupabase()
+
+    const { error } = await supabase.rpc('set_team_order', {
+        target_user_id: userId,
+        p_kind: kind,
+        ordered_ids: orderedIds,
+    })
+
+    if (error) throw error
+}
+
+async function _deleteSavedTeam(teamId: string) {
+    const userId = getUserId()
+
+    if (!userId) return
+
+    const supabase = getSupabase()
+
+    const { error } = await supabase
+        .from("user_saved_teams")
+        .delete()
+        .eq("user_id", userId)
+        .eq("team_id", teamId)
+
+    if (error) throw error
+}
+
+// Works without a cloud account: anyone with the link can view a shared team.
+async function _loadSharedTeam(teamId: string): Promise<SharedTeam | null> {
+    if (!isUuid(teamId)) return null
+
+    const supabase = getSupabase()
+
+    const { data, error } = await supabase.rpc('get_shared_team', {
+        target_team_id: teamId
+    })
+
+    if (error) throw error
+
+    const row = (data as any[] | null)?.[0]
+
+    if (!row || (row.kind !== "single" && row.kind !== "pvp")) return null
+
+    const kind = row.kind as SavedTeamKind
+
+    return {
+        team: {
+            id: row.team_id,
+            name: clampName(row.name),
+            slots: sanitizeTeamSlots(teamData(row.data), kind),
+            createdAt: Date.parse(row.created_at) || Date.now(),
+            updatedAt: Date.parse(row.updated_at) || Date.now(),
+        },
+        kind,
+        ownerName: typeof row.owner_display_name === "string" ? row.owner_display_name.trim().slice(0, 100) : "",
+        ownerFriendId: row.owner_friend_id ? String(row.owner_friend_id) : null,
+        isOwner: !!row.is_owner,
+    }
+}
+
 export const createCloudUser = withAnalytics(
     _createCloudUser,
     'create_cloud_user',
@@ -1166,4 +1288,33 @@ export const loadSharedTierList = withAnalytics(
     _loadSharedTierList,
     'load_shared_tier_list',
     ([listId], result) => ({ listId, found: !!result, isOwner: result?.isOwner ?? false })
+)
+
+export const loadMySavedTeams = withAnalytics(
+    _loadMySavedTeams,
+    'load_saved_teams',
+    ([kind], result) => ({ kind, count: result.length })
+)
+
+export const saveTeam = withAnalytics(
+    _saveTeam,
+    'save_team',
+    ([kind], result) => ({ kind, conflict: !!result?.conflict })
+)
+
+export const saveTeamOrder = withAnalytics(
+    _saveTeamOrder,
+    'save_team_order',
+    ([kind]) => ({ kind })
+)
+
+export const deleteSavedTeam = withAnalytics(
+    _deleteSavedTeam,
+    'delete_saved_team',
+)
+
+export const loadSharedTeam = withAnalytics(
+    _loadSharedTeam,
+    'load_shared_team',
+    (_args, result) => ({ found: !!result, kind: result?.kind })
 )

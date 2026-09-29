@@ -2,10 +2,13 @@
   <div class="setup-page team-page">
     <h1 class="page-title">PvP Simulator</h1>
 
+    <SavedTeamsPanel :saved="saved" />
+
     <section class="toolbar card share-card-actions">
       <div class="toolbar-left">
         <ImageActionsToolbar :target="() => shareCardRef!" filename="pvp-team-share.png" :export-options="exportOpts"
-          :share-options="shareOptionsForTeamCard" :disabled="!shareCardAvailable" />
+          :share-options="shareOptionsForTeamCard" :disabled="!shareCardAvailable"
+          :share-handler="saved.generateShareUrl" share-label="Share team" />
       </div>
     </section>
 
@@ -131,6 +134,8 @@ import { PvPBattle } from '../models/PvPBattle'
 import { PvPTeam } from '../models/PvPTeam'
 import CharacterEditor from '../components/CharacterEditor.vue'
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
+import SavedTeamsPanel from '../components/SavedTeamsPanel.vue'
+import { useSavedTeams } from '../store/savedTeams'
 import BattleTimeline from '../components/BattleTimeline.vue'
 import RngControls from '../components/RngControls.vue'
 import { useSetting } from '../store/settingsStore'
@@ -242,6 +247,16 @@ const shareCardRef = ref<HTMLElement | null>(null)
 const shareCardAvailable = computed(() => team.slots[0].some(s => !!s.main) || team.slots[1].some(s => !!s.main))
 const exportOpts = { exportClass: "exporting" }
 
+const saved = useSavedTeams({
+  kind: 'pvp',
+  routePath: '/pvp-simulator',
+  label: 'PvP Team',
+  getSlots: () => team.slots,
+  applySlots: slots => team.importSlots(slots),
+  shareTarget: () => shareCardRef.value!,
+  exportOptions: exportOpts,
+})
+
 const shareOptionsForTeamCard = () => ({
   title: `${useFriendStore().getFormattedDisplayNamePossessive()} PvP Team Setup`,
   backUrl: window.location.href,
@@ -326,6 +341,7 @@ async function importBattle(ev: Event) {
   if (!file) return
   try {
     const data = parseExport(await file.text())
+    saved.detach() // an imported file is a new setup, not an edit of the active saved team
     team.importSlots(data.slots)
     await nextTick() // lets the team watcher reset its state first
     seed.value = data.seed
