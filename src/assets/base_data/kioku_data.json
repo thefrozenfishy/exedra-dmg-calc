@@ -2888,7 +2888,7 @@
     },
     "Metallicized Projectile": {
         "ability_id": 15077,
-        "ascension_1_effect_2_id": 85001,
+        "ascension_1_effect_2_id": 85111,
         "ascension_2_effect_2_id": 85098,
         "ascension_4_effect_2_id": 85099,
         "atk120": 2468,

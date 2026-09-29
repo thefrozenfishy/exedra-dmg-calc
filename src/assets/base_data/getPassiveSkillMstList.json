@@ -40001,6 +40001,16 @@
     },
     {
         "conditionElement": 0,
+        "conditionRole": 0,
+        "description": "On enemy break, grants 1 BP, and increases ATK by 20% (2 turns).",
+        "level": 1,
+        "name": "Ascension Effects",
+        "passiveSkillMstId": 8511101,
+        "skillButtonIcon": "",
+        "skillUniqueId": 85111
+    },
+    {
+        "conditionElement": 0,
         "conditionRole": 2,
         "description": "Equipped to Breaker:<br>Increases ATK by 5%.",
         "level": 1,
