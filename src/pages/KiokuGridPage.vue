@@ -206,7 +206,12 @@
             </table>
         </div>
 
-        <section class="card gain-section">
+        <section class="card gain-section buff-chart-section">
+            <div class="chart-export-toolbar">
+                <ImageActionsToolbar target=".buff-chart-section" filename="relative-buff-strength.png"
+                    :export-options="() => chartExportOpts('.buff-chart-section')" :share-options="shareOptionsForBuffChart"
+                    :disabled="!gainChart.bars.length" />
+            </div>
             <div class="gain-header filters-heading">Relative buff strength</div>
             <p class="gain-desc">Comparison of relative buff strength on a character with no other buffs. Only buffs to
                 special dmg is being compared. {{ levelsDescription }}</p>
@@ -279,7 +284,12 @@
             </template>
         </section>
 
-        <section class="card gain-section">
+        <section class="card gain-section attacker-chart-section">
+            <div class="chart-export-toolbar">
+                <ImageActionsToolbar target=".attacker-chart-section" filename="attacker-strength-vs-lux.png"
+                    :export-options="() => chartExportOpts('.attacker-chart-section')" :share-options="shareOptionsForAttackerChart"
+                    :disabled="!attackerChart.bars.length" />
+            </div>
             <div class="gain-header filters-heading">Attacker strength compared to Lux</div>
             <p class="gain-desc">Damage each character deals as the attacker, compared to {{ LuxMagica }} in the same
                 spot. {{ LuxMagica }} is the 0% line; -50% means half of her damage.</p>
@@ -379,6 +389,7 @@ import { ScoreAttackKioku } from "../models/ScoreAttackKioku"
 import { ScoreAttackTeam } from "../models/ScoreAttackTeam"
 import { skillDetails } from "../utils/helpers"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
+import type { ImageExportOptions } from "../utils/image"
 import { useFriendStore } from "../store/friendStore"
 import { Enemy } from "../types/EnemyTypes"
 
@@ -1612,6 +1623,28 @@ const shareOptionsForGrid = () => ({
     backUrl: window.location.href,
 })
 
+// The bar charts scroll sideways on the page; the exported image shows the whole chart instead,
+// never narrower than the section is on screen.
+const chartExportOpts = (selector: string): ImageExportOptions => {
+    const el = document.querySelector<HTMLElement>(selector)
+    return {
+        exportClass: "chart-exporting",
+        // Runs before the export class widens the section, so this is its on-screen width.
+        onBefore: () => { if (el) el.style.minWidth = `${el.offsetWidth}px` },
+        onAfter: () => { el?.style.removeProperty("min-width") },
+    }
+}
+
+const shareOptionsForBuffChart = () => ({
+    title: "Relative buff strength",
+    backUrl: window.location.href,
+})
+
+const shareOptionsForAttackerChart = () => ({
+    title: `Attacker strength compared to ${LuxMagica}`,
+    backUrl: window.location.href,
+})
+
 watch([markedCharacters, fightMode, simulateMaxLevels], computeGains, { immediate: true })
 </script>
 
@@ -2121,6 +2154,27 @@ watch([markedCharacters, fightMode, simulateMaxLevels], computeGains, { immediat
     flex-direction: column;
     align-items: stretch;
     margin-top: 1rem;
+}
+
+.chart-export-toolbar {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Image export of a bar chart: show the whole chart (no sideways scroll) and hide the toolbar. */
+.gain-section.chart-exporting {
+    width: max-content !important;
+    max-width: none !important;
+}
+
+.chart-exporting .chart-export-toolbar {
+    display: none;
+}
+
+.chart-exporting .gain-scroll {
+    overflow: visible;
+    width: max-content;
+    margin: 0 auto;
 }
 
 .gain-header {
