@@ -2,6 +2,8 @@
   <div class="team-page">
     <h1 class="page-title">Simulate Single Battle</h1>
 
+    <SavedTeamsPanel :saved="saved" />
+
     <section class="card" :class="{ 'expanded-dmg': showAllMembersDmg }">
       <h2 class="section-title">Battle Result</h2>
       <p class="result-line">{{ formatDmg(battleOutput) }}</p>
@@ -44,7 +46,8 @@
     <section class="toolbar card share-card-actions">
       <div class="toolbar-left">
         <ImageActionsToolbar :target="() => shareCardRef!" filename="single-team-share.png" :export-options="exportOpts"
-          :share-options="shareOptionsForTeamCard" :disabled="!shareCardAvailable" />
+          :share-options="shareOptionsForTeamCard" :disabled="!shareCardAvailable"
+          :share-handler="saved.generateShareUrl" share-label="Share team" />
       </div>
     </section>
 
@@ -323,6 +326,8 @@ import DamageReductionInputs from '../components/DamageReductionInputs.vue'
 import { toast } from "vue3-toastify"
 import CharacterEditor from '../components/CharacterEditor.vue'
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
+import SavedTeamsPanel from '../components/SavedTeamsPanel.vue'
+import { useSavedTeams } from '../store/savedTeams'
 import AllMembersDamageTable, { type DmgPair, type MemberDmgBreakdown } from '../components/AllMembersDamageTable.vue'
 import { ScoreAttackKioku } from '../models/ScoreAttackKioku'
 import { useSetting } from '../store/settingsStore'
@@ -518,6 +523,16 @@ const debugSlotTitle = (idx: number) => ['L Other', 'L Proximity', 'Target', 'R 
 
 const team = useTeamStore()
 const enemies = useEnemyStore()
+
+const saved = useSavedTeams({
+  kind: 'single',
+  routePath: '/sa-simulator-single',
+  label: 'Team',
+  getSlots: () => [team.slots],
+  applySlots: slots => team.importSlots(slots[0]),
+  shareTarget: () => shareCardRef.value!,
+  exportOptions: exportOpts,
+})
 const isFullTeam = computed(() => team.slots.map(slot => slot.main).filter(Boolean).length === 5)
 
 const swapSourceIndex = ref<number | null>(null)
