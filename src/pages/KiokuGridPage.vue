@@ -208,23 +208,29 @@
         <section class="card gain-section">
             <div class="gain-header filters-heading">Relative buff strength</div>
             <p class="gain-desc">Comparison of relative buff strength on a character with no other buffs. Only buffs to
-                special dmg is being compared. All characters being compared are A5 and max level.</p>
+                special dmg is being compared. {{ levelsDescription }}</p>
             <p class="gain-desc">One enemy with 3000 def is used as basis for dmg calculation.</p>
             <p class="gain-desc">Be careful when directly comparing buffers and debuffs, as they scale differently on
                 eachother.
             </p>
             <p class="gain-desc">Buffs which are only active under some circumstances have dashed bars.</p>
 
-            <div class="fight-mode-row" style="width: fit-content; margin: 0 auto;">
-                <span class="fight-mode-label">Display</span>
-                <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Damage metric">
-                    <div class="fight-mode-highlight" :style="{ transform: `translateX(${metricIndex * 100}%)` }"></div>
-                    <button v-for="opt in metricOptions" :key="opt.label" type="button" class="fight-mode-option"
-                        :class="{ active: barGraphAverageDmg === opt.value }" :title="opt.title"
-                        @click="barGraphAverageDmg = opt.value">
-                        {{ opt.label }}
-                    </button>
+            <div style="width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+                <div class="fight-mode-row">
+                    <span class="fight-mode-label">Display</span>
+                    <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Damage metric">
+                        <div class="fight-mode-highlight" :style="{ transform: `translateX(${metricIndex * 100}%)` }"></div>
+                        <button v-for="opt in metricOptions" :key="opt.label" type="button" class="fight-mode-option"
+                            :class="{ active: barGraphAverageDmg === opt.value }" :title="opt.title"
+                            @click="barGraphAverageDmg = opt.value">
+                            {{ opt.label }}
+                        </button>
+                    </div>
                 </div>
+                <label class="filter-chip" :class="{ active: simulateMaxLevels }"
+                    title="On: every Kioku is simulated at A5 with max Kioku, Magic, Heartphial and Special level. Off: your own Kioku's current ascension and levels are used, and unowned Kioku are left out">
+                    <input type="checkbox" v-model="simulateMaxLevels" /> Simulate using max possible levels
+                </label>
             </div>
             <p v-if="gainChart.error" class="gain-empty">{{ gainChart.error }}</p>
             <p v-else-if="gainLoading && !gainChart.bars.length" class="gain-empty">Calculating… {{ gainProgress }}%
@@ -274,10 +280,10 @@
             <p class="gain-desc">Damage each character deals as the attacker, compared to {{ LuxMagica }} in the same
                 spot. {{ LuxMagica }} is the 0% line; -50% means half of her damage.</p>
             <p class="gain-desc">Every character uses their own element and role, has no other buffs and is supported by
-                four {{ LuxMagica }}. All characters are A5 and max level.</p>
+                four {{ LuxMagica }}. {{ levelsDescription }}</p>
             <p class="gain-desc">{{ fightMode === 'st' ? 'One enemy' : fightMode === 'aoe' ? 'Five enemies' : 'Three enemies'}} with 3000 def is used as basis for dmg calculation.</p>
 
-            <div style="width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem;">
+            <div style="width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
                 <div class="fight-mode-row">
                     <span class="fight-mode-label">Display</span>
                     <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Damage metric">
@@ -301,6 +307,10 @@
                         </button>
                     </div>
                 </div>
+                <label class="filter-chip" :class="{ active: simulateMaxLevels }"
+                    title="On: every Kioku is simulated at A5 with max Kioku, Magic, Heartphial and Special level. Off: your own Kioku's current ascension and levels are used, and unowned Kioku are left out">
+                    <input type="checkbox" v-model="simulateMaxLevels" /> Simulate using max possible levels
+                </label>
             </div>
             <p v-if="attackerChart.error" class="gain-empty">{{ attackerChart.error }}</p>
             <p v-else-if="attackerLoading && !attackerChart.bars.length" class="gain-empty">Calculating…</p>
@@ -490,6 +500,7 @@ const splitBreakerRange = useSetting("splitBreakerRange", true)
 const splitDebufferRange = useSetting("splitDebufferRange", true)
 const displayArchetypes = useSetting("displayArchetypes", true)
 const barGraphAverageDmg = useSetting("barGraphAverageDmg", false)
+const simulateMaxLevels = useSetting("gridSimulateMaxLevels", true)
 
 const fightModeOptions = [
     { value: "st", label: "ST", title: "Single target — only the center enemy takes damage" },
@@ -706,9 +717,20 @@ const SPLIT_ROLE_COLORS: Record<string, string> = {
 const roleColor = (vRole: string) =>
     SPLIT_ROLE_COLORS[vRole] ?? ROLE_COLORS[vRole] ?? "#9ca3af"
 
-const prepareForChart = (c: Character): Character => {
-    return withMaxLevelsForPlayerLevel({ ...c, ascension: KiokuConstants.maxAscension }, KiokuConstants.maxKiokuLvl)
-}
+const maxLevelsForChart = (c: Character): Character =>
+    withMaxLevelsForPlayerLevel({ ...c, ascension: KiokuConstants.maxAscension }, KiokuConstants.maxKiokuLvl)
+
+// Lux is the fixed yardstick (dealer, filler and reference), so she always uses max levels.
+const prepareForChart = (c: Character): Character =>
+    simulateMaxLevels.value ? maxLevelsForChart(c) : { ...c }
+
+// Without simulated max levels only owned characters can be compared.
+const chartCharacters = () =>
+    markedCharacters.value.filter(c => c.name !== LuxMagica && (simulateMaxLevels.value || c.enabled))
+
+const levelsDescription = computed(() => simulateMaxLevels.value
+    ? "All characters are A5 and max level."
+    : `All characters use your current ascension and levels, unowned characters are left out. ${LuxMagica} is always A5 and max level.`)
 
 type ChartTargetContext = {
     role?: KiokuRole
@@ -1080,7 +1102,7 @@ const computeAttackerGains = async (
     shouldStop: () => Promise<boolean>,
 ): Promise<boolean> => {
     const supports = [filler, filler, filler, filler]
-    const luxDps = toKioku(prepareForChart(lux))
+    const luxDps = toKioku(maxLevelsForChart(lux))
 
     const finishAttacker = (results: AttackerGainEntry[], error = "", notes: string[] = []) => {
         attackerResults.value = results
@@ -1114,7 +1136,7 @@ const computeAttackerGains = async (
         return true
     }
 
-    const chars = markedCharacters.value.filter(c => c.name !== LuxMagica)
+    const chars = chartCharacters()
     const results: AttackerGainEntry[] = []
     let failed = 0
 
@@ -1208,7 +1230,7 @@ const computeGains = async () => {
     }
 
     const filler = toKioku(
-        prepareForChart(lux),
+        maxLevelsForChart(lux),
         { role: undefined, element: undefined },
     )
 
@@ -1221,7 +1243,7 @@ const computeGains = async () => {
 
         try {
             const dps = toKioku(
-                prepareForChart(lux),
+                maxLevelsForChart(lux),
                 {
                     element: context.element,
                     role: context.role,
@@ -1257,7 +1279,7 @@ const computeGains = async () => {
         return
     }
 
-    const chars = markedCharacters.value.filter(c => c.name !== LuxMagica)
+    const chars = chartCharacters()
     const results: SupportGainEntry[] = []
     let failed = 0
 
@@ -1581,7 +1603,7 @@ const shareOptionsForGrid = () => ({
     backUrl: window.location.href,
 })
 
-watch([markedCharacters, fightMode], computeGains, { immediate: true })
+watch([markedCharacters, fightMode, simulateMaxLevels], computeGains, { immediate: true })
 </script>
 
 <style scoped>
