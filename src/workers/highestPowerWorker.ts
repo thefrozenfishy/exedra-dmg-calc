@@ -32,7 +32,9 @@ function combinations<T>(arr: T[], k: number): T[][] {
     return result;
 }
 
-function buildTeamObject(setup: [string, string, string, number][], characters: Character[]) {
+function buildTeamObject(unsortedSetup: [string, string, string, number][], characters: Character[]) {
+    // Strongest member first, weakest last.
+    const setup = [...unsortedSetup].sort((a, b) => b[3] - a[3]);
     return {
         attacker: characters.find(c => c.name === setup[0][0]),
         portrait: setup[0][2],
@@ -252,7 +254,7 @@ self.onmessage = function (e: MessageEvent) {
             });
         }
 
-        const bestTeam = buildTeamObject(bestTeamSetup.reverse(), characters);
+        const bestTeam = buildTeamObject(bestTeamSetup, characters);
         self.postMessage({ type: 'done', bestTeam, maxTeamPower });
     } catch (error) {
         self.postMessage({ type: 'error', error });
