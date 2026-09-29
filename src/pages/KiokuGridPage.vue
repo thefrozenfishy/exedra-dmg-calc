@@ -165,6 +165,7 @@
                                                         :class="ch._borderClass" />
                                                 </a>
                                                 <div class="axis-info-badge level-badge"
+                                                    :class="{ low: ch.ascension < 2, mid: 2 <= ch.ascension && ch.ascension < 5, high: ch.ascension === 5 }"
                                                     v-if="infoAxisKey === 'ascension'">
                                                     {{ ch.ascension === -1 ? "X" : `A${ch.ascension}` }}
                                                 </div>
@@ -215,11 +216,13 @@
             </p>
             <p class="gain-desc">Buffs which are only active under some circumstances have dashed bars.</p>
 
-            <div style="width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+            <div
+                style="width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
                 <div class="fight-mode-row">
                     <span class="fight-mode-label">Display</span>
                     <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Damage metric">
-                        <div class="fight-mode-highlight" :style="{ transform: `translateX(${metricIndex * 100}%)` }"></div>
+                        <div class="fight-mode-highlight" :style="{ transform: `translateX(${metricIndex * 100}%)` }">
+                        </div>
                         <button v-for="opt in metricOptions" :key="opt.label" type="button" class="fight-mode-option"
                             :class="{ active: barGraphAverageDmg === opt.value }" :title="opt.title"
                             @click="barGraphAverageDmg = opt.value">
@@ -241,7 +244,8 @@
                 <p v-if="gainLoading" class="gain-desc">Updating… {{ gainProgress }}%</p>
                 <div class="gain-legend">
                     <span v-for="role in gainChart.roles" :key="role" class="gain-legend-item">
-                        <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{ virtualRoleLabel(role) }}
+                        <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{
+                            virtualRoleLabel(role) }}
                     </span>
                 </div>
                 <div class="gain-scroll">
@@ -281,13 +285,16 @@
                 spot. {{ LuxMagica }} is the 0% line; -50% means half of her damage.</p>
             <p class="gain-desc">Every character uses their own element and role, has no other buffs and is supported by
                 four {{ LuxMagica }}. {{ levelsDescription }}</p>
-            <p class="gain-desc">{{ fightMode === 'st' ? 'One enemy' : fightMode === 'aoe' ? 'Five enemies' : 'Three enemies'}} with 3000 def is used as basis for dmg calculation.</p>
+            <p class="gain-desc">{{ fightMode === 'st' ? 'One enemy' : fightMode === 'aoe' ? 'Five enemies' : 
+            'Three enemies'}} with 3000 def is used as basis for dmg calculation.</p>
 
-            <div style="width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+            <div
+                style="width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
                 <div class="fight-mode-row">
                     <span class="fight-mode-label">Display</span>
                     <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Damage metric">
-                        <div class="fight-mode-highlight" :style="{ transform: `translateX(${metricIndex * 100}%)` }"></div>
+                        <div class="fight-mode-highlight" :style="{ transform: `translateX(${metricIndex * 100}%)` }">
+                        </div>
                         <button v-for="opt in metricOptions" :key="opt.label" type="button" class="fight-mode-option"
                             :class="{ active: barGraphAverageDmg === opt.value }" :title="opt.title"
                             @click="barGraphAverageDmg = opt.value">
@@ -299,7 +306,8 @@
                 <div class="fight-mode-row">
                     <span class="fight-mode-label">Fight type</span>
                     <div class="fight-mode-toggle" role="radiogroup" aria-label="Fight type">
-                        <div class="fight-mode-highlight" :style="{ transform: `translateX(${fightModeIndex * 100}%)` }"></div>
+                        <div class="fight-mode-highlight"
+                            :style="{ transform: `translateX(${fightModeIndex * 100}%)` }"></div>
                         <button v-for="opt in fightModeOptions" :key="opt.value" type="button" class="fight-mode-option"
                             :class="{ active: fightMode === opt.value }" :title="opt.title"
                             @click="fightMode = opt.value">
@@ -319,7 +327,8 @@
             <template v-else>
                 <div class="gain-legend">
                     <span v-for="role in attackerChart.roles" :key="role" class="gain-legend-item">
-                        <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{ virtualRoleLabel(role) }}
+                        <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{
+                            virtualRoleLabel(role) }}
                     </span>
                 </div>
                 <div class="gain-scroll">
@@ -2050,6 +2059,19 @@ watch([markedCharacters, fightMode, simulateMaxLevels], computeGains, { immediat
     border-radius: 15rem;
     font-weight: bold;
 }
+
+.level-badge.low {
+    color: pink;
+}
+
+.level-badge.mid {
+    color: rgb(154, 149, 212);
+}
+
+.level-badge.high {
+    color: palegreen;
+}
+
 
 .axis-info-badge {
     left: 22%;
