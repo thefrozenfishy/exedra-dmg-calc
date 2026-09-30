@@ -11,6 +11,11 @@
 - Condition SET ids (the csv in detail rows, `xq cond 1671`) and CONDITION ids (the `[cond 966]` rows inside a set,
   `xq cond c966`) are different id spaces.
 
+- A simulator export's `engine` field is a hard-coded label ("battle-engine-3.19"), not the build that made it.
+  If a user export disagrees with the engine, replay it on each branch
+  (`git archive <ref> | tar -x -C $HOME/wt && ln -s $PWD/node_modules $HOME/wt/node_modules`) before debugging:
+  the browser may be running main or the deployed site.
+
 ## Engine semantics
 - **Passives are triggers**, not always-on states (R7.2). Check START conditions when adding, ACTIVE conditions
   while active. Checking both at trigger time lost every "while X" passive.

@@ -6,7 +6,7 @@
           <span class="turn">Wave {{ state.wave }}</span>
         </div>
         <div v-else-if="idx > 0" class="ten-separator" :class="state.lastTeamIsTeam1 ? 'ally' : 'enemy'">
-          <span class="turn">Action {{ actionNumber(idx) }}</span>
+          <span class="turn">Action {{ actionNumber(idx) }}<template v-if="state.round"> · R{{ state.round }}</template></span>
           <span class="actor">{{ state.lastActor }}</span>
           <span class="action"> {{ skillTranslate[state.lastTargetType as keyof typeof skillTranslate] }} </span>
           <span v-if="state.actionLabel && state.lastTargetType !== TargetType.fuaId" class="sub-action-tag">{{ state.actionLabel }}</span>
@@ -16,9 +16,22 @@
         </div>
       </div>
 
+      <div v-if="state.linkHp || state.countdown || state.vanguard" class="raid-status">
+        <span v-if="state.vanguard">Vanguard: <b>{{ state.vanguard.active ? `ACTIVE (${fmt(state.vanguard.gauge)} left)` : `${state.vanguard.point}/${state.vanguard.maxPoint}` }}</b><template v-if="state.vanguard.active"> · {{ state.vanguard.point }}/{{ state.vanguard.activeMaxPoint }} pts</template><template v-if="state.linkHp || state.countdown"> · </template></span>
+        <span v-if="state.linkHp">{{ state.linkHp.name || 'Linked HP' }}: <b>{{ fmt(state.linkHp.current) }}</b> / {{ fmt(state.linkHp.max) }}</span>
+        <span v-if="state.countdown"><template v-if="state.linkHp"> · </template>Countdown ({{ state.countdown.unit }}): <b>{{ state.countdown.value }}</b>
+          · cancel damage {{ fmt(state.countdown.cancelTotal) }} / {{ fmt(state.countdown.cancelMax) }}</span>
+      </div>
+
       <ul v-if="idx > 0 && state.events?.length" class="battle-log">
         <li v-for="(ev, evIdx) in state.events" :key="evIdx" :class="['log-' + ev.kind, ev.sourceIsTeam1 ? 'ally' : 'enemy']">
-          <template v-if="ev.kind === 'heal'">
+          <template v-if="ev.kind === 'summon' && ev.formChange">
+            {{ ev.source ?? '?' }} changed form: <b>{{ ev.target }}</b>
+          </template>
+          <template v-else-if="ev.kind === 'summon'">
+            {{ ev.source ?? '?' }} summoned <b>{{ ev.target }}</b>
+          </template>
+          <template v-else-if="ev.kind === 'heal'">
             {{ ev.source ?? '?' }} healed {{ ev.target }} <b class="heal-text">+{{ fmt(ev.amount) }}</b>
           </template>
           <template v-else>
@@ -487,6 +500,12 @@ function healTo(state: BattleSnapshot, isAllies: boolean, pos: number, name: str
 .gauge-count {
   margin-left: 0.25rem;
   color: var(--warning);
+}
+
+.raid-status {
+  font-size: 0.85rem;
+  color: var(--accent-soft);
+  margin: 0.25rem 0;
 }
 
 .wave-separator {

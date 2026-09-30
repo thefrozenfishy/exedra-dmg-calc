@@ -1,3 +1,100 @@
+# Revision 11 - duration exempt-once, raid score, break bonus (3.19.0)
+
+- [CONFIRMED] IsExemptPassingTurnOnce only for states a unit gives itself (active skill, or passive during its own
+  act): `isOwnSkillState` in PvPTeam.ts. Previously every timed state was exempt, so buffs/debuffs from others
+  lasted one of the holder's turns too long. Also applied to UNIQUE accum / Lv blends.
+- [APPROXIMATION, by decision] Solo Raid score = round(20 × elapsed AV) ("team points used", PvPBattle.teamPointsUsed).
+- [TODO, by decision] Break bonus damage fixed at 0 (BREAK_BONUS_DAMAGE); UP_BREAK_EFFECT is stored but inert.
+
+# Revision 10 - character kit mechanics and full Solo Raid (3.19.0)
+
+## R10.1 Kit mechanics
+- [CONFIRMED] ZONE: per-unit ZoneStack/MaxZoneStack (ZONE_STACK max clamp 3), ZONE_EXPAND (fresh expand sets the
+  "field started" flag, releases a foreign zone), GAIN/CONSUME_ZONE_STACK (active-skill origin only; consuming the last
+  stack releases the zone and removes every UNIQUE_ZONE), UNIQUE_ZONE on every living ally. Conditions 29
+  (IsExpandingZone), 113/114 (field started/ended; flags cleared after each passive pass). ZONE_RELEASE: no data row.
+- [CONFIRMED] TSUBAME_CORE (caster only, SPD down share of the running value) / TSUBAME_LINK (every ally but the
+  caster: SPD v1/10 %, ATK v2/10 %, extra damage like ADDITIONAL_DAMAGE with power v3/10 % from the caster); links go
+  when the core goes.
+- [CONFIRMED] COUNT: max 20 while held, GAIN/CONSUME_COUNT_POINT (value1), +1 after the AttackEnd pass of a normal
+  attack / battle skill / ultimate for every surviving unit it hit; condition 209 = team sum.
+- [CONFIRMED] UNIQUE_*: accum blend per (pattern, giver, max), Lv states (UNIQUE_ELEMENT_STACK hit counter vs
+  UniqueStateLevelMst), conditions 27/31/210/211, RESET_UNIQUE_BUFF/DEBUFF, removal when the giver dies,
+  UNIQUE_ENEMY_639002 = 0 damage.
+- [CONFIRMED] REFLECTION_RATIO (holder with barrier; base from its barrier endurance; can't kill), REGAIN_ATK/DEF/HP
+  (once per launch that hit an opponent), VORTEX_ATK (duplicates allowed, pops after N damage rows on the holder,
+  damage base fixed at application), consume-on-attack states (-1 remain count per damage row).
+- [CONFIRMED] UP/DWN_BUFF/DEBUFF_EFFECT_VALUE are live: a state's value is scaled by the GIVER's rates when given
+  (IHasUpdateableEffectValue states only, list generated in StateInterfaces.ts). Replaces PvPKioku's pre-scaling.
+  Battle-start passives are sorted by IBattleStartTriggerPriority (AddTurn 200, effect value 100, barrier value 90).
+- Not done: UP_BREAK_EFFECT (the break bonus damage needs CharacterParameter.LevelReactionBreakDamageValue /
+  BreakDamageRate, passed by client code outside the core; the break bonus damage itself is not simulated).
+  [UNCERTAIN] crystalis passives treated as unscaled by effect-value states (as before).
+
+## R10.2 Solo Raid
+- [CONFIRMED] Every ally holds the Vanguard base passive 1600000 plus the season (normal/enhanced/charge) and the chosen
+  party (buff/charge) passives. GAIN_SOLO_RAID_BUFF_POINT: points 0..100 (0..30 while active). At 100 the Labyrinth
+  Vanguard phase activates between acts (SeasonBuffActive timing 10 passives), for enhancedSkillTurnGaugeValue units of
+  turn-gauge time. Conditions 1001 (player unit) and 1101 (phase active).
+- [CONFIRMED] Round limit (SoloRaidStageMst.limitRoundCount): an act starting past it ends the attempt as a loss.
+  Rounds: elapsed turn-gauge time < 150 -> 1, then +1 per 100.
+- [CONFIRMED] Attempts carry over (BattleInfo): wave, endless index, linked HP / boss HP, alive enemies (form, position,
+  HP, break gauge, break bonus, turn gauge), countdown count + cancel damage, Vanguard state. Not kept: buffs/debuffs;
+  the round count restarts. PvE page: party buff picker, "Next attempt (carry over)", round limit toggle; exports keep
+  the attempts.
+- Not done: the score (computed by the server; policy type 7 coefficients listed in the project doc), the real-time
+  battle end time.
+
+# Revision 9 - missing enemy mechanics, heal/EP/ailment formulas, DMG_RANDOM (3.19.0)
+
+Trigger: "fix SUMMON and other non implemented functions". Everything below is from the 3.19 decompile
+(RVAs in the code comments).
+
+## R9.1 Enemy / stage mechanics
+- [CONFIRMED] SUMMON: positions walked 3,2,4,1,5; an occupied position is skipped, otherwise the next summon id
+  spawns there (unknown id = consumed). New units: turn gauge reset + their battle-start passives.
+  [APPROXIMATION] other units' battle-start state passives are not re-applied to them.
+- [CONFIRMED] Board positions: `KiokuState.positionId` (allies slot+1, enemies 3-n/2+i, summons as above);
+  proximity targeting uses it.
+- [CONFIRMED] Wave list (GetModelListForBattleStart): conditionType 0 only, ordered by id, only step-1 forms of
+  mode-change bosses, then the main target is moved to the middle (index count/2).
+- [CONFIRMED] Boss form changes (QuestEnemyModeChangeMst, 37 bosses incl. every Solo Raid): a hit on the
+  current form can't push HP past the next threshold (x1000 HP ratio); at/under it the unit is replaced by the
+  next form (same position, HP and turn gauge, fresh states, battle-start passives run). Runs as its own entry
+  after the action ("Form change").
+- [CONFIRMED] Solo Raid Link HP: type 1 (endless minions): pool 100, each defeated enemy -linkHpWeight, empty
+  positions 1-5 refilled round-robin before time moves on; the wave ends when the pool is < 1.
+  [APPROXIMATION] remaining minions are removed at that point. Type 2: shared pool = main target HP; each act
+  subtracts damage dealt to the wave (minus healing) and syncs every enemy to min(pool, max HP).
+- [CONFIRMED] Solo Raid countdown: COUNTDOWN_START (countdown = turn-1, cancel threshold = value1), damage to the
+  holder accumulates, COUNTDOWN_DECREASE -1, conditions 1201 (countdown value) / 1202 (cancel reached),
+  ADDITIONAL_COUNTDOWN_ZERO/CANCEL_SKILL_ACT queue the act and end the countdown. Reset on form change.
+- [CONFIRMED] LOSE_EP_RATIO/FIXED, DEC/ADD_BUFF/DEBUFF_TURN_IMM (amount value2, value1 = state id filter,
+  ailments/Cutaway excluded), ADD_BUFF/DEBUFF_TURN are caster states (+value1 turns on buffs/debuffs it gives),
+  HASTE/SLOW do nothing while the caster has LOCK_TURN_ORDER, GAIN/LOSE_BP no battle effect.
+- Not done: Solo Raid party/season buffs, the round limit, score.
+
+## R9.2 Engine-wide fixes (PvP too)
+- [CONFIRMED] Condition-set csv lists are OR'd (IsMatchConditionSets = Any); conditions inside a set AND'd.
+- [CONFIRMED] Unit/team "has state" conditions also see permanent states.
+- [CONFIRMED] State-add roll: base hit/parry (enemy effectHitRate/effectParryRate), clamps, per-ailment enemy
+  parry columns (per-mille, 1000 = immune), repeat-stun parry (+25 per stun on quest enemies, max 80), Floor to
+  2 decimals. PREVENT_ABNORMAL blocks new ailments (incl. stun), one count each.
+- [CONFIRMED] EP: every gain goes through the recover-rate pipeline (UP adds v1/10, DWN multiplies), clamp to
+  MaxEP, computed live (was fixed at battle start). Hit taken: 15/10/5 by HP% after the hit (<10/<40), kill +10,
+  DOT tick +2.
+- [CONFIRMED] Healing: RECOVERY_HP = healer MaxHP*v1/1000+v2, RECOVERY_HP_ATK = processed ATK*v1/1000+v2,
+  x (1 + healRatio/100) (UP/DWN_HEAL_RATE_RATIO, enemy healRate), receiver DWN_RCV_RECOVERY_RATIO, PvP x0.5,
+  Ceiling. HoT = holder MaxHP*(v1/10)/100+v2 at the start of the holder's turn. Revival in float32.
+- [CONFIRMED] UP_HP_RATIO raises MaxHP (and HP by the gain). DWN_BARRIER_VALUE on a caster shrinks barriers it
+  gives. DWN_CTR/CTD_ACCUM_RATIO stack as IAccum.
+- [CONFIRMED] DMG_RANDOM: value2 hits on random targets (repeats allowed), per hit crit / break (v3, 1 if 0) /
+  break-rate growth (base v4/10).
+- [UNCERTAIN] character-side HealRate, RecoveryEpRate and EffectHit/ParryRate come from styles not in our
+  data (treated as 0). Whether EP-on-hit is per hit or per act (applied per damage effect here).
+
+## R9.3 (superseded by Revision 10 - the "no kioku uses them" claim was wrong: skill rows are keyed id*100+lvl)
+
 # Revision 8 - PvE: quest stages on the battle engine (3.19.0)
 
 Trigger: the Single Battle Calculator page moves from the old ScoreAttackTeam formula to the engine, with

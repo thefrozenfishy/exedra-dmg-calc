@@ -4,12 +4,15 @@ import { skillDetails } from "../utils/helpers";
 import { isConditionSetActive, isConditionSetActiveForPvP, isActiveConditionSetMet, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
 import { PvPKioku } from "./PvPKioku";
 import { damageBaseTypeFromEffectType, getAttackDamageResult, getSlipDamageResult, getAdditionalDamageBase, getFinalDamageExtra, damageCutByBarrier, DamageBaseType, BattleType, PVP_POLICY } from "./DamageCalculator";
-import { getProcessedAtk, mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum, getFinalDamageRatio, getProcessedSpeedWithBreakdown, unitLabel } from "./UnitStateEngine";
+import { getProcessedAtk, getProcessedRecoveryValue, mergeAccumEffect, isEligibleForEffect, rollAppliesEffect, getProcessedDef, getMaxComboActionNum, getFinalDamageRatio, getProcessedSpeedWithBreakdown, unitLabel } from "./UnitStateEngine";
 import { elementMap } from "../types/enums";
-import { type EnemyParams, enemyParams, isEnemyKioku, selectEnemySkill, enemySkillDetails, skillName } from "./PvE";
-import { EFFECT_TARGET_SIDE } from "./EffectTargetSide";
+import { dec } from "./BattleMath";
+import { type EnemyParams, enemyParams, isEnemyKioku, selectEnemySkill, enemySkillDetails, skillName, EnemyKioku, wavePositionIds, SUMMON_POSITION_ORDER, type QuestEnemyAppearance, type ModeChangeInfo } from "./PvE";
+import { EFFECT_TARGET_SIDE, NEGATIVE_STATE_TYPES } from "./EffectTargetSide";
+import { UPDATEABLE_STATE_TYPES, CONSUME_ON_ATTACK_STATE_TYPES } from "./StateInterfaces";
+import uniqueStateLevelJson from "../assets/base_data/getUniqueStateLevelMstList.json";
 import { selectFullAutoTarget, expandProximity, filterAlive, legalTargetPool } from "./AITargetSelector";
-import { BattleRng, type RngSource } from "./BattleRng";
+import { BattleRng, rollChoice, type RngSource } from "./BattleRng";
 import { UNIT_STATE_TYPES } from "./StateAddFilter";
 import { SkillType, getVariationBreakPoint, decreaseBreakPoint, increaseBreakedDamageReceiveRate } from "./BreakPoint";
 
@@ -76,8 +79,8 @@ const friendlySkills = [
     "UP_GIV_DMG_ACCUM_RATIO",    // [CONFIRMED] "Accumulated DMG+"
     "UP_GIV_SLIP_DMG_RATIO",     // [CONFIRMED] "DOT DMG+" - only affects DOT ticks, see UnitStateEngine.ts
     "DWN_RCV_DMG_RATIO",         // [CONFIRMED] "Decrease DMG Taken" - a defensive buff despite the DWN_ prefix
-    "UP_HP_RATIO",               // [CONFIRMED] [RECOGNIZED ONLY] max-HP-% increase - not implemented, see MISSING_AND_UNCERTAIN.md
-    "ADD_BUFF_TURN", "ADD_BUFF_TURN_IMM",     // [CONFIRMED] [IMPLEMENTED] extends active buff durations - see applyEffect
+    "UP_HP_RATIO",               // [CONFIRMED 3.19] [IMPLEMENTED] max-HP-% increase - see KiokuState.updateMaxHp
+    "ADD_BUFF_TURN", "ADD_BUFF_TURN_IMM",     // [CONFIRMED 3.19] [IMPLEMENTED] state: +value1 turns to buffs the holder gives (storeTimedEffect); _IMM: instant +value2 (applyEffect)
     "GAIN_SP_FIXED",   // [CONFIRMED] [IMPLEMENTED] flat add to the attack/skill alternation counter
     "REMOVE_ALL_ABNORMAL", // [CONFIRMED] [IMPLEMENTED] cleanses Ailment-type states, mirrors REMOVE_ALL_DEBUFF
     "ADDITIONAL_DAMAGE",   // [CONFIRMED] [IMPLEMENTED] flat bonus damage folded into the next hit - see applyEffect's DMG_ branch
@@ -133,7 +136,7 @@ const enemySkills = [
     "CURSE_ATK", "CURSE_DEF", "CURSE_HP",    // [CONFIRMED classes exist]
     "VORTEX_ATK", // [CONFIRMED string; RECOGNIZED ONLY - not wired into tickDotEffects, no _DEF/_HP variant confirmed to exist]
     "UP_GIV_VORTEX_DMG_RATIO", // [CONFIRMED string; RECOGNIZED ONLY, pairs with VORTEX_ATK]
-    "ADD_DEBUFF_TURN", "ADD_DEBUFF_TURN_IMM", // [CONFIRMED] [IMPLEMENTED] extends active debuff durations
+    "ADD_DEBUFF_TURN", "ADD_DEBUFF_TURN_IMM", // [CONFIRMED 3.19] [IMPLEMENTED] as ADD_BUFF_TURN, for debuffs (not ailments)
     "DWN_ELEMENT_RESIST_RATIO", "DWN_ELEMENT_RESIST_ACCUM_RATIO", // [CONFIRMED] see UnitStateEngine.getElementResistRate
     "IMM_SLIP_DMG", // [CONFIRMED string] [IMPLEMENTED] DOT immunity - see tickDotEffects
     "REFLECTION_RATIO", // [CONFIRMED string; RECOGNIZED ONLY] damage reflection - not implemented, needs a "reflect N% of the next hit back at the attacker" hook that touches the DMG_ pipeline in applyEffect; flagged rather than guessed at
@@ -174,10 +177,22 @@ export function isAlimentEffect(abilityEffectType: string): boolean {
 // mergeAccumEffect). [CONFIRMED to exist as game content per enums.ts, though the exact
 // per-family completeness (e.g. whether DWN_ATK_ACCUM_RATIO exists) is still
 // per-entry-flagged in UnitStateEngine.ts].
+// UniqueUnitStateBase subclasses (IRemoveByUserUnitDeath). The character-specific UNIQUE_10030301 / UNIQUE_10070201
+// markers are plain states and stay.
+let vortexSeq = 0
+const battleStartPriority = (d: SkillDetail): number =>
+    d.abilityEffectType === "ADD_BUFF_TURN" || d.abilityEffectType === "ADD_DEBUFF_TURN" ? 200
+        : d.abilityEffectType.endsWith("_EFFECT_VALUE") ? 100 : d.abilityEffectType === "DWN_BARRIER_VALUE" ? 90 : 0
+const REMOVE_ON_GIVER_DEATH = new Set(["UNIQUE_BUFF", "UNIQUE_DEBUFF", "UNIQUE_BUFF_ACCUM", "UNIQUE_DEBUFF_ACCUM",
+    "UNIQUE_ELEMENT_STACK", "UNIQUE_ELEMENT_BREAK", "UNIQUE_ZONE"])
+// UniqueStateLevelMst: groupId -> [level, conditionCount] (hits needed from the previous level).
+const UNIQUE_LEVELS = new Map<number, { level: number, conditionCount: number }[]>()
+for (const r of uniqueStateLevelJson as any[]) (UNIQUE_LEVELS.get(r.groupId) ?? UNIQUE_LEVELS.set(r.groupId, []).get(r.groupId)!).push(r)
+
 const ACCUM_RATIO_EFFECT_TYPES = new Set([
     "UP_ATK_ACCUM_RATIO", "DWN_ATK_ACCUM_RATIO",
     "UP_DEF_ACCUM_RATIO", "DWN_DEF_ACCUM_RATIO",
-    "UP_CTR_ACCUM_RATIO", "UP_CTD_ACCUM_RATIO",
+    "UP_CTR_ACCUM_RATIO", "UP_CTD_ACCUM_RATIO", "DWN_CTR_ACCUM_RATIO", "DWN_CTD_ACCUM_RATIO",
     "UP_GIV_DMG_ACCUM_RATIO", "DWN_ELEMENT_RESIST_ACCUM_RATIO",
     "UP_SPD_ACCUM_RATIO", "DWN_SPD_ACCUM_RATIO",
 ])
@@ -406,8 +421,13 @@ export class KiokuState {
 
     stateGen: (actor: KiokuState, target: KiokuState, actionType?: TargetType, trueActorUnit?: KiokuState, mainTargetUnit?: KiokuState, notice?: AffectedUnitNotice) => BattleState
 
+    // BattleUnit.PositionId (1-5). Characters: slot + 1. Enemies: set by PvPTeam.layoutEnemyPositions (a wave
+    // is centred, see PvE.wavePositionIds) or by the summon that created them.
+    positionId: number
+
     constructor(posIdx: number, teamLabel: string, team: PvPTeam, kioku: PvPKioku, stateGen: KiokuState["stateGen"]) {
         this.posIdx = posIdx
+        this.positionId = posIdx + 1
         this.teamLabel = teamLabel
         this.team = team
         this.kioku = kioku
@@ -459,6 +479,160 @@ export class KiokuState {
     // checks a multi-gauge-HP-bar CurrentHpGaugeCount<2 condition used for PvE raid
     // bosses with multiple HP bars; not applicable to this 1v1 PvP context, so omitted).
     // Enemies with 2+ HP gauges left are not dead at 0 HP (they revive, see checkHpGaugeRevive).
+    // [CONFIRMED 3.19] UnitCondition.RepeatStunParryRate: StunUnitState.OnRemovingFromCondition (0x15c0850) raises it
+    // by 25 (max 80) on quest enemies; it adds to the stun parry of the state-add roll (UnitStateEngine).
+    repeatStunParryRate = 0
+
+    // [CONFIRMED 3.19] UnitCondition zone fields (0x5C..0x6C): ZoneStack / MaxZoneStack, and the "field started" /
+    // "field ended" pattern flags read by condition contents 113/114 (cleared after every passive pass).
+    zone = { stack: 0, max: 0, expandPattern: 0, releasePattern: 0 }
+    get zoneActive(): boolean { return this.zone.max > 0 && this.zone.stack > 0 }
+    // [CONFIRMED 3.19] UnitCondition CountPoint / MaxCountPoint (COUNT "sigils"): MaxCountPoint = 20 while the unit
+    // holds a COUNT state (CountUnitState.OnAdded), both reset to 0 when it goes.
+    countPoint = 0
+    maxCountPoint = 0
+    // UnitCondition.TryModifyCountPointBy (0x15cae00): only while holding COUNT; clamp [0, max].
+    tryModifyCountPoint(d: number): void {
+        if (!this.hasState("COUNT")) return
+        this.countPoint = Math.max(0, Math.min(this.maxCountPoint, this.countPoint + d))
+    }
+    onStateRemoved(detail: SkillDetail): void {
+        if (detail.abilityEffectType === "STUN" && this.enemy) this.repeatStunParryRate = Math.min(this.repeatStunParryRate + 25, 80)
+        if (detail.abilityEffectType === "COUNT") { this.countPoint = 0; this.maxCountPoint = 0 }
+        if (detail.abilityEffectType === "TSUBAME_CORE") {
+            // [CONFIRMED 3.19] TsubameCoreUnitState.OnRemovingFromCondition (0x16d95a0): every TSUBAME_LINK the same caster gave
+            // to the caster's team goes with it.
+            const caster = (detail as any)._applierState as KiokuState | undefined
+            for (const u of this.team.kiokuStates) u.removeStatesWhere(d => d.abilityEffectType === "TSUBAME_LINK" && (d as any)._applierState === (caster ?? this))
+        }
+    }
+
+    // [CONFIRMED 3.19] UnitCondition.AddUnitState: after a successful roll, a new ailment (Burn/Poison/Curse/Bleed/
+    // Vortex/Weakness/Stun) is blocked by the unit's first active PREVENT_ABNORMAL with RemainCount >= 1, which loses
+    // one count (ConsumeRemainCount). Debuffs are not blocked.
+    blockedByPreventAbnormal(detail: SkillDetail): boolean {
+        if (!isAlimentEffect(detail.abilityEffectType)) return false
+        for (const map of [this.activeEffectDetails, this.passiveEffectDetails] as Map<string, SkillDetail>[]) {
+            const hit = [...map.entries()].find(([, d]) => d.abilityEffectType === "PREVENT_ABNORMAL" && (d.remainCount ?? 0) >= 1 && this.isEffectCurrentlyActive(d))
+            if (!hit) continue
+            const remain = (hit[1].remainCount ?? 0) - 1
+            if (remain < 1) map.delete(hit[0]); else map.set(hit[0], { ...hit[1], remainCount: remain })
+            return true
+        }
+        return false
+    }
+
+    // [CONFIRMED 3.19] REFLECTION_RATIO (ReflectionRatioUnitState, ctor 0x16d6520; Triggering 0x16d6c50): when this unit
+    // is hit while it has barrier endurance X > 0, each active reflection state deals
+    //   base = ratio/100 * X * ((X/124)^1.2 + 12) / 20      (ratio = v1/10)
+    // through the attack pipeline without crit (GetReflectionDamageResult 0x1380070) to every living unit of the other
+    // team (value2 > 0) or to the attacker (value2 = 0). It can't kill (AttacksToNearDeath: HP - 1 at most).
+    reflectDamage(attacker: KiokuState): void {
+        const x = this.barrierEndurance
+        if (x <= 0) return
+        for (const d of this.filteredEffects()["REFLECTION_RATIO"] ?? []) {
+            const ratio = f32(f32(d.value1) / 10)
+            const base = dec.float(ratio).div(dec.int(100)).mul(dec.int(x)).mul(dec.float(Math.pow(x / 124.0, 1.2)).add(dec.int(12))).div(dec.int(20))
+            const victims = (d.value2 ?? 0) > 0 ? this.team.otherTeam.kiokuStates.filter(u => !u.isDead) : (attacker.isDead ? [] : [attacker])
+            for (const v of victims) {
+                const r = getAttackDamageResult(this, v, { ...d, value1: 0 } as SkillDetail, DamageBaseType.DEF, {
+                    battleType: this.team.battleType, damageBaseOverride: base, forceCrit: false, attackElementOverride: d.element ?? 0,
+                })
+                const dmg = v.team.modeChangeDamageCut(v, Math.max(0, Math.min(r.finalDamage, v.currentHp - 1)))
+                const lost = v.takeDamage(dmg)
+                this.team.eventLog.push({ kind: "hit", source: `${this.kioku.name} (reflect)`, target: v.kioku.name, amount: lost, sourceIsTeam1: this.team.isTeam1, targetIsTeam1: v.team.isTeam1, targetPos: v.posIdx })
+                v.lastNotice = mergeNotice(v.lastNotice, { ...emptyNotice(), totalDamageValue: lost, isReceivedReflection: true })
+            }
+        }
+    }
+
+    // VortexProcess: -1 RemainAttackCount on every vortex; the ones at < 1 deal their damage through the slip pipeline
+    // (GetSlipDamageValue, aqua; UP/DWN_GIV_VORTEX_DMG_RATIO apply), give the holder DOT EP, and are removed.
+    popVortex(): number {
+        let total = 0
+        for (const [key, d] of [...this.passiveEffectDetails] as [string, any][]) {
+            if (d.abilityEffectType !== "VORTEX_ATK") continue
+            d._remainAttackCount = (d._remainAttackCount ?? 0) - 1
+            if (d._remainAttackCount >= 1) continue
+            this.passiveEffectDetails.delete(key)
+            const owner: KiokuState = d._applierState ?? this
+            const dmg = getSlipDamageResult(owner, this, { ...d, element: 2 }, DamageBaseType.ATK, this.team.battleType)
+            total += dmg
+            this.getMp(2)
+            this.team.eventLog.push({ kind: "dot", source: `${owner.kioku.name} (vortex)`, target: this.kioku.name, amount: dmg, sourceIsTeam1: owner.team.isTeam1, targetIsTeam1: this.team.isTeam1, targetPos: this.posIdx })
+        }
+        return total
+    }
+
+    // UniqueLvDebuffUnitStateBase.TryCountUp (0x16de5f0): below MaxLv, HitCounter++; reaching the next level's
+    // conditionCount (UniqueStateLevelMst, group = value2) levels up and resets the counter.
+    uniqueLvUp(attacker: KiokuState): void {
+        for (const map of [this.activeEffectDetails, this.passiveEffectDetails] as Map<string, any>[]) {
+            for (const [key, d] of map) {
+                if (d.abilityEffectType !== "UNIQUE_ELEMENT_STACK" && d.abilityEffectType !== "UNIQUE_ELEMENT_BREAK") continue
+                if (!this.isEffectCurrentlyActive(d)) continue
+                if (d.abilityEffectType === "UNIQUE_ELEMENT_STACK" && d.element && elementMap[d.element] !== attacker.kioku.data.element) continue
+                if (d.abilityEffectType === "UNIQUE_ELEMENT_BREAK" && d._applierState !== attacker) continue
+                const levels = UNIQUE_LEVELS.get(d.value2) ?? []
+                const maxLv = levels.reduce((m, r) => Math.max(m, r.level), 1)
+                let lv = d._lv ?? 1, counter = d._hitCounter ?? 0
+                if (lv >= maxLv) continue
+                counter++
+                const next = levels.find(r => r.level === lv + 1)
+                if (next && next.conditionCount > 0 && counter >= next.conditionCount) { lv++; counter = 0 }
+                map.set(key, { ...d, _lv: lv, _hitCounter: counter })
+            }
+        }
+    }
+
+    collectConsumable(): [Map<string, any>, string][] {
+        const out: [Map<string, any>, string][] = []
+        for (const map of [this.activeEffectDetails, this.passiveEffectDetails] as Map<string, any>[])
+            for (const [key, d] of map) if (CONSUME_ON_ATTACK_STATE_TYPES.has(d.abilityEffectType) && (d.remainCount ?? 0) >= 1 && this.isEffectCurrentlyActive(d)) out.push([map, key])
+        return out
+    }
+    consumeCollected(list: [Map<string, any>, string][]): void {
+        for (const [map, key] of list) {
+            const d = map.get(key)
+            if (!d) continue
+            const remain = Math.max(0, (d.remainCount ?? 0) - 1)
+            if (remain < 1) { map.delete(key); this.onStateRemoved(d) } else map.set(key, { ...d, remainCount: remain })
+        }
+        if (list.length) this.updateSpd()
+    }
+
+    // [CONFIRMED 3.19] REGAIN_ATK / REGAIN_DEF / REGAIN_HP (RegainUnitStateBase.GetAdditionalHpRecoveryValue 0x16d7320,
+    // from AbilityEffectLauncher.GetAdditionalRecoveryResult 0x1372f70): once per skill launch, if it hit an opposing
+    // unit, the holder heals Ceiling(sum over its regain states of GetProcessedRecoveryValue(holder, holder,
+    // caster's processed ATK (DEF / MaxHP) * v1/1000 + v2, PvP/GvG)).
+    regainAfterLaunch(noticeStart: number): void {
+        const regains = ["REGAIN_ATK", "REGAIN_DEF", "REGAIN_HP"].flatMap(t => this.filteredEffects()[t] ?? [])
+        if (!regains.length || this.isDead) return
+        if (!this.team.otherTeam.lastActionNotices.slice(noticeStart).some(n => n.isReceivedAttack)) return
+        const suppress = this.team.battleType === BattleType.Pvp || this.team.battleType === BattleType.Gvg
+        let sum = 0
+        for (const d of regains) {
+            const src: KiokuState = (d as any)._applierState ?? this
+            const stat = d.abilityEffectType === "REGAIN_ATK" ? getProcessedAtk(src) : d.abilityEffectType === "REGAIN_DEF" ? getProcessedDef(src) : src.maxHp
+            sum += getProcessedRecoveryValue(this, this, stat * (d.value1 / 1000) + ((d as any).value2 ?? 0), suppress)
+        }
+        if (sum > 0) this.heal(Math.ceil(sum), this)
+    }
+
+    // Removes matching timed and permanent states (running onStateRemoved for each).
+    removeStatesWhere(pred: (d: SkillDetail) => boolean): number {
+        let n = 0
+        for (const map of [this.activeEffectDetails, this.passiveEffectDetails] as Map<string, SkillDetail>[]) {
+            for (const [key, d] of [...map]) if (pred(d)) { map.delete(key); n++; this.onStateRemoved(d) }
+        }
+        if (n) this.updateSpd()
+        return n
+    }
+
+    // Link HP bookkeeping (PvPTeam.syncLinkHp): already counted as defeated / HP at the last sync.
+    _linkCounted?: boolean
+    _linkSyncedHp?: number
+
     get isDead(): boolean {
         return this.currentHp <= 0 && (this.enemy?.hpGaugeCount ?? 1) < 2
     }
@@ -510,9 +684,19 @@ export class KiokuState {
     // [CONFIRMED] ReDriveBattleCore.BattleUnit$$SetHP (clamp) + $$Attack (delta + return
     // actual amount lost).
     takeDamage(damage: number): number {
+        const wasDead = this.isDead
         const before = this.currentHp
         this.currentHp = Math.max(0, Math.min(this.maxHp, before - damage))
+        if (!wasDead && this.isDead) this.onDeath()
         return before - this.currentHp
+    }
+
+    // [CONFIRMED 3.19] IRemoveByUserUnitDeath: every UniqueUnitStateBase state (UNIQUE_BUFF/DEBUFF(+ACCUM),
+    // UNIQUE_ELEMENT_STACK/BREAK, UNIQUE_ZONE) this unit gave goes when it dies.
+    onDeath(): void {
+        const teams = this.team.otherTeam ? [this.team, this.team.otherTeam] : [this.team]
+        for (const t of teams) for (const u of t.kiokuStates)
+            u.removeStatesWhere(d => REMOVE_ON_GIVER_DEATH.has(d.abilityEffectType) && (d as any)._applierState === this)
     }
 
     heal(amount: number, source?: KiokuState): number {
@@ -588,7 +772,6 @@ export class KiokuState {
     // Also ticks DOT/HoT - see tickDotEffects()/tickHotEffects().
     decrementActiveEffects() {
         this.tickDotEffects()
-        this.tickHotEffects()
         const updated: typeof this.activeEffectDetails = new Map();
         for (const [key, detail] of this.activeEffectDetails) {
             let turn = detail.turn;
@@ -598,6 +781,7 @@ export class KiokuState {
                 turn = turn - 1
             }
             if (turn > 0) updated.set(key, { ...detail, turn })
+            else this.onStateRemoved(detail)
         }
         this.activeEffectDetails = updated;
     }
@@ -626,31 +810,37 @@ export class KiokuState {
             const applier = detail._applierState ?? this;
             const dmg = getSlipDamageResult(applier, this, detail, damageBaseType, this.team.battleType)
             const lost = this.takeDamage(dmg)
+            if (!this.isDead) this.getMp(2)
             this.team.eventLog.push({ kind: "dot", source: applier.kioku.name, target: this.kioku.name, amount: lost, sourceIsTeam1: applier.team.isTeam1, targetIsTeam1: this.team.isTeam1, targetPos: this.posIdx })
         }
     }
 
-    // [RECONSTRUCTED by analogy] CONTINUOUS_RECOVERY ("HoT") - not independently
-    // decompiled (I didn't locate a dedicated ReDriveBattleCore.UnitState class for it
-    // in the functions I extracted), but architecturally it should mirror the DOT tick
-    // pattern (a stored, timed effect that fires every end-of-turn) with the sign
-    // flipped (heal instead of damage). Uses the same getDamageBase-style
-    // power/statValue scaling via RECOVERY_HP_ATK's formula (see applyEffect) since no
-    // other heal-scaling formula is confirmed. Flagged as a reconstruction, not a
-    // decompiled fact - see MISSING_AND_UNCERTAIN.md.
-    private tickHotEffects(): void {
+    // [CONFIRMED 3.19] CONTINUOUS_RECOVERY: ContinuousRecoveryUnitState.GetRecoveryValue (0x15b67d0) =
+    // GetProcessedRecoveryValue(holder, holder, holder MaxHP * (v1/10)/100 + v2, no PvP suppression); ticked by
+    // ActExecutor.ContinuousRecoveryProcess (0x17df600) at the start of the holder's turn (TurnBegin): the values of
+    // all its HoT states are summed, then heal = Max(0, Ceiling(sum)).
+    tickHotEffects(): void {
+        let sum = 0, any = false
         for (const detail of this.activeEffectDetails.values()) {
-            if (detail.abilityEffectType !== "CONTINUOUS_RECOVERY") continue
-            const applier = detail._applierState ?? this;
-            const healAmount = Math.floor(applier.kioku.getBaseAtk() * (detail.value1 / 1000));
-            this.heal(healAmount, applier);
+            if (detail.abilityEffectType !== "CONTINUOUS_RECOVERY" || !this.isEffectCurrentlyActive(detail)) continue
+            any = true
+            const base = this.maxHp * (f32(f32(detail.value1) / 10) / 100) + f32((detail as any).value2 ?? 0)
+            sum += getProcessedRecoveryValue(this, this, base, false)
         }
+        if (any && !this.isDead) this.heal(Math.max(0, Math.ceil(sum)), this)
     }
 
     currentBuffs(): string[] {
         return [...this.activeEffectDetails.values()]
             .filter(d => isFriendlyEffect(d.abilityEffectType))
             .map(d => `${d.applier} - ${d.description}`)
+    }
+
+    // Is a state of this type on the unit (timed or permanent)?
+    hasState(abilityEffectType: string): boolean {
+        for (const d of this.activeEffectDetails.values()) if (d.abilityEffectType === abilityEffectType) return true
+        for (const d of this.passiveEffectDetails.values()) if (d.abilityEffectType === abilityEffectType) return true
+        return false
     }
 
     // Ailments (burn, curse, poison, stun, vortex, weakness, wound), listed apart from debuffs:
@@ -676,7 +866,23 @@ export class KiokuState {
     // skipped when Mathf.Approximately. It runs after EVERY state (not once after all passives), so
     // float rounding depends on the exact order of SPD states and HASTE/SLOW - which is what breaks
     // exact ties between otherwise identical units (e.g. mirrored Thunder Torrents).
+    // [CONFIRMED 3.19] UP_HP_RATIO (UpHpRatioUnitState, IMaxHpVariation 0x16e5b80) in BattleUnit.UpdateParameter
+    // (0x1388cd0): bonus = Ceiling(sum of base HP * (v1/10)/100); MaxHP = base + bonus; when the bonus grows the
+    // unit also gains the difference as HP; when it shrinks HP is only clamped to the new MaxHP.
+    updateMaxHp(): void {
+        const baseHp = this.kioku.getBaseHp()
+        let sum = 0
+        for (const d of this.filteredEffects()["UP_HP_RATIO"] ?? []) sum += baseHp * (f32(f32(d.value1) / 10) / 100)
+        const bonus = Math.ceil(sum)
+        const oldBonus = this.maxHp - baseHp
+        if (bonus === 0 && oldBonus === 0) return
+        const gain = bonus > oldBonus ? bonus - oldBonus : 0
+        this.maxHp = baseHp + bonus
+        this.currentHp = Math.max(0, Math.min(this.maxHp, this.currentHp + (this.isDead ? 0 : gain)))
+    }
+
     updateSpd(updateGauge = true): void {
+        this.updateMaxHp()
         const { speed, steps } = getProcessedSpeedWithBreakdown(this)
         this.currSpdEffects = steps.map(([step, d]) => [step, d.description, (d as any).applier])
         this.currentSpd = speed
@@ -720,9 +926,28 @@ export class KiokuState {
         this.getMp(mpGainFromAction[action])
     }
 
+    // [CONFIRMED 3.19] EpCharger.GetProcessedRecoveryEp (0x1497980), then EP = Clamp(EP + gain, 0, MaxEP):
+    //   rate = 100 (+ the style's RecoveryEpRate, not in our data); every active UP_EP_RECOVER_RATE_RATIO adds v1/10;
+    //   then every DWN_EP_RECOVER_RATE_RATIO in turn: rate -= rate * (v1/10) / 100;
+    //   gain = floor(Max(0, (rate - 100) * ep / 100 + ep)). Enemies have no EP.
+    // (Was a multiplier computed once at battle start, so buffs gained later never counted.)
     getMp(mp: number): void {
-        if (this.enemy) return // enemies have no EP (MaxEP 0)
-        this.currentMp += Math.floor(mp * this.currentMpGain)
+        if (this.enemy) return
+        const fx = this.filteredEffects()
+        let rate = 100
+        for (const d of fx["UP_EP_RECOVER_RATE_RATIO"] ?? []) rate = f32(rate + f32(f32(d.value1) / 10))
+        for (const d of fx["DWN_EP_RECOVER_RATE_RATIO"] ?? []) rate = f32(rate + -f32(f32(rate * f32(f32(d.value1) / 10)) / 100))
+        const v = Math.max(0, f32(f32(f32(f32(rate - 100) * f32(mp)) / 100) + f32(mp)))
+        const gain = Math.floor(v)
+        this.currentMp = Math.max(0, Math.min(this.maxMp, this.currentMp + gain))
+    }
+
+    // [CONFIRMED 3.19] EpCharger.ChargeByReceiveDamage (0x1497520): EP by HP% after the hit (<10: 15, <40: 10, else 5),
+    // only while alive. Kills give the attacker 10 (DefeatUnit, 0x14973a0); a DOT tick gives 2 (0x1497880).
+    chargeByReceiveDamage(): void {
+        if (this.isDead) return
+        const pct = this.currentHp * 100 / this.maxHp
+        this.getMp(pct < 10 ? 15 : pct < 40 ? 10 : 5)
     }
 
     secondsUntilAbleToAct(): number {
@@ -786,7 +1011,74 @@ export class KiokuState {
     // this turn's decrement, and tracking the applying KiokuState (`applierState`) so
     // DOT/HoT ticks can scale off the right unit's stats (see tickDotEffects/
     // tickHotEffects and DamageCalculator.ts's getSlipDamageResult).
+    // [CONFIRMED 3.19] StateAbilityEffect.ChangeGiveUnitState (0x19013a0), for states given by a unit (not card/support
+    // passives): an IHasUpdateableEffectValue state's value is multiplied by Max(1 + s, 0), s = sum over the GIVER's
+    // active UP/DWN_BUFF_EFFECT_VALUE (for Positive states) or UP/DWN_DEBUFF_EFFECT_VALUE (Negative states) of
+    // +-v1/1000. Replaces the old one-time pre-scaling of the kioku's own passives (PvPKioku). TSUBAME_LINK scales
+    // its SPD and ATK parts (value1, value2), not its extra damage (value3).
+    private giveTransform(detail: SkillDetail, applierState: KiokuState): SkillDetail {
+        const type = detail.abilityEffectType
+        if ((detail as any)._noEffectValueScale || !UPDATEABLE_STATE_TYPES.has(type)) return detail
+        const neg = NEGATIVE_STATE_TYPES.has(type)
+        const fx = applierState.filteredEffects()
+        let sum = 0
+        for (const d of fx[neg ? "UP_DEBUFF_EFFECT_VALUE" : "UP_BUFF_EFFECT_VALUE"] ?? []) sum = f32(sum + f32(f32(f32(d.value1) / 10) / 100))
+        for (const d of fx[neg ? "DWN_DEBUFF_EFFECT_VALUE" : "DWN_BUFF_EFFECT_VALUE"] ?? []) sum = f32(sum - f32(f32(f32(d.value1) / 10) / 100))
+        if (sum === 0) return detail
+        const m = Math.max(f32(sum + 1), 0)
+        const out: any = { ...detail, value1: f32(detail.value1 * m), _effectValueRate: m }
+        if (type === "TSUBAME_LINK") out.value2 = f32(((detail as any).value2 ?? 0) * m)
+        return out
+    }
+
+    // CanAddTo overrides that aren't a role/element filter.
+    private canAddTo(t: KiokuState, detail: SkillDetail, applierState: KiokuState): boolean {
+        const type = detail.abilityEffectType
+        if (type === "TSUBAME_CORE") return t === applierState     // 0x16d9090: the caster only
+        if (type === "TSUBAME_LINK") return t !== applierState     // 0x16d9950: everyone but the caster
+        return true
+    }
+
+    // [CONFIRMED 3.19] Unique accum / Lv states blend instead of stacking copies. Returns true if merged.
+    private mergeUniqueState(t: KiokuState, detail: SkillDetail, applierState: KiokuState): boolean {
+        const type = detail.abilityEffectType
+        const maps = [t.activeEffectDetails, t.passiveEffectDetails] as Map<string, any>[]
+        if (type === "UNIQUE_BUFF_ACCUM" || type === "UNIQUE_DEBUFF_ACCUM") {
+            // UniqueAccumUnitStateBase.Blend (0x16ddaf0): same class, pattern (value1), giver and AccumCountMax (value2):
+            // AccumCount = min(+1, max); remaining turn and the exempt flag are overwritten by the new application.
+            for (const map of maps) for (const [key, d] of map) {
+                if (d.abilityEffectType === type && d.value1 === detail.value1 && d._applierState === applierState && (d.value2 ?? 0) === (detail.value2 ?? 0)) {
+                    map.set(key, { ...d, _accumCount: Math.min((d._accumCount ?? 1) + 1, detail.value2 || 1), turn: detail.turn, _isExemptPassingTurnOnce: !!detail.turn && this.isOwnSkillState(t, detail, applierState) })
+                    return true
+                }
+            }
+        }
+        if (type === "UNIQUE_ELEMENT_STACK" || type === "UNIQUE_ELEMENT_BREAK") {
+            // UniqueLvDebuffUnitStateBase.Blend (0x16de420): same pattern -> RemainingTurn = max(old, new); Lv and
+            // HitCounter are kept.
+            for (const map of maps) for (const [key, d] of map) {
+                if (d.abilityEffectType === type && d.value1 === detail.value1) {
+                    map.set(key, { ...d, turn: Math.max(d.turn ?? 0, detail.turn ?? 0), _isExemptPassingTurnOnce: this.isOwnSkillState(t, detail, applierState) })
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    // Unit whose act is running when applyEffect was called (for the exempt-once rule below).
+    private _actUnit?: KiokuState
+    // [CONFIRMED 3.19] StateAbilityEffect.Triggering (0x1901cb0) / UnitStateBase.SetTriggeringInfo (0x16dfd70):
+    // IsExemptPassingTurnOnce only for a state a unit gives ITSELF - from an active skill, or from a passive while
+    // it is that unit's own act. Matches in-game observation (a buff from an ally ticks at your next TurnEnd).
+    private isOwnSkillState(t: KiokuState, detail: SkillDetail, applierState: KiokuState): boolean {
+        if (t !== applierState) return false
+        return !("passiveSkillDetailMstId" in detail) || this._actUnit === applierState
+    }
+
     private storeTimedEffect(t: KiokuState, detail: SkillDetail, applier: string, applierState: KiokuState): boolean {
+        detail = this.giveTransform(detail, applierState)
+        if (!this.canAddTo(t, detail, applierState)) return false
         // [CONFIRMED] ReDriveBattleCore.UnitCondition$$AddUnitState's actual order: a
         // per-state `CanAddTo(targetUnit)` gate FIRST, then the probability roll (see
         // rollAppliesEffect, UnitStateEngine.ts, for that formula and citations).
@@ -801,6 +1093,11 @@ export class KiokuState {
         // further to add at this specific call site - noted here so the connection
         // between that pre-existing filter and this newly-read C# method isn't lost.
         if (!rollAppliesEffect(detail, applierState, t, this.team.rng)) return false;
+        // [CONFIRMED 3.19] UnitCondition.AddUnitState: after a successful roll, a new ailment (Burn/Poison/Curse/
+        // Bleed/Vortex/Weakness/Stun) is blocked by the target's first active PREVENT_ABNORMAL with RemainCount >= 1,
+        // which loses one count (ConsumeRemainCount). Debuffs are not blocked.
+        if (t.blockedByPreventAbnormal(detail)) return false
+        if (this.mergeUniqueState(t, detail, applierState)) { t.updateSpd(); return true }
         const key = String(skillDetailId(detail))
         const existing = t.activeEffectDetails.get(key)
         if (existing && ACCUM_RATIO_EFFECT_TYPES.has(detail.abilityEffectType)) {
@@ -808,13 +1105,30 @@ export class KiokuState {
             t.updateSpd()
             return true
         }
-        t.activeEffectDetails.set(key, { applier, ...detail, _isExemptPassingTurnOnce: true, _accumCount: 1, _applierState: applierState })
+        // [CONFIRMED 3.19] StateAbilityEffect.ChangeGiveUnitState (0x19013a0): every active
+        // AddTurnUnitStateBase on the USER calls AddTurnTo(newState) -> UnitStateBase.AddEffectTurn(AddTurnNum = value1)
+        // when the new state is an IBuff (ADD_BUFF_TURN) / IDebuff (ADD_DEBUFF_TURN). Ailments are neither,
+        // and an AddTurn state never extends another AddTurn state.
+        let turn = detail.turn
+        if (turn && detail.abilityEffectType !== "ADD_BUFF_TURN" && detail.abilityEffectType !== "ADD_DEBUFF_TURN"
+            && !isAlimentEffect(detail.abilityEffectType)) {
+            const fx = applierState.filteredEffects()
+            const want = isFriendlyEffect(detail.abilityEffectType) ? "ADD_BUFF_TURN"
+                : isOpponentEffect(detail.abilityEffectType) ? "ADD_DEBUFF_TURN" : undefined
+            if (want) for (const d of fx[want] ?? []) turn += d.value1
+        }
+        t.activeEffectDetails.set(key, { applier, ...detail, turn, _isExemptPassingTurnOnce: this.isOwnSkillState(t, detail, applierState), _accumCount: 1, _applierState: applierState,
+            ...(detail.abilityEffectType.startsWith("UNIQUE_ELEMENT_") ? { _lv: 1, _hitCounter: 0 } : {}),
+            ...(detail.abilityEffectType === "VORTEX_ATK" ? { _remainAttackCount: detail.value2 ?? 0 } : {}) } as any)
         t.updateSpd()
         return true
     }
 
     private storePermanentState(t: KiokuState, detail: SkillDetail, applier: string, applierState: KiokuState): boolean {
+        detail = this.giveTransform(detail, applierState)
+        if (!this.canAddTo(t, detail, applierState)) return false
         if (!rollAppliesEffect(detail, applierState, t, this.team.rng)) return false;
+        if (this.mergeUniqueState(t, detail, applierState)) { t.updateSpd(); return true }
         const key = String(skillDetailId(detail))
         const existing = t.passiveEffectDetails.get(key)
         if (existing) {
@@ -833,6 +1147,7 @@ export class KiokuState {
         // [CONFIRMED 3.19] A state's ActiveConditionSet is re-checked continuously
         // (UnitStateBase.IsActive), not at the moment it is added: only the start conditions gate
         // adding a state. Instant effects (damage, EP, HASTE, ...) check both now.
+        this._actUnit = trueActorUnit
         const triggerState = this.stateGen(this, target, targetType, trueActorUnit, mainTarget)
         if (UNIT_STATE_TYPES.has(detail.abilityEffectType)
             ? !isConditionSetActiveForPvP((detail.startConditionSetIdCsv ?? "").split(","), triggerState)
@@ -847,7 +1162,7 @@ export class KiokuState {
         if (detail.abilityEffectType === "DMG_RATIO") {
             const base = detail.value1 > 0 ? f32(target.currentHp * f32(f32(detail.value1) / 1000))
                 : f32(target.maxHp * f32(f32((detail as any).value2 ?? 0) / 1000))
-            const dmg = Math.max(0, Math.min(Math.floor(base), target.currentHp - 1))
+            const dmg = target.team.modeChangeDamageCut(target, Math.max(0, Math.min(Math.floor(base), target.currentHp - 1)))
             const hpLost = target.takeDamage(dmg)
             this.team.eventLog.push({ kind: "hit", source: this.kioku.name, target: target.kioku.name, amount: hpLost, sourceIsTeam1: this.team.isTeam1, targetIsTeam1: target.team.isTeam1, targetPos: target.posIdx })
             target.lastNotice = mergeNotice(target.lastNotice, { ...emptyNotice(), totalDamageValue: hpLost, isReceivedAttack: true })
@@ -855,7 +1170,6 @@ export class KiokuState {
         }
 
         if (detail.abilityEffectType.startsWith("DMG_")) {
-            target.getMp(5)
 
             const damageBaseType = damageBaseTypeFromEffectType(detail.abilityEffectType)
             const battleType = this.team.battleType
@@ -863,6 +1177,15 @@ export class KiokuState {
             // skill only the main target takes value1 power; the others take value2.
             const isMainTarget = mainTarget === undefined || mainTarget === target
             const rng = this.team.rng
+            // [CONFIRMED 3.19] ReflectionProcess (0x18eefb0) runs before the damage calc of every hit.
+            if (!(targetType === TargetType.fuaId && (detail as any).skillType === 5)) target.reflectDamage(this)
+            // [CONFIRMED 3.19] BattleDamageCalculator.IsDamageDisabled (0x1381490): a unit holding UNIQUE_ENEMY_639002 takes
+            // 0 damage (CreateByDisabledDamageHit).
+            if (target.hasState("UNIQUE_ENEMY_639002")) {
+                this.team.eventLog.push({ kind: "hit", source: this.kioku.name, target: target.kioku.name, amount: 0, sourceIsTeam1: this.team.isTeam1, targetIsTeam1: target.team.isTeam1, targetPos: target.posIdx })
+                target.lastNotice = mergeNotice(target.lastNotice, { ...emptyNotice(), isReceivedAttack: true })
+                return
+            }
             const result = getAttackDamageResult(this, target, detail, damageBaseType, {
                 battleType, isMainTarget, rng, rngLabel: `${unitLabel(this)} → ${unitLabel(target)} crit`,
                 forceCrit: this.team.critOverride?.(this, target, detail),
@@ -878,6 +1201,19 @@ export class KiokuState {
                 const applier: KiokuState = (bonus as any)._applierState ?? this
                 const extra = getAttackDamageResult(this, target, bonus, DamageBaseType.ATK, {
                     battleType, rng, rngLabel: `${unitLabel(this)} → ${unitLabel(target)} crit (additional damage)`,
+                    damageBaseOverride: getAdditionalDamageBase(applier, bonus),
+                    attackElementOverride: elementNumberOf(this),
+                    forceCrit: this.team.critOverride?.(this, target, bonus),
+                })
+                totalDamage += extra.finalDamage
+            }
+            // [CONFIRMED 3.19] TsubameLinkUnitState also works like ADDITIONAL_DAMAGE (0x16d9970): power value3/10 %, damage
+            // base from the caster (Luce) - not scaled by the effect-value multiplier.
+            for (const link of this.filteredEffects()["TSUBAME_LINK"] ?? []) {
+                const applier: KiokuState = (link as any)._applierState ?? this
+                const bonus = { ...link, value1: (link as any).value3 ?? 0 } as SkillDetail
+                const extra = getAttackDamageResult(this, target, bonus, DamageBaseType.ATK, {
+                    battleType, rng, rngLabel: `${unitLabel(this)} → ${unitLabel(target)} crit (Swallow link)`,
                     damageBaseOverride: getAdditionalDamageBase(applier, bonus),
                     attackElementOverride: elementNumberOf(this),
                     forceCrit: this.team.critOverride?.(this, target, bonus),
@@ -901,7 +1237,22 @@ export class KiokuState {
             const rateUp = increaseBreakedDamageReceiveRate(this, target, detail)
             const brk = decreaseBreakPoint(this, target, detail.element ?? 0, breakValue, this.turnPriorityForEffect())
 
+            // [CONFIRMED 3.19] BattleUnit.Attack: first UpdateCountdownCancelTotalDamage - damage to a unit holding the
+            // countdown state adds to CancelTotalDamage (capped at the threshold, AddCancelTotalDamage 0x14a6ce0) -
+            // then the boss form-change cut (see PvPTeam.modeChangeDamageCut), then the HP loss.
+            const cd = this.team.countdown
+            if (cd?.unit && target.hasState("COUNTDOWN_START")) cd.cancelTotal = Math.min(cd.cancelMax, cd.cancelTotal + totalDamage)
+            totalDamage = target.team.modeChangeDamageCut(target, totalDamage)
+            const wasAlive = !target.isDead
+            // [CONFIRMED 3.19] VortexProcess (0x18f0260): after the damage calc, every vortex on the target counts the hit;
+            // the ones that reach 0 pop now (their damage joins this hit's).
+            totalDamage += target.popVortex()
             const hpLost = target.takeDamage(totalDamage)
+            target.chargeByReceiveDamage()
+            if (wasAlive && target.isDead) this.getMp(10)
+            // [CONFIRMED 3.19] UniqueStateLvUpProcess (0x18eff70): after each damaging hit on a living target, its unique
+            // Lv states count the hit (UNIQUE_ELEMENT_STACK: attacker of the state's element; _BREAK: the state's giver).
+            if (!target.isDead) target.uniqueLvUp(this)
             this.team.eventLog.push({
                 kind: "hit", source: this.kioku.name, target: target.kioku.name, amount: hpLost,
                 barrierAbsorbed: result.barrierAbsorbed, isCritical: result.isCritical,
@@ -982,7 +1333,11 @@ export class KiokuState {
                 const bt = this.team.battleType
                 const suppress = (f: number) => (bt === BattleType.Pvp || bt === BattleType.Gvg)
                     ? f32(f * f32(1 - f32(PVP_POLICY.barrierEnduranceSuppresionRatio / 1000))) : f
-                const ratio = f32(f32(detail.value1) / 1000), fixed = f32(detail.value2), maxRatio = f32(f32(detail.value3) / 1000)
+                // [CONFIRMED 3.19] StateAbilityEffect.ChangeGiveUnitState (0x19013a0): a barrier given by a caster holding
+                // DWN_BARRIER_VALUE is scaled by r = product of Max(1 - v1/1000, 0) (BarrierUnitState.UpdateValueByRate).
+                let r = 1
+                for (const d of this.filteredEffects()["DWN_BARRIER_VALUE"] ?? []) r = f32(r * Math.max(f32(1 - f32(f32(f32(d.value1) / 10) / 100)), 0))
+                const ratio = Math.max(f32(f32(f32(detail.value1) / 1000) * r), 0), fixed = Math.max(f32(f32(detail.value2) * r), 0), maxRatio = Math.max(f32(f32(f32(detail.value3) / 1000) * r), 0)
                 const grant = Math.ceil(suppress(f32(f32(getProcessedDef(t) * ratio) + fixed)))
                 const cap = maxRatio === 0 ? grant : Math.ceil(suppress(f32(f32(t.kioku.getBaseDef()) * maxRatio)))
                 const newMax = Math.max(t.maxBarrierEndurance, cap)
@@ -993,26 +1348,8 @@ export class KiokuState {
             return;
         }
 
-        // [CONFIRMED strings] [IMPLEMENTED] ADD_BUFF_TURN/ADD_DEBUFF_TURN(+_IMM):
-        // extends the remaining duration of the target's currently-active buffs (or
-        // debuffs) by `value1` turns. Distinguished from AddTurnUnitStateBase's
-        // "grant a bonus turn" cousin classes by name only - see MISSING_AND_UNCERTAIN.md
-        // for why these two are NOT the same mechanic as ADDITIONAL_TURN_UNIT_ACT
-        // despite superficially similar naming (revision 1 conflated them).
-        // The "_IMM" variant's distinguishing behavior isn't confirmed - implemented
-        // identically to the non-IMM version.
-        if (["ADD_BUFF_TURN", "ADD_BUFF_TURN_IMM", "ADD_DEBUFF_TURN", "ADD_DEBUFF_TURN_IMM"].includes(detail.abilityEffectType)) {
-            const wantDebuffs = detail.abilityEffectType.startsWith("ADD_DEBUFF");
-            effTargets.forEach(t => {
-                t.activeEffectDetails.forEach((d, key) => {
-                    const isDebuff = !isAlimentEffect(d.abilityEffectType) && isOpponentEffect(d.abilityEffectType);
-                    const isAliment = isAlimentEffect(d.abilityEffectType);
-                    const matches = wantDebuffs ? (isDebuff || isAliment) : isFriendlyEffect(d.abilityEffectType);
-                    if (matches) t.activeEffectDetails.set(key, { ...d, turn: d.turn + detail.value1 });
-                })
-            });
-            return;
-        }
+        // ADD_BUFF_TURN / ADD_DEBUFF_TURN are states on the caster (see storeTimedEffect's AddTurnTo);
+        // the *_IMM variants are instant and handled further down (ChangeBuffDebuffTurnAbilityEffectBase).
 
         // [CONFIRMED] ReDriveBattleCore.AbilityEffect.RemoveStateAbilityEffectBase$$
         // Triggering (the SHARED base Triggering inherited by all four
@@ -1043,7 +1380,7 @@ export class KiokuState {
                 const matching = [...t.activeEffectDetails.entries()].filter(([, d]) => isMatch(d.abilityEffectType));
                 matching.reverse(); // approximate "most recently applied first"
                 const removeCount = detail.value1 > 0 ? detail.value1 : matching.length;
-                matching.slice(0, removeCount).forEach(([key]) => t.activeEffectDetails.delete(key));
+                matching.slice(0, removeCount).forEach(([key, d]) => { t.activeEffectDetails.delete(key); t.onStateRemoved(d) });
             })
         }
 
@@ -1125,10 +1462,137 @@ export class KiokuState {
         // of activeEffectDetails on demand, and AITargetSelector.ts's
         // filterByRoleAtWeightedRandomWithHate, which is what actually consumes it now
         // (previously nothing did - `aggro` was write-only).
+        if (detail.abilityEffectType === "VORTEX_ATK") {
+            // [CONFIRMED 3.19] VortexAtkUnitState (ctor 0x15d1ed0): an ailment that allows duplicates (each application is
+            // its own instance), never ticks at turn start; RemainAttackCount = value2. Its damage base is fixed when it
+            // is given (SetTriggeringInfo 0x15bf5b0): the caster's unbuffed ATK x power (value1/1000, after the
+            // effect-value multiplier). It pops in VortexProcess, see popVortex.
+            effTargets.forEach(t => {
+                const d = this.giveTransform(detail, this)
+                if (t.isDead || !rollAppliesEffect(d, this, t, this.team.rng) || t.blockedByPreventAbnormal(d)) return
+                t.passiveEffectDetails.set(`vortex:${++vortexSeq}`, { applier: this.kioku.name, ...d, _applierState: this, _remainAttackCount: d.value2 ?? 0 } as any)
+            })
+            return
+        }
+        if (detail.abilityEffectType === "RESET_UNIQUE_BUFF" || detail.abilityEffectType === "RESET_UNIQUE_DEBUFF") {
+            // [CONFIRMED 3.19] ResetUniqueBuffDebuffAbilityEffectBase.Triggering (0x1900190): on each living target remove
+            // every unique state (IBuff for BUFF / IDebuff for DEBUFF) of pattern value1 (0 = nothing), even if normally
+            // not removable; then the turn gauge follows the new speed.
+            if (!detail.value1) return
+            const buff = detail.abilityEffectType === "RESET_UNIQUE_BUFF"
+            const types = buff ? ["UNIQUE_BUFF", "UNIQUE_BUFF_ACCUM"] : ["UNIQUE_DEBUFF", "UNIQUE_DEBUFF_ACCUM", "UNIQUE_ELEMENT_STACK", "UNIQUE_ELEMENT_BREAK"]
+            effTargets.filter(t => !t.isDead).forEach(t => t.removeStatesWhere(d => types.includes(d.abilityEffectType) && d.value1 === detail.value1))
+            return
+        }
+        // ---- ZONE ("field") ---------------------------------------------------------------------------------
+        const fromActiveSkill = !("passiveSkillDetailMstId" in detail)
+        if (detail.abilityEffectType === "ZONE_STACK") {
+            // [CONFIRMED 3.19] ZoneStackAbilityEffect (0x1906d60): Max = clamp(v2, 0, 3); Stack = clamp(v1, 0, Max).
+            effTargets.forEach(t => {
+                t.zone.max = Math.max(0, Math.min(detail.value2 ?? 0, 3))
+                t.zone.stack = Math.max(0, Math.min(detail.value1, t.zone.max))
+            })
+            return
+        }
+        if (detail.abilityEffectType === "ZONE_EXPAND") {
+            // [CONFIRMED 3.19] ZoneExpandAbilityEffect (0x1905ff0): on the user, a fresh expand sets the "field started"
+            // flag and fills the stack; on anyone else with an active zone, that zone is released. The target's
+            // UNIQUE_ZONE marker is removed (the skill's UNIQUE_ZONE row re-adds it team-wide).
+            effTargets.forEach(t => {
+                if (t === this) {
+                    if (t.zone.stack < 1) t.zone.expandPattern = detail.value1
+                    t.zone.stack = t.zone.max
+                } else if (!t.isDead && t.zoneActive) {
+                    t.zone.releasePattern = [...t.passiveEffectDetails.values()].find(d => d.abilityEffectType === "UNIQUE_ZONE")?.value1 ?? detail.value1
+                    t.zone.stack = 0
+                }
+                t.removeStatesWhere(d => d.abilityEffectType === "UNIQUE_ZONE")
+            })
+            return
+        }
+        if (detail.abilityEffectType === "GAIN_ZONE_STACK" || detail.abilityEffectType === "CONSUME_ZONE_STACK") {
+            // [CONFIRMED 3.19] Gain/ConsumeZoneStackAbilityEffect (0x18f3e60 / 0x18ed9e0): active-skill origin only, and
+            // only while a zone is up. Consuming the last stack releases the zone: "field ended" flag, and every
+            // UNIQUE_ZONE marker in the battle is removed.
+            if (!fromActiveSkill) return
+            effTargets.forEach(t => {
+                if (!t.zoneActive) return
+                const sign = detail.abilityEffectType === "GAIN_ZONE_STACK" ? 1 : -1
+                t.zone.stack = Math.max(0, Math.min(t.zone.max, t.zone.stack + sign * detail.value1))
+                if (sign < 0 && t.zone.stack === 0) {
+                    t.zone.releasePattern = [...t.passiveEffectDetails.values(), ...t.activeEffectDetails.values()].find(d => d.abilityEffectType === "UNIQUE_ZONE")?.value1 ?? 1
+                    for (const u of [...this.team.kiokuStates, ...this.team.otherTeam.kiokuStates]) u.removeStatesWhere(d => d.abilityEffectType === "UNIQUE_ZONE")
+                }
+            })
+            return
+        }
+        if (detail.abilityEffectType === "UNIQUE_ZONE") {
+            // [CONFIRMED 3.19] UniqueZoneUnitState is an ITargetTeam state (StateTeamAbilityEffect): value2 = 1 puts it on
+            // every living ally, the user included. A pure marker (condition content 29), removed on the user's death.
+            const team = detail.value2 === 2 ? this.team.otherTeam : this.team
+            team.kiokuStates.filter(u => !u.isDead).forEach(u => this.storePermanentState(u, detail, this.kioku.name, this))
+            return
+        }
+        // ---- COUNT ("sigils") ------------------------------------------------------------------------------
+        if (detail.abilityEffectType === "GAIN_COUNT_POINT" || detail.abilityEffectType === "CONSUME_COUNT_POINT") {
+            // [CONFIRMED 3.19] Gain/ConsumeCountPointAbilityEffect (0x18ee190): TryModifyCountPointBy(+-value1) per target.
+            const d = detail.abilityEffectType === "GAIN_COUNT_POINT" ? detail.value1 : -detail.value1
+            effTargets.forEach(t => t.tryModifyCountPoint(d))
+            return
+        }
+        if (detail.abilityEffectType === "COUNT") {
+            // [CONFIRMED 3.19] CountUnitState: CanAddTo fails if the unit already has one; OnAdded sets MaxCountPoint = 20.
+            effTargets.forEach(t => {
+                if (t.hasState("COUNT")) return
+                if (detail.turn ? this.storeTimedEffect(t, detail, this.kioku.name, this) : this.storePermanentState(t, detail, this.kioku.name, this)) t.maxCountPoint = 20
+            })
+            return
+        }
+        if (detail.abilityEffectType === "GAIN_SOLO_RAID_BUFF_POINT") {
+            // [CONFIRMED 3.19] GainSoloRaidBuffPointAbilityEffect (0x18f35f0): value1 x number of targets (range -1: once);
+            // SoloRaidBuffReferee.AddPoint (0x15bfd20): point = clamp(point + n, 0, active ? 30 : 100). Solo Raid only.
+            const sr = this.team.soloRaid
+            if (sr) sr.point = Math.max(0, Math.min(sr.active ? sr.activeMaxPoint : sr.maxPoint, sr.point + detail.value1 * effTargets.length))
+            return
+        }
+        if (detail.abilityEffectType === "COUNTDOWN_START") {
+            // [CONFIRMED 3.19] CountdownStartUnitState: CanAddTo = the unit has no countdown state yet; ctor sets
+            // countdown = turn - 1 and the cancel threshold = value1; OnAddedToCondition starts the Solo Raid
+            // countdown (StartCountdown 0x14a7fc0) unless one is already running.
+            effTargets.forEach(t => {
+                if (t.hasState("COUNTDOWN_START")) return
+                if (!this.storeTimedEffect(t, detail, this.kioku.name, this)) return
+                const cd = this.team.countdown
+                if (cd && !cd.unit) Object.assign(cd, { max: detail.turn - 1, value: detail.turn - 1, cancelMax: detail.value1, cancelTotal: 0, unit: t })
+            })
+            return
+        }
+        if (detail.abilityEffectType === "COUNTDOWN_DECREASE") {
+            // [CONFIRMED 3.19] CountdownDecreaseAbilityEffect.Triggering (0x18ee3d0): if the USER holds the countdown
+            // state, DecreaseCountdown (0x14a72c0): countdown = max(0, countdown - 1).
+            const cd = this.team.countdown
+            if (cd?.unit && this.hasState("COUNTDOWN_START")) cd.value = Math.max(0, cd.value - 1)
+            return
+        }
+        if (detail.abilityEffectType === "COUNTDOWN_CANCEL") return // CountdownCancelAbilityEffect.Triggering returns null (no effect)
+        if (detail.abilityEffectType === "ADDITIONAL_COUNTDOWN_ZERO_SKILL_ACT" || detail.abilityEffectType === "ADDITIONAL_COUNTDOWN_CANCEL_SKILL_ACT") {
+            // [CONFIRMED 3.19] AdditionalCountdownZero/CancelSkillActAbilityEffect.Triggering (0x18ea100/0x18e9e30):
+            // only while the USER holds the countdown state: queue skill value1 as an additional act, then
+            // End/CancelCountdown - clear the referee and remove the user's CountdownStartUnitState.
+            if (!this.hasState("COUNTDOWN_START")) return
+            for (const [key, d] of [...this.activeEffectDetails]) if (d.abilityEffectType === "COUNTDOWN_START") this.activeEffectDetails.delete(key)
+            for (const [key, d] of [...this.passiveEffectDetails]) if (d.abilityEffectType === "COUNTDOWN_START") this.passiveEffectDetails.delete(key)
+            const cd = this.team.countdown
+            if (cd) Object.assign(cd, { max: 0, value: 0, cancelMax: 0, cancelTotal: 0, unit: undefined })
+            return detail.value1
+        }
         if (detail.turn) {
             // (Timed passive states used to be deleted from the bank after their first trigger,
             // so e.g. an "on attack end: SPD +10% for 1 turn" passive fired once per battle.)
             effTargets.forEach(t => this.storeTimedEffect(t, detail, this.kioku.name, this))
+        } else if ((detail.abilityEffectType === "HASTE" || detail.abilityEffectType === "SLOW") && this.hasState("LOCK_TURN_ORDER")) {
+            // [CONFIRMED 3.19] Haste/SlowAbilityEffect.Triggering: nothing happens when the USER (caster) has
+            // LockTurnOrderUnitState ("Negates effects that advance or delay action order").
         } else if (detail.abilityEffectType === "HASTE") {
             // [CONFIRMED 3.19] HasteAbilityEffect$$Triggering (0x18f4840): SubtractGaugeValue((float)v/1000f)
             const prio = this.turnPriorityForEffect()
@@ -1139,6 +1603,35 @@ export class KiokuState {
             effTargets.forEach(t => t.addGaugeRate(f32(f32(detail.value1) / 1000), prio))
         } else if (detail.abilityEffectType === "GAIN_EP_RATIO") {
             effTargets.forEach(t => t.getMp(target.maxMp * detail.value1 / 1000))
+        } else if (detail.abilityEffectType === "LOSE_EP_RATIO" || detail.abilityEffectType === "LOSE_EP_FIXED") {
+            // [CONFIRMED 3.19] LoseEpAbilityEffectBase.Triggering (0x18f5f40): AddEP(-GetLosePoint(target)), clamped at 0.
+            // Ratio (0x18f61a0): (int)((float)(v * target.MaxEP) / 1000f); fixed: v.
+            effTargets.forEach(t => {
+                const lose = detail.abilityEffectType === "LOSE_EP_FIXED" ? detail.value1 : Math.trunc(f32(detail.value1 * t.maxMp) / 1000)
+                t.currentMp = Math.max(0, t.currentMp - lose)
+            })
+        } else if (["DEC_BUFF_TURN_IMM", "DEC_DEBUFF_TURN_IMM", "ADD_BUFF_TURN_IMM", "ADD_DEBUFF_TURN_IMM"].includes(detail.abilityEffectType)) {
+            // [CONFIRMED 3.19] ChangeBuffDebuffTurnAbilityEffectBase.Triggering (0x18ebf40) / IsChangeableUnitState
+            // (0x18ebab0) / DecreaseTurn (0x18eb3d0): on each living target, every timed (non-permanent) buff (or
+            // debuff) that is not an ailment, an ADD_*_TURN state or Cutaway - and, when value1 != 0, only states of
+            // that id - loses value2 turns; one that would drop below 1 is removed. ADD_* adds value2 turns instead.
+            const isBuff = detail.abilityEffectType.includes("_BUFF_")
+            const add = detail.abilityEffectType.startsWith("ADD_")
+            effTargets.filter(t => !t.isDead).forEach(t => {
+                for (const [key, d] of [...t.activeEffectDetails]) {
+                    const type = d.abilityEffectType
+                    if (!d.turn || isAlimentEffect(type) || type === "CUTOUT" || type === "ADD_BUFF_TURN" || type === "ADD_DEBUFF_TURN") continue
+                    if (isBuff ? !isFriendlyEffect(type) : !isOpponentEffect(type)) continue
+                    if (detail.value1 && skillDetailId(d) !== detail.value1) continue
+                    if (add) t.activeEffectDetails.set(key, { ...d, turn: d.turn + detail.value2 })
+                    else if (d.turn - detail.value2 < 1) t.activeEffectDetails.delete(key)
+                    else t.activeEffectDetails.set(key, { ...d, turn: d.turn - detail.value2 })
+                }
+                t.updateSpd()
+            })
+        } else if (detail.abilityEffectType === "GAIN_BP_FIXED" || detail.abilityEffectType === "LOSE_BP_FIXED") {
+            // [CONFIRMED 3.19] BattleUnit.AddBP (0x1382c30) moves BattleUnit.BP, but nothing in the battle core reads BP
+            // (no condition, no skill cost, no ultimate check - only the UI's BattleUnitInfo). No battle effect.
         } else if (detail.abilityEffectType === "GAIN_EP_FIXED") {
             effTargets.forEach(t => t.getMp(detail.value1))
         } else if (detail.abilityEffectType === "GAIN_SP_FIXED") {
@@ -1153,16 +1646,16 @@ export class KiokuState {
                 ...detail, applier: this.kioku.name, turn: 1,
                 _lockTurnOrder: [...t.activeEffectDetails.values()].some(d => d.abilityEffectType === "LOCK_TURN_ORDER"),
             }))
-        } else if (detail.abilityEffectType === "RECOVERY_HP") {
-            effTargets.forEach(t => t.heal(detail.value1, this))
-        } else if (detail.abilityEffectType === "RECOVERY_HP_ATK") {
-            // [CONFIRMED string] [IMPLEMENTED] heal scaling off the HEALER's (this) own
-            // ATK, using the same base-damage formula as a normal hit (by analogy with
-            // ADDITIONAL_DAMAGE's confirmed calc_base_dmg usage - no dedicated heal
-            // formula was independently confirmed, flagged as a reconstruction).
-            const healAmount = Math.floor(detail.value1 / 1000 * this.kioku.getBaseAtk() * (Math.pow(this.kioku.getBaseAtk() / 124, 1.2) + 12) / 20);
-            effTargets.forEach(t => {
-                const healed = t.heal(healAmount, this);
+        } else if (detail.abilityEffectType === "RECOVERY_HP" || detail.abilityEffectType === "RECOVERY_HP_ATK") {
+            // [CONFIRMED 3.19] RecoveryHpAbilityEffectBase.Triggering (0x18fdf60), living targets only:
+            //   RECOVERY_HP (0x18fe3c0):     base = healer MaxHP * v1/1000 + v2
+            //   RECOVERY_HP_ATK (0x18fe640): base = healer processed (buffed) ATK * v1/1000 + v2
+            //   heal = Ceiling(GetProcessedRecoveryValue(healer, target, Max(base, 0), PvP/GvG)) (UnitStateEngine.ts)
+            const stat = detail.abilityEffectType === "RECOVERY_HP" ? this.maxHp : getProcessedAtk(this)
+            const base = Math.max(0, stat * (detail.value1 / 1000) + ((detail as any).value2 ?? 0))
+            const suppress = this.team.battleType === BattleType.Pvp || this.team.battleType === BattleType.Gvg
+            effTargets.filter(t => !t.isDead).forEach(t => {
+                const healed = t.heal(Math.ceil(getProcessedRecoveryValue(this, t, base, suppress)), this);
                 if (healed > 0) t.lastNotice = mergeNotice(t.lastNotice, { ...emptyNotice(), isReceivedRecovery: true });
             })
         } else if (detail.abilityEffectType === "REVIVAL_RATIO") {
@@ -1177,7 +1670,8 @@ export class KiokuState {
             // confirmed on the info-based ctor - see AITargetSelector.ts's revivalChain
             // for the AI targeting half (uniform random among the dead).
             effTargets.filter(t => t.isDead).forEach(t => {
-                const hp = Math.ceil((detail.value1 / 100) * t.maxHp);
+                // RevivalRatioAbilityEffect (0x1900790): Ceiling((float)MaxHP * ((float)v1 / 100f)), no heal modifiers.
+                const hp = Math.ceil(f32(t.maxHp * f32(detail.value1 / 100)));
                 t.heal(hp, this);
                 t.lastNotice = mergeNotice(t.lastNotice, { ...emptyNotice(), isReceivedRecovery: true });
             })
@@ -1199,9 +1693,10 @@ export class KiokuState {
             effTargets.forEach(t => {
                 t.currentMagic = Math.max(0, Math.min(t.currentMaxMagic, t.currentMagic + detail.value1));
             })
-        } else if ("passiveSkillDetailMstId" in detail) {
-            // Permanent (turn 0) state added by a passive trigger, at any timing. Re-triggering
-            // an IAccum state adds a stack (e.g. UP_ATK_ACCUM_RATIO on every attack end).
+        } else if ("passiveSkillDetailMstId" in detail || UNIT_STATE_TYPES.has(detail.abilityEffectType)) {
+            // Permanent (turn 0) state: added by a passive trigger at any timing, or by a skill (e.g. an enemy's
+            // LOCK_TURN_ORDER, "Cannot be removed"). Re-triggering an IAccum state adds a stack (e.g.
+            // UP_ATK_ACCUM_RATIO on every attack end).
             effTargets.forEach(t => this.storePermanentState(t, detail, this.kioku.name, this))
         } else {
             console.warn("Active without turn (possibly a RECOGNIZED-ONLY effect type not yet implemented - see PvPTeam.ts's friendlySkills/enemySkills header notes and MISSING_AND_UNCERTAIN.md):", detail)
@@ -1307,6 +1802,202 @@ export class PvPTeam {
         this.teamLabel = teamLabel;
         this.battleType = battleType;
         this.kiokuStates = kiokus.map((k, i) => new KiokuState(i, teamLabel, this, k, this.generateState))
+        this.layoutEnemyPositions()
+    }
+
+    // [CONFIRMED 3.19] a wave's enemies sit at consecutive positions starting at 3 - n/2 (PvE.wavePositionIds).
+    private layoutEnemyPositions(): void {
+        if (!this.kiokuStates.length || !this.kiokuStates.every(k => k.enemy)) return
+        const ids = wavePositionIds(this.kiokuStates.length)
+        this.kiokuStates.forEach((k, i) => { k.positionId = ids[i] })
+    }
+
+    // PvE: the stage's summon templates (summonId -> appearance), set by createPvEBattle.
+    summonTemplates?: Map<number, QuestEnemyAppearance>
+
+    // [CONFIRMED 3.19] SummonAbilityEffect.Triggering (0x1902c60) -> EnemyAppearanceGameDirectorBase.GetSummonedUnitList
+    // (0x14953f0): walk the positions 3, 2, 4, 1, 5; a position held by a living unit is skipped, otherwise the next
+    // summon id is dequeued and CreateAdditionalBattleUnitForSummon(id, position) spawns it there (an id without a
+    // template is used up and spawns nothing). Stops when the ids run out. AddEnemyBattleUnit (0x1494c80) then resets
+    // the new unit's turn gauge and runs TriggeringOnBattleStart for it.
+    summonUnits(summonIds: number[], summoner: KiokuState): KiokuState[] {
+        const queue = summonIds.filter(id => id)
+        const added: KiokuState[] = []
+        for (const pos of SUMMON_POSITION_ORDER) {
+            if (!queue.length) break
+            if (this.kiokuStates.some(k => !k.isDead && k.positionId === pos)) continue
+            const template = this.summonTemplates?.get(queue.shift()!)
+            if (!template) continue
+            added.push(this.addEnemyUnit(template, pos, summoner.kioku.name, summoner.team.isTeam1))
+        }
+        this.finishAddedUnits(added)
+        return added
+    }
+
+    // One new enemy at board position `pos`: a KO'd unit at that position is replaced in its slot, otherwise the
+    // unit is added at the end. AddEnemyBattleUnit (0x1494c80): HP = the shared pool on a linkHpType 2 wave, turn
+    // gauge reset.
+    private addEnemyUnit(template: QuestEnemyAppearance, pos: number, source: string, sourceIsTeam1: boolean): KiokuState {
+        const kioku = new EnemyKioku(template) as unknown as PvPKioku
+        const slot = this.kiokuStates.findIndex(k => k.isDead && k.positionId === pos)
+        const idx = slot >= 0 ? slot : this.kiokuStates.length
+        const unit = new KiokuState(idx, this.teamLabel, this, kioku, this.generateState)
+        unit.positionId = pos
+        if (slot >= 0) this.kiokuStates[slot] = unit; else this.kiokuStates.push(unit)
+        kioku.effects.forEach(e => unit.addEffectToBank(e))
+        unit.resetDistanceRemaining()
+        this.eventLog.push({ kind: "summon", source, target: unit.kioku.name, amount: 0,
+            sourceIsTeam1, targetIsTeam1: this.isTeam1, targetPos: unit.posIdx })
+        return unit
+    }
+
+    // [APPROXIMATION] only the new units' own battle-start passives run; the game also lets the other units'
+    // battle-start state passives reach them (TriggeringOnBattleStart with isStateOnly).
+    private finishAddedUnits(added: KiokuState[]): void {
+        if (!added.length) return
+        const fuas = this.applyPassivesForTiming(ProcessTiming.BATTLE_START, TargetType.init, undefined, undefined, new Set(added))
+        this.recomputeDerivedStats()
+        if (this.linkHp?.type === 2) for (const u of added) { u.currentHp = Math.min(this.linkHp.current, u.maxHp); u._linkSyncedHp = u.currentHp }
+        this.triggerFua(fuas)
+    }
+
+    // Solo Raid "Labyrinth Vanguard" (SoloRaidBuffReferee), one object shared by both teams; undefined outside Solo
+    // Raid. Points 0..100 (0..30 while active); at 100 the phase activates between acts for `maxGauge` units of
+    // turn-gauge time (PvPBattle).
+    soloRaid?: { active: boolean, point: number, maxPoint: number, activeMaxPoint: number, gauge: number, maxGauge: number }
+
+    // Solo Raid countdown (SoloRaidGameDirector.CountdownReferee), one object shared by both teams; undefined
+    // outside Solo Raid, where COUNTDOWN_START is only a state and nothing counts down.
+    countdown?: { max: number, value: number, cancelMax: number, cancelTotal: number, unit?: KiokuState }
+
+    // ---- Link HP (Solo Raid waves) ------------------------------------------------------------------------
+    // [CONFIRMED 3.19] LinkHpReferee (InitLinkHp 0x14956c0, UpdateLinkHp 0x1495d80, SyncEnemyHp, AddLinkHpDelta)
+    // and QuestJudgeResultReferee.CheckBattleFinishAfterActWithHpLink: on a Link HP wave the wave is won when the
+    // pool drops below 1, not when every enemy is down.
+    //  type 1: pool 100/100; after each act every enemy that died removes its linkHpWeight.
+    //  type 2: pool = the main target's HP; after each act it takes the total damage dealt to the wave's enemies
+    //          (minus healing), then every enemy's HP is set to min(pool, its max HP).
+    linkHp?: { type: number, name: string, current: number, max: number }
+    // [CONFIRMED 3.19] AdditionalEnemyReferee.RegisterEndlessEnemy / GetNextEndlessEnemyAppearModel: the wave's
+    // appearance list is dealt round-robin (index wraps).
+    endless?: { list: QuestEnemyAppearance[], next: number }
+
+    setupLinkHp(meta: { linkHpType: number, linkHpName: string, appearances: QuestEnemyAppearance[], modeChanges?: ModeChangeInfo[] } | undefined): void {
+        this.linkHp = undefined
+        this.endless = undefined
+        this.setupModeChange(meta?.modeChanges ?? [])
+        if (!meta) return
+        if (meta.linkHpType === 1 && meta.appearances.length) {
+            this.linkHp = { type: 1, name: meta.linkHpName, current: 100, max: 100 }
+            this.endless = { list: meta.appearances, next: this.kiokuStates.length % meta.appearances.length }
+        } else if (meta.linkHpType === 2) {
+            const main = meta.appearances.find(a => a.isMainTargetEnemy)
+            if (!main) return
+            this.linkHp = { type: 2, name: meta.linkHpName, current: main.hp, max: main.hp }
+            for (const k of this.kiokuStates) k._linkSyncedHp = k.currentHp
+            this.syncLinkHp()
+        }
+    }
+
+    syncLinkHp(): void {
+        const l = this.linkHp
+        if (!l) return
+        if (l.type === 1) {
+            for (const k of this.kiokuStates) if (k.isDead && !k._linkCounted) {
+                k._linkCounted = true
+                l.current = Math.max(0, l.current - (k.enemy?.appearance.linkHpWeight ?? 0))
+            }
+            // [APPROXIMATION] the game ends the wave with the remaining enemies still standing; here they are
+            // removed so the usual "wave wiped" flow takes over.
+            if (l.current < 1) for (const k of this.kiokuStates) if (!k.isDead) { k.currentHp = 0; k._linkCounted = true }
+        } else {
+            let delta = 0
+            for (const k of this.kiokuStates) if (k._linkSyncedHp !== undefined) delta += k.currentHp - k._linkSyncedHp
+            // LinkHpReferee.CalculateBossLinkHpDelta: the pool can't pass the boss's next form threshold either.
+            const main = this.kiokuStates.find(k => k.enemy?.appearance.isMainTargetEnemy && !k.isDead)
+            if (delta < 0 && main) delta = -this.modeChangeDamageCut(main, -delta)
+            l.current = Math.max(0, Math.min(l.max, l.current + delta))
+            for (const k of this.kiokuStates) {
+                if (!k.isDead || l.current < 1) k.currentHp = Math.max(0, Math.min(l.current, k.maxHp))
+                k._linkSyncedHp = k.currentHp
+            }
+        }
+    }
+
+    // ---- Boss form changes (QuestEnemyModeChangeMst) ------------------------------------------------------
+    // [CONFIRMED 3.19] ModeChangeReferee: `step` is the current form's step (the form the main target spawned as).
+    modeChange?: { infos: ModeChangeInfo[], step: number }
+
+    private setupModeChange(infos: ModeChangeInfo[]): void {
+        this.modeChange = undefined
+        const main = this.kiokuStates.find(k => k.enemy?.appearance.isMainTargetEnemy)
+        const cur = main && infos.find(i => i.appearance.questEnemyAppearanceMstId === main.enemy!.appearance.questEnemyAppearanceMstId)
+        if (cur) this.modeChange = { infos, step: cur.step }
+    }
+
+    private nextModeInfo(): ModeChangeInfo | undefined {
+        const mc = this.modeChange
+        return mc?.infos.find(i => i.step === mc.step + 1)
+    }
+
+    // [CONFIRMED 3.19] ModeChangeReferee.GetNextModeChangeDamageCutDamage (0x149fd30), used by BattleUnit.Attack: a
+    // hit on the current form can't take its HP below the next form's threshold (type 1 = HP ratio, in 1/1000).
+    modeChangeDamageCut(unit: KiokuState, damage: number): number {
+        const mc = this.modeChange
+        if (!mc || !unit.enemy) return damage
+        const cur = mc.infos.find(i => i.step === mc.step)
+        const next = this.nextModeInfo()
+        if (!cur || !next || next.type !== 1 || cur.appearance.questEnemyAppearanceMstId !== unit.enemy.appearance.questEnemyAppearanceMstId) return damage
+        const cap = Math.trunc(next.threshold * unit.maxHp / 1000)
+        return unit.currentHp - damage <= cap ? Math.max(0, unit.currentHp - cap) : damage
+    }
+
+    // [CONFIRMED 3.19] SoloGameDirectorBase.CheckModeChange (0x14a4bd0) + ModeChangeReferee.CanModeChange (0x149f960)
+    // -> ModeChangeAct -> EnemyAppearanceGameDirectorBase.ModeChangeEnemyBattleUnit (0x14956f0): once the main target's
+    // HP ratio (x1000) is at or below the next form's threshold, it is replaced by that form: same position, HP and
+    // turn gauge, but a fresh unit (its buffs/debuffs are gone) whose battle-start passives run; in Solo Raid the
+    // countdown is reset. Returns the new unit.
+    checkModeChange(): KiokuState | undefined {
+        const mc = this.modeChange
+        const next = this.nextModeInfo()
+        const main = this.kiokuStates.find(k => k.enemy?.appearance.isMainTargetEnemy && !k.isDead)
+        if (!mc || !next || next.type !== 1 || !main) return undefined
+        if (f32(f32(main.currentHp) / f32(main.maxHp)) * 1000 > next.threshold) return undefined
+        mc.step = next.step
+        const kioku = new EnemyKioku(next.appearance) as unknown as PvPKioku
+        const unit = new KiokuState(main.posIdx, this.teamLabel, this, kioku, this.generateState)
+        unit.positionId = main.positionId
+        this.kiokuStates[this.kiokuStates.indexOf(main)] = unit
+        kioku.effects.forEach(e => unit.addEffectToBank(e))
+        this.eventLog.push({ kind: "summon", source: main.kioku.name, target: unit.kioku.name, amount: 0, formChange: true,
+            sourceIsTeam1: this.isTeam1, targetIsTeam1: this.isTeam1, targetPos: unit.posIdx })
+        if (this.countdown) Object.assign(this.countdown, { max: 0, value: 0, cancelMax: 0, cancelTotal: 0, unit: undefined })
+        const fuas = this.applyPassivesForTiming(ProcessTiming.BATTLE_START, TargetType.init, undefined, undefined, new Set([unit]))
+        this.recomputeDerivedStats()
+        unit.currentHp = main.currentHp
+        unit._linkSyncedHp = unit.currentHp
+        unit.turnGauge = main.turnGauge
+        unit.turnGaugeSpeed = main.turnGaugeSpeed
+        unit.turnOrderPriority = main.turnOrderPriority
+        this.triggerFua(fuas)
+        return unit
+    }
+
+    // [CONFIRMED 3.19] SoloGameDirectorBase.Request(TimeForward) -> TrySupplyEndlessEnemyUnits ->
+    // AdditionalEnemyReferee.CreateSuppliedEndlessEnemyUnitList (0x1376250): before time moves on, every position
+    // 1-5 not held by a living enemy gets the next enemy of the list. Returns the new units.
+    supplyEndless(): KiokuState[] {
+        const e = this.endless
+        if (!e || !this.linkHp || this.linkHp.current < 1) return []
+        const added: KiokuState[] = []
+        for (const pos of [1, 2, 3, 4, 5]) {
+            if (this.kiokuStates.some(k => !k.isDead && k.positionId === pos)) continue
+            const template = e.list[e.next]
+            e.next = (e.next + 1) % e.list.length
+            added.push(this.addEnemyUnit(template, pos, this.linkHp.name || "Reinforcements", this.isTeam1))
+        }
+        this.finishAddedUnits(added)
+        return added
     }
 
     // [STRUCTURAL FIX, revision 3 - see report for the full writeup] Previously this
@@ -1326,6 +2017,7 @@ export class PvPTeam {
     // Next PvE wave: new units replace this team's (wiped) units.
     replaceUnits(kiokus: PvPKioku[]): void {
         this.kiokuStates = kiokus.map((k, i) => new KiokuState(i, this.teamLabel, this, k, this.generateState))
+        this.layoutEnemyPositions()
     }
 
     finishSetup(otherTeam: PvPTeam) {
@@ -1350,11 +2042,17 @@ export class PvPTeam {
     // main target and skill in the condition bundle; start conditions decide who reacts. Target
     // side comes from the effect class (EffectTargetSide.ts); passives are range -1 (self) or 3
     // (every living unit of that side) apart from follow-up triggers.
-    applyPassivesForTiming(timing: ProcessTiming, lastAction?: TargetType, lastActor?: KiokuState, mainTarget?: KiokuState): FuaMap {
+    applyPassivesForTiming(timing: ProcessTiming, lastAction?: TargetType, lastActor?: KiokuState, mainTarget?: KiokuState, only?: Set<KiokuState>): FuaMap {
         let additionalAct: FuaMap = {};
         for (const k of this.kiokuStates) {
             if (k.isDead) continue
-            k.passiveSkills.forEach(detail => {
+            if (only && !only.has(k)) continue
+            // [CONFIRMED 3.19] PassiveSkill.TriggeringOnBattleStart stable-sorts by IBattleStartTriggerPriority
+            // (Define: AddTurn states 200, effect-value variation 100, DWN_BARRIER_VALUE 90, others 0), highest first,
+            // so e.g. UP_BUFF_EFFECT_VALUE is in place before the unit's other battle-start states are given.
+            const list = [...k.passiveSkills.values()]
+            if (timing === ProcessTiming.BATTLE_START) list.sort((a, b) => battleStartPriority(b) - battleStartPriority(a))
+            list.forEach(detail => {
                 if (!isTimingCorrect(timing, detail)) return
                 if (conditionSetRequiresActorIsSelf(detail) && (!lastActor || lastActor !== k)) return
                 k.effectTurnPriority = nextTurnOrderPriority()
@@ -1395,6 +2093,13 @@ export class PvPTeam {
         const teams = this.bothTeams
         const fuas = teams.map(t => t.applyPassivesForTiming(timing, actionType, actor, mainTarget))
         teams.forEach((t, i) => { fuas[i] = mergeFuaMaps(fuas[i], t.applyPassivesForTiming(ProcessTiming.AFTER_PROCESS, actionType, actor, mainTarget)) })
+        // [CONFIRMED 3.19] PassiveSkill.Triggering ends with ResetZoneStatePatternMstId on every unit: the zone
+        // "started"/"ended" flags are only visible during the pass right after the change.
+        teams.forEach(t => t.kiokuStates.forEach(k => { k.zone.expandPattern = 0; k.zone.releasePattern = 0 }))
+        // [CONFIRMED 3.19] ActExecutor.ExecuteSkill (0x17dfec0): after the AttackEnd pass of a normal attack, battle
+        // skill or ultimate, every unit that took a damaging hit from it and is alive gets +1 count point.
+        if (timing === ProcessTiming.ATTACK_END && (actionType === TargetType.attackId || actionType === TargetType.skillId || actionType === TargetType.specialId))
+            teams.forEach(t => t.kiokuStates.forEach(k => { if (!k.isDead && k.lastNotice?.isReceivedAttack) k.tryModifyCountPoint(1) }))
         teams.forEach(t => t.recomputeDerivedStats())
         beforeFollowUps?.()
         teams.forEach((t, i) => t.triggerFua(fuas[i]))
@@ -1441,6 +2146,13 @@ export class PvPTeam {
 
     get isWiped(): boolean {
         return this.kiokuStates.every(k => k.isDead)
+    }
+
+    // The enemy wave is over: everyone is down, except on an endless (Link HP type 1) wave, which only ends when
+    // its pool is empty (defeated enemies keep being replaced until then).
+    get waveCleared(): boolean {
+        if (this.linkHp?.type === 1) return this.linkHp.current < 1
+        return this.isWiped
     }
 
     getSecondsUntilNextReadyKioku(): number {
@@ -1565,7 +2277,8 @@ export class PvPTeam {
     enemySkillHasTarget(_actor: KiokuState, skillMstId: number): boolean {
         const main = enemySkillDetails(skillMstId)[0]
         if (!main) return false
-        if (main.abilityEffectType === "SUMMON") return false // summons are not simulated yet
+        // [CONFIRMED 3.19] SummonAbilityEffect.GetAIFilteredTargets keeps the living units of its own side (the user).
+        if (main.abilityEffectType === "SUMMON") return !_actor.isDead
         const side = isFriendlyEffect(main.abilityEffectType) ? this.kiokuStates : this.otherTeam.kiokuStates
         if (main.abilityEffectType.startsWith("REVIVAL")) return side.some(u => u.isDead)
         return side.some(u => !u.isDead)
@@ -1609,11 +2322,37 @@ export class PvPTeam {
     // Targets chosen for the action in progress (see sliceTargets).
     actionPrimaryTargets = new Map<string, KiokuState>()
 
+    // The (target, effect) applications of one skill effect: one per target, except DMG_RANDOM.
+    // [CONFIRMED 3.19] DmgRandomAbilityEffect (ctor 0x18f1210, Triggering 0x18f08b0): value2 hits of power v1/1000,
+    // each on a target picked uniformly (with repeats) from the targets selected at the start - a unit that died
+    // meanwhile can still be picked and just takes no HP loss. Per hit: crit, break-rate growth (base v4/10, role
+    // table when 0), break gauge -v3 (1 when 0), HP loss. Picks are made lazily so each pick precedes its crit roll.
+    private *hitsOf(actor: KiokuState, detail: SkillDetail, targets: KiokuState[]): Generator<[KiokuState, SkillDetail]> {
+        if (detail.abilityEffectType !== "DMG_RANDOM") {
+            for (const t of targets) yield [t, detail]
+            return
+        }
+        if (!targets.length) return
+        const v3 = detail.value3 || 1
+        const hit = { ...detail, value2: detail.value1, value3: v3, value4: v3, value5: (detail as any).value4 ?? 0, range: targetRange.ALL } as SkillDetail
+        const hits = detail.value2 ?? 0
+        for (let i = 0; i < hits; i++) {
+            const idx = rollChoice(this.rng, targets.map(() => 1), "target", () => `${unitLabel(actor)} random hit ${i + 1}/${hits}`, () => targets.map(t => unitLabel(t)))
+            yield [targets[idx], hit]
+        }
+    }
+
     completeAction(actor: KiokuState, effectName: TargetType, details: SkillDetail[]): FuaMap {
         this.actionPrimaryTargets = new Map()
+        const noticeStart = this.otherTeam.lastActionNotices.length
         let possibleTargets: KiokuState[] = []
         let additionalAct: FuaMap = {}
         for (const detail of details) {
+            if (detail.abilityEffectType === "SUMMON") {
+                // Once per effect, not per target: value1..value5 are summon ids (PvE summon templates).
+                this.summonUnits([detail.value1, detail.value2, detail.value3, (detail as any).value4, (detail as any).value5], actor)
+                continue
+            }
             // [CONFIRMED 3.19] side comes from the game's own effect classes (EffectTargetSide.ts);
             // the hand-maintained friendlySkills/enemySkills lists are only a fallback now.
             const side = EFFECT_TARGET_SIDE[detail.abilityEffectType]
@@ -1628,13 +2367,19 @@ export class PvPTeam {
             const targets = this.sliceTargets(actor, possibleTargets, detail)
             if (detail.abilityEffectType.startsWith("DMG_") && targets[0] && !this.lastMainTarget) this.lastMainTarget = targets[0]
             actor.effectTurnPriority = nextTurnOrderPriority()
+            // [CONFIRMED 3.19] DamageAbilityEffectBase: Collect/ConsumeAttackHitConsumableStates (0x18ee590 / 0x18ee7b0) -
+            // the attacker's IConsumeRemainCountOnAttack states active at the start of a damage row lose 1 remain count
+            // after the row (whether it hit or not); at 0 they are removed (UnitCondition.Refresh).
+            const consumable = detail.abilityEffectType.startsWith("DMG_") && detail.abilityEffectType !== "DMG_RATIO" ? actor.collectConsumable() : []
             try {
-                for (const target of targets) {
-                    const fua = actor.applyEffect(target, detail, effectName, actor, targets[0])
+                for (const [target, d] of this.hitsOf(actor, detail, targets)) {
+                    const fua = actor.applyEffect(target, d, effectName, actor, targets[0])
                     if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
                 }
             } finally { actor.effectTurnPriority = undefined }
+            actor.consumeCollected(consumable)
         }
+        actor.regainAfterLaunch(noticeStart)
         actor.getMpFromType(effectName)
         return additionalAct
     }
@@ -1693,6 +2438,7 @@ export class PvPTeam {
         // [CONFIRMED 3.19] ActExecutor: TurnBeginAct (break reset, TurnStart passives with this
         // unit as actor) -> TurnUnitAct (UnitTurnGauge.Reset, then ExecuteSkill) -> TurnEndAct.
         actor.exitBreak()
+        actor.tickHotEffects()
         let effType = actor.enemy || this.currentSp ? TargetType.skillId : TargetType.attackId
         this.fireTiming(ProcessTiming.TURN_START, actor, undefined, effType)
         actor.resetDistanceRemaining()
@@ -1830,19 +2576,26 @@ export class PvPTeam {
         this.lastMainTarget = undefined
         this.actionPrimaryTargets = new Map()
         if (!preferredTarget) return this.completeAction(actor, effectName, details)
+        const noticeStart = this.otherTeam.lastActionNotices.length
         let additionalAct: FuaMap = {}
         for (const detail of details) {
             const isSingleTarget = detail.range === targetRange.TARGET
             const targets = isSingleTarget ? [preferredTarget] : this.sliceTargets(actor, isFriendlyEffect(detail.abilityEffectType) ? [actor] : this.otherTeam.kiokuStates, detail)
             if (detail.abilityEffectType.startsWith("DMG_") && targets[0] && !this.lastMainTarget) this.lastMainTarget = targets[0]
             actor.effectTurnPriority = nextTurnOrderPriority()
+            // [CONFIRMED 3.19] DamageAbilityEffectBase: Collect/ConsumeAttackHitConsumableStates (0x18ee590 / 0x18ee7b0) -
+            // the attacker's IConsumeRemainCountOnAttack states active at the start of a damage row lose 1 remain count
+            // after the row (whether it hit or not); at 0 they are removed (UnitCondition.Refresh).
+            const consumable = detail.abilityEffectType.startsWith("DMG_") && detail.abilityEffectType !== "DMG_RATIO" ? actor.collectConsumable() : []
             try {
-                for (const target of targets) {
-                    const fua = actor.applyEffect(target, detail, effectName, actor, targets[0])
+                for (const [target, d] of this.hitsOf(actor, detail, targets)) {
+                    const fua = actor.applyEffect(target, d, effectName, actor, targets[0])
                     if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
                 }
             } finally { actor.effectTurnPriority = undefined }
+            actor.consumeCollected(consumable)
         }
+        actor.regainAfterLaunch(noticeStart)
         actor.getMpFromType(effectName)
         return additionalAct
     }

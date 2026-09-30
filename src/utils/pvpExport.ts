@@ -1,3 +1,4 @@
+import type { RaidCarry } from "../models/PvPBattle";
 // PvP simulator export/import: one JSON file holding the exact team setup, the RNG seed and the
 // simulated sequence (human-readable lines + raw snapshots), so a run seen in the browser can be
 // replayed exactly elsewhere (scripts/sim/replayExport.ts) and discussed line by line.
@@ -80,8 +81,16 @@ export function formatSequence(snapshots: BattleSnapshot[]): string[] {
             const side = s.lastTeamIsTeam1 ? "Ally" : "Enemy"
             lines.push(`== Action ${idx}: ${s.lastActor} (${side}) - ${SKILL_NAMES[s.lastTargetType ?? ""] ?? s.lastTargetType}${s.actionLabel && s.lastTargetType !== TargetType.fuaId ? ` [${s.actionLabel}]` : ""} ==`)
         }
+        const raidBits = [
+            s.round ? `round ${s.round}` : "",
+            s.linkHp ? `${s.linkHp.name || "linked HP"} ${n(s.linkHp.current)}/${n(s.linkHp.max)}` : "",
+            s.countdown ? `countdown ${s.countdown.value} (cancel ${n(s.countdown.cancelTotal)}/${n(s.countdown.cancelMax)})` : "",
+            s.vanguard ? (s.vanguard.active ? `Vanguard ACTIVE ${n(s.vanguard.gauge)} left, ${s.vanguard.point}/${s.vanguard.activeMaxPoint}` : `Vanguard ${s.vanguard.point}/${s.vanguard.maxPoint}`) : "",
+        ].filter(Boolean)
+        if (raidBits.length && (s.linkHp || s.countdown || s.vanguard)) lines.push(`  [${raidBits.join(" | ")}]`)
         for (const e of s.events ?? []) {
-            if (e.kind === "heal") lines.push(`  ${e.source ?? "?"} healed ${e.target} +${n(e.amount)}`)
+            if (e.kind === "summon") lines.push(e.formChange ? `  ${e.source ?? "?"} changed form: ${e.target}` : `  ${e.source ?? "?"} summoned ${e.target}`)
+            else if (e.kind === "heal") lines.push(`  ${e.source ?? "?"} healed ${e.target} +${n(e.amount)}`)
             else {
                 const extra = [
                     e.isCritical ? "crit" : "",
@@ -192,11 +201,15 @@ export interface PvEExport {
     slots: TeamSlot[]          // useTeamStore().slots as-is (empty slots included)
     sequence: string[]
     snapshots: BattleSnapshot[]
+    // Solo Raid: the chosen party buff, round-limit override, and the carried-over state of each earlier attempt
+    // (the run is the attempt after the last one).
+    soloRaid?: { partyBuffId?: number, noRoundLimit?: boolean, attempts: RaidCarry[] }
 }
 
 export function buildPvEExport(args: {
     stageId: number, stageName?: string, control: "auto" | "manual", rngMode: RngMode, seed: number, turns: number,
     decisions: Map<number, RngDecision>, slots: TeamSlot[], snapshots: BattleSnapshot[], pending?: RngEvent | null,
+    soloRaid?: PvEExport["soloRaid"],
 }): PvEExport {
     return {
         format: PVE_EXPORT_FORMAT,
@@ -216,6 +229,7 @@ export function buildPvEExport(args: {
         slots: JSON.parse(JSON.stringify(args.slots)),
         sequence: formatSequence(args.snapshots),
         snapshots: JSON.parse(JSON.stringify(args.snapshots)),
+        soloRaid: args.soloRaid ? JSON.parse(JSON.stringify(args.soloRaid)) : undefined,
     }
 }
 

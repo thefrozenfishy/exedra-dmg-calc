@@ -75,8 +75,8 @@ function applyBreakStates(unit: KiokuState, side: "give" | "receive", damage: Cs
             if (!k || k.side !== side || k.addition !== pass) continue;
             const stacks = d._accumCount ?? 1;
             let v = k.calc === "Fixed"
-                ? dec.int(d.value1)
-                : (pass === "Up" ? damage : r).mul(dec.int(d.value1)).div(dec.int(1000));
+                ? dec.float(f32(d.value1))
+                : (pass === "Up" ? damage : r).mul(dec.float(f32(d.value1))).div(dec.int(1000));
             if (stacks > 1) v = v.mul(dec.int(stacks));
             r = pass === "Up" ? r.add(v) : r.sub(v);
         }
@@ -102,6 +102,9 @@ export function calculateProcessedBreakPointDamage(attacker: KiokuState, defende
 // bonus damage (BattleDamageCalculator$$GetBreakDamage) is attached to the notice, the turn
 // gauge is pushed back by BreakTurnGaugeSlowRatio/1000 (PvP policy 250) and
 // BreakedDamageReceiveRate is set to InitialBreakedDamageReceiveRate/10 (PvP policy 1000 -> 100).
+// TODO(UP_BREAK_EFFECT): break bonus damage (GetBreakDamage) needs CharacterParameter.LevelReactionBreakDamageValue,
+// which we don't have. It's negligible in practice, so it is fixed at 0 and UP_BREAK_EFFECT is stored but has no effect.
+export const BREAK_BONUS_DAMAGE = 0
 export interface BreakResult { decreased: number, broke: boolean }
 export function decreaseBreakPoint(attacker: KiokuState, defender: KiokuState, attackElement: number, decreaseValue: number, turnOrderPriority?: number): BreakResult {
     if (defender.maxBreakGauge < 1 || defender.currentRemainingBreakGauge < 1) return { decreased: 0, broke: false };

@@ -119,6 +119,10 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   each passive pass); team 209 sum of CountPoint, 210 units holding pattern pid, 211 total AccumCount of pid;
   1001 IsAlly; 1101 vanguard phase active. [C] (implemented in stash, STATUS.md)
 - HPRatio = `HP * 100f / MaxHP` (float). [C]
+- 304 TotalDamage (team) = Σ over the team's notices of `AffectedUnitNotice.GetTotalDamageValue(true)` 0x1379240 =
+  Σ `Damages` (HP damage after the barrier) + BreakDamage. `BarrierDamages` are a separate list, so a hit fully
+  absorbed by a barrier counts 0 (e.g. Time Stop Strike's "+1 Magic on DMG dealt" doesn't fire). [C]
+  TS: notice `totalDamageValue` = damage after `damageCutByBarrier`. Fixture time-stop-strike-magic.json.
 - 12 AbilityEffect "TYPE[,TYPE]" contains/not-contains: **prefix match** (`AbilityEffectListComparer`) over the
   unit's states, timed and permanent (e.g. "TSUBAME" matches TSUBAME_CORE). [C] TS `compareAbilityEffectList`.
 
@@ -159,7 +163,7 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   permanent; `StateAbilityEffect.Triggering` 0x1901cb0 passes isOwnSkill = (origin ActiveSkill && target == user)
   || (origin PassiveSkill && target == user && the current act's unit is the user && IsConditionActivation [?]).
   So a self-buff from your own skill survives the TurnEnd of the turn it was cast in; a buff on an ally is counted
-  down at that ally's next TurnEnd. [C] **TS differs**: `storeTimedEffect` exempts every timed state (STATUS.md).
+  down at that ally's next TurnEnd. [C] TS: `isOwnSkillState` in PvPTeam.ts (fixed 2026-09-30).
 - ADD_BUFF_TURN / ADD_DEBUFF_TURN: states on the caster giving +v1 turns to every IBuff/IDebuff state it gives.
   DEC/ADD_BUFF/DEBUFF_TURN_IMM: ±value2 turns now, value1 = state id filter, ailments/Cutaway/AddTurn excluded,
   a state below 1 turn is removed. [C]

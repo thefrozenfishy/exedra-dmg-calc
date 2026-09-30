@@ -22,4 +22,4 @@ for (let t = 0; t < Number(turnsArg ?? 40) && !battle.isOver; t++) snaps.push(..
 Object.assign(console, quiet);
 console.log(`Stage ${stageId} ${stage?.name}: ${waves.map((w, i) => `wave ${i + 1}: ${w.map(enemyName).join(", ")}`).join(" | ")}`);
 console.log(formatSequence(snaps).join("\n"));
-console.log(`result: ${battle.result ?? "not finished"} after ${snaps.length - 1} actions`);
+console.log(`result: ${battle.result ?? "not finished"} after ${snaps.length - 1} actions, ${Math.round(battle.elapsed)} AV (round ${battle.currentRound}), ${battle.teamPointsUsed} team points used`);

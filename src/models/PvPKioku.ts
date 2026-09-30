@@ -75,15 +75,13 @@ export class PvPKioku extends Kioku {
         if (this.buffMult < 0) this.buffMult = 0;
         if (this.debuffMult < 0) this.debuffMult = 0;
 
-        this.effects = [...this.unscalableEffects.values(), ...this.scalableEffects.values()].map(e => {
-            let v = e.value1;
-            if (e.abilityEffectType.startsWith("DWN_") || e.abilityEffectType.startsWith("DOWN_") || e.abilityEffectType === "UP_RCV_DMG_RATIO") {
-                v *= this.debuffMult;
-            } else if (e.abilityEffectType.startsWith("UP_")) {
-                v *= this.buffMult;
-            }
-            return { ...e, value1: v }
-        });
+        // [CONFIRMED 3.19] UP/DWN_BUFF/DEBUFF_EFFECT_VALUE are live states applied when a state is GIVEN
+        // (PvPTeam.giveTransform), not a one-time rescale of this kioku's passives. Effects from card (portrait) and
+        // support sources are never scaled (AbilitySource != Unit); crystalis kept with them as before [UNCERTAIN].
+        this.effects = [
+            ...[...this.unscalableEffects.values()].map(e => ({ ...e, _noEffectValueScale: true } as unknown as SkillDetail)),
+            ...this.scalableEffects.values(),
+        ];
         const rank = (e: SkillDetail) => {
             const key = String(skillDetailId(e))
             return this.abilityKeys.has(key) ? 0 : this.crysKeys.has(key) ? 1 : 2

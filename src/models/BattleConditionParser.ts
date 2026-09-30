@@ -73,6 +73,7 @@ export enum ProcessTiming {
     WAVE_END = 7,
     BATTLE_END = 8,
     AFTER_PROCESS = 9,
+    SEASON_BUFF_ACTIVE = 10, // [CONFIRMED 3.19] Solo Raid: the Labyrinth Vanguard activation phase starts
 }
 
 export const isTimingActive = (startTiming: ProcessTiming, eff: PassiveSkill) => {
@@ -145,7 +146,8 @@ enum CompareContent {
     BREAK_DAMAGE_RECEIVE_RATE_LESS_THAN_UNIT_COUNT = 207,
     NR_OF_DEBUFFS = 208,
     SIGILS_APPLIED_COUNT = 209,
-    OTHER_BUFF_COUNT = 210,
+    OTHER_BUFF_COUNT = 210,        // 3.19: units of the team holding a unique state of pattern pid ("pid,n")
+    UNIQUE_ACCUM_TEAM_TOTAL = 211, // 3.19: sum of AccumCount of unique accum states of pattern pid ("pid,n")
 
     KILLED_UNIT_COUNT = 301,
     BREAK_UNIT_COUNT = 302,
@@ -164,6 +166,9 @@ enum CompareContent {
 
     ACTOR_SKILL_TYPE = 401,
     COMBO_ACTION_STEP = 402,
+    // [CONFIRMED 3.19] BattleOtherConditionChecker.Check 0x4b1/0x4b2 (Solo Raid countdown)
+    COUNTDOWN = 1201,              // IntValueComparer over CountdownReferee.Countdown
+    COUNTDOWN_CANCEL_REACHED = 1202, // CancelMaxTotalDamage > 0 && CancelMaxTotalDamage <= CancelTotalDamage
 
     PLAYER_TEAM = 1001,
 
@@ -403,6 +408,12 @@ export const conditionSetRequiresActorIsSelf = (eff: SkillDetail) =>
 // [CONFIRMED] ReDriveBattleCore.BattleCondition.BattleUnitConditionChecker$$Check.
 // `battleUnit` is whichever unit CompareTarget resolved to (see isMatchCondition's
 // dispatcher below) - NOT necessarily `state.target` the way the original file assumed.
+// Every state on the unit: timed (activeEffectDetails) and permanent (passiveEffectDetails, e.g. an enemy's
+// "cannot be removed" LOCK_TURN_ORDER). The game keeps both in one UnitCondition state list.
+const unitStates = (u: KiokuState) => [...u.activeEffectDetails.values(), ...u.passiveEffectDetails.values()]
+const unitStateTypes = (u: KiokuState): string[] =>
+    [...u.activeEffectDetails.values(), ...u.passiveEffectDetails.values()].map(d => d.abilityEffectType)
+
 function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state: BattleState): boolean {
     const notice = battleUnit.lastNotice;
     switch (cond.compareContent as CompareContent) {
@@ -443,7 +454,7 @@ function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state
             // [CONFIRMED] AbilityEffectListComparer over the unit's active EffectType
             // list, prefix-matched (see compareAbilityEffectList above) - NOT the plain
             // Array.includes the original file used.
-            const types = [...battleUnit.activeEffectDetails.values()].map(d => d.abilityEffectType);
+            const types = unitStateTypes(battleUnit);
             return compareAbilityEffectList(cond.compareOperator, types, cond.compareValue);
         }
         case CompareContent.EVERY_N_TURN: {
@@ -517,9 +528,42 @@ function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state
             if (cond.compareOperator === CompareOperator.NOT_CONTAIN) return !ids.includes(v)
             return ids.some(id => compareInt(cond.compareOperator, id, cond.compareValue))
         }
-        case CompareContent.UNIQUE_DEBUFF_COUNT:
+        case CompareContent.UNIQUE_DEBUFF_COUNT: {
+            // [CONFIRMED 3.19] case 0x1b UniqueAbilityEffectAccumCount: "pid,n" -> sum of AccumCount of the unit's
+            // unique accum states with that pattern (plain UNIQUE_BUFF/DEBUFF count 0). No IsActive check.
+            const [pid, n] = cond.compareValue.split(",").map(Number)
+            const sum = unitStates(battleUnit).filter(d => (d.abilityEffectType === "UNIQUE_BUFF_ACCUM" || d.abilityEffectType === "UNIQUE_DEBUFF_ACCUM") && d.value1 === pid)
+                .reduce((a, d) => a + ((d as any)._accumCount ?? 1), 0)
+            return compareInt(cond.compareOperator, sum, String(n))
+        }
+        case CompareContent.CHAIN_LVL: {
+            // [CONFIRMED 3.19] case 0x1f UniqueAbilityEffectLv: "pid,n" -> Lv of the first unique Lv state
+            // (UNIQUE_ELEMENT_STACK/BREAK) with that pattern; none -> false.
+            const [pid, n] = cond.compareValue.split(",").map(Number)
+            const st = unitStates(battleUnit).find(d => (d.abilityEffectType === "UNIQUE_ELEMENT_STACK" || d.abilityEffectType === "UNIQUE_ELEMENT_BREAK") && d.value1 === pid)
+            return !!st && compareInt(cond.compareOperator, (st as any)._lv ?? 1, String(n))
+        }
+        case CompareContent.FIELD_IS_UP: {
+            // [CONFIRMED 3.19] case 0x1d IsExpandingZone: "pid,BOOL" -> pid 0: has any UNIQUE_ZONE; else its pattern == pid.
+            const [pidStr, boolStr] = cond.compareValue.split(",")
+            const pid = Number(pidStr)
+            const zones = unitStates(battleUnit).filter(d => d.abilityEffectType === "UNIQUE_ZONE")
+            const v = pid === 0 ? zones.length > 0 : zones.some(d => d.value1 === pid)
+            return compareBool(cond.compareOperator, v, boolStr ?? "TRUE")
+        }
+        case CompareContent.FIELD_START:
+        case CompareContent.FIELD_END: {
+            // [CONFIRMED 3.19] IsExpandZone / IsReleaseZone: the unit's Expand/ReleaseZoneUnitStatePatternMstId (set by
+            // ZONE_EXPAND / zone release, cleared after each passive pass) vs pid; pid 0 = "is non-zero".
+            const [pidStr, boolStr] = cond.compareValue.split(",")
+            const pid = Number(pidStr)
+            const flag = cond.compareContent === CompareContent.FIELD_START ? battleUnit.zone.expandPattern : battleUnit.zone.releasePattern
+            return compareBool(cond.compareOperator, pid === 0 ? flag !== 0 : flag === pid, boolStr ?? "TRUE")
+        }
+        case CompareContent.PLAYER_TEAM:
+            // [CONFIRMED 3.19] content 1001: the unit is on the player (Ally) team.
+            return compareBool(cond.compareOperator, !battleUnit.enemy && battleUnit.team.isTeam1, cond.compareValue);
         case CompareContent.SELF_IS_KIOKU:
-        case CompareContent.FIELD_IS_UP:
         case CompareContent.BREAK_COUNT:
             // [NOT IMPLEMENTED] Not present in BattleUnitConditionChecker.Check's own
             // switch either (they fall to its default case, which returns false) - so
@@ -584,7 +628,7 @@ function checkTeamCondition(team: PvPTeam, cond: BattleCondition): boolean {
             // SECOND CompareValue token (not the condition's own compareValue as a
             // whole) via IntValueComparer.
             const [prefix, threshold] = cond.compareValue.split(",");
-            const count = units.filter(u => [...u.activeEffectDetails.values()].some(d => d.abilityEffectType.startsWith(prefix))).length;
+            const count = units.filter(u => unitStateTypes(u).some(t => t.startsWith(prefix))).length;
             return compareInt(cond.compareOperator, count, threshold ?? "0");
         }
         case CompareContent.BREAK_DAMAGE_RECEIVE_RATE_GREATER_THAN_UNIT_COUNT:
@@ -597,10 +641,21 @@ function checkTeamCondition(team: PvPTeam, cond: BattleCondition): boolean {
             // (not just a unit COUNT the way BUFF_COUNT/DEBUFF_COUNT are per-unit).
             return compareInt(cond.compareOperator, units.reduce((sum, u) => sum + u.currentDebuffs().length, 0), cond.compareValue);
         case CompareContent.SIGILS_APPLIED_COUNT:
-        case CompareContent.OTHER_BUFF_COUNT:
-            // [NOT IMPLEMENTED] not present in BattleUnitTeamConditionChecker.Check's
-            // own switch either - matches the source's default-false for these.
-            return false;
+            // [CONFIRMED 3.19] team checker case 8: sum of the units' CountPoint (COUNT "sigils").
+            return compareInt(cond.compareOperator, units.reduce((a, u) => a + u.countPoint, 0), cond.compareValue);
+        case CompareContent.OTHER_BUFF_COUNT: {
+            // [CONFIRMED 3.19] team checker case 9: "pid,n" -> units holding any unique state of pattern pid.
+            const [pid, n] = cond.compareValue.split(",").map(Number)
+            const count = units.filter(u => unitStates(u).some(d => UNIQUE_STATE_TYPES.has(d.abilityEffectType) && d.value1 === pid)).length
+            return compareInt(cond.compareOperator, count, String(n))
+        }
+        case CompareContent.UNIQUE_ACCUM_TEAM_TOTAL: {
+            // [CONFIRMED 3.19] team checker case 10: "pid,n" -> total AccumCount of unique accum states of pattern pid.
+            const [pid, n] = cond.compareValue.split(",").map(Number)
+            const sum = units.reduce((a, u) => a + unitStates(u).filter(d => (d.abilityEffectType === "UNIQUE_BUFF_ACCUM" || d.abilityEffectType === "UNIQUE_DEBUFF_ACCUM") && d.value1 === pid)
+                .reduce((b, d) => b + ((d as any)._accumCount ?? 1), 0), 0)
+            return compareInt(cond.compareOperator, sum, String(n))
+        }
         case CompareContent.KILLED_UNIT_COUNT:
             return compareInt(cond.compareOperator, team.lastActionNotices.filter(n => n.isDead).length, cond.compareValue);
         case CompareContent.BREAK_UNIT_COUNT:
@@ -622,7 +677,7 @@ function checkTeamCondition(team: PvPTeam, cond: BattleCondition): boolean {
             // meets the threshold.
             const [prefix, threshold] = cond.compareValue.split(",");
             const any = units.some(u =>
-                [...u.activeEffectDetails.values()].some(d => d.abilityEffectType.startsWith(prefix)) &&
+                unitStateTypes(u).some(t => t.startsWith(prefix)) &&
                 (u.lastNotice?.totalDamageValue ?? 0) >= Number(threshold ?? "0"));
             return compareBool(cond.compareOperator, any, "TRUE");
         }
@@ -636,7 +691,7 @@ function checkTeamCondition(team: PvPTeam, cond: BattleCondition): boolean {
             return compareInt(cond.compareOperator, team.lastActionNotices.filter(n => n.isBreakedDamageReceiveRateBecomeMax).length, cond.compareValue);
         case CompareContent.HAS_BUFF_APPLIED: {
             const [prefix, threshold] = cond.compareValue.split(",");
-            const count = units.filter(u => [...u.activeEffectDetails.values()].some(d => d.abilityEffectType.startsWith(prefix))).length;
+            const count = units.filter(u => unitStateTypes(u).some(t => t.startsWith(prefix))).length;
             return compareInt(cond.compareOperator, count, threshold ?? "0");
         }
         case CompareContent.ONGOING_DAMAGE:
@@ -682,6 +737,17 @@ function checkOtherCondition(state: BattleState, cond: BattleCondition): boolean
             // all, not "step 1"). Unrelated to TSUBAME_* (a separate, still-unimplemented
             // character-specific mechanic - see MISSING_AND_UNCERTAIN.md's B5).
             return compareInt(cond.compareOperator, state.trueActorUnit?.currentComboActionStep ?? 0, cond.compareValue);
+        case CompareContent.AWAKEN:
+            // [CONFIRMED 3.19] content 1101: Solo Raid "Labyrinth Vanguard" activation phase (SoloRaidBuffReferee.IsActive).
+            return compareBool(cond.compareOperator, !!state.actorTeam.soloRaid?.active, cond.compareValue);
+        case CompareContent.COUNTDOWN: {
+            const cd = state.actorTeam.countdown
+            return !!cd?.unit && compareInt(cond.compareOperator, cd.value, cond.compareValue);
+        }
+        case CompareContent.COUNTDOWN_CANCEL_REACHED: {
+            const cd = state.actorTeam.countdown
+            return compareBool(cond.compareOperator, !!cd?.unit && cd.cancelMax > 0 && cd.cancelMax <= cd.cancelTotal, cond.compareValue);
+        }
         default:
             return false;
     }
@@ -750,14 +816,19 @@ export const isConditionSetActive = (eff: SkillDetail, state: BattleState) =>
 export const isActiveConditionSetMet = (eff: SkillDetail, state: BattleState) =>
     isConditionSetActiveForPvP((eff.activeConditionSetIdCsv ?? "").split(","), state)
 
-export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], state: BattleState): boolean =>
-    conditionSetIdCsvList.every(conditionSetIdCsv => conditionSetIdCsv.split(",").every(conditionSetId => {
-        if (!conditionSetId.length || conditionSetId === "0") return true
-
+// [CONFIRMED 3.19] BattleConditionUtils.IsMatchConditionSets (0x17e30b0): an empty csv matches; otherwise the
+// csv's condition SETS are OR'd (Enumerable.Any) and the conditions inside one set are AND'd. (This used to AND
+// the sets, so e.g. an enemy's "when broken, stunned or the countdown cancel is met" never fired.)
+export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], state: BattleState): boolean => {
+    const ids = conditionSetIdCsvList.flatMap(csv => csv.split(",")).filter(id => id.length && id !== "0")
+    if (!ids.length) return true
+    return ids.some(conditionSetId => {
         const battleConditionSet = battleConditionSets[conditionSetId]
+        if (!battleConditionSet) return false
         for (const conditionId of battleConditionSet.battleConditionMstIdCsv.split(",")) {
             const battleCondition = battleConditions[conditionId]
             if (!isMatchCondition(battleCondition, state)) return false
         }
         return true
-    }))
+    })
+}
