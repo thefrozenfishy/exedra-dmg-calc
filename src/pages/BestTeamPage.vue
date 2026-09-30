@@ -324,18 +324,18 @@ const preprocessing = ref(false)
 const results = reactive<{ attackerId: string, team: any, dmg: number }[][]>([])
 
 const playerLevel = useSetting("playerLevel", KiokuConstants.maxKiokuLvl)
+const useMaxAccountLevels = useSetting("useMaxAccountLevels", false)
 const testAllA5MaxLevel = useSetting("testAllA5MaxLevel", false)
 const includeUnownedAsA5 = useSetting("includeUnownedAsA5", false)
 
-// Owned Kioku are raised to A5 by "Test with all A5 & all max level" (their levels are maxed when the
-// team search starts). Only "Include unowned Kioku as A5" enables unowned Kioku, at A5 and max level.
+// The roster exactly as the search sees it, so the result rows show the same levels that were simulated.
+// Only "Include unowned Kioku as A5" enables unowned Kioku.
 const effectiveCharacters = computed<Character[]>(() => store.characters.map(c => {
-    if (!c.enabled) {
-        return includeUnownedAsA5.value
-            ? withMaxLevelsForPlayerLevel({ ...c, enabled: true, ascension: KiokuConstants.maxAscension }, playerLevel.value)
-            : c
-    }
-    return testAllA5MaxLevel.value ? { ...c, ascension: KiokuConstants.maxAscension } : c
+    const toA5 = { ...c, enabled: true, ascension: KiokuConstants.maxAscension }
+    if (!c.enabled) return includeUnownedAsA5.value ? withMaxLevelsForPlayerLevel(toA5, playerLevel.value) : c
+    if (testAllA5MaxLevel.value) return withMaxLevelsForPlayerLevel(toA5, playerLevel.value)
+    if (useMaxAccountLevels.value) return withMaxLevelsForPlayerLevel(c, playerLevel.value)
+    return c
 }))
 
 const members = computed(() => effectiveCharacters.value.filter(c => c.enabled))
@@ -363,7 +363,6 @@ const offElementDebuffMultReduction = useSetting("offElementDebuffMultReduction"
 const optimizeAverageDamage = useSetting("optimizeAverageDamage", false)
 const attackerHealth = useSetting("attackerHealth", 100)
 const optimalSubCrys = useSetting("optimalSubCrys", true)
-const useMaxAccountLevels = useSetting("useMaxAccountLevels", false)
 const enablePruning = useSetting("enablePruning", true)
 const pruningMargin = useSetting("pruningMargin", 15)
 const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
@@ -701,11 +700,7 @@ async function startSimulation() {
             minDefender: safeInt(minDefender.value, 0, 0, 4),
             minBreaker: safeInt(minBreaker.value, 0, 0, 4),
             optimalSubCrys: optimalSubCrys.value,
-            enabledCharacters: JSON.parse(JSON.stringify(
-                (useMaxAccountLevels.value || testAllA5MaxLevel.value)
-                    ? members.value.map(c => withMaxLevelsForPlayerLevel(c, playerLevel.value))
-                    : members.value
-            )),
+            enabledCharacters: JSON.parse(JSON.stringify(members.value)),
             buffMultReduction: buffMultReduction.value,
             offElementBuffMultReduction: offElementBuffMultReduction.value,
             debuffMultReduction: debuffMultReduction.value,
