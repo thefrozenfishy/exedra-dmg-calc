@@ -1,0 +1,1504 @@
+{
+"DisplayActType": {
+"0": "None",
+"1": "TurnUnit",
+"2": "SpecialAttack",
+"3": "AdditionalSkill",
+"4": "AdditionalTurn",
+"5": "ReActionTurn",
+"6": "Other"
+},
+"DamageCategory": {
+"0": "None",
+"1": "Normal",
+"2": "Random",
+"3": "Break",
+"4": "Slip",
+"5": "Reflection",
+"6": "Ratio",
+"7": "Additional",
+"8": "FinalDamage"
+},
+"AutoType": {
+"0": "Manual",
+"1": "SemiAuto",
+"2": "FullAuto"
+},
+"BattleSpeedType": {
+"0": "Normal",
+"1": "Fast"
+},
+"CorrelationDamageType": {
+"0": "None",
+"1": "Weak",
+"2": "Strong"
+},
+"TargetPriorityType": {
+"0": "Low",
+"1": "Middle",
+"2": "High"
+},
+"ResultStatus": {
+"0": "None",
+"1": "Winning",
+"2": "Losing"
+},
+"JudgeResultType": {
+"0": "None",
+"1": "MainTargetRemainHpGaugeCount"
+},
+"AbnormalType": {
+"1": "Burn",
+"2": "Weakness",
+"3": "Poison",
+"4": "Stun",
+"5": "Curse",
+"6": "Bleed",
+"7": "Vortex"
+},
+"EffectOriginType": {
+"0": "None",
+"1": "ActiveSkill",
+"2": "PassiveSkill",
+"3": "Field"
+},
+"AdditionType": {
+"0": "Up",
+"1": "Down"
+},
+"RequestType": {
+"0": "None",
+"1": "Skill",
+"2": "Phase",
+"3": "EndWave",
+"4": "BeginWave",
+"5": "UnitCondition",
+"6": "SwitchDebug",
+"7": "ChangeAutoControl",
+"8": "ClientReady",
+"9": "ChangeBattleSpeedType",
+"10": "ChangePauseState",
+"11": "TimeForward",
+"12": "RegisterSpecialAttack",
+"13": "GveMainTargetBreakCount",
+"14": "SkipForcedAutomaticBattle",
+"15": "MultiRaidSyncHpScore",
+"1000": "DebugFastEndBattle",
+"1001": "DebugStatusEdit",
+"1002": "DebugTurnGaugeEdit",
+"1003": "DebugBreakEdit",
+"1004": "DebugSkipWave"
+},
+"Phase": {
+"0": "Ready",
+"1": "Start",
+"2": "Finish"
+},
+"BattleCoreErrorType": {
+"0": "None",
+"1": "MultiRaidSyncApiError"
+},
+"CommandType": {
+"0": "None",
+"1": "BattlePhase",
+"2": "Target",
+"3": "Skill",
+"4": "BeginTurn",
+"5": "SituationSync",
+"6": "AddEnemy",
+"7": "AddEndlessEnemy",
+"8": "EndWave",
+"9": "BeginWave",
+"10": "UnitCondition",
+"11": "Reproduction",
+"12": "Debug",
+"13": "Initialize",
+"14": "Finalize",
+"15": "GveSyncHpDirection",
+"16": "ExecuteCommonAct",
+"17": "DecideSkillContent",
+"18": "RefreshTurnActUnitOrder",
+"19": "RefreshBattleUnitStatus",
+"20": "GveMainTargetBreakCount",
+"21": "ExecuteUnitHpGaugeRevive",
+"22": "ExecuteModeChange",
+"23": "Resend",
+"24": "MultiRaidSyncHpScore",
+"25": "MultiRaidSyncTotalDamage",
+"26": "MultiRaidSyncHpResultForServer",
+"27": "Error",
+"28": "SoloRaidSyncBattleInfo",
+"29": "SoloRaidSyncCountdown",
+"30": "SoloRaidBuffActivate",
+"31": "SoloRaidBuffFinish",
+"32": "SyncLinkHp",
+"33": "SyncModeChange"
+},
+"CompareTarget": {
+"0": "None",
+"1": "Self",
+"2": "Actor",
+"3": "MainTarget",
+"8": "EachTarget",
+"4": "AllTargets",
+"5": "FriendTeam",
+"6": "OpponentTeam",
+"7": "Others"
+},
+"CompareContent": {
+"0": "None",
+"1": "HP",
+"2": "HPRatio",
+"3": "ATK",
+"4": "DEF",
+"5": "SPD",
+"6": "EP",
+"7": "Turn",
+"8": "IsActor",
+"9": "IsMainTarget",
+"10": "IsFriend",
+"11": "IsOpponent",
+"12": "AbilityEffect",
+"13": "EveryNTurn",
+"14": "Character",
+"15": "HpGaugeCount",
+"16": "IsBreak",
+"17": "ChargePoint",
+"18": "CanNotAction",
+"19": "IsElementType",
+"20": "IsRoleType",
+"21": "BreakedDamageReceiveRate",
+"22": "IsMaxBreakedDamageReceiveRate",
+"23": "AbnormalStateCount",
+"24": "BuffCount",
+"25": "DebuffCount",
+"26": "UniqueAbilityEffect",
+"27": "UniqueAbilityEffectAccumCount",
+"28": "StyleId",
+"29": "IsExpandingZone",
+"30": "BreakCount",
+"31": "UniqueAbilityEffectLv",
+"101": "DMG",
+"102": "DMGRatio",
+"103": "IsKilled",
+"104": "IsRecovery",
+"105": "IsBarrierAdded",
+"106": "IsBarrierAttacked",
+"107": "IsBarrierDestroyed",
+"108": "BreakedDamageReceiveRateBecomeMax",
+"109": "IsWeakElementAttacked",
+"110": "IsReceivedAttack",
+"111": "IsReceivedSlipDamage",
+"112": "ReceivedSlipDamageType",
+"113": "IsExpandZone",
+"114": "IsReleaseZone",
+"115": "AddRemovableBuffCount",
+"116": "AddRemovableDebuffCount",
+"201": "SP",
+"202": "AliveUnitCount",
+"203": "DeadUnitCount",
+"204": "AppliedSkillEffectType",
+"205": "AbilityEffectUnitCount",
+"206": "BreakedDamageReceiveRateGreaterThanUnitCount",
+"207": "BreakedDamageReceiveRateLessThanUnitCount",
+"208": "AllUnitReceivedDebuffCount",
+"209": "AllUnitCountPointCount",
+"210": "UniqueAbilityEffectUnitCount",
+"211": "UniqueAbilityEffectTotalAccumCount",
+"212": "BreakCountInGroup",
+"301": "KilledUnitCount",
+"302": "BreakedUnitCount",
+"303": "CTDUnitCount",
+"304": "TotalDamage",
+"305": "AbilityEffectAndDamage",
+"306": "BreakedUnitTotalCount",
+"307": "WeakElementAttackedUnitCount",
+"308": "BreakedDamageReceiveRateBecomeMaxUnitCount",
+"309": "AbilityEffectAndReceivedAttackUnitCount",
+"310": "SlipDamageTotalCount",
+"311": "IsExpandZoneInGroup",
+"312": "IsReleaseZoneInGroup",
+"313": "HitUnitCount",
+"314": "InBreakAndReceivedAttackUnitCount",
+"315": "AddRemovableBuffTotalCount",
+"316": "AddRemovableDebuffTotalCount",
+"401": "ActorSkillType",
+"402": "ComboActionStep",
+"403": "ActorDamageRange",
+"1001": "IsAlly",
+"1101": "IsSeasonBuffActive",
+"1201": "CountdownValue",
+"1202": "IsExceededCountdownCancelDamage",
+"2001": "BattleStartTiming",
+"2002": "WaveStartTiming"
+},
+"CompareOperator": {
+"0": "None",
+"1": "Equal",
+"2": "NotEqual",
+"3": "Greater",
+"4": "GreaterOrEqual",
+"5": "Less",
+"6": "LessOrEqual",
+"7": "Contain",
+"8": "NotContain"
+},
+"ProcessTiming": {
+"0": "None",
+"1": "BattleStart",
+"2": "WaveStart",
+"3": "TurnStart",
+"4": "AttackStart",
+"5": "AttackEnd",
+"6": "TurnEnd",
+"7": "WaveEnd",
+"8": "BattleEnd",
+"9": "AfterProcess",
+"10": "SeasonBuffActive"
+},
+"ConditionUseType": {
+"0": "None",
+"1": "SkillStart",
+"2": "SkillActive",
+"3": "EnemyAction"
+},
+"DamageBaseType": {
+"0": "None",
+"1": "Atk",
+"2": "Def",
+"3": "MaxHp"
+},
+"ElementType": {
+"1": "Fire",
+"2": "Aqua",
+"3": "Forest",
+"4": "Light",
+"5": "Dark",
+"6": "Neutral"
+},
+"StanceType": {
+"1": "Arcane",
+"2": "Bless",
+"3": "Charm",
+"4": "Divine",
+"5": "Enchant"
+},
+"TargetElementType": {
+"0": "NotSpecified",
+"1": "Fire",
+"2": "Aqua",
+"3": "Forest",
+"4": "Light",
+"5": "Dark",
+"6": "Neutral"
+},
+"TargetStanceType": {
+"0": "NotSpecified",
+"1": "Arcane",
+"2": "Bless",
+"3": "Charm",
+"4": "Divine",
+"5": "Enchant"
+},
+"RangeType": {
+"-1": "Self",
+"1": "SelectSingle",
+"2": "SelectMultiple",
+"3": "Everyone"
+},
+"SkillType": {
+"1": "ActiveSkill",
+"2": "SpecialAttack",
+"3": "NormalAttack",
+"4": "AdditionalSkill",
+"5": "EtherBlow"
+},
+"BattleType": {
+"1": "Solo",
+"2": "Pvp",
+"3": "Gve",
+"4": "Gvg",
+"5": "Exploration",
+"6": "ScoreAttack",
+"7": "Simulation",
+"8": "MultiRaid",
+"9": "SoloRaid"
+},
+"RoleType": {
+"1": "Quest",
+"2": "Pvp",
+"3": "Healer",
+"4": "Exploration",
+"5": "MapGve",
+"6": "ScoreAttack",
+"7": "MultiRaid",
+"8": "SoloRaid"
+},
+"TargetRoleType": {
+"0": "NotSpecified",
+"1": "Attacker",
+"2": "Breaker",
+"3": "Healer",
+"4": "Buffer",
+"5": "Debuffer",
+"6": "Defender"
+},
+"AbnormalConditionType": {
+"1": "Burn",
+"2": "Weakness",
+"3": "Poison",
+"4": "Stun",
+"5": "Curse",
+"6": "Bleed"
+},
+"AutoMode": {
+"-1": "Unknown",
+"0": "Manual",
+"1": "SemiAuto",
+"2": "FullAuto"
+},
+"AbilitySourceType": {
+"1": "Unit",
+"2": "Card",
+"3": "Support",
+"4": "SelectionAbility",
+"5": "Bonus",
+"6": "SoloRaidSeasonBuff",
+"7": "SoloRaidPartyBuff",
+"8": "SoloRaidCommonBuff"
+},
+"PurchaseStatus": {
+"0": "Init",
+"1": "Ready",
+"2": "Complete",
+"3": "Failure",
+"4": "Cancel"
+},
+"TransitionType": {
+"0": "None",
+"100": "ByFieldStageMstId",
+"101": "ByFieldPointMstId",
+"110": "ByAlternativeStoryMstId",
+"111": "ByAlternativeStoryPointMstId",
+"120": "ByStoryEventMstId",
+"121": "ByStoryEventQuestStageMstId",
+"200": "StyleTrainingTop",
+"201": "StyleParamUpTrainingTop",
+"210": "SelectionAbilityTrainingTop",
+"220": "CharacterHeartTop",
+"300": "MultiRaidTop",
+"310": "TowerTop",
+"311": "ByTowerQuestStageMstId",
+"400": "ByShopSeriesMstId",
+"500": "CollectionFirstViewTop",
+"1": "ByQuestStageMstId",
+"2": "ByQuestMapMstId",
+"3": "ByQuestCategoryMstId",
+"4": "ByQuestGroupMstId",
+"5": "ByFieldStageMstId",
+"6": "TrainingStyle",
+"7": "TrainingCard",
+"8": "Pvp",
+"9": "EnhanceQuest",
+"10": "Profile",
+"11": "Guild",
+"12": "CharacterHeartGallery",
+"13": "Gacha",
+"14": "Party",
+"15": "ScoreAttackByScoreAttackMstId",
+"16": "MultiRaid",
+"17": "SoloRaid",
+"18": "AlternativeStory"
+},
+"ParamType": {
+"1": "Main",
+"2": "Sub"
+},
+"PostType": {
+"0": "None",
+"1": "Profile"
+},
+"BattleResult": {
+"-1": "BeforeBattle",
+"0": "InBattle",
+"1": "Win",
+"2": "Lose",
+"3": "Timeout",
+"4": "Retire",
+"5": "Skip"
+},
+"LikeType": {
+"1": "MultiRaid"
+},
+"ContentType": {
+"0": "None",
+"1": "Gacha",
+"2": "StoryEvent",
+"3": "Invitation",
+"4": "StoryEvent",
+"5": "ShopSeries",
+"6": "StoryEventArchive",
+"7": "MultiRaid",
+"8": "Tower",
+"9": "StyleTraining",
+"10": "StyleParamUpTraining",
+"11": "SelectionAbilityTraining",
+"12": "CharacterHeart",
+"13": "CollectionFirstView"
+},
+"TabType": {
+"0": "None",
+"1": "Standing",
+"2": "Limited"
+},
+"DailyClearType": {
+"1": "EventQuest",
+"2": "ScoreAttack",
+"3": "EventArchive",
+"4": "TrainingQuest",
+"5": "CharacterHeartQuest",
+"6": "GatheringShortcutQuest",
+"7": "GatheringReward"
+},
+"cameraType": {
+"1": "Easy",
+"2": "Ar"
+},
+"AnnounceType": {
+"1": "Notice",
+"2": "Event",
+"3": "Update",
+"4": "Incident"
+},
+"SubscriptionType": {
+"0": "None",
+"1": "Light",
+"2": "Premium",
+"9": "All"
+},
+"TargetType": {
+"0": "None",
+"1": "ComebackUser"
+},
+"EventType": {
+"1": "Permanent",
+"2": "Event",
+"3": "ThemeTower"
+},
+"ThemeDifficulty": {
+"1": "Normal",
+"2": "Extra"
+},
+"LimitBreakBonusRefStatus": {
+"0": "hp",
+"1": "atk",
+"2": "def"
+},
+"ParamUpType": {
+"1": "Once",
+"2": "Bulk"
+},
+"ParamUpTargetType": {
+"1": "Character",
+"2": "Style",
+"3": "ActiveSkill",
+"4": "PassiveSkill",
+"5": "SubPassiveSkill"
+},
+"LimitBreakBonusTargetType": {
+"1": "Param",
+"2": "SpecialAttackMaxLevel",
+"3": "PassiveSkill"
+},
+"LimitedType": {
+"0": "None",
+"1": "Limited"
+},
+"EventStartDirection": {
+"0": "None",
+"1": "Official",
+"2": "Alternate",
+"3": "Material",
+"4": "IfStory",
+"5": "ParallelStory",
+"6": "CollaborationStory",
+"7": "MagiaEtceteraStory"
+},
+"BonusType": {
+"1": "Style",
+"2": "Card"
+},
+"AchievementValueType": {
+"0": "Bool",
+"1": "Int",
+"2": "Float"
+},
+"SoundType": {
+"1": "Song",
+"2": "Bgm",
+"3": "Voice"
+},
+"DisplayType": {
+"0": "Default",
+"1": "Collection",
+"2": "Dollhouse"
+},
+"Difficulty": {
+"0": "None",
+"1": "Normal",
+"2": "Hard",
+"3": "VeryHard",
+"4": "Chaos",
+"5": "Extra",
+"6": "Nightmare"
+},
+"RoomResult": {
+"-1": "Init",
+"0": "None",
+"1": "Win",
+"2": "LoseForRoundLimit",
+"3": "LoseForDead",
+"4": "Timeout",
+"5": "Retire",
+"6": "Retire",
+"7": "Retry",
+"8": "Skip"
+},
+"StageResult": {
+"0": "None",
+"1": "Win",
+"2": "Lose",
+"-1": "Init"
+},
+"ChallengeType": {
+"1": "Normal",
+"2": "Practice"
+},
+"Mode": {
+"1": "TopRanking",
+"2": "AroundMyself"
+},
+"ResetType": {
+"0": "NoReset",
+"1": "Monthly"
+},
+"Category": {
+"1": "Item",
+"2": "Gacha",
+"3": "Event"
+},
+"Type": {
+"1": "MobileJP",
+"11": "MobileEN",
+"2": "Steam",
+"3": "WebStoreJP",
+"31": "WebStoreEN"
+},
+"PlatformType": {
+"1": "MobileJP",
+"11": "MobileEN",
+"2": "Steam",
+"3": "WebStoreJP",
+"31": "WebStoreEN"
+},
+"Rarity": {
+"1": "B",
+"2": "A",
+"3": "S",
+"4": "EX"
+},
+"SubRarityGroup": {
+"1": "B",
+"2": "A",
+"3": "S"
+},
+"EffectTargetType": {
+"1": "Param",
+"2": "PassiveSkill"
+},
+"SelectionAbilityType": {
+"1": "Main",
+"2": "Sub"
+},
+"LockType": {
+"0": "None",
+"1": "Temporary",
+"2": "Permanent"
+},
+"ConsumeType": {
+"1": "FreePlay",
+"2": "Gem"
+},
+"RankingRequestMode": {
+"1": "TopRankingMode",
+"2": "SelfAroundRankingMode"
+},
+"RecoverType": {
+"1": "RecoverTypeItem",
+"2": "RecoverTypeGem"
+},
+"OsType": {
+"0": "All",
+"1": "iOS",
+"2": "Android",
+"3": "Windows",
+"99": "Other"
+},
+"StoreType": {
+"0": "All",
+"1": "Apple",
+"2": "Google",
+"3": "Amazon",
+"4": "Kddi",
+"5": "Steam",
+"6": "Shift",
+"7": "DMM",
+"8": "Browser",
+"99": "None",
+"101": "WebStore"
+},
+"AccountStatus": {
+"0": "FINE",
+"1": "DELETED",
+"2": "BAN",
+"3": "ABANDONED"
+},
+"UserLikeType": {
+"1": "MultiRaid"
+},
+"ProfileDisplayItemType": {
+"0": "None",
+"1": "FavoriteCharacter",
+"2": "SoloRaidHighestRank",
+"3": "ScoreAttackHighestRank",
+"4": "TrophyCount",
+"5": "CollectionAchievedLevel",
+"6": "PvpHighestRank",
+"7": "PartyMaxPower",
+"8": "AcquiredStyleNum",
+"9": "StartDatetime",
+"10": "MultiRaidLikeCount"
+},
+"Role": {
+"0": "All",
+"1": "Attacker",
+"2": "Breaker",
+"3": "Healer",
+"4": "Buffer",
+"5": "Debuffer",
+"6": "Defender"
+},
+"ContentId": {
+"1": "Exploration",
+"2": "SoloRaid",
+"3": "MultiRaid"
+},
+"UsingStatus": {
+"0": "NotUsing",
+"1": "Using",
+"2": "AutoUsing"
+},
+"RescueType": {
+"0": "None",
+"1": "GuildOnly",
+"2": "All",
+"3": "FriendOnly",
+"4": "GuildAndFriend"
+},
+"DailyBonusRarity": {
+"1": "Bronze",
+"2": "Silver",
+"3": "Gold"
+},
+"MissionType": {
+"1": "Normal",
+"2": "Beginner",
+"3": "Comeback",
+"4": "Subscription",
+"5": "SubscriptionLight",
+"6": "SubscriptionPremium"
+},
+"MissionCategory": {
+"1": "Daily",
+"2": "Weekly",
+"3": "Challenge",
+"4": "Event",
+"5": "MultiRaid",
+"6": "Campaign",
+"7": "Bingo"
+},
+"TriggerType": {
+"1": "MISSION_CLEAR",
+"2": "USER_LEVEL_UP",
+"3": "LOGIN",
+"4": "GET_NEW_STYLE",
+"5": "PVP_BATTLE_END",
+"6": "QUEST_STAGE_CLEAR",
+"7": "EXPLORATION_STAGE_CLEAR",
+"8": "CONSUME_STAMINA",
+"9": "GAIN_CARD",
+"10": "GAIN_TALISMAN",
+"11": "EDIT_USER_PROFILE",
+"12": "JOIN_GUILD",
+"13": "SET_MIGRATION",
+"14": "CHARACTER_ADD_HEART_EXP_BY_ITEM",
+"15": "CHARACTER_AWAKE",
+"16": "STYLE_PARAM_UP",
+"17": "STYLE_LIMIT_BREAK",
+"18": "STYLE_SKILL_LEVEL_UP",
+"19": "CARD_PASSIVE_SKILL_LEVEL_UP",
+"20": "CARD_LIMIT_BREAK",
+"21": "TALISMAN_LEVEL_UP",
+"22": "GVG_BATTLE_END",
+"23": "GVE_BOSS_DEFEAT",
+"24": "GVE_BATTLE_END",
+"25": "GACHA_EXEC",
+"26": "UPDATE_MAX_PARTY_POWER",
+"27": "STYLE_LIMIT_BREAK_COUNT",
+"28": "SCORE_ATTACK_CLEARED_DIFFICULTY",
+"29": "MISSION_CLEAR_FOR_MISSION",
+"30": "GUILD_MISSION_CLEAR",
+"31": "QUEST_STAGE_CLEAR_FOR_BATTLE_LOG",
+"32": "MULTI_RAID_BATTLE_CLEAR",
+"33": "MULTI_RAID_TOTAL_SCORE",
+"34": "SCORE_ATTACK_PLAY",
+"35": "SOLO_RAID_STAGE_CLEAR",
+"36": "GAIN_ITEM",
+"37": "ALTERNATIVE_STORY_CLEAR",
+"38": "SHOP_BUY",
+"39": "LOGIN_BONUS_RECEIVE",
+"40": "STYLE_LEVEL_UP",
+"41": "SNS_POST"
+},
+"MiniTutorialNumber": {
+"1": "UnionUnlock",
+"2": "UnionUnlockEffected",
+"3": "StyleTraining",
+"4": "CheckHomeChatBadge",
+"5": "CardTraining",
+"6": "CheckChatBlockUser",
+"7": "CollectionTraining",
+"14": "Collection",
+"15": "StoryEvent",
+"16": "MapGve",
+"18": "PvpUnlock",
+"19": "PvpUnlockEffected",
+"20": "GvgUnlock",
+"21": "GvgUnlockEffected",
+"22": "GveUnlock",
+"23": "GveUnlockEffected",
+"24": "TrainingQuestUnlock",
+"25": "TrainingQuestUnlockEffected",
+"26": "TowerUnlock",
+"27": "TowerUnlockEffected",
+"28": "CollectionUnlock",
+"29": "CollectionUnlockEffected",
+"30": "StoryEventUnlock",
+"31": "StoryEventUnlockEffected",
+"32": "StoryOricoUnlock",
+"33": "StoryOricoUnlockEffected",
+"34": "StoryMagirecoUnlock",
+"35": "StoryMagirecoUnlockEffected",
+"36": "EditCardUnlock",
+"37": "EditCardUnlockEffected",
+"38": "CardTrainingQuestUnlock",
+"39": "CardTrainingQuestUnlockEffected",
+"40": "StyleTrainingUnlock",
+"41": "StyleTrainingUnlockEffected",
+"42": "CardTrainingUnlock",
+"43": "CardTrainingUnlockEffected",
+"44": "ShopUnlockEffected",
+"45": "SubStyleUnlock",
+"46": "SubStyleUnlockEffected",
+"47": "HardUnlockEffected",
+"48": "NightmareUnlockEffected",
+"49": "StoryEventIfEffected",
+"50": "StyleParamUpTrainingQuestUnLocked",
+"51": "StyleParamUpTrainingQuestUnLockedEffected",
+"52": "CharacterHeartUnlock",
+"53": "CharacterHeartUnlockEffected",
+"54": "ScoreAttackTutorial",
+"55": "CharacterHeartQuestUnlock",
+"56": "CharacterHeartQuestUnlockEffected",
+"57": "StoryMadokaHardUnlock",
+"58": "StoryMadokaHardUnlockEffected",
+"59": "StoryMadokaNightmareUnlock",
+"60": "StoryMadokaNightmareUnlockEffected",
+"61": "StoryMagirecoHardUnlock",
+"62": "StoryMagirecoHardUnlockEffected",
+"63": "StoryMagirecoNightmareUnlock",
+"64": "StoryMagirecoNightmareUnlockEffected",
+"65": "StoryOrikoHardUnlock",
+"66": "StoryOrikoHardUnlockEffected",
+"67": "StoryOrikoNightmareUnlock",
+"68": "StoryOrikoNightmareUnlockEffected",
+"69": "CollectionIllustPieceExplanation",
+"70": "BattleModeExplanation",
+"71": "SkillLevelUpExplanation",
+"74": "SkillLevelUpExplanationEffected",
+"72": "ScoreAttackExplanation",
+"73": "ChatExplanation",
+"75": "StyleParamUpUnlocked",
+"76": "StyleParamUpUnlockedEffected",
+"77": "BattleAutoButtonExplanation",
+"78": "StoryChaosUnlock",
+"79": "StoryChaosUnlockEffected",
+"80": "SelectionAbilityQuestExplanation",
+"81": "SelectionAbilityQuestExplanationEffected",
+"82": "SelectionAbilityEditExplanation",
+"83": "SelectionAbilityEditExplanationEffected",
+"84": "StoryScene0Unlock",
+"85": "StoryScene0UnlockEffected",
+"86": "StoryScene0HardUnlock",
+"87": "StoryScene0HardUnlockEffected",
+"88": "StoryScene0NightmareUnlock",
+"89": "StoryScene0NightmareUnlockEffected",
+"90": "MultiRaidUnlock",
+"91": "MultiRaidUnlockEffected",
+"92": "DollhouseUnlock",
+"93": "DollhouseUnlockEffected",
+"94": "CameraUnlock",
+"95": "CameraUnlockEffected",
+"96": "SoloRaidUnlock",
+"97": "SoloRaidUnlockEffected",
+"98": "FriendUnlock",
+"99": "FriendUnlockEffected",
+"100": "RoseGarden2NormalUnLocked",
+"101": "RoseGarden2NormalUnLockedEffected",
+"102": "DarknessNormalUnLocked",
+"103": "DarknessNormalUnLockedEffected",
+"104": "DessertNormalUnLocked",
+"105": "DessertNormalUnLockedEffected",
+"106": "BoxNormalUnLocked",
+"107": "BoxNormalUnLockedEffected",
+"108": "GraffitiNormalUnLocked",
+"109": "GraffitiNormalUnLockedEffected",
+"110": "SilverNormalUnLocked",
+"111": "SilverNormalUnLockedEffected",
+"112": "ShadowNormalUnLocked",
+"113": "ShadowNormalUnLockedEffected",
+"114": "DogNormalUnLocked",
+"115": "DogNormalUnLockedEffected",
+"116": "MermaidNormalUnLocked",
+"117": "MermaidNormalUnLockedEffected",
+"118": "ArtistNormalUnLocked",
+"119": "ArtistNormalUnLockedEffected",
+"120": "ChairpersonNormalUnLocked",
+"121": "ChairpersonNormalUnLockedEffected",
+"122": "BirdcageNormalUnLocked",
+"123": "BirdcageNormalUnLockedEffected",
+"124": "StagecraftNormalUnLocked",
+"125": "StagecraftNormalUnLockedEffected",
+"126": "StagecraftNormalStratum2UnLocked",
+"127": "StagecraftNormalStratum2UnLockedEffected",
+"128": "StagecraftNormalStratum3UnLocked",
+"129": "StagecraftNormalStratum3UnLockedEffected",
+"130": "SandboxNormalUnLocked",
+"131": "SandboxNormalUnLockedEffected",
+"132": "WaitingPersonHorseNormalUnLocked",
+"133": "WaitingPersonHorseNormalUnLockedEffected",
+"134": "AnonymousArtificialIntelligenceNormalUnLocked",
+"135": "AnonymousArtificialIntelligenceNormalUnLockedEffected",
+"136": "ChelateGigFerrisNormalUnLocked",
+"137": "ChelateGigFerrisNormalUnLockedEffected",
+"138": "EmbryoEveNormalUnLocked",
+"139": "EmbryoEveNormalUnLockedEffected",
+"140": "HappinessNormalUnLocked",
+"141": "HappinessNormalUnLockedEffected",
+"142": "NeedleNormalUnLocked",
+"143": "NeedleNormalUnLockedEffected",
+"144": "Scene0Part1NormalUnLocked",
+"145": "Scene0Part1NormalUnLockedEffected",
+"146": "Scene0Part2NormalUnLocked",
+"147": "Scene0Part2NormalUnLockedEffected",
+"148": "MajuNormalUnLocked",
+"149": "MajuNormalUnLockedEffected",
+"150": "StoryMajuUnlock",
+"151": "StoryMajuUnlockEffected",
+"152": "StoryMajuHardUnlock",
+"153": "StoryMajuHardUnlockEffected",
+"154": "StoryMajuNightmareUnlock",
+"155": "StoryMajuNightmareUnlockEffected",
+"156": "MagirecoZeroPart1NormalUnLocked",
+"157": "MagirecoZeroPart1NormalUnLockedEffected",
+"158": "StoryMagirecoZeroUnLocked",
+"159": "StoryMagirecoZeroUnLockedEffected",
+"160": "MagirecoZeroHardUnLocked",
+"161": "MagirecoZeroHardUnLockedEffected",
+"162": "MagirecoZeroNightmareUnLocked",
+"163": "MagirecoZeroNightmareUnLockedEffected",
+"164": "Scene0Part3NormalUnLocked",
+"165": "Scene0Part3NormalUnLockedEffected",
+"166": "MagirecoZeroPart2NormalUnLocked",
+"167": "MagirecoZeroPart2NormalUnLockedEffected",
+"168": "StoryHangyakuUnlock",
+"169": "StoryHangyakuUnlockEffected",
+"170": "StoryHangyakuHardUnlock",
+"171": "StoryHangyakuHardUnlockEffected",
+"172": "StoryHangyakuNightmareUnlock",
+"173": "StoryHangyakuNightmareUnlockEffected",
+"174": "HangyakuPart1NormalUnLocked",
+"175": "HangyakuPart1NormalUnLockedEffected",
+"176": "HangyakuPart2NormalUnLocked",
+"177": "HangyakuPart2NormalUnLockedEffected",
+"178": "StoryTarutoUnlock",
+"179": "StoryTarutoUnlockEffected",
+"180": "StoryTarutoHardUnlock",
+"181": "StoryTarutoHardUnlockEffected",
+"182": "StoryTarutoNightmareUnlock",
+"183": "StoryTarutoNightmareUnlockEffected",
+"184": "TarutoNormalUnLocked",
+"185": "TarutoNormalUnLockedEffected",
+"186": "MagirecoZeroPart3NormalUnLocked",
+"187": "MagirecoZeroPart3NormalUnLockedEffected",
+"188": "TarutoNormalPart2UnLocked",
+"189": "TarutoNormalPart2UnLockedEffected",
+"190": "StorySoranaUnlock",
+"191": "StorySoranaUnlockEffected",
+"192": "StorySoranaHardUnlock",
+"193": "StorySoranaHardUnlockEffected",
+"194": "StorySoranaNightmareUnlock",
+"195": "StorySoranaNightmareUnlockEffected",
+"196": "SoranaNormalUnLocked",
+"197": "SoranaNormalUnLockedEffected",
+"200": "SubStyleSlot1Unlocked",
+"201": "SubStyleSlot2Unlocked",
+"202": "SubStyleSlot3Unlocked",
+"203": "SubStyleSlot1UnlockedEffected",
+"204": "SubStyleSlot2UnlockedEffected",
+"205": "SubStyleSlot3UnlockedEffected",
+"206": "NightmareModeExplanation",
+"210": "FiledPointAndUIExplanation",
+"211": "FiledPointAndUIExplanationEffected",
+"212": "StyleLevelExplanation",
+"213": "StyleLevelExplanationEffected",
+"214": "CardLimitBreakExplanation",
+"215": "CardLimitBreakExplanationEffected",
+"216": "FieldPointBossExplanation",
+"217": "FieldPointBossExplanationEffected",
+"218": "FieldPointAreaBossExplanation",
+"219": "FieldPointAreaBossExplanationEffected",
+"220": "FieldPointExtraExplanation",
+"221": "FieldPointExtraExplanationEffected",
+"222": "FieldPointBonusExplanation",
+"223": "FieldPointBonusExplanationEffected",
+"224": "EditCardExplanation",
+"225": "EditCardExplanationEffected",
+"226": "BossBattleDarknessExplanation",
+"227": "BossBattleDarknessExplanationEffected",
+"228": "BossBattleDessertExplanation",
+"229": "BossBattleDessertExplanationEffected",
+"230": "SoloRaidBattleExplanation",
+"231": "SoloRaidBossBattleExplanation",
+"233": "AlternativeStoryModeChangeExplanation",
+"234": "StyleRentalExplanation",
+"300": "FinishTutorialWallBannerEffected",
+"301": "NamaeStoryEpisode02Unlocked",
+"302": "NamaeStoryEpisode02UnlockedEffected",
+"303": "NamaeStoryEpisode03Unlocked",
+"304": "NamaeStoryEpisode03UnlockedEffected",
+"305": "NamaeStoryEpisode04Unlocked",
+"306": "NamaeStoryEpisode04UnlockedEffected",
+"307": "NamaeStoryEpisode05Unlocked",
+"308": "NamaeStoryEpisode05UnlockedEffected",
+"309": "NamaeStoryEpisode06Unlocked",
+"310": "NamaeStoryEpisode06UnlockedEffected",
+"311": "NamaeStoryEpisode07Unlocked",
+"312": "NamaeStoryEpisode07UnlockedEffected",
+"313": "NamaeStoryEpisode08Unlocked",
+"314": "NamaeStoryEpisode08UnlockedEffected",
+"315": "NamaeStoryEpisode09Unlocked",
+"316": "NamaeStoryEpisode09UnlockedEffected",
+"317": "OptionKeyConfig",
+"318": "NamaeStoryEpisode10Unlocked",
+"319": "NamaeStoryEpisode10UnlockedEffected",
+"320": "NamaeStoryEpisode11Unlocked",
+"321": "NamaeStoryEpisode11UnlockedEffected",
+"322": "NamaeStoryEpisode12Unlocked",
+"323": "NamaeStoryEpisode12UnlockedEffected",
+"324": "NamaeStoryEpisode13Unlocked",
+"325": "NamaeStoryEpisode13UnlockedEffected",
+"326": "NamaeStoryEpisode14Unlocked",
+"327": "NamaeStoryEpisode14UnlockedEffected",
+"328": "NamaeStoryEpisode15Unlocked",
+"329": "NamaeStoryEpisode15UnlockedEffected",
+"353": "AlternativeStoryUnlock",
+"354": "AlternativeStoryUnlockEffected",
+"355": "StoryEventArchiveUnlock202604",
+"400": "LoginCheckForTowerUnlock",
+"401": "LoginCheckForPvpUnlock",
+"402": "LoginCheckForStoryChaosUnlock",
+"403": "LoginCheckForSelectionAbilityUnlock",
+"404": "LoginCheckForStoryScene0Unlock",
+"405": "LoginCheckForMultiRaidUnlock",
+"406": "LoginCheckForDollhouseUnlock",
+"407": "LoginCheckForCameraUnlock",
+"408": "LoginCheckForStoryMajuUnlock",
+"409": "LoginCheckForStoryMagirecoZeroUnlock",
+"411": "LoginCheckForFriendUnlock",
+"412": "LoginCheckForAlternativeStoryUnlock",
+"413": "LoginCheckForStoryTarutoUnlock",
+"414": "LoginCheckForTarutoNormalUnLocked",
+"415": "LoginCheckForMagirecoZeroPart3NormalUnlocked",
+"416": "LoginCheckForTarutoNormalPart2UnLocked",
+"417": "LoginCheckForStorySoranaUnlock",
+"418": "LoginCheckForSoranaNormalUnLocked",
+"490": "ConvertDollhouseCollectionCreatedTime",
+"491": "ConvertMainStoryTutorialUnlock",
+"492": "CharacterHeartObjectRewardChanges",
+"493": "ConvertSelectionAbilitySwapSystem",
+"500": "UserExpStoredMessageByLevel100",
+"501": "UserExpStoredMessageByLevel120",
+"502": "UserExpStoredMessageByLevel140",
+"600": "ExplorationFieldTopTarutoAct1Unlock",
+"601": "ExplorationFieldTopTarutoAct1UnlockEffected",
+"1000": "QuestBattleTutorial01",
+"1001": "QuestBattleTutorial02",
+"1002": "QuestBattleTutorial03",
+"1003": "QuestBattleTutorial04",
+"1004": "QuestBattleTutorial05",
+"1005": "QuestBattleTutorial06",
+"1006": "QuestBattleTutorial07",
+"2000": "DungeonTutorial01",
+"2001": "DungeonTutorial02",
+"2002": "DungeonTutorial03",
+"2003": "DungeonTutorial04",
+"2004": "DungeonTutorial05",
+"2005": "DungeonTutorial06",
+"3000": "GachaTutorial",
+"4000": "PartyTutorial",
+"5000": "ExchangeTutorial",
+"6000": "GatheringTutorial"
+},
+"ConditionType": {
+"0": "NotMatch",
+"1": "HasCollection",
+"2": "OpenLevel",
+"3": "OpenCollectionLevel",
+"4": "ClearedQuestStageMstId",
+"5": "QuestMissionClearCount"
+},
+"LotteryType": {
+"0": "Normal",
+"1": "Mini"
+},
+"CycleType": {
+"1": "Loop",
+"2": "NoLoop",
+"3": "Comeback",
+"4": "SubscriptionRegular",
+"5": "SubscriptionPremium",
+"6": "IndividualLottery"
+},
+"TrophyRarity": {
+"2": "Bronze",
+"3": "Silver",
+"4": "Gold",
+"5": "Platinum"
+},
+"Target": {
+"1": "Invitee",
+"2": "Inviter"
+},
+"HomeAppealType": {
+"0": "None",
+"1": "WallBanner",
+"2": "Movie"
+},
+"BannerType": {
+"0": "Movie",
+"1": "Gacha",
+"2": "Event",
+"3": "Campaign",
+"4": "Story",
+"5": "Tutorial",
+"6": "ShopPayment",
+"7": "TimeSale",
+"8": "News",
+"9": "GachaTopForWebShop",
+"10": "GachaTopNotForWebShop",
+"11": "ShopNotForWebShop",
+"12": "HomeForWebShop"
+},
+"TargetRegionType": {
+"1": "JpOnly",
+"2": "GlobalOnly"
+},
+"MultiRaidBattleStatus": {
+"0": "None",
+"1": "InProgress",
+"2": "CompletedExits"
+},
+"DispBalloonType": {
+"1": "Exploration",
+"2": "AlternativeStory",
+"3": "AlternativeStoryPointGroup"
+},
+"GuildMatchResult": {
+"-1": "BeforeMatch",
+"0": "InMatch",
+"1": "Win",
+"2": "Lose",
+"3": "Aggregation",
+"99": "NotApplicable"
+},
+"LeagueId": {
+"0": "Normal",
+"1": "Bronze",
+"2": "Silver",
+"3": "Gold",
+"4": "Platinum"
+},
+"EventStateType": {
+"0": "BEFORE_PRE_LEAGUE_MATCH",
+"1": "IN_PRE_LEAGUE_MATCH",
+"2": "BEFORE_LEAGUE_MATCH",
+"3": "IN_LEAGUE_MATCH",
+"4": "AFTER_LEAGUE_MATCH"
+},
+"MatchHistoryViewType": {
+"1": "OFFENSE",
+"2": "DEFENSE"
+},
+"GuildAtmosphere": {
+"1": "Relaxing",
+"2": "Decent",
+"3": "Vast",
+"4": "Silent"
+},
+"GuildRequestType": {
+"1": "JoinRequest",
+"2": "Scout"
+},
+"GuildRequestStatus": {
+"1": "Applying",
+"2": "Canceled",
+"3": "Approved",
+"4": "Denied",
+"5": "SystemCanceled"
+},
+"ObjectType": {
+"1": "Gem",
+"2": "Card",
+"3": "Item",
+"4": "Character",
+"5": "Style",
+"6": "Adv",
+"7": "Gold",
+"8": "Talisman",
+"9": "Enemy",
+"10": "DioramaBackground",
+"11": "ChargeGem",
+"12": "UserTitle",
+"13": "Sound",
+"14": "UserExp",
+"15": "Dollhouse3dBackground",
+"16": "Dollhouse2dBackground",
+"17": "StyleLive2dCostume",
+"18": "Style3dCharacter",
+"19": "WishlistSlot",
+"999": "KiokuHikari"
+},
+"GachaType": {
+"1": "Normal",
+"2": "StepUp",
+"3": "StartDash",
+"4": "Comeback",
+"5": "Tutorial",
+"6": "Bonus",
+"8": "WishlistNormal",
+"9": "WishlistStepUp"
+},
+"GachaDrawType": {
+"1": "Normal",
+"2": "StepUp",
+"3": "Tutorial",
+"5": "WishlistNormal",
+"6": "WishlistStepUp"
+},
+"BadgeType": {
+"0": "None",
+"1": "NewStyle",
+"2": "Reprint",
+"3": "LimitedTime",
+"4": "OnlyOneTime",
+"5": "OnlyChargeGem"
+},
+"StampType": {
+"0": "None",
+"1": "Limited"
+},
+"FriendType": {
+"0": "None",
+"1": "Follow",
+"2": "Followed",
+"3": "Friend",
+"4": "Block",
+"5": "Blocked",
+"6": "CrossBlock"
+},
+"SortCondition": {
+"0": "Level",
+"1": "MaxPartyPower",
+"2": "RecentLoginTime"
+},
+"SortOrder": {
+"0": "SortAsc",
+"1": "SortDesc"
+},
+"GainFriendMedalType": {
+"1": "StyleRental",
+"2": "StyleRentalByFriend",
+"3": "ExecLike",
+"4": "SoloStyleRental",
+"5": "StyleRentalByFollowAndFollower",
+"6": "SoloStyleRentalByFriend",
+"7": "SoloStyleRentalByFollowAndFollower",
+"8": "MultiStyleRental",
+"9": "MultiStyleRentalByFriend",
+"10": "MultiStyleRentalByFollowAndFollower"
+},
+"GroupType": {
+"1": "Normal",
+"2": "Exploration",
+"3": "Tower",
+"4": "EventTower",
+"5": "ThemeTower"
+},
+"QuestCategoryMstId": {
+"1": "MainStory",
+"3": "Gve",
+"4": "Training",
+"5": "Tower",
+"6": "EventTower",
+"7": "MapGveBattle",
+"8": "MapGveBossBattle",
+"9": "StoryEvent",
+"10": "CharacterHeart",
+"11": "ScoreAttack",
+"12": "MultiRaid",
+"13": "AlternativeStory",
+"14": "SoloRaid",
+"15": "ThemeTower"
+},
+"KeyQuestType": {
+"1": "KeyQuestTypeStage",
+"2": "KeyQuestTypeGroup"
+},
+"QuestMissionConditionType": {
+"1": "ClearRound",
+"2": "RemainHp",
+"3": "MaxDamage"
+},
+"CampaignType": {
+"1": "StaminaLow",
+"2": "SelectionAbilityRateBoost"
+},
+"LinkHpType": {
+"0": "None",
+"1": "NormalLink",
+"2": "BossLink"
+},
+"CanUseSelectionAbilityMultiLotteryItemDifficulty": {
+"4": "VeryHard"
+},
+"BuffType": {
+"1": "campUpDmg",
+"2": "campUpBreakPointDmg"
+},
+"EnemyUnlockType": {
+"1": "None",
+"2": "MiniTutorialNum"
+},
+"PlayType": {
+"1": "roundEnd",
+"2": "battleStart"
+},
+"EventRarity": {
+"1": "Bronze",
+"2": "Silver",
+"3": "Gold"
+},
+"PurgeType": {
+"1": "Directory",
+"2": "File"
+},
+"PurgeTarget": {
+"1": "AssetBundle",
+"2": "File"
+},
+"CalculationPointPolicyType": {
+"1": "ScoreAttack",
+"2": "Quest",
+"3": "PvpOrGvg",
+"4": "Gve",
+"5": "Pvp",
+"6": "Gvg",
+"7": "SoloRaid"
+},
+"UnlockType": {
+"0": "None",
+"1": "MainStory",
+"2": "StoryEvent",
+"3": "Mission",
+"4": "EventTower",
+"5": "Style",
+"6": "CollectionIllust",
+"7": "CharacterHeart",
+"8": "MemoryLight",
+"9": "LimitedEventShop",
+"99": "Common"
+},
+"DetailInfoGroupType": {
+"1": "Chapter",
+"2": "Stratum"
+},
+"AdvSkipType": {
+"0": "None",
+"1": "Normal",
+"2": "Fast",
+"3": "Skip"
+},
+"TargetObjectType": {
+"1": "Title",
+"2": "Model3d",
+"3": "Live2d",
+"4": "Dollhouse3dBackground",
+"5": "Dollhouse2dBackground",
+"6": "Character"
+},
+"RoomType": {
+"1": "Guild",
+"2": "Group",
+"3": "Direct"
+},
+"MessageType": {
+"1": "Text",
+"2": "Stamp",
+"3": "System"
+},
+"ActionType": {
+"1": "Join",
+"2": "Leave"
+},
+"RelativelyLevel": {
+"1": "Superior",
+"2": "SameRank",
+"3": "Inferior"
+},
+"PartyType": {
+"1": "SoloBattle",
+"2": "PlayerBattle",
+"3": "SoloRaid",
+"4": "Preset"
+},
+"HomeType": {
+"1": "LightHouse",
+"2": "Live2d",
+"3": "Model3d",
+"4": "Style",
+"5": "Card"
+},
+"Model3dBackgroundType": {
+"1": "DioramaBackground",
+"2": "Dollhouse3dBackground",
+"3": "Dollhouse2dBackground"
+},
+"LightingType": {
+"0": "Normal",
+"1": "Sunset",
+"2": "Dark"
+},
+"CameraPoseType": {
+"1": "Style3dCharacter",
+"2": "StyleLive2dCostume"
+},
+"Style3dCharacterType": {
+"1": "NormalCharacter",
+"2": "SpecialCharacter",
+"3": "OtherCharacter"
+},
+"RandomScopeType": {
+"1": "All",
+"2": "Configured"
+},
+"EnemyType": {
+"0": "None",
+"1": "Minion",
+"2": "Witch",
+"3": "Beast",
+"4": "Magica",
+"5": "Uwasa",
+"6": "Nightmare",
+"7": "NormalBeast"
+},
+"SizeType": {
+"0": "ExtraSmall",
+"1": "Small",
+"2": "Medium",
+"3": "Large",
+"4": "ExtraLarge"
+},
+"PointType": {
+"1": "Quest",
+"2": "Adv",
+"3": "Sequence"
+},
+"SequenceType": {
+"1": "Quest",
+"2": "Adv"
+},
+"StoryType": {
+"1": "BlackMemoryLight",
+"2": "AlternativeStory"
+},
+"BgAnimType": {
+"1": "ToLarge",
+"2": "ToSmall",
+"3": "ToRight",
+"4": "ToLeft"
+},
+"EndTypeV4": {
+"1": "Clear",
+"2": "GameOver",
+"3": "Retire"
+},
+"EndType": {
+"0": "Retire",
+"1": "GameOver",
+"2": "Clear"
+},
+"NextSceneType": {
+"1": "Adv",
+"2": "Battle",
+"3": "EndingAdv"
+},
+"AdvPlayType": {
+"1": "TwoDimensional",
+"2": "ThreeDimensional",
+"3": "Movie"
+},
+"AbilityEffectCategory": {
+"1": "Damage",
+"2": "Positive",
+"3": "Negative",
+"4": "AddAct"
+},
+"ParamEffectType": {
+"0": "NotParamEffect",
+"1": "Fixed",
+"2": "Ratio"
+},
+"SkillCategory": {
+"1": "Active",
+"2": "Passive"
+},
+"SkillLevelUpType": {
+"1": "StyleSpecialAttackSkill",
+"2": "CardPassiveSkill"
+},
+"SkillLevelUpConditionType": {
+"0": "None",
+"1": "CharacterLevel"
+}
+}
