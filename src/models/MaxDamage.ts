@@ -21,11 +21,14 @@ export interface MaxDmgEffect {
     key: string            // `${casterPos}:${detailId}` - stable id for exclude / stack overrides
     casterPos: number
     casterName: string
-    source: string         // "Ultimate" / "Battle Skill" / "Passive" / ...
+    source: string         // "Ultimate" / "Battle Skill" / "Basic Attack" / "Follow-up" / "Ability" / "Ascension" / "Crystalis" / "Portrait" / "Support"
     side: EffectSide
     detail: SkillDetail
     maxStacks: number      // 1 unless an ACCUM state
     applies: boolean       // false for self-only effects of another member, and for self-targeted debuffs (drawbacks)
+    // Set by computeMaxDamage for the damage dealer's evaluation: where the effect actually landed. Undefined when
+    // it was left out (excluded, 0 stacks or !applies). UI bookkeeping only.
+    reach?: { dealer: boolean, enemies: number[] }
 }
 
 export interface MaxDmgOptions {
@@ -73,6 +76,20 @@ const isState = (d: SkillDetail) => UNIT_STATE_TYPES.has(d.abilityEffectType)
     && !["ADDITIONAL_SKILL_ACT", "SWITCH_SKILL", "CUTOUT", "STUN", "LOCK_TURN_ORDER", "COMBO", "CAN_NOT_ACTION"].includes(d.abilityEffectType)
     && !d.abilityEffectType.startsWith("BURN") && !d.abilityEffectType.startsWith("POISON") && !d.abilityEffectType.startsWith("CURSE") && !d.abilityEffectType.startsWith("BLEED")
 
+// Which part of a kit a passive effect comes from. PvPKioku merges them into one `effects` list, so this reads
+// the passive id back: crystalis are stored as full passive ids, the rest as id * 100 + level. UI grouping only.
+function passiveOrigin(k: PvPKioku, d: SkillDetail): string {
+    const id = (d as any).passiveSkillMstId as number
+    const kit = k as any
+    if (kit.crys?.includes(id)) return "Crystalis"
+    const base = Math.floor(id / 100)
+    if (base === k.data.ability_id) return "Ability"
+    for (let i = 1; i <= 5; i++) if (base === (k.data as any)[`ascension_${i}_effect_2_id`]) return "Ascension"
+    if (kit.portrait && base === kit.portrait.passiveSkill1) return "Portrait"
+    if (kit.support && base === kit.support.data.support_id) return "Support"
+    return "Passive"
+}
+
 // Every buff/debuff the team can produce.
 export function collectTeamEffects(allies: PvPKioku[], attackerPos: number): MaxDmgEffect[] {
     const out: MaxDmgEffect[] = []
@@ -99,7 +116,7 @@ export function collectTeamEffects(allies: PvPKioku[], attackerPos: number): Max
             }
         }
         for (const d of k.effects) {
-            add(pos, k.name, "Passive", d)
+            add(pos, k.name, passiveOrigin(k, d), d)
             if (d.abilityEffectType === "ADDITIONAL_SKILL_ACT") {
                 for (const fd of (skillDetailsByMstId.get(d.value1) ?? []) as SkillDetail[]) add(pos, k.name, "Follow-up", fd)
             }
@@ -137,17 +154,27 @@ export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearan
         const attacker = team1.kiokuStates[pos]
         const targets = team2.kiokuStates
 
-        for (const e of collectTeamEffects(allies, pos)) {
+        // The dealer's pass reuses `effects` so the returned list records where each effect landed.
+        const passEffects = pos === attackerPos ? effects : collectTeamEffects(allies, pos)
+        for (const e of passEffects) {
             if (opts.excluded?.has(e.key)) continue
             const stacks = Math.max(0, Math.min(e.maxStacks, opts.stacks?.get(e.key) ?? e.maxStacks))
             if (!stacks) continue
             const caster = team1.kiokuStates[e.casterPos]
             if (e.side === "ally") {
-                if (!e.applies || !isEligibleForEffect(e.detail, attacker)) continue
-                attacker.activeEffectDetails.set(e.key, stateFrom(e, caster, stacks))
+                if (!e.applies) continue
+                const eligible = isEligibleForEffect(e.detail, attacker)
+                if (pos === attackerPos) e.reach = { dealer: eligible, enemies: [] }
+                if (eligible) attacker.activeEffectDetails.set(e.key, stateFrom(e, caster, stacks))
             } else {
                 if (!e.applies) continue
-                for (const t of targets) if (isEligibleForEffect(e.detail, t)) t.activeEffectDetails.set(e.key, stateFrom(e, caster, stacks))
+                const hit: number[] = []
+                targets.forEach((t, i) => {
+                    if (!isEligibleForEffect(e.detail, t)) return
+                    t.activeEffectDetails.set(e.key, stateFrom(e, caster, stacks))
+                    hit.push(i)
+                })
+                if (pos === attackerPos) e.reach = { dealer: false, enemies: hit }
             }
         }
         targets.forEach((t, i) => {

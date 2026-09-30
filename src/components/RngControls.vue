@@ -30,6 +30,7 @@ const emit = defineEmits<{ 'update:mode': [RngMode], 'update:seed': [number], re
 const RNG_MODE_OPTIONS = [
   { value: 'hit', label: 'All 100%', title: 'Every random roll succeeds: every crit lands, every buff/debuff with a chance applies. Rolls that are really 0% still fail. Choices between several options (targets, enemy skills) take the most likely one.' },
   { value: 'miss', label: 'All 0%', title: 'Every random roll fails: no crits, no chance-based buff/debuff lands. Rolls that are really 100% still succeed. Choices between several options (targets, enemy skills) take the most likely one.' },
+  { value: 'weighted', label: 'Weighted', title: 'Every roll with a 50% or higher chance happens, every roll below 50% doesn\'t. Choices between several options (targets, enemy skills) take the most likely one.' },
   { value: 'seed', label: 'Seed', title: 'Rolls come from a seeded random generator: the same teams and seed always give the same battle.' },
   { value: 'manual', label: 'Manual', title: 'You decide every roll: each action lists its rolls with the in-game chance. By default a roll hits at 50% or more; tick or untick to change it, pick another option for choices. The battle re-runs from the start.' },
 ] as const

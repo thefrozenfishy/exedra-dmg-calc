@@ -7,7 +7,7 @@ import { KiokuRole } from "../types/enums"
 import type { SavedTierList, SharedTierList, TierListRow } from "../types/TierListTypes"
 import { clampName, isUuid, sanitizeBoard } from "../utils/tierList"
 import type { SavedTeam, SavedTeamKind, SavedTeamRow, SharedTeam } from "../types/SavedTeamTypes"
-import { sanitizeTeamSlots, teamData } from "../utils/savedTeams"
+import { sanitizeTeamSlots, teamData, teamExtra } from "../utils/savedTeams"
 
 export class NameRequiredError extends Error {
     constructor() {
@@ -1033,7 +1033,7 @@ async function _saveTeam(
         p_team_id: team.id,
         p_kind: kind,
         p_name: team.name,
-        p_data: { slots: team.slots },
+        p_data: team.extra === undefined ? { slots: team.slots } : { slots: team.slots, extra: team.extra },
         p_is_shared: !!team.shared,
         p_sort_order: sortOrder,
         p_known_updated_at: knownUpdatedAt,
@@ -1091,7 +1091,7 @@ async function _loadSharedTeam(teamId: string): Promise<SharedTeam | null> {
 
     const row = (data as any[] | null)?.[0]
 
-    if (!row || (row.kind !== "single" && row.kind !== "pvp")) return null
+    if (!row || !["single", "pvp", "pve"].includes(row.kind)) return null
 
     const kind = row.kind as SavedTeamKind
 
@@ -1100,6 +1100,8 @@ async function _loadSharedTeam(teamId: string): Promise<SharedTeam | null> {
             id: row.team_id,
             name: clampName(row.name),
             slots: sanitizeTeamSlots(teamData(row.data), kind),
+            // Raw: the page that opens the team sanitizes its own setup.
+            extra: teamExtra(row.data),
             createdAt: Date.parse(row.created_at) || Date.now(),
             updatedAt: Date.parse(row.updated_at) || Date.now(),
         },

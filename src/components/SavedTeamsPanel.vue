@@ -5,6 +5,8 @@
                 <span class="viewing-label">Shared team</span>
                 <span class="viewing-name">{{ saved.shared.value.team.name || 'Untitled team' }}</span>
                 <span class="viewing-owner">by {{ saved.shared.value.ownerName || 'a player' }}</span>
+                <span v-if="saved.sharedDescription.value" class="viewing-owner shared-description">{{
+                    saved.sharedDescription.value }}</span>
                 <div class="shared-preview">
                     <div v-for="row in sharedRows" :key="row.label" class="shared-preview-row">
                         <span v-if="row.label" class="shared-preview-label">{{ row.label }}</span>
@@ -99,7 +101,7 @@
                 </svg>
                 <span v-if="confirmingDelete" class="delete-confirm-label">Confirm?</span>
             </button>
-            <span class="hint">Changes in the simulator are saved to this team automatically.</span>
+            <span class="hint">{{ saved.saveHint }}</span>
         </section>
     </div>
 </template>
@@ -352,6 +354,11 @@ function resetDrag() {
 .viewing-owner {
     font-size: 0.85rem;
     color: var(--muted);
+}
+
+.shared-description {
+    flex-basis: 100%;
+    text-align: left;
 }
 
 .shared-preview {

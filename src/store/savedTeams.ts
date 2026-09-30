@@ -1,4 +1,4 @@
-import { computed, onMounted, ref, watch } from "vue"
+import { computed, nextTick, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { toast } from "vue3-toastify"
 import { useSetting } from "./settingsStore"
@@ -13,6 +13,18 @@ import type { SavedTeam, SavedTeamKind, SharedTeam } from "../types/SavedTeamTyp
 
 const toastOpts = { position: toast.POSITION.TOP_RIGHT, icon: false } as const
 
+/** Page-specific setup saved alongside the team (the PvE Simulator's stage, settings and decisions). */
+export interface SavedTeamExtra {
+    /** The page's current setup. */
+    get: () => unknown
+    /** Coerces untrusted JSON (cloud rows, shared links) into a valid setup. Must return `get()`'s shape unchanged. */
+    sanitize: (raw: unknown) => unknown
+    /** Loads a setup into the page. Runs right after the team's slots were applied. */
+    apply: (value: unknown) => void | Promise<void>
+    /** One line describing a setup, shown on a shared team's banner. */
+    describe?: (value: unknown) => string
+}
+
 export interface SavedTeamsOptions {
     kind: SavedTeamKind
     /** Route path of the simulator page, used to build share links. */
@@ -26,6 +38,10 @@ export interface SavedTeamsOptions {
     /** Element captured for share previews, and how to capture it. */
     shareTarget: () => string | HTMLElement
     exportOptions: ImageExportOptions
+    /** Setup saved with each team besides the slots. */
+    extra?: SavedTeamExtra
+    /** Shown under the active team, e.g. what gets saved automatically. */
+    saveHint?: string
 }
 
 /**
@@ -52,8 +68,13 @@ export function useSavedTeams(options: SavedTeamsOptions) {
         save: (team, sortOrder, known) => saveTeam(kind, team, sortOrder, known),
         saveOrder: ids => saveTeamOrder(kind, ids),
         remove: deleteSavedTeam,
-        rowToItem: row => rowToTeam(row, kind),
-        sanitize: team => ({ ...team, name: clampName(team.name), slots: sanitizeTeamSlots(team.slots, kind) }),
+        rowToItem: row => rowToTeam(row, kind, options.extra?.sanitize),
+        sanitize: team => ({
+            ...team,
+            name: clampName(team.name),
+            slots: sanitizeTeamSlots(team.slots, kind),
+            ...(options.extra ? { extra: options.extra.sanitize(team.extra) } : {}),
+        }),
         displayName: team => team.name || "Untitled team",
     })
     const cloudEnabled = sync.active()
@@ -80,15 +101,30 @@ export function useSavedTeams(options: SavedTeamsOptions) {
 
     const catalog = computed(() => new Map(characterStore.characters.map(c => [c.id, c] as const)))
     const workingSlots = () => compactTeams(options.getSlots(), kind)
-    const workingKey = computed(() => teamsKey(workingSlots()))
+    const workingExtra = () => options.extra ? options.extra.sanitize(options.extra.get()) : undefined
+    // A team's identity for "is this what's on screen?": its slots, plus the page setup where there is one.
+    const keyOf = (slots: SavedTeam["slots"], extra: unknown) =>
+        options.extra ? `${teamsKey(slots)}|${JSON.stringify(extra ?? null)}` : teamsKey(slots)
+    const teamKey = (team: SavedTeam) => keyOf(team.slots, team.extra)
+    const workingKey = computed(() => keyOf(workingSlots(), workingExtra()))
     const workingIsEmpty = computed(() => isTeamsEmpty(workingSlots()))
     /** The simulator holds characters that aren't saved in any team. */
     const hasUnsavedSetup = computed(() =>
-        !currentTeam.value && !workingIsEmpty.value && !teamOptions.value.some(t => teamsKey(t.slots) === workingKey.value)
+        !currentTeam.value && !workingIsEmpty.value && !teamOptions.value.some(t => teamKey(t) === workingKey.value)
     )
 
-    function apply(team: SavedTeam) {
-        options.applySlots(expandTeams(team.slots, catalog.value))
+    // While a team is being loaded the page passes through half-applied states; none of them may be
+    // saved over the team.
+    let applying = 0
+    async function apply(team: SavedTeam) {
+        applying++
+        try {
+            options.applySlots(expandTeams(team.slots, catalog.value))
+            if (options.extra) await options.extra.apply(team.extra)
+            await nextTick()
+        } finally {
+            applying--
+        }
     }
 
     function putTeam(team: SavedTeam) {
@@ -101,9 +137,11 @@ export function useSavedTeams(options: SavedTeamsOptions) {
         activeTeamId.value = team.id
     }
 
-    function newTeam(name: string, slots = workingSlots()): SavedTeam {
+    function newTeam(name: string, slots = workingSlots(), extra = workingExtra()): SavedTeam {
         const now = Date.now()
-        return { id: crypto.randomUUID(), name: clampName(name), slots, createdAt: now, updatedAt: now }
+        const team: SavedTeam = { id: crypto.randomUUID(), name: clampName(name), slots, createdAt: now, updatedAt: now }
+        if (options.extra) team.extra = options.extra.sanitize(extra)
+        return team
     }
 
     const nextName = () => `Team ${teamOptions.value.length + 1}`
@@ -119,13 +157,13 @@ export function useSavedTeams(options: SavedTeamsOptions) {
         if (!team || id === activeTeamId.value) return
         if (hasUnsavedSetup.value && !window.confirm("Your current setup isn't saved as a team. Replace it with this team?")) return
         activeTeamId.value = id
-        apply(team)
+        void apply(team)
     }
 
     function duplicateTeam() {
         const src = currentTeam.value
         if (!src) return
-        addTeam(newTeam(`${src.name} (copy)`, sanitizeTeamSlots(src.slots, kind)))
+        addTeam(newTeam(`${src.name} (copy)`, sanitizeTeamSlots(src.slots, kind), src.extra))
         toast.success("Team duplicated!", toastOpts)
     }
 
@@ -165,12 +203,15 @@ export function useSavedTeams(options: SavedTeamsOptions) {
     // Edits in the simulator are saved into the active team.
     watch(workingKey, key => {
         const team = currentTeam.value
-        if (team && key !== teamsKey(team.slots)) putTeam({ ...team, slots: workingSlots() })
+        if (applying || !team || key === teamKey(team)) return
+        const next: SavedTeam = { ...team, slots: workingSlots() }
+        if (options.extra) next.extra = workingExtra()
+        putTeam(next)
     })
 
     // A different version of the active team (switched, or synced from another device) is loaded.
-    watch(() => currentTeam.value && teamsKey(currentTeam.value.slots), key => {
-        if (key && key !== workingKey.value) apply(currentTeam.value!)
+    watch(() => currentTeam.value && teamKey(currentTeam.value), key => {
+        if (key && key !== workingKey.value) void apply(currentTeam.value!)
     })
 
     // ── Shared (someone else's) teams, opened by `?team=<id>` ──
@@ -201,6 +242,7 @@ export function useSavedTeams(options: SavedTeamsOptions) {
                 sharedState.value = "notfound"
                 return
             }
+            result.team.extra = options.extra ? options.extra.sanitize(result.team.extra) : undefined
             shared.value = result
         } catch (err) {
             console.error("Failed to load shared team:", err)
@@ -219,7 +261,7 @@ export function useSavedTeams(options: SavedTeamsOptions) {
         if (!src) return
         if (hasUnsavedSetup.value && !window.confirm("Your current setup isn't saved as a team. Replace it with this team?")) return
         detach()
-        apply(src)
+        void apply(src)
         leaveSharedView()
         toast.success("Team loaded into the simulator", toastOpts)
     }
@@ -228,9 +270,9 @@ export function useSavedTeams(options: SavedTeamsOptions) {
         const src = shared.value?.team
         if (!src) return
         if (hasUnsavedSetup.value && !window.confirm("Your current setup isn't saved as a team. Replace it with this team?")) return
-        const copy = newTeam(src.name || "Shared team", sanitizeTeamSlots(src.slots, kind))
+        const copy = newTeam(src.name || "Shared team", sanitizeTeamSlots(src.slots, kind), src.extra)
         addTeam(copy)
-        apply(copy)
+        void apply(copy)
         leaveSharedView()
         toast.success("Saved to your teams!", toastOpts)
     }
@@ -241,12 +283,16 @@ export function useSavedTeams(options: SavedTeamsOptions) {
         if (activeTeamId.value && !teams.value[activeTeamId.value]) activeTeamId.value = ""
     }
 
-    // Another page (e.g. "open in simulator" from the Best Team Calculator or the PvE simulator) may
-    // have replaced the simulator's team. Don't overwrite either side: just stop tracking the saved team.
+    // Another page (e.g. "open in simulator" from the Best Team Calculator, or a simulator sharing the same
+    // team store) may have replaced the team. Don't overwrite either side: just stop tracking the saved team.
     dropMissingActive()
-    if (currentTeam.value && teamsKey(currentTeam.value.slots) !== workingKey.value) detach()
+    if (currentTeam.value && teamsKey(currentTeam.value.slots) !== teamsKey(workingSlots())) detach()
 
     onMounted(async () => {
+        // The page setup (stage, seed, decisions...) only lives in the saved team, so bring it back.
+        if (options.extra && currentTeam.value && teamKey(currentTeam.value) !== workingKey.value) {
+            await apply(currentTeam.value)
+        }
         const pulling = sync.pull().then(dropMissingActive)
         // Opening my own share link should land on the synced team, so wait for the merge in that case.
         if (sharedTeamId.value) await pulling
@@ -296,8 +342,15 @@ export function useSavedTeams(options: SavedTeamsOptions) {
         })
     }
 
+    const sharedDescription = computed(() => {
+        const team = shared.value?.team
+        return team && options.extra?.describe ? options.extra.describe(team.extra) : ""
+    })
+
     return {
         kind,
+        saveHint: options.saveHint ?? "Changes in the simulator are saved to this team automatically.",
+        sharedDescription,
         teamOptions,
         currentTeam,
         activeTeamId,

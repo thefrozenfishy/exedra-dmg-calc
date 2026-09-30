@@ -9,6 +9,8 @@
 // Modes (RngMode):
 //   hit    - every real roll succeeds; every choice takes its most likely option.
 //   miss   - every real roll fails; every choice takes its most likely option.
+//   weighted - every real roll succeeds if p >= 50% and fails below; every choice takes its most likely option
+//            (the same outcomes Manual starts from, without stopping to ask).
 //   seed   - rolled from the seeded generator (mulberry32, same seed = same battle).
 //   manual - the user decides each roll; undecided rolls default to "succeeds if p >= 50%",
 //            choices default to the most likely option.
@@ -22,7 +24,7 @@
 // user, and replay with the answer.
 import { seededRng } from "./BattleMath";
 
-export type RngMode = "hit" | "miss" | "seed" | "manual"
+export type RngMode = "hit" | "miss" | "weighted" | "seed" | "manual"
 export type RngKind = "crit" | "effect" | "target" | "skill" | "action"
 
 export interface RngOption { label: string, weight: number }
