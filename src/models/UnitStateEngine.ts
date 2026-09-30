@@ -124,6 +124,9 @@ function atkDefUp(detail: StateDetail, t: string, stat: "ATK" | "DEF", base: CsD
         case `UP_${stat}_FIXED`: return dec.float(f32(detail.value1));
         case `UP_${stat}_CONSUME_RATIO`: return hasRemainCount(detail) ? base.mul(decTenth(detail).div(D100)) : CsDecimal.Zero;
         case `UP_${stat}_CONSUME_FIXED`: return hasRemainCount(detail) ? dec.float(f32(detail.value1)) : CsDecimal.Zero;
+        // [CONFIRMED 3.19] TsubameLinkUnitState IAtkVariation (0x16d9e90): + base * (value2/10 * updateable)/100
+        // (the give-time effect-value multiplier is already folded into value2, see PvPTeam.giveTransform).
+        case "TSUBAME_LINK": return stat === "ATK" ? base.mul(dec.float(f32(f32((detail as any).value2 ?? 0) / 10)).div(D100)) : null;
     }
     return null;
 }
@@ -180,6 +183,8 @@ export function getProcessedSpeedWithBreakdown(unit: KiokuState): { speed: numbe
             case "UP_SPD_RATIO": v = base.mul(decTenth(d).div(D100)); break;
             case "UP_SPD_ACCUM_RATIO": v = base.mul(decTenth(d).mul(dec.int(accumCount(d))).div(D100)); break;
             case "UP_SPD_FIXED": v = dec.float(f32(d.value1)); break;
+            // [CONFIRMED 3.19] TsubameLinkUnitState ISpeedVariation (0x16da100): + base * (value1/10 * updateable)/100.
+            case "TSUBAME_LINK": v = base.mul(decTenth(d).div(D100)); break;
         }
         if (v) { result = result.add(v); steps.push([v.toFloat(), d]); }
     }
@@ -189,6 +194,8 @@ export function getProcessedSpeedWithBreakdown(unit: KiokuState): { speed: numbe
             case "DWN_SPD_RATIO": v = result.mul(decTenth(d).div(D100)).neg(); break;
             case "DWN_SPD_ACCUM_RATIO": v = result.mul(decTenth(d).mul(dec.int(accumCount(d))).div(D100)).neg(); break;
             case "DWN_SPD_FIXED": v = dec.float(f32(d.value1)).neg(); break;
+            // [CONFIRMED 3.19] TsubameCoreUnitState (Down, 0x16d92f0): - running * (value1/10)/100, the caster only.
+            case "TSUBAME_CORE": v = result.mul(decTenth(d).div(D100)).neg(); break;
         }
         if (v) { result = result.add(v); steps.push([v.toFloat(), d]); }
     }
@@ -428,7 +435,7 @@ export function getFinalDamageRatio(defender: KiokuState, attacker: KiokuState):
     for (const d of orderedActiveEffectsInApplicationOrder(defender)) {
         if (d.abilityEffectType !== "RCV_FINAL_DAMAGE") continue;
         if (!(unitMatchesRole(attacker, (d as any).role) && unitMatchesElement(attacker, d.element))) continue;
-        sum = sum.add(dec.int(d.value1).div(D1000));
+        sum = sum.add(dec.float(f32(d.value1)).div(D1000));
     }
     return sum;
 }

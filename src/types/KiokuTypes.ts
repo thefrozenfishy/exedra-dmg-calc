@@ -317,6 +317,8 @@ export interface BattleSnapshot {
     rngEvents?: RngEvent[]   // real random rolls made during this action (BattleRng)
     linkHp?: { type: number, name: string, current: number, max: number }   // Solo Raid Link HP pool of the enemy wave
     countdown?: { value: number, max: number, cancelTotal: number, cancelMax: number, unit: string } // Solo Raid countdown
+    round?: number           // TurnReferee round (elapsed turn-gauge time: < 150 -> 1, then +1 per 100)
+    vanguard?: { active: boolean, point: number, maxPoint: number, activeMaxPoint: number, gauge: number, maxGauge: number } // Solo Raid Labyrinth Vanguard
 }
 
 export interface KiokuData {

@@ -30,7 +30,8 @@ if (isPvE) {
     const pve = parsePvEExport(text);
     data = pve;
     const allies = pve.slots.filter(s => !!s.main).map(buildSlotKioku);
-    battle = createPvEBattle(allies, pve.stageId, pve.seed, 0, { rngMode: pve.rngMode, decisions: pve.decisions, manualTargeting: pve.control === "manual" });
+    battle = createPvEBattle(allies, pve.stageId, pve.seed, 0, { rngMode: pve.rngMode, decisions: pve.decisions, manualTargeting: pve.control === "manual",
+        partyBuffId: pve.soloRaid?.partyBuffId, noRoundLimit: pve.soloRaid?.noRoundLimit, raidCarry: pve.soloRaid?.attempts?.[pve.soloRaid.attempts.length - 1] });
     header = `PvE stage ${pve.stageId} ${pve.stageName ?? ""}, ${pve.control} control, ${pve.rngMode} RNG, seed ${pve.seed}`;
 } else {
     const pvp = parseExport(text);

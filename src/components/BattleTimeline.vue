@@ -6,7 +6,7 @@
           <span class="turn">Wave {{ state.wave }}</span>
         </div>
         <div v-else-if="idx > 0" class="ten-separator" :class="state.lastTeamIsTeam1 ? 'ally' : 'enemy'">
-          <span class="turn">Action {{ actionNumber(idx) }}</span>
+          <span class="turn">Action {{ actionNumber(idx) }}<template v-if="state.round"> · R{{ state.round }}</template></span>
           <span class="actor">{{ state.lastActor }}</span>
           <span class="action"> {{ skillTranslate[state.lastTargetType as keyof typeof skillTranslate] }} </span>
           <span v-if="state.actionLabel && state.lastTargetType !== TargetType.fuaId" class="sub-action-tag">{{ state.actionLabel }}</span>
@@ -16,7 +16,8 @@
         </div>
       </div>
 
-      <div v-if="state.linkHp || state.countdown" class="raid-status">
+      <div v-if="state.linkHp || state.countdown || state.vanguard" class="raid-status">
+        <span v-if="state.vanguard">Vanguard: <b>{{ state.vanguard.active ? `ACTIVE (${fmt(state.vanguard.gauge)} left)` : `${state.vanguard.point}/${state.vanguard.maxPoint}` }}</b><template v-if="state.vanguard.active"> · {{ state.vanguard.point }}/{{ state.vanguard.activeMaxPoint }} pts</template><template v-if="state.linkHp || state.countdown"> · </template></span>
         <span v-if="state.linkHp">{{ state.linkHp.name || 'Linked HP' }}: <b>{{ fmt(state.linkHp.current) }}</b> / {{ fmt(state.linkHp.max) }}</span>
         <span v-if="state.countdown"><template v-if="state.linkHp"> · </template>Countdown ({{ state.countdown.unit }}): <b>{{ state.countdown.value }}</b>
           · cancel damage {{ fmt(state.countdown.cancelTotal) }} / {{ fmt(state.countdown.cancelMax) }}</span>

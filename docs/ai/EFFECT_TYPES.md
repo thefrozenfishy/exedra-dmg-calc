@@ -1,6 +1,6 @@
 # Effect types: data usage vs engine coverage (GENERATED - do not edit)
 
-Built from `battle-engine-3.19 @ 7f1147e 2026-09-30`. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
+Built from `battle-engine-3.19 @ 2ecfe0b 2026-09-30` + uncommitted src/models changes. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
 
 - **kiokus** = kiokus in kioku_data.json whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).
 - **stages** = quest stages whose enemies use it (skill sets + enemy passives).
@@ -66,13 +66,13 @@ Built from `battle-engine-3.19 @ 7f1147e 2026-09-30`. Regenerate after switching
 | CHARGE | ChargeAbilityEffect | 40 | 1216 | yes | AITargetSelector.ts, PvPBattle.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Venus, Assault Paranoia |
 | COMBO | ComboUnitState | 0 | 2092 | yes | AITargetSelector.ts, PvPTeam.ts, UnitStateEngine.ts |  |
 | CONSUME_CHARGE_POINT | ConsumeChargePointAbilityEffect | 35 | 919 | yes | AITargetSelector.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Venus, Assault Paranoia |
-| CONSUME_COUNT_POINT | ConsumeCountPointAbilityEffect | 1 | 0 | **LISTED ONLY** |  | Dark Art Dominion |
-| CONSUME_ZONE_STACK | ConsumeZoneStackAbilityEffect | 4 | 0 | **LISTED ONLY** |  | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
+| CONSUME_COUNT_POINT | ConsumeCountPointAbilityEffect | 1 | 0 | yes | PvPTeam.ts | Dark Art Dominion |
+| CONSUME_ZONE_STACK | ConsumeZoneStackAbilityEffect | 4 | 0 | yes | PvPTeam.ts | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
 | CONTINUOUS_RECOVERY | ContinuousRecoveryUnitState | 2 | 0 | yes | PvPTeam.ts | Doppel of Silence, Magic Cake Dish |
-| COUNT | CountUnitState | 1 | 0 | **LISTED ONLY** |  | Dark Art Dominion |
+| COUNT | CountUnitState | 1 | 0 | yes | PvPTeam.ts | Dark Art Dominion |
 | COUNTDOWN_CANCEL | CountdownCancelAbilityEffect | 0 | 36 | yes | PvPTeam.ts |  |
 | COUNTDOWN_DECREASE | CountdownDecreaseAbilityEffect | 0 | 36 | yes | PvPTeam.ts |  |
-| COUNTDOWN_START | CountdownStartUnitState | 0 | 36 | yes | PvPTeam.ts |  |
+| COUNTDOWN_START | CountdownStartUnitState | 0 | 36 | yes | PvPBattle.ts, PvPTeam.ts |  |
 | CPN_UP_GIV_BREAK_POINT_DMG_RATIO | CpnUpGivBreakPointDmgRatioUnitState | 0 | 0 | yes | BreakPoint.ts |  |
 | CPN_UP_GIV_DMG_RATIO | CpnUpGivDmgRatioUnitState | 0 | 0 | yes | UnitStateEngine.ts |  |
 | CURSE_ATK | CurseAtkUnitState | 3 | 589 | yes | AITargetSelector.ts, PvPTeam.ts | Assault Paranoia, Bebe-O'-Lantern, Nightmare Stinger |
@@ -159,12 +159,12 @@ Built from `battle-engine-3.19 @ 7f1147e 2026-09-30`. Regenerate after switching
 | DWN_SPD_RATIO | DwnSpdRatioUnitState | 4 | 914 | yes | PvPTeam.ts, UnitStateEngine.ts | La Danse Macabre, Splashin' Kyubey Blast, Vampire Fang |
 | GAIN_BP_FIXED | GainBpFixedAbilityEffect | 2 | 0 | yes | PvPTeam.ts | Metallicized Projectile, Vinctio☆Magica |
 | GAIN_CHARGE_POINT | GainChargePointAbilityEffect | 40 | 926 | yes | AITargetSelector.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Venus, Assault Paranoia |
-| GAIN_COUNT_POINT | GainCountPointAbilityEffect | 1 | 0 | **LISTED ONLY** |  | Dark Art Dominion |
+| GAIN_COUNT_POINT | GainCountPointAbilityEffect | 1 | 0 | yes | PvPTeam.ts | Dark Art Dominion |
 | GAIN_EP_FIXED | GainEpFixedAbilityEffect | 62 | 0 | yes | AITargetSelector.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
 | GAIN_EP_RATIO | GainEpRatioAbilityEffect | 29 | 0 | yes | AITargetSelector.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Rain, Brilliant Beam |
-| GAIN_SOLO_RAID_BUFF_POINT | GainSoloRaidBuffPointAbilityEffect | 0 | 0 | - |  |  |
+| GAIN_SOLO_RAID_BUFF_POINT | GainSoloRaidBuffPointAbilityEffect | 0 | 0 | yes | PvPTeam.ts |  |
 | GAIN_SP_FIXED | GainSpFixedAbilityEffect | 27 | 0 | yes | AITargetSelector.ts, PvPTeam.ts | Buon Natale Grazioso, Carnival Cuddleboom, Dark Art Dominion |
-| GAIN_ZONE_STACK | GainZoneStackAbilityEffect | 1 | 0 | **LISTED ONLY** |  | Evoluzione Presente |
+| GAIN_ZONE_STACK | GainZoneStackAbilityEffect | 1 | 0 | yes | PvPTeam.ts | Evoluzione Presente |
 | GVE_UP_FINAL_GAIN_EP_RATIO | GveUpFinalGainEpRatioUnitState | 0 | 0 | prefix/template? | AITargetSelector.ts |  |
 | GVE_UP_SPECIAL_ATTACK_FINAL_GIV_DMG_RATIO | GveUpSpecialAttackFinalGiveDamageRatioUnitState | 0 | 0 | prefix/template? | AITargetSelector.ts |  |
 | HASTE | HasteAbilityEffect | 81 | 990 | yes | AITargetSelector.ts, PvPTeam.ts | Absolute Venus, Ashley's Kioku, Assault Paranoia |
@@ -183,15 +183,15 @@ Built from `battle-engine-3.19 @ 7f1147e 2026-09-30`. Regenerate after switching
 | RECOVERY_HP | RecoveryHpAbilityEffect | 20 | 1382 | yes | AITargetSelector.ts, PvPTeam.ts | Baldamente Fortissimo, Circle Of Fire, Folter Gefängnis |
 | RECOVERY_HP_ATK | RecoveryHpAtkAbilityEffect | 3 | 0 | yes | AITargetSelector.ts, PvPTeam.ts | Doppel of Silence, Grandioso Sinfonia, Nothing to Despair, Ever |
 | REFLECTION_RATIO | ReflectionRatioUnitState | 1 | 0 | yes | PvPTeam.ts | Vampire Fang |
-| REGAIN_ATK | RegainAtkUnitState | 2 | 0 | **LISTED ONLY** |  | Grandioso Sinfonia, Panna Vorticosa |
-| REGAIN_DEF | RegainDefUnitState | 0 | 0 | - |  |  |
-| REGAIN_HP | RegainHpUnitState | 0 | 0 | - |  |  |
+| REGAIN_ATK | RegainAtkUnitState | 2 | 0 | yes | PvPTeam.ts | Grandioso Sinfonia, Panna Vorticosa |
+| REGAIN_DEF | RegainDefUnitState | 0 | 0 | yes | PvPTeam.ts |  |
+| REGAIN_HP | RegainHpUnitState | 0 | 0 | listed |  |  |
 | REMOVE_ALL_ABNORMAL | RemoveAllAbnormalAbilityEffect | 5 | 424 | yes | AITargetSelector.ts, PvPTeam.ts | Circle Of Fire, Glitterjoy Snow Globe, Grandioso Sinfonia |
 | REMOVE_ALL_BUFF | RemoveAllBuffAbilityEffect | 9 | 445 | yes | AITargetSelector.ts, PvPTeam.ts | Atomo Arrabbiato, Cherry Ballad, Dark Art Dominion |
 | REMOVE_ALL_DEBUFF | RemoveAllDebuffAbilityEffect | 5 | 418 | yes | AITargetSelector.ts, PvPTeam.ts | My Gigantic Heart, Panna Vorticosa, Spietata Scarica |
 | REMOVE_ALL_UNABLE_ACTION | RemoveAllUnableActionAbilityEffect | 0 | 50 | yes | AITargetSelector.ts, PvPTeam.ts |  |
 | RESET_UNIQUE_BUFF | ResetUniqueBuffAbilityEffect | 2 | 0 | yes | PvPTeam.ts | Désintégration, Metallicized Projectile |
-| RESET_UNIQUE_DEBUFF | ResetUniqueDebuffAbilityEffect | 0 | 0 | listed |  |  |
+| RESET_UNIQUE_DEBUFF | ResetUniqueDebuffAbilityEffect | 0 | 0 | yes | PvPTeam.ts |  |
 | REVIVAL_RATIO | RevivalRatioAbilityEffect | 0 | 0 | yes | AITargetSelector.ts, PvPTeam.ts |  |
 | RE_ACTION_TURN_UNIT_ACT | ReActionTurnUnitActAbilityEffect | 5 | 0 | yes | PvPTeam.ts | Dark Art Dominion, Falsified Phenomena, Final Fatebloom |
 | SHIELD | ShieldUnitState | 13 | 544 | yes | PvPBattle.ts, PvPTeam.ts, UnitStateEngine.ts | Baldamente Fortissimo, Fiore Finale, Folter Gefängnis |
@@ -200,18 +200,18 @@ Built from `battle-engine-3.19 @ 7f1147e 2026-09-30`. Regenerate after switching
 | SUMMON | SummonAbilityEffect | 0 | 329 | yes | PvPTeam.ts |  |
 | SWITCH_SKILL | SwitchSkillUnitState | 9 | 0 | yes | PvPTeam.ts | Absolute Venus, Falsified Phenomena, Final Fatebloom |
 | TRIG_COUNTER_ATTACK |  | 0 | 0 | - |  |  |
-| TSUBAME_CORE | TsubameCoreUnitState | 1 | 0 | **LISTED ONLY** |  | Luce della Speranza |
-| TSUBAME_LINK | TsubameLinkUnitState | 1 | 0 | **LISTED ONLY** |  | Luce della Speranza |
+| TSUBAME_CORE | TsubameCoreUnitState | 1 | 0 | yes | PvPTeam.ts, UnitStateEngine.ts | Luce della Speranza |
+| TSUBAME_LINK | TsubameLinkUnitState | 1 | 0 | yes | PvPTeam.ts, UnitStateEngine.ts | Luce della Speranza |
 | UNIQUE_10030301 | Unique10030301UnitState | 1 | 0 | **LISTED ONLY** |  | Fiore Finale |
 | UNIQUE_10070201 | Unique10070201UnitState | 1 | 0 | **LISTED ONLY** |  | Groundhog Daze |
 | UNIQUE_BUFF | UniqueBuffUnitState | 23 | 0 | **LISTED ONLY** |  | Absolute Venus, Buon Natale Grazioso, Carnival Cuddleboom |
-| UNIQUE_BUFF_ACCUM | UniqueBuffAccumUnitState | 2 | 0 | **LISTED ONLY** |  | Falsified Phenomena, Luminous Tenet |
+| UNIQUE_BUFF_ACCUM | UniqueBuffAccumUnitState | 2 | 0 | yes | BattleConditionParser.ts, PvPTeam.ts | Falsified Phenomena, Luminous Tenet |
 | UNIQUE_DEBUFF | UniqueDebuffUnitState | 3 | 0 | **LISTED ONLY** |  | Bebe-O'-Lantern, Splashin' Kyubey Blast, Vinctio☆Magica |
-| UNIQUE_DEBUFF_ACCUM | UniqueDebuffAccumUnitState | 2 | 0 | **LISTED ONLY** |  | Luminous Tenet, Yuletide Gift |
-| UNIQUE_ELEMENT_BREAK | UniqueElementBreakUnitState | 0 | 0 | listed |  |  |
-| UNIQUE_ELEMENT_STACK | UniqueElementStackUnitState | 1 | 0 | **LISTED ONLY** |  | Vinctio☆Magica |
-| UNIQUE_ENEMY_639002 | UniqueEnemy639002UnitState | 0 | 1 | **LISTED ONLY** |  |  |
-| UNIQUE_ZONE | UniqueZoneUnitState | 4 | 0 | **LISTED ONLY** |  | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
+| UNIQUE_DEBUFF_ACCUM | UniqueDebuffAccumUnitState | 2 | 0 | yes | BattleConditionParser.ts, PvPTeam.ts | Luminous Tenet, Yuletide Gift |
+| UNIQUE_ELEMENT_BREAK | UniqueElementBreakUnitState | 0 | 0 | yes | BattleConditionParser.ts, PvPTeam.ts |  |
+| UNIQUE_ELEMENT_STACK | UniqueElementStackUnitState | 1 | 0 | yes | BattleConditionParser.ts, PvPTeam.ts | Vinctio☆Magica |
+| UNIQUE_ENEMY_639002 | UniqueEnemy639002UnitState | 0 | 1 | yes | PvPTeam.ts |  |
+| UNIQUE_ZONE | UniqueZoneUnitState | 4 | 0 | yes | BattleConditionParser.ts, PvPTeam.ts | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
 | UP_ABNORMAL_HIT_RATE_RATIO | UpAbnormalHitRateRatioUnitState | 8 | 274 | yes | PvPTeam.ts, UnitStateEngine.ts | Atomo Arrabbiato, Marigold Dadaism, Meteor Punch |
 | UP_ABNORMAL_PARRY_RATE_RATIO | UpAbnormalParryRateRatioUnitState | 0 | 164 | yes | PvPTeam.ts, UnitStateEngine.ts |  |
 | UP_AIM_GIV_DMG_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
@@ -275,7 +275,7 @@ Built from `battle-engine-3.19 @ 7f1147e 2026-09-30`. Regenerate after switching
 | UP_RCV_CTD_RATIO | UpRcvCtdRatioUnitState | 0 | 0 | yes | UnitStateEngine.ts |  |
 | UP_RCV_CTR_RATIO | UpRcvCtrRatioUnitState | 7 | 0 | yes | UnitStateEngine.ts | Assault Paranoia, Atomo Arrabbiato, Final Fatebloom |
 | UP_RCV_DMG_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
-| UP_RCV_DMG_RATIO | UpRcvDmgRatioUnitState | 17 | 488 | yes | PvPKioku.ts, PvPTeam.ts, UnitStateEngine.ts | Atomo Arrabbiato, Bebe-O'-Lantern, Cherry Ballad |
+| UP_RCV_DMG_RATIO | UpRcvDmgRatioUnitState | 17 | 488 | yes | PvPTeam.ts, UnitStateEngine.ts | Atomo Arrabbiato, Bebe-O'-Lantern, Cherry Ballad |
 | UP_RCV_NMDMG_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | UP_RCV_NMDMG_RATIO |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | UP_RCV_SMDMG_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
@@ -293,8 +293,8 @@ Built from `battle-engine-3.19 @ 7f1147e 2026-09-30`. Regenerate after switching
 | UP_WEAK_ELEMENT_DMG_RATIO | UpWeakElementDmgRatioUnitState | 33 | 0 | yes | PvPTeam.ts, UnitStateEngine.ts | A Tale of Cherry Blossoms, Buon Natale Grazioso, Carnival Cuddleboom |
 | VORTEX_ATK | VortexAtkUnitState | 1 | 0 | yes | PvPTeam.ts | Melodia Appassionata |
 | WEAKNESS | WeaknessUnitState | 2 | 509 | yes | PvPTeam.ts, UnitStateEngine.ts | Nine Phases, Sacred Gift |
-| ZONE_EXPAND | ZoneExpandAbilityEffect | 4 | 0 | **LISTED ONLY** |  | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
+| ZONE_EXPAND | ZoneExpandAbilityEffect | 4 | 0 | yes | PvPTeam.ts | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
 | ZONE_RELEASE | ZoneReleaseAbilityEffect | 0 | 0 | - |  |  |
-| ZONE_STACK | ZoneStackAbilityEffect | 4 | 0 | **LISTED ONLY** |  | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
+| ZONE_STACK | ZoneStackAbilityEffect | 4 | 0 | yes | PvPTeam.ts | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
 
-288 types; 20 are used by data but have no logic reference in the engine: CONSUME_COUNT_POINT, CONSUME_ZONE_STACK, COUNT, GAIN_COUNT_POINT, GAIN_ZONE_STACK, REGAIN_ATK, TSUBAME_CORE, TSUBAME_LINK, UNIQUE_10030301, UNIQUE_10070201, UNIQUE_BUFF, UNIQUE_BUFF_ACCUM, UNIQUE_DEBUFF, UNIQUE_DEBUFF_ACCUM, UNIQUE_ELEMENT_STACK, UNIQUE_ENEMY_639002, UNIQUE_ZONE, UP_BREAK_EFFECT, ZONE_EXPAND, ZONE_STACK
+288 types; 5 are used by data but have no logic reference in the engine: UNIQUE_10030301, UNIQUE_10070201, UNIQUE_BUFF, UNIQUE_DEBUFF, UP_BREAK_EFFECT

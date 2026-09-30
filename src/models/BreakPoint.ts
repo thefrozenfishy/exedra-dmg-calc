@@ -75,8 +75,8 @@ function applyBreakStates(unit: KiokuState, side: "give" | "receive", damage: Cs
             if (!k || k.side !== side || k.addition !== pass) continue;
             const stacks = d._accumCount ?? 1;
             let v = k.calc === "Fixed"
-                ? dec.int(d.value1)
-                : (pass === "Up" ? damage : r).mul(dec.int(d.value1)).div(dec.int(1000));
+                ? dec.float(f32(d.value1))
+                : (pass === "Up" ? damage : r).mul(dec.float(f32(d.value1))).div(dec.int(1000));
             if (stacks > 1) v = v.mul(dec.int(stacks));
             r = pass === "Up" ? r.add(v) : r.sub(v);
         }

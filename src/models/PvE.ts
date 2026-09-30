@@ -151,6 +151,27 @@ export function stageWaveMeta(questStageMstId: number): WaveMeta[] {
     })
 }
 
+// ---- Solo Raid master data -----------------------------------------------------------------------------
+import soloRaidJson from "../assets/base_data/getSoloRaidMstList.json";
+import soloRaidSeasonBuffJson from "../assets/base_data/getSoloRaidSeasonBuffMstList.json";
+import soloRaidPartyBuffJson from "../assets/base_data/getSoloRaidPartyBuffMstList.json";
+export interface SoloRaidSeasonBuff { soloRaidSeasonBuffMstId: number, groupId: number, passiveSkillMstId: number, enhancedPassiveSkillMstId: number,
+    buffPointChargePassiveSkillMstId: number, maxBuffPoint: number, maxBuffPointOnEnhanced: number, enhancedSkillTurnGaugeValue: number }
+export interface SoloRaidPartyBuff { soloRaidPartyBuffMstId: number, groupId: number, passiveSkillMstId: number, buffPointChargePassiveSkillMstId: number }
+export interface SoloRaidInfo { soloRaidMstId: number, difficulty: number, limitRoundCount: number, season?: SoloRaidSeasonBuff, partyBuffs: SoloRaidPartyBuff[] }
+// "Vanguard Base Points" passive (SoloRaidBuffReferee commonCharge): sent by the server, not in a master table.
+export const SOLO_RAID_COMMON_CHARGE_PASSIVE = 1600000
+export function soloRaidInfo(questStageMstId: number): SoloRaidInfo | undefined {
+    const st = (soloRaidStageJson as any[]).find(s => s.questStageMstId === questStageMstId)
+    if (!st) return undefined
+    const raid = (soloRaidJson as any[]).find(r => r.soloRaidMstId === st.soloRaidMstId)
+    return {
+        soloRaidMstId: st.soloRaidMstId, difficulty: st.difficulty, limitRoundCount: st.limitRoundCount,
+        season: (soloRaidSeasonBuffJson as any[]).find(b => b.groupId === raid?.soloRaidSeasonBuffGroupId),
+        partyBuffs: (soloRaidPartyBuffJson as any[]).filter(b => b.groupId === raid?.soloRaidPartyBuffGroupId),
+    }
+}
+
 // Countdowns only run in Solo Raid battles (SoloRaidGameDirector).
 const soloRaidStageIds = new Set<number>((soloRaidStageJson as any[]).map(s => s.questStageMstId))
 export const isSoloRaidStage = (questStageMstId: number) => soloRaidStageIds.has(questStageMstId)

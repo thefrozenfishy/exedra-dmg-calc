@@ -1,3 +1,42 @@
+# Revision 10 - character kit mechanics and full Solo Raid (3.19.0)
+
+## R10.1 Kit mechanics
+- [CONFIRMED] ZONE: per-unit ZoneStack/MaxZoneStack (ZONE_STACK max clamp 3), ZONE_EXPAND (fresh expand sets the
+  "field started" flag, releases a foreign zone), GAIN/CONSUME_ZONE_STACK (active-skill origin only; consuming the last
+  stack releases the zone and removes every UNIQUE_ZONE), UNIQUE_ZONE on every living ally. Conditions 29
+  (IsExpandingZone), 113/114 (field started/ended; flags cleared after each passive pass). ZONE_RELEASE: no data row.
+- [CONFIRMED] TSUBAME_CORE (caster only, SPD down share of the running value) / TSUBAME_LINK (every ally but the
+  caster: SPD v1/10 %, ATK v2/10 %, extra damage like ADDITIONAL_DAMAGE with power v3/10 % from the caster); links go
+  when the core goes.
+- [CONFIRMED] COUNT: max 20 while held, GAIN/CONSUME_COUNT_POINT (value1), +1 after the AttackEnd pass of a normal
+  attack / battle skill / ultimate for every surviving unit it hit; condition 209 = team sum.
+- [CONFIRMED] UNIQUE_*: accum blend per (pattern, giver, max), Lv states (UNIQUE_ELEMENT_STACK hit counter vs
+  UniqueStateLevelMst), conditions 27/31/210/211, RESET_UNIQUE_BUFF/DEBUFF, removal when the giver dies,
+  UNIQUE_ENEMY_639002 = 0 damage.
+- [CONFIRMED] REFLECTION_RATIO (holder with barrier; base from its barrier endurance; can't kill), REGAIN_ATK/DEF/HP
+  (once per launch that hit an opponent), VORTEX_ATK (duplicates allowed, pops after N damage rows on the holder,
+  damage base fixed at application), consume-on-attack states (-1 remain count per damage row).
+- [CONFIRMED] UP/DWN_BUFF/DEBUFF_EFFECT_VALUE are live: a state's value is scaled by the GIVER's rates when given
+  (IHasUpdateableEffectValue states only, list generated in StateInterfaces.ts). Replaces PvPKioku's pre-scaling.
+  Battle-start passives are sorted by IBattleStartTriggerPriority (AddTurn 200, effect value 100, barrier value 90).
+- Not done: UP_BREAK_EFFECT (the break bonus damage needs CharacterParameter.LevelReactionBreakDamageValue /
+  BreakDamageRate, passed by client code outside the core; the break bonus damage itself is not simulated).
+  [UNCERTAIN] crystalis passives treated as unscaled by effect-value states (as before).
+
+## R10.2 Solo Raid
+- [CONFIRMED] Every ally holds the Vanguard base passive 1600000 plus the season (normal/enhanced/charge) and the chosen
+  party (buff/charge) passives. GAIN_SOLO_RAID_BUFF_POINT: points 0..100 (0..30 while active). At 100 the Labyrinth
+  Vanguard phase activates between acts (SeasonBuffActive timing 10 passives), for enhancedSkillTurnGaugeValue units of
+  turn-gauge time. Conditions 1001 (player unit) and 1101 (phase active).
+- [CONFIRMED] Round limit (SoloRaidStageMst.limitRoundCount): an act starting past it ends the attempt as a loss.
+  Rounds: elapsed turn-gauge time < 150 -> 1, then +1 per 100.
+- [CONFIRMED] Attempts carry over (BattleInfo): wave, endless index, linked HP / boss HP, alive enemies (form, position,
+  HP, break gauge, break bonus, turn gauge), countdown count + cancel damage, Vanguard state. Not kept: buffs/debuffs;
+  the round count restarts. PvE page: party buff picker, "Next attempt (carry over)", round limit toggle; exports keep
+  the attempts.
+- Not done: the score (computed by the server; policy type 7 coefficients listed in the project doc), the real-time
+  battle end time.
+
 # Revision 9 - missing enemy mechanics, heal/EP/ailment formulas, DMG_RANDOM (3.19.0)
 
 Trigger: "fix SUMMON and other non implemented functions". Everything below is from the 3.19 decompile
@@ -46,9 +85,7 @@ Trigger: "fix SUMMON and other non implemented functions". Everything below is f
 - [UNCERTAIN] character-side HealRate, RecoveryEpRate and EffectHit/ParryRate come from styles not in our
   data (treated as 0). Whether EP-on-hit is per hit or per act (applied per damage effect here).
 
-## R9.3 Not implemented (no kioku in kioku_data.json uses them)
-TSUBAME_*, ZONE_*, UNIQUE_* (except the ones already wired), COUNT/*_COUNT_POINT beyond revision 3,
-REGAIN_ATK, REFLECTION_RATIO, VORTEX_ATK. They matter once newer kiokus are added to kioku_data.json.
+## R9.3 (superseded by Revision 10 - the "no kioku uses them" claim was wrong: skill rows are keyed id*100+lvl)
 
 # Revision 8 - PvE: quest stages on the battle engine (3.19.0)
 

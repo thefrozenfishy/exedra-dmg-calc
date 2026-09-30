@@ -165,6 +165,22 @@
         <RngControls v-model:mode="rngMode" :seed="seed" :changed="changedRolls" :disabled="!canRun"
           @update:seed="setSeed" @reset="resetRolls" />
       </div>
+      <div v-if="raid" class="raid-panel">
+        <div class="raid-head">Solo Raid · difficulty {{ raid.difficulty }} · {{ raid.limitRoundCount }}-round limit · attempt {{ raidAttempts.length + 1 }}</div>
+        <div class="raid-row">
+          <span class="field-label">Party buff</span>
+          <button v-for="p in raid.partyBuffs" :key="p.soloRaidPartyBuffMstId" type="button" class="chip-btn"
+            :class="{ active: (partyBuffId || raid.partyBuffs[0]?.soloRaidPartyBuffMstId) === p.soloRaidPartyBuffMstId }"
+            :title="passiveInfo(p.passiveSkillMstId).description" @click="partyBuffId = p.soloRaidPartyBuffMstId">{{ passiveInfo(p.passiveSkillMstId).name }}</button>
+          <label class="field inline check"><input v-model="noRoundLimit" type="checkbox" /> ignore round limit</label>
+        </div>
+        <div class="raid-row">
+          <button class="btn" :disabled="!battle || !battle.isOver" @click="nextAttempt"
+            title="Start the next attempt from where this one ended: enemy HP, break gauges, turn gauges, the linked HP pool, the countdown and Vanguard points carry over (buffs and debuffs do not; the round count restarts)">Next attempt (carry over)</button>
+          <button class="btn" :disabled="!raidAttempts.length" @click="resetAttempts">Back to attempt 1</button>
+          <span v-if="raidAttempts.length" class="muted small">{{ raidAttempts.length }} earlier attempt{{ raidAttempts.length === 1 ? '' : 's' }} · linked HP / boss HP at the start of this one: {{ fmt(raidAttempts[raidAttempts.length - 1].linkHp) }}</span>
+        </div>
+      </div>
       <div class="sim-tools">
         <button class="btn btn-accent" @click="runSimulation" :disabled="!canRun">Run Simulation</button>
         <button v-if="pickCount" class="btn" @click="resetPicks" :disabled="!canRun"
@@ -177,7 +193,7 @@
           title="Load stage, team, settings and decisions from an exported file and re-run the simulation">Import file</button>
         <input ref="importInput" type="file" accept=".json,application/json" class="hidden-file" @change="importBattle" />
         <span v-if="pending" class="result waiting">Waiting for your decision</span>
-        <span v-else-if="battleResult" class="result" :class="battleResult">{{ battleResult === 'win' ? 'Cleared' : 'Defeated' }}</span>
+        <span v-else-if="battleResult" class="result" :class="battleResult">{{ battleResult === 'win' ? 'Cleared' : battle?.finishedByRoundLimit ? 'Round limit reached' : 'Defeated' }}</span>
       </div>
       <BattleTimeline :states="battleOutput" :show-sp="false" :rng-editable="rngMode === 'manual'" @decide="onDecide" />
       <div v-if="pending" ref="pickPanel" class="pick-panel">
@@ -210,8 +226,10 @@ import { PendingDecision, type RngDecision, type RngEvent, type RngMode } from '
 import { toast } from 'vue3-toastify'
 import { TargetType, type BattleSnapshot } from '../types/KiokuTypes'
 import { elementMap } from '../types/enums'
-import { stageWaves, enemyName, breakMstOf, ELEMENT_KEYS, questStages } from '../models/PvE'
+import { stageWaves, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo } from '../models/PvE'
 import { createPvEBattle, stageBattleType } from '../models/PvEBattle'
+import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
+import type { RaidCarry } from '../models/PvPBattle'
 import { getScoreAttackStage } from '../models/PvEScore'
 import { computeMaxDamage, type MaxDmgResult, type MemberDamage, type SkillDamage, type EffectSide } from '../models/MaxDamage'
 import { buildSlotKioku, buildPvEExport, parsePvEExport, downloadText } from '../utils/pvpExport'
@@ -337,11 +355,35 @@ const changedRolls = computed(() => [...decisions.value.values()].filter(d => !d
 const pickCount = computed(() => [...decisions.value.values()].filter(d => d.pick).length)
 const actionCount = computed(() => battleOutput.value.slice(1).filter(s => !s.wave).length)
 
+// ---- Solo Raid: party buff, round limit, attempts carrying over (PvEBattle / PvPBattle.raidCarry) ----
+const raid = computed(() => stageId.value ? soloRaidInfo(stageId.value) : undefined)
+const partyBuffId = useSetting<number>('pveRaidPartyBuff', 0)
+const noRoundLimit = useSetting<boolean>('pveRaidNoRoundLimit', false)
+const raidAttempts = shallowRef<RaidCarry[]>([])
+const passiveNames = new Map<number, { name: string, description: string }>((passiveMstJson as any[]).map(p => [p.passiveSkillMstId, { name: p.name, description: String(p.description ?? '').replace(/<br>/g, '\n') }]))
+const passiveInfo = (id: number) => passiveNames.get(id) ?? { name: `Passive ${id}`, description: '' }
+
+function nextAttempt() {
+  if (!battle.value?.isOver) return
+  raidAttempts.value = [...raidAttempts.value, battle.value.raidCarry()]
+  decisions.value = new Map()
+  seed.value = Math.floor(Math.random() * 2 ** 32)
+  runSimulation()
+}
+function resetAttempts() {
+  raidAttempts.value = []
+  decisions.value = new Map()
+  runSimulation()
+}
+watch([partyBuffId, noRoundLimit], () => { if (hasRun()) runSimulation(); else buildBattle() })
+
 function newBattle(): PvPBattle {
   // Fresh units: a battle mutates its units' state.
   const allies = filledSlots.value.map(([s]) => buildSlotKioku(s))
+  const carry = raidAttempts.value[raidAttempts.value.length - 1]
   return markRaw(createPvEBattle(allies, stageId.value, seed.value, 0, {
     rngMode: rngMode.value, decisions: decisions.value, manualTargeting: targetMode.value === 'manual',
+    partyBuffId: partyBuffId.value || undefined, noRoundLimit: noRoundLimit.value, raidCarry: carry,
   }))
 }
 
@@ -365,6 +407,7 @@ function buildBattle() {
 }
 watch([() => team.slots, stageId], () => {
   decisions.value = new Map()
+  raidAttempts.value = []
   buildBattle()
 }, { deep: true, immediate: true })
 
@@ -443,6 +486,7 @@ function exportBattle() {
     stageId: stageId.value, stageName: questStages.get(stageId.value)?.name,
     control: targetMode.value, rngMode: rngMode.value, seed: seed.value, turns: simTurns.value,
     decisions: decisions.value, slots: team.slots, snapshots: battleOutput.value, pending: pending.value,
+    soloRaid: raid.value ? { partyBuffId: partyBuffId.value || undefined, noRoundLimit: noRoundLimit.value, attempts: raidAttempts.value } : undefined,
   })
   const tag = rngMode.value === 'seed' ? `seed${seed.value}` : rngMode.value
   downloadText(`pve-sim-${stageId.value}-${targetMode.value}-${tag}.json`, JSON.stringify(data, null, 2))
@@ -465,6 +509,11 @@ async function importBattle(ev: Event) {
     rngMode.value = data.rngMode ?? 'seed'
     targetMode.value = data.control ?? 'auto'
     decisions.value = new Map(Object.entries(data.decisions ?? {}).map(([k, v]) => [Number(k), v]))
+    if (data.soloRaid) {
+      partyBuffId.value = data.soloRaid.partyBuffId ?? 0
+      noRoundLimit.value = !!data.soloRaid.noRoundLimit
+      raidAttempts.value = data.soloRaid.attempts ?? []
+    }
     await nextTick() // the mode watchers re-run first; run once more with everything in place
     runSimulation()
     toast.success(`Imported ${data.stageName ?? `stage ${data.stageId}`} (${data.control} control, ${data.rngMode} RNG)`)
@@ -809,4 +858,16 @@ function hpOf(label: string): string {
   gap: 0.1rem;
   text-align: left;
 }
+.raid-panel {
+  border: 1px solid var(--accent-soft);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  margin: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.raid-head { font-weight: 600; }
+.raid-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
+.field.check { display: inline-flex; align-items: center; gap: 0.3rem; }
 </style>
