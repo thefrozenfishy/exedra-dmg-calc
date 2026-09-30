@@ -37,6 +37,8 @@
 - `func_0x...` calls: see MECHANICS section 1 for the known ones; `FUN_18067ce80` / lazy-init blocks are
   boilerplate (`xq fn` strips them).
 - Decimal code is unreadable raw: pipe through `tools/decsimp.py` for straight-line functions.
+- Virtual calls appear as `FUN_18004c7a0(slot, obj, ...)` / `(**(code **)(*obj + 0x..))(...)`: grepping the
+  method name won't find those callers; grep the field offset it writes (`+ 0x71) = `) instead.
 - Lambdas live in `<>c` / `<>c__DisplayClassN_M` classes: `xq fn 'MethodName>b__'`.
 - Before deciding "not in the decompile": the decompile only covers `ReDriveBattleCore.*`. Score formulas, UI,
   network, `CreateCharParamFromNetworkUnit` are in other namespaces (need Ghidra on those).
