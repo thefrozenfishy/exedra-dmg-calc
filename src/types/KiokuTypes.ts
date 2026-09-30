@@ -197,6 +197,7 @@ export interface PassiveBaseSkill {
     level: number
     name: string
     passiveSkillMstId: number
+    skillUniqueId: number
 }
 
 export interface ActiveSkill {
@@ -316,6 +317,7 @@ export interface BattleSnapshot {
     rngEvents?: RngEvent[]   // real random rolls made during this action (BattleRng)
 }
 
+// Built in utils/helpers.ts from the master tables (+ kioku_data.json for obtain / permaDate / heartphial)
 export interface KiokuData {
     ability_id: number
     atk120: number
@@ -325,7 +327,6 @@ export interface KiokuData {
     atk200: number
     attack_id: number
     character_en: string
-    crystalis_effect: string
     crystalis_id: number
     def120: number
     def140: number

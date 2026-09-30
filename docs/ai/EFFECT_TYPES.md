@@ -2,7 +2,7 @@
 
 Built from `main @ 61aed43 2026-09-30`. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
 
-- **kiokus** = kiokus in kioku_data.json whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).
+- **kiokus** = collectable kiokus (getStyleMstList) whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).
 - **stages** = quest stages whose enemies use it (skill sets + enemy passives).
 - **TS** = `yes` if the engine (src/models + src/utils, not the generated tables or the old ScoreAttack calculator) compares/cases on it; `prefix/template?` = only matched by a template literal like `UP_${stat}_FIXED` or a `startsWith`/`endsWith` test (may over-match); `**LISTED ONLY**` = only appears in a type list (e.g. target-side tables); `**MISSING**` = never mentioned. A reference is not proof of a full implementation: check with `xq effect <TYPE>` (it lists each reference with its kind).
 

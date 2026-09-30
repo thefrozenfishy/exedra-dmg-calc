@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import kiokuDataJson from '../assets/base_data/kioku_data.json'
+import { kiokuData } from '../utils/helpers'
 import yaml from 'js-yaml'
 import sharedConfigRaw from '../content/tierlists/master.yaml?raw'
 
@@ -51,7 +51,7 @@ function entriesByRole(entries) {
   const map = {}
   allRoles.forEach(r => (map[r] = []))
   entries.forEach(e => {
-    const role = kiokuDataJson[e.name].role
+    const role = kiokuData[e.name].role
     map[role].push(e)
   })
   return map
@@ -89,7 +89,7 @@ function normalizeColor(value) {
                 <div v-for="char in entriesByRole(entriesByRank[rank])[role]" :key="char.name"
                   class="character-card relative" @click="toggleExpanded(char)">
                   <div class="character-img-wrapper">
-                    <img :src="`/exedra-dmg-calc/kioku_images/${kiokuDataJson[char.name].id}_thumbnail.png`"
+                    <img :src="`/exedra-dmg-calc/kioku_images/${kiokuData[char.name].id}_thumbnail.png`"
                       :alt="char.name" class="character-img" />
 
                     <div v-if="char.meta.ascension" class="ascension-overlay">

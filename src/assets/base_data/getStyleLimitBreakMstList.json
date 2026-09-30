@@ -317,6 +317,41 @@
     {
         "limitBreakCount": 1,
         "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 5109,
+        "styleLimitBreakMstId": 1002080101,
+        "styleMstId": 10020801
+    },
+    {
+        "limitBreakCount": 2,
+        "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 5096,
+        "styleLimitBreakMstId": 1002080102,
+        "styleMstId": 10020801
+    },
+    {
+        "limitBreakCount": 3,
+        "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 1002,
+        "styleLimitBreakMstId": 1002080103,
+        "styleMstId": 10020801
+    },
+    {
+        "limitBreakCount": 4,
+        "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 5097,
+        "styleLimitBreakMstId": 1002080104,
+        "styleMstId": 10020801
+    },
+    {
+        "limitBreakCount": 5,
+        "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 1002,
+        "styleLimitBreakMstId": 1002080105,
+        "styleMstId": 10020801
+    },
+    {
+        "limitBreakCount": 1,
+        "styleLimitBreakEffectMstId1": 1001,
         "styleLimitBreakEffectMstId2": 5005,
         "styleLimitBreakMstId": 1003010101,
         "styleMstId": 10030101

@@ -7,7 +7,7 @@
 - Crystalis and enemy skills/passives are the exception (exact ids). Portrait passives use `id*100+6`.
 - Condition csv = OR of sets. The engine once ANDed them everywhere.
 - Enemy `criticalRate`/`criticalDamageRate` are per-mille: 100 = +10 %, not +100 %.
-- `kioku_data.json` is a dict keyed by name, not a list.
+- `kiokuData` is a dict keyed by name, not a list. It is built from the Mst tables in `utils/helpers.ts`; `kioku_data.json` only has `obtain`/`permaDate`/`heartphial` (don't read stats or kit ids from it). When syncing base_data, copy getStyle*/getCharacterMstList too, or new kiokus get no level-cap stats.
 - Condition SET ids (the csv in detail rows, `xq cond 1671`) and CONDITION ids (the `[cond 966]` rows inside a set,
   `xq cond c966`) are different id spaces.
 

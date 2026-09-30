@@ -84,9 +84,51 @@ def mst(name):
     return d if isinstance(d, list) else list(d.values())
 
 
+KIOKU_ELEM = {1: "Flame", 2: "Aqua", 3: "Forest", 4: "Light", 5: "Dark", 6: "Void"}
+KIOKU_ROLE = {1: "Attacker", 2: "Breaker", 3: "Healer", 4: "Buffer", 5: "Debuffer", 6: "Defender"}  # getStyleMstList.role
+
+
 @lru_cache(None)
 def kioku_data():
-    return json.load(open(os.path.join(BASE, "kioku_data.json"), encoding="utf-8"))
+    """name -> kioku dict, built from the master tables the same way src/utils/helpers.ts builds kiokuData
+    (kioku_data.json only adds obtain / permaDate / heartphial)."""
+    extras = json.load(open(os.path.join(BASE, "kioku_data.json"), encoding="utf-8"))
+    lvl = uniq("StyleLevelUp", "styleLevelUpMstId")
+    lb = uniq("StyleLimitBreak", "styleLimitBreakMstId")
+    lbe = uniq("StyleLimitBreakEffect", "styleLimitBreakEffectMstId")
+    pas = uniq("PassiveSkill", "passiveSkillMstId")
+    pdet = by("PassiveSkillDetail", "passiveSkillMstId")
+    chars = uniq("Character", "characterMstId")
+    repl = uniq("ReplaceCharacterName", "styleMstId")
+    crys = by("SelectionAbility", "styleMstId")
+    res = {}
+    for s in sorted((s for s in mst("Style") if s.get("isCollectionDisp")), key=lambda s: s["name"]):
+        sid = s["styleMstId"]
+        m = re.match(r"^Equipped to (.*?):", pas.get(s["subPassiveSkill"] * 100 + 10, {}).get("description", ""))
+        k = {"id": sid, "rarity": s["rarity"], "element": KIOKU_ELEM.get(s["element"]), "role": KIOKU_ROLE.get(s["role"]),
+             "ep": s["ep"], "minHp": s["hp"], "minAtk": s["atk"], "minDef": s["def"], "minSpd": s["speed"],
+             "minCritRate": s["criticalRate"] // 10, "minCritDmg": s["criticalDamageRate"] // 10,
+             "attack_id": s["normalAttack"], "skill_id": s["skill1"], "special_id": s["specialAttackMstId"],
+             "ability_id": s["passiveSkill1"], "support_id": s["subPassiveSkill"],
+             "support_target": m.group(1).strip() if m else "",
+             "crystalis_id": crys[sid][0]["value1"] if crys.get(sid) else 0,
+             "character_en": repl[sid]["overrideCharacterName"] if sid in repl else chars.get(sid // 10000, {}).get("name", ""),
+             "releaseDate": "2025-03-27" if int(s["releaseTime"][:4]) < 2025 else s["releaseTime"][:10]}
+        for L in (120, 140, 160, 180, 200):
+            r = lvl.get(sid * 1000 + L, {})
+            k[f"hp{L}"], k[f"atk{L}"], k[f"def{L}"] = r.get("maxHp"), r.get("maxAtk"), r.get("maxDef")
+        for i in range(1, 6):
+            e = lbe.get(lb.get(sid * 100 + i, {}).get("styleLimitBreakEffectMstId2"))
+            if e and e["targetType"] not in (1, 2) and e["value1"] in pas:
+                k[f"ascension_{i}_effect_2_id"] = pas[e["value1"]]["skillUniqueId"]
+        for L in range(1, 21):
+            ch = [r for r in pdet.get(s["passiveSkill1"] * 100 + L, []) if r["abilityEffectType"] == "CHARGE"]
+            if ch:
+                k["maxMagicStacks"] = ch[0]["value2"]; break
+        ex = extras.get(s["name"], {})
+        k.update({f: ex.get(f, d) for f, d in (("obtain", "Permanent"), ("permaDate", ""), ("heartphial", ""))})
+        res[s["name"]] = k
+    return res
 
 
 @lru_cache(None)
@@ -808,7 +850,7 @@ def cmd_build(args):
         fh.write(f"Built from `{br}{(' @ ' + ref) if ref else ''}`{' + uncommitted src/models changes' if dirty else ''}. "
                  "Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. "
                  "Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.\n\n")
-        fh.write("- **kiokus** = kiokus in kioku_data.json whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).\n")
+        fh.write("- **kiokus** = collectable kiokus (getStyleMstList) whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).\n")
         fh.write("- **stages** = quest stages whose enemies use it (skill sets + enemy passives).\n")
         fh.write("- **TS** = `yes` if the engine (src/models + src/utils, not the generated tables or the old ScoreAttack calculator) "
                  "compares/cases on it; `prefix/template?` = only matched by a template literal like `UP_${stat}_FIXED` or a `startsWith`/`endsWith` test (may over-match); `**LISTED ONLY**` = only appears in a type list "

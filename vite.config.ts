@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import Markdown from 'vite-plugin-md'
-import kiokuDataJson from './src/assets/base_data/kioku_data.json'
+import styleJson from './src/assets/base_data/getStyleMstList.json'
 
-const characterMap = Object.fromEntries(
-  Object.entries(kiokuDataJson).map(([name, data]) => [name, data.id])
+// kioku name -> styleMstId, for every collectable kioku (same set as kiokuData in src/utils/helpers.ts)
+const characterMap: Record<string, number> = Object.fromEntries(
+  styleJson.filter(style => style.isCollectionDisp).map(style => [style.name, style.styleMstId])
 )
 
 export default defineConfig({

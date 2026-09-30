@@ -1,4 +1,4 @@
-import json
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -23,8 +23,11 @@ def kioku_stat(level, values):
     return values[-1]
 
 
-with open("src/assets/base_data/kioku_data.json", encoding="utf8") as f:
-    data = json.load(f)
+# Kioku stats come from the master tables; reuse the builder in scripts/ai/xq.py
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts" / "ai"))
+from xq import kioku_data  # noqa: E402
+
+data = kioku_data()
 
 
 ROLES = sorted({d["role"] for d in data.values()})

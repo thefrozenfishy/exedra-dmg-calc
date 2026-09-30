@@ -71,6 +71,13 @@ $jsonFiles = @(
     "getStyleParamUpEffectMstList.json",
     "getCharacterHeartParamUpGroupMstList.json",
     "getCharacterHeartMstList.json",
+    "getPassiveSkillMstList.json",
+    "getStyleMstList.json",
+    "getStyleLevelUpMstList.json",
+    "getStyleLimitBreakMstList.json",
+    "getStyleLimitBreakEffectMstList.json",
+    "getCharacterMstList.json",
+    "getReplaceCharacterNameMstList.json",
     "kioku_data.json"
 )
 
