@@ -45,14 +45,18 @@
             </label>
             <label class="chip" style="cursor: help;" :class="{ active: testAllA5MaxLevel || useMaxAccountLevels }"
                 :title="testAllA5MaxLevel
-                    ? 'Already implied by \'Test with all A5 & max level Kioku\''
+                    ? 'Already implied by \'Test with all A5 & all max level\''
                     : 'Calculate using the max Kioku, Magic, Heartphial and Special level your account could theoretically reach based on your Player Level, instead of each Kioku\'s current levels'">
                 <input type="checkbox" v-model="useMaxAccountLevels" :disabled="testAllA5MaxLevel" /> Use max possible
                 levels
             </label>
             <label class="chip" style="cursor: help;" :class="{ active: testAllA5MaxLevel }"
-                title="Ignores your roster entirely: every Kioku is treated as enabled and at max Ascension (A5), with max Heartphial and max Kioku/Magic/Special level based on your Player Level. Useful for theorycrafting the ceiling regardless of what you actually own or have leveled.">
-                <input type="checkbox" v-model="testAllA5MaxLevel" /> Test with all A5 &amp; max level Kioku
+                title="Every Kioku you own is treated as max Ascension (A5), with max Heartphial and max Kioku/Magic/Special level based on your Player Level. Useful for seeing the ceiling of your current roster regardless of how far it's leveled.">
+                <input type="checkbox" v-model="testAllA5MaxLevel" /> Test with all A5 &amp; all max level
+            </label>
+            <label class="chip" style="cursor: help;" :class="{ active: includeUnownedAsA5 }"
+                title="Kioku you don't own are added to the search as if you had them at max Ascension (A5), with max Heartphial and max Kioku/Magic/Special level based on your Player Level. Your owned Kioku keep their own levels unless 'Test with all A5 & all max level' is also on.">
+                <input type="checkbox" v-model="includeUnownedAsA5" /> Include unowned Kioku as A5
             </label>
             <label class="chip" style="cursor: help;" :class="{ active: enablePruning }"
                 title="Ranks candidate teams with a quick estimate first, then only fully optimizes the strongest ones. Much faster; only turn off to double-check a result against the exhaustive search.">
@@ -319,12 +323,20 @@ const completedRuns = ref(0)
 const preprocessing = ref(false)
 const results = reactive<{ attackerId: string, team: any, dmg: number }[][]>([])
 
+const playerLevel = useSetting("playerLevel", KiokuConstants.maxKiokuLvl)
 const testAllA5MaxLevel = useSetting("testAllA5MaxLevel", false)
+const includeUnownedAsA5 = useSetting("includeUnownedAsA5", false)
 
-const effectiveCharacters = computed<Character[]>(() => {
-    if (!testAllA5MaxLevel.value) return store.characters
-    return store.characters.map(c => ({ ...c, enabled: true, ascension: KiokuConstants.maxAscension }))
-})
+// Owned Kioku are raised to A5 by "Test with all A5 & all max level" (their levels are maxed when the
+// team search starts). Only "Include unowned Kioku as A5" enables unowned Kioku, at A5 and max level.
+const effectiveCharacters = computed<Character[]>(() => store.characters.map(c => {
+    if (!c.enabled) {
+        return includeUnownedAsA5.value
+            ? withMaxLevelsForPlayerLevel({ ...c, enabled: true, ascension: KiokuConstants.maxAscension }, playerLevel.value)
+            : c
+    }
+    return testAllA5MaxLevel.value ? { ...c, ascension: KiokuConstants.maxAscension } : c
+}))
 
 const members = computed(() => effectiveCharacters.value.filter(c => c.enabled))
 const attackers = computed(() => effectiveCharacters.value.filter(c => (c.enabled && c.role === KiokuRole.Attacker) || extraAttackers.value.map(c => c.name).includes(c.name)))
@@ -354,7 +366,6 @@ const optimalSubCrys = useSetting("optimalSubCrys", true)
 const useMaxAccountLevels = useSetting("useMaxAccountLevels", false)
 const enablePruning = useSetting("enablePruning", true)
 const pruningMargin = useSetting("pruningMargin", 15)
-const playerLevel = useSetting("playerLevel", KiokuConstants.maxKiokuLvl)
 const arenaEffects = useSetting<{ type: string; value: number }[]>("arenaEffects", [])
 const onlyConsiderOnElements = useSetting("onlyConsiderOnElements", true)
 
