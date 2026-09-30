@@ -28,6 +28,7 @@ export interface PvESetup {
     turns: number
     decisions: [number, RngDecision][] // by decision index: manual picks and changed rolls
     ran: boolean                     // the battle had been simulated (so loading re-runs it)
+    // noRoundLimit: no longer offered on the page (always false); kept so older saved setups still read the same.
     raid: { partyBuffId: number, noRoundLimit: boolean, attempts: RaidCarry[] } | null
 }
 
@@ -36,7 +37,7 @@ const MAX_EFFECT_KEYS = 400
 const MAX_DECISIONS = 800
 const MAX_LABEL_LENGTH = 500
 const MAX_ATTEMPTS = 30
-const RNG_MODES: RngMode[] = ["hit", "miss", "seed", "manual"]
+const RNG_MODES: RngMode[] = ["hit", "miss", "weighted", "seed", "manual"]
 const RNG_KINDS: RngKind[] = ["crit", "effect", "target", "skill", "action"]
 const EFFECT_KEY = /^\d{1,2}:\d{1,12}$/
 

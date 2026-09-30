@@ -75,7 +75,7 @@
       </div>
     </div>
 
-    <!-- Stage + enemies -->
+    <!-- Stage -->
     <section class="card section-card">
       <h2 class="section-title">Stage</h2>
       <StagePicker v-model="stageId" />
@@ -83,62 +83,108 @@
       <div v-if="waves.length" class="wave-row">
         <span class="filters-heading">Wave</span>
         <button v-for="(w, i) in waves" :key="i" type="button" class="chip" :class="{ active: waveIdx === i }"
-          @click="waveIdx = i">{{ i + 1 }} <span class="chip-count">{{ w.length }} enem{{ w.length === 1 ? 'y' : 'ies'
-            }}</span></button>
-        <span class="row-hint">Max Damage uses the selected wave; the battle simulator plays every wave.</span>
-      </div>
-
-      <div class="enemy-grid">
-        <div v-for="(e, i) in enemyInfo" :key="e.id" class="enemy-card" :class="{ main: mainTargetIdx === i }">
-          <div class="enemy-top">
-            <img class="enemy-img" :src="enemyImage(e.enemyMstId)" :alt="e.name" @error="hideImg" />
-            <div class="enemy-title">
-              <div class="enemy-name" :title="e.name">{{ e.name }}</div>
-              <div class="enemy-break">
-                <template v-if="e.breakPoint > 0">Break gauge {{ e.breakPoint }} · broken {{ e.initRate }}–{{ e.maxRate
-                  }}%</template>
-                <template v-else>Can't be broken</template>
-              </div>
-            </div>
-          </div>
-          <div class="enemy-stat-grid">
-            <div class="enemy-stat"><span class="enemy-stat-label">HP</span>
-              <span class="enemy-stat-value">{{ fmt(e.hp) }}<span v-if="e.gauges > 1" class="muted"> ×{{ e.gauges
-                  }}</span></span></div>
-            <div class="enemy-stat"><span class="enemy-stat-label">ATK</span><span class="enemy-stat-value">{{
-              fmt(e.atk) }}</span></div>
-            <div class="enemy-stat"><span class="enemy-stat-label">DEF</span><span class="enemy-stat-value">{{
-              fmt(e.def) }}</span></div>
-            <div class="enemy-stat"><span class="enemy-stat-label">SPD</span><span class="enemy-stat-value">{{ e.spd
-                }}</span></div>
-          </div>
-          <div v-if="e.weak.length || e.resists.length" class="enemy-elements">
-            <span v-if="e.weak.length" class="weak" title="Weak to">Weak
-              <img v-for="w in e.weak" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w" :title="w"
-                class="elem-icon" />
-            </span>
-            <span v-for="r in e.resists" :key="r.el" class="resist" :title="`${r.el} resist`">
-              <img :src="`/exedra-dmg-calc/elements/${r.el}.png`" :alt="r.el" class="elem-icon" /> −{{ r.pct }}%
-            </span>
-          </div>
-          <div class="enemy-controls">
-            <label class="chip" :class="{ active: mainTargetIdx === i }"
-              title="Single-target skills hit this enemy in Max Damage">
-              <input type="radio" :checked="mainTargetIdx === i" @change="mainTargetIdx = i" /> Target
-            </label>
-            <label v-if="e.breakPoint > 0" class="chip" :class="{ active: !!broken[i] }"
-              title="Evaluate Max Damage against this enemy while it's broken">
-              <input type="checkbox" :checked="!!broken[i]"
-                @change="setBroken(i, ($event.target as HTMLInputElement).checked)" /> Broken
-            </label>
-            <label v-if="e.breakPoint > 0 && broken[i]" class="rate-field" title="Broken DMG rate (%)">
-              <input class="num" type="number" min="100" :max="e.maxRate" :value="breakRate[i] ?? e.maxRate"
-                @change="setBreakRate(i, Number(($event.target as HTMLInputElement).value), e.maxRate)" />%
-            </label>
-          </div>
-        </div>
+          @click="waveIdx = i">{{ i + 1 }} <span class="chip-count">{{ Math.min(w.length, 5) }} enem{{ Math.min(w.length, 5)
+            === 1 ? 'y' : 'ies' }}<template v-if="w.length > 5"> + {{ w.length - 5 }} backup{{ w.length - 5 === 1 ? '' :
+              's' }}</template></span></button>
+        <span class="row-hint">Max Damage uses the enemies on the field when the selected wave starts; the battle
+          simulator plays every wave.</span>
       </div>
     </section>
+
+    <!-- Enemies, in the same 5 columns as the team below -->
+    <div v-if="enemyInfo.length" class="enemies-block">
+      <h2 class="section-title page-section-title">Enemies <span class="title-sub">· wave {{ waveIdx + 1 }}</span></h2>
+      <div class="team-grid enemy-grid">
+        <div v-for="(e, i) in enemyInfo" :key="e.id" class="enemy-card" :class="[`pos-${e.position}`, { main: mainTargetIdx === i }]">
+            <div class="enemy-top">
+              <img class="enemy-img" :src="enemyImage(e.enemyMstId)" :alt="e.name" @error="hideImg" />
+              <div class="enemy-title">
+                <div class="enemy-name" :title="e.name">{{ e.name }}</div>
+                <div class="enemy-break">
+                  <template v-if="e.breakPoint > 0">Break {{ e.breakPoint }} · broken {{ e.initRate }}–{{ e.maxRate
+                    }}%</template>
+                  <template v-else>Can't be broken</template>
+                </div>
+              </div>
+            </div>
+            <div class="enemy-stat-grid">
+              <div class="enemy-stat"><span class="enemy-stat-label">HP</span>
+                <span class="enemy-stat-value">{{ fmt(e.hp) }}<span v-if="e.gauges > 1" class="muted"> ×{{ e.gauges
+                    }}</span></span></div>
+              <div class="enemy-stat"><span class="enemy-stat-label">ATK</span><span class="enemy-stat-value">{{
+                fmt(e.atk) }}</span></div>
+              <div class="enemy-stat"><span class="enemy-stat-label">DEF</span><span class="enemy-stat-value">{{
+                fmt(e.def) }}</span></div>
+              <div class="enemy-stat"><span class="enemy-stat-label">SPD</span><span class="enemy-stat-value">{{ e.spd
+                  }}</span></div>
+            </div>
+            <div v-if="e.weak.length || e.resists.length" class="enemy-elements">
+              <span v-if="e.weak.length" class="weak" title="Weak to">Weak
+                <img v-for="w in e.weak" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w" :title="w"
+                  class="elem-icon" />
+              </span>
+              <span v-for="r in e.resists" :key="r.el" class="resist" :title="`${r.el} resist`">
+                <img :src="`/exedra-dmg-calc/elements/${r.el}.png`" :alt="r.el" class="elem-icon" /> −{{ r.pct }}%
+              </span>
+            </div>
+            <div class="enemy-controls">
+              <label class="chip" :class="{ active: mainTargetIdx === i }"
+                title="Single-target skills hit this enemy in Max Damage">
+                <input type="radio" :checked="mainTargetIdx === i" @change="mainTargetIdx = i" /> Target
+              </label>
+              <label v-if="e.breakPoint > 0" class="chip" :class="{ active: !!broken[i] }"
+                title="Evaluate Max Damage against this enemy while it's broken">
+                <input type="checkbox" :checked="!!broken[i]"
+                  @change="setBroken(i, ($event.target as HTMLInputElement).checked)" /> Broken
+              </label>
+              <label v-if="e.breakPoint > 0 && broken[i]" class="rate-field" title="Broken DMG rate (%)">
+                <input class="num" type="number" min="100" :max="e.maxRate" :value="breakRate[i] ?? e.maxRate"
+                  @change="setBreakRate(i, Number(($event.target as HTMLInputElement).value), e.maxRate)" />%
+              </label>
+            </div>
+        </div>
+      </div>
+
+      <template v-for="row in extraEnemyRows" :key="row.title">
+        <h3 class="enemy-row-title">{{ row.title }}</h3>
+        <p class="enemy-row-hint">{{ row.hint }}</p>
+        <div class="team-grid enemy-grid">
+          <div v-for="e in row.enemies" :key="e.id" class="enemy-card enemy-card-extra">
+            <div class="enemy-top">
+              <img class="enemy-img" :src="enemyImage(e.enemyMstId)" :alt="e.name" @error="hideImg" />
+              <div class="enemy-title">
+                <div class="enemy-name" :title="e.name">{{ e.name }}</div>
+                <div class="enemy-break">
+                  <template v-if="e.breakPoint > 0">Break {{ e.breakPoint }} · broken {{ e.initRate }}–{{ e.maxRate
+                    }}%</template>
+                  <template v-else>Can't be broken</template>
+                </div>
+              </div>
+            </div>
+            <div class="enemy-stat-grid">
+              <div class="enemy-stat"><span class="enemy-stat-label">HP</span>
+                <span class="enemy-stat-value">{{ fmt(e.hp) }}<span v-if="e.gauges > 1" class="muted"> ×{{ e.gauges
+                    }}</span></span></div>
+              <div class="enemy-stat"><span class="enemy-stat-label">ATK</span><span class="enemy-stat-value">{{
+                fmt(e.atk) }}</span></div>
+              <div class="enemy-stat"><span class="enemy-stat-label">DEF</span><span class="enemy-stat-value">{{
+                fmt(e.def) }}</span></div>
+              <div class="enemy-stat"><span class="enemy-stat-label">SPD</span><span class="enemy-stat-value">{{ e.spd
+                  }}</span></div>
+            </div>
+            <div v-if="e.weak.length || e.resists.length" class="enemy-elements">
+              <span v-if="e.weak.length" class="weak" title="Weak to">Weak
+                <img v-for="w in e.weak" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w" :title="w"
+                  class="elem-icon" />
+              </span>
+              <span v-for="r in e.resists" :key="r.el" class="resist" :title="`${r.el} resist`">
+                <img :src="`/exedra-dmg-calc/elements/${r.el}.png`" :alt="r.el" class="elem-icon" /> −{{ r.pct }}%
+              </span>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
 
     <!-- Team -->
     <h2 class="section-title page-section-title">Team</h2>
@@ -228,49 +274,59 @@
       </template>
     </section>
 
-    <!-- Buffs & debuffs used by Max Damage -->
+    <!-- Buffs & debuffs used by Max Damage, by where they come from -->
     <section v-if="maxDmg && maxDmg.effects.length" class="card section-card effects-card">
       <h2 class="section-title">Buffs &amp; Debuffs</h2>
-      <p class="hint-text">Everything your team can give, and whether it counts toward {{ dealerName }}'s Max Damage.
-        Click a card to leave that effect out (or back in); lower its stacks to use fewer.</p>
+      <p class="hint-text">Every buff and debuff your team gives, grouped by what applies it. Max Damage counts the
+        ones that are on: buffs on {{ dealerName }} (green) and debuffs on the enemies (red). Click one to turn it off
+        or back on; lower its stacks to use fewer.</p>
 
       <div class="effects-summary">
-        <span class="legend legend-used">{{ effectCounts.used }} counted</span>
-        <span v-if="effectCounts.partial" class="legend legend-partial">{{ effectCounts.partial }} on some
-          enemies</span>
-        <span v-if="effectCounts.off" class="legend legend-off">{{ effectCounts.off }} left out by you</span>
-        <span v-if="effectCounts.na" class="legend legend-na">{{ effectCounts.na }} can't reach {{ dealerName
-          }}</span>
-        <button v-if="excluded.size || stacks.size" type="button" class="link-btn" @click="resetEffects">Undo my
-          changes</button>
-        <label v-if="effectCounts.na" class="chip" :class="{ active: showUnreachable }">
-          <input type="checkbox" v-model="showUnreachable" /> Show the ones that can't reach
+        <span class="legend legend-buff">{{ effectCounts.buff }} buff{{ effectCounts.buff === 1 ? '' : 's' }} on {{
+          dealerName }}</span>
+        <span class="legend legend-debuff">{{ effectCounts.debuff }} debuff{{ effectCounts.debuff === 1 ? '' : 's' }}
+          on the enemies</span>
+        <span v-if="effectCounts.off" class="legend legend-off">{{ effectCounts.off }} turned off</span>
+        <button v-if="excluded.size || stacks.size" type="button" class="link-btn" @click="resetEffects">Turn
+          everything back on</button>
+        <label v-if="effectCounts.na" class="chip" :class="{ active: showUnreachable }"
+          title="Effects that only affect their own caster, or are limited to other elements/roles">
+          <input type="checkbox" v-model="showUnreachable" /> Show {{ effectCounts.na }} that can't reach {{ dealerName
+          }} or the enemies
         </label>
       </div>
 
-      <div class="effect-cols">
-        <div v-for="col in effectColumns" :key="col.side" class="effect-col">
-          <h3 class="subsection-title">{{ col.title }}</h3>
-          <p class="col-hint">{{ col.hint }}</p>
-          <p v-if="!col.groups.length" class="empty-hint">None</p>
-          <div v-for="g in col.groups" :key="g.name" class="effect-group">
-            <div class="effect-group-label">{{ g.name }}</div>
-            <div v-for="e in g.effects" :key="e.key" class="effect-row" :class="`is-${e.status}`"
-              :title="e.status === 'na' ? e.statusText : `${e.type}\nClick to ${e.status === 'off' ? 'include' : 'leave out'}`"
-              @click="e.status !== 'na' && toggleEffect(e.key)">
-              <div class="effect-head">
-                <span class="effect-src">{{ e.casterName }} <span class="effect-origin">· {{ e.source }}</span></span>
-                <span v-if="e.value" class="effect-value">{{ e.value }}</span>
-              </div>
-              <div v-if="e.description" class="effect-desc">{{ e.description }}</div>
-              <div class="effect-foot">
-                <span class="effect-status">{{ e.statusText }}</span>
-                <label v-if="e.maxStacks > 1 && e.status !== 'na'" class="effect-stacks" @click.stop>
-                  Stacks <input class="num" type="number" min="0" :max="e.maxStacks" :value="e.stacks"
-                    @change="setStacks(e.key, Number(($event.target as HTMLInputElement).value), e.maxStacks)" /> / {{
-                  e.maxStacks }}
-                </label>
-              </div>
+      <div v-for="sec in effectSections" :key="sec.source" class="fx-section">
+        <div class="fx-section-head">
+          <span class="fx-section-title">{{ sec.source }}</span>
+          <span class="fx-section-count">{{ sec.onCount }} of {{ sec.toggleable.length }} on</span>
+          <button v-if="sec.toggleable.length > 1" type="button" class="link-btn"
+            @click="setSectionOn(sec.toggleable, sec.onCount < sec.toggleable.length)">{{ sec.onCount <
+              sec.toggleable.length ? 'Turn all on' : 'Turn all off' }}</button>
+        </div>
+        <div class="fx-grid">
+          <div v-for="e in sec.effects" :key="e.key" class="fx-card"
+            :class="[e.side === 'ally' ? 'fx-buff' : 'fx-debuff', `fx-${e.status}`]"
+            :title="e.status === 'na' ? e.statusText : `${e.type}\nClick to turn ${e.status === 'off' ? 'on' : 'off'}`"
+            @click="e.status !== 'na' && toggleEffect(e.key)">
+            <div class="fx-head">
+              <img v-if="memberId(e.casterPos)" class="fx-thumb" :src="kiokuImage(memberId(e.casterPos)!)"
+                :alt="e.casterName" />
+              <span class="fx-caster">{{ e.casterName }}</span>
+              <span class="fx-switch">{{ e.status === 'off' ? 'Off' : e.status === 'na' ? 'N/A' : 'On' }}</span>
+            </div>
+            <div class="fx-effect">
+              <span class="fx-name">{{ e.side === 'ally' ? 'Buff' : 'Debuff' }}: {{ e.name }}</span>
+              <span v-if="e.value" class="fx-value">{{ e.value }}</span>
+            </div>
+            <div v-if="e.description" class="fx-desc">{{ e.description }}</div>
+            <div class="fx-foot">
+              <span class="fx-target">{{ e.statusText }}</span>
+              <label v-if="e.maxStacks > 1 && e.status !== 'na'" class="fx-stacks" @click.stop>
+                Stacks <input class="num" type="number" min="0" :max="e.maxStacks" :value="e.stacks"
+                  @change="setStacks(e.key, Number(($event.target as HTMLInputElement).value), e.maxStacks)" /> / {{
+                e.maxStacks }}
+              </label>
             </div>
           </div>
         </div>
@@ -289,6 +345,19 @@
         <p class="sim-hint">{{ TARGET_MODE_OPTIONS.find(o => o.value === targetMode)?.title }}</p>
         <RngControls v-model:mode="rngMode" :seed="seed" :changed="changedRolls" :disabled="!canRun"
           @update:seed="setSeed" @reset="resetRolls" />
+        <div v-if="raid && partyBuffViews.length" class="party-buff-row">
+          <span class="party-buff-label">Party buff</span>
+          <div class="party-buff" :style="{ '--count': partyBuffViews.length }">
+            <SegmentedToggle v-model="partyBuffChoice" :options="partyBuffOptions" />
+            <div class="party-buff-effects">
+              <div v-for="p in partyBuffViews" :key="p.value" class="party-buff-col"
+                :class="{ active: p.value === partyBuffChoice }" @click="partyBuffChoice = p.value">
+                <div v-for="(line, i) in p.buffs" :key="i" class="party-buff-effect">{{ line }}</div>
+                <div v-if="p.charge" class="party-buff-charge">{{ p.charge }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div v-if="raid" class="raid-panel">
@@ -296,16 +365,6 @@
           <span class="filters-heading">Solo Raid</span>
           <span>Difficulty {{ raid.difficulty }} · {{ raid.limitRoundCount }}-round limit · attempt {{
             raidAttempts.length + 1 }}</span>
-        </div>
-        <div class="raid-row">
-          <span class="filters-heading">Party buff</span>
-          <button v-for="p in raid.partyBuffs" :key="p.soloRaidPartyBuffMstId" type="button" class="chip"
-            :class="{ active: (partyBuffId || raid.partyBuffs[0]?.soloRaidPartyBuffMstId) === p.soloRaidPartyBuffMstId }"
-            :title="passiveInfo(p.passiveSkillMstId).description" @click="partyBuffId = p.soloRaidPartyBuffMstId">{{
-              passiveInfo(p.passiveSkillMstId).name }}</button>
-          <label class="chip" :class="{ active: noRoundLimit }">
-            <input v-model="noRoundLimit" type="checkbox" /> Ignore round limit
-          </label>
         </div>
         <div class="raid-row">
           <button class="btn" :disabled="!battle || !battle.isOver" @click="nextAttempt"
@@ -378,18 +437,18 @@ import SavedTeamsPanel from '../components/SavedTeamsPanel.vue'
 import { useSavedTeams } from '../store/savedTeams'
 import { PendingDecision, type RngDecision, type RngEvent, type RngMode } from '../models/BattleRng'
 import { toast } from 'vue3-toastify'
-import { TargetType, type BattleSnapshot } from '../types/KiokuTypes'
+import { TargetType, type BattleSnapshot, type SkillDetail } from '../types/KiokuTypes'
 import { elementMap } from '../types/enums'
-import { stageWaves, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo } from '../models/PvE'
-import { createPvEBattle, stageBattleType } from '../models/PvEBattle'
+import { stageWaves, stageWaveMeta, summonTemplates, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo, type QuestEnemyAppearance } from '../models/PvE'
+import { createPvEBattle, stageBattleType, waveStartUnits } from '../models/PvEBattle'
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
 import type { RaidCarry } from '../models/PvPBattle'
 import { getScoreAttackStage } from '../models/PvEScore'
-import { computeMaxDamage, type MaxDmgEffect, type MaxDmgResult, type MemberDamage, type SkillDamage, type EffectSide } from '../models/MaxDamage'
+import { computeMaxDamage, type MaxDmgEffect, type MaxDmgResult, type MemberDamage, type SkillDamage } from '../models/MaxDamage'
 import { buildSlotKioku, buildPvEExport, parsePvEExport, downloadText } from '../utils/pvpExport'
 import { describePvESetup, sanitizePvESetup, stagePath, type PvESetup } from '../utils/pveSetup'
 import { effectDescription, effectName, effectRestriction, effectValue } from '../utils/effectText'
-import { portraits } from '../utils/helpers'
+import { passiveDetailsByMstId, portraits } from '../utils/helpers'
 import type { PvPBattle } from '../models/PvPBattle'
 import type { PvPKioku } from '../models/PvPKioku'
 
@@ -410,8 +469,11 @@ const portraitImage = (portrait: string) => portraits[portrait] ? `/exedra-dmg-c
 
 // ---- stage / enemies ----
 const waveIdx = ref(0)
-const waves = computed(() => stageId.value ? stageWaves(stageId.value) : [])
-const wave = computed(() => waves.value[Math.min(waveIdx.value, waves.value.length - 1)] ?? [])
+const waveMetas = computed(() => stageId.value ? stageWaveMeta(stageId.value) : [])
+const waves = computed(() => waveMetas.value.map(m => m.appearances))
+const waveMeta = computed(() => waveMetas.value[Math.min(waveIdx.value, waveMetas.value.length - 1)])
+// The enemies on the field when the wave starts (at most 5): Max Damage is evaluated against these only.
+const wave = computed(() => waveMeta.value ? waveStartUnits(waveMeta.value) : [])
 const mainTargetIdx = ref(0)
 const broken = ref<boolean[]>([])
 const breakRate = ref<(number | undefined)[]>([])
@@ -429,7 +491,7 @@ const setBreakRate = (i: number, v: number, max: number) => {
   const r = [...breakRate.value]; r[i] = Number.isFinite(v) ? Math.max(100, Math.min(max, v)) : undefined; breakRate.value = r
 }
 
-const enemyInfo = computed(() => wave.value.map(a => {
+function enemyView(a: QuestEnemyAppearance) {
   const b = breakMstOf(a)
   return {
     id: a.questEnemyAppearanceMstId, enemyMstId: a.enemyMstId, name: enemyName(a),
@@ -441,7 +503,26 @@ const enemyInfo = computed(() => wave.value.map(a => {
     initRate: Math.trunc((b?.initialBreakedDamageReceiveRate ?? 1000) / 10),
     maxRate: Math.trunc((b?.maxBreakedDamageReceiveRate ?? 1000) / 10),
   }
-}))
+}
+// Each start unit with its position (1-5, left to right), which is also its column above the team.
+const enemyInfo = computed(() => {
+  const positions = wavePositionIds(wave.value.length)
+  return wave.value.map((a, i) => ({ ...enemyView(a), position: positions[i] }))
+})
+// Endless waves list more than 5 enemies: only 5 can be on the field, the rest come in as those are defeated.
+// Summons are defined for the whole stage (identical templates shown once).
+const extraEnemyRows = computed(() => {
+  const backups = (waveMeta.value?.appearances ?? []).slice(wave.value.length).map(enemyView)
+  const seen = new Set<string>()
+  const summons = [...(stageId.value ? summonTemplates(stageId.value).values() : [])].map(enemyView).filter(e => {
+    const key = `${e.enemyMstId}:${e.hp}:${e.atk}:${e.def}:${e.spd}`
+    return !seen.has(key) && !!seen.add(key)
+  })
+  return [
+    { title: 'Backups', enemies: backups, hint: 'Only 5 enemies can be on the field at once. These wait in the back and come in as the ones on the field are defeated. Not part of Max Damage.' },
+    { title: 'Summons', enemies: summons, hint: 'Enemies that can be summoned during the battle. Not part of Max Damage.' },
+  ].filter(r => r.enemies.length)
+})
 
 // ---- team ----
 // Members in slot order; an empty slot is skipped (quests can be played with fewer than 5).
@@ -486,30 +567,33 @@ const skillCols: [TargetType, string][] = [[TargetType.specialId, 'Ultimate'], [
 const skillOf = (m: MemberDamage, t: TargetType) => m.skills.find(s => s.type === t)
 const perEnemyTitle = (s: SkillDamage) => s.perEnemy.map((x, i) => x.crit ? `${enemyInfo.value[i]?.name}: ${fmt(x.crit)} crit / ${fmt(x.normal)} / avg ${fmt(x.avg)}` : '').filter(Boolean).join('\n')
 
-// ---- buffs & debuffs: what each effect does and whether it counts ----
+// ---- buffs & debuffs: where each effect comes from and whether it counts ----
 type EffectStatus = 'used' | 'partial' | 'off' | 'na'
 const STATUS_ORDER: Record<EffectStatus, number> = { used: 0, partial: 1, off: 2, na: 3 }
+// Sections, in this order: active skills first, then the kit's passives and what's equipped.
+const SOURCE_ORDER = ['Battle Skill', 'Ultimate', 'Basic Attack', 'Follow-up', 'Ability', 'Ascension', 'Crystalis', 'Portrait', 'Support', 'Passive']
 const showUnreachable = useSetting('pveShowUnreachableEffects', false)
 
 function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: string } {
   const restriction = effectRestriction(e.detail)
+  const only = restriction ? ` (only ${restriction})` : ''
   const enemyCount = maxDmg.value?.enemies.length ?? 0
   if (!e.applies) {
     return e.side === 'ally'
       ? { status: 'na', statusText: `Only affects ${e.casterName} itself` }
       : { status: 'na', statusText: `A drawback on ${e.casterName} itself, not on enemies` }
   }
-  if (excluded.has(e.key)) return { status: 'off', statusText: 'Left out: click to include' }
+  if (excluded.has(e.key)) return { status: 'off', statusText: 'Turned off: click to turn on' }
   if (!e.reach) return { status: 'off', statusText: 'Set to 0 stacks' }
   if (e.side === 'ally') {
     return e.reach.dealer
-      ? { status: 'used', statusText: `Counts for ${dealerName.value}` }
+      ? { status: 'used', statusText: `On ${dealerName.value}` }
       : { status: 'na', statusText: `Only for ${restriction || 'other'} allies: ${dealerName.value} isn't one` }
   }
   const hit = e.reach.enemies.length
-  if (!hit) return { status: 'na', statusText: `No enemy in this wave can receive it${restriction ? ` (only ${restriction})` : ''}` }
+  if (!hit) return { status: 'na', statusText: `No enemy in this wave can receive it${only}` }
   return hit < enemyCount
-    ? { status: 'partial', statusText: `On ${hit} of ${enemyCount} enemies${restriction ? ` (only ${restriction})` : ''}` }
+    ? { status: 'partial', statusText: `On ${hit} of ${enemyCount} enemies${only}` }
     : { status: 'used', statusText: enemyCount === 1 ? 'On the enemy' : `On all ${enemyCount} enemies` }
 }
 
@@ -517,35 +601,48 @@ const effectViews = computed(() => (maxDmg.value?.effects ?? []).map(e => {
   const count = Math.max(0, Math.min(e.maxStacks, stacks.get(e.key) ?? e.maxStacks))
   return {
     key: e.key, side: e.side, type: e.detail.abilityEffectType, name: effectName(e.detail.abilityEffectType),
-    casterName: e.casterName, source: e.source, maxStacks: e.maxStacks, stacks: count,
+    casterPos: e.casterPos, casterName: e.casterName, source: e.source, maxStacks: e.maxStacks, stacks: count,
     value: effectValue(e.detail, e.maxStacks > 1 ? count : 1), description: effectDescription(e.detail),
     ...effectStatus(e),
   }
 }))
+type EffectView = (typeof effectViews.value)[number]
 
 const effectCounts = computed(() => {
-  const counts: Record<EffectStatus, number> = { used: 0, partial: 0, off: 0, na: 0 }
-  for (const e of effectViews.value) counts[e.status]++
+  const counts = { buff: 0, debuff: 0, off: 0, na: 0 }
+  for (const e of effectViews.value) {
+    if (e.status === 'off' || e.status === 'na') counts[e.status]++
+    else counts[e.side === 'ally' ? 'buff' : 'debuff']++
+  }
   return counts
 })
 
-const effectColumns = computed(() => ([
-  { side: 'ally', title: `Buffs on ${dealerName.value}`, hint: 'Buffs from every member, including passives, crystalis, portraits and supports.' },
-  { side: 'enemy', title: 'Debuffs on the enemies', hint: `Debuffs your team can put on wave ${waveIdx.value + 1}.` },
-] as { side: EffectSide, title: string, hint: string }[]).map(col => {
-  const groups = new Map<string, typeof effectViews.value>()
+const effectSections = computed(() => {
+  const bySource = new Map<string, EffectView[]>()
   for (const e of effectViews.value) {
-    if (e.side !== col.side || (e.status === 'na' && !showUnreachable.value)) continue
-    groups.set(e.name, [...(groups.get(e.name) ?? []), e])
+    if (e.status === 'na' && !showUnreachable.value) continue
+    bySource.set(e.source, [...(bySource.get(e.source) ?? []), e])
   }
-  return {
-    ...col,
-    groups: [...groups].map(([name, effects]) => ({
-      name,
-      effects: effects.sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.casterName.localeCompare(b.casterName)),
-    })).sort((a, b) => STATUS_ORDER[a.effects[0].status] - STATUS_ORDER[b.effects[0].status] || a.name.localeCompare(b.name)),
+  const rank = (source: string) => { const i = SOURCE_ORDER.indexOf(source); return i < 0 ? SOURCE_ORDER.length : i }
+  return [...bySource].sort(([a], [b]) => rank(a) - rank(b)).map(([source, effects]) => {
+    const toggleable = effects.filter(e => e.status !== 'na')
+    return {
+      source,
+      toggleable,
+      onCount: toggleable.filter(e => e.status === 'used' || e.status === 'partial').length,
+      // Buffs before debuffs, what counts first, then by member.
+      effects: effects.sort((a, b) => Number(a.side !== 'ally') - Number(b.side !== 'ally')
+        || STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.casterPos - b.casterPos || a.name.localeCompare(b.name)),
+    }
+  })
+})
+
+function setSectionOn(effects: EffectView[], on: boolean) {
+  for (const e of effects) {
+    if (on) excluded.delete(e.key)
+    else excluded.add(e.key)
   }
-}))
+}
 
 // Score Attack score, same estimate as the previous version of this page.
 const isScoreAttack = computed(() => !!getScoreAttackStage(stageId.value))
@@ -583,7 +680,21 @@ const battleResultText = computed(() => pending.value ? 'Waiting for your decisi
 // ---- Solo Raid: party buff, round limit, attempts carrying over (PvEBattle / PvPBattle.raidCarry) ----
 const raid = computed(() => stageId.value ? soloRaidInfo(stageId.value) : undefined)
 const partyBuffId = useSetting<number>('pveRaidPartyBuff', 0)
-const noRoundLimit = useSetting<boolean>('pveRaidNoRoundLimit', false)
+// Solo Raid party buff choices: the buffs each gives every ally, and how it earns Vanguard points.
+const partyBuffViews = computed(() => (raid.value?.partyBuffs ?? []).map(p => ({
+  value: String(p.soloRaidPartyBuffMstId),
+  label: passiveInfo(p.passiveSkillMstId).name,
+  title: passiveInfo(p.passiveSkillMstId).description,
+  buffs: (passiveDetailsByMstId.get(p.passiveSkillMstId) ?? []).map(d =>
+    effectDescription(d as unknown as SkillDetail) || `${effectName(d.abilityEffectType)} ${effectValue(d as unknown as SkillDetail) ?? ''}`.trim()),
+  charge: (passiveDetailsByMstId.get(p.buffPointChargePassiveSkillMstId) ?? [])
+    .map(d => String(d.description ?? '').replace(/grants \d+ Vanguard points?/, 'grants Vanguard points'))[0] ?? '',
+})))
+const partyBuffOptions = computed(() => partyBuffViews.value.map(({ value, label, title }) => ({ value, label, title })))
+const partyBuffChoice = computed<string>({
+  get: () => String(partyBuffId.value || raid.value?.partyBuffs[0]?.soloRaidPartyBuffMstId || ''),
+  set: v => { partyBuffId.value = Number(v) },
+})
 const raidAttempts = shallowRef<RaidCarry[]>([])
 const passiveNames = new Map<number, { name: string, description: string }>((passiveMstJson as any[]).map(p => [p.passiveSkillMstId, { name: p.name, description: String(p.description ?? '').replace(/<br>/g, '\n') }]))
 const passiveInfo = (id: number) => passiveNames.get(id) ?? { name: `Passive ${id}`, description: '' }
@@ -600,7 +711,7 @@ function resetAttempts() {
   decisions.value = new Map()
   runSimulation()
 }
-watch([partyBuffId, noRoundLimit], () => { if (hasRun()) runSimulation(); else buildBattle() })
+watch(partyBuffId, () => { if (hasRun()) runSimulation(); else buildBattle() })
 
 function newBattle(): PvPBattle {
   // Fresh units: a battle mutates its units' state.
@@ -608,7 +719,7 @@ function newBattle(): PvPBattle {
   const carry = raidAttempts.value[raidAttempts.value.length - 1]
   return markRaw(createPvEBattle(allies, stageId.value, seed.value, 0, {
     rngMode: rngMode.value, decisions: decisions.value, manualTargeting: targetMode.value === 'manual',
-    partyBuffId: partyBuffId.value || undefined, noRoundLimit: noRoundLimit.value, raidCarry: carry,
+    partyBuffId: partyBuffId.value || undefined, raidCarry: carry,
   }))
 }
 
@@ -711,7 +822,7 @@ function exportBattle() {
     stageId: stageId.value, stageName: questStages.get(stageId.value)?.name,
     control: targetMode.value, rngMode: rngMode.value, seed: seed.value, turns: simTurns.value,
     decisions: decisions.value, slots: team.slots, snapshots: battleOutput.value, pending: pending.value,
-    soloRaid: raid.value ? { partyBuffId: partyBuffId.value || undefined, noRoundLimit: noRoundLimit.value, attempts: raidAttempts.value } : undefined,
+    soloRaid: raid.value ? { partyBuffId: partyBuffId.value || undefined, attempts: raidAttempts.value } : undefined,
   })
   const tag = rngMode.value === 'seed' ? `seed${seed.value}` : rngMode.value
   downloadText(`pve-sim-${stageId.value}-${targetMode.value}-${tag}.json`, JSON.stringify(data, null, 2))
@@ -737,7 +848,6 @@ async function importBattle(ev: Event) {
     decisions.value = new Map(Object.entries(data.decisions ?? {}).map(([k, v]) => [Number(k), v]))
     if (data.soloRaid) {
       partyBuffId.value = data.soloRaid.partyBuffId ?? 0
-      noRoundLimit.value = !!data.soloRaid.noRoundLimit
       raidAttempts.value = data.soloRaid.attempts ?? []
     }
     await nextTick() // the mode watchers re-run first; run once more with everything in place
@@ -774,7 +884,7 @@ function currentSetup(): PvESetup {
     turns: simTurns.value,
     decisions: [...decisions.value],
     ran: hasRun(),
-    raid: raid.value ? { partyBuffId: partyBuffId.value, noRoundLimit: noRoundLimit.value, attempts: raidAttempts.value } : null,
+    raid: raid.value ? { partyBuffId: partyBuffId.value, noRoundLimit: false, attempts: raidAttempts.value } : null,
   }
 }
 
@@ -804,7 +914,6 @@ async function applySetup(raw: unknown) {
   targetMode.value = s.control
   if (s.raid) {
     partyBuffId.value = s.raid.partyBuffId
-    noRoundLimit.value = s.raid.noRoundLimit
     raidAttempts.value = s.raid.attempts
   }
   decisions.value = new Map(s.decisions)
@@ -1281,11 +1390,48 @@ const saved = useSavedTeams({
   margin-left: 0.4rem;
 }
 
-.enemy-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 0.75rem;
-  margin-top: 0.9rem;
+/* Same columns as .team-grid; while it shows 5 columns, each enemy sits above its position (1-5). */
+.enemies-block {
+  container-type: inline-size;
+}
+
+.title-sub {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.team-grid.enemy-grid {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  margin-top: 0.75rem;
+}
+
+@container (min-width: 1128px) {
+  .enemy-card.pos-1 { grid-column: 1; }
+  .enemy-card.pos-2 { grid-column: 2; }
+  .enemy-card.pos-3 { grid-column: 3; }
+  .enemy-card.pos-4 { grid-column: 4; }
+  .enemy-card.pos-5 { grid-column: 5; }
+}
+
+.enemy-row-title {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--accent-soft);
+}
+
+.enemy-row-hint {
+  margin: 0.2rem auto 0;
+  max-width: 720px;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.enemy-card-extra {
+  border-style: dashed;
+  opacity: 0.85;
 }
 
 .enemy-card {
@@ -1295,7 +1441,7 @@ const saved = useSavedTeams({
   min-width: 0;
   padding: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
+  border-radius: 20px;
   background: rgba(255, 255, 255, 0.02);
   transition: border-color 0.15s, box-shadow 0.15s;
 }
@@ -1338,8 +1484,8 @@ const saved = useSavedTeams({
 
 .enemy-stat-grid {
   display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr 0.8fr;
-  gap: 0.4rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem 0.5rem;
 }
 
 .enemy-stat {
@@ -1621,116 +1767,156 @@ const saved = useSavedTeams({
   border-radius: 3px;
 }
 
-.legend-used::before { background: var(--success); }
-.legend-partial::before { background: var(--warning); }
-.legend-off::before { background: var(--danger); }
-.legend-na::before { background: rgba(255, 255, 255, 0.25); }
+.legend-buff::before { background: var(--success); }
+.legend-debuff::before { background: var(--danger); }
+.legend-off::before { background: rgba(255, 255, 255, 0.25); }
 
-.effect-cols {
+.fx-section {
+  margin-top: 1.1rem;
+}
+
+.fx-section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0 0.2rem 0.3rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.fx-section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-soft);
+}
+
+.fx-section-count {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.fx-section-head .link-btn {
+  margin-left: auto;
+}
+
+.fx-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.5rem;
 }
 
-.effect-col {
-  min-width: 0;
-}
-
-.effect-group {
+/* Green: buff on the damage dealer. Red: debuff on the enemies. Grey: turned off / can't reach. */
+.fx-card {
+  --fx: var(--success);
+  --fx-bg: rgba(20, 100, 40, 0.16);
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin-bottom: 0.75rem;
-}
-
-.effect-group-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0.1rem 0.2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.effect-row {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  text-align: left;
-  padding: 0.4rem 0.55rem;
-  border-radius: 6px;
-  border-left: 3px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 3px solid var(--fx);
+  background: var(--fx-bg);
   font-size: 0.8rem;
+  text-align: left;
   cursor: pointer;
-  transition: background 0.12s, border-color 0.12s;
+  transition: background 0.12s, border-color 0.12s, opacity 0.12s;
 }
 
-.effect-row:hover {
-  background: rgba(255, 255, 255, 0.07);
+.fx-card.fx-debuff {
+  --fx: var(--danger);
+  --fx-bg: rgba(180, 40, 40, 0.16);
 }
 
-.effect-row.is-used {
-  border-left-color: var(--success);
+.fx-card:hover {
+  filter: brightness(1.15);
 }
 
-.effect-row.is-partial {
-  border-left-color: var(--warning);
+.fx-card.fx-off,
+.fx-card.fx-na {
+  --fx: rgba(255, 255, 255, 0.2);
+  --fx-bg: rgba(255, 255, 255, 0.02);
+  opacity: 0.6;
 }
 
-.effect-row.is-off {
-  border-left-color: rgba(200, 60, 60, 0.75);
-  background: rgba(180, 40, 40, 0.14);
-}
-
-.effect-row.is-off .effect-src,
-.effect-row.is-off .effect-value {
+.fx-card.fx-off .fx-name,
+.fx-card.fx-off .fx-value {
   text-decoration: line-through;
-  opacity: 0.75;
 }
 
-.effect-row.is-na {
-  opacity: 0.55;
+.fx-card.fx-na {
+  border-left-style: dashed;
   cursor: default;
 }
 
-.effect-row.is-na:hover {
-  background: rgba(255, 255, 255, 0.03);
+.fx-card.fx-na:hover {
+  filter: none;
 }
 
-.effect-head {
+.fx-head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.fx-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.fx-caster {
+  font-weight: 600;
+  color: var(--text-light);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fx-switch {
+  margin-left: auto;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--fx);
+  border: 1px solid var(--fx);
+  border-radius: 999px;
+  padding: 0 0.45rem;
+}
+
+.fx-effect {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   gap: 0.5rem;
 }
 
-.effect-src {
+.fx-name {
   font-weight: 600;
-  color: var(--text-light);
+  color: var(--fx);
 }
 
-.effect-origin {
-  font-weight: 400;
-  color: var(--muted);
-}
-
-.effect-value {
-  color: var(--info);
-  font-weight: 600;
+.fx-value {
+  font-weight: 700;
+  color: var(--fx);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-.effect-desc {
-  font-size: 0.75rem;
+.fx-desc {
+  font-size: 0.74rem;
   color: var(--muted);
   line-height: 1.35;
   white-space: pre-line;
 }
 
-.effect-foot {
+.fx-foot {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1738,17 +1924,12 @@ const saved = useSavedTeams({
   gap: 0.3rem 0.6rem;
 }
 
-.effect-status {
+.fx-target {
   font-size: 0.72rem;
-  font-weight: 600;
   color: var(--muted);
 }
 
-.effect-row.is-used .effect-status { color: var(--success); }
-.effect-row.is-partial .effect-status { color: var(--warning); }
-.effect-row.is-off .effect-status { color: var(--danger); }
-
-.effect-stacks {
+.fx-stacks {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
@@ -1756,7 +1937,7 @@ const saved = useSavedTeams({
   color: var(--muted);
 }
 
-.effect-stacks .num {
+.fx-stacks .num {
   width: 3.5em;
 }
 
@@ -1775,6 +1956,66 @@ const saved = useSavedTeams({
   text-align: center;
   font-size: 0.78rem;
   color: var(--muted);
+}
+
+.party-buff-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+  max-width: 100%;
+}
+
+.party-buff-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  padding-top: 0.3rem;
+}
+
+/* The pill toggle stretched over one column per party buff, with that buff's effects in the column below it. */
+.party-buff {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: calc(var(--count) * 190px);
+  max-width: calc(100vw - 7rem);
+}
+
+.party-buff :deep(.fight-mode-row),
+.party-buff :deep(.fight-mode-toggle) {
+  display: grid;
+  width: 100%;
+}
+
+.party-buff-effects {
+  display: grid;
+  grid-template-columns: repeat(var(--count), minmax(0, 1fr));
+  gap: 3px;
+  padding: 0 3px;
+}
+
+.party-buff-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-size: 0.74rem;
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+}
+
+.party-buff-col.active {
+  color: var(--text);
+  background: var(--accent-glow);
+  border-color: var(--border-strong);
+}
+
+.party-buff-charge {
+  font-size: 0.7rem;
+  opacity: 0.75;
 }
 
 .raid-panel {

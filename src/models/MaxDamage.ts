@@ -21,7 +21,7 @@ export interface MaxDmgEffect {
     key: string            // `${casterPos}:${detailId}` - stable id for exclude / stack overrides
     casterPos: number
     casterName: string
-    source: string         // "Ultimate" / "Battle Skill" / "Passive" / ...
+    source: string         // "Ultimate" / "Battle Skill" / "Basic Attack" / "Follow-up" / "Ability" / "Ascension" / "Crystalis" / "Portrait" / "Support"
     side: EffectSide
     detail: SkillDetail
     maxStacks: number      // 1 unless an ACCUM state
@@ -76,6 +76,20 @@ const isState = (d: SkillDetail) => UNIT_STATE_TYPES.has(d.abilityEffectType)
     && !["ADDITIONAL_SKILL_ACT", "SWITCH_SKILL", "CUTOUT", "STUN", "LOCK_TURN_ORDER", "COMBO", "CAN_NOT_ACTION"].includes(d.abilityEffectType)
     && !d.abilityEffectType.startsWith("BURN") && !d.abilityEffectType.startsWith("POISON") && !d.abilityEffectType.startsWith("CURSE") && !d.abilityEffectType.startsWith("BLEED")
 
+// Which part of a kit a passive effect comes from. PvPKioku merges them into one `effects` list, so this reads
+// the passive id back: crystalis are stored as full passive ids, the rest as id * 100 + level. UI grouping only.
+function passiveOrigin(k: PvPKioku, d: SkillDetail): string {
+    const id = (d as any).passiveSkillMstId as number
+    const kit = k as any
+    if (kit.crys?.includes(id)) return "Crystalis"
+    const base = Math.floor(id / 100)
+    if (base === k.data.ability_id) return "Ability"
+    for (let i = 1; i <= 5; i++) if (base === (k.data as any)[`ascension_${i}_effect_2_id`]) return "Ascension"
+    if (kit.portrait && base === kit.portrait.passiveSkill1) return "Portrait"
+    if (kit.support && base === kit.support.data.support_id) return "Support"
+    return "Passive"
+}
+
 // Every buff/debuff the team can produce.
 export function collectTeamEffects(allies: PvPKioku[], attackerPos: number): MaxDmgEffect[] {
     const out: MaxDmgEffect[] = []
@@ -102,7 +116,7 @@ export function collectTeamEffects(allies: PvPKioku[], attackerPos: number): Max
             }
         }
         for (const d of k.effects) {
-            add(pos, k.name, "Passive", d)
+            add(pos, k.name, passiveOrigin(k, d), d)
             if (d.abilityEffectType === "ADDITIONAL_SKILL_ACT") {
                 for (const fd of (skillDetailsByMstId.get(d.value1) ?? []) as SkillDetail[]) add(pos, k.name, "Follow-up", fd)
             }
