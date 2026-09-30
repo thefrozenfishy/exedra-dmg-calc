@@ -71,3 +71,7 @@
   subagents that hit a rate limit must be resumed (SendMessage), not restarted.
 - After a fix: probe the exact scenario the user reported, run fixtures, type-check, then commit. Report what
   changed in game terms, and what is still unverified in game.
+- Anything that puts states on units without going through PvPTeam's give path must apply
+  `scaleGivenState(detail, giverEffects)` itself (buff/debuff strength, UP/DWN_BUFF/DEBUFF_EFFECT_VALUE, is
+  applied at give time, not baked into the kit). MaxDamage.ts skipped it, so ascension-granted buff/debuff
+  strength (e.g. Flame Waltz A4 +50%) had no effect on Max Damage until 2026-09-30.
