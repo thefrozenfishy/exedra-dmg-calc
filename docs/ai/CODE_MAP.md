@@ -79,7 +79,7 @@ it looks redundant.
 | Route | Page | Engine use |
 |---|---|---|
 | `/pvp-simulator` "PvP Simulator" | `src/pages/PvpTeamPage.vue` | PvPBattle; RNG modes (`RngControls.vue`), export/import (`src/utils/pvpExport.ts`), `BattleTimeline.vue` |
-| `/pve-simulator` "PvE Simulator" (beta only: `isBeta()` in `src/utils/betaSettings.ts`, toggled on `/beta`) | `src/pages/PvESimulatorPage.vue` | createPvEBattle, stage picker (`StagePicker.vue`), Auto/Manual control, Solo Raid panel (stash) |
+| `/pve-simulator` "PvE Simulator" (beta only: `isBeta()` in `src/utils/betaSettings.ts`, toggled on `/beta`) | `src/pages/PvESimulatorPage.vue` | createPvEBattle, stage picker (`StagePicker.vue`), Auto/Manual control, Solo Raid panel (stash); saved/shared teams (`store/savedTeams.ts`, kind `pve`) carry the whole setup incl. decisions (`utils/pveSetup.ts`); Max Damage effect cards use `utils/effectText.ts` and `MaxDmgEffect.reach` |
 | `/sa-simulator-single` "Single Battle Calculator" | `SingleTeamPage.vue` | OLD ScoreAttackTeam formula (restored on user request, keep it) |
 | `/sa-simulator-multiple` "Best SA Team" | `BestTeamPage.vue` | OLD formula + workers |
 

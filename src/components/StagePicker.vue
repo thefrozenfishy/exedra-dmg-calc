@@ -23,7 +23,7 @@
               <button v-for="st in g.stages" :key="st.questStageMstId" type="button" class="node stage-node"
                 :class="{ active: st.questStageMstId === modelValue }" :title="`Stage ${st.questStageMstId}`"
                 @click="emit('update:modelValue', st.questStageMstId)">
-                {{ stageLabel(st) }}
+                {{ stageLabel(st.questStageMstId) }}
               </button>
             </div>
           </div>
@@ -37,8 +37,8 @@
 <script setup lang="ts">
 // Category -> quest group -> stage navigation over the quest masters (only stages with enemies).
 import { computed, reactive, ref, watch } from 'vue'
-import { buildStageTree, questStages, QUEST_CATEGORY_NAMES, type QuestStage } from '../models/PvE'
-import { getScoreAttackStage } from '../models/PvEScore'
+import { buildStageTree, questStages } from '../models/PvE'
+import { stageLabel, stagePath } from '../utils/pveSetup'
 import questGroupJson from '../assets/base_data/getQuestGroupMstList.json'
 
 const props = defineProps<{ modelValue?: number }>()
@@ -51,12 +51,6 @@ const open = reactive(new Set<string>())
 
 const isOpen = (k: string) => open.has(k) || query.value.trim().length >= 2
 const toggle = (k: string) => { if (open.has(k)) open.delete(k); else open.add(k) }
-
-// Score Attack stages are all called "Score Attack Rank N": show the difficulty instead.
-function stageLabel(st: QuestStage) {
-  const sa = getScoreAttackStage(st.questStageMstId)
-  return sa ? `Difficulty ${sa.difficulty}` : st.name
-}
 
 const filtered = computed(() => {
   const q = query.value.trim().toLowerCase()
@@ -72,12 +66,7 @@ const filtered = computed(() => {
 })
 
 const selected = computed(() => props.modelValue ? questStages.get(props.modelValue) : undefined)
-const path = computed(() => {
-  const s = selected.value
-  if (!s) return ''
-  const g = groups.get(s.questGroupMstId)
-  return [QUEST_CATEGORY_NAMES[g?.questCategoryMstId] ?? '', g?.name ?? '', stageLabel(s)].filter(Boolean).join(' › ')
-})
+const path = computed(() => props.modelValue ? stagePath(props.modelValue) : '')
 
 // Open the branch of the current stage.
 watch(() => props.modelValue, id => {

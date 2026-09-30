@@ -1,7 +1,10 @@
 import type { CrystalisSelection } from "./KiokuTypes"
 
-/** Which simulator a saved team belongs to. `single` holds one team, `pvp` holds [enemy team, allied team]. */
-export type SavedTeamKind = "single" | "pvp"
+/**
+ * Which simulator a saved team belongs to. `single` and `pve` hold one team, `pvp` holds [enemy team, allied team].
+ * `pve` teams also carry the simulator setup (stage, settings, decisions) in `extra`.
+ */
+export type SavedTeamKind = "single" | "pvp" | "pve"
 
 /** The per-team parts of a Character; everything else (name, element, role, ...) comes from the game data. */
 export interface SavedTeamMember {
@@ -27,6 +30,8 @@ export interface SavedTeam {
     name: string
     /** One array of 5 slots per team. */
     slots: SavedTeamSlot[][]
+    /** Page-specific setup saved with the team (PvE: stage, control, RNG, decisions...), already sanitized. */
+    extra?: unknown
     /** Anyone holding the link may view this team. Only takes effect once the team has synced to the cloud. */
     shared?: boolean
     createdAt: number

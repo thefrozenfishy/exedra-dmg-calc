@@ -5,7 +5,7 @@ import { portraits } from "./helpers"
 import { clampName } from "./tierList"
 
 export const SLOTS_PER_TEAM = 5
-export const TEAMS_PER_KIND: Record<SavedTeamKind, number> = { single: 1, pvp: 2 }
+export const TEAMS_PER_KIND: Record<SavedTeamKind, number> = { single: 1, pvp: 2, pve: 1 }
 
 const MAX_CRYS_OPTIONS = 20
 const MAX_SUB_CRYS = 20
@@ -114,10 +114,12 @@ const parseTime = (iso: string): number => {
 }
 
 export const teamData = (raw: unknown): unknown => asRecord(raw).slots
+/** The page-specific setup stored next to the slots (untrusted; the page sanitizes it). */
+export const teamExtra = (raw: unknown): unknown => asRecord(raw).extra
 
 /** Turns a cloud row into a local team. The local `updatedAt` mirrors the server's so it starts out "clean". */
-export function rowToTeam(row: SavedTeamRow, kind: SavedTeamKind): SavedTeam {
-    return {
+export function rowToTeam(row: SavedTeamRow, kind: SavedTeamKind, sanitizeExtra?: (raw: unknown) => unknown): SavedTeam {
+    const team: SavedTeam = {
         id: row.list_id,
         name: clampName(row.name),
         slots: sanitizeTeamSlots(teamData(row.data), kind),
@@ -125,4 +127,6 @@ export function rowToTeam(row: SavedTeamRow, kind: SavedTeamKind): SavedTeam {
         createdAt: parseTime(row.created_at),
         updatedAt: parseTime(row.updated_at),
     }
+    if (sanitizeExtra) team.extra = sanitizeExtra(teamExtra(row.data))
+    return team
 }

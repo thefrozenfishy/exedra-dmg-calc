@@ -2,107 +2,195 @@
   <div class="team-page">
     <h1 class="page-title">PvE Simulator</h1>
 
+    <SavedTeamsPanel :saved="saved" />
+
+    <section class="toolbar card share-card-actions">
+      <div class="toolbar-left">
+        <ImageActionsToolbar :target="() => shareCardRef!" filename="pve-simulator.png" :export-options="exportOpts"
+          :share-options="() => saved.shareOptions()" :disabled="!teamKiokus.length"
+          :share-handler="saved.generateShareUrl" share-label="Share team" />
+      </div>
+    </section>
+
+    <!-- What the image export / share preview shows (hidden on the page). -->
+    <div class="share-card-preview" ref="shareCardRef">
+      <div class="share-header">
+        <div class="share-stage">{{ stagePath(stageId) || 'No stage selected' }}</div>
+        <div class="share-sub">{{ runSummary }}</div>
+      </div>
+      <div class="share-card-grid">
+        <div v-for="(slot, index) in team.slots" :key="index" class="share-slot"
+          :class="{ 'share-slot-dealer': index === attackerIndex }">
+          <template v-if="slot.main">
+            <div v-if="index === attackerIndex" class="share-dealer-tag">Damage Dealer</div>
+            <div class="share-slot-top">
+              <div class="share-slot-kioku-image">
+                <img :src="kiokuImage(slot.main.id)" :alt="slot.main.name" />
+                <div class="share-overlay-badges">
+                  <span class="share-overlay-badge ascension">A{{ slot.main.ascension }}</span>
+                  <span class="share-overlay-badge heart">H{{ slot.main.heartphialLvl }}</span>
+                  <span class="share-overlay-badge magic">ML{{ slot.main.magicLvl }}</span>
+                  <span v-if="slot.main.rarity !== 3" class="share-overlay-badge special">SP{{ slot.main.specialLvl
+                    }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="share-slot-portrait-support">
+              <div v-if="slot.main.portrait" class="share-slot-portrait-block">
+                <img class="share-slot-portrait-icon" :src="portraitImage(slot.main.portrait)"
+                  :alt="slot.main.portrait" />
+                <div class="share-slot-label">{{ slot.main.portrait }}</div>
+              </div>
+              <div v-if="slot.support" class="share-slot-support-block">
+                <img class="share-slot-support-image" :src="kiokuImage(slot.support.id)" :alt="slot.support.name" />
+                <div class="share-slot-label">{{ slot.support.name }}</div>
+              </div>
+            </div>
+          </template>
+          <div v-else class="share-slot-empty">Empty</div>
+        </div>
+      </div>
+      <div class="share-enemies-grid">
+        <div v-for="(e, i) in enemyInfo" :key="e.id" class="share-enemy-slot">
+          <img class="share-enemy-img" :src="enemyImage(e.enemyMstId)" :alt="e.name" />
+          <div class="share-enemy-name">{{ e.name }}</div>
+          <div class="share-enemy-hp">HP {{ fmt(e.hp) }}<span v-if="e.gauges > 1"> ×{{ e.gauges }}</span></div>
+          <div class="share-enemy-toggles">
+            <span v-if="mainTargetIdx === i" class="share-chip">Target</span>
+            <span v-if="broken[i]" class="share-chip">Broken {{ breakRate[i] ?? e.maxRate }}%</span>
+          </div>
+        </div>
+      </div>
+      <div class="share-results">
+        <div v-if="dealer?.best" class="share-result">
+          <span class="share-result-label">Max damage · {{ dealer.name }} · {{ dealer.best.label }}</span>
+          <span class="share-result-value">{{ fmt(dealer.best.total.crit) }}</span>
+          <span class="share-result-sub">{{ fmt(dealer.best.total.avg) }} average</span>
+        </div>
+        <div v-if="battleResult || pending" class="share-result">
+          <span class="share-result-label">Battle simulator</span>
+          <span class="share-result-value" :class="pending ? 'waiting' : battleResult">{{ battleResultText }}</span>
+          <span class="share-result-sub">after {{ actionCount }} action{{ actionCount === 1 ? '' : 's' }}</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Stage + enemies -->
-    <section class="card">
+    <section class="card section-card">
       <h2 class="section-title">Stage</h2>
       <StagePicker v-model="stageId" />
 
-      <div v-if="waves.length" class="wave-tabs">
-        <span class="muted">Wave:</span>
-        <button v-for="(w, i) in waves" :key="i" type="button" class="chip-btn" :class="{ active: waveIdx === i }"
-          @click="waveIdx = i">{{ i + 1 }} <span class="muted">({{ w.length }})</span></button>
-        <span class="muted hint">Max damage uses the selected wave; the battle simulator plays every wave.</span>
+      <div v-if="waves.length" class="wave-row">
+        <span class="filters-heading">Wave</span>
+        <button v-for="(w, i) in waves" :key="i" type="button" class="chip" :class="{ active: waveIdx === i }"
+          @click="waveIdx = i">{{ i + 1 }} <span class="chip-count">{{ w.length }} enem{{ w.length === 1 ? 'y' : 'ies'
+            }}</span></button>
+        <span class="row-hint">Max Damage uses the selected wave; the battle simulator plays every wave.</span>
       </div>
 
       <div class="enemy-grid">
         <div v-for="(e, i) in enemyInfo" :key="e.id" class="enemy-card" :class="{ main: mainTargetIdx === i }">
-          <img class="enemy-img" :src="`/exedra-dmg-calc/enemy/${e.enemyMstId}_thumbnail.png`" :alt="e.name"
-            @error="hideImg" />
-          <div class="enemy-body">
-            <div class="enemy-name" :title="e.name">{{ e.name }}</div>
-            <div class="enemy-stats">
-              <span>HP {{ fmt(e.hp) }}<span v-if="e.gauges > 1" class="muted"> ×{{ e.gauges }}</span></span>
-              <span>ATK {{ fmt(e.atk) }}</span>
-              <span>DEF {{ fmt(e.def) }}</span>
-              <span>SPD {{ e.spd }}</span>
+          <div class="enemy-top">
+            <img class="enemy-img" :src="enemyImage(e.enemyMstId)" :alt="e.name" @error="hideImg" />
+            <div class="enemy-title">
+              <div class="enemy-name" :title="e.name">{{ e.name }}</div>
+              <div class="enemy-break">
+                <template v-if="e.breakPoint > 0">Break gauge {{ e.breakPoint }} · broken {{ e.initRate }}–{{ e.maxRate
+                  }}%</template>
+                <template v-else>Can't be broken</template>
+              </div>
             </div>
-            <div class="enemy-stats">
-              <span v-if="e.weak.length" class="weak">Weak
-                <img v-for="w in e.weak" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w" :title="w"
-                  class="elem-icon" />
-              </span>
-              <span v-for="r in e.resists" :key="r.el" class="resist" :title="`${r.el} resist`">
-                <img :src="`/exedra-dmg-calc/elements/${r.el}.png`" :alt="r.el" class="elem-icon" /> −{{ r.pct }}%
-              </span>
-            </div>
-            <div class="enemy-stats">
-              <span v-if="e.breakPoint > 0">Break {{ e.breakPoint }} · broken {{ e.initRate }}–{{ e.maxRate }}%</span>
-              <span v-else class="muted">Unbreakable</span>
-            </div>
-            <div class="enemy-controls">
-              <label title="Single-target skills hit this enemy">
-                <input type="radio" :checked="mainTargetIdx === i" @change="mainTargetIdx = i" /> Target
-              </label>
-              <label v-if="e.breakPoint > 0">
-                <input type="checkbox" :checked="!!broken[i]" @change="setBroken(i, ($event.target as HTMLInputElement).checked)" /> Broken
-              </label>
-              <label v-if="e.breakPoint > 0 && broken[i]" title="Broken damage rate (%)">
-                <input class="num" type="number" min="100" :max="e.maxRate" :value="breakRate[i] ?? e.maxRate"
-                  @change="setBreakRate(i, Number(($event.target as HTMLInputElement).value), e.maxRate)" />%
-              </label>
-            </div>
+          </div>
+          <div class="enemy-stat-grid">
+            <div class="enemy-stat"><span class="enemy-stat-label">HP</span>
+              <span class="enemy-stat-value">{{ fmt(e.hp) }}<span v-if="e.gauges > 1" class="muted"> ×{{ e.gauges
+                  }}</span></span></div>
+            <div class="enemy-stat"><span class="enemy-stat-label">ATK</span><span class="enemy-stat-value">{{
+              fmt(e.atk) }}</span></div>
+            <div class="enemy-stat"><span class="enemy-stat-label">DEF</span><span class="enemy-stat-value">{{
+              fmt(e.def) }}</span></div>
+            <div class="enemy-stat"><span class="enemy-stat-label">SPD</span><span class="enemy-stat-value">{{ e.spd
+                }}</span></div>
+          </div>
+          <div v-if="e.weak.length || e.resists.length" class="enemy-elements">
+            <span v-if="e.weak.length" class="weak" title="Weak to">Weak
+              <img v-for="w in e.weak" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w" :title="w"
+                class="elem-icon" />
+            </span>
+            <span v-for="r in e.resists" :key="r.el" class="resist" :title="`${r.el} resist`">
+              <img :src="`/exedra-dmg-calc/elements/${r.el}.png`" :alt="r.el" class="elem-icon" /> −{{ r.pct }}%
+            </span>
+          </div>
+          <div class="enemy-controls">
+            <label class="chip" :class="{ active: mainTargetIdx === i }"
+              title="Single-target skills hit this enemy in Max Damage">
+              <input type="radio" :checked="mainTargetIdx === i" @change="mainTargetIdx = i" /> Target
+            </label>
+            <label v-if="e.breakPoint > 0" class="chip" :class="{ active: !!broken[i] }"
+              title="Evaluate Max Damage against this enemy while it's broken">
+              <input type="checkbox" :checked="!!broken[i]"
+                @change="setBroken(i, ($event.target as HTMLInputElement).checked)" /> Broken
+            </label>
+            <label v-if="e.breakPoint > 0 && broken[i]" class="rate-field" title="Broken DMG rate (%)">
+              <input class="num" type="number" min="100" :max="e.maxRate" :value="breakRate[i] ?? e.maxRate"
+                @change="setBreakRate(i, Number(($event.target as HTMLInputElement).value), e.maxRate)" />%
+            </label>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Team -->
-    <h2 class="section-title">Team</h2>
+    <h2 class="section-title page-section-title">Team</h2>
     <div class="team-grid">
-      <div v-for="(slot, index) in team.slots" :key="index" class="team-slot">
+      <div v-for="(slot, index) in team.slots" :key="index" class="team-slot"
+        :class="{ dealer: attackerIndex === index }">
+        <button type="button" class="dealer-slot-btn" :class="{ active: attackerIndex === index }"
+          :title="attackerIndex === index ? 'This member is the damage dealer' : 'Make this member the damage dealer'"
+          @click="attackerIndex = index">
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+            <path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z" fill="currentColor" />
+          </svg>
+        </button>
         <h3 class="slot-title">
-          <button type="button" class="dealer-btn" :class="{ active: attackerIndex === index }"
-            :title="attackerIndex === index ? 'Damage dealer' : 'Make this the damage dealer'" @click="attackerIndex = index">
-            {{ attackerIndex === index ? '★ Damage Dealer' : `Member ${index + 1}` }}
-          </button>
+          {{ index === attackerIndex ? 'Damage Dealer' : `Member ${index < attackerIndex ? index + 1 : index}` }}
         </h3>
         <CharacterEditor :index="index" :slot="slot" :setMain="team.setMain" :setSupport="team.setSupport" />
       </div>
     </div>
 
     <!-- Max damage -->
-    <section class="card">
+    <section class="card section-card">
       <h2 class="section-title">Max Damage</h2>
-      <p class="hint-text">Every buff and debuff the team can produce is applied at full stacks with its conditions
-        assumed met, then each skill is run through the battle engine's damage formula against the selected wave.
-        Click an effect below to leave it out.</p>
+      <p class="hint-text">The best case against wave {{ waveIdx + 1 }}: every buff and debuff listed under "Buffs &amp;
+        Debuffs" below is active at the same time, at full stacks, with its conditions met. Each skill is then run
+        through the battle engine's damage formula.</p>
 
-      <p v-if="!teamKiokus.length" class="muted">Add team members to calculate damage.</p>
+      <p v-if="!teamKiokus.length" class="empty-hint">Add team members to calculate damage.</p>
       <template v-else-if="maxDmg">
-        <div v-if="dealer?.best" class="headline">
-          <div class="headline-main">
-            {{ dealer.name }} · {{ dealer.best.label }}:
-            <b>{{ fmt(dealer.best.total.crit) }}</b> <span class="muted">crit</span>
-          </div>
-          <div class="muted">
-            {{ fmt(dealer.best.total.normal) }} without crit · {{ fmt(dealer.best.total.avg) }} average at
-            {{ dealer.best.critChance.toFixed(1) }}% crit
-          </div>
+        <div v-if="dealer?.best" class="result-block">
+          <div class="result-label">{{ dealer.name }} · {{ dealer.best.label }}</div>
+          <div class="result-value">{{ fmt(dealer.best.total.crit) }} <span class="result-unit">if it crits</span></div>
+          <div class="result-sub">{{ fmt(dealer.best.total.normal) }} without a crit · {{ fmt(dealer.best.total.avg) }}
+            on average at {{ dealer.best.critChance.toFixed(1) }}% crit rate</div>
         </div>
 
-        <div class="sa-fields" v-if="isScoreAttack">
+        <template v-if="isScoreAttack">
           <div class="sa-score-row" :title="saScoreTitle">
-            <span class="muted">Score Attack score (estimate)</span> <b>{{ saScore }}</b>
+            <span class="sa-score-label">Score Attack score (estimate)</span>
+            <span class="sa-score-value">{{ saScore }}</span>
           </div>
-          <label class="field"><span class="field-label">Difficulty score</span>
-            <input v-model.number="difficultyScore" type="number" /></label>
-          <label class="field"><span class="field-label">HP remaining (%)</span>
-            <input v-model.number="hpPercentTeam" type="number" min="0" max="100" /></label>
-          <label class="field"><span class="field-label">Turns</span>
-            <input v-model.number="saTurns" type="number" min="1" max="16" /></label>
-          <label class="field"><span class="field-label">Score multiplier</span>
-            <input v-model.number="scoreMultiplier" type="number" step="0.1" min="0" /></label>
-        </div>
+          <div class="sa-fields">
+            <label class="field"><span class="field-label">Difficulty score</span>
+              <input v-model.number="difficultyScore" type="number" /></label>
+            <label class="field"><span class="field-label">HP remaining (%)</span>
+              <input v-model.number="hpPercentTeam" type="number" min="0" max="100" /></label>
+            <label class="field"><span class="field-label">Turns</span>
+              <input v-model.number="saTurns" type="number" min="1" max="16" /></label>
+            <label class="field"><span class="field-label">Score multiplier</span>
+              <input v-model.number="scoreMultiplier" type="number" step="0.1" min="0" /></label>
+          </div>
+        </template>
 
         <div class="table-wrap">
           <table class="dmg-table">
@@ -113,12 +201,21 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="m in maxDmg.members" :key="m.pos" :class="{ dealer: m.pos === attackerIndex }">
-                <td>{{ m.name }}</td>
+              <tr v-for="m in maxDmg.members" :key="m.pos" :class="{ dealer: m.pos === dealerPos }">
+                <td>
+                  <div class="member-cell">
+                    <img v-if="memberId(m.pos)" class="member-thumb" :src="kiokuImage(memberId(m.pos)!)"
+                      :alt="m.name" />
+                    <span>{{ m.name }}</span>
+                    <span v-if="m.pos === dealerPos" class="dealer-badge">Dealer</span>
+                  </div>
+                </td>
                 <td v-for="[type] in skillCols" :key="type">
                   <template v-if="skillOf(m, type)">
-                    <div :title="perEnemyTitle(skillOf(m, type)!)"><b>{{ fmt(skillOf(m, type)!.total.crit) }}</b></div>
-                    <div class="muted small">{{ fmt(skillOf(m, type)!.total.normal) }} · avg {{ fmt(skillOf(m, type)!.total.avg) }}</div>
+                    <div :title="perEnemyTitle(skillOf(m, type)!)" class="dmg-crit">{{ fmt(skillOf(m, type)!.total.crit)
+                      }}</div>
+                    <div class="dmg-sub">{{ fmt(skillOf(m, type)!.total.normal) }} · avg {{
+                      fmt(skillOf(m, type)!.total.avg) }}</div>
                   </template>
                   <span v-else class="muted">–</span>
                 </td>
@@ -126,81 +223,133 @@
             </tbody>
           </table>
         </div>
-        <p class="muted small">Totals over every enemy the skill hits: crit / no crit · average. Hover a value for the
-          per-enemy split.</p>
+        <p class="table-note">Big number: every hit crits. Below: no crits · average. Totals are summed over every
+          enemy the skill hits; hover a value for the per-enemy split.</p>
+      </template>
+    </section>
 
-        <details class="effects">
-          <summary>Effects applied ({{ activeEffectCount }} / {{ maxDmg.effects.length }})
-            <button v-if="excluded.size" type="button" class="link-btn" @click.prevent="excluded.clear()">include all</button>
-          </summary>
-          <div class="effect-cols">
-            <div v-for="side in (['ally', 'enemy'] as const)" :key="side">
-              <h4 class="subsection-title">{{ side === 'ally' ? 'Buffs on the attacker' : 'Debuffs on the enemies' }}</h4>
-              <div v-for="e in effectsBySide(side)" :key="e.key" class="effect-row"
-                :class="{ off: excluded.has(e.key), na: !e.applies }" @click="toggleEffect(e.key)"
-                :title="e.applies ? 'Click to include / exclude' : 'Self-only effect of another member (not applied)'">
-                <span class="effect-src">{{ e.casterName }} · {{ e.source }}</span>
-                <span class="effect-type">{{ e.detail.abilityEffectType }}</span>
-                <span class="effect-desc">{{ e.detail.description }}</span>
-                <label v-if="e.maxStacks > 1" class="stacks" @click.stop>
-                  <input class="num" type="number" min="0" :max="e.maxStacks" :value="stacks.get(e.key) ?? e.maxStacks"
-                    @change="setStacks(e.key, Number(($event.target as HTMLInputElement).value), e.maxStacks)" /> / {{ e.maxStacks }}
+    <!-- Buffs & debuffs used by Max Damage -->
+    <section v-if="maxDmg && maxDmg.effects.length" class="card section-card effects-card">
+      <h2 class="section-title">Buffs &amp; Debuffs</h2>
+      <p class="hint-text">Everything your team can give, and whether it counts toward {{ dealerName }}'s Max Damage.
+        Click a card to leave that effect out (or back in); lower its stacks to use fewer.</p>
+
+      <div class="effects-summary">
+        <span class="legend legend-used">{{ effectCounts.used }} counted</span>
+        <span v-if="effectCounts.partial" class="legend legend-partial">{{ effectCounts.partial }} on some
+          enemies</span>
+        <span v-if="effectCounts.off" class="legend legend-off">{{ effectCounts.off }} left out by you</span>
+        <span v-if="effectCounts.na" class="legend legend-na">{{ effectCounts.na }} can't reach {{ dealerName
+          }}</span>
+        <button v-if="excluded.size || stacks.size" type="button" class="link-btn" @click="resetEffects">Undo my
+          changes</button>
+        <label v-if="effectCounts.na" class="chip" :class="{ active: showUnreachable }">
+          <input type="checkbox" v-model="showUnreachable" /> Show the ones that can't reach
+        </label>
+      </div>
+
+      <div class="effect-cols">
+        <div v-for="col in effectColumns" :key="col.side" class="effect-col">
+          <h3 class="subsection-title">{{ col.title }}</h3>
+          <p class="col-hint">{{ col.hint }}</p>
+          <p v-if="!col.groups.length" class="empty-hint">None</p>
+          <div v-for="g in col.groups" :key="g.name" class="effect-group">
+            <div class="effect-group-label">{{ g.name }}</div>
+            <div v-for="e in g.effects" :key="e.key" class="effect-row" :class="`is-${e.status}`"
+              :title="e.status === 'na' ? e.statusText : `${e.type}\nClick to ${e.status === 'off' ? 'include' : 'leave out'}`"
+              @click="e.status !== 'na' && toggleEffect(e.key)">
+              <div class="effect-head">
+                <span class="effect-src">{{ e.casterName }} <span class="effect-origin">· {{ e.source }}</span></span>
+                <span v-if="e.value" class="effect-value">{{ e.value }}</span>
+              </div>
+              <div v-if="e.description" class="effect-desc">{{ e.description }}</div>
+              <div class="effect-foot">
+                <span class="effect-status">{{ e.statusText }}</span>
+                <label v-if="e.maxStacks > 1 && e.status !== 'na'" class="effect-stacks" @click.stop>
+                  Stacks <input class="num" type="number" min="0" :max="e.maxStacks" :value="e.stacks"
+                    @change="setStacks(e.key, Number(($event.target as HTMLInputElement).value), e.maxStacks)" /> / {{
+                  e.maxStacks }}
                 </label>
               </div>
             </div>
           </div>
-        </details>
-      </template>
+        </div>
+      </div>
     </section>
 
     <!-- Battle simulator -->
-    <section class="card">
+    <section class="card section-card battle-card">
       <h2 class="section-title">Battle Simulator</h2>
       <p class="hint-text">Plays the stage with the battle engine: enemy skills follow their skill rotation and
         conditions, enemies pick targets by role aggro, and later waves appear when a wave is cleared. Summons, boss
         form changes and Solo Raid linked HP / endless minions / countdowns are simulated.</p>
+
       <div class="sim-controls">
         <SegmentedToggle v-model="targetMode" :options="TARGET_MODE_OPTIONS" label="Control" />
         <p class="sim-hint">{{ TARGET_MODE_OPTIONS.find(o => o.value === targetMode)?.title }}</p>
         <RngControls v-model:mode="rngMode" :seed="seed" :changed="changedRolls" :disabled="!canRun"
           @update:seed="setSeed" @reset="resetRolls" />
       </div>
+
       <div v-if="raid" class="raid-panel">
-        <div class="raid-head">Solo Raid · difficulty {{ raid.difficulty }} · {{ raid.limitRoundCount }}-round limit · attempt {{ raidAttempts.length + 1 }}</div>
+        <div class="raid-head">
+          <span class="filters-heading">Solo Raid</span>
+          <span>Difficulty {{ raid.difficulty }} · {{ raid.limitRoundCount }}-round limit · attempt {{
+            raidAttempts.length + 1 }}</span>
+        </div>
         <div class="raid-row">
-          <span class="field-label">Party buff</span>
-          <button v-for="p in raid.partyBuffs" :key="p.soloRaidPartyBuffMstId" type="button" class="chip-btn"
+          <span class="filters-heading">Party buff</span>
+          <button v-for="p in raid.partyBuffs" :key="p.soloRaidPartyBuffMstId" type="button" class="chip"
             :class="{ active: (partyBuffId || raid.partyBuffs[0]?.soloRaidPartyBuffMstId) === p.soloRaidPartyBuffMstId }"
-            :title="passiveInfo(p.passiveSkillMstId).description" @click="partyBuffId = p.soloRaidPartyBuffMstId">{{ passiveInfo(p.passiveSkillMstId).name }}</button>
-          <label class="field inline check"><input v-model="noRoundLimit" type="checkbox" /> ignore round limit</label>
+            :title="passiveInfo(p.passiveSkillMstId).description" @click="partyBuffId = p.soloRaidPartyBuffMstId">{{
+              passiveInfo(p.passiveSkillMstId).name }}</button>
+          <label class="chip" :class="{ active: noRoundLimit }">
+            <input v-model="noRoundLimit" type="checkbox" /> Ignore round limit
+          </label>
         </div>
         <div class="raid-row">
           <button class="btn" :disabled="!battle || !battle.isOver" @click="nextAttempt"
-            title="Start the next attempt from where this one ended: enemy HP, break gauges, turn gauges, the linked HP pool, the countdown and Vanguard points carry over (buffs and debuffs do not; the round count restarts)">Next attempt (carry over)</button>
+            title="Start the next attempt from where this one ended: enemy HP, break gauges, turn gauges, the linked HP pool, the countdown and Vanguard points carry over (buffs and debuffs do not; the round count restarts)">Next
+            attempt (carry over)</button>
           <button class="btn" :disabled="!raidAttempts.length" @click="resetAttempts">Back to attempt 1</button>
-          <span v-if="raidAttempts.length" class="muted small">{{ raidAttempts.length }} earlier attempt{{ raidAttempts.length === 1 ? '' : 's' }} · linked HP / boss HP at the start of this one: {{ fmt(raidAttempts[raidAttempts.length - 1].linkHp) }}</span>
+          <span v-if="raidAttempts.length" class="row-hint">{{ raidAttempts.length }} earlier attempt{{
+            raidAttempts.length === 1 ? '' : 's' }} · linked HP / boss HP at the start of this one: {{
+              fmt(raidAttempts[raidAttempts.length - 1].linkHp) }}</span>
         </div>
       </div>
+
+      <button class="btn btn-accent run-sim-btn" @click="runSimulation" :disabled="!canRun">Run Simulation</button>
+
       <div class="sim-tools">
-        <button class="btn btn-accent" @click="runSimulation" :disabled="!canRun">Run Simulation</button>
-        <button v-if="pickCount" class="btn" @click="resetPicks" :disabled="!canRun"
-          title="Forget every decision you made and start the battle over">Reset {{ pickCount }} decision{{ pickCount === 1 ? '' : 's' }}</button>
         <label class="field inline"><span class="field-label">Turns</span>
           <input v-model.number="simTurns" type="number" min="1" max="200" /></label>
+        <button v-if="pickCount" class="btn" @click="resetPicks" :disabled="!canRun"
+          title="Forget every decision you made and start the battle over">Reset {{ pickCount }} decision{{ pickCount ===
+            1 ? '' : 's' }}</button>
         <button class="btn" @click="exportBattle" :disabled="!canRun"
-          title="Save the stage, team, control and RNG settings, every decision and the simulated sequence to a file">Export to file</button>
+          title="Save the stage, team, control and RNG settings, every decision and the simulated sequence to a file">Export
+          to file</button>
         <button class="btn" @click="importInput?.click()"
-          title="Load stage, team, settings and decisions from an exported file and re-run the simulation">Import file</button>
-        <input ref="importInput" type="file" accept=".json,application/json" class="hidden-file" @change="importBattle" />
-        <span v-if="pending" class="result waiting">Waiting for your decision</span>
-        <span v-else-if="battleResult" class="result" :class="battleResult">{{ battleResult === 'win' ? 'Cleared' : battle?.finishedByRoundLimit ? 'Round limit reached' : 'Defeated' }}</span>
-        <span v-if="!pending && battleResult && raid && battle" class="muted small"
-          title="Approximation: 20 points per AV of elapsed time (the game computes the real score on the server)">{{ battle.teamPointsUsed.toLocaleString() }} team points used ({{ Math.round(battle.elapsed) }} AV)</span>
+          title="Load stage, team, settings and decisions from an exported file and re-run the simulation">Import
+          file</button>
+        <input ref="importInput" type="file" accept=".json,application/json" class="hidden-file"
+          @change="importBattle" />
       </div>
-      <BattleTimeline :states="battleOutput" :show-sp="false" :rng-editable="rngMode === 'manual'" @decide="onDecide" />
+
+      <div v-if="pending || battleResult" class="sim-status">
+        <span class="result-pill" :class="pending ? 'waiting' : battleResult">{{ battleResultText }}</span>
+        <span v-if="!pending && battleResult && raid && battle" class="row-hint"
+          title="Approximation: 20 points per AV of elapsed time (the game computes the real score on the server)">{{
+            battle.teamPointsUsed.toLocaleString() }} team points used ({{ Math.round(battle.elapsed) }} AV)</span>
+      </div>
+
+      <BattleTimeline :states="battleOutput" :show-sp="false" :rng-editable="rngMode === 'manual'"
+        @decide="onDecide" />
       <div v-if="pending" ref="pickPanel" class="pick-panel">
-        <div class="pick-head">{{ pending.kind === 'target' ? 'Pick a target' : pending.label.startsWith('Between') ? 'Fire an ultimate?' : 'Choose an action' }}
-          <span class="muted">· after action {{ actionCount }}</span></div>
+        <div class="pick-head">{{ pending.kind === 'target' ? 'Pick a target' : pending.label.startsWith('Between') ?
+          'Fire an ultimate?' : 'Choose an action' }}
+          <span class="muted">· after action {{ actionCount }}</span>
+        </div>
         <div class="pick-label">{{ pending.label }}</div>
         <div class="pick-options">
           <button v-for="(o, i) in pending.options" :key="i" type="button" class="btn pick-btn" @click="pickTarget(i)">
@@ -209,7 +358,7 @@
           </button>
         </div>
         <p class="muted small">Every decision can be changed later from that action's roll list; the battle then re-runs
-          from the start.</p>
+          from the start. Decisions are saved with the team when a saved team is selected above.</p>
       </div>
     </section>
   </div>
@@ -224,6 +373,9 @@ import StagePicker from '../components/StagePicker.vue'
 import BattleTimeline from '../components/BattleTimeline.vue'
 import SegmentedToggle from '../components/SegmentedToggle.vue'
 import RngControls from '../components/RngControls.vue'
+import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
+import SavedTeamsPanel from '../components/SavedTeamsPanel.vue'
+import { useSavedTeams } from '../store/savedTeams'
 import { PendingDecision, type RngDecision, type RngEvent, type RngMode } from '../models/BattleRng'
 import { toast } from 'vue3-toastify'
 import { TargetType, type BattleSnapshot } from '../types/KiokuTypes'
@@ -233,8 +385,11 @@ import { createPvEBattle, stageBattleType } from '../models/PvEBattle'
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
 import type { RaidCarry } from '../models/PvPBattle'
 import { getScoreAttackStage } from '../models/PvEScore'
-import { computeMaxDamage, type MaxDmgResult, type MemberDamage, type SkillDamage, type EffectSide } from '../models/MaxDamage'
+import { computeMaxDamage, type MaxDmgEffect, type MaxDmgResult, type MemberDamage, type SkillDamage, type EffectSide } from '../models/MaxDamage'
 import { buildSlotKioku, buildPvEExport, parsePvEExport, downloadText } from '../utils/pvpExport'
+import { describePvESetup, sanitizePvESetup, stagePath, type PvESetup } from '../utils/pveSetup'
+import { effectDescription, effectName, effectRestriction, effectValue } from '../utils/effectText'
+import { portraits } from '../utils/helpers'
 import type { PvPBattle } from '../models/PvPBattle'
 import type { PvPKioku } from '../models/PvPKioku'
 
@@ -249,6 +404,9 @@ const simTurns = useSetting('pveSimTurns', 40)
 
 const fmt = (n: number) => Math.round(n).toLocaleString()
 const hideImg = (ev: Event) => { (ev.target as HTMLImageElement).style.visibility = 'hidden' }
+const kiokuImage = (id: number) => `/exedra-dmg-calc/kioku_images/${id}_thumbnail.png`
+const enemyImage = (enemyMstId: number) => `/exedra-dmg-calc/enemy/${enemyMstId}_thumbnail.png`
+const portraitImage = (portrait: string) => portraits[portrait] ? `/exedra-dmg-calc/portrait_images/${portraits[portrait].resourceName}_thumbnail.png` : ''
 
 // ---- stage / enemies ----
 const waveIdx = ref(0)
@@ -297,6 +455,7 @@ const teamKiokus = computed<PvPKioku[]>(() => {
   }
 })
 const dealerPos = computed(() => Math.max(0, filledSlots.value.findIndex(([, i]) => i === attackerIndex.value)))
+const memberId = (pos: number) => filledSlots.value[pos]?.[0].main?.id
 
 // ---- max damage ----
 const excluded = reactive(new Set<string>())
@@ -306,6 +465,7 @@ const setStacks = (k: string, v: number, max: number) => {
   const n = Math.max(0, Math.min(max, Number.isFinite(v) ? v : max))
   if (n === max) stacks.delete(k); else stacks.set(k, n)
 }
+const resetEffects = () => { excluded.clear(); stacks.clear() }
 
 const maxDmg = computed<MaxDmgResult | undefined>(() => {
   if (!teamKiokus.value.length || !wave.value.length) return undefined
@@ -321,11 +481,71 @@ const maxDmg = computed<MaxDmgResult | undefined>(() => {
   }
 })
 const dealer = computed(() => maxDmg.value?.members[dealerPos.value])
+const dealerName = computed(() => dealer.value?.name ?? 'the damage dealer')
 const skillCols: [TargetType, string][] = [[TargetType.specialId, 'Ultimate'], [TargetType.skillId, 'Battle Skill'], [TargetType.attackId, 'Basic Attack']]
 const skillOf = (m: MemberDamage, t: TargetType) => m.skills.find(s => s.type === t)
 const perEnemyTitle = (s: SkillDamage) => s.perEnemy.map((x, i) => x.crit ? `${enemyInfo.value[i]?.name}: ${fmt(x.crit)} crit / ${fmt(x.normal)} / avg ${fmt(x.avg)}` : '').filter(Boolean).join('\n')
-const effectsBySide = (side: EffectSide) => (maxDmg.value?.effects ?? []).filter(e => e.side === side)
-const activeEffectCount = computed(() => (maxDmg.value?.effects ?? []).filter(e => e.applies && !excluded.has(e.key)).length)
+
+// ---- buffs & debuffs: what each effect does and whether it counts ----
+type EffectStatus = 'used' | 'partial' | 'off' | 'na'
+const STATUS_ORDER: Record<EffectStatus, number> = { used: 0, partial: 1, off: 2, na: 3 }
+const showUnreachable = useSetting('pveShowUnreachableEffects', false)
+
+function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: string } {
+  const restriction = effectRestriction(e.detail)
+  const enemyCount = maxDmg.value?.enemies.length ?? 0
+  if (!e.applies) {
+    return e.side === 'ally'
+      ? { status: 'na', statusText: `Only affects ${e.casterName} itself` }
+      : { status: 'na', statusText: `A drawback on ${e.casterName} itself, not on enemies` }
+  }
+  if (excluded.has(e.key)) return { status: 'off', statusText: 'Left out: click to include' }
+  if (!e.reach) return { status: 'off', statusText: 'Set to 0 stacks' }
+  if (e.side === 'ally') {
+    return e.reach.dealer
+      ? { status: 'used', statusText: `Counts for ${dealerName.value}` }
+      : { status: 'na', statusText: `Only for ${restriction || 'other'} allies: ${dealerName.value} isn't one` }
+  }
+  const hit = e.reach.enemies.length
+  if (!hit) return { status: 'na', statusText: `No enemy in this wave can receive it${restriction ? ` (only ${restriction})` : ''}` }
+  return hit < enemyCount
+    ? { status: 'partial', statusText: `On ${hit} of ${enemyCount} enemies${restriction ? ` (only ${restriction})` : ''}` }
+    : { status: 'used', statusText: enemyCount === 1 ? 'On the enemy' : `On all ${enemyCount} enemies` }
+}
+
+const effectViews = computed(() => (maxDmg.value?.effects ?? []).map(e => {
+  const count = Math.max(0, Math.min(e.maxStacks, stacks.get(e.key) ?? e.maxStacks))
+  return {
+    key: e.key, side: e.side, type: e.detail.abilityEffectType, name: effectName(e.detail.abilityEffectType),
+    casterName: e.casterName, source: e.source, maxStacks: e.maxStacks, stacks: count,
+    value: effectValue(e.detail, e.maxStacks > 1 ? count : 1), description: effectDescription(e.detail),
+    ...effectStatus(e),
+  }
+}))
+
+const effectCounts = computed(() => {
+  const counts: Record<EffectStatus, number> = { used: 0, partial: 0, off: 0, na: 0 }
+  for (const e of effectViews.value) counts[e.status]++
+  return counts
+})
+
+const effectColumns = computed(() => ([
+  { side: 'ally', title: `Buffs on ${dealerName.value}`, hint: 'Buffs from every member, including passives, crystalis, portraits and supports.' },
+  { side: 'enemy', title: 'Debuffs on the enemies', hint: `Debuffs your team can put on wave ${waveIdx.value + 1}.` },
+] as { side: EffectSide, title: string, hint: string }[]).map(col => {
+  const groups = new Map<string, typeof effectViews.value>()
+  for (const e of effectViews.value) {
+    if (e.side !== col.side || (e.status === 'na' && !showUnreachable.value)) continue
+    groups.set(e.name, [...(groups.get(e.name) ?? []), e])
+  }
+  return {
+    ...col,
+    groups: [...groups].map(([name, effects]) => ({
+      name,
+      effects: effects.sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.casterName.localeCompare(b.casterName)),
+    })).sort((a, b) => STATUS_ORDER[a.effects[0].status] - STATUS_ORDER[b.effects[0].status] || a.name.localeCompare(b.name)),
+  }
+}))
 
 // Score Attack score, same estimate as the previous version of this page.
 const isScoreAttack = computed(() => !!getScoreAttackStage(stageId.value))
@@ -356,6 +576,9 @@ const pickPanel = ref<HTMLElement | null>(null)
 const changedRolls = computed(() => [...decisions.value.values()].filter(d => !d.pick).length)
 const pickCount = computed(() => [...decisions.value.values()].filter(d => d.pick).length)
 const actionCount = computed(() => battleOutput.value.slice(1).filter(s => !s.wave).length)
+const battleResultText = computed(() => pending.value ? 'Waiting for your decision'
+  : battleResult.value === 'win' ? 'Cleared'
+    : battleResult.value === 'lose' ? (battle.value?.finishedByRoundLimit ? 'Round limit reached' : 'Defeated') : '')
 
 // ---- Solo Raid: party buff, round limit, attempts carrying over (PvEBattle / PvPBattle.raidCarry) ----
 const raid = computed(() => stageId.value ? soloRaidInfo(stageId.value) : undefined)
@@ -503,6 +726,7 @@ async function importBattle(ev: Event) {
   try {
     const data = parsePvEExport(await file.text())
     if (!stageWaves(data.stageId).length) throw new Error(`stage ${data.stageId} is not in this build's data`)
+    saved.detach() // an imported file is a new setup, not an edit of the selected saved team
     stageId.value = data.stageId
     team.importSlots(data.slots)
     await nextTick() // lets the team/stage watcher reset its state first
@@ -532,9 +756,92 @@ function hpOf(label: string): string {
   const u = (m[1] === 'Ally' ? last.allies : last.enemies).team[Number(m[2]) - 1]
   return u ? `HP ${fmt(u.hp)} / ${fmt(u.maxHp)}` : ''
 }
+
+// ---- saved teams: the team plus this page's whole setup (utils/pveSetup.ts) ----
+function currentSetup(): PvESetup {
+  return {
+    stageId: stageId.value,
+    wave: waveIdx.value,
+    target: mainTargetIdx.value,
+    broken: [...broken.value],
+    breakRate: breakRate.value.map(r => r ?? null),
+    dealer: attackerIndex.value,
+    excluded: [...excluded],
+    stacks: Object.fromEntries(stacks),
+    control: targetMode.value,
+    rngMode: rngMode.value,
+    seed: seed.value,
+    turns: simTurns.value,
+    decisions: [...decisions.value],
+    ran: hasRun(),
+    raid: raid.value ? { partyBuffId: partyBuffId.value, noRoundLimit: noRoundLimit.value, attempts: raidAttempts.value } : null,
+  }
+}
+
+// Called right after the team's slots were loaded. Staged like importBattle: the stage and team watchers
+// reset the wave, target, decisions and attempts first, then the saved values go in.
+async function applySetup(raw: unknown) {
+  if (!raw) return
+  const s = sanitizePvESetup(raw)
+  if (!stageWaves(s.stageId).length) {
+    toast.warning(`This team's stage (${s.stageId}) isn't in this version's data, so only the team was loaded.`)
+    return
+  }
+  stageId.value = s.stageId
+  attackerIndex.value = s.dealer
+  await nextTick()
+  waveIdx.value = Math.min(s.wave, Math.max(0, waves.value.length - 1))
+  await nextTick()
+  if (s.target < wave.value.length) mainTargetIdx.value = s.target
+  if (s.broken.length === wave.value.length) broken.value = [...s.broken]
+  if (s.breakRate.length === wave.value.length) breakRate.value = s.breakRate.map(r => r ?? undefined)
+  resetEffects()
+  s.excluded.forEach(k => excluded.add(k))
+  Object.entries(s.stacks).forEach(([k, v]) => stacks.set(k, v))
+  seed.value = s.seed
+  simTurns.value = s.turns
+  rngMode.value = s.rngMode
+  targetMode.value = s.control
+  if (s.raid) {
+    partyBuffId.value = s.raid.partyBuffId
+    noRoundLimit.value = s.raid.noRoundLimit
+    raidAttempts.value = s.raid.attempts
+  }
+  decisions.value = new Map(s.decisions)
+  await nextTick() // the mode / raid watchers re-run first
+  if (s.ran || s.decisions.length) runSimulation(); else buildBattle()
+}
+
+const shareCardRef = ref<HTMLElement | null>(null)
+const exportOpts = { exportClass: 'exporting' }
+
+const runSummary = computed(() => [
+  targetMode.value === 'manual' ? 'Manual control' : 'Auto control',
+  rngMode.value === 'seed' ? `seed ${seed.value}` : `${rngMode.value} RNG`,
+  pickCount.value ? `${pickCount.value} decision${pickCount.value === 1 ? '' : 's'}` : '',
+  changedRolls.value ? `${changedRolls.value} changed roll${changedRolls.value === 1 ? '' : 's'}` : '',
+].filter(Boolean).join(' · '))
+
+const saved = useSavedTeams({
+  kind: 'pve',
+  routePath: '/pve-simulator',
+  label: 'PvE Team',
+  getSlots: () => [team.slots],
+  applySlots: slots => team.importSlots(slots[0]),
+  shareTarget: () => shareCardRef.value!,
+  exportOptions: exportOpts,
+  extra: {
+    get: currentSetup,
+    sanitize: sanitizePvESetup,
+    apply: applySetup,
+    describe: describePvESetup,
+  },
+  saveHint: 'The team, stage, settings and every decision are saved to this team automatically.',
+})
 </script>
 
 <style scoped>
+/* ── Page (same look as the Single Battle Calculator and PvP Simulator) ── */
 .team-page {
   max-width: 1200px;
   margin: 0 auto;
@@ -546,7 +853,7 @@ function hpOf(label: string): string {
 
 .page-title {
   font-size: 2rem;
-  margin: 0 0 0.5rem;
+  margin: 0 0 0.25rem;
   color: var(--text);
   text-align: center;
 }
@@ -561,235 +868,109 @@ function hpOf(label: string): string {
 .section-title {
   font-size: 1.2rem;
   color: var(--accent-soft);
-  margin: 0.5rem 0 0.75rem;
+  margin: 0 0 0.75rem;
   text-align: center;
+}
+
+.page-section-title {
+  margin: 0.5rem 0 0;
 }
 
 .subsection-title {
-  margin: 0.5rem 0;
-  color: var(--accent-soft);
   font-size: 0.95rem;
-}
-
-.muted { color: var(--muted); }
-.small { font-size: 0.8rem; }
-.hint-text { color: var(--muted); font-size: 0.9rem; margin: 0 0 0.75rem; }
-
-.wave-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-  margin: 0.75rem 0 0;
-}
-
-.wave-tabs .hint { font-size: 0.8rem; margin-left: 0.5rem; }
-
-.chip-btn {
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text);
-  padding: 0.15rem 0.7rem;
-  font: inherit;
-  cursor: pointer;
-}
-
-.chip-btn.active {
-  border-color: var(--accent-soft);
   color: var(--accent-soft);
+  margin: 0 0 0.25rem;
 }
 
-.enemy-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
-  gap: 0.75rem;
-  margin-top: 0.75rem;
-}
-
-.enemy-card {
-  display: flex;
-  gap: 0.6rem;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.6rem;
-  min-width: 0;
-}
-
-.enemy-card.main { border-color: var(--accent-soft); }
-
-.enemy-img {
-  width: 56px;
-  height: 56px;
-  border-radius: 8px;
+.filters-heading {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
   flex-shrink: 0;
-  background: rgba(0, 0, 0, 0.25);
+  opacity: 0.8;
 }
 
-.enemy-body { min-width: 0; display: flex; flex-direction: column; gap: 0.2rem; }
-.enemy-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-.enemy-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.2rem 0.6rem;
-  font-size: 0.82rem;
-  font-variant-numeric: tabular-nums;
+.hint-text {
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+  max-width: 820px;
+  margin: 0 auto 1rem;
 }
 
-.elem-icon { width: 16px; height: 16px; vertical-align: -3px; }
-.resist { color: var(--muted); }
+.row-hint,
+.col-hint,
+.table-note {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
 
-.enemy-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.2rem 0.8rem;
-  font-size: 0.82rem;
-  margin-top: 0.15rem;
+.col-hint {
+  margin: 0 0 0.6rem;
+}
+
+.table-note {
+  text-align: center;
+  margin: 0.6rem 0 0;
+}
+
+.empty-hint {
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 0.8rem;
+}
+
+/* Toggle chips, as on Kioku Setup */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--muted);
+  background: transparent;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  user-select: none;
+}
+
+.chip input {
+  display: none;
+}
+
+.chip.active {
+  background: var(--accent-glow);
+  border-color: var(--border-strong);
+  color: var(--accent);
+}
+
+.chip-count {
+  opacity: 0.7;
+  font-size: 0.72rem;
 }
 
 .num {
-  width: 4.2em;
-  padding: 0.1rem 0.25rem;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text);
-  font: inherit;
-}
-
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 0.75rem;
-}
-
-.team-slot {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 0.5rem;
-  min-width: 0;
-}
-
-.slot-title { text-align: center; margin: 0.25rem 0 0.5rem; }
-
-.dealer-btn {
-  background: none;
-  border: 1px dashed var(--border);
-  border-radius: 999px;
-  color: var(--muted);
-  font: inherit;
-  font-size: 0.9rem;
-  padding: 0.15rem 0.8rem;
-  cursor: pointer;
-}
-
-.dealer-btn.active {
-  border-style: solid;
-  border-color: var(--accent-soft);
-  color: var(--accent-soft);
-  font-weight: 600;
-}
-
-.headline {
-  text-align: center;
-  margin: 0.5rem 0 1rem;
-}
-
-.headline-main { font-size: 1.25rem; }
-
-.sa-fields {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: end;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.sa-score-row { width: 100%; text-align: center; }
-
-.field { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.82rem; }
-.field.inline { flex-direction: row; align-items: center; gap: 0.4rem; }
-.field input {
-  width: 8rem;
-  padding: 0.3rem 0.5rem;
+  width: 4.5em;
+  padding: 0.15rem 0.3rem;
   border-radius: 8px;
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.05);
   color: var(--text);
   font: inherit;
-}
-.field.inline input { width: 4.5rem; }
-.field-label { color: var(--muted); }
-
-.table-wrap { overflow-x: auto; }
-
-.dmg-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-variant-numeric: tabular-nums;
-}
-
-.dmg-table th, .dmg-table td {
-  padding: 0.4rem 0.6rem;
-  border-bottom: 1px solid var(--border);
-  text-align: right;
-  white-space: nowrap;
-}
-
-.dmg-table th:first-child, .dmg-table td:first-child { text-align: left; }
-.dmg-table th { color: var(--muted); font-weight: 500; }
-.dmg-table tr.dealer td { background: rgba(255, 255, 255, 0.05); }
-
-.effects { margin-top: 1rem; }
-.effects summary { cursor: pointer; color: var(--accent-soft); }
-
-.link-btn {
-  background: none;
-  border: none;
-  color: var(--muted);
-  text-decoration: underline;
-  cursor: pointer;
-  font: inherit;
-  margin-left: 0.5rem;
-}
-
-.effect-cols {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-  gap: 1rem;
-}
-
-.effect-row {
-  text-align: left;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.1rem 0.5rem;
-  padding: 0.35rem 0.5rem;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  margin-bottom: 0.35rem;
-  cursor: pointer;
-  font-size: 0.85rem;
-}
-
-.effect-row:hover { background: rgba(255, 255, 255, 0.04); }
-.effect-row.off { opacity: 0.45; text-decoration: line-through; }
-.effect-row.na { opacity: 0.35; cursor: default; }
-.effect-src { color: var(--muted); }
-.effect-cols .subsection-title { text-align: left; }
-.effect-type { font-family: monospace; font-size: 0.78rem; color: var(--accent-soft); text-align: right; }
-.effect-desc { grid-column: 1 / -1; }
-.stacks { grid-column: 1 / -1; color: var(--muted); }
-
-.sim-tools {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 1rem;
+  font-size: 0.8rem;
 }
 
 .btn {
@@ -802,24 +983,790 @@ function hpOf(label: string): string {
   background: rgba(255, 255, 255, 0.08);
   color: var(--text);
   cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.btn-accent { background: var(--accent); color: #fff; }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-accent {
+  background: var(--accent-glow);
+  border: 1px solid var(--border-strong);
+  color: var(--accent);
+}
 
-.result { font-weight: 600; }
-.result.win { color: var(--success); }
-.result.lose { color: var(--danger); }
-.result.waiting { color: var(--accent); }
+.btn-accent:hover:not(:disabled) {
+  background: var(--accent-glow-strong);
+  border-color: var(--accent);
+}
 
-.hidden-file { display: none; }
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
 
+.link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent-soft);
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.field.inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.field-label {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.field input {
+  width: 8rem;
+}
+
+.field.inline input {
+  width: 4.5rem;
+}
+
+.hidden-file {
+  display: none;
+}
+
+/* ── Toolbar + share image ── */
+.toolbar {
+  display: flex;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.share-card-actions {
+  justify-content: center;
+}
+
+.exporting {
+  display: block !important;
+  width: 1200px !important;
+}
+
+.share-card-preview {
+  display: none;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 1rem;
+  background: rgba(18, 13, 25, 0.95);
+  color: var(--text);
+}
+
+.share-header {
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.share-stage {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent-soft);
+}
+
+.share-sub {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.share-card-grid,
+.share-enemies-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.share-enemies-grid {
+  margin-top: 0.75rem;
+}
+
+.share-slot,
+.share-enemy-slot {
+  position: relative;
+  background: rgba(15, 11, 21, 0.95);
+  border: 1px solid rgba(255, 209, 110, 0.15);
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.share-slot-dealer {
+  border-color: rgba(255, 209, 110, 0.6);
+}
+
+.share-dealer-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+
+.share-slot-kioku-image {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: radial-gradient(circle at top, rgba(255, 207, 109, 0.14), rgba(14, 10, 21, 1));
+}
+
+.share-slot-kioku-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.share-overlay-badges {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.share-overlay-badge {
+  position: absolute;
+  min-width: 32px;
+  height: 32px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  background: rgba(15, 12, 20, 0.88);
+  color: var(--text);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.share-overlay-badge.ascension { left: 80%; top: 0; }
+.share-overlay-badge.heart { left: 20%; top: 0; }
+.share-overlay-badge.magic { left: 20%; bottom: 0; }
+.share-overlay-badge.special { left: 80%; bottom: 0; }
+
+.share-slot-portrait-support {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.share-slot-portrait-block,
+.share-slot-support-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.share-slot-portrait-icon,
+.share-slot-support-image {
+  height: 36px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.share-slot-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.share-slot-empty {
+  color: var(--muted);
+  margin: auto;
+}
+
+.share-enemy-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+}
+
+.share-enemy-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.share-enemy-hp {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.share-enemy-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: center;
+}
+
+.share-chip {
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--accent);
+  font-size: 0.74rem;
+}
+
+.share-results {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  margin-top: 1rem;
+}
+
+.share-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.share-result-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.share-result-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.share-result-value.win { color: var(--success); }
+.share-result-value.lose { color: var(--danger); }
+
+.share-result-sub {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* ── Stage + enemies ── */
+.wave-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.9rem 0 0;
+}
+
+.wave-row .row-hint {
+  margin-left: 0.4rem;
+}
+
+.enemy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+}
+
+.enemy-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-width: 0;
+  padding: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.enemy-card.main {
+  border-color: rgba(255, 209, 110, 0.6);
+  box-shadow: 0 0 0 1px rgba(255, 209, 110, 0.2);
+}
+
+.enemy-top {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  min-width: 0;
+}
+
+.enemy-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.enemy-title {
+  min-width: 0;
+}
+
+.enemy-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.enemy-break {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.enemy-stat-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 0.8fr;
+  gap: 0.4rem;
+}
+
+.enemy-stat {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.enemy-stat-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.enemy-stat-value {
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.enemy-elements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.6rem;
+  font-size: 0.78rem;
+}
+
+.elem-icon {
+  width: 16px;
+  height: 16px;
+  vertical-align: -3px;
+}
+
+.weak {
+  color: var(--success);
+}
+
+.resist {
+  color: var(--muted);
+}
+
+.enemy-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.rate-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* ── Team ── */
+.team-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.team-slot {
+  position: relative;
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.team-slot.dealer {
+  border-color: rgba(255, 209, 110, 0.55);
+  box-shadow: 0 0 0 1px rgba(255, 209, 110, 0.2), 0 0 12px rgba(255, 209, 110, 0.12);
+}
+
+.slot-title {
+  font-size: 0.95rem;
+  color: var(--accent-soft);
+  text-align: center;
+  margin: 0 0 0.5rem;
+}
+
+.dealer-slot-btn {
+  position: absolute;
+  top: -0.6rem;
+  left: -0.6rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s, color 0.15s;
+}
+
+.dealer-slot-btn:hover {
+  border-color: rgba(255, 209, 110, 0.5);
+  color: var(--accent-soft);
+  transform: scale(1.08);
+}
+
+.dealer-slot-btn.active {
+  background: rgba(255, 209, 110, 0.18);
+  border-color: rgba(255, 209, 110, 0.75);
+  color: var(--accent);
+}
+
+/* ── Max damage ── */
+.result-block {
+  text-align: center;
+  margin: 0 0 1rem;
+}
+
+.result-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.result-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.result-unit {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.result-sub {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.sa-score-row {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.sa-score-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.sa-score-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.sa-fields {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.sa-fields .field {
+  align-items: center;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.dmg-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.dmg-table th,
+.dmg-table td {
+  padding: 0.45rem 0.65rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.dmg-table th {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.dmg-table th:first-child,
+.dmg-table td:first-child {
+  text-align: left;
+}
+
+.dmg-table tr.dealer td {
+  background: var(--accent-glow);
+}
+
+.dmg-table tr.dealer td:first-child {
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.member-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.member-thumb {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dealer-badge {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 0 0.4rem;
+}
+
+.dmg-crit {
+  font-weight: 700;
+}
+
+.dmg-sub {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* ── Buffs & debuffs (card style of the Single Battle Calculator's "Buffs Received") ── */
+.effects-summary {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+}
+
+.legend::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.legend-used::before { background: var(--success); }
+.legend-partial::before { background: var(--warning); }
+.legend-off::before { background: var(--danger); }
+.legend-na::before { background: rgba(255, 255, 255, 0.25); }
+
+.effect-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+.effect-col {
+  min-width: 0;
+}
+
+.effect-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 0.75rem;
+}
+
+.effect-group-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.effect-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: left;
+  padding: 0.4rem 0.55rem;
+  border-radius: 6px;
+  border-left: 3px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.effect-row:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.effect-row.is-used {
+  border-left-color: var(--success);
+}
+
+.effect-row.is-partial {
+  border-left-color: var(--warning);
+}
+
+.effect-row.is-off {
+  border-left-color: rgba(200, 60, 60, 0.75);
+  background: rgba(180, 40, 40, 0.14);
+}
+
+.effect-row.is-off .effect-src,
+.effect-row.is-off .effect-value {
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+
+.effect-row.is-na {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.effect-row.is-na:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.effect-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.effect-src {
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.effect-origin {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.effect-value {
+  color: var(--info);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.effect-desc {
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.35;
+  white-space: pre-line;
+}
+
+.effect-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.6rem;
+}
+
+.effect-status {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.effect-row.is-used .effect-status { color: var(--success); }
+.effect-row.is-partial .effect-status { color: var(--warning); }
+.effect-row.is-off .effect-status { color: var(--danger); }
+
+.effect-stacks {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.effect-stacks .num {
+  width: 3.5em;
+}
+
+/* ── Battle simulator ── */
 .sim-controls {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.35rem;
-  margin: 0.5rem 0 1rem;
+  margin-bottom: 1rem;
 }
 
 .sim-hint {
@@ -829,6 +1776,66 @@ function hpOf(label: string): string {
   font-size: 0.78rem;
   color: var(--muted);
 }
+
+.raid-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0 auto 1rem;
+  max-width: 820px;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.raid-head,
+.raid-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.6rem;
+}
+
+.raid-head {
+  font-weight: 600;
+}
+
+.run-sim-btn {
+  display: block;
+  margin: 0 auto 0.75rem;
+}
+
+.sim-tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 auto 1rem;
+}
+
+.sim-status {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.result-pill {
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+}
+
+.result-pill.win { color: var(--success); }
+.result-pill.lose { color: var(--danger); }
+.result-pill.waiting { color: var(--accent); }
 
 .pick-panel {
   margin: 0.5rem auto 0;
@@ -844,8 +1851,14 @@ function hpOf(label: string): string {
   scroll-margin: 1rem;
 }
 
-.pick-head { font-weight: 700; color: var(--accent); }
-.pick-label { overflow-wrap: anywhere; }
+.pick-head {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.pick-label {
+  overflow-wrap: anywhere;
+}
 
 .pick-options {
   display: flex;
@@ -860,16 +1873,4 @@ function hpOf(label: string): string {
   gap: 0.1rem;
   text-align: left;
 }
-.raid-panel {
-  border: 1px solid var(--accent-soft);
-  border-radius: 8px;
-  padding: 0.5rem 0.75rem;
-  margin: 0.5rem 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-.raid-head { font-weight: 600; }
-.raid-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
-.field.check { display: inline-flex; align-items: center; gap: 0.3rem; }
 </style>
