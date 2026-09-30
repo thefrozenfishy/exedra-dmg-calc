@@ -107,6 +107,7 @@
                 </div>
               </div>
             </div>
+            <div v-if="e.tag" class="enemy-tag">{{ e.tag }}</div>
             <div class="enemy-stat-grid">
               <div class="enemy-stat"><span class="enemy-stat-label">HP</span>
                 <span class="enemy-stat-value">{{ fmt(e.hp) }}<span v-if="e.gauges > 1" class="muted"> ×{{ e.gauges
@@ -162,6 +163,7 @@
                 </div>
               </div>
             </div>
+            <div v-if="e.tag" class="enemy-tag">{{ e.tag }}</div>
             <div class="enemy-stat-grid">
               <div class="enemy-stat"><span class="enemy-stat-label">HP</span>
                 <span class="enemy-stat-value">{{ fmt(e.hp) }}<span v-if="e.gauges > 1" class="muted"> ×{{ e.gauges
@@ -447,7 +449,7 @@ import { PendingDecision, type RngDecision, type RngEvent, type RngMode } from '
 import { toast } from 'vue3-toastify'
 import { TargetType, type BattleSnapshot, type SkillDetail } from '../types/KiokuTypes'
 import { elementMap } from '../types/enums'
-import { stageWaves, stageWaveMeta, summonTemplates, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo, type QuestEnemyAppearance } from '../models/PvE'
+import { stageWaves, stageWaveMeta, summonTemplates, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
 import { createPvEBattle, stageBattleType, waveStartUnits } from '../models/PvEBattle'
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
 import type { RaidCarry } from '../models/PvPBattle'
@@ -499,9 +501,10 @@ const setBreakRate = (i: number, v: number, max: number) => {
   const r = [...breakRate.value]; r[i] = Number.isFinite(v) ? Math.max(100, Math.min(max, v)) : undefined; breakRate.value = r
 }
 
-function enemyView(a: QuestEnemyAppearance) {
+function enemyView(a: QuestEnemyAppearance, tag = '') {
   const b = breakMstOf(a)
   return {
+    tag,
     id: a.questEnemyAppearanceMstId, enemyMstId: a.enemyMstId, name: enemyName(a),
     hp: a.hp, atk: a.atk, def: a.def, spd: a.speed,
     gauges: a.startHpGaugeCount > 0 ? a.startHpGaugeCount : a.hpGaugeCount,
@@ -515,18 +518,28 @@ function enemyView(a: QuestEnemyAppearance) {
 // Each start unit with its position (1-5, left to right), which is also its column above the team.
 const enemyInfo = computed(() => {
   const positions = wavePositionIds(wave.value.length)
-  return wave.value.map((a, i) => ({ ...enemyView(a), position: positions[i] }))
+  return wave.value.map((a, i) => ({ ...enemyView(a, formTag(a)), position: positions[i] }))
 })
+// A boss that changes form at HP thresholds (type 1: HP ratio in 1/1000; the only type in the data): every form
+// of the wave, first one included, is labelled with where it takes over.
+const formLabel = (m: ModeChangeInfo) => `Form ${m.step} · ${m.step === 1 ? 'from the start' : `from ${m.threshold / 10}% HP`}`
+function formTag(a: QuestEnemyAppearance): string {
+  const forms = waveMeta.value?.modeChanges ?? []
+  const own = forms.find(m => m.appearance.questEnemyAppearanceMstId === a.questEnemyAppearanceMstId)
+  return own ? formLabel(own) : ''
+}
 // Endless waves list more than 5 enemies: only 5 can be on the field, the rest come in as those are defeated.
 // Summons are defined for the whole stage (identical templates shown once).
 const extraEnemyRows = computed(() => {
-  const backups = (waveMeta.value?.appearances ?? []).slice(wave.value.length).map(enemyView)
+  const backups = (waveMeta.value?.appearances ?? []).slice(wave.value.length).map(a => enemyView(a))
   const seen = new Set<string>()
-  const summons = [...(stageId.value ? summonTemplates(stageId.value).values() : [])].map(enemyView).filter(e => {
+  const summons = [...(stageId.value ? summonTemplates(stageId.value).values() : [])].map(a => enemyView(a)).filter(e => {
     const key = `${e.enemyMstId}:${e.hp}:${e.atk}:${e.def}:${e.spd}`
     return !seen.has(key) && !!seen.add(key)
   })
+  const forms = (waveMeta.value?.modeChanges ?? []).filter(m => m.step > 1).map(m => enemyView(m.appearance, formLabel(m)))
   return [
+    { title: 'Later forms', enemies: forms, hint: 'The boss above changes into these forms when its HP drops to each threshold, keeping its position. Not part of Max Damage.' },
     { title: 'Backups', enemies: backups, hint: 'Only 5 enemies can be on the field at once. These wait in the back and come in as the ones on the field are defeated. Not part of Max Damage.' },
     { title: 'Summons', enemies: summons, hint: 'Enemies that can be summoned during the battle. Not part of Max Damage.' },
   ].filter(r => r.enemies.length)
@@ -1423,6 +1436,18 @@ const saved = useSavedTeams({
   .enemy-card.pos-3 { grid-column: 3; }
   .enemy-card.pos-4 { grid-column: 4; }
   .enemy-card.pos-5 { grid-column: 5; }
+}
+
+.enemy-tag {
+  align-self: flex-start;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 0 0.5rem;
 }
 
 .enemy-row-title {
