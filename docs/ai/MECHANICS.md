@@ -119,6 +119,10 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   each passive pass); team 209 sum of CountPoint, 210 units holding pattern pid, 211 total AccumCount of pid;
   1001 IsAlly; 1101 vanguard phase active. [C] (implemented in stash, STATUS.md)
 - HPRatio = `HP * 100f / MaxHP` (float). [C]
+- 304 TotalDamage (team) = Σ over the team's notices of `AffectedUnitNotice.GetTotalDamageValue(true)` 0x1379240 =
+  Σ `Damages` (HP damage after the barrier) + BreakDamage. `BarrierDamages` are a separate list, so a hit fully
+  absorbed by a barrier counts 0 (e.g. Time Stop Strike's "+1 Magic on DMG dealt" doesn't fire). [C]
+  TS: notice `totalDamageValue` = damage after `damageCutByBarrier`. Fixture time-stop-strike-magic.json.
 - 12 AbilityEffect "TYPE[,TYPE]" contains/not-contains: **prefix match** (`AbilityEffectListComparer`) over the
   unit's states, timed and permanent (e.g. "TSUBAME" matches TSUBAME_CORE). [C] TS `compareAbilityEffectList`.
 

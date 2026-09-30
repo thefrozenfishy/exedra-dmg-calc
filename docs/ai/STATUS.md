@@ -1,14 +1,14 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-09-30 (knowledge-base setup session; no engine changes)._
+_Last updated: 2026-09-30 evening (battle-engine-3.19 rebased onto origin/main 61aed43; Time Stop Strike checked)._
 
 ## Branches and uncommitted work in E:\exedra-dmg-calc
 
 | ref | state |
 |---|---|
 | `main` | checked out on 2026-09-30. Has the engine up to the merge `8c4b5ed Merge branch 'battle-engine-3.19'` plus later UI work (saved teams, Kioku Grid, Best SA Team). Lacks the two newest engine commits. |
-| `battle-engine-3.19` | 2 commits ahead of `origin/battle-engine-3.19` and not merged into main: `63c0727` PvE summons, Solo Raid link HP/endless/countdown, boss form changes, enemy effects; `1e1c3b1` heal/EP/ailment-roll formulas, DMG_RANDOM, UP_HP_RATIO. |
-| `stash@{0}` "claude in-progress" (on battle-engine-3.19, 2026-09-27) | **Unfinished session work, never committed**: kit mechanics TSUBAME, ZONE, COUNT, UNIQUE_* (accum/Lv/reset), REFLECTION_RATIO, REGAIN_*, VORTEX_ATK, consume-on-attack states, live UP/DWN_BUFF/DEBUFF_EFFECT_VALUE, PREVENT_ABNORMAL; Solo Raid vanguard points/activation, party/season buffs, round limit, attempt carry-over, raid UI panel. 12 files, +720/-40. The session stopped during the UI check: **fixtures / type-check / browser not confirmed**. The confirmed rules are in MECHANICS.md sections 6, 8, 12, 13. |
+| `battle-engine-3.19` | **Rebased onto origin/main (61aed43) on 2026-09-30**; old tip kept as `backup/battle-engine-3.19-pre-rebase`. On top of main: `6dd3b51` PvE summons, Solo Raid link HP/endless/countdown, form changes; `49cad71` heal/EP/ailment-roll formulas, DMG_RANDOM, UP_HP_RATIO, **condition sets OR'd** (main still ANDs them, so e.g. Time Stop Strike's Magic passive never fires on main); KB commits; Time Stop Strike fixture. Not pushed; `origin/battle-engine-3.19` is now stale (a push would need --force). Merging into main: docs/ai/EFFECT_TYPES.md will conflict (each branch has its own) - regenerate with `xq build`. |
+| `stash@{0}` "claude in-progress" (made on the pre-rebase 1e1c3b1, 2026-09-27; checked: no file overlap with the rebase, `git stash apply` on the rebased branch should be clean) | **Unfinished session work, never committed**: kit mechanics TSUBAME, ZONE, COUNT, UNIQUE_* (accum/Lv/reset), REFLECTION_RATIO, REGAIN_*, VORTEX_ATK, consume-on-attack states, live UP/DWN_BUFF/DEBUFF_EFFECT_VALUE, PREVENT_ABNORMAL; Solo Raid vanguard points/activation, party/season buffs, round limit, attempt carry-over, raid UI panel. 12 files, +720/-40. The session stopped during the UI check: **fixtures / type-check / browser not confirmed**. The confirmed rules are in MECHANICS.md sections 6, 8, 12, 13. |
 
 Stash touch points (view with `git diff 'stash@{0}^1' 'stash@{0}' -- <path>`; `git stash show -p stash@{0} -- <path>`
 errors): PvPTeam.ts (KiokuState zone/count fields, giveTransform effect-value scaling, unique blend, reflection /
@@ -56,6 +56,9 @@ turns under a 2-turn buff from someone else), then fix + fixture.
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-09-30 evening: rebased battle-engine-3.19 onto origin/main; Time Stop Strike Magic already right on the
+  engine branch (bug only on main: AND of condition sets); added fixture time-stop-strike-magic.json + line checks
+  in checkFixtures.ts.
 - 2026-09-30: built docs/ai + scripts/ai/xq.py; skills proposed; no engine change.
 - 2026-09-27: kit mechanics + full Solo Raid (stash@{0}, unfinished).
 - 2026-09-26: EX crys magic (trigger order, TurnNum), RNG modes, manual PvE, exports, ailments, summons, link HP,

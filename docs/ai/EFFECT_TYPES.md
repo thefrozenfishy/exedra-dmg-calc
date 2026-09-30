@@ -1,6 +1,6 @@
 # Effect types: data usage vs engine coverage (GENERATED - do not edit)
 
-Built from `battle-engine-3.19 @ 1e1c3b1`. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
+Built from `battle-engine-3.19 @ 7f1147e 2026-09-30`. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
 
 - **kiokus** = kiokus in kioku_data.json whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).
 - **stages** = quest stages whose enemies use it (skill sets + enemy passives).
