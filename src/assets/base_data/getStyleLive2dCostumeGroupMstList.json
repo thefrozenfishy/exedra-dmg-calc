@@ -185,6 +185,11 @@
         "styleMstId": 10020701
     },
     {
+        "styleLive2dCostumeGroupMstId": 1002421,
+        "styleLive2dCostumeMstId": 100242,
+        "styleMstId": 10020801
+    },
+    {
         "styleLive2dCostumeGroupMstId": 1003001,
         "styleLive2dCostumeMstId": 100300,
         "styleMstId": 10030101

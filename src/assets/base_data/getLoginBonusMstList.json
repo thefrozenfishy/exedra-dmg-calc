@@ -802,5 +802,41 @@
         "sortOrder": 1030,
         "startTime": "2026-09-18T12:00:00+09:00",
         "title": "1.5th Anniversary Countdown Login Bonus"
+    },
+    {
+        "appealDescription": "to get <color=#ecd19c>Magica Stones</color>!",
+        "appealIconObjectId": 0,
+        "appealIconObjectReceiveType": 2,
+        "conditionDescription": "Based on Special Login Bonus Tickets, log in",
+        "cycleType": 6,
+        "endTime": "2026-11-30T11:59:59+09:00",
+        "loginBonusMstId": 68,
+        "sortOrder": 1001,
+        "startTime": "2026-10-16T12:00:00+09:00",
+        "title": "Magia Exedraw Special Login Bonus"
+    },
+    {
+        "appealDescription": "Get a <color=#ecd19c>total of 3,000 Magica Stones</color>!",
+        "appealIconObjectId": 0,
+        "appealIconObjectReceiveType": 2,
+        "conditionDescription": "Log in",
+        "cycleType": 2,
+        "endTime": "2026-10-31T11:59:59+09:00",
+        "loginBonusMstId": 69,
+        "sortOrder": 1034,
+        "startTime": "2026-09-27T21:00:00+09:00",
+        "title": "1.5th Anniversary Login Bonus"
+    },
+    {
+        "appealDescription": "Get a <color=#ecd19c>special portrait</color>!",
+        "appealIconObjectId": 4200101,
+        "appealIconObjectReceiveType": 4,
+        "conditionDescription": "Log in",
+        "cycleType": 2,
+        "endTime": "2026-10-10T23:59:59+09:00",
+        "loginBonusMstId": 70,
+        "sortOrder": 1032,
+        "startTime": "2026-10-03T00:00:00+09:00",
+        "title": "Madoka Kaname's Birthday Login Bonus"
     }
 ]

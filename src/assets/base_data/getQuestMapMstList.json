@@ -5,7 +5,8 @@
         "openEffectFlagMiniTutorialNumber": 0,
         "openFlagMiniTutorialNumber": 0,
         "questCategoryMstId": 1,
-        "questMapMstId": 1
+        "questMapMstId": 1,
+        "shortName": "Madoka Magica"
     },
     {
         "conditionGroupId": 0,
@@ -13,7 +14,8 @@
         "openEffectFlagMiniTutorialNumber": 35,
         "openFlagMiniTutorialNumber": 34,
         "questCategoryMstId": 1,
-        "questMapMstId": 2
+        "questMapMstId": 2,
+        "shortName": "Magia Record"
     },
     {
         "conditionGroupId": 0,
@@ -21,7 +23,8 @@
         "openEffectFlagMiniTutorialNumber": 33,
         "openFlagMiniTutorialNumber": 32,
         "questCategoryMstId": 1,
-        "questMapMstId": 3
+        "questMapMstId": 3,
+        "shortName": "Oriko Magica"
     },
     {
         "conditionGroupId": 0,
@@ -29,7 +32,8 @@
         "openEffectFlagMiniTutorialNumber": 85,
         "openFlagMiniTutorialNumber": 84,
         "questCategoryMstId": 1,
-        "questMapMstId": 5
+        "questMapMstId": 5,
+        "shortName": "Scene 0"
     },
     {
         "conditionGroupId": 0,
@@ -37,7 +41,8 @@
         "openEffectFlagMiniTutorialNumber": 79,
         "openFlagMiniTutorialNumber": 78,
         "questCategoryMstId": 1,
-        "questMapMstId": 6
+        "questMapMstId": 6,
+        "shortName": ""
     },
     {
         "conditionGroupId": 0,
@@ -45,7 +50,8 @@
         "openEffectFlagMiniTutorialNumber": 151,
         "openFlagMiniTutorialNumber": 150,
         "questCategoryMstId": 1,
-        "questMapMstId": 7
+        "questMapMstId": 7,
+        "shortName": "Wraith Arc"
     },
     {
         "conditionGroupId": 0,
@@ -53,7 +59,8 @@
         "openEffectFlagMiniTutorialNumber": 159,
         "openFlagMiniTutorialNumber": 158,
         "questCategoryMstId": 1,
-        "questMapMstId": 8
+        "questMapMstId": 8,
+        "shortName": "Crescent Memoria"
     },
     {
         "conditionGroupId": 0,
@@ -61,7 +68,8 @@
         "openEffectFlagMiniTutorialNumber": 169,
         "openFlagMiniTutorialNumber": 168,
         "questCategoryMstId": 1,
-        "questMapMstId": 9
+        "questMapMstId": 9,
+        "shortName": "Rebellion"
     },
     {
         "conditionGroupId": 0,
@@ -69,7 +77,8 @@
         "openEffectFlagMiniTutorialNumber": 179,
         "openFlagMiniTutorialNumber": 178,
         "questCategoryMstId": 1,
-        "questMapMstId": 10
+        "questMapMstId": 10,
+        "shortName": "Darc Magica"
     },
     {
         "conditionGroupId": 0,
@@ -77,7 +86,8 @@
         "openEffectFlagMiniTutorialNumber": 0,
         "openFlagMiniTutorialNumber": 0,
         "questCategoryMstId": 4,
-        "questMapMstId": 41
+        "questMapMstId": 41,
+        "shortName": ""
     },
     {
         "conditionGroupId": 0,
@@ -85,7 +95,8 @@
         "openEffectFlagMiniTutorialNumber": 0,
         "openFlagMiniTutorialNumber": 0,
         "questCategoryMstId": 4,
-        "questMapMstId": 42
+        "questMapMstId": 42,
+        "shortName": ""
     },
     {
         "conditionGroupId": 0,
@@ -93,7 +104,8 @@
         "openEffectFlagMiniTutorialNumber": 0,
         "openFlagMiniTutorialNumber": 0,
         "questCategoryMstId": 4,
-        "questMapMstId": 43
+        "questMapMstId": 43,
+        "shortName": ""
     },
     {
         "conditionGroupId": 0,
@@ -101,7 +113,8 @@
         "openEffectFlagMiniTutorialNumber": 0,
         "openFlagMiniTutorialNumber": 0,
         "questCategoryMstId": 10,
-        "questMapMstId": 101
+        "questMapMstId": 101,
+        "shortName": ""
     },
     {
         "conditionGroupId": 0,
@@ -109,6 +122,7 @@
         "openEffectFlagMiniTutorialNumber": 0,
         "openFlagMiniTutorialNumber": 0,
         "questCategoryMstId": 13,
-        "questMapMstId": 131
+        "questMapMstId": 131,
+        "shortName": ""
     }
 ]

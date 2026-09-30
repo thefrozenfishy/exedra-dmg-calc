@@ -1430,6 +1430,32 @@
         "unlockType": 8
     },
     {
+        "backgroundResourceName": "bg_3d_600_14_00_001",
+        "dioramaBackgroundMstId": 411111,
+        "enemyType": 2,
+        "fieldSeriesMstId": 99999,
+        "releaseTime": "2026-10-01T12:00:00+09:00",
+        "seriesId": 4,
+        "sortOrder": 1061,
+        "stageName": "Rose Garden Witch (Apex Form) - Boss Floor",
+        "stageThumbnailName": "bg_3d_600_14_00_001",
+        "unlockId": 0,
+        "unlockType": 8
+    },
+    {
+        "backgroundResourceName": "bg_3d_600_15_00_001",
+        "dioramaBackgroundMstId": 411112,
+        "enemyType": 2,
+        "fieldSeriesMstId": 99999,
+        "releaseTime": "2026-10-01T12:00:00+09:00",
+        "seriesId": 4,
+        "sortOrder": 1062,
+        "stageName": "Rose Garden Witch (Apex Overdrive Form) - Boss Floor",
+        "stageThumbnailName": "bg_3d_600_15_00_001",
+        "unlockId": 0,
+        "unlockType": 8
+    },
+    {
         "backgroundResourceName": "bg_3d_641_00_01_001",
         "dioramaBackgroundMstId": 710111,
         "enemyType": 7,

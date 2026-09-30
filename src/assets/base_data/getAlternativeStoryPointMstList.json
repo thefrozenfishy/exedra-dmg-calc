@@ -1,6 +1,7 @@
 [
     {
         "alternativeStoryMstId": 1,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 101,
         "bgAnimType": 1,
         "bgAssetBundleName": "bg_00_01",
@@ -16,6 +17,7 @@
     },
     {
         "alternativeStoryMstId": 1,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 102,
         "bgAnimType": 3,
         "bgAssetBundleName": "bg_00_02",
@@ -31,6 +33,7 @@
     },
     {
         "alternativeStoryMstId": 1,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 103,
         "bgAnimType": 2,
         "bgAssetBundleName": "bg_00_03",
@@ -46,6 +49,7 @@
     },
     {
         "alternativeStoryMstId": 1,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 104,
         "bgAnimType": 2,
         "bgAssetBundleName": "bg_00_03",
@@ -61,6 +65,7 @@
     },
     {
         "alternativeStoryMstId": 1,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 105,
         "bgAnimType": 4,
         "bgAssetBundleName": "bg_00_04",
@@ -76,6 +81,7 @@
     },
     {
         "alternativeStoryMstId": 1,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 106,
         "bgAnimType": 4,
         "bgAssetBundleName": "bg_00_04",
@@ -91,6 +97,7 @@
     },
     {
         "alternativeStoryMstId": 1,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 107,
         "bgAnimType": 1,
         "bgAssetBundleName": "bg_00_05",
@@ -106,6 +113,7 @@
     },
     {
         "alternativeStoryMstId": 1,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 108,
         "bgAnimType": 1,
         "bgAssetBundleName": "bg_00_05",
@@ -121,6 +129,7 @@
     },
     {
         "alternativeStoryMstId": 1,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 109,
         "bgAnimType": 3,
         "bgAssetBundleName": "bg_00_06",
@@ -136,6 +145,7 @@
     },
     {
         "alternativeStoryMstId": 1,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 110,
         "bgAnimType": 3,
         "bgAssetBundleName": "bg_00_06",
@@ -151,6 +161,7 @@
     },
     {
         "alternativeStoryMstId": 2,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 201,
         "bgAnimType": 1,
         "bgAssetBundleName": "bg_01_01",
@@ -166,6 +177,7 @@
     },
     {
         "alternativeStoryMstId": 2,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 202,
         "bgAnimType": 1,
         "bgAssetBundleName": "bg_01_01",
@@ -181,6 +193,7 @@
     },
     {
         "alternativeStoryMstId": 2,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 203,
         "bgAnimType": 3,
         "bgAssetBundleName": "bg_01_02",
@@ -196,6 +209,7 @@
     },
     {
         "alternativeStoryMstId": 2,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 204,
         "bgAnimType": 2,
         "bgAssetBundleName": "bg_01_03",
@@ -211,6 +225,7 @@
     },
     {
         "alternativeStoryMstId": 2,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 205,
         "bgAnimType": 4,
         "bgAssetBundleName": "bg_01_04",
@@ -226,6 +241,7 @@
     },
     {
         "alternativeStoryMstId": 2,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 206,
         "bgAnimType": 4,
         "bgAssetBundleName": "bg_01_04",
@@ -241,6 +257,7 @@
     },
     {
         "alternativeStoryMstId": 2,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 207,
         "bgAnimType": 1,
         "bgAssetBundleName": "bg_01_05",
@@ -256,6 +273,7 @@
     },
     {
         "alternativeStoryMstId": 2,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 208,
         "bgAnimType": 1,
         "bgAssetBundleName": "bg_01_05",
@@ -271,6 +289,7 @@
     },
     {
         "alternativeStoryMstId": 2,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 209,
         "bgAnimType": 3,
         "bgAssetBundleName": "bg_01_06",
@@ -286,6 +305,7 @@
     },
     {
         "alternativeStoryMstId": 2,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 210,
         "bgAnimType": 3,
         "bgAssetBundleName": "bg_01_06",
@@ -301,6 +321,7 @@
     },
     {
         "alternativeStoryMstId": 2,
+        "alternativeStoryPointGroupMstId": 0,
         "alternativeStoryPointMstId": 211,
         "bgAnimType": 3,
         "bgAssetBundleName": "bg_01_06",
@@ -312,6 +333,86 @@
         "pointType": 2,
         "pointValue": 20005113,
         "prevAlternativeStoryPointMstId": 210,
+        "storyType": 1
+    },
+    {
+        "alternativeStoryMstId": 3,
+        "alternativeStoryPointGroupMstId": 31,
+        "alternativeStoryPointMstId": 301,
+        "bgAnimType": 2,
+        "bgAssetBundleName": "bg_01_08",
+        "chapterBgAssetBundleName": "alternative_bg_model_01",
+        "firstClearRewardGroupId": 100,
+        "inBattleArchiveAdvMstId": 0,
+        "isDisplayBossIcon": false,
+        "name": "Story 1",
+        "pointType": 2,
+        "pointValue": 20006901,
+        "prevAlternativeStoryPointMstId": 0,
+        "storyType": 1
+    },
+    {
+        "alternativeStoryMstId": 3,
+        "alternativeStoryPointGroupMstId": 31,
+        "alternativeStoryPointMstId": 302,
+        "bgAnimType": 4,
+        "bgAssetBundleName": "bg_01_08",
+        "chapterBgAssetBundleName": "alternative_bg_model_01",
+        "firstClearRewardGroupId": 100,
+        "inBattleArchiveAdvMstId": 0,
+        "isDisplayBossIcon": false,
+        "name": "Battle 2",
+        "pointType": 1,
+        "pointValue": 1309101,
+        "prevAlternativeStoryPointMstId": 301,
+        "storyType": 1
+    },
+    {
+        "alternativeStoryMstId": 3,
+        "alternativeStoryPointGroupMstId": 31,
+        "alternativeStoryPointMstId": 303,
+        "bgAnimType": 1,
+        "bgAssetBundleName": "bg_01_09",
+        "chapterBgAssetBundleName": "alternative_bg_model_01",
+        "firstClearRewardGroupId": 100,
+        "inBattleArchiveAdvMstId": 0,
+        "isDisplayBossIcon": false,
+        "name": "Story 3",
+        "pointType": 2,
+        "pointValue": 20006902,
+        "prevAlternativeStoryPointMstId": 302,
+        "storyType": 1
+    },
+    {
+        "alternativeStoryMstId": 3,
+        "alternativeStoryPointGroupMstId": 31,
+        "alternativeStoryPointMstId": 304,
+        "bgAnimType": 3,
+        "bgAssetBundleName": "bg_01_09",
+        "chapterBgAssetBundleName": "alternative_bg_model_01",
+        "firstClearRewardGroupId": 104,
+        "inBattleArchiveAdvMstId": 0,
+        "isDisplayBossIcon": false,
+        "name": "Story 4",
+        "pointType": 2,
+        "pointValue": 20006903,
+        "prevAlternativeStoryPointMstId": 303,
+        "storyType": 1
+    },
+    {
+        "alternativeStoryMstId": 3,
+        "alternativeStoryPointGroupMstId": 32,
+        "alternativeStoryPointMstId": 305,
+        "bgAnimType": 2,
+        "bgAssetBundleName": "bg_01_06",
+        "chapterBgAssetBundleName": "alternative_bg_model_01",
+        "firstClearRewardGroupId": 100,
+        "inBattleArchiveAdvMstId": 0,
+        "isDisplayBossIcon": false,
+        "name": "Story 5",
+        "pointType": 2,
+        "pointValue": 20006903,
+        "prevAlternativeStoryPointMstId": 304,
         "storyType": 1
     }
 ]

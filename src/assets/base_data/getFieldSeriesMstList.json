@@ -317,7 +317,7 @@
         "backgroundResourcePath": "",
         "endTime": "2050-01-02T10:00:00+09:00",
         "fieldSeriesMstId": 64100,
-        "name": "Wraith",
+        "name": "Wraith Arc",
         "questGroupMstId": 64100,
         "questMapMstId": 7,
         "sortOrder": 1,
@@ -330,7 +330,7 @@
         "backgroundResourcePath": "",
         "endTime": "2050-01-02T10:00:00+09:00",
         "fieldSeriesMstId": 65000,
-        "name": "Nightmare",
+        "name": "Nightmare Arc",
         "questGroupMstId": 65000,
         "questMapMstId": 9,
         "sortOrder": 1,
@@ -569,6 +569,45 @@
         "questMapMstId": 6,
         "sortOrder": 1,
         "startTime": "2025-10-30T12:00:00+09:00",
+        "styleMstId": 0
+    },
+    {
+        "advMstId": 0,
+        "assetbundleName": "61800_01",
+        "backgroundResourcePath": "",
+        "endTime": "2050-01-02T10:00:00+09:00",
+        "fieldSeriesMstId": 71800,
+        "name": "Uwasa of the Commoner's Horse",
+        "questGroupMstId": 71800,
+        "questMapMstId": 6,
+        "sortOrder": 1,
+        "startTime": "2026-09-27T21:00:00+09:00",
+        "styleMstId": 0
+    },
+    {
+        "advMstId": 0,
+        "assetbundleName": "61100_01",
+        "backgroundResourcePath": "",
+        "endTime": "2050-01-02T10:00:00+09:00",
+        "fieldSeriesMstId": 71900,
+        "name": "Birdcage Witch",
+        "questGroupMstId": 71100,
+        "questMapMstId": 6,
+        "sortOrder": 1,
+        "startTime": "2026-09-27T21:00:00+09:00",
+        "styleMstId": 0
+    },
+    {
+        "advMstId": 0,
+        "assetbundleName": "61200_01",
+        "backgroundResourcePath": "",
+        "endTime": "2050-01-02T10:00:00+09:00",
+        "fieldSeriesMstId": 72000,
+        "name": "Stage Witch",
+        "questGroupMstId": 71200,
+        "questMapMstId": 6,
+        "sortOrder": 1,
+        "startTime": "2026-09-27T21:00:00+09:00",
         "styleMstId": 0
     }
 ]

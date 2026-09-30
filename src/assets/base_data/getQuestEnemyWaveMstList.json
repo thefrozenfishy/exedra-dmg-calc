@@ -868,5 +868,125 @@
         "questStageMstId": 1406106,
         "stagePrefabName": "bg_3d_605_00_00_001",
         "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 120113,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14071011,
+        "questStageMstId": 1407101,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 120119,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Rose Garden Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Rose Garden Witch<br>Each time a certain number of enemy turns pass, uses a counterattack.<br>On each counterattack, the Witch's ATK and SPD increases.<br><br>- Rose Garden Witch (Apex Form)<br>Increases DMG and effects of some of its skills based on Magic value.<br>The Witch's Magic decreases based on the number of allies attacked simultaneously by battle skills.<br><br>- Rose Garden Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>The Witch slightly decreases all enemies' MP after a certain number of enemy turns pass, so be mindful of when to use your special attacks.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14071012,
+        "questStageMstId": 1407101,
+        "stagePrefabName": "bg_3d_600_01_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 120113,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14071021,
+        "questStageMstId": 1407102,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 120119,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Rose Garden Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Rose Garden Witch<br>Each time a certain number of enemy turns pass, uses a counterattack.<br>On each counterattack, the Witch's ATK and SPD increases.<br><br>- Rose Garden Witch (Apex Form)<br>Increases DMG and effects of some of its skills based on Magic value.<br>The Witch's Magic decreases based on the number of allies attacked simultaneously by battle skills.<br><br>- Rose Garden Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>The Witch slightly decreases all enemies' MP after a certain number of enemy turns pass, so be mindful of when to use your special attacks.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14071022,
+        "questStageMstId": 1407102,
+        "stagePrefabName": "bg_3d_600_01_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 120113,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14071031,
+        "questStageMstId": 1407103,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 120119,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Rose Garden Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Rose Garden Witch<br>Each time a certain number of enemy turns pass, uses a counterattack.<br>On each counterattack, the Witch's ATK and SPD increases.<br><br>- Rose Garden Witch (Apex Form)<br>Increases DMG and effects of some of its skills based on Magic value.<br>The Witch's Magic decreases based on the number of allies attacked simultaneously by battle skills.<br><br>- Rose Garden Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>The Witch slightly decreases all enemies' MP after a certain number of enemy turns pass, so be mindful of when to use your special attacks.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14071032,
+        "questStageMstId": 1407103,
+        "stagePrefabName": "bg_3d_600_01_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 120113,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14071041,
+        "questStageMstId": 1407104,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 120119,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Rose Garden Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Rose Garden Witch<br>Each time a certain number of enemy turns pass, uses a counterattack.<br>On each counterattack, the Witch's ATK and SPD increases.<br><br>- Rose Garden Witch (Apex Form)<br>Increases DMG and effects of some of its skills based on Magic value.<br>The Witch's Magic decreases based on the number of allies attacked simultaneously by battle skills.<br><br>- Rose Garden Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>The Witch slightly decreases all enemies' MP after a certain number of enemy turns pass, so be mindful of when to use your special attacks.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14071042,
+        "questStageMstId": 1407104,
+        "stagePrefabName": "bg_3d_600_01_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 120113,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14071051,
+        "questStageMstId": 1407105,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 120119,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Rose Garden Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Rose Garden Witch<br>Each time a certain number of enemy turns pass, uses a counterattack.<br>On each counterattack, the Witch's ATK and SPD increases.<br><br>- Rose Garden Witch (Apex Form)<br>Increases DMG and effects of some of its skills based on Magic value.<br>The Witch's Magic decreases based on the number of allies attacked simultaneously by battle skills.<br><br>- Rose Garden Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>The Witch slightly decreases all enemies' MP after a certain number of enemy turns pass, so be mindful of when to use your special attacks.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14071052,
+        "questStageMstId": 1407105,
+        "stagePrefabName": "bg_3d_600_01_00_001",
+        "wave": 2
+    },
+    {
+        "dioramaBackGroundMstId": 120113,
+        "enemyTipsText": "",
+        "linkHpName": "Witch Minions",
+        "linkHpType": 1,
+        "questEnemyWaveMstId": 14071061,
+        "questStageMstId": 1407106,
+        "stagePrefabName": "",
+        "wave": 1
+    },
+    {
+        "dioramaBackGroundMstId": 120119,
+        "enemyTipsText": "Wave 2 has <tooltips_id=5>.<br><br>The Rose Garden Witch has different stats and skills in its <tooltips_id=3> form.<br><br>- Rose Garden Witch<br>Each time a certain number of enemy turns pass, uses a counterattack.<br>On each counterattack, the Witch's ATK and SPD increases.<br><br>- Rose Garden Witch (Apex Form)<br>Increases DMG and effects of some of its skills based on Magic value.<br>The Witch's Magic decreases based on the number of allies attacked simultaneously by battle skills.<br><br>- Rose Garden Witch (Apex Overdrive Form)<br>Uses <tooltips_id=1>.<br>The Witch slightly decreases all enemies' MP after a certain number of enemy turns pass, so be mindful of when to use your special attacks.",
+        "linkHpName": "",
+        "linkHpType": 2,
+        "questEnemyWaveMstId": 14071062,
+        "questStageMstId": 1407106,
+        "stagePrefabName": "bg_3d_600_01_00_001",
+        "wave": 2
     }
 ]

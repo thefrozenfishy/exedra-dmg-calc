@@ -1058,5 +1058,20 @@
         "advTitleMstId": 219,
         "isViewCollection": true,
         "title": "Missing My Bear\nWhere Are You, Kumanosuke?"
+    },
+    {
+        "advTitleMstId": 220,
+        "isViewCollection": true,
+        "title": "My Friend"
+    },
+    {
+        "advTitleMstId": 221,
+        "isViewCollection": true,
+        "title": "Theory of Relative Happiness"
+    },
+    {
+        "advTitleMstId": 222,
+        "isViewCollection": true,
+        "title": "Madoka's Birthday 2026\nA Special Group Snapshot"
     }
 ]

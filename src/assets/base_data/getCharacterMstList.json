@@ -1,6 +1,7 @@
 [
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1000,
         "colorCode": "#FFFFFF",
         "enCapsName": "",
@@ -9,6 +10,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1001,
         "colorCode": "#FA71BD",
         "enCapsName": "MADOKA KANAME",
@@ -17,6 +19,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1002,
         "colorCode": "#B56ABF",
         "enCapsName": "HOMURA AKEMI",
@@ -25,6 +28,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1003,
         "colorCode": "#EA9C54",
         "enCapsName": "MAMI TOMOE",
@@ -33,6 +37,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1004,
         "colorCode": "#64C5E6",
         "enCapsName": "SAYAKA MIKI",
@@ -41,6 +46,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1005,
         "colorCode": "#E64545",
         "enCapsName": "KYOKO SAKURA",
@@ -49,6 +55,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1006,
         "colorCode": "#B192C0",
         "enCapsName": "NAGISA MOMOE",
@@ -57,6 +64,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1007,
         "colorCode": "#EBA4F0",
         "enCapsName": "MABAYU AKI",
@@ -65,6 +73,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1008,
         "colorCode": "#F57689",
         "enCapsName": "IROHA TAMAKI",
@@ -73,6 +82,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1009,
         "colorCode": "#1A9AB7",
         "enCapsName": "YACHIYO NANAMI",
@@ -81,6 +91,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1010,
         "colorCode": "#FF5F4B",
         "enCapsName": "TSURUNO YUI",
@@ -89,6 +100,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1011,
         "colorCode": "#6dd1b5",
         "enCapsName": "SANA FUTABA",
@@ -97,6 +109,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1012,
         "colorCode": "#8D6AD2",
         "enCapsName": "FELICIA MITSUKI",
@@ -105,6 +118,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1013,
         "colorCode": "#7c8aa7",
         "enCapsName": "MIFUYU AZUSA",
@@ -113,6 +127,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1014,
         "colorCode": "#FC7459",
         "enCapsName": "MOMOKO TOGAME",
@@ -121,6 +136,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1015,
         "colorCode": "#9BDAEB",
         "enCapsName": "RENA MINAMI",
@@ -129,6 +145,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1016,
         "colorCode": "#CE3225",
         "enCapsName": "KAEDE AKINO",
@@ -137,6 +154,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1017,
         "colorCode": "#FFCF3D",
         "enCapsName": "KARIN MISONO",
@@ -145,6 +163,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1018,
         "colorCode": "#4A8DE4",
         "enCapsName": "ASUKA TATSUKI",
@@ -153,6 +172,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1019,
         "colorCode": "#E73D24",
         "enCapsName": "TOUKA SATOMI",
@@ -161,6 +181,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1020,
         "colorCode": "#EAB088",
         "enCapsName": "NEMU HIIRAGI",
@@ -169,6 +190,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1021,
         "colorCode": "#CCF02A",
         "enCapsName": "ALINA GRAY",
@@ -177,6 +199,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1022,
         "colorCode": "#d14c69",
         "enCapsName": "UI TAMAKI",
@@ -185,6 +208,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1023,
         "colorCode": "#929196",
         "enCapsName": "KANAGI IZUMI",
@@ -193,6 +217,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1024,
         "colorCode": "#3d78c1",
         "enCapsName": "MITAMA YAKUMO",
@@ -201,6 +226,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1025,
         "colorCode": "#EF3775",
         "enCapsName": "TSUKUYO AMANE",
@@ -209,6 +235,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1026,
         "colorCode": "#EF3775",
         "enCapsName": "TSUKASA AMANE",
@@ -217,6 +244,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1058,
         "colorCode": "#B8DAFF",
         "enCapsName": "NATSUKI UTSUHO",
@@ -225,6 +253,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1059,
         "colorCode": "#49922d",
         "enCapsName": "HINANO MIYAKO",
@@ -233,6 +262,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1061,
         "colorCode": "#FF5B7E",
         "enCapsName": "NANAKA TOKIWA",
@@ -241,6 +271,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1062,
         "colorCode": "#f4a738",
         "enCapsName": "EMIRI KISAKI",
@@ -249,6 +280,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1067,
         "colorCode": "#53FEC9",
         "enCapsName": "KAKO NATSUME",
@@ -257,6 +289,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1068,
         "colorCode": "#4E80C2",
         "enCapsName": "MEIYUI CHUN",
@@ -265,6 +298,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1069,
         "colorCode": "#E38D84",
         "enCapsName": "REIRA IBUKI",
@@ -273,6 +307,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1070,
         "colorCode": "#8AA5CA",
         "enCapsName": "SEIKA KUMI",
@@ -281,6 +316,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1071,
         "colorCode": "#7DAC7C",
         "enCapsName": "MITO AINO",
@@ -289,6 +325,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1072,
         "colorCode": "#AAF43B",
         "enCapsName": "KOKORO AWANE",
@@ -297,6 +334,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1074,
         "colorCode": "#ED7CA2",
         "enCapsName": "HANNA SASARA",
@@ -305,6 +343,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1076,
         "colorCode": "#D14969",
         "enCapsName": "HIMIKA MAO",
@@ -313,6 +352,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1080,
         "colorCode": "#5564A7",
         "enCapsName": "REN ISUZU",
@@ -321,6 +361,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1081,
         "colorCode": "#6E29FF",
         "enCapsName": "KONOHA SHIZUMI",
@@ -329,6 +370,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1082,
         "colorCode": "#FBDD00",
         "enCapsName": "HAZUKI YUSA",
@@ -337,6 +379,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1083,
         "colorCode": "#8CE70E",
         "enCapsName": "AYAME MIKURI",
@@ -345,6 +388,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1084,
         "colorCode": "#8ABAF0",
         "enCapsName": "MASARA KAGAMI",
@@ -353,6 +397,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1086,
         "colorCode": "#EF4D77",
         "enCapsName": "RIKA AYANO",
@@ -361,6 +406,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1090,
         "colorCode": "#39ADE1",
         "enCapsName": "RIKO CHIAKI",
@@ -369,6 +415,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1092,
         "colorCode": "#4EF6D5",
         "enCapsName": "MEL ANNA",
@@ -377,6 +424,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1098,
         "colorCode": "#FFAEDC",
         "enCapsName": "ETERNAL SAKURA",
@@ -385,6 +433,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1104,
         "colorCode": "#EB4877",
         "enCapsName": "KANAE YUKINO",
@@ -393,6 +442,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1107,
         "colorCode": "#FF4227",
         "enCapsName": "ASHLEY TAYLOR",
@@ -401,6 +451,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1114,
         "colorCode": "#EB2B28",
         "enCapsName": "KUSH IRINA",
@@ -409,6 +460,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1115,
         "colorCode": "#64DD5D",
         "enCapsName": "DARC",
@@ -417,6 +469,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1116,
         "colorCode": "#f7ba5d",
         "enCapsName": "LIZ HAWKWOOD",
@@ -425,6 +478,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1117,
         "colorCode": "#91afd6",
         "enCapsName": "MELISSA DE VIGNOLLES",
@@ -433,6 +487,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1120,
         "colorCode": "#ffffff",
         "enCapsName": "CORBEAU",
@@ -441,6 +496,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1124,
         "colorCode": "#D7DAE6",
         "enCapsName": "ORIKO MIKUNI",
@@ -449,6 +505,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1125,
         "colorCode": "#A79DD6",
         "enCapsName": "KIRIKA KURE",
@@ -457,6 +514,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1126,
         "colorCode": "#ACCDA1",
         "enCapsName": "YUMA CHITOSE",
@@ -465,6 +523,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1133,
         "colorCode": "#FF61CC",
         "enCapsName": "KOITO ASAKO",
@@ -473,6 +532,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1145,
         "colorCode": "#B96AF1",
         "enCapsName": "SUMIRE YOAKE",
@@ -481,6 +541,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1146,
         "colorCode": "#6C6299",
         "enCapsName": "FUKA HIGURE",
@@ -489,6 +550,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": false,
         "characterMstId": 1149,
         "colorCode": "#87C8B0",
         "enCapsName": "YOTSUGI ONONOKI",
@@ -497,6 +559,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": false,
         "characterMstId": 1150,
         "colorCode": "#FFB0B7",
         "enCapsName": "MAYOI HACHIKUJI",
@@ -505,6 +568,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": false,
         "characterMstId": 1151,
         "colorCode": "#FDE101",
         "enCapsName": "SHINOBU OSHINO",
@@ -513,6 +577,7 @@
     },
     {
         "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
         "characterMstId": 1152,
         "colorCode": "#F36D97",
         "enCapsName": "MADOKA-SENPAI",

@@ -57,24 +57,6 @@
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
         "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 1027,
-        "prevMissionTitleMstId": 0,
-        "priority": 1,
-        "title": "Season Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 1028,
-        "prevMissionTitleMstId": 0,
-        "priority": 1,
-        "title": "Season Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 1029,
         "prevMissionTitleMstId": 0,
         "priority": 1,
@@ -178,6 +160,33 @@
         "prevMissionTitleMstId": 0,
         "priority": 140,
         "title": "Magica Stone Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x1,000!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2018,
+        "prevMissionTitleMstId": 0,
+        "priority": 150,
+        "title": "1.5th Anniversary Bingo Missions Part 1"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x1,000!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2019,
+        "prevMissionTitleMstId": 2018,
+        "priority": 150,
+        "title": "1.5th Anniversary Bingo Missions Part 1"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x1,000!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2020,
+        "prevMissionTitleMstId": 2019,
+        "priority": 150,
+        "title": "1.5th Anniversary Bingo Missions Part 1"
     },
     {
         "completeAppealDescription": "",
@@ -349,5 +358,41 @@
         "prevMissionTitleMstId": 0,
         "priority": 89,
         "title": "Nagisa's Wish Event Memorial Medal Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5157,
+        "prevMissionTitleMstId": 0,
+        "priority": 10006,
+        "title": "Exedra Crisis Play Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5158,
+        "prevMissionTitleMstId": 0,
+        "priority": 92,
+        "title": "My Friend Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5159,
+        "prevMissionTitleMstId": 0,
+        "priority": 93,
+        "title": "My Friend Event Memorial Medal Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5160,
+        "prevMissionTitleMstId": 0,
+        "priority": 10,
+        "title": "Main Quest Clear Missions"
     }
 ]

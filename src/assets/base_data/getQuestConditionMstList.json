@@ -196,10 +196,31 @@
         "value2": 0
     },
     {
+        "conditionGroupId": 113401,
+        "conditionType": 5,
+        "questConditionMstId": 113401,
+        "value1": 24,
+        "value2": 0
+    },
+    {
         "conditionGroupId": 114401,
         "conditionType": 5,
         "questConditionMstId": 114401,
         "value1": 18,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 116401,
+        "conditionType": 5,
+        "questConditionMstId": 116401,
+        "value1": 24,
+        "value2": 0
+    },
+    {
+        "conditionGroupId": 117401,
+        "conditionType": 5,
+        "questConditionMstId": 117401,
+        "value1": 24,
         "value2": 0
     },
     {

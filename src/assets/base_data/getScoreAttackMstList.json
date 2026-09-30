@@ -316,11 +316,23 @@
         "dioramaBackgroundMstId": 810119,
         "endTime": "2026-09-30T11:59:59+09:00",
         "highScoreRewardGroupId": 27,
-        "name": "",
+        "name": "Bunny Eared Witch",
         "rankingRewardGroupId": 27,
         "reprintNum": 0,
         "scoreAttackMstId": 27,
         "startTime": "2026-09-10T12:00:00+09:00",
         "totalScoreRewardGroupId": 26
+    },
+    {
+        "comment": "The boss has 3 actions, but is reduced to 2 actions when applying an ailment to it.\nAlso, DMG dealt increases while in break, stacking up to 3 times based on the number of ailments applied.\nTry to keep multiple ailments on the boss consistently while timing your attacks for maximum damage.",
+        "dioramaBackgroundMstId": 110419,
+        "endTime": "2026-11-05T11:59:59+09:00",
+        "highScoreRewardGroupId": 28,
+        "name": "Box Witch",
+        "rankingRewardGroupId": 0,
+        "reprintNum": 0,
+        "scoreAttackMstId": 28,
+        "startTime": "2026-09-27T21:00:00+09:00",
+        "totalScoreRewardGroupId": 27
     }
 ]

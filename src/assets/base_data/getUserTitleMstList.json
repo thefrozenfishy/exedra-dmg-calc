@@ -54,6 +54,12 @@
         "value1": 10020701
     },
     {
+        "title": "Metallicized Projectile",
+        "titleType": 1,
+        "userTitleMstId": 10020801,
+        "value1": 10020801
+    },
+    {
         "title": "Tiro Finale",
         "titleType": 1,
         "userTitleMstId": 10030101,
@@ -768,6 +774,18 @@
         "value1": 0
     },
     {
+        "title": "Birdcage Witch (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20104013,
+        "value1": 0
+    },
+    {
+        "title": "Stage Witch (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20104014,
+        "value1": 0
+    },
+    {
         "title": "Sandbox Witch (Standard) Ace",
         "titleType": 0,
         "userTitleMstId": 20201001,
@@ -879,6 +897,12 @@
         "title": "Sandbox Witch (Chaos) Ace",
         "titleType": 0,
         "userTitleMstId": 20204001,
+        "value1": 0
+    },
+    {
+        "title": "Rumor of the Commoner's Horse (Chaos) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20204002,
         "value1": 0
     },
     {
@@ -1026,7 +1050,7 @@
         "value1": 0
     },
     {
-        "title": "Rebellion Nightmare (Standard) Ace",
+        "title": "Rebellion Nightmare Arc (Standard) Ace",
         "titleType": 0,
         "userTitleMstId": 20701001,
         "value1": 0
@@ -1038,7 +1062,7 @@
         "value1": 0
     },
     {
-        "title": "Rebellion Nightmare (Battler) Ace",
+        "title": "Rebellion Nightmare Arc (Battler) Ace",
         "titleType": 0,
         "userTitleMstId": 20702001,
         "value1": 0
@@ -1050,7 +1074,7 @@
         "value1": 0
     },
     {
-        "title": "Rebellion Nightmare (Nightmare) Ace",
+        "title": "Rebellion Nightmare Arc (Nightmare) Ace",
         "titleType": 0,
         "userTitleMstId": 20703001,
         "value1": 0
@@ -1552,6 +1576,12 @@
         "titleType": 2,
         "userTitleMstId": 60000057,
         "value1": 4200103
+    },
+    {
+        "title": "My Friend Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000058,
+        "value1": 4200098
     },
     {
         "title": "Mirrors Ranking S☆☆☆",

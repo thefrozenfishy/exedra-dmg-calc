@@ -65,6 +65,11 @@
         "styleMstId": 10020701
     },
     {
+        "style3dCharacterGroupMstId": 1002071,
+        "style3dCharacterMstId": 100207,
+        "styleMstId": 10020801
+    },
+    {
         "style3dCharacterGroupMstId": 1003011,
         "style3dCharacterMstId": 100301,
         "styleMstId": 10030101

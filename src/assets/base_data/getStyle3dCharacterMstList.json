@@ -110,6 +110,16 @@
         "type": 1
     },
     {
+        "homeMotionResourceName": "chara_10020801_home",
+        "isDefault": true,
+        "isExistVoice": false,
+        "name": "Homura Akemi - Walpurgisnacht Rising",
+        "resourceName": "chara_100208_battle_unit",
+        "sortOrder": 100207,
+        "style3dCharacterMstId": 100207,
+        "type": 1
+    },
+    {
         "homeMotionResourceName": "chara_10030101_home",
         "isDefault": true,
         "isExistVoice": true,

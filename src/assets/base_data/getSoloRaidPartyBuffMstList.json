@@ -106,5 +106,23 @@
         "groupId": 6,
         "passiveSkillMstId": 1600008,
         "soloRaidPartyBuffMstId": 602
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600039,
+        "groupId": 7,
+        "passiveSkillMstId": 1600038,
+        "soloRaidPartyBuffMstId": 700
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600007,
+        "groupId": 7,
+        "passiveSkillMstId": 1600006,
+        "soloRaidPartyBuffMstId": 701
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600009,
+        "groupId": 7,
+        "passiveSkillMstId": 1600008,
+        "soloRaidPartyBuffMstId": 702
     }
 ]

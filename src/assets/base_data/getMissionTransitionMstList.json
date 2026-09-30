@@ -1186,5 +1186,11 @@
         "missionTransitionMstId": 3910001,
         "transitionSceneName": "MainQuest",
         "transitionSceneParam": 0
+    },
+    {
+        "missionMstId": 3023,
+        "missionTransitionMstId": 5055021,
+        "transitionSceneName": "StoryEvent",
+        "transitionSceneParam": 0
     }
 ]

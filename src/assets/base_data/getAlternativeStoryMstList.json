@@ -35,7 +35,7 @@
         "alternativeStoryMstId": 3,
         "chapterNum": 1,
         "comingSoonMovieAssetBundleName": "",
-        "description": "",
+        "description": "In an eerie Mitakihara is an unusual Sayaka Miki.\nOne who tells twisted tales of joy and dismay.\nThe girl who is the new Lighthouse Keeper wonders\n\"if I understood her pain, could I save her?\"",
         "firstClearRewardGroupId": 102,
         "iconAssetBundleName": "chapter_icon_01_02",
         "name": "Chapter 1",
@@ -44,7 +44,7 @@
         "prevAlternativeStoryMstId": 2,
         "questMapMstId": 131,
         "sortOrder": 3,
-        "startTime": "2050-01-01T00:00:00+09:00",
-        "title": ""
+        "startTime": "2026-09-27T21:00:00+09:00",
+        "title": "Theory of Relative Happiness"
     }
 ]

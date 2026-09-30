@@ -58,5 +58,15 @@
         "maxBuffPointOnEnhanced": 30,
         "passiveSkillMstId": 1600031,
         "soloRaidSeasonBuffMstId": 600
+    },
+    {
+        "buffPointChargePassiveSkillMstId": 1600035,
+        "enhancedPassiveSkillMstId": 1600037,
+        "enhancedSkillTurnGaugeValue": 40,
+        "groupId": 7,
+        "maxBuffPoint": 100,
+        "maxBuffPointOnEnhanced": 30,
+        "passiveSkillMstId": 1600036,
+        "soloRaidSeasonBuffMstId": 700
     }
 ]

@@ -332,6 +332,10 @@
         "live2DParamMstId": 200235
     },
     {
+        "json": "{\"textureWidth\":512,\"height\":-70,\"modelScale\":1.3,\"idleFace\":[\"mtn_ex_000.exp3.json\",\"mtn_ex_000.exp3.json\"],\"motionFace\":[\"mtn_ex_011.exp3.json\",\"\",\"\",\"\"],\"charaName\":\"暁美ほむらre(ワルプルギス)_圧縮\",\"expressions\":[{\"name\":\"mtn_ex_014.exp3.json\",\"desc\":\"笑顔2\"},{\"name\":\"mtn_ex_063.exp3.json\",\"desc\":\"絶望\"}]}",
+        "live2DParamMstId": 200236
+    },
+    {
         "json": "{\"textureWidth\":512,\"height\":-70,\"modelScale\":1.3,\"idleFace\":[\"mtn_ex_000.exp3.json\",\"mtn_ex_000.exp3.json\"],\"motionFace\":[\"mtn_ex_011.exp3.json\",\"\",\"\",\"\"],\"charaName\":\"暁美ほむらre_(クール・入院着)_圧縮\",\"expressions\":[{\"name\":\"mtn_ex_014.exp3.json\",\"desc\":\"笑顔2\"},{\"name\":\"mtn_ex_063.exp3.json\",\"desc\":\"絶望\"}]}",
         "live2DParamMstId": 200262
     },
@@ -442,6 +446,10 @@
     {
         "json": "{\"textureWidth\":768,\"height\":-100,\"motionFace\":[\"mtn_ex_011.exp3.json\",\"\",\"\",\"\"],\"charaName\":\"百江なぎさre_(私服)_圧縮\",\"expressions\":[{\"name\":\"mtn_ex_031.exp3.json\",\"desc\":\"悲愴\"},{\"name\":\"mtn_ex_033.exp3.json\",\"desc\":\"無表情\"},{\"name\":\"mtn_ex_034.exp3.json\",\"desc\":\"無表情(暗い)\"},{\"name\":\"mtn_ex_035.exp3.json\",\"desc\":\"悲哀(暗い)\"},{\"name\":\"mtn_ex_060.exp3.json\",\"desc\":\"ダメージ\"}]}",
         "live2DParamMstId": 200731
+    },
+    {
+        "json": "{\"textureWidth\":768,\"height\":-100,\"motionFace\":[\"mtn_ex_011.exp3.json\",\"\",\"\",\"\"],\"charaName\":\"百江なぎさ(マギアデイ)re_圧縮\",\"expressions\":[{\"name\":\"mtn_ex_031.exp3.json\",\"desc\":\"悲愴\"},{\"name\":\"mtn_ex_033.exp3.json\",\"desc\":\"無表情\"},{\"name\":\"mtn_ex_034.exp3.json\",\"desc\":\"無表情(暗い)\"},{\"name\":\"mtn_ex_035.exp3.json\",\"desc\":\"悲哀(暗い)\"},{\"name\":\"mtn_ex_060.exp3.json\",\"desc\":\"ダメージ\"}]}",
+        "live2DParamMstId": 200732
     },
     {
         "json": "{\"textureWidth\":512,\"height\":-90,\"modelScale\":1.3,\"idleFace\":[\"mtn_ex_010.exp3.json\",\"mtn_ex_010.exp3.json\"],\"motionFace\":[\"\",\"\",\"\",\"\"],\"charaName\":\"愛生まばゆre_圧縮\",\"expressions\":[{\"name\":\"mtn_ex_014.exp3.json\",\"desc\":\"恍惚2\"},{\"name\":\"mtn_ex_035.exp3.json\",\"desc\":\"考える\"},{\"name\":\"mtn_ex_053.exp3.json\",\"desc\":\"驚愕\"}]}",

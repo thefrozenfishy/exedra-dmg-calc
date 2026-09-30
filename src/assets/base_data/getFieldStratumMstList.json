@@ -2854,5 +2854,29 @@
         "soundMstId": 0,
         "stratumName": "",
         "stratumNum": 1
+    },
+    {
+        "fieldStageMstId": 718004,
+        "fieldStratumMstId": 7180041,
+        "isWholeFieldVisible": false,
+        "soundMstId": 0,
+        "stratumName": "",
+        "stratumNum": 1
+    },
+    {
+        "fieldStageMstId": 719004,
+        "fieldStratumMstId": 7190041,
+        "isWholeFieldVisible": false,
+        "soundMstId": 0,
+        "stratumName": "",
+        "stratumNum": 1
+    },
+    {
+        "fieldStageMstId": 720004,
+        "fieldStratumMstId": 7200041,
+        "isWholeFieldVisible": false,
+        "soundMstId": 0,
+        "stratumName": "",
+        "stratumNum": 1
     }
 ]
