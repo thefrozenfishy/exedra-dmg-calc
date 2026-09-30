@@ -163,7 +163,7 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   permanent; `StateAbilityEffect.Triggering` 0x1901cb0 passes isOwnSkill = (origin ActiveSkill && target == user)
   || (origin PassiveSkill && target == user && the current act's unit is the user && IsConditionActivation [?]).
   So a self-buff from your own skill survives the TurnEnd of the turn it was cast in; a buff on an ally is counted
-  down at that ally's next TurnEnd. [C] **TS differs**: `storeTimedEffect` exempts every timed state (STATUS.md).
+  down at that ally's next TurnEnd. [C] TS: `isOwnSkillState` in PvPTeam.ts (fixed 2026-09-30).
 - ADD_BUFF_TURN / ADD_DEBUFF_TURN: states on the caster giving +v1 turns to every IBuff/IDebuff state it gives.
   DEC/ADD_BUFF/DEBUFF_TURN_IMM: ±value2 turns now, value1 = state id filter, ailments/Cutaway/AddTurn excluded,
   a state below 1 turn is removed. [C]

@@ -128,6 +128,10 @@ export class PvPBattle {
     static roundOf(t: number): number { return t < 150 ? 1 : Math.floor((t - 150) / 100) + 2 }
     get currentRound(): number { return PvPBattle.roundOf(this.elapsed) }
 
+    // Solo Raid score: the real score is computed server-side. Approximation agreed with the user:
+    // 20 points per unit of elapsed action value (a clear at 2.5 turns = 250 AV -> 5000 "team points used").
+    get teamPointsUsed(): number { return Math.round(20 * this.elapsed) }
+
     // [CONFIRMED 3.19] SoloRaidGameDirector.ApplyEnemyInfo (0x14a6db0) + InitializeCountdownForRestart (0x14a7530):
     // enemies (matched by position) get their HP, break gauge, broken-damage bonus and turn gauge back; the link pool
     // and the endless index continue; a running countdown is restored on the enemy whose skill starts it.

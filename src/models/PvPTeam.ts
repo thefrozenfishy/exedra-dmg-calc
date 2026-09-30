@@ -1048,7 +1048,7 @@ export class KiokuState {
             // AccumCount = min(+1, max); remaining turn and the exempt flag are overwritten by the new application.
             for (const map of maps) for (const [key, d] of map) {
                 if (d.abilityEffectType === type && d.value1 === detail.value1 && d._applierState === applierState && (d.value2 ?? 0) === (detail.value2 ?? 0)) {
-                    map.set(key, { ...d, _accumCount: Math.min((d._accumCount ?? 1) + 1, detail.value2 || 1), turn: detail.turn, _isExemptPassingTurnOnce: !!detail.turn })
+                    map.set(key, { ...d, _accumCount: Math.min((d._accumCount ?? 1) + 1, detail.value2 || 1), turn: detail.turn, _isExemptPassingTurnOnce: !!detail.turn && this.isOwnSkillState(t, detail, applierState) })
                     return true
                 }
             }
@@ -1058,12 +1058,22 @@ export class KiokuState {
             // HitCounter are kept.
             for (const map of maps) for (const [key, d] of map) {
                 if (d.abilityEffectType === type && d.value1 === detail.value1) {
-                    map.set(key, { ...d, turn: Math.max(d.turn ?? 0, detail.turn ?? 0), _isExemptPassingTurnOnce: true })
+                    map.set(key, { ...d, turn: Math.max(d.turn ?? 0, detail.turn ?? 0), _isExemptPassingTurnOnce: this.isOwnSkillState(t, detail, applierState) })
                     return true
                 }
             }
         }
         return false
+    }
+
+    // Unit whose act is running when applyEffect was called (for the exempt-once rule below).
+    private _actUnit?: KiokuState
+    // [CONFIRMED 3.19] StateAbilityEffect.Triggering (0x1901cb0) / UnitStateBase.SetTriggeringInfo (0x16dfd70):
+    // IsExemptPassingTurnOnce only for a state a unit gives ITSELF - from an active skill, or from a passive while
+    // it is that unit's own act. Matches in-game observation (a buff from an ally ticks at your next TurnEnd).
+    private isOwnSkillState(t: KiokuState, detail: SkillDetail, applierState: KiokuState): boolean {
+        if (t !== applierState) return false
+        return !("passiveSkillDetailMstId" in detail) || this._actUnit === applierState
     }
 
     private storeTimedEffect(t: KiokuState, detail: SkillDetail, applier: string, applierState: KiokuState): boolean {
@@ -1107,7 +1117,7 @@ export class KiokuState {
                 : isOpponentEffect(detail.abilityEffectType) ? "ADD_DEBUFF_TURN" : undefined
             if (want) for (const d of fx[want] ?? []) turn += d.value1
         }
-        t.activeEffectDetails.set(key, { applier, ...detail, turn, _isExemptPassingTurnOnce: true, _accumCount: 1, _applierState: applierState,
+        t.activeEffectDetails.set(key, { applier, ...detail, turn, _isExemptPassingTurnOnce: this.isOwnSkillState(t, detail, applierState), _accumCount: 1, _applierState: applierState,
             ...(detail.abilityEffectType.startsWith("UNIQUE_ELEMENT_") ? { _lv: 1, _hitCounter: 0 } : {}),
             ...(detail.abilityEffectType === "VORTEX_ATK" ? { _remainAttackCount: detail.value2 ?? 0 } : {}) } as any)
         t.updateSpd()
@@ -1137,6 +1147,7 @@ export class KiokuState {
         // [CONFIRMED 3.19] A state's ActiveConditionSet is re-checked continuously
         // (UnitStateBase.IsActive), not at the moment it is added: only the start conditions gate
         // adding a state. Instant effects (damage, EP, HASTE, ...) check both now.
+        this._actUnit = trueActorUnit
         const triggerState = this.stateGen(this, target, targetType, trueActorUnit, mainTarget)
         if (UNIT_STATE_TYPES.has(detail.abilityEffectType)
             ? !isConditionSetActiveForPvP((detail.startConditionSetIdCsv ?? "").split(","), triggerState)

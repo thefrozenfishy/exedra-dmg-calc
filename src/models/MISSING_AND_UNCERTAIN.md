@@ -1,3 +1,11 @@
+# Revision 11 - duration exempt-once, raid score, break bonus (3.19.0)
+
+- [CONFIRMED] IsExemptPassingTurnOnce only for states a unit gives itself (active skill, or passive during its own
+  act): `isOwnSkillState` in PvPTeam.ts. Previously every timed state was exempt, so buffs/debuffs from others
+  lasted one of the holder's turns too long. Also applied to UNIQUE accum / Lv blends.
+- [APPROXIMATION, by decision] Solo Raid score = round(20 × elapsed AV) ("team points used", PvPBattle.teamPointsUsed).
+- [TODO, by decision] Break bonus damage fixed at 0 (BREAK_BONUS_DAMAGE); UP_BREAK_EFFECT is stored but inert.
+
 # Revision 10 - character kit mechanics and full Solo Raid (3.19.0)
 
 ## R10.1 Kit mechanics

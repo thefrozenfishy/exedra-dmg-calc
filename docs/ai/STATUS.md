@@ -1,6 +1,6 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-09-30 night (stash applied and committed: kit mechanics + full Solo Raid)._
+_Last updated: 2026-09-30 evening (exempt-once fix, raid score, break bonus = 0)._
 
 ## Branches and uncommitted work in E:\exedra-dmg-calc
 
@@ -15,17 +15,21 @@ branches or changing the engine. On battle-engine-3.19 `xq build` still lists UN
 UNIQUE_10030301 / UNIQUE_10070201 (pure marker states: stored generically, read by conditions 12/26 - nothing more to
 do) and UP_BREAK_EFFECT (blocked, open question 1).
 
-## Probable engine bug found 2026-09-30 (not fixed yet)
+## Fixed 2026-09-30: state duration exempt-once
 
-State durations: the game skips the first countdown only for a state a unit gives ITSELF with its own skill
-(IsExemptPassingTurnOnce, MECHANICS.md section 8, 0x16dfd70 / 0x1901cb0). `PvPTeam.ts` `storeTimedEffect` sets
-`_isExemptPassingTurnOnce: true` for every timed state, so buffs/debuffs on OTHER units last one of their turns
-too long (e.g. Luce's 2-turn team buff covers an ally's next 3 turns instead of 2). Check in game (count an ally's
-turns under a 2-turn buff from someone else), then fix + fixture.
+`storeTimedEffect` / `mergeUniqueState` now set `_isExemptPassingTurnOnce` only via `isOwnSkillState`: the holder
+gave the state to itself, from an active skill, or from a passive during its own act (MECHANICS.md section 8).
+Confirmed by the user's in-game observation. Buffs from allies now tick at the holder's next TurnEnd.
+
+## Decisions taken with the user (2026-09-30)
+
+- Break bonus damage (UP_BREAK_EFFECT): fixed at 0 (`BREAK_BONUS_DAMAGE` in BreakPoint.ts, TODO). Negligible in game.
+- Solo Raid score: `PvPBattle.teamPointsUsed` = round(20 × elapsed AV), shown as "N team points used" after a raid
+  run (2.5 turns = 250 AV -> 5000). An approximation; the real score is server-side.
 
 ## Open questions (most useful first)
 
-1. Break bonus damage (`GetBreakDamage` 0x137d340) needs `LevelReactionBreakDamageValue` (client-provided, not in
+1. (Parked: set to 0 by decision) Break bonus damage (`GetBreakDamage` 0x137d340) needs `LevelReactionBreakDamageValue` (client-provided, not in
    data): one in-game break-bonus number per attacker level would let us back-solve it. UP_BREAK_EFFECT depends on it.
 2. Character HealRate / RecoveryEpRate / EffectHit/ParryRate come from styles/params not in base_data (treated 0).
 3. EP on hit received: per hit or per act? (applied per damage effect).
@@ -36,7 +40,7 @@ turns under a 2-turn buff from someone else), then fix + fixture.
 7. RE_ACTION_TURN_UNIT_ACT has its own class (ReActionTurnUnitAct) but is still treated as ADDITIONAL_TURN_UNIT_ACT.
 8. RCV_FINAL_DAMAGE applied per damage effect; the game sums the skill per target first (possible ±1).
 9. Waves: a new wave's passives run as BATTLE_START instead of WAVE_START [APPROXIMATION].
-10. Score formulas (Score Attack, Solo Raid, PvP points) are not in the battle core; would need Assembly-CSharp
+10. Score formulas (Score Attack, PvP points; Solo Raid approximated as 20 × AV) are not in the battle core; would need Assembly-CSharp
     UI classes decompiled (`PopupScoreAttackReadyController` ...) or fitting against real results.
 11. Team counters 302/306 details for some enemies; target filters of non-damage effects when an enemy casts.
 

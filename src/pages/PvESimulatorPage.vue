@@ -194,6 +194,8 @@
         <input ref="importInput" type="file" accept=".json,application/json" class="hidden-file" @change="importBattle" />
         <span v-if="pending" class="result waiting">Waiting for your decision</span>
         <span v-else-if="battleResult" class="result" :class="battleResult">{{ battleResult === 'win' ? 'Cleared' : battle?.finishedByRoundLimit ? 'Round limit reached' : 'Defeated' }}</span>
+        <span v-if="!pending && battleResult && raid && battle" class="muted small"
+          title="Approximation: 20 points per AV of elapsed time (the game computes the real score on the server)">{{ battle.teamPointsUsed.toLocaleString() }} team points used ({{ Math.round(battle.elapsed) }} AV)</span>
       </div>
       <BattleTimeline :states="battleOutput" :show-sp="false" :rng-editable="rngMode === 'manual'" @decide="onDecide" />
       <div v-if="pending" ref="pickPanel" class="pick-panel">
