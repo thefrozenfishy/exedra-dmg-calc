@@ -118,14 +118,15 @@
               <div class="enemy-stat"><span class="enemy-stat-label">SPD</span><span class="enemy-stat-value">{{ e.spd
                   }}</span></div>
             </div>
-            <div v-if="e.weak.length || e.resists.length" class="enemy-elements">
-              <span v-if="e.weak.length" class="weak" title="Weak to">Weak
-                <img v-for="w in e.weak" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w" :title="w"
-                  class="elem-icon" />
-              </span>
-              <span v-for="r in e.resists" :key="r.el" class="resist" :title="`${r.el} resist`">
-                <img :src="`/exedra-dmg-calc/elements/${r.el}.png`" :alt="r.el" class="elem-icon" /> −{{ r.pct }}%
-              </span>
+            <div v-if="e.weak.length" class="enemy-elements weak" title="Weak to">Weak
+              <img v-for="w in e.weak" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w" :title="w"
+                class="elem-icon" />
+            </div>
+            <!-- Every resisted element has the same rate, so one number covers them all. -->
+            <div v-if="e.resists.length" class="enemy-elements resist" title="Resists">Resist
+              <img v-for="r in e.resists" :key="r.el" :src="`/exedra-dmg-calc/elements/${r.el}.png`" :alt="r.el"
+                :title="r.el" class="elem-icon" />
+              −{{ e.resists[0].pct }}%
             </div>
             <div class="enemy-controls">
               <label class="chip" :class="{ active: mainTargetIdx === i }"
@@ -172,14 +173,15 @@
               <div class="enemy-stat"><span class="enemy-stat-label">SPD</span><span class="enemy-stat-value">{{ e.spd
                   }}</span></div>
             </div>
-            <div v-if="e.weak.length || e.resists.length" class="enemy-elements">
-              <span v-if="e.weak.length" class="weak" title="Weak to">Weak
-                <img v-for="w in e.weak" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w" :title="w"
-                  class="elem-icon" />
-              </span>
-              <span v-for="r in e.resists" :key="r.el" class="resist" :title="`${r.el} resist`">
-                <img :src="`/exedra-dmg-calc/elements/${r.el}.png`" :alt="r.el" class="elem-icon" /> −{{ r.pct }}%
-              </span>
+            <div v-if="e.weak.length" class="enemy-elements weak" title="Weak to">Weak
+              <img v-for="w in e.weak" :key="w" :src="`/exedra-dmg-calc/elements/${w}.png`" :alt="w" :title="w"
+                class="elem-icon" />
+            </div>
+            <!-- Every resisted element has the same rate, so one number covers them all. -->
+            <div v-if="e.resists.length" class="enemy-elements resist" title="Resists">Resist
+              <img v-for="r in e.resists" :key="r.el" :src="`/exedra-dmg-calc/elements/${r.el}.png`" :alt="r.el"
+                :title="r.el" class="elem-icon" />
+              −{{ e.resists[0].pct }}%
             </div>
           </div>
         </div>
@@ -275,8 +277,8 @@
     </section>
 
     <!-- Buffs & debuffs used by Max Damage, by where they come from -->
-    <section v-if="maxDmg && maxDmg.effects.length" class="card section-card effects-card">
-      <h2 class="section-title">Buffs &amp; Debuffs</h2>
+    <div v-if="maxDmg && maxDmg.effects.length" class="effects-block">
+      <h2 class="section-title page-section-title">Buffs &amp; Debuffs</h2>
       <p class="hint-text">Every buff and debuff your team gives, grouped by what applies it. Max Damage counts the
         ones that are on: buffs on {{ dealerName }} (green) and debuffs on the enemies (red). Click one to turn it off
         or back on; lower its stacks to use fewer.</p>
@@ -304,34 +306,40 @@
             @click="setSectionOn(sec.toggleable, sec.onCount < sec.toggleable.length)">{{ sec.onCount <
               sec.toggleable.length ? 'Turn all on' : 'Turn all off' }}</button>
         </div>
-        <div class="fx-grid">
-          <div v-for="e in sec.effects" :key="e.key" class="fx-card"
-            :class="[e.side === 'ally' ? 'fx-buff' : 'fx-debuff', `fx-${e.status}`]"
-            :title="e.status === 'na' ? e.statusText : `${e.type}\nClick to turn ${e.status === 'off' ? 'on' : 'off'}`"
-            @click="e.status !== 'na' && toggleEffect(e.key)">
-            <div class="fx-head">
-              <img v-if="memberId(e.casterPos)" class="fx-thumb" :src="kiokuImage(memberId(e.casterPos)!)"
-                :alt="e.casterName" />
-              <span class="fx-caster">{{ e.casterName }}</span>
-              <span class="fx-switch">{{ e.status === 'off' ? 'Off' : e.status === 'na' ? 'N/A' : 'On' }}</span>
-            </div>
-            <div class="fx-effect">
-              <span class="fx-name">{{ e.side === 'ally' ? 'Buff' : 'Debuff' }}: {{ e.name }}</span>
-              <span v-if="e.value" class="fx-value">{{ e.value }}</span>
-            </div>
-            <div v-if="e.description" class="fx-desc">{{ e.description }}</div>
-            <div class="fx-foot">
-              <span class="fx-target">{{ e.statusText }}</span>
-              <label v-if="e.maxStacks > 1 && e.status !== 'na'" class="fx-stacks" @click.stop>
-                Stacks <input class="num" type="number" min="0" :max="e.maxStacks" :value="e.stacks"
-                  @change="setStacks(e.key, Number(($event.target as HTMLInputElement).value), e.maxStacks)" /> / {{
-                e.maxStacks }}
-              </label>
+        <template v-for="row in sec.rows" :key="row.side">
+          <h4 class="fx-row-title" :class="row.side === 'ally' ? 'fx-row-buffs' : 'fx-row-debuffs'">{{ row.title }}</h4>
+          <!-- One cell per team slot, in the same columns as the team. -->
+          <div class="team-grid fx-grid">
+            <div v-for="(cell, slot) in row.cells" :key="slot" class="fx-cell">
+              <div v-if="cell.length" class="fx-cell-head">
+                <img v-if="team.slots[slot]?.main" class="fx-thumb" :src="kiokuImage(team.slots[slot].main!.id)"
+                  :alt="cell[0].casterName" />
+                <span class="fx-caster">{{ cell[0].casterName }}</span>
+              </div>
+              <div v-for="e in cell" :key="e.key" class="fx-card"
+                :class="[e.side === 'ally' ? 'fx-buff' : 'fx-debuff', `fx-${e.status}`]"
+                :title="e.status === 'na' ? e.statusText : `${e.type}\nClick to turn ${e.status === 'off' ? 'on' : 'off'}`"
+                @click="e.status !== 'na' && toggleEffect(e.key)">
+                <div class="fx-effect">
+                  <span class="fx-name">{{ e.name }}</span>
+                  <span v-if="e.value" class="fx-value">{{ e.value }}</span>
+                </div>
+                <div v-if="e.description" class="fx-desc">{{ e.description }}</div>
+                <div class="fx-foot">
+                  <span class="fx-target">{{ e.statusText }}</span>
+                  <span class="fx-switch">{{ e.status === 'off' ? 'Off' : e.status === 'na' ? 'N/A' : 'On' }}</span>
+                </div>
+                <label v-if="e.maxStacks > 1 && e.status !== 'na'" class="fx-stacks" @click.stop>
+                  Stacks <input class="num" type="number" min="0" :max="e.maxStacks" :value="e.stacks"
+                    @change="setStacks(e.key, Number(($event.target as HTMLInputElement).value), e.maxStacks)" /> /
+                  {{ e.maxStacks }}
+                </label>
+              </div>
             </div>
           </div>
-        </div>
+        </template>
       </div>
-    </section>
+    </div>
 
     <!-- Battle simulator -->
     <section class="card section-card battle-card">
@@ -601,7 +609,8 @@ const effectViews = computed(() => (maxDmg.value?.effects ?? []).map(e => {
   const count = Math.max(0, Math.min(e.maxStacks, stacks.get(e.key) ?? e.maxStacks))
   return {
     key: e.key, side: e.side, type: e.detail.abilityEffectType, name: effectName(e.detail.abilityEffectType),
-    casterPos: e.casterPos, casterName: e.casterName, source: e.source, maxStacks: e.maxStacks, stacks: count,
+    // Team slot (0-4) of the caster: the column its card goes in.
+    slot: filledSlots.value[e.casterPos]?.[1] ?? e.casterPos, casterName: e.casterName, source: e.source, maxStacks: e.maxStacks, stacks: count,
     value: effectValue(e.detail, e.maxStacks > 1 ? count : 1), description: effectDescription(e.detail),
     ...effectStatus(e),
   }
@@ -626,13 +635,15 @@ const effectSections = computed(() => {
   const rank = (source: string) => { const i = SOURCE_ORDER.indexOf(source); return i < 0 ? SOURCE_ORDER.length : i }
   return [...bySource].sort(([a], [b]) => rank(a) - rank(b)).map(([source, effects]) => {
     const toggleable = effects.filter(e => e.status !== 'na')
+    const sorted = effects.sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.name.localeCompare(b.name))
     return {
       source,
       toggleable,
       onCount: toggleable.filter(e => e.status === 'used' || e.status === 'partial').length,
-      // Buffs before debuffs, what counts first, then by member.
-      effects: effects.sort((a, b) => Number(a.side !== 'ally') - Number(b.side !== 'ally')
-        || STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.casterPos - b.casterPos || a.name.localeCompare(b.name)),
+      // A "Buffs" and a "Debuffs" row, each with one cell per team slot.
+      rows: ([['ally', 'Buffs'], ['enemy', 'Debuffs']] as const)
+        .map(([side, title]) => ({ side, title, cells: [0, 1, 2, 3, 4].map(i => sorted.filter(e => e.side === side && e.slot === i)) }))
+        .filter(row => row.cells.some(c => c.length)),
     }
   })
 })
@@ -1513,7 +1524,8 @@ const saved = useSavedTeams({
 .enemy-elements {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.2rem 0.6rem;
+  align-items: center;
+  gap: 0.25rem;
   font-size: 0.78rem;
 }
 
@@ -1801,10 +1813,39 @@ const saved = useSavedTeams({
   margin-left: auto;
 }
 
-.fx-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 0.5rem;
+.effects-block {
+  container-type: inline-size;
+}
+
+.fx-row-title {
+  margin: 0.6rem 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.fx-row-buffs { color: var(--success); }
+.fx-row-debuffs { color: var(--danger); }
+
+/* Same columns as .team-grid (auto-fill keeps empty slots so each cell stays under its member). */
+.team-grid.fx-grid {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  align-items: start;
+}
+
+.fx-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.fx-cell-head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
 }
 
 /* Green: buff on the damage dealer. Red: debuff on the enemies. Grey: turned off / can't reach. */
@@ -1855,12 +1896,6 @@ const saved = useSavedTeams({
   filter: none;
 }
 
-.fx-head {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-}
-
 .fx-thumb {
   width: 26px;
   height: 26px;
@@ -1870,6 +1905,7 @@ const saved = useSavedTeams({
 }
 
 .fx-caster {
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-light);
   min-width: 0;
