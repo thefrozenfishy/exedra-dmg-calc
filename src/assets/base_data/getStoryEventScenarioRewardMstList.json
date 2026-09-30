@@ -6051,6 +6051,13 @@
         "num": 10,
         "objectId": 0,
         "objectReceiveType": 2,
+        "storyEventScenarioMstId": 107601,
+        "storyEventScenarioRewardMstId": 107601
+    },
+    {
+        "num": 10,
+        "objectId": 0,
+        "objectReceiveType": 2,
         "storyEventScenarioMstId": 107901,
         "storyEventScenarioRewardMstId": 107901
     },
@@ -6102,6 +6109,34 @@
         "objectReceiveType": 2,
         "storyEventScenarioMstId": 107908,
         "storyEventScenarioRewardMstId": 107908
+    },
+    {
+        "num": 10,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "storyEventScenarioMstId": 108001,
+        "storyEventScenarioRewardMstId": 108001
+    },
+    {
+        "num": 10,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "storyEventScenarioMstId": 108002,
+        "storyEventScenarioRewardMstId": 108002
+    },
+    {
+        "num": 10,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "storyEventScenarioMstId": 108003,
+        "storyEventScenarioRewardMstId": 108003
+    },
+    {
+        "num": 10,
+        "objectId": 0,
+        "objectReceiveType": 2,
+        "storyEventScenarioMstId": 108004,
+        "storyEventScenarioRewardMstId": 108004
     },
     {
         "num": 10,

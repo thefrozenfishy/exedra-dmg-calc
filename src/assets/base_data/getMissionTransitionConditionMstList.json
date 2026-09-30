@@ -13,5 +13,15 @@
         "conditionType": 152,
         "missionTransitionConditionMstId": 4,
         "transitionType": 6
+    },
+    {
+        "conditionType": 1851,
+        "missionTransitionConditionMstId": 5,
+        "transitionType": 10
+    },
+    {
+        "conditionType": 1502,
+        "missionTransitionConditionMstId": 6,
+        "transitionType": 16
     }
 ]

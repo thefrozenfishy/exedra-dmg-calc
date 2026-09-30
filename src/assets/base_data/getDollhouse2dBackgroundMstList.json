@@ -2700,6 +2700,36 @@
         "sortOrder": 990691
     },
     {
+        "dollhouse2dBackgroundMstId": 990702,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Little Park (Night)",
+        "releaseTime": "2026-09-27T21:00:00+09:00",
+        "resourceName": "bg_adv_99_90269_02",
+        "seriesId": 999,
+        "sortOrder": 990702
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990711,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Upscale Residential Area (Noon)",
+        "releaseTime": "2026-09-27T21:00:00+09:00",
+        "resourceName": "bg_adv_99_90167_01",
+        "seriesId": 999,
+        "sortOrder": 990221
+    },
+    {
+        "dollhouse2dBackgroundMstId": 990721,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Photography Studio",
+        "releaseTime": "2026-10-03T00:00:00+09:00",
+        "resourceName": "bg_adv_99_10162_01",
+        "seriesId": 999,
+        "sortOrder": 990721
+    },
+    {
         "dollhouse2dBackgroundMstId": 990733,
         "isDefault": false,
         "lightingType": 2,

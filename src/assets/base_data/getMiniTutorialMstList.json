@@ -832,7 +832,7 @@
         "description": "Friends are players that you follow, and players that follow you.\nYou can follow players from the Friends screen and Profile screen.",
         "miniTutorialMstId": 9901,
         "miniTutorialNumber": 99,
-        "resourceName": "friend_01",
+        "resourceName": "friend_02",
         "sortOrder": 1,
         "title": "Friends"
     },

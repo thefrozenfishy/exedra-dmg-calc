@@ -8503,5 +8503,14 @@
         "policyType": 7,
         "startTime": "2020-01-01T00:00:00+09:00",
         "value": 0
+    },
+    {
+        "calculationPointPolicyMstId": 946,
+        "coefficientName": "difficultyCoefficient",
+        "conditionValue": 51,
+        "conditionValue2": 0,
+        "policyType": 1,
+        "startTime": "2020-01-01T00:00:00+09:00",
+        "value": 25000
     }
 ]

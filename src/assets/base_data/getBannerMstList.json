@@ -2940,6 +2940,27 @@
         "name": ""
     },
     {
+        "bannerLabelMstId": 17,
+        "bannerMstId": 427,
+        "destination": "Gacha",
+        "imageName": "banner_00383",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 9,
+        "bannerMstId": 428,
+        "destination": "Gacha",
+        "imageName": "banner_00383",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 10,
+        "bannerMstId": 429,
+        "destination": "Gacha",
+        "imageName": "banner_00383",
+        "name": ""
+    },
+    {
         "bannerLabelMstId": 9,
         "bannerMstId": 430,
         "destination": "Gacha",
@@ -2979,6 +3000,90 @@
         "bannerMstId": 435,
         "destination": "",
         "imageName": "banner_00381",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 14,
+        "bannerMstId": 436,
+        "destination": "Gacha",
+        "imageName": "banner_00399",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 14,
+        "bannerMstId": 437,
+        "destination": "Gacha",
+        "imageName": "banner_00388",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 11,
+        "bannerMstId": 438,
+        "destination": "Gacha",
+        "imageName": "banner_00389",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 2,
+        "bannerMstId": 439,
+        "destination": "StoryEvent",
+        "imageName": "banner_00386",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 2,
+        "bannerMstId": 440,
+        "destination": "StoryEvent",
+        "imageName": "banner_00387",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 12,
+        "bannerMstId": 441,
+        "destination": "Gacha",
+        "imageName": "banner_00364",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 0,
+        "bannerMstId": 442,
+        "destination": "",
+        "imageName": "banner_00391",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 4,
+        "bannerMstId": 443,
+        "destination": "MainQuest",
+        "imageName": "banner_00392",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 2,
+        "bannerMstId": 444,
+        "destination": "StoryEvent",
+        "imageName": "banner_00382",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 5,
+        "bannerMstId": 449,
+        "destination": "",
+        "imageName": "banner_00393",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 5,
+        "bannerMstId": 450,
+        "destination": "",
+        "imageName": "banner_00394",
+        "name": ""
+    },
+    {
+        "bannerLabelMstId": 0,
+        "bannerMstId": 451,
+        "destination": "",
+        "imageName": "banner_00395",
         "name": ""
     }
 ]

@@ -2959,6 +2959,17 @@
         "targetParams": ""
     },
     {
+        "abilityEffectTypeMstId": 274,
+        "category": 3,
+        "displayType": 2,
+        "effectType": "LOCK_SPECIAL_ATTACK",
+        "iconName": "",
+        "name": "Magic Seal",
+        "paramEffectType": 0,
+        "stateFlipName": "Magic Seal",
+        "targetParams": ""
+    },
+    {
         "abilityEffectTypeMstId": 1001,
         "category": 2,
         "displayType": 1,

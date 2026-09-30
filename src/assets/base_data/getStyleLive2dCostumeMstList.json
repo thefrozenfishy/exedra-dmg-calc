@@ -361,6 +361,18 @@
     },
     {
         "cheekParam": 0,
+        "defaultOption": "",
+        "isDefault": true,
+        "isExistVoice": false,
+        "name": "Homura Akemi - Walpurgisnacht Rising",
+        "releaseTime": "2026-09-27T21:00:00+09:00",
+        "resourceName": "200236",
+        "sortOrder": 100242,
+        "styleLive2dCostumeMstId": 100242,
+        "type": 1
+    },
+    {
+        "cheekParam": 0,
         "defaultOption": "\"\"",
         "isDefault": true,
         "isExistVoice": true,

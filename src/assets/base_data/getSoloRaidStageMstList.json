@@ -358,5 +358,65 @@
         "questStageMstId": 1406106,
         "soloRaidMstId": 6,
         "soloRaidStageMstId": 606
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>The Witch's Minions gain Magic when not attacked. Each time their Magic reaches max, they use counterattack, assist, and other actions.<br>Their Magic decreases when attacked, so prioritize assigning Kioku to your party capable of performing all-target attacks to prevent them from gaining Magic.",
+        "difficulty": 1,
+        "dioramaBackgroundMstId": 120119,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60037,
+        "questStageMstId": 1407101,
+        "soloRaidMstId": 7,
+        "soloRaidStageMstId": 701
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>The Witch's Minions gain Magic when not attacked. Each time their Magic reaches max, they use counterattack, assist, and other actions.<br>Their Magic decreases when attacked, so prioritize assigning Kioku to your party capable of performing all-target attacks to prevent them from gaining Magic.",
+        "difficulty": 2,
+        "dioramaBackgroundMstId": 120119,
+        "limitRoundCount": 5,
+        "questRewardGroupId": 60038,
+        "questStageMstId": 1407102,
+        "soloRaidMstId": 7,
+        "soloRaidStageMstId": 702
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>The Witch's Minions gain Magic when not attacked. Each time their Magic reaches max, they use counterattack, assist, and other actions.<br>Their Magic decreases when attacked, so prioritize assigning Kioku to your party capable of performing all-target attacks to prevent them from gaining Magic.",
+        "difficulty": 3,
+        "dioramaBackgroundMstId": 120119,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60039,
+        "questStageMstId": 1407103,
+        "soloRaidMstId": 7,
+        "soloRaidStageMstId": 703
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>The Witch's Minions gain Magic when not attacked. Each time their Magic reaches max, they use counterattack, assist, and other actions.<br>Their Magic decreases when attacked, so prioritize assigning Kioku to your party capable of performing all-target attacks to prevent them from gaining Magic.",
+        "difficulty": 4,
+        "dioramaBackgroundMstId": 120119,
+        "limitRoundCount": 4,
+        "questRewardGroupId": 60040,
+        "questStageMstId": 1407104,
+        "soloRaidMstId": 7,
+        "soloRaidStageMstId": 704
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>The Witch's Minions gain Magic when not attacked. Each time their Magic reaches max, they use counterattack, assist, and other actions.<br>Their Magic decreases when attacked, so prioritize assigning Kioku to your party capable of performing all-target attacks to prevent them from gaining Magic.",
+        "difficulty": 5,
+        "dioramaBackgroundMstId": 120119,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60041,
+        "questStageMstId": 1407105,
+        "soloRaidMstId": 7,
+        "soloRaidStageMstId": 705
+    },
+    {
+        "comment": "In Wave 1, the Witch's Minions have <tooltips_id=4>.<br>The Witch's Minions gain Magic when not attacked. Each time their Magic reaches max, they use counterattack, assist, and other actions.<br>Their Magic decreases when attacked, so prioritize assigning Kioku to your party capable of performing all-target attacks to prevent them from gaining Magic.",
+        "difficulty": 6,
+        "dioramaBackgroundMstId": 120119,
+        "limitRoundCount": 3,
+        "questRewardGroupId": 60042,
+        "questStageMstId": 1407106,
+        "soloRaidMstId": 7,
+        "soloRaidStageMstId": 706
     }
 ]

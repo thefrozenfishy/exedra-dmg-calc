@@ -8,5 +8,10 @@
         "bingoMissionMstId": 5,
         "firstMissionTitleMstId": 2017,
         "sortOrder": 100
+    },
+    {
+        "bingoMissionMstId": 6,
+        "firstMissionTitleMstId": 2018,
+        "sortOrder": 100
     }
 ]

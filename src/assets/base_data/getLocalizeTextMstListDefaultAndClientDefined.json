@@ -128,6 +128,10 @@
         "textMstId": "021da1b20f73dc252361a54d80497ef31"
     },
     {
+        "text": "60/60",
+        "textMstId": "02240250bbb4d8ee3f99211d437b7abe1"
+    },
+    {
         "text": "Magica Stone x60",
         "textMstId": "0237d7b057f37d2348932d62ed719af71"
     },
@@ -868,6 +872,10 @@
         "textMstId": "0bcef9c45bd8a48eda1b26eb0c61c8691"
     },
     {
+        "text": "Comment",
+        "textMstId": "0be8406951cdfda82f00f79328cf4efc1"
+    },
+    {
         "text": "A new app version is now available.\nPlease restart the app.",
         "textMstId": "0bf729dfa5bfd50e45759d11a491a0001"
     },
@@ -1100,6 +1108,10 @@
         "textMstId": "0f059cf5ecc97054b9be7bbf73049f091"
     },
     {
+        "text": "Skip Count",
+        "textMstId": "0f14ac7ee4bb77e802b7e2250b842d641"
+    },
+    {
         "text": "Touka Satomi",
         "textMstId": "0f1ea15ea9f840e011373b8e5d0045e01"
     },
@@ -1210,6 +1222,10 @@
     {
         "text": "Aqua RES",
         "textMstId": "10c0883b2c2bfbe77647bfbd91cd28fa1"
+    },
+    {
+        "text": "Cannot ascend further.",
+        "textMstId": "10c20f142265bb0acbbcadbd432925f81"
     },
     {
         "text": "You are now at max QP.",
@@ -1368,12 +1384,20 @@
         "textMstId": "1356700ad4898ab380ad84754b9db8831"
     },
     {
+        "text": "{0} {1} {2} {3} is now unlocked.",
+        "textMstId": "135ab5fa86b65431659c329c6d25d5311"
+    },
+    {
         "text": "You must be union master or submaster to remove a member.",
         "textMstId": "136cefe4a240157d00b4b680283ec8631"
     },
     {
         "text": "Nurse B",
         "textMstId": "1380f7b69b224f886f001a964d82690e1"
+    },
+    {
+        "text": "Display item(s) from all\nyou have at random",
+        "textMstId": "138f68866f0b2835e15ad40d15f7590f1"
     },
     {
         "text": "Tap where you'd like to position the model.\n<color=#B9B2A8><size=25pt>* You can hold and swipe to adjust the position.</size></color>",
@@ -1390,6 +1414,10 @@
     {
         "text": "Order Options",
         "textMstId": "13a7cca8a005a668f72ca531971f61b91"
+    },
+    {
+        "text": "You have no trophies.",
+        "textMstId": "13ac436c27549c35ee3e01933912332a1"
     },
     {
         "text": "What-If Story",
@@ -2176,6 +2204,10 @@
         "textMstId": "1dbd92f8fe0e60e4b8f684e8a7670c7f1"
     },
     {
+        "text": "Unaffiliated",
+        "textMstId": "1dbda67dc58fee11fcc09434d113edf11"
+    },
+    {
         "text": "Critical",
         "textMstId": "1dc2716015603038746cf3ffa536045c1"
     },
@@ -2708,6 +2740,10 @@
         "textMstId": "246e5285c6c9490115eff3c656e8b99c1"
     },
     {
+        "text": "Randomizer Settings",
+        "textMstId": "248446b9207e0087f5b6577208a9bc851"
+    },
+    {
         "text": "Sakae Ward",
         "textMstId": "24997aff67d5c051c6fd9f5b9f3025551"
     },
@@ -2750,6 +2786,10 @@
     {
         "text": "Results Viewability Period:",
         "textMstId": "24fe7aefccb3ae9e365c01ce6ff592fc1"
+    },
+    {
+        "text": "{0} will be consumed,\nand the following Kioku will be ascended.",
+        "textMstId": "250337b9e9bffc4d469a2408cba6cbb61"
     },
     {
         "text": "456",
@@ -2858,6 +2898,10 @@
     {
         "text": "No abilities to convert.",
         "textMstId": "265027b23380d3143e9d34d469b7f7a31"
+    },
+    {
+        "text": "Cannot ascend. Insufficient materials.",
+        "textMstId": "265929985250458054e078a34e4bf6651"
     },
     {
         "text": "{0}h ago",
@@ -3056,6 +3100,10 @@
         "textMstId": "28f5aa54b17106d446047300e96b31ab1"
     },
     {
+        "text": "Select material(s) for ascension.",
+        "textMstId": "290432798060eb3b9df1b2aa0e47cc811"
+    },
+    {
         "text": "Under 16",
         "textMstId": "29260bd5845b63a0f51d833b85d2728b1"
     },
@@ -3096,6 +3144,10 @@
         "textMstId": "29b8cf461220d6779fbb0cd6579b59ac1"
     },
     {
+        "text": "Changes to profile saved.",
+        "textMstId": "29bb830e31327ede424f7f3978afc1901"
+    },
+    {
         "text": "Series",
         "textMstId": "29be070260ece69f85b002b4f0c4bb841"
     },
@@ -3134,6 +3186,10 @@
     {
         "text": "+4",
         "textMstId": "2a24213f4f964092cabeb9859056f9701"
+    },
+    {
+        "text": "Bulk Skip",
+        "textMstId": "2a2b08623546e91b01f1b89183a611bf1"
     },
     {
         "text": "Battled members.",
@@ -3200,6 +3256,10 @@
         "textMstId": "2addec3c52abd4d6355ecee38b9122bb1"
     },
     {
+        "text": "* Bulk skip will be performed maintaining the status from the last time you skipped.",
+        "textMstId": "2ae4336ec16c8860439a864c407347921"
+    },
+    {
         "text": "Change Lvl.",
         "textMstId": "2ae5f177bed99bf37a451964f7c9089a1"
     },
@@ -3210,6 +3270,10 @@
     {
         "text": "+111",
         "textMstId": "2afe6ec8b228c217570c07c1c69f87e11"
+    },
+    {
+        "text": "There is no skippable content.",
+        "textMstId": "2b270e5d763003a863000d803dd2451a1"
     },
     {
         "text": "Additional Effect",
@@ -3426,6 +3490,10 @@
     {
         "text": "Delete Account",
         "textMstId": "2e146e2a4c96943d1e6c2f0d2e7c4ed71"
+    },
+    {
+        "text": "No models placed.",
+        "textMstId": "2e30171d12aeb1293e48ebb345feb50d1"
     },
     {
         "text": "Log",
@@ -4088,6 +4156,10 @@
         "textMstId": "35c4228073a03c82de47409d9ad545ea1"
     },
     {
+        "text": "Favorite Magical Girl(s)",
+        "textMstId": "35c8d49fcc70ecfde047265c1fbbc8f81"
+    },
+    {
         "text": "Tower Select",
         "textMstId": "35caec8dee06638ff8c9441c99dce9bb1"
     },
@@ -4168,6 +4240,10 @@
         "textMstId": "366d84de531c0c297ddfa66c273fbfdc1"
     },
     {
+        "text": "{0} \"{1}\" Window Into Memory unlocked.",
+        "textMstId": "366fb198ac1b6c8dbd4a221e648ae04b1"
+    },
+    {
         "text": "Upgrade Quests (Kioku)",
         "textMstId": "3675c391b3af543747c331971e4a930b1"
     },
@@ -4214,6 +4290,10 @@
     {
         "text": "Country/region information deleted.\n\nThe game will now close.",
         "textMstId": "36ec14356cc347cd577771ae1279e8c11"
+    },
+    {
+        "text": "Link Raid Likes",
+        "textMstId": "36ef493a511bc1cb12bb6b122eb8eccf1"
     },
     {
         "text": "A {1} download is required to play {0}.\nStart download?",
@@ -4338,6 +4418,10 @@
     {
         "text": "Ability Slot {0}",
         "textMstId": "3885c372d45f1577170fce766babacd51"
+    },
+    {
+        "text": "Display a random dollhouse\nfrom those you have set",
+        "textMstId": "388f0b18e86c205d86773c46ff1416f41"
     },
     {
         "text": "Showdown period ended.",
@@ -4522,6 +4606,10 @@
     {
         "text": "Select restore method.",
         "textMstId": "3b4cd5771f91f36cfa150a988ba1b66f1"
+    },
+    {
+        "text": "There is no ranking.",
+        "textMstId": "3b6af2aba2f0c5c7c9fc18f832d6c4c51"
     },
     {
         "text": "New Group Chat",
@@ -4788,6 +4876,10 @@
         "textMstId": "3faad0c8f038bf28978bba5e350721461"
     },
     {
+        "text": "Trophies",
+        "textMstId": "3fbd826a4301d9ed066f74f686ec32911"
+    },
+    {
         "text": "RENTAL",
         "textMstId": "3fc2c3cbe8987c1a067e7909484db69a1"
     },
@@ -4890,6 +4982,10 @@
     {
         "text": "Current High Score",
         "textMstId": "40f2208f4727dd6e8221bb28059ba3871"
+    },
+    {
+        "text": "Randomization Range",
+        "textMstId": "41007adbf83c804fa0c35fe301799ac91"
     },
     {
         "text": "Buffs/Debuffs",
@@ -5260,6 +5356,10 @@
         "textMstId": "45238c9e086a8fc4577a80c554242deb1"
     },
     {
+        "text": "Set Dollhouse",
+        "textMstId": "45319adca99eb9ef2c17c325278debf11"
+    },
+    {
         "text": "ID 123456789\n",
         "textMstId": "453a897719d587d35ed89a8fd19d2efd1"
     },
@@ -5428,6 +5528,10 @@
         "textMstId": "471415fd1e56e85ffd64ef1339b4bd741"
     },
     {
+        "text": "Trophies Won",
+        "textMstId": "471e213bdeee943da11490b07f26ec5e1"
+    },
+    {
         "text": "Play Story",
         "textMstId": "4720630c5192d5e64c1c7f484c7291e71"
     },
@@ -5438,6 +5542,10 @@
     {
         "text": "Chat List",
         "textMstId": "473c04f0861c08a1d6ec306d25144fbc1"
+    },
+    {
+        "text": "All skips were completed.",
+        "textMstId": "473dceded416ffdbe61992f2223d45741"
     },
     {
         "text": "Message",
@@ -5474,6 +5582,10 @@
     {
         "text": "The barrier that was activated prevented the loss of HP.",
         "textMstId": "478388c62d253ff2138e0b8343adec721"
+    },
+    {
+        "text": "Score Attack Highest Rank",
+        "textMstId": "4784019b109514ea1b18ae4d459d453e1"
     },
     {
         "text": "ATTACKER",
@@ -5586,6 +5698,10 @@
     {
         "text": "Felicia's Voice",
         "textMstId": "48e86debb05597056fc74d37c5915fd41"
+    },
+    {
+        "text": "Skip of {0} failed.",
+        "textMstId": "48e87d97de36dbca665f8fddbb266d6f1"
     },
     {
         "text": "COUNT",
@@ -5734,6 +5850,10 @@
     {
         "text": "{0} / {1}",
         "textMstId": "4a96f95143a4492175b798c2ddf4e2291"
+    },
+    {
+        "text": "Puella Pictura Rank",
+        "textMstId": "4aa117bc123980e8a91a7eb0ff8466801"
     },
     {
         "text": "Due to the large number of items in your Gift Box, some Gift Box items may not be included in the alert.",
@@ -6094,6 +6214,10 @@
     {
         "text": "Proceed with this lineup?",
         "textMstId": "4eb7945cc82ca7ff575408c3f2949da61"
+    },
+    {
+        "text": "Select at least one.",
+        "textMstId": "4eb8d4b2d069de05d9ab6d8cb96e427c1"
     },
     {
         "text": "A new Magical Girl has been unlocked.\n\n* You can check her profile and more from the Chamber of Light.",
@@ -6730,6 +6854,10 @@
     {
         "text": "Union Match Start Announcements",
         "textMstId": "5709e439e0c3c52af428dbeb580529501"
+    },
+    {
+        "text": "Select Favorite Magical Girls",
+        "textMstId": "571472a325cc82785512a541f986baa21"
     },
     {
         "text": "No traders to display.",
@@ -7532,6 +7660,10 @@
         "textMstId": "60d92116dabb8dcc612cd8e96e19b2461"
     },
     {
+        "text": "Profile photo saved.\n{0}",
+        "textMstId": "60eab7394859f2d684fd3798a39f56451"
+    },
+    {
         "text": "Skip Special Attack Animations",
         "textMstId": "60eb1d1af15db37258bc58d8d60695ea1"
     },
@@ -7600,6 +7732,10 @@
         "textMstId": "61965de10ec831ff0c65ad787f9262151"
     },
     {
+        "text": "Select an Ascension Lvl.",
+        "textMstId": "61a80d140909537aed5c8e7b58b5f0291"
+    },
+    {
         "text": "You cannot add any more plays.",
         "textMstId": "61bb3958480abab7500766fb117dcb8c1"
     },
@@ -7630,6 +7766,10 @@
     {
         "text": "Play All Memories",
         "textMstId": "623da43c0368296f0bc88207392fd8e11"
+    },
+    {
+        "text": "Randomization Options",
+        "textMstId": "624fdf956f729ed3e7c1d16c25c1fbdd1"
     },
     {
         "text": "A synchronization error has occurred. Please check your connection.",
@@ -7698,6 +7838,10 @@
     {
         "text": "Overwrite",
         "textMstId": "631b1691f16ef490702e6f25331bbc051"
+    },
+    {
+        "text": "Select materials to use",
+        "textMstId": "631d121debfd132b2380580c3915e2bd1"
     },
     {
         "text": "If <color=#ecd19c>you have</color> Kioku or portraits with the bonus effect,\nthen you can earn more medals!\nThe bonus multiplier increases with higher ascension levels!",
@@ -7904,12 +8048,20 @@
         "textMstId": "652a704c00b6990ab7fd3cf967f526e41"
     },
     {
+        "text": "Exedra Crisis Highest Rank",
+        "textMstId": "6543e901745454ede636d1f853517b5a1"
+    },
+    {
         "text": "When performing data transfer, any save data on this device will be deleted and overwritten with the transferred data.\n\nData transfer allows you to continue playing with your game data in case it is lost due to a device change, deleting the app, etc. It requires that you complete the transfer setup in advance.\nThere are two types of data transfer setup.\n\n- Setup using a transfer ID and password you set\n- Setup linking to an external social media account",
         "textMstId": "6552e7e50f9a61ebfbfacd4706bcf8861"
     },
     {
         "text": "To {0}",
         "textMstId": "6557eea220ff185bf6250cae681e90bc1"
+    },
+    {
+        "text": "Changes have been made to your profile.\nDiscard changes?",
+        "textMstId": "6560e5f6e25866ecf9fec8d9090d78b51"
     },
     {
         "text": "Directly-placed parts sample",
@@ -8358,6 +8510,10 @@
     {
         "text": "Data transfer allows you to continue playing with your game data in case it is lost due to a device change, deleting the app, etc. It requires that you complete the transfer setup in advance.\nThere are two types of data transfer setup.\n\n- Setup using a transfer ID and password you set\n- Setup linking to an external social media account\n\nPlease note that when transferring data between different platforms, paid Magica Stones will not be transferred and will remain on the original platform.\n\n* When transferring data on the same platform, they will be carried over as-is.\n\nWhen transferring to a different platform or a different account on the same platform, be sure to cancel your Exedra Pass subscription in advance.\nNote that you will not receive duplicate bonuses even if you have multiple/duplicate Exedra Pass subscriptions.\n",
         "textMstId": "6a9c43f079ae3f8be4ddc7cad36c30831"
+    },
+    {
+        "text": "You have no trophies.",
+        "textMstId": "6ab6c93dca66f2512aa16b4027b263291"
     },
     {
         "text": "There are currently no recommended products.",
@@ -9040,6 +9196,10 @@
         "textMstId": "74ded48db7c88cfb833e0b778e1e29be1"
     },
     {
+        "text": "Profile created!\n#madoka_exedra #madoka_exedra_profile",
+        "textMstId": "74fc13ad98d6f36306b738e85f2bda751"
+    },
+    {
         "text": "Important",
         "textMstId": "75018b1bed0718ab2736a5246262b0a51"
     },
@@ -9504,6 +9664,10 @@
         "textMstId": "7bd42ff95b1d7f64c6a76e96052a60671"
     },
     {
+        "text": "Select Favorite Magical Girls",
+        "textMstId": "7bef5c595e8cc9fdd87565522246593f1"
+    },
+    {
         "text": "No battles to display.",
         "textMstId": "7bf10fbd5b792bc87e2a18e27b1616071"
     },
@@ -9724,6 +9888,10 @@
         "textMstId": "7e424ad013a08230a358e9ef617212501"
     },
     {
+        "text": "{0}\nNew Window Into Memory unlocked.",
+        "textMstId": "7e469ae393360795e8c63c26d2358c021"
+    },
+    {
         "text": "Remove follower",
         "textMstId": "7e49a397fad340406cdda17778c999581"
     },
@@ -9836,6 +10004,14 @@
         "textMstId": "7f52e831f6279dd338afd0d11bba1fba1"
     },
     {
+        "text": "Insufficient",
+        "textMstId": "7f56244b9bf17a1c9af26b047d0ed72c1"
+    },
+    {
+        "text": "Accumulated Skips",
+        "textMstId": "7f637199c636d4eb51d51f8ad8c74db41"
+    },
+    {
         "text": "{0} ~",
         "textMstId": "7f6de3a1763e0e1b5402fe55c396401d1"
     },
@@ -9896,12 +10072,20 @@
         "textMstId": "800a108605dca94a1331b0ce7545181f1"
     },
     {
+        "text": "Select at least one.",
+        "textMstId": "800e0031d298474877e4c518b5005d5d1"
+    },
+    {
         "text": "11-Win Streak",
         "textMstId": "801846296bb739f76e6bab95ca0779121"
     },
     {
         "text": "Download",
         "textMstId": "801ab24683a4a8c433c6eb40c48bcd9d1"
+    },
+    {
+        "text": "* Only one can be selected",
+        "textMstId": "80214997f2ba85d7d593a8ab3e8343a91"
     },
     {
         "text": "{0}-person",
@@ -10116,6 +10300,10 @@
         "textMstId": "8310d04f01d4bf34887311898fd57b131"
     },
     {
+        "text": "Battle {0}",
+        "textMstId": "831328d689dc71f86de495c0e713fa341"
+    },
+    {
         "text": "0-Win Streak!",
         "textMstId": "831cadb65de39e16e4dd2db68d8cb3cd1"
     },
@@ -10166,6 +10354,10 @@
     {
         "text": "If you exit the Labyrinth before reaching the goal,\nall items you obtained in the Labyrinth will be reset.\n\nAre you sure you want to exit?",
         "textMstId": "83a3dea601d8bafe6857c43908ab27ad1"
+    },
+    {
+        "text": "Lvl. 12",
+        "textMstId": "83a84baa6fee213b2414d89f9749cbbd1"
     },
     {
         "text": "\"",
@@ -10238,6 +10430,10 @@
     {
         "text": "You can use <color=#ecd19c>{0}</color> to add LP.",
         "textMstId": "847cd545046435c85e2f245ec15493491"
+    },
+    {
+        "text": "Score Attack Highest Rank",
+        "textMstId": "848aa02e594fb93a865481e3a49851bf1"
     },
     {
         "text": "Another Memspark for your collection.",
@@ -10422,6 +10618,10 @@
     {
         "text": "Switch Fate Weave",
         "textMstId": "8683d584621046b912bae30ad0d5b67c1"
+    },
+    {
+        "text": "Start Date",
+        "textMstId": "869d3c7f68e1e9eaff13a9312f2522f91"
     },
     {
         "text": "Stage",
@@ -10704,6 +10904,10 @@
         "textMstId": "89b1288799c9f50b909144e1b5aeb1cb1"
     },
     {
+        "text": "Several Windows Into Memory have been unlocked.",
+        "textMstId": "89cc8d39a0bb193da72cd41994eabef11"
+    },
+    {
         "text": "<color=#ecd19c>{0}★</color> or higher x{1} guaranteed!",
         "textMstId": "89dd4dba3cc962b2b850ae9f347564531"
     },
@@ -10758,6 +10962,10 @@
     {
         "text": "News Presenter (N)",
         "textMstId": "8a6c296ffd6bedd0e76f1962e9ffbc6a1"
+    },
+    {
+        "text": "0-99% or MAX",
+        "textMstId": "8a70216f99e7872266efd0ca507027811"
     },
     {
         "text": "Remaining HP",
@@ -11232,6 +11440,10 @@
         "textMstId": "8fd6abf2bcdd0c41a25d6386fb76a1821"
     },
     {
+        "text": "A data update is available.\nReturning to the Home screen.",
+        "textMstId": "8ff5358694b677091014d9e35d0575dd1"
+    },
+    {
         "text": "Unable to log in. The game is currently under maintenance.",
         "textMstId": "9005515ecd31dbc4c3580586254de9011"
     },
@@ -11596,6 +11808,10 @@
         "textMstId": "9402aa9e519899790e536262b89c4f6d1"
     },
     {
+        "text": "Free Skip Count",
+        "textMstId": "940656ef9daebdc6ff3bb4440a3661e11"
+    },
+    {
         "text": "Terms of Use",
         "textMstId": "940876a28fcdf5012d6123d97a102d4b1"
     },
@@ -11712,6 +11928,10 @@
         "textMstId": "95d83e6c702fb73e40288efe2e30075f1"
     },
     {
+        "text": "Kioku Obtained",
+        "textMstId": "95e7d314c506cb0c031780cdaf73d4e01"
+    },
+    {
         "text": "A payment that was on hold has been completed.",
         "textMstId": "95ea827c766707e39a7e06af59085c811"
     },
@@ -11734,6 +11954,10 @@
     {
         "text": "Bronze League",
         "textMstId": "963713ae389119324844237784b998ed1"
+    },
+    {
+        "text": "And {0}",
+        "textMstId": "96432b3ef0567aeb80f1551819d482f81"
     },
     {
         "text": "100<size=24px>%</size>",
@@ -11944,6 +12168,10 @@
         "textMstId": "98f8c470736b52e6d74c0b32d9d902591"
     },
     {
+        "text": "Could not use special attack.",
+        "textMstId": "99040e135d3f59bef6c99498a128372a1"
+    },
+    {
         "text": "Unobtained Kioku",
         "textMstId": "991071ad947b118965cfa867ca8434321"
     },
@@ -12100,6 +12328,10 @@
         "textMstId": "9b2cab849bba5632ede2d983b515644c1"
     },
     {
+        "text": "Guild Name",
+        "textMstId": "9b56e1ae139ec5ed7448084afdff63891"
+    },
+    {
         "text": "Drawing",
         "textMstId": "9b80bc16c04d32097b40b82e6cf4aecf1"
     },
@@ -12236,6 +12468,10 @@
         "textMstId": "9d83e0c645b94fb9fdc5eece1c570be81"
     },
     {
+        "text": "999+",
+        "textMstId": "9dbe1e1fcd84943a7d3c9f5d2f36042d1"
+    },
+    {
         "text": "Crisis",
         "textMstId": "9dc772d82afb9a5374668bd51a50cc8c1"
     },
@@ -12310,6 +12546,10 @@
     {
         "text": "Kaede",
         "textMstId": "9ea3afcc788d6c579f03ad2213a708851"
+    },
+    {
+        "text": "Selected: 0 / 3",
+        "textMstId": "9ea59fba4b57806482fc3b7fec2b9c581"
     },
     {
         "text": "Converted Item Confirmation",
@@ -12636,6 +12876,10 @@
         "textMstId": "a2b1699fe06f665e324317e0b3ead2861"
     },
     {
+        "text": "Player Name",
+        "textMstId": "a2b668f156b39ec54443760e3d13515a1"
+    },
+    {
         "text": "Failed to download {0} item(s).\nRetry?",
         "textMstId": "a2ccc4d01478b85036f10d905563d8611"
     },
@@ -12798,6 +13042,10 @@
     {
         "text": "Poison",
         "textMstId": "a487f2e667ebc22619c54d97c6a749d21"
+    },
+    {
+        "text": "Doubled!",
+        "textMstId": "a4a4830921937a1b55ae7896d41661a51"
     },
     {
         "text": "Message was reported.\nCannot block user. Your block list limit has been reached.",
@@ -12998,6 +13246,10 @@
     {
         "text": "Entered",
         "textMstId": "a77d8993ba873eb31943c86adfa182271"
+    },
+    {
+        "text": "Please select a trophy.",
+        "textMstId": "a782da6e51cf1e3c126eec5f6c64c1fc1"
     },
     {
         "text": "Max Stock",
@@ -13260,6 +13512,10 @@
         "textMstId": "aab3238922bcc25a6f606eb525ffdc561"
     },
     {
+        "text": "Kioku Ascension",
+        "textMstId": "aac4a8b8cd61db0eab30590dbe2c909a1"
+    },
+    {
         "text": "You can use <color=#ecd19c>{0}</color> to add QP.",
         "textMstId": "aacabb88aa041e9b58fc3a7b3fa0d23e1"
     },
@@ -13342,6 +13598,10 @@
     {
         "text": "You can assign Magical Girls that share the same name to a party.",
         "textMstId": "ab8addd0d14920b826395477cf4d60091"
+    },
+    {
+        "text": "Highest PWR",
+        "textMstId": "ab9d3ed76d8f58212d3acf4f5add5def1"
     },
     {
         "text": "You cannot add more LP.",
@@ -13828,6 +14088,10 @@
         "textMstId": "b161ebef30a7c321185060c2db2c22d51"
     },
     {
+        "text": "Profile photo saved.\n\n{0}",
+        "textMstId": "b1821b4d7a4d12f8a3cc3551549a68931"
+    },
+    {
         "text": "Kush Irina",
         "textMstId": "b187315969ca1aa723705eb44d634ca01"
     },
@@ -14132,6 +14396,10 @@
         "textMstId": "b632adfc9c9fe1861521003cde816fa61"
     },
     {
+        "text": "Select at least one randomization option.",
+        "textMstId": "b6379d106e6530f18e89d9c55a5bde311"
+    },
+    {
         "text": "High Quality",
         "textMstId": "b63895d124bf3cf7c11fc1356ecac00a1"
     },
@@ -14174,6 +14442,10 @@
     {
         "text": "Latest game data found.\nThe app will restart to apply the updates.\n* To ensure data integrity, please conduct the update in a stable network environment",
         "textMstId": "b68e1f24c0ead9d551a957b2fe0a35241"
+    },
+    {
+        "text": "* Eligible content is displayed based on your previous activity.",
+        "textMstId": "b68e959b838f7b0e78c29a960ef2b76d1"
     },
     {
         "text": "Yachiyo",
@@ -14306,6 +14578,10 @@
     {
         "text": "Debuff RES",
         "textMstId": "b840d84f87682b893fda39f82f41a1341"
+    },
+    {
+        "text": "Obtain Trophy",
+        "textMstId": "b8433ccbeb783ea15c4f1ed0dab766f71"
     },
     {
         "text": "Ranking",
@@ -14496,6 +14772,10 @@
         "textMstId": "ba6cee5df6d76d692082d0dd87096afd1"
     },
     {
+        "text": "Change Ascension Lvl.",
+        "textMstId": "ba7ecb7f2fabb5e9be8e4f08f95e60a11"
+    },
+    {
         "text": "\n\n* All <color=#ecd19c>QP</color> and <color=#ecd19c>{0}</color> will be returned to you.",
         "textMstId": "ba7f29d5308953504ea85b2ba9667fa91"
     },
@@ -14530,6 +14810,10 @@
     {
         "text": "Limited-Time Sale\nEnded",
         "textMstId": "bad6604d0024a7fc28471a2eb571b7d01"
+    },
+    {
+        "text": "Profile Titles",
+        "textMstId": "bad6855e230d5bfe40b06918eb4a295e1"
     },
     {
         "text": "You cannot place if your camera is too close\nto the model or positioned too low.",
@@ -14682,6 +14966,10 @@
     {
         "text": "222",
         "textMstId": "bcbe3365e6ac95ea2c0343a2395834dd1"
+    },
+    {
+        "text": "Cost",
+        "textMstId": "bcbe35da04bb8d8f8b34be965e26a89c1"
     },
     {
         "text": "Sample\nSample\nSample",
@@ -15092,6 +15380,10 @@
         "textMstId": "c20ad4d76fe97759aa27a0c99bff67101"
     },
     {
+        "text": "You have no profile titles.",
+        "textMstId": "c213d9fb2c19ae789bb540a763994bdf1"
+    },
+    {
         "text": "Return to the Raid Prep screen, and retry <color=#ecd19c>all\nbattles</color> from the beginning.",
         "textMstId": "c2277970aabec5e6665ae0e52fd207a31"
     },
@@ -15202,6 +15494,10 @@
     {
         "text": "IV",
         "textMstId": "c370c5acb3044668ef30ddd3a1b4ea551"
+    },
+    {
+        "text": "Slot {0}",
+        "textMstId": "c37885b514496527d214793387216dd71"
     },
     {
         "text": "Oriko Mikuni's Father",
@@ -15664,6 +15960,10 @@
         "textMstId": "c9aa8a5ac6841ffb3a6cc2de45b447971"
     },
     {
+        "text": "You can skip content and claim all rewards at once.",
+        "textMstId": "c9d81435f66467e6d1e16d74f63ee81b1"
+    },
+    {
         "text": "666,666,666",
         "textMstId": "c9e88a44d07fc4003e18c289c74062ea1"
     },
@@ -15710,6 +16010,10 @@
     {
         "text": "Stronger",
         "textMstId": "ca437e7b74ad23faa048a2c75483e6191"
+    },
+    {
+        "text": "Item(s) collected from the Magia Box using quick collect.",
+        "textMstId": "ca4598951be4cc5b272742df9d340bdf1"
     },
     {
         "text": "Previous Floor",
@@ -17068,6 +17372,14 @@
         "textMstId": "db63f08cc22e12c85d0dc24286e462961"
     },
     {
+        "text": "Changed settings.",
+        "textMstId": "db6bb8a5ddb2d9f022ca7b5be9a8875f1"
+    },
+    {
+        "text": "Copyright!",
+        "textMstId": "db8800f544393118b0a866a5640de92e1"
+    },
+    {
         "text": "You will not obtain EXP from score attack.",
         "textMstId": "db953accd56debc5562d204468f03b0c1"
     },
@@ -17248,12 +17560,20 @@
         "textMstId": "ddc7e44a66f69e62d503659a808823111"
     },
     {
+        "text": "Please select a profile title.",
+        "textMstId": "ddc8d9b3b7f9e86888a369ff2f242d7f1"
+    },
+    {
         "text": "PvP Top Ranked",
         "textMstId": "ddcb2b1bc2cdf34f821280de069f648f1"
     },
     {
         "text": "Remove / Add",
         "textMstId": "ddcd5b01a5b7536b53c33838615a5dd01"
+    },
+    {
+        "text": "Unavailable when 2 models are placed.",
+        "textMstId": "ddcdc246d9970e650c78fb25418d651d1"
     },
     {
         "text": "Single Draw",
@@ -17386,6 +17706,10 @@
     {
         "text": "Skill Details",
         "textMstId": "df5ba48b9f03d7f70158becb7942764b1"
+    },
+    {
+        "text": "Cannot be used when randomizer settings are off.",
+        "textMstId": "df7759d5b882c06e7c1d9ca7d15621201"
     },
     {
         "text": "{0} asset update required.\nBegin download?\n\n* Assets are downloaded while the data download bar on the next screen is displayed and as needed during the tutorial.",
@@ -17628,6 +17952,10 @@
         "textMstId": "e18adf6093970f438e222f69bfb67d101"
     },
     {
+        "text": "Select Fate Weave",
+        "textMstId": "e196df6e9d2362c63f3f4eff75bceaae1"
+    },
+    {
         "text": "<size=28px>Lvl.</size>\n{0}",
         "textMstId": "e19f617276c831d5514f3991c28867411"
     },
@@ -17842,6 +18170,10 @@
     {
         "text": "Sale Period:",
         "textMstId": "e471e5b34c84c738cfcaf617d4095f571"
+    },
+    {
+        "text": "19th",
+        "textMstId": "e4754988649d9f2d20222f2606b21b021"
     },
     {
         "text": "Voice",
@@ -18300,6 +18632,10 @@
         "textMstId": "ea799632239af5b845f91d5a2246724a1"
     },
     {
+        "text": "Cannot select while randomizer settings are turned on.",
+        "textMstId": "ea79c8d517625a6b227b2383239923b01"
+    },
+    {
         "text": "You cannot add more QP.",
         "textMstId": "ea7d428f9f0c2a00314ff347220ba9b51"
     },
@@ -18334,6 +18670,10 @@
     {
         "text": "It weakens enemies. A stunned enemy cannot perform an action.",
         "textMstId": "eac335e9562c0270a4fcd86bcb1ea8851"
+    },
+    {
+        "text": "Item(s) collected from the Magia Box.",
+        "textMstId": "eac7f26bed9edaf630eb2d143f5cb97b1"
     },
     {
         "text": "Cannot add members. Your limit has been reached.",
@@ -18404,6 +18744,10 @@
         "textMstId": "eb9ffaee6d696fc0a7fda440e05cf28c1"
     },
     {
+        "text": "Sorana Magica",
+        "textMstId": "eba68c76f63993dc4b001c9ca424b6a11"
+    },
+    {
         "text": "Are you sure you want to unfollow the following player?",
         "textMstId": "eba9359123f3191b36190a06b8e975131"
     },
@@ -18470,6 +18814,10 @@
     {
         "text": "-Please note that when transferring data between different platforms, paid Magica Stones will not be transferred and will remain on the original platform.\n* When transferring data on the same platform, they will be carried over as-is.",
         "textMstId": "eca92a04ab6c5db991b56e95494dba841"
+    },
+    {
+        "text": "Magic Unlock Upgrade",
+        "textMstId": "ecb2f8cea388873ced36548c004508bc1"
     },
     {
         "text": "Use <color=#ecd19c>items</color> to reroll the boost effects for the following prime ability.",
@@ -18562,6 +18910,10 @@
     {
         "text": "TBD Scenario Name",
         "textMstId": "ed5af6a1c218c90c56cc78cee46952011"
+    },
+    {
+        "text": "Selected: {0} / {1}",
+        "textMstId": "ed68d96331de2c23f5d1eb0a666dc52c1"
     },
     {
         "text": "Himika Mao",
@@ -18952,6 +19304,10 @@
         "textMstId": "f26b42ee59abd196900db1eae7cfe92a1"
     },
     {
+        "text": "Content Selection",
+        "textMstId": "f275ec323adf45038e6d1f86f0b75c561"
+    },
+    {
         "text": "Unlock Support Kioku Slot {0}",
         "textMstId": "f276dfe7945f1e82ec807754439771bd1"
     },
@@ -19090,6 +19446,10 @@
     {
         "text": "2DV",
         "textMstId": "f46b2598f4cd7d6d7dc0b8dc1e4de76a1"
+    },
+    {
+        "text": "Please select a model.",
+        "textMstId": "f4994e6047bede3666b17fb418d686721"
     },
     {
         "text": "Level-up {0}'s Heartphial to unlock.",
