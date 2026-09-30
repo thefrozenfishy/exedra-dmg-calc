@@ -263,6 +263,26 @@ function elementNumberOf(unit: KiokuState): number {
     return hit ? Number(hit[0]) : 0
 }
 
+// [CONFIRMED 3.19] StateAbilityEffect.ChangeGiveUnitState (0x19013a0), for states given by a unit (not card/support
+// passives): an IHasUpdateableEffectValue state's value is multiplied by Max(1 + s, 0), s = sum over the GIVER's
+// active UP/DWN_BUFF_EFFECT_VALUE (for Positive states) or UP/DWN_DEBUFF_EFFECT_VALUE (Negative states) of
+// +-v1/1000. Replaces the old one-time pre-scaling of the kioku's own passives (PvPKioku). TSUBAME_LINK scales
+// its SPD and ATK parts (value1, value2), not its extra damage (value3).
+// `giverEffects`: the giver's active states by type (KiokuState.filteredEffects()). Exported for MaxDamage.
+export function scaleGivenState(detail: SkillDetail, giverEffects: Record<string, SkillDetail[]>): SkillDetail {
+    const type = detail.abilityEffectType
+    if ((detail as any)._noEffectValueScale || !UPDATEABLE_STATE_TYPES.has(type)) return detail
+    const neg = NEGATIVE_STATE_TYPES.has(type)
+    let sum = 0
+    for (const d of giverEffects[neg ? "UP_DEBUFF_EFFECT_VALUE" : "UP_BUFF_EFFECT_VALUE"] ?? []) sum = f32(sum + f32(f32(f32(d.value1) / 10) / 100))
+    for (const d of giverEffects[neg ? "DWN_DEBUFF_EFFECT_VALUE" : "DWN_BUFF_EFFECT_VALUE"] ?? []) sum = f32(sum - f32(f32(f32(d.value1) / 10) / 100))
+    if (sum === 0) return detail
+    const m = Math.max(f32(sum + 1), 0)
+    const out: any = { ...detail, value1: f32(detail.value1 * m), _effectValueRate: m }
+    if (type === "TSUBAME_LINK") out.value2 = f32(((detail as any).value2 ?? 0) * m)
+    return out
+}
+
 export class KiokuState {
     posIdx: number;
     teamLabel: string
@@ -1011,24 +1031,9 @@ export class KiokuState {
     // this turn's decrement, and tracking the applying KiokuState (`applierState`) so
     // DOT/HoT ticks can scale off the right unit's stats (see tickDotEffects/
     // tickHotEffects and DamageCalculator.ts's getSlipDamageResult).
-    // [CONFIRMED 3.19] StateAbilityEffect.ChangeGiveUnitState (0x19013a0), for states given by a unit (not card/support
-    // passives): an IHasUpdateableEffectValue state's value is multiplied by Max(1 + s, 0), s = sum over the GIVER's
-    // active UP/DWN_BUFF_EFFECT_VALUE (for Positive states) or UP/DWN_DEBUFF_EFFECT_VALUE (Negative states) of
-    // +-v1/1000. Replaces the old one-time pre-scaling of the kioku's own passives (PvPKioku). TSUBAME_LINK scales
-    // its SPD and ATK parts (value1, value2), not its extra damage (value3).
+    // Effect-value scaling of a state this unit gives: see scaleGivenState.
     private giveTransform(detail: SkillDetail, applierState: KiokuState): SkillDetail {
-        const type = detail.abilityEffectType
-        if ((detail as any)._noEffectValueScale || !UPDATEABLE_STATE_TYPES.has(type)) return detail
-        const neg = NEGATIVE_STATE_TYPES.has(type)
-        const fx = applierState.filteredEffects()
-        let sum = 0
-        for (const d of fx[neg ? "UP_DEBUFF_EFFECT_VALUE" : "UP_BUFF_EFFECT_VALUE"] ?? []) sum = f32(sum + f32(f32(f32(d.value1) / 10) / 100))
-        for (const d of fx[neg ? "DWN_DEBUFF_EFFECT_VALUE" : "DWN_BUFF_EFFECT_VALUE"] ?? []) sum = f32(sum - f32(f32(f32(d.value1) / 10) / 100))
-        if (sum === 0) return detail
-        const m = Math.max(f32(sum + 1), 0)
-        const out: any = { ...detail, value1: f32(detail.value1 * m), _effectValueRate: m }
-        if (type === "TSUBAME_LINK") out.value2 = f32(((detail as any).value2 ?? 0) * m)
-        return out
+        return scaleGivenState(detail, applierState.filteredEffects())
     }
 
     // CanAddTo overrides that aren't a role/element filter.

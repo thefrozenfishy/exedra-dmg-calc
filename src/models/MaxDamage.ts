@@ -5,7 +5,7 @@
 // supports, follow-up skills) is put on the attacker / the enemies at full stacks, with conditions assumed
 // met, then each member's ultimate / battle skill / basic attack is evaluated against every enemy, with and
 // without a crit. Individual effects can be excluded and stack counts overridden.
-import { PvPTeam, KiokuState, isFriendlyEffect, isOpponentEffect } from "./PvPTeam";
+import { PvPTeam, KiokuState, isFriendlyEffect, isOpponentEffect, scaleGivenState } from "./PvPTeam";
 import type { PvPKioku } from "./PvPKioku";
 import { BattleType, DamageBaseType, damageBaseTypeFromEffectType, getAttackDamageResult, getAdditionalDamageBase, critChance } from "./DamageCalculator";
 import { isEligibleForEffect } from "./UnitStateEngine";
@@ -29,7 +29,13 @@ export interface MaxDmgEffect {
     // Set by computeMaxDamage for the damage dealer's evaluation: where the effect actually landed. Undefined when
     // it was left out (excluded, 0 stacks or !applies). UI bookkeeping only.
     reach?: { dealer: boolean, enemies: number[] }
+    // Also for the dealer's evaluation: the effect-value rate the caster's buff/debuff strength applied (1 = none).
+    rate?: number
 }
+
+// Buff/debuff strength (UP/DWN_BUFF/DEBUFF_EFFECT_VALUE): not a state on the dealer or an enemy, it scales every
+// state its holder gives (PvPTeam.scaleGivenState).
+export const isEffectValueType = (type: string) => /^(UP|DWN)_(BUFF|DEBUFF)_EFFECT_VALUE$/.test(type)
 
 export interface MaxDmgOptions {
     battleType?: BattleType
@@ -105,7 +111,7 @@ export function collectTeamEffects(allies: PvPKioku[], attackerPos: number): Max
         out.push({
             key, casterPos, casterName, source, side, detail: d,
             maxStacks: isAccum ? Math.max(1, d.value2 || 1) : 1,
-            applies: d.range !== targetRange.SELF || (side === "ally" && casterPos === attackerPos),
+            applies: isEffectValueType(d.abilityEffectType) || d.range !== targetRange.SELF || (side === "ally" && casterPos === attackerPos),
         })
     }
     allies.forEach((k, pos) => {
@@ -125,9 +131,9 @@ export function collectTeamEffects(allies: PvPKioku[], attackerPos: number): Max
     return out
 }
 
-function stateFrom(e: MaxDmgEffect, caster: KiokuState, stacks: number): SkillDetail & Record<string, any> {
+function stateFrom(e: MaxDmgEffect, detail: SkillDetail, caster: KiokuState, stacks: number): SkillDetail & Record<string, any> {
     return {
-        ...e.detail,
+        ...detail,
         // Conditions are assumed met: that's the "max" in max damage.
         activeConditionSetIdCsv: "", startConditionSetIdCsv: "",
         turn: 99,
@@ -156,22 +162,33 @@ export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearan
 
         // The dealer's pass reuses `effects` so the returned list records where each effect landed.
         const passEffects = pos === attackerPos ? effects : collectTeamEffects(allies, pos)
+        const stacksOf = (e: MaxDmgEffect) => opts.excluded?.has(e.key) ? 0 : Math.max(0, Math.min(e.maxStacks, opts.stacks?.get(e.key) ?? e.maxStacks))
+        // Each caster's active buff/debuff strength, by type (conditions assumed met, like everything else here).
+        const giverEffects = new Map<number, Record<string, SkillDetail[]>>()
         for (const e of passEffects) {
-            if (opts.excluded?.has(e.key)) continue
-            const stacks = Math.max(0, Math.min(e.maxStacks, opts.stacks?.get(e.key) ?? e.maxStacks))
-            if (!stacks) continue
+            if (!isEffectValueType(e.detail.abilityEffectType) || !stacksOf(e)) continue
+            const fx = giverEffects.get(e.casterPos) ?? {}
+            fx[e.detail.abilityEffectType] = [...(fx[e.detail.abilityEffectType] ?? []), e.detail]
+            giverEffects.set(e.casterPos, fx)
+        }
+        for (const e of passEffects) {
+            const stacks = stacksOf(e)
+            if (!stacks || isEffectValueType(e.detail.abilityEffectType)) continue
             const caster = team1.kiokuStates[e.casterPos]
+            // Scaled by the caster's buff/debuff strength, as when the battle gives the state.
+            const detail = scaleGivenState(e.detail, giverEffects.get(e.casterPos) ?? {})
+            if (pos === attackerPos) e.rate = (detail as any)._effectValueRate ?? 1
             if (e.side === "ally") {
                 if (!e.applies) continue
-                const eligible = isEligibleForEffect(e.detail, attacker)
+                const eligible = isEligibleForEffect(detail, attacker)
                 if (pos === attackerPos) e.reach = { dealer: eligible, enemies: [] }
-                if (eligible) attacker.activeEffectDetails.set(e.key, stateFrom(e, caster, stacks))
+                if (eligible) attacker.activeEffectDetails.set(e.key, stateFrom(e, detail, caster, stacks))
             } else {
                 if (!e.applies) continue
                 const hit: number[] = []
                 targets.forEach((t, i) => {
-                    if (!isEligibleForEffect(e.detail, t)) return
-                    t.activeEffectDetails.set(e.key, stateFrom(e, caster, stacks))
+                    if (!isEligibleForEffect(detail, t)) return
+                    t.activeEffectDetails.set(e.key, stateFrom(e, detail, caster, stacks))
                     hit.push(i)
                 })
                 if (pos === attackerPos) e.reach = { dealer: false, enemies: hit }
