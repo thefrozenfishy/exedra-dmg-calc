@@ -194,12 +194,26 @@
     <h2 class="section-title page-section-title">Team</h2>
     <div class="team-grid">
       <div v-for="(slot, index) in team.slots" :key="index" class="team-slot"
-        :class="{ dealer: attackerIndex === index }">
+        :class="{ dealer: attackerIndex === index, 'swap-source': swapSourceIndex === index }">
         <button type="button" class="dealer-slot-btn" :class="{ active: attackerIndex === index }"
           :title="attackerIndex === index ? 'This member is the damage dealer' : 'Make this member the damage dealer'"
           @click="attackerIndex = index">
           <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
             <path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z" fill="currentColor" />
+          </svg>
+        </button>
+        <button type="button" class="swap-slot-btn" :class="{ active: swapSourceIndex === index }"
+          :title="swapSourceIndex === null ? 'Select this member to swap position' : swapSourceIndex === index ? 'Cancel swap' : 'Swap position with the selected member'"
+          @click="handleSwapClick(index)">
+          <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+            <path d="M6 3L2 7l4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M2 7h13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M18 21l4-4-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M22 17H9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
           </svg>
         </button>
         <h3 class="slot-title">
@@ -471,6 +485,27 @@ import type { PvPKioku } from '../models/PvPKioku'
 const team = useTeamStore()
 const stageId = useSetting<number>('pveStageId', 982250)
 const attackerIndex = useSetting('pveAttackerIndex', 2)
+
+// Swap two members' positions (main + support). The damage dealer star follows its kioku.
+const swapSourceIndex = ref<number | null>(null)
+const swapSlots = (a: number, b: number) => {
+  const { main: aMain, support: aSupport } = team.slots[a]
+  const { main: bMain, support: bSupport } = team.slots[b]
+  team.setMain(a, bMain)
+  team.setSupport(a, bSupport)
+  team.setMain(b, aMain)
+  team.setSupport(b, aSupport)
+  if (attackerIndex.value === a) attackerIndex.value = b
+  else if (attackerIndex.value === b) attackerIndex.value = a
+}
+const handleSwapClick = (index: number) => {
+  if (swapSourceIndex.value === null) swapSourceIndex.value = index
+  else if (swapSourceIndex.value === index) swapSourceIndex.value = null
+  else {
+    swapSlots(swapSourceIndex.value, index)
+    swapSourceIndex.value = null
+  }
+}
 const scoreMultiplier = useSetting('scoreMultiplier', 35)
 const saTurns = useSetting('turns', 3)
 const hpPercentTeam = useSetting('hp_percentage_team', 20)
@@ -1680,6 +1715,42 @@ const saved = useSavedTeams({
 }
 
 .dealer-slot-btn.active {
+  background: rgba(255, 209, 110, 0.18);
+  border-color: rgba(255, 209, 110, 0.75);
+  color: var(--accent);
+}
+
+.team-slot.swap-source {
+  border-color: rgba(255, 209, 110, 0.7);
+  box-shadow: 0 0 0 1px rgba(255, 209, 110, 0.35), 0 0 12px rgba(255, 209, 110, 0.2);
+}
+
+.swap-slot-btn {
+  position: absolute;
+  top: -0.6rem;
+  left: 1.2rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  padding: 0;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s, color 0.15s;
+}
+
+.swap-slot-btn:hover {
+  border-color: rgba(255, 209, 110, 0.5);
+  color: var(--accent-soft);
+  transform: scale(1.08);
+}
+
+.swap-slot-btn.active {
   background: rgba(255, 209, 110, 0.18);
   border-color: rgba(255, 209, 110, 0.75);
   color: var(--accent);
