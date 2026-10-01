@@ -15,16 +15,16 @@ import breakMstJson from "../assets/base_data/getBreakMstList.json";
 import { PvPKioku } from "./PvPKioku";
 import { PvPTeam, type KiokuState } from "./PvPTeam";
 import { PvPBattle } from "./PvPBattle";
-import { computeMaxDamage } from "./MaxDamage";
+import { ailmentMarker, computeMaxDamage } from "./MaxDamage";
 import { enemyKiokus } from "./PvEBattle";
 import { BattleType } from "./DamageCalculator";
 import { BattleRng, type RngKind, type RngMode } from "./BattleRng";
 import { seededRng } from "./BattleMath";
-import { unitTypeConditionValues } from "./BattleConditionParser";
+import { ailmentConditionValues, unitTypeConditionValues } from "./BattleConditionParser";
 import type { QuestEnemyAppearance } from "./PvE";
 import { skillDetailsByMstId } from "../utils/helpers";
 import { TargetType, TargetTypeLookup, targetTypeToLvl, targetRange, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
-import { elementMap, roleMap, KiokuElement, KiokuRole } from "../types/enums";
+import { Ailment, elementMap, roleMap, KiokuElement, KiokuRole } from "../types/enums";
 
 export const BENCH_DEF = 3000
 export const BENCH_BROKEN_RATE = 500  // % damage taken while broken
@@ -59,8 +59,15 @@ export function benchEnemies(count: number): QuestEnemyAppearance[] {
 
 /** What a bench unit counts as for element/role-limited effects. A key that is present replaces the unit's own
  *  value, `undefined` included: such a unit matches no element (or role) restriction, like the legacy charts'
- *  "no context" Lux. */
-export interface BenchIdentity { element?: KiokuElement, role?: KiokuRole }
+ *  "no context" Lux. `ailment` is not about the unit: every enemy carries that ailment for the whole run. */
+export interface BenchIdentity { element?: KiokuElement, role?: KiokuRole, ailment?: Ailment }
+
+// The state each ailment is represented by on the dummies (what ABILITY_EFFECT conditions match by prefix).
+const AILMENT_STATE: Record<Ailment, string> = {
+    [Ailment.BURN]: "BURN_ATK", [Ailment.CURSE]: "CURSE_ATK", [Ailment.POISON]: "POISON_ATK", [Ailment.WOUND]: "BLEED_ATK",
+    [Ailment.STUN]: "STUN", [Ailment.VORTEX]: "VORTEX_ATK", [Ailment.WEAKNESS]: "WEAKNESS",
+}
+const enemyStatesOf = (ailment?: Ailment): string[] => ailment ? [AILMENT_STATE[ailment]] : []
 
 export function benchKioku(args: Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>, as?: BenchIdentity): PvPKioku {
     const k = new PvPKioku({ ...args, crysIDs: args.crysIDs ?? [], subCrysIDs: args.subCrysIDs ?? [] } as KiokuArgs)
@@ -75,7 +82,7 @@ const DAMAGE_TYPES = new Set(["DMG_ATK", "DMG_DEF", "DMG_HP", "DMG_RANDOM"])
 /** Elements and roles a kit's effects are limited to: the TargetElement/TargetRole of its effects (damage effects
  *  aside, where `element` is the attack element) and the IS_ELEMENT_TYPE / IS_ROLE_TYPE conditions they use.
  *  Covers the basic attack, battle skill, ultimate, every passive and the follow-up skills they grant. */
-export function kitRestrictions(k: PvPKioku): { elements: KiokuElement[], roles: KiokuRole[] } {
+export function kitRestrictions(k: PvPKioku): { elements: KiokuElement[], roles: KiokuRole[], ailments: Ailment[] } {
     const details: SkillDetail[] = []
     for (const type of [TargetType.attackId, TargetType.skillId, TargetType.specialId]) {
         const id = (k.data as any)[TargetTypeLookup[type as keyof typeof TargetTypeLookup]]
@@ -86,8 +93,9 @@ export function kitRestrictions(k: PvPKioku): { elements: KiokuElement[], roles:
     for (const d of [...details]) {
         if (d.abilityEffectType === "ADDITIONAL_SKILL_ACT") details.push(...(skillDetailsByMstId.get(d.value1) ?? []) as SkillDetail[])
     }
-    const elements = new Set<KiokuElement>(), roles = new Set<KiokuRole>()
+    const elements = new Set<KiokuElement>(), roles = new Set<KiokuRole>(), ailments = new Set<Ailment>()
     for (const d of details) {
+        ailmentConditionValues([d.startConditionSetIdCsv, d.activeConditionSetIdCsv]).forEach(a => ailments.add(a))
         if (!DAMAGE_TYPES.has(d.abilityEffectType)) {
             if (d.element && elementMap[d.element]) elements.add(elementMap[d.element])
             if ((d as any).role && roleMap[(d as any).role]) roles.add(roleMap[(d as any).role])
@@ -96,11 +104,12 @@ export function kitRestrictions(k: PvPKioku): { elements: KiokuElement[], roles:
         cond.elements.forEach(e => elements.add(e as KiokuElement))
         cond.roles.forEach(r => roles.add(r as KiokuRole))
     }
-    return { elements: [...elements], roles: [...roles] }
+    return { elements: [...elements], roles: [...roles], ailments: [...ailments] }
 }
 
-/** Max Burst: the dealer's Ultimate, every hit a crit, total over every enemy it hits. */
-export function ultimateDamage(allies: PvPKioku[], dealerPos: number, enemyCount: number): { damage: number, critChance: number } {
+/** Max Burst: the dealer's Ultimate, every hit a crit, total over every enemy it hits. With `ailment`, every enemy
+ *  carries it and the team's ailment conditions are checked against it (the other conditions count as met). */
+export function ultimateDamage(allies: PvPKioku[], dealerPos: number, enemyCount: number, ailment?: Ailment): { damage: number, critChance: number } {
     const enemies = benchEnemies(enemyCount)
     const result = computeMaxDamage(allies, enemies, dealerPos, {
         battleType: BattleType.Solo,
@@ -108,6 +117,7 @@ export function ultimateDamage(allies: PvPKioku[], dealerPos: number, enemyCount
         breakRate: enemies.map(() => BENCH_BROKEN_RATE),
         mainTargetIdx: Math.trunc(enemyCount / 2),
         onlyPos: dealerPos,
+        enemyStates: enemyStatesOf(ailment),
     })
     const ult = result.members[dealerPos]?.skills.find(s => s.type === TargetType.specialId)
     return { damage: ult?.total.crit ?? 0, critChance: ult?.critChance ?? 0 }
@@ -143,6 +153,7 @@ export interface SimOptions {
     seed: number
     rngMode?: RngMode   // default "seed" (drawn per roll label, see LabelStreamRng)
     infiniteSp?: boolean // the allies' SP is refilled before every turn, see SP_REFILL (bench-only, not a game rule)
+    ailment?: Ailment   // every enemy carries this ailment for the whole run
     onAction?: (state: BattleSnapshot, elapsed: number) => void  // every counted action (debugging)
 }
 
@@ -176,16 +187,24 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     const team2 = new PvPTeam(enemyKiokus(benchEnemies(enemyCount)), "Enemy", false, BattleType.Solo)
     const mode = opts.rngMode ?? "seed"
     const battle = new PvPBattle(team1, team2, false, opts.seed, { rngMode: mode, rng: mode === "seed" ? new LabelStreamRng(opts.seed) : undefined })
-    // Broken from the start at a fixed rate (no growth per hit), like the legacy charts' "broken 500%" enemies.
+    // Broken from the start at a fixed rate (no growth per hit), like the legacy charts' "broken 500%" enemies. The
+    // break gauge is 1, so should anything ever end the break, the next hit breaks them again (at the same 500%).
     for (const e of team2.kiokuStates) {
         if (e.enemy) e.enemy.breakMst = {
-            ...e.enemy.breakMst, initialBreakedDamageReceiveRate: BENCH_BROKEN_RATE * 10,
+            ...e.enemy.breakMst, breakPoint: 1, initialBreakedDamageReceiveRate: BENCH_BROKEN_RATE * 10,
             maxBreakedDamageReceiveRate: BENCH_BROKEN_RATE * 10, breakedDamageReceiveRateIncreaseRate: 0,
         }
+        e.maxBreakGauge = 1
         e.currentRemainingBreakGauge = 0
         e.isBroken = true
         e.breakedDamageReceiveRate = BENCH_BROKEN_RATE
     }
+    // The ailment stays on every enemy (re-set before each action, in case anything removes it). Held as a marker in the
+    // timed states: no damage, and it never ticks or pops (the dummies never get a turn).
+    const states = enemyStatesOf(opts.ailment)
+    const keepAilment = () => states.forEach((type, i) => team2.kiokuStates.forEach(e => {
+        if (!e.isDead) e.activeEffectDetails.set(`ailment:${type}`, ailmentMarker(type, i))
+    }))
     // Refill only when the next action is at a later moment: nobody is due to act right now (a haste to 100% or an
     // extra action keeps a unit at 0 time left).
     const refillSp = () => {
@@ -208,6 +227,7 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     // knows its time once it advances to it) but not counted.
     while (!battle.isOver) {
         refillSp()
+        keepAilment()
         const states = battle.executeNextAction()
         if (battle.elapsed > opts.av) break
         for (const state of states) { count(state.events); opts.onAction?.(state, battle.elapsed) }
@@ -217,7 +237,7 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
 
 // ── The two Kioku Grid charts ──
 
-const identityKey = (id: BenchIdentity) => `${id.element ?? "-"}/${id.role ?? "-"}`
+const identityKey = (id: BenchIdentity) => `${id.element ?? "-"}/${id.role ?? "-"}/${id.ailment ?? "-"}`
 
 /** One bar of a chart: the gain (%) in one dealer identity. `critRate` is the dealer's Ultimate crit chance. */
 export interface BenchRow extends BenchIdentity { gain: number, critRate?: number }
@@ -255,7 +275,7 @@ export class LuxBenchCharts {
     }
 
     private dealer(id: BenchIdentity): PvPKioku {
-        const key = identityKey(id)
+        const key = identityKey({ element: id.element, role: id.role })
         let k = this.dealers.get(key)
         if (!k) this.dealers.set(key, k = benchKioku(this.luxArgs, { element: id.element, role: id.role }))
         return k
@@ -265,33 +285,40 @@ export class LuxBenchCharts {
         return [dealer, second ?? this.filler, this.filler, this.filler, this.filler]
     }
 
-    private simTotal(team: PvPKioku[], enemies: number): number {
+    private simTotal(team: PvPKioku[], enemies: number, ailment?: Ailment): number {
         let total = 0
-        for (let seed = 0; seed < this.opts.seeds; seed++) total += simulatedDealerDamage(team, 0, enemies, { av: this.opts.av, seed, infiniteSp: this.opts.infiniteSp })
+        for (let seed = 0; seed < this.opts.seeds; seed++) total += simulatedDealerDamage(team, 0, enemies, { av: this.opts.av, seed, infiniteSp: this.opts.infiniteSp, ailment })
         return total
     }
 
-    private cachedUlt(key: string, team: () => PvPKioku[], enemies: number) {
+    private cachedUlt(key: string, team: () => PvPKioku[], enemies: number, ailment?: Ailment) {
         let v = this.ultBase.get(key)
-        if (!v) this.ultBase.set(key, v = ultimateDamage(team(), 0, enemies))
+        if (!v) this.ultBase.set(key, v = ultimateDamage(team(), 0, enemies, ailment))
         return v
     }
 
-    private cachedSim(key: string, team: () => PvPKioku[], enemies: number) {
+    private cachedSim(key: string, team: () => PvPKioku[], enemies: number, ailment?: Ailment) {
         let v = this.simBase.get(key)
-        if (v === undefined) this.simBase.set(key, v = this.simTotal(team(), enemies))
+        if (v === undefined) this.simBase.set(key, v = this.simTotal(team(), enemies, ailment))
         return v
     }
 
-    /** Dealer identities to test a support in: none, then each element / role / element+role its kit is limited to. */
+    /** Dealer identities to test a support in: none, then each element / role / element+role its kit is limited to, then
+     *  each ailment its kit reacts to, alone and with each of those elements / roles. */
     supportIdentities(x: PvPKioku): BenchIdentity[] {
-        const { elements, roles } = kitRestrictions(x)
-        return [
+        const { elements, roles, ailments } = kitRestrictions(x)
+        const unit: BenchIdentity[] = [
             {},
             ...elements.map(element => ({ element })),
             ...roles.map(role => ({ role })),
             ...elements.flatMap(element => roles.map(role => ({ element, role }))),
         ]
+        return [...unit, ...ailments.flatMap(ailment => unit.map(id => ({ ...id, ailment })))]
+    }
+
+    /** Attacker chart: the character's own identity, then each ailment its kit reacts to. */
+    attackerIdentities(x: PvPKioku): BenchIdentity[] {
+        return [{}, ...kitRestrictions(x).ailments.map(ailment => ({ ailment }))]
     }
 
     // The dealer's element / role when none is tested: Lux's own (Light, Breaker) unless the kit is limited to it, then
@@ -310,14 +337,14 @@ export class LuxBenchCharts {
     // A tested identity as the dealer actually is: untested parts replaced by the neutral ones.
     private resolve(id: BenchIdentity, x: PvPKioku): BenchIdentity {
         const n = this.neutral(x)
-        return { element: id.element ?? n.element, role: id.role ?? n.role }
+        return { element: id.element ?? n.element, role: id.role ?? n.role, ailment: id.ailment }
     }
 
     supportMax(x: PvPKioku, ids = this.supportIdentities(x)): BenchRow[] {
         return ids.map(id => {
             const dealer = this.dealer(this.resolve(id, x))
-            const base = this.cachedUlt(`s:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), 1)
-            const v = ultimateDamage(this.team(dealer, x), 0, 1)
+            const base = this.cachedUlt(`s:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), 1, id.ailment)
+            const v = ultimateDamage(this.team(dealer, x), 0, 1, id.ailment)
             return { ...id, gain: pctGain(v.damage, base.damage), critRate: v.critChance }
         })
     }
@@ -325,20 +352,24 @@ export class LuxBenchCharts {
     supportAvg(x: PvPKioku, ids = this.supportIdentities(x)): BenchRow[] {
         return ids.map(id => {
             const dealer = this.dealer(this.resolve(id, x))
-            const base = this.cachedSim(`s:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), 1)
-            return { ...id, gain: pctGain(this.simTotal(this.team(dealer, x), 1), base) }
+            const base = this.cachedSim(`s:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), 1, id.ailment)
+            return { ...id, gain: pctGain(this.simTotal(this.team(dealer, x), 1, id.ailment), base) }
         })
     }
 
-    attackerMax(x: PvPKioku, enemies: number): BenchRow {
-        const base = this.cachedUlt(`a:${enemies}`, () => this.team(this.reference), enemies)
-        const v = ultimateDamage(this.team(x), 0, enemies)
-        return { gain: pctGain(v.damage, base.damage), critRate: v.critChance }
+    attackerMax(x: PvPKioku, enemies: number, ids = this.attackerIdentities(x)): BenchRow[] {
+        return ids.map(id => {
+            const base = this.cachedUlt(`a:${enemies}:${id.ailment ?? "-"}`, () => this.team(this.reference), enemies, id.ailment)
+            const v = ultimateDamage(this.team(x), 0, enemies, id.ailment)
+            return { ...id, gain: pctGain(v.damage, base.damage), critRate: v.critChance }
+        })
     }
 
-    attackerAvg(x: PvPKioku, enemies: number): BenchRow {
-        const base = this.cachedSim(`a:${enemies}`, () => this.team(this.reference), enemies)
-        return { gain: pctGain(this.simTotal(this.team(x), enemies), base) }
+    attackerAvg(x: PvPKioku, enemies: number, ids = this.attackerIdentities(x)): BenchRow[] {
+        return ids.map(id => {
+            const base = this.cachedSim(`a:${enemies}:${id.ailment ?? "-"}`, () => this.team(this.reference), enemies, id.ailment)
+            return { ...id, gain: pctGain(this.simTotal(this.team(x), enemies, id.ailment), base) }
+        })
     }
 }
 

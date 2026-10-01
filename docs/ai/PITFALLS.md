@@ -52,6 +52,10 @@
   Mapping them through `elementMap`/`roleMap` silently made every element/role condition false for real units.
 - A friendly effect reaches `applyEffect` with the caster as placeholder target; conditions about "each target"
   must be checked on the widened targets, not on the placeholder (Attacker-only buffs never applied).
+- Every damage event pushed to the eventLog needs `sourcePos` (and `vortex` when it pops vortexes): the Kioku Grid
+  bench attributes damage by slot. `additionalHit` once lacked it, so additional damage silently dropped out.
+- Enemy break rate: `breakParams` reads `enemy.breakMst` live; a probe that only sets `breakedDamageReceiveRate` falls
+  back to the table's max (100% for most) on the next hit. Override `breakMst` too (LuxBench does).
 - Who dealt a hit: use `BattleEvent.sourcePos` (names repeat, e.g. several Lux). A popped vortex is inside the
   popping hit's `amount` (`vortex` field) and also logged as its owner's `dot` event; subtract it when attributing.
 - "Infinite SP" can't be literal: a battle skill that acts again at the same moment (Tenebrous Arcana's extra

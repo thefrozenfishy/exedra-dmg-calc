@@ -40,7 +40,7 @@ self.onmessage = (e: MessageEvent<LuxBenchJob>) => {
             if (!x) units.set(c.id, x = benchKioku(toInput(c)))
             const rows = job.chart === "support"
                 ? (type === "max" ? bench.supportMax(x) : bench.supportAvg(x))
-                : [type === "max" ? bench.attackerMax(x, job.enemies) : bench.attackerAvg(x, job.enemies)]
+                : (type === "max" ? bench.attackerMax(x, job.enemies) : bench.attackerAvg(x, job.enemies))
             post({ type, id: c.id, rows })
         } catch (err) {
             failed.add(c.id)

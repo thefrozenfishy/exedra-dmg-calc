@@ -54,6 +54,9 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-01 (5): engine: state active conditions see the processed target as EachTarget ("DMG to cursed enemies"
+  now applies) [?]; additionalHit events got sourcePos/vortex. MaxDamage `enemyStates` (ailment conditions checked
+  against them). Kioku Grid bench: ailment variants (support + attacker charts), dummies break gauge 1.
 - 2026-10-01 (4): bench back to 500 AV; scripted play hooks `PvPTeam.allyActionPolicy` / `allyTargetPolicy` (+
   `KiokuState.skillStreak`) used by LuxBench only (Tenebrous Arcana skill x3 then basic, Thunder Torrent always skills
   the dealer); Kioku Grid bench results cached in localStorage with a Recalculate button.

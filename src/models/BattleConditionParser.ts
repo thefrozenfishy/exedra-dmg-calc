@@ -2,7 +2,7 @@ import battleConditionSetsJson from '../assets/base_data/getBattleConditionSetMs
 import battleConditionsJson from '../assets/base_data/getBattleConditionMstList.json';
 import { BattleState, PassiveSkill, SkillDetail } from '../types/KiokuTypes';
 import { KiokuState, PvPTeam, isAlimentEffect } from './PvPTeam';
-import { KiokuElement, KiokuRole, elementMap, roleMap } from '../types/enums';
+import { Ailment, KiokuElement, KiokuRole, elementMap, roleMap } from '../types/enums';
 
 /**
  * BattleConditionParser.ts
@@ -885,4 +885,39 @@ export function unitTypeConditionValues(csvs: (string | undefined)[]): { element
         }
     }
     return { elements: [...elements], roles: [...roles] }
+}
+
+// Ailments (Ailment enum values: BURN, CURSE, ..., BLEED) that ABILITY_EFFECT conditions in these condition-set csvs
+// test for ("contains CURSE", "not contains BURN_ATK", ...), on whichever unit. Used to find a kit's ailment-dependent
+// effects.
+export function ailmentConditionValues(csvs: (string | undefined)[]): Ailment[] {
+    const found = new Set<Ailment>()
+    for (const setId of csvs.flatMap(csv => (csv ?? "").split(","))) {
+        for (const condId of (battleConditionSets[setId]?.battleConditionMstIdCsv ?? "").split(",")) {
+            const cond = battleConditions[condId]
+            if (cond?.compareContent !== CompareContent.ABILITY_EFFECT) continue
+            const a = ailmentOf(cond.compareValue)
+            if (a) found.add(a)
+        }
+    }
+    return [...found]
+}
+
+const ailmentOf = (stateType: string): Ailment | undefined =>
+    (Object.values(Ailment) as string[]).find(a => stateType === a || stateType.startsWith(a + "_")) as Ailment | undefined
+
+// [APPROXIMATION] Max Damage assumes conditions are met; this keeps only the ailment checks among them: an ABILITY_EFFECT
+// condition about an ailment is evaluated against `stateTypes` (the state types the enemies carry), whichever unit it
+// names, and every other condition counts as met. Each csv's sets are OR'd, conditions in a set AND'd, as in
+// isConditionSetActiveForPvP.
+export function ailmentConditionsMet(csvs: (string | undefined)[], stateTypes: string[]): boolean {
+    return csvs.every(csv => {
+        const ids = (csv ?? "").split(",").filter(id => id.length && id !== "0")
+        if (!ids.length) return true
+        return ids.some(setId => (battleConditionSets[setId]?.battleConditionMstIdCsv ?? "").split(",").every(condId => {
+            const cond = battleConditions[condId]
+            if (cond?.compareContent !== CompareContent.ABILITY_EFFECT || !ailmentOf(cond.compareValue)) return true
+            return compareAbilityEffectList(cond.compareOperator, stateTypes, cond.compareValue)
+        }))
+    })
 }
