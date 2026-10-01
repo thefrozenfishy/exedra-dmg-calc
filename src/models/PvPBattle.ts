@@ -232,7 +232,18 @@ export class PvPBattle {
             vanguard: this.team1.soloRaid ? { ...this.team1.soloRaid } : undefined,
             countdown: this.team2.countdown?.unit ? { value: this.team2.countdown.value, max: this.team2.countdown.max, cancelTotal: this.team2.countdown.cancelTotal, cancelMax: this.team2.countdown.cancelMax, unit: this.team2.countdown.unit.kioku.name } : undefined,
             rngEvents: this.rng.drain(),
+            field: this.fieldSnapshot(),
         }
+    }
+
+    // [CONFIRMED 3.19] ZoneExpandAbilityEffect (0x1905ff0) releases every other unit's active zone, so at most one
+    // field is up at a time; it lasts while its stock is above 0 (KiokuState.zoneActive). UI display only.
+    private fieldSnapshot(): BattleSnapshot["field"] {
+        for (const t of [this.team1, this.team2]) {
+            const k = t.kiokuStates.find(u => !u.isDead && u.zoneActive)
+            if (k) return { owner: k.kioku.name, ownerPos: k.posIdx, ownerIsTeam1: t.isTeam1, stack: k.zone.stack, max: k.zone.max, element: k.kioku.data.element }
+        }
+        return undefined
     }
 
     traverseToNextActor(): PvPTeam {

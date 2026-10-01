@@ -13,6 +13,7 @@ import { UNIT_STATE_TYPES } from "./StateAddFilter";
 import { enemyKiokus } from "./PvEBattle";
 import type { QuestEnemyAppearance } from "./PvE";
 import { skillDetailsByMstId } from "../utils/helpers";
+import skillMstJson from "../assets/base_data/getSkillMstList.json";
 import { type SkillDetail, skillDetailId, targetRange, TargetType, TargetTypeLookup, targetTypeToLvl } from "../types/KiokuTypes";
 
 export type EffectSide = "ally" | "enemy"
@@ -21,7 +22,7 @@ export interface MaxDmgEffect {
     key: string            // `${casterPos}:${detailId}` - stable id for exclude / stack overrides
     casterPos: number
     casterName: string
-    source: string         // "Ultimate" / "Battle Skill" / "Basic Attack" / "Follow-up" / "Ability" / "Ascension" / "Crystalis" / "Portrait" / "Support"
+    source: string         // "Ultimate" / "Battle Skill" / "Basic Attack" / "Switch Skill" / "Follow-up" / "Ability" / "Ascension" / "Crystalis" / "Portrait" / "Support"
     side: EffectSide
     detail: SkillDetail
     maxStacks: number      // 1 unless an ACCUM state
@@ -52,13 +53,17 @@ export interface SkillDamage {
     perEnemy: { normal: number, crit: number, avg: number }[]
     total: { normal: number, crit: number, avg: number }
     critChance: number // % against the main target
+    name?: string      // the skill's own name (switch skills and follow-ups)
+    note?: string      // e.g. "replaces Battle Skill" / "Ether Blow"
 }
 
 export interface MemberDamage {
     pos: number
     name: string
     skills: SkillDamage[]
-    best: SkillDamage | undefined
+    best: SkillDamage | undefined   // strongest of skills + switchSkill (not the follow-up: it comes on top of an action)
+    switchSkill?: SkillDamage       // strongest SWITCH_SKILL replacement skill
+    followUp?: SkillDamage          // strongest AdditionalSkill / EtherBlow (ADDITIONAL_SKILL_ACT)
 }
 
 export interface MaxDmgResult {
@@ -70,6 +75,45 @@ export interface MaxDmgResult {
 const SKILL_TYPES: [TargetType, string][] = [
     [TargetType.specialId, "Ultimate"], [TargetType.skillId, "Battle Skill"], [TargetType.attackId, "Basic Attack"],
 ]
+
+// skillMstId -> name and SkillType (1 ActiveSkill, 2 SpecialAttack, 3 NormalAttack, 4 AdditionalSkill, 5 EtherBlow).
+const skillMst = new Map<number, { name: string, type: number }>((skillMstJson as any[]).map(s => [s.skillMstId, { name: s.name, type: s.type }]))
+const TARGET_OF_SKILL_TYPE: Record<number, TargetType> = { 1: TargetType.skillId, 2: TargetType.specialId, 3: TargetType.attackId }
+const isDamageRow = (d: SkillDetail) => d.abilityEffectType.startsWith("DMG_") && d.abilityEffectType !== "DMG_RATIO"
+
+interface ExtraSkill { type: TargetType, label: string, name?: string, note?: string, details: SkillDetail[] }
+
+// [CONFIRMED 3.19] SwitchSkillUnitState: value1 = skill unique id switched to, value3 = the SkillType it replaces, at
+// the replaced skill's level (PvPTeam.act / KiokuState.switchedSkillId). All current ones come from abilities.
+function switchSkillsOf(k: PvPKioku): ExtraSkill[] {
+    const out: ExtraSkill[] = []
+    const seen = new Set<number>()
+    for (const d of k.effects) {
+        if (d.abilityEffectType !== "SWITCH_SKILL") continue
+        const replaced = TARGET_OF_SKILL_TYPE[d.value3 ?? 0]
+        if (replaced === undefined) continue
+        const lvl = (k as any)[targetTypeToLvl[replaced as keyof typeof targetTypeToLvl]] ?? 1
+        const mstId = d.value1 * 100 + lvl
+        if (seen.has(mstId)) continue
+        seen.add(mstId)
+        const replacedLabel = SKILL_TYPES.find(([t]) => t === replaced)?.[1] ?? ""
+        out.push({ type: replaced, label: "Switch Skill", name: skillMst.get(mstId)?.name || undefined, note: `replaces ${replacedLabel}`, details: (skillDetailsByMstId.get(mstId) ?? []) as SkillDetail[] })
+    }
+    return out
+}
+
+// Follow-ups: every skill an ADDITIONAL_SKILL_ACT (value1 = exact skill id) of the kit can trigger - from passives,
+// the member's own skills or its switch skills. SkillType 4 = AdditionalSkill, 5 = EtherBlow.
+function followUpsOf(k: PvPKioku, switches: ExtraSkill[]): ExtraSkill[] {
+    const rows = [...k.effects, ...SKILL_TYPES.flatMap(([t]) => skillDetailsOf(k, t)), ...switches.flatMap(s => s.details)]
+    const ids = new Set(rows.filter(d => d.abilityEffectType === "ADDITIONAL_SKILL_ACT").map(d => d.value1))
+    return [...ids].map(id => {
+        const mst = skillMst.get(id)
+        return { type: TargetType.fuaId, label: "Follow-up", name: mst?.name || undefined, note: mst?.type === 5 ? "Ether Blow" : "Follow-up", details: (skillDetailsByMstId.get(id) ?? []) as SkillDetail[] }
+    })
+}
+
+const strongest = (list: (SkillDamage | undefined)[]) => list.reduce<SkillDamage | undefined>((b, s) => s && (!b || s.total.crit > b.total.crit) ? s : b, undefined)
 
 function skillDetailsOf(k: PvPKioku, type: TargetType): SkillDetail[] {
     const id = (k.data as any)[TargetTypeLookup[type as keyof typeof TargetTypeLookup]]
@@ -123,10 +167,11 @@ export function collectTeamEffects(allies: PvPKioku[], attackerPos: number): Max
         }
         for (const d of k.effects) {
             add(pos, k.name, passiveOrigin(k, d), d)
-            if (d.abilityEffectType === "ADDITIONAL_SKILL_ACT") {
-                for (const fd of (skillDetailsByMstId.get(d.value1) ?? []) as SkillDetail[]) add(pos, k.name, "Follow-up", fd)
-            }
         }
+        // Switch skills and follow-ups (incl. Ether Blows) the kit can use.
+        const switches = switchSkillsOf(k)
+        for (const sw of switches) for (const d of sw.details) add(pos, k.name, "Switch Skill", d)
+        for (const fu of followUpsOf(k, switches)) for (const d of fu.details) add(pos, k.name, "Follow-up", d)
     })
     return out
 }
@@ -207,10 +252,9 @@ export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearan
             breakRate: t.isBroken ? t.breakedDamageReceiveRate : 100, canBreak: t.maxBreakGauge >= 1,
         }))
 
-        const skills: SkillDamage[] = []
-        for (const [type, label] of SKILL_TYPES) {
-            const details = skillDetailsOf(allies[pos], type).filter(d => d.abilityEffectType.startsWith("DMG_") && d.abilityEffectType !== "DMG_RATIO")
-            if (!details.length) continue
+        const evaluate = ({ type, label, name, note, details: all }: ExtraSkill): SkillDamage | undefined => {
+            const details = all.filter(isDamageRow)
+            if (!details.length) return undefined
             const perEnemy = targets.map(() => ({ normal: 0, crit: 0, avg: 0 }))
             const bonus = [...attacker.activeEffectDetails.values()].filter(d => d.abilityEffectType === "ADDITIONAL_DAMAGE")
             for (const d of details) {
@@ -240,10 +284,15 @@ export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearan
             }
             perEnemy.forEach(x => { x.avg = Math.round(x.avg) })
             const total = perEnemy.reduce((s, x) => ({ normal: s.normal + x.normal, crit: s.crit + x.crit, avg: s.avg + x.avg }), { normal: 0, crit: 0, avg: 0 })
-            skills.push({ type, label, perEnemy, total, critChance: targets[main] ? critChance(attacker, targets[main]) : 0 })
+            return { type, label, name, note, perEnemy, total, critChance: targets[main] ? critChance(attacker, targets[main]) : 0 }
         }
-        const best = skills.reduce<SkillDamage | undefined>((b, s) => !b || s.total.crit > b.total.crit ? s : b, undefined)
-        members.push({ pos, name: allies[pos].name, skills, best })
+        const skills = SKILL_TYPES.map(([type, label]) => evaluate({ type, label, details: skillDetailsOf(allies[pos], type) }))
+            .filter((s): s is SkillDamage => !!s)
+        const switches = switchSkillsOf(allies[pos])
+        const switchSkill = strongest(switches.map(evaluate))
+        const followUp = strongest(followUpsOf(allies[pos], switches).map(evaluate))
+        const best = strongest([...skills, switchSkill])
+        members.push({ pos, name: allies[pos].name, skills, best, switchSkill, followUp })
     }
     return { effects, members, enemies: enemySummary }
 }

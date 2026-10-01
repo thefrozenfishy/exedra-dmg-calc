@@ -63,7 +63,7 @@
       </div>
       <div class="share-results">
         <div v-if="dealer?.best" class="share-result">
-          <span class="share-result-label">Max damage · {{ dealer.name }} · {{ dealer.best.label }}</span>
+          <span class="share-result-label">Max damage · {{ dealer.name }} · {{ skillLabel(dealer.best) }}</span>
           <span class="share-result-value">{{ fmt(dealer.best.total.crit) }}</span>
           <span class="share-result-sub">{{ fmt(dealer.best.total.avg) }} average</span>
         </div>
@@ -219,7 +219,7 @@
       <p v-if="!teamKiokus.length" class="empty-hint">Add team members to calculate damage.</p>
       <template v-else-if="maxDmg">
         <div v-if="dealer?.best" class="result-block">
-          <div class="result-label">{{ dealer.name }} · {{ dealer.best.label }}</div>
+          <div class="result-label">{{ dealer.name }} · {{ skillLabel(dealer.best) }}</div>
           <div class="result-value">{{ fmt(dealer.best.total.crit) }} <span class="result-unit">if it crits</span></div>
           <div class="result-sub">{{ fmt(dealer.best.total.normal) }} without a crit · {{ fmt(dealer.best.total.avg) }}
             on average at {{ dealer.best.critChance.toFixed(1) }}% crit rate</div>
@@ -247,7 +247,7 @@
             <thead>
               <tr>
                 <th>Member</th>
-                <th v-for="[, label] in skillCols" :key="label">{{ label }}</th>
+                <th v-for="col in dmgCols" :key="col.label" :title="col.title">{{ col.label }}</th>
               </tr>
             </thead>
             <tbody>
@@ -260,12 +260,12 @@
                     <span v-if="m.pos === dealerPos" class="dealer-badge">Dealer</span>
                   </div>
                 </td>
-                <td v-for="[type] in skillCols" :key="type">
-                  <template v-if="skillOf(m, type)">
-                    <div :title="perEnemyTitle(skillOf(m, type)!)" class="dmg-crit">{{ fmt(skillOf(m, type)!.total.crit)
-                      }}</div>
-                    <div class="dmg-sub">{{ fmt(skillOf(m, type)!.total.normal) }} · avg {{
-                      fmt(skillOf(m, type)!.total.avg) }}</div>
+                <td v-for="col in dmgCols" :key="col.label">
+                  <template v-if="col.get(m)">
+                    <div :title="perEnemyTitle(col.get(m)!)" class="dmg-crit">{{ fmt(col.get(m)!.total.crit) }}</div>
+                    <div class="dmg-sub">{{ fmt(col.get(m)!.total.normal) }} · avg {{ fmt(col.get(m)!.total.avg) }}</div>
+                    <div v-if="col.get(m)!.name || col.get(m)!.note" class="dmg-name">{{ col.get(m)!.name }}<span
+                        v-if="col.get(m)!.note" class="dmg-note">{{ col.get(m)!.name ? ' · ' : '' }}{{ col.get(m)!.note }}</span></div>
                   </template>
                   <span v-else class="muted">–</span>
                 </td>
@@ -274,7 +274,8 @@
           </table>
         </div>
         <p class="table-note">Big number: every hit crits. Below: no crits · average. Totals are summed over every
-          enemy the skill hits; hover a value for the per-enemy split.</p>
+          enemy the skill hits; hover a value for the per-enemy split. Switch Skill and Follow-up show the strongest one the
+          member has.</p>
       </template>
     </section>
 
@@ -587,15 +588,24 @@ const maxDmg = computed<MaxDmgResult | undefined>(() => {
 })
 const dealer = computed(() => maxDmg.value?.members[dealerPos.value])
 const dealerName = computed(() => dealer.value?.name ?? 'the damage dealer')
-const skillCols: [TargetType, string][] = [[TargetType.specialId, 'Ultimate'], [TargetType.skillId, 'Battle Skill'], [TargetType.attackId, 'Basic Attack']]
 const skillOf = (m: MemberDamage, t: TargetType) => m.skills.find(s => s.type === t)
+// Switch skill: the strongest skill a SWITCH_SKILL state swaps in (e.g. Falsified Phenomena's battle skill while her
+// field is up). Follow-up: the strongest AdditionalSkill / Ether Blow the kit can trigger, on top of an action.
+const dmgCols: { label: string, title?: string, get: (m: MemberDamage) => SkillDamage | undefined }[] = [
+  { label: 'Ultimate', get: m => skillOf(m, TargetType.specialId) },
+  { label: 'Battle Skill', get: m => skillOf(m, TargetType.skillId) },
+  { label: 'Basic Attack', get: m => skillOf(m, TargetType.attackId) },
+  { label: 'Switch Skill', title: 'A skill that replaces one of the above while its condition holds (e.g. while a field is up). Strongest one if there are several.', get: m => m.switchSkill },
+  { label: 'Follow-up', title: 'Damage of one follow-up / Ether Blow, dealt on top of an action. Strongest one if there are several.', get: m => m.followUp },
+]
+const skillLabel = (s: SkillDamage) => s.name ? `${s.label} (${s.name})` : s.label
 const perEnemyTitle = (s: SkillDamage) => s.perEnemy.map((x, i) => x.crit ? `${enemyInfo.value[i]?.name}: ${fmt(x.crit)} crit / ${fmt(x.normal)} / avg ${fmt(x.avg)}` : '').filter(Boolean).join('\n')
 
 // ---- buffs & debuffs: where each effect comes from and whether it counts ----
 type EffectStatus = 'used' | 'partial' | 'off' | 'na'
 const STATUS_ORDER: Record<EffectStatus, number> = { used: 0, partial: 1, off: 2, na: 3 }
 // Sections, in this order: active skills first, then the kit's passives and what's equipped.
-const SOURCE_ORDER = ['Battle Skill', 'Ultimate', 'Basic Attack', 'Follow-up', 'Ability', 'Ascension', 'Crystalis', 'Portrait', 'Support', 'Passive']
+const SOURCE_ORDER = ['Battle Skill', 'Ultimate', 'Basic Attack', 'Switch Skill', 'Follow-up', 'Ability', 'Ascension', 'Crystalis', 'Portrait', 'Support', 'Passive']
 const showUnreachable = useSetting('pveShowUnreachableEffects', false)
 
 function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: string } {
@@ -1785,6 +1795,19 @@ const saved = useSavedTeams({
 
 .dmg-crit {
   font-weight: 700;
+}
+
+.dmg-name {
+  font-size: 0.72rem;
+  color: var(--muted);
+  max-width: 11rem;
+  margin-left: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dmg-note {
+  opacity: 0.75;
 }
 
 .dmg-sub {

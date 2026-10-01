@@ -1,6 +1,7 @@
 <template>
   <div class="battle-output">
-    <div v-for="(state, idx) in states" :key="idx" class="battle-state">
+    <div v-for="(state, idx) in states" :key="idx" class="battle-state"
+      :class="{ 'field-on': fieldDuring(idx) }" :style="fieldDuring(idx) ? { '--field-color': fieldColor(fieldDuring(idx)!) } : undefined">
       <div class="matchup-divider">
         <div v-if="state.wave" class="ten-separator wave-separator">
           <span class="turn">Wave {{ state.wave }}</span>
@@ -14,6 +15,18 @@
         <div v-else>
           <span class="action"> Initial State </span>
         </div>
+      </div>
+
+      <div v-if="fieldDuring(idx)" class="field-status">
+        <template v-if="state.field">
+          <span class="field-label">{{ fieldChange(idx) === 'start' ? 'Field started' : 'Field' }}</span>
+          {{ state.field.owner }}
+          <span class="field-pips" :title="`Stock ${state.field.stack} / ${state.field.max}`">
+            <span v-for="n in state.field.max" :key="n" class="field-pip" :class="{ full: n <= state.field.stack }"></span>
+          </span>
+          <b>{{ state.field.stack }}/{{ state.field.max }}</b>
+        </template>
+        <template v-else><span class="field-label">Field ended</span> {{ states[idx - 1]?.field?.owner }}</template>
       </div>
 
       <div v-if="state.linkHp || state.countdown || state.vanguard" class="raid-status">
@@ -113,6 +126,9 @@
               <span v-if="char.shields" class="status-chip shield" :title="`${char.shields} active shield(s): damage cut per hit`">Shield ×{{ char.shields }}</span>
               <span v-if="char.isBroken" class="status-chip broken-chip" title="Damage taken while broken">Broken {{ char.breakedDamageReceiveRate ?? 100 }}%</span>
               <span v-if="char.stunned" class="status-chip stun">Stunned</span>
+              <span v-if="state.field && state.field.ownerIsTeam1 === (sideIdx === 0) && state.field.ownerPos === charIdx"
+                class="status-chip field-chip" :title="`Field stock ${state.field.stack} / ${state.field.max}`">Field {{
+                  state.field.stack }}/{{ state.field.max }}</span>
             </div>
             <div v-if="char.maxMp > 0" class="progress-bar" :title="char.mp + ' / ' + char.maxMp">
               MP
@@ -156,6 +172,26 @@ const skillTranslate = {
   [TargetType.skillId]: "Battle Skill",
   [TargetType.fuaId]: "Follow-up",
 }
+
+// The field (only one can be up at a time) that was up at some point during this entry's action: up after it, or up
+// before it (the action that used the last stock still ran with the field).
+type FieldInfo = NonNullable<BattleSnapshot['field']>
+function fieldDuring(idx: number): FieldInfo | undefined {
+  const state = props.states[idx]
+  if (state.field) return state.field
+  return idx > 0 && !state.wave ? props.states[idx - 1]?.field : undefined
+}
+function fieldChange(idx: number): 'start' | 'end' | undefined {
+  const before = idx > 0 ? props.states[idx - 1]?.field : undefined
+  const after = props.states[idx].field
+  if (after && (!before || before.owner !== after.owner || before.ownerIsTeam1 !== after.ownerIsTeam1)) return 'start'
+  if (before && !after) return 'end'
+  return undefined
+}
+const FIELD_COLORS: Record<string, string> = {
+  Flame: '#e8644a', Aqua: '#4a9be8', Forest: '#5bbf6a', Light: '#e8c14a', Dark: '#a070f0', Void: '#b4a6cc',
+}
+const fieldColor = (f: FieldInfo) => FIELD_COLORS[f.element ?? ''] ?? '#a0a0c8'
 
 // Wave dividers are not actions: number actions without them.
 function actionNumber(idx: number) {
@@ -506,6 +542,56 @@ function healTo(state: BattleSnapshot, isAllies: boolean, pos: number, name: str
   font-size: 0.85rem;
   color: var(--accent-soft);
   margin: 0.25rem 0;
+}
+
+.battle-state {
+  padding: 0 0.5rem 0.5rem;
+  border-radius: var(--radius-sm, 8px);
+  border-left: 3px solid transparent;
+}
+
+.battle-state.field-on {
+  background: color-mix(in srgb, var(--field-color) 8%, transparent);
+  border-left-color: color-mix(in srgb, var(--field-color) 55%, transparent);
+}
+
+.field-status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text);
+  margin: 0.25rem 0;
+}
+
+.field-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--field-color);
+}
+
+.field-pips {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.field-pip {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  border: 1px solid var(--field-color);
+}
+
+.field-pip.full {
+  background: var(--field-color);
+}
+
+.status-chip.field-chip {
+  color: var(--field-color);
+  border-color: var(--field-color);
 }
 
 .wave-separator {
