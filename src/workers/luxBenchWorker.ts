@@ -10,7 +10,7 @@ export interface LuxBenchJob {
     chart: "support" | "attacker"
     lux: Character
     chars: Character[]  // levels already applied
-    enemies: number     // attacker chart: 1, 3 or 5 (the support chart always uses one)
+    enemies: number     // 1, 3 or 5 (the page's fight type)
     seeds: number
     av: number
     infiniteSp: boolean
@@ -39,7 +39,7 @@ self.onmessage = (e: MessageEvent<LuxBenchJob>) => {
             let x = units.get(c.id)
             if (!x) units.set(c.id, x = benchKioku(toInput(c)))
             const rows = job.chart === "support"
-                ? (type === "max" ? bench.supportMax(x) : bench.supportAvg(x))
+                ? (type === "max" ? bench.supportMax(x, job.enemies) : bench.supportAvg(x, job.enemies))
                 : (type === "max" ? bench.attackerMax(x, job.enemies) : bench.attackerAvg(x, job.enemies))
             post({ type, id: c.id, rows })
         } catch (err) {
