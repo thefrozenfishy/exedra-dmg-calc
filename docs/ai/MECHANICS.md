@@ -129,6 +129,10 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   each passive pass); team 209 sum of CountPoint, 210 units holding pattern pid, 211 total AccumCount of pid;
   1001 IsAlly; 1101 vanguard phase active. [C] (implemented in stash, STATUS.md)
 - HPRatio = `HP * 100f / MaxHP` (float). [C]
+- State active conditions during a launch: EachTarget = the unit the launch is processing (each effect's target,
+  each additional hit's target), not the state's holder. `withEachTarget` / `LaunchContext.eachTarget` in PvPTeam.
+  [?] (set site not read; "DMG dealt to cursed/burning enemies" states, EachTarget.AbilityEffect contains CURSE/BURN,
+  never applied with the holder as EachTarget.)
 - 19 IsElementType / 20 IsRoleType: CompareValue is the enum NAME in the data ("Fire" = Flame, "Neutral" = Void,
   "Attacker", ...), never an id. TS `conditionElement` / `conditionRole` (they used to go through id maps and
   matched no character until 2026-10-01). [C data]

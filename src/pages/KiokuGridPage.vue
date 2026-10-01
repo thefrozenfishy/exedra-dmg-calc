@@ -1662,16 +1662,16 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
         return
     }
 
-    const identityKey = (element?: string, role?: string) => contextKey(makeContext(element as KiokuElement, role as KiokuRole))
+    const identityKey = (r: BenchRow) => contextKey(makeContext(r.element, r.role, r.ailment))
     const setMax = (id: number, rows: BenchRow[]) => results.set(id, rows.map(r => ({
-        context: makeContext(r.element, r.role),
+        context: makeContext(r.element, r.role, r.ailment),
         maxGain: r.gain,
         critRate: r.critRate,
     })))
     const setAvg = (id: number, rows: BenchRow[]) => {
         const cells = results.get(id)
         if (!cells) return
-        const avg = new Map(rows.map(r => [identityKey(r.element, r.role), r.gain]))
+        const avg = new Map(rows.map(r => [identityKey(r), r.gain]))
         results.set(id, cells.map(c => ({ ...c, avgGain: avg.get(contextKey(c.context)) })))
     }
 
@@ -1839,7 +1839,7 @@ const benchCharts = computed(() => [
             benchAverageDmg.value
                 ? `Average Damage: ${BENCH_AV} AV (${BENCH_AV / 100} turns) of auto battle with infinite SP (topped up to 5 every turn, so everyone can always use their battle skill), the character next to the attacker and three ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts (including additional damage it deals), never the rest of the team's. ${BENCH_PLAY_NOTE}`
                 : `Max Burst: the attacker's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
-            `One enemy with 3000 def, weak to every element and broken (500% dmg taken). Element or role bonuses get their own bar when they change the result, so a bonus can show in one metric only: crit rate or procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
+            `One enemy with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle. Element, role or ailment bonuses (enemies under Curse, Burn, ... for the whole battle) get their own bar when they change the result, so a bonus can show in one metric only: crit rate or procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
         ],
         chart: buildBenchChart("support"),
         status: benchStatusText("support"),
@@ -1856,7 +1856,7 @@ const benchCharts = computed(() => [
             benchAverageDmg.value
                 ? `Average Damage: ${BENCH_AV} AV (${BENCH_AV / 100} turns) of auto battle with infinite SP (topped up to 5 every turn), supported by four ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts. ${BENCH_PLAY_NOTE}`
                 : `Max Burst: the Ultimate with the attacker's own buffs and debuffs at full stacks and every hit a crit.`,
-            `Every character uses their own element and role. ${levelsDescription.value} ${LuxMagica} is A0. ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken).`,
+            `Every character uses their own element and role. ${levelsDescription.value} ${LuxMagica} is A0. ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result.`,
         ],
         chart: buildBenchChart("attacker"),
         status: benchStatusText("attacker"),

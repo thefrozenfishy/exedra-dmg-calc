@@ -11,6 +11,7 @@ import { PvPTeam, KiokuState, isFriendlyEffect, isOpponentEffect, scaleGivenStat
 import type { PvPKioku } from "./PvPKioku";
 import { BattleType, DamageBaseType, damageBaseTypeFromEffectType, getAttackDamageResult, getAdditionalDamageBase, critChance } from "./DamageCalculator";
 import { isEligibleForEffect } from "./UnitStateEngine";
+import { ailmentConditionsMet } from "./BattleConditionParser";
 import { UNIT_STATE_TYPES } from "./StateAddFilter";
 import { actorSkillTypeRestriction } from "./BattleConditionParser";
 import { enemyKiokus } from "./PvEBattle";
@@ -49,6 +50,17 @@ export interface MaxDmgOptions {
     breakRate?: (number | undefined)[] // per enemy broken damage rate in % (default: the enemy's max)
     mainTargetIdx?: number        // single-target skills hit this enemy
     onlyPos?: number              // evaluate only this member as the attacker (the others get no skills)
+    // Ailment states every enemy carries ("CURSE_ATK", "STUN", ...). When set, conditions about ailments are no longer
+    // assumed met but checked against these (ailmentConditionsMet), for the team's effects and the damage rows alike.
+    enemyStates?: string[]
+}
+
+// A marker of an ailment on a unit: no damage and never ticks (Max Damage has no turns).
+export function ailmentMarker(type: string, i: number): SkillDetail & Record<string, any> {
+    return {
+        abilityEffectType: type, value1: 0, value2: 0, value3: 0, turn: 99, remainCount: 99, range: targetRange.TARGET,
+        element: 0, probability: 1000, activeConditionSetIdCsv: "", startConditionSetIdCsv: "", skillDetailMstId: -1 - i,
+    } as any
 }
 
 export interface SkillDamage {
@@ -219,16 +231,19 @@ export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearan
         const passEffects = pos === attackerPos ? effects : collectTeamEffects(allies, pos)
         const stacksOf = (e: MaxDmgEffect) => opts.excluded?.has(e.key) ? 0 : Math.max(0, Math.min(e.maxStacks, opts.stacks?.get(e.key) ?? e.maxStacks))
         // Each caster's active buff/debuff strength, by type (conditions assumed met, like everything else here).
+        const ailmentsOk = (d: SkillDetail) => !opts.enemyStates
+            || ailmentConditionsMet([d.startConditionSetIdCsv, d.activeConditionSetIdCsv], opts.enemyStates)
         const giverEffects = new Map<number, Record<string, SkillDetail[]>>()
         for (const e of passEffects) {
-            if (!isEffectValueType(e.detail.abilityEffectType) || !stacksOf(e)) continue
+            if (!isEffectValueType(e.detail.abilityEffectType) || !stacksOf(e) || !ailmentsOk(e.detail)) continue
             const fx = giverEffects.get(e.casterPos) ?? {}
             fx[e.detail.abilityEffectType] = [...(fx[e.detail.abilityEffectType] ?? []), e.detail]
             giverEffects.set(e.casterPos, fx)
         }
+        opts.enemyStates?.forEach((type, i) => targets.forEach(t => t.activeEffectDetails.set(`ailment:${type}`, ailmentMarker(type, i))))
         for (const e of passEffects) {
             const stacks = stacksOf(e)
-            if (!stacks || isEffectValueType(e.detail.abilityEffectType)) continue
+            if (!stacks || isEffectValueType(e.detail.abilityEffectType) || !ailmentsOk(e.detail)) continue
             const caster = team1.kiokuStates[e.casterPos]
             // Scaled by the caster's buff/debuff strength, as when the battle gives the state.
             const detail = scaleGivenState(e.detail, giverEffects.get(e.casterPos) ?? {})
@@ -277,7 +292,7 @@ export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearan
         }
 
         const evaluateSkill = ({ type, label, name, note, details: all }: ExtraSkill): SkillDamage | undefined => {
-            const details = all.filter(isDamageRow)
+            const details = all.filter(d => isDamageRow(d) && ailmentsOk(d))
             if (!details.length) return undefined
             const perEnemy = targets.map(() => ({ normal: 0, crit: 0, avg: 0 }))
             const p = (t: typeof targets[number]) => Math.min(1, Math.max(0, critChance(attacker, t) / 100))
