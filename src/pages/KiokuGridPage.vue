@@ -1644,7 +1644,7 @@ const fightModeEnemies = () => fightMode.value === "st" ? 1 : fightMode.value ==
 
 const benchSetup = (kind: BenchChartKind, lux: Character): BenchSetup => ({
     chart: kind,
-    enemies: kind === "attacker" ? fightModeEnemies() : 1,
+    enemies: fightModeEnemies(),
     seeds: BENCH_SEEDS,
     av: BENCH_AV,
     infiniteSp: BENCH_INFINITE_SP,
@@ -1833,13 +1833,13 @@ const benchCharts = computed(() => [
         sectionClass: "bench-buff-chart-section",
         filename: "relative-buff-strength-battle-engine.png",
         title: "Relative buff strength (battle engine)",
-        fightType: false,
+        fightType: true,
         desc: [
             `How much each character increases the damage of a ${LuxMagica} attacker (a Light Breaker like herself, or another element/role when the character's buffs are limited to those), measured with the battle engine. ${levelsDescription.value}`,
             benchAverageDmg.value
                 ? `Average Damage: ${BENCH_AV} AV (${BENCH_AV / 100} turns) of auto battle with infinite SP (topped up to 5 every turn, so everyone can always use their battle skill), the character next to the attacker and three ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts (including additional damage it deals), never the rest of the team's. ${BENCH_PLAY_NOTE}`
                 : `Max Burst: the attacker's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
-            `One enemy with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle. Element, role or ailment bonuses (enemies under Curse, Burn, ... for the whole battle) get their own bar when they change the result, so a bonus can show in one metric only: crit rate or procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
+            `${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle. Everyone aims single-target and proximity skills at the middle enemy, so a single-target debuff covers one enemy and an AoE one all of them. Element, role or ailment bonuses (enemies under Curse, Burn, ... for the whole battle) get their own bar when they change the result, so a bonus can show in one metric only: crit rate or procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
         ],
         chart: buildBenchChart("support"),
         status: benchStatusText("support"),
@@ -1856,7 +1856,7 @@ const benchCharts = computed(() => [
             benchAverageDmg.value
                 ? `Average Damage: ${BENCH_AV} AV (${BENCH_AV / 100} turns) of auto battle with infinite SP (topped up to 5 every turn), supported by four ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts. ${BENCH_PLAY_NOTE}`
                 : `Max Burst: the Ultimate with the attacker's own buffs and debuffs at full stacks and every hit a crit.`,
-            `Every character uses their own element and role. ${levelsDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result.`,
+            `Every character uses their own element and role. ${levelsDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle; single-target and proximity skills aim at the middle one. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result.`,
         ],
         chart: buildBenchChart("attacker"),
         status: benchStatusText("attacker"),
@@ -2034,7 +2034,7 @@ const shareOptionsForAttackerChart = () => ({
 
 watch([markedCharacters, fightMode, simulateMaxLevels], computeGains, { immediate: true })
 if (beta) {
-    watch([markedCharacters, simulateMaxLevels], () => runBench("support"), { immediate: true })
+    watch([markedCharacters, simulateMaxLevels, fightMode], () => runBench("support"), { immediate: true })
     watch([markedCharacters, simulateMaxLevels, fightMode], () => runBench("attacker"), { immediate: true })
 }
 </script>

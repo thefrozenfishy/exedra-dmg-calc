@@ -173,8 +173,14 @@ const PLAY_PATTERNS: Record<string, {
     },
 }
 
+// Every ally aims single-target and proximity skills at the middle enemy (the main target), so with 3 or 5 enemies a
+// single-target debuff covers one of them and an AoE one all of them.
 function applyPlayPatterns(team: PvPTeam, dealerPos: number) {
     const dealer = team.kiokuStates[dealerPos]
+    team.opponentTargetPolicy = () => {
+        const enemies = team.otherTeam?.kiokuStates ?? []
+        return enemies[Math.trunc(enemies.length / 2)]
+    }
     team.allyActionPolicy = u => PLAY_PATTERNS[u.kioku.name]?.action?.(u)
     team.allyTargetPolicy = (u, detail) => detail.range === targetRange.SELF || detail.range === targetRange.ALL ? undefined
         : PLAY_PATTERNS[u.kioku.name]?.target?.(u, dealer)
@@ -340,20 +346,20 @@ export class LuxBenchCharts {
         return { element: id.element ?? n.element, role: id.role ?? n.role, ailment: id.ailment }
     }
 
-    supportMax(x: PvPKioku, ids = this.supportIdentities(x)): BenchRow[] {
+    supportMax(x: PvPKioku, enemies = 1, ids = this.supportIdentities(x)): BenchRow[] {
         return ids.map(id => {
             const dealer = this.dealer(this.resolve(id, x))
-            const base = this.cachedUlt(`s:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), 1, id.ailment)
-            const v = ultimateDamage(this.team(dealer, x), 0, 1, id.ailment)
+            const base = this.cachedUlt(`s:${enemies}:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), enemies, id.ailment)
+            const v = ultimateDamage(this.team(dealer, x), 0, enemies, id.ailment)
             return { ...id, gain: pctGain(v.damage, base.damage), critRate: v.critChance }
         })
     }
 
-    supportAvg(x: PvPKioku, ids = this.supportIdentities(x)): BenchRow[] {
+    supportAvg(x: PvPKioku, enemies = 1, ids = this.supportIdentities(x)): BenchRow[] {
         return ids.map(id => {
             const dealer = this.dealer(this.resolve(id, x))
-            const base = this.cachedSim(`s:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), 1, id.ailment)
-            return { ...id, gain: pctGain(this.simTotal(this.team(dealer, x), 1, id.ailment), base) }
+            const base = this.cachedSim(`s:${enemies}:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), enemies, id.ailment)
+            return { ...id, gain: pctGain(this.simTotal(this.team(dealer, x), enemies, id.ailment), base) }
         })
     }
 

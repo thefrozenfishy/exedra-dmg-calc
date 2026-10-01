@@ -255,9 +255,13 @@ export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearan
                 if (eligible) attacker.activeEffectDetails.set(e.key, stateFrom(e, detail, caster, stacks))
             } else {
                 if (!e.applies) continue
+                // By range, centred on the main target like the damage rows: single -> the main target, proximity ->
+                // it and its neighbours, all -> every enemy.
+                const inRange = (i: number) => detail.range === targetRange.ALL || detail.range === targetRange.SELF ? true
+                    : detail.range === targetRange.PROXIMITY ? Math.abs(i - main) <= 1 : i === main
                 const hit: number[] = []
                 targets.forEach((t, i) => {
-                    if (!isEligibleForEffect(detail, t)) return
+                    if (!inRange(i) || !isEligibleForEffect(detail, t)) return
                     t.activeEffectDetails.set(e.key, stateFrom(e, detail, caster, stacks))
                     hit.push(i)
                 })
