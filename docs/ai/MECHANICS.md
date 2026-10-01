@@ -267,6 +267,8 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   DWN_RCV_RECOVERY_RATIO `p -= p × v1/1000` each; PvP/GvG ×0.5; Max(0); caller Ceiling. [C]
   RECOVERY_HP = healer MaxHP×v1/1000+v2; RECOVERY_HP_ATK = processed ATK×v1/1000+v2; CONTINUOUS_RECOVERY (HoT) =
   holder MaxHP×(v1/10)/100+v2 at the holder's TurnBegin, never suppressed; REVIVAL_RATIO = Ceiling(f32 MaxHP×v1/100).
+  Every living RECOVERY_HP(_ATK) target gets IsReceivedRecovery = true (CreateByRecovery 0x1378df0), even at full HP
+  (healed 0): IS_RECOVERY (104) conditions fire on full-HP heals. [C]
 - REGAIN_ATK/DEF/HP (0x16d7320 via 0x1372f70): once per skill launch that hit an opponent, the holder heals
   Ceiling(Σ GetProcessedRecoveryValue(holder, holder, caster's processed ATK (DEF/MaxHP) × v1/1000 + v2)). [C]
 - Barrier (`BarrierUnitState` 0x15b5ed0): v1, v3 per-mille; endurance `ceil(f)`; PvP ×0.5; DWN_BARRIER_VALUE on
@@ -281,8 +283,10 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   GAIN_SP_FIXED adds through the same clamp. [C] Check: checkMechanics #6.
 - BP (ultimate gauge of units with StyleMst.bp > 0: Vinctio☆Magica 12, Metallicized Projectile 15; their ep = 0):
   `BattleUnit.IsSpecialAttackPointMax` 0x13885d0 = MaxBP > 0 ? BP >= MaxBP : (MaxEP > 0 && EP >= MaxEP), used by every
-  ultimate gate. BP starts 0, moves only via GAIN/LOSE_BP_FIXED (`AddBP` 0x1382c30, clamp [0, MaxBP]); EpCharger
-  never touches it. `SpecialAttack.Execute` 0x138c4f0 sets EP = 0 (if MaxEP > 0) and BP = 0 (if MaxBP > 0) before
+  ultimate gate. BP starts 0; clamp [0, MaxBP] everywhere. Sources: GAIN/LOSE_BP_FIXED (`AddBP` 0x1382c30) and
+  `BpCharger` (cctor 0x1491450): own basic attack +1 (NormalAttack.Execute 0x138b560), own battle skill +2
+  (ActiveSkill.Execute, both before the effects), +1 per GAIN_EP_* effect received whatever the EP amount
+  (GainEpAbilityEffectBase.Triggering 0x18f3300, e.g. Pluvia☆Magica ult, Cherry Ballad support turn-start MP). `SpecialAttack.Execute` 0x138c4f0 sets EP = 0 (if MaxEP > 0) and BP = 0 (if MaxBP > 0) before
   the effects run (so an ult's own +BP lands on 0). `OnBattleUnitDeath` 0x149a9a0 zeroes EP and BP. [C]
   TS: `KiokuState.maxBp/currentBp/isSpecialAttackPointMax/addBp`. (Before 2026-10-01 BP was ignored: these two never ulted.)
 

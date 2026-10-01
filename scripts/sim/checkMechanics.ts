@@ -169,4 +169,25 @@ for (const mates of [["Time Stop Strike", "Hollow Woman", "Ultra Great Big Hamme
     void t1
 }
 
+// 9. BP (MaxBP = StyleMst.bp > 0): IsSpecialAttackPointMax 0x13885d0 reads BP, not EP. BpCharger (cctor 0x1491450):
+//    own basic attack +1, own battle skill +2, each GAIN_EP_* effect received +1 (GainEpAbilityEffectBase.Triggering
+//    0x18f3300). SpecialAttack.Execute 0x138c4f0 zeroes BP before the ult's own GAIN_BP_FIXED (+2 for Vinctio).
+{
+    const mk0 = (name: string) => new PvPKioku({ name, kiokuLvl: 120, magicLvl: 10, heartphialLvl: 10, ascension: 0, specialLvl: 10, crysIDs: [], subCrysIDs: [] } as any)
+    const t1 = new PvPTeam(["Vinctio☆Magica", "Pluvia☆Magica", ...names.filter(n => !/Vinctio|Pluvia/.test(n)).slice(0, 3)].map(mk0), "Ally")
+    const t2 = new PvPTeam(names.slice(10, 15).map(mk), "Enemy")
+    new PvPBattle(t1, t2, false, 4242)
+    t1.snapshotHook = t2.snapshotHook = undefined
+    const [v, p] = t1.kiokuStates
+    const start = v.currentBp
+    act(t1, v, TargetType.attackId); const afterAttack = v.currentBp
+    t1.currentSp = 5; act(t1, v, TargetType.skillId); const afterSkill = v.currentBp
+    p.currentMp = p.maxMp; act(t1, p, TargetType.specialId); const afterPluviaUlt = v.currentBp
+    const readyAt11 = (v.currentBp = 11, v.isSpecialAttackPointMax())
+    v.currentBp = 12; const readyAt12 = v.isSpecialAttackPointMax() && t1.readyUltimates().includes(v)
+    act(t1, v, TargetType.specialId); const afterUlt = v.currentBp
+    check("BP gains and ultimate", v.maxBp === 12 && v.maxMp === 0 && start === 0 && afterAttack === 1 && afterSkill === 3 && afterPluviaUlt === 4 && !readyAt11 && readyAt12 && afterUlt === 2,
+        `max ${v.maxBp} (MP max ${v.maxMp}); start ${start}, basic ${afterAttack}, skill ${afterSkill}, Pluvia ult (+20 MP) ${afterPluviaUlt}, ready at 11 ${readyAt11} / 12 ${readyAt12}, after own ult ${afterUlt} (want 0,1,3,4,false,true,2)`)
+}
+
 process.exit(failed ? 1 : 0);

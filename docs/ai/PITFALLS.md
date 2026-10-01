@@ -123,4 +123,5 @@
   applied at give time, not baked into the kit). MaxDamage.ts skipped it, so ascension-granted buff/debuff
   strength (e.g. Flame Waltz A4 +50%) had no effect on Max Damage until 2026-09-30.
 - "Nothing reads X" claims from grepping a getter's RVA miss folded getters and direct field reads: BP was declared dead
-  but `IsSpecialAttackPointMax` reads BattleUnit+0x34/+0x3C directly. Grep the field offset in the callers too.
+  but `IsSpecialAttackPointMax` reads BattleUnit+0x34/+0x3C directly, and `BpCharger` writes +0x34 without AddBP.
+  Grep the field offset and `<Name>Charger`-style static helpers too, not only the setter/adder.

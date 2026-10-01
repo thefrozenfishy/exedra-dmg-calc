@@ -345,9 +345,9 @@ export class KiokuState {
     maxMp: number
     // [CONFIRMED 3.19] BattleUnit.BP (+0x34) / MaxBP (+0x3C), MaxBP = StyleMst.bp (CharacterParameter+0x78).
     // A unit with MaxBP > 0 (Vinctio☆Magica 12, Metallicized Projectile 15) uses BP instead of EP for its
-    // ultimate: see isSpecialAttackPointMax. BP only moves through GAIN_BP_FIXED / LOSE_BP_FIXED
-    // (BattleUnit.AddBP 0x1382c30, Clamp(BP + n, 0, MaxBP)); no EpCharger path touches it. Starts at 0
-    // (the ctor 0x138a1d0 zeroes EP and BP together).
+    // ultimate: see isSpecialAttackPointMax. BP moves through GAIN_BP_FIXED / LOSE_BP_FIXED (BattleUnit.AddBP
+    // 0x1382c30) and BpCharger: own basic attack +1, own battle skill +2, each GAIN_EP_* effect received +1
+    // (see act / applyEffectToTarget). Always Clamp(BP + n, 0, MaxBP). Starts at 0 (the ctor 0x138a1d0 zeroes EP and BP).
     maxBp: number = 0
     currentBp = 0
     aggro: number
@@ -1780,7 +1780,9 @@ export class KiokuState {
             const prio = this.turnPriorityForEffect()
             effTargets.forEach(t => t.addGaugeRate(f32(f32(detail.value1) / 1000), prio))
         } else if (detail.abilityEffectType === "GAIN_EP_RATIO") {
-            effTargets.forEach(t => t.getMp(target.maxMp * detail.value1 / 1000))
+            // [CONFIRMED 3.19] GainEpAbilityEffectBase.Triggering (0x18f3300): per target EpCharger.ChargeByEpAbilityEffect,
+            // then BpCharger.ChargeByEpAbilityEffect (0x1491370): +1 BP whatever the EP amount (MaxBP units only).
+            effTargets.forEach(t => { t.getMp(target.maxMp * detail.value1 / 1000); t.addBp(1) })
         } else if (detail.abilityEffectType === "LOSE_EP_RATIO" || detail.abilityEffectType === "LOSE_EP_FIXED") {
             // [CONFIRMED 3.19] LoseEpAbilityEffectBase.Triggering (0x18f5f40): AddEP(-GetLosePoint(target)), clamped at 0.
             // Ratio (0x18f61a0): (int)((float)(v * target.MaxEP) / 1000f); fixed: v.
@@ -1814,7 +1816,8 @@ export class KiokuState {
             const n = detail.abilityEffectType === "GAIN_BP_FIXED" ? detail.value1 : -detail.value1
             effTargets.forEach(t => t.addBp(n))
         } else if (detail.abilityEffectType === "GAIN_EP_FIXED") {
-            effTargets.forEach(t => t.getMp(detail.value1))
+            // [CONFIRMED 3.19] same GainEpAbilityEffectBase.Triggering as GAIN_EP_RATIO: EP, then +1 BP (BpCharger).
+            effTargets.forEach(t => { t.getMp(detail.value1); t.addBp(1) })
         } else if (detail.abilityEffectType === "GAIN_SP_FIXED") {
             // [CONFIRMED string] [IMPLEMENTED] flat add to the attack/skill alternation
             // counter (`currentSp`) - matches GAIN_EP_FIXED's pattern one level up (team,
@@ -1836,8 +1839,10 @@ export class KiokuState {
             const base = Math.max(0, stat * (detail.value1 / 1000) + ((detail as any).value2 ?? 0))
             const suppress = this.team.battleType === BattleType.Pvp || this.team.battleType === BattleType.Gvg
             effTargets.filter(t => !t.isDead).forEach(t => {
-                const healed = withEachTarget(this, t, () => t.heal(Math.ceil(getProcessedRecoveryValue(this, t, base, suppress)), this));
-                if (healed > 0) t.lastNotice = mergeNotice(t.lastNotice, { ...emptyNotice(), isReceivedRecovery: true });
+                withEachTarget(this, t, () => t.heal(Math.ceil(getProcessedRecoveryValue(this, t, base, suppress)), this));
+                // [CONFIRMED 3.19] AffectedUnitNotice.CreateByRecovery (0x1378df0) sets IsReceivedRecovery = true for
+                // every living target, even when nothing was healed (full HP) - IS_RECOVERY conditions see it.
+                t.lastNotice = mergeNotice(t.lastNotice, { ...emptyNotice(), isReceivedRecovery: true });
             })
         } else if (detail.abilityEffectType === "REVIVAL_RATIO") {
             // [NEWLY IMPLEMENTED - was entirely absent] ReDriveBattleCore.AbilityEffect.
@@ -2508,11 +2513,16 @@ export class PvPTeam {
             // Enemy active skill: no SP / MP bookkeeping (enemies have neither).
             return this.completeAction(actor, effectName, enemySkillDetails(enemySkillId))
         }
+        // [CONFIRMED 3.19] BpCharger (cctor 0x1491450: NormalAttack 1, ActiveSkill 2, EpAbilityEffect 1):
+        // NormalAttack.Execute (0x138b560) calls ChargeByNormalAttack (0x14913e0) and ActiveSkill.Execute
+        // ChargeByActiveSkill (0x1491300), both before the skill's effects: BP = Clamp(BP + n, 0, MaxBP).
         if (effectName === TargetType.attackId) {
             this.addSp(1);
+            actor.addBp(1);
             actor.skillStreak = 0
         } else if (effectName === TargetType.skillId) {
             this.addSp(-1);
+            actor.addBp(2);
             actor.skillStreak++
         } else {
             // [CONFIRMED 3.19] SpecialAttack.Execute (0x138c4f0): if MaxEP > 0, EP = 0; if MaxBP > 0, BP = 0
