@@ -1,6 +1,6 @@
 // Beta Kioku Grid charts measured with the battle engine (models/LuxBench.ts), off the main thread. One job is one
-// chart: first every character's Max Burst (fast), then every character's Average Damage (battle simulations).
-// Each result is posted as soon as it is known, so the page can draw the chart while the rest is computed.
+// chart: each character's Max Burst (fast) and Average Damage (battle simulations), one character at a time. Each
+// result is posted as soon as it is known, so the page draws the chart bar by bar while the rest is computed.
 import "../models/BestTeamCalculator"; // loads Kioku <-> BestTeamCalculator <-> ScoreAttackKioku in a working order
 import { benchKioku, LuxBenchCharts, type BenchRow } from "../models/LuxBench";
 import type { PvPKioku } from "../models/PvPKioku";
@@ -13,6 +13,7 @@ export interface LuxBenchJob {
     enemies: number     // attacker chart: 1, 3 or 5 (the support chart always uses one)
     seeds: number
     av: number
+    infiniteSp: boolean
 }
 
 export type LuxBenchMessage =
@@ -28,7 +29,7 @@ const toInput = (c: Character) => ({ ...c, portrait: undefined, supportKey: unde
 self.onmessage = (e: MessageEvent<LuxBenchJob>) => {
     const job = e.data
     const post = (m: LuxBenchMessage) => self.postMessage(m)
-    const bench = new LuxBenchCharts(toInput(job.lux), { seeds: job.seeds, av: job.av })
+    const bench = new LuxBenchCharts(toInput(job.lux), { seeds: job.seeds, av: job.av, infiniteSp: job.infiniteSp })
     const units = new Map<number, PvPKioku>()
     const failed = new Set<number>()
 
@@ -48,7 +49,10 @@ self.onmessage = (e: MessageEvent<LuxBenchJob>) => {
         }
     }
 
-    for (const c of job.chars) run(c, "max")
-    for (const c of job.chars) run(c, "avg")
+    // One character at a time, both metrics, so its bar appears complete in either view.
+    for (const c of job.chars) {
+        run(c, "max")
+        run(c, "avg")
+    }
     post({ type: "done" })
 }

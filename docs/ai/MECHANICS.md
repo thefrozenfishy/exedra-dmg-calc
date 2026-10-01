@@ -129,6 +129,12 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   each passive pass); team 209 sum of CountPoint, 210 units holding pattern pid, 211 total AccumCount of pid;
   1001 IsAlly; 1101 vanguard phase active. [C] (implemented in stash, STATUS.md)
 - HPRatio = `HP * 100f / MaxHP` (float). [C]
+- 19 IsElementType / 20 IsRoleType: CompareValue is the enum NAME in the data ("Fire" = Flame, "Neutral" = Void,
+  "Attacker", ...), never an id. TS `conditionElement` / `conditionRole` (they used to go through id maps and
+  matched no character until 2026-10-01). [C data]
+- EACH_TARGET start conditions of a friendly effect are checked per real target, after the caster placeholder is
+  widened by sliceTargets (KiokuState.applyEffect). [?] (site not read; follows from the condition texts, e.g.
+  Scorchin' Summer Spike's Beachball's Boon "to self and Attacker allies", condition 2831.)
 - 304 TotalDamage (team) = Σ over the team's notices of `AffectedUnitNotice.GetTotalDamageValue(true)` 0x1379240 =
   Σ `Damages` (HP damage after the barrier) + BreakDamage. `BarrierDamages` are a separate list, so a hit fully
   absorbed by a barrier counts 0 (e.g. Time Stop Strike's "+1 Magic on DMG dealt" doesn't fire). [C]

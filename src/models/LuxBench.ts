@@ -13,7 +13,7 @@
 // recover at their own turn start) they stay broken throughout.
 import breakMstJson from "../assets/base_data/getBreakMstList.json";
 import { PvPKioku } from "./PvPKioku";
-import { PvPTeam } from "./PvPTeam";
+import { PvPTeam, type KiokuState } from "./PvPTeam";
 import { PvPBattle } from "./PvPBattle";
 import { computeMaxDamage } from "./MaxDamage";
 import { enemyKiokus } from "./PvEBattle";
@@ -23,13 +23,17 @@ import { seededRng } from "./BattleMath";
 import { unitTypeConditionValues } from "./BattleConditionParser";
 import type { QuestEnemyAppearance } from "./PvE";
 import { skillDetailsByMstId } from "../utils/helpers";
-import { TargetType, TargetTypeLookup, targetTypeToLvl, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
-import { elementMap, roleMap, type KiokuElement, type KiokuRole } from "../types/enums";
+import { TargetType, TargetTypeLookup, targetTypeToLvl, targetRange, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
+import { elementMap, roleMap, KiokuElement, KiokuRole } from "../types/enums";
 
 export const BENCH_DEF = 3000
 export const BENCH_BROKEN_RATE = 500  // % damage taken while broken
 const BENCH_HP = 1e12                 // never dies within a run
 const BENCH_SPD = 1                   // first turn after ~10,000 AV: never acts within a run
+// "Infinite" SP: topped up to this whenever time moves forward. Truly endless SP never ends a chain of battle skills
+// that act again at the same moment (Tenebrous Arcana's extra action, Thunder Torrent hasting herself): those drain
+// the 5 SP and end, as in the game, while every normal turn starts with SP.
+const SP_REFILL = 5
 
 // Any break table with a gauge, so the dummies can be broken; the rate itself is pinned below.
 const BREAK_MST_ID: number = (breakMstJson as any[]).find(b => b.breakPoint > 0)?.breakMstId ?? 0
@@ -138,12 +142,37 @@ export interface SimOptions {
     av: number          // action value to play (100 AV = 1 turn)
     seed: number
     rngMode?: RngMode   // default "seed" (drawn per roll label, see LabelStreamRng)
+    infiniteSp?: boolean // the allies' SP is refilled before every turn, see SP_REFILL (bench-only, not a game rule)
     onAction?: (state: BattleSnapshot, elapsed: number) => void  // every counted action (debugging)
+}
+
+// How players actually run some kits, where auto play (Battle Skill whenever there is SP) is unrealistic. Applied to
+// the ally team of every bench battle (PvPTeam.allyActionPolicy / allyTargetPolicy).
+//   Tenebrous Arcana: her Battle Skill grants an extra action; she uses it 3 times, then a Basic Attack.
+//   Thunder Torrent: always her Battle Skill, its haste on the dealer (another ally when she is the dealer), never
+//   herself.
+const PLAY_PATTERNS: Record<string, {
+    action?: (unit: KiokuState) => TargetType.skillId | TargetType.attackId
+    target?: (unit: KiokuState, dealer: KiokuState) => KiokuState | undefined
+}> = {
+    "Tenebrous Arcana": { action: u => u.skillStreak >= 3 ? TargetType.attackId : TargetType.skillId },
+    "Thunder Torrent": {
+        action: () => TargetType.skillId,
+        target: (u, dealer) => dealer !== u ? dealer : u.team.kiokuStates.find(k => k !== u && !k.isDead),
+    },
+}
+
+function applyPlayPatterns(team: PvPTeam, dealerPos: number) {
+    const dealer = team.kiokuStates[dealerPos]
+    team.allyActionPolicy = u => PLAY_PATTERNS[u.kioku.name]?.action?.(u)
+    team.allyTargetPolicy = (u, detail) => detail.range === targetRange.SELF || detail.range === targetRange.ALL ? undefined
+        : PLAY_PATTERNS[u.kioku.name]?.target?.(u, dealer)
 }
 
 /** Average Damage: total damage dealt by the dealer slot during an auto battle of `opts.av` action value. */
 export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, enemyCount: number, opts: SimOptions): number {
     const team1 = new PvPTeam(allies, "Ally", false, BattleType.Solo)
+    applyPlayPatterns(team1, dealerPos)
     const team2 = new PvPTeam(enemyKiokus(benchEnemies(enemyCount)), "Enemy", false, BattleType.Solo)
     const mode = opts.rngMode ?? "seed"
     const battle = new PvPBattle(team1, team2, false, opts.seed, { rngMode: mode, rng: mode === "seed" ? new LabelStreamRng(opts.seed) : undefined })
@@ -156,6 +185,13 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
         e.currentRemainingBreakGauge = 0
         e.isBroken = true
         e.breakedDamageReceiveRate = BENCH_BROKEN_RATE
+    }
+    // Refill only when the next action is at a later moment: nobody is due to act right now (a haste to 100% or an
+    // extra action keeps a unit at 0 time left).
+    const refillSp = () => {
+        if (!opts.infiniteSp) return
+        const units = [...team1.kiokuStates, ...team2.kiokuStates].filter(k => !k.isDead)
+        if (battle.elapsed === 0 || units.every(k => k.secondsUntilAbleToAct() > 0)) team1.currentSp = Math.max(team1.currentSp, SP_REFILL)
     }
     let total = 0
     // A vortex pops inside the hit that sets it off, but it is its owner's damage (logged again as the owner's
@@ -171,6 +207,7 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     // An action counts if it starts within the run: the one that would start after it is played (the battle only
     // knows its time once it advances to it) but not counted.
     while (!battle.isOver) {
+        refillSp()
         const states = battle.executeNextAction()
         if (battle.elapsed > opts.av) break
         for (const state of states) { count(state.events); opts.onAction?.(state, battle.elapsed) }
@@ -188,6 +225,7 @@ export interface BenchRow extends BenchIdentity { gain: number, critRate?: numbe
 export interface BenchOptions {
     seeds: number   // battles averaged for Average Damage (seeds 0..seeds-1, the same for the baseline)
     av: number      // action value per battle
+    infiniteSp?: boolean // see SimOptions
 }
 
 type KiokuInput = Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>
@@ -229,7 +267,7 @@ export class LuxBenchCharts {
 
     private simTotal(team: PvPKioku[], enemies: number): number {
         let total = 0
-        for (let seed = 0; seed < this.opts.seeds; seed++) total += simulatedDealerDamage(team, 0, enemies, { av: this.opts.av, seed })
+        for (let seed = 0; seed < this.opts.seeds; seed++) total += simulatedDealerDamage(team, 0, enemies, { av: this.opts.av, seed, infiniteSp: this.opts.infiniteSp })
         return total
     }
 
@@ -256,18 +294,39 @@ export class LuxBenchCharts {
         ]
     }
 
+    // The dealer's element / role when none is tested: Lux's own (Light, Breaker) unless the kit is limited to it, then
+    // another one it isn't limited to. Every unit has both in game and they matter beyond restrictions: additional damage
+    // (ADDITIONAL_DAMAGE, TSUBAME_LINK) is dealt in the attacker's own element (without one it misses the dummies'
+    // weakness), and some ally targeting prefers roles (Thunder Torrent's haste picks an Attacker/Breaker ally).
+    private neutral(x: PvPKioku): { element: KiokuElement, role: KiokuRole } {
+        const { elements, roles } = kitRestrictions(x)
+        const pick = <T,>(own: T, all: T[], limited: T[]) => !limited.includes(own) ? own : all.find(v => !limited.includes(v)) ?? own
+        return {
+            element: pick(this.reference.data.element as KiokuElement, Object.values(KiokuElement), elements),
+            role: pick(this.reference.data.role as KiokuRole, Object.values(KiokuRole), roles),
+        }
+    }
+
+    // A tested identity as the dealer actually is: untested parts replaced by the neutral ones.
+    private resolve(id: BenchIdentity, x: PvPKioku): BenchIdentity {
+        const n = this.neutral(x)
+        return { element: id.element ?? n.element, role: id.role ?? n.role }
+    }
+
     supportMax(x: PvPKioku, ids = this.supportIdentities(x)): BenchRow[] {
         return ids.map(id => {
-            const base = this.cachedUlt(`s:${identityKey(id)}`, () => this.team(this.dealer(id)), 1)
-            const v = ultimateDamage(this.team(this.dealer(id), x), 0, 1)
+            const dealer = this.dealer(this.resolve(id, x))
+            const base = this.cachedUlt(`s:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), 1)
+            const v = ultimateDamage(this.team(dealer, x), 0, 1)
             return { ...id, gain: pctGain(v.damage, base.damage), critRate: v.critChance }
         })
     }
 
     supportAvg(x: PvPKioku, ids = this.supportIdentities(x)): BenchRow[] {
         return ids.map(id => {
-            const base = this.cachedSim(`s:${identityKey(id)}`, () => this.team(this.dealer(id)), 1)
-            return { ...id, gain: pctGain(this.simTotal(this.team(this.dealer(id), x), 1), base) }
+            const dealer = this.dealer(this.resolve(id, x))
+            const base = this.cachedSim(`s:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), 1)
+            return { ...id, gain: pctGain(this.simTotal(this.team(dealer, x), 1), base) }
         })
     }
 
