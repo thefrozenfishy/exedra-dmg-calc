@@ -24,7 +24,7 @@
             <label v-for="s in levelStats" :key="s.key" class="stat-cell">
               <span class="cell-label">{{ s.short }}</span>
               <input type="number" :min="s.min" :max="s.max" :value="character[s.key]"
-                :class="{ 'at-max': character[s.key] >= s.max }"
+                :class="{ 'at-max': character[s.key] >= s.colourMax }"
                 @input="updateStat(s.key, s.min, s.max, $event?.target?.valueAsNumber)" />
             </label>
           </div>
@@ -102,7 +102,7 @@ import { defineComponent, computed, PropType } from 'vue'
 import { useCharacterStore } from '../store/characterStore'
 import PortraitSelector from './PortraitSelector.vue'
 import CrysSelector from './CrysSelector.vue'
-import { Character, KiokuConstants } from '../types/KiokuTypes'
+import { Character, KiokuConstants, getMaxKiokuLevelForPlayerLevel, getMaxMagicLevelForKiokuLevel } from '../types/KiokuTypes'
 import { crystalises, kiokuLevelCosts, magicLevelCosts, specialUpgradeCosts } from '../utils/helpers'
 import { getCachedStats, scheduleBackfill } from '../utils/statsBackfill'
 
@@ -157,12 +157,15 @@ export default defineComponent({
 
     const maxAscension = KiokuConstants.maxAscension
 
-    const levelStats = [
-      { key: 'kiokuLvl', short: 'Kioku', min: KiokuConstants.minKiokuLvl , max: KiokuConstants.maxKiokuLvl },
-      { key: 'magicLvl', short: 'Magic', min: KiokuConstants.minMagicLvl , max: KiokuConstants.maxMagicLvl },
-      { key: 'heartphialLvl', short: 'HP', min: KiokuConstants.minHeartphialLvl , max: KiokuConstants.maxHeartphialLvl },
-      { key: 'specialLvl', short: 'SP', min: KiokuConstants.minSpecialLvl , max: KiokuConstants.maxSpecialLvl },
-    ]
+    // Kioku & Magic level are capped by the account's player level, so colour them as maxed
+    // once they reach the highest level currently reachable rather than the theoretical max
+    const playerMaxKiokuLvl = computed(() => getMaxKiokuLevelForPlayerLevel(props.playerLevel))
+    const levelStats = computed(() => [
+      { key: 'kiokuLvl', short: 'Kioku', min: KiokuConstants.minKiokuLvl , max: KiokuConstants.maxKiokuLvl, colourMax: playerMaxKiokuLvl.value },
+      { key: 'magicLvl', short: 'Magic', min: KiokuConstants.minMagicLvl , max: KiokuConstants.maxMagicLvl, colourMax: getMaxMagicLevelForKiokuLevel(playerMaxKiokuLvl.value) },
+      { key: 'heartphialLvl', short: 'HP', min: KiokuConstants.minHeartphialLvl , max: KiokuConstants.maxHeartphialLvl, colourMax: KiokuConstants.maxHeartphialLvl },
+      { key: 'specialLvl', short: 'SP', min: KiokuConstants.minSpecialLvl , max: KiokuConstants.maxSpecialLvl, colourMax: KiokuConstants.maxSpecialLvl },
+    ])
 
     const derivedStats = computed(() => {
       const cached = getCachedStats(props.character)
