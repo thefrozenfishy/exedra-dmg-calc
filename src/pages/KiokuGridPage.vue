@@ -1600,7 +1600,7 @@ const attackerChart = computed(() => {
 
 const beta = isBeta()
 const BENCH_SEEDS = 10 // battles averaged per bar (the same seeds for Lux's baseline)
-const BENCH_AV = 500   // 5 turns
+const BENCH_AV = 1000   // 10 turns
 const BENCH_PLAY_NOTE = "Tenebrous Arcana uses her battle skill 3 times, then a basic attack; Thunder Torrent always uses her battle skill on the attacker (on a Lux when she is the attacker). Results are saved in this browser and only new or changed characters are recalculated."
 const BENCH_INFINITE_SP = true // SP topped up to 5 before every turn: a battle skill every turn, no SP shared out
 
