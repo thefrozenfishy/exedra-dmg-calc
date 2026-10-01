@@ -1835,7 +1835,7 @@ const benchCharts = computed(() => [
         title: "Relative buff strength (battle engine)",
         fightType: false,
         desc: [
-            `How much each character increases the damage of a ${LuxMagica} attacker (a Light Breaker like herself, or another element/role when the character's buffs are limited to those), measured with the battle engine. ${levelsDescription.value} ${LuxMagica} is A0 here, so her own ascension follow-up doesn't change with the team.`,
+            `How much each character increases the damage of a ${LuxMagica} attacker (a Light Breaker like herself, or another element/role when the character's buffs are limited to those), measured with the battle engine. ${levelsDescription.value}`,
             benchAverageDmg.value
                 ? `Average Damage: ${BENCH_AV} AV (${BENCH_AV / 100} turns) of auto battle with infinite SP (topped up to 5 every turn, so everyone can always use their battle skill), the character next to the attacker and three ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts (including additional damage it deals), never the rest of the team's. ${BENCH_PLAY_NOTE}`
                 : `Max Burst: the attacker's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
@@ -1856,7 +1856,7 @@ const benchCharts = computed(() => [
             benchAverageDmg.value
                 ? `Average Damage: ${BENCH_AV} AV (${BENCH_AV / 100} turns) of auto battle with infinite SP (topped up to 5 every turn), supported by four ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts. ${BENCH_PLAY_NOTE}`
                 : `Max Burst: the Ultimate with the attacker's own buffs and debuffs at full stacks and every hit a crit.`,
-            `Every character uses their own element and role. ${levelsDescription.value} ${LuxMagica} is A0. ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result.`,
+            `Every character uses their own element and role. ${levelsDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result.`,
         ],
         chart: buildBenchChart("attacker"),
         status: benchStatusText("attacker"),
