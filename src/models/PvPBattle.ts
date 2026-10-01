@@ -16,6 +16,7 @@ export interface BattleOptions {
     roundLimit?: number                                         // Solo Raid: SoloRaidStageMst.limitRoundCount (0 = none)
     allyExtraPassives?: number[]                                // Solo Raid: buff passives every ally holds (passiveSkillMstId)
     raidCarry?: RaidCarry                                       // Solo Raid: continue from a previous attempt
+    rng?: BattleRng                                             // use this instead of a new BattleRng(rngMode, seed, decisions)
 }
 
 // [CONFIRMED 3.19] Network.Definition.SoloRaid.BattleInfo, written by SoloRaidGameDirector.SyncBattleInfo (0x14a8220)
@@ -69,7 +70,7 @@ export class PvPBattle {
         this.team2 = team2;
         this.debug = debug;
         this.seed = seed ?? Math.floor(Math.random() * 2 ** 32);
-        this.rng = new BattleRng(opts?.rngMode ?? "seed", this.seed, opts?.decisions);
+        this.rng = opts?.rng ?? new BattleRng(opts?.rngMode ?? "seed", this.seed, opts?.decisions);
         this.team1.rng = this.rng;
         this.team2.rng = this.rng;
         this.team1.manualTargeting = this.team2.manualTargeting = !!opts?.manualTargeting;

@@ -326,6 +326,9 @@
                   <span class="fx-name">{{ e.name }}</span>
                   <span v-if="e.value" class="fx-value">{{ e.value }}</span>
                 </div>
+                <div v-if="e.rate !== 1 && e.value" class="fx-rate"
+                  :title="`${e.casterName}'s ${e.side === 'ally' ? 'buff' : 'debuff'} strength multiplies this effect's value`">
+                  ×{{ +e.rate.toFixed(2) }} from {{ e.side === 'ally' ? 'buff' : 'debuff' }} strength</div>
                 <div v-if="e.description" class="fx-desc">{{ e.description }}</div>
                 <div class="fx-foot">
                   <span class="fx-target">{{ e.statusText }}</span>
@@ -454,7 +457,7 @@ import { createPvEBattle, stageBattleType, waveStartUnits } from '../models/PvEB
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
 import type { RaidCarry } from '../models/PvPBattle'
 import { getScoreAttackStage } from '../models/PvEScore'
-import { computeMaxDamage, type MaxDmgEffect, type MaxDmgResult, type MemberDamage, type SkillDamage } from '../models/MaxDamage'
+import { computeMaxDamage, isEffectValueType, type MaxDmgEffect, type MaxDmgResult, type MemberDamage, type SkillDamage } from '../models/MaxDamage'
 import { buildSlotKioku, buildPvEExport, parsePvEExport, downloadText } from '../utils/pvpExport'
 import { describePvESetup, sanitizePvESetup, stagePath, type PvESetup } from '../utils/pveSetup'
 import { effectDescription, effectName, effectRestriction, effectValue } from '../utils/effectText'
@@ -599,6 +602,12 @@ function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: stri
   const restriction = effectRestriction(e.detail)
   const only = restriction ? ` (only ${restriction})` : ''
   const enemyCount = maxDmg.value?.enemies.length ?? 0
+  // Buff/debuff strength: makes everything this member gives stronger (weaker for DWN_).
+  if (isEffectValueType(e.detail.abilityEffectType)) {
+    if (excluded.has(e.key)) return { status: 'off', statusText: 'Turned off: click to turn on' }
+    const what = e.detail.abilityEffectType.includes('DEBUFF') ? 'debuffs' : 'buffs'
+    return { status: 'used', statusText: `${e.detail.abilityEffectType.startsWith('UP') ? 'Strengthens' : 'Weakens'} the ${what} ${e.casterName} gives` }
+  }
   if (!e.applies) {
     return e.side === 'ally'
       ? { status: 'na', statusText: `Only affects ${e.casterName} itself` }
@@ -624,7 +633,10 @@ const effectViews = computed(() => (maxDmg.value?.effects ?? []).map(e => {
     key: e.key, side: e.side, type: e.detail.abilityEffectType, name: effectName(e.detail.abilityEffectType),
     // Team slot (0-4) of the caster: the column its card goes in.
     slot: filledSlots.value[e.casterPos]?.[1] ?? e.casterPos, casterName: e.casterName, source: e.source, maxStacks: e.maxStacks, stacks: count,
-    value: effectValue(e.detail, e.maxStacks > 1 ? count : 1), description: effectDescription(e.detail),
+    // Shown as given: after the caster's buff/debuff strength (e.rate).
+    value: effectValue(e.rate && e.rate !== 1 ? { ...e.detail, value1: e.detail.value1 * e.rate } : e.detail, e.maxStacks > 1 ? count : 1),
+    rate: e.rate ?? 1,
+    description: effectDescription(e.detail),
     ...effectStatus(e),
   }
 }))
@@ -1968,6 +1980,13 @@ const saved = useSavedTeams({
   color: var(--fx);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+.fx-rate {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--fx);
+  opacity: 0.85;
 }
 
 .fx-desc {

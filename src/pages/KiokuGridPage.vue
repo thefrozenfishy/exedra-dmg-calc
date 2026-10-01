@@ -372,6 +372,91 @@
             </template>
         </section>
 
+        <template v-if="beta">
+            <section v-for="bc in benchCharts" :key="bc.kind" class="card gain-section" :class="bc.sectionClass">
+                <div class="chart-export-toolbar">
+                    <ImageActionsToolbar :target="`.${bc.sectionClass}`" :filename="bc.filename"
+                        :export-options="() => chartExportOpts(`.${bc.sectionClass}`)"
+                        :share-options="shareOptionsForBenchChart(bc.title)" :disabled="!bc.chart.bars.length" />
+                </div>
+                <div class="gain-header filters-heading">{{ bc.title }} <span class="beta-badge">Beta</span></div>
+                <p v-for="line in bc.desc" :key="line" class="gain-desc">{{ line }}</p>
+
+                <div
+                    style="width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+                    <div class="fight-mode-row">
+                        <span class="fight-mode-label">Display</span>
+                        <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Damage metric">
+                            <div class="fight-mode-highlight"
+                                :style="{ transform: `translateX(${benchMetricIndex * 100}%)` }"></div>
+                            <button v-for="opt in benchMetricOptions" :key="opt.label" type="button"
+                                class="fight-mode-option" :class="{ active: benchAverageDmg === opt.value }"
+                                :title="opt.title" @click="benchAverageDmg = opt.value">
+                                {{ opt.label }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div v-if="bc.fightType" class="fight-mode-row">
+                        <span class="fight-mode-label">Fight type</span>
+                        <div class="fight-mode-toggle" role="radiogroup" aria-label="Fight type">
+                            <div class="fight-mode-highlight"
+                                :style="{ transform: `translateX(${fightModeIndex * 100}%)` }"></div>
+                            <button v-for="opt in fightModeOptions" :key="opt.value" type="button"
+                                class="fight-mode-option" :class="{ active: fightMode === opt.value }"
+                                :title="opt.title" @click="fightMode = opt.value">
+                                {{ opt.label }}
+                            </button>
+                        </div>
+                    </div>
+                    <label class="filter-chip" :class="{ active: simulateMaxLevels }"
+                        title="On: every Kioku is simulated at A5 with max Kioku, Magic, Heartphial and Special level. Off: your own Kioku's current ascension and levels are used, and unowned Kioku are left out">
+                        <input type="checkbox" v-model="simulateMaxLevels" /> Simulate using max possible levels
+                    </label>
+                </div>
+                <p v-if="bc.chart.error" class="gain-empty">{{ bc.chart.error }}</p>
+                <p v-else-if="!bc.chart.bars.length" class="gain-empty">
+                    {{ bc.status || "No characters to show with the current filters." }}</p>
+                <template v-else>
+                    <p v-if="bc.status" class="gain-desc">{{ bc.status }}</p>
+                    <div class="gain-legend">
+                        <span v-for="role in bc.chart.roles" :key="role" class="gain-legend-item">
+                            <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{
+                                virtualRoleLabel(role) }}
+                        </span>
+                    </div>
+                    <div class="gain-scroll">
+                        <div class="gain-chart">
+                            <div v-for="bar in bc.chart.bars" :key="bar.id" class="gain-col"
+                                :class="{ variant: bar.variant, active: activeBarTip?.id === bar.id }"
+                                :title="activeBarTip?.id === bar.id ? undefined : bar.title"
+                                @click.stop="toggleBarTip(bar, $event)">
+                                <div class="gain-track">
+                                    <div class="gain-zero" :style="{ bottom: `${bc.chart.zeroPct}%` }"></div>
+                                    <div class="gain-bar-wrap" :style="bar.style">
+                                        <div class="gain-bar" :style="{ backgroundColor: roleColor(bar.vRole) }">
+                                        </div>
+                                        <span class="gain-value">{{ bar.label }}</span>
+                                    </div>
+                                </div>
+                                <div class="gain-name" :title="bar.name">
+                                    <img class="gain-char-icon" :class="bar._borderClass"
+                                        :src="`/exedra-dmg-calc/kioku_images/${bar.charId}_thumbnail.png`"
+                                        :alt="bar.name" />
+
+                                    <div v-if="bar.tags.length" class="gain-tag-icons">
+                                        <img v-for="tag in bar.tags" :key="`${tag.kind}:${tag.value}`"
+                                            class="gain-tag-icon" :src="tag.icon" :alt="tag.value" :title="tag.value" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p v-for="note in bc.chart.notes" :key="note" class="gain-desc">{{ note }}</p>
+                </template>
+            </section>
+        </template>
+
         <div v-if="activeBarTip" class="gain-tip" :class="{ below: activeBarTip.below }"
             :style="{ left: `${activeBarTip.x}px`, top: `${activeBarTip.y}px` }" @click.stop="closeBarTip">
             {{ activeBarTip.text }}
@@ -380,7 +465,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from "vue"
+import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch, type ShallowRef } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { Character, KiokuConstants, withMaxLevelsForPlayerLevel } from "../types/KiokuTypes"
 import { Ailment, KiokuElement, KiokuRole, LuxMagica } from '../types/enums'
@@ -392,6 +477,8 @@ import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import type { ImageExportOptions } from "../utils/image"
 import { useFriendStore } from "../store/friendStore"
 import { Enemy } from "../types/EnemyTypes"
+import { isBeta } from "../utils/betaSettings"
+import type { LuxBenchJob, LuxBenchMessage } from "../workers/luxBenchWorker"
 
 const store = useCharacterStore()
 
@@ -536,6 +623,14 @@ const metricOptions = [
     { value: true, label: "Average Burst", title: "Calculates the dmg difference using the average crit rate" },
 ] as const
 const metricIndex = computed(() => metricOptions.findIndex(opt => opt.value === barGraphAverageDmg.value))
+
+// Beta charts (battle engine): their own metric toggle, since "average" means something else there.
+const benchAverageDmg = useSetting("gridBenchAverageDmg", false)
+const benchMetricOptions = [
+    { value: false, label: "Max Burst", title: "How much the Ultimate's dmg changes, every hit a crit, with all buffs and debuffs at full stacks" },
+    { value: true, label: "Average Damage", title: "How much the attacker's total dmg changes over 300 AV (3 turns) of auto battle, averaged over several battles" },
+] as const
+const benchMetricIndex = computed(() => benchMetricOptions.findIndex(opt => opt.value === benchAverageDmg.value))
 
 type VirtualRole = string
 
@@ -978,14 +1073,22 @@ const dealerContexts: DealerContext[] = [
 
 const NONE_CONTEXT_KEY = contextKey(makeContext())
 
+// What buildCharGainResult reads of a DealerGain (the beta charts build these without a ScoreAttackKioku).
+interface GainLike {
+    dealer: { context: DealerContext; tags: DealerTag[] }
+    result: { critRate: string }
+    maxGain: number
+    avgGain: number
+}
+
 const buildCharGainResult = (
     ch: MarkedChar,
-    gains: DealerGain[],
+    gains: GainLike[],
     metric: Metric,
 ): CharGainResult | null => {
-    const gainOf = (g: DealerGain) => metric === "avg" ? g.avgGain : g.maxGain
+    const gainOf = (g: GainLike) => metric === "avg" ? g.avgGain : g.maxGain
 
-    const toRow = (g: DealerGain, tags: DealerTag[]): GainRow => ({
+    const toRow = (g: GainLike, tags: DealerTag[]): GainRow => ({
         ch,
         tags,
         gain: gainOf(g),
@@ -994,7 +1097,7 @@ const buildCharGainResult = (
         critRate: g.result.critRate,
     })
 
-    const gainByContext = new Map<string, DealerGain>()
+    const gainByContext = new Map<string, GainLike>()
     for (const g of gains) {
         gainByContext.set(contextKey(g.dealer.context), g)
     }
@@ -1002,7 +1105,7 @@ const buildCharGainResult = (
     const noneGain = gainByContext.get(NONE_CONTEXT_KEY)
     if (!noneGain) return null
 
-    const meaningfulTagsFor = (g: DealerGain): DealerTag[] =>
+    const meaningfulTagsFor = (g: GainLike): DealerTag[] =>
         g.dealer.tags.filter(tag => {
             const reducedContext: DealerContext = {
                 ...g.dealer.context,
@@ -1373,7 +1476,11 @@ onBeforeUnmount(() => {
 // Negative gains are drawn below the zero line.
 const buildBarChart = (
     rows: GainRow[],
-    { idPrefix = "", titleLabel = "dmg increase" }: { idPrefix?: string; titleLabel?: string } = {},
+    { idPrefix = "", titleLabel = "dmg increase", title = makeBarTitle }: {
+        idPrefix?: string
+        titleLabel?: string
+        title?: (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">, label: string) => string
+    } = {},
 ) => {
     const sorted = [...rows].sort((a, b) => a.gain - b.gain)
 
@@ -1401,7 +1508,7 @@ const buildBarChart = (
         gain,
         variant: tags.length > 0,
         label: fmt(gain),
-        title: makeBarTitle({ avgGain, maxGain, critRate }, titleLabel),
+        title: title({ avgGain, maxGain, critRate }, titleLabel),
 
         style: gain < 0
             ? {
@@ -1480,6 +1587,231 @@ const attackerChart = computed(() => {
         notes,
         error: "",
     }
+})
+
+// --- Beta: the same two charts measured with the battle engine ---------------------------
+// models/LuxBench.ts does the measuring, in a worker per chart (workers/luxBenchWorker.ts): about a minute of
+// battle simulations for the whole roster. Max Burst arrives first (seconds), then Average Damage per character.
+
+const beta = isBeta()
+const BENCH_SEEDS = 10 // battles averaged per bar (the same seeds for Lux's baseline)
+const BENCH_AV = 300   // 3 turns
+
+type BenchChartKind = LuxBenchJob["chart"]
+
+// One dealer identity (no element/role, or one the character's kit is limited to) of one character.
+interface BenchCell {
+    context: DealerContext
+    maxGain: number
+    avgGain?: number
+    critRate?: number
+}
+
+interface BenchProgress {
+    running: boolean
+    total: number
+    maxDone: number
+    avgDone: number
+    failed: number
+    error: string
+}
+
+const idleBench = (): BenchProgress => ({ running: false, total: 0, maxDone: 0, avgDone: 0, failed: 0, error: "" })
+
+const benchResults: Record<BenchChartKind, ShallowRef<Map<number, BenchCell[]>>> = {
+    support: shallowRef(new Map()),
+    attacker: shallowRef(new Map()),
+}
+const benchProgress: Record<BenchChartKind, ShallowRef<BenchProgress>> = {
+    support: shallowRef(idleBench()),
+    attacker: shallowRef(idleBench()),
+}
+const benchWorkers: Partial<Record<BenchChartKind, Worker>> = {}
+
+const stopBench = (kind: BenchChartKind) => {
+    benchWorkers[kind]?.terminate()
+    delete benchWorkers[kind]
+}
+
+const fightModeEnemies = () => fightMode.value === "st" ? 1 : fightMode.value === "prox" ? 3 : 5
+
+const runBench = (kind: BenchChartKind) => {
+    stopBench(kind)
+    const results = new Map<number, BenchCell[]>()
+    benchResults[kind].value = results
+
+    const lux = store.characters.find(c => c.name === LuxMagica)
+    if (!lux) {
+        benchProgress[kind].value = { ...idleBench(), error: `${LuxMagica} was not found in your roster.` }
+        return
+    }
+
+    const chars = chartCharacters()
+    const progress: BenchProgress = { ...idleBench(), running: chars.length > 0, total: chars.length }
+    benchProgress[kind].value = { ...progress }
+    if (!chars.length) return
+
+    const plain = <T,>(value: T): T => JSON.parse(JSON.stringify(value))
+    const job: LuxBenchJob = {
+        chart: kind,
+        lux: plain(maxLevelsForChart(lux)),
+        chars: chars.map(c => plain(prepareForChart(c))),
+        enemies: kind === "attacker" ? fightModeEnemies() : 1,
+        seeds: BENCH_SEEDS,
+        av: BENCH_AV,
+    }
+
+    const worker = new Worker(new URL("../workers/luxBenchWorker.ts", import.meta.url), { type: "module" })
+    benchWorkers[kind] = worker
+
+    // One message per character: re-render at most once per frame.
+    let scheduled = false
+    const publish = () => {
+        if (scheduled) return
+        scheduled = true
+        requestAnimationFrame(() => {
+            scheduled = false
+            if (benchWorkers[kind] !== worker && progress.running) return // superseded
+            benchResults[kind].value = new Map(results)
+            benchProgress[kind].value = { ...progress }
+        })
+    }
+
+    const identityKey = (element?: string, role?: string) => contextKey(makeContext(element as KiokuElement, role as KiokuRole))
+
+    worker.onmessage = (e: MessageEvent<LuxBenchMessage>) => {
+        const msg = e.data
+        if (msg.type === "max") {
+            results.set(msg.id, msg.rows.map(r => ({
+                context: makeContext(r.element, r.role),
+                maxGain: r.gain,
+                critRate: r.critRate,
+            })))
+            progress.maxDone++
+        } else if (msg.type === "avg") {
+            const cells = results.get(msg.id)
+            if (cells) {
+                const avg = new Map(msg.rows.map(r => [identityKey(r.element, r.role), r.gain]))
+                results.set(msg.id, cells.map(c => ({ ...c, avgGain: avg.get(contextKey(c.context)) })))
+            }
+            progress.avgDone++
+        } else if (msg.type === "error") {
+            progress.failed++
+        } else {
+            progress.running = false
+            stopBench(kind)
+        }
+        publish()
+    }
+
+    worker.onerror = (e) => {
+        console.error(`Lux bench (${kind}) worker failed:`, e)
+        progress.running = false
+        progress.error = "The battle simulation failed (see console)."
+        stopBench(kind)
+        publish()
+    }
+
+    worker.postMessage(job)
+}
+
+onBeforeUnmount(() => {
+    stopBench("support")
+    stopBench("attacker")
+})
+
+const benchBarTitle = (row: Pick<GainRow, "avgGain" | "maxGain" | "critRate">, label: string) => [
+    `Max Burst ${label}: ${fmt(row.maxGain)}`,
+    `Average Damage ${label}: ${Number.isNaN(row.avgGain) ? "calculating…" : fmt(row.avgGain)}`,
+    `Ultimate crit rate: ${row.critRate}%`,
+].join("\n")
+
+const buildBenchChart = (kind: BenchChartKind) => {
+    const progress = benchProgress[kind].value
+    if (progress.error) return { ...emptyBarChart(), error: progress.error, notes: [] as string[] }
+
+    const metric: Metric = benchAverageDmg.value ? "avg" : "max"
+    const visible = new Map(allChars.value.map(c => [c.id, c]))
+    const rows: GainRow[] = []
+
+    for (const [id, cells] of benchResults[kind].value) {
+        const ch = visible.get(id)
+        if (!ch) continue
+        // Average Damage: a character shows up once all of its battles are done.
+        if (metric === "avg" && cells.some(c => c.avgGain === undefined)) continue
+
+        const gains: GainLike[] = cells.map(c => ({
+            dealer: { context: c.context, tags: c.context.tags },
+            result: { critRate: c.critRate?.toFixed(1) ?? "?" },
+            maxGain: c.maxGain,
+            avgGain: c.avgGain ?? NaN,
+        }))
+        const result = buildCharGainResult(ch, gains, metric)
+        if (result) rows.push(result.main, ...result.variants)
+    }
+
+    // Like the legacy charts: the support chart only shows real gains, the attacker chart everything.
+    const shown = kind === "support" ? rows.filter(r => r.gain > 1) : rows
+
+    return {
+        ...buildBarChart(shown, {
+            idPrefix: `bench-${kind}:`,
+            titleLabel: kind === "support" ? "dmg increase" : "dmg vs Lux",
+            title: benchBarTitle,
+        }),
+        error: "",
+        notes: progress.failed ? [`${progress.failed} character(s) could not be simulated (see console).`] : [],
+    }
+}
+
+const benchStatusText = (kind: BenchChartKind): string => {
+    const p = benchProgress[kind].value
+    if (!p.running) return ""
+    if (p.maxDone + p.failed < p.total) return `Calculating Max Burst… ${p.maxDone}/${p.total}`
+    return `Simulating battles… ${p.avgDone}/${p.total - p.failed}`
+}
+
+const benchEnemyText = computed(() =>
+    fightMode.value === "st" ? "One enemy" : fightMode.value === "aoe" ? "Five enemies" : "Three enemies")
+
+const benchCharts = computed(() => [
+    {
+        kind: "support" as const,
+        sectionClass: "bench-buff-chart-section",
+        filename: "relative-buff-strength-battle-engine.png",
+        title: "Relative buff strength (battle engine)",
+        fightType: false,
+        desc: [
+            `How much each character increases the damage of a ${LuxMagica} attacker with no element or role, measured with the battle engine. ${levelsDescription.value} ${LuxMagica} is A0 here, so her own ascension follow-up doesn't change with the team.`,
+            benchAverageDmg.value
+                ? `Average Damage: ${BENCH_AV} AV (3 turns) of auto battle with the character next to the attacker and three ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts (including additional damage it deals), never the rest of the team's. SP is shared, so a character that spends it can cost the attacker battle skills or its ultimate.`
+                : `Max Burst: the attacker's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
+            `One enemy with 3000 def, weak to every element and broken (500% dmg taken). Element or role bonuses get their own bar when they change the result.`,
+        ],
+        chart: buildBenchChart("support"),
+        status: benchStatusText("support"),
+    },
+    {
+        kind: "attacker" as const,
+        sectionClass: "bench-attacker-chart-section",
+        filename: "attacker-strength-vs-lux-battle-engine.png",
+        title: `Attacker strength compared to ${LuxMagica} (battle engine)`,
+        fightType: true,
+        desc: [
+            `Damage each character deals as the attacker, compared to ${LuxMagica} in the same spot, measured with the battle engine. ${LuxMagica} is the 0% line; -50% means half of her damage.`,
+            benchAverageDmg.value
+                ? `Average Damage: ${BENCH_AV} AV (3 turns) of auto battle supported by four ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts.`
+                : `Max Burst: the Ultimate with the attacker's own buffs and debuffs at full stacks and every hit a crit.`,
+            `Every character uses their own element and role. ${levelsDescription.value} ${LuxMagica} is A0. ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken).`,
+        ],
+        chart: buildBenchChart("attacker"),
+        status: benchStatusText("attacker"),
+    },
+])
+
+const shareOptionsForBenchChart = (title: string) => () => ({
+    title,
+    backUrl: window.location.href,
 })
 
 // Click/tap tooltip for the bar chart (native `title` tooltips don't work on touch screens)
@@ -1646,6 +1978,10 @@ const shareOptionsForAttackerChart = () => ({
 })
 
 watch([markedCharacters, fightMode, simulateMaxLevels], computeGains, { immediate: true })
+if (beta) {
+    watch([markedCharacters, simulateMaxLevels], () => runBench("support"), { immediate: true })
+    watch([markedCharacters, simulateMaxLevels, fightMode], () => runBench("attacker"), { immediate: true })
+}
 </script>
 
 <style scoped>
@@ -2184,6 +2520,15 @@ watch([markedCharacters, fightMode, simulateMaxLevels], computeGains, { immediat
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
+}
+
+.beta-badge {
+    padding: 0.05rem 0.4rem;
+    border-radius: 999px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
 }
 
 .gain-desc,
