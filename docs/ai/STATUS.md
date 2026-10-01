@@ -71,6 +71,9 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - 2026-10-01 (6b, main): Kioku Grid bench support chart gets ST/Prox/AoE (1/3/5 enemies); bench allies aim single/proximity
   skills at the middle enemy (`PvPTeam.opponentTargetPolicy`). Max Damage applies enemy debuffs by range around the
   main target (was: every debuff on every enemy). Cache version 5.
+- 2026-10-01 (7): Kioku Grid bench support chart gets ST/Prox/AoE (1/3/5 enemies); bench allies aim single/proximity
+  skills at the middle enemy (`PvPTeam.opponentTargetPolicy`). Max Damage applies enemy debuffs by range around the
+  main target (was: every debuff on every enemy). Cache version 5.
 - 2026-10-01 (6): Kioku Grid bench Lux back to A5 max levels (user request); no-buff supports read about -3.5% in Average
   Damage from her A1 follow-up timing (hidden by the >1% support filter). Cache version 4.
 - 2026-10-01 (5): engine: state active conditions see the processed target as EachTarget ("DMG to cursed enemies"
