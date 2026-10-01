@@ -58,7 +58,7 @@ python3 scripts/ai/xq.py --branch battle-engine-3.19 effect X   # any command ag
   weak ratio = float32 (`Math.fround`, alias `f32`). Wrong type = off-by-one damage or wrong turn order.
 - **Condition csv lists are OR, conditions inside one set are AND.**
 - **Detail rows:** skills/ability/ascension/support are keyed `id*100+lvl`; crys and enemy skills/passives by exact id.
-- **Verify before claiming done:** `npx tsx scripts/sim/checkFixtures.ts` (in-game fixtures), a probe run of the
+- **Verify before claiming done:** `npx tsx scripts/sim/checkFixtures.ts` (in-game fixtures) + `checkMechanics.ts`, a probe run of the
   exact scenario, and the type-check with the OOM guard (ENVIRONMENT.md). Compare errors to the baseline.
 - **Leave the cache better:** new confirmed finding -> MECHANICS.md (+ the code comment); state change ->
   STATUS.md; new trap -> PITFALLS.md; engine changes -> `xq build`. Keep entries short and cite RVAs.

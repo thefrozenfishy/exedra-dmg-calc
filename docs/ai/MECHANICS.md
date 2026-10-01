@@ -33,8 +33,18 @@ Longer derivations: `src/models/PVE_PARAMS_3.19.md`, `PVE_ENEMY_AI_3.19.md`, `MI
 8. difficulty ("Aim", PvE only): enemy attacker vs character: × (1 + aimRate/1000) for the defender's element.
 9. final-give (GvE) -> **PvP/GvG suppression × (1 - 750/1000) = ×0.25** (CalculationPointPolicyMst, `PVP_POLICY`).
 10. shield (f32 product) -> `Max(1, d)` -> `Ceiling` -> barrier absorbs (`damageCutByBarrier`).
-- ADDITIONAL_DAMAGE: a full extra hit through the pipeline, base from the state giver's ATK at power
-  `(v/10f)/100f` (`AdditionalDamageUnitState.GetAdditionalDamageResult` 0x15b4840). TS `getAdditionalDamageBase`.
+- ADDITIONAL_DAMAGE / TSUBAME_LINK (IAdditionalDamage): **once per skill launch, not per damage row**.
+  `AbilityEffectLauncher.Triggering` 0x1373550, only for an active-skill launch (basic, battle skill, ultimate,
+  follow-up, Ether Blow, enemy skills), after all the skill's effects and before regain / final damage, still in the
+  skill's condition context (section 6): for each of the user's states that is IAdditionalDamage and IsActive(user)
+  (b__1 0x138eb70), in state-list order, `GetAdditionalDamageResult(user, skill, notices)` (0x15b4840 / 0x16d9970):
+  targets = units of this skill's notices with IsReceivedAttack whose team != the user's; base = `GetDamageBase(giver's
+  initial ATK, DamagePower/100)` (DamagePower = v1/10, link: v3/10); one AdditionalDamageAbilityEffect (range all,
+  DamageCategory 7 Additional, element = the user's character element) hits them via
+  DamageAbilityEffectBase.Triggering with the **user as attacker** (its give/crit states, crit roll, ActorSkillType =
+  the launching skill): reflection, pipeline, vortex, Attack, unique Lv-up; **no** break damage, no broken-rate
+  growth, no consume-on-attack (those three getters return false). [C] TS `KiokuState.additionalDamageAfterLaunch`,
+  `getAdditionalDamageBase`; MaxDamage adds one per state per enemy hit. Check: `scripts/sim/checkMechanics.ts`.
 - RCV_FINAL_DAMAGE: extra `ceil(total × ratio)` hit, role/element gated (`CalcFinalDamageNoticeBundle` 0x137b110).
 - DOT (`GetSlipDamageValue` 0x1380f20): same pipeline minus crit and shield. TS `getSlipDamageResult`.
 - DMG_RATIO: `floor(HP × v1/1000)` (or MaxHP × v2/1000), capped at HP-1, no modifiers.
@@ -123,6 +133,22 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   Σ `Damages` (HP damage after the barrier) + BreakDamage. `BarrierDamages` are a separate list, so a hit fully
   absorbed by a barrier counts 0 (e.g. Time Stop Strike's "+1 Magic on DMG dealt" doesn't fire). [C]
   TS: notice `totalDamageValue` = damage after `damageCutByBarrier`. Fixture time-stop-strike-magic.json.
+- **A state's ACTIVE condition is checked against its holder's own bundle** (`BattleUnit+0x90`, created by
+  `SetActiveConditionCheckDataBundle` 0x1388820 with GameDirector + SelfUnit; `UnitStateBase.IsActive(BattleUnit)`
+  0x16dfba0, used by every GetProcessedX / give / receive / crit lookup). `AbilityEffectLauncher.Triggering` 0x1373550
+  with a triggering skill (`ActiveSkillBase.Triggering` 0x1375430: every normal/skill/ultimate/follow-up and enemy
+  skill) first sets, in **every unit's** bundle on both teams, ActorUnit = user, MainTargetUnit = selected target,
+  ActorActiveSkill = the skill; per effect ActorAbilityEffect (+EachTargetUnit per hit); at the end
+  `RemoveTransientData` 0x17ec1f0 clears all five (checked in the disassembly). Passive launches pass no skill. So
+  between skills and during passives IsActor (8) and ActorSkillType (401) are false, and during a skill they hold
+  for the whole skill incl. its additional-damage hits, regain and final damage, on any unit's states (an enemy's
+  "takes more DMG from ultimates" works too). [C] TS: `activeLaunch` in PvPTeam.ts (`launchSkill`,
+  `KiokuState.unitStateCheckState`). ~1000 rows depend on it (660 UP_GIV_DMG_RATIO, 350
+  UP_BREAK_DAMAGE_RECEIVE_RATIO, crit, weak-element...); before 2026-10-01 the TS never activated them.
+- 401 ActorSkillType (`BattleOtherConditionChecker.Check` 0x17e3850): NormalAttack 3, ActiveSkill 1, SpecialAttack
+  2, AdditionalSkill -> its SkillMst type (4 AdditionalSkill, **5 EtherBlow**); no skill -> false; int compare with
+  CompareValue parsed as SkillType (EQUAL / NOT_EQUAL in data). Start conditions of passives use the passive pass's
+  own bundle (actorActiveSkill passed to `PassiveSkill.Triggering` 0x14a2c20). [C] TS `BattleState.actorSkillType`.
 - 12 AbilityEffect "TYPE[,TYPE]" contains/not-contains: **prefix match** (`AbilityEffectListComparer`) over the
   unit's states, timed and permanent (e.g. "TSUBAME" matches TSUBAME_CORE). [C] TS `compareAbilityEffectList`.
 
@@ -136,6 +162,10 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
 - Target side = state Direction (StateAbilityEffect 0x19023d0) - generated `EffectTargetSide.ts`. [C]
 - `UnitBrain.TargetingUnits` 0x17f2ea0: **one** opponent and **one** friendly target per skill; every single /
   splash effect on that side uses it (TS `actionPrimaryTargets`). [C]
+- AI targets are decided before the turn unit's gauge reset (`GameDirectorBase.Forward`: CommandDecideSkillContent,
+  then `ResetTurnGaugeBeforeTurnUnitActExecute` 0x17e1a70, then ExecuteSkill), so the turn unit's gauge is 0 at
+  decision time. HASTE (`GetAIFilteredTargets` 0x18f4140) keeps only living units with GaugeValue > 0 (no fallback),
+  so a battle-skill haste never targets its user. TS: `setAIDecisionGauge`. [C]
 - Character auto damage targeting order: break, main target, weak element, weighted role+hate roll; enemy
   damage targeting: only the weighted roll. Role weights: Defender 15, Healer/Buffer/Debuffer 10,
   Attacker/Breaker 5, + hate states. [C] TS `AITargetSelector.ts`.
@@ -265,8 +295,8 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   MISSING_AND_UNCERTAIN A-3.1.
 - TSUBAME (Luce della Speranza's Swallow's Providence): TSUBAME_CORE on the caster only (Down: `-running ×
   (v1/10)/100` SPD); TSUBAME_LINK on everyone but the caster: +SPD `base × (v1/10 × updateable)/100`, +ATK
-  `base × (v2/10 × updateable)/100`, and an ADDITIONAL_DAMAGE-like extra hit at power v3/10 % from the caster
-  (not effect-value scaled). Removing the CORE removes every LINK the same caster gave. (0x16d92f0, 0x16d9e90,
+  `base × (v2/10 × updateable)/100`, and an ADDITIONAL_DAMAGE-like extra hit (once per launch, section 2) at power
+  v3/10 % from the caster (not effect-value scaled). Removing the CORE removes every LINK the same caster gave. (0x16d92f0, 0x16d9e90,
   0x16da100, 0x16d9970, 0x16d95a0) [C]
 - ZONE: ZONE_STACK (0x1906d60) Max = clamp(v2,0,3), Stack = clamp(v1,0,Max); ZONE_EXPAND (0x1905ff0) on the user
   sets "field started" and fills the stack, on others with an active zone releases it; GAIN/CONSUME_ZONE_STACK

@@ -5,11 +5,14 @@
 // supports, follow-up skills) is put on the attacker / the enemies at full stacks, with conditions assumed
 // met, then each member's ultimate / battle skill / basic attack is evaluated against every enemy, with and
 // without a crit. Individual effects can be excluded and stack counts overridden.
-import { PvPTeam, KiokuState, isFriendlyEffect, isOpponentEffect, scaleGivenState } from "./PvPTeam";
+// Exception to "conditions assumed met": a state's ActorSkillType (401) conditions are kept and evaluated per skill
+// column (an "Ultimate DMG +30%" buff counts for the Ultimate only) - see stateFrom / withSkillType.
+import { PvPTeam, KiokuState, isFriendlyEffect, isOpponentEffect, scaleGivenState, elementNumberOf } from "./PvPTeam";
 import type { PvPKioku } from "./PvPKioku";
 import { BattleType, DamageBaseType, damageBaseTypeFromEffectType, getAttackDamageResult, getAdditionalDamageBase, critChance } from "./DamageCalculator";
 import { isEligibleForEffect } from "./UnitStateEngine";
 import { UNIT_STATE_TYPES } from "./StateAddFilter";
+import { actorSkillTypeRestriction } from "./BattleConditionParser";
 import { enemyKiokus } from "./PvEBattle";
 import type { QuestEnemyAppearance } from "./PvE";
 import { skillDetailsByMstId } from "../utils/helpers";
@@ -81,7 +84,7 @@ const skillMst = new Map<number, { name: string, type: number }>((skillMstJson a
 const TARGET_OF_SKILL_TYPE: Record<number, TargetType> = { 1: TargetType.skillId, 2: TargetType.specialId, 3: TargetType.attackId }
 const isDamageRow = (d: SkillDetail) => d.abilityEffectType.startsWith("DMG_") && d.abilityEffectType !== "DMG_RATIO"
 
-interface ExtraSkill { type: TargetType, label: string, name?: string, note?: string, details: SkillDetail[] }
+interface ExtraSkill { type: TargetType, label: string, name?: string, note?: string, details: SkillDetail[], skillType?: string }
 
 // [CONFIRMED 3.19] SwitchSkillUnitState: value1 = skill unique id switched to, value3 = the SkillType it replaces, at
 // the replaced skill's level (PvPTeam.act / KiokuState.switchedSkillId). All current ones come from abilities.
@@ -109,7 +112,7 @@ function followUpsOf(k: PvPKioku, switches: ExtraSkill[]): ExtraSkill[] {
     const ids = new Set(rows.filter(d => d.abilityEffectType === "ADDITIONAL_SKILL_ACT").map(d => d.value1))
     return [...ids].map(id => {
         const mst = skillMst.get(id)
-        return { type: TargetType.fuaId, label: "Follow-up", name: mst?.name || undefined, note: mst?.type === 5 ? "Ether Blow" : "Follow-up", details: (skillDetailsByMstId.get(id) ?? []) as SkillDetail[] }
+        return { type: TargetType.fuaId, label: "Follow-up", name: mst?.name || undefined, note: mst?.type === 5 ? "Ether Blow" : "Follow-up", details: (skillDetailsByMstId.get(id) ?? []) as SkillDetail[], skillType: mst?.type === 5 ? "EtherBlow" : "AdditionalSkill" }
     })
 }
 
@@ -179,8 +182,10 @@ export function collectTeamEffects(allies: PvPKioku[], attackerPos: number): Max
 function stateFrom(e: MaxDmgEffect, detail: SkillDetail, caster: KiokuState, stacks: number): SkillDetail & Record<string, any> {
     return {
         ...detail,
-        // Conditions are assumed met: that's the "max" in max damage.
+        // Conditions are assumed met: that's the "max" in max damage. Except the skill type the state is limited to
+        // (ActorSkillType 401, e.g. "special attack crit DMG +20%"): kept as `_actorSkillTypes`, applied per column.
         activeConditionSetIdCsv: "", startConditionSetIdCsv: "",
+        _actorSkillTypes: actorSkillTypeRestriction(detail.activeConditionSetIdCsv),
         turn: 99,
         remainCount: e.detail.remainCount || 99,
         _accumCount: stacks,
@@ -252,11 +257,26 @@ export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearan
             breakRate: t.isBroken ? t.breakedDamageReceiveRate : 100, canBreak: t.maxBreakGauge >= 1,
         }))
 
-        const evaluate = ({ type, label, name, note, details: all }: ExtraSkill): SkillDamage | undefined => {
+        // [CONFIRMED 3.19] A state's ActorSkillType condition is checked against the skill being launched, on every
+        // unit (PvPTeam `activeLaunch`): while evaluating one column, leave out the states (on the dealer and on the
+        // enemies) whose skill-type restriction excludes it. Map order is kept (it is the states' application order).
+        const withSkillType = <T>(skillType: string, fn: () => T): T => {
+            const saved = [attacker, ...targets].map(u => [u, new Map(u.activeEffectDetails)] as const)
+            for (const [u, orig] of saved) {
+                u.activeEffectDetails.clear()
+                for (const [k, d] of orig) if (!(d as any)._actorSkillTypes || (d as any)._actorSkillTypes.has(skillType)) u.activeEffectDetails.set(k, d)
+            }
+            try { return fn() } finally {
+                for (const [u, orig] of saved) { u.activeEffectDetails.clear(); orig.forEach((d, k) => u.activeEffectDetails.set(k, d)) }
+            }
+        }
+
+        const evaluateSkill = ({ type, label, name, note, details: all }: ExtraSkill): SkillDamage | undefined => {
             const details = all.filter(isDamageRow)
             if (!details.length) return undefined
             const perEnemy = targets.map(() => ({ normal: 0, crit: 0, avg: 0 }))
-            const bonus = [...attacker.activeEffectDetails.values()].filter(d => d.abilityEffectType === "ADDITIONAL_DAMAGE")
+            const p = (t: typeof targets[number]) => Math.min(1, Math.max(0, critChance(attacker, t) / 100))
+            const hitEnemies = new Set<number>()
             for (const d of details) {
                 const hit: number[] = d.range === targetRange.ALL ? targets.map((_, i) => i)
                     : d.range === targetRange.PROXIMITY ? [main - 1, main, main + 1].filter(i => i >= 0 && i < targets.length)
@@ -265,27 +285,39 @@ export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearan
                     const t = targets[i]
                     const baseType = damageBaseTypeFromEffectType(d.abilityEffectType)
                     const isMainTarget = i === main
-                    const run = (crit: boolean) => {
-                        let dmg = getAttackDamageResult(attacker, t, d, baseType, { battleType: bt, forceCrit: crit, isMainTarget }).preBarrierDamage
-                        for (const b of bonus) {
-                            dmg += getAttackDamageResult(attacker, t, b, DamageBaseType.ATK, {
-                                battleType: bt, forceCrit: crit,
-                                damageBaseOverride: getAdditionalDamageBase((b as any)._applierState ?? attacker, b),
-                            }).preBarrierDamage
-                        }
-                        return dmg
-                    }
+                    const run = (crit: boolean) => getAttackDamageResult(attacker, t, d, baseType, { battleType: bt, forceCrit: crit, isMainTarget }).preBarrierDamage
                     const n = run(false), c = run(true)
-                    const p = Math.min(1, Math.max(0, critChance(attacker, t) / 100))
                     perEnemy[i].normal += n
                     perEnemy[i].crit += c
-                    perEnemy[i].avg += n * (1 - p) + c * p
+                    perEnemy[i].avg += n * (1 - p(t)) + c * p(t)
+                    hitEnemies.add(i)
+                }
+            }
+            // [CONFIRMED 3.19] ADDITIONAL_DAMAGE / TSUBAME_LINK (IAdditionalDamage): one extra hit per state on every
+            // enemy the skill hit, after the skill (not one per damage row) - see KiokuState.additionalDamageAfterLaunch.
+            // A Swallow link is never on its own caster; its power is value3.
+            const bonus = [...attacker.activeEffectDetails.values()]
+                .filter(d => d.abilityEffectType === "ADDITIONAL_DAMAGE" || (d.abilityEffectType === "TSUBAME_LINK" && (d as any)._applierState !== attacker))
+                .map(d => d.abilityEffectType === "TSUBAME_LINK" ? { ...d, value1: (d as any).value3 ?? 0 } as SkillDetail : d)
+            for (const i of hitEnemies) {
+                const t = targets[i]
+                for (const b of bonus) {
+                    const run = (crit: boolean) => getAttackDamageResult(attacker, t, b, DamageBaseType.ATK, {
+                        battleType: bt, forceCrit: crit,
+                        damageBaseOverride: getAdditionalDamageBase((b as any)._applierState ?? attacker, b),
+                        attackElementOverride: elementNumberOf(attacker),
+                    }).preBarrierDamage
+                    const n = run(false), c = run(true)
+                    perEnemy[i].normal += n
+                    perEnemy[i].crit += c
+                    perEnemy[i].avg += n * (1 - p(t)) + c * p(t)
                 }
             }
             perEnemy.forEach(x => { x.avg = Math.round(x.avg) })
             const total = perEnemy.reduce((s, x) => ({ normal: s.normal + x.normal, crit: s.crit + x.crit, avg: s.avg + x.avg }), { normal: 0, crit: 0, avg: 0 })
             return { type, label, name, note, perEnemy, total, critChance: targets[main] ? critChance(attacker, targets[main]) : 0 }
         }
+        const evaluate = (skill: ExtraSkill): SkillDamage | undefined => withSkillType(skill.skillType ?? skill.type, () => evaluateSkill(skill))
         const skills = SKILL_TYPES.map(([type, label]) => evaluate({ type, label, details: skillDetailsOf(allies[pos], type) }))
             .filter((s): s is SkillDamage => !!s)
         const switches = switchSkillsOf(allies[pos])

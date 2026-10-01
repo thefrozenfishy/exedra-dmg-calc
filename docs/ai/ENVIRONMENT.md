@@ -46,6 +46,7 @@
 
 ```
 npx tsx scripts/sim/checkFixtures.ts             # in-game regression fixtures: must stay PASS (actor of action N, optional `line` regex e.g. a unit's Magic)
+npx tsx scripts/sim/checkMechanics.ts            # engine checks of decompile-confirmed rules (skill-type-gated states, additional damage per launch): must stay PASS
 npx tsx scripts/sim/runPvp.ts [seed]             # headless PvP battle, prints every hit
 npx tsx scripts/sim/runPvE.ts <stageId> [seed] [teamExport.json] [turns]   # e.g. 509140 Sandbox Witch, 110112 Mermaid Witch, 1401101 Solo Raid
 npx tsx scripts/sim/replayExport.ts <export.json> [--diff]   # replay a browser export (PvP or PvE) with the current engine

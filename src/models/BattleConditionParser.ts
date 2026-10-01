@@ -713,18 +713,17 @@ function checkTeamCondition(team: PvPTeam, cond: BattleCondition): boolean {
 function checkOtherCondition(state: BattleState, cond: BattleCondition): boolean {
     switch (cond.compareContent as CompareContent) {
         case CompareContent.ACTOR_SKILL_TYPE: {
-            // [CONFIRMED, simplified] The source maps the current action to a
-            // SkillType enum (NormalAttack=3/ActiveSkill=1/SpecialAttack=2/
-            // AdditionalSkill=4) and compares against CompareValue parsed as that same
-            // enum, via IntValueComparer. This codebase's TargetType enum already uses
-            // the IDENTICAL strings as its values ("NormalAttack"/"ActiveSkill"/
-            // "SpecialAttack"/"AdditionalSkill" - see KiokuTypes.ts), so a direct string
-            // EQUAL/NOT_EQUAL compare gives the same result without needing the
-            // enum-int roundtrip. GREATER/LESS wouldn't have a sensible string
-            // equivalent and fall through to false.
-            if (!state.actionType) return false;
-            if (cond.compareOperator === CompareOperator.EQUAL) return state.actionType === (cond.compareValue as any);
-            if (cond.compareOperator === CompareOperator.NOT_EQUAL) return state.actionType !== (cond.compareValue as any);
+            // [CONFIRMED 3.19] BattleOtherConditionChecker.Check (0x17e3850) reads the bundle's ActorActiveSkill:
+            // NormalAttack -> 3, ActiveSkill -> 1, SpecialAttack -> 2, AdditionalSkill -> its SkillMst type
+            // (4 AdditionalSkill, 5 EtherBlow); no skill -> false. Compared as ints with CompareValue parsed as
+            // SkillType, so a string compare of the enum names is the same thing. `actorSkillType` carries
+            // "EtherBlow" (TargetType has no value for it); otherwise TargetType's values are the enum names.
+            // For a STATE's active condition the skill is the one being launched right now on the battlefield
+            // (any unit's skill, both teams) - see PvPTeam's launch context; passives launch with no skill.
+            const skillType = state.actorSkillType ?? state.actionType
+            if (!skillType) return false;
+            if (cond.compareOperator === CompareOperator.EQUAL) return skillType === (cond.compareValue as any);
+            if (cond.compareOperator === CompareOperator.NOT_EQUAL) return skillType !== (cond.compareValue as any);
             return false;
         }
         case CompareContent.COMBO_ACTION_STEP:
@@ -831,4 +830,30 @@ export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], stat
         }
         return true
     })
+}
+
+// The skill types (CompareContent 401 names) for which an activeConditionSetIdCsv can hold when every OTHER condition
+// is assumed met; undefined = no skill-type restriction. Sets are OR'd, conditions in a set AND'd (as above). Used by
+// MaxDamage, which assumes conditions met but must not give e.g. a "special attack only" crit buff to a Battle Skill.
+export const ACTOR_SKILL_TYPE_NAMES = ["NormalAttack", "ActiveSkill", "SpecialAttack", "AdditionalSkill", "EtherBlow"] as const
+export function actorSkillTypeRestriction(activeConditionSetIdCsv: string | undefined): Set<string> | undefined {
+    const ids = (activeConditionSetIdCsv ?? "").split(",").filter(id => id.length && id !== "0")
+    if (!ids.length) return undefined
+    const allowed = new Set<string>()
+    for (const id of ids) {
+        const set = battleConditionSets[id]
+        if (!set) continue // an unknown set never matches (IsMatchConditionSets)
+        let types: string[] = [...ACTOR_SKILL_TYPE_NAMES]
+        let restricted = false
+        for (const condId of set.battleConditionMstIdCsv.split(",")) {
+            const c = battleConditions[condId]
+            if (!c || c.compareContent !== CompareContent.ACTOR_SKILL_TYPE) continue
+            restricted = true
+            types = types.filter(t => c.compareOperator === CompareOperator.EQUAL ? t === c.compareValue
+                : c.compareOperator === CompareOperator.NOT_EQUAL ? t !== c.compareValue : false)
+        }
+        if (!restricted) return undefined
+        types.forEach(t => allowed.add(t))
+    }
+    return allowed
 }

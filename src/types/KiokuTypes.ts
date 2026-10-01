@@ -671,6 +671,9 @@ export interface BattleState {
     actor: KiokuState,
     target: KiokuState,
     actionType?: TargetType
+    // CompareContent 401 ActorSkillType when it differs from actionType ("EtherBlow" follow-ups). See
+    // BattleConditionParser.checkOtherCondition and PvPTeam's skill-launch context.
+    actorSkillType?: string
     // trueActorUnit: unit performing the CURRENT action (CompareTarget.ACTOR);
     // mainTargetUnit: primary target of the action (CompareTarget.MAIN_TARGET);
     // notice: what just happened to `target` this action.

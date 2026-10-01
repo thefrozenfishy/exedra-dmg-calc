@@ -1,12 +1,13 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-09-30 evening (exempt-once fix, raid score, break bonus = 0)._
+_Last updated: 2026-10-01 (skill-type-gated states + additional damage per launch, branch claude/actor-skill-type-3.19)._
 
 ## Branches and uncommitted work in E:\exedra-dmg-calc
 
 | ref | state |
 |---|---|
-| `main` | checked out on 2026-09-30. Has the engine up to the merge `8c4b5ed Merge branch 'battle-engine-3.19'` plus later UI work (saved teams, Kioku Grid, Best SA Team). Lacks the two newest engine commits. |
+| `claude/actor-skill-type-3.19` | **Checked out 2026-10-01**, branched from main (9346192). Unit-state conditions see the running skill launch (ActorSkillType / IsActor / MainTarget, `activeLaunch`), ADDITIONAL_DAMAGE / TSUBAME_LINK once per launch per opponent hit, MaxDamage per-column skill-type filtering + one additional hit per enemy, `scripts/sim/checkMechanics.ts`. Fixtures 6/6, checkMechanics 5/5, type-check at the 232 baseline, 114-kioku PvP smoke run clean. Not pushed; for the user to merge into main. |
+| `main` | 3 commits ahead of origin/main on 2026-10-01: contains all of battle-engine-3.19 plus the PvE simulator UI (merged claude/hopeful-edison-k78vto) and the Max Damage work. |
 | `battle-engine-3.19` | **Rebased onto origin/main (61aed43) on 2026-09-30**; old tip kept as `backup/battle-engine-3.19-pre-rebase`. On top of main: `6dd3b51` PvE summons, Solo Raid link HP/endless/countdown, form changes; `49cad71` heal/EP/ailment-roll formulas, DMG_RANDOM, UP_HP_RATIO, **condition sets OR'd** (main still ANDs them, so e.g. Time Stop Strike's Magic passive never fires on main); KB commits; Time Stop Strike fixture. Not pushed; `origin/battle-engine-3.19` is now stale (a push would need --force). Merging into main: docs/ai/EFFECT_TYPES.md will conflict (each branch has its own) - regenerate with `xq build`. |
 | (stash) | Applied and committed on battle-engine-3.19 on 2026-09-30 (kit mechanics TSUBAME / ZONE / COUNT / UNIQUE_* / REFLECTION / REGAIN / VORTEX / consume states / live effect-value scaling; Solo Raid Vanguard, party/season buffs, round limit, attempt carry-over, raid UI panel). Fixtures 6/6 PASS, type-check at the 232 baseline, all 114 kiokus smoke-run on a raid stage, raid panel checked in the browser. |
 
@@ -39,6 +40,9 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 6. FuaMap keyed by skill id only: two units with the same follow-up skill in one timing collapse into one.
 7. RE_ACTION_TURN_UNIT_ACT has its own class (ReActionTurnUnitAct) but is still treated as ADDITIONAL_TURN_UNIT_ACT.
 8. RCV_FINAL_DAMAGE applied per damage effect; the game sums the skill per target first (possible ±1).
+   Additional-damage hits get their own per-hit final damage the same way; targets that died earlier in the skill are
+   skipped for the additional hit (the game still lists them) [?]. TURN_START / TURN_END passive start conditions still
+   see the turn's chosen action as ActorSkillType (game: probably no skill at those timings, not checked).
 9. Waves: a new wave's passives run as BATTLE_START instead of WAVE_START [APPROXIMATION].
 10. Score formulas (Score Attack, PvP points; Solo Raid approximated as 20 × AV) are not in the battle core; would need Assembly-CSharp
     UI classes decompiled (`PopupScoreAttackReadyController` ...) or fitting against real results.
@@ -50,6 +54,7 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-01: (claude/actor-skill-type-3.19) verified a report from another session in the decompile: state active conditions use each unit's ActiveConditionCheckDataBundle, filled by AbilityEffectLauncher.Triggering for the whole skill (0x1373550 / RemoveTransientData 0x17ec1f0), so ~1000 skill-type / IsActor gated states were never active in TS; ADDITIONAL_DAMAGE / TSUBAME_LINK are one hit per launch per opponent hit (not per row); Ether Blow = ActorSkillType "EtherBlow". Fixed engine + MaxDamage, added checkMechanics.ts, MECHANICS 2/6, PITFALLS, CODE_MAP.
 - 2026-10-01: (main, uncommitted) PvE Max Damage: Switch Skill + Follow-up columns (strongest SWITCH_SKILL / ADDITIONAL_SKILL_ACT skill, EtherBlow = SkillType 5), switch-skill states added to Buffs & Debuffs; `BattleSnapshot.field` (zone owner + stock) shown and tinted in BattleTimeline. Known: Max Damage counts each DMG_RANDOM row as one v1 hit on every enemy and counts all its mutually exclusive conditional rows (Falsified Phenomena ult: 6 rows instead of 10 random hits), so random-hit skills are only approximate.
 - 2026-09-30 night: applied the 2026-09-27 stash, fixed a CsDecimal.fromInt crash (effect-value-scaled FIXED break states), finished the Solo Raid UI check, committed; MISSING_AND_UNCERTAIN.md revision 10.
 - 2026-09-30 evening: rebased battle-engine-3.19 onto origin/main; Time Stop Strike Magic already right on the

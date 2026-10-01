@@ -17,6 +17,15 @@
   the browser may be running main or the deployed site.
 
 ## Engine semantics
+- **Unit-state conditions see the running skill.** Checking a state's active condition with a bare
+  `stateGen(this, this)` (no actor, no skill) silently disabled every "Ultimate / Battle Skill / follow-up / Ether
+  Blow only" buff and every IsActor-gated state (~1000 rows) for months. Use `isEffectCurrentlyActive` /
+  `filteredEffects` (they read `activeLaunch`); never build a state-check BattleState by hand. MECHANICS section 6.
+- **Per launch vs per row.** ADDITIONAL_DAMAGE / TSUBAME_LINK, regain and final damage belong to the whole skill
+  launch (AbilityEffectLauncher.Triggering), not to each DMG row or each DMG_RANDOM hit. Code that runs "after the
+  skill" goes in `PvPTeam.launchSkill`.
+- "Conditions assumed met" (MaxDamage) must still respect the skill type a state is limited to
+  (`actorSkillTypeRestriction`), or Battle Skill / Basic Attack columns get ultimate-only buffs.
 - **Passives are triggers**, not always-on states (R7.2). Check START conditions when adding, ACTIVE conditions
   while active. Checking both at trigger time lost every "while X" passive.
 - **TurnNum is per finished turn**, not per act (Forward's +1/-1 pair is a preview). A "literal" reading of one
@@ -29,6 +38,11 @@
   resistance to buffs made ~30 fake "rolls" at battle start.)
 - A friendly skill placeholder resolved before the user's manual pick broke Hollow Woman's Cutaway; in manual
   mode, targets must come from the pick.
+- The same placeholder ([actor]) also broke FULL AUTO: the generic AI could only pick the caster, so every friendly
+  single-target skill without a bespoke rule self-targeted (Thunder Torrent hasting herself every turn). Friendly
+  picks are made against the whole team in both modes.
+- The TS turn flow resets the actor's gauge before resolving targets; the game decides targets first. Any AI filter
+  that reads the gauge must use `aiDecisionGauge` (AITargetSelector.ts).
 - KO'd units must leave the turn order.
 - Don't pre-scale a kit by UP_BUFF_EFFECT_VALUE once; it is a live give-time multiplier from the giver.
 - The old ScoreAttackTeam/ScoreAttackKioku code is a different, simplified calculator. Don't copy its rules into
