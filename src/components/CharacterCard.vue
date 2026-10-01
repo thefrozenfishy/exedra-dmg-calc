@@ -508,11 +508,6 @@ export default defineComponent({
   width: 100%;
 }
 
-.edit-port-btn :deep(input) {
-  width: calc(100% - 2.8rem);
-  margin: 0 auto;
-}
-
 .edit-crys-btn {
   display: inline-flex;
   justify-content: center;

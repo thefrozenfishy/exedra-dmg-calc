@@ -4,7 +4,11 @@
             :placeholder="placeholder ?? 'Search crys…'" @focus="onFocus" @blur="hide" />
         <button v-if="modelValue || query" @click.prevent="clear" class="clear-btn">×</button>
 
-        <ul v-if="show && filtered.length" class="dropdown">
+        <ul v-if="show && (filtered.length || includeLowRarity)" class="dropdown">
+            <li v-if="includeLowRarity" class="gold-toggle" @mousedown.prevent="goldOnly = !goldOnly">
+                <input type="checkbox" :checked="goldOnly" tabindex="-1" />
+                <span>Show only gold crys</span>
+            </li>
             <li v-for="crys in filtered" :key="crys.selectionAbilityMstId" @mousedown.prevent="select(crys)">
                 <img :src="`/exedra-dmg-calc/selection_ability/${crys.resourceIconName}.png`" :alt="crys.name" />
                 <div class="details">
@@ -21,6 +25,7 @@ import { ref, computed } from 'vue'
 import { relevantCrys, type CrystalisData } from '../types/KiokuTypes'
 import { crystalises, passiveDetails } from '../utils/helpers'
 import { elementMap, KiokuElement } from '../types/enums';
+import { useSetting } from '../store/settingsStore'
 
 const props = defineProps<{
     characterId: number
@@ -39,6 +44,8 @@ const emit = defineEmits<{
 
 const query = ref('')
 const show = ref(false)
+// Hides the blue (rarity 1) & purple (rarity 2) crys, leaving the gold ones and the character's EX (rarity 4)
+const goldOnly = useSetting('crysSelectorGoldOnly', false)
 
 const isRelevantCrys = ({ selectionAbilityMstId }) => {
     if (!(selectionAbilityMstId in crystalises)) {
@@ -65,10 +72,14 @@ const selectedCrys = computed(() =>
     props.modelValue ? allCrys.value.find(c => c.selectionAbilityMstId === props.modelValue) : undefined
 )
 
+const shownCrys = computed(() => props.includeLowRarity && goldOnly.value
+    ? allCrys.value.filter(c => c.rarity >= 3)
+    : allCrys.value)
+
 const filtered = computed(() => {
     const q = query.value.toLowerCase().trim()
-    if (!q) return allCrys.value
-    return allCrys.value.filter(
+    if (!q) return shownCrys.value
+    return shownCrys.value.filter(
         c =>
             c.name.toLowerCase().includes(q) ||
             c.description.toLowerCase().includes(q)
@@ -184,6 +195,32 @@ input::placeholder {
 
 .dropdown li:hover {
     background: rgba(246, 214, 130, 0.08);
+}
+
+.dropdown li.gold-toggle {
+    position: sticky;
+    top: -4px;
+    margin-top: -4px;
+    padding: 7px 8px;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    background: #1e1e2a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1;
+    user-select: none;
+}
+
+.dropdown li.gold-toggle:hover {
+    color: var(--text);
+}
+
+.gold-toggle input {
+    width: auto;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+    accent-color: var(--accent);
 }
 
 .dropdown li img {
