@@ -832,3 +832,17 @@ export const isConditionSetActiveForPvP = (conditionSetIdCsvList: string[], stat
         return true
     })
 }
+
+// Elements / roles that IS_ELEMENT_TYPE / IS_ROLE_TYPE conditions in these condition-set csvs compare a unit
+// against (whichever unit they check). Used to find which element/role a kit's effects depend on.
+export function unitTypeConditionValues(csvs: (string | undefined)[]): { elements: string[], roles: string[] } {
+    const elements = new Set<string>(), roles = new Set<string>()
+    for (const setId of csvs.flatMap(csv => (csv ?? "").split(","))) {
+        for (const condId of (battleConditionSets[setId]?.battleConditionMstIdCsv ?? "").split(",")) {
+            const cond = battleConditions[condId]
+            if (cond?.compareContent === CompareContent.IS_ELEMENT_TYPE && elementMap[cond.compareValue]) elements.add(elementMap[cond.compareValue])
+            if (cond?.compareContent === CompareContent.IS_ROLE_TYPE && roleMap[cond.compareValue]) roles.add(roleMap[cond.compareValue])
+        }
+    }
+    return { elements: [...elements], roles: [...roles] }
+}

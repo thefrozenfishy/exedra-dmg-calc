@@ -31,6 +31,15 @@
   mode, targets must come from the pick.
 - KO'd units must leave the turn order.
 - Don't pre-scale a kit by UP_BUFF_EFFECT_VALUE once; it is a live give-time multiplier from the giver.
+- Running a battle "for N AV": `executeNextAction` advances `elapsed` to the actor's time *before* acting, so check
+  `elapsed > N` after the call and drop that action. `while (elapsed < N) executeNextAction()` counts one action past
+  the window, and which one depends on the team (the Kioku Grid bench showed a fake -10% for supports without buffs).
+- Who dealt a hit: use `BattleEvent.sourcePos` (names repeat, e.g. several Lux). A popped vortex is inside the
+  popping hit's `amount` (`vortex` field) and also logged as its owner's `dot` event; subtract it when attributing.
+- Lux☆Magica is not a blank slate in a simulation at A1+: her Magic charges from every ally's battle skill, so her
+  follow-up timing changes with whoever stands next to her. LuxBench uses her at A0.
+- Hot paths: never `Object.values(skillDetails).filter(...)` per action (it was ~23% of sim time in `getDetails`
+  and `triggerFua`); use `skillDetailsByMstId.get(id * 100 + lvl)`, same entries in the same order.
 - The old ScoreAttackTeam/ScoreAttackKioku code is a different, simplified calculator. Don't copy its rules into
   the engine without checking the decompile (its element/role gate on damage made skills hit only same-element
   enemies).

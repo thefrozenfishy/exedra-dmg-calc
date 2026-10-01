@@ -50,6 +50,9 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-01: Kioku Grid beta "(battle engine)" charts (LuxBench.ts + luxBenchWorker.ts); BattleEvent.sourcePos /
+  vortex, BattleRng.draw hook + BattleOptions.rng, computeMaxDamage onlyPos, skill-detail index in getDetails /
+  triggerFua (~5x faster sims). Fixtures 6/6, type-check 231 (baseline 232). No game-rule change.
 - 2026-09-30 night: applied the 2026-09-27 stash, fixed a CsDecimal.fromInt crash (effect-value-scaled FIXED break states), finished the Solo Raid UI check, committed; MISSING_AND_UNCERTAIN.md revision 10.
 - 2026-09-30 evening: rebased battle-engine-3.19 onto origin/main; Time Stop Strike Magic already right on the
   engine branch (bug only on main: AND of condition sets); added fixture time-stop-strike-magic.json + line checks
