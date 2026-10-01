@@ -24,7 +24,7 @@ import { unitTypeConditionValues } from "./BattleConditionParser";
 import type { QuestEnemyAppearance } from "./PvE";
 import { skillDetailsByMstId } from "../utils/helpers";
 import { TargetType, TargetTypeLookup, targetTypeToLvl, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
-import { elementMap, roleMap, type KiokuElement, type KiokuRole } from "../types/enums";
+import { elementMap, roleMap, KiokuElement, type KiokuRole } from "../types/enums";
 
 export const BENCH_DEF = 3000
 export const BENCH_BROKEN_RATE = 500  // % damage taken while broken
@@ -256,18 +256,35 @@ export class LuxBenchCharts {
         ]
     }
 
+    // The dealer's element when none is tested: one the kit isn't limited to (Lux's own Light if possible). Every unit
+    // has one in game, and it matters beyond restrictions: additional damage (ADDITIONAL_DAMAGE, TSUBAME_LINK) is dealt
+    // in the attacker's own element, so without one it would miss the dummies' weakness and element buffs. The role
+    // stays empty: nothing in the damage formula reads it.
+    private neutralElement(x: PvPKioku): KiokuElement {
+        const limited = new Set(kitRestrictions(x).elements)
+        const own = this.reference.data.element as KiokuElement
+        return !limited.has(own) ? own : Object.values(KiokuElement).find(e => !limited.has(e)) ?? own
+    }
+
+    // A tested identity as the dealer actually is: an untested element replaced by the neutral one.
+    private resolve(id: BenchIdentity, x: PvPKioku): BenchIdentity {
+        return { element: id.element ?? this.neutralElement(x), role: id.role }
+    }
+
     supportMax(x: PvPKioku, ids = this.supportIdentities(x)): BenchRow[] {
         return ids.map(id => {
-            const base = this.cachedUlt(`s:${identityKey(id)}`, () => this.team(this.dealer(id)), 1)
-            const v = ultimateDamage(this.team(this.dealer(id), x), 0, 1)
+            const dealer = this.dealer(this.resolve(id, x))
+            const base = this.cachedUlt(`s:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), 1)
+            const v = ultimateDamage(this.team(dealer, x), 0, 1)
             return { ...id, gain: pctGain(v.damage, base.damage), critRate: v.critChance }
         })
     }
 
     supportAvg(x: PvPKioku, ids = this.supportIdentities(x)): BenchRow[] {
         return ids.map(id => {
-            const base = this.cachedSim(`s:${identityKey(id)}`, () => this.team(this.dealer(id)), 1)
-            return { ...id, gain: pctGain(this.simTotal(this.team(this.dealer(id), x), 1), base) }
+            const dealer = this.dealer(this.resolve(id, x))
+            const base = this.cachedSim(`s:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), 1)
+            return { ...id, gain: pctGain(this.simTotal(this.team(dealer, x), 1), base) }
         })
     }
 

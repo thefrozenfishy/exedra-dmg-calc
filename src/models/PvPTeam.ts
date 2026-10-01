@@ -1260,14 +1260,25 @@ export class KiokuState {
         // (UnitStateBase.IsActive), not at the moment it is added: only the start conditions gate
         // adding a state. Instant effects (damage, EP, HASTE, ...) check both now.
         this._actUnit = trueActorUnit
-        const triggerState = this.stateGen(this, target, targetType, trueActorUnit, mainTarget)
-        if (UNIT_STATE_TYPES.has(detail.abilityEffectType)
-            ? !isConditionSetActiveForPvP((detail.startConditionSetIdCsv ?? "").split(","), triggerState)
-            : !isConditionSetActive(detail, triggerState)) return
-
-        // [NEW, CONFIRMED via ScoreAttackTeam.ts] Generic element/role eligibility gate,
-        // applied BEFORE any effect-type-specific logic - see UnitStateEngine.isEligibleForEffect.
-        if (!isEligibleForEffect(detail, target)) return
+        const conditionsMet = (t: KiokuState) => {
+            const triggerState = this.stateGen(this, t, targetType, trueActorUnit, mainTarget)
+            return UNIT_STATE_TYPES.has(detail.abilityEffectType)
+                ? isConditionSetActiveForPvP((detail.startConditionSetIdCsv ?? "").split(","), triggerState)
+                : isConditionSetActive(detail, triggerState)
+        }
+        // A friendly effect arrives with the caster as a placeholder target and is widened to its real targets
+        // further down (sliceTargets). Its conditions and eligibility are checked per real target there.
+        // [UNCERTAIN] the per-target check site was not read in the decompile; it follows from CompareTarget
+        // EACH_TARGET ("the target, individually") and the skill texts: Scorchin' Summer Spike's battle skill
+        // gives Beachball's Boon "to self and Attacker allies" with start condition 2831 (EachTarget.IsRoleType ==
+        // Attacker). Checked against the caster (a Buffer) only, it never reached any Attacker.
+        const placeholder = this === target && !detail.abilityEffectType.startsWith("DMG_")
+        if (!placeholder) {
+            if (!conditionsMet(target)) return
+            // [NEW, CONFIRMED via ScoreAttackTeam.ts] Generic element/role eligibility gate,
+            // applied BEFORE any effect-type-specific logic - see UnitStateEngine.isEligibleForEffect.
+            if (!isEligibleForEffect(detail, target)) return
+        }
 
         // [CONFIRMED 3.19] DmgRatioAbilityEffect$$Triggering (0x18f1320): damage = Min(floor(HP * v1/1000),
         // HP - 1) (or MaxHP * v2/1000 when v1 is 0); no modifiers, can't kill.
@@ -1374,7 +1385,8 @@ export class KiokuState {
         // Re-apply the element/role eligibility gate per resolved target too (the first
         // check above only covered the originally-passed `target`; sliceTargets can
         // widen this to a team, e.g. for self-buffs re-targeted via range=SELF/ALL).
-        effTargets = effTargets.filter(t => isEligibleForEffect(detail, t))
+        effTargets = effTargets.filter(t => isEligibleForEffect(detail, t) && (!placeholder || conditionsMet(t)))
+        if (placeholder && !effTargets.length) return
 
         if (detail.abilityEffectType === "BARRIER") {
             effTargets.forEach(t => {

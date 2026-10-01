@@ -1782,11 +1782,11 @@ const benchCharts = computed(() => [
         title: "Relative buff strength (battle engine)",
         fightType: false,
         desc: [
-            `How much each character increases the damage of a ${LuxMagica} attacker with no element or role, measured with the battle engine. ${levelsDescription.value} ${LuxMagica} is A0 here, so her own ascension follow-up doesn't change with the team.`,
+            `How much each character increases the damage of a ${LuxMagica} attacker with no role and an element the character's buffs aren't limited to, measured with the battle engine. ${levelsDescription.value} ${LuxMagica} is A0 here, so her own ascension follow-up doesn't change with the team.`,
             benchAverageDmg.value
                 ? `Average Damage: ${BENCH_AV} AV (3 turns) of auto battle with the character next to the attacker and three ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts (including additional damage it deals), never the rest of the team's. SP is shared, so a character that spends it can cost the attacker battle skills or its ultimate.`
                 : `Max Burst: the attacker's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
-            `One enemy with 3000 def, weak to every element and broken (500% dmg taken). Element or role bonuses get their own bar when they change the result.`,
+            `One enemy with 3000 def, weak to every element and broken (500% dmg taken). Element or role bonuses get their own bar when they change the result, so a bonus can show in one metric only: buffs from a support's own ultimate rarely land within 3 turns, and crit rate or procs (chains, follow-ups) don't change Max Burst.`,
         ],
         chart: buildBenchChart("support"),
         status: benchStatusText("support"),

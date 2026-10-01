@@ -48,6 +48,10 @@
 - Running a battle "for N AV": `executeNextAction` advances `elapsed` to the actor's time *before* acting, so check
   `elapsed > N` after the call and drop that action. `while (elapsed < N) executeNextAction()` counts one action past
   the window, and which one depends on the team (the Kioku Grid bench showed a fake -10% for supports without buffs).
+- Read condition CompareValues from the data before mapping them: IsElementType/IsRoleType hold names, not ids.
+  Mapping them through `elementMap`/`roleMap` silently made every element/role condition false for real units.
+- A friendly effect reaches `applyEffect` with the caster as placeholder target; conditions about "each target"
+  must be checked on the widened targets, not on the placeholder (Attacker-only buffs never applied).
 - Who dealt a hit: use `BattleEvent.sourcePos` (names repeat, e.g. several Lux). A popped vortex is inside the
   popping hit's `amount` (`vortex` field) and also logged as its owner's `dot` event; subtract it when attributing.
 - Lux☆Magica is not a blank slate in a simulation at A1+: her Magic charges from every ally's battle skill, so her

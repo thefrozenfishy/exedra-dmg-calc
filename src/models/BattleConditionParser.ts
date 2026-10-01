@@ -2,7 +2,7 @@ import battleConditionSetsJson from '../assets/base_data/getBattleConditionSetMs
 import battleConditionsJson from '../assets/base_data/getBattleConditionMstList.json';
 import { BattleState, PassiveSkill, SkillDetail } from '../types/KiokuTypes';
 import { KiokuState, PvPTeam, isAlimentEffect } from './PvPTeam';
-import { KiokuRole, elementMap, roleMap } from '../types/enums';
+import { KiokuElement, KiokuRole, elementMap, roleMap } from '../types/enums';
 
 /**
  * BattleConditionParser.ts
@@ -488,13 +488,11 @@ function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state
             // source, the comparison is ALWAYS "must equal true" regardless of
             // compareOperator (EQUAL/NOT_EQUAL are not consulted for this content type)
             // - implemented that way here rather than routed through compareBool.
-            // `kioku.data.element` is a KiokuElement STRING enum in this codebase
-            // (confirmed via the real KiokuTypes.ts), while CompareValue is the game's
-            // numeric element id - mapped through `elementMap` (also confirmed real)
-            // before comparing.
-            return elementMap[cond.compareValue] === battleUnit.kioku.data.element;
+            // `kioku.data.element` is a KiokuElement STRING enum in this codebase, and CompareValue
+            // is the element's NAME in the data, not its id: see conditionElement.
+            return conditionElement(cond.compareValue) === battleUnit.kioku.data.element;
         case CompareContent.IS_ROLE_TYPE:
-            return roleMap[cond.compareValue] === battleUnit.kioku.data.role;
+            return conditionRole(cond.compareValue) === battleUnit.kioku.data.role;
         case CompareContent.BREAK_DAMAGE_RECEIVE_RATE: {
             const rate = battleUnit.breakedDamageReceiveRate;
             return compareFloat(cond.compareOperator, rate, cond.compareValue);
@@ -769,6 +767,21 @@ function checkOtherCondition(state: BattleState, cond: BattleCondition): boolean
 // `actorUnit` - whoever REALLY performed the current action - now threaded through
 // separately (see PvPTeam.ts). `state.target` is "the specific unit currently under
 // consideration" (matches CompareTarget.EACH_TARGET most directly).
+// [CONFIRMED data] IS_ELEMENT_TYPE / IS_ROLE_TYPE CompareValues in getBattleConditionMstList.json are enum NAMES:
+// "Fire" "Aqua" "Forest" "Light" "Dark" "Neutral" and "Attacker" "Breaker" ... (never ids). They used to be looked up
+// in elementMap/roleMap (keyed by id), which matched no character, so e.g. Scorchin' Summer Spike's "Attacker
+// allies" effects (condition 1695) never applied. Ids are still accepted.
+const CONDITION_ELEMENTS: Record<string, KiokuElement> = {
+    Fire: KiokuElement.Flame, Aqua: KiokuElement.Aqua, Forest: KiokuElement.Forest,
+    Light: KiokuElement.Light, Dark: KiokuElement.Dark, Neutral: KiokuElement.Void,
+}
+function conditionElement(value: string): KiokuElement | undefined {
+    return CONDITION_ELEMENTS[value] ?? elementMap[value]
+}
+function conditionRole(value: string): KiokuRole | undefined {
+    return (Object.values(KiokuRole) as string[]).includes(value) ? value as KiokuRole : roleMap[value]
+}
+
 function isMatchCondition(cond: BattleCondition, state: BattleState): boolean {
     const { actor, target, actorTeam, enemyTeam, trueActorUnit, mainTargetUnit } = state;
     switch (cond.compareTarget as CompareTarget) {
@@ -865,8 +878,10 @@ export function unitTypeConditionValues(csvs: (string | undefined)[]): { element
     for (const setId of csvs.flatMap(csv => (csv ?? "").split(","))) {
         for (const condId of (battleConditionSets[setId]?.battleConditionMstIdCsv ?? "").split(",")) {
             const cond = battleConditions[condId]
-            if (cond?.compareContent === CompareContent.IS_ELEMENT_TYPE && elementMap[cond.compareValue]) elements.add(elementMap[cond.compareValue])
-            if (cond?.compareContent === CompareContent.IS_ROLE_TYPE && roleMap[cond.compareValue]) roles.add(roleMap[cond.compareValue])
+            const element = cond?.compareContent === CompareContent.IS_ELEMENT_TYPE ? conditionElement(cond.compareValue) : undefined
+            const role = cond?.compareContent === CompareContent.IS_ROLE_TYPE ? conditionRole(cond.compareValue) : undefined
+            if (element) elements.add(element)
+            if (role) roles.add(role)
         }
     }
     return { elements: [...elements], roles: [...roles] }
