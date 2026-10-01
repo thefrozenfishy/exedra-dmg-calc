@@ -40,11 +40,15 @@ Longer derivations: `src/models/PVE_PARAMS_3.19.md`, `PVE_ENEMY_AI_3.19.md`, `MI
   (b__1 0x138eb70), in state-list order, `GetAdditionalDamageResult(user, skill, notices)` (0x15b4840 / 0x16d9970):
   targets = units of this skill's notices with IsReceivedAttack whose team != the user's; base = `GetDamageBase(giver's
   initial ATK, DamagePower/100)` (DamagePower = v1/10, link: v3/10); one AdditionalDamageAbilityEffect (range all,
-  DamageCategory 7 Additional, element = the user's character element) hits them via
+  DamageCategory 7 Additional, element = the user's CharacterParameter element; NotSpecified (0) for a non-character
+  user such as an enemy, disassembly 0x1815b4bc2-0x1815b4c88) hits them via
   DamageAbilityEffectBase.Triggering with the **user as attacker** (its give/crit states, crit roll, ActorSkillType =
   the launching skill): reflection, pipeline, vortex, Attack, unique Lv-up; **no** break damage, no broken-rate
   growth, no consume-on-attack (those three getters return false). [C] TS `KiokuState.additionalDamageAfterLaunch`,
   `getAdditionalDamageBase`; MaxDamage adds one per state per enemy hit. Check: `scripts/sim/checkMechanics.ts`.
+  No giver check anywhere (b__1 IsActive only, b__2 team != user's, AdditionalDamageUnitState has no CanAddTo
+  override): an all-allies ADDITIONAL_DAMAGE also sits on its giver and fires on her own skills. Only
+  TsubameLinkUnitState.CanAddTo (0x16d9950) refuses its caster. [C]
 - RCV_FINAL_DAMAGE: extra `ceil(total × ratio)` hit, role/element gated (`CalcFinalDamageNoticeBundle` 0x137b110).
 - DOT (`GetSlipDamageValue` 0x1380f20): same pipeline minus crit and shield. TS `getSlipDamageResult`.
 - DMG_RATIO: `floor(HP × v1/1000)` (or MaxHP × v2/1000), capped at HP-1, no modifiers.
@@ -129,16 +133,30 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   each passive pass); team 209 sum of CountPoint, 210 units holding pattern pid, 211 total AccumCount of pid;
   1001 IsAlly; 1101 vanguard phase active. [C] (implemented in stash, STATUS.md)
 - HPRatio = `HP * 100f / MaxHP` (float). [C]
-- State active conditions during a launch: EachTarget = the unit the launch is processing (each effect's target,
-  each additional hit's target), not the state's holder. `withEachTarget` / `LaunchContext.eachTarget` in PvPTeam.
-  [?] (set site not read; "DMG dealt to cursed/burning enemies" states, EachTarget.AbilityEffect contains CURSE/BURN,
-  never applied with the holder as EachTarget.)
-- 19 IsElementType / 20 IsRoleType: CompareValue is the enum NAME in the data ("Fire" = Flame, "Neutral" = Void,
-  "Attacker", ...), never an id. TS `conditionElement` / `conditionRole` (they used to go through id maps and
-  matched no character until 2026-10-01). [C data]
-- EACH_TARGET start conditions of a friendly effect are checked per real target, after the caster placeholder is
-  widened by sliceTargets (KiokuState.applyEffect). [?] (site not read; follows from the condition texts, e.g.
-  Scorchin' Summer Spike's Beachball's Boon "to self and Attacker allies", condition 2831.)
+- **EachTargetUnit** is set by every effect's Triggering in the **user's** bundle only (`userUnit+0x90` +0x30 = the
+  target being processed, cleared to null after it): DamageAbilityEffectBase 0x18ef650 (before ReflectionProcess /
+  GetAttackDamageResult), DmgRandom, RecoveryHp, State 0x1901cb0, Haste, GainEp, ... (~28 classes, scan of `+0x90`
+  then `+0x30` writes). Skills and passives alike; additional hits too (GetAdditionalDamageResult runs its effect's
+  Triggering with the attacker as user). The launcher never sets it. Every other bundle (the defender's included)
+  has it null. `Condition.IsMatchCondition` 0x17eca80 case 8: null EachTarget -> **true** for ConditionUseType
+  SkillStart (1), otherwise a checker on a null unit -> **false** (state activity = SkillActive 2). So "DMG dealt to
+  cursed enemies" (set 345) counts on the user's hits on cursed targets only; a defender's EachTarget-conditioned
+  states never hold. In data only attacker-side states use EachTarget active conditions (UP_GIV_DMG_RATIO 101,
+  UP_HEAL_RATE_RATIO 22, UP_CTR_RATIO 10, UP_CTD_FIXED 10). [C] TS: `eachTargetCtx` / `withEachTarget(user, target)`
+  (set in `KiokuState.applyEffect` per real target, per heal target, per additional hit),
+  `BattleState.eachTargetUnset`. Check: checkMechanics #4.
+- Start conditions are checked **per selected target** for every effect: `AbilityEffectBase.SelectTargetsConditionCheck`
+  0x18e7bb0 (launcher, after SelectTargets): EachTarget = each target, `IsMatchConditionSets(start, bundle,
+  SkillStart)`, keeps the targets that pass; Triggering then loops over them (StateAbilityEffect 0x1901cb0 has no
+  check of its own). TS: friendly effects arrive with the caster as placeholder and are checked per widened target
+  (`applyEffectToTarget`), opponent effects per real target. E.g. Scorchin' Summer Spike's Beachball's Boon "to self
+  and Attacker allies", condition 2831. [C]
+- 19 IsElementType / 20 IsRoleType: CompareValue is the enum NAME ("Fire" = Flame, "Neutral" = Void, "Attacker",
+  ..., parsed with `Enum.Parse<TargetElementType|TargetRoleType>`), never an id. Check 0x17e3f10:
+  `BoolValueComparer(unit.IsMatch(v), true).Compare(op)` (0x17e8240): Equal -> IsMatch, **NotEqual -> !IsMatch**,
+  other ops false. IsMatch (0x1388540 / 0x13884b0): NotSpecified -> true; non-CharacterParameter unit (enemy) ->
+  false; else element/role equality. Only NotEqual rows in use: set 349 (EachTarget neither Buffer nor Debuffer, skill
+  detail 200600401 DMG_RANDOM). TS `conditionElement` / `conditionRole`. [C] Check: checkMechanics #5.
 - 304 TotalDamage (team) = Σ over the team's notices of `AffectedUnitNotice.GetTotalDamageValue(true)` 0x1379240 =
   Σ `Damages` (HP damage after the barrier) + BreakDamage. `BarrierDamages` are a separate list, so a hit fully
   absorbed by a barrier counts 0 (e.g. Time Stop Strike's "+1 Magic on DMG dealt" doesn't fire). [C]
@@ -159,8 +177,11 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   2, AdditionalSkill -> its SkillMst type (4 AdditionalSkill, **5 EtherBlow**); no skill -> false; int compare with
   CompareValue parsed as SkillType (EQUAL / NOT_EQUAL in data). Start conditions of passives use the passive pass's
   own bundle (actorActiveSkill passed to `PassiveSkill.Triggering` 0x14a2c20). [C] TS `BattleState.actorSkillType`.
-- 12 AbilityEffect "TYPE[,TYPE]" contains/not-contains: **prefix match** (`AbilityEffectListComparer`) over the
-  unit's states, timed and permanent (e.g. "TSUBAME" matches TSUBAME_CORE). [C] TS `compareAbilityEffectList`.
+- 12 AbilityEffect "TYPE[,TYPE]" contains/not-contains: **prefix match** (`AbilityEffectListComparer` 0x17df400) over
+  `UnitCondition.StateList` mapped to `UnitStateBase.EffectType` (b__8_0 0xe0f070): every state held, timed and
+  permanent, active or not (e.g. "TSUBAME" matches TSUBAME_CORE, "CURSE" matches CURSE_ATK/DEF/HP/BREAK). State
+  names are the ability effect types: "STUN", "WEAKNESS", "VORTEX_ATK". [C] TS `compareAbilityEffectList`,
+  `unitStateTypes`.
 
 ## 7. Targeting
 
@@ -255,8 +276,9 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   Base: normal 15, skill 30, ultimate 5, kill 10, DOT tick received 2, hit received by HP% after the hit
   (<10 -> 15, <40 -> 10, else 5). Enemies: no EP. LOSE_EP_RATIO `(int)(f32(v1×MaxEP)/1000)`. [C]
   [?] per hit vs per act for hit-received EP.
-- SP: team resource (`SpReferee`, TS `PvPTeam.currentSp`, starts 5 [?]); battle skills cost SkillMst `sp`;
-  GAIN_SP_FIXED adds. GAIN/LOSE_BP: no battle effect. [?] SP gain rules not re-read for 3.19.
+- SP: team resource (`SpReferee`, TS `PvPTeam.currentSp` / `addSp`): Init 0x15c07a0 = 5 per team; **AddSp 0x15c04b0
+  = Clamp(sp + n, 0, 6)** (SP above 6 is lost); `GetCalculationSp` 0x15c05e0: normal attack +1, else -ConsumeSP;
+  GAIN_SP_FIXED adds through the same clamp. GAIN/LOSE_BP: no battle effect. [C] Check: checkMechanics #6.
 
 ## 11. PvE specifics
 
@@ -323,7 +345,10 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
 - VORTEX_ATK (0x15d1ed0, `VortexProcess` 0x18f0260): an ailment allowing duplicates, never ticks at turn start,
   RemainAttackCount = v2; damage base fixed at give time = caster's unbuffed ATK × v1/1000 (after effect-value
   scaling); after each hit's damage calc every vortex on the target counts the hit, the ones reaching 0 pop and
-  add their damage to this hit. [C]
+  add their damage to this hit: the GetSlipDamageResult notice (0x13806d0) is op_Addition'ed into the hit's notice,
+  so it counts in that hit's GetTotalDamageValue (DMG 101, team 304) and the popping skill's notice bundle.
+  DamageInfo has no giver field: the vortex's owner gets no credit. [C] TS: added to `notice.totalDamageValue`; the
+  owner's `dot` event is display/attribution only. Check: checkMechanics #7.
 
 ## 14. PvP specifics
 

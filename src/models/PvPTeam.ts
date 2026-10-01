@@ -253,13 +253,19 @@ const runningFollowUps = new Set<string>()
 // lambdas b__3/b__5, TriggeringOnBattleStart), so outside a skill launch IsActor and ActorSkillType (401) are false.
 // So "special attack crit DMG +20%" (active condition set 7 / 317) counts for every hit of the holder's ultimate,
 // including its additional-damage hits, and for nothing else. TS: `activeLaunch` while PvPTeam.launchSkill runs.
-// `eachTarget`: the unit the launch is processing right now (an effect's target, an additional hit's target). It fills
-// EachTargetUnit of the bundle, so a state like Nightmare Stinger's "DMG dealt to cursed enemies +40%" (active condition
-// set 345: EachTarget.AbilityEffect contains CURSE) is checked against the enemy being hit.
-// [UNCERTAIN] the bundle's EachTargetUnit set site was not read; it follows from the field and from the effect texts
-// ("to cursed enemies", "against broken enemies"), which can't work when EachTarget is the state's holder (the
-// previous reading, under which such states never applied).
-interface LaunchContext { actor: KiokuState, targetType: TargetType, skillType: string, team: PvPTeam, eachTarget?: KiokuState }
+// EachTargetUnit: [CONFIRMED 3.19] every effect's Triggering sets the USER's bundle (userUnit+0x90)
+// EachTargetUnit to the target it is processing, then clears it to null after that target
+// (DamageAbilityEffectBase.Triggering 0x18ef650, DmgRandomAbilityEffect, RecoveryHpAbilityEffectBase, StateAbilityEffect
+// 0x1901cb0, ... - every *AbilityEffect.Triggering; AdditionalDamageUnitState.GetAdditionalDamageResult 0x15b4840 runs
+// its effect's Triggering with the attacker as user, so additional hits too). Skills and passives alike; the launcher
+// (AbilityEffectLauncher.Triggering 0x1373550) never sets it. So only the user's own states see it: Nightmare Stinger's
+// "DMG dealt to cursed enemies +40%" (active condition set 345, EachTarget.AbilityEffect contains CURSE) is checked
+// against the enemy being hit. Every other unit's bundle (the defender's included), and the user's outside an effect,
+// have EachTarget null, and Condition.IsMatchCondition (0x17eca80, case 8) makes an EACH_TARGET condition with a null
+// unit FALSE for state activity (ConditionUseType SkillActive; true only for SkillStart). In the data only attacker-side
+// states (UP_GIV_DMG_RATIO, UP_HEAL_RATE_RATIO, UP_CTR_RATIO, UP_CTD_FIXED) have EachTarget active conditions.
+let eachTargetCtx: { user: KiokuState, target: KiokuState } | undefined
+interface LaunchContext { actor: KiokuState, targetType: TargetType, skillType: string, team: PvPTeam }
 let activeLaunch: LaunchContext | undefined
 // Skill type of the most recent launch: the AttackEnd pass after an Ether Blow sees ActorSkillType "EtherBlow".
 let lastLaunchSkillType: string | undefined
@@ -271,13 +277,11 @@ function launchSkillType(targetType: TargetType, details: SkillDetail[]): string
     const mstId = (details[0] as any)?.skillMstId
     return mstId !== undefined && SKILL_MST_TYPE.get(mstId) === 5 ? "EtherBlow" : TargetType.fuaId
 }
-// Runs `fn` with `target` as the running launch's EachTargetUnit (no-op outside a launch).
-function withEachTarget<T>(target: KiokuState, fn: () => T): T {
-    const l = activeLaunch
-    if (!l) return fn()
-    const prev = l.eachTarget
-    l.eachTarget = target
-    try { return fn() } finally { l.eachTarget = prev }
+// Runs `fn` with `target` as `user`'s EachTargetUnit (the effect's Triggering for that target), restoring it after.
+function withEachTarget<T>(user: KiokuState, target: KiokuState, fn: () => T): T {
+    const prev = eachTargetCtx
+    eachTargetCtx = { user, target }
+    try { return fn() } finally { eachTargetCtx = prev }
 }
 // The running launch, for code outside PvPTeam (e.g. UI probes). Undefined between skills.
 export const currentLaunch = (): Readonly<LaunchContext> | undefined => activeLaunch
@@ -302,7 +306,12 @@ export function isOpponentEffect(type: string): boolean {
 
 // Attack element for ADDITIONAL_DAMAGE: the attacker's own character element as the
 // numeric TargetElementType used in skill data (inverse of enums.elementMap).
+// [CONFIRMED 3.19] AdditionalDamageUnitState.GetAdditionalDamageResult (0x15b4840; disassembly 0x1815b4bc2-0x1815b4c88):
+// element = NotSpecified (0), replaced by the attacker's CharacterParameter element when the attacker is a character
+// and Enum.IsDefined. A non-character attacker (enemy, enemy summon) deals elementless additional damage. The damage
+// base is the GIVER's (state+0x58) initial ATK x DamagePower/100. (TSUBAME_LINK: same shape.)
 export function elementNumberOf(unit: KiokuState): number {
+    if (unit.enemy) return 0
     const hit = Object.entries(elementMap).find(([, name]) => name === unit.kioku.data.element)
     return hit ? Number(hit[0]) : 0
 }
@@ -625,6 +634,7 @@ export class KiokuState {
             const dmg = getSlipDamageResult(owner, this, { ...d, element: 2 }, DamageBaseType.ATK, this.team.battleType)
             total += dmg
             this.getMp(2)
+            // Display/attribution only (Kioku Grid bench, export): the game credits the popping hit, see the caller.
             this.team.eventLog.push({ kind: "dot", source: `${owner.kioku.name} (vortex)`, target: this.kioku.name, amount: dmg, sourceIsTeam1: owner.team.isTeam1, sourcePos: owner.posIdx, targetIsTeam1: this.team.isTeam1, targetPos: this.posIdx })
         }
         return total
@@ -700,6 +710,12 @@ export class KiokuState {
     //   (its IsGiveBreakPointDamage / IsIncreaseBreakedDamageReceiveRate / IsConsumeRemainCountOnAttackHit are false).
     // So one extra hit per state per opponent hit, not one per damage row (the TS used to add it to every row and
     // every DMG_RANDOM hit). Dead targets are skipped here [?] (their notice still counts in the game).
+    // [CONFIRMED 3.19] Who: the attacker's own IAdditionalDamage states that are IsActive on the attacker's bundle
+    // (AbilityEffectLauncher lambda b__1 0x138eb70), with no check of the state's giver: an ADDITIONAL_DAMAGE given to
+    // all allies (Pluvia☆Neujahr, Scorchin' Summer Spike) also lands on the giver (AdditionalDamageUnitState has no
+    // CanAddTo override; only TsubameLinkUnitState.CanAddTo 0x16d9950 excludes its caster) and fires on her own skills.
+    // Targets: opponents (b__2 0x15c7b10, other TeamId) whose notice IsReceivedAttack (b__14_0). Only for an
+    // ActiveSkill-origin launch with a skill (the launcher skips the pass otherwise): passives never trigger it.
     additionalDamageAfterLaunch(): void {
         const states = [...this.passiveEffectDetails.values(), ...this.activeEffectDetails.values()]
             .filter(d => (d.abilityEffectType === "ADDITIONAL_DAMAGE" || d.abilityEffectType === "TSUBAME_LINK") && this.isEffectCurrentlyActive(d))
@@ -712,7 +728,7 @@ export class KiokuState {
             const bonus = isLink ? { ...state, value1: (state as any).value3 ?? 0 } as SkillDetail : state
             for (const target of targets) {
                 if (target.isDead) continue
-                withEachTarget(target, () => this.additionalHit(target, bonus, applier, isLink ? "Swallow link" : "additional damage"))
+                withEachTarget(this, target, () => this.additionalHit(target, bonus, applier, isLink ? "Swallow link" : "additional damage"))
             }
         }
     }
@@ -741,6 +757,7 @@ export class KiokuState {
         const wasAlive = !target.isDead
         const vortex = target.popVortex()
         totalDamage += vortex
+        if (vortex) result.notice.totalDamageValue += vortex  // part of the hit's notice, see applyEffectToTarget
         const hpLost = target.takeDamage(totalDamage)
         target.chargeByReceiveDamage()
         if (wasAlive && target.isDead) this.getMp(10)
@@ -1053,8 +1070,13 @@ export class KiokuState {
     // [CONFIRMED 3.19] UnitStateBase.IsActive(BattleUnit) (0x16dfba0) checks the holder's own condition bundle:
     // during a skill launch it carries the launching unit, its main target and its skill (see `activeLaunch`).
     private unitStateCheckState(): BattleState {
+        // EachTarget: only while one of this unit's own effects processes a target (see eachTargetCtx); otherwise null,
+        // and EACH_TARGET conditions are false (`eachTargetUnset`).
         const l = activeLaunch
-        return l ? this.stateGen(this, l.eachTarget ?? this, l.targetType, l.actor, l.team.lastMainTarget) : this.stateGen(this, this)
+        const each = eachTargetCtx?.user === this ? eachTargetCtx.target : undefined
+        const state = l ? this.stateGen(this, each ?? this, l.targetType, l.actor, l.team.lastMainTarget) : this.stateGen(this, each ?? this)
+        if (!each) state.eachTargetUnset = true
+        return state
     }
 
     updateMPGain(): void {
@@ -1270,7 +1292,15 @@ export class KiokuState {
         return true
     }
 
+    // [CONFIRMED 3.19] An effect's Triggering runs with its target as the user's EachTargetUnit (see eachTargetCtx). A
+    // friendly effect's placeholder target (the caster) is not a real target: its widened targets set it one by one.
     applyEffect(target: KiokuState, detail: SkillDetail, targetType?: TargetType, trueActorUnit?: KiokuState, mainTarget?: KiokuState): number | undefined {
+        const placeholder = this === target && !detail.abilityEffectType.startsWith("DMG_")
+        return placeholder ? this.applyEffectToTarget(target, detail, targetType, trueActorUnit, mainTarget)
+            : withEachTarget(this, target, () => this.applyEffectToTarget(target, detail, targetType, trueActorUnit, mainTarget))
+    }
+
+    private applyEffectToTarget(target: KiokuState, detail: SkillDetail, targetType?: TargetType, trueActorUnit?: KiokuState, mainTarget?: KiokuState): number | undefined {
         /**
          * @returns action id if additional act should be triggered, otherwise returns null
          */
@@ -1284,12 +1314,14 @@ export class KiokuState {
                 ? isConditionSetActiveForPvP((detail.startConditionSetIdCsv ?? "").split(","), triggerState)
                 : isConditionSetActive(detail, triggerState)
         }
-        // A friendly effect arrives with the caster as a placeholder target and is widened to its real targets
-        // further down (sliceTargets). Its conditions and eligibility are checked per real target there.
-        // [UNCERTAIN] the per-target check site was not read in the decompile; it follows from CompareTarget
-        // EACH_TARGET ("the target, individually") and the skill texts: Scorchin' Summer Spike's battle skill
-        // gives Beachball's Boon "to self and Attacker allies" with start condition 2831 (EachTarget.IsRoleType ==
-        // Attacker). Checked against the caster (a Buffer) only, it never reached any Attacker.
+        // [CONFIRMED 3.19] AbilityEffectBase.SelectTargetsConditionCheck (0x18e7bb0), run by AbilityEffectLauncher.Triggering
+        // after SelectTargets for every effect: for each selected target it sets EachTargetUnit = that target and keeps
+        // the target only if the effect's start condition sets match (ConditionUseType SkillStart); the effect then runs
+        // on the kept targets only (StateAbilityEffect.Triggering 0x1901cb0 loops over them with no further check).
+        // A friendly effect arrives here with the caster as a placeholder target and is widened to its real targets
+        // further down (sliceTargets), so its conditions and eligibility are checked per real target there. Example:
+        // Scorchin' Summer Spike's Beachball's Boon "to self and Attacker allies", start condition 2831
+        // (EachTarget.IsRoleType == Attacker).
         const placeholder = this === target && !detail.abilityEffectType.startsWith("DMG_")
         if (!placeholder) {
             if (!conditionsMet(target)) return
@@ -1360,9 +1392,13 @@ export class KiokuState {
             totalDamage = target.team.modeChangeDamageCut(target, totalDamage)
             const wasAlive = !target.isDead
             // [CONFIRMED 3.19] VortexProcess (0x18f0260): after the damage calc, every vortex on the target counts the hit;
-            // the ones that reach 0 pop now (their damage joins this hit's).
+            // the ones that reach 0 pop now. Their GetSlipDamageResult notice (0x13806d0) is op_Addition'ed into THIS hit's
+            // notice (DamageAbilityEffectBase.Triggering 0x18ef650), so it is part of the hit's damage, of its
+            // GetTotalDamageValue (DMG 101, team TotalDamage 304) and of the popping skill's notice bundle. DamageInfo has no
+            // giver field: nothing is credited to the vortex's owner (the owner's "dot" event below is display-only).
             const vortex = target.popVortex()
             totalDamage += vortex
+            if (vortex) result.notice.totalDamageValue += vortex
             const hpLost = target.takeDamage(totalDamage)
             target.chargeByReceiveDamage()
             if (wasAlive && target.isDead) this.getMp(10)
@@ -1755,7 +1791,7 @@ export class KiokuState {
             // [CONFIRMED string] [IMPLEMENTED] flat add to the attack/skill alternation
             // counter (`currentSp`) - matches GAIN_EP_FIXED's pattern one level up (team,
             // not unit, since currentSp lives on PvPTeam).
-            this.team.currentSp += detail.value1;
+            this.team.addSp(detail.value1);
         } else if (detail.abilityEffectType === "CUTOUT") {
             // Kept until the holder's next TurnEnd (see triggerCutoutAtTurnEnd). IsUserUnitLockTurnOrder-
             // UnitState is captured when the state is added (CutoutUnitState$$SetTriggeringInfo).
@@ -1772,7 +1808,7 @@ export class KiokuState {
             const base = Math.max(0, stat * (detail.value1 / 1000) + ((detail as any).value2 ?? 0))
             const suppress = this.team.battleType === BattleType.Pvp || this.team.battleType === BattleType.Gvg
             effTargets.filter(t => !t.isDead).forEach(t => {
-                const healed = t.heal(Math.ceil(getProcessedRecoveryValue(this, t, base, suppress)), this);
+                const healed = withEachTarget(this, t, () => t.heal(Math.ceil(getProcessedRecoveryValue(this, t, base, suppress)), this));
                 if (healed > 0) t.lastNotice = mergeNotice(t.lastNotice, { ...emptyNotice(), isReceivedRecovery: true });
             })
         } else if (detail.abilityEffectType === "REVIVAL_RATIO") {
@@ -1873,7 +1909,13 @@ export class PvPTeam {
     declare otherTeam: PvPTeam
     private debug: boolean;
     teamLabel: string
+    // [CONFIRMED 3.19] SpReferee: Init (0x15c07a0) sets both teams to 5; AddSp (0x15c04b0) = Clamp(sp + n, 0, 6), so SP
+    // gained above 6 is lost. Normal attack +1, a skill -ConsumeSP (GetCalculationSp 0x15c05e0).
     currentSp = 5
+    static readonly MAX_SP = 6
+    addSp(n: number): void {
+        this.currentSp = Math.max(0, Math.min(PvPTeam.MAX_SP, this.currentSp + n))
+    }
 
     // [CONFIRMED enum] Network.Definition.Battle.BattleType (dump.cs). Defaults to Pvp
     // (2) per the person's message; pass BattleType.Solo/Gve/etc. to run a non-PvP
@@ -2439,10 +2481,10 @@ export class PvPTeam {
             return this.completeAction(actor, effectName, enemySkillDetails(enemySkillId))
         }
         if (effectName === TargetType.attackId) {
-            this.currentSp++;
+            this.addSp(1);
             actor.skillStreak = 0
         } else if (effectName === TargetType.skillId) {
-            this.currentSp--;
+            this.addSp(-1);
             actor.skillStreak++
         } else {
             actor.currentMp = 0;
@@ -2528,7 +2570,7 @@ export class PvPTeam {
                 const consumable = detail.abilityEffectType.startsWith("DMG_") && detail.abilityEffectType !== "DMG_RATIO" ? actor.collectConsumable() : []
                 try {
                     for (const [target, d] of this.hitsOf(actor, detail, targets)) {
-                        const fua = withEachTarget(target, () => actor.applyEffect(target, d, effectName, actor, targets[0]))
+                        const fua = actor.applyEffect(target, d, effectName, actor, targets[0])
                         if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
                     }
                 } finally { actor.effectTurnPriority = undefined }
@@ -2749,7 +2791,7 @@ export class PvPTeam {
                 const consumable = detail.abilityEffectType.startsWith("DMG_") && detail.abilityEffectType !== "DMG_RATIO" ? actor.collectConsumable() : []
                 try {
                     for (const [target, d] of this.hitsOf(actor, detail, targets)) {
-                        const fua = withEachTarget(target, () => actor.applyEffect(target, d, effectName, actor, targets[0]))
+                        const fua = actor.applyEffect(target, d, effectName, actor, targets[0])
                         if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
                     }
                 } finally { actor.effectTurnPriority = undefined }

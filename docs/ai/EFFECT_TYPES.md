@@ -1,6 +1,6 @@
 # Effect types: data usage vs engine coverage (GENERATED - do not edit)
 
-Built from `claude/actor-skill-type-3.19 @ 9346192 2026-10-01` + uncommitted src/models changes. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
+Built from `claude/verify-priority-3.19 @ 7ce61a4 2026-10-01` + uncommitted src/models changes. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
 
 - **kiokus** = collectable kiokus (getStyleMstList) whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).
 - **stages** = quest stages whose enemies use it (skill sets + enemy passives).
@@ -11,7 +11,7 @@ Built from `claude/actor-skill-type-3.19 @ 9346192 2026-10-01` + uncommitted src
 | ADDITIONAL_COUNTDOWN_CANCEL_SKILL_ACT | AdditionalCountdownCancelSkillActAbilityEffect | 0 | 42 | yes | PvPTeam.ts |  |
 | ADDITIONAL_COUNTDOWN_ZERO_SKILL_ACT | AdditionalCountdownZeroSkillActAbilityEffect | 0 | 42 | yes | PvPTeam.ts |  |
 | ADDITIONAL_DAMAGE | AdditionalDamageUnitState | 3 | 0 | yes | DamageCalculator.ts, PvPTeam.ts, effectText.ts | Luminous Tenet, Pluvia☆Neujahr, Scorchin' Summer Spike |
-| ADDITIONAL_SKILL_ACT | AdditionalSkillActAbilityEffect | 31 | 585 | yes | PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Venus, Ashley's Kioku |
+| ADDITIONAL_SKILL_ACT | AdditionalSkillActAbilityEffect | 31 | 585 | yes | LuxBench.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Venus, Ashley's Kioku |
 | ADDITIONAL_TURN_UNIT_ACT | AdditionalTurnUnitActAbilityEffect | 17 | 99 | yes | PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Rain, Concentrated Missile Fire |
 | ADD_BUFF_TURN | AddBuffTurnUnitState | 23 | 0 | yes | PvPTeam.ts, effectText.ts | Baldamente Fortissimo, Buon Natale Grazioso, Carnival Cuddleboom |
 | ADD_BUFF_TURN_IMM | AddBuffTurnImmAbilityEffect | 2 | 16 | yes | PvPTeam.ts | Absolute Venus, Scorchin' Summer Spike |

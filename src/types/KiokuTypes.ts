@@ -682,4 +682,7 @@ export interface BattleState {
     trueActorUnit?: KiokuState
     mainTargetUnit?: KiokuState
     notice?: AffectedUnitNotice
+    // No EachTargetUnit in the holder's bundle (state activity outside the holder's own effect Triggering):
+    // EACH_TARGET conditions are false (Condition.IsMatchCondition 0x17eca80, case 8, ConditionUseType SkillActive).
+    eachTargetUnset?: boolean
 }

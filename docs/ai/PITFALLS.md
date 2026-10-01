@@ -52,12 +52,20 @@
   Mapping them through `elementMap`/`roleMap` silently made every element/role condition false for real units.
 - A friendly effect reaches `applyEffect` with the caster as placeholder target; conditions about "each target"
   must be checked on the widened targets, not on the placeholder (Attacker-only buffs never applied).
+- EachTarget belongs to the effect's USER only (eachTargetCtx.user): don't hand it to every unit's state checks during a
+  launch (the defender's own EachTarget states would see itself), and don't fall back to the holder when none is set
+  (a null EachTarget is false for state activity, true only for start conditions). Wrap any new per-target effect
+  loop in `withEachTarget(user, target, ...)`.
+- Condition operators: read the Check case before claiming one is ignored. IsElementType/IsRoleType honor NotEqual
+  (BoolValueComparer), and a code comment once said the opposite while marked confirmed.
+- Team SP goes through `PvPTeam.addSp` (clamped 0..6); never `currentSp +=`.
 - Every damage event pushed to the eventLog needs `sourcePos` (and `vortex` when it pops vortexes): the Kioku Grid
   bench attributes damage by slot. `additionalHit` once lacked it, so additional damage silently dropped out.
 - Enemy break rate: `breakParams` reads `enemy.breakMst` live; a probe that only sets `breakedDamageReceiveRate` falls
   back to the table's max (100% for most) on the next hit. Override `breakMst` too (LuxBench does).
 - Who dealt a hit: use `BattleEvent.sourcePos` (names repeat, e.g. several Lux). A popped vortex is inside the
   popping hit's `amount` (`vortex` field) and also logged as its owner's `dot` event; subtract it when attributing.
+  The `dot` event is display-only: in the game the vortex counts in the popping hit's notice, the owner gets nothing.
 - "Infinite SP" can't be literal: a battle skill that acts again at the same moment (Tenebrous Arcana's extra
   action, Thunder Torrent hasting herself) loops forever. LuxBench tops SP up to 5 only when nobody is due to act at
   the current moment.

@@ -411,6 +411,7 @@ export const conditionSetRequiresActorIsSelf = (eff: SkillDetail) =>
 // Every state on the unit: timed (activeEffectDetails) and permanent (passiveEffectDetails, e.g. an enemy's
 // "cannot be removed" LOCK_TURN_ORDER). The game keeps both in one UnitCondition state list.
 const unitStates = (u: KiokuState) => [...u.activeEffectDetails.values(), ...u.passiveEffectDetails.values()]
+// Every stored state's type, active or not (UnitCondition.StateList, see CompareContent.ABILITY_EFFECT).
 const unitStateTypes = (u: KiokuState): string[] =>
     [...u.activeEffectDetails.values(), ...u.passiveEffectDetails.values()].map(d => d.abilityEffectType)
 
@@ -451,9 +452,11 @@ function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state
         case CompareContent.IS_OPPONENT:
             return compareBool(cond.compareOperator, state.enemyTeam.kiokuStates.includes(battleUnit), cond.compareValue);
         case CompareContent.ABILITY_EFFECT: {
-            // [CONFIRMED] AbilityEffectListComparer over the unit's active EffectType
-            // list, prefix-matched (see compareAbilityEffectList above) - NOT the plain
-            // Array.includes the original file used.
+            // [CONFIRMED 3.19] BattleUnitConditionChecker.Check (0x17e3f10) content 12: UnitCondition.StateList (every
+            // state the unit holds - from skills and passives, timed and permanent, active or not) mapped to
+            // UnitStateBase.EffectType (lambda b__8_0 0xe0f070), then AbilityEffectListComparer (0x17df400): Contain =
+            // any EffectType StartsWith(CompareValue), NotContain = none. So "CURSE" matches CURSE_ATK/_DEF/_HP/_BREAK;
+            // stun is "STUN", weakness "WEAKNESS", vortex "VORTEX_ATK" (state names = ability effect types).
             const types = unitStateTypes(battleUnit);
             return compareAbilityEffectList(cond.compareOperator, types, cond.compareValue);
         }
@@ -483,16 +486,20 @@ function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state
             // confirmed; the exact source set-site and turn-consumption mechanics are not).
             return compareBool(cond.compareOperator, battleUnit.canNotAction, cond.compareValue);
         case CompareContent.IS_ELEMENT_TYPE:
-            // [CONFIRMED] BattleUnit.IsMatch(element): true iff the unit is a character
-            // AND its element equals the parsed CompareValue. Per the decompiled
-            // source, the comparison is ALWAYS "must equal true" regardless of
-            // compareOperator (EQUAL/NOT_EQUAL are not consulted for this content type)
-            // - implemented that way here rather than routed through compareBool.
-            // `kioku.data.element` is a KiokuElement STRING enum in this codebase, and CompareValue
-            // is the element's NAME in the data, not its id: see conditionElement.
-            return conditionElement(cond.compareValue) === battleUnit.kioku.data.element;
-        case CompareContent.IS_ROLE_TYPE:
-            return conditionRole(cond.compareValue) === battleUnit.kioku.data.role;
+        case CompareContent.IS_ROLE_TYPE: {
+            // [CONFIRMED 3.19] BattleUnitConditionChecker.Check (0x17e3f10) content 19/20:
+            //   new BoolValueComparer(unit.IsMatch(Enum.Parse<TargetElementType|TargetRoleType>(CompareValue)), true)
+            //   .Compare(CompareOperator) -> Equal: IsMatch, NotEqual: !IsMatch, anything else false (0x17e8240).
+            // BattleUnit.IsMatch (0x1388540 element / 0x13884b0 role): "NotSpecified" (0) matches every unit; else only
+            // a CharacterParameter unit (never an enemy) whose element / role equals it. The only NotEqual rows in use:
+            // set 349 (EachTarget is neither Buffer nor Debuffer), skill detail 200600401 DMG_RANDOM.
+            // CompareValue is the enum NAME ("Fire" = Flame, "Neutral" = Void, "Attacker", ...): see conditionElement.
+            const isElement = cond.compareContent === CompareContent.IS_ELEMENT_TYPE
+            const isMatch = cond.compareValue === "NotSpecified" || cond.compareValue === "0" || (!battleUnit.enemy && (isElement
+                ? conditionElement(cond.compareValue) === battleUnit.kioku.data.element
+                : conditionRole(cond.compareValue) === battleUnit.kioku.data.role))
+            return compareBool(cond.compareOperator, isMatch, "TRUE");
+        }
         case CompareContent.BREAK_DAMAGE_RECEIVE_RATE: {
             const rate = battleUnit.breakedDamageReceiveRate;
             return compareFloat(cond.compareOperator, rate, cond.compareValue);
@@ -796,6 +803,10 @@ function isMatchCondition(cond: BattleCondition, state: BattleState): boolean {
         case CompareTarget.MAIN_TARGET:
             return checkUnitCondition(mainTargetUnit ?? target, cond, state);
         case CompareTarget.EACH_TARGET:
+            // [CONFIRMED 3.19] Condition.IsMatchCondition (0x17eca80) case 8: a null EachTargetUnit is TRUE for
+            // ConditionUseType SkillStart (start conditions) and FALSE otherwise (BattleUnitConditionChecker.Check
+            // 0x17e3f10 on a null unit). State activity flags the null case with `eachTargetUnset`.
+            if (state.eachTargetUnset) return false;
             return checkUnitCondition(target, cond, state);
         case CompareTarget.FRIEND_TEAM:
             return checkTeamCondition(actorTeam, cond);
@@ -878,8 +889,10 @@ export function unitTypeConditionValues(csvs: (string | undefined)[]): { element
     for (const setId of csvs.flatMap(csv => (csv ?? "").split(","))) {
         for (const condId of (battleConditionSets[setId]?.battleConditionMstIdCsv ?? "").split(",")) {
             const cond = battleConditions[condId]
-            const element = cond?.compareContent === CompareContent.IS_ELEMENT_TYPE ? conditionElement(cond.compareValue) : undefined
-            const role = cond?.compareContent === CompareContent.IS_ROLE_TYPE ? conditionRole(cond.compareValue) : undefined
+            // Only "is X" (Equal) rows restrict a kit to X; "is not X" (NotEqual) rows don't.
+            if (cond?.compareOperator !== CompareOperator.EQUAL) continue
+            const element = cond.compareContent === CompareContent.IS_ELEMENT_TYPE ? conditionElement(cond.compareValue) : undefined
+            const role = cond.compareContent === CompareContent.IS_ROLE_TYPE ? conditionRole(cond.compareValue) : undefined
             if (element) elements.add(element)
             if (role) roles.add(role)
         }

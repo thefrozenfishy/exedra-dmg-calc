@@ -3,7 +3,8 @@
 import "../../src/models/BestTeamCalculator"; // must load first (import cycle outside Vite)
 import { kiokuData } from "../../src/utils/helpers";
 import { PvPKioku } from "../../src/models/PvPKioku";
-import { PvPTeam, KiokuState, currentLaunch } from "../../src/models/PvPTeam";
+import { PvPTeam, KiokuState, currentLaunch, elementNumberOf } from "../../src/models/PvPTeam";
+import { isConditionSetActiveForPvP } from "../../src/models/BattleConditionParser";
 import { PvPBattle } from "../../src/models/PvPBattle";
 import { getProcessedCtd } from "../../src/models/UnitStateEngine";
 import { TargetType, type SkillDetail } from "../../src/types/KiokuTypes";
@@ -91,6 +92,81 @@ for (const mates of [["Time Stop Strike", "Hollow Woman", "Ultra Great Big Hamme
     check(`Thunder Torrent battle skill never targets herself (${label})`,
         hasted.length === 1 && buffed.length === 1 && buffed[0] === hasted[0] && !buffed.includes(tt) && tt.turnGauge > 0,
         `hasted [${hasted.map(u => u.kioku.name)}], DMG up on [${buffed.map(u => u.kioku.name)}], her own gauge ${tt.turnGauge.toFixed(2)} (want one teammate for both, gauge > 0)`)
+}
+
+// 4. EachTargetUnit: every effect's Triggering sets the USER's bundle EachTarget to the target it processes and clears it
+//    after (DamageAbilityEffectBase.Triggering 0x18ef650, ...); the defender's bundle never gets it, and a null
+//    EachTarget makes EACH_TARGET conditions false for state activity (Condition.IsMatchCondition 0x17eca80, case 8).
+//    "DMG dealt to cursed enemies" (active condition set 345: EachTarget.AbilityEffect contains CURSE).
+{
+    const { t1, t2, a } = fresh()
+    const probe = { abilityEffectType: "UP_GIV_DMG_RATIO", value1: 400, activeConditionSetIdCsv: "345", startConditionSetIdCsv: "", range: -1, element: 0, role: 0 } as Partial<SkillDetail>
+    put(a, "probe:each", probe)
+    const cursed = t2.kiokuStates[0]
+    put(cursed, "probe:curse", { abilityEffectType: "CURSE_ATK", value1: 1, activeConditionSetIdCsv: "", startConditionSetIdCsv: "" })
+    put(cursed, "probe:each", probe)  // the same state on the defender: never sees the attacker's EachTarget
+    const seen = new Map<KiokuState, [boolean, boolean]>()
+    for (const u of t2.kiokuStates) {
+        const orig = u.takeDamage.bind(u)
+        u.takeDamage = (n: number) => {
+            if (!seen.has(u)) seen.set(u, [a.isEffectCurrentlyActive(a.activeEffectDetails.get("probe:each")!), u.isEffectCurrentlyActive(u.activeEffectDetails.get("probe:each") ?? probe as SkillDetail)])
+            return orig(n)
+        }
+    }
+    const outside = a.isEffectCurrentlyActive(a.activeEffectDetails.get("probe:each")!)
+    act(t1, a, TargetType.specialId)
+    const onCursed = seen.get(cursed)?.[0], defender = seen.get(cursed)?.[1]
+    const others = [...seen].filter(([u]) => u !== cursed).map(([, [x]]) => x)
+    check("EachTarget = the attacker's current target (cond set 345)",
+        outside === false && onCursed === true && defender === false && others.length > 0 && others.every(x => !x),
+        `outside an effect ${outside} (want false), hitting the cursed enemy ${onCursed} (want true), on ${others.length} uncursed enemies [${others}] (want false), the cursed defender's own copy ${defender} (want false)`)
+}
+
+// 5. IsElementType / IsRoleType honor the operator: BoolValueComparer(IsMatch, true).Compare(op) (0x17e3f10, 0x17e8240).
+//    Set 349 = EachTarget is neither Buffer nor Debuffer (NotEqual rows).
+{
+    const { t1, a } = fresh()
+    const byRole = (role: string) => names.find(n => kiokuData[n].role === role)!
+    const res = ["Buffer", "Debuffer", "Attacker"].map(role => {
+        const u = new PvPTeam([mk(byRole(role))], "Ally").kiokuStates[0]
+        return [role, isConditionSetActiveForPvP(["349"], a.stateGen(a, u))] as const
+    })
+    check("IsRoleType NotEqual (cond set 349)", !res[0][1] && !res[1][1] && res[2][1], res.map(([r, v]) => `${r}: ${v}`).join(", ") + " (want false, false, true)")
+    void t1
+}
+
+// 6. Team SP: SpReferee.AddSp (0x15c04b0) = Clamp(sp + n, 0, 6).
+{
+    const { t1, a } = fresh()
+    t1.currentSp = 6
+    act(t1, a, TargetType.attackId)
+    const afterAttack = t1.currentSp
+    t1.currentSp = 4; t1.addSp(5)
+    const afterGain = t1.currentSp
+    t1.currentSp = 0; t1.addSp(-1)
+    check("team SP clamped to 0..6", afterAttack === 6 && afterGain === 6 && t1.currentSp === 0, `attack at 6 -> ${afterAttack}, 4 + 5 -> ${afterGain}, 0 - 1 -> ${t1.currentSp}`)
+}
+
+// 7. A popped vortex is part of the popping hit's notice (VortexProcess 0x18f0260, op_Addition in Triggering 0x18ef650).
+{
+    const { t1, t2, a } = fresh()
+    const owner = t1.kiokuStates[1]
+    for (const target of t2.kiokuStates)
+        target.passiveEffectDetails.set("vortex:probe", { abilityEffectType: "VORTEX_ATK", value1: 3000, value2: 1, turn: -1, applier: owner.kioku.name, _applierState: owner, _remainAttackCount: 1, activeConditionSetIdCsv: "", startConditionSetIdCsv: "" } as any)
+    const start = t1.eventLog.length
+    act(t1, a, TargetType.attackId)
+    const hit = t1.eventLog.slice(start).find(e => e.kind === "hit" && e.vortex)
+    const notice = t2.lastActionNotices.find(n => n.totalDamageValue > 0)
+    check("popped vortex counted in the hit's notice", !!hit && !!notice && notice.totalDamageValue >= hit.vortex! && notice.totalDamageValue === hit.amount + (hit.barrierAbsorbed ?? 0),
+        `hit ${hit?.amount} (vortex ${hit?.vortex}), notice total ${notice?.totalDamageValue}`)
+}
+
+// 8. Additional damage element: a non-character attacker deals it elementless (GetAdditionalDamageResult 0x15b4840).
+{
+    const { t1, a } = fresh()
+    const fakeEnemy = { enemy: {}, kioku: a.kioku } as unknown as KiokuState
+    check("additional damage element", elementNumberOf(a) > 0 && elementNumberOf(fakeEnemy) === 0, `character ${elementNumberOf(a)}, enemy ${elementNumberOf(fakeEnemy)} (want > 0, 0)`)
+    void t1
 }
 
 process.exit(failed ? 1 : 0);

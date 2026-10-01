@@ -1,11 +1,12 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-01 (skill-type-gated states + additional damage per launch, branch claude/actor-skill-type-3.19)._
+_Last updated: 2026-10-01 (EachTarget / start conditions / element-role operator / SP cap / vortex notice verified, branch claude/verify-priority-3.19)._
 
 ## Branches and uncommitted work in E:\exedra-dmg-calc
 
 | ref | state |
 |---|---|
+| `claude/verify-priority-3.19` | **Checked out 2026-10-01**, branched from main 7ce61a4 (= origin/main with PRs #14-#16). Decompile check of the 8 assumptions another session listed: EachTarget only in the user's bundle (null = false), per-target start conditions (SelectTargetsConditionCheck), IsElementType/IsRoleType honor NotEqual, additional damage has no giver check, ailment prefix match over all states, vortex damage in the popping hit's notice, team SP clamped 0..6, enemy additional damage elementless. Fixtures 6/6, checkMechanics 13/13 (the 5 new ones fail on 7ce61a4), type-check 231 = baseline, 114-kioku smoke run clean. Not pushed. |
 | `claude/actor-skill-type-3.19` | **Checked out 2026-10-01**, branched from main (9346192). Unit-state conditions see the running skill launch (ActorSkillType / IsActor / MainTarget, `activeLaunch`), ADDITIONAL_DAMAGE / TSUBAME_LINK once per launch per opponent hit, MaxDamage per-column skill-type filtering + one additional hit per enemy, `scripts/sim/checkMechanics.ts`. Fixtures 6/6, checkMechanics 5/5, type-check at the 232 baseline, 114-kioku PvP smoke run clean. Not pushed; for the user to merge into main. |
 | `main` | 3 commits ahead of origin/main on 2026-10-01: contains all of battle-engine-3.19 plus the PvE simulator UI (merged claude/hopeful-edison-k78vto) and the Max Damage work. |
 | `battle-engine-3.19` | **Rebased onto origin/main (61aed43) on 2026-09-30**; old tip kept as `backup/battle-engine-3.19-pre-rebase`. On top of main: `6dd3b51` PvE summons, Solo Raid link HP/endless/countdown, form changes; `49cad71` heal/EP/ailment-roll formulas, DMG_RANDOM, UP_HP_RATIO, **condition sets OR'd** (main still ANDs them, so e.g. Time Stop Strike's Magic passive never fires on main); KB commits; Time Stop Strike fixture. Not pushed; `origin/battle-engine-3.19` is now stale (a push would need --force). Merging into main: docs/ai/EFFECT_TYPES.md will conflict (each branch has its own) - regenerate with `xq build`. |
@@ -54,6 +55,12 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-01 (7): (claude/verify-priority-3.19) checked another session's 8 open assumptions in the decompile. Fixed: EachTarget
+  given to every unit / falling back to the holder (now user-only, null = false, also for passives and heals); IS_ROLE /
+  IS_ELEMENT NotEqual (set 349, skill detail 200600401, inverted before); team SP uncapped (now 0..6); vortex damage
+  missing from the hit's notice (DMG 101 / team 304); enemy additional damage used the enemy's element (now none).
+  Confirmed as implemented: per-target start conditions, additional damage on its giver, ailment prefix match.
+  checkMechanics #4-#8 added. MECHANICS 2/6/10/13, PITFALLS, CODE_MAP.
 - 2026-10-01 (6): Kioku Grid bench Lux back to A5 max levels (user request); no-buff supports read about -3.5% in Average
   Damage from her A1 follow-up timing (hidden by the >1% support filter). Cache version 4.
 - 2026-10-01 (5): engine: state active conditions see the processed target as EachTarget ("DMG to cursed enemies"
