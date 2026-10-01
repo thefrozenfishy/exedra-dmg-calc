@@ -5,7 +5,7 @@
 // Bump LUX_BENCH_VERSION whenever the engine or the bench changes the numbers; older entries are then dropped.
 import type { BenchRow } from "../models/LuxBench"
 
-export const LUX_BENCH_VERSION = 1
+export const LUX_BENCH_VERSION = 2
 
 const STORAGE_KEY = "kiokuGridBenchCache"
 const MAX_SETUPS = 8 // most recently used setups kept (chart x enemies x levels mode ...)
