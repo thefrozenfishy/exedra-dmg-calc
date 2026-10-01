@@ -72,6 +72,11 @@ export class BattleRng {
         this.decisions = decisions instanceof Map ? decisions : new Map(Object.entries(decisions ?? {}).map(([k, v]) => [Number(k), v]))
     }
 
+    // The uniform draw [0, 1) behind a "seed"-mode roll. Subclasses may draw per roll label (see LuxBench).
+    protected draw(_kind: RngKind, _label: string): number {
+        return this.generator()
+    }
+
     private stored(kind: RngKind, label: string): RngDecision | undefined {
         const d = this.decisions.get(this.nextIndex)
         return d && d.kind === kind && d.label === label ? d : undefined
@@ -93,7 +98,7 @@ export class BattleRng {
         let outcome: boolean
         let decided = false
         if (this.mode === "seed") {
-            const r = this.generator()
+            const r = this.draw(kind, label)
             outcome = hits ? hits(r) : r * 100 < probability
         } else {
             const d = this.mode === "manual" ? this.stored(kind, label) : undefined
@@ -116,7 +121,7 @@ export class BattleRng {
         let outcome = defaultOutcome
         let decided = false
         if (this.mode === "seed") {
-            outcome = weightedIndex(w, this.generator())
+            outcome = weightedIndex(w, this.draw(kind, label))
         } else if (this.mode === "manual") {
             const d = this.stored(kind, label)
             if (d && typeof d.value === "number" && w[d.value] > 0) { outcome = d.value; decided = true }

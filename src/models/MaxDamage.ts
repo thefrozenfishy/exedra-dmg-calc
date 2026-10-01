@@ -48,6 +48,7 @@ export interface MaxDmgOptions {
     broken?: boolean[]            // per enemy: evaluate as broken
     breakRate?: (number | undefined)[] // per enemy broken damage rate in % (default: the enemy's max)
     mainTargetIdx?: number        // single-target skills hit this enemy
+    onlyPos?: number              // evaluate only this member as the attacker (the others get no skills)
 }
 
 export interface SkillDamage {
@@ -203,6 +204,10 @@ export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearan
 
     // Each member is evaluated as "the attacker" with the whole team's buffs on it.
     for (let pos = 0; pos < allies.length; pos++) {
+        if (opts.onlyPos !== undefined && pos !== opts.onlyPos) {
+            members.push({ pos, name: allies[pos].name, skills: [], best: undefined })
+            continue
+        }
         const team1 = new PvPTeam(allies, "Ally", false, bt)
         const team2 = new PvPTeam(enemyKiokus(enemies), "Enemy", false, bt)
         team1.finishSetup(team2); team2.finishSetup(team1)
@@ -252,7 +257,7 @@ export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearan
                 t.breakedDamageReceiveRate = opts.breakRate?.[i] ?? Math.trunc(t.breakParams.maxRate / 10)
             }
         })
-        if (pos === 0) enemySummary = targets.map(t => ({
+        if (!enemySummary.length) enemySummary = targets.map(t => ({
             name: t.kioku.name, hp: t.maxHp, def: t.kioku.getBaseDef(), broken: t.isBroken,
             breakRate: t.isBroken ? t.breakedDamageReceiveRate : 100, canBreak: t.maxBreakGauge >= 1,
         }))

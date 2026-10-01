@@ -1,6 +1,6 @@
 import { Ailment, KiokuRole } from "../types/enums";
-import { type AffectedUnitNotice, type BattleEvent, BattleState, aggro, maxMeters, mpGainFromAction, PassiveSkill, SkillDetail, skillDetailId, SkillKey, targetRange, TargetType, targetTypeToLvl, TargetTypeLookup } from "../types/KiokuTypes";
-import { skillDetails } from "../utils/helpers";
+import { type AffectedUnitNotice, type BattleEvent, BattleState, aggro, maxMeters, mpGainFromAction, PassiveSkill, SkillDetail, skillDetailId, targetRange, TargetType, targetTypeToLvl, TargetTypeLookup } from "../types/KiokuTypes";
+import { skillDetailsByMstId } from "../utils/helpers";
 import { isConditionSetActive, isConditionSetActiveForPvP, isActiveConditionSetMet, isTimingActive as isTimingCorrect, ProcessTiming, conditionSetRequiresActorIsSelf } from "./BattleConditionParser";
 import { PvPKioku } from "./PvPKioku";
 import { damageBaseTypeFromEffectType, getAttackDamageResult, getSlipDamageResult, getAdditionalDamageBase, getFinalDamageExtra, damageCutByBarrier, DamageBaseType, BattleType, PVP_POLICY } from "./DamageCalculator";
@@ -590,7 +590,7 @@ export class KiokuState {
                 })
                 const dmg = v.team.modeChangeDamageCut(v, Math.max(0, Math.min(r.finalDamage, v.currentHp - 1)))
                 const lost = v.takeDamage(dmg)
-                this.team.eventLog.push({ kind: "hit", source: `${this.kioku.name} (reflect)`, target: v.kioku.name, amount: lost, sourceIsTeam1: this.team.isTeam1, targetIsTeam1: v.team.isTeam1, targetPos: v.posIdx })
+                this.team.eventLog.push({ kind: "hit", source: `${this.kioku.name} (reflect)`, target: v.kioku.name, amount: lost, sourceIsTeam1: this.team.isTeam1, sourcePos: this.posIdx, targetIsTeam1: v.team.isTeam1, targetPos: v.posIdx })
                 v.lastNotice = mergeNotice(v.lastNotice, { ...emptyNotice(), totalDamageValue: lost, isReceivedReflection: true })
             }
         }
@@ -609,7 +609,7 @@ export class KiokuState {
             const dmg = getSlipDamageResult(owner, this, { ...d, element: 2 }, DamageBaseType.ATK, this.team.battleType)
             total += dmg
             this.getMp(2)
-            this.team.eventLog.push({ kind: "dot", source: `${owner.kioku.name} (vortex)`, target: this.kioku.name, amount: dmg, sourceIsTeam1: owner.team.isTeam1, targetIsTeam1: this.team.isTeam1, targetPos: this.posIdx })
+            this.team.eventLog.push({ kind: "dot", source: `${owner.kioku.name} (vortex)`, target: this.kioku.name, amount: dmg, sourceIsTeam1: owner.team.isTeam1, sourcePos: owner.posIdx, targetIsTeam1: this.team.isTeam1, targetPos: this.posIdx })
         }
         return total
     }
@@ -930,7 +930,7 @@ export class KiokuState {
             const dmg = getSlipDamageResult(applier, this, detail, damageBaseType, this.team.battleType)
             const lost = this.takeDamage(dmg)
             if (!this.isDead) this.getMp(2)
-            this.team.eventLog.push({ kind: "dot", source: applier.kioku.name, target: this.kioku.name, amount: lost, sourceIsTeam1: applier.team.isTeam1, targetIsTeam1: this.team.isTeam1, targetPos: this.posIdx })
+            this.team.eventLog.push({ kind: "dot", source: applier.kioku.name, target: this.kioku.name, amount: lost, sourceIsTeam1: applier.team.isTeam1, sourcePos: applier.posIdx, targetIsTeam1: this.team.isTeam1, targetPos: this.posIdx })
         }
     }
 
@@ -1276,7 +1276,7 @@ export class KiokuState {
                 : f32(target.maxHp * f32(f32((detail as any).value2 ?? 0) / 1000))
             const dmg = target.team.modeChangeDamageCut(target, Math.max(0, Math.min(Math.floor(base), target.currentHp - 1)))
             const hpLost = target.takeDamage(dmg)
-            this.team.eventLog.push({ kind: "hit", source: this.kioku.name, target: target.kioku.name, amount: hpLost, sourceIsTeam1: this.team.isTeam1, targetIsTeam1: target.team.isTeam1, targetPos: target.posIdx })
+            this.team.eventLog.push({ kind: "hit", source: this.kioku.name, target: target.kioku.name, amount: hpLost, sourceIsTeam1: this.team.isTeam1, sourcePos: this.posIdx, targetIsTeam1: target.team.isTeam1, targetPos: target.posIdx })
             target.lastNotice = mergeNotice(target.lastNotice, { ...emptyNotice(), totalDamageValue: hpLost, isReceivedAttack: true })
             return
         }
@@ -1294,7 +1294,7 @@ export class KiokuState {
             // [CONFIRMED 3.19] BattleDamageCalculator.IsDamageDisabled (0x1381490): a unit holding UNIQUE_ENEMY_639002 takes
             // 0 damage (CreateByDisabledDamageHit).
             if (target.hasState("UNIQUE_ENEMY_639002")) {
-                this.team.eventLog.push({ kind: "hit", source: this.kioku.name, target: target.kioku.name, amount: 0, sourceIsTeam1: this.team.isTeam1, targetIsTeam1: target.team.isTeam1, targetPos: target.posIdx })
+                this.team.eventLog.push({ kind: "hit", source: this.kioku.name, target: target.kioku.name, amount: 0, sourceIsTeam1: this.team.isTeam1, sourcePos: this.posIdx, targetIsTeam1: target.team.isTeam1, targetPos: target.posIdx })
                 target.lastNotice = mergeNotice(target.lastNotice, { ...emptyNotice(), isReceivedAttack: true })
                 return
             }
@@ -1332,7 +1332,8 @@ export class KiokuState {
             const wasAlive = !target.isDead
             // [CONFIRMED 3.19] VortexProcess (0x18f0260): after the damage calc, every vortex on the target counts the hit;
             // the ones that reach 0 pop now (their damage joins this hit's).
-            totalDamage += target.popVortex()
+            const vortex = target.popVortex()
+            totalDamage += vortex
             const hpLost = target.takeDamage(totalDamage)
             target.chargeByReceiveDamage()
             if (wasAlive && target.isDead) this.getMp(10)
@@ -1342,8 +1343,8 @@ export class KiokuState {
             this.team.eventLog.push({
                 kind: "hit", source: this.kioku.name, target: target.kioku.name, amount: hpLost,
                 barrierAbsorbed: result.barrierAbsorbed, isCritical: result.isCritical,
-                sourceIsTeam1: this.team.isTeam1, targetIsTeam1: target.team.isTeam1, targetPos: target.posIdx,
-                breakDamage: brk.decreased, broke: brk.broke, breakRateUp: rateUp || undefined,
+                sourceIsTeam1: this.team.isTeam1, sourcePos: this.posIdx, targetIsTeam1: target.team.isTeam1, targetPos: target.posIdx,
+                breakDamage: brk.decreased, broke: brk.broke, breakRateUp: rateUp || undefined, vortex: vortex || undefined,
             })
             // Notice flags read by AttackEnd conditions: 302 counts notices that carry break
             // bonus info (the unit broke THIS skill), 108/308 the broken rate reaching its max.
@@ -1832,8 +1833,9 @@ export function isPvpLikeBattle(bt: BattleType): boolean {
     return bt === BattleType.Pvp || bt === BattleType.Gvg
 }
 
-function getDetails(map: Record<any, SkillDetail>, key: SkillKey, id: number, lvl: number): SkillDetail[] {
-    return Object.values(map).filter(v => (v as any)[key] === id * 100 + lvl);
+// Same entries, in the same order, as scanning skillDetails for skillMstId === id*100+lvl (the index is built from it).
+function getDetails(id: number, lvl: number): SkillDetail[] {
+    return (skillDetailsByMstId.get(id * 100 + lvl) ?? []) as SkillDetail[];
 }
 
 export class PvPTeam {
@@ -2402,7 +2404,7 @@ export class PvPTeam {
         // at the same level as the original). E.g. Final Fatebloom's battle skill becomes 7008
         // (+10 EP) while Abyssal Rose (UNIQUE_BUFF 18) is on her.
         const skillId = actor.switchedSkillId(effectName) ?? actor.kioku.data[TargetTypeLookup[effectName]]
-        const details = getDetails(skillDetails, "skillMstId", skillId, actor.kioku[targetTypeToLvl[effectName]])
+        const details = getDetails(skillId, actor.kioku[targetTypeToLvl[effectName]])
         return this.completeAction(actor, effectName, details)
     }
 
@@ -2659,7 +2661,7 @@ export class PvPTeam {
 
     triggerFua(actionIds: FuaMap): void {
         Object.entries(actionIds).forEach(([actionId, { caster, triggerTarget }]) => {
-            const details = Object.values(skillDetails).filter(v => (v as any).skillMstId === Number(actionId))
+            const details = (skillDetailsByMstId.get(Number(actionId)) ?? []) as SkillDetail[]
             // [CONFIRMED 3.19] AdditionalSkillActAbilityEffectBase$$Triggering (0x18ea740): no
             // follow-up from a unit that is broken or can't act, and none while the same unit's
             // same follow-up skill is already executing or queued (this is what stops e.g. a

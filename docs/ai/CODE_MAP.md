@@ -19,9 +19,10 @@ Function names, not line numbers (lines drift). Find any symbol with `python3 sc
 | `BattleConditionParser.ts` | BattleCondition.* checkers | Enums `ProcessTiming`, `CompareContent`, `CompareOperator`, `CompareTarget`; `checkUnitCondition` / `checkTeamCondition` / `checkOtherCondition` (one `case` per content), `isMatchCondition` (target dispatch), `isConditionSetActive*`. |
 | `BreakPoint.ts` | BreakPoint, DamageAbilityEffectBase break parts | Break decrease tables, `calculateProcessedBreakPointDamage`, `decreaseBreakPoint`, `increaseBreakedDamageReceiveRate`, `SkillType`. |
 | `AITargetSelector.ts` | AISkillTargetSelector, UnitBrain.TargetingUnits | Unit filters (`filterByBreak`, `filterWithMaxAtk`, role weights, hate), `selectTargetUnitInOrder`, per-effect filter orders. |
-| `BattleRng.ts` | (sim only) | Every random decision: modes seed/hit/miss/manual, `chance`, `choose`, `pickTarget`, `PendingDecision` (manual PvE picks), recorded `RngEvent`s. |
+| `BattleRng.ts` | (sim only) | Every random decision: modes seed/hit/miss/weighted/manual, `chance`, `choose`, `pickTarget`, `PendingDecision` (manual PvE picks), recorded `RngEvent`s. Subclasses can override `draw(kind, label)` (the seed-mode uniform draw); `PvPBattle` takes one via `BattleOptions.rng`. |
 | `EffectTargetSide.ts`, `StateAddFilter.ts` | generated from the dump | Target side per effect type; CanAddTo role/element filter class per state. Regenerate, don't hand-edit. |
-| `MaxDamage.ts`, `PvEScore.ts` | - | Max-damage estimate page, score estimate. |
+| `MaxDamage.ts`, `PvEScore.ts` | - | Max-damage estimate page, score estimate. `computeMaxDamage(..., { onlyPos })` evaluates one member only. |
+| `LuxBench.ts` | - | Kioku Grid beta charts: Lux☆Magica (A0) bench against 3000-DEF dummies (weak to all, broken 500%, SPD 1). `ultimateDamage` (Max Burst via computeMaxDamage), `simulatedDealerDamage` (auto battle for N AV, counts only the dealer slot's `hit`/`dot` events by `sourcePos`, minus popped `vortex`; per-label RNG streams `LabelStreamRng`), `kitRestrictions` (elements/roles a kit's effects are limited to), `LuxBenchCharts` (support/attacker gains, baselines cached). Run in `src/workers/luxBenchWorker.ts`. |
 | `ScoreAttackTeam.ts`, `ScoreAttackKioku.ts`, `Kioku.ts`, `BestTeamCalculator.ts` | - | The OLD closed-form Score Attack calculator (Best SA Team / Single Battle pages). Not the engine. Useful hints only. `Kioku.ts` is the base class of PvPKioku (stats). |
 
 Type lists at the top of `PvPTeam.ts`: `friendlySkills` / `enemySkills` (effect types by side, the "RECOGNIZED ONLY"
@@ -82,6 +83,7 @@ it looks redundant.
 | `/pvp-simulator` "PvP Simulator" | `src/pages/PvpTeamPage.vue` | PvPBattle; RNG modes (`RngControls.vue`), export/import (`src/utils/pvpExport.ts`), `BattleTimeline.vue` |
 | `/pve-simulator` "PvE Simulator" (beta only: `isBeta()` in `src/utils/betaSettings.ts`, toggled on `/beta`) | `src/pages/PvESimulatorPage.vue` | createPvEBattle, stage picker (`StagePicker.vue`), Auto/Manual control, Solo Raid panel (stash); saved/shared teams (`store/savedTeams.ts`, kind `pve`) carry the whole setup incl. decisions (`utils/pveSetup.ts`); Max Damage runs against the wave's start units only (`waveStartUnits`: endless waves list backups beyond 5), effect cards are grouped by `MaxDmgEffect.source` (passives resolved to Ability/Ascension/Crystalis/Portrait/Support) and use `utils/effectText.ts` + `MaxDmgEffect.reach`; RNG mode `weighted` = rolls happen iff p >= 50% |
 | `/sa-simulator-single` "Single Battle Calculator" | `SingleTeamPage.vue` | OLD ScoreAttackTeam formula (restored on user request, keep it) |
+| `/kioku-grid` "Kioku Grid" | `KiokuGridPage.vue` | Legacy bar charts use the OLD formula; beta-only (`isBeta()`) "(battle engine)" copies use `LuxBench.ts` in one worker per chart (`luxBenchWorker.ts`): Max Burst first, then Average Damage (300 AV, 10 seeds) per character |
 | `/sa-simulator-multiple` "Best SA Team" | `BestTeamPage.vue` | OLD formula + workers |
 
 Exports: PvP `format` default, PvE `format: "exedra-pve-sim"`; both carry teams, seed, rngMode, decisions,

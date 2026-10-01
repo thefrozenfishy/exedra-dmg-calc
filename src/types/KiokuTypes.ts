@@ -297,6 +297,8 @@ export interface BattleEvent {
     barrierAbsorbed?: number
     isCritical?: boolean
     sourceIsTeam1?: boolean
+    sourcePos?: number       // source's slot index (names can repeat on a team, e.g. several Lux)
+    vortex?: number          // part of a hit's amount from vortexes it popped (also logged as their owners' "dot" events)
     targetIsTeam1: boolean
     targetPos?: number       // target's slot index (names can repeat on a team)
     breakDamage?: number     // break gauge removed by this hit (after give/receive modifiers)
