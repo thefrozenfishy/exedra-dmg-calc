@@ -1964,9 +1964,11 @@ export class PvPTeam {
     manualTargeting = false
     // Scripted play for simulations that want a fixed play pattern (LuxBench), not game rules. allyActionPolicy picks
     // an auto ally's Battle Skill / Basic Attack (a Battle Skill without SP falls back to the default); allyTargetPolicy
-    // picks the ally target of a friendly single/proximity effect before any targeting rule.
+    // picks the ally target of a friendly single/proximity effect before any targeting rule; opponentTargetPolicy the
+    // same for opponent-side effects (the primary target of single and proximity skills).
     allyActionPolicy?: (actor: KiokuState) => TargetType.skillId | TargetType.attackId | undefined
     allyTargetPolicy?: (actor: KiokuState, detail: SkillDetail) => KiokuState | undefined
+    opponentTargetPolicy?: (actor: KiokuState, detail: SkillDetail) => KiokuState | undefined
 
     // Auto play: Battle Skill whenever the team has SP, unless allyActionPolicy says otherwise.
     private autoAllyAction(actor: KiokuState): TargetType {
@@ -2389,10 +2391,8 @@ export class PvPTeam {
             // --- Character-specific hardcoded kit targeting (pre-existing, unrelated to
             // the generic FULL AUTO system below - these bespoke rules take priority over
             // it exactly like the source's own character-unique classes would). ---
-            if (side === "friend") {
-                const forced = this.allyTargetPolicy?.(actor, detail)
-                if (forced && !forced.isDead) return forced
-            }
+            const forced = side === "friend" ? this.allyTargetPolicy?.(actor, detail) : this.opponentTargetPolicy?.(actor, detail)
+            if (forced && !forced.isDead) return forced
             const eligableTargets = this.kiokuStates.filter(k => k !== actor)
             // (Fixed: these used a placeholder object as the reduce seed and returned it when no
             // ally qualified, crashing on e.g. an all-dead or all-ready team. Now they fall back
