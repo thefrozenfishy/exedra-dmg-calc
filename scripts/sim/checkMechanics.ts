@@ -67,4 +67,30 @@ for (const type of [TargetType.attackId, TargetType.skillId, TargetType.specialI
         `${without.launches} launch(es), ${without.hits} hits without, ${withB.hits} with (want ${without.hits} + ${without.opponentsHit} opponents hit)`)
 }
 
+// 3. A battle-skill HASTE never targets its user: HasteAbilityEffect.GetAIFilteredTargets (0x18f4140) keeps only units
+//    with TurnGauge.GaugeValue > 0, and the AI decides before ResetTurnGaugeBeforeTurnUnitActExecute (0x17e1a70), while
+//    the turn unit's gauge is 0. The friendly pick is made against the whole team (UnitBrain.TargetingUnits 0x17f2ea0),
+//    and the skill's other friendly effect (UP_GIV_DMG_RATIO) lands on the same unit. Regression: Thunder Torrent
+//    (Rapid Pulse, skill 1066) hasted herself every turn - first with no Attacker/Breaker teammate (generic AI path),
+//    then with one (her kit-specific rule).
+for (const mates of [["Time Stop Strike", "Hollow Woman", "Ultra Great Big Hammer", "Judgement Earth"],
+                     [attackerName, "Time Stop Strike", "Hollow Woman", "Judgement Earth"]]) {
+    const t1 = new PvPTeam(["Thunder Torrent", ...mates].map(mk), "Ally")
+    const t2 = new PvPTeam(names.slice(10, 15).map(mk), "Enemy")
+    const battle = new PvPBattle(t1, t2, false, 4242)
+    t1.snapshotHook = t2.snapshotHook = undefined
+    const tt = t1.kiokuStates[0]
+    for (const u of [...t1.kiokuStates, ...t2.kiokuStates]) { u.turnGauge = u === tt ? 0 : 40; u.currentMp = 0 }
+    t1.currentSp = 5
+    const giv = (u: KiokuState) => [...u.activeEffectDetails.values()].some((d: any) => d.abilityEffectType === "UP_GIV_DMG_RATIO" && d.applier === "Thunder Torrent")
+    const before = new Map(t1.kiokuStates.map(u => [u, giv(u)]))
+    battle.executeNextAction()
+    const hasted = t1.kiokuStates.filter(u => u !== tt && u.turnGauge === 0)
+    const buffed = t1.kiokuStates.filter(u => giv(u) && !before.get(u))
+    const label = mates.includes(attackerName) ? "with an Attacker teammate" : "no Attacker/Breaker teammate"
+    check(`Thunder Torrent battle skill never targets herself (${label})`,
+        hasted.length === 1 && buffed.length === 1 && buffed[0] === hasted[0] && !buffed.includes(tt) && tt.turnGauge > 0,
+        `hasted [${hasted.map(u => u.kioku.name)}], DMG up on [${buffed.map(u => u.kioku.name)}], her own gauge ${tt.turnGauge.toFixed(2)} (want one teammate for both, gauge > 0)`)
+}
+
 process.exit(failed ? 1 : 0);

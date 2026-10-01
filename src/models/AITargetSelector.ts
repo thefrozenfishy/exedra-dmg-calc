@@ -438,13 +438,32 @@ function removeStateFamilyChain(): AIChain {
     return { chain: [filterByMainTarget, filterWithMinHpRate] };
 }
 
+// Turn gauge the AI sees when it decides a TurnUnitAct's targets. The game decides before
+// ResetTurnGaugeBeforeTurnUnitActExecute (0x17e1a70); the TS turn flow resets first (PvPTeam.useAttackOrSkill),
+// so it records the pre-reset value here for the turn unit until its skill's targets are resolved.
+const decisionGauge = new WeakMap<KiokuState, number>()
+export function setAIDecisionGauge(unit: KiokuState, gauge: number | undefined): void {
+    if (gauge === undefined) decisionGauge.delete(unit)
+    else decisionGauge.set(unit, gauge)
+}
+const aiDecisionGauge = (u: KiokuState): number => decisionGauge.get(u) ?? u.turnGauge
+
 // [CONFIRMED] ReDriveBattleCore.AbilityEffect.HasteAbilityEffect - backs HASTE.
 // SelectTargetInAIAction chain: UnitFilterByMainTarget (PvE no-op),
 // UnitFilterByRoleAttackerOrBreaker, UnitFilterWithLastTurnOrder (help whoever acts last).
 // [CORRECTED] the third filter was missed on the first pass for the same regex reason
 // documented on removeAllBuffChain above - re-read and confirmed present.
+// [CONFIRMED 3.19] HasteAbilityEffect.GetAIFilteredTargets (0x18f4140): living units (<>c.b__5_0 = !IsDead), then
+// (when any) only those with TurnGauge.GaugeValue > 0 (<>c.b__5_1 0x1903500: `0f < unit.TurnGauge.GaugeValue`) - no
+// fallback when that empties the list. The AI picks the target while building the TurnUnitAct
+// (GameDirectorBase.Forward: CommandDecideSkillContent, then ResetTurnGaugeBeforeTurnUnitActExecute 0x17e1a70, then
+// ExecuteSkill), i.e. while the turn unit's own gauge is still 0, so a battle-skill haste never lands on its user.
+// The TS engine resets the gauge before resolving targets: see setAIDecisionGauge.
 function hasteChain(): AIChain {
-    return { chain: [filterByMainTarget, filterByRoleAttackerOrBreaker, filterWithLastTurnOrder] };
+    return {
+        preFilter: (units) => units.filter(u => aiDecisionGauge(u) > 0),
+        chain: [filterByMainTarget, filterByRoleAttackerOrBreaker, filterWithLastTurnOrder],
+    };
 }
 
 // [CONFIRMED] ReDriveBattleCore.AbilityEffect.SlowAbilityEffect - backs SLOW.

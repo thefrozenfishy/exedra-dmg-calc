@@ -12,7 +12,7 @@ import { EFFECT_TARGET_SIDE, NEGATIVE_STATE_TYPES } from "./EffectTargetSide";
 import { UPDATEABLE_STATE_TYPES, CONSUME_ON_ATTACK_STATE_TYPES } from "./StateInterfaces";
 import uniqueStateLevelJson from "../assets/base_data/getUniqueStateLevelMstList.json";
 import skillMstJson from "../assets/base_data/getSkillMstList.json";
-import { selectFullAutoTarget, expandProximity, filterAlive, legalTargetPool } from "./AITargetSelector";
+import { selectFullAutoTarget, expandProximity, filterAlive, legalTargetPool, setAIDecisionGauge } from "./AITargetSelector";
 import { BattleRng, rollChoice, type RngSource } from "./BattleRng";
 import { UNIT_STATE_TYPES } from "./StateAddFilter";
 import { SkillType, getVariationBreakPoint, decreaseBreakPoint, increaseBreakedDamageReceiveRate } from "./BreakPoint";
@@ -2548,6 +2548,8 @@ export class PvPTeam {
         actor.tickHotEffects()
         let effType = actor.enemy || this.currentSp ? TargetType.skillId : TargetType.attackId
         this.fireTiming(ProcessTiming.TURN_START, actor, undefined, effType)
+        // The AI picks this act's targets before the reset in the game (see setAIDecisionGauge).
+        setAIDecisionGauge(actor, actor.turnGauge)
         actor.resetDistanceRemaining()
         // [RECONSTRUCTED - see KiokuState.canNotAction] a stunned unit's turn still comes
         // up (gauge already reset above) and TURN_START passives still fire, but the
@@ -2599,6 +2601,7 @@ export class PvPTeam {
             }
             actor.currentComboActionStep = 0
         }
+        setAIDecisionGauge(actor, undefined)
         // [CONFIRMED 3.19] ActExecutor$$TurnEnd: TurnEnd passives (actor = this unit), then the
         // unit's states pass one turn (BattleUnit.PassingTurn(1)). Ultimates and follow-ups have
         // no TurnEnd, so they don't tick durations.
@@ -2621,6 +2624,7 @@ export class PvPTeam {
         // [CONFIRMED 3.19] ActExecutor$$ExecuteSkill: the skill, then AttackEnd passives for every
         // living unit (actor, main target, skill passed along), then queued follow-ups.
         const skillFuas = this.act(actor, effType, enemySkillId)
+        setAIDecisionGauge(actor, undefined)
         const skillLabel = enemySkillId !== undefined ? skillName(enemySkillId) : undefined
         const comboLabel = [actor.currentComboActionStep ? `Combo ${actor.currentComboActionStep}` : turnLabel, skillLabel].filter(Boolean).join(" · ") || undefined
         this.fireTiming(ProcessTiming.ATTACK_END, actor, this.lastMainTarget, effType, () => this.recordAction(actor, effType, comboLabel))
