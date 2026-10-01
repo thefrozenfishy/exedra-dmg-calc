@@ -13,6 +13,7 @@ export interface LuxBenchJob {
     enemies: number     // attacker chart: 1, 3 or 5 (the support chart always uses one)
     seeds: number
     av: number
+    infiniteSp: boolean
 }
 
 export type LuxBenchMessage =
@@ -28,7 +29,7 @@ const toInput = (c: Character) => ({ ...c, portrait: undefined, supportKey: unde
 self.onmessage = (e: MessageEvent<LuxBenchJob>) => {
     const job = e.data
     const post = (m: LuxBenchMessage) => self.postMessage(m)
-    const bench = new LuxBenchCharts(toInput(job.lux), { seeds: job.seeds, av: job.av })
+    const bench = new LuxBenchCharts(toInput(job.lux), { seeds: job.seeds, av: job.av, infiniteSp: job.infiniteSp })
     const units = new Map<number, PvPKioku>()
     const failed = new Set<number>()
 

@@ -628,7 +628,7 @@ const metricIndex = computed(() => metricOptions.findIndex(opt => opt.value === 
 const benchAverageDmg = useSetting("gridBenchAverageDmg", false)
 const benchMetricOptions = [
     { value: false, label: "Max Burst", title: "How much the Ultimate's dmg changes, every hit a crit, with all buffs and debuffs at full stacks" },
-    { value: true, label: "Average Damage", title: "How much the attacker's total dmg changes over 300 AV (3 turns) of auto battle, averaged over several battles" },
+    { value: true, label: "Average Damage", title: "How much the attacker's total dmg changes over 1000 AV (10 turns) of auto battle with SP refilled every turn, averaged over several battles" },
 ] as const
 const benchMetricIndex = computed(() => benchMetricOptions.findIndex(opt => opt.value === benchAverageDmg.value))
 
@@ -1595,7 +1595,8 @@ const attackerChart = computed(() => {
 
 const beta = isBeta()
 const BENCH_SEEDS = 10 // battles averaged per bar (the same seeds for Lux's baseline)
-const BENCH_AV = 300   // 3 turns
+const BENCH_AV = 1000  // 10 turns
+const BENCH_INFINITE_SP = true // SP topped up to 5 before every turn: a battle skill every turn, no SP shared out
 
 type BenchChartKind = LuxBenchJob["chart"]
 
@@ -1659,6 +1660,7 @@ const runBench = (kind: BenchChartKind) => {
         enemies: kind === "attacker" ? fightModeEnemies() : 1,
         seeds: BENCH_SEEDS,
         av: BENCH_AV,
+        infiniteSp: BENCH_INFINITE_SP,
     }
 
     const worker = new Worker(new URL("../workers/luxBenchWorker.ts", import.meta.url), { type: "module" })
@@ -1782,11 +1784,11 @@ const benchCharts = computed(() => [
         title: "Relative buff strength (battle engine)",
         fightType: false,
         desc: [
-            `How much each character increases the damage of a ${LuxMagica} attacker with no role and an element the character's buffs aren't limited to, measured with the battle engine. ${levelsDescription.value} ${LuxMagica} is A0 here, so her own ascension follow-up doesn't change with the team.`,
+            `How much each character increases the damage of a ${LuxMagica} attacker (a Light Breaker like herself, or another element/role when the character's buffs are limited to those), measured with the battle engine. ${levelsDescription.value} ${LuxMagica} is A0 here, so her own ascension follow-up doesn't change with the team.`,
             benchAverageDmg.value
-                ? `Average Damage: ${BENCH_AV} AV (3 turns) of auto battle with the character next to the attacker and three ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts (including additional damage it deals), never the rest of the team's. SP is shared, so a character that spends it can cost the attacker battle skills or its ultimate.`
+                ? `Average Damage: ${BENCH_AV} AV (${BENCH_AV / 100} turns) of auto battle with infinite SP (topped up to 5 every turn, so everyone can always use their battle skill), the character next to the attacker and three ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts (including additional damage it deals), never the rest of the team's.`
                 : `Max Burst: the attacker's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
-            `One enemy with 3000 def, weak to every element and broken (500% dmg taken). Element or role bonuses get their own bar when they change the result, so a bonus can show in one metric only: buffs from a support's own ultimate rarely land within 3 turns, and crit rate or procs (chains, follow-ups) don't change Max Burst.`,
+            `One enemy with 3000 def, weak to every element and broken (500% dmg taken). Element or role bonuses get their own bar when they change the result, so a bonus can show in one metric only: crit rate or procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
         ],
         chart: buildBenchChart("support"),
         status: benchStatusText("support"),
@@ -1800,7 +1802,7 @@ const benchCharts = computed(() => [
         desc: [
             `Damage each character deals as the attacker, compared to ${LuxMagica} in the same spot, measured with the battle engine. ${LuxMagica} is the 0% line; -50% means half of her damage.`,
             benchAverageDmg.value
-                ? `Average Damage: ${BENCH_AV} AV (3 turns) of auto battle supported by four ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts.`
+                ? `Average Damage: ${BENCH_AV} AV (${BENCH_AV / 100} turns) of auto battle with infinite SP (topped up to 5 every turn), supported by four ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts.`
                 : `Max Burst: the Ultimate with the attacker's own buffs and debuffs at full stacks and every hit a crit.`,
             `Every character uses their own element and role. ${levelsDescription.value} ${LuxMagica} is A0. ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken).`,
         ],

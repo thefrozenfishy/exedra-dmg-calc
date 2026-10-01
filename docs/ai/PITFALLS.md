@@ -54,6 +54,9 @@
   must be checked on the widened targets, not on the placeholder (Attacker-only buffs never applied).
 - Who dealt a hit: use `BattleEvent.sourcePos` (names repeat, e.g. several Lux). A popped vortex is inside the
   popping hit's `amount` (`vortex` field) and also logged as its owner's `dot` event; subtract it when attributing.
+- "Infinite SP" can't be literal: a battle skill that acts again at the same moment (Tenebrous Arcana's extra
+  action, Thunder Torrent hasting herself) loops forever. LuxBench tops SP up to 5 only when nobody is due to act at
+  the current moment.
 - Lux☆Magica is not a blank slate in a simulation at A1+: her Magic charges from every ally's battle skill, so her
   follow-up timing changes with whoever stands next to her. LuxBench uses her at A0.
 - Hot paths: never `Object.values(skillDetails).filter(...)` per action (it was ~23% of sim time in `getDetails`

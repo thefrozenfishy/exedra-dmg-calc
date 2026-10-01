@@ -24,12 +24,16 @@ import { unitTypeConditionValues } from "./BattleConditionParser";
 import type { QuestEnemyAppearance } from "./PvE";
 import { skillDetailsByMstId } from "../utils/helpers";
 import { TargetType, TargetTypeLookup, targetTypeToLvl, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
-import { elementMap, roleMap, KiokuElement, type KiokuRole } from "../types/enums";
+import { elementMap, roleMap, KiokuElement, KiokuRole } from "../types/enums";
 
 export const BENCH_DEF = 3000
 export const BENCH_BROKEN_RATE = 500  // % damage taken while broken
 const BENCH_HP = 1e12                 // never dies within a run
 const BENCH_SPD = 1                   // first turn after ~10,000 AV: never acts within a run
+// "Infinite" SP: topped up to this whenever time moves forward. Truly endless SP never ends a chain of battle skills
+// that act again at the same moment (Tenebrous Arcana's extra action, Thunder Torrent hasting herself): those drain
+// the 5 SP and end, as in the game, while every normal turn starts with SP.
+const SP_REFILL = 5
 
 // Any break table with a gauge, so the dummies can be broken; the rate itself is pinned below.
 const BREAK_MST_ID: number = (breakMstJson as any[]).find(b => b.breakPoint > 0)?.breakMstId ?? 0
@@ -138,6 +142,7 @@ export interface SimOptions {
     av: number          // action value to play (100 AV = 1 turn)
     seed: number
     rngMode?: RngMode   // default "seed" (drawn per roll label, see LabelStreamRng)
+    infiniteSp?: boolean // the allies' SP is refilled before every turn, see SP_REFILL (bench-only, not a game rule)
     onAction?: (state: BattleSnapshot, elapsed: number) => void  // every counted action (debugging)
 }
 
@@ -157,6 +162,13 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
         e.isBroken = true
         e.breakedDamageReceiveRate = BENCH_BROKEN_RATE
     }
+    // Refill only when the next action is at a later moment: nobody is due to act right now (a haste to 100% or an
+    // extra action keeps a unit at 0 time left).
+    const refillSp = () => {
+        if (!opts.infiniteSp) return
+        const units = [...team1.kiokuStates, ...team2.kiokuStates].filter(k => !k.isDead)
+        if (battle.elapsed === 0 || units.every(k => k.secondsUntilAbleToAct() > 0)) team1.currentSp = Math.max(team1.currentSp, SP_REFILL)
+    }
     let total = 0
     // A vortex pops inside the hit that sets it off, but it is its owner's damage (logged again as the owner's
     // "dot" event), so it is taken out of the hit.
@@ -171,6 +183,7 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     // An action counts if it starts within the run: the one that would start after it is played (the battle only
     // knows its time once it advances to it) but not counted.
     while (!battle.isOver) {
+        refillSp()
         const states = battle.executeNextAction()
         if (battle.elapsed > opts.av) break
         for (const state of states) { count(state.events); opts.onAction?.(state, battle.elapsed) }
@@ -188,6 +201,7 @@ export interface BenchRow extends BenchIdentity { gain: number, critRate?: numbe
 export interface BenchOptions {
     seeds: number   // battles averaged for Average Damage (seeds 0..seeds-1, the same for the baseline)
     av: number      // action value per battle
+    infiniteSp?: boolean // see SimOptions
 }
 
 type KiokuInput = Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>
@@ -229,7 +243,7 @@ export class LuxBenchCharts {
 
     private simTotal(team: PvPKioku[], enemies: number): number {
         let total = 0
-        for (let seed = 0; seed < this.opts.seeds; seed++) total += simulatedDealerDamage(team, 0, enemies, { av: this.opts.av, seed })
+        for (let seed = 0; seed < this.opts.seeds; seed++) total += simulatedDealerDamage(team, 0, enemies, { av: this.opts.av, seed, infiniteSp: this.opts.infiniteSp })
         return total
     }
 
@@ -256,19 +270,23 @@ export class LuxBenchCharts {
         ]
     }
 
-    // The dealer's element when none is tested: one the kit isn't limited to (Lux's own Light if possible). Every unit
-    // has one in game, and it matters beyond restrictions: additional damage (ADDITIONAL_DAMAGE, TSUBAME_LINK) is dealt
-    // in the attacker's own element, so without one it would miss the dummies' weakness and element buffs. The role
-    // stays empty: nothing in the damage formula reads it.
-    private neutralElement(x: PvPKioku): KiokuElement {
-        const limited = new Set(kitRestrictions(x).elements)
-        const own = this.reference.data.element as KiokuElement
-        return !limited.has(own) ? own : Object.values(KiokuElement).find(e => !limited.has(e)) ?? own
+    // The dealer's element / role when none is tested: Lux's own (Light, Breaker) unless the kit is limited to it, then
+    // another one it isn't limited to. Every unit has both in game and they matter beyond restrictions: additional damage
+    // (ADDITIONAL_DAMAGE, TSUBAME_LINK) is dealt in the attacker's own element (without one it misses the dummies'
+    // weakness), and some ally targeting prefers roles (Thunder Torrent's haste picks an Attacker/Breaker ally).
+    private neutral(x: PvPKioku): { element: KiokuElement, role: KiokuRole } {
+        const { elements, roles } = kitRestrictions(x)
+        const pick = <T,>(own: T, all: T[], limited: T[]) => !limited.includes(own) ? own : all.find(v => !limited.includes(v)) ?? own
+        return {
+            element: pick(this.reference.data.element as KiokuElement, Object.values(KiokuElement), elements),
+            role: pick(this.reference.data.role as KiokuRole, Object.values(KiokuRole), roles),
+        }
     }
 
-    // A tested identity as the dealer actually is: an untested element replaced by the neutral one.
+    // A tested identity as the dealer actually is: untested parts replaced by the neutral ones.
     private resolve(id: BenchIdentity, x: PvPKioku): BenchIdentity {
-        return { element: id.element ?? this.neutralElement(x), role: id.role }
+        const n = this.neutral(x)
+        return { element: id.element ?? n.element, role: id.role ?? n.role }
     }
 
     supportMax(x: PvPKioku, ids = this.supportIdentities(x)): BenchRow[] {

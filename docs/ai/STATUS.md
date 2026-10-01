@@ -54,6 +54,8 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-01 (3): Kioku Grid Average Damage = 1000 AV with SP topped up to 5 whenever time advances; neutral bench
+  dealer is a Light Breaker unless the kit is limited to those. ~160 s single-thread for the full roster.
 - 2026-10-01 (2): engine: IsElementType/IsRoleType conditions compared ids to names (never matched), and EACH_TARGET
   start conditions of friendly effects were checked on the caster only - both fixed (Attacker/element-only buffs now
   land). Max Damage: additional damage in the attacker's element, TSUBAME_LINK extra hit included. Lux bench dealer
