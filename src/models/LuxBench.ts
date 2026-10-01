@@ -13,7 +13,7 @@
 // recover at their own turn start) they stay broken throughout.
 import breakMstJson from "../assets/base_data/getBreakMstList.json";
 import { PvPKioku } from "./PvPKioku";
-import { PvPTeam } from "./PvPTeam";
+import { PvPTeam, type KiokuState } from "./PvPTeam";
 import { PvPBattle } from "./PvPBattle";
 import { computeMaxDamage } from "./MaxDamage";
 import { enemyKiokus } from "./PvEBattle";
@@ -23,7 +23,7 @@ import { seededRng } from "./BattleMath";
 import { unitTypeConditionValues } from "./BattleConditionParser";
 import type { QuestEnemyAppearance } from "./PvE";
 import { skillDetailsByMstId } from "../utils/helpers";
-import { TargetType, TargetTypeLookup, targetTypeToLvl, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
+import { TargetType, TargetTypeLookup, targetTypeToLvl, targetRange, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
 import { elementMap, roleMap, KiokuElement, KiokuRole } from "../types/enums";
 
 export const BENCH_DEF = 3000
@@ -146,9 +146,33 @@ export interface SimOptions {
     onAction?: (state: BattleSnapshot, elapsed: number) => void  // every counted action (debugging)
 }
 
+// How players actually run some kits, where auto play (Battle Skill whenever there is SP) is unrealistic. Applied to
+// the ally team of every bench battle (PvPTeam.allyActionPolicy / allyTargetPolicy).
+//   Tenebrous Arcana: her Battle Skill grants an extra action; she uses it 3 times, then a Basic Attack.
+//   Thunder Torrent: always her Battle Skill, its haste on the dealer (another ally when she is the dealer), never
+//   herself.
+const PLAY_PATTERNS: Record<string, {
+    action?: (unit: KiokuState) => TargetType.skillId | TargetType.attackId
+    target?: (unit: KiokuState, dealer: KiokuState) => KiokuState | undefined
+}> = {
+    "Tenebrous Arcana": { action: u => u.skillStreak >= 3 ? TargetType.attackId : TargetType.skillId },
+    "Thunder Torrent": {
+        action: () => TargetType.skillId,
+        target: (u, dealer) => dealer !== u ? dealer : u.team.kiokuStates.find(k => k !== u && !k.isDead),
+    },
+}
+
+function applyPlayPatterns(team: PvPTeam, dealerPos: number) {
+    const dealer = team.kiokuStates[dealerPos]
+    team.allyActionPolicy = u => PLAY_PATTERNS[u.kioku.name]?.action?.(u)
+    team.allyTargetPolicy = (u, detail) => detail.range === targetRange.SELF || detail.range === targetRange.ALL ? undefined
+        : PLAY_PATTERNS[u.kioku.name]?.target?.(u, dealer)
+}
+
 /** Average Damage: total damage dealt by the dealer slot during an auto battle of `opts.av` action value. */
 export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, enemyCount: number, opts: SimOptions): number {
     const team1 = new PvPTeam(allies, "Ally", false, BattleType.Solo)
+    applyPlayPatterns(team1, dealerPos)
     const team2 = new PvPTeam(enemyKiokus(benchEnemies(enemyCount)), "Enemy", false, BattleType.Solo)
     const mode = opts.rngMode ?? "seed"
     const battle = new PvPBattle(team1, team2, false, opts.seed, { rngMode: mode, rng: mode === "seed" ? new LabelStreamRng(opts.seed) : undefined })

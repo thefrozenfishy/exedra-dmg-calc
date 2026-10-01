@@ -54,6 +54,9 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-01 (4): bench back to 500 AV; scripted play hooks `PvPTeam.allyActionPolicy` / `allyTargetPolicy` (+
+  `KiokuState.skillStreak`) used by LuxBench only (Tenebrous Arcana skill x3 then basic, Thunder Torrent always skills
+  the dealer); Kioku Grid bench results cached in localStorage with a Recalculate button.
 - 2026-10-01 (3): Kioku Grid Average Damage = 1000 AV with SP topped up to 5 whenever time advances; neutral bench
   dealer is a Light Breaker unless the kit is limited to those. ~160 s single-thread for the full roster.
 - 2026-10-01 (2): engine: IsElementType/IsRoleType conditions compared ids to names (never matched), and EACH_TARGET

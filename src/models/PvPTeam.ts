@@ -399,6 +399,8 @@ export class KiokuState {
     // treated as an alias, see MISSING_AND_UNCERTAIN.md) effect. Grants the SAME unit an
     // immediate extra action - see PvPTeam.performAction.
     pendingBonusTurns = 0
+    // Battle skills in a row since this unit's last basic attack (read by PvPTeam.allyActionPolicy).
+    skillStreak = 0
     // Shown on the unit's next turn in the battle log (e.g. "Cutaway" after a Cutaway advance).
     nextTurnLabel?: string
 
@@ -1869,6 +1871,18 @@ export class PvPTeam {
     // PvE "Manual" targeting: every target decision (either team) is the user's pick via
     // BattleRng.pickTarget instead of the targeting AI. Set by PvPBattle.
     manualTargeting = false
+    // Scripted play for simulations that want a fixed play pattern (LuxBench), not game rules. allyActionPolicy picks
+    // an auto ally's Battle Skill / Basic Attack (a Battle Skill without SP falls back to the default); allyTargetPolicy
+    // picks the ally target of a friendly single/proximity effect before any targeting rule.
+    allyActionPolicy?: (actor: KiokuState) => TargetType.skillId | TargetType.attackId | undefined
+    allyTargetPolicy?: (actor: KiokuState, detail: SkillDetail) => KiokuState | undefined
+
+    // Auto play: Battle Skill whenever the team has SP, unless allyActionPolicy says otherwise.
+    private autoAllyAction(actor: KiokuState): TargetType {
+        const wanted = this.allyActionPolicy?.(actor)
+        if (wanted === TargetType.attackId || (wanted === TargetType.skillId && this.currentSp > 0)) return wanted
+        return this.currentSp ? TargetType.skillId : TargetType.attackId
+    }
     // Shared with the opposing team by PvPBattle; drained into each BattleSnapshot.
     eventLog: BattleEvent[] = []
     // Optional manual override for crit outcomes (UI "force crit / no crit"): return
@@ -2284,6 +2298,10 @@ export class PvPTeam {
             // --- Character-specific hardcoded kit targeting (pre-existing, unrelated to
             // the generic FULL AUTO system below - these bespoke rules take priority over
             // it exactly like the source's own character-unique classes would). ---
+            if (side === "friend") {
+                const forced = this.allyTargetPolicy?.(actor, detail)
+                if (forced && !forced.isDead) return forced
+            }
             const eligableTargets = this.kiokuStates.filter(k => k !== actor)
             // (Fixed: these used a placeholder object as the reduce seed and returned it when no
             // ally qualified, crashing on e.g. an all-dead or all-ready team. Now they fall back
@@ -2406,8 +2424,10 @@ export class PvPTeam {
         }
         if (effectName === TargetType.attackId) {
             this.currentSp++;
+            actor.skillStreak = 0
         } else if (effectName === TargetType.skillId) {
             this.currentSp--;
+            actor.skillStreak++
         } else {
             actor.currentMp = 0;
         }
@@ -2558,7 +2578,7 @@ export class PvPTeam {
         // unit as actor) -> TurnUnitAct (UnitTurnGauge.Reset, then ExecuteSkill) -> TurnEndAct.
         actor.exitBreak()
         actor.tickHotEffects()
-        let effType = actor.enemy || this.currentSp ? TargetType.skillId : TargetType.attackId
+        let effType = actor.enemy ? TargetType.skillId : this.autoAllyAction(actor)
         this.fireTiming(ProcessTiming.TURN_START, actor, undefined, effType)
         // The AI picks this act's targets before the reset in the game (see setAIDecisionGauge).
         setAIDecisionGauge(actor, actor.turnGauge)
@@ -2606,7 +2626,7 @@ export class PvPTeam {
                 }
                 const chosen = this.isManualControl
                     ? this.chooseAllyAction(actor, actionNum >= 2 ? `turn (combo ${i + 1})` : "turn")
-                    : this.currentSp ? TargetType.skillId : TargetType.attackId
+                    : this.autoAllyAction(actor)
                 if (chosen === undefined) break
                 effType = chosen
                 this.performAction(actor, effType, i === 0 ? turnLabel : undefined)
@@ -2646,7 +2666,7 @@ export class PvPTeam {
             actor.pendingBonusTurns--
             const bonusEffType = actor.enemy ? TargetType.skillId
                 : this.isManualControl ? this.chooseAllyAction(actor, "extra action")
-                : this.currentSp ? TargetType.skillId : TargetType.attackId
+                : this.autoAllyAction(actor)
             if (bonusEffType === undefined) break
             const bonusChoice = actor.enemy ? selectEnemySkill(actor, this, this.rng, id => this.enemySkillHasTarget(actor, id)) : undefined
             if (actor.enemy && !bonusChoice) continue

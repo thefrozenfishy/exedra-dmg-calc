@@ -413,6 +413,9 @@
                         title="On: every Kioku is simulated at A5 with max Kioku, Magic, Heartphial and Special level. Off: your own Kioku's current ascension and levels are used, and unowned Kioku are left out">
                         <input type="checkbox" v-model="simulateMaxLevels" /> Simulate using max possible levels
                     </label>
+                    <button type="button" class="filter-chip" :disabled="bc.running"
+                        title="Results are saved in this browser and reused while nothing changes. Recalculate this chart from scratch."
+                        @click="runBench(bc.kind, { fresh: true })">Recalculate</button>
                 </div>
                 <p v-if="bc.chart.error" class="gain-empty">{{ bc.chart.error }}</p>
                 <p v-else-if="!bc.chart.bars.length" class="gain-empty">
@@ -479,6 +482,8 @@ import { useFriendStore } from "../store/friendStore"
 import { Enemy } from "../types/EnemyTypes"
 import { isBeta } from "../utils/betaSettings"
 import type { LuxBenchJob, LuxBenchMessage } from "../workers/luxBenchWorker"
+import type { BenchRow } from "../models/LuxBench"
+import { benchCharKey, clearBenchCache, loadBenchCache, saveBenchCache, type BenchCacheEntry, type BenchSetup } from "../utils/luxBenchCache"
 
 const store = useCharacterStore()
 
@@ -628,7 +633,7 @@ const metricIndex = computed(() => metricOptions.findIndex(opt => opt.value === 
 const benchAverageDmg = useSetting("gridBenchAverageDmg", false)
 const benchMetricOptions = [
     { value: false, label: "Max Burst", title: "How much the Ultimate's dmg changes, every hit a crit, with all buffs and debuffs at full stacks" },
-    { value: true, label: "Average Damage", title: "How much the attacker's total dmg changes over 1000 AV (10 turns) of auto battle with SP refilled every turn, averaged over several battles" },
+    { value: true, label: "Average Damage", title: "How much the attacker's total dmg changes over 500 AV (5 turns) of auto battle with SP refilled every turn, averaged over several battles" },
 ] as const
 const benchMetricIndex = computed(() => benchMetricOptions.findIndex(opt => opt.value === benchAverageDmg.value))
 
@@ -1595,7 +1600,8 @@ const attackerChart = computed(() => {
 
 const beta = isBeta()
 const BENCH_SEEDS = 10 // battles averaged per bar (the same seeds for Lux's baseline)
-const BENCH_AV = 1000  // 10 turns
+const BENCH_AV = 500   // 5 turns
+const BENCH_PLAY_NOTE = "Tenebrous Arcana uses her battle skill 3 times, then a basic attack; Thunder Torrent always uses her battle skill on the attacker (on a Lux when she is the attacker). Results are saved in this browser and only new or changed characters are recalculated."
 const BENCH_INFINITE_SP = true // SP topped up to 5 before every turn: a battle skill every turn, no SP shared out
 
 type BenchChartKind = LuxBenchJob["chart"]
@@ -1636,7 +1642,16 @@ const stopBench = (kind: BenchChartKind) => {
 
 const fightModeEnemies = () => fightMode.value === "st" ? 1 : fightMode.value === "prox" ? 3 : 5
 
-const runBench = (kind: BenchChartKind) => {
+const benchSetup = (kind: BenchChartKind, lux: Character): BenchSetup => ({
+    chart: kind,
+    enemies: kind === "attacker" ? fightModeEnemies() : 1,
+    seeds: BENCH_SEEDS,
+    av: BENCH_AV,
+    infiniteSp: BENCH_INFINITE_SP,
+    lux: maxLevelsForChart(lux),
+})
+
+const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
     stopBench(kind)
     const results = new Map<number, BenchCell[]>()
     benchResults[kind].value = results
@@ -1647,17 +1662,57 @@ const runBench = (kind: BenchChartKind) => {
         return
     }
 
-    const chars = chartCharacters()
-    const progress: BenchProgress = { ...idleBench(), running: chars.length > 0, total: chars.length }
+    const identityKey = (element?: string, role?: string) => contextKey(makeContext(element as KiokuElement, role as KiokuRole))
+    const setMax = (id: number, rows: BenchRow[]) => results.set(id, rows.map(r => ({
+        context: makeContext(r.element, r.role),
+        maxGain: r.gain,
+        critRate: r.critRate,
+    })))
+    const setAvg = (id: number, rows: BenchRow[]) => {
+        const cells = results.get(id)
+        if (!cells) return
+        const avg = new Map(rows.map(r => [identityKey(r.element, r.role), r.gain]))
+        results.set(id, cells.map(c => ({ ...c, avgGain: avg.get(contextKey(c.context)) })))
+    }
+
+    // Cached characters are shown right away; only new or changed ones are simulated.
+    const setup = benchSetup(kind, lux)
+    if (fresh) clearBenchCache(setup)
+    const cache = loadBenchCache(setup)
+    const chars = chartCharacters().map(prepareForChart)
+    const keyOf = new Map(chars.map(c => [c.id, benchCharKey(c)]))
+    const todo: Character[] = []
+    const progress: BenchProgress = { ...idleBench(), total: chars.length }
+    for (const c of chars) {
+        const hit = cache[keyOf.get(c.id)!] // only complete entries (both metrics) are ever stored
+        if (hit?.max && hit.avg) {
+            setMax(c.id, hit.max)
+            setAvg(c.id, hit.avg)
+            progress.maxDone++
+            progress.avgDone++
+        } else todo.push(c)
+    }
+    progress.running = todo.length > 0
+    benchResults[kind].value = new Map(results)
     benchProgress[kind].value = { ...progress }
-    if (!chars.length) return
+    if (!todo.length) return
+
+    // The cache keeps only characters still on the chart, so it doesn't grow with level changes.
+    const kept: Record<string, BenchCacheEntry> = {}
+    for (const c of chars) { const k = keyOf.get(c.id)!; if (cache[k]?.avg) kept[k] = cache[k] }
+    let saveTimer: ReturnType<typeof setTimeout> | undefined
+    const save = (now = false) => {
+        clearTimeout(saveTimer)
+        if (now) saveBenchCache(setup, kept)
+        else saveTimer = setTimeout(() => saveBenchCache(setup, kept), 1000)
+    }
 
     const plain = <T,>(value: T): T => JSON.parse(JSON.stringify(value))
     const job: LuxBenchJob = {
         chart: kind,
-        lux: plain(maxLevelsForChart(lux)),
-        chars: chars.map(c => plain(prepareForChart(c))),
-        enemies: kind === "attacker" ? fightModeEnemies() : 1,
+        lux: plain(setup.lux as Character),
+        chars: todo.map(c => plain(c)),
+        enemies: setup.enemies,
         seeds: BENCH_SEEDS,
         av: BENCH_AV,
         infiniteSp: BENCH_INFINITE_SP,
@@ -1679,28 +1734,25 @@ const runBench = (kind: BenchChartKind) => {
         })
     }
 
-    const identityKey = (element?: string, role?: string) => contextKey(makeContext(element as KiokuElement, role as KiokuRole))
+    const pendingMax = new Map<number, BenchRow[]>()
 
     worker.onmessage = (e: MessageEvent<LuxBenchMessage>) => {
         const msg = e.data
         if (msg.type === "max") {
-            results.set(msg.id, msg.rows.map(r => ({
-                context: makeContext(r.element, r.role),
-                maxGain: r.gain,
-                critRate: r.critRate,
-            })))
+            setMax(msg.id, msg.rows)
+            pendingMax.set(msg.id, msg.rows)
             progress.maxDone++
         } else if (msg.type === "avg") {
-            const cells = results.get(msg.id)
-            if (cells) {
-                const avg = new Map(msg.rows.map(r => [identityKey(r.element, r.role), r.gain]))
-                results.set(msg.id, cells.map(c => ({ ...c, avgGain: avg.get(contextKey(c.context)) })))
-            }
+            setAvg(msg.id, msg.rows)
+            const max = pendingMax.get(msg.id)
+            if (max) kept[keyOf.get(msg.id)!] = { max, avg: msg.rows }
+            save()
             progress.avgDone++
         } else if (msg.type === "error") {
             progress.failed++
         } else {
             progress.running = false
+            save(true)
             stopBench(kind)
         }
         publish()
@@ -1786,12 +1838,13 @@ const benchCharts = computed(() => [
         desc: [
             `How much each character increases the damage of a ${LuxMagica} attacker (a Light Breaker like herself, or another element/role when the character's buffs are limited to those), measured with the battle engine. ${levelsDescription.value} ${LuxMagica} is A0 here, so her own ascension follow-up doesn't change with the team.`,
             benchAverageDmg.value
-                ? `Average Damage: ${BENCH_AV} AV (${BENCH_AV / 100} turns) of auto battle with infinite SP (topped up to 5 every turn, so everyone can always use their battle skill), the character next to the attacker and three ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts (including additional damage it deals), never the rest of the team's.`
+                ? `Average Damage: ${BENCH_AV} AV (${BENCH_AV / 100} turns) of auto battle with infinite SP (topped up to 5 every turn, so everyone can always use their battle skill), the character next to the attacker and three ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts (including additional damage it deals), never the rest of the team's. ${BENCH_PLAY_NOTE}`
                 : `Max Burst: the attacker's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
             `One enemy with 3000 def, weak to every element and broken (500% dmg taken). Element or role bonuses get their own bar when they change the result, so a bonus can show in one metric only: crit rate or procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
         ],
         chart: buildBenchChart("support"),
         status: benchStatusText("support"),
+        running: benchProgress.support.value.running,
     },
     {
         kind: "attacker" as const,
@@ -1802,12 +1855,13 @@ const benchCharts = computed(() => [
         desc: [
             `Damage each character deals as the attacker, compared to ${LuxMagica} in the same spot, measured with the battle engine. ${LuxMagica} is the 0% line; -50% means half of her damage.`,
             benchAverageDmg.value
-                ? `Average Damage: ${BENCH_AV} AV (${BENCH_AV / 100} turns) of auto battle with infinite SP (topped up to 5 every turn), supported by four ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts.`
+                ? `Average Damage: ${BENCH_AV} AV (${BENCH_AV / 100} turns) of auto battle with infinite SP (topped up to 5 every turn), supported by four ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts. ${BENCH_PLAY_NOTE}`
                 : `Max Burst: the Ultimate with the attacker's own buffs and debuffs at full stacks and every hit a crit.`,
             `Every character uses their own element and role. ${levelsDescription.value} ${LuxMagica} is A0. ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken).`,
         ],
         chart: buildBenchChart("attacker"),
         status: benchStatusText("attacker"),
+        running: benchProgress.attacker.value.running,
     },
 ])
 
