@@ -89,6 +89,11 @@ From the six yellow numbers choose the three you think you have the most use for
                 <input type="checkbox" :disabled="!(showLevels || showHearts)" v-model="colourLevels" /> Colour max
                 levels
             </label>
+            <label v-if="showLevels" class="chip player-level-chip"
+                title="Magic level counts as maxed once it reaches the highest level your Player Level allows">
+                Player Level
+                <input type="number" min="1" :max="maxPlayerLevel" v-model.number="playerLevel" />
+            </label>
         </section>
 
         <p v-if="isTouchDevice" class="help-text"> Hold icons to enter edit mode, then move by dragging </p>
@@ -174,7 +179,7 @@ From the six yellow numbers choose the three you think you have the most use for
 
                                 <div class="magic-level-badge level-badge editable"
                                     v-if="showLevels && (chars as any).label !== 'Not Owned'" :class="colourLevels
-                                        ? ch.magicLvl === KiokuConstants.maxMagicLvl ? 'maxLvl' : 'notMaxLvl'
+                                        ? ch.magicLvl >= maxMagicLvlForPlayer ? 'maxLvl' : 'notMaxLvl'
                                         : ''" @click.stop="startEdit(ch, 'magicLvl', $event)">
                                     <template v-if="isEditing(ch, 'magicLvl')">
                                         <input type="number" v-model.number="editValue" :min="0"
@@ -310,8 +315,8 @@ From the six yellow numbers choose the three you think you have the most use for
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import { useCharacterStore } from "../store/characterStore"
-import { Character, KiokuConstants, relevantCrys } from "../types/KiokuTypes"
-import { elementMap, KiokuElement } from '../types/enums'
+import { Character, KiokuConstants, relevantCrys, getMaxKiokuLevelForPlayerLevel, getMaxMagicLevelForKiokuLevel } from "../types/KiokuTypes"
+import { elementMap, KiokuElement, maxPlayerLevel } from '../types/enums'
 import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
@@ -401,6 +406,10 @@ const showHearts = useSetting("showHearts", true);
 const showDupes = useSetting("showDupes", true);
 const showCrys = useSetting("showCrys", true);
 const colourLevels = useSetting("colourLevels", true);
+// Shared with Kioku Setup. Kioku level is capped by player level, which in turn caps magic level,
+// so magic counts as maxed at the highest level this account can currently reach
+const playerLevel = useSetting('playerLevel', KiokuConstants.maxKiokuLvl)
+const maxMagicLvlForPlayer = computed(() => getMaxMagicLevelForKiokuLevel(getMaxKiokuLevelForPlayerLevel(playerLevel.value)))
 const highlightCompleted = useSetting("highlightCompleted", true);
 
 const showOffElementalOnes = useSetting("showOffElementalCrysCollection", false)
@@ -446,7 +455,7 @@ const getCrysCount = (ch: Character, filterOutOffElement: boolean): number => {
 }
 
 const isMaxHeartLevel = (ch: Character): boolean => showHearts.value ? ch.heartphialLvl === KiokuConstants.maxHeartphialLvl : true
-const isMaxMagicAndSpecialLevel = (ch: Character): boolean => showLevels.value ? ch.magicLvl === KiokuConstants.maxMagicLvl
+const isMaxMagicAndSpecialLevel = (ch: Character): boolean => showLevels.value ? ch.magicLvl >= maxMagicLvlForPlayer.value
     // Since Fuuka sp10 breaks her for pvp allow sp9 to also be considered completed
     && ((ch.name === "Final Fatebloom" && ch.ascension === 5 ? 9 : getMaxSpecialLvl(ch)) <= ch.specialLvl || ch.rarity === 3) : true
 const isMaxCrysCollected = (ch: Character): boolean => showCrys.value ? getCrysCount(ch, true) === maxCrysCount.value : true
@@ -922,6 +931,21 @@ const onTouchEnd = (e: TouchEvent) => {
     background: var(--accent-glow);
     border-color: var(--border-strong);
     color: var(--accent);
+}
+
+.player-level-chip {
+    cursor: default;
+}
+
+.player-level-chip input {
+    display: inline-block;
+    width: 3.2rem;
+    padding: 0.05rem 0.3rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--text);
+    font-size: 0.8rem;
 }
 
 .chip.disabled {
