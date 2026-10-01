@@ -430,8 +430,8 @@
                     </div>
                     <div class="gain-scroll">
                         <div class="gain-chart">
-                            <div v-for="bar in bc.chart.bars" :key="bar.id" class="gain-col"
-                                :class="{ variant: bar.variant, active: activeBarTip?.id === bar.id }"
+                            <div v-for="bar in bc.chart.bars" :key="bar.id" class="gain-col bench-col"
+                                :class="{ variant: bar.variant, active: activeBarTip?.id === bar.id, negative: bar.gain < 0 }"
                                 :title="activeBarTip?.id === bar.id ? undefined : bar.title"
                                 @click.stop="toggleBarTip(bar, $event)">
                                 <div class="gain-track">
@@ -1821,8 +1821,7 @@ const buildBenchChart = (kind: BenchChartKind) => {
 const benchStatusText = (kind: BenchChartKind): string => {
     const p = benchProgress[kind].value
     if (!p.running) return ""
-    if (p.maxDone + p.failed < p.total) return `Calculating Max Burst… ${p.maxDone}/${p.total}`
-    return `Simulating battles… ${p.avgDone}/${p.total - p.failed}`
+    return `Simulating battles… ${p.avgDone + p.failed}/${p.total}`
 }
 
 const benchEnemyText = computed(() =>
@@ -2672,6 +2671,41 @@ if (beta) {
     position: absolute;
     left: 4px;
     right: 4px;
+}
+
+/* Beta charts fill in while they are computed: each new bar grows in from the zero line, and the others glide to
+   their new size when the scale changes. */
+.bench-col .gain-bar-wrap {
+    transition: height 0.3s ease, top 0.3s ease, bottom 0.3s ease;
+}
+
+.bench-col .gain-bar {
+    transform-origin: bottom;
+    animation: bench-bar-in 0.4s ease-out;
+}
+
+.bench-col.negative .gain-bar {
+    transform-origin: top;
+}
+
+.bench-col .gain-value {
+    animation: bench-value-in 0.4s ease-out;
+}
+
+@keyframes bench-bar-in {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+}
+
+@keyframes bench-value-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bench-col .gain-bar-wrap { transition: none; }
+    .bench-col .gain-bar,
+    .bench-col .gain-value { animation: none; }
 }
 
 .gain-bar {
