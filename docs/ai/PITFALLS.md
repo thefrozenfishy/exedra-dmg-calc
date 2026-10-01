@@ -26,6 +26,10 @@
   skill" goes in `PvPTeam.launchSkill`.
 - "Conditions assumed met" (MaxDamage) must still respect the skill type a state is limited to
   (`actorSkillTypeRestriction`), or Battle Skill / Basic Attack columns get ultimate-only buffs.
+- ...and must not stack **tier ladders**: a passive often adds N same-type states gated by exclusive ACTIVE conditions
+  (Focused Guard "enemies == 5..1", Light Chain "Lv 1..5", Magic/token == n). In battle one rung is active; with
+  conditions stripped all N stacked (Light Chain final DMG 160%, resist -30%). `ConditionTiers.ts` +
+  `MaxDamage.assignTiers` keep the strongest rung (766 ladders in the passive data, 2026-10-01).
 - **Passives are triggers**, not always-on states (R7.2). Check START conditions when adding, ACTIVE conditions
   while active. Checking both at trigger time lost every "while X" passive.
 - **TurnNum is per finished turn**, not per act (Forward's +1/-1 pair is a preview). A "literal" reading of one

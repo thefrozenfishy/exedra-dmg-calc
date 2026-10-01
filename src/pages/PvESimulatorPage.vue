@@ -213,8 +213,9 @@
     <section class="card section-card">
       <h2 class="section-title">Max Damage</h2>
       <p class="hint-text">The best case against wave {{ waveIdx + 1 }}: every buff and debuff listed under "Buffs &amp;
-        Debuffs" below is active at the same time, at full stacks, with its conditions met. Each skill is then run
-        through the battle engine's damage formula.</p>
+        Debuffs" below is active at the same time, at full stacks, with its conditions met (for tiered effects that
+        exclude each other, like "while 5 / 4 / ... / 1 enemies remain" or Light Chain Lv 1-5, only the strongest
+        tier). Each skill is then run through the battle engine's damage formula.</p>
 
       <p v-if="!teamKiokus.length" class="empty-hint">Add team members to calculate damage.</p>
       <template v-else-if="maxDmg">
@@ -284,7 +285,8 @@
       <h2 class="section-title page-section-title">Buffs &amp; Debuffs</h2>
       <p class="hint-text">Every buff and debuff your team gives, grouped by what applies it. Max Damage counts the
         ones that are on: buffs on {{ dealerName }} (green) and debuffs on the enemies (red). Click one to turn it off
-        or back on; lower its stacks to use fewer.</p>
+        or back on; lower its stacks to use fewer. Tiered effects count one tier at a time: click another tier to use it
+        instead.</p>
 
       <div class="effects-summary">
         <span class="legend legend-buff">{{ effectCounts.buff }} buff{{ effectCounts.buff === 1 ? '' : 's' }} on {{
@@ -304,10 +306,10 @@
       <div v-for="sec in effectSections" :key="sec.source" class="fx-section">
         <div class="fx-section-head">
           <span class="fx-section-title">{{ sec.source }}</span>
-          <span class="fx-section-count">{{ sec.onCount }} of {{ sec.toggleable.length }} on</span>
-          <button v-if="sec.toggleable.length > 1" type="button" class="link-btn"
-            @click="setSectionOn(sec.toggleable, sec.onCount < sec.toggleable.length)">{{ sec.onCount <
-              sec.toggleable.length ? 'Turn all on' : 'Turn all off' }}</button>
+          <span class="fx-section-count">{{ sec.onCount }} of {{ sec.total }} on</span>
+          <button v-if="sec.total > 1" type="button" class="link-btn"
+            @click="setSectionOn(sec.toggleable, sec.onCount < sec.total)">{{ sec.onCount <
+              sec.total ? 'Turn all on' : 'Turn all off' }}</button>
         </div>
         <template v-for="row in sec.rows" :key="row.side">
           <h4 class="fx-row-title" :class="row.side === 'ally' ? 'fx-row-buffs' : 'fx-row-debuffs'">{{ row.title }}</h4>
@@ -321,7 +323,7 @@
               </div>
               <div v-for="e in cell" :key="e.key" class="fx-card"
                 :class="[e.side === 'ally' ? 'fx-buff' : 'fx-debuff', `fx-${e.status}`]"
-                :title="e.status === 'na' ? e.statusText : `${e.type}\nClick to turn ${e.status === 'off' ? 'on' : 'off'}`"
+                :title="e.status === 'na' ? e.statusText : e.status === 'alt' ? `${e.type}\nClick to use this tier instead` : `${e.type}\nClick to turn ${e.status === 'off' ? 'on' : 'off'}`"
                 @click="e.status !== 'na' && toggleEffect(e.key)">
                 <div class="fx-effect">
                   <span class="fx-name">{{ e.name }}</span>
@@ -333,7 +335,7 @@
                 <div v-if="e.description" class="fx-desc">{{ e.description }}</div>
                 <div class="fx-foot">
                   <span class="fx-target">{{ e.statusText }}</span>
-                  <span class="fx-switch">{{ e.status === 'off' ? 'Off' : e.status === 'na' ? 'N/A' : 'On' }}</span>
+                  <span class="fx-switch">{{ e.status === 'off' ? 'Off' : e.status === 'na' ? 'N/A' : e.status === 'alt' ? 'Other tier' : 'On' }}</span>
                 </div>
                 <label v-if="e.maxStacks > 1 && e.status !== 'na'" class="fx-stacks" @click.stop>
                   Stacks <input class="num" type="number" min="0" :max="e.maxStacks" :value="e.stacks"
@@ -566,7 +568,18 @@ const memberId = (pos: number) => filledSlots.value[pos]?.[0].main?.id
 // ---- max damage ----
 const excluded = reactive(new Set<string>())
 const stacks = reactive(new Map<string, number>())
-const toggleEffect = (k: string) => { if (excluded.has(k)) excluded.delete(k); else excluded.add(k) }
+// A rung of a tier ladder (MaxDmgEffect.tier, one rung counts at a time): clicking the rung in use turns the whole
+// ladder off; clicking any other rung uses that one (the stronger rungs above it are turned off).
+const toggleEffect = (k: string) => {
+  const e = maxDmg.value?.effects.find(x => x.key === k)
+  if (e?.tier) {
+    const inUse = !excluded.has(k) && !e.tierUsed && !!e.reach
+    if (inUse) e.tier.keys.forEach(key => excluded.add(key))
+    else e.tier.keys.forEach((key, rank) => { if (rank < e.tier!.rank) excluded.add(key); else excluded.delete(key) })
+    return
+  }
+  if (excluded.has(k)) excluded.delete(k); else excluded.add(k)
+}
 const setStacks = (k: string, v: number, max: number) => {
   const n = Math.max(0, Math.min(max, Number.isFinite(v) ? v : max))
   if (n === max) stacks.delete(k); else stacks.set(k, n)
@@ -602,8 +615,9 @@ const skillLabel = (s: SkillDamage) => s.name ? `${s.label} (${s.name})` : s.lab
 const perEnemyTitle = (s: SkillDamage) => s.perEnemy.map((x, i) => x.crit ? `${enemyInfo.value[i]?.name}: ${fmt(x.crit)} crit / ${fmt(x.normal)} / avg ${fmt(x.avg)}` : '').filter(Boolean).join('\n')
 
 // ---- buffs & debuffs: where each effect comes from and whether it counts ----
-type EffectStatus = 'used' | 'partial' | 'off' | 'na'
-const STATUS_ORDER: Record<EffectStatus, number> = { used: 0, partial: 1, off: 2, na: 3 }
+// 'alt': a rung of a tier ladder left out because another rung of it is used (MaxDmgEffect.tierUsed).
+type EffectStatus = 'used' | 'partial' | 'alt' | 'off' | 'na'
+const STATUS_ORDER: Record<EffectStatus, number> = { used: 0, partial: 1, alt: 2, off: 3, na: 4 }
 // Sections, in this order: active skills first, then the kit's passives and what's equipped.
 const SOURCE_ORDER = ['Battle Skill', 'Ultimate', 'Basic Attack', 'Switch Skill', 'Follow-up', 'Ability', 'Ascension', 'Crystalis', 'Portrait', 'Support', 'Passive']
 const showUnreachable = useSetting('pveShowUnreachableEffects', false)
@@ -624,6 +638,7 @@ function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: stri
       : { status: 'na', statusText: `A drawback on ${e.casterName} itself, not on enemies` }
   }
   if (excluded.has(e.key)) return { status: 'off', statusText: 'Turned off: click to turn on' }
+  if (e.tierUsed) return { status: 'alt', statusText: 'Only one tier is active at a time (its conditions exclude each other)' }
   if (!e.reach) return { status: 'off', statusText: 'Set to 0 stacks' }
   if (e.side === 'ally') {
     return e.reach.dealer
@@ -646,6 +661,7 @@ const effectViews = computed(() => (maxDmg.value?.effects ?? []).map(e => {
     // Shown as given: after the caster's buff/debuff strength (e.rate).
     value: effectValue(e.rate && e.rate !== 1 ? { ...e.detail, value1: e.detail.value1 * e.rate } : e.detail, e.maxStacks > 1 ? count : 1),
     rate: e.rate ?? 1,
+    tierGroup: e.tier?.group,
     description: effectDescription(e.detail),
     ...effectStatus(e),
   }
@@ -656,7 +672,7 @@ const effectCounts = computed(() => {
   const counts = { buff: 0, debuff: 0, off: 0, na: 0 }
   for (const e of effectViews.value) {
     if (e.status === 'off' || e.status === 'na') counts[e.status]++
-    else counts[e.side === 'ally' ? 'buff' : 'debuff']++
+    else if (e.status !== 'alt') counts[e.side === 'ally' ? 'buff' : 'debuff']++
   }
   return counts
 })
@@ -671,10 +687,13 @@ const effectSections = computed(() => {
   return [...bySource].sort(([a], [b]) => rank(a) - rank(b)).map(([source, effects]) => {
     const toggleable = effects.filter(e => e.status !== 'na')
     const sorted = effects.sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.name.localeCompare(b.name))
+    // A tier ladder counts as one effect.
+    const unit = (e: EffectView) => e.tierGroup ?? e.key
     return {
       source,
       toggleable,
-      onCount: toggleable.filter(e => e.status === 'used' || e.status === 'partial').length,
+      total: new Set(toggleable.map(unit)).size,
+      onCount: new Set(toggleable.filter(e => e.status === 'used' || e.status === 'partial').map(unit)).size,
       // A "Buffs" and a "Debuffs" row, each with one cell per team slot.
       rows: ([['ally', 'Buffs'], ['enemy', 'Debuffs']] as const)
         .map(([side, title]) => ({ side, title, cells: [0, 1, 2, 3, 4].map(i => sorted.filter(e => e.side === side && e.slot === i)) }))
@@ -1936,6 +1955,7 @@ const saved = useSavedTeams({
 }
 
 .fx-card.fx-off,
+.fx-card.fx-alt,
 .fx-card.fx-na {
   --fx: rgba(255, 255, 255, 0.2);
   --fx-bg: rgba(255, 255, 255, 0.02);

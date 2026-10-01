@@ -6,14 +6,17 @@
 // met, then each member's ultimate / battle skill / basic attack is evaluated against every enemy, with and
 // without a crit. Individual effects can be excluded and stack counts overridden.
 // Exception to "conditions assumed met": a state's ActorSkillType (401) conditions are kept and evaluated per skill
-// column (an "Ultimate DMG +30%" buff counts for the Ultimate only) - see stateFrom / withSkillType.
+// column (an "Ultimate DMG +30%" buff counts for the Ultimate only) - see stateFrom / withSkillType. And states whose
+// active conditions exclude each other (a tier ladder like Focused Guard's "enemies == 5 / 4 / ... / 1" or Light Chain
+// Lv 1..5) count one rung at a time, the strongest that is on - see assignTiers.
 import { PvPTeam, KiokuState, isFriendlyEffect, isOpponentEffect, scaleGivenState, elementNumberOf } from "./PvPTeam";
 import type { PvPKioku } from "./PvPKioku";
-import { BattleType, DamageBaseType, damageBaseTypeFromEffectType, getAttackDamageResult, getAdditionalDamageBase, critChance } from "./DamageCalculator";
-import { isEligibleForEffect } from "./UnitStateEngine";
+import { BattleType, DamageBaseType, damageBaseTypeFromEffectType, getAttackDamageResult, getAdditionalDamageBase, critChance, getFinalDamageExtra } from "./DamageCalculator";
+import { isEligibleForEffect, getFinalDamageRatio } from "./UnitStateEngine";
 import { ailmentConditionsMet } from "./BattleConditionParser";
 import { UNIT_STATE_TYPES } from "./StateAddFilter";
 import { actorSkillTypeRestriction } from "./BattleConditionParser";
+import { conditionCsvsExclusive } from "./ConditionTiers";
 import { enemyKiokus } from "./PvEBattle";
 import type { QuestEnemyAppearance } from "./PvE";
 import { skillDetailsByMstId } from "../utils/helpers";
@@ -36,6 +39,12 @@ export interface MaxDmgEffect {
     reach?: { dealer: boolean, enemies: number[] }
     // Also for the dealer's evaluation: the effect-value rate the caster's buff/debuff strength applied (1 = none).
     rate?: number
+    // One rung of a ladder of same-type states from the same caster whose ACTIVE conditions exclude each other
+    // (Focused Guard "enemies == 5/4/3/2/1", Light Chain "Lv 1..5"): in battle only one can be active, so only one
+    // counts here. rank 0 = strongest; `keys` = every rung of the ladder, strongest first.
+    tier?: { group: string, rank: number, keys: string[] }
+    // Dealer's evaluation: set on a rung that was left out because another rung of its ladder (this key) is used.
+    tierUsed?: string
 }
 
 // Buff/debuff strength (UP/DWN_BUFF/DEBUFF_EFFECT_VALUE): not a state on the dealer or an enemy, it scales every
@@ -189,7 +198,36 @@ export function collectTeamEffects(allies: PvPKioku[], attackerPos: number): Max
         for (const sw of switches) for (const d of sw.details) add(pos, k.name, "Switch Skill", d)
         for (const fu of followUpsOf(k, switches)) for (const d of fu.details) add(pos, k.name, "Follow-up", d)
     })
+    assignTiers(out)
     return out
+}
+
+// [APPROXIMATION] Ladders of mutually exclusive states (see MaxDmgEffect.tier, ConditionTiers.ts). Grouped per
+// caster, side and effect type; strongest first (|value1| x max stacks), each rung pairwise exclusive with the others.
+// Ladders that mix effect types (Light Chain Lv n gives final DMG AND resist down) are handled per type, so the
+// strongest final-DMG rung and the strongest resist rung are used together (true here: both are Lv 5).
+function assignTiers(effects: MaxDmgEffect[]) {
+    const byType = new Map<string, MaxDmgEffect[]>()
+    for (const e of effects) {
+        if (!e.detail.activeConditionSetIdCsv || isEffectValueType(e.detail.abilityEffectType)) continue
+        const k = `${e.casterPos}:${e.side}:${e.detail.abilityEffectType}`
+        byType.set(k, [...(byType.get(k) ?? []), e])
+    }
+    const strength = (e: MaxDmgEffect) => Math.abs(e.detail.value1 ?? 0) * e.maxStacks
+    for (const list of byType.values()) {
+        if (list.length < 2) continue
+        const ladders: MaxDmgEffect[][] = []
+        for (const e of [...list].sort((a, b) => strength(b) - strength(a))) {
+            const ladder = ladders.find(l => l.every(o => conditionCsvsExclusive(o.detail.activeConditionSetIdCsv, e.detail.activeConditionSetIdCsv)))
+            if (ladder) ladder.push(e)
+            else ladders.push([e])
+        }
+        for (const ladder of ladders) {
+            if (ladder.length < 2) continue
+            const keys = ladder.map(e => e.key)
+            ladder.forEach((e, rank) => { e.tier = { group: keys[0], rank, keys } })
+        }
+    }
 }
 
 function stateFrom(e: MaxDmgEffect, detail: SkillDetail, caster: KiokuState, stacks: number): SkillDetail & Record<string, any> {
@@ -241,9 +279,20 @@ export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearan
             giverEffects.set(e.casterPos, fx)
         }
         opts.enemyStates?.forEach((type, i) => targets.forEach(t => t.activeEffectDetails.set(`ailment:${type}`, ailmentMarker(type, i))))
+        // One rung per ladder: the strongest one that is on (not excluded, stacks > 0).
+        const usedRung = new Map<string, string>()
+        for (const e of passEffects.filter(x => x.tier).sort((a, b) => a.tier!.rank - b.tier!.rank)) {
+            if (!usedRung.has(e.tier!.group) && stacksOf(e) && ailmentsOk(e.detail)) usedRung.set(e.tier!.group, e.key)
+        }
         for (const e of passEffects) {
+            if (pos === attackerPos) e.tierUsed = undefined
             const stacks = stacksOf(e)
             if (!stacks || isEffectValueType(e.detail.abilityEffectType) || !ailmentsOk(e.detail)) continue
+            const rung = e.tier ? usedRung.get(e.tier.group) : undefined
+            if (rung && rung !== e.key) {
+                if (pos === attackerPos) e.tierUsed = rung
+                continue
+            }
             const caster = team1.kiokuStates[e.casterPos]
             // Scaled by the caster's buff/debuff strength, as when the battle gives the state.
             const detail = scaleGivenState(e.detail, giverEffects.get(e.casterPos) ?? {})
@@ -332,6 +381,15 @@ export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearan
                     perEnemy[i].crit += c
                     perEnemy[i].avg += n * (1 - p(t)) + c * p(t)
                 }
+            }
+            // [CONFIRMED 3.19] RCV_FINAL_DAMAGE (BattleDamageCalculator.CalcFinalDamageNoticeBundle 0x137b110): one more
+            // hit of Ceiling(the skill's whole damage to that target x Σ ratio) - e.g. Light Chain "final DMG taken +50%".
+            for (const i of hitEnemies) {
+                const ratio = getFinalDamageRatio(targets[i], attacker)
+                const x = perEnemy[i]
+                x.normal += getFinalDamageExtra(x.normal, ratio)
+                x.crit += getFinalDamageExtra(x.crit, ratio)
+                x.avg += getFinalDamageExtra(Math.round(x.avg), ratio)
             }
             perEnemy.forEach(x => { x.avg = Math.round(x.avg) })
             const total = perEnemy.reduce((s, x) => ({ normal: s.normal + x.normal, crit: s.crit + x.crit, avg: s.avg + x.avg }), { normal: 0, crit: 0, avg: 0 })

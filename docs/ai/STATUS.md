@@ -55,6 +55,10 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-01 (8): (claude/verify-priority-3.19) Max Damage stacked every rung of tier ladders (Focused Guard "N enemies",
+  Light Chain Lv 1-5, Magic/token counts...) because it strips active conditions: now one rung per ladder
+  (`ConditionTiers.ts`, `MaxDamage.assignTiers`), UI shows the others as "Other tier" (click = use that tier). Max Damage
+  also never counted RCV_FINAL_DAMAGE: added. Engine itself was already right (probe of the user's export). LUX_BENCH_VERSION 5.
 - 2026-10-01 (7): (claude/verify-priority-3.19) checked another session's 8 open assumptions in the decompile. Fixed: EachTarget
   given to every unit / falling back to the holder (now user-only, null = false, also for passives and heals); IS_ROLE /
   IS_ELEMENT NotEqual (set 349, skill detail 200600401, inverted before); team SP uncapped (now 0..6); vortex damage
