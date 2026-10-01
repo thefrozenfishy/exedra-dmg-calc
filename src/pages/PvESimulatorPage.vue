@@ -247,7 +247,7 @@
             <thead>
               <tr>
                 <th>Member</th>
-                <th v-for="col in dmgCols" :key="col.label" :title="col.title">{{ col.label }}</th>
+                <th v-for="col in visibleDmgCols" :key="col.label" :title="col.title">{{ col.label }}</th>
               </tr>
             </thead>
             <tbody>
@@ -260,7 +260,7 @@
                     <span v-if="m.pos === dealerPos" class="dealer-badge">Dealer</span>
                   </div>
                 </td>
-                <td v-for="col in dmgCols" :key="col.label">
+                <td v-for="col in visibleDmgCols" :key="col.label">
                   <template v-if="col.get(m)">
                     <div :title="perEnemyTitle(col.get(m)!)" class="dmg-crit">{{ fmt(col.get(m)!.total.crit) }}</div>
                     <div class="dmg-sub">{{ fmt(col.get(m)!.total.normal) }} · avg {{ fmt(col.get(m)!.total.avg) }}</div>
@@ -598,6 +598,8 @@ const dmgCols: { label: string, title?: string, get: (m: MemberDamage) => SkillD
   { label: 'Switch Skill', title: 'A skill that replaces one of the above while its condition holds (e.g. while a field is up). Strongest one if there are several.', get: m => m.switchSkill },
   { label: 'Follow-up', title: 'Damage of one follow-up / Ether Blow, dealt on top of an action. Strongest one if there are several.', get: m => m.followUp },
 ]
+// Hide a column when no team member has anything in it (e.g. no Switch Skills or Follow-ups in the team)
+const visibleDmgCols = computed(() => dmgCols.filter(col => maxDmg.value?.members.some(m => col.get(m))))
 const skillLabel = (s: SkillDamage) => s.name ? `${s.label} (${s.name})` : s.label
 const perEnemyTitle = (s: SkillDamage) => s.perEnemy.map((x, i) => x.crit ? `${enemyInfo.value[i]?.name}: ${fmt(x.crit)} crit / ${fmt(x.normal)} / avg ${fmt(x.avg)}` : '').filter(Boolean).join('\n')
 
