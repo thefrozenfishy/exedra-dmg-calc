@@ -6,7 +6,7 @@ import { useCharacterStore } from "./characterStore"
 import { useCloudListSync } from "./cloudListSync"
 import { deleteSavedTeam, getFriendCode, loadMySavedTeams, loadSharedTeam as fetchSharedTeam, saveTeam, saveTeamOrder } from "./cloud"
 import { clampName, isUuid } from "../utils/tierList"
-import { compactTeams, expandTeams, isTeamsEmpty, rowToTeam, sanitizeTeamSlots, teamsKey } from "../utils/savedTeams"
+import { compactTeams, expandTeams, isTeamsEmpty, legacyCompactTeams, rowToTeam, sanitizeTeamSlots, teamsKey } from "../utils/savedTeams"
 import { generateShareLink, latestPrettyUrl, prettyShareId, refreshSharePreview, type ImageExportOptions, type ShareLinkOptions } from "../utils/image"
 import type { TeamSlot } from "../types/BestTeamTypes"
 import type { SavedTeam, SavedTeamKind, SharedTeam } from "../types/SavedTeamTypes"
@@ -200,6 +200,24 @@ export function useSavedTeams(options: SavedTeamsOptions) {
 
     // ── Keeping the simulator and the active team in step ──
 
+    function dropMissingActive() {
+        if (activeTeamId.value && !teams.value[activeTeamId.value]) activeTeamId.value = ""
+    }
+
+    // Another page (e.g. "open in simulator" from the Best Team Calculator, or a simulator sharing the same
+    // team store) may have replaced the team. Don't overwrite either side: just stop tracking the saved team.
+    // Done before the watchers below exist, so neither reacts to it.
+    dropMissingActive()
+    if (currentTeam.value && teamsKey(currentTeam.value.slots) !== teamsKey(workingSlots())) {
+        // Teams saved by older versions lack most crys (see legacyCompactTeams). If that's the only difference,
+        // the simulator holds the full version of this team: store that instead.
+        if (teamsKey(currentTeam.value.slots) === teamsKey(legacyCompactTeams(options.getSlots(), kind))) {
+            putTeam({ ...currentTeam.value, slots: workingSlots() })
+        } else {
+            detach()
+        }
+    }
+
     // Edits in the simulator are saved into the active team.
     watch(workingKey, key => {
         const team = currentTeam.value
@@ -278,15 +296,6 @@ export function useSavedTeams(options: SavedTeamsOptions) {
     }
 
     watch(sharedTeamId, openSharedFromRoute)
-
-    function dropMissingActive() {
-        if (activeTeamId.value && !teams.value[activeTeamId.value]) activeTeamId.value = ""
-    }
-
-    // Another page (e.g. "open in simulator" from the Best Team Calculator, or a simulator sharing the same
-    // team store) may have replaced the team. Don't overwrite either side: just stop tracking the saved team.
-    dropMissingActive()
-    if (currentTeam.value && teamsKey(currentTeam.value.slots) !== teamsKey(workingSlots())) detach()
 
     onMounted(async () => {
         // The page setup (stage, seed, decisions...) only lives in the saved team, so bring it back.
