@@ -343,6 +343,13 @@ export class KiokuState {
     kioku: PvPKioku;
     maxBreakGauge: number
     maxMp: number
+    // [CONFIRMED 3.19] BattleUnit.BP (+0x34) / MaxBP (+0x3C), MaxBP = StyleMst.bp (CharacterParameter+0x78).
+    // A unit with MaxBP > 0 (Vinctio☆Magica 12, Metallicized Projectile 15) uses BP instead of EP for its
+    // ultimate: see isSpecialAttackPointMax. BP only moves through GAIN_BP_FIXED / LOSE_BP_FIXED
+    // (BattleUnit.AddBP 0x1382c30, Clamp(BP + n, 0, MaxBP)); no EpCharger path touches it. Starts at 0
+    // (the ctor 0x138a1d0 zeroes EP and BP together).
+    maxBp: number = 0
+    currentBp = 0
     aggro: number
 
     team: PvPTeam
@@ -510,6 +517,7 @@ export class KiokuState {
         this.maxBreakGauge = this.currentRemainingBreakGauge
         this.aggro = aggro[kioku.data.role]
         this.maxMp = kioku.data.ep
+        this.maxBp = kioku.data.bp ?? 0
         this.currentMaxMagic = kioku.maxMagicStacks
         this.stateGen = stateGen
         // ReDriveBattleCore.BattleUnit's HP is initialized from the character's base HP
@@ -526,6 +534,7 @@ export class KiokuState {
             this.currentRemainingBreakGauge = this.maxBreakGauge
             this.weakElements = [...p.weakElements]
             this.maxMp = 0
+            this.maxBp = 0
             this.aggro = 0
         } else if (!isPvpLikeBattle(team.battleType)) {
             // [CONFIRMED 3.19] CharacterParameter.ctor (0x138af80) with isPvpOrGvg = false: BreakPoint = 0,
@@ -848,6 +857,9 @@ export class KiokuState {
     // [CONFIRMED 3.19] IRemoveByUserUnitDeath: every UniqueUnitStateBase state (UNIQUE_BUFF/DEBUFF(+ACCUM),
     // UNIQUE_ELEMENT_STACK/BREAK, UNIQUE_ZONE) this unit gave goes when it dies.
     onDeath(): void {
+        // [CONFIRMED 3.19] GameDirectorBase.OnBattleUnitDeath (0x149a9a0): AddEP(-EP); AddBP(-BP).
+        this.currentMp = 0
+        this.currentBp = 0
         const teams = this.team.otherTeam ? [this.team, this.team.otherTeam] : [this.team]
         for (const t of teams) for (const u of t.kiokuStates)
             u.removeStatesWhere(d => REMOVE_ON_GIVER_DEATH.has(d.abilityEffectType) && (d as any)._applierState === this)
@@ -1106,6 +1118,19 @@ export class KiokuState {
         const v = Math.max(0, f32(f32(f32(f32(rate - 100) * f32(mp)) / 100) + f32(mp)))
         const gain = Math.floor(v)
         this.currentMp = Math.max(0, Math.min(this.maxMp, this.currentMp + gain))
+    }
+
+    // [CONFIRMED 3.19] BattleUnit.IsSpecialAttackPointMax (0x13885d0): MaxBP > 0 ? BP >= MaxBP
+    // : (MaxEP > 0 && EP >= MaxEP). Every ultimate gate uses it (ActExecutor.ValidateCanExecuteAct,
+    // UnitBrain.ShouldUseSpecialAttack / GetAutoSpecialAttackUseUnit, SpecialAttack.Execute).
+    isSpecialAttackPointMax(): boolean {
+        if (this.maxBp > 0) return this.currentBp >= this.maxBp
+        return this.maxMp > 0 && this.currentMp >= this.maxMp
+    }
+
+    // [CONFIRMED 3.19] BattleUnit.AddBP (0x1382c30): BP = Clamp(BP + bp, 0, MaxBP).
+    addBp(bp: number): void {
+        this.currentBp = Math.max(0, Math.min(this.maxBp, this.currentBp + bp))
     }
 
     // [CONFIRMED 3.19] EpCharger.ChargeByReceiveDamage (0x1497520): EP by HP% after the hit (<10: 15, <40: 10, else 5),
@@ -1783,8 +1808,11 @@ export class KiokuState {
                 t.updateSpd()
             })
         } else if (detail.abilityEffectType === "GAIN_BP_FIXED" || detail.abilityEffectType === "LOSE_BP_FIXED") {
-            // [CONFIRMED 3.19] BattleUnit.AddBP (0x1382c30) moves BattleUnit.BP, but nothing in the battle core reads BP
-            // (no condition, no skill cost, no ultimate check - only the UI's BattleUnitInfo). No battle effect.
+            // [CONFIRMED 3.19] GainBpAbilityEffectBase.Triggering (0x18f1e80): AddBP(GetGainPoint = value1) on each
+            // target; LoseBpAbilityEffectBase: AddBP(-value1). BP is the ultimate gauge of MaxBP > 0 units
+            // (isSpecialAttackPointMax). AddBP clamps to [0, MaxBP], so it is a no-op on everyone else.
+            const n = detail.abilityEffectType === "GAIN_BP_FIXED" ? detail.value1 : -detail.value1
+            effTargets.forEach(t => t.addBp(n))
         } else if (detail.abilityEffectType === "GAIN_EP_FIXED") {
             effTargets.forEach(t => t.getMp(detail.value1))
         } else if (detail.abilityEffectType === "GAIN_SP_FIXED") {
@@ -2487,7 +2515,10 @@ export class PvPTeam {
             this.addSp(-1);
             actor.skillStreak++
         } else {
-            actor.currentMp = 0;
+            // [CONFIRMED 3.19] SpecialAttack.Execute (0x138c4f0): if MaxEP > 0, EP = 0; if MaxBP > 0, BP = 0
+            // (the whole gauge is spent, overflow is lost), then EpCharger.ChargeBySpecialAttack (EP only).
+            if (actor.maxMp > 0) actor.currentMp = 0;
+            if (actor.maxBp > 0) actor.currentBp = 0;
         }
         // [CONFIRMED 3.19] SwitchSkillUnitState (value1 = switch-to skill unique id, value3 = the
         // SkillType it replaces; BattleUnit$$IsSwitchingActiveSkill / GetSwitchableSkills build it
@@ -2584,8 +2615,8 @@ export class PvPTeam {
     // Units whose ultimate can fire right now (full MP, not broken, able to act), in slot order.
     readyUltimates(): KiokuState[] {
         return this.aliveKiokus
-            .filter(k => k.currentMp >= k.maxMp)
-            .filter(k => k.maxMp > 0)
+            // [CONFIRMED 3.19] BattleUnit.IsSpecialAttackPointMax: BP vs MaxBP for BP units, else EP vs MaxEP.
+            .filter(k => k.isSpecialAttackPointMax())
             // Not broken. (Was `currentRemainingBreakGauge > 0`, which never holds for PvE allies:
             // they have no break gauge at all, so their ultimates never fired in PvE.)
             .filter(k => k.maxBreakGauge <= 0 || k.currentRemainingBreakGauge > 0)

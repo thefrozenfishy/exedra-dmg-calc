@@ -203,6 +203,8 @@ export class PvPBattle {
             maxBreakGauge: k.maxBreakGauge,
             mp: k.currentMp,
             maxMp: k.maxMp,
+            bp: k.currentBp,
+            maxBp: k.maxBp,
             id: k.kioku.data.id,
             hp: k.currentHp,
             maxHp: k.maxHp,

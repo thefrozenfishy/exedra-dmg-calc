@@ -274,6 +274,8 @@ export interface TeamSnapshot {
     maxBreakGauge: number
     mp: number
     maxMp: number
+    bp?: number
+    maxBp?: number
     name: string
     hp: number
     maxHp: number
@@ -344,6 +346,7 @@ export interface KiokuData {
     def200: number
     element: KiokuElement
     ep: number
+    bp?: number  // StyleMst.bp: MaxBP; > 0 means the ultimate runs on BP instead of EP (MP)
     heartphial: string
     hp120: number
     hp140: number

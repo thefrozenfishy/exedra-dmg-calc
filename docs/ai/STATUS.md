@@ -55,6 +55,7 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-01 (9): (claude/verify-priority-3.19) BP system: MaxBP units (Vinctio☆Magica, Metallicized Projectile) ult on BP (IsSpecialAttackPointMax), GAIN/LOSE_BP_FIXED implemented, EP/BP zeroed on death; BattleTimeline/export show a BP bar and charge (max 1000) as %. MECHANICS 10.
 - 2026-10-01 (8): (claude/verify-priority-3.19) Max Damage stacked every rung of tier ladders (Focused Guard "N enemies",
   Light Chain Lv 1-5, Magic/token counts...) because it strips active conditions: now one rung per ladder
   (`ConditionTiers.ts`, `MaxDamage.assignTiers`), UI shows the others as "Other tier" (click = use that tier). Max Damage

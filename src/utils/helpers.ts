@@ -269,6 +269,7 @@ function buildKiokuData(style: any): KiokuData {
         element: elementMap[style.element],
         role: roleMap[style.role],
         ep: style.ep,
+        bp: style.bp ?? 0,
         releaseDate: releaseDateOf(style.releaseTime),
         minHp: style.hp,
         minAtk: style.atk,

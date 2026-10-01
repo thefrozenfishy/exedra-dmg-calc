@@ -130,7 +130,11 @@
                 class="status-chip field-chip" :title="`Field stock ${state.field.stack} / ${state.field.max}`">Field {{
                   state.field.stack }}/{{ state.field.max }}</span>
             </div>
-            <div v-if="char.maxMp > 0" class="progress-bar" :title="char.mp + ' / ' + char.maxMp">
+            <div v-if="char.maxBp" class="progress-bar" :title="char.bp + ' / ' + char.maxBp + ' BP'">
+              BP
+              <progress :value="char.bp" :max="char.maxBp">BP</progress>
+            </div>
+            <div v-else-if="char.maxMp > 0" class="progress-bar" :title="char.mp + ' / ' + char.maxMp">
               MP
               <progress :value="char.mp" :max="char.maxMp">MP</progress>
             </div>
@@ -138,7 +142,8 @@
               Break
               <progress :value="char.breakCurrent" :max="char.maxBreakGauge"></progress>
             </div>
-            <div v-if="char.maxMagicStacks" class="distance">Magic: {{ char.magicStacks }} / {{ char.maxMagicStacks }}</div>
+            <div v-if="char.maxMagicStacks === 1000" class="distance" :title="char.magicStacks + ' / 1000'">Charge: {{ char.magicStacks / 10 }}%</div>
+            <div v-else-if="char.maxMagicStacks" class="distance">Magic: {{ char.magicStacks }} / {{ char.maxMagicStacks }}</div>
             <div class="distance">{{ round(char.secondsLeft) }} AV ({{ round(char.distanceLeft / 100) }} AA)</div>
             <div class="distance" :title="formatSpdBuffs(char.currSpdBuffs)">{{ round(char.spd) }} spd</div>
             <div class="distance" :title="char.buffs.join('\n')">{{ char.buffs.length }} buffs</div>

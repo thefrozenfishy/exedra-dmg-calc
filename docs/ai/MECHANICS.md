@@ -278,7 +278,13 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   [?] per hit vs per act for hit-received EP.
 - SP: team resource (`SpReferee`, TS `PvPTeam.currentSp` / `addSp`): Init 0x15c07a0 = 5 per team; **AddSp 0x15c04b0
   = Clamp(sp + n, 0, 6)** (SP above 6 is lost); `GetCalculationSp` 0x15c05e0: normal attack +1, else -ConsumeSP;
-  GAIN_SP_FIXED adds through the same clamp. GAIN/LOSE_BP: no battle effect. [C] Check: checkMechanics #6.
+  GAIN_SP_FIXED adds through the same clamp. [C] Check: checkMechanics #6.
+- BP (ultimate gauge of units with StyleMst.bp > 0: Vinctio☆Magica 12, Metallicized Projectile 15; their ep = 0):
+  `BattleUnit.IsSpecialAttackPointMax` 0x13885d0 = MaxBP > 0 ? BP >= MaxBP : (MaxEP > 0 && EP >= MaxEP), used by every
+  ultimate gate. BP starts 0, moves only via GAIN/LOSE_BP_FIXED (`AddBP` 0x1382c30, clamp [0, MaxBP]); EpCharger
+  never touches it. `SpecialAttack.Execute` 0x138c4f0 sets EP = 0 (if MaxEP > 0) and BP = 0 (if MaxBP > 0) before
+  the effects run (so an ult's own +BP lands on 0). `OnBattleUnitDeath` 0x149a9a0 zeroes EP and BP. [C]
+  TS: `KiokuState.maxBp/currentBp/isSpecialAttackPointMax/addBp`. (Before 2026-10-01 BP was ignored: these two never ulted.)
 
 ## 11. PvE specifics
 
