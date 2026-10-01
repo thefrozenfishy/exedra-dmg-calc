@@ -7,8 +7,13 @@ import { clampName } from "./tierList"
 export const SLOTS_PER_TEAM = 5
 export const TEAMS_PER_KIND: Record<SavedTeamKind, number> = { single: 1, pvp: 2, pve: 1 }
 
+// A member's crysOptions has an entry for every crys it can use (the game has under 100); most are untouched
+// defaults. At most MAX_CRYS_OPTIONS of the others are stored.
+const MAX_CRYS_KEYS = 500
 const MAX_CRYS_OPTIONS = 20
 const MAX_SUB_CRYS = 20
+// Teams saved before every crys key was read only kept crys among the first 20 keys (ids 1001-1020, the 1★ crys).
+const LEGACY_CRYS_KEYS = 20
 
 const asRecord = (value: unknown): Record<string, unknown> =>
     value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, unknown>) : {}
@@ -42,11 +47,15 @@ function sanitizeMember(raw: unknown): SavedTeamMember | undefined {
 
     const crysIn = asRecord(m.crysOptions)
     const crysOptions: Record<string, CrystalisSelection> = {}
-    for (const key of Object.keys(crysIn).slice(0, MAX_CRYS_OPTIONS)) {
-        if (!isId(Number(key))) continue
-        const selection = sanitizeCrys(crysIn[key])
-        if (selection) crysOptions[String(Number(key))] = selection
-    }
+    // Equipped crys go first, so the cap can only drop leftovers (an unequipped crys that still has sub crys
+    // or the owned flag), never what the member uses.
+    Object.keys(crysIn).slice(0, MAX_CRYS_KEYS)
+        .filter(key => isId(Number(key)))
+        .map(key => [String(Number(key)), sanitizeCrys(crysIn[key])] as const)
+        .filter((entry): entry is readonly [string, CrystalisSelection] => !!entry[1])
+        .sort(([, a], [, b]) => Number(b.useIndex > 0) - Number(a.useIndex > 0))
+        .slice(0, MAX_CRYS_OPTIONS)
+        .forEach(([id, selection]) => { crysOptions[id] = selection })
 
     const member: SavedTeamMember = {
         id: m.id,
@@ -85,6 +94,15 @@ export function sanitizeTeamSlots(raw: unknown, kind: SavedTeamKind): SavedTeamS
 /** Simulator slots -> the compact form that is stored and shared. */
 export function compactTeams(teams: TeamSlot[][], kind: SavedTeamKind): SavedTeamSlot[][] {
     return sanitizeTeamSlots(teams, kind)
+}
+
+/** Simulator slots -> the compact form as teams were stored when only the first LEGACY_CRYS_KEYS crys keys were read. */
+export function legacyCompactTeams(teams: TeamSlot[][], kind: SavedTeamKind): SavedTeamSlot[][] {
+    const cut = (m?: Character): Character | undefined => m && {
+        ...m,
+        crysOptions: Object.fromEntries(Object.entries(m.crysOptions ?? {}).slice(0, LEGACY_CRYS_KEYS)),
+    }
+    return compactTeams(teams.map(team => team.map(slot => slot && { ...slot, main: cut(slot.main), support: cut(slot.support) })), kind)
 }
 
 /** Stored slots -> simulator slots. Static character data (name, element, role, ...) comes from `catalog`. */
