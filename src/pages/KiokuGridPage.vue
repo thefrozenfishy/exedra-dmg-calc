@@ -84,7 +84,7 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualSplitRole(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                            }}</span>
+                        }}</span>
                     </div>
                 </button>
                 <button class="chip chip-all" :class="allVirtualRolesVisible ? 'chip--visible' : 'chip--hidden'"
@@ -130,7 +130,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ xVal === "-1" ? "Not Owned" : `A${xVal}`
-                            }}</span>
+                                }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -150,7 +150,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ yVal === "-1" ? "Not Owned" : `A${yVal}`
-                            }}</span>
+                                }}</span>
                         </td>
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
                             <template v-for="r in [5, 4, 3]" :key="r">
@@ -180,7 +180,7 @@
                                                         <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`"
                                                             :alt="ch.role" class="info-badge-icon" />
                                                         <span class="role-badge-tag">{{ rangeTag(ch.range, ch.role)[0]
-                                                        }}</span>
+                                                            }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="axis-info-badge level-badge info-badge-img"
@@ -206,114 +206,44 @@
             </table>
         </div>
 
-        <section class="card gain-section buff-chart-section">
+        <section v-for="bc in benchCharts" :key="bc.kind" class="card gain-section" :class="bc.sectionClass">
             <div class="chart-export-toolbar">
-                <ImageActionsToolbar target=".buff-chart-section" filename="relative-buff-strength.png"
-                    :export-options="() => chartExportOpts('.buff-chart-section')"
-                    :share-options="shareOptionsForBuffChart" :disabled="!gainChart.bars.length" />
+                <ImageActionsToolbar :target="`.${bc.sectionClass}`" :filename="bc.filename"
+                    :export-options="() => chartExportOpts(`.${bc.sectionClass}`)"
+                    :share-options="shareOptionsForBenchChart(bc.title)" :disabled="!bc.chart.bars.length" />
             </div>
-            <div class="gain-header filters-heading">Relative buff strength</div>
-            <p class="gain-desc">Comparison of relative buff strength on a character with no other buffs. Only buffs to
-                special dmg is being compared. {{ levelsDescription }}</p>
-            <p class="gain-desc">One enemy with 3000 def is used as basis for dmg calculation.</p>
-            <p class="gain-desc">Be careful when directly comparing buffers and debuffs, as they scale differently on
-                eachother.
-            </p>
-            <p class="gain-desc">Buffs which are only active under some circumstances have dashed bars.</p>
+            <div class="gain-header filters-heading">{{ bc.title }} <span class="beta-badge">New engine</span></div>
+            <p v-for="line in bc.desc" :key="line" class="gain-desc">{{ line }}</p>
 
-            <div
-                style="width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+            <div class="gain-bar-options">
                 <div class="fight-mode-row">
                     <span class="fight-mode-label">Display</span>
                     <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Damage metric">
-                        <div class="fight-mode-highlight" :style="{ transform: `translateX(${metricIndex * 100}%)` }">
+                        <div class="fight-mode-highlight"
+                            :style="{ transform: `translateX(${benchMetricIndex * 100}%)` }">
                         </div>
-                        <button v-for="opt in metricOptions" :key="opt.label" type="button" class="fight-mode-option"
-                            :class="{ active: barGraphAverageDmg === opt.value }" :title="opt.title"
-                            @click="barGraphAverageDmg = opt.value">
-                            {{ opt.label }}
-                        </button>
-                    </div>
-                </div>
-                <label class="filter-chip" :class="{ active: simulateMaxLevels }"
-                    title="On: every Kioku is simulated at A5 with max Kioku, Magic, Heartphial and Special level. Off: your own Kioku's current ascension and levels are used, and unowned Kioku are left out">
-                    <input type="checkbox" v-model="simulateMaxLevels" /> Simulate using max possible levels
-                </label>
-            </div>
-            <p v-if="gainChart.error" class="gain-empty">{{ gainChart.error }}</p>
-            <p v-else-if="gainLoading && !gainChart.bars.length" class="gain-empty">Calculating… {{ gainProgress }}%
-            </p>
-            <p v-else-if="!gainChart.bars.length" class="gain-empty">No characters to show with the current filters.
-            </p>
-            <template v-else>
-                <p v-if="gainLoading" class="gain-desc">Updating… {{ gainProgress }}%</p>
-                <div class="gain-legend">
-                    <span v-for="role in gainChart.roles" :key="role" class="gain-legend-item">
-                        <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{
-                            virtualRoleLabel(role) }}
-                    </span>
-                </div>
-                <div class="gain-scroll">
-                    <div class="gain-chart">
-                        <div v-for="bar in gainChart.bars" :key="bar.id" class="gain-col"
-                            :class="{ variant: bar.variant, active: activeBarTip?.id === bar.id }"
-                            :title="activeBarTip?.id === bar.id ? undefined : bar.title"
-                            @click.stop="toggleBarTip(bar, $event)">
-                            <div class="gain-track">
-                                <div class="gain-zero" :style="{ bottom: `${gainChart.zeroPct}%` }"></div>
-                                <div class="gain-bar-wrap" :style="bar.style">
-                                    <div class="gain-bar" :style="{ backgroundColor: roleColor(bar.vRole) }">
-                                    </div>
-                                    <span class="gain-value">{{ bar.label }}</span>
-                                </div>
-                            </div>
-                            <div class="gain-name" :title="bar.name">
-                                <img class="gain-char-icon" :class="bar._borderClass"
-                                    :src="`/exedra-dmg-calc/kioku_images/${bar.charId}_thumbnail.png`"
-                                    :alt="bar.name" />
-
-                                <div v-if="bar.tags.length" class="gain-tag-icons">
-                                    <img v-for="tag in bar.tags" :key="`${tag.kind}:${tag.value}`" class="gain-tag-icon"
-                                        :src="tag.icon" :alt="tag.value" :title="tag.value" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <p v-for="note in gainChart.notes" :key="note" class="gain-desc">{{ note }}</p>
-            </template>
-        </section>
-
-        <section class="card gain-section attacker-chart-section">
-            <div class="chart-export-toolbar">
-                <ImageActionsToolbar target=".attacker-chart-section" filename="attacker-strength-vs-lux.png"
-                    :export-options="() => chartExportOpts('.attacker-chart-section')"
-                    :share-options="shareOptionsForAttackerChart" :disabled="!attackerChart.bars.length" />
-            </div>
-            <div class="gain-header filters-heading">Attacker strength compared to Lux</div>
-            <p class="gain-desc">Damage each character deals as the attacker, compared to {{ LuxMagica }} in the same
-                spot. {{ LuxMagica }} is the 0% line; -50% means half of her damage.</p>
-            <p class="gain-desc">Every character uses their own element and role, has no other buffs and is supported by
-                four {{ LuxMagica }}. {{ levelsDescription }}</p>
-            <p class="gain-desc">{{ fightMode === 'st' ? 'One enemy' : fightMode === 'aoe' ? 'Five enemies' :
-                'Three enemies' }} with 3000 def is used as basis for dmg calculation.</p>
-
-            <div
-                style="width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
-                <div class="fight-mode-row">
-                    <span class="fight-mode-label">Display</span>
-                    <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Damage metric">
-                        <div class="fight-mode-highlight" :style="{ transform: `translateX(${metricIndex * 100}%)` }">
-                        </div>
-                        <button v-for="opt in metricOptions" :key="opt.label" type="button" class="fight-mode-option"
-                            :class="{ active: barGraphAverageDmg === opt.value }" :title="opt.title"
-                            @click="barGraphAverageDmg = opt.value">
+                        <button v-for="opt in benchMetricOptions" :key="opt.label" type="button"
+                            class="fight-mode-option" :class="{ active: benchAverageDmg === opt.value }"
+                            :title="opt.title" @click="benchAverageDmg = opt.value">
                             {{ opt.label }}
                         </button>
                     </div>
                 </div>
 
-                <div class="fight-mode-row">
+                <div v-if="benchAverageDmg" class="fight-mode-row">
+                    <span class="fight-mode-label">Simulation depth</span>
+                    <div class="fight-mode-toggle" style="--count: 3" role="radiogroup" aria-label="Battle length">
+                        <div class="fight-mode-highlight"
+                            :style="{ transform: `translateX(${benchSpeedIndex * 100}%)` }"></div>
+                        <button v-for="opt in benchSpeedOptions" :key="opt.value" type="button"
+                            class="fight-mode-option" :class="{ active: benchSpeed === opt.value }" :title="opt.title"
+                            @click="benchSpeed = opt.value">
+                            {{ opt.label }}
+                        </button>
+                    </div>
+                </div>
+
+                <div v-if="bc.fightType" class="fight-mode-row">
                     <span class="fight-mode-label">Fight type</span>
                     <div class="fight-mode-toggle" role="radiogroup" aria-label="Fight type">
                         <div class="fight-mode-highlight"
@@ -329,26 +259,29 @@
                     title="On: every Kioku is simulated at A5 with max Kioku, Magic, Heartphial and Special level. Off: your own Kioku's current ascension and levels are used, and unowned Kioku are left out">
                     <input type="checkbox" v-model="simulateMaxLevels" /> Simulate using max possible levels
                 </label>
+                <button type="button" class="filter-chip" :disabled="bc.running"
+                    title="Results are saved in this browser and reused while nothing changes. Recalculate this chart from scratch."
+                    @click="runBench(bc.kind, { fresh: true })">Recalculate</button>
             </div>
-            <p v-if="attackerChart.error" class="gain-empty">{{ attackerChart.error }}</p>
-            <p v-else-if="attackerLoading && !attackerChart.bars.length" class="gain-empty">Calculating…</p>
-            <p v-else-if="!attackerChart.bars.length" class="gain-empty">No characters to show with the current
-                filters.</p>
+            <p v-if="bc.chart.error" class="gain-empty">{{ bc.chart.error }}</p>
+            <p v-else-if="!bc.chart.bars.length" class="gain-empty">
+                {{ bc.status || "No characters to show with the current filters." }}</p>
             <template v-else>
+                <p v-if="bc.status" class="gain-desc">{{ bc.status }}</p>
                 <div class="gain-legend">
-                    <span v-for="role in attackerChart.roles" :key="role" class="gain-legend-item">
+                    <span v-for="role in bc.chart.roles" :key="role" class="gain-legend-item">
                         <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{
                             virtualRoleLabel(role) }}
                     </span>
                 </div>
                 <div class="gain-scroll">
                     <div class="gain-chart">
-                        <div v-for="bar in attackerChart.bars" :key="bar.id" class="gain-col"
-                            :class="{ variant: bar.variant, active: activeBarTip?.id === bar.id }"
+                        <div v-for="bar in bc.chart.bars" :key="bar.id" class="gain-col bench-col"
+                            :class="{ variant: bar.variant, active: activeBarTip?.id === bar.id, negative: bar.gain < 0 }"
                             :title="activeBarTip?.id === bar.id ? undefined : bar.title"
                             @click.stop="toggleBarTip(bar, $event)">
                             <div class="gain-track">
-                                <div class="gain-zero" :style="{ bottom: `${attackerChart.zeroPct}%` }"></div>
+                                <div class="gain-zero" :style="{ bottom: `${bc.chart.zeroPct}%` }"></div>
                                 <div class="gain-bar-wrap" :style="bar.style">
                                     <div class="gain-bar" :style="{ backgroundColor: roleColor(bar.vRole) }">
                                     </div>
@@ -368,109 +301,9 @@
                         </div>
                     </div>
                 </div>
-                <p v-for="note in attackerChart.notes" :key="note" class="gain-desc">{{ note }}</p>
+                <p v-for="note in bc.chart.notes" :key="note" class="gain-desc">{{ note }}</p>
             </template>
         </section>
-
-        <template v-if="beta">
-            <section v-for="bc in benchCharts" :key="bc.kind" class="card gain-section" :class="bc.sectionClass">
-                <div class="chart-export-toolbar">
-                    <ImageActionsToolbar :target="`.${bc.sectionClass}`" :filename="bc.filename"
-                        :export-options="() => chartExportOpts(`.${bc.sectionClass}`)"
-                        :share-options="shareOptionsForBenchChart(bc.title)" :disabled="!bc.chart.bars.length" />
-                </div>
-                <div class="gain-header filters-heading">{{ bc.title }} <span class="beta-badge">New engine</span></div>
-                <p v-for="line in bc.desc" :key="line" class="gain-desc">{{ line }}</p>
-
-                <div class="gain-bar-options">
-                    <div class="fight-mode-row">
-                        <span class="fight-mode-label">Display</span>
-                        <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Damage metric">
-                            <div class="fight-mode-highlight"
-                                :style="{ transform: `translateX(${benchMetricIndex * 100}%)` }"></div>
-                            <button v-for="opt in benchMetricOptions" :key="opt.label" type="button"
-                                class="fight-mode-option" :class="{ active: benchAverageDmg === opt.value }"
-                                :title="opt.title" @click="benchAverageDmg = opt.value">
-                                {{ opt.label }}
-                            </button>
-                        </div>
-                    </div>
-
-                    <div v-if="benchAverageDmg" class="fight-mode-row">
-                        <span class="fight-mode-label">Simulation depth</span>
-                        <div class="fight-mode-toggle" style="--count: 3" role="radiogroup" aria-label="Battle length">
-                            <div class="fight-mode-highlight"
-                                :style="{ transform: `translateX(${benchSpeedIndex * 100}%)` }"></div>
-                            <button v-for="opt in benchSpeedOptions" :key="opt.value" type="button"
-                                class="fight-mode-option" :class="{ active: benchSpeed === opt.value }"
-                                :title="opt.title" @click="benchSpeed = opt.value">
-                                {{ opt.label }}
-                            </button>
-                        </div>
-                    </div>
-
-                    <div v-if="bc.fightType" class="fight-mode-row">
-                        <span class="fight-mode-label">Fight type</span>
-                        <div class="fight-mode-toggle" role="radiogroup" aria-label="Fight type">
-                            <div class="fight-mode-highlight"
-                                :style="{ transform: `translateX(${fightModeIndex * 100}%)` }"></div>
-                            <button v-for="opt in fightModeOptions" :key="opt.value" type="button"
-                                class="fight-mode-option" :class="{ active: fightMode === opt.value }"
-                                :title="opt.title" @click="fightMode = opt.value">
-                                {{ opt.label }}
-                            </button>
-                        </div>
-                    </div>
-                    <label class="filter-chip" :class="{ active: simulateMaxLevels }"
-                        title="On: every Kioku is simulated at A5 with max Kioku, Magic, Heartphial and Special level. Off: your own Kioku's current ascension and levels are used, and unowned Kioku are left out">
-                        <input type="checkbox" v-model="simulateMaxLevels" /> Simulate using max possible levels
-                    </label>
-                    <button type="button" class="filter-chip" :disabled="bc.running"
-                        title="Results are saved in this browser and reused while nothing changes. Recalculate this chart from scratch."
-                        @click="runBench(bc.kind, { fresh: true })">Recalculate</button>
-                </div>
-                <p v-if="bc.chart.error" class="gain-empty">{{ bc.chart.error }}</p>
-                <p v-else-if="!bc.chart.bars.length" class="gain-empty">
-                    {{ bc.status || "No characters to show with the current filters." }}</p>
-                <template v-else>
-                    <p v-if="bc.status" class="gain-desc">{{ bc.status }}</p>
-                    <div class="gain-legend">
-                        <span v-for="role in bc.chart.roles" :key="role" class="gain-legend-item">
-                            <span class="gain-legend-swatch" :style="{ background: roleColor(role) }"></span>{{
-                                virtualRoleLabel(role) }}
-                        </span>
-                    </div>
-                    <div class="gain-scroll">
-                        <div class="gain-chart">
-                            <div v-for="bar in bc.chart.bars" :key="bar.id" class="gain-col bench-col"
-                                :class="{ variant: bar.variant, active: activeBarTip?.id === bar.id, negative: bar.gain < 0 }"
-                                :title="activeBarTip?.id === bar.id ? undefined : bar.title"
-                                @click.stop="toggleBarTip(bar, $event)">
-                                <div class="gain-track">
-                                    <div class="gain-zero" :style="{ bottom: `${bc.chart.zeroPct}%` }"></div>
-                                    <div class="gain-bar-wrap" :style="bar.style">
-                                        <div class="gain-bar" :style="{ backgroundColor: roleColor(bar.vRole) }">
-                                        </div>
-                                        <span class="gain-value">{{ bar.label }}</span>
-                                    </div>
-                                </div>
-                                <div class="gain-name" :title="bar.name">
-                                    <img class="gain-char-icon" :class="bar._borderClass"
-                                        :src="`/exedra-dmg-calc/kioku_images/${bar.charId}_thumbnail.png`"
-                                        :alt="bar.name" />
-
-                                    <div v-if="bar.tags.length" class="gain-tag-icons">
-                                        <img v-for="tag in bar.tags" :key="`${tag.kind}:${tag.value}`"
-                                            class="gain-tag-icon" :src="tag.icon" :alt="tag.value" :title="tag.value" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <p v-for="note in bc.chart.notes" :key="note" class="gain-desc">{{ note }}</p>
-                </template>
-            </section>
-        </template>
 
         <div v-if="activeBarTip" class="gain-tip" :class="{ below: activeBarTip.below }"
             :style="{ left: `${activeBarTip.x}px`, top: `${activeBarTip.y}px` }" @click.stop="closeBarTip">
@@ -486,13 +319,10 @@ import { Character, KiokuConstants, withMaxLevelsForPlayerLevel } from "../types
 import { Ailment, KiokuElement, KiokuRole, LuxMagica } from '../types/enums'
 import { useSetting } from "../store/settingsStore"
 import { ScoreAttackKioku } from "../models/ScoreAttackKioku"
-import { ScoreAttackTeam } from "../models/ScoreAttackTeam"
 import { skillDetails } from "../utils/helpers"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import type { ImageExportOptions } from "../utils/image"
 import { useFriendStore } from "../store/friendStore"
-import { Enemy } from "../types/EnemyTypes"
-import { isBeta } from "../utils/betaSettings"
 import type { LuxBenchJob, LuxBenchMessage } from "../workers/luxBenchWorker"
 import type { BenchRow } from "../models/LuxBench"
 import { benchCharKey, clearBenchCache, loadBenchCache, saveBenchCache, type BenchCacheEntry, type BenchSetup } from "../utils/luxBenchCache"
@@ -623,7 +453,6 @@ const splitAttackerRange = useSetting("splitAttackerRange", true)
 const splitBreakerRange = useSetting("splitBreakerRange", true)
 const splitDebufferRange = useSetting("splitDebufferRange", true)
 const displayArchetypes = useSetting("displayArchetypes", true)
-const barGraphAverageDmg = useSetting("barGraphAverageDmg", false)
 const simulateMaxLevels = useSetting("gridSimulateMaxLevels", true)
 
 const fightModeOptions = [
@@ -634,12 +463,6 @@ const fightModeOptions = [
 type FightMode = typeof fightModeOptions[number]["value"]
 const fightMode = useSetting<FightMode>("fightMode", "aoe")
 const fightModeIndex = computed(() => fightModeOptions.findIndex(opt => opt.value === fightMode.value))
-
-const metricOptions = [
-    { value: false, label: "Max Burst", title: "Calculates the dmg difference if all hits crit" },
-    { value: true, label: "Average Burst", title: "Calculates the dmg difference using the average crit rate" },
-] as const
-const metricIndex = computed(() => metricOptions.findIndex(opt => opt.value === barGraphAverageDmg.value))
 
 // Beta charts (battle engine): their own metric toggle, since "average" means something else there.
 const benchAverageDmg = useSetting("gridBenchAverageDmg", false)
@@ -912,34 +735,6 @@ interface DmgResult {
     critRate: string
 }
 
-interface Dealer {
-    char: Character
-    context: DealerContext
-    tags: DealerTag[]
-    dps: ScoreAttackKioku
-    baseline: DmgResult
-}
-
-interface DealerGain {
-    dealer: Dealer
-    result: DmgResult
-    maxGain: number
-    avgGain: number
-}
-
-const dealerLabel = (d: Dealer) => `${d.char.name}${d.tags.length ? ` (${d.tags.map(t => t.value).join("/")})` : ""}`
-
-const exampleEnemies = computed(() => {
-    const outerEnabled = fightMode.value === "aoe"
-    const proxEnabled = fightMode.value === "aoe" || fightMode.value === "prox"
-    return [
-        { name: 'Left Other', maxBreak: 500, defense: 3000, enabled: outerEnabled, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
-        { name: 'Left Proximity', maxBreak: 500, defense: 3000, enabled: proxEnabled, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
-        { name: 'Target', maxBreak: 500, defense: 3000, enabled: true, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 1 },
-        { name: 'Right Proximity', maxBreak: 500, defense: 3000, enabled: proxEnabled, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
-        { name: 'Right Other', maxBreak: 500, defense: 3000, enabled: outerEnabled, defenseUp: 0, dmgTakenDown: 0, isBreak: true, isWeak: true, isCrit: true, isAddDmgCrit: true, hitsToKill: 10 },
-    ] as Enemy[]
-})
 
 const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1).toLowerCase()
 
@@ -1007,10 +802,6 @@ interface SupportGainEntry {
     avg: CharGainResult
 }
 
-// Same shape, but for the attacker chart: `gain` is the dmg the character deals as the
-// attacker compared to Lux in the same spot (0% = as much as Lux).
-type AttackerGainEntry = SupportGainEntry
-
 const fmt = (g: number) =>
     `${g > 0 ? "+" : ""}${g.toFixed(1)}%`
 
@@ -1023,82 +814,6 @@ const makeBarTitle = (
     `Crit rate: ${row.critRate}%`,
 ].join("\n")
 
-const pctGain = (value: number, base: number) => base > 0 ? (value / base - 1) * 100 : 0
-
-const calculateDmg = (
-    dps: ScoreAttackKioku,
-    supports: ScoreAttackKioku[],
-    activeAilment?: Ailment,
-    noConsume = false,
-): DmgResult => {
-    const [max, avg, critRate] = new ScoreAttackTeam(
-        dps,
-        supports,
-        100,
-        activeAilment ? [activeAilment] : [],
-        {},
-        false,
-        new Set(),
-        new Set(),
-        new Map(),
-        new Set(),
-        new Map(),
-        noConsume,
-    ).calculate_max_dmg(exampleEnemies.value, 0)
-
-    return { max, avg, critRate }
-}
-
-// Static: only depends on the enums, so build it once.
-const dealerContexts: DealerContext[] = [
-    makeContext(),
-    makeContext(undefined, undefined, undefined, true),
-
-    ...Object.values(KiokuElement).flatMap(element => [
-        makeContext(element),
-        makeContext(element, undefined, undefined, true),
-    ]),
-
-    ...Object.values(KiokuRole).flatMap(role => [
-        makeContext(undefined, role),
-        makeContext(undefined, role, undefined, true),
-    ]),
-
-    ...Object.values(Ailment).flatMap(ailment => [
-        makeContext(undefined, undefined, ailment),
-        makeContext(undefined, undefined, ailment, true),
-    ]),
-
-    ...Object.values(KiokuElement).flatMap(element =>
-        Object.values(KiokuRole).flatMap(role => [
-            makeContext(element, role),
-            makeContext(element, role, undefined, true),
-        ])
-    ),
-
-    ...Object.values(KiokuElement).flatMap(element =>
-        Object.values(Ailment).flatMap(ailment => [
-            makeContext(element, undefined, ailment),
-            makeContext(element, undefined, ailment, true),
-        ])
-    ),
-
-    ...Object.values(KiokuRole).flatMap(role =>
-        Object.values(Ailment).flatMap(ailment => [
-            makeContext(undefined, role, ailment),
-            makeContext(undefined, role, ailment, true),
-        ])
-    ),
-
-    ...Object.values(KiokuElement).flatMap(element =>
-        Object.values(KiokuRole).flatMap(role =>
-            Object.values(Ailment).flatMap(ailment => [
-                makeContext(element, role, ailment),
-                makeContext(element, role, ailment, true),
-            ])
-        )
-    ),
-]
 
 const NONE_CONTEXT_KEY = contextKey(makeContext())
 
@@ -1171,336 +886,6 @@ const buildCharGainResult = (
     return { main: toRow(noneGain, []), variants: [...variantMap.values()] }
 }
 
-// --- Heavy part: runs in the background, in time-sliced chunks -------------------------
-// It only depends on the roster, NOT on the filters or the avg/max toggle.
-
-const gainResults = shallowRef<SupportGainEntry[]>([])
-const gainStatus = shallowRef({ error: "", notes: [] as string[] })
-const gainLoading = ref(false)
-const gainProgress = ref(0)
-let gainRun = 0
-
-const attackerResults = shallowRef<AttackerGainEntry[]>([])
-const attackerStatus = shallowRef({ error: "", notes: [] as string[] })
-const attackerLoading = ref(false)
-
-const SLICE_MS = 12
-
-const yieldToMain = (): Promise<void> => {
-    const sched = (globalThis as any).scheduler
-    return typeof sched?.yield === "function"
-        ? sched.yield()
-        : new Promise<void>(resolve => setTimeout(resolve, 0))
-}
-
-// The bar charts are only published once their icons are in the browser cache, so the bars and
-// their character/tag icons appear together instead of the icons popping in afterwards.
-const IMAGE_PRELOAD_TIMEOUT_MS = 3000
-
-const preloadImages = (urls: Iterable<string>): Promise<void> => {
-    const loads = [...urls].map(url => new Promise<void>(resolve => {
-        const img = new Image()
-        img.onload = () => resolve()
-        img.onerror = () => resolve() // a missing icon must never block the chart
-        img.src = url
-    }))
-
-    let timer: ReturnType<typeof setTimeout>
-    const timeout = new Promise<void>(resolve => {
-        timer = setTimeout(resolve, IMAGE_PRELOAD_TIMEOUT_MS) // don't hang on a stalled request
-    })
-
-    return Promise.race([Promise.all(loads), timeout]).finally(() => clearTimeout(timer))
-}
-
-// Every icon a chart can show: the character thumbnails plus the tag icons of their variants.
-// Covers both metrics so flipping the avg/max toggle never loads anything new.
-// `minGain` mirrors the chart's own cut-off, so characters that are never drawn aren't loaded.
-const chartImageUrls = (entries: SupportGainEntry[], minGain: number): Set<string> => {
-    const urls = new Set<string>()
-
-    for (const entry of entries) {
-        for (const metric of [entry.max, entry.avg]) {
-            for (const row of [metric.main, ...metric.variants]) {
-                if (row.gain <= minGain) continue
-
-                urls.add(`/exedra-dmg-calc/kioku_images/${row.ch.id}_thumbnail.png`)
-                row.tags.forEach(tag => urls.add(tag.icon))
-            }
-        }
-    }
-
-    return urls
-}
-
-// Attacker chart: every character is put in the attacker slot with four Lux as supports and
-// compared to Lux in the same setup. Element and role are the character's own, so the only thing
-// varied is which ailment is active on the enemy and whether one-time buffs are excluded.
-// Cheap (one calc per character per context),
-// so it runs before the support chart and shows up first.
-const attackerContexts: DealerContext[] = [
-    makeContext(),
-    makeContext(undefined, undefined, undefined, true),
-    ...Object.values(Ailment).flatMap(ailment => [
-        makeContext(undefined, undefined, ailment),
-        makeContext(undefined, undefined, ailment, true),
-    ]),
-]
-
-// Returns false if a newer run superseded this one and the caller should bail out.
-const computeAttackerGains = async (
-    lux: Character,
-    filler: ScoreAttackKioku,
-    shouldStop: () => Promise<boolean>,
-): Promise<boolean> => {
-    const supports = [filler, filler, filler, filler]
-    const luxDps = toKioku(maxLevelsForChart(lux))
-
-    const finishAttacker = (results: AttackerGainEntry[], error = "", notes: string[] = []) => {
-        attackerResults.value = results
-        attackerStatus.value = { error, notes }
-        attackerLoading.value = false
-    }
-
-    // Lux's own dmg in each ailment context is what everyone is compared against.
-    // (Reusing the `Dealer` shape here: "dealer" is the reference Lux, `baseline` its dmg.)
-    const references: Dealer[] = []
-
-    for (const context of attackerContexts) {
-        if (await shouldStop()) return false
-
-        try {
-            const baseline = calculateDmg(luxDps, supports, context.ailment, context.noConsume)
-
-            if (baseline.max > 0 || baseline.avg > 0) {
-                references.push({ char: lux, context, tags: context.tags, dps: luxDps, baseline })
-            }
-        } catch (err) {
-            console.error(
-                `Attacker chart: failed to calculate Lux Magica in ${context.tags.map(t => t.value).join("/") || "none"}:`,
-                err,
-            )
-        }
-    }
-
-    if (!references.some(r => contextKey(r.context) === NONE_CONTEXT_KEY)) {
-        finishAttacker([], "No Lux Magica baseline could be calculated.")
-        return true
-    }
-
-    const chars = chartCharacters()
-    const results: AttackerGainEntry[] = []
-    let failed = 0
-
-    for (const ch of chars) {
-        try {
-            const dps = toKioku(prepareForChart(ch))
-            const gains: DealerGain[] = []
-
-            for (const reference of references) {
-                if (await shouldStop()) return false
-
-                try {
-                    const result = calculateDmg(dps, supports, reference.context.ailment, reference.context.noConsume)
-
-                    gains.push({
-                        dealer: reference,
-                        result,
-                        maxGain: pctGain(result.max, reference.baseline.max),
-                        avgGain: pctGain(result.avg, reference.baseline.avg),
-                    })
-                } catch (err) {
-                    failed++
-
-                    console.warn(
-                        `Attacker chart: failed to calculate ${ch.name} in ${dealerLabel(reference)}:`,
-                        err,
-                    )
-                }
-            }
-
-            if (!gains.length) continue
-
-            const max = buildCharGainResult(ch, gains, "max")
-            const avg = buildCharGainResult(ch, gains, "avg")
-
-            if (max && avg) results.push({ ch, max, avg })
-        } catch (err) {
-            failed++
-
-            console.warn(`Attacker chart: failed to calculate ${ch.name}:`, err)
-        }
-    }
-
-    // Keep the "Calculating…" state until the icons are ready, then show bars + icons together.
-    await preloadImages(chartImageUrls(results, -Infinity))
-    if (await shouldStop()) return false
-
-    finishAttacker(results, "", failed ? [`${failed} calculation(s) failed (see console).`] : [])
-    return true
-}
-
-const computeGains = async () => {
-    const run = ++gainRun
-    const cancelled = () => run !== gainRun
-
-    gainLoading.value = true
-    gainProgress.value = 0
-    attackerLoading.value = true
-
-    // Let the browser paint/handle input before starting any heavy work.
-    await yieldToMain()
-    if (cancelled()) return
-
-    let sliceStart = performance.now()
-    // Yields to the browser when the current slice is used up.
-    // Returns true if a newer run superseded this one and we should bail out.
-    const shouldStop = async (): Promise<boolean> => {
-        if (performance.now() - sliceStart > SLICE_MS) {
-            await yieldToMain()
-            sliceStart = performance.now()
-        }
-        return cancelled()
-    }
-
-    const finish = (results: SupportGainEntry[], error = "", notes: string[] = []) => {
-        gainResults.value = results
-        gainStatus.value = { error, notes }
-        gainProgress.value = 100
-        gainLoading.value = false
-    }
-
-    const lux = store.characters.find(c => c.name === LuxMagica)
-
-    if (!lux) {
-        const error = `${LuxMagica} was not found in your roster.`
-        attackerResults.value = []
-        attackerStatus.value = { error, notes: [] }
-        attackerLoading.value = false
-        finish([], error)
-        return
-    }
-
-    const filler = toKioku(
-        maxLevelsForChart(lux),
-        { role: undefined, element: undefined },
-    )
-
-    if (!(await computeAttackerGains(lux, filler, shouldStop))) return
-
-    const dealers: Dealer[] = []
-
-    for (const context of dealerContexts) {
-        if (await shouldStop()) return
-
-        try {
-            const dps = toKioku(
-                maxLevelsForChart(lux),
-                {
-                    element: context.element,
-                    role: context.role,
-                },
-            )
-
-            const baseline = calculateDmg(
-                dps,
-                [filler, filler, filler, filler],
-                context.ailment,
-                context.noConsume,
-            )
-
-            if (baseline.max > 0 || baseline.avg > 0) {
-                dealers.push({
-                    char: lux,
-                    context,
-                    tags: context.tags,
-                    dps,
-                    baseline,
-                })
-            }
-        } catch (err) {
-            console.error(
-                `Failed to calculate Lux Magica context ${context.tags.map(t => t.value).join("/") || "none"}:`,
-                err,
-            )
-        }
-    }
-
-    if (!dealers.length) {
-        finish([], "No Lux Magica test context could be calculated.")
-        return
-    }
-
-    const chars = chartCharacters()
-    const results: SupportGainEntry[] = []
-    let failed = 0
-
-    for (const [i, ch] of chars.entries()) {
-        gainProgress.value = Math.round((i / chars.length) * 100)
-
-        try {
-            const support = toKioku(prepareForChart(ch))
-            const gains: DealerGain[] = []
-
-            for (const dealer of dealers) {
-                if (await shouldStop()) return
-
-                try {
-                    const result = calculateDmg(
-                        dealer.dps,
-                        [support, filler, filler, filler],
-                        dealer.context.ailment,
-                        dealer.context.noConsume,
-                    )
-
-                    gains.push({
-                        dealer,
-                        result,
-                        maxGain: pctGain(result.max, dealer.baseline.max),
-                        avgGain: pctGain(result.avg, dealer.baseline.avg),
-                    })
-                } catch (err) {
-                    failed++
-
-                    console.warn(
-                        `Support chart: failed to calculate ${ch.name} in ${dealerLabel(dealer)}:`,
-                        err,
-                    )
-                }
-            }
-
-            if (!gains.length) continue
-
-            const max = buildCharGainResult(ch, gains, "max")
-            const avg = buildCharGainResult(ch, gains, "avg")
-
-            if (max && avg) results.push({ ch, max, avg })
-        } catch (err) {
-            failed++
-
-            console.warn(
-                `Support chart: failed to calculate ${ch.name}:`,
-                err,
-            )
-        }
-    }
-
-    if (cancelled()) return
-
-    // Keep the "Calculating…" state until the icons are ready, then show bars + icons together.
-    gainProgress.value = 100
-    await preloadImages(chartImageUrls(results, 1))
-    if (cancelled()) return
-
-    finish(results, "", failed ? [`${failed} calculation(s) failed (see console).`] : [])
-}
-
-onBeforeUnmount(() => {
-    gainRun++ // cancel any in-flight calculation
-})
-
-// --- Cheap part: runs on every filter change --------------------------------------------
-
 // Turns rows of { character, tags, gain } into everything the bar chart template needs.
 // Negative gains are drawn below the zero line.
 const buildBarChart = (
@@ -1567,62 +952,6 @@ const emptyBarChart = () => ({
     hasVariants: false,
 })
 
-const gainChart = computed(() => {
-    const { error, notes } = gainStatus.value
-
-    if (error) return { ...emptyBarChart(), notes, error }
-
-    const metric: Metric = barGraphAverageDmg.value ? "avg" : "max"
-    const visibleIds = new Set(allChars.value.map(c => c.id))
-
-    const picked = gainResults.value
-        .filter(entry => visibleIds.has(entry.ch.id))
-        .map(entry => entry[metric])
-
-    const rows = [
-        ...picked
-            .map(r => r.main)
-            .filter(m => m.gain > 1),
-
-        ...picked
-            .flatMap(r => r.variants)
-            .filter(v => v.gain > 1),
-    ]
-
-    return { ...buildBarChart(rows), notes, error: "" }
-})
-
-// Unlike the support chart, negative values are meaningful here (weaker than Lux), so nothing is
-// filtered out by gain. Use the role/element filters to narrow it down.
-const attackerChart = computed(() => {
-    const { error, notes } = attackerStatus.value
-
-    if (error) return { ...emptyBarChart(), notes, error }
-
-    const metric: Metric = barGraphAverageDmg.value ? "avg" : "max"
-    const visibleIds = new Set(allChars.value.map(c => c.id))
-
-    const picked = attackerResults.value
-        .filter(entry => visibleIds.has(entry.ch.id))
-        .map(entry => entry[metric])
-
-    const rows = [
-        ...picked.map(r => r.main),
-        ...picked.flatMap(r => r.variants),
-    ]
-
-    return {
-        ...buildBarChart(rows, { idPrefix: "attacker:", titleLabel: "dmg vs Lux" }),
-        notes,
-        error: "",
-    }
-})
-
-// --- Beta: the same two charts measured with the battle engine ---------------------------
-// models/LuxBench.ts does the measuring, in a worker per chart (workers/luxBenchWorker.ts): about a minute of
-// battle simulations for the whole roster. Max Burst arrives first (seconds), then Average Damage per character.
-
-const beta = isBeta()
 const BENCH_SEEDS = 10 // rolled battles averaged when a team is random beyond crits (the same seeds for Lux's baseline)
 const benchAv = () => benchTurns.value * 100 // 100 AV = 1 turn (the Length toggle)
 const BENCH_INFINITE_SP = true // SP topped up to 5 before every turn: a battle skill every turn, no SP shared out
@@ -2046,21 +1375,8 @@ const chartExportOpts = (selector: string): ImageExportOptions => {
     }
 }
 
-const shareOptionsForBuffChart = () => ({
-    title: "Relative buff strength",
-    backUrl: window.location.href,
-})
-
-const shareOptionsForAttackerChart = () => ({
-    title: `Damage dealer strength compared to ${LuxMagica}`,
-    backUrl: window.location.href,
-})
-
-watch([markedCharacters, fightMode, simulateMaxLevels], computeGains, { immediate: true })
-if (beta) {
-    watch([markedCharacters, simulateMaxLevels, fightMode, benchSpeed], () => runBench("support"), { immediate: true })
-    watch([markedCharacters, simulateMaxLevels, fightMode, benchSpeed], () => runBench("attacker"), { immediate: true })
-}
+watch([markedCharacters, simulateMaxLevels, fightMode, benchSpeed], () => runBench("support"), { immediate: true })
+watch([markedCharacters, simulateMaxLevels, fightMode, benchSpeed], () => runBench("attacker"), { immediate: true })
 </script>
 
 <style scoped>
