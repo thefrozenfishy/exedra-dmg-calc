@@ -32,7 +32,7 @@
  *   DamageCutByBarrier(damage, defender)
  */
 
-import { rollChance, type RngSource } from "./BattleRng";
+import { BattleRng, rollChance, type RngSource } from "./BattleRng";
 import { KiokuState } from "./PvPTeam";
 import { SkillDetail, type AffectedUnitNotice } from "../types/KiokuTypes";
 import { CsDecimal, dec, f32 } from "./BattleMath";
@@ -362,10 +362,17 @@ export function getAttackDamageResult(attacker: KiokuState, defender: KiokuState
     d = step("weakElement", d.mul(dec.float(correlation.elementDamageRatio)));
 
     const chance = critChance(attacker, defender);
-    const isCritical = opts.isNoCritNoBarrier ? false
+    // [APPROXIMATION] BattleRng.expectedCrits (bench only): the hit's expected damage instead of a crit roll.
+    const expectedCrit = !opts.isNoCritNoBarrier && opts.forceCrit === undefined && chance > 0 && chance < 100
+        && opts.rng instanceof BattleRng && opts.rng.expectedCrits;
+    const isCritical = opts.isNoCritNoBarrier || expectedCrit ? false
         : opts.forceCrit !== undefined ? opts.forceCrit
             : rollChance(opts.rng ?? Math.random, chance, "crit", () => opts.rngLabel ?? `${attacker.kioku.name} → ${defender.kioku.name} crit`, r => f32(r * 100) < chance);
     if (isCritical) d = step("crit", getAddedCriticalDamage(attacker, defender, d));
+    else if (expectedCrit) {
+        const bonus = getAddedCriticalDamage(attacker, defender, d).sub(d);
+        d = step("expectedCrit", d.add(bonus.mul(dec.float(chance).div(dec.int(100)))));
+    }
 
     d = step("difficulty", getDifficultyCorrectedDamage(attacker, defender, d));
     if (d.lt(CsDecimal.Zero)) d = CsDecimal.Zero; // GetProcessedFinalGiveDamage: GvE-only states, then clamp

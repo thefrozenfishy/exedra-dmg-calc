@@ -84,7 +84,7 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualSplitRole(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                        }}</span>
+                            }}</span>
                     </div>
                 </button>
                 <button class="chip chip-all" :class="allVirtualRolesVisible ? 'chip--visible' : 'chip--hidden'"
@@ -130,7 +130,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ xVal === "-1" ? "Not Owned" : `A${xVal}`
-                                }}</span>
+                            }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -150,7 +150,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ yVal === "-1" ? "Not Owned" : `A${yVal}`
-                                }}</span>
+                            }}</span>
                         </td>
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
                             <template v-for="r in [5, 4, 3]" :key="r">
@@ -180,7 +180,7 @@
                                                         <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`"
                                                             :alt="ch.role" class="info-badge-icon" />
                                                         <span class="role-badge-tag">{{ rangeTag(ch.range, ch.role)[0]
-                                                            }}</span>
+                                                        }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="axis-info-badge level-badge info-badge-img"
@@ -209,8 +209,8 @@
         <section class="card gain-section buff-chart-section">
             <div class="chart-export-toolbar">
                 <ImageActionsToolbar target=".buff-chart-section" filename="relative-buff-strength.png"
-                    :export-options="() => chartExportOpts('.buff-chart-section')" :share-options="shareOptionsForBuffChart"
-                    :disabled="!gainChart.bars.length" />
+                    :export-options="() => chartExportOpts('.buff-chart-section')"
+                    :share-options="shareOptionsForBuffChart" :disabled="!gainChart.bars.length" />
             </div>
             <div class="gain-header filters-heading">Relative buff strength</div>
             <p class="gain-desc">Comparison of relative buff strength on a character with no other buffs. Only buffs to
@@ -287,16 +287,16 @@
         <section class="card gain-section attacker-chart-section">
             <div class="chart-export-toolbar">
                 <ImageActionsToolbar target=".attacker-chart-section" filename="attacker-strength-vs-lux.png"
-                    :export-options="() => chartExportOpts('.attacker-chart-section')" :share-options="shareOptionsForAttackerChart"
-                    :disabled="!attackerChart.bars.length" />
+                    :export-options="() => chartExportOpts('.attacker-chart-section')"
+                    :share-options="shareOptionsForAttackerChart" :disabled="!attackerChart.bars.length" />
             </div>
             <div class="gain-header filters-heading">Attacker strength compared to Lux</div>
             <p class="gain-desc">Damage each character deals as the attacker, compared to {{ LuxMagica }} in the same
                 spot. {{ LuxMagica }} is the 0% line; -50% means half of her damage.</p>
             <p class="gain-desc">Every character uses their own element and role, has no other buffs and is supported by
                 four {{ LuxMagica }}. {{ levelsDescription }}</p>
-            <p class="gain-desc">{{ fightMode === 'st' ? 'One enemy' : fightMode === 'aoe' ? 'Five enemies' : 
-            'Three enemies'}} with 3000 def is used as basis for dmg calculation.</p>
+            <p class="gain-desc">{{ fightMode === 'st' ? 'One enemy' : fightMode === 'aoe' ? 'Five enemies' :
+                'Three enemies' }} with 3000 def is used as basis for dmg calculation.</p>
 
             <div
                 style="width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
@@ -379,11 +379,10 @@
                         :export-options="() => chartExportOpts(`.${bc.sectionClass}`)"
                         :share-options="shareOptionsForBenchChart(bc.title)" :disabled="!bc.chart.bars.length" />
                 </div>
-                <div class="gain-header filters-heading">{{ bc.title }} <span class="beta-badge">Beta</span></div>
+                <div class="gain-header filters-heading">{{ bc.title }} <span class="beta-badge">New engine</span></div>
                 <p v-for="line in bc.desc" :key="line" class="gain-desc">{{ line }}</p>
 
-                <div
-                    style="width: fit-content; margin: 0 auto; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+                <div class="gain-bar-options">
                     <div class="fight-mode-row">
                         <span class="fight-mode-label">Display</span>
                         <div class="fight-mode-toggle" style="--count: 2" role="radiogroup" aria-label="Damage metric">
@@ -392,6 +391,19 @@
                             <button v-for="opt in benchMetricOptions" :key="opt.label" type="button"
                                 class="fight-mode-option" :class="{ active: benchAverageDmg === opt.value }"
                                 :title="opt.title" @click="benchAverageDmg = opt.value">
+                                {{ opt.label }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div v-if="benchAverageDmg" class="fight-mode-row">
+                        <span class="fight-mode-label">Simulation depth</span>
+                        <div class="fight-mode-toggle" style="--count: 3" role="radiogroup" aria-label="Battle length">
+                            <div class="fight-mode-highlight"
+                                :style="{ transform: `translateX(${benchSpeedIndex * 100}%)` }"></div>
+                            <button v-for="opt in benchSpeedOptions" :key="opt.value" type="button"
+                                class="fight-mode-option" :class="{ active: benchSpeed === opt.value }"
+                                :title="opt.title" @click="benchSpeed = opt.value">
                                 {{ opt.label }}
                             </button>
                         </div>
@@ -633,9 +645,21 @@ const metricIndex = computed(() => metricOptions.findIndex(opt => opt.value === 
 const benchAverageDmg = useSetting("gridBenchAverageDmg", false)
 const benchMetricOptions = [
     { value: false, label: "Max Burst", title: "How much the Ultimate's dmg changes, every hit a crit, with all buffs and debuffs at full stacks" },
-    { value: true, label: "Average Damage", title: "How much the attacker's total dmg changes over 500 AV (5 turns) of auto battle with SP refilled every turn, averaged over several battles" },
+    { value: true, label: "Average Damage", title: "How much the attacker's total dmg changes over a few turns of auto battle with SP refilled every turn, using expected crit damage" },
 ] as const
 const benchMetricIndex = computed(() => benchMetricOptions.findIndex(opt => opt.value === benchAverageDmg.value))
+
+// Average Damage battle length. Each length is its own setup in the bench cache (the AV is part of its key), so
+// switching back and forth reuses the results of every length already calculated.
+const benchSpeedOptions = [
+    { value: "fast", label: "Fast (5 turns)", turns: 5, title: "5 turns (500 AV) per battle. Less accurate" },
+    { value: "medium", label: "Medium (15 turns)", turns: 15, title: "15 turns (1500 AV) per battle" },
+    { value: "slow", label: "Slow (100 turns)", turns: 100, title: "100 turns (10000 AV) per battle. Very accurate" },
+] as const
+type BenchSpeed = typeof benchSpeedOptions[number]["value"]
+const benchSpeed = useSetting<BenchSpeed>("gridBenchSpeed", "fast")
+const benchSpeedIndex = computed(() => Math.max(0, benchSpeedOptions.findIndex(opt => opt.value === benchSpeed.value)))
+const benchTurns = computed(() => benchSpeedOptions[benchSpeedIndex.value].turns)
 
 type VirtualRole = string
 
@@ -1599,9 +1623,8 @@ const attackerChart = computed(() => {
 // battle simulations for the whole roster. Max Burst arrives first (seconds), then Average Damage per character.
 
 const beta = isBeta()
-const BENCH_SEEDS = 10 // battles averaged per bar (the same seeds for Lux's baseline)
-const BENCH_AV = 1000   // 10 turns
-const BENCH_PLAY_NOTE = "Tenebrous Arcana uses her battle skill 3 times, then a basic attack; Thunder Torrent always uses her battle skill on the attacker (on a Lux when she is the attacker). Results are saved in this browser and only new or changed characters are recalculated."
+const BENCH_SEEDS = 10 // rolled battles averaged when a team is random beyond crits (the same seeds for Lux's baseline)
+const benchAv = () => benchTurns.value * 100 // 100 AV = 1 turn (the Length toggle)
 const BENCH_INFINITE_SP = true // SP topped up to 5 before every turn: a battle skill every turn, no SP shared out
 
 type BenchChartKind = LuxBenchJob["chart"]
@@ -1646,7 +1669,7 @@ const benchSetup = (kind: BenchChartKind, lux: Character): BenchSetup => ({
     chart: kind,
     enemies: fightModeEnemies(),
     seeds: BENCH_SEEDS,
-    av: BENCH_AV,
+    av: benchAv(),
     infiniteSp: BENCH_INFINITE_SP,
     lux: maxLevelsForChart(lux),
 })
@@ -1713,8 +1736,8 @@ const runBench = (kind: BenchChartKind, { fresh = false } = {}) => {
         lux: plain(setup.lux as Character),
         chars: todo.map(c => plain(c)),
         enemies: setup.enemies,
-        seeds: BENCH_SEEDS,
-        av: BENCH_AV,
+        seeds: setup.seeds,
+        av: setup.av,
         infiniteSp: BENCH_INFINITE_SP,
     }
 
@@ -1832,13 +1855,13 @@ const benchCharts = computed(() => [
         kind: "support" as const,
         sectionClass: "bench-buff-chart-section",
         filename: "relative-buff-strength-battle-engine.png",
-        title: "Relative buff strength (battle engine)",
+        title: "Relative buff strength",
         fightType: true,
         desc: [
-            `How much each character increases the damage of a ${LuxMagica} attacker (a Light Breaker like herself, or another element/role when the character's buffs are limited to those), measured with the battle engine. ${levelsDescription.value}`,
+            `How much each character increases the damage of a ${LuxMagica} as damage dealer, ${LuxMagica} is modified to be simulated as with any role and any element. When the element or role version had a different damage output, that element or role will be given a separate bar. ${levelsDescription.value}`,
             benchAverageDmg.value
-                ? `Average Damage: ${BENCH_AV} AV (${BENCH_AV / 100} turns) of auto battle with infinite SP (topped up to 5 every turn, so everyone can always use their battle skill), the character next to the attacker and three ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts (including additional damage it deals), never the rest of the team's. ${BENCH_PLAY_NOTE}`
-                : `Max Burst: the attacker's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
+                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of auto battle with infinite SP, the character next to the damage dealer and three ${LuxMagica}, Only the damage dealer's own damage counts (including additional damage it deals), never the rest of the team's.`
+                : `Max Burst: the damage dealer's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
             `${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle. Everyone aims single-target and proximity skills at the middle enemy, so a single-target debuff covers one enemy and an AoE one all of them. Element, role or ailment bonuses (enemies under Curse, Burn, ... for the whole battle) get their own bar when they change the result, so a bonus can show in one metric only: crit rate or procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
         ],
         chart: buildBenchChart("support"),
@@ -1849,14 +1872,15 @@ const benchCharts = computed(() => [
         kind: "attacker" as const,
         sectionClass: "bench-attacker-chart-section",
         filename: "attacker-strength-vs-lux-battle-engine.png",
-        title: `Attacker strength compared to ${LuxMagica} (battle engine)`,
+        title: `Damage dealer strength compared to ${LuxMagica}`,
         fightType: true,
         desc: [
-            `Damage each character deals as the attacker, compared to ${LuxMagica} in the same spot, measured with the battle engine. ${LuxMagica} is the 0% line; -50% means half of her damage.`,
+            `Damage each character deals as the damage dealer, compared to ${LuxMagica} in the same spot.`,
+            `${LuxMagica} is the 0% line; 100% means double of her damage.`,
             benchAverageDmg.value
-                ? `Average Damage: ${BENCH_AV} AV (${BENCH_AV / 100} turns) of auto battle with infinite SP (topped up to 5 every turn), supported by four ${LuxMagica}, average of ${BENCH_SEEDS} battles. Only the attacker's own damage counts. ${BENCH_PLAY_NOTE}`
-                : `Max Burst: the Ultimate with the attacker's own buffs and debuffs at full stacks and every hit a crit.`,
-            `Every character uses their own element and role. ${levelsDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle; single-target and proximity skills aim at the middle one. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result.`,
+                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of auto battle with infinite SP, supported by four ${LuxMagica}, Only the damage dealer's own damage counts.`
+                : `Max Burst: the Ultimate with the damage dealer's own buffs and debuffs at full stacks and every hit a crit.`,
+            `${levelsDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle; single-target and proximity skills aim at the middle one. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result.`,
         ],
         chart: buildBenchChart("attacker"),
         status: benchStatusText("attacker"),
@@ -2028,14 +2052,14 @@ const shareOptionsForBuffChart = () => ({
 })
 
 const shareOptionsForAttackerChart = () => ({
-    title: `Attacker strength compared to ${LuxMagica}`,
+    title: `Damage dealer strength compared to ${LuxMagica}`,
     backUrl: window.location.href,
 })
 
 watch([markedCharacters, fightMode, simulateMaxLevels], computeGains, { immediate: true })
 if (beta) {
-    watch([markedCharacters, simulateMaxLevels, fightMode], () => runBench("support"), { immediate: true })
-    watch([markedCharacters, simulateMaxLevels, fightMode], () => runBench("attacker"), { immediate: true })
+    watch([markedCharacters, simulateMaxLevels, fightMode, benchSpeed], () => runBench("support"), { immediate: true })
+    watch([markedCharacters, simulateMaxLevels, fightMode, benchSpeed], () => runBench("attacker"), { immediate: true })
 }
 </script>
 
@@ -2693,19 +2717,34 @@ if (beta) {
 }
 
 @keyframes bench-bar-in {
-    from { transform: scaleY(0); }
-    to { transform: scaleY(1); }
+    from {
+        transform: scaleY(0);
+    }
+
+    to {
+        transform: scaleY(1);
+    }
 }
 
 @keyframes bench-value-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .bench-col .gain-bar-wrap { transition: none; }
+    .bench-col .gain-bar-wrap {
+        transition: none;
+    }
+
     .bench-col .gain-bar,
-    .bench-col .gain-value { animation: none; }
+    .bench-col .gain-value {
+        animation: none;
+    }
 }
 
 .gain-bar {
@@ -2755,6 +2794,13 @@ if (beta) {
     margin-bottom: 2px;
     transform: rotate(-45deg);
     transform-origin: left bottom;
+}
+
+.gain-bar-options {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-direction: column;
 }
 
 .gain-name {

@@ -2,6 +2,7 @@ import battleConditionSetsJson from '../assets/base_data/getBattleConditionSetMs
 import battleConditionsJson from '../assets/base_data/getBattleConditionMstList.json';
 import { BattleState, PassiveSkill, SkillDetail } from '../types/KiokuTypes';
 import { KiokuState, PvPTeam, isAlimentEffect } from './PvPTeam';
+import { BattleRng } from './BattleRng';
 import { Ailment, KiokuElement, KiokuRole, elementMap, roleMap } from '../types/enums';
 
 /**
@@ -694,6 +695,7 @@ function checkTeamCondition(team: PvPTeam, cond: BattleCondition): boolean {
             // reading kept e.g. Concentrated Missile Fire's follow-up re-triggering forever).
             return compareInt(cond.compareOperator, team.lastActionNotices.filter(n => n.isBreak).length, cond.compareValue);
         case CompareContent.CTD_UNIT_COUNT:
+            if (team.rng instanceof BattleRng && team.rng.expectedCrits) team.rng.critReads++; // see BattleRng.expectedCrits
             return compareInt(cond.compareOperator, team.lastActionNotices.filter(n => n.isCritical).length, cond.compareValue);
         case CompareContent.TOTAL_DAMAGE:
             return compareInt(cond.compareOperator, team.lastActionNotices.reduce((sum, n) => sum + n.totalDamageValue, 0), cond.compareValue);

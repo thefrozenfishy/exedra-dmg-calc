@@ -1,6 +1,6 @@
 # Effect types: data usage vs engine coverage (GENERATED - do not edit)
 
-Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models changes. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
+Built from `claude/version-3.19.1 @ e7943c3 2026-10-02` + uncommitted src/models changes. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
 
 - **kiokus** = collectable kiokus (getStyleMstList) whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).
 - **stages** = quest stages whose enemies use it (skill sets + enemy passives).
@@ -10,10 +10,10 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 |---|---|---|---|---|---|---|
 | ADDITIONAL_COUNTDOWN_CANCEL_SKILL_ACT | AdditionalCountdownCancelSkillActAbilityEffect | 0 | 42 | yes | PvPTeam.ts |  |
 | ADDITIONAL_COUNTDOWN_ZERO_SKILL_ACT | AdditionalCountdownZeroSkillActAbilityEffect | 0 | 42 | yes | PvPTeam.ts |  |
-| ADDITIONAL_DAMAGE | AdditionalDamageUnitState | 3 | 0 | yes | DamageCalculator.ts, PvPTeam.ts, effectText.ts | Luminous Tenet, Pluvia☆Neujahr, Scorchin' Summer Spike |
-| ADDITIONAL_SKILL_ACT | AdditionalSkillActAbilityEffect | 31 | 585 | yes | LuxBench.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Venus, Ashley's Kioku |
+| ADDITIONAL_DAMAGE | AdditionalDamageUnitState | 4 | 0 | yes | DamageCalculator.ts, PvPTeam.ts, effectText.ts | Aqua Tempest, Luminous Tenet, Pluvia☆Neujahr |
+| ADDITIONAL_SKILL_ACT | AdditionalSkillActAbilityEffect | 32 | 605 | yes | LuxBench.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Venus, Aqua Tempest |
 | ADDITIONAL_TURN_UNIT_ACT | AdditionalTurnUnitActAbilityEffect | 17 | 99 | yes | PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Rain, Concentrated Missile Fire |
-| ADD_BUFF_TURN | AddBuffTurnUnitState | 23 | 0 | yes | PvPTeam.ts, effectText.ts | Baldamente Fortissimo, Buon Natale Grazioso, Carnival Cuddleboom |
+| ADD_BUFF_TURN | AddBuffTurnUnitState | 24 | 0 | yes | PvPTeam.ts, effectText.ts | Aqua Tempest, Baldamente Fortissimo, Buon Natale Grazioso |
 | ADD_BUFF_TURN_IMM | AddBuffTurnImmAbilityEffect | 2 | 16 | yes | PvPTeam.ts | Absolute Venus, Scorchin' Summer Spike |
 | ADD_DEBUFF_TURN | AddDebuffTurnUnitState | 15 | 3 | yes | PvPTeam.ts, effectText.ts | Assault Paranoia, Atomo Arrabbiato, Bebe-O'-Lantern |
 | ADD_DEBUFF_TURN_IMM | AddDebuffTurnImmAbilityEffect | 1 | 74 | yes | PvPTeam.ts | Splashin' Kyubey Blast |
@@ -53,7 +53,7 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | ADD_DMG_HP_STUN_ALL |  | 0 | 0 | - |  |  |
 | ADD_DMG_HP_WEAKNESS |  | 0 | 0 | - |  |  |
 | ADD_DMG_HP_WEAKNESS_ALL |  | 0 | 0 | - |  |  |
-| BARRIER | BarrierUnitState | 9 | 278 | yes | PvPTeam.ts, effectText.ts | Baldamente Fortissimo, Folter Gefängnis, La Lumière |
+| BARRIER | BarrierUnitState | 9 | 281 | yes | PvPTeam.ts, effectText.ts | Baldamente Fortissimo, Folter Gefängnis, La Lumière |
 | BLEED_ATK | BleedAtkUnitState | 1 | 276 | yes | AITargetSelector.ts, PvPTeam.ts | Soul Salvation |
 | BLEED_BREAK |  | 0 | 0 | prefix/template? | AITargetSelector.ts |  |
 | BLEED_DEF | BleedDefUnitState | 0 | 60 | yes | AITargetSelector.ts, PvPTeam.ts |  |
@@ -63,9 +63,9 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | BURN_DEF | BurnDefUnitState | 0 | 20 | yes | AITargetSelector.ts, PvPTeam.ts |  |
 | BURN_HP | BurnHpUnitState | 0 | 0 | yes | AITargetSelector.ts, PvPTeam.ts |  |
 | CHANGE_SKILL |  | 0 | 0 | - |  |  |
-| CHARGE | ChargeAbilityEffect | 40 | 1216 | yes | AITargetSelector.ts, PvPBattle.ts, PvPTeam.ts, helpers.ts | A Tale of Cherry Blossoms, Absolute Venus, Assault Paranoia |
-| COMBO | ComboUnitState | 0 | 2092 | yes | AITargetSelector.ts, PvPTeam.ts, UnitStateEngine.ts |  |
-| CONSUME_CHARGE_POINT | ConsumeChargePointAbilityEffect | 35 | 919 | yes | AITargetSelector.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Venus, Assault Paranoia |
+| CHARGE | ChargeAbilityEffect | 41 | 1236 | yes | AITargetSelector.ts, PvPBattle.ts, PvPTeam.ts, helpers.ts | A Tale of Cherry Blossoms, Absolute Venus, Aqua Tempest |
+| COMBO | ComboUnitState | 0 | 2136 | yes | AITargetSelector.ts, PvPTeam.ts, UnitStateEngine.ts |  |
+| CONSUME_CHARGE_POINT | ConsumeChargePointAbilityEffect | 35 | 939 | yes | AITargetSelector.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Venus, Assault Paranoia |
 | CONSUME_COUNT_POINT | ConsumeCountPointAbilityEffect | 1 | 0 | yes | PvPTeam.ts | Dark Art Dominion |
 | CONSUME_ZONE_STACK | ConsumeZoneStackAbilityEffect | 4 | 0 | yes | PvPTeam.ts | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
 | CONTINUOUS_RECOVERY | ContinuousRecoveryUnitState | 2 | 0 | yes | PvPTeam.ts, effectText.ts | Doppel of Silence, Magic Cake Dish |
@@ -82,12 +82,12 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | CUTOUT | CutoutUnitState | 1 | 0 | yes | AITargetSelector.ts, PvPTeam.ts | Hollow Woman |
 | DEC_BUFF_TURN_IMM | DecBuffTurnImmAbilityEffect | 0 | 8 | yes | PvPTeam.ts |  |
 | DEC_DEBUFF_TURN_IMM | DecDebuffTurnImmAbilityEffect | 0 | 6 | yes | PvPTeam.ts |  |
-| DMG_ATK | DmgAtkAbilityEffect | 111 | 4348 | yes | DamageCalculator.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
+| DMG_ATK | DmgAtkAbilityEffect | 112 | 4428 | yes | DamageCalculator.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
 | DMG_DEF | DmgDefAbilityEffect | 3 | 215 | yes | DamageCalculator.ts, PvPTeam.ts | Baldamente Fortissimo, Soaring Storyteller, Vampire Fang |
 | DMG_HP | DmgHpAbilityEffect | 0 | 0 | yes | DamageCalculator.ts, PvPTeam.ts |  |
 | DMG_MAGIC |  | 0 | 0 | - |  |  |
 | DMG_NMAGIC |  | 0 | 0 | - |  |  |
-| DMG_RANDOM | DmgRandomAbilityEffect | 3 | 592 | yes | DamageCalculator.ts, PvPTeam.ts | Falsified Phenomena, Metallicized Projectile, Tiro Finale Liberation |
+| DMG_RANDOM | DmgRandomAbilityEffect | 3 | 598 | yes | DamageCalculator.ts, PvPTeam.ts | Falsified Phenomena, Metallicized Projectile, Tiro Finale Liberation |
 | DMG_RATIO | DmgRatioAbilityEffect | 0 | 487 | yes | BattleConditionParser.ts, PvPTeam.ts |  |
 | DMG_SMAGIC |  | 0 | 0 | - |  |  |
 | DRAIN |  | 0 | 0 | - |  |  |
@@ -98,7 +98,7 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | DWN_ATK_ACCUM_RATIO | DwnAtkAccumRatioUnitState | 0 | 74 | yes | PvPTeam.ts, UnitStateEngine.ts |  |
 | DWN_ATK_CONSUME_RATIO | DwnAtkConsumeRatioUnitState | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | DWN_ATK_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
-| DWN_ATK_RATIO | DwnAtkRatioUnitState | 4 | 748 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Structure Destruction, Thunderous Waltz, Vampire Fang |
+| DWN_ATK_RATIO | DwnAtkRatioUnitState | 4 | 768 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Structure Destruction, Thunderous Waltz, Vampire Fang |
 | DWN_BARRIER_VALUE | DwnBarrierValueUnitState | 0 | 184 | yes | PvPTeam.ts |  |
 | DWN_BREAKED_DAMAGE_RECEIVE_RATIO | DwnBreakedDamageReceiveRatioUnitState | 0 | 0 | yes | BreakPoint.ts, UnitStateEngine.ts |  |
 | DWN_BREAK_DAMAGE_RECEIVE_RATIO | DwnBreakedDamageReceiveRatioUnitState | 0 | 0 | yes | BreakPoint.ts, UnitStateEngine.ts |  |
@@ -114,10 +114,10 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | DWN_DEBUFF_EFFECT_VALUE | DwnDebuffEffectValueUnitState | 0 | 68 | yes | PvPKioku.ts, PvPTeam.ts |  |
 | DWN_DEF_ACCUM_RATIO | DwnDefAccumRatioUnitState | 5 | 232 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Désintégration, La Danse Macabre, Soul Salvation |
 | DWN_DEF_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
-| DWN_DEF_RATIO | DwnDefRatioUnitState | 15 | 616 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Atomo Arrabbiato, Bebe-O'-Lantern, Cherry Ballad |
+| DWN_DEF_RATIO | DwnDefRatioUnitState | 15 | 652 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Atomo Arrabbiato, Bebe-O'-Lantern, Cherry Ballad |
 | DWN_ELEMENT_DMG_RATE_RATIO | DwnElementDmgRateRatioUnitState | 0 | 0 | yes | UnitStateEngine.ts |  |
 | DWN_ELEMENT_RESIST_ACCUM_RATIO | DwnElementResistRatioAccumUnitState | 10 | 658 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Absolute Venus, Atomo Arrabbiato, Baldamente Fortissimo |
-| DWN_EP_RECOVER_RATE_RATIO | DwnRecoveryEpRateRatioRatioUnitState | 0 | 630 | yes | PvPTeam.ts, UnitStateEngine.ts |  |
+| DWN_EP_RECOVER_RATE_RATIO | DwnRecoveryEpRateRatioRatioUnitState | 0 | 650 | yes | PvPTeam.ts, UnitStateEngine.ts |  |
 | DWN_GIV_BLEED_DMG_RATIO | DwnGivBleedDmgRatioUnitState | 0 | 0 | yes | UnitStateEngine.ts |  |
 | DWN_GIV_BREAK_POINT_DMG_FIXED | DwnGivBreakPointDmgFixedUnitState | 0 | 0 | yes | BreakPoint.ts, UnitStateEngine.ts |  |
 | DWN_GIV_BURN_DMG_RATIO | DwnGivBurnDmgRatioUnitState | 0 | 0 | yes | UnitStateEngine.ts |  |
@@ -140,9 +140,9 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | DWN_NMATK_RATIO |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | DWN_NMDEF_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | DWN_NMDEF_RATIO |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
-| DWN_RCV_BREAK_POINT_DMG_RATIO | DwnRcvBreakPointDmgRatioUnitState | 0 | 1034 | yes | BreakPoint.ts, UnitStateEngine.ts |  |
+| DWN_RCV_BREAK_POINT_DMG_RATIO | DwnRcvBreakPointDmgRatioUnitState | 0 | 1037 | yes | BreakPoint.ts, UnitStateEngine.ts |  |
 | DWN_RCV_DMG_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
-| DWN_RCV_DMG_RATIO | DwnRcvDmgRatioUnitState | 40 | 1551 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Absolute Venus, Baldamente Fortissimo, Brilliant Beam |
+| DWN_RCV_DMG_RATIO | DwnRcvDmgRatioUnitState | 41 | 1567 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Absolute Venus, Aqua Tempest, Baldamente Fortissimo |
 | DWN_RCV_NMDMG_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | DWN_RCV_NMDMG_RATIO |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | DWN_RCV_RECOVERY_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
@@ -156,18 +156,18 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | DWN_SMDEF_RATIO |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | DWN_SPD_ACCUM_RATIO | DwnSpdAccumRatioUnitState | 1 | 171 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Bebe-O'-Lantern |
 | DWN_SPD_FIXED | DwnSpdFixedUnitState | 0 | 0 | yes | UnitStateEngine.ts |  |
-| DWN_SPD_RATIO | DwnSpdRatioUnitState | 4 | 914 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | La Danse Macabre, Splashin' Kyubey Blast, Vampire Fang |
+| DWN_SPD_RATIO | DwnSpdRatioUnitState | 4 | 934 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | La Danse Macabre, Splashin' Kyubey Blast, Vampire Fang |
 | GAIN_BP_FIXED | GainBpFixedAbilityEffect | 2 | 0 | yes | PvPTeam.ts | Metallicized Projectile, Vinctio☆Magica |
-| GAIN_CHARGE_POINT | GainChargePointAbilityEffect | 40 | 926 | yes | AITargetSelector.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Venus, Assault Paranoia |
+| GAIN_CHARGE_POINT | GainChargePointAbilityEffect | 41 | 946 | yes | AITargetSelector.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Venus, Aqua Tempest |
 | GAIN_COUNT_POINT | GainCountPointAbilityEffect | 1 | 0 | yes | PvPTeam.ts | Dark Art Dominion |
-| GAIN_EP_FIXED | GainEpFixedAbilityEffect | 62 | 0 | yes | AITargetSelector.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
+| GAIN_EP_FIXED | GainEpFixedAbilityEffect | 63 | 0 | yes | AITargetSelector.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
 | GAIN_EP_RATIO | GainEpRatioAbilityEffect | 29 | 0 | yes | AITargetSelector.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Rain, Brilliant Beam |
 | GAIN_SOLO_RAID_BUFF_POINT | GainSoloRaidBuffPointAbilityEffect | 0 | 0 | yes | PvPTeam.ts |  |
-| GAIN_SP_FIXED | GainSpFixedAbilityEffect | 27 | 0 | yes | AITargetSelector.ts, PvPTeam.ts | Buon Natale Grazioso, Carnival Cuddleboom, Dark Art Dominion |
+| GAIN_SP_FIXED | GainSpFixedAbilityEffect | 28 | 0 | yes | AITargetSelector.ts, PvPTeam.ts | Aqua Tempest, Buon Natale Grazioso, Carnival Cuddleboom |
 | GAIN_ZONE_STACK | GainZoneStackAbilityEffect | 1 | 0 | yes | PvPTeam.ts | Evoluzione Presente |
 | GVE_UP_FINAL_GAIN_EP_RATIO | GveUpFinalGainEpRatioUnitState | 0 | 0 | prefix/template? | AITargetSelector.ts |  |
 | GVE_UP_SPECIAL_ATTACK_FINAL_GIV_DMG_RATIO | GveUpSpecialAttackFinalGiveDamageRatioUnitState | 0 | 0 | prefix/template? | AITargetSelector.ts |  |
-| HASTE | HasteAbilityEffect | 81 | 996 | yes | AITargetSelector.ts, PvPTeam.ts | Absolute Venus, Ashley's Kioku, Assault Paranoia |
+| HASTE | HasteAbilityEffect | 82 | 1016 | yes | AITargetSelector.ts, PvPTeam.ts | Absolute Venus, Aqua Tempest, Ashley's Kioku |
 | IMM_SLIP_DMG | ImmSlipDmgAbilityEffect | 3 | 36 | yes | AITargetSelector.ts, BestTeamCalculator.ts, PvPTeam.ts | Marigold Dadaism, My Creations, Nightmare Stinger |
 | LOCK_SPECIAL_ATTACK | LockSpecialAttackUnitState | 0 | 0 | yes | AITargetSelector.ts, PvPTeam.ts |  |
 | LOCK_TURN_ORDER | LockTurnOrderUnitState | 0 | 45 | yes | PvPTeam.ts |  |
@@ -180,7 +180,7 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | POISON_HP | PoisonHpUnitState | 0 | 0 | yes | AITargetSelector.ts, PvPTeam.ts |  |
 | PREVENT_ABNORMAL | PreventAbnormalUnitState | 0 | 132 | yes | PvPTeam.ts |  |
 | RCV_FINAL_DAMAGE | RcvFinalDamageUnitState | 1 | 0 | yes | UnitStateEngine.ts, effectText.ts | Vinctio☆Magica |
-| RECOVERY_HP | RecoveryHpAbilityEffect | 20 | 1389 | yes | AITargetSelector.ts, PvPTeam.ts | Baldamente Fortissimo, Circle Of Fire, Folter Gefängnis |
+| RECOVERY_HP | RecoveryHpAbilityEffect | 20 | 1423 | yes | AITargetSelector.ts, PvPTeam.ts | Baldamente Fortissimo, Circle Of Fire, Folter Gefängnis |
 | RECOVERY_HP_ATK | RecoveryHpAtkAbilityEffect | 3 | 0 | yes | AITargetSelector.ts, PvPTeam.ts | Doppel of Silence, Grandioso Sinfonia, Nothing to Despair, Ever |
 | REFLECTION_RATIO | ReflectionRatioUnitState | 1 | 0 | yes | PvPTeam.ts, effectText.ts | Vampire Fang |
 | REGAIN_ATK | RegainAtkUnitState | 2 | 0 | yes | PvPTeam.ts, effectText.ts | Grandioso Sinfonia, Panna Vorticosa |
@@ -188,7 +188,7 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | REGAIN_HP | RegainHpUnitState | 0 | 0 | listed |  |  |
 | REMOVE_ALL_ABNORMAL | RemoveAllAbnormalAbilityEffect | 5 | 425 | yes | AITargetSelector.ts, PvPTeam.ts | Circle Of Fire, Glitterjoy Snow Globe, Grandioso Sinfonia |
 | REMOVE_ALL_BUFF | RemoveAllBuffAbilityEffect | 9 | 445 | yes | AITargetSelector.ts, PvPTeam.ts | Atomo Arrabbiato, Cherry Ballad, Dark Art Dominion |
-| REMOVE_ALL_DEBUFF | RemoveAllDebuffAbilityEffect | 5 | 420 | yes | AITargetSelector.ts, PvPTeam.ts | My Gigantic Heart, Panna Vorticosa, Spietata Scarica |
+| REMOVE_ALL_DEBUFF | RemoveAllDebuffAbilityEffect | 6 | 458 | yes | AITargetSelector.ts, PvPTeam.ts | Aqua Tempest, My Gigantic Heart, Panna Vorticosa |
 | REMOVE_ALL_UNABLE_ACTION | RemoveAllUnableActionAbilityEffect | 0 | 50 | yes | AITargetSelector.ts, PvPTeam.ts |  |
 | RESET_UNIQUE_BUFF | ResetUniqueBuffAbilityEffect | 2 | 0 | yes | PvPTeam.ts | Désintégration, Metallicized Projectile |
 | RESET_UNIQUE_DEBUFF | ResetUniqueDebuffAbilityEffect | 0 | 0 | yes | PvPTeam.ts |  |
@@ -204,7 +204,7 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | TSUBAME_LINK | TsubameLinkUnitState | 1 | 0 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Luce della Speranza |
 | UNIQUE_10030301 | Unique10030301UnitState | 1 | 0 | prefix/template? | effectText.ts | Fiore Finale |
 | UNIQUE_10070201 | Unique10070201UnitState | 1 | 0 | prefix/template? | effectText.ts | Groundhog Daze |
-| UNIQUE_BUFF | UniqueBuffUnitState | 23 | 0 | prefix/template? | effectText.ts | Absolute Venus, Buon Natale Grazioso, Carnival Cuddleboom |
+| UNIQUE_BUFF | UniqueBuffUnitState | 24 | 0 | prefix/template? | effectText.ts | Absolute Venus, Aqua Tempest, Buon Natale Grazioso |
 | UNIQUE_BUFF_ACCUM | UniqueBuffAccumUnitState | 2 | 0 | yes | BattleConditionParser.ts, PvPTeam.ts, effectText.ts | Falsified Phenomena, Luminous Tenet |
 | UNIQUE_DEBUFF | UniqueDebuffUnitState | 3 | 0 | prefix/template? | effectText.ts | Bebe-O'-Lantern, Splashin' Kyubey Blast, Vinctio☆Magica |
 | UNIQUE_DEBUFF_ACCUM | UniqueDebuffAccumUnitState | 2 | 0 | yes | BattleConditionParser.ts, PvPTeam.ts, effectText.ts | Luminous Tenet, Yuletide Gift |
@@ -222,11 +222,11 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | UP_ATK_CONSUME_FIXED | UpAtkConsumeFixedUnitState | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | UP_ATK_CONSUME_RATIO | UpAtkConsumeRatioUnitState | 2 | 0 | yes | UnitStateEngine.ts, effectText.ts | L'Ombre, Pluvia☆Neujahr |
 | UP_ATK_FIXED | UpAtkFixedUnitState | 0 | 0 | yes | AITargetSelector.ts, UnitStateEngine.ts, effectText.ts |  |
-| UP_ATK_RATIO | UpAtkRatioUnitState | 58 | 1463 | yes | AITargetSelector.ts, PvPTeam.ts, UnitStateEngine.ts, effectText.ts | A Tale of Cherry Blossoms, Absolute Rain, Ashley's Kioku |
+| UP_ATK_RATIO | UpAtkRatioUnitState | 59 | 1521 | yes | AITargetSelector.ts, PvPTeam.ts, UnitStateEngine.ts, effectText.ts | A Tale of Cherry Blossoms, Absolute Rain, Aqua Tempest |
 | UP_BREAKED_DAMAGE_RECEIVE_RATIO | UpBreakedDamageReceiveRatioUnitState | 0 | 0 | yes | BreakPoint.ts, UnitStateEngine.ts |  |
 | UP_BREAK_DAMAGE_RECEIVE_RATIO | UpBreakedDamageReceiveRatioUnitState | 17 | 0 | yes | BreakPoint.ts, PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Absolute Venus, Assault Paranoia, Cherry Blizzard |
 | UP_BREAK_EFFECT | UpBreakEffectRatioUnitState | 14 | 0 | yes | effectText.ts | Cherry Blizzard, Diamond Splash, Hanna's Kioku |
-| UP_BUFF_EFFECT_VALUE | UpBuffEffectValueUnitState | 13 | 251 | yes | PvPKioku.ts, PvPTeam.ts, effectText.ts | Brilliant Beam, Buon Natale Grazioso, Carnival Cuddleboom |
+| UP_BUFF_EFFECT_VALUE | UpBuffEffectValueUnitState | 14 | 251 | yes | PvPKioku.ts, PvPTeam.ts, effectText.ts | Aqua Tempest, Brilliant Beam, Buon Natale Grazioso |
 | UP_COUNTER_ATTACK_RATIO |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | UP_CTD_ACCUM_RATIO | UpCtdAccumRatioUnitState | 8 | 0 | yes | UnitStateEngine.ts, effectText.ts | A Tale of Cherry Blossoms, Dark Art Dominion, Evoluzione Presente |
 | UP_CTD_CONSUME_FIXED | UpCtdConsumeFixedUnitState | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
@@ -239,7 +239,7 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | UP_DEBUFF_EFFECT_VALUE | UpDebuffEffectValueUnitState | 17 | 230 | yes | PvPKioku.ts, PvPTeam.ts, effectText.ts | Atomo Arrabbiato, Bebe-O'-Lantern, Cherry Ballad |
 | UP_DEF_ACCUM_RATIO | UpDefAccumRatioUnitState | 5 | 655 | yes | AITargetSelector.ts, PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Baldamente Fortissimo, Folter Gefängnis, Kokoro's Kioku |
 | UP_DEF_FIXED | UpDefFixedUnitState | 0 | 0 | yes | AITargetSelector.ts, UnitStateEngine.ts |  |
-| UP_DEF_RATIO | UpDefRatioUnitState | 21 | 1066 | yes | AITargetSelector.ts, UnitStateEngine.ts, effectText.ts | Baldamente Fortissimo, Evoluzione Presente, Folter Gefängnis |
+| UP_DEF_RATIO | UpDefRatioUnitState | 21 | 1069 | yes | AITargetSelector.ts, UnitStateEngine.ts, effectText.ts | Baldamente Fortissimo, Evoluzione Presente, Folter Gefängnis |
 | UP_EFFECT_HIT_RATE_RATIO | UpEffectHitRateRatioUnitState | 4 | 1 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Désintégration, Hazuki's Kioku, Mito's Kioku |
 | UP_EFFECT_PARRY_RATE_RATIO | UpEffectParryRateRatioUnitState | 0 | 112 | yes | PvPTeam.ts, UnitStateEngine.ts |  |
 | UP_ELEMENT_DMG_RATE_RATIO | UpElementDmgRateRatioUnitState | 7 | 130 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Evoluzione Presente, Falsified Phenomena, Fiore Finale |
@@ -254,7 +254,7 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | UP_GIV_DMG_ACCUM_RATIO | UpGivDmgAccumRatioUnitState | 4 | 0 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Kiss-shot, Light of Reckoning, Metallicized Projectile |
 | UP_GIV_DMG_CONSUME_RATIO | UpGivDmgConsumeRatioUnitState | 0 | 0 | yes | UnitStateEngine.ts |  |
 | UP_GIV_DMG_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
-| UP_GIV_DMG_RATIO | UpGivDmgRatioUnitState | 67 | 1148 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
+| UP_GIV_DMG_RATIO | UpGivDmgRatioUnitState | 68 | 1168 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | A Tale of Cherry Blossoms, Absolute Rain, Absolute Venus |
 | UP_GIV_NMDMG_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | UP_GIV_NMDMG_RATIO |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | UP_GIV_POISON_DMG_RATIO | UpGivPoisonDmgRatioUnitState | 0 | 0 | yes | UnitStateEngine.ts |  |
@@ -275,7 +275,7 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | UP_RCV_CTD_RATIO | UpRcvCtdRatioUnitState | 0 | 0 | yes | UnitStateEngine.ts |  |
 | UP_RCV_CTR_RATIO | UpRcvCtrRatioUnitState | 7 | 0 | yes | UnitStateEngine.ts, effectText.ts | Assault Paranoia, Atomo Arrabbiato, Final Fatebloom |
 | UP_RCV_DMG_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
-| UP_RCV_DMG_RATIO | UpRcvDmgRatioUnitState | 17 | 488 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Atomo Arrabbiato, Bebe-O'-Lantern, Cherry Ballad |
+| UP_RCV_DMG_RATIO | UpRcvDmgRatioUnitState | 17 | 511 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Atomo Arrabbiato, Bebe-O'-Lantern, Cherry Ballad |
 | UP_RCV_NMDMG_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | UP_RCV_NMDMG_RATIO |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | UP_RCV_SMDMG_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
@@ -287,10 +287,10 @@ Built from `claude/version-3.19.1 @ 5e776b1 2026-10-02` + uncommitted src/models
 | UP_SMDEF_RATIO |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | UP_SPD_ACCUM_RATIO | UpSpdAccumRatioUnitState | 19 | 693 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Ayame's Kioku, Doppel of Invitations, Floral Ironspike |
 | UP_SPD_FIXED | UpSpdFixedUnitState | 31 | 0 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Ashley's Kioku, Asuka's Kioku, Ayame's Kioku |
-| UP_SPD_RATIO | UpSpdRatioUnitState | 84 | 1407 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Absolute Rain, Absolute Venus, Assault Paranoia |
+| UP_SPD_RATIO | UpSpdRatioUnitState | 85 | 1453 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Absolute Rain, Absolute Venus, Aqua Tempest |
 | UP_WEAK_ELEMENT_DMG_ACCUM_RATIO | UpWeakElementDmgAccumRatioUnitState | 1 | 0 | yes | UnitStateEngine.ts, effectText.ts | Evoluzione Presente |
 | UP_WEAK_ELEMENT_DMG_CONSUME_RATIO | UpWeakElementDmgConsumeRatioUnitState | 0 | 0 | yes | UnitStateEngine.ts |  |
-| UP_WEAK_ELEMENT_DMG_RATIO | UpWeakElementDmgRatioUnitState | 33 | 0 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | A Tale of Cherry Blossoms, Buon Natale Grazioso, Carnival Cuddleboom |
+| UP_WEAK_ELEMENT_DMG_RATIO | UpWeakElementDmgRatioUnitState | 34 | 0 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | A Tale of Cherry Blossoms, Aqua Tempest, Buon Natale Grazioso |
 | VORTEX_ATK | VortexAtkUnitState | 1 | 0 | yes | PvPTeam.ts, effectText.ts | Melodia Appassionata |
 | WEAKNESS | WeaknessUnitState | 2 | 509 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Nine Phases, Sacred Gift |
 | ZONE_EXPAND | ZoneExpandAbilityEffect | 4 | 0 | yes | PvPTeam.ts | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |

@@ -73,6 +73,10 @@
 - "Infinite SP" can't be literal: a battle skill that acts again at the same moment (Tenebrous Arcana's extra
   action, Thunder Torrent hasting herself) loops forever. LuxBench tops SP up to 5 only when nobody is due to act at
   the current moment.
+- Expected-crit damage (`BattleRng.expectedCrits`, LuxBench) is only the average when crit is the only randomness and
+  nothing reacts to crits: on-crit stacks (Light of Reckoning: ATK/SPD/charge per crit, 41% seed-to-seed spread) and
+  CTD_UNIT_COUNT conditions see every hit as non-crit. `simulatedDealerDamage(..., { report })` flags those runs
+  (`critReads` / any recorded roll) and `LuxBenchCharts.simTotal` falls back to rolled seeds.
 - Lux☆Magica is not a blank slate in a simulation at A1+: her Magic charges from every ally's battle skill, so her
   follow-up timing changes with whoever stands next to her. LuxBench used her at A0 for that reason; since 2026-10-01 it uses
   A5 max levels on request (with SP topped up every turn, everyone uses battle skills, which keeps the effect small).

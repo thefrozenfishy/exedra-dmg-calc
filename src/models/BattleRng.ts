@@ -64,6 +64,12 @@ export class BattleRng {
     private nextIndex = 0
     private pending: RngEvent[] = []
     readonly events: RngEvent[] = []
+    // [APPROXIMATION] Bench-only (models/LuxBench.ts), not a game rule: crits are not rolled, every hit deals its
+    // expected damage (non-crit + chance x crit bonus) and counts as not critical. Whatever reads whether a hit crit
+    // (CTD_UNIT_COUNT conditions) bumps `critReads`, so the caller can tell the result is not exact and fall back to
+    // rolled battles.
+    expectedCrits = false
+    critReads = 0
 
     constructor(mode: RngMode, seed: number, decisions?: Map<number, RngDecision> | Record<number, RngDecision>) {
         this.mode = mode

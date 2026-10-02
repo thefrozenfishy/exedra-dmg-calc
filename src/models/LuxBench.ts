@@ -29,7 +29,7 @@ import { Ailment, elementMap, roleMap, KiokuElement, KiokuRole } from "../types/
 export const BENCH_DEF = 3000
 export const BENCH_BROKEN_RATE = 500  // % damage taken while broken
 const BENCH_HP = 1e12                 // never dies within a run
-const BENCH_SPD = 1                   // first turn after ~10,000 AV: never acts within a run
+const BENCH_SPD = 0.1                 // first turn after ~100,000 AV: never acts within a run (Slow is 10,000 AV)
 // "Infinite" SP: topped up to this whenever time moves forward. Truly endless SP never ends a chain of battle skills
 // that act again at the same moment (Tenebrous Arcana's extra action, Thunder Torrent hasting herself): those drain
 // the 5 SP and end, as in the game, while every normal turn starts with SP.
@@ -155,6 +155,10 @@ export interface SimOptions {
     infiniteSp?: boolean // the allies' SP is refilled before every turn, see SP_REFILL (bench-only, not a game rule)
     ailment?: Ailment   // every enemy carries this ailment for the whole run
     onAction?: (state: BattleSnapshot, elapsed: number) => void  // every counted action (debugging)
+    // [APPROXIMATION] No crit rolls: every hit deals its expected damage (BattleRng.expectedCrits). Exact only when
+    // nothing else is random; `report.random` says whether anything was (a real roll, or a read of whether a hit crit).
+    expectedCrits?: boolean
+    report?: { random: boolean }
 }
 
 // How players actually run some kits, where auto play (Battle Skill whenever there is SP) is unrealistic. Applied to
@@ -192,7 +196,9 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     applyPlayPatterns(team1, dealerPos)
     const team2 = new PvPTeam(enemyKiokus(benchEnemies(enemyCount)), "Enemy", false, BattleType.Solo)
     const mode = opts.rngMode ?? "seed"
-    const battle = new PvPBattle(team1, team2, false, opts.seed, { rngMode: mode, rng: mode === "seed" ? new LabelStreamRng(opts.seed) : undefined })
+    const rng = mode === "seed" ? new LabelStreamRng(opts.seed) : undefined
+    if (rng && opts.expectedCrits) rng.expectedCrits = true
+    const battle = new PvPBattle(team1, team2, false, opts.seed, { rngMode: mode, rng })
     // Broken from the start at a fixed rate (no growth per hit), like the legacy charts' "broken 500%" enemies. The
     // break gauge is 1, so should anything ever end the break, the next hit breaks them again (at the same 500%).
     for (const e of team2.kiokuStates) {
@@ -238,6 +244,7 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
         if (battle.elapsed > opts.av) break
         for (const state of states) { count(state.events); opts.onAction?.(state, battle.elapsed) }
     }
+    if (opts.report) opts.report.random = battle.rng.critReads > 0 || battle.rng.events.length > 0
     return total
 }
 
@@ -249,7 +256,7 @@ const identityKey = (id: BenchIdentity) => `${id.element ?? "-"}/${id.role ?? "-
 export interface BenchRow extends BenchIdentity { gain: number, critRate?: number }
 
 export interface BenchOptions {
-    seeds: number   // battles averaged for Average Damage (seeds 0..seeds-1, the same for the baseline)
+    seeds: number   // rolled battles averaged for Average Damage when a team is random beyond crits (see simTotal)
     av: number      // action value per battle
     infiniteSp?: boolean // see SimOptions
 }
@@ -291,10 +298,18 @@ export class LuxBenchCharts {
         return [dealer, second ?? this.filler, this.filler, this.filler, this.filler]
     }
 
+    // The dealer's average damage over one run. Crit is the only randomness in most teams, so one battle with expected
+    // crit damage gives the average directly (and ~seeds x faster). A team that rolls anything else (proc chances,
+    // random hits or targets) or reacts to crits (on-crit stacks, crit-count conditions) can't be averaged that way:
+    // it falls back to the mean of `seeds` rolled battles (seeds 0..seeds-1).
     private simTotal(team: PvPKioku[], enemies: number, ailment?: Ailment): number {
+        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, ailment }
+        const report = { random: false }
+        const expected = simulatedDealerDamage(team, 0, enemies, { ...base, seed: 0, expectedCrits: true, report })
+        if (!report.random) return expected
         let total = 0
-        for (let seed = 0; seed < this.opts.seeds; seed++) total += simulatedDealerDamage(team, 0, enemies, { av: this.opts.av, seed, infiniteSp: this.opts.infiniteSp, ailment })
-        return total
+        for (let seed = 0; seed < this.opts.seeds; seed++) total += simulatedDealerDamage(team, 0, enemies, { ...base, seed })
+        return total / this.opts.seeds
     }
 
     private cachedUlt(key: string, team: () => PvPKioku[], enemies: number, ailment?: Ailment) {
