@@ -5,7 +5,7 @@ Run from the repo root (in the Cowork VM: cd $HOME/mnt/exedra-dmg-calc). Full pr
 
   bin   <oldVerDir> <newVerDir>                  Senbei outputs (E:\\unpackedExedra\\<ver>): per-PE-section byte diff.
                                                  Verdict "CODE IDENTICAL" when .text / il2cpp / .data / .pdata match.
-  meta  <global-metadata.dat> [--old-literals <stringliteral.json>]
+  meta  <global-metadata.dat> [--old-literals <stringliteral.json>] [--old-metadata <old global-metadata.dat>]
                                                  parse metadata v29-31: string literals vs the old Il2CppDumper output,
                                                  the game-version literal, section sizes.
   funcs <oldDll> <newDll> <oldScriptJson> <newScriptJson> [--prefix ReDriveBattleCore] [--all]
@@ -13,10 +13,13 @@ Run from the repo root (in the Cowork VM: cd $HOME/mnt/exedra-dmg-calc). Full pr
                                                  versions). rel32 operands that only moved are ignored (heuristic).
   mst   <old> <new> [--md out.md] [--json out.json]
                                                  master data diff. <old>/<new> = a git ref of this repo (e.g. 4ea7254^,
-                                                 HEAD) or a folder with get*MstList.json. Battle-relevant summary first
+                                                 HEAD) or a folder with get*MstList.json (base_data, or the raw downloads
+                                                 in ../ma-ex-data/gamedata/manifests/en-Latn, often newer than base_data). Battle-relevant summary first
                                                  (new kiokus, crys, effect types + engine coverage, changed kit rows,
                                                  conditions, stages, raids), then per-file counts.
   report --old-ver 3.19.0 --new-ver 3.19.1 --mst-old <ref> --mst-new <ref> [--metadata <path>] --out <dir>
+                                                 (--metadata defaults to unpackedExedra/<new>/global-metadata.dat, which
+                                                 unpack_version.sh copies; the old version's copy is diffed when present)
                                                  all of the above into <dir>/report.md + report.json
 """
 import json, os, re, sys, struct, hashlib, subprocess, tempfile, collections, datetime
@@ -135,8 +138,19 @@ def parse_metadata(path):
             "literals": lits, "identifier_count": len(idents)}
 
 
-def meta_diff(path, old_literals=None):
+def meta_diff(path, old_literals=None, old_metadata=None):
     m = parse_metadata(path)
+    if old_metadata and os.path.exists(old_metadata):
+        o = parse_metadata(old_metadata)
+        so, sn = set(o["literals"]), set(m["literals"])
+        res = {"version": m["version"], "size": m["size"], "md5": m["md5"], "literal_count": len(m["literals"]),
+               "identifier_count": m["identifier_count"], "sections": m["sections"], "old_metadata": old_metadata,
+               "identical": o["md5"] == m["md5"],
+               "sections_changed": [n for n in m["sections"] if m["sections"][n] != o["sections"].get(n)],
+               "old_literal_count": len(o["literals"]),
+               "literals_only_old": sorted(so - sn), "literals_only_new": sorted(sn - so)}
+        res["version_literals"] = sorted({x for x in m["literals"] if re.fullmatch(r"\d+\.\d+\.\d+", x) and x.startswith(("2.", "3.", "4.", "5."))})
+        return res
     res = {"version": m["version"], "size": m["size"], "md5": m["md5"], "literal_count": len(m["literals"]),
            "identifier_count": m["identifier_count"], "sections": m["sections"]}
     res["version_literals"] = sorted({x for x in m["literals"] if re.fullmatch(r"\d+\.\d+\.\d+", x) and x.startswith(("2.", "3.", "4.", "5."))})
@@ -153,8 +167,10 @@ def meta_diff(path, old_literals=None):
 def print_meta(r):
     out(f"metadata v{r['version']}, {r['size']} bytes, {r['literal_count']} literals, {r['identifier_count']} identifier strings")
     out(f"   version-like literals: {', '.join(r['version_literals'])}")
+    if "identical" in r:
+        out(f"   vs {r['old_metadata']}: {'IDENTICAL' if r['identical'] else 'changed sections ' + str(r['sections_changed'])}")
     if "old_literal_count" in r:
-        out(f"   vs old Il2CppDumper stringliteral.json ({r['old_literal_count']} referenced literals):")
+        out(f"   vs old literal list ({r['old_literal_count']} referenced literals):")
         out(f"   only in old: {r['literals_only_old'][:30]}")
         out(f"   only in new ({len(r['literals_only_new'])}, includes literals no code references): {r['literals_only_new'][:30]}")
 
@@ -224,6 +240,8 @@ def load_list(d, f):
     if not os.path.exists(p):
         return []
     x = json.load(open(p, encoding="utf8"))
+    if isinstance(x, dict) and isinstance(x.get("payload"), dict):  # raw API dump (ma-ex-data gamedata/manifests/en-Latn)
+        x = x["payload"].get("mstList", [])
     return x if isinstance(x, list) else []
 
 
@@ -420,8 +438,13 @@ def mst_md(r):
         newc = [c for c in S["new_conditions"] if c["new_content"]]
         gaps = [c for c in S["new_conditions"] if c["engine"] != "yes"]
         L.append(f"### New conditions: {len(S['new_conditions'])} rows, {len(newc)} with a compareContent never seen before")
+        groups = collections.OrderedDict()
         for c in newc + [g for g in gaps if g not in newc]:
-            L.append(f"- cond {c['id']} content {c['content']} {c['content_name']} (engine: {c['engine']}) \"{c['description']}\"")
+            groups.setdefault(c["content"], []).append(c)
+        for content, cs in groups.items():
+            c = cs[0]
+            ids = ", ".join(str(x["id"]) for x in cs[:4]) + (f" ... ({len(cs)} rows)" if len(cs) > 4 else "")
+            L.append(f"- content {content} {c['content_name']} (engine: {c['engine']}{', new content' if c['new_content'] else ''}): conds {ids}, e.g. \"{c['description']}\"")
     if S["new_stages"]:
         L.append("### New stages")
         for g in S["new_stages"]:
@@ -463,8 +486,8 @@ def main():
     if cmd == "bin":
         print_bin(bin_diff(sys.argv[2], sys.argv[3]))
     elif cmd == "meta":
-        old = arg("--old-literals")
-        print_meta(meta_diff(sys.argv[2], old))
+        old = arg("--old-literals"); oldm = arg("--old-metadata")
+        print_meta(meta_diff(sys.argv[2], old, oldm))
     elif cmd == "funcs":
         prefix = arg("--prefix", "ReDriveBattleCore"); all_ = "--all" in sys.argv
         r = funcs_diff(*sys.argv[2:6], prefix=prefix, all_=all_)
@@ -493,9 +516,11 @@ def main():
         os.makedirs(outdir, exist_ok=True)
         rep = {"old_version": ov, "new_version": nv, "generated": datetime.datetime.now().isoformat(timespec="seconds")}
         rep["bin"] = bin_diff(os.path.join(unpacked, ov), os.path.join(unpacked, nv))
+        meta = meta or (os.path.join(unpacked, nv, "global-metadata.dat") if os.path.exists(os.path.join(unpacked, nv, "global-metadata.dat")) else None)
         if meta:
+            old_meta = os.path.join(unpacked, ov, "global-metadata.dat")
             old_lits = next((p for p in (os.path.join(unpacked, ov, "dump", "stringliteral.json"), os.path.join(dumper, "stringliteral.json")) if os.path.exists(p)), None)
-            m = meta_diff(meta, old_lits)
+            m = meta_diff(meta, old_lits, old_meta if os.path.exists(old_meta) else None)
             m.pop("sections", None)
             rep["meta"] = m
         if mo:
@@ -511,6 +536,8 @@ def main():
         if "meta" in rep:
             m = rep["meta"]
             L.append(f"\n## global-metadata.dat\n- v{m['version']}, {m['literal_count']} string literals; version literals {m['version_literals']}")
+            if "identical" in m:
+                L.append(f"- vs {ov}'s global-metadata.dat: {'identical' if m['identical'] else 'changed sections ' + str(m['sections_changed'])}")
             if "literals_only_old" in m:
                 L.append(f"- literals gone since the old dump: {m['literals_only_old']}")
                 L.append(f"- literals not in the old dump ({len(m['literals_only_new'])}; Il2CppDumper omits unreferenced ones, so most of these are not new): {m['literals_only_new'][:40]}")

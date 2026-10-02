@@ -4,9 +4,9 @@ Written 2026-10-02 while doing 3.19.0 -> 3.19.1. Follow it top to bottom; every 
 Cowork VM (`mcp__remote-devices__device_bash`, folders under `$HOME/mnt/`). A full run where the code did not change
 takes ~30 min; most of it is the engine triage in step 7. The last finished example is `docs/versions/3.19.1/`.
 
-**Trigger:** the user ran Senbei and a new folder `E:\unpackedExedra\<ver>` appeared (it holds
-`GameAssembly.unpack.dll`, `MadokaExedra.unpack.exe`, `baselib.unpack.dll`, a `senbei-*.log`). A version is DONE
-when `E:\unpackedExedra\<ver>\version_report\DONE` exists.
+**Trigger:** the user fires the scheduled task "Exedra new-version check" (manual only) after a patch, or asks.
+Step 0b unpacks the client itself; the user no longer has to run Senbei. A version is DONE when
+`E:\unpackedExedra\<ver>\version_report\DONE` exists.
 
 ## 0. Orient (5 min, do not skip)
 
@@ -23,6 +23,22 @@ ls $HOME/mnt/unpackedExedra                                 # versions: the new 
   `mcp__remote-devices__device_request_delete_permission` for `E:\exedra-dmg-calc` once, then
   `rm -f .git/index.lock` if a stale one exists. Then `git checkout -b claude/version-<ver>`.
 - OLD = the previous version folder (`ls | sort -V`), NEW = the new one. Below: `OLD=3.19.0 NEW=3.19.1`.
+
+## 0b. Unpack the installed client (replaces the manual Senbei run + move)
+
+Needs the Steam folder connected (`$HOME/mnt/MadokaExedra` = `E:\SteamLibrary\steamapps\common\MadokaExedra`;
+the scheduled task has it, otherwise request read access).
+```
+bash scripts/ai/unpack_version.sh     # -> "NEW 3.19.2" / "SAME 3.19.1" (nothing new) / an error
+```
+It reads the version from `MadokaExedra_Data/globalgamemanagers`, runs `E:\unpackedExedra\tools\senbei-linux`
+(a Linux build of `E:\Senbei-1.0.1`, output byte-identical to senbei.exe, ~6 s) on GameAssembly.dll, baselib.dll and
+MadokaExedra.exe, writes `E:\unpackedExedra\<ver>\*.unpack.*` + a senbei log, and copies `global-metadata.dat` there
+too. SAME with no new data (step 4) means there is nothing to do: stop and say so.
+Rebuilding senbei-linux (only if Senbei changes): tar the source from the VM into a connected folder, stage it to the
+cloud container (it has cargo + crates.io; the VM cannot download rustup), `rm rust-toolchain.toml && cargo build
+--release`, check `objdump -T target/release/senbei | grep -o "GLIBC_[0-9.]*" | sort -Vu | tail -1` <= 2.35 (the
+VM's glibc), commit the binary back to `E:\unpackedExedra\tools\senbei-linux`.
 
 ## 1. Client binaries: did the code change?
 
@@ -62,9 +78,9 @@ Read the line for `GameAssembly.unpack.dll`:
 
 ## 3. global-metadata.dat
 
-The metadata is not in the Senbei output; it is in the Steam folder. Request read access once
-(`mcp__remote-devices__device_request_folder_access`, path `E:\SteamLibrary\steamapps\common\MadokaExedra`; it mounts
-as `$HOME/mnt/MadokaExedra`). Do NOT `find` that folder: 27k files, it times out. Then:
+`unpack_version.sh` copies `global-metadata.dat` into the version folder (from 3.19.1 on), and `verdiff.py report`
+diffs it against the previous version's copy automatically. 3.19.0 has no copy: compare with its Il2CppDumper
+literal list instead. Do NOT `find` the Steam folder: 27k files, it times out. By hand:
 ```
 python3 scripts/ai/verdiff.py meta $HOME/mnt/MadokaExedra/MadokaExedra_Data/il2cpp_data/Metadata/global-metadata.dat \
     --old-literals $HOME/mnt/Il2CppDumper/stringliteral.json
@@ -88,6 +104,10 @@ git --no-optional-locks log --format='%h %ad %s' --date=format:'%F %H:%M' -12 --
 ```
 python3 scripts/ai/verdiff.py mst $MST_OLD HEAD | head -120
 ```
+- **Also diff the newest download**: the user's downloader writes `../ma-ex-data/gamedata/manifests/en-Latn` (raw API
+  dumps) before base_data is synced. `python3 scripts/ai/verdiff.py mst HEAD $HOME/mnt/ma-ex-data/gamedata/manifests/en-Latn`
+  lists what base_data does not have yet (2026-10-02: Aqua Tempest, contents 212/403). Port the engine side of it now
+  (conditions are data-driven once synced) and tell the user to sync base_data; the engine only reads base_data.
 
 ## 5. Write the report
 
@@ -124,6 +144,19 @@ From report.md, in this order:
    newsletter.
 Every port: game rule comment `[CONFIRMED 3.19] Class.Method (0xRVA)`, a check in `scripts/sim/checkMechanics.ts`
 that fails without the change, an entry in docs/ai/MECHANICS.md.
+
+## 6b. Wiki generator (ma-ex-data/wiki)
+
+The wiki pages decode conditions with `wiki/condition_parser.py` and effect values with `wiki/wiki_helpers.py`
+(`_formatValue`). New compare contents / effect types / value slots must be added there too:
+```
+pip install uv -q && ~/.local/bin/uv python install 3.12      # once per VM (the wiki code needs Python 3.12)
+cd $HOME/mnt/ma-ex-data && ~/.local/bin/python3.12 $HOME/mnt/exedra-dmg-calc/scripts/ai/wikicheck.py
+```
+Fix every COND MISSING / COND ERROR / COND RAW / VALUE ERROR line (VALUE UNKNOWN = known unknowns, fine), using the
+engine's names and semantics (`xq enum CompareContent`, MECHANICS.md section 6, `xq effect`). Values: per-mille
+fields are shown as % (`formatPercentage`), ids are resolved to names (characters, kioku, unique-state patterns /
+fields). Re-run until clean. Don't run the page generators or the uploader: the user does that.
 
 ## 7. Verify
 

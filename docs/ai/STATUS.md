@@ -6,7 +6,7 @@ _Last updated: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, b
 
 | ref | state |
 |---|---|
-| `claude/version-3.19.1` | **Checked out 2026-10-02**, branched from main 7fb9730 (= origin/main; the 2026-10-01 branches claude/verify-priority-3.19, claude/actor-skill-type-3.19 and battle-engine-3.19 are merged and no longer exist locally). 3.19.1 work: verdiff.py / disasm.py / smokeNew.ts / VERSION_UPDATE.md runbook, LOCK_SPECIAL_ATTACK, conditions 22/206/207/313-316, BreakedDamageReceiveRate starts at 0, IMM_SLIP_DMG instant DOT burst. Fixtures 6/6, checkMechanics 17/17 (#10-#13 new, each fails without its change), type-check 229 = baseline set. Not pushed; for the user to merge. |
+| `claude/version-3.19.1` | **Checked out 2026-10-02**, branched from main 7fb9730 (= origin/main; the 2026-10-01 branches claude/verify-priority-3.19, claude/actor-skill-type-3.19 and battle-engine-3.19 are merged and no longer exist locally). 3.19.1 work: verdiff.py / disasm.py / smokeNew.ts / VERSION_UPDATE.md runbook, LOCK_SPECIAL_ATTACK, conditions 22/206/207/313-316, BreakedDamageReceiveRate starts at 0, IMM_SLIP_DMG instant DOT burst. Fixtures 6/6, checkMechanics 18/18 (#10-#14 new, each fails without its change), type-check 229 = baseline set. Not pushed; for the user to merge. |
 | `main` | = origin/main 7fb9730 on 2026-10-02. |
 
 `docs/ai/EFFECT_TYPES.md` is committed per branch (its header says which); rebuild with `xq build` after switching
@@ -56,6 +56,7 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-02 (2): scheduled task made manual; `unpack_version.sh` + senbei-linux unpack the Steam install in the VM; wiki condition_parser.py / wiki_helpers._formatValue updated (real content names, ids -> names, % units, 212/403/313-316, value slots) + `scripts/ai/wikicheck.py`; engine contents 28/30/212/403 (checkMechanics #14). The 2026-10-02 download (Aqua Tempest, Link Raid Darkness Witch, Sorana event) is in ma-ex-data manifests but NOT in base_data yet: report docs/versions/3.19.1/data-2026-10-02.md.
 - 2026-10-02: game 3.19.1 (patch 2026-09-27): client code byte-identical to 3.19.0, only the version literal changed; master data diff 4ea7254^..HEAD (Metallicized Projectile, Solo Raid 7 Rose Garden Witch, Score Attack 28 Box Witch, LOCK_SPECIAL_ATTACK). Report + newsletter in E:\unpackedExedra\3.19.1\version_report and docs/versions/3.19.1. Engine: Magic Seal, conds 22/206/207/313/314/315/316, break rate 0 at start, IMM_SLIP_DMG burst (was misread as DOT immunity). New tools verdiff.py, disasm.py, smokeNew.ts; runbook VERSION_UPDATE.md.
 - 2026-10-01 (11): main rebased onto claude/verify-priority-3.19 (old main kept as backup/main-pre-rebase; diverges from origin/main, needs a force push). Both sides had bumped LUX_BENCH_VERSION 4->5 independently: now 6.
 - 2026-10-01 (10): BpCharger (basic +1, skill +2, GAIN_EP_* received +1) and IsReceivedRecovery on full-HP heals; checkMechanics #9. Replay: debugging/pvp-sim-Hollow-Woman-seed2405608212.json (Vinctio ults at actions 19, 32).

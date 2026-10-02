@@ -198,6 +198,14 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   names DMG_TAKEN / BROKEN_UNITS_ATTACKED / WITH_DEBUFF_EFFECT_VALUE were guesses (renamed 2026-10-02). [C]
   Users: Solo Raid party buff 1600009 (313), Rose Garden Witch passives 5001250-2 (316), kits 15057.. (313), 15050.. (314).
 
+- 28 StyleId (unit case 0x1c): character units only; CompareValue csv -> int list vs CharacterParameter.StyleMstId
+  (+0x60). 30 BreakCount (case 0x1e): int compare with BreakPoint.BreakCount. 212 BreakCountInGroup (team case 0xb):
+  Σ BreakCount over living units. 403 ActorDamageRange (other checker case 0x193): the bundle's ActorAbilityEffect
+  must be a damage effect of DamageCategory Normal/Random (DMG_ATK/DEF/HP/RANDOM); its RangeType name (Self /
+  SelectSingle / SelectMultiple / Everyone) string-compared. ActorAbilityEffect is set per effect in every unit's
+  bundle during a launch (TS `LaunchContext.effect`, `BattleState.actorEffect`). [C] checkMechanics #14. 212/403 first
+  appear in the 2026-10-02 download (Link Raid Darkness Witch passives 104401.., Aqua Tempest's ability 15076).
+
 ## 7. Targeting
 
 - `AbilityEffectBase.SelectTargets` 0x18e7e60 never filters by element/role: candidates = the effect side's

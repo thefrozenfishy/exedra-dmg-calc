@@ -11,6 +11,8 @@
 | `E:\unpackedExedra\Ghidra\` | Ghidra 12.1.4 + `scripts/` (make_name_lists.py, ApplyIl2CppNames.java, DecompileList.java) + `README_headless.md` (import+name ~90 s, decompile all ~10 min, no auto-analysis). Needed only for namespaces outside ReDriveBattleCore or a new game version. |
 | `E:\unpackedExedra\3.19.1\` | Senbei output of 3.19.1 (2026-09-27 patch). **Code byte-identical to 3.19.0**: use the 3.19.0 decompile/dump. `version_report/` = the verdiff report + newsletter. |
 | `E:\SteamLibrary\steamapps\common\MadokaExedra` | The game install (not attached by default: request read access). Only needed for `global-metadata.dat` (`MadokaExedra_Data/il2cpp_data/Metadata/`) and file dates of a patch. 27k files: never `find` it. |
+| `E:\unpackedExedra\tools\senbei-linux` | Linux build of `E:\Senbei-1.0.1` (built in the cloud container, glibc 2.34): `scripts/ai/unpack_version.sh` unpacks the Steam install with it. Senbei source is attached to the 3.19.1 session only. |
+| `E:\ma-ex-data\gamedata\manifests\en-Latn` | Raw master data downloads (`{"payload": {"mstList": [...]}}`), often newer than base_data. Wiki generator input. |
 | `E:\unpackedExedra\README.md` | How to redo Senbei + Il2CppDumper for a new game version. Also old `*.bundle` git bundles (history of deliveries, ignore). |
 | `E:\Il2CppDumper\` | 3.19.0 dump: `dump.cs` (79 MB: every class, field offset, method RVA), `script.json`, `il2cpp.h`, `stringliteral.json`, `DummyDll/`. Use `xq cls` / `xq enum`. |
 | `E:\ma-ex-data\` | Data-mining project (Python): `helpers.py`, `downloader.py`, `PROTOCOL_DOCUMENTATION.md` (network protocol, see the project doc protocol-findings-3.19.0.md). |
@@ -27,7 +29,7 @@
   `$HOME/mnt/il2cpp_reverse_engineering`. Load it with ToolSearch `select:mcp__remote-devices__device_bash` first.
 - Each call is a fresh `bash -c` (no cwd carried over): start every command with `cd $HOME/mnt/exedra-dmg-calc &&`.
 - Default timeout 120 s, max `timeout_ms: 180000`. Split long jobs.
-- The VM has python3.10, node 22, git, ~4 GB RAM, no display. Network only to allow-listed hosts (npm works).
+- The VM has python3.10, node 22, git, ~4 GB RAM, no display. Python 3.12 (the ma-ex-data wiki code needs it): `pip install uv -q && ~/.local/bin/uv python install 3.12`, run `~/.local/bin/python3.12`. capstone: `pip install capstone`. Network only to allow-listed hosts (npm works).
 - **Deleting is blocked** in connected folders (`rm` -> "Operation not permitted") until the user approves
   `mcp__remote-devices__device_request_delete_permission` (ask once, with a reason). Without it: don't create temp
   files in the repo; put probes in `$HOME` (outside mnt) or `scripts/sim/_probe.ts` and ask before deleting.
