@@ -1343,7 +1343,7 @@ const bandRows = (yVal: string, rarity: number): number => {
 
 const borderClass = (ch: Character): string => {
     if (ch.name === LuxMagica) return "default-border"
-    if (ch.obtain && ch.obtain !== "Permanent") return "limited-border"
+    if (ch.obtain && !ch.isStandardChar) return "limited-border"
     return "default-border"
 }
 
