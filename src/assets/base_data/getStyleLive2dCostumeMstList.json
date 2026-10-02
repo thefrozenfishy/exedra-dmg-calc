@@ -2746,5 +2746,41 @@
         "sortOrder": 115200,
         "styleLive2dCostumeMstId": 115200,
         "type": 1
+    },
+    {
+        "cheekParam": 0,
+        "defaultOption": "",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Sorana Nagiboshi - Magical Girl",
+        "releaseTime": "2026-10-04T22:00:00+09:00",
+        "resourceName": "413030",
+        "sortOrder": 115401,
+        "styleLive2dCostumeMstId": 115401,
+        "type": 1
+    },
+    {
+        "cheekParam": 0,
+        "defaultOption": "",
+        "isDefault": false,
+        "isExistVoice": true,
+        "name": "Sorana Nagiboshi - Casualwear",
+        "releaseTime": "2026-10-04T22:00:00+09:00",
+        "resourceName": "413033",
+        "sortOrder": 115402,
+        "styleLive2dCostumeMstId": 115402,
+        "type": 1
+    },
+    {
+        "cheekParam": 0,
+        "defaultOption": "",
+        "isDefault": false,
+        "isExistVoice": true,
+        "name": "Sorana Nagiboshi - Diving Suit",
+        "releaseTime": "2026-10-04T22:00:00+09:00",
+        "resourceName": "413032",
+        "sortOrder": 115403,
+        "styleLive2dCostumeMstId": 115403,
+        "type": 1
     }
 ]

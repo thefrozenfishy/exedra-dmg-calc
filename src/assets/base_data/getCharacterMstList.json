@@ -583,5 +583,14 @@
         "enCapsName": "MADOKA-SENPAI",
         "iconResourceName": "1152",
         "name": "Madoka-senpai"
+    },
+    {
+        "awakeItemMstId": 0,
+        "canSelectProfileFavorite": true,
+        "characterMstId": 1154,
+        "colorCode": "#0E5DA8",
+        "enCapsName": "SORANA NAGIBOSHI",
+        "iconResourceName": "1154",
+        "name": "Sorana Nagiboshi"
     }
 ]

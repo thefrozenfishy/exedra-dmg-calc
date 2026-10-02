@@ -8065,6 +8065,214 @@
     },
     {
         "advAssetbundleName": "",
+        "advMstId": 16370001,
+        "advResourceName": "1_Main/main_sorana1_prologue_movie",
+        "advTitleMstId": 217,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": true,
+        "name": "Episode 1",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 16370003,
+        "advResourceName": "1_Main/main_sorana1_1",
+        "advTitleMstId": 217,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 16370001,
+        "gainGemFlg": true,
+        "has3dMovie": true,
+        "name": "Episode 1",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 16370004,
+        "advResourceName": "1_Main/main_sorana1_2",
+        "advTitleMstId": 217,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "Episode 2",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 16370005,
+        "advResourceName": "1_Main/main_sorana1_3",
+        "advTitleMstId": 217,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "Episode 3",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 16370006,
+        "advResourceName": "1_Main/main_sorana1_4",
+        "advTitleMstId": 217,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "Episode 4",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 16370007,
+        "advResourceName": "1_Main/main_sorana1_5",
+        "advTitleMstId": 217,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "Episode 5",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 16370008,
+        "advResourceName": "1_Main/main_sorana1_6",
+        "advTitleMstId": 217,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": true,
+        "name": "Episode 6",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 16370009,
+        "advResourceName": "1_Main/main_sorana1_7",
+        "advTitleMstId": 217,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "Episode 7",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 16370010,
+        "advResourceName": "1_Main/main_sorana1_8",
+        "advTitleMstId": 217,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "Episode 8",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 16370011,
+        "advResourceName": "1_Main/main_sorana1_9",
+        "advTitleMstId": 217,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "Episode 9",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 16370012,
+        "advResourceName": "1_Main/main_sorana1_10",
+        "advTitleMstId": 217,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": true,
+        "name": "Episode 10",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 16370013,
+        "advResourceName": "4_Portrait/portrait_sorana1_1",
+        "advTitleMstId": 218,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "Episode 1",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 16370014,
+        "advResourceName": "4_Portrait/portrait_sorana1_2",
+        "advTitleMstId": 218,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "Episode 2",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
         "advMstId": 20000101,
         "advResourceName": "2_Sub/sub_farewell_1",
         "advTitleMstId": 52,
@@ -21857,6 +22065,134 @@
     },
     {
         "advAssetbundleName": "",
+        "advMstId": 20007101,
+        "advResourceName": "3_Character/character_sorana_0",
+        "advTitleMstId": 224,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": false,
+        "has3dMovie": false,
+        "name": "Episode 0",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 20007102,
+        "advResourceName": "3_Character/character_sorana_1",
+        "advTitleMstId": 224,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": false,
+        "has3dMovie": false,
+        "name": "Episode 1",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 20007103,
+        "advResourceName": "3_Character/character_sorana_2",
+        "advTitleMstId": 224,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": false,
+        "has3dMovie": false,
+        "name": "Episode 2",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 20007104,
+        "advResourceName": "3_Character/character_sorana_3",
+        "advTitleMstId": 224,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": false,
+        "has3dMovie": false,
+        "name": "Episode 3",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 20007105,
+        "advResourceName": "3_Character/character_sorana_4",
+        "advTitleMstId": 224,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": false,
+        "has3dMovie": false,
+        "name": "Episode 4",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 20007106,
+        "advResourceName": "3_Character/character_sorana_5",
+        "advTitleMstId": 224,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": false,
+        "has3dMovie": false,
+        "name": "Episode 5",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 20007107,
+        "advResourceName": "3_Character/character_sorana_6",
+        "advTitleMstId": 224,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": false,
+        "has3dMovie": false,
+        "name": "Episode 6",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 20007108,
+        "advResourceName": "3_Character/character_sorana_7",
+        "advTitleMstId": 224,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": false,
+        "has3dMovie": false,
+        "name": "Episode 7",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
         "advMstId": 20007201,
         "advResourceName": "3_Character/character_nagisa_0",
         "advTitleMstId": 96,
@@ -30177,6 +30513,166 @@
     },
     {
         "advAssetbundleName": "",
+        "advMstId": 30115401,
+        "advResourceName": "3_Character/character_sorana_0",
+        "advTitleMstId": 223,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "\"Anything for Who I Care About!\" Episode 0",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 30115402,
+        "advResourceName": "3_Character/character_sorana_1",
+        "advTitleMstId": 223,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "\"Anything for Who I Care About!\" Episode 1",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 30115403,
+        "advResourceName": "3_Character/character_sorana_2",
+        "advTitleMstId": 223,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "\"Anything for Who I Care About!\" Episode 2",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 30115404,
+        "advResourceName": "3_Character/character_sorana_3",
+        "advTitleMstId": 223,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "\"Anything for Who I Care About!\" Episode 3",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 30115405,
+        "advResourceName": "3_Character/character_sorana_4",
+        "advTitleMstId": 223,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "\"Anything for Who I Care About!\" Episode 4",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 30115406,
+        "advResourceName": "3_Character/character_sorana_5",
+        "advTitleMstId": 223,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "\"Anything for Who I Care About!\" Episode 5",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 30115407,
+        "advResourceName": "3_Character/character_sorana_6",
+        "advTitleMstId": 223,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "\"Anything for Who I Care About!\" Episode 6",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 30115408,
+        "advResourceName": "3_Character/character_sorana_7",
+        "advTitleMstId": 223,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "\"Anything for Who I Care About!\" Episode 7",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 30115409,
+        "advResourceName": "3_Character/character_sorana_8",
+        "advTitleMstId": 223,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "\"Fave at First Sight\" Episode 1",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 30115410,
+        "advResourceName": "3_Character/character_sorana_9",
+        "advTitleMstId": 223,
+        "advType": 2,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": true,
+        "has3dMovie": false,
+        "name": "\"Fave at First Sight\" Episode 2",
+        "playType": 0,
+        "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 1
+    },
+    {
+        "advAssetbundleName": "",
         "advMstId": 40010101,
         "advResourceName": "4_Portrait/portrait_baraen1_1",
         "advTitleMstId": 56,
@@ -31402,7 +31898,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31418,7 +31914,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 3",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31434,7 +31930,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 4",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31450,7 +31946,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 5",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31466,7 +31962,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 6",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31482,7 +31978,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 7",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31498,7 +31994,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 9",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31514,7 +32010,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 21",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31530,7 +32026,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 22",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31546,7 +32042,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 27",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31562,7 +32058,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 28",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31578,7 +32074,7 @@
         "has3dMovie": false,
         "name": "Play Tutorial 07_01_02",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31594,7 +32090,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 24",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31610,7 +32106,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 26",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31626,7 +32122,7 @@
         "has3dMovie": false,
         "name": "Upon What-If Story Unlock",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31642,7 +32138,7 @@
         "has3dMovie": false,
         "name": "Upon Upgrade Quest Unlock",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31658,7 +32154,7 @@
         "has3dMovie": false,
         "name": "Upon Union Unlock_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31674,7 +32170,7 @@
         "has3dMovie": false,
         "name": "Upon Tower Unlock",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31690,7 +32186,7 @@
         "has3dMovie": false,
         "name": "Upon PvP Unlock",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31706,7 +32202,7 @@
         "has3dMovie": false,
         "name": "Upon GvG Unlock",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31722,7 +32218,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Oriko Magica_02",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31738,7 +32234,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Oriko Magica_03",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31754,7 +32250,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Oriko Magica_04",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31770,7 +32266,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Oriko Magica_05",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31786,7 +32282,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Oriko Magica_06",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31802,7 +32298,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Oriko Magica_07",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31818,7 +32314,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Oriko Magica_08",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31834,7 +32330,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Oriko Magica_09",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31850,7 +32346,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Oriko Magica_10",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31866,7 +32362,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Oriko Magica_11",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31882,7 +32378,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Oriko Magica_12",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31898,7 +32394,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Oriko Magica_13",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31914,7 +32410,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Oriko Magica_14",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31930,7 +32426,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Magia Record_01",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31946,7 +32442,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Magia Record_02",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31962,7 +32458,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Magia Record_03",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31978,7 +32474,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Magia Record_04",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -31994,7 +32490,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Magia Record_05",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32010,7 +32506,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Magia Record_06",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32026,7 +32522,7 @@
         "has3dMovie": false,
         "name": "Window Into Memory Unlocked_Oriko Magica",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32042,7 +32538,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Normal_01",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32058,7 +32554,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Normal_02",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32074,7 +32570,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Normal_03",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32090,7 +32586,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Normal_04",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32106,7 +32602,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Normal_05",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32122,7 +32618,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Normal_06",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32138,7 +32634,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Normal_07",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32154,7 +32650,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Normal_08",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32170,7 +32666,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Normal_09",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32186,7 +32682,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Normal_10",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32202,7 +32698,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Normal_11",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32218,7 +32714,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Normal_12",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32234,7 +32730,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Normal_13",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32250,7 +32746,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Normal_14",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32266,7 +32762,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Magia Record_Normal_01",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32282,7 +32778,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Magia Record_Normal_02",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32298,7 +32794,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Magia Record_Normal_03",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32314,7 +32810,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Magia Record_Normal_04",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32330,7 +32826,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Magia Record_Normal_05",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32346,7 +32842,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Magia Record_Normal_06",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32362,7 +32858,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Magia Record_Normal_07",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32378,7 +32874,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Magia Record_Normal_08",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32394,7 +32890,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Magia Record_Normal_09",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32410,7 +32906,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Magia Record_Normal_10",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32426,7 +32922,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Oriko Magica_Normal_01",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32442,7 +32938,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Oriko Magica_Normal_02",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32458,7 +32954,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Oriko Magica_Normal_03",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32474,7 +32970,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Oriko Magica_Normal_04",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32490,7 +32986,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Other)_Madoka Magica_Normal",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32506,7 +33002,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Other)_Madoka Magica_Hard",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32522,7 +33018,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Other)_Madoka Magica_Nightmare",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32538,7 +33034,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Other)_Magia Record_Normal",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32554,7 +33050,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Other)_Magia Record_Hard",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32570,7 +33066,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Other)_Magia Record_Nightmare",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32586,7 +33082,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Other)_Oriko Magica_Normal",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32602,7 +33098,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Other)_Oriko Magica_Hard",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32618,7 +33114,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Other)_Oriko_Nightmare",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32634,7 +33130,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Complete_Madoka Magica_Normal",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32650,7 +33146,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Complete_Madoka Magica_Hard",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32666,7 +33162,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Complete_Madoka Magica_Nightmare",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32682,7 +33178,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Complete_Magia Record_Normal",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32698,7 +33194,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Complete_Magia Record_Hard",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32714,7 +33210,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Complete_Magia Record_Nightmare",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32730,7 +33226,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Complete_Oriko Magica",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32746,7 +33242,7 @@
         "has3dMovie": false,
         "name": "Memspark in Window Into Memory (Story or Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32762,7 +33258,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 10",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32778,7 +33274,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 12",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32794,7 +33290,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Madoka Magica_Nightmare",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32810,7 +33306,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Magia Record_Nightmare",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32826,7 +33322,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Exp (Story)_Oriko Magica_Nightmare",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32842,7 +33338,7 @@
         "has3dMovie": false,
         "name": "Sub-Boss Tile - Closed",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32858,7 +33354,7 @@
         "has3dMovie": false,
         "name": "Feature Tutorial_Heartphial",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32874,7 +33370,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Rose Garden_1_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32890,7 +33386,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Rose Garden_1_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32906,7 +33402,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Rose Garden_2_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32922,7 +33418,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Rose Garden_2_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32938,7 +33434,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Darkness_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32954,7 +33450,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Darkness_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32970,7 +33466,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Dessert_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -32986,7 +33482,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Dessert_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33002,7 +33498,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Dessert_3",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33018,7 +33514,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Box_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33034,7 +33530,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Box_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33050,7 +33546,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Graffiti_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33066,7 +33562,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Graffiti_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33082,7 +33578,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Graffiti_3",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33098,7 +33594,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Silver_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33114,7 +33610,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Silver_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33130,7 +33626,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Shadow_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33146,7 +33642,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Shadow_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33162,7 +33658,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Shadow_3",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33178,7 +33674,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Dog_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33194,7 +33690,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Dog_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33210,7 +33706,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Dog_3",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33226,7 +33722,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Mermaid_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33242,7 +33738,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Mermaid_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33258,7 +33754,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Mermaid_3",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33274,7 +33770,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Artist_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33290,7 +33786,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Artist_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33306,7 +33802,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Artist_3",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33322,7 +33818,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Chairperson_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33338,7 +33834,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Chairperson_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33354,7 +33850,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Chairperson_3",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33370,7 +33866,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Birdcage_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33386,7 +33882,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Birdcage_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33402,7 +33898,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Madoka Magica_Birdcage_3",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33530,7 +34026,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 8",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33546,7 +34042,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 11",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33562,7 +34058,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 13",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33578,7 +34074,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 14",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33594,7 +34090,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 15",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33610,7 +34106,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 16",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33626,7 +34122,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 17",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33642,7 +34138,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 18",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33658,7 +34154,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 23",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33674,7 +34170,7 @@
         "has3dMovie": false,
         "name": "Upon Nightmare Difficulty Unlock",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33690,7 +34186,7 @@
         "has3dMovie": false,
         "name": "Sub-Boss Tile - Open",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33706,7 +34202,7 @@
         "has3dMovie": false,
         "name": "Upon 1st Secret Item Obtained",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33722,7 +34218,7 @@
         "has3dMovie": false,
         "name": "Rose Garden 1 - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33738,7 +34234,7 @@
         "has3dMovie": false,
         "name": "Madoka Magica_Normal_Puella Pictura (Rose Garden to Dessert) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33754,7 +34250,7 @@
         "has3dMovie": false,
         "name": "Madoka Magica_Normal_Puella Pictura (Box to Mermaid) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33770,7 +34266,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial_Additional 1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33802,7 +34298,7 @@
         "has3dMovie": false,
         "name": "Upon Upgrade Quest Unlock_3D",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33818,7 +34314,7 @@
         "has3dMovie": false,
         "name": "Upon Tower Unlock_3D",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33834,7 +34330,7 @@
         "has3dMovie": false,
         "name": "Upon PvP Unlock_3D",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33850,7 +34346,7 @@
         "has3dMovie": false,
         "name": "Upon Union Unlock_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33866,7 +34362,7 @@
         "has3dMovie": false,
         "name": "Upon Union Unlock_3",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33882,7 +34378,7 @@
         "has3dMovie": false,
         "name": "Upon Union Unlock_4",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33898,7 +34394,7 @@
         "has3dMovie": false,
         "name": "Upon GvG Unlock_3D",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33914,7 +34410,7 @@
         "has3dMovie": false,
         "name": "Rose Garden 1 Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33930,7 +34426,7 @@
         "has3dMovie": false,
         "name": "Rose Garden 2 Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33946,7 +34442,7 @@
         "has3dMovie": false,
         "name": "Darkness Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33962,7 +34458,7 @@
         "has3dMovie": false,
         "name": "Dessert Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33978,7 +34474,7 @@
         "has3dMovie": false,
         "name": "Box Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -33994,7 +34490,7 @@
         "has3dMovie": false,
         "name": "Graffiti Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34010,7 +34506,7 @@
         "has3dMovie": false,
         "name": "Silver Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34026,7 +34522,7 @@
         "has3dMovie": false,
         "name": "Shadow Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34042,7 +34538,7 @@
         "has3dMovie": false,
         "name": "Dog Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34058,7 +34554,7 @@
         "has3dMovie": false,
         "name": "Mermaid Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34074,7 +34570,7 @@
         "has3dMovie": false,
         "name": "Artist Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34090,7 +34586,7 @@
         "has3dMovie": false,
         "name": "Chairperson Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34106,7 +34602,7 @@
         "has3dMovie": false,
         "name": "Birdcage Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34122,7 +34618,7 @@
         "has3dMovie": false,
         "name": "Stage Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34138,7 +34634,7 @@
         "has3dMovie": false,
         "name": "Sandbox Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34154,7 +34650,7 @@
         "has3dMovie": false,
         "name": "Commoner's Horse_Ch2 Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34170,7 +34666,7 @@
         "has3dMovie": false,
         "name": "Commoner's Horse_Ch3 Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34186,7 +34682,7 @@
         "has3dMovie": false,
         "name": "Anonymous AI_Ch4 Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34202,7 +34698,7 @@
         "has3dMovie": false,
         "name": "Anonymous AI_Ch5 Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34218,7 +34714,7 @@
         "has3dMovie": false,
         "name": "Chelation Land Ferris Wheel_Ch6 Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34234,7 +34730,7 @@
         "has3dMovie": false,
         "name": "Chelation Land Ferris Wheel_Ch7 Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34250,7 +34746,7 @@
         "has3dMovie": false,
         "name": "Embryo Eve Ch1_8 Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34266,7 +34762,7 @@
         "has3dMovie": false,
         "name": "Embryo Eve Ch1_9 Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34282,7 +34778,7 @@
         "has3dMovie": false,
         "name": "Embryo Eve Ch2_10 Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34298,7 +34794,7 @@
         "has3dMovie": false,
         "name": "Needle_F2 Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34314,7 +34810,7 @@
         "has3dMovie": false,
         "name": "Needle_F4 Puella Pictura Exp (Nightmare) / Memspark (Story)",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34330,7 +34826,7 @@
         "has3dMovie": false,
         "name": "Post-DL Forced Tutorial 21_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34346,7 +34842,7 @@
         "has3dMovie": false,
         "name": "March 2025: Original Scenario (Release)_Upon Starting 1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34362,7 +34858,7 @@
         "has3dMovie": false,
         "name": "March 2025: Original Scenario (Release)_Upon Starting 2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34378,7 +34874,7 @@
         "has3dMovie": false,
         "name": "March 2025: Original Scenario (Release)_Upon Completion",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34410,7 +34906,7 @@
         "has3dMovie": false,
         "name": "Scene 0 Part I (Normal) Story Unlock Dialog",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34426,7 +34922,7 @@
         "has3dMovie": false,
         "name": "Scene 0 Part I - Boss Tile Clear",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34442,7 +34938,7 @@
         "has3dMovie": false,
         "name": "Scene 0 Part I - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34458,7 +34954,7 @@
         "has3dMovie": false,
         "name": "Scene 0 Part I - Window Into Memory (Story) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34474,7 +34970,7 @@
         "has3dMovie": false,
         "name": "Scene 0 Part I - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34490,7 +34986,7 @@
         "has3dMovie": false,
         "name": "Scene 0 Part I - Window Into Memory (Story) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34506,7 +35002,7 @@
         "has3dMovie": false,
         "name": "Scene 0 Part I - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34522,7 +35018,7 @@
         "has3dMovie": false,
         "name": "Scene 0 - Puella Pictura Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34538,7 +35034,7 @@
         "has3dMovie": false,
         "name": "Crystalis Tutorial 1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34650,7 +35146,7 @@
         "has3dMovie": false,
         "name": "Dollhouse Tutorial",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34666,7 +35162,7 @@
         "has3dMovie": false,
         "name": "Camera Feature Tutorial",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34698,7 +35194,7 @@
         "has3dMovie": false,
         "name": "Wraith Arc (Normal) Story Unlock Dialog",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34714,7 +35210,7 @@
         "has3dMovie": false,
         "name": "Wraith Arc - Boss Tile Clear",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34730,7 +35226,7 @@
         "has3dMovie": false,
         "name": "Wraith Arc - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34746,7 +35242,7 @@
         "has3dMovie": false,
         "name": "Wraith Arc - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34762,7 +35258,7 @@
         "has3dMovie": false,
         "name": "Wraith Arc - Window Into Memory (Story) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34778,7 +35274,7 @@
         "has3dMovie": false,
         "name": "Wraith Arc - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34794,7 +35290,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Complete_Wraith Arc",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34810,7 +35306,7 @@
         "has3dMovie": false,
         "name": "Zero (1/3) (Normal) Story Unlock Dialog",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34826,7 +35322,7 @@
         "has3dMovie": false,
         "name": "Zero (1/3) - Boss Tile Clear",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34842,7 +35338,7 @@
         "has3dMovie": false,
         "name": "Zero (1/3) - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34858,7 +35354,7 @@
         "has3dMovie": false,
         "name": "Zero (1/3) - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34874,7 +35370,7 @@
         "has3dMovie": false,
         "name": "Zero (1/3) - Window Into Memory (Story) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34890,7 +35386,7 @@
         "has3dMovie": false,
         "name": "Zero (1/3) - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -34906,7 +35402,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Complete_Zero",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35002,7 +35498,7 @@
         "has3dMovie": false,
         "name": "Zero (2/3) (Normal) Story Unlock Dialog",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35018,7 +35514,7 @@
         "has3dMovie": false,
         "name": "Zero (2/3) - Boss Tile Clear",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35034,7 +35530,7 @@
         "has3dMovie": false,
         "name": "Zero (2/3) - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35050,7 +35546,7 @@
         "has3dMovie": false,
         "name": "Zero (2/3) - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35066,7 +35562,7 @@
         "has3dMovie": false,
         "name": "Zero (2/3) - Window Into Memory (Story) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35082,7 +35578,7 @@
         "has3dMovie": false,
         "name": "Zero (2/3) - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35098,7 +35594,7 @@
         "has3dMovie": false,
         "name": "Rebellion Nightmare / Window Into Memory Unlocked",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35114,7 +35610,7 @@
         "has3dMovie": false,
         "name": "Rebellion Nightmare / Memsparks (Story) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35130,7 +35626,7 @@
         "has3dMovie": false,
         "name": "Rebellion Nightmare / Memsparks (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35146,7 +35642,7 @@
         "has3dMovie": false,
         "name": "Rebellion Nightmare / Memsparks (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35162,7 +35658,7 @@
         "has3dMovie": false,
         "name": "Rebellion Nightmare / Memsparks (Story) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35178,7 +35674,7 @@
         "has3dMovie": false,
         "name": "Rebellion Nightmare / Memsparks (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35194,7 +35690,7 @@
         "has3dMovie": false,
         "name": "Rebellion Nutcracker / Window Into Memory Unlocked",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35210,7 +35706,7 @@
         "has3dMovie": false,
         "name": "Rebellion Nutcracker / Memsparks (Story) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35226,7 +35722,7 @@
         "has3dMovie": false,
         "name": "Rebellion Nutcracker / Memsparks (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35242,7 +35738,7 @@
         "has3dMovie": false,
         "name": "Rebellion Nutcracker / Memsparks (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35258,7 +35754,7 @@
         "has3dMovie": false,
         "name": "Rebellion Nutcracker / Memsparks (Story) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35274,7 +35770,7 @@
         "has3dMovie": false,
         "name": "Rebellion Nutcracker / Memsparks (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35290,7 +35786,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Complete_Rebellion",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35306,7 +35802,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Rebellion_Nightmare_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35322,7 +35818,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Rebellion_Nightmare_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35338,7 +35834,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Rebellion_Nightmare_3",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35354,7 +35850,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Rebellion_False Mitakihara_1",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35370,7 +35866,7 @@
         "has3dMovie": false,
         "name": "Post-Flashback Dialog_Rebellion_False Mitakihara_2",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35386,7 +35882,7 @@
         "has3dMovie": false,
         "name": "Darc Part I (Normal) Story Unlock Dialog",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35402,7 +35898,7 @@
         "has3dMovie": false,
         "name": "Darc Part I - Boss Tile Clear",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35418,7 +35914,7 @@
         "has3dMovie": false,
         "name": "Darc Part I - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35434,7 +35930,7 @@
         "has3dMovie": false,
         "name": "Darc Part I - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35450,7 +35946,7 @@
         "has3dMovie": false,
         "name": "Darc Part I - Window Into Memory (Story) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35466,7 +35962,7 @@
         "has3dMovie": false,
         "name": "Darc Part I - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35562,7 +36058,7 @@
         "has3dMovie": false,
         "name": "Puella Pictura Complete_Darc",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35610,7 +36106,7 @@
         "has3dMovie": false,
         "name": "Zero (3/3) (Normal) Story Unlock Dialog",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35626,7 +36122,7 @@
         "has3dMovie": false,
         "name": "Zero (3/3) - Boss Tile Clear",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35642,7 +36138,7 @@
         "has3dMovie": false,
         "name": "Zero (3/3) - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35658,7 +36154,7 @@
         "has3dMovie": false,
         "name": "Zero (3/3) - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35674,7 +36170,7 @@
         "has3dMovie": false,
         "name": "Zero (3/3) - Window Into Memory (Story) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35690,7 +36186,7 @@
         "has3dMovie": false,
         "name": "Zero (3/3) - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35722,7 +36218,7 @@
         "has3dMovie": false,
         "name": "Darc Part II (Normal) Story Unlock Dialog",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35738,7 +36234,7 @@
         "has3dMovie": false,
         "name": "Darc Part II - Boss Tile Clear",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35754,7 +36250,7 @@
         "has3dMovie": false,
         "name": "Darc Part II (Normal) - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35770,7 +36266,7 @@
         "has3dMovie": false,
         "name": "Darc Part II (Hard) - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35786,7 +36282,7 @@
         "has3dMovie": false,
         "name": "Darc Part II (Nightmare) - Window Into Memory (Story) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35802,7 +36298,7 @@
         "has3dMovie": false,
         "name": "Darc Part II (Nightmare) - Window Into Memory (Other) Complete",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35818,7 +36314,7 @@
         "has3dMovie": false,
         "name": "Darc Part II - Act I Progress Lock",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35834,7 +36330,7 @@
         "has3dMovie": false,
         "name": "Darc Part II - Act I Unlock",
         "playType": 0,
-        "releaseTime": "2026-09-27T20:16:28+09:00",
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0
@@ -35851,6 +36347,102 @@
         "name": "Episode 14",
         "playType": 0,
         "releaseTime": "2024-01-01T00:00:00+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 0
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 70000340,
+        "advResourceName": "7_Namae/gateopen_sorana_01",
+        "advTitleMstId": 0,
+        "advType": 4,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": false,
+        "has3dMovie": false,
+        "name": "Sorana Chapter 1 (Normal) Story Unlock Dialog",
+        "playType": 0,
+        "releaseTime": "2026-10-02T16:01:09+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 0
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 70000341,
+        "advResourceName": "7_Namae/pp_monogatari_sorana_normal_01",
+        "advTitleMstId": 0,
+        "advType": 4,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": false,
+        "has3dMovie": false,
+        "name": "Sorana Chapter 1 - Boss Tile Clear",
+        "playType": 0,
+        "releaseTime": "2026-10-02T16:01:09+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 0
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 70000342,
+        "advResourceName": "7_Namae/pp_sonota_sorana_normal_01",
+        "advTitleMstId": 0,
+        "advType": 4,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": false,
+        "has3dMovie": false,
+        "name": "Sorana Chapter 1 (Normal) - Window Into Memory (Other) Complete",
+        "playType": 0,
+        "releaseTime": "2026-10-02T16:01:09+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 0
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 70000343,
+        "advResourceName": "7_Namae/pp_sonota_sorana_hard_01",
+        "advTitleMstId": 0,
+        "advType": 4,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": false,
+        "has3dMovie": false,
+        "name": "Sorana Chapter 1 (Hard) - Window Into Memory (Other) Complete",
+        "playType": 0,
+        "releaseTime": "2026-10-02T16:01:09+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 0
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 70000344,
+        "advResourceName": "7_Namae/pp_monogatari_sorana_nightmare_01",
+        "advTitleMstId": 0,
+        "advType": 4,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": false,
+        "has3dMovie": false,
+        "name": "Sorana Chapter 1 (Nightmare) - Window Into Memory (Story) Complete",
+        "playType": 0,
+        "releaseTime": "2026-10-02T16:01:09+09:00",
+        "subName": "",
+        "unlockId": 0,
+        "unlockType": 0
+    },
+    {
+        "advAssetbundleName": "",
+        "advMstId": 70000345,
+        "advResourceName": "7_Namae/pp_sonota_sorana_nightmare_01",
+        "advTitleMstId": 0,
+        "advType": 4,
+        "beforeAdvMstIdInGallery": 0,
+        "gainGemFlg": false,
+        "has3dMovie": false,
+        "name": "Sorana Chapter 1 (Nightmare) - Window Into Memory (Other) Complete",
+        "playType": 0,
+        "releaseTime": "2026-10-02T16:01:09+09:00",
         "subName": "",
         "unlockId": 0,
         "unlockType": 0

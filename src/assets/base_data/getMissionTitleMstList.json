@@ -63,6 +63,15 @@
         "title": "Season Missions"
     },
     {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 1030,
+        "prevMissionTitleMstId": 0,
+        "priority": 1,
+        "title": "Season Missions"
+    },
+    {
         "completeAppealDescription": "Get Portrait \"Walpurgisnacht Rising KV Part 1 Madoka\" x1!",
         "featuredRewardResourceName": "",
         "missionCampaignGroupMstId": 0,
@@ -153,15 +162,6 @@
         "title": "Walpurgisnacht Rising Bingo Missions"
     },
     {
-        "completeAppealDescription": "Get Magica Stone x500!",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 2017,
-        "prevMissionTitleMstId": 0,
-        "priority": 140,
-        "title": "Magica Stone Bingo Missions"
-    },
-    {
         "completeAppealDescription": "Get Magica Stone x1,000!",
         "featuredRewardResourceName": "",
         "missionCampaignGroupMstId": 0,
@@ -187,6 +187,60 @@
         "prevMissionTitleMstId": 2019,
         "priority": 150,
         "title": "1.5th Anniversary Bingo Missions Part 1"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x1,000!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2021,
+        "prevMissionTitleMstId": 0,
+        "priority": 160,
+        "title": "1.5th Anniversary Bingo Missions Part 2"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x1,000!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2022,
+        "prevMissionTitleMstId": 2021,
+        "priority": 160,
+        "title": "1.5th Anniversary Bingo Missions Part 2"
+    },
+    {
+        "completeAppealDescription": "Get Magica Stone x1,000!",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2023,
+        "prevMissionTitleMstId": 2022,
+        "priority": 160,
+        "title": "1.5th Anniversary Bingo Missions Part 2"
+    },
+    {
+        "completeAppealDescription": "Obtain 5★ Kioku [Aqua Tempest] Sorana Nagiboshi: x1",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2024,
+        "prevMissionTitleMstId": 0,
+        "priority": 100,
+        "title": "Sorana Magica Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Obtain 5★ Kioku [Aqua Tempest] Sorana Nagiboshi: x1",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2025,
+        "prevMissionTitleMstId": 2024,
+        "priority": 100,
+        "title": "Sorana Magica Bingo Missions"
+    },
+    {
+        "completeAppealDescription": "Obtain 5★ Kioku [Aqua Tempest] Sorana Nagiboshi: x1",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 2026,
+        "prevMissionTitleMstId": 2025,
+        "priority": 100,
+        "title": "Sorana Magica Bingo Missions"
     },
     {
         "completeAppealDescription": "",
@@ -228,51 +282,6 @@
         "completeAppealDescription": "",
         "featuredRewardResourceName": "",
         "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5139,
-        "prevMissionTitleMstId": 0,
-        "priority": 79,
-        "title": "-Rebellion- Nightmare Story Event Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5140,
-        "prevMissionTitleMstId": 0,
-        "priority": 81,
-        "title": "[Redux] Puella Magi Madoka Magica -Rebellion- Event Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5141,
-        "prevMissionTitleMstId": 0,
-        "priority": 82,
-        "title": "[Redux] Puella Magi Madoka Magica -Rebellion- Event Memorial Medal Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5144,
-        "prevMissionTitleMstId": 0,
-        "priority": 84,
-        "title": "Hollow Utopia Event Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5145,
-        "prevMissionTitleMstId": 0,
-        "priority": 85,
-        "title": "Hollow Utopia Event Memorial Medal Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
         "missionTitleMstId": 5146,
         "prevMissionTitleMstId": 0,
         "priority": 86,
@@ -286,78 +295,6 @@
         "prevMissionTitleMstId": 0,
         "priority": 87,
         "title": "Sweet Dreams and Shifting Realities Event Memorial Medal Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5149,
-        "prevMissionTitleMstId": 0,
-        "priority": 10008,
-        "title": "Main Quest Clear Missions Part 1"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5150,
-        "prevMissionTitleMstId": 0,
-        "priority": 10009,
-        "title": "Main Quest Clear Missions Part 2"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5151,
-        "prevMissionTitleMstId": 0,
-        "priority": 90,
-        "title": "Missing My Bear: Where Are You, Kumanosuke? Event Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5152,
-        "prevMissionTitleMstId": 0,
-        "priority": 91,
-        "title": "Missing My Bear: Where Are You, Kumanosuke? Event Memorial Medal Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 4,
-        "missionTitleMstId": 5153,
-        "prevMissionTitleMstId": 0,
-        "priority": 10010,
-        "title": "Kioku Crystal Release Celebration Shard Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5154,
-        "prevMissionTitleMstId": 0,
-        "priority": 10010,
-        "title": "1.5th Anniversary Countdown Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5155,
-        "prevMissionTitleMstId": 0,
-        "priority": 88,
-        "title": "Nagisa's Wish Event Missions"
-    },
-    {
-        "completeAppealDescription": "",
-        "featuredRewardResourceName": "",
-        "missionCampaignGroupMstId": 0,
-        "missionTitleMstId": 5156,
-        "prevMissionTitleMstId": 0,
-        "priority": 89,
-        "title": "Nagisa's Wish Event Memorial Medal Missions"
     },
     {
         "completeAppealDescription": "",
@@ -394,5 +331,23 @@
         "prevMissionTitleMstId": 0,
         "priority": 10,
         "title": "Main Quest Clear Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5161,
+        "prevMissionTitleMstId": 0,
+        "priority": 94,
+        "title": "Anything for Who I Care About! Event Missions"
+    },
+    {
+        "completeAppealDescription": "",
+        "featuredRewardResourceName": "",
+        "missionCampaignGroupMstId": 0,
+        "missionTitleMstId": 5162,
+        "prevMissionTitleMstId": 0,
+        "priority": 95,
+        "title": "Anything for Who I Care About! Event Memorial Medal Missions"
     }
 ]

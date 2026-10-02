@@ -16776,6 +16776,14 @@
         "description": "自分にスピード上昇が付与されている場合"
     },
     {
+        "battleConditionMstId": 2115,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 2,
+        "compareValue": "32",
+        "description": "そらな専用バフが付与されているとき"
+    },
+    {
         "battleConditionMstId": 2118,
         "compareContent": 205,
         "compareOperator": 5,
@@ -16872,6 +16880,502 @@
         "description": "味方全体で火傷が付与されている敵が5体のとき"
     },
     {
+        "battleConditionMstId": 2130,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "91",
+        "description": "トークンが91以上のとき"
+    },
+    {
+        "battleConditionMstId": 2131,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "91",
+        "description": "トークンが91未満のとき"
+    },
+    {
+        "battleConditionMstId": 2132,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "88",
+        "description": "トークンが88以上のとき"
+    },
+    {
+        "battleConditionMstId": 2133,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "88",
+        "description": "トークンが88未満のとき"
+    },
+    {
+        "battleConditionMstId": 2134,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "85",
+        "description": "トークンが85以上のとき"
+    },
+    {
+        "battleConditionMstId": 2135,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "85",
+        "description": "トークンが85未満のとき"
+    },
+    {
+        "battleConditionMstId": 2136,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "82",
+        "description": "トークンが82以上のとき"
+    },
+    {
+        "battleConditionMstId": 2137,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "82",
+        "description": "トークンが82未満のとき"
+    },
+    {
+        "battleConditionMstId": 2138,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "79",
+        "description": "トークンが79以上のとき"
+    },
+    {
+        "battleConditionMstId": 2139,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "79",
+        "description": "トークンが79未満のとき"
+    },
+    {
+        "battleConditionMstId": 2140,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "76",
+        "description": "トークンが76以上のとき"
+    },
+    {
+        "battleConditionMstId": 2141,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "76",
+        "description": "トークンが76未満のとき"
+    },
+    {
+        "battleConditionMstId": 2142,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "73",
+        "description": "トークンが73以上のとき"
+    },
+    {
+        "battleConditionMstId": 2143,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "73",
+        "description": "トークンが73未満のとき"
+    },
+    {
+        "battleConditionMstId": 2144,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "70",
+        "description": "トークンが70以上のとき"
+    },
+    {
+        "battleConditionMstId": 2145,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "70",
+        "description": "トークンが70未満のとき"
+    },
+    {
+        "battleConditionMstId": 2146,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "67",
+        "description": "トークンが67以上のとき"
+    },
+    {
+        "battleConditionMstId": 2147,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "67",
+        "description": "トークンが67未満のとき"
+    },
+    {
+        "battleConditionMstId": 2148,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "64",
+        "description": "トークンが64以上のとき"
+    },
+    {
+        "battleConditionMstId": 2149,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "64",
+        "description": "トークンが64未満のとき"
+    },
+    {
+        "battleConditionMstId": 2150,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "61",
+        "description": "トークンが61以上のとき"
+    },
+    {
+        "battleConditionMstId": 2151,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "61",
+        "description": "トークンが61未満のとき"
+    },
+    {
+        "battleConditionMstId": 2152,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "58",
+        "description": "トークンが58以上のとき"
+    },
+    {
+        "battleConditionMstId": 2153,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "58",
+        "description": "トークンが58未満のとき"
+    },
+    {
+        "battleConditionMstId": 2154,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "55",
+        "description": "トークンが55以上のとき"
+    },
+    {
+        "battleConditionMstId": 2155,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "55",
+        "description": "トークンが55未満のとき"
+    },
+    {
+        "battleConditionMstId": 2156,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "52",
+        "description": "トークンが52以上のとき"
+    },
+    {
+        "battleConditionMstId": 2157,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "52",
+        "description": "トークンが52未満のとき"
+    },
+    {
+        "battleConditionMstId": 2158,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "49",
+        "description": "トークンが49以上のとき"
+    },
+    {
+        "battleConditionMstId": 2159,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "49",
+        "description": "トークンが49未満のとき"
+    },
+    {
+        "battleConditionMstId": 2160,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "46",
+        "description": "トークンが46以上のとき"
+    },
+    {
+        "battleConditionMstId": 2161,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "46",
+        "description": "トークンが46未満のとき"
+    },
+    {
+        "battleConditionMstId": 2162,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "43",
+        "description": "トークンが43以上のとき"
+    },
+    {
+        "battleConditionMstId": 2163,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "43",
+        "description": "トークンが43未満のとき"
+    },
+    {
+        "battleConditionMstId": 2164,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "40",
+        "description": "トークンが40以上のとき"
+    },
+    {
+        "battleConditionMstId": 2165,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "40",
+        "description": "トークンが40未満のとき"
+    },
+    {
+        "battleConditionMstId": 2166,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "37",
+        "description": "トークンが37以上のとき"
+    },
+    {
+        "battleConditionMstId": 2167,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "37",
+        "description": "トークンが37未満のとき"
+    },
+    {
+        "battleConditionMstId": 2168,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "34",
+        "description": "トークンが34以上のとき"
+    },
+    {
+        "battleConditionMstId": 2169,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "34",
+        "description": "トークンが34未満のとき"
+    },
+    {
+        "battleConditionMstId": 2170,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "31",
+        "description": "トークンが31以上のとき"
+    },
+    {
+        "battleConditionMstId": 2171,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "31",
+        "description": "トークンが31未満のとき"
+    },
+    {
+        "battleConditionMstId": 2172,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "28",
+        "description": "トークンが28以上のとき"
+    },
+    {
+        "battleConditionMstId": 2173,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "28",
+        "description": "トークンが28未満のとき"
+    },
+    {
+        "battleConditionMstId": 2174,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "25",
+        "description": "トークンが25以上のとき"
+    },
+    {
+        "battleConditionMstId": 2175,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "25",
+        "description": "トークンが25未満のとき"
+    },
+    {
+        "battleConditionMstId": 2176,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "22",
+        "description": "トークンが22以上のとき"
+    },
+    {
+        "battleConditionMstId": 2177,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "22",
+        "description": "トークンが22未満のとき"
+    },
+    {
+        "battleConditionMstId": 2178,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "19",
+        "description": "トークンが19以上のとき"
+    },
+    {
+        "battleConditionMstId": 2179,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "19",
+        "description": "トークンが19未満のとき"
+    },
+    {
+        "battleConditionMstId": 2180,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "16",
+        "description": "トークンが16以上のとき"
+    },
+    {
+        "battleConditionMstId": 2181,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "16",
+        "description": "トークンが16未満のとき"
+    },
+    {
+        "battleConditionMstId": 2182,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "13",
+        "description": "トークンが13以上のとき"
+    },
+    {
+        "battleConditionMstId": 2183,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "13",
+        "description": "トークンが13未満のとき"
+    },
+    {
+        "battleConditionMstId": 2184,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "10",
+        "description": "トークンが10以上のとき"
+    },
+    {
+        "battleConditionMstId": 2185,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "10",
+        "description": "トークンが10未満のとき"
+    },
+    {
+        "battleConditionMstId": 2186,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "7",
+        "description": "トークンが7以上のとき"
+    },
+    {
+        "battleConditionMstId": 2187,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "7",
+        "description": "トークンが7未満のとき"
+    },
+    {
+        "battleConditionMstId": 2188,
+        "compareContent": 17,
+        "compareOperator": 4,
+        "compareTarget": 1,
+        "compareValue": "4",
+        "description": "トークンが4以上のとき"
+    },
+    {
+        "battleConditionMstId": 2189,
+        "compareContent": 17,
+        "compareOperator": 5,
+        "compareTarget": 1,
+        "compareValue": "4",
+        "description": "トークンが4未満のとき"
+    },
+    {
+        "battleConditionMstId": 2190,
+        "compareContent": 313,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "3",
+        "description": "同時に攻撃を受けた味方の数が3以上"
+    },
+    {
+        "battleConditionMstId": 2191,
+        "compareContent": 26,
+        "compareOperator": 7,
+        "compareTarget": 1,
+        "compareValue": "32",
+        "description": "そらな専用バフが付与されているとき"
+    },
+    {
         "battleConditionMstId": 2197,
         "compareContent": 202,
         "compareOperator": 4,
@@ -16920,11 +17424,547 @@
         "description": "自分のブレイク補正倍率は700%未満"
     },
     {
+        "battleConditionMstId": 2203,
+        "compareContent": 313,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "同時に攻撃を受けた味方の数が1以上"
+    },
+    {
+        "battleConditionMstId": 2204,
+        "compareContent": 313,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "2",
+        "description": "同時に攻撃を受けた味方の数が2以上"
+    },
+    {
+        "battleConditionMstId": 2205,
+        "compareContent": 313,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "3",
+        "description": "同時に攻撃を受けた味方の数が3以上"
+    },
+    {
+        "battleConditionMstId": 2206,
+        "compareContent": 313,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "4",
+        "description": "同時に攻撃を受けた味方の数が4以上"
+    },
+    {
+        "battleConditionMstId": 2207,
+        "compareContent": 313,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "5",
+        "description": "同時に攻撃を受けた味方の数が5以上"
+    },
+    {
+        "battleConditionMstId": 2208,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "1",
+        "description": "敵軍のブレイク回数合計が1回"
+    },
+    {
+        "battleConditionMstId": 2209,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "2",
+        "description": "敵軍のブレイク回数合計が2回"
+    },
+    {
+        "battleConditionMstId": 2210,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "3",
+        "description": "敵軍のブレイク回数合計が3回"
+    },
+    {
+        "battleConditionMstId": 2211,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "4",
+        "description": "敵軍のブレイク回数合計が4回"
+    },
+    {
+        "battleConditionMstId": 2212,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "5",
+        "description": "敵軍のブレイク回数合計が5回"
+    },
+    {
+        "battleConditionMstId": 2213,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "6",
+        "description": "敵軍のブレイク回数合計が6回"
+    },
+    {
+        "battleConditionMstId": 2214,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "7",
+        "description": "敵軍のブレイク回数合計が7回"
+    },
+    {
+        "battleConditionMstId": 2215,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "8",
+        "description": "敵軍のブレイク回数合計が8回"
+    },
+    {
+        "battleConditionMstId": 2216,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "9",
+        "description": "敵軍のブレイク回数合計が9回"
+    },
+    {
+        "battleConditionMstId": 2217,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "10",
+        "description": "敵軍のブレイク回数合計が10回"
+    },
+    {
+        "battleConditionMstId": 2218,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "11",
+        "description": "敵軍のブレイク回数合計が11回"
+    },
+    {
+        "battleConditionMstId": 2219,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "12",
+        "description": "敵軍のブレイク回数合計が12回"
+    },
+    {
+        "battleConditionMstId": 2220,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "13",
+        "description": "敵軍のブレイク回数合計が13回"
+    },
+    {
+        "battleConditionMstId": 2221,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "14",
+        "description": "敵軍のブレイク回数合計が14回"
+    },
+    {
+        "battleConditionMstId": 2222,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "15",
+        "description": "敵軍のブレイク回数合計が15回"
+    },
+    {
+        "battleConditionMstId": 2223,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "16",
+        "description": "敵軍のブレイク回数合計が16回"
+    },
+    {
+        "battleConditionMstId": 2224,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "17",
+        "description": "敵軍のブレイク回数合計が17回"
+    },
+    {
+        "battleConditionMstId": 2225,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "18",
+        "description": "敵軍のブレイク回数合計が18回"
+    },
+    {
+        "battleConditionMstId": 2226,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "19",
+        "description": "敵軍のブレイク回数合計が19回"
+    },
+    {
+        "battleConditionMstId": 2227,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "20",
+        "description": "敵軍のブレイク回数合計が20回"
+    },
+    {
+        "battleConditionMstId": 2228,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "21",
+        "description": "敵軍のブレイク回数合計が21回"
+    },
+    {
+        "battleConditionMstId": 2229,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "22",
+        "description": "敵軍のブレイク回数合計が22回"
+    },
+    {
+        "battleConditionMstId": 2230,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "23",
+        "description": "敵軍のブレイク回数合計が23回"
+    },
+    {
+        "battleConditionMstId": 2231,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "24",
+        "description": "敵軍のブレイク回数合計が24回"
+    },
+    {
+        "battleConditionMstId": 2232,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "25",
+        "description": "敵軍のブレイク回数合計が25回"
+    },
+    {
+        "battleConditionMstId": 2233,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "26",
+        "description": "敵軍のブレイク回数合計が26回"
+    },
+    {
+        "battleConditionMstId": 2234,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "27",
+        "description": "敵軍のブレイク回数合計が27回"
+    },
+    {
+        "battleConditionMstId": 2235,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "28",
+        "description": "敵軍のブレイク回数合計が28回"
+    },
+    {
+        "battleConditionMstId": 2236,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "29",
+        "description": "敵軍のブレイク回数合計が29回"
+    },
+    {
+        "battleConditionMstId": 2237,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "30",
+        "description": "敵軍のブレイク回数合計が30回"
+    },
+    {
+        "battleConditionMstId": 2238,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "31",
+        "description": "敵軍のブレイク回数合計が31回"
+    },
+    {
+        "battleConditionMstId": 2239,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "32",
+        "description": "敵軍のブレイク回数合計が32回"
+    },
+    {
+        "battleConditionMstId": 2240,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "33",
+        "description": "敵軍のブレイク回数合計が33回"
+    },
+    {
+        "battleConditionMstId": 2241,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "34",
+        "description": "敵軍のブレイク回数合計が34回"
+    },
+    {
+        "battleConditionMstId": 2242,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "35",
+        "description": "敵軍のブレイク回数合計が35回"
+    },
+    {
+        "battleConditionMstId": 2243,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "36",
+        "description": "敵軍のブレイク回数合計が36回"
+    },
+    {
+        "battleConditionMstId": 2244,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "37",
+        "description": "敵軍のブレイク回数合計が37回"
+    },
+    {
+        "battleConditionMstId": 2245,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "38",
+        "description": "敵軍のブレイク回数合計が38回"
+    },
+    {
+        "battleConditionMstId": 2246,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "39",
+        "description": "敵軍のブレイク回数合計が39回"
+    },
+    {
+        "battleConditionMstId": 2247,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "40",
+        "description": "敵軍のブレイク回数合計が40回"
+    },
+    {
+        "battleConditionMstId": 2248,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "41",
+        "description": "敵軍のブレイク回数合計が41回"
+    },
+    {
+        "battleConditionMstId": 2249,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "42",
+        "description": "敵軍のブレイク回数合計が42回"
+    },
+    {
+        "battleConditionMstId": 2250,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "43",
+        "description": "敵軍のブレイク回数合計が43回"
+    },
+    {
+        "battleConditionMstId": 2251,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "44",
+        "description": "敵軍のブレイク回数合計が44回"
+    },
+    {
+        "battleConditionMstId": 2252,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "45",
+        "description": "敵軍のブレイク回数合計が45回"
+    },
+    {
+        "battleConditionMstId": 2253,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "46",
+        "description": "敵軍のブレイク回数合計が46回"
+    },
+    {
+        "battleConditionMstId": 2254,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "47",
+        "description": "敵軍のブレイク回数合計が47回"
+    },
+    {
+        "battleConditionMstId": 2255,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "48",
+        "description": "敵軍のブレイク回数合計が48回"
+    },
+    {
+        "battleConditionMstId": 2256,
+        "compareContent": 212,
+        "compareOperator": 1,
+        "compareTarget": 6,
+        "compareValue": "49",
+        "description": "敵軍のブレイク回数合計が49回"
+    },
+    {
+        "battleConditionMstId": 2257,
+        "compareContent": 212,
+        "compareOperator": 4,
+        "compareTarget": 6,
+        "compareValue": "50",
+        "description": "敵軍のブレイク回数合計が50回以上"
+    },
+    {
+        "battleConditionMstId": 2260,
+        "compareContent": 403,
+        "compareOperator": 1,
+        "compareTarget": 7,
+        "compareValue": "Everyone",
+        "description": "全体攻撃を発動したとき"
+    },
+    {
         "battleConditionMstId": 2261,
         "compareContent": 101,
         "compareOperator": 5,
         "compareTarget": 1,
         "compareValue": "1",
         "description": "自分が1以上のダメージ未満"
+    },
+    {
+        "battleConditionMstId": 2286,
+        "compareContent": 14,
+        "compareOperator": 1,
+        "compareTarget": 1,
+        "compareValue": "1154",
+        "description": "自分のキャラクターが「凪星そらな」"
+    },
+    {
+        "battleConditionMstId": 2317,
+        "compareContent": 205,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "POISON,1",
+        "description": "味方全体で毒が付与されている敵が1体以上"
+    },
+    {
+        "battleConditionMstId": 2318,
+        "compareContent": 205,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "POISON,2",
+        "description": "味方全体で毒が付与されている敵が2体以上"
+    },
+    {
+        "battleConditionMstId": 2319,
+        "compareContent": 205,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "POISON,3",
+        "description": "味方全体で毒が付与されている敵が3体以上"
+    },
+    {
+        "battleConditionMstId": 2320,
+        "compareContent": 205,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "POISON,4",
+        "description": "味方全体で毒が付与されている敵が4体以上"
+    },
+    {
+        "battleConditionMstId": 2321,
+        "compareContent": 205,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "POISON,5",
+        "description": "味方全体で毒が付与されている敵が5体以上"
+    },
+    {
+        "battleConditionMstId": 2322,
+        "compareContent": 205,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "BURN,1",
+        "description": "味方全体で火傷が付与されている敵が1体以上"
+    },
+    {
+        "battleConditionMstId": 2323,
+        "compareContent": 205,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "BURN,2",
+        "description": "味方全体で火傷が付与されている敵が2体以上"
+    },
+    {
+        "battleConditionMstId": 2324,
+        "compareContent": 205,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "BURN,3",
+        "description": "味方全体で火傷が付与されている敵が3体以上"
+    },
+    {
+        "battleConditionMstId": 2325,
+        "compareContent": 205,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "BURN,4",
+        "description": "味方全体で火傷が付与されている敵が4体以上"
+    },
+    {
+        "battleConditionMstId": 2326,
+        "compareContent": 205,
+        "compareOperator": 4,
+        "compareTarget": 5,
+        "compareValue": "BURN,5",
+        "description": "味方全体で火傷が付与されている敵が5体以上"
     }
 ]

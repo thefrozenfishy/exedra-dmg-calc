@@ -1055,6 +1055,16 @@
         "title": "Magia Et Cetera\n100 Episodes & Zero Regrets Special"
     },
     {
+        "advTitleMstId": 217,
+        "isViewCollection": true,
+        "title": "Chapter 1: Sea"
+    },
+    {
+        "advTitleMstId": 218,
+        "isViewCollection": true,
+        "title": "Noontide in a Sunken City"
+    },
+    {
         "advTitleMstId": 219,
         "isViewCollection": true,
         "title": "Missing My Bear\nWhere Are You, Kumanosuke?"
@@ -1073,5 +1083,15 @@
         "advTitleMstId": 222,
         "isViewCollection": true,
         "title": "Madoka's Birthday 2026\nA Special Group Snapshot"
+    },
+    {
+        "advTitleMstId": 223,
+        "isViewCollection": true,
+        "title": "Magical Girl Story"
+    },
+    {
+        "advTitleMstId": 224,
+        "isViewCollection": true,
+        "title": "Anything for Who I Care About!"
     }
 ]

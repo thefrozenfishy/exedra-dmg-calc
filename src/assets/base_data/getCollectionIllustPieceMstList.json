@@ -583,5 +583,80 @@
         "collectionConditionGroupMstId": 126,
         "collectionIllustMstId": 10100,
         "collectionIllustPieceMstId": 100106
+    },
+    {
+        "collectionConditionGroupMstId": 127,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110101
+    },
+    {
+        "collectionConditionGroupMstId": 128,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110102
+    },
+    {
+        "collectionConditionGroupMstId": 129,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110103
+    },
+    {
+        "collectionConditionGroupMstId": 130,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110104
+    },
+    {
+        "collectionConditionGroupMstId": 131,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110105
+    },
+    {
+        "collectionConditionGroupMstId": 132,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110106
+    },
+    {
+        "collectionConditionGroupMstId": 133,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110107
+    },
+    {
+        "collectionConditionGroupMstId": 134,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110108
+    },
+    {
+        "collectionConditionGroupMstId": 135,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110109
+    },
+    {
+        "collectionConditionGroupMstId": 136,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110110
+    },
+    {
+        "collectionConditionGroupMstId": 137,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110111
+    },
+    {
+        "collectionConditionGroupMstId": 138,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110112
+    },
+    {
+        "collectionConditionGroupMstId": 139,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110113
+    },
+    {
+        "collectionConditionGroupMstId": 140,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110114
+    },
+    {
+        "collectionConditionGroupMstId": 141,
+        "collectionIllustMstId": 11100,
+        "collectionIllustPieceMstId": 110115
     }
 ]

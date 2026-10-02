@@ -202,5 +202,11 @@
         "primaryCategory": 10,
         "secondaryCategory": 63900,
         "sortOrder": 1000
+    },
+    {
+        "namaeScenarioArchiveCategoryMstId": 333,
+        "primaryCategory": 11,
+        "secondaryCategory": 66300,
+        "sortOrder": 1100
     }
 ]

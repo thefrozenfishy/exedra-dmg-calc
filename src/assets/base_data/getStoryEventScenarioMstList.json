@@ -8770,6 +8770,86 @@
         "viewType": 0
     },
     {
+        "advMstId": 20007101,
+        "conditionQuestStageMstId": 982701,
+        "conditionScenarioMstId": 0,
+        "filmNo": 0,
+        "sortOrder": 1,
+        "storyEventMstId": 82,
+        "storyEventScenarioMstId": 108201,
+        "viewType": 0
+    },
+    {
+        "advMstId": 20007102,
+        "conditionQuestStageMstId": 982702,
+        "conditionScenarioMstId": 0,
+        "filmNo": 0,
+        "sortOrder": 2,
+        "storyEventMstId": 82,
+        "storyEventScenarioMstId": 108202,
+        "viewType": 0
+    },
+    {
+        "advMstId": 20007103,
+        "conditionQuestStageMstId": 982703,
+        "conditionScenarioMstId": 0,
+        "filmNo": 0,
+        "sortOrder": 3,
+        "storyEventMstId": 82,
+        "storyEventScenarioMstId": 108203,
+        "viewType": 0
+    },
+    {
+        "advMstId": 20007104,
+        "conditionQuestStageMstId": 982704,
+        "conditionScenarioMstId": 0,
+        "filmNo": 0,
+        "sortOrder": 4,
+        "storyEventMstId": 82,
+        "storyEventScenarioMstId": 108204,
+        "viewType": 0
+    },
+    {
+        "advMstId": 20007105,
+        "conditionQuestStageMstId": 982705,
+        "conditionScenarioMstId": 0,
+        "filmNo": 0,
+        "sortOrder": 5,
+        "storyEventMstId": 82,
+        "storyEventScenarioMstId": 108205,
+        "viewType": 0
+    },
+    {
+        "advMstId": 20007106,
+        "conditionQuestStageMstId": 982706,
+        "conditionScenarioMstId": 0,
+        "filmNo": 0,
+        "sortOrder": 6,
+        "storyEventMstId": 82,
+        "storyEventScenarioMstId": 108206,
+        "viewType": 0
+    },
+    {
+        "advMstId": 20007107,
+        "conditionQuestStageMstId": 982707,
+        "conditionScenarioMstId": 0,
+        "filmNo": 0,
+        "sortOrder": 7,
+        "storyEventMstId": 82,
+        "storyEventScenarioMstId": 108207,
+        "viewType": 0
+    },
+    {
+        "advMstId": 20007108,
+        "conditionQuestStageMstId": 982708,
+        "conditionScenarioMstId": 0,
+        "filmNo": 0,
+        "sortOrder": 8,
+        "storyEventMstId": 82,
+        "storyEventScenarioMstId": 108208,
+        "viewType": 0
+    },
+    {
         "advMstId": 20000801,
         "conditionQuestStageMstId": 904101,
         "conditionScenarioMstId": 0,

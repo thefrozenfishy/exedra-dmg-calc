@@ -1890,6 +1890,34 @@
         "resourceName": "63900/boss/bossbattleenddirectiondata"
     },
     {
+        "bossDirectionMstId": 3701,
+        "nextBossDirectionMstId": 3702,
+        "nextSceneType": 2,
+        "objectId": 133113,
+        "resourceName": ""
+    },
+    {
+        "bossDirectionMstId": 3702,
+        "nextBossDirectionMstId": 0,
+        "nextSceneType": 1,
+        "objectId": 16370012,
+        "resourceName": ""
+    },
+    {
+        "bossDirectionMstId": 3711,
+        "nextBossDirectionMstId": 3712,
+        "nextSceneType": 2,
+        "objectId": 133316,
+        "resourceName": ""
+    },
+    {
+        "bossDirectionMstId": 3712,
+        "nextBossDirectionMstId": 0,
+        "nextSceneType": 1,
+        "objectId": 16370014,
+        "resourceName": ""
+    },
+    {
         "bossDirectionMstId": 5501,
         "nextBossDirectionMstId": 5502,
         "nextSceneType": 1,

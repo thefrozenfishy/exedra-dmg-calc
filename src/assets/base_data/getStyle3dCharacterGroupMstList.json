@@ -583,5 +583,10 @@
         "style3dCharacterGroupMstId": 1152011,
         "style3dCharacterMstId": 115201,
         "styleMstId": 11520101
+    },
+    {
+        "style3dCharacterGroupMstId": 1154011,
+        "style3dCharacterMstId": 115401,
+        "styleMstId": 11540101
     }
 ]

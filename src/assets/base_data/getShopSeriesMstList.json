@@ -184,6 +184,19 @@
     {
         "category": 2,
         "description": "",
+        "endTime": "2026-11-01T11:59:59+09:00",
+        "payId": 231074,
+        "payType": 3,
+        "resourceName": "",
+        "shopGroupId1": 2919,
+        "shopGroupId2": 0,
+        "shopSeriesMstId": 2919,
+        "startTime": "2026-10-10T12:00:00+09:00",
+        "title": "1.5th Anniversary Exclusive Kioku Redux Wishlist Fate Weave Trader"
+    },
+    {
+        "category": 2,
+        "description": "",
         "endTime": "2026-10-31T11:59:59+09:00",
         "payId": 201141,
         "payType": 3,
@@ -1168,6 +1181,19 @@
         "shopSeriesMstId": 2999,
         "startTime": "2025-01-30T12:00:00+09:00",
         "title": "Magia Fate Weave Trader"
+    },
+    {
+        "category": 3,
+        "description": "",
+        "endTime": "2026-11-01T11:59:59+09:00",
+        "payId": 201111,
+        "payType": 3,
+        "resourceName": "",
+        "shopGroupId1": 3882,
+        "shopGroupId2": 3934,
+        "shopSeriesMstId": 3882,
+        "startTime": "2026-10-08T12:00:00+09:00",
+        "title": "Anything for Who I Care About! Event Trader"
     },
     {
         "category": 3,

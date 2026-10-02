@@ -4411,6 +4411,21 @@
     },
     {
         "abilityEffectType": "",
+        "description": "On basic attack, advances action order by 10% and grants 5 MP.",
+        "name": "What Does the Future Have in Store for Me Now?!",
+        "rarity": 4,
+        "resourceIconName": "battle_icon_selection_ability_ex",
+        "selectionAbilityEffectId": 161,
+        "selectionAbilityMstId": 7075,
+        "selectionAbilityType": 1,
+        "sortOrder": 0,
+        "styleMstId": 11540101,
+        "targetType": 2,
+        "value1": 1150075,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
         "description": "Increases SPD by 10% and ATK by 10%.<br><br>While Ember Feather is applied:<br>On special attack, increases own DMG dealt when targeting elemental weakness by 20%.",
         "name": "To See Her Again",
         "rarity": 4,

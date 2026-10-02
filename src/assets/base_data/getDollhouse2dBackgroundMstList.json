@@ -2100,6 +2100,76 @@
         "sortOrder": 100411
     },
     {
+        "dollhouse2dBackgroundMstId": 110001,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Old Capital (Noon)",
+        "releaseTime": "2026-10-04T22:00:00+09:00",
+        "resourceName": "bg_adv_10_10107_01",
+        "seriesId": 11,
+        "sortOrder": 110001
+    },
+    {
+        "dollhouse2dBackgroundMstId": 110012,
+        "isDefault": false,
+        "lightingType": 1,
+        "name": "Old Capital (Evening)",
+        "releaseTime": "2026-10-04T22:00:00+09:00",
+        "resourceName": "bg_adv_10_10107_02",
+        "seriesId": 11,
+        "sortOrder": 110012
+    },
+    {
+        "dollhouse2dBackgroundMstId": 110023,
+        "isDefault": false,
+        "lightingType": 2,
+        "name": "Old Capital (Night)",
+        "releaseTime": "2026-10-04T22:00:00+09:00",
+        "resourceName": "bg_adv_10_10107_03",
+        "seriesId": 11,
+        "sortOrder": 110023
+    },
+    {
+        "dollhouse2dBackgroundMstId": 110031,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Space Station - Lobby",
+        "releaseTime": "2026-10-04T22:00:00+09:00",
+        "resourceName": "bg_adv_10_10103_01",
+        "seriesId": 11,
+        "sortOrder": 110031
+    },
+    {
+        "dollhouse2dBackgroundMstId": 110041,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Room from the Near Future",
+        "releaseTime": "2026-10-04T22:00:00+09:00",
+        "resourceName": "bg_adv_10_10108_01",
+        "seriesId": 11,
+        "sortOrder": 110041
+    },
+    {
+        "dollhouse2dBackgroundMstId": 110051,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Ichthyian Witch Labyrinth - Surface",
+        "releaseTime": "2026-10-04T22:00:00+09:00",
+        "resourceName": "bg_adv_10_10115_01",
+        "seriesId": 11,
+        "sortOrder": 110051
+    },
+    {
+        "dollhouse2dBackgroundMstId": 110061,
+        "isDefault": false,
+        "lightingType": 0,
+        "name": "Ichthyian Witch Labyrinth - Underwater",
+        "releaseTime": "2026-10-04T22:00:00+09:00",
+        "resourceName": "bg_adv_10_10123_01",
+        "seriesId": 11,
+        "sortOrder": 110061
+    },
+    {
         "dollhouse2dBackgroundMstId": 990011,
         "isDefault": false,
         "lightingType": 0,

@@ -3988,5 +3988,40 @@
         "styleLimitBreakEffectMstId2": 1003,
         "styleLimitBreakMstId": 1152010105,
         "styleMstId": 11520101
+    },
+    {
+        "limitBreakCount": 1,
+        "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 5093,
+        "styleLimitBreakMstId": 1154010101,
+        "styleMstId": 11540101
+    },
+    {
+        "limitBreakCount": 2,
+        "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 5094,
+        "styleLimitBreakMstId": 1154010102,
+        "styleMstId": 11540101
+    },
+    {
+        "limitBreakCount": 3,
+        "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 1002,
+        "styleLimitBreakMstId": 1154010103,
+        "styleMstId": 11540101
+    },
+    {
+        "limitBreakCount": 4,
+        "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 5095,
+        "styleLimitBreakMstId": 1154010104,
+        "styleMstId": 11540101
+    },
+    {
+        "limitBreakCount": 5,
+        "styleLimitBreakEffectMstId1": 1001,
+        "styleLimitBreakEffectMstId2": 1002,
+        "styleLimitBreakMstId": 1154010105,
+        "styleMstId": 11540101
     }
 ]

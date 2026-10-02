@@ -1018,5 +1018,15 @@
         "sortOrder": 115201,
         "style3dCharacterMstId": 115201,
         "type": 1
+    },
+    {
+        "homeMotionResourceName": "chara_11540101_home",
+        "isDefault": true,
+        "isExistVoice": true,
+        "name": "Sorana Nagiboshi - Magical Girl",
+        "resourceName": "chara_115401_battle_unit",
+        "sortOrder": 115401,
+        "style3dCharacterMstId": 115401,
+        "type": 1
     }
 ]

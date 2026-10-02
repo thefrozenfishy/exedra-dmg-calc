@@ -186,6 +186,12 @@
         "uniqueStatePatternMstId": 31
     },
     {
+        "iconName": "battle_icon_unique_039",
+        "name": "Orchestration",
+        "stateFlipName": "Orchestration",
+        "uniqueStatePatternMstId": 32
+    },
+    {
         "iconName": "battle_icon_unique_013",
         "name": "Dark Field",
         "stateFlipName": "Dark Field",

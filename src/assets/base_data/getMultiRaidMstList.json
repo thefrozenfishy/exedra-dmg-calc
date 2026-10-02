@@ -230,5 +230,13 @@
         "multiRaidMstId": 29,
         "seasonId": 2,
         "startTime": "2026-09-24T12:00:00+09:00"
+    },
+    {
+        "dailyBonusLotteryRarityGroupId": 103,
+        "endTime": "2026-10-22T11:59:59+09:00",
+        "multiRaidBattleBonusGroupId": 10,
+        "multiRaidMstId": 30,
+        "seasonId": 10,
+        "startTime": "2026-10-08T12:00:00+09:00"
     }
 ]

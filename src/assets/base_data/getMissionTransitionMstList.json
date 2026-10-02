@@ -12,24 +12,6 @@
         "transitionSceneParam": 0
     },
     {
-        "missionMstId": 3003,
-        "missionTransitionMstId": 3003,
-        "transitionSceneName": "EnhanceQuest",
-        "transitionSceneParam": 0
-    },
-    {
-        "missionMstId": 3004,
-        "missionTransitionMstId": 3004,
-        "transitionSceneName": "PvP",
-        "transitionSceneParam": 0
-    },
-    {
-        "missionMstId": 3005,
-        "missionTransitionMstId": 3005,
-        "transitionSceneName": "EnhanceQuest",
-        "transitionSceneParam": 0
-    },
-    {
         "missionMstId": 4005,
         "missionTransitionMstId": 4005,
         "transitionSceneName": "Training",

@@ -5,13 +5,18 @@
         "sortOrder": 100
     },
     {
-        "bingoMissionMstId": 5,
-        "firstMissionTitleMstId": 2017,
+        "bingoMissionMstId": 6,
+        "firstMissionTitleMstId": 2018,
         "sortOrder": 100
     },
     {
-        "bingoMissionMstId": 6,
-        "firstMissionTitleMstId": 2018,
+        "bingoMissionMstId": 7,
+        "firstMissionTitleMstId": 2021,
+        "sortOrder": 100
+    },
+    {
+        "bingoMissionMstId": 8,
+        "firstMissionTitleMstId": 2024,
         "sortOrder": 100
     }
 ]

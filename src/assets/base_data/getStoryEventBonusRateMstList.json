@@ -3576,6 +3576,66 @@
         "storyEventMstId": 80
     },
     {
+        "bonusMstId": 11540101,
+        "bonusType": 1,
+        "limitBreakCount0Rate": 1000,
+        "limitBreakCount1Rate": 1400,
+        "limitBreakCount2Rate": 1800,
+        "limitBreakCount3Rate": 2200,
+        "limitBreakCount4Rate": 2600,
+        "limitBreakCount5Rate": 3000,
+        "storyEventBonusRateMstId": 8200,
+        "storyEventMstId": 82
+    },
+    {
+        "bonusMstId": 10610101,
+        "bonusType": 1,
+        "limitBreakCount0Rate": 200,
+        "limitBreakCount1Rate": 250,
+        "limitBreakCount2Rate": 300,
+        "limitBreakCount3Rate": 350,
+        "limitBreakCount4Rate": 400,
+        "limitBreakCount5Rate": 500,
+        "storyEventBonusRateMstId": 8201,
+        "storyEventMstId": 82
+    },
+    {
+        "bonusMstId": 10700101,
+        "bonusType": 1,
+        "limitBreakCount0Rate": 200,
+        "limitBreakCount1Rate": 250,
+        "limitBreakCount2Rate": 300,
+        "limitBreakCount3Rate": 350,
+        "limitBreakCount4Rate": 400,
+        "limitBreakCount5Rate": 500,
+        "storyEventBonusRateMstId": 8202,
+        "storyEventMstId": 82
+    },
+    {
+        "bonusMstId": 4200098,
+        "bonusType": 2,
+        "limitBreakCount0Rate": 100,
+        "limitBreakCount1Rate": 130,
+        "limitBreakCount2Rate": 160,
+        "limitBreakCount3Rate": 190,
+        "limitBreakCount4Rate": 220,
+        "limitBreakCount5Rate": 250,
+        "storyEventBonusRateMstId": 8203,
+        "storyEventMstId": 82
+    },
+    {
+        "bonusMstId": 5400020,
+        "bonusType": 2,
+        "limitBreakCount0Rate": 100,
+        "limitBreakCount1Rate": 130,
+        "limitBreakCount2Rate": 160,
+        "limitBreakCount3Rate": 190,
+        "limitBreakCount4Rate": 220,
+        "limitBreakCount5Rate": 250,
+        "storyEventBonusRateMstId": 8204,
+        "storyEventMstId": 82
+    },
+    {
         "bonusMstId": 10010101,
         "bonusType": 1,
         "limitBreakCount0Rate": 1000,

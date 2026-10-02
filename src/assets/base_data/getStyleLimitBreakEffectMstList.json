@@ -1298,6 +1298,30 @@
     {
         "abilityEffectType": "",
         "name": "",
+        "styleLimitBreakEffectMstId": 5093,
+        "targetType": 3,
+        "value1": 8509501,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "name": "",
+        "styleLimitBreakEffectMstId": 5094,
+        "targetType": 3,
+        "value1": 8509601,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "name": "",
+        "styleLimitBreakEffectMstId": 5095,
+        "targetType": 3,
+        "value1": 8509701,
+        "value2": 0
+    },
+    {
+        "abilityEffectType": "",
+        "name": "",
         "styleLimitBreakEffectMstId": 5096,
         "targetType": 3,
         "value1": 8509801,

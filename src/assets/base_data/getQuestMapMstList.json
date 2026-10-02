@@ -82,6 +82,15 @@
     },
     {
         "conditionGroupId": 0,
+        "name": "Sorana Magica: Our Fates, Our Futures",
+        "openEffectFlagMiniTutorialNumber": 191,
+        "openFlagMiniTutorialNumber": 190,
+        "questCategoryMstId": 1,
+        "questMapMstId": 11,
+        "shortName": "Sorana Magica"
+    },
+    {
+        "conditionGroupId": 0,
         "name": "Kioku Upgrade Material Quest",
         "openEffectFlagMiniTutorialNumber": 0,
         "openFlagMiniTutorialNumber": 0,

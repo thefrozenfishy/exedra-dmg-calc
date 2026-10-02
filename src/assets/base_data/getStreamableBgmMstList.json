@@ -463,5 +463,20 @@
         "cueName": "bgm02_battle_hangyaku_homucifer",
         "cueSheetName": "bgm_battle_hangyaku",
         "streamableBgmMstId": 93
+    },
+    {
+        "cueName": "bgm_sorana_main_theme",
+        "cueSheetName": "bgm_sorana",
+        "streamableBgmMstId": 94
+    },
+    {
+        "cueName": "bgm_battle_sorana_teshita_01",
+        "cueSheetName": "bgm_battle_sorana",
+        "streamableBgmMstId": 95
+    },
+    {
+        "cueName": "bgm_battle_sorana_majo_01",
+        "cueSheetName": "bgm_battle_sorana",
+        "streamableBgmMstId": 96
     }
 ]

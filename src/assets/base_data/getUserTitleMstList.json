@@ -450,6 +450,12 @@
         "value1": 11510101
     },
     {
+        "title": "Aqua Tempest",
+        "titleType": 1,
+        "userTitleMstId": 11540101,
+        "value1": 11540101
+    },
+    {
         "title": "Nameless Girl",
         "titleType": 0,
         "userTitleMstId": 20000000,
@@ -1122,6 +1128,24 @@
         "value1": 0
     },
     {
+        "title": "Sorana Magica: Sorana Nagiboshi's Memory - Earth (Standard) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20901001,
+        "value1": 0
+    },
+    {
+        "title": "Sorana Magica: Sorana Nagiboshi's Memory - Earth (Battler) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20902001,
+        "value1": 0
+    },
+    {
+        "title": "Sorana Magica: Sorana Nagiboshi's Memory - Earth (Nightmare) Ace",
+        "titleType": 0,
+        "userTitleMstId": 20903001,
+        "value1": 0
+    },
+    {
         "title": "Player Match No.1",
         "titleType": 3,
         "userTitleMstId": 30010001,
@@ -1582,6 +1606,12 @@
         "titleType": 2,
         "userTitleMstId": 60000058,
         "value1": 4200098
+    },
+    {
+        "title": "Anything for Who I Care About! Ace",
+        "titleType": 2,
+        "userTitleMstId": 60000059,
+        "value1": 4200102
     },
     {
         "title": "Mirrors Ranking S☆☆☆",

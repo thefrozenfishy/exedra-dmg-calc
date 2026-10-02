@@ -18090,9 +18090,204 @@
         "description": "対象は無属性 AND 行動タイプが必殺技 AND一度の攻撃で自軍に5体クリティカルダメージが発生したとき"
     },
     {
+        "battleConditionMstIdCsv": "2115",
+        "battleConditionSetMstId": 3664,
+        "description": "そらなの専用バフがある"
+    },
+    {
+        "battleConditionMstIdCsv": "2115,393",
+        "battleConditionSetMstId": 3665,
+        "description": "そらな専用バフ+魔力1"
+    },
+    {
+        "battleConditionMstIdCsv": "2115,394",
+        "battleConditionSetMstId": 3666,
+        "description": "そらな専用バフ+魔力2"
+    },
+    {
+        "battleConditionMstIdCsv": "2115,395",
+        "battleConditionSetMstId": 3667,
+        "description": "そらな専用バフ+魔力3"
+    },
+    {
+        "battleConditionMstIdCsv": "2115,396",
+        "battleConditionSetMstId": 3668,
+        "description": "そらな専用バフ+魔力4"
+    },
+    {
+        "battleConditionMstIdCsv": "2115,7,962,1",
+        "battleConditionSetMstId": 3669,
+        "description": "そらな専用バフ+自身以外が必殺技を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "3,7,396",
+        "battleConditionSetMstId": 3670,
+        "description": "魔力4+自身+必殺技を発動"
+    },
+    {
+        "battleConditionMstIdCsv": "3,7,396",
+        "battleConditionSetMstId": 3671,
+        "description": "魔力4+自身+必殺技を発動+そらなの専用バフが付与されている(個別)"
+    },
+    {
         "battleConditionMstIdCsv": "2118,2124",
         "battleConditionSetMstId": 3674,
         "description": "味方全体で毒が付与されている敵が1体未満 and 火傷が付与されている敵が1体未満"
+    },
+    {
+        "battleConditionMstIdCsv": "2130",
+        "battleConditionSetMstId": 3676,
+        "description": "トークンが91以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2131,2132",
+        "battleConditionSetMstId": 3677,
+        "description": "トークンが91未満、トークンが88以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2133,2134",
+        "battleConditionSetMstId": 3678,
+        "description": "トークンが88未満、トークンが85以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2135,2136",
+        "battleConditionSetMstId": 3679,
+        "description": "トークンが85未満、トークンが82以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2137,2138",
+        "battleConditionSetMstId": 3680,
+        "description": "トークンが82未満、トークンが79以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2139,2140",
+        "battleConditionSetMstId": 3681,
+        "description": "トークンが79未満、トークンが76以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2141,2142",
+        "battleConditionSetMstId": 3682,
+        "description": "トークンが76未満、トークンが73以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2143,2144",
+        "battleConditionSetMstId": 3683,
+        "description": "トークンが73未満、トークンが70以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2145,2146",
+        "battleConditionSetMstId": 3684,
+        "description": "トークンが70未満、トークンが67以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2147,2148",
+        "battleConditionSetMstId": 3685,
+        "description": "トークンが67未満、トークンが64以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2149,2150",
+        "battleConditionSetMstId": 3686,
+        "description": "トークンが64未満、トークンが61以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2151,2152",
+        "battleConditionSetMstId": 3687,
+        "description": "トークンが61未満、トークンが58以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2153,2154",
+        "battleConditionSetMstId": 3688,
+        "description": "トークンが58未満、トークンが55以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2155,2156",
+        "battleConditionSetMstId": 3689,
+        "description": "トークンが55未満、トークンが52以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2157,2158",
+        "battleConditionSetMstId": 3690,
+        "description": "トークンが52未満、トークンが49以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2159,2160",
+        "battleConditionSetMstId": 3691,
+        "description": "トークンが49未満、トークンが46以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2161,2162",
+        "battleConditionSetMstId": 3692,
+        "description": "トークンが46未満、トークンが43以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2163,2164",
+        "battleConditionSetMstId": 3693,
+        "description": "トークンが43未満、トークンが40以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2165,2166",
+        "battleConditionSetMstId": 3694,
+        "description": "トークンが40未満、トークンが37以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2167,2168",
+        "battleConditionSetMstId": 3695,
+        "description": "トークンが37未満、トークンが34以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2169,2170",
+        "battleConditionSetMstId": 3696,
+        "description": "トークンが34未満、トークンが31以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2171,2172",
+        "battleConditionSetMstId": 3697,
+        "description": "トークンが31未満、トークンが28以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2173,2174",
+        "battleConditionSetMstId": 3698,
+        "description": "トークンが28未満、トークンが25以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2175,2176",
+        "battleConditionSetMstId": 3699,
+        "description": "トークンが25未満、トークンが22以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2177,2178",
+        "battleConditionSetMstId": 3700,
+        "description": "トークンが22未満、トークンが19以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2179,2180",
+        "battleConditionSetMstId": 3701,
+        "description": "トークンが19未満、トークンが16以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2181,2182",
+        "battleConditionSetMstId": 3702,
+        "description": "トークンが16未満、トークンが13以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2183,2184",
+        "battleConditionSetMstId": 3703,
+        "description": "トークンが13未満、トークンが10以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2185,2186",
+        "battleConditionSetMstId": 3704,
+        "description": "トークンが10未満、トークンが7以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2187,2188",
+        "battleConditionSetMstId": 3705,
+        "description": "トークンが7未満、トークンが4以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2189",
+        "battleConditionSetMstId": 3706,
+        "description": "トークンが4未満"
     },
     {
         "battleConditionMstIdCsv": "2119,2124",
@@ -18118,6 +18313,11 @@
         "battleConditionMstIdCsv": "2126,2118",
         "battleConditionSetMstId": 3711,
         "description": "味方全体で火傷が付与されている敵が2体のとき\nAND 味方全体で毒が付与されている敵が1体未満のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2190",
+        "battleConditionSetMstId": 3712,
+        "description": "同時に攻撃を受けた味方の数が3以上"
     },
     {
         "battleConditionMstIdCsv": "2121,2124",
@@ -18195,6 +18395,11 @@
         "description": "味方全体で毒が付与されている体数が3体+火傷が2体のとき"
     },
     {
+        "battleConditionMstIdCsv": "2191",
+        "battleConditionSetMstId": 3728,
+        "description": "そらな専用バフが付与されているとき"
+    },
+    {
         "battleConditionMstIdCsv": "82,275",
         "battleConditionSetMstId": 3729,
         "description": "自分が8ターンごとに（ターン1から） AND 連続行動の3回目"
@@ -18270,6 +18475,281 @@
         "description": "トークンが21以上のとき"
     },
     {
+        "battleConditionMstIdCsv": "2203,3",
+        "battleConditionSetMstId": 3749,
+        "description": "同時に攻撃を受けた味方の数が1以上+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "2204,3",
+        "battleConditionSetMstId": 3750,
+        "description": "同時に攻撃を受けた味方の数が2以上+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "2205,3",
+        "battleConditionSetMstId": 3751,
+        "description": "同時に攻撃を受けた味方の数が3以上+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "2206,3",
+        "battleConditionSetMstId": 3752,
+        "description": "同時に攻撃を受けた味方の数が4以上+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "2207,3",
+        "battleConditionSetMstId": 3753,
+        "description": "同時に攻撃を受けた味方の数が5以上+行動者は自分"
+    },
+    {
+        "battleConditionMstIdCsv": "2208",
+        "battleConditionSetMstId": 3754,
+        "description": "敵軍のブレイク回数合計が1回"
+    },
+    {
+        "battleConditionMstIdCsv": "2209",
+        "battleConditionSetMstId": 3755,
+        "description": "敵軍のブレイク回数合計が2回"
+    },
+    {
+        "battleConditionMstIdCsv": "2210",
+        "battleConditionSetMstId": 3756,
+        "description": "敵軍のブレイク回数合計が3回"
+    },
+    {
+        "battleConditionMstIdCsv": "2211",
+        "battleConditionSetMstId": 3757,
+        "description": "敵軍のブレイク回数合計が4回"
+    },
+    {
+        "battleConditionMstIdCsv": "2212",
+        "battleConditionSetMstId": 3758,
+        "description": "敵軍のブレイク回数合計が5回"
+    },
+    {
+        "battleConditionMstIdCsv": "2213",
+        "battleConditionSetMstId": 3759,
+        "description": "敵軍のブレイク回数合計が6回"
+    },
+    {
+        "battleConditionMstIdCsv": "2214",
+        "battleConditionSetMstId": 3760,
+        "description": "敵軍のブレイク回数合計が7回"
+    },
+    {
+        "battleConditionMstIdCsv": "2215",
+        "battleConditionSetMstId": 3761,
+        "description": "敵軍のブレイク回数合計が8回"
+    },
+    {
+        "battleConditionMstIdCsv": "2216",
+        "battleConditionSetMstId": 3762,
+        "description": "敵軍のブレイク回数合計が9回"
+    },
+    {
+        "battleConditionMstIdCsv": "2217",
+        "battleConditionSetMstId": 3763,
+        "description": "敵軍のブレイク回数合計が10回"
+    },
+    {
+        "battleConditionMstIdCsv": "2218",
+        "battleConditionSetMstId": 3764,
+        "description": "敵軍のブレイク回数合計が11回"
+    },
+    {
+        "battleConditionMstIdCsv": "2219",
+        "battleConditionSetMstId": 3765,
+        "description": "敵軍のブレイク回数合計が12回"
+    },
+    {
+        "battleConditionMstIdCsv": "2220",
+        "battleConditionSetMstId": 3766,
+        "description": "敵軍のブレイク回数合計が13回"
+    },
+    {
+        "battleConditionMstIdCsv": "2221",
+        "battleConditionSetMstId": 3767,
+        "description": "敵軍のブレイク回数合計が14回"
+    },
+    {
+        "battleConditionMstIdCsv": "2222",
+        "battleConditionSetMstId": 3768,
+        "description": "敵軍のブレイク回数合計が15回"
+    },
+    {
+        "battleConditionMstIdCsv": "2223",
+        "battleConditionSetMstId": 3769,
+        "description": "敵軍のブレイク回数合計が16回"
+    },
+    {
+        "battleConditionMstIdCsv": "2224",
+        "battleConditionSetMstId": 3770,
+        "description": "敵軍のブレイク回数合計が17回"
+    },
+    {
+        "battleConditionMstIdCsv": "2225",
+        "battleConditionSetMstId": 3771,
+        "description": "敵軍のブレイク回数合計が18回"
+    },
+    {
+        "battleConditionMstIdCsv": "2226",
+        "battleConditionSetMstId": 3772,
+        "description": "敵軍のブレイク回数合計が19回"
+    },
+    {
+        "battleConditionMstIdCsv": "2227",
+        "battleConditionSetMstId": 3773,
+        "description": "敵軍のブレイク回数合計が20回"
+    },
+    {
+        "battleConditionMstIdCsv": "2228",
+        "battleConditionSetMstId": 3774,
+        "description": "敵軍のブレイク回数合計が21回"
+    },
+    {
+        "battleConditionMstIdCsv": "2229",
+        "battleConditionSetMstId": 3775,
+        "description": "敵軍のブレイク回数合計が22回"
+    },
+    {
+        "battleConditionMstIdCsv": "2230",
+        "battleConditionSetMstId": 3776,
+        "description": "敵軍のブレイク回数合計が23回"
+    },
+    {
+        "battleConditionMstIdCsv": "2231",
+        "battleConditionSetMstId": 3777,
+        "description": "敵軍のブレイク回数合計が24回"
+    },
+    {
+        "battleConditionMstIdCsv": "2232",
+        "battleConditionSetMstId": 3778,
+        "description": "敵軍のブレイク回数合計が25回"
+    },
+    {
+        "battleConditionMstIdCsv": "2233",
+        "battleConditionSetMstId": 3779,
+        "description": "敵軍のブレイク回数合計が26回"
+    },
+    {
+        "battleConditionMstIdCsv": "2234",
+        "battleConditionSetMstId": 3780,
+        "description": "敵軍のブレイク回数合計が27回"
+    },
+    {
+        "battleConditionMstIdCsv": "2235",
+        "battleConditionSetMstId": 3781,
+        "description": "敵軍のブレイク回数合計が28回"
+    },
+    {
+        "battleConditionMstIdCsv": "2236",
+        "battleConditionSetMstId": 3782,
+        "description": "敵軍のブレイク回数合計が29回"
+    },
+    {
+        "battleConditionMstIdCsv": "2237",
+        "battleConditionSetMstId": 3783,
+        "description": "敵軍のブレイク回数合計が30回"
+    },
+    {
+        "battleConditionMstIdCsv": "2238",
+        "battleConditionSetMstId": 3784,
+        "description": "敵軍のブレイク回数合計が31回"
+    },
+    {
+        "battleConditionMstIdCsv": "2239",
+        "battleConditionSetMstId": 3785,
+        "description": "敵軍のブレイク回数合計が32回"
+    },
+    {
+        "battleConditionMstIdCsv": "2240",
+        "battleConditionSetMstId": 3786,
+        "description": "敵軍のブレイク回数合計が33回"
+    },
+    {
+        "battleConditionMstIdCsv": "2241",
+        "battleConditionSetMstId": 3787,
+        "description": "敵軍のブレイク回数合計が34回"
+    },
+    {
+        "battleConditionMstIdCsv": "2242",
+        "battleConditionSetMstId": 3788,
+        "description": "敵軍のブレイク回数合計が35回"
+    },
+    {
+        "battleConditionMstIdCsv": "2243",
+        "battleConditionSetMstId": 3789,
+        "description": "敵軍のブレイク回数合計が36回"
+    },
+    {
+        "battleConditionMstIdCsv": "2244",
+        "battleConditionSetMstId": 3790,
+        "description": "敵軍のブレイク回数合計が37回"
+    },
+    {
+        "battleConditionMstIdCsv": "2245",
+        "battleConditionSetMstId": 3791,
+        "description": "敵軍のブレイク回数合計が38回"
+    },
+    {
+        "battleConditionMstIdCsv": "2246",
+        "battleConditionSetMstId": 3792,
+        "description": "敵軍のブレイク回数合計が39回"
+    },
+    {
+        "battleConditionMstIdCsv": "2247",
+        "battleConditionSetMstId": 3793,
+        "description": "敵軍のブレイク回数合計が40回"
+    },
+    {
+        "battleConditionMstIdCsv": "2248",
+        "battleConditionSetMstId": 3794,
+        "description": "敵軍のブレイク回数合計が41回"
+    },
+    {
+        "battleConditionMstIdCsv": "2249",
+        "battleConditionSetMstId": 3795,
+        "description": "敵軍のブレイク回数合計が42回"
+    },
+    {
+        "battleConditionMstIdCsv": "2250",
+        "battleConditionSetMstId": 3796,
+        "description": "敵軍のブレイク回数合計が43回"
+    },
+    {
+        "battleConditionMstIdCsv": "2251",
+        "battleConditionSetMstId": 3797,
+        "description": "敵軍のブレイク回数合計が44回"
+    },
+    {
+        "battleConditionMstIdCsv": "2252",
+        "battleConditionSetMstId": 3798,
+        "description": "敵軍のブレイク回数合計が45回"
+    },
+    {
+        "battleConditionMstIdCsv": "2253",
+        "battleConditionSetMstId": 3799,
+        "description": "敵軍のブレイク回数合計が46回"
+    },
+    {
+        "battleConditionMstIdCsv": "2254",
+        "battleConditionSetMstId": 3800,
+        "description": "敵軍のブレイク回数合計が47回"
+    },
+    {
+        "battleConditionMstIdCsv": "2255",
+        "battleConditionSetMstId": 3801,
+        "description": "敵軍のブレイク回数合計が48回"
+    },
+    {
+        "battleConditionMstIdCsv": "2256",
+        "battleConditionSetMstId": 3802,
+        "description": "敵軍のブレイク回数合計が49回"
+    },
+    {
+        "battleConditionMstIdCsv": "2257",
+        "battleConditionSetMstId": 3803,
+        "description": "敵軍のブレイク回数合計が50回以上"
+    },
+    {
         "battleConditionMstIdCsv": "2,25",
         "battleConditionSetMstId": 3806,
         "description": "行動者は敵 AND 自分が1以上のダメージを受けた"
@@ -18308,6 +18788,56 @@
         "battleConditionMstIdCsv": "285,990",
         "battleConditionSetMstId": 3816,
         "description": "トークンが5のとき + 対象は無属性"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1001,1052",
+        "battleConditionSetMstId": 3817,
+        "description": "自身のターン経過が1ターン以上、2ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1002,1053",
+        "battleConditionSetMstId": 3818,
+        "description": "自身のターン経過が2ターン以上、3ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1003,1054",
+        "battleConditionSetMstId": 3819,
+        "description": "自身のターン経過が3ターン以上、4ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1004,1055",
+        "battleConditionSetMstId": 3820,
+        "description": "自身のターン経過が4ターン以上、5ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1005,1056",
+        "battleConditionSetMstId": 3821,
+        "description": "自身のターン経過が5ターン以上、6ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1006,1057",
+        "battleConditionSetMstId": 3822,
+        "description": "自身のターン経過が6ターン以上、7ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1007,1058",
+        "battleConditionSetMstId": 3823,
+        "description": "自身のターン経過が7ターン以上、8ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1008,1059",
+        "battleConditionSetMstId": 3824,
+        "description": "自身のターン経過が8ターン以上、9ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1009,1060",
+        "battleConditionSetMstId": 3825,
+        "description": "自身のターン経過が9ターン以上、10ターン未満"
+    },
+    {
+        "battleConditionMstIdCsv": "3,1010",
+        "battleConditionSetMstId": 3826,
+        "description": "自身のターン経過が10ターン以上"
     },
     {
         "battleConditionMstIdCsv": "75,273",
@@ -18380,6 +18910,11 @@
         "description": "7ターンごと（7ターン目から） AND 連続行動の2回目"
     },
     {
+        "battleConditionMstIdCsv": "2,2260,2191",
+        "battleConditionSetMstId": 3841,
+        "description": "敵が全体攻撃を発動したとき+そらなの専用バフが付与されているとき"
+    },
+    {
         "battleConditionMstIdCsv": "972,2032",
         "battleConditionSetMstId": 3842,
         "description": "行動者は水属性,攻撃を受けた味方が1体以上の時"
@@ -18425,6 +18960,11 @@
         "description": "行動者は敵 AND 攻撃されたとき AND 魔力が99のとき"
     },
     {
+        "battleConditionMstIdCsv": "3,396",
+        "battleConditionSetMstId": 3851,
+        "description": "行動者は自分+魔力4"
+    },
+    {
         "battleConditionMstIdCsv": "971,2032",
         "battleConditionSetMstId": 3852,
         "description": "行動者は火属性,攻撃を受けた味方が1体以上の時"
@@ -18445,8 +18985,63 @@
         "description": "火傷が付与されている敵が1体未満"
     },
     {
+        "battleConditionMstIdCsv": "2286",
+        "battleConditionSetMstId": 3880,
+        "description": "自分のキャラクターが「凪星そらな」"
+    },
+    {
         "battleConditionMstIdCsv": "3,1017",
         "battleConditionSetMstId": 3921,
         "description": "自身の経過ターンが17ターン以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2123,2322",
+        "battleConditionSetMstId": 3977,
+        "description": "味方全体で毒が付与されている敵が5体のときAND 味方全体で火傷が付与されている敵が1体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2317,2129",
+        "battleConditionSetMstId": 3978,
+        "description": "味方全体で毒が付与されている敵が1体以上のときAND 味方全体で火傷が付与されている敵が5体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2122,2323",
+        "battleConditionSetMstId": 3979,
+        "description": "味方全体で毒が付与されている敵が4体のときAND 味方全体で火傷が付与されている敵が2体以上のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2318,2128",
+        "battleConditionSetMstId": 3980,
+        "description": "味方全体で毒が付与されている敵が2体以上のときAND 味方全体で火傷が付与されている敵が4体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2121,2324",
+        "battleConditionSetMstId": 3981,
+        "description": "味方全体で毒が付与されている敵が3体のときAND 味方全体で火傷が付与されている敵が3体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2319,2127",
+        "battleConditionSetMstId": 3982,
+        "description": "味方全体で毒が付与されている敵が3体以上AND 味方全体で火傷が付与されている敵が3体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2120,2325",
+        "battleConditionSetMstId": 3983,
+        "description": "味方全体で毒が付与されている敵が2体のときAND 味方全体で火傷が付与されている敵が4体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2320,2126",
+        "battleConditionSetMstId": 3984,
+        "description": "味方全体で毒が付与されている敵が4体以上AND 味方全体で火傷が付与されている敵が2体のとき"
+    },
+    {
+        "battleConditionMstIdCsv": "2119,2326",
+        "battleConditionSetMstId": 3985,
+        "description": "味方全体で毒が付与されている敵が1体のときAND 味方全体で火傷が付与されている敵が5体以上"
+    },
+    {
+        "battleConditionMstIdCsv": "2321,2125",
+        "battleConditionSetMstId": 3986,
+        "description": "味方全体で毒が付与されている敵が5体以上AND 味方全体で火傷が付与されている敵が1体のとき"
     }
 ]

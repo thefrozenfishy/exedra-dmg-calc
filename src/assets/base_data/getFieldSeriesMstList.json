@@ -416,6 +416,19 @@
         "styleMstId": 0
     },
     {
+        "advMstId": 70000340,
+        "assetbundleName": "66300_01",
+        "backgroundResourcePath": "",
+        "endTime": "2050-01-02T10:00:00+09:00",
+        "fieldSeriesMstId": 66300,
+        "name": "Sorana Nagiboshi's Memory - Earth",
+        "questGroupMstId": 66300,
+        "questMapMstId": 11,
+        "sortOrder": 1,
+        "startTime": "2026-10-04T22:00:00+09:00",
+        "styleMstId": 0
+    },
+    {
         "advMstId": 0,
         "assetbundleName": "60001_01",
         "backgroundResourcePath": "",

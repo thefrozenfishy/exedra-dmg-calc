@@ -1152,6 +1152,42 @@
         "subTitle": " Part II"
     },
     {
+        "backgroundCardMstId": 4100034,
+        "difficulty": 1,
+        "fieldSeriesMstId": 66300,
+        "fieldStageMstId": 663001,
+        "firstClearRewardGroupId": 102,
+        "name": "Sorana Nagiboshi's Memory - Earth",
+        "prevFieldStageMstId": 602001,
+        "prevFieldStageMstId2": 0,
+        "stageAssetbundleName": "",
+        "subTitle": "Chapter 1"
+    },
+    {
+        "backgroundCardMstId": 4100034,
+        "difficulty": 2,
+        "fieldSeriesMstId": 66300,
+        "fieldStageMstId": 663002,
+        "firstClearRewardGroupId": 102,
+        "name": "Sorana Nagiboshi's Memory - Earth",
+        "prevFieldStageMstId": 663001,
+        "prevFieldStageMstId2": 0,
+        "stageAssetbundleName": "",
+        "subTitle": "Chapter 1"
+    },
+    {
+        "backgroundCardMstId": 5100054,
+        "difficulty": 3,
+        "fieldSeriesMstId": 66300,
+        "fieldStageMstId": 663003,
+        "firstClearRewardGroupId": 102,
+        "name": "Sorana Nagiboshi's Memory - Earth",
+        "prevFieldStageMstId": 663001,
+        "prevFieldStageMstId2": 612001,
+        "stageAssetbundleName": "",
+        "subTitle": "Chapter 1"
+    },
+    {
         "backgroundCardMstId": 0,
         "difficulty": 4,
         "fieldSeriesMstId": 70000,

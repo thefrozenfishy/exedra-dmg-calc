@@ -1190,6 +1190,20 @@
         "unlockType": 1
     },
     {
+        "description": "",
+        "enemyMstId": 664004,
+        "enemyProfileMstId": 664004,
+        "enemyUniqueId": 664004,
+        "isCollectionDisp": false,
+        "name": "??? Witch Minion",
+        "releaseTime": "2026-10-04T22:00:00+09:00",
+        "runesName": "?????",
+        "seriesId": 11,
+        "sortOrder": 80010101,
+        "unlockId": 0,
+        "unlockType": 0
+    },
+    {
         "description": "Nature: Minor Role.<br>The end result of some defeated Magical Girl.",
         "enemyMstId": 689001,
         "enemyProfileMstId": 689001,

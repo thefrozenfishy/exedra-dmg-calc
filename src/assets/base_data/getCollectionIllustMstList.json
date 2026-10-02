@@ -223,5 +223,20 @@
         "questMapMstId": 10,
         "resourceName": "art_06_04_0001",
         "source": ""
+    },
+    {
+        "advMstId": 70000346,
+        "collectionIllustMstId": 11100,
+        "completeHomeAppealMstId": 0,
+        "completeRewardCardMstId": 5100055,
+        "completeRewardGemNum": 1000,
+        "completeRewardStyleMstId": 0,
+        "expandCelestialGlobe": false,
+        "illustrator": "",
+        "isAutoUnlocked": false,
+        "name": "Orbit of SORA",
+        "questMapMstId": 11,
+        "resourceName": "art_06_07_0001",
+        "source": ""
     }
 ]
