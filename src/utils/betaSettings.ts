@@ -353,6 +353,7 @@ export const BETA_SECTIONS = [
                     { name: "Nine Phases", ascension: 4, },
                     { name: "Tiro Finale", ascension: 4, },
                     { name: "Tiro Finale", ascension: 5, }, // Extra MP% gives important breakpoints
+                    { name: "Judgement Earth", ascension: 4, },
 
                     // Great supports 
                     { name: "Flame Waltz", ascension: 0 },
@@ -437,7 +438,6 @@ export const BETA_SECTIONS = [
                             ],
                         },
                     },
-                    { name: "Judgement Earth", ascension: 4, },
                     {
                         name: "Flame Waltz", ascension: 4,
                         exceptions: {
