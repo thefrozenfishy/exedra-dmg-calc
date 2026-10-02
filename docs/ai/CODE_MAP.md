@@ -77,6 +77,13 @@ Conventions: comment every game rule `// [CONFIRMED 3.19] Class.Method (0xRVA): 
 `[APPROXIMATION]` otherwise. `f32 = Math.fround` for float32 steps. Keep the game's evaluation order even when
 it looks redundant.
 
+- New state that blocks something (Magic Seal): `KiokuState.canAddTo` (CanAddTo), a getter like
+  `canNotUseSpecialAttack`, the gate (`readyUltimates`), and its AI chain in `AITargetSelector.CHAIN_BY_EFFECT_TYPE`.
+- New team/unit condition content: `BattleConditionParser.ts` (`checkTeamCondition` / unit switch); notice-based
+  team counts read each unit's `lastNotice` (one per unit per skill; `noteAddedState` feeds 315/316).
+- New instant ability effect (no state): a branch in `applyEffectToTarget` before `if (detail.turn)` (e.g.
+  IMM_SLIP_DMG); otherwise it falls to the "Active without turn" warning and does nothing.
+
 ## Pages and UI
 
 | Route | Page | Engine use |

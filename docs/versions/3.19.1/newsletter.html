@@ -1,0 +1,193 @@
+<title>Exedra 3.19.1 Dispatch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column (patch-notes dispatch), wide tables scroll in place; one rose accent drawn from the Rose Garden Witch raid. */
+:root {
+  --bg: #f7f5f8; --surface: #ffffff; --fg: #1d1a24; --muted: #625b6e; --line: #e2dce7;
+  --accent: #b2386e; --accent-soft: #f6e3ec; --ok: #2f7d55; --ok-soft: #e1f2e8;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #16131b; --surface: #1f1b26; --fg: #ece8f1; --muted: #a59db1; --line: #342e3d;
+  --accent: #ec7aa9; --accent-soft: #3a2230; --ok: #6fcf9b; --ok-soft: #1c3127; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #16131b; --surface: #1f1b26; --fg: #ece8f1; --muted: #a59db1; --line: #342e3d;
+  --accent: #ec7aa9; --accent-soft: #3a2230; --ok: #6fcf9b; --ok-soft: #1c3127; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); }
+.wrap { max-width: 760px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 72px; display: flex; flex-direction: column; gap: 40px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(30px, 6vw, 46px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 24px; font-weight: 700; }
+h3 { font-size: 17px; font-weight: 700; }
+p { margin: 0; }
+section { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 17px; color: var(--muted); max-width: 62ch; }
+.meta { font: 13px var(--mono); color: var(--muted); }
+.verdict { background: var(--ok-soft); border: 1px solid color-mix(in srgb, var(--ok) 35%, transparent); border-radius: 10px; padding: 16px 18px; display: flex; gap: 14px; align-items: flex-start; }
+.verdict b { color: var(--ok); }
+.verdict .tag { font: 600 12px var(--mono); color: var(--ok); border: 1px solid var(--ok); border-radius: 999px; padding: 2px 9px; white-space: nowrap; }
+.item { border-top: 1px solid var(--line); padding-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+.item .head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: baseline; }
+.chip { font: 500 12px var(--mono); background: var(--accent-soft); color: var(--accent); border-radius: 4px; padding: 1px 7px; }
+.chip.plain { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+code, .mono { font-family: var(--mono); font-size: 13px; }
+code { background: var(--accent-soft); color: var(--fg); padding: 0 4px; border-radius: 3px; }
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { font: 500 12px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+td.num { text-align: right; font-family: var(--mono); }
+.fix { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.fix article { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.fix .why { color: var(--muted); font-size: 14px; }
+.rva { font: 12px var(--mono); color: var(--muted); }
+.kit { display: grid; grid-template-columns: 9.5em 1fr; gap: 6px 14px; font-size: 14px; }
+.kit dt { font: 500 12px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .04em; padding-top: 2px; }
+.kit dd { margin: 0; min-width: 0; }
+@media (max-width: 520px) { .kit { grid-template-columns: 1fr; } .kit dd { margin-bottom: 6px; } .verdict { flex-direction: column; } }
+a { color: var(--accent); }
+footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:14px">
+    <div class="eyebrow">Madoka Exedra · version dispatch · 2 Oct 2026</div>
+    <h1>3.19.1: same battle engine, a new Kioku and a rose garden</h1>
+    <p class="lede">The 27 September patch (Steam files dated 2026-09-27 14:00 UTC) rebuilt the client without touching game logic. Everything new arrived as server master data. The simulator learned five rules along the way.</p>
+    <p class="meta">Compared: unpackedExedra 3.19.0 → 3.19.1 · global-metadata v31 · base_data 4ea7254^ → HEAD</p>
+  </header>
+
+  <div class="verdict">
+    <span class="tag">CODE IDENTICAL</span>
+    <p><b>GameAssembly is byte-for-byte the same code.</b> The <code>.text</code>, <code>il2cpp</code>, <code>.data</code> and <code>.pdata</code> sections match exactly. Only the build timestamp, the PDB age and the protector's <code>_RDATA</code> changed, and in global-metadata the single string literal <code>"3.19.0"</code> became <code>"3.19.1"</code>. Every RVA in the knowledge base and the whole 3.19.0 decompile stay valid.</p>
+  </div>
+
+  <section id="game">
+    <div class="eyebrow">What's new in the game</div>
+    <h2>Content that came with the patch</h2>
+
+    <div class="item">
+      <div class="head"><h3>Metallicized Projectile</h3><span class="chip">5★ Flame Attacker</span><span class="chip plain">BP 15 · SPD 105</span><span class="chip plain">released 27 Sep 21:00 JST</span></div>
+      <dl class="kit">
+        <dt>Battle skill</dt><dd>Doll Skewer: 180% flame to all, +30% DMG vs weak element, opens a flame field (3 stock). With the field up: 210%, +1 BP, targets take +10% flame DMG, +2 stock. The field gives all allies +30% flame DMG and +30% flame crit rate.</dd>
+        <dt>Ultimate</dt><dd>Needs 15 BP, not EP. 270% flame to all plus 5 random 10% hits, applies Ember Feather (+10% SPD, +1 BP when hit). With Ember Feather already on: +20% crit DMG, an extra action and 5 BP, then the feather is consumed.</dd>
+        <dt>Ability</dt><dd>Assault Haste: SPD and ATK stacks on flame damage, BP from allies' flame basics (+1) and skills (+2), and Metal Monsoon (80% flame to all) on enemy break or on her ultimate while the field is up.</dd>
+        <dt>EX crys</dt><dd>To See Her Again: +10% SPD and ATK; with Ember Feather, +20% weak-element DMG on her ultimate.</dd>
+      </dl>
+      <p class="why" style="color:var(--muted);font-size:14px">New unique states: Ember Feather (pattern 30) and Flame Field (10004). Her ascension rows add crit, Metal Monsoon damage and BP on break.</p>
+    </div>
+
+    <div class="item">
+      <div class="head"><h3>Solo Raid 7: Rose Garden Witch</h3><span class="chip">1 Oct – 8 Oct 23:59 JST</span></div>
+      <p>Six difficulties, stages <span class="mono">1407101–1407106</span>, round limit 5 / 5 / 4 / 4 / 3 / 3. Wave 1 is six minions sharing one HP pool (10,000,000 each on Crisis). They gain 2 Magic whenever an enemy turn leaves them unhit and lose 1 when hit; at 5 they counter, assist or heal. Each minion takes 80% less damage until its break bonus reaches 700%. Wave 2 brings the Witch in its Apex and Apex Overdrive forms (new enemies 600021 / 600022).</p>
+      <p>Vanguard: 5 points per hit; activation gives +30% crit rate, +50% damage, 5 SP and role bonuses. Party buffs this season: +30% crit DMG with SPD on crit, +30% weak-element DMG, +30% battle-skill DMG.</p>
+    </div>
+
+    <div class="item">
+      <div class="head"><h3>Score Attack 28: Box Witch</h3><span class="chip">27 Sep – 5 Nov JST</span></div>
+      <p>Ranks 1–50 plus EX (stages <span class="mono">982301–982351</span>). The boss acts 3 times per turn, 2 once it carries an ailment, and its damage taken while broken stacks up to 3 times with the number of ailments on it.</p>
+    </div>
+
+    <div class="item">
+      <div class="head"><h3>Also in the data</h3></div>
+      <ul>
+        <li>Event "My Friend" (15 battles, <span class="mono">982501–982515</span>), Madoka's Birthday 2026 snapshot event, Exedra Quest 1-5.</li>
+        <li>Chaos bosses for Birdcage, Commoner's Horse and Stage Witch (<span class="mono">113401, 116401, 117401</span>).</li>
+        <li>Four 5★ portraits, at max limit break: My Friend (+12.5% flame DMG, +8.5% crit DMG for Attackers), Walpurgisnacht Rising KV Part 1 Homura (+12.5% battle skill and follow-up/counter DMG), Magia Day 2026 Celebration (+7.5% ATK, +10% SPD), Ribbons of Devotion (+7.5% DEF).</li>
+        <li>A new effect type, <code>LOCK_SPECIAL_ATTACK</code> "Magic Seal". Nothing uses it yet.</li>
+        <li><b>No balance changes:</b> not one existing skill or passive row changed. The 1,202 changed Score Attack rows only gained the new <code>isEx</code> / <code>fixedDifficultyScore</code> fields.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="client">
+    <div class="eyebrow">What changed in the client</div>
+    <h2>Binary diff</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>File (Senbei output)</th><th>Verdict</th><th>What differs</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">GameAssembly.unpack.dll</td><td>code identical</td><td>PE timestamp 17 Sep → 24 Sep; <span class="mono">.rdata</span> 10 bytes (debug dir, PDB age); <span class="mono">_RDATA</span> 45,820 bytes; <span class="mono">.reloc</span></td></tr>
+        <tr><td class="mono">MadokaExedra.unpack.exe</td><td>code identical</td><td>+4 KB of <span class="mono">.rsrc</span>, <span class="mono">_RDATA</span> (launcher resources, protector data)</td></tr>
+        <tr><td class="mono">baselib.unpack.dll</td><td>code identical</td><td><span class="mono">_RDATA</span>, <span class="mono">.reloc</span> only</td></tr>
+        <tr><td class="mono">global-metadata.dat</td><td>1 literal</td><td><span class="mono">"3.19.0" → "3.19.1"</span>; every method name of the old dump is still present</td></tr>
+      </tbody>
+    </table></div>
+    <p style="color:var(--muted);font-size:14px">Steam also rewrote the Unity scene and asset files (<span class="mono">level*</span>, <span class="mono">sharedassets*</span>, <span class="mono">resources.assets</span>). There was no pre-patch copy of those to compare against.</p>
+  </section>
+
+  <section id="calc">
+    <div class="eyebrow">exedra-dmg-calc</div>
+    <h2>What the simulator learned</h2>
+    <p>Checking the new data against the engine turned up one new type and four older rules that the new content leans on. All five are ported from the 3.19 decompile and covered by a new engine check. They are on branch <code>claude/version-3.19.1</code>, not pushed.</p>
+    <div class="fix">
+      <article>
+        <h3>Magic Seal (LOCK_SPECIAL_ATTACK)</h3>
+        <p>A sealed unit can't use its ultimate and keeps its EP until the seal ends. It only lands on EP-based units (never BP units like Metallicized Projectile, never enemies). Enemy AI aims it at unsealed targets, preferring the main target, then broken units, then the highest ATK.</p>
+        <p class="rva">CanAddTo 0x16d2940 · UnitCondition.Refresh 0x15c9b00 · ValidateCanExecuteAct 0x17e27a0 · AI 0x16d29d0 / 0x16d2c00</p>
+      </article>
+      <article>
+        <h3>"Number of broken enemies" conditions</h3>
+        <p>Contents 206/207 (units with break bonus ≥ or &lt; X) and 22 (break bonus at max) always returned false. About 190 kit and passive rows use them, for example ATK or SPD per broken enemy. They now count, and a unit's break bonus starts at 0 instead of 100%, as in the game. That also fixes "own break bonus ≥ 80%", which used to be true for every unbroken unit.</p>
+        <p class="rva">team checker 0x17e5f30 cases 5/6 · unit checker 0x17e3f10 case 0x16 · BattleUnit ctor 0x1389650</p>
+      </article>
+      <article>
+        <h3>Notice team counts (313–316)</h3>
+        <p>These count "allies hit by this skill", "broken units hit", and "removable buffs/debuffs just applied". The code marked them as not handled by the game, but the game does handle them. The Solo Raid party buff's Vanguard points (313) and the new Rose Garden Witch Magic gain on debuffs (316) depend on them.</p>
+        <p class="rva">0x17e5f30 cases 0x139–0x13c · AddStateInfo flags in StateAbilityEffect.Triggering 0x1901cb0</p>
+      </article>
+      <article>
+        <h3>Instant DOT burst (IMM_SLIP_DMG)</h3>
+        <p>This was implemented as "DOT immunity" and did nothing. It actually deals every DOT on the target × its remaining turns at once and removes them. It affects the Nightmare Stinger, My Creations and Marigold Dadaism ultimates and enemies in 36 stages.</p>
+        <p class="rva">ImmSlipDmgAbilityEffect.Triggering 0x18f4e90 · GetSlipDamageResult 0x13806d0 · GetSlipDamageValue 0x15bf670 (× RemainingTurn, read from the disassembly)</p>
+      </article>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Check</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td>In-game fixtures</td><td>6 / 6 pass</td></tr>
+        <tr><td>Decompile mechanics checks</td><td>17 / 17 pass (4 new, each fails without its change)</td></tr>
+        <tr><td>Type-check</td><td>229 errors, the same set as before</td></tr>
+        <tr><td>Smoke run</td><td>New raid, Score Attack, Chaos and event stages plus every kioku in PvP: no exceptions, no unhandled effects</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="numbers">
+    <div class="eyebrow">Master data in numbers</div>
+    <h2>Rows added (battle tables)</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Table</th><th style="text-align:right">Added</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">PassiveSkillDetail</td><td class="num">435</td><td>kit, crys, enemy, raid buffs</td></tr>
+        <tr><td class="mono">SkillDetail</td><td class="num">370</td><td>65 effect types, all handled</td></tr>
+        <tr><td class="mono">QuestEnemyAppearance</td><td class="num">209</td><td>raid, Score Attack, event, Chaos</td></tr>
+        <tr><td class="mono">EnemyConditionSetsAndAction</td><td class="num">148</td><td>enemy AI rows</td></tr>
+        <tr><td class="mono">BattleConditionSet</td><td class="num">142</td><td></td></tr>
+        <tr><td class="mono">SkillMst / PassiveSkillMst</td><td class="num">112 / 78</td><td></td></tr>
+        <tr><td class="mono">QuestStage</td><td class="num">76</td><td>51 Score Attack, 15 event, 6 raid, 4 other</td></tr>
+        <tr><td class="mono">BreakMst</td><td class="num">58</td><td></td></tr>
+        <tr><td class="mono">BattleCondition</td><td class="num">23</td><td>no new compare content</td></tr>
+        <tr><td class="mono">StyleMst / AbilityEffectType</td><td class="num">1 / 1</td><td>Metallicized Projectile / Magic Seal</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="next">
+    <div class="eyebrow">Next time</div>
+    <h2>How this was made, and how to repeat it</h2>
+    <ul>
+      <li><code>scripts/ai/verdiff.py report</code> diffs the binaries, metadata and master data into <span class="mono">unpackedExedra/&lt;ver&gt;/version_report/report.md</span>.</li>
+      <li><code>scripts/sim/smokeNew.ts</code> runs new stages and kiokus and prints exceptions and unhandled effects. <code>scripts/ai/disasm.py</code> disassembles functions where Ghidra loses the return value.</li>
+      <li>The step-by-step runbook is in <span class="mono">docs/ai/VERSION_UPDATE.md</span>. The full machine report for this version is in <span class="mono">docs/versions/3.19.1/report.md</span>.</li>
+      <li>Still open: content 310 (slip-damage count) and Vortex in the instant burst.</li>
+    </ul>
+  </section>
+
+  <footer>Sources: Senbei outputs in E:\unpackedExedra, Steam install metadata, exedra-dmg-calc base_data history, ReDriveBattleCore 3.19.0 decompile.</footer>
+</div>

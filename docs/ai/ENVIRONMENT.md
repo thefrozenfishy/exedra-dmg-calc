@@ -9,6 +9,8 @@
 | `E:\unpackedExedra\3.19.0\tools\` | `getfn.py`, `fn.sh`, `decsimp.py` (collapses System.Decimal stack shuffling into expressions: `xq fn X \| python3 tools/decsimp.py`), `flt.sh`. `xq fn` supersedes getfn/fn.sh. |
 | `E:\unpackedExedra\3.19.0\GameAssembly.unpack.dll` | Senbei output (Crackproof removed); input for Ghidra. |
 | `E:\unpackedExedra\Ghidra\` | Ghidra 12.1.4 + `scripts/` (make_name_lists.py, ApplyIl2CppNames.java, DecompileList.java) + `README_headless.md` (import+name ~90 s, decompile all ~10 min, no auto-analysis). Needed only for namespaces outside ReDriveBattleCore or a new game version. |
+| `E:\unpackedExedra\3.19.1\` | Senbei output of 3.19.1 (2026-09-27 patch). **Code byte-identical to 3.19.0**: use the 3.19.0 decompile/dump. `version_report/` = the verdiff report + newsletter. |
+| `E:\SteamLibrary\steamapps\common\MadokaExedra` | The game install (not attached by default: request read access). Only needed for `global-metadata.dat` (`MadokaExedra_Data/il2cpp_data/Metadata/`) and file dates of a patch. 27k files: never `find` it. |
 | `E:\unpackedExedra\README.md` | How to redo Senbei + Il2CppDumper for a new game version. Also old `*.bundle` git bundles (history of deliveries, ignore). |
 | `E:\Il2CppDumper\` | 3.19.0 dump: `dump.cs` (79 MB: every class, field offset, method RVA), `script.json`, `il2cpp.h`, `stringliteral.json`, `DummyDll/`. Use `xq cls` / `xq enum`. |
 | `E:\ma-ex-data\` | Data-mining project (Python): `helpers.py`, `downloader.py`, `PROTOCOL_DOCUMENTATION.md` (network protocol, see the project doc protocol-findings-3.19.0.md). |
@@ -81,7 +83,10 @@ NODE_OPTIONS=--max-old-space-size=3300 timeout 170 npx vue-tsc --noEmit -p tscon
 
 ## New game version
 
-1. Senbei + Il2CppDumper as in `E:\unpackedExedra\README.md` (output into `E:\unpackedExedra\<ver>\dump`).
-2. Ghidra headless per `E:\unpackedExedra\Ghidra\README_headless.md` into `E:\unpackedExedra\<ver>\decompiled`.
-3. Signature diff vs the previous dump (script in MISSING_AND_UNCERTAIN R5 / battlecore_diff json) to see what changed.
-4. Point xq at it (`XQ_UNPACKED`, edit `DECOMP` for the version folder), `xq build`, and re-verify cited RVAs.
+Full runbook: [VERSION_UPDATE.md](VERSION_UPDATE.md). Short form:
+
+1. `python3 scripts/ai/verdiff.py bin <old> <new>`: if GameAssembly code is identical (3.19.1), nothing below is needed.
+2. Else Il2CppDumper (user, Windows) into `E:\unpackedExedra\<ver>\dump`, `verdiff.py funcs` for the changed methods,
+   Ghidra headless per `E:\unpackedExedra\Ghidra\README_headless.md` into `E:\unpackedExedra\<ver>\decompiled`.
+3. Point xq at it (`XQ_GAME_VER=<ver>`, `XQ_DUMPER=.../<ver>/dump`), `xq build`, and re-verify cited RVAs.
+4. Master data diff + report + newsletter: VERSION_UPDATE.md steps 4-8.

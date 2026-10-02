@@ -125,3 +125,21 @@
 - "Nothing reads X" claims from grepping a getter's RVA miss folded getters and direct field reads: BP was declared dead
   but `IsSpecialAttackPointMax` reads BattleUnit+0x34/+0x3C directly, and `BpCharger` writes +0x34 without AddBP.
   Grep the field offset and `<Name>Charger`-style static helpers too, not only the setter/adder.
+
+## Added 2026-10-02 (3.19.1 session)
+- **Old "the source doesn't handle it" comments can be wrong.** BattleConditionParser said team contents 313/314/316
+  and unit content 22 / team 206/207 were "not in the source switch"/"need a stat not in data"; the 3.19 decompile
+  handles all of them. Re-check against `xq fn` before keeping a `[NOT IMPLEMENTED]` = false.
+- **Don't implement an effect from its name.** IMM_SLIP_DMG ("immune slip damage"?) is "Instant DOT DMG Burst"
+  (`AbilityEffectTypeMst.name`, kit text "consumes all remaining turns of ongoing DMG"). `xq effect` prints the name.
+- The CompareContent enum names in BattleConditionParser.ts are partly guesses; `xq enum CompareContent` has the real ones.
+- **Ghidra drops float/double return values** (the function shows `void`, the last arithmetic vanishes): disassemble
+  with `scripts/ai/disasm.py <rva>` (capstone) when a decompiled function looks like it computes nothing.
+- A grep for "who reads field +0x3a" misses compiler-folded getters: ICF makes one body serve many getters, so calls
+  appear under another class's name (e.g. `set_BreakedDamageReceiveRate` is called as
+  `Sentry_Unity_..._set_ReportAssembliesMode`). Search the field offset pattern instead (`0x58) + 0x3a)`).
+- PvP/PvE battles drain `team.eventLog` into the snapshots: collect events from `executeNextAction()`'s returned
+  snapshots (`s.events`), or set `snapshotHook = undefined` when calling `performAction` directly.
+- The first `git status` on the mount refreshes the whole index (~2.5 min); a killed git leaves `.git/index.lock`.
+- The Steam folder (`E:\SteamLibrary\steamapps\common\MadokaExedra`, 27k files) and ma-ex-data are too big for
+  `find` / `grep -r` within one 180 s call: list known paths instead.

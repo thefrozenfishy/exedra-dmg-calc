@@ -18,6 +18,20 @@
 7. **Data**: dump 1-2 real rows that use it (`xq kit`, `xq stage`) so value slots are concrete.
 8. **Compare with the TS** (`xq ts <TYPE>`) and list exactly what must change.
 
+
+## When the C output is not enough
+
+- Ghidra drops float/double returns (XMM0) and sometimes the arithmetic feeding them: the function decompiles to
+  `void`. Disassemble: `pip install capstone` once, then `python3 scripts/ai/disasm.py 0x<rva>` (calls annotated with
+  their names). Example: ReceiveSlipDamageUnitStateBase.GetSlipDamageValue 0x15bf670 = value x RemainingTurn on the
+  isImmediately path, invisible in C.
+- Getters/setters are ICF-folded: a call to a one-line accessor shows under some unrelated class's name. To find who
+  reads a field, grep the offset pattern (`0x58) + 0x3a)` = BattleUnit.Condition.CanNotUseSpecialAttack).
+- Lambdas (`<Check>b__6_40`) can be ICF-folded too: `xq rva <their RVA>` lists every name at that address; read the
+  body once, it is shared.
+- Interfaces of a state class (IBuff, IDebuff, INeutralState...) are on its `class X : Base, I1, I2` line in dump.cs;
+  resolve the base chain (StateInterfaces.ts was generated that way).
+
 ## Depth standard (what a finding must contain so a cheaper model can implement it)
 
 Look at MECHANICS.md sections 8 and 13 or `PVE_ENEMY_AI_3.19.md` for the target depth:

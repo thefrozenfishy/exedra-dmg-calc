@@ -14,6 +14,7 @@ the layout, data formats and mechanics every time. **Read this file, then only t
 | avoid the mistakes earlier sessions made | [PITFALLS.md](PITFALLS.md) |
 | know the current branch state, in-progress work, open questions | [STATUS.md](STATUS.md) |
 | research a new mechanic in the decompile and write it up | [RESEARCH.md](RESEARCH.md) |
+| handle a new game version (diff, engine update, newsletter) | [VERSION_UPDATE.md](VERSION_UPDATE.md) + `scripts/ai/verdiff.py` |
 
 Deeper, older write-ups (still valid unless MECHANICS.md says otherwise): `src/models/PVE_PARAMS_3.19.md`,
 `src/models/PVE_ENEMY_AI_3.19.md`, `src/models/GAME_TABLES_3.19.md` (effect string -> class),
@@ -39,6 +40,10 @@ python3 scripts/ai/xq.py find "sandbox"            # search kioku / skill / pass
 python3 scripts/ai/xq.py build                     # after engine changes: regenerate EFFECT_TYPES.md + enum cache
 python3 scripts/ai/xq.py --branch battle-engine-3.19 effect X   # any command against another branch, no checkout
 ```
+
+Other tools: `scripts/ai/verdiff.py` (version diff: binaries, metadata, master data -> report.md),
+`scripts/ai/disasm.py <rva>` (capstone disassembly when Ghidra output is incomplete),
+`scripts/sim/smokeNew.ts` (smoke-run listed stages / kiokus, prints exceptions and engine warnings).
 
 ## Lookup ladder (cheapest first)
 

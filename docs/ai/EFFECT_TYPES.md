@@ -1,6 +1,6 @@
 # Effect types: data usage vs engine coverage (GENERATED - do not edit)
 
-Built from `claude/verify-priority-3.19 @ ba50bf4 2026-10-01` + uncommitted src/models changes. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
+Built from `claude/version-3.19.1 @ 7fb9730 2026-10-02` + uncommitted src/models changes. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
 
 - **kiokus** = collectable kiokus (getStyleMstList) whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).
 - **stages** = quest stages whose enemies use it (skill sets + enemy passives).
@@ -169,7 +169,7 @@ Built from `claude/verify-priority-3.19 @ ba50bf4 2026-10-01` + uncommitted src/
 | GVE_UP_SPECIAL_ATTACK_FINAL_GIV_DMG_RATIO | GveUpSpecialAttackFinalGiveDamageRatioUnitState | 0 | 0 | prefix/template? | AITargetSelector.ts |  |
 | HASTE | HasteAbilityEffect | 81 | 996 | yes | AITargetSelector.ts, PvPTeam.ts | Absolute Venus, Ashley's Kioku, Assault Paranoia |
 | IMM_SLIP_DMG | ImmSlipDmgAbilityEffect | 3 | 36 | yes | AITargetSelector.ts, BestTeamCalculator.ts, PvPTeam.ts | Marigold Dadaism, My Creations, Nightmare Stinger |
-| LOCK_SPECIAL_ATTACK | LockSpecialAttackUnitState | 0 | 0 | - |  |  |
+| LOCK_SPECIAL_ATTACK | LockSpecialAttackUnitState | 0 | 0 | yes | AITargetSelector.ts, PvPTeam.ts |  |
 | LOCK_TURN_ORDER | LockTurnOrderUnitState | 0 | 45 | yes | PvPTeam.ts |  |
 | LOSE_BP_FIXED | LoseBpFixedAbilityEffect | 0 | 0 | yes | PvPTeam.ts |  |
 | LOSE_EP_FIXED | LoseEpFixedAbilityEffect | 0 | 11 | yes | AITargetSelector.ts, PvPTeam.ts |  |

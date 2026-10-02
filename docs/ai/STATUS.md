@@ -1,16 +1,13 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-01 (EachTarget / start conditions / element-role operator / SP cap / vortex notice verified, branch claude/verify-priority-3.19)._
+_Last updated: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
 ## Branches and uncommitted work in E:\exedra-dmg-calc
 
 | ref | state |
 |---|---|
-| `claude/verify-priority-3.19` | **Checked out 2026-10-01**, branched from main 7ce61a4 (= origin/main with PRs #14-#16). Decompile check of the 8 assumptions another session listed: EachTarget only in the user's bundle (null = false), per-target start conditions (SelectTargetsConditionCheck), IsElementType/IsRoleType honor NotEqual, additional damage has no giver check, ailment prefix match over all states, vortex damage in the popping hit's notice, team SP clamped 0..6, enemy additional damage elementless. Fixtures 6/6, checkMechanics 13/13 (the 5 new ones fail on 7ce61a4), type-check 231 = baseline, 114-kioku smoke run clean. Not pushed. |
-| `claude/actor-skill-type-3.19` | **Checked out 2026-10-01**, branched from main (9346192). Unit-state conditions see the running skill launch (ActorSkillType / IsActor / MainTarget, `activeLaunch`), ADDITIONAL_DAMAGE / TSUBAME_LINK once per launch per opponent hit, MaxDamage per-column skill-type filtering + one additional hit per enemy, `scripts/sim/checkMechanics.ts`. Fixtures 6/6, checkMechanics 5/5, type-check at the 232 baseline, 114-kioku PvP smoke run clean. Not pushed; for the user to merge into main. |
-| `main` | 3 commits ahead of origin/main on 2026-10-01: contains all of battle-engine-3.19 plus the PvE simulator UI (merged claude/hopeful-edison-k78vto) and the Max Damage work. |
-| `battle-engine-3.19` | **Rebased onto origin/main (61aed43) on 2026-09-30**; old tip kept as `backup/battle-engine-3.19-pre-rebase`. On top of main: `6dd3b51` PvE summons, Solo Raid link HP/endless/countdown, form changes; `49cad71` heal/EP/ailment-roll formulas, DMG_RANDOM, UP_HP_RATIO, **condition sets OR'd** (main still ANDs them, so e.g. Time Stop Strike's Magic passive never fires on main); KB commits; Time Stop Strike fixture. Not pushed; `origin/battle-engine-3.19` is now stale (a push would need --force). Merging into main: docs/ai/EFFECT_TYPES.md will conflict (each branch has its own) - regenerate with `xq build`. |
-| (stash) | Applied and committed on battle-engine-3.19 on 2026-09-30 (kit mechanics TSUBAME / ZONE / COUNT / UNIQUE_* / REFLECTION / REGAIN / VORTEX / consume states / live effect-value scaling; Solo Raid Vanguard, party/season buffs, round limit, attempt carry-over, raid UI panel). Fixtures 6/6 PASS, type-check at the 232 baseline, all 114 kiokus smoke-run on a raid stage, raid panel checked in the browser. |
+| `claude/version-3.19.1` | **Checked out 2026-10-02**, branched from main 7fb9730 (= origin/main; the 2026-10-01 branches claude/verify-priority-3.19, claude/actor-skill-type-3.19 and battle-engine-3.19 are merged and no longer exist locally). 3.19.1 work: verdiff.py / disasm.py / smokeNew.ts / VERSION_UPDATE.md runbook, LOCK_SPECIAL_ATTACK, conditions 22/206/207/313-316, BreakedDamageReceiveRate starts at 0, IMM_SLIP_DMG instant DOT burst. Fixtures 6/6, checkMechanics 17/17 (#10-#13 new, each fails without its change), type-check 229 = baseline set. Not pushed; for the user to merge. |
+| `main` | = origin/main 7fb9730 on 2026-10-02. |
 
 `docs/ai/EFFECT_TYPES.md` is committed per branch (its header says which); rebuild with `xq build` after switching
 branches or changing the engine. On battle-engine-3.19 `xq build` still lists UNIQUE_BUFF / UNIQUE_DEBUFF /
@@ -49,12 +46,17 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
     UI classes decompiled (`PopupScoreAttackReadyController` ...) or fitting against real results.
 11. Team counters 302/306 details for some enemies; target filters of non-damage effects when an enemy casts.
 
+12. Team content 310 SlipDamageTotalCount (6 conditions) still returns false: notices don't record slip-damage types.
+13. IMM_SLIP_DMG does not pop Vortex (VortexUnitStateBase overrides GetSlipDamageValue; not read yet).
+14. Whether a blended unique state (mergeUniqueState) still adds an AddStateInfo for 315/316 (assumed yes).
+
 ## Useful in-game verification the user could do
 - A fixture (browser export + notes) for any crys/kit fix, e.g. Tenebrous Arcana 3/3 Magic at start, Diamond
   Splash +3 on first turn only.
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-02: game 3.19.1 (patch 2026-09-27): client code byte-identical to 3.19.0, only the version literal changed; master data diff 4ea7254^..HEAD (Metallicized Projectile, Solo Raid 7 Rose Garden Witch, Score Attack 28 Box Witch, LOCK_SPECIAL_ATTACK). Report + newsletter in E:\unpackedExedra\3.19.1\version_report and docs/versions/3.19.1. Engine: Magic Seal, conds 22/206/207/313/314/315/316, break rate 0 at start, IMM_SLIP_DMG burst (was misread as DOT immunity). New tools verdiff.py, disasm.py, smokeNew.ts; runbook VERSION_UPDATE.md.
 - 2026-10-01 (11): main rebased onto claude/verify-priority-3.19 (old main kept as backup/main-pre-rebase; diverges from origin/main, needs a force push). Both sides had bumped LUX_BENCH_VERSION 4->5 independently: now 6.
 - 2026-10-01 (10): BpCharger (basic +1, skill +2, GAIN_EP_* received +1) and IsReceivedRecovery on full-HP heals; checkMechanics #9. Replay: debugging/pvp-sim-Hollow-Woman-seed2405608212.json (Vinctio ults at actions 19, 32).
 - 2026-10-01 (9): (claude/verify-priority-3.19) BP system: MaxBP units (Vinctio☆Magica, Metallicized Projectile) ult on BP (IsSpecialAttackPointMax), GAIN/LOSE_BP_FIXED implemented, EP/BP zeroed on death; BattleTimeline/export show a BP bar and charge (max 1000) as %. MECHANICS 10.

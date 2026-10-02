@@ -1,5 +1,7 @@
 # Confirmed game mechanics (3.19.0) - the cache
 
+3.19.1 (2026-09-27) has byte-identical GameAssembly code: every RVA here is valid for both (docs/versions/3.19.1).
+
 Every line is from the decompile unless tagged. **[C]** confirmed in code, **[D]** from master data,
 **[G]** confirmed by an in-game fixture, **[?]** inferred/unverified. RVAs are for 3.19.0 (`xq rva`, `xq fn`).
 "TS:" = where the engine implements it. When you confirm something new, add it here in the same style.
@@ -183,6 +185,19 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   names are the ability effect types: "STUN", "WEAKNESS", "VORTEX_ATK". [C] TS `compareAbilityEffectList`,
   `unitStateTypes`.
 
+- 22 IsMaxBreakedDamageReceiveRate (unit checker case 0x16): `(float)Param.MaxBreakedDamageReceiveRate/10 <=
+  (float)BreakedDamageReceiveRate`, bool compare. [C] TS `breakParams.maxRate`.
+- 206 / 207 (team checker cases 5/6, "rate,n"): count living units with BreakedDamageReceiveRate >= rate / < rate
+  (<>c__DisplayClass6_0.b__10 0x17eff50 / b__11 0x17effa0), int compare with n. Unbroken units have rate 0 (section
+  9), so "1,n" = "n units broken" (conds 1398-1449). ~190 kit/passive rows use them. [C]
+- Team notice contents (second switch of 0x17e5f30, cases 0x12d..0x13c): 313 HitUnitCount = notices with
+  IsReceivedAttack (one notice per unit per skill = TS `lastNotice`); 314 InBreakAndReceivedAttackUnitCount = units
+  whose notice IsReceivedAttack with no BreakDamage (did not break in this skill) and rate > 0 (b__6_40); 315/316
+  AddRemovableBuff/DebuffTotalCount = Σ AddStateInfoList entries with isRemovableBuff (+0x2a) / isRemovableDebuff
+  (+0x2b) (section 8); 310 SlipDamageTotalCount (b__6_34, ReceivedSlipDamageEffectTypeList) not ported. The TS enum
+  names DMG_TAKEN / BROKEN_UNITS_ATTACKED / WITH_DEBUFF_EFFECT_VALUE were guesses (renamed 2026-10-02). [C]
+  Users: Solo Raid party buff 1600009 (313), Rose Garden Witch passives 5001250-2 (316), kits 15057.. (313), 15050.. (314).
+
 ## 7. Targeting
 
 - `AbilityEffectBase.SelectTargets` 0x18e7e60 never filters by element/role: candidates = the effect side's
@@ -203,6 +218,16 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
 - Cutaway targeting (0x15b7520): MainTarget, RoleAttacker, MaxAtk (processed ATK). [C]
 
 ## 8. States: adding, roll, removal
+
+- AddStateInfo (StateAbilityEffect.Triggering 0x1901cb0, after AddUnitState succeeds): isRemovableBuff = the state
+  implements IBuff && EffectOriginType == ActiveSkill (1); isRemovableDebuff the same with IDebuff. Passive (2) and
+  field (3) states are neither; ailments, LOCK_TURN_ORDER, zones implement neither interface. TS
+  `KiokuState.noteAddedState`, sets IBUFF/IDEBUFF_STATE_TYPES in StateInterfaces.ts (generated from dump.cs). [C]
+- LOCK_SPECIAL_ATTACK "Magic Seal" (new in the 3.19.1 data, no user yet): CanAddTo 0x16d2940 = not sealed yet, MaxEP >
+  0, MaxBP < 1 (EP units only); UnitCondition.Refresh 0x15c9b00 sets CanNotUseSpecialAttack (+0x3a);
+  ActExecutor.ValidateCanExecuteAct 0x17e27a0 rejects the ultimate (EP stays). Neutral direction, opponent side. AI
+  target: living units without a seal (0x16d29d0), then main target / break / max ATK (0x16d2c00). [C] TS
+  `canNotUseSpecialAttack`, `readyUltimates`. checkMechanics #10.
 
 - State-add roll (`UnitStateBase.GetProcessedProbability` 0x16dfa50): fixed probability as is; else
   `p = clamp(Floor2(prob × hit × parry × secondary), 0, 100)`, fails when `p*10 <= Next(1000)`.
@@ -257,6 +282,9 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   {Attacker 5, Breaker 20, Defender/Healer 10, Buffer/Debuffer 12}; cap max/10. [C]
 - TurnBegin of a broken unit that can act: gauge full, rate 0 - and it **acts normally that turn**; broken +
   can't act stays broken. Not broken: regen `(int)(max × perTurn/1000)`. [C]
+- **BreakedDamageReceiveRate starts at 0**: no BattleUnit ctor sets +0x80; only Decrease (on break),
+  AddBreakedDamageReceiveRate and TurnBegin (reset to 0) write it. Damage reads it only while broken. The TS started
+  every unit at 100 until 2026-10-02 (harmless for damage, wrong for conditions 21/206/207/22). [C]
 - PvP characters: gauge = 100 × rarity × role factors (policy 3), slow 250, rate 100 %/max 200 %. **Outside
   PvP/GvG characters have no break gauge.** Enemies: BreakMst. [C]
 
@@ -333,6 +361,12 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
 
 ## 13. Kit mechanics (3.x classes)
 
+- IMM_SLIP_DMG "Instant DOT DMG Burst" (Nightmare Stinger / My Creations / Marigold Dadaism ultimates, 36 enemy
+  stages): ImmSlipDmgAbilityEffect.Triggering 0x18f4e90 -> GetSlipDamageResult(target, isImmediately: true) 0x13806d0:
+  every active IReceiveSlipDamage state deals GetSlipDamageValue x RemainingTurn (+0x3c, unless permanent; seen only
+  in the disassembly of 0x15bf670, Ghidra drops the float return), charges EP, is flagged ShouldBeRemovedNow (+0x70)
+  and removed; the sum hits through the user's BattleUnit.Attack. Not a DOT immunity (the TS read it so until
+  2026-10-02 and the effect did nothing). Vortex (VortexUnitStateBase override) not popped in TS [?]. checkMechanics #13.
 - CHARGE / GAIN_CHARGE_POINT / CONSUME_CHARGE_POINT: the "Magic" gauge (ChargePoint, content 17). See
   MISSING_AND_UNCERTAIN A-3.1.
 - TSUBAME (Luce della Speranza's Swallow's Providence): TSUBAME_CORE on the caster only (Down: `-running ×
