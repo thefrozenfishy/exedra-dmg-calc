@@ -154,6 +154,7 @@ export interface SimOptions {
     rngMode?: RngMode   // default "seed" (drawn per roll label, see LabelStreamRng)
     infiniteSp?: boolean // the allies' SP is refilled before every turn, see SP_REFILL (bench-only, not a game rule)
     ailment?: Ailment   // every enemy carries this ailment for the whole run
+    immune?: Ailment[]  // ailments that never land on the enemies (KiokuState.immuneAilments), see benchImmunities
     onAction?: (state: BattleSnapshot, elapsed: number) => void  // every counted action (debugging)
     // [APPROXIMATION] No crit rolls: every hit deals its expected damage (BattleRng.expectedCrits). Exact only when
     // nothing else is random; `report.random` says whether anything was (a real roll, or a read of whether a hit crit).
@@ -213,6 +214,8 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     }
     // The ailment stays on every enemy (re-set before each action, in case anything removes it). Held as a marker in the
     // timed states: no damage, and it never ticks or pops (the dummies never get a turn).
+    const immune = new Set<string>(opts.immune ?? [])
+    for (const e of team2.kiokuStates) e.immuneAilments = immune
     const states = enemyStatesOf(opts.ailment)
     const keepAilment = () => states.forEach((type, i) => team2.kiokuStates.forEach(e => {
         if (!e.isDead) e.activeEffectDetails.set(`ailment:${type}`, ailmentMarker(type, i))
@@ -251,6 +254,13 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
 // ── The two Kioku Grid charts ──
 
 const identityKey = (id: BenchIdentity) => `${id.element ?? "-"}/${id.role ?? "-"}/${id.ailment ?? "-"}`
+
+/** Average Damage: an ailment the kit reacts to is a question of whether the enemies CAN carry it, not of who puts it
+ *  there. A run without that ailment makes the enemies immune to it, so a kit that applies it itself and reacts to it
+ *  (Bebe-O'-Lantern curses her Candyholic target, and Candyholic only lowers DEF while the target is cursed) shows
+ *  the difference in its ailment bar instead of always having it. A run with one of them keeps it on the enemies
+ *  (as before) and makes them immune to the kit's other ones. */
+export const benchImmunities = (kitAilments: Ailment[], ailment?: Ailment): Ailment[] => kitAilments.filter(a => a !== ailment)
 
 /** One bar of a chart: the gain (%) in one dealer identity. `critRate` is the dealer's Ultimate crit chance. */
 export interface BenchRow extends BenchIdentity { gain: number, critRate?: number }
@@ -302,8 +312,8 @@ export class LuxBenchCharts {
     // crit damage gives the average directly (and ~seeds x faster). A team that rolls anything else (proc chances,
     // random hits or targets) or reacts to crits (on-crit stacks, crit-count conditions) can't be averaged that way:
     // it falls back to the mean of `seeds` rolled battles (seeds 0..seeds-1).
-    private simTotal(team: PvPKioku[], enemies: number, ailment?: Ailment): number {
-        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, ailment }
+    private simTotal(team: PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = []): number {
+        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, ailment, immune }
         const report = { random: false }
         const expected = simulatedDealerDamage(team, 0, enemies, { ...base, seed: 0, expectedCrits: true, report })
         if (!report.random) return expected
@@ -318,9 +328,10 @@ export class LuxBenchCharts {
         return v
     }
 
-    private cachedSim(key: string, team: () => PvPKioku[], enemies: number, ailment?: Ailment) {
+    private cachedSim(key: string, team: () => PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = []) {
+        key += `:${[...immune].sort().join(",")}`
         let v = this.simBase.get(key)
-        if (v === undefined) this.simBase.set(key, v = this.simTotal(team(), enemies, ailment))
+        if (v === undefined) this.simBase.set(key, v = this.simTotal(team(), enemies, ailment, immune))
         return v
     }
 
@@ -371,10 +382,12 @@ export class LuxBenchCharts {
     }
 
     supportAvg(x: PvPKioku, enemies = 1, ids = this.supportIdentities(x)): BenchRow[] {
+        const kitAilments = kitRestrictions(x).ailments
         return ids.map(id => {
             const dealer = this.dealer(this.resolve(id, x))
-            const base = this.cachedSim(`s:${enemies}:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), enemies, id.ailment)
-            return { ...id, gain: pctGain(this.simTotal(this.team(dealer, x), enemies, id.ailment), base) }
+            const immune = benchImmunities(kitAilments, id.ailment)
+            const base = this.cachedSim(`s:${enemies}:${identityKey(this.resolve(id, x))}`, () => this.team(dealer), enemies, id.ailment, immune)
+            return { ...id, gain: pctGain(this.simTotal(this.team(dealer, x), enemies, id.ailment, immune), base) }
         })
     }
 
@@ -387,9 +400,11 @@ export class LuxBenchCharts {
     }
 
     attackerAvg(x: PvPKioku, enemies: number, ids = this.attackerIdentities(x)): BenchRow[] {
+        const kitAilments = kitRestrictions(x).ailments
         return ids.map(id => {
-            const base = this.cachedSim(`a:${enemies}:${id.ailment ?? "-"}`, () => this.team(this.reference), enemies, id.ailment)
-            return { ...id, gain: pctGain(this.simTotal(this.team(x), enemies, id.ailment), base) }
+            const immune = benchImmunities(kitAilments, id.ailment)
+            const base = this.cachedSim(`a:${enemies}:${id.ailment ?? "-"}`, () => this.team(this.reference), enemies, id.ailment, immune)
+            return { ...id, gain: pctGain(this.simTotal(this.team(x), enemies, id.ailment, immune), base) }
         })
     }
 }

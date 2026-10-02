@@ -80,6 +80,12 @@
 - Lux☆Magica is not a blank slate in a simulation at A1+: her Magic charges from every ally's battle skill, so her
   follow-up timing changes with whoever stands next to her. LuxBench used her at A0 for that reason; since 2026-10-01 it uses
   A5 max levels on request (with SP topped up every turn, everyone uses battle skills, which keeps the effect small).
+- LuxBench ailment bars are about whether the enemies CAN carry an ailment, not who applies it. A kit that applies an
+  ailment and reacts to it (Bebe-O'-Lantern: her passive curses her Candyholic target, Candyholic's DEF-/DMG-taken
+  only work while it is cursed) looked identical with and without the forced ailment, so its bar was hidden. Average
+  Damage runs now make the dummies immune to the kit's ailments except the tested one (`benchImmunities`,
+  `KiokuState.immuneAilments`, bench-only, checked in canAddTo / vortex before the roll). Max Burst never applied
+  ailments itself, so it is unchanged.
 - Hot paths: never `Object.values(skillDetails).filter(...)` per action (it was ~23% of sim time in `getDetails`
   and `triggerFua`); use `skillDetailsByMstId.get(id * 100 + lvl)`, same entries in the same order.
 - The old ScoreAttackTeam/ScoreAttackKioku code is a different, simplified calculator. Don't copy its rules into

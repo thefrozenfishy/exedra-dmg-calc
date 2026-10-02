@@ -173,6 +173,10 @@ export function ailmentName(abilityEffectType: string): string {
 export function isAlimentEffect(abilityEffectType: string): boolean {
     return ALIMENT_PREFIXES.some(prefix => abilityEffectType === prefix || abilityEffectType.startsWith(prefix + "_"));
 }
+// The ailment (Ailment enum value: "BURN", "CURSE", ...) an ailment state type belongs to, undefined for anything else.
+export function ailmentPrefixOf(abilityEffectType: string): string | undefined {
+    return ALIMENT_PREFIXES.find(prefix => abilityEffectType === prefix || abilityEffectType.startsWith(prefix + "_"));
+}
 
 // Ability effect types that use IAccum stacking semantics (see UnitStateEngine.ts's
 // mergeAccumEffect). [CONFIRMED to exist as game content per enums.ts, though the exact
@@ -362,6 +366,14 @@ export class KiokuState {
     // this unit (UnitCondition.AddUnitState). Timed states go to activeEffectDetails.
     passiveSkills: Map<string, PassiveSkill> = new Map()
     passiveEffectDetails: Map<string, PassiveSkill> = new Map()
+    // Bench only (LuxBench), not a game rule: ailments (Ailment enum values) that never land on this unit, as if every
+    // attempt were resisted. Checked in canAddTo and for vortexes, before the probability roll.
+    immuneAilments?: ReadonlySet<string>
+    immuneTo(abilityEffectType: string): boolean {
+        if (!this.immuneAilments?.size) return false
+        const prefix = ailmentPrefixOf(abilityEffectType)
+        return !!prefix && this.immuneAilments.has(prefix)
+    }
     // NEW: `_applierState` tracks the KiokuState that applied this effect (not just
     // their display name, already tracked separately as `applier: string`) - needed so
     // DOT ticks can scale off the APPLIER's stat rather than the sufferer's, per the
@@ -1219,6 +1231,7 @@ export class KiokuState {
     // CanAddTo overrides that aren't a role/element filter.
     private canAddTo(t: KiokuState, detail: SkillDetail, applierState: KiokuState): boolean {
         const type = detail.abilityEffectType
+        if (t.immuneTo(type)) return false // bench-only ailment immunity, see KiokuState.immuneAilments
         if (type === "TSUBAME_CORE") return t === applierState     // 0x16d9090: the caster only
         if (type === "TSUBAME_LINK") return t !== applierState     // 0x16d9950: everyone but the caster
         // [CONFIRMED 3.19] LockSpecialAttackUnitState.CanAddTo (0x16d2940): no Magic Seal yet, MaxEP > 0 and MaxBP < 1
@@ -1679,7 +1692,7 @@ export class KiokuState {
             // effect-value multiplier). It pops in VortexProcess, see popVortex.
             effTargets.forEach(t => {
                 const d = this.giveTransform(detail, this)
-                if (t.isDead || !rollAppliesEffect(d, this, t, this.team.rng) || t.blockedByPreventAbnormal(d)) return
+                if (t.isDead || t.immuneTo(d.abilityEffectType) || !rollAppliesEffect(d, this, t, this.team.rng) || t.blockedByPreventAbnormal(d)) return
                 t.passiveEffectDetails.set(`vortex:${++vortexSeq}`, { applier: this.kioku.name, ...d, _applierState: this, _remainAttackCount: d.value2 ?? 0 } as any)
             })
             return

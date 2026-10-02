@@ -1191,7 +1191,7 @@ const benchCharts = computed(() => [
             benchAverageDmg.value
                 ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of auto battle with infinite SP, the character next to the damage dealer and three ${LuxMagica}, Only the damage dealer's own damage counts (including additional damage it deals), never the rest of the team's.`
                 : `Max Burst: the damage dealer's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
-            `${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle. Everyone aims single-target and proximity skills at the middle enemy, so a single-target debuff covers one enemy and an AoE one all of them. Element, role or ailment bonuses (enemies under Curse, Burn, ... for the whole battle) get their own bar when they change the result, so a bonus can show in one metric only: crit rate or procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
+            `${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle. Everyone aims single-target and proximity skills at the middle enemy, so a single-target debuff covers one enemy and an AoE one all of them. Element, role or ailment bonuses (enemies under Curse, Burn, ... for the whole battle) get their own bar when they change the result; in Average Damage the other bars make the enemies immune to those ailments, so a character that applies an ailment itself and reacts to it shows that in its ailment bar, so a bonus can show in one metric only: crit rate or procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,
         ],
         chart: buildBenchChart("support"),
         status: benchStatusText("support"),
@@ -1209,7 +1209,7 @@ const benchCharts = computed(() => [
             benchAverageDmg.value
                 ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of auto battle with infinite SP, supported by four ${LuxMagica}, Only the damage dealer's own damage counts.`
                 : `Max Burst: the Ultimate with the damage dealer's own buffs and debuffs at full stacks and every hit a crit.`,
-            `${levelsDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle; single-target and proximity skills aim at the middle one. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result.`,
+            `${levelsDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle; single-target and proximity skills aim at the middle one. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result; in Average Damage the other bars make the enemies immune to those ailments.`,
         ],
         chart: buildBenchChart("attacker"),
         status: benchStatusText("attacker"),
@@ -1929,7 +1929,8 @@ watch([markedCharacters, simulateMaxLevels, fightMode, benchSpeed], () => runBen
 .gain-desc,
 .gain-empty {
     width: 100%;
-    margin: 0;
+    max-width: 50rem;
+    margin: 0 auto;
     text-align: center;
     font-size: 0.8rem;
     color: var(--muted);
