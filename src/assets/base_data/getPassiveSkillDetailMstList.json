@@ -318255,7 +318255,7 @@
         "startConditionSetIdCsv": "",
         "startTimingIdCsv": "1",
         "turn": 0,
-        "value1": 200,
+        "value1": 100,
         "value2": 0,
         "value3": 0
     },
@@ -318275,7 +318275,7 @@
         "startConditionSetIdCsv": "",
         "startTimingIdCsv": "1",
         "turn": 0,
-        "value1": 400,
+        "value1": 200,
         "value2": 0,
         "value3": 0
     },
@@ -318295,7 +318295,7 @@
         "startConditionSetIdCsv": "",
         "startTimingIdCsv": "1",
         "turn": 0,
-        "value1": 600,
+        "value1": 300,
         "value2": 0,
         "value3": 0
     },
@@ -318315,7 +318315,7 @@
         "startConditionSetIdCsv": "",
         "startTimingIdCsv": "1",
         "turn": 0,
-        "value1": 800,
+        "value1": 400,
         "value2": 0,
         "value3": 0
     },
@@ -318335,7 +318335,7 @@
         "startConditionSetIdCsv": "",
         "startTimingIdCsv": "1",
         "turn": 0,
-        "value1": 900,
+        "value1": 500,
         "value2": 0,
         "value3": 0
     },
@@ -318396,6 +318396,26 @@
         "startTimingIdCsv": "5",
         "turn": 0,
         "value1": 100,
+        "value2": 0,
+        "value3": 0
+    },
+    {
+        "abilityEffectType": "UP_ABNORMAL_PARRY_RATE_RATIO",
+        "activeConditionSetIdCsv": "3977,3978,3979,3980,3981,3982,3983,3984,3985,3986",
+        "description": "",
+        "descriptionType": 2,
+        "element": 0,
+        "isFixedProbability": false,
+        "passiveSkillDetailMstId": 500125521,
+        "passiveSkillMstId": 5001255,
+        "probability": 100,
+        "range": -1,
+        "remainCount": 0,
+        "role": 0,
+        "startConditionSetIdCsv": "",
+        "startTimingIdCsv": "1",
+        "turn": 0,
+        "value1": 500,
         "value2": 0,
         "value3": 0
     },
