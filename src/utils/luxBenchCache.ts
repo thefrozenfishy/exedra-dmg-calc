@@ -5,7 +5,7 @@
 // Bump LUX_BENCH_VERSION whenever the engine or the bench changes the numbers; older entries are then dropped.
 import type { BenchRow } from "../models/LuxBench"
 
-export const LUX_BENCH_VERSION = 9 // 8: expected-crit battles, battle length toggle; 9: Average Damage ailment immunity
+export const LUX_BENCH_VERSION = 10 // 8: expected-crit battles, battle length toggle; 9: Average Damage ailment immunity; 10: A0 Lux fillers
 
 const STORAGE_KEY = "kiokuGridBenchCache"
 const MAX_SETUPS = 24 // most recently used setups kept (chart x enemies x levels mode x battle length ...)

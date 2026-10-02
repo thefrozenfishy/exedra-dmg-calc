@@ -80,6 +80,7 @@
 - Lux☆Magica is not a blank slate in a simulation at A1+: her Magic charges from every ally's battle skill, so her
   follow-up timing changes with whoever stands next to her. LuxBench used her at A0 for that reason; since 2026-10-01 it uses
   A5 max levels on request (with SP topped up every turn, everyone uses battle skills, which keeps the effect small).
+  Since 2026-10-03 only the dealer (support chart) and the reference dealer (attacker chart) are A5; the fillers are A0.
 - LuxBench ailment bars are about whether the enemies CAN carry an ailment, not who applies it. A kit that applies an
   ailment and reacts to it (Bebe-O'-Lantern: her passive curses her Candyholic target, Candyholic's DEF-/DMG-taken
   only work while it is cursed) looked identical with and without the forced ailment, so its bar was hidden. Average

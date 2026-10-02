@@ -696,8 +696,8 @@ const chartCharacters = () =>
     markedCharacters.value.filter(c => c.name !== LuxMagica && (simulateMaxLevels.value || c.enabled))
 
 const levelsDescription = computed(() => simulateMaxLevels.value
-    ? "All characters are A5 and max level."
-    : `All characters use your current ascension and levels, unowned characters are left out. ${LuxMagica} is always A5 and max level.`)
+    ? `All characters are A5 and max level. ${LuxMagica} is A5 as the damage dealer and A0 in the other slots (no follow-ups).`
+    : `All characters use your current ascension and levels, unowned characters are left out. ${LuxMagica} is always max level, A5 as the damage dealer and A0 in the other slots (no follow-ups).`)
 
 type ChartTargetContext = {
     role?: KiokuRole

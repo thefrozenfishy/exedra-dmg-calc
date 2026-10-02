@@ -277,7 +277,8 @@ type KiokuInput = Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>
  * Support chart: a Lux dealer with the character in slot 2 and three Lux fillers, compared to five Lux; the dealer
  * has no element or role (the main bar) or one the character's kit is limited to (variant bars). Attacker chart:
  * the character as the dealer (its own element and role) compared to Lux as the dealer, both with four fillers.
- * Lux's baselines are computed once per identity / enemy count and reused. Lux (every slot) is A5 at max levels.
+ * Lux's baselines are computed once per identity / enemy count and reused. The Lux dealer (support chart) and the Lux
+ * reference dealer (attacker chart) are A5 at max levels; the Lux fillers are A0 at max levels, so they have no follow-up.
  */
 export class LuxBenchCharts {
     private readonly luxArgs: KiokuInput
@@ -288,12 +289,13 @@ export class LuxBenchCharts {
     private readonly simBase = new Map<string, number>()
     private readonly opts: BenchOptions
 
-    // Lux as given (the page passes A5, max levels). Her A1 follow-up charges a Magic from every ally's battle skill, so
-    // her own damage also reflects when the character next to her uses battle skills.
+    // Lux as given (the page passes A5, max levels) for the dealer / reference. Her A1 follow-up charges a Magic from every
+    // ally's battle skill, so her own damage also reflects when the character next to her uses battle skills. The fillers
+    // are the same Lux at A0 (no follow-up), so only the dealer and the measured character act beyond their turns.
     constructor(lux: KiokuInput, opts: BenchOptions) {
         this.luxArgs = { ...lux }
         this.opts = opts
-        this.filler = benchKioku(this.luxArgs, { element: undefined, role: undefined })
+        this.filler = benchKioku({ ...this.luxArgs, ascension: 0 }, { element: undefined, role: undefined })
         this.reference = benchKioku(this.luxArgs)
     }
 
