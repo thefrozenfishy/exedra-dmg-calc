@@ -158,11 +158,12 @@ enum CompareContent {
     WEAK_ELEMENT_ATTACKED_UNIT_COUNT = 307,
     BREAK_DAMAGE_RECEIVE_RATE_BECOME_MAX_UNIT_COUNT = 308,
     HAS_BUFF_APPLIED = 309,
-    ONGOING_DAMAGE = 310,
+    ONGOING_DAMAGE = 310,          // 3.19 dump.cs: SlipDamageTotalCount
 
-    DMG_TAKEN = 313,
-    BROKEN_UNITS_ATTACKED = 314,
-    WITH_DEBUFF_EFFECT_VALUE = 316, // 3.19 dump.cs: AddRemovableDebuffTotalCount
+    HIT_UNIT_COUNT = 313,          // 3.19 dump.cs: HitUnitCount (was DMG_TAKEN)
+    IN_BREAK_AND_RECEIVED_ATTACK_UNIT_COUNT = 314, // 3.19 dump.cs (was BROKEN_UNITS_ATTACKED)
+    ADD_REMOVABLE_BUFF_TOTAL_COUNT = 315,   // 3.19 dump.cs: AddRemovableBuffTotalCount
+    ADD_REMOVABLE_DEBUFF_TOTAL_COUNT = 316, // 3.19 dump.cs: AddRemovableDebuffTotalCount (was WITH_DEBUFF_EFFECT_VALUE)
 
     ACTOR_SKILL_TYPE = 401,
     COMBO_ACTION_STEP = 402,
@@ -505,9 +506,11 @@ function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state
             return compareFloat(cond.compareOperator, rate, cond.compareValue);
         }
         case CompareContent.IS_MAX_BREAK_DAMAGE_RECEIVE_RATE: {
-            // [NOT IMPLEMENTED] needs MaxBreakedDamageReceiveRate, a per-unit stat not
-            // present in any provided data file.
-            return false;
+            // [CONFIRMED 3.19] BattleUnitConditionChecker.Check (0x17e3f10) case 0x16:
+            // (float)Param.MaxBreakedDamageReceiveRate (BattleParameter +0x58) / 10 <= (float)BreakedDamageReceiveRate,
+            // then BoolValueComparer. maxRate: BreakMst (enemies) or the PvP policy (characters).
+            const max = battleUnit.breakParams.maxRate;
+            return compareBool(cond.compareOperator, Math.fround(max / 10) <= battleUnit.breakedDamageReceiveRate, cond.compareValue);
         }
         case CompareContent.ABNORMAL_STATE_COUNT: {
             const count = [...battleUnit.activeEffectDetails.values()].filter(d => isAlimentEffect(d.abilityEffectType)).length;
@@ -637,10 +640,17 @@ function checkTeamCondition(team: PvPTeam, cond: BattleCondition): boolean {
             return compareInt(cond.compareOperator, count, threshold ?? "0");
         }
         case CompareContent.BREAK_DAMAGE_RECEIVE_RATE_GREATER_THAN_UNIT_COUNT:
-        case CompareContent.BREAK_DAMAGE_RECEIVE_RATE_LESS_THAN_UNIT_COUNT:
-            // [NOT IMPLEMENTED] needs a per-unit BreakedDamageReceiveRate stat not
-            // present in any provided data file.
-            return false;
+        case CompareContent.BREAK_DAMAGE_RECEIVE_RATE_LESS_THAN_UNIT_COUNT: {
+            // [CONFIRMED 3.19] BattleUnitTeamConditionChecker.Check (0x17e5f30) cases 5/6: CompareValue "rate,n";
+            // count living units with BreakedDamageReceiveRate >= rate (206, <>c__DisplayClass6_0.b__10 0x17eff50)
+            // or < rate (207, b__11 0x17effa0), IntValueComparer against n. A unit that is not broken has rate 0
+            // (the BattleUnit ctor never sets it; BreakPoint.Decrease does on break, TurnBegin resets it to 0),
+            // so "rate >= 1" = "is broken" (conditions 1398-1449, "ブレイクしている敵がN体").
+            const [rate, n] = cond.compareValue.split(",").map(Number)
+            const greater = cond.compareContent === CompareContent.BREAK_DAMAGE_RECEIVE_RATE_GREATER_THAN_UNIT_COUNT
+            const count = units.filter(u => !u.isDead && (greater ? u.breakedDamageReceiveRate >= rate : u.breakedDamageReceiveRate < rate)).length
+            return compareInt(cond.compareOperator, count, String(n ?? 0))
+        }
         case CompareContent.NR_OF_DEBUFFS:
             // [CONFIRMED shape] sum of debuff counts across every unit on this team
             // (not just a unit COUNT the way BUFF_COUNT/DEBUFF_COUNT are per-unit).
@@ -699,11 +709,28 @@ function checkTeamCondition(team: PvPTeam, cond: BattleCondition): boolean {
             const count = units.filter(u => unitStateTypes(u).some(t => t.startsWith(prefix))).length;
             return compareInt(cond.compareOperator, count, threshold ?? "0");
         }
+        case CompareContent.HIT_UNIT_COUNT:
+            // [CONFIRMED 3.19] BattleUnitTeamConditionChecker.Check (0x17e5f30) case 0x139: Count(team notices where
+            // IsReceivedAttack (<>c.b__6_5, AffectedUnitNotice +0x30)), IntValueComparer. One notice per unit per skill
+            // = KiokuState.lastNotice. "攻撃を受けた味方がN体" (conds 2103-2107, Solo Raid party buff 1600009, kits 15057...).
+            return compareInt(cond.compareOperator, units.filter(u => u.lastNotice?.isReceivedAttack).length, cond.compareValue);
+        case CompareContent.IN_BREAK_AND_RECEIVED_ATTACK_UNIT_COUNT:
+            // [CONFIRMED 3.19] case 0x13a: Count(units where b__6_40 0x17e8060): its notice has IsReceivedAttack, no
+            // BreakDamage (did not break during this skill, i.e. was already broken) and BreakedDamageReceiveRate > 0.
+            return compareInt(cond.compareOperator, units.filter(u => !!u.lastNotice?.isReceivedAttack && !u.lastNotice.isBreak && u.breakedDamageReceiveRate > 0).length, cond.compareValue);
+        case CompareContent.ADD_REMOVABLE_BUFF_TOTAL_COUNT:
+        case CompareContent.ADD_REMOVABLE_DEBUFF_TOTAL_COUNT: {
+            // [CONFIRMED 3.19] cases 0x13b / 0x13c: Σ over the team's units of their notice's AddStateInfoList entries
+            // with isRemovableBuff (b__6_43, +0x2a) / isRemovableDebuff (b__6_45, +0x2b). StateAbilityEffect.Triggering
+            // (0x1901cb0) sets them for a state that implements IBuff / IDebuff and was added by an ActiveSkill
+            // (EffectOriginType 1): see KiokuState.noteAddedState. Rose Garden Witch (passives 5001250-2) gains Magic on 316.
+            const buff = cond.compareContent === CompareContent.ADD_REMOVABLE_BUFF_TOTAL_COUNT
+            const sum = units.reduce((a, u) => a + ((buff ? u.lastNotice?.addedRemovableBuffs : u.lastNotice?.addedRemovableDebuffs) ?? 0), 0)
+            return compareInt(cond.compareOperator, sum, cond.compareValue);
+        }
         case CompareContent.ONGOING_DAMAGE:
-        case CompareContent.DMG_TAKEN:
-        case CompareContent.BROKEN_UNITS_ATTACKED:
-            // [NOT IMPLEMENTED] not present in BattleUnitTeamConditionChecker.Check's
-            // own switch either - matches source default-false.
+            // [NOT IMPLEMENTED] case 0x136 (SlipDamageTotalCount): Count(units where b__6_34 0x17e7f50: its notice's
+            // ReceivedSlipDamageEffectTypeList matches). TS notices don't record slip-damage types yet.
             return false;
         default:
             return false;

@@ -9,7 +9,7 @@ import { elementMap } from "../types/enums";
 import { dec } from "./BattleMath";
 import { type EnemyParams, enemyParams, isEnemyKioku, selectEnemySkill, enemySkillDetails, skillName, EnemyKioku, wavePositionIds, SUMMON_POSITION_ORDER, type QuestEnemyAppearance, type ModeChangeInfo } from "./PvE";
 import { EFFECT_TARGET_SIDE, NEGATIVE_STATE_TYPES } from "./EffectTargetSide";
-import { UPDATEABLE_STATE_TYPES, CONSUME_ON_ATTACK_STATE_TYPES } from "./StateInterfaces";
+import { UPDATEABLE_STATE_TYPES, CONSUME_ON_ATTACK_STATE_TYPES, IBUFF_STATE_TYPES, IDEBUFF_STATE_TYPES } from "./StateInterfaces";
 import uniqueStateLevelJson from "../assets/base_data/getUniqueStateLevelMstList.json";
 import skillMstJson from "../assets/base_data/getSkillMstList.json";
 import { selectFullAutoTarget, expandProximity, filterAlive, legalTargetPool, setAIDecisionGauge } from "./AITargetSelector";
@@ -139,7 +139,7 @@ const enemySkills = [
     "UP_GIV_VORTEX_DMG_RATIO", // [CONFIRMED string; RECOGNIZED ONLY, pairs with VORTEX_ATK]
     "ADD_DEBUFF_TURN", "ADD_DEBUFF_TURN_IMM", // [CONFIRMED 3.19] [IMPLEMENTED] as ADD_BUFF_TURN, for debuffs (not ailments)
     "DWN_ELEMENT_RESIST_RATIO", "DWN_ELEMENT_RESIST_ACCUM_RATIO", // [CONFIRMED] see UnitStateEngine.getElementResistRate
-    "IMM_SLIP_DMG", // [CONFIRMED string] [IMPLEMENTED] DOT immunity - see tickDotEffects
+    "IMM_SLIP_DMG", // [CONFIRMED 3.19] [IMPLEMENTED] instant DOT burst (ImmSlipDmgAbilityEffect), see applyEffectToTarget
     "REFLECTION_RATIO", // [CONFIRMED string; RECOGNIZED ONLY] damage reflection - not implemented, needs a "reflect N% of the next hit back at the attacker" hook that touches the DMG_ pipeline in applyEffect; flagged rather than guessed at
     "RESET_UNIQUE_DEBUFF", "UNIQUE_DEBUFF", "UNIQUE_DEBUFF_ACCUM", // RECOGNIZED ONLY, character-specific
     "UP_EFFECT_PARRY_RATE_RATIO", "UP_ABNORMAL_PARRY_RATE_RATIO", // [CONFIRMED] [IMPLEMENTED] see friendlySkills' copy of this same pair for what changed - this entry is pre-existing and now redundant (friendlySkills.includes is checked first in completeAction, so this array's copy is presently unreachable) rather than wrong; left in place rather than deleted since it's not causing any issue and this pass isn't the place to relitigate which side these belong on.
@@ -419,11 +419,14 @@ export class KiokuState {
     weakElements: number[] = []
 
     // [CONFIRMED 3.19] BattleUnit.BreakedDamageReceiveRate (+0x80): damage multiplier in % while
-    // broken (GetAppliedDamageOfBreakSituation). PvP start value from the policy table
-    // (initialBreakDamageReceiveRate 1000 = 100.0%, max 2000 = 200.0%). The per-hit increase
-    // while broken (DamageAbilityEffectBase$$IncreaseBreakedDamageReceiveRate) is not modelled
-    // yet - see MISSING_AND_UNCERTAIN.md.
-    breakedDamageReceiveRate = PVP_POLICY.initialBreakDamageReceiveRate / 10
+    // broken (GetAppliedDamageOfBreakSituation, only applied while broken). 0 until the first break:
+    // the BattleUnit ctor (0x1389650 / param ctor) never sets it; BreakPoint.Decrease sets it to
+    // InitialBreakedDamageReceiveRate/10 on break (onBreak), hits while broken raise it
+    // (BreakPoint.ts increaseBreakedDamageReceiveRate) and TurnBegin resets it to 0 (exitBreak).
+    // Until 2026-10-02 it started at PVP_POLICY.initialBreakDamageReceiveRate/10 = 100: harmless for damage, but
+    // it made "own break bonus >= 80%" (cond 311) true for every unbroken unit and every unit "broken" for
+    // the team counts 206/207.
+    breakedDamageReceiveRate = 0
 
     // Incremented by an active ADDITIONAL_TURN_UNIT_ACT (or RE_ACTION_TURN_UNIT_ACT -
     // treated as an alias, see MISSING_AND_UNCERTAIN.md) effect. Grants the SAME unit an
@@ -844,6 +847,13 @@ export class KiokuState {
         return false
     }
 
+    // [CONFIRMED 3.19] UnitCondition.Refresh (0x15c9b00, the LockSpecialAttackUnitState type test)
+    // sets CanNotUseSpecialAttack (+0x3a) while a LOCK_SPECIAL_ATTACK ("Magic Seal") state is held.
+    // ActExecutor.ValidateCanExecuteAct (0x17e27a0) rejects a SpecialAttackAct when it is set.
+    get canNotUseSpecialAttack(): boolean {
+        return this.hasState("LOCK_SPECIAL_ATTACK")
+    }
+
     // [CONFIRMED] ReDriveBattleCore.BattleUnit$$SetHP (clamp) + $$Attack (delta + return
     // actual amount lost).
     takeDamage(damage: number): number {
@@ -963,13 +973,8 @@ export class KiokuState {
     // `this` (old, incorrect revision-1 behavior) with a warning if for some reason no
     // applier was tracked (shouldn't normally happen).
     //
-    // Respects IMM_SLIP_DMG [CONFIRMED string]: a unit with an active IMM_SLIP_DMG
-    // effect takes no DOT damage at all this tick. (Whether IMM_SLIP_DMG should also
-    // PREVENT new DOTs from being applied in the first place, vs. just no-op existing
-    // ones, isn't confirmed - implemented as the less invasive "no-op ticks" reading.)
+    // (IMM_SLIP_DMG is not a DOT immunity: it is the instant DOT burst, see applyEffectToTarget.)
     private tickDotEffects(): void {
-        const immune = [...this.activeEffectDetails.values()].some(d => d.abilityEffectType === "IMM_SLIP_DMG");
-        if (immune) return;
         for (const detail of this.activeEffectDetails.values()) {
             const damageBaseType = DOT_EFFECT_DAMAGE_BASE_TYPE[detail.abilityEffectType]
             if (damageBaseType === undefined) continue
@@ -1213,6 +1218,9 @@ export class KiokuState {
         const type = detail.abilityEffectType
         if (type === "TSUBAME_CORE") return t === applierState     // 0x16d9090: the caster only
         if (type === "TSUBAME_LINK") return t !== applierState     // 0x16d9950: everyone but the caster
+        // [CONFIRMED 3.19] LockSpecialAttackUnitState.CanAddTo (0x16d2940): no Magic Seal yet, MaxEP > 0 and MaxBP < 1
+        // (BattleUnit +0x38 / +0x3c): EP-ultimate units only, never BP units (Vinctio, Metallicized Projectile) or enemies.
+        if (type === "LOCK_SPECIAL_ATTACK") return !t.hasState("LOCK_SPECIAL_ATTACK") && t.maxMp > 0 && t.maxBp < 1
         return true
     }
 
@@ -1253,6 +1261,18 @@ export class KiokuState {
         return !("passiveSkillDetailMstId" in detail) || this._actUnit === applierState
     }
 
+    // [CONFIRMED 3.19] StateAbilityEffect.Triggering (0x1901cb0): after UnitCondition.AddUnitState succeeds, the target's
+    // notice gets an AddStateInfo; isRemovableBuff / isRemovableDebuff = the state implements IBuff / IDebuff
+    // (StateInterfaces.ts) && EffectOriginType == ActiveSkill (1). Passive (2) and field (3) states count for neither.
+    // Read by team conditions 315 / 316. [UNCERTAIN] whether a blended unique state (mergeUniqueState) still adds one.
+    private noteAddedState(t: KiokuState, detail: SkillDetail): void {
+        if ("passiveSkillDetailMstId" in detail) return
+        const type = detail.abilityEffectType
+        const buff = IBUFF_STATE_TYPES.has(type), debuff = IDEBUFF_STATE_TYPES.has(type)
+        if (!buff && !debuff) return
+        t.lastNotice = mergeNotice(t.lastNotice, { ...emptyNotice(), ...(buff ? { addedRemovableBuffs: 1 } : { addedRemovableDebuffs: 1 }) })
+    }
+
     private storeTimedEffect(t: KiokuState, detail: SkillDetail, applier: string, applierState: KiokuState): boolean {
         detail = this.giveTransform(detail, applierState)
         if (!this.canAddTo(t, detail, applierState)) return false
@@ -1274,7 +1294,8 @@ export class KiokuState {
         // Bleed/Vortex/Weakness/Stun) is blocked by the target's first active PREVENT_ABNORMAL with RemainCount >= 1,
         // which loses one count (ConsumeRemainCount). Debuffs are not blocked.
         if (t.blockedByPreventAbnormal(detail)) return false
-        if (this.mergeUniqueState(t, detail, applierState)) { t.updateSpd(); return true }
+        if (this.mergeUniqueState(t, detail, applierState)) { t.updateSpd(); this.noteAddedState(t, detail); return true }
+        this.noteAddedState(t, detail)
         const key = String(skillDetailId(detail))
         const existing = t.activeEffectDetails.get(key)
         if (existing && ACCUM_RATIO_EFFECT_TYPES.has(detail.abilityEffectType)) {
@@ -1305,7 +1326,8 @@ export class KiokuState {
         detail = this.giveTransform(detail, applierState)
         if (!this.canAddTo(t, detail, applierState)) return false
         if (!rollAppliesEffect(detail, applierState, t, this.team.rng)) return false;
-        if (this.mergeUniqueState(t, detail, applierState)) { t.updateSpd(); return true }
+        if (this.mergeUniqueState(t, detail, applierState)) { t.updateSpd(); this.noteAddedState(t, detail); return true }
+        this.noteAddedState(t, detail)
         const key = String(skillDetailId(detail))
         const existing = t.passiveEffectDetails.get(key)
         if (existing) {
@@ -1752,6 +1774,36 @@ export class KiokuState {
             if (cd?.unit && this.hasState("COUNTDOWN_START")) cd.value = Math.max(0, cd.value - 1)
             return
         }
+        // [CONFIRMED 3.19] IMM_SLIP_DMG "Instant DOT DMG Burst" (Nightmare Stinger, My Creations, Marigold Dadaism
+        // ultimates; 36 enemy stages) = ImmSlipDmgAbilityEffect.Triggering (0x18f4e90), NOT a DOT immunity (the
+        // engine read it that way until 2026-10-02 and the effect did nothing). Per target:
+        // BattleDamageCalculator.GetSlipDamageResult(target, ..., isImmediately: true) (0x13806d0): every active
+        // IReceiveSlipDamage state ticks once - ReceiveSlipDamageUnitStateBase.GetSlipDamageValue (0x15bf670) =
+        // GetSlipDamageValue (int) x RemainingTurn (+0x3c) unless permanent - charges EP
+        // (EpCharger.ChargeByReceiveSlipDamage) and is flagged ShouldBeRemovedNow (+0x70) and removed; the sum then
+        // hits the target through the user's BattleUnit.Attack. [UNCERTAIN] Vortex (VortexUnitStateBase overrides
+        // GetSlipDamageValue) is not popped here.
+        if (detail.abilityEffectType === "IMM_SLIP_DMG") {
+            effTargets.filter(t => !t.isDead).forEach(t => {
+                let total = 0
+                const popped: SkillDetail[] = []
+                for (const d of t.activeEffectDetails.values()) {
+                    const base = DOT_EFFECT_DAMAGE_BASE_TYPE[d.abilityEffectType]
+                    if (base === undefined || !t.isEffectCurrentlyActive(d)) continue
+                    const applier = d._applierState ?? t
+                    const tick = getSlipDamageResult(applier, t, d, base, this.team.battleType)
+                    total += d.turn && d.turn > 0 ? tick * d.turn : tick
+                    popped.push(d)
+                    t.getMp(2)
+                }
+                if (!popped.length) return
+                t.removeStatesWhere(d => popped.includes(d))
+                const lost = t.takeDamage(total)
+                t.lastNotice = mergeNotice(t.lastNotice, { ...emptyNotice(), totalDamageValue: lost, isDead: t.isDead })
+                this.team.eventLog.push({ kind: "dot", source: this.kioku.name, target: t.kioku.name, amount: lost, sourceIsTeam1: this.team.isTeam1, sourcePos: this.posIdx, targetIsTeam1: t.team.isTeam1, targetPos: t.posIdx })
+            })
+            return
+        }
         if (detail.abilityEffectType === "COUNTDOWN_CANCEL") return // CountdownCancelAbilityEffect.Triggering returns null (no effect)
         if (detail.abilityEffectType === "ADDITIONAL_COUNTDOWN_ZERO_SKILL_ACT" || detail.abilityEffectType === "ADDITIONAL_COUNTDOWN_CANCEL_SKILL_ACT") {
             // [CONFIRMED 3.19] AdditionalCountdownZero/CancelSkillActAbilityEffect.Triggering (0x18ea100/0x18e9e30):
@@ -1885,7 +1937,7 @@ export class KiokuState {
             // UP_ATK_ACCUM_RATIO on every attack end).
             effTargets.forEach(t => this.storePermanentState(t, detail, this.kioku.name, this))
         } else {
-            console.warn("Active without turn (possibly a RECOGNIZED-ONLY effect type not yet implemented - see PvPTeam.ts's friendlySkills/enemySkills header notes and MISSING_AND_UNCERTAIN.md):", detail)
+            console.warn(`Active without turn: ${detail.abilityEffectType} (detail ${skillDetailId(detail)}) (possibly a RECOGNIZED-ONLY effect type not yet implemented - see PvPTeam.ts's friendlySkills/enemySkills header notes and MISSING_AND_UNCERTAIN.md)`, detail)
         }
         return;
     }
@@ -2458,7 +2510,7 @@ export class PvPTeam {
         if (detail.range === targetRange.TARGET) {
             const picked = resolveCached()
             if (!picked) {
-                console.warn(actor.kioku.name, detail, "FULL AUTO targeting found no eligible target (all candidates dead/ineligible?)")
+                console.warn(`${actor.kioku.name}: ${detail.abilityEffectType} (detail ${skillDetailId(detail)}) FULL AUTO targeting found no eligible target (all candidates dead/ineligible?)`, detail)
                 return []
             }
             return [picked]
@@ -2636,6 +2688,9 @@ export class PvPTeam {
             // instead of being burned on a no-op - not confirmed against the source, but
             // it's the reading least likely to feel like a bug either way this resolves.
             .filter(k => !k.canNotAction)
+            // [CONFIRMED 3.19] ValidateCanExecuteAct (0x17e27a0): CanNotUseSpecialAttack (Magic Seal) blocks the ultimate;
+            // EP stays banked until the seal ends.
+            .filter(k => !k.canNotUseSpecialAttack)
     }
 
     useUltimate(): [KiokuState, TargetType] | undefined {

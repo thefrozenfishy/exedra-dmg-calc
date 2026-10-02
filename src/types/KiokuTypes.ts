@@ -668,6 +668,10 @@ export interface AffectedUnitNotice {
     isReceivedReflection: boolean
     isReceivedAttack: boolean      // 110
     isBreak?: boolean              // BreakDamageInfo != null: broke on this hit (team 302)
+    // AddStateInfoList entries with isRemovableBuff / isRemovableDebuff (team 315 / 316): IBuff / IDebuff states
+    // added by an active skill. Summed when notices merge.
+    addedRemovableBuffs?: number
+    addedRemovableDebuffs?: number
 }
 
 export interface BattleState {

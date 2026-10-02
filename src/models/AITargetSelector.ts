@@ -504,6 +504,13 @@ const CHAIN_BY_EFFECT_TYPE: Record<string, () => AIChain> = {
     SLOW: slowChain,
     // [CONFIRMED 3.19] CutoutUnitState$$GetUnitFilterFuncOrder (0x15b7520).
     CUTOUT: () => ({ chain: [filterByMainTarget, filterByRole(KiokuRole.Attacker), filterWithMaxAtk] }),
+    // [CONFIRMED 3.19] LockSpecialAttackUnitState ("Magic Seal"): GetAIFilteredTargets (0x16d29d0) = living units
+    // (b__12_0 = !IsDead), then, when any, those without a seal yet (b__12_1 0x16da570, no fallback);
+    // GetUnitFilterFuncOrder (0x16d2c00) = UnitFilterByMainTarget, UnitFilterByBreak, UnitFilterWithMaxAtk.
+    LOCK_SPECIAL_ATTACK: () => ({
+        preFilter: (units) => units.filter(u => !u.hasState("LOCK_SPECIAL_ATTACK")),
+        chain: [filterByMainTarget, filterByBreak, filterWithMaxAtk],
+    }),
 };
 
 // [CONFIRMED] ReDriveBattleCore.AbilityEffect.AbilityEffectBase - the base class's OWN

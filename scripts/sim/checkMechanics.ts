@@ -7,7 +7,9 @@ import { PvPTeam, KiokuState, currentLaunch, elementNumberOf } from "../../src/m
 import { isConditionSetActiveForPvP } from "../../src/models/BattleConditionParser";
 import { PvPBattle } from "../../src/models/PvPBattle";
 import { getProcessedCtd } from "../../src/models/UnitStateEngine";
+import { getSlipDamageResult, DamageBaseType } from "../../src/models/DamageCalculator";
 import { TargetType, type SkillDetail } from "../../src/types/KiokuTypes";
+import { selectFullAutoTarget } from "../../src/models/AITargetSelector";
 import passiveDetails from "../../src/assets/base_data/getPassiveSkillDetailMstList.json";
 
 console.warn = () => {}; console.debug = () => {};
@@ -188,6 +190,89 @@ for (const mates of [["Time Stop Strike", "Hollow Woman", "Ultra Great Big Hamme
     act(t1, v, TargetType.specialId); const afterUlt = v.currentBp
     check("BP gains and ultimate", v.maxBp === 12 && v.maxMp === 0 && start === 0 && afterAttack === 1 && afterSkill === 3 && afterPluviaUlt === 4 && !readyAt11 && readyAt12 && afterUlt === 2,
         `max ${v.maxBp} (MP max ${v.maxMp}); start ${start}, basic ${afterAttack}, skill ${afterSkill}, Pluvia ult (+20 MP) ${afterPluviaUlt}, ready at 11 ${readyAt11} / 12 ${readyAt12}, after own ult ${afterUlt} (want 0,1,3,4,false,true,2)`)
+}
+
+// 10. Magic Seal (LOCK_SPECIAL_ATTACK, new in the 3.19.1 master data): LockSpecialAttackUnitState.CanAddTo 0x16d2940 =
+//     not sealed yet && MaxEP > 0 && MaxBP < 1; UnitCondition.Refresh 0x15c9b00 -> CanNotUseSpecialAttack, which
+//     ActExecutor.ValidateCanExecuteAct 0x17e27a0 checks for a SpecialAttackAct. AI target (0x16d29d0 / 0x16d2c00):
+//     living units without a seal, then main target / break / max ATK.
+{
+    const mk0 = (name: string) => new PvPKioku({ name, kiokuLvl: 120, magicLvl: 10, heartphialLvl: 10, ascension: 0, specialLvl: 10, crysIDs: [], subCrysIDs: [] } as any)
+    const t1 = new PvPTeam(["Vinctio☆Magica", ...names.filter(n => !/Vinctio/.test(n)).slice(0, 4)].map(mk0), "Ally")
+    const t2 = new PvPTeam(names.slice(10, 15).map(mk), "Enemy")
+    new PvPBattle(t1, t2, false, 4242)
+    t1.snapshotHook = t2.snapshotHook = undefined
+    const [v, a, b, c, d] = t1.kiokuStates
+    const seal = { abilityEffectType: "LOCK_SPECIAL_ATTACK", value1: 0, turn: 2, activeConditionSetIdCsv: "", startConditionSetIdCsv: "", range: 1, element: 0, role: 0 } as any
+    const canAdd = (u: KiokuState) => (t2.kiokuStates[0] as any).canAddTo(u, seal, t2.kiokuStates[0])
+    a.currentMp = a.maxMp
+    const readyBefore = t1.readyUltimates().includes(a)
+    const addBefore = canAdd(a)
+    put(a, "probe:seal", seal)
+    const readyAfter = t1.readyUltimates().includes(a)
+    const addAgain = canAdd(a), addBp = canAdd(v)
+    for (const u of [b, c]) put(u, "probe:seal", seal)
+    const picks = new Set<string>()
+    for (let i = 0; i < 20; i++) picks.add(selectFullAutoTarget(seal, t1.kiokuStates.filter(u => u !== v), Math.random)?.kioku.name ?? "none")
+    check("Magic Seal", readyBefore && addBefore && !readyAfter && !addAgain && !addBp && a.canNotUseSpecialAttack && picks.size === 1 && picks.has(d.kioku.name),
+        `ready ${readyBefore}->${readyAfter}, can add ${addBefore} / again ${addAgain} / BP unit ${addBp}, AI picks ${[...picks].join(",")} (want only ${d.kioku.name})`)
+}
+
+// 11. Break bonus conditions. BreakedDamageReceiveRate starts at 0 (BattleUnit ctor 0x1389650 never sets +0x80;
+//     BreakPoint.Decrease sets it on break). Team checker 0x17e5f30 cases 5/6 (206/207, "rate,n": living units
+//     with rate >= / < rate); unit checker 0x17e3f10 case 0x16 (22: MaxBreakedDamageReceiveRate/10 <= rate).
+//     Sets: 2286 = one broken enemy, 625 (cond 555, 207) = at least one enemy with rate < 1, 329 = own rate at max.
+{
+    const { t1, t2, a } = fresh()
+    const st = () => a.stateGen(a, a)
+    const startRates = [...t1.kiokuStates, ...t2.kiokuStates].every(u => u.breakedDamageReceiveRate === 0)
+    const before = [isConditionSetActiveForPvP(["2286"], st()), isConditionSetActiveForPvP(["625"], st()), isConditionSetActiveForPvP(["329"], st())]
+    t2.kiokuStates[0].currentRemainingBreakGauge = 0; t2.kiokuStates[0].onBreak()
+    a.breakedDamageReceiveRate = Math.trunc(a.breakParams.maxRate / 10)
+    const after = [isConditionSetActiveForPvP(["2286"], st()), isConditionSetActiveForPvP(["625"], st()), isConditionSetActiveForPvP(["329"], st())]
+    check("break bonus conditions (206/207/22)", startRates && before.join() === "false,true,false" && after.join() === "true,true,true" && t2.kiokuStates[0].breakedDamageReceiveRate === 100,
+        `all rates 0 at start ${startRates}; one broken enemy / an unbroken enemy / own rate max: before ${before}, after ${after} (want false,true,false then true,true,true), broken enemy rate ${t2.kiokuStates[0].breakedDamageReceiveRate} (want 100)`)
+}
+
+// 12. Notice team counts (0x17e5f30): 313 HitUnitCount = notices with IsReceivedAttack (one per unit per skill);
+//     316 AddRemovableDebuffTotalCount = AddStateInfos with isRemovableDebuff (IDebuff state from an ActiveSkill,
+//     StateAbilityEffect.Triggering 0x1901cb0). Set 3592 = actor is an opponent + battle skill + exactly 1 ally hit;
+//     set 3585 = actor is self + a removable debuff was added to the opponent team.
+{
+    const { t1, t2, a } = fresh()
+    const [e1, e2] = t2.kiokuStates
+    const hitSt = () => e1.stateGen(e1, e1, TargetType.skillId, a)
+    e1.lastNotice = { isReceivedAttack: true } as any
+    const one = isConditionSetActiveForPvP(["3592"], hitSt())
+    e2.lastNotice = { isReceivedAttack: true } as any
+    const two = isConditionSetActiveForPvP(["3592"], hitSt())
+    t1.resetActionTallies()
+    const dbSt = () => a.stateGen(a, a, TargetType.skillId, a)
+    const none = isConditionSetActiveForPvP(["3585"], dbSt())
+    ;(a as any).noteAddedState(e1, { abilityEffectType: "DWN_DEF_RATIO", passiveSkillDetailMstId: 1 })
+    const fromPassive = isConditionSetActiveForPvP(["3585"], dbSt())
+    ;(a as any).noteAddedState(e1, { abilityEffectType: "POISON_ATK", skillDetailMstId: 1 })
+    const ailment = isConditionSetActiveForPvP(["3585"], dbSt())
+    ;(a as any).noteAddedState(e2, { abilityEffectType: "DWN_DEF_RATIO", skillDetailMstId: 1 })
+    const fromSkill = isConditionSetActiveForPvP(["3585"], dbSt())
+    check("notice team counts (313/316)", one && !two && !none && !fromPassive && !ailment && fromSkill,
+        `1 ally hit ${one}, 2 hit ${two} (want true,false); removable debuff: none ${none}, passive ${fromPassive}, ailment ${ailment}, skill ${fromSkill} (want false,false,false,true)`)
+}
+
+// 13. IMM_SLIP_DMG = instant DOT burst (ImmSlipDmgAbilityEffect.Triggering 0x18f4e90, GetSlipDamageResult(isImmediately)
+//     0x13806d0, ReceiveSlipDamageUnitStateBase.GetSlipDamageValue 0x15bf670): each DOT deals tick x remaining turns
+//     at once and is removed.
+{
+    const { t2, a } = fresh()
+    const e1 = t2.kiokuStates[0]
+    const poison = { abilityEffectType: "POISON_ATK", value1: 500, turn: 3, element: 0, activeConditionSetIdCsv: "", startConditionSetIdCsv: "", skillDetailMstId: 999001 } as any
+    e1.activeEffectDetails.set("probe:poison", { ...poison, applier: a.kioku.name, _applierState: a })
+    const tick = getSlipDamageResult(a, e1, poison, DamageBaseType.ATK, t2.battleType)
+    const hp0 = e1.currentHp
+    ;(a as any).applyEffectToTarget(e1, { abilityEffectType: "IMM_SLIP_DMG", value1: 0, range: 1, element: 0, role: 0, activeConditionSetIdCsv: "", startConditionSetIdCsv: "", skillDetailMstId: 999002 }, TargetType.specialId, a, e1)
+    const lost = hp0 - e1.currentHp
+    check("IMM_SLIP_DMG burst", tick > 0 && lost === Math.min(hp0, tick * 3) && !e1.hasState("POISON_ATK"),
+        `tick ${tick}, HP lost ${lost} (want ${tick * 3}), poison left ${e1.hasState("POISON_ATK")} (want false)`)
 }
 
 process.exit(failed ? 1 : 0);
