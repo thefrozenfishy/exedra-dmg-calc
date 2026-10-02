@@ -148,6 +148,7 @@ enum CompareContent {
     SIGILS_APPLIED_COUNT = 209,
     OTHER_BUFF_COUNT = 210,        // 3.19: units of the team holding a unique state of pattern pid ("pid,n")
     UNIQUE_ACCUM_TEAM_TOTAL = 211, // 3.19: sum of AccumCount of unique accum states of pattern pid ("pid,n")
+    BREAK_COUNT_IN_GROUP = 212,    // 3.19 dump.cs: BreakCountInGroup (sum of the living units' BreakCount)
 
     KILLED_UNIT_COUNT = 301,
     BREAK_UNIT_COUNT = 302,
@@ -167,6 +168,7 @@ enum CompareContent {
 
     ACTOR_SKILL_TYPE = 401,
     COMBO_ACTION_STEP = 402,
+    ACTOR_DAMAGE_RANGE = 403,      // 3.19 dump.cs: ActorDamageRange (RangeType name of the running damage effect)
     // [CONFIRMED 3.19] BattleOtherConditionChecker.Check 0x4b1/0x4b2 (Solo Raid countdown)
     COUNTDOWN = 1201,              // IntValueComparer over CountdownReferee.Countdown
     COUNTDOWN_CANCEL_REACHED = 1202, // CancelMaxTotalDamage > 0 && CancelMaxTotalDamage <= CancelTotalDamage
@@ -571,13 +573,18 @@ function checkUnitCondition(battleUnit: KiokuState, cond: BattleCondition, state
         case CompareContent.PLAYER_TEAM:
             // [CONFIRMED 3.19] content 1001: the unit is on the player (Ally) team.
             return compareBool(cond.compareOperator, !battleUnit.enemy && battleUnit.team.isTeam1, cond.compareValue);
-        case CompareContent.SELF_IS_KIOKU:
+        case CompareContent.SELF_IS_KIOKU: {
+            // [CONFIRMED 3.19] BattleUnitConditionChecker.Check (0x17e3f10) case 0x1c StyleId: character units only
+            // (+0x84); CompareValue csv -> int list, compared with CharacterParameter.StyleMstId (+0x60). Data: one row,
+            // CONTAIN "11370101". [?] EQUAL treated as contains.
+            if (battleUnit.enemy) return false
+            const ids = cond.compareValue.split(",").filter(x => x.trim()).map(Number)
+            const has = ids.includes(Number((battleUnit.kioku.data as any).id))
+            return cond.compareOperator === CompareOperator.NOT_CONTAIN || cond.compareOperator === CompareOperator.NOT_EQUAL ? !has : has
+        }
         case CompareContent.BREAK_COUNT:
-            // [NOT IMPLEMENTED] Not present in BattleUnitConditionChecker.Check's own
-            // switch either (they fall to its default case, which returns false) - so
-            // this matches the source's OWN behavior for these specific values, not
-            // just a port gap.
-            return false;
+            // [CONFIRMED 3.19] case 0x1e: IntValueComparer(BreakPoint.BreakCount (+0x18), value). Was "not in the source".
+            return compareInt(cond.compareOperator, battleUnit.breakCount, cond.compareValue);
         case CompareContent.DMG:
             if (!notice || notice.isReceivedReflection) return compareInt(cond.compareOperator, 0, cond.compareValue);
             return compareInt(cond.compareOperator, notice.totalDamageValue, cond.compareValue);
@@ -671,6 +678,10 @@ function checkTeamCondition(team: PvPTeam, cond: BattleCondition): boolean {
                 .reduce((b, d) => b + ((d as any)._accumCount ?? 1), 0), 0)
             return compareInt(cond.compareOperator, sum, String(n))
         }
+        case CompareContent.BREAK_COUNT_IN_GROUP:
+            // [CONFIRMED 3.19] team checker case 0xb: Sum(BreakPoint.BreakCount (b__6_25 0x17ee540)) over living units
+            // (b__6_24 = !IsDead), IntValueComparer. "敵軍のブレイク回数合計がN回" (conds 2208-2257).
+            return compareInt(cond.compareOperator, units.filter(u => !u.isDead).reduce((a, u) => a + u.breakCount, 0), cond.compareValue);
         case CompareContent.KILLED_UNIT_COUNT:
             return compareInt(cond.compareOperator, team.lastActionNotices.filter(n => n.isDead).length, cond.compareValue);
         case CompareContent.BREAK_UNIT_COUNT:
@@ -768,6 +779,18 @@ function checkOtherCondition(state: BattleState, cond: BattleCondition): boolean
             // all, not "step 1"). Unrelated to TSUBAME_* (a separate, still-unimplemented
             // character-specific mechanic - see MISSING_AND_UNCERTAIN.md's B5).
             return compareInt(cond.compareOperator, state.trueActorUnit?.currentComboActionStep ?? 0, cond.compareValue);
+        case CompareContent.ACTOR_DAMAGE_RANGE: {
+            // [CONFIRMED 3.19] BattleOtherConditionChecker.Check (0x17e3850) case 0x193: the bundle's ActorAbilityEffect
+            // must be a DamageAbilityEffectBase with DamageCategory Normal (1: DMG_ATK/DEF/HP) or Random (2: DMG_RANDOM);
+            // its RangeType name ("Self", "SelectSingle", "SelectMultiple", "Everyone") is string-compared with the
+            // value. No damage effect running -> false. Aqua Tempest's "DMG taken -10% vs all-target attacks" (cond 2260).
+            const eff = state.actorEffect
+            if (!eff || !/^DMG_(ATK|DEF|HP|RANDOM)$/.test(eff.abilityEffectType)) return false
+            const rangeName = ({ [-1]: "Self", 1: "SelectSingle", 2: "SelectMultiple", 3: "Everyone" } as Record<number, string>)[eff.range] ?? ""
+            if (cond.compareOperator === CompareOperator.EQUAL) return rangeName === cond.compareValue
+            if (cond.compareOperator === CompareOperator.NOT_EQUAL) return rangeName !== cond.compareValue
+            return false
+        }
         case CompareContent.AWAKEN:
             // [CONFIRMED 3.19] content 1101: Solo Raid "Labyrinth Vanguard" activation phase (SoloRaidBuffReferee.IsActive).
             return compareBool(cond.compareOperator, !!state.actorTeam.soloRaid?.active, cond.compareValue);
@@ -816,7 +839,7 @@ function conditionRole(value: string): KiokuRole | undefined {
     return (Object.values(KiokuRole) as string[]).includes(value) ? value as KiokuRole : roleMap[value]
 }
 
-function isMatchCondition(cond: BattleCondition, state: BattleState): boolean {
+export function isMatchCondition(cond: BattleCondition, state: BattleState): boolean {
     const { actor, target, actorTeam, enemyTeam, trueActorUnit, mainTargetUnit } = state;
     switch (cond.compareTarget as CompareTarget) {
         case CompareTarget.SELF:

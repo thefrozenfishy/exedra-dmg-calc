@@ -265,7 +265,9 @@ const runningFollowUps = new Set<string>()
 // unit FALSE for state activity (ConditionUseType SkillActive; true only for SkillStart). In the data only attacker-side
 // states (UP_GIV_DMG_RATIO, UP_HEAL_RATE_RATIO, UP_CTR_RATIO, UP_CTD_FIXED) have EachTarget active conditions.
 let eachTargetCtx: { user: KiokuState, target: KiokuState } | undefined
-interface LaunchContext { actor: KiokuState, targetType: TargetType, skillType: string, team: PvPTeam }
+// effect: ActorAbilityEffect, the launch's effect being processed (set per effect by AbilityEffectLauncher.Triggering
+// 0x1373550 in every unit's bundle; read by content 403 ActorDamageRange).
+interface LaunchContext { actor: KiokuState, targetType: TargetType, skillType: string, team: PvPTeam, effect?: SkillDetail }
 let activeLaunch: LaunchContext | undefined
 // Skill type of the most recent launch: the AttackEnd pass after an Ether Blow sees ActorSkillType "EtherBlow".
 let lastLaunchSkillType: string | undefined
@@ -1093,6 +1095,7 @@ export class KiokuState {
         const each = eachTargetCtx?.user === this ? eachTargetCtx.target : undefined
         const state = l ? this.stateGen(this, each ?? this, l.targetType, l.actor, l.team.lastMainTarget) : this.stateGen(this, each ?? this)
         if (!each) state.eachTargetUnset = true
+        if (l?.effect) state.actorEffect = l.effect
         return state
     }
 
@@ -1343,8 +1346,14 @@ export class KiokuState {
     // friendly effect's placeholder target (the caster) is not a real target: its widened targets set it one by one.
     applyEffect(target: KiokuState, detail: SkillDetail, targetType?: TargetType, trueActorUnit?: KiokuState, mainTarget?: KiokuState): number | undefined {
         const placeholder = this === target && !detail.abilityEffectType.startsWith("DMG_")
-        return placeholder ? this.applyEffectToTarget(target, detail, targetType, trueActorUnit, mainTarget)
-            : withEachTarget(this, target, () => this.applyEffectToTarget(target, detail, targetType, trueActorUnit, mainTarget))
+        // ActorAbilityEffect for the duration of this effect, only inside a skill launch (passives launch without one).
+        const launch = activeLaunch && activeLaunch.actor === this ? activeLaunch : undefined
+        const prevEffect = launch?.effect
+        if (launch) launch.effect = detail
+        try {
+            return placeholder ? this.applyEffectToTarget(target, detail, targetType, trueActorUnit, mainTarget)
+                : withEachTarget(this, target, () => this.applyEffectToTarget(target, detail, targetType, trueActorUnit, mainTarget))
+        } finally { if (launch) launch.effect = prevEffect }
     }
 
     private applyEffectToTarget(target: KiokuState, detail: SkillDetail, targetType?: TargetType, trueActorUnit?: KiokuState, mainTarget?: KiokuState): number | undefined {
@@ -1357,6 +1366,7 @@ export class KiokuState {
         this._actUnit = trueActorUnit
         const conditionsMet = (t: KiokuState) => {
             const triggerState = this.stateGen(this, t, targetType, trueActorUnit, mainTarget)
+            if (activeLaunch?.effect === detail) triggerState.actorEffect = detail
             return UNIT_STATE_TYPES.has(detail.abilityEffectType)
                 ? isConditionSetActiveForPvP((detail.startConditionSetIdCsv ?? "").split(","), triggerState)
                 : isConditionSetActive(detail, triggerState)

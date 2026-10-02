@@ -4,7 +4,7 @@ import "../../src/models/BestTeamCalculator"; // must load first (import cycle o
 import { kiokuData } from "../../src/utils/helpers";
 import { PvPKioku } from "../../src/models/PvPKioku";
 import { PvPTeam, KiokuState, currentLaunch, elementNumberOf } from "../../src/models/PvPTeam";
-import { isConditionSetActiveForPvP } from "../../src/models/BattleConditionParser";
+import { isConditionSetActiveForPvP, isMatchCondition } from "../../src/models/BattleConditionParser";
 import { PvPBattle } from "../../src/models/PvPBattle";
 import { getProcessedCtd } from "../../src/models/UnitStateEngine";
 import { getSlipDamageResult, DamageBaseType } from "../../src/models/DamageCalculator";
@@ -273,6 +273,24 @@ for (const mates of [["Time Stop Strike", "Hollow Woman", "Ultra Great Big Hamme
     const lost = hp0 - e1.currentHp
     check("IMM_SLIP_DMG burst", tick > 0 && lost === Math.min(hp0, tick * 3) && !e1.hasState("POISON_ATK"),
         `tick ${tick}, HP lost ${lost} (want ${tick * 3}), poison left ${e1.hasState("POISON_ATK")} (want false)`)
+}
+
+// 14. Unit/team/other contents the TS called "not in the source": 30 BreakCount (0x17e3f10 case 0x1e), 28 StyleId
+//     (case 0x1c), 212 BreakCountInGroup (0x17e5f30 case 0xb), 403 ActorDamageRange (0x17e3850 case 0x193, the running
+//     damage effect's RangeType name). 212/403 rows only exist in data newer than base_data, so they are built here.
+{
+    const { t1, t2, a } = fresh()
+    const st = () => a.stateGen(a, a)
+    const b0 = isConditionSetActiveForPvP(["2929"], st())          // own BreakCount == 0
+    a.breakCount = 1
+    const b1 = isConditionSetActiveForPvP(["2930"], st()) && !isConditionSetActiveForPvP(["2929"], st())
+    const style = isMatchCondition({ battleConditionMstId: -1, compareContent: 28, compareOperator: 7, compareTarget: 1, compareValue: String((a.kioku.data as any).id) } as any, st())
+    t2.kiokuStates[0].breakCount = 2; t2.kiokuStates[1].breakCount = 1
+    const grp = (v: string) => isMatchCondition({ battleConditionMstId: -1, compareContent: 212, compareOperator: 1, compareTarget: 6, compareValue: v } as any, st())
+    const range = (effect: any) => { const s = st(); s.actorEffect = effect; return isMatchCondition({ battleConditionMstId: -1, compareContent: 403, compareOperator: 1, compareTarget: 7, compareValue: "Everyone" } as any, s) }
+    const aoe = range({ abilityEffectType: "DMG_ATK", range: 3 }), single = range({ abilityEffectType: "DMG_ATK", range: 1 }), buff = range({ abilityEffectType: "UP_ATK_RATIO", range: 3 }), none = range(undefined)
+    check("BreakCount / StyleId / BreakCountInGroup / ActorDamageRange", b0 && b1 && style && grp("3") && !grp("2") && aoe && !single && !buff && !none,
+        `break count 0 ${b0} / 1 ${b1}, style ${style}, team breaks 3 ${grp("3")} 2 ${grp("2")}, range AoE ${aoe} single ${single} buff ${buff} none ${none}`)
 }
 
 process.exit(failed ? 1 : 0);
