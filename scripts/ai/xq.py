@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""xq - quick lookups for the Exedra battle-engine work (game 3.19.0).
+"""xq - quick lookups for the Exedra battle-engine work (game 3.19.0; 3.19.1 has identical code).
 
 One command instead of 5-10 ad-hoc greps/python snippets. Run from anywhere:
 
@@ -53,7 +53,11 @@ def _first(*cands):
 
 
 UNPACKED = _first(os.environ.get("XQ_UNPACKED"), os.path.join(MNT, "unpackedExedra"))
-DECOMP = os.path.join(UNPACKED, "3.19.0", "decompiled")
+# The decompile exists for 3.19.0 only. 3.19.1 has byte-identical code (docs/versions/3.19.1/report.md), so every RVA
+# and function is the same. A future version with changed code: decompile into unpackedExedra/<ver>/decompiled and set
+# XQ_GAME_VER=<ver> (docs/ai/VERSION_UPDATE.md).
+GAME_VER = os.environ.get("XQ_GAME_VER", "3.19.0")
+DECOMP = os.path.join(UNPACKED, GAME_VER, "decompiled")
 DUMPER = _first(os.environ.get("XQ_DUMPER"), os.path.join(MNT, "Il2CppDumper"))
 DUMP_CS = os.path.join(DUMPER, "dump.cs")
 MAEX = _first(os.environ.get("XQ_MAEX"), os.path.join(MNT, "ma-ex-data"))
