@@ -1,6 +1,6 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-03 (duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
 ## Branches and uncommitted work in E:\exedra-dmg-calc
 
@@ -13,6 +13,23 @@ _Last updated: 2026-10-03 (duplicate active-skill states); before: 2026-10-02 (g
 branches or changing the engine. On battle-engine-3.19 `xq build` still lists UNIQUE_BUFF / UNIQUE_DEBUFF /
 UNIQUE_10030301 / UNIQUE_10070201 (pure marker states: stored generically, read by conditions 12/26 - nothing more to
 do) and UP_BREAK_EFFECT (blocked, open question 1).
+
+## Fixed 2026-10-03: no skill in TurnStart / TurnEnd passes (uncommitted on main)
+
+User report (same Rose Garden run): after Hollow Woman's battle skill the minions had 4/5 Magic and their follow-ups
+fired; in-game 2/5, no follow-ups, Tiro Finale next. `fireTiming` now passes no action type to the TurnStart / TurnEnd
+passes (and their AfterProcess), as ActExecutor.TurnBegin/TurnEnd do. Fixture extended with the action-3 decisions
+(checkFixtures handles a pending manual decision as `<pending: label>`); both new cases fail without the fix.
+Lux bench before/after: only Absolute Venus attacker avg changes (158.19% -> 144.59%, max unchanged) - its
+AfterProcess follow-up 653410 (IsActor + ActiveSkill + 20 tokens) no longer fires early from the TurnStart pass.
+
+## Fixed 2026-10-03: passive states per giver + UP_HP_FIXED max HP (uncommitted on main)
+
+User report (Rose Garden Witch Extra, solo raid 1407105): HP after the minions' AoE was 8% lower in the sim for every
+ally, and Hollow Woman's max HP 460 short. Causes: `storePermanentState` deduped the same passive detail across givers
+(two Indomitable Guard++ = one -8%; the game keeps two states, GetDuplicateUnitState b__2 0x15c7d90 compares the giver),
+and `updateMaxHp` ignored UP_HP_FIXED (Max HP +420/+40 sub-crys). Both fixed; now exact for all 5 allies.
+`checkFixtures.ts` replays PvE exports too; new fixture `rose-garden-indomitable-guard-x2.json` (2 cases).
 
 ## Fixed 2026-10-03: duplicate active-skill states (uncommitted on main)
 

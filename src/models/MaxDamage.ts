@@ -282,7 +282,7 @@ export function computeMaxDamage(allies: PvPKioku[], enemies: QuestEnemyAppearan
         const stacksOf = (e: MaxDmgEffect) => opts.excluded?.has(e.key) ? 0 : Math.max(0, Math.min(e.maxStacks, opts.stacks?.get(e.key) ?? e.maxStacks))
         // Each caster's active buff/debuff strength, by type (conditions assumed met, like everything else here).
         const ailmentsOk = (d: SkillDetail) => !opts.enemyStates
-            || ailmentConditionsMet([d.startConditionSetIdCsv, d.activeConditionSetIdCsv], opts.enemyStates)
+            || ailmentConditionsMet([d.startConditionSetIdCsv, d.activeConditionSetIdCsv], opts.enemyStates, enemies.length)
         const giverEffects = new Map<number, Record<string, SkillDetail[]>>()
         for (const e of passEffects) {
             if (!isEffectValueType(e.detail.abilityEffectType) || !stacksOf(e) || !ailmentsOk(e.detail)) continue

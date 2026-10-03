@@ -1,0 +1,5814 @@
+{
+ "format": "exedra-pve-sim",
+ "version": 1,
+ "exportedAt": "2026-10-03T07:56:17.757Z",
+ "engine": "battle-engine-3.19",
+ "stageId": 1407105,
+ "stageName": "Rose Garden Witch (Extra)",
+ "control": "manual",
+ "rngMode": "weighted",
+ "seed": 3588916058,
+ "turns": 3,
+ "notes": "In-game HP after action 2 (minion Forest DMG [M] All): Floral Ironspike 10195/11496, Pluvia 8166/12722, Infinite Poseidon 11103/12256, Hollow Woman 8674/13316, Tiro Finale 10500/11668. Two Indomitable Guard++ (Hollow Woman + Poseidon) stack (x0.92 twice); Hollow Woman's Max HP +420/+40 sub-crys count toward max HP. Action 3 (in-game): Hollow Woman Battle Skill on Pluvia -> all minions 2/5 Magic (were 0/5 at her turn start), no follow-ups, Tiro Finale acts next. The minions' +2 Magic (AfterProcess, ActorSkillType) must not also fire after TurnStart.",
+ "decisionLog": [
+  "Action 3: Hollow Woman (Ally 4) · turn: choose an action -> Battle Skill (SP 5)",
+  "Action 3: Hollow Woman (Ally 4) · Cut & Splice: target on the allies -> Pluvia☆Magica (Ally 2)",
+  "WAITING after action 3: Tiro Finale (Ally 5) · turn: choose an action [Battle Skill (SP 4) | Basic Attack]"
+ ],
+ "pending": {
+  "label": "Tiro Finale (Ally 5) · turn: choose an action",
+  "options": [
+   "Battle Skill (SP 4)",
+   "Basic Attack"
+  ]
+ },
+ "slots": [
+  {
+   "main": {
+    "enabled": true,
+    "dupes": 0,
+    "ascension": 5,
+    "portrait": "Farewell to a Future Unseen",
+    "kiokuLvl": 146,
+    "magicLvl": 140,
+    "heartphialLvl": 50,
+    "specialLvl": 10,
+    "name": "Floral Ironspike",
+    "id": 11450101,
+    "role": "Attacker",
+    "element": "Forest",
+    "supportTarget": "Attacker",
+    "supportDescription": "Increases critical rate by 15% and ATK by 10%.<br>On own critical hit, grants 5 MP.",
+    "character_en": "Sumire Yoake",
+    "heartphial": "Sumire Yoake",
+    "rarity": 5,
+    "obtain": "Exclusive",
+    "permaDate": "",
+    "releaseDate": "2026-03-27",
+    "crysOptions": {
+     "1001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3001": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3002": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3003": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3004": {
+      "enabled": true,
+      "useIndex": 3,
+      "subCrys": [
+       4044,
+       4054,
+       4034
+      ]
+     },
+     "3005": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3006": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3007": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3008": {
+      "enabled": true,
+      "useIndex": 1,
+      "subCrys": [
+       4034,
+       4054,
+       4044
+      ]
+     },
+     "3009": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3010": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3012": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3013": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3014": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3015": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3016": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4034,
+       4044,
+       4054
+      ]
+     },
+     "3017": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3018": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3019": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3020": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3021": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3022": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3023": {
+      "enabled": true,
+      "useIndex": 2,
+      "subCrys": [
+       4054,
+       4034,
+       4044
+      ]
+     },
+     "3024": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3025": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3026": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3027": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3028": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4044,
+       4034,
+       4054
+      ]
+     },
+     "3029": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "7053": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     }
+    },
+    "isStandardChar": false
+   },
+   "support": {
+    "enabled": true,
+    "dupes": 0,
+    "ascension": 1,
+    "portrait": "",
+    "kiokuLvl": 140,
+    "magicLvl": 130,
+    "heartphialLvl": 50,
+    "specialLvl": 4,
+    "name": "Oracle Ray",
+    "id": 11240101,
+    "role": "Attacker",
+    "element": "Light",
+    "supportTarget": "Attacker",
+    "supportDescription": "Increases DMG dealt when targeting elemental weakness by 25%.<br>With 2 or more enemies present, increases DMG dealt by 5%, plus an additional 5% for each enemy above 2.",
+    "character_en": "Oriko Mikuni",
+    "heartphial": "Oriko Mikuni",
+    "rarity": 5,
+    "obtain": "Permanent",
+    "permaDate": "2025-03-27",
+    "releaseDate": "2025-03-27",
+    "crysOptions": {
+     "1001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3001": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3002": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3003": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3004": {
+      "enabled": true,
+      "useIndex": 1,
+      "subCrys": [
+       4089,
+       4044,
+       4054
+      ]
+     },
+     "3005": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3006": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3007": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3008": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3009": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3010": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3012": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3013": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3014": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3016": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3017": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3020": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3021": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3022": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3023": {
+      "enabled": true,
+      "useIndex": 2,
+      "subCrys": [
+       4054,
+       4044,
+       4030
+      ]
+     },
+     "3024": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3025": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3026": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3027": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3028": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3029": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "7008": {
+      "enabled": true,
+      "useIndex": 3,
+      "subCrys": [
+       4044,
+       4054,
+       4013
+      ]
+     }
+    },
+    "isStandardChar": true
+   }
+  },
+  {
+   "main": {
+    "enabled": true,
+    "dupes": 4,
+    "ascension": 5,
+    "portrait": "Proof of Friends Again",
+    "kiokuLvl": 146,
+    "magicLvl": 140,
+    "heartphialLvl": 50,
+    "specialLvl": 10,
+    "name": "Pluvia☆Magica",
+    "id": 10010701,
+    "role": "Breaker",
+    "element": "Light",
+    "supportTarget": "Light",
+    "supportDescription": "Increases break bonus by 20%, and on enemy break, grants 5 MP.",
+    "character_en": "Madoka Kaname",
+    "heartphial": "Madoka Kaname",
+    "rarity": 5,
+    "obtain": "Permanent",
+    "permaDate": "2025-03-27",
+    "releaseDate": "2025-03-27",
+    "crysOptions": {
+     "1001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3001": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3002": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3003": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3004": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3005": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3006": {
+      "enabled": true,
+      "useIndex": 3,
+      "subCrys": [
+       4090,
+       4034,
+       4044
+      ]
+     },
+     "3007": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3008": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3009": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3010": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3011": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4044,
+       4007,
+       4034
+      ]
+     },
+     "3012": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3013": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3014": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3016": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3017": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3018": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3020": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3021": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3022": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3023": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3024": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3025": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4068,
+       4090,
+       4034
+      ]
+     },
+     "3026": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3027": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3028": {
+      "enabled": true,
+      "useIndex": 1,
+      "subCrys": [
+       4023,
+       4044,
+       4034
+      ]
+     },
+     "3029": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4085,
+       4017,
+       4034
+      ]
+     },
+     "7002": {
+      "enabled": true,
+      "useIndex": 2,
+      "subCrys": [
+       4034,
+       4044,
+       4013
+      ]
+     }
+    },
+    "isStandardChar": true
+   },
+   "support": {
+    "enabled": true,
+    "dupes": 0,
+    "ascension": 3,
+    "portrait": "",
+    "kiokuLvl": 146,
+    "magicLvl": 130,
+    "heartphialLvl": 50,
+    "specialLvl": 7,
+    "name": "Sacred Gift",
+    "id": 10800201,
+    "role": "Breaker",
+    "element": "Aqua",
+    "supportTarget": "Breaker",
+    "supportDescription": "Increases SPD by 20%.<br>If HP 50% or higher, increases break gauge depletion (50%-59% (1), 60%-79% (2), 80%-99% (3), 100% (4)).",
+    "character_en": "Ren Isuzu",
+    "heartphial": "Ren Isuzu",
+    "rarity": 5,
+    "obtain": "Exclusive",
+    "permaDate": "",
+    "releaseDate": "2025-12-22",
+    "crysOptions": {
+     "1001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3001": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3002": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3003": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3004": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3005": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3006": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4034,
+       4013,
+       4090
+      ]
+     },
+     "3007": {
+      "enabled": true,
+      "useIndex": 2,
+      "subCrys": [
+       4003,
+       4034,
+       4044
+      ]
+     },
+     "3008": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3009": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3010": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3011": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3012": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3013": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3014": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3015": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3017": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3018": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3019": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3020": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3021": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3022": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3023": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3024": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4022,
+       4033,
+       4061
+      ]
+     },
+     "3025": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4033,
+       4069,
+       4035
+      ]
+     },
+     "3026": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3027": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3028": {
+      "enabled": true,
+      "useIndex": 1,
+      "subCrys": [
+       4044,
+       4085,
+       4034
+      ]
+     },
+     "3029": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "7042": {
+      "enabled": true,
+      "useIndex": 3,
+      "subCrys": [
+       4044,
+       4034,
+       4049
+      ]
+     }
+    },
+    "isStandardChar": false
+   }
+  },
+  {
+   "main": {
+    "enabled": true,
+    "dupes": 6,
+    "ascension": 5,
+    "portrait": "Under a Cherry Blossom Tree",
+    "kiokuLvl": 146,
+    "magicLvl": 130,
+    "heartphialLvl": 50,
+    "specialLvl": 10,
+    "name": "Infinite Poseidon",
+    "id": 10150101,
+    "role": "Breaker",
+    "element": "Aqua",
+    "supportTarget": "Aqua",
+    "supportDescription": "Grants 15 MP at battle start, and on enemy break, grants 2 MP.",
+    "character_en": "Rena Minami",
+    "heartphial": "Rena Minami",
+    "rarity": 5,
+    "obtain": "Permanent",
+    "permaDate": "May 31, 2025",
+    "releaseDate": "2025-04-11",
+    "crysOptions": {
+     "1001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3001": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3002": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3003": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3004": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3005": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3006": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4034,
+       4017,
+       4002
+      ]
+     },
+     "3007": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3008": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3009": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3010": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3011": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4086,
+       4034,
+       4014
+      ]
+     },
+     "3012": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3013": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3014": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3015": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3017": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3018": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3020": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3021": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3022": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3023": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3024": {
+      "enabled": true,
+      "useIndex": 2,
+      "subCrys": [
+       4086,
+       4034,
+       4012
+      ]
+     },
+     "3025": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3026": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4023,
+       4003,
+       4077
+      ]
+     },
+     "3027": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3028": {
+      "enabled": true,
+      "useIndex": 3,
+      "subCrys": [
+       4084,
+       4056,
+       4034
+      ]
+     },
+     "3029": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "7016": {
+      "enabled": true,
+      "useIndex": 1,
+      "subCrys": [
+       4034,
+       4015,
+       4088
+      ]
+     }
+    },
+    "isStandardChar": true
+   },
+   "support": {
+    "enabled": true,
+    "dupes": 0,
+    "ascension": 2,
+    "portrait": "For Hope That Lies Ahead",
+    "kiokuLvl": 140,
+    "magicLvl": 130,
+    "heartphialLvl": 50,
+    "specialLvl": 4,
+    "name": "Groundhog Daze",
+    "id": 10070201,
+    "role": "Breaker",
+    "element": "Void",
+    "supportTarget": "Breaker",
+    "supportDescription": "Increases SPD by 20%.<br>On own special attack, increases break gauge depletion (5) (2 turns).",
+    "character_en": "Mabayu Aki",
+    "heartphial": "Mabayu Aki",
+    "rarity": 5,
+    "obtain": "Permanent",
+    "permaDate": "January 31, 2025",
+    "releaseDate": "2025-11-18",
+    "crysOptions": {
+     "1001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3001": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3002": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3003": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3004": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3005": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3006": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3007": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3008": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3009": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3010": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3011": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3012": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3013": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3016": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3019": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3020": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3021": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3022": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3023": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3024": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4083,
+       4051,
+       4063
+      ]
+     },
+     "3025": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3026": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3027": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3028": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3029": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "7039": {
+      "enabled": true,
+      "useIndex": 3,
+      "subCrys": [
+       4009,
+       4027,
+       4015
+      ]
+     }
+    },
+    "isStandardChar": true
+   }
+  },
+  {
+   "main": {
+    "enabled": true,
+    "dupes": 1,
+    "ascension": 5,
+    "portrait": "It's Cake Party Time!",
+    "kiokuLvl": 146,
+    "magicLvl": 140,
+    "heartphialLvl": 50,
+    "specialLvl": 10,
+    "name": "Hollow Woman",
+    "id": 10070101,
+    "role": "Buffer",
+    "element": "Light",
+    "supportTarget": "Buffer",
+    "supportDescription": "On basic attack, advances action order by 10%.<br>Increases SPD by 20%.",
+    "character_en": "Mabayu Aki",
+    "heartphial": "Mabayu Aki",
+    "rarity": 5,
+    "obtain": "Permanent",
+    "permaDate": "July 31 , 2025",
+    "releaseDate": "2025-05-30",
+    "crysOptions": {
+     "1001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3001": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3002": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3003": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3004": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3005": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4010,
+       4034,
+       4030
+      ]
+     },
+     "3006": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4037,
+       4010,
+       4034
+      ]
+     },
+     "3007": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3008": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3009": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3010": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3011": {
+      "enabled": true,
+      "useIndex": 2,
+      "subCrys": [
+       4017,
+       4088,
+       4034
+      ]
+     },
+     "3012": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3013": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3014": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3015": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3016": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3017": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3018": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3019": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3020": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3021": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3022": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3023": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3024": {
+      "enabled": true,
+      "useIndex": 1,
+      "subCrys": [
+       4030,
+       4010,
+       4034
+      ]
+     },
+     "3025": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4030,
+       4034,
+       4010
+      ]
+     },
+     "3026": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3027": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3028": {
+      "enabled": true,
+      "useIndex": 3,
+      "subCrys": [
+       4001,
+       4046,
+       4034
+      ]
+     },
+     "3029": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4021,
+       4048,
+       4034
+      ]
+     },
+     "7021": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4034,
+       4055,
+       4047
+      ]
+     }
+    },
+    "isStandardChar": true
+   },
+   "support": {
+    "enabled": true,
+    "dupes": 0,
+    "ascension": 2,
+    "portrait": "",
+    "kiokuLvl": 140,
+    "magicLvl": 120,
+    "heartphialLvl": 50,
+    "specialLvl": 4,
+    "name": "L'Ombre",
+    "id": 11160101,
+    "role": "Buffer",
+    "element": "Dark",
+    "supportTarget": "Buffer",
+    "supportDescription": "Increases SPD by 10%.<br>On own special attack, increases all allies' special attack DMG dealt by 15% (1 turn).<br>On taking DMG equal to 20% or higher of own max HP, advances action order by 5%.",
+    "character_en": "Liz Hawkwood",
+    "heartphial": "Liz Hawkwood",
+    "rarity": 5,
+    "obtain": "Permanent",
+    "permaDate": "June 30, 2026",
+    "releaseDate": "2026-04-24",
+    "crysOptions": {
+     "1001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3001": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3002": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3003": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3004": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3005": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3007": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3008": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3009": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3010": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3012": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3013": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3017": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3019": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3020": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3021": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3025": {
+      "enabled": true,
+      "useIndex": 1,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3029": {
+      "enabled": true,
+      "useIndex": 2,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "7058": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     }
+    },
+    "isStandardChar": true
+   }
+  },
+  {
+   "main": {
+    "enabled": true,
+    "dupes": 5,
+    "ascension": 5,
+    "portrait": "New Specs to a New Perspective",
+    "kiokuLvl": 146,
+    "magicLvl": 130,
+    "heartphialLvl": 50,
+    "specialLvl": 10,
+    "name": "Tiro Finale",
+    "id": 10030101,
+    "role": "Buffer",
+    "element": "Forest",
+    "supportTarget": "Forest",
+    "supportDescription": "Increases SPD by 25%, and MP recovery rate by 10%.",
+    "character_en": "Mami Tomoe",
+    "heartphial": "Mami Tomoe",
+    "rarity": 5,
+    "obtain": "Permanent",
+    "permaDate": "May 31, 2025",
+    "releaseDate": "2025-03-30",
+    "crysOptions": {
+     "1001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3001": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3002": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3003": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3004": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3005": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3006": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4034,
+       4016,
+       4075
+      ]
+     },
+     "3007": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3008": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3009": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3010": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3011": {
+      "enabled": true,
+      "useIndex": 1,
+      "subCrys": [
+       4018,
+       4023,
+       4034
+      ]
+     },
+     "3012": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3013": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4022,
+       4012,
+       4034
+      ]
+     },
+     "3014": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3015": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3016": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3017": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3018": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3019": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3020": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3021": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3022": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3023": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3024": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4018,
+       4023,
+       4034
+      ]
+     },
+     "3025": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4034,
+       4069,
+       4015
+      ]
+     },
+     "3026": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3027": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3028": {
+      "enabled": true,
+      "useIndex": 3,
+      "subCrys": [
+       4071,
+       4079,
+       4034
+      ]
+     },
+     "3029": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "7012": {
+      "enabled": true,
+      "useIndex": 2,
+      "subCrys": [
+       4086,
+       4034,
+       4062
+      ]
+     }
+    },
+    "isStandardChar": true
+   },
+   "support": {
+    "enabled": true,
+    "dupes": 0,
+    "ascension": 5,
+    "portrait": "",
+    "kiokuLvl": 143,
+    "magicLvl": 132,
+    "heartphialLvl": 50,
+    "specialLvl": 7,
+    "name": "Flame Waltz",
+    "id": 10100101,
+    "role": "Buffer",
+    "element": "Flame",
+    "supportTarget": "Buffer",
+    "supportDescription": "Increases self-applied buff effects by 30% (* excluding MP recovery and action order advance effects), and increases SPD by 15%.",
+    "character_en": "Tsuruno Yui",
+    "heartphial": "Tsuruno Yui",
+    "rarity": 5,
+    "obtain": "Permanent",
+    "permaDate": "2025-03-27",
+    "releaseDate": "2025-03-27",
+    "crysOptions": {
+     "1001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "1029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2001": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2002": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2003": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2004": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2005": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2006": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2007": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2008": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2009": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2010": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2011": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2012": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2013": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2014": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2017": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2018": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2019": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2020": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2021": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2022": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2023": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2024": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2025": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2026": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2027": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2028": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "2029": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3001": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3002": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3003": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3004": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3005": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3006": {
+      "enabled": true,
+      "useIndex": 1,
+      "subCrys": [
+       4034,
+       4013,
+       4071
+      ]
+     },
+     "3007": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3008": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3009": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3010": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3011": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4030,
+       4034,
+       4065
+      ]
+     },
+     "3012": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3013": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3014": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3015": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3016": {
+      "enabled": false,
+      "useIndex": 0,
+      "subCrys": []
+     },
+     "3017": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3018": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3019": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3020": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3021": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3022": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3023": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3024": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3025": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       4003,
+       4064,
+       4031
+      ]
+     },
+     "3026": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3027": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "3028": {
+      "enabled": true,
+      "useIndex": 2,
+      "subCrys": [
+       4033,
+       4013,
+       4035
+      ]
+     },
+     "3029": {
+      "enabled": true,
+      "useIndex": 0,
+      "subCrys": [
+       0,
+       0,
+       0
+      ]
+     },
+     "7006": {
+      "enabled": true,
+      "useIndex": 3,
+      "subCrys": [
+       4022,
+       4004,
+       4034
+      ]
+     }
+    },
+    "isStandardChar": true
+   }
+  }
+ ],
+ "sequence": [],
+ "soloRaid": {
+  "partyBuffId": 700,
+  "attempts": []
+ },
+ "decisions": {
+  "0": {
+   "kind": "action",
+   "label": "Hollow Woman (Ally 4) · turn: choose an action",
+   "value": 0,
+   "pick": true
+  },
+  "1": {
+   "kind": "target",
+   "label": "Hollow Woman (Ally 4) · Cut & Splice: target on the allies",
+   "value": 1,
+   "pick": true
+  }
+ }
+}

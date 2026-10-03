@@ -23,7 +23,7 @@ export type LuxBenchMessage =
 
 console.debug = () => { } // the engine logs every action
 
-// Kit only, like the legacy charts: no portrait, support or crystalis.
+// Kit and its EX crystalis only (benchKioku drops portrait, support and every other crystalis).
 const toInput = (c: Character) => ({ ...c, portrait: undefined, supportKey: undefined, crysIDs: [], subCrysIDs: [] }) as any
 
 self.onmessage = (e: MessageEvent<LuxBenchJob>) => {

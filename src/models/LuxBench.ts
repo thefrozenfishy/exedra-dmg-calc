@@ -13,7 +13,7 @@
 // recover at their own turn start) they stay broken throughout.
 import breakMstJson from "../assets/base_data/getBreakMstList.json";
 import { PvPKioku } from "./PvPKioku";
-import { PvPTeam, type KiokuState } from "./PvPTeam";
+import { PvPTeam, scaleGivenState, type KiokuState } from "./PvPTeam";
 import { PvPBattle } from "./PvPBattle";
 import { ailmentMarker, computeMaxDamage } from "./MaxDamage";
 import { enemyKiokus } from "./PvEBattle";
@@ -22,8 +22,8 @@ import { BattleRng, type RngKind, type RngMode } from "./BattleRng";
 import { seededRng } from "./BattleMath";
 import { ailmentConditionValues, unitTypeConditionValues } from "./BattleConditionParser";
 import type { QuestEnemyAppearance } from "./PvE";
-import { skillDetailsByMstId } from "../utils/helpers";
-import { TargetType, TargetTypeLookup, targetTypeToLvl, targetRange, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
+import { crystalisesByStyle, kiokuData, skillDetailsByMstId } from "../utils/helpers";
+import { skillDetailId, TargetType, TargetTypeLookup, targetTypeToLvl, targetRange, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
 import { Ailment, elementMap, roleMap, KiokuElement, KiokuRole } from "../types/enums";
 
 export const BENCH_DEF = 3000
@@ -69,10 +69,23 @@ const AILMENT_STATE: Record<Ailment, string> = {
 }
 const enemyStatesOf = (ailment?: Ailment): string[] => ailment ? [AILMENT_STATE[ailment]] : []
 
+/** The character's own EX crystalis (SelectionAbility rows with its styleMstId; one per character). */
+export const exCrysIds = (name: string): number[] =>
+    (crystalisesByStyle[kiokuData[name]?.id ?? -1] ?? []).map(c => c.selectionAbilityMstId)
+
+/** A bench unit: the kit at the given levels with only its EX crystalis - no portrait, support or other crystalis,
+ *  whatever `args` carries (the same for Lux and for every character measured). */
 export function benchKioku(args: Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>, as?: BenchIdentity): PvPKioku {
-    const k = new PvPKioku({ ...args, crysIDs: args.crysIDs ?? [], subCrysIDs: args.subCrysIDs ?? [] } as KiokuArgs)
+    const k = new PvPKioku({ ...args, portrait: undefined, supportKey: undefined, crysIDs: exCrysIds(args.name), subCrysIDs: [] } as KiokuArgs)
     if (as && ("element" in as || "role" in as)) {
         (k as any).data = { ...k.data, ...("element" in as ? { element: as.element } : {}), ...("role" in as ? { role: as.role } : {}) }
+    }
+    // A dealer tested as an element also deals damage in it: "forest DMG dealt" buffs and the like are gated on the
+    // element of the hit, not of the unit (UpElementDmgRateRatioUnitState, 0x16e3d70). Without this a Forest-identity Lux
+    // still hit in Light and got only her unit-gated buffs (Sumire's forest field gave its crit rate but not its +30%).
+    if (as?.element) {
+        const num = Object.entries(elementMap).find(([, name]) => name === as.element)?.[0]
+        if (num) k.damageElementOverride = Number(num)
     }
     return k
 }
@@ -160,6 +173,10 @@ export interface SimOptions {
     // nothing else is random; `report.random` says whether anything was (a real roll, or a read of whether a hit crit).
     expectedCrits?: boolean
     report?: { random: boolean }
+    // [BENCH] Damage per AV instead of a hard cut at `av`: the damage of the dealer's actions within the run, divided by
+    // the time of its next own turn (scaled back to `av`). Speed then counts continuously: a turn that comes 3 AV earlier
+    // shows, where with the hard cut it only matters once it fits one more action in.
+    perAv?: boolean
 }
 
 // How players actually run some kits, where auto play (Battle Skill whenever there is SP) is unrealistic. Applied to
@@ -167,10 +184,19 @@ export interface SimOptions {
 //   Tenebrous Arcana: her Battle Skill grants an extra action; she uses it 3 times, then a Basic Attack.
 //   Thunder Torrent: always her Battle Skill, its haste on the dealer (another ally when she is the dealer), never
 //   herself.
+//   Judgement Earth: her Battle Skill (heal, MP, and at A2 "special attack DMG +20%" on whoever it heals) on the dealer.
+//   Baldamente Fortissimo: her debuff comes from her counterattack, and the dummies never attack. Her counter's
+//   elemental RES down (follow-up 650310, 5% x 3 stacks) is kept on the main target at max stacks for the whole run.
 const PLAY_PATTERNS: Record<string, {
     action?: (unit: KiokuState) => TargetType.skillId | TargetType.attackId
     target?: (unit: KiokuState, dealer: KiokuState) => KiokuState | undefined
+    // States this unit keeps on the main target for the whole run, at max stacks (re-set before every action).
+    enemyStates?: () => SkillDetail[]
 }> = {
+    "Judgement Earth": { target: (u, dealer) => dealer !== u ? dealer : undefined },
+    "Baldamente Fortissimo": {
+        enemyStates: () => ((skillDetailsByMstId.get(650310) ?? []) as SkillDetail[]).filter(d => d.abilityEffectType === "DWN_ELEMENT_RESIST_ACCUM_RATIO"),
+    },
     "Tenebrous Arcana": { action: u => u.skillStreak >= 3 ? TargetType.attackId : TargetType.skillId },
     "Thunder Torrent": {
         action: () => TargetType.skillId,
@@ -227,6 +253,17 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
         const units = [...team1.kiokuStates, ...team2.kiokuStates].filter(k => !k.isDead)
         if (battle.elapsed === 0 || units.every(k => k.secondsUntilAbleToAct() > 0)) team1.currentSp = Math.max(team1.currentSp, SP_REFILL)
     }
+    // Kit special cases (PLAY_PATTERNS.enemyStates): kept on the main target as if given by that unit, at max stacks.
+    const preApplied = team1.kiokuStates.flatMap(u => (PLAY_PATTERNS[u.kioku.name]?.enemyStates?.() ?? [])
+        .map(d => ({ giver: u, d: scaleGivenState(d, u.filteredEffects()) })))
+    const keepPreApplied = () => {
+        const main = team2.kiokuStates[Math.trunc(team2.kiokuStates.length / 2)]
+        if (!main || main.isDead) return
+        for (const { giver, d } of preApplied) main.activeEffectDetails.set(`bench:${giver.posIdx}:${skillDetailId(d)}`, {
+            applier: giver.kioku.name, ...d, turn: 99, _accumCount: Math.max(1, d.value2 || 1), _applierState: giver,
+            _isExemptPassingTurnOnce: false,
+        } as any)
+    }
     let total = 0
     // A vortex pops inside the hit that sets it off, but it is its owner's damage (logged again as the owner's
     // "dot" event), so it is taken out of the hit.
@@ -240,15 +277,28 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     count(battle.getCurrentState().events)
     // An action counts if it starts within the run: the one that would start after it is played (the battle only
     // knows its time once it advances to it) but not counted.
+    const isDealerTurn = (st: BattleSnapshot) => st.lastTeamIsTeam1 && st.lastActorPos === dealerPos && !st.actionLabel
+        && st.lastTargetType !== TargetType.fuaId
+    let nextTurn = 0
     while (!battle.isOver) {
         refillSp()
         keepAilment()
+        keepPreApplied()
         const states = battle.executeNextAction()
-        if (battle.elapsed > opts.av) break
+        if (battle.elapsed > opts.av) { if (states.some(isDealerTurn)) nextTurn = battle.elapsed; break }
         for (const state of states) { count(state.events); opts.onAction?.(state, battle.elapsed) }
     }
+    // Per-AV rate: play on (counting nothing) to the dealer's first own turn past the run.
+    if (opts.perAv && !nextTurn) {
+        while (!battle.isOver && battle.elapsed < opts.av * 3) {
+            refillSp()
+            keepAilment()
+            keepPreApplied()
+            if (battle.executeNextAction().some(isDealerTurn)) { nextTurn = battle.elapsed; break }
+        }
+    }
     if (opts.report) opts.report.random = battle.rng.critReads > 0 || battle.rng.events.length > 0
-    return total
+    return opts.perAv && nextTurn > 0 ? total * opts.av / nextTurn : total
 }
 
 // ── The two Kioku Grid charts ──
@@ -277,8 +327,8 @@ type KiokuInput = Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>
  * Support chart: a Lux dealer with the character in slot 2 and three Lux fillers, compared to five Lux; the dealer
  * has no element or role (the main bar) or one the character's kit is limited to (variant bars). Attacker chart:
  * the character as the dealer (its own element and role) compared to Lux as the dealer, both with four fillers.
- * Lux's baselines are computed once per identity / enemy count and reused. The Lux dealer (support chart) and the Lux
- * reference dealer (attacker chart) are A5 at max levels; the Lux fillers are A0 at max levels, so they have no follow-up.
+ * Lux's baselines are computed once per identity / enemy count and reused. The Lux reference dealer (attacker chart) is A5
+ * at max levels; the support chart's Lux dealer and every Lux filler are A0 at max levels, so they have no follow-up.
  */
 export class LuxBenchCharts {
     private readonly luxArgs: KiokuInput
@@ -289,13 +339,13 @@ export class LuxBenchCharts {
     private readonly simBase = new Map<string, number>()
     private readonly opts: BenchOptions
 
-    // Lux as given (the page passes A5, max levels) for the dealer / reference. Her A1 follow-up charges a Magic from every
-    // ally's battle skill, so her own damage also reflects when the character next to her uses battle skills. The fillers
-    // are the same Lux at A0 (no follow-up), so only the dealer and the measured character act beyond their turns.
+    // Lux as given (the page passes A5, max levels) for the attacker chart's reference. In the support chart the dealer and
+    // the fillers are the same Lux at A0: her A1 follow-up charges a Magic from every ally's battle skill, so at A5 a
+    // character casting several battle skills a turn (Tenebrous Arcana's extra actions) showed as a damage buff.
     constructor(lux: KiokuInput, opts: BenchOptions) {
-        this.luxArgs = { ...lux }
+        this.luxArgs = { ...lux, ascension: 0 }
         this.opts = opts
-        this.filler = benchKioku({ ...this.luxArgs, ascension: 0 }, { element: undefined, role: undefined })
+        this.filler = benchKioku(this.luxArgs, { element: undefined, role: undefined })
         this.reference = benchKioku(this.luxArgs)
     }
 
@@ -315,7 +365,7 @@ export class LuxBenchCharts {
     // random hits or targets) or reacts to crits (on-crit stacks, crit-count conditions) can't be averaged that way:
     // it falls back to the mean of `seeds` rolled battles (seeds 0..seeds-1).
     private simTotal(team: PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = []): number {
-        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, ailment, immune }
+        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, ailment, immune, perAv: true }
         const report = { random: false }
         const expected = simulatedDealerDamage(team, 0, enemies, { ...base, seed: 0, expectedCrits: true, report })
         if (!report.random) return expected

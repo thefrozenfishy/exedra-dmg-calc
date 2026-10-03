@@ -960,8 +960,7 @@ export function ailmentConditionValues(csvs: (string | undefined)[]): Ailment[] 
     for (const setId of csvs.flatMap(csv => (csv ?? "").split(","))) {
         for (const condId of (battleConditionSets[setId]?.battleConditionMstIdCsv ?? "").split(",")) {
             const cond = battleConditions[condId]
-            if (cond?.compareContent !== CompareContent.ABILITY_EFFECT) continue
-            const a = ailmentOf(cond.compareValue)
+            const a = ailmentConditionType(cond)
             if (a) found.add(a)
         }
     }
@@ -971,17 +970,30 @@ export function ailmentConditionValues(csvs: (string | undefined)[]): Ailment[] 
 const ailmentOf = (stateType: string): Ailment | undefined =>
     (Object.values(Ailment) as string[]).find(a => stateType === a || stateType.startsWith(a + "_")) as Ailment | undefined
 
+// The ailment an ABILITY_EFFECT condition (12, "has state X") or ABILITY_EFFECT_UNIT_COUNT condition (205, "N units
+// with state X", compareValue "X,N" - Atomo Arrabbiato's "when a poisoned enemy is present") is about, if any.
+function ailmentConditionType(cond: BattleCondition | undefined): Ailment | undefined {
+    if (cond?.compareContent === CompareContent.ABILITY_EFFECT) return ailmentOf(cond.compareValue)
+    if (cond?.compareContent === CompareContent.ABILITY_EFFECT_UNIT_COUNT) return ailmentOf(cond.compareValue.split(",")[0])
+    return undefined
+}
+
 // [APPROXIMATION] Max Damage assumes conditions are met; this keeps only the ailment checks among them: an ABILITY_EFFECT
 // condition about an ailment is evaluated against `stateTypes` (the state types the enemies carry), whichever unit it
 // names, and every other condition counts as met. Each csv's sets are OR'd, conditions in a set AND'd, as in
 // isConditionSetActiveForPvP.
-export function ailmentConditionsMet(csvs: (string | undefined)[], stateTypes: string[]): boolean {
+// `enemyCount`: how many units carry `stateTypes` (all enemies), for the unit-count conditions (205).
+export function ailmentConditionsMet(csvs: (string | undefined)[], stateTypes: string[], enemyCount = 1): boolean {
     return csvs.every(csv => {
         const ids = (csv ?? "").split(",").filter(id => id.length && id !== "0")
         if (!ids.length) return true
         return ids.some(setId => (battleConditionSets[setId]?.battleConditionMstIdCsv ?? "").split(",").every(condId => {
             const cond = battleConditions[condId]
-            if (cond?.compareContent !== CompareContent.ABILITY_EFFECT || !ailmentOf(cond.compareValue)) return true
+            if (!ailmentConditionType(cond)) return true
+            if (cond.compareContent === CompareContent.ABILITY_EFFECT_UNIT_COUNT) {
+                const [prefix, threshold] = cond.compareValue.split(",")
+                return compareInt(cond.compareOperator, stateTypes.some(t => t.startsWith(prefix)) ? enemyCount : 0, threshold ?? "0")
+            }
             return compareAbilityEffectList(cond.compareOperator, stateTypes, cond.compareValue)
         }))
     })

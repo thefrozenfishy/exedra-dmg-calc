@@ -159,3 +159,9 @@
   active condition csv (MECHANICS section 8, "Duplicate states"). Keying `activeEffectDetails` by `skillDetailId` alone
   stacked Light of Reckoning's three follow-up "+48% special DMG" buffs (144%) and let two givers of the same detail
   overwrite each other. Fixed 2026-10-03 in `storeTimedEffect`; accum states still merge per detail id (`mergeAccumEffect`).
+- **Permanent (passive) states are per giver too.** `storePermanentState` used to drop a second copy of the same passive
+  detail from another ally, so two "Indomitable Guard++" counted once (sim 8% too little damage cut). Fixed 2026-10-03;
+  accum types still merge per detail id. Also: max HP must include UP_HP_FIXED (sub-crys), not just UP_HP_RATIO.
+- **TurnStart / TurnEnd passes have no skill.** The TS used to pass the turn's chosen action type into the TurnStart and
+  TurnEnd passes, so AfterProcess passives gated on ActorSkillType fired twice per turn (Rose Garden minions' Magic
+  2 -> 4; Absolute Venus' 20-token follow-up fired before her skill). Fixed 2026-10-03 in `fireTiming`.

@@ -1,6 +1,6 @@
 # Effect types: data usage vs engine coverage (GENERATED - do not edit)
 
-Built from `main @ a03b8fb 2026-10-03` + uncommitted src/models changes. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
+Built from `main @ 9ec99d3 2026-10-03` + uncommitted src/models changes. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
 
 - **kiokus** = collectable kiokus (getStyleMstList) whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).
 - **stages** = quest stages whose enemies use it (skill sets + enemy passives).
@@ -116,7 +116,7 @@ Built from `main @ a03b8fb 2026-10-03` + uncommitted src/models changes. Regener
 | DWN_DEF_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | DWN_DEF_RATIO | DwnDefRatioUnitState | 15 | 652 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Atomo Arrabbiato, Bebe-O'-Lantern, Cherry Ballad |
 | DWN_ELEMENT_DMG_RATE_RATIO | DwnElementDmgRateRatioUnitState | 0 | 0 | yes | UnitStateEngine.ts |  |
-| DWN_ELEMENT_RESIST_ACCUM_RATIO | DwnElementResistRatioAccumUnitState | 10 | 658 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Absolute Venus, Atomo Arrabbiato, Baldamente Fortissimo |
+| DWN_ELEMENT_RESIST_ACCUM_RATIO | DwnElementResistRatioAccumUnitState | 10 | 658 | yes | LuxBench.ts, PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Absolute Venus, Atomo Arrabbiato, Baldamente Fortissimo |
 | DWN_EP_RECOVER_RATE_RATIO | DwnRecoveryEpRateRatioRatioUnitState | 0 | 650 | yes | PvPTeam.ts, UnitStateEngine.ts |  |
 | DWN_GIV_BLEED_DMG_RATIO | DwnGivBleedDmgRatioUnitState | 0 | 0 | yes | UnitStateEngine.ts |  |
 | DWN_GIV_BREAK_POINT_DMG_FIXED | DwnGivBreakPointDmgFixedUnitState | 0 | 0 | yes | BreakPoint.ts, UnitStateEngine.ts |  |
@@ -265,7 +265,7 @@ Built from `main @ a03b8fb 2026-10-03` + uncommitted src/models changes. Regener
 | UP_HATE | UpHateUnitState | 5 | 0 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts, helpers.ts | Folter Gefängnis, La Lumière, Screw Zone |
 | UP_HEAL_RATE_RATIO | UpHealRateRatioUnitState | 15 | 124 | yes | UnitStateEngine.ts, effectText.ts | Circle Of Fire, Doppel of Silence, Glitterjoy Snow Globe |
 | UP_HP_ATK_DEF_RATIO |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
-| UP_HP_FIXED | UpHpFixedUnitState | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
+| UP_HP_FIXED | UpHpFixedUnitState | 0 | 0 | yes | PvPTeam.ts, UnitStateEngine.ts |  |
 | UP_HP_RATIO | UpHpRatioUnitState | 18 | 0 | yes | PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Ayame's Kioku, Circle Of Fire, Doppel of Silence |
 | UP_NMATK_FIXED |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |
 | UP_NMATK_RATIO |  | 0 | 0 | prefix/template? | UnitStateEngine.ts |  |

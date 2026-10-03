@@ -75,12 +75,7 @@ export class PvPBattle {
         this.team2.rng = this.rng;
         this.team1.manualTargeting = this.team2.manualTargeting = !!opts?.manualTargeting;
         this.team1.isTeam1 = true;
-        const hook = (actor: KiokuState, type: TargetType, label?: string) => {
-            this.team2.syncLinkHp()
-            this.actionSnapshots.push(this.getCurrentState({ actor, type, label }))
-        }
-        this.team1.snapshotHook = hook;
-        this.team2.snapshotHook = hook;
+        this.bindSnapshotHooks();
         this.team2.eventLog = this.team1.eventLog; // one shared, ordered log
 
         // [STRUCTURAL FIX, revision 3 - see report] Each phase now runs for BOTH teams
@@ -123,6 +118,18 @@ export class PvPBattle {
         this.startTimingActs = this.collectStartTimingActs()
 
         if (!this.isOver) this.traverseToNextActor()
+    }
+
+    // The per-skill hook of both teams: syncs the linked HP pool, then (record = true) snapshots the skill for the
+    // display. A cloned battle (models/BattleClone.ts) calls this again so the hooks point at the clone; the fight
+    // solver passes record = false (no snapshots, same game state).
+    bindSnapshotHooks(record = true): void {
+        const hook = (actor: KiokuState, type: TargetType, label?: string) => {
+            this.team2.syncLinkHp()
+            if (record) this.actionSnapshots.push(this.getCurrentState({ actor, type, label }))
+        }
+        this.team1.snapshotHook = hook;
+        this.team2.snapshotHook = hook;
     }
 
     // [CONFIRMED 3.19] TurnReferee.CalculateNextRound (0x15c18b0): t < 150 -> round 1, else floor((t - 150) / 100) + 2.

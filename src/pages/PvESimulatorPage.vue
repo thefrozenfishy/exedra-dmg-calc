@@ -450,6 +450,11 @@
           from the start. Decisions are saved with the team when a saved team is selected above.</p>
       </div>
     </section>
+
+    <!-- Fight solver: least-AV clear search (components/FightSolver.vue) -->
+    <FightSolver v-if="showSolver" :can-run="canRun && !!waves.length" :slots="solverSlots" :stage-id="stageId" :seed="seed"
+      :rng-mode="rngMode" :party-buff-id="partyBuffId || undefined"
+      :raid-carry="raidAttempts[raidAttempts.length - 1]" />
   </div>
 </template>
 
@@ -460,6 +465,7 @@ import { useSetting } from '../store/settingsStore'
 import CharacterEditor from '../components/CharacterEditor.vue'
 import StagePicker from '../components/StagePicker.vue'
 import BattleTimeline from '../components/BattleTimeline.vue'
+import FightSolver from '../components/FightSolver.vue'
 import SegmentedToggle from '../components/SegmentedToggle.vue'
 import RngControls from '../components/RngControls.vue'
 import ImageActionsToolbar from '../components/ImageActionsToolbar.vue'
@@ -798,6 +804,9 @@ const partyBuffChoice = computed<string>({
   set: v => { partyBuffId.value = Number(v) },
 })
 const raidAttempts = shallowRef<RaidCarry[]>([])
+// The fight solver's team: the filled slots as plain data (it builds its own units in a worker).
+const solverSlots = computed(() => filledSlots.value.map(([s]) => s))
+const showSolver = computed(() => localStorage.getItem("solver") === "show")
 const passiveNames = new Map<number, { name: string, description: string }>((passiveMstJson as any[]).map(p => [p.passiveSkillMstId, { name: p.name, description: String(p.description ?? '').replace(/<br>/g, '\n') }]))
 const passiveInfo = (id: number) => passiveNames.get(id) ?? { name: `Passive ${id}`, description: '' }
 

@@ -70,8 +70,9 @@ Longer derivations: `src/models/PVE_PARAMS_3.19.md`, `PVE_ENEMY_AI_3.19.md`, `MI
   RemainCount > 0. [C]
 - SPD is decimal with the ATK shape (ratio (v/10)/100 of base, fixed v). [C]
 - Crit is float32; enemy CTR/CTD data is per-mille (`/10` = percent: criticalDamageRate 100 -> +10 %). [C]
-- UP_HP_RATIO: MaxHP bonus `Ceiling(Σ baseHP × (v1/10)/100)`; HP rises by the gain; when the bonus shrinks HP is
-  only clamped. [C]
+- Max HP (`BattleUnit.UpdateParameter` 0x1388cd0): bonus = `Ceiling(Σ active IMaxHpVariation)`, UP_HP_RATIO =
+  `InitialHP × (v1/10)/100` (0x16e5b80), UP_HP_FIXED = `(decimal)(float)v1` (0x16e5b00, sub-crys "Max HP +420");
+  HP rises by the gain; when the bonus shrinks HP is only clamped. [C] Verified in-game 2026-10-03 (+420 +40 -> +460).
 
 ## 4. Turn order, rounds, turn counter
 
@@ -104,6 +105,11 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
 ```
 - `PassiveSkill.Triggering` 0x14a2c20: for a timing, every living unit on **both teams** runs its passives, then
   every living unit runs AfterProcess (9). Ends with `ResetZoneStatePatternMstId` on every unit. [C] TS `fireTiming`.
+- Skill passed per pass: `ActExecutor.TurnBegin` (0x17e1b30) / TurnEnd call `PassiveSkill.Triggering(gd, 3|6, actor,
+  null, null, ...)` - no main target, **no actorActiveSkill**, so ActorSkillType (401) is false in the TurnStart /
+  TurnEnd passes and their AfterProcess; only ExecuteSkill's AttackEnd (5) passes the skill. In-game check
+  2026-10-03: the Rose Garden minions' AfterProcess "+2 Magic when not attacked" fires once per ally battle skill
+  (0 -> 2/5), not also after the TurnStart. [C] TS `fireTiming` (skillType).
 - Each ExecuteSkill has its own notice bundle (tallies reset before each follow-up). Team conditions read the
   notices of units **in that team**. [C]
 - Follow-ups (`AdditionalSkillActAbilityEffectBase.Triggering` 0x18ea740): none from a broken / can't-act unit,
@@ -244,7 +250,10 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   / detail id is NOT compared. IBlendable (accum / unique) -> Blend; otherwise `IsPriorityOver` (never overridden, true)
   -> old one List.Remove'd (no OnRemovingFromCondition), new one added. Passive origin: b__2 0x15c7d90 (same origin,
   MstId, giver) / IAccum b__3. So Light of Reckoning's 3 follow-ups each giving "special attack DMG +48%" (cond 317) =
-  one state; the same buff from two different givers = two states. [C] TS `storeTimedEffect` (simulators), `MaxDamage.isGameDuplicate` (Max Damage), checkMechanics #15.
+  one state; the same buff from two different givers = two states. [C] Passive origin (b__2, fields 0x54 origin /
+  0x14 MstId / 0x58 UserUnitId) likewise: the same passive from two allies = two states, both apply - two "Indomitable
+  Guard++" (-8% DMG taken each, Down pass on the running value) give x0.92 x0.92 in-game (2026-10-03 fixture
+  rose-garden-indomitable-guard-x2). IAccum (b__3 0x15c7de0) compares origin + AbilitySource, not the giver. [C] TS `storeTimedEffect` (simulators), `MaxDamage.isGameDuplicate` (Max Damage), checkMechanics #15.
 - State-add roll (`UnitStateBase.GetProcessedProbability` 0x16dfa50): fixed probability as is; else
   `p = clamp(Floor2(prob × hit × parry × secondary), 0, 100)`, fails when `p*10 <= Next(1000)`.
   hit = `max((neg ? clamp((baseHit/10 + Σup)/100, 0, 1) : 0) + (ailment ? AllAbnormalHit/100 : 0) + 1, 0)`;

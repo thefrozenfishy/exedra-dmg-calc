@@ -344,10 +344,15 @@ export interface DamageResult {
     steps: { label: string, value: string }[]; // decimal after each pipeline step
 }
 
+// Bench only: an elemental row of a unit with PvPKioku.damageElementOverride is dealt in that element (non-elemental
+// rows stay non-elemental). Without the override this is the row's own element, as in the game.
+const benchElement = (unit: KiokuState, element: number): number =>
+    element ? ((unit.kioku as any).damageElementOverride ?? element) : element
+
 export function getAttackDamageResult(attacker: KiokuState, defender: KiokuState, detail: SkillDetail, damageBaseType: DamageBaseType, battleTypeOrOpts: BattleType | DamageOptions = BattleType.Pvp): DamageResult {
     const opts: DamageOptions = typeof battleTypeOrOpts === "object" ? battleTypeOrOpts : { battleType: battleTypeOrOpts };
     const battleType = opts.battleType ?? BattleType.Pvp;
-    const attackElement: number = opts.attackElementOverride ?? detail.element ?? 0;
+    const attackElement: number = opts.attackElementOverride ?? benchElement(attacker, detail.element ?? 0);
     const steps: { label: string, value: string }[] = [];
     const step = (label: string, v: CsDecimal) => { steps.push({ label, value: v.toString() }); return v; };
 
@@ -453,7 +458,7 @@ export function getFinalDamageExtra(totalDamage: number, ratio: CsDecimal): numb
 //       -> x correlation ratio -> difficulty -> PvP suppression -> Max(1, d) -> Ceiling.
 // No crit, no shield, no barrier cut in this function.
 export function getSlipDamageResult(dotOwner: KiokuState, target: KiokuState, detail: SkillDetail, damageBaseType: DamageBaseType, battleType: BattleType = BattleType.Pvp): number {
-    const attackElement: number = detail.element ?? 0;
+    const attackElement: number = benchElement(dotOwner, detail.element ?? 0);
     let d = getDamageBase(getInitialDamageBaseParamValue(dotOwner, damageBaseType), f32(f32(detail.value1) / 1000));
     d = getAppliedDamageOfBreakSituation(target, d);
     d = getDefenseCorrectedDamage(dotOwner, target, d, damageBaseType);

@@ -81,6 +81,7 @@ const friendlySkills = [
     "UP_GIV_SLIP_DMG_RATIO",     // [CONFIRMED] "DOT DMG+" - only affects DOT ticks, see UnitStateEngine.ts
     "DWN_RCV_DMG_RATIO",         // [CONFIRMED] "Decrease DMG Taken" - a defensive buff despite the DWN_ prefix
     "UP_HP_RATIO",               // [CONFIRMED 3.19] [IMPLEMENTED] max-HP-% increase - see KiokuState.updateMaxHp
+    "UP_HP_FIXED",               // [CONFIRMED 3.19] [IMPLEMENTED] flat max-HP increase (sub-crys "Max HP +N") - see KiokuState.updateMaxHp
     "ADD_BUFF_TURN", "ADD_BUFF_TURN_IMM",     // [CONFIRMED 3.19] [IMPLEMENTED] state: +value1 turns to buffs the holder gives (storeTimedEffect); _IMM: instant +value2 (applyEffect)
     "GAIN_SP_FIXED",   // [CONFIRMED] [IMPLEMENTED] flat add to the attack/skill alternation counter
     "REMOVE_ALL_ABNORMAL", // [CONFIRMED] [IMPLEMENTED] cleanses Ailment-type states, mirrors REMOVE_ALL_DEBUFF
@@ -289,6 +290,10 @@ function withEachTarget<T>(user: KiokuState, target: KiokuState, fn: () => T): T
     eachTargetCtx = { user, target }
     try { return fn() } finally { eachTargetCtx = prev }
 }
+// Module-level battle state that outlives one skill: the fight solver (models/FightSolver.ts) saves it with each
+// cloned battle and restores it before running that clone (the other module state is scoped to one launch / target).
+export const saveModuleBattleState = () => ({ lastLaunchSkillType })
+export function restoreModuleBattleState(s: { lastLaunchSkillType: string | undefined }): void { lastLaunchSkillType = s.lastLaunchSkillType }
 // The running launch, for code outside PvPTeam (e.g. UI probes). Undefined between skills.
 export const currentLaunch = (): Readonly<LaunchContext> | undefined => activeLaunch
 
@@ -518,13 +523,17 @@ export class KiokuState {
     // please let me know and I'll re-examine the four lambda bodies.
     turnOrderPriority = 0
 
-    stateGen: (actor: KiokuState, target: KiokuState, actionType?: TargetType, trueActorUnit?: KiokuState, mainTargetUnit?: KiokuState, notice?: AffectedUnitNotice) => BattleState
+    // The condition bundle for this unit's checks: always its own team's (PvPTeam.generateState). A method, not a
+    // stored closure, so a cloned battle (models/BattleClone.ts, fight solver) keeps every unit pointing at its clone.
+    stateGen(actor: KiokuState, target: KiokuState, actionType?: TargetType, trueActorUnit?: KiokuState, mainTargetUnit?: KiokuState, notice?: AffectedUnitNotice): BattleState {
+        return this.team.generateState(actor, target, actionType, trueActorUnit, mainTargetUnit, notice)
+    }
 
     // BattleUnit.PositionId (1-5). Characters: slot + 1. Enemies: set by PvPTeam.layoutEnemyPositions (a wave
     // is centred, see PvE.wavePositionIds) or by the summon that created them.
     positionId: number
 
-    constructor(posIdx: number, teamLabel: string, team: PvPTeam, kioku: PvPKioku, stateGen: KiokuState["stateGen"]) {
+    constructor(posIdx: number, teamLabel: string, team: PvPTeam, kioku: PvPKioku) {
         this.posIdx = posIdx
         this.positionId = posIdx + 1
         this.teamLabel = teamLabel
@@ -536,7 +545,6 @@ export class KiokuState {
         this.maxMp = kioku.data.ep
         this.maxBp = kioku.data.bp ?? 0
         this.currentMaxMagic = kioku.maxMagicStacks
-        this.stateGen = stateGen
         // ReDriveBattleCore.BattleUnit's HP is initialized from the character's base HP
         // stat (BattleParameter.HP), i.e. kioku.getBaseHp() here - no in-battle buffs
         // apply to the starting HP pool itself, only to incoming/outgoing damage.
@@ -1051,13 +1059,17 @@ export class KiokuState {
     // skipped when Mathf.Approximately. It runs after EVERY state (not once after all passives), so
     // float rounding depends on the exact order of SPD states and HASTE/SLOW - which is what breaks
     // exact ties between otherwise identical units (e.g. mirrored Thunder Torrents).
-    // [CONFIRMED 3.19] UP_HP_RATIO (UpHpRatioUnitState, IMaxHpVariation 0x16e5b80) in BattleUnit.UpdateParameter
-    // (0x1388cd0): bonus = Ceiling(sum of base HP * (v1/10)/100); MaxHP = base + bonus; when the bonus grows the
-    // unit also gains the difference as HP; when it shrinks HP is only clamped to the new MaxHP.
+    // [CONFIRMED 3.19] BattleUnit.UpdateParameter (0x1388cd0) sums every active IMaxHpVariation state:
+    // UP_HP_RATIO (UpHpRatioUnitState 0x16e5b80) = InitialHP * ((float)v1/10)/100 and UP_HP_FIXED
+    // (UpHpFixedUnitState 0x16e5b00) = (decimal)(float)v1 (e.g. "Max HP +420" sub-crys); bonus = Ceiling(sum);
+    // MaxHP = base + bonus; when the bonus grows the unit also gains the difference as HP; when it shrinks HP is
+    // only clamped to the new MaxHP.
     updateMaxHp(): void {
         const baseHp = this.kioku.getBaseHp()
+        const fx = this.filteredEffects()
         let sum = 0
-        for (const d of this.filteredEffects()["UP_HP_RATIO"] ?? []) sum += baseHp * (f32(f32(d.value1) / 10) / 100)
+        for (const d of fx["UP_HP_FIXED"] ?? []) sum += f32(d.value1)
+        for (const d of fx["UP_HP_RATIO"] ?? []) sum += baseHp * (f32(f32(d.value1) / 10) / 100)
         const bonus = Math.ceil(sum)
         const oldBonus = this.maxHp - baseHp
         if (bonus === 0 && oldBonus === 0) return
@@ -1368,7 +1380,14 @@ export class KiokuState {
         if (!rollAppliesEffect(detail, applierState, t, this.team.rng)) return false;
         if (this.mergeUniqueState(t, detail, applierState)) { t.updateSpd(); this.noteAddedState(t, detail); return true }
         this.noteAddedState(t, detail)
-        const key = String(skillDetailId(detail))
+        let key = String(skillDetailId(detail))
+        // [CONFIRMED 3.19] UnitCondition.GetDuplicateUnitState (0x15c8f90): a passive-origin state is a duplicate only
+        // with the same EffectOrigin, MstId AND UserUnitId (giver) - lambda b__2 (0x15c7d90). The same passive from two
+        // allies (e.g. two "Indomitable Guard++" crys) is two states and both apply. IAccum states (b__3 0x15c7de0)
+        // match on origin + AbilitySource without the giver, so they keep merging per detail id.
+        const other = t.passiveEffectDetails.get(key) as any
+        if (other && other._applierState !== applierState && !ACCUM_RATIO_EFFECT_TYPES.has(detail.abilityEffectType))
+            key = `${key}@${applierState.kioku.name}#${applierState.posIdx}`
         const existing = t.passiveEffectDetails.get(key)
         if (existing) {
             if (ACCUM_RATIO_EFFECT_TYPES.has(detail.abilityEffectType)) { mergeAccumEffect(existing, detail); t.updateSpd() }
@@ -1863,7 +1882,10 @@ export class KiokuState {
             if (cd) Object.assign(cd, { max: 0, value: 0, cancelMax: 0, cancelTotal: 0, unit: undefined })
             return detail.value1
         }
-        if (detail.turn) {
+        // [CONFIRMED data] A turn count only means something on a unit state: 46 skill rows of instant effects carry one
+        // anyway (RECOVERY_HP / GAIN_EP_RATIO "turn=2" on Judgement Earth's skills, a HASTE, a LOSE_EP_FIXED, ...). Those
+        // were stored as timed states and never happened (no heal, no MP); they trigger like any other instant effect.
+        if (detail.turn && UNIT_STATE_TYPES.has(detail.abilityEffectType)) {
             // (Timed passive states used to be deleted from the bank after their first trigger,
             // so e.g. an "on attack end: SPD +10% for 1 turn" passive fired once per battle.)
             effTargets.forEach(t => this.storeTimedEffect(t, detail, this.kioku.name, this))
@@ -2092,24 +2114,26 @@ export class PvPTeam {
     appliedSkillEffectTypesThisAction: Set<string> = new Set()
     lastActionNotices: AffectedUnitNotice[] = []
 
-    generateState = (actor: KiokuState, target: KiokuState, actionType?: TargetType, trueActorUnit?: KiokuState, mainTargetUnit?: KiokuState, notice?: AffectedUnitNotice): BattleState => ({
-        actorTeam: this,
-        enemyTeam: this.otherTeam,
-        actor,
-        target,
-        actionType,
-        // An Ether Blow is a follow-up (TargetType.fuaId) whose ActorSkillType is "EtherBlow" (SkillMst type 5).
-        actorSkillType: actionType === TargetType.fuaId && lastLaunchSkillType === "EtherBlow" ? "EtherBlow" : actionType,
-        trueActorUnit,
-        mainTargetUnit,
-        notice,
-    })
+    generateState(actor: KiokuState, target: KiokuState, actionType?: TargetType, trueActorUnit?: KiokuState, mainTargetUnit?: KiokuState, notice?: AffectedUnitNotice): BattleState {
+        return {
+            actorTeam: this,
+            enemyTeam: this.otherTeam,
+            actor,
+            target,
+            actionType,
+            // An Ether Blow is a follow-up (TargetType.fuaId) whose ActorSkillType is "EtherBlow" (SkillMst type 5).
+            actorSkillType: actionType === TargetType.fuaId && lastLaunchSkillType === "EtherBlow" ? "EtherBlow" : actionType,
+            trueActorUnit,
+            mainTargetUnit,
+            notice,
+        }
+    }
 
     constructor(kiokus: PvPKioku[], teamLabel: string, debug = false, battleType: BattleType = BattleType.Pvp) {
         this.debug = debug;
         this.teamLabel = teamLabel;
         this.battleType = battleType;
-        this.kiokuStates = kiokus.map((k, i) => new KiokuState(i, teamLabel, this, k, this.generateState))
+        this.kiokuStates = kiokus.map((k, i) => new KiokuState(i, teamLabel, this, k))
         this.layoutEnemyPositions()
     }
 
@@ -2149,7 +2173,7 @@ export class PvPTeam {
         const kioku = new EnemyKioku(template) as unknown as PvPKioku
         const slot = this.kiokuStates.findIndex(k => k.isDead && k.positionId === pos)
         const idx = slot >= 0 ? slot : this.kiokuStates.length
-        const unit = new KiokuState(idx, this.teamLabel, this, kioku, this.generateState)
+        const unit = new KiokuState(idx, this.teamLabel, this, kioku)
         unit.positionId = pos
         if (slot >= 0) this.kiokuStates[slot] = unit; else this.kiokuStates.push(unit)
         kioku.effects.forEach(e => unit.addEffectToBank(e))
@@ -2273,7 +2297,7 @@ export class PvPTeam {
         if (f32(f32(main.currentHp) / f32(main.maxHp)) * 1000 > next.threshold) return undefined
         mc.step = next.step
         const kioku = new EnemyKioku(next.appearance) as unknown as PvPKioku
-        const unit = new KiokuState(main.posIdx, this.teamLabel, this, kioku, this.generateState)
+        const unit = new KiokuState(main.posIdx, this.teamLabel, this, kioku)
         unit.positionId = main.positionId
         this.kiokuStates[this.kiokuStates.indexOf(main)] = unit
         kioku.effects.forEach(e => unit.addEffectToBank(e))
@@ -2324,7 +2348,7 @@ export class PvPTeam {
     // This method now only records the enemy team reference.
     // Next PvE wave: new units replace this team's (wiped) units.
     replaceUnits(kiokus: PvPKioku[]): void {
-        this.kiokuStates = kiokus.map((k, i) => new KiokuState(i, this.teamLabel, this, k, this.generateState))
+        this.kiokuStates = kiokus.map((k, i) => new KiokuState(i, this.teamLabel, this, k))
         this.layoutEnemyPositions()
     }
 
@@ -2399,8 +2423,14 @@ export class PvPTeam {
     // it queued executes (used to record the finished action for the battle display).
     fireTiming(timing: ProcessTiming, actor?: KiokuState, mainTarget?: KiokuState, actionType?: TargetType, beforeFollowUps?: () => void): void {
         const teams = this.bothTeams
-        const fuas = teams.map(t => t.applyPassivesForTiming(timing, actionType, actor, mainTarget))
-        teams.forEach((t, i) => { fuas[i] = mergeFuaMaps(fuas[i], t.applyPassivesForTiming(ProcessTiming.AFTER_PROCESS, actionType, actor, mainTarget)) })
+        // [CONFIRMED 3.19] ActExecutor.TurnBegin (0x17e1b30) and TurnEnd call PassiveSkill.Triggering(gd, 3 / 6, actor,
+        // null, null, ...): no main target and NO actorActiveSkill, so ActorSkillType (401) is false in the TurnStart /
+        // TurnEnd passes and their AfterProcess. Only ExecuteSkill's AttackEnd (5) passes the skill. E.g. the Rose Garden
+        // minions' "+2 Magic when not attacked during an enemy's turn" (AfterProcess, ActorSkillType) fires once per
+        // ally action, not also after the ally's TurnStart.
+        const skillType = timing === ProcessTiming.TURN_START || timing === ProcessTiming.TURN_END ? undefined : actionType
+        const fuas = teams.map(t => t.applyPassivesForTiming(timing, skillType, actor, mainTarget))
+        teams.forEach((t, i) => { fuas[i] = mergeFuaMaps(fuas[i], t.applyPassivesForTiming(ProcessTiming.AFTER_PROCESS, skillType, actor, mainTarget)) })
         // [CONFIRMED 3.19] PassiveSkill.Triggering ends with ResetZoneStatePatternMstId on every unit: the zone
         // "started"/"ended" flags are only visible during the pass right after the change.
         teams.forEach(t => t.kiokuStates.forEach(k => { k.zone.expandPattern = 0; k.zone.releasePattern = 0 }))

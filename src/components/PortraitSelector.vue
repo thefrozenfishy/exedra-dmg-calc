@@ -10,7 +10,12 @@
                 <img :src="portraitImage(p)" :alt="p.name" />
                 <div class="details">
                     <p>{{ p.name }}</p>
-                    <p>{{ p.description }}</p>
+                    <p class="desc">{{ p.description }}</p>
+                    <p v-if="p.lbStats" class="stats">
+                        <span>+{{ p.lbStats.hp }}hp</span>
+                        <span>+{{ p.lbStats.atk }}atk</span>
+                        <span>+{{ p.lbStats.def }}def</span>
+                    </p>
                 </div>
             </li>
         </ul>
@@ -20,7 +25,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { KiokuElement } from '../types/enums'
-import { getPortraits, getPortraitDescription, Portrait } from "../types/KiokuTypes";
+import { getPortraits, getPortraitDescription, Portrait, portraitMaxLimitBreak } from "../types/KiokuTypes";
 import { portraits } from "../utils/helpers";
 
 const props = defineProps<{
@@ -37,7 +42,7 @@ const filtered = computed(() => {
     return getPortraits(props.element)
         .map((p) => portraits[p])
         .filter(Boolean)
-        .map((p) => ({ ...p, description: getPortraitDescription(p) }))
+        .map((p) => ({ ...p, description: getPortraitDescription(p), lbStats: p.stats?.[portraitMaxLimitBreak] }))
         .filter(
             (p) =>
                 p.name.toLowerCase().includes(q) ||
@@ -187,9 +192,18 @@ input::placeholder {
     white-space: normal;
 }
 
-.details p:last-child {
+.details p.desc {
     font-size: 0.72em;
     opacity: 0.5;
     white-space: pre-line;
+}
+
+.details p.stats {
+    display: flex;
+    gap: 8px;
+    font-size: 0.68em;
+    opacity: 0.7;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
 }
 </style>

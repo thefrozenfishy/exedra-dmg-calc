@@ -19,6 +19,9 @@ export class PvPKioku extends Kioku {
     private unscalableEffects: Map<string, SkillDetail> = new Map()
     private buffMult = 1;
     private debuffMult = 1;
+    // Bench only (LuxBench.benchKioku): the element (number) this unit's elemental hits and DOTs are dealt in, so a
+    // Lux dealer simulated "as a Forest unit" also deals Forest damage. Not a game rule; unset everywhere else.
+    damageElementOverride?: number;
 
     constructor(args: KiokuArgs) {
         super(args);
