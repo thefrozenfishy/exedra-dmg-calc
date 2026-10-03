@@ -202,6 +202,17 @@ export function collectTeamEffects(allies: PvPKioku[], attackerPos: number): Max
     return out
 }
 
+// [CONFIRMED 3.19] UnitCondition.GetDuplicateUnitState (0x15c8f90) / b__1 (0x15c7d30): two non-accum states from the
+// caster's active skills (any skill, follow-ups included) with the same type, role, element and active condition csv
+// replace each other in battle (MECHANICS.md section 8, "Duplicate states"), so only one can count: Light of
+// Reckoning's three follow-ups each giving "special attack DMG +x%". Same caster/side/type is already the grouping key.
+function isGameDuplicate(a: SkillDetail, b: SkillDetail): boolean {
+    if ("passiveSkillDetailMstId" in a || "passiveSkillDetailMstId" in b) return false
+    if (a.abilityEffectType.includes("ACCUM") || a.abilityEffectType === "VORTEX_ATK") return false
+    return a.abilityEffectType === b.abilityEffectType && (a.role ?? 0) === (b.role ?? 0) && (a.element ?? 0) === (b.element ?? 0)
+        && (a.activeConditionSetIdCsv ?? "") === (b.activeConditionSetIdCsv ?? "")
+}
+
 // [APPROXIMATION] Ladders of mutually exclusive states (see MaxDmgEffect.tier, ConditionTiers.ts). Grouped per
 // caster, side and effect type; strongest first (|value1| x max stacks), each rung pairwise exclusive with the others.
 // Ladders that mix effect types (Light Chain Lv n gives final DMG AND resist down) are handled per type, so the
@@ -209,7 +220,7 @@ export function collectTeamEffects(allies: PvPKioku[], attackerPos: number): Max
 function assignTiers(effects: MaxDmgEffect[]) {
     const byType = new Map<string, MaxDmgEffect[]>()
     for (const e of effects) {
-        if (!e.detail.activeConditionSetIdCsv || isEffectValueType(e.detail.abilityEffectType)) continue
+        if (isEffectValueType(e.detail.abilityEffectType)) continue
         const k = `${e.casterPos}:${e.side}:${e.detail.abilityEffectType}`
         byType.set(k, [...(byType.get(k) ?? []), e])
     }
@@ -218,7 +229,8 @@ function assignTiers(effects: MaxDmgEffect[]) {
         if (list.length < 2) continue
         const ladders: MaxDmgEffect[][] = []
         for (const e of [...list].sort((a, b) => strength(b) - strength(a))) {
-            const ladder = ladders.find(l => l.every(o => conditionCsvsExclusive(o.detail.activeConditionSetIdCsv, e.detail.activeConditionSetIdCsv)))
+            const ladder = ladders.find(l => l.every(o => isGameDuplicate(o.detail, e.detail)
+                || (!!o.detail.activeConditionSetIdCsv && !!e.detail.activeConditionSetIdCsv && conditionCsvsExclusive(o.detail.activeConditionSetIdCsv, e.detail.activeConditionSetIdCsv))))
             if (ladder) ladder.push(e)
             else ladders.push([e])
         }

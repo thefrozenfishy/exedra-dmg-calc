@@ -1312,7 +1312,31 @@ export class KiokuState {
         if (t.blockedByPreventAbnormal(detail)) return false
         if (this.mergeUniqueState(t, detail, applierState)) { t.updateSpd(); this.noteAddedState(t, detail); return true }
         this.noteAddedState(t, detail)
-        const key = String(skillDetailId(detail))
+        let key = String(skillDetailId(detail))
+        // [CONFIRMED 3.19] UnitCondition.AddUnitState (0x15c8a30) -> GetDuplicateUnitState (0x15c8f90): a state from an
+        // active skill (EffectOrigin ActiveSkill: basic / battle skill / special / follow-up) that is not AllowDuplicate
+        // (only Vortex) looks for a duplicate via GetSameStateList (0x15c94c0, same state class) + <>c__DisplayClass98_0.b__1
+        // (0x15c7d30): same EffectOrigin, same UserUnitId (giver), same TargetRole, same TargetElement and the same
+        // ActiveConditionSetIdCsv string. A non-IBlendable duplicate is replaced (IsPriorityOver is never overridden:
+        // base stub returns true) by a plain List.Remove - no OnRemovingFromCondition. The skill / detail id is NOT
+        // compared: Light of Reckoning's three follow-ups (652410/652510/652610) each give "special attack DMG +48%"
+        // (UP_GIV_DMG_RATIO, cond 317) and the game keeps one. IBlendable (accum / unique) states keep their own paths.
+        // [UNCERTAIN] GetUnitState without doWithoutInheritance also matches subclasses (e.g. UpWeakElementDmgAccumRatio
+        // derives from UpWeakElementDmgRatio); here the class is approximated by the effect type.
+        if (!("passiveSkillDetailMstId" in detail) && detail.abilityEffectType !== "VORTEX_ATK"
+            && !ACCUM_RATIO_EFFECT_TYPES.has(detail.abilityEffectType)) {
+            for (const [k, d] of [...t.activeEffectDetails]) {
+                const dd = d as any
+                if (dd.abilityEffectType === detail.abilityEffectType && !("passiveSkillDetailMstId" in dd)
+                    && dd._applierState === applierState && (dd.role ?? 0) === (detail.role ?? 0)
+                    && (dd.element ?? 0) === (detail.element ?? 0)
+                    && (dd.activeConditionSetIdCsv ?? "") === (detail.activeConditionSetIdCsv ?? "")) t.activeEffectDetails.delete(k)
+            }
+        }
+        // Same detail from a different giver is a separate state in the game (UserUnitId differs): don't overwrite it.
+        const other = t.activeEffectDetails.get(key) as any
+        if (other && other._applierState !== applierState && !ACCUM_RATIO_EFFECT_TYPES.has(detail.abilityEffectType)
+            && detail.abilityEffectType !== "VORTEX_ATK") key = `${key}@${applierState.kioku.name}#${applierState.posIdx}`
         const existing = t.activeEffectDetails.get(key)
         if (existing && ACCUM_RATIO_EFFECT_TYPES.has(detail.abilityEffectType)) {
             mergeAccumEffect(existing, detail)

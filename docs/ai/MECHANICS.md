@@ -237,6 +237,14 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   target: living units without a seal (0x16d29d0), then main target / break / max ATK (0x16d2c00). [C] TS
   `canNotUseSpecialAttack`, `readyUltimates`. checkMechanics #10.
 
+- Duplicate states (`UnitCondition.AddUnitState` 0x15c8a30 -> `GetDuplicateUnitState` 0x15c8f90): searched only when
+  EffectOrigin == ActiveSkill (any skill: basic / battle / special / follow-up) or IsConditionActivation, and never for
+  AllowDuplicate states (Vortex only). Active origin: `GetSameStateList` 0x15c94c0 (same class, subclasses included) +
+  `b__1` 0x15c7d30 = same EffectOrigin, UserUnitId (giver), TargetRole, TargetElement and ActiveConditionSetIdCsv. Skill
+  / detail id is NOT compared. IBlendable (accum / unique) -> Blend; otherwise `IsPriorityOver` (never overridden, true)
+  -> old one List.Remove'd (no OnRemovingFromCondition), new one added. Passive origin: b__2 0x15c7d90 (same origin,
+  MstId, giver) / IAccum b__3. So Light of Reckoning's 3 follow-ups each giving "special attack DMG +48%" (cond 317) =
+  one state; the same buff from two different givers = two states. [C] TS `storeTimedEffect` (simulators), `MaxDamage.isGameDuplicate` (Max Damage), checkMechanics #15.
 - State-add roll (`UnitStateBase.GetProcessedProbability` 0x16dfa50): fixed probability as is; else
   `p = clamp(Floor2(prob × hit × parry × secondary), 0, 100)`, fails when `p*10 <= Next(1000)`.
   hit = `max((neg ? clamp((baseHit/10 + Σup)/100, 0, 1) : 0) + (ailment ? AllAbnormalHit/100 : 0) + 1, 0)`;

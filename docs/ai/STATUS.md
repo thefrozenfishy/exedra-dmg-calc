@@ -1,6 +1,6 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-03 (duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
 ## Branches and uncommitted work in E:\exedra-dmg-calc
 
@@ -13,6 +13,16 @@ _Last updated: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, b
 branches or changing the engine. On battle-engine-3.19 `xq build` still lists UNIQUE_BUFF / UNIQUE_DEBUFF /
 UNIQUE_10030301 / UNIQUE_10070201 (pure marker states: stored generically, read by conditions 12/26 - nothing more to
 do) and UP_BREAK_EFFECT (blocked, open question 1).
+
+## Fixed 2026-10-03: duplicate active-skill states (uncommitted on main)
+
+`storeTimedEffect` now removes an existing active-skill state of the same type, giver, role, element and active
+condition csv before adding (GetDuplicateUnitState 0x15c8f90). User report: Light of Reckoning showed "special attack
+DMG +48%" 3x after one ultimate (follow-ups 652410/652510/652610) -> now 1x. Same detail from another giver gets its own
+key. The Max Damage estimate (`MaxDamage.ts` `assignTiers`, `isGameDuplicate`) now puts such duplicates on one tier
+ladder, so only the strongest counts (it had LoR at 3 x 35%). checkMechanics #15 (fails without the change), fixtures + mechanics all pass, type-check 230 = baseline.
+Open: accum (IBlendable) states from active skills still merge per detail id, not per the b__1 rule; subclass matching
+(UpWeakElementDmgAccumRatio < UpWeakElementDmgRatio) approximated by effect type.
 
 ## Fixed 2026-09-30: state duration exempt-once
 

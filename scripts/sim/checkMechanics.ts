@@ -293,4 +293,24 @@ for (const mates of [["Time Stop Strike", "Hollow Woman", "Ultra Great Big Hamme
         `break count 0 ${b0} / 1 ${b1}, style ${style}, team breaks 3 ${grp("3")} 2 ${grp("2")}, range AoE ${aoe} single ${single} buff ${buff} none ${none}`)
 }
 
+// 15. Duplicate active-skill states (UnitCondition.AddUnitState 0x15c8a30 -> GetDuplicateUnitState 0x15c8f90, b__1
+//     0x15c7d30): same class + origin + giver + role + element + active condition csv -> the new state replaces the old,
+//     whatever skill/detail it came from (Light of Reckoning's three follow-ups 652410/652510/652610: one +48%). A
+//     different giver or a different active condition is a separate state.
+{
+    const { t1, a } = fresh()
+    const b = t1.kiokuStates[1]
+    const giv = (id: number, cond = "317") => ({ abilityEffectType: "UP_GIV_DMG_RATIO", value1: 480, value2: 0, value3: 0, turn: 2, range: -1, element: 0, role: 0,
+        probability: 100, isFixedProbability: true, activeConditionSetIdCsv: cond, startConditionSetIdCsv: "", skillDetailMstId: id, skillMstId: Math.floor(id / 100) }) as any
+    const store = (giver: KiokuState, d: any) => (giver as any).storeTimedEffect(a, d, giver.kioku.name, giver)
+    const count = () => [...a.activeEffectDetails.values()].filter((d: any) => d.abilityEffectType === "UP_GIV_DMG_RATIO").length
+    store(a, giv(65241004)); store(a, giv(65251003)); store(a, giv(65261003))
+    const same = count()
+    store(a, giv(65261003)); const again = count()
+    store(a, giv(99999901, "")); const otherCond = count()
+    store(b, giv(65261003)); const otherGiver = count()
+    check("duplicate active-skill states replace", same === 1 && again === 1 && otherCond === 2 && otherGiver === 3,
+        `3 follow-ups ${same} (want 1), reapply ${again} (want 1), other condition ${otherCond} (want 2), other giver ${otherGiver} (want 3)`)
+}
+
 process.exit(failed ? 1 : 0);

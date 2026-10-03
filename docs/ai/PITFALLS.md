@@ -154,3 +154,8 @@
 - The first `git status` on the mount refreshes the whole index (~2.5 min); a killed git leaves `.git/index.lock`.
 - The Steam folder (`E:\SteamLibrary\steamapps\common\MadokaExedra`, 27k files) and ma-ex-data are too big for
   `find` / `grep -r` within one 180 s call: list known paths instead.
+
+- **State identity is not the detail id.** The game dedups active-skill states by class + giver + role + element +
+  active condition csv (MECHANICS section 8, "Duplicate states"). Keying `activeEffectDetails` by `skillDetailId` alone
+  stacked Light of Reckoning's three follow-up "+48% special DMG" buffs (144%) and let two givers of the same detail
+  overwrite each other. Fixed 2026-10-03 in `storeTimedEffect`; accum states still merge per detail id (`mergeAccumEffect`).
