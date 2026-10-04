@@ -2083,6 +2083,9 @@ export class PvPTeam {
     // PvE "Manual" targeting: every target decision (either team) is the user's pick via
     // BattleRng.pickTarget instead of the targeting AI. Set by PvPBattle.
     manualTargeting = false
+    // Fight solver: under manual control, picks on these sides ("friend" = the acting unit's own team, "opp" = the
+    // other one) are left to the targeting AI. Unset everywhere else.
+    aiTargetSides?: Set<"friend" | "opp">
     // Scripted play for simulations that want a fixed play pattern (LuxBench), not game rules. allyActionPolicy picks
     // an auto ally's Battle Skill / Basic Attack (a Battle Skill without SP falls back to the default); allyTargetPolicy
     // picks the ally target of a friendly single/proximity effect before any targeting rule; opponentTargetPolicy the
@@ -2562,7 +2565,8 @@ export class PvPTeam {
         // pick), and passing the caster through fails "target is not self" start conditions checked
         // on that first call (Hollow Woman's Cutaway, condition 1278, silently never applied).
         const isFriendPlaceholder = side === "friend" && possibleTargets.length === 1 && possibleTargets[0] === actor
-        const manual = this.manualTargeting && this.rng instanceof BattleRng
+        // aiTargetSides (fight solver option): sides whose targets stay with the AI under manual control.
+        const manual = this.manualTargeting && this.rng instanceof BattleRng && !this.aiTargetSides?.has(side)
         // Same for FULL AUTO: UnitBrain.TargetingUnits picks the friendly target from the whole friend list; against
         // the [actor] placeholder the AI could only ever pick the caster (Thunder Torrent's Rapid Pulse / DMG up on herself).
         const universe = isFriendPlaceholder ? this.kiokuStates : possibleTargets
@@ -2574,7 +2578,7 @@ export class PvPTeam {
             const skillMstId = (detail as any).skillMstId as number | undefined
             const what = skillMstId ? skillName(skillMstId) : detail.abilityEffectType
             const label = `${unitLabel(actor)} · ${what}: target on the ${pool[0].team.isTeam1 ? "allies" : "enemies"}`
-            return pool[(this.rng as BattleRng).pickTarget(label, pool.map(unitLabel))]
+            return pool[(this.rng as BattleRng).pickTarget(label, pool.map(unitLabel), pool)]
         }
         const resolveUncached = manual ? resolveManual : resolvePrimaryTarget
         const resolveCached = (): KiokuState | null => {

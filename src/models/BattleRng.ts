@@ -141,7 +141,8 @@ export class BattleRng {
     // Manual control: the user decides (a target, Battle Skill vs Basic Attack, whether to fire an
     // ultimate). Uses the stored decision for this point of the battle or throws PendingDecision
     // (nothing is consumed or recorded before the throw). A single option is taken without asking.
-    pick(kind: RngKind, label: string, optionLabels: string[]): number {
+    // `units`: the units behind the options (target picks), for subclasses that compare them (fight solver).
+    pick(kind: RngKind, label: string, optionLabels: string[], _units?: readonly unknown[]): number {
         if (optionLabels.length <= 1) return optionLabels.length - 1
         const d = this.stored(kind, label)
         const options = optionLabels.map(l => ({ label: l, weight: 100 / optionLabels.length }))
@@ -152,8 +153,8 @@ export class BattleRng {
         return d.value
     }
 
-    pickTarget(label: string, optionLabels: string[]): number {
-        return this.pick("target", label, optionLabels)
+    pickTarget(label: string, optionLabels: string[], units?: readonly unknown[]): number {
+        return this.pick("target", label, optionLabels, units)
     }
 
     // Events recorded since the last drain (attached to the next battle snapshot).

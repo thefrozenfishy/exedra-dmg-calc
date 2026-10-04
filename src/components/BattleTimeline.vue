@@ -15,6 +15,8 @@
         <div v-else>
           <span class="action"> Initial State </span>
         </div>
+        <button v-if="actionButton && stepAt(idx) !== undefined" class="btn small-btn action-btn" :title="actionTitle"
+          @click="emit('action', stepAt(idx)!)">{{ actionButton }}</button>
       </div>
 
       <div v-if="fieldDuring(idx)" class="field-status">
@@ -165,8 +167,17 @@ import type { RngEvent, RngKind } from '../models/BattleRng'
 
 // rngEditable: Manual RNG mode - rolls get a checkbox / dropdown and emit `decide` when changed.
 // Manual targeting picks (userPick) are always changeable.
-const props = withDefaults(defineProps<{ states: BattleSnapshot[], showSp?: boolean, rngEditable?: boolean }>(), { showSp: true, rngEditable: false })
-const emit = defineEmits<{ decide: [event: RngEvent, value: boolean | number] }>()
+// actionEnds: the snapshot index after each executed action (index k = after action k + 1); with actionButton, the
+// last snapshot of every action (and the initial state, step 0) gets that button, emitting `action` with the number
+// of actions run up to there.
+const props = withDefaults(defineProps<{ states: BattleSnapshot[], showSp?: boolean, rngEditable?: boolean, actionEnds?: number[], actionButton?: string, actionTitle?: string }>(), { showSp: true, rngEditable: false })
+const emit = defineEmits<{ decide: [event: RngEvent, value: boolean | number], action: [steps: number] }>()
+const stepAt = (idx: number): number | undefined => {
+  if (!props.actionEnds) return undefined
+  if (idx === 0) return 0
+  const k = props.actionEnds.indexOf(idx)
+  return k >= 0 ? k + 1 : undefined
+}
 
 const KIND_LABEL: Record<RngKind, string> = { crit: 'Crit', effect: 'Effect', target: 'Target', skill: 'Skill', action: 'Action' }
 const pctText = (p: number) => `${p >= 10 ? p.toFixed(1).replace(/\.0$/, '') : p.toFixed(2).replace(/0$/, '')}%`
@@ -522,6 +533,15 @@ function healTo(state: BattleSnapshot, isAllies: boolean, pos: number, name: str
 .matchup-divider span {
   padding: 0 0.75rem;
 }
+
+.matchup-divider .action-btn {
+  font-size: 0.72rem;
+  padding: 0.15rem 0.55rem;
+  margin-right: 0.75rem;
+  white-space: nowrap;
+  opacity: 0.75;
+}
+.matchup-divider .action-btn:hover { opacity: 1; }
 
 .sp-count {
   align-self: center;

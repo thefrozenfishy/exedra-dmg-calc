@@ -1,6 +1,7 @@
 <template>
   <div class="team-page">
     <h1 class="page-title">Simulate Single Battle</h1>
+    <h2>This is the old calc and will be removed once PvE Simulator fully covers the usecases</h2>
 
     <SavedTeamsPanel :saved="saved" />
 

@@ -80,10 +80,11 @@ const group2Paths = [
   '/profile',
   '/account-compare',
   '/sa-simulator-multiple',
-  '/sa-simulator-single',
   '/pvp-simulator',
+  '/pve-simulator',
 ].filter(Boolean)
 const group3Paths = [
+  '/sa-simulator-single',
   '/pvp-how-to',
   '/gacha-rate',
   '/link-raid',
@@ -115,7 +116,6 @@ function routeForPath(path: string) {
           </template>
         </div>
         <div v-if="beta">
-          <router-link to="/pve-simulator">PvE Simulator</router-link>
           <router-link to="/beta">Beta Settings</router-link>
           <router-link to="/analytics">Analytics</router-link>
           <router-link to="/analytics-user">User Analytics</router-link>
