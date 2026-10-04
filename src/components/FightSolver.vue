@@ -16,15 +16,12 @@
                 <input v-model.number="maxNodes" type="number" min="0" step="1000" placeholder="∞" /></label>
             <label class="field inline" title="Don't explore past this AV (0 = no cap)"><span class="field-label">AV
                     cap</span>
-                <input v-model.number="maxAv" type="number" min="0" step="50" /></label>
+                <input v-model.number="maxAv" type="number" min="0" step="0.1" /></label>
             <label class="field inline"
-                title="Where a line ends: the clear, or a checkpoint (the end of the current wave, the boss's next phase) where you pick the state to go on from"><span
+                title="Where a line ends: the clear, or a checkpoint where you pick the state to go on from: the end of the current wave, the boss's next phase, the HP down to 75 / 50 / 25% (the wave's shared HP pool if it has one, e.g. crisis wave 1; else the boss, all HP bars; a minion wave without a pool is played through to the boss), or the next break (a main target if the wave has one). Every checkpoint also counts when its wave ends first"><span
                     class="field-label">Goal</span>
                 <select v-model="goal">
-                    <option value="clear">Clear the stage</option>
-                    <option value="wave">End of this wave</option>
-                    <option value="phase">Next boss phase</option>
-                    <option value="checkpoint">Next wave or phase</option>
+                    <option v-for="g in goalOptions" :key="g.value" :value="g.value">{{ g.label }}</option>
                 </select></label>
             <label class="field inline"
                 :title="goal === 'clear' ? 'Also keep lines up to this much AV slower than the best clear (more clears to choose from; 0 = only ever faster ones, the quickest search)' : 'Checkpoints: also keep lines up to this much AV slower than the fastest one (they may arrive with more EP, SP or HP)'"><span
@@ -34,6 +31,12 @@
                 :title="`Search with this many parallel workers (0 = auto: ${autoWorkers} on this device)`"><span
                     class="field-label">Workers</span>
                 <input v-model.number="workers" type="number" min="0" max="16" /></label>
+        </div>
+        <div v-if="teamNames.length" class="priority-row"
+            title="Checkpoint states: a prioritised character's EP and AV until its next turn count on their own (as much EP and as little AV as possible for each), ahead of the rest of the team's totals; the cards list the best of those first">
+            <span class="field-label">Prioritise</span>
+            <button v-for="n in teamNames" :key="n" type="button" class="prio-chip" :class="{ on: priorityNames.includes(n) }"
+                @click="togglePriority(n)">{{ priorityNames.includes(n) ? '★ ' : '' }}{{ n }}</button>
         </div>
         <div class="option-groups">
             <fieldset class="option-group">
@@ -144,9 +147,9 @@
             <h3 v-else-if="jobGoal !== 'clear'" class="cand-title">Checkpoint states <span class="muted">· {{
                     candidates.length
                     }} not
-                    worse in every way than another (faster, more EP or SP, or the team's next turns sooner; HP only
-                    breaks
-                    ties); pick one to go on from</span></h3>
+                    worse in every way than another (faster, more EP or SP, or the team's next turns sooner{{
+                    jobPriority.length ? `; ★ ${jobPriority.join(', ')}: own EP and next turn each` : '' }}; HP only
+                    breaks ties); pick one to go on from</span></h3>
             <h3 v-else class="cand-title">Clears found <span class="muted">· the {{ candidates.length }} fastest{{
                 clearSlack >
                     0 ?
@@ -157,7 +160,9 @@
                     <div class="cand-head">
                         <b>{{ fmtAv(c.elapsed) }} AV</b>
                         <span v-if="c.note" class="cand-note">{{ c.note }}</span>
-                        <span class="muted">round {{ c.round }} · wave {{ c.wave }}{{ c.win ? ' · clear' : '' }}</span>
+                        <span class="muted">round {{ c.round }} · wave {{ c.wave }}{{ c.win ? ' · clear' : '' }}<template
+                                v-if="!c.win && c.bossPct"> · HP {{ c.bossPct.toFixed(1) }}%</template><b
+                                v-if="!c.win && c.broken" class="cand-broken"> · BREAK</b></span>
                         <span class="cand-keys"><span title="Team SP">SP <b>{{ c.sp }}</b></span><span
                                 title="Team EP: the allies' EP as a share of full, added up">EP <b>{{ teamEp(c)
                                     }}</b></span><span v-if="hasTurns(c)"
@@ -166,16 +171,18 @@
                                 <b>{{ fmtAv(turnSum(c)) }}</b> AV</span></span>
                     </div>
                     <div class="cand-allies">
-                        <div class="cand-ally cand-legend"><span></span><span>EP</span><span
-                                title="AV until this ally's next turn">Next</span><span>HP</span></div>
-                        <div v-for="(a, i) in c.allies" :key="i" class="cand-ally" :class="{ dead: a.dead }"
-                            :title="`${a.name}: EP ${Math.round(a.ep)} / ${a.maxEp}${a.av !== undefined && !a.dead ? `, next turn in ${fmtAv(a.av)} AV` : ''}, HP ${a.hpPct.toFixed(0)}%`">
-                            <span class="cand-name">{{ shortName(a.name) }}</span>
+                        <div class="cand-ally cand-legend" :class="{ 'with-magic': hasMagic(c) }"><span></span><span>EP</span><span
+                                title="AV until this ally's next turn">Next</span><span v-if="hasMagic(c)"
+                                title="Magic stacks">Magic</span><span>HP</span></div>
+                        <div v-for="(a, i) in c.allies" :key="i" class="cand-ally" :class="{ dead: a.dead, 'with-magic': hasMagic(c) }"
+                            :title="`${a.name}: EP ${Math.round(a.ep)} / ${a.maxEp}${a.av !== undefined && !a.dead ? `, next turn in ${fmtAv(a.av)} AV` : ''}${a.maxMagic ? `, Magic ${a.magic} / ${a.maxMagic}` : ''}, HP ${a.hpPct.toFixed(0)}%`">
+                            <span class="cand-name" :class="{ prio: a.priority }">{{ a.priority ? '★ ' : '' }}{{ shortName(a.name) }}</span>
                             <span class="bar ep" :class="{ full: epPct(a) >= 100 }"><i
                                     :style="{ width: `${epPct(a)}%` }"></i></span>
                             <span class="cand-av" :class="{ now: a.av !== undefined && a.av < 0.05 }">{{ a.dead ? '—' :
                                 a.av ===
                                 undefined ? '?' : fmtAv(a.av) }}</span>
+                            <span v-if="hasMagic(c)" class="cand-magic" :class="{ full: !!a.maxMagic && a.magic! >= a.maxMagic }">{{ magicText(a) }}</span>
                             <span class="bar hp"><i :style="{ width: `${a.hpPct}%` }"></i></span>
                         </div>
                     </div>
@@ -308,7 +315,7 @@ import { useSetting } from '../store/settingsStore'
 import type { RngMode } from '../models/BattleRng'
 import type { RaidCarry } from '../models/PvPBattle'
 import type { TeamSlot } from '../types/BestTeamTypes'
-import { SOLVER_STATUSES, type CheckpointView, type SolverGoal, type SolverLine, type SolverNodeStatus, type SolverNodeView, type SolverStats, type SolverTreeChunk } from '../models/FightSolver'
+import { SOLVER_GOALS, SOLVER_STATUSES, hpGoalShare, type CheckpointView, type SolverGoal, type SolverLine, type SolverNodeStatus, type SolverNodeView, type SolverStats, type SolverTreeChunk } from '../models/FightSolver'
 import type { FightSolverJob, FightSolverMessage, FightSolverRequest, SolverExportItem } from '../workers/fightSolverWorker'
 import { buildPvEExport, downloadText, type PvEExport } from '../utils/pvpExport'
 import { RESULTS_FORMAT, lineOf, mergeCandidates, resultsFileName, type SavedResults, type SolverRouteStep } from '../models/FightSolverResults'
@@ -333,6 +340,23 @@ const emit = defineEmits<{ play: [line: SolverLine, opts?: { scroll?: boolean }]
 // 0 = no limit: the search runs until Stop (or until nothing is left).
 const maxNodes = useSetting<number>('pveSolverNodeLimit', 0)
 const goal = useSetting<SolverGoal>('pveSolverGoal', 'clear')
+// Prioritised characters (by name, so the choice survives reordering the team): their EP and next turn count on their
+// own on checkpoint states (FightSolver.stateCard).
+const priorityNames = useSetting<string[]>('pveSolverPriority', [])
+const teamNames = computed(() => props.slots.map(s => s.main?.name ?? '').filter(Boolean))
+function togglePriority(n: string) {
+  const cur = priorityNames.value ?? []
+  priorityNames.value = cur.includes(n) ? cur.filter(x => x !== n) : [...cur, n]
+}
+// The prioritised characters of the search on screen (names, for the cards' title).
+const jobPriority = ref<string[]>([])
+const priorityIndexes = () => props.slots.map((s, i) => (priorityNames.value ?? []).includes(s.main?.name ?? '') ? i : -1).filter(i => i >= 0)
+// The page's goals, plus any other HP goal a loaded file (or the command line) used, e.g. hp60.
+const goalOptions = computed(() => {
+  const share = hpGoalShare(goal.value)
+  return SOLVER_GOALS.some(g => g.value === goal.value) || share === undefined ? SOLVER_GOALS
+    : [...SOLVER_GOALS, { value: goal.value, label: `Boss / wave HP at ${Math.round(share * 100)}%` }]
+})
 const checkpointSlack = useSetting<number>('pveSolverSlack', 30)
 const clearSlack = useSetting<number>('pveSolverClearSlack', 0)
 const slack = computed<number>({
@@ -558,6 +582,9 @@ function mergedCandidates(): (CheckpointView & { gid: number })[] {
     return mergeCandidates(all)
 }
 const epPct = (a: { ep: number, maxEp: number }) => a.maxEp > 0 ? Math.min(100, 100 * a.ep / a.maxEp) : 0
+const hasMagic = (c: CheckpointView) => c.allies.some(a => !!a.maxMagic)
+// As the battle timeline shows it: a 1000-stack kit as a %, others as stacks / max.
+const magicText = (a: { magic?: number, maxMagic?: number }) => !a.maxMagic ? '' : a.maxMagic === 1000 ? `${(a.magic ?? 0) / 10}%` : `${a.magic ?? 0}/${a.maxMagic}`
 const teamEp = (c: CheckpointView) => `${Math.round(c.allies.reduce((s, a) => s + (a.dead ? 0 : epPct(a)), 0) / Math.max(1, c.allies.length))}%`
 const hasTurns = (c: CheckpointView) => c.allies.some(a => a.av !== undefined)
 const turnSum = (c: CheckpointView) => c.allies.reduce((s, a) => s + (a.dead ? 0 : a.av ?? 0), 0)
@@ -709,8 +736,10 @@ function start(from?: SolverLine | MouseEvent, route: SolverRouteStep[] = []) {
         partition: { index: 0, count },
         opening: opening ? JSON.parse(JSON.stringify(opening)) : undefined,
         goal: goal.value, slack: Math.max(0, slack.value || 0),
+        priority: priorityIndexes(),
     }
     lastJob = job
+    jobPriority.value = (job.priority ?? []).map(i => props.slots[i]?.main?.name ?? `#${i + 1}`)
     loadedNote.value = ''
     loadedFile = undefined
     exportWait = undefined
@@ -935,6 +964,8 @@ async function loadResults(ev: Event) {
         goal.value = data.search.goal
         slack.value = data.search.slack
         jobGoal.value = data.search.goal
+        const filled = data.setup.slots.filter(s => !!s.main)
+        jobPriority.value = (data.search.job.priority ?? []).map(i => filled[i]?.main?.name ?? `#${i + 1}`)
         opening = undefined
         jobSides = [...(data.search.job.aiAllyTargets ? ['friend' as const] : []), ...(data.search.job.aiEnemyTargets ? ['opp' as const] : [])]
         stats.value = data.search.stats ? { ...data.search.stats, current: undefined, bestNode: undefined } : null
@@ -1804,6 +1835,10 @@ input.tiny {
     text-align: right;
 }
 
+.cand-legend.with-magic span:nth-child(4) {
+    text-align: right;
+}
+
 .cand-legend {
     font-size: 0.68rem;
     color: var(--muted);
@@ -1814,6 +1849,11 @@ input.tiny {
 .cand.selected {
     border-color: var(--accent);
     box-shadow: 0 0 0 1px var(--accent) inset;
+}
+
+.cand-broken {
+    color: var(--warning);
+    font-weight: 600;
 }
 
 .cand-head {
@@ -1841,6 +1881,22 @@ input.tiny {
     grid-template-columns: 1fr 46px 40px 26px;
     gap: 0.35rem;
     align-items: center;
+}
+
+.cand-ally.with-magic {
+    grid-template-columns: 1fr 40px 36px 38px 22px;
+    gap: 0.3rem;
+}
+
+.cand-magic {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.75rem;
+    color: var(--accent-soft);
+}
+
+.cand-magic.full {
+    color: var(--accent);
 }
 
 .cand-av {
@@ -1881,6 +1937,35 @@ input.tiny {
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--text);
+}
+
+.cand-name.prio {
+    color: var(--accent);
+}
+
+.priority-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0 0 0.75rem;
+}
+
+.prio-chip {
+    font-size: 0.78rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.prio-chip.on {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .bar {

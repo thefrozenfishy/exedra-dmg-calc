@@ -440,6 +440,7 @@ export interface SolverOptions {
     partition?: { index: number, count: number }  // parallel search: this worker's share of the prefix frontier
     goal?: SolverGoal         // default "clear"
     slack?: number            // checkpoint goals: keep searching lines up to this much AV slower than the fastest
+    priority?: number[]       // candidates: allies (team positions, 0-based) whose EP / next turn count on their own
 }
 
 const short = (unit: string) => unit.replace(/ \(Ally \d+\)$/, "").replace(/ \(Enemy (\d+)\)$/, " #$1")
@@ -544,7 +545,27 @@ export class FightSolver {
         // Checkpoints are measured from the first decision (after any automatic actions, e.g. the next wave coming in
         // when the search starts from a cleared wave).
         const rb = rootNode.cp?.battle
-        if (rb) { this.rootWave = rb.currentWave; this.rootPhase = this.phaseKey(rb) }
+        if (rb) {
+            this.rootWave = rb.currentWave
+            this.rootPhase = this.phaseKey(rb)
+            // The goal's wave: this one if it has a shared HP pool (crisis / minion waves) or a main target, else the
+            // next one with a main target, else this one.
+            const hasMain = (units: any[]) => units.some(u => (u.enemy?.appearance ?? u.appearance)?.isMainTargetEnemy)
+            this.bossWave = rb.currentWave
+            if (!(rb as any).team2.linkHp && !hasMain((rb as any).team2.kiokuStates)) {
+                const later = ((rb as any).pendingWaves ?? []) as any[][]
+                const k = later.findIndex(w => hasMain(w))
+                if (k >= 0) this.bossWave = rb.currentWave + k + 1
+            }
+            if (this.bossWave === rb.currentWave) for (const u of this.breakTargets(rb)) if (u.isBroken) this.rootBroken.add(this.unitKey(u))
+            const share = hpGoalShare(this.goal), h = bossHp(rb)
+            if (share !== undefined || this.goal === "break") {
+                if (this.bossWave > rb.currentWave) this.goalNote = `The boss is in wave ${this.bossWave}: lines play through wave ${rb.currentWave} first`
+                else if (share !== undefined && h && h.cur <= share * h.max) this.goalNote = `The ${(rb as any).team2.linkHp ? `wave's HP pool${(rb as any).team2.linkHp.name ? ` (${(rb as any).team2.linkHp.name})` : ""}` : "boss"} is already at ${(100 * h.cur / h.max).toFixed(1)}% here: every line reaches this checkpoint at once (pick a lower HP goal)`
+                else if (share !== undefined && (rb as any).team2.linkHp) this.goalNote = `HP goal on this wave's shared HP pool${(rb as any).team2.linkHp.name ? ` (${(rb as any).team2.linkHp.name})` : ""}, now at ${(100 * (h?.cur ?? 0) / (h?.max ?? 1)).toFixed(0)}%`
+                this.rootHp = this.hpAbs(rb)   // the estimate's reference, now in the goal's terms
+            }
+        }
         if (rootNode.status === "open") this.beamLevel = [rootNode.id]
     }
 
@@ -609,11 +630,33 @@ export class FightSolver {
         const bars = (t2.kiokuStates as any[]).filter(u => u.enemy?.appearance?.isMainTargetEnemy).map(u => u.enemy.hpGaugeCount).join(",")
         return `${b.currentWave}|${t2.modeChange?.step ?? 0}|${bars}`
     }
+    // Break goal: the enemies to break (main targets if the wave has any) and the ones already broken at the start.
+    private rootBroken = new Set<string>()
+    private breakTargets(b: PvPBattle): any[] {
+        const all = ((b as any).team2.kiokuStates as any[]).filter(u => !u.isDead)
+        const main = all.filter(u => u.enemy?.appearance?.isMainTargetEnemy)
+        return main.length ? main : all
+    }
+    private unitKey(u: any): string { return `${u.positionId}|${u.enemy?.appearance?.questEnemyAppearanceMstId ?? u.kioku?.name}` }
+    // A note on the goal for the page (e.g. an HP checkpoint the boss is already past).
+    goalNote = ""
+
+    private bossWave = Infinity   // HP / break goals: the wave they look at (see SolverGoal; set from the root)
+
     private reachedGoal(b: PvPBattle): boolean {
         const g = this.goal
         if (g === "clear") return false
         const t2 = (b as any).team2
-        const waveDone = b.currentWave > this.rootWave || (!!t2.waveCleared && ((b as any).pendingWaves?.length ?? 0) > 0)
+        const cleared = !!t2.waveCleared && ((b as any).pendingWaves?.length ?? 0) > 0
+        const share = hpGoalShare(g)
+        if (share !== undefined || g === "break") {
+            // Earlier (minion) waves are played through; the boss wave ending counts.
+            if (b.currentWave < this.bossWave) return false
+            if (b.currentWave > this.bossWave || cleared) return true
+            if (share !== undefined) { const h = bossHp(b); return !!h && h.cur <= share * h.max }
+            return this.breakTargets(b).some(u => u.isBroken && !this.rootBroken.has(this.unitKey(u)))
+        }
+        const waveDone = b.currentWave > this.rootWave || cleared
         if (g === "wave") return waveDone
         return waveDone || this.phaseKey(b) !== this.rootPhase
     }
@@ -624,13 +667,28 @@ export class FightSolver {
         const allies = (t1.kiokuStates as any[]).map(u => ({
             name: u.kioku?.name ?? "?", ep: u.currentMp, maxEp: u.maxMp, hpPct: 100 * Math.max(0, u.currentHp) / Math.max(1, u.maxHp), dead: !!u.isDead,
             av: u.isDead ? 0 : Math.max(0, Number(u.turnGauge) || 0),
+            // Magic stacks (characters with a Magic kit; max 1000 = shown as a %).
+            ...(u.currentMaxMagic > 0 ? { magic: u.currentMagic, maxMagic: u.currentMaxMagic } : {}),
         }))
-        const epShare = allies.reduce((a, x) => a + (x.maxEp > 0 ? Math.min(1, x.ep / x.maxEp) : 0), 0)
-        const hpShare = allies.reduce((a, x) => a + x.hpPct / 100, 0)
+        const epOf = (x: typeof allies[number]) => x.maxEp > 0 ? Math.min(1, x.ep / x.maxEp) : 0
         // A fallen ally counts as a full round's wait.
-        const turnWait = Math.round(10 * allies.reduce((a, x) => a + (x.dead ? 100 : x.av), 0)) / 10
-        const vec = [node.elapsed, -epShare, -t1.currentSp, turnWait, -hpShare]
-        return { id: node.id, elapsed: node.elapsed, round: b.currentRound, wave: b.currentWave, win: node.status === "win", sp: t1.currentSp, allies, enemyHp: node.remaining, vec }
+        const waitOf = (x: typeof allies[number]) => x.dead ? 100 : x.av
+        const r1 = (v: number) => Math.round(10 * v) / 10
+        const hpShare = allies.reduce((a, x) => a + x.hpPct / 100, 0)
+        // Prioritised allies (opts.priority, team positions): each one's EP and turn wait are criteria of their own,
+        // right after the AV; the others are summed.
+        const pri = [...new Set(this.opts.priority ?? [])].filter(i => i >= 0 && i < allies.length)
+        const rest = allies.filter((_, i) => !pri.includes(i))
+        const vec = [node.elapsed]
+        for (const i of pri) vec.push(-epOf(allies[i]), r1(waitOf(allies[i])))
+        vec.push(-rest.reduce((a, x) => a + epOf(x), 0), -t1.currentSp, r1(rest.reduce((a, x) => a + waitOf(x), 0)), -hpShare)
+        for (const i of pri) (allies[i] as any).priority = true
+        const boss = bossHp(b)
+        return {
+            id: node.id, elapsed: node.elapsed, round: b.currentRound, wave: b.currentWave, win: node.status === "win", sp: t1.currentSp, allies, enemyHp: node.remaining, vec,
+            bossPct: boss ? 100 * boss.cur / boss.max : undefined,
+            broken: this.breakTargets(b).some(u => u.isBroken),
+        }
     }
 
     // A node's state card, replaying its battle (any node).
@@ -707,6 +765,9 @@ export class FightSolver {
     private hpAbs(b: PvPBattle, later = this.goal === "clear"): number {
         const t2 = (b as any).team2
         if (b.isOver && b.result === "win") return 0
+        // HP goals: the boss HP still to take off to reach the threshold.
+        const share = hpGoalShare(this.goal)
+        if (share !== undefined && !later && b.currentWave >= this.bossWave) { const h = bossHp(b); if (h) return Math.max(0, h.cur - share * h.max) }
         if (t2.linkHp?.type === 1) return NaN
         let hp = 0
         if (t2.linkHp?.type === 2) hp = Math.max(0, t2.linkHp.current)
@@ -1261,18 +1322,63 @@ export const SOLVER_STATUSES: SolverNodeStatus[] = ["open", "expanded", "win", "
 //   wave       - the current wave is cleared (before the next one comes in)
 //   phase      - the boss changes form or loses an HP bar (or the wave ends)
 //   checkpoint - whichever comes first (same as phase, kept for the wording)
-export type SolverGoal = "clear" | "wave" | "phase" | "checkpoint"
+//   hpNN       - the wave's HP is at or below NN% of full; hp75 / hp50 / hp25 on the page. The wave = the current
+//                one if it has a shared HP pool (a crisis / minion wave's pool, 100 -> 0 as its enemies fall) or a
+//                main target, else the next wave with a main target (the waves before it are played through first),
+//                else the current wave. Its HP: the shared pool, else the main target(s) (every HP bar), else every
+//                enemy. Reached as well when that wave ends.
+//   break      - in the boss wave, an enemy (a main target if the wave has one) that was not broken where the search
+//                started is broken (or the boss wave ends)
+export type SolverGoal = "clear" | "wave" | "phase" | "checkpoint" | "break" | `hp${number}`
+
+export const SOLVER_GOALS: { value: SolverGoal, label: string }[] = [
+    { value: "clear", label: "Clear the stage" },
+    { value: "wave", label: "End of this wave" },
+    { value: "phase", label: "Next boss phase" },
+    { value: "checkpoint", label: "Next wave or phase" },
+    { value: "hp75", label: "Boss / wave HP at 75%" },
+    { value: "hp50", label: "Boss / wave HP at 50%" },
+    { value: "hp25", label: "Boss / wave HP at 25%" },
+    { value: "break", label: "Next break" },
+]
+export function isSolverGoal(g: string): g is SolverGoal {
+    return ["clear", "wave", "phase", "checkpoint", "break"].includes(g) || /^hp([1-9]\d?)$/.test(g)
+}
+// hpNN -> NN / 100 (undefined for other goals).
+export function hpGoalShare(g: SolverGoal): number | undefined {
+    const m = /^hp(\d+)$/.exec(g)
+    return m ? Number(m[1]) / 100 : undefined
+}
+
+// The boss's HP (current and full, every HP bar counted): a shared HP pool when the wave has one (none for an
+// endless pool), else the wave's main target(s), else every enemy of the wave. Dead units count as 0.
+export function bossHp(b: PvPBattle): { cur: number, max: number } | undefined {
+    const t2 = (b as any).team2
+    if (t2.linkHp) return { cur: Math.max(0, t2.linkHp.current), max: Math.max(1, t2.linkHp.max) }
+    const all = t2.kiokuStates as any[]
+    const main = all.filter(u => u.enemy?.appearance?.isMainTargetEnemy)
+    const units = main.length ? main : all
+    if (!units.length) return undefined
+    let cur = 0, max = 0
+    for (const u of units) {
+        const bars = Math.max(1, u.enemy?.appearance?.hpGaugeCount ?? 1)
+        max += bars * Math.max(1, u.maxHp)
+        if (!u.isDead) cur += Math.max(0, (u.enemy?.hpGaugeCount ?? 1) - 1) * u.maxHp + Math.max(0, u.currentHp)
+    }
+    return { cur, max }
+}
 
 // A state at a checkpoint (or a clear), for the page's candidate list.
-// Candidate vectors [AV, -EP share, -SP, Σ AV until each ally's next turn, -HP share]: smaller is better. The first
-// four decide (AV, EP, SP and turn order are what make a good state to go on from); HP only breaks exact ties.
-// `a` covers `b`: a is at least as good in all four, and on a tie there not worse in HP. (Files saved before the
-// turn-wait slot have 4-slot vectors with HP last: compared the same way, slot by slot.)
-const DECIDING = 4
+// Candidate vectors, smaller is better in every slot: [AV, then per prioritised ally (-EP share, its AV until its next
+// turn), then the other allies' -EP share (summed), -SP, their summed AV until their next turns, and last -HP share].
+// Every slot but the last decides (AV, EP, SP and turn order are what make a good state to go on from); HP only
+// breaks exact ties. `a` covers `b`: a is at least as good in all deciding slots, and on a tie there not worse in HP.
+// (Files saved before the turn-wait slot have 4-slot vectors with HP last: compared the same way.)
 export function candidateCovers(a: number[], b: number[]): boolean {
-    for (let i = 0; i < DECIDING; i++) if (!((a[i] ?? 0) <= (b[i] ?? 0))) return false
-    for (let i = 0; i < DECIDING; i++) if ((a[i] ?? 0) !== (b[i] ?? 0)) return true
-    return (a[DECIDING] ?? 0) <= (b[DECIDING] ?? 0)
+    const n = Math.max(a.length, b.length) - 1
+    for (let i = 0; i < n; i++) if (!((a[i] ?? 0) <= (b[i] ?? 0))) return false
+    for (let i = 0; i < n; i++) if ((a[i] ?? 0) !== (b[i] ?? 0)) return true
+    return (a[n] ?? 0) <= (b[n] ?? 0)
 }
 export function compareCandidates(x: { vec: number[] }, y: { vec: number[] }): number {
     for (let i = 0; i < Math.max(x.vec.length, y.vec.length); i++) { const d = (x.vec[i] ?? 0) - (y.vec[i] ?? 0); if (d) return d }
@@ -1286,8 +1392,10 @@ export interface CheckpointView {
     wave: number
     win: boolean
     sp: number
-    allies: { name: string, ep: number, maxEp: number, hpPct: number, dead: boolean, av?: number }[]
+    allies: { name: string, ep: number, maxEp: number, hpPct: number, dead: boolean, av?: number, magic?: number, maxMagic?: number, priority?: boolean }[]
     enemyHp: number       // remaining (waves), as SNode.remaining
+    bossPct?: number      // the boss's HP share in % (bossHp)
+    broken?: boolean      // the boss is broken (a living main target; no main target: any enemy)
     vec: number[]         // [AV, -EP share, -SP, Σ AV to the allies' next turns, -HP share] (see candidateCovers)
 }
 export interface SolverTreeChunk { from: number, parents: Int32Array, elapsed: Float64Array, remaining: Float32Array, labels: string[], status: Uint8Array }

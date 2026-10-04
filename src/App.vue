@@ -11,11 +11,18 @@ const beta = isBeta()
 const router = useRouter()
 
 const titles: [string, number, number?][] = [
-    ["TFF's Exedra Toolbox", 9],
-    ["TFF's Mess of a Toolbox", 1, 6],
-    ["TFF's Ever Changing Beta Toolbox", 0, 10],
-    ["TFF is not a whale!", 0, 2],
-    ["🐳", 0, 1],
+    ["TFF's Exedra Toolbox", 50, 40],
+    ["TFF's Mess of a Toolbox", 47, 30],
+    ["TFF's Ever Changing Beta Toolbox", 0, 20],
+    ["TFF is not a whale!", 0, 1],
+    ["[img:haru.webp] is the biggest whale!", 0, 1],
+    ["[img:haru2.webp]", 0, 1],
+    ["Time to [img:hyperwhale.webp]", 0, 1],
+    ["[img:feliwhale.webp]", 0, 1],
+    ["[img:whale.svg]", 0, 1],
+    ["[img:ren.svg]", 0, 1],
+    ["[img:nya.webp]", 1],
+    ["[img:rika.webp]", 2],
 ]
 
 function pickWeightedTitle(titles: [string, number, number?][]): string {
@@ -38,6 +45,31 @@ function pickWeightedTitle(titles: [string, number, number?][]): string {
 }
 
 const title = pickWeightedTitle(titles)
+
+type TitlePart = { type: 'text'; value: string } | { type: 'img'; src: string }
+
+const IMG_BASE = '/exedra-dmg-calc/header_images/'
+
+function resolveImgSrc(path: string): string {
+    if (path.startsWith('/') || /^https?:\/\//.test(path)) return path
+    return IMG_BASE + path
+}
+
+function parseTitle(raw: string): TitlePart[] {
+    const parts: TitlePart[] = []
+    const re = /\[img:([^\]]+)\]/g
+    let last = 0
+    let m: RegExpExecArray | null
+    while ((m = re.exec(raw)) !== null) {
+        if (m.index > last) parts.push({ type: 'text', value: raw.slice(last, m.index) })
+        parts.push({ type: 'img', src: resolveImgSrc(m[1].trim()) })
+        last = m.index + m[0].length
+    }
+    if (last < raw.length) parts.push({ type: 'text', value: raw.slice(last) })
+    return parts
+}
+
+const titleParts = parseTitle(title)
 
 const navRoutes = computed(() =>
     router.getRoutes().filter(r => r.meta?.version != null)
@@ -104,7 +136,12 @@ function routeForPath(path: string) {
             <CloudSyncWidget />
             <div class="title-row">
                 <img :src="icon" alt="App Icon" class="app-icon" />
-                <h1>{{ title }}</h1>
+                <h1>
+                    <template v-for="(part, i) in titleParts" :key="i">
+                        <img v-if="part.type === 'img'" :src="part.src" alt="" class="title-img" />
+                        <template v-else>{{ part.value }}</template>
+                    </template>
+                </h1>
             </div>
             <nav>
                 <div v-for="paths in [group1Paths, group2Paths, group3Paths]">
@@ -206,6 +243,13 @@ nav a.nav-new.router-link-active {
 .title-row h1 {
     margin: 0;
     line-height: 1;
+}
+
+.title-img {
+    height: 1.1em;
+    width: auto;
+    vertical-align: middle;
+    object-fit: contain;
 }
 
 @media (max-width: 768px) {

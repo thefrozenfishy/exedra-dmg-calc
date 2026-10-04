@@ -7,7 +7,8 @@
 // Solver results file (the page's "Save results" / "Save this line", or this script's output): the search then starts
 // where that file's line ends (its first card, or --pick N), like "Continue from here", with the file's goal and slack
 // unless given. Options:
-//   --goal clear|wave|phase|checkpoint   where a line ends (default clear)
+//   --goal G           where a line ends (default clear): clear | wave (end of this wave) | phase (next boss phase) |
+//                      checkpoint (wave or phase) | break (next break) | hpNN (the wave's shared HP pool, else the boss, at NN%, e.g. hp75)
 //   --slack N          also keep lines up to N AV slower than the best (default: clear 0, checkpoints 30)
 //   --workers N        worker threads (default: CPU cores - 1, at most 16)
 //   --minutes M        stop after M minutes (default: run until Ctrl+C or until the search is complete)
@@ -15,6 +16,8 @@
 //   --out FILE         results file (default fight-solver-<stage>-<goal>-<time>.json in the current folder)
 //   --save-every S     also write the file every S seconds while searching (default 60; 0 = only at the end)
 //   --pick N           results file: start from its N-th card (default 1)
+//   --priority LIST    checkpoint states: characters whose EP and AV until their next turn count on their own (as much
+//                      EP / as little AV as possible each), e.g. "Lux,3" (names or team positions 1-5)
 //   --from-export      start from the export's battle: its decisions and its first <turns> actions are the opening
 //                      (like "Solve from here"; the export's own control mode is used for them)
 //   --allow-ally-deaths   keep searching lines where an ally falls (default: such a line ends as a defeat)
@@ -50,6 +53,7 @@ async function worker() {
     const post = (m: FromWorker) => port.postMessage(m)
     let running = true
     const { solver } = createJobSolver(job)
+    if (job.partition.index === 0 && solver.goalNote) console.log(`note: ${solver.goalNote}`)
     const lines = new Map<number, SolverExportItem>()   // lines never change: replay each node once
     port.on("message", (m: ToWorker) => {
         try {
@@ -96,17 +100,18 @@ async function main() {
     const { parsePvEExport } = await import("../../src/utils/pvpExport")
     const { RESULTS_FORMAT, combineStats, lineOf, mergeCandidates, resultsFileName } = await import("../../src/models/FightSolverResults")
     const { jobSides } = await import("../../src/models/FightSolverJob")
+    const { isSolverGoal } = await import("../../src/models/FightSolver")
 
     // ---- arguments ----
     const args = process.argv.slice(2)
     const file = args.find(a => !a.startsWith("--") && !isValueOf(a))
     function isValueOf(a: string) { const i = args.indexOf(a); return i > 0 && VALUED.has(args[i - 1]) }
-    const VALUED = new Set(["--pick", "--goal", "--slack", "--workers", "--minutes", "--nodes", "--out", "--save-every", "--max-av", "--lower-bound"])
+    const VALUED = new Set(["--priority", "--pick", "--goal", "--slack", "--workers", "--minutes", "--nodes", "--out", "--save-every", "--max-av", "--lower-bound"])
     const flag = (n: string) => args.includes(n)
     const value = (n: string) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : undefined }
     const num = (n: string, d: number) => { const v = value(n); if (v === undefined) return d; const x = Number(v); if (!Number.isFinite(x)) fail(`${n} needs a number`); return x }
     function fail(msg: string): never { console.error(msg); process.exit(2) }
-    if (!file || flag("--help")) fail("usage: npx tsx scripts/sim/fightSolve.ts <pve-export.json | results.json> [--pick N] [--goal clear|wave|phase|checkpoint] [--slack N] [--workers N] [--minutes M] [--nodes N] [--out FILE] [--save-every S] [--from-export] [--allow-ally-deaths] (see the top of the script for all options)")
+    if (!file || flag("--help")) fail("usage: npx tsx scripts/sim/fightSolve.ts <pve-export.json | results.json> [--pick N] [--priority Name,2] [--goal clear|wave|phase|checkpoint|break|hpNN] [--slack N] [--workers N] [--minutes M] [--nodes N] [--out FILE] [--save-every S] [--from-export] [--allow-ally-deaths] (see the top of the script for all options)")
     const text = fs.readFileSync(file, "utf8")
     const parsed = JSON.parse(text)
     // A results file: its setup and the line of one of its cards (the search starts where that line ends).
@@ -116,7 +121,7 @@ async function main() {
     const from = results ? results.candidates[pick - 1] : undefined
     if (results && !from) fail(`the results file has ${results.candidates.length} card(s); --pick ${pick} is not one of them`)
     const goal = (value("--goal") ?? results?.search.goal ?? "clear") as SolverGoal
-    if (!["clear", "wave", "phase", "checkpoint"].includes(goal)) fail(`unknown --goal ${goal}`)
+    if (!isSolverGoal(goal)) fail(`unknown --goal ${goal} (clear, wave, phase, checkpoint, break, or hpNN: the wave's HP pool / the boss at NN%, e.g. hp75)`)
     const slack = num("--slack", value("--goal") === undefined && results ? results.search.slack : goal === "clear" ? 0 : 30)
     const count = Math.max(1, Math.min(16, Math.round(num("--workers", Math.min(16, Math.max(1, os.cpus().length - 1))))))
     const minutes = num("--minutes", 0)
@@ -139,7 +144,17 @@ async function main() {
         ultsAsap: flag("--ults-asap"), ultHabits: flag("--ult-habits"), loose: flag("--loose"),
         stopOnAllyDeath: !flag("--allow-ally-deaths"), goal, slack, opening,
     }
+    // --priority "Lux,3": team positions (1-based) or (parts of) names; a results file's own priority otherwise.
+    const filled = base.slots
+    const pv = value("--priority")
+    base.priority = pv === undefined ? results?.search.job.priority : pv.split(",").map(x => x.trim()).filter(Boolean).map(x => {
+        const n = Number(x)
+        const i = Number.isInteger(n) ? n - 1 : filled.findIndex(sl => (sl.main?.name ?? "").toLowerCase().includes(x.toLowerCase()))
+        if (!(i >= 0 && i < filled.length)) fail(`--priority: no team member "${x}" (team: ${filled.map((sl, k) => `${k + 1} ${sl.main?.name}`).join(", ")})`)
+        return i
+    })
     console.log(`${data.stageName ?? `stage ${data.stageId}`} · ${base.slots.length} units · ${base.rngMode}${base.rngMode === "seed" ? ` ${data.seed}` : ""} RNG · goal ${goal} · slack ${slack} AV · ${count} workers${from ? ` · from card ${pick} of ${file} (${from.note ?? `${from.elapsed.toFixed(1)} AV`}, ${from.route.length} decisions)` : opening ? ` · from the export's first ${opening.steps} actions` : ""}`)
+    if (base.priority?.length) console.log(`prioritised: ${base.priority.map(i => filled[i]?.main?.name).join(", ")} (own EP and next turn each)`)
     console.log(`results: ${path.resolve(out)} (Ctrl+C stops and saves)`)
 
     // ---- workers ----

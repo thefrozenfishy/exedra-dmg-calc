@@ -31,6 +31,7 @@ export interface FightSolverJob {
     stopOnAllyDeath: boolean
     goal: SolverGoal
     slack: number
+    priority?: number[]     // checkpoint cards: prioritised allies (team positions, 0-based; FightSolver.stateCard)
     partition: { index: number, count: number }
     // "Solve from here": the simulator's battle so far (its decisions by roll index, the actions it ran, its control).
     opening?: SolverOpening
@@ -68,8 +69,8 @@ export function createJobSolver(job: FightSolverJob): { solver: FightSolver, inf
     const solver = new FightSolver(build, {
         maxNodes: job.maxNodes, maxAv: job.maxAv, memo: job.memo, dominance: job.dominance, symmetry: job.symmetry,
         beamWidth: job.beamWidth, lowerBound: job.lowerBound, damage, ultsAsap: job.ultsAsap, ultHabits: job.ultHabits,
-        loose: job.loose, stopOnAllyDeath: job.stopOnAllyDeath, partition: job.partition, goal: job.goal, slack: job.slack,
+        loose: job.loose, stopOnAllyDeath: job.stopOnAllyDeath, partition: job.partition, goal: job.goal, slack: job.slack, priority: job.priority,
     }, prefix)
-    const info = [solver.resourceInfo, damage ? `max damage rate ≈ ${Math.round(damage.rate).toLocaleString()} HP/AV` : ""].filter(Boolean).join(" · ")
+    const info = [solver.goalNote, solver.resourceInfo, damage ? `max damage rate ≈ ${Math.round(damage.rate).toLocaleString()} HP/AV` : ""].filter(Boolean).join(" · ")
     return { solver, info }
 }
