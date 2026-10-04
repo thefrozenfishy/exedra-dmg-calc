@@ -465,6 +465,7 @@ export const BETA_SECTIONS = [
                     { name: "Ultra Great Big Hammer", ascension: 0 },
                     { name: "Cherry Blizzard", ascension: 0 },
                     { name: "Désintégration", ascension: 0 },
+                    { name: "Groundhog Daze", ascension: 0 },
 
                     // Pretty strong
                     {
