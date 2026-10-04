@@ -84,7 +84,7 @@
                     <div class="role-chip-inner">
                         <img :src="`/exedra-dmg-calc/roles/${virtualRoleBase(vRole)}.png`" :alt="vRole" />
                         <span v-if="isVirtualSplitRole(vRole)" class="role-chip-label">{{ virtualRoleRangeTag(vRole)
-                            }}</span>
+                        }}</span>
                     </div>
                 </button>
                 <button class="chip chip-all" :class="allVirtualRolesVisible ? 'chip--visible' : 'chip--hidden'"
@@ -130,7 +130,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ xVal === "-1" ? "Not Owned" : `A${xVal}`
-                            }}</span>
+                                }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -150,7 +150,7 @@
                                 </div>
                             </template>
                             <span v-else class="ascension-header-label">{{ yVal === "-1" ? "Not Owned" : `A${yVal}`
-                            }}</span>
+                                }}</span>
                         </td>
                         <td v-for="xVal in visibleXValues" :key="xVal" class="grid-cell">
                             <template v-for="r in [5, 4, 3]" :key="r">
@@ -180,7 +180,7 @@
                                                         <img :src="`/exedra-dmg-calc/roles/${ch.role}.png`"
                                                             :alt="ch.role" class="info-badge-icon" />
                                                         <span class="role-badge-tag">{{ rangeTag(ch.range, ch.role)[0]
-                                                        }}</span>
+                                                            }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="axis-info-badge level-badge info-badge-img"
@@ -1214,7 +1214,7 @@ const benchCharts = computed(() => [
                 ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of auto battle with infinite SP, supported by four ${LuxMagica}, Only the damage dealer's own damage counts.`
                 : `Max Burst: the Ultimate with the damage dealer's own buffs and debuffs at full stacks and every hit a crit.`,
             `${levelsDescription.value} ${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle; single-target and proximity skills aim at the middle one. Ailment bonuses (enemies under Curse, Burn, ...) get their own bar when they change the result; in Average Damage the other bars make the enemies immune to those ailments.`,
-                        benchAverageDmg.value
+            benchAverageDmg.value
                 ? `Be aware: Dot poppers (e.g. Marigold Dadaism) requires a team of dot appliers and uniquely scales on the entire teams dps, not just their own, so their damage output is not well reflected here.`
                 : ``,
         ],

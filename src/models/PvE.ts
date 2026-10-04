@@ -155,8 +155,10 @@ export function stageWaveMeta(questStageMstId: number): WaveMeta[] {
 import soloRaidJson from "../assets/base_data/getSoloRaidMstList.json";
 import soloRaidSeasonBuffJson from "../assets/base_data/getSoloRaidSeasonBuffMstList.json";
 import soloRaidPartyBuffJson from "../assets/base_data/getSoloRaidPartyBuffMstList.json";
-export interface SoloRaidSeasonBuff { soloRaidSeasonBuffMstId: number, groupId: number, passiveSkillMstId: number, enhancedPassiveSkillMstId: number,
-    buffPointChargePassiveSkillMstId: number, maxBuffPoint: number, maxBuffPointOnEnhanced: number, enhancedSkillTurnGaugeValue: number }
+export interface SoloRaidSeasonBuff {
+    soloRaidSeasonBuffMstId: number, groupId: number, passiveSkillMstId: number, enhancedPassiveSkillMstId: number,
+    buffPointChargePassiveSkillMstId: number, maxBuffPoint: number, maxBuffPointOnEnhanced: number, enhancedSkillTurnGaugeValue: number
+}
 export interface SoloRaidPartyBuff { soloRaidPartyBuffMstId: number, groupId: number, passiveSkillMstId: number, buffPointChargePassiveSkillMstId: number }
 export interface SoloRaidInfo { soloRaidMstId: number, difficulty: number, limitRoundCount: number, season?: SoloRaidSeasonBuff, partyBuffs: SoloRaidPartyBuff[] }
 // "Vanguard Base Points" passive (SoloRaidBuffReferee commonCharge): sent by the server, not in a master table.

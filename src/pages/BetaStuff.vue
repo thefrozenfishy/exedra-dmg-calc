@@ -17,8 +17,8 @@
 
                         <span v-if="hasChanged(setting)" class="changed-dot" title="Changed from default" />
 
-                        <button v-if="hasChanged(setting)" type="button" class="reset-btn"
-                            title="Revert to default" @click="resetSetting(setting)">
+                        <button v-if="hasChanged(setting)" type="button" class="reset-btn" title="Revert to default"
+                            @click="resetSetting(setting)">
                             Reset
                         </button>
                     </div>

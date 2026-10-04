@@ -184,8 +184,10 @@ export class PvPBattle {
             wave: this.currentWave + this.firstWave,
             nextEnemyIndex: t2.endless?.next ?? 0,
             linkHp: t2.linkHp ? t2.linkHp.current : (main?.currentHp ?? 0),
-            enemies: alive.map(k => ({ appearanceId: k.enemy!.appearance.questEnemyAppearanceMstId, positionId: k.positionId, hp: k.currentHp,
-                breakGauge: k.currentRemainingBreakGauge, breakBonus: k.breakedDamageReceiveRate, turnGauge: k.turnGauge })),
+            enemies: alive.map(k => ({
+                appearanceId: k.enemy!.appearance.questEnemyAppearanceMstId, positionId: k.positionId, hp: k.currentHp,
+                breakGauge: k.currentRemainingBreakGauge, breakBonus: k.breakedDamageReceiveRate, turnGauge: k.turnGauge
+            })),
             countdown: t2.countdown?.unit ? { num: t2.countdown.value, damage: t2.countdown.cancelTotal } : undefined,
             seasonBuff: t2.soloRaid ? { active: t2.soloRaid.active, point: t2.soloRaid.point, gauge: t2.soloRaid.gauge } : undefined,
         }

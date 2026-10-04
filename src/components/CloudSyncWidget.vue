@@ -31,7 +31,7 @@
                         <br><br>
 
                         Save this ID somewhere safe. It can be used to restore your profile
-                        on another device or browser. 
+                        on another device or browser.
                         You can load the same profile on multiple devices by using the same ID.
 
                         <br><br>

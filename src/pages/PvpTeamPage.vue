@@ -1,129 +1,143 @@
 <template>
-  <div class="setup-page team-page">
-    <h1 class="page-title">PvP Simulator</h1>
+    <div class="setup-page team-page">
+        <h1 class="page-title">PvP Simulator</h1>
 
-    <SavedTeamsPanel :saved="saved" />
+        <SavedTeamsPanel :saved="saved" />
 
-    <section class="toolbar card share-card-actions">
-      <div class="toolbar-left">
-        <ImageActionsToolbar :target="() => shareCardRef!" filename="pvp-team-share.png" :export-options="exportOpts"
-          :share-options="shareOptionsForTeamCard" :disabled="!shareCardAvailable"
-          :share-handler="saved.generateShareUrl" share-label="Share team" />
-      </div>
-    </section>
+        <section class="toolbar card share-card-actions">
+            <div class="toolbar-left">
+                <ImageActionsToolbar :target="() => shareCardRef!" filename="pvp-team-share.png"
+                    :export-options="exportOpts" :share-options="shareOptionsForTeamCard"
+                    :disabled="!shareCardAvailable" :share-handler="saved.generateShareUrl" share-label="Share team" />
+            </div>
+        </section>
 
-    <div class="share-card-preview" ref="shareCardRef">
-      <div v-for="teamGroup in shareTeams" :key="teamGroup.isAlliedTeam" class="share-team-section">
-        <div class="share-team-heading" :class="teamGroup.isAlliedTeam ? 'ally' : 'enemy'">{{ teamGroup.label }} Team
+        <div class="share-card-preview" ref="shareCardRef">
+            <div v-for="teamGroup in shareTeams" :key="teamGroup.isAlliedTeam" class="share-team-section">
+                <div class="share-team-heading" :class="teamGroup.isAlliedTeam ? 'ally' : 'enemy'">{{ teamGroup.label }}
+                    Team
+                </div>
+                <div class="share-card-grid">
+                    <div v-for="(entry, index) in teamGroup.entries" :key="index" class="share-slot"
+                        :class="{ 'share-slot-starter': isStarter(entry.extraData) }">
+                        <template v-if="entry.slot.main">
+                            <div class="share-slot-top">
+                                <div class="share-slot-kioku-image">
+                                    <img :src="kiokuImage(entry.slot.main)" :alt="entry.slot.main.name" />
+                                    <div class="share-overlay-badges">
+                                        <span class="share-overlay-badge ascension">A{{ entry.slot.main.ascension
+                                        }}</span>
+                                        <span class="share-overlay-badge heart">H{{ entry.slot.main.heartphialLvl
+                                        }}</span>
+                                        <span class="share-overlay-badge magic">ML{{ entry.slot.main.magicLvl }}</span>
+                                        <span v-if="entry.slot.main.rarity !== 3"
+                                            class="share-overlay-badge special">SP{{
+                                                entry.slot.main.specialLvl }}</span>
+                                    </div>
+                                </div>
+                                <div v-if="isStarter(entry.extraData)" class="share-starter-tag">Starts</div>
+                            </div>
+
+                            <div class="share-slot-portrait-support">
+                                <div class="share-slot-portrait-block" v-if="entry.slot.main?.portrait">
+                                    <img class="share-slot-portrait-icon" :src="portraitImage(entry.slot.main.portrait)"
+                                        :alt="entry.slot.main.portrait" />
+                                    <div class="share-slot-portrait-label">{{ entry.slot.main.portrait }}</div>
+                                </div>
+                                <div class="share-slot-support-block" v-if="entry.slot.support">
+                                    <img class="share-slot-support-image" :src="kiokuImage(entry.slot.support)"
+                                        :alt="entry.slot.support.name" />
+                                    <div class="share-slot-support-label">{{ entry.slot.support.name }}</div>
+                                </div>
+                            </div>
+
+                            <div class="share-slot-crys-row">
+                                <span class="share-chip"
+                                    v-for="([crysId], idx) in Object.entries(entry.slot.main.crysOptions)
+                                        .filter(([, value]) => value.useIndex > 0).sort(([, a], [, b]) => a.useIndex - b.useIndex)"
+                                    :key="`cry-${idx}`">
+                                    {{ crystalises[Number(crysId)]?.styleMstId ? "EX" :
+                                        crystalises[Number(crysId)]?.name }}
+                                </span>
+                            </div>
+
+                            <div class="share-slot-subcrys-row">
+                                <span class="share-chip subcrys-chip"
+                                    v-for="(item, idx) in summarizeSubCrys(entry.slot.main)" :key="`sub-${idx}`">
+                                    {{ item }}
+                                </span>
+                            </div>
+
+                            <div class="share-slot-pvp-stats" v-if="entry.extraData">
+                                <div class="share-pvp-stat">
+                                    Spd: {{ round(entry.extraData.spd) }}
+                                    ({{ entry.extraData.baseSpd }}
+                                    <span class="share-spd-bonus">+ {{ round(entry.extraData.spd -
+                                        entry.extraData.baseSpd) }}</span>)
+                                </div>
+                                <div class="share-pvp-stat">
+                                    Initial AV: {{ entry.extraData.secondsLeft > 0.001 || entry.extraData.secondsLeft
+                                        === 0 ?
+                                        round(entry.extraData.secondsLeft) :
+                                        'Barely not 0!' }}
+                                </div>
+                            </div>
+                        </template>
+                        <div v-else class="share-slot-empty">Empty</div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="share-card-grid">
-          <div v-for="(entry, index) in teamGroup.entries" :key="index" class="share-slot"
-            :class="{ 'share-slot-starter': isStarter(entry.extraData) }">
-            <template v-if="entry.slot.main">
-              <div class="share-slot-top">
-                <div class="share-slot-kioku-image">
-                  <img :src="kiokuImage(entry.slot.main)" :alt="entry.slot.main.name" />
-                  <div class="share-overlay-badges">
-                    <span class="share-overlay-badge ascension">A{{ entry.slot.main.ascension }}</span>
-                    <span class="share-overlay-badge heart">H{{ entry.slot.main.heartphialLvl }}</span>
-                    <span class="share-overlay-badge magic">ML{{ entry.slot.main.magicLvl }}</span>
-                    <span v-if="entry.slot.main.rarity !== 3" class="share-overlay-badge special">SP{{
-                      entry.slot.main.specialLvl }}</span>
-                  </div>
-                </div>
-                <div v-if="isStarter(entry.extraData)" class="share-starter-tag">Starts</div>
-              </div>
 
-              <div class="share-slot-portrait-support">
-                <div class="share-slot-portrait-block" v-if="entry.slot.main?.portrait">
-                  <img class="share-slot-portrait-icon" :src="portraitImage(entry.slot.main.portrait)"
-                    :alt="entry.slot.main.portrait" />
-                  <div class="share-slot-portrait-label">{{ entry.slot.main.portrait }}</div>
-                </div>
-                <div class="share-slot-support-block" v-if="entry.slot.support">
-                  <img class="share-slot-support-image" :src="kiokuImage(entry.slot.support)"
-                    :alt="entry.slot.support.name" />
-                  <div class="share-slot-support-label">{{ entry.slot.support.name }}</div>
-                </div>
-              </div>
+        <div v-for="isAlliedTeam in [1, 0]">
+            <h2 class="section-title">{{ isAlliedTeam ? "Allied" : "Enemy" }} Team</h2>
+            <div class="team-grid">
+                <div v-for="(slot, index) in team.slots[isAlliedTeam]" :key="index" class="team-slot">
+                    <h3 class="slot-title"> {{ isAlliedTeam ? "Ally" : "Enemy" }} {{ index + 1 }}</h3>
 
-              <div class="share-slot-crys-row">
-                <span class="share-chip" v-for="([crysId], idx) in Object.entries(entry.slot.main.crysOptions)
-                  .filter(([, value]) => value.useIndex > 0).sort(([, a], [, b]) => a.useIndex - b.useIndex)"
-                  :key="`cry-${idx}`">
-                  {{ crystalises[Number(crysId)]?.styleMstId ? "EX" : crystalises[Number(crysId)]?.name }}
-                </span>
-              </div>
-
-              <div class="share-slot-subcrys-row">
-                <span class="share-chip subcrys-chip" v-for="(item, idx) in summarizeSubCrys(entry.slot.main)"
-                  :key="`sub-${idx}`">
-                  {{ item }}
-                </span>
-              </div>
-
-              <div class="share-slot-pvp-stats" v-if="entry.extraData">
-                <div class="share-pvp-stat">
-                  Spd: {{ round(entry.extraData.spd) }}
-                  ({{ entry.extraData.baseSpd }}
-                  <span class="share-spd-bonus">+ {{ round(entry.extraData.spd - entry.extraData.baseSpd) }}</span>)
+                    <CharacterEditor :index="index" :slot="slot"
+                        :extraData="battleOutput[0]?.[isAlliedTeam ? 'allies' : 'enemies']?.team?.find(b => b.name === slot.main?.name)"
+                        :setMain="team.setMain(isAlliedTeam)" :setSupport="team.setSupport(isAlliedTeam)" />
                 </div>
-                <div class="share-pvp-stat">
-                  Initial AV: {{ entry.extraData.secondsLeft > 0.001 || entry.extraData.secondsLeft === 0 ?
-                    round(entry.extraData.secondsLeft) :
-                  'Barely not 0!' }}
-                </div>
-              </div>
-            </template>
-            <div v-else class="share-slot-empty">Empty</div>
-          </div>
+            </div>
         </div>
-      </div>
+
+        <section class="card battle-order-card">
+            <h2 class="section-title">Battle Simulator</h2>
+
+            <p class="hint-text">Simulates the battle turn by turn. Choose how random rolls (crits, buff/debuff chances,
+                AI
+                target picks) are decided below.</p>
+
+            <div class="notice-banner">
+                <h3 class="notice-tag">PvP simulator is fully implemented</h3>
+                <p>The PvP simulator now has been fully rewritten and should simulate the game closely.</p>
+                <p>If you spot any situation where the simulator and in-game doesn't agree please notify me on discord.
+                    It's
+                    annoyingly hard to test due to the play count limit!</p>
+                <p>Just @TFF!</p>
+            </div>
+
+            <RngControls class="sim-rng" v-model:mode="rngMode" :seed="seed" :changed="decisions.size"
+                :disabled="!isFullBattle" @update:seed="setSeed" @reset="resetDecisions" />
+
+            <button class="btn btn-accent run-sim-btn" @click="runSimulation" :disabled="!isFullBattle">Run
+                Simulation</button>
+
+            <div class="sim-tools">
+                <button class="btn" @click="exportBattle" :disabled="!isFullBattle"
+                    title="Save the team setup, RNG settings and the full simulated sequence to a file">Export to
+                    file</button>
+                <button class="btn" @click="importInput?.click()"
+                    title="Load teams and RNG settings from an exported file and re-run the simulation">Import
+                    file</button>
+                <input ref="importInput" type="file" accept=".json,application/json" class="hidden-file"
+                    @change="importBattle" />
+            </div>
+
+            <BattleTimeline :states="battleOutput" :rng-editable="rngMode === 'manual'" @decide="onDecide" />
+        </section>
     </div>
-
-    <div v-for="isAlliedTeam in [1, 0]">
-      <h2 class="section-title">{{ isAlliedTeam ? "Allied" : "Enemy" }} Team</h2>
-      <div class="team-grid">
-        <div v-for="(slot, index) in team.slots[isAlliedTeam]" :key="index" class="team-slot">
-          <h3 class="slot-title"> {{ isAlliedTeam ? "Ally" : "Enemy" }} {{ index + 1 }}</h3>
-
-          <CharacterEditor :index="index" :slot="slot"
-            :extraData="battleOutput[0]?.[isAlliedTeam ? 'allies' : 'enemies']?.team?.find(b => b.name === slot.main?.name)"
-            :setMain="team.setMain(isAlliedTeam)" :setSupport="team.setSupport(isAlliedTeam)" />
-        </div>
-      </div>
-    </div>
-
-    <section class="card battle-order-card">
-      <h2 class="section-title">Battle Simulator</h2>
-
-      <p class="hint-text">Simulates the battle turn by turn. Choose how random rolls (crits, buff/debuff chances, AI
-        target picks) are decided below.</p>
-
-      <div class="notice-banner">
-        <h3 class="notice-tag">PvP simulator is fully implemented</h3>
-        <p>The PvP simulator now has been fully rewritten and should simulate the game closely.</p>
-        <p>If you spot any situation where the simulator and in-game doesn't agree please notify me on discord. It's annoyingly hard to test due to the play count limit!</p>
-        <p>Just @TFF!</p>
-      </div>
-
-      <RngControls class="sim-rng" v-model:mode="rngMode" :seed="seed" :changed="decisions.size" :disabled="!isFullBattle"
-        @update:seed="setSeed" @reset="resetDecisions" />
-
-      <button class="btn btn-accent run-sim-btn" @click="runSimulation" :disabled="!isFullBattle">Run
-        Simulation</button>
-
-      <div class="sim-tools">
-        <button class="btn" @click="exportBattle" :disabled="!isFullBattle"
-          title="Save the team setup, RNG settings and the full simulated sequence to a file">Export to file</button>
-        <button class="btn" @click="importInput?.click()"
-          title="Load teams and RNG settings from an exported file and re-run the simulation">Import file</button>
-        <input ref="importInput" type="file" accept=".json,application/json" class="hidden-file" @change="importBattle" />
-      </div>
-
-      <BattleTimeline :states="battleOutput" :rng-editable="rngMode === 'manual'" @decide="onDecide" />
-    </section>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -162,7 +176,7 @@ const battleInstance = shallowRef<PvPBattle | null>(null)
 
 // Shared with scripts/sim/replayExport.ts so an exported file replays with the same teams.
 function buildTeams(): [PvPKioku[], PvPKioku[]] {
-  return buildPvPKiokus(team.slots)
+    return buildPvPKiokus(team.slots)
 }
 
 // Turns simulated per run (each turn can produce several displayed actions).
@@ -176,71 +190,71 @@ const seed = ref(Math.floor(Math.random() * 2 ** 32))
 const decisions = shallowRef(new Map<number, RngDecision>())
 
 function newBattle(): PvPBattle {
-  const [alliedTeam, enemyTeam] = buildTeams()
-  return markRaw(new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"), false, seed.value,
-    { rngMode: rngMode.value, decisions: decisions.value }))
+    const [alliedTeam, enemyTeam] = buildTeams()
+    return markRaw(new PvPBattle(new PvPTeam(alliedTeam, "Ally", true), new PvPTeam(enemyTeam, "Enemy"), false, seed.value,
+        { rngMode: rngMode.value, decisions: decisions.value }))
 }
 
 // Initial state only (no simulation yet).
 function rebuildBattle() {
-  if (!isFullBattle.value) {
-    battleOutput.value = []
-    battleInstance.value = null
-    return
-  }
-  const battle = newBattle()
-  battleInstance.value = battle
-  if (import.meta.env.DEV) (window as any).__pvpBattle = battle // for debugging exports in dev
-  battleOutput.value = [battle.getCurrentState()]
+    if (!isFullBattle.value) {
+        battleOutput.value = []
+        battleInstance.value = null
+        return
+    }
+    const battle = newBattle()
+    battleInstance.value = battle
+    if (import.meta.env.DEV) (window as any).__pvpBattle = battle // for debugging exports in dev
+    battleOutput.value = [battle.getCurrentState()]
 }
 
 watch(team, () => {
-  decisions.value = new Map()
-  rebuildBattle()
+    decisions.value = new Map()
+    rebuildBattle()
 }, { immediate: true, deep: true })
 
 // Changing how rolls are decided re-runs a battle that was already simulated.
 const hasRun = () => battleOutput.value.length > 1
 function rerun() {
-  if (hasRun()) runSimulation()
-  else rebuildBattle()
+    if (hasRun()) runSimulation()
+    else rebuildBattle()
 }
 watch(rngMode, rerun)
 
 function setSeed(v: number) {
-  seed.value = v
-  runSimulation()
+    seed.value = v
+    runSimulation()
 }
 
 function onDecide(ev: RngEvent, value: boolean | number) {
-  const next = new Map(decisions.value)
-  if (value === ev.defaultOutcome) next.delete(ev.index)
-  else next.set(ev.index, { kind: ev.kind, label: ev.label, value })
-  decisions.value = next
-  runSimulation()
+    const next = new Map(decisions.value)
+    if (value === ev.defaultOutcome) next.delete(ev.index)
+    else next.set(ev.index, { kind: ev.kind, label: ev.label, value })
+    decisions.value = next
+    runSimulation()
 }
 
 function resetDecisions() {
-  decisions.value = new Map()
-  rerun()
+    decisions.value = new Map()
+    rerun()
 }
 
 function isStarter(extraData?: TeamSnapshot) {
-  return !!extraData && extraData.secondsLeft === 0
+    return !!extraData && extraData.secondsLeft === 0
 }
 
 function getExtraData(isAlliedTeam: number, mainName?: string): TeamSnapshot | undefined {
-  if (!mainName) return undefined
-  return battleOutput.value[0]?.[isAlliedTeam ? 'allies' : 'enemies']?.team?.find(b => b.name === mainName)
+    if (!mainName) return undefined
+    return battleOutput.value[0]?.[isAlliedTeam ? 'allies' : 'enemies']?.team?.find(b => b.name === mainName)
 }
 
 const shareTeams = computed(() => [1, 0].map(isAlliedTeam => ({
-  isAlliedTeam,
-  label: isAlliedTeam ? 'Allied' : 'Enemy',
-  entries: team.slots[isAlliedTeam].map(slot => ({
-    slot,
-    extraData: getExtraData(isAlliedTeam, slot.main?.name),
-  })),
+    isAlliedTeam,
+    label: isAlliedTeam ? 'Allied' : 'Enemy',
+    entries: team.slots[isAlliedTeam].map(slot => ({
+        slot,
+        extraData: getExtraData(isAlliedTeam, slot.main?.name),
+    })),
 })))
 
 const shareCardRef = ref<HTMLElement | null>(null)
@@ -248,544 +262,543 @@ const shareCardAvailable = computed(() => team.slots[0].some(s => !!s.main) || t
 const exportOpts = { exportClass: "exporting" }
 
 const saved = useSavedTeams({
-  kind: 'pvp',
-  routePath: '/pvp-simulator',
-  label: 'PvP Team',
-  getSlots: () => team.slots,
-  applySlots: slots => team.importSlots(slots),
-  shareTarget: () => shareCardRef.value!,
-  exportOptions: exportOpts,
+    kind: 'pvp',
+    routePath: '/pvp-simulator',
+    label: 'PvP Team',
+    getSlots: () => team.slots,
+    applySlots: slots => team.importSlots(slots),
+    shareTarget: () => shareCardRef.value!,
+    exportOptions: exportOpts,
 })
 
 const shareOptionsForTeamCard = () => ({
-  title: `${useFriendStore().getFormattedDisplayNamePossessive()} PvP Team Setup`,
-  backUrl: window.location.href,
+    title: `${useFriendStore().getFormattedDisplayNamePossessive()} PvP Team Setup`,
+    backUrl: window.location.href,
 })
 
 const kiokuImage = (member: Character) =>
-  `/exedra-dmg-calc/kioku_images/${member.id}_thumbnail.png`
+    `/exedra-dmg-calc/kioku_images/${member.id}_thumbnail.png`
 
 const portraitImage = (portrait?: string) => {
-  if (!portrait) return ''
-  return `/exedra-dmg-calc/portrait_images/${portraits[portrait].resourceName}_thumbnail.png`
+    if (!portrait) return ''
+    return `/exedra-dmg-calc/portrait_images/${portraits[portrait].resourceName}_thumbnail.png`
 }
 
 const summarizeSubCrys = (ch: Character) => {
-  const items = Object.values(ch.crysOptions)
-    .filter(c => c.useIndex > 0)
-    .flatMap(option => option.subCrys)
-    .filter(Boolean)
-    .map(c => Object.values(crystalises).find(cx => cx.selectionAbilityMstId === c))
-    .filter(c => c?.abilityEffectType === "UP_SPD_FIXED")
-    .map(c => Object.values(passiveDetails).find(v => (v as any).passiveSkillMstId === c?.value1))
-    .filter(c => !!c)
+    const items = Object.values(ch.crysOptions)
+        .filter(c => c.useIndex > 0)
+        .flatMap(option => option.subCrys)
+        .filter(Boolean)
+        .map(c => Object.values(crystalises).find(cx => cx.selectionAbilityMstId === c))
+        .filter(c => c?.abilityEffectType === "UP_SPD_FIXED")
+        .map(c => Object.values(passiveDetails).find(v => (v as any).passiveSkillMstId === c?.value1))
+        .filter(c => !!c)
 
-  if (!items.length) return []
-  const counts = items.reduce((acc, eff) => {
-    if (eff.abilityEffectType in acc) {
-      acc[eff.abilityEffectType][1] = acc[eff.abilityEffectType][1] + eff.value1
-    } else {
-      acc[eff.abilityEffectType] = [
-        eff.description
-          .replace(eff.value1, "XXXXX")
-          .replace((eff.value1 / 10).toFixed(1), "XXXXX")
-          .replace((eff.value1 / 10).toFixed(0), "XXXXX"),
-        eff.value1
-      ]
-    }
+    if (!items.length) return []
+    const counts = items.reduce((acc, eff) => {
+        if (eff.abilityEffectType in acc) {
+            acc[eff.abilityEffectType][1] = acc[eff.abilityEffectType][1] + eff.value1
+        } else {
+            acc[eff.abilityEffectType] = [
+                eff.description
+                    .replace(eff.value1, "XXXXX")
+                    .replace((eff.value1 / 10).toFixed(1), "XXXXX")
+                    .replace((eff.value1 / 10).toFixed(0), "XXXXX"),
+                eff.value1
+            ]
+        }
 
-    return acc
-  }, {} as Record<string, number>)
+        return acc
+    }, {} as Record<string, number>)
 
-  return Object.entries(counts).map(([effType, [desc, nr]]) => desc.replace("XXXXX", (desc as string).includes("%") ? nr / 10 : nr))
+    return Object.entries(counts).map(([effType, [desc, nr]]) => desc.replace("XXXXX", (desc as string).includes("%") ? nr / 10 : nr))
 }
 
 
 
 function runSimulation() {
-  if (!isFullBattle.value) {
-    battleOutput.value = []
-    return
-  }
-  // Always a fresh battle: a run mutates its units, and Manual mode replays from the start.
-  const battle = newBattle()
-  battleInstance.value = battle
-  // One entry per executed skill: turn actions, ultimates, extra actions, combo steps and
-  // follow-ups each get their own "Action N" (executeNextAction returns them in order).
-  const states: BattleSnapshot[] = [battle.getCurrentState()]
-  for (let turn = 0; turn < SIM_TURNS && !battle.isOver; turn++) {
-    try {
-      states.push(...battle.executeNextAction())
-    } catch (e) {
-      toast.warning(String(e))
-      console.warn("Failed to execute next action:", e)
-      break
+    if (!isFullBattle.value) {
+        battleOutput.value = []
+        return
     }
-  }
-  battleOutput.value = states
+    // Always a fresh battle: a run mutates its units, and Manual mode replays from the start.
+    const battle = newBattle()
+    battleInstance.value = battle
+    // One entry per executed skill: turn actions, ultimates, extra actions, combo steps and
+    // follow-ups each get their own "Action N" (executeNextAction returns them in order).
+    const states: BattleSnapshot[] = [battle.getCurrentState()]
+    for (let turn = 0; turn < SIM_TURNS && !battle.isOver; turn++) {
+        try {
+            states.push(...battle.executeNextAction())
+        } catch (e) {
+            toast.warning(String(e))
+            console.warn("Failed to execute next action:", e)
+            break
+        }
+    }
+    battleOutput.value = states
 }
 
 function exportBattle() {
-  if (!isFullBattle.value) return
-  if (!hasRun()) runSimulation()
-  const data = buildExport(team.slots, seed.value, SIM_TURNS, battleOutput.value, { mode: rngMode.value, decisions: decisions.value })
-  const first = (team.slots[1][0]?.main?.name ?? "team").replace(/[^A-Za-z0-9]+/g, "-")
-  downloadText(`pvp-sim-${first}-${rngMode.value === 'seed' ? `seed${seed.value}` : rngMode.value}.json`, JSON.stringify(data, null, 2))
-  toast.success("Exported team setup and simulated sequence")
+    if (!isFullBattle.value) return
+    if (!hasRun()) runSimulation()
+    const data = buildExport(team.slots, seed.value, SIM_TURNS, battleOutput.value, { mode: rngMode.value, decisions: decisions.value })
+    const first = (team.slots[1][0]?.main?.name ?? "team").replace(/[^A-Za-z0-9]+/g, "-")
+    downloadText(`pvp-sim-${first}-${rngMode.value === 'seed' ? `seed${seed.value}` : rngMode.value}.json`, JSON.stringify(data, null, 2))
+    toast.success("Exported team setup and simulated sequence")
 }
 
 async function importBattle(ev: Event) {
-  const input = ev.target as HTMLInputElement
-  const file = input.files?.[0]
-  input.value = ""
-  if (!file) return
-  try {
-    const data = parseExport(await file.text())
-    saved.detach() // an imported file is a new setup, not an edit of the active saved team
-    team.importSlots(data.slots)
-    await nextTick() // lets the team watcher reset its state first
-    seed.value = data.seed
-    rngMode.value = data.rngMode ?? 'seed'
-    decisions.value = new Map(Object.entries(data.decisions ?? {}).map(([k, v]) => [Number(k), v]))
-    runSimulation()
-    toast.success(`Imported teams (${data.rngMode ?? 'seed'} RNG${(data.rngMode ?? 'seed') === 'seed' ? `, seed ${data.seed}` : ''})`)
-  } catch (e) {
-    toast.error(`Could not import: ${(e as Error).message}`)
-  }
+    const input = ev.target as HTMLInputElement
+    const file = input.files?.[0]
+    input.value = ""
+    if (!file) return
+    try {
+        const data = parseExport(await file.text())
+        saved.detach() // an imported file is a new setup, not an edit of the active saved team
+        team.importSlots(data.slots)
+        await nextTick() // lets the team watcher reset its state first
+        seed.value = data.seed
+        rngMode.value = data.rngMode ?? 'seed'
+        decisions.value = new Map(Object.entries(data.decisions ?? {}).map(([k, v]) => [Number(k), v]))
+        runSimulation()
+        toast.success(`Imported teams (${data.rngMode ?? 'seed'} RNG${(data.rngMode ?? 'seed') === 'seed' ? `, seed ${data.seed}` : ''})`)
+    } catch (e) {
+        toast.error(`Could not import: ${(e as Error).message}`)
+    }
 }
 </script>
 
 <style scoped>
 /* ── Page (shared design system) ── */
 .setup-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 0 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 0 4rem;
 }
 
 .page-title {
-  font-size: 2rem;
-  margin: 0 0 1.25rem;
-  color: var(--text);
-  text-align: center;
+    font-size: 2rem;
+    margin: 0 0 1.25rem;
+    color: var(--text);
+    text-align: center;
 }
 
 .card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
 }
 
 .section-title {
-  font-size: 1.2rem;
-  color: var(--accent-soft);
-  margin: 1.5rem 0 0.75rem;
-  text-align: center;
+    font-size: 1.2rem;
+    color: var(--accent-soft);
+    margin: 1.5rem 0 0.75rem;
+    text-align: center;
 }
 
 .slot-title {
-  font-size: 0.95rem;
-  color: var(--accent-soft);
-  text-align: center;
-  margin: 0.5rem 0;
+    font-size: 0.95rem;
+    color: var(--accent-soft);
+    text-align: center;
+    margin: 0.5rem 0;
 }
 
 .btn {
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 0.5em 1.2em;
-  font-size: 0.9rem;
-  font-weight: 600;
-  font-family: inherit;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text);
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 0.5em 1.2em;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .btn-accent {
-  background: var(--accent-glow);
-  border: 1px solid var(--border-strong);
-  color: var(--accent);
+    background: var(--accent-glow);
+    border: 1px solid var(--border-strong);
+    color: var(--accent);
 }
 
 .btn-accent:hover:not(:disabled) {
-  background: var(--accent-glow-strong);
-  border-color: var(--accent);
+    background: var(--accent-glow-strong);
+    border-color: var(--accent);
 }
 
 .btn:disabled {
-  opacity: 0.5;
-  cursor: default;
+    opacity: 0.5;
+    cursor: default;
 }
 
 .run-sim-btn {
-  display: block;
-  margin: 0 auto 0.75rem;
+    display: block;
+    margin: 0 auto 0.75rem;
 }
 
 .sim-tools {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0 auto 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 auto 1.5rem;
 }
 
 .sim-rng {
-  margin: 0 auto 1rem;
+    margin: 0 auto 1rem;
 }
 
 .hidden-file {
-  display: none;
+    display: none;
 }
 
 .battle-order-card {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .notice-banner {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  border: 1px solid var(--success);
-  border-radius: var(--radius-sm);
-  padding: 0.6rem 0.85rem;
-  margin-bottom: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    border: 1px solid var(--success);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.85rem;
+    margin-bottom: 0.75rem;
 }
 
 .notice-tag {
-  flex-shrink: 0;
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-weight: 700;
-  color: var(--success);
-  background: rgba(10, 78, 36, 0.18);
-  border-radius: 999px;
-  padding: 0.2rem 0.5rem;
-  margin-top: 0.1rem;
+    flex-shrink: 0;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    color: var(--success);
+    background: rgba(10, 78, 36, 0.18);
+    border-radius: 999px;
+    padding: 0.2rem 0.5rem;
+    margin-top: 0.1rem;
 }
 
 .notice-banner p {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--text);
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text);
 }
 
 .hint-text {
-  font-size: 0.82rem;
-  color: var(--muted);
-  margin: 0 0 1rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin: 0 0 1rem;
 }
 
 .team-page {
-  justify-content: center;
+    justify-content: center;
 }
 
 .toolbar {
-  display: flex;
+    display: flex;
 }
 
 .toolbar-left {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .exporting {
-  display: block !important;
+    display: block !important;
 }
 
 .share-card-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  justify-content: center;
-  margin: 0 0 1.25rem;
-  width: 100%;
-  max-width: 1200px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin: 0 0 1.25rem;
+    width: 100%;
+    max-width: 1200px;
 }
 
 .share-card-preview {
-  display: none;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  padding: 1rem;
-  background: rgba(18, 13, 25, 0.95);
-  color: var(--text);
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.35);
+    display: none;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 1rem;
+    background: rgba(18, 13, 25, 0.95);
+    color: var(--text);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.35);
 }
 
 .share-team-section+.share-team-section {
-  margin-top: 1.25rem;
+    margin-top: 1.25rem;
 }
 
 .share-team-heading {
-  font-size: 1.05rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 0.6rem;
-  color: var(--accent-soft);
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0.6rem;
+    color: var(--accent-soft);
 }
 
 .share-team-heading.ally {
-  color: rgba(128, 198, 153, 0.9);
+    color: rgba(128, 198, 153, 0.9);
 }
 
 .share-team-heading.enemy {
-  color: rgba(255, 154, 154, 0.9);
+    color: rgba(255, 154, 154, 0.9);
 }
 
 .share-card-grid {
-  display: grid;
-  gap: 0.75rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
 .share-slot {
-  position: relative;
-  background: rgba(15, 11, 21, 0.95);
-  border: 1px solid rgba(255, 209, 110, 0.15);
-  border-radius: 12px;
-  padding: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 300px;
+    position: relative;
+    background: rgba(15, 11, 21, 0.95);
+    border: 1px solid rgba(255, 209, 110, 0.15);
+    border-radius: 12px;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 300px;
 }
 
 .share-slot-starter {
-  border: 2px solid rgba(255, 209, 110, 0.9);
-  box-shadow: 0 0 12px rgba(255, 209, 110, 0.5);
+    border: 2px solid rgba(255, 209, 110, 0.9);
+    box-shadow: 0 0 12px rgba(255, 209, 110, 0.5);
 }
 
 .share-starter-tag {
-  position: absolute;
-  top: -0.6rem;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255, 209, 110, 0.95);
-  color: #2a1e05;
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  border-radius: 999px;
-  padding: 0.1rem 0.6rem;
-  white-space: nowrap;
+    position: absolute;
+    top: -0.6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 209, 110, 0.95);
+    color: #2a1e05;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: 999px;
+    padding: 0.1rem 0.6rem;
+    white-space: nowrap;
 }
 
 .share-slot-top {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .share-slot-kioku-image {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  border-radius: 14px;
-  background: radial-gradient(circle at top, rgba(255, 207, 109, 0.14), rgba(14, 10, 21, 1));
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 14px;
+    background: radial-gradient(circle at top, rgba(255, 207, 109, 0.14), rgba(14, 10, 21, 1));
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .share-slot-kioku-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .share-overlay-badges {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
 }
 
 .share-overlay-badge {
-  position: absolute;
-  min-width: 34px;
-  transform: translateX(-50%);
-  height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(15, 12, 20, 0.88);
-  color: var(--text);
-  font-size: 0.74rem;
-  text-align: center;
-  border-radius: 999px;
-  font-weight: 700;
-  padding: 0 0.35rem;
+    position: absolute;
+    min-width: 34px;
+    transform: translateX(-50%);
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 12, 20, 0.88);
+    color: var(--text);
+    font-size: 0.74rem;
+    text-align: center;
+    border-radius: 999px;
+    font-weight: 700;
+    padding: 0 0.35rem;
 }
 
 .share-overlay-badge.ascension {
-  left: 80%;
-  top: 0;
+    left: 80%;
+    top: 0;
 }
 
 .share-overlay-badge.heart {
-  left: 20%;
-  top: 0;
+    left: 20%;
+    top: 0;
 }
 
 .share-overlay-badge.magic {
-  left: 20%;
-  bottom: 0;
+    left: 20%;
+    bottom: 0;
 }
 
 .share-overlay-badge.special {
-  left: 80%;
-  bottom: 0;
+    left: 80%;
+    bottom: 0;
 }
 
 .share-slot-portrait-support {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  align-items: flex-start;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 .share-slot-portrait-block,
 .share-slot-support-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.35rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
 }
 
 .share-slot-portrait-icon {
-  height: 40px;
-  border-radius: 8px;
-  object-fit: cover;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: var(--panel);
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--panel);
 }
 
 .share-slot-support-image {
-  height: 40px;
-  object-fit: cover;
+    height: 40px;
+    object-fit: cover;
 }
 
 .share-slot-portrait-label,
 .share-slot-support-label {
-  font-size: 0.78rem;
-  color: var(--muted);
-  text-align: center;
-  max-width: 100px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-align: center;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .share-slot-crys-row,
 .share-slot-subcrys-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  min-height: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    min-height: 2rem;
 }
 
 .share-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.25rem 0.65rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: var(--accent);
-  font-size: 0.78rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--accent);
+    font-size: 0.78rem;
 }
 
 .subcrys-chip {
-  background: var(--accent-glow);
+    background: var(--accent-glow);
 }
 
 .share-slot-name {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text);
-  text-align: center;
-  max-width: 130px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+    text-align: center;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .share-slot-pvp-stats {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.15rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
 }
 
 .share-pvp-stat {
-  font-size: 0.72rem;
-  color: var(--muted);
-  text-align: center;
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-align: center;
 }
 
 .share-spd-bonus {
-  color: aqua;
+    color: aqua;
 }
 
 .share-slot-empty {
-  margin: auto;
-  font-size: 0.8rem;
-  color: var(--muted);
+    margin: auto;
+    font-size: 0.8rem;
+    color: var(--muted);
 }
 
 .team-grid {
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  max-width: 1200px;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    max-width: 1200px;
 }
 
 .team-slot {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding-bottom: 1rem;
 }
 
 .support-section {
-  margin-top: 1rem;
-  padding-top: 0.5rem;
-  border-top: 1px dashed rgba(255, 255, 255, 0.12);
-  color: var(--muted);
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.12);
+    color: var(--muted);
 }
 
 .stat-inputs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: auto;
-  height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+    height: 100%;
 }
 
 .stat-inputs label {
-  width: 90%;
-  display: block;
-  color: var(--text);
-  margin-left: 0.3rem;
+    width: 90%;
+    display: block;
+    color: var(--text);
+    margin-left: 0.3rem;
 }
 
 .stat {
-  display: flex;
-  margin-left: 0.3rem;
+    display: flex;
+    margin-left: 0.3rem;
 }
-
 </style>

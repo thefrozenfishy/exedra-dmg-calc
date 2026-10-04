@@ -9,7 +9,7 @@
                     <div class="selected-character-names">
                         <span class="selected-character-name">{{ character.name }}</span>
                         <span v-if="character.character_en" class="selected-character-name">{{ character.character_en
-                            }}</span>
+                        }}</span>
                     </div>
                     <button class="close-btn" title="Back to overview" @click="goBack">✖</button>
                 </div>
@@ -28,7 +28,7 @@
                         <span class="mass-edit-title">
                             Multi edit sub-crys
                             <span v-if="massEditSelection.size" class="mass-edit-count">({{ massEditSelection.size
-                            }})</span>
+                                }})</span>
                         </span>
                         <button v-if="massEditSelection.size" class="mass-edit-clear" @click="clearMassEditSelection">
                             Clear
@@ -123,11 +123,12 @@
                         </div>
 
                         <div class="compact-subcrys">
-                            <div v-for="(id, idx) in crys.subCrys.toSorted()" :key="idx" class="compact-subcrys-slot" :class="{
-                                empty: !id,
-                                rare: subCrysTier(id) === 'rare',
-                                uncommon: subCrysTier(id) === 'uncommon'
-                            }">
+                            <div v-for="(id, idx) in crys.subCrys.toSorted()" :key="idx" class="compact-subcrys-slot"
+                                :class="{
+                                    empty: !id,
+                                    rare: subCrysTier(id) === 'rare',
+                                    uncommon: subCrysTier(id) === 'uncommon'
+                                }">
                                 <span v-if="id" class="compact-subcrys-name">{{ subCrysById[id]?.name ?? '?' }}</span>
                                 <span v-else class="compact-subcrys-empty">—</span>
                             </div>

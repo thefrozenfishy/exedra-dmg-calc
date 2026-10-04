@@ -24,7 +24,7 @@ export function owensT(h: number, a: number): number {
     if (Math.abs(a) > 100) return a > 0 ? 0.5 * stdNormalCdf(h) : -0.5 * stdNormalCdf(h);
 
     const f = (x: number) => Math.exp(-0.5 * h * h * (1.0 + x * x)) / (1.0 + x * x);
-    
+
     const steps = 100;
     const stepSize = a / steps;
     let sum = 0.5 * (f(0) + f(a));

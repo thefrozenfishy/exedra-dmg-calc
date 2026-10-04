@@ -163,7 +163,7 @@ export function buildCrysImportDiff(characters: Character[], importData: CrysImp
         const specialChanged = importedSpecialLvl != null && !isNaN(importedSpecialLvl) && importedSpecialLvl !== char.specialLvl
         const ascensionChanged = importedAscension != null && !isNaN(importedAscension) && importedAscension !== char.ascension
 
-        if (items.length || kiokuChanged || magicChanged || specialChanged||ascensionChanged || !char.enabled) {
+        if (items.length || kiokuChanged || magicChanged || specialChanged || ascensionChanged || !char.enabled) {
             result.push({
                 char,
                 items,
@@ -185,7 +185,7 @@ export function applyCrysImportDiff(
     diffCharacters: CrysDiffCharacter[],
     selectedKeys: Set<string>
 ) {
-    for (const { char, items, kiokuLvl, magicLvl, specialLvl,ascension } of diffCharacters) {
+    for (const { char, items, kiokuLvl, magicLvl, specialLvl, ascension } of diffCharacters) {
         const selectedItems = items.filter(i => selectedKeys.has(i.key))
         if (items.length > 0 && !selectedItems.length) continue
 

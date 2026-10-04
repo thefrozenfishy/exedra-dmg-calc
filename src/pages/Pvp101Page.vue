@@ -4,5 +4,5 @@ import src from "../content/text/pvp.md"
 </script>
 
 <template>
-  <MarkdownPage :src />
+    <MarkdownPage :src />
 </template>

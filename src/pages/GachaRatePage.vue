@@ -896,7 +896,7 @@ const downloadFullHistoryHorizontal = async () => {
                 <div class="stat-pill">🔵 3★: <strong>{{ blueCount }}</strong></div>
                 <div class="stat-pill">🟣 4★: <strong>{{ purpleCount }}</strong></div>
                 <div class="stat-pill">🟡 5★: <strong>{{ goldCount }}</strong>, of which <strong>{{ guaranteedGoldCount
-                        }}</strong> were guaranteed and <strong>{{ rateUpCount }}</strong> were <strong>{{
+                }}</strong> were guaranteed and <strong>{{ rateUpCount }}</strong> were <strong>{{
                             pickupCharacter?.name }}</strong></div>
             </div>
 

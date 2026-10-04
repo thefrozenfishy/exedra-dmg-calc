@@ -128,7 +128,7 @@ Lower = faster but more likely to skip a team that could have closed the gap.
                         - (disabledOtherRoles.includes(KiokuRole.Defender) ? 0 : minDefender)
                         - (disabledOtherRoles.includes(KiokuRole.Healer) ? 0 : minHealer)
                         - (disabledOtherRoles.includes(KiokuRole.Breaker) ? 0 : minBreaker)
-                    }}</div>
+                        }}</div>
                 </div>
             </div>
         </section>

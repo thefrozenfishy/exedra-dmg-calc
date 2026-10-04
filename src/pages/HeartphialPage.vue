@@ -18,7 +18,8 @@
                                 exp/play</span>
                         </span>
                         <span class="stage-picker-elements">
-                            <img v-for="elem in selectedStage?.weakElements" :src="`/exedra-dmg-calc/elements/${elem}.png`" :alt="elem" class="element-chip-icon" />
+                            <img v-for="elem in selectedStage?.weakElements"
+                                :src="`/exedra-dmg-calc/elements/${elem}.png`" :alt="elem" class="element-chip-icon" />
                         </span>
                         <span class="stage-picker-chevron">▾</span>
                     </button>
@@ -39,7 +40,9 @@
                                         <div class="stage-option-exp">{{ formatExp(stage.exp) }} exp</div>
                                     </div>
                                     <span class="stage-picker-elements">
-                                        <img v-for="elem in stage?.weakElements" :src="`/exedra-dmg-calc/elements/${elem}.png`" :alt="elem" class="element-chip-icon" />
+                                        <img v-for="elem in stage?.weakElements"
+                                            :src="`/exedra-dmg-calc/elements/${elem}.png`" :alt="elem"
+                                            class="element-chip-icon" />
                                     </span>
                                 </button>
                             </div>
@@ -112,17 +115,18 @@
 
                     <div v-show="!collapsedGroups[group.name]" class="role-body">
                         <HeartphialRowItem v-for="row in group.visible" :key="rowKey(row)" :row="row"
-                            :max-level="KiokuConstants.maxHeartphialLvl" :progress-percent="progressPercent(row)" :format-exp="formatExp"
-                            :plays-until-maxed="playsUntilMaxed(row)"
+                            :max-level="KiokuConstants.maxHeartphialLvl" :progress-percent="progressPercent(row)"
+                            :format-exp="formatExp" :plays-until-maxed="playsUntilMaxed(row)"
                             @update-level="level => updateLevel(row, level)" />
                     </div>
                 </div>
             </template>
 
             <template v-else>
-                <HeartphialRowItem v-for="row in rows" :key="rowKey(row)" :row="row" :max-level="KiokuConstants.maxHeartphialLvl"
-                    :progress-percent="progressPercent(row)" :format-exp="formatExp"
-                    :plays-until-maxed="playsUntilMaxed(row)" @update-level="level => updateLevel(row, level)" />
+                <HeartphialRowItem v-for="row in rows" :key="rowKey(row)" :row="row"
+                    :max-level="KiokuConstants.maxHeartphialLvl" :progress-percent="progressPercent(row)"
+                    :format-exp="formatExp" :plays-until-maxed="playsUntilMaxed(row)"
+                    @update-level="level => updateLevel(row, level)" />
             </template>
         </div>
     </div>

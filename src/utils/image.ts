@@ -323,7 +323,7 @@ async function ensureWebp(blob: Blob): Promise<Blob> {
     return new Blob([buffer], { type: EXPORT_MIME })
 }
 
-const uploadBlobForSharing = async (rawBlob: Blob): Promise<{ path: string, publicUrl: string, shareId: string }>  => {
+const uploadBlobForSharing = async (rawBlob: Blob): Promise<{ path: string, publicUrl: string, shareId: string }> => {
     const blob = await ensureWebp(rawBlob)
     const supabase = getSupabase()
     const userId = getUserId() ?? "anon"

@@ -14,7 +14,7 @@ interface Cond { compareContent: number, compareOperator: number, compareTarget:
 
 const conds = new Map<string, Cond>((battleConditionsJson as any[]).map(c => [String(c.battleConditionMstId), c]))
 const sets = new Map<string, Cond[]>((battleConditionSetsJson as any[]).map(s => [String(s.battleConditionSetMstId),
-    String(s.battleConditionMstIdCsv).split(",").map(id => conds.get(id)).filter((c): c is Cond => !!c)]))
+String(s.battleConditionMstIdCsv).split(",").map(id => conds.get(id)).filter((c): c is Cond => !!c)]))
 
 // CompareOperator (BattleConditionParser): 1 Equal, 2 NotEqual, 3 Greater, 4 GreaterOrEqual, 5 Less, 6 LessOrEqual,
 // 7 Contain, 8 NotContain. Unit value <op> CompareValue (Int/FloatValueComparer).

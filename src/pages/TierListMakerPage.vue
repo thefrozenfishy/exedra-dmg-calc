@@ -54,8 +54,7 @@
             <label class="field grow-field">
                 <span class="field-label">List name</span>
                 <input class="list-name-input" :value="currentList.name" placeholder="My Tier List"
-                    :maxlength="MAX_NAME_LENGTH"
-                    @change="updateListName(($event.target as HTMLInputElement).value)"
+                    :maxlength="MAX_NAME_LENGTH" @change="updateListName(($event.target as HTMLInputElement).value)"
                     @keydown.enter="($event.target as HTMLInputElement).blur()" />
             </label>
             <label class="chip" :class="{ active: currentList.shared, disabled: !cloudEnabled }"
@@ -105,8 +104,7 @@
                                 <button class="row-ctrl-btn" title="Move tier up" aria-label="Move tier up"
                                     :disabled="rIdx === 0" @click="moveRow(row.id, -1)">↑</button>
                                 <button class="row-ctrl-btn" title="Move tier down" aria-label="Move tier down"
-                                    :disabled="rIdx === viewList.rows.length - 1"
-                                    @click="moveRow(row.id, 1)">↓</button>
+                                    :disabled="rIdx === viewList.rows.length - 1" @click="moveRow(row.id, 1)">↓</button>
                                 <button class="row-ctrl-btn row-ctrl-btn--danger" title="Remove tier"
                                     aria-label="Remove tier" @click="removeRow(row.id)">×</button>
                                 <label class="row-color-edit" title="Row colour">
@@ -137,13 +135,14 @@
                                     <img class="chip-img" :class="characterBorderClass(charById.get(charId))"
                                         :src="`/exedra-dmg-calc/kioku_images/${charId}_thumbnail.png`"
                                         :alt="charById.get(charId)?.name" :title="charById.get(charId)?.name" />
-                                    <button v-if="!isReadonly" class="chip-remove" title="Send back to pool" aria-label="Send back to pool"
-                                        @click.stop="removeFromRow(charId)">×</button>
+                                    <button v-if="!isReadonly" class="chip-remove" title="Send back to pool"
+                                        aria-label="Send back to pool" @click.stop="removeFromRow(charId)">×</button>
                                 </div>
                             </template>
                             <span class="insertion-marker"
                                 v-if="dragOverZone === row.id && dragOverIndex === (viewList.placements[row.id] || []).length"></span>
-                            <span v-if="!(viewList.placements[row.id] || []).length && !isReadonly" class="row-empty-hint">Drag
+                            <span v-if="!(viewList.placements[row.id] || []).length && !isReadonly"
+                                class="row-empty-hint">Drag
                                 characters here</span>
                         </div>
                     </div>
@@ -154,71 +153,73 @@
             </section>
 
             <template v-if="!isReadonly">
-            <section class="card pool-section" data-drop-zone="pool" :class="{ 'drag-over': dragOverZone === 'pool' }"
-                @dragover.prevent="onZoneDragOver(null, $event)" @dragleave="onZoneDragLeave($event)"
-                @drop.prevent="onZoneDrop(null)">
-                <div class="pool-heading-row">
-                    <span class="filters-heading">Unranked ({{ filteredPool.length }})</span>
-                    <label class="pool-sort-label">
-                        <span>Sort</span>
-                        <select v-model="poolSort" class="selector" aria-label="Sort unranked characters">
-                            <option value="id">ID</option>
-                            <option value="releaseDate">Release date</option>
-                            <option value="character_en">Character name</option>
-                            <option value="name">Kioku name</option>
-                        </select>
-                        <label class="chip sort-inverse-chip" :class="{ active: poolSortInverse }">
-                            <input type="checkbox" v-model="poolSortInverse" /> Sort inverse
+                <section class="card pool-section" data-drop-zone="pool"
+                    :class="{ 'drag-over': dragOverZone === 'pool' }" @dragover.prevent="onZoneDragOver(null, $event)"
+                    @dragleave="onZoneDragLeave($event)" @drop.prevent="onZoneDrop(null)">
+                    <div class="pool-heading-row">
+                        <span class="filters-heading">Unranked ({{ filteredPool.length }})</span>
+                        <label class="pool-sort-label">
+                            <span>Sort</span>
+                            <select v-model="poolSort" class="selector" aria-label="Sort unranked characters">
+                                <option value="id">ID</option>
+                                <option value="releaseDate">Release date</option>
+                                <option value="character_en">Character name</option>
+                                <option value="name">Kioku name</option>
+                            </select>
+                            <label class="chip sort-inverse-chip" :class="{ active: poolSortInverse }">
+                                <input type="checkbox" v-model="poolSortInverse" /> Sort inverse
+                            </label>
                         </label>
-                    </label>
-                    <button v-if="filteredPool.length" class="add-all-btn"
-                        title="Add every shown character to the bottom tier" @click="addAllPoolToBottomRow">
-                        + Add all to bottom tier
-                    </button>
-                </div>
-                <div class="pool-chips">
-                    <div v-for="ch in filteredPool" :key="ch.id" class="tier-chip pool-chip" :data-char-id="ch.id"
-                        :class="{ dragging: draggedCharId === ch.id }" draggable="true"
-                        @dragstart="onChipDragStart(ch.id, null, $event)" @dragend="resetDragState"
-                        @touchstart="onChipTouchStart(ch.id, null, $event)" @touchmove="onChipTouchMove($event)"
-                        @touchend="onChipTouchEnd($event)">
-                        <img class="chip-img" :class="characterBorderClass(ch)"
-                            :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
-                            :title="ch.name" />
+                        <button v-if="filteredPool.length" class="add-all-btn"
+                            title="Add every shown character to the bottom tier" @click="addAllPoolToBottomRow">
+                            + Add all to bottom tier
+                        </button>
                     </div>
-                    <p v-if="!filteredPool.length" class="pool-empty-hint">No characters match your filters.</p>
-                </div>
-            </section>
+                    <div class="pool-chips">
+                        <div v-for="ch in filteredPool" :key="ch.id" class="tier-chip pool-chip" :data-char-id="ch.id"
+                            :class="{ dragging: draggedCharId === ch.id }" draggable="true"
+                            @dragstart="onChipDragStart(ch.id, null, $event)" @dragend="resetDragState"
+                            @touchstart="onChipTouchStart(ch.id, null, $event)" @touchmove="onChipTouchMove($event)"
+                            @touchend="onChipTouchEnd($event)">
+                            <img class="chip-img" :class="characterBorderClass(ch)"
+                                :src="`/exedra-dmg-calc/kioku_images/${ch.id}_thumbnail.png`" :alt="ch.name"
+                                :title="ch.name" />
+                        </div>
+                        <p v-if="!filteredPool.length" class="pool-empty-hint">No characters match your filters.</p>
+                    </div>
+                </section>
 
-            <section class="filters card">
-                <span class="filters-heading">Pool</span>
-                <div class="selector pool-search">
-                    <input type="text" v-model="poolSearch" placeholder="Search characters…" />
-                    <button v-if="poolSearch" class="clear-btn" title="Clear search" @click="poolSearch = ''">×</button>
-                </div>
-                <label class="chip" :class="{ active: poolShow5 }">
-                    <input type="checkbox" v-model="poolShow5" /> ★★★★★
-                </label>
-                <label class="chip" :class="{ active: poolShow4 }">
-                    <input type="checkbox" v-model="poolShow4" /> ★★★★
-                </label>
-                <label class="chip" :class="{ active: poolShow3 }">
-                    <input type="checkbox" v-model="poolShow3" /> ★★★
-                </label>
-                <label class="chip" :class="{ active: poolShowStandards }">
-                    <input type="checkbox" v-model="poolShowStandards" /> Standards
-                </label>
-                <label class="chip" :class="{ active: poolShowLimiteds }">
-                    <input type="checkbox" v-model="poolShowLimiteds" /> Limiteds
-                </label>
-                <div>
-                    <button v-for="el in allElementValues" :key="el" class="chip element-chip"
-                        :class="hiddenElements.includes(el) ? 'chip--hidden' : 'chip--visible'"
-                        :title="hiddenElements.includes(el) ? `Show ${el}` : `Hide ${el}`" @click="toggleElement(el)">
-                        <img :src="`/exedra-dmg-calc/elements/${el}.png`" :alt="el" />
-                    </button>
-                </div>
-            </section>
+                <section class="filters card">
+                    <span class="filters-heading">Pool</span>
+                    <div class="selector pool-search">
+                        <input type="text" v-model="poolSearch" placeholder="Search characters…" />
+                        <button v-if="poolSearch" class="clear-btn" title="Clear search"
+                            @click="poolSearch = ''">×</button>
+                    </div>
+                    <label class="chip" :class="{ active: poolShow5 }">
+                        <input type="checkbox" v-model="poolShow5" /> ★★★★★
+                    </label>
+                    <label class="chip" :class="{ active: poolShow4 }">
+                        <input type="checkbox" v-model="poolShow4" /> ★★★★
+                    </label>
+                    <label class="chip" :class="{ active: poolShow3 }">
+                        <input type="checkbox" v-model="poolShow3" /> ★★★
+                    </label>
+                    <label class="chip" :class="{ active: poolShowStandards }">
+                        <input type="checkbox" v-model="poolShowStandards" /> Standards
+                    </label>
+                    <label class="chip" :class="{ active: poolShowLimiteds }">
+                        <input type="checkbox" v-model="poolShowLimiteds" /> Limiteds
+                    </label>
+                    <div>
+                        <button v-for="el in allElementValues" :key="el" class="chip element-chip"
+                            :class="hiddenElements.includes(el) ? 'chip--hidden' : 'chip--visible'"
+                            :title="hiddenElements.includes(el) ? `Show ${el}` : `Hide ${el}`"
+                            @click="toggleElement(el)">
+                            <img :src="`/exedra-dmg-calc/elements/${el}.png`" :alt="el" />
+                        </button>
+                    </div>
+                </section>
 
             </template>
 
@@ -234,7 +235,8 @@
                     where you drop a character is exactly where it lands. Tap the × on a character to send it back
                     to the pool. Tap a tier's colour circle to change it, or edit its name directly. This is a
                     freeform list for your own opinions — it isn't tied to your account data. Lists are saved in
-                    this browser, and backed up to the cloud when you have a cloud profile (see the top of the page). Turn on
+                    this browser, and backed up to the cloud when you have a cloud profile (see the top of the page).
+                    Turn on
                     "Link sharing" for a list and use the link button in the toolbar to share it: anyone with the link
                     can view it and save their own copy, but only you can edit it. You can keep as many lists as you
                     like using the switcher above.

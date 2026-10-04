@@ -302,7 +302,7 @@ function mergeFuaMaps(a: FuaMap, b: FuaMap): FuaMap {
 }
 
 export // UnityEngine.Mathf.Approximately(a, b)
-function mathfApproximately(a: number, b: number): boolean {
+    function mathfApproximately(a: number, b: number): boolean {
     return Math.abs(b - a) < Math.max(1e-6 * Math.max(Math.abs(a), Math.abs(b)), 1.401298e-45 * 8)
 }
 
@@ -1367,9 +1367,11 @@ export class KiokuState {
                 : isOpponentEffect(detail.abilityEffectType) ? "ADD_DEBUFF_TURN" : undefined
             if (want) for (const d of fx[want] ?? []) turn += d.value1
         }
-        t.activeEffectDetails.set(key, { applier, ...detail, turn, _isExemptPassingTurnOnce: this.isOwnSkillState(t, detail, applierState), _accumCount: 1, _applierState: applierState,
+        t.activeEffectDetails.set(key, {
+            applier, ...detail, turn, _isExemptPassingTurnOnce: this.isOwnSkillState(t, detail, applierState), _accumCount: 1, _applierState: applierState,
             ...(detail.abilityEffectType.startsWith("UNIQUE_ELEMENT_") ? { _lv: 1, _hitCounter: 0 } : {}),
-            ...(detail.abilityEffectType === "VORTEX_ATK" ? { _remainAttackCount: detail.value2 ?? 0 } : {}) } as any)
+            ...(detail.abilityEffectType === "VORTEX_ATK" ? { _remainAttackCount: detail.value2 ?? 0 } : {})
+        } as any)
         t.updateSpd()
         return true
     }
@@ -2181,8 +2183,10 @@ export class PvPTeam {
         if (slot >= 0) this.kiokuStates[slot] = unit; else this.kiokuStates.push(unit)
         kioku.effects.forEach(e => unit.addEffectToBank(e))
         unit.resetDistanceRemaining()
-        this.eventLog.push({ kind: "summon", source, target: unit.kioku.name, amount: 0,
-            sourceIsTeam1, targetIsTeam1: this.isTeam1, targetPos: unit.posIdx })
+        this.eventLog.push({
+            kind: "summon", source, target: unit.kioku.name, amount: 0,
+            sourceIsTeam1, targetIsTeam1: this.isTeam1, targetPos: unit.posIdx
+        })
         return unit
     }
 
@@ -2304,8 +2308,10 @@ export class PvPTeam {
         unit.positionId = main.positionId
         this.kiokuStates[this.kiokuStates.indexOf(main)] = unit
         kioku.effects.forEach(e => unit.addEffectToBank(e))
-        this.eventLog.push({ kind: "summon", source: main.kioku.name, target: unit.kioku.name, amount: 0, formChange: true,
-            sourceIsTeam1: this.isTeam1, targetIsTeam1: this.isTeam1, targetPos: unit.posIdx })
+        this.eventLog.push({
+            kind: "summon", source: main.kioku.name, target: unit.kioku.name, amount: 0, formChange: true,
+            sourceIsTeam1: this.isTeam1, targetIsTeam1: this.isTeam1, targetPos: unit.posIdx
+        })
         if (this.countdown) Object.assign(this.countdown, { max: 0, value: 0, cancelMax: 0, cancelTotal: 0, unit: undefined })
         const fuas = this.applyPassivesForTiming(ProcessTiming.BATTLE_START, TargetType.init, undefined, undefined, new Set([unit]))
         this.recomputeDerivedStats()
@@ -2392,21 +2398,21 @@ export class PvPTeam {
                 if (conditionSetRequiresActorIsSelf(detail) && (!lastActor || lastActor !== k)) return
                 k.effectTurnPriority = nextTurnOrderPriority()
                 try {
-                if (isOpponentEffect(detail.abilityEffectType)) {
-                    // [CONFIRMED 3.19] AdditionalSkillActAbilityEffectBase$$Triggering: value2 is the
-                    // AdditionalSkillTargetType. Type 1 with an ENEMY actor targets that actor (a
-                    // counter); otherwise the team's selected target, which the port approximates
-                    // with its normal auto-targeting (no preferred target). Previously the
-                    // follow-up was aimed at whichever enemy the loop visited last.
-                    const counterTarget = detail.value2 === 1 && lastActor && lastActor.team !== k.team && !lastActor.isDead ? lastActor : undefined
-                    filterAlive(this.otherTeam.kiokuStates).forEach(target => {
-                        const fua = k.applyEffect(target, detail, lastAction, lastActor, mainTarget)
-                        if (fua) additionalAct[fua] = { caster: k, triggerTarget: counterTarget }
-                    })
-                } else {
-                    const fua = k.applyEffect(k, detail, lastAction, lastActor, mainTarget)
-                    if (fua) additionalAct[fua] = { caster: k, triggerTarget: lastActor }
-                }
+                    if (isOpponentEffect(detail.abilityEffectType)) {
+                        // [CONFIRMED 3.19] AdditionalSkillActAbilityEffectBase$$Triggering: value2 is the
+                        // AdditionalSkillTargetType. Type 1 with an ENEMY actor targets that actor (a
+                        // counter); otherwise the team's selected target, which the port approximates
+                        // with its normal auto-targeting (no preferred target). Previously the
+                        // follow-up was aimed at whichever enemy the loop visited last.
+                        const counterTarget = detail.value2 === 1 && lastActor && lastActor.team !== k.team && !lastActor.isDead ? lastActor : undefined
+                        filterAlive(this.otherTeam.kiokuStates).forEach(target => {
+                            const fua = k.applyEffect(target, detail, lastAction, lastActor, mainTarget)
+                            if (fua) additionalAct[fua] = { caster: k, triggerTarget: counterTarget }
+                        })
+                    } else {
+                        const fua = k.applyEffect(k, detail, lastAction, lastActor, mainTarget)
+                        if (fua) additionalAct[fua] = { caster: k, triggerTarget: lastActor }
+                    }
                 } finally { k.effectTurnPriority = undefined }
             })
         }
@@ -2793,7 +2799,7 @@ export class PvPTeam {
     }
 
     private chooseAllyAction(actor: KiokuState, what: string): TargetType | undefined {
-        for (;;) {
+        for (; ;) {
             if (actor.isDead || this.otherTeam.isWiped) return undefined
             const options: { label: string, type?: TargetType, ult?: KiokuState }[] = []
             if (this.currentSp > 0) options.push({ label: `Battle Skill (SP ${this.currentSp})`, type: TargetType.skillId })
@@ -2901,7 +2907,7 @@ export class PvPTeam {
             actor.pendingBonusTurns--
             const bonusEffType = actor.enemy ? TargetType.skillId
                 : this.isManualControl ? this.chooseAllyAction(actor, "extra action")
-                : this.autoAllyAction(actor)
+                    : this.autoAllyAction(actor)
             if (bonusEffType === undefined) break
             const bonusChoice = actor.enemy ? selectEnemySkill(actor, this, this.rng, id => this.enemySkillHasTarget(actor, id)) : undefined
             if (actor.enemy && !bonusChoice) continue
@@ -2914,7 +2920,7 @@ export class PvPTeam {
 
     // Previously fired a second, actor-less ATTACK_END for this team after every action; the
     // game has no such step (every reaction happens inside fireTiming).
-    resolveEndOfTurn(): void {}
+    resolveEndOfTurn(): void { }
 
     // Each ExecuteSkill has its own AffectedUnitNoticeBundle: reset the per-skill tallies that
     // AttackEnd conditions read (crit/break/damage counts, effect types applied), including
@@ -2942,10 +2948,10 @@ export class PvPTeam {
             if (runningFollowUps.has(key)) return
             runningFollowUps.add(key)
             try {
-            caster.team.resetActionTallies()
-            const fuas = caster.team.completeActionWithPreferredTarget(caster, TargetType.fuaId, details, triggerTarget)
-            caster.team.fireTiming(ProcessTiming.ATTACK_END, caster, caster.team.lastMainTarget, TargetType.fuaId, () => caster.team.recordAction(caster, TargetType.fuaId, "Follow-up"))
-            caster.team.triggerFua(fuas)
+                caster.team.resetActionTallies()
+                const fuas = caster.team.completeActionWithPreferredTarget(caster, TargetType.fuaId, details, triggerTarget)
+                caster.team.fireTiming(ProcessTiming.ATTACK_END, caster, caster.team.lastMainTarget, TargetType.fuaId, () => caster.team.recordAction(caster, TargetType.fuaId, "Follow-up"))
+                caster.team.triggerFua(fuas)
             } finally { runningFollowUps.delete(key) }
         })
     }

@@ -165,8 +165,8 @@ export class SolverRng extends BattleRng {
         this.picks.push({ kind, label, choice: optionLabels[value], value, count: optionLabels.length, auto })
         this.log?.push({ index, kind, label, value })
         const options = optionLabels.map(l => ({ label: l, weight: 100 / optionLabels.length }))
-        // Same event as BattleRng.pick records, so a replayed path shows its picks in the roll list.
-        ;(this as any).record({ kind, label, options, outcome: value, defaultOutcome: value, decided: true, userPick: true })
+            // Same event as BattleRng.pick records, so a replayed path shows its picks in the roll list.
+            ; (this as any).record({ kind, label, options, outcome: value, defaultOutcome: value, decided: true, userPick: true })
         return value
     }
 }
@@ -571,7 +571,7 @@ export class FightSolver {
                 break
             }
         }
-        ;(b.rng as SolverRng).endReplay()
+        ; (b.rng as SolverRng).endReplay()
         prefix.handOver(b)
         b.bindSnapshotHooks(false)
         return { battle: b, steps, snapshots }
@@ -725,7 +725,7 @@ export class FightSolver {
         const ult = this.opts.damage?.ultDamage
         if (!ult) return 0
         let s = 0
-        ;((b as any).team1.kiokuStates as any[]).forEach((u, i) => { if (!u.isDead && u.maxMp > 0) s += Math.min(1, u.currentMp / u.maxMp) * (ult[i] ?? 0) })
+            ; ((b as any).team1.kiokuStates as any[]).forEach((u, i) => { if (!u.isDead && u.maxMp > 0) s += Math.min(1, u.currentMp / u.maxMp) * (ult[i] ?? 0) })
         return s
     }
 
@@ -788,7 +788,7 @@ export class FightSolver {
         let note: string | undefined
         let auto = 0
         try {
-            for (;;) {
+            for (; ;) {
                 if (cp.battle.isOver) { status = cp.battle.result === "win" ? "win" : "lose"; break }
                 if (parent >= 0 && this.reachedGoal(cp.battle)) { status = "checkpoint"; break }
                 if (this.opts.stopOnAllyDeath && this.allyDown(cp.battle)) { status = "lose"; note = "an ally fell (search option: stop when an ally dies)"; this.stats.allyFell++; break }

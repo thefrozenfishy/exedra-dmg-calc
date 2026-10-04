@@ -247,13 +247,15 @@ From the six yellow numbers choose the three you think you have the most use for
             <div class="stat-row">
                 <span class="stat-label">Chance of non-A5 on standard pull</span>
                 <span class="stat-value">{{ standardPool.length - ownedA5StandardPool.length }} / {{ standardPool.length
-                    }}
+                }}
                     ({{ round((standardPool.length - ownedA5StandardPool.length) / standardPool.length * 100)
                     }}%)</span>
             </div>
             <div class="stat-row stat-row-sub">
-                <span class="stat-label">— Meaning if you wish to maximize amount of non-A5 kioku pulled per legacy medal spent, you want to prefer <b>{{ ((standardPool.length -
-                    ownedA5StandardPool.length) / standardPool.length) > 0.6 ? 'Standard' : 'Wishlist' }}</b> keys
+                <span class="stat-label">— Meaning if you wish to maximize amount of non-A5 kioku pulled per legacy
+                    medal spent,
+                    you want to prefer <b>{{ ((standardPool.length -
+                        ownedA5StandardPool.length) / standardPool.length) > 0.6 ? 'Standard' : 'Wishlist' }}</b> keys
                     from the legacy shop.<br />
                     As wishlist keys become more cost efficient once the A5 pull rate goes below 60%.</span>
             </div>
@@ -379,7 +381,7 @@ const loadFriendKioku = async (code: string) => {
 }
 
 const fiveStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 5))
-const fourStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 4 ))
+const fourStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 4))
 const threeStarMembers = computed(() => displayedCharactersComputed.value.filter(c => c.rarity === 3))
 
 const maxed5starChars = computed(() => fiveStarMembers.value.filter(isCompleted))
@@ -485,7 +487,7 @@ const groupedByAscension = computed(() => {
         if (!showLimiteds.value && !ch.isStandardChar) continue
         if (!showStandards.value && ch.isStandardChar) continue
 
-        if (ch.rarity === 4 ) {
+        if (ch.rarity === 4) {
             groups[7].push(ch)
         } else if (ch.rarity === 3) {
             groups[8].push(ch)

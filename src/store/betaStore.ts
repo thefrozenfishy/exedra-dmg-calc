@@ -3,73 +3,73 @@ import { computed, ref, type Ref } from 'vue'
 import { isBeta } from '../utils/betaSettings'
 
 export function useBeta<T>(key: string, defaultValue: T): Ref<T> {
-  const store = useBetaStore()
+    const store = useBetaStore()
 
-  return computed({
-    get: () => {
-      if (!isBeta()) {
-        return defaultValue
-      }
+    return computed({
+        get: () => {
+            if (!isBeta()) {
+                return defaultValue
+            }
 
-      return store.get(key, defaultValue)
-    },
+            return store.get(key, defaultValue)
+        },
 
-    set: (value) => {
-      if (!isBeta()) {
-        return
-      }
+        set: (value) => {
+            if (!isBeta()) {
+                return
+            }
 
-      store.set(key, value)
-    },
-  })
+            store.set(key, value)
+        },
+    })
 }
 
 export const useBetaStore = defineStore('betaValues', {
-  state: () => ({
-    data: {} as Record<string, any>
-  }),
+    state: () => ({
+        data: {} as Record<string, any>
+    }),
 
-  actions: {
-    set(key: string, value: any) {
-      if (!this.data || typeof this.data !== "object" || Array.isArray(this.data)) {
-        this.data = {}
-      }
+    actions: {
+        set(key: string, value: any) {
+            if (!this.data || typeof this.data !== "object" || Array.isArray(this.data)) {
+                this.data = {}
+            }
 
-      this.data[key] = value
-      this.save()
-    },
+            this.data[key] = value
+            this.save()
+        },
 
-    get(key: string, defaultValue?: any) {
-      return this.data[key] ?? defaultValue
-    },
+        get(key: string, defaultValue?: any) {
+            return this.data[key] ?? defaultValue
+        },
 
-    remove(key: string) {
-      delete this.data[key]
-      this.save()
-    },
+        remove(key: string) {
+            delete this.data[key]
+            this.save()
+        },
 
-    save() {
-      localStorage.setItem("betaValues", JSON.stringify(this.data ?? {}))
-    },
+        save() {
+            localStorage.setItem("betaValues", JSON.stringify(this.data ?? {}))
+        },
 
-    load() {
-      const saved = localStorage.getItem("betaValues")
+        load() {
+            const saved = localStorage.getItem("betaValues")
 
-      if (!saved) return
+            if (!saved) return
 
-      try {
-        const parsed = JSON.parse(saved)
+            try {
+                const parsed = JSON.parse(saved)
 
-        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
-          this.data = parsed
-        } else {
-          console.warn("Invalid betaValues data, resetting")
-          this.data = {}
+                if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+                    this.data = parsed
+                } else {
+                    console.warn("Invalid betaValues data, resetting")
+                    this.data = {}
+                }
+            } catch (err) {
+                console.error("Failed to parse betaValues", err)
+                this.data = {}
+            }
         }
-      } catch (err) {
-        console.error("Failed to parse betaValues", err)
-        this.data = {}
-      }
     }
-  }
 })
