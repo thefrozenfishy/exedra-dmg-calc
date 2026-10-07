@@ -1,6 +1,6 @@
 # Effect types: data usage vs engine coverage (GENERATED - do not edit)
 
-Built from `main @ 9ec99d3 2026-10-03` + uncommitted src/models changes. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
+Built from `claude/version-3.19.11 @ 1f3e518 2026-10-07`. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
 
 - **kiokus** = collectable kiokus (getStyleMstList) whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).
 - **stages** = quest stages whose enemies use it (skill sets + enemy passives).

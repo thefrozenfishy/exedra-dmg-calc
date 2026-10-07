@@ -7,12 +7,22 @@ _Last updated: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier
 | ref | state |
 |---|---|
 | `claude/version-3.19.1` | **Checked out 2026-10-02**, branched from main 7fb9730 (= origin/main; the 2026-10-01 branches claude/verify-priority-3.19, claude/actor-skill-type-3.19 and battle-engine-3.19 are merged and no longer exist locally). 3.19.1 work: verdiff.py / disasm.py / smokeNew.ts / VERSION_UPDATE.md runbook, LOCK_SPECIAL_ATTACK, conditions 22/206/207/313-316, BreakedDamageReceiveRate starts at 0, IMM_SLIP_DMG instant DOT burst. Fixtures 6/6, checkMechanics 18/18 (#10-#14 new, each fails without its change), type-check 229 = baseline set. Not pushed; for the user to merge. |
+| `claude/version-3.19.11` | **Checked out 2026-10-07**, branched at 1f3e518 (= main). 3.19.11 report + newsletter, `verdiff.py runs`, docs. No engine change (battle code identical to 3.19.0). Fixtures 10/10, checkMechanics 19/19, type-check 230. Not pushed. |
 | `main` | = origin/main 7fb9730 on 2026-10-02. |
 
 `docs/ai/EFFECT_TYPES.md` is committed per branch (its header says which); rebuild with `xq build` after switching
 branches or changing the engine. On battle-engine-3.19 `xq build` still lists UNIQUE_BUFF / UNIQUE_DEBUFF /
 UNIQUE_10030301 / UNIQUE_10070201 (pure marker states: stored generically, read by conditions 12/26 - nothing more to
 do) and UP_BREAK_EFFECT (blocked, open question 1).
+
+## Game 3.19.11 (patched 2026-10-05 18:26 UTC), compared with 3.19.0
+
+GameAssembly code changed only in LotteryMstRecordUnpacker.TryReadByIndex 0x10e0a70 and LotteryMstModel
+get_DisplayableLotteryNumberDigit 0x19c2a90 / get_IsSetLotteryNumberUpperLimit 0x19c2b50 (`lotteryNumberUpperLimit`
+int -> long); section layout unchanged, so every battle RVA and the 3.19.0 decompile stay valid. Metadata: only the
+version literal. Master data: nothing newer than base_data (last download 2026-10-02; 3.19.11 data not downloaded
+yet). Smoke run (12 new stages, all 115 kiokus), wikicheck (only the 3 known unknowns): clean. Report and newsletter:
+docs/versions/3.19.11/.
 
 ## Fixed 2026-10-03: no skill in TurnStart / TurnEnd passes (uncommitted on main)
 

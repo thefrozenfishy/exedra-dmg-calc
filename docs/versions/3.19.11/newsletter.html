@@ -1,0 +1,185 @@
+<title>Exedra 3.19.11 Dispatch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column (patch-notes dispatch, same family as the 3.19.1 issue); one deep-sea accent for Aqua Tempest, amber for "code changed". */
+:root {
+  --bg: #f4f7f8; --surface: #ffffff; --fg: #17202a; --muted: #586873; --line: #dbe4e8;
+  --accent: #1d6b88; --accent-soft: #e0eff5; --ok: #2f7d55; --ok-soft: #e1f2e8; --warn: #9a5b06; --warn-soft: #fbefd9;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11171b; --surface: #1a2227; --fg: #e6eef2; --muted: #9aacb6; --line: #2c3940;
+  --accent: #6cc3e0; --accent-soft: #1c3440; --ok: #6fcf9b; --ok-soft: #1c3127; --warn: #f0b45c; --warn-soft: #3a2c16; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11171b; --surface: #1a2227; --fg: #e6eef2; --muted: #9aacb6; --line: #2c3940;
+  --accent: #6cc3e0; --accent-soft: #1c3440; --ok: #6fcf9b; --ok-soft: #1c3127; --warn: #f0b45c; --warn-soft: #3a2c16; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); }
+.wrap { max-width: 760px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 72px; display: flex; flex-direction: column; gap: 40px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(30px, 6vw, 44px); font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 24px; font-weight: 700; }
+h3 { font-size: 17px; font-weight: 700; }
+p { margin: 0; }
+section { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 17px; color: var(--muted); max-width: 62ch; }
+.meta { font: 13px var(--mono); color: var(--muted); }
+.verdict { background: var(--warn-soft); border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent); border-radius: 10px; padding: 16px 18px; display: flex; gap: 14px; align-items: flex-start; }
+.verdict b { color: var(--warn); }
+.verdict .tag { font: 600 12px var(--mono); color: var(--warn); border: 1px solid var(--warn); border-radius: 999px; padding: 2px 9px; white-space: nowrap; }
+.verdict.ok { background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 35%, transparent); }
+.verdict.ok b, .verdict.ok .tag { color: var(--ok); border-color: var(--ok); }
+.item { border-top: 1px solid var(--line); padding-top: 14px; display: flex; flex-direction: column; gap: 6px; }
+.item .head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: baseline; }
+.chip { font: 500 12px var(--mono); background: var(--accent-soft); color: var(--accent); border-radius: 4px; padding: 1px 7px; }
+.chip.plain { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+code, .mono { font-family: var(--mono); font-size: 13px; }
+code { background: var(--accent-soft); color: var(--fg); padding: 0 4px; border-radius: 3px; }
+pre { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; font: 12.5px/1.5 var(--mono); }
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { font: 500 12px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+td.num { text-align: right; font-family: var(--mono); }
+.fix { display: grid; grid-template-columns: 1fr; gap: 16px; }
+.fix article { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.rva { font: 12px var(--mono); color: var(--muted); }
+.note { color: var(--muted); font-size: 14px; }
+@media (max-width: 520px) { .verdict { flex-direction: column; } }
+a { color: var(--accent); }
+footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:14px">
+    <div class="eyebrow">Madoka Exedra · version dispatch · 5 Oct 2026</div>
+    <h1>3.19.11: one lottery field changed, the battle engine did not</h1>
+    <p class="lede">The 5 October patch (Steam files dated 2026-10-05 18:26 UTC) is the first client since 3.19.0 with a real code change. It touches only the lottery event's number limit. Every battle function is byte-identical, so the simulator needed no changes this time.</p>
+    <p class="meta">Compared: unpackedExedra 3.19.0 → 3.19.11 (the 3.19.1 unpack is no longer on disk) · global-metadata v31 · base_data 4ea7254^ → HEAD</p>
+  </header>
+
+  <div class="verdict">
+    <span class="tag">CODE CHANGED</span>
+    <p><b>1,577 bytes of code changed, all in the lottery.</b> The diff touches 3 functions: <code>LotteryMstRecordUnpacker.TryReadByIndex</code>, <code>LotteryMstModel.get_DisplayableLotteryNumberDigit</code> and <code>get_IsSetLotteryNumberUpperLimit</code>. <code>lotteryNumberUpperLimit</code> (record offset 0x20) went from a 32-bit to a 64-bit integer: <span class="mono">mov ecx,[rax+20h]</span> became <span class="mono">mov rcx,[rax+20h]</span>. The <code>il2cpp</code> section is the same size and nothing after those functions moved.</p>
+  </div>
+  <div class="verdict ok">
+    <span class="tag">BATTLE CODE IDENTICAL</span>
+    <p><b>Every ReDriveBattleCore function is unchanged and at the same address.</b> All RVAs in the knowledge base and the 3.19.0 decompile stay valid. Il2CppDumper and Ghidra are only needed to get the new names on record, not for the simulator.</p>
+  </div>
+
+  <section id="game">
+    <div class="eyebrow">What's new in the game since 3.19.0</div>
+    <h2>Content</h2>
+    <p class="note">The newest download in ma-ex-data (2 Oct, config 4 Oct) has no battle data that base_data lacks, so this is the full picture up to the 3.19.11 patch. Data for 3.19.11 itself hasn't been downloaded yet.</p>
+
+    <div class="item">
+      <div class="head"><h3>Aqua Tempest</h3><span class="chip">5★ Aqua Buffer</span><span class="chip plain">Sorana Nagiboshi</span><span class="chip plain">released 4 Oct 22:00 JST</span></div>
+      <p>She brings the new unique state Orchestration (pattern 32). Her ability cuts DMG taken from all-target attacks, which uses the new condition "attacker's skill range" (content 403). Her EX crys, What Does the Future Have in Store for Me Now?!, advances action order by 10% and grants 5 MP on basic attacks. Her portraits include Orbit of SORA (+20% SPD) and Noontide in a Sunken City (+20% aqua DMG).</p>
+    </div>
+
+    <div class="item">
+      <div class="head"><h3>Metallicized Projectile</h3><span class="chip">5★ Flame Attacker</span><span class="chip plain">released 27 Sep 21:00 JST</span></div>
+      <p>A BP-based ultimate, a flame field (Flame Field, 10004) and Ember Feather (30). The 3.19.1 dispatch has her full kit.</p>
+    </div>
+
+    <div class="item">
+      <div class="head"><h3>Events and battles</h3></div>
+      <ul>
+        <li>Solo Raid 7: Rose Garden Witch, 1–8 Oct JST (stages <span class="mono">1407101–1407106</span>, new Apex forms 600021 / 600022).</li>
+        <li>Score Attack 28: Box Witch, until 5 Nov JST (<span class="mono">982301–982351</span>).</li>
+        <li>Link Raid: Darkness Witch, 20 levels (<span class="mono">1210101–1210120</span>). Its passives count total breaks on the enemy team (new condition content 212, 50 rows).</li>
+        <li>Multi Raid season 10, 8–22 Oct JST.</li>
+        <li>Sorana Nagiboshi's Memory (45 stages), the events "My Friend" and "Anything for Who I Care About!" (15 battles each), Exedra Quest 1-5, Chaos bosses for Birdcage, Commoner's Horse and Stage Witch (<span class="mono">113401, 116401, 117401</span>).</li>
+        <li>11 portraits in total and one new effect type, <code>LOCK_SPECIAL_ATTACK</code> "Magic Seal", which nothing uses yet.</li>
+        <li><b>No balance changes:</b> no existing skill or passive row changed between 3.19.0 and now.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="client">
+    <div class="eyebrow">What changed in the client</div>
+    <h2>Binary diff 3.19.0 → 3.19.11</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>File (Senbei output)</th><th>Verdict</th><th>What differs</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">GameAssembly.unpack.dll</td><td>code changed (lottery only)</td><td>PE timestamp 17 Sep → 30 Sep; <span class="mono">il2cpp</span> 12 runs / 1,577 bytes in 3 lottery functions; <span class="mono">.rdata</span> 12 bytes, <span class="mono">.data</span> 5 bytes, <span class="mono">.pdata</span> 3 bytes (unwind info of the same functions); <span class="mono">_RDATA</span> 95,146 bytes (protector)</td></tr>
+        <tr><td class="mono">MadokaExedra.unpack.exe</td><td>code identical</td><td><span class="mono">.rsrc</span>, <span class="mono">_RDATA</span></td></tr>
+        <tr><td class="mono">baselib.unpack.dll</td><td>code identical</td><td><span class="mono">_RDATA</span>, <span class="mono">.reloc</span></td></tr>
+        <tr><td class="mono">global-metadata.dat</td><td>1 literal</td><td><span class="mono">"3.19.0" → "3.19.11"</span>; no new method or type names against the 3.19.0 dump's literal list</td></tr>
+      </tbody>
+    </table></div>
+    <div class="tbl"><table>
+      <thead><tr><th>RVA (3.19.0 names)</th><th>Function</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">0x10e0a70</td><td class="mono">LotteryMstRecordUnpacker.TryReadByIndex</td><td>reads <code>lotteryNumberUpperLimit</code> as Int64; string ids shift by one</td></tr>
+        <tr><td class="mono">0x19c2a90</td><td class="mono">LotteryMstModel.get_DisplayableLotteryNumberDigit</td><td>64-bit load and digit count</td></tr>
+        <tr><td class="mono">0x19c2b50</td><td class="mono">LotteryMstModel.get_IsSetLotteryNumberUpperLimit</td><td><span class="mono">cmp dword</span> → <span class="mono">cmp qword</span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="calc">
+    <div class="eyebrow">exedra-dmg-calc</div>
+    <h2>What the simulator learned</h2>
+    <p>Nothing new was needed for 3.19.11. All new effect types and condition contents since 3.19.0 are handled. The rules learned since 3.19.0 are already on main:</p>
+    <div class="fix">
+      <article>
+        <h3>From the 3.19.1 update</h3>
+        <p>Magic Seal, the "number of broken enemies" conditions (206/207/22) with break bonus starting at 0, notice team counts 313–316, the instant DOT burst (IMM_SLIP_DMG), and the new contents 212 / 403.</p>
+        <p class="rva">0x16d2940 · 0x17e5f30 · 0x17e3f10 · 0x18f4e90 · 0x15bf670</p>
+      </article>
+      <article>
+        <h3>From in-game reports, 3 Oct</h3>
+        <p>Passive states are kept per giver (two Indomitable Guard++ give two states), UP_HP_FIXED counts toward max HP, duplicate active-skill states replace each other, and no skill action type is passed in TurnStart / TurnEnd passes.</p>
+        <p class="rva">GetDuplicateUnitState b__2 0x15c7d90 · GetDuplicateUnitState 0x15c8f90</p>
+      </article>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Check</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td>In-game fixtures</td><td>10 / 10 pass</td></tr>
+        <tr><td>Decompile mechanics checks</td><td>19 / 19 pass</td></tr>
+        <tr><td>Type-check</td><td>230 errors, same count as the 3 Oct baseline</td></tr>
+        <tr><td>Smoke run</td><td>12 new stages and all 115 kiokus in PvP: no exceptions, no unhandled effects. The only warnings are end-of-battle targeting with no living target.</td></tr>
+        <tr><td>Wiki parser (ma-ex-data)</td><td>2,246 conditions and 42,178 effect values checked; only the 3 known unknowns (ADD_BUFF/DEBUFF_TURN_IMM value3, SWITCH_SKILL value2). No parser change needed.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="numbers">
+    <div class="eyebrow">Master data in numbers, 3.19.0 → now</div>
+    <h2>Rows added (battle tables)</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>Table</th><th style="text-align:right">Added</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">PassiveSkillDetail</td><td class="num">1,213</td></tr>
+        <tr><td class="mono">SkillDetail</td><td class="num">618</td></tr>
+        <tr><td class="mono">QuestEnemyAppearance</td><td class="num">495</td></tr>
+        <tr><td class="mono">BattleConditionSet / BattleCondition</td><td class="num">261 / 153</td></tr>
+        <tr><td class="mono">SkillMst / PassiveSkillMst</td><td class="num">233 / 170</td></tr>
+        <tr><td class="mono">EnemyConditionSetsAndAction</td><td class="num">194</td></tr>
+        <tr><td class="mono">QuestStage</td><td class="num">156</td></tr>
+        <tr><td class="mono">BreakMst</td><td class="num">81</td></tr>
+        <tr><td class="mono">StyleMst / AbilityEffectType</td><td class="num">2 / 1</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="next">
+    <div class="eyebrow">Needs you</div>
+    <h2>Optional: record the new names</h2>
+    <p>The simulator doesn't need this, since no battle code changed. If you want a 3.19.11 dump on file (PowerShell, in <span class="mono">E:\Il2CppDumper</span>):</p>
+    <pre>.\Il2CppDumper.exe "E:\unpackedExedra\3.19.11\GameAssembly.unpack.dll" "E:\SteamLibrary\steamapps\common\MadokaExedra\MadokaExedra_Data\il2cpp_data\Metadata\global-metadata.dat" "E:\unpackedExedra\3.19.11\dump"</pre>
+    <ul>
+      <li>Download the 3.19.11 master data with the ma-ex-data downloader and sync base_data. The last download predates the patch.</li>
+      <li>The full machine report is in <span class="mono">docs/versions/3.19.11/report.md</span>.</li>
+    </ul>
+  </section>
+
+  <footer>Sources: Senbei outputs in E:\unpackedExedra (3.19.0, 3.19.11), Il2CppDumper 3.19.0 script.json and dump.cs, Steam global-metadata.dat, exedra-dmg-calc base_data history, ma-ex-data download of 2 Oct.</footer>
+</div>
