@@ -69,10 +69,11 @@ export function extractImportVersion(importData: CrysImportData): number {
     return highestVer
 }
 
-export function buildCrysImportDiff(characters: Character[], importData: CrysImportData): CrysDiffCharacter[] {
+export function buildCrysImportDiff(characters: Character[], importData: CrysImportData): [number, CrysDiffCharacter[]] {
     const { descToId, idToLabel } = buildSubCrysMaps()
 
     const result: CrysDiffCharacter[] = []
+    let highestKiokuLevel = 0
 
     for (const [importCharName, rawEntry] of Object.entries(importData)) {
         const char = characters.find(c => c.name === importCharName)
@@ -81,10 +82,11 @@ export function buildCrysImportDiff(characters: Character[], importData: CrysImp
         const { meta, crysMap } = splitMeta(rawEntry)
 
         const equipOrder = meta?.equipOrder ?? null
-        const importedKiokuLvl = meta?.kiokuLevel != null ? Number(meta.kiokuLevel) : undefined
         const importedMagicLvl = meta?.magicLevel != null ? Number(meta.magicLevel) : undefined
         const importedSpecialLvl = meta?.specialLvl != null ? Number(meta.specialLvl) : undefined
         const importedAscension = meta?.ascension != null ? Number(meta.ascension) : undefined
+        const importedKiokuLvl = meta?.kiokuLevel != null ? Number(meta.kiokuLevel) : undefined
+        if (importedKiokuLvl && importedKiokuLvl > highestKiokuLevel) highestKiokuLevel = importedKiokuLvl
 
         // No equipOrder in the import => leave crys untouched, only levels are imported
         const allCrys = equipOrder ? relevantCrys(char.id) : []
@@ -177,7 +179,7 @@ export function buildCrysImportDiff(characters: Character[], importData: CrysImp
         }
     }
 
-    return result.sort((a, b) => a.char.id - b.char.id)
+    return [highestKiokuLevel, result.sort((a, b) => a.char.id - b.char.id)]
 }
 
 export function applyCrysImportDiff(

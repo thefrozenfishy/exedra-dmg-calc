@@ -175,7 +175,7 @@
                                 title="AV until this ally's next turn">Next</span><span v-if="hasMagic(c)"
                                 title="Magic stacks">Magic</span><span>HP</span></div>
                         <div v-for="(a, i) in c.allies" :key="i" class="cand-ally" :class="{ dead: a.dead, 'with-magic': hasMagic(c) }"
-                            :title="`${a.name}: EP ${Math.round(a.ep)} / ${a.maxEp}${a.av !== undefined && !a.dead ? `, next turn in ${fmtAv(a.av)} AV` : ''}${a.maxMagic ? `, Magic ${a.magic} / ${a.maxMagic}` : ''}, HP ${a.hpPct.toFixed(0)}%`">
+                            :title="allyTitle(a)">
                             <span class="cand-name" :class="{ prio: a.priority }">{{ a.priority ? '★ ' : '' }}{{ shortName(a.name) }}</span>
                             <span class="bar ep" :class="{ full: epPct(a) >= 100 }"><i
                                     :style="{ width: `${epPct(a)}%` }"></i></span>
@@ -583,6 +583,15 @@ function mergedCandidates(): (CheckpointView & { gid: number })[] {
 }
 const epPct = (a: { ep: number, maxEp: number }) => a.maxEp > 0 ? Math.min(100, 100 * a.ep / a.maxEp) : 0
 const hasMagic = (c: CheckpointView) => c.allies.some(a => !!a.maxMagic)
+// The hover text of an ally row: its numbers, then every buff / debuff / ailment on it (as in the Battle Timeline).
+const allyTitle = (a: Candidate['allies'][number]) => {
+    console.log(a)
+    const lines = [`${a.name}: EP ${Math.round(a.ep)} / ${a.maxEp}${a.av !== undefined && !a.dead ? `, next turn in ${fmtAv(a.av)} AV` : ''}${a.maxMagic ? `, Magic ${a.magic} / ${a.maxMagic}` : ''}, HP ${a.hpPct.toFixed(0)}%`]
+    for (const [label, list] of [['Buffs', a.buffs], ['Debuffs', a.debuffs], ['Ailments', a.ailments]] as const) {
+        if (list?.length) lines.push('', `${label} (${list.length}):`, ...list)
+    }
+    return lines.join('\n')
+}
 // As the battle timeline shows it: a 1000-stack kit as a %, others as stacks / max.
 const magicText = (a: { magic?: number, maxMagic?: number }) => !a.maxMagic ? '' : a.maxMagic === 1000 ? `${(a.magic ?? 0) / 10}%` : `${a.magic ?? 0}/${a.maxMagic}`
 const teamEp = (c: CheckpointView) => `${Math.round(c.allies.reduce((s, a) => s + (a.dead ? 0 : epPct(a)), 0) / Math.max(1, c.allies.length))}%`

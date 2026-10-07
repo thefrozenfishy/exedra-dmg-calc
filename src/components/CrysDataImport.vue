@@ -29,8 +29,11 @@ import NewBadge from './NewBadge.vue'
 import CrysImportModal from './CrysImportModal.vue'
 import { useCharacterStore } from '../store/characterStore'
 import { buildCrysImportDiff, applyCrysImportDiff, extractImportVersion, type CrysDiffCharacter, type CrysImportData } from '../utils/crysImport'
+import { useSetting } from '../store/settingsStore.js'
+import { KiokuConstants } from '../types/KiokuTypes.js'
 
 const store = useCharacterStore()
+const playerLevel = useSetting("playerLevel", KiokuConstants.maxKiokuLvl)
 
 const importFileInputRef = ref<HTMLInputElement | null>(null)
 const showImportModal = ref(false)
@@ -79,12 +82,13 @@ function onImportFileChange(e: Event) {
                 await checkGitVersionMatch(importedVersion.toString())
             }
 
-            const diff = buildCrysImportDiff(store.characters, parsed)
+            const [newPlayerLevel, diff] = buildCrysImportDiff(store.characters, parsed)
 
             if (!diff.length) {
                 alert("No differences found between your saved data and this file.")
                 return
             }
+            if (newPlayerLevel > playerLevel.value) playerLevel.value = newPlayerLevel
 
             importDiff.value = diff
             showImportModal.value = true

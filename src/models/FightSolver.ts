@@ -664,12 +664,25 @@ export class FightSolver {
     private stateCard(node: SNode, b: PvPBattle): CheckpointView {
         const t1 = (b as any).team1
         // av: AV until the ally's next turn (its turn gauge; allies keep their gauges into the next wave).
-        const allies = (t1.kiokuStates as any[]).map(u => ({
-            name: u.kioku?.name ?? "?", ep: u.currentMp, maxEp: u.maxMp, hpPct: 100 * Math.max(0, u.currentHp) / Math.max(1, u.maxHp), dead: !!u.isDead,
-            av: u.isDead ? 0 : Math.max(0, Number(u.turnGauge) || 0),
-            // Magic stacks (characters with a Magic kit; max 1000 = shown as a %).
-            ...(u.currentMaxMagic > 0 ? { magic: u.currentMagic, maxMagic: u.currentMaxMagic } : {}),
-        }))
+        // Buff / debuff / ailment descriptions per ally: the same strings the Battle Timeline lists, taken from the
+        // display snapshot of this battle (best effort: a card without them just shows no effect list).
+        let snapTeam: any[] = []
+        try { snapTeam = (b.getCurrentState() as any)?.allies?.team ?? [] } catch { /* no effect list on this card */ }
+        const allies = (t1.kiokuStates as any[]).map((u, i) => {
+            const name = u.kioku?.name ?? "?"
+            const snap = snapTeam[i]?.name === name ? snapTeam[i] : snapTeam.find(s => s?.name === name)
+            return {
+                name, ep: u.currentMp, maxEp: u.maxMp, hpPct: 100 * Math.max(0, u.currentHp) / Math.max(1, u.maxHp), dead: !!u.isDead,
+                av: u.isDead ? 0 : Math.max(0, Number(u.turnGauge) || 0),
+                // Magic stacks (characters with a Magic kit; max 1000 = shown as a %).
+                ...(u.currentMaxMagic > 0 ? { magic: u.currentMagic, maxMagic: u.currentMaxMagic } : {}),
+                ...(snap ? {
+                    buffs: [...(snap.buffs ?? [])] as string[],
+                    debuffs: [...(snap.debuffs ?? [])] as string[],
+                    ailments: [...(snap.ailments ?? [])] as string[],
+                } : {}),
+            }
+        })
         const epOf = (x: typeof allies[number]) => x.maxEp > 0 ? Math.min(1, x.ep / x.maxEp) : 0
         // A fallen ally counts as a full round's wait.
         const waitOf = (x: typeof allies[number]) => x.dead ? 100 : x.av
@@ -1392,7 +1405,7 @@ export interface CheckpointView {
     wave: number
     win: boolean
     sp: number
-    allies: { name: string, ep: number, maxEp: number, hpPct: number, dead: boolean, av?: number, magic?: number, maxMagic?: number, priority?: boolean }[]
+    allies: { name: string, ep: number, maxEp: number, hpPct: number, dead: boolean, av?: number, magic?: number, maxMagic?: number, priority?: boolean, buffs?: string[], debuffs?: string[], ailments?: string[] }[]
     enemyHp: number       // remaining (waves), as SNode.remaining
     bossPct?: number      // the boss's HP share in % (bossHp)
     broken?: boolean      // the boss is broken (a living main target; no main target: any enemy)

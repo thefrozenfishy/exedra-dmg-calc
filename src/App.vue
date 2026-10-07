@@ -11,8 +11,8 @@ const beta = isBeta()
 const router = useRouter()
 
 const titles: [string, number, number?][] = [
-    ["TFF's Exedra Toolbox", 50, 40],
-    ["TFF's Mess of a Toolbox", 47, 30],
+    ["TFF's Exedra Toolbox", 50, 34],
+    ["TFF's Mess of a Toolbox", 47, 34],
     ["TFF's Ever Changing Beta Toolbox", 0, 20],
     ["TFF is not a whale!", 0, 1],
     ["[img:haru.webp] is the biggest whale!", 0, 1],
@@ -20,8 +20,10 @@ const titles: [string, number, number?][] = [
     ["Time to [img:hyperwhale.webp]", 0, 1],
     ["[img:feliwhale.webp]", 0, 1],
     ["[img:whale.svg]", 0, 1],
-    ["[img:ren.svg]", 0, 1],
+    ["[img:ren.webp]", 0, 1],
     ["[img:nya.webp]", 1],
+    ["[img:rika_bonked.webp][img:lys_bonking.webp]", 0, 1],
+    ["[img:lys_bonked.webp][img:rika_bonking.webp]", 0, 1],
     ["[img:rika.webp]", 2],
 ]
 
