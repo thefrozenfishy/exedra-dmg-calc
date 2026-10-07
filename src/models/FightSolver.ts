@@ -40,13 +40,15 @@ import { computeMaxDamage } from "./MaxDamage";
 import { stageBattleType, waveStartUnits } from "./PvEBattle";
 import battleConditionSetJson from "../assets/base_data/getBattleConditionSetMstList.json";
 import battleConditionJson from "../assets/base_data/getBattleConditionMstList.json";
+import { fmtGoalValue, goalLabel, goalScore, goalValue, isLimit, ultRuled, unitHasEffect, type AllyStrategy, type SolverTactics } from "./FightSolverTactics";
 
 // ---------------------------------------------------------------------------------------------------------------
 // RNG: the page's roll modes, the player's decisions forced from a list
 // ---------------------------------------------------------------------------------------------------------------
 // `auto`: the only allowed option (symmetry / ultimates-asap left one), taken without branching; not part of the
 // forced list when a path is replayed.
-export interface SolverPick { kind: RngKind, label: string, choice: string, value: number, count: number, auto?: boolean }
+// `dev`: how far the pick strays from the user's strategies (its rank minus the best allowed rank, see tacticRanks).
+export interface SolverPick { kind: RngKind, label: string, choice: string, value: number, count: number, auto?: boolean, dev?: number }
 
 
 // Thrown when the battle needs a decision that the forced list does not hold.
@@ -55,12 +57,14 @@ export class SolverPending extends Error {
     readonly label: string
     readonly options: string[]
     readonly allowed: number[]
-    constructor(kind: RngKind, label: string, options: string[], allowed: number[]) {
+    readonly ranks?: number[]
+    constructor(kind: RngKind, label: string, options: string[], allowed: number[], ranks?: number[]) {
         super(`Solver decision: ${label}`)
         this.kind = kind
         this.label = label
         this.options = options
         this.allowed = allowed
+        this.ranks = ranks
         this.name = "SolverPending"
     }
 }
@@ -73,16 +77,24 @@ export interface PickFilter {
     // Ultimate habits: Breaker ultimates as soon as ready, Attacker ultimates only while an enemy is broken.
     ultHabits?: boolean
     roleOf?: (option: string) => string | undefined   // "Ultimate: <unit label>" -> role of that ally
+    // Tactics (FightSolverTactics): per option rank (RANK_*), undefined when no strategy applies to the prompt.
+    ranks?: (kind: RngKind, label: string, options: string[], units?: readonly unknown[]) => number[] | undefined
+    ultRuled?: (option: string) => boolean           // an ultimate under a strategy of its own (habits leave it alone)
 }
+// Strategy ranks of an option (lower = tried first); FORBIDDEN options ("only" strategies) are not tried.
+export const RANK_PREFERRED = 0, RANK_NEUTRAL = 1, RANK_DISCOURAGED = 2, RANK_FORBIDDEN = 9
 let pickFilter: PickFilter = {}
 // The battle being run (set before every executeNextAction), for filters that look at its state.
 let activeBattle: PvPBattle | undefined
 const anyEnemyBroken = (b?: PvPBattle) => !!b && ((b as any).team2.kiokuStates as any[]).some(u => !u.isDead && u.isBroken)
 const isUlt = (o: string) => o.startsWith("Ultimate: ")
+// "Name (Ally 3)" -> 2 (team position); -1 when not an ally label.
+const allyOfLabel = (l: string) => { const m = / \(Ally (\d+)\)$/.exec(l.trim()); return m ? Number(m[1]) - 1 : -1 }
 let symmetrySkipped = 0
 
-export function allowedOptions(kind: RngKind, label: string, options: string[], units?: readonly unknown[]): number[] {
+export function allowedOptions(kind: RngKind, label: string, options: string[], units?: readonly unknown[], ranks?: number[]): number[] {
     let idx = options.map((_, i) => i)
+    if (ranks) { const ok = idx.filter(i => ranks[i] < RANK_FORBIDDEN); if (ok.length) idx = ok }
     if (pickFilter.ultsAsap && kind === "action") {
         if (label.startsWith("Between actions")) {
             const u = idx.find(i => options[i].startsWith("Ultimate: "))
@@ -91,9 +103,10 @@ export function allowedOptions(kind: RngKind, label: string, options: string[], 
     }
     if (pickFilter.ultHabits && kind === "action" && pickFilter.roleOf) {
         const broken = anyEnemyBroken(activeBattle)
-        const breaker = idx.find(i => isUlt(options[i]) && pickFilter.roleOf!(options[i]) === "Breaker")
+        const habit = (i: number) => isUlt(options[i]) && !pickFilter.ultRuled?.(options[i])
+        const breaker = idx.find(i => habit(i) && pickFilter.roleOf!(options[i]) === "Breaker")
         if (breaker !== undefined) return [breaker]
-        if (!broken) idx = idx.filter(i => !(isUlt(options[i]) && pickFilter.roleOf!(options[i]) === "Attacker"))
+        if (!broken) idx = idx.filter(i => !(habit(i) && pickFilter.roleOf!(options[i]) === "Attacker"))
     }
     const fp = pickFilter.fingerprint
     if (fp && kind === "target" && units && units.length === options.length && idx.length > 1) {
@@ -153,16 +166,18 @@ export class SolverRng extends BattleRng {
             this.log?.push({ index, kind, label, value: v })
             return v
         }
-        const allowed = allowedOptions(kind, label, optionLabels, units)
+        const ranks = pickFilter.ranks?.(kind, label, optionLabels, units)
+        const allowed = allowedOptions(kind, label, optionLabels, units, ranks)
         let value: number
         const auto = allowed.length === 1
         if (auto) value = allowed[0]
         else {
-            if (this.pos >= this.forced.length) throw new SolverPending(kind, label, optionLabels, allowed)
+            if (this.pos >= this.forced.length) throw new SolverPending(kind, label, optionLabels, allowed, ranks)
             value = this.forced[this.pos++]
         }
         if (value < 0 || value >= optionLabels.length) throw new Error(`Solver: decision ${value} out of range for "${label}"`)
-        this.picks.push({ kind, label, choice: optionLabels[value], value, count: optionLabels.length, auto })
+        const dev = ranks && !auto ? Math.max(0, ranks[value] - Math.min(...allowed.map(i => ranks[i]))) : 0
+        this.picks.push({ kind, label, choice: optionLabels[value], value, count: optionLabels.length, auto, ...(dev ? { dev } : {}) })
         this.log?.push({ index, kind, label, value })
         const options = optionLabels.map(l => ({ label: l, weight: 100 / optionLabels.length }))
             // Same event as BattleRng.pick records, so a replayed path shows its picks in the roll list.
@@ -188,6 +203,10 @@ export class ResourceModel {
     epValues: number[] = []   // EP thresholds
     spValues: number[] = []   // team SP thresholds
     hpAbsolute = false        // some condition reads absolute HP: HP is not compared, only matched exactly
+    // Matched exactly instead of compared (a tactics goal wants less of it, so "more is better" does not hold).
+    exactAllyHp = false
+    exactEp = false
+    exactSp = false
     conditionsScanned = 0
 
     constructor(b: PvPBattle) {
@@ -276,12 +295,13 @@ export class ResourceModel {
         if (t2.linkHp) vec.push(t2.linkHp.current)
         for (const u of t1.kiokuStates) {
             const pct = 100 * u.currentHp / Math.max(1, u.maxHp)
-            band += "A" + ResourceModel.band(pct, this.hpPct) + (this.hpAbsolute ? `:${u.currentHp}` : "")
+            band += "A" + ResourceModel.band(pct, this.hpPct) + (this.hpAbsolute || this.exactAllyHp ? `:${u.currentHp}` : "")
                 + ResourceModel.band(u.currentMp, this.epValues) + (u.maxMp > 0 && u.currentMp >= u.maxMp ? "F" : "")
-            vec.push(-u.currentHp, -u.currentMp)
+                + (this.exactEp ? `:${u.currentMp}` : "")
+            vec.push(this.exactAllyHp ? 0 : -u.currentHp, this.exactEp ? 0 : -u.currentMp)
         }
-        band += "S" + ResourceModel.band(t1.currentSp, this.spValues)
-        vec.push(-t1.currentSp)
+        band += "S" + ResourceModel.band(t1.currentSp, this.spValues) + (this.exactSp ? `:${t1.currentSp}` : "")
+        vec.push(this.exactSp ? 0 : -t1.currentSp)
         return { band, vec }
     }
 }
@@ -305,7 +325,7 @@ export type SolverNodeStatus =
     | "checkpoint" // reached the search's checkpoint (end of the wave / next boss phase)
 
 interface Checkpoint { battle: PvPBattle, mod: ReturnType<typeof saveModuleBattleState> }
-interface Pending { kind: RngKind, label: string, options: string[], allowed: number[] }
+interface Pending { kind: RngKind, label: string, options: string[], allowed: number[], ranks?: number[] }
 
 interface SNode {
     id: number
@@ -315,6 +335,7 @@ interface SNode {
     status: SolverNodeStatus
     remaining: number     // enemy HP left, in waves (next waves count 1 each)
     est: number           // estimated AV at the clear (ordering only)
+    dev: number           // picks on the path that strayed from the user's strategies (ordering: fewest first)
     picks: SolverPick[]   // decisions on the edge into this node
     steps: number         // executeNextAction calls on the edge (decision action + automatic ones)
     actors: string[]      // who acted on the edge (display)
@@ -334,8 +355,9 @@ export interface SolverNodeView {
     elapsed: number
     remaining: number
     est: number
+    dev?: number
     label: string
-    picks: { label: string, choice: string, count: number, auto?: boolean }[]
+    picks: { label: string, choice: string, count: number, auto?: boolean, dev?: number }[]
     actors: string[]
     steps: number
     childCount: number
@@ -364,6 +386,7 @@ export interface SolverStats {
     phase: "prefix" | "search" | "done"
     checkpoints: number   // lines that reached the checkpoint goal
     allyFell: number      // lines ended by "stop when an ally dies"
+    missedGoals?: number  // checkpoints / clears that miss a limit of the tactics goals (they do not set the bound)
     userSkipped: number   // open nodes skipped by the user (the result is then not proven optimal)
     prefixSize?: number   // nodes in the shared prefix (parallel search)
     bestElapsed?: number
@@ -441,6 +464,7 @@ export interface SolverOptions {
     goal?: SolverGoal         // default "clear"
     slack?: number            // checkpoint goals: keep searching lines up to this much AV slower than the fastest
     priority?: number[]       // candidates: allies (team positions, 0-based) whose EP / next turn count on their own
+    tactics?: SolverTactics   // checkpoint goals (ranking, bound) and per-ally strategies (option ranks)
 }
 
 const short = (unit: string) => unit.replace(/ \(Ally \d+\)$/, "").replace(/ \(Enemy (\d+)\)$/, " #$1")
@@ -466,7 +490,8 @@ export function summarizePicks(picks: { label: string, choice: string }[]): stri
 // Try order (rule of thumb from play): Breaker ultimates first (fired as soon as ready), Attacker ultimates next
 // only while an enemy is broken (saved for the break otherwise: after Continue / the action), other ultimates
 // before the rest; then the engine's order (Continue, Skill before Basic, targets as listed).
-function optionOrder(options: string[], allowed: number[], roleOf: (o: string) => string | undefined, broken: boolean): number[] {
+// The user's strategies (ranks) come before all of that.
+function optionOrder(options: string[], allowed: number[], roleOf: (o: string) => string | undefined, broken: boolean, ranks?: number[]): number[] {
     const rank = (i: number) => {
         const o = options[i]
         if (!isUlt(o)) return 2
@@ -475,7 +500,8 @@ function optionOrder(options: string[], allowed: number[], roleOf: (o: string) =
         if (role === "Attacker") return broken ? 1 : 3
         return 1
     }
-    return [...allowed].sort((a, b) => rank(a) - rank(b) || a - b)
+    const tr = (i: number) => ranks?.[i] ?? RANK_NEUTRAL
+    return [...allowed].sort((a, b) => tr(a) - tr(b) || rank(a) - rank(b) || a - b)
 }
 
 export class FightSolver {
@@ -530,7 +556,19 @@ export class FightSolver {
             ultHabits: opts.ultHabits,
             roleOf: (o: string) => this.roleOf(o),
         }
-        if (opts.dominance) this.resources = new ResourceModel(first)
+        for (const s of opts.tactics?.strategies ?? []) this.strategies.set(s.ally, s)
+        if (this.strategies.size) {
+            pickFilter.ranks = (kind, label, options, units) => this.tacticRanks(kind, label, options, units)
+            pickFilter.ultRuled = (o: string) => ultRuled(this.strategies.get(allyOfLabel(o.slice(10))))
+        }
+        if (opts.dominance) {
+            this.resources = new ResourceModel(first)
+            // A goal that wants less HP / EP / SP (or a range): that resource is matched exactly, not compared.
+            const less = (opts.tactics?.goals ?? []).filter(g => g.mode === "low" || g.mode === "lte" || g.mode === "between")
+            this.resources.exactAllyHp = less.some(g => g.metric === "hp")
+            this.resources.exactEp = less.some(g => g.metric === "ep")
+            this.resources.exactSp = less.some(g => g.metric === "sp")
+        }
         const r = this.resources
         this.resourceInfo = r ? `${r.conditionsScanned} conditions scanned; HP ${r.hpAbsolute ? "matched exactly (absolute-HP conditions)" : `bands at ${r.hpPct.join("/")}%`}; EP bands ${r.epValues.join("/") || "none"}; SP bands ${r.spValues.join("/") || "none"}` : ""
         first.bindSnapshotHooks(false)
@@ -538,6 +576,7 @@ export class FightSolver {
         this.stats = {
             nodes: 0, expanded: 0, actions: 0, merged: 0, dominated: 0, bounded: 0, lowerBounded: 0, symmetry: 0, capped: 0,
             wins: 0, losses: 0, errors: 0, open: 0, memoSize: 0, ms: 0, phase: "prefix", done: false, userSkipped: 0, checkpoints: 0, allyFell: 0,
+            missedGoals: 0,
         }
         this.rootHp = this.hpAbs(first)
         const b = this.cloner.cloneBattle(first)
@@ -609,6 +648,69 @@ export class FightSolver {
     private roleOf(option: string): string | undefined {
         const m = / \(Ally (\d+)\)$/.exec(option)
         return m ? (this.root.battle as any).team1.kiokuStates[Number(m[1]) - 1]?.kioku?.data?.role : undefined
+    }
+
+    // ---- tactics: the user's strategies as option ranks ----
+    private strategies = new Map<number, AllyStrategy>()
+
+    // Ranks of a prompt's options under the strategies (undefined: no strategy applies):
+    //  - ultimates (any prompt with "Ultimate: X"): X's mode for the number of broken enemies; asap = preferred
+    //    ("only": every other option of the prompt is forbidden, so it fires as soon as it is offered), hold =
+    //    discouraged ("only": forbidden);
+    //  - the actor's action ("choose an action"): its Basic Attack / Battle Skill preferred, the other one
+    //    discouraged ("only": forbidden; nothing changes when the preferred one is not offered, e.g. no SP);
+    //  - ally-side targets of an ally with buff targets: the main target unless it already has the actor's buffs, then
+    //    the second one (both have them: the main one again); the others discouraged ("only": forbidden).
+    private tacticRanks(kind: RngKind, label: string, options: string[], units?: readonly unknown[]): number[] | undefined {
+        const b = activeBattle as any
+        if (!b) return undefined
+        const team = b.team1.kiokuStates as any[]
+        const ranks = options.map(() => RANK_NEUTRAL)
+        const required = new Set<number>()
+        let touched = false
+        if (kind === "action") {
+            let broken = -1
+            options.forEach((o, i) => {
+                if (!isUlt(o)) return
+                const s = this.strategies.get(allyOfLabel(o.slice(10)))
+                if (!s || !ultRuled(s)) return
+                if (broken < 0) broken = (b.team2.kiokuStates as any[]).filter(u => !u.isDead && u.isBroken).length
+                const mode = broken >= (s.ultBreaks ?? 1) ? s.ultAtBreak : s.ultOtherwise
+                if (mode === "asap") { ranks[i] = RANK_PREFERRED; touched = true; if (s.ultStrict) required.add(i) }
+                else if (mode === "hold") { ranks[i] = s.ultStrict ? RANK_FORBIDDEN : RANK_DISCOURAGED; touched = true }
+            })
+            if (label.endsWith("choose an action")) {
+                const s = this.strategies.get(allyOfLabel(label.split(" · ")[0]))
+                if (s?.action) {
+                    const isBasic = (o: string) => o.startsWith("Basic Attack"), isSkill = (o: string) => o.startsWith("Battle Skill")
+                    const want = options.findIndex(s.action === "basic" ? isBasic : isSkill)
+                    const other = options.findIndex(s.action === "basic" ? isSkill : isBasic)
+                    if (want >= 0) {
+                        ranks[want] = RANK_PREFERRED
+                        if (other >= 0) ranks[other] = s.actionStrict ? RANK_FORBIDDEN : RANK_DISCOURAGED
+                        touched = true
+                    }
+                }
+            }
+        } else if (kind === "target" && label.endsWith("target on the allies") && units && units.length === options.length) {
+            const actorIdx = allyOfLabel(label.split(" · ")[0])
+            const s = this.strategies.get(actorIdx)
+            if (s && (s.buffMain !== undefined || s.buffSecond !== undefined)) {
+                const actor = team[actorIdx]
+                const main = s.buffMain !== undefined ? team[s.buffMain] : undefined
+                const second = s.buffSecond !== undefined ? team[s.buffSecond] : undefined
+                const inPool = (u: any) => !!u && units.includes(u)
+                const has = (u: any) => unitHasEffect(u, s.buffName, actor)
+                const want = inPool(main) && !has(main) ? main : inPool(second) && !has(second) ? second : inPool(main) ? main : inPool(second) ? second : undefined
+                if (want) {
+                    const w = units.indexOf(want)
+                    ranks.forEach((_, k) => { ranks[k] = k === w ? RANK_PREFERRED : s.buffStrict ? RANK_FORBIDDEN : RANK_DISCOURAGED })
+                    touched = true
+                }
+            }
+        }
+        if (required.size) ranks.forEach((_, i) => { if (!required.has(i)) ranks[i] = RANK_FORBIDDEN })
+        return touched ? ranks : undefined
     }
 
     setExternalBound(v: number): void { if (v < this.externalBound) this.externalBound = v }
@@ -696,11 +798,24 @@ export class FightSolver {
         for (const i of pri) vec.push(-epOf(allies[i]), r1(waitOf(allies[i])))
         vec.push(-rest.reduce((a, x) => a + epOf(x), 0), -t1.currentSp, r1(rest.reduce((a, x) => a + waitOf(x), 0)), -hpShare)
         for (const i of pri) (allies[i] as any).priority = true
+        // Tactics goals: one slot each, in the user's order, ahead of everything above.
+        const goals = this.opts.tactics?.goals ?? []
+        let goalViews: CheckpointView["goals"]
+        let meets: boolean | undefined
+        if (goals.length) {
+            const names = allies.map(a => a.name)
+            const values = goals.map(g => goalValue(g, t1, node.elapsed))
+            const scores = goals.map((g, i) => goalScore(g, values[i]))
+            vec.unshift(...scores)
+            goalViews = goals.map((g, i) => ({ label: goalLabel(g, names), value: fmtGoalValue(g, values[i]), ...(isLimit(g.mode) ? { ok: scores[i] === 0 } : {}) }))
+            meets = goalViews.every(v => v.ok !== false)
+        }
         const boss = bossHp(b)
         return {
             id: node.id, elapsed: node.elapsed, round: b.currentRound, wave: b.currentWave, win: node.status === "win", sp: t1.currentSp, allies, enemyHp: node.remaining, vec,
             bossPct: boss ? 100 * boss.cur / boss.max : undefined,
             broken: this.breakTargets(b).some(u => u.isBroken),
+            ...(goalViews ? { goals: goalViews, meets } : {}),
         }
     }
 
@@ -710,18 +825,20 @@ export class FightSolver {
         return this.stateCard(node, (node.cp ?? this.materialize(node)).battle)
     }
 
-    private addCandidate(node: SNode, b: PvPBattle): void {
+    private addCandidate(node: SNode, b: PvPBattle): CheckpointView {
         const card = this.stateCard(node, b)
         const vec = card.vec
-        // Clears: only the AV matters (the 60 fastest are listed); checkpoints: not worse in every way than another.
+        // Clears: only the AV matters (the 60 fastest are listed; tactics goals first); checkpoints: not worse in every
+        // way than another.
         const clearGoal = this.goal === "clear"
-        if (!clearGoal && this.candidates.some(c => candidateCovers(c.vec, vec))) return
+        if (!clearGoal && this.candidates.some(c => candidateCovers(c.vec, vec))) return card
         const keep = clearGoal ? [...this.candidates] : this.candidates.filter(c => !candidateCovers(vec, c.vec))
         keep.push(card)
         // Fastest first; at equal AV the most EP, then SP, then HP first (vec is smaller-is-better).
         keep.sort(compareCandidates)
         this.candidates.length = 0
         this.candidates.push(...keep.slice(0, 60))
+        return card
     }
 
     // ---- one action on a copy of a checkpoint ----
@@ -740,7 +857,7 @@ export class FightSolver {
         try {
             snaps = b.executeNextAction()
         } catch (e) {
-            if (e instanceof SolverPending) return { done: false, pending: { kind: e.kind, label: e.label, options: e.options, allowed: e.allowed } }
+            if (e instanceof SolverPending) return { done: false, pending: { kind: e.kind, label: e.label, options: e.options, allowed: e.allowed, ranks: e.ranks } }
             throw e
         } finally {
             this.stats.symmetry = symmetrySkipped
@@ -887,6 +1004,7 @@ export class FightSolver {
         const remaining = this.remaining(b)
         const node: SNode = {
             id: this.nodes.length, parent, depth, elapsed: b.elapsed, status, remaining, est: 0, picks, steps,
+            dev: (parent >= 0 ? this.nodes[parent].dev : 0) + picks.reduce((a, p) => a + (p.dev ?? 0), 0),
             actors, children: [], order, note,
         }
         this.nodes.push(node)
@@ -897,8 +1015,10 @@ export class FightSolver {
         if (this.goal !== "clear" && (status === "win" || status === "checkpoint")) {
             // A checkpoint (or a clear on the way): a candidate; the fastest one sets the bound (+ slack).
             if (status === "win") this.stats.wins++; else this.stats.checkpoints++
-            this.addCandidate(node, b)
-            if (this.stats.bestElapsed === undefined || node.elapsed < this.stats.bestElapsed) {
+            // A state that misses a limit of the user's goals is listed but does not set the bound.
+            const card = this.addCandidate(node, b)
+            if (card.meets === false) this.stats.missedGoals = (this.stats.missedGoals ?? 0) + 1
+            else if (this.stats.bestElapsed === undefined || node.elapsed < this.stats.bestElapsed) {
                 this.stats.bestElapsed = node.elapsed
                 this.stats.bestNode = node.id
                 this.stats.bestFoundAt = this.stats.nodes
@@ -906,8 +1026,9 @@ export class FightSolver {
             }
         } else if (status === "win") {
             this.stats.wins++
-            this.addCandidate(node, b)
-            if (this.stats.bestElapsed === undefined || node.elapsed < this.stats.bestElapsed) {
+            const card = this.addCandidate(node, b)
+            if (card.meets === false) this.stats.missedGoals = (this.stats.missedGoals ?? 0) + 1
+            else if (this.stats.bestElapsed === undefined || node.elapsed < this.stats.bestElapsed) {
                 this.stats.bestElapsed = node.elapsed
                 this.stats.bestNode = node.id
                 this.stats.bestFoundAt = this.stats.nodes
@@ -992,7 +1113,7 @@ export class FightSolver {
             const broken = anyEnemyBroken(cp.battle)
             const self = this
             const walk = function* (prefix: number[], p: Pending): Generator<void, void, void> {
-                for (const i of optionOrder(p.options, p.allowed, o => self.roleOf(o), broken)) {
+                for (const i of optionOrder(p.options, p.allowed, o => self.roleOf(o), broken, p.ranks)) {
                     if (leaves.length >= maxBranch) return
                     const forced = [...prefix, i]
                     const r = self.runAction(cp, forced)
@@ -1018,7 +1139,7 @@ export class FightSolver {
             const l = leaves[k]
             children.push(yield* this.settleG(l.cp, node.id, node.depth + 1, l.picks, 1, l.actor ? [l.actor] : [], k))
         }
-        return children.filter(c => c.status === "open").sort((a, b) => a.est - b.est || a.order - b.order)
+        return children.filter(c => c.status === "open").sort((a, b) => a.dev - b.dev || a.est - b.est || a.order - b.order)
     }
 
     // ---- expansions in progress ----
@@ -1073,7 +1194,7 @@ export class FightSolver {
             return
         }
         // Level done: keep the best `width` (by estimate) for the next level; the others wait (checkpoint dropped).
-        const next = this.beamNext.map(id => this.nodes[id]).filter(n => n.status === "open").sort((a, b) => a.est - b.est)
+        const next = this.beamNext.map(id => this.nodes[id]).filter(n => n.status === "open").sort((a, b) => a.dev - b.dev || a.est - b.est)
         this.beamNext = []
         this.beamPos = 0
         const openCount = this.nodes.reduce((c, n) => c + (n.status === "open" ? 1 : 0), 0)
@@ -1089,7 +1210,7 @@ export class FightSolver {
 
     // End of the prefix: the open frontier, best estimate first, dealt out round-robin to the workers.
     private split(): void {
-        const frontier = this.nodes.filter(n => n.status === "open").sort((a, b) => a.est - b.est || a.id - b.id)
+        const frontier = this.nodes.filter(n => n.status === "open").sort((a, b) => a.dev - b.dev || a.est - b.est || a.id - b.id)
         const p = this.opts.partition ?? { index: 0, count: 1 }
         const mine: SNode[] = []
         frontier.forEach((n, i) => {
@@ -1167,7 +1288,7 @@ export class FightSolver {
             else if (n.status === "open" && this.isUnder(n.id, id)) mine.add(n.id)
         }
         this.stack = this.stack.filter(x => !mine.has(x))
-        const ordered = [...mine].map(x => this.nodes[x]).sort((a, b) => a.est - b.est)
+        const ordered = [...mine].map(x => this.nodes[x]).sort((a, b) => a.dev - b.dev || a.est - b.est)
         for (let k = ordered.length - 1; k >= 0; k--) this.stack.push(ordered[k].id)
         for (const r of [...this.skippedRoots]) if (this.isUnder(id, r) || this.isUnder(r, id)) this.skippedRoots.delete(r)
         this.focusRoot = id
@@ -1209,9 +1330,9 @@ export class FightSolver {
     view(id: number): SolverNodeView {
         const n = this.nodes[id]
         return {
-            id: n.id, parent: n.parent, depth: n.depth, status: n.status, elapsed: n.elapsed, remaining: n.remaining, est: n.est,
+            id: n.id, parent: n.parent, depth: n.depth, status: n.status, elapsed: n.elapsed, remaining: n.remaining, est: n.est, dev: n.dev,
             label: n.parent < 0 ? this.rootLabel() : summarizePicks(n.picks),
-            picks: n.picks.map(p => ({ label: p.label, choice: p.choice, count: p.count, auto: p.auto })),
+            picks: n.picks.map(p => ({ label: p.label, choice: p.choice, count: p.count, auto: p.auto, dev: p.dev })),
             actors: n.actors, steps: n.steps, childCount: n.children.length,
             nextDecision: n.pending?.label, mergedInto: n.mergedInto, note: n.note, onBestPath: this.bestPath.has(n.id),
         }
@@ -1382,7 +1503,7 @@ export function bossHp(b: PvPBattle): { cur: number, max: number } | undefined {
 }
 
 // A state at a checkpoint (or a clear), for the page's candidate list.
-// Candidate vectors, smaller is better in every slot: [AV, then per prioritised ally (-EP share, its AV until its next
+// Candidate vectors, smaller is better in every slot: [the tactics goals' scores in the user's order (if any), AV, then per prioritised ally (-EP share, its AV until its next
 // turn), then the other allies' -EP share (summed), -SP, their summed AV until their next turns, and last -HP share].
 // Every slot but the last decides (AV, EP, SP and turn order are what make a good state to go on from); HP only
 // breaks exact ties. `a` covers `b`: a is at least as good in all deciding slots, and on a tie there not worse in HP.
@@ -1409,6 +1530,9 @@ export interface CheckpointView {
     enemyHp: number       // remaining (waves), as SNode.remaining
     bossPct?: number      // the boss's HP share in % (bossHp)
     broken?: boolean      // the boss is broken (a living main target; no main target: any enemy)
-    vec: number[]         // [AV, -EP share, -SP, Σ AV to the allies' next turns, -HP share] (see candidateCovers)
+    vec: number[]         // [tactics goals..., AV, -EP share, -SP, Σ AV to the allies' next turns, -HP share] (see candidateCovers)
+    // Tactics goals (in the user's order): label, the state's value, and for limits whether it is met.
+    goals?: { label: string, value: string, ok?: boolean }[]
+    meets?: boolean       // every limit met (false: listed, but it did not set the bound)
 }
 export interface SolverTreeChunk { from: number, parents: Int32Array, elapsed: Float64Array, remaining: Float32Array, labels: string[], status: Uint8Array }

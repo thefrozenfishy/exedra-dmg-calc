@@ -38,6 +38,116 @@
             <button v-for="n in teamNames" :key="n" type="button" class="prio-chip" :class="{ on: priorityNames.includes(n) }"
                 @click="togglePriority(n)">{{ priorityNames.includes(n) ? '★ ' : '' }}{{ n }}</button>
         </div>
+        <details v-if="teamNames.length" class="tactics" :open="tacticsOpen"
+            @toggle="tacticsOpen = ($event.target as HTMLDetailsElement).open">
+            <summary><span class="tactics-title">Tactics</span> <span class="muted small">· {{ tacticsSummary
+                    }}</span></summary>
+            <fieldset class="option-group tactic-group">
+                <legend>Checkpoint goals <span class="muted">· top = most important; they rank the states (and
+                        clears) before AV, EP, SP and next turns</span></legend>
+                <p v-if="!tactics.goals.length" class="muted small tactic-empty">None: every character and value is
+                    "don't care" (the solver's own ranking). Add one per value you care about, most important first;
+                    a state that misses a limit (at least / at most / between / buff) is still listed, but only states
+                    that meet every limit set the AV bound.</p>
+                <div v-for="(g, i) in tactics.goals" :key="i" class="goal-row" :class="{ gone: !goalInTeam(g) }"
+                    draggable="true" @dragstart="dragGoal = i" @dragover.prevent @drop="dropGoal(i)"
+                    :title="goalInTeam(g) ? 'Drag (or use the arrows) to change its priority' : 'Not in the current team: ignored'">
+                    <span class="goal-rank">{{ i + 1 }}</span>
+                    <button type="button" class="icon-btn" :disabled="i === 0" @click="moveGoal(i, -1)"
+                        title="More important">▲</button>
+                    <button type="button" class="icon-btn" :disabled="i === tactics.goals.length - 1"
+                        @click="moveGoal(i, 1)" title="Less important">▼</button>
+                    <select v-model="g.ally" @change="fixGoal(g)">
+                        <option value="">Team</option>
+                        <option v-for="n in teamNames" :key="n" :value="n">{{ n }}</option>
+                        <option v-if="g.ally && !teamNames.includes(g.ally)" :value="g.ally">{{ g.ally }} (not in
+                            team)</option>
+                    </select>
+                    <select v-model="g.metric" @change="fixGoal(g)">
+                        <option v-for="m in metricsFor(g)" :key="m" :value="m">{{ METRIC_LABELS[m] }}</option>
+                    </select>
+                    <template v-if="g.metric === 'buff'">
+                        <select v-model="g.mode">
+                            <option value="has">has</option>
+                            <option value="lacks">does not have</option>
+                        </select>
+                        <input v-model.trim="g.buff" class="buff-input" placeholder="e.g. CUTOUT"
+                            title="Text found in the effect's type (e.g. CUTOUT) or in its 'applier - description' as the Battle Timeline lists it" />
+                        <select v-model="g.from">
+                            <option value="">from anyone</option>
+                            <option v-for="n in teamNames" :key="n" :value="n">from {{ n }}</option>
+                        </select>
+                    </template>
+                    <template v-else>
+                        <select v-model="g.mode">
+                            <option v-for="m in NUM_MODES" :key="m" :value="m">{{ MODE_LABELS[m] }}</option>
+                        </select>
+                        <input v-if="isLimit(g.mode)" v-model.number="g.value" type="number" class="tiny" step="any" />
+                        <template v-if="g.mode === 'between'"><span class="muted small">and</span><input
+                                v-model.number="g.value2" type="number" class="tiny" step="any" /></template>
+                        <span v-if="isLimit(g.mode) && metricUnit(g)" class="muted small">{{ metricUnit(g) }}</span>
+                    </template>
+                    <button type="button" class="icon-btn" @click="removeGoal(i)" title="Remove this goal">✕</button>
+                </div>
+                <div class="tactic-buttons">
+                    <button type="button" class="btn small-btn" @click="addGoal()">+ Add goal</button>
+                </div>
+            </fieldset>
+            <fieldset class="option-group tactic-group">
+                <legend>Strategies <span class="muted">· "try first": those lines are searched first; "only": the
+                        other options are not tried</span></legend>
+                <div class="strat-grid">
+                    <span class="strat-head">Character</span><span class="strat-head">Action on its turns</span><span
+                        class="strat-head">Ally-side targets (buffs)</span><span class="strat-head">Ultimate</span>
+                    <template v-for="n in teamNames" :key="n">
+                        <span class="strat-name" :class="{ on: strategyOn(n) }">{{ n }}</span>
+                        <span class="strat-cell">
+                            <select v-model="stratOf(n).action">
+                                <option :value="undefined">any</option>
+                                <option value="basic">Basic Attack</option>
+                                <option value="skill">Battle Skill</option>
+                            </select>
+                            <select v-if="stratOf(n).action" v-model="stratOf(n).actionStrict" class="strict-select" title="Try first: these lines are searched first, the rest later. Only: the other options are not tried at all"><option :value="undefined">try first</option><option :value="true">only</option></select>
+                        </span>
+                        <span class="strat-cell">
+                            <select v-model="stratOf(n).buffMain" title="Main target">
+                                <option value="">any</option>
+                                <option v-for="m in teamNames" :key="m" :value="m">{{ m }}</option>
+                            </select>
+                            <template v-if="stratOf(n).buffMain"><span class="muted small"
+                                    title="When the main target already has this character's buffs">then</span>
+                                <select v-model="stratOf(n).buffSecond" title="Second target">
+                                    <option value="">—</option>
+                                    <option v-for="m in teamNames" :key="m" :value="m">{{ m }}</option>
+                                </select>
+                                <input v-model.trim="stratOf(n).buffName" class="buff-input" placeholder="any buff"
+                                    title="'Already has the buffs': an effect from this character matching this text (its type, e.g. CUTOUT, or its description); empty: any effect from this character" />
+                                <select v-model="stratOf(n).buffStrict" class="strict-select" title="Try first: these lines are searched first, the rest later. Only: the other options are not tried at all"><option :value="undefined">try first</option><option :value="true">only</option></select></template>
+                        </span>
+                        <span class="strat-cell">
+                            <span class="muted small">≥</span><input v-model.number="stratOf(n).ultBreaks" type="number"
+                                class="tiny" min="0" max="5" placeholder="1"
+                                title="Number of enemies in break (living)" /><span class="muted small">broken:</span>
+                            <select v-model="stratOf(n).ultAtBreak">
+                                <option v-for="m in ULT_MODES" :key="m.value" :value="m.value">{{ m.label }}</option>
+                            </select>
+                            <span class="muted small">else</span>
+                            <select v-model="stratOf(n).ultOtherwise">
+                                <option v-for="m in ULT_MODES" :key="m.value" :value="m.value">{{ m.label }}</option>
+                            </select>
+                            <select v-if="ultOn(n)" v-model="stratOf(n).ultStrict" class="strict-select" title="Try first: these lines are searched first, the rest later. Only: the other options are not tried at all"><option :value="undefined">try first</option><option :value="true">only</option></select>
+                        </span>
+                    </template>
+                </div>
+            </fieldset>
+            <div class="tactic-buttons">
+                <button type="button" class="btn small-btn" :disabled="!tacticsCount" @click="clearTactics"
+                    title="Every goal and strategy back to don't care">Clear tactics</button>
+                <button type="button" class="btn small-btn" :disabled="!tacticsCount" @click="exportTactics"
+                    title="Save the tactics to a file for the command-line runner (scripts/sim/fightSolve.ts --tactics FILE)">Export
+                    tactics</button>
+            </div>
+        </details>
         <div class="option-groups">
             <fieldset class="option-group">
                 <legend>Exact <span class="muted">· the result stays optimal</span></legend>
@@ -122,7 +232,8 @@
                 · {{
                     stats.wins.toLocaleString() }} clears<template v-if="stats.checkpoints"> · {{
                     stats.checkpoints.toLocaleString() }}
-                    checkpoints</template> · {{ stats.losses.toLocaleString() }} defeats<template v-if="stats.allyFell">
+                    checkpoints</template><template v-if="stats.missedGoals"> ({{ stats.missedGoals.toLocaleString() }}
+                    miss your goal limits)</template> · {{ stats.losses.toLocaleString() }} defeats<template v-if="stats.allyFell">
                     ({{
                         stats.allyFell.toLocaleString() }} by an ally falling)</template> · {{ (stats.ms / 1000).toFixed(1)
                 }}
@@ -149,14 +260,14 @@
                     }} not
                     worse in every way than another (faster, more EP or SP, or the team's next turns sooner{{
                     jobPriority.length ? `; ★ ${jobPriority.join(', ')}: own EP and next turn each` : '' }}; HP only
-                    breaks ties); pick one to go on from</span></h3>
+                    breaks ties{{ candidates.some(c => c.goals?.length) ? '; your tactics goals first' : '' }}); pick one to go on from</span></h3>
             <h3 v-else class="cand-title">Clears found <span class="muted">· the {{ candidates.length }} fastest{{
                 clearSlack >
                     0 ?
-                    ` (slower lines kept up to ${clearSlack} AV behind the best)` : '' }}</span></h3>
+                    ` (slower lines kept up to ${clearSlack} AV behind the best)` : '' }}{{ candidates.some(c => c.goals?.length) ? ', ranked by your tactics goals first' : '' }}</span></h3>
             <div class="cand-list">
                 <div v-for="c in candidates" :key="c.gid" class="cand"
-                    :class="{ selected: c.gid === selectedId, win: c.win }">
+                    :class="{ selected: c.gid === selectedId, win: c.win, miss: c.meets === false }">
                     <div class="cand-head">
                         <b>{{ fmtAv(c.elapsed) }} AV</b>
                         <span v-if="c.note" class="cand-note">{{ c.note }}</span>
@@ -169,6 +280,12 @@
                                 title="AV until each ally's next turn, added up (lower = the team acts sooner)">next
                                 turns Σ
                                 <b>{{ fmtAv(turnSum(c)) }}</b> AV</span></span>
+                    </div>
+                    <div v-if="c.goals?.length" class="cand-goals">
+                        <span v-for="(g, gi) in c.goals" :key="gi" class="cand-goal"
+                            :class="{ ok: g.ok === true, miss: g.ok === false }"
+                            :title="g.ok === false ? 'Misses this limit' : g.ok ? 'Limit met' : 'Ranked: as high / low as possible'">{{
+                                g.ok === false ? '✗' : g.ok ? '✓' : '·' }} {{ g.label }} <b>{{ g.value }}</b></span>
                     </div>
                     <div class="cand-allies">
                         <div class="cand-ally cand-legend" :class="{ 'with-magic': hasMagic(c) }"><span></span><span>EP</span><span
@@ -318,6 +435,7 @@ import type { TeamSlot } from '../types/BestTeamTypes'
 import { SOLVER_GOALS, SOLVER_STATUSES, hpGoalShare, type CheckpointView, type SolverGoal, type SolverLine, type SolverNodeStatus, type SolverNodeView, type SolverStats, type SolverTreeChunk } from '../models/FightSolver'
 import type { FightSolverJob, FightSolverMessage, FightSolverRequest, SolverExportItem } from '../workers/fightSolverWorker'
 import { buildPvEExport, downloadText, type PvEExport } from '../utils/pvpExport'
+import { METRIC_LABELS, MODE_LABELS, TEAM_METRICS, isLimit, strategyActive, tacticsFromNames, tacticsToNames, type AllyStrategyByName, type SolverTacticsByName, type TacticGoalByName, type TacticMetric, type TacticMode, type UltMode } from '../models/FightSolverTactics'
 import { RESULTS_FORMAT, lineOf, mergeCandidates, resultsFileName, type SavedResults, type SolverRouteStep } from '../models/FightSolverResults'
 
 const props = defineProps<{
@@ -348,6 +466,73 @@ function togglePriority(n: string) {
   const cur = priorityNames.value ?? []
   priorityNames.value = cur.includes(n) ? cur.filter(x => x !== n) : [...cur, n]
 }
+// Tactics (models/FightSolverTactics.ts): checkpoint goals in priority order and per-character strategies, by name.
+const tacticsSetting = useSetting<SolverTacticsByName>('pveSolverTactics', { goals: [], strategies: {} })
+// Stored (not the default object) so the form's v-model edits are saved.
+tacticsSetting.value = normalizeTactics(tacticsSetting.value)
+const tactics = computed(() => tacticsSetting.value)
+const tacticsOpen = useSetting<boolean>('pveSolverTacticsOpen', false)
+const NUM_MODES: TacticMode[] = ['high', 'low', 'gte', 'lte', 'between']
+const ULT_MODES: { value: UltMode, label: string }[] = [{ value: 'free', label: 'solver decides' }, { value: 'asap', label: 'as soon as ready' }, { value: 'hold', label: 'hold' }]
+function normalizeTactics(t?: SolverTacticsByName): SolverTacticsByName {
+    return {
+        goals: Array.isArray(t?.goals) ? t!.goals.map(g => ({ ...g, ally: g.ally ?? '', from: g.from ?? '' })) : [],
+        strategies: Object.fromEntries(Object.entries(t?.strategies && typeof t.strategies === 'object' ? t.strategies : {})
+            .map(([n, x]) => [n, { ...emptyStrategy(), ...JSON.parse(JSON.stringify(x ?? {})), buffMain: x?.buffMain ?? '', buffSecond: x?.buffSecond ?? '', ultAtBreak: x?.ultAtBreak ?? 'free', ultOtherwise: x?.ultOtherwise ?? 'free' }])),
+    }
+}
+const emptyStrategy = (): AllyStrategyByName => ({ buffMain: '', buffSecond: '', ultAtBreak: 'free', ultOtherwise: 'free' })
+// Every team member has a strategy entry (so the form can bind to it).
+watch(teamNames, names => {
+    for (const n of names) if (!tactics.value.strategies[n]) tactics.value.strategies[n] = emptyStrategy()
+}, { immediate: true })
+const stratOf = (n: string): AllyStrategyByName => tactics.value.strategies[n] ?? {}
+const ultOn = (n: string) => { const s = stratOf(n); return (!!s.ultAtBreak && s.ultAtBreak !== 'free') || (!!s.ultOtherwise && s.ultOtherwise !== 'free') }
+const strategyOn = (n: string) => strategyActive(stratOf(n))
+const goalInTeam = (g: TacticGoalByName) => TEAM_METRICS.includes(g.metric) || teamNames.value.includes(g.ally)
+const metricsFor = (g: TacticGoalByName): TacticMetric[] => g.ally ? ['av', 'ep', 'hp', 'magic', 'buff'] : TEAM_METRICS
+const metricUnit = (g: TacticGoalByName) => g.metric === 'ep' || g.metric === 'hp' ? '%' : g.metric === 'av' || g.metric === 'elapsed' ? 'AV' : ''
+// Keeps a goal consistent after its character / value changed (team values for "Team", a mode the value has).
+function fixGoal(g: TacticGoalByName) {
+    if (!metricsFor(g).includes(g.metric)) g.metric = g.ally ? 'av' : 'elapsed'
+    if (g.metric === 'buff') { if (g.mode !== 'has' && g.mode !== 'lacks') g.mode = 'has' }
+    else if (g.mode === 'has' || g.mode === 'lacks') g.mode = g.metric === 'av' || g.metric === 'elapsed' ? 'low' : 'high'
+}
+function addGoal() {
+    const ally = teamNames.value[0] ?? ''
+    tactics.value.goals.push({ ally, metric: 'av', mode: 'low', from: '' })
+}
+function removeGoal(i: number) { tactics.value.goals.splice(i, 1) }
+function moveGoal(i: number, d: number) {
+    const gs = tactics.value.goals, j = i + d
+    if (j < 0 || j >= gs.length) return
+    const [g] = gs.splice(i, 1)
+    gs.splice(j, 0, g)
+}
+const dragGoal = ref<number | null>(null)
+function dropGoal(i: number) {
+    const from = dragGoal.value
+    dragGoal.value = null
+    if (from === null || from === i) return
+    const gs = tactics.value.goals
+    const [g] = gs.splice(from, 1)
+    gs.splice(i, 0, g)
+}
+const tacticsCount = computed(() => tactics.value.goals.filter(goalInTeam).length + teamNames.value.filter(strategyOn).length)
+const tacticsSummary = computed(() => {
+    const g = tactics.value.goals.filter(goalInTeam).length, s = teamNames.value.filter(strategyOn).length
+    if (!g && !s) return "don't care (the solver's own ranking and order)"
+    return [g ? `${g} goal${g === 1 ? '' : 's'}` : '', s ? `strategies for ${teamNames.value.filter(strategyOn).join(', ')}` : ''].filter(Boolean).join(' · ')
+})
+function clearTactics() {
+    tacticsSetting.value = { goals: [], strategies: {} }
+    for (const n of teamNames.value) tactics.value.strategies[n] = emptyStrategy()
+}
+function exportTactics() {
+    downloadText('fight-solver-tactics.json', JSON.stringify({ format: 'exedra-fight-solver-tactics', version: 1, tactics: tactics.value }, null, 2))
+}
+const jobTactics = () => tacticsFromNames(tactics.value, props.slots.map(s => s.main?.name ?? ''))
+
 // The prioritised characters of the search on screen (names, for the cards' title).
 const jobPriority = ref<string[]>([])
 const priorityIndexes = () => props.slots.map((s, i) => (priorityNames.value ?? []).includes(s.main?.name ?? '') ? i : -1).filter(i => i >= 0)
@@ -412,6 +597,7 @@ const statusText = computed(() => {
     if (!s) return ''
     if (running.value) return 'Searching…'
     if (s.done && s.userSkipped > 0) return `Complete except ${s.userSkipped.toLocaleString()} skipped`
+    if (s.done && s.bestElapsed === undefined && s.missedGoals) return 'No line meets your goal limits'
     if (s.done && jobGoal.value !== 'clear') return s.bestElapsed !== undefined ? 'Every line to the checkpoint searched' : 'No line reaches the checkpoint'
     if (s.done) return s.bestElapsed !== undefined ? 'Optimal (search complete)' : 'No clear exists'
     return s.stopReason === 'node limit' ? 'Node limit reached' : 'Stopped'
@@ -746,6 +932,7 @@ function start(from?: SolverLine | MouseEvent, route: SolverRouteStep[] = []) {
         opening: opening ? JSON.parse(JSON.stringify(opening)) : undefined,
         goal: goal.value, slack: Math.max(0, slack.value || 0),
         priority: priorityIndexes(),
+        tactics: jobTactics(),
     }
     lastJob = job
     jobPriority.value = (job.priority ?? []).map(i => props.slots[i]?.main?.name ?? `#${i + 1}`)
@@ -975,6 +1162,11 @@ async function loadResults(ev: Event) {
         jobGoal.value = data.search.goal
         const filled = data.setup.slots.filter(s => !!s.main)
         jobPriority.value = (data.search.job.priority ?? []).map(i => filled[i]?.main?.name ?? `#${i + 1}`)
+        // The file's tactics into the form (Continue from here searches with them again).
+        if (data.search.job.tactics) {
+            tacticsSetting.value = normalizeTactics(tacticsToNames(data.search.job.tactics, filled.map(sl => sl.main?.name ?? '')))
+            for (const n of teamNames.value) if (!tactics.value.strategies[n]) tactics.value.strategies[n] = emptyStrategy()
+        }
         opening = undefined
         jobSides = [...(data.search.job.aiAllyTargets ? ['friend' as const] : []), ...(data.search.job.aiEnemyTargets ? ['opp' as const] : [])]
         stats.value = data.search.stats ? { ...data.search.stats, current: undefined, bestNode: undefined } : null
@@ -2011,5 +2203,171 @@ input.tiny {
     display: flex;
     flex-wrap: wrap;
     gap: 0.3rem;
+}
+.tactics {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.35rem 0.8rem;
+    margin: 0 auto 0.75rem;
+    max-width: 1100px;
+    text-align: left;
+}
+
+.tactics summary {
+    cursor: pointer;
+    font-size: 0.82rem;
+}
+
+.tactics-title {
+    color: var(--accent-soft);
+    font-weight: 600;
+}
+
+.tactics[open] summary {
+    margin-bottom: 0.5rem;
+}
+
+.tactic-group {
+    max-width: none;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin-bottom: 0.6rem;
+}
+
+.tactic-empty {
+    margin: 0.2rem 0;
+}
+
+.goal-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    padding: 0.15rem 0.3rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg-soft);
+    cursor: grab;
+}
+
+.goal-row.gone {
+    opacity: 0.45;
+}
+
+.goal-rank {
+    min-width: 1.2rem;
+    text-align: right;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.goal-row select,
+.strat-cell select {
+    font-size: 0.78rem;
+    max-width: 12rem;
+}
+
+.buff-input {
+    width: 7rem;
+    font-size: 0.78rem;
+}
+
+.goal-row .icon-btn {
+    width: 1.6rem;
+    height: 1.6rem;
+    min-width: 0;
+    font-size: 0.65rem;
+    padding: 0;
+    border-radius: 6px;
+}
+
+.goal-row input.tiny,
+.strat-cell input.tiny {
+    padding: 0.1rem 0.3rem;
+    height: 1.6rem;
+}
+
+.tactic-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.2rem;
+}
+
+.strat-grid {
+    display: grid;
+    grid-template-columns: minmax(7rem, auto) auto auto auto;
+    gap: 0.3rem 0.8rem;
+    align-items: center;
+    font-size: 0.8rem;
+    overflow-x: auto;
+}
+
+.strat-head {
+    font-size: 0.68rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.strat-name {
+    white-space: nowrap;
+    color: var(--muted);
+}
+
+.strat-name.on {
+    color: var(--accent);
+}
+
+.strat-cell {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.strat-cell input.tiny {
+    margin-left: 0;
+    width: 2.6rem;
+}
+
+.strict-select {
+    color: var(--muted);
+}
+
+.cand-goals {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    font-size: 0.74rem;
+    color: var(--muted);
+}
+
+.cand-goal.ok b {
+    color: var(--success);
+}
+
+.cand-goal.miss {
+    color: var(--danger);
+}
+
+.cand.miss {
+    opacity: 0.7;
+    border-style: dashed;
+}
+
+@media (max-width: 640px) {
+    .strat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .strat-head {
+        display: none;
+    }
+
+    .strat-name {
+        margin-top: 0.4rem;
+        font-weight: 600;
+    }
 }
 </style>
