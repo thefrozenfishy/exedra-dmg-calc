@@ -481,7 +481,8 @@ function normalizeTactics(t?: SolverTacticsByName): SolverTacticsByName {
             .map(([n, x]) => [n, { ...emptyStrategy(), ...JSON.parse(JSON.stringify(x ?? {})), buffMain: x?.buffMain ?? '', buffSecond: x?.buffSecond ?? '', ultAtBreak: x?.ultAtBreak ?? 'free', ultOtherwise: x?.ultOtherwise ?? 'free' }])),
     }
 }
-const emptyStrategy = (): AllyStrategyByName => ({ buffMain: '', buffSecond: '', ultAtBreak: 'free', ultOtherwise: 'free' })
+// A function declaration (hoisted): normalizeTactics uses it during setup, above this line.
+function emptyStrategy(): AllyStrategyByName { return { buffMain: '', buffSecond: '', ultAtBreak: 'free', ultOtherwise: 'free' } }
 // Every team member has a strategy entry (so the form can bind to it).
 watch(teamNames, names => {
     for (const n of names) if (!tactics.value.strategies[n]) tactics.value.strategies[n] = emptyStrategy()
