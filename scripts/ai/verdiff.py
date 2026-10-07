@@ -11,6 +11,12 @@ Run from the repo root (in the Cowork VM: cd $HOME/mnt/exedra-dmg-calc). Full pr
   funcs <oldDll> <newDll> <oldScriptJson> <newScriptJson> [--prefix ReDriveBattleCore] [--all]
                                                  per-method diff by name (needs Il2CppDumper's script.json for BOTH
                                                  versions). rel32 operands that only moved are ignored (heuristic).
+  runs  <oldVerDir> <newVerDir> [<oldScriptJson>]
+                                                 changed byte runs in GameAssembly's code sections, each mapped to the
+                                                 method that contains it (by the OLD script.json, default
+                                                 ../Il2CppDumper/script.json). Use it on CODE CHANGED before asking for
+                                                 Il2CppDumper: if the section sizes match, nothing moved and the names
+                                                 are exact (3.19.11: only 3 lottery methods changed).
   mst   <old> <new> [--md out.md] [--json out.json]
                                                  master data diff. <old>/<new> = a git ref of this repo (e.g. 4ea7254^,
                                                  HEAD) or a folder with get*MstList.json (base_data, or the raw downloads
@@ -50,6 +56,38 @@ def pe_sections(d):
         secs.append({"name": name, "va": va, "vsize": vs, "raw": ra, "rsize": rs})
         off += 40
     return secs, ts
+
+
+def code_runs(old_dir, new_dir, script_json, gap=16, limit=60):
+    import bisect
+    a = open(os.path.join(old_dir, "GameAssembly.unpack.dll"), "rb").read()
+    b = open(os.path.join(new_dir, "GameAssembly.unpack.dll"), "rb").read()
+    sa, _ = pe_sections(a); sb, _ = pe_sections(b)
+    meth = sorted((m["Address"], m["Name"]) for m in json.load(open(script_json, encoding="utf8"))["ScriptMethod"])
+    addrs = [m[0] for m in meth]
+    res = []
+    for s in sa:
+        if s["name"] not in CODE_SECTIONS:
+            continue
+        t = next((x for x in sb if x["name"] == s["name"]), None)
+        moved = t is None or (t["va"], t["rsize"]) != (s["va"], s["rsize"])
+        x = a[s["raw"]:s["raw"] + s["rsize"]]; y = b[t["raw"]:t["raw"] + t["rsize"]] if t else b""
+        n = min(len(x), len(y)); runs = []; st = pr = None
+        for i in range(n):
+            if x[i] != y[i]:
+                if st is None or i - pr > gap:
+                    if st is not None: runs.append((st, pr))
+                    st = i
+                pr = i
+        if st is not None: runs.append((st, pr))
+        for st, en in runs[:limit]:
+            rva = s["va"] + st; name = None
+            if s["name"] in (".text", "il2cpp"):
+                k = bisect.bisect_right(addrs, rva) - 1
+                if k >= 0: name = f"{meth[k][1]} +0x{rva - meth[k][0]:x}"
+            res.append({"section": s["name"], "rva": hex(rva), "len": en - st + 1, "method": name,
+                        "old": x[st:en + 1][:24].hex(), "new": y[st:en + 1][:24].hex(), "layout_moved": moved})
+    return res
 
 
 def rva_to_off(secs, rva):
@@ -485,6 +523,10 @@ def main():
     cmd = sys.argv[1]
     if cmd == "bin":
         print_bin(bin_diff(sys.argv[2], sys.argv[3]))
+    elif cmd == "runs":
+        sj = sys.argv[4] if len(sys.argv) > 4 else os.path.join(MNT, "Il2CppDumper", "script.json")
+        for r in code_runs(sys.argv[2], sys.argv[3], sj):
+            out(f"{r['section']:7} {r['rva']:>10} {r['len']:5} B  {r['method'] or ''}" + ("  (section moved/resized: names approximate)" if r["layout_moved"] else ""))
     elif cmd == "meta":
         old = arg("--old-literals"); oldm = arg("--old-metadata")
         print_meta(meta_diff(sys.argv[2], old, oldm))

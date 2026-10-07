@@ -48,7 +48,11 @@ python3 scripts/ai/verdiff.py bin $HOME/mnt/unpackedExedra/$OLD $HOME/mnt/unpack
 Read the line for `GameAssembly.unpack.dll`:
 - **CODE IDENTICAL** (only `.rdata` debug timestamp/PDB age, `_RDATA`, `.reloc` differ - this is what 3.19.1 looked
   like): the battle code, every RVA and the 3.19.0 decompile stay valid. Skip step 2.
-- **CODE CHANGED**: do step 2.
+- **CODE CHANGED**: first `python3 scripts/ai/verdiff.py runs $HOME/mnt/unpackedExedra/$OLD $HOME/mnt/unpackedExedra/$NEW`
+  lists every changed byte run with the (old) method containing it. When the section sizes match nothing moved, so
+  the names are exact. 3.19.11: 12 runs, all in 3 lottery methods (`lotteryNumberUpperLimit` int -> long), battle
+  code identical, every RVA still valid. Only if a run lands in battle code (or the layout moved) do step 2;
+  otherwise Il2CppDumper is optional (names on record only).
 `MadokaExedra.unpack.exe` / `baselib.unpack.dll` (launcher, Unity runtime) normally differ only in `_RDATA`/`.rsrc`
 (protector data, icons); ignore them unless their `.text` changed.
 
