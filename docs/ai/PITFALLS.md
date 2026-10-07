@@ -165,3 +165,7 @@
 - **TurnStart / TurnEnd passes have no skill.** The TS used to pass the turn's chosen action type into the TurnStart and
   TurnEnd passes, so AfterProcess passives gated on ActorSkillType fired twice per turn (Rose Garden minions' Magic
   2 -> 4; Absolute Venus' 20-token follow-up fired before her skill). Fixed 2026-10-03 in `fireTiming`.
+- **"CODE CHANGED" is not "battle code changed".** 3.19.11's GameAssembly differed in 1,577 code bytes, all in the
+  lottery unpacker/model. `verdiff.py runs` names the methods from the old script.json; check it before asking the
+  user for Il2CppDumper/Ghidra. Also: unpack folders of in-between versions may be gone (3.19.1 was deleted), so
+  diff against whatever previous version folder exists (the user asked for 3.19.0 -> 3.19.11).

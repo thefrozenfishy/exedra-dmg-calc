@@ -6,6 +6,7 @@ import { createPvEBattle } from "./PvEBattle";
 import type { RaidCarry } from "./PvPBattle";
 import type { RngMode } from "./BattleRng";
 import { FightSolver, SolverRng, applyControlSwitch, teamDamageModel, type SolverLine, type SolverGoal } from "./FightSolver";
+import { hasTactics, type SolverTactics } from "./FightSolverTactics";
 import { buildSlotKioku } from "../utils/pvpExport";
 import type { TeamSlot } from "../types/BestTeamTypes";
 
@@ -32,6 +33,7 @@ export interface FightSolverJob {
     goal: SolverGoal
     slack: number
     priority?: number[]     // checkpoint cards: prioritised allies (team positions, 0-based; FightSolver.stateCard)
+    tactics?: SolverTactics // checkpoint goals and per-ally strategies (team positions; FightSolverTactics)
     partition: { index: number, count: number }
     // "Solve from here": the simulator's battle so far (its decisions by roll index, the actions it ran, its control).
     opening?: SolverOpening
@@ -70,6 +72,7 @@ export function createJobSolver(job: FightSolverJob): { solver: FightSolver, inf
         maxNodes: job.maxNodes, maxAv: job.maxAv, memo: job.memo, dominance: job.dominance, symmetry: job.symmetry,
         beamWidth: job.beamWidth, lowerBound: job.lowerBound, damage, ultsAsap: job.ultsAsap, ultHabits: job.ultHabits,
         loose: job.loose, stopOnAllyDeath: job.stopOnAllyDeath, partition: job.partition, goal: job.goal, slack: job.slack, priority: job.priority,
+        tactics: hasTactics(job.tactics) ? job.tactics : undefined,
     }, prefix)
     const info = [solver.goalNote, solver.resourceInfo, damage ? `max damage rate ≈ ${Math.round(damage.rate).toLocaleString()} HP/AV` : ""].filter(Boolean).join(" · ")
     return { solver, info }

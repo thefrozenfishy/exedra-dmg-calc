@@ -18,6 +18,8 @@
 //   --pick N           results file: start from its N-th card (default 1)
 //   --priority LIST    checkpoint states: characters whose EP and AV until their next turn count on their own (as much
 //                      EP / as little AV as possible each), e.g. "Lux,3" (names or team positions 1-5)
+//   --tactics FILE     checkpoint goals and per-ally strategies: the page's "Export tactics" file (allies by name);
+//                      a results file's own tactics otherwise; --no-tactics drops them
 //   --from-export      start from the export's battle: its decisions and its first <turns> actions are the opening
 //                      (like "Solve from here"; the export's own control mode is used for them)
 //   --allow-ally-deaths   keep searching lines where an ally falls (default: such a line ends as a defeat)
@@ -106,7 +108,7 @@ async function main() {
     const args = process.argv.slice(2)
     const file = args.find(a => !a.startsWith("--") && !isValueOf(a))
     function isValueOf(a: string) { const i = args.indexOf(a); return i > 0 && VALUED.has(args[i - 1]) }
-    const VALUED = new Set(["--priority", "--pick", "--goal", "--slack", "--workers", "--minutes", "--nodes", "--out", "--save-every", "--max-av", "--lower-bound"])
+    const VALUED = new Set(["--tactics", "--priority", "--pick", "--goal", "--slack", "--workers", "--minutes", "--nodes", "--out", "--save-every", "--max-av", "--lower-bound"])
     const flag = (n: string) => args.includes(n)
     const value = (n: string) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : undefined }
     const num = (n: string, d: number) => { const v = value(n); if (v === undefined) return d; const x = Number(v); if (!Number.isFinite(x)) fail(`${n} needs a number`); return x }
@@ -154,7 +156,27 @@ async function main() {
         return i
     })
     console.log(`${data.stageName ?? `stage ${data.stageId}`} · ${base.slots.length} units · ${base.rngMode}${base.rngMode === "seed" ? ` ${data.seed}` : ""} RNG · goal ${goal} · slack ${slack} AV · ${count} workers${from ? ` · from card ${pick} of ${file} (${from.note ?? `${from.elapsed.toFixed(1)} AV`}, ${from.route.length} decisions)` : opening ? ` · from the export's first ${opening.steps} actions` : ""}`)
+    // --tactics FILE: the page's form (allies by name, FightSolverTactics.SolverTacticsByName).
+    const { tacticsFromNames, goalLabel, hasTactics } = await import("../../src/models/FightSolverTactics")
+    const tv = value("--tactics")
+    if (flag("--no-tactics")) base.tactics = undefined
+    else if (tv !== undefined) {
+        const t = JSON.parse(fs.readFileSync(tv, "utf8"))
+        const byName = t?.format === "exedra-fight-solver-tactics" ? t.tactics : t
+        if (!byName || !Array.isArray(byName.goals) || typeof byName.strategies !== "object") fail(`--tactics: ${tv} is not a tactics file`)
+        base.tactics = tacticsFromNames(byName, filled.map(sl => sl.main?.name ?? ""))
+    } else base.tactics = results?.search.job.tactics
+    if (base.tactics && !hasTactics(base.tactics)) base.tactics = undefined
     if (base.priority?.length) console.log(`prioritised: ${base.priority.map(i => filled[i]?.main?.name).join(", ")} (own EP and next turn each)`)
+    if (base.tactics) {
+        const names = filled.map(sl => sl.main?.name ?? "?")
+        if (base.tactics.goals.length) console.log(`goals: ${base.tactics.goals.map((g, i) => `${i + 1}. ${goalLabel(g, names)}`).join(" · ")}`)
+        for (const st of base.tactics.strategies) console.log(`strategy ${names[st.ally]}: ${[
+            st.action ? `${st.actionStrict ? "only" : "prefer"} ${st.action === "basic" ? "Basic Attack" : "Battle Skill"}` : "",
+            st.buffMain !== undefined || st.buffSecond !== undefined ? `${st.buffStrict ? "only" : "prefer"} buffing ${[st.buffMain, st.buffSecond].filter(x => x !== undefined).map(x => names[x!]).join(" then ")}${st.buffName ? ` (${st.buffName})` : ""}` : "",
+            st.ultAtBreak && st.ultAtBreak !== "free" || st.ultOtherwise && st.ultOtherwise !== "free" ? `${st.ultStrict ? "only" : "prefer"} ult ${st.ultAtBreak ?? "free"} at ${st.ultBreaks ?? 1}+ broken, else ${st.ultOtherwise ?? "free"}` : "",
+        ].filter(Boolean).join("; ")}`)
+    }
     console.log(`results: ${path.resolve(out)} (Ctrl+C stops and saves)`)
 
     // ---- workers ----
@@ -236,7 +258,7 @@ async function main() {
         const rate = (st.nodes - lastNodes) / Math.max(0.001, (now - lastT) / 1000)
         lastNodes = st.nodes; lastT = now
         const cands = mergeCandidates(ws.flatMap(r => r.candidates)).length
-        return `[${fmt(now - t0)}] ${st.nodes.toLocaleString("en")} nodes (${rate.toFixed(0)}/s) · ${st.phase === "prefix" ? "pre-pass · " : ""}best ${st.bestElapsed?.toFixed(1) ?? "-"} AV · ${cands} ${goal === "clear" ? "clears" : "states"} kept · ${st.wins} clears${goal !== "clear" ? ` / ${st.checkpoints} checkpoints` : ""} · ${st.losses} defeats (${st.allyFell} ally fell) · ${st.bounded} cut · ${st.merged + st.dominated} merged`
+        return `[${fmt(now - t0)}] ${st.nodes.toLocaleString("en")} nodes (${rate.toFixed(0)}/s) · ${st.phase === "prefix" ? "pre-pass · " : ""}best ${st.bestElapsed?.toFixed(1) ?? "-"} AV · ${cands} ${goal === "clear" ? "clears" : "states"} kept · ${st.wins} clears${goal !== "clear" ? ` / ${st.checkpoints} checkpoints` : ""} ${st.missedGoals ? ` (${st.missedGoals} miss your goal limits)` : ""} · ${st.losses} defeats (${st.allyFell} ally fell) · ${st.bounded} cut · ${st.merged + st.dominated} merged`
     }
     const progressTimer = setInterval(() => console.log(line()), 5000)
     const saveTimer = saveEvery > 0 ? setInterval(() => { save().then(() => console.log(`  saved ${out}`)).catch(e => console.error("save failed:", e)) }, saveEvery * 1000) : undefined
@@ -255,6 +277,8 @@ async function main() {
         const st = combineStats(ws.flatMap(r => r.stats ? [r.stats] : []))
         const n = JSON.parse(fs.readFileSync(out, "utf8")).candidates.length
         console.log(`${st?.done ? "Search complete: the best is optimal for these settings. " : ""}Wrote ${n} ${goal === "clear" ? "clear" : "state"}${n === 1 ? "" : "s"} to ${path.resolve(out)}`)
+        const top = JSON.parse(fs.readFileSync(out, "utf8")).candidates[0] as SavedCandidate | undefined
+        if (top?.goals?.length) console.log(`best card: ${top.elapsed.toFixed(1)} AV · ${top.goals.map(g => `${g.ok === false ? "✗" : g.ok ? "✓" : "·"} ${g.label}: ${g.value}`).join(" · ")}`)
         console.log(`Load it on the PvE Simulator page: Fight Solver → Load results.`)
         for (const r of ws) await r.w.terminate()
         process.exit(0)

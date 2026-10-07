@@ -70,7 +70,7 @@ export function combineStats(ss: SolverStats[]): SolverStats | null {
         expanded: sum("expanded"), actions: sum("actions"), merged: sum("merged"), dominated: sum("dominated"),
         bounded: sum("bounded"), lowerBounded: sum("lowerBounded"), symmetry: sum("symmetry"), capped: sum("capped"),
         wins: sum("wins"), losses: sum("losses"), errors: sum("errors"), open: sum("open"), userSkipped: sum("userSkipped"),
-        checkpoints: sum("checkpoints"), allyFell: sum("allyFell"),
+        checkpoints: sum("checkpoints"), allyFell: sum("allyFell"), missedGoals: sum("missedGoals"),
         ms: Math.max(...ss.map(x => x.ms)),
         bestElapsed: best?.bestElapsed, bestNode: undefined, current: undefined,
         done: ss.every(x => x.done),
