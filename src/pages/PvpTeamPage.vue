@@ -156,7 +156,7 @@ import { useSetting } from '../store/settingsStore'
 import type { RngDecision, RngEvent, RngMode } from '../models/BattleRng'
 import { toast } from 'vue3-toastify'
 import { PvPKioku } from '../models/PvPKioku'
-import { buildPvPKiokus, buildExport, parseExport, downloadText } from '../utils/pvpExport'
+import { buildPvPKiokus, buildExport, parseExport, downloadText, exportToText } from '../utils/pvpExport'
 import { useFriendStore } from '../store/friendStore'
 import { crystalises, passiveDetails, portraits } from "../utils/helpers"
 
@@ -344,7 +344,7 @@ function exportBattle() {
     if (!hasRun()) runSimulation()
     const data = buildExport(team.slots, seed.value, SIM_TURNS, battleOutput.value, { mode: rngMode.value, decisions: decisions.value })
     const first = (team.slots[1][0]?.main?.name ?? "team").replace(/[^A-Za-z0-9]+/g, "-")
-    downloadText(`pvp-sim-${first}-${rngMode.value === 'seed' ? `seed${seed.value}` : rngMode.value}.json`, JSON.stringify(data, null, 2))
+    downloadText(`pvp-sim-${first}-${rngMode.value === 'seed' ? `seed${seed.value}` : rngMode.value}.json`, exportToText(data))
     toast.success("Exported team setup and simulated sequence")
 }
 

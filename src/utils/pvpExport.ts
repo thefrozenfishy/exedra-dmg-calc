@@ -1,7 +1,13 @@
 import type { RaidCarry } from "../models/PvPBattle";
 // PvP simulator export/import: one JSON file holding the exact team setup, the RNG seed and the
-// simulated sequence (human-readable lines + raw snapshots), so a run seen in the browser can be
-// replayed exactly elsewhere (scripts/sim/replayExport.ts) and discussed line by line.
+// simulated sequence (human-readable lines), so a run seen in the browser can be replayed exactly
+// elsewhere (scripts/sim/replayExport.ts) and discussed line by line.
+//
+// What a replay / import uses: the team builds (`slots`), stage, seed, RNG mode, control mode, turns,
+// `decisions` and the Solo Raid state. Everything else (`sequence`, `decisionLog`, `pending`) is a readable
+// record of what this engine version did, for reading and for `replayExport.ts --diff`; it is never read back,
+// so an old file still imports with the current engine. Files from before 2026-10-07 also carry raw
+// `snapshots` (ignored) and every character's full catalog entry (only the build fields are used).
 import { PvPKioku } from "../models/PvPKioku"
 import type { BattleSnapshot, TeamSnapshot } from "../types/KiokuTypes"
 import { TargetType } from "../types/KiokuTypes"
@@ -21,10 +27,47 @@ export interface PvPExport {
     decisions?: Record<number, RngDecision> // Manual mode: changed rolls, by roll index
     turns: number             // turns simulated (each can produce several actions)
     decisionLog?: string[]    // readable: every roll changed by hand (Manual RNG), with its action
-    slots: TeamSlot[][]       // usePvPStore().slots as-is: [enemy team, allied team]
+    slots: TeamSlot[][]       // usePvPStore().slots (build fields, see compactSlot): [enemy team, allied team]
     notes?: string
     sequence: string[]        // readable log, one line per row
-    snapshots: BattleSnapshot[]
+    snapshots?: BattleSnapshot[] // files before 2026-10-07 only (ignored)
+}
+
+// A slot as exported: the character entries keep their build (and their crystalis entries only when equipped or
+// enabled); normalizeCharacter (singleTeamStore) fills the rest back in on import. The engine reads only the build:
+// name/id, levels, ascension, dupes, portrait, equipped crystalis (buildSlotKioku) - kit data comes from this build.
+function compactCharacter<T>(c: T): T {
+    if (!c) return c
+    const opts = (c as any).crysOptions as Record<string, { enabled?: boolean, useIndex?: number }> | undefined
+    const out: any = JSON.parse(JSON.stringify(c))
+    if (opts) out.crysOptions = Object.fromEntries(Object.entries(out.crysOptions).filter(([, v]: any) => v?.enabled || v?.useIndex > 0))
+    return out
+}
+export function compactSlot(s: TeamSlot): TeamSlot {
+    return { ...JSON.parse(JSON.stringify(s)), main: compactCharacter(s.main), support: compactCharacter(s.support) }
+}
+
+// JSON text of an export: one entry per line for the readable string lists (sequence, decision log), the rest
+// compact. (Pretty-printing everything made files ~6x larger.)
+export function exportToText(data: object): string {
+    const parts = Object.entries(data).filter(([, v]) => v !== undefined).map(([k, v]) => {
+        const body = Array.isArray(v) && v.every(x => typeof x === "string")
+            ? (v.length ? `[\n    ${v.map(x => JSON.stringify(x)).join(",\n    ")}\n  ]` : "[]")
+            : JSON.stringify(v)
+        return `  ${JSON.stringify(k)}: ${body}`
+    })
+    return `{\n${parts.join(",\n")}\n}\n`
+}
+
+// After a relaxed-picks run (BattleRng: an import whose decision indices shifted), the picks keyed by the index
+// they were actually used at, so later runs match them exactly. Flipped rolls are kept as they are; stored picks
+// that were not used are dropped.
+export function rekeyPicks(decisions: Map<number, RngDecision>, snapshots: BattleSnapshot[]): Map<number, RngDecision> {
+    const out = new Map([...decisions].filter(([, d]) => !d.pick))
+    for (const s of snapshots) for (const r of s.rngEvents ?? []) {
+        if (r.userPick && typeof r.outcome === "number") out.set(r.index, { kind: r.kind, label: r.label, value: r.outcome, pick: true })
+    }
+    return out
 }
 
 // One team slot (main + support + equipped crystalis) as an engine unit.
@@ -129,8 +172,7 @@ export function buildExport(slots: TeamSlot[][], seed: number, turns: number, sn
         notes: "",                                 // free text: what looks wrong
         decisionLog: formatDecisions(snapshots),   // what was decided by hand
         sequence: formatSequence(snapshots),       // readable log (read this first)
-        slots: JSON.parse(JSON.stringify(slots)),  // exact team setup (for import / replay)
-        snapshots: JSON.parse(JSON.stringify(snapshots)),
+        slots: slots.map(team => team.map(compactSlot)), // exact team setup (for import / replay)
     }
 }
 
@@ -198,9 +240,9 @@ export interface PvEExport {
     notes?: string
     decisionLog: string[]      // readable: every decision taken, with its action (read this with the sequence)
     pending?: { label: string, options: string[] } // the decision the battle stopped at, if any
-    slots: TeamSlot[]          // useTeamStore().slots as-is (empty slots included)
+    slots: TeamSlot[]          // useTeamStore().slots, build fields (compactSlot; empty slots included)
     sequence: string[]
-    snapshots: BattleSnapshot[]
+    snapshots?: BattleSnapshot[] // files before 2026-10-07 only (ignored)
     // Solo Raid: the chosen party buff, round-limit override, and the carried-over state of each earlier attempt
     // (the run is the attempt after the last one).
     soloRaid?: { partyBuffId?: number, noRoundLimit?: boolean, attempts: RaidCarry[] }
@@ -226,9 +268,8 @@ export function buildPvEExport(args: {
         notes: "",
         decisionLog: formatDecisions(args.snapshots, args.pending),
         pending: args.pending ? { label: args.pending.label, options: (args.pending.options ?? []).map(o => o.label) } : undefined,
-        slots: JSON.parse(JSON.stringify(args.slots)),
+        slots: args.slots.map(compactSlot),
         sequence: formatSequence(args.snapshots),
-        snapshots: JSON.parse(JSON.stringify(args.snapshots)),
         soloRaid: args.soloRaid ? JSON.parse(JSON.stringify(args.soloRaid)) : undefined,
     }
 }

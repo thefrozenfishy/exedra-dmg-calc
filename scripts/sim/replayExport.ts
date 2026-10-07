@@ -1,6 +1,7 @@
 // Replays a PvP or PvE simulator export (the "Export to file" button) with the current engine:
 //   npx tsx scripts/sim/replayExport.ts <export.json> [--diff] [--out <file>]
-// Same teams (and stage), seed, RNG mode, decisions and number of turns. Prints the decision log and
+// Same teams (and stage), seed, RNG mode, decisions and number of turns. Manual picks whose index shifted with an
+// engine change are matched by label (BattleRng relaxedPicks), like the page's Import file. Prints the decision log and
 // the readable sequence; with --diff it only prints the lines that differ from the sequence stored in
 // the file (i.e. what the engine change did).
 import "../../src/models/BestTeamCalculator"; // must load first: breaks the Kioku <-> BestTeamCalculator import cycle outside Vite
@@ -30,7 +31,7 @@ if (isPvE) {
     const pve = parsePvEExport(text);
     data = pve;
     const allies = pve.slots.filter(s => !!s.main).map(buildSlotKioku);
-    battle = createPvEBattle(allies, pve.stageId, pve.seed, 0, { rngMode: pve.rngMode, decisions: pve.decisions, manualTargeting: pve.control === "manual",
+    battle = createPvEBattle(allies, pve.stageId, pve.seed, 0, { rngMode: pve.rngMode, decisions: pve.decisions, manualTargeting: pve.control === "manual", relaxedPicks: true,
         partyBuffId: pve.soloRaid?.partyBuffId, noRoundLimit: pve.soloRaid?.noRoundLimit, raidCarry: pve.soloRaid?.attempts?.[pve.soloRaid.attempts.length - 1] });
     header = `PvE stage ${pve.stageId} ${pve.stageName ?? ""}, ${pve.control} control, ${pve.rngMode} RNG, seed ${pve.seed}`;
 } else {

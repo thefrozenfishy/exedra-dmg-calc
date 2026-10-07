@@ -19,6 +19,11 @@
 // `decisions` and the battle is replayed from the start; a stored decision only applies if the
 // event at that index still has the same kind and label (earlier flips can change what happens).
 //
+// Relaxed picks (import / replay of an export only): when the stored pick at an index doesn't match (an engine change
+// added or removed rolls before it, shifting every later index), pick() takes the earliest unused stored pick with
+// the same kind and label instead. Flipped rolls (chance/choose) still match by index only. Re-key the result with
+// rekeyPicks (utils/pvpExport.ts) so later runs match exactly again.
+//
 // Manual control (PvE): pick() asks for a stored decision (a target, the ally's action, whether to
 // fire an ultimate) and throws PendingDecision when there is none, so the page can stop, ask the
 // user, and replay with the answer.
@@ -61,6 +66,8 @@ export class BattleRng {
     readonly seed: number
     private readonly generator: () => number
     private readonly decisions: Map<number, RngDecision>
+    private readonly relaxedPicks: boolean
+    private readonly usedPicks = new Set<number>()
     private nextIndex = 0
     private pending: RngEvent[] = []
     readonly events: RngEvent[] = []
@@ -71,9 +78,10 @@ export class BattleRng {
     expectedCrits = false
     critReads = 0
 
-    constructor(mode: RngMode, seed: number, decisions?: Map<number, RngDecision> | Record<number, RngDecision>) {
+    constructor(mode: RngMode, seed: number, decisions?: Map<number, RngDecision> | Record<number, RngDecision>, relaxedPicks = false) {
         this.mode = mode
         this.seed = seed
+        this.relaxedPicks = relaxedPicks
         this.generator = seededRng(seed)
         this.decisions = decisions instanceof Map ? decisions : new Map(Object.entries(decisions ?? {}).map(([k, v]) => [Number(k), v]))
     }
@@ -86,6 +94,20 @@ export class BattleRng {
     private stored(kind: RngKind, label: string): RngDecision | undefined {
         const d = this.decisions.get(this.nextIndex)
         return d && d.kind === kind && d.label === label ? d : undefined
+    }
+
+    private storedPick(kind: RngKind, label: string): RngDecision | undefined {
+        if (!this.relaxedPicks) return this.stored(kind, label)
+        const exact = this.usedPicks.has(this.nextIndex) ? undefined : this.stored(kind, label)
+        let key = exact ? this.nextIndex : undefined
+        if (key === undefined) {
+            for (const [k, d] of [...this.decisions].sort((a, b) => a[0] - b[0])) {
+                if (d.pick && !this.usedPicks.has(k) && d.kind === kind && d.label === label) { key = k; break }
+            }
+        }
+        if (key === undefined) return undefined
+        this.usedPicks.add(key)
+        return this.decisions.get(key)
     }
 
     private record(ev: Omit<RngEvent, "index">): RngEvent {
@@ -144,7 +166,7 @@ export class BattleRng {
     // `units`: the units behind the options (target picks), for subclasses that compare them (fight solver).
     pick(kind: RngKind, label: string, optionLabels: string[], _units?: readonly unknown[]): number {
         if (optionLabels.length <= 1) return optionLabels.length - 1
-        const d = this.stored(kind, label)
+        const d = this.storedPick(kind, label)
         const options = optionLabels.map(l => ({ label: l, weight: 100 / optionLabels.length }))
         if (!d || typeof d.value !== "number" || d.value < 0 || d.value >= optionLabels.length) {
             throw new PendingDecision({ index: this.nextIndex, kind, label, options, outcome: -1, defaultOutcome: -1, decided: false, userPick: true })

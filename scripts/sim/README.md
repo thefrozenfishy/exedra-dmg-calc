@@ -54,3 +54,12 @@ the battle stopped at if any); `replayExport.ts` replays both kinds.
 
 `scripts/sim/fixtures/*.json` are exports (snapshots stripped) of situations checked in-game; the
 `notes` field says what the game does. `npx tsx scripts/sim/checkFixtures.ts` asserts them.
+
+## Export format and old files
+
+Replay / import read only the build (`slots`), stage, seed, RNG mode, control mode, turns, `decisions` and the Solo
+Raid state; `sequence` and `decisionLog` are a readable record of the engine that wrote the file. Since 2026-10-07
+exports carry no raw `snapshots` and only the equipped/enabled crystalis entries, one line per sequence row
+(`exportToText`), ~5x smaller. Manual picks are stored by roll index; when an engine change shifts the indices, Import
+file and `replayExport.ts` match picks by label in order (BattleRng `relaxedPicks`, then `rekeyPicks`), so an old file
+replays until the first decision that didn't exist when it was made.

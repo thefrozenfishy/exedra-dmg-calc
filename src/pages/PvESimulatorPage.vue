@@ -560,7 +560,7 @@ import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
 import type { RaidCarry } from '../models/PvPBattle'
 import { getScoreAttackStage } from '../models/PvEScore'
 import { computeMaxDamage, isEffectValueType, type MaxDmgEffect, type MaxDmgResult, type MemberDamage, type SkillDamage } from '../models/MaxDamage'
-import { buildSlotKioku, buildPvEExport, parsePvEExport, downloadText, type PvEExport } from '../utils/pvpExport'
+import { buildSlotKioku, buildPvEExport, parsePvEExport, downloadText, exportToText, rekeyPicks, type PvEExport } from '../utils/pvpExport'
 import { describePvESetup, sanitizePvESetup, stagePath, type PvESetup } from '../utils/pveSetup'
 import { effectDescription, effectName, effectRestriction, effectValue } from '../utils/effectText'
 import { passiveDetailsByMstId, portraits } from '../utils/helpers'
@@ -909,6 +909,9 @@ function resetAttempts() {
 }
 watch(partyBuffId, () => { if (hasRun()) runSimulation(); else buildBattle() })
 
+// Set for the first run of an imported file: its picks may sit at shifted indices (engine changes since the export).
+let relaxedPicksRun = false
+
 function newBattle(): PvPBattle {
     // Fresh units: a battle mutates its units' state.
     const allies = filledSlots.value.map(([s]) => buildSlotKioku(s))
@@ -916,7 +919,7 @@ function newBattle(): PvPBattle {
     return markRaw(createPvEBattle(allies, stageId.value, seed.value, 0, {
         rngMode: rngMode.value, decisions: decisions.value,
         manualTargeting: solverControl.value ? solverControl.value.control === 'manual' : targetMode.value === 'manual',
-        partyBuffId: partyBuffId.value || undefined, raidCarry: carry,
+        partyBuffId: partyBuffId.value || undefined, raidCarry: carry, relaxedPicks: relaxedPicksRun,
     }))
 }
 
@@ -1074,7 +1077,7 @@ function exportBattle() {
         soloRaid: raid.value ? { partyBuffId: partyBuffId.value || undefined, attempts: raidAttempts.value } : undefined,
     })
     const tag = rngMode.value === 'seed' ? `seed${seed.value}` : rngMode.value
-    downloadText(`pve-sim-${stageId.value}-${targetMode.value}-${tag}.json`, JSON.stringify(data, null, 2))
+    downloadText(`pve-sim-${stageId.value}-${targetMode.value}-${tag}.json`, exportToText(data))
     toast.success(`Exported the run${data.decisionLog.length ? ` with ${data.decisionLog.length} decision${data.decisionLog.length === 1 ? '' : 's'}` : ''}`)
 }
 
@@ -1110,7 +1113,11 @@ async function applyPvEExport(data: PvEExport) {
     }
     solverControl.value = null
     await nextTick() // the mode watchers re-run first; run once more with everything in place
-    runSimulation()
+    // Picks are matched by label where an engine change shifted their indices, then stored at the indices they
+    // were used at (BattleRng relaxedPicks / rekeyPicks).
+    relaxedPicksRun = true
+    try { runSimulation() } finally { relaxedPicksRun = false }
+    decisions.value = rekeyPicks(decisions.value, battleOutput.value)
 }
 
 // "Name (Enemy 2)" -> that unit's HP in the latest state, for the pick buttons.
