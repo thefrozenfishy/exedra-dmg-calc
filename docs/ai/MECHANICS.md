@@ -112,6 +112,16 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   (0 -> 2/5), not also after the TurnStart. [C] TS `fireTiming` (skillType).
 - Each ExecuteSkill has its own notice bundle (tallies reset before each follow-up). Team conditions read the
   notices of units **in that team**. [C]
+- **Extra turns.** ADDITIONAL_TURN_UNIT_ACT (`AdditionalTurnUnitActAbilityEffect.Triggering` 0x18eb120): for the USER
+  whatever the targets (the class targets opponents: A4 "on maxed enemy break bonus"); nothing if the user can't act,
+  is broken, has `IsAdditionalTurnCoolTime` (UnitCondition+0x50, set here, cleared at its TurnBegin) or already has one
+  queued/running; else an `AdditionalTurnUnitAct` goes to the end of the act list. It is a TurnUnitActBase: only
+  ExecuteSkill (no TurnBegin/TurnEnd, no gauge reset - `ResetTurnGaugeBeforeTurnUnitActExecute` takes TurnUnitAct).
+  `CanBeInterruptedBySpecialAttackAct` 0x18e9040 is false for it, so ultimates queued later go after it (in game the
+  player can't ult before it). [C] TS `KiokuState.queueAdditionalTurn`, `PvPBattle.runQueuedAdditionalTurn` (before
+  ultimates), `PvPTeam.runAdditionalTurn`. Until 2026-10-07 the extra turn went to the targets (enemies for ally A4s,
+  allies for the 99 enemy uses). RE_ACTION_TURN_UNIT_ACT (0x18fd2a0): a ReActionTurnUnitAct per target, no cool time,
+  interruptible by ultimates; TS still runs it right after the action (`pendingBonusTurns`) [~].
 - Follow-ups (`AdditionalSkillActAbilityEffectBase.Triggering` 0x18ea740): none from a broken / can't-act unit,
   none while the same unit's same follow-up is queued/running. value2 AdditionalSkillTargetType 1 + enemy actor =
   counter that actor. [C]
@@ -159,6 +169,13 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   check of its own). TS: friendly effects arrive with the caster as placeholder and are checked per widened target
   (`applyEffectToTarget`), opponent effects per real target. E.g. Scorchin' Summer Spike's Beachball's Boon "to self
   and Attacker allies", condition 2831. [C]
+- **Two passes per launch** (`AbilityEffectLauncher.Triggering` 0x1373530): first SelectTargets +
+  SelectTargetsConditionCheck for EVERY effect of the skill, then a second loop triggers them. So all of a skill's
+  start conditions see the state from before the skill: Final Fatebloom's ult at Lv1-9 lists CONSUME_CHARGE_POINT(10)
+  before GAIN_SP_FIXED / its Lv10 lists GAIN_EP_FIXED to Attackers after it (all "Magic == 10"): they still fire, and
+  the "Magic < 10" +2 Magic row doesn't. [C] TS: `PvPTeam.completeAction` pass 1 + `KiokuState.precheckStartConditions`
+  -> `PvPTeam.launchPrecheck` (read by `applyEffectToTarget`). Active skills only; passive launches still check each
+  detail when it runs [?]. Fixture pve-rose-garden-fatebloom-ironspike.json (in-game: +1 SP).
 - 19 IsElementType / 20 IsRoleType: CompareValue is the enum NAME ("Fire" = Flame, "Neutral" = Void, "Attacker",
   ..., parsed with `Enum.Parse<TargetElementType|TargetRoleType>`), never an id. Check 0x17e3f10:
   `BoolValueComparer(unit.IsMatch(v), true).Compare(op)` (0x17e8240): Equal -> IsMatch, **NotEqual -> !IsMatch**,

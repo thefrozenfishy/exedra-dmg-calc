@@ -371,6 +371,19 @@ export class PvPBattle {
         return [snap]
     }
 
+    // The oldest queued additional turn of either team that can still be executed (see PvPTeam.runAdditionalTurn).
+    private runQueuedAdditionalTurn(): [KiokuState, TargetType] | undefined {
+        for (; ;) {
+            const next = [...this.team1.additionalTurnQueue, ...this.team2.additionalTurnQueue].sort((a, b) => a.seq - b.seq)[0]
+            if (!next) return undefined
+            const team = next.unit.team
+            team.additionalTurnQueue = team.additionalTurnQueue.filter(e => e !== next)
+            this.lastTeamIsTeam1 = team === this.team1
+            const eff = team.runAdditionalTurn(next.unit)
+            if (eff) return eff
+        }
+    }
+
     // Returns [] once the battle is over.
     executeNextAction(): BattleSnapshot[] {
         this.actionSnapshots = []
@@ -399,8 +412,15 @@ export class PvPBattle {
             const supplied = this.supplyEndless()
             if (supplied) return supplied
         }
-        this.lastTeamIsTeam1 = false
-        let eff: [KiokuState, TargetType] | undefined = this.team2.useUltimate()
+        // [CONFIRMED 3.19] Queued AdditionalTurnUnitActs (KiokuState.queueAdditionalTurn) come before ultimates: the act
+        // list keeps them ahead of a later SpecialAttackAct (ActReferee.CanBeInterruptedBySpecialAttackAct is false for
+        // them). Each is its own action; the ultimate prompt comes back after it.
+        let eff: [KiokuState, TargetType] | undefined = this.runQueuedAdditionalTurn()
+        if (eff) this.ultimateWindowPassed = false
+        if (!eff) {
+            this.lastTeamIsTeam1 = false
+            eff = this.team2.useUltimate()
+        }
         if (!eff) {
             this.lastTeamIsTeam1 = true
             eff = this.team1.manualTargeting ? this.manualUltimateWindow() : this.team1.useUltimate()

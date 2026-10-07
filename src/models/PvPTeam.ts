@@ -243,6 +243,8 @@ function mergeNotice(a: AffectedUnitNotice | undefined, b: AffectedUnitNotice): 
 
 // Follow-ups currently executing (see triggerFua).
 const runningFollowUps = new Set<string>()
+// Order of queued AdditionalTurnUnitActs across both teams (ActReferee act id, see KiokuState.queueAdditionalTurn).
+let additionalTurnSeq = 0
 
 // ---------------------------------------------------------------------------------------------------------------
 // Skill launch context (the units' ActiveConditionCheckDataBundle)
@@ -272,6 +274,8 @@ const runningFollowUps = new Set<string>()
 let eachTargetCtx: { user: KiokuState, target: KiokuState } | undefined
 // effect: ActorAbilityEffect, the launch's effect being processed (set per effect by AbilityEffectLauncher.Triggering
 // 0x1373550 in every unit's bundle; read by content 403 ActorDamageRange).
+// Start-condition results of one skill launch's effects, computed before any of them runs (precheckStartConditions).
+export interface LaunchPrecheck { kept: Set<KiokuState>, widened?: KiokuState[] }
 interface LaunchContext { actor: KiokuState, targetType: TargetType, skillType: string, team: PvPTeam, effect?: SkillDetail }
 let activeLaunch: LaunchContext | undefined
 // Skill type of the most recent launch: the AttackEnd pass after an Ether Blow sees ActorSkillType "EtherBlow".
@@ -451,6 +455,9 @@ export class KiokuState {
     // treated as an alias, see MISSING_AND_UNCERTAIN.md) effect. Grants the SAME unit an
     // immediate extra action - see PvPTeam.performAction.
     pendingBonusTurns = 0
+    // [CONFIRMED 3.19] UnitCondition.IsAdditionalTurnCoolTime (+0x50): set when an ADDITIONAL_TURN_UNIT_ACT queues
+    // this unit's extra turn, cleared at its TurnBegin. While set, further ADDITIONAL_TURN_UNIT_ACTs do nothing.
+    additionalTurnCoolTime = false
     // Battle skills in a row since this unit's last basic attack (read by PvPTeam.allyActionPolicy).
     skillStreak = 0
     // Shown on the unit's next turn in the battle log (e.g. "Cutaway" after a Cutaway advance).
@@ -1400,6 +1407,58 @@ export class KiokuState {
         return true
     }
 
+    startConditionsMet(t: KiokuState, detail: SkillDetail, targetType?: TargetType, trueActorUnit?: KiokuState, mainTarget?: KiokuState): boolean {
+        const triggerState = this.stateGen(this, t, targetType, trueActorUnit, mainTarget)
+        if (activeLaunch?.effect === detail) triggerState.actorEffect = detail
+        return UNIT_STATE_TYPES.has(detail.abilityEffectType)
+            ? isConditionSetActiveForPvP((detail.startConditionSetIdCsv ?? "").split(","), triggerState)
+            : isConditionSetActive(detail, triggerState)
+    }
+
+    // [CONFIRMED 3.19] AbilityEffectLauncher.Triggering (0x1373530) runs in two passes: first, for EVERY effect of the
+    // skill, SelectTargets + SelectTargetsConditionCheck (start conditions per target, EachTargetUnit = that target);
+    // only then a second loop triggers the effects. So a skill's conditions all see the state from before the skill.
+    // Example: Final Fatebloom's ult at Lv1-9 lists CONSUME_CHARGE_POINT(10) before GAIN_SP_FIXED, both gated on
+    // "Magic == 10": the game still grants the SP, and the "Magic < 10" GAIN_CHARGE_POINT row does not fire.
+    // Mirrors applyEffect/applyEffectToTarget: a friendly placeholder (the caster) is widened to its real targets here
+    // (and the widened list is reused when the effect runs, so its target pick happens once, in this pass).
+    precheckStartConditions(detail: SkillDetail, targets: KiokuState[], targetType?: TargetType, trueActorUnit?: KiokuState, mainTarget?: KiokuState): LaunchPrecheck {
+        const launch = activeLaunch && activeLaunch.actor === this ? activeLaunch : undefined
+        const prevEffect = launch?.effect
+        if (launch) launch.effect = detail
+        const prevActUnit = this._actUnit
+        this._actUnit = trueActorUnit
+        try {
+            const kept = new Set<KiokuState>()
+            let widened: KiokuState[] | undefined
+            for (const target of targets) {
+                const placeholder = this === target && !detail.abilityEffectType.startsWith("DMG_")
+                if (placeholder) {
+                    widened = this.team.sliceTargets(this, this.team.kiokuStates, detail)
+                    for (const t of widened) if (this.startConditionsMet(t, detail, targetType, trueActorUnit, mainTarget)) kept.add(t)
+                } else if (withEachTarget(this, target, () => this.startConditionsMet(target, detail, targetType, trueActorUnit, mainTarget))) {
+                    kept.add(target)
+                }
+            }
+            return { kept, widened }
+        } finally {
+            if (launch) launch.effect = prevEffect
+            this._actUnit = prevActUnit
+        }
+    }
+
+    // [CONFIRMED 3.19] AdditionalTurnUnitActAbilityEffect.Triggering (0x18eb120): always about the USER (the effect's
+    // targets only carry the conditions; the class targets opponents, e.g. Floral Ironspike's A4 "on maxed enemy break
+    // bonus"). Nothing if the user can't act, is broken, is in IsAdditionalTurnCoolTime, already has an
+    // AdditionalTurnUnitAct queued or is running one; else an AdditionalTurnUnitAct is added to the act list
+    // (AddActToListAndSort: after the acts already queued; CanBeInterruptedBySpecialAttackAct is false for it, so a
+    // later ultimate goes after it) and IsAdditionalTurnCoolTime is set. Run by PvPBattle.executeNextAction.
+    queueAdditionalTurn(): void {
+        if (this.isDead || this.canNotAction || this.isBroken || this.additionalTurnCoolTime) return
+        this.additionalTurnCoolTime = true
+        this.team.additionalTurnQueue.push({ unit: this, seq: ++additionalTurnSeq })
+    }
+
     // [CONFIRMED 3.19] An effect's Triggering runs with its target as the user's EachTargetUnit (see eachTargetCtx). A
     // friendly effect's placeholder target (the caster) is not a real target: its widened targets set it one by one.
     applyEffect(target: KiokuState, detail: SkillDetail, targetType?: TargetType, trueActorUnit?: KiokuState, mainTarget?: KiokuState): number | undefined {
@@ -1422,13 +1481,10 @@ export class KiokuState {
         // (UnitStateBase.IsActive), not at the moment it is added: only the start conditions gate
         // adding a state. Instant effects (damage, EP, HASTE, ...) check both now.
         this._actUnit = trueActorUnit
-        const conditionsMet = (t: KiokuState) => {
-            const triggerState = this.stateGen(this, t, targetType, trueActorUnit, mainTarget)
-            if (activeLaunch?.effect === detail) triggerState.actorEffect = detail
-            return UNIT_STATE_TYPES.has(detail.abilityEffectType)
-                ? isConditionSetActiveForPvP((detail.startConditionSetIdCsv ?? "").split(","), triggerState)
-                : isConditionSetActive(detail, triggerState)
-        }
+        // Inside an active skill launch the start conditions were already checked for every effect before the first
+        // one ran (see PvPTeam.completeAction / precheckStartConditions); use that result, not the current state.
+        const pre = this.team.launchPrecheck?.get((detail as any)._src ?? detail)
+        const conditionsMet = (t: KiokuState) => pre ? pre.kept.has(t) : this.startConditionsMet(t, detail, targetType, trueActorUnit, mainTarget)
         // [CONFIRMED 3.19] AbilityEffectBase.SelectTargetsConditionCheck (0x18e7bb0), run by AbilityEffectLauncher.Triggering
         // after SelectTargets for every effect: for each selected target it sets EachTargetUnit = that target and keeps
         // the target only if the effect's start condition sets match (ConditionUseType SkillStart); the effect then runs
@@ -1547,7 +1603,7 @@ export class KiokuState {
         }
         let effTargets
         if (this === target) {
-            effTargets = this.team.sliceTargets(this, this.team.kiokuStates, detail)
+            effTargets = pre?.widened ?? this.team.sliceTargets(this, this.team.kiokuStates, detail)
         } else {
             effTargets = [target]
         }
@@ -1986,10 +2042,13 @@ export class KiokuState {
             })
         } else if (detail.abilityEffectType === "ADDITIONAL_SKILL_ACT") {
             return detail.value1;
-        } else if (detail.abilityEffectType === "ADDITIONAL_TURN_UNIT_ACT" || detail.abilityEffectType === "RE_ACTION_TURN_UNIT_ACT") {
-            // [CONFIRMED shape for ADDITIONAL_TURN_UNIT_ACT via AdditionalTurnUnitActTriggerUnitStateBase]
-            // RE_ACTION_TURN_UNIT_ACT is treated as an alias (RECONSTRUCTED, not
-            // independently decompiled - see MISSING_AND_UNCERTAIN.md).
+        } else if (detail.abilityEffectType === "ADDITIONAL_TURN_UNIT_ACT") {
+            // The user's own extra turn, whatever the targets were (see queueAdditionalTurn). It used to be given to
+            // the targets: opponents, so ally A4 extra turns went to the enemies and enemy ones to the allies.
+            this.queueAdditionalTurn()
+        } else if (detail.abilityEffectType === "RE_ACTION_TURN_UNIT_ACT") {
+            // [CONFIRMED 3.19] ReActionTurnUnitActAbilityEffect (0x18fd2a0): a ReActionTurnUnitAct per target (no cool
+            // time), interruptible by ultimates. [APPROXIMATION] run right after the action (performAction loop).
             effTargets.forEach(t => { t.pendingBonusTurns++ })
         } else if (detail.abilityEffectType === "GAIN_CHARGE_POINT") {
             // [FIXED] [CONFIRMED] ReDriveBattleCore.AbilityEffect.
@@ -2069,6 +2128,11 @@ export class PvPTeam {
     // gained above 6 is lost. Normal attack +1, a skill -ConsumeSP (GetCalculationSp 0x15c05e0).
     currentSp = 5
     static readonly MAX_SP = 6
+    // Queued AdditionalTurnUnitActs of this team's units (KiokuState.queueAdditionalTurn), run by PvPBattle before
+    // ultimates; seq orders them across both teams.
+    additionalTurnQueue: { unit: KiokuState, seq: number }[] = []
+    // Start-condition results of the skill launch in progress (completeAction), by effect.
+    launchPrecheck?: Map<SkillDetail, LaunchPrecheck>
     addSp(n: number): void {
         this.currentSp = Math.max(0, Math.min(PvPTeam.MAX_SP, this.currentSp + n))
     }
@@ -2696,7 +2760,7 @@ export class PvPTeam {
         }
         if (!targets.length) return
         const v3 = detail.value3 || 1
-        const hit = { ...detail, value2: detail.value1, value3: v3, value4: v3, value5: (detail as any).value4 ?? 0, range: targetRange.ALL } as SkillDetail
+        const hit = { ...detail, value2: detail.value1, value3: v3, value4: v3, value5: (detail as any).value4 ?? 0, range: targetRange.ALL, _src: detail } as SkillDetail
         const hits = detail.value2 ?? 0
         for (let i = 0; i < hits; i++) {
             const idx = rollChoice(this.rng, targets.map(() => 1), "target", () => `${unitLabel(actor)} random hit ${i + 1}/${hits}`, () => targets.map(t => unitLabel(t)))
@@ -2724,12 +2788,11 @@ export class PvPTeam {
         let possibleTargets: KiokuState[] = []
         let additionalAct: FuaMap = {}
         this.launchSkill(actor, effectName, details, noticeStart, () => {
+            // Pass 1 (AbilityEffectLauncher.Triggering, see KiokuState.precheckStartConditions): every effect's targets
+            // and start conditions, before any effect runs.
+            const plan: { detail: SkillDetail, targets: KiokuState[] }[] = []
             for (const detail of details) {
-                if (detail.abilityEffectType === "SUMMON") {
-                    // Once per effect, not per target: value1..value5 are summon ids (PvE summon templates).
-                    this.summonUnits([detail.value1, detail.value2, detail.value3, (detail as any).value4, (detail as any).value5], actor)
-                    continue
-                }
+                if (detail.abilityEffectType === "SUMMON") { plan.push({ detail, targets: [] }); continue }
                 // [CONFIRMED 3.19] side comes from the game's own effect classes (EffectTargetSide.ts);
                 // the hand-maintained friendlySkills/enemySkills lists are only a fallback now.
                 const side = EFFECT_TARGET_SIDE[detail.abilityEffectType]
@@ -2743,19 +2806,36 @@ export class PvPTeam {
                 }
                 const targets = this.sliceTargets(actor, possibleTargets, detail)
                 if (detail.abilityEffectType.startsWith("DMG_") && targets[0] && !this.lastMainTarget) this.lastMainTarget = targets[0]
-                actor.effectTurnPriority = nextTurnOrderPriority()
-                // [CONFIRMED 3.19] DamageAbilityEffectBase: Collect/ConsumeAttackHitConsumableStates (0x18ee590 / 0x18ee7b0) -
-                // the attacker's IConsumeRemainCountOnAttack states active at the start of a damage row lose 1 remain count
-                // after the row (whether it hit or not); at 0 they are removed (UnitCondition.Refresh).
-                const consumable = detail.abilityEffectType.startsWith("DMG_") && detail.abilityEffectType !== "DMG_RATIO" ? actor.collectConsumable() : []
-                try {
-                    for (const [target, d] of this.hitsOf(actor, detail, targets)) {
-                        const fua = actor.applyEffect(target, d, effectName, actor, targets[0])
-                        if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
-                    }
-                } finally { actor.effectTurnPriority = undefined }
-                actor.consumeCollected(consumable)
+                plan.push({ detail, targets })
             }
+            const precheck = new Map<SkillDetail, LaunchPrecheck>()
+            for (const { detail, targets } of plan) {
+                if (detail.abilityEffectType !== "SUMMON") precheck.set(detail, actor.precheckStartConditions(detail, targets, effectName, actor, targets[0]))
+            }
+            const prevPrecheck = this.launchPrecheck
+            this.launchPrecheck = precheck
+            try {
+                // Pass 2: trigger the effects in order.
+                for (const { detail, targets } of plan) {
+                    if (detail.abilityEffectType === "SUMMON") {
+                        // Once per effect, not per target: value1..value5 are summon ids (PvE summon templates).
+                        this.summonUnits([detail.value1, detail.value2, detail.value3, (detail as any).value4, (detail as any).value5], actor)
+                        continue
+                    }
+                    actor.effectTurnPriority = nextTurnOrderPriority()
+                    // [CONFIRMED 3.19] DamageAbilityEffectBase: Collect/ConsumeAttackHitConsumableStates (0x18ee590 / 0x18ee7b0) -
+                    // the attacker's IConsumeRemainCountOnAttack states active at the start of a damage row lose 1 remain count
+                    // after the row (whether it hit or not); at 0 they are removed (UnitCondition.Refresh).
+                    const consumable = detail.abilityEffectType.startsWith("DMG_") && detail.abilityEffectType !== "DMG_RATIO" ? actor.collectConsumable() : []
+                    try {
+                        for (const [target, d] of this.hitsOf(actor, detail, targets)) {
+                            const fua = actor.applyEffect(target, d, effectName, actor, targets[0])
+                            if (fua) additionalAct[fua] = { caster: actor, triggerTarget: target }
+                        }
+                    } finally { actor.effectTurnPriority = undefined }
+                    actor.consumeCollected(consumable)
+                }
+            } finally { this.launchPrecheck = prevPrecheck }
         })
         actor.getMpFromType(effectName)
         return additionalAct
@@ -2811,12 +2891,30 @@ export class PvPTeam {
         }
     }
 
+    // [CONFIRMED 3.19] An AdditionalTurnUnitAct is a TurnUnitActBase: ActExecutor.Execute runs only ExecuteSkill for it
+    // (no TurnBegin/TurnEnd, so no duration tick or TurnNum; the gauge reset is TurnUnitAct-only). ValidateCanExecuteAct:
+    // nothing if the unit died, can't act or is broken meanwhile. The skill is chosen like a normal turn.
+    runAdditionalTurn(actor: KiokuState): [KiokuState, TargetType] | undefined {
+        if (actor.isDead || actor.canNotAction || actor.isBroken || this.otherTeam.isWiped) return undefined
+        if (actor.enemy) {
+            const choice = selectEnemySkill(actor, this, this.rng, id => this.enemySkillHasTarget(actor, id))
+            if (!choice) return undefined
+            this.performAction(actor, TargetType.skillId, "Extra action", choice.skillMstId)
+            return [actor, TargetType.skillId]
+        }
+        const effType = this.isManualControl ? this.chooseAllyAction(actor, "extra action") : this.autoAllyAction(actor)
+        if (effType === undefined) return undefined
+        this.performAction(actor, effType, "Extra action")
+        return [actor, effType]
+    }
+
     useAttackOrSkill(): [KiokuState, TargetType] {
         const actor = this.getNextActor()
         const turnLabel = actor.nextTurnLabel
         actor.nextTurnLabel = undefined
         // [CONFIRMED 3.19] ActExecutor: TurnBeginAct (break reset, TurnStart passives with this
         // unit as actor) -> TurnUnitAct (UnitTurnGauge.Reset, then ExecuteSkill) -> TurnEndAct.
+        actor.additionalTurnCoolTime = false // TurnBeginAct: IsAdditionalTurnCoolTime = false
         actor.exitBreak()
         actor.tickHotEffects()
         let effType = actor.enemy ? TargetType.skillId : this.autoAllyAction(actor)

@@ -52,7 +52,8 @@ PvPBattle.executeNextAction()
              performAction(actor, type)
                 resetActionTallies(); act() -> completeAction(details) -> per detail: sliceTargets + applyEffect per target
                 fireTiming(ATTACK_END, ..., recordAction = snapshot) ; triggerFua(follow-ups)
-                pendingBonusTurns (ADDITIONAL_TURN_UNIT_ACT extra actions) loop
+                pendingBonusTurns (RE_ACTION_TURN_UNIT_ACT extra actions) loop
+  (next call) PvPBattle.runQueuedAdditionalTurn(): queued ADDITIONAL_TURN_UNIT_ACT turns, before ultimates
           fireTiming(TURN_END); triggerCutoutAtTurnEnd(); decrementActiveEffects(); actor.turnNum++   (PassingTurn)
   resolveEndOfTurn(); formChange()
 fireTiming(timing): both teams applyPassivesForTiming(timing) then AFTER_PROCESS, recomputeDerivedStats, follow-ups.

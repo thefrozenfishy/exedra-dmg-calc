@@ -23,6 +23,12 @@ const CASES: { file: string, action: number, actor: string, ally?: boolean, line
     // TurnStart / TurnEnd passes carry no skill: the minions gain 2 Magic once on an ally's battle skill (no follow-ups yet).
     { file: "rose-garden-indomitable-guard-x2.json", action: 3, actor: "Hollow Woman", line: /^ +Rose Garden Witch Minion +\| HP 4,000,000\/4,000,000 \| MP 0\/0 \| break 300\/300 \| spd 260\.00 \| AV [\d.]+ \| magic 2\/5/ },
     { file: "rose-garden-indomitable-guard-x2.json", action: 4, actor: "<pending: Tiro Finale (Ally 5) · turn: choose an action>" },
+    // Every effect's start conditions are checked before any runs: Final Fatebloom's Lv9 ult (CONSUME_CHARGE_POINT
+    // listed before GAIN_SP_FIXED, both "Magic == 10") still grants +1 SP.
+    { file: "pve-rose-garden-fatebloom-ironspike.json", action: 2, actor: "Final Fatebloom", ally: true, line: /^  Allies \(SP 5\)/ },
+    // ADDITIONAL_TURN_UNIT_ACT (Floral Ironspike A4, enemy break bonus maxed by Tiro's basic attack at action 13): her
+    // own extra turn, next, before the ultimate prompt.
+    { file: "pve-rose-garden-fatebloom-ironspike.json", action: 14, actor: "Floral Ironspike", ally: true, line: /roll #\d+ action: Floral Ironspike \(Ally 5\) · extra action/ },
 ];
 
 console.warn = () => {}; console.debug = () => {};
