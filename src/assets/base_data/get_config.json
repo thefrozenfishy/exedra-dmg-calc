@@ -3819,6 +3819,14 @@
                     "talkId": 70000043
                 },
                 {
+                    "fieldStageMstId": 663001,
+                    "isForceIndividualDisplay": true,
+                    "releaseFlag": 196,
+                    "releaseStageName": "Sorana Nagiboshi's Memory - Earth",
+                    "releaseTalkFlag": 197,
+                    "talkId": 70000340
+                },
+                {
                     "fieldStageMstId": 604001,
                     "isForceIndividualDisplay": false,
                     "releaseFlag": 108,
