@@ -37,5 +37,10 @@ export class CommandAddEnemy extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17E8560  public void .ctor(in int battleUnitId, in int questEnemyAppearanceMstId, in int positionId) { } */
-    ctor$int_int_int(battleUnitId: int, questEnemyAppearanceMstId: int, positionId: int): this { return notPorted("CommandAddEnemy..ctor", 0x17E8560); }
+    ctor$int_int_int(battleUnitId: int, questEnemyAppearanceMstId: int, positionId: int): this {
+        this._BattleUnitId = battleUnitId;
+        this._QuestEnemyAppearanceMstId = questEnemyAppearanceMstId;
+        this._PositionId = positionId;
+        return this;
+    }
 }

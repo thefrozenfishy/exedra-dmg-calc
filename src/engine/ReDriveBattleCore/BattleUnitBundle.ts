@@ -1,9 +1,10 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../runtime";
+import { bindDelegate, listRemove, notPorted } from "../runtime";
 import type { Dictionary, List, int } from "../runtime";
 import type { BattleUnit } from "./BattleUnit";
+import { BattleUnit_TeamType } from "./BattleUnit";
 
 // ---- ReDriveBattleCore.BattleUnitBundle  (TypeDefIndex 359, public class) ----
 export class BattleUnitBundle {
@@ -16,21 +17,74 @@ export class BattleUnitBundle {
     /** 0x28 public List<BattleUnit> activeList */
     activeList: List<BattleUnit> = null!;
     /** @rva 0x14907C0  public void AddUnit(BattleUnit unit) { } */
-    AddUnit(unit: BattleUnit): void { return notPorted("BattleUnitBundle.AddUnit", 0x14907C0); }
+    AddUnit(unit: BattleUnit): void {
+        this.dic.set(unit.Id, unit); // Dictionary.Add
+        const list = unit.Team === BattleUnit_TeamType.Ally ? this.allyList : this.enemyList;
+        list.push(unit);
+        if (!unit.IsDead) this.AddToActiveUnitList(unit);
+        unit.add_onAliveStateChanged(bindDelegate(this, this.OnUnitAliveStateChanged));
+    }
     /** @rva 0x1490EA0  public void RemoveUnit(int unitId) { } */
-    RemoveUnit$int(unitId: int): void { return notPorted("BattleUnitBundle.RemoveUnit", 0x1490EA0); }
+    RemoveUnit$int(unitId: int): void {
+        const unit = this.dic.get(unitId);
+        if (unit === undefined) return;
+        this.dic.delete(unit.Id);
+        const list = unit.Team === BattleUnit_TeamType.Ally ? this.allyList : this.enemyList;
+        listRemove(list, unit);
+        if (this.activeList.includes(unit)) this.RemoveFromActiveUnitList(unit);
+        unit.remove_onAliveStateChanged(bindDelegate(this, this.OnUnitAliveStateChanged));
+    }
     /** @rva 0x1491010  public void RemoveUnit(BattleUnit unit) { } */
-    RemoveUnit$BattleUnit(unit: BattleUnit): void { return notPorted("BattleUnitBundle.RemoveUnit", 0x1491010); }
+    RemoveUnit$BattleUnit(unit: BattleUnit): void {
+        this.dic.delete(unit.Id);
+        const list = unit.Team === BattleUnit_TeamType.Ally ? this.allyList : this.enemyList;
+        listRemove(list, unit);
+        if (this.activeList.includes(unit)) this.RemoveFromActiveUnitList(unit);
+        unit.remove_onAliveStateChanged(bindDelegate(this, this.OnUnitAliveStateChanged)); // inlined in the game
+    }
     /** @rva 0x1490BB0  public void RemoveAllEnemyUnits() { } */
-    RemoveAllEnemyUnits(): void { return notPorted("BattleUnitBundle.RemoveAllEnemyUnits", 0x1490BB0); }
+    RemoveAllEnemyUnits(): void {
+        for (const unit of [...this.enemyList]) this.RemoveUnit$BattleUnit(unit); // ToList() copy; call target 0x1491010
+    }
     /** @rva 0x1490AF0  private void OnUnitAliveStateChanged(BattleUnit unit) { } */
-    OnUnitAliveStateChanged(unit: BattleUnit): void { return notPorted("BattleUnitBundle.OnUnitAliveStateChanged", 0x1490AF0); }
+    OnUnitAliveStateChanged(unit: BattleUnit): void {
+        if (unit.IsDead && this.activeList.includes(unit)) {
+            this.RemoveFromActiveUnitList(unit);
+            return;
+        }
+        if (!unit.IsDead && !this.activeList.includes(unit)) this.AddToActiveUnitList(unit); // inlined in the game
+    }
     /** @rva 0x1490510  private void AddToActiveUnitList(BattleUnit newUnit) { } */
-    AddToActiveUnitList(newUnit: BattleUnit): void { return notPorted("BattleUnitBundle.AddToActiveUnitList", 0x1490510); }
+    AddToActiveUnitList(newUnit: BattleUnit): void {
+        if (this.activeList.includes(newUnit)) return;
+        // the game builds a new list (copy + add) so running enumerations of the old one are not disturbed
+        const old = this.activeList;
+        this.activeList = [];
+        for (const u of old) this.activeList.push(u);
+        this.activeList.push(newUnit);
+    }
     /** @rva 0x1490CD0  private void RemoveFromActiveUnitList(BattleUnit removeUnit) { } */
-    RemoveFromActiveUnitList(removeUnit: BattleUnit): void { return notPorted("BattleUnitBundle.RemoveFromActiveUnitList", 0x1490CD0); }
+    RemoveFromActiveUnitList(removeUnit: BattleUnit): void {
+        if (!this.activeList.includes(removeUnit)) return;
+        const old = this.activeList;
+        this.activeList = [];
+        for (const u of old) if (u !== removeUnit) this.activeList.push(u);
+    }
     /** @rva 0x14908D0  public void OnDeserialized(StreamingContext _) { } */
-    OnDeserialized(_: any /* StreamingContext */): void { return notPorted("BattleUnitBundle.OnDeserialized", 0x14908D0); }
+    OnDeserialized(_: any /* StreamingContext */): void {
+        for (const unit of this.dic.values()) {
+            if (unit.Team === BattleUnit_TeamType.Ally) this.allyList.push(unit);
+            else this.enemyList.push(unit);
+            if (!unit.IsDead) this.AddToActiveUnitList(unit);
+            unit.add_onAliveStateChanged(bindDelegate(this, this.OnUnitAliveStateChanged));
+        }
+    }
     /** @rva 0x1491130  public void .ctor() { } */
-    ctor(): this { return notPorted("BattleUnitBundle..ctor", 0x1491130); }
+    ctor(): this {
+        this.dic = new Map(); // capacity 16
+        this.allyList = []; // capacity 5
+        this.enemyList = []; // capacity 8
+        this.activeList = [];
+        return this;
+    }
 }

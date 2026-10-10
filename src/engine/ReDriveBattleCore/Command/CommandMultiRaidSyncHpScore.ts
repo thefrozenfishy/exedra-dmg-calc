@@ -53,7 +53,14 @@ export class CommandMultiRaidSyncHpScore extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17E9650  public void .ctor(int hp, CommandMultiRaidSyncHpScore.ParticipantInfo[] participantInfos, bool isInitialize, bool isLastSync, bool isRequestedByPlayer) { } */
-    ctor$int_ParticipantInfo_bool_bool_bool(hp: int, participantInfos: CommandMultiRaidSyncHpScore_ParticipantInfo[], isInitialize: boolean, isLastSync: boolean, isRequestedByPlayer: boolean): this { return notPorted("CommandMultiRaidSyncHpScore..ctor", 0x17E9650); }
+    ctor$int_ParticipantInfo_bool_bool_bool(hp: int, participantInfos: CommandMultiRaidSyncHpScore_ParticipantInfo[], isInitialize: boolean, isLastSync: boolean, isRequestedByPlayer: boolean): this {
+        this._Hp = hp;
+        this._ParticipantInfos = participantInfos ?? [];
+        this._IsLastSyncAfterBattleEnd = isLastSync;
+        this._IsInitialize = isInitialize;
+        this._IsRequestedByPlayer = isRequestedByPlayer;
+        return this;
+    }
 }
 
 // ---- ReDriveBattleCore.Command.CommandMultiRaidSyncHpScore.ParticipantInfo  (TypeDefIndex 1001, public class) ----

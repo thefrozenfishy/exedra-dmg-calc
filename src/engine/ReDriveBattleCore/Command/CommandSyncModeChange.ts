@@ -30,5 +30,9 @@ export class CommandSyncModeChange extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17EB870  public void .ctor(List<ModeChangeReferee.ModeChangeInfo> modeChangeInfoList, int modeChangeCurrentStep) { } */
-    ctor$ListModeChangeRefereeModeChangeInfo_int(modeChangeInfoList: List<ModeChangeReferee_ModeChangeInfo>, modeChangeCurrentStep: int): this { return notPorted("CommandSyncModeChange..ctor", 0x17EB870); }
+    ctor$ListModeChangeRefereeModeChangeInfo_int(modeChangeInfoList: List<ModeChangeReferee_ModeChangeInfo>, modeChangeCurrentStep: int): this {
+        this._ModeChangeInfoList = modeChangeInfoList;
+        this._ModeChangeCurrentStep = modeChangeCurrentStep;
+        return this;
+    }
 }

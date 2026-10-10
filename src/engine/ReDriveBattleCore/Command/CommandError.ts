@@ -19,5 +19,8 @@ export class CommandError extends CommandBase {
     /** @rva 0x8A2240  public void set_ErrorType(BattleCoreErrorType value) { } */
     set_ErrorType(value: BattleCoreErrorType): void { this._ErrorType = value; /* auto-property */ }
     /** @rva 0x149DC70  public void .ctor(BattleCoreErrorType errorType) { } */
-    ctor$BattleCoreErrorType(errorType: BattleCoreErrorType): this { return notPorted("CommandError..ctor", 0x149DC70); }
+    ctor$BattleCoreErrorType(errorType: BattleCoreErrorType): this {
+        this._ErrorType = errorType;
+        return this;
+    }
 }

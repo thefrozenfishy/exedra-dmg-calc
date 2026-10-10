@@ -13,13 +13,27 @@ export class CommandSender {  // implements IObservable<IReadOnlyList<CommandBas
     /** 0x18 private readonly Queue<CommandBase> commandQueue */
     commandQueue: CommandBase[] = null!; // Queue<CommandBase>
     /** @rva 0x14936E0 slot 4  public IDisposable Subscribe(IObserver<IReadOnlyList<CommandBase>> observer) { } */
-    Subscribe(observer: any /* IObserver<IReadOnlyList<CommandBase>> */): any /* IDisposable */ { return notPorted("CommandSender.Subscribe", 0x14936E0); }
+    Subscribe(observer: any /* IObserver<IReadOnlyList<CommandBase>> */): any /* IDisposable */ {
+        this.observerList.push(observer);
+        return new CommandSender_Subscription().ctor$IObserverIReadOnlyListCommandBase_ListIObserverIReadOnlyListCommandBase(observer, this.observerList);
+    }
     /** @rva 0x1493680  internal void StoreCommand(CommandBase commandBase) { } */
-    StoreCommand(commandBase: CommandBase): void { return notPorted("CommandSender.StoreCommand", 0x1493680); }
+    StoreCommand(commandBase: CommandBase): void {
+        this.commandQueue.push(commandBase); // Queue.Enqueue (inlined)
+    }
     /** @rva 0x1493460  internal void Flush() { } */
-    Flush(): void { return notPorted("CommandSender.Flush", 0x1493460); }
+    Flush(): void {
+        if (!(this.commandQueue.length > 0)) return;
+        const commands = [...this.commandQueue]; // Queue.ToArray
+        this.commandQueue.length = 0; // Queue.Clear
+        for (const observer of this.observerList) observer.IObserver$OnNext(commands);
+    }
     /** @rva 0x14937F0  public void .ctor() { } */
-    ctor(): this { return notPorted("CommandSender..ctor", 0x14937F0); }
+    ctor(): this {
+        this.observerList = [];
+        this.commandQueue = [];
+        return this;
+    }
 }
 
 // ---- ReDriveBattleCore.CommandSender.Subscription  (TypeDefIndex 367, private sealed class) ----
@@ -30,7 +44,11 @@ export class CommandSender_Subscription {  // implements IDisposable
     /** 0x18 private readonly List<IObserver<IReadOnlyList<CommandBase>>> subscribeList */
     subscribeList: List<any /* IObserver<IReadOnlyList<CommandBase>> */> = null!;
     /** @rva 0x736A60  public void .ctor(IObserver<IReadOnlyList<CommandBase>> observer, List<IObserver<IReadOnlyList<CommandBase>>> subscribeList) { } */
-    ctor$IObserverIReadOnlyListCommandBase_ListIObserverIReadOnlyListCommandBase(observer: any /* IObserver<IReadOnlyList<CommandBase>> */, subscribeList: List<any /* IObserver<IReadOnlyList<CommandBase>> */>): this { return notPorted("CommandSender_Subscription..ctor", 0x736A60); }
+    ctor$IObserverIReadOnlyListCommandBase_ListIObserverIReadOnlyListCommandBase(observer: any /* IObserver<IReadOnlyList<CommandBase>> */, subscribeList: List<any /* IObserver<IReadOnlyList<CommandBase>> */>): this {
+        this.observer = observer;
+        this.subscribeList = subscribeList;
+        return this;
+    }
     /** @rva 0x14A8AF0 slot 4  public void Dispose() { } */
     Dispose(): void { return notPorted("CommandSender_Subscription.Dispose", 0x14A8AF0); }
 }

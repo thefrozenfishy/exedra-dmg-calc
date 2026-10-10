@@ -21,5 +21,8 @@ export class CommandGveMainTargetBreakCount extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x149DC70  public void .ctor(int breakCount) { } */
-    ctor$int(breakCount: int): this { return notPorted("CommandGveMainTargetBreakCount..ctor", 0x149DC70); }
+    ctor$int(breakCount: int): this {
+        this._BreakCount = breakCount;
+        return this;
+    }
 }

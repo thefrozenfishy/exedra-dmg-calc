@@ -1,10 +1,12 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { QuestEnemyAppearanceParameter } from "../QuestEnemyAppearanceParameter";
+import { AddEnemyInfo } from "./AddEnemyInfo";
 import { notPorted } from "../../runtime";
 import type { List, int } from "../../runtime";
 import type { BattleUnit } from "../BattleUnit";
-import type { AddEnemyInfo } from "./AddEnemyInfo";
+
 import { CommandBase } from "./CommandBase";
 import type { CommandType } from "./CommandType";
 import type { TurnActOrderUnitInfo } from "../TurnActOrderUnitInfo";
@@ -56,5 +58,20 @@ export class CommandBeginWave extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17E8840  public void .ctor(in int questStageMstId, in int wave, in List<BattleUnit> enemyUnitList, in TurnActOrderUnitInfo turnActOrderUnitInfo) { } */
-    ctor$int_int_ListBattleUnit_TurnActOrderUnitInfo(questStageMstId: int, wave: int, enemyUnitList: List<BattleUnit>, turnActOrderUnitInfo: TurnActOrderUnitInfo): this { return notPorted("CommandBeginWave..ctor", 0x17E8840); }
+    ctor$int_int_ListBattleUnit_TurnActOrderUnitInfo(questStageMstId: int, wave: int, enemyUnitList: List<BattleUnit>, turnActOrderUnitInfo: TurnActOrderUnitInfo): this {
+        this._QuestStageMstId = questStageMstId;
+        this._Wave = wave;
+        this._TurnActOrderUnitInfo = turnActOrderUnitInfo;
+        const infos: List<AddEnemyInfo> = [];
+        if (enemyUnitList == null) return this;
+        for (const unit of enemyUnitList) {
+            const param = unit.BattleParameter;
+            if (param instanceof QuestEnemyAppearanceParameter) {
+                infos.push(new AddEnemyInfo().ctor$int_int_int(unit.Id, param.QuestEnemyAppearanceMstId, unit.PositionId));
+                if (param.IsMainTargetEnemy) this._HasBossEnemy = true;
+            }
+        }
+        this._AddEnemyInfos = [...infos];
+        return this;
+    }
 }

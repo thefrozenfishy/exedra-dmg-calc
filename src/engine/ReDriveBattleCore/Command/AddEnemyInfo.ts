@@ -31,5 +31,10 @@ export class AddEnemyInfo {
     /** @rva 0x8A2240  public void set_PositionId(int value) { } */
     set_PositionId(value: int): void { this._PositionId = value; /* auto-property */ }
     /** @rva 0x95DC70  public void .ctor(int id, int mstId, int pos) { } */
-    ctor$int_int_int(id: int, mstId: int, pos: int): this { return notPorted("AddEnemyInfo..ctor", 0x95DC70); }
+    ctor$int_int_int(id: int, mstId: int, pos: int): this {
+        this._BattleUnitId = id;
+        this._QuestEnemyAppearanceMstId = mstId;
+        this._PositionId = pos;
+        return this;
+    }
 }

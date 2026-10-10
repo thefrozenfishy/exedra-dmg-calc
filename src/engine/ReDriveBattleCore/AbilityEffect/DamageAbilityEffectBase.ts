@@ -65,7 +65,10 @@ export abstract class DamageAbilityEffectBase extends AbilityEffectBase {  // im
     /** @rva 0x18F0630  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DamageAbilityEffectBase..ctor", 0x18F0630); }
     /** @rva 0x18EF640 slot 8  public void SetActiveSkillInfo(SkillType skillType, int skillMstId) { } */
-    SetActiveSkillInfo(skillType: SkillType, skillMstId: int): void { return notPorted("DamageAbilityEffectBase.SetActiveSkillInfo", 0x18EF640); }
+    SetActiveSkillInfo(skillType: SkillType, skillMstId: int): void {
+        this.skillType = skillType;
+        this.skillMstId = skillMstId;
+    }
     /** @rva 0x18EF600 slot 4  public override void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
     SelectTargets(userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, selectFriendUnitId: int, attackTargetId?: int /* = 0 */): void { return notPorted("DamageAbilityEffectBase.SelectTargets", 0x18EF600); }
     /** @rva 0x18EF650 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */

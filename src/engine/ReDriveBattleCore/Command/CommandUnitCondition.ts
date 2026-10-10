@@ -1,14 +1,19 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { EffectOriginType } from "../UnitState/EffectOriginType";
+import { AbnormalUnitStateBase } from "../UnitState/AbnormalUnitStateBase";
+import { ElementType } from "../../Network/Definition/Battle/ElementType";
+import { UnitStateData } from "./UnitStateData";
+import { f32, notPorted, runCctor } from "../../runtime";
 import type { Dictionary, float, int } from "../../runtime";
-import type { ElementType } from "../../Network/Definition/Battle/ElementType";
+
 import type { BattleUnit } from "../BattleUnit";
 import { CommandBase } from "./CommandBase";
 import type { CommandType } from "./CommandType";
-import type { UnitStateData } from "./UnitStateData";
+
 import type { AbnormalType } from "../UnitState/AbnormalType";
+import { TargetElementType } from "../../Network/Definition/Battle/TargetElementType";
 
 // ---- ReDriveBattleCore.Command.CommandUnitCondition  (TypeDefIndex 1027, public class) ----
 export class CommandUnitCondition extends CommandBase {
@@ -105,5 +110,26 @@ export class CommandUnitCondition extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17EB920  public void .ctor(BattleUnit battleUnit) { } */
-    ctor$BattleUnit(battleUnit: BattleUnit): this { return notPorted("CommandUnitCondition..ctor", 0x17EB920); }
+    ctor$BattleUnit(battleUnit: BattleUnit): this {
+        this._BattleUnitId = battleUnit.Id;
+        this._InitAtk = battleUnit.ATK;
+        this._Atk = Math.trunc(battleUnit.GetProcessedAtkDecimal().toFloat()); // (int)(float)decimal
+        this._InitDef = battleUnit.DEF;
+        this._Def = Math.trunc(battleUnit.GetProcessedDefDecimal().toFloat());
+        this._InitSpeed = battleUnit.Speed;
+        this._Speed = Math.trunc(battleUnit.GetProcessedSpeed());
+        this._UnitStates = battleUnit.Condition.StateList.filter(state => state.EffectOrigin !== EffectOriginType.Field) // <>c.b__46_0
+            .map(state => new UnitStateData().ctor$UnitStateBase_bool(state, state.IsActive$BattleUnit(battleUnit))); // <>c__DisplayClass46_0.b__1 (ctor inlined in the game)
+        this._ElementResistRateDic = new Map();
+        for (const element of Object.values(ElementType) as ElementType[]) { // Enum.GetValues (sorted by value)
+            this._ElementResistRateDic.set(element, battleUnit.GetProcessedElementResistRate(element as unknown as TargetElementType).toFloat());
+        }
+        this._AbnormalEffectParryRateDic = new Map();
+        runCctor(AbnormalUnitStateBase);
+        for (const [abnormalType, type_] of AbnormalUnitStateBase.AbnormalUnitStateBaseTypeDic) {
+            this._AbnormalEffectParryRateDic.set(abnormalType, f32(f32(1 - battleUnit.GetTotalSecondaryEffectParryRate$Type(type_)) * 100));
+        }
+        this._BarrierEndurance = battleUnit.Condition.BarrierEndurance;
+        return this;
+    }
 }

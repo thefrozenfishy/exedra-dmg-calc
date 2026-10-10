@@ -43,9 +43,13 @@ export abstract class JudgeResultRefereeBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x8AB430  public void Init() { } */
-    Init(): void { return notPorted("JudgeResultRefereeBase.Init", 0x8AB430); }
+    Init(): void {
+        this.result = 0;
+    }
     /** @rva 0x8AB430  public void ResetResult() { } */
-    ResetResult(): void { return notPorted("JudgeResultRefereeBase.ResetResult", 0x8AB430); }
+    ResetResult(): void {
+        this.result = 0;
+    }
     /** @rva -1 slot 5  public abstract void CheckMainTargetEnemyDead(BattleUnit deathUnit); */
     abstract CheckMainTargetEnemyDead(deathUnit: BattleUnit): void;
     /** @rva 0x149E960 slot 6  public virtual void CheckBattleFinishBeforeAct(int nextActRound) { } */

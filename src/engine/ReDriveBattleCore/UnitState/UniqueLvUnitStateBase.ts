@@ -58,11 +58,17 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
     /** @rva 0x16DE5F0  protected bool TryCountUp() { } */
     TryCountUp(): boolean { return notPorted("UniqueLvUnitStateBase.TryCountUp", 0x16DE5F0); }
     /** @rva 0x16DE530  public int GetRequiredHitCount() { } */
-    GetRequiredHitCount(): int { return notPorted("UniqueLvUnitStateBase.GetRequiredHitCount", 0x16DE530); }
+    GetRequiredHitCount(): int {
+        const model = this.LvMstList.find(m => this.$GetRequiredHitCount$b__24_0(m)) ?? null; // FirstOrDefault
+        if (model == null) return 0;
+        return model.record.conditionCount;
+    }
     /** @rva 0x16DE420 slot 25  public bool Blend(UnitStateBase injectUnitState) { } */
     Blend(injectUnitState: UnitStateBase): boolean { return notPorted("UniqueLvUnitStateBase.Blend", 0x16DE420); }
     /** @rva 0x16DE8B0  private bool <get_LvMstList>b__14_0(UniqueStateLevelMstRecord r) { } */
     $get_LvMstList$b__14_0(r: any /* UniqueStateLevelMstRecord */): boolean { return notPorted("UniqueLvUnitStateBase.<get_LvMstList>b__14_0", 0x16DE8B0); }
     /** @rva 0x16DE880  private bool <GetRequiredHitCount>b__24_0(UniqueStateLevelMstModel m) { } */
-    $GetRequiredHitCount$b__24_0(m: UniqueStateLevelMstModel): boolean { return notPorted("UniqueLvUnitStateBase.<GetRequiredHitCount>b__24_0", 0x16DE880); }
+    $GetRequiredHitCount$b__24_0(m: UniqueStateLevelMstModel): boolean {
+        return m.record.level === this.Lv + 1;
+    }
 }

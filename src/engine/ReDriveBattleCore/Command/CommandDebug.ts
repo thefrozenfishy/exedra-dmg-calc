@@ -38,5 +38,10 @@ export class CommandDebug extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17E8B20  public void .ctor(in List<BattleUnit> battleUnitList, OptionBase[] debugOptions, bool isStopTime) { } */
-    ctor$ListBattleUnit_OptionBase_bool(battleUnitList: List<BattleUnit>, debugOptions: any /* OptionBase */[], isStopTime: boolean): this { return notPorted("CommandDebug..ctor", 0x17E8B20); }
+    ctor$ListBattleUnit_OptionBase_bool(battleUnitList: List<BattleUnit>, debugOptions: any /* OptionBase */[], isStopTime: boolean): this {
+        this._BattleUnitList = battleUnitList;
+        this._DebugOptions = debugOptions;
+        this._IsStopTime = isStopTime;
+        return this;
+    }
 }

@@ -18,7 +18,10 @@ export class GveJudgeResultReferee extends JudgeResultRefereeBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x149DC70  public void .ctor(int victoryRound) { } */
-    ctor$int(victoryRound: int): this { return notPorted("GveJudgeResultReferee..ctor", 0x149DC70); }
+    ctor$int(victoryRound: int): this {
+        this.victoryRound = victoryRound;
+        return this;
+    }
     /** @rva 0x730170 slot 5  public override void CheckMainTargetEnemyDead(BattleUnit deathUnit) { } */
     CheckMainTargetEnemyDead(deathUnit: BattleUnit): void { /* asm: ret 0 */ }
     /** @rva 0x149DC50 slot 6  public override void CheckBattleFinishBeforeAct(int nextActRound) { } */

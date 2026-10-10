@@ -38,7 +38,12 @@ export class CommandBattlePhase extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17E85B0  public void .ctor(in Phase phase, CommandBattlePhase.ReadyPhaseData readyPhase, CommandBattlePhase.FinishPhaseData finishPhase) { } */
-    ctor$Phase_ReadyPhaseData_FinishPhaseData(phase: Phase, readyPhase: CommandBattlePhase_ReadyPhaseData, finishPhase: CommandBattlePhase_FinishPhaseData): this { return notPorted("CommandBattlePhase..ctor", 0x17E85B0); }
+    ctor$Phase_ReadyPhaseData_FinishPhaseData(phase: Phase, readyPhase: CommandBattlePhase_ReadyPhaseData, finishPhase: CommandBattlePhase_FinishPhaseData): this {
+        this._Phase = phase;
+        this._ReadyPhase = readyPhase;
+        this._FinishPhase = finishPhase;
+        return this;
+    }
 }
 
 // ---- ReDriveBattleCore.Command.CommandBattlePhase.PhaseDataBase  (TypeDefIndex 974, public class) ----

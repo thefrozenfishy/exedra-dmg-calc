@@ -19,5 +19,8 @@ export class CommandMultiRaidSyncHpResultForServer extends CommandBase {
     /** @rva 0x8A2240  public void set_ReducedHpBySync(int value) { } */
     set_ReducedHpBySync(value: int): void { this._ReducedHpBySync = value; /* auto-property */ }
     /** @rva 0x149DC70  public void .ctor(int reducedHpBySync) { } */
-    ctor$int(reducedHpBySync: int): this { return notPorted("CommandMultiRaidSyncHpResultForServer..ctor", 0x149DC70); }
+    ctor$int(reducedHpBySync: int): this {
+        this._ReducedHpBySync = reducedHpBySync;
+        return this;
+    }
 }

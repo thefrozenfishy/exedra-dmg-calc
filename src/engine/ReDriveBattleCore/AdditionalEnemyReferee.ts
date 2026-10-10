@@ -102,7 +102,12 @@ export class AdditionalEnemyReferee_AdditionalEnemyUnit {
     /** @rva 0x13778F0  public void .ctor(QuestEnemyAppearanceMstModel questEnemyAppearanceMst, int positionId, AdditionalEnemyCondition additionalEnemyAppearanceCondition) { } */
     ctor$QuestEnemyAppearanceMstModel_int_AdditionalEnemyCondition(questEnemyAppearanceMst: QuestEnemyAppearanceMstModel, positionId: int, additionalEnemyAppearanceCondition: AdditionalEnemyCondition): this { return notPorted("AdditionalEnemyReferee_AdditionalEnemyUnit..ctor", 0x13778F0); }
     /** @rva 0x13778A0  public void .ctor(int questEnemyAppearanceMstId, int positionId, AdditionalEnemyCondition additionalEnemyAppearanceCondition) { } */
-    ctor$int_int_AdditionalEnemyCondition(questEnemyAppearanceMstId: int, positionId: int, additionalEnemyAppearanceCondition: AdditionalEnemyCondition): this { return notPorted("AdditionalEnemyReferee_AdditionalEnemyUnit..ctor", 0x13778A0); }
+    ctor$int_int_AdditionalEnemyCondition(questEnemyAppearanceMstId: int, positionId: int, additionalEnemyAppearanceCondition: AdditionalEnemyCondition): this {
+        this._QuestEnemyAppearanceMstId = questEnemyAppearanceMstId;
+        this._PositionId = positionId;
+        this._AppearanceCondition = additionalEnemyAppearanceCondition;
+        return this;
+    }
     /** @rva 0x8F3F90  public void Disable() { } */
     Disable(): void { this._IsDisable = true; /* asm: mov byte ptr [rcx + 0x20], 1; ret */ }
 }

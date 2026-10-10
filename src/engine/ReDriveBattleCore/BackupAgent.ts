@@ -1,15 +1,19 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { GameDirectorBase_GameSituationDataCreator } from "./GameDirectorBase";
+import { BattleUnitInfo } from "./Command/BattleUnitInfo";
 import { notPorted } from "../runtime";
 import type { IList, IReadOnlyList, List, Type } from "../runtime";
-import type { BackupData } from "./BackupData";
-import type { BattleUnitInfo } from "./Command/BattleUnitInfo";
+import { BackupData } from "./BackupData";
+
 import type { CommandBase } from "./Command/CommandBase";
 import type { CommandType } from "./Command/CommandType";
 import type { GameDirectorBase } from "./GameDirectorBase";
 import type { GameSituationData } from "./GameSituationData";
 import type { TurnActOrderUnitInfo } from "./TurnActOrderUnitInfo";
+import type { int } from "../runtime";
+import { BattleUnit } from "./BattleUnit";
 
 // ---- ReDriveBattleCore.BackupAgent  (TypeDefIndex 324, public sealed class) ----
 export class BackupAgent {  // implements IObserver<IReadOnlyList<CommandBase>>
@@ -40,7 +44,13 @@ export class BackupAgent {  // implements IObserver<IReadOnlyList<CommandBase>>
     get AllLogCommandList(): List<CommandBase> { return this.get_AllLogCommandList(); }
     get LogCommandListForBackup(): List<CommandBase> { return this.get_LogCommandListForBackup(); }
     /** @rva 0x137AFF0  public void .ctor(GameDirectorBase backupTarget) { } */
-    ctor$GameDirectorBase(backupTarget: GameDirectorBase): this { return notPorted("BackupAgent..ctor", 0x137AFF0); }
+    ctor$GameDirectorBase(backupTarget: GameDirectorBase): this {
+        this.backupData = new BackupData().ctor();
+        this.allLogCommandList = [];
+        this.logCommandListForBackup = [];
+        this.backupTarget = backupTarget;
+        return this;
+    }
     /** @rva 0x733E90  public BackupData get_BackupData() { } */
     get_BackupData(): BackupData { return this.backupData; /* asm: mov rax, qword ptr [rcx + 0x18]; ret */ }
     /** @rva 0x7369E0  public List<CommandBase> get_AllLogCommandList() { } */
@@ -54,11 +64,36 @@ export class BackupAgent {  // implements IObserver<IReadOnlyList<CommandBase>>
     /** @rva 0x1379E70  public void MakeBackup(IReadOnlyList<CommandBase> commands) { } */
     MakeBackup(commands: IReadOnlyList<CommandBase>): void { return notPorted("BackupAgent.MakeBackup", 0x1379E70); }
     /** @rva 0x137A1A0  private void RecordLogCommands(IReadOnlyList<CommandBase> commands) { } */
-    RecordLogCommands(commands: IReadOnlyList<CommandBase>): void { return notPorted("BackupAgent.RecordLogCommands", 0x137A1A0); }
+    RecordLogCommands(commands: IReadOnlyList<CommandBase>): void {
+        for (let i = 0; i < commands.length; i++) {
+            const command = commands[i];
+            if (BackupAgent.LogCommandType.indexOf(command.GetCommandType()) >= 0) {
+                this.allLogCommandList.push(command);
+                this.logCommandListForBackup.push(command);
+            }
+        }
+    }
     /** @rva 0x137A080  public static bool NeedBackup(IReadOnlyList<CommandBase> commands) { } */
     static NeedBackup(commands: IReadOnlyList<CommandBase>): boolean { return notPorted("BackupAgent.NeedBackup", 0x137A080); }
     /** @rva 0x137A3E0  public void RefreshPrevBackup() { } */
-    RefreshPrevBackup(): void { return notPorted("BackupAgent.RefreshPrevBackup", 0x137A3E0); }
+    RefreshPrevBackup(): void {
+        const figureUnits: List<BattleUnit> = [];
+        const byPosition = new Map<int, BattleUnit>();
+        for (const [, unit] of this.backupTarget.battleUnitDic) {
+            if (!unit.isCharacterFigure && !unit.isNoVisualDeath) {
+                if (unit.HP > 0 || unit.CurrentHpGaugeCount > 1) {
+                    const existing = byPosition.get(unit.PositionId);
+                    if (existing === undefined) byPosition.set(unit.PositionId, unit);
+                    else if (unit.Id < existing.Id) byPosition.set(unit.PositionId, unit);
+                }
+            } else {
+                figureUnits.push(unit);
+            }
+        }
+        this.prevUnits = [...figureUnits, ...byPosition.values()].map(unit => new BattleUnitInfo().ctor$BattleUnit(unit)); // <>c.b__27_0
+        this.prevSituation = GameDirectorBase_GameSituationDataCreator.Create(this.backupTarget);
+        this.prevTurnOrder = this.backupTarget.turnActSystem.CreateTurnActUnitOrderInfo(this.backupTarget.ActiveUnitList, this.backupTarget);
+    }
     /** @rva 0x137AA30  public static GameDirectorBase RestoreGameDirector(BackupData backupData) { } */
     static RestoreGameDirector(backupData: BackupData): GameDirectorBase { return notPorted("BackupAgent.RestoreGameDirector", 0x137AA30); }
     /** @rva 0x137A960  public List<CommandBase> RestoreCommands() { } */
@@ -74,11 +109,18 @@ export class BackupAgent {  // implements IObserver<IReadOnlyList<CommandBase>>
     /** @rva 0x730170 slot 6  private void System.IObserver<System.Collections.Generic.IReadOnlyList<ReDriveBattleCore.Command.CommandBase>>.OnCompleted() { } */
     IObserver$OnCompleted(): void { /* asm: ret 0 */ }
     /** @rva 0x137AD20 slot 4  private void System.IObserver<System.Collections.Generic.IReadOnlyList<ReDriveBattleCore.Command.CommandBase>>.OnNext(IReadOnlyList<CommandBase> commands) { } */
-    IObserver$OnNext(commands: IReadOnlyList<CommandBase>): void { return notPorted("BackupAgent.System.IObserver<System.Collections.Generic.IReadOnlyList<ReDriveBattleCore.Command.CommandBase>>.OnNext", 0x137AD20); }
+    IObserver$OnNext(commands: IReadOnlyList<CommandBase>): void {
+        this.RecordLogCommands(commands); // inlined in the game
+    }
     /** @rva 0x730170 slot 5  private void System.IObserver<System.Collections.Generic.IReadOnlyList<ReDriveBattleCore.Command.CommandBase>>.OnError(Exception e) { } */
     IObserver$OnError(e: any /* Exception */): void { /* asm: ret 0 */ }
     /** @rva 0x137AD30  private static void .cctor() { } */
-    static cctor(): void { return notPorted("BackupAgent..cctor", 0x137AD30); }
+    static cctor(): void {
+        BackupAgent.EnableEncryption = true;
+        // JsonSerializerSettings / JsonSerializerSettingsForLog (Newtonsoft TypeNameHandling etc.) are client serialization
+        // settings with no battle effect; not constructed here.
+        BackupAgent.LogCommandType = [3, 16, 4, 11, 26] as CommandType[]; // Skill, ExecuteCommonAct, BeginTurn, Reproduction, MultiRaidSyncHpResultForServer (<PrivateImplementationDetails> blob)
+    }
 }
 
 // base type DefaultContractResolver is outside the ported set
@@ -119,7 +161,12 @@ export class BackupAgent_GameDirectorSerializeWrapper {
     /** 0x10 private readonly GameDirectorBase gameDirector */
     gameDirector: GameDirectorBase = null!;
     /** @rva 0x737FB0  public void .ctor(GameDirectorBase gameDirector) { } */
-    ctor$GameDirectorBase(gameDirector: GameDirectorBase): this { return notPorted("BackupAgent_GameDirectorSerializeWrapper..ctor", 0x737FB0); }
+    ctor$GameDirectorBase(gameDirector: GameDirectorBase): this {
+        this.gameDirector = gameDirector;
+        return this;
+    }
     /** @rva 0x730C50  public GameDirectorBase GetGameDirector() { } */
     GetGameDirector(): GameDirectorBase { return this.gameDirector; /* asm: mov rax, qword ptr [rcx + 0x10]; ret */ }
 }
+
+BackupAgent.cctor(); // C# static constructor

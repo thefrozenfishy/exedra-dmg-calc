@@ -168,7 +168,12 @@ export abstract class EnemyConditionAndActionController_ActionBase {
     /** @rva 0x7305E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x1490430  public void .ctor(List<int> skillMstIds, bool isSkillResuable) { } */
-    ctor$Listint_bool(skillMstIds: List<int>, isSkillResuable: boolean): this { return notPorted("EnemyConditionAndActionController_ActionBase..ctor", 0x1490430); }
+    ctor$Listint_bool(skillMstIds: List<int>, isSkillResuable: boolean): this {
+        this._SkillMstIds = skillMstIds;
+        this._IsSkillResuable = isSkillResuable;
+        this._IsAvailable = true;
+        return this;
+    }
 }
 
 // ---- ReDriveBattleCore.EnemyConditionAndActionController.BundleAction  (TypeDefIndex 384, public class) ----
@@ -176,7 +181,12 @@ export class EnemyConditionAndActionController_BundleAction extends EnemyConditi
     /** @rva 0x7305E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x1490430  public void .ctor(List<int> skillMstIds, bool isSkillResuable) { } */
-    ctor$Listint_bool(skillMstIds: List<int>, isSkillResuable: boolean): this { return notPorted("EnemyConditionAndActionController_BundleAction..ctor", 0x1490430); }
+    ctor$Listint_bool(skillMstIds: List<int>, isSkillResuable: boolean): this {
+        this._SkillMstIds = skillMstIds;
+        this._IsSkillResuable = isSkillResuable;
+        this._IsAvailable = true;
+        return this;
+    }
     /** @rva 0x1493160  public List<int> GetActions(int actionCount) { } */
     GetActions(actionCount: int): List<int> { return notPorted("EnemyConditionAndActionController_BundleAction.GetActions", 0x1493160); }
 }
@@ -186,7 +196,12 @@ export class EnemyConditionAndActionController_SingleAction extends EnemyConditi
     /** @rva 0x7305E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x1490430  public void .ctor(List<int> skillMstIds, bool isSkillResuable) { } */
-    ctor$Listint_bool(skillMstIds: List<int>, isSkillResuable: boolean): this { return notPorted("EnemyConditionAndActionController_SingleAction..ctor", 0x1490430); }
+    ctor$Listint_bool(skillMstIds: List<int>, isSkillResuable: boolean): this {
+        this._SkillMstIds = skillMstIds;
+        this._IsSkillResuable = isSkillResuable;
+        this._IsAvailable = true;
+        return this;
+    }
     /** @rva 0x14A47F0  public int GetAction() { } */
     GetAction(): int { return notPorted("EnemyConditionAndActionController_SingleAction.GetAction", 0x14A47F0); }
 }

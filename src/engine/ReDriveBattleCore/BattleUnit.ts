@@ -65,7 +65,7 @@ import type { TargetElementType } from "../Network/Definition/Battle/TargetEleme
 import type { TargetRoleType } from "../Network/Definition/Battle/TargetRoleType";
 import type { DamageBaseType } from "./AbilityEffect/DamageBaseType";
 
-import type { ActiveSkillBase } from "./ActiveSkillBase";
+import { ActiveSkillBase } from "./ActiveSkillBase";
 import type { AdditionalSkill } from "./AdditionalSkill";
 
 import type { BattleParameter } from "./BattleParameter";
@@ -75,6 +75,7 @@ import type { GameDirectorBase } from "./GameDirectorBase";
 import type { IRequiredStateForDecide } from "./UnitState/IRequiredStateForDecide";
 
 import type { UnitStateBase } from "./UnitState/UnitStateBase";
+import { orderBy } from "../runtime";
 
 // ---- ReDriveBattleCore.BattleUnit  (TypeDefIndex 358, public class) ----
 export class BattleUnit {
@@ -705,7 +706,24 @@ export class BattleUnit {
         }
     }
     /** @rva -1  public bool IsSwitchingActiveSkill<T>(out T activeSkill, out SwitchSkillUnitState unitState) { } */
-    IsSwitchingActiveSkill<T>(T$: abstract new (...args: any[]) => T, activeSkill: Ref<T>, unitState: Ref<SwitchSkillUnitState>): boolean { return notPorted("BattleUnit.IsSwitchingActiveSkill", 0); }
+    IsSwitchingActiveSkill<T>(T$: abstract new (...args: any[]) => T, activeSkill: Ref<T>, unitState: Ref<SwitchSkillUnitState>): boolean {
+        // instance IsSwitchingActiveSkill<object> at 0x24EEB30
+        activeSkill.v = null!;
+        unitState.v = null!;
+        const skillType = ActiveSkillBaseUtility.GetSkillTypeForSwitchSkill(T$); // <>c__DisplayClass166_0<T>.<0x10>
+        const states = this.Condition.StateList.filter((s): s is SwitchSkillUnitState => s instanceof SwitchSkillUnitState)
+            .filter(state => T$ === (ActiveSkillBase as unknown) || (skillType != null && state.SkillType === skillType)) // b__0
+            .filter(state => state.IsActive$BattleUnit(this)); // b__1
+        for (const state of orderBy(states, s => s.MstId)) { // <>c__166<T>.b__166_2
+            const skill = this.SkillSet.SwitchableSkills.find(s => s.UniqueId === state.switchSkillUniqueId) ?? null; // <>c__DisplayClass166_1<T>.b__3
+            if (skill == null) continue;
+            if (!(skill instanceof (T$ as any))) throw new TypeError("InvalidCastException");
+            activeSkill.v = skill as unknown as T;
+            unitState.v = state;
+            return true;
+        }
+        return false;
+    }
     /** @rva 0x13883C0  public int GetUniqueZoneUnitStatePatternId() { } */
     GetUniqueZoneUnitStatePatternId(): int {
         const s = this.Condition.StateList.find(x => x instanceof UniqueZoneUnitState) as UniqueZoneUnitState | undefined;

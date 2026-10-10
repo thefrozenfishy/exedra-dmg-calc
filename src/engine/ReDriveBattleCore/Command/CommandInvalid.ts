@@ -17,5 +17,9 @@ export class CommandInvalid extends CommandBase {
     /** @rva 0x17E95F0  public static CommandInvalid get_Default() { } */
     static get_Default(): CommandInvalid { return CommandInvalid._Default; /* auto-property */ }
     /** @rva 0x17E9580  private static void .cctor() { } */
-    static cctor(): void { return notPorted("CommandInvalid..cctor", 0x17E9580); }
+    static cctor(): void {
+        CommandInvalid._Default = new CommandInvalid().ctor();
+    }
 }
+
+CommandInvalid.cctor(); // C# static constructor

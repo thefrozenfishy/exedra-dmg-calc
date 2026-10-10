@@ -181,3 +181,20 @@ export function dictGet<K, V>(dic: ReadonlyMap<K, V>, key: K): V {
     if (!dic.has(key)) throw new RangeError(`KeyNotFoundException: The given key '${String(key)}' was not present in the dictionary.`);
     return dic.get(key)!;
 }
+/** `new Action<T>(target.Method)`: C# delegates compare equal by (target, method), so the same pair gives the same
+ * function object here (needed for `-=` / Delegate.Remove of a freshly created delegate). */
+const delegateCache = new WeakMap<object, Map<Function, Function>>();
+export function bindDelegate<F extends AnyFn>(target: object, method: F): F {
+    let m = delegateCache.get(target);
+    if (m === undefined) { m = new Map(); delegateCache.set(target, m); }
+    let f = m.get(method);
+    if (f === undefined) { f = method.bind(target); m.set(method, f); }
+    return f as F;
+}
+/** List<T>.Remove: removes the first occurrence, returns whether it was found. */
+export function listRemove<T>(list: T[], item: T): boolean {
+    const i = list.indexOf(item);
+    if (i < 0) return false;
+    list.splice(i, 1);
+    return true;
+}

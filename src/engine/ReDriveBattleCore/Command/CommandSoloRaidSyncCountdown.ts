@@ -78,7 +78,18 @@ export class CommandSoloRaidSyncCountdown extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17EB780  public void .ctor(CountdownReferee countdownReferee, int syncTypeNum) { } */
-    ctor$CountdownReferee_int(countdownReferee: CountdownReferee, syncTypeNum: int): this { return notPorted("CommandSoloRaidSyncCountdown..ctor", 0x17EB780); }
+    ctor$CountdownReferee_int(countdownReferee: CountdownReferee, syncTypeNum: int): this {
+        if (countdownReferee == null) return this;
+        this._MaxCountdown = countdownReferee.maxCountdown;
+        this._Countdown = countdownReferee.countdown;
+        this._CancelMaxTotalDamage = countdownReferee.cancelMaxTotalDamage;
+        this._CancelTotalDamage = countdownReferee.cancelTotalDamage;
+        this._SyncTypeNum = syncTypeNum;
+        this._BattleUnitId = countdownReferee.battleUnitId;
+        this._CanActiveSkillMstId = countdownReferee.canActiveSkillMstId;
+        this._CanActiveSkillDetailMstId = countdownReferee.canActiveSkillDetailMstId;
+        return this;
+    }
 }
 
 // ---- ReDriveBattleCore.Command.CommandSoloRaidSyncCountdown.SyncType  (TypeDefIndex 1019, public enum) ----

@@ -1,10 +1,17 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import type { PassiveSkillDetailMstRecord } from "../../Network/Definition/Skill/PassiveSkillDetailMstRecord";
+import { SkillDetailMstReader } from "../Reader/SkillDetailMstReader";
+import { PassiveSkillDetailMstModel } from "../Model/PassiveSkillDetailMstModel";
+import { BattleMstReaderBase } from "../Reader/BattleMstReaderBase";
+import { BattleUnitStructure, BattleUnitStructure_PassiveSkillInfo } from "./BattleUnitStructure";
+import { QuestEnemyAppearanceParameter } from "../QuestEnemyAppearanceParameter";
+import { CharacterParameter } from "../CharacterParameter";
 import { notPorted } from "../../runtime";
 import type { int } from "../../runtime";
 import type { BattleUnit, BattleUnit_TeamType } from "../BattleUnit";
-import type { BattleUnitStructure } from "./BattleUnitStructure";
+import type { List } from "../../runtime";
 
 // ---- ReDriveBattleCore.Command.BattleUnitInfo  (TypeDefIndex 967, public class) ----
 export class BattleUnitInfo {
@@ -100,9 +107,72 @@ export class BattleUnitInfo {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x16CEAE0  public void .ctor(BattleUnit unit) { } */
-    ctor$BattleUnit(unit: BattleUnit): this { return notPorted("BattleUnitInfo..ctor", 0x16CEAE0); }
+    ctor$BattleUnit(unit: BattleUnit): this {
+        this._BattleUnitId = unit.Id;
+        this._Position = unit.PositionId;
+        this._Team = unit.Team;
+        this._Position = unit.PositionId; // stored twice in the game
+        this._HP = unit.HP;
+        this._EP = unit.EP;
+        this._BP = unit.BP;
+        this._BreakPoint = unit.BreakPoint.PointValue;
+        this._BreakedDamageReceiveRate = unit.BreakedDamageReceiveRate;
+        const battleParameter = unit.BattleParameter;
+        if (!unit.isCharacter) {
+            if (!unit.IsEnemy) throw new Error(`NotImplementedException: what type of unit ${unit.Id}`);
+            const param = unit.BattleParameter;
+            if (!(param instanceof QuestEnemyAppearanceParameter)) throw new TypeError("InvalidCastException");
+            this._QuestEnemyAppearanceMstId = param.QuestEnemyAppearanceMstId;
+        } else {
+            const param = unit.BattleParameter;
+            const styleMstId = param instanceof CharacterParameter ? param.StyleMstId : 0;
+            const mstId = unit.MstId;
+            const maxHp = unit.MaxHP;
+            const speed = unit.Speed;
+            const special = unit.SpecialAttack;
+            const specialId = special == null ? 0 : special.Id;
+            const activeIds = unit.ActiveSkills.map(skill => skill.Id); // <>c.b__45_0
+            const normal = unit.NormalAttack;
+            const normalId = normal == null ? 0 : normal.Id;
+            const passives = unit.PassiveSkills.map(ps => { // <>c.b__45_1
+                const info = new BattleUnitStructure_PassiveSkillInfo().ctor();
+                info._AbilitySourceType = ps.AbilitySourceType;
+                info._PassiveSkillMstId = ps.Id;
+                return info;
+            });
+            this._Structure = new BattleUnitStructure().ctor$int_int_int_int_int_int_int_PassiveSkillInfo_int_int_int_int(mstId, styleMstId, maxHp, speed,
+                specialId, activeIds, normalId, passives, battleParameter.BreakPoint, battleParameter.InitialBreakedDamageReceiveRate,
+                battleParameter.MaxBreakedDamageReceiveRate, unit.BattleParameter.BreakTurnGaugeSlowRatio);
+        }
+        this._ShowCountPointAll = this.CheckShowCountPointAll(unit);
+        return this;
+    }
     /** @rva 0x16CF070  public bool get_IsCharacter() { } */
-    get_IsCharacter(): boolean { return notPorted("BattleUnitInfo.get_IsCharacter", 0x16CF070); }
+    get_IsCharacter(): boolean { return this._QuestEnemyAppearanceMstId === 0; /* asm: cmp dword ptr [rcx + 0x20], 0; sete al */ }
     /** @rva 0x16CE4F0  private bool CheckShowCountPointAll(BattleUnit unit) { } */
-    CheckShowCountPointAll(unit: BattleUnit): boolean { return notPorted("BattleUnitInfo.CheckShowCountPointAll", 0x16CE4F0); }
+    CheckShowCountPointAll(unit: BattleUnit): boolean {
+        let result = false;
+        const passiveTypes: List<string> = [];
+        if (unit.PassiveSkills != null) {
+            for (let i = 0; i < unit.PassiveSkills.length; i++) {
+                const ps = unit.PassiveSkills[i]; // <>c__DisplayClass48_0
+                const details = BattleMstReaderBase.get_Instance<PassiveSkillDetailMstModel, PassiveSkillDetailMstRecord, int>(PassiveSkillDetailMstModel)
+                    .GetModelList(detail => detail.passiveSkillMstId === ps.Id); // <>c__DisplayClass48_0.b__0
+                if (details != null) passiveTypes.push(...[...details].map(detail => detail.record.abilityEffectType)); // <>c.b__48_1
+            }
+            result = passiveTypes.includes("COUNT");
+        }
+        if (unit.SkillSet != null) {
+            const skills = unit.SkillSet.GetList();
+            if (skills != null) {
+                const skillTypes: List<string> = [];
+                for (const skill of skills) {
+                    const details = SkillDetailMstReader.GetDetailModelsByMstId(skill.Id);
+                    if (details != null) skillTypes.push(...details.map(detail => detail.record.abilityEffectType)); // <>c.b__48_2
+                }
+                result = skillTypes.includes("COUNT") || result;
+            }
+        }
+        return result;
+    }
 }

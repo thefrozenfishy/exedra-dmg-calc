@@ -42,5 +42,11 @@ export class GainSoloRaidBuffPointNotice {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x12D52F0  public void .ctor(string iconName, int gainPoint, int afterPoint, AbilitySourceType abilitySource) { } */
-    ctor$string_int_int_AbilitySourceType(iconName: string, gainPoint: int, afterPoint: int, abilitySource: AbilitySourceType): this { return notPorted("GainSoloRaidBuffPointNotice..ctor", 0x12D52F0); }
+    ctor$string_int_int_AbilitySourceType(iconName: string, gainPoint: int, afterPoint: int, abilitySource: AbilitySourceType): this {
+        this._IconName = iconName;
+        this._AfterPoint = afterPoint;
+        this._AbilitySource = abilitySource;
+        this._GainPoint = gainPoint;
+        return this;
+    }
 }

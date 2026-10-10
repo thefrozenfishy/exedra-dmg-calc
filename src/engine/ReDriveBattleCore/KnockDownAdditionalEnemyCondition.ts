@@ -16,7 +16,10 @@ export class KnockDownAdditionalEnemyCondition extends AdditionalEnemyCondition 
     /** @rva 0x7305E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x733EE0  public void .ctor(int enemyAppearanceMstId) { } */
-    ctor$int(enemyAppearanceMstId: int): this { return notPorted("KnockDownAdditionalEnemyCondition..ctor", 0x733EE0); }
+    ctor$int(enemyAppearanceMstId: int): this {
+        this.targetEnemyAppearanceMstId = enemyAppearanceMstId;
+        return this;
+    }
     /** @rva 0x138B550  public void CheckTargetEnemy(int enemyAppearanceMstId) { } */
     CheckTargetEnemy(enemyAppearanceMstId: int): void { return notPorted("KnockDownAdditionalEnemyCondition.CheckTargetEnemy", 0x138B550); }
 }

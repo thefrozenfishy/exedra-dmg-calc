@@ -21,7 +21,11 @@ export class BattleUnitSpeedAccumulator {
     /** @rva 0x739D00  private void set_AccumulatedSpeed(int value) { } */
     set_AccumulatedSpeed(value: int): void { this._AccumulatedSpeed = value; /* auto-property */ }
     /** @rva 0x14912C0  public void .ctor(int useSpeedAmount, int recastTimeSecRegulation) { } */
-    ctor$int_int(useSpeedAmount: int, recastTimeSecRegulation: int): this { return notPorted("BattleUnitSpeedAccumulator..ctor", 0x14912C0); }
+    ctor$int_int(useSpeedAmount: int, recastTimeSecRegulation: int): this {
+        this.useSpeedAmount = useSpeedAmount;
+        this.recastTimeSec = recastTimeSecRegulation;
+        return this;
+    }
     /** @rva 0x14912A0  public void TryUpdate(int addSpeedIfNotRecasting) { } */
     TryUpdate(addSpeedIfNotRecasting: int): void { return notPorted("BattleUnitSpeedAccumulator.TryUpdate", 0x14912A0); }
     /** @rva 0x1491280  public bool IsCanUseSpeed() { } */

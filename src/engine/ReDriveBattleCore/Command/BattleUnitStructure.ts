@@ -114,7 +114,21 @@ export class BattleUnitStructure {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17E5E80  public void .ctor(int mstId, int styleMstId, int maxHP, int speed, int specialAttackMstId, int[] activeSkillAttackMstIds, int normalAttackMstId, BattleUnitStructure.PassiveSkillInfo[] passiveSkills, int breakPoint, int initialBreakDamageReceiveRatio, int maxBreakDamageReceiveRatio, int breakTurnGaugeSlowRatio) { } */
-    ctor$int_int_int_int_int_int_int_PassiveSkillInfo_int_int_int_int(mstId: int, styleMstId: int, maxHP: int, speed: int, specialAttackMstId: int, activeSkillAttackMstIds: int[], normalAttackMstId: int, passiveSkills: BattleUnitStructure_PassiveSkillInfo[], breakPoint: int, initialBreakDamageReceiveRatio: int, maxBreakDamageReceiveRatio: int, breakTurnGaugeSlowRatio: int): this { return notPorted("BattleUnitStructure..ctor", 0x17E5E80); }
+    ctor$int_int_int_int_int_int_int_PassiveSkillInfo_int_int_int_int(mstId: int, styleMstId: int, maxHP: int, speed: int, specialAttackMstId: int, activeSkillAttackMstIds: int[], normalAttackMstId: int, passiveSkills: BattleUnitStructure_PassiveSkillInfo[], breakPoint: int, initialBreakDamageReceiveRatio: int, maxBreakDamageReceiveRatio: int, breakTurnGaugeSlowRatio: int): this {
+        this._Speed = speed;
+        this._SpecialAttackMstId = specialAttackMstId;
+        this._MstId = mstId;
+        this._StyleMstId = styleMstId;
+        this._MaxHP = maxHP;
+        this._ActiveSkillAttackMstIds = activeSkillAttackMstIds;
+        this._PassiveSkills = passiveSkills;
+        this._NormalAttackMstId = normalAttackMstId;
+        this._BreakPoint = breakPoint;
+        this._InitialBreakDamageReceiveRatio = initialBreakDamageReceiveRatio;
+        this._MaxBreakDamageReceiveRatio = maxBreakDamageReceiveRatio;
+        this._BreakTurnGaugeSlowRatio = breakTurnGaugeSlowRatio;
+        return this;
+    }
 }
 
 // ---- ReDriveBattleCore.Command.BattleUnitStructure.PassiveSkillInfo  (TypeDefIndex 968, public class) ----

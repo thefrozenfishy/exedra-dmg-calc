@@ -58,7 +58,12 @@ export class CountdownReferee {
     /** @rva 0x1494310  public void InitializeForRestart(Dictionary<int, BattleUnit> battleUnitDic, int currentCount, int currentDamage, int turnOrderPriority) { } */
     InitializeForRestart(battleUnitDic: Dictionary<int, BattleUnit>, currentCount: int, currentDamage: int, turnOrderPriority: int): void { return notPorted("CountdownReferee.InitializeForRestart", 0x1494310); }
     /** @rva 0x1494860  private void ResetParameter() { } */
-    ResetParameter(): void { return notPorted("CountdownReferee.ResetParameter", 0x1494860); }
+    ResetParameter(): void {
+        this.maxCountdown = 0;
+        this.cancelMaxTotalDamage = 0;
+        this.battleUnitId = 0;
+        this.canActiveSkillDetailMstId = 0;
+    }
     /** @rva 0x14944D0  private void LoadCanActiveCountdownSkill(Dictionary<int, BattleUnit> battleUnitDic) { } */
     LoadCanActiveCountdownSkill(battleUnitDic: Dictionary<int, BattleUnit>): void { return notPorted("CountdownReferee.LoadCanActiveCountdownSkill", 0x14944D0); }
     /** @rva 0x14942F0  public void DecreaseCountdown() { } */
@@ -66,11 +71,21 @@ export class CountdownReferee {
     /** @rva 0x14942D0  public void AddCancelTotalDamage(int damage) { } */
     AddCancelTotalDamage(damage: int): void { return notPorted("CountdownReferee.AddCancelTotalDamage", 0x14942D0); }
     /** @rva 0x1494B90  public void StartCountdown(int maxCountdown, int maxCancelTotalDamage, int battleUnitId) { } */
-    StartCountdown(maxCountdown: int, maxCancelTotalDamage: int, battleUnitId: int): void { return notPorted("CountdownReferee.StartCountdown", 0x1494B90); }
+    StartCountdown(maxCountdown: int, maxCancelTotalDamage: int, battleUnitId: int): void {
+        this.maxCountdown = maxCountdown;
+        this.countdown = maxCountdown;
+        this.cancelMaxTotalDamage = maxCancelTotalDamage;
+        this.cancelTotalDamage = 0;
+        this.battleUnitId = battleUnitId;
+    }
     /** @rva 0x1494880  public void SetCountdownForRestart(int countdown, int maxCountdown, int cancelTotalDamage, int cancelMaxTotalDamage, int battleUnitId, Dictionary<int, BattleUnit> battleUnitDic, int turnOrderPriority) { } */
     SetCountdownForRestart(countdown: int, maxCountdown: int, cancelTotalDamage: int, cancelMaxTotalDamage: int, battleUnitId: int, battleUnitDic: Dictionary<int, BattleUnit>, turnOrderPriority: int): void { return notPorted("CountdownReferee.SetCountdownForRestart", 0x1494880); }
     /** @rva 0x1494300  public void EndCountdown() { } */
-    EndCountdown(): void { return notPorted("CountdownReferee.EndCountdown", 0x1494300); }
+    EndCountdown(): void {
+        this.maxCountdown = 0;
+        this.cancelMaxTotalDamage = 0;
+        this.battleUnitId = 0;
+    }
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x1494BB0  private bool <SetCountdownForRestart>b__35_0(BattleUnit unit) { } */

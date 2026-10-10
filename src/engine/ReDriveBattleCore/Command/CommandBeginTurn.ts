@@ -54,9 +54,27 @@ export class CommandBeginTurn extends CommandBase {
     /** @rva 0x95E100  public void set_DeltaActionTime(float value) { } */
     set_DeltaActionTime(value: float): void { this._DeltaActionTime = value; /* auto-property */ }
     /** @rva 0x17E87C0  public void .ctor() { } */
-    ctor(): this { return notPorted("CommandBeginTurn..ctor", 0x17E87C0); }
+    ctor(): this {
+        this._ActiveSkillInfoList = [];
+        return this;
+    }
     /** @rva 0x17E8610  public void .ctor(BattleUnit currentTurnUnit, TurnActOrderUnitInfo turnActOrderUnitInfo, int currentRound, int currentWave, float deltaActionTime) { } */
-    ctor$BattleUnit_TurnActOrderUnitInfo_int_int_float(currentTurnUnit: BattleUnit, turnActOrderUnitInfo: TurnActOrderUnitInfo, currentRound: int, currentWave: int, deltaActionTime: float): this { return notPorted("CommandBeginTurn..ctor", 0x17E8610); }
+    ctor$BattleUnit_TurnActOrderUnitInfo_int_int_float(currentTurnUnit: BattleUnit, turnActOrderUnitInfo: TurnActOrderUnitInfo, currentRound: int, currentWave: int, deltaActionTime: float): this {
+        this._ActiveSkillInfoList = [];
+        this._TurnActOrderUnitInfo = turnActOrderUnitInfo;
+        if (currentTurnUnit == null) return this;
+        if (currentTurnUnit.SkillSet != null) {
+            this._ActiveSkillInfoList = currentTurnUnit.SkillSet.GetList().map(skill => { // <>c__DisplayClass23_0.b__0
+                const info = new CommandBeginTurn_ActiveSkillInfo();
+                info._ActiveSkillId = skill.Id; // ActiveSkillInfo..ctor(skill, unit) inlined in the game
+                return info;
+            });
+        }
+        this._DeltaActionTime = deltaActionTime;
+        this._CurrentRound = currentRound;
+        this._CurrentWave = currentWave;
+        return this;
+    }
 }
 
 // ---- ReDriveBattleCore.Command.CommandBeginTurn.ActiveSkillInfo  (TypeDefIndex 978, public class) ----
@@ -72,5 +90,8 @@ export class CommandBeginTurn_ActiveSkillInfo {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17E2B30  public void .ctor(ActiveSkillBase activeSkill, BattleUnit unit) { } */
-    ctor$ActiveSkillBase_BattleUnit(activeSkill: ActiveSkillBase, unit: BattleUnit): this { return notPorted("CommandBeginTurn_ActiveSkillInfo..ctor", 0x17E2B30); }
+    ctor$ActiveSkillBase_BattleUnit(activeSkill: ActiveSkillBase, unit: BattleUnit): this {
+        if (activeSkill != null) this._ActiveSkillId = activeSkill.Id;
+        return this;
+    }
 }

@@ -20,5 +20,8 @@ export class CommandSoloRaidSyncBattleInfo extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x95F810  public void .ctor(BattleInfo battleInfo) { } */
-    ctor$BattleInfo(battleInfo: any /* BattleInfo */): this { return notPorted("CommandSoloRaidSyncBattleInfo..ctor", 0x95F810); }
+    ctor$BattleInfo(battleInfo: any /* BattleInfo */): this {
+        this._BattleInfo = battleInfo;
+        return this;
+    }
 }

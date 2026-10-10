@@ -27,7 +27,10 @@ export class QuestJudgeResultReferee extends JudgeResultRefereeBase {
     /** @rva 0x14A46C0  public void .ctor(int stageMstId, int victoryRound = 0) { } */
     ctor$int_int(stageMstId: int, victoryRound?: int /* = 0 */): this { return notPorted("QuestJudgeResultReferee..ctor", 0x14A46C0); }
     /** @rva 0x14A4550  public void SetJudgeResultType(JudgeResultType newJudgeResultType, int newJudgeResultValue) { } */
-    SetJudgeResultType(newJudgeResultType: JudgeResultType, newJudgeResultValue: int): void { return notPorted("QuestJudgeResultReferee.SetJudgeResultType", 0x14A4550); }
+    SetJudgeResultType(newJudgeResultType: JudgeResultType, newJudgeResultValue: int): void {
+        this.judgeResultType = newJudgeResultType;
+        this.judgeResultValue = newJudgeResultValue;
+    }
     /** @rva 0x14A44C0 slot 5  public override void CheckMainTargetEnemyDead(BattleUnit deathUnit) { } */
     CheckMainTargetEnemyDead(deathUnit: BattleUnit): void { return notPorted("QuestJudgeResultReferee.CheckMainTargetEnemyDead", 0x14A44C0); }
     /** @rva 0x14A4560  public void SetWaveMainTarget(int stageMstId, int currentWave) { } */

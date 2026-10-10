@@ -3,7 +3,7 @@
 
 import { notPorted } from "../runtime";
 import type { int } from "../runtime";
-import type { BattleUnit_TeamType } from "./BattleUnit";
+import { BattleUnit_TeamType } from "./BattleUnit";
 
 // ---- ReDriveBattleCore.TargetReferee  (TypeDefIndex 463, public class) ----
 export class TargetReferee {
@@ -33,13 +33,31 @@ export class TargetReferee {
     /** @rva 0x75ED70  public int get_AttackTargetIdBeforeEndlessSupply() { } */
     get_AttackTargetIdBeforeEndlessSupply(): int { return this.attackTargetIdBeforeEndlessSupply; /* asm: mov eax, dword ptr [rcx + 0x20]; ret */ }
     /** @rva 0x15C0AB0  public void ChangeTarget(BattleUnit.TeamType targetTeam, TargetReferee.TargetType targetType, int targetUnitId) { } */
-    ChangeTarget(targetTeam: BattleUnit_TeamType, targetType: TargetReferee_TargetType, targetUnitId: int): void { return notPorted("TargetReferee.ChangeTarget", 0x15C0AB0); }
+    ChangeTarget(targetTeam: BattleUnit_TeamType, targetType: TargetReferee_TargetType, targetUnitId: int): void {
+        if (targetTeam === BattleUnit_TeamType.Ally) {
+            if (targetType === TargetReferee_TargetType.Attack) { this.allyAttackTargetId = targetUnitId; return; }
+            if (targetType === TargetReferee_TargetType.Friend) { this.allyFriendTargetId = targetUnitId; return; }
+        } else if (targetTeam === BattleUnit_TeamType.Enemy) {
+            if (targetType === TargetReferee_TargetType.Attack) { this.enemyAttackTargetId = targetUnitId; return; }
+            if (targetType === TargetReferee_TargetType.Friend) this.enemyFriendTargetId = targetUnitId;
+        }
+    }
     /** @rva 0x15C0AF0  public int GetAttackTargetId(BattleUnit.TeamType teamType) { } */
-    GetAttackTargetId(teamType: BattleUnit_TeamType): int { return notPorted("TargetReferee.GetAttackTargetId", 0x15C0AF0); }
+    GetAttackTargetId(teamType: BattleUnit_TeamType): int {
+        if (teamType === BattleUnit_TeamType.Ally) return this.allyAttackTargetId;
+        if (teamType === BattleUnit_TeamType.Enemy) return this.enemyAttackTargetId;
+        throw new Error(`存在しない TeamType：${teamType}`);
+    }
     /** @rva 0x15C0BA0  public int GetFriendTargetId(BattleUnit.TeamType teamType) { } */
-    GetFriendTargetId(teamType: BattleUnit_TeamType): int { return notPorted("TargetReferee.GetFriendTargetId", 0x15C0BA0); }
+    GetFriendTargetId(teamType: BattleUnit_TeamType): int {
+        if (teamType === BattleUnit_TeamType.Ally) return this.allyFriendTargetId;
+        if (teamType === BattleUnit_TeamType.Enemy) return this.enemyFriendTargetId;
+        throw new Error(`存在しない TeamType：${teamType}`);
+    }
     /** @rva 0x15C0AA0  public void CacheAttackTargetBeforeEndlessSupply() { } */
-    CacheAttackTargetBeforeEndlessSupply(): void { return notPorted("TargetReferee.CacheAttackTargetBeforeEndlessSupply", 0x15C0AA0); }
+    CacheAttackTargetBeforeEndlessSupply(): void {
+        this.attackTargetIdBeforeEndlessSupply = this.allyAttackTargetId;
+    }
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }

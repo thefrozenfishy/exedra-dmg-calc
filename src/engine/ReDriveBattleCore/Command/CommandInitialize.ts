@@ -201,13 +201,42 @@ export class CommandInitialize extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17E94E0  public void .ctor(BattleUnitInfo[] battleUnitInfoArray, int allyAttackTargetId, int allyFriendTargetId, int enemyAttackTargetId, int enemyFriendTargetId, int allySp, int enemySp, bool isForcedAutomatic, GameSituationData gameSituationData) { } */
-    ctor$BattleUnitInfo_int_int_int_int_int_int_bool_GameSituationData(battleUnitInfoArray: BattleUnitInfo[], allyAttackTargetId: int, allyFriendTargetId: int, enemyAttackTargetId: int, enemyFriendTargetId: int, allySp: int, enemySp: int, isForcedAutomatic: boolean, gameSituationData: GameSituationData): this { return notPorted("CommandInitialize..ctor", 0x17E94E0); }
+    ctor$BattleUnitInfo_int_int_int_int_int_int_bool_GameSituationData(battleUnitInfoArray: BattleUnitInfo[], allyAttackTargetId: int, allyFriendTargetId: int, enemyAttackTargetId: int, enemyFriendTargetId: int, allySp: int, enemySp: int, isForcedAutomatic: boolean, gameSituationData: GameSituationData): this {
+        this._UnitInfoArray = battleUnitInfoArray;
+        this._EnemyAttackTargetId = enemyAttackTargetId;
+        this._EnemyFriendTargetId = enemyFriendTargetId;
+        this._AllySp = allySp;
+        this._EnemySp = enemySp;
+        this._IsForcedAutomatic = isForcedAutomatic;
+        this._AllyAttackTargetId = allyAttackTargetId;
+        this._AllyFriendTargetId = allyFriendTargetId;
+        this._GameSituationData = gameSituationData;
+        return this;
+    }
     /** @rva 0x17E94D0  public void SetWave(int maxWave, int currentWave) { } */
-    SetWave(maxWave: int, currentWave: int): void { return notPorted("CommandInitialize.SetWave", 0x17E94D0); }
+    SetWave(maxWave: int, currentWave: int): void {
+        this._MaxWave = maxWave;
+        this._CurrentWave = currentWave;
+    }
     /** @rva 0x17E94A0  public void SetSoloRaidBuffInfo(bool isSeasonBuffActive, int currentSeasonBuffPoint, int maxSeasonBuffPoint, int activeMaxSeasonBuffPoint, float activeCurrentSeasonBuffTurnGaugeValue, int activeMaxSeasonBuffTurnGaugeValue) { } */
-    SetSoloRaidBuffInfo(isSeasonBuffActive: boolean, currentSeasonBuffPoint: int, maxSeasonBuffPoint: int, activeMaxSeasonBuffPoint: int, activeCurrentSeasonBuffTurnGaugeValue: float, activeMaxSeasonBuffTurnGaugeValue: int): void { return notPorted("CommandInitialize.SetSoloRaidBuffInfo", 0x17E94A0); }
+    SetSoloRaidBuffInfo(isSeasonBuffActive: boolean, currentSeasonBuffPoint: int, maxSeasonBuffPoint: int, activeMaxSeasonBuffPoint: int, activeCurrentSeasonBuffTurnGaugeValue: float, activeMaxSeasonBuffTurnGaugeValue: int): void {
+        this._ActiveMaxSeasonBuffPoint = activeMaxSeasonBuffPoint;
+        this._ActiveMaxSeasonBuffTurnGaugeValue = activeMaxSeasonBuffTurnGaugeValue;
+        this._ActiveCurrentSeasonBuffTurnGaugeValue = activeCurrentSeasonBuffTurnGaugeValue;
+        this._IsSeasonBuffActive = isSeasonBuffActive;
+        this._CurrentSeasonBuffPoint = currentSeasonBuffPoint;
+        this._MaxSeasonBuffPoint = maxSeasonBuffPoint;
+    }
     /** @rva 0x17E9430  public void SetLinkHp(LinkHpType linkHpType, string linkHpName, int currentLinkHp, int maxLinkHp) { } */
-    SetLinkHp(linkHpType: LinkHpType, linkHpName: string, currentLinkHp: int, maxLinkHp: int): void { return notPorted("CommandInitialize.SetLinkHp", 0x17E9430); }
+    SetLinkHp(linkHpType: LinkHpType, linkHpName: string, currentLinkHp: int, maxLinkHp: int): void {
+        this._LinkHpType = linkHpType;
+        this._LinkHpName = linkHpName;
+        this._MaxLinkHp = maxLinkHp;
+        this._CurrentLinkHp = currentLinkHp;
+    }
     /** @rva 0x17E9470  public void SetModeChangeData(List<ModeChangeReferee.ModeChangeInfo> modeChangeInfoList, int modeChangeCurrentStep) { } */
-    SetModeChangeData(modeChangeInfoList: List<ModeChangeReferee_ModeChangeInfo>, modeChangeCurrentStep: int): void { return notPorted("CommandInitialize.SetModeChangeData", 0x17E9470); }
+    SetModeChangeData(modeChangeInfoList: List<ModeChangeReferee_ModeChangeInfo>, modeChangeCurrentStep: int): void {
+        this._ModeChangeInfoList = modeChangeInfoList;
+        this._ModeChangeCurrentStep = modeChangeCurrentStep;
+    }
 }

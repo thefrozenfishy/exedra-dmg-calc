@@ -41,5 +41,11 @@ export class SwitchedActiveSkillInfo {
     /** @rva 0x7F9820  public void set_VisualEffectElement(TargetElementType value) { } */
     set_VisualEffectElement(value: TargetElementType): void { this._VisualEffectElement = value; /* auto-property */ }
     /** @rva 0xBE7F70  public void .ctor(SkillType skillType, int activeSkillMstId, int visualEffectNo, TargetElementType visualEffectElement) { } */
-    ctor$SkillType_int_int_TargetElementType(skillType: SkillType, activeSkillMstId: int, visualEffectNo: int, visualEffectElement: TargetElementType): this { return notPorted("SwitchedActiveSkillInfo..ctor", 0xBE7F70); }
+    ctor$SkillType_int_int_TargetElementType(skillType: SkillType, activeSkillMstId: int, visualEffectNo: int, visualEffectElement: TargetElementType): this {
+        this._SkillType = skillType;
+        this._VisualEffectNo = visualEffectNo;
+        this._VisualEffectElement = visualEffectElement;
+        this._ActiveSkillMstId = activeSkillMstId;
+        return this;
+    }
 }

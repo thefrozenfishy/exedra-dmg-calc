@@ -360,7 +360,16 @@ export class AffectedUnitNotice_DamageInfo {
     /** @rva 0x8A2250  public void set_Category(DamageCategory value) { } */
     set_Category(value: DamageCategory): void { this._Category = value; /* auto-property */ }
     /** @rva 0x138B4C0  public void .ctor(int damageValue, TargetElementType attackElement, DamageCategory category, bool isCritical = False, CorrelationDamageType correlationDamageType = 0, bool isBreakBonusApplied = False, bool isBarrierDamage = False) { } */
-    ctor$int_TargetElementType_DamageCategory_bool_CorrelationDamageType_bool_bool(damageValue: int, attackElement: TargetElementType, category: DamageCategory, isCritical?: boolean /* = False */, correlationDamageType?: CorrelationDamageType /* = 0 */, isBreakBonusApplied?: boolean /* = False */, isBarrierDamage?: boolean /* = False */): this { return notPorted("AffectedUnitNotice_DamageInfo..ctor", 0x138B4C0); }
+    ctor$int_TargetElementType_DamageCategory_bool_CorrelationDamageType_bool_bool(damageValue: int, attackElement: TargetElementType, category: DamageCategory, isCritical?: boolean /* = False */, correlationDamageType?: CorrelationDamageType /* = 0 */, isBreakBonusApplied?: boolean /* = False */, isBarrierDamage?: boolean /* = False */): this {
+        this._IsCritical = (isCritical ?? false);
+        this._CorrelationDamageType = (correlationDamageType ?? 0);
+        this._IsBreakBonusApplied = (isBreakBonusApplied ?? false);
+        this._DamageValue = damageValue;
+        this._Category = category;
+        this._IsBarrierDamage = (isBarrierDamage ?? false);
+        this._AttackElement = attackElement;
+        return this;
+    }
 }
 
 // ---- ReDriveBattleCore.AffectedUnitNotice.AddStateInfo  (TypeDefIndex 310, public class) ----

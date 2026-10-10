@@ -20,5 +20,9 @@ export class SwitchDebugRequest extends RequestBase {
     /** @rva 0x733E90  public OptionBase[] get_DebugOptions() { } */
     get_DebugOptions(): any /* OptionBase */[] { return this._DebugOptions; /* auto-property */ }
     /** @rva 0x7338D0  public void .ctor(bool isActive, OptionBase[] debugOptions) { } */
-    ctor$bool_OptionBase(isActive: boolean, debugOptions: any /* OptionBase */[]): this { return notPorted("SwitchDebugRequest..ctor", 0x7338D0); }
+    ctor$bool_OptionBase(isActive: boolean, debugOptions: any /* OptionBase */[]): this {
+        this._IsActive = isActive;
+        this._DebugOptions = debugOptions;
+        return this;
+    }
 }

@@ -50,7 +50,10 @@ export class BreakPoint {
     /** @rva 0x8A2240  public void set_BreakCount(int value) { } */
     set_BreakCount(value: int): void { this._BreakCount = value; /* auto-property */ }
     /** @rva 0x1492B20  public void Initialize(int maxValue) { } */
-    Initialize(maxValue: int): void { return notPorted("BreakPoint.Initialize", 0x1492B20); }
+    Initialize(maxValue: int): void {
+        this.maxPointValue = maxValue;
+        this._PointValue = maxValue;
+    }
     /** @rva 0x1492B30  public void ResetValue() { } */
     ResetValue(): void { return notPorted("BreakPoint.ResetValue", 0x1492B30); }
     /** @rva 0x1492530  public AffectedUnitNotice Decrease(BattleUnit attackUnit, BattleUnit defenseUnit, TargetElementType attackElement, int decreaseValue, int turnOrderPriority) { } */

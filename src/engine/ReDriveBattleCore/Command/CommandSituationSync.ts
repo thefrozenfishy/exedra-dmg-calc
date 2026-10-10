@@ -30,5 +30,9 @@ export class CommandSituationSync extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17EA9B0  public void .ctor(GameSituationData gameSituationData, float elapsedTime) { } */
-    ctor$GameSituationData_float(gameSituationData: GameSituationData, elapsedTime: float): this { return notPorted("CommandSituationSync..ctor", 0x17EA9B0); }
+    ctor$GameSituationData_float(gameSituationData: GameSituationData, elapsedTime: float): this {
+        this._GameSituationData = gameSituationData;
+        this._ElapsedTime = elapsedTime;
+        return this;
+    }
 }

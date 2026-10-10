@@ -24,9 +24,26 @@ export class CommandExecuteCommonAct extends CommandExecuteActBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17E9240  public static CommandExecuteCommonAct CreateByTurnBegin(int id, List<AffectedUnitNotice> noticeList, ContinuousRecoveryInfo continuousRecoveryInfo, List<GainSoloRaidBuffPointNotice> gainSoloRaidBuffPointNoticeList) { } */
-    static CreateByTurnBegin(id: int, noticeList: List<AffectedUnitNotice>, continuousRecoveryInfo: ContinuousRecoveryInfo, gainSoloRaidBuffPointNoticeList: List<GainSoloRaidBuffPointNotice>): CommandExecuteCommonAct { return notPorted("CommandExecuteCommonAct.CreateByTurnBegin", 0x17E9240); }
+    static CreateByTurnBegin(id: int, noticeList: List<AffectedUnitNotice>, continuousRecoveryInfo: ContinuousRecoveryInfo, gainSoloRaidBuffPointNoticeList: List<GainSoloRaidBuffPointNotice>): CommandExecuteCommonAct {
+        const command = new CommandExecuteCommonAct();
+        command._ActUnitId = id;
+        command._AffectedUnitNoticeList = noticeList;
+        command._ContinuousRecoveryInfo = continuousRecoveryInfo;
+        command._GainSoloRaidBuffPointNoticeList = gainSoloRaidBuffPointNoticeList;
+        return command;
+    }
     /** @rva 0x17E9300  public static CommandExecuteCommonAct CreateByTurnEnd(int id, List<AffectedUnitNotice> noticeList) { } */
-    static CreateByTurnEnd(id: int, noticeList: List<AffectedUnitNotice>): CommandExecuteCommonAct { return notPorted("CommandExecuteCommonAct.CreateByTurnEnd", 0x17E9300); }
+    static CreateByTurnEnd(id: int, noticeList: List<AffectedUnitNotice>): CommandExecuteCommonAct {
+        const command = new CommandExecuteCommonAct();
+        command._ActUnitId = id;
+        command._AffectedUnitNoticeList = noticeList;
+        return command;
+    }
     /** @rva 0x17E9380  public static CommandExecuteCommonAct CreateNoAct(int id) { } */
-    static CreateNoAct(id: int): CommandExecuteCommonAct { return notPorted("CommandExecuteCommonAct.CreateNoAct", 0x17E9380); }
+    static CreateNoAct(id: int): CommandExecuteCommonAct {
+        const command = new CommandExecuteCommonAct();
+        command._ActUnitId = id;
+        command._AffectedUnitNoticeList = [];
+        return command;
+    }
 }

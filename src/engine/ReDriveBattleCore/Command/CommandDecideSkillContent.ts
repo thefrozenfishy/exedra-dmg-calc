@@ -1,15 +1,23 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import type { SwitchSkillUnitState } from "../UnitState/SwitchSkillUnitState";
+import { SwitchedActiveSkillInfo } from "./SwitchedActiveSkillInfo";
+import { TurnUnitActBase } from "../Act/TurnUnitActBase";
+import { ReActionTurnUnitAct } from "../Act/ReActionTurnUnitAct";
+import { AdditionalTurnUnitAct } from "../Act/AdditionalTurnUnitAct";
+import { SpecialAttackAct } from "../Act/SpecialAttackAct";
+import { ActiveSkillBase } from "../ActiveSkillBase";
+import { isImpl, notPorted, ref } from "../../runtime";
 import type { Dictionary, List, int } from "../../runtime";
 import type { ActBase } from "../Act/ActBase";
 import type { BattleUnit } from "../BattleUnit";
 import { CommandBase } from "./CommandBase";
 import type { CommandType } from "./CommandType";
-import type { SwitchedActiveSkillInfo } from "./SwitchedActiveSkillInfo";
+
 import type { IEffectValueVariation } from "../UnitState/IEffectValueVariation";
 import type { IRequiredStateForDecide } from "../UnitState/IRequiredStateForDecide";
+import { dictGet } from "../../runtime";
 
 // ---- ReDriveBattleCore.Command.CommandDecideSkillContent  (TypeDefIndex 985, public class) ----
 export class CommandDecideSkillContent extends CommandBase {
@@ -72,9 +80,48 @@ export class CommandDecideSkillContent extends CommandBase {
     /** @rva 0x736A30  public void set_SwitchedActiveSkillInfo(SwitchedActiveSkillInfo value) { } */
     set_SwitchedActiveSkillInfo(value: SwitchedActiveSkillInfo): void { this._SwitchedActiveSkillInfo = value; /* auto-property */ }
     /** @rva 0x17E91E0  public void .ctor() { } */
-    ctor(): this { return notPorted("CommandDecideSkillContent..ctor", 0x17E91E0); }
+    ctor(): this {
+        this._EffectValueVariations = [];
+        return this;
+    }
     /** @rva 0x17E8E70  public void .ctor(int unitId, bool isSpecialAttack, bool isAdditionalTurnAct, bool isReActionTurnAct, Dictionary<int, BattleUnit> unitDic) { } */
-    ctor$int_bool_bool_bool_DictionaryintBattleUnit(unitId: int, isSpecialAttack: boolean, isAdditionalTurnAct: boolean, isReActionTurnAct: boolean, unitDic: Dictionary<int, BattleUnit>): this { return notPorted("CommandDecideSkillContent..ctor", 0x17E8E70); }
+    ctor$int_bool_bool_bool_DictionaryintBattleUnit(unitId: int, isSpecialAttack: boolean, isAdditionalTurnAct: boolean, isReActionTurnAct: boolean, unitDic: Dictionary<int, BattleUnit>): this {
+        this._EffectValueVariations = [];
+        this._IsReActionTurnAct = isReActionTurnAct;
+        this._UnitId = unitId;
+        this._IsSpecialAttack = isSpecialAttack;
+        this._IsAdditionalTurnAct = isAdditionalTurnAct;
+        if (unitDic == null) return this;
+        const dic = new Map<int, List<IRequiredStateForDecide>>(); // ToDictionary(<>c.b__30_0 key, <>c.b__30_1 value)
+        for (const [key, unit] of unitDic) {
+            dic.set(key, unit.Condition.StateList.filter(state => unit.$GetStateListForDecide$b__164_0(state))
+                .filter(state => isImpl(state, "IRequiredStateForDecide")) as unknown as List<IRequiredStateForDecide>);
+        }
+        this._UnitStateListForDecideDic = dic;
+        const unit = unitDic.get(unitId); // <>c__DisplayClass30_0
+        if (unit !== undefined) {
+            this._EffectValueVariations = unit.Condition.StateList
+                .filter(state => isImpl(state, "IEffectValueVariation") && state.IsActive$BattleUnit(unit)) // <>c__DisplayClass30_0.b__2 (IsActive inlined in the game)
+                .filter(state => isImpl(state, "IEffectValueVariation")) as unknown as IEffectValueVariation[]; // OfType<IEffectValueVariation>
+        }
+        return this;
+    }
     /** @rva 0x17E8B90  public static CommandDecideSkillContent Create(ActBase currentAct, Dictionary<int, BattleUnit> unitDic) { } */
-    static Create(currentAct: ActBase, unitDic: Dictionary<int, BattleUnit>): CommandDecideSkillContent { return notPorted("CommandDecideSkillContent.Create", 0x17E8B90); }
+    static Create(currentAct: ActBase, unitDic: Dictionary<int, BattleUnit>): CommandDecideSkillContent {
+        const unitId = currentAct.actUnitId;
+        const command = new CommandDecideSkillContent().ctor$int_bool_bool_bool_DictionaryintBattleUnit(unitId,
+            currentAct instanceof SpecialAttackAct, currentAct instanceof AdditionalTurnUnitAct, currentAct instanceof ReActionTurnUnitAct, unitDic);
+        if (!(currentAct instanceof TurnUnitActBase)) return command;
+        const unit = dictGet(unitDic, unitId);
+        const activeSkill = ref<ActiveSkillBase>(null!);
+        const unitState = ref<SwitchSkillUnitState>(null!);
+        if (!unit.IsSwitchingActiveSkill<ActiveSkillBase>(ActiveSkillBase, activeSkill, unitState)) return command;
+        const info = new SwitchedActiveSkillInfo();
+        info._SkillType = unitState.v.SkillType;
+        info._ActiveSkillMstId = activeSkill.v.Id;
+        info._VisualEffectNo = unitState.v.visualEffectNo;
+        info._VisualEffectElement = unitState.v.TargetElement;
+        command._SwitchedActiveSkillInfo = info;
+        return command;
+    }
 }

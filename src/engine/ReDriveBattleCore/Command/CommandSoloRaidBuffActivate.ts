@@ -55,5 +55,16 @@ export class CommandSoloRaidBuffActivate extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17EB690  public void .ctor(SoloRaidBuffReferee soloRaidBuffReferee, int resultSp, List<AffectedUnitNotice> noticeList) { } */
-    ctor$SoloRaidBuffReferee_int_ListAffectedUnitNotice(soloRaidBuffReferee: SoloRaidBuffReferee, resultSp: int, noticeList: List<AffectedUnitNotice>): this { return notPorted("CommandSoloRaidBuffActivate..ctor", 0x17EB690); }
+    ctor$SoloRaidBuffReferee_int_ListAffectedUnitNotice(soloRaidBuffReferee: SoloRaidBuffReferee, resultSp: int, noticeList: List<AffectedUnitNotice>): this {
+        if (soloRaidBuffReferee == null) return this;
+        this._IsSeasonBuffActive = soloRaidBuffReferee.isSeasonBuffActive;
+        this._CurrentSeasonBuffPoint = soloRaidBuffReferee.currentSeasonBuffPoint;
+        this._MaxSeasonBuffPoint = soloRaidBuffReferee.maxSeasonBuffPoint;
+        this._ActiveMaxSeasonBuffPoint = soloRaidBuffReferee.activeMaxSeasonBuffPoint;
+        this._ActiveCurrentSeasonBuffTurnGaugeValue = soloRaidBuffReferee.activeCurrentSeasonBuffTurnGaugeValue;
+        this._ActiveMaxSeasonBuffTurnGaugeValue = soloRaidBuffReferee.activeMaxSeasonBuffTurnGaugeValue;
+        this._ResultSp = resultSp;
+        this._AffectedUnitNoticeList = noticeList;
+        return this;
+    }
 }

@@ -18,5 +18,8 @@ export class CommandResend extends CommandBase {
     /** @rva 0x736AB0  public void set_Command(CommandBase value) { } */
     set_Command(value: CommandBase): void { this._Command = value; /* auto-property */ }
     /** @rva 0x95F810  public void .ctor(CommandBase command) { } */
-    ctor$CommandBase(command: CommandBase): this { return notPorted("CommandResend..ctor", 0x95F810); }
+    ctor$CommandBase(command: CommandBase): this {
+        this._Command = command;
+        return this;
+    }
 }

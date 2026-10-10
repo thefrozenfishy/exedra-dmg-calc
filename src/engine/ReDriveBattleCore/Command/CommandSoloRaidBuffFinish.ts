@@ -44,5 +44,14 @@ export class CommandSoloRaidBuffFinish extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17EB710  public void .ctor(SoloRaidBuffReferee soloRaidBuffReferee) { } */
-    ctor$SoloRaidBuffReferee(soloRaidBuffReferee: SoloRaidBuffReferee): this { return notPorted("CommandSoloRaidBuffFinish..ctor", 0x17EB710); }
+    ctor$SoloRaidBuffReferee(soloRaidBuffReferee: SoloRaidBuffReferee): this {
+        if (soloRaidBuffReferee == null) return this;
+        this._IsSeasonBuffActive = soloRaidBuffReferee.isSeasonBuffActive;
+        this._CurrentSeasonBuffPoint = soloRaidBuffReferee.currentSeasonBuffPoint;
+        this._MaxSeasonBuffPoint = soloRaidBuffReferee.maxSeasonBuffPoint;
+        this._ActiveMaxSeasonBuffPoint = soloRaidBuffReferee.activeMaxSeasonBuffPoint;
+        this._ActiveCurrentSeasonBuffTurnGaugeValue = soloRaidBuffReferee.activeCurrentSeasonBuffTurnGaugeValue;
+        this._ActiveMaxSeasonBuffTurnGaugeValue = soloRaidBuffReferee.activeMaxSeasonBuffTurnGaugeValue;
+        return this;
+    }
 }

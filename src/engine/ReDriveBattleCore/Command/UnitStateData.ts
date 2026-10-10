@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { UniqueLvUnitStateBase } from "../UnitState/UniqueLvUnitStateBase";
 import { notPorted } from "../../runtime";
 import type { int } from "../../runtime";
 import type { AbilitySourceType } from "../../Network/Definition/Battle/AbilitySourceType";
@@ -124,5 +125,24 @@ export class UnitStateData {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17F3B50  public void .ctor(UnitStateBase unitState, bool isActive) { } */
-    ctor$UnitStateBase_bool(unitState: UnitStateBase, isActive: boolean): this { return notPorted("UnitStateData..ctor", 0x17F3B50); }
+    ctor$UnitStateBase_bool(unitState: UnitStateBase, isActive: boolean): this {
+        if (unitState == null) return this;
+        this._AbilitySource = unitState.AbilitySource;
+        this._MstId = unitState.MstId;
+        this._EffectOrigin = unitState.EffectOrigin;
+        this._EffectType = unitState.EffectType;
+        this._RemainingTurn = unitState.RemainingTurn;
+        this._IsPermanent = unitState.IsPermanent;
+        this._RemainCount = unitState.RemainCount;
+        this._IconName = unitState.IconName;
+        this._IsActive = isActive;
+        this._ShowStateDetailAttachedByPassiveSkill = unitState.ShowStateDetailAttachedByPassiveSkill;
+        this._DetailDisplayPriority = unitState.DetailDisplayPriority;
+        if (unitState instanceof UniqueLvUnitStateBase) {
+            this._StateLevel = unitState.Lv;
+            this._HitCounter = unitState.HitCounter;
+            this._MaxHitCounter = unitState.GetRequiredHitCount();
+        }
+        return this;
+    }
 }

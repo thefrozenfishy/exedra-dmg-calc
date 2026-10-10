@@ -38,7 +38,12 @@ export class CommandRefreshTurnActUnitOrder extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17EA8D0  public void .ctor(TurnActOrderUnitInfo info, CommandRefreshTurnActUnitOrder.RefreshReasonType reasonType = 0, int reasonUnitId = 0) { } */
-    ctor$TurnActOrderUnitInfo_RefreshReasonType_int(info: TurnActOrderUnitInfo, reasonType?: CommandRefreshTurnActUnitOrder_RefreshReasonType /* = 0 */, reasonUnitId?: int /* = 0 */): this { return notPorted("CommandRefreshTurnActUnitOrder..ctor", 0x17EA8D0); }
+    ctor$TurnActOrderUnitInfo_RefreshReasonType_int(info: TurnActOrderUnitInfo, reasonType?: CommandRefreshTurnActUnitOrder_RefreshReasonType /* = 0 */, reasonUnitId?: int /* = 0 */): this {
+        this._TurnActOrderUnitInfo = info;
+        this._ReasonType = (reasonType ?? 0);
+        this._ReasonUnitId = (reasonUnitId ?? 0);
+        return this;
+    }
 }
 
 // ---- ReDriveBattleCore.Command.CommandRefreshTurnActUnitOrder.RefreshReasonType  (TypeDefIndex 1007, public enum) ----

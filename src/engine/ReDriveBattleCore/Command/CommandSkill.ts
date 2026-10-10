@@ -1,15 +1,21 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { SwitchSkillUnitState } from "../UnitState/SwitchSkillUnitState";
+import { QuestEnemyAppearanceParameter } from "../QuestEnemyAppearanceParameter";
+import { ActiveSkillBase } from "../ActiveSkillBase";
+import { SwitchedActiveSkillInfo } from "./SwitchedActiveSkillInfo";
+import { AddEnemyInfo } from "./AddEnemyInfo";
+import { dictGet, notPorted, ref } from "../../runtime";
 import type { Dictionary, IEnumerable, List, int } from "../../runtime";
 import type { AffectedUnitNotice } from "../AffectedUnitNotice";
 import type { BattleUnit } from "../BattleUnit";
-import type { AddEnemyInfo } from "./AddEnemyInfo";
+
 import { CommandExecuteActBase } from "./CommandExecuteActBase";
 import type { CommandType } from "./CommandType";
-import type { SwitchedActiveSkillInfo } from "./SwitchedActiveSkillInfo";
+
 import type { GainSoloRaidBuffPointNotice } from "../GainSoloRaidBuffPointNotice";
+import { AffectedUnitNotice_DamageInfo } from "../AffectedUnitNotice";
 
 // ---- ReDriveBattleCore.Command.CommandSkill  (TypeDefIndex 1015, public sealed class) ----
 export class CommandSkill extends CommandExecuteActBase {
@@ -68,13 +74,66 @@ export class CommandSkill extends CommandExecuteActBase {
     /** @rva 0x736A20  public void set_AddEnemyInfos(AddEnemyInfo[] value) { } */
     set_AddEnemyInfos(value: AddEnemyInfo[]): void { this._AddEnemyInfos = value; /* auto-property */ }
     /** @rva 0x17EB640  public bool get_IsRandomAttack() { } */
-    get_IsRandomAttack(): boolean { return notPorted("CommandSkill.get_IsRandomAttack", 0x17EB640); }
+    get_IsRandomAttack(): boolean {
+        return this.GetRandomDamageInternal().length > 0; // Any()
+    }
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17EAD80  public void .ctor(int id, int mainTargetUnitId, int sp, int beforeApplyPassiveSkillSp, int skillMstId, List<AffectedUnitNotice> noticeList, Dictionary<int, BattleUnit> battleUnitDic, List<GainSoloRaidBuffPointNotice> gainSoloRaidBuffPointNoticeList) { } */
-    ctor$int_int_int_int_int_ListAffectedUnitNotice_DictionaryintBattleUnit_ListGainSoloRaidBuffPointNotice(id: int, mainTargetUnitId: int, sp: int, beforeApplyPassiveSkillSp: int, skillMstId: int, noticeList: List<AffectedUnitNotice>, battleUnitDic: Dictionary<int, BattleUnit>, gainSoloRaidBuffPointNoticeList: List<GainSoloRaidBuffPointNotice>): this { return notPorted("CommandSkill..ctor", 0x17EAD80); }
+    ctor$int_int_int_int_int_ListAffectedUnitNotice_DictionaryintBattleUnit_ListGainSoloRaidBuffPointNotice(id: int, mainTargetUnitId: int, sp: int, beforeApplyPassiveSkillSp: int, skillMstId: int, noticeList: List<AffectedUnitNotice>, battleUnitDic: Dictionary<int, BattleUnit>, gainSoloRaidBuffPointNoticeList: List<GainSoloRaidBuffPointNotice>): this {
+        this._ActUnitId = id;
+        this._MainTargetUnitId = mainTargetUnitId;
+        this._ResultSP = sp;
+        this._ResultSPBeforeApplyPassiveSkill = beforeApplyPassiveSkillSp;
+        this._SkillMstId = skillMstId;
+        this._AffectedUnitNoticeList = noticeList;
+        this._GainSoloRaidBuffPointNoticeList = gainSoloRaidBuffPointNoticeList ?? [];
+        const addEnemyInfos: List<AddEnemyInfo> = [];
+        const summoned = noticeList.filter(info => info.IsSummoned) // <>c.b__30_0
+            .map(info => dictGet(battleUnitDic, info.AffectedUnitId)); // <>c__DisplayClass30_0.b__1
+        for (const unit of summoned) {
+            const param = unit.BattleParameter;
+            if (param instanceof QuestEnemyAppearanceParameter) addEnemyInfos.push(new AddEnemyInfo().ctor$int_int_int(unit.Id, param.QuestEnemyAppearanceMstId, unit.PositionId));
+        }
+        this._AddEnemyInfos = [...addEnemyInfos];
+        if (battleUnitDic == null || !battleUnitDic.has(id)) return this;
+        const actUnit = dictGet(battleUnitDic, id);
+        const switchable = actUnit.SkillSet.SwitchableSkills.find(skill => skill.Id === skillMstId) ?? null; // <>c__DisplayClass30_0.b__2 (DisplayClass30_1.<0x10>)
+        if (switchable == null) {
+            const activeSkill = ref<ActiveSkillBase>(null!);
+            const unitState = ref<SwitchSkillUnitState>(null!);
+            if (!actUnit.IsSwitchingActiveSkill<ActiveSkillBase>(ActiveSkillBase, activeSkill, unitState)) return this;
+            const used = actUnit.SkillSet.GetSkill(skillMstId);
+            if (used == null) return this;
+            if (used.constructor === activeSkill.v.constructor) return this; // GetType() != GetType()
+            const info = new SwitchedActiveSkillInfo();
+            info._SkillType = unitState.v.SkillType;
+            info._ActiveSkillMstId = activeSkill.v.Id;
+            info._VisualEffectNo = unitState.v.visualEffectNo;
+            info._VisualEffectElement = unitState.v.TargetElement;
+            this._SwitchedActiveSkillInfo = info;
+        } else {
+            const state = actUnit.Condition.StateList.filter((s): s is SwitchSkillUnitState => s instanceof SwitchSkillUnitState)
+                .find(s => s.switchSkillUniqueId === switchable.UniqueId) ?? null; // <>c__DisplayClass30_1.b__3
+            if (state == null) return this;
+            const info = new SwitchedActiveSkillInfo();
+            info._SkillType = state.SkillType;
+            info._ActiveSkillMstId = switchable.Id;
+            info._VisualEffectNo = state.visualEffectNo;
+            info._VisualEffectElement = state.TargetElement;
+            this._SwitchedActiveSkillInfo = info;
+        }
+        return this;
+    }
     /** @rva 0x17EAD30  public ValueTuple<int, AffectedUnitNotice.DamageInfo>[] GetRandomDamages() { } */
-    GetRandomDamages(): any /* ValueTuple<int, AffectedUnitNotice.DamageInfo> */[] { return notPorted("CommandSkill.GetRandomDamages", 0x17EAD30); }
+    GetRandomDamages(): any /* ValueTuple<int, AffectedUnitNotice.DamageInfo> */[] {
+        return [...this.GetRandomDamageInternal()];
+    }
     /** @rva 0x17EAA00  private IEnumerable<ValueTuple<int, AffectedUnitNotice.DamageInfo>> GetRandomDamageInternal() { } */
-    GetRandomDamageInternal(): IEnumerable<any /* ValueTuple<int, AffectedUnitNotice.DamageInfo> */> { return notPorted("CommandSkill.GetRandomDamageInternal", 0x17EAA00); }
+    GetRandomDamageInternal(): IEnumerable<any /* ValueTuple<int, AffectedUnitNotice.DamageInfo> */> {
+        const all = this.AffectedUnitNoticeList.flatMap(notice => [...notice.BarrierDamages, ...notice.Damages] // <>c.b__32_0
+            .map(info => [info.DamageValue, info] as [int, AffectedUnitNotice_DamageInfo])); // <>c.b__32_1
+        if (all.some(damage => damage[1].Sequence > 0)) return all; // <>c.b__32_2
+        return [];
+    }
 }

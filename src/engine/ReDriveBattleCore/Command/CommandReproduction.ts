@@ -39,5 +39,10 @@ export class CommandReproduction extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17EA930  public void .ctor(TurnActOrderUnitInfo turnActOrderUnitInfo, GameSituationData gameSituationData, CommandInitialize commandInitialize) { } */
-    ctor$TurnActOrderUnitInfo_GameSituationData_CommandInitialize(turnActOrderUnitInfo: TurnActOrderUnitInfo, gameSituationData: GameSituationData, commandInitialize: CommandInitialize): this { return notPorted("CommandReproduction..ctor", 0x17EA930); }
+    ctor$TurnActOrderUnitInfo_GameSituationData_CommandInitialize(turnActOrderUnitInfo: TurnActOrderUnitInfo, gameSituationData: GameSituationData, commandInitialize: CommandInitialize): this {
+        this._GameSituationData = gameSituationData;
+        this._TurnActOrderUnitInfo = turnActOrderUnitInfo;
+        this._CommandInitialize = commandInitialize;
+        return this;
+    }
 }

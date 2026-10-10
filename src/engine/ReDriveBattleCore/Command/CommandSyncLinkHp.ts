@@ -46,5 +46,11 @@ export class CommandSyncLinkHp extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17EB800  public void .ctor(LinkHpType linkHpType, string linkHpName, int currentLinkHp, int maxLinkHp) { } */
-    ctor$LinkHpType_string_int_int(linkHpType: LinkHpType, linkHpName: string, currentLinkHp: int, maxLinkHp: int): this { return notPorted("CommandSyncLinkHp..ctor", 0x17EB800); }
+    ctor$LinkHpType_string_int_int(linkHpType: LinkHpType, linkHpName: string, currentLinkHp: int, maxLinkHp: int): this {
+        this._LinkHpType = linkHpType;
+        this._LinkHpName = linkHpName;
+        this._CurrentLinkHp = currentLinkHp;
+        this._MaxLinkHp = maxLinkHp;
+        return this;
+    }
 }

@@ -1,6 +1,23 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { UniqueLvUnitStateBase } from "./UnitState/UniqueLvUnitStateBase";
+import { BattleUnitSituationData, BattleUnitSituationData_UniqueLvStateIconData } from "./BattleUnitSituationData";
+import { GameSituationData } from "./GameSituationData";
+import { BattleUnitInfo } from "./Command/BattleUnitInfo";
+import { CommandReproduction } from "./Command/CommandReproduction";
+import { CommandFinalize } from "./Command/CommandFinalize";
+import { CommandInitialize } from "./Command/CommandInitialize";
+import { CommandUnitCondition } from "./Command/CommandUnitCondition";
+import { CommandTarget } from "./Command/CommandTarget";
+import { CommandBattlePhase, CommandBattlePhase_ReadyPhaseData, CommandBattlePhase_FinishPhaseData } from "./Command/CommandBattlePhase";
+import { TurnReferee } from "./TurnReferee";
+import { BackupAgent } from "./BackupAgent";
+import { TurnActSystem } from "./TurnActSystem";
+import { SpReferee } from "./SpReferee";
+import { UnitBrain } from "./AI/UnitBrain";
+import { BattleUnitBundle } from "./BattleUnitBundle";
+import { CommandSender } from "./CommandSender";
 import { CommandResend } from "./Command/CommandResend";
 import { JudgeResultType } from "./JudgeResultType";
 import { ResultStatus } from "./ResultStatus";
@@ -15,7 +32,7 @@ import { ActiveSkillBaseUtility } from "./ActiveSkillBaseUtility";
 import { PassiveSkill } from "./PassiveSkill";
 import { QuestJudgeResultReferee } from "./QuestJudgeResultReferee";
 import { QuestEnemyAppearanceParameter } from "./QuestEnemyAppearanceParameter";
-import { TargetReferee_TargetType } from "./TargetReferee";
+import { TargetReferee, TargetReferee_TargetType } from "./TargetReferee";
 import { BattleUnit_TeamType } from "./BattleUnit";
 import { HpGaugeReviveAct } from "./Act/HpGaugeReviveAct";
 import { StartTimingAct } from "./Act/StartTimingAct";
@@ -25,31 +42,20 @@ import { TurnUnitAct } from "./Act/TurnUnitAct";
 import { SkillDecisionActBase } from "./Act/SkillDecisionActBase";
 import { SpecialAttackAct } from "./Act/SpecialAttackAct";
 import { ActExecutor, ActExecutor_ValidateActionType } from "./Act/ActExecutor";
-import { notPorted } from "../runtime";
+import { notPorted, orderBy, orderByNewGuid, ref, trunc } from "../runtime";
 import type { Dictionary, List, float, int } from "../runtime";
 import type { BattleType } from "../Network/Definition/Battle/BattleType";
-import type { UnitBrain } from "./AI/UnitBrain";
 
 import type { AffectedUnitNotice } from "./AffectedUnitNotice";
 
-import type { BackupAgent } from "./BackupAgent";
-
 import type { BattleSpeedType } from "./BattleSpeedType";
 import type { BattleUnit } from "./BattleUnit";
-import type { BattleUnitBundle } from "./BattleUnitBundle";
-import type { BattleUnitSituationData } from "./BattleUnitSituationData";
-import type { BattleUnitInfo } from "./Command/BattleUnitInfo";
-import type { CommandBase } from "./Command/CommandBase";
-import type { CommandInitialize } from "./Command/CommandInitialize";
 
-import type { CommandSender } from "./CommandSender";
-import type { GameSituationData } from "./GameSituationData";
+import type { CommandBase } from "./Command/CommandBase";
+
 import type { JudgeResultRefereeBase } from "./JudgeResultRefereeBase";
 import type { RequestBase } from "./Request/RequestBase";
-import type { SpReferee } from "./SpReferee";
-import type { TargetReferee } from "./TargetReferee";
-import type { TurnActSystem } from "./TurnActSystem";
-import type { TurnReferee } from "./TurnReferee";
+import { ActiveSkillBase } from "./ActiveSkillBase";
 
 // ---- ReDriveBattleCore.GameDirectorBase  (TypeDefIndex 405, public abstract class) ----
 export abstract class GameDirectorBase {
@@ -130,13 +136,56 @@ export abstract class GameDirectorBase {
     /** @rva 0x149C660  protected TurnReferee get_turnReferee() { } */
     get_turnReferee(): TurnReferee { return this.turnActSystem.turnReferee; }
     /** @rva 0x149C1A0  public void .ctor() { } */
-    ctor(): this { return notPorted("GameDirectorBase..ctor", 0x149C1A0); }
+    ctor(): this {
+        this.lastUpdateTimePerSecond = -1;
+        this.commandSender = new CommandSender().ctor(); // inlined in the game
+        this.battleUnitBundle = new BattleUnitBundle().ctor(); // inlined in the game
+        this.unitBrain = new UnitBrain().ctor();
+        this.targetReferee = new TargetReferee().ctor();
+        this.spReferee = new SpReferee().ctor();
+        this.turnActSystem = new TurnActSystem().ctor();
+        this.backupAgent = new BackupAgent().ctor$GameDirectorBase(this);
+        this.commandSender.Subscribe(this.backupAgent); // inlined in the game
+        return this;
+    }
     /** @rva 0xCB24E0  protected void Ready() { } */
-    Ready(): void { return notPorted("GameDirectorBase.Ready", 0xCB24E0); }
+    Ready(): void {
+        this.BattlePhase = 0;
+    }
     /** @rva 0x149A600  protected void InitializeBattle() { } */
-    InitializeBattle(): void { return notPorted("GameDirectorBase.InitializeBattle", 0x149A600); }
+    InitializeBattle(): void {
+        const allyList = this.battleUnitBundle.allyList;
+        const enemyList = this.battleUnitBundle.enemyList;
+        this.ChangeTargetToCenter(BattleUnit_TeamType.Ally, TargetReferee_TargetType.Attack, enemyList, true);
+        this.ChangeTargetAtRandom(BattleUnit_TeamType.Ally, TargetReferee_TargetType.Friend, allyList, true, false);
+        this.ChangeTargetAtRandom(BattleUnit_TeamType.Enemy, TargetReferee_TargetType.Attack, allyList, true, false);
+        this.ChangeTargetAtRandom(BattleUnit_TeamType.Enemy, TargetReferee_TargetType.Friend, enemyList, true, false);
+        this.spReferee.Init();
+        this.battleUnitBundle.activeList.forEach(unit => this.$InitializeBattle$b__46_0(unit));
+        this.battleUnitBundle.activeList.forEach(unit => this.$InitializeBattle$b__46_1(unit));
+        this.battleUnitBundle.activeList.forEach(unit => unit.TurnGauge.Reset(unit)); // <>c.<InitializeBattle>b__46_2 (Reset inlined in the game)
+        const dic = this.battleUnitBundle.dic;
+        PassiveSkill.TriggeringOnBattleStart(this, dic, dic, false);
+        for (const unit of this.battleUnitBundle.activeList) unit.Refresh(); // <>c.<InitializeBattle>b__46_3 (List.ForEach)
+    }
     /** @rva 0x149BC90 slot 5  protected virtual void StoreBattlePhaseCommand() { } */
-    StoreBattlePhaseCommand(): void { return notPorted("GameDirectorBase.StoreBattlePhaseCommand", 0x149BC90); }
+    StoreBattlePhaseCommand(): void {
+        let readyPhase: CommandBattlePhase_ReadyPhaseData = null!;
+        let finishPhase: CommandBattlePhase_FinishPhaseData = null!;
+        if (this.BattlePhase === Phase.Ready) {
+            const nextAllyTurnUnitId = ref<int>(0);
+            if (TurnReferee.TryGetNextAllyTurnUnitId(this.battleUnitBundle.activeList, nextAllyTurnUnitId)) {
+                readyPhase = new CommandBattlePhase_ReadyPhaseData().ctor();
+                readyPhase._firstAllyUnitId = nextAllyTurnUnitId.v;
+            }
+        } else if (this.BattlePhase === Phase.Finish) {
+            finishPhase = new CommandBattlePhase_FinishPhaseData().ctor();
+            finishPhase._isWinPlayer = this.judgeResultReferee.result === ResultStatus.Winning;
+            finishPhase._battleFinishByRoundLimit = this.judgeResultReferee.BattleFinishByRoundLimit;
+            finishPhase._battleFinishByTimeLimit = this.judgeResultReferee.BattleFinishByTimeLimit;
+        }
+        this.StoreCommand(new CommandBattlePhase().ctor$Phase_ReadyPhaseData_FinishPhaseData(this.BattlePhase, readyPhase, finishPhase));
+    }
     /** @rva 0x149A4F0  public BattleUnit GetTargetBattleUnit(int battleUnitId) { } */
     GetTargetBattleUnit(battleUnitId: int): BattleUnit {
         return this.battleUnitBundle.dic.get(battleUnitId) ?? null!;
@@ -202,11 +251,35 @@ export abstract class GameDirectorBase {
         revivalUnit.TurnGauge.Reset(revivalUnit); // inlined in the game
     }
     /** @rva 0x1498EE0  public void ChangeTarget(BattleUnit.TeamType targetTeam, TargetReferee.TargetType targetType, int targetUnitId, bool isChangeTargetAfterAct = False) { } */
-    ChangeTarget(targetTeam: BattleUnit_TeamType, targetType: TargetReferee_TargetType, targetUnitId: int, isChangeTargetAfterAct?: boolean /* = False */): void { return notPorted("GameDirectorBase.ChangeTarget", 0x1498EE0); }
+    ChangeTarget(targetTeam: BattleUnit_TeamType, targetType: TargetReferee_TargetType, targetUnitId: int, isChangeTargetAfterAct?: boolean /* = False */): void {
+        this.targetReferee.ChangeTarget(targetTeam, targetType, targetUnitId);
+        this.StoreCommand(new CommandTarget().ctor$TeamType_TargetType_int_bool(targetTeam, targetType, targetUnitId, isChangeTargetAfterAct ?? false));
+    }
     /** @rva 0x1498B20  private void ChangeTargetAtRandom(BattleUnit.TeamType targetTeam, TargetReferee.TargetType targetType, List<BattleUnit> targetCandidateList, bool withoutNotify = False, bool isChangeTargetAfterAct = False) { } */
-    ChangeTargetAtRandom(targetTeam: BattleUnit_TeamType, targetType: TargetReferee_TargetType, targetCandidateList: List<BattleUnit>, withoutNotify?: boolean /* = False */, isChangeTargetAfterAct?: boolean /* = False */): void { return notPorted("GameDirectorBase.ChangeTargetAtRandom", 0x1498B20); }
+    ChangeTargetAtRandom(targetTeam: BattleUnit_TeamType, targetType: TargetReferee_TargetType, targetCandidateList: List<BattleUnit>, withoutNotify?: boolean /* = False */, isChangeTargetAfterAct?: boolean /* = False */): void {
+        if (targetCandidateList == null || targetCandidateList.length === 0) return;
+        const unit = orderByNewGuid(targetCandidateList)[0]; // OrderBy(<>c.b__56_0: Guid.NewGuid()).First()
+        if (unit == null) return;
+        if (!(withoutNotify ?? false)) {
+            this.ChangeTarget(targetTeam, targetType, unit.Id, isChangeTargetAfterAct ?? false);
+            return;
+        }
+        this.targetReferee.ChangeTarget(targetTeam, targetType, unit.Id); // inlined in the game
+    }
     /** @rva 0x1498CF0  protected void ChangeTargetToCenter(BattleUnit.TeamType targetTeam, TargetReferee.TargetType targetType, List<BattleUnit> targetCandidateList, bool withoutNotify = False) { } */
-    ChangeTargetToCenter(targetTeam: BattleUnit_TeamType, targetType: TargetReferee_TargetType, targetCandidateList: List<BattleUnit>, withoutNotify?: boolean /* = False */): void { return notPorted("GameDirectorBase.ChangeTargetToCenter", 0x1498CF0); }
+    ChangeTargetToCenter(targetTeam: BattleUnit_TeamType, targetType: TargetReferee_TargetType, targetCandidateList: List<BattleUnit>, withoutNotify?: boolean /* = False */): void {
+        const count = targetCandidateList.length; // Enumerable.Count
+        const sorted = orderBy(targetCandidateList, u => u.PositionId); // <>c.b__57_0
+        const index = trunc(count / 2);
+        if (index >= sorted.length) throw new RangeError("IndexOutOfRangeException");
+        const unit = sorted[index];
+        if (unit == null) return;
+        if (!(withoutNotify ?? false)) {
+            this.ChangeTarget(targetTeam, targetType, unit.Id, false); // inlined in the game
+            return;
+        }
+        this.targetReferee.ChangeTarget(targetTeam, targetType, unit.Id); // inlined in the game
+    }
     /** @rva 0x14988F0  public void ChangeBattlePhase(Phase battlePhase) { } */
     ChangeBattlePhase(battlePhase: Phase): void {
         if (this.BattlePhase !== Phase.Finish || battlePhase === Phase.Finish) {
@@ -227,7 +300,10 @@ export abstract class GameDirectorBase {
         this.ForwardIfAutoAndSkillDecide();
     }
     /** @rva 0x14988E0  public void ChangeAutoControl(AutoType autoType) { } */
-    ChangeAutoControl(autoType: AutoType): void { return notPorted("GameDirectorBase.ChangeAutoControl", 0x14988E0); }
+    ChangeAutoControl(autoType: AutoType): void {
+        this.autoType = autoType;
+        this.ForwardIfAutoAndSkillDecide();
+    }
     /** @rva 0x1499A00  private void ForwardIfAutoAndSkillDecide() { } */
     ForwardIfAutoAndSkillDecide(): void {
         if (this.BattlePhase !== Phase.Start || this.autoType === AutoType.Manual) return;
@@ -251,19 +327,87 @@ export abstract class GameDirectorBase {
     /** @rva 0x901C00  private void SetBattleSpeedType(BattleSpeedType battleSpeedType) { } */
     SetBattleSpeedType(battleSpeedType: BattleSpeedType): void { this.battleSpeedType = battleSpeedType; /* asm: mov dword ptr [rcx + 0x68], edx; ret */ }
     /** @rva 0x14985E0  private void AutoAction(SkillDecisionActBase decisionAct, BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle, BattleUnit currentTurnUnit) { } */
-    AutoAction(decisionAct: SkillDecisionActBase, conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle, currentTurnUnit: BattleUnit): void { return notPorted("GameDirectorBase.AutoAction", 0x14985E0); }
+    AutoAction(decisionAct: SkillDecisionActBase, conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle, currentTurnUnit: BattleUnit): void {
+        let turnUnitAct: TurnUnitActBase | null;
+        let friendList: List<BattleUnit>;
+        let opponentList: List<BattleUnit>;
+        if (currentTurnUnit.Team === BattleUnit_TeamType.Ally) {
+            turnUnitAct = decisionAct instanceof TurnUnitActBase ? decisionAct : null;
+            opponentList = this.battleUnitBundle.enemyList;
+            friendList = this.battleUnitBundle.allyList;
+        } else {
+            turnUnitAct = decisionAct instanceof TurnUnitActBase ? decisionAct : null;
+            opponentList = this.battleUnitBundle.allyList;
+            friendList = this.battleUnitBundle.enemyList;
+        }
+        const skill: ActiveSkillBase = turnUnitAct == null
+            ? currentTurnUnit.SpecialAttack
+            : this.unitBrain.AutoSelectActiveSkillOrNormalAttack(conditionCheckDataBundle, currentTurnUnit, this, opponentList, friendList);
+        if (skill == null) return;
+        const attackTargetId = currentTurnUnit.Team === BattleUnit_TeamType.Ally ? this.targetReferee.allyAttackTargetId : this.targetReferee.enemyAttackTargetId;
+        const targets = this.unitBrain.TargetingUnits(attackTargetId, currentTurnUnit, skill, opponentList, friendList);
+        this.unitBrain.ClearAIFilteredTargetsDictionary();
+        if (targets[0] !== 0) {
+            const current = currentTurnUnit.Team === BattleUnit_TeamType.Ally ? this.targetReferee.allyAttackTargetId : this.targetReferee.enemyAttackTargetId;
+            if (targets[0] !== current) this.ChangeTarget(currentTurnUnit.Team, TargetReferee_TargetType.Attack, targets[0], false);
+        }
+        if (decisionAct == null) return;
+        if (decisionAct instanceof TurnUnitActBase) {
+            decisionAct.SetDecisionContent(skill.Id, targets[1]);
+        } else {
+            if (!(decisionAct instanceof SpecialAttackAct)) return;
+            decisionAct.targetFriendUnitId = targets[1];
+        }
+        decisionAct.Decide();
+    }
     /** @rva 0x149A430  public void GetBattleUnitCondition(int battleUnitId) { } */
-    GetBattleUnitCondition(battleUnitId: int): void { return notPorted("GameDirectorBase.GetBattleUnitCondition", 0x149A430); }
+    GetBattleUnitCondition(battleUnitId: int): void {
+        const unit = this.battleUnitBundle.dic.get(battleUnitId);
+        if (unit !== undefined) this.StoreCommand(new CommandUnitCondition().ctor$BattleUnit(unit));
+    }
     /** @rva 0x149BE90  protected void SyncGameSituation() { } */
-    SyncGameSituation(): void { return notPorted("GameDirectorBase.SyncGameSituation", 0x149BE90); }
+    SyncGameSituation(): void {
+        const situation = GameDirectorBase_GameSituationDataCreator.Create(this);
+        this.StoreCommand(new CommandSituationSync().ctor$GameSituationData_float(situation, this.elapsedTime));
+    }
     /** @rva 0x730170  public void DebugMode(bool isActive, OptionBase[] debugOptions) { } */
     DebugMode(isActive: boolean, debugOptions: any /* OptionBase */[]): void { /* asm: ret 0 */ }
     /** @rva 0x1499810 slot 11  protected virtual CommandInitialize CreateCommandInitialize(BattleUnitInfo[] battleUnitInfoArray, TargetReferee targetReferee, SpReferee spReferee, GameSituationData gameSituationData) { } */
-    CreateCommandInitialize(battleUnitInfoArray: BattleUnitInfo[], targetReferee: TargetReferee, spReferee: SpReferee, gameSituationData: GameSituationData): CommandInitialize { return notPorted("GameDirectorBase.CreateCommandInitialize", 0x1499810); }
+    CreateCommandInitialize(battleUnitInfoArray: BattleUnitInfo[], targetReferee: TargetReferee, spReferee: SpReferee, gameSituationData: GameSituationData): CommandInitialize {
+        return new CommandInitialize().ctor$BattleUnitInfo_int_int_int_int_int_int_bool_GameSituationData(battleUnitInfoArray,
+            targetReferee.allyAttackTargetId, targetReferee.allyFriendTargetId, targetReferee.enemyAttackTargetId, targetReferee.enemyFriendTargetId,
+            spReferee.allySp, spReferee.enemySp, this.isForcedAutomatic, gameSituationData);
+    }
     /** @rva 0x149B650 slot 12  public virtual void RespondToClientReadyRequest() { } */
-    RespondToClientReadyRequest(): void { return notPorted("GameDirectorBase.RespondToClientReadyRequest", 0x149B650); }
+    RespondToClientReadyRequest(): void {
+        let command: CommandBase;
+        if (this.BattlePhase === Phase.Ready || (this.BattlePhase === Phase.Start && !(this.backupAgent.RestoreCommands().length > 0))) {
+            const infos = [...this.battleUnitBundle.dic.values()].map(unit => new BattleUnitInfo().ctor$BattleUnit(unit)); // <>c.b__70_0
+            const situation = GameDirectorBase_GameSituationDataCreator.Create(this);
+            command = this.CreateCommandInitialize(infos, this.targetReferee, this.spReferee, situation);
+        } else {
+            if (this.BattlePhase !== Phase.Finish) this.BattlePhase = Phase.Ready;
+            this.battleUnitBundle.activeList.forEach(unit => this.$RespondToClientReadyRequest$b__70_1(unit));
+            [...this.battleUnitBundle.dic.values()].forEach(unit => this.$RespondToClientReadyRequest$b__70_2(unit));
+            let situation = this.backupAgent.RestorePrevSituationData();
+            let infos = this.backupAgent.RestoreBattleUnitInfoArray();
+            let turnOrder = this.backupAgent.RestoreTurnActOrderUnitInfo();
+            if (situation == null || infos == null || !(infos.length > 0)) {
+                situation = GameDirectorBase_GameSituationDataCreator.Create(this);
+                infos = this.battleUnitBundle.activeList.map(unit => new BattleUnitInfo().ctor$BattleUnit(unit)); // <>c.b__70_3
+                turnOrder = this.turnActSystem.CreateTurnActUnitOrderInfo(this.battleUnitBundle.activeList, this);
+            }
+            const init = this.CreateCommandInitialize(infos, this.targetReferee, this.spReferee, null!);
+            command = new CommandReproduction().ctor$TurnActOrderUnitInfo_GameSituationData_CommandInitialize(turnOrder, situation, init);
+        }
+        this.StoreCommand(command);
+        this.StoreBattlePhaseCommand();
+    }
     /** @rva 0x149BC10  public void SendFinalizeCommand() { } */
-    SendFinalizeCommand(): void { return notPorted("GameDirectorBase.SendFinalizeCommand", 0x149BC10); }
+    SendFinalizeCommand(): void {
+        this.StoreCommand(new CommandFinalize().ctor());
+        this.commandSender.Flush(); // inlined in the game
+    }
     /** @rva 0x149AD30  private SpecialAttackAct RegisterSpecialAttack(int unitId) { } */
     RegisterSpecialAttack(unitId: int): SpecialAttackAct {
         const unit = this.GetTargetBattleUnit(unitId);
@@ -295,13 +439,22 @@ export abstract class GameDirectorBase {
             CommandRefreshTurnActUnitOrder_RefreshReasonType.RegisterSpecialAttack, unitId));
     }
     /** @rva 0x14999E0  protected void FlushCommands() { } */
-    FlushCommands(): void { return notPorted("GameDirectorBase.FlushCommands", 0x14999E0); }
+    FlushCommands(): void {
+        this.commandSender.Flush(); // inlined in the game
+    }
     /** @rva 0x149AFA0 slot 13  public virtual void Request(RequestBase request, bool dontFlushCommand = False, CancellationToken cancellationToken) { } */
     Request(request: RequestBase, dontFlushCommand: boolean /* = False */, cancellationToken: any /* CancellationToken */): void { return notPorted("GameDirectorBase.Request", 0x149AFA0); }
     /** @rva 0x14999E0  public void ManualFlushCommand() { } */
-    ManualFlushCommand(): void { return notPorted("GameDirectorBase.ManualFlushCommand", 0x14999E0); }
+    ManualFlushCommand(): void {
+        this.commandSender.Flush(); // same code as FlushCommands
+    }
     /** @rva 0x149BB90 slot 14  protected virtual void RunBattleToEnd(CancellationToken ct) { } */
-    RunBattleToEnd(ct: any /* CancellationToken */): void { return notPorted("GameDirectorBase.RunBattleToEnd", 0x149BB90); }
+    RunBattleToEnd(ct: any /* CancellationToken */): void {
+        while (this.BattlePhase !== Phase.Finish) {
+            if (ct != null && ct.IsCancellationRequested) break;
+            this.Forward();
+        }
+    }
     /** @rva 0x149A570  public int GetTeamTargetUnitIdOfUnit(int unitId) { } */
     GetTeamTargetUnitIdOfUnit$int(unitId: int): int {
         const unit = this.GetTargetBattleUnit(unitId);
@@ -430,29 +583,96 @@ export abstract class GameDirectorBase {
     /** @rva 0x730170 slot 17  protected virtual void CheckModeChange() { } */
     CheckModeChange(): void { /* asm: ret 0 */ }
     /** @rva 0x1498FE0  public void CheckBattleFinishByTimeLimit(DateTimeOffset currentTime) { } */
-    CheckBattleFinishByTimeLimit(currentTime: any /* DateTimeOffset */): void { return notPorted("GameDirectorBase.CheckBattleFinishByTimeLimit", 0x1498FE0); }
+    CheckBattleFinishByTimeLimit(currentTime: any /* DateTimeOffset */): void {
+        if (this.judgeResultReferee.result !== ResultStatus.None) return;
+        this.judgeResultReferee.CheckBattleFinishByTimeLimit(currentTime);
+        if (this.judgeResultReferee.result === ResultStatus.None) return;
+        this.BattleEnd();
+        this.commandSender.Flush(); // inlined in the game
+    }
     /** @rva 0x730170 slot 18  protected virtual void UpdateLinkHp(List<AffectedUnitNotice> noticeList, GameDirectorBase gameDirector) { } */
     UpdateLinkHp(noticeList: List<AffectedUnitNotice>, gameDirector: GameDirectorBase): void { /* asm: ret 0 */ }
     /** @rva 0x730170 slot 19  protected virtual void PrepareEndlessEnemySupply() { } */
     PrepareEndlessEnemySupply(): void { /* asm: ret 0 */ }
     /** @rva 0x149C130  private static void .cctor() { } */
-    static cctor(): void { return notPorted("GameDirectorBase..cctor", 0x149C130); }
+    static cctor(): void {
+        GameDirectorBase.Version = 0xf4628;
+        GameDirectorBase.AllyIdStart = 1;
+        GameDirectorBase.EnemyIdStart = -1;
+    }
     /** @rva 0x149BF60  private void <InitializeBattle>b__46_0(BattleUnit unit) { } */
-    $InitializeBattle$b__46_0(unit: BattleUnit): void { return notPorted("GameDirectorBase.<InitializeBattle>b__46_0", 0x149BF60); }
+    $InitializeBattle$b__46_0(unit: BattleUnit): void {
+        unit.Condition.gameDirector = this;
+    }
     /** @rva 0x149BF90  private void <InitializeBattle>b__46_1(BattleUnit unit) { } */
-    $InitializeBattle$b__46_1(unit: BattleUnit): void { return notPorted("GameDirectorBase.<InitializeBattle>b__46_1", 0x149BF90); }
+    $InitializeBattle$b__46_1(unit: BattleUnit): void {
+        unit.SetActiveConditionCheckDataBundle(this);
+    }
     /** @rva 0x149BF60  private void <RespondToClientReadyRequest>b__70_1(BattleUnit unit) { } */
-    $RespondToClientReadyRequest$b__70_1(unit: BattleUnit): void { return notPorted("GameDirectorBase.<RespondToClientReadyRequest>b__70_1", 0x149BF60); }
+    $RespondToClientReadyRequest$b__70_1(unit: BattleUnit): void {
+        unit.Condition.gameDirector = this; // same code as <InitializeBattle>b__46_0
+    }
     /** @rva 0x149BF90  private void <RespondToClientReadyRequest>b__70_2(BattleUnit unit) { } */
-    $RespondToClientReadyRequest$b__70_2(unit: BattleUnit): void { return notPorted("GameDirectorBase.<RespondToClientReadyRequest>b__70_2", 0x149BF90); }
+    $RespondToClientReadyRequest$b__70_2(unit: BattleUnit): void {
+        unit.SetActiveConditionCheckDataBundle(this); // same code as <InitializeBattle>b__46_1
+    }
 }
 
 // ---- ReDriveBattleCore.GameDirectorBase.GameSituationDataCreator  (TypeDefIndex 402, public static class) ----
 export class GameDirectorBase_GameSituationDataCreator {
     /** @rva 0x149C7D0  public static GameSituationData Create(GameDirectorBase gameDirector) { } */
-    static Create(gameDirector: GameDirectorBase): GameSituationData { return notPorted("GameDirectorBase_GameSituationDataCreator.Create", 0x149C7D0); }
+    static Create(gameDirector: GameDirectorBase): GameSituationData {
+        const data = new GameSituationData();
+        data._BattleUnitSituationDatas = [];
+        data._BattleUnitSituationDatas = [...gameDirector.battleUnitBundle.dic].map(kvp => GameDirectorBase_GameSituationDataCreator.$CreateBattleUnitSituationDatas$g__ConvertDataToSituation_1_1(kvp[1])); // CreateBattleUnitSituationDatas inlined; <>c.b__1_0
+        return data;
+    }
     /** @rva 0x149C680  private static BattleUnitSituationData[] CreateBattleUnitSituationDatas(GameDirectorBase gameDirector) { } */
-    static CreateBattleUnitSituationDatas(gameDirector: GameDirectorBase): BattleUnitSituationData[] { return notPorted("GameDirectorBase_GameSituationDataCreator.CreateBattleUnitSituationDatas", 0x149C680); }
+    static CreateBattleUnitSituationDatas(gameDirector: GameDirectorBase): BattleUnitSituationData[] {
+        return [...gameDirector.battleUnitBundle.dic].map(kvp => GameDirectorBase_GameSituationDataCreator.$CreateBattleUnitSituationDatas$g__ConvertDataToSituation_1_1(kvp[1])); // <>c.b__1_0
+    }
     /** @rva 0x149CA00  internal static BattleUnitSituationData <CreateBattleUnitSituationDatas>g__ConvertDataToSituation|1_1(BattleUnit unit) { } */
-    static $CreateBattleUnitSituationDatas$g__ConvertDataToSituation_1_1(unit: BattleUnit): BattleUnitSituationData { return notPorted("GameDirectorBase_GameSituationDataCreator.<CreateBattleUnitSituationDatas>g__ConvertDataToSituation|1_1", 0x149CA00); }
+    static $CreateBattleUnitSituationDatas$g__ConvertDataToSituation_1_1(unit: BattleUnit): BattleUnitSituationData {
+        const d = new BattleUnitSituationData();
+        const condition = unit.Condition;
+        d._battleUnitDataId = unit.Id;
+        d._maxHp = unit.MaxHP;
+        d._hp = unit.HP;
+        d._ep = unit.EP;
+        d._bp = unit.BP;
+        d._breakPoint = unit.BreakPoint.PointValue;
+        d._chargePoint = condition.ChargePoint;
+        d._maxChargePoint = condition.MaxChargePoint;
+        d._breakedDamageReceiveRate = unit.BreakedDamageReceiveRate;
+        d._currentHpGaugeCount = unit.CurrentHpGaugeCount;
+        d._stateIcons = condition.StateIcons;
+        d._visualEffectNames = condition.VisualEffectNames;
+        d._visualShaderName = condition.VisualShaderName;
+        d._canNotAction = condition.CanNotAction;
+        d._canNotUseSkill = condition.CanNotUseSkill;
+        d._canNotUseSpecialAttack = condition.CanNotUseSpecialAttack;
+        d._isAbnormalState = condition.IsAbnormalState;
+        d._barrierEndurance = condition.BarrierEndurance;
+        d._maxBarrierEndurance = condition.MaxBarrierEndurance;
+        d._countPoint = condition.CountPoint;
+        d._maxCountPoint = condition.MaxCountPoint;
+        d._zoneStack = condition.ZoneStack;
+        d._maxZoneStack = condition.MaxZoneStack;
+        d._zoneEffectId = condition.ZoneEffectId;
+        d._uniqueLvStateIconDataArray = condition.StateList.filter((s): s is UniqueLvUnitStateBase => s instanceof UniqueLvUnitStateBase) // OfType<UniqueLvUnitStateBase>
+            .filter(state => state.IsActive$BattleUnit(unit)) // <>c__DisplayClass1_0.b__2
+            .map(state => { // <>c.b__1_3
+                const icon = new BattleUnitSituationData_UniqueLvStateIconData();
+                icon._Lv = state.Lv;
+                icon._HitCounter = state.HitCounter;
+                const next = state.LvMstList?.find(m => m.Level === state.Lv + 1) ?? null; // <>c__DisplayClass1_1.b__4
+                icon._RequiredCount = next == null ? 0 : next.ConditionCount; // Nullable<int>.Value of default = 0
+                icon._UniqueStatePatternMstId = state.UniqueStatePatternMstId;
+                icon._TargetElement = state.TargetElement;
+                return icon;
+            });
+        return d;
+    }
 }
+
+GameDirectorBase.cctor(); // C# static constructor

@@ -27,5 +27,9 @@ export class CommandMultiRaidSyncTotalDamage extends CommandBase {
     /** @rva 0x9024E0  public void set_IsInitialize(bool value) { } */
     set_IsInitialize(value: boolean): void { this._IsInitialize = value; /* auto-property */ }
     /** @rva 0x17E96F0  public void .ctor(int totalDamage, bool isInitialize) { } */
-    ctor$int_bool(totalDamage: int, isInitialize: boolean): this { return notPorted("CommandMultiRaidSyncTotalDamage..ctor", 0x17E96F0); }
+    ctor$int_bool(totalDamage: int, isInitialize: boolean): this {
+        this._TotalDamage = totalDamage;
+        this._IsInitialize = isInitialize;
+        return this;
+    }
 }

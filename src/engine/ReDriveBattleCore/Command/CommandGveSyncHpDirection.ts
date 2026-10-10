@@ -22,5 +22,9 @@ export class CommandGveSyncHpDirection extends CommandBase {
     /** @rva 0x7369E0  public GveChainData[] get_ChainDataArray() { } */
     get_ChainDataArray(): GveChainData[] { return this._ChainDataArray; /* auto-property */ }
     /** @rva 0xA9D0E0  public void .ctor(GveHistoryData[] historyDataArray, GveChainData[] chainDataArray) { } */
-    ctor$GveHistoryData_GveChainData(historyDataArray: GveHistoryData[], chainDataArray: GveChainData[]): this { return notPorted("CommandGveSyncHpDirection..ctor", 0xA9D0E0); }
+    ctor$GveHistoryData_GveChainData(historyDataArray: GveHistoryData[], chainDataArray: GveChainData[]): this {
+        this._HistoryDataArray = historyDataArray;
+        this._ChainDataArray = chainDataArray;
+        return this;
+    }
 }

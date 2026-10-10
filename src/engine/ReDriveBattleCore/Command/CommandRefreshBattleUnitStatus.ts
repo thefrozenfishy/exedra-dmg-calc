@@ -19,5 +19,8 @@ export class CommandRefreshBattleUnitStatus extends CommandBase {
     /** @rva 0x8A2240  private void set_UnitId(int value) { } */
     set_UnitId(value: int): void { this._UnitId = value; /* auto-property */ }
     /** @rva 0x149DC70  public void .ctor(int unitId) { } */
-    ctor$int(unitId: int): this { return notPorted("CommandRefreshBattleUnitStatus..ctor", 0x149DC70); }
+    ctor$int(unitId: int): this {
+        this._UnitId = unitId;
+        return this;
+    }
 }

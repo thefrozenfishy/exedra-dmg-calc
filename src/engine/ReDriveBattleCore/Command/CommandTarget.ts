@@ -47,5 +47,11 @@ export class CommandTarget extends CommandBase {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x17EB8C0  public void .ctor(in BattleUnit.TeamType targetTeam, TargetReferee.TargetType targetType, in int targetId, bool isChangeTargetAfterAct = False) { } */
-    ctor$TeamType_TargetType_int_bool(targetTeam: BattleUnit_TeamType, targetType: TargetReferee_TargetType, targetId: int, isChangeTargetAfterAct?: boolean /* = False */): this { return notPorted("CommandTarget..ctor", 0x17EB8C0); }
+    ctor$TeamType_TargetType_int_bool(targetTeam: BattleUnit_TeamType, targetType: TargetReferee_TargetType, targetId: int, isChangeTargetAfterAct?: boolean /* = False */): this {
+        this._TargetTeam = targetTeam;
+        this._TargetType = targetType;
+        this._TargetId = targetId;
+        this._IsChangeTargetAfterAct = (isChangeTargetAfterAct ?? false);
+        return this;
+    }
 }
