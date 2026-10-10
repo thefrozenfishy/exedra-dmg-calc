@@ -30,6 +30,15 @@ export function isBeta(): boolean {
     return localStorage.getItem("beta") === "true"
 }
 
+/** Kanban admin: can edit/delete every card and comment. Set with localStorage.setItem("isAdmin", "true"). */
+export function isAdmin(): boolean {
+    try {
+        return localStorage.getItem("isAdmin") === "true"
+    } catch {
+        return false
+    }
+}
+
 export function toggleBeta() {
     const current = isBeta();
     localStorage.setItem("beta", current ? "false" : "true");

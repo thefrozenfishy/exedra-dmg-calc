@@ -158,6 +158,7 @@ function routeForPath(path: string) {
                     <router-link to="/beta">Beta Settings</router-link>
                     <router-link to="/analytics">Analytics</router-link>
                     <router-link to="/analytics-user">User Analytics</router-link>
+                    <router-link to="/kanban">TO-DOs</router-link>
                 </div>
             </nav>
         </header>

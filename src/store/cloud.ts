@@ -1,4 +1,5 @@
-import { getSupabase } from "../utils/supabase"
+import { getSupabase, getKanbanSupabase } from "../utils/supabase"
+import { isAdmin } from "../utils/betaSettings"
 import { getUserId } from "./user"
 import { logEvent } from '../utils/analytics'
 import { Character, correctCharacterParams } from "../types/KiokuTypes"
@@ -8,6 +9,7 @@ import type { SavedTierList, SharedTierList, TierListRow } from "../types/TierLi
 import { clampName, isUuid, sanitizeBoard } from "../utils/tierList"
 import type { SavedTeam, SavedTeamKind, SavedTeamRow, SharedTeam } from "../types/SavedTeamTypes"
 import { sanitizeTeamSlots, teamData, teamExtra } from "../utils/savedTeams"
+import type { KanbanAuthor, KanbanComment, KanbanTask, KanbanTaskPatch } from "../types/KanbanTypes"
 
 export class NameRequiredError extends Error {
     constructor() {
@@ -1319,4 +1321,189 @@ export const loadSharedTeam = withAnalytics(
     _loadSharedTeam,
     'load_shared_team',
     (_args, result) => ({ found: !!result, kind: result?.kind })
+)
+
+// =========================================================
+// Kanban board (Beta): one shared board, anyone can write (see 0025/0026 kanban migrations).
+// Reads go through the kanban_board_* views, which never expose the poster's user_id.
+// =========================================================
+
+const KANBAN_TASK_COLUMNS = 'task_id, parent_id, title, description, category, status, tags, sort_order, created_at, updated_at'
+
+function toKanbanAuthor(row: any): KanbanAuthor {
+    return {
+        name: row.author_name ?? null,
+        friendId: row.author_friend_id ?? null,
+        isMine: !!row.is_mine,
+    }
+}
+
+function toKanbanTask(row: any, author: KanbanAuthor = toKanbanAuthor(row), canEdit: boolean = author.isMine || isAdmin()): KanbanTask {
+    return {
+        id: row.task_id,
+        parentId: row.parent_id ?? null,
+        title: row.title ?? '',
+        description: row.description ?? '',
+        category: row.category === 'bug' ? 'bug' : 'feature',
+        status: row.status === 'in_progress' || row.status === 'done' ? row.status : 'todo',
+        tags: Array.isArray(row.tags) ? row.tags : [],
+        sortOrder: Number(row.sort_order ?? 0),
+        createdAt: row.created_at,
+        updatedAt: row.updated_at,
+        author,
+        canEdit,
+    }
+}
+
+function toKanbanComment(row: any): KanbanComment {
+    return {
+        id: row.comment_id,
+        taskId: row.task_id,
+        body: row.body ?? '',
+        createdAt: row.created_at,
+        author: toKanbanAuthor(row),
+        canDelete: !!row.is_mine || isAdmin(),
+    }
+}
+
+function toKanbanRow(patch: KanbanTaskPatch) {
+    const row: Record<string, unknown> = {}
+    if (patch.parentId !== undefined) row.parent_id = patch.parentId
+    if (patch.title !== undefined) row.title = patch.title
+    if (patch.description !== undefined) row.description = patch.description
+    if (patch.category !== undefined) row.category = patch.category
+    if (patch.status !== undefined) row.status = patch.status
+    if (patch.tags !== undefined) row.tags = patch.tags
+    if (patch.sortOrder !== undefined) row.sort_order = patch.sortOrder
+    return row
+}
+
+async function _loadKanbanBoard(): Promise<{ tasks: KanbanTask[]; comments: KanbanComment[] }> {
+    const supabase = getKanbanSupabase()
+
+    const [tasksRes, commentsRes] = await Promise.all([
+        supabase
+            .from('kanban_board_tasks')
+            .select('*')
+            .order('sort_order', { ascending: true })
+            .order('created_at', { ascending: true }),
+        supabase
+            .from('kanban_board_comments')
+            .select('*')
+            .order('created_at', { ascending: true }),
+    ])
+
+    if (tasksRes.error) throw tasksRes.error
+    if (commentsRes.error) throw commentsRes.error
+
+    return {
+        tasks: (tasksRes.data ?? []).map(row => toKanbanTask(row)),
+        comments: (commentsRes.data ?? []).map(toKanbanComment),
+    }
+}
+
+async function _addKanbanTask(patch: KanbanTaskPatch & { title: string }): Promise<KanbanTask> {
+    const supabase = getKanbanSupabase()
+
+    const { data, error } = await supabase
+        .from('kanban_tasks')
+        .insert(toKanbanRow(patch))
+        .select('task_id')
+        .single()
+
+    if (error) throw error
+
+    // Re-read through the view to get the author fields.
+    const { data: row, error: readError } = await supabase
+        .from('kanban_board_tasks')
+        .select('*')
+        .eq('task_id', data.task_id)
+        .single()
+
+    if (readError) throw readError
+    return toKanbanTask(row)
+}
+
+/** The author and permissions never change, so the caller passes the task it already has. */
+async function _updateKanbanTask(taskId: string, patch: KanbanTaskPatch, previous: KanbanTask): Promise<KanbanTask> {
+    const { data, error } = await getKanbanSupabase()
+        .from('kanban_tasks')
+        .update(toKanbanRow(patch))
+        .eq('task_id', taskId)
+        .select(KANBAN_TASK_COLUMNS)
+        .maybeSingle()
+
+    if (error) throw error
+    if (!data) throw new Error('This card no longer exists')
+    return toKanbanTask(data, previous.author, previous.canEdit)
+}
+
+async function _deleteKanbanTask(taskId: string) {
+    const { error, count } = await getKanbanSupabase()
+        .from('kanban_tasks')
+        .delete({ count: 'exact' })
+        .eq('task_id', taskId)
+
+    if (error) throw error
+    if (!count) throw new Error('This card no longer exists')
+}
+
+async function _addKanbanComment(taskId: string, body: string): Promise<KanbanComment> {
+    const supabase = getKanbanSupabase()
+
+    const { data, error } = await supabase
+        .from('kanban_comments')
+        .insert({ task_id: taskId, body })
+        .select('comment_id')
+        .single()
+
+    if (error) throw error
+
+    const { data: row, error: readError } = await supabase
+        .from('kanban_board_comments')
+        .select('*')
+        .eq('comment_id', data.comment_id)
+        .single()
+
+    if (readError) throw readError
+    return toKanbanComment(row)
+}
+
+async function _deleteKanbanComment(commentId: string) {
+    const { error, count } = await getKanbanSupabase()
+        .from('kanban_comments')
+        .delete({ count: 'exact' })
+        .eq('comment_id', commentId)
+
+    if (error) throw error
+    if (!count) throw new Error('This comment no longer exists')
+}
+
+export const loadKanbanBoard = _loadKanbanBoard
+
+export const addKanbanTask = withAnalytics(
+    _addKanbanTask,
+    'kanban_add_task',
+    ([patch]) => ({ category: patch.category, isChild: !!patch.parentId })
+)
+
+export const updateKanbanTask = withAnalytics(
+    _updateKanbanTask,
+    'kanban_update_task',
+    ([, patch]) => ({ fields: Object.keys(patch) })
+)
+
+export const deleteKanbanTask = withAnalytics(
+    _deleteKanbanTask,
+    'kanban_delete_task',
+)
+
+export const addKanbanComment = withAnalytics(
+    _addKanbanComment,
+    'kanban_add_comment',
+)
+
+export const deleteKanbanComment = withAnalytics(
+    _deleteKanbanComment,
+    'kanban_delete_comment',
 )

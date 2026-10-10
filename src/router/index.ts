@@ -20,6 +20,7 @@ import AccountComparisonPage from '../pages/AccountComparisonPage.vue'
 import BetaStuff from '../pages/BetaStuff.vue'
 import AnalyticsDashboard from '../pages/AnalyticsDashboard.vue'
 import AnalyticsUserPage from '../pages/AnalyticsUserPage.vue'
+import KanbanBoardPage from '../pages/KanbanBoardPage.vue'
 import logEvent from '../utils/analytics'
 import PortraitSetupPage from '../pages/PortraitSetupPage.vue'
 import TierListMakerPage from '../pages/TierListMakerPage.vue'
@@ -47,6 +48,7 @@ const routes = [
     { path: '/tier-list-maker', name: 'Tier List Maker', component: TierListMakerPage, meta: { version: 1 } },
     { path: '/analytics', name: 'Analytics Dashboard', component: AnalyticsDashboard },
     { path: '/analytics-user', name: 'User Analytics Dashboard', component: AnalyticsUserPage },
+    { path: '/kanban', name: 'Kanban Board', component: KanbanBoardPage },
     { path: '/beta', name: 'Beta Settings', component: BetaStuff, meta: { reloadOnLeave: true } },
 ]
 
