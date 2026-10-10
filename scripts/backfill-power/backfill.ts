@@ -72,6 +72,9 @@ const charInfoByExternalId: Record<number, Character> = Object.fromEntries(
             heartphial: data.heartphial || data.character_en,
             rarity: data.rarity,
             obtain: data.obtain,
+            // Same derivation as characterStore.charInfo (KiokuObtain.Permanent / .Exclusive); countCharsObtained needs them.
+            isStandardChar: data.obtain === "Permanent",
+            isLimitedChar: data.obtain === "Exclusive",
             permaDate: data.permaDate,
             releaseDate: data.releaseDate,
         } as Character,

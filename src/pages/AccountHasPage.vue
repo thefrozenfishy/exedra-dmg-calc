@@ -319,7 +319,6 @@ import { computed, ref } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { Character, KiokuConstants, relevantCrys, getMaxKiokuLevelForPlayerLevel, getMaxMagicLevelForKiokuLevel } from "../types/KiokuTypes"
 import { elementMap, KiokuElement, maxPlayerLevel, obtainBorderClass } from '../types/enums'
-import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
 import { onMounted, onUnmounted } from "vue"

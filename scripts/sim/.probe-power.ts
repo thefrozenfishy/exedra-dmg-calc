@@ -1,0 +1,15 @@
+import "../../src/models/BestTeamCalculator";
+import fs from "fs";
+import { createPinia, setActivePinia } from "pinia";
+(globalThis as any).localStorage = { getItem: () => null, setItem: () => { }, removeItem: () => { } };
+setActivePinia(createPinia());
+const { getPowerScores, countCharsObtained } = await import("../../src/models/PowerValue");
+const chars = JSON.parse(fs.readFileSync(new URL(".probe-power-chars.json", import.meta.url), "utf8"));
+const p = (label: string, cs: any[]) => { const s = getPowerScores(cs); console.log(label.padEnd(34), "total", s.total, "whale", s.whale) };
+p("as in HEAD (isLimited||isStandard)", chars);
+p("rarity===5 && (limited||standard)", chars.filter((c: any) => c.rarity === 5));
+console.log(countCharsObtained(chars));
+p("FIXED filter on full list", chars.filter((c: any) => c.rarity === 5 && (c.isLimitedChar || c.isStandardChar)));
+p("only limited", chars.filter((c: any) => c.isLimitedChar));
+p("only permanent 5*", chars.filter((c: any) => c.rarity === 5 && c.isStandardChar));
+console.log("f2p model", 247 * ((Date.now() - 1742947200000) / (30 * 864e5)) + 4600 * (1 - Math.exp(-((Date.now() - 1742947200000) / (30 * 864e5)) / 4)) + 300);

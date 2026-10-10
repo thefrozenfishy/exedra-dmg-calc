@@ -362,8 +362,11 @@ export const useCharacterStore = defineStore('characterStore', () => {
         if (char) char.enabled = !char.enabled
     }
 
+    const charInfoById = new Map(Object.values(charInfo).map(info => [info.id, info]))
+
     const updateChar = (char: Character) => {
-        characters.value[characters.value.findIndex(c => c.id === char.id)] = correctCharacterParams(char);
+        const info = charInfoById.get(char.id)
+        characters.value[characters.value.findIndex(c => c.id === char.id)] = correctCharacterParams(info ? { ...char, ...info } : char);
 
         characters.value.forEach(c => {
             if (c.heartphial === char.heartphial) {

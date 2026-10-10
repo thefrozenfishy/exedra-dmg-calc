@@ -212,7 +212,7 @@ type WeightedEntry = {
 }
 
 export function getPowerScores(chars: Character[]): PowerScores {
-    const fiveStars = chars.filter((ch) => ch.isLimitedChar || ch.isStandardChar)
+    const fiveStars = chars.filter((ch) => ch.rarity === 5 && (ch.isLimitedChar || ch.isStandardChar))
 
     const roleCurrent = {
         [KiokuRole.Attacker]: [] as WeightedEntry[],
