@@ -532,7 +532,7 @@ export function getMaxComboActionNum(unit: KiokuState): number {
 //     hitRate    = userUnit != null ? userUnit.GetTotalEffectHitRate(state) : 1.0
 //     parryRate  = targetUnit.GetTotalEffectParryRate(state)
 //     secondary  = targetUnit.GetTotalSecondaryEffectParryRate(state)
-//     result     = Floor(secondary * parryRate * hitRate * state.Probability, 2 decimals)
+//     result     = MathExtension.Floor(Probability * hitRate * parryRate * secondary, 2) = one decimal (scale 10^(n-1))
 //     return Clamp(result, 0, 100)
 //
 // GetTotalEffectHitRate (BattleUnit$$GetTotalEffectHitRate), [CONFIRMED shape]:
@@ -616,7 +616,7 @@ function getTotalSecondaryEffectParryRate(target: KiokuState, type: string, isAl
 /**
  * [CONFIRMED 3.19] UnitCondition.AddUnitState (0x15c8a30): the state is added unless
  * `p*10 <= Random.Next(1000)`, p = GetProcessedProbability: the fixed probability as-is, otherwise
- * Clamp(Floor2(probability * hit * parry * secondaryParry), 0, 100) (MathExtension.Floor to 2 decimals).
+ * Clamp(Floor(probability * hit * parry * secondaryParry, 2), 0, 100); MathExtension.Floor(x, 2) keeps one decimal.
  * `caster` is the unit applying the effect, `target` the unit it goes on. Returns true = applies.
  */
 export function rollAppliesEffect(detail: SkillDetail, caster: KiokuState | undefined, target: KiokuState, rng: RngSource = Math.random): boolean {
@@ -632,7 +632,9 @@ export function rollAppliesEffect(detail: SkillDetail, caster: KiokuState | unde
     const parryRate = getTotalEffectParryRate(target, isNegative);
     const secondaryParryRate = getTotalSecondaryEffectParryRate(target, type, isAliment);
     const raw = f32(f32(f32(f32(detail.probability) * f32(hitRate)) * f32(parryRate)) * f32(secondaryParryRate));
-    const finalProbability = Math.min(Math.max(f32(Math.floor(f32(raw * 100)) / 100), 0), 100);
+    // [CONFIRMED 3.19] MathExtension.Floor(value, n) 0x149f830 scales by Math.Pow(10, n - 1) in double, so Floor(raw, 2)
+    // keeps ONE decimal (src/engine/ReDriveBattleCore/MathExtension.ts).
+    const finalProbability = Math.min(Math.max(f32(Math.floor(raw * 10) / 10), 0), 100);
     return rollChance(rng, finalProbability, "effect", label, r => r * 1000 < finalProbability * 10);
 }
 
