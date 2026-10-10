@@ -1,7 +1,9 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../runtime";
+import type { IBattleStartTriggerPriority } from "./IBattleStartTriggerPriority";
+import { IBattleStartTriggerPriority_Define } from "./IBattleStartTriggerPriority";
+import { isImpl, notPorted } from "../runtime";
 import type { int } from "../runtime";
 import type { AbilityEffectBase } from "./AbilityEffect/AbilityEffectBase";
 import type { BattleConditionUtils_ConditionCheckDataBundle } from "./BattleCondition/BattleConditionUtils";
@@ -19,5 +21,8 @@ export class BattleStartPassiveSkillTriggerInfo {
     abilityEffect: AbilityEffectBase = null!;
     get TriggerPriority(): int { return this.get_TriggerPriority(); }
     /** @rva 0x1490480  public int get_TriggerPriority() { } */
-    get_TriggerPriority(): int { return notPorted("BattleStartPassiveSkillTriggerInfo.get_TriggerPriority", 0x1490480); }
+    get_TriggerPriority(): int {
+        if (isImpl(this.abilityEffect, "IBattleStartTriggerPriority")) return (this.abilityEffect as unknown as IBattleStartTriggerPriority).Priority;
+        return IBattleStartTriggerPriority_Define.DefaultPriority;
+    }
 }
