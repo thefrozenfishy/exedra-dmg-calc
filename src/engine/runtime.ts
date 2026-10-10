@@ -168,3 +168,16 @@ export function clamp(value: number, min: number, max: number): number {
     if (min > max) throw new RangeError(`ArgumentException: '${min}' cannot be greater than ${max}.`);
     return value < min ? min : value > max ? max : value;
 }
+/** Enumerable.OrderBy(source, key): stable ascending sort into a new array. */
+export function orderBy<T>(source: readonly T[], key: (t: T) => number): T[] {
+    return source.map((v, i) => ({ v, i, k: key(v) })).sort((a, b) => a.k - b.k || a.i - b.i).map(x => x.v);
+}
+/** Enumerable.OrderByDescending(source, key): stable descending sort into a new array. */
+export function orderByDescending<T>(source: readonly T[], key: (t: T) => number): T[] {
+    return source.map((v, i) => ({ v, i, k: key(v) })).sort((a, b) => b.k - a.k || a.i - b.i).map(x => x.v);
+}
+/** Dictionary<K,V>[key] getter: throws KeyNotFoundException like C#. */
+export function dictGet<K, V>(dic: ReadonlyMap<K, V>, key: K): V {
+    if (!dic.has(key)) throw new RangeError(`KeyNotFoundException: The given key '${String(key)}' was not present in the dictionary.`);
+    return dic.get(key)!;
+}

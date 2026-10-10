@@ -70,11 +70,28 @@ export class BattleUnitSkillSet {
     /** @rva 0x7305E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x91B580  public void .ctor(ActiveSkill[] activeSkills, SpecialAttack specialAttack, NormalAttack normalAttack, AdditionalSkill[] additionalSkills, ActiveSkillBase[] switchableSkills) { } */
-    ctor$ActiveSkill_SpecialAttack_NormalAttack_AdditionalSkill_ActiveSkillBase(activeSkills: ActiveSkill[], specialAttack: SpecialAttack, normalAttack: NormalAttack, additionalSkills: AdditionalSkill[], switchableSkills: ActiveSkillBase[]): this { return notPorted("BattleUnitSkillSet..ctor", 0x91B580); }
+    ctor$ActiveSkill_SpecialAttack_NormalAttack_AdditionalSkill_ActiveSkillBase(activeSkills: ActiveSkill[], specialAttack: SpecialAttack, normalAttack: NormalAttack, additionalSkills: AdditionalSkill[], switchableSkills: ActiveSkillBase[]): this {
+        this._ActiveSkills = activeSkills;
+        this._SpecialAttack = specialAttack;
+        this._NormalAttack = normalAttack;
+        this._AdditionalSkills = additionalSkills;
+        this._SwitchableSkills = switchableSkills;
+        return this;
+    }
     /** @rva 0x1381850  public List<ActiveSkillBase> GetList() { } */
-    GetList(): List<ActiveSkillBase> { return notPorted("BattleUnitSkillSet.GetList", 0x1381850); }
+    GetList(): List<ActiveSkillBase> {
+        const list: ActiveSkillBase[] = [];
+        if (this.ActiveSkills != null) for (const s of this.ActiveSkills) list.push(s);
+        if (this.NormalAttack != null) list.push(this.NormalAttack);
+        if (this.SpecialAttack != null) list.push(this.SpecialAttack);
+        for (const s of this.AdditionalSkills) list.push(s); // no null check in 3.19.0 (NRE when null)
+        if (this.SwitchableSkills != null) for (const s of this.SwitchableSkills) list.push(s);
+        return list;
+    }
     /** @rva 0x1381B90  public ActiveSkillBase GetSkill(int skillMstId) { } */
-    GetSkill(skillMstId: int): ActiveSkillBase { return notPorted("BattleUnitSkillSet.GetSkill", 0x1381B90); }
+    GetSkill(skillMstId: int): ActiveSkillBase {
+        return this.GetList().find(skill => skill.Id === skillMstId) ?? null!; // DisplayClass23_0 <GetSkill>b__0
+    }
     /** @rva 0x13824A0  public void OnSerializing(StreamingContext _) { } */
     OnSerializing(_: any /* StreamingContext */): void { return notPorted("BattleUnitSkillSet.OnSerializing", 0x13824A0); }
     /** @rva 0x1381C60  public void OnDeserialized(StreamingContext _) { } */

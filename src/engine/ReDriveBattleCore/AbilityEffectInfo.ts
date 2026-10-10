@@ -1,12 +1,14 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../runtime";
+import { RangeType } from "../Network/Definition/Battle/RangeType";
+import { TargetRoleType } from "../Network/Definition/Battle/TargetRoleType";
+import { TargetElementType } from "../Network/Definition/Battle/TargetElementType";
+import { EnumUtil } from "./EnumUtil";
+import { notPorted, orderBy } from "../runtime";
 import type { List, int } from "../runtime";
 import type { AbilitySourceType } from "../Network/Definition/Battle/AbilitySourceType";
-import type { RangeType } from "../Network/Definition/Battle/RangeType";
-import type { TargetElementType } from "../Network/Definition/Battle/TargetElementType";
-import type { TargetRoleType } from "../Network/Definition/Battle/TargetRoleType";
+
 import type { ProcessTiming } from "./BattleCondition/ProcessTiming";
 import type { PassiveSkillDetailMstModel } from "./Model/PassiveSkillDetailMstModel";
 import type { SkillDetailMstModel } from "./Model/SkillDetailMstModel";
@@ -176,13 +178,61 @@ export class AbilityEffectInfo {
     /** @rva 0xB2F4F0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; mov dword ptr [rcx + 0x10], 1; jmp 0x730170 */ }
     /** @rva 0x1372E60  public void .ctor(int mstId, string effectType, TargetElementType targetElement, TargetRoleType targetRole, int effectTurn, RangeType effectRange, int probability, int effectValue1, int effectValue2 = 0, int effectValue3 = 0, int effectValue4 = 0, int effectValue5 = 0, int remainCount = 0, bool isFixedProbability = False, List<ProcessTiming> startTimings, string startConditionSetIdCsv, string activeConditionSetIdCsv, AbilitySourceType abilitySource = 1, int skillUniqueId = 0) { } */
-    ctor$int_string_TargetElementType_TargetRoleType_int_RangeType_int_int_int_int_int_int_int_bool_ListProcessTiming_string_string_AbilitySourceType_int(mstId: int, effectType: string, targetElement: TargetElementType, targetRole: TargetRoleType, effectTurn: int, effectRange: RangeType, probability: int, effectValue1: int, effectValue2: int /* = 0 */, effectValue3: int /* = 0 */, effectValue4: int /* = 0 */, effectValue5: int /* = 0 */, remainCount: int /* = 0 */, isFixedProbability: boolean /* = False */, startTimings: List<ProcessTiming>, startConditionSetIdCsv: string, activeConditionSetIdCsv: string, abilitySource?: AbilitySourceType /* = 1 */, skillUniqueId?: int /* = 0 */): this { return notPorted("AbilityEffectInfo..ctor", 0x1372E60); }
+    ctor$int_string_TargetElementType_TargetRoleType_int_RangeType_int_int_int_int_int_int_int_bool_ListProcessTiming_string_string_AbilitySourceType_int(mstId: int, effectType: string, targetElement: TargetElementType, targetRole: TargetRoleType, effectTurn: int, effectRange: RangeType, probability: int, effectValue1: int, effectValue2: int = 0, effectValue3: int = 0, effectValue4: int = 0, effectValue5: int = 0, remainCount: int = 0, isFixedProbability: boolean = false, startTimings: List<ProcessTiming> = null!, startConditionSetIdCsv: string = null!, activeConditionSetIdCsv: string = null!, abilitySource: AbilitySourceType = 1 as AbilitySourceType, skillUniqueId: int = 0): this {
+        this._AbilitySource = 1 as AbilitySourceType; // field initializer
+        this._AbilitySource = abilitySource;
+        this._SkillUniqueId = skillUniqueId;
+        this._MstId = mstId;
+        this._EffectType = effectType;
+        this._TargetRole = targetRole;
+        this._EffectValue1 = effectValue1;
+        this._EffectValue2 = effectValue2;
+        this._EffectValue3 = effectValue3;
+        this._EffectValue4 = effectValue4;
+        this._EffectValue5 = effectValue5;
+        this._EffectTurn = effectTurn;
+        this._RemainCount = remainCount;
+        this._EffectRange = effectRange;
+        this._Probability = probability;
+        this._IsFixedProbability = isFixedProbability;
+        this._TargetElement = targetElement;
+        this._StartTimings = startTimings;
+        this._StartConditionSetIdCsv = startConditionSetIdCsv;
+        this._ActiveConditionSetIdCsv = activeConditionSetIdCsv;
+        return this;
+    }
     /** @rva 0x1372B60  public static AbilityEffectInfo CreateFromMst(SkillDetailMstModel skillDetailMst, int skillUniqueId = 0) { } */
-    static CreateFromMst$SkillDetailMstModel_int(skillDetailMst: SkillDetailMstModel, skillUniqueId?: int /* = 0 */): AbilityEffectInfo { return notPorted("AbilityEffectInfo.CreateFromMst", 0x1372B60); }
+    static CreateFromMst$SkillDetailMstModel_int(skillDetailMst: SkillDetailMstModel, skillUniqueId: int = 0): AbilityEffectInfo {
+        const r = skillDetailMst.record;
+        return new AbilityEffectInfo().ctor$int_string_TargetElementType_TargetRoleType_int_RangeType_int_int_int_int_int_int_int_bool_ListProcessTiming_string_string_AbilitySourceType_int(
+            r.skillDetailMstId, r.abilityEffectType,
+            EnumUtil.Cast<TargetElementType>(TargetElementType, r.element), EnumUtil.Cast<TargetRoleType>(TargetRoleType, r.role),
+            r.turn, EnumUtil.Cast<RangeType>(RangeType, r.range), r.probability,
+            r.value1, r.value2, r.value3, r.value4, r.value5, r.remainCount, r.isFixedProbability,
+            [], r.startConditionSetIdCsv, r.activeConditionSetIdCsv, 1 as AbilitySourceType, skillUniqueId);
+    }
     /** @rva -1  public static List<AbilityEffectInfo> CreateFromMst<TEnumerable>(TEnumerable skillDetailMstList, int skillUniqueId = 0) { } */
-    static CreateFromMst$TEnumerable_int<TEnumerable>(skillDetailMstList: TEnumerable, skillUniqueId?: int /* = 0 */): List<AbilityEffectInfo> { return notPorted("AbilityEffectInfo.CreateFromMst", 0); }
+    static CreateFromMst$TEnumerable_int<TEnumerable>(skillDetailMstList: TEnumerable, skillUniqueId: int = 0): List<AbilityEffectInfo> {
+        // shared instance 0x2745490: OrderBy(<CreateFromMst>b__83_0: SkillDetailMstId).Select(DisplayClass83_0 b__1).ToList()
+        return orderBy(skillDetailMstList as unknown as SkillDetailMstModel[], mst => mst.SkillDetailMstId)
+            .map(mst => AbilityEffectInfo.CreateFromMst$SkillDetailMstModel_int(mst, skillUniqueId));
+    }
     /** @rva 0x13728C0  public static AbilityEffectInfo CreateFromMst(PassiveSkillDetailMstModel mst, AbilitySourceType abilitySource = 1, string skillButtonIcon) { } */
-    static CreateFromMst$PassiveSkillDetailMstModel_AbilitySourceType_string(mst: PassiveSkillDetailMstModel, abilitySource: AbilitySourceType /* = 1 */, skillButtonIcon: string): AbilityEffectInfo { return notPorted("AbilityEffectInfo.CreateFromMst", 0x13728C0); }
+    static CreateFromMst$PassiveSkillDetailMstModel_AbilitySourceType_string(mst: PassiveSkillDetailMstModel, abilitySource: AbilitySourceType = 1 as AbilitySourceType, skillButtonIcon: string = null!): AbilityEffectInfo {
+        // .ctor inlined (effectValue4/5 and skillUniqueId left 0)
+        const r = mst.record;
+        const info = new AbilityEffectInfo().ctor$int_string_TargetElementType_TargetRoleType_int_RangeType_int_int_int_int_int_int_int_bool_ListProcessTiming_string_string_AbilitySourceType_int(
+            r.passiveSkillDetailMstId, r.abilityEffectType,
+            EnumUtil.Cast<TargetElementType>(TargetElementType, r.element), EnumUtil.Cast<TargetRoleType>(TargetRoleType, r.role),
+            r.turn, EnumUtil.Cast<RangeType>(RangeType, r.range), r.probability,
+            r.value1, r.value2, r.value3, 0, 0, r.remainCount, r.isFixedProbability,
+            mst.StartTimings, r.startConditionSetIdCsv, r.activeConditionSetIdCsv, abilitySource, 0);
+        info._SkillButtonIcon = skillButtonIcon;
+        return info;
+    }
     /** @rva 0x13726E0  public static List<AbilityEffectInfo> CreateFromMst(List<PassiveSkillDetailMstModel> mstList, AbilitySourceType abilitySource = 1, string skillButtonIcon) { } */
-    static CreateFromMst$ListPassiveSkillDetailMstModel_AbilitySourceType_string(mstList: List<PassiveSkillDetailMstModel>, abilitySource: AbilitySourceType /* = 1 */, skillButtonIcon: string): List<AbilityEffectInfo> { return notPorted("AbilityEffectInfo.CreateFromMst", 0x13726E0); }
+    static CreateFromMst$ListPassiveSkillDetailMstModel_AbilitySourceType_string(mstList: List<PassiveSkillDetailMstModel>, abilitySource: AbilitySourceType = 1 as AbilitySourceType, skillButtonIcon: string = null!): List<AbilityEffectInfo> {
+        return orderBy(mstList, mst => mst.PassiveSkillDetailMstId) // <CreateFromMst>b__85_0
+            .map(mst => AbilityEffectInfo.CreateFromMst$PassiveSkillDetailMstModel_AbilitySourceType_string(mst, abilitySource, skillButtonIcon)); // DisplayClass85_0 b__1
+    }
 }

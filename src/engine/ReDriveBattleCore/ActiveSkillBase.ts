@@ -1,15 +1,23 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import type { EffectOriginType } from "./UnitState/EffectOriginType";
+import type { ProcessTiming } from "./BattleCondition/ProcessTiming";
+import type { SkillMstRecord } from "../Network/Definition/Skill/SkillMstRecord";
+import { SkillMstModel } from "./Model/SkillMstModel";
+import { SkillDetailMstReader } from "./Reader/SkillDetailMstReader";
+import { BattleMstReaderBase } from "./Reader/BattleMstReaderBase";
+import { BattleConditionUtils_ConditionCheckDataBundle } from "./BattleCondition/BattleConditionUtils";
+import { AffectedUnitNoticeBundle } from "./AffectedUnitNoticeBundle";
+import { AbilityEffectLauncher } from "./AbilityEffectLauncher";
+import { AbilityEffectInfo } from "./AbilityEffectInfo";
 import { notPorted } from "../runtime";
 import type { List, int } from "../runtime";
 import type { AbilityEffectBase } from "./AbilityEffect/AbilityEffectBase";
-import type { AbilityEffectLauncher } from "./AbilityEffectLauncher";
-import type { AffectedUnitNoticeBundle } from "./AffectedUnitNoticeBundle";
+
 import type { BattleUnit } from "./BattleUnit";
 import type { GameDirectorBase } from "./GameDirectorBase";
 import type { SkillDetailMstModel } from "./Model/SkillDetailMstModel";
-import type { SkillMstModel } from "./Model/SkillMstModel";
 
 // ---- ReDriveBattleCore.ActiveSkillBase  (TypeDefIndex 284, public abstract class) ----
 export abstract class ActiveSkillBase {
@@ -58,19 +66,70 @@ export abstract class ActiveSkillBase {
     /** @rva 0x7305E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x13756D0  public void .ctor(int skillMstId) { } */
-    ctor$int(skillMstId: int): this { return notPorted("ActiveSkillBase..ctor", 0x13756D0); }
+    ctor$int(skillMstId: int): this {
+        const skillMst = BattleMstReaderBase.get_Instance<SkillMstModel, SkillMstRecord, int>(SkillMstModel).GetModelByKey(skillMstId);
+        const details = SkillDetailMstReader.GetDetailModelsByMstId(skillMstId);
+        if (skillMst == null || details.length === 0) return this; // !Any()
+        this._Id = skillMst.SkillMstId;
+        this._UniqueId = skillMst.SkillUniqueId;
+        this._Level = skillMst.Level;
+        this._Name = skillMst.Name;
+        this._ConsumeSP = skillMst.SP;
+        const infos = AbilityEffectInfo.CreateFromMst$TEnumerable_int<List<SkillDetailMstModel>>(details, this.UniqueId);
+        this.launcher = new AbilityEffectLauncher().ctor$ListAbilityEffectInfo_SkillType_int(infos, skillMst.Type, skillMst.SkillMstId);
+        return this;
+    }
     /** @rva 0x1375880  public void .ctor(int id, int uniqueId, int level, string name, int consumeSp) { } */
-    ctor$int_int_int_string_int(id: int, uniqueId: int, level: int, name: string, consumeSp: int): this { return notPorted("ActiveSkillBase..ctor", 0x1375880); }
+    ctor$int_int_int_string_int(id: int, uniqueId: int, level: int, name: string, consumeSp: int): this {
+        this._Name = name;
+        this._Id = id;
+        this._UniqueId = uniqueId;
+        this._Level = level;
+        this._ConsumeSP = consumeSp;
+        return this;
+    }
     /** @rva 0x13758E0  public void .ctor(SkillMstModel skillMst, List<SkillDetailMstModel> skillDetailMstList) { } */
-    ctor$SkillMstModel_ListSkillDetailMstModel(skillMst: SkillMstModel, skillDetailMstList: List<SkillDetailMstModel>): this { return notPorted("ActiveSkillBase..ctor", 0x13758E0); }
+    ctor$SkillMstModel_ListSkillDetailMstModel(skillMst: SkillMstModel, skillDetailMstList: List<SkillDetailMstModel>): this {
+        if (skillMst == null) return this;
+        this._Id = skillMst.SkillMstId;
+        this._UniqueId = skillMst.SkillUniqueId;
+        this._Level = skillMst.Level;
+        this._Name = skillMst.Name;
+        this._ConsumeSP = skillMst.SP;
+        const infos = AbilityEffectInfo.CreateFromMst$TEnumerable_int<List<SkillDetailMstModel>>(skillDetailMstList, this.UniqueId);
+        this.launcher = new AbilityEffectLauncher().ctor$ListAbilityEffectInfo_SkillType_int(infos, skillMst.Type, skillMst.SkillMstId);
+        return this;
+    }
     /** @rva 0x1375430  protected AffectedUnitNoticeBundle Triggering(GameDirectorBase gameDirector, int attackTargetId, BattleUnit userUnit, int selectFriendUnitId) { } */
-    Triggering(gameDirector: GameDirectorBase, attackTargetId: int, userUnit: BattleUnit, selectFriendUnitId: int): AffectedUnitNoticeBundle { return notPorted("ActiveSkillBase.Triggering", 0x1375430); }
+    Triggering(gameDirector: GameDirectorBase, attackTargetId: int, userUnit: BattleUnit, selectFriendUnitId: int): AffectedUnitNoticeBundle {
+        const noticeBundle = new AffectedUnitNoticeBundle().ctor();
+        if (gameDirector == null) return noticeBundle;
+        const battleUnitDic = gameDirector.get_battleUnitDic();
+        const list = this.launcher.AbilityEffectList;
+        // <Triggering>b__25_0: an effect on the user's side aimed at a single/one-side unit picks the selected friend
+        const targetId = list.some(eff => eff.TargetSide === 0 && (eff.EffectRange === 1 || eff.EffectRange === 2)) ? selectFriendUnitId : attackTargetId;
+        const mainTarget = gameDirector.GetTargetBattleUnit(targetId);
+        const bundle = new BattleConditionUtils_ConditionCheckDataBundle().ctor();
+        bundle._GameDirector = gameDirector;
+        bundle._SelfUnit = userUnit;
+        bundle._ActorUnit = userUnit;
+        bundle._MainTargetUnit = mainTarget;
+        bundle._ActorActiveSkill = this;
+        bundle._AffectedUnitNoticeBundle = null!;
+        bundle._AffectedUnits = null!;
+        return AbilityEffectLauncher.Triggering$10(this.launcher.AbilityEffectList, 0 as ProcessTiming, bundle, 1 as EffectOriginType, userUnit, battleUnitDic, gameDirector, this, attackTargetId, selectFriendUnitId);
+    }
     /** @rva -1 slot 4  public abstract AffectedUnitNoticeBundle Execute(GameDirectorBase gameDirector, int attackTargetId, BattleUnit userUnit, int selectFriendUnitId, bool isForcedAct = False); */
     abstract Execute(gameDirector: GameDirectorBase, attackTargetId: int, userUnit: BattleUnit, selectFriendUnitId: int, isForcedAct?: boolean /* = False */): AffectedUnitNoticeBundle;
     /** @rva 0xD2C4A0  public List<AbilityEffectBase> GetAbilityEffectList() { } */
-    GetAbilityEffectList(): List<AbilityEffectBase> { return notPorted("ActiveSkillBase.GetAbilityEffectList", 0xD2C4A0); }
+    GetAbilityEffectList(): List<AbilityEffectBase> { return this.launcher.AbilityEffectList; }
     /** @rva 0x1375150  public ActiveSkillBase.TargetSideType GetSkillTargetSideType() { } */
-    GetSkillTargetSideType(): ActiveSkillBase_TargetSideType { return notPorted("ActiveSkillBase.GetSkillTargetSideType", 0x1375150); }
+    GetSkillTargetSideType(): ActiveSkillBase_TargetSideType {
+        const list = this.launcher.AbilityEffectList;
+        if (list.every(x => x.TargetSide === 1)) return 1 as ActiveSkillBase_TargetSideType;  // <GetSkillTargetSideType>b__29_0
+        if (!list.every(x => x.TargetSide === 0)) return 4 as ActiveSkillBase_TargetSideType; // b__29_1
+        return (list.every(x => x.EffectRange === -1) ? 3 : 2) as ActiveSkillBase_TargetSideType; // b__29_2
+    }
 }
 
 // ---- ReDriveBattleCore.ActiveSkillBase.TargetSideType  (TypeDefIndex 282, public enum) ----

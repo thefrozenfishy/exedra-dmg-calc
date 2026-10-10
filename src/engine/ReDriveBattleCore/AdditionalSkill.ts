@@ -21,11 +21,17 @@ export class AdditionalSkill extends ActiveSkillBase {
     /** @rva 0x7305E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x1375BA0  public void .ctor(int skillMstId) { } */
-    ctor$int(skillMstId: int): this { return notPorted("AdditionalSkill..ctor", 0x1375BA0); }
+    ctor$int(skillMstId: int): this { super.ctor$int(skillMstId); return this; }
     /** @rva 0x1375880  public void .ctor(int id, int uniqueId, int level, string name, int consumeSP) { } */
-    ctor$int_int_int_string_int(id: int, uniqueId: int, level: int, name: string, consumeSP: int): this { return notPorted("AdditionalSkill..ctor", 0x1375880); }
+    ctor$int_int_int_string_int(id: int, uniqueId: int, level: int, name: string, consumeSP: int): this { super.ctor$int_int_int_string_int(id, uniqueId, level, name, consumeSP); return this; }
     /** @rva 0x1377A30  public void .ctor(SkillMstModel skillMst, List<SkillDetailMstModel> skillDetailMstList) { } */
-    ctor$SkillMstModel_ListSkillDetailMstModel(skillMst: SkillMstModel, skillDetailMstList: List<SkillDetailMstModel>): this { return notPorted("AdditionalSkill..ctor", 0x1377A30); }
+    ctor$SkillMstModel_ListSkillDetailMstModel(skillMst: SkillMstModel, skillDetailMstList: List<SkillDetailMstModel>): this { super.ctor$SkillMstModel_ListSkillDetailMstModel(skillMst, skillDetailMstList); return this; }
     /** @rva 0x1377960 slot 4  public override AffectedUnitNoticeBundle Execute(GameDirectorBase gameDirector, int attackTargetId, BattleUnit userUnit, int selectFriendUnitId, bool isForcedAct = False) { } */
-    Execute(gameDirector: GameDirectorBase, attackTargetId: int, userUnit: BattleUnit, selectFriendUnitId: int, isForcedAct?: boolean /* = False */): AffectedUnitNoticeBundle { return notPorted("AdditionalSkill.Execute", 0x1377960); }
+    Execute(gameDirector: GameDirectorBase, attackTargetId: int, userUnit: BattleUnit, selectFriendUnitId: int, isForcedAct: boolean = false): AffectedUnitNoticeBundle {
+        if (userUnit.Condition.CanNotUseSkill || userUnit.BreakPoint.IsBreak) {
+            if (!isForcedAct) return null!;
+        }
+        if (gameDirector.spReferee.GetSp(userUnit.Team) < this.ConsumeSP) return null!;
+        return this.Triggering(gameDirector, attackTargetId, userUnit, selectFriendUnitId);
+    }
 }
