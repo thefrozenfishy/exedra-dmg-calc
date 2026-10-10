@@ -6,12 +6,13 @@ import type { int } from "../../runtime";
 import type { ElementType } from "../../Network/Definition/Battle/ElementType";
 import type { JudgeResultType } from "../JudgeResultType";
 import { MstModelBase } from "./MstModelBase";
+import type { QuestStageMstRecord } from "../../Network/Definition/QuestOutGame/QuestStageMstRecord";
 
 // ---- ReDriveBattleCore.Model.QuestStageMstModel  (TypeDefIndex 893, public class) ----
-export class QuestStageMstModel extends MstModelBase<any /* QuestStageMstRecord */> {
+export class QuestStageMstModel extends MstModelBase<QuestStageMstRecord> {
     /** 0x18 private ElementType[] recommendationElements */
     recommendationElements: ElementType[] = null!;
-    get Record(): any /* QuestStageMstRecord */ { return this.get_Record(); }
+    get Record(): QuestStageMstRecord { return this.get_Record(); }
     get QuestStageMstId(): int { return this.get_QuestStageMstId(); }
     get QuestGroupMstId(): int { return this.get_QuestGroupMstId(); }
     get StageName(): string { return this.get_StageName(); }
@@ -38,57 +39,57 @@ export class QuestStageMstModel extends MstModelBase<any /* QuestStageMstRecord 
     get IsAutoModeOff(): boolean { return this.get_IsAutoModeOff(); }
     get SelectionAbilityLotteryMstId(): int { return this.get_SelectionAbilityLotteryMstId(); }
     /** @rva 0x16D5820  public void .ctor(QuestStageMstRecord record) { } */
-    ctor$QuestStageMstRecord(record: any /* QuestStageMstRecord */): this { return notPorted("QuestStageMstModel..ctor", 0x16D5820); }
+    ctor$QuestStageMstRecord(record: QuestStageMstRecord): this { return notPorted("QuestStageMstModel..ctor", 0x16D5820); }
     /** @rva 0x730C50  public QuestStageMstRecord get_Record() { } */
-    get_Record(): any /* QuestStageMstRecord */ { return notPorted("QuestStageMstModel.get_Record", 0x730C50); }
+    get_Record(): QuestStageMstRecord { return notPorted("QuestStageMstModel.get_Record", 0x730C50); }
     /** @rva 0x901770  public int get_QuestStageMstId() { } */
-    get_QuestStageMstId(): int { return notPorted("QuestStageMstModel.get_QuestStageMstId", 0x901770); }
+    get_QuestStageMstId(): int { return this.record.questStageMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_QuestGroupMstId() { } */
-    get_QuestGroupMstId(): int { return notPorted("QuestStageMstModel.get_QuestGroupMstId", 0x901790); }
+    get_QuestGroupMstId(): int { return this.record.questGroupMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017a5; mov eax, dword ptr [rax + 0x14]; add rsp, 0x28; ret */ }
     /** @rva 0x85E540  public string get_StageName() { } */
-    get_StageName(): string { return notPorted("QuestStageMstModel.get_StageName", 0x85E540); }
+    get_StageName(): string { return this.record.name; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x85e556; mov rax, qword ptr [rax + 0x18]; add rsp, 0x28; ret */ }
     /** @rva 0xA0E810  public int get_UseStamina() { } */
-    get_UseStamina(): int { return notPorted("QuestStageMstModel.get_UseStamina", 0xA0E810); }
+    get_UseStamina(): int { return this.record.useStamina; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e825; mov eax, dword ptr [rax + 0x34]; add rsp, 0x28; ret */ }
     /** @rva 0x16CBED0  public int get_PrevQuestStageMstId() { } */
-    get_PrevQuestStageMstId(): int { return notPorted("QuestStageMstModel.get_PrevQuestStageMstId", 0x16CBED0); }
+    get_PrevQuestStageMstId(): int { return this.record.prevQuestStageMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16cbee5; mov eax, dword ptr [rax + 0x38]; add rsp, 0x28; ret */ }
     /** @rva 0x16D31F0  public int get_ConditionGroupId() { } */
-    get_ConditionGroupId(): int { return notPorted("QuestStageMstModel.get_ConditionGroupId", 0x16D31F0); }
+    get_ConditionGroupId(): int { return this.record.conditionGroupId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d3205; mov eax, dword ptr [rax + 0x3c]; add rsp, 0x28; ret */ }
     /** @rva 0x901960  public int get_QuestMissionGroupId() { } */
-    get_QuestMissionGroupId(): int { return notPorted("QuestStageMstModel.get_QuestMissionGroupId", 0x901960); }
+    get_QuestMissionGroupId(): int { return this.record.questMissionGroupId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901975; mov eax, dword ptr [rax + 0x40]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5AD0  public object get_Difficulty() { } */
     get_Difficulty(): any { return notPorted("QuestStageMstModel.get_Difficulty", 0x16D5AD0); }
     /** @rva 0x16D5C20  public string get_StagePrefabName() { } */
-    get_StagePrefabName(): string { return notPorted("QuestStageMstModel.get_StagePrefabName", 0x16D5C20); }
+    get_StagePrefabName(): string { return this.record.stagePrefabName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5c39; mov rax, qword ptr [rax + 0x98]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5AB0  public string get_BgmCueSheetName() { } */
-    get_BgmCueSheetName(): string { return notPorted("QuestStageMstModel.get_BgmCueSheetName", 0x16D5AB0); }
+    get_BgmCueSheetName(): string { return this.record.bgmCueSheetName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5ac9; mov rax, qword ptr [rax + 0x88]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5A90  public string get_BgmCueName() { } */
-    get_BgmCueName(): string { return notPorted("QuestStageMstModel.get_BgmCueName", 0x16D5A90); }
+    get_BgmCueName(): string { return this.record.bgmCueName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5aa9; mov rax, qword ptr [rax + 0x90]; add rsp, 0x28; ret */ }
     /** @rva 0x7F9C00  public string get_ResourceName() { } */
-    get_ResourceName(): string { return notPorted("QuestStageMstModel.get_ResourceName", 0x7F9C00); }
+    get_ResourceName(): string { return this.record.resourceName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x7f9c16; mov rax, qword ptr [rax + 0x48]; add rsp, 0x28; ret */ }
     /** @rva 0x16D4340  public int get_RewardGroupId() { } */
-    get_RewardGroupId(): int { return notPorted("QuestStageMstModel.get_RewardGroupId", 0x16D4340); }
+    get_RewardGroupId(): int { return this.record.rewardGroupId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d4355; mov eax, dword ptr [rax + 0x5c]; add rsp, 0x28; ret */ }
     /** @rva 0x16D4DE0  public int get_FirstClearRewardGroupId() { } */
-    get_FirstClearRewardGroupId(): int { return notPorted("QuestStageMstModel.get_FirstClearRewardGroupId", 0x16D4DE0); }
+    get_FirstClearRewardGroupId(): int { return this.record.firstClearRewardGroupId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d4df5; mov eax, dword ptr [rax + 0x60]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5BE0  public ElementType get_RecommendationElement() { } */
-    get_RecommendationElement(): ElementType { return notPorted("QuestStageMstModel.get_RecommendationElement", 0x16D5BE0); }
+    get_RecommendationElement(): ElementType { return this.record.recommendationElement as ElementType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5bf8; mov eax, dword ptr [rax + 0xcc]; add rsp, 0x28; ret */ }
     /** @rva 0x733E90  public ElementType[] get_RecommendationElements() { } */
     get_RecommendationElements(): ElementType[] { return this.recommendationElements; /* asm: mov rax, qword ptr [rcx + 0x18]; ret */ }
     /** @rva 0x16D0B20  public int get_RecommendationPartyPower() { } */
-    get_RecommendationPartyPower(): int { return notPorted("QuestStageMstModel.get_RecommendationPartyPower", 0x16D0B20); }
+    get_RecommendationPartyPower(): int { return this.record.recommendationPartyPower; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d0b35; mov eax, dword ptr [rax + 0x58]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5A70  public int get_BeforeBattleScenarioMstId() { } */
-    get_BeforeBattleScenarioMstId(): int { return notPorted("QuestStageMstModel.get_BeforeBattleScenarioMstId", 0x16D5A70); }
+    get_BeforeBattleScenarioMstId(): int { return this.record.beforeBattleScenarioMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5a88; mov eax, dword ptr [rax + 0xa8]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5A50  public int get_AfterBattleScenarioMstId() { } */
-    get_AfterBattleScenarioMstId(): int { return notPorted("QuestStageMstModel.get_AfterBattleScenarioMstId", 0x16D5A50); }
+    get_AfterBattleScenarioMstId(): int { return this.record.afterBattleScenarioMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5a68; mov eax, dword ptr [rax + 0xac]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5B80  public JudgeResultType get_JudgeResultType() { } */
-    get_JudgeResultType(): JudgeResultType { return notPorted("QuestStageMstModel.get_JudgeResultType", 0x16D5B80); }
+    get_JudgeResultType(): JudgeResultType { return this.record.judgeResultType as JudgeResultType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5b98; mov eax, dword ptr [rax + 0xa0]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5BA0  public int get_JudgeResultValue() { } */
-    get_JudgeResultValue(): int { return notPorted("QuestStageMstModel.get_JudgeResultValue", 0x16D5BA0); }
+    get_JudgeResultValue(): int { return this.record.judgeResultValue; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5bb8; mov eax, dword ptr [rax + 0xa4]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5BC0  public string get_OverrideComponentPrefabName() { } */
-    get_OverrideComponentPrefabName(): string { return notPorted("QuestStageMstModel.get_OverrideComponentPrefabName", 0x16D5BC0); }
+    get_OverrideComponentPrefabName(): string { return this.record.overrideComponentPrefabName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5bd9; mov rax, qword ptr [rax + 0xb8]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5B30  public ElementType get_Element() { } */
-    get_Element(): ElementType { return notPorted("QuestStageMstModel.get_Element", 0x16D5B30); }
+    get_Element(): ElementType { return this.record.element as ElementType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5b48; mov eax, dword ptr [rax + 0xc8]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5B50  public bool get_IsAutoModeOff() { } */
     get_IsAutoModeOff(): boolean { return notPorted("QuestStageMstModel.get_IsAutoModeOff", 0x16D5B50); }
     /** @rva 0x16D5C00  public int get_SelectionAbilityLotteryMstId() { } */
-    get_SelectionAbilityLotteryMstId(): int { return notPorted("QuestStageMstModel.get_SelectionAbilityLotteryMstId", 0x16D5C00); }
+    get_SelectionAbilityLotteryMstId(): int { return this.record.selectionAbilityLotteryMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5c18; mov eax, dword ptr [rax + 0xc4]; add rsp, 0x28; ret */ }
 }

@@ -5,9 +5,6 @@
     python3 scripts/engine/decomp.py calls <rva>         every call/jmp target of one function (from the machine code)
     python3 scripts/engine/decomp.py slot <Class> <n>..  which virtual method a vtable slot is (class and its bases)
     python3 scripts/engine/decomp.py names <rva>         every method name IL2CPP folded onto one RVA
-    python3 scripts/engine/decomp.py rva <rva>[,<rva>..]  the simplified decompile of functions by RVA
-    python3 scripts/engine/decomp.py stubs <Class> [--all]  every notPorted method of a src/engine class (decompile; asm when Ghidra pruned blocks)
-    python3 scripts/engine/decomp.py asm <rva> [max]     machine code with TypeInfo/MethodInfo/string names, init boilerplate dropped
 
 `fn` takes a regex on the `// ==== Ns.Class$$...$$Method ====` header (e.g. 'ActReferee..AddAct ====' or
 'TurnReferee\\.<>c' for the lambdas) and prints the Ghidra C of decompiled/<ns>.c with the noise removed:
@@ -138,14 +135,11 @@ def simplify(s, idx, s2r, types):
     s = re.sub(r'\(\*\*\(code \*\*\)\((\*?\w+) \+ (0x[0-9a-f]+)\)\)\((\w+),\*\(undefined8 \*\)\(\*?\w+ \+ 0x[0-9a-f]+\)\)',
                lambda m: f'{m.group(3)}->VSLOT{(int(m.group(2), 16) - 0x138) // 16}()', s)
     s = re.sub(r'\(\*\*\(code \*\*\)\((\*?\w+) \+ (0x[0-9a-f]+)\)\)\((\w+),', lambda m: f'{m.group(3)}->VSLOT{(int(m.group(2), 16) - 0x138) // 16}(', s)
-    # interface dispatch: the inlined itable search + FUN_180688890 fallback -> IFACE(obj, IFoo, slot)
-    s = re.sub(r'(\w+) = \*(\w+);\n\s*(\w+) = 0;\n\s*if \(\*\(ushort \*\)\(\1 \+ 0x12e\) != 0\) \{(?:(?!\n\S)[\s\S])*?\n\s*(\w+) =\s*(?:\([\w *]+\)\s*)?FUN_180688890\(\2,\s*(_\S+?_TypeInfo)\s*,\s*(\w+)\s*\);\n(?:LAB_|code_r)\w+:\n',
-               lambda m: f'{m.group(4)} = IFACE({m.group(2)}, {m.group(5).strip("_").replace("_TypeInfo", "")}, slot {m.group(6)});\n', s)
     s = s.replace('ReDriveBattleCore_', '').replace('System_Collections_Generic_', '')
     s = re.sub(r',_Method_[A-Za-z0-9_<>.,]+?__\)', ')', s)
     s = re.sub(r'\(longlong \*\)|\(longlong\)|\(undefined8 \*\)|\(undefined4 \*\)|\(int \*\)|\(char \*\)|\(byte \*\)|\(ulonglong\)|\(uint \*\)', '', s)
     s = re.sub(r'\*\((\w+) \+ (0x[0-9a-f]+)\)', r'\1[\2]', s)
-    lines = [l for l in s.split('\n') if l.strip() and not l.startswith('/* WARNING') and not re.search(r'FUN_18067ce80|swi\(3\)|\(\*pcVar[0-9]\)\(\)|FUN_18067d0a0\(\);$|func_0x00018067c210\(', l)
+    lines = [l for l in s.split('\n') if l.strip() and not re.search(r'FUN_18067ce80|swi\(3\)|\(\*pcVar[0-9]\)\(\)|FUN_18067d0a0\(\);$|func_0x00018067c210\(', l)
              and not re.match(r'^  (undefined[0-9]*|longlong|ulonglong|int|uint|char|bool|byte|float|double|code|short|ushort|undefined) \**[A-Za-z_0-9]+( \[[0-9]+\])?;$', l)]
     s = '\n'.join(lines)
     s = re.sub(r'\n(\s*)if \([^\n]*(?:\[0xe0\]|\+ 0xe0\)) == 0\) \{\n\s*func_0x00018065d160\([^\n]*\n\1\}', '', s)
@@ -156,149 +150,224 @@ def simplify(s, idx, s2r, types):
     return s
 
 
+# ---------------------------------------------------------------------------------------------------------------
+# Typed field resolution: rewrite raw Ghidra memory accesses to `var.Field` using dump.cs layouts.
+ELEM = {'longlong': 8, 'ulonglong': 8, 'undefined8': 8, 'double': 8, 'code': 8, 'int': 4, 'uint': 4, 'undefined4': 4,
+        'float': 4, 'short': 2, 'ushort': 2, 'undefined2': 2, 'char': 1, 'byte': 1, 'bool': 1, 'undefined1': 1,
+        'undefined': 1, 'int7': 8, 'uint7': 8}
+_TI = None
+
+
+def type_index():
+    global _TI
+    if _TI is None:
+        idx, s2r, types = caches()
+        by = {}
+        for t in types:
+            by.setdefault(t['name'].split('<')[0], t)
+            by.setdefault(t['name'].split('<')[0].split('.')[-1], t)
+        rva_ret = {}
+        for t in types:
+            for m in t['methods']:
+                if m['rva'] and m['rva'] != '-1':
+                    rva_ret.setdefault(int(m['rva'], 16), []).append((t['name'].split('<')[0], m['name'], m['ret']))
+        _TI = (by, rva_ret, idx, s2r)
+    return _TI
+
+
+def bare(tn):
+    """'List<BattleUnit>' -> 'List', 'BattleUnit.TeamType' -> 'BattleUnit.TeamType', 'UnitStateBase[]' -> None"""
+    if tn is None: return None
+    tn = tn.strip()
+    if tn.endswith(']') or tn.endswith('?'): return None
+    return tn.split('<')[0]
+
+
+BUILTIN = {'List': {0x10: ('_items', 'T[]'), 0x18: ('Count', 'int'), 0x1c: ('_version', 'int')},
+           'HashSet': {}, 'Dictionary': {}}
+
+
+def fields_of(cls):
+    if cls in BUILTIN: return BUILTIN[cls]
+    by = type_index()[0]
+    out = {}; seen = set(); t = by.get(cls)
+    while t and t['name'] not in seen:
+        seen.add(t['name'])
+        for f in t['fields']:
+            if f.get('offset') and 'static' not in f['mods'] and 'const' not in f['mods']:
+                off = int(f['offset'], 16)
+                m = re.match(r'^<(\w+)>k__BackingField$', f['name'])
+                out.setdefault(off, (m.group(1) if m else f['name'], f['type']))
+        b = next((x for x in t['bases'] if (by.get(x.split('<')[0]) or {}).get('kind') in ('class', 'struct')), None)
+        t = by.get(b.split('<')[0]) if b else None
+    return out
+
+
+def slot_name(cls, slot):
+    by = type_index()[0]
+    t = by.get(cls); seen = set()
+    while t and t['name'] not in seen:
+        seen.add(t['name'])
+        for m in t['methods']:
+            if m['slot'] == slot: return m['name']
+        b = next((x for x in t['bases'] if (by.get(x.split('<')[0]) or {}).get('kind') in ('class', 'struct')), None)
+        t = by.get(b.split('<')[0]) if b else None
+    return None
+
+
+def ret_type(callname):
+    by, rva_ret, idx, s2r = type_index()
+    r = s2r.get(callname)
+    if r is None: return None
+    for cls, mn, ret in rva_ret.get(r, []):
+        if san(cls + '$$' + mn).endswith(callname.split('__', 1)[-1]) and callname.split('__')[0].split('_')[-1] == cls.split('.')[-1]:
+            return bare(ret)
+    c = rva_ret.get(r, [])
+    return bare(c[0][2]) if len(c) == 1 else None
+
+
+def typed(block):
+    """Rename params to their C# names, resolve `*(T *)(x + off)` / `x[n]` to `x.Field`, track simple types."""
+    m = re.search(r'// RVA (?:0x[0-9a-f]+)\s+C#: (.*)$', block, re.M)
+    hm = re.match(r'// ==== ([^$]+)\$\$', block)
+    if not m or not hm: return block
+    sig = m.group(1)
+    cls = hm.group(1).replace('ReDriveBattleCore.', '').split('.')
+    cls = '.'.join(cls[1:]) if cls[0] in ('Act', 'AI', 'AbilityEffect', 'BattleCondition', 'Command', 'Model', 'Reader', 'Request', 'UnitState', 'SimulationBattle') else '.'.join(cls)
+    pm = re.search(r'\((.*)\)\s*\{', sig)
+    cs_params = []
+    if pm and pm.group(1).strip():
+        depth = 0; cur = ''
+        for ch in pm.group(1):
+            if ch == '<': depth += 1
+            if ch == '>': depth -= 1
+            if ch == ',' and depth == 0: cs_params.append(cur.strip()); cur = ''
+            else: cur += ch
+        cs_params.append(cur.strip())
+    is_static = ' static ' in ' ' + sig
+    vtype = {}; elem = {}
+    # declarations
+    fm = re.search(r'^\S[^\n]*?\b(\w+)\s*\(([^)]*)\)\s*\n\{', block, re.M)
+    names = {}
+    if fm:
+        ps = [p.strip() for p in fm.group(2).split(',') if p.strip()]
+        k = 0
+        if not is_static and ps:
+            names[re.split(r'[\s*]+', ps[0])[-1]] = 'this'; vtype['this'] = cls; k = 1
+        for i, cp in enumerate(cs_params):
+            if k + i >= len(ps): break
+            pv = re.split(r'[\s*]+', ps[k + i])[-1]
+            toks = cp.replace(' in ', ' ').replace('out ', '').replace('ref ', '').split('=')[0].split()
+            if len(toks) >= 2:
+                names[pv] = toks[-1]; vtype[toks[-1]] = bare(' '.join(toks[:-1]))
+    for d in re.finditer(r'^\s*(?:\w+ )?(undefined[1248]?|longlong|ulonglong|int|uint|char|byte|bool|float|double|short|ushort|code|undefined)\s*(\*+)\s*(\w+)\s*(?:\[\d+\])?;', block, re.M):
+        elem[d.group(3)] = 8 if len(d.group(2)) > 1 else ELEM.get(d.group(1), 1)
+    if fm:
+        for p in fm.group(2).split(','):
+            pm2 = re.match(r'\s*(\w+)\s*(\*+)\s*(\w+)', p)
+            if pm2: elem[pm2.group(3)] = 8 if len(pm2.group(2)) > 1 else ELEM.get(pm2.group(1), 1)
+    for a, b in names.items():
+        block = re.sub(r'\b' + a + r'\b', b, block)
+        if a in elem: elem[b] = elem.pop(a)
+    out_lines = []
+    ATOM = r'([A-Za-z_]\w*(?:\.\w+)*)'
+    for line in block.split('\n'):
+        if line.startswith('//'): out_lines.append(line); continue
+
+        def skip(var, off):
+            return var.startswith('_') or 'TypeInfo' in var or 'Method_' in var or (var not in vtype and off in (0x130, 0xc8, 0x12e, 0x135, 0xe0, 0xb8, 0xb0, 0x178, 0x180, 0x1a8, 0x1b0, 0x1c0))
+
+        def fname(var, off):
+            t = vtype.get(var)
+            if t:
+                f = fields_of(t).get(off)
+                if f: return f'{var}.{f[0]}', bare(f[1])
+            return f'{var}@{off:#x}', None
+        changed = True; guard = 0
+        while changed and guard < 20:
+            changed = False; guard += 1
+            # *(T *)((longlong)X + N)  -> byte offset
+            def r1(m):
+                nonlocal changed
+                if skip(m.group(1), int(m.group(2), 16)): return m.group(0)
+                changed = True
+                return fname(m.group(1), int(m.group(2), 16))[0]
+            line = re.sub(r'\*\((?:\w+) \*\)\(\(longlong\)' + ATOM + r' \+ (0x[0-9a-f]+)\)', r1, line)
+            def r2(m):
+                nonlocal changed
+                v = m.group(1); n = int(m.group(2), 16)
+                if v in ('this',) and v not in elem: off = n
+                elif v in elem: off = n * elem[v]
+                elif '.' in v or '@' in v or v.startswith(('lVar', 'uVar', 'param', 'lStack', 'uStack')) or v in vtype: off = n
+                else: return m.group(0)
+                if skip(v, off): return m.group(0)
+                changed = True
+                return fname(v, off)[0]
+            line = re.sub(r'\*\((?:\w+) \*\)\(' + ATOM + r' \+ (0x[0-9a-f]+|\d+)\)', r2, line)
+            def r3(m):
+                nonlocal changed
+                v = m.group(1)
+                if v not in elem or skip(v, int(m.group(2), 0) * elem[v]): return m.group(0)
+                changed = True
+                return fname(v, int(m.group(2), 0) * elem[v])[0]
+            line = re.sub(r'\b' + ATOM + r'\[(0x[0-9a-f]+|\d+)\]', r3, line)
+        # type propagation on assignment
+        am = re.match(r'\s*(\w+) = (.*?);?\s*$', line)
+        if am:
+            v, rhs = am.group(1), am.group(2)
+            t = None
+            cm = re.match(r'(?:\(\w+\s*\*?\))?\s*([A-Za-z_]\w*__\w+)', rhs)
+            if cm: t = ret_type(cm.group(1))
+            fm2 = re.match(r'([A-Za-z_]\w*(?:\.\w+)+)$', rhs.strip())
+            if fm2:
+                parts = fm2.group(1).split('.')
+                tt = vtype.get(parts[0])
+                for p in parts[1:]:
+                    tt = next((bare(ty) for o, (nm, ty) in fields_of(tt).items() if nm == p), None) if tt else None
+                t = tt
+            if t: vtype[v] = t
+            elif v in vtype and not rhs.startswith(v): vtype.pop(v, None)
+            if t: line += f'   /*: {t}*/'
+        out_lines.append(line)
+    # chained field access X.A@0x10 -> X.A.B when A's type is known
+    s = '\n'.join(out_lines)
+
+    def vslot(m):
+        v = m.group(1); slot = (int(m.group(2), 16) - 0x138) // 16
+        t = vtype.get(v)
+        nm = slot_name(t, slot) if t else None
+        return f'{v}->{nm or "VSLOT" + str(slot)}('
+    s = re.sub(r'\(\*\*\(code \*\*\)\(\*(?:\(longlong \*\))?(\w+(?:\.\w+)*) \+ (0x[0-9a-f]+)\)\)\(', vslot, s)
+    def chain(m):
+        path = m.group(1); off = int(m.group(2), 16)
+        parts = path.split('.'); tt = vtype.get(parts[0])
+        for p in parts[1:]:
+            tt = next((bare(ty) for o, (nm, ty) in fields_of(tt).items() if nm == p), None) if tt else None
+        f = fields_of(tt).get(off) if tt else None
+        return f'{path}.{f[0]}' if f else m.group(0)
+    for _ in range(4):
+        s = re.sub(r'\b([A-Za-z_]\w*(?:\.\w+)+)@(0x[0-9a-f]+)', chain, s)
+    return s
+
+
 def cmd_fn(pattern):
     idx, s2r, types = caches()
     rx = re.compile(r'^// ==== .*(' + pattern + ')')
-    printed = set()
     for f in sorted(os.listdir(DEC)):
         if not f.endswith('.c'): continue
         blocks = re.split(r'\n(?=// ==== )', open(os.path.join(DEC, f), encoding='utf-8', errors='ignore').read())
         for b in blocks:
             if not rx.match(b): continue
+            try:
+                b2 = typed(b)
+            except Exception as e:
+                b2 = b; sys.stderr.write(f'typed() failed: {e}\n')
+            print(simplify(b2, idx, s2r, types))
             m = re.search(r'// RVA (0x[0-9a-f]+)', b)
-            if m and m.group(1) in printed:
-                print(b.split('\n')[0] + '\n' + b.split('\n')[1] + '   (same code as printed above)\n'); continue
-            if m: printed.add(m.group(1))
-            print(simplify(b, idx, s2r, types))
             if m:
                 cs = [c for c in calls(int(m.group(1), 16), idx) if not any(x in c for x in NOISE)]
                 if cs: print('-- calls (machine code):\n  ' + '\n  '.join(c[:170] for c in cs))
             print()
-
-
-RT = {0x62af30: 'il2cpp_object_new', 0x67c210: 'gc_wbarrier', 0x65d160: 'class_init', 0x67d090: 'throw_index_out_of_range',
-      0x67d0a0: 'throw_nullref', 0x67ce80: 'init_metadata', 0x62a6f0: 'array_new'}
-
-
-def meta():
-    p = os.path.join(CACHE, 'meta.pkl')
-    if not os.path.exists(p):
-        d = json.load(open(os.path.join(DUMPER, 'script.json'), encoding='utf-8'))
-        m = {}
-        for x in d.get('ScriptMetadata', []): m[x['Address']] = x['Name']
-        for x in d.get('ScriptMetadataMethod', []): m[x['Address']] = 'M:' + x['Name']
-        for x in d.get('ScriptString', []): m[x['Address']] = 'S:' + repr(x['Value'])[:60]
-        pickle.dump(m, open(p, 'wb'))
-    return pickle.load(open(p, 'rb'))
-
-
-def cmd_asm(rva, mx=0x1800):
-    import capstone
-    idx, _, _ = caches(); M = meta()
-    d, secs = dll()
-    off = next(rva - va + ra for va, sz, ra in secs if va <= rva < va + sz)
-    starts = sorted(idx.keys()); k = bisect.bisect_right(starts, rva)
-    size = min(mx, (starts[k] if k < len(starts) else rva + mx) - rva)
-    md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_64)
-    ins = list(md.disasm(d[off:off + size], rva))
-    def tgt(i):
-        if i.mnemonic in ('call', 'jmp') and i.op_str.startswith('0x'):
-            t = int(i.op_str, 16); return t - 0x180000000 if t >= 0x180000000 else t
-        return None
-    drop = set()
-    for n, i in enumerate(ins):
-        t = tgt(i)
-        if t == 0x67ce80:
-            drop.add(n)
-            if n and ins[n - 1].mnemonic == 'lea': drop.add(n - 1)
-        if t == 0x67c210:  # lea rcx,[x+o]; mov [x+o],r; mov rdx,r; call barrier -> keep the store only
-            drop.add(n)
-            for k in (n - 1, n - 3):
-                if k >= 0 and (ins[k].mnemonic == 'lea' and ins[k].op_str.startswith('rcx') or ins[k].mnemonic == 'mov' and ins[k].op_str.startswith('rdx,')): drop.add(k)
-            if n >= 1 and ins[n - 1].mnemonic == 'mov' and ins[n - 1].op_str.startswith('rdx,'): drop.add(n - 1)
-        # static-init guard: cmp byte [rip+x],0 ; jne L ; ... ; mov byte [rip+x],1
-        if i.mnemonic == 'cmp' and i.op_str.startswith('byte ptr [rip') and i.op_str.endswith(', 0'):
-            for k in range(n + 1, min(n + 40, len(ins))):
-                if ins[k].mnemonic == 'mov' and ins[k].op_str.startswith('byte ptr [rip') and ins[k].op_str.endswith(', 1'):
-                    if all(j in drop or ins[j].mnemonic in ('lea', 'call', 'jne', 'mov') and (ins[j].mnemonic != 'mov' or j == n + 1 or j == k) for j in range(n + 1, k)):
-                        drop.update([n, k]); drop.update(j for j in range(n + 1, k) if ins[j].mnemonic == 'jne')
-                    break
-    out = []
-    for n, i in enumerate(ins):
-        if n in drop: continue
-        op = i.op_str
-        note = ''
-        m = re.search(r'\[rip ([+-]) (0x[0-9a-f]+)\]', op)
-        if m:
-            a = i.address + i.size + (int(m.group(2), 16) * (1 if m.group(1) == '+' else -1))
-            nm = M.get(a + 0x180000000) or M.get(a)
-            note = nm if nm else f'[{a:#x}]'
-        if i.mnemonic in ('call', 'jmp') and op.startswith('0x'):
-            t = int(op, 16); t2 = t - 0x180000000 if t > 0x180000000 else t
-            nm = RT.get(t2) or ' | '.join(([x for x in idx.get(t2, []) if x.startswith(('ReDriveBattleCore', 'A2.', 'System.'))] or idx.get(t2, []))[:3])
-            note = f'{t2:#x} {nm}'
-            if i.mnemonic == 'jmp' and rva <= t2 < rva + size: note = f'-> {t2:#x}'
-        if re.match(r'^j\w+$', i.mnemonic) and op.startswith('0x'):
-            t = int(op, 16); t2 = t - 0x180000000 if t > 0x180000000 else t
-            op = f'{t2:#x}'
-            if note.startswith('-> '): note = ''
-        out.append(f'{i.address:#x} {i.mnemonic:6s} {op}' + (f'   ; {note}' if note else ''))
-    print('\n'.join(out))
-
-
-def rva_index():
-    p = os.path.join(CACHE, 'rvablocks.pkl')
-    if not os.path.exists(p):
-        ix = {}
-        for f in sorted(os.listdir(DEC)):
-            if not f.endswith('.c'): continue
-            txt = open(os.path.join(DEC, f), encoding='utf-8', errors='ignore').read()
-            pos = 0
-            for b in re.split(r'\n(?=// ==== )', txt):
-                m = re.search(r'// RVA (0x[0-9a-f]+)', b[:400])
-                if m: ix.setdefault(int(m.group(1), 16), (f, pos, len(b)))
-                pos += len(b) + 1
-        pickle.dump(ix, open(p, 'wb'))
-    return pickle.load(open(p, 'rb'))
-
-
-def block_of(rva, ix):
-    e = ix.get(rva)
-    if not e: return None
-    f, pos, n = e
-    with open(os.path.join(DEC, f), encoding='utf-8', errors='ignore') as h:
-        return h.read()[pos:pos + n]
-
-
-def show_rva(rva, idx, s2r, types, ix, label=''):
-    b = block_of(rva, ix)
-    if b is None:
-        print(f'// ==== {label} {rva:#x}: not in the decompile, machine code:'); cmd_asm(rva); print(); return
-    pruned = 'Removing unreachable block' in b
-    print(simplify(b, idx, s2r, types))
-    cs = [c for c in calls(rva, idx) if not any(x in c for x in NOISE)]
-    if cs: print('-- calls (machine code):\n  ' + '\n  '.join(c[:170] for c in cs))
-    if pruned:
-        print('-- Ghidra pruned blocks; machine code:'); cmd_asm(rva)
-    print()
-
-
-def cmd_stubs(cls, everything=False):
-    idx, s2r, types = caches(); ix = rva_index()
-    sys.path.insert(0, HERE)
-    import importlib.util
-    spec = importlib.util.spec_from_file_location('ledger_mod', os.path.join(HERE, 'ledger.py'))
-    src = open(os.path.join(HERE, 'ledger.py'), encoding='utf-8').read().replace('\nmain()\n', '\n')
-    g = {'__file__': os.path.join(HERE, 'ledger.py'), '__name__': 'ledger_mod'}; exec(compile(src, 'ledger.py', 'exec'), g)
-    seen = set()
-    for r in g['scan']():
-        if not (r['cls'] == cls or r['cls'].split('.')[-1] == cls): continue
-        if r['status'] != 'stub' and not everything: continue
-        if r['rva'] == '-1': continue
-        v = int(r['rva'], 16)
-        print(f"//>>> {r['ts']}  [{r['status']}]  {r['sig']}")
-        if v in seen: print('//    (same RVA as above)\n'); continue
-        seen.add(v); show_rva(v, idx, s2r, types, ix, r['ts'])
 
 
 def cmd_slot(cls, slots):
@@ -321,11 +390,6 @@ def main():
     elif a[0] == 'calls':
         idx, _, _ = caches(); print('\n'.join(calls(int(a[1], 16), idx)))
     elif a[0] == 'slot': cmd_slot(a[1], [int(x) for x in a[2:]])
-    elif a[0] == 'rva':
-        idx, s2r, types = caches(); ix = rva_index()
-        for x in a[1].split(','): show_rva(int(x, 16), idx, s2r, types, ix)
-    elif a[0] == 'stubs': cmd_stubs(a[1], '--all' in a)
-    elif a[0] == 'asm': cmd_asm(int(a[1], 16), int(a[2], 16) if len(a) > 2 else 0x1800)
     elif a[0] == 'names':
         idx, _, _ = caches(); print('\n'.join(idx.get(int(a[1], 16), ['(none)'])))
     else: print(__doc__)

@@ -4,9 +4,10 @@
 import { notPorted } from "../../runtime";
 import type { int } from "../../runtime";
 import { MstModelBase } from "./MstModelBase";
+import type { SoloRaidSeasonBuffMstRecord } from "../../Network/Definition/SoloRaid/SoloRaidSeasonBuffMstRecord";
 
 // ---- ReDriveBattleCore.Model.SoloRaidSeasonBuffMstModel  (TypeDefIndex 897, public class) ----
-export class SoloRaidSeasonBuffMstModel extends MstModelBase<any /* SoloRaidSeasonBuffMstRecord */> {
+export class SoloRaidSeasonBuffMstModel extends MstModelBase<SoloRaidSeasonBuffMstRecord> {
     get SoloRaidSeasonBuffMstId(): int { return this.get_SoloRaidSeasonBuffMstId(); }
     get GroupId(): int { return this.get_GroupId(); }
     get PassiveSkillMstId(): int { return this.get_PassiveSkillMstId(); }
@@ -16,21 +17,21 @@ export class SoloRaidSeasonBuffMstModel extends MstModelBase<any /* SoloRaidSeas
     get BuffPointChargePassiveSkillMstId(): int { return this.get_BuffPointChargePassiveSkillMstId(); }
     get EnhancedSkillTurnGaugeValue(): int { return this.get_EnhancedSkillTurnGaugeValue(); }
     /** @rva 0x16D8750  public void .ctor(SoloRaidSeasonBuffMstRecord record) { } */
-    ctor$SoloRaidSeasonBuffMstRecord(record: any /* SoloRaidSeasonBuffMstRecord */): this { return notPorted("SoloRaidSeasonBuffMstModel..ctor", 0x16D8750); }
+    ctor$SoloRaidSeasonBuffMstRecord(record: SoloRaidSeasonBuffMstRecord): this { return notPorted("SoloRaidSeasonBuffMstModel..ctor", 0x16D8750); }
     /** @rva 0x901770  public int get_SoloRaidSeasonBuffMstId() { } */
-    get_SoloRaidSeasonBuffMstId(): int { return notPorted("SoloRaidSeasonBuffMstModel.get_SoloRaidSeasonBuffMstId", 0x901770); }
+    get_SoloRaidSeasonBuffMstId(): int { return this.record.soloRaidSeasonBuffMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_GroupId() { } */
-    get_GroupId(): int { return notPorted("SoloRaidSeasonBuffMstModel.get_GroupId", 0x901790); }
+    get_GroupId(): int { return this.record.groupId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017a5; mov eax, dword ptr [rax + 0x14]; add rsp, 0x28; ret */ }
     /** @rva 0x902C70  public int get_PassiveSkillMstId() { } */
-    get_PassiveSkillMstId(): int { return notPorted("SoloRaidSeasonBuffMstModel.get_PassiveSkillMstId", 0x902C70); }
+    get_PassiveSkillMstId(): int { return this.record.passiveSkillMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x902c85; mov eax, dword ptr [rax + 0x18]; add rsp, 0x28; ret */ }
     /** @rva 0x902C50  public int get_EnhancedPassiveSkillMstId() { } */
-    get_EnhancedPassiveSkillMstId(): int { return notPorted("SoloRaidSeasonBuffMstModel.get_EnhancedPassiveSkillMstId", 0x902C50); }
+    get_EnhancedPassiveSkillMstId(): int { return this.record.enhancedPassiveSkillMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x902c65; mov eax, dword ptr [rax + 0x1c]; add rsp, 0x28; ret */ }
     /** @rva 0xA0D840  public int get_MaxBuffPoint() { } */
-    get_MaxBuffPoint(): int { return notPorted("SoloRaidSeasonBuffMstModel.get_MaxBuffPoint", 0xA0D840); }
+    get_MaxBuffPoint(): int { return this.record.maxBuffPoint; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0d855; mov eax, dword ptr [rax + 0x20]; add rsp, 0x28; ret */ }
     /** @rva 0xA0E7D0  public int get_MaxBuffPointOnEnhanced() { } */
-    get_MaxBuffPointOnEnhanced(): int { return notPorted("SoloRaidSeasonBuffMstModel.get_MaxBuffPointOnEnhanced", 0xA0E7D0); }
+    get_MaxBuffPointOnEnhanced(): int { return this.record.maxBuffPointOnEnhanced; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e7e5; mov eax, dword ptr [rax + 0x24]; add rsp, 0x28; ret */ }
     /** @rva 0xA0E790  public int get_BuffPointChargePassiveSkillMstId() { } */
-    get_BuffPointChargePassiveSkillMstId(): int { return notPorted("SoloRaidSeasonBuffMstModel.get_BuffPointChargePassiveSkillMstId", 0xA0E790); }
+    get_BuffPointChargePassiveSkillMstId(): int { return this.record.buffPointChargePassiveSkillMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e7a5; mov eax, dword ptr [rax + 0x28]; add rsp, 0x28; ret */ }
     /** @rva 0xA0E7B0  public int get_EnhancedSkillTurnGaugeValue() { } */
-    get_EnhancedSkillTurnGaugeValue(): int { return notPorted("SoloRaidSeasonBuffMstModel.get_EnhancedSkillTurnGaugeValue", 0xA0E7B0); }
+    get_EnhancedSkillTurnGaugeValue(): int { return this.record.enhancedSkillTurnGaugeValue; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e7c5; mov eax, dword ptr [rax + 0x2c]; add rsp, 0x28; ret */ }
 }

@@ -1,0 +1,440 @@
+{
+ "AbilityEffectTypeMstModel": {
+  "record": "AbilityEffectTypeMstRecord",
+  "file": "getAbilityEffectTypeMstList.json",
+  "key": "abilityEffectTypeMstId",
+  "fields": [
+   "abilityEffectTypeMstId",
+   "name",
+   "effectType",
+   "category",
+   "targetParams",
+   "paramEffectType",
+   "iconName",
+   "stateFlipName",
+   "displayType"
+  ]
+ },
+ "BattleConditionMstModel": {
+  "record": "BattleConditionMstRecord",
+  "file": "getBattleConditionMstList.json",
+  "key": "battleConditionMstId",
+  "fields": [
+   "battleConditionMstId",
+   "description",
+   "compareTarget",
+   "compareContent",
+   "compareOperator",
+   "compareValue"
+  ]
+ },
+ "BattleConditionSetMstModel": {
+  "record": "BattleConditionSetMstRecord",
+  "file": "getBattleConditionSetMstList.json",
+  "key": "battleConditionSetMstId",
+  "fields": [
+   "battleConditionSetMstId",
+   "description",
+   "battleConditionMstIdCsv"
+  ]
+ },
+ "BreakMstModel": {
+  "record": "BreakMstRecord",
+  "file": "getBreakMstList.json",
+  "key": "breakMstId",
+  "fields": [
+   "breakMstId",
+   "breakPoint",
+   "breakPointRecoveryPerTurn",
+   "breakTurnGaugeSlowRatio",
+   "initialBreakedDamageReceiveRate",
+   "maxBreakedDamageReceiveRate",
+   "breakedDamageReceiveRateIncreaseRate"
+  ]
+ },
+ "CalculationPointPolicyMstModel": {
+  "record": "CalculationPointPolicyMstRecord",
+  "file": "getCalculationPointPolicyMstList.json",
+  "key": "calculationPointPolicyMstId",
+  "fields": [
+   "calculationPointPolicyMstId",
+   "policyType",
+   "coefficientName",
+   "conditionValue",
+   "conditionValue2",
+   "value",
+   "startTime"
+  ]
+ },
+ "EnemyConditionSetsAndActionMstModel": {
+  "record": "EnemyConditionSetsAndActionMstRecord",
+  "file": "getEnemyConditionSetsAndActionMstList.json",
+  "key": "enemyConditionSetsAndActionMstId",
+  "fields": [
+   "enemyConditionSetsAndActionMstId",
+   "questEnemyAppearanceMstId",
+   "enemyConditionSkillSetId",
+   "conditionSetMstIdCsv",
+   "skillMstIdCsv",
+   "isSkillBundle",
+   "isSkillReusable",
+   "priority"
+  ]
+ },
+ "EnemyMstModel": {
+  "record": "EnemyMstRecord",
+  "file": "getEnemyMstList.json",
+  "key": "enemyMstId",
+  "fields": [
+   "enemyMstId",
+   "enemyUniqueId",
+   "name",
+   "runesName",
+   "enemyType",
+   "size",
+   "modelPrefabName",
+   "iconResourceName",
+   "cueSheetName",
+   "appearEffectPrefabName",
+   "isCollectionDisp",
+   "canRotateModel",
+   "unlockType",
+   "unlockValue",
+   "releaseTime",
+   "isNoVisualDeath"
+  ]
+ },
+ "PassiveSkillDetailMstModel": {
+  "record": "PassiveSkillDetailMstRecord",
+  "file": "getPassiveSkillDetailMstList.json",
+  "key": "passiveSkillDetailMstId",
+  "fields": [
+   "passiveSkillDetailMstId",
+   "passiveSkillMstId",
+   "abilityEffectType",
+   "value1",
+   "value2",
+   "value3",
+   "element",
+   "turn",
+   "remainCount",
+   "role",
+   "range",
+   "probability",
+   "isFixedProbability",
+   "description",
+   "descriptionType",
+   "startTimingIdCsv",
+   "startConditionSetIdCsv",
+   "activeConditionSetIdCsv"
+  ]
+ },
+ "PassiveSkillMstModel": {
+  "record": "PassiveSkillMstRecord",
+  "file": "getPassiveSkillMstList.json",
+  "key": "passiveSkillMstId",
+  "fields": [
+   "passiveSkillMstId",
+   "skillUniqueId",
+   "level",
+   "name",
+   "description",
+   "conditionElement",
+   "conditionRole",
+   "skillButtonIcon"
+  ]
+ },
+ "QuestEnemyAppearanceMstModel": {
+  "record": "QuestEnemyAppearanceMstRecord",
+  "file": "getQuestEnemyAppearanceMstList.json",
+  "key": "questEnemyAppearanceMstId",
+  "fields": [
+   "questEnemyAppearanceMstId",
+   "questStageMstId",
+   "wave",
+   "enemyMstId",
+   "enemySkillSetId",
+   "enemyConditionSkillSetId",
+   "passiveSkillMstId",
+   "weakElement1",
+   "weakElement2",
+   "weakElement3",
+   "weakElement4",
+   "weakElement5",
+   "weakElement6",
+   "isMainTargetEnemy",
+   "hp",
+   "atk",
+   "def",
+   "speed",
+   "criticalRate",
+   "criticalDamageRate",
+   "healRate",
+   "effectHitRate",
+   "effectParryRate",
+   "burnParryRate",
+   "weaknessParryRate",
+   "poisonParryRate",
+   "stunParryRate",
+   "curseParryRate",
+   "bleedParryRate",
+   "vortexParryRate",
+   "fireDamageRate",
+   "aquaDamageRate",
+   "forestDamageRate",
+   "lightDamageRate",
+   "darkDamageRate",
+   "neutralDamageRate",
+   "fireResistRate",
+   "aquaResistRate",
+   "forestResistRate",
+   "lightResistRate",
+   "darkResistRate",
+   "neutralResistRate",
+   "fireAimDamageRate",
+   "aquaAimDamageRate",
+   "forestAimDamageRate",
+   "lightAimDamageRate",
+   "darkAimDamageRate",
+   "neutralAimDamageRate",
+   "breakMstId",
+   "conditionType",
+   "conditionValue",
+   "summonId",
+   "hpGaugeCount",
+   "startHpGaugeCount",
+   "modeChangeEffectTxt",
+   "linkHpWeight",
+   "isSkipDeathMotion"
+  ]
+ },
+ "QuestEnemyModeChangeMstModel": {
+  "record": "QuestEnemyModeChangeMstRecord",
+  "file": "getQuestEnemyModeChangeMstList.json",
+  "key": "questEnemyModeChangeMstId",
+  "fields": [
+   "questEnemyModeChangeMstId",
+   "questEnemyAppearanceMstId",
+   "step",
+   "type",
+   "thresholdValue"
+  ]
+ },
+ "QuestEnemySkillSetMstModel": {
+  "record": "QuestEnemySkillSetMstRecord",
+  "file": "getQuestEnemySkillSetMstList.json",
+  "key": "questEnemySkillSetMstId",
+  "fields": [
+   "questEnemySkillSetMstId",
+   "enemySkillSetId",
+   "skillMstId",
+   "weightValue",
+   "hpGaugeValue",
+   "isDescriptionHidden"
+  ]
+ },
+ "QuestEnemyWaveMstModel": {
+  "record": "QuestEnemyWaveMstRecord",
+  "file": "getQuestEnemyWaveMstList.json",
+  "key": "questEnemyWaveMstId",
+  "fields": [
+   "questEnemyWaveMstId",
+   "questStageMstId",
+   "wave",
+   "linkHpType",
+   "linkHpName",
+   "stagePrefabName",
+   "dioramaBackGroundMstId",
+   "enemyTipsText"
+  ]
+ },
+ "QuestStageMstModel": {
+  "record": "QuestStageMstRecord",
+  "file": "getQuestStageMstList.json",
+  "key": "questStageMstId",
+  "fields": [
+   "questStageMstId",
+   "questGroupMstId",
+   "name",
+   "description",
+   "detail",
+   "difficulty",
+   "useStamina",
+   "prevQuestStageMstId",
+   "conditionGroupId",
+   "questMissionGroupId",
+   "resourceName",
+   "recommendationElementCsv",
+   "recommendationPartyPower",
+   "rewardGroupId",
+   "firstClearRewardGroupId",
+   "exp",
+   "firstClearExp",
+   "money",
+   "firstClearMoney",
+   "characterExp",
+   "styleExp",
+   "firstClearStyleExp",
+   "characterHeartExp",
+   "bgmCueSheetName",
+   "bgmCueName",
+   "stagePrefabName",
+   "judgeResultType",
+   "judgeResultValue",
+   "beforeBattleScenarioMstId",
+   "afterBattleScenarioMstId",
+   "endDirectionName",
+   "overrideComponentPrefabName",
+   "isAutoModeOff",
+   "selectionAbilityLotteryMstId",
+   "element",
+   "recommendationElement"
+  ]
+ },
+ "SkillDetailMstModel": {
+  "record": "SkillDetailMstRecord",
+  "file": "getSkillDetailMstList.json",
+  "key": "skillDetailMstId",
+  "fields": [
+   "skillDetailMstId",
+   "skillMstId",
+   "abilityEffectType",
+   "value1",
+   "value2",
+   "value3",
+   "value4",
+   "value5",
+   "element",
+   "turn",
+   "remainCount",
+   "role",
+   "range",
+   "probability",
+   "isFixedProbability",
+   "description",
+   "descriptionType",
+   "startConditionSetIdCsv",
+   "activeConditionSetIdCsv"
+  ]
+ },
+ "SkillMstModel": {
+  "record": "SkillMstRecord",
+  "file": "getSkillMstList.json",
+  "key": "skillMstId",
+  "fields": [
+   "skillMstId",
+   "skillUniqueId",
+   "level",
+   "name",
+   "description",
+   "type",
+   "sp",
+   "hitEffectResourceName",
+   "balloonText",
+   "iconName",
+   "directionName",
+   "cueSheetName",
+   "cueName",
+   "isEmphasize",
+   "additionalCueName",
+   "skillButtonIcon"
+  ]
+ },
+ "SoloRaidPartyBuffMstModel": {
+  "record": "SoloRaidPartyBuffMstRecord",
+  "file": "getSoloRaidPartyBuffMstList.json",
+  "key": "soloRaidPartyBuffMstId",
+  "fields": [
+   "soloRaidPartyBuffMstId",
+   "groupId",
+   "passiveSkillMstId",
+   "buffPointChargePassiveSkillMstId"
+  ]
+ },
+ "SoloRaidSeasonBuffMstModel": {
+  "record": "SoloRaidSeasonBuffMstRecord",
+  "file": "getSoloRaidSeasonBuffMstList.json",
+  "key": "soloRaidSeasonBuffMstId",
+  "fields": [
+   "soloRaidSeasonBuffMstId",
+   "groupId",
+   "passiveSkillMstId",
+   "enhancedPassiveSkillMstId",
+   "maxBuffPoint",
+   "maxBuffPointOnEnhanced",
+   "buffPointChargePassiveSkillMstId",
+   "enhancedSkillTurnGaugeValue"
+  ]
+ },
+ "StyleMstModel": {
+  "record": "StyleMstRecord",
+  "file": "getStyleMstList.json",
+  "key": "styleMstId",
+  "fields": [
+   "styleMstId",
+   "name",
+   "styleFigureMstId",
+   "rarity",
+   "specialAttackMstId",
+   "normalAttack",
+   "skill1",
+   "passiveSkill1",
+   "limitBreakPassiveSkill1",
+   "subPassiveSkill",
+   "leaderSkill",
+   "hp",
+   "ep",
+   "bp",
+   "recoveryEpRate",
+   "atk",
+   "def",
+   "speed",
+   "criticalRate",
+   "criticalDamageRate",
+   "breakDamageRate",
+   "healRate",
+   "effectHitRate",
+   "effectParryRate",
+   "fireDamageRate",
+   "aquaDamageRate",
+   "forestDamageRate",
+   "lightDamageRate",
+   "darkDamageRate",
+   "neutralDamageRate",
+   "fireResistRate",
+   "aquaResistRate",
+   "forestResistRate",
+   "lightResistRate",
+   "darkResistRate",
+   "neutralResistRate",
+   "element",
+   "role",
+   "paramUpGroupId",
+   "resourceName",
+   "releaseTime",
+   "isCollectionDisp"
+  ]
+ },
+ "UniqueStateLevelMstModel": {
+  "record": "UniqueStateLevelMstRecord",
+  "file": "getUniqueStateLevelMstList.json",
+  "key": "uniqueStateLevelMstId",
+  "fields": [
+   "uniqueStateLevelMstId",
+   "groupId",
+   "level",
+   "conditionCount"
+  ]
+ },
+ "UniqueStatePatternMstModel": {
+  "record": "UniqueStatePatternMstRecord",
+  "file": "getUniqueStatePatternMstList.json",
+  "key": "uniqueStatePatternMstId",
+  "fields": [
+   "uniqueStatePatternMstId",
+   "name",
+   "stateFlipName",
+   "iconName"
+  ]
+ }
+}

@@ -7,9 +7,10 @@ import type { EnemyType } from "../../Network/Definition/QuestBattle/EnemyType";
 import type { SizeType } from "../../Network/Definition/QuestBattle/SizeType";
 import type { EnemyUnlockType } from "../../Network/Definition/QuestOutGame/EnemyUnlockType";
 import { MstModelBase } from "./MstModelBase";
+import type { EnemyMstRecord } from "../../Network/Definition/QuestOutGame/EnemyMstRecord";
 
 // ---- ReDriveBattleCore.Model.EnemyMstModel  (TypeDefIndex 882, public class) ----
-export class EnemyMstModel extends MstModelBase<any /* EnemyMstRecord */> {  // implements IHaveThumbnailTexture, IHaveOriginalTexture
+export class EnemyMstModel extends MstModelBase<EnemyMstRecord> {  // implements IHaveThumbnailTexture, IHaveOriginalTexture
     static readonly __interfaces: readonly string[] = ['IHaveThumbnailTexture', 'IHaveOriginalTexture'];
     get EnemyMstId(): int { return this.get_EnemyMstId(); }
     get EnemyUniqueId(): int { return this.get_EnemyUniqueId(); }
@@ -29,33 +30,33 @@ export class EnemyMstModel extends MstModelBase<any /* EnemyMstRecord */> {  // 
     get IHaveOriginalTexture$Type(): any /* AssetBundleType */ { return this.get_IHaveOriginalTexture$Type(); }
     get IHaveOriginalTexture$TextureKey(): string { return this.get_IHaveOriginalTexture$TextureKey(); }
     /** @rva 0x16D0A90  public void .ctor(EnemyMstRecord record) { } */
-    ctor$EnemyMstRecord(record: any /* EnemyMstRecord */): this { return notPorted("EnemyMstModel..ctor", 0x16D0A90); }
+    ctor$EnemyMstRecord(record: EnemyMstRecord): this { return notPorted("EnemyMstModel..ctor", 0x16D0A90); }
     /** @rva 0x901770  public int get_EnemyMstId() { } */
-    get_EnemyMstId(): int { return notPorted("EnemyMstModel.get_EnemyMstId", 0x901770); }
+    get_EnemyMstId(): int { return this.record.enemyMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_EnemyUniqueId() { } */
-    get_EnemyUniqueId(): int { return notPorted("EnemyMstModel.get_EnemyUniqueId", 0x901790); }
+    get_EnemyUniqueId(): int { return this.record.enemyUniqueId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017a5; mov eax, dword ptr [rax + 0x14]; add rsp, 0x28; ret */ }
     /** @rva 0x85E540  public string get_EnemyName() { } */
-    get_EnemyName(): string { return notPorted("EnemyMstModel.get_EnemyName", 0x85E540); }
+    get_EnemyName(): string { return this.record.name; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x85e556; mov rax, qword ptr [rax + 0x18]; add rsp, 0x28; ret */ }
     /** @rva 0xA0E790  public EnemyType get_EnemyType() { } */
-    get_EnemyType(): EnemyType { return notPorted("EnemyMstModel.get_EnemyType", 0xA0E790); }
+    get_EnemyType(): EnemyType { return this.record.enemyType as EnemyType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e7a5; mov eax, dword ptr [rax + 0x28]; add rsp, 0x28; ret */ }
     /** @rva 0xA0E7B0  public SizeType get_SizeType() { } */
-    get_SizeType(): SizeType { return notPorted("EnemyMstModel.get_SizeType", 0xA0E7B0); }
+    get_SizeType(): SizeType { return this.record.size as SizeType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e7c5; mov eax, dword ptr [rax + 0x2c]; add rsp, 0x28; ret */ }
     /** @rva 0x7F9BC0  public string get_ModelPrefabName() { } */
-    get_ModelPrefabName(): string { return notPorted("EnemyMstModel.get_ModelPrefabName", 0x7F9BC0); }
+    get_ModelPrefabName(): string { return this.record.modelPrefabName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x7f9bd6; mov rax, qword ptr [rax + 0x30]; add rsp, 0x28; ret */ }
     /** @rva 0x901750  public string get_IconResourceName() { } */
-    get_IconResourceName(): string { return notPorted("EnemyMstModel.get_IconResourceName", 0x901750); }
+    get_IconResourceName(): string { return this.record.iconResourceName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901766; mov rax, qword ptr [rax + 0x38]; add rsp, 0x28; ret */ }
     /** @rva 0x16D0AE0  public bool get_CanRotateModel() { } */
-    get_CanRotateModel(): boolean { return notPorted("EnemyMstModel.get_CanRotateModel", 0x16D0AE0); }
+    get_CanRotateModel(): boolean { return this.record.canRotateModel; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d0af6; movzx eax, byte ptr [rax + 0x51]; add rsp, 0x28; ret */ }
     /** @rva 0x16D0B00  public EnemyUnlockType get_UnlockType() { } */
-    get_UnlockType(): EnemyUnlockType { return notPorted("EnemyMstModel.get_UnlockType", 0x16D0B00); }
+    get_UnlockType(): EnemyUnlockType { return this.record.unlockType as EnemyUnlockType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d0b15; mov eax, dword ptr [rax + 0x54]; add rsp, 0x28; ret */ }
     /** @rva 0x16D0B20  public int get_UnlockValue() { } */
-    get_UnlockValue(): int { return notPorted("EnemyMstModel.get_UnlockValue", 0x16D0B20); }
+    get_UnlockValue(): int { return this.record.unlockValue; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d0b35; mov eax, dword ptr [rax + 0x58]; add rsp, 0x28; ret */ }
     /** @rva 0x16CBEB0  public string get_CvCueSheetNameFormat() { } */
-    get_CvCueSheetNameFormat(): string { return notPorted("EnemyMstModel.get_CvCueSheetNameFormat", 0x16CBEB0); }
+    get_CvCueSheetNameFormat(): string { return this.record.cueSheetName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16cbec6; mov rax, qword ptr [rax + 0x40]; add rsp, 0x28; ret */ }
     /** @rva 0x7F9C00  public string get_AppearEffectPrefabName() { } */
-    get_AppearEffectPrefabName(): string { return notPorted("EnemyMstModel.get_AppearEffectPrefabName", 0x7F9C00); }
+    get_AppearEffectPrefabName(): string { return this.record.appearEffectPrefabName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x7f9c16; mov rax, qword ptr [rax + 0x48]; add rsp, 0x28; ret */ }
     /** @rva 0xAD1CB0  public bool get_IsNoVisualDeath() { } */
-    get_IsNoVisualDeath(): boolean { return notPorted("EnemyMstModel.get_IsNoVisualDeath", 0xAD1CB0); }
+    get_IsNoVisualDeath(): boolean { return this.record.isNoVisualDeath; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xad1cc6; movzx eax, byte ptr [rax + 0x70]; add rsp, 0x28; ret */ }
     /** @rva 0x16CFC80 slot 4  private AssetBundleType ReDrive.Common.IHaveThumbnailTexture.get_Type() { } */
     get_IHaveThumbnailTexture$Type(): any /* AssetBundleType */ { return notPorted("EnemyMstModel.ReDrive.Common.IHaveThumbnailTexture.get_Type", 0x16CFC80); }
     /** @rva 0x901750 slot 5  private string ReDrive.Common.IHaveThumbnailTexture.get_TextureKey() { } */

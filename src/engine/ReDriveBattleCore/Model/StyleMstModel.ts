@@ -6,9 +6,10 @@ import type { int } from "../../runtime";
 import type { ElementType } from "../../Network/Definition/Battle/ElementType";
 import type { RoleType } from "../../Network/Definition/Battle/RoleType";
 import { MstModelBase } from "./MstModelBase";
+import type { StyleMstRecord } from "../../Network/Definition/Style/StyleMstRecord";
 
 // ---- ReDriveBattleCore.Model.StyleMstModel  (TypeDefIndex 898, public class) ----
-export class StyleMstModel extends MstModelBase<any /* StyleMstRecord */> {  // implements IHaveThumbnailTexture, IHaveOriginalTexture, IHaveTexture
+export class StyleMstModel extends MstModelBase<StyleMstRecord> {  // implements IHaveThumbnailTexture, IHaveOriginalTexture, IHaveTexture
     static readonly __interfaces: readonly string[] = ['IHaveThumbnailTexture', 'IHaveOriginalTexture', 'IHaveTexture'];
     /** 0x18 private readonly int[] <SkillMstIds>k__BackingField */
     _SkillMstIds: int[] = null!;
@@ -63,79 +64,79 @@ export class StyleMstModel extends MstModelBase<any /* StyleMstRecord */> {  // 
     get HaveAnimatedStyle(): boolean { return this.get_HaveAnimatedStyle(); }
     get IsReleased(): boolean { return this.get_IsReleased(); }
     /** @rva 0x16D8810  public void .ctor(StyleMstRecord record) { } */
-    ctor$StyleMstRecord(record: any /* StyleMstRecord */): this { return notPorted("StyleMstModel..ctor", 0x16D8810); }
+    ctor$StyleMstRecord(record: StyleMstRecord): this { return notPorted("StyleMstModel..ctor", 0x16D8810); }
     /** @rva 0x901770  public int get_StyleMstId() { } */
-    get_StyleMstId(): int { return notPorted("StyleMstModel.get_StyleMstId", 0x901770); }
+    get_StyleMstId(): int { return this.record.styleMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0xA0D840  public int get_StyleFigureMstId() { } */
-    get_StyleFigureMstId(): int { return notPorted("StyleMstModel.get_StyleFigureMstId", 0xA0D840); }
+    get_StyleFigureMstId(): int { return this.record.styleFigureMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0d855; mov eax, dword ptr [rax + 0x20]; add rsp, 0x28; ret */ }
     /** @rva 0xA0E790  public int get_SpecialAttackMstId() { } */
-    get_SpecialAttackMstId(): int { return notPorted("StyleMstModel.get_SpecialAttackMstId", 0xA0E790); }
+    get_SpecialAttackMstId(): int { return this.record.specialAttackMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e7a5; mov eax, dword ptr [rax + 0x28]; add rsp, 0x28; ret */ }
     /** @rva 0xA0E810  public int get_PassiveSkill1() { } */
-    get_PassiveSkill1(): int { return notPorted("StyleMstModel.get_PassiveSkill1", 0xA0E810); }
+    get_PassiveSkill1(): int { return this.record.passiveSkill1; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e825; mov eax, dword ptr [rax + 0x34]; add rsp, 0x28; ret */ }
     /** @rva 0x16CBED0  public int get_LimitBreakPassiveSkill1() { } */
-    get_LimitBreakPassiveSkill1(): int { return notPorted("StyleMstModel.get_LimitBreakPassiveSkill1", 0x16CBED0); }
+    get_LimitBreakPassiveSkill1(): int { return this.record.limitBreakPassiveSkill1; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16cbee5; mov eax, dword ptr [rax + 0x38]; add rsp, 0x28; ret */ }
     /** @rva 0x16D31F0  public int get_SubPassiveSkill() { } */
-    get_SubPassiveSkill(): int { return notPorted("StyleMstModel.get_SubPassiveSkill", 0x16D31F0); }
+    get_SubPassiveSkill(): int { return this.record.subPassiveSkill; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d3205; mov eax, dword ptr [rax + 0x3c]; add rsp, 0x28; ret */ }
     /** @rva 0xA0E7B0  public int get_NormalAttack() { } */
-    get_NormalAttack(): int { return notPorted("StyleMstModel.get_NormalAttack", 0xA0E7B0); }
+    get_NormalAttack(): int { return this.record.normalAttack; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e7c5; mov eax, dword ptr [rax + 0x2c]; add rsp, 0x28; ret */ }
     /** @rva 0x733E90  public int[] get_SkillMstIds() { } */
     get_SkillMstIds(): int[] { return this._SkillMstIds; /* auto-property */ }
     /** @rva 0x7369E0  public int[] get_PassiveSkillMstIds() { } */
     get_PassiveSkillMstIds(): int[] { return this._PassiveSkillMstIds; /* auto-property */ }
     /** @rva 0x85E540  public string get_Name() { } */
-    get_Name(): string { return notPorted("StyleMstModel.get_Name", 0x85E540); }
+    get_Name(): string { return this.record.name; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x85e556; mov rax, qword ptr [rax + 0x18]; add rsp, 0x28; ret */ }
     /** @rva 0xA0E7D0  public int get_Rarity() { } */
-    get_Rarity(): int { return notPorted("StyleMstModel.get_Rarity", 0xA0E7D0); }
+    get_Rarity(): int { return this.record.rarity; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e7e5; mov eax, dword ptr [rax + 0x24]; add rsp, 0x28; ret */ }
     /** @rva 0x16D7FB0  public int get_Hp() { } */
-    get_Hp(): int { return notPorted("StyleMstModel.get_Hp", 0x16D7FB0); }
+    get_Hp(): int { return this.record.hp; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d7fc5; mov eax, dword ptr [rax + 0x44]; add rsp, 0x28; ret */ }
     /** @rva 0x9019A0  public int get_Ep() { } */
-    get_Ep(): int { return notPorted("StyleMstModel.get_Ep", 0x9019A0); }
+    get_Ep(): int { return this.record.ep; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9019b5; mov eax, dword ptr [rax + 0x48]; add rsp, 0x28; ret */ }
     /** @rva 0x901980  public int get_Bp() { } */
-    get_Bp(): int { return notPorted("StyleMstModel.get_Bp", 0x901980); }
+    get_Bp(): int { return this.record.bp; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901995; mov eax, dword ptr [rax + 0x4c]; add rsp, 0x28; ret */ }
     /** @rva 0x16D0B00  public int get_Atk() { } */
-    get_Atk(): int { return notPorted("StyleMstModel.get_Atk", 0x16D0B00); }
+    get_Atk(): int { return this.record.atk; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d0b15; mov eax, dword ptr [rax + 0x54]; add rsp, 0x28; ret */ }
     /** @rva 0x16D0B20  public int get_Def() { } */
-    get_Def(): int { return notPorted("StyleMstModel.get_Def", 0x16D0B20); }
+    get_Def(): int { return this.record.def; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d0b35; mov eax, dword ptr [rax + 0x58]; add rsp, 0x28; ret */ }
     /** @rva 0x16D4340  public int get_Speed() { } */
-    get_Speed(): int { return notPorted("StyleMstModel.get_Speed", 0x16D4340); }
+    get_Speed(): int { return this.record.speed; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d4355; mov eax, dword ptr [rax + 0x5c]; add rsp, 0x28; ret */ }
     /** @rva 0x16D4DE0  public int get_CriticalRate() { } */
-    get_CriticalRate(): int { return notPorted("StyleMstModel.get_CriticalRate", 0x16D4DE0); }
+    get_CriticalRate(): int { return this.record.criticalRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d4df5; mov eax, dword ptr [rax + 0x60]; add rsp, 0x28; ret */ }
     /** @rva 0x16D4360  public int get_CriticalDamageRate() { } */
-    get_CriticalDamageRate(): int { return notPorted("StyleMstModel.get_CriticalDamageRate", 0x16D4360); }
+    get_CriticalDamageRate(): int { return this.record.criticalDamageRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d4375; mov eax, dword ptr [rax + 0x64]; add rsp, 0x28; ret */ }
     /** @rva 0x16D4380  public int get_BreakDamageRate() { } */
-    get_BreakDamageRate(): int { return notPorted("StyleMstModel.get_BreakDamageRate", 0x16D4380); }
+    get_BreakDamageRate(): int { return this.record.breakDamageRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d4395; mov eax, dword ptr [rax + 0x68]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8A70  public int get_HealRate() { } */
-    get_HealRate(): int { return notPorted("StyleMstModel.get_HealRate", 0x16D8A70); }
+    get_HealRate(): int { return this.record.healRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8a85; mov eax, dword ptr [rax + 0x6c]; add rsp, 0x28; ret */ }
     /** @rva 0x16CBE90  public int get_RecoveryEpRate() { } */
-    get_RecoveryEpRate(): int { return notPorted("StyleMstModel.get_RecoveryEpRate", 0x16CBE90); }
+    get_RecoveryEpRate(): int { return this.record.recoveryEpRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16cbea5; mov eax, dword ptr [rax + 0x50]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8940  public int get_EffectHitRate() { } */
-    get_EffectHitRate(): int { return notPorted("StyleMstModel.get_EffectHitRate", 0x16D8940); }
+    get_EffectHitRate(): int { return this.record.effectHitRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8955; mov eax, dword ptr [rax + 0x70]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8960  public int get_EffectParryRate() { } */
-    get_EffectParryRate(): int { return notPorted("StyleMstModel.get_EffectParryRate", 0x16D8960); }
+    get_EffectParryRate(): int { return this.record.effectParryRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8975; mov eax, dword ptr [rax + 0x74]; add rsp, 0x28; ret */ }
     /** @rva 0x16D89D0  public int get_FireDamageRate() { } */
-    get_FireDamageRate(): int { return notPorted("StyleMstModel.get_FireDamageRate", 0x16D89D0); }
+    get_FireDamageRate(): int { return this.record.fireDamageRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d89e5; mov eax, dword ptr [rax + 0x78]; add rsp, 0x28; ret */ }
     /** @rva 0x16D88E0  public int get_AquaDamageRate() { } */
-    get_AquaDamageRate(): int { return notPorted("StyleMstModel.get_AquaDamageRate", 0x16D88E0); }
+    get_AquaDamageRate(): int { return this.record.aquaDamageRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d88f5; mov eax, dword ptr [rax + 0x7c]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8A10  public int get_ForestDamageRate() { } */
-    get_ForestDamageRate(): int { return notPorted("StyleMstModel.get_ForestDamageRate", 0x16D8A10); }
+    get_ForestDamageRate(): int { return this.record.forestDamageRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8a28; mov eax, dword ptr [rax + 0x80]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8B10  public int get_LightDamageRate() { } */
-    get_LightDamageRate(): int { return notPorted("StyleMstModel.get_LightDamageRate", 0x16D8B10); }
+    get_LightDamageRate(): int { return this.record.lightDamageRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8b28; mov eax, dword ptr [rax + 0x84]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8920  public int get_DarkDamageRate() { } */
-    get_DarkDamageRate(): int { return notPorted("StyleMstModel.get_DarkDamageRate", 0x16D8920); }
+    get_DarkDamageRate(): int { return this.record.darkDamageRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8938; mov eax, dword ptr [rax + 0x88]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8B50  public int get_NeutralDamageRate() { } */
-    get_NeutralDamageRate(): int { return notPorted("StyleMstModel.get_NeutralDamageRate", 0x16D8B50); }
+    get_NeutralDamageRate(): int { return this.record.neutralDamageRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8b68; mov eax, dword ptr [rax + 0x8c]; add rsp, 0x28; ret */ }
     /** @rva 0x16D89F0  public int get_FireResistRate() { } */
-    get_FireResistRate(): int { return notPorted("StyleMstModel.get_FireResistRate", 0x16D89F0); }
+    get_FireResistRate(): int { return this.record.fireResistRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8a08; mov eax, dword ptr [rax + 0x90]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8900  public int get_AquaResistRate() { } */
-    get_AquaResistRate(): int { return notPorted("StyleMstModel.get_AquaResistRate", 0x16D8900); }
+    get_AquaResistRate(): int { return this.record.aquaResistRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8918; mov eax, dword ptr [rax + 0x94]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8A30  public int get_ForestResistRate() { } */
-    get_ForestResistRate(): int { return notPorted("StyleMstModel.get_ForestResistRate", 0x16D8A30); }
+    get_ForestResistRate(): int { return this.record.forestResistRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8a48; mov eax, dword ptr [rax + 0x98]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8B30  public int get_LightResistRate() { } */
-    get_LightResistRate(): int { return notPorted("StyleMstModel.get_LightResistRate", 0x16D8B30); }
+    get_LightResistRate(): int { return this.record.lightResistRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8b48; mov eax, dword ptr [rax + 0x9c]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5B80  public int get_DarkResistRate() { } */
-    get_DarkResistRate(): int { return notPorted("StyleMstModel.get_DarkResistRate", 0x16D5B80); }
+    get_DarkResistRate(): int { return this.record.darkResistRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5b98; mov eax, dword ptr [rax + 0xa0]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5BA0  public int get_NeutralResistRate() { } */
-    get_NeutralResistRate(): int { return notPorted("StyleMstModel.get_NeutralResistRate", 0x16D5BA0); }
+    get_NeutralResistRate(): int { return this.record.neutralResistRate; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5bb8; mov eax, dword ptr [rax + 0xa4]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8B70  public DateTimeOffset get_ReleaseTime() { } */
     get_ReleaseTime(): any /* DateTimeOffset */ { return notPorted("StyleMstModel.get_ReleaseTime", 0x16D8B70); }
     /** @rva 0x16D8980  public ElementType get_Element() { } */
@@ -155,7 +156,7 @@ export class StyleMstModel extends MstModelBase<any /* StyleMstRecord */> {  // 
     /** @rva 0x16D5BC0 slot 9  private string ReDrive.Common.IHaveTexture.get_TextureKey() { } */
     get_IHaveTexture$TextureKey(): string { return notPorted("StyleMstModel.ReDrive.Common.IHaveTexture.get_TextureKey", 0x16D5BC0); }
     /** @rva 0x16D5BC0  public string get_ResourceName() { } */
-    get_ResourceName(): string { return notPorted("StyleMstModel.get_ResourceName", 0x16D5BC0); }
+    get_ResourceName(): string { return this.record.resourceName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5bd9; mov rax, qword ptr [rax + 0xb8]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8A50  public bool get_HaveAnimatedStyle() { } */
     get_HaveAnimatedStyle(): boolean { return notPorted("StyleMstModel.get_HaveAnimatedStyle", 0x16D8A50); }
     /** @rva 0x16D8A90  public bool get_IsReleased() { } */

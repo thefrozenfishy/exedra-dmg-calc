@@ -5,9 +5,10 @@ import { notPorted } from "../../runtime";
 import type { int } from "../../runtime";
 import type { LinkHpType } from "../../Network/Definition/QuestOutGame/LinkHpType";
 import { MstModelBase } from "./MstModelBase";
+import type { QuestEnemyWaveMstRecord } from "../../Network/Definition/QuestOutGame/QuestEnemyWaveMstRecord";
 
 // ---- ReDriveBattleCore.Model.QuestEnemyWaveMstModel  (TypeDefIndex 891, public class) ----
-export class QuestEnemyWaveMstModel extends MstModelBase<any /* QuestEnemyWaveMstRecord */> {
+export class QuestEnemyWaveMstModel extends MstModelBase<QuestEnemyWaveMstRecord> {
     get QuestEnemyWaveMstId(): int { return this.get_QuestEnemyWaveMstId(); }
     get QuestStageMstId(): int { return this.get_QuestStageMstId(); }
     get Wave(): int { return this.get_Wave(); }
@@ -17,21 +18,21 @@ export class QuestEnemyWaveMstModel extends MstModelBase<any /* QuestEnemyWaveMs
     get DioramaBackGroundMstId(): int { return this.get_DioramaBackGroundMstId(); }
     get EnemyTipsText(): string { return this.get_EnemyTipsText(); }
     /** @rva 0x16D5790  public void .ctor(QuestEnemyWaveMstRecord record) { } */
-    ctor$QuestEnemyWaveMstRecord(record: any /* QuestEnemyWaveMstRecord */): this { return notPorted("QuestEnemyWaveMstModel..ctor", 0x16D5790); }
+    ctor$QuestEnemyWaveMstRecord(record: QuestEnemyWaveMstRecord): this { return notPorted("QuestEnemyWaveMstModel..ctor", 0x16D5790); }
     /** @rva 0x901770  public int get_QuestEnemyWaveMstId() { } */
-    get_QuestEnemyWaveMstId(): int { return notPorted("QuestEnemyWaveMstModel.get_QuestEnemyWaveMstId", 0x901770); }
+    get_QuestEnemyWaveMstId(): int { return this.record.questEnemyWaveMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_QuestStageMstId() { } */
-    get_QuestStageMstId(): int { return notPorted("QuestEnemyWaveMstModel.get_QuestStageMstId", 0x901790); }
+    get_QuestStageMstId(): int { return this.record.questStageMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017a5; mov eax, dword ptr [rax + 0x14]; add rsp, 0x28; ret */ }
     /** @rva 0x902C70  public int get_Wave() { } */
-    get_Wave(): int { return notPorted("QuestEnemyWaveMstModel.get_Wave", 0x902C70); }
+    get_Wave(): int { return this.record.wave; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x902c85; mov eax, dword ptr [rax + 0x18]; add rsp, 0x28; ret */ }
     /** @rva 0x902C50  public LinkHpType get_LinkHpType() { } */
-    get_LinkHpType(): LinkHpType { return notPorted("QuestEnemyWaveMstModel.get_LinkHpType", 0x902C50); }
+    get_LinkHpType(): LinkHpType { return this.record.linkHpType as LinkHpType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x902c65; mov eax, dword ptr [rax + 0x1c]; add rsp, 0x28; ret */ }
     /** @rva 0x9017E0  public string get_LinkHpName() { } */
-    get_LinkHpName(): string { return notPorted("QuestEnemyWaveMstModel.get_LinkHpName", 0x9017E0); }
+    get_LinkHpName(): string { return this.record.linkHpName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017f6; mov rax, qword ptr [rax + 0x20]; add rsp, 0x28; ret */ }
     /** @rva 0x116EC30  public string get_StagePrefabName() { } */
-    get_StagePrefabName(): string { return notPorted("QuestEnemyWaveMstModel.get_StagePrefabName", 0x116EC30); }
+    get_StagePrefabName(): string { return this.record.stagePrefabName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x116ec46; mov rax, qword ptr [rax + 0x28]; add rsp, 0x28; ret */ }
     /** @rva 0x901940  public int get_DioramaBackGroundMstId() { } */
-    get_DioramaBackGroundMstId(): int { return notPorted("QuestEnemyWaveMstModel.get_DioramaBackGroundMstId", 0x901940); }
+    get_DioramaBackGroundMstId(): int { return this.record.dioramaBackGroundMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901955; mov eax, dword ptr [rax + 0x30]; add rsp, 0x28; ret */ }
     /** @rva 0x901750  public string get_EnemyTipsText() { } */
-    get_EnemyTipsText(): string { return notPorted("QuestEnemyWaveMstModel.get_EnemyTipsText", 0x901750); }
+    get_EnemyTipsText(): string { return this.record.enemyTipsText; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901766; mov rax, qword ptr [rax + 0x38]; add rsp, 0x28; ret */ }
 }

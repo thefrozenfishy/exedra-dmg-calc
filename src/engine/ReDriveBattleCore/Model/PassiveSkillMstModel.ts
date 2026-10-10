@@ -6,9 +6,10 @@ import type { int } from "../../runtime";
 import type { TargetElementType } from "../../Network/Definition/Battle/TargetElementType";
 import type { TargetRoleType } from "../../Network/Definition/Battle/TargetRoleType";
 import { MstModelBase } from "./MstModelBase";
+import type { PassiveSkillMstRecord } from "../../Network/Definition/Skill/PassiveSkillMstRecord";
 
 // ---- ReDriveBattleCore.Model.PassiveSkillMstModel  (TypeDefIndex 886, public class) ----
-export class PassiveSkillMstModel extends MstModelBase<any /* PassiveSkillMstRecord */> {  // implements IEnhanceSkill
+export class PassiveSkillMstModel extends MstModelBase<PassiveSkillMstRecord> {  // implements IEnhanceSkill
     static readonly __interfaces: readonly string[] = ['IEnhanceSkill'];
     get PassiveSkillMstId(): int { return this.get_PassiveSkillMstId(); }
     get SkillUniqueId(): int { return this.get_SkillUniqueId(); }
@@ -19,21 +20,21 @@ export class PassiveSkillMstModel extends MstModelBase<any /* PassiveSkillMstRec
     get ConditionRole(): TargetRoleType { return this.get_ConditionRole(); }
     get SkillButtonIcon(): string { return this.get_SkillButtonIcon(); }
     /** @rva 0x16D3770  public void .ctor(PassiveSkillMstRecord record) { } */
-    ctor$PassiveSkillMstRecord(record: any /* PassiveSkillMstRecord */): this { return notPorted("PassiveSkillMstModel..ctor", 0x16D3770); }
+    ctor$PassiveSkillMstRecord(record: PassiveSkillMstRecord): this { return notPorted("PassiveSkillMstModel..ctor", 0x16D3770); }
     /** @rva 0x901770  public int get_PassiveSkillMstId() { } */
-    get_PassiveSkillMstId(): int { return notPorted("PassiveSkillMstModel.get_PassiveSkillMstId", 0x901770); }
+    get_PassiveSkillMstId(): int { return this.record.passiveSkillMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_SkillUniqueId() { } */
-    get_SkillUniqueId(): int { return notPorted("PassiveSkillMstModel.get_SkillUniqueId", 0x901790); }
+    get_SkillUniqueId(): int { return this.record.skillUniqueId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017a5; mov eax, dword ptr [rax + 0x14]; add rsp, 0x28; ret */ }
     /** @rva 0x9017E0 slot 4  public string get_Name() { } */
-    get_Name(): string { return notPorted("PassiveSkillMstModel.get_Name", 0x9017E0); }
+    get_Name(): string { return this.record.name; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017f6; mov rax, qword ptr [rax + 0x20]; add rsp, 0x28; ret */ }
     /** @rva 0x902C70  public int get_Level() { } */
-    get_Level(): int { return notPorted("PassiveSkillMstModel.get_Level", 0x902C70); }
+    get_Level(): int { return this.record.level; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x902c85; mov eax, dword ptr [rax + 0x18]; add rsp, 0x28; ret */ }
     /** @rva 0x116EC30 slot 5  public string get_Description() { } */
-    get_Description(): string { return notPorted("PassiveSkillMstModel.get_Description", 0x116EC30); }
+    get_Description(): string { return this.record.description; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x116ec46; mov rax, qword ptr [rax + 0x28]; add rsp, 0x28; ret */ }
     /** @rva 0x901940  public TargetElementType get_ConditionElement() { } */
-    get_ConditionElement(): TargetElementType { return notPorted("PassiveSkillMstModel.get_ConditionElement", 0x901940); }
+    get_ConditionElement(): TargetElementType { return this.record.conditionElement as TargetElementType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901955; mov eax, dword ptr [rax + 0x30]; add rsp, 0x28; ret */ }
     /** @rva 0xA0E810  public TargetRoleType get_ConditionRole() { } */
-    get_ConditionRole(): TargetRoleType { return notPorted("PassiveSkillMstModel.get_ConditionRole", 0xA0E810); }
+    get_ConditionRole(): TargetRoleType { return this.record.conditionRole as TargetRoleType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e825; mov eax, dword ptr [rax + 0x34]; add rsp, 0x28; ret */ }
     /** @rva 0x901750  public string get_SkillButtonIcon() { } */
-    get_SkillButtonIcon(): string { return notPorted("PassiveSkillMstModel.get_SkillButtonIcon", 0x901750); }
+    get_SkillButtonIcon(): string { return this.record.skillButtonIcon; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901766; mov rax, qword ptr [rax + 0x38]; add rsp, 0x28; ret */ }
 }

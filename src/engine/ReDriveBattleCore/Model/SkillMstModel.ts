@@ -5,9 +5,10 @@ import { notPorted } from "../../runtime";
 import type { int } from "../../runtime";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
 import { MstModelBase } from "./MstModelBase";
+import type { SkillMstRecord } from "../../Network/Definition/Skill/SkillMstRecord";
 
 // ---- ReDriveBattleCore.Model.SkillMstModel  (TypeDefIndex 895, public class) ----
-export class SkillMstModel extends MstModelBase<any /* SkillMstRecord */> {  // implements IEnhanceSkill
+export class SkillMstModel extends MstModelBase<SkillMstRecord> {  // implements IEnhanceSkill
     static readonly __interfaces: readonly string[] = ['IEnhanceSkill'];
     get SkillMstId(): int { return this.get_SkillMstId(); }
     get SkillUniqueId(): int { return this.get_SkillUniqueId(); }
@@ -28,41 +29,41 @@ export class SkillMstModel extends MstModelBase<any /* SkillMstRecord */> {  // 
     get IsSpecialAttack(): boolean { return this.get_IsSpecialAttack(); }
     get AdditionalCueName(): string { return this.get_AdditionalCueName(); }
     /** @rva 0x16D82A0  public void .ctor(SkillMstRecord record) { } */
-    ctor$SkillMstRecord(record: any /* SkillMstRecord */): this { return notPorted("SkillMstModel..ctor", 0x16D82A0); }
+    ctor$SkillMstRecord(record: SkillMstRecord): this { return notPorted("SkillMstModel..ctor", 0x16D82A0); }
     /** @rva 0x901770  public int get_SkillMstId() { } */
-    get_SkillMstId(): int { return notPorted("SkillMstModel.get_SkillMstId", 0x901770); }
+    get_SkillMstId(): int { return this.record.skillMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_SkillUniqueId() { } */
-    get_SkillUniqueId(): int { return notPorted("SkillMstModel.get_SkillUniqueId", 0x901790); }
+    get_SkillUniqueId(): int { return this.record.skillUniqueId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017a5; mov eax, dword ptr [rax + 0x14]; add rsp, 0x28; ret */ }
     /** @rva 0x9017E0 slot 4  public string get_Name() { } */
-    get_Name(): string { return notPorted("SkillMstModel.get_Name", 0x9017E0); }
+    get_Name(): string { return this.record.name; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017f6; mov rax, qword ptr [rax + 0x20]; add rsp, 0x28; ret */ }
     /** @rva 0x901940  public SkillType get_Type() { } */
-    get_Type(): SkillType { return notPorted("SkillMstModel.get_Type", 0x901940); }
+    get_Type(): SkillType { return this.record.type as SkillType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901955; mov eax, dword ptr [rax + 0x30]; add rsp, 0x28; ret */ }
     /** @rva 0x902C70  public int get_Level() { } */
-    get_Level(): int { return notPorted("SkillMstModel.get_Level", 0x902C70); }
+    get_Level(): int { return this.record.level; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x902c85; mov eax, dword ptr [rax + 0x18]; add rsp, 0x28; ret */ }
     /** @rva 0xA0E810  public int get_SP() { } */
-    get_SP(): int { return notPorted("SkillMstModel.get_SP", 0xA0E810); }
+    get_SP(): int { return this.record.sp; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e825; mov eax, dword ptr [rax + 0x34]; add rsp, 0x28; ret */ }
     /** @rva 0x901750  public string get_HitEffectResourceName() { } */
-    get_HitEffectResourceName(): string { return notPorted("SkillMstModel.get_HitEffectResourceName", 0x901750); }
+    get_HitEffectResourceName(): string { return this.record.hitEffectResourceName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901766; mov rax, qword ptr [rax + 0x38]; add rsp, 0x28; ret */ }
     /** @rva 0x116EC30 slot 5  public string get_Description() { } */
-    get_Description(): string { return notPorted("SkillMstModel.get_Description", 0x116EC30); }
+    get_Description(): string { return this.record.description; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x116ec46; mov rax, qword ptr [rax + 0x28]; add rsp, 0x28; ret */ }
     /** @rva 0x16CBEB0  public string get_BalloonText() { } */
-    get_BalloonText(): string { return notPorted("SkillMstModel.get_BalloonText", 0x16CBEB0); }
+    get_BalloonText(): string { return this.record.balloonText; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16cbec6; mov rax, qword ptr [rax + 0x40]; add rsp, 0x28; ret */ }
     /** @rva 0x7F9C00  public string get_IconName() { } */
-    get_IconName(): string { return notPorted("SkillMstModel.get_IconName", 0x7F9C00); }
+    get_IconName(): string { return this.record.iconName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x7f9c16; mov rax, qword ptr [rax + 0x48]; add rsp, 0x28; ret */ }
     /** @rva 0x16D7F70  public string get_DirectionName() { } */
-    get_DirectionName(): string { return notPorted("SkillMstModel.get_DirectionName", 0x16D7F70); }
+    get_DirectionName(): string { return this.record.directionName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d7f86; mov rax, qword ptr [rax + 0x50]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8310  public string get_CueSheetName() { } */
-    get_CueSheetName(): string { return notPorted("SkillMstModel.get_CueSheetName", 0x16D8310); }
+    get_CueSheetName(): string { return this.record.cueSheetName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8326; mov rax, qword ptr [rax + 0x58]; add rsp, 0x28; ret */ }
     /** @rva 0x16D3210  public string get_CueName() { } */
-    get_CueName(): string { return notPorted("SkillMstModel.get_CueName", 0x16D3210); }
+    get_CueName(): string { return this.record.cueName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d3226; mov rax, qword ptr [rax + 0x60]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8350  public bool get_IsEmphasize() { } */
-    get_IsEmphasize(): boolean { return notPorted("SkillMstModel.get_IsEmphasize", 0x16D8350); }
+    get_IsEmphasize(): boolean { return this.record.isEmphasize; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8366; movzx eax, byte ptr [rax + 0x68]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8390  public string get_SkillButtonIcon() { } */
-    get_SkillButtonIcon(): string { return notPorted("SkillMstModel.get_SkillButtonIcon", 0x16D8390); }
+    get_SkillButtonIcon(): string { return this.record.skillButtonIcon; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d83a6; mov rax, qword ptr [rax + 0x78]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8330  public bool get_IsActiveSkill() { } */
     get_IsActiveSkill(): boolean { return notPorted("SkillMstModel.get_IsActiveSkill", 0x16D8330); }
     /** @rva 0x16D8370  public bool get_IsSpecialAttack() { } */
     get_IsSpecialAttack(): boolean { return notPorted("SkillMstModel.get_IsSpecialAttack", 0x16D8370); }
     /** @rva 0x16D82F0  public string get_AdditionalCueName() { } */
-    get_AdditionalCueName(): string { return notPorted("SkillMstModel.get_AdditionalCueName", 0x16D82F0); }
+    get_AdditionalCueName(): string { return this.record.additionalCueName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8306; mov rax, qword ptr [rax + 0x70]; add rsp, 0x28; ret */ }
 }
