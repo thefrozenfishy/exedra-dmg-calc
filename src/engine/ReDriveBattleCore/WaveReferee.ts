@@ -1,7 +1,14 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../runtime";
+import type { EnemyInfo } from "../Network/Definition/SoloRaid/EnemyInfo";
+import type { QuestEnemyWaveMstRecord } from "../Network/Definition/QuestOutGame/QuestEnemyWaveMstRecord";
+import type { QuestEnemyAppearanceMstRecord } from "../Network/Definition/QuestOutGame/QuestEnemyAppearanceMstRecord";
+import { QuestEnemyAppearanceMstReader } from "./Reader/QuestEnemyAppearanceMstReader";
+import { QuestEnemyWaveMstModel } from "./Model/QuestEnemyWaveMstModel";
+import { QuestEnemyAppearanceMstModel } from "./Model/QuestEnemyAppearanceMstModel";
+import { BattleMstReaderBase } from "./Reader/BattleMstReaderBase";
+import { maxBy, notPorted } from "../runtime";
 import type { List, int } from "../runtime";
 import type { AdditionalEnemyReferee } from "./AdditionalEnemyReferee";
 import type { BattleUnit } from "./BattleUnit";
@@ -39,21 +46,58 @@ export class WaveReferee {
     /** @rva 0x8AC0D0  public bool get_IsDuringTransition() { } */
     get_IsDuringTransition(): boolean { return this.isDuringTransition; /* asm: movzx eax, byte ptr [rcx + 0x20]; ret */ }
     /** @rva 0x15D2490  public void Init(int questStageMstId, int initialWave = 1) { } */
-    Init(questStageMstId: int, initialWave?: int /* = 1 */): void { return notPorted("WaveReferee.Init", 0x15D2490); }
+    Init(questStageMstId: int, initialWave?: int /* = 1 */): void {
+        this.questStageMstId = questStageMstId;
+        const list = [...BattleMstReaderBase.get_Instance<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int>(QuestEnemyAppearanceMstModel)
+            .GetModelList(mst => this.$Init$b__19_0(mst))];
+        if (list.every(mst => WaveReferee.NoneWaveValue < mst.Wave)) { // <>c.b__19_1
+            this.mode = 1 as WaveReferee_ModeType;
+            this.maxWave = maxBy(list, mst => mst.Wave); // <>c.b__19_2
+            this.currentWave = initialWave ?? 1;
+        }
+    }
     /** @rva 0x15D2120  public void BeginTransition() { } */
-    BeginTransition(): void { return notPorted("WaveReferee.BeginTransition", 0x15D2120); }
+    BeginTransition(): void {
+        if (this.mode !== 0) this.isDuringTransition = true;
+    }
     /** @rva 0xB999E0  public void EndTransition() { } */
     EndTransition(): void { this.isDuringTransition = false; /* asm: mov byte ptr [rcx + 0x20], 0; ret */ }
     /** @rva 0x15D27B0  public void ShiftNextWave() { } */
-    ShiftNextWave(): void { return notPorted("WaveReferee.ShiftNextWave", 0x15D27B0); }
+    ShiftNextWave(): void {
+        if (this.mode !== 0 && this.isDuringTransition && this.currentWave < this.maxWave) this.currentWave = this.currentWave + 1;
+    }
     /** @rva 0x15D22E0  public List<BattleUnit> CreateEnemyUnitList(AdditionalEnemyReferee additionalEnemyReferee) { } */
-    CreateEnemyUnitList(additionalEnemyReferee: AdditionalEnemyReferee): List<BattleUnit> { return notPorted("WaveReferee.CreateEnemyUnitList", 0x15D22E0); }
+    CreateEnemyUnitList(additionalEnemyReferee: AdditionalEnemyReferee): List<BattleUnit> {
+        const wave = this.mode === 1 ? this.currentWave : WaveReferee.NoneWaveValue; // <>c__DisplayClass23_0
+        const models = QuestEnemyAppearanceMstReader.GetModelListForBattleStart(this.questStageMstId, wave);
+        const waveMst = BattleMstReaderBase.get_Instance<QuestEnemyWaveMstModel, QuestEnemyWaveMstRecord, int>(QuestEnemyWaveMstModel)
+            .GetModel(model => model.questStageMstId === this.questStageMstId && model.wave === wave); // b__0
+        if (waveMst == null || waveMst.LinkHpType !== 1) {
+            additionalEnemyReferee.UnregisterEndlessEnemy();
+            return additionalEnemyReferee.GetAdditionalBattleUnitList$ListQuestEnemyAppearanceMstModel(models);
+        }
+        additionalEnemyReferee.RegisterEndlessEnemy(models, 0);
+        return additionalEnemyReferee.CreateEndlessEnemyUnitListForBattleStart();
+    }
     /** @rva 0x15D2130  public List<BattleUnit> CreateEnemyUnitListFromEnemyInfos(AdditionalEnemyReferee additionalEnemyReferee, EnemyInfo[] enemyInfos, int nextEnemyIndex) { } */
-    CreateEnemyUnitListFromEnemyInfos(additionalEnemyReferee: AdditionalEnemyReferee, enemyInfos: any /* EnemyInfo */[], nextEnemyIndex: int): List<BattleUnit> { return notPorted("WaveReferee.CreateEnemyUnitListFromEnemyInfos", 0x15D2130); }
+    CreateEnemyUnitListFromEnemyInfos(additionalEnemyReferee: AdditionalEnemyReferee, enemyInfos: EnemyInfo[], nextEnemyIndex: int): List<BattleUnit> {
+        const wave = this.mode === 1 ? this.currentWave : WaveReferee.NoneWaveValue; // <>c__DisplayClass24_0
+        const models = QuestEnemyAppearanceMstReader.GetModelListForBattleStart(this.questStageMstId, wave);
+        const waveMst = BattleMstReaderBase.get_Instance<QuestEnemyWaveMstModel, QuestEnemyWaveMstRecord, int>(QuestEnemyWaveMstModel)
+            .GetModel(model => model.questStageMstId === this.questStageMstId && model.wave === wave); // b__0
+        const isEndless = waveMst != null && waveMst.LinkHpType === 1;
+        if (!isEndless) additionalEnemyReferee.UnregisterEndlessEnemy();
+        else additionalEnemyReferee.RegisterEndlessEnemy(models, nextEnemyIndex);
+        return additionalEnemyReferee.CreateEnemyUnitListFromEnemyInfo(enemyInfos, isEndless); // inlined in the game
+    }
     /** @rva 0x15D27D0  public void .ctor() { } */
-    ctor(): this { return notPorted("WaveReferee..ctor", 0x15D27D0); }
+    ctor(): this {
+        this.maxWave = WaveReferee.NoneWaveValue;
+        this.currentWave = WaveReferee.NoneWaveValue;
+        return this;
+    }
     /** @rva 0xE287B0  private bool <Init>b__19_0(QuestEnemyAppearanceMstRecord mst) { } */
-    $Init$b__19_0(mst: any /* QuestEnemyAppearanceMstRecord */): boolean { return notPorted("WaveReferee.<Init>b__19_0", 0xE287B0); }
+    $Init$b__19_0(mst: QuestEnemyAppearanceMstRecord): boolean { return mst.questStageMstId === this.questStageMstId; }
 }
 
 // ---- ReDriveBattleCore.WaveReferee.ModeType  (TypeDefIndex 487, public enum) ----

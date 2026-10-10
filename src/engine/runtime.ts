@@ -198,3 +198,23 @@ export function listRemove<T>(list: T[], item: T): boolean {
     list.splice(i, 1);
     return true;
 }
+/** Enumerable.First(predicate): throws when nothing matches (InvalidOperationException). */
+export function first<T>(source: readonly T[], pred?: (t: T) => boolean): T {
+    for (const t of source) if (pred == null || pred(t)) return t;
+    throw new Error("InvalidOperationException: Sequence contains no matching element");
+}
+/** Enumerable.SingleOrDefault(predicate): default when none, throws when more than one matches. */
+export function singleOrDefault<T>(source: readonly T[], pred: (t: T) => boolean): T | null {
+    let found: T | null = null, n = 0;
+    for (const t of source) if (pred(t)) { found = t; if (++n > 1) throw new Error("InvalidOperationException: Sequence contains more than one matching element"); }
+    return found;
+}
+/** Enumerable.Min/Max(selector) over ints: throws on an empty sequence. */
+export function minBy<T>(source: readonly T[], sel: (t: T) => number): number {
+    if (source.length === 0) throw new Error("InvalidOperationException: Sequence contains no elements");
+    let m = sel(source[0]); for (let i = 1; i < source.length; i++) { const v = sel(source[i]); if (v < m) m = v; } return m;
+}
+export function maxBy<T>(source: readonly T[], sel: (t: T) => number): number {
+    if (source.length === 0) throw new Error("InvalidOperationException: Sequence contains no elements");
+    let m = sel(source[0]); for (let i = 1; i < source.length; i++) { const v = sel(source[i]); if (v > m) m = v; } return m;
+}

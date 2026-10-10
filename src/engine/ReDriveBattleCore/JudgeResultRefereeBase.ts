@@ -4,7 +4,8 @@
 import { notPorted } from "../runtime";
 import type { List, int } from "../runtime";
 import type { BattleUnit } from "./BattleUnit";
-import type { ResultStatus } from "./ResultStatus";
+import { ResultStatus } from "./ResultStatus";
+import { BattleUnit_TeamType } from "./BattleUnit";
 
 // ---- ReDriveBattleCore.JudgeResultRefereeBase  (TypeDefIndex 418, public abstract class) ----
 export abstract class JudgeResultRefereeBase {
@@ -27,7 +28,9 @@ export abstract class JudgeResultRefereeBase {
     /** @rva 0x7364F0  public ResultStatus get_Result() { } */
     get_Result(): ResultStatus { return this.result; /* asm: mov eax, dword ptr [rcx + 0x10]; ret */ }
     /** @rva 0x149E9C0  protected void set_Result(ResultStatus value) { } */
-    set_Result(value: ResultStatus): void { return notPorted("JudgeResultRefereeBase.set_Result", 0x149E9C0); }
+    set_Result(value: ResultStatus): void {
+        if (this.result === ResultStatus.None) this.result = value;
+    }
     /** @rva 0x852290  public bool get_BattleFinishByRoundLimit() { } */
     get_BattleFinishByRoundLimit(): boolean { return this._BattleFinishByRoundLimit; /* auto-property */ }
     /** @rva 0x9024F0  protected void set_BattleFinishByRoundLimit(bool value) { } */
@@ -39,7 +42,9 @@ export abstract class JudgeResultRefereeBase {
     /** @rva -1 slot 4  public abstract int get_RoundLimit(); */
     abstract get_RoundLimit(): int;
     /** @rva 0x149E9D0  private bool get_HasRoundLimit() { } */
-    get_HasRoundLimit(): boolean { return notPorted("JudgeResultRefereeBase.get_HasRoundLimit", 0x149E9D0); }
+    get_HasRoundLimit(): boolean {
+        return 0 < this.get_RoundLimit();
+    }
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x8AB430  public void Init() { } */
@@ -53,11 +58,24 @@ export abstract class JudgeResultRefereeBase {
     /** @rva -1 slot 5  public abstract void CheckMainTargetEnemyDead(BattleUnit deathUnit); */
     abstract CheckMainTargetEnemyDead(deathUnit: BattleUnit): void;
     /** @rva 0x149E960 slot 6  public virtual void CheckBattleFinishBeforeAct(int nextActRound) { } */
-    CheckBattleFinishBeforeAct(nextActRound: int): void { return notPorted("JudgeResultRefereeBase.CheckBattleFinishBeforeAct", 0x149E960); }
+    CheckBattleFinishBeforeAct(nextActRound: int): void {
+        if (0 < this.get_RoundLimit() && this.get_RoundLimit() < nextActRound) { // HasRoundLimit inlined
+            if (this.result === ResultStatus.None) this.result = ResultStatus.Losing;
+            this._BattleFinishByRoundLimit = true;
+        }
+    }
     /** @rva 0x149E760 slot 7  public virtual void CheckBattleFinishAfterAct(List<BattleUnit> activeUnitList) { } */
-    CheckBattleFinishAfterAct(activeUnitList: List<BattleUnit>): void { return notPorted("JudgeResultRefereeBase.CheckBattleFinishAfterAct", 0x149E760); }
+    CheckBattleFinishAfterAct(activeUnitList: List<BattleUnit>): void {
+        if (!activeUnitList.some(unit => unit.Team === BattleUnit_TeamType.Enemy)) { // <>c.b__22_0
+            if (this.result === ResultStatus.None) this.result = ResultStatus.Winning;
+        } else if (!activeUnitList.some(unit => unit.Team === BattleUnit_TeamType.Ally) && this.result === ResultStatus.None) { // <>c.b__22_1
+            this.result = ResultStatus.Losing;
+        }
+    }
     /** @rva 0x730170 slot 8  public virtual void CheckBattleFinishByTimeLimit(DateTimeOffset currentTime) { } */
     CheckBattleFinishByTimeLimit(currentTime: any /* DateTimeOffset */): void { /* asm: ret 0 */ }
     /** @rva 0x149E9C0  public void SetResult(ResultStatus result) { } */
-    SetResult(result: ResultStatus): void { return notPorted("JudgeResultRefereeBase.SetResult", 0x149E9C0); }
+    SetResult(result: ResultStatus): void {
+        if (this.result === ResultStatus.None) this.result = result; // same code as set_Result
+    }
 }

@@ -1,11 +1,14 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../runtime";
+import type { QuestEnemyModeChangeMstRecord } from "../Network/Definition/QuestOutGame/QuestEnemyModeChangeMstRecord";
+import type { QuestEnemyAppearanceMstRecord } from "../Network/Definition/QuestOutGame/QuestEnemyAppearanceMstRecord";
+import { QuestEnemyModeChangeMstModel } from "./Model/QuestEnemyModeChangeMstModel";
+import { QuestEnemyAppearanceMstModel } from "./Model/QuestEnemyAppearanceMstModel";
+import { BattleMstReaderBase } from "./Reader/BattleMstReaderBase";
+import { f32, first, notPorted, orderBy } from "../runtime";
 import type { List, int } from "../runtime";
 import type { BattleUnit } from "./BattleUnit";
-import type { QuestEnemyAppearanceMstModel } from "./Model/QuestEnemyAppearanceMstModel";
-import type { QuestEnemyModeChangeMstModel } from "./Model/QuestEnemyModeChangeMstModel";
 
 // ---- ReDriveBattleCore.ModeChangeReferee  (TypeDefIndex 440, public class) ----
 export class ModeChangeReferee {
@@ -20,25 +23,81 @@ export class ModeChangeReferee {
     /** @rva 0x763820  public int get_CurrentModeChangeStep() { } */
     get_CurrentModeChangeStep(): int { return this.currentModeChangeStep; /* asm: mov eax, dword ptr [rcx + 0x18]; ret */ }
     /** @rva 0x149FEA0  public void Init(int questStageMstId, int wave, List<BattleUnit> enemyList) { } */
-    Init(questStageMstId: int, wave: int, enemyList: List<BattleUnit>): void { return notPorted("ModeChangeReferee.Init", 0x149FEA0); }
+    Init(questStageMstId: int, wave: int, enemyList: List<BattleUnit>): void {
+        // <>c__DisplayClass8_0 { questStageMstId, wave, mainUnit }
+        this.modeChangeInfoList.length = 0;
+        this.currentModeChangeStep = 0;
+        if (enemyList == null) return;
+        if (!enemyList.some(u => u.IsMainTargetEnemy())) return; // <>c.b__8_0
+        const mainUnit = first(enemyList, u => u.IsMainTargetEnemy()); // <>c.b__8_1
+        const mains = BattleMstReaderBase.get_Instance<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int>(QuestEnemyAppearanceMstModel)
+            .GetModelList(m => m.questStageMstId === questStageMstId && m.wave === wave && m.isMainTargetEnemy); // DisplayClass8_0.b__2
+        if (mains == null) return;
+        if (mains.length < 2) return;
+        const modeChanges = orderBy([...mains].map(mst => BattleMstReaderBase.get_Instance<QuestEnemyModeChangeMstModel, QuestEnemyModeChangeMstRecord, int>(QuestEnemyModeChangeMstModel)
+            .GetModel(r => r.questEnemyAppearanceMstId === mst.QuestEnemyAppearanceMstId)), // <>c.b__8_3 / DisplayClass8_1.b__6
+            m => m.Step); // <>c.b__8_4
+        for (const mc of modeChanges) {
+            const info = new ModeChangeReferee_ModeChangeInfo(); // ctor(QuestEnemyModeChangeMstModel) inlined in the game
+            info._QuestEnemyAppearanceMstId = mc.QuestEnemyAppearanceMstId;
+            info._Step = mc.Step;
+            info._Type = mc.Type as ModeChangeReferee_ModeChangeType;
+            info._ThresholdValue = mc.ThresholdValue;
+            this.modeChangeInfoList.push(info);
+        }
+        this.currentModeChangeStep = first(this.modeChangeInfoList, info => info.QuestEnemyAppearanceMstId === mainUnit.serializedEnemyParameterMstId).Step; // DisplayClass8_0.b__5
+    }
     /** @rva 0x149F960  public ValueTuple<bool, BattleUnit, int> CanModeChange(List<BattleUnit> enemyList) { } */
-    CanModeChange(enemyList: List<BattleUnit>): any /* ValueTuple<bool, BattleUnit, int> */ { return notPorted("ModeChangeReferee.CanModeChange", 0x149F960); }
+    CanModeChange(enemyList: List<BattleUnit>): any /* ValueTuple<bool, BattleUnit, int> */ {
+        if (this.modeChangeInfoList.length !== 0 && enemyList != null && enemyList.some(u => u.IsMainTargetEnemy())) { // <>c.b__9_0
+            const unit = first(enemyList, u => u.IsMainTargetEnemy()); // <>c.b__9_1
+            const info = this.modeChangeInfoList.find(i => this.$CanModeChange$b__9_2(i)) ?? null;
+            if (info != null && info.Type === 1) {
+                if (f32(f32(f32(unit.HP) / f32(unit.MaxHP)) * 1000) <= f32(info.ThresholdValue)) return [true, unit, info.Step];
+            }
+        }
+        return [false, null, 0];
+    }
     /** @rva 0x149FCA0  public ModeChangeReferee.ModeChangeInfo GetCurrentModeChangeInfo() { } */
-    GetCurrentModeChangeInfo(): ModeChangeReferee_ModeChangeInfo { return notPorted("ModeChangeReferee.GetCurrentModeChangeInfo", 0x149FCA0); }
+    GetCurrentModeChangeInfo(): ModeChangeReferee_ModeChangeInfo {
+        return this.modeChangeInfoList.find(info => this.$GetCurrentModeChangeInfo$b__10_0(info)) ?? null!;
+    }
     /** @rva 0x149FC90  public void ExecuteModeChange() { } */
-    ExecuteModeChange(): void { return notPorted("ModeChangeReferee.ExecuteModeChange", 0x149FC90); }
+    ExecuteModeChange(): void {
+        this.currentModeChangeStep = this.currentModeChangeStep + 1; // asm: inc dword ptr [rcx + 0x18]
+    }
     /** @rva 0x149FD30  public int GetNextModeChangeDamageCutDamage(BattleUnit unit, int damage) { } */
-    GetNextModeChangeDamageCutDamage(unit: BattleUnit, damage: int): int { return notPorted("ModeChangeReferee.GetNextModeChangeDamageCutDamage", 0x149FD30); }
+    GetNextModeChangeDamageCutDamage(unit: BattleUnit, damage: int): int {
+        if (this.modeChangeInfoList.length === 0) return damage;
+        if (this.GetCurrentModeChangeInfo() == null) return damage;
+        const current = this.GetCurrentModeChangeInfo();
+        if (current.QuestEnemyAppearanceMstId !== unit.serializedEnemyParameterMstId) return damage;
+        const next = this.modeChangeInfoList.find(info => this.$GetNextModeChangeDamageCutDamage$b__12_0(info)) ?? null;
+        if (next == null || next.Type !== 1) return damage;
+        const threshold = Math.trunc((next.ThresholdValue * unit.MaxHP) / 1000.0); // double math
+        if ((unit.HP - damage | 0) <= threshold) return unit.HP - threshold;
+        return damage;
+    }
     /** @rva 0x14A05F0  public static List<QuestEnemyAppearanceMstModel> RemoveModeChangeFirstOther(List<QuestEnemyAppearanceMstModel> questEnemyAppearanceMstModels) { } */
-    static RemoveModeChangeFirstOther(questEnemyAppearanceMstModels: List<QuestEnemyAppearanceMstModel>): List<QuestEnemyAppearanceMstModel> { return notPorted("ModeChangeReferee.RemoveModeChangeFirstOther", 0x14A05F0); }
+    static RemoveModeChangeFirstOther(questEnemyAppearanceMstModels: List<QuestEnemyAppearanceMstModel>): List<QuestEnemyAppearanceMstModel> {
+        return questEnemyAppearanceMstModels.filter(mst => { // <>c.b__13_0
+            const mc = BattleMstReaderBase.get_Instance<QuestEnemyModeChangeMstModel, QuestEnemyModeChangeMstRecord, int>(QuestEnemyModeChangeMstModel)
+                .GetModel(r => r.questEnemyAppearanceMstId === mst.QuestEnemyAppearanceMstId); // DisplayClass13_0.b__1
+            if (mc == null) return true;
+            return mc.Step === 1;
+        });
+    }
     /** @rva 0x14A0740  public void .ctor() { } */
-    ctor(): this { return notPorted("ModeChangeReferee..ctor", 0x14A0740); }
+    ctor(): this {
+        this.modeChangeInfoList = [];
+        return this;
+    }
     /** @rva 0x14A0720  private bool <CanModeChange>b__9_2(ModeChangeReferee.ModeChangeInfo info) { } */
-    $CanModeChange$b__9_2(info: ModeChangeReferee_ModeChangeInfo): boolean { return notPorted("ModeChangeReferee.<CanModeChange>b__9_2", 0x14A0720); }
+    $CanModeChange$b__9_2(info: ModeChangeReferee_ModeChangeInfo): boolean { return info.Step === this.currentModeChangeStep + 1; }
     /** @rva 0x130FBD0  private bool <GetCurrentModeChangeInfo>b__10_0(ModeChangeReferee.ModeChangeInfo info) { } */
-    $GetCurrentModeChangeInfo$b__10_0(info: ModeChangeReferee_ModeChangeInfo): boolean { return notPorted("ModeChangeReferee.<GetCurrentModeChangeInfo>b__10_0", 0x130FBD0); }
+    $GetCurrentModeChangeInfo$b__10_0(info: ModeChangeReferee_ModeChangeInfo): boolean { return info.Step === this.currentModeChangeStep; }
     /** @rva 0x14A0720  private bool <GetNextModeChangeDamageCutDamage>b__12_0(ModeChangeReferee.ModeChangeInfo info) { } */
-    $GetNextModeChangeDamageCutDamage$b__12_0(info: ModeChangeReferee_ModeChangeInfo): boolean { return notPorted("ModeChangeReferee.<GetNextModeChangeDamageCutDamage>b__12_0", 0x14A0720); }
+    $GetNextModeChangeDamageCutDamage$b__12_0(info: ModeChangeReferee_ModeChangeInfo): boolean { return info.Step === this.currentModeChangeStep + 1; }
 }
 
 // ---- ReDriveBattleCore.ModeChangeReferee.ModeChangeType  (TypeDefIndex 434, public enum) ----
@@ -85,5 +144,12 @@ export class ModeChangeReferee_ModeChangeInfo {
     /** @rva 0x7305E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x149F8F0  public void .ctor(QuestEnemyModeChangeMstModel mstModel) { } */
-    ctor$QuestEnemyModeChangeMstModel(mstModel: QuestEnemyModeChangeMstModel): this { return notPorted("ModeChangeReferee_ModeChangeInfo..ctor", 0x149F8F0); }
+    ctor$QuestEnemyModeChangeMstModel(mstModel: QuestEnemyModeChangeMstModel): this {
+        if (mstModel == null) return this;
+        this._QuestEnemyAppearanceMstId = mstModel.QuestEnemyAppearanceMstId;
+        this._Step = mstModel.Step;
+        this._Type = mstModel.Type as ModeChangeReferee_ModeChangeType;
+        this._ThresholdValue = mstModel.ThresholdValue;
+        return this;
+    }
 }

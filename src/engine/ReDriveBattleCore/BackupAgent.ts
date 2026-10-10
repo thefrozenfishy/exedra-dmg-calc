@@ -1,17 +1,18 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { TurnActOrderUnitInfo } from "./TurnActOrderUnitInfo";
 import { GameDirectorBase_GameSituationDataCreator } from "./GameDirectorBase";
 import { BattleUnitInfo } from "./Command/BattleUnitInfo";
-import { notPorted } from "../runtime";
+import { isNullOrEmpty, notPorted } from "../runtime";
 import type { IList, IReadOnlyList, List, Type } from "../runtime";
 import { BackupData } from "./BackupData";
 
 import type { CommandBase } from "./Command/CommandBase";
 import type { CommandType } from "./Command/CommandType";
 import type { GameDirectorBase } from "./GameDirectorBase";
-import type { GameSituationData } from "./GameSituationData";
-import type { TurnActOrderUnitInfo } from "./TurnActOrderUnitInfo";
+import { GameSituationData } from "./GameSituationData";
+
 import type { int } from "../runtime";
 import { BattleUnit } from "./BattleUnit";
 
@@ -97,13 +98,25 @@ export class BackupAgent {  // implements IObserver<IReadOnlyList<CommandBase>>
     /** @rva 0x137AA30  public static GameDirectorBase RestoreGameDirector(BackupData backupData) { } */
     static RestoreGameDirector(backupData: BackupData): GameDirectorBase { return notPorted("BackupAgent.RestoreGameDirector", 0x137AA30); }
     /** @rva 0x137A960  public List<CommandBase> RestoreCommands() { } */
-    RestoreCommands(): List<CommandBase> { return notPorted("BackupAgent.RestoreCommands", 0x137A960); }
+    RestoreCommands(): List<CommandBase> {
+        if (isNullOrEmpty(this.backupData.commandsJson)) return [];
+        return BackupAgent.DeserializeObject<List<CommandBase>>(Array as any, this.backupData.commandsJson, true);
+    }
     /** @rva 0x137A8B0  public BattleUnitInfo[] RestoreBattleUnitInfoArray() { } */
-    RestoreBattleUnitInfoArray(): BattleUnitInfo[] { return notPorted("BackupAgent.RestoreBattleUnitInfoArray", 0x137A8B0); }
+    RestoreBattleUnitInfoArray(): BattleUnitInfo[] {
+        if (isNullOrEmpty(this.backupData.prevUnitsJson)) return []; // Array.Empty<BattleUnitInfo>()
+        return BackupAgent.DeserializeObject<BattleUnitInfo[]>(Array as any, this.backupData.prevUnitsJson, true);
+    }
     /** @rva 0x137ABD0  public GameSituationData RestorePrevSituationData() { } */
-    RestorePrevSituationData(): GameSituationData { return notPorted("BackupAgent.RestorePrevSituationData", 0x137ABD0); }
+    RestorePrevSituationData(): GameSituationData {
+        if (isNullOrEmpty(this.backupData.prevSituationJson)) return null!;
+        return BackupAgent.DeserializeObject<GameSituationData>(GameSituationData, this.backupData.prevSituationJson, true);
+    }
     /** @rva 0x137AC60  public TurnActOrderUnitInfo RestoreTurnActOrderUnitInfo() { } */
-    RestoreTurnActOrderUnitInfo(): TurnActOrderUnitInfo { return notPorted("BackupAgent.RestoreTurnActOrderUnitInfo", 0x137AC60); }
+    RestoreTurnActOrderUnitInfo(): TurnActOrderUnitInfo {
+        if (isNullOrEmpty(this.backupData.turnOrderJson)) return new TurnActOrderUnitInfo().ctor();
+        return BackupAgent.DeserializeObject<TurnActOrderUnitInfo>(TurnActOrderUnitInfo, this.backupData.turnOrderJson, true);
+    }
     /** @rva -1  public void RestoreLogCommands<T>(T logCommandsJsons) { } */
     RestoreLogCommands<T>(logCommandsJsons: T): void { return notPorted("BackupAgent.RestoreLogCommands", 0); }
     /** @rva 0x730170 slot 6  private void System.IObserver<System.Collections.Generic.IReadOnlyList<ReDriveBattleCore.Command.CommandBase>>.OnCompleted() { } */

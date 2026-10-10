@@ -1,11 +1,16 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../runtime";
+import type { QuestEnemyAppearanceMstRecord } from "../Network/Definition/QuestOutGame/QuestEnemyAppearanceMstRecord";
+import type { EnemyInfo } from "../Network/Definition/SoloRaid/EnemyInfo";
+import { BattleUnit } from "./BattleUnit";
+import { QuestEnemyAppearanceParameter } from "./QuestEnemyAppearanceParameter";
+import { KnockDownAdditionalEnemyCondition } from "./KnockDownAdditionalEnemyCondition";
+import { QuestEnemyAppearanceMstModel } from "./Model/QuestEnemyAppearanceMstModel";
+import { BattleMstReaderBase } from "./Reader/BattleMstReaderBase";
+import { minBy, notPorted, singleOrDefault } from "../runtime";
 import type { Dictionary, List, int } from "../runtime";
 import type { AdditionalEnemyCondition } from "./AdditionalEnemyCondition";
-import type { BattleUnit } from "./BattleUnit";
-import type { QuestEnemyAppearanceMstModel } from "./Model/QuestEnemyAppearanceMstModel";
 
 // ---- ReDriveBattleCore.AdditionalEnemyReferee  (TypeDefIndex 307, public class) ----
 export class AdditionalEnemyReferee {
@@ -23,35 +28,185 @@ export class AdditionalEnemyReferee {
     endlessEnemyPositionIdList: List<int> = null!;
     get EndlessEnemyIndex(): int { return this.get_EndlessEnemyIndex(); }
     /** @rva 0x1376F70  public void Initialize(int stageMstId, int wave, List<BattleUnit> enemyUnitList) { } */
-    Initialize(stageMstId: int, wave: int, enemyUnitList: List<BattleUnit>): void { return notPorted("AdditionalEnemyReferee.Initialize", 0x1376F70); }
+    Initialize(stageMstId: int, wave: int, enemyUnitList: List<BattleUnit>): void {
+        // <>c__DisplayClass5_0 { stageMstId, wave, models, enemyUnitList }
+        this.minUnitId = minBy(enemyUnitList, u => u.Id); // <>c.b__5_0
+        const models = [...BattleMstReaderBase.get_Instance<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int>(QuestEnemyAppearanceMstModel)
+            .GetModelList(r => r.questStageMstId === stageMstId && r.wave === wave)]; // DisplayClass5_0.b__1
+        this.additionalEnemyUnitList.length = 0;
+        this.summonQuestEnemyAppearanceMstIdDic.clear();
+        for (const model of models) {
+            if (model.ConditionType !== 2) {
+                if (model.ConditionType === 3 && model.SummonId > 0) {
+                    if (this.summonQuestEnemyAppearanceMstIdDic.has(model.SummonId)) continue;
+                    this.summonQuestEnemyAppearanceMstIdDic.set(model.SummonId, model.QuestEnemyAppearanceMstId); // Dictionary.Add
+                }
+                continue;
+            }
+            const condition = new KnockDownAdditionalEnemyCondition().ctor$int(model.ConditionValue);
+            // <Initialize>g__GetKnockDownAdditionalEnemyPositionId|2 (DisplayClass5_1 { conditionValue, foundId, b__4 cache })
+            let mst = model;
+            let conditionValue = mst.ConditionValue;
+            let foundId = 0;
+            for (;;) {
+                if (foundId !== 0) break;
+                const target = singleOrDefault(models, m => m.QuestEnemyAppearanceMstId === conditionValue); // b__4
+                if (target == null) break;
+                if (!target.IsBattleStartMember) { mst = target; conditionValue = mst.ConditionValue; continue; }
+                foundId = target.QuestEnemyAppearanceMstId;
+            }
+            const unit = singleOrDefault(enemyUnitList, u => { // b__3
+                const p = u.BattleParameter;
+                if (p == null) return false;
+                if (!(p instanceof QuestEnemyAppearanceParameter)) throw new TypeError("InvalidCastException");
+                return p.QuestEnemyAppearanceMstId === foundId;
+            });
+            if (unit == null) throw new Error(`${model.QuestEnemyAppearanceMstId} There is no Knock Down Enemy`);
+            const positionId = unit.PositionId;
+            const entry = new AdditionalEnemyReferee_AdditionalEnemyUnit();
+            entry._QuestEnemyAppearanceMstId = model.QuestEnemyAppearanceMstId;
+            entry._PositionId = positionId;
+            entry._AppearanceCondition = condition;
+            this.additionalEnemyUnitList.push(entry);
+        }
+    }
     /** @rva 0x1375BB0  public void CheckTargetEnemy(BattleUnit deathUnit) { } */
-    CheckTargetEnemy(deathUnit: BattleUnit): void { return notPorted("AdditionalEnemyReferee.CheckTargetEnemy", 0x1375BB0); }
+    CheckTargetEnemy(deathUnit: BattleUnit): void {
+        if (deathUnit == null || deathUnit.isCharacter) return;
+        for (const entry of this.additionalEnemyUnitList) {
+            if (entry._IsDisable) continue;
+            const condition = entry._AppearanceCondition;
+            if (condition == null || condition.constructor !== KnockDownAdditionalEnemyCondition) continue;
+            const param = deathUnit.BattleParameter;
+            if (param == null || param.constructor !== QuestEnemyAppearanceParameter) continue;
+            if ((condition as KnockDownAdditionalEnemyCondition).targetEnemyAppearanceMstId === (param as QuestEnemyAppearanceParameter).QuestEnemyAppearanceMstId) {
+                (condition as KnockDownAdditionalEnemyCondition).isFulfill = true;
+            }
+        }
+    }
     /** @rva 0x1376750  public List<BattleUnit> GetAdditionalBattleUnitList(in List<BattleUnit> enemyUnitList) { } */
-    GetAdditionalBattleUnitList$ListBattleUnit(enemyUnitList: List<BattleUnit>): List<BattleUnit> { return notPorted("AdditionalEnemyReferee.GetAdditionalBattleUnitList", 0x1376750); }
+    GetAdditionalBattleUnitList$ListBattleUnit(enemyUnitList: List<BattleUnit>): List<BattleUnit> {
+        const positions = enemyUnitList.filter(unit => unit.HP > 0 || unit.CurrentHpGaugeCount > 1) // <>c.b__7_0
+            .map(unit => unit.PositionId); // <>c.b__7_1
+        const list = this.GetFulfillAdditionalBattleUnitList(positions);
+        if (!(list.length > 0)) return null!;
+        return list;
+    }
     /** @rva 0x1376C40  private List<BattleUnit> GetFulfillAdditionalBattleUnitList(in List<int> positionIdList) { } */
-    GetFulfillAdditionalBattleUnitList(positionIdList: List<int>): List<BattleUnit> { return notPorted("AdditionalEnemyReferee.GetFulfillAdditionalBattleUnitList", 0x1376C40); }
+    GetFulfillAdditionalBattleUnitList(positionIdList: List<int>): List<BattleUnit> {
+        const result: List<BattleUnit> = [];
+        for (const entry of this.additionalEnemyUnitList) {
+            if (entry._IsDisable) continue;
+            if (!entry._AppearanceCondition.IsFulfill) continue;
+            if (!positionIdList.includes(entry._PositionId)) {
+                positionIdList.push(entry._PositionId);
+                entry._IsDisable = true;
+                result.push(this.CreateAdditionalBattleUnit(entry._QuestEnemyAppearanceMstId, entry._PositionId));
+            } else {
+                entry._IsDisable = true; // position occupied: the game drops this additional enemy
+            }
+        }
+        return result;
+    }
     /** @rva 0x13769C0  public List<BattleUnit> GetAdditionalBattleUnitList(List<QuestEnemyAppearanceMstModel> mstList) { } */
-    GetAdditionalBattleUnitList$ListQuestEnemyAppearanceMstModel(mstList: List<QuestEnemyAppearanceMstModel>): List<BattleUnit> { return notPorted("AdditionalEnemyReferee.GetAdditionalBattleUnitList", 0x13769C0); }
+    GetAdditionalBattleUnitList$ListQuestEnemyAppearanceMstModel(mstList: List<QuestEnemyAppearanceMstModel>): List<BattleUnit> {
+        if (mstList == null) return null!;
+        const result: List<BattleUnit> = [];
+        let positionId = 3 - Math.trunc(mstList.length / 2);
+        for (const mst of mstList) {
+            const id = mst.QuestEnemyAppearanceMstId;
+            this.minUnitId = this.minUnitId - 1;
+            result.push(new BattleUnit().ctor$int_int_int(this.minUnitId, id, positionId));
+            positionId = positionId + 1;
+        }
+        return result;
+    }
     /** @rva 0x1375E20  private BattleUnit CreateAdditionalBattleUnit(int questEnemyAppearanceMstId, int positionId) { } */
-    CreateAdditionalBattleUnit(questEnemyAppearanceMstId: int, positionId: int): BattleUnit { return notPorted("AdditionalEnemyReferee.CreateAdditionalBattleUnit", 0x1375E20); }
+    CreateAdditionalBattleUnit(questEnemyAppearanceMstId: int, positionId: int): BattleUnit {
+        this.minUnitId = this.minUnitId - 1;
+        return new BattleUnit().ctor$int_int_int(this.minUnitId, questEnemyAppearanceMstId, positionId);
+    }
     /** @rva 0x1375D80  public BattleUnit CreateAdditionalBattleUnitForSummon(int summonId, int positionId) { } */
-    CreateAdditionalBattleUnitForSummon(summonId: int, positionId: int): BattleUnit { return notPorted("AdditionalEnemyReferee.CreateAdditionalBattleUnitForSummon", 0x1375D80); }
+    CreateAdditionalBattleUnitForSummon(summonId: int, positionId: int): BattleUnit {
+        const id = this.summonQuestEnemyAppearanceMstIdDic.get(summonId) ?? 0; // TryGetValue
+        if (id !== 0) return this.CreateAdditionalBattleUnit(id, positionId);
+        return null!;
+    }
     /** @rva 0x1376080  public List<BattleUnit> CreateEnemyUnitListFromEnemyInfo(EnemyInfo[] enemyInfos, bool isEndlessSpawn) { } */
-    CreateEnemyUnitListFromEnemyInfo(enemyInfos: any /* EnemyInfo */[], isEndlessSpawn: boolean): List<BattleUnit> { return notPorted("AdditionalEnemyReferee.CreateEnemyUnitListFromEnemyInfo", 0x1376080); }
+    CreateEnemyUnitListFromEnemyInfo(enemyInfos: EnemyInfo[], isEndlessSpawn: boolean): List<BattleUnit> {
+        const result: List<BattleUnit> = [];
+        if (enemyInfos == null) return result;
+        for (let i = 0; i < enemyInfos.length; i++) {
+            const info = enemyInfos[i];
+            const mstId = info.questEnemyAppearanceMstId;
+            const positionId = info.enemyIndex; // enemyIndex is used as the position
+            this.minUnitId = this.minUnitId - 1;
+            result.push(new BattleUnit().ctor$int_int_int(this.minUnitId, mstId, positionId));
+            if (isEndlessSpawn) this.endlessEnemyPositionIdList.push(positionId);
+        }
+        return result;
+    }
     /** @rva 0x75ED60  public int get_EndlessEnemyIndex() { } */
     get_EndlessEnemyIndex(): int { return this.endlessEnemyIndex; /* asm: mov eax, dword ptr [rcx + 0x30]; ret */ }
     /** @rva 0x1377580  public void RegisterEndlessEnemy(List<QuestEnemyAppearanceMstModel> appearMstList, int initialEndlessEnemyIndex = 0) { } */
-    RegisterEndlessEnemy(appearMstList: List<QuestEnemyAppearanceMstModel>, initialEndlessEnemyIndex?: int /* = 0 */): void { return notPorted("AdditionalEnemyReferee.RegisterEndlessEnemy", 0x1377580); }
+    RegisterEndlessEnemy(appearMstList: List<QuestEnemyAppearanceMstModel>, initialEndlessEnemyIndex?: int /* = 0 */): void {
+        this.endlessEnemySourceList = appearMstList.map(m => m.QuestEnemyAppearanceMstId); // <>c.b__18_0
+        this.endlessEnemyIndex = initialEndlessEnemyIndex ?? 0;
+        this.endlessEnemyPositionIdList.length = 0;
+    }
     /** @rva 0x1377700  public void UnregisterEndlessEnemy() { } */
-    UnregisterEndlessEnemy(): void { return notPorted("AdditionalEnemyReferee.UnregisterEndlessEnemy", 0x1377700); }
+    UnregisterEndlessEnemy(): void {
+        this.endlessEnemySourceList.length = 0;
+        this.endlessEnemyIndex = 0;
+        this.endlessEnemyPositionIdList.length = 0;
+    }
     /** @rva 0x1375EA0  public List<BattleUnit> CreateEndlessEnemyUnitListForBattleStart() { } */
-    CreateEndlessEnemyUnitListForBattleStart(): List<BattleUnit> { return notPorted("AdditionalEnemyReferee.CreateEndlessEnemyUnitListForBattleStart", 0x1375EA0); }
+    CreateEndlessEnemyUnitListForBattleStart(): List<BattleUnit> {
+        let positionId = 1;
+        const result: List<BattleUnit> = [];
+        for (;;) {
+            const model = this.GetNextEndlessEnemyAppearModel();
+            if (model == null) break;
+            const id = model.QuestEnemyAppearanceMstId;
+            this.minUnitId = this.minUnitId - 1;
+            result.push(new BattleUnit().ctor$int_int_int(this.minUnitId, id, positionId));
+            this.endlessEnemyPositionIdList.push(positionId);
+            positionId = positionId + 1;
+            if (5 < positionId) return result;
+        }
+        return result;
+    }
     /** @rva 0x1376250  public List<BattleUnit> CreateSuppliedEndlessEnemyUnitList(List<BattleUnit> enemyUnitList) { } */
-    CreateSuppliedEndlessEnemyUnitList(enemyUnitList: List<BattleUnit>): List<BattleUnit> { return notPorted("AdditionalEnemyReferee.CreateSuppliedEndlessEnemyUnitList", 0x1376250); }
+    CreateSuppliedEndlessEnemyUnitList(enemyUnitList: List<BattleUnit>): List<BattleUnit> {
+        if (!(this.endlessEnemySourceList.length > 0) || !(this.endlessEnemyPositionIdList.length > 0)) return null!;
+        const alive = enemyUnitList.filter(unit => unit.HP > 0 || unit.CurrentHpGaugeCount > 1); // <>c.b__21_0
+        if (!(0 < 5 - alive.length)) return null!;
+        const occupied = alive.map(unit => unit.PositionId); // <>c.b__21_1 (lazy Select, read while enumerating)
+        const result: List<BattleUnit> = [];
+        for (const positionId of this.endlessEnemyPositionIdList.filter(id => !occupied.includes(id))) { // DisplayClass21_0.b__2
+            const model = this.GetNextEndlessEnemyAppearModel();
+            if (model == null) throw new TypeError("NullReferenceException");
+            result.push(this.CreateAdditionalBattleUnit(model.QuestEnemyAppearanceMstId, positionId));
+        }
+        return result;
+    }
     /** @rva 0x1376E90  private QuestEnemyAppearanceMstModel GetNextEndlessEnemyAppearModel() { } */
-    GetNextEndlessEnemyAppearModel(): QuestEnemyAppearanceMstModel { return notPorted("AdditionalEnemyReferee.GetNextEndlessEnemyAppearModel", 0x1376E90); }
+    GetNextEndlessEnemyAppearModel(): QuestEnemyAppearanceMstModel {
+        if (this.endlessEnemySourceList.length <= this.endlessEnemyIndex) this.endlessEnemyIndex = 0;
+        const id = this.endlessEnemySourceList[this.endlessEnemyIndex];
+        if (id === undefined) throw new RangeError("ArgumentOutOfRangeException");
+        const model = BattleMstReaderBase.get_Instance<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int>(QuestEnemyAppearanceMstModel).GetModelByKey(id);
+        this.endlessEnemyIndex = (this.endlessEnemyIndex + 1) % this.endlessEnemySourceList.length;
+        return model;
+    }
     /** @rva 0x1377760  public void .ctor() { } */
-    ctor(): this { return notPorted("AdditionalEnemyReferee..ctor", 0x1377760); }
+    ctor(): this {
+        this.additionalEnemyUnitList = [];
+        this.summonQuestEnemyAppearanceMstIdDic = new Map();
+        this.endlessEnemySourceList = [];
+        this.endlessEnemyPositionIdList = [];
+        return this;
+    }
 }
 
 // ---- ReDriveBattleCore.AdditionalEnemyReferee.ConditionType  (TypeDefIndex 301, public enum) ----
