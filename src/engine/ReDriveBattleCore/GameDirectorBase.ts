@@ -1,6 +1,15 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { SkipForcedAutomaticBattleRequest } from "./Request/SkipForcedAutomaticBattleRequest";
+import { RegisterSpecialAttackRequest } from "./Request/RegisterSpecialAttackRequest";
+import { TimeForwardRequest } from "./Request/TimeForwardRequest";
+import { ChangePauseStateRequest } from "./Request/ChangePauseStateRequest";
+import { ChangeBattleSpeedTypeRequest } from "./Request/ChangeBattleSpeedTypeRequest";
+import { ChangeAutoControlRequest } from "./Request/ChangeAutoControlRequest";
+import { UnitConditionRequest } from "./Request/UnitConditionRequest";
+import { BattlePhaseRequest } from "./Request/BattlePhaseRequest";
+import { SkillRequest } from "./Request/SkillRequest";
 import { UniqueLvUnitStateBase } from "./UnitState/UniqueLvUnitStateBase";
 import { BattleUnitSituationData, BattleUnitSituationData_UniqueLvStateIconData } from "./BattleUnitSituationData";
 import { GameSituationData } from "./GameSituationData";
@@ -443,7 +452,82 @@ export abstract class GameDirectorBase {
         this.commandSender.Flush(); // inlined in the game
     }
     /** @rva 0x149AFA0 slot 13  public virtual void Request(RequestBase request, bool dontFlushCommand = False, CancellationToken cancellationToken) { } */
-    Request(request: RequestBase, dontFlushCommand: boolean /* = False */, cancellationToken: any /* CancellationToken */): void { return notPorted("GameDirectorBase.Request", 0x149AFA0); }
+    Request(request: RequestBase, dontFlushCommand: boolean /* = False */, cancellationToken: any /* CancellationToken */): void {
+        if (request == null) return;
+        switch (request.RequestType) {
+            case 1:
+                if (request instanceof SkillRequest) {
+                    if (this.BattlePhase === Phase.Finish) return;
+                    this.ChangeTarget(BattleUnit_TeamType.Ally, TargetReferee_TargetType.Attack, request.targetBattleUnitId, false);
+                    this.ChangeTarget(BattleUnit_TeamType.Ally, TargetReferee_TargetType.Friend, request.selectAllyUnitId, false);
+                    const act = this.turnActSystem.CurrentAct;
+                    if (act instanceof SkillDecisionActBase && !act.IsDecided && act.actUnitId === request.battleUnitId) {
+                        act.skillMstId = request.skillMstId;
+                        act.targetFriendUnitId = request.selectAllyUnitId;
+                        act.Decide();
+                    }
+                    this.Forward();
+                }
+                break;
+            case 2:
+                if (request instanceof BattlePhaseRequest) {
+                    if (request.phase === Phase.Finish) {
+                        const judge = this.judgeResultReferee;
+                        if (judge.result !== ResultStatus.None) judge.result = ResultStatus.None; // ResetResult inlined
+                        if (judge.result === ResultStatus.None) judge.result = (2 - (request.isWin ? 1 : 0)) as ResultStatus; // SetResult inlined
+                    }
+                    this.ChangeBattlePhase(request.phase);
+                }
+                break;
+            case 5:
+                if (request instanceof UnitConditionRequest) {
+                    const unit = this.battleUnitBundle.dic.get(request.battleUnitId);
+                    if (unit !== undefined) this.StoreCommand(new CommandUnitCondition().ctor$BattleUnit(unit));
+                }
+                break;
+            case 7:
+                if (request instanceof ChangeAutoControlRequest) {
+                    this.autoType = request.autoType;
+                    this.ForwardIfAutoAndSkillDecide();
+                }
+                break;
+            case 8:
+                this.RespondToClientReadyRequest();
+                break;
+            case 9:
+                if (request instanceof ChangeBattleSpeedTypeRequest) this.battleSpeedType = request.battleSpeedType;
+                break;
+            case 10:
+                if (request instanceof ChangePauseStateRequest) this.isPaused = request.isPaused;
+                break;
+            case 11:
+                if (request instanceof TimeForwardRequest) {
+                    if (this.BattlePhase === Phase.Finish) return;
+                    this.Forward();
+                }
+                break;
+            case 12:
+                if (request instanceof RegisterSpecialAttackRequest) {
+                    const unitId = request.battleUnitId;
+                    if (!request.isRegister) {
+                        const current = this.turnActSystem.CurrentAct;
+                        const wasWaiting = current instanceof SpecialAttackAct && current.actUnitId === unitId && !current.IsDecided;
+                        if (this.turnActSystem.actReferee.RemoveUnitSpecialAttackAct(unitId)) {
+                            if (wasWaiting) this.Forward();
+                            const info = this.turnActSystem.CreateTurnActUnitOrderInfo(this.battleUnitBundle.activeList, this);
+                            this.StoreCommand(new CommandRefreshTurnActUnitOrder().ctor$TurnActOrderUnitInfo_RefreshReasonType_int(info, 1 as CommandRefreshTurnActUnitOrder_RefreshReasonType, unitId));
+                        }
+                    } else {
+                        this.RegisterSpecialAttack(unitId);
+                    }
+                }
+                break;
+            case 14:
+                if (request instanceof SkipForcedAutomaticBattleRequest && this.isForcedAutomatic) this.RunBattleToEnd(cancellationToken);
+                break;
+        }
+        if (!dontFlushCommand) this.commandSender.Flush();
+    }
     /** @rva 0x14999E0  public void ManualFlushCommand() { } */
     ManualFlushCommand(): void {
         this.commandSender.Flush(); // same code as FlushCommands

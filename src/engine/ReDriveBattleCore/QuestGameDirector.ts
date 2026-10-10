@@ -10,5 +10,8 @@ export class QuestGameDirector extends SoloGameDirectorBase {
     /** @rva 0x759B30 slot 4  public override BattleType get_BattleType() { } */
     get_BattleType(): BattleType { return 1 as BattleType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x14A42A0  public void .ctor() { } */
-    ctor(): this { return notPorted("QuestGameDirector..ctor", 0x14A42A0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
 }
