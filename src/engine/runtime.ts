@@ -218,3 +218,21 @@ export function maxBy<T>(source: readonly T[], sel: (t: T) => number): number {
     if (source.length === 0) throw new Error("InvalidOperationException: Sequence contains no elements");
     let m = sel(source[0]); for (let i = 1; i < source.length; i++) { const v = sel(source[i]); if (v > m) m = v; } return m;
 }
+/** `OrderBy(k0).ThenBy(k1)...` (descending per key when `desc`), stable like LINQ. Keys are computed level by level
+ * for all elements, as .NET's EnumerableSorter does (matters for `Guid.NewGuid()` keys drawn from GameRandom). */
+export function orderByKeys<T>(source: readonly T[], keys: ReadonlyArray<readonly [(t: T) => number | boolean, boolean]>): T[] {
+    const cols = keys.map(([k]) => source.map(t => Number(k(t))));
+    const idx = source.map((_, i) => i);
+    idx.sort((a, b) => {
+        for (let l = 0; l < keys.length; l++) {
+            const d = cols[l][a] - cols[l][b];
+            if (d !== 0) return keys[l][1] ? -d : d;
+        }
+        return a - b;
+    });
+    return idx.map(i => source[i]);
+}
+/** Guid.NewGuid() used as a sort key: a random number from GameRandom. */
+export const newGuidKey = (): number => GameRandom.next();
+/** new System.Random().Next(maxValue): an int in [0, maxValue) from GameRandom. */
+export const randomNext = (maxValue: number): number => Math.floor(GameRandom.next() * maxValue);

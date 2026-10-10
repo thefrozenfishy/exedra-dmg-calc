@@ -33,3 +33,4 @@ dist-ssr
 *.sw?
 debugging/*.json
 debugging/stats/
+src/engine/dist/
