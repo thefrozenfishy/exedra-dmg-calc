@@ -13,7 +13,10 @@ export class UniqueStatePatternMstModel extends MstModelBase<UniqueStatePatternM
     get StateFlipName(): string { return this.get_StateFlipName(); }
     get IconName(): string { return this.get_IconName(); }
     /** @rva 0x16DEC40  public void .ctor(UniqueStatePatternMstRecord record) { } */
-    ctor$UniqueStatePatternMstRecord(record: UniqueStatePatternMstRecord): this { return notPorted("UniqueStatePatternMstModel..ctor", 0x16DEC40); }
+    ctor$UniqueStatePatternMstRecord(record: UniqueStatePatternMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_UniqueStatePatternMstId() { } */
     get_UniqueStatePatternMstId(): int { return this.record.uniqueStatePatternMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x85E540  public string get_Name() { } */

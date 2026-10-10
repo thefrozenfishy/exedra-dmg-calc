@@ -8,5 +8,8 @@ export class MstModelBase<TRecord> {
     /** 0x0 protected readonly TRecord record */
     record: TRecord = null!;
     /** @rva -1  public void .ctor(TRecord record) { } */
-    ctor$TRecord(record: TRecord): this { return notPorted("MstModelBase..ctor", 0); }
+    ctor$TRecord(record: TRecord): this {
+        this.record = record; // 0x737fb0: base .ctor, then this+0x10 = record
+        return this;
+    }
 }

@@ -1,7 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { intParse, isNullOrEmpty, notPorted } from "../../runtime";
 import type { int } from "../../runtime";
 import type { ElementType } from "../../Network/Definition/Battle/ElementType";
 import type { JudgeResultType } from "../JudgeResultType";
@@ -39,9 +39,15 @@ export class QuestStageMstModel extends MstModelBase<QuestStageMstRecord> {
     get IsAutoModeOff(): boolean { return this.get_IsAutoModeOff(); }
     get SelectionAbilityLotteryMstId(): int { return this.get_SelectionAbilityLotteryMstId(); }
     /** @rva 0x16D5820  public void .ctor(QuestStageMstRecord record) { } */
-    ctor$QuestStageMstRecord(record: QuestStageMstRecord): this { return notPorted("QuestStageMstModel..ctor", 0x16D5820); }
+    ctor$QuestStageMstRecord(record: QuestStageMstRecord): this {
+        super.ctor$TRecord(record);
+        this.recommendationElements = isNullOrEmpty(record.recommendationElementCsv)
+            ? []
+            : record.recommendationElementCsv.split(",").map(i => intParse(i) as ElementType); // <.ctor>b__0_0: int.Parse
+        return this;
+    }
     /** @rva 0x730C50  public QuestStageMstRecord get_Record() { } */
-    get_Record(): QuestStageMstRecord { return notPorted("QuestStageMstModel.get_Record", 0x730C50); }
+    get_Record(): QuestStageMstRecord { return this.record; }
     /** @rva 0x901770  public int get_QuestStageMstId() { } */
     get_QuestStageMstId(): int { return this.record.questStageMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_QuestGroupMstId() { } */
@@ -57,7 +63,7 @@ export class QuestStageMstModel extends MstModelBase<QuestStageMstRecord> {
     /** @rva 0x901960  public int get_QuestMissionGroupId() { } */
     get_QuestMissionGroupId(): int { return this.record.questMissionGroupId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901975; mov eax, dword ptr [rax + 0x40]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5AD0  public object get_Difficulty() { } */
-    get_Difficulty(): any { return notPorted("QuestStageMstModel.get_Difficulty", 0x16D5AD0); }
+    get_Difficulty(): any { return this.record.difficulty; /* boxed int */ }
     /** @rva 0x16D5C20  public string get_StagePrefabName() { } */
     get_StagePrefabName(): string { return this.record.stagePrefabName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5c39; mov rax, qword ptr [rax + 0x98]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5AB0  public string get_BgmCueSheetName() { } */
@@ -89,7 +95,7 @@ export class QuestStageMstModel extends MstModelBase<QuestStageMstRecord> {
     /** @rva 0x16D5B30  public ElementType get_Element() { } */
     get_Element(): ElementType { return this.record.element as ElementType; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5b48; mov eax, dword ptr [rax + 0xc8]; add rsp, 0x28; ret */ }
     /** @rva 0x16D5B50  public bool get_IsAutoModeOff() { } */
-    get_IsAutoModeOff(): boolean { return notPorted("QuestStageMstModel.get_IsAutoModeOff", 0x16D5B50); }
+    get_IsAutoModeOff(): boolean { return this.record.isAutoModeOff === 1; }
     /** @rva 0x16D5C00  public int get_SelectionAbilityLotteryMstId() { } */
     get_SelectionAbilityLotteryMstId(): int { return this.record.selectionAbilityLotteryMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5c18; mov eax, dword ptr [rax + 0xc4]; add rsp, 0x28; ret */ }
 }

@@ -1,14 +1,20 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { CalculationPointPolicyMstModel } from "../Model/CalculationPointPolicyMstModel";
 import { notPorted } from "../../runtime";
-import type { CalculationPointPolicyMstModel } from "../Model/CalculationPointPolicyMstModel";
 
-// base type BattleMstReaderBase<CalculationPointPolicyMstModel, CalculationPointPolicyMstRecord, int> is outside the ported set
+import { BattleMstReaderBase } from "./BattleMstReaderBase";
+import type { CalculationPointPolicyMstRecord } from "../../Network/Definition/CalcPoint/CalculationPointPolicyMstRecord";
+import type { int } from "../../runtime";
+
 // ---- ReDriveBattleCore.Reader.CalculationPointPolicyMstReader  (TypeDefIndex 872, public class) ----
-export class CalculationPointPolicyMstReader {
+export class CalculationPointPolicyMstReader extends BattleMstReaderBase<CalculationPointPolicyMstModel, CalculationPointPolicyMstRecord, int> {
     /** @rva 0x16CF6E0  public static CalculationPointPolicyMstModel GetModelByCoefficientName(string name) { } */
-    static GetModelByCoefficientName(name: string): CalculationPointPolicyMstModel { return notPorted("CalculationPointPolicyMstReader.GetModelByCoefficientName", 0x16CF6E0); }
+    static GetModelByCoefficientName(name: string): CalculationPointPolicyMstModel {
+        return BattleMstReaderBase.get_Instance<CalculationPointPolicyMstModel, CalculationPointPolicyMstRecord, int>(CalculationPointPolicyMstModel)
+            .GetModel(x => x.coefficientName === name); // <GetModelByCoefficientName>b__0: string ==
+    }
     /** @rva 0x16CF840  public void .ctor() { } */
-    ctor(): this { return notPorted("CalculationPointPolicyMstReader..ctor", 0x16CF840); }
+    ctor(): this { super.ctor(); return this; }
 }

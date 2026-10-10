@@ -16,7 +16,10 @@ export class BreakMstModel extends MstModelBase<BreakMstRecord> {
     get MaxBreakedDamageReceiveRate(): int { return this.get_MaxBreakedDamageReceiveRate(); }
     get BreakedDamageReceiveRateIncreaseRate(): int { return this.get_BreakedDamageReceiveRateIncreaseRate(); }
     /** @rva 0x16CF080  public void .ctor(BreakMstRecord record) { } */
-    ctor$BreakMstRecord(record: BreakMstRecord): this { return notPorted("BreakMstModel..ctor", 0x16CF080); }
+    ctor$BreakMstRecord(record: BreakMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_BreakMstId() { } */
     get_BreakMstId(): int { return this.record.breakMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_BreakPoint() { } */

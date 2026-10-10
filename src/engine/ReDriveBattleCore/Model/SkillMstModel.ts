@@ -29,7 +29,10 @@ export class SkillMstModel extends MstModelBase<SkillMstRecord> {  // implements
     get IsSpecialAttack(): boolean { return this.get_IsSpecialAttack(); }
     get AdditionalCueName(): string { return this.get_AdditionalCueName(); }
     /** @rva 0x16D82A0  public void .ctor(SkillMstRecord record) { } */
-    ctor$SkillMstRecord(record: SkillMstRecord): this { return notPorted("SkillMstModel..ctor", 0x16D82A0); }
+    ctor$SkillMstRecord(record: SkillMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_SkillMstId() { } */
     get_SkillMstId(): int { return this.record.skillMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_SkillUniqueId() { } */
@@ -61,9 +64,9 @@ export class SkillMstModel extends MstModelBase<SkillMstRecord> {  // implements
     /** @rva 0x16D8390  public string get_SkillButtonIcon() { } */
     get_SkillButtonIcon(): string { return this.record.skillButtonIcon; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d83a6; mov rax, qword ptr [rax + 0x78]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8330  public bool get_IsActiveSkill() { } */
-    get_IsActiveSkill(): boolean { return notPorted("SkillMstModel.get_IsActiveSkill", 0x16D8330); }
+    get_IsActiveSkill(): boolean { return this.record.type === 1; }
     /** @rva 0x16D8370  public bool get_IsSpecialAttack() { } */
-    get_IsSpecialAttack(): boolean { return notPorted("SkillMstModel.get_IsSpecialAttack", 0x16D8370); }
+    get_IsSpecialAttack(): boolean { return this.record.type === 2; }
     /** @rva 0x16D82F0  public string get_AdditionalCueName() { } */
     get_AdditionalCueName(): string { return this.record.additionalCueName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d8306; mov rax, qword ptr [rax + 0x70]; add rsp, 0x28; ret */ }
 }

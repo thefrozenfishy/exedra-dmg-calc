@@ -18,7 +18,10 @@ export class BattleConditionMstModel extends MstModelBase<BattleConditionMstReco
     get CompareOperator(): CompareOperator { return this.get_CompareOperator(); }
     get CompareValue(): string { return this.get_CompareValue(); }
     /** @rva 0x16CBF30  public void .ctor(BattleConditionMstRecord record) { } */
-    ctor$BattleConditionMstRecord(record: BattleConditionMstRecord): this { return notPorted("BattleConditionMstModel..ctor", 0x16CBF30); }
+    ctor$BattleConditionMstRecord(record: BattleConditionMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_Id() { } */
     get_Id(): int { return this.record.battleConditionMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x85E540  public string get_Description() { } */

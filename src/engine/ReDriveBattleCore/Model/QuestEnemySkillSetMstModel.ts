@@ -15,7 +15,10 @@ export class QuestEnemySkillSetMstModel extends MstModelBase<QuestEnemySkillSetM
     get HpGaugeValue(): int { return this.get_HpGaugeValue(); }
     get IsDescriptionHidden(): boolean { return this.get_IsDescriptionHidden(); }
     /** @rva 0x16D5700  public void .ctor(QuestEnemySkillSetMstRecord record) { } */
-    ctor$QuestEnemySkillSetMstRecord(record: QuestEnemySkillSetMstRecord): this { return notPorted("QuestEnemySkillSetMstModel..ctor", 0x16D5700); }
+    ctor$QuestEnemySkillSetMstRecord(record: QuestEnemySkillSetMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_QuestEnemySkillSetMstId() { } */
     get_QuestEnemySkillSetMstId(): int { return this.record.questEnemySkillSetMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_EnemySkillSetId() { } */

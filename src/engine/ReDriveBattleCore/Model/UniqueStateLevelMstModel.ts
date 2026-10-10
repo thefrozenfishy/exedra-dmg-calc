@@ -13,7 +13,10 @@ export class UniqueStateLevelMstModel extends MstModelBase<UniqueStateLevelMstRe
     get Level(): int { return this.get_Level(); }
     get ConditionCount(): int { return this.get_ConditionCount(); }
     /** @rva 0x16DEBB0  public void .ctor(UniqueStateLevelMstRecord record) { } */
-    ctor$UniqueStateLevelMstRecord(record: UniqueStateLevelMstRecord): this { return notPorted("UniqueStateLevelMstModel..ctor", 0x16DEBB0); }
+    ctor$UniqueStateLevelMstRecord(record: UniqueStateLevelMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_UniqueStateLevelMstId() { } */
     get_UniqueStateLevelMstId(): int { return this.record.uniqueStateLevelMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_GroupId() { } */

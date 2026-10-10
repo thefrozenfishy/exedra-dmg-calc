@@ -18,7 +18,10 @@ export class QuestEnemyWaveMstModel extends MstModelBase<QuestEnemyWaveMstRecord
     get DioramaBackGroundMstId(): int { return this.get_DioramaBackGroundMstId(); }
     get EnemyTipsText(): string { return this.get_EnemyTipsText(); }
     /** @rva 0x16D5790  public void .ctor(QuestEnemyWaveMstRecord record) { } */
-    ctor$QuestEnemyWaveMstRecord(record: QuestEnemyWaveMstRecord): this { return notPorted("QuestEnemyWaveMstModel..ctor", 0x16D5790); }
+    ctor$QuestEnemyWaveMstRecord(record: QuestEnemyWaveMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_QuestEnemyWaveMstId() { } */
     get_QuestEnemyWaveMstId(): int { return this.record.questEnemyWaveMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_QuestStageMstId() { } */

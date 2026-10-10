@@ -1,7 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { intParse, isNullOrEmpty, notPorted } from "../../runtime";
 import type { List, int } from "../../runtime";
 import type { ProcessTiming } from "../BattleCondition/ProcessTiming";
 import { MstModelBase } from "./MstModelBase";
@@ -28,7 +28,10 @@ export class PassiveSkillDetailMstModel extends MstModelBase<PassiveSkillDetailM
     get Description(): string { return this.get_Description(); }
     get DescriptionType(): int { return this.get_DescriptionType(); }
     /** @rva 0x16D3180  public void .ctor(PassiveSkillDetailMstRecord record) { } */
-    ctor$PassiveSkillDetailMstRecord(record: PassiveSkillDetailMstRecord): this { return notPorted("PassiveSkillDetailMstModel..ctor", 0x16D3180); }
+    ctor$PassiveSkillDetailMstRecord(record: PassiveSkillDetailMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_PassiveSkillDetailMstId() { } */
     get_PassiveSkillDetailMstId(): int { return this.record.passiveSkillDetailMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_PassiveSkillMstId() { } */
@@ -56,7 +59,12 @@ export class PassiveSkillDetailMstModel extends MstModelBase<PassiveSkillDetailM
     /** @rva 0x9017C0  public bool get_IsFixedProbability() { } */
     get_IsFixedProbability(): boolean { return this.record.isFixedProbability; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x9017d6; movzx eax, byte ptr [rax + 0x44]; add rsp, 0x28; ret */ }
     /** @rva 0x16D3230  public List<ProcessTiming> get_StartTimings() { } */
-    get_StartTimings(): List<ProcessTiming> { return notPorted("PassiveSkillDetailMstModel.get_StartTimings", 0x16D3230); }
+    get_StartTimings(): List<ProcessTiming> {
+        if (isNullOrEmpty(this.record.startTimingIdCsv)) return [];
+        return this.record.startTimingIdCsv.split(",")
+            .filter(x => !isNullOrEmpty(x))            // <get_StartTimings>b__28_0
+            .map(y => intParse(y.trim()) as ProcessTiming); // <get_StartTimings>b__28_1: int.Parse(y.Trim())
+    }
     /** @rva 0x16D3210  public string get_StartConditionSetIdCsv() { } */
     get_StartConditionSetIdCsv(): string { return this.record.startConditionSetIdCsv; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d3226; mov rax, qword ptr [rax + 0x60]; add rsp, 0x28; ret */ }
     /** @rva 0x16D31D0  public string get_ActiveConditionSetIdCsv() { } */

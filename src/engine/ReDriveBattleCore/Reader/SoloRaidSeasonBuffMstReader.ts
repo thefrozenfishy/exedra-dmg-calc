@@ -2,10 +2,13 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
+import { BattleMstReaderBase } from "./BattleMstReaderBase";
+import type { SoloRaidSeasonBuffMstModel } from "../Model/SoloRaidSeasonBuffMstModel";
+import type { SoloRaidSeasonBuffMstRecord } from "../../Network/Definition/SoloRaid/SoloRaidSeasonBuffMstRecord";
+import type { int } from "../../runtime";
 
-// base type BattleMstReaderBase<SoloRaidSeasonBuffMstModel, SoloRaidSeasonBuffMstRecord, int> is outside the ported set
 // ---- ReDriveBattleCore.Reader.SoloRaidSeasonBuffMstReader  (TypeDefIndex 857, public class) ----
-export class SoloRaidSeasonBuffMstReader {
+export class SoloRaidSeasonBuffMstReader extends BattleMstReaderBase<SoloRaidSeasonBuffMstModel, SoloRaidSeasonBuffMstRecord, int> {
     /** @rva 0x16D87A0  public void .ctor() { } */
-    ctor(): this { return notPorted("SoloRaidSeasonBuffMstReader..ctor", 0x16D87A0); }
+    ctor(): this { super.ctor(); return this; }
 }

@@ -1,13 +1,23 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { VortexUnitStateBase } from "../UnitState/VortexUnitStateBase";
+import { BleedUnitStateBase } from "../UnitState/BleedUnitStateBase";
+import { CurseUnitStateBase } from "../UnitState/CurseUnitStateBase";
+import { StunUnitState } from "../UnitState/StunUnitState";
+import { PoisonUnitStateBase } from "../UnitState/PoisonUnitStateBase";
+import { WeaknessUnitState } from "../UnitState/WeaknessUnitState";
+import { BurnUnitStateBase } from "../UnitState/BurnUnitStateBase";
+import { AbnormalEffectParryRate$1 } from "../AbnormalEffectParryRate";
+import { ElementAimDamageRate } from "../ElementAimDamageRate";
+import { ElementResistRate } from "../ElementResistRate";
+import { ElementDamageRate } from "../ElementDamageRate";
+import { ElementType } from "../../Network/Definition/Battle/ElementType";
+import { enumIsDefined, listInsert, notPorted, trunc } from "../../runtime";
 import type { IEnumerable, int } from "../../runtime";
-import type { ElementType } from "../../Network/Definition/Battle/ElementType";
+
 import type { AbnormalEffectParryRate } from "../AbnormalEffectParryRate";
-import type { ElementAimDamageRate } from "../ElementAimDamageRate";
-import type { ElementDamageRate } from "../ElementDamageRate";
-import type { ElementResistRate } from "../ElementResistRate";
+
 import { MstModelBase } from "./MstModelBase";
 import type { QuestEnemyAppearanceMstRecord } from "../../Network/Definition/QuestOutGame/QuestEnemyAppearanceMstRecord";
 
@@ -46,7 +56,10 @@ export class QuestEnemyAppearanceMstModel extends MstModelBase<QuestEnemyAppeara
     get SummonId(): int { return this.get_SummonId(); }
     get IsBattleStartMember(): boolean { return this.get_IsBattleStartMember(); }
     /** @rva 0x16D3E20  public void .ctor(QuestEnemyAppearanceMstRecord record) { } */
-    ctor$QuestEnemyAppearanceMstRecord(record: QuestEnemyAppearanceMstRecord): this { return notPorted("QuestEnemyAppearanceMstModel..ctor", 0x16D3E20); }
+    ctor$QuestEnemyAppearanceMstRecord(record: QuestEnemyAppearanceMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_QuestEnemyAppearanceMstId() { } */
     get_QuestEnemyAppearanceMstId(): int { return this.record.questEnemyAppearanceMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_QuestStageMstId() { } */
@@ -92,15 +105,61 @@ export class QuestEnemyAppearanceMstModel extends MstModelBase<QuestEnemyAppeara
     /** @rva 0x16D4E30  public bool get_IsSkipDeathMotion() { } */
     get_IsSkipDeathMotion(): boolean { return this.record.isSkipDeathMotion; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d4e49; movzx eax, byte ptr [rax + 0xf4]; add rsp, 0x28; ret */ }
     /** @rva 0x16D4700  public ElementDamageRate[] get_ElementDamageRates() { } */
-    get_ElementDamageRates(): ElementDamageRate[] { return notPorted("QuestEnemyAppearanceMstModel.get_ElementDamageRates", 0x16D4700); }
+    get_ElementDamageRates(): ElementDamageRate[] {
+        const r = this.record;
+        return [
+            new ElementDamageRate().ctor$ElementType_int(ElementType.Fire, r.fireDamageRate),
+            new ElementDamageRate().ctor$ElementType_int(ElementType.Aqua, r.aquaDamageRate),
+            new ElementDamageRate().ctor$ElementType_int(ElementType.Forest, r.forestDamageRate),
+            new ElementDamageRate().ctor$ElementType_int(ElementType.Light, r.lightDamageRate),
+            new ElementDamageRate().ctor$ElementType_int(ElementType.Dark, r.darkDamageRate),
+            new ElementDamageRate().ctor$ElementType_int(ElementType.Neutral, r.neutralDamageRate),
+        ];
+    }
     /** @rva 0x16D4A60  public ElementResistRate[] get_ElementResistRates() { } */
-    get_ElementResistRates(): ElementResistRate[] { return notPorted("QuestEnemyAppearanceMstModel.get_ElementResistRates", 0x16D4A60); }
+    get_ElementResistRates(): ElementResistRate[] {
+        const r = this.record;
+        return [
+            new ElementResistRate().ctor$ElementType_int(ElementType.Fire, r.fireResistRate),
+            new ElementResistRate().ctor$ElementType_int(ElementType.Aqua, r.aquaResistRate),
+            new ElementResistRate().ctor$ElementType_int(ElementType.Forest, r.forestResistRate),
+            new ElementResistRate().ctor$ElementType_int(ElementType.Light, r.lightResistRate),
+            new ElementResistRate().ctor$ElementType_int(ElementType.Dark, r.darkResistRate),
+            new ElementResistRate().ctor$ElementType_int(ElementType.Neutral, r.neutralResistRate),
+        ];
+    }
     /** @rva 0x16D43A0  public ElementAimDamageRate[] get_ElementAimDamageRates() { } */
-    get_ElementAimDamageRates(): ElementAimDamageRate[] { return notPorted("QuestEnemyAppearanceMstModel.get_ElementAimDamageRates", 0x16D43A0); }
+    get_ElementAimDamageRates(): ElementAimDamageRate[] {
+        const r = this.record;
+        return [
+            new ElementAimDamageRate().ctor$ElementType_int(ElementType.Fire, r.fireAimDamageRate),
+            new ElementAimDamageRate().ctor$ElementType_int(ElementType.Aqua, r.aquaAimDamageRate),
+            new ElementAimDamageRate().ctor$ElementType_int(ElementType.Forest, r.forestAimDamageRate),
+            new ElementAimDamageRate().ctor$ElementType_int(ElementType.Light, r.lightAimDamageRate),
+            new ElementAimDamageRate().ctor$ElementType_int(ElementType.Dark, r.darkAimDamageRate),
+            new ElementAimDamageRate().ctor$ElementType_int(ElementType.Neutral, r.neutralAimDamageRate),
+        ];
+    }
     /** @rva 0x16D4ED0  public ElementType[] get_WeakElements() { } */
-    get_WeakElements(): ElementType[] { return notPorted("QuestEnemyAppearanceMstModel.get_WeakElements", 0x16D4ED0); }
+    get_WeakElements(): ElementType[] {
+        const r = this.record;
+        return [r.weakElement1, r.weakElement2, r.weakElement3, r.weakElement4, r.weakElement5, r.weakElement6]
+            .filter(ele => enumIsDefined(ElementType, ele)) // <get_WeakElements>b__52_0: Enum.IsDefined(typeof(ElementType), ele)
+            .map(ele => ele as ElementType);                // <get_WeakElements>b__52_1
+    }
     /** @rva 0x16D3E70  public AbnormalEffectParryRate[] get_AbnormalEffectParryRates() { } */
-    get_AbnormalEffectParryRates(): AbnormalEffectParryRate[] { return notPorted("QuestEnemyAppearanceMstModel.get_AbnormalEffectParryRates", 0x16D3E70); }
+    get_AbnormalEffectParryRates(): AbnormalEffectParryRate[] {
+        const r = this.record;
+        return [
+            new AbnormalEffectParryRate$1(BurnUnitStateBase).ctor$int(r.burnParryRate),
+            new AbnormalEffectParryRate$1(WeaknessUnitState).ctor$int(r.weaknessParryRate),
+            new AbnormalEffectParryRate$1(PoisonUnitStateBase).ctor$int(r.poisonParryRate),
+            new AbnormalEffectParryRate$1(StunUnitState).ctor$int(r.stunParryRate),
+            new AbnormalEffectParryRate$1(CurseUnitStateBase).ctor$int(r.curseParryRate),
+            new AbnormalEffectParryRate$1(BleedUnitStateBase).ctor$int(r.bleedParryRate),
+            new AbnormalEffectParryRate$1(VortexUnitStateBase).ctor$int(r.vortexParryRate),
+        ];
+    }
     /** @rva 0x16D42E0  public int get_BreakMstId() { } */
     get_BreakMstId(): int { return this.record.breakMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d42f8; mov eax, dword ptr [rax + 0xd0]; add rsp, 0x28; ret */ }
     /** @rva 0x16D4300  public int get_ConditionType() { } */
@@ -110,7 +169,17 @@ export class QuestEnemyAppearanceMstModel extends MstModelBase<QuestEnemyAppeara
     /** @rva 0x16D4EB0  public int get_SummonId() { } */
     get_SummonId(): int { return this.record.summonId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d4ec8; mov eax, dword ptr [rax + 0xdc]; add rsp, 0x28; ret */ }
     /** @rva 0x16D4E00  public bool get_IsBattleStartMember() { } */
-    get_IsBattleStartMember(): boolean { return notPorted("QuestEnemyAppearanceMstModel.get_IsBattleStartMember", 0x16D4E00); }
+    get_IsBattleStartMember(): boolean { return this.record.conditionValue === 0; }
     /** @rva 0x16D3B60  public static IEnumerable<QuestEnemyAppearanceMstModel> Sort(IEnumerable<QuestEnemyAppearanceMstModel> mstList) { } */
-    static Sort(mstList: IEnumerable<QuestEnemyAppearanceMstModel>): IEnumerable<QuestEnemyAppearanceMstModel> { return notPorted("QuestEnemyAppearanceMstModel.Sort", 0x16D3B60); }
+    static Sort(mstList: IEnumerable<QuestEnemyAppearanceMstModel>): IEnumerable<QuestEnemyAppearanceMstModel> {
+        const list: QuestEnemyAppearanceMstModel[] = [];
+        const count = mstList.length;
+        let mainTarget: QuestEnemyAppearanceMstModel | null = null;
+        for (const mst of mstList) {
+            if (!mst.record.isMainTargetEnemy) list.push(mst);
+            else mainTarget = mst; // the last main target wins
+        }
+        if (mainTarget != null) listInsert(list, trunc(count / 2), mainTarget);
+        return list;
+    }
 }

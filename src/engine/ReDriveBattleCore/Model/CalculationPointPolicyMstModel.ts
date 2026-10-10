@@ -16,7 +16,10 @@ export class CalculationPointPolicyMstModel extends MstModelBase<CalculationPoin
     get Value(): int { return this.get_Value(); }
     get StartTime(): any /* DateTimeOffset */ { return this.get_StartTime(); }
     /** @rva 0x16CF660  public void .ctor(CalculationPointPolicyMstRecord record) { } */
-    ctor$CalculationPointPolicyMstRecord(record: CalculationPointPolicyMstRecord): this { return notPorted("CalculationPointPolicyMstModel..ctor", 0x16CF660); }
+    ctor$CalculationPointPolicyMstRecord(record: CalculationPointPolicyMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_CalculationPointPolicyMstId() { } */
     get_CalculationPointPolicyMstId(): int { return this.record.calculationPointPolicyMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public CalculationPointPolicyType get_PolicyType() { } */
@@ -28,5 +31,5 @@ export class CalculationPointPolicyMstModel extends MstModelBase<CalculationPoin
     /** @rva 0xA0E790  public int get_Value() { } */
     get_Value(): int { return this.record.value; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0xa0e7a5; mov eax, dword ptr [rax + 0x28]; add rsp, 0x28; ret */ }
     /** @rva 0x16CF6B0  public DateTimeOffset get_StartTime() { } */
-    get_StartTime(): any /* DateTimeOffset */ { return notPorted("CalculationPointPolicyMstModel.get_StartTime", 0x16CF6B0); }
+    get_StartTime(): any /* DateTimeOffset */ { return this.record.startTime; }
 }

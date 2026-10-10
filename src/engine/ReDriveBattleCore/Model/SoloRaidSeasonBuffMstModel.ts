@@ -17,7 +17,10 @@ export class SoloRaidSeasonBuffMstModel extends MstModelBase<SoloRaidSeasonBuffM
     get BuffPointChargePassiveSkillMstId(): int { return this.get_BuffPointChargePassiveSkillMstId(); }
     get EnhancedSkillTurnGaugeValue(): int { return this.get_EnhancedSkillTurnGaugeValue(); }
     /** @rva 0x16D8750  public void .ctor(SoloRaidSeasonBuffMstRecord record) { } */
-    ctor$SoloRaidSeasonBuffMstRecord(record: SoloRaidSeasonBuffMstRecord): this { return notPorted("SoloRaidSeasonBuffMstModel..ctor", 0x16D8750); }
+    ctor$SoloRaidSeasonBuffMstRecord(record: SoloRaidSeasonBuffMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_SoloRaidSeasonBuffMstId() { } */
     get_SoloRaidSeasonBuffMstId(): int { return this.record.soloRaidSeasonBuffMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_GroupId() { } */

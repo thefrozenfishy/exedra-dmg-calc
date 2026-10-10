@@ -12,7 +12,10 @@ export class BattleConditionSetMstModel extends MstModelBase<BattleConditionSetM
     get Description(): string { return this.get_Description(); }
     get BattleConditionMstIdCsv(): string { return this.get_BattleConditionMstIdCsv(); }
     /** @rva 0x16CBFC0  public void .ctor(BattleConditionSetMstRecord record) { } */
-    ctor$BattleConditionSetMstRecord(record: BattleConditionSetMstRecord): this { return notPorted("BattleConditionSetMstModel..ctor", 0x16CBFC0); }
+    ctor$BattleConditionSetMstRecord(record: BattleConditionSetMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_Id() { } */
     get_Id(): int { return this.record.battleConditionSetMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x85E540  public string get_Description() { } */

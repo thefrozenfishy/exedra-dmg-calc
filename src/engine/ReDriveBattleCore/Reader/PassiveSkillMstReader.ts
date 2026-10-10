@@ -2,10 +2,13 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
+import { BattleMstReaderBase } from "./BattleMstReaderBase";
+import type { PassiveSkillMstModel } from "../Model/PassiveSkillMstModel";
+import type { PassiveSkillMstRecord } from "../../Network/Definition/Skill/PassiveSkillMstRecord";
+import type { int } from "../../runtime";
 
-// base type BattleMstReaderBase<PassiveSkillMstModel, PassiveSkillMstRecord, int> is outside the ported set
 // ---- ReDriveBattleCore.Reader.PassiveSkillMstReader  (TypeDefIndex 856, public class) ----
-export class PassiveSkillMstReader {
+export class PassiveSkillMstReader extends BattleMstReaderBase<PassiveSkillMstModel, PassiveSkillMstRecord, int> {
     /** @rva 0x16D37C0  public void .ctor() { } */
-    ctor(): this { return notPorted("PassiveSkillMstReader..ctor", 0x16D37C0); }
+    ctor(): this { super.ctor(); return this; }
 }

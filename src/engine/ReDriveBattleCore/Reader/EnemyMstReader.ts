@@ -2,10 +2,13 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
+import { BattleMstReaderBase } from "./BattleMstReaderBase";
+import type { EnemyMstModel } from "../Model/EnemyMstModel";
+import type { EnemyMstRecord } from "../../Network/Definition/QuestOutGame/EnemyMstRecord";
+import type { int } from "../../runtime";
 
-// base type BattleMstReaderBase<EnemyMstModel, EnemyMstRecord, int> is outside the ported set
 // ---- ReDriveBattleCore.Reader.EnemyMstReader  (TypeDefIndex 853, public class) ----
-export class EnemyMstReader {
+export class EnemyMstReader extends BattleMstReaderBase<EnemyMstModel, EnemyMstRecord, int> {
     /** @rva 0x16D0B40  public void .ctor() { } */
-    ctor(): this { return notPorted("EnemyMstReader..ctor", 0x16D0B40); }
+    ctor(): this { super.ctor(); return this; }
 }

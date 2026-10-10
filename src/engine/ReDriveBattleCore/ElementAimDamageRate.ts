@@ -26,5 +26,9 @@ export class ElementAimDamageRate {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0xA91B60  public void .ctor(ElementType element, int damageRate) { } */
-    ctor$ElementType_int(element: ElementType, damageRate: int): this { return notPorted("ElementAimDamageRate..ctor", 0xA91B60); }
+    ctor$ElementType_int(element: ElementType, damageRate: int): this {
+        this._Element = element;
+        this._DamageRate = damageRate;
+        return this;
+    }
 }

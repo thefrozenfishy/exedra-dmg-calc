@@ -26,5 +26,9 @@ export class ElementResistRate {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0xA91B60  public void .ctor(ElementType element, int resistRate) { } */
-    ctor$ElementType_int(element: ElementType, resistRate: int): this { return notPorted("ElementResistRate..ctor", 0xA91B60); }
+    ctor$ElementType_int(element: ElementType, resistRate: int): this {
+        this._Element = element;
+        this._ResistRate = resistRate;
+        return this;
+    }
 }

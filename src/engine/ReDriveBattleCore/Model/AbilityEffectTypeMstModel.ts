@@ -19,7 +19,10 @@ export class AbilityEffectTypeMstModel extends MstModelBase<AbilityEffectTypeMst
     get DisplayType(): int { return this.get_DisplayType(); }
     get Category(): AbilityEffectCategory { return this.get_Category(); }
     /** @rva 0x16CBE40  public void .ctor(AbilityEffectTypeMstRecord record) { } */
-    ctor$AbilityEffectTypeMstRecord(record: AbilityEffectTypeMstRecord): this { return notPorted("AbilityEffectTypeMstModel..ctor", 0x16CBE40); }
+    ctor$AbilityEffectTypeMstRecord(record: AbilityEffectTypeMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_AbilityEffectTypeMstId() { } */
     get_AbilityEffectTypeMstId(): int { return this.record.abilityEffectTypeMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x9017E0  public string get_EffectType() { } */

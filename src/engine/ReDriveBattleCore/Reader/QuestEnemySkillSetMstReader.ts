@@ -2,10 +2,13 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
+import { BattleMstReaderBase } from "./BattleMstReaderBase";
+import type { QuestEnemySkillSetMstModel } from "../Model/QuestEnemySkillSetMstModel";
+import type { QuestEnemySkillSetMstRecord } from "../../Network/Definition/QuestOutGame/QuestEnemySkillSetMstRecord";
+import type { int } from "../../runtime";
 
-// base type BattleMstReaderBase<QuestEnemySkillSetMstModel, QuestEnemySkillSetMstRecord, int> is outside the ported set
 // ---- ReDriveBattleCore.Reader.QuestEnemySkillSetMstReader  (TypeDefIndex 863, public class) ----
-export class QuestEnemySkillSetMstReader {
+export class QuestEnemySkillSetMstReader extends BattleMstReaderBase<QuestEnemySkillSetMstModel, QuestEnemySkillSetMstRecord, int> {
     /** @rva 0x16D5750  public void .ctor() { } */
-    ctor(): this { return notPorted("QuestEnemySkillSetMstReader..ctor", 0x16D5750); }
+    ctor(): this { super.ctor(); return this; }
 }

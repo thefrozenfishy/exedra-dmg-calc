@@ -1,10 +1,12 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { RoleType } from "../../Network/Definition/Battle/RoleType";
+import { ElementType } from "../../Network/Definition/Battle/ElementType";
+import { EnumUtil } from "../EnumUtil";
 import { notPorted } from "../../runtime";
 import type { int } from "../../runtime";
-import type { ElementType } from "../../Network/Definition/Battle/ElementType";
-import type { RoleType } from "../../Network/Definition/Battle/RoleType";
+
 import { MstModelBase } from "./MstModelBase";
 import type { StyleMstRecord } from "../../Network/Definition/Style/StyleMstRecord";
 
@@ -64,7 +66,12 @@ export class StyleMstModel extends MstModelBase<StyleMstRecord> {  // implements
     get HaveAnimatedStyle(): boolean { return this.get_HaveAnimatedStyle(); }
     get IsReleased(): boolean { return this.get_IsReleased(); }
     /** @rva 0x16D8810  public void .ctor(StyleMstRecord record) { } */
-    ctor$StyleMstRecord(record: StyleMstRecord): this { return notPorted("StyleMstModel..ctor", 0x16D8810); }
+    ctor$StyleMstRecord(record: StyleMstRecord): this {
+        super.ctor$TRecord(record);
+        // new int[1] { record.skill1 }. PassiveSkillMstIds is never assigned in 3.19.0 (stays null).
+        this._SkillMstIds = [record.skill1];
+        return this;
+    }
     /** @rva 0x901770  public int get_StyleMstId() { } */
     get_StyleMstId(): int { return this.record.styleMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0xA0D840  public int get_StyleFigureMstId() { } */
@@ -140,9 +147,13 @@ export class StyleMstModel extends MstModelBase<StyleMstRecord> {  // implements
     /** @rva 0x16D8B70  public DateTimeOffset get_ReleaseTime() { } */
     get_ReleaseTime(): any /* DateTimeOffset */ { return notPorted("StyleMstModel.get_ReleaseTime", 0x16D8B70); }
     /** @rva 0x16D8980  public ElementType get_Element() { } */
-    get_Element(): ElementType { return notPorted("StyleMstModel.get_Element", 0x16D8980); }
+    get_Element(): ElementType {
+        return EnumUtil.Cast<ElementType>(ElementType, this.record.element);
+    }
     /** @rva 0x16D8BA0  public RoleType get_Role() { } */
-    get_Role(): RoleType { return notPorted("StyleMstModel.get_Role", 0x16D8BA0); }
+    get_Role(): RoleType {
+        return EnumUtil.Cast<RoleType>(RoleType, this.record.role);
+    }
     /** @rva 0x16D8800 slot 4  private AssetBundleType ReDrive.Common.IHaveThumbnailTexture.get_Type() { } */
     get_IHaveThumbnailTexture$Type(): any /* AssetBundleType */ { return notPorted("StyleMstModel.ReDrive.Common.IHaveThumbnailTexture.get_Type", 0x16D8800); }
     /** @rva 0x16D87E0 slot 6  private AssetBundleType ReDrive.Common.IHaveOriginalTexture.get_Type() { } */
@@ -158,7 +169,9 @@ export class StyleMstModel extends MstModelBase<StyleMstRecord> {  // implements
     /** @rva 0x16D5BC0  public string get_ResourceName() { } */
     get_ResourceName(): string { return this.record.resourceName; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x16d5bd9; mov rax, qword ptr [rax + 0xb8]; add rsp, 0x28; ret */ }
     /** @rva 0x16D8A50  public bool get_HaveAnimatedStyle() { } */
-    get_HaveAnimatedStyle(): boolean { return notPorted("StyleMstModel.get_HaveAnimatedStyle", 0x16D8A50); }
+    get_HaveAnimatedStyle(): boolean {
+        return 4 < this.record.rarity;
+    }
     /** @rva 0x16D8A90  public bool get_IsReleased() { } */
     get_IsReleased(): boolean { return notPorted("StyleMstModel.get_IsReleased", 0x16D8A90); }
 }

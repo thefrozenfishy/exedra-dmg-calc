@@ -2,10 +2,13 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
+import { BattleMstReaderBase } from "./BattleMstReaderBase";
+import type { StyleMstModel } from "../Model/StyleMstModel";
+import type { StyleMstRecord } from "../../Network/Definition/Style/StyleMstRecord";
+import type { int } from "../../runtime";
 
-// base type BattleMstReaderBase<StyleMstModel, StyleMstRecord, int> is outside the ported set
 // ---- ReDriveBattleCore.Reader.StyleMstReader  (TypeDefIndex 869, public class) ----
-export class StyleMstReader {
+export class StyleMstReader extends BattleMstReaderBase<StyleMstModel, StyleMstRecord, int> {
     /** @rva 0x16D8BF0  public void .ctor() { } */
-    ctor(): this { return notPorted("StyleMstReader..ctor", 0x16D8BF0); }
+    ctor(): this { super.ctor(); return this; }
 }

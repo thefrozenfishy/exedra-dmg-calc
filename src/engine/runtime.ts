@@ -96,3 +96,44 @@ export function orderByNewGuid<T>(source: readonly T[]): T[] {
 
 export type Queue<T> = T[]; // Enqueue = push, Dequeue = shift
 export type Stack<T> = T[]; // Push = push, Pop = pop
+
+/** `type.Name` (MemberInfo.Name). Classes may set `static __csName` so minified builds keep the C# name. */
+export function typeName(t: Type): string {
+    return Object.prototype.hasOwnProperty.call(t, "__csName") ? (t as any).__csName : t.name;
+}
+/** `a.IsAssignableFrom(b)` for classes (interfaces are strings, see isImpl). */
+export function isAssignableFrom(a: Type, b: Type | null): boolean {
+    if (b == null) return false;
+    return b === a || b.prototype instanceof a;
+}
+/** List<T>.Insert(index, item): throws like C# when index > Count. */
+export function listInsert<T>(list: T[], index: int, item: T): void {
+    if (index < 0 || index > list.length) throw new RangeError("ArgumentOutOfRangeException: index");
+    list.splice(index, 0, item);
+}
+/** Enum.IsDefined(typeof(TEnum), value) for the const-object enums. */
+export function enumIsDefined(e: object, value: number): boolean {
+    return Object.values(e).includes(value);
+}
+/** int.Parse(string) (invariant integer style: surrounding whitespace and a sign allowed). */
+export function intParse(s: string | null): int {
+    if (s == null) throw new TypeError("ArgumentNullException: s");
+    const t = s.trim();
+    if (!/^[+-]?\d+$/.test(t)) throw new SyntaxError(`FormatException: "${s}"`);
+    const v = Number(t);
+    if (v > 2147483647 || v < -2147483648) throw new RangeError(`OverflowException: "${s}"`);
+    return v;
+}
+/** string.IsNullOrEmpty */
+export const isNullOrEmpty = (s: string | null | undefined): boolean => s == null || s.length === 0;
+/**
+ * Lazy C# static constructor, for classes whose .cctor references classes that import them (an import cycle would
+ * see `undefined` at module load). Call `runCctor(X)` at the start of every member that reads X's static fields;
+ * the CLR also runs such a .cctor on first access.
+ */
+const cctorDone = new Set<object>();
+export function runCctor(cls: { cctor(): void }): void {
+    if (cctorDone.has(cls)) return;
+    cctorDone.add(cls);
+    cls.cctor();
+}

@@ -20,7 +20,10 @@ export class PassiveSkillMstModel extends MstModelBase<PassiveSkillMstRecord> { 
     get ConditionRole(): TargetRoleType { return this.get_ConditionRole(); }
     get SkillButtonIcon(): string { return this.get_SkillButtonIcon(); }
     /** @rva 0x16D3770  public void .ctor(PassiveSkillMstRecord record) { } */
-    ctor$PassiveSkillMstRecord(record: PassiveSkillMstRecord): this { return notPorted("PassiveSkillMstModel..ctor", 0x16D3770); }
+    ctor$PassiveSkillMstRecord(record: PassiveSkillMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_PassiveSkillMstId() { } */
     get_PassiveSkillMstId(): int { return this.record.passiveSkillMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_SkillUniqueId() { } */

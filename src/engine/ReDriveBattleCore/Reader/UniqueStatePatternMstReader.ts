@@ -2,10 +2,13 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
+import { BattleMstReaderBase } from "./BattleMstReaderBase";
+import type { UniqueStatePatternMstModel } from "../Model/UniqueStatePatternMstModel";
+import type { UniqueStatePatternMstRecord } from "../../Network/Definition/Skill/UniqueStatePatternMstRecord";
+import type { int } from "../../runtime";
 
-// base type BattleMstReaderBase<UniqueStatePatternMstModel, UniqueStatePatternMstRecord, int> is outside the ported set
 // ---- ReDriveBattleCore.Reader.UniqueStatePatternMstReader  (TypeDefIndex 848, public class) ----
-export class UniqueStatePatternMstReader {
+export class UniqueStatePatternMstReader extends BattleMstReaderBase<UniqueStatePatternMstModel, UniqueStatePatternMstRecord, int> {
     /** @rva 0x16DEC90  public void .ctor() { } */
-    ctor(): this { return notPorted("UniqueStatePatternMstReader..ctor", 0x16DEC90); }
+    ctor(): this { super.ctor(); return this; }
 }

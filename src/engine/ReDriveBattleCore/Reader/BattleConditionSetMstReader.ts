@@ -2,10 +2,13 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
+import { BattleMstReaderBase } from "./BattleMstReaderBase";
+import type { BattleConditionSetMstModel } from "../Model/BattleConditionSetMstModel";
+import type { BattleConditionSetMstRecord } from "../../Network/Definition/QuestBattle/BattleConditionSetMstRecord";
+import type { int } from "../../runtime";
 
-// base type BattleMstReaderBase<BattleConditionSetMstModel, BattleConditionSetMstRecord, int> is outside the ported set
 // ---- ReDriveBattleCore.Reader.BattleConditionSetMstReader  (TypeDefIndex 851, public class) ----
-export class BattleConditionSetMstReader {
+export class BattleConditionSetMstReader extends BattleMstReaderBase<BattleConditionSetMstModel, BattleConditionSetMstRecord, int> {
     /** @rva 0x16CC010  public void .ctor() { } */
-    ctor(): this { return notPorted("BattleConditionSetMstReader..ctor", 0x16CC010); }
+    ctor(): this { super.ctor(); return this; }
 }

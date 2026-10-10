@@ -30,7 +30,10 @@ export class EnemyMstModel extends MstModelBase<EnemyMstRecord> {  // implements
     get IHaveOriginalTexture$Type(): any /* AssetBundleType */ { return this.get_IHaveOriginalTexture$Type(); }
     get IHaveOriginalTexture$TextureKey(): string { return this.get_IHaveOriginalTexture$TextureKey(); }
     /** @rva 0x16D0A90  public void .ctor(EnemyMstRecord record) { } */
-    ctor$EnemyMstRecord(record: EnemyMstRecord): this { return notPorted("EnemyMstModel..ctor", 0x16D0A90); }
+    ctor$EnemyMstRecord(record: EnemyMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_EnemyMstId() { } */
     get_EnemyMstId(): int { return this.record.enemyMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_EnemyUniqueId() { } */

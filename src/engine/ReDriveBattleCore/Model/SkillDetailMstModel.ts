@@ -28,7 +28,10 @@ export class SkillDetailMstModel extends MstModelBase<SkillDetailMstRecord> {
     get StartConditionSetIdCsv(): string { return this.get_StartConditionSetIdCsv(); }
     get ActiveConditionSetIdCsv(): string { return this.get_ActiveConditionSetIdCsv(); }
     /** @rva 0x16D7F20  public void .ctor(SkillDetailMstRecord record) { } */
-    ctor$SkillDetailMstRecord(record: SkillDetailMstRecord): this { return notPorted("SkillDetailMstModel..ctor", 0x16D7F20); }
+    ctor$SkillDetailMstRecord(record: SkillDetailMstRecord): this {
+        super.ctor$TRecord(record);
+        return this;
+    }
     /** @rva 0x901770  public int get_SkillDetailMstId() { } */
     get_SkillDetailMstId(): int { return this.record.skillDetailMstId; /* asm: sub rsp, 0x28; mov rax, qword ptr [rcx + 0x10]; test rax, rax; je 0x901785; mov eax, dword ptr [rax + 0x10]; add rsp, 0x28; ret */ }
     /** @rva 0x901790  public int get_SkillMstId() { } */
