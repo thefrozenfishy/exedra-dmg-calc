@@ -197,3 +197,12 @@ when available (load the artifact-design skill first), and save a copy to
 - Don't infer an effect from its name: IMM_SLIP_DMG was implemented as "DOT immunity"; it is an instant DOT burst.
   Read `AbilityEffectTypeMst.name` (`xq effect`) and the class's Triggering.
 - Background processes die when the device_bash call ends; split long work into <170 s calls.
+
+## src/engine (1:1 port) after a code change
+
+1. New dump: `python3 scripts/engine/dump_parse.py <ver>/dump/dump.cs /tmp/t.json && python3 scripts/engine/ledger.py --check /tmp/t.json`
+   (new/removed/changed members, moved RVAs). Changed functions from `verdiff.py funcs`: `ledger.py --rva <rva,...>`.
+2. Re-port those methods from the new decompile (`XQ_GAME_VER=<ver> python3 scripts/engine/decomp.py fn ...`), update
+   `@rva` tags, `gen_shells.py --only <Ns.Type>` for new types, `fill_trivial.py --ver <ver>`.
+3. `npx tsc --noEmit -p tsconfig.engine.json` (0 errors), `ledger.py --write`.
+

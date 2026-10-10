@@ -6,6 +6,7 @@ the layout, data formats and mechanics every time. **Read this file, then only t
 
 | I need to... | Go to |
 |---|---|
+| port game code 1:1 (the goal for all engine work), see what is ported, apply a patch | `src/engine/README.md` + [ENGINE_LEDGER.md](ENGINE_LEDGER.md) (generated) + `scripts/engine/decomp.py` |
 | know where things are, how to run/test/commit, tool quirks | [ENVIRONMENT.md](ENVIRONMENT.md) |
 | find where the TS engine does X, or where to hook a new mechanic | [CODE_MAP.md](CODE_MAP.md) |
 | read master data (kits, conditions, enemies, stages), the id rules | [DATA.md](DATA.md) |
@@ -56,6 +57,10 @@ Other tools: `scripts/ai/verdiff.py` (version diff: binaries, metadata, master d
 5. **Ghidra headless** only for code outside `ReDriveBattleCore` (see ENVIRONMENT.md).
 
 ## Golden rules (each one cost a session before)
+
+- **1:1 is the goal.** New engine work is a port of the game's method into `src/engine` (same class, same method,
+  same branch order). Don't add new rules to `src/models` in its own structure; that is how the old engine drifted
+  (passive states merged across givers, the TurnStart pass seeing the action type, buff duration exempt-once).
 
 - **The game is the spec.** Every engine rule carries a `[CONFIRMED 3.19]` comment with the C# name + RVA, or
   is marked `[UNCERTAIN]` / `[APPROXIMATION]`. Never guess silently; never "fix" confirmed code to match intuition.

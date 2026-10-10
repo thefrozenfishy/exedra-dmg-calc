@@ -1,0 +1,26 @@
+// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
+
+import { notPorted } from "../../runtime";
+import type { Dictionary, List, int } from "../../runtime";
+import type { SkillType } from "../../Network/Definition/Battle/SkillType";
+import { ZoneAbilityEffectBase } from "./ZoneAbilityEffectBase";
+import type { AbilityEffectInfo } from "../AbilityEffectInfo";
+import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
+import type { BattleUnit } from "../BattleUnit";
+import type { GameDirectorBase } from "../GameDirectorBase";
+import type { EffectOriginType } from "../UnitState/EffectOriginType";
+
+// ---- ReDriveBattleCore.AbilityEffect.ZoneExpandAbilityEffect  (TypeDefIndex 1231, public class) ----
+export class ZoneExpandAbilityEffect extends ZoneAbilityEffectBase {
+    /** 0x68 protected int zoneEffectId */
+    zoneEffectId: int = 0;
+    /** @rva 0x1906360  protected void .ctor() { } */
+    ctor(): this { return notPorted("ZoneExpandAbilityEffect..ctor", 0x1906360); }
+    /** @rva 0x1906310  public void .ctor(AbilityEffectInfo info) { } */
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ZoneExpandAbilityEffect..ctor", 0x1906310); }
+    /** @rva 0x1905FF0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("ZoneExpandAbilityEffect.Triggering", 0x1905FF0); }
+    /** @rva 0x1905D50 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("ZoneExpandAbilityEffect.GetAIFilteredTargets", 0x1905D50); }
+}

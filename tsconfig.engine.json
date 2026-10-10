@@ -1,0 +1,19 @@
+{
+  // Type-check of the 1:1 game port (src/engine). Kept out of tsconfig.app.json until the app uses it:
+  //   NODE_OPTIONS=--max-old-space-size=3300 npx tsc --noEmit -p tsconfig.engine.json
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "useDefineForClassFields": true,
+    "isolatedModules": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "lib": ["ESNext"],
+    "types": []
+  },
+  "include": ["src/engine/**/*.ts"]
+}

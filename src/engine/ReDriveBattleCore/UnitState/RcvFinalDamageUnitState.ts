@@ -1,0 +1,41 @@
+// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
+
+import { Decimal, notPorted } from "../../runtime";
+import type { IEnumerable, List } from "../../runtime";
+import type { RangeType } from "../../Network/Definition/Battle/RangeType";
+import type { SkillType } from "../../Network/Definition/Battle/SkillType";
+import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import type { AbilityEffectInfo } from "../AbilityEffectInfo";
+import type { BattleUnit } from "../BattleUnit";
+import type { GameDirectorBase } from "../GameDirectorBase";
+import type { IDebuff } from "./IDebuff";
+import type { IReceiveFinalDamage } from "./IReceiveFinalDamage";
+import { UnitStateBase } from "./UnitStateBase";
+import type { UnitStateBase_DirectionType } from "./UnitStateBase";
+
+// ---- ReDriveBattleCore.UnitState.RcvFinalDamageUnitState  (TypeDefIndex 644, public class) ----
+export class RcvFinalDamageUnitState extends UnitStateBase {  // implements IDebuff, IReceiveFinalDamage
+    static readonly __interfaces: readonly string[] = ['IDebuff', 'IReceiveFinalDamage'];
+    /** 0x88 private readonly Decimal damageRatio */
+    damageRatio: Decimal = Decimal.Zero;
+    get DamageRatio(): Decimal { return this.get_DamageRatio(); }
+    /** @rva 0x759B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    get_Direction(): UnitStateBase_DirectionType { return 1 as UnitStateBase_DirectionType; /* asm: mov eax, 1; ret */ }
+    /** @rva 0x16D62C0 slot 7  public override string get_IconName() { } */
+    get_IconName(): string { return notPorted("RcvFinalDamageUnitState.get_IconName", 0x16D62C0); }
+    /** @rva 0x16D6290 slot 13  public override string get_GiveVisualEffectName() { } */
+    get_GiveVisualEffectName(): string { return notPorted("RcvFinalDamageUnitState.get_GiveVisualEffectName", 0x16D6290); }
+    /** @rva 0x16D61E0  public Decimal get_DamageRatio() { } */
+    get_DamageRatio(): Decimal { return notPorted("RcvFinalDamageUnitState.get_DamageRatio", 0x16D61E0); }
+    /** @rva 0x16CF610  protected void .ctor() { } */
+    ctor(): this { return notPorted("RcvFinalDamageUnitState..ctor", 0x16CF610); }
+    /** @rva 0x16D6100  public void .ctor(AbilityEffectInfo info) { } */
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("RcvFinalDamageUnitState..ctor", 0x16D6100); }
+    /** @rva 0x16D5E80 slot 25  public Decimal GetFinalDamageRatio(BattleUnit attacker) { } */
+    GetFinalDamageRatio(attacker: BattleUnit): Decimal { return notPorted("RcvFinalDamageUnitState.GetFinalDamageRatio", 0x16D5E80); }
+    /** @rva 0x16D5C80 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("RcvFinalDamageUnitState.GetAIFilteredTargets", 0x16D5C80); }
+    /** @rva 0x16D5F30 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("RcvFinalDamageUnitState.GetUnitFilterFuncOrder", 0x16D5F30); }
+}

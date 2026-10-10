@@ -1,0 +1,27 @@
+// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
+
+import { notPorted } from "../../runtime";
+import type { IEnumerable, List, float } from "../../runtime";
+import type { RangeType } from "../../Network/Definition/Battle/RangeType";
+import type { SkillType } from "../../Network/Definition/Battle/SkillType";
+import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import type { AbilityEffectInfo } from "../AbilityEffectInfo";
+import type { BattleUnit } from "../BattleUnit";
+import type { GameDirectorBase } from "../GameDirectorBase";
+import { DownEffectValueUnitStateBase } from "./DownEffectValueUnitStateBase";
+import type { UnitStateBase } from "./UnitStateBase";
+
+// ---- ReDriveBattleCore.UnitState.DwnBuffEffectValueUnitState  (TypeDefIndex 631, public class) ----
+export class DwnBuffEffectValueUnitState extends DownEffectValueUnitStateBase {
+    /** @rva 0x16D02D0  protected void .ctor() { } */
+    ctor(): this { return notPorted("DwnBuffEffectValueUnitState..ctor", 0x16D02D0); }
+    /** @rva 0x16D02C0  public void .ctor(AbilityEffectInfo info) { } */
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DwnBuffEffectValueUnitState..ctor", 0x16D02C0); }
+    /** @rva 0x16D0090 slot 27  public override float GetEffectValueVariationRate(UnitStateBase targetState) { } */
+    GetEffectValueVariationRate(targetState: UnitStateBase): float { return notPorted("DwnBuffEffectValueUnitState.GetEffectValueVariationRate", 0x16D0090); }
+    /** @rva 0x16CFE60 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("DwnBuffEffectValueUnitState.GetAIFilteredTargets", 0x16CFE60); }
+    /** @rva 0x16D00F0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("DwnBuffEffectValueUnitState.GetUnitFilterFuncOrder", 0x16D00F0); }
+}

@@ -1,6 +1,22 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+
+## 2026-10-10: 1:1 port started in src/engine (branch claude/engine-1to1)
+
+The user's goal for the engine is a 1:1 copy of the game (CLAUDE.md, src/engine/README.md). `src/engine` holds the
+generated shells of all 654 ReDriveBattleCore + Network.Definition.Battle types (fields with offsets, every method
+with its RVA, `notPorted` bodies), 533 trivial methods filled from the machine code, 1160 auto-property accessors,
+and hand ports of: the whole Act namespace, TurnActSystem, TurnReferee, UnitTurnGauge, TurnOrderUnitInfo,
+the GameDirectorBase loop (Forward, Register/UnregisterSpecialAttack, CheckHpGaugeRevive, OnBattleUnitDeath,
+OnRevival, CheckTargetUnit, ChangeBattlePhase, BattleEnd, StoreCommand), UnitCondition and the UnitStateBase core,
+MathExtension.Floor. `tsconfig.engine.json` type-checks it (0 errors); tsconfig.app.json excludes it, so the app,
+fixtures and checkMechanics are untouched. Coverage: docs/ai/ENGINE_LEDGER.md. Not runnable yet: BattleUnit,
+PassiveSkill/ActiveSkill/AbilityEffectLauncher, BattleDamageCalculator, the condition checkers, readers and the
+concrete UnitStates/AbilityEffects are stubs. Next: BattleUnit, then PassiveSkill.Triggering and the condition
+checkers, then a director setup that loads base_data, then run fixtures through it next to src/models.
+Port fragments of this session (re-applicable with port_apply.py): E:\unpackedExedra\port_frag\.
+Findings for src/models: MathExtension.Floor scale (PITFALLS), RegisterSpecialAttack leaves the act's team at Ally.
 
 ## Branches and uncommitted work in E:\exedra-dmg-calc
 

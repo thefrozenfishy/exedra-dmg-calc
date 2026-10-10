@@ -186,3 +186,24 @@
   self-only advance (Heroic Grace++ crystalis 1003022, `passive 1003022`): the unit WITHOUT it loses the tie to slot
   order. When a reported turn order differs, check the crystalis in the export first (importing a file restores its
   build, so an in-game crys change is easily missing from the sim).
+
+## Porting into src/engine (2026-10-10)
+- **Folded functions.** IL2CPP merges identical code, so one RVA has many names (0x7305e0 is 17k empty ctors,
+  0x730170 an empty method that is also `TurnActSystem.AddActOnSkillEnd`, 0x7f0a70 is `TurnActSystem.get_CurrentAct`
+  but Ghidra calls it `PassiveSkill__GetAbilityEffectList`). Ghidra prints whichever name it picked. Use
+  `decomp.py fn` (it annotates `/*@0xRVA =Alias*/`) and trust its `-- calls (machine code)` list.
+- **Overloads.** Ghidra calls every overload by the same name; the decompile can't tell `AddAct(SpecialAttackAct)`
+  0x18e8bd0 from `AddAct(ActBase)` 0x18e8c50, nor `IsActive(bundle)` from `IsActive(BattleUnit)`. The machine-code
+  call list can.
+- **Generic methods** (`TryGetUnitState<T>`, `GetUnitStateList<T>`) are RVA -1 in the dump; their shared instance
+  is listed under the `<object>` name in script.json (`decomp.py names`). `TryGetUnitState<T>` ignores its
+  doWithoutInheritance argument (passes false).
+- **MathExtension.Floor(x, n) scales by 10^(n-1)** (asm 0x149f830: `Math.Pow(10, n - 1)`): `Floor(p, 2)` in
+  GetProcessedProbability keeps ONE decimal. `src/models/UnitStateEngine.ts` rollAppliesEffect floors to two
+  (`Math.floor(raw * 100) / 100`): open finding, not changed there yet (it moves state-hit odds by up to 0.1 point).
+- **GameDirectorBase.RegisterSpecialAttack sets only actUnitId** on the new SpecialAttackAct (team stays Ally=0),
+  while TurnActSystem.RegisterUnitSpecialAttack sets both. AddAct(SpecialAttackAct) reads the team for the
+  interruption rule. Port such quirks as they are.
+- **Device file delivery:** `device_commit_files` uploads the content a path had when it was first committed; a
+  second commit of the same container path can deliver the old bytes. Copy to a new name per revision and
+  check md5 on both sides. Don't edit a committed file on the device and commit it again from the container.

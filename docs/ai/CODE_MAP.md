@@ -1,4 +1,11 @@
-# TS engine code map (src/models)
+# TS engine code map
+
+**`src/engine/` (the 1:1 port)** needs no map: it mirrors the game's namespaces and classes
+(`src/engine/ReDriveBattleCore/Act/ActReferee.ts` = `ReDriveBattleCore.Act.ActReferee`), and
+`python3 scripts/engine/ledger.py --class <Class>` / `--rva <rva>` locate any game method. The rest of this file
+maps the older engine in `src/models`.
+
+## src/models (older engine, own structure)
 
 Function names, not line numbers (lines drift). Find any symbol with `python3 scripts/ai/xq.py ts <name>`
 (add `--branch battle-engine-3.19` when another branch is checked out). Described as on branch
