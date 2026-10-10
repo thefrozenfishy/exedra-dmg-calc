@@ -257,38 +257,47 @@ function gemCostForPull(p) {
     return 300
 }
 
-function computeExpectedSSRCounts(maxPulls) {
-    const counts = new Array(maxPulls + 1).fill(0)
-    let cum = 0
+// Mean and standard deviation of the SSR count after p pulls.
+// - Natural SSR rolls are independent Bernoulli(r) -> variance r(1-r) each.
+// - Fixed bonuses (step-up, 50-key, gauge, spark, non-retrying soft pity) are
+//   guaranteed, so they shift the mean but add no variance.
+// - Retrying soft pity pays out at most once: after n windows it has paid out
+//   with probability q = 1 - (1 - softP)^n, which contributes q and variance q(1-q).
+function computeSSRStats(maxPulls) {
+    const mean = new Array(maxPulls + 1).fill(0)
+    const std = new Array(maxPulls + 1).fill(0)
+
+    const softP = softPityRate.value / 100
+    let cumMean = 0
+    let cumVar = 0
+    let softWindows = 0
+    let softQ = 0
 
     for (let p = 1; p <= maxPulls; p++) {
-        cum += ssrRateForPull(p) / 100
+        const r = ssrRateForPull(p) / 100
+        cumMean += r
+        cumVar += r * (1 - r)
 
-        if (stepUpEnabled.value && p === 30) {
-            cum += 1
+        if (stepUpEnabled.value && p === 30) cumMean += 1
+        if (p === 50) cumMean += 1
+
+        if (hasRetryingSoftPity.value) {
+            if (p === softPityAt.value) cumMean += 1 // 100-gauge reward
+            if (isSoftPityWindow(p)) {
+                softWindows++
+                softQ = 1 - Math.pow(1 - softP, softWindows)
+            }
+        } else if (p === softPityAt.value) {
+            cumMean += 1 // single soft pity roll always yields an SSR
         }
 
-        if (p === 50) {
-            cum += 1
-        }
+        if (sparkPoints.value.has(p)) cumMean += 1
 
-        if (p === 100 && hasRetryingSoftPity.value) {
-            cum += 1
-        }
-
-        if (p === 100) {
-            // TODO: This is to model the soft pity thing, so it should prolly not be static at 100 but instead use something similar to the isSoftWindow to find the end logic
-            cum += 1
-        }
-
-        if (sparkPoints.value.has(p)) {
-            cum += 1
-        }
-
-        counts[p] = cum
+        mean[p] = cumMean + softQ
+        std[p] = Math.sqrt(cumVar + softQ * (1 - softQ))
     }
 
-    return counts
+    return { mean, std }
 }
 
 function computeCumulativeGems(maxPulls) {
@@ -307,7 +316,7 @@ function renderChart() {
     if (chart) chart.destroy()
 
     const dpTable = computeDPTable(MAX_PULLS, MAX_ROLLS)
-    const ssrCounts = computeExpectedSSRCounts(MAX_PULLS)
+    const { mean: ssrCounts, std: ssrStd } = computeSSRStats(MAX_PULLS)
     const gemsCum = computeCumulativeGems(MAX_PULLS)
 
     const xValues = xAxisMode.value === 'gems' ? gemsCum : Array.from({ length: MAX_PULLS + 1 }, (_, i) => i)
@@ -325,6 +334,42 @@ function renderChart() {
         tension: 0.15,
         yAxisID: 'y1',
     })
+
+    // ±1σ/2σ/3σ bands. Each pair is [upper, lower]; the upper dataset fills down
+    // to the lower one ('+1'). The translucent fills stack, so the band is
+    // darkest near the mean. Lower edge is clamped at 0 (can't have negative SSRs).
+    for (const k of [3, 2, 1]) {
+        const band = (sign) => xValues.map((x, p) => ({
+            x,
+            y: Math.max(0, ssrCounts[p] + sign * k * ssrStd[p]),
+        }))
+        const common = {
+            borderColor: 'rgba(225, 191, 135, 0.25)',
+            borderWidth: 0.75,
+            pointRadius: 0,
+            tension: 0.15,
+            yAxisID: 'y1',
+            order: 5, // drawn behind the mean line and probability curves
+        }
+        datasets.push({
+            ...common,
+            label: `+${k}σ`,
+            data: band(+1),
+            backgroundColor: 'rgba(225, 191, 135, 0.08)',
+            fill: '+1',
+        })
+        datasets.push({
+            ...common,
+            label: `−${k}σ`,
+            data: band(-1),
+            fill: false,
+        })
+    }
+
+    const y1Max = Math.max(
+        50,
+        Math.ceil(Math.max(...ssrCounts.map((m, p) => m + 3 * ssrStd[p])) / 10) * 10
+    )
 
     for (let t = 1; t <= MAX_ROLLS; t++) {
         datasets.push({
@@ -350,6 +395,16 @@ function renderChart() {
                 intersect: false
             },
             plugins: {
+                legend: {
+                    labels: {
+                        // One legend entry per band ("±2σ"), hiding the duplicate lower edge
+                        generateLabels(c) {
+                            return Chart.defaults.plugins.legend.labels.generateLabels(c)
+                                .filter(l => !l.text.startsWith('−'))
+                                .map(l => l.text.startsWith('+') ? { ...l, text: l.text.replace('+', '±') } : l)
+                        }
+                    }
+                },
                 tooltip: {
                     callbacks: {
                         label(ctx) {
@@ -406,7 +461,7 @@ function renderChart() {
                     type: 'linear',
                     position: 'right',
                     min: 0,
-                    max: 50,
+                    max: y1Max,
                     grid: {
                         drawOnChartArea: false
                     },
