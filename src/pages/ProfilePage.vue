@@ -1318,8 +1318,8 @@ const getAxisLabel = (value: string) => graphOptions.find(o => o.value === value
 const getMaxTick = (axisLabel: string) => {
     if (axisLabel === "perm") return characterStore.characters.filter(c => c.rarity === 5 && c.isStandardChar).length
     if (axisLabel === "permAs") return characterStore.characters.filter(c => c.rarity === 5 && c.isStandardChar).length * 6
-    if (axisLabel === "lim") return characterStore.characters.filter(c => c.rarity === 5 && !c.isStandardChar).length
-    if (axisLabel === "limAs") return characterStore.characters.filter(c => c.rarity === 5 && !c.isStandardChar).length * 6
+    if (axisLabel === "lim") return characterStore.characters.filter(c => c.rarity === 5 && c.isLimitedChar).length
+    if (axisLabel === "limAs") return characterStore.characters.filter(c => c.rarity === 5 && c.isLimitedChar).length * 6
     if (axisLabel === "rank") return store.myRank?.totalPlayers
     return 100
 }

@@ -268,7 +268,7 @@ import { toast } from "vue3-toastify"
 import { useCharacterStore } from "../store/characterStore"
 import { useSetting } from "../store/settingsStore"
 import { Character } from "../types/KiokuTypes"
-import { KiokuElement } from "../types/enums"
+import { KiokuElement, obtainBorderClass } from "../types/enums"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { useTierListSync } from "../store/tierListSync"
 import { loadSharedTierList, getFriendCode } from "../store/cloud"
@@ -668,7 +668,7 @@ const poolSort = useSetting<"id" | "releaseDate" | "character_en" | "name">("tie
 const poolSortInverse = useSetting("tierMakerPoolSortInverse", false)
 
 function characterBorderClass(ch?: Character): string {
-    return ch?.obtain && !ch.isStandardChar ? "limited-border" : "default-border"
+    return obtainBorderClass(ch?.obtain)
 }
 
 const allElementValues = computed(() => Object.values(KiokuElement))
@@ -684,8 +684,8 @@ function matchesFilters(c: Character): boolean {
     if (c.rarity === 4 && !poolShow4.value) return false
     if (c.rarity === 3 && !poolShow3.value) return false
     if (hiddenElements.value.includes(c.element)) return false
-    if (!poolShowLimiteds.value && !c.isStandardChar) return false
-    if (!poolShowStandards.value && c.isStandardChar) return false
+    if (!poolShowLimiteds.value && c.isLimitedChar) return false
+    if (!poolShowStandards.value && !c.isLimitedChar) return false
     const q = poolSearch.value.trim().toLowerCase()
     if (q && !c.name.toLowerCase().includes(q) && !(c.character_en ?? "").toLowerCase().includes(q)) return false
     return true

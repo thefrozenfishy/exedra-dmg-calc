@@ -20,7 +20,7 @@ import {
     getUserId
 } from "../store/user"
 import { getAccountSimilarityScore } from "../models/AccountSimilarityScore"
-import { LuxMagica } from '../types/enums'
+import { KiokuObtain, LuxMagica } from '../types/enums'
 
 const base = {
     ascension: KiokuConstants.minAscension,
@@ -60,7 +60,8 @@ export const useCharacterStore = defineStore('characterStore', () => {
         obtain: data.obtain,
         permaDate: data.permaDate,
         releaseDate: data.releaseDate,
-        isStandardChar: data.obtain !== "Exclusive",
+        isStandardChar: data.obtain === KiokuObtain.Permanent,
+        isLimitedChar: data.obtain === KiokuObtain.Exclusive,
     }]));
 
     const basicSetting = (ch: Character) => ({

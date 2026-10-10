@@ -304,3 +304,14 @@ input[type='number']:focus {
   background: var(--accent-glow-strong);
   border-color: var(--accent);
 }
+/* Border per kioku obtain type (see obtainBorderClass in types/enums.ts; Exclusive = .limited-border, styled per page) */
+.free-border,
+.event-border {
+  border: 2px solid var(--obtain-color) !important;
+}
+.free-border { --obtain-color: #4cd68a; }
+.event-border { --obtain-color: #4aa8ff; }
+.gain-char-icon.free-border,
+.gain-char-icon.event-border {
+  border-width: 1px !important;
+}

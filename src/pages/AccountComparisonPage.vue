@@ -260,7 +260,7 @@ import { getAccountSimilarityScore } from "../models/AccountSimilarityScore"
 import { getPowerScores } from "../models/PowerValue"
 import ImageActionsToolbar from "../components/ImageActionsToolbar.vue"
 import { toast } from "vue3-toastify"
-import { KiokuRole } from "../types/enums"
+import { KiokuRole, obtainBorderClass } from "../types/enums"
 
 const friendStore = useFriendStore()
 
@@ -454,8 +454,7 @@ const formatArrowState = (leftScore: number, rightScore: number) => {
 }
 
 const borderClass = (ch: Character): string => {
-    if (ch.obtain && !ch.isStandardChar) return "limited-border"
-    return "default-border"
+    return obtainBorderClass(ch.obtain)
 }
 
 const diffColor = (diff: number) => {

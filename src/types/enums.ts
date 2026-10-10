@@ -26,6 +26,31 @@ export const elementAlimentMap: Record<KiokuElement, Ailment> = {
     [KiokuElement.Void]: Ailment.WOUND,
 };
 
+/** How a kioku can be obtained (kioku_data.json `obtain`). Only Permanent counts as "standard". */
+export enum KiokuObtain {
+    Permanent = "Permanent",
+    Exclusive = "Exclusive",
+    Free = "Free",
+    Event = "Event",
+}
+
+export const obtainColors: Record<KiokuObtain, string | null> = {
+    [KiokuObtain.Permanent]: null,
+    [KiokuObtain.Exclusive]: "#ff3b3b",
+    [KiokuObtain.Free]: "#4cd68a",
+    [KiokuObtain.Event]: "#4aa8ff",
+};
+
+/** Border css class per obtain type (css lives in style.css; Exclusive keeps its old "limited-border" name). */
+export function obtainBorderClass(obtain: KiokuObtain | undefined): string {
+    switch (obtain) {
+        case KiokuObtain.Exclusive: return "limited-border"
+        case KiokuObtain.Free: return "free-border"
+        case KiokuObtain.Event: return "event-border"
+        default: return "default-border"
+    }
+}
+
 export enum KiokuRole {
     Attacker = "Attacker",
     Buffer = "Buffer",

@@ -301,8 +301,8 @@ From the six yellow numbers choose the three you think you have the most use for
             <span class="filters-heading">About</span>
             <p>
                 You can edit, export, and import your kioku on the <b>Kioku Setup</b> page, or edit here directly.<br />
-                Red borders indicate limited characters. For crys counter, red indicates some crys are missing,
-                pink that some are missing but the elemental
+                Red borders indicate limited characters, green border free characters, and blue borders event only characters. 
+                For crys counter, red indicates some crys are missing, pink that some are missing but the elemental
                 crys has been collected, and green that all on-element crys have been collected.
                 Maxed out kioku are given a golden glow to indicate their completeness.
                 <template v-if="showOffElementalOnesOption">Truly perfected kioku with all crys, including
@@ -318,7 +318,7 @@ From the six yellow numbers choose the three you think you have the most use for
 import { computed, ref } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { Character, KiokuConstants, relevantCrys, getMaxKiokuLevelForPlayerLevel, getMaxMagicLevelForKiokuLevel } from "../types/KiokuTypes"
-import { elementMap, KiokuElement, maxPlayerLevel } from '../types/enums'
+import { elementMap, KiokuElement, maxPlayerLevel, obtainBorderClass } from '../types/enums'
 import { toast } from "vue3-toastify"
 import { useSetting } from "../store/settingsStore"
 import { nextTick } from "vue"
@@ -392,8 +392,8 @@ const ownedFiveStars = computed(() => fiveStarMembers.value.filter(c => c.enable
 const totalAscensions = computed(() => ownedFiveStars.value.reduce((sum, ch) => sum + ch.ascension + 1, 0))
 const totalStandards = computed(() => ownedFiveStars.value.filter(ch => ch.isStandardChar).reduce((sum, ch) => sum + ch.ascension + 1, 0))
 const totalPossibleStandards = computed(() => fiveStarMembers.value.filter(ch => ch.isStandardChar).reduce((sum, _) => sum + 6, 0))
-const totalLimiteds = computed(() => ownedFiveStars.value.filter(ch => !ch.isStandardChar).reduce((sum, ch) => sum + ch.ascension + 1, 0))
-const totalPossibleLimiteds = computed(() => fiveStarMembers.value.filter(ch => !ch.isStandardChar).reduce((sum, _) => sum + 6, 0))
+const totalLimiteds = computed(() => ownedFiveStars.value.filter(ch => ch.isLimitedChar).reduce((sum, ch) => sum + ch.ascension + 1, 0))
+const totalPossibleLimiteds = computed(() => fiveStarMembers.value.filter(ch => ch.isLimitedChar).reduce((sum, _) => sum + 6, 0))
 const standardPool = computed(() => fiveStarMembers.value.filter(ch => ch.isStandardChar))
 const ownedA5StandardPool = computed(() => standardPool.value.filter(ch => ch.enabled && ch.ascension === 5))
 const extraCollected = useSetting("extraCollected", 0)
@@ -484,8 +484,8 @@ const groupedByAscension = computed(() => {
     groups[8].label = "3 Stars"
 
     for (const ch of displayedCharactersComputed.value) {
-        if (!showLimiteds.value && !ch.isStandardChar) continue
-        if (!showStandards.value && ch.isStandardChar) continue
+        if (!showLimiteds.value && ch.isLimitedChar) continue
+        if (!showStandards.value && !ch.isLimitedChar) continue
 
         if (ch.rarity === 4) {
             groups[7].push(ch)
@@ -583,15 +583,14 @@ const wishlistTooltip = (ch: Character): string => {
 
 const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
-    if (ch.obtain && !ch.isStandardChar) {
+    if (!ch.isStandardChar) {
         title += ` - ${ch.obtain}`
     }
     return title
 }
 
 const borderClass = (ch: Character): string => {
-    if (ch.obtain && !ch.isStandardChar) return "limited-border"
-    return "default-border"
+    return obtainBorderClass(ch.obtain)
 }
 
 type EditableField = "magicLvl" | "heartphialLvl" | "specialLvl" | "dupes"

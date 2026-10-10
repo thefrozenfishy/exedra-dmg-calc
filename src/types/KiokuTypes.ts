@@ -1,7 +1,7 @@
 import type { RngEvent } from "../models/BattleRng";
 import { PvPTeam, KiokuState } from "../models/PvPTeam";
 import { crystalises, crystalisesByStyle, portraits, passiveDetails, passiveBase } from "../utils/helpers";
-import { elementMap, KiokuElement, KiokuRole, SupportKey } from "./enums";
+import { elementMap, KiokuElement, KiokuObtain, KiokuRole, SupportKey } from "./enums";
 
 
 
@@ -239,9 +239,10 @@ export interface Character {
     kiokuLvl: number
     magicLvl: number
     name: string
-    obtain: string
+    obtain: KiokuObtain
     permaDate: string
     isStandardChar: boolean
+    isLimitedChar: boolean
     releaseDate: string
     portrait?: string
     rarity: number
@@ -362,7 +363,7 @@ export interface KiokuData {
     minDef: number
     minHp: number
     minSpd: number
-    obtain: string
+    obtain: KiokuObtain
     permaDate: string
     releaseDate: string
     rarity: number

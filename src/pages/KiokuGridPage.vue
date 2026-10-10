@@ -316,7 +316,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch, type ShallowRef } from "vue"
 import { useCharacterStore } from "../store/characterStore"
 import { Character, KiokuConstants, withMaxLevelsForPlayerLevel } from "../types/KiokuTypes"
-import { Ailment, KiokuElement, KiokuRole, LuxMagica } from '../types/enums'
+import { Ailment, KiokuElement, KiokuObtain, KiokuRole, LuxMagica, obtainBorderClass } from '../types/enums'
 import { useSetting } from "../store/settingsStore"
 import { ScoreAttackKioku } from "../models/ScoreAttackKioku"
 import { skillDetails } from "../utils/helpers"
@@ -647,8 +647,8 @@ const displayedVirtualRoles = computed(() =>
 const allChars = computed(() =>
     markedCharacters.value
         .filter(c => showUnowned.value ? true : c.enabled)
-        .filter(c => showLimiteds.value ? true : c.isStandardChar)
-        .filter(c => showStandards.value ? true : !c.isStandardChar)
+        .filter(c => showLimiteds.value ? true : !c.isLimitedChar)
+        .filter(c => showStandards.value ? true : c.isLimitedChar)
         .filter(c => !hiddenElements.value.includes(c.element as KiokuElement))
         .filter(c => !hiddenVirtualRoles.value.includes(virtualRoleForChar(c)))
         .filter(c => shouldShow(c.rarity))
@@ -917,6 +917,7 @@ const buildBarChart = (
         role: ch.role as string,
         vRole: virtualRoleForChar(ch) as string,
         isStandardChar: ch.isStandardChar,
+        isLimitedChar: ch.isLimitedChar,
         _borderClass: borderClass(ch),
 
         gain,
@@ -1349,15 +1350,12 @@ const bandRows = (yVal: string, rarity: number): number => {
 }
 
 const borderClass = (ch: Character): string => {
-    if (ch.name === LuxMagica) return "default-border"
-    if (ch.obtain && !ch.isStandardChar) return "limited-border"
-    return "default-border"
+    return obtainBorderClass(ch.obtain)
 }
 
 const makeTitle = (ch: Character): string => {
     let title = `${ch.name}`
-    if (ch.name === LuxMagica) { }
-    else if (ch.obtain && !ch.isStandardChar) {
+    if (!ch.isStandardChar) {
         title += ` - ${ch.obtain}`
     }
     return title
