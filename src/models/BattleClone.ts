@@ -100,7 +100,7 @@ export class BattleCloner {
 // never a wrong one.
 // (By instanceof, not constructor.name: class names are minified in the production build.)
 const BATTLE_SKIP = new Set(["actionSnapshots", "elapsed", "seed", "debug", "lastActor", "lastTargetType", "lastTeamIsTeam1"])
-const TEAM_SKIP = new Set(["eventLog", "snapshotHook", "debug", "rng"])
+const TEAM_SKIP = new Set(["eventLog", "snapshotHook", "betweenActsHook", "debug", "rng"])
 const STAMP_KEYS = new Set(["turnOrderPriority", "effectTurnPriority"])
 
 const f64 = new Float64Array(1)

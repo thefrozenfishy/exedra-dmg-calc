@@ -1,0 +1,88 @@
+{
+  "format": "exedra-fight-solver-tactics",
+  "version": 1,
+  "tactics": {
+    "goals": [
+      {
+        "ally": "Pluvia☆Magica",
+        "metric": "buff",
+        "mode": "has",
+        "from": "",
+        "buff": "CUTOUT"
+      },
+      {
+        "ally": "Final Fatebloom",
+        "metric": "magic",
+        "mode": "gte",
+        "from": "",
+        "value": 8
+      },
+      {
+        "ally": "Pluvia☆Magica",
+        "metric": "ep",
+        "mode": "gte",
+        "from": "",
+        "value": 80
+      },
+      {
+        "ally": "Final Fatebloom",
+        "metric": "ep",
+        "mode": "gte",
+        "from": "",
+        "value": 80
+      },
+      {
+        "ally": "Final Fatebloom",
+        "metric": "av",
+        "mode": "low",
+        "from": ""
+      },
+      {
+        "ally": "Pluvia☆Magica",
+        "metric": "av",
+        "mode": "low",
+        "from": ""
+      }
+    ],
+    "strategies": {
+      "Tiro Finale": {
+        "buffMain": "",
+        "buffSecond": "",
+        "ultAtBreak": "free",
+        "ultOtherwise": "free",
+        "action": "basic",
+        "ultBreaks": ""
+      },
+      "Pluvia☆Magica": {
+        "buffMain": "",
+        "buffSecond": "",
+        "ultAtBreak": "hold",
+        "ultOtherwise": "free",
+        "ultBreaks": 3
+      },
+      "Final Fatebloom": {
+        "buffMain": "",
+        "buffSecond": "",
+        "ultAtBreak": "hold",
+        "ultOtherwise": "hold",
+        "action": "basic"
+      },
+      "Hollow Woman": {
+        "buffMain": "Pluvia☆Magica",
+        "buffSecond": "Final Fatebloom",
+        "ultAtBreak": "free",
+        "ultOtherwise": "free",
+        "action": "skill",
+        "buffName": "CUTOUT",
+        "buffStrict": true
+      },
+      "Floral Ironspike": {
+        "buffMain": "",
+        "buffSecond": "",
+        "ultAtBreak": "asap",
+        "ultOtherwise": "hold",
+        "ultBreaks": 2
+      }
+    }
+  }
+}

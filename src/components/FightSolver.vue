@@ -18,6 +18,10 @@
                     cap</span>
                 <input v-model.number="maxAv" type="number" min="0" step="0.1" /></label>
             <label class="field inline"
+                title="Only search this many decisions (actions you pick) ahead of the start; deeper lines are cut. Empty or 0: no limit. Pairs well with a checkpoint goal or tactics goals to compare the states reached"><span
+                    class="field-label">Max depth</span>
+                <input v-model.number="maxDepth" type="number" min="0" step="1" placeholder="∞" /></label>
+            <label class="field inline"
                 title="Where a line ends: the clear, or a checkpoint where you pick the state to go on from: the end of the current wave, the boss's next phase, the HP down to 75 / 50 / 25% (the wave's shared HP pool if it has one, e.g. crisis wave 1; else the boss, all HP bars; a minion wave without a pool is played through to the boss), or the next break (a main target if the wave has one). Every checkpoint also counts when its wave ends first"><span
                     class="field-label">Goal</span>
                 <select v-model="goal">
@@ -42,6 +46,12 @@
             @toggle="tacticsOpen = ($event.target as HTMLDetailsElement).open">
             <summary><span class="tactics-title">Tactics</span> <span class="muted small">· {{ tacticsSummary
                     }}</span></summary>
+            <fieldset class="option-group tactic-group">
+                <legend>General <span class="muted">· how you play every stage</span></legend>
+                <label class="check"
+                    title="Only when someone on the team has an 'on enemy break, advances action order' effect (an ascension such as Final Fatebloom's A4, or the Heroic Grace crystalis): breaking enemies one after the other is tried before breaking several in one action, and a break is tried first while the allies who get the advance are not already at 0 AV. Only an order of search: the other lines are still tried later (a break of everything that ends the wave is never held back).">
+                    <input v-model="tactics.spreadBreaks" type="checkbox" /> Spread breaks over several actions (when the team has break action-advance)</label>
+            </fieldset>
             <fieldset class="option-group tactic-group">
                 <legend>Checkpoint goals <span class="muted">· top = most important; they rank the states (and
                         clears) before AV, EP, SP and next turns</span></legend>
@@ -146,6 +156,11 @@
                 <button type="button" class="btn small-btn" :disabled="!tacticsCount" @click="exportTactics"
                     title="Save the tactics to a file for the command-line runner (scripts/sim/fightSolve.ts --tactics FILE)">Export
                     tactics</button>
+                <button type="button" class="btn small-btn" @click="tacticsInput?.click()"
+                    title="Load tactics saved with Export tactics (replaces the current goals and strategies; characters not in the team are kept but ignored)">Import
+                    tactics</button>
+                <input ref="tacticsInput" type="file" accept=".json,application/json" class="hidden-file"
+                    @change="importTactics" />
             </div>
         </details>
         <div class="option-groups">
@@ -163,6 +178,12 @@
                 <label class="check"
                     title="Run a quick beam search first (the 8 most promising lines per decision) so a good clear is known early and the bound cuts hard from the start; also the shared prefix for parallel workers">
                     <input v-model="beam" type="checkbox" /> Greedy pre-pass</label>
+                <label class="check"
+                    title="Best first: always go on from the most promising waiting line of the whole search (fewest deviations from your tactics, then the best estimated finish), so the node limit goes into a few good lines. Depth first: the older sweep, which finishes the last decisions of each line before going back (complete, but wide)">
+                    Search order <select v-model="searchOrder">
+                        <option value="best">Best first (a good line fast)</option>
+                        <option value="dfs">Depth first (exhaustive)</option>
+                    </select></label>
             </fieldset>
             <fieldset class="option-group">
                 <legend>Approximations <span class="muted">· faster, may miss the best clear</span></legend>
@@ -476,6 +497,7 @@ const NUM_MODES: TacticMode[] = ['high', 'low', 'gte', 'lte', 'between']
 const ULT_MODES: { value: UltMode, label: string }[] = [{ value: 'free', label: 'solver decides' }, { value: 'asap', label: 'as soon as ready' }, { value: 'hold', label: 'hold' }]
 function normalizeTactics(t?: SolverTacticsByName): SolverTacticsByName {
     return {
+        spreadBreaks: !!t?.spreadBreaks,
         goals: Array.isArray(t?.goals) ? t!.goals.map(g => ({ ...g, ally: g.ally ?? '', from: g.from ?? '' })) : [],
         strategies: Object.fromEntries(Object.entries(t?.strategies && typeof t.strategies === 'object' ? t.strategies : {})
             .map(([n, x]) => [n, { ...emptyStrategy(), ...JSON.parse(JSON.stringify(x ?? {})), buffMain: x?.buffMain ?? '', buffSecond: x?.buffSecond ?? '', ultAtBreak: x?.ultAtBreak ?? 'free', ultOtherwise: x?.ultOtherwise ?? 'free' }])),
@@ -519,18 +541,37 @@ function dropGoal(i: number) {
     const [g] = gs.splice(from, 1)
     gs.splice(i, 0, g)
 }
-const tacticsCount = computed(() => tactics.value.goals.filter(goalInTeam).length + teamNames.value.filter(strategyOn).length)
+const tacticsCount = computed(() => tactics.value.goals.filter(goalInTeam).length + teamNames.value.filter(strategyOn).length + (tactics.value.spreadBreaks ? 1 : 0))
 const tacticsSummary = computed(() => {
     const g = tactics.value.goals.filter(goalInTeam).length, s = teamNames.value.filter(strategyOn).length
-    if (!g && !s) return "don't care (the solver's own ranking and order)"
-    return [g ? `${g} goal${g === 1 ? '' : 's'}` : '', s ? `strategies for ${teamNames.value.filter(strategyOn).join(', ')}` : ''].filter(Boolean).join(' · ')
+    const sp = !!tactics.value.spreadBreaks
+    if (!g && !s && !sp) return "don't care (the solver's own ranking and order)"
+    return [sp ? 'spread breaks' : '', g ? `${g} goal${g === 1 ? '' : 's'}` : '', s ? `strategies for ${teamNames.value.filter(strategyOn).join(', ')}` : ''].filter(Boolean).join(' · ')
 })
 function clearTactics() {
-    tacticsSetting.value = { goals: [], strategies: {} }
+    tacticsSetting.value = { goals: [], strategies: {}, spreadBreaks: false }
     for (const n of teamNames.value) tactics.value.strategies[n] = emptyStrategy()
 }
 function exportTactics() {
     downloadText('fight-solver-tactics.json', JSON.stringify({ format: 'exedra-fight-solver-tactics', version: 1, tactics: tactics.value }, null, 2))
+}
+const tacticsInput = ref<HTMLInputElement | null>(null)
+async function importTactics(ev: Event) {
+    const input = ev.target as HTMLInputElement
+    const file = input.files?.[0]
+    input.value = ''
+    if (!file) return
+    try {
+        const data = JSON.parse(await file.text())
+        // Accept the Export tactics wrapper or a bare { goals, strategies } object.
+        const t = data?.format === 'exedra-fight-solver-tactics' ? data.tactics : data
+        if (!t || !Array.isArray(t.goals) || (t.strategies != null && typeof t.strategies !== 'object')) throw new Error('not a Fight Solver tactics file')
+        tacticsSetting.value = normalizeTactics(t)
+        for (const n of teamNames.value) if (!tactics.value.strategies[n]) tactics.value.strategies[n] = emptyStrategy()
+        error.value = ''
+    } catch (e) {
+        error.value = `Could not import tactics: ${(e as Error).message}`
+    }
 }
 const jobTactics = () => tacticsFromNames(tactics.value, props.slots.map(s => s.main?.name ?? ''))
 
@@ -551,12 +592,14 @@ const slack = computed<number>({
 })
 const jobGoal = ref<SolverGoal>('clear')   // the goal of the search on screen
 const maxAv = useSetting<number>('pveSolverMaxAv', 0)
+const maxDepth = useSetting<number>('pveSolverMaxDepth', 0)
 const memo = useSetting<boolean>('pveSolverMemo', true)
 const stopOnAllyDeath = useSetting<boolean>('pveSolverStopOnAllyDeath', true)
 // Exact pruning (the result stays optimal for the model)
 const dominance = useSetting<boolean>('pveSolverDominance', true)
 const symmetry = useSetting<boolean>('pveSolverSymmetry', true)
 const beam = useSetting<boolean>('pveSolverBeam', true)
+const searchOrder = useSetting<'best' | 'dfs'>('pveSolverSearch', 'best')
 // Approximations (faster, may miss the best clear)
 const lowerBound = useSetting<boolean>('pveSolverLowerBound', false)
 const lbSafety = useSetting<number>('pveSolverLbSafety', 1.5)
@@ -840,6 +883,9 @@ function onMessage(w: number, m: FightSolverMessage) {
     if (m.type === 'decisions') { onLine(part, m); return }
     if (m.type === 'exported') { onExported(part, m.items); return }
     if (m.type === 'history') return   // (not used by the page: nodes are shown in the Battle Simulator)
+    try { handleProgress(w, part, m) } finally { part.worker.postMessage({ type: 'ack' } satisfies FightSolverRequest) }
+}
+function handleProgress(w: number, part: (typeof parts.value)[number], m: Extract<FightSolverMessage, { type: 'progress' }>) {
     const wasRunning = running.value
     part.stats = m.stats
     part.running = m.running
@@ -924,8 +970,8 @@ function start(from?: SolverLine | MouseEvent, route: SolverRouteStep[] = []) {
         slots: JSON.parse(JSON.stringify(props.slots)), stageId: props.stageId, seed: props.seed, rngMode: props.rngMode,
         partyBuffId: props.partyBuffId, raidCarry: props.raidCarry ? JSON.parse(JSON.stringify(props.raidCarry)) : undefined,
         // The node limit is for the whole search: each worker gets its share.
-        maxNodes: maxNodes.value > 0 ? Math.ceil(Math.max(100, maxNodes.value) / count) : 0, maxAv: Math.max(0, maxAv.value || 0),
-        memo: memo.value, dominance: dominance.value, symmetry: symmetry.value, beamWidth: beam.value ? 8 : 0,
+        maxNodes: maxNodes.value > 0 ? Math.ceil(Math.max(100, maxNodes.value) / count) : 0, maxAv: Math.max(0, maxAv.value || 0), maxDepth: Math.max(0, Math.floor(maxDepth.value || 0)),
+        memo: memo.value, dominance: dominance.value, symmetry: symmetry.value, beamWidth: beam.value ? 8 : 0, search: searchOrder.value,
         lowerBound: lowerBound.value ? Math.max(0.1, lbSafety.value || 1) : 0,
         aiAllyTargets: aiAllyTargets.value, aiEnemyTargets: aiEnemyTargets.value, ultsAsap: ultsAsap.value,
         ultHabits: ultHabits.value, loose: loose.value, stopOnAllyDeath: stopOnAllyDeath.value,

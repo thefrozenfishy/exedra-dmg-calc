@@ -49,6 +49,11 @@ export interface AllyStrategy {
 export interface SolverTactics {
     goals: TacticGoal[]
     strategies: AllyStrategy[]
+    // General tactic: when the team has break action-advance (an ascension / crystalis effect "on enemy break, advances
+    // action order": Final Fatebloom's A4, Heroic Grace), breaking enemies one after the other is preferred over
+    // breaking several in one action, and a break is preferred while the allies who get the advance are not already
+    // at 0 AV. Only a preference (lines that do otherwise are searched later), never a ban.
+    spreadBreaks?: boolean
 }
 
 // The page's form: allies by name ("" = team).
@@ -57,6 +62,7 @@ export interface AllyStrategyByName extends Omit<AllyStrategy, "ally" | "buffMai
 export interface SolverTacticsByName {
     goals: TacticGoalByName[]
     strategies: Record<string, AllyStrategyByName>
+    spreadBreaks?: boolean
 }
 
 export const TEAM_METRICS: TacticMetric[] = ["elapsed", "sp"]
@@ -72,7 +78,7 @@ export const isLimit = (m: TacticMode) => m !== "high" && m !== "low"
 export function emptyTactics(): SolverTactics { return { goals: [], strategies: [] } }
 
 export function hasTactics(t?: SolverTactics): boolean {
-    return !!t && (t.goals.length > 0 || t.strategies.some(s => strategyActive(s)))
+    return !!t && (t.goals.length > 0 || !!t.spreadBreaks || t.strategies.some(s => strategyActive(s)))
 }
 export function strategyActive(s: AllyStrategy | AllyStrategyByName): boolean {
     return !!s.action || s.buffMain !== undefined && s.buffMain !== "" || s.buffSecond !== undefined && s.buffSecond !== ""
@@ -105,13 +111,14 @@ export function tacticsFromNames(t: SolverTacticsByName | undefined, names: stri
             buffSecond: second !== undefined && second >= 0 ? second : undefined,
         })
     }
-    return { goals, strategies }
+    return { goals, strategies, spreadBreaks: !!t?.spreadBreaks }
 }
 
 // Team positions -> names (a results file's tactics back into the page's form).
 export function tacticsToNames(t: SolverTactics | undefined, names: string[]): SolverTacticsByName {
     const nm = (i?: number) => i === undefined || i < 0 ? undefined : names[i]
     return {
+        spreadBreaks: !!t?.spreadBreaks,
         goals: (t?.goals ?? []).map(g => ({ ...g, ally: g.ally < 0 ? "" : names[g.ally] ?? "", from: nm(g.from) })),
         strategies: Object.fromEntries((t?.strategies ?? []).filter(s => names[s.ally]).map(s => {
             const { ally, buffMain, buffSecond, ...rest } = s

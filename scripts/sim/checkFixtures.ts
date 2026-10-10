@@ -29,6 +29,11 @@ const CASES: { file: string, action: number, actor: string, ally?: boolean, line
     // ADDITIONAL_TURN_UNIT_ACT (Floral Ironspike A4, enemy break bonus maxed by Tiro's basic attack at action 13): her
     // own extra turn, next, before the ultimate prompt.
     { file: "pve-rose-garden-fatebloom-ironspike.json", action: 14, actor: "Floral Ironspike", ally: true, line: /roll #\d+ action: Floral Ironspike \(Ally 5\) · extra action/ },
+    // An ultimate fired from the manual turn prompt that wipes the endless minions: refill (TimeForward request) before
+    // the turn act resumes, and the turn unit's gauge is reset only when its turn act runs (0 AV after the ultimate).
+    { file: "pve-rose-garden-own-ult-refill.json", action: 19, actor: "Floral Ironspike", ally: true, line: /^ +Floral Ironspike +\|.*MP 79\/150 .*\| AV 0\.00/ },
+    { file: "pve-rose-garden-own-ult-refill.json", action: 20, actor: "Witch Minions", ally: false },
+    { file: "pve-rose-garden-own-ult-refill.json", action: 21, actor: "Floral Ironspike", ally: true, line: /roll #\d+ action: Floral Ironspike \(Ally 5\) · turn: choose an action -> Battle Skill/ },
 ];
 
 console.warn = () => {}; console.debug = () => {};

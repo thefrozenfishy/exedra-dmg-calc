@@ -323,6 +323,7 @@ export interface BattleSnapshot {
     linkHp?: { type: number, name: string, current: number, max: number }   // Solo Raid Link HP pool of the enemy wave
     countdown?: { value: number, max: number, cancelTotal: number, cancelMax: number, unit: string } // Solo Raid countdown
     round?: number           // TurnReferee round (elapsed turn-gauge time: < 150 -> 1, then +1 per 100)
+    elapsed?: number         // elapsed turn-gauge time (AV spent so far) after this action
     vanguard?: { active: boolean, point: number, maxPoint: number, activeMaxPoint: number, gauge: number, maxGauge: number } // Solo Raid Labyrinth Vanguard
     // The field (zone) up after this action, if any: only one can be active at a time (ZONE_EXPAND releases the others).
     field?: { owner: string, ownerPos: number, ownerIsTeam1: boolean, stack: number, max: number, element?: string }

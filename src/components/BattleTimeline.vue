@@ -54,6 +54,8 @@
                     <b>{{
                         state.countdown.value }}</b>
                     · cancel damage {{ fmt(state.countdown.cancelTotal) }} / {{ fmt(state.countdown.cancelMax) }}</span>
+                <span v-if="state.elapsed !== undefined" title="Turn-gauge time spent so far / current turn (round)"> · <b>{{
+                    state.elapsed.toFixed(1) }} AV</b> / {{ state.round }} Turn</span>
             </div>
 
             <ul v-if="idx > 0 && state.events?.length" class="battle-log">

@@ -2519,6 +2519,9 @@ export class PvPTeam {
     // Set by PvPBattle: called after every executed skill (turn action, ultimate, extra action,
     // combo step, follow-up) so the display can show each as its own entry.
     snapshotHook?: (actor: KiokuState, type: TargetType, label?: string) => void
+    // Set by PvPBattle: the between-acts requests (endless refill, Labyrinth Vanguard activation) for an act that
+    // runs inside a turn prompt (an ultimate fired from the manual turn prompt).
+    betweenActsHook?: () => void
     recordAction(actor: KiokuState, type: TargetType, label?: string) {
         for (const u of [...this.kiokuStates, ...(this.otherTeam?.kiokuStates ?? [])]) u.checkHpGaugeRevive()
         this.snapshotHook?.(actor, type, label)
@@ -2888,6 +2891,10 @@ export class PvPTeam {
             const choice = options[(this.rng as BattleRng).pick("action", `${unitLabel(actor)} · ${what}: choose an action`, options.map(o => o.label))]
             if (!choice.ult) return choice.type
             this.useUltimateOf(choice.ult)
+            // [CONFIRMED 3.19] SoloGameDirectorBase.Request(TimeForward) (0x14a4f60) runs before every act: endless
+            // refill (TrySupplyEndlessEnemyUnits 0x14a5dd0 -> SupplyEndlessEnemy 0x14a5a80), else the Vanguard check.
+            // So an ultimate that wipes the minions doesn't end the turn: they come back and the turn act still runs.
+            this.betweenActsHook?.()
         }
     }
 
@@ -2921,7 +2928,12 @@ export class PvPTeam {
         this.fireTiming(ProcessTiming.TURN_START, actor, undefined, effType)
         // The AI picks this act's targets before the reset in the game (see setAIDecisionGauge).
         setAIDecisionGauge(actor, actor.turnGauge)
-        actor.resetDistanceRemaining()
+        // [CONFIRMED 3.19] GameDirectorBase.Forward (0x1499ab0): the TurnUnitAct's gauge is reset when the act runs
+        // (ResetTurnGaugeBeforeTurnUnitActExecute 0x17e1a70, after the skill decision; also when the act is skipped),
+        // not at TurnBegin. Ultimates fired from the manual turn prompt run before it, so a haste/slow they cause on
+        // this unit lands on the old gauge and is then overwritten by the reset.
+        let gaugeReset = false
+        const resetGauge = () => { if (!gaugeReset) { gaugeReset = true; actor.resetDistanceRemaining() } }
         // [RECONSTRUCTED - see KiokuState.canNotAction] a stunned unit's turn still comes
         // up (gauge already reset above) and TURN_START passives still fire, but the
         // actual attack/skill is skipped entirely - no target resolution, no damage, no
@@ -2960,6 +2972,7 @@ export class PvPTeam {
                     if (actor.isBroken || actor.isDead) break
                     effType = TargetType.skillId
                     const choice = selectEnemySkill(actor, this, this.rng, id => this.enemySkillHasTarget(actor, id))
+                    resetGauge()
                     if (choice) this.performAction(actor, effType, i === 0 ? turnLabel : undefined, choice.skillMstId)
                     continue
                 }
@@ -2968,10 +2981,12 @@ export class PvPTeam {
                     : this.autoAllyAction(actor)
                 if (chosen === undefined) break
                 effType = chosen
+                resetGauge()
                 this.performAction(actor, effType, i === 0 ? turnLabel : undefined)
             }
             actor.currentComboActionStep = 0
         }
+        resetGauge() // can't act / skipped: ValidateCanExecuteAct == 1 still resets the TurnUnitAct's gauge
         setAIDecisionGauge(actor, undefined)
         // [CONFIRMED 3.19] ActExecutor$$TurnEnd: TurnEnd passives (actor = this unit), then the
         // unit's states pass one turn (BattleUnit.PassingTurn(1)). Ultimates and follow-ups have

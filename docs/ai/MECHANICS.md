@@ -99,10 +99,18 @@ Longer derivations: `src/models/PVE_PARAMS_3.19.md`, `PVE_ENEMY_AI_3.19.md`, `MI
 ```
 TurnBeginAct: IsAdditionalTurnCoolTime=false; ContinuousRecovery (HoT); slip damage;
               broken & can act -> break recovered (gauge full, rate 0); not broken -> regen per BreakMst; TurnStart(3) passives
-TurnUnitAct:  gauge reset; ExecuteSkill -> AttackEnd(5) passives -> follow-ups (AdditionalSkillAct)
+TurnUnitAct:  gauge reset (when the decided act runs); ExecuteSkill -> AttackEnd(5) passives -> follow-ups (AdditionalSkillAct)
 TurnEndAct:   TurnEnd(6) passives; ITurnEndTrigger states (Cutaway); PassingTurn (durations -1, TurnNum+1)
 Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/TurnEnd, no duration tick.
 ```
+- **Ultimate from the turn prompt.** While the player picks the turn unit's action the TurnUnitAct is undecided
+  (Forward 0x1499ab0 sends CommandDecideSkillContent and waits). An ultimate fired then is its own act ahead of it;
+  the turn unit's gauge is reset only when its TurnUnitAct executes (`ResetTurnGaugeBeforeTurnUnitActExecute`
+  0x17e1a70), so a haste/slow that ultimate puts on the turn unit is overwritten. Before every act
+  `SoloGameDirectorBase.Request(TimeForward)` 0x14a4f60 refills endless minions (`TrySupplyEndlessEnemyUnits`
+  0x14a5dd0) or checks the Vanguard, so an ultimate that wipes the minions doesn't end the turn: they come back and
+  the turn unit still acts (in-game 2026-10-07, fixture pve-rose-garden-own-ult-refill.json). [C][G]
+  TS `useAttackOrSkill` (`resetGauge` before the first performAction), `chooseAllyAction` -> `betweenActsHook`.
 - `PassiveSkill.Triggering` 0x14a2c20: for a timing, every living unit on **both teams** runs its passives, then
   every living unit runs AfterProcess (9). Ends with `ResetZoneStatePatternMstId` on every unit. [C] TS `fireTiming`.
 - Skill passed per pass: `ActExecutor.TurnBegin` (0x17e1b30) / TurnEnd call `PassiveSkill.Triggering(gd, 3|6, actor,

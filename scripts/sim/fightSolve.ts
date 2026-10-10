@@ -24,6 +24,10 @@
 //                      (like "Solve from here"; the export's own control mode is used for them)
 //   --allow-ally-deaths   keep searching lines where an ally falls (default: such a line ends as a defeat)
 //   --max-av N         do not search past N AV
+//   --max-depth N      only search N decisions ahead of the start (deeper lines are cut)
+//   --search best|dfs  order of the search after the pre-pass: best = always go on from the most promising waiting line
+//                      of the whole search (a good line fast; default), dfs = depth first (complete, wide)
+//   --break-spread     add the general tactic "spread breaks over several actions" (see FightSolverTactics)
 //   --no-memo --no-dominance --no-symmetry --no-beam            switch off exact pruning
 //   --lower-bound X --ai-ally-targets --ai-enemy-targets --ults-asap --ult-habits --loose   approximations
 // Ctrl+C stops the search and writes the file (a second Ctrl+C quits at once).
@@ -56,6 +60,7 @@ async function worker() {
     let running = true
     const { solver } = createJobSolver(job)
     if (job.partition.index === 0 && solver.goalNote) console.log(`note: ${solver.goalNote}`)
+    if (job.partition.index === 0 && solver.spreadNote) console.log(`note: ${solver.spreadNote}`)
     const lines = new Map<number, SolverExportItem>()   // lines never change: replay each node once
     port.on("message", (m: ToWorker) => {
         try {
@@ -108,7 +113,7 @@ async function main() {
     const args = process.argv.slice(2)
     const file = args.find(a => !a.startsWith("--") && !isValueOf(a))
     function isValueOf(a: string) { const i = args.indexOf(a); return i > 0 && VALUED.has(args[i - 1]) }
-    const VALUED = new Set(["--tactics", "--priority", "--pick", "--goal", "--slack", "--workers", "--minutes", "--nodes", "--out", "--save-every", "--max-av", "--lower-bound"])
+    const VALUED = new Set(["--tactics", "--priority", "--pick", "--goal", "--slack", "--workers", "--minutes", "--nodes", "--out", "--save-every", "--max-av", "--max-depth", "--lower-bound", "--search"])
     const flag = (n: string) => args.includes(n)
     const value = (n: string) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : undefined }
     const num = (n: string, d: number) => { const v = value(n); if (v === undefined) return d; const x = Number(v); if (!Number.isFinite(x)) fail(`${n} needs a number`); return x }
@@ -140,8 +145,8 @@ async function main() {
     const base: Omit<FightSolverJob, "partition"> = {
         slots: data.slots.filter(s => !!s.main), stageId: data.stageId, seed: data.seed, rngMode: data.rngMode ?? "seed",
         partyBuffId: data.soloRaid?.partyBuffId || undefined, raidCarry: attempts.length ? attempts[attempts.length - 1] : undefined,
-        maxNodes: totalNodes > 0 ? Math.ceil(Math.max(100, totalNodes) / count) : 0, maxAv: num("--max-av", 0),
-        memo: !flag("--no-memo"), dominance: !flag("--no-dominance"), symmetry: !flag("--no-symmetry"), beamWidth: flag("--no-beam") ? 0 : 8,
+        maxNodes: totalNodes > 0 ? Math.ceil(Math.max(100, totalNodes) / count) : 0, maxAv: num("--max-av", 0), maxDepth: num("--max-depth", 0),
+        memo: !flag("--no-memo"), dominance: !flag("--no-dominance"), symmetry: !flag("--no-symmetry"), beamWidth: flag("--no-beam") ? 0 : 8, search: (value("--search") ?? "best") as "best" | "dfs",
         lowerBound: num("--lower-bound", 0), aiAllyTargets: flag("--ai-ally-targets"), aiEnemyTargets: flag("--ai-enemy-targets"),
         ultsAsap: flag("--ults-asap"), ultHabits: flag("--ult-habits"), loose: flag("--loose"),
         stopOnAllyDeath: !flag("--allow-ally-deaths"), goal, slack, opening,
@@ -166,10 +171,13 @@ async function main() {
         if (!byName || !Array.isArray(byName.goals) || typeof byName.strategies !== "object") fail(`--tactics: ${tv} is not a tactics file`)
         base.tactics = tacticsFromNames(byName, filled.map(sl => sl.main?.name ?? ""))
     } else base.tactics = results?.search.job.tactics
+    if (flag("--break-spread")) base.tactics = { goals: [], strategies: [], ...base.tactics, spreadBreaks: true }
     if (base.tactics && !hasTactics(base.tactics)) base.tactics = undefined
+    if (base.search !== "dfs") console.log("search order: best first (--search dfs for the depth-first sweep)")
     if (base.priority?.length) console.log(`prioritised: ${base.priority.map(i => filled[i]?.main?.name).join(", ")} (own EP and next turn each)`)
     if (base.tactics) {
         const names = filled.map(sl => sl.main?.name ?? "?")
+        if (base.tactics.spreadBreaks) console.log("general: spread breaks over several actions (when the team has break action-advance)")
         if (base.tactics.goals.length) console.log(`goals: ${base.tactics.goals.map((g, i) => `${i + 1}. ${goalLabel(g, names)}`).join(" · ")}`)
         for (const st of base.tactics.strategies) console.log(`strategy ${names[st.ally]}: ${[
             st.action ? `${st.actionStrict ? "only" : "prefer"} ${st.action === "basic" ? "Basic Attack" : "Battle Skill"}` : "",

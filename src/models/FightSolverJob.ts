@@ -19,10 +19,12 @@ export interface FightSolverJob {
     raidCarry?: RaidCarry
     maxNodes: number
     maxAv: number
+    maxDepth?: number
     memo: boolean
     dominance: boolean
     symmetry: boolean
     beamWidth: number       // 0 = off
+    search?: "best" | "dfs" // order of the search after the pre-pass (default: dfs, as before)
     lowerBound: number      // safety factor on the damage rate, 0 = off
     aiAllyTargets: boolean
     aiEnemyTargets: boolean
@@ -69,11 +71,11 @@ export function createJobSolver(job: FightSolverJob): { solver: FightSolver, inf
     const probe = build()
     const damage = teamDamageModel(job.slots.map(buildSlotKioku), job.stageId, probe)
     const solver = new FightSolver(build, {
-        maxNodes: job.maxNodes, maxAv: job.maxAv, memo: job.memo, dominance: job.dominance, symmetry: job.symmetry,
-        beamWidth: job.beamWidth, lowerBound: job.lowerBound, damage, ultsAsap: job.ultsAsap, ultHabits: job.ultHabits,
+        maxNodes: job.maxNodes, maxAv: job.maxAv, maxDepth: job.maxDepth, memo: job.memo, dominance: job.dominance, symmetry: job.symmetry,
+        beamWidth: job.beamWidth, search: job.search, lowerBound: job.lowerBound, damage, ultsAsap: job.ultsAsap, ultHabits: job.ultHabits,
         loose: job.loose, stopOnAllyDeath: job.stopOnAllyDeath, partition: job.partition, goal: job.goal, slack: job.slack, priority: job.priority,
         tactics: hasTactics(job.tactics) ? job.tactics : undefined,
     }, prefix)
-    const info = [solver.goalNote, solver.resourceInfo, damage ? `max damage rate ≈ ${Math.round(damage.rate).toLocaleString()} HP/AV` : ""].filter(Boolean).join(" · ")
+    const info = [solver.goalNote, solver.spreadNote, solver.resourceInfo, damage ? `max damage rate ≈ ${Math.round(damage.rate).toLocaleString()} HP/AV` : ""].filter(Boolean).join(" · ")
     return { solver, info }
 }

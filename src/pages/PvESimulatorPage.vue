@@ -477,6 +477,9 @@
             <div class="sim-tools">
                 <label class="field inline"><span class="field-label">Turns</span>
                     <input v-model.number="simTurns" type="number" min="1" max="200" /></label>
+                <button v-if="lastUsedPick" class="btn" @click="undoLastPick" :disabled="!canRun"
+                    :title="`Forget your last pick (${lastUsedPick.label} → ${lastUsedPick.options?.[lastUsedPick.outcome as number]?.label ?? '?'}) and everything after it, then ask again`">Undo
+                    last pick</button>
                 <button v-if="pickCount" class="btn" @click="resetPicks" :disabled="!canRun"
                     title="Forget every decision you made and start the battle over">Reset {{ pickCount }} decision{{
                         pickCount
@@ -512,6 +515,12 @@
                     <span class="muted">· after action {{ actionCount }}</span>
                 </div>
                 <div class="pick-label">{{ pending.label }}</div>
+                <div v-if="lastUsedPick" class="pick-undo muted small">
+                    <span>Last pick: {{ lastUsedPick.label }} → <b>{{ lastUsedPick.options?.[lastUsedPick.outcome as
+                        number]?.label ?? '?' }}</b></span>
+                    <button type="button" class="btn" @click="undoLastPick"
+                        title="Forget that pick and everything after it, then ask it again">Undo</button>
+                </div>
                 <div class="pick-options">
                     <button v-for="(o, i) in pending.options" :key="i" type="button" class="btn pick-btn"
                         @click="pickTarget(i)">
@@ -526,6 +535,22 @@
                     title="Let the Fight Solver take over from this decision (everything before it stays as you played it)">Solve
                     from
                     here</button>
+            </div>
+        </section>
+
+        <!-- Actions: the allies' inputs in order, one row, to replay the run in game -->
+        <section v-if="actionSteps.some(x => !x.divider)" class="card section-card actions-card">
+            <div class="actions-head">
+                <h2 class="section-title">Actions</h2>
+                <span class="muted small">your inputs in order · numbers match the timeline</span>
+                <button class="btn" @click="copyActions" title="Copy the list as text">Copy</button>
+            </div>
+            <div ref="actionsRow" class="actions-row">
+                <template v-for="(x, i) in actionSteps" :key="i">
+                    <span v-if="x.divider" class="act-div">{{ x.divider }}</span>
+                    <span v-else class="act-chip" :class="x.kind" :title="x.title"><b>{{ x.n }}</b>{{ x.text }}</span>
+                </template>
+                <span v-if="pendingStepText" class="act-chip next" :title="pending?.label">{{ pendingStepText }}</span>
             </div>
         </section>
 
@@ -866,6 +891,54 @@ const pickPanel = ref<HTMLElement | null>(null)
 const changedRolls = computed(() => [...decisions.value.values()].filter(d => !d.pick).length)
 const pickCount = computed(() => [...decisions.value.values()].filter(d => d.pick).length)
 const actionCount = computed(() => battleOutput.value.slice(1).filter(s => !s.wave).length)
+
+// ---- Actions strip: what to press in game, in order ----
+// One chip per ally input (ultimate, battle skill, basic attack; a picked target is added), numbered like the
+// timeline's actions. Enemy acts, follow-ups and Vanguard entries are left out (nothing to press); rounds and
+// waves are markers between the chips.
+type ActionStep = { divider?: string, n?: number, text?: string, kind?: string, title?: string }
+const shortUnit = (u: string) => u.replace(/ \(Ally \d+\)$/, '').replace(/^.* \(Enemy (\d+)\)$/, '#$1')
+const actionSteps = computed<ActionStep[]>(() => {
+    const out: ActionStep[] = []
+    let n = 0, round = 1
+    const divider = (d: string) => {
+        if (out.length && out[out.length - 1].divider) out[out.length - 1].divider += ` · ${d}`
+        else out.push({ divider: d })
+    }
+    for (const s of battleOutput.value.slice(1)) {
+        if (s.wave) { divider(`Wave ${s.wave}`); continue }
+        n++
+        if (s.round && s.round !== round) { round = s.round; divider(`R${round}`) }
+        if (!s.lastTeamIsTeam1 || !s.lastActor) continue
+        const t = s.lastTargetType
+        if (t !== TargetType.specialId && t !== TargetType.skillId && t !== TargetType.attackId) continue
+        const target = (s.rngEvents ?? []).find(e => e.kind === 'target' && e.label.startsWith(`${s.lastActor} (`))
+        const targetText = target ? ` → ${shortUnit(target.options?.[target.outcome as number]?.label ?? '?')}` : ''
+        const extra = s.actionLabel && s.actionLabel !== 'Cutaway' ? ` (${s.actionLabel.toLowerCase()})` : ''
+        const what = t === TargetType.specialId ? 'Ult' : t === TargetType.skillId ? 'Skill' : 'Basic'
+        out.push({
+            n, kind: t === TargetType.specialId ? 'ult' : t === TargetType.skillId ? 'skill' : 'basic',
+            text: t === TargetType.specialId ? `Ult ${s.lastActor}${targetText}` : `${s.lastActor} ${what}${targetText}${extra}`,
+            title: `Action ${n} · round ${s.round ?? round}${s.actionLabel ? ` · ${s.actionLabel}` : ''}`,
+        })
+    }
+    if (out.length && out[out.length - 1].divider) out.pop()
+    return out
+})
+// The decision the battle is waiting for, as the strip's last chip.
+const pendingStepText = computed(() => {
+    const p = pending.value
+    if (!p) return ''
+    if (p.label.startsWith('Between')) return 'next: fire an ult?'
+    const who = shortUnit(p.label.split(' · ')[0])
+    return p.kind === 'target' ? `next: ${who}'s target?` : `next: ${who}?`
+})
+const actionsRow = ref<HTMLElement | null>(null)
+watch(actionSteps, () => nextTick(() => { const el = actionsRow.value; if (el) el.scrollLeft = el.scrollWidth }))
+function copyActions() {
+    const text = actionSteps.value.map(x => x.divider ? `[${x.divider}]` : `${x.n}. ${x.text}`).join('  ')
+    navigator.clipboard?.writeText(text).then(() => toast.success('Actions copied'), () => toast.warning('Could not copy'))
+}
 const battleResultText = computed(() => pending.value ? 'Waiting for your decision'
     : battleResult.value === 'win' ? 'Cleared'
         : battleResult.value === 'lose' ? (battle.value?.finishedByRoundLimit ? 'Round limit reached' : 'Defeated') : '')
@@ -1036,21 +1109,44 @@ function setSeed(v: number) {
     runSimulation()
 }
 
-function setDecision(index: number, d: RngDecision | undefined) {
-    const next = new Map(decisions.value)
+// `branch`: the decision starts a new line from that point, so every later decision (picks and flipped rolls) is
+// dropped. Decisions match by roll index + kind + label only, and the same label comes back all the time ("Tiro
+// Finale (Ally 1) · turn: choose an action"), so a pick left over from the old line would be replayed in the new one
+// as whatever option sits at its index there (e.g. an ultimate you never chose).
+function setDecision(index: number, d: RngDecision | undefined, branch = false) {
+    const next = new Map(branch ? [...decisions.value].filter(([i]) => i < index) : decisions.value)
     if (d) next.set(index, d); else next.delete(index)
     decisions.value = next
     runSimulation()
 }
 
+// Answering the waiting decision: anything stored past it is from an abandoned line (see setDecision).
 function pickTarget(i: number) {
     const ev = pending.value
-    if (ev) setDecision(ev.index, { kind: ev.kind, label: ev.label, value: i, pick: true })
+    if (ev) setDecision(ev.index, { kind: ev.kind, label: ev.label, value: i, pick: true }, true)
 }
 
+// Changing a pick in the timeline branches (later decisions go); flipping a roll keeps them (labels name the actor
+// and target, so a stale flip rarely matches, and re-flipping every later crit after one change would be tedious).
 function onDecide(ev: RngEvent, value: boolean | number) {
-    if (ev.userPick) return setDecision(ev.index, { kind: ev.kind, label: ev.label, value, pick: true })
+    if (ev.userPick) return setDecision(ev.index, { kind: ev.kind, label: ev.label, value, pick: true }, true)
     setDecision(ev.index, value === ev.defaultOutcome ? undefined : { kind: ev.kind, label: ev.label, value })
+}
+
+// The last pick the current run actually used, read from the battle's own roll record (it includes the rolls of
+// an action cut short by the waiting decision, which no snapshot shows yet).
+const lastUsedPick = computed(() => {
+    const evs = battle.value?.rng.events ?? []
+    for (let k = evs.length - 1; k >= 0; k--) if (evs[k].userPick) return evs[k]
+    return undefined
+})
+
+// Undo: forget the last pick and everything after it; the battle re-runs and asks that question again.
+function undoLastPick() {
+    const ev = lastUsedPick.value
+    if (!ev) return
+    decisions.value = new Map([...decisions.value].filter(([i]) => i < ev.index))
+    runSimulation()
 }
 
 function resetRolls() {
@@ -2446,6 +2542,74 @@ const saved = useSavedTeams({
     font-weight: 600;
 }
 
+.actions-card {
+    padding: 0.6rem 1rem;
+}
+
+.actions-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.3rem 0.8rem;
+    margin-bottom: 0.4rem;
+}
+
+.actions-head .section-title {
+    margin: 0;
+}
+
+.actions-head .btn {
+    margin-left: auto;
+}
+
+.actions-row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.3rem;
+    overflow-x: auto;
+    padding-bottom: 0.3rem;
+    font-size: 0.82rem;
+    flex-direction: column;
+}
+
+.act-chip {
+    flex: none;
+    white-space: nowrap;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-soft);
+}
+
+.act-chip b {
+    margin-right: 0.3rem;
+    opacity: 0.6;
+    font-weight: 600;
+}
+
+.act-chip.ult {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.act-chip.skill {
+    border-color: var(--accent-soft);
+}
+
+.act-chip.next {
+    border-style: dashed;
+    opacity: 0.75;
+}
+
+.act-div {
+    flex: none;
+    white-space: nowrap;
+    font-size: 0.72rem;
+    opacity: 0.6;
+    padding: 0 0.15rem;
+}
+
 .solver-line-note {
     display: flex;
     flex-wrap: wrap;
@@ -2533,6 +2697,14 @@ const saved = useSavedTeams({
 }
 
 .pick-label {
+    overflow-wrap: anywhere;
+}
+
+.pick-undo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
     overflow-wrap: anywhere;
 }
 

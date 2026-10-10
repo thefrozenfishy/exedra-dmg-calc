@@ -131,6 +131,16 @@ export class PvPBattle {
         }
         this.team1.snapshotHook = hook;
         this.team2.snapshotHook = hook;
+        // An ultimate fired from the manual turn prompt is its own act: the TimeForward requests (endless refill,
+        // Vanguard activation) run before the turn act resumes. Their entries go before the turn's own.
+        const betweenActs = () => {
+            const saved = this.actionSnapshots
+            const supplied = this.supplyEndless() ?? []
+            const activated = this.activateVanguard() ?? []
+            this.actionSnapshots = record ? [...saved, ...supplied, ...activated] : saved
+        }
+        this.team1.betweenActsHook = betweenActs;
+        this.team2.betweenActsHook = betweenActs;
     }
 
     // [CONFIRMED 3.19] TurnReferee.CalculateNextRound (0x15c18b0): t < 150 -> round 1, else floor((t - 150) / 100) + 2.
@@ -242,6 +252,7 @@ export class PvPBattle {
             events: this.team1.eventLog.splice(0),
             linkHp: this.team2.linkHp ? { ...this.team2.linkHp } : undefined,
             round: this.currentRound,
+            elapsed: this.elapsed,
             vanguard: this.team1.soloRaid ? { ...this.team1.soloRaid } : undefined,
             countdown: this.team2.countdown?.unit ? { value: this.team2.countdown.value, max: this.team2.countdown.max, cancelTotal: this.team2.countdown.cancelTotal, cancelMax: this.team2.countdown.cancelMax, unit: this.team2.countdown.unit.kioku.name } : undefined,
             rngEvents: this.rng.drain(),

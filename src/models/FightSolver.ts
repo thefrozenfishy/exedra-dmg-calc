@@ -32,6 +32,7 @@ import { BattleRng, PendingDecision, type RngDecision, type RngKind, type RngMod
 import { BattleCloner, StateHasher, sharedObjects } from "./BattleClone";
 import type { PvPBattle } from "./PvPBattle";
 import { restoreModuleBattleState, saveModuleBattleState } from "./PvPTeam";
+import { getDescriptionOfCond } from "./BattleConditionParser";
 import { enemyParams, enemySkillDetails, stageWaveMeta, type QuestEnemyAppearance } from "./PvE";
 import { skillDetailsByMstId } from "../utils/helpers";
 import { TargetType, type BattleSnapshot } from "../types/KiokuTypes";
@@ -317,7 +318,7 @@ export type SolverNodeStatus =
     | "win" | "lose"
     | "merged"    // same state reached before with no more AV (memoisation)
     | "bound"     // AV (or AV + lower bound) already past the best (+ slack); level lines are kept
-    | "cap"       // over the AV cap, or too many actions without a decision
+    | "cap"       // over the AV cap, past the max search depth, or too many actions without a decision
     | "error"
     | "dominated" // an equal-or-better state (dominance) was reached before
     | "foreign"   // another worker searches this branch
@@ -336,6 +337,8 @@ interface SNode {
     remaining: number     // enemy HP left, in waves (next waves count 1 each)
     est: number           // estimated AV at the clear (ordering only)
     dev: number           // picks on the path that strayed from the user's strategies (ordering: fewest first)
+    nBroken: number       // living enemies in a broken state after this node (spread-breaks tactic)
+    allyAv: number[]      // allies' turn gauges at this node (spread-breaks tactic)
     picks: SolverPick[]   // decisions on the edge into this node
     steps: number         // executeNextAction calls on the edge (decision action + automatic ones)
     actors: string[]      // who acted on the edge (display)
@@ -368,6 +371,7 @@ export interface SolverNodeView {
 }
 
 export interface SolverStats {
+    spreadPenalised?: number   // nodes the spread-breaks tactic put behind their siblings
     nodes: number
     expanded: number
     actions: number       // executeNextAction calls simulated (incl. re-runs for decisions inside an action)
@@ -448,10 +452,12 @@ export function teamDamageModel(allies: PvPKioku[], stageId: number, battle: any
 export interface SolverOptions {
     maxNodes: number          // stop after creating this many nodes (0 = no limit)
     maxAv: number             // do not expand nodes past this AV (0 = no cap)
+    maxDepth?: number         // do not expand nodes this many decisions (tree levels) from the start (0 / unset = no cap)
     memo: boolean             // exact merging
     dominance?: boolean       // Pareto merging on resources (ResourceModel)
     symmetry?: boolean        // interchangeable targets once
     beamWidth?: number        // beam pre-pass width (0 = off)
+    search?: "best" | "dfs"    // after the pre-pass: best first (global priority queue: fewest deviations, then best estimate) or depth first (default)
     lowerBound?: number       // optimistic lower bound: safety factor on the damage rate (0 = off)
     damage?: DamageModel      // for the estimate (EP credit) and the lower bound
     ultsAsap?: boolean
@@ -579,6 +585,7 @@ export class FightSolver {
             missedGoals: 0,
         }
         this.rootHp = this.hpAbs(first)
+        if (opts.tactics?.spreadBreaks) this.spreadBen = this.breakAdvanceAllies(first)
         const b = this.cloner.cloneBattle(first)
         const rootNode = this.settle({ battle: b, mod: this.root.mod }, -1, 0, [], 0, [])
         // Checkpoints are measured from the first decision (after any automatic actions, e.g. the next wave coming in
@@ -1000,12 +1007,22 @@ export class FightSolver {
             note = String((e as any)?.message ?? e)
             console.warn("Fight solver: engine error", e)
         }
+        // Max search depth: a node this many decisions from the start is a leaf (a decision is pending, nothing below it is searched).
+        if (status === "open" && (this.opts.maxDepth ?? 0) > 0 && depth >= this.opts.maxDepth!) { status = "cap"; note = `${this.opts.maxDepth} decisions deep (max search depth)` }
         const b = cp.battle
         const remaining = this.remaining(b)
         const node: SNode = {
             id: this.nodes.length, parent, depth, elapsed: b.elapsed, status, remaining, est: 0, picks, steps,
             dev: (parent >= 0 ? this.nodes[parent].dev : 0) + picks.reduce((a, p) => a + (p.dev ?? 0), 0),
+            nBroken: 0, allyAv: [],
             actors, children: [], order, note,
+        }
+        node.nBroken = this.brokenCount(b)
+        if (this.spreadBen) {
+            node.allyAv = ((b as any).team1.kiokuStates as any[]).map(k => k.isDead ? 1 : Number(k.turnGauge))
+            const pen = this.spreadPenalty(node, parent, picks, status)
+            if (pen > 0) this.stats.spreadPenalised = (this.stats.spreadPenalised ?? 0) + 1
+            node.dev += pen
         }
         this.nodes.push(node)
         node.est = status === "win" ? b.elapsed : this.estimate(b, remaining)
@@ -1075,6 +1092,100 @@ export class FightSolver {
             node.pending = pending
         }
         return node
+    }
+
+    // ---- tactic: spread breaks ----
+    // Break action-advance on the team: a HASTE passive (ascension / crystalis / support) that starts "when the attack
+    // target breaks". The allies who get it: the holder (range self) or the whole team.
+    private spreadBen?: Set<number>
+    spreadNote = ""
+
+    private breakAdvanceAllies(b: PvPBattle): Set<number> | undefined {
+        const team = (b as any).team1.kiokuStates as any[]
+        const out = new Set<number>()
+        const names: string[] = []
+        team.forEach((u, i) => {
+            for (const e of ((u.kioku?.effects ?? []) as any[])) {
+                if (e.abilityEffectType !== "HASTE") continue
+                const onBreak = String(e.startConditionSetIdCsv ?? "").split(",").some(id => {
+                    try { return !!id && getDescriptionOfCond(id.trim()).includes("ブレイクが発生") } catch { return false }
+                })
+                if (!onBreak) continue
+                names.push(`${u.kioku?.name ?? `#${i + 1}`}${e.description ? ` (${String(e.description).replace(/<br>/g, " ").slice(0, 60)})` : ""}`)
+                if (e.range === -1) out.add(i); else team.forEach((_, k) => out.add(k))
+            }
+        })
+        this.spreadNote = out.size ? `Spread breaks: break action-advance from ${[...new Set(names)].join("; ")}` : "Spread breaks is on, but nobody on the team has break action-advance: ignored"
+        return out.size ? out : undefined
+    }
+
+    private brokenCount(b: PvPBattle): number {
+        let n = 0
+        for (const u of (b as any).team2.kiokuStates as any[]) if (!u.isDead && u.isBroken) n++
+        return n
+    }
+
+    // Extra deviation (ordering only, like a strategy deviation) of the edge into `node`: one point per enemy broken
+    // beyond the first in one go, and one per break advance wasted on an ally already at 0 AV (not the actor).
+    // A break that ends the wave / the fight is never penalised (a quick kill is worth it).
+    private spreadPenalty(node: SNode, parent: number, picks: SolverPick[], status: SolverNodeStatus): number {
+        const par = this.nodes[parent]
+        if (!par || !this.spreadBen || status === "win" || status === "checkpoint") return 0
+        const newly = node.nBroken - par.nBroken
+        if (newly <= 0) return 0
+        let pen = newly - 1
+        const m = /\(Ally (\d+)\)/.exec(picks.map(p => `${p.label} ${p.choice}`).join(" "))
+        const actor = m ? Number(m[1]) - 1 : -1
+        for (const i of this.spreadBen) if (i !== actor && (par.allyAv[i] ?? 1) <= 0.01) pen++
+        return pen
+    }
+
+    // ---- best-first search: one priority queue over the open nodes of the whole search ----
+    private heap: number[] = []
+    private get best(): boolean { return this.opts.search === "best" }
+    private less(a: number, b: number): boolean {
+        const x = this.nodes[a], y = this.nodes[b]
+        if (this.focusRoot !== undefined) {
+            const fx = this.isUnder(a, this.focusRoot), fy = this.isUnder(b, this.focusRoot)
+            if (fx !== fy) return fx
+        }
+        return (x.dev - y.dev || x.est - y.est || y.depth - x.depth || x.id - y.id) < 0
+    }
+    private heapPush(id: number): void {
+        const h = this.heap
+        h.push(id)
+        let i = h.length - 1
+        while (i > 0) {
+            const p = (i - 1) >> 1
+            if (!this.less(h[i], h[p])) break
+            ;[h[i], h[p]] = [h[p], h[i]]; i = p
+        }
+    }
+    private heapPop(): number | undefined {
+        const h = this.heap
+        if (!h.length) return undefined
+        const top = h[0], last = h.pop()!
+        if (h.length) {
+            h[0] = last
+            let i = 0
+            for (; ;) {
+                const l = 2 * i + 1, r = l + 1
+                let m = i
+                if (l < h.length && this.less(h[l], h[m])) m = l
+                if (r < h.length && this.less(h[r], h[m])) m = r
+                if (m === i) break
+                ;[h[i], h[m]] = [h[m], h[i]]; i = m
+            }
+        }
+        return top
+    }
+    private heapRebuild(): void { const ids = this.heap; this.heap = []; for (const id of ids) this.heapPush(id) }
+    // Keeps the battle checkpoints of the best few hundred waiting nodes only (the others are replayed when needed).
+    private trimHeapCheckpoints(): void {
+        const held = this.heap.filter(id => this.nodes[id].cp)
+        if (held.length <= 1500) return
+        held.sort((a, b) => (this.less(a, b) ? -1 : 1))
+        for (const id of held.slice(400)) { const n = this.nodes[id]; n.cp = undefined; n.pending = undefined }
     }
 
     // Rebuilds a dropped checkpoint by replaying the node's path from the start.
@@ -1163,6 +1274,7 @@ export class FightSolver {
         })
         if (mode === "beam") { this.beamNext.push(...open.map(c => c.id)); return }
         const ids = open.map(c => c.id)
+        if (this.best) { for (const id of ids) this.heapPush(id); this.trimHeapCheckpoints(); return }
         if (this.focusRoot !== undefined && !this.isUnder(node.id, this.focusRoot)) this.stack.unshift(...[...ids].reverse())
         else for (let k = ids.length - 1; k >= 0; k--) this.stack.push(ids[k])
     }
@@ -1175,12 +1287,14 @@ export class FightSolver {
 
     // ---- prefix: beam pass (or, for a parallel search without beam, breadth-first until the frontier is wide) ----
     private prefixStep(): void {
-        const width = this.opts.beamWidth ?? 0
+        // Best first goes straight to its priority queue (a level-by-level beam first only delays the first checkpoint);
+        // parallel workers still spread the root's lines with a short breadth-first start.
+        const width = this.best ? 0 : this.opts.beamWidth ?? 0
         const parts = this.opts.partition?.count ?? 1
         // The pre-pass may use a quarter of the whole search's node budget (the same cap in every worker, so the
         // shared prefix stays identical); then the depth-first part takes over from wherever the beam got to.
         // (No node limit: 2000 nodes per worker.)
-        const cap = this.opts.maxNodes > 0 ? Math.max(60, Math.floor(this.opts.maxNodes * parts / 4)) : 2000 * parts
+        const cap = this.opts.maxNodes > 0 ? Math.max(60, Math.floor(this.opts.maxNodes * parts / (this.best ? 12 : 4))) : 2000 * parts
         if (this.stats.nodes >= cap) {
             this.beamLevel = []; this.beamNext = []; this.beamPos = 0
             this.split()
@@ -1217,7 +1331,8 @@ export class FightSolver {
             if (i % p.count === p.index) mine.push(n)
             else { n.status = "foreign"; n.cp = undefined; n.pending = undefined }
         })
-        for (let k = mine.length - 1; k >= 0; k--) this.stack.push(mine[k].id)
+        if (this.best) for (const n of mine) this.heapPush(n.id)
+        else for (let k = mine.length - 1; k >= 0; k--) this.stack.push(mine[k].id)
         this.stats.prefixSize = this.nodes.length
         this.stats.phase = "search"
         if (this.pendingFocus !== undefined) { this.focus(this.pendingFocus); this.pendingFocus = undefined }
@@ -1245,11 +1360,11 @@ export class FightSolver {
             }
             if (this.stats.phase === "prefix") {
                 if (!this.beamLevel.length && this.beamPos === 0 && !this.beamNext.length) { this.split(); continue }
-                if ((this.opts.beamWidth ?? 0) <= 0 && (this.opts.partition?.count ?? 1) <= 1) { this.beamLevel = []; this.beamNext = []; this.split(); continue }
+                if ((this.best || (this.opts.beamWidth ?? 0) <= 0) && (this.opts.partition?.count ?? 1) <= 1) { this.beamLevel = []; this.beamNext = []; this.split(); continue }
                 this.prefixStep()
                 continue
             }
-            if (!this.stack.length) {
+            if (this.best ? !this.heap.length : !this.stack.length) {
                 // Expansions parked by "search this branch next" carry on once nothing else is waiting.
                 const p = this.parked.pop()
                 if (!p) break
@@ -1257,15 +1372,15 @@ export class FightSolver {
                 this.stats.current = p.node.id
                 continue
             }
-            const node = this.nodes[this.stack.pop()!]
+            const node = this.nodes[this.best ? this.heapPop()! : this.stack.pop()!]
             if (node.status !== "open" || this.cutByBound(node)) continue
             if (this.focusRoot !== undefined && !this.isUnder(node.id, this.focusRoot)) this.focusRoot = undefined
             this.stats.current = node.id
             this.active = { gen: this.expandG(node), node, mode: "dfs" }
         }
         this.stats.ms = performance.now() - this.t0
-        this.stats.open = this.stack.filter(id => this.nodes[id].status === "open").length
-        this.stats.done = this.stats.phase === "search" && !this.stack.length && !this.active && !this.parked.length
+        this.stats.open = (this.best ? this.heap : this.stack).filter(id => this.nodes[id].status === "open").length
+        this.stats.done = this.stats.phase === "search" && !(this.best ? this.heap.length : this.stack.length) && !this.active && !this.parked.length
         if (this.stats.done) { this.stats.stopReason = "search complete"; this.stats.phase = "done" }
         return this.stats.done || this.stats.stopReason === "node limit"
     }
@@ -1287,6 +1402,16 @@ export class FightSolver {
             if (n.status === "skipped" && this.isUnder(n.id, id)) { n.status = "open"; this.stats.userSkipped--; mine.add(n.id) }
             else if (n.status === "open" && this.isUnder(n.id, id)) mine.add(n.id)
         }
+        if (this.best) {
+            const inHeap = new Set(this.heap)
+            for (const x of mine) if (!inHeap.has(x)) this.heap.push(x)
+            this.focusRoot = id
+            this.heapRebuild()
+            for (const r of [...this.skippedRoots]) if (this.isUnder(id, r) || this.isUnder(r, id)) this.skippedRoots.delete(r)
+            if (this.active && this.active.mode === "dfs" && !this.isUnder(this.active.node.id, id)) { this.parked.push(this.active); this.active = undefined }
+            if (this.stats.phase === "done" && this.heap.length) { this.stats.phase = "search"; this.stats.done = false; this.stats.stopReason = undefined }
+            return mine.size
+        }
         this.stack = this.stack.filter(x => !mine.has(x))
         const ordered = [...mine].map(x => this.nodes[x]).sort((a, b) => a.dev - b.dev || a.est - b.est)
         for (let k = ordered.length - 1; k >= 0; k--) this.stack.push(ordered[k].id)
@@ -1307,6 +1432,7 @@ export class FightSolver {
         }
         this.stats.userSkipped += count
         this.stack = this.stack.filter(x => this.nodes[x].status === "open")
+        if (this.best) { this.heap = this.heap.filter(x => this.nodes[x].status === "open"); this.heapRebuild() }
         return count
     }
 

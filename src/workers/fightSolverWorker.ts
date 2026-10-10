@@ -15,6 +15,7 @@ export type { SolverExportItem } from "../models/FightSolverResults";
 export type FightSolverRequest =
     | { type: "start", job: FightSolverJob }
     | { type: "stop" }
+    | { type: "ack" }                          // the page has handled a progress message (backpressure)
     | { type: "resume", maxNodes: number }
     | { type: "bound", elapsed: number }       // best AV found by another worker
     | { type: "history", id: number }
@@ -41,6 +42,11 @@ let running = false
 let sentNodes = 0       // tree nodes already sent to the page
 let info = ""
 let timer: ReturnType<typeof setTimeout> | undefined
+// Backpressure: while the page is still handling the last progress message (tree merge, layout, drawing: slow on a
+// big tree) the next ones are not sent, so they cannot pile up in front of the page's Stop click (the tree chunks
+// are incremental, nothing is lost). A page that never answers is still served every 2 s.
+let awaiting = false
+let lastSent = 0
 
 const post = (m: FightSolverMessage) => self.postMessage(m)
 
@@ -55,6 +61,8 @@ function progress() {
         tree = solver.treeSince(sentNodes)
         sentNodes = solver.nodes.length
     }
+    awaiting = true
+    lastSent = performance.now()
     const m: FightSolverMessage = { type: "progress", running, stats: { ...solver.stats }, bestPath: solver.bestPathIds(), tree, info, candidates: solver.candidates }
     self.postMessage(m, { transfer: tree ? [tree.parents.buffer, tree.elapsed.buffer, tree.remaining.buffer, tree.status.buffer] : [] })
 }
@@ -68,7 +76,7 @@ function tick() {
         running = false
         post({ type: "error", error: String((e as any)?.message ?? e) })
     }
-    progress()
+    if (!running || !awaiting || performance.now() - lastSent > 2000) progress()
     if (running) timer = setTimeout(tick, 0)
 }
 
@@ -86,6 +94,8 @@ self.onmessage = (e: MessageEvent<FightSolverRequest>) => {
             running = true
             progress()
             timer = setTimeout(tick, 0)
+        } else if (m.type === "ack") {
+            awaiting = false
         } else if (m.type === "stop") {
             running = false
             if (solver) solver.stats.stopReason = "stopped"

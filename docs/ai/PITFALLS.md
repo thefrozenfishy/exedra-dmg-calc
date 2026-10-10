@@ -169,3 +169,20 @@
   lottery unpacker/model. `verdiff.py runs` names the methods from the old script.json; check it before asking the
   user for Il2CppDumper/Ghidra. Also: unpack folders of in-between versions may be gone (3.19.1 was deleted), so
   diff against whatever previous version folder exists (the user asked for 3.19.0 -> 3.19.11).
+
+## Added 2026-10-07 (PvE sim branching)
+- Manual decisions are keyed by roll index and only gated by kind + label, and pick labels repeat ("Tiro Finale (Ally 1) ·
+  turn: choose an action"). Changing an earlier pick and keeping the later ones replays them in the new line as
+  whatever option now sits at that index (seen: a stale "option 2" fired Pluvia's ultimate inside the next unfinished
+  action, so the menu offered ultimates nobody had charged). The page now drops every later decision when a pick is
+  answered or changed (`setDecision(..., branch)`); flipped rolls keep later decisions. "Undo last pick" reads the
+  last pick from `battle.rng.events`, not the snapshots: the action cut short by the waiting decision may already have
+  used picks that no snapshot shows yet.
+- The turn unit's gauge reset belongs right before its action executes, not before the manual prompt: ultimates fired
+  from the prompt run first (and any haste on the turn unit is lost to the reset). An ultimate that kills every
+  endless minion must not end the turn: `betweenActsHook` refills first. Before 2026-10-07 the sim did both wrong
+  (Floral ult from her own prompt -> turn lost, AV 45.87).
+- Turn-order ties after several "advance all allies" effects (Heroic Grace A4s) are usually decided by a later
+  self-only advance (Heroic Grace++ crystalis 1003022, `passive 1003022`): the unit WITHOUT it loses the tie to slot
+  order. When a reported turn order differs, check the crystalis in the export first (importing a file restores its
+  build, so an in-game crys change is easily missing from the sim).
