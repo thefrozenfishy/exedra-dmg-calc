@@ -89,6 +89,7 @@ function applyBannerPreset(preset) {
 }
 
 const xAxisMode = ref('pulls') // 'pulls' | 'gems'
+const sigmaShown = useSetting('sigmaShown', 3) // 0 = no bands, otherwise show bands up to ±Nσ
 
 const sparkPoints = computed(() => {
     let currentPull = 0
@@ -338,7 +339,7 @@ function renderChart() {
     // ±1σ/2σ/3σ bands. Each pair is [upper, lower]; the upper dataset fills down
     // to the lower one ('+1'). The translucent fills stack, so the band is
     // darkest near the mean. Lower edge is clamped at 0 (can't have negative SSRs).
-    for (const k of [3, 2, 1]) {
+    for (const k of [3, 2, 1].filter(k => k <= sigmaShown.value)) {
         const band = (sign) => xValues.map((x, p) => ({
             x,
             y: Math.max(0, ssrCounts[p] + sign * k * ssrStd[p]),
@@ -365,11 +366,6 @@ function renderChart() {
             fill: false,
         })
     }
-
-    const y1Max = Math.max(
-        50,
-        Math.ceil(Math.max(...ssrCounts.map((m, p) => m + 3 * ssrStd[p])) / 10) * 10
-    )
 
     for (let t = 1; t <= MAX_ROLLS; t++) {
         datasets.push({
@@ -461,7 +457,7 @@ function renderChart() {
                     type: 'linear',
                     position: 'right',
                     min: 0,
-                    max: y1Max,
+                    max: 50,
                     grid: {
                         drawOnChartArea: false
                     },
@@ -492,7 +488,8 @@ watch(
         step3Cost,
         step3Rate,
         bonusRateUpChance,
-        xAxisMode
+        xAxisMode,
+        sigmaShown
     ],
     renderChart
 )
@@ -913,6 +910,12 @@ const downloadFullHistoryHorizontal = async () => {
                     @click="xAxisMode = 'pulls'">Pulls</button>
                 <button type="button" class="segment" :class="{ active: xAxisMode === 'gems' }"
                     @click="xAxisMode = 'gems'">Gems Spent</button>
+            </div>
+
+            <span class="filters-heading">Sigma</span>
+            <div class="segmented">
+                <button v-for="n in [0, 1, 2, 3]" :key="n" type="button" class="segment"
+                    :class="{ active: sigmaShown === n }" @click="sigmaShown = n">{{ n }}σ</button>
             </div>
         </div>
 
