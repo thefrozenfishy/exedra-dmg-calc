@@ -137,3 +137,34 @@ export function runCctor(cls: { cctor(): void }): void {
     cctorDone.add(cls);
     cls.cctor();
 }
+
+/**
+ * Multicast delegates (Action/Func fields with += / -=): System.Delegate.Combine / Remove. A combined delegate is a
+ * function carrying its invocation list in `__list`; invoking it calls each entry in order and returns the last result.
+ */
+type AnyFn = (...a: any[]) => any;
+function invocationList(d: AnyFn | null): AnyFn[] { return d == null ? [] : ((d as any).__list ?? [d]); }
+function fromList<T extends AnyFn>(list: AnyFn[]): T | null {
+    if (list.length === 0) return null;
+    if (list.length === 1) return list[0] as T;
+    const f = ((...a: any[]) => { let r: any; for (const g of list) r = g(...a); return r; }) as any;
+    f.__list = list;
+    return f as T;
+}
+export const Delegate = {
+    Combine<T extends AnyFn>(a: T | null, b: T | null): T | null { return fromList<T>([...invocationList(a), ...invocationList(b)]); },
+    /** Removes the last occurrence of b's invocation list in a (C# semantics). */
+    Remove<T extends AnyFn>(a: T | null, b: T | null): T | null {
+        const la = invocationList(a), lb = invocationList(b);
+        if (lb.length === 0) return a;
+        for (let i = la.length - lb.length; i >= 0; i--) {
+            if (lb.every((g, j) => la[i + j] === g)) return fromList<T>([...la.slice(0, i), ...la.slice(i + lb.length)]);
+        }
+        return a;
+    },
+};
+/** Math.Clamp(int|float, min, max) (throws when min > max, like .NET). */
+export function clamp(value: number, min: number, max: number): number {
+    if (min > max) throw new RangeError(`ArgumentException: '${min}' cannot be greater than ${max}.`);
+    return value < min ? min : value > max ? max : value;
+}

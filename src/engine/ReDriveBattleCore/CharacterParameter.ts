@@ -1,7 +1,11 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../runtime";
+import type { CalculationPointPolicyMstRecord } from "../Network/Definition/CalcPoint/CalculationPointPolicyMstRecord";
+import { CalculationPointPolicyMstModel } from "./Model/CalculationPointPolicyMstModel";
+import { BattleMstReaderBase } from "./Reader/BattleMstReaderBase";
+import { BreakPoint } from "./BreakPoint";
+import { f32, notPorted } from "../runtime";
 import type { int } from "../runtime";
 import type { ElementType } from "../Network/Definition/Battle/ElementType";
 import type { RoleType } from "../Network/Definition/Battle/RoleType";
@@ -87,7 +91,55 @@ export class CharacterParameter extends BattleParameter {
     /** @rva 0x7305E0  private void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x138AF80  public void .ctor(in int atk, in int def, in int ctr, in int ctd, in int hp, in int speed, in int healRate, in int effectHitRate, in int effectParryRate, in ElementDamageRate[] elementDamageRates, in ElementResistRate[] elementResistRates, in int levelReactionBreakDamageValue, in int levelReactionSlipDamageValue, in int breakDamageRate, in int recoveryEpRate, in StyleMstModel styleMst, in bool isPvpOrGvg = False) { } */
-    ctor$int_int_int_int_int_int_int_int_int_ElementDamageRate_ElementResistRate_int_int_int_int_StyleMstModel_bool(atk: int, def: int, ctr: int, ctd: int, hp: int, speed: int, healRate: int, effectHitRate: int, effectParryRate: int, elementDamageRates: ElementDamageRate[], elementResistRates: ElementResistRate[], levelReactionBreakDamageValue: int, levelReactionSlipDamageValue: int, breakDamageRate: int, recoveryEpRate: int, styleMst: StyleMstModel, isPvpOrGvg?: boolean /* = False */): this { return notPorted("CharacterParameter..ctor", 0x138AF80); }
+    ctor$int_int_int_int_int_int_int_int_int_ElementDamageRate_ElementResistRate_int_int_int_int_StyleMstModel_bool(atk: int, def: int, ctr: int, ctd: int, hp: int, speed: int, healRate: int, effectHitRate: int, effectParryRate: int, elementDamageRates: ElementDamageRate[], elementResistRates: ElementResistRate[], levelReactionBreakDamageValue: int, levelReactionSlipDamageValue: int, breakDamageRate: int, recoveryEpRate: int, styleMst: StyleMstModel, isPvpOrGvg: boolean = false): this {
+        super.ctor$int_int_int_int_int_int_int_int_int_ElementDamageRate_ElementResistRate(atk, def, ctr, ctd, hp, speed, healRate, effectHitRate, effectParryRate, elementDamageRates, elementResistRates);
+        this._StyleMstId = styleMst.StyleMstId;
+        this._Element = styleMst.Element;
+        this._Role = styleMst.Role;
+        this._EP = styleMst.Ep;
+        this._BP = styleMst.Bp;
+        this._LevelReactionBreakDamageValue = levelReactionBreakDamageValue;
+        this._LevelReactionSlipDamageValue = levelReactionSlipDamageValue;
+        this._BreakDamageRate = breakDamageRate;
+        this._RecoveryEpRate = recoveryEpRate;
+        if (!isPvpOrGvg) {
+            this._BreakPoint = 0;
+            this._InitialBreakedDamageReceiveRate = 1300;
+            this._MaxBreakedDamageReceiveRate = 2000;
+            this._BreakTurnGaugeSlowRatio = BreakPoint.BreakTurnGaugeSlowRatio * 10;
+        } else {
+            const reader = () => BattleMstReaderBase.get_Instance<CalculationPointPolicyMstModel, CalculationPointPolicyMstRecord, int>(CalculationPointPolicyMstModel);
+            const initial = reader().GetModel(x => x.coefficientName === "initialBreakDamageReceiveRate"); // <.ctor>b__37_0
+            const max = reader().GetModel(x => x.coefficientName === "maxBreakDamageReceiveRate");         // <.ctor>b__37_1
+            const slow = reader().GetModel(x => x.coefficientName === "breakTurnGaugeSlowRatio");          // <.ctor>b__37_2
+            this._BreakPoint = CharacterParameter.CalculateBreakPoint(styleMst.Rarity, styleMst.Role);
+            this._BreakTurnGaugeSlowRatio = slow.Value;
+            this._InitialBreakedDamageReceiveRate = initial.Value;
+            this._MaxBreakedDamageReceiveRate = max.Value;
+            this._BreakPointRecoveryPerTurn = 0;
+        }
+        this._BreakedDamageReceiveRateIncreaseRate = 1000;
+        return this;
+    }
     /** @rva 0x138ABA0  private static int CalculateBreakPoint(int rarity, RoleType roleType) { } */
-    static CalculateBreakPoint(rarity: int, roleType: RoleType): int { return notPorted("CharacterParameter.CalculateBreakPoint", 0x138ABA0); }
+    static CalculateBreakPoint(rarity: int, roleType: RoleType): int {
+        const reader = () => BattleMstReaderBase.get_Instance<CalculationPointPolicyMstModel, CalculationPointPolicyMstRecord, int>(CalculationPointPolicyMstModel);
+        const baseMst = reader().GetModel(x => x.coefficientName === "baseBreakGaugeValue");                                  // <CalculateBreakPoint>b__38_0
+        const rarityMst = reader().GetModel(x => x.coefficientName === "rarityBreakGaugeUpRatio" && x.conditionValue === rarity); // b__1
+        let roleName: string;
+        switch (roleType) {
+            case 1: roleName = "attackerBreakGaugeUpRatio"; break;
+            case 2: roleName = "breakerBreakGaugeUpRatio"; break;
+            case 3: roleName = "healerBreakGaugeUpRatio"; break;
+            case 4: roleName = "bufferBreakGaugeUpRatio"; break;
+            case 5: roleName = "debufferBreakGaugeUpRatio"; break;
+            case 6: roleName = "defenderBreakGaugeUpRatio"; break;
+            default: roleName = ""; break;
+        }
+        const roleMst = reader().GetModel(x => x.coefficientName === roleName);                                                 // b__2
+        const baseValue = baseMst.Value, rarityRatio = rarityMst.Value, roleRatio = roleMst.Value;
+        // float math (asm 0x138aefb): (int)Math.Floor((double)((rarity / 1000f + 1f) * base * (role / 1000f + 1f)))
+        const v = f32(f32(f32(f32(rarityRatio / 1000) + 1) * baseValue) * f32(f32(roleRatio / 1000) + 1));
+        return Math.trunc(Math.floor(v));
+    }
 }

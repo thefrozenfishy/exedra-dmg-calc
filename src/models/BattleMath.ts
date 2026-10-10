@@ -85,6 +85,13 @@ export class CsDecimal {
         return CsDecimal.fromRational(m, pow10n(s), 0);
     }
 
+    // C# `new decimal(int lo, int mid, int hi, bool isNegative, byte scale)` (keeps the scale: new decimal(10,0,0,false,1) is 1.0).
+    static fromParts(lo: number, mid: number, hi: number, isNegative: boolean, scale: number): CsDecimal {
+        if (scale < 0 || scale > MAX_SCALE) throw new RangeError("ArgumentOutOfRangeException: scale");
+        const m = (BigInt(hi >>> 0) << 64n) | (BigInt(mid >>> 0) << 32n) | BigInt(lo >>> 0);
+        return new CsDecimal(isNegative ? -m : m, scale);
+    }
+
     static fromInt(n: number): CsDecimal {
         if (!Number.isInteger(n)) throw new TypeError(`CsDecimal.fromInt(${n}): not an integer`);
         return new CsDecimal(BigInt(n), 0);

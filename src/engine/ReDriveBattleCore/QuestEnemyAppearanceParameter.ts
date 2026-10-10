@@ -79,5 +79,28 @@ export class QuestEnemyAppearanceParameter extends BattleParameter {
     /** @rva 0x7305E0  private void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x138B650  public void .ctor(in QuestEnemyAppearanceMstModel mst, BreakMstModel breakMstModel) { } */
-    ctor$QuestEnemyAppearanceMstModel_BreakMstModel(mst: QuestEnemyAppearanceMstModel, breakMstModel: BreakMstModel): this { return notPorted("QuestEnemyAppearanceParameter..ctor", 0x138B650); }
+    ctor$QuestEnemyAppearanceMstModel_BreakMstModel(mst: QuestEnemyAppearanceMstModel, breakMstModel: BreakMstModel): this {
+        // base .ctor(atk, def, ctr, ctd, hp, speed, healRate, effectHitRate, effectParryRate, damageRates, resistRates) inlined
+        const hp = mst.HP, atk = mst.ATK, def = mst.DEF, ctr = mst.CriticalRate, ctd = mst.CriticalDamageRate, speed = mst.Speed;
+        const healRate = mst.HealRate, effectHitRate = mst.EffectHitRate, effectParryRate = mst.EffectParryRate;
+        const damageRates = mst.ElementDamageRates, resistRates = mst.ElementResistRates;
+        super.ctor$int_int_int_int_int_int_int_int_int_ElementDamageRate_ElementResistRate(atk, def, ctr, ctd, hp, speed, healRate, effectHitRate, effectParryRate, damageRates, resistRates);
+        this._QuestEnemyAppearanceMstId = mst.QuestEnemyAppearanceMstId;
+        this._IsMainTargetEnemy = mst.IsMainTargetEnemy;
+        this._WeakElements = mst.WeakElements;
+        this._AbnormalEffectParryRates = mst.AbnormalEffectParryRates;
+        this._HPGaugeCount = mst.HPGaugeCount;
+        this._StartHPGaugeCount = mst.StartHPGaugeCount;
+        this._ElementAimDamageRates = mst.ElementAimDamageRates;
+        this._LinkHpWeight = mst.LinkHpWeight;
+        if (breakMstModel == null)
+            throw new Error(`QuestEnemyAppearanceMstModel(id:${this.QuestEnemyAppearanceMstId})のBreakMstId(${mst.BreakMstId})が存在しません！`);
+        this._BreakPoint = breakMstModel.BreakPoint;
+        this._BreakPointRecoveryPerTurn = breakMstModel.BreakPointRecoveryPerTurn;
+        this._BreakTurnGaugeSlowRatio = breakMstModel.BreakTurnGaugeSlowRatio;
+        this._InitialBreakedDamageReceiveRate = breakMstModel.InitialBreakedDamageReceiveRate;
+        this._MaxBreakedDamageReceiveRate = breakMstModel.MaxBreakedDamageReceiveRate;
+        this._BreakedDamageReceiveRateIncreaseRate = breakMstModel.BreakedDamageReceiveRateIncreaseRate;
+        return this;
+    }
 }

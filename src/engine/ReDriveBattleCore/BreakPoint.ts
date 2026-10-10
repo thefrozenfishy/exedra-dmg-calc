@@ -66,7 +66,11 @@ export class BreakPoint {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x1493050  private static void .cctor() { } */
-    static cctor(): void { return notPorted("BreakPoint..cctor", 0x1493050); }
+    static cctor(): void {
+        BreakPoint.DamageRatioOnNormal = Decimal.fromParts(10, 0, 0, false, 1); // 1.0
+        BreakPoint.BreakTurnGaugeSlowRatio = 25;
+        BreakPoint.BreakPointWeakElementDecreaseRatio = Decimal.fromParts(2, 0, 0, false, 1); // 0.2
+    }
     /** @rva 0x1492CF0  internal static ValueTuple<int, int> <GetDecreaseValue>g__GetNormalAttackDecreaseValue|24_0(RangeType range, RoleType roleType, bool isRandom) { } */
     static $GetDecreaseValue$g__GetNormalAttackDecreaseValue_24_0(range: RangeType, roleType: RoleType, isRandom: boolean): any /* ValueTuple<int, int> */ { return notPorted("BreakPoint.<GetDecreaseValue>g__GetNormalAttackDecreaseValue|24_0", 0x1492CF0); }
     /** @rva 0x1492B40  internal static ValueTuple<int, int> <GetDecreaseValue>g__GetActiveSkillDecreaseValue|24_1(RangeType range, RoleType roleType, bool isRandom) { } */
@@ -74,3 +78,4 @@ export class BreakPoint {
     /** @rva 0x1492EA0  internal static ValueTuple<int, int> <GetDecreaseValue>g__GetSpecialAttackDecreaseValue|24_2(RangeType range, RoleType roleType, bool isRandom) { } */
     static $GetDecreaseValue$g__GetSpecialAttackDecreaseValue_24_2(range: RangeType, roleType: RoleType, isRandom: boolean): any /* ValueTuple<int, int> */ { return notPorted("BreakPoint.<GetDecreaseValue>g__GetSpecialAttackDecreaseValue|24_2", 0x1492EA0); }
 }
+BreakPoint.cctor(); // C# static constructor

@@ -147,5 +147,19 @@ export class BattleParameter {
     /** @rva 0x7305E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x1381740  public void .ctor(in int atk, in int def, in int ctr, in int ctd, in int hp, in int speed, in int healRate, in int effectHitRate, in int effectParryRate, in ElementDamageRate[] elementDamageRates, in ElementResistRate[] elementResistRates) { } */
-    ctor$int_int_int_int_int_int_int_int_int_ElementDamageRate_ElementResistRate(atk: int, def: int, ctr: int, ctd: int, hp: int, speed: int, healRate: int, effectHitRate: int, effectParryRate: int, elementDamageRates: ElementDamageRate[], elementResistRates: ElementResistRate[]): this { return notPorted("BattleParameter..ctor", 0x1381740); }
+    ctor$int_int_int_int_int_int_int_int_int_ElementDamageRate_ElementResistRate(atk: int, def: int, ctr: int, ctd: int, hp: int, speed: int, healRate: int, effectHitRate: int, effectParryRate: int, elementDamageRates: ElementDamageRate[], elementResistRates: ElementResistRate[]): this {
+        // asm 0x1381740 (Ghidra dropped the last stack argument)
+        this._EffectParryRate = effectParryRate;
+        this._ATK = atk;
+        this._DEF = def;
+        this._CTR = ctr;
+        this._CTD = ctd;
+        this._HP = hp;
+        this._Speed = speed;
+        this._HealRate = healRate;
+        this._EffectHitRate = effectHitRate;
+        this._ElementDamageRates = elementDamageRates;
+        this._ElementResistRates = elementResistRates;
+        return this;
+    }
 }
