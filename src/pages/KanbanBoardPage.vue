@@ -1,6 +1,7 @@
 <template>
     <div class="setup-page kanban-page">
-        <h1 class="page-title">Kanban Board</h1>
+        <h1 class="page-title">Future plans</h1>
+        <p class="page-subtitle">If you have any ideas or discover any bugs please tell them to me, or write them in here directly!</p>
 
         <form class="card add-card" @submit.prevent="addTask">
             <input v-model="newTitle" class="add-title" placeholder="Add a card…" maxlength="500" />
@@ -399,8 +400,13 @@ onBeforeUnmount(() => {
 
 .page-title {
     font-size: 2rem;
-    margin: 0 0 1.25rem;
+    margin: 0 0 0.35rem;
     color: var(--text);
+}
+
+.page-subtitle {
+    margin: 0 0 1.25rem;
+    color: var(--muted);
 }
 
 .card {
