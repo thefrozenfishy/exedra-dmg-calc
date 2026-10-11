@@ -22,5 +22,14 @@ export class StateIconData {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x15C07B0  public void .ctor(UnitStateBase state, int stateCount, bool isShowStateCountZeroIfZero) { } */
-    ctor$UnitStateBase_int_bool(state: UnitStateBase, stateCount: int, isShowStateCountZeroIfZero: boolean): this { return notPorted("StateIconData..ctor", 0x15C07B0); }
+    ctor$UnitStateBase_int_bool(state: UnitStateBase, stateCount: int, isShowStateCountZeroIfZero: boolean): this {
+        if (state == null) return this;
+        this.IconName = state.get_IconName();
+        this.StateCount = stateCount;
+        this.RemainingTurn = state._RemainingTurn;
+        this.RemainCount = state._RemainCount;
+        this.Priority = state.get_IconPriority();
+        this.IsShowStateCountZeroIfZero = isShowStateCountZeroIfZero;
+        return this;
+    }
 }

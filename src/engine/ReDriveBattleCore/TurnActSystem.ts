@@ -96,5 +96,5 @@ export class TurnActSystem {
         return this;
     }
     /** @rva 0xA0B880  private bool <Forward>b__9_0(BattleUnit u) { } */
-    $Forward$b__9_0(u: BattleUnit): boolean { return notPorted("TurnActSystem.<Forward>b__9_0", 0xA0B880); }
+    $Forward$b__9_0(u: BattleUnit): boolean { return u._Id === this.turnReferee.get_CurrentTurnUnitId(); }
 }

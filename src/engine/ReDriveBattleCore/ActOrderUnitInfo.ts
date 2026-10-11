@@ -1,6 +1,14 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { SkillDecisionActBase } from "./Act/SkillDecisionActBase";
+import { ComboTurnUnitAct } from "./Act/ComboTurnUnitAct";
+import { StartTimingAct } from "./Act/StartTimingAct";
+import { ReActionTurnUnitAct } from "./Act/ReActionTurnUnitAct";
+import { AdditionalTurnUnitAct } from "./Act/AdditionalTurnUnitAct";
+import { AdditionalSkillAct } from "./Act/AdditionalSkillAct";
+import { SpecialAttackAct } from "./Act/SpecialAttackAct";
+import { TurnUnitAct } from "./Act/TurnUnitAct";
 import { notPorted } from "../runtime";
 import type { int } from "../runtime";
 import type { ActBase } from "./Act/ActBase";
@@ -59,7 +67,24 @@ export class ActOrderUnitInfo {
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x1374920  public void .ctor(ActBase act) { } */
-    ctor$ActBase(act: ActBase): this { return notPorted("ActOrderUnitInfo..ctor", 0x1374920); }
+    ctor$ActBase(act: ActBase): this {
+        if (act == null) return this;
+        this._ActId = act.id;
+        this._BattleUnitId = act.actUnitId;
+        this._ActType = this.GetDisplayActType(act); // inlined in the game
+        this._ShouldShow = act.get_ShouldShow();
+        if (act instanceof ComboTurnUnitAct) this._ComboActionId = act._ActionStep - 1;
+        if (act instanceof SkillDecisionActBase) this._IsDecided = act._IsDecided;
+        return this;
+    }
     /** @rva 0x1374760  public DisplayActType GetDisplayActType(ActBase act) { } */
-    GetDisplayActType(act: ActBase): DisplayActType { return notPorted("ActOrderUnitInfo.GetDisplayActType", 0x1374760); }
+    GetDisplayActType(act: ActBase): DisplayActType {
+        if (act instanceof TurnUnitAct) return 1 as DisplayActType;
+        if (act instanceof SpecialAttackAct) return 2 as DisplayActType;
+        if (act instanceof AdditionalSkillAct) return 3 as DisplayActType;
+        if (act instanceof AdditionalTurnUnitAct) return 4 as DisplayActType;
+        if (act instanceof ReActionTurnUnitAct) return 5 as DisplayActType;
+        if (act instanceof StartTimingAct) return 1 as DisplayActType;
+        return (act.get_ShouldShow() ? 6 : 0) as DisplayActType; // ActBase vslot 6
+    }
 }

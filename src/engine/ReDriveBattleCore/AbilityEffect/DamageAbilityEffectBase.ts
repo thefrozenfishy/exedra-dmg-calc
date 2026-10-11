@@ -1,3 +1,5 @@
+import { IConsumeRemainCount$ConsumeRemainCount } from "../UnitState/IConsumeRemainCount";
+import { IConsumeRemainCountOnAttack$ShouldConsume } from "../UnitState/IConsumeRemainCountOnAttack";
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
@@ -268,8 +270,8 @@ export abstract class DamageAbilityEffectBase extends AbilityEffectBase {  // im
         if (!this.get_IsConsumeRemainCountOnAttackHit() || !(this.attackHitConsumableStateList.length > 0)) return false;
         let count = 0;
         for (const state of this.attackHitConsumableStateList) {
-            if (state.ShouldConsume(attackSkill, noticeList)) {
-                (state as IConsumeRemainCount).ConsumeRemainCount(1);
+            if (IConsumeRemainCountOnAttack$ShouldConsume(state, attackSkill, noticeList)) {
+                IConsumeRemainCount$ConsumeRemainCount(state as unknown as IConsumeRemainCount, 1); // default interface method
                 count++;
             }
         }

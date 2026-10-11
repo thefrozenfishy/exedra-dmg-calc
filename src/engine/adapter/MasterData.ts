@@ -1,3 +1,4 @@
+import { Debug } from "../ReDriveBattleCore/Debugging/Debug";
 // App side of the master-data boundary: binds every IBattleMstReader the battle core reads to a repository over the
 // server master lists in src/assets/base_data (the game client does the same with its ResourceMstRepository).
 // Generated table (scripts/engine/gen_records.py writes src/engine/records.json); call bindMasterData() once.
@@ -71,9 +72,15 @@ import type { UniqueStatePatternMstRecord } from "../Network/Definition/Skill/Un
 
 let bound = false;
 /** Bind the readers (idempotent). */
+/** Messages the battle core logged through ReDriveBattleCore.Debugging.Debug (kept for inspection). */
+export const engineLog: [string, string][] = [];
 export function bindMasterData(): void {
     if (bound) return;
     bound = true;
+    // The game client sets the ReDriveBattleCore log delegates at startup; some battle code invokes them directly.
+    Debug.onLog = (message: string) => { engineLog.push(["log", message]); };
+    Debug.onLogWarning = (message: string) => { engineLog.push(["warning", message]); };
+    Debug.onLogError = (message: string) => { engineLog.push(["error", message]); };
     BattleMstReaderContainer.Bind(AbilityEffectTypeMstModel, new BattleMstModelRepositoryBase<AbilityEffectTypeMstModel, AbilityEffectTypeMstRecord, int>(
         abilityEffectTypeMstModelJson as unknown as AbilityEffectTypeMstRecord[], r => r.abilityEffectTypeMstId, r => new AbilityEffectTypeMstModel().ctor$AbilityEffectTypeMstRecord(r)));
     BattleMstReaderContainer.Bind(BattleConditionMstModel, new BattleMstModelRepositoryBase<BattleConditionMstModel, BattleConditionMstRecord, int>(

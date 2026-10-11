@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { IConsumeRemainCount$ConsumeRemainCount } from "./IConsumeRemainCount";
 import { notPorted } from "../../runtime";
 import type { IEnumerable, float } from "../../runtime";
 import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
@@ -51,5 +52,7 @@ export class ShieldUnitState extends UnitStateBase {  // implements IBuff, ICons
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
     /** @rva 0x16D7B20  public void ConsumeRemainCount() { } */
-    ConsumeRemainCount(): void { return notPorted("ShieldUnitState.ConsumeRemainCount", 0x16D7B20); }
+    ConsumeRemainCount(): void {
+        IConsumeRemainCount$ConsumeRemainCount(this as unknown as IConsumeRemainCount, 1); // ((IConsumeRemainCount)this).ConsumeRemainCount(1), default interface method
+    }
 }

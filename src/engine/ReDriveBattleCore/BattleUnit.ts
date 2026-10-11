@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { DamageBaseType as DamageBaseType$ } from "./AbilityEffect/DamageBaseType";
 import { UniqueZoneUnitState } from "./UnitState/UniqueZoneUnitState";
 import { StunUnitState } from "./UnitState/StunUnitState";
 import { AbnormalUnitStateBase } from "./UnitState/AbnormalUnitStateBase";
@@ -58,7 +59,7 @@ import { BreakPoint } from "./BreakPoint";
 import { UnitTurnGauge } from "./UnitTurnGauge";
 import { UnitCondition } from "./UnitCondition";
 import { PassiveSkillInfo } from "../Network/Definition/QuestBattle/PassiveSkillInfo";
-import { Decimal, Delegate, clamp, f32, isAssignableFrom, isImpl, notPorted, trunc } from "../runtime";
+import { Decimal, Delegate, clamp, enumToString, f32, isAssignableFrom, isImpl, notPorted, trunc } from "../runtime";
 import type { List, Ref, Type, float, int } from "../runtime";
 import type { ElementType } from "../Network/Definition/Battle/ElementType";
 import type { TargetElementType } from "../Network/Definition/Battle/TargetElementType";
@@ -1033,7 +1034,14 @@ export class BattleUnit {
         return f32(rate - 100);
     }
     /** @rva 0x1385480  public Decimal GetProcessedDamageBaseParamValueDecimal(DamageBaseType damageBaseType) { } */
-    GetProcessedDamageBaseParamValueDecimal(damageBaseType: DamageBaseType): Decimal { return notPorted("BattleUnit.GetProcessedDamageBaseParamValueDecimal", 0x1385480); }
+    GetProcessedDamageBaseParamValueDecimal(damageBaseType: DamageBaseType): Decimal {
+        switch (damageBaseType as number) {
+            case 1: return this.GetProcessedAtkDecimal();
+            case 2: return this.GetProcessedDefDecimal();
+            case 3: return Decimal.fromInt(this._MaxHP);
+            default: throw new Error(`不正な DamageBaseType です：${enumToString(DamageBaseType$, damageBaseType)}`);
+        }
+    }
     /** @rva 0x1388A60  private bool <GetStateListForDecide>b__164_0(UnitStateBase state) { } */
     $GetStateListForDecide$b__164_0(state: UnitStateBase): boolean {
         if (!isImpl(state, "IRequiredStateForDecide")) return false;

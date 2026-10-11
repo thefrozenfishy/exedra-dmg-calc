@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { AISkillTargetSelector, AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import { notPorted } from "../../runtime";
 import type { Dictionary, List, int } from "../../runtime";
 import { AbilityEffectBase } from "./AbilityEffectBase";
@@ -23,9 +24,25 @@ export abstract class ZoneAbilityEffectBase extends AbilityEffectBase {
         return this;
     }
     /** @rva 0x1905A80 slot 4  public override void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
-    SelectTargets(userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, selectFriendUnitId: int, attackTargetId?: int /* = 0 */): void { return notPorted("ZoneAbilityEffectBase.SelectTargets", 0x1905A80); }
+    SelectTargets(userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, selectFriendUnitId: int, attackTargetId: int = 0): void {
+        this._TargetUnitIdList = [];
+        this._TargetUnitIdList = [...targetUnitDic.values()].filter(unit => !unit.get_IsDead()).map(unit => unit._Id); // <>c.b__3_0, b__3_1
+    }
     /** @rva 0x1905840  protected bool CanRemoveZone(BattleUnit targetUnit, int targetPatternId = 0) { } */
-    CanRemoveZone(targetUnit: BattleUnit, targetPatternId?: int /* = 0 */): boolean { return notPorted("ZoneAbilityEffectBase.CanRemoveZone", 0x1905840); }
+    CanRemoveZone(targetUnit: BattleUnit, targetPatternId: int = 0): boolean {
+        if (targetUnit.get_IsDead()) return false;
+        const condition = targetUnit._Condition;
+        if (0 < condition._MaxZoneStack && 0 < condition._ZoneStack) {
+            if (targetPatternId !== 0) return targetPatternId === targetUnit.GetUniqueZoneUnitStatePatternId();
+            return true;
+        }
+        return false;
+    }
     /** @rva 0x19058C0 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
-    SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int { return notPorted("ZoneAbilityEffectBase.SelectTargetInAIAction", 0x19058C0); }
+    SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
+        const candidateUnits = targetUnitList.filter(unit => !unit.get_IsDead()); // <>c.b__5_0
+        const unit = AISkillTargetSelector.SelectTargetUnitInOrder(candidateUnits, new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit([]));
+        if (unit != null) return unit._Id;
+        return 0;
+    }
 }

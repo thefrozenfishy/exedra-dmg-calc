@@ -10,3 +10,9 @@ export interface IConsumeRemainCount {
     /** @rva 0x16D1EC0 slot 3  public virtual void ConsumeRemainCount(int num) { } */
     ConsumeRemainCount(num: int): void;
 }
+
+// C# default interface method of IConsumeRemainCount (no class in 3.19.0 overrides it).
+/** @rva 0x16D1EC0  public virtual void ConsumeRemainCount(int num) { } */
+export function IConsumeRemainCount$ConsumeRemainCount(self: IConsumeRemainCount, num: int): void {
+    self.RemainCount = Math.max(0, self.RemainCount - num); // set_RemainCount (slot 1), Math.Max(int)
+}

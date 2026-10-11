@@ -260,9 +260,39 @@ export class AffectedUnitNotice {
         return this;
     }
     /** @rva 0x1378A40  public static AffectedUnitNotice CreateByDamage(int affectedUnitId, int damageValue, DamageCategory damageCategory, bool isCritical, CorrelationDamageType correlationDamageType, List<string> visualEffectList, TargetElementType attackElement = 0, bool isBreakBonusApplied = False) { } */
-    static CreateByDamage(affectedUnitId: int, damageValue: int, damageCategory: DamageCategory, isCritical: boolean, correlationDamageType: CorrelationDamageType, visualEffectList: List<string>, attackElement?: TargetElementType /* = 0 */, isBreakBonusApplied?: boolean /* = False */): AffectedUnitNotice { return notPorted("AffectedUnitNotice.CreateByDamage", 0x1378A40); }
+    static CreateByDamage(affectedUnitId: int, damageValue: int, damageCategory: DamageCategory, isCritical: boolean, correlationDamageType: CorrelationDamageType, visualEffectList: List<string>, attackElement: TargetElementType = 0 as TargetElementType, isBreakBonusApplied: boolean = false): AffectedUnitNotice {
+        const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
+        const damageInfo = new AffectedUnitNotice_DamageInfo();
+        damageInfo._AttackElement = attackElement;
+        damageInfo._CorrelationDamageType = correlationDamageType;
+        damageInfo._IsBreakBonusApplied = isBreakBonusApplied;
+        damageInfo._DamageValue = damageValue;
+        damageInfo._Category = damageCategory;
+        damageInfo._IsCritical = isCritical;
+        damageInfo._IsBarrierDamage = false;
+        notice.Damages = [damageInfo];
+        notice._IsReceivedAttack = true;
+        notice._IsVisibleOnAttack = true;
+        notice._DamageVisualEffectList = visualEffectList ?? [];
+        return notice;
+    }
     /** @rva 0x1378650  public static AffectedUnitNotice CreateByBarrierDamage(int affectedUnitId, int damageValue, DamageCategory damageCategory, bool isCritical, CorrelationDamageType correlationDamageType, List<string> visualEffectList, TargetElementType attackElement = 0, bool isBreakBonusApplied = False) { } */
-    static CreateByBarrierDamage(affectedUnitId: int, damageValue: int, damageCategory: DamageCategory, isCritical: boolean, correlationDamageType: CorrelationDamageType, visualEffectList: List<string>, attackElement?: TargetElementType /* = 0 */, isBreakBonusApplied?: boolean /* = False */): AffectedUnitNotice { return notPorted("AffectedUnitNotice.CreateByBarrierDamage", 0x1378650); }
+    static CreateByBarrierDamage(affectedUnitId: int, damageValue: int, damageCategory: DamageCategory, isCritical: boolean, correlationDamageType: CorrelationDamageType, visualEffectList: List<string>, attackElement: TargetElementType = 0 as TargetElementType, isBreakBonusApplied: boolean = false): AffectedUnitNotice {
+        const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
+        const damageInfo = new AffectedUnitNotice_DamageInfo();
+        damageInfo._AttackElement = attackElement;
+        damageInfo._CorrelationDamageType = correlationDamageType;
+        damageInfo._IsBreakBonusApplied = isBreakBonusApplied;
+        damageInfo._DamageValue = damageValue;
+        damageInfo._Category = damageCategory;
+        damageInfo._IsCritical = isCritical;
+        damageInfo._IsBarrierDamage = true;
+        notice.BarrierDamages = [damageInfo];
+        notice._IsReceivedAttack = true;
+        notice._IsVisibleOnAttack = true;
+        notice._DamageVisualEffectList = visualEffectList ?? [];
+        return notice;
+    }
     /** @rva 0x1378DF0  public static AffectedUnitNotice CreateByRecovery(int affectedUnitId, int recoveryValue, bool isRevival = False) { } */
     static CreateByRecovery(affectedUnitId: int, recoveryValue: int, isRevival?: boolean /* = False */): AffectedUnitNotice {
         isRevival = isRevival ?? false;

@@ -1,7 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../runtime";
+import { dictGet, notPorted } from "../runtime";
 import type { Dictionary, List, float, int } from "../runtime";
 import type { BattleUnit, BattleUnit_TeamType } from "./BattleUnit";
 
@@ -60,5 +60,7 @@ export class TurnOrderUnitInfo {
         return this;
     }
     /** @rva 0x15C16A0  public static List<TurnOrderUnitInfo> CreateList(List<int> turnOrderUnitIdList, Dictionary<int, BattleUnit> battleUnitDic) { } */
-    static CreateList(turnOrderUnitIdList: List<int>, battleUnitDic: Dictionary<int, BattleUnit>): List<TurnOrderUnitInfo> { return notPorted("TurnOrderUnitInfo.CreateList", 0x15C16A0); }
+    static CreateList(turnOrderUnitIdList: List<int>, battleUnitDic: Dictionary<int, BattleUnit>): List<TurnOrderUnitInfo> {
+        return turnOrderUnitIdList.map(id => new TurnOrderUnitInfo().ctor$BattleUnit(dictGet(battleUnitDic, id))); // DisplayClass22_0.b__0 (ctor inlined)
+    }
 }
