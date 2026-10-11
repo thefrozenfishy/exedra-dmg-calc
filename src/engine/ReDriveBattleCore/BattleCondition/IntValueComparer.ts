@@ -9,7 +9,20 @@ import { ValueComparerBase } from "./ValueComparerBase";
 // ---- ReDriveBattleCore.BattleCondition.IntValueComparer  (TypeDefIndex 1066, public class) ----
 export class IntValueComparer extends ValueComparerBase<int> {
     /** @rva 0x17EDF80  public void .ctor(int leftValue, int rightValue) { } */
-    ctor$int_int(leftValue: int, rightValue: int): this { return notPorted("IntValueComparer..ctor", 0x17EDF80); }
+    ctor$int_int(leftValue: int, rightValue: int): this {
+        super.ctor$T_T(leftValue, rightValue);
+        return this;
+    }
     /** @rva 0x17EDF00 slot 5  public override bool Compare(CompareOperator compareOperator) { } */
-    Compare(compareOperator: CompareOperator): boolean { return notPorted("IntValueComparer.Compare", 0x17EDF00); }
+    Compare(compareOperator: CompareOperator): boolean {
+        switch (compareOperator) {
+            case 1: return this.leftValue === this.rightValue;
+            case 2: return this.leftValue !== this.rightValue;
+            case 3: return this.leftValue > this.rightValue;
+            case 4: return this.leftValue >= this.rightValue;
+            case 5: return this.leftValue < this.rightValue;
+            case 6: return this.leftValue <= this.rightValue;
+            default: return false;
+        }
+    }
 }

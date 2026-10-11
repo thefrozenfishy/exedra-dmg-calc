@@ -8,7 +8,14 @@ import { ValueComparerBase } from "./ValueComparerBase";
 // ---- ReDriveBattleCore.BattleCondition.StringValueComparer  (TypeDefIndex 1069, public class) ----
 export class StringValueComparer extends ValueComparerBase<string> {
     /** @rva 0x17EE1A0  public void .ctor(string leftValue, string rightValue) { } */
-    ctor$string_string(leftValue: string, rightValue: string): this { return notPorted("StringValueComparer..ctor", 0x17EE1A0); }
+    ctor$string_string(leftValue: string, rightValue: string): this {
+        super.ctor$T_T(leftValue, rightValue);
+        return this;
+    }
     /** @rva 0x17EE150 slot 5  public override bool Compare(CompareOperator compareOperator) { } */
-    Compare(compareOperator: CompareOperator): boolean { return notPorted("StringValueComparer.Compare", 0x17EE150); }
+    Compare(compareOperator: CompareOperator): boolean {
+        if (compareOperator === 1) return this.leftValue === this.rightValue; // String.Equals(a, b)
+        if (compareOperator === 2) return !(this.leftValue === this.rightValue);
+        return false;
+    }
 }

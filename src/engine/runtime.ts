@@ -236,3 +236,23 @@ export function orderByKeys<T>(source: readonly T[], keys: ReadonlyArray<readonl
 export const newGuidKey = (): number => GameRandom.next();
 /** new System.Random().Next(maxValue): an int in [0, maxValue) from GameRandom. */
 export const randomNext = (maxValue: number): number => Math.floor(GameRandom.next() * maxValue);
+
+/** Enum.Parse<T>(string) (case-sensitive): a member name or an integer, trimmed; comma lists are OR'ed like .NET. Throws like .NET. */
+export function enumParse(e: Readonly<Record<string, number>>, s: string | null): number {
+    if (s == null) throw new TypeError("ArgumentNullException: value");
+    let result = 0;
+    const parts = s.split(",");
+    for (const raw of parts) {
+        const p = raw.trim();
+        if (p.length === 0) throw new SyntaxError(`ArgumentException: Requested value '${s}' was not found.`);
+        if (/^[+-]?\d+$/.test(p)) { result |= Number(p); continue; }
+        if (!Object.prototype.hasOwnProperty.call(e, p)) throw new SyntaxError(`ArgumentException: Requested value '${s}' was not found.`);
+        result |= e[p];
+    }
+    return result;
+}
+/** Enum.ToString() for a non-flags enum: the member name, or the number when the value is not defined. */
+export function enumToString(e: Readonly<Record<string, number>>, value: number): string {
+    for (const k of Object.keys(e)) if (e[k] === value) return k;
+    return String(value);
+}

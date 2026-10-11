@@ -9,7 +9,19 @@ import type { CompareOperator } from "./CompareOperator";
 // ---- ReDriveBattleCore.BattleCondition.IntListComparer  (TypeDefIndex 1072, public class) ----
 export class IntListComparer {
     /** @rva 0x17EDEA0  public void .ctor(ICollection<int> leftValue, int rightValue) { } */
-    ctor$ICollectionint_int(leftValue: ICollection<int>, rightValue: int): this { return notPorted("IntListComparer..ctor", 0x17EDEA0); }
+    /** 0x10 public ICollection<int> leftValue (ListComparer<ICollection<int>, int>) */
+    leftValue: ICollection<int> = null!;
+    /** 0x18 public int rightValue (ListComparer<ICollection<int>, int>) */
+    rightValue: int = 0;
+    ctor$ICollectionint_int(leftValue: ICollection<int>, rightValue: int): this {
+        this.leftValue = leftValue;
+        this.rightValue = rightValue;
+        return this;
+    }
     /** @rva 0x17EDE00 slot 5  public override bool Compare(CompareOperator compareOperator) { } */
-    Compare(compareOperator: CompareOperator): boolean { return notPorted("IntListComparer.Compare", 0x17EDE00); }
+    Compare(compareOperator: CompareOperator): boolean {
+        if (compareOperator === 7) return [...this.leftValue].includes(this.rightValue);
+        if (compareOperator === 8) return !([...this.leftValue].includes(this.rightValue));
+        return false;
+    }
 }

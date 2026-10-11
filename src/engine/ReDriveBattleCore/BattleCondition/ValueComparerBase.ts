@@ -13,7 +13,11 @@ export abstract class ValueComparerBase<T> {  // implements IComparer
     /** 0x0 public T rightValue */
     rightValue: T = null!;
     /** @rva -1  public void .ctor(T leftValue, T rightValue) { } */
-    ctor$T_T(leftValue: T, rightValue: T): this { return notPorted("ValueComparerBase..ctor", 0); }
+    ctor$T_T(leftValue: T, rightValue: T): this {
+        this.leftValue = leftValue;
+        this.rightValue = rightValue;
+        return this;
+    }
     /** @rva -1 slot 5  public abstract bool Compare(CompareOperator compareOperator); */
     abstract Compare(compareOperator: CompareOperator): boolean;
 }

@@ -18,5 +18,9 @@ export abstract class ConditionCheckerBase {
     /** @rva -1 slot 4  public abstract bool Check(); */
     abstract Check(): boolean;
     /** @rva 0x17EC260  private static void .cctor() { } */
-    static cctor(): void { return notPorted("ConditionCheckerBase..cctor", 0x17EC260); }
+    static cctor(): void {
+        ConditionCheckerBase.CompareValueDelimiter = ",";
+    }
 }
+
+ConditionCheckerBase.cctor(); // C# static constructor

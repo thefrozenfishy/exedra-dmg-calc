@@ -1,9 +1,11 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { EnumUtil } from "../EnumUtil";
+import { SkillType } from "../../Network/Definition/Battle/SkillType";
+import { enumIsDefined, notPorted } from "../../runtime";
 import type { IEnumerable, int } from "../../runtime";
-import type { SkillType } from "../../Network/Definition/Battle/SkillType";
+
 import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
@@ -37,14 +39,27 @@ export class SwitchSkillUnitState extends UnitStateBase {
     /** @rva 0x9FD270  public int get_VisualEffectNo() { } */
     get_VisualEffectNo(): int { return this.visualEffectNo; /* asm: mov eax, dword ptr [rcx + 0x8c]; ret */ }
     /** @rva 0x16D8E30  public SkillType get_SkillType() { } */
-    get_SkillType(): SkillType { return notPorted("SwitchSkillUnitState.get_SkillType", 0x16D8E30); }
+    get_SkillType(): SkillType {
+        if (enumIsDefined(SkillType, this.skillType)) return this.skillType;
+        return 1 as SkillType;
+    }
     /** @rva 0x16CF610  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
     /** @rva 0x16D8CC0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("SwitchSkillUnitState..ctor", 0x16D8CC0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this.switchSkillUniqueId = info._EffectValue1;
+        this.visualEffectNo = info._EffectValue2;
+        if (enumIsDefined(SkillType, info._EffectValue3)) {
+            this.skillType = EnumUtil.Cast<SkillType>(SkillType, info._EffectValue3);
+            return this;
+        }
+        this.skillType = 1 as SkillType;
+        return this;
+    }
     /** @rva 0x16D8C30 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];

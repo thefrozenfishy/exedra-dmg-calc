@@ -1,7 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { dictGet, notPorted, orderBy, orderByDescending, orderByNewGuid } from "../../runtime";
 import type { Dictionary, List, int } from "../../runtime";
 import type { AbilitySourceType } from "../../Network/Definition/Battle/AbilitySourceType";
 import type { RangeType } from "../../Network/Definition/Battle/RangeType";
@@ -13,6 +13,8 @@ import type { ProcessTiming } from "../BattleCondition/ProcessTiming";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
+import { BattleConditionUtils } from "../BattleCondition/BattleConditionUtils";
+import { ConditionUseType } from "../BattleCondition/ConditionUseType";
 
 // ---- ReDriveBattleCore.AbilityEffect.AbilityEffectBase  (TypeDefIndex 1130, public abstract class) ----
 export abstract class AbilityEffectBase {
@@ -97,23 +99,103 @@ export abstract class AbilityEffectBase {
     /** @rva 0x736A00  public void set_ActiveConditionSetIdCsv(string value) { } */
     set_ActiveConditionSetIdCsv(value: string): void { this._ActiveConditionSetIdCsv = value; /* auto-property */ }
     /** @rva 0x18E8970  public List<BattleConditionUtils.ConditionSet> get_StartConditionSetList() { } */
-    get_StartConditionSetList(): List<BattleConditionUtils_ConditionSet> { return notPorted("AbilityEffectBase.get_StartConditionSetList", 0x18E8970); }
+    get_StartConditionSetList(): List<BattleConditionUtils_ConditionSet> {
+        if (this.startConditionSetList == null) {
+            this.startConditionSetList = BattleConditionUtils.GetConditionSetListByIdCsv(this._StartConditionSetIdCsv);
+        }
+        return this.startConditionSetList;
+    }
     /** @rva 0x737C40  public int get_DetailMstId() { } */
     get_DetailMstId(): int { return this._DetailMstId; /* auto-property */ }
     /** @rva 0x737DF0  public void set_DetailMstId(int value) { } */
     set_DetailMstId(value: int): void { this._DetailMstId = value; /* auto-property */ }
     /** @rva 0x18E88E0  public bool get_IsConditionActivation() { } */
-    get_IsConditionActivation(): boolean { return notPorted("AbilityEffectBase.get_IsConditionActivation", 0x18E88E0); }
+    get_IsConditionActivation(): boolean {
+        if (!(this._StartTimings.length > 0)) return false;
+        // Count != 1 || First() != 1
+        if (this._StartTimings.length !== 1) return true;
+        return this._StartTimings[0] !== 1;
+    }
     /** @rva 0x18E8810  protected void .ctor() { } */
-    ctor(): this { return notPorted("AbilityEffectBase..ctor", 0x18E8810); }
+    ctor(): this {
+        this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
+        this._TargetUnitIdList = [];
+        this._StartTimings = [];
+        return this;
+    }
     /** @rva 0x18E86B0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("AbilityEffectBase..ctor", 0x18E86B0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
+        this._TargetUnitIdList = [];
+        this._StartTimings = [];
+        // object..ctor
+        this._AbilitySource = info._AbilitySource;
+        this._EffectType = info._EffectType;
+        this._EffectRange = info._EffectRange;
+        this._StartTimings = info._StartTimings ?? [];
+        this._StartConditionSetIdCsv = info._StartConditionSetIdCsv;
+        this._ActiveConditionSetIdCsv = info._ActiveConditionSetIdCsv;
+        this._DetailMstId = info._MstId;
+        return this;
+    }
     /** @rva 0x18E78C0  public bool CheckStartConditionSets(BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle) { } */
-    CheckStartConditionSets(conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle): boolean { return notPorted("AbilityEffectBase.CheckStartConditionSets", 0x18E78C0); }
+    CheckStartConditionSets(conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle): boolean {
+        return BattleConditionUtils.IsMatchConditionSets$ListBattleConditionUtilsConditionSet_ConditionCheckDataBundle_ConditionUseType(this.get_StartConditionSetList() /* inlined in the game */, conditionCheckDataBundle, 1 as ConditionUseType);
+    }
     /** @rva 0x18E7E60 slot 4  public virtual void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
-    SelectTargets(userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, selectFriendUnitId: int, attackTargetId?: int /* = 0 */): void { return notPorted("AbilityEffectBase.SelectTargets", 0x18E7E60); }
+    SelectTargets(userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, selectFriendUnitId: int, attackTargetId?: int /* = 0 */): void {
+        attackTargetId = attackTargetId ?? 0;
+        // <>c__DisplayClass49_0: 0x10 targetTeam, 0x14 selectUnitId, 0x18 mainTarget
+        const c = { targetTeam: 0 as int, selectUnitId: 0 as int, mainTarget: null as BattleUnit | null };
+        this._TargetUnitIdList = [];
+        if (userUnit._Team === 0) {
+            c.targetTeam = this._TargetSide !== 0 ? 1 : 0;
+        } else {
+            c.targetTeam = this._TargetSide === 0 ? 1 : 0;
+        }
+        let list: List<BattleUnit> = [...targetUnitDic.values()].filter(unit => unit._Team === c.targetTeam); // b__0
+        if (!this._IsIncludeDeadUnitInTarget) {
+            list = list.filter(u => !u.get_IsDead()); // <>c.b__49_1
+        }
+        if (this._EffectRange === -1) {
+            if (!list.includes(userUnit)) return;
+            this._TargetUnitIdList.push(userUnit._Id);
+            return;
+        }
+        if (this._EffectRange === 3) {
+            this._TargetUnitIdList = list.map(u => u._Id); // <>c.b__49_2
+            return;
+        }
+        if (this._TargetSide !== 0) {
+            selectFriendUnitId = attackTargetId;
+        }
+        c.selectUnitId = selectFriendUnitId;
+        c.mainTarget = list.find(unit => unit._Id === c.selectUnitId) ?? null; // b__3
+        if (c.mainTarget == null) return;
+        if (this._EffectRange === 1) {
+            this._TargetUnitIdList.push(c.mainTarget._Id);
+            return;
+        }
+        if (this._EffectRange !== 2) return;
+        const left = orderByDescending(list.filter(unit => unit._PositionId < c.mainTarget!._PositionId) /* b__4 */, u => u._PositionId /* <>c.b__49_5 */)[0] ?? null;
+        const right = orderBy(list.filter(unit => c.mainTarget!._PositionId < unit._PositionId) /* b__6 */, u => u._PositionId /* <>c.b__49_7 */)[0] ?? null;
+        const units: (BattleUnit | null)[] = [c.mainTarget, left, right];
+        for (let i = 0; i < units.length; i++) {
+            if (units[i] != null) this._TargetUnitIdList.push(units[i]!._Id);
+        }
+    }
     /** @rva 0x18E7BB0  public void SelectTargetsConditionCheck(Dictionary<int, BattleUnit> targetUnitDic, BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle) { } */
-    SelectTargetsConditionCheck(targetUnitDic: Dictionary<int, BattleUnit>, conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle): void { return notPorted("AbilityEffectBase.SelectTargetsConditionCheck", 0x18E7BB0); }
+    SelectTargetsConditionCheck(targetUnitDic: Dictionary<int, BattleUnit>, conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle): void {
+        const list: List<int> = [];
+        for (const id of this._TargetUnitIdList) {
+            conditionCheckDataBundle._EachTargetUnit = dictGet(targetUnitDic, id); // setter inlined in the game
+            if (BattleConditionUtils.IsMatchConditionSets$ListBattleConditionUtilsConditionSet_ConditionCheckDataBundle_ConditionUseType(this.get_StartConditionSetList() /* inlined in the game */, conditionCheckDataBundle, 1 as ConditionUseType)) {
+                list.push(id);
+            }
+            conditionCheckDataBundle._EachTargetUnit = null!;
+        }
+        this._TargetUnitIdList = list;
+    }
     /** @rva -1 slot 5  public abstract AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector); */
     abstract Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle;
     /** @rva 0x746DC0 slot 6  public virtual List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
@@ -121,7 +203,11 @@ export abstract class AbilityEffectBase {
         return targetUnitList;
     }
     /** @rva 0x18E7990 slot 7  public virtual int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
-    SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int { return notPorted("AbilityEffectBase.SelectTargetInAIAction", 0x18E7990); }
+    SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
+        const unit = orderByNewGuid(targetUnitList.filter(u => !u.get_IsDead()) /* <>c.b__53_0 */)[0] ?? null; // OrderBy(_ => Guid.NewGuid()) <>c.b__53_1
+        if (unit != null) return unit._Id;
+        return 0;
+    }
 }
 
 // ---- ReDriveBattleCore.AbilityEffect.AbilityEffectBase.TargetSideType  (TypeDefIndex 1127, public enum) ----

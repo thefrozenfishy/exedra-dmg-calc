@@ -129,7 +129,15 @@ for (const sf of sources) {
             if (e) { if (e.unique !== node.text) edits.push([node.getStart(sf), node.end, e.unique]); return; }
             if (sym && (sym.flags & ts.SymbolFlags.Alias) && localExt.has(node.text)) {
                 const decl = sym.declarations?.[0];
-                if (decl && decl.getSourceFile() === sf) edits.push([node.getStart(sf), node.end, localExt.get(node.text)]);
+                if (decl && decl.getSourceFile() === sf) { edits.push([node.getStart(sf), node.end, localExt.get(node.text)]); return; }
+            }
+            // a value re-exported by an engine module from a non-engine module (runtime.ts `export { f32 }`)
+            if (sym && (sym.flags & ts.SymbolFlags.Alias)) {
+                let target; try { target = checker.getAliasedSymbol(sym); } catch { target = undefined; }
+                const tdecl = target?.declarations?.[0];
+                const tfile = tdecl?.getSourceFile().fileName;
+                if (tfile && !inEngine(tdecl.getSourceFile()) && (target.flags & ts.SymbolFlags.Value) && !tfile.endsWith(".json"))
+                    edits.push([node.getStart(sf), node.end, extName(tfile, target.name)]);
             }
             return;
         }
