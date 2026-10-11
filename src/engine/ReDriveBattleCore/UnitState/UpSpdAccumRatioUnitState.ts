@@ -1,8 +1,10 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal, float, int } from "../../runtime";
+import { IAccum$Accumulate } from "./IAccum";
+import { f32, notPorted } from "../../runtime";
+import type { float, int } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { IAccum } from "./IAccum";
@@ -11,7 +13,6 @@ import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import type { IStateIconNumberDisplayable } from "./IStateIconNumberDisplayable";
 import type { UnitStateBase } from "./UnitStateBase";
 import { UpSpeedUnitStateBase } from "./UpSpeedUnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpSpdAccumRatioUnitState  (TypeDefIndex 809, public class) ----
 export class UpSpdAccumRatioUnitState extends UpSpeedUnitStateBase {  // implements IAccum, IBlendable, IHasUpdateableEffectValue, IStateIconNumberDisplayable
@@ -52,9 +53,13 @@ export class UpSpdAccumRatioUnitState extends UpSpeedUnitStateBase {  // impleme
         return this;
     }
     /** @rva 0x16E6E10 slot 33  public override Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue) { } */
-    GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("UpSpdAccumRatioUnitState.GetSpeedVariationValue", 0x16E6E10); }
+    GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal {
+        return Decimal.fromInt(unit.get_Speed()).mul(Decimal.fromFloat(f32(this._UpdateableEffectValue / 10)).mul(Decimal.fromInt(this._AccumCount)).div(Decimal.fromInt(100)));
+    }
     /** @rva 0x16E6C50 slot 42  public bool Blend(UnitStateBase injectUnitState) { } */
-    Blend(injectUnitState: UnitStateBase): boolean { return notPorted("UpSpdAccumRatioUnitState.Blend", 0x16E6C50); }
+    Blend(injectUnitState: UnitStateBase): boolean {
+        return IAccum$Accumulate(this as unknown as IAccum, injectUnitState); // ((IAccum)this).Accumulate (default interface method, IAccum slot 6)
+    }
     /** @rva 0x16E6CA0 slot 34  public override Decimal GetSpeedVariationValue(BattleUnitData unit, Decimal processingValue) { } */
     GetSpeedVariationValue$BattleUnitData_Decimal(unit: any /* BattleUnitData */, processingValue: Decimal): Decimal { return notPorted("UpSpdAccumRatioUnitState.GetSpeedVariationValue", 0x16E6CA0); }
 }

@@ -2,7 +2,8 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
-import type { Decimal, IEnumerable, List, float } from "../../runtime";
+import type { IEnumerable, List, float } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { RangeType } from "../../Network/Definition/Battle/RangeType";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
 import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
@@ -61,11 +62,16 @@ export class TsubameCoreUnitState extends UnitStateBase {  // implements IBuff, 
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
     /** @rva 0x16D92F0 slot 26  public Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue) { } */
-    GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("TsubameCoreUnitState.GetSpeedVariationValue", 0x16D92F0); }
+    GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal {
+        return processingValue.mul(Decimal.fromFloat(this._DownRatio).div(Decimal.fromInt(100))).neg();
+    }
     /** @rva 0x16D95A0 slot 19  public override void OnRemovingFromCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
     OnRemovingFromCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void { return notPorted("TsubameCoreUnitState.OnRemovingFromCondition", 0x16D95A0); }
     /** @rva 0x16D9090 slot 29  public bool CanAddTo(BattleUnitData targetUnit) { } */
     CanAddTo$BattleUnitData(targetUnit: any /* BattleUnitData */): boolean { return notPorted("TsubameCoreUnitState.CanAddTo", 0x16D9090); }
     /** @rva 0x16D9400 slot 28  public Decimal GetSpeedVariationValue(BattleUnitData unit, Decimal processingValue) { } */
     GetSpeedVariationValue$BattleUnitData_Decimal(unit: any /* BattleUnitData */, processingValue: Decimal): Decimal { return notPorted("TsubameCoreUnitState.GetSpeedVariationValue", 0x16D9400); }
+    /** ISpeedVariation.GetSpeedVariationValue (interface slot 1): the C# overload taking BattleUnit; the name is suffixed
+     * here because of the BattleUnitData overload, so interface calls are forwarded to it. */
+    GetSpeedVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return this.GetSpeedVariationValue$BattleUnit_Decimal(unit, processingValue); }
 }

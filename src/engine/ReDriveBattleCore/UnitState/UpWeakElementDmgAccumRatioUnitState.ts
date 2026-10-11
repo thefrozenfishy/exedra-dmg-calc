@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { IAccum$Accumulate } from "./IAccum";
 import { notPorted } from "../../runtime";
 import type { float, int } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
@@ -55,5 +56,7 @@ export class UpWeakElementDmgAccumRatioUnitState extends UpWeakElementDmgRatioUn
         return this;
     }
     /** @rva 0x16E75B0 slot 36  public bool Blend(UnitStateBase injectUnitState) { } */
-    Blend(injectUnitState: UnitStateBase): boolean { return notPorted("UpWeakElementDmgAccumRatioUnitState.Blend", 0x16E75B0); }
+    Blend(injectUnitState: UnitStateBase): boolean {
+        return IAccum$Accumulate(this as unknown as IAccum, injectUnitState); // ((IAccum)this).Accumulate (default interface method, IAccum slot 6)
+    }
 }

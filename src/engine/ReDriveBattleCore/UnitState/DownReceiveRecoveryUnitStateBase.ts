@@ -51,7 +51,11 @@ export abstract class DownReceiveRecoveryUnitStateBase extends UnitStateBase {  
         return this;
     }
     /** @rva 0x15B8090 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
-    CanAddTo(targetUnit: BattleUnit): boolean { return notPorted("DownReceiveRecoveryUnitStateBase.CanAddTo", 0x15B8090); }
+    CanAddTo(targetUnit: BattleUnit): boolean {
+        // DamageBetterUnitStateBase.CanAddTo (0x15B8090)
+        if (!targetUnit.IsMatch$TargetRoleType(this._TargetRole)) return false;
+        return targetUnit.IsMatch$TargetElementType(this._TargetElement);
+    }
     /** @rva 0x15BB820 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];

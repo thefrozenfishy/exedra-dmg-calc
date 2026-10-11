@@ -1,7 +1,10 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { AbnormalUnitStateBase } from "./AbnormalUnitStateBase";
+import { UnableActionUnitStateBase } from "./UnableActionUnitStateBase";
+import { StateAbilityEffect } from "../AbilityEffect/StateAbilityEffect";
+import { isImpl, notPorted } from "../../runtime";
 import type { IEnumerable, List } from "../../runtime";
 import type { RangeType } from "../../Network/Definition/Battle/RangeType";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
@@ -27,9 +30,23 @@ export class AddDebuffTurnUnitState extends AddTurnUnitStateBase {
         return this;
     }
     /** @rva 0x15B4030 slot 26  public override void AddTurnTo(UnitStateBase targetUnitState) { } */
-    AddTurnTo(targetUnitState: UnitStateBase): void { return notPorted("AddDebuffTurnUnitState.AddTurnTo", 0x15B4030); }
+    AddTurnTo(targetUnitState: UnitStateBase): void {
+        if (targetUnitState instanceof UnableActionUnitStateBase || targetUnitState instanceof AddTurnUnitStateBase) return;
+        if (isImpl(targetUnitState, "IDebuff") || targetUnitState instanceof AbnormalUnitStateBase) targetUnitState.AddEffectTurn(this._AddTurnNum);
+    }
     /** @rva 0x15B4150 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("AddDebuffTurnUnitState.GetAIFilteredTargets", 0x15B4150); }
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__3_0
+        if (list.length > 0) {
+            list = list.filter(unit => unit._SkillSet.GetList().some(skill => // <>c.b__3_1
+                skill.GetAbilityEffectList().some(effect => { // <>c.b__3_2
+                    if (!(effect instanceof StateAbilityEffect)) return false; // <>c.b__3_3
+                    const state = effect._GiveUnitState;
+                    return isImpl(state, "IDebuff") || state instanceof AbnormalUnitStateBase;
+                })));
+        }
+        return list;
+    }
     /** @rva 0x15B4380 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];

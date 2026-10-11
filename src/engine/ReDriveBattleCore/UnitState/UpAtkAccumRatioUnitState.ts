@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { IAccum$Accumulate } from "./IAccum";
 import { notPorted } from "../../runtime";
 import type { Decimal, float, int } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
@@ -54,5 +55,7 @@ export class UpAtkAccumRatioUnitState extends UpAttackUnitStateBase {  // implem
     /** @rva 0x16E06A0 slot 30  public override Decimal GetAtkVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("UpAtkAccumRatioUnitState.GetAtkVariationValue", 0x16E06A0); }
     /** @rva 0x16E0650 slot 38  public bool Blend(UnitStateBase injectUnitState) { } */
-    Blend(injectUnitState: UnitStateBase): boolean { return notPorted("UpAtkAccumRatioUnitState.Blend", 0x16E0650); }
+    Blend(injectUnitState: UnitStateBase): boolean {
+        return IAccum$Accumulate(this as unknown as IAccum, injectUnitState); // ((IAccum)this).Accumulate (default interface method, IAccum slot 6)
+    }
 }

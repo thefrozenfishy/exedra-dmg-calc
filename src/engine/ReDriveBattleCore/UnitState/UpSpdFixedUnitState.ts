@@ -2,7 +2,8 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
-import type { Decimal, float } from "../../runtime";
+import type { float } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UpSpeedUnitStateBase } from "./UpSpeedUnitStateBase";
@@ -25,7 +26,9 @@ export class UpSpdFixedUnitState extends UpSpeedUnitStateBase {
         return this;
     }
     /** @rva 0x16E6F80 slot 33  public override Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue) { } */
-    GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("UpSpdFixedUnitState.GetSpeedVariationValue", 0x16E6F80); }
+    GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal {
+        return Decimal.fromFloat(this._UpdateableEffectValue);
+    }
     /** @rva 0x16E7000 slot 34  public override Decimal GetSpeedVariationValue(BattleUnitData unit, Decimal processingValue) { } */
     GetSpeedVariationValue$BattleUnitData_Decimal(unit: any /* BattleUnitData */, processingValue: Decimal): Decimal { return notPorted("UpSpdFixedUnitState.GetSpeedVariationValue", 0x16E7000); }
 }

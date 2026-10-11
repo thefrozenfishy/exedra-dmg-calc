@@ -1,12 +1,12 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal, float } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import type { float } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UpSpeedUnitStateBase } from "./UpSpeedUnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpSpdRatioUnitState  (TypeDefIndex 808, public class) ----
 export class UpSpdRatioUnitState extends UpSpeedUnitStateBase {
@@ -27,7 +27,10 @@ export class UpSpdRatioUnitState extends UpSpeedUnitStateBase {
         return this;
     }
     /** @rva 0x16E71B0 slot 33  public override Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue) { } */
-    GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("UpSpdRatioUnitState.GetSpeedVariationValue", 0x16E71B0); }
+    GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal {
+        // based on the unit's Speed, not on processingValue
+        return Decimal.fromInt(unit.get_Speed()).mul(Decimal.fromFloat(f32(this._UpdateableEffectValue / 10)).div(Decimal.fromInt(100)));
+    }
     /** @rva 0x16E7080 slot 34  public override Decimal GetSpeedVariationValue(BattleUnitData unit, Decimal processingValue) { } */
     GetSpeedVariationValue$BattleUnitData_Decimal(unit: any /* BattleUnitData */, processingValue: Decimal): Decimal { return notPorted("UpSpdRatioUnitState.GetSpeedVariationValue", 0x16E7080); }
 }

@@ -81,7 +81,9 @@ export class CountUnitState extends UnitStateBase {  // implements INeutralState
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
     /** @rva 0x15B6C40 slot 21  public override bool CanAddTo(BattleUnit unit) { } */
-    CanAddTo(unit: BattleUnit): boolean { return notPorted("CountUnitState.CanAddTo", 0x15B6C40); }
+    CanAddTo(unit: BattleUnit): boolean {
+        return !unit._Condition._StateList.some(s => s instanceof CountUnitState); // OfType<CountUnitState>().Any()
+    }
     /** @rva 0x15B7110 slot 27  public void RefreshStateIconNumber(BattleUnit unit) { } */
     RefreshStateIconNumber(unit: BattleUnit): void {
         this.countPoint = unit._Condition._CountPoint;

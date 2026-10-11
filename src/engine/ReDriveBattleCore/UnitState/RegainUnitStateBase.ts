@@ -55,7 +55,11 @@ export abstract class RegainUnitStateBase extends UnitStateBase {  // implements
         return this;
     }
     /** @rva 0x15B8090 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
-    CanAddTo(targetUnit: BattleUnit): boolean { return notPorted("RegainUnitStateBase.CanAddTo", 0x15B8090); }
+    CanAddTo(targetUnit: BattleUnit): boolean {
+        // DamageBetterUnitStateBase.CanAddTo (0x15B8090)
+        if (!targetUnit.IsMatch$TargetRoleType(this._TargetRole)) return false;
+        return targetUnit.IsMatch$TargetElementType(this._TargetElement);
+    }
     /** @rva -1 slot 26  public abstract Decimal GetParameterValue(BattleUnit sourceUnit); */
     abstract GetParameterValue(sourceUnit: BattleUnit): Decimal;
     /** @rva 0x16D7320 slot 25  public Decimal GetAdditionalHpRecoveryValue(BattleUnit userUnit, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */

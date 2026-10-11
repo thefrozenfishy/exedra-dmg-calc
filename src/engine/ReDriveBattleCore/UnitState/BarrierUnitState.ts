@@ -1,7 +1,10 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import type { CalculationPointPolicyMstRecord } from "../../Network/Definition/CalcPoint/CalculationPointPolicyMstRecord";
+import { CalculationPointPolicyMstModel } from "../Model/CalculationPointPolicyMstModel";
+import { BattleMstReaderBase } from "../Reader/BattleMstReaderBase";
+import { f32, notPorted, trunc } from "../../runtime";
 import type { IEnumerable, List, float, int } from "../../runtime";
 import type { BattleType } from "../../Network/Definition/Battle/BattleType";
 import type { RangeType } from "../../Network/Definition/Battle/RangeType";
@@ -14,7 +17,6 @@ import type { EffectOriginType } from "./EffectOriginType";
 import type { IBuff } from "./IBuff";
 import { UnitStateBase } from "./UnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
-import { f32 } from "../../runtime";
 import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 
 // ---- ReDriveBattleCore.UnitState.BarrierUnitState  (TypeDefIndex 540, public class) ----
@@ -84,9 +86,20 @@ export class BarrierUnitState extends UnitStateBase {  // implements IBuff
         return this;
     }
     /** @rva 0x15B5BE0 slot 17  public override void SetTriggeringInfo(EffectOriginType effectOrigin, BattleUnit triggeredBattleUnit, bool isOwnSkill = False, bool isConditionActivation = False, BattleType battleType = 1) { } */
-    SetTriggeringInfo(effectOrigin: EffectOriginType, triggeredBattleUnit: BattleUnit, isOwnSkill?: boolean /* = False */, isConditionActivation?: boolean /* = False */, battleType?: BattleType /* = 1 */): void { return notPorted("BarrierUnitState.SetTriggeringInfo", 0x15B5BE0); }
+    SetTriggeringInfo(effectOrigin: EffectOriginType, triggeredBattleUnit: BattleUnit, isOwnSkill: boolean = false, isConditionActivation: boolean = false, battleType: BattleType = 1 as BattleType): void {
+        this._CalculatedEndurance = BarrierUnitState.CalculateEndurance([this._BarrierRatio, this._BarrierFixed, this._MaxBarrierRatio], triggeredBattleUnit, battleType);
+        this._CalculatedMaxEndurance = BarrierUnitState.CalculateMaxEndurance([this._BarrierRatio, this._BarrierFixed, this._MaxBarrierRatio], triggeredBattleUnit, battleType);
+        super.SetTriggeringInfo(effectOrigin, triggeredBattleUnit, isOwnSkill, isConditionActivation, battleType);
+    }
     /** @rva 0x15B5700 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit triggeredUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(triggeredUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("BarrierUnitState.GetAIFilteredTargets", 0x15B5700); }
+    GetAIFilteredTargets(triggeredUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__31_0
+        if (list.length > 0) {
+            if (effectRange === -1) list = [triggeredUnit];
+            list = list.filter(unit => this.$GetAIFilteredTargets$g__HasBarrierUpdate_31_1(unit));
+        }
+        return list;
+    }
     /** @rva 0x15B5980 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
@@ -96,11 +109,36 @@ export class BarrierUnitState extends UnitStateBase {  // implements IBuff
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
     /** @rva 0x15B54E0  private static int CalculateMaxEndurance(ValueTuple<float, float, float> info, BattleUnit targetUnit, BattleType battleType) { } */
-    static CalculateMaxEndurance(info: any /* ValueTuple<float, float, float> */, targetUnit: BattleUnit, battleType: BattleType): int { return notPorted("BarrierUnitState.CalculateMaxEndurance", 0x15B54E0); }
+    static CalculateMaxEndurance(info: [float, float, float], targetUnit: BattleUnit, battleType: BattleType): int {
+        if (info[2] === 0) return BarrierUnitState.CalculateEndurance(info, targetUnit, battleType);
+        let value = f32(targetUnit._BattleParameter._DEF * info[2]);
+        if (battleType === 2 || battleType === 4) {
+            const model = BattleMstReaderBase.get_Instance<CalculationPointPolicyMstModel, CalculationPointPolicyMstRecord, int>(CalculationPointPolicyMstModel)
+                .GetModel(x => x.coefficientName === "barrierEnduranceSuppresionRatio"); // <>c.b__33_0
+            value = f32(value * f32(1 - f32(model.get_Value() / 1000)));
+        }
+        return trunc(Math.ceil(value)); // Math.Ceiling(double)
+    }
     /** @rva 0x15B52B0  private static int CalculateEndurance(ValueTuple<float, float, float> info, BattleUnit targetUnit, BattleType battleType) { } */
-    static CalculateEndurance(info: any /* ValueTuple<float, float, float> */, targetUnit: BattleUnit, battleType: BattleType): int { return notPorted("BarrierUnitState.CalculateEndurance", 0x15B52B0); }
+    static CalculateEndurance(info: [float, float, float], targetUnit: BattleUnit, battleType: BattleType): int {
+        let value = f32(f32(targetUnit.GetProcessedDefDecimal().toFloat() * info[0]) + info[1]);
+        if (battleType === 2 || battleType === 4) {
+            const model = BattleMstReaderBase.get_Instance<CalculationPointPolicyMstModel, CalculationPointPolicyMstRecord, int>(CalculationPointPolicyMstModel)
+                .GetModel(x => x.coefficientName === "barrierEnduranceSuppresionRatio"); // <>c.b__34_0
+            value = f32(value * f32(1 - f32(model.get_Value() / 1000)));
+        }
+        return trunc(Math.ceil(value)); // Math.Ceiling(double)
+    }
     /** @rva 0x15B5E10  public void UpdateValueByRate(float rate) { } */
-    UpdateValueByRate(rate: float): void { return notPorted("BarrierUnitState.UpdateValueByRate", 0x15B5E10); }
+    UpdateValueByRate(rate: float): void {
+        this._BarrierRatio = Math.max(f32(this._BarrierRatio * rate), 0);
+        this._BarrierFixed = Math.max(f32(this._BarrierFixed * rate), 0);
+        this._MaxBarrierRatio = Math.max(f32(this._MaxBarrierRatio * rate), 0);
+    }
     /** @rva 0x15B5D40  private bool <GetAIFilteredTargets>g__HasBarrierUpdate|31_1(BattleUnit unit) { } */
-    $GetAIFilteredTargets$g__HasBarrierUpdate_31_1(unit: BattleUnit): boolean { return notPorted("BarrierUnitState.<GetAIFilteredTargets>g__HasBarrierUpdate|31_1", 0x15B5D40); }
+    $GetAIFilteredTargets$g__HasBarrierUpdate_31_1(unit: BattleUnit): boolean {
+        const num = Math.max(unit._Condition._MaxBarrierEndurance, this._CalculatedMaxEndurance);
+        if (unit._Condition._BarrierEndurance < num) return true;
+        return unit._Condition.GetUnitStateList(BarrierUnitState, false).length === 0;
+    }
 }

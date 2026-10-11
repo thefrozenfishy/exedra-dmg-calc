@@ -5,6 +5,7 @@ import { notPorted } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UnableUseSkillUnitStateBase } from "./UnableUseSkillUnitStateBase";
+import type { Type } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UnableActionUnitStateBase  (TypeDefIndex 495, public abstract class) ----
 export abstract class UnableActionUnitStateBase extends UnableUseSkillUnitStateBase {
@@ -19,5 +20,7 @@ export abstract class UnableActionUnitStateBase extends UnableUseSkillUnitStateB
         return this;
     }
     /** @rva 0x15C89B0 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
-    CanAddTo(targetUnit: BattleUnit): boolean { return notPorted("UnableActionUnitStateBase.CanAddTo", 0x15C89B0); }
+    CanAddTo(targetUnit: BattleUnit): boolean {
+        return !(targetUnit._Condition.GetUnitState$2((this as object).constructor as Type, false).length > 0); // GetUnitState(GetType()).Any()
+    }
 }

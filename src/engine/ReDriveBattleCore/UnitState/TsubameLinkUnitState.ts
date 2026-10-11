@@ -1,8 +1,9 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal, IEnumerable, float } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import type { IEnumerable, float } from "../../runtime";
+import { Decimal } from "../../runtime";
 import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AdditionalDamageAbilityEffect } from "../AbilityEffect/AdditionalDamageAbilityEffect";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
@@ -19,7 +20,6 @@ import type { IRequiredStateForDecide } from "./IRequiredStateForDecide";
 import type { ISpeedVariation } from "./ISpeedVariation";
 import { UnitStateBase } from "./UnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
-import { f32 } from "../../runtime";
 import type { List } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.TsubameLinkUnitState  (TypeDefIndex 663, public class) ----
@@ -77,9 +77,13 @@ export class TsubameLinkUnitState extends UnitStateBase {  // implements IHasUpd
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
     /** @rva 0x16D9950 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
-    CanAddTo(targetUnit: BattleUnit): boolean { return notPorted("TsubameLinkUnitState.CanAddTo", 0x16D9950); }
+    CanAddTo(targetUnit: BattleUnit): boolean {
+        return targetUnit._Id !== this._UserUnitId;
+    }
     /** @rva 0x16DA100 slot 28  public Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue) { } */
-    GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("TsubameLinkUnitState.GetSpeedVariationValue", 0x16DA100); }
+    GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal {
+        return Decimal.fromInt(unit.get_Speed()).mul(Decimal.fromFloat(f32(this._UpdateableEffectValue * this.upSpdRatio)).div(Decimal.fromInt(100)));
+    }
     /** @rva 0x16D9E90 slot 30  public Decimal GetAtkVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("TsubameLinkUnitState.GetAtkVariationValue", 0x16D9E90); }
     /** @rva 0x16D9970 slot 31  public AffectedUnitNoticeBundle GetAdditionalDamageResult(BattleUnit attackUnit, ActiveSkillBase attackSkill, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */
@@ -88,4 +92,7 @@ export class TsubameLinkUnitState extends UnitStateBase {  // implements IHasUpd
     CanAddTo$BattleUnitData(targetUnit: any /* BattleUnitData */): boolean { return notPorted("TsubameLinkUnitState.CanAddTo", 0x16D9950); }
     /** @rva 0x16D9FD0 slot 33  public Decimal GetSpeedVariationValue(BattleUnitData unit, Decimal processingValue) { } */
     GetSpeedVariationValue$BattleUnitData_Decimal(unit: any /* BattleUnitData */, processingValue: Decimal): Decimal { return notPorted("TsubameLinkUnitState.GetSpeedVariationValue", 0x16D9FD0); }
+    /** ISpeedVariation.GetSpeedVariationValue (interface slot 1): the C# overload taking BattleUnit; the name is suffixed
+     * here because of the BattleUnitData overload, so interface calls are forwarded to it. */
+    GetSpeedVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return this.GetSpeedVariationValue$BattleUnit_Decimal(unit, processingValue); }
 }

@@ -56,7 +56,11 @@ export abstract class DownGiveSlipDamageUnitStateBase extends UnitStateBase {  /
         return this;
     }
     /** @rva 0x15B8090 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
-    CanAddTo(targetUnit: BattleUnit): boolean { return notPorted("DownGiveSlipDamageUnitStateBase.CanAddTo", 0x15B8090); }
+    CanAddTo(targetUnit: BattleUnit): boolean {
+        // DamageBetterUnitStateBase.CanAddTo (0x15B8090)
+        if (!targetUnit.IsMatch$TargetRoleType(this._TargetRole)) return false;
+        return targetUnit.IsMatch$TargetElementType(this._TargetElement);
+    }
     /** @rva 0x15BAD90 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("DownGiveSlipDamageUnitStateBase.GetAIFilteredTargets", 0x15BAD90); }
     /** @rva 0x15BAF50 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */

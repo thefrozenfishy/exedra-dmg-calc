@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { IAccum$Accumulate } from "./IAccum";
 import { notPorted } from "../../runtime";
 import type { Decimal, int } from "../../runtime";
 import type { TargetElementType } from "../../Network/Definition/Battle/TargetElementType";
@@ -53,5 +54,7 @@ export class UpElementResistRatioAccumUnitState extends UpElementResistUnitState
     /** @rva 0x16E3FB0 slot 29  public override Decimal GetElementResistVariationValue(BattleUnit unit, TargetElementType attackElement) { } */
     GetElementResistVariationValue(unit: BattleUnit, attackElement: TargetElementType): Decimal { return notPorted("UpElementResistRatioAccumUnitState.GetElementResistVariationValue", 0x16E3FB0); }
     /** @rva 0x16E3F60 slot 37  public bool Blend(UnitStateBase injectUnitState) { } */
-    Blend(injectUnitState: UnitStateBase): boolean { return notPorted("UpElementResistRatioAccumUnitState.Blend", 0x16E3F60); }
+    Blend(injectUnitState: UnitStateBase): boolean {
+        return IAccum$Accumulate(this as unknown as IAccum, injectUnitState); // ((IAccum)this).Accumulate (default interface method, IAccum slot 6)
+    }
 }

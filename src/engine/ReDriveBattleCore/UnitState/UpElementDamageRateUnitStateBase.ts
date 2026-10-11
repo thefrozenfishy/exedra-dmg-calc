@@ -41,7 +41,10 @@ export abstract class UpElementDamageRateUnitStateBase extends ParameterVariatio
         return this;
     }
     /** @rva 0x15B9E40 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
-    CanAddTo(targetUnit: BattleUnit): boolean { return notPorted("UpElementDamageRateUnitStateBase.CanAddTo", 0x15B9E40); }
+    CanAddTo(targetUnit: BattleUnit): boolean {
+        // DownElementDamageRateUnitStateBase.CanAddTo (0x15B9E40)
+        return targetUnit.IsMatch$TargetRoleType(this._TargetRole);
+    }
     /** @rva -1 slot 30  public abstract Decimal GetElementDamageRateVariationValue(BattleUnit unit, TargetElementType attackElement); */
     abstract GetElementDamageRateVariationValue(unit: BattleUnit, attackElement: TargetElementType): Decimal;
     /** @rva 0x16E3980 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */

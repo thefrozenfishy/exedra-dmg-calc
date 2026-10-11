@@ -54,5 +54,10 @@ export class LockSpecialAttackUnitState extends UnitStateBase {  // implements I
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
     /** @rva 0x16D2940 slot 21  public override bool CanAddTo(BattleUnit unit) { } */
-    CanAddTo(unit: BattleUnit): boolean { return notPorted("LockSpecialAttackUnitState.CanAddTo", 0x16D2940); }
+    CanAddTo(unit: BattleUnit): boolean {
+        if (!unit._Condition._StateList.some(s => s instanceof LockSpecialAttackUnitState) && 0 < unit._MaxEP) { // OfType<>().Any()
+            return unit._MaxBP < 1;
+        }
+        return false;
+    }
 }

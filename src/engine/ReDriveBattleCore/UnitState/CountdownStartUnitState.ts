@@ -33,7 +33,9 @@ export class CountdownStartUnitState extends UnitStateBase {
     /** @rva 0x15B7290 slot 18  public override void OnAddedToCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
     OnAddedToCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void { return notPorted("CountdownStartUnitState.OnAddedToCondition", 0x15B7290); }
     /** @rva 0x15B7190 slot 21  public override bool CanAddTo(BattleUnit unit) { } */
-    CanAddTo(unit: BattleUnit): boolean { return notPorted("CountdownStartUnitState.CanAddTo", 0x15B7190); }
+    CanAddTo(unit: BattleUnit): boolean {
+        return !unit._Condition._StateList.some(s => s instanceof CountdownStartUnitState); // OfType<CountdownStartUnitState>().Any()
+    }
     /** @rva 0x15B7200 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];

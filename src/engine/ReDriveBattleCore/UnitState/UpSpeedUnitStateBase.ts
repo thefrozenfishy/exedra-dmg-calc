@@ -57,4 +57,7 @@ export abstract class UpSpeedUnitStateBase extends ParameterVariationUnitStateBa
     abstract GetSpeedVariationValue$BattleUnitData_Decimal(unit: any /* BattleUnitData */, processingValue: Decimal): Decimal;
     /** @rva 0x15BBB70 slot 32  public bool CanAddTo(BattleUnitData targetUnit) { } */
     CanAddTo$BattleUnitData(targetUnit: any /* BattleUnitData */): boolean { return notPorted("UpSpeedUnitStateBase.CanAddTo", 0x15BBB70); }
+    /** ISpeedVariation.GetSpeedVariationValue (interface slot 1): the C# overload taking BattleUnit; the name is suffixed
+     * here because of the BattleUnitData overload, so interface calls are forwarded to it. */
+    GetSpeedVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return this.GetSpeedVariationValue$BattleUnit_Decimal(unit, processingValue); }
 }
