@@ -26,7 +26,10 @@ export class StateAbilityEffect extends AbilityEffectBase {  // implements IBatt
     /** @rva 0x737A50  public void set_GiveUnitState(UnitStateBase value) { } */
     set_GiveUnitState(value: UnitStateBase): void { this._GiveUnitState = value; /* auto-property */ }
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("StateAbilityEffect..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x19023D0  public void .ctor(AbilityEffectInfo info, UnitStateBase giveUnitState, bool isIncludeDeadUnitInTarget) { } */
     ctor$AbilityEffectInfo_UnitStateBase_bool(info: AbilityEffectInfo, giveUnitState: UnitStateBase, isIncludeDeadUnitInTarget: boolean): this { return notPorted("StateAbilityEffect..ctor", 0x19023D0); }
     /** @rva 0x1901CB0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */

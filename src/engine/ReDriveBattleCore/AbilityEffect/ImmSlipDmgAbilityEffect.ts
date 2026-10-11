@@ -20,9 +20,15 @@ export class ImmSlipDmgAbilityEffect extends DamageAbilityEffectBase {
     /** @rva 0xD6FDF0 slot 13  public override DamageCategory get_DamageCategory() { } */
     get_DamageCategory(): DamageCategory { return 4 as DamageCategory; /* asm: mov eax, 4; ret */ }
     /** @rva 0x18F0810  protected void .ctor() { } */
-    ctor(): this { return notPorted("ImmSlipDmgAbilityEffect..ctor", 0x18F0810); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18F0800  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ImmSlipDmgAbilityEffect..ctor", 0x18F0800); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x18F4E90 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("ImmSlipDmgAbilityEffect.Triggering", 0x18F4E90); }
     /** @rva 0x18F4C60 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */

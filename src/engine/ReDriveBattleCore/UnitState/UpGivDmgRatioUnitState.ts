@@ -7,6 +7,7 @@ import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { AdditionType } from "./AdditionType";
 import type { DamageVariationUnitStateBase_CalculationType } from "./DamageVariationUnitStateBase";
 import { UpGiveDamageUnitStateBase } from "./UpGiveDamageUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpGivDmgRatioUnitState  (TypeDefIndex 566, public class) ----
 export class UpGivDmgRatioUnitState extends UpGiveDamageUnitStateBase {
@@ -16,9 +17,17 @@ export class UpGivDmgRatioUnitState extends UpGiveDamageUnitStateBase {
     /** @rva 0x7431D0 slot 28  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
     /** @rva 0x15BBF20  public float get_UpRatio() { } */
-    get_UpRatio(): float { return notPorted("UpGivDmgRatioUnitState.get_UpRatio", 0x15BBF20); }
+    get_UpRatio(): float {
+        return f32(this._UpdateableEffectValue / 10);
+    }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpGivDmgRatioUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpGivDmgRatioUnitState..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
 }

@@ -8,15 +8,24 @@ import { CountPointVariationAbilityEffectBase } from "./CountPointVariationAbili
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.GainCountPointAbilityEffect  (TypeDefIndex 1167, public class) ----
 export class GainCountPointAbilityEffect extends CountPointVariationAbilityEffectBase {
     /** 0x60 protected int gainPoint */
     gainPoint: int = 0;
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("GainCountPointAbilityEffect..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18ED6B0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("GainCountPointAbilityEffect..ctor", 0x18ED6B0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
+        this.gainPoint = info._EffectValue1;
+        return this;
+    }
     /** @rva 0x8A2200 slot 8  protected override int GetModifyCountPoint() { } */
     GetModifyCountPoint(): int { return this.gainPoint; /* asm: mov eax, dword ptr [rcx + 0x60]; ret */ }
     /** @rva 0x18F2950 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */

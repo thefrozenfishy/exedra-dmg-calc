@@ -9,13 +9,21 @@ import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.CountPointVariationAbilityEffectBase  (TypeDefIndex 1165, public abstract class) ----
 export abstract class CountPointVariationAbilityEffectBase extends AbilityEffectBase {
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("CountPointVariationAbilityEffectBase..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18EE3B0  protected void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("CountPointVariationAbilityEffectBase..ctor", 0x18EE3B0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
+        return this;
+    }
     /** @rva -1 slot 8  protected abstract int GetModifyCountPoint(); */
     abstract GetModifyCountPoint(): int;
     /** @rva 0x18EE190 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */

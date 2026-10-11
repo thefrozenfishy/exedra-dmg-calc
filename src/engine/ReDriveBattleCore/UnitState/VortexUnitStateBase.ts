@@ -9,6 +9,7 @@ import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { IStateIconNumberDisplayable } from "./IStateIconNumberDisplayable";
 import { ReceiveSlipDamageUnitStateBase } from "./ReceiveSlipDamageUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.VortexUnitStateBase  (TypeDefIndex 502, public abstract class) ----
 export abstract class VortexUnitStateBase extends ReceiveSlipDamageUnitStateBase {  // implements IStateIconNumberDisplayable
@@ -20,11 +21,17 @@ export abstract class VortexUnitStateBase extends ReceiveSlipDamageUnitStateBase
     get StateIconNumber(): int { return this.get_StateIconNumber(); }
     get IsShowZeroIfZero(): boolean { return this.get_IsShowZeroIfZero(); }
     /** @rva 0x15D20C0 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("VortexUnitStateBase.get_IconName", 0x15D20C0); }
+    get_IconName(): string {
+        return "vortex";
+    }
     /** @rva 0x15D2090 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("VortexUnitStateBase.get_GiveVisualEffectName", 0x15D2090); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_statehit_002";
+    }
     /** @rva 0x15D20F0 slot 33  public override string get_SlipDamageVisualEffectName() { } */
-    get_SlipDamageVisualEffectName(): string { return notPorted("VortexUnitStateBase.get_SlipDamageVisualEffectName", 0x15D20F0); }
+    get_SlipDamageVisualEffectName(): string {
+        return "eff_cmn_act_state_whirlpool_001";
+    }
     /** @rva 0x7E1AD0 slot 31  public override TargetElementType get_AttackElement() { } */
     get_AttackElement(): TargetElementType { return 2 as TargetElementType; /* asm: mov eax, 2; ret */ }
     /** @rva 0x76F830 slot 34  public override bool get_SkipDamageOnTurnBegin() { } */
@@ -40,9 +47,17 @@ export abstract class VortexUnitStateBase extends ReceiveSlipDamageUnitStateBase
     /** @rva 0x7360C0 slot 39  public bool get_IsShowZeroIfZero() { } */
     get_IsShowZeroIfZero(): boolean { return false; /* asm: xor al, al; ret */ }
     /** @rva 0x15B5FF0  protected void .ctor() { } */
-    ctor(): this { return notPorted("VortexUnitStateBase..ctor", 0x15B5FF0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15D1ED0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("VortexUnitStateBase..ctor", 0x15D1ED0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        this._RemainAttackCount = info._EffectValue2;
+        return this;
+    }
     /** @rva 0x15D1FA0 slot 36  public override float GetSlipDamageValue(BattleUnit attackUnit, BattleUnit defenseUnit, BattleType battleType, bool isImmediately) { } */
     GetSlipDamageValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, battleType: BattleType, isImmediately: boolean): float { return notPorted("VortexUnitStateBase.GetSlipDamageValue", 0x15D1FA0); }
 }

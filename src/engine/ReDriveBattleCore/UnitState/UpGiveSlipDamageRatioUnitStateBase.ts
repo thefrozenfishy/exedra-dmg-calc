@@ -7,6 +7,7 @@ import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { ReceiveSlipDamageUnitStateBase } from "./ReceiveSlipDamageUnitStateBase";
 import { UpGiveSlipDamageUnitStateBase } from "./UpGiveSlipDamageUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpGiveSlipDamageRatioUnitStateBase  (TypeDefIndex 787, public abstract class) ----
 export abstract class UpGiveSlipDamageRatioUnitStateBase extends UpGiveSlipDamageUnitStateBase {
@@ -14,9 +15,16 @@ export abstract class UpGiveSlipDamageRatioUnitStateBase extends UpGiveSlipDamag
     /** @rva 0x16E4B70  public Decimal get_UpRatio() { } */
     get_UpRatio(): Decimal { return notPorted("UpGiveSlipDamageRatioUnitStateBase.get_UpRatio", 0x16E4B70); }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpGiveSlipDamageRatioUnitStateBase..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpGiveSlipDamageRatioUnitStateBase..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x16E49A0 slot 32  public override Decimal GetSlipDamageVariationValue(ReceiveSlipDamageUnitStateBase state, BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageValue, Decimal processingValue) { } */
     GetSlipDamageVariationValue(state: ReceiveSlipDamageUnitStateBase, attackUnit: BattleUnit, defenseUnit: BattleUnit, damageValue: Decimal, processingValue: Decimal): Decimal { return notPorted("UpGiveSlipDamageRatioUnitStateBase.GetSlipDamageVariationValue", 0x16E49A0); }
 }

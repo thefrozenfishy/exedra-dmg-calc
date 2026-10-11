@@ -6,13 +6,21 @@ import type { Nullable } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import { BleedUnitStateBase } from "./BleedUnitStateBase";
 import type { ReceiveSlipDamageUnitStateBase_ParameterType } from "./ReceiveSlipDamageUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.BleedDefUnitState  (TypeDefIndex 516, public class) ----
 export class BleedDefUnitState extends BleedUnitStateBase {
     /** @rva 0x15B6090 slot 32  protected override Nullable<ReceiveSlipDamageUnitStateBase.ParameterType> get_DamageType() { } */
     get_DamageType(): Nullable<ReceiveSlipDamageUnitStateBase_ParameterType> { return notPorted("BleedDefUnitState.get_DamageType", 0x15B6090); }
     /** @rva 0x15B5FF0  protected void .ctor() { } */
-    ctor(): this { return notPorted("BleedDefUnitState..ctor", 0x15B5FF0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5F70  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("BleedDefUnitState..ctor", 0x15B5F70); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
 }

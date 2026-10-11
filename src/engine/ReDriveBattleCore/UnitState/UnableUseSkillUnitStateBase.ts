@@ -8,7 +8,13 @@ import { AbnormalUnitStateBase } from "./AbnormalUnitStateBase";
 // ---- ReDriveBattleCore.UnitState.UnableUseSkillUnitStateBase  (TypeDefIndex 494, public abstract class) ----
 export abstract class UnableUseSkillUnitStateBase extends AbnormalUnitStateBase {
     /** @rva 0x15C0960  protected void .ctor() { } */
-    ctor(): this { return notPorted("UnableUseSkillUnitStateBase..ctor", 0x15C0960); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15C09B0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UnableUseSkillUnitStateBase..ctor", 0x15C09B0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
 }

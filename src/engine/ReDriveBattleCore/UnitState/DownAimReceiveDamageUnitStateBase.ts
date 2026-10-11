@@ -3,26 +3,42 @@
 
 import { notPorted } from "../../runtime";
 import type { Decimal, IEnumerable } from "../../runtime";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { AdditionType } from "./AdditionType";
 import { AimDamageBetterUnitStateBase } from "./AimDamageBetterUnitStateBase";
 import type { IReceiveDamageVariation } from "./IReceiveDamageVariation";
+import type { List } from "../../runtime";
+import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 
 // ---- ReDriveBattleCore.UnitState.DownAimReceiveDamageUnitStateBase  (TypeDefIndex 529, public abstract class) ----
 export abstract class DownAimReceiveDamageUnitStateBase extends AimDamageBetterUnitStateBase {  // implements IReceiveDamageVariation
     static readonly __interfaces: readonly string[] = ['IReceiveDamageVariation'];
     /** @rva 0x15B8940 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("DownAimReceiveDamageUnitStateBase.get_IconName", 0x15B8940); }
+    get_IconName(): string {
+        return "battle_icon_dwn_rcv_dmg";
+    }
     /** @rva 0x759B30 slot 28  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 1 as AdditionType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DownAimReceiveDamageUnitStateBase..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DownAimReceiveDamageUnitStateBase..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15B85D0 slot 29  public override Decimal GetDamageVariationValue(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageValue, Decimal processingValue) { } */
     GetDamageVariationValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageValue: Decimal, processingValue: Decimal): Decimal { return notPorted("DownAimReceiveDamageUnitStateBase.GetDamageVariationValue", 0x15B85D0); }
     /** @rva 0x15B86E0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("DownAimReceiveDamageUnitStateBase.GetUnitFilterFuncOrder", 0x15B86E0); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        list.push(AISkillTargetSelector.UnitFilterByMainTarget);
+        list.push(AISkillTargetSelector.UnitFilterByRoleAttackerOrBreaker);
+        list.push(AISkillTargetSelector.UnitFilterWithMinDef);
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
 }

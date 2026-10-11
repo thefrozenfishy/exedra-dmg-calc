@@ -6,13 +6,22 @@ import type { int } from "../../runtime";
 import { LoseEpAbilityEffectBase } from "./LoseEpAbilityEffectBase";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.LoseEpRatioAbilityEffect  (TypeDefIndex 1191, public class) ----
 export class LoseEpRatioAbilityEffect extends LoseEpAbilityEffectBase {
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("LoseEpRatioAbilityEffect..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18F5990  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("LoseEpRatioAbilityEffect..ctor", 0x18F5990); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
+        this.effectValue = info._EffectValue1;
+        return this;
+    }
     /** @rva 0x18F61A0 slot 8  public override int GetLosePoint(BattleUnit targetUnit) { } */
     GetLosePoint(targetUnit: BattleUnit): int { return notPorted("LoseEpRatioAbilityEffect.GetLosePoint", 0x18F61A0); }
 }

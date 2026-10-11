@@ -39,9 +39,20 @@ export abstract class UniqueAccumUnitStateBase extends UniqueUnitStateBase {  //
     /** @rva 0x7360C0 slot 28  public bool get_IsShowZeroIfZero() { } */
     get_IsShowZeroIfZero(): boolean { return false; /* asm: xor al, al; ret */ }
     /** @rva 0x16DE010  protected void .ctor() { } */
-    ctor(): this { return notPorted("UniqueAccumUnitStateBase..ctor", 0x16DE010); }
+    ctor(): this {
+        this._AccumCount = 1;
+        super.ctor();
+        return this;
+    }
     /** @rva 0x16DE030  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UniqueAccumUnitStateBase..ctor", 0x16DE030); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this._AccumCount = 1;
+        this.iconName = "";
+        super.ctor$AbilityEffectInfo(info);
+        this._UniqueStatePatternMstId = info._EffectValue1;
+        this._AccumCountMax = info._EffectValue2;
+        return this;
+    }
     /** @rva 0x16DDAF0 slot 25  public bool Blend(UnitStateBase injectUnitState) { } */
     Blend(injectUnitState: UnitStateBase): boolean { return notPorted("UniqueAccumUnitStateBase.Blend", 0x16DDAF0); }
     /** @rva 0x16DDC10 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */

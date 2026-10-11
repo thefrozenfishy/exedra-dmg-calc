@@ -21,13 +21,23 @@ export abstract class DownElementDamageRateUnitStateBase extends ParameterVariat
     /** @rva 0x759B30 slot 27  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 1 as AdditionType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x15BA2F0 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("DownElementDamageRateUnitStateBase.get_IconName", 0x15BA2F0); }
+    get_IconName(): string {
+        return "battle_icon_dwn_giv_dmg";
+    }
     /** @rva 0x15BA2C0 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("DownElementDamageRateUnitStateBase.get_GiveVisualEffectName", 0x15BA2C0); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_debuff_appear_001";
+    }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DownElementDamageRateUnitStateBase..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DownElementDamageRateUnitStateBase..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15B9E40 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean { return notPorted("DownElementDamageRateUnitStateBase.CanAddTo", 0x15B9E40); }
     /** @rva -1 slot 30  public abstract Decimal GetElementDamageRateVariationValue(BattleUnit unit, TargetElementType attackElement); */

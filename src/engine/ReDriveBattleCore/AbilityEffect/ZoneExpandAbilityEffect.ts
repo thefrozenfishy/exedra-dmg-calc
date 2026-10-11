@@ -16,9 +16,19 @@ export class ZoneExpandAbilityEffect extends ZoneAbilityEffectBase {
     /** 0x68 protected int zoneEffectId */
     zoneEffectId: int = 0;
     /** @rva 0x1906360  protected void .ctor() { } */
-    ctor(): this { return notPorted("ZoneExpandAbilityEffect..ctor", 0x1906360); }
+    ctor(): this {
+        this.zoneEffectId = -1;
+        super.ctor();
+        return this;
+    }
     /** @rva 0x1906310  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ZoneExpandAbilityEffect..ctor", 0x1906310); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this.zoneEffectId = -1;
+        super.ctor$AbilityEffectInfo(info);
+        this.zoneUnitStatePatternId = info._EffectValue1;
+        this.zoneEffectId = info._TargetElement;
+        return this;
+    }
     /** @rva 0x1905FF0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("ZoneExpandAbilityEffect.Triggering", 0x1905FF0); }
     /** @rva 0x1905D50 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */

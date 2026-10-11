@@ -10,6 +10,7 @@ import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.ChargeAbilityEffect  (TypeDefIndex 1156, public class) ----
 export class ChargeAbilityEffect extends AbilityEffectBase {
@@ -30,9 +31,18 @@ export class ChargeAbilityEffect extends AbilityEffectBase {
     /** @rva 0x8A22F0  public void set_MaxChargePoint(int value) { } */
     set_MaxChargePoint(value: int): void { this._MaxChargePoint = value; /* auto-property */ }
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("ChargeAbilityEffect..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18ECBB0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ChargeAbilityEffect..ctor", 0x18ECBB0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
+        this._InitChargePoint = info._EffectValue1;
+        this._MaxChargePoint = info._EffectValue2;
+        return this;
+    }
     /** @rva 0x18EC990 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("ChargeAbilityEffect.Triggering", 0x18EC990); }
     /** @rva 0x18EC400 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */

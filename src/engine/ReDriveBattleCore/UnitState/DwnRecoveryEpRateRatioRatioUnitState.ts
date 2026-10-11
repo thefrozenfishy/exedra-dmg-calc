@@ -6,6 +6,7 @@ import type { float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { DwnRecoveryEpRateRatioUnitStateBase } from "./DwnRecoveryEpRateRatioUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnRecoveryEpRateRatioRatioUnitState  (TypeDefIndex 618, public class) ----
 export class DwnRecoveryEpRateRatioRatioUnitState extends DwnRecoveryEpRateRatioUnitStateBase {
@@ -18,9 +19,16 @@ export class DwnRecoveryEpRateRatioRatioUnitState extends DwnRecoveryEpRateRatio
     /** @rva 0x754810  public void set_DownRatio(float value) { } */
     set_DownRatio(value: float): void { this._DownRatio = value; /* auto-property */ }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DwnRecoveryEpRateRatioRatioUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15BE830  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DwnRecoveryEpRateRatioRatioUnitState..ctor", 0x15BE830); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._DownRatio = f32(f32(info._EffectValue1) / 10);
+        return this;
+    }
     /** @rva 0x15BE810 slot 30  public override float GetRecoveryEpRateRatioVariationValue(BattleUnit unit, float processingValue) { } */
     GetRecoveryEpRateRatioVariationValue(unit: BattleUnit, processingValue: float): float { return notPorted("DwnRecoveryEpRateRatioRatioUnitState.GetRecoveryEpRateRatioVariationValue", 0x15BE810); }
 }

@@ -6,16 +6,28 @@ import type { float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UpCtrUnitStateBase } from "./UpCtrUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpCtrFixedUnitState  (TypeDefIndex 767, public class) ----
 export class UpCtrFixedUnitState extends UpCtrUnitStateBase {
     get UpFixed(): float { return this.get_UpFixed(); }
     /** @rva 0x15BBF20  public float get_UpFixed() { } */
-    get_UpFixed(): float { return notPorted("UpCtrFixedUnitState.get_UpFixed", 0x15BBF20); }
+    get_UpFixed(): float {
+        return f32(this._UpdateableEffectValue / 10);
+    }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpCtrFixedUnitState..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpCtrFixedUnitState..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x15BBF20 slot 30  public override float GetCtrVariationValue(BattleUnit unit, float processingValue) { } */
-    GetCtrVariationValue(unit: BattleUnit, processingValue: float): float { return notPorted("UpCtrFixedUnitState.GetCtrVariationValue", 0x15BBF20); }
+    GetCtrVariationValue(unit: BattleUnit, processingValue: float): float {
+        return f32(this._UpdateableEffectValue / 10);
+    }
 }

@@ -6,6 +6,7 @@ import type { Decimal, float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UpAttackUnitStateBase } from "./UpAttackUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpAtkFixedUnitState  (TypeDefIndex 752, public class) ----
 export class UpAtkFixedUnitState extends UpAttackUnitStateBase {
@@ -13,9 +14,16 @@ export class UpAtkFixedUnitState extends UpAttackUnitStateBase {
     /** @rva 0xC646A0  public float get_UpFixed() { } */
     get_UpFixed(): float { return this._UpdateableEffectValue; /* asm: movss xmm0, dword ptr [rcx + 0x88]; ret */ }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpAtkFixedUnitState..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpAtkFixedUnitState..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x16E0A90 slot 30  public override Decimal GetAtkVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("UpAtkFixedUnitState.GetAtkVariationValue", 0x16E0A90); }
 }

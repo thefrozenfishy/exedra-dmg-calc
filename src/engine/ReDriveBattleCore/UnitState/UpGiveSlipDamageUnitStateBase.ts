@@ -18,6 +18,7 @@ import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import type { ReceiveSlipDamageUnitStateBase } from "./ReceiveSlipDamageUnitStateBase";
 import { UnitStateBase } from "./UnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpGiveSlipDamageUnitStateBase  (TypeDefIndex 786, public abstract class) ----
 export abstract class UpGiveSlipDamageUnitStateBase extends UnitStateBase {  // implements IGiveSlipDamageVariation, IBuff, IHasUpdateableEffectValue
@@ -30,9 +31,13 @@ export abstract class UpGiveSlipDamageUnitStateBase extends UnitStateBase {  // 
     /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
     /** @rva 0x16E5370 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("UpGiveSlipDamageUnitStateBase.get_IconName", 0x16E5370); }
+    get_IconName(): string {
+        return "battle_icon_up_giv_dmg";
+    }
     /** @rva 0x16E5340 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("UpGiveSlipDamageUnitStateBase.get_GiveVisualEffectName", 0x16E5340); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_buff_appear_001";
+    }
     /** @rva 0x7431D0 slot 25  public AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
     /** @rva 0xC646A0 slot 29  public float get_UpdateableEffectValue() { } */
@@ -40,9 +45,16 @@ export abstract class UpGiveSlipDamageUnitStateBase extends UnitStateBase {  // 
     /** @rva 0xC646B0 slot 30  public void set_UpdateableEffectValue(float value) { } */
     set_UpdateableEffectValue(value: float): void { this._UpdateableEffectValue = value; /* auto-property */ }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpGiveSlipDamageUnitStateBase..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpGiveSlipDamageUnitStateBase..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x15B8090 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean { return notPorted("UpGiveSlipDamageUnitStateBase.CanAddTo", 0x15B8090); }
     /** @rva 0x16E4C30 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */

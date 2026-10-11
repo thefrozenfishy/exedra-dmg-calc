@@ -5,7 +5,7 @@ import { notPorted } from "../../runtime";
 import type { IEnumerable, List, int } from "../../runtime";
 import type { RangeType } from "../../Network/Definition/Battle/RangeType";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AbilityEffectBase_TargetSideType } from "../AbilityEffect/AbilityEffectBase";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
@@ -31,11 +31,23 @@ export class UniqueZoneUnitState extends UniqueUnitStateBase {  // implements IN
     /** @rva 0x76F830 slot 12  public override bool get_IsDontShowAddStateFlip() { } */
     get_IsDontShowAddStateFlip(): boolean { return true; /* asm: mov al, 1; ret */ }
     /** @rva 0x16DE0F0  protected void .ctor() { } */
-    ctor(): this { return notPorted("UniqueZoneUnitState..ctor", 0x16DE0F0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x16DF6B0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UniqueZoneUnitState..ctor", 0x16DF6B0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this.iconName = "";
+        super.ctor$AbilityEffectInfo(info);
+        this._UniqueStatePatternMstId = info._EffectValue1;
+        this.targetTypeNum = info._EffectValue2;
+        return this;
+    }
     /** @rva 0x16DF4F0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("UniqueZoneUnitState.GetAIFilteredTargets", 0x16DF4F0); }
     /** @rva 0x16DF620 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("UniqueZoneUnitState.GetUnitFilterFuncOrder", 0x16DF620); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
 }

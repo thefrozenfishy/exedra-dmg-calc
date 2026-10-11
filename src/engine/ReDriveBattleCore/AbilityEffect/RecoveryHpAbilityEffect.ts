@@ -6,6 +6,7 @@ import type { Decimal, int } from "../../runtime";
 import { RecoveryHpAbilityEffectBase } from "./RecoveryHpAbilityEffectBase";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.RecoveryHpAbilityEffect  (TypeDefIndex 1198, public class) ----
 export class RecoveryHpAbilityEffect extends RecoveryHpAbilityEffectBase {
@@ -26,9 +27,18 @@ export class RecoveryHpAbilityEffect extends RecoveryHpAbilityEffectBase {
     /** @rva 0x8A22F0  public void set_RecoveryFixed(int value) { } */
     set_RecoveryFixed(value: int): void { this._RecoveryFixed = value; /* auto-property */ }
     /** @rva 0x18FE570  protected void .ctor() { } */
-    ctor(): this { return notPorted("RecoveryHpAbilityEffect..ctor", 0x18FE570); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18FE5C0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("RecoveryHpAbilityEffect..ctor", 0x18FE5C0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
+        this._RecoveryRatio = info._EffectValue1;
+        this._RecoveryFixed = info._EffectValue2;
+        return this;
+    }
     /** @rva 0x18FE3C0 slot 8  public override Decimal GetBaseRecoveryValue(BattleUnit userUnit) { } */
     GetBaseRecoveryValue(userUnit: BattleUnit): Decimal { return notPorted("RecoveryHpAbilityEffect.GetBaseRecoveryValue", 0x18FE3C0); }
 }

@@ -14,7 +14,13 @@ export class DmgHpAbilityEffect extends DamageAbilityEffectBase {
     /** @rva 0x759B30 slot 13  public override DamageCategory get_DamageCategory() { } */
     get_DamageCategory(): DamageCategory { return 1 as DamageCategory; /* asm: mov eax, 1; ret */ }
     /** @rva 0x18F0810  protected void .ctor() { } */
-    ctor(): this { return notPorted("DmgHpAbilityEffect..ctor", 0x18F0810); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18F0800  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DmgHpAbilityEffect..ctor", 0x18F0800); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
 }

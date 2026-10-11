@@ -21,7 +21,10 @@ export class DmgRandomAbilityEffect extends DmgAtkAbilityEffect {
     /** @rva 0x7E1AD0 slot 13  public override DamageCategory get_DamageCategory() { } */
     get_DamageCategory(): DamageCategory { return 2 as DamageCategory; /* asm: mov eax, 2; ret */ }
     /** @rva 0x18F0810  protected void .ctor() { } */
-    ctor(): this { return notPorted("DmgRandomAbilityEffect..ctor", 0x18F0810); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18F1210  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DmgRandomAbilityEffect..ctor", 0x18F1210); }
     /** @rva 0x18F08B0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */

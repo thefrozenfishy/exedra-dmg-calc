@@ -15,11 +15,19 @@ export abstract class HateUnitStateBase extends UnitStateBase {  // implements I
     /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
     /** @rva 0x16D1AB0 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("HateUnitStateBase.get_GiveVisualEffectName", 0x16D1AB0); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_buff_appear_001";
+    }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("HateUnitStateBase..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15B3AA0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("HateUnitStateBase..ctor", 0x15B3AA0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva -1 slot 26  public abstract int GetHateVariationWeight(); */
     abstract GetHateVariationWeight(): int;
 }

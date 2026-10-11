@@ -8,6 +8,7 @@ import type { BattleUnit } from "../BattleUnit";
 import type { AdditionType } from "./AdditionType";
 import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import { UnitStateBase } from "./UnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.ParameterVariationUnitStateBase  (TypeDefIndex 689, public abstract class) ----
 export abstract class ParameterVariationUnitStateBase extends UnitStateBase {  // implements IHasUpdateableEffectValue
@@ -24,9 +25,16 @@ export abstract class ParameterVariationUnitStateBase extends UnitStateBase {  /
     /** @rva -1 slot 27  public abstract AdditionType get_Addition(); */
     abstract get_Addition(): AdditionType;
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("ParameterVariationUnitStateBase..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ParameterVariationUnitStateBase..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x15B8090 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean { return notPorted("ParameterVariationUnitStateBase.CanAddTo", 0x15B8090); }
 }

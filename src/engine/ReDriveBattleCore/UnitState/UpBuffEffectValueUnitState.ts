@@ -11,13 +11,21 @@ import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { UnitStateBase } from "./UnitStateBase";
 import { UpEffectValueUnitStateBase } from "./UpEffectValueUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpBuffEffectValueUnitState  (TypeDefIndex 627, public class) ----
 export class UpBuffEffectValueUnitState extends UpEffectValueUnitStateBase {
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpBuffEffectValueUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B9DC0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpBuffEffectValueUnitState..ctor", 0x15B9DC0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpRatio = f32(f32(info._EffectValue1) / 10);
+        return this;
+    }
     /** @rva 0x15CFE80 slot 27  public override float GetEffectValueVariationRate(UnitStateBase targetState) { } */
     GetEffectValueVariationRate(targetState: UnitStateBase): float { return notPorted("UpBuffEffectValueUnitState.GetEffectValueVariationRate", 0x15CFE80); }
     /** @rva 0x15CFC50 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */

@@ -11,15 +11,27 @@ import { UnableActionUnitStateBase } from "./UnableActionUnitStateBase";
 // ---- ReDriveBattleCore.UnitState.StunUnitState  (TypeDefIndex 511, public class) ----
 export class StunUnitState extends UnableActionUnitStateBase {
     /** @rva 0x15C0A70 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("StunUnitState.get_IconName", 0x15C0A70); }
+    get_IconName(): string {
+        return "stun";
+    }
     /** @rva 0x15C0A40 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("StunUnitState.get_GiveVisualEffectName", 0x15C0A40); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_statehit_004";
+    }
     /** @rva 0x15C0A10 slot 14  public override string get_AlwaysVisualEffectName() { } */
-    get_AlwaysVisualEffectName(): string { return notPorted("StunUnitState.get_AlwaysVisualEffectName", 0x15C0A10); }
+    get_AlwaysVisualEffectName(): string {
+        return "eff_cmn_act_state_stun_002";
+    }
     /** @rva 0x15C0960  protected void .ctor() { } */
-    ctor(): this { return notPorted("StunUnitState..ctor", 0x15C0960); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15C09B0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("StunUnitState..ctor", 0x15C09B0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15C0850 slot 19  public override void OnRemovingFromCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
     OnRemovingFromCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void { return notPorted("StunUnitState.OnRemovingFromCondition", 0x15C0850); }
 }

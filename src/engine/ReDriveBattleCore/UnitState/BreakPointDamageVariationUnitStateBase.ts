@@ -11,6 +11,7 @@ import type { GameDirectorBase } from "../GameDirectorBase";
 import type { AdditionType } from "./AdditionType";
 import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import { UnitStateBase } from "./UnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.BreakPointDamageVariationUnitStateBase  (TypeDefIndex 694, public abstract class) ----
 export abstract class BreakPointDamageVariationUnitStateBase extends UnitStateBase {  // implements IHasUpdateableEffectValue
@@ -26,9 +27,16 @@ export abstract class BreakPointDamageVariationUnitStateBase extends UnitStateBa
     /** @rva 0xC646B0 slot 26  public void set_UpdateableEffectValue(float value) { } */
     set_UpdateableEffectValue(value: float): void { this._UpdateableEffectValue = value; /* auto-property */ }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("BreakPointDamageVariationUnitStateBase..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("BreakPointDamageVariationUnitStateBase..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva -1 slot 27  public abstract BreakPointDamageVariationUnitStateBase.CalculationType get_Calculation(); */
     abstract get_Calculation(): BreakPointDamageVariationUnitStateBase_CalculationType;
     /** @rva -1 slot 28  public abstract AdditionType get_Addition(); */

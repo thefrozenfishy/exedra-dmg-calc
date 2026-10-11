@@ -8,7 +8,13 @@ import { UpGivBreakPointDmgRatioUnitState } from "./UpGivBreakPointDmgRatioUnitS
 // ---- ReDriveBattleCore.UnitState.CpnUpGivBreakPointDmgRatioUnitState  (TypeDefIndex 553, public class) ----
 export class CpnUpGivBreakPointDmgRatioUnitState extends UpGivBreakPointDmgRatioUnitState {
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("CpnUpGivBreakPointDmgRatioUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("CpnUpGivBreakPointDmgRatioUnitState..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
 }

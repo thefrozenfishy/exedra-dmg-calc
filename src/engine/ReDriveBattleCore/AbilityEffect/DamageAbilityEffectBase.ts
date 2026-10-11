@@ -127,5 +127,11 @@ export class DamageAbilityEffectBase_TargetInfo {
     /** @rva 0xF0D4D0  public void set_RangeDamageRatio(float value) { } */
     set_RangeDamageRatio(value: float): void { this._RangeDamageRatio = value; /* auto-property */ }
     /** @rva 0x19030F0  public void .ctor(BattleUnit unit, CorrelationEffect correlationEffect) { } */
-    ctor$BattleUnit_CorrelationEffect(unit: BattleUnit, correlationEffect: CorrelationEffect): this { return notPorted("DamageAbilityEffectBase_TargetInfo..ctor", 0x19030F0); }
+    ctor$BattleUnit_CorrelationEffect(unit: BattleUnit, correlationEffect: CorrelationEffect): this {
+        this._UnitId = unit._Id;
+        this._TotalDamageRatio = correlationEffect._TotalDamageRatio;
+        this._Hp = unit._HP;
+        this._RangeDamageRatio = correlationEffect._TotalDamageRatio;
+        return this;
+    }
 }

@@ -5,19 +5,33 @@ import { notPorted } from "../../runtime";
 import type { TargetElementType } from "../../Network/Definition/Battle/TargetElementType";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import { ReceiveSlipDamageUnitStateBase } from "./ReceiveSlipDamageUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.BurnUnitStateBase  (TypeDefIndex 498, public abstract class) ----
 export abstract class BurnUnitStateBase extends ReceiveSlipDamageUnitStateBase {
     /** @rva 0x15B6340 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("BurnUnitStateBase.get_IconName", 0x15B6340); }
+    get_IconName(): string {
+        return "burn";
+    }
     /** @rva 0x15B6310 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("BurnUnitStateBase.get_GiveVisualEffectName", 0x15B6310); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_statehit_001";
+    }
     /** @rva 0x15B6370 slot 33  public override string get_SlipDamageVisualEffectName() { } */
-    get_SlipDamageVisualEffectName(): string { return notPorted("BurnUnitStateBase.get_SlipDamageVisualEffectName", 0x15B6370); }
+    get_SlipDamageVisualEffectName(): string {
+        return "eff_cmn_act_state_burn_001";
+    }
     /** @rva 0x759B30 slot 31  public override TargetElementType get_AttackElement() { } */
     get_AttackElement(): TargetElementType { return 1 as TargetElementType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x15B5FF0  protected void .ctor() { } */
-    ctor(): this { return notPorted("BurnUnitStateBase..ctor", 0x15B5FF0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5F70  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("BurnUnitStateBase..ctor", 0x15B5F70); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
 }

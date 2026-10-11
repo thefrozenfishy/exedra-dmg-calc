@@ -12,5 +12,8 @@ export class DebugDisplayableAttribute {
     /** @rva 0x730C50  public string get_EntryName() { } */
     get_EntryName(): string { return this._EntryName; /* auto-property */ }
     /** @rva 0x730C10  public void .ctor(string entryName = "") { } */
-    ctor$string(entryName?: string /* = "" */): this { return notPorted("DebugDisplayableAttribute..ctor", 0x730C10); }
+    ctor$string(entryName?: string /* = "" */): this {
+        this._EntryName = (entryName ?? "");
+        return this;
+    }
 }

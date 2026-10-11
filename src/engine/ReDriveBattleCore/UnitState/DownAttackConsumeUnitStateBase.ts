@@ -13,11 +13,19 @@ import type { IConsumeRemainCountOnAttack } from "./IConsumeRemainCountOnAttack"
 export abstract class DownAttackConsumeUnitStateBase extends DownAttackUnitStateBase {  // implements IConsumeRemainCountOnAttack, IConsumeRemainCount
     static readonly __interfaces: readonly string[] = ['IConsumeRemainCountOnAttack', 'IConsumeRemainCount'];
     /** @rva 0x15B8A30 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("DownAttackConsumeUnitStateBase.get_IconName", 0x15B8A30); }
+    get_IconName(): string {
+        return "battle_icon_consume_dwn_atk";
+    }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DownAttackConsumeUnitStateBase..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DownAttackConsumeUnitStateBase..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15B8970 slot 30  public override Decimal GetAtkVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("DownAttackConsumeUnitStateBase.GetAtkVariationValue", 0x15B8970); }
     /** @rva -1 slot 36  protected abstract Decimal GetAtkVariationValueIfRemainCount(BattleUnit unit, Decimal processingValue); */

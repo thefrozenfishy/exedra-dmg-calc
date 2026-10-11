@@ -11,6 +11,7 @@ import type { IAbnormalHitRateVariation } from "./IAbnormalHitRateVariation";
 import type { IBuff } from "./IBuff";
 import { ParameterVariationUnitStateBase } from "./ParameterVariationUnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpAbnormalHitRateUnitStateBase  (TypeDefIndex 743, public abstract class) ----
 export abstract class UpAbnormalHitRateUnitStateBase extends ParameterVariationUnitStateBase {  // implements IAbnormalHitRateVariation, IBuff
@@ -20,13 +21,24 @@ export abstract class UpAbnormalHitRateUnitStateBase extends ParameterVariationU
     /** @rva 0x7431D0 slot 27  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
     /** @rva 0x16E0360 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("UpAbnormalHitRateUnitStateBase.get_IconName", 0x16E0360); }
+    get_IconName(): string {
+        return "battle_icon_up_hit_rate";
+    }
     /** @rva 0x16E0330 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("UpAbnormalHitRateUnitStateBase.get_GiveVisualEffectName", 0x16E0330); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_buff_appear_001";
+    }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpAbnormalHitRateUnitStateBase..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpAbnormalHitRateUnitStateBase..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva -1 slot 30  public abstract float GetAbnormalHitRateVariationValue(BattleUnit unit, float processingValue); */
     abstract GetAbnormalHitRateVariationValue(unit: BattleUnit, processingValue: float): float;
     /** @rva 0x16E0050 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */

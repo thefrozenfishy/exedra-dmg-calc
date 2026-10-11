@@ -5,13 +5,21 @@ import { notPorted } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { UnitStateBase } from "./UnitStateBase";
 import { UpGiveSlipDamageRatioUnitStateBase } from "./UpGiveSlipDamageRatioUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpGivSlipDmgRatioUnitState  (TypeDefIndex 788, public class) ----
 export class UpGivSlipDmgRatioUnitState extends UpGiveSlipDamageRatioUnitStateBase {
     /** @rva 0x16CF610  public void .ctor() { } */
-    ctor(): this { return notPorted("UpGivSlipDmgRatioUnitState..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpGivSlipDmgRatioUnitState..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x16E48A0 slot 31  public override bool IsTarget(UnitStateBase state) { } */
     IsTarget(state: UnitStateBase): boolean { return notPorted("UpGivSlipDmgRatioUnitState.IsTarget", 0x16E48A0); }
 }

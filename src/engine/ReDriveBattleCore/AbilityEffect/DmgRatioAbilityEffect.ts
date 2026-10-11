@@ -11,6 +11,7 @@ import type { BattleUnit } from "../BattleUnit";
 import type { DamageCategory } from "../DamageCategory";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.AbilityEffect.DmgRatioAbilityEffect  (TypeDefIndex 1181, public class) ----
 export class DmgRatioAbilityEffect extends DamageAbilityEffectBase {
@@ -23,9 +24,17 @@ export class DmgRatioAbilityEffect extends DamageAbilityEffectBase {
     /** @rva 0xDB7A40 slot 13  public override DamageCategory get_DamageCategory() { } */
     get_DamageCategory(): DamageCategory { return 6 as DamageCategory; /* asm: mov eax, 6; ret */ }
     /** @rva 0x18F0810  protected void .ctor() { } */
-    ctor(): this { return notPorted("DmgRatioAbilityEffect..ctor", 0x18F0810); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18F17A0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DmgRatioAbilityEffect..ctor", 0x18F17A0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this.damagePowerCurrentHpRatio = f32(f32(info._EffectValue1) / 1000);
+        this.damagePowerMaxHpRatio = f32(f32(info._EffectValue2) / 1000);
+        return this;
+    }
     /** @rva 0x18F1320 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("DmgRatioAbilityEffect.Triggering", 0x18F1320); }
 }

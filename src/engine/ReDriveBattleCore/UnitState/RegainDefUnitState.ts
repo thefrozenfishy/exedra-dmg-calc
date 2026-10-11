@@ -10,9 +10,17 @@ import { RegainUnitStateBase } from "./RegainUnitStateBase";
 // ---- ReDriveBattleCore.UnitState.RegainDefUnitState  (TypeDefIndex 654, public class) ----
 export class RegainDefUnitState extends RegainUnitStateBase {
     /** @rva 0x16CF610  public void .ctor() { } */
-    ctor(): this { return notPorted("RegainDefUnitState..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15B7FD0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("RegainDefUnitState..ctor", 0x15B7FD0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this.recoveryRatio = info._EffectValue1;
+        this.recoveryFixed = info._EffectValue2;
+        return this;
+    }
     /** @rva 0x16D7030 slot 26  public override Decimal GetParameterValue(BattleUnit sourceUnit) { } */
     GetParameterValue(sourceUnit: BattleUnit): Decimal { return notPorted("RegainDefUnitState.GetParameterValue", 0x16D7030); }
 }

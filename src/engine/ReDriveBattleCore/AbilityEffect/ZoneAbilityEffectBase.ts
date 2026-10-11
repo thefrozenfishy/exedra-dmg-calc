@@ -12,9 +12,16 @@ export abstract class ZoneAbilityEffectBase extends AbilityEffectBase {
     /** 0x60 protected int zoneUnitStatePatternId */
     zoneUnitStatePatternId: int = 0;
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("ZoneAbilityEffectBase..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x19000A0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ZoneAbilityEffectBase..ctor", 0x19000A0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this.zoneUnitStatePatternId = info._EffectValue1;
+        return this;
+    }
     /** @rva 0x1905A80 slot 4  public override void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */
     SelectTargets(userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, selectFriendUnitId: int, attackTargetId?: int /* = 0 */): void { return notPorted("ZoneAbilityEffectBase.SelectTargets", 0x1905A80); }
     /** @rva 0x1905840  protected bool CanRemoveZone(BattleUnit targetUnit, int targetPatternId = 0) { } */

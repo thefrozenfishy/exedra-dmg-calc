@@ -7,6 +7,7 @@ import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { AdditionType } from "./AdditionType";
 import type { DamageVariationUnitStateBase_CalculationType } from "./DamageVariationUnitStateBase";
 import { DownReceiveDamageUnitStateBase } from "./DownReceiveDamageUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnRcvDmgRatioUnitState  (TypeDefIndex 565, public class) ----
 export class DwnRcvDmgRatioUnitState extends DownReceiveDamageUnitStateBase {
@@ -16,9 +17,17 @@ export class DwnRcvDmgRatioUnitState extends DownReceiveDamageUnitStateBase {
     /** @rva 0x759B30 slot 28  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 1 as AdditionType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x15BBF20  public float get_DownRatio() { } */
-    get_DownRatio(): float { return notPorted("DwnRcvDmgRatioUnitState.get_DownRatio", 0x15BBF20); }
+    get_DownRatio(): float {
+        return f32(this._UpdateableEffectValue / 10);
+    }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DwnRcvDmgRatioUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DwnRcvDmgRatioUnitState..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
 }

@@ -18,6 +18,7 @@ import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import type { ReceiveSlipDamageUnitStateBase } from "./ReceiveSlipDamageUnitStateBase";
 import { UnitStateBase } from "./UnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DownGiveSlipDamageUnitStateBase  (TypeDefIndex 604, public abstract class) ----
 export abstract class DownGiveSlipDamageUnitStateBase extends UnitStateBase {  // implements IGiveSlipDamageVariation, IDebuff, IHasUpdateableEffectValue
@@ -30,9 +31,13 @@ export abstract class DownGiveSlipDamageUnitStateBase extends UnitStateBase {  /
     /** @rva 0x759B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 1 as UnitStateBase_DirectionType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x15BB560 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("DownGiveSlipDamageUnitStateBase.get_IconName", 0x15BB560); }
+    get_IconName(): string {
+        return "battle_icon_dwn_giv_dmg";
+    }
     /** @rva 0x15BB530 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("DownGiveSlipDamageUnitStateBase.get_GiveVisualEffectName", 0x15BB530); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_debuff_appear_001";
+    }
     /** @rva 0x759B30 slot 25  public AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 1 as AdditionType; /* asm: mov eax, 1; ret */ }
     /** @rva 0xC646A0 slot 29  public float get_UpdateableEffectValue() { } */
@@ -40,9 +45,16 @@ export abstract class DownGiveSlipDamageUnitStateBase extends UnitStateBase {  /
     /** @rva 0xC646B0 slot 30  public void set_UpdateableEffectValue(float value) { } */
     set_UpdateableEffectValue(value: float): void { this._UpdateableEffectValue = value; /* auto-property */ }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DownGiveSlipDamageUnitStateBase..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DownGiveSlipDamageUnitStateBase..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x15B8090 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean { return notPorted("DownGiveSlipDamageUnitStateBase.CanAddTo", 0x15B8090); }
     /** @rva 0x15BAD90 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */

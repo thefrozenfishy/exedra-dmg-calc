@@ -11,6 +11,7 @@ import type { IBlendable } from "./IBlendable";
 import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import type { IStateIconNumberDisplayable } from "./IStateIconNumberDisplayable";
 import type { UnitStateBase } from "./UnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnDefAccumRatioUnitState  (TypeDefIndex 598, public class) ----
 export class DwnDefAccumRatioUnitState extends DownDefenseUnitStateBase {  // implements IAccum, IBlendable, IHasUpdateableEffectValue, IStateIconNumberDisplayable
@@ -25,7 +26,9 @@ export class DwnDefAccumRatioUnitState extends DownDefenseUnitStateBase {  // im
     get AccumCount(): int { return this.get_AccumCount(); }
     set AccumCount(v: int) { this.set_AccumCount(v); }
     /** @rva 0x15BBF20  public float get_DownRatio() { } */
-    get_DownRatio(): float { return notPorted("DwnDefAccumRatioUnitState.get_DownRatio", 0x15BBF20); }
+    get_DownRatio(): float {
+        return f32(this._UpdateableEffectValue / 10);
+    }
     /** @rva 0x902980 slot 31  public int get_AccumCountMax() { } */
     get_AccumCountMax(): int { return this._AccumCountMax; /* auto-property */ }
     /** @rva 0x9029B0 slot 32  public void set_AccumCountMax(int value) { } */
@@ -35,9 +38,18 @@ export class DwnDefAccumRatioUnitState extends DownDefenseUnitStateBase {  // im
     /** @rva 0x9029A0 slot 34  public void set_AccumCount(int value) { } */
     set_AccumCount(value: int): void { this._AccumCount = value; /* auto-property */ }
     /** @rva 0x15BC130  protected void .ctor() { } */
-    ctor(): this { return notPorted("DwnDefAccumRatioUnitState..ctor", 0x15BC130); }
+    ctor(): this {
+        this._AccumCount = 1;
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15BC0E0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DwnDefAccumRatioUnitState..ctor", 0x15BC0E0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this._AccumCount = 1;
+        super.ctor$AbilityEffectInfo(info);
+        this._AccumCountMax = info._EffectValue2;
+        return this;
+    }
     /** @rva 0x15BCB40 slot 30  public override Decimal GetDefVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetDefVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("DwnDefAccumRatioUnitState.GetDefVariationValue", 0x15BCB40); }
     /** @rva 0x15BCAF0 slot 38  public bool Blend(UnitStateBase injectUnitState) { } */

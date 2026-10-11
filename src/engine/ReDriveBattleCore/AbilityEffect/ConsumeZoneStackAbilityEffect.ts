@@ -10,15 +10,24 @@ import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.ConsumeZoneStackAbilityEffect  (TypeDefIndex 1240, public class) ----
 export class ConsumeZoneStackAbilityEffect extends AbilityEffectBase {
     /** 0x60 protected int consumeZoneStack */
     consumeZoneStack: int = 0;
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("ConsumeZoneStackAbilityEffect..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18ED430  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ConsumeZoneStackAbilityEffect..ctor", 0x18ED430); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
+        this.consumeZoneStack = info._EffectValue1;
+        return this;
+    }
     /** @rva 0x18ED9E0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("ConsumeZoneStackAbilityEffect.Triggering", 0x18ED9E0); }
     /** @rva 0x18ED6F0 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */

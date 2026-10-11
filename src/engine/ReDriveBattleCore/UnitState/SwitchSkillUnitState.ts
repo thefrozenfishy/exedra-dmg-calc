@@ -4,11 +4,12 @@
 import { notPorted } from "../../runtime";
 import type { IEnumerable, int } from "../../runtime";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UnitStateBase } from "./UnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
+import type { List } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.SwitchSkillUnitState  (TypeDefIndex 656, public class) ----
 export class SwitchSkillUnitState extends UnitStateBase {
@@ -24,7 +25,9 @@ export class SwitchSkillUnitState extends UnitStateBase {
     /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
     /** @rva 0x16D8E00 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("SwitchSkillUnitState.get_IconName", 0x16D8E00); }
+    get_IconName(): string {
+        return "battle_icon_switch_skill";
+    }
     /** @rva 0xC2A210 slot 8  public override int get_IconPriority() { } */
     get_IconPriority(): int { return 100; /* asm: mov eax, 0x64; ret */ }
     /** @rva 0x76F830 slot 9  public override bool get_ShowStateIconAttachedByPassiveSkill() { } */
@@ -36,9 +39,15 @@ export class SwitchSkillUnitState extends UnitStateBase {
     /** @rva 0x16D8E30  public SkillType get_SkillType() { } */
     get_SkillType(): SkillType { return notPorted("SwitchSkillUnitState.get_SkillType", 0x16D8E30); }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("SwitchSkillUnitState..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x16D8CC0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("SwitchSkillUnitState..ctor", 0x16D8CC0); }
     /** @rva 0x16D8C30 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("SwitchSkillUnitState.GetUnitFilterFuncOrder", 0x16D8C30); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
 }

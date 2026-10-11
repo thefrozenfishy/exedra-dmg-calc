@@ -6,13 +6,21 @@ import type { Nullable } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import { CurseUnitStateBase } from "./CurseUnitStateBase";
 import type { ReceiveSlipDamageUnitStateBase_ParameterType } from "./ReceiveSlipDamageUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.CurseAtkUnitState  (TypeDefIndex 512, public class) ----
 export class CurseAtkUnitState extends CurseUnitStateBase {
     /** @rva 0x15B73A0 slot 32  protected override Nullable<ReceiveSlipDamageUnitStateBase.ParameterType> get_DamageType() { } */
     get_DamageType(): Nullable<ReceiveSlipDamageUnitStateBase_ParameterType> { return notPorted("CurseAtkUnitState.get_DamageType", 0x15B73A0); }
     /** @rva 0x15B5FF0  protected void .ctor() { } */
-    ctor(): this { return notPorted("CurseAtkUnitState..ctor", 0x15B5FF0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5F70  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("CurseAtkUnitState..ctor", 0x15B5F70); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
 }

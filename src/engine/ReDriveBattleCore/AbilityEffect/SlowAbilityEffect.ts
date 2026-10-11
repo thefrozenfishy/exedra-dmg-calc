@@ -9,15 +9,24 @@ import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.SlowAbilityEffect  (TypeDefIndex 1226, public class) ----
 export class SlowAbilityEffect extends AbilityEffectBase {
     /** 0x60 protected int slowRate */
     slowRate: int = 0;
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("SlowAbilityEffect..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18ED6B0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("SlowAbilityEffect..ctor", 0x18ED6B0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
+        this.slowRate = info._EffectValue1;
+        return this;
+    }
     /** @rva 0x1900F80 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("SlowAbilityEffect.Triggering", 0x1900F80); }
     /** @rva 0x1900B20  public float GetResultGaugeValue(float gaugeValue, float speed) { } */

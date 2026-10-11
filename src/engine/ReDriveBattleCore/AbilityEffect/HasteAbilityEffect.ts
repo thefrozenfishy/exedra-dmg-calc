@@ -10,15 +10,24 @@ import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.HasteAbilityEffect  (TypeDefIndex 1224, public class) ----
 export class HasteAbilityEffect extends AbilityEffectBase {
     /** 0x60 protected int hasteRate */
     hasteRate: int = 0;
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("HasteAbilityEffect..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18ED430  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("HasteAbilityEffect..ctor", 0x18ED430); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
+        this.hasteRate = info._EffectValue1;
+        return this;
+    }
     /** @rva 0x18F4840 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("HasteAbilityEffect.Triggering", 0x18F4840); }
     /** @rva 0x18F43E0  public float GetResultGaugeValue(float gaugeValue, float speed) { } */

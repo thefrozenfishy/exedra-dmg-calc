@@ -6,16 +6,25 @@ import type { float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { DownCtrUnitStateBase } from "./DownCtrUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnCtrFixedUnitState  (TypeDefIndex 593, public class) ----
 export class DwnCtrFixedUnitState extends DownCtrUnitStateBase {
     get DownFixed(): float { return this.get_DownFixed(); }
     /** @rva 0x15BBF20  public float get_DownFixed() { } */
-    get_DownFixed(): float { return notPorted("DwnCtrFixedUnitState.get_DownFixed", 0x15BBF20); }
+    get_DownFixed(): float {
+        return f32(this._UpdateableEffectValue / 10);
+    }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DwnCtrFixedUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DwnCtrFixedUnitState..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15BCAC0 slot 30  public override float GetCtrVariationValue(BattleUnit unit, float processingValue) { } */
     GetCtrVariationValue(unit: BattleUnit, processingValue: float): float { return notPorted("DwnCtrFixedUnitState.GetCtrVariationValue", 0x15BCAC0); }
 }

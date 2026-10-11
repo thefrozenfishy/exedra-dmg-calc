@@ -7,6 +7,7 @@ import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { DownReceiveRecoveryUnitStateBase } from "./DownReceiveRecoveryUnitStateBase";
 import type { IReceiveRecoveryVariation } from "./IReceiveRecoveryVariation";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnRcvRecoveryRatioUnitState  (TypeDefIndex 615, public class) ----
 export class DwnRcvRecoveryRatioUnitState extends DownReceiveRecoveryUnitStateBase {  // implements IReceiveRecoveryVariation
@@ -15,9 +16,16 @@ export class DwnRcvRecoveryRatioUnitState extends DownReceiveRecoveryUnitStateBa
     /** @rva 0x15BE750  public Decimal get_DownRatio() { } */
     get_DownRatio(): Decimal { return notPorted("DwnRcvRecoveryRatioUnitState.get_DownRatio", 0x15BE750); }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DwnRcvRecoveryRatioUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DwnRcvRecoveryRatioUnitState..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x15BE5D0 slot 29  public Decimal GetReceiveRecoveryVariationValue(BattleUnit unit, Decimal recoveryValue, Decimal processingValue) { } */
     GetReceiveRecoveryVariationValue(unit: BattleUnit, recoveryValue: Decimal, processingValue: Decimal): Decimal { return notPorted("DwnRcvRecoveryRatioUnitState.GetReceiveRecoveryVariationValue", 0x15BE5D0); }
 }

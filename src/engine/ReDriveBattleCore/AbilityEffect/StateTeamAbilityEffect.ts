@@ -14,7 +14,11 @@ export class StateTeamAbilityEffect extends StateAbilityEffect {
     /** 0x68 public ITargetTeam.TeamTargetType TeamTargetType */
     TeamTargetType: ITargetTeam_TeamTargetType = 0 as ITargetTeam_TeamTargetType;
     /** @rva 0x1902AC0  protected void .ctor() { } */
-    ctor(): this { return notPorted("StateTeamAbilityEffect..ctor", 0x1902AC0); }
+    ctor(): this {
+        this.TeamTargetType = 2 as ITargetTeam_TeamTargetType;
+        super.ctor();
+        return this;
+    }
     /** @rva 0x1902920  public void .ctor(AbilityEffectInfo info, UnitStateBase giveUnitState, bool isIncludeDeadUnitInTarget) { } */
     ctor$AbilityEffectInfo_UnitStateBase_bool(info: AbilityEffectInfo, giveUnitState: UnitStateBase, isIncludeDeadUnitInTarget: boolean): this { return notPorted("StateTeamAbilityEffect..ctor", 0x1902920); }
     /** @rva 0x1902520 slot 4  public override void SelectTargets(BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, int selectFriendUnitId, int attackTargetId = 0) { } */

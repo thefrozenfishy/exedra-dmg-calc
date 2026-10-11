@@ -13,9 +13,19 @@ export class UniqueBuffUnitState extends UniqueUnitStateBase {  // implements IB
     /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
     /** @rva 0x16DE180 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("UniqueBuffUnitState.get_GiveVisualEffectName", 0x16DE180); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_buff_appear_001";
+    }
     /** @rva 0x16DE0F0  protected void .ctor() { } */
-    ctor(): this { return notPorted("UniqueBuffUnitState..ctor", 0x16DE0F0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x16DE100  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UniqueBuffUnitState..ctor", 0x16DE100); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this.iconName = "";
+        super.ctor$AbilityEffectInfo(info);
+        this._UniqueStatePatternMstId = info._EffectValue1;
+        return this;
+    }
 }

@@ -11,12 +11,14 @@ import { BurnUnitStateBase } from "./BurnUnitStateBase";
 import { AbnormalType } from "./AbnormalType";
 import { isAssignableFrom, notPorted, runCctor } from "../../runtime";
 import type { Dictionary, IEnumerable, Ref, Type } from "../../runtime";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 
 import { UnitStateBase } from "./UnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
+import type { List } from "../../runtime";
+import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 
 // ---- ReDriveBattleCore.UnitState.AbnormalUnitStateBase  (TypeDefIndex 493, public abstract class) ----
 export abstract class AbnormalUnitStateBase extends UnitStateBase {
@@ -37,11 +39,23 @@ export abstract class AbnormalUnitStateBase extends UnitStateBase {
     /** @rva 0x759B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 1 as UnitStateBase_DirectionType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("AbnormalUnitStateBase..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B3AA0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("AbnormalUnitStateBase..ctor", 0x15B3AA0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15B3440 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("AbnormalUnitStateBase.GetUnitFilterFuncOrder", 0x15B3440); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        list.push(AISkillTargetSelector.UnitFilterByMainTarget);
+        list.push(AISkillTargetSelector.UnitFilterByBreak);
+        list.push(AISkillTargetSelector.UnitFilterWithMaxAtk);
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
     /** @rva 0x15B3860  private static void .cctor() { } */
     static cctor(): void {
         // lazy (runCctor): the types below extend this class

@@ -3,13 +3,16 @@
 
 import { notPorted } from "../../runtime";
 import type { IEnumerable, float } from "../../runtime";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { IBuff } from "./IBuff";
 import type { IConsumeRemainCount } from "./IConsumeRemainCount";
 import { UnitStateBase } from "./UnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
+import { f32 } from "../../runtime";
+import type { List } from "../../runtime";
+import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 
 // ---- ReDriveBattleCore.UnitState.ShieldUnitState  (TypeDefIndex 655, public class) ----
 export class ShieldUnitState extends UnitStateBase {  // implements IBuff, IConsumeRemainCount
@@ -21,17 +24,32 @@ export class ShieldUnitState extends UnitStateBase {  // implements IBuff, ICons
     /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
     /** @rva 0x16D7E20 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("ShieldUnitState.get_IconName", 0x16D7E20); }
+    get_IconName(): string {
+        return "battle_icon_shield";
+    }
     /** @rva 0xC646A0  public float get_DecreaseRatio() { } */
     get_DecreaseRatio(): float { return this._DecreaseRatio; /* auto-property */ }
     /** @rva 0xC646B0  public void set_DecreaseRatio(float value) { } */
     set_DecreaseRatio(value: float): void { this._DecreaseRatio = value; /* auto-property */ }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("ShieldUnitState..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x16D7DD0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ShieldUnitState..ctor", 0x16D7DD0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._DecreaseRatio = f32(f32(info._EffectValue1) / 1000);
+        return this;
+    }
     /** @rva 0x16D7B70 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("ShieldUnitState.GetUnitFilterFuncOrder", 0x16D7B70); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        list.push(AISkillTargetSelector.UnitFilterByMainTarget);
+        list.push(AISkillTargetSelector.UnitFilterByRoleAttackerOrBreaker);
+        list.push(AISkillTargetSelector.UnitFilterWithMinDef);
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
     /** @rva 0x16D7B20  public void ConsumeRemainCount() { } */
     ConsumeRemainCount(): void { return notPorted("ShieldUnitState.ConsumeRemainCount", 0x16D7B20); }
 }

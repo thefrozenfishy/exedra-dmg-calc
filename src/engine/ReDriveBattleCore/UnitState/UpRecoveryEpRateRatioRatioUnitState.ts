@@ -6,6 +6,7 @@ import type { float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UpRecoveryEpRateRatioUnitStateBase } from "./UpRecoveryEpRateRatioUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpRecoveryEpRateRatioRatioUnitState  (TypeDefIndex 806, public class) ----
 export class UpRecoveryEpRateRatioRatioUnitState extends UpRecoveryEpRateRatioUnitStateBase {
@@ -18,9 +19,17 @@ export class UpRecoveryEpRateRatioRatioUnitState extends UpRecoveryEpRateRatioUn
     /** @rva 0x754810  public void set_UpRatio(float value) { } */
     set_UpRatio(value: float): void { this._UpRatio = value; /* auto-property */ }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpRecoveryEpRateRatioRatioUnitState..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x16D19F0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpRecoveryEpRateRatioRatioUnitState..ctor", 0x16D19F0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        this._UpRatio = f32(f32(info._EffectValue1) / 10);
+        return this;
+    }
     /** @rva 0x754560 slot 30  public override float GetRecoveryEpRateRatioVariationValue(BattleUnit unit, float processingValue) { } */
     GetRecoveryEpRateRatioVariationValue(unit: BattleUnit, processingValue: float): float { return this._UpRatio; /* asm: movss xmm0, dword ptr [rcx + 0x90]; ret */ }
 }

@@ -14,11 +14,19 @@ export abstract class DamageWorseUnitStateBase extends DamageVariationUnitStateB
     /** @rva 0x759B30 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 1 as UnitStateBase_DirectionType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x15B8120 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("DamageWorseUnitStateBase.get_GiveVisualEffectName", 0x15B8120); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_debuff_appear_001";
+    }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DamageWorseUnitStateBase..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DamageWorseUnitStateBase..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15B8090 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean { return notPorted("DamageWorseUnitStateBase.CanAddTo", 0x15B8090); }
 }

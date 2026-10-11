@@ -9,11 +9,20 @@ import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
+import { ActBase_Define } from "../Act/ActBase";
+import { AdditionalSkillActAbilityEffectBase_AdditionalSkillTargetType } from "./AdditionalSkillActAbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.AdditionalCountdownZeroSkillActAbilityEffect  (TypeDefIndex 1140, public class) ----
 export class AdditionalCountdownZeroSkillActAbilityEffect extends AdditionalSkillActAbilityEffectBase {
     /** @rva 0x18EA2F0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("AdditionalCountdownZeroSkillActAbilityEffect..ctor", 0x18EA2F0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this.priority = ActBase_Define.AdditionalSkillDefaultPriority;
+        super.ctor$AbilityEffectInfo(info);
+        this.skillMstId = info._EffectValue1;
+        this.additionalSkillTargetType = info._EffectValue2 as AdditionalSkillActAbilityEffectBase_AdditionalSkillTargetType;
+        this.priority = ActBase_Define.CountdownAdditionalSkillActPriority;
+        return this;
+    }
     /** @rva 0x18EA100 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("AdditionalCountdownZeroSkillActAbilityEffect.Triggering", 0x18EA100); }
 }

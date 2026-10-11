@@ -13,9 +13,22 @@ export class UniqueBuffAccumUnitState extends UniqueAccumUnitStateBase {  // imp
     /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
     /** @rva 0x16DE0C0 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("UniqueBuffAccumUnitState.get_GiveVisualEffectName", 0x16DE0C0); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_buff_appear_001";
+    }
     /** @rva 0x16DE010  protected void .ctor() { } */
-    ctor(): this { return notPorted("UniqueBuffAccumUnitState..ctor", 0x16DE010); }
+    ctor(): this {
+        this._AccumCount = 1;
+        super.ctor();
+        return this;
+    }
     /** @rva 0x16DE030  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UniqueBuffAccumUnitState..ctor", 0x16DE030); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this._AccumCount = 1;
+        this.iconName = "";
+        super.ctor$AbilityEffectInfo(info);
+        this._UniqueStatePatternMstId = info._EffectValue1;
+        this._AccumCountMax = info._EffectValue2;
+        return this;
+    }
 }

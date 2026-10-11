@@ -18,9 +18,13 @@ export class WeaknessUnitState extends AbnormalUnitStateBase {  // implements IA
     get DownAtkRatio(): int { return this.get_DownAtkRatio(); }
     get DownDefRatio(): int { return this.get_DownDefRatio(); }
     /** @rva 0x15D2B20 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("WeaknessUnitState.get_IconName", 0x15D2B20); }
+    get_IconName(): string {
+        return "weakness";
+    }
     /** @rva 0x15D2AF0 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("WeaknessUnitState.get_GiveVisualEffectName", 0x15D2AF0); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_state_weakness_001";
+    }
     /** @rva 0x759B30 slot 25  private AdditionType ReDriveBattleCore.UnitState.IAtkVariation.get_Addition() { } */
     get_IAtkVariation$Addition(): AdditionType { return 1 as AdditionType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x759B30 slot 27  private AdditionType ReDriveBattleCore.UnitState.IDefVariation.get_Addition() { } */
@@ -30,9 +34,15 @@ export class WeaknessUnitState extends AbnormalUnitStateBase {  // implements IA
     /** @rva 0x118F480  public int get_DownDefRatio() { } */
     get_DownDefRatio(): int { return 10; /* asm: mov eax, 0xa; ret */ }
     /** @rva 0x15D2A40  protected void .ctor() { } */
-    ctor(): this { return notPorted("WeaknessUnitState..ctor", 0x15D2A40); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15D2A90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("WeaknessUnitState..ctor", 0x15D2A90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15D2840 slot 26  public Decimal GetAtkVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("WeaknessUnitState.GetAtkVariationValue", 0x15D2840); }
     /** @rva 0x15D2940 slot 28  public Decimal GetDefVariationValue(BattleUnit unit, Decimal processingValue) { } */

@@ -11,6 +11,7 @@ import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import type { IStateIconNumberDisplayable } from "./IStateIconNumberDisplayable";
 import type { UnitStateBase } from "./UnitStateBase";
 import { UpSpeedUnitStateBase } from "./UpSpeedUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpSpdAccumRatioUnitState  (TypeDefIndex 809, public class) ----
 export class UpSpdAccumRatioUnitState extends UpSpeedUnitStateBase {  // implements IAccum, IBlendable, IHasUpdateableEffectValue, IStateIconNumberDisplayable
@@ -25,7 +26,9 @@ export class UpSpdAccumRatioUnitState extends UpSpeedUnitStateBase {  // impleme
     get AccumCount(): int { return this.get_AccumCount(); }
     set AccumCount(v: int) { this.set_AccumCount(v); }
     /** @rva 0x15BBF20  public float get_UpRatio() { } */
-    get_UpRatio(): float { return notPorted("UpSpdAccumRatioUnitState.get_UpRatio", 0x15BBF20); }
+    get_UpRatio(): float {
+        return f32(this._UpdateableEffectValue / 10);
+    }
     /** @rva 0x902980 slot 35  public int get_AccumCountMax() { } */
     get_AccumCountMax(): int { return this._AccumCountMax; /* auto-property */ }
     /** @rva 0x9029B0 slot 36  public void set_AccumCountMax(int value) { } */
@@ -35,9 +38,19 @@ export class UpSpdAccumRatioUnitState extends UpSpeedUnitStateBase {  // impleme
     /** @rva 0x9029A0 slot 38  public void set_AccumCount(int value) { } */
     set_AccumCount(value: int): void { this._AccumCount = value; /* auto-property */ }
     /** @rva 0x16E0870  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpSpdAccumRatioUnitState..ctor", 0x16E0870); }
+    ctor(): this {
+        this._AccumCount = 1;
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x16E0810  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpSpdAccumRatioUnitState..ctor", 0x16E0810); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this._AccumCount = 1;
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        this._AccumCountMax = info._EffectValue2;
+        return this;
+    }
     /** @rva 0x16E6E10 slot 33  public override Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("UpSpdAccumRatioUnitState.GetSpeedVariationValue", 0x16E6E10); }
     /** @rva 0x16E6C50 slot 42  public bool Blend(UnitStateBase injectUnitState) { } */

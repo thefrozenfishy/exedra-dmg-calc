@@ -10,6 +10,7 @@ import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.ZoneStackAbilityEffect  (TypeDefIndex 1235, public class) ----
 export class ZoneStackAbilityEffect extends AbilityEffectBase {
@@ -20,9 +21,18 @@ export class ZoneStackAbilityEffect extends AbilityEffectBase {
     /** private const int MaxZoneStack */
     static readonly MaxZoneStack: int = 3;
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("ZoneStackAbilityEffect..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18ECBB0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ZoneStackAbilityEffect..ctor", 0x18ECBB0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
+        this.initialZoneStack = info._EffectValue1;
+        this.maxZoneStack = info._EffectValue2;
+        return this;
+    }
     /** @rva 0x1906D60 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("ZoneStackAbilityEffect.Triggering", 0x1906D60); }
     /** @rva 0x1906920 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */

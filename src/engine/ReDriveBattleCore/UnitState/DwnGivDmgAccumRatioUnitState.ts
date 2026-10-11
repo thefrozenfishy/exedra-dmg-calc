@@ -13,6 +13,7 @@ import type { IBlendable } from "./IBlendable";
 import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import type { IStateIconNumberDisplayable } from "./IStateIconNumberDisplayable";
 import type { UnitStateBase } from "./UnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnGivDmgAccumRatioUnitState  (TypeDefIndex 575, public class) ----
 export class DwnGivDmgAccumRatioUnitState extends DownGiveDamageUnitStateBase {  // implements IAccum, IBlendable, IHasUpdateableEffectValue, IStateIconNumberDisplayable
@@ -31,7 +32,9 @@ export class DwnGivDmgAccumRatioUnitState extends DownGiveDamageUnitStateBase { 
     /** @rva 0x759B30 slot 28  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 1 as AdditionType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x15BBF20  public float get_DownRatio() { } */
-    get_DownRatio(): float { return notPorted("DwnGivDmgAccumRatioUnitState.get_DownRatio", 0x15BBF20); }
+    get_DownRatio(): float {
+        return f32(this._UpdateableEffectValue / 10);
+    }
     /** @rva 0x902980 slot 32  public int get_AccumCountMax() { } */
     get_AccumCountMax(): int { return this._AccumCountMax; /* auto-property */ }
     /** @rva 0x9029B0 slot 33  public void set_AccumCountMax(int value) { } */
@@ -41,9 +44,18 @@ export class DwnGivDmgAccumRatioUnitState extends DownGiveDamageUnitStateBase { 
     /** @rva 0x9029A0 slot 35  public void set_AccumCount(int value) { } */
     set_AccumCount(value: int): void { this._AccumCount = value; /* auto-property */ }
     /** @rva 0x15BC130  protected void .ctor() { } */
-    ctor(): this { return notPorted("DwnGivDmgAccumRatioUnitState..ctor", 0x15BC130); }
+    ctor(): this {
+        this._AccumCount = 1;
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15BC0E0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DwnGivDmgAccumRatioUnitState..ctor", 0x15BC0E0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this._AccumCount = 1;
+        super.ctor$AbilityEffectInfo(info);
+        this._AccumCountMax = info._EffectValue2;
+        return this;
+    }
     /** @rva 0x15BD760 slot 29  public override Decimal GetDamageVariationValue(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageValue, Decimal processingValue) { } */
     GetDamageVariationValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageValue: Decimal, processingValue: Decimal): Decimal { return notPorted("DwnGivDmgAccumRatioUnitState.GetDamageVariationValue", 0x15BD760); }
     /** @rva 0x15BD710 slot 39  public bool Blend(UnitStateBase injectUnitState) { } */

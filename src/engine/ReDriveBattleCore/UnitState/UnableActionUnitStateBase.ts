@@ -9,9 +9,15 @@ import { UnableUseSkillUnitStateBase } from "./UnableUseSkillUnitStateBase";
 // ---- ReDriveBattleCore.UnitState.UnableActionUnitStateBase  (TypeDefIndex 495, public abstract class) ----
 export abstract class UnableActionUnitStateBase extends UnableUseSkillUnitStateBase {
     /** @rva 0x15C0960  protected void .ctor() { } */
-    ctor(): this { return notPorted("UnableActionUnitStateBase..ctor", 0x15C0960); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15C09B0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UnableActionUnitStateBase..ctor", 0x15C09B0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15C89B0 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean { return notPorted("UnableActionUnitStateBase.CanAddTo", 0x15C89B0); }
 }

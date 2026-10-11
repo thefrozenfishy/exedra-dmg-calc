@@ -15,9 +15,15 @@ export abstract class EffectValueVariationUnitStateBase extends UnitStateBase { 
     /** @rva 0x15BF350 slot 26  private int ReDriveBattleCore.IBattleStartTriggerPriority.get_Priority() { } */
     get_IBattleStartTriggerPriority$Priority(): int { return notPorted("EffectValueVariationUnitStateBase.ReDriveBattleCore.IBattleStartTriggerPriority.get_Priority", 0x15BF350); }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("EffectValueVariationUnitStateBase..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B3AA0  protected void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("EffectValueVariationUnitStateBase..ctor", 0x15B3AA0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva -1 slot 27  public abstract float GetEffectValueVariationRate(UnitStateBase targetState); */
     abstract GetEffectValueVariationRate(targetState: UnitStateBase): float;
 }

@@ -6,6 +6,7 @@ import type { Decimal, float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UpHpUnitStateBase } from "./UpHpUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpHpFixedUnitState  (TypeDefIndex 798, public class) ----
 export class UpHpFixedUnitState extends UpHpUnitStateBase {
@@ -13,9 +14,16 @@ export class UpHpFixedUnitState extends UpHpUnitStateBase {
     /** @rva 0xC646A0  public float get_UpFixed() { } */
     get_UpFixed(): float { return this._UpdateableEffectValue; /* asm: movss xmm0, dword ptr [rcx + 0x88]; ret */ }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpHpFixedUnitState..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpHpFixedUnitState..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x16E5B00 slot 30  public override Decimal GetMaxHpVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetMaxHpVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("UpHpFixedUnitState.GetMaxHpVariationValue", 0x16E5B00); }
 }

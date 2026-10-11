@@ -10,16 +10,26 @@ import type { BattleUnit } from "../BattleUnit";
 import type { IConsumeRemainCount } from "./IConsumeRemainCount";
 import type { IConsumeRemainCountOnAttack } from "./IConsumeRemainCountOnAttack";
 import { UpCtdFixedUnitState } from "./UpCtdFixedUnitState";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpCtdConsumeFixedUnitState  (TypeDefIndex 765, public class) ----
 export class UpCtdConsumeFixedUnitState extends UpCtdFixedUnitState {  // implements IConsumeRemainCountOnAttack, IConsumeRemainCount
     static readonly __interfaces: readonly string[] = ['IConsumeRemainCountOnAttack', 'IConsumeRemainCount'];
     /** @rva 0x16E1F10 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("UpCtdConsumeFixedUnitState.get_IconName", 0x16E1F10); }
+    get_IconName(): string {
+        return "battle_icon_consume_up_ctd";
+    }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpCtdConsumeFixedUnitState..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpCtdConsumeFixedUnitState..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x16E1D00 slot 30  public override float GetCtdVariationValue(BattleUnit unit, float processingValue) { } */
     GetCtdVariationValue(unit: BattleUnit, processingValue: float): float { return notPorted("UpCtdConsumeFixedUnitState.GetCtdVariationValue", 0x16E1D00); }
     /** @rva 0x16E1D20 slot 31  public bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */

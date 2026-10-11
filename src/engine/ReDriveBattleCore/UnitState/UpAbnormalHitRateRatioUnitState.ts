@@ -6,16 +6,28 @@ import type { float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UpAbnormalHitRateUnitStateBase } from "./UpAbnormalHitRateUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpAbnormalHitRateRatioUnitState  (TypeDefIndex 744, public class) ----
 export class UpAbnormalHitRateRatioUnitState extends UpAbnormalHitRateUnitStateBase {
     get UpRatio(): float { return this.get_UpRatio(); }
     /** @rva 0x15BBF20  public float get_UpRatio() { } */
-    get_UpRatio(): float { return notPorted("UpAbnormalHitRateRatioUnitState.get_UpRatio", 0x15BBF20); }
+    get_UpRatio(): float {
+        return f32(this._UpdateableEffectValue / 10);
+    }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpAbnormalHitRateRatioUnitState..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpAbnormalHitRateRatioUnitState..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x15BBF20 slot 30  public override float GetAbnormalHitRateVariationValue(BattleUnit unit, float processingValue) { } */
-    GetAbnormalHitRateVariationValue(unit: BattleUnit, processingValue: float): float { return notPorted("UpAbnormalHitRateRatioUnitState.GetAbnormalHitRateVariationValue", 0x15BBF20); }
+    GetAbnormalHitRateVariationValue(unit: BattleUnit, processingValue: float): float {
+        return f32(this._UpdateableEffectValue / 10);
+    }
 }

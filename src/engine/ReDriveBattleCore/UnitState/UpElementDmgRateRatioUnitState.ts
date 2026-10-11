@@ -7,6 +7,7 @@ import type { TargetElementType } from "../../Network/Definition/Battle/TargetEl
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UpElementDamageRateUnitStateBase } from "./UpElementDamageRateUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpElementDmgRateRatioUnitState  (TypeDefIndex 781, public class) ----
 export class UpElementDmgRateRatioUnitState extends UpElementDamageRateUnitStateBase {
@@ -14,9 +15,16 @@ export class UpElementDmgRateRatioUnitState extends UpElementDamageRateUnitState
     /** @rva 0x16E3EA0  public Decimal get_UpRatio() { } */
     get_UpRatio(): Decimal { return notPorted("UpElementDmgRateRatioUnitState.get_UpRatio", 0x16E3EA0); }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpElementDmgRateRatioUnitState..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpElementDmgRateRatioUnitState..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x16E3D70 slot 30  public override Decimal GetElementDamageRateVariationValue(BattleUnit unit, TargetElementType attackElement) { } */
     GetElementDamageRateVariationValue(unit: BattleUnit, attackElement: TargetElementType): Decimal { return notPorted("UpElementDmgRateRatioUnitState.GetElementDamageRateVariationValue", 0x16E3D70); }
 }

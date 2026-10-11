@@ -3,12 +3,14 @@
 
 import { notPorted } from "../../runtime";
 import type { IEnumerable, float } from "../../runtime";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { AdditionType } from "./AdditionType";
 import { DamageBetterUnitStateBase } from "./DamageBetterUnitStateBase";
 import type { DamageVariationUnitStateBase_CalculationType } from "./DamageVariationUnitStateBase";
+import { f32 } from "../../runtime";
+import type { List } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.GveUpSpecialAttackFinalGiveDamageRatioUnitState  (TypeDefIndex 569, public class) ----
 export class GveUpSpecialAttackFinalGiveDamageRatioUnitState extends DamageBetterUnitStateBase {
@@ -18,11 +20,22 @@ export class GveUpSpecialAttackFinalGiveDamageRatioUnitState extends DamageBette
     /** @rva 0x7431D0 slot 28  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
     /** @rva 0x15BBF20  public float get_UpRatio() { } */
-    get_UpRatio(): float { return notPorted("GveUpSpecialAttackFinalGiveDamageRatioUnitState.get_UpRatio", 0x15BBF20); }
+    get_UpRatio(): float {
+        return f32(this._UpdateableEffectValue / 10);
+    }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("GveUpSpecialAttackFinalGiveDamageRatioUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("GveUpSpecialAttackFinalGiveDamageRatioUnitState..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15BF3A0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("GveUpSpecialAttackFinalGiveDamageRatioUnitState.GetUnitFilterFuncOrder", 0x15BF3A0); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
 }

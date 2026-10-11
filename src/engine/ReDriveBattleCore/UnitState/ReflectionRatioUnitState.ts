@@ -18,7 +18,10 @@ export class ReflectionRatioUnitState extends ReflectionUnitStateBase {
     /** @rva 0x754810  public void set_ReflectionRatio(float value) { } */
     set_ReflectionRatio(value: float): void { this._ReflectionRatio = value; /* auto-property */ }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("ReflectionRatioUnitState..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x16D6520  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ReflectionRatioUnitState..ctor", 0x16D6520); }
     /** @rva 0x16D62F0 slot 25  protected override Decimal GetDamageBase(BattleUnit userUnit) { } */

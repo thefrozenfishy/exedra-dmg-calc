@@ -3,7 +3,7 @@
 
 import { notPorted } from "../../runtime";
 import type { IEnumerable, float } from "../../runtime";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { AdditionType } from "./AdditionType";
@@ -11,6 +11,9 @@ import type { IDebuff } from "./IDebuff";
 import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import { UnitStateBase } from "./UnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
+import { f32 } from "../../runtime";
+import type { List } from "../../runtime";
+import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 
 // ---- ReDriveBattleCore.UnitState.DownReceiveRecoveryUnitStateBase  (TypeDefIndex 614, public abstract class) ----
 export abstract class DownReceiveRecoveryUnitStateBase extends UnitStateBase {  // implements IDebuff, IHasUpdateableEffectValue
@@ -25,19 +28,37 @@ export abstract class DownReceiveRecoveryUnitStateBase extends UnitStateBase {  
     /** @rva 0x759B30 slot 27  public AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 1 as AdditionType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x15BBB40 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("DownReceiveRecoveryUnitStateBase.get_IconName", 0x15BBB40); }
+    get_IconName(): string {
+        return "battle_icon_dwn_heal";
+    }
     /** @rva 0x15BBB10 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("DownReceiveRecoveryUnitStateBase.get_GiveVisualEffectName", 0x15BBB10); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_debuff_appear_001";
+    }
     /** @rva 0xC646A0 slot 25  public float get_UpdateableEffectValue() { } */
     get_UpdateableEffectValue(): float { return this._UpdateableEffectValue; /* auto-property */ }
     /** @rva 0xC646B0 slot 26  public void set_UpdateableEffectValue(float value) { } */
     set_UpdateableEffectValue(value: float): void { this._UpdateableEffectValue = value; /* auto-property */ }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DownReceiveRecoveryUnitStateBase..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DownReceiveRecoveryUnitStateBase..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x15B8090 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean { return notPorted("DownReceiveRecoveryUnitStateBase.CanAddTo", 0x15B8090); }
     /** @rva 0x15BB820 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("DownReceiveRecoveryUnitStateBase.GetUnitFilterFuncOrder", 0x15BB820); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        list.push(AISkillTargetSelector.UnitFilterByMainTarget);
+        list.push(AISkillTargetSelector.UnitFilterByBreak);
+        list.push(AISkillTargetSelector.UnitFilterByRoleAttackerOrBreaker);
+        list.push(AISkillTargetSelector.UnitFilterWithMaxAtk);
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
 }

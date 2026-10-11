@@ -6,16 +6,25 @@ import type { float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { DownBreakedDamageReceiveRatioUnitStateBase } from "./DownBreakedDamageReceiveRatioUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnBreakedDamageReceiveRatioUnitState  (TypeDefIndex 586, public class) ----
 export class DwnBreakedDamageReceiveRatioUnitState extends DownBreakedDamageReceiveRatioUnitStateBase {
     get DownRatio(): float { return this.get_DownRatio(); }
     /** @rva 0x15BBF20  public float get_DownRatio() { } */
-    get_DownRatio(): float { return notPorted("DwnBreakedDamageReceiveRatioUnitState.get_DownRatio", 0x15BBF20); }
+    get_DownRatio(): float {
+        return f32(this._UpdateableEffectValue / 10);
+    }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DwnBreakedDamageReceiveRatioUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DwnBreakedDamageReceiveRatioUnitState..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15BC690 slot 30  public override float GetBreakedDamageReceiveRatioVariationValue(BattleUnit unit, float processingValue) { } */
     GetBreakedDamageReceiveRatioVariationValue(unit: BattleUnit, processingValue: float): float { return notPorted("DwnBreakedDamageReceiveRatioUnitState.GetBreakedDamageReceiveRatioVariationValue", 0x15BC690); }
 }

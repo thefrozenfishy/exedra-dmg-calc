@@ -5,13 +5,22 @@ import { notPorted } from "../../runtime";
 import { RemoveStateAbilityEffectBase } from "./RemoveStateAbilityEffectBase";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { UnitStateBase } from "../UnitState/UnitStateBase";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.RemoveAllDebuffAbilityEffect  (TypeDefIndex 1204, public class) ----
 export class RemoveAllDebuffAbilityEffect extends RemoveStateAbilityEffectBase {
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("RemoveAllDebuffAbilityEffect..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18FE960  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("RemoveAllDebuffAbilityEffect..ctor", 0x18FE960); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this.maxRemoveCount = info._EffectValue1;
+        this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
+        return this;
+    }
     /** @rva 0x18FF700 slot 8  public override bool IsRemovable(UnitStateBase state) { } */
     IsRemovable(state: UnitStateBase): boolean { return notPorted("RemoveAllDebuffAbilityEffect.IsRemovable", 0x18FF700); }
 }

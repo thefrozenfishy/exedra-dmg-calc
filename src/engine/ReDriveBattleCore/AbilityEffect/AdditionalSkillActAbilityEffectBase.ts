@@ -9,6 +9,7 @@ import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
+import { ActBase_Define } from "../Act/ActBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.AdditionalSkillActAbilityEffectBase  (TypeDefIndex 1135, public abstract class) ----
 export abstract class AdditionalSkillActAbilityEffectBase extends AbilityEffectBase {
@@ -21,9 +22,19 @@ export abstract class AdditionalSkillActAbilityEffectBase extends AbilityEffectB
     /** 0x6C protected int priority */
     priority: int = 0;
     /** @rva 0x18EB0C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("AdditionalSkillActAbilityEffectBase..ctor", 0x18EB0C0); }
+    ctor(): this {
+        this.priority = ActBase_Define.AdditionalSkillDefaultPriority;
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18EB030  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("AdditionalSkillActAbilityEffectBase..ctor", 0x18EB030); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this.priority = ActBase_Define.AdditionalSkillDefaultPriority;
+        super.ctor$AbilityEffectInfo(info);
+        this.skillMstId = info._EffectValue1;
+        this.additionalSkillTargetType = info._EffectValue2 as AdditionalSkillActAbilityEffectBase_AdditionalSkillTargetType;
+        return this;
+    }
     /** @rva 0x18EA740 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("AdditionalSkillActAbilityEffectBase.Triggering", 0x18EA740); }
     /** @rva 0x18EAC30  internal static int <Triggering>g__GetSelectedTargetUnit|7_0(bool isFriendTarget, ref AdditionalSkillActAbilityEffectBase.<>c__DisplayClass7_0 ) { } */

@@ -13,7 +13,10 @@ import type { EffectOriginType } from "../UnitState/EffectOriginType";
 // ---- ReDriveBattleCore.AbilityEffect.CountdownCancelAbilityEffect  (TypeDefIndex 1161, public class) ----
 export class CountdownCancelAbilityEffect extends AbilityEffectBase {
     /** @rva 0x18EB3B0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("CountdownCancelAbilityEffect..ctor", 0x18EB3B0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x7431D0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return null!; /* asm: xor eax, eax; ret */ }
 }

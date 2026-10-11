@@ -15,11 +15,19 @@ import type { IConsumeRemainCountOnAttack } from "./IConsumeRemainCountOnAttack"
 export class DwnCtrConsumeFixedUnitState extends DwnCtrFixedUnitState {  // implements IConsumeRemainCountOnAttack, IConsumeRemainCount
     static readonly __interfaces: readonly string[] = ['IConsumeRemainCountOnAttack', 'IConsumeRemainCount'];
     /** @rva 0x15BCA90 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("DwnCtrConsumeFixedUnitState.get_IconName", 0x15BCA90); }
+    get_IconName(): string {
+        return "battle_icon_consume_dwn_ctr";
+    }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DwnCtrConsumeFixedUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DwnCtrConsumeFixedUnitState..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15BC9F0 slot 30  public override float GetCtrVariationValue(BattleUnit unit, float processingValue) { } */
     GetCtrVariationValue(unit: BattleUnit, processingValue: float): float { return notPorted("DwnCtrConsumeFixedUnitState.GetCtrVariationValue", 0x15BC9F0); }
     /** @rva 0x15BCA20 slot 31  public bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */

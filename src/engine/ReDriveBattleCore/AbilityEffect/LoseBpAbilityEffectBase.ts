@@ -10,6 +10,7 @@ import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.LoseBpAbilityEffectBase  (TypeDefIndex 1147, public abstract class) ----
 export abstract class LoseBpAbilityEffectBase extends AbilityEffectBase {
@@ -18,9 +19,17 @@ export abstract class LoseBpAbilityEffectBase extends AbilityEffectBase {
     /** 0x64 protected readonly int effectValue */
     effectValue: int = 0;
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("LoseBpAbilityEffectBase..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18F5990  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("LoseBpAbilityEffectBase..ctor", 0x18F5990); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
+        this.effectValue = info._EffectValue1;
+        return this;
+    }
     /** @rva -1 slot 8  public abstract int GetLosePoint(BattleUnit targetUnit); */
     abstract GetLosePoint(targetUnit: BattleUnit): int;
     /** @rva 0x18F5730 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */

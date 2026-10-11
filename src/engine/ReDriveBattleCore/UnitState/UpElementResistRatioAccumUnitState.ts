@@ -12,6 +12,7 @@ import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import type { IStateIconNumberDisplayable } from "./IStateIconNumberDisplayable";
 import type { UnitStateBase } from "./UnitStateBase";
 import { UpElementResistUnitStateBase } from "./UpElementResistUnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpElementResistRatioAccumUnitState  (TypeDefIndex 784, public class) ----
 export class UpElementResistRatioAccumUnitState extends UpElementResistUnitStateBase {  // implements IAccum, IBlendable, IHasUpdateableEffectValue, IStateIconNumberDisplayable
@@ -36,9 +37,19 @@ export class UpElementResistRatioAccumUnitState extends UpElementResistUnitState
     /** @rva 0x9029A0 slot 33  public void set_AccumCount(int value) { } */
     set_AccumCount(value: int): void { this._AccumCount = value; /* auto-property */ }
     /** @rva 0x16E0870  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpElementResistRatioAccumUnitState..ctor", 0x16E0870); }
+    ctor(): this {
+        this._AccumCount = 1;
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x16E0810  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpElementResistRatioAccumUnitState..ctor", 0x16E0810); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this._AccumCount = 1;
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        this._AccumCountMax = info._EffectValue2;
+        return this;
+    }
     /** @rva 0x16E3FB0 slot 29  public override Decimal GetElementResistVariationValue(BattleUnit unit, TargetElementType attackElement) { } */
     GetElementResistVariationValue(unit: BattleUnit, attackElement: TargetElementType): Decimal { return notPorted("UpElementResistRatioAccumUnitState.GetElementResistVariationValue", 0x16E3FB0); }
     /** @rva 0x16E3F60 slot 37  public bool Blend(UnitStateBase injectUnitState) { } */

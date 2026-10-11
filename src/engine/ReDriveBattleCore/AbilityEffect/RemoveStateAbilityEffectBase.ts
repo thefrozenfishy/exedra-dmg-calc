@@ -19,9 +19,16 @@ export abstract class RemoveStateAbilityEffectBase extends AbilityEffectBase {
     /** 0x60 protected int maxRemoveCount */
     maxRemoveCount: int = 0;
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("RemoveStateAbilityEffectBase..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x19000A0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("RemoveStateAbilityEffectBase..ctor", 0x19000A0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this.maxRemoveCount = info._EffectValue1;
+        return this;
+    }
     /** @rva 0x18FFC70 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("RemoveStateAbilityEffectBase.Triggering", 0x18FFC70); }
     /** @rva -1 slot 8  public abstract bool IsRemovable(UnitStateBase state); */

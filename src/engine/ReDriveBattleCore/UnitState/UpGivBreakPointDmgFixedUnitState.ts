@@ -17,7 +17,9 @@ export class UpGivBreakPointDmgFixedUnitState extends BreakPointDamageBetterUnit
     static readonly __interfaces: readonly string[] = ['IGiveBreakPointDamageVariation', 'IRequiredStateForDecide'];
     get UpFixed(): float { return this.get_UpFixed(); }
     /** @rva 0x15D06D0 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("UpGivBreakPointDmgFixedUnitState.get_IconName", 0x15D06D0); }
+    get_IconName(): string {
+        return "battle_icon_up_giv_break_point_dmg";
+    }
     /** @rva 0x759B30 slot 27  public override BreakPointDamageVariationUnitStateBase.CalculationType get_Calculation() { } */
     get_Calculation(): BreakPointDamageVariationUnitStateBase_CalculationType { return 1 as BreakPointDamageVariationUnitStateBase_CalculationType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x7431D0 slot 28  public override AdditionType get_Addition() { } */
@@ -25,9 +27,15 @@ export class UpGivBreakPointDmgFixedUnitState extends BreakPointDamageBetterUnit
     /** @rva 0xC646A0  public float get_UpFixed() { } */
     get_UpFixed(): float { return this._UpdateableEffectValue; /* asm: movss xmm0, dword ptr [rcx + 0x88]; ret */ }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpGivBreakPointDmgFixedUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpGivBreakPointDmgFixedUnitState..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15D0330 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("UpGivBreakPointDmgFixedUnitState.GetUnitFilterFuncOrder", 0x15D0330); }
     /** @rva 0x15D0590  internal static IEnumerable<BattleUnit> <GetUnitFilterFuncOrder>g__UnitFilterByRoleBreakerAndMaxSpeed|10_0(IEnumerable<BattleUnit> candidateUnits) { } */

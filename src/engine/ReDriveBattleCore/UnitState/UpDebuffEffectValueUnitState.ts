@@ -15,9 +15,15 @@ import { UpEffectValueUnitStateBase } from "./UpEffectValueUnitStateBase";
 // ---- ReDriveBattleCore.UnitState.UpDebuffEffectValueUnitState  (TypeDefIndex 629, public class) ----
 export class UpDebuffEffectValueUnitState extends UpEffectValueUnitStateBase {
     /** @rva 0x16D02D0  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpDebuffEffectValueUnitState..ctor", 0x16D02D0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x16D02C0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpDebuffEffectValueUnitState..ctor", 0x16D02C0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x16E27E0 slot 27  public override float GetEffectValueVariationRate(UnitStateBase targetState) { } */
     GetEffectValueVariationRate(targetState: UnitStateBase): float { return notPorted("UpDebuffEffectValueUnitState.GetEffectValueVariationRate", 0x16E27E0); }
     /** @rva 0x16E25B0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */

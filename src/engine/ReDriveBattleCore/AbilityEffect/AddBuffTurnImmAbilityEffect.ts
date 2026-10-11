@@ -4,6 +4,7 @@
 import { notPorted } from "../../runtime";
 import { ChangeBuffDebuffTurnAbilityEffectBase } from "./ChangeBuffDebuffTurnAbilityEffectBase";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.AddBuffTurnImmAbilityEffect  (TypeDefIndex 1151, public class) ----
 export class AddBuffTurnImmAbilityEffect extends ChangeBuffDebuffTurnAbilityEffectBase {
@@ -12,9 +13,23 @@ export class AddBuffTurnImmAbilityEffect extends ChangeBuffDebuffTurnAbilityEffe
     /** @rva 0x76F830 slot 10  public override bool get_IsTargetBuff() { } */
     get_IsTargetBuff(): boolean { return true; /* asm: mov al, 1; ret */ }
     /** @rva 0x18E9D40 slot 12  public override string get_DisplayEffectType() { } */
-    get_DisplayEffectType(): string { return notPorted("AddBuffTurnImmAbilityEffect.get_DisplayEffectType", 0x18E9D40); }
+    get_DisplayEffectType(): string {
+        return "eff_cmn_act_buff_appear_001";
+    }
     /** @rva 0x18E9C60  protected void .ctor() { } */
-    ctor(): this { return notPorted("AddBuffTurnImmAbilityEffect..ctor", 0x18E9C60); }
+    ctor(): this {
+        this._DisplayEffectType = "";
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18E9CB0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("AddBuffTurnImmAbilityEffect..ctor", 0x18E9CB0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this._DisplayEffectType = "";
+        super.ctor$AbilityEffectInfo(info);
+        this._TargetSkillUniqueId = info._EffectValue1;
+        this._TurnChangeValue = info._EffectValue2;
+        this._MaxChangeCount = info._EffectValue3;
+        this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
+        return this;
+    }
 }

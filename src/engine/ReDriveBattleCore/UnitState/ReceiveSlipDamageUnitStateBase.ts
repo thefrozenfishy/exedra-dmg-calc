@@ -13,6 +13,7 @@ import { AbnormalUnitStateBase } from "./AbnormalUnitStateBase";
 import type { EffectOriginType } from "./EffectOriginType";
 import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import type { IReceiveSlipDamage } from "./IReceiveSlipDamage";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.ReceiveSlipDamageUnitStateBase  (TypeDefIndex 497, public abstract class) ----
 export abstract class ReceiveSlipDamageUnitStateBase extends AbnormalUnitStateBase {  // implements IReceiveSlipDamage, IHasUpdateableEffectValue
@@ -36,7 +37,9 @@ export abstract class ReceiveSlipDamageUnitStateBase extends AbnormalUnitStateBa
     /** @rva 0xC646B0 slot 30  public void set_UpdateableEffectValue(float value) { } */
     set_UpdateableEffectValue(value: float): void { this._UpdateableEffectValue = value; /* auto-property */ }
     /** @rva 0x15BFD00  public float get_DamagePower() { } */
-    get_DamagePower(): float { return notPorted("ReceiveSlipDamageUnitStateBase.get_DamagePower", 0x15BFD00); }
+    get_DamagePower(): float {
+        return f32(this._UpdateableEffectValue / 1000);
+    }
     /** @rva 0x902510  public Decimal get_DamageBase() { } */
     get_DamageBase(): Decimal { return this._DamageBase; /* auto-property */ }
     /** @rva 0x902550  public void set_DamageBase(Decimal value) { } */
@@ -52,9 +55,16 @@ export abstract class ReceiveSlipDamageUnitStateBase extends AbnormalUnitStateBa
     /** @rva 0x15BFBF0  protected DamageBaseType get_DamageBaseType() { } */
     get_DamageBaseType(): DamageBaseType { return notPorted("ReceiveSlipDamageUnitStateBase.get_DamageBaseType", 0x15BFBF0); }
     /** @rva 0x15B5FF0  public void .ctor() { } */
-    ctor(): this { return notPorted("ReceiveSlipDamageUnitStateBase..ctor", 0x15B5FF0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5F70  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ReceiveSlipDamageUnitStateBase..ctor", 0x15B5F70); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x15BF920 slot 17  public override void SetTriggeringInfo(EffectOriginType effectOrigin, BattleUnit userUnit, bool isOwnSkill = False, bool isConditionActivation = False, BattleType battleType = 1) { } */
     SetTriggeringInfo(effectOrigin: EffectOriginType, userUnit: BattleUnit, isOwnSkill?: boolean /* = False */, isConditionActivation?: boolean /* = False */, battleType?: BattleType /* = 1 */): void { return notPorted("ReceiveSlipDamageUnitStateBase.SetTriggeringInfo", 0x15BF920); }
     /** @rva 0x15BF770 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */

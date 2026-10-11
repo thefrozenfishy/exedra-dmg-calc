@@ -13,11 +13,19 @@ import { UpGivDmgRatioUnitState } from "./UpGivDmgRatioUnitState";
 export class UpGivDmgConsumeRatioUnitState extends UpGivDmgRatioUnitState {  // implements IConsumeRemainCountOnAttack, IConsumeRemainCount
     static readonly __interfaces: readonly string[] = ['IConsumeRemainCountOnAttack', 'IConsumeRemainCount'];
     /** @rva 0x15D0D30 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("UpGivDmgConsumeRatioUnitState.get_IconName", 0x15D0D30); }
+    get_IconName(): string {
+        return "battle_icon_consume_up_giv_dmg";
+    }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpGivDmgConsumeRatioUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpGivDmgConsumeRatioUnitState..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15D0C50 slot 29  public override Decimal GetDamageVariationValue(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageValue, Decimal processingValue) { } */
     GetDamageVariationValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageValue: Decimal, processingValue: Decimal): Decimal { return notPorted("UpGivDmgConsumeRatioUnitState.GetDamageVariationValue", 0x15D0C50); }
 }

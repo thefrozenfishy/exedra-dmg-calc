@@ -63,9 +63,20 @@ export abstract class ChangeBuffDebuffTurnAbilityEffectBase extends AbilityEffec
     /** @rva 0x737A60 slot 13  public virtual void set_DisplayEffectType(string value) { } */
     set_DisplayEffectType(value: string): void { this._DisplayEffectType = value; /* auto-property */ }
     /** @rva 0x18E9C60  protected void .ctor() { } */
-    ctor(): this { return notPorted("ChangeBuffDebuffTurnAbilityEffectBase..ctor", 0x18E9C60); }
+    ctor(): this {
+        this._DisplayEffectType = "";
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18EC360  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ChangeBuffDebuffTurnAbilityEffectBase..ctor", 0x18EC360); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this._DisplayEffectType = "";
+        super.ctor$AbilityEffectInfo(info);
+        this._TargetSkillUniqueId = info._EffectValue1;
+        this._TurnChangeValue = info._EffectValue2;
+        this._MaxChangeCount = info._EffectValue3;
+        return this;
+    }
     /** @rva 0x18EBF40 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("ChangeBuffDebuffTurnAbilityEffectBase.Triggering", 0x18EBF40); }
     /** @rva 0x18EB590 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */

@@ -16,9 +16,16 @@ export abstract class ResetUniqueBuffDebuffAbilityEffectBase extends AbilityEffe
     /** 0x60 protected int uniqueStatePatternMstId */
     uniqueStatePatternMstId: int = 0;
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("ResetUniqueBuffDebuffAbilityEffectBase..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x19000A0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ResetUniqueBuffDebuffAbilityEffectBase..ctor", 0x19000A0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this.uniqueStatePatternMstId = info._EffectValue1;
+        return this;
+    }
     /** @rva 0x1900190 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("ResetUniqueBuffDebuffAbilityEffectBase.Triggering", 0x1900190); }
     /** @rva -1 slot 8  public abstract bool IsRemovable(UnitStateBase state); */

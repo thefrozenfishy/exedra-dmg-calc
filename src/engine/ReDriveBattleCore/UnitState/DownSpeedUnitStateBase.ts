@@ -3,7 +3,7 @@
 
 import { notPorted } from "../../runtime";
 import type { Decimal, IEnumerable } from "../../runtime";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { AdditionType } from "./AdditionType";
@@ -13,6 +13,8 @@ import type { IRequiredStateForDecide } from "./IRequiredStateForDecide";
 import type { ISpeedVariation } from "./ISpeedVariation";
 import { ParameterVariationUnitStateBase } from "./ParameterVariationUnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
+import type { List } from "../../runtime";
+import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 
 // ---- ReDriveBattleCore.UnitState.DownSpeedUnitStateBase  (TypeDefIndex 619, public abstract class) ----
 export abstract class DownSpeedUnitStateBase extends ParameterVariationUnitStateBase {  // implements ISpeedVariation, IRequiredStateForDecide, IDebuff, IRequiredSpeedVariationStateForDecide
@@ -22,17 +24,34 @@ export abstract class DownSpeedUnitStateBase extends ParameterVariationUnitState
     /** @rva 0x759B30 slot 27  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 1 as AdditionType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x15BBEF0 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("DownSpeedUnitStateBase.get_IconName", 0x15BBEF0); }
+    get_IconName(): string {
+        return "battle_icon_dwn_spd";
+    }
     /** @rva 0x15BBEC0 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("DownSpeedUnitStateBase.get_GiveVisualEffectName", 0x15BBEC0); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_debuff_appear_001";
+    }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DownSpeedUnitStateBase..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DownSpeedUnitStateBase..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva -1 slot 33  public abstract Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue); */
     abstract GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal;
     /** @rva 0x15BBBD0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("DownSpeedUnitStateBase.GetUnitFilterFuncOrder", 0x15BBBD0); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        list.push(AISkillTargetSelector.UnitFilterByMainTarget);
+        list.push(AISkillTargetSelector.UnitFilterByBreak);
+        list.push(AISkillTargetSelector.UnitFilterByRoleAttackerOrBreaker);
+        list.push(AISkillTargetSelector.UnitFilterWithMaxSpeed);
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
     /** @rva -1 slot 34  public abstract Decimal GetSpeedVariationValue(BattleUnitData unit, Decimal processingValue); */
     abstract GetSpeedVariationValue$BattleUnitData_Decimal(unit: any /* BattleUnitData */, processingValue: Decimal): Decimal;
     /** @rva 0x15BBB70 slot 32  public bool CanAddTo(BattleUnitData targetUnit) { } */

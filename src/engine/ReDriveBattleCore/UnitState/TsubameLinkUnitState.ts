@@ -3,7 +3,7 @@
 
 import { notPorted } from "../../runtime";
 import type { Decimal, IEnumerable, float } from "../../runtime";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AdditionalDamageAbilityEffect } from "../AbilityEffect/AdditionalDamageAbilityEffect";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { ActiveSkillBase } from "../ActiveSkillBase";
@@ -19,6 +19,8 @@ import type { IRequiredStateForDecide } from "./IRequiredStateForDecide";
 import type { ISpeedVariation } from "./ISpeedVariation";
 import { UnitStateBase } from "./UnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
+import { f32 } from "../../runtime";
+import type { List } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.TsubameLinkUnitState  (TypeDefIndex 663, public class) ----
 export class TsubameLinkUnitState extends UnitStateBase {  // implements IHasUpdateableEffectValue, ISpeedVariation, IRequiredStateForDecide, IAtkVariation, IAdditionalDamage, IRequiredSpeedVariationStateForDecide
@@ -44,17 +46,25 @@ export class TsubameLinkUnitState extends UnitStateBase {  // implements IHasUpd
     /** @rva 0x7431D0 slot 32  public AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
     /** @rva 0x16DA4A0 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("TsubameLinkUnitState.get_IconName", 0x16DA4A0); }
+    get_IconName(): string {
+        return "battle_icon_unique_002";
+    }
     /** @rva 0x16DA470 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("TsubameLinkUnitState.get_GiveVisualEffectName", 0x16DA470); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_buff_appear_001";
+    }
     /** @rva 0xC646A0 slot 25  public float get_UpdateableEffectValue() { } */
     get_UpdateableEffectValue(): float { return this._UpdateableEffectValue; /* auto-property */ }
     /** @rva 0xC646B0 slot 26  public void set_UpdateableEffectValue(float value) { } */
     set_UpdateableEffectValue(value: float): void { this._UpdateableEffectValue = value; /* auto-property */ }
     /** @rva 0x16DA4F0  public float get_UpSpdRatio() { } */
-    get_UpSpdRatio(): float { return notPorted("TsubameLinkUnitState.get_UpSpdRatio", 0x16DA4F0); }
+    get_UpSpdRatio(): float {
+        return f32(this.upSpdRatio * this._UpdateableEffectValue);
+    }
     /** @rva 0x16DA4D0  public float get_UpAtkRatio() { } */
-    get_UpAtkRatio(): float { return notPorted("TsubameLinkUnitState.get_UpAtkRatio", 0x16DA4D0); }
+    get_UpAtkRatio(): float {
+        return f32(this.upAtkRatio * this._UpdateableEffectValue);
+    }
     /** @rva 0x16DA460  public float get_DamagePower() { } */
     get_DamagePower(): float { return this.damagePower; /* asm: movss xmm0, dword ptr [rcx + 0x94]; ret */ }
     /** @rva 0x16DA3B0  protected void .ctor() { } */
@@ -62,7 +72,10 @@ export class TsubameLinkUnitState extends UnitStateBase {  // implements IHasUpd
     /** @rva 0x16DA2D0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("TsubameLinkUnitState..ctor", 0x16DA2D0); }
     /** @rva 0x16DA240 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("TsubameLinkUnitState.GetUnitFilterFuncOrder", 0x16DA240); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
     /** @rva 0x16D9950 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean { return notPorted("TsubameLinkUnitState.CanAddTo", 0x16D9950); }
     /** @rva 0x16DA100 slot 28  public Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue) { } */

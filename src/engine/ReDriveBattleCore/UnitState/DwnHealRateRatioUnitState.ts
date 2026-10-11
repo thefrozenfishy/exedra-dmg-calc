@@ -14,6 +14,7 @@ import type { IDebuff } from "./IDebuff";
 import type { IHealRateVariation } from "./IHealRateVariation";
 import { ParameterVariationUnitStateBase } from "./ParameterVariationUnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnHealRateRatioUnitState  (TypeDefIndex 613, public class) ----
 export class DwnHealRateRatioUnitState extends ParameterVariationUnitStateBase {  // implements IHealRateVariation, IDebuff
@@ -24,15 +25,27 @@ export class DwnHealRateRatioUnitState extends ParameterVariationUnitStateBase {
     /** @rva 0x759B30 slot 27  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 1 as AdditionType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x15BE170 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("DwnHealRateRatioUnitState.get_IconName", 0x15BE170); }
+    get_IconName(): string {
+        return "battle_icon_dwn_heal";
+    }
     /** @rva 0x15BE140 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("DwnHealRateRatioUnitState.get_GiveVisualEffectName", 0x15BE140); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_debuff_appear_001";
+    }
     /** @rva 0x15BBF20  public float get_DownRatio() { } */
-    get_DownRatio(): float { return notPorted("DwnHealRateRatioUnitState.get_DownRatio", 0x15BBF20); }
+    get_DownRatio(): float {
+        return f32(this._UpdateableEffectValue / 10);
+    }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DwnHealRateRatioUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DwnHealRateRatioUnitState..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15BDD70 slot 29  public float GetHealRateVariationValue(float processingValue) { } */
     GetHealRateVariationValue(processingValue: float): float { return notPorted("DwnHealRateRatioUnitState.GetHealRateVariationValue", 0x15BDD70); }
     /** @rva 0x15BDB40 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */

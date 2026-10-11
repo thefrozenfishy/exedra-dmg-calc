@@ -36,9 +36,18 @@ export class DwnElementResistRatioAccumUnitState extends DownElementResistUnitSt
     /** @rva 0x9029A0 slot 33  public void set_AccumCount(int value) { } */
     set_AccumCount(value: int): void { this._AccumCount = value; /* auto-property */ }
     /** @rva 0x15BC130  protected void .ctor() { } */
-    ctor(): this { return notPorted("DwnElementResistRatioAccumUnitState..ctor", 0x15BC130); }
+    ctor(): this {
+        this._AccumCount = 1;
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15BC0E0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DwnElementResistRatioAccumUnitState..ctor", 0x15BC0E0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this._AccumCount = 1;
+        super.ctor$AbilityEffectInfo(info);
+        this._AccumCountMax = info._EffectValue2;
+        return this;
+    }
     /** @rva 0x15BD020 slot 29  public override Decimal GetElementResistVariationValue(BattleUnit unit, TargetElementType attackElement) { } */
     GetElementResistVariationValue(unit: BattleUnit, attackElement: TargetElementType): Decimal { return notPorted("DwnElementResistRatioAccumUnitState.GetElementResistVariationValue", 0x15BD020); }
     /** @rva 0x15BCFD0 slot 37  public bool Blend(UnitStateBase injectUnitState) { } */

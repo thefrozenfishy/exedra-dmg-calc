@@ -52,9 +52,20 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
     /** @rva 0x7360C0 slot 28  public bool get_IsShowZeroIfZero() { } */
     get_IsShowZeroIfZero(): boolean { return false; /* asm: xor al, al; ret */ }
     /** @rva 0x16DE240  protected void .ctor() { } */
-    ctor(): this { return notPorted("UniqueLvUnitStateBase..ctor", 0x16DE240); }
+    ctor(): this {
+        this._Lv = 1;
+        super.ctor();
+        return this;
+    }
     /** @rva 0x16DE260  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UniqueLvUnitStateBase..ctor", 0x16DE260); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this._Lv = 1;
+        this.iconName = "";
+        super.ctor$AbilityEffectInfo(info);
+        this._UniqueStatePatternMstId = info._EffectValue1;
+        this._UniqueStateLevelMstGroupId = info._EffectValue2;
+        return this;
+    }
     /** @rva 0x16DE5F0  protected bool TryCountUp() { } */
     TryCountUp(): boolean { return notPorted("UniqueLvUnitStateBase.TryCountUp", 0x16DE5F0); }
     /** @rva 0x16DE530  public int GetRequiredHitCount() { } */

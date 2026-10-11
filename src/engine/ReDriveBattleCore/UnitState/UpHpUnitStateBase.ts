@@ -3,7 +3,7 @@
 
 import { notPorted } from "../../runtime";
 import type { Decimal, IEnumerable } from "../../runtime";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { AdditionType } from "./AdditionType";
@@ -11,6 +11,9 @@ import type { IBuff } from "./IBuff";
 import type { IMaxHpVariation } from "./IMaxHpVariation";
 import { ParameterVariationUnitStateBase } from "./ParameterVariationUnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
+import { f32 } from "../../runtime";
+import type { List } from "../../runtime";
+import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 
 // ---- ReDriveBattleCore.UnitState.UpHpUnitStateBase  (TypeDefIndex 796, public abstract class) ----
 export abstract class UpHpUnitStateBase extends ParameterVariationUnitStateBase {  // implements IMaxHpVariation, IBuff
@@ -20,15 +23,32 @@ export abstract class UpHpUnitStateBase extends ParameterVariationUnitStateBase 
     /** @rva 0x7431D0 slot 27  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
     /** @rva 0x16E5F50 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("UpHpUnitStateBase.get_IconName", 0x16E5F50); }
+    get_IconName(): string {
+        return "battle_icon_up_hp";
+    }
     /** @rva 0x16E5F20 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("UpHpUnitStateBase.get_GiveVisualEffectName", 0x16E5F20); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_buff_appear_001";
+    }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("UpHpUnitStateBase..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("UpHpUnitStateBase..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva -1 slot 30  public abstract Decimal GetMaxHpVariationValue(BattleUnit unit, Decimal processingValue); */
     abstract GetMaxHpVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal;
     /** @rva 0x16E5CC0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("UpHpUnitStateBase.GetUnitFilterFuncOrder", 0x16E5CC0); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        list.push(AISkillTargetSelector.UnitFilterByMainTarget);
+        list.push(AISkillTargetSelector.UnitFilterByRoleHealer);
+        list.push(AISkillTargetSelector.UnitFilterWithMaxHP);
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
 }

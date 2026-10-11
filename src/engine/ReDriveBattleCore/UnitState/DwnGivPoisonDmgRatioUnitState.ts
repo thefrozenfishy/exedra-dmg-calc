@@ -5,13 +5,21 @@ import { notPorted } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import { DownGiveSlipDamageRatioUnitStateBase } from "./DownGiveSlipDamageRatioUnitStateBase";
 import type { UnitStateBase } from "./UnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnGivPoisonDmgRatioUnitState  (TypeDefIndex 608, public class) ----
 export class DwnGivPoisonDmgRatioUnitState extends DownGiveSlipDamageRatioUnitStateBase {
     /** @rva 0x15B3A90  public void .ctor() { } */
-    ctor(): this { return notPorted("DwnGivPoisonDmgRatioUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DwnGivPoisonDmgRatioUnitState..ctor", 0x15BAC90); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = f32(info._EffectValue1);
+        return this;
+    }
     /** @rva 0x15BD9C0 slot 31  public override bool IsTarget(UnitStateBase state) { } */
     IsTarget(state: UnitStateBase): boolean { return notPorted("DwnGivPoisonDmgRatioUnitState.IsTarget", 0x15BD9C0); }
 }

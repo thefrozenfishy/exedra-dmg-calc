@@ -5,7 +5,7 @@ import { notPorted } from "../../runtime";
 import type { Decimal, IEnumerable, List, float } from "../../runtime";
 import type { RangeType } from "../../Network/Definition/Battle/RangeType";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
@@ -16,6 +16,7 @@ import type { IRequiredStateForDecide } from "./IRequiredStateForDecide";
 import type { ISpeedVariation } from "./ISpeedVariation";
 import { UnitStateBase } from "./UnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.TsubameCoreUnitState  (TypeDefIndex 660, public class) ----
 export class TsubameCoreUnitState extends UnitStateBase {  // implements IBuff, ISpeedVariation, IRequiredStateForDecide, IRequiredSpeedVariationStateForDecide
@@ -30,21 +31,35 @@ export class TsubameCoreUnitState extends UnitStateBase {  // implements IBuff, 
     /** @rva 0x759B30 slot 27  public AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 1 as AdditionType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x16D9920 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("TsubameCoreUnitState.get_IconName", 0x16D9920); }
+    get_IconName(): string {
+        return "battle_icon_unique_002";
+    }
     /** @rva 0x16D98F0 slot 13  public override string get_GiveVisualEffectName() { } */
-    get_GiveVisualEffectName(): string { return notPorted("TsubameCoreUnitState.get_GiveVisualEffectName", 0x16D98F0); }
+    get_GiveVisualEffectName(): string {
+        return "eff_cmn_act_buff_appear_001";
+    }
     /** @rva 0xC646A0  public float get_DownRatio() { } */
     get_DownRatio(): float { return this._DownRatio; /* auto-property */ }
     /** @rva 0xC646B0  public void set_DownRatio(float value) { } */
     set_DownRatio(value: float): void { this._DownRatio = value; /* auto-property */ }
     /** @rva 0x16CF610  protected void .ctor() { } */
-    ctor(): this { return notPorted("TsubameCoreUnitState..ctor", 0x16CF610); }
+    ctor(): this {
+        this._IconName = "";
+        return this;
+    }
     /** @rva 0x15B9DC0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("TsubameCoreUnitState..ctor", 0x15B9DC0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._DownRatio = f32(f32(info._EffectValue1) / 10);
+        return this;
+    }
     /** @rva 0x16D90B0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("TsubameCoreUnitState.GetAIFilteredTargets", 0x16D90B0); }
     /** @rva 0x16D9510 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("TsubameCoreUnitState.GetUnitFilterFuncOrder", 0x16D9510); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
     /** @rva 0x16D92F0 slot 26  public Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("TsubameCoreUnitState.GetSpeedVariationValue", 0x16D92F0); }
     /** @rva 0x16D95A0 slot 19  public override void OnRemovingFromCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */

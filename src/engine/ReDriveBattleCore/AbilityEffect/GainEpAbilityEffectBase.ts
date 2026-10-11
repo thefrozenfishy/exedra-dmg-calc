@@ -10,6 +10,7 @@ import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.GainEpAbilityEffectBase  (TypeDefIndex 1185, public abstract class) ----
 export abstract class GainEpAbilityEffectBase extends AbilityEffectBase {
@@ -18,9 +19,17 @@ export abstract class GainEpAbilityEffectBase extends AbilityEffectBase {
     /** 0x64 protected readonly int effectValue */
     effectValue: int = 0;
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("GainEpAbilityEffectBase..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18F20E0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("GainEpAbilityEffectBase..ctor", 0x18F20E0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
+        this.effectValue = info._EffectValue1;
+        return this;
+    }
     /** @rva -1 slot 8  public abstract float GetGainPoint(BattleUnit targetUnit); */
     abstract GetGainPoint(targetUnit: BattleUnit): float;
     /** @rva 0x18F3300 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */

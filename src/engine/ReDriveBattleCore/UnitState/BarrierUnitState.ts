@@ -6,7 +6,7 @@ import type { IEnumerable, List, float, int } from "../../runtime";
 import type { BattleType } from "../../Network/Definition/Battle/BattleType";
 import type { RangeType } from "../../Network/Definition/Battle/RangeType";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
@@ -14,6 +14,8 @@ import type { EffectOriginType } from "./EffectOriginType";
 import type { IBuff } from "./IBuff";
 import { UnitStateBase } from "./UnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
+import { f32 } from "../../runtime";
+import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 
 // ---- ReDriveBattleCore.UnitState.BarrierUnitState  (TypeDefIndex 540, public class) ----
 export class BarrierUnitState extends UnitStateBase {  // implements IBuff
@@ -41,7 +43,9 @@ export class BarrierUnitState extends UnitStateBase {  // implements IBuff
     /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
     /** @rva 0x15B5F40 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("BarrierUnitState.get_IconName", 0x15B5F40); }
+    get_IconName(): string {
+        return "battle_icon_barrier";
+    }
     /** @rva 0xC646A0  public float get_BarrierRatio() { } */
     get_BarrierRatio(): float { return this._BarrierRatio; /* auto-property */ }
     /** @rva 0xC646B0  public void set_BarrierRatio(float value) { } */
@@ -67,15 +71,30 @@ export class BarrierUnitState extends UnitStateBase {  // implements IBuff
     /** @rva 0x76F830 slot 20  public override bool get_ShouldRemoveStateByHolderDeath() { } */
     get_ShouldRemoveStateByHolderDeath(): boolean { return true; /* asm: mov al, 1; ret */ }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("BarrierUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5ED0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("BarrierUnitState..ctor", 0x15B5ED0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._BarrierRatio = f32(f32(info._EffectValue1) / 1000);
+        this._BarrierFixed = f32(info._EffectValue2);
+        this._MaxBarrierRatio = f32(f32(info._EffectValue3) / 1000);
+        return this;
+    }
     /** @rva 0x15B5BE0 slot 17  public override void SetTriggeringInfo(EffectOriginType effectOrigin, BattleUnit triggeredBattleUnit, bool isOwnSkill = False, bool isConditionActivation = False, BattleType battleType = 1) { } */
     SetTriggeringInfo(effectOrigin: EffectOriginType, triggeredBattleUnit: BattleUnit, isOwnSkill?: boolean /* = False */, isConditionActivation?: boolean /* = False */, battleType?: BattleType /* = 1 */): void { return notPorted("BarrierUnitState.SetTriggeringInfo", 0x15B5BE0); }
     /** @rva 0x15B5700 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit triggeredUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(triggeredUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("BarrierUnitState.GetAIFilteredTargets", 0x15B5700); }
     /** @rva 0x15B5980 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("BarrierUnitState.GetUnitFilterFuncOrder", 0x15B5980); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        list.push(AISkillTargetSelector.UnitFilterByMainTarget);
+        list.push(AISkillTargetSelector.UnitFilterByRoleAttackerOrBreaker);
+        list.push(AISkillTargetSelector.UnitFilterWithMinDef);
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
     /** @rva 0x15B54E0  private static int CalculateMaxEndurance(ValueTuple<float, float, float> info, BattleUnit targetUnit, BattleType battleType) { } */
     static CalculateMaxEndurance(info: any /* ValueTuple<float, float, float> */, targetUnit: BattleUnit, battleType: BattleType): int { return notPorted("BarrierUnitState.CalculateMaxEndurance", 0x15B54E0); }
     /** @rva 0x15B52B0  private static int CalculateEndurance(ValueTuple<float, float, float> info, BattleUnit targetUnit, BattleType battleType) { } */

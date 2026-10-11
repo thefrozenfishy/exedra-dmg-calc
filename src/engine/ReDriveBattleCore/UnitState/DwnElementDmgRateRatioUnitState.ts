@@ -14,9 +14,15 @@ export class DwnElementDmgRateRatioUnitState extends DownElementDamageRateUnitSt
     /** @rva 0x15BCF10  public Decimal get_DownRatio() { } */
     get_DownRatio(): Decimal { return notPorted("DwnElementDmgRateRatioUnitState.get_DownRatio", 0x15BCF10); }
     /** @rva 0x15B3A90  protected void .ctor() { } */
-    ctor(): this { return notPorted("DwnElementDmgRateRatioUnitState..ctor", 0x15B3A90); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("DwnElementDmgRateRatioUnitState..ctor", 0x15B5240); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        return this;
+    }
     /** @rva 0x15BCDB0 slot 30  public override Decimal GetElementDamageRateVariationValue(BattleUnit unit, TargetElementType attackElement) { } */
     GetElementDamageRateVariationValue(unit: BattleUnit, attackElement: TargetElementType): Decimal { return notPorted("DwnElementDmgRateRatioUnitState.GetElementDamageRateVariationValue", 0x15BCDB0); }
 }

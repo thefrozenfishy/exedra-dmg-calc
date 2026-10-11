@@ -9,6 +9,7 @@ import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.RevivalRatioAbilityEffect  (TypeDefIndex 1212, public class) ----
 export class RevivalRatioAbilityEffect extends RevivalAbilityEffectBase {
@@ -21,9 +22,18 @@ export class RevivalRatioAbilityEffect extends RevivalAbilityEffectBase {
     /** @rva 0x8A22D0  public void set_RecoveryRatio(int value) { } */
     set_RecoveryRatio(value: int): void { this._RecoveryRatio = value; /* auto-property */ }
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("RevivalRatioAbilityEffect..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x1900AE0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("RevivalRatioAbilityEffect..ctor", 0x1900AE0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
+        this._IsIncludeDeadUnitInTarget = true;
+        this._RecoveryRatio = info._EffectValue1;
+        return this;
+    }
     /** @rva 0x1900790 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("RevivalRatioAbilityEffect.Triggering", 0x1900790); }
 }

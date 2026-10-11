@@ -9,13 +9,22 @@ import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { UnitStateBase } from "../UnitState/UnitStateBase";
+import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.RemoveAllBuffAbilityEffect  (TypeDefIndex 1203, public class) ----
 export class RemoveAllBuffAbilityEffect extends RemoveStateAbilityEffectBase {
     /** @rva 0x18EB3C0  protected void .ctor() { } */
-    ctor(): this { return notPorted("RemoveAllBuffAbilityEffect..ctor", 0x18EB3C0); }
+    ctor(): this {
+        super.ctor();
+        return this;
+    }
     /** @rva 0x18FF6C0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("RemoveAllBuffAbilityEffect..ctor", 0x18FF6C0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this.maxRemoveCount = info._EffectValue1;
+        this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
+        return this;
+    }
     /** @rva 0x18FEBB0 slot 8  public override bool IsRemovable(UnitStateBase state) { } */
     IsRemovable(state: UnitStateBase): boolean { return notPorted("RemoveAllBuffAbilityEffect.IsRemovable", 0x18FEBB0); }
     /** @rva 0x18FE9A0 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
