@@ -1,7 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../runtime";
+import { f32, notPorted, union } from "../runtime";
 import type { List, float, int } from "../runtime";
 import type { TargetElementType } from "../Network/Definition/Battle/TargetElementType";
 import type { AbilityEffectBase_TargetSideType } from "./AbilityEffect/AbilityEffectBase";
@@ -233,53 +233,168 @@ export class AffectedUnitNotice {
     /** @rva 0x737A60  public void set_ReceivedSlipDamageEffectTypeList(List<string> value) { } */
     set_ReceivedSlipDamageEffectTypeList(value: List<string>): void { this._ReceivedSlipDamageEffectTypeList = value; /* auto-property */ }
     /** @rva 0x1379940  public bool get_IsReceivedDamage() { } */
-    get_IsReceivedDamage(): boolean { return notPorted("AffectedUnitNotice.get_IsReceivedDamage", 0x1379940); }
+    get_IsReceivedDamage(): boolean {
+        const damage = this.Damages.reduce((a, d) => a + d._DamageValue, 0); // <>c.b__128_0
+        if (this._BreakDamage != null) return 0 < damage + this._BreakDamage._DamageValue;
+        return 0 < damage;
+    }
     /** @rva 0x13797E0  public void .ctor() { } */
-    ctor(): this { return notPorted("AffectedUnitNotice..ctor", 0x13797E0); }
+    ctor(): this {
+        this.Damages = [];
+        this.BarrierDamages = [];
+        this._DamageVisualEffectList = [];
+        this._NonDamageVisualEffectList = [];
+        this._AddStateInfoList = [];
+        this._ReceivedSlipDamageEffectTypeList = [];
+        return this;
+    }
     /** @rva 0x1379670  public void .ctor(int affectedUnitId) { } */
-    ctor$int(affectedUnitId: int): this { return notPorted("AffectedUnitNotice..ctor", 0x1379670); }
+    ctor$int(affectedUnitId: int): this {
+        this.Damages = [];
+        this.BarrierDamages = [];
+        this._DamageVisualEffectList = [];
+        this._NonDamageVisualEffectList = [];
+        this._AddStateInfoList = [];
+        this._ReceivedSlipDamageEffectTypeList = [];
+        this._AffectedUnitId = affectedUnitId;
+        return this;
+    }
     /** @rva 0x1378A40  public static AffectedUnitNotice CreateByDamage(int affectedUnitId, int damageValue, DamageCategory damageCategory, bool isCritical, CorrelationDamageType correlationDamageType, List<string> visualEffectList, TargetElementType attackElement = 0, bool isBreakBonusApplied = False) { } */
     static CreateByDamage(affectedUnitId: int, damageValue: int, damageCategory: DamageCategory, isCritical: boolean, correlationDamageType: CorrelationDamageType, visualEffectList: List<string>, attackElement?: TargetElementType /* = 0 */, isBreakBonusApplied?: boolean /* = False */): AffectedUnitNotice { return notPorted("AffectedUnitNotice.CreateByDamage", 0x1378A40); }
     /** @rva 0x1378650  public static AffectedUnitNotice CreateByBarrierDamage(int affectedUnitId, int damageValue, DamageCategory damageCategory, bool isCritical, CorrelationDamageType correlationDamageType, List<string> visualEffectList, TargetElementType attackElement = 0, bool isBreakBonusApplied = False) { } */
     static CreateByBarrierDamage(affectedUnitId: int, damageValue: int, damageCategory: DamageCategory, isCritical: boolean, correlationDamageType: CorrelationDamageType, visualEffectList: List<string>, attackElement?: TargetElementType /* = 0 */, isBreakBonusApplied?: boolean /* = False */): AffectedUnitNotice { return notPorted("AffectedUnitNotice.CreateByBarrierDamage", 0x1378650); }
     /** @rva 0x1378DF0  public static AffectedUnitNotice CreateByRecovery(int affectedUnitId, int recoveryValue, bool isRevival = False) { } */
-    static CreateByRecovery(affectedUnitId: int, recoveryValue: int, isRevival?: boolean /* = False */): AffectedUnitNotice { return notPorted("AffectedUnitNotice.CreateByRecovery", 0x1378DF0); }
+    static CreateByRecovery(affectedUnitId: int, recoveryValue: int, isRevival?: boolean /* = False */): AffectedUnitNotice {
+        isRevival = isRevival ?? false;
+        const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
+        notice._RecoveryValue = recoveryValue;
+        notice._IsReceivedRecovery = true;
+        notice._IsRevived = isRevival;
+        notice._NonDamageVisualEffectList.push(isRevival ? "revival_temp" : "eff_cmn_act_recovery_appear_001");
+        return notice;
+    }
     /** @rva 0x1379130  public static AffectedUnitNotice CreateByTurnGaugeVariation(int affectedUnitId, float turnGaugeVariation) { } */
-    static CreateByTurnGaugeVariation(affectedUnitId: int, turnGaugeVariation: float): AffectedUnitNotice { return notPorted("AffectedUnitNotice.CreateByTurnGaugeVariation", 0x1379130); }
+    static CreateByTurnGaugeVariation(affectedUnitId: int, turnGaugeVariation: float): AffectedUnitNotice {
+        const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
+        notice._TurnGaugeVariation = turnGaugeVariation;
+        return notice;
+    }
     /** @rva 0x1379010  public static AffectedUnitNotice CreateByRemoveState(int affectedUnitId, AbilityEffectBase.TargetSideType targetSide) { } */
-    static CreateByRemoveState(affectedUnitId: int, targetSide: AbilityEffectBase_TargetSideType): AffectedUnitNotice { return notPorted("AffectedUnitNotice.CreateByRemoveState", 0x1379010); }
+    static CreateByRemoveState(affectedUnitId: int, targetSide: AbilityEffectBase_TargetSideType): AffectedUnitNotice {
+        const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
+        notice._NonDamageVisualEffectList.push(targetSide === 0 ? "eff_cmn_act_recovery_appear_001" : "eff_cmn_act_debuff_appear_001");
+        return notice;
+    }
     /** @rva 0x1378CF0  public static AffectedUnitNotice CreateByOneState(int affectedUnitId, string visualEffect) { } */
-    static CreateByOneState(affectedUnitId: int, visualEffect: string): AffectedUnitNotice { return notPorted("AffectedUnitNotice.CreateByOneState", 0x1378CF0); }
+    static CreateByOneState(affectedUnitId: int, visualEffect: string): AffectedUnitNotice {
+        const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
+        notice._NonDamageVisualEffectList.push(visualEffect);
+        return notice;
+    }
     /** @rva 0x1378920  public static AffectedUnitNotice CreateByBarrier(int affectedUnitId, bool isCharacterFigure, int barrierValue) { } */
-    static CreateByBarrier(affectedUnitId: int, isCharacterFigure: boolean, barrierValue: int): AffectedUnitNotice { return notPorted("AffectedUnitNotice.CreateByBarrier", 0x1378920); }
+    static CreateByBarrier(affectedUnitId: int, isCharacterFigure: boolean, barrierValue: int): AffectedUnitNotice {
+        const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
+        notice._IsBarrierAdded = true;
+        notice._BarrierValue = barrierValue;
+        notice._NonDamageVisualEffectList.push(isCharacterFigure ? "eff_cmn_act_barrier_appear_001" : "eff_cmn_act_barrier_appear_002");
+        return notice;
+    }
     /** @rva 0x1378800  public static AffectedUnitNotice CreateByBarrierHit(int affectedUnitId, bool isCharacterFigure, bool isBarrierDestroyed) { } */
-    static CreateByBarrierHit(affectedUnitId: int, isCharacterFigure: boolean, isBarrierDestroyed: boolean): AffectedUnitNotice { return notPorted("AffectedUnitNotice.CreateByBarrierHit", 0x1378800); }
+    static CreateByBarrierHit(affectedUnitId: int, isCharacterFigure: boolean, isBarrierDestroyed: boolean): AffectedUnitNotice {
+        const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
+        notice._IsBarrierAttacked = true;
+        notice._IsBarrierDestroyed = isBarrierDestroyed;
+        notice._DamageVisualEffectList.push(isCharacterFigure ? "eff_cmn_act_barrier_active_001" : "eff_cmn_act_barrier_active_002");
+        return notice;
+    }
     /** @rva 0x1378F10  public static AffectedUnitNotice CreateByReflection(int affectedUnitId) { } */
-    static CreateByReflection(affectedUnitId: int): AffectedUnitNotice { return notPorted("AffectedUnitNotice.CreateByReflection", 0x1378F10); }
+    static CreateByReflection(affectedUnitId: int): AffectedUnitNotice {
+        const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
+        notice._DamageVisualEffectList.push("eff_cmn_act_reflection_active_001");
+        return notice;
+    }
     /** @rva 0x1378BF0  public static AffectedUnitNotice CreateByDisabledDamageHit(int affectedUnitId) { } */
-    static CreateByDisabledDamageHit(affectedUnitId: int): AffectedUnitNotice { return notPorted("AffectedUnitNotice.CreateByDisabledDamageHit", 0x1378BF0); }
+    static CreateByDisabledDamageHit(affectedUnitId: int): AffectedUnitNotice {
+        const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
+        notice._DamageVisualEffectList.push("eff_639002_smoke_001");
+        return notice;
+    }
     /** @rva 0x1378550  public static AffectedUnitNotice CreateByAddStateInfo(int affectedUnitId, AffectedUnitNotice.AddStateInfo addStateInfo) { } */
-    static CreateByAddStateInfo(affectedUnitId: int, addStateInfo: AffectedUnitNotice_AddStateInfo): AffectedUnitNotice { return notPorted("AffectedUnitNotice.CreateByAddStateInfo", 0x1378550); }
+    static CreateByAddStateInfo(affectedUnitId: int, addStateInfo: AffectedUnitNotice_AddStateInfo): AffectedUnitNotice {
+        const notice = new AffectedUnitNotice().ctor$int(affectedUnitId);
+        notice._AddStateInfoList.push(addStateInfo);
+        return notice;
+    }
     /** @rva 0x1379A90  public static AffectedUnitNotice op_Addition(AffectedUnitNotice notice1, AffectedUnitNotice notice2) { } */
-    static op_Addition(notice1: AffectedUnitNotice, notice2: AffectedUnitNotice): AffectedUnitNotice { return notPorted("AffectedUnitNotice.op_Addition", 0x1379A90); }
+    static op_Addition(notice1: AffectedUnitNotice, notice2: AffectedUnitNotice): AffectedUnitNotice {
+        const n = new AffectedUnitNotice().ctor$int(notice1._AffectedUnitId);
+        n.Damages = union(notice1.Damages, notice2.Damages);
+        n._BreakDamage = notice2._BreakDamage ?? notice1._BreakDamage;
+        n.BarrierDamages = union(notice1.BarrierDamages, notice2.BarrierDamages);
+        n._IsReceivedAttack = notice1._IsReceivedAttack || notice2._IsReceivedAttack;
+        n._IsVisibleOnAttack = notice1._IsVisibleOnAttack || notice2._IsVisibleOnAttack;
+        n._RecoveryValue = notice1._RecoveryValue + notice2._RecoveryValue;
+        n._BarrierValue = notice1._BarrierValue + notice2._BarrierValue;
+        n._TurnGaugeVariation = f32(notice1._TurnGaugeVariation + notice2._TurnGaugeVariation);
+        n._IsReceivedRecovery = notice1._IsReceivedRecovery || notice2._IsReceivedRecovery;
+        n._IsDead = notice1._IsDead || notice2._IsDead;
+        n._IsRevived = notice1._IsRevived || notice2._IsRevived;
+        n._IsSummoned = notice1._IsSummoned || notice2._IsSummoned;
+        n._IsResetBreakPoint = notice1._IsResetBreakPoint || notice2._IsResetBreakPoint;
+        n._IsBarrierAdded = notice1._IsBarrierAdded || notice2._IsBarrierAdded;
+        n._IsBarrierAttacked = notice1._IsBarrierAttacked || notice2._IsBarrierAttacked;
+        n._IsBarrierDestroyed = notice1._IsBarrierDestroyed || notice2._IsBarrierDestroyed;
+        n._IsReceivedReflection = notice1._IsReceivedReflection || notice2._IsReceivedReflection;
+        n._IsCounterAttack = notice1._IsCounterAttack || notice2._IsCounterAttack;
+        n._BreakedDamageReceiveRateUpValue = notice1._BreakedDamageReceiveRateUpValue + notice2._BreakedDamageReceiveRateUpValue;
+        n._IsBreakedDamageReceiveRateBecomeMax = notice1._IsBreakedDamageReceiveRateBecomeMax || notice2._IsBreakedDamageReceiveRateBecomeMax;
+        n._IsWeakElementAttacked = notice1._IsWeakElementAttacked || notice2._IsWeakElementAttacked;
+        n._CanNotAction = notice1._CanNotAction || notice2._CanNotAction;
+        n._FinishCanNotAction = notice1._FinishCanNotAction || notice2._FinishCanNotAction;
+        n._FinishLockTurnOrder = notice1._FinishLockTurnOrder || notice2._FinishLockTurnOrder;
+        n._DamageVisualEffectList = union(notice1._DamageVisualEffectList, notice2._DamageVisualEffectList);
+        n._NonDamageVisualEffectList = union(notice1._NonDamageVisualEffectList, notice2._NonDamageVisualEffectList);
+        n._AddStateInfoList = union(notice1._AddStateInfoList, notice2._AddStateInfoList);
+        n._ReceivedSlipDamageEffectTypeList = union(notice1._ReceivedSlipDamageEffectTypeList, notice2._ReceivedSlipDamageEffectTypeList);
+        return n;
+    }
     /** @rva 0x1379240  public int GetTotalDamageValue(bool includeBreakDamage = True) { } */
-    GetTotalDamageValue(includeBreakDamage?: boolean /* = True */): int { return notPorted("AffectedUnitNotice.GetTotalDamageValue", 0x1379240); }
+    GetTotalDamageValue(includeBreakDamage?: boolean /* = True */): int {
+        includeBreakDamage = includeBreakDamage ?? true;
+        const damage = this.Damages.reduce((a, d) => a + d._DamageValue, 0) | 0; // Enumerable.Sum (<>c.b__128_0)
+        if (includeBreakDamage && this._BreakDamage != null) return (damage + this._BreakDamage._DamageValue) | 0;
+        return damage;
+    }
     /** @rva 0x1379440  public void SetDamageSequence(int seq) { } */
-    SetDamageSequence(seq: int): void { return notPorted("AffectedUnitNotice.SetDamageSequence", 0x1379440); }
+    SetDamageSequence(seq: int): void {
+        // <>c__DisplayClass129_0: 0x10 seq
+        this.Damages.forEach(x => { x._Sequence = seq; }); // b__0
+        this.BarrierDamages.forEach(x => { x._Sequence = seq; }); // b__1
+    }
     /** @rva 0x13791A0  public List<AffectedUnitNotice.DamageInfo> GetDisplayDamageInfoList() { } */
-    GetDisplayDamageInfoList(): List<AffectedUnitNotice_DamageInfo> { return notPorted("AffectedUnitNotice.GetDisplayDamageInfoList", 0x13791A0); }
+    GetDisplayDamageInfoList(): List<AffectedUnitNotice_DamageInfo> {
+        const list: List<AffectedUnitNotice_DamageInfo> = [];
+        list.push(...this.BarrierDamages);
+        list.push(...this.Damages);
+        return list;
+    }
     /** @rva 0x1379390  public bool HasAnyDamageOfCategory(DamageCategory category) { } */
-    HasAnyDamageOfCategory(category: DamageCategory): boolean { return notPorted("AffectedUnitNotice.HasAnyDamageOfCategory", 0x1379390); }
+    HasAnyDamageOfCategory(category: DamageCategory): boolean {
+        for (const d of this.Damages) if (d._Category === category) return true;
+        if (this._BreakDamage != null && this._BreakDamage._Category === category) return true;
+        for (const d of this.BarrierDamages) if (d._Category === category) return true;
+        return false;
+    }
     /** @rva 0x1379600  public bool ShouldSerializeDamages() { } */
-    ShouldSerializeDamages(): boolean { return notPorted("AffectedUnitNotice.ShouldSerializeDamages", 0x1379600); }
+    ShouldSerializeDamages(): boolean { return this.Damages.length !== 0; }
     /** @rva 0xBE6780  public bool ShouldSerializeBarrierDamages() { } */
-    ShouldSerializeBarrierDamages(): boolean { return notPorted("AffectedUnitNotice.ShouldSerializeBarrierDamages", 0xBE6780); }
+    ShouldSerializeBarrierDamages(): boolean { return this.BarrierDamages.length !== 0; }
     /** @rva 0x13795B0  public bool ShouldSerializeDamageVisualEffectList() { } */
-    ShouldSerializeDamageVisualEffectList(): boolean { return notPorted("AffectedUnitNotice.ShouldSerializeDamageVisualEffectList", 0x13795B0); }
+    ShouldSerializeDamageVisualEffectList(): boolean { return 0 < this._DamageVisualEffectList.length; }
     /** @rva 0x1379620  public bool ShouldSerializeNonDamageVisualEffectList() { } */
-    ShouldSerializeNonDamageVisualEffectList(): boolean { return notPorted("AffectedUnitNotice.ShouldSerializeNonDamageVisualEffectList", 0x1379620); }
+    ShouldSerializeNonDamageVisualEffectList(): boolean { return 0 < this._NonDamageVisualEffectList.length; }
     /** @rva 0x1379560  public bool ShouldSerializeAddStateInfoList() { } */
-    ShouldSerializeAddStateInfoList(): boolean { return notPorted("AffectedUnitNotice.ShouldSerializeAddStateInfoList", 0x1379560); }
+    ShouldSerializeAddStateInfoList(): boolean { return 0 < this._AddStateInfoList.length; }
 }
 
 // ---- ReDriveBattleCore.AffectedUnitNotice.DamageInfo  (TypeDefIndex 309, public class) ----
@@ -354,7 +469,9 @@ export class AffectedUnitNotice_DamageInfo {
     /** @rva 0x8A2290  public void set_IsBarrierDamage(bool value) { } */
     set_IsBarrierDamage(value: boolean): void { this._IsBarrierDamage = value; /* auto-property */ }
     /** @rva 0x138B530  public void set_IsReflectionDamage(bool value) { } */
-    set_IsReflectionDamage(value: boolean): void { return notPorted("AffectedUnitNotice_DamageInfo.set_IsReflectionDamage", 0x138B530); }
+    set_IsReflectionDamage(value: boolean): void {
+        this._Category = (value ? 5 : 0) as DamageCategory;
+    }
     /** @rva 0x7637A0  public DamageCategory get_Category() { } */
     get_Category(): DamageCategory { return this._Category; /* auto-property */ }
     /** @rva 0x8A2250  public void set_Category(DamageCategory value) { } */

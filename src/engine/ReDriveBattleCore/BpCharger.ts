@@ -14,13 +14,25 @@ export class BpCharger {
     /** 0x8 private static readonly int EpAbilityEffectChargePoint */
     static EpAbilityEffectChargePoint: int = 0;
     /** @rva 0x14913E0  public static void ChargeByNormalAttack(BattleUnit attacker) { } */
-    static ChargeByNormalAttack(attacker: BattleUnit): void { return notPorted("BpCharger.ChargeByNormalAttack", 0x14913E0); }
+    static ChargeByNormalAttack(attacker: BattleUnit): void {
+        attacker.AddBP(BpCharger.NormalAttackChargePoint); // tail call
+    }
     /** @rva 0x1491300  public static void ChargeByActiveSkill(BattleUnit attacker) { } */
-    static ChargeByActiveSkill(attacker: BattleUnit): void { return notPorted("BpCharger.ChargeByActiveSkill", 0x1491300); }
+    static ChargeByActiveSkill(attacker: BattleUnit): void {
+        attacker.AddBP(BpCharger.ActiveSkillChargePoint); // tail call
+    }
     /** @rva 0x1491370  public static void ChargeByEpAbilityEffect(BattleUnit targetUnit) { } */
-    static ChargeByEpAbilityEffect(targetUnit: BattleUnit): void { return notPorted("BpCharger.ChargeByEpAbilityEffect", 0x1491370); }
+    static ChargeByEpAbilityEffect(targetUnit: BattleUnit): void {
+        targetUnit.AddBP(BpCharger.EpAbilityEffectChargePoint); // tail call
+    }
     /** @rva 0x7305E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x1491450  private static void .cctor() { } */
-    static cctor(): void { return notPorted("BpCharger..cctor", 0x1491450); }
+    static cctor(): void {
+        BpCharger.NormalAttackChargePoint = 1;
+        BpCharger.ActiveSkillChargePoint = 2;
+        BpCharger.EpAbilityEffectChargePoint = 1;
+    }
 }
+
+BpCharger.cctor(); // C# static constructor

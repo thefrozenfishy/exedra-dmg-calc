@@ -256,3 +256,40 @@ export function enumToString(e: Readonly<Record<string, number>>, value: number)
     for (const k of Object.keys(e)) if (e[k] === value) return k;
     return String(value);
 }
+
+/** System.Boolean.Parse: "True"/"False", case-insensitive, surrounding whitespace allowed. */
+export function boolParse(s: string | null): boolean {
+    if (s == null) throw new TypeError("ArgumentNullException: value");
+    const t = s.trim().toLowerCase();
+    if (t === "true") return true;
+    if (t === "false") return false;
+    throw new SyntaxError(`FormatException: "${s}"`);
+}
+/** System.Single.Parse (invariant-style digits), rounded to float. */
+export function singleParse(s: string | null): number {
+    if (s == null) throw new TypeError("ArgumentNullException: s");
+    const t = s.trim();
+    if (!/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(t)) throw new SyntaxError(`FormatException: "${s}"`);
+    return Math.fround(Number(t));
+}
+/** String.StartsWith(string) (culture-sensitive in .NET; ordinal here); throws on a null prefix like .NET. */
+export function startsWith(s: string, prefix: string | null): boolean {
+    if (prefix == null) throw new TypeError("ArgumentNullException: value");
+    return s.startsWith(prefix);
+}
+
+/** Enumerable.Union (default equality: value for strings/numbers, reference for objects); order kept, duplicates dropped. */
+export function union<T>(first: readonly T[], second: readonly T[]): T[] {
+    const seen = new Set<T>(), out: T[] = [];
+    for (const x of first) if (!seen.has(x)) { seen.add(x); out.push(x); }
+    for (const x of second) if (!seen.has(x)) { seen.add(x); out.push(x); }
+    return out;
+}
+
+/** System.Math.Clamp(value, min, max): throws when min > max, like .NET. */
+export function mathClamp(value: number, min: number, max: number): number {
+    if (min > max) throw new RangeError(`ArgumentException: '${min}' cannot be greater than ${max}.`);
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+}

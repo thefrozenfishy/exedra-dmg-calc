@@ -22,6 +22,8 @@ import type { CompareTarget } from "./CompareTarget";
 import type { ConditionUseType } from "./ConditionUseType";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
+import { singleParse } from "../../runtime";
+import { boolParse } from "../../runtime";
 
 // ---- ReDriveBattleCore.BattleCondition.BattleConditionUtils  (TypeDefIndex 1041, public class) ----
 export class BattleConditionUtils {
@@ -408,18 +410,3 @@ export class BattleConditionUtils_Condition {
 }
 
 BattleConditionUtils.cctor(); // C# static constructor
-/** System.Single.Parse (invariant culture), as float. */
-function singleParse(s: string): float {
-    if (s == null) throw new TypeError("ArgumentNullException: s");
-    const t = s.trim();
-    if (!/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(t)) throw new SyntaxError(`FormatException: "${s}"`);
-    return f32(Number(t));
-}
-/** System.Boolean.Parse: "True"/"False", case-insensitive, surrounding whitespace allowed. */
-function boolParse(s: string): boolean {
-    if (s == null) throw new TypeError("ArgumentNullException: value");
-    const t = s.trim().toLowerCase();
-    if (t === "true") return true;
-    if (t === "false") return false;
-    throw new SyntaxError(`FormatException: "${s}"`);
-}

@@ -1,7 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
 import type { float } from "../../runtime";
 import { GainEpAbilityEffectBase } from "./GainEpAbilityEffectBase";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
@@ -23,5 +23,7 @@ export class GainEpRatioAbilityEffect extends GainEpAbilityEffectBase {
         return this;
     }
     /** @rva 0x18F35C0 slot 8  public override float GetGainPoint(BattleUnit targetUnit) { } */
-    GetGainPoint(targetUnit: BattleUnit): float { return notPorted("GainEpRatioAbilityEffect.GetGainPoint", 0x18F35C0); }
+    GetGainPoint(targetUnit: BattleUnit): float {
+        return f32(f32(this.effectValue * targetUnit._MaxEP) / 1000);
+    }
 }

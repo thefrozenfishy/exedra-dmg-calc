@@ -23,6 +23,7 @@ import type { BattleUnit } from "../BattleUnit";
 import type { Nullable } from "../../runtime";
 import type { float } from "../../runtime";
 import type { int } from "../../runtime";
+import { boolParse } from "../../runtime";
 
 // ---- ReDriveBattleCore.BattleCondition.BattleUnitConditionChecker  (TypeDefIndex 1046, public class) ----
 export class BattleUnitConditionChecker extends ConditionCheckerBase {
@@ -224,11 +225,3 @@ export class BattleUnitConditionChecker extends ConditionCheckerBase {
     }
 }
 
-/** System.Boolean.Parse: "True"/"False", case-insensitive, surrounding whitespace allowed. */
-function boolParse(s: string): boolean {
-    if (s == null) throw new TypeError("ArgumentNullException: value");
-    const t = s.trim().toLowerCase();
-    if (t === "true") return true;
-    if (t === "false") return false;
-    throw new SyntaxError(`FormatException: "${s}"`);
-}

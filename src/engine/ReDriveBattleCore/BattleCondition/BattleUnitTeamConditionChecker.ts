@@ -16,6 +16,8 @@ import type { AffectedUnitNotice } from "../AffectedUnitNotice";
 import type { BattleConditionUtils_Condition } from "./BattleConditionUtils";
 import { ConditionCheckerBase } from "./ConditionCheckerBase";
 import type { BattleUnit } from "../BattleUnit";
+import { startsWith } from "../../runtime";
+import { boolParse } from "../../runtime";
 
 // ---- ReDriveBattleCore.BattleCondition.BattleUnitTeamConditionChecker  (TypeDefIndex 1062, public class) ----
 export class BattleUnitTeamConditionChecker extends ConditionCheckerBase {
@@ -214,16 +216,3 @@ export class BattleUnitTeamConditionChecker extends ConditionCheckerBase {
     }
 }
 
-/** String.StartsWith(string) (current culture); throws on a null prefix like .NET. */
-function startsWith(s: string, prefix: string): boolean {
-    if (prefix == null) throw new TypeError("ArgumentNullException: value");
-    return s.startsWith(prefix);
-}
-/** System.Boolean.Parse. */
-function boolParse(s: string): boolean {
-    if (s == null) throw new TypeError("ArgumentNullException: value");
-    const t = s.trim().toLowerCase();
-    if (t === "true") return true;
-    if (t === "false") return false;
-    throw new SyntaxError(`FormatException: "${s}"`);
-}

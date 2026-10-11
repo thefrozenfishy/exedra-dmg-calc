@@ -1,7 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { f32, notPorted, trunc } from "../../runtime";
 import type { int } from "../../runtime";
 import { LoseEpAbilityEffectBase } from "./LoseEpAbilityEffectBase";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
@@ -23,5 +23,7 @@ export class LoseEpRatioAbilityEffect extends LoseEpAbilityEffectBase {
         return this;
     }
     /** @rva 0x18F61A0 slot 8  public override int GetLosePoint(BattleUnit targetUnit) { } */
-    GetLosePoint(targetUnit: BattleUnit): int { return notPorted("LoseEpRatioAbilityEffect.GetLosePoint", 0x18F61A0); }
+    GetLosePoint(targetUnit: BattleUnit): int {
+        return trunc(f32(f32(this.effectValue * targetUnit._MaxEP) / 1000));
+    }
 }
