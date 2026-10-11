@@ -1,12 +1,11 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
 import type { float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { DownCtrUnitStateBase } from "./DownCtrUnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnCtrFixedUnitState  (TypeDefIndex 593, public class) ----
 export class DwnCtrFixedUnitState extends DownCtrUnitStateBase {
@@ -26,5 +25,7 @@ export class DwnCtrFixedUnitState extends DownCtrUnitStateBase {
         return this;
     }
     /** @rva 0x15BCAC0 slot 30  public override float GetCtrVariationValue(BattleUnit unit, float processingValue) { } */
-    GetCtrVariationValue(unit: BattleUnit, processingValue: float): float { return notPorted("DwnCtrFixedUnitState.GetCtrVariationValue", 0x15BCAC0); }
+    GetCtrVariationValue(unit: BattleUnit, processingValue: float): float {
+        return -f32(f32(f32(this._UpdateableEffectValue / 10) * processingValue) / 100);
+    }
 }

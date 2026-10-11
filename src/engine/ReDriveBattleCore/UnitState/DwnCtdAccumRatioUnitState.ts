@@ -2,7 +2,7 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { IAccum$Accumulate } from "./IAccum";
-import { notPorted } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
 import type { float, int } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
@@ -12,7 +12,6 @@ import type { IBlendable } from "./IBlendable";
 import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import type { IStateIconNumberDisplayable } from "./IStateIconNumberDisplayable";
 import type { UnitStateBase } from "./UnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnCtdAccumRatioUnitState  (TypeDefIndex 589, public class) ----
 export class DwnCtdAccumRatioUnitState extends DownCtdUnitStateBase {  // implements IAccum, IBlendable, IHasUpdateableEffectValue, IStateIconNumberDisplayable
@@ -52,7 +51,9 @@ export class DwnCtdAccumRatioUnitState extends DownCtdUnitStateBase {  // implem
         return this;
     }
     /** @rva 0x15BC710 slot 30  public override float GetCtdVariationValue(BattleUnit unit, float processingValue) { } */
-    GetCtdVariationValue(unit: BattleUnit, processingValue: float): float { return notPorted("DwnCtdAccumRatioUnitState.GetCtdVariationValue", 0x15BC710); }
+    GetCtdVariationValue(unit: BattleUnit, processingValue: float): float {
+        return -f32(f32(f32(f32(this._UpdateableEffectValue / 10) * processingValue) * this._AccumCount) / 100); // same code as DwnCtrAccumRatioUnitState.GetCtrVariationValue
+    }
     /** @rva 0x15BC6C0 slot 38  public bool Blend(UnitStateBase injectUnitState) { } */
     Blend(injectUnitState: UnitStateBase): boolean {
         return IAccum$Accumulate(this as unknown as IAccum, injectUnitState); // ((IAccum)this).Accumulate (default interface method, IAccum slot 6)

@@ -1,7 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
 import type { List, float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { ActiveSkillBase } from "../ActiveSkillBase";
@@ -29,7 +29,10 @@ export class DwnCtrConsumeFixedUnitState extends DwnCtrFixedUnitState {  // impl
         return this;
     }
     /** @rva 0x15BC9F0 slot 30  public override float GetCtrVariationValue(BattleUnit unit, float processingValue) { } */
-    GetCtrVariationValue(unit: BattleUnit, processingValue: float): float { return notPorted("DwnCtrConsumeFixedUnitState.GetCtrVariationValue", 0x15BC9F0); }
+    GetCtrVariationValue(unit: BattleUnit, processingValue: float): float {
+        if (0 < this._RemainCount) return -f32(f32(f32(this._UpdateableEffectValue / 10) * processingValue) / 100);
+        return 0;
+    }
     /** @rva 0x15BCA20 slot 31  public bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
     ShouldConsume(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean { return notPorted("DwnCtrConsumeFixedUnitState.ShouldConsume", 0x15BCA20); }
 }

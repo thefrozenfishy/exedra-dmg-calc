@@ -1,12 +1,11 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
 import type { float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { DownBreakedDamageReceiveRatioUnitStateBase } from "./DownBreakedDamageReceiveRatioUnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnBreakedDamageReceiveRatioUnitState  (TypeDefIndex 586, public class) ----
 export class DwnBreakedDamageReceiveRatioUnitState extends DownBreakedDamageReceiveRatioUnitStateBase {
@@ -26,5 +25,7 @@ export class DwnBreakedDamageReceiveRatioUnitState extends DownBreakedDamageRece
         return this;
     }
     /** @rva 0x15BC690 slot 30  public override float GetBreakedDamageReceiveRatioVariationValue(BattleUnit unit, float processingValue) { } */
-    GetBreakedDamageReceiveRatioVariationValue(unit: BattleUnit, processingValue: float): float { return notPorted("DwnBreakedDamageReceiveRatioUnitState.GetBreakedDamageReceiveRatioVariationValue", 0x15BC690); }
+    GetBreakedDamageReceiveRatioVariationValue(unit: BattleUnit, processingValue: float): float {
+        return f32(f32(f32(this._UpdateableEffectValue / 10) * -processingValue) / 100);
+    }
 }

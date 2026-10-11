@@ -1,8 +1,8 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { DownAttackUnitStateBase } from "./DownAttackUnitStateBase";
@@ -27,7 +27,10 @@ export abstract class DownAttackConsumeUnitStateBase extends DownAttackUnitState
         return this;
     }
     /** @rva 0x15B8970 slot 30  public override Decimal GetAtkVariationValue(BattleUnit unit, Decimal processingValue) { } */
-    GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("DownAttackConsumeUnitStateBase.GetAtkVariationValue", 0x15B8970); }
+    GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal {
+        if (this._RemainCount < 1) return Decimal.Zero;
+        return this.GetAtkVariationValueIfRemainCount(unit, processingValue); // vslot 36
+    }
     /** @rva -1 slot 36  protected abstract Decimal GetAtkVariationValueIfRemainCount(BattleUnit unit, Decimal processingValue); */
     abstract GetAtkVariationValueIfRemainCount(unit: BattleUnit, processingValue: Decimal): Decimal;
 }

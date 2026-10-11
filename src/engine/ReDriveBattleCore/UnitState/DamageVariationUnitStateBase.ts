@@ -1,14 +1,14 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal, float } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import type { float } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { AdditionType } from "./AdditionType";
 import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import { UnitStateBase } from "./UnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DamageVariationUnitStateBase  (TypeDefIndex 691, public abstract class) ----
 export abstract class DamageVariationUnitStateBase extends UnitStateBase {  // implements IHasUpdateableEffectValue
@@ -39,7 +39,22 @@ export abstract class DamageVariationUnitStateBase extends UnitStateBase {  // i
     /** @rva -1 slot 28  public abstract AdditionType get_Addition(); */
     abstract get_Addition(): AdditionType;
     /** @rva 0x16CFA40 slot 29  public virtual Decimal GetDamageVariationValue(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageValue, Decimal processingValue) { } */
-    GetDamageVariationValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageValue: Decimal, processingValue: Decimal): Decimal { return notPorted("DamageVariationUnitStateBase.GetDamageVariationValue", 0x16CFA40); }
+    GetDamageVariationValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageValue: Decimal, processingValue: Decimal): Decimal {
+        let value: Decimal;
+        const calculation = this.get_Calculation(); // vslot 27
+        if (calculation === 0) {
+            const baseValue = this.get_Addition() === 0 ? damageValue : processingValue; // vslot 28
+            value = baseValue.mul(Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(1000)));
+        } else if (calculation === 1) {
+            value = Decimal.fromFloat(this._UpdateableEffectValue);
+        } else {
+            value = Decimal.Zero;
+        }
+        const addition = this.get_Addition();
+        if (addition === 0) return value;
+        if (addition === 1) return value.neg();
+        return Decimal.Zero;
+    }
 }
 
 // ---- ReDriveBattleCore.UnitState.DamageVariationUnitStateBase.CalculationType  (TypeDefIndex 690, public enum) ----

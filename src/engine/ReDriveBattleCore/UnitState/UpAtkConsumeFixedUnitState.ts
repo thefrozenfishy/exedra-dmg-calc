@@ -1,12 +1,12 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal, float } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import type { float } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UpAttackConsumeUnitStateBase } from "./UpAttackConsumeUnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpAtkConsumeFixedUnitState  (TypeDefIndex 753, public class) ----
 export class UpAtkConsumeFixedUnitState extends UpAttackConsumeUnitStateBase {
@@ -25,5 +25,7 @@ export class UpAtkConsumeFixedUnitState extends UpAttackConsumeUnitStateBase {
         return this;
     }
     /** @rva 0x16E08D0 slot 36  protected override Decimal GetAtkVariationValueIfRemainCount(BattleUnit unit, Decimal processingValue) { } */
-    GetAtkVariationValueIfRemainCount(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("UpAtkConsumeFixedUnitState.GetAtkVariationValueIfRemainCount", 0x16E08D0); }
+    GetAtkVariationValueIfRemainCount(unit: BattleUnit, processingValue: Decimal): Decimal {
+        return Decimal.fromFloat(this._UpdateableEffectValue);
+    }
 }

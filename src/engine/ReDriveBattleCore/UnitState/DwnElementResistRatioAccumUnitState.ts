@@ -2,8 +2,9 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { IAccum$Accumulate } from "./IAccum";
-import { notPorted } from "../../runtime";
-import type { Decimal, int } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import type { int } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { TargetElementType } from "../../Network/Definition/Battle/TargetElementType";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
@@ -50,7 +51,10 @@ export class DwnElementResistRatioAccumUnitState extends DownElementResistUnitSt
         return this;
     }
     /** @rva 0x15BD020 slot 29  public override Decimal GetElementResistVariationValue(BattleUnit unit, TargetElementType attackElement) { } */
-    GetElementResistVariationValue(unit: BattleUnit, attackElement: TargetElementType): Decimal { return notPorted("DwnElementResistRatioAccumUnitState.GetElementResistVariationValue", 0x15BD020); }
+    GetElementResistVariationValue(unit: BattleUnit, attackElement: TargetElementType): Decimal {
+        if (this._TargetElement === 0 || (this._TargetElement as number) === (attackElement as number)) return Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10)).mul(Decimal.fromInt(this._AccumCount)).neg();
+        return Decimal.Zero;
+    }
     /** @rva 0x15BCFD0 slot 37  public bool Blend(UnitStateBase injectUnitState) { } */
     Blend(injectUnitState: UnitStateBase): boolean {
         return IAccum$Accumulate(this as unknown as IAccum, injectUnitState); // ((IAccum)this).Accumulate (default interface method, IAccum slot 6)

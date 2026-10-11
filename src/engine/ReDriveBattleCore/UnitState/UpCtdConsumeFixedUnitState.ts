@@ -1,7 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
 import type { List, float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { ActiveSkillBase } from "../ActiveSkillBase";
@@ -10,7 +10,6 @@ import type { BattleUnit } from "../BattleUnit";
 import type { IConsumeRemainCount } from "./IConsumeRemainCount";
 import type { IConsumeRemainCountOnAttack } from "./IConsumeRemainCountOnAttack";
 import { UpCtdFixedUnitState } from "./UpCtdFixedUnitState";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpCtdConsumeFixedUnitState  (TypeDefIndex 765, public class) ----
 export class UpCtdConsumeFixedUnitState extends UpCtdFixedUnitState {  // implements IConsumeRemainCountOnAttack, IConsumeRemainCount
@@ -31,7 +30,10 @@ export class UpCtdConsumeFixedUnitState extends UpCtdFixedUnitState {  // implem
         return this;
     }
     /** @rva 0x16E1D00 slot 30  public override float GetCtdVariationValue(BattleUnit unit, float processingValue) { } */
-    GetCtdVariationValue(unit: BattleUnit, processingValue: float): float { return notPorted("UpCtdConsumeFixedUnitState.GetCtdVariationValue", 0x16E1D00); }
+    GetCtdVariationValue(unit: BattleUnit, processingValue: float): float {
+        if (0 < this._RemainCount) return f32(this._UpdateableEffectValue / 10);
+        return 0;
+    }
     /** @rva 0x16E1D20 slot 31  public bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
     ShouldConsume(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean { return notPorted("UpCtdConsumeFixedUnitState.ShouldConsume", 0x16E1D20); }
 }

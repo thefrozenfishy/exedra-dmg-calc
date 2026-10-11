@@ -1,6 +1,11 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import type { IReceiveFinalDamage } from "./UnitState/IReceiveFinalDamage";
+import { TargetElementType as TargetElementType$ } from "../Network/Definition/Battle/TargetElementType";
+import { AffectedUnitNoticeBundle } from "./AffectedUnitNoticeBundle";
+import type { IReceiveSlipDamage } from "./UnitState/IReceiveSlipDamage";
+import { EpCharger } from "./EpCharger";
 import type { IBreakEffectVariation } from "./UnitState/IBreakEffectVariation";
 import type { IReceiveDamageVariation } from "./UnitState/IReceiveDamageVariation";
 import type { IGiveSlipDamageVariation } from "./UnitState/IGiveSlipDamageVariation";
@@ -19,7 +24,7 @@ import { QuestEnemyAppearanceParameter } from "./QuestEnemyAppearanceParameter";
 import { CharacterParameter } from "./CharacterParameter";
 import { CorrelationEffect } from "./CorrelationEffect";
 import { AffectedUnitNotice, AffectedUnitNotice_DamageInfo } from "./AffectedUnitNotice";
-import { GameRandom, enumToString, f32, isImpl, notPorted } from "../runtime";
+import { GameRandom, dictGet, enumIsDefined, enumToString, f32, isImpl, notPorted } from "../runtime";
 import type { Dictionary, float, int } from "../runtime";
 import { Decimal } from "../runtime";
 import type { BattleType } from "../Network/Definition/Battle/BattleType";
@@ -27,7 +32,6 @@ import type { TargetElementType } from "../Network/Definition/Battle/TargetEleme
 import type { DamageBaseType } from "./AbilityEffect/DamageBaseType";
 import type { ActiveSkillBase } from "./ActiveSkillBase";
 
-import type { AffectedUnitNoticeBundle } from "./AffectedUnitNoticeBundle";
 import type { BattleUnit } from "./BattleUnit";
 
 import type { DamageCategory } from "./DamageCategory";
@@ -130,7 +134,57 @@ export class BattleDamageCalculator {
         return damage.ceiling().toInt();
     }
     /** @rva 0x13806D0  public static AffectedUnitNotice GetSlipDamageResult(BattleUnit unit, Dictionary<int, BattleUnit> battleUnitDic, BattleType battleType, Func<UnitStateBase, bool> predicate, bool isImmediately = False) { } */
-    static GetSlipDamageResult(unit: BattleUnit, battleUnitDic: Dictionary<int, BattleUnit>, battleType: BattleType, predicate: ((a0: UnitStateBase) => boolean), isImmediately?: boolean /* = False */): AffectedUnitNotice { return notPorted("BattleDamageCalculator.GetSlipDamageResult", 0x13806D0); }
+    static GetSlipDamageResult(unit: BattleUnit, battleUnitDic: Dictionary<int, BattleUnit>, battleType: BattleType, predicate: ((a0: UnitStateBase) => boolean), isImmediately: boolean = false): AffectedUnitNotice {
+        // <>c__DisplayClass6_0 { isBreak }
+        const receivedSlipDamageEffectTypes = new Set<string>(); // HashSet<string>
+        const visualEffects = new Set<string>(); // HashSet<string>
+        let isReceived = false;
+        const isBreak = unit._BreakPoint.get_IsBreak();
+        const damageDic: Dictionary<TargetElementType, Decimal> = new Map();
+        let stateList = unit._Condition._StateList;
+        if (predicate != null) stateList = stateList.filter(predicate);
+        for (const state of stateList) {
+            if (!isImpl(state, "IReceiveSlipDamage")) continue;
+            const receiveSlipDamage = state as unknown as IReceiveSlipDamage;
+            if (!state.IsActive$BattleUnit(unit)) continue;
+            const attackUnit = battleUnitDic.get(state._UserUnitId) ?? null; // TryGetValue
+            if (attackUnit == null) continue;
+            const damage = Decimal.fromFloat(receiveSlipDamage.GetSlipDamageValue(attackUnit, unit, battleType, isImmediately));
+            if (isImmediately) state._ShouldBeRemovedNow = true;
+            receivedSlipDamageEffectTypes.add(state._EffectType);
+            visualEffects.add(receiveSlipDamage.SlipDamageVisualEffectName); // slot 2
+            const element = receiveSlipDamage.AttackElement; // slot 1
+            if (damageDic.has(element)) { // TryAdd failed
+                const key = receiveSlipDamage.AttackElement;
+                damageDic.set(key, damageDic.get(key)!.add(damage));
+            } else {
+                damageDic.set(element, damage);
+            }
+            EpCharger.ChargeByReceiveSlipDamage(unit);
+            isReceived = true;
+        }
+        unit._Condition.RemoveUnitState$BattleUnit_FuncUnitStateBasebool(unit, state => state._ShouldBeRemovedNow); // <>c.b__6_0
+        if (!isReceived) return null!;
+        let notice = new AffectedUnitNotice().ctor$int(unit._Id);
+        notice.Damages = [...damageDic].map(([key, value]) => { // DisplayClass6_0.b__1
+            const damageInfo = new AffectedUnitNotice_DamageInfo();
+            damageInfo._DamageValue = value.ceiling().toInt();
+            damageInfo._IsBreakBonusApplied = isBreak;
+            damageInfo._AttackElement = key;
+            damageInfo._Category = 4 as DamageCategory; // Slip
+            damageInfo._IsCritical = false;
+            damageInfo._CorrelationDamageType = 0 as CorrelationDamageType;
+            damageInfo._IsBarrierDamage = false;
+            return damageInfo;
+        });
+        notice._ReceivedSlipDamageEffectTypeList = [...receivedSlipDamageEffectTypes];
+        notice._DamageVisualEffectList = [...visualEffects];
+        if (BattleDamageCalculator.IsDamageDisabled(unit)) notice = AffectedUnitNotice.op_Addition(notice, AffectedUnitNotice.CreateByDisabledDamageHit(unit._Id));
+        let isMaxBreakBonus = false;
+        if (unit._BreakPoint.get_IsBreak()) isMaxBreakBonus = unit._BreakedDamageReceiveRate === Math.trunc(unit._BattleParameter._MaxBreakedDamageReceiveRate / 10);
+        for (const damageInfo of notice.Damages) damageInfo._IsMaxBreakBonusWhenHit = isMaxBreakBonus;
+        return notice;
+    }
     /** @rva 0x137DA30  private static Decimal GetDefenseCorrectedDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage, DamageBaseType damageBaseType) { } */
     static GetDefenseCorrectedDamage(attackUnit: BattleUnit, defenseUnit: BattleUnit, damage: Decimal, damageBaseType: DamageBaseType): Decimal {
         const attackValue = attackUnit.GetProcessedDamageBaseParamValueDecimal(damageBaseType); // inlined in the game
@@ -323,7 +377,44 @@ export class BattleDamageCalculator {
         return [notice, 0, damageValue];
     }
     /** @rva 0x137B110  public static AffectedUnitNoticeBundle CalcFinalDamageNoticeBundle(BattleUnit userUnit, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */
-    static CalcFinalDamageNoticeBundle(userUnit: BattleUnit, noticeBundle: AffectedUnitNoticeBundle, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("BattleDamageCalculator.CalcFinalDamageNoticeBundle", 0x137B110); }
+    static CalcFinalDamageNoticeBundle(userUnit: BattleUnit, noticeBundle: AffectedUnitNoticeBundle, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
+        // <>c__DisplayClass23_0 { userUnit }
+        const affectedUnitNoticeBundle = new AffectedUnitNoticeBundle().ctor();
+        if (!noticeBundle.GetAllDisplayDamageInfo().some(d => d._Category === 1 || d._Category === 2)) return null!; // <>c.b__23_0
+        for (const notice of [...noticeBundle.noticeDic.values()]) {
+            // <>c__DisplayClass23_1 { targetUnit }
+            if (!notice.GetDisplayDamageInfoList().some(d => d._Category === 1 || d._Category === 2)) continue; // <>c.b__23_1
+            const targetUnit = dictGet(gameDirector.get_battleUnitDic(), notice._AffectedUnitId);
+            if (targetUnit._Team === userUnit._Team) continue;
+            let totalDamage = Decimal.Zero; // Enumerable.Sum(Func<DamageInfo, decimal>)
+            for (const d of notice.GetDisplayDamageInfoList()) totalDamage = totalDamage.add(Decimal.fromInt(d._DamageValue)); // <>c.b__23_2
+            totalDamage = totalDamage.add(Decimal.fromInt(notice._BreakDamage != null ? notice._BreakDamage._DamageValue : 0));
+            let ratio = Decimal.Zero; // Enumerable.Sum
+            for (const state of targetUnit._Condition._StateList) {
+                if (!(isImpl(state, "IReceiveFinalDamage") && state.IsActive$BattleUnit(targetUnit))) continue; // DisplayClass23_1.b__3
+                ratio = ratio.add((state as unknown as IReceiveFinalDamage).GetFinalDamageRatio(userUnit)); // DisplayClass23_0.b__4
+            }
+            if (ratio.le(Decimal.Zero)) continue;
+            const damageValue = totalDamage.mul(ratio).ceiling().toInt();
+            let barrierNotice = new AffectedUnitNotice().ctor$int(targetUnit._Id);
+            let barrierDamageValue: int, remainDamageValue: int;
+            [barrierNotice, barrierDamageValue, remainDamageValue] = BattleDamageCalculator.DamageCutByBarrier(damageValue, targetUnit, barrierNotice);
+            let attackElement = 0 as TargetElementType;
+            const p = userUnit._BattleParameter;
+            if (p instanceof CharacterParameter && enumIsDefined(TargetElementType$, p._Element as number)) attackElement = p._Element as number as TargetElementType;
+            if (0 < remainDamageValue) {
+                userUnit.Attack(targetUnit, remainDamageValue, gameDirector);
+                const damageNotice = AffectedUnitNotice.CreateByDamage(targetUnit._Id, remainDamageValue, 8 as DamageCategory, false, 0 as CorrelationDamageType, null!, attackElement, false);
+                damageNotice._IsDead = targetUnit.get_IsDead(); // inlined in the game
+                affectedUnitNoticeBundle.Add(damageNotice);
+            }
+            if (0 < barrierDamageValue) {
+                const barrierDamageNotice = AffectedUnitNotice.CreateByBarrierDamage(targetUnit._Id, barrierDamageValue, 8 as DamageCategory, false, 0 as CorrelationDamageType, null!, attackElement, false);
+                affectedUnitNoticeBundle.Add(AffectedUnitNotice.op_Addition(barrierNotice, barrierDamageNotice));
+            }
+        }
+        return affectedUnitNoticeBundle;
+    }
     /** @rva 0x1381490  private static bool IsDamageDisabled(BattleUnit unit) { } */
     static IsDamageDisabled(unit: BattleUnit): boolean {
         return unit._Condition._StateList.some(state => state instanceof UniqueEnemy639002UnitState && state.IsActive$BattleUnit(unit)); // DisplayClass24_0.b__0

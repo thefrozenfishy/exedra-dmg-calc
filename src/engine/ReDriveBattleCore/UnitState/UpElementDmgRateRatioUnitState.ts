@@ -1,13 +1,12 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { TargetElementType } from "../../Network/Definition/Battle/TargetElementType";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UpElementDamageRateUnitStateBase } from "./UpElementDamageRateUnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpElementDmgRateRatioUnitState  (TypeDefIndex 781, public class) ----
 export class UpElementDmgRateRatioUnitState extends UpElementDamageRateUnitStateBase {
@@ -26,5 +25,8 @@ export class UpElementDmgRateRatioUnitState extends UpElementDamageRateUnitState
         return this;
     }
     /** @rva 0x16E3D70 slot 30  public override Decimal GetElementDamageRateVariationValue(BattleUnit unit, TargetElementType attackElement) { } */
-    GetElementDamageRateVariationValue(unit: BattleUnit, attackElement: TargetElementType): Decimal { return notPorted("UpElementDmgRateRatioUnitState.GetElementDamageRateVariationValue", 0x16E3D70); }
+    GetElementDamageRateVariationValue(unit: BattleUnit, attackElement: TargetElementType): Decimal {
+        if (this._TargetElement === 0 || (this._TargetElement as number) === (attackElement as number)) return Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10));
+        return Decimal.Zero;
+    }
 }

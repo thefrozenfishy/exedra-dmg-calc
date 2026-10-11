@@ -1,13 +1,12 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { DownReceiveRecoveryUnitStateBase } from "./DownReceiveRecoveryUnitStateBase";
 import type { IReceiveRecoveryVariation } from "./IReceiveRecoveryVariation";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnRcvRecoveryRatioUnitState  (TypeDefIndex 615, public class) ----
 export class DwnRcvRecoveryRatioUnitState extends DownReceiveRecoveryUnitStateBase {  // implements IReceiveRecoveryVariation
@@ -27,5 +26,7 @@ export class DwnRcvRecoveryRatioUnitState extends DownReceiveRecoveryUnitStateBa
         return this;
     }
     /** @rva 0x15BE5D0 slot 29  public Decimal GetReceiveRecoveryVariationValue(BattleUnit unit, Decimal recoveryValue, Decimal processingValue) { } */
-    GetReceiveRecoveryVariationValue(unit: BattleUnit, recoveryValue: Decimal, processingValue: Decimal): Decimal { return notPorted("DwnRcvRecoveryRatioUnitState.GetReceiveRecoveryVariationValue", 0x15BE5D0); }
+    GetReceiveRecoveryVariationValue(unit: BattleUnit, recoveryValue: Decimal, processingValue: Decimal): Decimal {
+        return processingValue.mul(Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10)).div(Decimal.fromInt(100))).neg();
+    }
 }

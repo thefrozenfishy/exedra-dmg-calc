@@ -1,8 +1,8 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { DwnGivDmgRatioUnitState } from "./DwnGivDmgRatioUnitState";
@@ -27,5 +27,8 @@ export class DwnGivDmgConsumeRatioUnitState extends DwnGivDmgRatioUnitState {  /
         return this;
     }
     /** @rva 0x15BD8B0 slot 29  public override Decimal GetDamageVariationValue(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageValue, Decimal processingValue) { } */
-    GetDamageVariationValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageValue: Decimal, processingValue: Decimal): Decimal { return notPorted("DwnGivDmgConsumeRatioUnitState.GetDamageVariationValue", 0x15BD8B0); }
+    GetDamageVariationValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageValue: Decimal, processingValue: Decimal): Decimal {
+        if (this._RemainCount < 1) return Decimal.Zero;
+        return super.GetDamageVariationValue(attackUnit, defenseUnit, damageValue, processingValue); // DamageVariationUnitStateBase (non-virtual call)
+    }
 }

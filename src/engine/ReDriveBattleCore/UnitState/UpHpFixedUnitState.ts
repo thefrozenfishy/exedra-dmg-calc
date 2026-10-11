@@ -1,12 +1,12 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal, float } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import type { float } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UpHpUnitStateBase } from "./UpHpUnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpHpFixedUnitState  (TypeDefIndex 798, public class) ----
 export class UpHpFixedUnitState extends UpHpUnitStateBase {
@@ -25,5 +25,7 @@ export class UpHpFixedUnitState extends UpHpUnitStateBase {
         return this;
     }
     /** @rva 0x16E5B00 slot 30  public override Decimal GetMaxHpVariationValue(BattleUnit unit, Decimal processingValue) { } */
-    GetMaxHpVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("UpHpFixedUnitState.GetMaxHpVariationValue", 0x16E5B00); }
+    GetMaxHpVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal {
+        return Decimal.fromFloat(this._UpdateableEffectValue);
+    }
 }

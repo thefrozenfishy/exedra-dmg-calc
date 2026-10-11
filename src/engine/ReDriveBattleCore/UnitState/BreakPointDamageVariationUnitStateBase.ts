@@ -1,8 +1,9 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal, List, float } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import type { List, float } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { RangeType } from "../../Network/Definition/Battle/RangeType";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
@@ -11,7 +12,6 @@ import type { GameDirectorBase } from "../GameDirectorBase";
 import type { AdditionType } from "./AdditionType";
 import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import { UnitStateBase } from "./UnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.BreakPointDamageVariationUnitStateBase  (TypeDefIndex 694, public abstract class) ----
 export abstract class BreakPointDamageVariationUnitStateBase extends UnitStateBase {  // implements IHasUpdateableEffectValue
@@ -42,7 +42,22 @@ export abstract class BreakPointDamageVariationUnitStateBase extends UnitStateBa
     /** @rva -1 slot 28  public abstract AdditionType get_Addition(); */
     abstract get_Addition(): AdditionType;
     /** @rva 0x16CF3D0 slot 29  public virtual Decimal GetDamageVariationValue(Decimal damageValue, Decimal processingValue) { } */
-    GetDamageVariationValue(damageValue: Decimal, processingValue: Decimal): Decimal { return notPorted("BreakPointDamageVariationUnitStateBase.GetDamageVariationValue", 0x16CF3D0); }
+    GetDamageVariationValue(damageValue: Decimal, processingValue: Decimal): Decimal {
+        let value: Decimal;
+        const calculation = this.get_Calculation(); // vslot 27
+        if (calculation === 0) {
+            const baseValue = this.get_Addition() === 0 ? damageValue : processingValue; // vslot 28
+            value = baseValue.mul(Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(1000)));
+        } else if (calculation === 1) {
+            value = Decimal.fromFloat(this._UpdateableEffectValue);
+        } else {
+            value = Decimal.Zero;
+        }
+        const addition = this.get_Addition();
+        if (addition === 0) return value;
+        if (addition === 1) return value.neg();
+        return Decimal.Zero;
+    }
     /** @rva 0x15B8090 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean {
         // DamageBetterUnitStateBase.CanAddTo (0x15B8090)

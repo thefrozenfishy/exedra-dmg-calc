@@ -1,7 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
 import type { List, float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { ActiveSkillBase } from "../ActiveSkillBase";
@@ -10,7 +10,6 @@ import type { BattleUnit } from "../BattleUnit";
 import type { IConsumeRemainCount } from "./IConsumeRemainCount";
 import type { IConsumeRemainCountOnAttack } from "./IConsumeRemainCountOnAttack";
 import { UpCtrFixedUnitState } from "./UpCtrFixedUnitState";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpCtrConsumeFixedUnitState  (TypeDefIndex 769, public class) ----
 export class UpCtrConsumeFixedUnitState extends UpCtrFixedUnitState {  // implements IConsumeRemainCountOnAttack, IConsumeRemainCount
@@ -31,7 +30,10 @@ export class UpCtrConsumeFixedUnitState extends UpCtrFixedUnitState {  // implem
         return this;
     }
     /** @rva 0x16E1D00 slot 30  public override float GetCtrVariationValue(BattleUnit unit, float processingValue) { } */
-    GetCtrVariationValue(unit: BattleUnit, processingValue: float): float { return notPorted("UpCtrConsumeFixedUnitState.GetCtrVariationValue", 0x16E1D00); }
+    GetCtrVariationValue(unit: BattleUnit, processingValue: float): float {
+        if (0 < this._RemainCount) return f32(this._UpdateableEffectValue / 10);
+        return 0;
+    }
     /** @rva 0x16E2250 slot 31  public bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
     ShouldConsume(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean { return notPorted("UpCtrConsumeFixedUnitState.ShouldConsume", 0x16E2250); }
 }

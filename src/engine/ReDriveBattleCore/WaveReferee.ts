@@ -42,7 +42,7 @@ export class WaveReferee {
     /** @rva 0x7F9800  public int get_CurrentWave() { } */
     get_CurrentWave(): int { return this.currentWave; /* asm: mov eax, dword ptr [rcx + 0x1c]; ret */ }
     /** @rva 0x15D2830  public bool get_HasNextWave() { } */
-    get_HasNextWave(): boolean { return notPorted("WaveReferee.get_HasNextWave", 0x15D2830); }
+    get_HasNextWave(): boolean { return this.currentWave < this.maxWave; }
     /** @rva 0x8AC0D0  public bool get_IsDuringTransition() { } */
     get_IsDuringTransition(): boolean { return this.isDuringTransition; /* asm: movzx eax, byte ptr [rcx + 0x20]; ret */ }
     /** @rva 0x15D2490  public void Init(int questStageMstId, int initialWave = 1) { } */

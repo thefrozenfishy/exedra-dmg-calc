@@ -1,7 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
 import type { IEnumerable, List, float } from "../../runtime";
 import type { RangeType } from "../../Network/Definition/Battle/RangeType";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
@@ -14,7 +14,6 @@ import type { IDebuff } from "./IDebuff";
 import type { IHealRateVariation } from "./IHealRateVariation";
 import { ParameterVariationUnitStateBase } from "./ParameterVariationUnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnHealRateRatioUnitState  (TypeDefIndex 613, public class) ----
 export class DwnHealRateRatioUnitState extends ParameterVariationUnitStateBase {  // implements IHealRateVariation, IDebuff
@@ -47,7 +46,9 @@ export class DwnHealRateRatioUnitState extends ParameterVariationUnitStateBase {
         return this;
     }
     /** @rva 0x15BDD70 slot 29  public float GetHealRateVariationValue(float processingValue) { } */
-    GetHealRateVariationValue(processingValue: float): float { return notPorted("DwnHealRateRatioUnitState.GetHealRateVariationValue", 0x15BDD70); }
+    GetHealRateVariationValue(processingValue: float): float {
+        return f32(f32(f32(this._UpdateableEffectValue / 10) * -processingValue) / 100);
+    }
     /** @rva 0x15BDB40 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("DwnHealRateRatioUnitState.GetAIFilteredTargets", 0x15BDB40); }
     /** @rva 0x15BDDA0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */

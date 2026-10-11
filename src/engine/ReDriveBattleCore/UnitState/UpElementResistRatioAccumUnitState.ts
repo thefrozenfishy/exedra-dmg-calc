@@ -2,8 +2,9 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { IAccum$Accumulate } from "./IAccum";
-import { notPorted } from "../../runtime";
-import type { Decimal, int } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import type { int } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { TargetElementType } from "../../Network/Definition/Battle/TargetElementType";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
@@ -13,7 +14,6 @@ import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import type { IStateIconNumberDisplayable } from "./IStateIconNumberDisplayable";
 import type { UnitStateBase } from "./UnitStateBase";
 import { UpElementResistUnitStateBase } from "./UpElementResistUnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpElementResistRatioAccumUnitState  (TypeDefIndex 784, public class) ----
 export class UpElementResistRatioAccumUnitState extends UpElementResistUnitStateBase {  // implements IAccum, IBlendable, IHasUpdateableEffectValue, IStateIconNumberDisplayable
@@ -52,7 +52,10 @@ export class UpElementResistRatioAccumUnitState extends UpElementResistUnitState
         return this;
     }
     /** @rva 0x16E3FB0 slot 29  public override Decimal GetElementResistVariationValue(BattleUnit unit, TargetElementType attackElement) { } */
-    GetElementResistVariationValue(unit: BattleUnit, attackElement: TargetElementType): Decimal { return notPorted("UpElementResistRatioAccumUnitState.GetElementResistVariationValue", 0x16E3FB0); }
+    GetElementResistVariationValue(unit: BattleUnit, attackElement: TargetElementType): Decimal {
+        if (this._TargetElement === 0 || (this._TargetElement as number) === (attackElement as number)) return Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10)).mul(Decimal.fromInt(this._AccumCount));
+        return Decimal.Zero;
+    }
     /** @rva 0x16E3F60 slot 37  public bool Blend(UnitStateBase injectUnitState) { } */
     Blend(injectUnitState: UnitStateBase): boolean {
         return IAccum$Accumulate(this as unknown as IAccum, injectUnitState); // ((IAccum)this).Accumulate (default interface method, IAccum slot 6)

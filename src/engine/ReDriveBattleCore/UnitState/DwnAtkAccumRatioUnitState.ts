@@ -2,8 +2,9 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { IAccum$Accumulate } from "./IAccum";
-import { notPorted } from "../../runtime";
-import type { Decimal, float, int } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import type { float, int } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { DownAttackUnitStateBase } from "./DownAttackUnitStateBase";
@@ -12,7 +13,6 @@ import type { IBlendable } from "./IBlendable";
 import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import type { IStateIconNumberDisplayable } from "./IStateIconNumberDisplayable";
 import type { UnitStateBase } from "./UnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnAtkAccumRatioUnitState  (TypeDefIndex 581, public class) ----
 export class DwnAtkAccumRatioUnitState extends DownAttackUnitStateBase {  // implements IAccum, IBlendable, IHasUpdateableEffectValue, IStateIconNumberDisplayable
@@ -52,7 +52,9 @@ export class DwnAtkAccumRatioUnitState extends DownAttackUnitStateBase {  // imp
         return this;
     }
     /** @rva 0x15BBF90 slot 30  public override Decimal GetAtkVariationValue(BattleUnit unit, Decimal processingValue) { } */
-    GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("DwnAtkAccumRatioUnitState.GetAtkVariationValue", 0x15BBF90); }
+    GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal {
+        return processingValue.mul(Decimal.fromFloat(f32(this._UpdateableEffectValue / 10)).mul(Decimal.fromInt(this._AccumCount)).div(Decimal.fromInt(100))).neg();
+    }
     /** @rva 0x15BBF40 slot 38  public bool Blend(UnitStateBase injectUnitState) { } */
     Blend(injectUnitState: UnitStateBase): boolean {
         return IAccum$Accumulate(this as unknown as IAccum, injectUnitState); // ((IAccum)this).Accumulate (default interface method, IAccum slot 6)

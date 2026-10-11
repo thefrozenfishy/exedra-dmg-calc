@@ -1,12 +1,11 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
 import type { float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UpRcvCtdUnitStateBase } from "./UpRcvCtdUnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpRcvCtdRatioUnitState  (TypeDefIndex 801, public class) ----
 export class UpRcvCtdRatioUnitState extends UpRcvCtdUnitStateBase {
@@ -27,5 +26,8 @@ export class UpRcvCtdRatioUnitState extends UpRcvCtdUnitStateBase {
         return this;
     }
     /** @rva 0x16E5F80 slot 30  public override float GetRcvCtdVariationValue(BattleUnit attackUnit, float processingValue) { } */
-    GetRcvCtdVariationValue(attackUnit: BattleUnit, processingValue: float): float { return notPorted("UpRcvCtdRatioUnitState.GetRcvCtdVariationValue", 0x16E5F80); }
+    GetRcvCtdVariationValue(attackUnit: BattleUnit, processingValue: float): float {
+        if (attackUnit.IsMatch$TargetRoleType(this._TargetRole) && attackUnit.IsMatch$TargetElementType(this._TargetElement)) return f32(this._UpdateableEffectValue / 10);
+        return 0;
+    }
 }

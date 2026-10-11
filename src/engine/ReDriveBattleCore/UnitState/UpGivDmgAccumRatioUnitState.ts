@@ -2,8 +2,9 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { IAccum$Accumulate } from "./IAccum";
-import { notPorted } from "../../runtime";
-import type { Decimal, float, int } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import type { float, int } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { AdditionType } from "./AdditionType";
@@ -14,7 +15,6 @@ import type { IHasUpdateableEffectValue } from "./IHasUpdateableEffectValue";
 import type { IStateIconNumberDisplayable } from "./IStateIconNumberDisplayable";
 import type { UnitStateBase } from "./UnitStateBase";
 import { UpGiveDamageUnitStateBase } from "./UpGiveDamageUnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpGivDmgAccumRatioUnitState  (TypeDefIndex 567, public class) ----
 export class UpGivDmgAccumRatioUnitState extends UpGiveDamageUnitStateBase {  // implements IAccum, IBlendable, IHasUpdateableEffectValue, IStateIconNumberDisplayable
@@ -58,7 +58,9 @@ export class UpGivDmgAccumRatioUnitState extends UpGiveDamageUnitStateBase {  //
         return this;
     }
     /** @rva 0x15D0B20 slot 29  public override Decimal GetDamageVariationValue(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageValue, Decimal processingValue) { } */
-    GetDamageVariationValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageValue: Decimal, processingValue: Decimal): Decimal { return notPorted("UpGivDmgAccumRatioUnitState.GetDamageVariationValue", 0x15D0B20); }
+    GetDamageVariationValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageValue: Decimal, processingValue: Decimal): Decimal {
+        return damageValue.mul(Decimal.fromFloat(f32(this._UpdateableEffectValue / 10)).mul(Decimal.fromInt(this._AccumCount)).div(Decimal.fromInt(100))); // damageValue (the Down variant uses processingValue)
+    }
     /** @rva 0x15D0AD0 slot 39  public bool Blend(UnitStateBase injectUnitState) { } */
     Blend(injectUnitState: UnitStateBase): boolean {
         return IAccum$Accumulate(this as unknown as IAccum, injectUnitState); // ((IAccum)this).Accumulate (default interface method, IAccum slot 6)

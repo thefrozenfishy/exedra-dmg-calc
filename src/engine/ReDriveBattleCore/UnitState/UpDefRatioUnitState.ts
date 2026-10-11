@@ -1,12 +1,12 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal, float } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import type { float } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { UpDefenseUnitStateBase } from "./UpDefenseUnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpDefRatioUnitState  (TypeDefIndex 771, public class) ----
 export class UpDefRatioUnitState extends UpDefenseUnitStateBase {
@@ -27,5 +27,7 @@ export class UpDefRatioUnitState extends UpDefenseUnitStateBase {
         return this;
     }
     /** @rva 0x16E2E20 slot 30  public override Decimal GetDefVariationValue(BattleUnit unit, Decimal processingValue) { } */
-    GetDefVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("UpDefRatioUnitState.GetDefVariationValue", 0x16E2E20); }
+    GetDefVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal {
+        return Decimal.fromInt(unit.get_DEF()).mul(Decimal.fromFloat(f32(this._UpdateableEffectValue / 10)).div(Decimal.fromInt(100)));
+    }
 }

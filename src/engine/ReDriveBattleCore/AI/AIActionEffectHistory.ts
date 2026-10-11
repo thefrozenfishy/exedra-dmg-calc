@@ -12,9 +12,19 @@ export class AIActionEffectHistory {
     /** 0x18 private HashSet<string> enemyActionEffectTypes */
     enemyActionEffectTypes: HashSet<string> = null!;
     /** @rva 0x17DCD80  public void AddAppliedEffectTypes(List<string> appliedSkillEffectTypes, BattleUnit.TeamType teamType) { } */
-    AddAppliedEffectTypes(appliedSkillEffectTypes: List<string>, teamType: BattleUnit_TeamType): void { return notPorted("AIActionEffectHistory.AddAppliedEffectTypes", 0x17DCD80); }
+    AddAppliedEffectTypes(appliedSkillEffectTypes: List<string>, teamType: BattleUnit_TeamType): void {
+        const hashSet = teamType === 0 ? this.allyActionEffectTypes : this.enemyActionEffectTypes;
+        if (appliedSkillEffectTypes == null) return;
+        for (const effectType of appliedSkillEffectTypes) hashSet.add(effectType);
+    }
     /** @rva 0x17DCEC0  public HashSet<string> GetAppliedEffectTypes(BattleUnit.TeamType teamType) { } */
-    GetAppliedEffectTypes(teamType: BattleUnit_TeamType): HashSet<string> { return notPorted("AIActionEffectHistory.GetAppliedEffectTypes", 0x17DCEC0); }
+    GetAppliedEffectTypes(teamType: BattleUnit_TeamType): HashSet<string> {
+        return teamType === 0 ? this.allyActionEffectTypes : this.enemyActionEffectTypes;
+    }
     /** @rva 0x17DCED0  public void .ctor() { } */
-    ctor(): this { return notPorted("AIActionEffectHistory..ctor", 0x17DCED0); }
+    ctor(): this {
+        this.allyActionEffectTypes = new Set<string>();
+        this.enemyActionEffectTypes = new Set<string>();
+        return this;
+    }
 }

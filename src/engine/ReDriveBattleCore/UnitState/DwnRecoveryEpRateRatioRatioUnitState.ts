@@ -1,12 +1,11 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
 import type { float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { DwnRecoveryEpRateRatioUnitStateBase } from "./DwnRecoveryEpRateRatioUnitStateBase";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnRecoveryEpRateRatioRatioUnitState  (TypeDefIndex 618, public class) ----
 export class DwnRecoveryEpRateRatioRatioUnitState extends DwnRecoveryEpRateRatioUnitStateBase {
@@ -30,5 +29,7 @@ export class DwnRecoveryEpRateRatioRatioUnitState extends DwnRecoveryEpRateRatio
         return this;
     }
     /** @rva 0x15BE810 slot 30  public override float GetRecoveryEpRateRatioVariationValue(BattleUnit unit, float processingValue) { } */
-    GetRecoveryEpRateRatioVariationValue(unit: BattleUnit, processingValue: float): float { return notPorted("DwnRecoveryEpRateRatioRatioUnitState.GetRecoveryEpRateRatioVariationValue", 0x15BE810); }
+    GetRecoveryEpRateRatioVariationValue(unit: BattleUnit, processingValue: float): float {
+        return -f32(f32(processingValue * this._DownRatio) / 100);
+    }
 }

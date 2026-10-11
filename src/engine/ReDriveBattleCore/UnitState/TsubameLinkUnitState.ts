@@ -85,7 +85,9 @@ export class TsubameLinkUnitState extends UnitStateBase {  // implements IHasUpd
         return Decimal.fromInt(unit.get_Speed()).mul(Decimal.fromFloat(f32(this._UpdateableEffectValue * this.upSpdRatio)).div(Decimal.fromInt(100)));
     }
     /** @rva 0x16D9E90 slot 30  public Decimal GetAtkVariationValue(BattleUnit unit, Decimal processingValue) { } */
-    GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("TsubameLinkUnitState.GetAtkVariationValue", 0x16D9E90); }
+    GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal {
+        return Decimal.fromInt(unit.get_ATK()).mul(Decimal.fromFloat(f32(this._UpdateableEffectValue * this.upAtkRatio)).div(Decimal.fromInt(100)));
+    }
     /** @rva 0x16D9970 slot 31  public AffectedUnitNoticeBundle GetAdditionalDamageResult(BattleUnit attackUnit, ActiveSkillBase attackSkill, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */
     GetAdditionalDamageResult(attackUnit: BattleUnit, attackSkill: ActiveSkillBase, noticeBundle: AffectedUnitNoticeBundle, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("TsubameLinkUnitState.GetAdditionalDamageResult", 0x16D9970); }
     /** @rva 0x16D9950 slot 34  public bool CanAddTo(BattleUnitData targetUnit) { } */

@@ -1,8 +1,9 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal, int } from "../../runtime";
+import { f32, notPorted } from "../../runtime";
+import type { int } from "../../runtime";
+import { Decimal } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { AbnormalUnitStateBase } from "./AbnormalUnitStateBase";
@@ -44,7 +45,11 @@ export class WeaknessUnitState extends AbnormalUnitStateBase {  // implements IA
         return this;
     }
     /** @rva 0x15D2840 slot 26  public Decimal GetAtkVariationValue(BattleUnit unit, Decimal processingValue) { } */
-    GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("WeaknessUnitState.GetAtkVariationValue", 0x15D2840); }
+    GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal {
+        return processingValue.mul(Decimal.fromInt(10).div(Decimal.fromInt(100))).neg();
+    }
     /** @rva 0x15D2940 slot 28  public Decimal GetDefVariationValue(BattleUnit unit, Decimal processingValue) { } */
-    GetDefVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return notPorted("WeaknessUnitState.GetDefVariationValue", 0x15D2940); }
+    GetDefVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal {
+        return processingValue.mul(Decimal.fromInt(10).div(Decimal.fromInt(100))).neg();
+    }
 }
