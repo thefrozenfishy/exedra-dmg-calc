@@ -1,11 +1,13 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { CorrelationEffect } from "../CorrelationEffect";
+import { AISkillTargetSelector, AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import { Decimal, notPorted } from "../../runtime";
 import type { IEnumerable, Nullable, float } from "../../runtime";
 import type { BattleType } from "../../Network/Definition/Battle/BattleType";
 import type { TargetElementType } from "../../Network/Definition/Battle/TargetElementType";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+
 import type { DamageBaseType } from "../AbilityEffect/DamageBaseType";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
@@ -68,17 +70,37 @@ export abstract class ReceiveSlipDamageUnitStateBase extends AbnormalUnitStateBa
     /** @rva 0x15BF920 slot 17  public override void SetTriggeringInfo(EffectOriginType effectOrigin, BattleUnit userUnit, bool isOwnSkill = False, bool isConditionActivation = False, BattleType battleType = 1) { } */
     SetTriggeringInfo(effectOrigin: EffectOriginType, userUnit: BattleUnit, isOwnSkill?: boolean /* = False */, isConditionActivation?: boolean /* = False */, battleType?: BattleType /* = 1 */): void { return notPorted("ReceiveSlipDamageUnitStateBase.SetTriggeringInfo", 0x15BF920); }
     /** @rva 0x15BF770 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("ReceiveSlipDamageUnitStateBase.GetUnitFilterFuncOrder", 0x15BF770); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const order = new AISkillTargetSelector_UnitFilterFuncOrder().ctor();
+        if (!userUnit.isCharacter) {
+            order.AddLast(ReceiveSlipDamageUnitStateBase.$GetUnitFilterFuncOrder$g__UnitFilterByRoleAtWeightedRandom_24_1);
+        } else {
+            order.AddLast(AISkillTargetSelector.UnitFilterByBreak);
+            order.AddLast(AISkillTargetSelector.UnitFilterByMainTarget);
+            order.AddLast(this.$GetUnitFilterFuncOrder$g__UnitFilterMatchWeakElement_24_0.bind(this));
+            order.AddLast(ReceiveSlipDamageUnitStateBase.$GetUnitFilterFuncOrder$g__UnitFilterByRoleAtWeightedRandom_24_1);
+        }
+        return order;
+    }
     /** @rva 0x15BF5B0 slot 35  protected virtual Decimal GetDamageBase(BattleUnit userUnit) { } */
     GetDamageBase(userUnit: BattleUnit): Decimal { return notPorted("ReceiveSlipDamageUnitStateBase.GetDamageBase", 0x15BF5B0); }
     /** @rva 0x15BF670 slot 36  public virtual float GetSlipDamageValue(BattleUnit attackUnit, BattleUnit defenseUnit, BattleType battleType, bool isImmediately) { } */
     GetSlipDamageValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, battleType: BattleType, isImmediately: boolean): float { return notPorted("ReceiveSlipDamageUnitStateBase.GetSlipDamageValue", 0x15BF670); }
     /** @rva 0x15BFB60  private IEnumerable<BattleUnit> <GetUnitFilterFuncOrder>g__UnitFilterMatchWeakElement|24_0(IEnumerable<BattleUnit> candidateUnits) { } */
-    $GetUnitFilterFuncOrder$g__UnitFilterMatchWeakElement_24_0(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> { return notPorted("ReceiveSlipDamageUnitStateBase.<GetUnitFilterFuncOrder>g__UnitFilterMatchWeakElement|24_0", 0x15BFB60); }
+    $GetUnitFilterFuncOrder$g__UnitFilterMatchWeakElement_24_0(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
+        return candidateUnits.filter(unit => this.$GetUnitFilterFuncOrder$b__24_2(unit));
+    }
     /** @rva 0x15BF990  private bool <GetUnitFilterFuncOrder>b__24_2(BattleUnit unit) { } */
-    $GetUnitFilterFuncOrder$b__24_2(unit: BattleUnit): boolean { return notPorted("ReceiveSlipDamageUnitStateBase.<GetUnitFilterFuncOrder>b__24_2", 0x15BF990); }
+    $GetUnitFilterFuncOrder$b__24_2(unit: BattleUnit): boolean {
+        const attackElement = this.get_AttackElement(); // vslot 31, read before the null check in the game
+        return CorrelationEffect.IsMatchWeakElement(attackElement, unit._WeakElements);
+    }
     /** @rva 0x15BFA10  internal static IEnumerable<BattleUnit> <GetUnitFilterFuncOrder>g__UnitFilterByRoleAtWeightedRandom|24_1(IEnumerable<BattleUnit> candidateUnits) { } */
-    static $GetUnitFilterFuncOrder$g__UnitFilterByRoleAtWeightedRandom_24_1(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> { return notPorted("ReceiveSlipDamageUnitStateBase.<GetUnitFilterFuncOrder>g__UnitFilterByRoleAtWeightedRandom|24_1", 0x15BFA10); }
+    static $GetUnitFilterFuncOrder$g__UnitFilterByRoleAtWeightedRandom_24_1(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
+        const unit = AISkillTargetSelector.SelectUnitAtWeightedRandom(AISkillTargetSelector.GetUnitWeightDic(candidateUnits, false));
+        if (unit == null) return []; // Array.Empty<BattleUnit>()
+        return [unit];
+    }
 }
 
 // ---- ReDriveBattleCore.UnitState.ReceiveSlipDamageUnitStateBase.ParameterType  (TypeDefIndex 496, protected enum) ----

@@ -11,7 +11,7 @@ import type { GameDirectorBase } from "../GameDirectorBase";
 import type { IBlendable } from "./IBlendable";
 import type { IStateIconNumberDisplayable } from "./IStateIconNumberDisplayable";
 import { UniqueUnitStateBase } from "./UniqueUnitStateBase";
-import type { UnitStateBase } from "./UnitStateBase";
+import { UnitStateBase } from "./UnitStateBase";
 
 // ---- ReDriveBattleCore.UnitState.UniqueAccumUnitStateBase  (TypeDefIndex 667, public abstract class) ----
 export abstract class UniqueAccumUnitStateBase extends UniqueUnitStateBase {  // implements IBlendable, IStateIconNumberDisplayable
@@ -56,7 +56,15 @@ export abstract class UniqueAccumUnitStateBase extends UniqueUnitStateBase {  //
     /** @rva 0x16DDAF0 slot 25  public bool Blend(UnitStateBase injectUnitState) { } */
     Blend(injectUnitState: UnitStateBase): boolean { return notPorted("UniqueAccumUnitStateBase.Blend", 0x16DDAF0); }
     /** @rva 0x16DDC10 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("UniqueAccumUnitStateBase.GetAIFilteredTargets", 0x16DDC10); }
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__15_0
+        if (list.length > 0) list = list.filter(unit => this.$GetAIFilteredTargets$b__15_1(unit));
+        return list;
+    }
     /** @rva 0x16DDDD0  private bool <GetAIFilteredTargets>b__15_1(BattleUnit unit) { } */
-    $GetAIFilteredTargets$b__15_1(unit: BattleUnit): boolean { return notPorted("UniqueAccumUnitStateBase.<GetAIFilteredTargets>b__15_1", 0x16DDDD0); }
+    $GetAIFilteredTargets$b__15_1(unit: BattleUnit): boolean {
+        const same = unit._Condition.GetSameStateList(this, false).filter((s): s is UniqueAccumUnitStateBase => s instanceof UniqueAccumUnitStateBase); // OfType (lazy, enumerated twice)
+        if (same.some(state => state._AccumCount < state._AccumCountMax)) return true; // <>c.b__15_2
+        return !same.some(state => state._EffectTurn === UnitStateBase.EffectTurnOfPermanent || state._RemainingTurn > 1); // <>c.b__15_3
+    }
 }

@@ -15,6 +15,9 @@ import { ParameterVariationUnitStateBase } from "./ParameterVariationUnitStateBa
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
 import { f32 } from "../../runtime";
 import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
+import { QuestEnemyAppearanceParameter } from "../QuestEnemyAppearanceParameter";
+import { CorrelationEffect } from "../CorrelationEffect";
+import { CharacterParameter } from "../CharacterParameter";
 
 // ---- ReDriveBattleCore.UnitState.UpWeakElementDmgRatioUnitState  (TypeDefIndex 814, public class) ----
 export class UpWeakElementDmgRatioUnitState extends ParameterVariationUnitStateBase {  // implements IBuff
@@ -48,7 +51,23 @@ export class UpWeakElementDmgRatioUnitState extends ParameterVariationUnitStateB
         return this;
     }
     /** @rva 0x16E78F0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("UpWeakElementDmgRatioUnitState.GetAIFilteredTargets", 0x16E78F0); }
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__12_0
+        if (list.length > 0) {
+            if (userUnit._Team !== 0) return [];
+            const enemyParams: QuestEnemyAppearanceParameter[] = []; // <>c__DisplayClass12_0
+            for (const enemy of gameDirector.get_EnemyUnitList()) {
+                const p = enemy.get_Param();
+                if (p instanceof QuestEnemyAppearanceParameter) enemyParams.push(p);
+            }
+            list = list.filter(unit => { // DisplayClass12_0.b__1
+                const charParam = unit.get_Param() instanceof CharacterParameter ? unit.get_Param() as CharacterParameter : null; // DisplayClass12_1
+                if (charParam == null) return false;
+                return enemyParams.some(enemyParam => CorrelationEffect.IsMatchWeakElement(charParam._Element as any, enemyParam._WeakElements)); // b__2
+            });
+        }
+        return list;
+    }
     /** @rva 0x16E7D00 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];

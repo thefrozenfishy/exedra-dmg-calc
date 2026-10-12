@@ -51,7 +51,11 @@ export abstract class ReflectionUnitStateBase extends UnitStateBase {  // implem
     /** @rva -1 slot 25  protected abstract Decimal GetDamageBase(BattleUnit userUnit); */
     abstract GetDamageBase(userUnit: BattleUnit): Decimal;
     /** @rva 0x16D6580 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("ReflectionUnitStateBase.GetAIFilteredTargets", 0x16D6580); }
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__16_0
+        if (list.length > 0) list = list.filter(unit => unit._Condition._BarrierEndurance > 0); // b__16_1
+        return list;
+    }
     /** @rva 0x16D69F0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];

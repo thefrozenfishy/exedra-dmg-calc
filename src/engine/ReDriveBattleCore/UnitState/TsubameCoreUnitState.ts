@@ -55,7 +55,11 @@ export class TsubameCoreUnitState extends UnitStateBase {  // implements IBuff, 
         return this;
     }
     /** @rva 0x16D90B0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("TsubameCoreUnitState.GetAIFilteredTargets", 0x16D90B0); }
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__14_0
+        if (list.length > 0) list = list.filter(unit => unit._Id === userUnit._Id) /* DisplayClass14_0.b__1 */.filter(unit => !unit._Condition._StateList.some(state => state instanceof TsubameCoreUnitState && state._UserUnitId === userUnit._Id)); // b__2, b__3
+        return list;
+    }
     /** @rva 0x16D9510 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];

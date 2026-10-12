@@ -60,9 +60,17 @@ export class ContinuousRecoveryUnitState extends UnitStateBase {  // implements 
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
     /** @rva 0x15B65A0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("ContinuousRecoveryUnitState.GetAIFilteredTargets", 0x15B65A0); }
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__16_0
+        if (list.length > 0) list = list.filter(unit => unit.CalculationHpRate() < ContinuousRecoveryUnitState.MaxHpRateToUse); // b__16_1
+        return list;
+    }
     /** @rva 0x15B67D0  public Decimal GetRecoveryValue(BattleUnit userUnit) { } */
     GetRecoveryValue(userUnit: BattleUnit): Decimal { return notPorted("ContinuousRecoveryUnitState.GetRecoveryValue", 0x15B67D0); }
     /** @rva 0x15B6B40  private static void .cctor() { } */
-    static cctor(): void { return notPorted("ContinuousRecoveryUnitState..cctor", 0x15B6B40); }
+    static cctor(): void {
+        ContinuousRecoveryUnitState.MaxHpRateToUse = 80; // 0x42a00000
+    }
 }
+
+ContinuousRecoveryUnitState.cctor(); // C# static constructor

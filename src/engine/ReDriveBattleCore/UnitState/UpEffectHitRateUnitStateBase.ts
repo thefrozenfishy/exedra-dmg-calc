@@ -1,9 +1,10 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { AISkillTargetSelector, AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import { notPorted } from "../../runtime";
 import type { IEnumerable, float } from "../../runtime";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { AdditionType } from "./AdditionType";
@@ -12,6 +13,7 @@ import type { IEffectHitRateVariation } from "./IEffectHitRateVariation";
 import { ParameterVariationUnitStateBase } from "./ParameterVariationUnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
 import { f32 } from "../../runtime";
+import type { List } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpEffectHitRateUnitStateBase  (TypeDefIndex 776, public abstract class) ----
 export abstract class UpEffectHitRateUnitStateBase extends ParameterVariationUnitStateBase {  // implements IEffectHitRateVariation, IBuff
@@ -42,7 +44,17 @@ export abstract class UpEffectHitRateUnitStateBase extends ParameterVariationUni
     /** @rva -1 slot 30  public abstract float GetEffectHitRateVariationValue(BattleUnit unit, float processingValue); */
     abstract GetEffectHitRateVariationValue(unit: BattleUnit, processingValue: float): float;
     /** @rva 0x16E3220 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("UpEffectHitRateUnitStateBase.GetUnitFilterFuncOrder", 0x16E3220); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        list.push(AISkillTargetSelector.UnitFilterByMainTarget);
+        list.push(AISkillTargetSelector.UnitFilterByRoleDebuffer);
+        list.push(UpEffectHitRateUnitStateBase.$GetUnitFilterFuncOrder$g__UnitFilterWithMaxEffectHitRate_11_0);
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
     /** @rva 0x16E3480  internal static IEnumerable<BattleUnit> <GetUnitFilterFuncOrder>g__UnitFilterWithMaxEffectHitRate|11_0(IEnumerable<BattleUnit> candidateUnits) { } */
-    static $GetUnitFilterFuncOrder$g__UnitFilterWithMaxEffectHitRate_11_0(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> { return notPorted("UpEffectHitRateUnitStateBase.<GetUnitFilterFuncOrder>g__UnitFilterWithMaxEffectHitRate|11_0", 0x16E3480); }
+    static $GetUnitFilterFuncOrder$g__UnitFilterWithMaxEffectHitRate_11_0(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
+        if (!(candidateUnits.length > 0)) return candidateUnits;
+        const maxRate = Math.max(...candidateUnits.map(unit => unit.get_Param()._EffectHitRate)); // <>c.b__11_1
+        return candidateUnits.filter(unit => unit.get_Param()._EffectHitRate === maxRate); // DisplayClass11_0.b__2
+    }
 }

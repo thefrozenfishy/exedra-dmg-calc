@@ -1,9 +1,12 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { AbnormalUnitStateBase } from "./AbnormalUnitStateBase";
+import { StateAbilityEffect } from "../AbilityEffect/StateAbilityEffect";
+import { AISkillTargetSelector, AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import { notPorted } from "../../runtime";
 import type { IEnumerable, float } from "../../runtime";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { AdditionType } from "./AdditionType";
@@ -12,6 +15,7 @@ import type { IBuff } from "./IBuff";
 import { ParameterVariationUnitStateBase } from "./ParameterVariationUnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
 import { f32 } from "../../runtime";
+import type { List } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpAbnormalHitRateUnitStateBase  (TypeDefIndex 743, public abstract class) ----
 export abstract class UpAbnormalHitRateUnitStateBase extends ParameterVariationUnitStateBase {  // implements IAbnormalHitRateVariation, IBuff
@@ -42,7 +46,16 @@ export abstract class UpAbnormalHitRateUnitStateBase extends ParameterVariationU
     /** @rva -1 slot 30  public abstract float GetAbnormalHitRateVariationValue(BattleUnit unit, float processingValue); */
     abstract GetAbnormalHitRateVariationValue(unit: BattleUnit, processingValue: float): float;
     /** @rva 0x16E0050 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("UpAbnormalHitRateUnitStateBase.GetUnitFilterFuncOrder", 0x16E0050); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        list.push(AISkillTargetSelector.UnitFilterByMainTarget);
+        list.push(UpAbnormalHitRateUnitStateBase.$GetUnitFilterFuncOrder$g__UnitFilterWithSkillOfAbnormalUnitState_11_0);
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
     /** @rva 0x16E0220  internal static IEnumerable<BattleUnit> <GetUnitFilterFuncOrder>g__UnitFilterWithSkillOfAbnormalUnitState|11_0(IEnumerable<BattleUnit> candidateUnits) { } */
-    static $GetUnitFilterFuncOrder$g__UnitFilterWithSkillOfAbnormalUnitState_11_0(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> { return notPorted("UpAbnormalHitRateUnitStateBase.<GetUnitFilterFuncOrder>g__UnitFilterWithSkillOfAbnormalUnitState|11_0", 0x16E0220); }
+    static $GetUnitFilterFuncOrder$g__UnitFilterWithSkillOfAbnormalUnitState_11_0(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
+        return candidateUnits.filter(unit => unit._SkillSet.GetList() // <>c.b__11_1
+            .some(skill => skill.GetAbilityEffectList() // b__11_2
+                .some(effect => effect instanceof StateAbilityEffect && effect._GiveUnitState instanceof AbnormalUnitStateBase))); // b__11_3
+    }
 }

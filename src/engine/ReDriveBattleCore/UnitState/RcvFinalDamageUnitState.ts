@@ -43,7 +43,11 @@ export class RcvFinalDamageUnitState extends UnitStateBase {  // implements IDeb
     /** @rva 0x16D5E80 slot 25  public Decimal GetFinalDamageRatio(BattleUnit attacker) { } */
     GetFinalDamageRatio(attacker: BattleUnit): Decimal { return notPorted("RcvFinalDamageUnitState.GetFinalDamageRatio", 0x16D5E80); }
     /** @rva 0x16D5C80 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("RcvFinalDamageUnitState.GetAIFilteredTargets", 0x16D5C80); }
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__12_0
+        if (list.length > 0) list = list.filter(unit => !unit._Condition._StateList.some(state => state instanceof RcvFinalDamageUnitState && state._UserUnitId === userUnit._Id && (state._EffectTurn === UnitStateBase.EffectTurnOfPermanent || state._RemainingTurn > 1))); // DisplayClass12_0.b__1, b__2
+        return list;
+    }
     /** @rva 0x16D5F30 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];

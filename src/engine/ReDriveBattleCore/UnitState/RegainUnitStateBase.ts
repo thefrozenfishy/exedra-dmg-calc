@@ -65,7 +65,14 @@ export abstract class RegainUnitStateBase extends UnitStateBase {  // implements
     /** @rva 0x16D7320 slot 25  public Decimal GetAdditionalHpRecoveryValue(BattleUnit userUnit, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */
     GetAdditionalHpRecoveryValue(userUnit: BattleUnit, noticeBundle: AffectedUnitNoticeBundle, gameDirector: GameDirectorBase): Decimal { return notPorted("RegainUnitStateBase.GetAdditionalHpRecoveryValue", 0x16D7320); }
     /** @rva 0x16D70F0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("RegainUnitStateBase.GetAIFilteredTargets", 0x16D70F0); }
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__17_0
+        if (list.length > 0) {
+            if (effectRange === -1) list = [userUnit];
+            list = list.filter(unit => this.$GetAIFilteredTargets$b__17_1(unit));
+        }
+        return list;
+    }
     /** @rva 0x16D7780 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
@@ -74,5 +81,9 @@ export abstract class RegainUnitStateBase extends UnitStateBase {  // implements
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
     /** @rva 0x16D7950  private bool <GetAIFilteredTargets>b__17_1(BattleUnit unit) { } */
-    $GetAIFilteredTargets$b__17_1(unit: BattleUnit): boolean { return notPorted("RegainUnitStateBase.<GetAIFilteredTargets>b__17_1", 0x16D7950); }
+    $GetAIFilteredTargets$b__17_1(unit: BattleUnit): boolean {
+        const same = unit._Condition.GetSameStateList(this, false);
+        if (!(same.length > 0)) return true;
+        return same.some(state => state._EffectTurn !== UnitStateBase.EffectTurnOfPermanent && state._RemainingTurn < 2); // <>c.b__17_2
+    }
 }

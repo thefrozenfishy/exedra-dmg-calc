@@ -16,6 +16,7 @@ import { ParameterVariationUnitStateBase } from "./ParameterVariationUnitStateBa
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
 import { f32 } from "../../runtime";
 import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
+import { UnitStateBase } from "./UnitStateBase";
 
 // ---- ReDriveBattleCore.UnitState.UpRcvCtdUnitStateBase  (TypeDefIndex 800, public abstract class) ----
 export abstract class UpRcvCtdUnitStateBase extends ParameterVariationUnitStateBase {  // implements IRcvCtdVariation, IDebuff
@@ -48,7 +49,11 @@ export abstract class UpRcvCtdUnitStateBase extends ParameterVariationUnitStateB
     /** @rva 0x76F830 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean { return true; /* asm: mov al, 1; ret */ }
     /** @rva 0x16E5FF0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("UpRcvCtdUnitStateBase.GetAIFilteredTargets", 0x16E5FF0); }
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__12_0
+        if (list.length > 0) list = list.filter(unit => this.$GetAIFilteredTargets$b__12_1(unit));
+        return list;
+    }
     /** @rva 0x16E61B0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
@@ -57,5 +62,7 @@ export abstract class UpRcvCtdUnitStateBase extends ParameterVariationUnitStateB
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
     /** @rva 0x16E6380  private bool <GetAIFilteredTargets>b__12_1(BattleUnit unit) { } */
-    $GetAIFilteredTargets$b__12_1(unit: BattleUnit): boolean { return notPorted("UpRcvCtdUnitStateBase.<GetAIFilteredTargets>b__12_1", 0x16E6380); }
+    $GetAIFilteredTargets$b__12_1(unit: BattleUnit): boolean {
+        return !unit._Condition.GetSameStateList(this, false).some(state => state._EffectTurn === UnitStateBase.EffectTurnOfPermanent || state._RemainingTurn > 1); // <>c.b__12_2
+    }
 }

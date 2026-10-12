@@ -177,9 +177,18 @@ export class ActReferee {
         return checkAct instanceof ReActionTurnUnitAct;
     }
     /** @rva -1  public bool HasUnitTargetActAllTime<TAct>(int unitId) { } */
-    HasUnitTargetActAllTime<TAct>(TAct$: abstract new (...args: any[]) => TAct, unitId: int): boolean { return notPorted("ActReferee.HasUnitTargetActAllTime", 0); }
+    HasUnitTargetActAllTime<TAct>(TAct$: abstract new (...args: any[]) => TAct, unitId: int): boolean {
+        // IsUnitTargetAct<TAct>(currentAct, unitId) inlined in the game
+        if (ActReferee.IsUnitTargetAct(TAct$, this.currentAct, unitId)) return true;
+        return this.actList.some(act => ActReferee.IsUnitTargetAct(TAct$, act, unitId)) // <>c__DisplayClass19_0.b__0
+            || this.turnActHistory.some(act => ActReferee.IsUnitTargetAct(TAct$, act, unitId)); // b__1
+    }
     /** @rva -1  private static bool IsUnitTargetAct<TAct>(ActBase actBase, int unitId) { } */
-    static IsUnitTargetAct<TAct>(TAct$: abstract new (...args: any[]) => TAct, actBase: ActBase, unitId: int): boolean { return notPorted("ActReferee.IsUnitTargetAct", 0); }
+    static IsUnitTargetAct<TAct>(TAct$: abstract new (...args: any[]) => TAct, actBase: ActBase, unitId: int): boolean {
+        // `actBase is TAct t && t.actUnitId == unitId` (the game compares actUnitId at 0x14)
+        if (!(actBase instanceof TAct$)) return false;
+        return actBase.actUnitId === unitId;
+    }
     /** @rva 0x18E9740  public void SetRandomTarget(List<BattleUnit> targetUnitList, Dictionary<int, BattleUnit> battleUnitDic) { } */
     SetRandomTarget(targetUnitList: List<BattleUnit>, battleUnitDic: Dictionary<int, BattleUnit>): void {
         for (const act of this.actList) {

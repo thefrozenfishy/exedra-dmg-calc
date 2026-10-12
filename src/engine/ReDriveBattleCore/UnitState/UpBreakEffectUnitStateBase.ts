@@ -1,9 +1,11 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { CharacterParameter } from "../CharacterParameter";
+import { AISkillTargetSelector, AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import { notPorted } from "../../runtime";
 import type { Decimal, IEnumerable } from "../../runtime";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { AdditionType } from "./AdditionType";
@@ -12,6 +14,7 @@ import type { IBuff } from "./IBuff";
 import { ParameterVariationUnitStateBase } from "./ParameterVariationUnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
 import { f32 } from "../../runtime";
+import type { List } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpBreakEffectUnitStateBase  (TypeDefIndex 759, public abstract class) ----
 export abstract class UpBreakEffectUnitStateBase extends ParameterVariationUnitStateBase {  // implements IBreakEffectVariation, IBuff
@@ -42,7 +45,19 @@ export abstract class UpBreakEffectUnitStateBase extends ParameterVariationUnitS
     /** @rva -1 slot 30  public abstract Decimal GetBreakEffectVariationValue(BattleUnit unit, Decimal processingValue); */
     abstract GetBreakEffectVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal;
     /** @rva 0x16E1080 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("UpBreakEffectUnitStateBase.GetUnitFilterFuncOrder", 0x16E1080); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        list.push(AISkillTargetSelector.UnitFilterByMainTarget);
+        list.push(UpBreakEffectUnitStateBase.$GetUnitFilterFuncOrder$g__UnitFilterWithMaxBreakDamageRate_11_0);
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
     /** @rva 0x16E12E0  internal static IEnumerable<BattleUnit> <GetUnitFilterFuncOrder>g__UnitFilterWithMaxBreakDamageRate|11_0(IEnumerable<BattleUnit> candidateUnits) { } */
-    static $GetUnitFilterFuncOrder$g__UnitFilterWithMaxBreakDamageRate_11_0(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> { return notPorted("UpBreakEffectUnitStateBase.<GetUnitFilterFuncOrder>g__UnitFilterWithMaxBreakDamageRate|11_0", 0x16E12E0); }
+    static $GetUnitFilterFuncOrder$g__UnitFilterWithMaxBreakDamageRate_11_0(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
+        const units = candidateUnits.filter(unit => unit.get_Param() instanceof CharacterParameter); // <>c.b__11_1
+        if (units.length > 0) {
+            const maxRate = Math.max(...units.map(unit => (unit.get_Param() as CharacterParameter)._BreakDamageRate)); // b__11_2
+            return units.filter(unit => (unit.get_Param() as CharacterParameter)._BreakDamageRate === maxRate); // DisplayClass11_0.b__3
+        }
+        return candidateUnits;
+    }
 }

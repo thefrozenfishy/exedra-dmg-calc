@@ -1,11 +1,12 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { AISkillTargetSelector, AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import { notPorted } from "../../runtime";
 import type { IEnumerable, List, float } from "../../runtime";
 import type { RangeType } from "../../Network/Definition/Battle/RangeType";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
-import type { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
@@ -16,6 +17,7 @@ import type { IRequiredStateForDecide } from "./IRequiredStateForDecide";
 import { ParameterVariationUnitStateBase } from "./ParameterVariationUnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
 import { f32 } from "../../runtime";
+import { TargetRoleType } from "../../Network/Definition/Battle/TargetRoleType";
 
 // ---- ReDriveBattleCore.UnitState.UpBreakedDamageReceiveRatioUnitStateBase  (TypeDefIndex 755, public abstract class) ----
 export abstract class UpBreakedDamageReceiveRatioUnitStateBase extends ParameterVariationUnitStateBase {  // implements IBreakedDamageReceiveRatioVariation, IRequiredStateForDecide, IBuff
@@ -46,9 +48,25 @@ export abstract class UpBreakedDamageReceiveRatioUnitStateBase extends Parameter
     /** @rva -1 slot 30  public abstract float GetBreakedDamageReceiveRatioVariationValue(BattleUnit unit, float processingValue); */
     abstract GetBreakedDamageReceiveRatioVariationValue(unit: BattleUnit, processingValue: float): float;
     /** @rva 0x16E15E0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("UpBreakedDamageReceiveRatioUnitStateBase.GetAIFilteredTargets", 0x16E15E0); }
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__11_0
+        if (list.length > 0) {
+            const opponents = userUnit._Team === 0 ? gameDirector.get_EnemyUnitList() : gameDirector.get_AllyUnitList();
+            if (!opponents.some(unit => unit._BreakPoint.get_HasBreakPoint())) list = []; // b__11_1
+        }
+        return list;
+    }
     /** @rva 0x16E1890 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
-    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder { return notPorted("UpBreakedDamageReceiveRatioUnitStateBase.GetUnitFilterFuncOrder", 0x16E1890); }
+    GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
+        const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
+        list.push(AISkillTargetSelector.UnitFilterByMainTarget);
+        list.push(UpBreakedDamageReceiveRatioUnitStateBase.$GetUnitFilterFuncOrder$g__UnitFilterByRoleBreakerAndMaxSpeed_12_0);
+        list.push(AISkillTargetSelector.UnitFilterWithMaxAtk);
+        return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
+    }
     /** @rva 0x16E1AF0  internal static IEnumerable<BattleUnit> <GetUnitFilterFuncOrder>g__UnitFilterByRoleBreakerAndMaxSpeed|12_0(IEnumerable<BattleUnit> candidateUnits) { } */
-    static $GetUnitFilterFuncOrder$g__UnitFilterByRoleBreakerAndMaxSpeed_12_0(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> { return notPorted("UpBreakedDamageReceiveRatioUnitStateBase.<GetUnitFilterFuncOrder>g__UnitFilterByRoleBreakerAndMaxSpeed|12_0", 0x16E1AF0); }
+    static $GetUnitFilterFuncOrder$g__UnitFilterByRoleBreakerAndMaxSpeed_12_0(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
+        const units = candidateUnits.filter(unit => unit.IsMatch$TargetRoleType(2 as TargetRoleType)); // <>c.b__12_1 (Breaker)
+        return AISkillTargetSelector.UnitFilterWithMaxSpeed(units); // inlined in the game
+    }
 }

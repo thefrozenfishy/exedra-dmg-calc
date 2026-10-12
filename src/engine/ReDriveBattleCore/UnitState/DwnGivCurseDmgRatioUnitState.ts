@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { CurseUnitStateBase } from "./CurseUnitStateBase";
 import { notPorted } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import { DownGiveSlipDamageRatioUnitStateBase } from "./DownGiveSlipDamageRatioUnitStateBase";
@@ -21,5 +22,5 @@ export class DwnGivCurseDmgRatioUnitState extends DownGiveSlipDamageRatioUnitSta
         return this;
     }
     /** @rva 0x15BD690 slot 31  public override bool IsTarget(UnitStateBase state) { } */
-    IsTarget(state: UnitStateBase): boolean { return notPorted("DwnGivCurseDmgRatioUnitState.IsTarget", 0x15BD690); }
+    IsTarget(state: UnitStateBase): boolean { return state instanceof CurseUnitStateBase; }
 }

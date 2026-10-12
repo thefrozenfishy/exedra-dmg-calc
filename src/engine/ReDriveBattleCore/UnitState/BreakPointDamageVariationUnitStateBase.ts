@@ -65,7 +65,14 @@ export abstract class BreakPointDamageVariationUnitStateBase extends UnitStateBa
         return targetUnit.IsMatch$TargetElementType(this._TargetElement);
     }
     /** @rva 0x16CF110 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("BreakPointDamageVariationUnitStateBase.GetAIFilteredTargets", 0x16CF110); }
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__13_0
+        if (list.length > 0) {
+            // first filter is UnitStateBase.<>c.b__112_0 in the game
+            if (list.some(x => x.isCharacter)) list = list.filter(u => this.CanAddTo(u)); // b__13_0, then Where(CanAddTo) (vslot 21)
+        }
+        return list;
+    }
 }
 
 // ---- ReDriveBattleCore.UnitState.BreakPointDamageVariationUnitStateBase.CalculationType  (TypeDefIndex 692, public enum) ----
