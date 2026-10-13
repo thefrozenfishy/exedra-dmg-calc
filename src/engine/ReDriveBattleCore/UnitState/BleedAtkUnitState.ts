@@ -11,7 +11,7 @@ import { f32 } from "../../runtime";
 // ---- ReDriveBattleCore.UnitState.BleedAtkUnitState  (TypeDefIndex 515, public class) ----
 export class BleedAtkUnitState extends BleedUnitStateBase {
     /** @rva 0x15B6040 slot 32  protected override Nullable<ReceiveSlipDamageUnitStateBase.ParameterType> get_DamageType() { } */
-    get_DamageType(): Nullable<ReceiveSlipDamageUnitStateBase_ParameterType> { return notPorted("BleedAtkUnitState.get_DamageType", 0x15B6040); }
+    get_DamageType(): Nullable<ReceiveSlipDamageUnitStateBase_ParameterType> { return 0 as ReceiveSlipDamageUnitStateBase_ParameterType; /* new Nullable<ParameterType>(Atk) */ }
     /** @rva 0x15B5FF0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();

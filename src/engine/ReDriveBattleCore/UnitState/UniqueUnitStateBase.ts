@@ -1,6 +1,9 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import type { UniqueStatePatternMstRecord } from "../../Network/Definition/Skill/UniqueStatePatternMstRecord";
+import { UniqueStatePatternMstModel } from "../Model/UniqueStatePatternMstModel";
+import { BattleMstReaderBase } from "../Reader/BattleMstReaderBase";
 import { notPorted } from "../../runtime";
 import type { IEnumerable, List, int } from "../../runtime";
 import type { RangeType } from "../../Network/Definition/Battle/RangeType";
@@ -25,9 +28,21 @@ export abstract class UniqueUnitStateBase extends UnitStateBase {  // implements
     /** @rva 0x76F830 slot 9  public override bool get_ShowStateIconAttachedByPassiveSkill() { } */
     get_ShowStateIconAttachedByPassiveSkill(): boolean { return true; /* asm: mov al, 1; ret */ }
     /** @rva 0x16DF3A0 slot 7  public override string get_IconName() { } */
-    get_IconName(): string { return notPorted("UniqueUnitStateBase.get_IconName", 0x16DF3A0); }
+    get_IconName(): string {
+        if (this.iconName !== "") return this.iconName;
+        const model = BattleMstReaderBase.get_Instance<UniqueStatePatternMstModel, UniqueStatePatternMstRecord, int>(UniqueStatePatternMstModel).GetModelByKey(this._UniqueStatePatternMstId);
+        if (model == null) return "";
+        this.iconName = model.record.iconName; // IconName getter inlined in the game
+        return this.iconName;
+    }
     /** @rva 0x16DEE90  private string GetIconName() { } */
-    GetIconName(): string { return notPorted("UniqueUnitStateBase.GetIconName", 0x16DEE90); }
+    GetIconName(): string {
+        if (this.iconName !== "") return this.iconName;
+        const model = BattleMstReaderBase.get_Instance<UniqueStatePatternMstModel, UniqueStatePatternMstRecord, int>(UniqueStatePatternMstModel).GetModelByKey(this._UniqueStatePatternMstId);
+        if (model == null) return "";
+        this.iconName = model.record.iconName; // IconName getter inlined in the game
+        return this.iconName;
+    }
     /** @rva 0x902980  public int get_UniqueStatePatternMstId() { } */
     get_UniqueStatePatternMstId(): int { return this._UniqueStatePatternMstId; /* auto-property */ }
     /** @rva 0x9029B0  public void set_UniqueStatePatternMstId(int value) { } */

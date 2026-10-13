@@ -28,7 +28,9 @@ export class UpElementResistRatioAccumUnitState extends UpElementResistUnitState
     get AccumCount(): int { return this.get_AccumCount(); }
     set AccumCount(v: int) { this.set_AccumCount(v); }
     /** @rva 0x16E4130  public Decimal get_UpRatio() { } */
-    get_UpRatio(): Decimal { return notPorted("UpElementResistRatioAccumUnitState.get_UpRatio", 0x16E4130); }
+    get_UpRatio(): Decimal {
+        return Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10)); // (decimal)float / 10m
+    }
     /** @rva 0x902980 slot 30  public int get_AccumCountMax() { } */
     get_AccumCountMax(): int { return this._AccumCountMax; /* auto-property */ }
     /** @rva 0x9029B0 slot 31  public void set_AccumCountMax(int value) { } */

@@ -11,7 +11,7 @@ import { f32 } from "../../runtime";
 // ---- ReDriveBattleCore.UnitState.BurnAtkUnitState  (TypeDefIndex 503, public class) ----
 export class BurnAtkUnitState extends BurnUnitStateBase {
     /** @rva 0x15B6220 slot 32  protected override Nullable<ReceiveSlipDamageUnitStateBase.ParameterType> get_DamageType() { } */
-    get_DamageType(): Nullable<ReceiveSlipDamageUnitStateBase_ParameterType> { return notPorted("BurnAtkUnitState.get_DamageType", 0x15B6220); }
+    get_DamageType(): Nullable<ReceiveSlipDamageUnitStateBase_ParameterType> { return 0 as ReceiveSlipDamageUnitStateBase_ParameterType; /* new Nullable<ParameterType>(Atk) */ }
     /** @rva 0x15B5FF0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();

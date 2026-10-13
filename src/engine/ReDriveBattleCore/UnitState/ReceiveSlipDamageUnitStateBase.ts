@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { BattleDamageCalculator } from "../BattleDamageCalculator";
 import { CorrelationEffect } from "../CorrelationEffect";
 import { AISkillTargetSelector, AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import { Decimal, notPorted } from "../../runtime";
@@ -55,7 +56,15 @@ export abstract class ReceiveSlipDamageUnitStateBase extends AbnormalUnitStateBa
     /** @rva 0x7360C0 slot 34  public virtual bool get_SkipDamageOnTurnBegin() { } */
     get_SkipDamageOnTurnBegin(): boolean { return false; /* asm: xor al, al; ret */ }
     /** @rva 0x15BFBF0  protected DamageBaseType get_DamageBaseType() { } */
-    get_DamageBaseType(): DamageBaseType { return notPorted("ReceiveSlipDamageUnitStateBase.get_DamageBaseType", 0x15BFBF0); }
+    get_DamageBaseType(): DamageBaseType {
+        const type = this.get_DamageType(); // vslot 32
+        if (type != null) {
+            if (type === 0) return 1 as DamageBaseType; // Atk
+            if (type === 1) return 2 as DamageBaseType; // Def
+            if (type === 2) return 3 as DamageBaseType; // MaxHp
+        }
+        throw new Error(`Error SlipDamageType ${type}`); // String.Format("Error_SlipDamageType {0}") -> Exception
+    }
     /** @rva 0x15B5FF0  public void .ctor() { } */
     ctor(): this {
         super.ctor();
@@ -68,7 +77,10 @@ export abstract class ReceiveSlipDamageUnitStateBase extends AbnormalUnitStateBa
         return this;
     }
     /** @rva 0x15BF920 slot 17  public override void SetTriggeringInfo(EffectOriginType effectOrigin, BattleUnit userUnit, bool isOwnSkill = False, bool isConditionActivation = False, BattleType battleType = 1) { } */
-    SetTriggeringInfo(effectOrigin: EffectOriginType, userUnit: BattleUnit, isOwnSkill?: boolean /* = False */, isConditionActivation?: boolean /* = False */, battleType?: BattleType /* = 1 */): void { return notPorted("ReceiveSlipDamageUnitStateBase.SetTriggeringInfo", 0x15BF920); }
+    SetTriggeringInfo(effectOrigin: EffectOriginType, userUnit: BattleUnit, isOwnSkill: boolean = false, isConditionActivation: boolean = false, battleType: BattleType = 1 as BattleType): void {
+        super.SetTriggeringInfo(effectOrigin, userUnit, isOwnSkill, isConditionActivation, battleType);
+        this._DamageBase = this.GetDamageBase(userUnit); // vslot 35
+    }
     /** @rva 0x15BF770 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const order = new AISkillTargetSelector_UnitFilterFuncOrder().ctor();
@@ -83,9 +95,16 @@ export abstract class ReceiveSlipDamageUnitStateBase extends AbnormalUnitStateBa
         return order;
     }
     /** @rva 0x15BF5B0 slot 35  protected virtual Decimal GetDamageBase(BattleUnit userUnit) { } */
-    GetDamageBase(userUnit: BattleUnit): Decimal { return notPorted("ReceiveSlipDamageUnitStateBase.GetDamageBase", 0x15BF5B0); }
+    GetDamageBase(userUnit: BattleUnit): Decimal {
+        const type = this.get_DamageBaseType();
+        return BattleDamageCalculator.GetDamageBase(userUnit.GetInitialDamageBaseParamValue(type), f32(this._UpdateableEffectValue / 1000));
+    }
     /** @rva 0x15BF670 slot 36  public virtual float GetSlipDamageValue(BattleUnit attackUnit, BattleUnit defenseUnit, BattleType battleType, bool isImmediately) { } */
-    GetSlipDamageValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, battleType: BattleType, isImmediately: boolean): float { return notPorted("ReceiveSlipDamageUnitStateBase.GetSlipDamageValue", 0x15BF670); }
+    GetSlipDamageValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, battleType: BattleType, isImmediately: boolean): float {
+        let damage = BattleDamageCalculator.GetSlipDamageValue(attackUnit, defenseUnit, this._DamageBase, this.get_AttackElement(), this.get_DamageBaseType(), battleType, this);
+        if (isImmediately && !this.get_IsPermanent()) damage = Math.imul(damage, this._RemainingTurn);
+        return f32(damage);
+    }
     /** @rva 0x15BFB60  private IEnumerable<BattleUnit> <GetUnitFilterFuncOrder>g__UnitFilterMatchWeakElement|24_0(IEnumerable<BattleUnit> candidateUnits) { } */
     $GetUnitFilterFuncOrder$g__UnitFilterMatchWeakElement_24_0(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => this.$GetUnitFilterFuncOrder$b__24_2(unit));

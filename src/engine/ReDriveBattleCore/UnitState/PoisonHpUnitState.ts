@@ -11,7 +11,7 @@ import { f32 } from "../../runtime";
 // ---- ReDriveBattleCore.UnitState.PoisonHpUnitState  (TypeDefIndex 509, public class) ----
 export class PoisonHpUnitState extends PoisonUnitStateBase {
     /** @rva 0x15BF4D0 slot 32  protected override Nullable<ReceiveSlipDamageUnitStateBase.ParameterType> get_DamageType() { } */
-    get_DamageType(): Nullable<ReceiveSlipDamageUnitStateBase_ParameterType> { return notPorted("PoisonHpUnitState.get_DamageType", 0x15BF4D0); }
+    get_DamageType(): Nullable<ReceiveSlipDamageUnitStateBase_ParameterType> { return 2 as ReceiveSlipDamageUnitStateBase_ParameterType; /* new Nullable<ParameterType>(Hp) */ }
     /** @rva 0x15B5FF0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();

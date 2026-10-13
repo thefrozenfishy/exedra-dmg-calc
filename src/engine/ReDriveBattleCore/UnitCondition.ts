@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { IStateIconNumberDisplayable$RefreshStateIconNumber } from "./UnitState/IStateIconNumberDisplayable";
 import type { IStateIconNumberDisplayable } from "./UnitState/IStateIconNumberDisplayable";
 import type { ISpeedVariation } from "./UnitState/ISpeedVariation";
 import type { IHasUpdateableEffectValue } from "./UnitState/IHasUpdateableEffectValue";
@@ -300,7 +301,7 @@ export class UnitCondition {
                         let showZero = false;
                         if (isImpl(state, "IStateIconNumberDisplayable")) {
                             const d = state as unknown as IStateIconNumberDisplayable;
-                            d.RefreshStateIconNumber(unit);
+                            IStateIconNumberDisplayable$RefreshStateIconNumber(d, unit); // default interface method when not overridden
                             number = d.StateIconNumber;
                             showZero = d.IsShowZeroIfZero;
                         }

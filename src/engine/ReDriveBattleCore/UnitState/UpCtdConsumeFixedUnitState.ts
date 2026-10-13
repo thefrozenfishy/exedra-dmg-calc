@@ -35,5 +35,8 @@ export class UpCtdConsumeFixedUnitState extends UpCtdFixedUnitState {  // implem
         return 0;
     }
     /** @rva 0x16E1D20 slot 31  public bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
-    ShouldConsume(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean { return notPorted("UpCtdConsumeFixedUnitState.ShouldConsume", 0x16E1D20); }
+    ShouldConsume(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean {
+        return noticeList.flatMap(notice => [...notice.Damages, ...notice.BarrierDamages]) // <>c.b__5_0 (Damages.Concat(BarrierDamages))
+            .some(damage => damage._IsCritical); // b__5_1
+    }
 }

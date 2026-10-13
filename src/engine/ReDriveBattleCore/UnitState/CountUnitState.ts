@@ -68,9 +68,14 @@ export class CountUnitState extends UnitStateBase {  // implements INeutralState
         return this;
     }
     /** @rva 0x15B70B0 slot 18  public override void OnAddedToCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
-    OnAddedToCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void { return notPorted("CountUnitState.OnAddedToCondition", 0x15B70B0); }
+    OnAddedToCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void {
+        unit._Condition._MaxCountPoint = 20;
+    }
     /** @rva 0x15B70E0 slot 19  public override void OnRemovingFromCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
-    OnRemovingFromCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void { return notPorted("CountUnitState.OnRemovingFromCondition", 0x15B70E0); }
+    OnRemovingFromCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void {
+        unit._Condition._CountPoint = 0;
+        unit._Condition._MaxCountPoint = 0;
+    }
     /** @rva 0x15B6CB0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__33_0

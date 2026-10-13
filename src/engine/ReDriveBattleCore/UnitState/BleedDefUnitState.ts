@@ -11,7 +11,7 @@ import { f32 } from "../../runtime";
 // ---- ReDriveBattleCore.UnitState.BleedDefUnitState  (TypeDefIndex 516, public class) ----
 export class BleedDefUnitState extends BleedUnitStateBase {
     /** @rva 0x15B6090 slot 32  protected override Nullable<ReceiveSlipDamageUnitStateBase.ParameterType> get_DamageType() { } */
-    get_DamageType(): Nullable<ReceiveSlipDamageUnitStateBase_ParameterType> { return notPorted("BleedDefUnitState.get_DamageType", 0x15B6090); }
+    get_DamageType(): Nullable<ReceiveSlipDamageUnitStateBase_ParameterType> { return 1 as ReceiveSlipDamageUnitStateBase_ParameterType; /* new Nullable<ParameterType>(Def) */ }
     /** @rva 0x15B5FF0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();

@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { BattleDamageCalculator } from "../BattleDamageCalculator";
 import { notPorted } from "../../runtime";
 import type { float, int } from "../../runtime";
 import type { BattleType } from "../../Network/Definition/Battle/BattleType";
@@ -59,5 +60,9 @@ export abstract class VortexUnitStateBase extends ReceiveSlipDamageUnitStateBase
         return this;
     }
     /** @rva 0x15D1FA0 slot 36  public override float GetSlipDamageValue(BattleUnit attackUnit, BattleUnit defenseUnit, BattleType battleType, bool isImmediately) { } */
-    GetSlipDamageValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, battleType: BattleType, isImmediately: boolean): float { return notPorted("VortexUnitStateBase.GetSlipDamageValue", 0x15D1FA0); }
+    GetSlipDamageValue(attackUnit: BattleUnit, defenseUnit: BattleUnit, battleType: BattleType, isImmediately: boolean): float {
+        const damageBase = this._DamageBase;
+        this._ShouldBeRemovedNow = true;
+        return f32(BattleDamageCalculator.GetSlipDamageValue(attackUnit, defenseUnit, damageBase, this.get_AttackElement(), this.get_DamageBaseType(), battleType, this));
+    }
 }

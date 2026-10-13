@@ -32,16 +32,25 @@ export class RcvFinalDamageUnitState extends UnitStateBase {  // implements IDeb
         return "eff_cmn_act_debuff_appear_001";
     }
     /** @rva 0x16D61E0  public Decimal get_DamageRatio() { } */
-    get_DamageRatio(): Decimal { return notPorted("RcvFinalDamageUnitState.get_DamageRatio", 0x16D61E0); }
+    get_DamageRatio(): Decimal {
+        return this.damageRatio.mul(Decimal.fromInt(100));
+    }
     /** @rva 0x16CF610  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
     /** @rva 0x16D6100  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("RcvFinalDamageUnitState..ctor", 0x16D6100); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this.damageRatio = Decimal.fromInt(info._EffectValue1).div(Decimal.fromInt(1000));
+        return this;
+    }
     /** @rva 0x16D5E80 slot 25  public Decimal GetFinalDamageRatio(BattleUnit attacker) { } */
-    GetFinalDamageRatio(attacker: BattleUnit): Decimal { return notPorted("RcvFinalDamageUnitState.GetFinalDamageRatio", 0x16D5E80); }
+    GetFinalDamageRatio(attacker: BattleUnit): Decimal {
+        if (attacker.IsMatch$TargetRoleType(this._TargetRole) && attacker.IsMatch$TargetElementType(this._TargetElement)) return this.damageRatio;
+        return Decimal.Zero;
+    }
     /** @rva 0x16D5C80 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__12_0

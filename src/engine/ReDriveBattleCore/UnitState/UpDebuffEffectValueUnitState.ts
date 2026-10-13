@@ -14,6 +14,7 @@ import type { GameDirectorBase } from "../GameDirectorBase";
 import type { UnitStateBase } from "./UnitStateBase";
 import { UpEffectValueUnitStateBase } from "./UpEffectValueUnitStateBase";
 import { TargetRoleType } from "../../Network/Definition/Battle/TargetRoleType";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.UpDebuffEffectValueUnitState  (TypeDefIndex 629, public class) ----
 export class UpDebuffEffectValueUnitState extends UpEffectValueUnitStateBase {
@@ -28,7 +29,10 @@ export class UpDebuffEffectValueUnitState extends UpEffectValueUnitStateBase {
         return this;
     }
     /** @rva 0x16E27E0 slot 27  public override float GetEffectValueVariationRate(UnitStateBase targetState) { } */
-    GetEffectValueVariationRate(targetState: UnitStateBase): float { return notPorted("UpDebuffEffectValueUnitState.GetEffectValueVariationRate", 0x16E27E0); }
+    GetEffectValueVariationRate(targetState: UnitStateBase): float {
+        if (targetState.get_Direction() === 1) return f32(this._UpRatio / 100);
+        return 0;
+    }
     /** @rva 0x16E25B0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__3_0

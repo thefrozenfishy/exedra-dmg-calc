@@ -13,7 +13,9 @@ export class DwnRcvRecoveryRatioUnitState extends DownReceiveRecoveryUnitStateBa
     static readonly __interfaces: readonly string[] = ['IReceiveRecoveryVariation'];
     get DownRatio(): Decimal { return this.get_DownRatio(); }
     /** @rva 0x15BE750  public Decimal get_DownRatio() { } */
-    get_DownRatio(): Decimal { return notPorted("DwnRcvRecoveryRatioUnitState.get_DownRatio", 0x15BE750); }
+    get_DownRatio(): Decimal {
+        return Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10)); // (decimal)float / 10m
+    }
     /** @rva 0x15B3A90  protected void .ctor() { } */
     ctor(): this {
         super.ctor();

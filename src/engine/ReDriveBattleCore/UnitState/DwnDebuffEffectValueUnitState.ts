@@ -13,6 +13,7 @@ import type { GameDirectorBase } from "../GameDirectorBase";
 import { DownEffectValueUnitStateBase } from "./DownEffectValueUnitStateBase";
 import type { UnitStateBase } from "./UnitStateBase";
 import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
+import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnDebuffEffectValueUnitState  (TypeDefIndex 633, public class) ----
 export class DwnDebuffEffectValueUnitState extends DownEffectValueUnitStateBase {
@@ -27,7 +28,10 @@ export class DwnDebuffEffectValueUnitState extends DownEffectValueUnitStateBase 
         return this;
     }
     /** @rva 0x16D0510 slot 27  public override float GetEffectValueVariationRate(UnitStateBase targetState) { } */
-    GetEffectValueVariationRate(targetState: UnitStateBase): float { return notPorted("DwnDebuffEffectValueUnitState.GetEffectValueVariationRate", 0x16D0510); }
+    GetEffectValueVariationRate(targetState: UnitStateBase): float {
+        if (targetState.get_Direction() === 1) return -f32(this._DownRatio / 100);
+        return 0;
+    }
     /** @rva 0x16D02E0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__3_0

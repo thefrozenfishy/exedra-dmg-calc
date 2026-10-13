@@ -12,7 +12,9 @@ import type { ReceiveSlipDamageUnitStateBase } from "./ReceiveSlipDamageUnitStat
 export abstract class DownGiveSlipDamageRatioUnitStateBase extends DownGiveSlipDamageUnitStateBase {
     get DownRatio(): Decimal { return this.get_DownRatio(); }
     /** @rva 0x15BACD0  public Decimal get_DownRatio() { } */
-    get_DownRatio(): Decimal { return notPorted("DownGiveSlipDamageRatioUnitStateBase.get_DownRatio", 0x15BACD0); }
+    get_DownRatio(): Decimal {
+        return Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10)); // (decimal)float / 10m
+    }
     /** @rva 0x15B3A90  protected void .ctor() { } */
     ctor(): this {
         super.ctor();

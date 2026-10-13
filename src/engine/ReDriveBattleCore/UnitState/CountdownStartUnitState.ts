@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { SoloRaidGameDirector } from "../SoloRaidGameDirector";
 import { notPorted } from "../../runtime";
 import type { IEnumerable, int } from "../../runtime";
 import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
@@ -29,9 +30,22 @@ export class CountdownStartUnitState extends UnitStateBase {
     /** @rva 0x76F830 slot 12  public override bool get_IsDontShowAddStateFlip() { } */
     get_IsDontShowAddStateFlip(): boolean { return true; /* asm: mov al, 1; ret */ }
     /** @rva 0x15B7350  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("CountdownStartUnitState..ctor", 0x15B7350); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        const start = info._EffectTurn - 1;
+        this.startCountdown = start;
+        this.countdown = start;
+        this.canCancelMaxTotalDamage = info._EffectValue1;
+        return this;
+    }
     /** @rva 0x15B7290 slot 18  public override void OnAddedToCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
-    OnAddedToCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void { return notPorted("CountdownStartUnitState.OnAddedToCondition", 0x15B7290); }
+    OnAddedToCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void {
+        if (gameDirector instanceof SoloRaidGameDirector) {
+            if (!gameDirector.countdownReferee.get_IsCountdownActive()) {
+                gameDirector.StartCountdown(this.startCountdown, this.canCancelMaxTotalDamage, unit._Id);
+            }
+        }
+    }
     /** @rva 0x15B7190 slot 21  public override bool CanAddTo(BattleUnit unit) { } */
     CanAddTo(unit: BattleUnit): boolean {
         return !unit._Condition._StateList.some(s => s instanceof CountdownStartUnitState); // OfType<CountdownStartUnitState>().Any()

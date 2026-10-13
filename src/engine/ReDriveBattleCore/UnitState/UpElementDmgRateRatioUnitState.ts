@@ -12,7 +12,9 @@ import { UpElementDamageRateUnitStateBase } from "./UpElementDamageRateUnitState
 export class UpElementDmgRateRatioUnitState extends UpElementDamageRateUnitStateBase {
     get UpRatio(): Decimal { return this.get_UpRatio(); }
     /** @rva 0x16E3EA0  public Decimal get_UpRatio() { } */
-    get_UpRatio(): Decimal { return notPorted("UpElementDmgRateRatioUnitState.get_UpRatio", 0x16E3EA0); }
+    get_UpRatio(): Decimal {
+        return Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10)); // (decimal)float / 10m
+    }
     /** @rva 0x16CF610  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";

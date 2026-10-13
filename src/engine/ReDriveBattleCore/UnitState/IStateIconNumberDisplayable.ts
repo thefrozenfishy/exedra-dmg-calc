@@ -11,3 +11,10 @@ export interface IStateIconNumberDisplayable {
     /** @rva 0x730170 slot 0  public virtual void RefreshStateIconNumber(BattleUnit unit) { } */
     RefreshStateIconNumber(unit: BattleUnit): void;
 }
+
+/** Interface dispatch of IStateIconNumberDisplayable.RefreshStateIconNumber (slot 0): the class's override when it has
+ * one, else the C# default interface method (@rva 0x730170, empty). */
+export function IStateIconNumberDisplayable$RefreshStateIconNumber(self: IStateIconNumberDisplayable, unit: BattleUnit): void {
+    const o = self as unknown as { RefreshStateIconNumber?: (u: BattleUnit) => void };
+    if (typeof o.RefreshStateIconNumber === "function") o.RefreshStateIconNumber(unit);
+}

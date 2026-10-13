@@ -19,7 +19,10 @@ export class UpWeakElementDmgConsumeRatioUnitState extends UpWeakElementDmgRatio
         return "battle_icon_consume_up_weak_element_dmg_ratio";
     }
     /** @rva 0x16E1D00 slot 28  public override float get_UpRatio() { } */
-    get_UpRatio(): float { return notPorted("UpWeakElementDmgConsumeRatioUnitState.get_UpRatio", 0x16E1D00); }
+    get_UpRatio(): float {
+        if (this._RemainCount > 0) return f32(this._UpdateableEffectValue / 10);
+        return 0;
+    }
     /** @rva 0x16CF610  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
@@ -32,5 +35,9 @@ export class UpWeakElementDmgConsumeRatioUnitState extends UpWeakElementDmgRatio
         return this;
     }
     /** @rva 0x16E7600 slot 29  public bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
-    ShouldConsume(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean { return notPorted("UpWeakElementDmgConsumeRatioUnitState.ShouldConsume", 0x16E7600); }
+    ShouldConsume(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean {
+        return noticeList.flatMap(notice => [...notice.Damages, ...notice.BarrierDamages]) // <>c.b__6_0 (Damages.Concat(BarrierDamages))
+            .filter(damage => damage._Category === 1 || damage._Category === 2) // b__6_1
+            .some(damage => damage._CorrelationDamageType === 2); // b__6_2
+    }
 }

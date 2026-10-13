@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { AdditionalSkill } from "../AdditionalSkill";
 import { f32, notPorted } from "../../runtime";
 import type { List, float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
@@ -35,5 +36,8 @@ export class UpCtrConsumeFixedUnitState extends UpCtrFixedUnitState {  // implem
         return 0;
     }
     /** @rva 0x16E2250 slot 31  public bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
-    ShouldConsume(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean { return notPorted("UpCtrConsumeFixedUnitState.ShouldConsume", 0x16E2250); }
+    ShouldConsume(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean {
+        if (attackSkill instanceof AdditionalSkill) return attackSkill.skillType !== 5;
+        return true;
+    }
 }

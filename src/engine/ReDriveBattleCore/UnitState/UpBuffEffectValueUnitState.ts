@@ -30,7 +30,10 @@ export class UpBuffEffectValueUnitState extends UpEffectValueUnitStateBase {
         return this;
     }
     /** @rva 0x15CFE80 slot 27  public override float GetEffectValueVariationRate(UnitStateBase targetState) { } */
-    GetEffectValueVariationRate(targetState: UnitStateBase): float { return notPorted("UpBuffEffectValueUnitState.GetEffectValueVariationRate", 0x15CFE80); }
+    GetEffectValueVariationRate(targetState: UnitStateBase): float {
+        if (targetState.get_Direction() === 0) return f32(this._UpRatio / 100);
+        return 0;
+    }
     /** @rva 0x15CFC50 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__3_0

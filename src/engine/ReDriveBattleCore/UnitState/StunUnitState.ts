@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { QuestEnemyAppearanceParameter } from "../QuestEnemyAppearanceParameter";
 import { notPorted } from "../../runtime";
 import type { int } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
@@ -33,7 +34,12 @@ export class StunUnitState extends UnableActionUnitStateBase {
         return this;
     }
     /** @rva 0x15C0850 slot 19  public override void OnRemovingFromCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
-    OnRemovingFromCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void { return notPorted("StunUnitState.OnRemovingFromCondition", 0x15C0850); }
+    OnRemovingFromCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void {
+        if (unit.get_Param() instanceof QuestEnemyAppearanceParameter) {
+            const condition = unit._Condition;
+            condition._RepeatStunParryRate = Math.min(StunUnitState_Define.AddRepeatStunParryRate + condition._RepeatStunParryRate, StunUnitState_Define.MaxRepeatStunParryRate);
+        }
+    }
 }
 
 // ---- ReDriveBattleCore.UnitState.StunUnitState.Define  (TypeDefIndex 510, private static class) ----
@@ -43,5 +49,10 @@ export class StunUnitState_Define {
     /** 0x4 public static readonly int MaxRepeatStunParryRate */
     static MaxRepeatStunParryRate: int = 0;
     /** @rva 0x15B8150  private static void .cctor() { } */
-    static cctor(): void { return notPorted("StunUnitState_Define..cctor", 0x15B8150); }
+    static cctor(): void {
+        StunUnitState_Define.AddRepeatStunParryRate = 25;
+        StunUnitState_Define.MaxRepeatStunParryRate = 80;
+    }
 }
+
+StunUnitState_Define.cctor(); // C# static constructor

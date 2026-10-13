@@ -34,5 +34,8 @@ export class DwnCtdConsumeFixedUnitState extends DwnCtdFixedUnitState {  // impl
         return 0;
     }
     /** @rva 0x15BC780 slot 31  public bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
-    ShouldConsume(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean { return notPorted("DwnCtdConsumeFixedUnitState.ShouldConsume", 0x15BC780); }
+    ShouldConsume(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean {
+        return noticeList.flatMap(notice => [...notice.Damages, ...notice.BarrierDamages]) // <>c.b__5_0 (Damages.Concat(BarrierDamages))
+            .some(damage => damage._IsCritical); // b__5_1
+    }
 }

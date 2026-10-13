@@ -1,12 +1,15 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { AffectedUnitNotice } from "../AffectedUnitNotice";
+import { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
+import { LockTurnOrderUnitState } from "./LockTurnOrderUnitState";
+import { isImpl, notPorted } from "../../runtime";
 import type { IEnumerable, float, int } from "../../runtime";
 import type { BattleType } from "../../Network/Definition/Battle/BattleType";
 import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
-import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
+
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "./EffectOriginType";
@@ -17,6 +20,7 @@ import type { UnitStateBase_DirectionType } from "./UnitStateBase";
 import { f32 } from "../../runtime";
 import type { List } from "../../runtime";
 import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
+import { ref } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.CutoutUnitState  (TypeDefIndex 561, public class) ----
 export class CutoutUnitState extends UnitStateBase {  // implements IBuff, ITurnEndTrigger
@@ -74,7 +78,14 @@ export class CutoutUnitState extends UnitStateBase {  // implements IBuff, ITurn
         return this;
     }
     /** @rva 0x15B7780 slot 17  public override void SetTriggeringInfo(EffectOriginType effectOrigin, BattleUnit userUnit, bool isOwnSkill = False, bool isConditionActivation = False, BattleType battleType = 1) { } */
-    SetTriggeringInfo(effectOrigin: EffectOriginType, userUnit: BattleUnit, isOwnSkill?: boolean /* = False */, isConditionActivation?: boolean /* = False */, battleType?: BattleType /* = 1 */): void { return notPorted("CutoutUnitState.SetTriggeringInfo", 0x15B7780); }
+    SetTriggeringInfo(effectOrigin: EffectOriginType, userUnit: BattleUnit, isOwnSkill: boolean = false, isConditionActivation: boolean = false, battleType: BattleType = 1 as BattleType): void {
+        super.SetTriggeringInfo(effectOrigin, userUnit, isOwnSkill, isConditionActivation, battleType);
+        let has = false;
+        if (userUnit != null) {
+            has = userUnit._Condition.TryGetUnitState(LockTurnOrderUnitState, ref<LockTurnOrderUnitState>(null!), false);
+        }
+        this._IsUserUnitLockTurnOrderUnitState = has;
+    }
     /** @rva 0x15B7520 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
@@ -84,5 +95,30 @@ export class CutoutUnitState extends UnitStateBase {  // implements IBuff, ITurn
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
     /** @rva 0x15B7840 slot 25  public AffectedUnitNoticeBundle TriggeringAtTurnEnd(BattleUnit userUnit, GameDirectorBase gameDirector) { } */
-    TriggeringAtTurnEnd(userUnit: BattleUnit, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("CutoutUnitState.TriggeringAtTurnEnd", 0x15B7840); }
+    TriggeringAtTurnEnd(userUnit: BattleUnit, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
+        const bundle = new AffectedUnitNoticeBundle().ctor();
+        if (userUnit._Condition._StateList.some(s => s instanceof CutoutUnitState && s._IsActivated)) { // OfType<CutoutUnitState>().Any(b__25_0)
+            this._IsActivated = true;
+            this._ShouldBeRemovedNow = true;
+            return bundle;
+        }
+        let notice = new AffectedUnitNotice().ctor$int(userUnit._Id);
+        const debuffs = userUnit._Condition._StateList
+            .filter(s => s._EffectOrigin === 1) // b__25_1
+            .filter(s => isImpl(s, "IDebuff") && !s._ShouldBeRemovedNow) // b__25_2
+            .reverse();
+        const count = this.debuffRemoveNum < 1 ? debuffs.length : this.debuffRemoveNum;
+        for (const state of debuffs.slice(0, Math.max(0, count))) state._ShouldBeRemovedNow = true; // Take(count)
+        if (!this._IsUserUnitLockTurnOrderUnitState) {
+            const turnOrderPriority = gameDirector.turnActSystem.turnReferee.get_NextTurnOrderPriority();
+            // UnitTurnGauge.AddGaugeValue inlined in the game
+            const variation = userUnit._TurnGauge.AddGaugeValue(-f32(this.hasteRate / 1000), turnOrderPriority);
+            notice = AffectedUnitNotice.op_Addition(notice, AffectedUnitNotice.CreateByTurnGaugeVariation(userUnit._Id, variation));
+        }
+        notice.NonDamageVisualEffectList.push("eff_cmn_act_cutout_appear_001");
+        bundle.Add(notice);
+        this._IsActivated = true;
+        this._ShouldBeRemovedNow = true;
+        return bundle;
+    }
 }
