@@ -13,6 +13,7 @@
 // recover at their own turn start) they stay broken throughout.
 import breakMstJson from "../assets/base_data/getBreakMstList.json";
 import { PvPKioku } from "./PvPKioku";
+import { Kioku } from "./Kioku";
 import { PvPTeam, scaleGivenState, type KiokuState } from "./PvPTeam";
 import { PvPBattle } from "./PvPBattle";
 import { ailmentMarker, computeMaxDamage } from "./MaxDamage";
@@ -24,7 +25,7 @@ import { ailmentConditionValues, unitTypeConditionValues } from "./BattleConditi
 import type { QuestEnemyAppearance } from "./PvE";
 import { crystalisesByStyle, kiokuData, skillDetailsByMstId } from "../utils/helpers";
 import { skillDetailId, TargetType, TargetTypeLookup, targetTypeToLvl, targetRange, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
-import { Ailment, elementMap, roleMap, KiokuElement, KiokuRole } from "../types/enums";
+import { Ailment, elementMap, roleMap, KiokuElement, KiokuRole, LuxMagica } from "../types/enums";
 
 export const BENCH_DEF = 3000
 export const BENCH_BROKEN_RATE = 500  // % damage taken while broken
@@ -77,6 +78,16 @@ export const exCrysIds = (name: string): number[] =>
  *  whatever `args` carries (the same for Lux and for every character measured). */
 export function benchKioku(args: Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>, as?: BenchIdentity): PvPKioku {
     const k = new PvPKioku({ ...args, portrait: undefined, supportKey: undefined, crysIDs: exCrysIds(args.name), subCrysIDs: [] } as KiokuArgs)
+    // Lux mimicking another role also gets that role's stats: the average HP/ATK/DEF of its 5 stars at her levels, so
+    // e.g. an Attacker-identity Lux hits like an average Attacker instead of with her own (Breaker) ATK.
+    if (as?.role && as.role !== k.data.role && args.name === LuxMagica) {
+        const stats = averageRoleStats(as.role, args)
+        if (stats) {
+            k.getBaseHp = () => stats.hp
+            k.getBaseAtk = () => stats.atk
+            k.getBaseDef = () => stats.def
+        }
+    }
     if (as && ("element" in as || "role" in as)) {
         (k as any).data = { ...k.data, ...("element" in as ? { element: as.element } : {}), ...("role" in as ? { role: as.role } : {}) }
     }
@@ -88,6 +99,21 @@ export function benchKioku(args: Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Par
         if (num) k.damageElementOverride = Number(num)
     }
     return k
+}
+
+// Average base HP/ATK/DEF of every 5 star of a role (Lux excluded) at the given levels: kit stats, magic and heart
+// levels and ascension only, like a bench unit (no portrait, support or crystalis). Cached per role and levels.
+const roleStatCache = new Map<string, { hp: number, atk: number, def: number } | undefined>()
+function averageRoleStats(role: KiokuRole, levels: Pick<KiokuArgs, "ascension" | "kiokuLvl" | "magicLvl" | "heartphialLvl" | "specialLvl">) {
+    const key = [role, levels.ascension, levels.kiokuLvl, levels.magicLvl, levels.heartphialLvl, levels.specialLvl].join(":")
+    if (roleStatCache.has(key)) return roleStatCache.get(key)
+    const units = Object.entries(kiokuData)
+        .filter(([name, d]) => d.rarity === 5 && d.role === role && name !== LuxMagica)
+        .map(([name]) => new Kioku({ ...levels, name, crysIDs: [], subCrysIDs: [] } as KiokuArgs))
+    const avg = (f: (k: Kioku) => number) => Math.round(units.reduce((sum, k) => sum + f(k), 0) / units.length)
+    const stats = units.length ? { hp: avg(k => k.getBaseHp()), atk: avg(k => k.getBaseAtk()), def: avg(k => k.getBaseDef()) } : undefined
+    roleStatCache.set(key, stats)
+    return stats
 }
 
 const DAMAGE_TYPES = new Set(["DMG_ATK", "DMG_DEF", "DMG_HP", "DMG_RANDOM"])
