@@ -34,7 +34,10 @@ const options = { target: ts.ScriptTarget.ESNext, module: ts.ModuleKind.ESNext, 
     strict: true, useDefineForClassFields: true, skipLibCheck: true, noEmit: true, resolveJsonModule: true, lib: ["lib.esnext.d.ts"], types: [] };
 const program = ts.createProgram(files, options);
 const checker = program.getTypeChecker();
-const inEngine = sf => sf.fileName.startsWith(ENG + "/") && !sf.fileName.startsWith(OUT_DIR);
+// TypeScript reports file names with "/" on every OS (E:/exedra-dmg-calc/... on Windows): compare in that form.
+const posix = p => p.replace(/\\/g, "/");
+const ENG_P = posix(ENG), OUT_DIR_P = posix(OUT_DIR);
+const inEngine = sf => posix(sf.fileName).startsWith(ENG_P + "/") && !posix(sf.fileName).startsWith(OUT_DIR_P);
 const rel = f => path.relative(ENG, f).replace(/\\/g, "/");
 
 // ---- top-level value declarations and their bundle names
@@ -77,7 +80,7 @@ const resolve = sym => {
 const externals = new Map(); // "abs#name" -> local name
 const externalImports = [];
 const extName = (absPath, imported) => {
-    const key = absPath + "#" + imported;
+    const key = posix(absPath) + "#" + imported;
     if (!externals.has(key)) {
         const local = `$ext${externals.size}_${imported.replace(/\W/g, "_")}`;
         externals.set(key, local);
@@ -102,7 +105,7 @@ for (const sf of sources) {
         const spec = st.moduleSpecifier.text;
         let abs = path.resolve(path.dirname(sf.fileName), spec);
         const cand = [abs, abs + ".ts", abs + ".js"].find(p => fs.existsSync(p) && fs.statSync(p).isFile());
-        if (cand && (cand.startsWith(ENG + "/"))) continue; // engine module: hoisted
+        if (cand && posix(cand).startsWith(ENG_P + "/")) continue; // engine module: hoisted
         abs = cand ?? abs;
         const ic = st.importClause;
         if (ic?.name) localExt.set(ic.name.text, extName(abs, "default"));
