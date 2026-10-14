@@ -49,6 +49,7 @@ const valueDeclsOf = st => {
     return [];
 };
 const sources = program.getSourceFiles().filter(inEngine);
+if (!sources.length) { console.error(`engine bundle: no engine modules found under ${ENG_P} (path matching failed?) - not writing an empty bundle`); process.exit(1); }
 for (const sf of sources) {
     for (const st of sf.statements) for (const id of valueDeclsOf(st)) {
         const sym = checker.getSymbolAtLocation(id);
