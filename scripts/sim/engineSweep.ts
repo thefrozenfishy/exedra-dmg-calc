@@ -4,7 +4,8 @@ import "../../src/models/BestTeamCalculator"; // load order (Kioku <-> BestTeamC
 import fs from "fs";
 import path from "path";
 import { buildPvPKiokus, parseExport } from "../../src/utils/pvpExport";
-import { bindMasterData, kiokuToNetworkUnit, QuestBattleUnitProvider, QuestGameDirector, GameRandom, NotPortedError } from "../../src/engine/dist/engine.js";
+import { bindMasterData, kiokuToNetworkUnit, QuestBattleUnitProvider, QuestGameDirector, SoloRaidGameDirector, BattleInfo, runBattleLikeClient, GameRandom, NotPortedError } from "../../src/engine/dist/engine.js";
+import { isSoloRaidStage, soloRaidInfo, SOLO_RAID_COMMON_CHARGE_PASSIVE } from "../../src/models/PvE";
 import stages from "../../src/assets/base_data/getQuestStageMstList.json";
 import { kiokuData } from "../../src/utils/helpers";
 import { buildSlotKioku } from "../../src/utils/pvpExport";
@@ -40,7 +41,8 @@ if (randTeams > 0) {
 Object.assign(console, quiet);
 bindMasterData();
 // spread the sample over the whole stage list
-const all = (stages as any[]).map((s) => s.id ?? s.questStageMstId).filter((x) => x);
+// SOLORAID=1: only Solo Raid stages (run on SoloRaidGameDirector, like every Solo Raid stage in the sweep)
+const all = (stages as any[]).map((s) => s.id ?? s.questStageMstId).filter((x) => x).filter((x) => !process.env.SOLORAID || isSoloRaidStage(x));
 const step = Math.max(1, Math.floor(all.length / count));
 const pick: number[] = [];
 for (let i = off; i < all.length && pick.length < count; i += step) pick.push(all[i]);
@@ -53,7 +55,8 @@ outer: for (const stageId of pick) for (const team of teams) for (let seed = 1; 
     GameRandom.seed(() => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; });
     n++;
     try {
-        const director = new QuestGameDirector().ctor();
+        const raid = isSoloRaidStage(stageId) ? soloRaidInfo(stageId)! : null;
+        const director = raid ? new SoloRaidGameDirector().ctor() : new QuestGameDirector().ctor();
         let skills = 0, bad = "";
         director.commandSender.Subscribe({ IObserver$OnNext(commands: any[]) {
             for (const c of commands) {
@@ -67,10 +70,13 @@ outer: for (const stageId of pick) for (const team of teams) for (let seed = 1; 
         } });
         const units = team.kiokus.map((k: any, i: number) => kiokuToNetworkUnit(k, i + 1));
         const provider = new QuestBattleUnitProvider().ctor(stageId, units);
-        director.SetupBattleStage(stageId, 0, provider);
+        if (raid) director.SetupBattleStageForSoloRaid(stageId, 0, provider, new BattleInfo(), SOLO_RAID_COMMON_CHARGE_PASSIVE,
+            raid.season?.soloRaidSeasonBuffMstId ?? 0, raid.partyBuffs[0]?.soloRaidPartyBuffMstId ?? 0, raid.limitRoundCount, 8.64e15);
+        else director.SetupBattleStage(stageId, 0, provider);
         director.autoType = 2 as any;
         director.ChangeBattlePhase(1 as any);
-        director.RunBattleToEnd(null);
+        // Solo Raid needs the client request loop (endless enemy supply, season buff); CLIENT=1 uses it everywhere
+        if (raid || process.env.CLIENT) runBattleLikeClient(director); else director.RunBattleToEnd(null);
         director.FlushCommands();
         for (const u of director.battleUnitBundle.dic.values()) if (!Number.isInteger(u._HP) || u._HP < 0 || u._HP > u._MaxHP) bad ||= `hp ${u._HP}/${u._MaxHP} unit ${u._MstId}`;
         if (skills === 0) bad ||= "no skills used";
@@ -80,7 +86,7 @@ outer: for (const stageId of pick) for (const team of teams) for (let seed = 1; 
         results.set(r, (results.get(r) ?? 0) + 1);
         if (r === 1) wins++;
     } catch (e: any) {
-        const key = e instanceof NotPortedError ? `NOT PORTED: ${e.message}` : `${e?.constructor?.name}: ${String(e?.message).slice(0, 120)} @ ${(e?.stack ?? "").split("\n")[1]?.trim().replace(/file:\/\/\S*\//, "")}`;
+        const key = e instanceof NotPortedError ? `NOT PORTED: ${e.message}` : `${e?.constructor?.name}: ${String(e?.message).slice(0, 120)} @ ${(e?.stack ?? "").split("\n").slice(1, 1 + Number(process.env.DEEP ?? 1)).map((l: string) => l.trim()).join(" < ").replace(/file:\/\/\S*\//, "")}`;
         const l = fails.get(key) ?? []; l.push(`${stageId}/${team.name.slice(0, team.name.startsWith("rand") ? 200 : 12)}/${seed}`); fails.set(key, l);
     }
 }
