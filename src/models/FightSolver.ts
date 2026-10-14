@@ -1550,7 +1550,8 @@ export class FightSolver {
 // Solver control from action `at` on (also what the Battle Simulator does for a line loaded from the solver): allies
 // manual, enemies on their targeting AI, `aiSides` picked by the AI as well.
 export interface ControlSwitch { at: number, aiSides: ("friend" | "opp")[] }
-export function applyControlSwitch(b: PvPBattle, sw: ControlSwitch): void {
+export function applyControlSwitch(b: PvPBattle | { applyControl(aiSides: ("friend" | "opp")[]): void }, sw: ControlSwitch): void {
+    if ("applyControl" in b) return b.applyControl(sw.aiSides) // EngineBattle (src/battle)
     const t1 = (b as any).team1, t2 = (b as any).team2
     t1.manualTargeting = true
     t2.manualTargeting = false

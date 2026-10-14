@@ -63,7 +63,9 @@ export class EngineBattle {
     private requests = 0
     /** Break gauges before the running request (the notices carry no amount): break damage = before - after. */
     private breakBefore = new Map<any, number>()
-    private readonly manual: boolean
+    /** HP before the running request: a hit's `amount` is the HP actually lost (overkill not counted), as before. */
+    private hpBefore = new Map<any, number>()
+    private manual: boolean
     /** Manual control: "Continue" closes the between-actions ultimate prompt until the next turn act. */
     private ultimateWindowPassed = false
 
@@ -151,6 +153,18 @@ export class EngineBattle {
     get elapsed(): number { return this.director.turnActSystem.turnReferee.elapsedActionTime }
     get currentRound(): number { return this.director.turnActSystem.turnReferee.CurrentRound }
     get currentWave(): number { return this.director.waveReferee?.currentWave ?? 1 }
+    /** Solo Raid score approximation agreed with the user (the real score is computed on the server): 20 per AV. */
+    get teamPointsUsed(): number { return Math.round(20 * this.elapsed) }
+
+    /** Fight solver control: sides whose targets stay with the AI while the player decides the actions. */
+    aiTargetSides?: Set<"friend" | "opp">
+
+    /** Switches to manual control of the allies (the enemies stay with the AI); `aiSides` keep their AI targets. */
+    applyControl(aiSides: ("friend" | "opp")[]): void {
+        this.manual = true
+        this.director.autoType = 0
+        this.aiTargetSides = aiSides.length ? new Set(aiSides) : undefined
+    }
 
     /** SoloRaidGameDirector.SyncBattleInfo of the finished attempt (what the next attempt continues from). */
     raidCarry(): RaidCarry | undefined {
@@ -340,7 +354,8 @@ export class EngineBattle {
             const t = this.info(target)
             const base = { target: t.name, targetIsTeam1: t.isTeam1, targetPos: this.posOf(target) }
             const damages = [...(n.Damages ?? [])]
-            const hp = damages.filter((x: any) => !x._IsBarrierDamage).reduce((s: number, x: any) => s + x._DamageValue, 0)
+            const dealt = damages.filter((x: any) => !x._IsBarrierDamage).reduce((s: number, x: any) => s + x._DamageValue, 0)
+            const hp = Math.min(dealt, this.hpBefore.get(target) ?? dealt)
             const barrier = [...(n.BarrierDamages ?? [])].reduce((s: number, x: any) => s + x._DamageValue, 0)
             if (damages.length || barrier) {
                 const slip = !isSkill && (n._ReceivedSlipDamageEffectTypeList?.length ?? 0) > 0
@@ -389,6 +404,7 @@ export class EngineBattle {
         const d = this.director
         const out: BattleSnapshot[] = []
         this.breakBefore = new Map([...d.battleUnitBundle.dic.values()].map((u: any) => [u, u._BreakPoint._PointValue]))
+        this.hpBefore = new Map([...d.battleUnitBundle.dic.values()].map((u: any) => [u, u._HP]))
         this.random.run(() => { fn(); d.FlushCommands() })
         const commands = this.consumeCommands()
         const act = d.turnActSystem.actReferee.currentAct
@@ -446,12 +462,12 @@ export class EngineBattle {
         const effects: any[] = skill.launcher.AbilityEffectList
         const aims = (side: number) => effects.some(e => e.TargetSide === side && (e.EffectRange === 1 || e.EffectRange === 2))
         const what = skillName(skill.Id)
-        if (aims(1)) {
+        if (aims(1) && !this.aiTargetSides?.has("opp")) {
             const pool = this.team(false).filter(u => !u.IsDead)
             if (pool.length > 1) target = pool[this.rng.pickTarget(`${this.unitLabel(unit)} · ${what}: target on the enemies`, pool.map(u => this.unitLabel(u)), pool)]._Id
             else if (pool.length === 1) target = pool[0]._Id
         }
-        if (aims(0)) {
+        if (aims(0) && !this.aiTargetSides?.has("friend")) {
             const pool = this.team(true).filter(u => !u.IsDead)
             if (pool.length > 1) friend = pool[this.rng.pickTarget(`${this.unitLabel(unit)} · ${what}: target on the allies`, pool.map(u => this.unitLabel(u)), pool)]._Id
             else if (pool.length === 1) friend = pool[0]._Id

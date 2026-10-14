@@ -579,8 +579,8 @@ import { PendingDecision, type RngDecision, type RngEvent, type RngMode } from '
 import { toast } from 'vue3-toastify'
 import { TargetType, type BattleSnapshot, type SkillDetail } from '../types/KiokuTypes'
 import { elementMap } from '../types/enums'
-import { stageWaves, stageWaveMeta, summonTemplates, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
-import { createPvEBattle, stageBattleType, waveStartUnits } from '../models/PvEBattle'
+import { stageWaves, stageWaveMeta, summonTemplates, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo, isSoloRaidStage, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
+import { stageBattleType, waveStartUnits } from '../models/PvEBattle'
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
 import type { RaidCarry } from '../models/PvPBattle'
 import { getScoreAttackStage } from '../models/PvEScore'
@@ -589,7 +589,7 @@ import { buildSlotKioku, buildPvEExport, parsePvEExport, downloadText, exportToT
 import { describePvESetup, sanitizePvESetup, stagePath, type PvESetup } from '../utils/pveSetup'
 import { effectDescription, effectName, effectRestriction, effectValue } from '../utils/effectText'
 import { passiveDetailsByMstId, portraits } from '../utils/helpers'
-import type { PvPBattle } from '../models/PvPBattle'
+import { EngineBattle } from '../battle/EngineBattle'
 import type { PvPKioku } from '../models/PvPKioku'
 
 const team = useTeamStore()
@@ -864,7 +864,7 @@ const saScoreTitle = computed(() => `${difficultyScore.value} + 20 * (${saDamage
 
 // ---- battle simulator ----
 // shallowRef + markRaw: keep the engine out of Vue reactivity (object identity matters, see PvP page).
-const battle = shallowRef<PvPBattle | null>(null)
+const battle = shallowRef<EngineBattle | null>(null)
 const battleOutput = ref<BattleSnapshot[]>([])
 const battleResult = ref<'win' | 'lose' | undefined>()
 const canRun = computed(() => !!teamKiokus.value.length && !!stageId.value)
@@ -969,8 +969,9 @@ const passiveNames = new Map<number, { name: string, description: string }>((pas
 const passiveInfo = (id: number) => passiveNames.get(id) ?? { name: `Passive ${id}`, description: '' }
 
 function nextAttempt() {
-    if (!battle.value?.isOver) return
-    raidAttempts.value = [...raidAttempts.value, battle.value.raidCarry()]
+    const carry = battle.value?.isOver ? battle.value.raidCarry() : undefined
+    if (!carry) return
+    raidAttempts.value = [...raidAttempts.value, carry]
     decisions.value = new Map()
     seed.value = Math.floor(Math.random() * 2 ** 32)
     runSimulation()
@@ -985,15 +986,17 @@ watch(partyBuffId, () => { if (hasRun()) runSimulation(); else buildBattle() })
 // Set for the first run of an imported file: its picks may sit at shifted indices (engine changes since the export).
 let relaxedPicksRun = false
 
-function newBattle(): PvPBattle {
-    // Fresh units: a battle mutates its units' state.
+function newBattle(): EngineBattle {
+    // Fresh units: a battle mutates its units' state. The 1:1 game engine (src/engine) through src/battle/EngineBattle.
     const allies = filledSlots.value.map(([s]) => buildSlotKioku(s))
     const carry = raidAttempts.value[raidAttempts.value.length - 1]
-    return markRaw(createPvEBattle(allies, stageId.value, seed.value, 0, {
-        rngMode: rngMode.value, decisions: decisions.value,
+    const opts = {
+        seed: seed.value, rngMode: rngMode.value, decisions: decisions.value, relaxedPicks: relaxedPicksRun,
         manualTargeting: solverControl.value ? solverControl.value.control === 'manual' : targetMode.value === 'manual',
-        partyBuffId: partyBuffId.value || undefined, raidCarry: carry, relaxedPicks: relaxedPicksRun,
-    }))
+    }
+    return markRaw(isSoloRaidStage(stageId.value)
+        ? new EngineBattle({ kind: 'soloRaid', allies, stageId: stageId.value, partyBuffId: partyBuffId.value || undefined, carry }, opts)
+        : new EngineBattle({ kind: 'quest', allies, stageId: stageId.value }, opts))
 }
 
 // Initial state only (no simulation yet).
@@ -1008,7 +1011,7 @@ function buildBattle() {
     }
     try {
         battle.value = newBattle()
-        battleOutput.value = [battle.value.getCurrentState()]
+        battleOutput.value = [battle.value.initialState]
     } catch (e) {
         console.warn('Could not build battle', e)
         battle.value = null
@@ -1065,7 +1068,7 @@ watch(targetMode, v => { if (v !== 'manual') solverControl.value = null })
 
 function runSimulation() {
     if (!canRun.value || !waves.value.length) return buildBattle()
-    let b: PvPBattle
+    let b: EngineBattle
     try {
         b = newBattle()
     } catch (e) {
@@ -1074,7 +1077,7 @@ function runSimulation() {
     }
     battle.value = b
     pending.value = null
-    const states: BattleSnapshot[] = [b.getCurrentState()]
+    const states: BattleSnapshot[] = [b.initialState]
     const ends: number[] = []
     simStepAv = []
     let t = 0
