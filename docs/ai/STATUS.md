@@ -12,9 +12,16 @@ director/provider, remaining unit states / ability effects. Fixed: hidden try/ca
 entries (the shape the pages render); `GameRandom.hook` + `src/battle/EngineRandom.ts` route every random draw
 through BattleRng (hit/miss/weighted/seed/manual flips). `scripts/sim/checkFixturesEngine.ts`: all automatic
 in-game fixture cases pass on the engine; manual-control PvE cases skipped (manual control not wired yet).
-Next: manual control (SkillRequest / RegisterSpecialAttackRequest from BattleRng picks), switch PvpTeamPage and
-PvESimulatorPage to EngineBattle (npm predev/prebuild must build the bundle), fight solver on the engine
-(replay-based, no BattleClone), then retire src/models battle code.
+Pages switched (same snapshots, low visual change): PvP simulator and PvE simulator (quests, Solo Raid with attempt
+carry, manual control) now run on the engine through EngineBattle. `npm run engine` builds src/engine/dist/engine.js;
+`predev` / `prebuild` run it. Verified with a production build and headless Chromium (fixture import, run, pick panel).
+Old vs engine (`scripts/sim/compareEngines.ts`, deterministic hit/miss modes, 42 battles): 210 of 247 matching
+actions identical; differences traced so far are engine-correct: break deals Max(1, ...) = 1 HP because
+LevelReactionBreakDamageValue is 0 (server value unknown), a passive state given during another unit's act expiring at
+the holder's next TurnEnd (old kept it), Solo Raid ally buff passives. Turn-order ties among identical units can pick a
+different unit than before (time-stop-strike #12, mirrored fixture #5).
+Still on the old engine (src/models): Max Damage panel (MaxDamage.ts), Kioku Grid bench (LuxBench.ts), Fight Solver
+(hidden, BattleClone), Score Attack calculators (closed-form, not a battle sim).
 
 ## 2026-10-10: 1:1 port started in src/engine (branch claude/engine-1to1)
 
