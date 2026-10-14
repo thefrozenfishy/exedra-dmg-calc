@@ -2,6 +2,20 @@
 
 _Last updated: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+## 2026-10-14: engine runs every battle type; app adapter (branch claude/engine-1to1)
+
+No NOT PORTED errors in quest, PvP or Solo Raid battles (sweeps: quests 150/150, Solo Raid 189/189 incl. 2 seeds,
+RANDTEAMS random kioku teams). Ported this session: SoloRaidGameDirector (setup + restart from BattleInfo,
+countdown, death, SyncBattleInfo), SoloRaidBuffReferee, SoloRaidJudgeResultReferee, CountdownReferee, PvP
+director/provider, remaining unit states / ability effects. Fixed: hidden try/catch in IsMatchConditionSet
+(PITFALLS). App side: `src/battle/EngineBattle.ts` runs the engine like the client and returns BattleSnapshot
+entries (the shape the pages render); `GameRandom.hook` + `src/battle/EngineRandom.ts` route every random draw
+through BattleRng (hit/miss/weighted/seed/manual flips). `scripts/sim/checkFixturesEngine.ts`: all automatic
+in-game fixture cases pass on the engine; manual-control PvE cases skipped (manual control not wired yet).
+Next: manual control (SkillRequest / RegisterSpecialAttackRequest from BattleRng picks), switch PvpTeamPage and
+PvESimulatorPage to EngineBattle (npm predev/prebuild must build the bundle), fight solver on the engine
+(replay-based, no BattleClone), then retire src/models battle code.
+
 ## 2026-10-10: 1:1 port started in src/engine (branch claude/engine-1to1)
 
 The user's goal for the engine is a 1:1 copy of the game (CLAUDE.md, src/engine/README.md). `src/engine` holds the

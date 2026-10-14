@@ -51,6 +51,11 @@ export class NotPortedError extends Error {
         this.rva = rva;
     }
 }
+/** `catch (Exception)` in the game: any managed exception (a TypeError here stands for NullReferenceException,
+ * ArgumentNullException, ...). Port errors (NotPortedError) are not game exceptions and keep propagating. */
+export function isGameException(e: unknown): boolean {
+    return !(e instanceof NotPortedError);
+}
 export function notPorted(method: string, rva: number): never {
     throw new NotPortedError(method, rva);
 }

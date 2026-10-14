@@ -10,7 +10,7 @@ import type { BattleConditionSetMstRecord } from "../../Network/Definition/Quest
 import { BattleConditionMstModel } from "../Model/BattleConditionMstModel";
 import { BattleConditionSetMstModel } from "../Model/BattleConditionSetMstModel";
 import { BattleMstReaderBase } from "../Reader/BattleMstReaderBase";
-import { dictGet, f32, intParse, isNullOrEmpty, notPorted } from "../../runtime";
+import { dictGet, f32, intParse, isGameException, isNullOrEmpty, notPorted } from "../../runtime";
 import type { Dictionary, HashSet, List, float, int } from "../../runtime";
 import type { AbilityEffectBase } from "../AbilityEffect/AbilityEffectBase";
 import type { ActBase } from "../Act/ActBase";
@@ -221,10 +221,18 @@ export class BattleConditionUtils_ConditionSet {
     }
     /** @rva 0x17EC2D0  public bool IsMatchConditionSet(Dictionary<int, bool> checkedConditionResults, BattleUnit selfUnit, BattleUnit actorUnit, BattleUnit mainTargetUnit, BattleUnit eachTargetUnit, List<BattleUnit> friendUnits, List<BattleUnit> opponentUnits, int friendSP, int opponentSP, ActBase act, ActiveSkillBase actorActiveSkill, AbilityEffectBase actorAbilityEffect, AffectedUnitNoticeBundle affectedUnitNoticeBundle, List<BattleUnit> affectedUnits, HashSet<string> friendAppliedSkillEffectTypes, HashSet<string> opponentAppliedSkillEffectTypes, ConditionUseType conditionUseType, GameDirectorBase gameDirector) { } */
     IsMatchConditionSet(checkedConditionResults: Dictionary<int, boolean>, selfUnit: BattleUnit, actorUnit: BattleUnit, mainTargetUnit: BattleUnit, eachTargetUnit: BattleUnit, friendUnits: List<BattleUnit>, opponentUnits: List<BattleUnit>, friendSP: int, opponentSP: int, act: ActBase, actorActiveSkill: ActiveSkillBase, actorAbilityEffect: AbilityEffectBase, affectedUnitNoticeBundle: AffectedUnitNoticeBundle, affectedUnits: List<BattleUnit>, friendAppliedSkillEffectTypes: HashSet<string>, opponentAppliedSkillEffectTypes: HashSet<string>, conditionUseType: ConditionUseType, gameDirector: GameDirectorBase): boolean {
-        // <>c__DisplayClass14_0.b__0: !IsMatchCondition(...)
-        return !this._ConditionList.some(x => !x.IsMatchCondition(checkedConditionResults, selfUnit, actorUnit, mainTargetUnit, eachTargetUnit, friendUnits, opponentUnits,
-            friendSP, opponentSP, act, actorActiveSkill, actorAbilityEffect, affectedUnitNoticeBundle, affectedUnits, friendAppliedSkillEffectTypes, opponentAppliedSkillEffectTypes,
-            conditionUseType, gameDirector));
+        // try { ... } catch { return false; }: the function has a C++ EH try block (FH4 tryBlockMap) and a catch
+        // continuation at 0x17ec4e7 (xor al, al -> epilogue). A condition that throws (e.g. Linq over the null notice
+        // list of a TurnEnd / battle-start AfterProcess pass, CompareContent 301-304) makes the set not match.
+        try {
+            // <>c__DisplayClass14_0.b__0: !IsMatchCondition(...)
+            return !this._ConditionList.some(x => !x.IsMatchCondition(checkedConditionResults, selfUnit, actorUnit, mainTargetUnit, eachTargetUnit, friendUnits, opponentUnits,
+                friendSP, opponentSP, act, actorActiveSkill, actorAbilityEffect, affectedUnitNoticeBundle, affectedUnits, friendAppliedSkillEffectTypes, opponentAppliedSkillEffectTypes,
+                conditionUseType, gameDirector));
+        } catch (e) {
+            if (!isGameException(e)) throw e;
+            return false;
+        }
     }
 }
 

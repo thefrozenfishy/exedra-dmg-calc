@@ -207,3 +207,17 @@
 - **Device file delivery:** `device_commit_files` uploads the content a path had when it was first committed; a
   second commit of the same container path can deliver the old bytes. Copy to a new name per revision and
   check md5 on both sides. Don't edit a committed file on the device and commit it again from the container.
+- **Hidden try/catch.** Ghidra drops catch blocks. `ConditionSet.IsMatchConditionSet` (0x17ec2d0) is
+  `try { !Any(!IsMatchCondition) } catch { return false; }` (FH4 tryBlockMap, catch continuation `xor al, al` at
+  0x17ec4e7). Without it a TurnEnd / battle-start AfterProcess pass (null notice bundle) crashes on Linq over null
+  notices (CompareContent 301-304, e.g. passives 2010015, 7001036). Audit: `~/ehaudit.py` lists functions with a
+  try block but no foreach/using (only this one and BackupAgent.RestoreGameDirector in 3.19.0). Port catches with
+  `isGameException(e)` so NotPortedError still propagates.
+- **ClientDriver, not RunBattleToEnd, for Solo Raid / endless waves.** Endless enemy supply and the season buff
+  activation only happen in SoloGameDirectorBase.Request(TimeForwardRequest); RunBattleToEnd (battle skip) calls
+  Forward directly and runs AdditionalSkillActs aimed at id 0 after a wave is wiped (KeyNotFound). Drive battles
+  with `runBattleLikeClient` / src/battle/EngineBattle.
+- **Solo Raid buffs go to the enemy list** (SetupBattleStageForSoloRaid passes `battleUnitBundle.enemyList` [+0x20] to
+  SoloRaidBuffReferee.Init); condition 1513 keeps them inert there. Not a port slip.
+- **GameDirectorBase.ChangeBattlePhase(Start) runs the first act** (Forward): capture its commands as an entry
+  (battle-start follow-ups like Splashin' Kyubey Blast happen there).
