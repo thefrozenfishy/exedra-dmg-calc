@@ -21,7 +21,7 @@ import { EngineBattle, type EngineBattleSetup } from "./EngineBattle"
 import { collectTeamEffects, isEffectValueType, type MaxDmgEffect, type MaxDmgOptions, type MaxDmgResult, type MemberDamage, type SkillDamage } from "../models/MaxDamage"
 import { actorSkillTypeRestriction, ailmentConditionsMet } from "../models/BattleConditionParser"
 import { conditionCsvsExclusive } from "../models/ConditionTiers"
-import { enemyName, isSoloRaidStage, type QuestEnemyAppearance } from "../models/PvE"
+import { enemyName, isMultiRaidStage, isSoloRaidStage, type QuestEnemyAppearance } from "../models/PvE"
 import type { PvPKioku } from "../models/PvPKioku"
 import { TargetType, type SkillDetail } from "../types/KiokuTypes"
 
@@ -362,7 +362,7 @@ function skillDamage(ev: Eval & { rungs?: string[] }, type: TargetType, label: s
 
 /** computeMaxDamage (models/MaxDamage.ts) on the 1:1 engine; `enemies` = the page's wave list (index order of the result). */
 export function computeMaxDamageEngine(allies: PvPKioku[], stage: EngineMaxDmgStage, enemies: QuestEnemyAppearance[], attackerPos: number, opts: MaxDmgOptions = {}): MaxDmgResult {
-    const setup: EngineBattleSetup = isSoloRaidStage(stage.stageId)
+    const setup: EngineBattleSetup = isMultiRaidStage(stage.stageId) ? { kind: "multiRaid", allies, stageId: stage.stageId, noRoundLimit: true } : isSoloRaidStage(stage.stageId)
         ? { kind: "soloRaid", allies, stageId: stage.stageId, noRoundLimit: true }
         : { kind: "quest", allies, stageId: stage.stageId }
     const mainIdx = Math.min(Math.max(0, opts.mainTargetIdx ?? 0), Math.max(0, enemies.length - 1))

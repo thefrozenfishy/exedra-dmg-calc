@@ -118,6 +118,7 @@
                 <p>Just @TFF!</p>
             </div>
 
+            <SegmentedToggle v-model="battleRules" :options="RULE_OPTIONS" label="Rules" />
             <RngControls class="sim-rng" v-model:mode="rngMode" :seed="seed" :changed="decisions.size"
                 :disabled="!isFullBattle" @update:seed="setSeed" @reset="resetDecisions" />
 
@@ -151,6 +152,7 @@ import SavedTeamsPanel from '../components/SavedTeamsPanel.vue'
 import { useSavedTeams } from '../store/savedTeams'
 import BattleTimeline from '../components/BattleTimeline.vue'
 import RngControls from '../components/RngControls.vue'
+import SegmentedToggle from '../components/SegmentedToggle.vue'
 import { useSetting } from '../store/settingsStore'
 import type { RngDecision, RngEvent, RngMode } from '../models/BattleRng'
 import { toast } from 'vue3-toastify'
@@ -184,6 +186,13 @@ const importInput = ref<HTMLInputElement | null>(null)
 
 // ---- RNG (see models/BattleRng.ts) ----
 const rngMode = useSetting<RngMode>('pvpRngMode', 'seed')
+// PvP (PvpGameDirector) or GvG (GvgGameDirector). In 3.19 the battle core treats both alike (every BattleType check is
+// "Pvp or Gvg": damage / DOT / heal / barrier suppression), with the same 15-round limit.
+const RULE_OPTIONS = [
+    { value: 'pvp', label: 'PvP', title: 'Arena rules (PvpGameDirector)' },
+    { value: 'gvg', label: 'GvG', title: 'Guild battle rules (GvgGameDirector). The game version this runs plays them the same as PvP: same damage, heal and barrier suppression, same 15-round limit.' },
+] as const
+const battleRules = useSetting<'pvp' | 'gvg'>('pvpBattleRules', 'pvp')
 const seed = ref(Math.floor(Math.random() * 2 ** 32))
 // Manual mode: rolls the user changed from their default, by roll index. Replayed from the start.
 const decisions = shallowRef(new Map<number, RngDecision>())
@@ -191,7 +200,7 @@ const decisions = shallowRef(new Map<number, RngDecision>())
 function newBattle(): EngineBattle {
     const [alliedTeam, enemyTeam] = buildTeams()
     // the 1:1 game engine (src/engine) through the app adapter (src/battle/EngineBattle.ts)
-    return markRaw(new EngineBattle({ kind: "pvp", allies: alliedTeam, enemies: enemyTeam },
+    return markRaw(new EngineBattle({ kind: "pvp", allies: alliedTeam, enemies: enemyTeam, gvg: battleRules.value === 'gvg' },
         { seed: seed.value, rngMode: rngMode.value, decisions: decisions.value }))
 }
 
@@ -220,6 +229,7 @@ function rerun() {
     else rebuildBattle()
 }
 watch(rngMode, rerun)
+watch(battleRules, rerun)
 
 function setSeed(v: number) {
     seed.value = v

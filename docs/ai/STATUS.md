@@ -2,6 +2,21 @@
 
 _Last updated: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+## 2026-10-14 (4): Link Raid (Multi-Raid), GvG, GvE directors ported; app options
+
+- Ported MultiRaidGameDirector, MultiRaidJudgeResultReferee, GvgGameDirector, GveGameDirector,
+  GveJudgeResultReferee, GveBreakBonusFieldParam (28 methods; 53 stubs left, none reachable).
+- **Link Raid** stages (MultiRaidStageMst, category "Link Raid") now run on MultiRaidGameDirector in the PvE page
+  (EngineBattle kind "multiRaid"): one wave, the boss starts at the raid's HP ("Boss HP at start", default full),
+  the stage's round limit, the season's battle bonus passives on every ally (source Bonus 5 [UNCERTAIN: server
+  side]; each passive's role / element condition is the engine's). The status shows TotalDamage (damage values to
+  the boss, overkill included, as the game counts it). Offline: no participants, so no HP syncs
+  (SyncHpScore is only called by the server's answer). `scripts/sim/engineMultiRaid.ts`: 200 stages x 4 teams ok.
+- **GvG**: PvP page "Rules: PvP | GvG" (GvgGameDirector). In 3.19 every BattleType check in the core is
+  "Pvp or Gvg" and both judges have the 15-round limit, so the result is the same as PvP.
+- **GvE**: ported, not offered: the master lists (GveMst, GveStageMst, MapGve*) are empty in this data dump, and
+  GvE enemies come from the server (CreateInitialEnemyBattleUnits), not from a stage.
+
 ## 2026-10-14 (3): Max Damage + Kioku Grid bench on the 1:1 engine; two port bugs fixed
 
 - **Port bugs found by comparing the old and new bench** (PITFALLS "explicit interface implementations"):

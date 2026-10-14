@@ -455,6 +455,25 @@
                 </div>
             </div>
 
+            <div v-if="linkRaid" class="raid-panel">
+                <div class="raid-head">
+                    <span class="filters-heading">Link Raid</span>
+                    <span>Difficulty {{ linkRaid.difficulty }} · {{ linkRaid.limitRoundCount }}-round limit</span>
+                </div>
+                <div class="raid-row">
+                    <label class="field" title="The boss's HP when you join: the raid's shared HP after the other participants' damage (empty = a fresh raid at full HP). Offline there are no other participants, so their damage does not come in during the battle.">
+                        <span class="field-label">Boss HP at start</span>
+                        <input v-model.number="linkRaidBossHp" type="number" min="1" :max="linkRaidFullHp"
+                            :placeholder="String(linkRaidFullHp)" />
+                    </label>
+                    <span class="row-hint">of {{ fmt(linkRaidFullHp) }}</span>
+                </div>
+                <div v-if="linkRaidBonuses.length" class="raid-row">
+                    <span class="row-hint">Season buffs (each applies to its role / element):</span>
+                    <span v-for="b in linkRaidBonuses" :key="b" class="row-hint">· {{ b }}</span>
+                </div>
+            </div>
+
             <div class="run-sim-row">
                 <button class="btn btn-accent" @click="runSimulation" :disabled="!canRun">Run Simulation</button>
                 <button v-if="showSolver" class="btn btn-accent" @click="solveFromHere"
@@ -495,6 +514,9 @@
 
             <div v-if="pending || battleResult" class="sim-status">
                 <span class="result-pill" :class="pending ? 'waiting' : battleResult">{{ battleResultText }}</span>
+                <span v-if="!pending && battleResult && linkRaid && battle" class="row-hint"
+                    title="MultiRaidGameDirector.TotalDamage: every damage value dealt to the boss (overkill included), what the game reports as this battle's damage">{{
+                        fmt(battle.raidTotalDamage ?? 0) }} damage to the boss</span>
                 <span v-if="!pending && battleResult && raid && battle" class="row-hint"
                     title="Approximation: 20 points per AV of elapsed time (the game computes the real score on the server)">{{
                         battle.teamPointsUsed.toLocaleString() }} team points used ({{ Math.round(battle.elapsed) }}
@@ -577,7 +599,7 @@ import { PendingDecision, type RngDecision, type RngEvent, type RngMode } from '
 import { toast } from 'vue3-toastify'
 import { TargetType, type BattleSnapshot, type SkillDetail } from '../types/KiokuTypes'
 import { elementMap } from '../types/enums'
-import { stageWaves, stageWaveMeta, summonTemplates, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo, isSoloRaidStage, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
+import { stageWaves, stageWaveMeta, summonTemplates, wavePositionIds, enemyName, breakMstOf, ELEMENT_KEYS, questStages, soloRaidInfo, isSoloRaidStage, multiRaidInfo, type QuestEnemyAppearance, type ModeChangeInfo } from '../models/PvE'
 import { stageBattleType, waveStartUnits } from '../models/PvEBattle'
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
 import type { RaidCarry } from '../models/PvPBattle'
@@ -973,6 +995,16 @@ const battleResultText = computed(() => pending.value ? 'Waiting for your decisi
 
 // ---- Solo Raid: party buff, round limit, attempts carrying over (PvEBattle / PvPBattle.raidCarry) ----
 const raid = computed(() => stageId.value ? soloRaidInfo(stageId.value) : undefined)
+// Link Raid (MultiRaidGameDirector): the boss's HP when you join, empty = full (a fresh raid).
+const linkRaid = computed(() => stageId.value ? multiRaidInfo(stageId.value) : undefined)
+const linkRaidFullHp = computed(() => linkRaid.value ? EngineBattle.multiRaidBossHp(stageId.value) : 0)
+const linkRaidBossHp = ref<number | ''>('')
+watch(stageId, () => { linkRaidBossHp.value = '' })
+watch(linkRaidBossHp, () => { if (hasRun()) runSimulation(); else buildBattle() })
+const linkRaidBonuses = computed(() => (linkRaid.value?.bonusPassiveIds ?? []).map(id => {
+    const p = (passiveMstJson as any[]).find(x => x.passiveSkillMstId === id)
+    return p ? String(p.description).replace(/<br>/g, ' ') : `#${id}`
+}))
 const partyBuffId = useSetting<number>('pveRaidPartyBuff', 0)
 // Solo Raid party buff choices: the buffs each gives every ally, and how it earns Vanguard points.
 const partyBuffViews = computed(() => (raid.value?.partyBuffs ?? []).map(p => ({
@@ -1021,6 +1053,10 @@ function newBattle(): EngineBattle {
     const opts = {
         seed: seed.value, rngMode: rngMode.value, decisions: decisions.value, relaxedPicks: relaxedPicksRun,
         manualTargeting: solverControl.value ? solverControl.value.control === 'manual' : targetMode.value === 'manual',
+    }
+    if (linkRaid.value) {
+        const bossHp = linkRaidBossHp.value && linkRaidBossHp.value > 0 ? Math.min(linkRaidBossHp.value, linkRaidFullHp.value) : undefined
+        return markRaw(new EngineBattle({ kind: 'multiRaid', allies, stageId: stageId.value, bossHp }, opts))
     }
     return markRaw(isSoloRaidStage(stageId.value)
         ? new EngineBattle({ kind: 'soloRaid', allies, stageId: stageId.value, partyBuffId: partyBuffId.value || undefined, carry }, opts)

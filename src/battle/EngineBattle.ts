@@ -5,7 +5,7 @@
 // TimeForward / EndWave / BeginWave between waves. Every engine call runs with this battle's EngineRandom installed.
 import { TargetType, type BattleEvent, type BattleSnapshot, type TeamSnapshot } from "../types/KiokuTypes"
 import { BattleRng, type RngDecision, type RngMode } from "../models/BattleRng"
-import { enemyName, skillName, soloRaidInfo, SOLO_RAID_COMMON_CHARGE_PASSIVE, type QuestEnemyAppearance } from "../models/PvE"
+import { enemyName, multiRaidInfo, skillName, soloRaidInfo, SOLO_RAID_COMMON_CHARGE_PASSIVE, type QuestEnemyAppearance } from "../models/PvE"
 import type { RaidCarry } from "../models/PvPBattle"
 import { passiveDetails, skillDetails } from "../utils/helpers"
 import questEnemyAppearanceJson from "../assets/base_data/getQuestEnemyAppearanceMstList.json"
@@ -19,9 +19,13 @@ export interface EngineKioku {
 }
 
 export type EngineBattleSetup =
-    | { kind: "pvp", allies: EngineKioku[], enemies: EngineKioku[] }
+    /** `gvg`: the same fight under GvgGameDirector (BattleType GvG instead of PvP). */
+    | { kind: "pvp", allies: EngineKioku[], enemies: EngineKioku[], gvg?: boolean }
     | { kind: "quest", allies: EngineKioku[], stageId: number }
     | { kind: "soloRaid", allies: EngineKioku[], stageId: number, partyBuffId?: number, noRoundLimit?: boolean, carry?: RaidCarry }
+    /** Link Raid (MultiRaidGameDirector). `bossHp`: the boss's HP when this player joins (the raid's shared HP the server
+     *  sends; default its full HP: a new raid). Offline there are no other participants: no HP syncs arrive. */
+    | { kind: "multiRaid", allies: EngineKioku[], stageId: number, bossHp?: number, noRoundLimit?: boolean }
 
 export interface EngineBattleOptions {
     seed?: number
@@ -106,14 +110,36 @@ export class EngineBattle {
         // allyPassives false: the allies arrive without passive skills (app-side tools that give effects themselves)
         if (opts.allyPassives === false) for (const u of allies) u.passiveSkillInfoList = []
         if (setup.kind === "pvp") {
+            const provider = new E.PvPOrGvGBattleUnitProvider().ctor(allies, setup.enemies.map((k, i) => E.kiokuToNetworkUnit(k, i + 1)))
+            if (setup.gvg) {
+                const d = new E.GvgGameDirector().ctor()
+                d.SetupBattleStage(provider)
+                return d
+            }
             const d = new E.PvpGameDirector().ctor()
-            d.SetupBattleStage(new E.PvPOrGvGBattleUnitProvider().ctor(allies, setup.enemies.map((k, i) => E.kiokuToNetworkUnit(k, i + 1))), 0)
+            d.SetupBattleStage(provider, 0)
             return d
         }
         const provider = new E.QuestBattleUnitProvider().ctor(setup.stageId, allies)
         if (setup.kind === "quest") {
             const d = new E.QuestGameDirector().ctor()
             d.SetupBattleStage(setup.stageId, 0, provider)
+            return d
+        }
+        if (setup.kind === "multiRaid") {
+            const info = multiRaidInfo(setup.stageId)!
+            // [UNCERTAIN] the season's battle bonus passives arrive with every player unit (source Bonus 5), like the Solo
+            // Raid buffs; each one's role / element condition is checked by the engine (BattleUnit.GetPassiveSkills).
+            for (const u of allies) for (const id of info.bonusPassiveIds) {
+                const p = new E.PassiveSkillInfo()
+                p.passiveSkillMstId = id
+                p.level = 1
+                p.abilitySourceType = 5
+                u.passiveSkillInfoList = [...u.passiveSkillInfoList, p]
+            }
+            const d = new E.MultiRaidGameDirector().ctor()
+            d.SetupBattleStage(setup.stageId, provider, setup.bossHp ?? EngineBattle.multiRaidBossHp(setup.stageId), [],
+                setup.noRoundLimit ? 0 : info.limitRoundCount, 8.64e15, 0, 0, false)
             return d
         }
         const raid = soloRaidInfo(setup.stageId)!
@@ -136,6 +162,15 @@ export class EngineBattle {
             raid.season?.soloRaidSeasonBuffMstId ?? 0, party?.soloRaidPartyBuffMstId ?? 0, setup.noRoundLimit ? 0 : raid.limitRoundCount, 8.64e15)
         return d
     }
+
+    /** Full HP of a Link Raid stage's boss (its main-target appearance at battle start). */
+    static multiRaidBossHp(stageId: number): number {
+        const rows = (questEnemyAppearanceJson as QuestEnemyAppearance[]).filter(a => a.questStageMstId === stageId && a.isMainTargetEnemy && a.conditionType === 0)
+        return rows.length ? rows[rows.length - 1].hp : 0
+    }
+
+    /** Link Raid: damage dealt to the boss so far (MultiRaidGameDirector.TotalDamage). */
+    get raidTotalDamage(): number | undefined { return this.kind === "multiRaid" ? this.director.TotalDamage : undefined }
 
     /** Network.Definition.SoloRaid.BattleInfo of a carried attempt (wave 0 = a new battle). */
     private static battleInfoOf(c?: RaidCarry): any {
