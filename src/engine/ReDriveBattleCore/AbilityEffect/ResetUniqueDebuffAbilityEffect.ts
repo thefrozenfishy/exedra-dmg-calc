@@ -1,7 +1,8 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { UniqueUnitStateBase } from "../UnitState/UniqueUnitStateBase";
+import { isImpl, notPorted } from "../../runtime";
 import { ResetUniqueBuffDebuffAbilityEffectBase } from "./ResetUniqueBuffDebuffAbilityEffectBase";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { UnitStateBase } from "../UnitState/UnitStateBase";
@@ -22,5 +23,8 @@ export class ResetUniqueDebuffAbilityEffect extends ResetUniqueBuffDebuffAbility
         return this;
     }
     /** @rva 0x1900440 slot 8  public override bool IsRemovable(UnitStateBase state) { } */
-    IsRemovable(state: UnitStateBase): boolean { return notPorted("ResetUniqueDebuffAbilityEffect.IsRemovable", 0x1900440); }
+    IsRemovable(state: UnitStateBase): boolean {
+        if (!(this.uniqueStatePatternMstId > 0)) return false;
+        return state instanceof UniqueUnitStateBase && isImpl(state, "IDebuff") && state._UniqueStatePatternMstId === this.uniqueStatePatternMstId;
+    }
 }

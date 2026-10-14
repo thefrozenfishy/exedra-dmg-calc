@@ -1,12 +1,18 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { CutoutUnitState } from "../UnitState/CutoutUnitState";
+import { AddTurnUnitStateBase } from "../UnitState/AddTurnUnitStateBase";
+import { AbnormalUnitStateBase } from "../UnitState/AbnormalUnitStateBase";
+import { AISkillTargetSelector, AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
+import { AffectedUnitNotice } from "../AffectedUnitNotice";
+import { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
+import { clamp, dictGet, isImpl, notPorted } from "../../runtime";
 import type { Dictionary, List, int } from "../../runtime";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
 import { AbilityEffectBase } from "./AbilityEffectBase";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
-import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
+
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
@@ -78,23 +84,78 @@ export abstract class ChangeBuffDebuffTurnAbilityEffectBase extends AbilityEffec
         return this;
     }
     /** @rva 0x18EBF40 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
-    Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("ChangeBuffDebuffTurnAbilityEffectBase.Triggering", 0x18EBF40); }
+    Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
+        const bundle = new AffectedUnitNoticeBundle().ctor();
+        for (const targetUnitId of this._TargetUnitIdList) {
+            const targetUnit = dictGet(targetUnitDic, targetUnitId);
+            if (targetUnit == null || targetUnit.get_IsDead()) continue;
+            userUnit.activeConditionCheckDataBundle._EachTargetUnit = targetUnit; // setter inlined in the game
+            const states = targetUnit._Condition._StateList.filter(state => this.IsChangeableUnitState(state));
+            if (!this.get_IsTurnAdd()) this.DecreaseTurn(states, targetUnit); // vslot 8
+            else this.IncreaseTurn(states);
+            const variation = targetUnit.UpdateTurnGaugeBySpeed();
+            if (variation !== 0) bundle.Add(AffectedUnitNotice.CreateByTurnGaugeVariation(targetUnitId, variation));
+            bundle.Add(AffectedUnitNotice.CreateByOneState(targetUnitId, this.get_DisplayEffectType())); // vslot 12
+            userUnit.activeConditionCheckDataBundle._EachTargetUnit = null!; // setter inlined in the game
+        }
+        return bundle;
+    }
     /** @rva 0x18EB590 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("ChangeBuffDebuffTurnAbilityEffectBase.GetAIFilteredTargets", 0x18EB590); }
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        const list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__27_0
+        return list.filter(unit => this.$GetAIFilteredTargets$b__27_1(unit));
+    }
     /** @rva 0x18EBC30 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
-    SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int { return notPorted("ChangeBuffDebuffTurnAbilityEffectBase.SelectTargetInAIAction", 0x18EBC30); }
+    SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
+        const candidateUnits = targetUnitList.filter(unit => !unit.get_IsDead()); // <>c.b__28_0
+        const funcList = [AISkillTargetSelector.UnitFilterByMainTarget, AISkillTargetSelector.UnitFilterWithMaxAtk];
+        const unit = AISkillTargetSelector.SelectTargetUnitInOrder(candidateUnits, new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(funcList));
+        if (unit != null) return unit._Id;
+        return 0;
+    }
     /** @rva 0x18EBAB0  private bool IsChangeableUnitState(UnitStateBase targetState) { } */
-    IsChangeableUnitState(targetState: UnitStateBase): boolean { return notPorted("ChangeBuffDebuffTurnAbilityEffectBase.IsChangeableUnitState", 0x18EBAB0); }
+    IsChangeableUnitState(targetState: UnitStateBase): boolean {
+        if (targetState == null || targetState._EffectOrigin !== 1) return false;
+        if (targetState.get_IsPermanent()) return false;
+        if (!this.IsBuffDebuff(targetState)) return false; // inlined in the game
+        if (targetState instanceof AbnormalUnitStateBase || targetState instanceof AddTurnUnitStateBase || targetState instanceof CutoutUnitState) return false;
+        return this.IsChangeableBySkillUniqueId(targetState); // inlined in the game
+    }
     /** @rva 0x18EBA00  private bool IsBuffDebuff(UnitStateBase targetState) { } */
-    IsBuffDebuff(targetState: UnitStateBase): boolean { return notPorted("ChangeBuffDebuffTurnAbilityEffectBase.IsBuffDebuff", 0x18EBA00); }
+    IsBuffDebuff(targetState: UnitStateBase): boolean {
+        return isImpl(targetState, this.get_IsTargetBuff() ? "IBuff" : "IDebuff"); // vslot 10
+    }
     /** @rva 0x18EBA80  private bool IsChangeableBySkillUniqueId(UnitStateBase targetState) { } */
-    IsChangeableBySkillUniqueId(targetState: UnitStateBase): boolean { return notPorted("ChangeBuffDebuffTurnAbilityEffectBase.IsChangeableBySkillUniqueId", 0x18EBA80); }
+    IsChangeableBySkillUniqueId(targetState: UnitStateBase): boolean {
+        if (this._TargetSkillUniqueId === 0) return true;
+        return targetState._SkillUniqueId === this._TargetSkillUniqueId;
+    }
     /** @rva 0x18EB720  private void IncreaseTurn(List<UnitStateBase> targetStates) { } */
-    IncreaseTurn(targetStates: List<UnitStateBase>): void { return notPorted("ChangeBuffDebuffTurnAbilityEffectBase.IncreaseTurn", 0x18EB720); }
+    IncreaseTurn(targetStates: List<UnitStateBase>): void {
+        if (targetStates == null) return;
+        for (const state of targetStates.filter(ts => this.$IncreaseTurn$b__32_0(ts))) {
+            const remaining = state._RemainingTurn;
+            const turn = clamp(this._TurnChangeValue + remaining, 0, this._MaxChangeCount) - remaining; // Math.Clamp
+            if (turn > 0) state.AddRemainingTurn(turn);
+        }
+    }
     /** @rva 0x18EB3D0  private void DecreaseTurn(List<UnitStateBase> targetStates, BattleUnit targetUnit) { } */
-    DecreaseTurn(targetStates: List<UnitStateBase>, targetUnit: BattleUnit): void { return notPorted("ChangeBuffDebuffTurnAbilityEffectBase.DecreaseTurn", 0x18EB3D0); }
+    DecreaseTurn(targetStates: List<UnitStateBase>, targetUnit: BattleUnit): void {
+        if (targetStates == null) return;
+        const removeList: UnitStateBase[] = [];
+        for (const state of targetStates) {
+            if (state._RemainingTurn - this._TurnChangeValue < 1) removeList.push(state);
+            else state.DecreaseRemainingTurn(this._TurnChangeValue);
+        }
+        targetUnit._Condition.RemoveUnitState$BattleUnit_ListUnitStateBase(targetUnit, removeList);
+    }
     /** @rva 0x18EC290  private bool <GetAIFilteredTargets>b__27_1(BattleUnit targetUnit) { } */
-    $GetAIFilteredTargets$b__27_1(targetUnit: BattleUnit): boolean { return notPorted("ChangeBuffDebuffTurnAbilityEffectBase.<GetAIFilteredTargets>b__27_1", 0x18EC290); }
+    $GetAIFilteredTargets$b__27_1(targetUnit: BattleUnit): boolean {
+        return targetUnit._Condition._StateList.some(state => this.IsChangeableUnitState(state));
+    }
     /** @rva 0x18EC340  private bool <IncreaseTurn>b__32_0(UnitStateBase ts) { } */
-    $IncreaseTurn$b__32_0(ts: UnitStateBase): boolean { return notPorted("ChangeBuffDebuffTurnAbilityEffectBase.<IncreaseTurn>b__32_0", 0x18EC340); }
+    $IncreaseTurn$b__32_0(ts: UnitStateBase): boolean {
+        if (ts == null) return false;
+        return ts._RemainingTurn < this._MaxChangeCount;
+    }
 }

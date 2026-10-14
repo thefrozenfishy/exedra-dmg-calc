@@ -2,7 +2,8 @@
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
-import type { Decimal, int } from "../../runtime";
+import type { int } from "../../runtime";
+import { Decimal } from "../../runtime";
 import { RecoveryHpAbilityEffectBase } from "./RecoveryHpAbilityEffectBase";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
@@ -40,5 +41,9 @@ export class RecoveryHpAtkAbilityEffect extends RecoveryHpAbilityEffectBase {
         return this;
     }
     /** @rva 0x18FE640 slot 8  public override Decimal GetBaseRecoveryValue(BattleUnit userUnit) { } */
-    GetBaseRecoveryValue(userUnit: BattleUnit): Decimal { return notPorted("RecoveryHpAtkAbilityEffect.GetBaseRecoveryValue", 0x18FE640); }
+    GetBaseRecoveryValue(userUnit: BattleUnit): Decimal {
+        const value = userUnit.GetProcessedAtkDecimal().mul(Decimal.fromInt(this._RecoveryRatio).div(Decimal.fromInt(1000))).add(Decimal.fromInt(this._RecoveryFixed));
+        if (value.lt(Decimal.Zero)) return Decimal.Zero;
+        return value;
+    }
 }

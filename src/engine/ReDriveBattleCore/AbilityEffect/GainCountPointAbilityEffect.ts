@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { CountUnitState } from "../UnitState/CountUnitState";
 import { notPorted } from "../../runtime";
 import type { List, int } from "../../runtime";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
@@ -29,5 +30,12 @@ export class GainCountPointAbilityEffect extends CountPointVariationAbilityEffec
     /** @rva 0x8A2200 slot 8  protected override int GetModifyCountPoint() { } */
     GetModifyCountPoint(): int { return this.gainPoint; /* asm: mov eax, dword ptr [rcx + 0x60]; ret */ }
     /** @rva 0x18F2950 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("GainCountPointAbilityEffect.GetAIFilteredTargets", 0x18F2950); }
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__4_0
+        if (list.length > 0) list = list.filter(unit => { // <>c.b__4_1
+            if (!unit._Condition._StateList.some(s => s instanceof CountUnitState)) return false;
+            return unit._Condition._CountPoint < unit._Condition._MaxCountPoint;
+        });
+        return list;
+    }
 }

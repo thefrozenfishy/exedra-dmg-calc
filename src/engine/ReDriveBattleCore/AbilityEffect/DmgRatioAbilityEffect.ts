@@ -1,17 +1,20 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { AdditionalSkillAct } from "../Act/AdditionalSkillAct";
+import { QuestEnemyAppearanceParameter } from "../QuestEnemyAppearanceParameter";
+import { AffectedUnitNotice } from "../AffectedUnitNotice";
+import { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
+import { dictGet, f32, notPorted } from "../../runtime";
 import type { Dictionary, float, int } from "../../runtime";
 import { DamageAbilityEffectBase } from "./DamageAbilityEffectBase";
 import type { DamageBaseType } from "./DamageBaseType";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
-import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
+
 import type { BattleUnit } from "../BattleUnit";
 import type { DamageCategory } from "../DamageCategory";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
-import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.AbilityEffect.DmgRatioAbilityEffect  (TypeDefIndex 1181, public class) ----
 export class DmgRatioAbilityEffect extends DamageAbilityEffectBase {
@@ -36,5 +39,29 @@ export class DmgRatioAbilityEffect extends DamageAbilityEffectBase {
         return this;
     }
     /** @rva 0x18F1320 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
-    Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("DmgRatioAbilityEffect.Triggering", 0x18F1320); }
+    Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
+        const bundle = new AffectedUnitNoticeBundle().ctor();
+        for (const targetUnitId of this._TargetUnitIdList) {
+            const targetUnit = dictGet(targetUnitDic, targetUnitId);
+            const param = targetUnit.get_Param();
+            if (param instanceof QuestEnemyAppearanceParameter && param._IsMainTargetEnemy) continue;
+            userUnit.activeConditionCheckDataBundle._EachTargetUnit = targetUnit; // setter inlined in the game
+            const maxDamage = targetUnit._HP - 1;
+            let damage: int;
+            if (this.damagePowerCurrentHpRatio > 0) {
+                damage = Math.min(Math.trunc(Math.floor(f32(targetUnit._HP * this.damagePowerCurrentHpRatio))), maxDamage);
+            } else if (this.damagePowerMaxHpRatio > 0) {
+                damage = Math.min(Math.trunc(Math.floor(f32(targetUnit._MaxHP * this.damagePowerMaxHpRatio))), maxDamage);
+            } else {
+                throw new Error("DamageRatioAbilityEffect の value1, value2 の値が 0 のため、計算不能");
+            }
+            const notice = AffectedUnitNotice.CreateByDamage(targetUnit._Id, damage, 6 as any /* DamageCategory */, false, 0 as any, null!, 0 as any, false);
+            userUnit.Attack(targetUnit, damage, gameDirector);
+            const currentAct = gameDirector.turnActSystem.actReferee.currentAct;
+            if (currentAct instanceof AdditionalSkillAct) notice._IsCounterAttack = currentAct.IsTargetingCurrentActUnit;
+            bundle.Add(notice);
+            userUnit.activeConditionCheckDataBundle._EachTargetUnit = null!; // setter inlined in the game
+        }
+        return bundle;
+    }
 }

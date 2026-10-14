@@ -1,11 +1,13 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
+import { AffectedUnitNotice } from "../AffectedUnitNotice";
+import { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
+import { dictGet, notPorted } from "../../runtime";
 import type { Dictionary, int } from "../../runtime";
 import { AbilityEffectBase } from "./AbilityEffectBase";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
-import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
+
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { EffectOriginType } from "../UnitState/EffectOriginType";
@@ -27,9 +29,21 @@ export abstract class ResetUniqueBuffDebuffAbilityEffectBase extends AbilityEffe
         return this;
     }
     /** @rva 0x1900190 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
-    Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("ResetUniqueBuffDebuffAbilityEffectBase.Triggering", 0x1900190); }
+    Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
+        const bundle = new AffectedUnitNoticeBundle().ctor();
+        for (const targetUnitId of this._TargetUnitIdList) {
+            const targetUnit = dictGet(targetUnitDic, targetUnitId);
+            if (targetUnit == null || targetUnit.get_IsDead()) continue;
+            userUnit.activeConditionCheckDataBundle._EachTargetUnit = targetUnit; // setter inlined in the game
+            targetUnit._Condition.RemoveUnitState$BattleUnit_FuncUnitStateBasebool(targetUnit, state => this.$Triggering$b__3_0(state));
+            const variation = targetUnit.UpdateTurnGaugeBySpeed();
+            if (variation !== 0) bundle.Add(AffectedUnitNotice.CreateByTurnGaugeVariation(targetUnitId, variation));
+            userUnit.activeConditionCheckDataBundle._EachTargetUnit = null!; // setter inlined in the game
+        }
+        return bundle;
+    }
     /** @rva -1 slot 8  public abstract bool IsRemovable(UnitStateBase state); */
     abstract IsRemovable(state: UnitStateBase): boolean;
     /** @rva 0x18FF0A0  private bool <Triggering>b__3_0(UnitStateBase state) { } */
-    $Triggering$b__3_0(state: UnitStateBase): boolean { return notPorted("ResetUniqueBuffDebuffAbilityEffectBase.<Triggering>b__3_0", 0x18FF0A0); }
+    $Triggering$b__3_0(state: UnitStateBase): boolean { return this.IsRemovable(state); /* vslot 8 */ }
 }
