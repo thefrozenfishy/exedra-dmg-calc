@@ -31,6 +31,11 @@ export interface EngineBattleOptions {
     rng?: BattleRng
     /** PvE "Manual": the player decides every ally action, target and ultimate (BattleRng.pick, PendingDecision). */
     manualTargeting?: boolean
+    /** App tools (Kioku Grid bench): runs once on the set-up director, before the battle phase starts. */
+    onSetup?: (director: any) => void
+    /** App tools (Kioku Grid bench): runs before each manual ally decision, with the deciding unit (before the options
+     *  are built, so it can e.g. top up SP). */
+    beforeDecision?: (unit: any, battle: EngineBattle) => void
 }
 
 /** Display info of one engine unit. */
@@ -66,6 +71,7 @@ export class EngineBattle {
     /** HP before the running request: a hit's `amount` is the HP actually lost (overkill not counted), as before. */
     private hpBefore = new Map<any, number>()
     private manual: boolean
+    private readonly beforeDecision?: (unit: any, battle: EngineBattle) => void
     /** Manual control: "Continue" closes the between-actions ultimate prompt until the next turn act. */
     private ultimateWindowPassed = false
 
@@ -77,10 +83,12 @@ export class EngineBattle {
         this.allyKiokus = setup.allies
         this.enemyKiokus = setup.kind === "pvp" ? setup.enemies : []
         E.bindMasterData()
-        this.director = this.random.run(() => this.create(setup))
+        this.director = this.random.run(() => EngineBattle.createDirector(setup))
         this.director.commandSender.Subscribe({ IObserver$OnNext: (commands: any[]) => { this.commands.push(...commands) } })
         this.manual = !!opts.manualTargeting
+        this.beforeDecision = opts.beforeDecision
         this.director.autoType = this.manual ? 0 : 2 // Manual: the player decides the allies; FullAuto: the AI acts for both teams
+        if (opts.onSetup) this.random.run(() => opts.onSetup!(this.director))
         this.random.run(() => this.director.FlushCommands())
         this.consumeCommands()
         this.initial = EngineBattle.shiftedToFirstActor(this.getCurrentState())
@@ -90,8 +98,13 @@ export class EngineBattle {
     private readonly initial: BattleSnapshot
     private pending: BattleSnapshot[] = []
 
-    private create(setup: EngineBattleSetup): any {
+    /** The game director of `setup` after SetupBattleStage (battle-start passives done, nothing acted yet). Call it with
+     *  a GameRandom hook installed when the setup may roll (EngineRandom.run). */
+    static createDirector(setup: EngineBattleSetup, opts: { allyPassives?: boolean } = {}): any {
+        E.bindMasterData()
         const allies = setup.allies.map((k, i) => E.kiokuToNetworkUnit(k, i + 1))
+        // allyPassives false: the allies arrive without passive skills (app-side tools that give effects themselves)
+        if (opts.allyPassives === false) for (const u of allies) u.passiveSkillInfoList = []
         if (setup.kind === "pvp") {
             const d = new E.PvpGameDirector().ctor()
             d.SetupBattleStage(new E.PvPOrGvGBattleUnitProvider().ctor(allies, setup.enemies.map((k, i) => E.kiokuToNetworkUnit(k, i + 1))), 0)
@@ -110,7 +123,7 @@ export class EngineBattle {
         const season = raid.season
         const extra: [number | undefined, number][] = [[SOLO_RAID_COMMON_CHARGE_PASSIVE, 8], [season?.passiveSkillMstId, 6], [season?.enhancedPassiveSkillMstId, 6],
             [season?.buffPointChargePassiveSkillMstId, 6], [party?.passiveSkillMstId, 7], [party?.buffPointChargePassiveSkillMstId, 7]]
-        for (const u of allies) for (const [id, source] of extra) {
+        if (opts.allyPassives !== false) for (const u of allies) for (const [id, source] of extra) {
             if (!id || !(id > 0)) continue
             const info = new E.PassiveSkillInfo()
             info.passiveSkillMstId = id
@@ -119,13 +132,13 @@ export class EngineBattle {
             u.passiveSkillInfoList = [...u.passiveSkillInfoList, info]
         }
         const d = new E.SoloRaidGameDirector().ctor()
-        d.SetupBattleStageForSoloRaid(setup.stageId, 0, provider, this.battleInfoOf(setup.carry), SOLO_RAID_COMMON_CHARGE_PASSIVE,
+        d.SetupBattleStageForSoloRaid(setup.stageId, 0, provider, EngineBattle.battleInfoOf(setup.carry), SOLO_RAID_COMMON_CHARGE_PASSIVE,
             raid.season?.soloRaidSeasonBuffMstId ?? 0, party?.soloRaidPartyBuffMstId ?? 0, setup.noRoundLimit ? 0 : raid.limitRoundCount, 8.64e15)
         return d
     }
 
     /** Network.Definition.SoloRaid.BattleInfo of a carried attempt (wave 0 = a new battle). */
-    private battleInfoOf(c?: RaidCarry): any {
+    private static battleInfoOf(c?: RaidCarry): any {
         const info = new E.BattleInfo()
         if (!c) return info
         info.wave = c.wave
@@ -496,6 +509,7 @@ export class EngineBattle {
     private decide(act: any): BattleSnapshot[] {
         const d = this.director
         const unit = d.battleUnitBundle.dic.get(act.actUnitId)
+        this.beforeDecision?.(unit, this)
         if (act instanceof E.SpecialAttackAct) return this.report(() => this.skillRequest(unit, unit.SpecialAttack))
         const what = act instanceof E.AdditionalTurnUnitAct || act instanceof E.ReActionTurnUnitAct ? "extra action" : act instanceof E.ComboTurnUnitAct && act._ActionStep >= 2 ? `turn (combo ${act._ActionStep})` : "turn"
         const sp = d.spReferee.allySp

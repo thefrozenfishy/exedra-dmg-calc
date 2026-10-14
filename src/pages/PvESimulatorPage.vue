@@ -251,14 +251,13 @@
 
         <!-- Max damage -->
         <section class="card section-card">
-            <h2 class="section-title">Max Damage</h2>
+            <h2 class="section-title">Max Damage <span v-if="maxDmgBusy" class="title-sub">· calculating…</span></h2>
             <p class="hint-text">The best case against wave {{ waveIdx + 1 }}: every buff and debuff listed under "Buffs
-                &amp;
-                Debuffs" below is active at the same time, at full stacks, with its conditions met (for tiered effects
-                that
-                exclude each other, like "while 5 / 4 / ... / 1 enemies remain" or Light Chain Lv 1-5, only the
-                strongest
-                tier). Each skill is then run through the battle engine's damage formula.</p>
+                &amp; Debuffs" below is active at the same time, at full stacks, with its conditions met. Effects that
+                can't count together count once, whichever gives the most damage: tiers that exclude each other (like
+                "while 5 / 4 / ... / 1 enemies remain" or Light Chain Lv 1-5), and the same kind of buff from a skill
+                and the switch skill replacing it, or from different follow-ups. Each skill is then launched in the
+                game's battle code against this wave.</p>
 
             <p v-if="!teamKiokus.length" class="empty-hint">Add team members to calculate damage.</p>
             <template v-else-if="maxDmg">
@@ -339,9 +338,8 @@
                 the
                 ones that are on: buffs on {{ dealerName }} (green) and debuffs on the enemies (red). Click one to turn
                 it off
-                or back on; lower its stacks to use fewer. Tiered effects count one tier at a time: click another tier
-                to use it
-                instead.</p>
+                or back on; lower its stacks to use fewer. Tiered effects and alternatives count one at a time (the one that gives the most damage):
+                click another one to use it instead.</p>
 
             <div class="effects-summary">
                 <span class="legend legend-buff">{{ effectCounts.buff }} buff{{ effectCounts.buff === 1 ? '' : 's' }} on
@@ -562,7 +560,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, markRaw, nextTick, reactive, ref, shallowRef, watch } from 'vue'
+import { computed, markRaw, nextTick, reactive, ref, shallowRef, watch, onBeforeUnmount } from 'vue'
 import { useTeamStore } from '../store/singleTeamStore'
 import { useSetting } from '../store/settingsStore'
 import CharacterEditor from '../components/CharacterEditor.vue'
@@ -584,12 +582,13 @@ import { stageBattleType, waveStartUnits } from '../models/PvEBattle'
 import passiveMstJson from '../assets/base_data/getPassiveSkillMstList.json'
 import type { RaidCarry } from '../models/PvPBattle'
 import { getScoreAttackStage } from '../models/PvEScore'
-import { computeMaxDamage, isEffectValueType, type MaxDmgEffect, type MaxDmgResult, type MemberDamage, type SkillDamage } from '../models/MaxDamage'
+import { isEffectValueType, type MaxDmgEffect, type MaxDmgResult, type MemberDamage, type SkillDamage } from '../models/MaxDamage'
 import { buildSlotKioku, buildPvEExport, parsePvEExport, downloadText, exportToText, rekeyPicks, type PvEExport } from '../utils/pvpExport'
 import { describePvESetup, sanitizePvESetup, stagePath, type PvESetup } from '../utils/pveSetup'
 import { effectDescription, effectName, effectRestriction, effectValue } from '../utils/effectText'
 import { passiveDetailsByMstId, portraits } from '../utils/helpers'
 import { EngineBattle } from '../battle/EngineBattle'
+import type { MaxDamageMessage, MaxDamageRequest } from '../workers/maxDamageWorker'
 import type { PvPKioku } from '../models/PvPKioku'
 
 const team = useTeamStore()
@@ -713,14 +712,14 @@ const memberId = (pos: number) => filledSlots.value[pos]?.[0].main?.id
 // ---- max damage ----
 const excluded = reactive(new Set<string>())
 const stacks = reactive(new Map<string, number>())
-// A rung of a tier ladder (MaxDmgEffect.tier, one rung counts at a time): clicking the rung in use turns the whole
-// ladder off; clicking any other rung uses that one (the stronger rungs above it are turned off).
+// A rung of a tier ladder (MaxDmgEffect.tier, one rung counts at a time; the engine uses the rung that gives the most
+// damage): clicking the rung in use turns the whole ladder off; clicking any other rung uses that one only.
 const toggleEffect = (k: string) => {
     const e = maxDmg.value?.effects.find(x => x.key === k)
     if (e?.tier) {
         const inUse = !excluded.has(k) && !e.tierUsed && !!e.reach
         if (inUse) e.tier.keys.forEach(key => excluded.add(key))
-        else e.tier.keys.forEach((key, rank) => { if (rank < e.tier!.rank) excluded.add(key); else excluded.delete(key) })
+        else e.tier.keys.forEach(key => { if (key !== k) excluded.add(key); else excluded.delete(key) })
         return
     }
     if (excluded.has(k)) excluded.delete(k); else excluded.add(k)
@@ -731,19 +730,44 @@ const setStacks = (k: string, v: number, max: number) => {
 }
 const resetEffects = () => { excluded.clear(); stacks.clear() }
 
-const maxDmg = computed<MaxDmgResult | undefined>(() => {
-    if (!teamKiokus.value.length || !wave.value.length) return undefined
+// Computed in a worker (workers/maxDamageWorker.ts: battle/EngineMaxDamage, the game's own battle code); the last
+// result stays on screen while a new one is computed (`maxDmgBusy`).
+const maxDmg = shallowRef<MaxDmgResult | undefined>()
+const maxDmgBusy = ref(false)
+let maxDmgWorker: Worker | undefined
+let maxDmgReq = 0
+function requestMaxDamage() {
+    if (!teamKiokus.value.length || !wave.value.length) { maxDmg.value = undefined; maxDmgBusy.value = false; return }
     try {
-        return computeMaxDamage(teamKiokus.value, wave.value, dealerPos.value, {
-            battleType: stageBattleType(stageId.value),
-            excluded: new Set(excluded), stacks: new Map(stacks),
-            broken: broken.value, breakRate: breakRate.value, mainTargetIdx: mainTargetIdx.value,
-        })
+        if (!maxDmgWorker) {
+            maxDmgWorker = new Worker(new URL('../workers/maxDamageWorker.ts', import.meta.url), { type: 'module' })
+            maxDmgWorker.onmessage = (e: MessageEvent<MaxDamageMessage>) => {
+                if (e.data.id !== maxDmgReq) return
+                maxDmgBusy.value = false
+                if (e.data.error) { console.warn('Max damage failed', e.data.error); maxDmg.value = undefined; return }
+                maxDmg.value = markRaw(e.data.result!)
+            }
+            maxDmgWorker.onerror = (e) => { console.warn('Max damage worker failed', e.message); maxDmgBusy.value = false }
+        }
+        maxDmgBusy.value = true
+        maxDmgWorker.postMessage({
+            id: ++maxDmgReq,
+            slots: JSON.parse(JSON.stringify(filledSlots.value.map(([s]) => s))),
+            stageId: stageId.value, waveIdx: Math.min(waveIdx.value, waveMetas.value.length - 1),
+            wave: JSON.parse(JSON.stringify(wave.value)), dealerPos: dealerPos.value,
+            opts: {
+                battleType: stageBattleType(stageId.value),
+                excluded: new Set(excluded), stacks: new Map(stacks),
+                broken: [...broken.value], breakRate: [...breakRate.value], mainTargetIdx: mainTargetIdx.value,
+            },
+        } satisfies MaxDamageRequest)
     } catch (e) {
         console.warn('Max damage failed', e)
-        return undefined
+        maxDmgBusy.value = false
     }
-})
+}
+watch([teamKiokus, wave, dealerPos, () => [...excluded], () => [...stacks], broken, breakRate, mainTargetIdx], requestMaxDamage, { deep: true, immediate: true })
+onBeforeUnmount(() => maxDmgWorker?.terminate())
 const dealer = computed(() => maxDmg.value?.members[dealerPos.value])
 const dealerName = computed(() => dealer.value?.name ?? 'the damage dealer')
 const skillOf = (m: MemberDamage, t: TargetType) => m.skills.find(s => s.type === t)
@@ -785,7 +809,11 @@ function effectStatus(e: MaxDmgEffect): { status: EffectStatus, statusText: stri
             : { status: 'na', statusText: `A drawback on ${e.casterName} itself, not on enemies` }
     }
     if (excluded.has(e.key)) return { status: 'off', statusText: 'Turned off: click to turn on' }
-    if (e.tierUsed) return { status: 'alt', statusText: 'Only one tier is active at a time (its conditions exclude each other)' }
+    if (e.tierUsed) return {
+        status: 'alt', statusText: e.tier?.reason === 'alternative'
+            ? 'Same kind of effect from a skill that stands in for another (switch skill / other follow-up): only the strongest counts'
+            : 'Only one tier is active at a time (its conditions exclude each other)',
+    }
     if (!e.reach) return { status: 'off', statusText: 'Set to 0 stacks' }
     if (e.side === 'ally') {
         return e.reach.dealer

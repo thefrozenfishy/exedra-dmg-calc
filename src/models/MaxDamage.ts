@@ -42,7 +42,12 @@ export interface MaxDmgEffect {
     // One rung of a ladder of same-type states from the same caster whose ACTIVE conditions exclude each other
     // (Focused Guard "enemies == 5/4/3/2/1", Light Chain "Lv 1..5"): in battle only one can be active, so only one
     // counts here. rank 0 = strongest; `keys` = every rung of the ladder, strongest first.
-    tier?: { group: string, rank: number, keys: string[] }
+    // reason "conditions": the rungs' conditions exclude each other (or the game replaces one with the other);
+    // "alternative": same-type effects of skills that stand in for each other (a skill and the switch skills replacing
+    // it, or the member's different follow-ups) - only the major one counts (the user's rule for the theoretical max).
+    tier?: { group: string, rank: number, keys: string[], reason: "conditions" | "alternative" }
+    // Skills that stand in for each other: `${casterPos}:${family}` + the variant within it (see collectTeamEffects).
+    alt?: { family: string, variant: string }
     // Dealer's evaluation: set on a rung that was left out because another rung of its ladder (this key) is used.
     tierUsed?: string
 }
@@ -106,7 +111,7 @@ const skillMst = new Map<number, { name: string, type: number }>((skillMstJson a
 const TARGET_OF_SKILL_TYPE: Record<number, TargetType> = { 1: TargetType.skillId, 2: TargetType.specialId, 3: TargetType.attackId }
 const isDamageRow = (d: SkillDetail) => d.abilityEffectType.startsWith("DMG_") && d.abilityEffectType !== "DMG_RATIO"
 
-interface ExtraSkill { type: TargetType, label: string, name?: string, note?: string, details: SkillDetail[], skillType?: string }
+interface ExtraSkill { type: TargetType, label: string, name?: string, note?: string, details: SkillDetail[], skillType?: string, id?: number }
 
 // [CONFIRMED 3.19] SwitchSkillUnitState: value1 = skill unique id switched to, value3 = the SkillType it replaces, at
 // the replaced skill's level (PvPTeam.act / KiokuState.switchedSkillId). All current ones come from abilities.
@@ -122,7 +127,7 @@ function switchSkillsOf(k: PvPKioku): ExtraSkill[] {
         if (seen.has(mstId)) continue
         seen.add(mstId)
         const replacedLabel = SKILL_TYPES.find(([t]) => t === replaced)?.[1] ?? ""
-        out.push({ type: replaced, label: "Switch Skill", name: skillMst.get(mstId)?.name || undefined, note: `replaces ${replacedLabel}`, details: (skillDetailsByMstId.get(mstId) ?? []) as SkillDetail[] })
+        out.push({ type: replaced, id: mstId, label: "Switch Skill", name: skillMst.get(mstId)?.name || undefined, note: `replaces ${replacedLabel}`, details: (skillDetailsByMstId.get(mstId) ?? []) as SkillDetail[] })
     }
     return out
 }
@@ -134,7 +139,7 @@ function followUpsOf(k: PvPKioku, switches: ExtraSkill[]): ExtraSkill[] {
     const ids = new Set(rows.filter(d => d.abilityEffectType === "ADDITIONAL_SKILL_ACT").map(d => d.value1))
     return [...ids].map(id => {
         const mst = skillMst.get(id)
-        return { type: TargetType.fuaId, label: "Follow-up", name: mst?.name || undefined, note: mst?.type === 5 ? "Ether Blow" : "Follow-up", details: (skillDetailsByMstId.get(id) ?? []) as SkillDetail[], skillType: mst?.type === 5 ? "EtherBlow" : "AdditionalSkill" }
+        return { type: TargetType.fuaId, id, label: "Follow-up", name: mst?.name || undefined, note: mst?.type === 5 ? "Ether Blow" : "Follow-up", details: (skillDetailsByMstId.get(id) ?? []) as SkillDetail[], skillType: mst?.type === 5 ? "EtherBlow" : "AdditionalSkill" }
     })
 }
 
@@ -169,7 +174,7 @@ function passiveOrigin(k: PvPKioku, d: SkillDetail): string {
 export function collectTeamEffects(allies: PvPKioku[], attackerPos: number): MaxDmgEffect[] {
     const out: MaxDmgEffect[] = []
     const seen = new Set<string>()
-    const add = (casterPos: number, casterName: string, source: string, d: SkillDetail) => {
+    const add = (casterPos: number, casterName: string, source: string, d: SkillDetail, alt?: { family: string, variant: string }) => {
         if (!isState(d)) return
         const side: EffectSide | undefined = isFriendlyEffect(d.abilityEffectType) ? "ally" : isOpponentEffect(d.abilityEffectType) ? "enemy" : undefined
         if (!side) return
@@ -178,25 +183,28 @@ export function collectTeamEffects(allies: PvPKioku[], attackerPos: number): Max
         seen.add(key)
         const isAccum = d.abilityEffectType.includes("ACCUM")
         out.push({
-            key, casterPos, casterName, source, side, detail: d,
+            key, casterPos, casterName, source, side, detail: d, alt,
             maxStacks: isAccum ? Math.max(1, d.value2 || 1) : 1,
             applies: isEffectValueType(d.abilityEffectType) || d.range !== targetRange.SELF || (side === "ally" && casterPos === attackerPos),
         })
     }
     allies.forEach((k, pos) => {
+        // Switch skills and follow-ups (incl. Ether Blows) the kit can use.
+        const switches = switchSkillsOf(k)
+        const followUps = followUpsOf(k, switches)
         for (const [type, label] of SKILL_TYPES) {
-            for (const d of skillDetailsOf(k, type)) {
-                add(pos, k.name, label, d)
-                // Follow-up skills granted by the kit (ADDITIONAL_SKILL_ACT value1 = skill id).
-            }
+            // a skill with switch skills replacing it: the skill and its switch skills are one family of alternatives
+            const alt = switches.some(sw => sw.type === type) ? { family: `${type}`, variant: "base" } : undefined
+            for (const d of skillDetailsOf(k, type)) add(pos, k.name, label, d, alt)
         }
         for (const d of k.effects) {
             add(pos, k.name, passiveOrigin(k, d), d)
         }
-        // Switch skills and follow-ups (incl. Ether Blows) the kit can use.
-        const switches = switchSkillsOf(k)
-        for (const sw of switches) for (const d of sw.details) add(pos, k.name, "Switch Skill", d)
-        for (const fu of followUpsOf(k, switches)) for (const d of fu.details) add(pos, k.name, "Follow-up", d)
+        for (const sw of switches) for (const d of sw.details) add(pos, k.name, "Switch Skill", d, { family: `${sw.type}`, variant: `${sw.id}` })
+        for (const fu of followUps) {
+            const alt = followUps.length > 1 ? { family: "followUp", variant: `${fu.id}` } : undefined
+            for (const d of fu.details) add(pos, k.name, "Follow-up", d, alt)
+        }
     })
     assignTiers(out)
     return out
@@ -217,6 +225,16 @@ function isGameDuplicate(a: SkillDetail, b: SkillDetail): boolean {
 // caster, side and effect type; strongest first (|value1| x max stacks), each rung pairwise exclusive with the others.
 // Ladders that mix effect types (Light Chain Lv n gives final DMG AND resist down) are handled per type, so the
 // strongest final-DMG rung and the strongest resist rung are used together (true here: both are Lv 5).
+// Two effects of one caster, side and effect type that cannot count together: the game replaces one with the other
+// (isGameDuplicate), their active conditions exclude each other, or (withAlternatives) they come from different skills of
+// one family of alternatives (a skill and a switch skill replacing it, or two different follow-ups): for those the user's
+// rule is "only the major buff counts".
+function excludeEachOther(a: MaxDmgEffect, b: MaxDmgEffect, withAlternatives = true): boolean {
+    if (isGameDuplicate(a.detail, b.detail)) return true
+    if (!!a.detail.activeConditionSetIdCsv && !!b.detail.activeConditionSetIdCsv && conditionCsvsExclusive(a.detail.activeConditionSetIdCsv, b.detail.activeConditionSetIdCsv)) return true
+    return withAlternatives && !!a.alt && !!b.alt && a.alt.family === b.alt.family && a.alt.variant !== b.alt.variant
+}
+
 function assignTiers(effects: MaxDmgEffect[]) {
     const byType = new Map<string, MaxDmgEffect[]>()
     for (const e of effects) {
@@ -229,15 +247,15 @@ function assignTiers(effects: MaxDmgEffect[]) {
         if (list.length < 2) continue
         const ladders: MaxDmgEffect[][] = []
         for (const e of [...list].sort((a, b) => strength(b) - strength(a))) {
-            const ladder = ladders.find(l => l.every(o => isGameDuplicate(o.detail, e.detail)
-                || (!!o.detail.activeConditionSetIdCsv && !!e.detail.activeConditionSetIdCsv && conditionCsvsExclusive(o.detail.activeConditionSetIdCsv, e.detail.activeConditionSetIdCsv))))
+            const ladder = ladders.find(l => l.every(o => excludeEachOther(o, e)))
             if (ladder) ladder.push(e)
             else ladders.push([e])
         }
         for (const ladder of ladders) {
             if (ladder.length < 2) continue
             const keys = ladder.map(e => e.key)
-            ladder.forEach((e, rank) => { e.tier = { group: keys[0], rank, keys } })
+            const reason = ladder.every((o, i) => ladder.every((e, j) => i === j || excludeEachOther(o, e, false))) ? "conditions" : "alternative"
+            ladder.forEach((e, rank) => { e.tier = { group: keys[0], rank, keys, reason } })
         }
     }
 }

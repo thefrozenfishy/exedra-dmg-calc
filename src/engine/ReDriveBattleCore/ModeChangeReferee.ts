@@ -6,7 +6,7 @@ import type { QuestEnemyAppearanceMstRecord } from "../Network/Definition/QuestO
 import { QuestEnemyModeChangeMstModel } from "./Model/QuestEnemyModeChangeMstModel";
 import { QuestEnemyAppearanceMstModel } from "./Model/QuestEnemyAppearanceMstModel";
 import { BattleMstReaderBase } from "./Reader/BattleMstReaderBase";
-import { f32, first, notPorted, orderBy } from "../runtime";
+import { f32, first, indexHint, notPorted, orderBy } from "../runtime";
 import type { List, int } from "../runtime";
 import type { BattleUnit } from "./BattleUnit";
 
@@ -31,7 +31,7 @@ export class ModeChangeReferee {
         if (!enemyList.some(u => u.IsMainTargetEnemy())) return; // <>c.b__8_0
         const mainUnit = first(enemyList, u => u.IsMainTargetEnemy()); // <>c.b__8_1
         const mains = BattleMstReaderBase.get_Instance<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int>(QuestEnemyAppearanceMstModel)
-            .GetModelList(m => m.questStageMstId === questStageMstId && m.wave === wave && m.isMainTargetEnemy); // DisplayClass8_0.b__2
+            .GetModelList(indexHint(m => m.questStageMstId === questStageMstId && m.wave === wave && m.isMainTargetEnemy, "questStageMstId", questStageMstId)); // DisplayClass8_0.b__2
         if (mains == null) return;
         if (mains.length < 2) return;
         const modeChanges = orderBy([...mains].map(mst => BattleMstReaderBase.get_Instance<QuestEnemyModeChangeMstModel, QuestEnemyModeChangeMstRecord, int>(QuestEnemyModeChangeMstModel)

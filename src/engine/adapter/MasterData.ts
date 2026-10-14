@@ -124,3 +124,9 @@ export function bindMasterData(): void {
     BattleMstReaderContainer.Bind(UniqueStatePatternMstModel, new BattleMstModelRepositoryBase<UniqueStatePatternMstModel, UniqueStatePatternMstRecord, int>(
         uniqueStatePatternMstModelJson as unknown as UniqueStatePatternMstRecord[], r => r.uniqueStatePatternMstId, r => new UniqueStatePatternMstModel().ctor$UniqueStatePatternMstRecord(r)));
 }
+
+/** App side: adds made-up master records (e.g. the Kioku Grid bench's dummy stage) to the bound reader of `model`. */
+export function addMasterRecords(model: any, records: readonly any[]): void {
+    bindMasterData();
+    (BattleMstReaderContainer.GetReader(model) as unknown as BattleMstModelRepositoryBase<any, any, any>).AddRecords(records);
+}

@@ -1,3 +1,8 @@
+// TODO(engine 1:1): the Fight Solver still searches on the OLD engine (models/PvPBattle via createPvEBattle, cloned with
+//   BattleCloner), while the PvE Simulator's battle and Max Damage run on the 1:1 engine (battle/EngineBattle). Its
+//   results can therefore differ from what the simulator plays. Port it to EngineBattle: the 1:1 engine has no
+//   BattleCloner, so nodes must be rebuilt by replaying the decision prefix from the start (or via a ported
+//   BackupAgent snapshot). Parked on purpose (2026-10-14); come back to it later.
 // Fight solver: searches the player's decisions in a PvE battle for the clear that takes the least action value
 // (elapsed turn-gauge time, "AV"). Not a game rule: a search over what the PvE Simulator's Manual control lets the
 // player decide (Battle Skill / Basic Attack, which ultimate to fire and when, every ally-side target pick), with

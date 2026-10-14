@@ -468,7 +468,7 @@ const fightModeIndex = computed(() => fightModeOptions.findIndex(opt => opt.valu
 const benchAverageDmg = useSetting("gridBenchAverageDmg", false)
 const benchMetricOptions = [
     { value: false, label: "Max Burst", title: "How much the Ultimate's dmg changes, every hit a crit, with all buffs and debuffs at full stacks" },
-    { value: true, label: "Average Damage", title: "How much the attacker's total dmg changes over a few turns of auto battle with SP refilled every turn, using expected crit damage" },
+    { value: true, label: "Average Damage", title: "How much the attacker's total dmg changes over a few turns of auto battle with SP refilled every turn, averaged over seeded battles (crits are rolled, as in the game)" },
 ] as const
 const benchMetricIndex = computed(() => benchMetricOptions.findIndex(opt => opt.value === benchAverageDmg.value))
 
@@ -1190,7 +1190,7 @@ const benchCharts = computed(() => [
         desc: [
             `How much each character increases the damage of a ${LuxMagica} as damage dealer, ${LuxMagica} is modified to be simulated as with any role and any element. When the element or role version had a different damage output, that element or role will be given a separate bar. ${levelsDescription.value}`,
             benchAverageDmg.value
-                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of auto battle with infinite SP, the character next to the damage dealer and three ${LuxMagica}, Only the damage dealer's own damage counts (including additional damage it deals), never the rest of the team's.`
+                ? `Average Damage: ${benchAv()} AV (${benchTurns.value} turns) of battle on the game's battle code with infinite SP (ultimates as soon as they are ready, Battle Skill every turn, ally-target skills on the damage dealer), the character next to the damage dealer and three ${LuxMagica}, averaged over seeded battles. Only the damage dealer's own damage counts (including additional damage it deals), never the rest of the team's.`
                 : `Max Burst: the damage dealer's Ultimate with every buff and debuff of the team at full stacks and every hit a crit.`,
             `${benchEnemyText.value} with 3000 def, weak to every element and broken (500% dmg taken) for the whole battle. Everyone aims single-target and proximity skills at the middle enemy, so a single-target debuff covers one enemy and an AoE one all of them.`,
             `Element, role or ailment bonuses (enemies under Curse, Burn, ... for the whole battle) get their own bar when they change the result; in Average Damage the other bars make the enemies immune to those ailments, so a character that applies an ailment itself and reacts to it shows that in its ailment bar, so a bonus can show in one metric only: crit rate or procs (chains, follow-ups) don't change Max Burst, and Max Burst counts every buff as already applied.`,

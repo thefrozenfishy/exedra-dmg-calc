@@ -344,3 +344,19 @@ export function mathClamp(value: number, min: number, max: number): number {
     if (value > max) return max;
     return value;
 }
+
+/** App side, a performance hint with no effect on results: tags a master-table predicate with an equality it implies
+ *  (`pred(r)` is only true when `r[field] === value`). The predicate is still what decides; a repository
+ *  (ReDrive/Model/BattleMstModelRepositoryBase) may use the tag to look at only the records with that value, in
+ *  record order, instead of scanning the whole table (the client does the scan in C#, ~100x faster than here). */
+export function indexHint<T>(pred: (r: T) => boolean, field: string, value: unknown): (r: T) => boolean {
+    (pred as any).$index = [field, value];
+    return pred;
+}
+
+/** C# interface dispatch of a property: reads `member` of interface `iface` on `o`. A class that implements the member
+ *  explicitly (`int IFoo.Bar { get; }`, ported as `IFoo$Bar`) answers through that, otherwise the public member. */
+export function ifaceProp(o: any, iface: string, member: string): any {
+    const explicit = `${iface}$${member}`;
+    return explicit in o ? o[explicit] : o[member];
+}

@@ -2,60 +2,36 @@
 // Lux☆Magica as the blank slate (beta charts on the Kioku Grid page).
 //
 // The setup mirrors the legacy Kioku Grid charts: enemies with 3000 DEF, weak to every element and broken at a
-// 500% damage-taken rate, and a team of Lux plus the character being measured. Unlike the legacy charts the
-// numbers come from the battle engine itself:
-//   - ultimateDamage: the dealer's Ultimate through the engine's damage formula, with every buff/debuff of the
-//     team active at full stacks (MaxDamage.computeMaxDamage), every hit a crit ("Max Burst").
-//   - simulatedDealerDamage: an auto battle played for a fixed amount of action value (AV), counting only the
-//     damage the dealer itself deals ("Average Damage"). The rest of the team's damage is ignored, so a support
-//     that also hits hard doesn't count, only what it changes about the dealer.
+// 500% damage-taken rate, and a team of Lux plus the character being measured. The numbers come from the 1:1 engine
+// (src/engine) against dummies made of game-shaped master data (battle/EngineBench.ts):
+//   - ultimateDamage: the dealer's Ultimate launched in the game's battle code (battle/EngineMaxDamage), with every
+//     buff/debuff of the team active at full stacks, every hit a crit ("Max Burst").
+//   - simulatedDealerDamage: a battle played for a fixed amount of action value (AV) with the bench's fixed play
+//     (BenchPolicy below), counting only the damage the dealer itself deals ("Average Damage"). The rest of the team's
+//     damage is ignored, so a support that also hits hard doesn't count, only what it changes about the dealer.
 // The dummies have SPD 1, so they never get a turn within the run: they don't attack, and (broken units only
 // recover at their own turn start) they stay broken throughout.
-import breakMstJson from "../assets/base_data/getBreakMstList.json";
 import { PvPKioku } from "./PvPKioku";
 import { Kioku } from "./Kioku";
-import { PvPTeam, scaleGivenState, type KiokuState } from "./PvPTeam";
-import { PvPBattle } from "./PvPBattle";
-import { ailmentMarker, computeMaxDamage } from "./MaxDamage";
-import { enemyKiokus } from "./PvEBattle";
 import { BattleType } from "./DamageCalculator";
-import { BattleRng, type RngKind, type RngMode } from "./BattleRng";
-import { seededRng } from "./BattleMath";
+import type { RngMode } from "./BattleRng";
 import { ailmentConditionValues, unitTypeConditionValues } from "./BattleConditionParser";
 import type { QuestEnemyAppearance } from "./PvE";
 import { crystalisesByStyle, kiokuData, skillDetailsByMstId } from "../utils/helpers";
-import { skillDetailId, TargetType, TargetTypeLookup, targetTypeToLvl, targetRange, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
+import { TargetType, TargetTypeLookup, targetTypeToLvl, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
 import { Ailment, elementMap, roleMap, KiokuElement, KiokuRole, LuxMagica } from "../types/enums";
+import { computeMaxDamageEngine } from "../battle/EngineMaxDamage";
+import { AILMENT_STATE, BENCH_BROKEN_RATE, BENCH_DEF, BenchRng, benchBattle, benchSkills, benchStage, benchStyle, keepAilment, keepStates, middleEnemy } from "../battle/EngineBench";
 
-export const BENCH_DEF = 3000
-export const BENCH_BROKEN_RATE = 500  // % damage taken while broken
-const BENCH_HP = 1e12                 // never dies within a run
-const BENCH_SPD = 0.1                 // first turn after ~100,000 AV: never acts within a run (Slow is 10,000 AV)
+export { BENCH_BROKEN_RATE, BENCH_DEF }
 // "Infinite" SP: topped up to this whenever time moves forward. Truly endless SP never ends a chain of battle skills
 // that act again at the same moment (Tenebrous Arcana's extra action, Thunder Torrent hasting herself): those drain
 // the 5 SP and end, as in the game, while every normal turn starts with SP.
 const SP_REFILL = 5
 
-// Any break table with a gauge, so the dummies can be broken; the rate itself is pinned below.
-const BREAK_MST_ID: number = (breakMstJson as any[]).find(b => b.breakPoint > 0)?.breakMstId ?? 0
-
-function dummyAppearance(i: number): QuestEnemyAppearance {
-    return {
-        questEnemyAppearanceMstId: -1 - i, questStageMstId: 0, enemyMstId: 0, wave: 1,
-        atk: 0, def: BENCH_DEF, hp: BENCH_HP, speed: BENCH_SPD,
-        criticalRate: 0, criticalDamageRate: 0, breakMstId: BREAK_MST_ID,
-        passiveSkillMstId: 0, enemySkillSetId: 0, enemyConditionSkillSetId: 0,
-        hpGaugeCount: 0, startHpGaugeCount: 0, isMainTargetEnemy: i === 0, conditionType: 0, summonId: 0,
-        // weak to every element, no resistances
-        weakElement1: 1, weakElement2: 2, weakElement3: 3, weakElement4: 4, weakElement5: 5, weakElement6: 6,
-    }
-}
-
-/** `count` dummies; the middle one is the main target (single-target skills hit it). */
+/** `count` dummies (the bench stage's appearance rows); the middle one is the main target (single-target skills hit it). */
 export function benchEnemies(count: number): QuestEnemyAppearance[] {
-    const list = Array.from({ length: count }, (_, i) => dummyAppearance(i + 1))
-    const main = Math.trunc(count / 2)
-    return list.map((a, i) => ({ ...a, isMainTargetEnemy: i === main }))
+    return benchStage(count).enemies
 }
 
 /** What a bench unit counts as for element/role-limited effects. A key that is present replaces the unit's own
@@ -63,11 +39,6 @@ export function benchEnemies(count: number): QuestEnemyAppearance[] {
  *  "no context" Lux. `ailment` is not about the unit: every enemy carries that ailment for the whole run. */
 export interface BenchIdentity { element?: KiokuElement, role?: KiokuRole, ailment?: Ailment }
 
-// The state each ailment is represented by on the dummies (what ABILITY_EFFECT conditions match by prefix).
-const AILMENT_STATE: Record<Ailment, string> = {
-    [Ailment.BURN]: "BURN_ATK", [Ailment.CURSE]: "CURSE_ATK", [Ailment.POISON]: "POISON_ATK", [Ailment.WOUND]: "BLEED_ATK",
-    [Ailment.STUN]: "STUN", [Ailment.VORTEX]: "VORTEX_ATK", [Ailment.WEAKNESS]: "WEAKNESS",
-}
 const enemyStatesOf = (ailment?: Ailment): string[] => ailment ? [AILMENT_STATE[ailment]] : []
 
 /** The character's own EX crystalis (SelectionAbility rows with its styleMstId; one per character). */
@@ -90,13 +61,19 @@ export function benchKioku(args: Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Par
     }
     if (as && ("element" in as || "role" in as)) {
         (k as any).data = { ...k.data, ...("element" in as ? { element: as.element } : {}), ...("role" in as ? { role: as.role } : {}) }
+        // In engine battles the unit's element and role come from its StyleMst row: a made-up style with this identity
+        // (the unit then also deals its damage in that element, as any unit of that element does).
+        ;(k as any).engineStyleMstId = benchStyle(k.data.id, k.data.element as KiokuElement | undefined, k.data.role as KiokuRole | undefined)
     }
     // A dealer tested as an element also deals damage in it: "forest DMG dealt" buffs and the like are gated on the
-    // element of the hit, not of the unit (UpElementDmgRateRatioUnitState, 0x16e3d70). Without this a Forest-identity Lux
-    // still hit in Light and got only her unit-gated buffs (Sumire's forest field gave its crit rate but not its +30%).
+    // element of the hit, not of the unit (UpElementDmgRateRatioUnitState, 0x16e3d70), and Lux's damage rows are Light.
+    // Without this a Forest-identity Lux still hit in Light and got only her unit-gated buffs (Sumire's forest field
+    // gave its crit rate but not its +30%): her skills as made-up rows in that element (EngineBench.benchSkills).
     if (as?.element) {
-        const num = Object.entries(elementMap).find(([, name]) => name === as.element)?.[0]
-        if (num) k.damageElementOverride = Number(num)
+        const kk = k as any
+        kk.engineSkillIds = benchSkills({
+            attack: [k.data.attack_id, kk.attackLvl], skill: [k.data.skill_id, kk.skillLvl], special: [k.data.special_id, Math.max(1, kk.specialLvl)],
+        }, as.element)
     }
     return k
 }
@@ -149,8 +126,8 @@ export function kitRestrictions(k: PvPKioku): { elements: KiokuElement[], roles:
 /** Max Burst: the dealer's Ultimate, every hit a crit, total over every enemy it hits. With `ailment`, every enemy
  *  carries it and the team's ailment conditions are checked against it (the other conditions count as met). */
 export function ultimateDamage(allies: PvPKioku[], dealerPos: number, enemyCount: number, ailment?: Ailment): { damage: number, critChance: number } {
-    const enemies = benchEnemies(enemyCount)
-    const result = computeMaxDamage(allies, enemies, dealerPos, {
+    const { stageId, enemies } = benchStage(enemyCount)
+    const result = computeMaxDamageEngine(allies, { stageId, waveIdx: 0 }, enemies, dealerPos, {
         battleType: BattleType.Solo,
         broken: enemies.map(() => true),
         breakRate: enemies.map(() => BENCH_BROKEN_RATE),
@@ -162,42 +139,16 @@ export function ultimateDamage(allies: PvPKioku[], dealerPos: number, enemyCount
     return { damage: ult?.total.crit ?? 0, critChance: ult?.critChance ?? 0 }
 }
 
-// FNV-1a
-function hashLabel(s: string): number {
-    let h = 0x811c9dc5
-    for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 0x01000193)
-    return h >>> 0
-}
-
-// "seed" mode, but every roll label ("Lux☆Magica (Ally 1) → Dummy (Enemy 1) crit", ...) draws from its own seeded
-// stream instead of one shared one. The dealer's n-th crit roll then gets the same number with or without the
-// character being measured, even when that character rolls things of its own in between, so comparing two runs of
-// the same seed measures what the character changes and not which rolls happened to shift. Every stream is still
-// uniform, so the average is unchanged. Bench-only: the game itself has one generator.
-class LabelStreamRng extends BattleRng {
-    private streams = new Map<string, () => number>()
-
-    constructor(seed: number) { super("seed", seed) }
-
-    protected override draw(kind: RngKind, label: string): number {
-        const key = `${kind}|${label}`
-        let stream = this.streams.get(key)
-        if (!stream) this.streams.set(key, stream = seededRng((hashLabel(key) ^ Math.imul(this.seed, 0x9e3779b1)) >>> 0))
-        return stream()
-    }
-}
-
 export interface SimOptions {
     av: number          // action value to play (100 AV = 1 turn)
     seed: number
-    rngMode?: RngMode   // default "seed" (drawn per roll label, see LabelStreamRng)
+    rngMode?: RngMode   // only "seed" (drawn per roll label, see EngineBench.BenchRng)
     infiniteSp?: boolean // the allies' SP is refilled before every turn, see SP_REFILL (bench-only, not a game rule)
     ailment?: Ailment   // every enemy carries this ailment for the whole run
-    immune?: Ailment[]  // ailments that never land on the enemies (KiokuState.immuneAilments), see benchImmunities
+    immune?: Ailment[]  // ailments that never land on the enemies (100% parry on the dummies), see benchImmunities
     onAction?: (state: BattleSnapshot, elapsed: number) => void  // every counted action (debugging)
-    // [APPROXIMATION] No crit rolls: every hit deals its expected damage (BattleRng.expectedCrits). Exact only when
-    // nothing else is random; `report.random` says whether anything was (a real roll, or a read of whether a hit crit).
-    expectedCrits?: boolean
+    // Whether anything in the run was random (a real roll). The engine has no "expected crit" damage (a hit crits or
+    // not), so a run with crit chances between 0 and 100% is random and is averaged over seeds (LuxBenchCharts.simTotal).
     report?: { random: boolean }
     // [BENCH] Damage per AV instead of a hard cut at `av`: the damage of the dealer's actions within the run, divided by
     // the time of its next own turn (scaled back to `av`). Speed then counts continuously: a turn that comes 3 AV earlier
@@ -205,8 +156,8 @@ export interface SimOptions {
     perAv?: boolean
 }
 
-// How players actually run some kits, where auto play (Battle Skill whenever there is SP) is unrealistic. Applied to
-// the ally team of every bench battle (PvPTeam.allyActionPolicy / allyTargetPolicy).
+// How players actually run some kits, where the bench's default play (Battle Skill whenever there is SP, ally-target
+// skills on the dealer) is unrealistic.
 //   Tenebrous Arcana: her Battle Skill grants an extra action; she uses it 3 times, then a Basic Attack.
 //   Thunder Torrent: always her Battle Skill, its haste on the dealer (another ally when she is the dealer), never
 //   herself.
@@ -214,116 +165,111 @@ export interface SimOptions {
 //   Baldamente Fortissimo: her debuff comes from her counterattack, and the dummies never attack. Her counter's
 //   elemental RES down (follow-up 650310, 5% x 3 stacks) is kept on the main target at max stacks for the whole run.
 const PLAY_PATTERNS: Record<string, {
-    action?: (unit: KiokuState) => TargetType.skillId | TargetType.attackId
-    target?: (unit: KiokuState, dealer: KiokuState) => KiokuState | undefined
-    // States this unit keeps on the main target for the whole run, at max stacks (re-set before every action).
+    action?: (streak: number) => "skill" | "attack"
+    // ally target: the unit to put it on (undefined: the default, the dealer)
+    target?: (self: any, dealer: any, allies: any[]) => any
+    // skill rows whose states this unit keeps on the main target for the whole run, at max stacks
     enemyStates?: () => SkillDetail[]
 }> = {
-    "Judgement Earth": { target: (u, dealer) => dealer !== u ? dealer : undefined },
+    "Judgement Earth": { target: (self, dealer) => dealer !== self ? dealer : undefined },
     "Baldamente Fortissimo": {
         enemyStates: () => ((skillDetailsByMstId.get(650310) ?? []) as SkillDetail[]).filter(d => d.abilityEffectType === "DWN_ELEMENT_RESIST_ACCUM_RATIO"),
     },
-    "Tenebrous Arcana": { action: u => u.skillStreak >= 3 ? TargetType.attackId : TargetType.skillId },
+    "Tenebrous Arcana": { action: streak => streak >= 3 ? "attack" : "skill" },
     "Thunder Torrent": {
-        action: () => TargetType.skillId,
-        target: (u, dealer) => dealer !== u ? dealer : u.team.kiokuStates.find(k => k !== u && !k.isDead),
+        action: () => "skill",
+        target: (self, dealer, allies) => dealer !== self ? dealer : allies.find(k => k !== self && !k.IsDead),
     },
 }
 
-// Every ally aims single-target and proximity skills at the middle enemy (the main target), so with 3 or 5 enemies a
-// single-target debuff covers one of them and an AoE one all of them.
-function applyPlayPatterns(team: PvPTeam, dealerPos: number) {
-    const dealer = team.kiokuStates[dealerPos]
-    team.opponentTargetPolicy = () => {
-        const enemies = team.otherTeam?.kiokuStates ?? []
-        return enemies[Math.trunc(enemies.length / 2)]
-    }
-    team.allyActionPolicy = u => PLAY_PATTERNS[u.kioku.name]?.action?.(u)
-    team.allyTargetPolicy = (u, detail) => detail.range === targetRange.SELF || detail.range === targetRange.ALL ? undefined
-        : PLAY_PATTERNS[u.kioku.name]?.target?.(u, dealer)
-}
-
-/** Average Damage: total damage dealt by the dealer slot during an auto battle of `opts.av` action value. */
+/** Average Damage: total damage dealt by the dealer slot during a bench battle of `opts.av` action value. */
 export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, enemyCount: number, opts: SimOptions): number {
-    const team1 = new PvPTeam(allies, "Ally", false, BattleType.Solo)
-    applyPlayPatterns(team1, dealerPos)
-    const team2 = new PvPTeam(enemyKiokus(benchEnemies(enemyCount)), "Enemy", false, BattleType.Solo)
-    const mode = opts.rngMode ?? "seed"
-    const rng = mode === "seed" ? new LabelStreamRng(opts.seed) : undefined
-    if (rng && opts.expectedCrits) rng.expectedCrits = true
-    const battle = new PvPBattle(team1, team2, false, opts.seed, { rngMode: mode, rng })
-    // Broken from the start at a fixed rate (no growth per hit), like the legacy charts' "broken 500%" enemies. The
-    // break gauge is 1, so should anything ever end the break, the next hit breaks them again (at the same 500%).
-    for (const e of team2.kiokuStates) {
-        if (e.enemy) e.enemy.breakMst = {
-            ...e.enemy.breakMst, breakPoint: 1, initialBreakedDamageReceiveRate: BENCH_BROKEN_RATE * 10,
-            maxBreakedDamageReceiveRate: BENCH_BROKEN_RATE * 10, breakedDamageReceiveRateIncreaseRate: 0,
+    const { stageId } = benchStage(enemyCount, opts.immune ?? [])
+    const nameOf = (u: any) => allies[u._PositionId - 1]?.name
+    let director: any
+    const allyUnits = () => [...director.battleUnitBundle.allyList].sort((a: any, b: any) => a._PositionId - b._PositionId)
+    const dealerUnit = () => allyUnits()[dealerPos]
+    let actor: any
+    const streak = new Map<any, number>()
+    // The bench's play (Manual control answered by BenchRng): ultimates as soon as they are ready, Battle Skill whenever
+    // there is SP (PLAY_PATTERNS aside), enemy targets on the middle dummy, ally targets on the dealer.
+    const rng = new BenchRng(opts.seed, (kind, _label, options, units) => {
+        if (kind === "action") {
+            if (options[0] === "Continue") return 1 // between actions: fire the first ready ultimate
+            const want = PLAY_PATTERNS[nameOf(actor)]?.action?.(streak.get(actor) ?? 0)
+            const skill = options.findIndex(o => o.startsWith("Battle Skill")), attack = options.indexOf("Basic Attack")
+            const i = want === "attack" ? attack : skill >= 0 ? skill : attack
+            streak.set(actor, i === skill ? (streak.get(actor) ?? 0) + 1 : 0)
+            return i
         }
-        e.maxBreakGauge = 1
-        e.currentRemainingBreakGauge = 0
-        e.isBroken = true
-        e.breakedDamageReceiveRate = BENCH_BROKEN_RATE
-    }
-    // The ailment stays on every enemy (re-set before each action, in case anything removes it). Held as a marker in the
-    // timed states: no damage, and it never ticks or pops (the dummies never get a turn).
-    const immune = new Set<string>(opts.immune ?? [])
-    for (const e of team2.kiokuStates) e.immuneAilments = immune
-    const states = enemyStatesOf(opts.ailment)
-    const keepAilment = () => states.forEach((type, i) => team2.kiokuStates.forEach(e => {
-        if (!e.isDead) e.activeEffectDetails.set(`ailment:${type}`, ailmentMarker(type, i))
-    }))
-    // Refill only when the next action is at a later moment: nobody is due to act right now (a haste to 100% or an
-    // extra action keeps a unit at 0 time left).
-    const refillSp = () => {
-        if (!opts.infiniteSp) return
-        const units = [...team1.kiokuStates, ...team2.kiokuStates].filter(k => !k.isDead)
-        if (battle.elapsed === 0 || units.every(k => k.secondsUntilAbleToAct() > 0)) team1.currentSp = Math.max(team1.currentSp, SP_REFILL)
-    }
+        if (kind === "target" && units?.length) {
+            if (units[0]._Team !== 0) return Math.max(0, units.indexOf(middleEnemy(director)))
+            const dealer = dealerUnit()
+            const pick = PLAY_PATTERNS[nameOf(actor)]?.target?.(actor, dealer, allyUnits()) ?? dealer
+            return Math.max(0, units.indexOf(pick))
+        }
+        return 0
+    })
     // Kit special cases (PLAY_PATTERNS.enemyStates): kept on the main target as if given by that unit, at max stacks.
-    const preApplied = team1.kiokuStates.flatMap(u => (PLAY_PATTERNS[u.kioku.name]?.enemyStates?.() ?? [])
-        .map(d => ({ giver: u, d: scaleGivenState(d, u.filteredEffects()) })))
-    const keepPreApplied = () => {
-        const main = team2.kiokuStates[Math.trunc(team2.kiokuStates.length / 2)]
-        if (!main || main.isDead) return
-        for (const { giver, d } of preApplied) main.activeEffectDetails.set(`bench:${giver.posIdx}:${skillDetailId(d)}`, {
-            applier: giver.kioku.name, ...d, turn: 99, _accumCount: Math.max(1, d.value2 || 1), _applierState: giver,
-            _isExemptPassingTurnOnce: false,
-        } as any)
+    const preApplied = allies.flatMap((k, pos) => (PLAY_PATTERNS[k.name]?.enemyStates?.() ?? []).map(d => ({ pos, d })))
+    const keep = (d: any) => {
+        director = d
+        keepAilment(d, opts.ailment)
+        for (const { pos, d: row } of preApplied) {
+            const main = middleEnemy(d)
+            const id = (row as any).skillDetailMstId as number
+            if (main && !main._Condition._StateList.some((s: any) => s._MstId === id && s._UserUnitId === allyUnits()[pos]?._Id)) {
+                keepStates(d, allyUnits()[pos], main, [id], () => Math.max(1, row.value2 || 1))
+            }
+        }
     }
+    let lastRefill = -1
+    const battle = benchBattle(allies, stageId, rng, {
+        beforeAction: keep,
+        // Refill only when time has moved since the last refill: an extra action at the same moment (a haste to 100%,
+        // Tenebrous Arcana's extra action) keeps the SP it has.
+        beforeDecision: (unit, b) => {
+            actor = unit
+            if (!opts.infiniteSp) return
+            if (lastRefill < 0 || b.elapsed > lastRefill) {
+                const sp = b.director.spReferee
+                sp.allySp = Math.max(sp.allySp, SP_REFILL)
+                lastRefill = b.elapsed
+            }
+        },
+    })
+    director = battle.director
     let total = 0
-    // A vortex pops inside the hit that sets it off, but it is its owner's damage (logged again as the owner's
-    // "dot" event), so it is taken out of the hit.
+    // A vortex pops inside the hit that sets it off; the engine reports it with that hit (its attacker), not as its
+    // owner's damage [APPROXIMATION vs the old bench, which moved it to the owner].
     const count = (events: BattleEvent[] | undefined) => {
         for (const ev of events ?? []) {
             if (!ev.sourceIsTeam1 || ev.sourcePos !== dealerPos) continue
-            if (ev.kind === "hit") total += ev.amount - (ev.vortex ?? 0)
-            else if (ev.kind === "dot") total += ev.amount
+            if (ev.kind === "hit" || ev.kind === "dot") total += ev.amount
         }
     }
-    count(battle.getCurrentState().events)
     // An action counts if it starts within the run: the one that would start after it is played (the battle only
     // knows its time once it advances to it) but not counted.
     const isDealerTurn = (st: BattleSnapshot) => st.lastTeamIsTeam1 && st.lastActorPos === dealerPos && !st.actionLabel
         && st.lastTargetType !== TargetType.fuaId
     let nextTurn = 0
     while (!battle.isOver) {
-        refillSp()
-        keepAilment()
-        keepPreApplied()
+        keep(director)
         const states = battle.executeNextAction()
+        if (!states.length) break
         if (battle.elapsed > opts.av) { if (states.some(isDealerTurn)) nextTurn = battle.elapsed; break }
         for (const state of states) { count(state.events); opts.onAction?.(state, battle.elapsed) }
     }
     // Per-AV rate: play on (counting nothing) to the dealer's first own turn past the run.
     if (opts.perAv && !nextTurn) {
         while (!battle.isOver && battle.elapsed < opts.av * 3) {
-            refillSp()
-            keepAilment()
-            keepPreApplied()
-            if (battle.executeNextAction().some(isDealerTurn)) { nextTurn = battle.elapsed; break }
+            keep(director)
+            const states = battle.executeNextAction()
+            if (!states.length) break
+            if (states.some(isDealerTurn)) { nextTurn = battle.elapsed; break }
         }
     }
-    if (opts.report) opts.report.random = battle.rng.critReads > 0 || battle.rng.events.length > 0
+    if (opts.report) opts.report.random = rng.events.length > 0
     return opts.perAv && nextTurn > 0 ? total * opts.av / nextTurn : total
 }
 
@@ -342,7 +288,7 @@ export const benchImmunities = (kitAilments: Ailment[], ailment?: Ailment): Ailm
 export interface BenchRow extends BenchIdentity { gain: number, critRate?: number }
 
 export interface BenchOptions {
-    seeds: number   // rolled battles averaged for Average Damage when a team is random beyond crits (see simTotal)
+    seeds: number   // rolled battles averaged for Average Damage when anything in it is random (see simTotal)
     av: number      // action value per battle
     infiniteSp?: boolean // see SimOptions
 }
@@ -396,17 +342,14 @@ export class LuxBenchCharts {
         return [dealer, second ?? this.filler, this.filler, this.filler, this.filler]
     }
 
-    // The dealer's average damage over one run. Crit is the only randomness in most teams, so one battle with expected
-    // crit damage gives the average directly (and ~seeds x faster). A team that rolls anything else (proc chances,
-    // random hits or targets) or reacts to crits (on-crit stacks, crit-count conditions) can't be averaged that way:
-    // it falls back to the mean of `seeds` rolled battles (seeds 0..seeds-1).
+    // The dealer's average damage over one run: the mean of `seeds` rolled battles (seeds 0..seeds-1), or the one
+    // battle when nothing in it was random (no roll between 0 and 100%: e.g. a 0% or 100% crit rate).
     private simTotal(team: PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = []): number {
         const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, ailment, immune, perAv: true }
         const report = { random: false }
-        const expected = simulatedDealerDamage(team, 0, enemies, { ...base, seed: 0, expectedCrits: true, report })
-        if (!report.random) return expected
-        let total = 0
-        for (let seed = 0; seed < this.opts.seeds; seed++) total += simulatedDealerDamage(team, 0, enemies, { ...base, seed })
+        let total = simulatedDealerDamage(team, 0, enemies, { ...base, seed: 0, report })
+        if (!report.random) return total
+        for (let seed = 1; seed < this.opts.seeds; seed++) total += simulatedDealerDamage(team, 0, enemies, { ...base, seed })
         return total / this.opts.seeds
     }
 

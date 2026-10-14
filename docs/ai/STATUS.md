@@ -1,6 +1,33 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+
+## 2026-10-14 (3): Max Damage + Kioku Grid bench on the 1:1 engine; two port bugs fixed
+
+- **Port bugs found by comparing the old and new bench** (PITFALLS "explicit interface implementations"):
+  WeaknessUnitState's ATK/DEF -10% never applied (GetProcessedAtk/Def read `.Addition` of an explicit
+  implementation), and the neutral states (Count, LockSpecialAttack, UniqueZone) got `_TargetSide = undefined`.
+  `ifaceProp` (runtime.ts) does interface dispatch. Icon numbers of accum / count states fixed the same way.
+- **Max Damage panel** (PvE page) runs on the engine: `src/battle/EngineMaxDamage.ts`, in a worker
+  (`src/workers/maxDamageWorker.ts`, the last result stays on screen while the next one is computed). Each skill is
+  launched in fresh engine battles of the stage's wave with every team effect given through AbilityEffectLauncher,
+  conditions met (parsed condition lists emptied, csv kept). Effects that can't count together count once, the
+  one giving the most damage (coordinate ascent per column): MaxDmgEffect.tier ladders - "conditions" (exclusive
+  conditions / game duplicates) and, new, "alternative": same-type effects of a skill and the switch skill
+  replacing it, or of different follow-ups (the user's rule: "only the major buff"). The skill's own rows whose start
+  conditions exclude each other also count once (Pluvia☆Magica's HP<80% / HP>=80% rows: the old panel added both).
+  Crystalis copies are given once per equipped copy. `scripts/sim/maxDamageEngine.ts` compares with the old panel
+  (same numbers except: enemy battle-start passives now count, e.g. 129202's DEF +10%; the cases above).
+- **Kioku Grid bench** (`models/LuxBench.ts`) runs on the engine against game-shaped made-up master data
+  (`src/battle/EngineBench.ts`, `addMasterRecords`): a bench stage per enemy count / immunity set (DEF 3000, weak to
+  all, int.MaxValue HP, SPD 1, break table that stays at 500%, 100% parry for immune ailments), styles for Lux
+  identities (element / role; open = Lux's own) and her skills as rows in the tested element. Average Damage is a
+  Manual-control EngineBattle answered by BenchRng (ultimates when ready, Battle Skill whenever SP, single targets on
+  the middle dummy, ally targets on the dealer, PLAY_PATTERNS). No expected crits in the engine: every run with a
+  real roll averages `seeds` battles. Cache version 18.
+- **Speed:** `indexHint` on hot GetModelList scans (BattleUnitInfo per request was 55% of a battle): bench battle
+  200 -> 40 ms; Max Damage 0.3-0.6 s per evaluation for quests, ~1 s for Solo Raid (in the worker).
+- Fight Solver: still on the old engine, marked TODO (user: come back later).
 
 ## 2026-10-14 (2): verification of the port, remaining notPorted
 

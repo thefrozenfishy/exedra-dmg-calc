@@ -13,7 +13,7 @@ import { AddTurnUnitStateBase } from "../UnitState/AddTurnUnitStateBase";
 import { BarrierUnitState } from "../UnitState/BarrierUnitState";
 import { AffectedUnitNotice, AffectedUnitNotice_AddStateInfo } from "../AffectedUnitNotice";
 import { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
-import { f32, isImpl, notPorted } from "../../runtime";
+import { f32, ifaceProp, isImpl, notPorted } from "../../runtime";
 import type { Dictionary, List, int } from "../../runtime";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
 import { AbilityEffectBase } from "./AbilityEffectBase";
@@ -55,7 +55,7 @@ export class StateAbilityEffect extends AbilityEffectBase {  // implements IBatt
             if (!isImpl(giveUnitState, "INeutralState")) {
                 throw new Error(`${giveUnitState.constructor.name}.Direction は Neutral ですが、INeutralState を実装していないため、効果対象を決められませんでした。`);
             }
-            this._TargetSide = (giveUnitState as unknown as INeutralState).TargetSide;
+            this._TargetSide = ifaceProp(giveUnitState, "INeutralState", "TargetSide"); // interface call: Count / LockSpecialAttack / UniqueZone implement it explicitly
         } else {
             this._TargetSide = (giveUnitState.get_Direction() !== 0 ? 1 : 0) as AbilityEffectBase_TargetSideType;
         }

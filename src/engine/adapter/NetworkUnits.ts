@@ -41,7 +41,8 @@ export function kiokuToNetworkUnit(kioku: Kioku, position: number): NetworkBattl
     u.battleUnitDataId = position;
     u.battleUnitType = 1;
     u.battleUnitMstId = Math.trunc(data.id / 100); // characterMstId
-    u.styleMstId = data.id;
+    // a made-up style (same kit, another element / role: the Kioku Grid bench's identities, battle/EngineBench.ts)
+    u.styleMstId = k.engineStyleMstId ?? data.id;
     u.maxHp = kioku.getBaseHp();
     u.atk = kioku.getBaseAtk();
     u.def = kioku.getBaseDef();
@@ -53,9 +54,11 @@ export function kiokuToNetworkUnit(kioku: Kioku, position: number): NetworkBattl
         "fireResistRate", "aquaResistRate", "forestResistRate", "lightResistRate", "darkResistRate", "neutralResistRate"]) {
         (u as any)[key] = style[key] ?? 0;
     }
-    u.normalAttackInfo = attack(data.attack_id, k.attackLvl);
-    u.attackInfoList = [attack(data.skill_id, k.skillLvl)];
-    u.specialAttackInfo = attack(data.special_id, Math.max(1, k.specialLvl));
+    // made-up skills (same rows, another damage element: the Kioku Grid bench's identities, battle/EngineBench.ts)
+    const ids = k.engineSkillIds ?? {};
+    u.normalAttackInfo = attack(ids.attack ?? data.attack_id, k.attackLvl);
+    u.attackInfoList = [attack(ids.skill ?? data.skill_id, k.skillLvl)];
+    u.specialAttackInfo = attack(ids.special ?? data.special_id, Math.max(1, k.specialLvl));
     const passives: PassiveSkillInfo[] = [];
     passives.push(passive(data.ability_id * 100 + k.abilityLvl, k.abilityLvl, 1)); // AbilitySourceType.Unit
     for (const c of k.crys as number[]) passives.push(passive(c, c % 100, 4)); // SelectionAbility (crystalis passive id already has its level)

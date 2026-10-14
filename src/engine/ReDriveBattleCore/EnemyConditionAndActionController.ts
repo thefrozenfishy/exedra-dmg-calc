@@ -6,7 +6,7 @@ import { BattleConditionUtils } from "./BattleCondition/BattleConditionUtils";
 import type { EnemyConditionSetsAndActionMstRecord } from "../Network/Definition/QuestBattle/EnemyConditionSetsAndActionMstRecord";
 import { EnemyConditionSetsAndActionMstModel } from "./Model/EnemyConditionSetsAndActionMstModel";
 import { BattleMstReaderBase } from "./Reader/BattleMstReaderBase";
-import { intParse, isNullOrEmpty, notPorted, orderBy, orderByNewGuid } from "../runtime";
+import { indexHint, intParse, isNullOrEmpty, notPorted, orderBy, orderByNewGuid } from "../runtime";
 import type { List, Nullable, int } from "../runtime";
 import type { BattleConditionUtils_ConditionCheckDataBundle } from "./BattleCondition/BattleConditionUtils";
 
@@ -48,7 +48,7 @@ export class EnemyConditionAndActionController {
         this._EnemyStartConditionTimingActionList = [];
         // <>c__DisplayClass14_0: 0x10 enemyConditionSkillSetId
         const models = [...BattleMstReaderBase.get_Instance<EnemyConditionSetsAndActionMstModel, EnemyConditionSetsAndActionMstRecord, int>(EnemyConditionSetsAndActionMstModel)
-            .GetModelList(r => r.enemyConditionSkillSetId === enemyConditionSkillSetId)]; // b__0
+            .GetModelList(indexHint(r => r.enemyConditionSkillSetId === enemyConditionSkillSetId, "enemyConditionSkillSetId", enemyConditionSkillSetId))]; // b__0
         this._conditionAndActionList = orderBy(
             models.map(m => new EnemyConditionAndActionController_ConditionSetsAndAction().ctor$int(m.get_Id())), // <>c.b__14_1
             x => x.get_ConditionSetsAndActionMstModel().get_Priority()); // <>c.b__14_2

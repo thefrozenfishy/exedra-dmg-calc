@@ -8,7 +8,7 @@ import { QuestEnemyAppearanceParameter } from "./QuestEnemyAppearanceParameter";
 import { KnockDownAdditionalEnemyCondition } from "./KnockDownAdditionalEnemyCondition";
 import { QuestEnemyAppearanceMstModel } from "./Model/QuestEnemyAppearanceMstModel";
 import { BattleMstReaderBase } from "./Reader/BattleMstReaderBase";
-import { minBy, singleOrDefault } from "../runtime";
+import { indexHint, minBy, singleOrDefault } from "../runtime";
 import type { Dictionary, List, int } from "../runtime";
 import type { AdditionalEnemyCondition } from "./AdditionalEnemyCondition";
 
@@ -32,7 +32,7 @@ export class AdditionalEnemyReferee {
         // <>c__DisplayClass5_0 { stageMstId, wave, models, enemyUnitList }
         this.minUnitId = minBy(enemyUnitList, u => u.Id); // <>c.b__5_0
         const models = [...BattleMstReaderBase.get_Instance<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int>(QuestEnemyAppearanceMstModel)
-            .GetModelList(r => r.questStageMstId === stageMstId && r.wave === wave)]; // DisplayClass5_0.b__1
+            .GetModelList(indexHint(r => r.questStageMstId === stageMstId && r.wave === wave, "questStageMstId", stageMstId))]; // DisplayClass5_0.b__1
         this.additionalEnemyUnitList.length = 0;
         this.summonQuestEnemyAppearanceMstIdDic.clear();
         for (const model of models) {

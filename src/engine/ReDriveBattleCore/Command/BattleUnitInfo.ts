@@ -8,7 +8,7 @@ import { BattleMstReaderBase } from "../Reader/BattleMstReaderBase";
 import { BattleUnitStructure, BattleUnitStructure_PassiveSkillInfo } from "./BattleUnitStructure";
 import { QuestEnemyAppearanceParameter } from "../QuestEnemyAppearanceParameter";
 import { CharacterParameter } from "../CharacterParameter";
-import { notPorted } from "../../runtime";
+import { indexHint, notPorted } from "../../runtime";
 import type { int } from "../../runtime";
 import type { BattleUnit, BattleUnit_TeamType } from "../BattleUnit";
 import type { List } from "../../runtime";
@@ -157,7 +157,7 @@ export class BattleUnitInfo {
             for (let i = 0; i < unit.PassiveSkills.length; i++) {
                 const ps = unit.PassiveSkills[i]; // <>c__DisplayClass48_0
                 const details = BattleMstReaderBase.get_Instance<PassiveSkillDetailMstModel, PassiveSkillDetailMstRecord, int>(PassiveSkillDetailMstModel)
-                    .GetModelList(detail => detail.passiveSkillMstId === ps.Id); // <>c__DisplayClass48_0.b__0
+                    .GetModelList(indexHint(detail => detail.passiveSkillMstId === ps.Id, "passiveSkillMstId", ps.Id)); // <>c__DisplayClass48_0.b__0
                 if (details != null) passiveTypes.push(...[...details].map(detail => detail.record.abilityEffectType)); // <>c.b__48_1
             }
             result = passiveTypes.includes("COUNT");

@@ -3,7 +3,7 @@
 
 import { ModeChangeReferee } from "../ModeChangeReferee";
 import { QuestEnemyAppearanceMstModel } from "../Model/QuestEnemyAppearanceMstModel";
-import { notPorted } from "../../runtime";
+import { indexHint, notPorted } from "../../runtime";
 import type { List, int } from "../../runtime";
 
 import { BattleMstReaderBase } from "./BattleMstReaderBase";
@@ -14,7 +14,7 @@ export class QuestEnemyAppearanceMstReader extends BattleMstReaderBase<QuestEnem
     /** @rva 0x16D51C0  public static List<QuestEnemyAppearanceMstModel> GetModelListForBattleStart(int questStageMstId, int wave) { } */
     static GetModelListForBattleStart(questStageMstId: int, wave: int): List<QuestEnemyAppearanceMstModel> {
         const list = [...BattleMstReaderBase.get_Instance<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int>(QuestEnemyAppearanceMstModel)
-            .GetModelList(mst => mst.questStageMstId === questStageMstId && mst.wave === wave)] // <GetModelListForBattleStart>b__0
+            .GetModelList(indexHint(mst => mst.questStageMstId === questStageMstId && mst.wave === wave, "questStageMstId", questStageMstId))] // <GetModelListForBattleStart>b__0
             .filter(mst => mst.record.conditionType === 0)                                     // b__0_1
             .map((m, i) => ({ m, i })).sort((a, b) => a.m.record.questEnemyAppearanceMstId - b.m.record.questEnemyAppearanceMstId || a.i - b.i)
             .map(x => x.m);                                                                      // OrderBy(b__0_2), stable

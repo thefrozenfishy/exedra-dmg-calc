@@ -59,7 +59,7 @@ import { BreakPoint } from "./BreakPoint";
 import { UnitTurnGauge } from "./UnitTurnGauge";
 import { UnitCondition } from "./UnitCondition";
 import { PassiveSkillInfo } from "../Network/Definition/QuestBattle/PassiveSkillInfo";
-import { Decimal, Delegate, clamp, enumToString, f32, isAssignableFrom, isImpl, notPorted, trunc } from "../runtime";
+import { Decimal, Delegate, clamp, enumToString, f32, ifaceProp, indexHint, isAssignableFrom, isImpl, notPorted, trunc } from "../runtime";
 import type { List, Ref, Type, float, int } from "../runtime";
 import type { ElementType } from "../Network/Definition/Battle/ElementType";
 import type { TargetElementType } from "../Network/Definition/Battle/TargetElementType";
@@ -441,7 +441,7 @@ export class BattleUnit {
         this.serializedPassiveSkillInfos = [info];
         this._PassiveSkills = BattleUnit.GetPassiveSkills(this, this.serializedPassiveSkillInfos);
         const skillSetMsts = [...BattleMstReaderBase.get_Instance<QuestEnemySkillSetMstModel, QuestEnemySkillSetMstRecord, int>(QuestEnemySkillSetMstModel)
-            .GetModelList(m => m.enemySkillSetId === mst.EnemySkillSetId)]; // <.ctor>b__0
+            .GetModelList(indexHint(m => m.enemySkillSetId === mst.EnemySkillSetId, "enemySkillSetId", mst.EnemySkillSetId))]; // <.ctor>b__0
         const activeSkillList: ActiveSkill[] = [];
         let specialAttack: SpecialAttack = null!;
         for (let i = 0; i < skillSetMsts.length; i++) {
@@ -827,13 +827,13 @@ export class BattleUnit {
         for (const state of this.Condition.StateList) {
             if (!isImpl(state, "IAtkVariation")) continue;
             const v = state as unknown as IAtkVariation;
-            if (v.Addition !== AdditionType.Up) continue;
+            if (ifaceProp(v, "IAtkVariation", "Addition") !== AdditionType.Up) continue;
             if (state.IsActive$BattleUnit(this)) value = value.add(v.GetAtkVariationValue(this, value));
         }
         for (const state of this.Condition.StateList) {
             if (!isImpl(state, "IAtkVariation")) continue;
             const v = state as unknown as IAtkVariation;
-            if (v.Addition !== AdditionType.Down) continue;
+            if (ifaceProp(v, "IAtkVariation", "Addition") !== AdditionType.Down) continue;
             if (state.IsActive$BattleUnit(this)) value = value.add(v.GetAtkVariationValue(this, value));
         }
         return value.lt(Decimal.Zero) ? Decimal.Zero : value;
@@ -846,13 +846,13 @@ export class BattleUnit {
         for (const state of this.Condition.StateList) {
             if (!isImpl(state, "IDefVariation")) continue;
             const v = state as unknown as IDefVariation;
-            if (v.Addition !== AdditionType.Up) continue;
+            if (ifaceProp(v, "IDefVariation", "Addition") !== AdditionType.Up) continue;
             if (state.IsActive$BattleUnit(this)) value = value.add(v.GetDefVariationValue(this, value));
         }
         for (const state of this.Condition.StateList) {
             if (!isImpl(state, "IDefVariation")) continue;
             const v = state as unknown as IDefVariation;
-            if (v.Addition !== AdditionType.Down) continue;
+            if (ifaceProp(v, "IDefVariation", "Addition") !== AdditionType.Down) continue;
             if (state.IsActive$BattleUnit(this)) value = value.add(v.GetDefVariationValue(this, value));
         }
         return value.lt(Decimal.Zero) ? Decimal.Zero : value;

@@ -5,7 +5,7 @@ import type { QuestEnemyAppearanceMstRecord } from "../Network/Definition/QuestO
 import { QuestEnemyAppearanceParameter } from "./QuestEnemyAppearanceParameter";
 import { QuestEnemyAppearanceMstModel } from "./Model/QuestEnemyAppearanceMstModel";
 import { BattleMstReaderBase } from "./Reader/BattleMstReaderBase";
-import { notPorted } from "../runtime";
+import { indexHint, notPorted } from "../runtime";
 import type { List, int } from "../runtime";
 import type { BattleUnit } from "./BattleUnit";
 import { JudgeResultRefereeBase } from "./JudgeResultRefereeBase";
@@ -54,7 +54,7 @@ export class QuestJudgeResultReferee extends JudgeResultRefereeBase {
     /** @rva 0x14A4560  public void SetWaveMainTarget(int stageMstId, int currentWave) { } */
     SetWaveMainTarget(stageMstId: int, currentWave: int): void {
         const list = BattleMstReaderBase.get_Instance<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int>(QuestEnemyAppearanceMstModel)
-            .GetModelList(mst => mst.questStageMstId === stageMstId && mst.isMainTargetEnemy && mst.wave === currentWave); // <>c__DisplayClass12_0.b__0
+            .GetModelList(indexHint(mst => mst.questStageMstId === stageMstId && mst.isMainTargetEnemy && mst.wave === currentWave, "questStageMstId", stageMstId)); // <>c__DisplayClass12_0.b__0
         if (list == null || !(list.length > 0)) {
             this.mainTargetQuestEnemyAppearanceMstId = 0;
             return;

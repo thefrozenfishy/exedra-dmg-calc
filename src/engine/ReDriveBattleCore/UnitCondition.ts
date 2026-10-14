@@ -7,7 +7,7 @@ import type { ISpeedVariation } from "./UnitState/ISpeedVariation";
 import type { IHasUpdateableEffectValue } from "./UnitState/IHasUpdateableEffectValue";
 import type { IConsumeRemainCount } from "./UnitState/IConsumeRemainCount";
 import type { IBlendable } from "./UnitState/IBlendable";
-import type { IAccum } from "./UnitState/IAccum";
+import { IAccum$get_IStateIconNumberDisplayable$IsShowZeroIfZero, IAccum$get_IStateIconNumberDisplayable$StateIconNumber, type IAccum } from "./UnitState/IAccum";
 import { AdditionType } from "./UnitState/AdditionType";
 import { EffectOriginType } from "./UnitState/EffectOriginType";
 import { StateIconData } from "./StateIconData";
@@ -23,7 +23,7 @@ import { UniqueZoneUnitState } from "./UnitState/UniqueZoneUnitState";
 import { BarrierUnitState } from "./UnitState/BarrierUnitState";
 import { PreventAbnormalUnitState } from "./UnitState/PreventAbnormalUnitState";
 import { AbnormalUnitStateBase } from "./UnitState/AbnormalUnitStateBase";
-import { f32, isImpl, notPorted, removeAll, randomChance } from "../runtime";
+import { f32, ifaceProp, isImpl, notPorted, randomChance, removeAll } from "../runtime";
 import type { List, Nullable, Ref, Type, int } from "../runtime";
 import type { BattleUnit } from "./BattleUnit";
 import type { GameDirectorBase } from "./GameDirectorBase";
@@ -302,8 +302,11 @@ export class UnitCondition {
                         if (isImpl(state, "IStateIconNumberDisplayable")) {
                             const d = state as unknown as IStateIconNumberDisplayable;
                             IStateIconNumberDisplayable$RefreshStateIconNumber(d, unit); // default interface method when not overridden
-                            number = d.StateIconNumber;
-                            showZero = d.IsShowZeroIfZero;
+                            // interface calls: an explicit implementation (CountUnitState) or IAccum's override of the members
+                            // (the accum states) answers before a public property
+                            const viaAccum = isImpl(state, "IAccum") && !("IStateIconNumberDisplayable$StateIconNumber" in d) && !("StateIconNumber" in d);
+                            number = viaAccum ? IAccum$get_IStateIconNumberDisplayable$StateIconNumber(state as unknown as IAccum) : ifaceProp(d, "IStateIconNumberDisplayable", "StateIconNumber");
+                            showZero = viaAccum ? IAccum$get_IStateIconNumberDisplayable$IsShowZeroIfZero(state as unknown as IAccum) : ifaceProp(d, "IStateIconNumberDisplayable", "IsShowZeroIfZero");
                         }
                         icons.push(new StateIconData().ctor$UnitStateBase_int_bool(state, number, showZero));
                     }
