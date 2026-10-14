@@ -6,7 +6,7 @@ import { ActReferee } from "../Act/ActReferee";
 import { NormalAttack } from "../NormalAttack";
 import { ActiveSkill } from "../ActiveSkill";
 import { AIActionEffectHistory } from "./AIActionEffectHistory";
-import { newGuidKey, notPorted, orderBy, orderByKeys, randomNext, ref, removeAll } from "../../runtime";
+import { newGuidKey, notPorted, orderBy, orderByKeys, randomNext, ref, removeAll, randomNextWeighted } from "../../runtime";
 import type { Dictionary, HashSet, IEnumerable, List, int } from "../../runtime";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
 
@@ -175,7 +175,7 @@ export class UnitBrain {
         const list = activeSkillList.filter(skill => skill.WeightValue >= 0); // <>c.b__13_0
         const total = list.reduce((s, skill) => s + skill.WeightValue, 0); // <>c.b__13_1 (Sum, int)
         if (total >= 1) {
-            const roll = randomNext(total); // new Random().Next(total)
+            const roll = randomNextWeighted(total, list.map(skill => skill.WeightValue), "skill", [], list); // new Random().Next(total)
             let acc = 0;
             for (const skill of list) {
                 acc = acc + skill.WeightValue;

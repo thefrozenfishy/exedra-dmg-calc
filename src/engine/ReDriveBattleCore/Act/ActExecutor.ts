@@ -34,7 +34,7 @@ import { TurnUnitActBase } from "./TurnUnitActBase";
 import { TurnUnitAct } from "./TurnUnitAct";
 import { TurnEndAct } from "./TurnEndAct";
 import { TurnBeginAct } from "./TurnBeginAct";
-import { Decimal, GameRandom, f32, isImpl, notPorted, ref } from "../../runtime";
+import { Decimal, f32, isImpl, notPorted, ref, randomNextIndex } from "../../runtime";
 import type { int } from "../../runtime";
 import type { ActBase } from "./ActBase";
 
@@ -282,5 +282,5 @@ export type ActExecutor_ValidateActionType = (typeof ActExecutor_ValidateActionT
 /** A2.Common.Extension.IEnumerableExtension.Random<T> 0x2581c70 (outside ReDriveBattleCore): `source.Any() ? source.ElementAt(random.Next(source.Count())) : default`. */
 function IEnumerableExtension_Random<T>(source: readonly T[]): T | null {
     if (source.length === 0) return null;
-    return source[Math.floor(GameRandom.next() * source.length)];
+    return source[randomNextIndex(source.length, "target", [], source)];
 }

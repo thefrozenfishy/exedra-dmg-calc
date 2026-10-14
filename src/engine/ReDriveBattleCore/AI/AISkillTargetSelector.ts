@@ -5,7 +5,7 @@ import type { TargetRoleType } from "../../Network/Definition/Battle/TargetRoleT
 import type { IHateVariation } from "../UnitState/IHateVariation";
 import { QuestEnemyAppearanceParameter } from "../QuestEnemyAppearanceParameter";
 import { CharacterParameter } from "../CharacterParameter";
-import { dictGet, f32, isImpl, notPorted, randomNext } from "../../runtime";
+import { dictGet, f32, isImpl, notPorted, randomNext, randomNextIndex, randomNextWeighted } from "../../runtime";
 import type { Dictionary, IEnumerable, List, int } from "../../runtime";
 import type { RoleType } from "../../Network/Definition/Battle/RoleType";
 import type { BattleUnit } from "../BattleUnit";
@@ -26,7 +26,7 @@ export class AISkillTargetSelector {
                 if (list.length === 1) return list[0];
             }
         }
-        const index = randomNext(list.length); // new System.Random().Next(list.Count)
+        const index = randomNextIndex(list.length, "target", [], list); // new System.Random().Next(list.Count)
         return list[index] ?? null!; // ElementAtOrDefault
     }
     /** @rva 0x17DD930  public static IEnumerable<BattleUnit> UnitFilterByBreak(IEnumerable<BattleUnit> candidateUnits) { } */
@@ -153,7 +153,7 @@ export class AISkillTargetSelector {
         // new System.Random(); Sum(Values) (checked; throws OverflowException in .NET on overflow)
         let sum = 0;
         for (const v of unitWeightDic.values()) sum += v;
-        const num = randomNext(sum); // random.Next(sum)
+        const num = randomNextWeighted(sum, [...unitWeightDic.values()], "target", [], [...unitWeightDic.keys()]); // random.Next(sum)
         let num2 = 0;
         for (const key of unitWeightDic.keys()) {
             num2 += dictGet(unitWeightDic, key);

@@ -8,7 +8,7 @@ import { BattleDamageCalculator } from "../BattleDamageCalculator";
 import { AffectedUnitNotice } from "../AffectedUnitNotice";
 import { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
 import { DamageAbilityEffectBase } from "./DamageAbilityEffectBase";
-import { dictGet, notPorted, randomNext } from "../../runtime";
+import { dictGet, notPorted, randomNext, randomNextIndex } from "../../runtime";
 import type { Dictionary, Nullable, int } from "../../runtime";
 import type { RoleType } from "../../Network/Definition/Battle/RoleType";
 import { DmgAtkAbilityEffect } from "./DmgAtkAbilityEffect";
@@ -61,7 +61,7 @@ export class DmgRandomAbilityEffect extends DmgAtkAbilityEffect {
         // new System.Random(): the game seeds from the clock; GameRandom here
         const turnOrderPriority = gameDirector.turnActSystem.turnReferee.get_NextTurnOrderPriority();
         for (let i = 0; i < this.damageCount; i++) {
-            const targetUnitId = this._TargetUnitIdList[randomNext(this._TargetUnitIdList.length)];
+            const targetUnitId = this._TargetUnitIdList[randomNextIndex(this._TargetUnitIdList.length, "target", [userUnit, this], this._TargetUnitIdList.map(id => targetUnitDic.get(id)))];
             const targetUnit = dictGet(targetUnitDic, targetUnitId);
             userUnit.activeConditionCheckDataBundle._EachTargetUnit = targetUnit; // setter inlined in the game
             this.CollectAttackHitConsumableStates(userUnit);

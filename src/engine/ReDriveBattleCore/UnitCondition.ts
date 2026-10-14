@@ -23,7 +23,7 @@ import { UniqueZoneUnitState } from "./UnitState/UniqueZoneUnitState";
 import { BarrierUnitState } from "./UnitState/BarrierUnitState";
 import { PreventAbnormalUnitState } from "./UnitState/PreventAbnormalUnitState";
 import { AbnormalUnitStateBase } from "./UnitState/AbnormalUnitStateBase";
-import { GameRandom, f32, isImpl, notPorted, removeAll } from "../runtime";
+import { f32, isImpl, notPorted, removeAll, randomChance } from "../runtime";
 import type { List, Nullable, Ref, Type, int } from "../runtime";
 import type { BattleUnit } from "./BattleUnit";
 import type { GameDirectorBase } from "./GameDirectorBase";
@@ -212,8 +212,8 @@ export class UnitCondition {
         if (!state.CanAddTo(targetUnit)) return false;
         // new System.Random().Next(1000) against probability (percent) * 10
         const probability = state.GetProcessedProbability(targetUnit, userUnit);
-        const roll = Math.floor(GameRandom.next() * 1000);
-        if (f32(probability * 10) <= roll && !isProbabilityIgnored) return false;
+        // roll = new System.Random().Next(1000) (drawn before the isProbabilityIgnored check in the game; the draw is unseeded)
+        if (!isProbabilityIgnored && !randomChance(probability, "effect", [state, targetUnit, userUnit], r => !(f32(probability * 10) <= Math.floor(r * 1000)))) return false;
         if (state instanceof AbnormalUnitStateBase) {
             for (const s of targetUnit.Condition.StateList) {
                 if (s instanceof PreventAbnormalUnitState && s.IsActive$BattleUnit(targetUnit) && s.RemainCount >= 1) {

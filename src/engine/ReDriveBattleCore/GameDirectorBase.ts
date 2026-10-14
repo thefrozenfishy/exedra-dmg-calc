@@ -267,7 +267,7 @@ export abstract class GameDirectorBase {
     /** @rva 0x1498B20  private void ChangeTargetAtRandom(BattleUnit.TeamType targetTeam, TargetReferee.TargetType targetType, List<BattleUnit> targetCandidateList, bool withoutNotify = False, bool isChangeTargetAfterAct = False) { } */
     ChangeTargetAtRandom(targetTeam: BattleUnit_TeamType, targetType: TargetReferee_TargetType, targetCandidateList: List<BattleUnit>, withoutNotify?: boolean /* = False */, isChangeTargetAfterAct?: boolean /* = False */): void {
         if (targetCandidateList == null || targetCandidateList.length === 0) return;
-        const unit = orderByNewGuid(targetCandidateList)[0]; // OrderBy(<>c.b__56_0: Guid.NewGuid()).First()
+        const unit = orderByNewGuid(targetCandidateList, "target", [targetTeam, targetType])[0]; // OrderBy(<>c.b__56_0: Guid.NewGuid()).First()
         if (unit == null) return;
         if (!(withoutNotify ?? false)) {
             this.ChangeTarget(targetTeam, targetType, unit.Id, isChangeTargetAfterAct ?? false);

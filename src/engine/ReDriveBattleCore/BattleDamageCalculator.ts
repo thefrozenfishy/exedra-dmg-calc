@@ -24,7 +24,7 @@ import { QuestEnemyAppearanceParameter } from "./QuestEnemyAppearanceParameter";
 import { CharacterParameter } from "./CharacterParameter";
 import { CorrelationEffect } from "./CorrelationEffect";
 import { AffectedUnitNotice, AffectedUnitNotice_DamageInfo } from "./AffectedUnitNotice";
-import { GameRandom, dictGet, enumIsDefined, enumToString, f32, isImpl, notPorted } from "../runtime";
+import { dictGet, enumIsDefined, enumToString, f32, isImpl, notPorted, randomChance } from "../runtime";
 import type { Dictionary, float, int } from "../runtime";
 import { Decimal } from "../runtime";
 import type { BattleType } from "../Network/Definition/Battle/BattleType";
@@ -197,8 +197,8 @@ export class BattleDamageCalculator {
     static IsCriticalDamage(attackUnit: BattleUnit, defenseUnit: BattleUnit): boolean {
         const ctr = attackUnit.GetProcessedCtr();
         const rcvCtr = defenseUnit.GetProcessedRcvCtr(attackUnit);
-        const roll = GameRandom.next(); // new System.Random().NextDouble()
-        return f32(roll * 100) < f32(rcvCtr + ctr);
+        // new System.Random().NextDouble(): f32(roll * 100) < f32(rcvCtr + ctr)
+        return randomChance(f32(rcvCtr + ctr), "crit", [attackUnit, defenseUnit], roll => f32(roll * 100) < f32(rcvCtr + ctr));
     }
     /** @rva 0x137C720  private static Decimal GetAddedCriticalDamage(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damage) { } */
     static GetAddedCriticalDamage(attackUnit: BattleUnit, defenseUnit: BattleUnit, damage: Decimal): Decimal {

@@ -85,11 +85,57 @@ export const GameRandom = {
     next: Math.random as () => number,
     /** Replace the source, e.g. `GameRandom.seed(seededRng(42))`. */
     seed(rng: () => number): void { GameRandom.next = rng; },
+    /** App side (not game code): when set, every random decision of the port goes through it (see RandomHook). */
+    hook: null as RandomHook | null,
 };
 
-/** `source.OrderBy(_ => Guid.NewGuid())`: a uniformly random permutation (stable sort on random keys). */
-export function orderByNewGuid<T>(source: readonly T[]): T[] {
-    const keyed = source.map(v => ({ v, k: GameRandom.next() }));
+/** What a random decision is about (for the app's RNG modes and its battle log). */
+export type RandomKind = "crit" | "effect" | "target" | "skill";
+/**
+ * App side (not game code): lets the app decide the port's random draws (always hit / miss / most likely /
+ * seeded / user decisions) and log them. `subject` = the game objects the decision is about (units, states,
+ * skills) for labels; `options` = what a choice picks from. Without a hook every draw is `GameRandom.next()`.
+ */
+export interface RandomHook {
+    /** A yes/no roll against `probability` percent; `hits(r)` is the game's own comparison for a uniform r in [0, 1). */
+    chance(probability: number, kind: RandomKind, subject: readonly unknown[], hits: (r: number) => boolean): boolean;
+    /** One of `options` by integer weights (the game's running-total walk; all 1 = uniform). Returns the index. */
+    choose(weights: readonly number[], kind: RandomKind, subject: readonly unknown[], options: readonly unknown[]): int;
+    /** A Guid.NewGuid() sort key (random tie-breaks inside an ordering). */
+    guidKey(): number;
+}
+/** A roll the game compares as `hits(r)` (r uniform in [0, 1)); `probability` (percent) is only for the hook. */
+export function randomChance(probability: number, kind: RandomKind, subject: readonly unknown[], hits: (r: number) => boolean): boolean {
+    const hook = GameRandom.hook;
+    return hook ? hook.chance(probability, kind, subject, hits) : hits(GameRandom.next());
+}
+/** `new System.Random().Next(maxValue)` used to pick `options[index]` uniformly. */
+export function randomNextIndex(maxValue: number, kind: RandomKind, subject: readonly unknown[], options: readonly unknown[]): int {
+    const hook = GameRandom.hook;
+    if (hook == null || maxValue < 1) return randomNext(maxValue);
+    return hook.choose(options.map(() => 1), kind, subject, options);
+}
+/** `new System.Random().Next(sum)` walked against the running total of `weights` (sum = their total): with a hook,
+ * returns a roll that the same walk turns into the hook's pick. */
+export function randomNextWeighted(sum: number, weights: readonly number[], kind: RandomKind, subject: readonly unknown[], options: readonly unknown[]): int {
+    const hook = GameRandom.hook;
+    if (hook == null || sum < 1) return randomNext(sum);
+    const index = hook.choose(weights, kind, subject, options);
+    let before = 0;
+    for (let i = 0; i < index; i++) before += weights[i];
+    return before;
+}
+
+/** `source.OrderBy(_ => Guid.NewGuid())`: a uniformly random permutation (stable sort on random keys). Callers that
+ * take only the first element pass `kind`/`subject` so a hook decides that element. */
+export function orderByNewGuid<T>(source: readonly T[], kind?: RandomKind, subject?: readonly unknown[]): T[] {
+    const hook = GameRandom.hook;
+    if (hook != null && kind != null) {
+        if (source.length === 0) return [];
+        const index = hook.choose(source.map(() => 1), kind, subject ?? [], source);
+        return [source[index], ...source.filter((_, i) => i !== index)];
+    }
+    const keyed = source.map(v => ({ v, k: hook != null ? hook.guidKey() : GameRandom.next() }));
     keyed.sort((a, b) => a.k - b.k);
     return keyed.map(x => x.v);
 }
@@ -233,7 +279,7 @@ export function orderByKeys<T>(source: readonly T[], keys: ReadonlyArray<readonl
     return idx.map(i => source[i]);
 }
 /** Guid.NewGuid() used as a sort key: a random number from GameRandom. */
-export const newGuidKey = (): number => GameRandom.next();
+export const newGuidKey = (): number => GameRandom.hook != null ? GameRandom.hook.guidKey() : GameRandom.next();
 /** new System.Random().Next(maxValue): an int in [0, maxValue) from GameRandom. */
 export const randomNext = (maxValue: number): number => Math.floor(GameRandom.next() * maxValue);
 

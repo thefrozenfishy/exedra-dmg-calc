@@ -194,7 +194,7 @@ export class ActReferee {
         for (const act of this.actList) {
             const unit = battleUnitDic.get(act.targetUnitId);
             if (unit === undefined || unit.IsDead) {
-                act.targetUnitId = orderByNewGuid(targetUnitList)[0].Id; // OrderBy(_ => Guid.NewGuid()).First()
+                act.targetUnitId = orderByNewGuid(targetUnitList, "target", [act])[0].Id; // OrderBy(_ => Guid.NewGuid()).First()
             }
         }
     }

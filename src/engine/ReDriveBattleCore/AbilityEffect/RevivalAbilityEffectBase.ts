@@ -30,7 +30,7 @@ export abstract class RevivalAbilityEffectBase extends AbilityEffectBase {
     }
     /** @rva 0x1900620 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
-        const unit = orderByNewGuid(targetUnitList)[0] ?? null; // OrderBy(b__3_0 Guid.NewGuid()).FirstOrDefault()
+        const unit = orderByNewGuid(targetUnitList, "target", [userUnit, this])[0] ?? null; // OrderBy(b__3_0 Guid.NewGuid()).FirstOrDefault()
         if (unit != null) return unit._Id;
         return 0;
     }

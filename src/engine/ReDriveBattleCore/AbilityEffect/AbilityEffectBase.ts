@@ -204,7 +204,7 @@ export abstract class AbilityEffectBase {
     }
     /** @rva 0x18E7990 slot 7  public virtual int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
-        const unit = orderByNewGuid(targetUnitList.filter(u => !u.get_IsDead()) /* <>c.b__53_0 */)[0] ?? null; // OrderBy(_ => Guid.NewGuid()) <>c.b__53_1
+        const unit = orderByNewGuid(targetUnitList.filter(u => !u.get_IsDead()) /* <>c.b__53_0 */, "target", [userUnit, this])[0] ?? null; // OrderBy(_ => Guid.NewGuid()) <>c.b__53_1
         if (unit != null) return unit._Id;
         return 0;
     }

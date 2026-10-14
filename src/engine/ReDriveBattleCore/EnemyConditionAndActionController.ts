@@ -318,6 +318,6 @@ export class EnemyConditionAndActionController_SingleAction extends EnemyConditi
     /** @rva 0x14A47F0  public int GetAction() { } */
     GetAction(): int {
         if (!this._IsSkillResuable) this._IsAvailable = false;
-        return orderByNewGuid(this._SkillMstIds)[0] ?? 0; // OrderBy(_ => Guid.NewGuid()).FirstOrDefault() <>c.b__2_0
+        return orderByNewGuid(this._SkillMstIds, "skill", [this])[0] ?? 0; // OrderBy(_ => Guid.NewGuid()).FirstOrDefault() <>c.b__2_0
     }
 }
