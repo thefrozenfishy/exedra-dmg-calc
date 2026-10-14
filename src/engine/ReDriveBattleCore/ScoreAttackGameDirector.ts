@@ -10,5 +10,8 @@ export class ScoreAttackGameDirector extends SoloGameDirectorBase {
     /** @rva 0xDB7A40 slot 4  public override BattleType get_BattleType() { } */
     get_BattleType(): BattleType { return 6 as BattleType; /* asm: mov eax, 6; ret */ }
     /** @rva 0x14A42A0  public void .ctor() { } */
-    ctor(): this { return notPorted("ScoreAttackGameDirector..ctor", 0x14A42A0); }
+    ctor(): this {
+        super.ctor(); // same code as QuestGameDirector..ctor (folded): SoloGameDirectorBase..ctor
+        return this;
+    }
 }
