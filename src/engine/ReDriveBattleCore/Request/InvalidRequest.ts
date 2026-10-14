@@ -1,7 +1,6 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
 import { RequestBase } from "./RequestBase";
 import type { RequestType } from "./RequestType";
 
@@ -17,5 +16,8 @@ export class InvalidRequest extends RequestBase {
     /** @rva 0x16D28F0  public static InvalidRequest get_Default() { } */
     static get_Default(): InvalidRequest { return InvalidRequest._Default; /* auto-property */ }
     /** @rva 0x16D2880  private static void .cctor() { } */
-    static cctor(): void { return notPorted("InvalidRequest..cctor", 0x16D2880); }
+    static cctor(): void {
+        InvalidRequest._Default = new InvalidRequest().ctor();
+    }
 }
+InvalidRequest.cctor(); // C# static constructor

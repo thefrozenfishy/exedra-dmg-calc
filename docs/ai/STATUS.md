@@ -2,6 +2,33 @@
 
 _Last updated: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+## 2026-10-14 (2): verification of the port, remaining notPorted
+
+- `scripts/engine/callcheck.py` cross-checks every hand-ported body against the game's machine code: for each
+  `@rva` method it lists the ReDriveBattleCore functions the game calls and reports callees the TS body never names.
+  Default mode accepts a callee that is reached through a helper the TS body names (the game inlined that helper);
+  `--strict` shows those too. Result: 0 unexplained callees; `--strict` 30 methods, all reviewed (inlined helpers such as
+  IsCriticalDamage / DamageCutByDisableDamage / CountdownReferee.Initialize, Mst getters read as record fields,
+  local functions `g__X|N_M` written inline, tail calls). GameDirectorBase.BattleEnd now calls SyncGameSituation (tail call).
+- Ported the small leftovers (TargetTypeExtensions, BattleUnitSpeedAccumulator, BackupData.IsValid, GameSituationData
+  ctor, BattleSpeedTypeExtensions, InvalidRequest cctor, DebugTurnGaugeEditRequest ctor, CommandSender.Subscription
+  Dispose, KnockDownAdditionalEnemyCondition.CheckTargetEnemy, AdditionalEnemyUnit ctor(QuestEnemyAppearanceMstModel)).
+- 81 notPorted left, none reachable from a battle (reverse call index over all ReDriveBattleCore functions, cached
+  in ~/.cache/exedra-engine/rev.pkl; 0 callers unless noted):
+  - backup / JSON restore (BackupAgent, contract resolvers, CommandPack Set/RestoreCommands, BattleUnitSkillSet
+    OnSerializing/OnDeserialized): only on a resumed battle; `RestoreLogCommands` is called from
+    RespondToClientReadyRequest only when the backup has commands (never here).
+  - Gve / Gvg / MultiRaid directors and judges, GveBreakBonusFieldParam: game modes the app does not run.
+  - client UI: Vector3 helpers, Style/Enemy texture keys, StyleMst.ReleaseTime/IsReleased, mode-change asset name.
+  - `GetSpeedVariationValue(BattleUnitData, ...)` / `CanAddTo(BattleUnitData)` of the speed states: interface
+    IRequiredSpeedVariationStateForDecide, used by the client's turn-order preview on states sent in
+    CommandDecideSkillContent (BattleUnit.GetStateListForDecide); no battle code calls them.
+  - SimulationBattleGameDirector / FinishBattleData ctors, LinqExtension.Max/Min/Priority (shared generic, no caller),
+    BattleMstReaderContainer.GetReader reflection fallback (every reader is bound).
+- Debug code: the shipped build has it stripped. GameDirectorBase.DebugMode and SoloGameDirectorBase.OnForceWinDebugRequested
+  are `ret`, Request() ignores SwitchDebug (6) and Debug* (1000-1004), Debug.Log is [Conditional("ARIES_LOGGER")], and
+  nothing in the battle code references the DebugTool namespace (log managers, Force*DamageOption, SkillOverwriteOption).
+
 ## 2026-10-14: engine runs every battle type; app adapter (branch claude/engine-1to1)
 
 No NOT PORTED errors in quest, PvP or Solo Raid battles (sweeps: quests 150/150, Solo Raid 189/189 incl. 2 seeds,

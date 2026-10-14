@@ -1,7 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../runtime";
+import { listRemove } from "../runtime";
 import type { List } from "../runtime";
 import type { CommandBase } from "./Command/CommandBase";
 
@@ -50,5 +50,7 @@ export class CommandSender_Subscription {  // implements IDisposable
         return this;
     }
     /** @rva 0x14A8AF0 slot 4  public void Dispose() { } */
-    Dispose(): void { return notPorted("CommandSender_Subscription.Dispose", 0x14A8AF0); }
+    Dispose(): void {
+        listRemove(this.subscribeList, this.observer); // List.Remove (inlined: IndexOf + RemoveAt)
+    }
 }

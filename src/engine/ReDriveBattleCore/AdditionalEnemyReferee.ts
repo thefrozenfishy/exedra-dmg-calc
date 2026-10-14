@@ -8,7 +8,7 @@ import { QuestEnemyAppearanceParameter } from "./QuestEnemyAppearanceParameter";
 import { KnockDownAdditionalEnemyCondition } from "./KnockDownAdditionalEnemyCondition";
 import { QuestEnemyAppearanceMstModel } from "./Model/QuestEnemyAppearanceMstModel";
 import { BattleMstReaderBase } from "./Reader/BattleMstReaderBase";
-import { minBy, notPorted, singleOrDefault } from "../runtime";
+import { minBy, singleOrDefault } from "../runtime";
 import type { Dictionary, List, int } from "../runtime";
 import type { AdditionalEnemyCondition } from "./AdditionalEnemyCondition";
 
@@ -255,7 +255,12 @@ export class AdditionalEnemyReferee_AdditionalEnemyUnit {
     /** @rva 0x7305E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
     /** @rva 0x13778F0  public void .ctor(QuestEnemyAppearanceMstModel questEnemyAppearanceMst, int positionId, AdditionalEnemyCondition additionalEnemyAppearanceCondition) { } */
-    ctor$QuestEnemyAppearanceMstModel_int_AdditionalEnemyCondition(questEnemyAppearanceMst: QuestEnemyAppearanceMstModel, positionId: int, additionalEnemyAppearanceCondition: AdditionalEnemyCondition): this { return notPorted("AdditionalEnemyReferee_AdditionalEnemyUnit..ctor", 0x13778F0); }
+    ctor$QuestEnemyAppearanceMstModel_int_AdditionalEnemyCondition(questEnemyAppearanceMst: QuestEnemyAppearanceMstModel, positionId: int, additionalEnemyAppearanceCondition: AdditionalEnemyCondition): this {
+        this._QuestEnemyAppearanceMstId = questEnemyAppearanceMst.get_QuestEnemyAppearanceMstId(); // null -> NullReferenceException
+        this._PositionId = positionId;
+        this._AppearanceCondition = additionalEnemyAppearanceCondition;
+        return this;
+    }
     /** @rva 0x13778A0  public void .ctor(int questEnemyAppearanceMstId, int positionId, AdditionalEnemyCondition additionalEnemyAppearanceCondition) { } */
     ctor$int_int_AdditionalEnemyCondition(questEnemyAppearanceMstId: int, positionId: int, additionalEnemyAppearanceCondition: AdditionalEnemyCondition): this {
         this._QuestEnemyAppearanceMstId = questEnemyAppearanceMstId;

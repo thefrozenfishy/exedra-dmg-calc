@@ -323,8 +323,7 @@ export abstract class GameDirectorBase {
     BattleEnd(): void {
         if (this.BattlePhase === Phase.Finish) return;
         this.ChangeBattlePhase(Phase.Finish);
-        const situation = GameDirectorBase_GameSituationDataCreator.Create(this);
-        this.StoreCommand(new CommandSituationSync().ctor$GameSituationData_float(situation, this.elapsedTime));
+        this.SyncGameSituation(); // tail call (jmp 0x149be90)
     }
     /** @rva 0x149BF20 slot 10  public virtual int TurnTransition() { } */
     TurnTransition(): int {

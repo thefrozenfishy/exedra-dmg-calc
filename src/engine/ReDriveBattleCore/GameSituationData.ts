@@ -1,7 +1,6 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../runtime";
 import type { BattleUnitSituationData } from "./BattleUnitSituationData";
 
 // ---- ReDriveBattleCore.GameSituationData  (TypeDefIndex 406, public class) ----
@@ -15,5 +14,8 @@ export class GameSituationData {
     /** @rva 0x730C60  public void set_BattleUnitSituationDatas(BattleUnitSituationData[] value) { } */
     set_BattleUnitSituationDatas(value: BattleUnitSituationData[]): void { this._BattleUnitSituationDatas = value; /* auto-property */ }
     /** @rva 0x149CF30  public void .ctor() { } */
-    ctor(): this { return notPorted("GameSituationData..ctor", 0x149CF30); }
+    ctor(): this {
+        this._BattleUnitSituationDatas = []; // Array.Empty<BattleUnitSituationData>()
+        return this;
+    }
 }
