@@ -78,9 +78,9 @@ export const exCrysIds = (name: string): number[] =>
  *  whatever `args` carries (the same for Lux and for every character measured). */
 export function benchKioku(args: Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>, as?: BenchIdentity): PvPKioku {
     const k = new PvPKioku({ ...args, portrait: undefined, supportKey: undefined, crysIDs: exCrysIds(args.name), subCrysIDs: [] } as KiokuArgs)
-    // Lux mimicking another role also gets that role's stats: the average HP/ATK/DEF of its 5 stars at her levels, so
-    // e.g. an Attacker-identity Lux hits like an average Attacker instead of with her own (Breaker) ATK.
-    if (as?.role && as.role !== k.data.role && args.name === LuxMagica) {
+    // Lux given a role (any, Breaker included) also gets that role's stats: the average HP/ATK/DEF of its 5 stars (Lux
+    // herself excluded) at her levels, so e.g. an Attacker-identity Lux hits like an average Attacker.
+    if (as?.role && args.name === LuxMagica) {
         const stats = averageRoleStats(as.role, args)
         if (stats) {
             k.getBaseHp = () => stats.hp
