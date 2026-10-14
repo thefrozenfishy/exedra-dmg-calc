@@ -1,11 +1,12 @@
 // The in-game regression cases of checkFixtures.ts, run on the 1:1 engine (src/battle/EngineBattle):
 //   npx tsx scripts/sim/checkFixturesEngine.ts
-// Manual-control PvE fixtures (the user picks targets/actions) need the engine's manual mode, not wired yet: SKIP.
+// Manual-control fixtures replay their stored picks matched by kind + label (relaxedPicks).
 import "../../src/models/BestTeamCalculator"; // must load first (import cycle outside Vite)
 import fs from "fs";
 import { buildPvPKiokus, buildSlotKioku, formatSequence, parseExport, parsePvEExport, PVE_EXPORT_FORMAT } from "../../src/utils/pvpExport";
 import { isSoloRaidStage } from "../../src/models/PvE";
 import { EngineBattle } from "../../src/battle/EngineBattle";
+import { PendingDecision } from "../../src/models/BattleRng";
 import type { BattleSnapshot } from "../../src/types/KiokuTypes";
 
 const CASES: { file: string, action: number, actor: string, ally?: boolean, line?: RegExp }[] = [
@@ -41,19 +42,20 @@ for (const c of CASES) {
     let b: EngineBattle;
     if (JSON.parse(text)?.format === PVE_EXPORT_FORMAT) {
         const d = parsePvEExport(text);
-        if (d.control === "manual") { skipped++; console.log(`SKIP ${c.file}: action ${c.action} (manual control)`); continue; }
         const allies = d.slots.filter(s => !!s.main).map(buildSlotKioku);
         b = isSoloRaidStage(d.stageId)
-            ? new EngineBattle({ kind: "soloRaid", allies, stageId: d.stageId, partyBuffId: d.soloRaid?.partyBuffId, noRoundLimit: d.soloRaid?.noRoundLimit, carry: d.soloRaid?.attempts?.[d.soloRaid.attempts.length - 1] }, { seed: d.seed, rngMode: d.rngMode, decisions: d.decisions })
-            : new EngineBattle({ kind: "quest", allies, stageId: d.stageId }, { seed: d.seed, rngMode: d.rngMode, decisions: d.decisions });
+            ? new EngineBattle({ kind: "soloRaid", allies, stageId: d.stageId, partyBuffId: d.soloRaid?.partyBuffId, noRoundLimit: d.soloRaid?.noRoundLimit, carry: d.soloRaid?.attempts?.[d.soloRaid.attempts.length - 1] }, { seed: d.seed, rngMode: d.rngMode, decisions: d.decisions, manualTargeting: d.control === "manual", relaxedPicks: true })
+            : new EngineBattle({ kind: "quest", allies, stageId: d.stageId }, { seed: d.seed, rngMode: d.rngMode, decisions: d.decisions, manualTargeting: d.control === "manual", relaxedPicks: true });
     } else {
         const d = parseExport(text);
         const [a, e] = buildPvPKiokus(d.slots);
         b = new EngineBattle({ kind: "pvp", allies: a, enemies: e }, { seed: d.seed, rngMode: d.rngMode, decisions: d.decisions });
     }
     const snaps: BattleSnapshot[] = [b.initialState];
-    while (snaps.length <= c.action && !b.isOver) snaps.push(...b.executeNextAction());
-    const s = snaps[c.action] ?? { lastActor: "<battle over>" } as BattleSnapshot;
+    let pending: string | undefined
+    try { while (snaps.length <= c.action && !b.isOver) snaps.push(...b.executeNextAction()); }
+    catch (err) { if (!(err instanceof PendingDecision)) throw err; pending = `<pending: ${err.event.label}>` }
+    const s = snaps[c.action] ?? { lastActor: pending ?? "<battle over>" } as BattleSnapshot;
     const side = (ally?: boolean) => ally === undefined ? "" : ally ? " (Ally)" : " (Enemy)";
     const got = s.lastActor + side(c.ally === undefined ? undefined : s.lastTeamIsTeam1);
     let ok = got === c.actor + side(c.ally);

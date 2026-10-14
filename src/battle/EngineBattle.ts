@@ -5,7 +5,7 @@
 // TimeForward / EndWave / BeginWave between waves. Every engine call runs with this battle's EngineRandom installed.
 import { TargetType, type BattleEvent, type BattleSnapshot, type TeamSnapshot } from "../types/KiokuTypes"
 import { BattleRng, type RngDecision, type RngMode } from "../models/BattleRng"
-import { enemyName, soloRaidInfo, SOLO_RAID_COMMON_CHARGE_PASSIVE, type QuestEnemyAppearance } from "../models/PvE"
+import { enemyName, skillName, soloRaidInfo, SOLO_RAID_COMMON_CHARGE_PASSIVE, type QuestEnemyAppearance } from "../models/PvE"
 import type { RaidCarry } from "../models/PvPBattle"
 import { passiveDetails, skillDetails } from "../utils/helpers"
 import questEnemyAppearanceJson from "../assets/base_data/getQuestEnemyAppearanceMstList.json"
@@ -29,6 +29,8 @@ export interface EngineBattleOptions {
     decisions?: Map<number, RngDecision> | Record<number, RngDecision>
     relaxedPicks?: boolean
     rng?: BattleRng
+    /** PvE "Manual": the player decides every ally action, target and ultimate (BattleRng.pick, PendingDecision). */
+    manualTargeting?: boolean
 }
 
 /** Display info of one engine unit. */
@@ -59,6 +61,11 @@ export class EngineBattle {
     private lastTargetType?: TargetType
     private lastBattleInfo?: any
     private requests = 0
+    /** Break gauges before the running request (the notices carry no amount): break damage = before - after. */
+    private breakBefore = new Map<any, number>()
+    private readonly manual: boolean
+    /** Manual control: "Continue" closes the between-actions ultimate prompt until the next turn act. */
+    private ultimateWindowPassed = false
 
     constructor(setup: EngineBattleSetup, opts: EngineBattleOptions = {}) {
         this.kind = setup.kind
@@ -70,7 +77,8 @@ export class EngineBattle {
         E.bindMasterData()
         this.director = this.random.run(() => this.create(setup))
         this.director.commandSender.Subscribe({ IObserver$OnNext: (commands: any[]) => { this.commands.push(...commands) } })
-        this.director.autoType = 2 // full auto: the AI acts for both teams
+        this.manual = !!opts.manualTargeting
+        this.director.autoType = this.manual ? 0 : 2 // Manual: the player decides the allies; FullAuto: the AI acts for both teams
         this.random.run(() => this.director.FlushCommands())
         this.consumeCommands()
         this.initial = this.getCurrentState()
@@ -95,6 +103,19 @@ export class EngineBattle {
         }
         const raid = soloRaidInfo(setup.stageId)!
         const party = raid.partyBuffs.find(p => p.soloRaidPartyBuffMstId === setup.partyBuffId) ?? raid.partyBuffs[0]
+        // The player's units arrive from the server with the Solo Raid buff passives (the same list
+        // SoloRaidBuffReferee.AddSoloRaidBuffToUnit gives the enemies: common 8, season 6, party 7).
+        const season = raid.season
+        const extra: [number | undefined, number][] = [[SOLO_RAID_COMMON_CHARGE_PASSIVE, 8], [season?.passiveSkillMstId, 6], [season?.enhancedPassiveSkillMstId, 6],
+            [season?.buffPointChargePassiveSkillMstId, 6], [party?.passiveSkillMstId, 7], [party?.buffPointChargePassiveSkillMstId, 7]]
+        for (const u of allies) for (const [id, source] of extra) {
+            if (!id || !(id > 0)) continue
+            const info = new E.PassiveSkillInfo()
+            info.passiveSkillMstId = id
+            info.level = 1
+            info.abilitySourceType = source
+            u.passiveSkillInfoList = [...u.passiveSkillInfoList, info]
+        }
         const d = new E.SoloRaidGameDirector().ctor()
         d.SetupBattleStageForSoloRaid(setup.stageId, 0, provider, this.battleInfoOf(setup.carry), SOLO_RAID_COMMON_CHARGE_PASSIVE,
             raid.season?.soloRaidSeasonBuffMstId ?? 0, party?.soloRaidPartyBuffMstId ?? 0, setup.noRoundLimit ? 0 : raid.limitRoundCount, 8.64e15)
@@ -188,6 +209,7 @@ export class EngineBattle {
         const buffs: string[] = [], debuffs: string[] = [], ailments: string[] = [], spd: [number, string, string?][] = []
         let shields = 0
         for (const s of unit._Condition._StateList) {
+            if (s._EffectOrigin === 2) continue // passive-skill states: always on, not listed (as before)
             const user = this.director.battleUnitBundle.dic.get(s._UserUnitId)
             const applier = user ? this.info(user).name : ""
             const desc = detailDescription(s._MstId)
@@ -317,7 +339,8 @@ export class EngineBattle {
                     ...base, kind: slip ? "dot" : "hit", amount: hp, barrierAbsorbed: barrier || undefined,
                     isCritical: damages.some((x: any) => x._IsCritical) || undefined,
                     source: actor ? this.info(actor).name : undefined, sourceIsTeam1: actor ? actor._Team === 0 : undefined, sourcePos: actor ? this.posOf(actor) : undefined,
-                    breakDamage: n._BreakDamage?._DamageValue || undefined,
+                    // notices carry no break amount (BreakDamage is the "broke" marker): the gauge's drop over this request
+                    breakDamage: Math.max(0, (this.breakBefore.get(target) ?? target._BreakPoint._PointValue) - target._BreakPoint._PointValue) || undefined,
                     broke: n._BreakDamage != null && target._BreakPoint.IsBreak ? true : undefined,
                     breakRateUp: n._BreakedDamageReceiveRateUpValue || undefined,
                 })
@@ -345,7 +368,7 @@ export class EngineBattle {
         if (act instanceof E.AdditionalSkillAct) return "Follow-up"
         if (act instanceof E.ComboTurnUnitAct && act._ActionStep >= 2) return `Combo ${act._ActionStep}`
         if (act instanceof E.AdditionalTurnUnitAct) return "Extra action"
-        if (act instanceof E.ReActionTurnUnitAct) return "Counter"
+        if (act instanceof E.ReActionTurnUnitAct) return "Extra action"
         if (act instanceof E.ModeChangeAct) return "Form change"
         if (act instanceof E.StartTimingAct) return "Start action"
         return undefined
@@ -356,6 +379,7 @@ export class EngineBattle {
     private report(fn: () => void): BattleSnapshot[] {
         const d = this.director
         const out: BattleSnapshot[] = []
+        this.breakBefore = new Map([...d.battleUnitBundle.dic.values()].map((u: any) => [u, u._BreakPoint._PointValue]))
         this.random.run(() => { fn(); d.FlushCommands() })
         const commands = this.consumeCommands()
         const act = d.turnActSystem.actReferee.currentAct
@@ -368,6 +392,7 @@ export class EngineBattle {
             const actor = d.battleUnitBundle.dic.get(skill._ActUnitId)
             this.lastActor = actor
             this.lastTargetType = this.targetTypeOf(act, actor)
+            if (act instanceof E.TurnUnitActBase) this.ultimateWindowPassed = false
             out.push({ ...this.getCurrentState(), actionLabel: this.actionLabelOf(act) })
         } else if (commands.some(c => c instanceof E.CommandExecuteModeChange)) {
             this.lastActor = act ? d.battleUnitBundle.dic.get(act.actUnitId) : undefined
@@ -377,9 +402,107 @@ export class EngineBattle {
         return out
     }
 
+    // ---- manual control (the client's decisions, made through BattleRng.pick)
+
+    private unitLabel(unit: any): string {
+        return `${this.info(unit).name} (${unit._Team === 0 ? "Ally" : "Enemy"} ${this.posOf(unit) + 1})`
+    }
+
+    /** Ally ultimates that GameDirectorBase.RegisterSpecialAttack would accept right now. */
+    private readyUltimates(): any[] {
+        const d = this.director
+        return this.team(true).filter(u => {
+            if (u.SpecialAttack == null || !u.IsSpecialAttackPointMax() || u.IsDead) return false
+            if (u._Condition._CanNotUseSkill || u._Condition._CanNotUseSpecialAttack) return false
+            const bp = u._BreakPoint
+            if (bp.maxPointValue > 0 && bp._PointValue < 1) return false
+            return !d.turnActSystem.actReferee.IsUnitSpecialAttackActRegistered(u._Id)
+        })
+    }
+
+    /** The undecided ally act the director stopped at (CommandDecideSkillContent), if any. */
+    private pendingDecisionAct(): any {
+        if (!this.manual) return undefined
+        const act = this.director.turnActSystem.actReferee.currentAct
+        if (!(act instanceof E.SkillDecisionActBase) || act.IsDecided || act.IsExecuted) return undefined
+        const unit = this.director.battleUnitBundle.dic.get(act.actUnitId)
+        return unit && unit._Team === 0 ? act : undefined
+    }
+
+    /** Targets of `skill` the player picks: one enemy and/or one ally, by the skill's target sides. */
+    private pickTargets(unit: any, skill: any): { target: number, friend: number } {
+        const ref = this.director.targetReferee
+        let target = ref.allyAttackTargetId, friend = ref.allyFriendTargetId
+        // only effects aimed at one unit (EffectRange 1 target / 2 proximity) use the picked target; TargetSide 1 = opponent, 0 = friend
+        const effects: any[] = skill.launcher.AbilityEffectList
+        const aims = (side: number) => effects.some(e => e.TargetSide === side && (e.EffectRange === 1 || e.EffectRange === 2))
+        const what = skillName(skill.Id)
+        if (aims(1)) {
+            const pool = this.team(false).filter(u => !u.IsDead)
+            if (pool.length > 1) target = pool[this.rng.pickTarget(`${this.unitLabel(unit)} · ${what}: target on the enemies`, pool.map(u => this.unitLabel(u)), pool)]._Id
+            else if (pool.length === 1) target = pool[0]._Id
+        }
+        if (aims(0)) {
+            const pool = this.team(true).filter(u => !u.IsDead)
+            if (pool.length > 1) friend = pool[this.rng.pickTarget(`${this.unitLabel(unit)} · ${what}: target on the allies`, pool.map(u => this.unitLabel(u)), pool)]._Id
+            else if (pool.length === 1) friend = pool[0]._Id
+        }
+        return { target, friend }
+    }
+
+    private skillRequest(unit: any, skill: any): void {
+        const { target, friend } = this.pickTargets(unit, skill)
+        const r = new E.SkillRequest().ctor()
+        r.battleUnitId = unit._Id
+        r.skillMstId = skill.Id
+        r.targetBattleUnitId = target
+        r.selectAllyUnitId = friend
+        this.director.Request(r, true, null)
+    }
+
+    private registerUltimate(unit: any): void {
+        const r = new E.RegisterSpecialAttackRequest().ctor()
+        r.battleUnitId = unit._Id
+        r.isRegister = true
+        this.director.Request(r, true, null)
+    }
+
+    /** Answers the director's decision request for `act` (may throw PendingDecision before touching the engine). */
+    private decide(act: any): BattleSnapshot[] {
+        const d = this.director
+        const unit = d.battleUnitBundle.dic.get(act.actUnitId)
+        if (act instanceof E.SpecialAttackAct) return this.report(() => this.skillRequest(unit, unit.SpecialAttack))
+        const what = act instanceof E.AdditionalTurnUnitAct || act instanceof E.ReActionTurnUnitAct ? "extra action" : act instanceof E.ComboTurnUnitAct && act._ActionStep >= 2 ? `turn (combo ${act._ActionStep})` : "turn"
+        const sp = d.spReferee.allySp
+        // the skills the client offers, switched ones included (as UnitBrain.AutoAction / CommandDecideSkillContent do)
+        const switched = E.ref(null), switchState = E.ref(null)
+        const skill = unit.IsSwitchingActiveSkill(E.ActiveSkill, switched, switchState) ? switched.v : unit.ActiveSkills[0]
+        const switchedNormal = E.ref(null)
+        const normal = unit.IsSwitchingActiveSkill(E.NormalAttack, switchedNormal, E.ref(null)) ? switchedNormal.v : unit.NormalAttack
+        const options: { label: string, skill?: any, ult?: any }[] = []
+        if (skill && sp > 0) options.push({ label: `Battle Skill (SP ${sp})`, skill })
+        options.push({ label: "Basic Attack", skill: normal })
+        for (const u of this.readyUltimates()) options.push({ label: `Ultimate: ${this.unitLabel(u)}`, ult: u })
+        const choice = options[this.rng.pick("action", `${this.unitLabel(unit)} · ${what}: choose an action`, options.map(o => o.label))]
+        if (choice.ult) return this.report(() => this.registerUltimate(choice.ult))
+        return this.report(() => this.skillRequest(unit, choice.skill))
+    }
+
     /** One client request (TimeForward, or TimeForward / EndWave / BeginWave between waves). */
     private step(): BattleSnapshot[] {
         const d = this.director
+        const pendingAct = this.pendingDecisionAct()
+        if (pendingAct) return this.decide(pendingAct)
+        const cur = d.turnActSystem.actReferee.currentAct
+        const betweenTurns = (cur == null || cur.IsExecuted) && d.turnActSystem.actReferee.actList.length === 0
+        if (this.manual && !this.ultimateWindowPassed && betweenTurns) {
+            const ready = this.readyUltimates()
+            if (ready.length) {
+                const i = this.rng.pick("action", "Between actions: fire an ultimate?", ["Continue", ...ready.map(u => `Ultimate: ${this.unitLabel(u)}`)])
+                if (i <= 0) this.ultimateWindowPassed = true
+                else return this.report(() => this.registerUltimate(ready[i - 1]))
+            }
+        }
         const wave = d.waveReferee
         if (wave != null && wave.isDuringTransition) {
             const out = this.report(() => {
