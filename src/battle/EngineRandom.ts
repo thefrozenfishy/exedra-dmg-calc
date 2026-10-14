@@ -9,7 +9,11 @@ export type EngineNamer = (obj: unknown) => string
 
 export class EngineRandom {
     private readonly guid: () => number
-    constructor(readonly rng: BattleRng, private readonly name: EngineNamer) {
+    readonly rng: BattleRng
+    private readonly name: EngineNamer
+    constructor(rng: BattleRng, name: EngineNamer) {
+        this.rng = rng
+        this.name = name
         this.guid = seededRng((rng.seed ^ 0x5bd1e995) >>> 0)
     }
 

@@ -84,7 +84,7 @@ const extName = (absPath, imported) => {
         let spec = path.relative(OUT_DIR, absPath).replace(/\\/g, "/");
         if (!spec.startsWith(".")) spec = "./" + spec;
         externalImports.push(imported === "default"
-            ? `import ${local} from "${spec}"${absPath.endsWith(".json") ? ' with { type: "json" }' : ""};`
+            ? `import ${local} from "${spec}";` // no import attributes: Vite/Rollup reject mixed attributes for one JSON module
             : `import { ${imported} as ${local} } from "${spec}";`);
     }
     return externals.get(key);

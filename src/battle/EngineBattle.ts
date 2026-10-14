@@ -38,7 +38,7 @@ interface UnitInfo { name: string, isTeam1: boolean, dataId: number, isEnemyUnit
 
 const appearanceById = new Map<number, QuestEnemyAppearance>((questEnemyAppearanceJson as QuestEnemyAppearance[]).map(a => [a.questEnemyAppearanceMstId, a]))
 const PHASE_START = 1, PHASE_FINISH = 2
-const RESULT_WIN = 1, RESULT_LOSE = 2
+const RESULT_WIN = 1
 
 /** Text of a state's master row ("applier - description"), like the old engine's buff lists. */
 function detailDescription(mstId: number): string {
@@ -81,7 +81,7 @@ export class EngineBattle {
         this.director.autoType = this.manual ? 0 : 2 // Manual: the player decides the allies; FullAuto: the AI acts for both teams
         this.random.run(() => this.director.FlushCommands())
         this.consumeCommands()
-        this.initial = this.getCurrentState()
+        this.initial = EngineBattle.shiftedToFirstActor(this.getCurrentState())
         // GameDirectorBase.ChangeBattlePhase(Start) runs the first act (e.g. a battle-start follow-up): its own entry.
         this.pending = this.report(() => this.director.ChangeBattlePhase(PHASE_START))
     }
@@ -209,7 +209,7 @@ export class EngineBattle {
         const buffs: string[] = [], debuffs: string[] = [], ailments: string[] = [], spd: [number, string, string?][] = []
         let shields = 0
         for (const s of unit._Condition._StateList) {
-            if (s._EffectOrigin === 2) continue // passive-skill states: always on, not listed (as before)
+            if (s._EffectOrigin === 2 && s.IsPermanent) continue // permanent passive-skill states: always on, not listed (as before)
             const user = this.director.battleUnitBundle.dic.get(s._UserUnitId)
             const applier = user ? this.info(user).name : ""
             const desc = detailDescription(s._MstId)
@@ -267,8 +267,17 @@ export class EngineBattle {
         return (unit._Team === 0 ? this.allyKiokus : this.enemyKiokus)[unit._PositionId - 1]
     }
 
-    /** The state before the first act (what the pages show as the battle setup). */
+    /** The state before the first act (what the pages show as the battle setup), with time moved on to the first
+     * actor like TurnReferee.ShiftNextTurn will (the first unit at 0 AV). */
     get initialState(): BattleSnapshot { return this.initial }
+
+    private static shiftedToFirstActor(s: BattleSnapshot): BattleSnapshot {
+        const living = [...s.allies.team, ...s.enemies.team].filter(u => !u.isDead)
+        const dt = Math.min(...living.map(u => u.secondsLeft))
+        if (!(dt > 0) || !Number.isFinite(dt)) return s
+        const shift = (u: TeamSnapshot): TeamSnapshot => u.isDead ? u : { ...u, secondsLeft: Math.max(0, Math.fround(u.secondsLeft - dt)), distanceLeft: Math.max(0, Math.fround(u.secondsLeft - dt)) * u.spd }
+        return { ...s, allies: { ...s.allies, team: s.allies.team.map(shift) }, enemies: { ...s.enemies, team: s.enemies.team.map(shift) } }
+    }
 
     getCurrentState(): BattleSnapshot {
         const d = this.director

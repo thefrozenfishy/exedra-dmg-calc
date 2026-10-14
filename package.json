@@ -4,7 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "engine": "node --max-old-space-size=3300 scripts/engine/bundle.mjs",
+    "predev": "npm run engine",
     "dev": "vite",
+    "prebuild": "npm run engine",
     "build": "vite build",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist"
