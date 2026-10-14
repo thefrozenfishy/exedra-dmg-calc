@@ -1,8 +1,9 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal, float } from "../../runtime";
+import { UnitStateBase } from "./UnitStateBase";
+import { Decimal, f32, notPorted } from "../../runtime";
+import type { float } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { ReflectionUnitStateBase } from "./ReflectionUnitStateBase";
@@ -23,7 +24,17 @@ export class ReflectionRatioUnitState extends ReflectionUnitStateBase {
         return this;
     }
     /** @rva 0x16D6520  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ReflectionRatioUnitState..ctor", 0x16D6520); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        UnitStateBase.prototype.ctor$AbilityEffectInfo.call(this, info); // the game calls UnitStateBase..ctor directly
+        this._DamageTarget = (info._EffectValue2 > 0 ? 1 : 0) as any;
+        this._ReflectionRatio = f32(f32(info._EffectValue1) / 10);
+        return this;
+    }
     /** @rva 0x16D62F0 slot 25  protected override Decimal GetDamageBase(BattleUnit userUnit) { } */
-    GetDamageBase(userUnit: BattleUnit): Decimal { return notPorted("ReflectionRatioUnitState.GetDamageBase", 0x16D62F0); }
+    GetDamageBase(userUnit: BattleUnit): Decimal {
+        const barrierEndurance = userUnit._Condition._BarrierEndurance;
+        const first = Decimal.fromFloat(this._ReflectionRatio).div(Decimal.fromInt(100)).mul(Decimal.fromInt(barrierEndurance));
+        const second = Decimal.fromDouble(Math.pow(barrierEndurance / 124.0, 1.2)).add(Decimal.fromInt(12)).div(Decimal.fromInt(20));
+        return first.mul(second);
+    }
 }

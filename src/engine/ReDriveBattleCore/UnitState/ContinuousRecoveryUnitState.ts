@@ -1,8 +1,9 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal, IEnumerable, List, float } from "../../runtime";
+import { HpRecoveryCalculator } from "../HpRecoveryCalculator";
+import { Decimal, notPorted } from "../../runtime";
+import type { IEnumerable, List, float } from "../../runtime";
 import type { RangeType } from "../../Network/Definition/Battle/RangeType";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
 import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
@@ -66,7 +67,10 @@ export class ContinuousRecoveryUnitState extends UnitStateBase {  // implements 
         return list;
     }
     /** @rva 0x15B67D0  public Decimal GetRecoveryValue(BattleUnit userUnit) { } */
-    GetRecoveryValue(userUnit: BattleUnit): Decimal { return notPorted("ContinuousRecoveryUnitState.GetRecoveryValue", 0x15B67D0); }
+    GetRecoveryValue(userUnit: BattleUnit): Decimal {
+        const value = Decimal.fromInt(userUnit._MaxHP).mul(Decimal.fromFloat(this.recoveryRatio).div(Decimal.fromInt(100))).add(Decimal.fromFloat(this.recoveryFixedValue));
+        return HpRecoveryCalculator.GetProcessedRecoveryValue(userUnit, userUnit, value, false);
+    }
     /** @rva 0x15B6B40  private static void .cctor() { } */
     static cctor(): void {
         ContinuousRecoveryUnitState.MaxHpRateToUse = 80; // 0x42a00000

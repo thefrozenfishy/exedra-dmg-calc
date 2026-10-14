@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { IBattleStartTriggerPriority_Define } from "../IBattleStartTriggerPriority";
 import { notPorted } from "../../runtime";
 import type { IEnumerable, float, int } from "../../runtime";
 import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
@@ -31,7 +32,7 @@ export class DwnBarrierValueUnitState extends UnitStateBase {  // implements IHa
         return "eff_cmn_act_debuff_appear_001";
     }
     /** @rva 0x15BC610 slot 27  private int ReDriveBattleCore.IBattleStartTriggerPriority.get_Priority() { } */
-    get_IBattleStartTriggerPriority$Priority(): int { return notPorted("DwnBarrierValueUnitState.ReDriveBattleCore.IBattleStartTriggerPriority.get_Priority", 0x15BC610); }
+    get_IBattleStartTriggerPriority$Priority(): int { return IBattleStartTriggerPriority_Define.BarrierValueVariationUnitStatePriority; }
     /** @rva 0xC646A0 slot 25  public float get_UpdateableEffectValue() { } */
     get_UpdateableEffectValue(): float { return this._UpdateableEffectValue; /* auto-property */ }
     /** @rva 0xC646B0 slot 26  public void set_UpdateableEffectValue(float value) { } */

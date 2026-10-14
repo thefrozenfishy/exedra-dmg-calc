@@ -6,7 +6,8 @@ import type { int } from "../runtime";
 
 // ---- ReDriveBattleCore.IBattleStartTriggerPriority  (TypeDefIndex 413, public interface) ----
 export interface IBattleStartTriggerPriority {
-    readonly Priority: int;
+    /** explicitly implemented (private int IBattleStartTriggerPriority.get_Priority) by every implementer */
+    readonly IBattleStartTriggerPriority$Priority: int;
 }
 
 // ---- ReDriveBattleCore.IBattleStartTriggerPriority.Define  (TypeDefIndex 412, public static class) ----

@@ -22,5 +22,5 @@ export class RegainAtkUnitState extends RegainUnitStateBase {
         return this;
     }
     /** @rva 0x16D6FF0 slot 26  public override Decimal GetParameterValue(BattleUnit sourceUnit) { } */
-    GetParameterValue(sourceUnit: BattleUnit): Decimal { return notPorted("RegainAtkUnitState.GetParameterValue", 0x16D6FF0); }
+    GetParameterValue(sourceUnit: BattleUnit): Decimal { return sourceUnit.GetProcessedAtkDecimal(); }
 }

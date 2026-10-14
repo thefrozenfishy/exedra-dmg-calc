@@ -1,6 +1,9 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { BattleDamageCalculator } from "../BattleDamageCalculator";
+import { AffectedUnitNotice } from "../AffectedUnitNotice";
+import { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
 import { notPorted } from "../../runtime";
 import type { Decimal, IEnumerable, List } from "../../runtime";
 import type { BattleType } from "../../Network/Definition/Battle/BattleType";
@@ -8,7 +11,7 @@ import type { RangeType } from "../../Network/Definition/Battle/RangeType";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
 import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
-import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
+
 import type { BattleUnit } from "../BattleUnit";
 import type { GameDirectorBase } from "../GameDirectorBase";
 import type { IBuff } from "./IBuff";
@@ -43,11 +46,40 @@ export abstract class ReflectionUnitStateBase extends UnitStateBase {  // implem
         return this;
     }
     /** @rva 0x16D6F40  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("ReflectionUnitStateBase..ctor", 0x16D6F40); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        super.ctor$AbilityEffectInfo(info);
+        this._DamageTarget = (info._EffectValue2 > 0 ? 1 : 0) as ReflectionUnitStateBase_DamageTargetType;
+        return this;
+    }
     /** @rva 0x16D67B0  protected List<BattleUnit> GetTargetUnitList(BattleUnit userUnit, BattleUnit attackUnit, List<BattleUnit> selectUnitList) { } */
-    GetTargetUnitList(userUnit: BattleUnit, attackUnit: BattleUnit, selectUnitList: List<BattleUnit>): List<BattleUnit> { return notPorted("ReflectionUnitStateBase.GetTargetUnitList", 0x16D67B0); }
+    GetTargetUnitList(userUnit: BattleUnit, attackUnit: BattleUnit, selectUnitList: List<BattleUnit>): List<BattleUnit> {
+        const list: BattleUnit[] = [];
+        if (this._DamageTarget === 1) {
+            for (const unit of selectUnitList) {
+                if (unit._Team !== userUnit._Team && !unit.get_IsDead() && !unit.get_IsDying()) list.push(unit);
+            }
+        } else if (attackUnit != null && !attackUnit.get_IsDead() && !attackUnit.get_IsDying()) {
+            list.push(attackUnit);
+        }
+        return list;
+    }
     /** @rva 0x16D6C50  public AffectedUnitNoticeBundle Triggering(BattleUnit userUnit, BattleUnit attackUnit, List<BattleUnit> selectUnitList, BattleType battleType, GameDirectorBase gameDirector) { } */
-    Triggering(userUnit: BattleUnit, attackUnit: BattleUnit, selectUnitList: List<BattleUnit>, battleType: BattleType, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("ReflectionUnitStateBase.Triggering", 0x16D6C50); }
+    Triggering(userUnit: BattleUnit, attackUnit: BattleUnit, selectUnitList: List<BattleUnit>, battleType: BattleType, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
+        const bundle = new AffectedUnitNoticeBundle().ctor();
+        for (const targetUnit of this.GetTargetUnitList(userUnit, attackUnit, selectUnitList)) {
+            userUnit.activeConditionCheckDataBundle._EachTargetUnit = targetUnit; // setter inlined in the game
+            bundle.Add(AffectedUnitNotice.CreateByReflection(userUnit._Id));
+            const damageBase = this.GetDamageBase(userUnit); // vslot 25
+            const notice = BattleDamageCalculator.GetReflectionDamageResult(userUnit, targetUnit, damageBase, this._TargetElement, battleType);
+            const damage = notice.GetTotalDamageValue(true);
+            notice._IsReceivedReflection = true;
+            userUnit.AttacksToNearDeath(targetUnit, damage, gameDirector);
+            notice._IsDead = targetUnit.get_IsDead();
+            bundle.Add(notice);
+            userUnit.activeConditionCheckDataBundle._EachTargetUnit = null!; // setter inlined in the game
+        }
+        return bundle;
+    }
     /** @rva -1 slot 25  protected abstract Decimal GetDamageBase(BattleUnit userUnit); */
     abstract GetDamageBase(userUnit: BattleUnit): Decimal;
     /** @rva 0x16D6580 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */

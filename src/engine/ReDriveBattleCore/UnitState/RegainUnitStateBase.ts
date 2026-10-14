@@ -1,8 +1,9 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal, IEnumerable, List, float, int } from "../../runtime";
+import { HpRecoveryCalculator } from "../HpRecoveryCalculator";
+import { Decimal, notPorted } from "../../runtime";
+import type { IEnumerable, List, float, int } from "../../runtime";
 import type { RangeType } from "../../Network/Definition/Battle/RangeType";
 import type { SkillType } from "../../Network/Definition/Battle/SkillType";
 import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
@@ -63,7 +64,22 @@ export abstract class RegainUnitStateBase extends UnitStateBase {  // implements
     /** @rva -1 slot 26  public abstract Decimal GetParameterValue(BattleUnit sourceUnit); */
     abstract GetParameterValue(sourceUnit: BattleUnit): Decimal;
     /** @rva 0x16D7320 slot 25  public Decimal GetAdditionalHpRecoveryValue(BattleUnit userUnit, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */
-    GetAdditionalHpRecoveryValue(userUnit: BattleUnit, noticeBundle: AffectedUnitNoticeBundle, gameDirector: GameDirectorBase): Decimal { return notPorted("RegainUnitStateBase.GetAdditionalHpRecoveryValue", 0x16D7320); }
+    GetAdditionalHpRecoveryValue(userUnit: BattleUnit, noticeBundle: AffectedUnitNoticeBundle, gameDirector: GameDirectorBase): Decimal {
+        // <>c__DisplayClass16_0 { gameDirector, userUnit }
+        const hit = noticeBundle.GetNoticeList()
+            .filter(notice => notice._IsReceivedAttack) // <>c.b__16_0
+            .map(notice => gameDirector.get_battleUnitDic().get(notice._AffectedUnitId) ?? null!) // DisplayClass16_0.b__1 (TryGetValue)
+            .some(unit => unit != null && unit._Team !== userUnit._Team); // DisplayClass16_0.b__2
+        if (hit) {
+            const sourceUnit = gameDirector.get_battleUnitDic().get(this._UserUnitId);
+            if (sourceUnit !== undefined) {
+                const value = this.GetParameterValue(sourceUnit).mul(Decimal.fromInt(this.recoveryRatio).div(Decimal.fromInt(1000))).add(Decimal.fromInt(this.recoveryFixed)); // vslot 26
+                const battleType = gameDirector.get_BattleType();
+                return HpRecoveryCalculator.GetProcessedRecoveryValue(userUnit, userUnit, value, battleType === 2 || battleType === 4);
+            }
+        }
+        return Decimal.Zero;
+    }
     /** @rva 0x16D70F0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__17_0

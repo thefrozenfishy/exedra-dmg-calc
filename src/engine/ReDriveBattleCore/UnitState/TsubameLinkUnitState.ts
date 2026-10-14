@@ -1,11 +1,16 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { f32, notPorted } from "../../runtime";
+import type { TargetElementType } from "../../Network/Definition/Battle/TargetElementType";
+import { TargetElementType as TargetElementType$ } from "../../Network/Definition/Battle/TargetElementType";
+import { CharacterParameter } from "../CharacterParameter";
+import { BattleDamageCalculator } from "../BattleDamageCalculator";
+import { AdditionalDamageAbilityEffect } from "../AbilityEffect/AdditionalDamageAbilityEffect";
+import { enumIsDefined, f32, notPorted } from "../../runtime";
 import type { IEnumerable, float } from "../../runtime";
 import { Decimal } from "../../runtime";
 import { AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
-import type { AdditionalDamageAbilityEffect } from "../AbilityEffect/AdditionalDamageAbilityEffect";
+
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { ActiveSkillBase } from "../ActiveSkillBase";
 import type { AffectedUnitNoticeBundle } from "../AffectedUnitNoticeBundle";
@@ -21,6 +26,8 @@ import type { ISpeedVariation } from "./ISpeedVariation";
 import { UnitStateBase } from "./UnitStateBase";
 import type { UnitStateBase_DirectionType } from "./UnitStateBase";
 import type { List } from "../../runtime";
+import { EffectOriginType } from "./EffectOriginType";
+import { DamageBaseType } from "../AbilityEffect/DamageBaseType";
 
 // ---- ReDriveBattleCore.UnitState.TsubameLinkUnitState  (TypeDefIndex 663, public class) ----
 export class TsubameLinkUnitState extends UnitStateBase {  // implements IHasUpdateableEffectValue, ISpeedVariation, IRequiredStateForDecide, IAtkVariation, IAdditionalDamage, IRequiredSpeedVariationStateForDecide
@@ -68,9 +75,21 @@ export class TsubameLinkUnitState extends UnitStateBase {  // implements IHasUpd
     /** @rva 0x16DA460  public float get_DamagePower() { } */
     get_DamagePower(): float { return this.damagePower; /* asm: movss xmm0, dword ptr [rcx + 0x94]; ret */ }
     /** @rva 0x16DA3B0  protected void .ctor() { } */
-    ctor(): this { return notPorted("TsubameLinkUnitState..ctor", 0x16DA3B0); }
+    ctor(): this {
+        this.additionalDamageAbilityEffect = new AdditionalDamageAbilityEffect().ctor();
+        super.ctor();
+        return this;
+    }
     /** @rva 0x16DA2D0  public void .ctor(AbilityEffectInfo info) { } */
-    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this { return notPorted("TsubameLinkUnitState..ctor", 0x16DA2D0); }
+    ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
+        this.additionalDamageAbilityEffect = new AdditionalDamageAbilityEffect().ctor();
+        super.ctor$AbilityEffectInfo(info);
+        this._UpdateableEffectValue = 1;
+        this.upSpdRatio = f32(f32(info._EffectValue1) / 10);
+        this.upAtkRatio = f32(f32(info._EffectValue2) / 10);
+        this.damagePower = f32(f32(info._EffectValue3) / 10);
+        return this;
+    }
     /** @rva 0x16DA240 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
@@ -89,7 +108,26 @@ export class TsubameLinkUnitState extends UnitStateBase {  // implements IHasUpd
         return Decimal.fromInt(unit.get_ATK()).mul(Decimal.fromFloat(f32(this._UpdateableEffectValue * this.upAtkRatio)).div(Decimal.fromInt(100)));
     }
     /** @rva 0x16D9970 slot 31  public AffectedUnitNoticeBundle GetAdditionalDamageResult(BattleUnit attackUnit, ActiveSkillBase attackSkill, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */
-    GetAdditionalDamageResult(attackUnit: BattleUnit, attackSkill: ActiveSkillBase, noticeBundle: AffectedUnitNoticeBundle, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle { return notPorted("TsubameLinkUnitState.GetAdditionalDamageResult", 0x16D9970); }
+    GetAdditionalDamageResult(attackUnit: BattleUnit, attackSkill: ActiveSkillBase, noticeBundle: AffectedUnitNoticeBundle, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
+        // <>c__DisplayClass28_0 { gameDirector, attackUnit }
+        const list = noticeBundle.GetNoticeList()
+            .filter(notice => notice._IsReceivedAttack) // <>c.b__28_0
+            .map(notice => gameDirector.get_battleUnitDic().get(notice._AffectedUnitId) ?? null!) // DisplayClass28_0.b__1 (TryGetValue)
+            .filter(unit => unit != null && unit._Team !== attackUnit._Team); // DisplayClass28_0.b__2
+        if (list.length === 0) return null!;
+        const userUnit = gameDirector.get_battleUnitDic().get(this._UserUnitId) ?? null;
+        if (userUnit == null) return null!; // TryGetValue false
+        const damageBase = BattleDamageCalculator.GetDamageBase(userUnit.GetInitialDamageBaseParamValue(1 as DamageBaseType), f32(this.damagePower / 100));
+        let attackElement = 0 as TargetElementType;
+        const p = attackUnit.get_Param();
+        if (p instanceof CharacterParameter) {
+            const element = p._Element as number;
+            if (enumIsDefined(TargetElementType$, element)) attackElement = element as TargetElementType;
+        }
+        this.additionalDamageAbilityEffect.SetActiveSkillInfo$3(attackSkill, attackElement, damageBase);
+        this.additionalDamageAbilityEffect.SelectTargets$ListBattleUnit(list);
+        return this.additionalDamageAbilityEffect.Triggering(1 as EffectOriginType, attackUnit, gameDirector.get_battleUnitDic(), gameDirector); // vslot 0x188
+    }
     /** @rva 0x16D9950 slot 34  public bool CanAddTo(BattleUnitData targetUnit) { } */
     CanAddTo$BattleUnitData(targetUnit: any /* BattleUnitData */): boolean { return notPorted("TsubameLinkUnitState.CanAddTo", 0x16D9950); }
     /** @rva 0x16D9FD0 slot 33  public Decimal GetSpeedVariationValue(BattleUnitData unit, Decimal processingValue) { } */

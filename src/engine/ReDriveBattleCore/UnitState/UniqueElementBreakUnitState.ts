@@ -29,5 +29,8 @@ export class UniqueElementBreakUnitState extends UniqueLvDebuffUnitStateBase {  
     /** @rva 0x759B30 slot 29  public ILvUp.LvUpType get_TargetLvUpType() { } */
     get_TargetLvUpType(): ILvUp_LvUpType { return 1 as ILvUp_LvUpType; /* asm: mov eax, 1; ret */ }
     /** @rva 0x16DE210 slot 30  public void LvUpProcess(BattleUnit userUnit, BattleUnit targetUnit) { } */
-    LvUpProcess(userUnit: BattleUnit, targetUnit: BattleUnit): void { return notPorted("UniqueElementBreakUnitState.LvUpProcess", 0x16DE210); }
+    LvUpProcess(userUnit: BattleUnit, targetUnit: BattleUnit): void {
+        if (this._UserUnitId !== userUnit._Id) return;
+        this.TryCountUp();
+    }
 }

@@ -1,6 +1,7 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { TsubameLinkUnitState } from "./TsubameLinkUnitState";
 import { notPorted } from "../../runtime";
 import type { IEnumerable, List, float } from "../../runtime";
 import { Decimal } from "../../runtime";
@@ -70,7 +71,12 @@ export class TsubameCoreUnitState extends UnitStateBase {  // implements IBuff, 
         return processingValue.mul(Decimal.fromFloat(this._DownRatio).div(Decimal.fromInt(100))).neg();
     }
     /** @rva 0x16D95A0 slot 19  public override void OnRemovingFromCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
-    OnRemovingFromCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void { return notPorted("TsubameCoreUnitState.OnRemovingFromCondition", 0x16D95A0); }
+    OnRemovingFromCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void {
+        // <>c__DisplayClass17_0 { unit, this }
+        for (const u of [...gameDirector.get_battleUnitDic().values()].filter(u => u._Team === unit._Team)) { // b__0
+            u._Condition.RemoveUnitState$BattleUnit_FuncUnitStateBasebool(u, state => state instanceof TsubameLinkUnitState && state._UserUnitId === this._UserUnitId); // b__1
+        }
+    }
     /** @rva 0x16D9090 slot 29  public bool CanAddTo(BattleUnitData targetUnit) { } */
     CanAddTo$BattleUnitData(targetUnit: any /* BattleUnitData */): boolean { return notPorted("TsubameCoreUnitState.CanAddTo", 0x16D9090); }
     /** @rva 0x16D9400 slot 28  public Decimal GetSpeedVariationValue(BattleUnitData unit, Decimal processingValue) { } */

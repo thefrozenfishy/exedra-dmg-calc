@@ -36,7 +36,7 @@ export class DwnHateUnitState extends HateUnitStateBase {
         return this;
     }
     /** @rva 0x16D0740 slot 26  public override int GetHateVariationWeight() { } */
-    GetHateVariationWeight(): int { return notPorted("DwnHateUnitState.GetHateVariationWeight", 0x16D0740); }
+    GetHateVariationWeight(): int { return -this._DownWeight; }
     /** @rva 0x16D0750 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];

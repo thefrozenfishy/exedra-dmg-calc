@@ -1,8 +1,8 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
-import { notPorted } from "../../runtime";
-import type { Decimal } from "../../runtime";
+import { Decimal, notPorted } from "../../runtime";
+
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
 import type { BattleUnit } from "../BattleUnit";
 import { RegainUnitStateBase } from "./RegainUnitStateBase";
@@ -22,5 +22,5 @@ export class RegainHpUnitState extends RegainUnitStateBase {
         return this;
     }
     /** @rva 0x16D7070 slot 26  public override Decimal GetParameterValue(BattleUnit sourceUnit) { } */
-    GetParameterValue(sourceUnit: BattleUnit): Decimal { return notPorted("RegainHpUnitState.GetParameterValue", 0x16D7070); }
+    GetParameterValue(sourceUnit: BattleUnit): Decimal { return Decimal.fromInt(sourceUnit._MaxHP); }
 }

@@ -42,7 +42,11 @@ export class Unique10070201UnitState extends UnitStateBase {  // implements IBuf
         return this;
     }
     /** @rva 0x16DD580 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
-    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> { return notPorted("Unique10070201UnitState.GetAIFilteredTargets", 0x16DD580); }
+    GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
+        let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__10_0
+        if (list.length > 0) list = list.filter(unit => this.$GetAIFilteredTargets$b__10_1(unit));
+        return list;
+    }
     /** @rva 0x16DD740 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
@@ -51,5 +55,7 @@ export class Unique10070201UnitState extends UnitStateBase {  // implements IBuf
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
     /** @rva 0x16DD910  private bool <GetAIFilteredTargets>b__10_1(BattleUnit unit) { } */
-    $GetAIFilteredTargets$b__10_1(unit: BattleUnit): boolean { return notPorted("Unique10070201UnitState.<GetAIFilteredTargets>b__10_1", 0x16DD910); }
+    $GetAIFilteredTargets$b__10_1(unit: BattleUnit): boolean {
+        return !unit._Condition.GetSameStateList(this, false).some(state => state._EffectTurn === UnitStateBase.EffectTurnOfPermanent || state._RemainingTurn > 1); // <>c.b__10_2
+    }
 }

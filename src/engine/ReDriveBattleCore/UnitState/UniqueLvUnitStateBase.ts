@@ -1,10 +1,13 @@
 // 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import type { UniqueStateLevelMstRecord } from "../../Network/Definition/Skill/UniqueStateLevelMstRecord";
+import { UniqueStateLevelMstModel } from "../Model/UniqueStateLevelMstModel";
+import { BattleMstReaderBase } from "../Reader/BattleMstReaderBase";
 import { notPorted } from "../../runtime";
 import type { List, int } from "../../runtime";
 import type { AbilityEffectInfo } from "../AbilityEffectInfo";
-import type { UniqueStateLevelMstModel } from "../Model/UniqueStateLevelMstModel";
+
 import type { IBlendable } from "./IBlendable";
 import type { IStateIconNumberDisplayable } from "./IStateIconNumberDisplayable";
 import { UniqueUnitStateBase } from "./UniqueUnitStateBase";
@@ -44,9 +47,20 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
     /** @rva 0x754900  public void set_UniqueStateLevelMstGroupId(int value) { } */
     set_UniqueStateLevelMstGroupId(value: int): void { this._UniqueStateLevelMstGroupId = value; /* auto-property */ }
     /** @rva 0x16DE8D0  public List<UniqueStateLevelMstModel> get_LvMstList() { } */
-    get_LvMstList(): List<UniqueStateLevelMstModel> { return notPorted("UniqueLvUnitStateBase.get_LvMstList", 0x16DE8D0); }
+    get_LvMstList(): List<UniqueStateLevelMstModel> {
+        if (this.lvMstListCache == null) {
+            this.lvMstListCache = [...BattleMstReaderBase.get_Instance<UniqueStateLevelMstModel, UniqueStateLevelMstRecord, int>(UniqueStateLevelMstModel)
+                .GetModelList(r => this.$get_LvMstList$b__14_0(r))]; // IBattleMstReader slot 3, .ToList()
+        }
+        return this.lvMstListCache;
+    }
     /** @rva 0x16DEA40  public int get_MaxLv() { } */
-    get_MaxLv(): int { return notPorted("UniqueLvUnitStateBase.get_MaxLv", 0x16DEA40); }
+    get_MaxLv(): int {
+        if (this.get_LvMstList() != null && this.get_LvMstList().length > 0) {
+            return Math.max(...this.get_LvMstList().map(m => m.record.level)); // <>c.b__16_0 (Max: throws on empty)
+        }
+        return 1;
+    }
     /** @rva 0x820790 slot 27  public int get_StateIconNumber() { } */
     get_StateIconNumber(): int { return this._Lv; /* asm: mov eax, dword ptr [rcx + 0x98]; ret */ }
     /** @rva 0x7360C0 slot 28  public bool get_IsShowZeroIfZero() { } */
@@ -67,7 +81,21 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
         return this;
     }
     /** @rva 0x16DE5F0  protected bool TryCountUp() { } */
-    TryCountUp(): boolean { return notPorted("UniqueLvUnitStateBase.TryCountUp", 0x16DE5F0); }
+    TryCountUp(): boolean {
+        if (this.get_LvMstList() == null) return false;
+        if (this.get_LvMstList().length === 0) return false;
+        if (!(this._Lv < this.get_MaxLv())) return false; // get_MaxLv inlined in the game
+        this._HitCounter++;
+        const model = this.get_LvMstList().find(m => m.record.level === this._Lv + 1) ?? null; // <GetRequiredHitCount>b__24_0 (GetRequiredHitCount inlined)
+        if (model == null) return false;
+        const required = model.record.conditionCount;
+        if (required > 0 && required <= this._HitCounter) {
+            this._Lv++;
+            this._HitCounter = 0;
+            return true;
+        }
+        return false;
+    }
     /** @rva 0x16DE530  public int GetRequiredHitCount() { } */
     GetRequiredHitCount(): int {
         const model = this.LvMstList.find(m => this.$GetRequiredHitCount$b__24_0(m)) ?? null; // FirstOrDefault
@@ -75,9 +103,16 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
         return model.record.conditionCount;
     }
     /** @rva 0x16DE420 slot 25  public bool Blend(UnitStateBase injectUnitState) { } */
-    Blend(injectUnitState: UnitStateBase): boolean { return notPorted("UniqueLvUnitStateBase.Blend", 0x16DE420); }
+    Blend(injectUnitState: UnitStateBase): boolean {
+        if (injectUnitState.constructor !== this.constructor) return false; // GetType() != GetType()
+        if (!(injectUnitState instanceof UniqueLvUnitStateBase)) return false;
+        if (injectUnitState._UniqueStatePatternMstId !== this._UniqueStatePatternMstId) return false;
+        if (this._RemainingTurn < injectUnitState._RemainingTurn) this._RemainingTurn = injectUnitState._RemainingTurn;
+        this.IsExemptPassingTurnOnce = injectUnitState.IsExemptPassingTurnOnce;
+        return true;
+    }
     /** @rva 0x16DE8B0  private bool <get_LvMstList>b__14_0(UniqueStateLevelMstRecord r) { } */
-    $get_LvMstList$b__14_0(r: any /* UniqueStateLevelMstRecord */): boolean { return notPorted("UniqueLvUnitStateBase.<get_LvMstList>b__14_0", 0x16DE8B0); }
+    $get_LvMstList$b__14_0(r: UniqueStateLevelMstRecord): boolean { return r.groupId === this._UniqueStateLevelMstGroupId; }
     /** @rva 0x16DE880  private bool <GetRequiredHitCount>b__24_0(UniqueStateLevelMstModel m) { } */
     $GetRequiredHitCount$b__24_0(m: UniqueStateLevelMstModel): boolean {
         return m.record.level === this.Lv + 1;

@@ -322,7 +322,40 @@ export class BattleDamageCalculator {
         return damage.mul(rate);
     }
     /** @rva 0x1380070  public static AffectedUnitNotice GetReflectionDamageResult(BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageBase, TargetElementType attackElement, BattleType battleType) { } */
-    static GetReflectionDamageResult(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageBase: Decimal, attackElement: TargetElementType, battleType: BattleType): AffectedUnitNotice { return notPorted("BattleDamageCalculator.GetReflectionDamageResult", 0x1380070); }
+    static GetReflectionDamageResult(attackUnit: BattleUnit, defenseUnit: BattleUnit, damageBase: Decimal, attackElement: TargetElementType, battleType: BattleType): AffectedUnitNotice {
+        const visualEffects = new Set<string>(); // HashSet<string>
+        let damage = BattleDamageCalculator.GetAppliedDamageOfBreakSituation(defenseUnit, damageBase, false);
+        damage = BattleDamageCalculator.GetDefenseCorrectedDamage(attackUnit, defenseUnit, damage, BattleDamageCalculator.ReflectionDamageDefenceCorrectedBaseType);
+        damage = BattleDamageCalculator.GetProcessedGiveDamage(attackUnit, defenseUnit, damage, attackElement, null!);
+        damage = BattleDamageCalculator.GetProcessedReceiveDamage(attackUnit, defenseUnit, damage);
+        damage = BattleDamageCalculator.GetElementResistDamage(attackUnit, defenseUnit, damage, attackElement);
+        const correlationEffect = new CorrelationEffect().ctor$BattleUnit_BattleUnit_TargetElementType(attackUnit, defenseUnit, attackElement);
+        const correlationDamageType = correlationEffect._DamageType;
+        damage = damage.mul(Decimal.fromFloat(correlationEffect._ElementDamageRatio));
+        // no critical roll for reflection damage
+        damage = BattleDamageCalculator.GetDifficultyCorrectedDamage(attackUnit, defenseUnit, damage);
+        damage = BattleDamageCalculator.GetProcessedFinalGiveDamage(attackUnit, defenseUnit, damage, null!);
+        if (battleType === 2 || battleType === 4) damage = BattleDamageCalculator.DamageCutByPvpOrGvgSuppression(damage);
+        damage = BattleDamageCalculator.DamageCutByShield(damage, defenseUnit);
+        damage = Decimal.max(Decimal.One, damage); // Math.Max(decimal, decimal)
+        let notice = new AffectedUnitNotice().ctor$int(defenseUnit._Id);
+        [notice, damage] = BattleDamageCalculator.DamageCutByDisableDamage(damage, defenseUnit, notice); // inlined in the game
+        let damageValue = damage.ceiling().toInt(); // (int)decimal.Ceiling(damage)
+        let barrierDamageValue = 0;
+        [notice, barrierDamageValue, damageValue] = BattleDamageCalculator.DamageCutByBarrier(damageValue, defenseUnit, notice);
+        const isBreak = defenseUnit._BreakPoint.get_IsBreak();
+        const damageNotice = AffectedUnitNotice.CreateByDamage(defenseUnit._Id, damageValue, 5 as DamageCategory, false, correlationDamageType, [...visualEffects], attackElement, isBreak);
+        let isMaxBreakBonus = false;
+        if (defenseUnit._BreakPoint.get_IsBreak()) isMaxBreakBonus = defenseUnit._BreakedDamageReceiveRate === Math.trunc(defenseUnit._BattleParameter._MaxBreakedDamageReceiveRate / 10);
+        for (const damageInfo of damageNotice.Damages) damageInfo._IsMaxBreakBonusWhenHit = isMaxBreakBonus;
+        if (!(barrierDamageValue > 0 && damageValue === 0)) notice = AffectedUnitNotice.op_Addition(notice, damageNotice);
+        if (barrierDamageValue > 0) {
+            const barrierNotice = AffectedUnitNotice.CreateByBarrierDamage(defenseUnit._Id, barrierDamageValue, 5 as DamageCategory, false, correlationDamageType, [...visualEffects], attackElement, isBreak);
+            for (const damageInfo of barrierNotice.BarrierDamages) damageInfo._IsMaxBreakBonusWhenHit = isMaxBreakBonus;
+            notice = AffectedUnitNotice.op_Addition(notice, barrierNotice);
+        }
+        return notice;
+    }
     /** @rva 0x137BFF0  private static Decimal DamageCutByPvpOrGvgSuppression(Decimal damage) { } */
     static DamageCutByPvpOrGvgSuppression(damage: Decimal): Decimal {
         const model = CalculationPointPolicyMstReader.GetModelByCoefficientName("damageSuppresionRatio");

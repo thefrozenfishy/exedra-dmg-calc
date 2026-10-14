@@ -22,7 +22,7 @@ export class BattleStartPassiveSkillTriggerInfo {
     get TriggerPriority(): int { return this.get_TriggerPriority(); }
     /** @rva 0x1490480  public int get_TriggerPriority() { } */
     get_TriggerPriority(): int {
-        if (isImpl(this.abilityEffect, "IBattleStartTriggerPriority")) return (this.abilityEffect as unknown as IBattleStartTriggerPriority).Priority;
+        if (isImpl(this.abilityEffect, "IBattleStartTriggerPriority")) return (this.abilityEffect as unknown as IBattleStartTriggerPriority).IBattleStartTriggerPriority$Priority;
         return IBattleStartTriggerPriority_Define.DefaultPriority;
     }
 }
