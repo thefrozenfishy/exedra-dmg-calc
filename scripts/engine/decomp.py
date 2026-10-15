@@ -26,9 +26,9 @@ import bisect, json, os, pickle, re, struct, subprocess, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, '..', '..'))
-VER = os.environ.get('XQ_GAME_VER', '3.19.0')
+VER = os.environ.get('XQ_GAME_VER') or open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'ai', 'GAME_VER')).read().strip()  # the version the engine is ported from
 UNP = os.environ.get('XQ_UNPACKED') or os.path.normpath(os.path.join(ROOT, '..', 'unpackedExedra'))
-DUMPER = os.environ.get('XQ_DUMPER') or os.path.normpath(os.path.join(ROOT, '..', 'Il2CppDumper'))
+DUMPER = os.environ.get('XQ_DUMPER') or next((p for p in [os.path.normpath(os.path.join(ROOT, '..', 'unpackedExedra', VER, 'dump'))] if os.path.exists(os.path.join(p, 'script.json'))), os.path.normpath(os.path.join(ROOT, '..', 'Il2CppDumper')))
 DEC = os.path.join(UNP, VER, 'decompiled')
 CACHE = os.path.expanduser(os.environ.get('ENGINE_CACHE', '~/.cache/exedra-engine/' + VER))
 

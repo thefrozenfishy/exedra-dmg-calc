@@ -56,9 +56,9 @@ UNPACKED = _first(os.environ.get("XQ_UNPACKED"), os.path.join(MNT, "unpackedExed
 # The decompile exists for 3.19.0 only. 3.19.1 has byte-identical code (docs/versions/3.19.1/report.md), so every RVA
 # and function is the same. A future version with changed code: decompile into unpackedExedra/<ver>/decompiled and set
 # XQ_GAME_VER=<ver> (docs/ai/VERSION_UPDATE.md).
-GAME_VER = os.environ.get("XQ_GAME_VER", "3.19.0")
+GAME_VER = os.environ.get("XQ_GAME_VER") or open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "GAME_VER")).read().strip()  # engine port version
 DECOMP = os.path.join(UNPACKED, GAME_VER, "decompiled")
-DUMPER = _first(os.environ.get("XQ_DUMPER"), os.path.join(MNT, "Il2CppDumper"))
+DUMPER = _first(os.environ.get("XQ_DUMPER"), os.path.join(MNT, "unpackedExedra", GAME_VER, "dump"), os.path.join(MNT, "Il2CppDumper"))
 DUMP_CS = os.path.join(DUMPER, "dump.cs")
 MAEX = _first(os.environ.get("XQ_MAEX"), os.path.join(MNT, "ma-ex-data"))
 WIKI = os.path.join(MAEX, "wiki")

@@ -19,7 +19,7 @@ def main():
     if not a:
         print(__doc__); return
     rva = int(a[0], 16)
-    ver = a[a.index("--ver") + 1] if "--ver" in a else os.environ.get("XQ_GAME_VER", "3.19.0")
+    ver = a[a.index("--ver") + 1] if "--ver" in a else (os.environ.get("XQ_GAME_VER") or open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "GAME_VER")).read().strip())
     mx = int(a[a.index("--max") + 1]) if "--max" in a else 400
     unpacked = os.environ.get("XQ_UNPACKED") or os.path.join(os.path.dirname(os.path.dirname(HERE)), "..", "unpackedExedra")
     dll = os.path.join(unpacked, ver, "GameAssembly.unpack.dll")

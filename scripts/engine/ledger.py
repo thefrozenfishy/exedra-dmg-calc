@@ -5,6 +5,8 @@
     python3 scripts/engine/ledger.py --class ActReferee   # every method of a class with its status
     python3 scripts/engine/ledger.py --rva 0x18e89f0,0x17E1060   # where those game functions live in TS
     python3 scripts/engine/ledger.py --check <types.json> # members in a (new) dump that the TS files lack / have extra
+    python3 scripts/engine/ledger.py --check <types.json> --apply-moves   # also rewrites the @rva tags (and the
+                                                          # notPorted(..., 0xRVA) of stubs) of every MOVED member
 
 Status of a method: ported (hand-written body), asm (fill_trivial.py), auto (auto-property accessor), stub (notPorted), abstract.
 A patch workflow: verdiff gives the changed RVAs -> `--rva` lists the TS methods to re-port; a new dump ->
@@ -99,6 +101,8 @@ def main():
         have = collections.defaultdict(list)
         for r in rows: have[r['cls']].append(r)
         n = 0
+        apply = '--apply-moves' in a
+        edits = collections.defaultdict(list)  # file -> [(header line index, body line count, old rva, new rva)]
         for t in T:
             if any(s.startswith('<') for s in t['name'].split('.')): continue
             full = t['ns'] + '.' + t['name']
@@ -118,7 +122,26 @@ def main():
                 d = rv.get(r['sig'])
                 if d and d != '-1' and int(d, 16) != int(r['rva'], 16) if r['rva'] != '-1' else False:
                     print(f"MOVED      {full}.{r['ts']}: {r['rva']} -> {d}  (update the @rva tag)"); n += 1
+                    edits[r['file']].append((r['line'] - 2, r['lines'], r['rva'], d))
         print(f'{n} differences')
+        if apply:
+            done = 0
+            for f, es in edits.items():
+                path = os.path.join(ROOT, f)
+                lines = open(path, encoding='utf-8').read().split('\n')
+                for hi, nb, old, new in es:
+                    newhex = '0x' + new[2:].upper().lstrip('0')
+                    pat = re.compile(r'0x0*' + old[2:].lstrip('0') + r'\b', re.I)
+                    hm = HDR.match(lines[hi])
+                    if not hm or int(hm.group(1), 16) != int(old, 16):
+                        print(f'  skip {f}:{hi + 1} (header does not match {old})'); continue
+                    lines[hi] = lines[hi].replace(hm.group(1), newhex, 1)
+                    for k in range(hi + 1, min(len(lines), hi + 1 + nb)):
+                        if 'notPorted(' in lines[k]:
+                            lines[k] = pat.sub(newhex, lines[k])
+                    done += 1
+                open(path, 'w', encoding='utf-8', newline='\n').write('\n'.join(lines))
+            print(f'applied {done} moves in {len(edits)} files')
         return
     out = summary(rows)
     print('\n'.join(out))
