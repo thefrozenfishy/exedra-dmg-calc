@@ -61,8 +61,10 @@ Read the line for `GameAssembly.unpack.dll`:
 Before the dump exists: `python3 scripts/ai/meta_idents.py $HOME/mnt/unpackedExedra/$OLD/global-metadata.dat $HOME/mnt/unpackedExedra/$NEW/global-metadata.dat --out docs/versions/$NEW --grep 'Skill|Effect|State|Battle'`
 lists new/gone type, method and field names (3.21.0: Step-Up skills, CONSUME_SELF_HP). Put them in the newsletter.
 
-1. The method names come from Il2CppDumper, a Windows .NET exe that cannot run in the VM. Ask the user to run (or
-   if unattended, write "BLOCKED: needs Il2CppDumper" in the report and continue with steps 3-6):
+1. The method names come from Il2CppDumper, a Windows .NET exe that cannot run in the VM. Run it yourself on the
+   Windows desktop with computer use: write the version to `E:\Il2CppDumper\run_dump_ver.txt` and double-click
+   `E:\Il2CppDumper\run_dump.bat` in File Explorer (click tier: navigate by clicking, no typing); it writes
+   `<ver>\dump`, `dump\il2cppdumper.log` and `dump\EXIT.txt`. Equivalent command:
    ```
    # in E:\Il2CppDumper (PowerShell)
    .\Il2CppDumper.exe "E:\unpackedExedra\<NEW>\GameAssembly.unpack.dll" "E:\SteamLibrary\steamapps\common\MadokaExedra\MadokaExedra_Data\il2cpp_data\Metadata\global-metadata.dat" "E:\unpackedExedra\<NEW>\dump"
@@ -76,8 +78,12 @@ lists new/gone type, method and field names (3.21.0: Step-Up skills, CONSUME_SEL
    Heuristic: a CHANGED entry can still be a pure re-layout (a RIP-relative global that moved); read it before
    believing it.
 3. Decompile the new version: `E:\unpackedExedra\Ghidra\README_headless.md` (make_name_lists.py on the NEW dump,
-   import, DecompileList into `E:\unpackedExedra\<NEW>\decompiled`). It needs ~6 GB heap: the user runs it on Windows
-   (the VM has 4 GB). Then `export XQ_GAME_VER=$NEW XQ_DUMPER=$HOME/mnt/unpackedExedra/$NEW/dump` for xq.
+   import, DecompileList into `E:\unpackedExedra\<NEW>\decompiled`). It needs ~6 GB heap, so it runs on Windows:
+   `make_name_lists.py` in the VM into `E:\unpackedExedra\ghidra_work_<NEW>`, the version into
+   `Ghidra\run_ghidra_ver.txt`, then double-click `E:\unpackedExedra\Ghidra\run_ghidra.bat` (logs and
+   GHIDRA_EXIT.txt in `<NEW>\decompiled`; ~5 min in total for 3.21.0). Then copy factories.json / state_direction.json /
+   ability_side.json from the previous decompile and add the new factory entries, and `_index_targets.tsv` = targets.tsv.
+   Semantic diff: `python3 scripts/engine/decdiff.py <old>/decompiled <new>/decompiled --only <new rvas> --ignore-offsets --loose`. Then `export XQ_GAME_VER=$NEW XQ_DUMPER=$HOME/mnt/unpackedExedra/$NEW/dump` for xq.
 4. For every changed method: find where the engine ports it (`grep -rn "<old RVA>" src/models docs/ai`, `xq ts`),
    re-read the new code (`xq fn`), fix the port, update the RVA in the code comment and in MECHANICS.md.
 5. Ghidra drops float returns and some branches: when C output looks incomplete, disassemble
@@ -175,13 +181,15 @@ NODE_OPTIONS=--max-old-space-size=3300 timeout 175 npx vue-tsc --noEmit -p tscon
 Type-check: compare the SET of errors with a baseline taken before your change
 (`grep "error TS" | sed 's/([0-9]*,[0-9]*)//' | sort`, then `diff`), not the count alone. 229 on 2026-10-02.
 
-## 8. Newsletter
+## 8. Newsletter (for players)
 
-HTML page for the user: copy `docs/versions/3.19.1/newsletter.html` and replace the content (same sections: headline
-verdict, what's new in the game, what changed in the client, what the simulator learned, numbers, how it was made).
-Keep it factual, cite stage ids / kiokus, and list engine changes with their RVAs. Publish it with the Artifact tool
-when available (load the artifact-design skill first), and save a copy to
-`E:\unpackedExedra\<NEW>\version_report\newsletter.html` and `docs/versions/<NEW>/newsletter.html`.
+The newsletter is for other players of the game, not for the user: gameplay only. Cover new mechanics and how they
+play (buttons, costs, limits, teambuilding hints), new kiokus and kits, events and stages, balance changes, raid / PvP
+rule changes, quality-of-life changes and one simulator-status line. Mark features nothing uses yet ("no units yet").
+Leave out decompile and client internals (RVAs, method/class names, byte diffs, tools, branches, check counts); those
+go to the user in the final chat message. Write only mechanics confirmed in code or data. Model:
+`docs/versions/3.21.0/newsletter.html`. Publish it with the Artifact tool (load the artifact-design skill first), and
+save a copy to `E:\unpackedExedra\<NEW>\version_report\newsletter.html` and `docs/versions/<NEW>/newsletter.html`.
 
 ## 9. Close out
 
@@ -202,6 +210,15 @@ when available (load the artifact-design skill first), and save a copy to
 - Background processes die when the device_bash call ends; split long work into <170 s calls.
 
 ## src/engine (1:1 port) after a code change
+
+Order that worked for 3.21.0 (one session, ~2 h):
+0. `python3 scripts/engine/dump_parse.py <NEW>/dump/dump.cs ~/t.json`; then `ledger.py --check ~/t.json --apply-moves`
+   (moved @rva tags), `fields_check.py ~/t.json --apply` (moved field offsets, NEW/GONE fields),
+   `gen_shells.py ~/t.json --only <new types>`, and for existing types with new members
+   `ENGINE_OUT=~/shells gen_shells.py ~/t.json --force --only <types>` + `merge_members.py ~/shells <types>`.
+   Enums: compare const fields of both dumps and regenerate changed enums with `gen_shells.py --force --only`.
+   Factories: diff the StringLiteral lists of UnitStateFactory / AbilityEffectFactory .cctor and add the entries.
+   Then `echo <NEW> > scripts/ai/GAME_VER` (default version of xq / decomp / disasm / fill_trivial).
 
 1. New dump: `python3 scripts/engine/dump_parse.py <ver>/dump/dump.cs /tmp/t.json && python3 scripts/engine/ledger.py --check /tmp/t.json`
    (new/removed/changed members, moved RVAs). Changed functions from `verdiff.py funcs`: `ledger.py --rva <rva,...>`.

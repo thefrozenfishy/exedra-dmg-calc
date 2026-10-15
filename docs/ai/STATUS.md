@@ -1,6 +1,6 @@
 # Status (update at the end of every session)
 
-_Last updated: 2026-10-15 (game 3.21.0: code changed, engine port blocked on Il2CppDumper; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
+_Last updated: 2026-10-15 (game 3.21.0: dumped + decompiled by Claude on Windows, engine re-ported to 3.21.0; branch claude/version-3.21.0); before: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
 ## 2026-10-15: Kioku Grid bench speed, expected-crit APP MOD, no filler Lux
 
@@ -127,7 +127,7 @@ Findings for src/models: MathExtension.Floor scale (PITFALLS), RegisterSpecialAt
 |---|---|
 | `claude/version-3.19.1` | **Checked out 2026-10-02**, branched from main 7fb9730 (= origin/main; the 2026-10-01 branches claude/verify-priority-3.19, claude/actor-skill-type-3.19 and battle-engine-3.19 are merged and no longer exist locally). 3.19.1 work: verdiff.py / disasm.py / smokeNew.ts / VERSION_UPDATE.md runbook, LOCK_SPECIAL_ATTACK, conditions 22/206/207/313-316, BreakedDamageReceiveRate starts at 0, IMM_SLIP_DMG instant DOT burst. Fixtures 6/6, checkMechanics 18/18 (#10-#14 new, each fails without its change), type-check 229 = baseline set. Not pushed; for the user to merge. |
 | `claude/version-3.19.11` | **Checked out 2026-10-07**, branched at 1f3e518 (= main). 3.19.11 report + newsletter, `verdiff.py runs`, docs. No engine change (battle code identical to 3.19.0). Fixtures 10/10, checkMechanics 19/19, type-check 230. Not pushed. |
-| `claude/version-3.21.0` | **Checked out 2026-10-15**, branched from claude/engine-1to1 43e093e (the checked-out branch; clean tree). 3.21.0 report + newsletter + metadata identifier diff, `scripts/ai/meta_idents.py`, docs. No engine change (blocked on the new dump). Fixtures 12/12, checkMechanics 19/19, engine tsc 0. Not pushed. |
+| `claude/version-3.21.0` | **Checked out 2026-10-15**, branched from claude/engine-1to1 43e093e (the checked-out branch; clean tree). 3.21.0 report + player newsletter, metadata identifier diff, engine re-ported to 3.21.0 (Step-Up, CONSUME_SELF_HP, Link Raid linked HP, Magic Seal AI), new tools meta_idents / decdiff / fields_check / merge_members / ledger --apply-moves, checkEngine321.ts. Not pushed; merge after claude/engine-1to1. |
 | `main` | = origin/main 7fb9730 on 2026-10-02. |
 
 `docs/ai/EFFECT_TYPES.md` is committed per branch (its header says which); rebuild with `xq build` after switching
@@ -137,19 +137,19 @@ do) and UP_BREAK_EFFECT (blocked, open question 1).
 
 ## Game 3.21.0 (Steam files 2026-10-15 16:12 UTC, PE build 2026-10-08), compared with 3.19.11
 
-**CODE CHANGED, layout moved**: GameAssembly 138,817,536 -> 139,264,000 bytes, every section changed, so the 3.19
-RVAs and the 3.19.0 decompile no longer describe the client. **BLOCKED: needs Il2CppDumper + Ghidra on Windows**
-(commands in docs/versions/3.21.0/newsletter.html "Needs you"). Metadata identifier diff (`scripts/ai/meta_idents.py`,
-docs/versions/3.21.0/idents_new.txt) names two new battle mechanics: **Step-Up skills** (STEP_UP_SKILL,
-StepUpSkillUnitState, CommandStepUpSkill, CalcStepUpTotalConsumeSp, SetOverrideConsumeSp, GetStepUpSkillByPassiveSkill,
-ShouldUseStepUpSkillByRole, nextSkillMstId/nextStepLevel) and **CONSUME_SELF_HP** (ConsumeSelfHpAbilityEffect,
-consumeHpRatio / consumeHpFixed, BattleUnitDamageResult.CreateByConsumeHp), plus the Link Raid EX character bonus
-(MultiRaidMst.exCharacterBonusGroupId / exCharacterBonusPassiveSkillMstId, MultiRaidExCharacterBonusMst). No master
-data uses any of them yet (all 30 MultiRaidMst rows 0, new tables empty, AbilityEffectTypeMst unchanged). Master data:
-no kiokus/stages/effects/conditions/balance changes (base_data 932c14c..HEAD and the 2026-10-15 download). Fixtures
-12/12, checkMechanics 19/19, engine tsc 0, wikicheck only the 3 known unknowns. Next: dump -> `verdiff.py funcs`,
-`ledger.py --check`, re-port moved/changed battle methods, port Step-Up + CONSUME_SELF_HP (+ EX bonus passive in
-MultiRaidGameDirector once the decompile shows where it is given).
+CODE CHANGED and the layout moved. Il2CppDumper + Ghidra were run by Claude on Windows (computer use, launchers
+`E:\Il2CppDumper\run_dump.bat`, `E:\unpackedExedra\Ghidra\run_ghidra.bat`): dump in `3.21.0\dump`, decompile in
+`3.21.0\decompiled` (5,513 functions). **src/engine is now a port of 3.21.0** (scripts default to it through
+`scripts/ai/GAME_VER`): 4,073 moved @rva tags (`ledger.py --apply-moves`), 30 moved field offsets
+(`fields_check.py --apply`), new members merged (`merge_members.py`), new types StepUpSkillHandler,
+StepUpSkillUnitState, CommandStepUpSkill, StepUpSkillRequest, ConsumeSelfHpAbilityEffect, enums RequestType 16 /
+CommandType 34 / CompareContent 117. Logic re-ported: see MECHANICS "Step-Up skills and self HP cost". Of 186
+changed functions (`verdiff.py funcs`) ~50 had real changes after `decdiff.py --ignore-offsets --loose`; the rest
+is inlining / folding noise. Master data: nothing uses the new mechanics yet. Checks: engine tsc 0,
+checkEngine321 7/7 (new), checkFixturesEngine 12/12, engineSweep 400/400 runs ok, engineMultiRaid 600/600 ok,
+checkFixtures 12/12 and checkMechanics 19/19 (old engine, unchanged), app type-check 232 (no error in src/engine or
+src/battle). Not ported (stubs as before): BattleUnitSkillSet.OnSerializing / OnDeserialized (backup only).
+[UNCERTAIN] BattleUnitSkillSet ctor stores stepUpSkills through a helper call (Array.Empty when null?).
 
 ## Game 3.19.11 (patched 2026-10-05 18:26 UTC), compared with 3.19.0
 
@@ -229,6 +229,7 @@ Confirmed by the user's in-game observation. Buffs from allies now tick at the h
 - Sandbox Witch (509140) rotation, to confirm TurnNum-per-turn in combo enemies.
 
 ## Session log (newest first, one line each)
+- 2026-10-15 (3): ran Il2CppDumper + Ghidra on the user's Windows desktop (File Explorer double-click on .bat launchers), re-ported src/engine to 3.21.0 (Step-Up skills, self HP cost, Link Raid linked HP, Magic Seal AI, 4,073 RVAs); newsletter rewritten for players; skill + runbook updated.
 - 2026-10-15 (2): game 3.21.0 (scheduled run): GameAssembly code changed and moved (needs Il2CppDumper/Ghidra); metadata names Step-Up skills, CONSUME_SELF_HP, Link Raid EX character bonus, none used by data yet; no new content. Report/newsletter/idents in docs/versions/3.21.0 and E:\unpackedExedra\3.21.0\version_report. Branch claude/version-3.21.0.
 - 2026-10-07 (3): PvE Simulator page: "Actions" card above the Fight Solver (`actionSteps` in PvESimulatorPage.vue): one scrolling row of the allies' inputs (Ult / Skill / Basic + picked target, extra actions marked), numbered like the timeline, R/Wave markers, pending decision chip, Copy as text. For replaying a run in game.
 - 2026-10-07 (2): manual turn prompt: ultimates fired from it run before the turn unit's gauge reset, and the TimeForward between-acts requests (endless refill, Vanguard) run after each (`PvPTeam.betweenActsHook`, set in `PvPBattle.bindSnapshotHooks`), so an ult that wipes the minions keeps the turn. Fixture pve-rose-garden-own-ult-refill.json (fixtures 15/15). Also traced two reported tie orders: both were a missing Heroic Grace++ on Floral in the sim build.

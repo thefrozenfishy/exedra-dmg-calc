@@ -250,3 +250,15 @@
 - A new enum name (STEP_UP_SKILL, CONSUME_SELF_HP) can appear in the code before AbilityEffectTypeMst has a row for
   it: `verdiff.py mst` then reports "no new effect types". Check the metadata literals too.
 - unpackedExedra no longer keeps every version (3.19.1 was deleted): OLD = the newest folder with version_report/DONE.
+- Il2CppDumper / Ghidra are Windows programs: run them yourself with computer use. File Explorer is the Windows
+  shell and only gets click tier (no typing, no Run box): write a .bat in the VM (CRLF) and double-click it; the
+  console is masked, so log to files and poll from the VM. The user may have another app in front: re-open Explorer.
+- `verdiff.py funcs` CHANGED includes field-offset shifts, folded getters and inlining. Triage with
+  `scripts/engine/decdiff.py <old> <new> --only <rvas> --ignore-offsets --loose --show`, then read each survivor in the
+  new decompile; ctor inlining (ActBase / BattleUnitStructure / CommandExecuteCommonAct.CreateByTurn*) is noise.
+- `node scripts/engine/bundle.mjs` runs out of memory in the VM without `NODE_OPTIONS=--max-old-space-size=3300`, and
+  a first run can exceed 120 s.
+- `sed -i` / `xargs` over all 600 engine files on the mount is too slow for one call (got killed half way): use one
+  python process.
+- Lambda renumbering after a patch (`b__164_0` -> `b__165_0`) shows up as GONE + NEW members: move the ported body to
+  the new name and RVA, don't leave both.

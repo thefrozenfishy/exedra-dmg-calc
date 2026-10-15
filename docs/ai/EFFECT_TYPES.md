@@ -1,6 +1,6 @@
 # Effect types: data usage vs engine coverage (GENERATED - do not edit)
 
-Built from `claude/version-3.21.0 @ 43e093e 2026-10-15`. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
+Built from `claude/version-3.21.0 @ 8c7ee2a 2026-10-15`. Regenerate after switching branches or changing the engine: `python3 scripts/ai/xq.py build`. Details for one type: `python3 scripts/ai/xq.py effect <TYPE>`.
 
 - **kiokus** = collectable kiokus (getStyleMstList) whose kit uses it (all levels, id*100+lvl keys, follow-ups followed).
 - **stages** = quest stages whose enemies use it (skill sets + enemy passives).
@@ -67,6 +67,7 @@ Built from `claude/version-3.21.0 @ 43e093e 2026-10-15`. Regenerate after switch
 | COMBO | ComboUnitState | 0 | 2136 | yes | AITargetSelector.ts, FightSolver.ts, FightSolverTactics.ts, PvPTeam.ts, UnitStateEngine.ts |  |
 | CONSUME_CHARGE_POINT | ConsumeChargePointAbilityEffect | 35 | 939 | yes | AITargetSelector.ts, FightSolver.ts, FightSolverTactics.ts, PvPTeam.ts | A Tale of Cherry Blossoms, Absolute Venus, Assault Paranoia |
 | CONSUME_COUNT_POINT | ConsumeCountPointAbilityEffect | 1 | 0 | yes | FightSolver.ts, FightSolverTactics.ts, PvPTeam.ts | Dark Art Dominion |
+| CONSUME_SELF_HP | ConsumeSelfHpAbilityEffect | 0 | 0 | prefix/template? | FightSolver.ts, FightSolverTactics.ts |  |
 | CONSUME_ZONE_STACK | ConsumeZoneStackAbilityEffect | 4 | 0 | yes | FightSolver.ts, FightSolverTactics.ts, PvPTeam.ts | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
 | CONTINUOUS_RECOVERY | ContinuousRecoveryUnitState | 2 | 0 | yes | FightSolver.ts, FightSolverTactics.ts, PvPTeam.ts, effectText.ts | Doppel of Silence, Magic Cake Dish |
 | COUNT | CountUnitState | 1 | 0 | yes | FightSolver.ts, FightSolverTactics.ts, PvPTeam.ts, effectText.ts | Dark Art Dominion |
@@ -196,6 +197,7 @@ Built from `claude/version-3.21.0 @ 43e093e 2026-10-15`. Regenerate after switch
 | RE_ACTION_TURN_UNIT_ACT | ReActionTurnUnitActAbilityEffect | 5 | 0 | yes | FightSolver.ts, FightSolverTactics.ts, PvPTeam.ts | Dark Art Dominion, Falsified Phenomena, Final Fatebloom |
 | SHIELD | ShieldUnitState | 13 | 545 | yes | FightSolver.ts, FightSolverTactics.ts, PvPBattle.ts, PvPTeam.ts, UnitStateEngine.ts, effectText.ts | Baldamente Fortissimo, Fiore Finale, Folter Gefängnis |
 | SLOW | SlowAbilityEffect | 6 | 855 | yes | AITargetSelector.ts, FightSolver.ts, FightSolverTactics.ts, PvPTeam.ts | Infinite Poseidon, Meteor Punch, Nightmare Stinger |
+| STEP_UP_SKILL | StepUpSkillUnitState | 0 | 0 | prefix/template? | FightSolver.ts, FightSolverTactics.ts |  |
 | STUN | StunUnitState | 1 | 403 | yes | FightSolver.ts, FightSolverTactics.ts, PvPTeam.ts, UnitStateEngine.ts | Ultra Great Big Hammer |
 | SUMMON | SummonAbilityEffect | 0 | 335 | yes | FightSolver.ts, FightSolverTactics.ts, PvPTeam.ts |  |
 | SWITCH_SKILL | SwitchSkillUnitState | 9 | 0 | yes | FightSolver.ts, FightSolverTactics.ts, PvPTeam.ts | Absolute Venus, Falsified Phenomena, Final Fatebloom |
@@ -297,4 +299,4 @@ Built from `claude/version-3.21.0 @ 43e093e 2026-10-15`. Regenerate after switch
 | ZONE_RELEASE | ZoneReleaseAbilityEffect | 0 | 0 | prefix/template? | FightSolver.ts, FightSolverTactics.ts |  |
 | ZONE_STACK | ZoneStackAbilityEffect | 4 | 0 | yes | FightSolver.ts, FightSolverTactics.ts, PvPTeam.ts | Evoluzione Presente, Falsified Phenomena, Floral Ironspike |
 
-288 types; 0 are used by data but have no logic reference in the engine: 
+290 types; 0 are used by data but have no logic reference in the engine: 

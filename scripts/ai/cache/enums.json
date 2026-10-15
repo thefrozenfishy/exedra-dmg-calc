@@ -83,6 +83,7 @@
 "13": "GveMainTargetBreakCount",
 "14": "SkipForcedAutomaticBattle",
 "15": "MultiRaidSyncHpScore",
+"16": "StepUpSkill",
 "1000": "DebugFastEndBattle",
 "1001": "DebugStatusEdit",
 "1002": "DebugTurnGaugeEdit",
@@ -132,7 +133,8 @@
 "30": "SoloRaidBuffActivate",
 "31": "SoloRaidBuffFinish",
 "32": "SyncLinkHp",
-"33": "SyncModeChange"
+"33": "SyncModeChange",
+"34": "StepUpSkill"
 },
 "CompareTarget": {
 "0": "None",
@@ -194,6 +196,7 @@
 "114": "IsReleaseZone",
 "115": "AddRemovableBuffCount",
 "116": "AddRemovableDebuffCount",
+"117": "IsConsumeHp",
 "201": "SP",
 "202": "AliveUnitCount",
 "203": "DeadUnitCount",
@@ -489,31 +492,6 @@
 "1": "Normal",
 "2": "Extra"
 },
-"LimitBreakBonusRefStatus": {
-"0": "hp",
-"1": "atk",
-"2": "def"
-},
-"ParamUpType": {
-"1": "Once",
-"2": "Bulk"
-},
-"ParamUpTargetType": {
-"1": "Character",
-"2": "Style",
-"3": "ActiveSkill",
-"4": "PassiveSkill",
-"5": "SubPassiveSkill"
-},
-"LimitBreakBonusTargetType": {
-"1": "Param",
-"2": "SpecialAttackMaxLevel",
-"3": "PassiveSkill"
-},
-"LimitedType": {
-"0": "None",
-"1": "Limited"
-},
 "EventStartDirection": {
 "0": "None",
 "1": "Official",
@@ -581,6 +559,10 @@
 "ResetType": {
 "0": "NoReset",
 "1": "Monthly"
+},
+"PaymentNoticeDisplayType": {
+"1": "Home",
+"2": "GachaExec"
 },
 "Category": {
 "1": "Item",
@@ -677,7 +659,8 @@
 "7": "PartyMaxPower",
 "8": "AcquiredStyleNum",
 "9": "StartDatetime",
-"10": "MultiRaidLikeCount"
+"10": "MultiRaidLikeCount",
+"11": "TowerHighestFloor"
 },
 "Role": {
 "0": "All",
@@ -992,6 +975,7 @@
 "231": "SoloRaidBossBattleExplanation",
 "233": "AlternativeStoryModeChangeExplanation",
 "234": "StyleRentalExplanation",
+"236": "MultiRaidAddExMode",
 "300": "FinishTutorialWallBannerEffected",
 "301": "NamaeStoryEpisode02Unlocked",
 "302": "NamaeStoryEpisode02UnlockedEffected",
@@ -1336,6 +1320,13 @@
 "6": "Gvg",
 "7": "SoloRaid"
 },
+"ParamUpTargetType": {
+"1": "Param",
+"2": "NormalAttack",
+"3": "ActiveSkill",
+"4": "PassiveSkill",
+"5": "SubPassiveSkill"
+},
 "UnlockType": {
 "0": "None",
 "1": "MainStory",
@@ -1421,6 +1412,24 @@
 "RandomScopeType": {
 "1": "All",
 "2": "Configured"
+},
+"LimitBreakBonusRefStatus": {
+"0": "hp",
+"1": "atk",
+"2": "def"
+},
+"ParamUpType": {
+"1": "Once",
+"2": "Bulk"
+},
+"LimitBreakBonusTargetType": {
+"1": "Param",
+"2": "SpecialAttackMaxLevel",
+"3": "PassiveSkill"
+},
+"LimitedType": {
+"0": "None",
+"1": "Limited"
 },
 "EnemyType": {
 "0": "None",
