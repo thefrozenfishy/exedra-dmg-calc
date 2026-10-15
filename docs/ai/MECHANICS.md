@@ -444,6 +444,13 @@ Ultimates (SpecialAttackAct) and follow-ups: only ExecuteSkill - no TurnStart/Tu
   DamageInfo has no giver field: the vortex's owner gets no credit. [C] TS: added to `notice.totalDamageValue`; the
   owner's `dot` event is display/attribution only. Check: checkMechanics #7.
 
+### Pending 3.21.0 (names from metadata only, NOT ported, no data uses them yet)
+- Step-Up skills (STEP_UP_SKILL): extra SP raises a skill's step level (StepUpSkillUnitState, CalcStepUpTotalConsumeSp,
+  SetOverrideConsumeSp, nextSkillMstId), given by a passive (GetStepUpSkillByPassiveSkill); AI: ShouldUseStepUpSkillByRole.
+- CONSUME_SELF_HP: ConsumeSelfHpAbilityEffect (consumeHpRatio / consumeHpFixed), BattleUnitDamageResult.CreateByConsumeHp.
+- Link Raid EX character bonus: MultiRaidMst.exCharacterBonusPassiveSkillMstId for MultiRaidExCharacterBonusMst characters.
+Port all three from the 3.21.0 decompile; RVAs unknown until Il2CppDumper runs.
+
 ## 14. PvP specifics
 
 - policyType 3: damage ×0.25, heal ×0.5, barrier ×0.5, break gauge from rarity/role, slow 250. [C][D]
