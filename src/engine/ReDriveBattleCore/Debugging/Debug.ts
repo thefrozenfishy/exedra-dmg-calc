@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0), written by hand (the shell generator skips this namespace).
+// 1:1 port of ReDriveBattleCore (game 3.21.0), written by hand (the shell generator skips this namespace).
 // The game calls these delegates directly (no null check); the client sets them at startup. Here the adapter
 // (src/engine/adapter) sets them, so a call with no handler throws like the game would.
 

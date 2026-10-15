@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { AdditionalTurnUnitAct } from "../Act/AdditionalTurnUnitAct";
@@ -14,17 +14,17 @@ import type { EffectOriginType } from "../UnitState/EffectOriginType";
 
 // ---- ReDriveBattleCore.AbilityEffect.AdditionalTurnUnitActAbilityEffect  (TypeDefIndex 1142, public class) ----
 export class AdditionalTurnUnitActAbilityEffect extends AbilityEffectBase {
-    /** @rva 0x18EB3C0  protected void .ctor() { } */
+    /** @rva 0x1920EF0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x18EB3B0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1920EE0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x18EB120 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1920C10 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const userUnitId = userUnit._Id; // <>c__DisplayClass2_0
         const actReferee = gameDirector.turnActSystem.actReferee;

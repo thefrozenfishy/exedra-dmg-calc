@@ -1,6 +1,7 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import type { List } from "../runtime";
 import type { DateTimeOffset } from "./SoloRaidJudgeResultReferee";
 import type { BattleCoreErrorType } from "./Command/BattleCoreErrorType";
 import type { Phase } from "./Command/Phase";
@@ -38,22 +39,22 @@ export class MultiRaidGameDirector extends EnemyAppearanceGameDirectorBase {
     set TotalDamage(v: int) { this.set_TotalDamage(v); }
     get ReqSyncHpScoreCount(): int { return this.get_ReqSyncHpScoreCount(); }
     set ReqSyncHpScoreCount(v: int) { this.set_ReqSyncHpScoreCount(v); }
-    /** @rva 0xD88680 slot 4  public override BattleType get_BattleType() { } */
+    /** @rva 0xDBAD00 slot 4  public override BattleType get_BattleType() { } */
     get_BattleType(): BattleType { return 8 as BattleType; /* asm: mov eax, 8; ret */ }
-    /** @rva 0x902980  public int get_TotalDamage() { } */
+    /** @rva 0x900F30  public int get_TotalDamage() { } */
     get_TotalDamage(): int { return this._TotalDamage; /* auto-property */ }
-    /** @rva 0x9029B0  public void set_TotalDamage(int value) { } */
+    /** @rva 0x900F60  public void set_TotalDamage(int value) { } */
     set_TotalDamage(value: int): void { this._TotalDamage = value; /* auto-property */ }
-    /** @rva 0x754630  public int get_ReqSyncHpScoreCount() { } */
+    /** @rva 0x753630  public int get_ReqSyncHpScoreCount() { } */
     get_ReqSyncHpScoreCount(): int { return this._ReqSyncHpScoreCount; /* auto-property */ }
-    /** @rva 0x754900  private void set_ReqSyncHpScoreCount(int value) { } */
+    /** @rva 0x753900  private void set_ReqSyncHpScoreCount(int value) { } */
     set_ReqSyncHpScoreCount(value: int): void { this._ReqSyncHpScoreCount = value; /* auto-property */ }
-    /** @rva 0x14A18A0  public void .ctor() { } */
+    /** @rva 0x14C8070  public void .ctor() { } */
     ctor(): this {
         super.ctor(); // EnemyAppearanceGameDirectorBase..ctor (tail call)
         return this;
     }
-    /** @rva 0x14A0BE0  public void SetupBattleStage(int questStageMstId, IBattleUnitProvider unitProvider, int mainTargetHp, CommandMultiRaidSyncHpScore.ParticipantInfo[] participantInfos, int roundLimit, DateTimeOffset endTime, int campUpDmg, int campUpBreakPointDmg, bool isBattleSkip) { } */
+    /** @rva 0x14C6F10  public void SetupBattleStage(int questStageMstId, IBattleUnitProvider unitProvider, int mainTargetHp, CommandMultiRaidSyncHpScore.ParticipantInfo[] participantInfos, int roundLimit, DateTimeOffset endTime, int campUpDmg, int campUpBreakPointDmg, bool isBattleSkip) { } */
     SetupBattleStage(questStageMstId: int, unitProvider: IBattleUnitProvider, mainTargetHp: int, participantInfos: CommandMultiRaidSyncHpScore_ParticipantInfo[], roundLimit: int, endTime: DateTimeOffset, campUpDmg: int, campUpBreakPointDmg: int, isBattleSkip: boolean): void {
         this.elapsedTime = 0;
         this.isForcedAutomatic = isBattleSkip;
@@ -69,6 +70,8 @@ export class MultiRaidGameDirector extends EnemyAppearanceGameDirectorBase {
             }
             this.battleUnitBundle.AddUnit(unit);
         }
+        // 3.21.0: the link HP starts at the raid's HP too (Nullable<int>(mainTargetHp))
+        this.linkHpReferee.Init(questStageMstId, WaveReferee.NoneWaveValue, this.battleUnitBundle.enemyList, mainTargetHp);
         // new MultiRaidJudgeResultReferee(questStageMstId, roundLimit, endTime) inlined, then result = 0
         const judge = new MultiRaidJudgeResultReferee().ctor$int_int_DateTimeOffset(questStageMstId, roundLimit, endTime);
         judge.result = 0 as ResultStatus;
@@ -83,7 +86,7 @@ export class MultiRaidGameDirector extends EnemyAppearanceGameDirectorBase {
         this.initialParticipantInfos = participantInfos;
         this.BattlePhase = 0 as Phase;
     }
-    /** @rva 0x14A0910 slot 13  public override void Request(RequestBase request, bool dontFlushCommand = False, CancellationToken cancellationToken) { } */
+    /** @rva 0x14C6C40 slot 13  public override void Request(RequestBase request, bool dontFlushCommand = False, CancellationToken cancellationToken) { } */
     Request(request: RequestBase, dontFlushCommand: boolean = false, cancellationToken: any = null): void {
         if (request == null) return;
         if (request.RequestType === 15 && request instanceof MultiRaidSyncHpScoreRequest) {
@@ -94,7 +97,7 @@ export class MultiRaidGameDirector extends EnemyAppearanceGameDirectorBase {
         }
         super.Request(request, dontFlushCommand, cancellationToken);
     }
-    /** @rva 0x14A09F0 slot 12  public override void RespondToClientReadyRequest() { } */
+    /** @rva 0x14C6D20 slot 12  public override void RespondToClientReadyRequest() { } */
     RespondToClientReadyRequest(): void {
         super.RespondToClientReadyRequest();
         // Enumerable.First(enemyList, <>c.b__14_0): result unused, throws when there is no main target
@@ -102,7 +105,7 @@ export class MultiRaidGameDirector extends EnemyAppearanceGameDirectorBase {
         this.StoreSyncHpScoreCommand(this.initialParticipantInfos, true, false);
         this.StoreTotalDamageCommand(true); // tail call
     }
-    /** @rva 0x14A1020 slot 8  public override void StoreCommand(CommandBase cmd) { } */
+    /** @rva 0x14C73E0 slot 8  public override void StoreCommand(CommandBase cmd) { } */
     StoreCommand(cmd: CommandBase): void {
         if (cmd == null) return;
         cmd._Time = this.elapsedTime;
@@ -113,29 +116,33 @@ export class MultiRaidGameDirector extends EnemyAppearanceGameDirectorBase {
         for (const notice of notices) {
             const unit = this.battleUnitBundle.dic.get(notice._AffectedUnitId);
             if (unit === undefined) continue; // TryGetValue
-            const p = unit.BattleParameter;
-            if (p == null || !(p instanceof QuestEnemyAppearanceParameter) || !p.IsMainTargetEnemy) continue;
+            if (unit._Team === 0) continue; // 3.21.0: allies never count
+            if (this.linkHpReferee.linkHpType !== 2) { // 3.21.0: with linked HP every enemy counts
+                const p = unit.BattleParameter;
+                if (p == null || !(p instanceof QuestEnemyAppearanceParameter) || !p.IsMainTargetEnemy) continue;
+            }
             this.TotalDamage = notice.GetTotalDamageValue(true) + this.TotalDamage;
+            if (notice._IsConsumeHp) this.TotalDamage = this.TotalDamage + notice._ConsumeHpValue; // 3.21.0
         }
     }
-    /** @rva 0x14A0880 slot 15  protected override void Forward() { } */
+    /** @rva 0x14C6BB0 slot 15  protected override void Forward() { } */
     Forward(): void {
         const before = this.TotalDamage;
         super.Forward();
         if (this.TotalDamage !== before) this.StoreCommand(new CommandMultiRaidSyncTotalDamage().ctor$int_bool(this.TotalDamage, false));
     }
-    /** @rva 0x14A15C0  public void SyncHpScoreOnResume(int syncedMainTargetEnemyHp, int totalDamageBeforeSync, CommandMultiRaidSyncHpScore.ParticipantInfo[] participantInfos) { } */
+    /** @rva 0x14C79C0  public void SyncHpScoreOnResume(int syncedMainTargetEnemyHp, int totalDamageBeforeSync, CommandMultiRaidSyncHpScore.ParticipantInfo[] participantInfos) { } */
     SyncHpScoreOnResume(syncedMainTargetEnemyHp: int, totalDamageBeforeSync: int, participantInfos: CommandMultiRaidSyncHpScore_ParticipantInfo[]): void {
         this.SyncHp(syncedMainTargetEnemyHp, totalDamageBeforeSync);
         this.initialParticipantInfos = participantInfos;
     }
-    /** @rva 0x14A1600  public void SyncHpScore(int syncedMainTargetEnemyHp, int totalDamageBeforeSync, CommandMultiRaidSyncHpScore.ParticipantInfo[] participantInfos, bool isRequestedByPlayer = False) { } */
+    /** @rva 0x14C7A00  public void SyncHpScore(int syncedMainTargetEnemyHp, int totalDamageBeforeSync, CommandMultiRaidSyncHpScore.ParticipantInfo[] participantInfos, bool isRequestedByPlayer = False) { } */
     SyncHpScore(syncedMainTargetEnemyHp: int, totalDamageBeforeSync: int, participantInfos: CommandMultiRaidSyncHpScore_ParticipantInfo[], isRequestedByPlayer: boolean = false): void {
         this.SyncHp(syncedMainTargetEnemyHp, totalDamageBeforeSync);
         this.StoreSyncHpScoreCommand(participantInfos, false, isRequestedByPlayer);
         this.commandSender.Flush(); // inlined
     }
-    /** @rva 0x14A1660  private void SyncHp(int syncedMainTargetEnemyHp, int totalDamageBeforeSync) { } */
+    /** @rva 0x14C7A60  private void SyncHp(int syncedMainTargetEnemyHp, int totalDamageBeforeSync) { } */
     SyncHp(syncedMainTargetEnemyHp: int, totalDamageBeforeSync: int): void {
         // the server's HP minus what this client dealt since the server counted
         const hp = Math.max(syncedMainTargetEnemyHp - (this.TotalDamage - totalDamageBeforeSync), 0);
@@ -143,33 +150,41 @@ export class MultiRaidGameDirector extends EnemyAppearanceGameDirectorBase {
         if (unit == null) return;
         this.StoreSyncHpResultForServerCommand(unit._HP - hp);
         const before = unit._HP;
-        unit.SetHP(hp);
+        let deathUnitIds: List<int>;
+        if (this.linkHpReferee.linkHpType === 2) {
+            // 3.21.0: linked HP (boss + parts) syncs every living enemy through the link
+            deathUnitIds = this.battleUnitBundle.enemyList.filter(u => !u.get_IsDead()).map(u => u._Id); // Where(<>c.b__19_1).Select(<>c.b__19_2)
+            this.linkHpReferee.SetCurrentLinkHp(hp, this.battleUnitBundle.enemyList); // inlined in the game
+        } else {
+            deathUnitIds = [unit._Id];
+            unit.SetHP(hp);
+        }
         if (0 < before && hp < 1) {
-            this.OnBattleUnitDeath(unit._Id);
-            this.judgeResultReferee.CheckBattleFinishAfterAct(this.battleUnitBundle.activeList);
+            for (const id of deathUnitIds) this.OnBattleUnitDeath(id);
+            this.CheckBattleFinishAfterAct(); // 3.21.0: the director's (virtual), was the referee's
             if (this.judgeResultReferee.result !== 0) this.BattleEnd();
         }
     }
-    /** @rva 0x14A1350  private void StoreSyncHpScoreCommand(CommandMultiRaidSyncHpScore.ParticipantInfo[] participantInfos, bool isInitialize, bool isRequestedByPlayer = False) { } */
+    /** @rva 0x14C7750  private void StoreSyncHpScoreCommand(CommandMultiRaidSyncHpScore.ParticipantInfo[] participantInfos, bool isInitialize, bool isRequestedByPlayer = False) { } */
     StoreSyncHpScoreCommand(participantInfos: CommandMultiRaidSyncHpScore_ParticipantInfo[], isInitialize: boolean, isRequestedByPlayer: boolean = false): void {
         const unit = [...this.battleUnitBundle.dic.values()].find(u => isMainTargetEnemyUnit(u)); // First(<>c.b__20_0)
         if (unit === undefined) throw new Error("InvalidOperationException: Sequence contains no matching element");
         this.StoreCommand(new CommandMultiRaidSyncHpScore().ctor$int_ParticipantInfo_bool_bool_bool(unit._HP, participantInfos, isInitialize, (this.BattlePhase as int) === 2, isRequestedByPlayer));
     }
-    /** @rva 0x14A1530  private void StoreTotalDamageCommand(bool isInitialize = False) { } */
+    /** @rva 0x14C7930  private void StoreTotalDamageCommand(bool isInitialize = False) { } */
     StoreTotalDamageCommand(isInitialize: boolean = false): void {
         this.StoreCommand(new CommandMultiRaidSyncTotalDamage().ctor$int_bool(this.TotalDamage, isInitialize));
     }
-    /** @rva 0x14A0B60  public void SendSyncApiError() { } */
+    /** @rva 0x14C6E90  public void SendSyncApiError() { } */
     SendSyncApiError(): void {
         this.StoreCommand(new CommandError().ctor$BattleCoreErrorType(1 as BattleCoreErrorType));
         this.commandSender.Flush(); // inlined
     }
-    /** @rva 0x14A12D0  private void StoreSyncHpResultForServerCommand(int reducedHpBySync) { } */
+    /** @rva 0x14C76D0  private void StoreSyncHpResultForServerCommand(int reducedHpBySync) { } */
     StoreSyncHpResultForServerCommand(reducedHpBySync: int): void {
         this.StoreCommand(new CommandMultiRaidSyncHpResultForServer().ctor$int(reducedHpBySync));
     }
-    /** @rva 0x14A07C0  public void ForceSetBattleFinishByTimeLimitIfNeed() { } */
+    /** @rva 0x14C6AF0  public void ForceSetBattleFinishByTimeLimitIfNeed() { } */
     ForceSetBattleFinishByTimeLimitIfNeed(): void {
         const judge = this.judgeResultReferee;
         if (judge == null) return;

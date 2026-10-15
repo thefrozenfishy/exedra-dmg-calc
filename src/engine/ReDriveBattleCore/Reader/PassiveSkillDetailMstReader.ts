@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import type { IMstIdDetailMstDicHolder } from "./IBattleMstReader";
@@ -11,11 +11,12 @@ import type { PassiveSkillDetailMstRecord } from "../../Network/Definition/Skill
 
 // ---- ReDriveBattleCore.Reader.PassiveSkillDetailMstReader  (TypeDefIndex 855, public class) ----
 export class PassiveSkillDetailMstReader extends BattleMstReaderBase<PassiveSkillDetailMstModel, PassiveSkillDetailMstRecord, int> {
-    /** @rva 0x16D34E0  public static List<PassiveSkillDetailMstModel> GetDetailModelsByMstId(int id) { } */
+    /** @rva 0x16FD3D0  public static List<PassiveSkillDetailMstModel> GetDetailModelsByMstId(int id) { } */
     static GetDetailModelsByMstId(id: int): List<PassiveSkillDetailMstModel> {
         const reader = BattleMstReaderBase.get_Instance<PassiveSkillDetailMstModel, PassiveSkillDetailMstRecord, int>(PassiveSkillDetailMstModel);
-        if (isImpl(reader, "IMstIdDetailMstDicHolder")) {
-            const dic = (reader as unknown as IMstIdDetailMstDicHolder<PassiveSkillDetailMstModel, PassiveSkillDetailMstRecord>).GetMstIdDetailModelsDic();
+        // 3.21.0: a holder whose dictionary is null also takes the fallback
+        const dic = isImpl(reader, "IMstIdDetailMstDicHolder") ? (reader as unknown as IMstIdDetailMstDicHolder<PassiveSkillDetailMstModel, PassiveSkillDetailMstRecord>).GetMstIdDetailModelsDic() : null;
+        if (dic != null) {
             const list = dic.get(id);
             if (list !== undefined) return list; // TryGetValue
             return [];
@@ -25,6 +26,6 @@ export class PassiveSkillDetailMstReader extends BattleMstReaderBase<PassiveSkil
         return [...BattleMstReaderBase.get_Instance<PassiveSkillDetailMstModel, PassiveSkillDetailMstRecord, int>(PassiveSkillDetailMstModel)
             .GetModelList(m => m.passiveSkillDetailMstId === id)]; // <GetDetailModelsByMstId>b__0
     }
-    /** @rva 0x16D3730  public void .ctor() { } */
+    /** @rva 0x16FD660  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { QuestEnemyAppearanceParameter } from "../QuestEnemyAppearanceParameter";
@@ -11,29 +11,29 @@ import { UnableActionUnitStateBase } from "./UnableActionUnitStateBase";
 
 // ---- ReDriveBattleCore.UnitState.StunUnitState  (TypeDefIndex 511, public class) ----
 export class StunUnitState extends UnableActionUnitStateBase {
-    /** @rva 0x15C0A70 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15E6340 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "stun";
     }
-    /** @rva 0x15C0A40 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x15E6310 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_statehit_004";
     }
-    /** @rva 0x15C0A10 slot 14  public override string get_AlwaysVisualEffectName() { } */
+    /** @rva 0x15E62E0 slot 14  public override string get_AlwaysVisualEffectName() { } */
     get_AlwaysVisualEffectName(): string {
         return "eff_cmn_act_state_stun_002";
     }
-    /** @rva 0x15C0960  protected void .ctor() { } */
+    /** @rva 0x15E6230  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15C09B0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15E6280  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x15C0850 slot 19  public override void OnRemovingFromCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
+    /** @rva 0x15E6120 slot 19  public override void OnRemovingFromCondition(BattleUnit unit, GameDirectorBase gameDirector) { } */
     OnRemovingFromCondition(unit: BattleUnit, gameDirector: GameDirectorBase): void {
         if (unit.get_Param() instanceof QuestEnemyAppearanceParameter) {
             const condition = unit._Condition;
@@ -48,7 +48,7 @@ export class StunUnitState_Define {
     static AddRepeatStunParryRate: int = 0;
     /** 0x4 public static readonly int MaxRepeatStunParryRate */
     static MaxRepeatStunParryRate: int = 0;
-    /** @rva 0x15B8150  private static void .cctor() { } */
+    /** @rva 0x15DE460  private static void .cctor() { } */
     static cctor(): void {
         StunUnitState_Define.AddRepeatStunParryRate = 25;
         StunUnitState_Define.MaxRepeatStunParryRate = 80;

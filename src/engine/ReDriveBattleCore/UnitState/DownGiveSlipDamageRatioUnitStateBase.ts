@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { f32, notPorted } from "../../runtime";
@@ -11,22 +11,22 @@ import type { ReceiveSlipDamageUnitStateBase } from "./ReceiveSlipDamageUnitStat
 // ---- ReDriveBattleCore.UnitState.DownGiveSlipDamageRatioUnitStateBase  (TypeDefIndex 605, public abstract class) ----
 export abstract class DownGiveSlipDamageRatioUnitStateBase extends DownGiveSlipDamageUnitStateBase {
     get DownRatio(): Decimal { return this.get_DownRatio(); }
-    /** @rva 0x15BACD0  public Decimal get_DownRatio() { } */
+    /** @rva 0x16F8D50  public Decimal get_DownRatio() { } */
     get_DownRatio(): Decimal {
         return Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10)); // (decimal)float / 10m
     }
-    /** @rva 0x15B3A90  protected void .ctor() { } */
+    /** @rva 0x16F8D40  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15DB550  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x15BAAB0 slot 32  public override Decimal GetSlipDamageVariationValue(ReceiveSlipDamageUnitStateBase state, BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageValue, Decimal processingValue) { } */
+    /** @rva 0x16F8B60 slot 32  public override Decimal GetSlipDamageVariationValue(ReceiveSlipDamageUnitStateBase state, BattleUnit attackUnit, BattleUnit defenseUnit, Decimal damageValue, Decimal processingValue) { } */
     GetSlipDamageVariationValue(state: ReceiveSlipDamageUnitStateBase, attackUnit: BattleUnit, defenseUnit: BattleUnit, damageValue: Decimal, processingValue: Decimal): Decimal {
         if (!this.IsTarget(state)) return Decimal.Zero; // vslot 31
         return processingValue.mul(Decimal.fromFloat(this._UpdateableEffectValue).div(Decimal.fromInt(10)).div(Decimal.fromInt(100))).neg();

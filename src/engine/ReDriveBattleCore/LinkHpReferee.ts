@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import type { QuestEnemyAppearanceMstRecord } from "../Network/Definition/QuestOutGame/QuestEnemyAppearanceMstRecord";
@@ -32,15 +32,15 @@ export class LinkHpReferee {
     get LinkHpName(): string { return this.get_LinkHpName(); }
     get CurrentLinkHp(): int { return this.get_CurrentLinkHp(); }
     get MaxLinkHp(): int { return this.get_MaxLinkHp(); }
-    /** @rva 0x7364F0  public LinkHpType get_LinkHpType() { } */
+    /** @rva 0x7354F0  public LinkHpType get_LinkHpType() { } */
     get_LinkHpType(): LinkHpType { return this.linkHpType; /* asm: mov eax, dword ptr [rcx + 0x10]; ret */ }
-    /** @rva 0x733E90  public string get_LinkHpName() { } */
+    /** @rva 0x732E90  public string get_LinkHpName() { } */
     get_LinkHpName(): string { return this.linkHpName; /* asm: mov rax, qword ptr [rcx + 0x18]; ret */ }
-    /** @rva 0x75ED70  public int get_CurrentLinkHp() { } */
+    /** @rva 0x75DD70  public int get_CurrentLinkHp() { } */
     get_CurrentLinkHp(): int { return this.currentLinkHp; /* asm: mov eax, dword ptr [rcx + 0x20]; ret */ }
-    /** @rva 0x75A830  public int get_MaxLinkHp() { } */
+    /** @rva 0x759830  public int get_MaxLinkHp() { } */
     get_MaxLinkHp(): int { return this.maxLinkHp; /* asm: mov eax, dword ptr [rcx + 0x24]; ret */ }
-    /** @rva 0x149F030  public void Init(int questStageMstId, int currentWave, List<BattleUnit> enemyUnitList, Nullable<int> initialLinkHp) { } */
+    /** @rva 0x14C52D0  public void Init(int questStageMstId, int currentWave, List<BattleUnit> enemyUnitList, Nullable<int> initialLinkHp) { } */
     Init(questStageMstId: int, currentWave: int, enemyUnitList: List<BattleUnit>, initialLinkHp: Nullable<int>): void {
         const wave = BattleMstReaderBase.get_Instance<QuestEnemyWaveMstModel, QuestEnemyWaveMstRecord, int>(QuestEnemyWaveMstModel)
             .GetModel(r => r.questStageMstId === questStageMstId && r.wave === currentWave); // <>c__DisplayClass13_0.b__0
@@ -64,7 +64,7 @@ export class LinkHpReferee {
             this.SyncEnemyHp$ListBattleUnit(enemyUnitList);
         }
     }
-    /** @rva 0x149F750  public void UpdateLinkHp(List<AffectedUnitNotice> noticeList, Dictionary<int, BattleUnit> battleUnitDic, List<BattleUnit> enemyUnitList, GameDirectorBase gameDirector) { } */
+    /** @rva 0x14C5A80  public void UpdateLinkHp(List<AffectedUnitNotice> noticeList, Dictionary<int, BattleUnit> battleUnitDic, List<BattleUnit> enemyUnitList, GameDirectorBase gameDirector) { } */
     UpdateLinkHp(noticeList: List<AffectedUnitNotice>, battleUnitDic: Dictionary<int, BattleUnit>, enemyUnitList: List<BattleUnit>, gameDirector: GameDirectorBase): void {
         const type = this.linkHpType;
         if (type === 0) return;
@@ -76,7 +76,7 @@ export class LinkHpReferee {
             this.UpdateAffectedUnitListIsDeadFlag(enemyUnitList, noticeList); // inlined in the game
         }
     }
-    /** @rva 0x149EE40  private int CalculateNormalLinkHpDelta(List<AffectedUnitNotice> noticeList, Dictionary<int, BattleUnit> battleUnitDic) { } */
+    /** @rva 0x14C50E0  private int CalculateNormalLinkHpDelta(List<AffectedUnitNotice> noticeList, Dictionary<int, BattleUnit> battleUnitDic) { } */
     CalculateNormalLinkHpDelta(noticeList: List<AffectedUnitNotice>, battleUnitDic: Dictionary<int, BattleUnit>): int {
         let delta = 0;
         if (noticeList == null) return delta;
@@ -90,7 +90,7 @@ export class LinkHpReferee {
         }
         return delta;
     }
-    /** @rva 0x149EA80  private int CalculateBossLinkHpDelta(List<AffectedUnitNotice> noticeList, Dictionary<int, BattleUnit> battleUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x14C4D10  private int CalculateBossLinkHpDelta(List<AffectedUnitNotice> noticeList, Dictionary<int, BattleUnit> battleUnitDic, GameDirectorBase gameDirector) { } */
     CalculateBossLinkHpDelta(noticeList: List<AffectedUnitNotice>, battleUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): int {
         let delta = 0;
         if (noticeList == null) return delta;
@@ -100,6 +100,7 @@ export class LinkHpReferee {
             if (unit.isCharacter) continue;
             if (notice.IsReceivedDamage) delta = delta - notice.GetTotalDamageValue(true);
             if (notice.IsReceivedRecovery) delta = delta + notice.RecoveryValue;
+            if (notice._IsConsumeHp) delta = delta - notice._ConsumeHpValue; // 3.21.0
         }
         if (!(gameDirector instanceof SoloGameDirectorBase)) return delta;
         for (const unit of battleUnitDic.values()) {
@@ -109,11 +110,16 @@ export class LinkHpReferee {
         }
         return delta;
     }
-    /** @rva 0x149EA00  private void AddLinkHpDelta(int hpDelta) { } */
+    /** @rva 0x14C4C90  private void AddLinkHpDelta(int hpDelta) { } */
     AddLinkHpDelta(hpDelta: int): void {
         this.currentLinkHp = clamp(this.currentLinkHp + hpDelta, 0, this.maxLinkHp);
     }
-    /** @rva 0x149F3A0  private void SyncEnemyHp(List<BattleUnit> enemyUnitList) { } */
+    /** @rva 0x14C5640  public void SetCurrentLinkHp(int hp, List<BattleUnit> enemyUnitList) { } */
+    SetCurrentLinkHp(hp: int, enemyUnitList: List<BattleUnit>): void {
+        this.currentLinkHp = clamp(hp, 0, this.maxLinkHp); // Math.Clamp
+        this.SyncEnemyHp$ListBattleUnit(enemyUnitList); // inlined in the game
+    }
+    /** @rva 0x14C56D0  private void SyncEnemyHp(List<BattleUnit> enemyUnitList) { } */
     SyncEnemyHp$ListBattleUnit(enemyUnitList: List<BattleUnit>): void {
         if (enemyUnitList == null) return;
         for (const unit of enemyUnitList) {
@@ -121,12 +127,12 @@ export class LinkHpReferee {
             unit.SetHP(this.currentLinkHp);
         }
     }
-    /** @rva 0x149F4C0  public void SyncEnemyHp(BattleUnit enemyUnit) { } */
+    /** @rva 0x14C57F0  public void SyncEnemyHp(BattleUnit enemyUnit) { } */
     SyncEnemyHp$BattleUnit(enemyUnit: BattleUnit): void {
         if (this.linkHpType !== 2) return;
         enemyUnit.SetHP(this.currentLinkHp); // inlined in the game
     }
-    /** @rva 0x149F4F0  private void UpdateAffectedUnitListIsDeadFlag(List<BattleUnit> enemyUnitList, List<AffectedUnitNotice> affectedUnitNoticeList) { } */
+    /** @rva 0x14C5820  private void UpdateAffectedUnitListIsDeadFlag(List<BattleUnit> enemyUnitList, List<AffectedUnitNotice> affectedUnitNoticeList) { } */
     UpdateAffectedUnitListIsDeadFlag(enemyUnitList: List<BattleUnit>, affectedUnitNoticeList: List<AffectedUnitNotice>): void {
         if (enemyUnitList == null) return;
         for (const unit of enemyUnitList) { // <>c__DisplayClass20_0
@@ -141,9 +147,9 @@ export class LinkHpReferee {
             affectedUnitNoticeList.push(added);
         }
     }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x72F5E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x149F7F0  private static void .cctor() { } */
+    /** @rva 0x14C5B20  private static void .cctor() { } */
     static cctor(): void {
         LinkHpReferee.MaxNormalLinkHp = 100;
     }

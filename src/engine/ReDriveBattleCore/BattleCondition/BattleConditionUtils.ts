@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import type { ConditionCheckerBase } from "./ConditionCheckerBase";
@@ -29,7 +29,7 @@ import { boolParse } from "../../runtime";
 export class BattleConditionUtils {
     /** 0x0 private static readonly string IdCsvDelimiter */
     static IdCsvDelimiter: string = null!;
-    /** @rva 0x17E2C20  public static List<BattleConditionUtils.ConditionSet> GetConditionSetListByIdCsv(string conditionSetMstIdCsv) { } */
+    /** @rva 0x1809040  public static List<BattleConditionUtils.ConditionSet> GetConditionSetListByIdCsv(string conditionSetMstIdCsv) { } */
     static GetConditionSetListByIdCsv(conditionSetMstIdCsv: string): List<BattleConditionUtils_ConditionSet> {
         if (isNullOrEmpty(conditionSetMstIdCsv)) return [];
         return conditionSetMstIdCsv.split(BattleConditionUtils.IdCsvDelimiter)
@@ -38,13 +38,13 @@ export class BattleConditionUtils {
             .filter(x => x > 0) // <>c.b__1_2
             .map(id => new BattleConditionUtils_ConditionSet().ctor$int(id)); // <>c.b__1_3
     }
-    /** @rva 0x17E30B0  public static bool IsMatchConditionSets(string conditionSetMstIdCsv, BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle, ConditionUseType conditionUseType) { } */
+    /** @rva 0x18094D0  public static bool IsMatchConditionSets(string conditionSetMstIdCsv, BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle, ConditionUseType conditionUseType) { } */
     static IsMatchConditionSets$string_ConditionCheckDataBundle_ConditionUseType(conditionSetMstIdCsv: string, conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle, conditionUseType: ConditionUseType): boolean {
         if (isNullOrEmpty(conditionSetMstIdCsv)) return true;
         return BattleConditionUtils.IsMatchConditionSets$ListBattleConditionUtilsConditionSet_ConditionCheckDataBundle_ConditionUseType(
             BattleConditionUtils.GetConditionSetListByIdCsv(conditionSetMstIdCsv), conditionCheckDataBundle, conditionUseType);
     }
-    /** @rva 0x17E33B0  public static bool IsMatchConditionSets(List<BattleConditionUtils.ConditionSet> conditionSetList, BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle, ConditionUseType conditionUseType) { } */
+    /** @rva 0x18097D0  public static bool IsMatchConditionSets(List<BattleConditionUtils.ConditionSet> conditionSetList, BattleConditionUtils.ConditionCheckDataBundle conditionCheckDataBundle, ConditionUseType conditionUseType) { } */
     static IsMatchConditionSets$ListBattleConditionUtilsConditionSet_ConditionCheckDataBundle_ConditionUseType(conditionSetList: List<BattleConditionUtils_ConditionSet>, conditionCheckDataBundle: BattleConditionUtils_ConditionCheckDataBundle, conditionUseType: ConditionUseType): boolean {
         if (conditionSetList.length === 0) return true;
         const b = conditionCheckDataBundle;
@@ -76,7 +76,7 @@ export class BattleConditionUtils {
             conditionSetList, selfUnit, b._ActorUnit, b._MainTargetUnit, b._EachTargetUnit, friendUnits, opponentUnits, friendSP, opponentSP, act,
             b._ActorActiveSkill, b._ActorAbilityEffect, b._AffectedUnitNoticeBundle, b._AffectedUnits, friendAppliedSkillEffectTypes, opponentAppliedSkillEffectTypes, conditionUseType, gameDirector);
     }
-    /** @rva 0x17E3150  public static bool IsMatchConditionSets(List<BattleConditionUtils.ConditionSet> conditionSetList, BattleUnit selfUnit, BattleUnit actorUnit, BattleUnit mainTargetUnit, BattleUnit eachTargetUnit, List<BattleUnit> friendUnits, List<BattleUnit> opponentUnits, int friendSP, int opponentSP, ActBase act, ActiveSkillBase actorActiveSkill, AbilityEffectBase actorAbilityEffect, AffectedUnitNoticeBundle affectedUnitNoticeBundle, List<BattleUnit> affectedUnits, HashSet<string> friendAppliedSkillEffectTypes, HashSet<string> opponentAppliedSkillEffectTypes, ConditionUseType conditionUseType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1809570  public static bool IsMatchConditionSets(List<BattleConditionUtils.ConditionSet> conditionSetList, BattleUnit selfUnit, BattleUnit actorUnit, BattleUnit mainTargetUnit, BattleUnit eachTargetUnit, List<BattleUnit> friendUnits, List<BattleUnit> opponentUnits, int friendSP, int opponentSP, ActBase act, ActiveSkillBase actorActiveSkill, AbilityEffectBase actorAbilityEffect, AffectedUnitNoticeBundle affectedUnitNoticeBundle, List<BattleUnit> affectedUnits, HashSet<string> friendAppliedSkillEffectTypes, HashSet<string> opponentAppliedSkillEffectTypes, ConditionUseType conditionUseType, GameDirectorBase gameDirector) { } */
     static IsMatchConditionSets$ListBattleConditionUtilsConditionSet_BattleUnit_BattleUnit_BattleUnit_BattleUnit_ListBattleUnit_ListBattleUnit_int_int_ActBase_ActiveSkillBase_AbilityEffectBase_AffectedUnitNoticeBundle_ListBattleUnit_HashSetstring_HashSetstring_ConditionUseType_GameDirectorBase(conditionSetList: List<BattleConditionUtils_ConditionSet>, selfUnit: BattleUnit, actorUnit: BattleUnit, mainTargetUnit: BattleUnit, eachTargetUnit: BattleUnit, friendUnits: List<BattleUnit>, opponentUnits: List<BattleUnit>, friendSP: int, opponentSP: int, act: ActBase, actorActiveSkill: ActiveSkillBase, actorAbilityEffect: AbilityEffectBase, affectedUnitNoticeBundle: AffectedUnitNoticeBundle, affectedUnits: List<BattleUnit>, friendAppliedSkillEffectTypes: HashSet<string>, opponentAppliedSkillEffectTypes: HashSet<string>, conditionUseType: ConditionUseType, gameDirector: GameDirectorBase): boolean {
         // <>c__DisplayClass4_0: 0x10 checkedConditionResults
         const checkedConditionResults: Dictionary<int, boolean> = new Map();
@@ -84,9 +84,9 @@ export class BattleConditionUtils {
             friendSP, opponentSP, act, actorActiveSkill, actorAbilityEffect, affectedUnitNoticeBundle, affectedUnits, friendAppliedSkillEffectTypes, opponentAppliedSkillEffectTypes,
             conditionUseType, gameDirector)); // b__0
     }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x72F5E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x17E37E0  private static void .cctor() { } */
+    /** @rva 0x1809C00  private static void .cctor() { } */
     static cctor(): void {
         BattleConditionUtils.IdCsvDelimiter = ",";
     }
@@ -130,47 +130,47 @@ export class BattleConditionUtils_ConditionCheckDataBundle {
     set AffectedUnitNoticeBundle(v: AffectedUnitNoticeBundle) { this.set_AffectedUnitNoticeBundle(v); }
     get AffectedUnits(): List<BattleUnit> { return this.get_AffectedUnits(); }
     set AffectedUnits(v: List<BattleUnit>) { this.set_AffectedUnits(v); }
-    /** @rva 0x730C50  public GameDirectorBase get_GameDirector() { } */
+    /** @rva 0x72FC50  public GameDirectorBase get_GameDirector() { } */
     get_GameDirector(): GameDirectorBase { return this._GameDirector; /* auto-property */ }
-    /** @rva 0x730C60  public void set_GameDirector(GameDirectorBase value) { } */
+    /** @rva 0x72FC60  public void set_GameDirector(GameDirectorBase value) { } */
     set_GameDirector(value: GameDirectorBase): void { this._GameDirector = value; /* auto-property */ }
-    /** @rva 0x733E90  public BattleUnit get_SelfUnit() { } */
+    /** @rva 0x732E90  public BattleUnit get_SelfUnit() { } */
     get_SelfUnit(): BattleUnit { return this._SelfUnit; /* auto-property */ }
-    /** @rva 0x736AB0  public void set_SelfUnit(BattleUnit value) { } */
+    /** @rva 0x735AB0  public void set_SelfUnit(BattleUnit value) { } */
     set_SelfUnit(value: BattleUnit): void { this._SelfUnit = value; /* auto-property */ }
-    /** @rva 0x7369E0  public BattleUnit get_ActorUnit() { } */
+    /** @rva 0x7359E0  public BattleUnit get_ActorUnit() { } */
     get_ActorUnit(): BattleUnit { return this._ActorUnit; /* auto-property */ }
-    /** @rva 0x736A50  public void set_ActorUnit(BattleUnit value) { } */
+    /** @rva 0x735A50  public void set_ActorUnit(BattleUnit value) { } */
     set_ActorUnit(value: BattleUnit): void { this._ActorUnit = value; /* auto-property */ }
-    /** @rva 0x736EA0  public BattleUnit get_MainTargetUnit() { } */
+    /** @rva 0x735EA0  public BattleUnit get_MainTargetUnit() { } */
     get_MainTargetUnit(): BattleUnit { return this._MainTargetUnit; /* auto-property */ }
-    /** @rva 0x736F10  public void set_MainTargetUnit(BattleUnit value) { } */
+    /** @rva 0x735F10  public void set_MainTargetUnit(BattleUnit value) { } */
     set_MainTargetUnit(value: BattleUnit): void { this._MainTargetUnit = value; /* auto-property */ }
-    /** @rva 0x736F00  public BattleUnit get_EachTargetUnit() { } */
+    /** @rva 0x735F00  public BattleUnit get_EachTargetUnit() { } */
     get_EachTargetUnit(): BattleUnit { return this._EachTargetUnit; /* auto-property */ }
-    /** @rva 0x736F30  public void set_EachTargetUnit(BattleUnit value) { } */
+    /** @rva 0x735F30  public void set_EachTargetUnit(BattleUnit value) { } */
     set_EachTargetUnit(value: BattleUnit): void { this._EachTargetUnit = value; /* auto-property */ }
-    /** @rva 0x736970  public ActiveSkillBase get_ActorActiveSkill() { } */
+    /** @rva 0x735970  public ActiveSkillBase get_ActorActiveSkill() { } */
     get_ActorActiveSkill(): ActiveSkillBase { return this._ActorActiveSkill; /* auto-property */ }
-    /** @rva 0x736A30  public void set_ActorActiveSkill(ActiveSkillBase value) { } */
+    /** @rva 0x735A30  public void set_ActorActiveSkill(ActiveSkillBase value) { } */
     set_ActorActiveSkill(value: ActiveSkillBase): void { this._ActorActiveSkill = value; /* auto-property */ }
-    /** @rva 0x7368E0  public AbilityEffectBase get_ActorAbilityEffect() { } */
+    /** @rva 0x7358E0  public AbilityEffectBase get_ActorAbilityEffect() { } */
     get_ActorAbilityEffect(): AbilityEffectBase { return this._ActorAbilityEffect; /* auto-property */ }
-    /** @rva 0x736F20  public void set_ActorAbilityEffect(AbilityEffectBase value) { } */
+    /** @rva 0x735F20  public void set_ActorAbilityEffect(AbilityEffectBase value) { } */
     set_ActorAbilityEffect(value: AbilityEffectBase): void { this._ActorAbilityEffect = value; /* auto-property */ }
-    /** @rva 0x7368F0  public AffectedUnitNoticeBundle get_AffectedUnitNoticeBundle() { } */
+    /** @rva 0x7358F0  public AffectedUnitNoticeBundle get_AffectedUnitNoticeBundle() { } */
     get_AffectedUnitNoticeBundle(): AffectedUnitNoticeBundle { return this._AffectedUnitNoticeBundle; /* auto-property */ }
-    /** @rva 0x736A00  public void set_AffectedUnitNoticeBundle(AffectedUnitNoticeBundle value) { } */
+    /** @rva 0x735A00  public void set_AffectedUnitNoticeBundle(AffectedUnitNoticeBundle value) { } */
     set_AffectedUnitNoticeBundle(value: AffectedUnitNoticeBundle): void { this._AffectedUnitNoticeBundle = value; /* auto-property */ }
-    /** @rva 0x736910  public List<BattleUnit> get_AffectedUnits() { } */
+    /** @rva 0x735910  public List<BattleUnit> get_AffectedUnits() { } */
     get_AffectedUnits(): List<BattleUnit> { return this._AffectedUnits; /* auto-property */ }
-    /** @rva 0x736A20  public void set_AffectedUnits(List<BattleUnit> value) { } */
+    /** @rva 0x735A20  public void set_AffectedUnits(List<BattleUnit> value) { } */
     set_AffectedUnits(value: List<BattleUnit>): void { this._AffectedUnits = value; /* auto-property */ }
-    /** @rva 0x17EC1F0  public void RemoveTransientData() { } */
+    /** @rva 0x18134D0  public void RemoveTransientData() { } */
     RemoveTransientData(): void {
         this._ActorUnit = null!;
     }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x72F5E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
 }
 
@@ -188,21 +188,21 @@ export class BattleConditionUtils_ConditionSet {
     set Description(v: string) { this.set_Description(v); }
     get ConditionList(): List<BattleConditionUtils_Condition> { return this.get_ConditionList(); }
     set ConditionList(v: List<BattleConditionUtils_Condition>) { this.set_ConditionList(v); }
-    /** @rva 0x7364F0  public int get_MstId() { } */
+    /** @rva 0x7354F0  public int get_MstId() { } */
     get_MstId(): int { return this._MstId; /* auto-property */ }
-    /** @rva 0x739D00  public void set_MstId(int value) { } */
+    /** @rva 0x738D00  public void set_MstId(int value) { } */
     set_MstId(value: int): void { this._MstId = value; /* auto-property */ }
-    /** @rva 0x733E90  public string get_Description() { } */
+    /** @rva 0x732E90  public string get_Description() { } */
     get_Description(): string { return this._Description; /* auto-property */ }
-    /** @rva 0x736AB0  public void set_Description(string value) { } */
+    /** @rva 0x735AB0  public void set_Description(string value) { } */
     set_Description(value: string): void { this._Description = value; /* auto-property */ }
-    /** @rva 0x7369E0  public List<BattleConditionUtils.Condition> get_ConditionList() { } */
+    /** @rva 0x7359E0  public List<BattleConditionUtils.Condition> get_ConditionList() { } */
     get_ConditionList(): List<BattleConditionUtils_Condition> { return this._ConditionList; /* auto-property */ }
-    /** @rva 0x736A50  public void set_ConditionList(List<BattleConditionUtils.Condition> value) { } */
+    /** @rva 0x735A50  public void set_ConditionList(List<BattleConditionUtils.Condition> value) { } */
     set_ConditionList(value: List<BattleConditionUtils_Condition>): void { this._ConditionList = value; /* auto-property */ }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x72F5E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x17EC510  public void .ctor(int conditionSetMstId) { } */
+    /** @rva 0x18137F0  public void .ctor(int conditionSetMstId) { } */
     ctor$int(conditionSetMstId: int): this {
         const model = BattleMstReaderBase.get_Instance<BattleConditionSetMstModel, BattleConditionSetMstRecord, int>(BattleConditionSetMstModel)
             .GetModelByKey(conditionSetMstId); // IBattleMstReader slot 0
@@ -219,7 +219,7 @@ export class BattleConditionUtils_ConditionSet {
             .map(id => new BattleConditionUtils_Condition().ctor$int(id)); // <>c.b__13_3
         return this;
     }
-    /** @rva 0x17EC2D0  public bool IsMatchConditionSet(Dictionary<int, bool> checkedConditionResults, BattleUnit selfUnit, BattleUnit actorUnit, BattleUnit mainTargetUnit, BattleUnit eachTargetUnit, List<BattleUnit> friendUnits, List<BattleUnit> opponentUnits, int friendSP, int opponentSP, ActBase act, ActiveSkillBase actorActiveSkill, AbilityEffectBase actorAbilityEffect, AffectedUnitNoticeBundle affectedUnitNoticeBundle, List<BattleUnit> affectedUnits, HashSet<string> friendAppliedSkillEffectTypes, HashSet<string> opponentAppliedSkillEffectTypes, ConditionUseType conditionUseType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x18135B0  public bool IsMatchConditionSet(Dictionary<int, bool> checkedConditionResults, BattleUnit selfUnit, BattleUnit actorUnit, BattleUnit mainTargetUnit, BattleUnit eachTargetUnit, List<BattleUnit> friendUnits, List<BattleUnit> opponentUnits, int friendSP, int opponentSP, ActBase act, ActiveSkillBase actorActiveSkill, AbilityEffectBase actorAbilityEffect, AffectedUnitNoticeBundle affectedUnitNoticeBundle, List<BattleUnit> affectedUnits, HashSet<string> friendAppliedSkillEffectTypes, HashSet<string> opponentAppliedSkillEffectTypes, ConditionUseType conditionUseType, GameDirectorBase gameDirector) { } */
     IsMatchConditionSet(checkedConditionResults: Dictionary<int, boolean>, selfUnit: BattleUnit, actorUnit: BattleUnit, mainTargetUnit: BattleUnit, eachTargetUnit: BattleUnit, friendUnits: List<BattleUnit>, opponentUnits: List<BattleUnit>, friendSP: int, opponentSP: int, act: ActBase, actorActiveSkill: ActiveSkillBase, actorAbilityEffect: AbilityEffectBase, affectedUnitNoticeBundle: AffectedUnitNoticeBundle, affectedUnits: List<BattleUnit>, friendAppliedSkillEffectTypes: HashSet<string>, opponentAppliedSkillEffectTypes: HashSet<string>, conditionUseType: ConditionUseType, gameDirector: GameDirectorBase): boolean {
         // try { ... } catch { return false; }: the function has a C++ EH try block (FH4 tryBlockMap) and a catch
         // continuation at 0x17ec4e7 (xor al, al -> epilogue). A condition that throws (e.g. Linq over the null notice
@@ -273,31 +273,31 @@ export class BattleConditionUtils_Condition {
     get CompareValueInt(): int { return this.get_CompareValueInt(); }
     get CompareValueFloat(): float { return this.get_CompareValueFloat(); }
     get CompareValueBool(): boolean { return this.get_CompareValueBool(); }
-    /** @rva 0x7364F0  public int get_MstId() { } */
+    /** @rva 0x7354F0  public int get_MstId() { } */
     get_MstId(): int { return this._MstId; /* auto-property */ }
-    /** @rva 0x739D00  public void set_MstId(int value) { } */
+    /** @rva 0x738D00  public void set_MstId(int value) { } */
     set_MstId(value: int): void { this._MstId = value; /* auto-property */ }
-    /** @rva 0x733E90  public string get_Description() { } */
+    /** @rva 0x732E90  public string get_Description() { } */
     get_Description(): string { return this._Description; /* auto-property */ }
-    /** @rva 0x736AB0  public void set_Description(string value) { } */
+    /** @rva 0x735AB0  public void set_Description(string value) { } */
     set_Description(value: string): void { this._Description = value; /* auto-property */ }
-    /** @rva 0x75ED70  public CompareTarget get_CompareTarget() { } */
+    /** @rva 0x75DD70  public CompareTarget get_CompareTarget() { } */
     get_CompareTarget(): CompareTarget { return this._CompareTarget; /* auto-property */ }
-    /** @rva 0x8A2230  public void set_CompareTarget(CompareTarget value) { } */
+    /** @rva 0x8A1230  public void set_CompareTarget(CompareTarget value) { } */
     set_CompareTarget(value: CompareTarget): void { this._CompareTarget = value; /* auto-property */ }
-    /** @rva 0x75A830  public CompareContent get_CompareContent() { } */
+    /** @rva 0x759830  public CompareContent get_CompareContent() { } */
     get_CompareContent(): CompareContent { return this._CompareContent; /* auto-property */ }
-    /** @rva 0x75A840  public void set_CompareContent(CompareContent value) { } */
+    /** @rva 0x759840  public void set_CompareContent(CompareContent value) { } */
     set_CompareContent(value: CompareContent): void { this._CompareContent = value; /* auto-property */ }
-    /** @rva 0x7637A0  public CompareOperator get_CompareOperator() { } */
+    /** @rva 0x7627A0  public CompareOperator get_CompareOperator() { } */
     get_CompareOperator(): CompareOperator { return this._CompareOperator; /* auto-property */ }
-    /** @rva 0x8A2250  public void set_CompareOperator(CompareOperator value) { } */
+    /** @rva 0x8A1250  public void set_CompareOperator(CompareOperator value) { } */
     set_CompareOperator(value: CompareOperator): void { this._CompareOperator = value; /* auto-property */ }
-    /** @rva 0x736F00  public string get_CompareValue() { } */
+    /** @rva 0x735F00  public string get_CompareValue() { } */
     get_CompareValue(): string { return this._CompareValue; /* auto-property */ }
-    /** @rva 0x736F30  public void set_CompareValue(string value) { } */
+    /** @rva 0x735F30  public void set_CompareValue(string value) { } */
     set_CompareValue(value: string): void { this._CompareValue = value; /* auto-property */ }
-    /** @rva 0x17EDB60  public int get_CompareValueInt() { } */
+    /** @rva 0x1814E40  public int get_CompareValueInt() { } */
     get_CompareValueInt(): int {
         // isValueParsed is shared by the int/float/bool getters (game quirk: the first one parsed wins)
         if (!this.isValueParsed) {
@@ -307,7 +307,7 @@ export class BattleConditionUtils_Condition {
         }
         return this.compareValueInt;
     }
-    /** @rva 0x17EDB20  public float get_CompareValueFloat() { } */
+    /** @rva 0x1814E00  public float get_CompareValueFloat() { } */
     get_CompareValueFloat(): float {
         if (!this.isValueParsed) {
             this.compareValueFloat = singleParse(this._CompareValue);
@@ -316,7 +316,7 @@ export class BattleConditionUtils_Condition {
         }
         return this.compareValueFloat;
     }
-    /** @rva 0x17EDAB0  public bool get_CompareValueBool() { } */
+    /** @rva 0x1814D90  public bool get_CompareValueBool() { } */
     get_CompareValueBool(): boolean {
         if (!this.isValueParsed) {
             this.compareValueBool = boolParse(this._CompareValue);
@@ -325,9 +325,9 @@ export class BattleConditionUtils_Condition {
         }
         return this.compareValueBool;
     }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x72F5E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x17ED950  public void .ctor(int conditionMstId) { } */
+    /** @rva 0x1814C30  public void .ctor(int conditionMstId) { } */
     ctor$int(conditionMstId: int): this {
         const model = BattleMstReaderBase.get_Instance<BattleConditionMstModel, BattleConditionMstRecord, int>(BattleConditionMstModel)
             .GetModelByKey(conditionMstId); // IBattleMstReader slot 0
@@ -341,7 +341,7 @@ export class BattleConditionUtils_Condition {
         }
         return this;
     }
-    /** @rva 0x17ECA80  public bool IsMatchCondition(Dictionary<int, bool> checkedConditionResults, BattleUnit selfUnit, BattleUnit actorUnit, BattleUnit mainTargetUnit, BattleUnit eachTargetUnit, List<BattleUnit> friendUnits, List<BattleUnit> opponentUnits, int friendSP, int opponentSP, ActBase act, ActiveSkillBase actorActiveSkill, AbilityEffectBase actorAbilityEffect, AffectedUnitNoticeBundle affectedUnitNoticeBundle, List<BattleUnit> affectedUnits, HashSet<string> friendAppliedSkillEffectTypes, HashSet<string> opponentAppliedSkillEffectTypes, ConditionUseType conditionUseType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1813D60  public bool IsMatchCondition(Dictionary<int, bool> checkedConditionResults, BattleUnit selfUnit, BattleUnit actorUnit, BattleUnit mainTargetUnit, BattleUnit eachTargetUnit, List<BattleUnit> friendUnits, List<BattleUnit> opponentUnits, int friendSP, int opponentSP, ActBase act, ActiveSkillBase actorActiveSkill, AbilityEffectBase actorAbilityEffect, AffectedUnitNoticeBundle affectedUnitNoticeBundle, List<BattleUnit> affectedUnits, HashSet<string> friendAppliedSkillEffectTypes, HashSet<string> opponentAppliedSkillEffectTypes, ConditionUseType conditionUseType, GameDirectorBase gameDirector) { } */
     IsMatchCondition(checkedConditionResults: Dictionary<int, boolean>, selfUnit: BattleUnit, actorUnit: BattleUnit, mainTargetUnit: BattleUnit, eachTargetUnit: BattleUnit, friendUnits: List<BattleUnit>, opponentUnits: List<BattleUnit>, friendSP: int, opponentSP: int, act: ActBase, actorActiveSkill: ActiveSkillBase, actorAbilityEffect: AbilityEffectBase, affectedUnitNoticeBundle: AffectedUnitNoticeBundle, affectedUnits: List<BattleUnit>, friendAppliedSkillEffectTypes: HashSet<string>, opponentAppliedSkillEffectTypes: HashSet<string>, conditionUseType: ConditionUseType, gameDirector: GameDirectorBase): boolean {
         // <>c__DisplayClass36_0: 0x10 selfUnit, 0x18 actorUnit, 0x20 mainTargetUnit
         if (checkedConditionResults.has(this._MstId)) {

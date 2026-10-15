@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { IStateIconNumberDisplayable$RefreshStateIconNumber } from "./UnitState/IStateIconNumberDisplayable";
@@ -118,95 +118,95 @@ export class UnitCondition {
     set ExpandZoneUnitStatePatternMstId(v: int) { this.set_ExpandZoneUnitStatePatternMstId(v); }
     get ReleaseZoneUnitStatePatternMstId(): int { return this.get_ReleaseZoneUnitStatePatternMstId(); }
     set ReleaseZoneUnitStatePatternMstId(v: int) { this.set_ReleaseZoneUnitStatePatternMstId(v); }
-    /** @rva 0x733E90  public List<UnitStateBase> get_StateList() { } */
+    /** @rva 0x732E90  public List<UnitStateBase> get_StateList() { } */
     get_StateList(): List<UnitStateBase> { return this._StateList; /* auto-property */ }
-    /** @rva 0x736AB0  public void set_StateList(List<UnitStateBase> value) { } */
+    /** @rva 0x735AB0  public void set_StateList(List<UnitStateBase> value) { } */
     set_StateList(value: List<UnitStateBase>): void { this._StateList = value; /* auto-property */ }
-    /** @rva 0x7369E0  public StateIconData[] get_StateIcons() { } */
+    /** @rva 0x7359E0  public StateIconData[] get_StateIcons() { } */
     get_StateIcons(): StateIconData[] { return this._StateIcons; /* auto-property */ }
-    /** @rva 0x736A50  public void set_StateIcons(StateIconData[] value) { } */
+    /** @rva 0x735A50  public void set_StateIcons(StateIconData[] value) { } */
     set_StateIcons(value: StateIconData[]): void { this._StateIcons = value; /* auto-property */ }
-    /** @rva 0x736EA0  public string[] get_VisualEffectNames() { } */
+    /** @rva 0x735EA0  public string[] get_VisualEffectNames() { } */
     get_VisualEffectNames(): string[] { return this._VisualEffectNames; /* auto-property */ }
-    /** @rva 0x736F10  public void set_VisualEffectNames(string[] value) { } */
+    /** @rva 0x735F10  public void set_VisualEffectNames(string[] value) { } */
     set_VisualEffectNames(value: string[]): void { this._VisualEffectNames = value; /* auto-property */ }
-    /** @rva 0x736F00  public string get_VisualShaderName() { } */
+    /** @rva 0x735F00  public string get_VisualShaderName() { } */
     get_VisualShaderName(): string { return this._VisualShaderName; /* auto-property */ }
-    /** @rva 0x736F30  public void set_VisualShaderName(string value) { } */
+    /** @rva 0x735F30  public void set_VisualShaderName(string value) { } */
     set_VisualShaderName(value: string): void { this._VisualShaderName = value; /* auto-property */ }
-    /** @rva 0x7388E0  public bool get_CanNotAction() { } */
+    /** @rva 0x7378E0  public bool get_CanNotAction() { } */
     get_CanNotAction(): boolean { return this._CanNotAction; /* auto-property */ }
-    /** @rva 0x7388F0  public void set_CanNotAction(bool value) { } */
+    /** @rva 0x7378F0  public void set_CanNotAction(bool value) { } */
     set_CanNotAction(value: boolean): void { this._CanNotAction = value; /* auto-property */ }
-    /** @rva 0x9025C0  public bool get_CanNotUseSkill() { } */
+    /** @rva 0x900A80  public bool get_CanNotUseSkill() { } */
     get_CanNotUseSkill(): boolean { return this._CanNotUseSkill; /* auto-property */ }
-    /** @rva 0x902680  public void set_CanNotUseSkill(bool value) { } */
+    /** @rva 0x900B40  public void set_CanNotUseSkill(bool value) { } */
     set_CanNotUseSkill(value: boolean): void { this._CanNotUseSkill = value; /* auto-property */ }
-    /** @rva 0x9FD130  public bool get_CanNotUseSpecialAttack() { } */
+    /** @rva 0xA2D760  public bool get_CanNotUseSpecialAttack() { } */
     get_CanNotUseSpecialAttack(): boolean { return this._CanNotUseSpecialAttack; /* auto-property */ }
-    /** @rva 0xBCC500  public void set_CanNotUseSpecialAttack(bool value) { } */
+    /** @rva 0xBE5540  public void set_CanNotUseSpecialAttack(bool value) { } */
     set_CanNotUseSpecialAttack(value: boolean): void { this._CanNotUseSpecialAttack = value; /* auto-property */ }
-    /** @rva 0xBCC480  public bool get_IsAbnormalState() { } */
+    /** @rva 0xBE5520  public bool get_IsAbnormalState() { } */
     get_IsAbnormalState(): boolean { return this._IsAbnormalState; /* auto-property */ }
-    /** @rva 0xBCC4E0  public void set_IsAbnormalState(bool value) { } */
+    /** @rva 0xBE5530  public void set_IsAbnormalState(bool value) { } */
     set_IsAbnormalState(value: boolean): void { this._IsAbnormalState = value; /* auto-property */ }
-    /** @rva 0x8F3F40  public int get_BarrierEndurance() { } */
+    /** @rva 0x8F2F40  public int get_BarrierEndurance() { } */
     get_BarrierEndurance(): int { return this._BarrierEndurance; /* auto-property */ }
-    /** @rva 0x901F80  public void set_BarrierEndurance(int value) { } */
+    /** @rva 0x900870  public void set_BarrierEndurance(int value) { } */
     set_BarrierEndurance(value: int): void { this._BarrierEndurance = value; /* auto-property */ }
-    /** @rva 0x7670B0  public int get_MaxBarrierEndurance() { } */
+    /** @rva 0x7660B0  public int get_MaxBarrierEndurance() { } */
     get_MaxBarrierEndurance(): int { return this._MaxBarrierEndurance; /* auto-property */ }
-    /** @rva 0x767A90  public void set_MaxBarrierEndurance(int value) { } */
+    /** @rva 0x766A90  public void set_MaxBarrierEndurance(int value) { } */
     set_MaxBarrierEndurance(value: int): void { this._MaxBarrierEndurance = value; /* auto-property */ }
-    /** @rva 0x902010  public int get_ChargePoint() { } */
+    /** @rva 0x900840  public int get_ChargePoint() { } */
     get_ChargePoint(): int { return this._ChargePoint; /* auto-property */ }
-    /** @rva 0x902040  public void set_ChargePoint(int value) { } */
+    /** @rva 0x900880  public void set_ChargePoint(int value) { } */
     set_ChargePoint(value: int): void { this._ChargePoint = value; /* auto-property */ }
-    /** @rva 0x854810  public int get_MaxChargePoint() { } */
+    /** @rva 0x853810  public int get_MaxChargePoint() { } */
     get_MaxChargePoint(): int { return this._MaxChargePoint; /* auto-property */ }
-    /** @rva 0x902050  public void set_MaxChargePoint(int value) { } */
+    /** @rva 0x9007A0  public void set_MaxChargePoint(int value) { } */
     set_MaxChargePoint(value: int): void { this._MaxChargePoint = value; /* auto-property */ }
-    /** @rva 0x87BCD0  public int get_RepeatStunParryRate() { } */
+    /** @rva 0x87ACD0  public int get_RepeatStunParryRate() { } */
     get_RepeatStunParryRate(): int { return this._RepeatStunParryRate; /* auto-property */ }
-    /** @rva 0x902030  public void set_RepeatStunParryRate(int value) { } */
+    /** @rva 0x900790  public void set_RepeatStunParryRate(int value) { } */
     set_RepeatStunParryRate(value: int): void { this._RepeatStunParryRate = value; /* auto-property */ }
-    /** @rva 0x8AC2E0  public bool get_IsAdditionalTurnCoolTime() { } */
+    /** @rva 0x8AB2E0  public bool get_IsAdditionalTurnCoolTime() { } */
     get_IsAdditionalTurnCoolTime(): boolean { return this._IsAdditionalTurnCoolTime; /* auto-property */ }
-    /** @rva 0x8AC340  public void set_IsAdditionalTurnCoolTime(bool value) { } */
+    /** @rva 0x8AB340  public void set_IsAdditionalTurnCoolTime(bool value) { } */
     set_IsAdditionalTurnCoolTime(value: boolean): void { this._IsAdditionalTurnCoolTime = value; /* auto-property */ }
-    /** @rva 0x8A2210  public int get_CountPoint() { } */
+    /** @rva 0x8A1210  public int get_CountPoint() { } */
     get_CountPoint(): int { return this._CountPoint; /* auto-property */ }
-    /** @rva 0x8A22E0  public void set_CountPoint(int value) { } */
+    /** @rva 0x8A12E0  public void set_CountPoint(int value) { } */
     set_CountPoint(value: int): void { this._CountPoint = value; /* auto-property */ }
-    /** @rva 0x737C40  public int get_MaxCountPoint() { } */
+    /** @rva 0x736C40  public int get_MaxCountPoint() { } */
     get_MaxCountPoint(): int { return this._MaxCountPoint; /* auto-property */ }
-    /** @rva 0x737DF0  public void set_MaxCountPoint(int value) { } */
+    /** @rva 0x736DF0  public void set_MaxCountPoint(int value) { } */
     set_MaxCountPoint(value: int): void { this._MaxCountPoint = value; /* auto-property */ }
-    /** @rva 0x7544F0  public int get_ZoneStack() { } */
+    /** @rva 0x7534F0  public int get_ZoneStack() { } */
     get_ZoneStack(): int { return this._ZoneStack; /* auto-property */ }
-    /** @rva 0x7547A0  public void set_ZoneStack(int value) { } */
+    /** @rva 0x7537A0  public void set_ZoneStack(int value) { } */
     set_ZoneStack(value: int): void { this._ZoneStack = value; /* auto-property */ }
-    /** @rva 0x8A2200  public int get_MaxZoneStack() { } */
+    /** @rva 0x8A1200  public int get_MaxZoneStack() { } */
     get_MaxZoneStack(): int { return this._MaxZoneStack; /* auto-property */ }
-    /** @rva 0x8A22D0  public void set_MaxZoneStack(int value) { } */
+    /** @rva 0x8A12D0  public void set_MaxZoneStack(int value) { } */
     set_MaxZoneStack(value: int): void { this._MaxZoneStack = value; /* auto-property */ }
-    /** @rva 0x8A2220  public int get_ZoneEffectId() { } */
+    /** @rva 0x8A1220  public int get_ZoneEffectId() { } */
     get_ZoneEffectId(): int { return this._ZoneEffectId; /* auto-property */ }
-    /** @rva 0x8A22F0  public void set_ZoneEffectId(int value) { } */
+    /** @rva 0x8A12F0  public void set_ZoneEffectId(int value) { } */
     set_ZoneEffectId(value: int): void { this._ZoneEffectId = value; /* auto-property */ }
-    /** @rva 0x901BF0  public int get_ExpandZoneUnitStatePatternMstId() { } */
+    /** @rva 0x900770  public int get_ExpandZoneUnitStatePatternMstId() { } */
     get_ExpandZoneUnitStatePatternMstId(): int { return this._ExpandZoneUnitStatePatternMstId; /* auto-property */ }
-    /** @rva 0x901C00  public void set_ExpandZoneUnitStatePatternMstId(int value) { } */
+    /** @rva 0x9007B0  public void set_ExpandZoneUnitStatePatternMstId(int value) { } */
     set_ExpandZoneUnitStatePatternMstId(value: int): void { this._ExpandZoneUnitStatePatternMstId = value; /* auto-property */ }
-    /** @rva 0x8570F0  public int get_ReleaseZoneUnitStatePatternMstId() { } */
+    /** @rva 0x8560F0  public int get_ReleaseZoneUnitStatePatternMstId() { } */
     get_ReleaseZoneUnitStatePatternMstId(): int { return this._ReleaseZoneUnitStatePatternMstId; /* auto-property */ }
-    /** @rva 0x901C10  public void set_ReleaseZoneUnitStatePatternMstId(int value) { } */
+    /** @rva 0x900A00  public void set_ReleaseZoneUnitStatePatternMstId(int value) { } */
     set_ReleaseZoneUnitStatePatternMstId(value: int): void { this._ReleaseZoneUnitStatePatternMstId = value; /* auto-property */ }
-    /** @rva 0x730C60  public void SetGameDirector(GameDirectorBase gameDirector) { } */
+    /** @rva 0x72FC60  public void SetGameDirector(GameDirectorBase gameDirector) { } */
     SetGameDirector(gameDirector: GameDirectorBase): void {
         this.gameDirector = gameDirector;
     }
-    /** @rva 0x15C8A30  public bool AddUnitState(UnitStateBase state, BattleUnit targetUnit, int turnOrderPriority, BattleUnit userUnit, bool isProbabilityIgnored = False) { } */
+    /** @rva 0x15EDED0  public bool AddUnitState(UnitStateBase state, BattleUnit targetUnit, int turnOrderPriority, BattleUnit userUnit, bool isProbabilityIgnored = False) { } */
     AddUnitState(state: UnitStateBase, targetUnit: BattleUnit, turnOrderPriority: int, userUnit: BattleUnit, isProbabilityIgnored: boolean = false): boolean {
         if (targetUnit.IsDead) return false;
         if (!state.CanAddTo(targetUnit)) return false;
@@ -249,7 +249,7 @@ export class UnitCondition {
         state.OnAddedToCondition(targetUnit, this.gameDirector);
         return result;
     }
-    /** @rva 0x15CA550  public void RemoveUnitState(BattleUnit unit, Type stateType, EffectOriginType origin = 0, BattleUnit userUnit, Nullable<UnitStateBase.DirectionType> directionType, Func<UnitStateBase, bool> predicate) { } */
+    /** @rva 0x15EF9F0  public void RemoveUnitState(BattleUnit unit, Type stateType, EffectOriginType origin = 0, BattleUnit userUnit, Nullable<UnitStateBase.DirectionType> directionType, Func<UnitStateBase, bool> predicate) { } */
     RemoveUnitState$BattleUnit_Type_EffectOriginType_BattleUnit_NullableUnitStateBaseDirectionType_FuncUnitStateBasebool(unit: BattleUnit, stateType: Type, origin: EffectOriginType /* = 0 */, userUnit: BattleUnit, directionType: Nullable<UnitStateBase_DirectionType>, predicate: ((a0: UnitStateBase) => boolean)): void {
         for (const state of this._StateList) {
             if (stateType != null && !(state instanceof (stateType as any))) continue; // GetType() == T || IsSubclassOf(T)
@@ -260,12 +260,12 @@ export class UnitCondition {
         }
         this.RemoveUnitState$BattleUnit_FuncUnitStateBasebool(unit, state => state.ShouldBeRemovedNow); // b__87_0
     }
-    /** @rva 0x15CA920  public void RemoveUnitState(BattleUnit unit, Func<UnitStateBase, bool> predicate) { } */
+    /** @rva 0x15EFDC0  public void RemoveUnitState(BattleUnit unit, Func<UnitStateBase, bool> predicate) { } */
     RemoveUnitState$BattleUnit_FuncUnitStateBasebool(unit: BattleUnit, predicate: ((a0: UnitStateBase) => boolean)): void {
         for (const state of this._StateList.filter(predicate)) state.OnRemovingFromCondition(unit, this.gameDirector);
         removeAll(this._StateList, predicate);
     }
-    /** @rva 0x15CABA0  public void RemoveUnitState(BattleUnit unit, List<UnitStateBase> removeStateList) { } */
+    /** @rva 0x15F0040  public void RemoveUnitState(BattleUnit unit, List<UnitStateBase> removeStateList) { } */
     RemoveUnitState$BattleUnit_ListUnitStateBase(unit: BattleUnit, removeStateList: List<UnitStateBase>): void {
         for (const state of this._StateList) {
             if (removeStateList.includes(state)) state.ShouldBeRemovedNow = true;
@@ -277,11 +277,11 @@ export class UnitCondition {
         // generic instance 0x270b8f0
         this.RemoveUnitState$BattleUnit_Type_EffectOriginType_BattleUnit_NullableUnitStateBaseDirectionType_FuncUnitStateBasebool(unit, T$, origin, null!, null, null!);
     }
-    /** @rva 0x15CA8F0  public void RemoveUnitState(BattleUnit unit, EffectOriginType origin, BattleUnit userUnit, Func<UnitStateBase, bool> predicate) { } */
+    /** @rva 0x15EFD90  public void RemoveUnitState(BattleUnit unit, EffectOriginType origin, BattleUnit userUnit, Func<UnitStateBase, bool> predicate) { } */
     RemoveUnitState$BattleUnit_EffectOriginType_BattleUnit_FuncUnitStateBasebool(unit: BattleUnit, origin: EffectOriginType, userUnit: BattleUnit, predicate: ((a0: UnitStateBase) => boolean)): void {
         this.RemoveUnitState$BattleUnit_Type_EffectOriginType_BattleUnit_NullableUnitStateBaseDirectionType_FuncUnitStateBasebool(unit, null!, origin, userUnit, null, predicate);
     }
-    /** @rva 0x15C9B00  public void Refresh(BattleUnit unit) { } */
+    /** @rva 0x15EEFA0  public void Refresh(BattleUnit unit) { } */
     Refresh(unit: BattleUnit): void {
         const icons: StateIconData[] = [];
         const visualEffects = new Set<string>();
@@ -329,7 +329,7 @@ export class UnitCondition {
         this._CanNotUseSpecialAttack = canNotUseSpecialAttack;
         this._IsAbnormalState = isAbnormal;
     }
-    /** @rva 0x15C98B0  public void PassingTurn(int turnNum, BattleUnit unit) { } */
+    /** @rva 0x15EED50  public void PassingTurn(int turnNum, BattleUnit unit) { } */
     PassingTurn(turnNum: int, unit: BattleUnit): void {
         for (const state of this._StateList) {
             if (state.IsPermanent) continue;
@@ -338,7 +338,7 @@ export class UnitCondition {
         }
         this.RemoveUnitState$BattleUnit_FuncUnitStateBasebool(unit, state => state.ShouldBeRemovedNow); // b__93_0
     }
-    /** @rva 0x15C9670  public List<UnitStateBase> GetUnitState(Type stateType, bool doWithoutInheritance = False) { } */
+    /** @rva 0x15EEB10  public List<UnitStateBase> GetUnitState(Type stateType, bool doWithoutInheritance = False) { } */
     GetUnitState$2(stateType: Type, doWithoutInheritance: boolean = false): List<UnitStateBase> {
         const list: UnitStateBase[] = [];
         for (const state of this._StateList) {
@@ -363,7 +363,7 @@ export class UnitCondition {
         unitState.v = this.GetUnitStateList(T$, false)[0] ?? null!;
         return unitState.v != null;
     }
-    /** @rva 0x15C8F90  public UnitStateBase GetDuplicateUnitState(UnitStateBase compareState) { } */
+    /** @rva 0x15EE430  public UnitStateBase GetDuplicateUnitState(UnitStateBase compareState) { } */
     GetDuplicateUnitState(compareState: UnitStateBase): UnitStateBase {
         if (compareState.AllowDuplicate) return null!;
         const accum = compareState instanceof UniqueAccumUnitStateBase ? compareState : null;
@@ -393,7 +393,7 @@ export class UnitCondition {
             && s.UserUnitId === compareState.UserUnitId && s.TargetRole === compareState.TargetRole
             && s.TargetElement === compareState.TargetElement && s.ActiveConditionSetIdCsv === compareState.ActiveConditionSetIdCsv) ?? null!;
     }
-    /** @rva 0x15C9320  public ComboUnitState GetMaximumActionNumComboUnitState(BattleUnit battleUnit) { } */
+    /** @rva 0x15EE7C0  public ComboUnitState GetMaximumActionNumComboUnitState(BattleUnit battleUnit) { } */
     GetMaximumActionNumComboUnitState(battleUnit: BattleUnit): ComboUnitState {
         let best: ComboUnitState = null!;
         let max = -1;
@@ -405,13 +405,13 @@ export class UnitCondition {
         }
         return best;
     }
-    /** @rva 0x15CAE00  public bool TryModifyCountPointBy(int deltaCountPoint) { } */
+    /** @rva 0x15F02A0  public bool TryModifyCountPointBy(int deltaCountPoint) { } */
     TryModifyCountPointBy(deltaCountPoint: int): boolean {
         if (!this._StateList.some(s => s instanceof CountUnitState)) return false;
         this._CountPoint = clamp(this._CountPoint + deltaCountPoint, 0, this._MaxCountPoint); // Math.Clamp 0xbaf550
         return true;
     }
-    /** @rva 0x15C94C0  public List<UnitStateBase> GetSameStateList(UnitStateBase compareState, bool doWithoutInheritance = False) { } */
+    /** @rva 0x15EE960  public List<UnitStateBase> GetSameStateList(UnitStateBase compareState, bool doWithoutInheritance = False) { } */
     GetSameStateList(compareState: UnitStateBase, doWithoutInheritance: boolean = false): List<UnitStateBase> {
         let list = this.GetUnitState$2(compareState.constructor, doWithoutInheritance);
         const unique = compareState instanceof UniqueUnitStateBase ? compareState : null;
@@ -421,13 +421,13 @@ export class UnitCondition {
         }
         return list;
     }
-    /** @rva 0x15CADF0  public void ResetZoneStatePatternMstId() { } */
+    /** @rva 0x15F0290  public void ResetZoneStatePatternMstId() { } */
     ResetZoneStatePatternMstId(): void {
         // one qword store at +0x68 clears both pattern ids
         this._ExpandZoneUnitStatePatternMstId = 0;
         this._ReleaseZoneUnitStatePatternMstId = 0;
     }
-    /** @rva 0x15CAED0  public void .ctor() { } */
+    /** @rva 0x15F0370  public void .ctor() { } */
     ctor(): this {
         this._StateList = [];
         this._StateIcons = [];

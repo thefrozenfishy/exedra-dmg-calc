@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import type { IComparer } from "./IComparer";
@@ -41,7 +41,7 @@ export class BattleUnitConditionChecker extends ConditionCheckerBase {
     opponentUnits: List<BattleUnit> = null!;
     /** 0x48 private AffectedUnitNotice notice */
     notice: AffectedUnitNotice = null!;
-    /** @rva 0x17E5D80  public void .ctor(BattleConditionUtils.Condition condition, BattleUnit battleUnit, BattleUnit selfUnit, BattleUnit actorUnit, BattleUnit mainTargetUnit, List<BattleUnit> friendUnits, List<BattleUnit> opponentUnits, AffectedUnitNotice notice) { } */
+    /** @rva 0x180C1D0  public void .ctor(BattleConditionUtils.Condition condition, BattleUnit battleUnit, BattleUnit selfUnit, BattleUnit actorUnit, BattleUnit mainTargetUnit, List<BattleUnit> friendUnits, List<BattleUnit> opponentUnits, AffectedUnitNotice notice) { } */
     ctor$Condition_BattleUnit_BattleUnit_BattleUnit_BattleUnit_ListBattleUnit_ListBattleUnit_AffectedUnitNotice(condition: BattleConditionUtils_Condition, battleUnit: BattleUnit, selfUnit: BattleUnit, actorUnit: BattleUnit, mainTargetUnit: BattleUnit, friendUnits: List<BattleUnit>, opponentUnits: List<BattleUnit>, notice: AffectedUnitNotice): this {
         super.ctor$Condition(condition); // inlined in the game
         this.battleUnit = battleUnit;
@@ -53,7 +53,7 @@ export class BattleUnitConditionChecker extends ConditionCheckerBase {
         this.notice = notice;
         return this;
     }
-    /** @rva 0x17E3F10 slot 4  public override bool Check() { } */
+    /** @rva 0x180A330 slot 4  public override bool Check() { } */
     Check(): boolean {
         if (this.battleUnit == null) return false;
         const cond = this.condition;
@@ -218,6 +218,7 @@ export class BattleUnitConditionChecker extends ConditionCheckerBase {
             }
             case 115: comparer = new IntValueComparer().ctor$int_int(this.notice == null ? 0 : this.notice._AddStateInfoList.filter(info => info.isRemovableBuff).length /* <>c.b__8_10 */, cond.get_CompareValueInt() /* inlined */); break;
             case 116: comparer = new IntValueComparer().ctor$int_int(this.notice == null ? 0 : this.notice._AddStateInfoList.filter(info => info.isRemovableDebuff).length /* <>c.b__8_11 */, cond.get_CompareValueInt() /* inlined */); break;
+            case 117: comparer = new BoolValueComparer().ctor$bool_bool(this.notice == null ? false : this.notice._IsConsumeHp, cond.get_CompareValueBool() /* inlined */); break; // 3.21.0: IsConsumeHp
             case 1001: comparer = new BoolValueComparer().ctor$bool_bool(this.selfUnit._Team === 0, cond.get_CompareValueBool()); break;
             default: return false;
         }

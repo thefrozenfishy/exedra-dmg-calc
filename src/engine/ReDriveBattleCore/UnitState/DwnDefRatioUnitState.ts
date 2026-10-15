@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { f32, notPorted } from "../../runtime";
@@ -11,21 +11,21 @@ import { DownDefenseUnitStateBase } from "./DownDefenseUnitStateBase";
 // ---- ReDriveBattleCore.UnitState.DwnDefRatioUnitState  (TypeDefIndex 597, public class) ----
 export class DwnDefRatioUnitState extends DownDefenseUnitStateBase {
     get DownRatio(): float { return this.get_DownRatio(); }
-    /** @rva 0x15BBF20  public float get_DownRatio() { } */
+    /** @rva 0x15E1810  public float get_DownRatio() { } */
     get_DownRatio(): float {
         return f32(this._UpdateableEffectValue / 10);
     }
-    /** @rva 0x15B3A90  protected void .ctor() { } */
+    /** @rva 0x15D9DA0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15DB550  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x15BCC90 slot 30  public override Decimal GetDefVariationValue(BattleUnit unit, Decimal processingValue) { } */
+    /** @rva 0x15E2580 slot 30  public override Decimal GetDefVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetDefVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal {
         return processingValue.mul(Decimal.fromFloat(f32(this._UpdateableEffectValue / 10)).div(Decimal.fromInt(100))).neg();
     }

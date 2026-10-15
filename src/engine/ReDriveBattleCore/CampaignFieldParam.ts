@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { UnitStateBase } from "./UnitState/UnitStateBase";
@@ -13,12 +13,12 @@ import { TargetElementType } from "../Network/Definition/Battle/TargetElementTyp
 
 // ---- ReDriveBattleCore.CampaignFieldParam  (TypeDefIndex 398, public class) ----
 export class CampaignFieldParam extends FieldParamBase {
-    /** @rva 0x14931E0  protected void .ctor() { } */
+    /** @rva 0x14B9410  protected void .ctor() { } */
     ctor(): this {
         this.stateList = []; // FieldParamBase..ctor inlined
         return this;
     }
-    /** @rva 0x14931F0  public void .ctor(int upDmgValue, int upBreakPointDmgValue) { } */
+    /** @rva 0x14B9420  public void .ctor(int upDmgValue, int upBreakPointDmgValue) { } */
     ctor$int_int(upDmgValue: int, upBreakPointDmgValue: int): this {
         super.ctor();
         if (0 < upDmgValue) {

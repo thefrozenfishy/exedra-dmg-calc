@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { ReceiveSlipDamageUnitStateBase } from "../UnitState/ReceiveSlipDamageUnitStateBase";
@@ -19,21 +19,21 @@ import type { EffectOriginType } from "../UnitState/EffectOriginType";
 
 // ---- ReDriveBattleCore.AbilityEffect.ImmSlipDmgAbilityEffect  (TypeDefIndex 1180, public class) ----
 export class ImmSlipDmgAbilityEffect extends DamageAbilityEffectBase {
-    /** @rva 0x7431D0 slot 9  protected override DamageBaseType get_DamageBaseType() { } */
+    /** @rva 0x7421D0 slot 9  protected override DamageBaseType get_DamageBaseType() { } */
     get_DamageBaseType(): DamageBaseType { return 0 as DamageBaseType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0xD6FDF0 slot 13  public override DamageCategory get_DamageCategory() { } */
+    /** @rva 0xD8FC50 slot 13  public override DamageCategory get_DamageCategory() { } */
     get_DamageCategory(): DamageCategory { return 4 as DamageCategory; /* asm: mov eax, 4; ret */ }
-    /** @rva 0x18F0810  protected void .ctor() { } */
+    /** @rva 0x1926190  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x18F0800  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1926180  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x18F4E90 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x192A2F0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const bundle = new AffectedUnitNoticeBundle().ctor();
         const attackSkill = userUnit._SkillSet.GetSkill(this.skillMstId);
@@ -54,7 +54,7 @@ export class ImmSlipDmgAbilityEffect extends DamageAbilityEffectBase {
         }
         return bundle;
     }
-    /** @rva 0x18F4C60 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x192A0C0 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__7_0
         if (list.length > 0) list = list.filter(unit => unit._Condition._StateList.some(state => state instanceof ReceiveSlipDamageUnitStateBase)); // b__7_1, b__7_2

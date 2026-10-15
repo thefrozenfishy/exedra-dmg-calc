@@ -1,8 +1,8 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 
-// ---- ReDriveBattleCore.BattleCondition.CompareContent  (TypeDefIndex 1074, public enum) ----
+// ---- ReDriveBattleCore.BattleCondition.CompareContent  (TypeDefIndex 1090, public enum) ----
 export const CompareContent = {
     None: 0,
     HP: 1,
@@ -52,6 +52,7 @@ export const CompareContent = {
     IsReleaseZone: 114,
     AddRemovableBuffCount: 115,
     AddRemovableDebuffCount: 116,
+    IsConsumeHp: 117,
     SP: 201,
     AliveUnitCount: 202,
     DeadUnitCount: 203,

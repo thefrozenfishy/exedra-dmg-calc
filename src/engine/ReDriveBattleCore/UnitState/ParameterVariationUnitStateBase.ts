@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -18,24 +18,24 @@ export abstract class ParameterVariationUnitStateBase extends UnitStateBase {  /
     get UpdateableEffectValue(): float { return this.get_UpdateableEffectValue(); }
     set UpdateableEffectValue(v: float) { this.set_UpdateableEffectValue(v); }
     get Addition(): AdditionType { return this.get_Addition(); }
-    /** @rva 0xC646A0 slot 25  public float get_UpdateableEffectValue() { } */
+    /** @rva 0xC84590 slot 25  public float get_UpdateableEffectValue() { } */
     get_UpdateableEffectValue(): float { return this._UpdateableEffectValue; /* auto-property */ }
-    /** @rva 0xC646B0 slot 26  public void set_UpdateableEffectValue(float value) { } */
+    /** @rva 0xC845A0 slot 26  public void set_UpdateableEffectValue(float value) { } */
     set_UpdateableEffectValue(value: float): void { this._UpdateableEffectValue = value; /* auto-property */ }
     /** @rva -1 slot 27  public abstract AdditionType get_Addition(); */
     abstract get_Addition(): AdditionType;
-    /** @rva 0x16CF610  protected void .ctor() { } */
+    /** @rva 0x16F8570  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x15B8090 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
+    /** @rva 0x15DE3A0 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean {
         // DamageBetterUnitStateBase.CanAddTo (0x15B8090)
         if (!targetUnit.IsMatch$TargetRoleType(this._TargetRole)) return false;

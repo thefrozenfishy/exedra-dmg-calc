@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -8,12 +8,12 @@ import { ValueComparerBase } from "./ValueComparerBase";
 
 // ---- ReDriveBattleCore.BattleCondition.FloatValueComparer  (TypeDefIndex 1067, public class) ----
 export class FloatValueComparer extends ValueComparerBase<float> {
-    /** @rva 0x17EDCF0  public void .ctor(float leftValue, float rightValue) { } */
+    /** @rva 0x1815210  public void .ctor(float leftValue, float rightValue) { } */
     ctor$float_float(leftValue: float, rightValue: float): this {
         super.ctor$T_T(leftValue, rightValue);
         return this;
     }
-    /** @rva 0x17EDC60 slot 5  public override bool Compare(CompareOperator compareOperator) { } */
+    /** @rva 0x1815180 slot 5  public override bool Compare(CompareOperator compareOperator) { } */
     Compare(compareOperator: CompareOperator): boolean {
         switch (compareOperator) {
             case 1: return this.leftValue === this.rightValue;

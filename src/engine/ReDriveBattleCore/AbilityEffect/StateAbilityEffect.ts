@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import type { BattleType } from "../../Network/Definition/Battle/BattleType";
@@ -36,16 +36,16 @@ export class StateAbilityEffect extends AbilityEffectBase {  // implements IBatt
     get GiveUnitState(): UnitStateBase { return this.get_GiveUnitState(); }
     set GiveUnitState(v: UnitStateBase) { this.set_GiveUnitState(v); }
     get IBattleStartTriggerPriority$Priority(): int { return this.get_IBattleStartTriggerPriority$Priority(); }
-    /** @rva 0x737A10  public UnitStateBase get_GiveUnitState() { } */
+    /** @rva 0x736A10  public UnitStateBase get_GiveUnitState() { } */
     get_GiveUnitState(): UnitStateBase { return this._GiveUnitState; /* auto-property */ }
-    /** @rva 0x737A50  public void set_GiveUnitState(UnitStateBase value) { } */
+    /** @rva 0x736A50  public void set_GiveUnitState(UnitStateBase value) { } */
     set_GiveUnitState(value: UnitStateBase): void { this._GiveUnitState = value; /* auto-property */ }
-    /** @rva 0x18EB3C0  protected void .ctor() { } */
+    /** @rva 0x1920EF0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x19023D0  public void .ctor(AbilityEffectInfo info, UnitStateBase giveUnitState, bool isIncludeDeadUnitInTarget) { } */
+    /** @rva 0x1930EA0  public void .ctor(AbilityEffectInfo info, UnitStateBase giveUnitState, bool isIncludeDeadUnitInTarget) { } */
     ctor$AbilityEffectInfo_UnitStateBase_bool(info: AbilityEffectInfo, giveUnitState: UnitStateBase, isIncludeDeadUnitInTarget: boolean): this {
         super.ctor$AbilityEffectInfo(info);
         this._GiveUnitState = giveUnitState;
@@ -61,7 +61,7 @@ export class StateAbilityEffect extends AbilityEffectBase {  // implements IBatt
         }
         return this;
     }
-    /** @rva 0x1901CB0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1930780 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const affectedUnitNoticeBundle = new AffectedUnitNoticeBundle().ctor();
         const isSpeedVariation = isImpl(this._GiveUnitState, "ISpeedVariation");
@@ -113,7 +113,7 @@ export class StateAbilityEffect extends AbilityEffectBase {  // implements IBatt
         }
         return affectedUnitNoticeBundle;
     }
-    /** @rva 0x19013A0  private UnitStateBase ChangeGiveUnitState(BattleUnit userUnit, UnitStateBase giveUnitState) { } */
+    /** @rva 0x192FE00  private UnitStateBase ChangeGiveUnitState(BattleUnit userUnit, UnitStateBase giveUnitState) { } */
     ChangeGiveUnitState(userUnit: BattleUnit, giveUnitState: UnitStateBase): UnitStateBase {
         for (const state of userUnit._Condition._StateList) {
             if (state instanceof AddTurnUnitStateBase && state.IsActive$BattleUnit(userUnit)) {
@@ -141,11 +141,11 @@ export class StateAbilityEffect extends AbilityEffectBase {  // implements IBatt
         }
         return giveUnitState;
     }
-    /** @rva 0x1901990 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1930460 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         return this._GiveUnitState.GetAIFilteredTargets(userUnit, targetUnitList, skillType, this._EffectRange, gameDirector);
     }
-    /** @rva 0x1901A70 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
+    /** @rva 0x1930540 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
         // <>c__DisplayClass9_0: 0x10 this, 0x18 userUnit
         const candidateUnits = targetUnitList.filter(u => !u.get_IsDead()); // <>c.b__9_0
@@ -164,7 +164,7 @@ export class StateAbilityEffect extends AbilityEffectBase {  // implements IBatt
         const unit = AISkillTargetSelector.SelectTargetUnitInOrder(candidateUnits, unitFilterFuncOrder);
         return unit == null ? 0 : unit._Id;
     }
-    /** @rva 0x19019E0 slot 8  private int ReDriveBattleCore.IBattleStartTriggerPriority.get_Priority() { } */
+    /** @rva 0x19304B0 slot 8  private int ReDriveBattleCore.IBattleStartTriggerPriority.get_Priority() { } */
     get_IBattleStartTriggerPriority$Priority(): int {
         if (isImpl(this._GiveUnitState, "IBattleStartTriggerPriority")) {
             return (this._GiveUnitState as unknown as { IBattleStartTriggerPriority$Priority: int }).IBattleStartTriggerPriority$Priority;

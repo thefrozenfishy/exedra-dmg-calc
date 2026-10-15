@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -14,21 +14,21 @@ import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 // ---- ReDriveBattleCore.UnitState.DownGiveDamageUnitStateBase  (TypeDefIndex 572, public abstract class) ----
 export abstract class DownGiveDamageUnitStateBase extends DamageWorseUnitStateBase {  // implements IGiveDamageVariation
     static readonly __interfaces: readonly string[] = ['IGiveDamageVariation'];
-    /** @rva 0x15BAA80 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15E0D10 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_dwn_giv_dmg";
     }
-    /** @rva 0x15B3A90  protected void .ctor() { } */
+    /** @rva 0x15D9DA0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x15B5240  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15DB550  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x15BA790 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15E0A20 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -34,27 +34,27 @@ export class CommandSoloRaidBuffActivate extends CommandBase {
     get ActiveMaxSeasonBuffTurnGaugeValue(): int { return this.get_ActiveMaxSeasonBuffTurnGaugeValue(); }
     get ResultSp(): int { return this.get_ResultSp(); }
     get AffectedUnitNoticeList(): List<AffectedUnitNotice> { return this.get_AffectedUnitNoticeList(); }
-    /** @rva 0x11C1560 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0x11F7EF0 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 30 as CommandType; /* asm: mov eax, 0x1e; ret */ }
-    /** @rva 0x7F97F0  public bool get_IsSeasonBuffActive() { } */
+    /** @rva 0x7F87F0  public bool get_IsSeasonBuffActive() { } */
     get_IsSeasonBuffActive(): boolean { return this._IsSeasonBuffActive; /* auto-property */ }
-    /** @rva 0x7F9800  public int get_CurrentSeasonBuffPoint() { } */
+    /** @rva 0x7F8800  public int get_CurrentSeasonBuffPoint() { } */
     get_CurrentSeasonBuffPoint(): int { return this._CurrentSeasonBuffPoint; /* auto-property */ }
-    /** @rva 0x75ED70  public int get_MaxSeasonBuffPoint() { } */
+    /** @rva 0x75DD70  public int get_MaxSeasonBuffPoint() { } */
     get_MaxSeasonBuffPoint(): int { return this._MaxSeasonBuffPoint; /* auto-property */ }
-    /** @rva 0x75A830  public int get_ActiveMaxSeasonBuffPoint() { } */
+    /** @rva 0x759830  public int get_ActiveMaxSeasonBuffPoint() { } */
     get_ActiveMaxSeasonBuffPoint(): int { return this._ActiveMaxSeasonBuffPoint; /* auto-property */ }
-    /** @rva 0x946D70  public float get_ActiveCurrentSeasonBuffTurnGaugeValue() { } */
+    /** @rva 0x95CC00  public float get_ActiveCurrentSeasonBuffTurnGaugeValue() { } */
     get_ActiveCurrentSeasonBuffTurnGaugeValue(): float { return this._ActiveCurrentSeasonBuffTurnGaugeValue; /* auto-property */ }
-    /** @rva 0x85E530  public int get_ActiveMaxSeasonBuffTurnGaugeValue() { } */
+    /** @rva 0x85D530  public int get_ActiveMaxSeasonBuffTurnGaugeValue() { } */
     get_ActiveMaxSeasonBuffTurnGaugeValue(): int { return this._ActiveMaxSeasonBuffTurnGaugeValue; /* auto-property */ }
-    /** @rva 0x75ED60  public int get_ResultSp() { } */
+    /** @rva 0x75DD60  public int get_ResultSp() { } */
     get_ResultSp(): int { return this._ResultSp; /* auto-property */ }
-    /** @rva 0x736970  public List<AffectedUnitNotice> get_AffectedUnitNoticeList() { } */
+    /** @rva 0x735970  public List<AffectedUnitNotice> get_AffectedUnitNoticeList() { } */
     get_AffectedUnitNoticeList(): List<AffectedUnitNotice> { return this._AffectedUnitNoticeList; /* auto-property */ }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x72F5E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x17EB690  public void .ctor(SoloRaidBuffReferee soloRaidBuffReferee, int resultSp, List<AffectedUnitNotice> noticeList) { } */
+    /** @rva 0x1812960  public void .ctor(SoloRaidBuffReferee soloRaidBuffReferee, int resultSp, List<AffectedUnitNotice> noticeList) { } */
     ctor$SoloRaidBuffReferee_int_ListAffectedUnitNotice(soloRaidBuffReferee: SoloRaidBuffReferee, resultSp: int, noticeList: List<AffectedUnitNotice>): this {
         if (soloRaidBuffReferee == null) return this;
         this._IsSeasonBuffActive = soloRaidBuffReferee.isSeasonBuffActive;

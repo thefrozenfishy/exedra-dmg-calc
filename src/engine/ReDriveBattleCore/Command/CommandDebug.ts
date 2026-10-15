@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -21,23 +21,23 @@ export class CommandDebug extends CommandBase {
     set DebugOptions(v: any /* OptionBase */[]) { this.set_DebugOptions(v); }
     get IsStopTime(): boolean { return this.get_IsStopTime(); }
     set IsStopTime(v: boolean) { this.set_IsStopTime(v); }
-    /** @rva 0xED2650 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0xEF6690 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 12 as CommandType; /* asm: mov eax, 0xc; ret */ }
-    /** @rva 0x733E90  public List<BattleUnit> get_BattleUnitList() { } */
+    /** @rva 0x732E90  public List<BattleUnit> get_BattleUnitList() { } */
     get_BattleUnitList(): List<BattleUnit> { return this._BattleUnitList; /* auto-property */ }
-    /** @rva 0x736AB0  public void set_BattleUnitList(List<BattleUnit> value) { } */
+    /** @rva 0x735AB0  public void set_BattleUnitList(List<BattleUnit> value) { } */
     set_BattleUnitList(value: List<BattleUnit>): void { this._BattleUnitList = value; /* auto-property */ }
-    /** @rva 0x7369E0  public OptionBase[] get_DebugOptions() { } */
+    /** @rva 0x7359E0  public OptionBase[] get_DebugOptions() { } */
     get_DebugOptions(): any /* OptionBase */[] { return this._DebugOptions; /* auto-property */ }
-    /** @rva 0x736A50  public void set_DebugOptions(OptionBase[] value) { } */
+    /** @rva 0x735A50  public void set_DebugOptions(OptionBase[] value) { } */
     set_DebugOptions(value: any /* OptionBase */[]): void { this._DebugOptions = value; /* auto-property */ }
-    /** @rva 0x73A4E0  public bool get_IsStopTime() { } */
+    /** @rva 0x7394E0  public bool get_IsStopTime() { } */
     get_IsStopTime(): boolean { return this._IsStopTime; /* auto-property */ }
-    /** @rva 0x73A4F0  public void set_IsStopTime(bool value) { } */
+    /** @rva 0x7394F0  public void set_IsStopTime(bool value) { } */
     set_IsStopTime(value: boolean): void { this._IsStopTime = value; /* auto-property */ }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x72F5E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x17E8B20  public void .ctor(in List<BattleUnit> battleUnitList, OptionBase[] debugOptions, bool isStopTime) { } */
+    /** @rva 0x180FC90  public void .ctor(in List<BattleUnit> battleUnitList, OptionBase[] debugOptions, bool isStopTime) { } */
     ctor$ListBattleUnit_OptionBase_bool(battleUnitList: List<BattleUnit>, debugOptions: any /* OptionBase */[], isStopTime: boolean): this {
         this._BattleUnitList = battleUnitList;
         this._DebugOptions = debugOptions;

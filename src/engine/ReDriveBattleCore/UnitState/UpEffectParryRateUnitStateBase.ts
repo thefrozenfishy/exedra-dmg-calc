@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -18,24 +18,24 @@ import { AISkillTargetSelector } from "../AI/AISkillTargetSelector";
 // ---- ReDriveBattleCore.UnitState.UpEffectParryRateUnitStateBase  (TypeDefIndex 778, public abstract class) ----
 export abstract class UpEffectParryRateUnitStateBase extends ParameterVariationUnitStateBase {  // implements IEffectParryRateVariation, IBuff
     static readonly __interfaces: readonly string[] = ['IEffectParryRateVariation', 'IBuff'];
-    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x7431D0 slot 27  public override AdditionType get_Addition() { } */
+    /** @rva 0x7421D0 slot 27  public override AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x16E3950 slot 7  public override string get_IconName() { } */
+    /** @rva 0x170E3F0 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_up_parry_rate";
     }
-    /** @rva 0x16E3920 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x170E3C0 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_buff_appear_001";
     }
-    /** @rva 0x16CF610  protected void .ctor() { } */
+    /** @rva 0x16F8570  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
@@ -43,7 +43,7 @@ export abstract class UpEffectParryRateUnitStateBase extends ParameterVariationU
     }
     /** @rva -1 slot 30  public abstract float GetEffectParryRateVariationValue(BattleUnit unit, float processingValue); */
     abstract GetEffectParryRateVariationValue(unit: BattleUnit, processingValue: float): float;
-    /** @rva 0x16E36C0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x170E160 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

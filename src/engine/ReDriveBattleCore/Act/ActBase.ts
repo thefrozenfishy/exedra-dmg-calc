@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -26,19 +26,19 @@ export abstract class ActBase {
     get IsExecuted(): boolean { return this.get_IsExecuted(); }
     set IsExecuted(v: boolean) { this.set_IsExecuted(v); }
     get ShouldShow(): boolean { return this.get_ShouldShow(); }
-    /** @rva 0x75A830 slot 4  public virtual int get_Priority() { } */
+    /** @rva 0x759830 slot 4  public virtual int get_Priority() { } */
     get_Priority(): int { return this._Priority; /* auto-property */ }
-    /** @rva 0x75A840 slot 5  public virtual void set_Priority(int value) { } */
+    /** @rva 0x759840 slot 5  public virtual void set_Priority(int value) { } */
     set_Priority(value: int): void { this._Priority = value; /* auto-property */ }
-    /** @rva 0x73A4E0  public bool get_IsExecuted() { } */
+    /** @rva 0x7394E0  public bool get_IsExecuted() { } */
     get_IsExecuted(): boolean { return this._IsExecuted; /* auto-property */ }
-    /** @rva 0x73A4F0  public void set_IsExecuted(bool value) { } */
+    /** @rva 0x7394F0  public void set_IsExecuted(bool value) { } */
     set_IsExecuted(value: boolean): void { this._IsExecuted = value; /* auto-property */ }
-    /** @rva 0x76F830 slot 6  public virtual bool get_ShouldShow() { } */
+    /** @rva 0x76E830 slot 6  public virtual bool get_ShouldShow() { } */
     get_ShouldShow(): boolean { return true; /* asm: mov al, 1; ret */ }
-    /** @rva 0x811D40  public void SetIsExecuted() { } */
+    /** @rva 0x810D40  public void SetIsExecuted() { } */
     SetIsExecuted(): void { this._IsExecuted = true; /* asm: mov byte ptr [rcx + 0x28], 1; ret */ }
-    /** @rva 0x17DF5A0  protected void .ctor() { } */
+    /** @rva 0x191AEB0  protected void .ctor() { } */
     ctor(): this {
         this._Priority = ActBase_Define.DefaultPriority;
         return this;
@@ -63,7 +63,7 @@ export class ActBase_Define {
     static StartTimingActPriority: int = 0;
     /** 0x1C public static readonly int CountdownAdditionalSkillActPriority */
     static CountdownAdditionalSkillActPriority: int = 0;
-    /** @rva 0x17EDB90  private static void .cctor() { } */
+    /** @rva 0x19260B0  private static void .cctor() { } */
     static cctor(): void {
         ActBase_Define.DefaultPriority = 0;
         ActBase_Define.TurnBeginPriority = 100;

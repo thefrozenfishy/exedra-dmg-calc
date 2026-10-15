@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../runtime";
@@ -20,7 +20,7 @@ export class IBattleStartTriggerPriority_Define {
     static EffectValueVariationUnitStatePriority: int = 0;
     /** 0xC public static readonly int AddTurnUnitStatePriority */
     static AddTurnUnitStatePriority: int = 0;
-    /** @rva 0x1494C00  private static void .cctor() { } */
+    /** @rva 0x14BAE30  private static void .cctor() { } */
     static cctor(): void {
         IBattleStartTriggerPriority_Define.DefaultPriority = 0;
         IBattleStartTriggerPriority_Define.BarrierValueVariationUnitStatePriority = 90;

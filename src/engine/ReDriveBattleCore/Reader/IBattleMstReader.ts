@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Generic interfaces (no RVA; not emitted by gen_shells.py), by hand.
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Generic interfaces (no RVA; not emitted by gen_shells.py), by hand.
 
 import type { ICollection, IReadOnlyDictionary, List, int } from "../../runtime";
 

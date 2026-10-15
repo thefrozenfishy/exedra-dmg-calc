@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import type { TargetElementType } from "../../Network/Definition/Battle/TargetElementType";
@@ -33,46 +33,46 @@ export class AdditionalDamageUnitState extends UnitStateBase {  // implements IA
     /** 0x90 protected AdditionalDamageAbilityEffect additionalDamageAbilityEffect */
     additionalDamageAbilityEffect: AdditionalDamageAbilityEffect = null!;
     get DamagePower(): float { return this.get_DamagePower(); }
-    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x15B5210 slot 7  public override string get_IconName() { } */
+    /** @rva 0x15DB520 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_additional_damage";
     }
-    /** @rva 0x15B51E0 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x15DB4F0 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_buff_appear_001";
     }
-    /** @rva 0xC646A0  public float get_DamagePower() { } */
+    /** @rva 0xC84590  public float get_DamagePower() { } */
     get_DamagePower(): float { return this.damagePower; /* asm: movss xmm0, dword ptr [rcx + 0x88]; ret */ }
-    /** @rva 0x15B50C0  protected void .ctor() { } */
+    /** @rva 0x15DB3D0  protected void .ctor() { } */
     ctor(): this {
         this.additionalDamageAbilityEffect = new AdditionalDamageAbilityEffect().ctor();
         this._IconName = "";
         super.ctor();
         return this;
     }
-    /** @rva 0x15B5130  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15DB440  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this.additionalDamageAbilityEffect = new AdditionalDamageAbilityEffect().ctor();
         super.ctor$AbilityEffectInfo(info);
         this.damagePower = f32(f32(info._EffectValue1) / 10);
         return this;
     }
-    /** @rva 0x15B4690 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x15DA9A0 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__12_0
         if (list.length > 0) list = list.filter(AdditionalDamageUnitState.$GetAIFilteredTargets$g__CanAddUnitState_12_1);
         return list;
     }
-    /** @rva 0x15B4D60 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x15DB070 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);
         list.push(AISkillTargetSelector.UnitFilterWithMaxAtk);
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
-    /** @rva 0x15B4840 slot 25  public AffectedUnitNoticeBundle GetAdditionalDamageResult(BattleUnit attackUnit, ActiveSkillBase attackSkill, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */
+    /** @rva 0x15DAB50 slot 25  public AffectedUnitNoticeBundle GetAdditionalDamageResult(BattleUnit attackUnit, ActiveSkillBase attackSkill, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */
     GetAdditionalDamageResult(attackUnit: BattleUnit, attackSkill: ActiveSkillBase, noticeBundle: AffectedUnitNoticeBundle, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         // <>c__DisplayClass14_0 { gameDirector, attackUnit }
         const list = noticeBundle.GetNoticeList()
@@ -93,7 +93,7 @@ export class AdditionalDamageUnitState extends UnitStateBase {  // implements IA
         this.additionalDamageAbilityEffect.SelectTargets$ListBattleUnit(list);
         return this.additionalDamageAbilityEffect.Triggering(1 as EffectOriginType, attackUnit, gameDirector.get_battleUnitDic(), gameDirector); // vslot 0x188
     }
-    /** @rva 0x15B4F30  internal static bool <GetAIFilteredTargets>g__CanAddUnitState|12_1(BattleUnit unit) { } */
+    /** @rva 0x15DB240  internal static bool <GetAIFilteredTargets>g__CanAddUnitState|12_1(BattleUnit unit) { } */
     static $GetAIFilteredTargets$g__CanAddUnitState_12_1(unit: BattleUnit): boolean {
         const list = unit._Condition._StateList.filter(s => s instanceof AdditionalDamageUnitState) as AdditionalDamageUnitState[]; // OfType().ToList()
         if (list.length === 0) return true;

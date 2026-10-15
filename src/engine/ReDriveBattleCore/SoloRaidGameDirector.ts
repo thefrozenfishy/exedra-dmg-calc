@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { dictGet, f32, orderBy, ref } from "../runtime";
@@ -40,20 +40,20 @@ export class SoloRaidGameDirector extends SoloGameDirectorBase {
     soloRaidBuffReferee: SoloRaidBuffReferee = null!;
     get CountdownReferee(): CountdownReferee { return this.get_CountdownReferee(); }
     get SoloRaidBuffReferee(): SoloRaidBuffReferee { return this.get_SoloRaidBuffReferee(); }
-    /** @rva 0xDBA190 slot 4  public override BattleType get_BattleType() { } */
+    /** @rva 0xDEFB50 slot 4  public override BattleType get_BattleType() { } */
     get_BattleType(): BattleType { return 9 as BattleType; /* asm: mov eax, 9; ret */ }
-    /** @rva 0x8ADA10  public CountdownReferee get_CountdownReferee() { } */
+    /** @rva 0x8ACA10  public CountdownReferee get_CountdownReferee() { } */
     get_CountdownReferee(): CountdownReferee { return this.countdownReferee; /* asm: mov rax, qword ptr [rcx + 0xa0]; ret */ }
-    /** @rva 0x737C20  public SoloRaidBuffReferee get_SoloRaidBuffReferee() { } */
+    /** @rva 0x736C20  public SoloRaidBuffReferee get_SoloRaidBuffReferee() { } */
     get_SoloRaidBuffReferee(): SoloRaidBuffReferee { return this.soloRaidBuffReferee; /* asm: mov rax, qword ptr [rcx + 0xa8]; ret */ }
-    /** @rva 0x14A8990  public void .ctor() { } */
+    /** @rva 0x14CF160  public void .ctor() { } */
     ctor(): this {
         this.countdownReferee = new CountdownReferee().ctor();
         this.soloRaidBuffReferee = new SoloRaidBuffReferee().ctor();
         super.ctor();
         return this;
     }
-    /** @rva 0x14A70F0 slot 11  protected override CommandInitialize CreateCommandInitialize(BattleUnitInfo[] battleUnitInfoArray, TargetReferee targetReferee, SpReferee spReferee, GameSituationData gameSituationData) { } */
+    /** @rva 0x14CD8C0 slot 11  protected override CommandInitialize CreateCommandInitialize(BattleUnitInfo[] battleUnitInfoArray, TargetReferee targetReferee, SpReferee spReferee, GameSituationData gameSituationData) { } */
     CreateCommandInitialize(battleUnitInfoArray: BattleUnitInfo[], targetReferee: TargetReferee, spReferee: SpReferee, gameSituationData: GameSituationData): CommandInitialize {
         const command = new CommandInitialize().ctor$BattleUnitInfo_int_int_int_int_int_int_bool_GameSituationData(battleUnitInfoArray,
             targetReferee.allyAttackTargetId, targetReferee.allyFriendTargetId, targetReferee.enemyAttackTargetId, targetReferee.enemyFriendTargetId,
@@ -67,24 +67,24 @@ export class SoloRaidGameDirector extends SoloGameDirectorBase {
             b.activeCurrentSeasonBuffTurnGaugeValue, b.activeMaxSeasonBuffTurnGaugeValue);
         return command;
     }
-    /** @rva 0x14A79C0 slot 12  public override void RespondToClientReadyRequest() { } */
+    /** @rva 0x14CE190 slot 12  public override void RespondToClientReadyRequest() { } */
     RespondToClientReadyRequest(): void {
         super.RespondToClientReadyRequest();
         this.SyncCountdownIfNeed(); // tail call
     }
-    /** @rva 0x14A8930 slot 20  protected override void WaveTransition() { } */
+    /** @rva 0x14CF100 slot 20  protected override void WaveTransition() { } */
     WaveTransition(): void {
         super.WaveTransition();
         this.countdownReferee.Initialize(this.battleUnitBundle.dic); // inlined in the game
         this.SyncCountdownIfNeed(); // tail call
     }
-    /** @rva 0x14A88D0 slot 21  protected override void WaveTransitionForForceWinDebug() { } */
+    /** @rva 0x14CF0A0 slot 21  protected override void WaveTransitionForForceWinDebug() { } */
     WaveTransitionForForceWinDebug(): void {
         super.WaveTransitionForForceWinDebug();
         this.countdownReferee.Initialize(this.battleUnitBundle.dic); // inlined in the game
         this.SyncCountdownIfNeed(); // tail call
     }
-    /** @rva 0x14A79E0  public void SetupBattleStageForSoloRaid(int questStageMstId, int repeatNum, IBattleUnitProvider unitProvider, BattleInfo battleInfo, int commonBuffPointChargePassiveSkillMstId, int soloRaidSeasonBuffMstId, int soloRaidPartyBuffMstId, int roundLimit, DateTimeOffset endTime) { } */
+    /** @rva 0x14CE1B0  public void SetupBattleStageForSoloRaid(int questStageMstId, int repeatNum, IBattleUnitProvider unitProvider, BattleInfo battleInfo, int commonBuffPointChargePassiveSkillMstId, int soloRaidSeasonBuffMstId, int soloRaidPartyBuffMstId, int roundLimit, DateTimeOffset endTime) { } */
     SetupBattleStageForSoloRaid(questStageMstId: int, repeatNum: int, unitProvider: IBattleUnitProvider, battleInfo: BattleInfo, commonBuffPointChargePassiveSkillMstId: int, soloRaidSeasonBuffMstId: int, soloRaidPartyBuffMstId: int, roundLimit: int, endTime: DateTimeOffset): void {
         // battleInfo is not null-checked: a new battle passes a BattleInfo with wave 0
         const isRestart = battleInfo.wave !== 0;
@@ -125,7 +125,7 @@ export class SoloRaidGameDirector extends SoloGameDirectorBase {
         if (this.waveReferee.mode === 1) this.unitBrain.SetEnabledActiveEnemyUnitsStartConditionTimingAction(this.battleUnitBundle.enemyList, 2);
         this.BattlePhase = 0 as Phase;
     }
-    /** @rva 0x14A7750 slot 6  public override void OnBattleUnitDeath(int deathObjectId) { } */
+    /** @rva 0x14CDF20 slot 6  public override void OnBattleUnitDeath(int deathObjectId) { } */
     OnBattleUnitDeath(deathObjectId: int): void {
         super.OnBattleUnitDeath(deathObjectId); // EnemyAppearanceGameDirectorBase.OnBattleUnitDeath, inlined in the game
         const deathUnit = dictGet(this.battleUnitBundle.dic, deathObjectId);
@@ -134,7 +134,7 @@ export class SoloRaidGameDirector extends SoloGameDirectorBase {
         if (r.battleUnitId !== deathUnit._Id) return;
         this.EndCountdown(deathUnit, true); // inlined in the game
     }
-    /** @rva 0x14A8080 slot 5  protected override void StoreBattlePhaseCommand() { } */
+    /** @rva 0x14CE850 slot 5  protected override void StoreBattlePhaseCommand() { } */
     StoreBattlePhaseCommand(): void {
         if (this.BattlePhase === Phase.Finish) this.SyncBattleInfo();
         let readyPhase: CommandBattlePhase_ReadyPhaseData = null!;
@@ -153,7 +153,7 @@ export class SoloRaidGameDirector extends SoloGameDirectorBase {
         }
         this.StoreCommand(new CommandBattlePhase().ctor$Phase_ReadyPhaseData_FinishPhaseData(this.BattlePhase, readyPhase, finishPhase));
     }
-    /** @rva 0x14A8220  private void SyncBattleInfo() { } */
+    /** @rva 0x14CE9F0  private void SyncBattleInfo() { } */
     SyncBattleInfo(): void {
         this.TrySupplyEndlessEnemyUnits();
         const enemyInfos = orderBy(this.battleUnitBundle.enemyList
@@ -185,11 +185,11 @@ export class SoloRaidGameDirector extends SoloGameDirectorBase {
         battleInfo.seasonBuffTurnGaugeValue = this.soloRaidBuffReferee.activeCurrentSeasonBuffTurnGaugeValue;
         this.StoreCommand(new CommandSoloRaidSyncBattleInfo().ctor$BattleInfo(battleInfo));
     }
-    /** @rva 0x7360C0  private bool ShouldStoreForceWinBattleInfo() { } */
+    /** @rva 0x7350C0  private bool ShouldStoreForceWinBattleInfo() { } */
     ShouldStoreForceWinBattleInfo(): boolean { return false; /* asm: xor al, al; ret */ }
-    /** @rva 0x730170  private void StoreForceWinBattleInfoCommand() { } */
+    /** @rva 0x72F170  private void StoreForceWinBattleInfoCommand() { } */
     StoreForceWinBattleInfoCommand(): void { /* asm: ret 0 */ }
-    /** @rva 0x14A6DB0  private void ApplyEnemyInfo(EnemyInfo[] enemyInfos) { } */
+    /** @rva 0x14CD580  private void ApplyEnemyInfo(EnemyInfo[] enemyInfos) { } */
     ApplyEnemyInfo(enemyInfos: EnemyInfo[]): void {
         for (const unit of this.battleUnitBundle.enemyList) {
             const info = enemyInfos.find(i => i.enemyIndex === unit._PositionId) ?? null; // <>c__DisplayClass19_0.<ApplyEnemyInfo>b__0
@@ -200,45 +200,45 @@ export class SoloRaidGameDirector extends SoloGameDirectorBase {
             unit._TurnGauge._GaugeValue = f32(info.turnGaugeValue);
         }
     }
-    /** @rva 0x14A76F0  public void InitializeCountdownReferee() { } */
+    /** @rva 0x14CDEC0  public void InitializeCountdownReferee() { } */
     InitializeCountdownReferee(): void {
         this.countdownReferee.Initialize(this.battleUnitBundle.dic); // inlined in the game
         this.SyncCountdownIfNeed(); // tail call
     }
-    /** @rva 0x14A7530  private void InitializeCountdownForRestart(int currentCount, int currentDamage) { } */
+    /** @rva 0x14CDD00  private void InitializeCountdownForRestart(int currentCount, int currentDamage) { } */
     InitializeCountdownForRestart(currentCount: int, currentDamage: int): void {
         const turnOrderPriority = this.turnActSystem.turnReferee.NextTurnOrderPriority;
         this.countdownReferee.InitializeForRestart(this.battleUnitBundle.dic, currentCount, currentDamage, turnOrderPriority); // inlined in the game
     }
-    /** @rva 0x14A8770  private void SyncCountdownIfNeed() { } */
+    /** @rva 0x14CEF40  private void SyncCountdownIfNeed() { } */
     SyncCountdownIfNeed(): void {
         const r = this.countdownReferee;
         if (r.canActiveSkillMstId !== 0 && r.canActiveSkillDetailMstId !== 0) this.StoreCommand(new CommandSoloRaidSyncCountdown().ctor$CountdownReferee_int(r, 1));
     }
-    /** @rva 0x14A7FC0  public void StartCountdown(int maxCountdown, int maxCancelTotalDamage, int battleUnitId) { } */
+    /** @rva 0x14CE790  public void StartCountdown(int maxCountdown, int maxCancelTotalDamage, int battleUnitId) { } */
     StartCountdown(maxCountdown: int, maxCancelTotalDamage: int, battleUnitId: int): void {
         this.countdownReferee.StartCountdown(maxCountdown, maxCancelTotalDamage, battleUnitId); // inlined in the game
         this.StoreCommand(new CommandSoloRaidSyncCountdown().ctor$CountdownReferee_int(this.countdownReferee, 2));
     }
-    /** @rva 0x14A72C0  public void DecreaseCountdown() { } */
+    /** @rva 0x14CDA90  public void DecreaseCountdown() { } */
     DecreaseCountdown(): void {
         this.countdownReferee.DecreaseCountdown(); // inlined in the game
         this.StoreCommand(new CommandSoloRaidSyncCountdown().ctor$CountdownReferee_int(this.countdownReferee, 3));
     }
-    /** @rva 0x14A7360  public void EndCountdown(BattleUnit battleUnit, bool isStoreCommand = True) { } */
+    /** @rva 0x14CDB30  public void EndCountdown(BattleUnit battleUnit, bool isStoreCommand = True) { } */
     EndCountdown(battleUnit: BattleUnit, isStoreCommand: boolean = true): void {
         if (isStoreCommand) this.StoreCommand(new CommandSoloRaidSyncCountdown().ctor$CountdownReferee_int(this.countdownReferee, 5));
         this.countdownReferee.EndCountdown(); // inlined in the game
         battleUnit.Condition.RemoveUnitState$BattleUnit_EffectOriginType(CountdownStartUnitState, battleUnit, 0);
     }
-    /** @rva 0x14A7000  public void CancelCountdown(BattleUnit battleUnit) { } */
+    /** @rva 0x14CD7D0  public void CancelCountdown(BattleUnit battleUnit) { } */
     CancelCountdown(battleUnit: BattleUnit): void {
         const r = this.countdownReferee;
         if (r.cancelTotalDamage < r.cancelMaxTotalDamage) this.StoreCommand(new CommandSoloRaidSyncCountdown().ctor$CountdownReferee_int(r, 4));
         this.countdownReferee.EndCountdown(); // inlined in the game
         battleUnit.Condition.RemoveUnitState$BattleUnit_EffectOriginType(CountdownStartUnitState, battleUnit, 0);
     }
-    /** @rva 0x14A7440  public void ForcedCancelCountdownAndInitialize() { } */
+    /** @rva 0x14CDC10  public void ForcedCancelCountdownAndInitialize() { } */
     ForcedCancelCountdownAndInitialize(): void {
         const r = this.countdownReferee;
         r.Initialize(this.battleUnitBundle.dic); // inlined in the game
@@ -246,14 +246,14 @@ export class SoloRaidGameDirector extends SoloGameDirectorBase {
         const syncType = r.canActiveSkillMstId === 0 || r.canActiveSkillDetailMstId === 0 ? 7 : 8;
         this.StoreCommand(new CommandSoloRaidSyncCountdown().ctor$CountdownReferee_int(r, syncType));
     }
-    /** @rva 0x14A6CE0  public void AddCancelTotalDamage(int damage) { } */
+    /** @rva 0x14CD4B0  public void AddCancelTotalDamage(int damage) { } */
     AddCancelTotalDamage(damage: int): void {
         const r = this.countdownReferee;
         r.AddCancelTotalDamage(damage); // inlined in the game
         const syncType = r.cancelTotalDamage < r.cancelMaxTotalDamage ? 6 : 4;
         this.StoreCommand(new CommandSoloRaidSyncCountdown().ctor$CountdownReferee_int(r, syncType));
     }
-    /** @rva 0x14A8810  internal static bool <SetupBattleStageForSoloRaid>g__TryGetQuestJudgeData|13_0(int stageMstId, out JudgeResultType judgeResultType, out int judgeResultValue) { } */
+    /** @rva 0x14CEFE0  internal static bool <SetupBattleStageForSoloRaid>g__TryGetQuestJudgeData|13_0(int stageMstId, out JudgeResultType judgeResultType, out int judgeResultValue) { } */
     static $SetupBattleStageForSoloRaid$g__TryGetQuestJudgeData_13_0(stageMstId: int, judgeResultType: Ref<JudgeResultType>, judgeResultValue: Ref<int>): boolean {
         judgeResultType.v = 0 as JudgeResultType;
         judgeResultValue.v = 0;

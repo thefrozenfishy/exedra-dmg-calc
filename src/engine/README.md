@@ -2,7 +2,7 @@
 
 **The goal is a 1:1 copy of the game, not an engine that behaves similarly.** Every class, field, method,
 branch and call order here mirrors `ReDriveBattleCore` (and the shared enums in `Network.Definition.Battle`)
-from the 3.19.0 client. When a patch changes the game, the change is applied here by porting the changed methods
+from the 3.21.0 client (first ported from 3.19.0). When a patch changes the game, the change is applied here by porting the changed methods
 again, nothing else. Do not restructure, merge methods, "simplify" control flow or substitute an existing
 `src/models` rule for the game's code. If something looks odd in the game, port it anyway and say so in a comment.
 

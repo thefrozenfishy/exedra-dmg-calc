@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import  { StateAbilityEffect } from "../AbilityEffect/StateAbilityEffect";
@@ -17,28 +17,28 @@ import { f32 } from "../../runtime";
 
 // ---- ReDriveBattleCore.UnitState.DwnBuffEffectValueUnitState  (TypeDefIndex 631, public class) ----
 export class DwnBuffEffectValueUnitState extends DownEffectValueUnitStateBase {
-    /** @rva 0x16D02D0  protected void .ctor() { } */
+    /** @rva 0x16F8570  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x16D02C0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x16F8AE0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         return this;
     }
-    /** @rva 0x16D0090 slot 27  public override float GetEffectValueVariationRate(UnitStateBase targetState) { } */
+    /** @rva 0x16F9740 slot 27  public override float GetEffectValueVariationRate(UnitStateBase targetState) { } */
     GetEffectValueVariationRate(targetState: UnitStateBase): float {
         if (targetState.get_Direction() === 0) return -f32(this._DownRatio / 100);
         return 0;
     }
-    /** @rva 0x16CFE60 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
+    /** @rva 0x16F9510 slot 23  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, RangeType effectRange, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, effectRange: RangeType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__3_0
         if (list.length > 0) list = list.filter(unit => unit._SkillSet.GetList().some(skill => skill.GetAbilityEffectList().some(effect => effect instanceof StateAbilityEffect && effect._GiveUnitState.get_Direction() === 0)) /* b__3_2, b__3_3 */); // b__3_1
         return list;
     }
-    /** @rva 0x16D00F0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x16F97A0 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         list.push(AISkillTargetSelector.UnitFilterByMainTarget);

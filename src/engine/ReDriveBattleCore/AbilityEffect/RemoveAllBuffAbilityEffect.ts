@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { ParameterVariationUnitStateBase } from "../UnitState/ParameterVariationUnitStateBase";
@@ -17,31 +17,31 @@ import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.RemoveAllBuffAbilityEffect  (TypeDefIndex 1203, public class) ----
 export class RemoveAllBuffAbilityEffect extends RemoveStateAbilityEffectBase {
-    /** @rva 0x18EB3C0  protected void .ctor() { } */
+    /** @rva 0x1920EF0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x18FF6C0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x192E060  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this.maxRemoveCount = info._EffectValue1;
         this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
         return this;
     }
-    /** @rva 0x18FEBB0 slot 8  public override bool IsRemovable(UnitStateBase state) { } */
+    /** @rva 0x192D550 slot 8  public override bool IsRemovable(UnitStateBase state) { } */
     IsRemovable(state: UnitStateBase): boolean {
         if (state._EffectOrigin !== 1) return false;
         return isImpl(state, "IBuff");
     }
-    /** @rva 0x18FE9A0 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x192D340 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         if (this._EffectRange === -1) return [];
         let list = targetUnitList.filter(x => !x.get_IsDead()); // <>c.b__3_0
         if (list.length > 0) list = list.filter(unit => this.$GetAIFilteredTargets$b__3_1(unit));
         return list;
     }
-    /** @rva 0x18FEC10 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
+    /** @rva 0x192D5B0 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
         const funcList = [
             AISkillTargetSelector.UnitFilterByMainTarget,
@@ -53,34 +53,34 @@ export class RemoveAllBuffAbilityEffect extends RemoveStateAbilityEffectBase {
         const unit = AISkillTargetSelector.SelectTargetUnitInOrder(targetUnitList, new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(funcList));
         return unit == null ? 0 : unit._Id;
     }
-    /** @rva 0x18FEFF0  private bool <GetAIFilteredTargets>b__3_1(BattleUnit unit) { } */
+    /** @rva 0x192D990  private bool <GetAIFilteredTargets>b__3_1(BattleUnit unit) { } */
     $GetAIFilteredTargets$b__3_1(unit: BattleUnit): boolean {
         return unit._Condition._StateList.filter(state => this.$GetAIFilteredTargets$b__3_2(state)).length > 1; // Count(b__3_2) > 1
     }
-    /** @rva 0x18FF0A0  private bool <GetAIFilteredTargets>b__3_2(UnitStateBase state) { } */
+    /** @rva 0x192DA40  private bool <GetAIFilteredTargets>b__3_2(UnitStateBase state) { } */
     $GetAIFilteredTargets$b__3_2(state: UnitStateBase): boolean { return this.IsRemovable(state); /* vslot 8 */ }
-    /** @rva 0x18FF510  private IEnumerable<BattleUnit> <SelectTargetInAIAction>g__UnitFilterByUpAtk|4_0(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x192DEB0  private IEnumerable<BattleUnit> <SelectTargetInAIAction>g__UnitFilterByUpAtk|4_0(IEnumerable<BattleUnit> candidateUnits) { } */
     $SelectTargetInAIAction$g__UnitFilterByUpAtk_4_0(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => this.$SelectTargetInAIAction$b__4_3(unit));
     }
-    /** @rva 0x18FF0C0  private bool <SelectTargetInAIAction>b__4_3(BattleUnit unit) { } */
+    /** @rva 0x192DA60  private bool <SelectTargetInAIAction>b__4_3(BattleUnit unit) { } */
     $SelectTargetInAIAction$b__4_3(unit: BattleUnit): boolean { return unit._Condition._StateList.some(state => this.$SelectTargetInAIAction$b__4_4(state)); }
-    /** @rva 0x18FF170  private bool <SelectTargetInAIAction>b__4_4(UnitStateBase state) { } */
+    /** @rva 0x192DB10  private bool <SelectTargetInAIAction>b__4_4(UnitStateBase state) { } */
     $SelectTargetInAIAction$b__4_4(state: UnitStateBase): boolean { return this.IsRemovable(state) && state instanceof UpAttackUnitStateBase; }
-    /** @rva 0x18FF5A0  private IEnumerable<BattleUnit> <SelectTargetInAIAction>g__UnitFilterByUpDef|4_1(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x192DF40  private IEnumerable<BattleUnit> <SelectTargetInAIAction>g__UnitFilterByUpDef|4_1(IEnumerable<BattleUnit> candidateUnits) { } */
     $SelectTargetInAIAction$g__UnitFilterByUpDef_4_1(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => this.$SelectTargetInAIAction$b__4_5(unit));
     }
-    /** @rva 0x18FF230  private bool <SelectTargetInAIAction>b__4_5(BattleUnit unit) { } */
+    /** @rva 0x192DBD0  private bool <SelectTargetInAIAction>b__4_5(BattleUnit unit) { } */
     $SelectTargetInAIAction$b__4_5(unit: BattleUnit): boolean { return unit._Condition._StateList.some(state => this.$SelectTargetInAIAction$b__4_6(state)); }
-    /** @rva 0x18FF2E0  private bool <SelectTargetInAIAction>b__4_6(UnitStateBase state) { } */
+    /** @rva 0x192DC80  private bool <SelectTargetInAIAction>b__4_6(UnitStateBase state) { } */
     $SelectTargetInAIAction$b__4_6(state: UnitStateBase): boolean { return this.IsRemovable(state) && state instanceof UpDefenseUnitStateBase; }
-    /** @rva 0x18FF630  private IEnumerable<BattleUnit> <SelectTargetInAIAction>g__UnitFilterByUpParam|4_2(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x192DFD0  private IEnumerable<BattleUnit> <SelectTargetInAIAction>g__UnitFilterByUpParam|4_2(IEnumerable<BattleUnit> candidateUnits) { } */
     $SelectTargetInAIAction$g__UnitFilterByUpParam_4_2(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         return candidateUnits.filter(unit => this.$SelectTargetInAIAction$b__4_7(unit));
     }
-    /** @rva 0x18FF3A0  private bool <SelectTargetInAIAction>b__4_7(BattleUnit unit) { } */
+    /** @rva 0x192DD40  private bool <SelectTargetInAIAction>b__4_7(BattleUnit unit) { } */
     $SelectTargetInAIAction$b__4_7(unit: BattleUnit): boolean { return unit._Condition._StateList.some(state => this.$SelectTargetInAIAction$b__4_8(state)); }
-    /** @rva 0x18FF450  private bool <SelectTargetInAIAction>b__4_8(UnitStateBase state) { } */
+    /** @rva 0x192DDF0  private bool <SelectTargetInAIAction>b__4_8(UnitStateBase state) { } */
     $SelectTargetInAIAction$b__4_8(state: UnitStateBase): boolean { return this.IsRemovable(state) && state instanceof ParameterVariationUnitStateBase; }
 }

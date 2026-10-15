@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { AISkillTargetSelector, AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
@@ -21,19 +21,19 @@ import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 export class SlowAbilityEffect extends AbilityEffectBase {
     /** 0x60 protected int slowRate */
     slowRate: int = 0;
-    /** @rva 0x18EB3C0  protected void .ctor() { } */
+    /** @rva 0x1920EF0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x18ED6B0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x19231E0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._TargetSide = 1 as AbilityEffectBase_TargetSideType;
         this.slowRate = info._EffectValue1;
         return this;
     }
-    /** @rva 0x1900F80 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x192F930 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         const affectedUnitNoticeBundle = new AffectedUnitNoticeBundle().ctor();
         const nextTurnOrderPriority = gameDirector.turnActSystem.turnReferee.get_NextTurnOrderPriority();
@@ -49,14 +49,14 @@ export class SlowAbilityEffect extends AbilityEffectBase {
         }
         return affectedUnitNoticeBundle;
     }
-    /** @rva 0x1900B20  public float GetResultGaugeValue(float gaugeValue, float speed) { } */
+    /** @rva 0x192F4D0  public float GetResultGaugeValue(float gaugeValue, float speed) { } */
     GetResultGaugeValue(gaugeValue: float, speed: float): float {
         const num = f32(f32(this.slowRate) / 1000);
         let result = f32(f32(f32(UnitTurnGauge.RawGaugeResetValue / speed) * num) + gaugeValue);
         if (result <= 0) result = 0;
         return result;
     }
-    /** @rva 0x1900BE0 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
+    /** @rva 0x192F590 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
         const candidateUnits = targetUnitList.filter(unit => !unit.get_IsDead()); // <>c.b__5_0
         const funcList = [AISkillTargetSelector.UnitFilterByMainTarget, AISkillTargetSelector.UnitFilterByBreak, SlowAbilityEffect.$SelectTargetInAIAction$g__UnitFilterWithFirstTurnOrder_5_1];
@@ -64,7 +64,7 @@ export class SlowAbilityEffect extends AbilityEffectBase {
         if (unit != null) return unit._Id;
         return 0;
     }
-    /** @rva 0x1901290  internal static IEnumerable<BattleUnit> <SelectTargetInAIAction>g__UnitFilterWithFirstTurnOrder|5_1(IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x192FC40  internal static IEnumerable<BattleUnit> <SelectTargetInAIAction>g__UnitFilterWithFirstTurnOrder|5_1(IEnumerable<BattleUnit> candidateUnits) { } */
     static $SelectTargetInAIAction$g__UnitFilterWithFirstTurnOrder_5_1(candidateUnits: IEnumerable<BattleUnit>): IEnumerable<BattleUnit> {
         const sorted = TurnReferee.SortByTurnOrder(candidateUnits);
         const battleUnit = sorted.length > 0 ? sorted[0] : null; // FirstOrDefault

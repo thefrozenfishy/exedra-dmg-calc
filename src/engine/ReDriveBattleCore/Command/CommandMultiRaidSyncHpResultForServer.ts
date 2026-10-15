@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -12,13 +12,13 @@ export class CommandMultiRaidSyncHpResultForServer extends CommandBase {
     _ReducedHpBySync: int = 0;
     get ReducedHpBySync(): int { return this.get_ReducedHpBySync(); }
     set ReducedHpBySync(v: int) { this.set_ReducedHpBySync(v); }
-    /** @rva 0x17E9640 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0x1810830 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 26 as CommandType; /* asm: mov eax, 0x1a; ret */ }
-    /** @rva 0x763820  public int get_ReducedHpBySync() { } */
+    /** @rva 0x762820  public int get_ReducedHpBySync() { } */
     get_ReducedHpBySync(): int { return this._ReducedHpBySync; /* auto-property */ }
-    /** @rva 0x8A2240  public void set_ReducedHpBySync(int value) { } */
+    /** @rva 0x8A1240  public void set_ReducedHpBySync(int value) { } */
     set_ReducedHpBySync(value: int): void { this._ReducedHpBySync = value; /* auto-property */ }
-    /** @rva 0x149DC70  public void .ctor(int reducedHpBySync) { } */
+    /** @rva 0x14C3F00  public void .ctor(int reducedHpBySync) { } */
     ctor$int(reducedHpBySync: int): this {
         this._ReducedHpBySync = reducedHpBySync;
         return this;

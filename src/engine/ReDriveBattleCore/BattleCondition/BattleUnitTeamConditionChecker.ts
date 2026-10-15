@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import type { UnitStateBase } from "../UnitState/UnitStateBase";
@@ -31,7 +31,7 @@ export class BattleUnitTeamConditionChecker extends ConditionCheckerBase {
     affectedUnitNotices: List<AffectedUnitNotice> = null!;
     /** 0x30 private HashSet<string> appliedSkillEffectTypes */
     appliedSkillEffectTypes: HashSet<string> = null!;
-    /** @rva 0x17E8180  public void .ctor(BattleConditionUtils.Condition condition, List<BattleUnit> battleUnits, List<AffectedUnitNotice> affectedUnitNotices, int SP, int breakedUnitTotalCount, HashSet<string> appliedSkillEffectTypes) { } */
+    /** @rva 0x180F140  public void .ctor(BattleConditionUtils.Condition condition, List<BattleUnit> battleUnits, List<AffectedUnitNotice> affectedUnitNotices, int SP, int breakedUnitTotalCount, HashSet<string> appliedSkillEffectTypes) { } */
     ctor$Condition_ListBattleUnit_ListAffectedUnitNotice_int_int_HashSetstring(condition: BattleConditionUtils_Condition, battleUnits: List<BattleUnit>, affectedUnitNotices: List<AffectedUnitNotice>, SP: int, breakedUnitTotalCount: int, appliedSkillEffectTypes: HashSet<string>): this {
         super.ctor$Condition(condition); // inlined in the game
         this.battleUnits = battleUnits;
@@ -41,7 +41,7 @@ export class BattleUnitTeamConditionChecker extends ConditionCheckerBase {
         this.appliedSkillEffectTypes = appliedSkillEffectTypes;
         return this;
     }
-    /** @rva 0x17E5F30 slot 4  public override bool Check() { } */
+    /** @rva 0x180CEF0 slot 4  public override bool Check() { } */
     Check(): boolean {
         const cond = this.condition;
         let compareOperator: CompareOperator = cond._CompareOperator;
@@ -200,14 +200,14 @@ export class BattleUnitTeamConditionChecker extends ConditionCheckerBase {
         }
         return comparer.Compare(compareOperator);
     }
-    /** @rva 0x17E7F50  private bool <Check>b__6_34(BattleUnit unit) { } */
+    /** @rva 0x180EF10  private bool <Check>b__6_34(BattleUnit unit) { } */
     $Check$b__6_34(unit: BattleUnit): boolean {
         // <>c__DisplayClass6_8: 0x10 unit; b__35
         const notice = this.affectedUnitNotices.find(n => n._AffectedUnitId === unit._Id) ?? null;
         if (notice == null) return false;
         return notice._ReceivedSlipDamageEffectTypeList.length > 0;
     }
-    /** @rva 0x17E8060  private bool <Check>b__6_40(BattleUnit unit) { } */
+    /** @rva 0x180F020  private bool <Check>b__6_40(BattleUnit unit) { } */
     $Check$b__6_40(unit: BattleUnit): boolean {
         // <>c__DisplayClass6_11: 0x10 unit; b__41
         if (this.affectedUnitNotices == null) return false;

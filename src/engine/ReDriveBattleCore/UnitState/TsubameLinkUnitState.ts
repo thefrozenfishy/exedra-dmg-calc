@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import type { TargetElementType } from "../../Network/Definition/Battle/TargetElementType";
@@ -48,39 +48,39 @@ export class TsubameLinkUnitState extends UnitStateBase {  // implements IHasUpd
     get UpSpdRatio(): float { return this.get_UpSpdRatio(); }
     get UpAtkRatio(): float { return this.get_UpAtkRatio(); }
     get DamagePower(): float { return this.get_DamagePower(); }
-    /** @rva 0x7431D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
+    /** @rva 0x7421D0 slot 6  public override UnitStateBase.DirectionType get_Direction() { } */
     get_Direction(): UnitStateBase_DirectionType { return 0 as UnitStateBase_DirectionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x7431D0 slot 32  public AdditionType get_Addition() { } */
+    /** @rva 0x7421D0 slot 32  public AdditionType get_Addition() { } */
     get_Addition(): AdditionType { return 0 as AdditionType; /* asm: xor eax, eax; ret */ }
-    /** @rva 0x16DA4A0 slot 7  public override string get_IconName() { } */
+    /** @rva 0x1704390 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_unique_002";
     }
-    /** @rva 0x16DA470 slot 13  public override string get_GiveVisualEffectName() { } */
+    /** @rva 0x1704360 slot 13  public override string get_GiveVisualEffectName() { } */
     get_GiveVisualEffectName(): string {
         return "eff_cmn_act_buff_appear_001";
     }
-    /** @rva 0xC646A0 slot 25  public float get_UpdateableEffectValue() { } */
+    /** @rva 0xC84590 slot 25  public float get_UpdateableEffectValue() { } */
     get_UpdateableEffectValue(): float { return this._UpdateableEffectValue; /* auto-property */ }
-    /** @rva 0xC646B0 slot 26  public void set_UpdateableEffectValue(float value) { } */
+    /** @rva 0xC845A0 slot 26  public void set_UpdateableEffectValue(float value) { } */
     set_UpdateableEffectValue(value: float): void { this._UpdateableEffectValue = value; /* auto-property */ }
-    /** @rva 0x16DA4F0  public float get_UpSpdRatio() { } */
+    /** @rva 0x17043E0  public float get_UpSpdRatio() { } */
     get_UpSpdRatio(): float {
         return f32(this.upSpdRatio * this._UpdateableEffectValue);
     }
-    /** @rva 0x16DA4D0  public float get_UpAtkRatio() { } */
+    /** @rva 0x17043C0  public float get_UpAtkRatio() { } */
     get_UpAtkRatio(): float {
         return f32(this.upAtkRatio * this._UpdateableEffectValue);
     }
-    /** @rva 0x16DA460  public float get_DamagePower() { } */
+    /** @rva 0x1704350  public float get_DamagePower() { } */
     get_DamagePower(): float { return this.damagePower; /* asm: movss xmm0, dword ptr [rcx + 0x94]; ret */ }
-    /** @rva 0x16DA3B0  protected void .ctor() { } */
+    /** @rva 0x17042A0  protected void .ctor() { } */
     ctor(): this {
         this.additionalDamageAbilityEffect = new AdditionalDamageAbilityEffect().ctor();
         super.ctor();
         return this;
     }
-    /** @rva 0x16DA2D0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x17041C0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this.additionalDamageAbilityEffect = new AdditionalDamageAbilityEffect().ctor();
         super.ctor$AbilityEffectInfo(info);
@@ -90,24 +90,24 @@ export class TsubameLinkUnitState extends UnitStateBase {  // implements IHasUpd
         this.damagePower = f32(f32(info._EffectValue3) / 10);
         return this;
     }
-    /** @rva 0x16DA240 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
+    /** @rva 0x1704130 slot 24  public override AISkillTargetSelector.UnitFilterFuncOrder GetUnitFilterFuncOrder(BattleUnit userUnit, IEnumerable<BattleUnit> candidateUnits) { } */
     GetUnitFilterFuncOrder(userUnit: BattleUnit, candidateUnits: IEnumerable<BattleUnit>): AISkillTargetSelector_UnitFilterFuncOrder {
         const list: List<(a0: IEnumerable<BattleUnit>) => IEnumerable<BattleUnit>> = [];
         return new AISkillTargetSelector_UnitFilterFuncOrder().ctor$ListFuncIEnumerableBattleUnitIEnumerableBattleUnit(list);
     }
-    /** @rva 0x16D9950 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
+    /** @rva 0x1703840 slot 21  public override bool CanAddTo(BattleUnit targetUnit) { } */
     CanAddTo(targetUnit: BattleUnit): boolean {
         return targetUnit._Id !== this._UserUnitId;
     }
-    /** @rva 0x16DA100 slot 28  public Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue) { } */
+    /** @rva 0x1703FF0 slot 28  public Decimal GetSpeedVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetSpeedVariationValue$BattleUnit_Decimal(unit: BattleUnit, processingValue: Decimal): Decimal {
         return Decimal.fromInt(unit.get_Speed()).mul(Decimal.fromFloat(f32(this._UpdateableEffectValue * this.upSpdRatio)).div(Decimal.fromInt(100)));
     }
-    /** @rva 0x16D9E90 slot 30  public Decimal GetAtkVariationValue(BattleUnit unit, Decimal processingValue) { } */
+    /** @rva 0x1703D80 slot 30  public Decimal GetAtkVariationValue(BattleUnit unit, Decimal processingValue) { } */
     GetAtkVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal {
         return Decimal.fromInt(unit.get_ATK()).mul(Decimal.fromFloat(f32(this._UpdateableEffectValue * this.upAtkRatio)).div(Decimal.fromInt(100)));
     }
-    /** @rva 0x16D9970 slot 31  public AffectedUnitNoticeBundle GetAdditionalDamageResult(BattleUnit attackUnit, ActiveSkillBase attackSkill, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */
+    /** @rva 0x1703860 slot 31  public AffectedUnitNoticeBundle GetAdditionalDamageResult(BattleUnit attackUnit, ActiveSkillBase attackSkill, AffectedUnitNoticeBundle noticeBundle, GameDirectorBase gameDirector) { } */
     GetAdditionalDamageResult(attackUnit: BattleUnit, attackSkill: ActiveSkillBase, noticeBundle: AffectedUnitNoticeBundle, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         // <>c__DisplayClass28_0 { gameDirector, attackUnit }
         const list = noticeBundle.GetNoticeList()
@@ -128,10 +128,10 @@ export class TsubameLinkUnitState extends UnitStateBase {  // implements IHasUpd
         this.additionalDamageAbilityEffect.SelectTargets$ListBattleUnit(list);
         return this.additionalDamageAbilityEffect.Triggering(1 as EffectOriginType, attackUnit, gameDirector.get_battleUnitDic(), gameDirector); // vslot 0x188
     }
-    /** @rva 0x16D9950 slot 34  public bool CanAddTo(BattleUnitData targetUnit) { } */
-    CanAddTo$BattleUnitData(targetUnit: any /* BattleUnitData */): boolean { return notPorted("TsubameLinkUnitState.CanAddTo", 0x16D9950); }
-    /** @rva 0x16D9FD0 slot 33  public Decimal GetSpeedVariationValue(BattleUnitData unit, Decimal processingValue) { } */
-    GetSpeedVariationValue$BattleUnitData_Decimal(unit: any /* BattleUnitData */, processingValue: Decimal): Decimal { return notPorted("TsubameLinkUnitState.GetSpeedVariationValue", 0x16D9FD0); }
+    /** @rva 0x1703840 slot 34  public bool CanAddTo(BattleUnitData targetUnit) { } */
+    CanAddTo$BattleUnitData(targetUnit: any /* BattleUnitData */): boolean { return notPorted("TsubameLinkUnitState.CanAddTo", 0x1703840); }
+    /** @rva 0x1703EC0 slot 33  public Decimal GetSpeedVariationValue(BattleUnitData unit, Decimal processingValue) { } */
+    GetSpeedVariationValue$BattleUnitData_Decimal(unit: any /* BattleUnitData */, processingValue: Decimal): Decimal { return notPorted("TsubameLinkUnitState.GetSpeedVariationValue", 0x1703EC0); }
     /** ISpeedVariation.GetSpeedVariationValue (interface slot 1): the C# overload taking BattleUnit; the name is suffixed
      * here because of the BattleUnitData overload, so interface calls are forwarded to it. */
     GetSpeedVariationValue(unit: BattleUnit, processingValue: Decimal): Decimal { return this.GetSpeedVariationValue$BattleUnit_Decimal(unit, processingValue); }

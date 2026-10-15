@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import type { UniqueStateLevelMstRecord } from "../../Network/Definition/Skill/UniqueStateLevelMstRecord";
@@ -34,19 +34,19 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
     get MaxLv(): int { return this.get_MaxLv(); }
     get StateIconNumber(): int { return this.get_StateIconNumber(); }
     get IsShowZeroIfZero(): boolean { return this.get_IsShowZeroIfZero(); }
-    /** @rva 0x820790  public int get_Lv() { } */
+    /** @rva 0x81F790  public int get_Lv() { } */
     get_Lv(): int { return this._Lv; /* auto-property */ }
-    /** @rva 0x821190  public void set_Lv(int value) { } */
+    /** @rva 0x820190  public void set_Lv(int value) { } */
     set_Lv(value: int): void { this._Lv = value; /* auto-property */ }
-    /** @rva 0x9FD140  public int get_HitCounter() { } */
+    /** @rva 0xA06FF0  public int get_HitCounter() { } */
     get_HitCounter(): int { return this._HitCounter; /* auto-property */ }
-    /** @rva 0xA10790  public void set_HitCounter(int value) { } */
+    /** @rva 0xA070A0  public void set_HitCounter(int value) { } */
     set_HitCounter(value: int): void { this._HitCounter = value; /* auto-property */ }
-    /** @rva 0x754630  public int get_UniqueStateLevelMstGroupId() { } */
+    /** @rva 0x753630  public int get_UniqueStateLevelMstGroupId() { } */
     get_UniqueStateLevelMstGroupId(): int { return this._UniqueStateLevelMstGroupId; /* auto-property */ }
-    /** @rva 0x754900  public void set_UniqueStateLevelMstGroupId(int value) { } */
+    /** @rva 0x753900  public void set_UniqueStateLevelMstGroupId(int value) { } */
     set_UniqueStateLevelMstGroupId(value: int): void { this._UniqueStateLevelMstGroupId = value; /* auto-property */ }
-    /** @rva 0x16DE8D0  public List<UniqueStateLevelMstModel> get_LvMstList() { } */
+    /** @rva 0x1708D80  public List<UniqueStateLevelMstModel> get_LvMstList() { } */
     get_LvMstList(): List<UniqueStateLevelMstModel> {
         if (this.lvMstListCache == null) {
             this.lvMstListCache = [...BattleMstReaderBase.get_Instance<UniqueStateLevelMstModel, UniqueStateLevelMstRecord, int>(UniqueStateLevelMstModel)
@@ -54,24 +54,24 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
         }
         return this.lvMstListCache;
     }
-    /** @rva 0x16DEA40  public int get_MaxLv() { } */
+    /** @rva 0x1708EF0  public int get_MaxLv() { } */
     get_MaxLv(): int {
         if (this.get_LvMstList() != null && this.get_LvMstList().length > 0) {
             return Math.max(...this.get_LvMstList().map(m => m.record.level)); // <>c.b__16_0 (Max: throws on empty)
         }
         return 1;
     }
-    /** @rva 0x820790 slot 27  public int get_StateIconNumber() { } */
+    /** @rva 0x81F790 slot 27  public int get_StateIconNumber() { } */
     get_StateIconNumber(): int { return this._Lv; /* asm: mov eax, dword ptr [rcx + 0x98]; ret */ }
-    /** @rva 0x7360C0 slot 28  public bool get_IsShowZeroIfZero() { } */
+    /** @rva 0x7350C0 slot 28  public bool get_IsShowZeroIfZero() { } */
     get_IsShowZeroIfZero(): boolean { return false; /* asm: xor al, al; ret */ }
-    /** @rva 0x16DE240  protected void .ctor() { } */
+    /** @rva 0x17086F0  protected void .ctor() { } */
     ctor(): this {
         this._Lv = 1;
         super.ctor();
         return this;
     }
-    /** @rva 0x16DE260  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x1708710  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         this._Lv = 1;
         this.iconName = "";
@@ -80,7 +80,7 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
         this._UniqueStateLevelMstGroupId = info._EffectValue2;
         return this;
     }
-    /** @rva 0x16DE5F0  protected bool TryCountUp() { } */
+    /** @rva 0x1708AA0  protected bool TryCountUp() { } */
     TryCountUp(): boolean {
         if (this.get_LvMstList() == null) return false;
         if (this.get_LvMstList().length === 0) return false;
@@ -96,13 +96,13 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
         }
         return false;
     }
-    /** @rva 0x16DE530  public int GetRequiredHitCount() { } */
+    /** @rva 0x17089E0  public int GetRequiredHitCount() { } */
     GetRequiredHitCount(): int {
         const model = this.LvMstList.find(m => this.$GetRequiredHitCount$b__24_0(m)) ?? null; // FirstOrDefault
         if (model == null) return 0;
         return model.record.conditionCount;
     }
-    /** @rva 0x16DE420 slot 25  public bool Blend(UnitStateBase injectUnitState) { } */
+    /** @rva 0x17088D0 slot 25  public bool Blend(UnitStateBase injectUnitState) { } */
     Blend(injectUnitState: UnitStateBase): boolean {
         if (injectUnitState.constructor !== this.constructor) return false; // GetType() != GetType()
         if (!(injectUnitState instanceof UniqueLvUnitStateBase)) return false;
@@ -111,9 +111,9 @@ export abstract class UniqueLvUnitStateBase extends UniqueUnitStateBase {  // im
         this.IsExemptPassingTurnOnce = injectUnitState.IsExemptPassingTurnOnce;
         return true;
     }
-    /** @rva 0x16DE8B0  private bool <get_LvMstList>b__14_0(UniqueStateLevelMstRecord r) { } */
+    /** @rva 0x1708D60  private bool <get_LvMstList>b__14_0(UniqueStateLevelMstRecord r) { } */
     $get_LvMstList$b__14_0(r: UniqueStateLevelMstRecord): boolean { return r.groupId === this._UniqueStateLevelMstGroupId; }
-    /** @rva 0x16DE880  private bool <GetRequiredHitCount>b__24_0(UniqueStateLevelMstModel m) { } */
+    /** @rva 0x1708D30  private bool <GetRequiredHitCount>b__24_0(UniqueStateLevelMstModel m) { } */
     $GetRequiredHitCount$b__24_0(m: UniqueStateLevelMstModel): boolean {
         return m.record.level === this.Lv + 1;
     }

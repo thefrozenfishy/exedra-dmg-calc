@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../runtime";
@@ -76,77 +76,77 @@ export class BattleParameter {
     set MaxBreakedDamageReceiveRate(v: int) { this.set_MaxBreakedDamageReceiveRate(v); }
     get BreakedDamageReceiveRateIncreaseRate(): int { return this.get_BreakedDamageReceiveRateIncreaseRate(); }
     set BreakedDamageReceiveRateIncreaseRate(v: int) { this.set_BreakedDamageReceiveRateIncreaseRate(v); }
-    /** @rva 0x7364F0  public int get_ATK() { } */
+    /** @rva 0x7354F0  public int get_ATK() { } */
     get_ATK(): int { return this._ATK; /* auto-property */ }
-    /** @rva 0x739D00  public void set_ATK(int value) { } */
+    /** @rva 0x738D00  public void set_ATK(int value) { } */
     set_ATK(value: int): void { this._ATK = value; /* auto-property */ }
-    /** @rva 0x803350  public int get_DEF() { } */
+    /** @rva 0x802350  public int get_DEF() { } */
     get_DEF(): int { return this._DEF; /* auto-property */ }
-    /** @rva 0x803540  public void set_DEF(int value) { } */
+    /** @rva 0x802540  public void set_DEF(int value) { } */
     set_DEF(value: int): void { this._DEF = value; /* auto-property */ }
-    /** @rva 0x763820  public int get_CTR() { } */
+    /** @rva 0x762820  public int get_CTR() { } */
     get_CTR(): int { return this._CTR; /* auto-property */ }
-    /** @rva 0x8A2240  public void set_CTR(int value) { } */
+    /** @rva 0x8A1240  public void set_CTR(int value) { } */
     set_CTR(value: int): void { this._CTR = value; /* auto-property */ }
-    /** @rva 0x7F9800  public int get_CTD() { } */
+    /** @rva 0x7F8800  public int get_CTD() { } */
     get_CTD(): int { return this._CTD; /* auto-property */ }
-    /** @rva 0x7F9820  public void set_CTD(int value) { } */
+    /** @rva 0x7F8820  public void set_CTD(int value) { } */
     set_CTD(value: int): void { this._CTD = value; /* auto-property */ }
-    /** @rva 0x75ED70  public int get_HP() { } */
+    /** @rva 0x75DD70  public int get_HP() { } */
     get_HP(): int { return this._HP; /* auto-property */ }
-    /** @rva 0x8A2230  public void set_HP(int value) { } */
+    /** @rva 0x8A1230  public void set_HP(int value) { } */
     set_HP(value: int): void { this._HP = value; /* auto-property */ }
-    /** @rva 0x75A830  public int get_Speed() { } */
+    /** @rva 0x759830  public int get_Speed() { } */
     get_Speed(): int { return this._Speed; /* auto-property */ }
-    /** @rva 0x75A840  public void set_Speed(int value) { } */
+    /** @rva 0x759840  public void set_Speed(int value) { } */
     set_Speed(value: int): void { this._Speed = value; /* auto-property */ }
-    /** @rva 0x7637A0  public int get_HealRate() { } */
+    /** @rva 0x7627A0  public int get_HealRate() { } */
     get_HealRate(): int { return this._HealRate; /* auto-property */ }
-    /** @rva 0x8A2250  public void set_HealRate(int value) { } */
+    /** @rva 0x8A1250  public void set_HealRate(int value) { } */
     set_HealRate(value: int): void { this._HealRate = value; /* auto-property */ }
-    /** @rva 0x85E530  public int get_EffectHitRate() { } */
+    /** @rva 0x85D530  public int get_EffectHitRate() { } */
     get_EffectHitRate(): int { return this._EffectHitRate; /* auto-property */ }
-    /** @rva 0x8A2260  public void set_EffectHitRate(int value) { } */
+    /** @rva 0x8A1260  public void set_EffectHitRate(int value) { } */
     set_EffectHitRate(value: int): void { this._EffectHitRate = value; /* auto-property */ }
-    /** @rva 0x75ED60  public int get_EffectParryRate() { } */
+    /** @rva 0x75DD60  public int get_EffectParryRate() { } */
     get_EffectParryRate(): int { return this._EffectParryRate; /* auto-property */ }
-    /** @rva 0x8745A0  public void set_EffectParryRate(int value) { } */
+    /** @rva 0x8735A0  public void set_EffectParryRate(int value) { } */
     set_EffectParryRate(value: int): void { this._EffectParryRate = value; /* auto-property */ }
-    /** @rva 0x736970  public ElementDamageRate[] get_ElementDamageRates() { } */
+    /** @rva 0x735970  public ElementDamageRate[] get_ElementDamageRates() { } */
     get_ElementDamageRates(): ElementDamageRate[] { return this._ElementDamageRates; /* auto-property */ }
-    /** @rva 0x736A30  public void set_ElementDamageRates(ElementDamageRate[] value) { } */
+    /** @rva 0x735A30  public void set_ElementDamageRates(ElementDamageRate[] value) { } */
     set_ElementDamageRates(value: ElementDamageRate[]): void { this._ElementDamageRates = value; /* auto-property */ }
-    /** @rva 0x7368E0  public ElementResistRate[] get_ElementResistRates() { } */
+    /** @rva 0x7358E0  public ElementResistRate[] get_ElementResistRates() { } */
     get_ElementResistRates(): ElementResistRate[] { return this._ElementResistRates; /* auto-property */ }
-    /** @rva 0x736F20  public void set_ElementResistRates(ElementResistRate[] value) { } */
+    /** @rva 0x735F20  public void set_ElementResistRates(ElementResistRate[] value) { } */
     set_ElementResistRates(value: ElementResistRate[]): void { this._ElementResistRates = value; /* auto-property */ }
-    /** @rva 0x854810  public int get_BreakPoint() { } */
+    /** @rva 0x853810  public int get_BreakPoint() { } */
     get_BreakPoint(): int { return this._BreakPoint; /* auto-property */ }
-    /** @rva 0x902050  public void set_BreakPoint(int value) { } */
+    /** @rva 0x9007A0  public void set_BreakPoint(int value) { } */
     set_BreakPoint(value: int): void { this._BreakPoint = value; /* auto-property */ }
-    /** @rva 0x87BCD0  public int get_BreakPointRecoveryPerTurn() { } */
+    /** @rva 0x87ACD0  public int get_BreakPointRecoveryPerTurn() { } */
     get_BreakPointRecoveryPerTurn(): int { return this._BreakPointRecoveryPerTurn; /* auto-property */ }
-    /** @rva 0x902030  public void set_BreakPointRecoveryPerTurn(int value) { } */
+    /** @rva 0x900790  public void set_BreakPointRecoveryPerTurn(int value) { } */
     set_BreakPointRecoveryPerTurn(value: int): void { this._BreakPointRecoveryPerTurn = value; /* auto-property */ }
-    /** @rva 0x7545F0  public int get_BreakTurnGaugeSlowRatio() { } */
+    /** @rva 0x7535F0  public int get_BreakTurnGaugeSlowRatio() { } */
     get_BreakTurnGaugeSlowRatio(): int { return this._BreakTurnGaugeSlowRatio; /* auto-property */ }
-    /** @rva 0x7548B0  public void set_BreakTurnGaugeSlowRatio(int value) { } */
+    /** @rva 0x7538B0  public void set_BreakTurnGaugeSlowRatio(int value) { } */
     set_BreakTurnGaugeSlowRatio(value: int): void { this._BreakTurnGaugeSlowRatio = value; /* auto-property */ }
-    /** @rva 0x8A2210  public int get_InitialBreakedDamageReceiveRate() { } */
+    /** @rva 0x8A1210  public int get_InitialBreakedDamageReceiveRate() { } */
     get_InitialBreakedDamageReceiveRate(): int { return this._InitialBreakedDamageReceiveRate; /* auto-property */ }
-    /** @rva 0x8A22E0  public void set_InitialBreakedDamageReceiveRate(int value) { } */
+    /** @rva 0x8A12E0  public void set_InitialBreakedDamageReceiveRate(int value) { } */
     set_InitialBreakedDamageReceiveRate(value: int): void { this._InitialBreakedDamageReceiveRate = value; /* auto-property */ }
-    /** @rva 0x737C40  public int get_MaxBreakedDamageReceiveRate() { } */
+    /** @rva 0x736C40  public int get_MaxBreakedDamageReceiveRate() { } */
     get_MaxBreakedDamageReceiveRate(): int { return this._MaxBreakedDamageReceiveRate; /* auto-property */ }
-    /** @rva 0x737DF0  public void set_MaxBreakedDamageReceiveRate(int value) { } */
+    /** @rva 0x736DF0  public void set_MaxBreakedDamageReceiveRate(int value) { } */
     set_MaxBreakedDamageReceiveRate(value: int): void { this._MaxBreakedDamageReceiveRate = value; /* auto-property */ }
-    /** @rva 0x7544F0  public int get_BreakedDamageReceiveRateIncreaseRate() { } */
+    /** @rva 0x7534F0  public int get_BreakedDamageReceiveRateIncreaseRate() { } */
     get_BreakedDamageReceiveRateIncreaseRate(): int { return this._BreakedDamageReceiveRateIncreaseRate; /* auto-property */ }
-    /** @rva 0x7547A0  public void set_BreakedDamageReceiveRateIncreaseRate(int value) { } */
+    /** @rva 0x7537A0  public void set_BreakedDamageReceiveRateIncreaseRate(int value) { } */
     set_BreakedDamageReceiveRateIncreaseRate(value: int): void { this._BreakedDamageReceiveRateIncreaseRate = value; /* auto-property */ }
-    /** @rva 0x7305E0  protected void .ctor() { } */
+    /** @rva 0x72F5E0  protected void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x1381740  public void .ctor(in int atk, in int def, in int ctr, in int ctd, in int hp, in int speed, in int healRate, in int effectHitRate, in int effectParryRate, in ElementDamageRate[] elementDamageRates, in ElementResistRate[] elementResistRates) { } */
+    /** @rva 0x13A85F0  public void .ctor(in int atk, in int def, in int ctr, in int ctd, in int hp, in int speed, in int healRate, in int effectHitRate, in int effectParryRate, in ElementDamageRate[] elementDamageRates, in ElementResistRate[] elementResistRates) { } */
     ctor$int_int_int_int_int_int_int_int_int_ElementDamageRate_ElementResistRate(atk: int, def: int, ctr: int, ctd: int, hp: int, speed: int, healRate: int, effectHitRate: int, effectParryRate: int, elementDamageRates: ElementDamageRate[], elementResistRates: ElementResistRate[]): this {
         // asm 0x1381740 (Ghidra dropped the last stack argument)
         this._EffectParryRate = effectParryRate;

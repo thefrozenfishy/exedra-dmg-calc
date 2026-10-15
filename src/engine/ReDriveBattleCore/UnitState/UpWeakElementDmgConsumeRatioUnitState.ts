@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -14,27 +14,27 @@ import { f32 } from "../../runtime";
 // ---- ReDriveBattleCore.UnitState.UpWeakElementDmgConsumeRatioUnitState  (TypeDefIndex 817, public class) ----
 export class UpWeakElementDmgConsumeRatioUnitState extends UpWeakElementDmgRatioUnitState {  // implements IConsumeRemainCountOnAttack, IConsumeRemainCount
     static readonly __interfaces: readonly string[] = ['IConsumeRemainCountOnAttack', 'IConsumeRemainCount'];
-    /** @rva 0x16E78C0 slot 7  public override string get_IconName() { } */
+    /** @rva 0x1712390 slot 7  public override string get_IconName() { } */
     get_IconName(): string {
         return "battle_icon_consume_up_weak_element_dmg_ratio";
     }
-    /** @rva 0x16E1D00 slot 28  public override float get_UpRatio() { } */
+    /** @rva 0x170C7A0 slot 28  public override float get_UpRatio() { } */
     get_UpRatio(): float {
         if (this._RemainCount > 0) return f32(this._UpdateableEffectValue / 10);
         return 0;
     }
-    /** @rva 0x16CF610  protected void .ctor() { } */
+    /** @rva 0x16F8570  protected void .ctor() { } */
     ctor(): this {
         this._IconName = "";
         return this;
     }
-    /** @rva 0x15BAC90  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x15E14E0  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._UpdateableEffectValue = f32(info._EffectValue1);
         return this;
     }
-    /** @rva 0x16E7600 slot 29  public bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
+    /** @rva 0x17120D0 slot 29  public bool ShouldConsume(ActiveSkillBase attackSkill, List<AffectedUnitNotice> noticeList) { } */
     ShouldConsume(attackSkill: ActiveSkillBase, noticeList: List<AffectedUnitNotice>): boolean {
         return noticeList.flatMap(notice => [...notice.Damages, ...notice.BarrierDamages]) // <>c.b__6_0 (Damages.Concat(BarrierDamages))
             .filter(damage => damage._Category === 1 || damage._Category === 2) // b__6_1

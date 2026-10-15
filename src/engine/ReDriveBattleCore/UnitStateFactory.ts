@@ -1,6 +1,7 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
+import { StepUpSkillUnitState } from "./UnitState/StepUpSkillUnitState";
 import { UpWeakElementDmgRatioUnitState } from "./UnitState/UpWeakElementDmgRatioUnitState";
 import { UpWeakElementDmgConsumeRatioUnitState } from "./UnitState/UpWeakElementDmgConsumeRatioUnitState";
 import { UpWeakElementDmgAccumRatioUnitState } from "./UnitState/UpWeakElementDmgAccumRatioUnitState";
@@ -152,23 +153,23 @@ export class UnitStateFactory {
     /** 0x0 private static readonly Dictionary<string, Func<AbilityEffectInfo, UnitStateBase>> createDic */
     static createDic: Dictionary<string, ((a0: AbilityEffectInfo) => UnitStateBase)> = null!;
     static get AbilityEffectTypeList(): List<string> { return UnitStateFactory.get_AbilityEffectTypeList(); }
-    /** @rva 0x15CEDD0  public static List<string> get_AbilityEffectTypeList() { } */
+    /** @rva 0x15F42D0  public static List<string> get_AbilityEffectTypeList() { } */
     static get_AbilityEffectTypeList(): List<string> {
         runCctor(UnitStateFactory);
         return [...UnitStateFactory.createDic.keys()];
     }
-    /** @rva 0x15CAFD0  public static bool CanCreate(string effectType) { } */
+    /** @rva 0x15F0470  public static bool CanCreate(string effectType) { } */
     static CanCreate(effectType: string): boolean {
         runCctor(UnitStateFactory);
         return UnitStateFactory.createDic.has(effectType);
     }
-    /** @rva 0x15CB050  public static UnitStateBase Create(AbilityEffectInfo info) { } */
+    /** @rva 0x15F04F0  public static UnitStateBase Create(AbilityEffectInfo info) { } */
     static Create(info: AbilityEffectInfo): UnitStateBase {
         runCctor(UnitStateFactory);
         if (!UnitStateFactory.createDic.has(info.EffectType)) return null!;
         return UnitStateFactory.createDic.get(info.EffectType)!(info);
     }
-    /** @rva 0x15CB180  private static void .cctor() { } */
+    /** @rva 0x15F0620  private static void .cctor() { } */
     static cctor(): void {
         // lazy (runCctor): the lambdas construct classes that import this module
         const dic = new Map<string, (info: AbilityEffectInfo) => UnitStateBase>();
@@ -283,6 +284,7 @@ export class UnitStateFactory {
         dic.set("UP_HATE", info => new UpHateUnitState().ctor$AbilityEffectInfo(info)); // b__5_108
         dic.set("DWN_HATE", info => new DwnHateUnitState().ctor$AbilityEffectInfo(info)); // b__5_109
         dic.set("SWITCH_SKILL", info => new SwitchSkillUnitState().ctor$AbilityEffectInfo(info)); // b__5_110
+        dic.set("STEP_UP_SKILL", info => new StepUpSkillUnitState().ctor$AbilityEffectInfo(info)); // 3.21.0 (lambdas renumbered from here on)
         dic.set("REFLECTION_RATIO", info => new ReflectionRatioUnitState().ctor$AbilityEffectInfo(info)); // b__5_111
         dic.set("COMBO", info => new ComboUnitState().ctor$AbilityEffectInfo(info)); // b__5_112
         dic.set("CUTOUT", info => new CutoutUnitState().ctor$AbilityEffectInfo(info)); // b__5_113

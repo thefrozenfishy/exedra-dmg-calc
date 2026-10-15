@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { AISkillTargetSelector, AISkillTargetSelector_UnitFilterFuncOrder } from "../AI/AISkillTargetSelector";
@@ -17,18 +17,18 @@ import { AbilityEffectBase_TargetSideType } from "./AbilityEffectBase";
 
 // ---- ReDriveBattleCore.AbilityEffect.ReActionTurnUnitActAbilityEffect  (TypeDefIndex 1195, public class) ----
 export class ReActionTurnUnitActAbilityEffect extends AbilityEffectBase {
-    /** @rva 0x18EB3C0  protected void .ctor() { } */
+    /** @rva 0x1920EF0  protected void .ctor() { } */
     ctor(): this {
         super.ctor();
         return this;
     }
-    /** @rva 0x18FD8C0  public void .ctor(AbilityEffectInfo info) { } */
+    /** @rva 0x192C260  public void .ctor(AbilityEffectInfo info) { } */
     ctor$AbilityEffectInfo(info: AbilityEffectInfo): this {
         super.ctor$AbilityEffectInfo(info);
         this._TargetSide = 0 as AbilityEffectBase_TargetSideType;
         return this;
     }
-    /** @rva 0x18FD2A0 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
+    /** @rva 0x192BC40 slot 5  public override AffectedUnitNoticeBundle Triggering(EffectOriginType origin, BattleUnit userUnit, Dictionary<int, BattleUnit> targetUnitDic, GameDirectorBase gameDirector) { } */
     Triggering(origin: EffectOriginType, userUnit: BattleUnit, targetUnitDic: Dictionary<int, BattleUnit>, gameDirector: GameDirectorBase): AffectedUnitNoticeBundle {
         // TargetUnitIdList.Select(targetUnitDic.GetValueOrDefault).Where(b__2_0).OrderByDescending(b__2_1).ThenBy(b__2_2)
         const units = this._TargetUnitIdList.map(id => targetUnitDic.get(id) ?? null).filter(unit => unit != null) as BattleUnit[]; // b__2_0: unit != null
@@ -52,7 +52,7 @@ export class ReActionTurnUnitActAbilityEffect extends AbilityEffectBase {
         }
         return new AffectedUnitNoticeBundle().ctor();
     }
-    /** @rva 0x18FCD40 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
+    /** @rva 0x192B6E0 slot 6  public override List<BattleUnit> GetAIFilteredTargets(BattleUnit userUnit, List<BattleUnit> targetUnitList, SkillType skillType, GameDirectorBase gameDirector) { } */
     GetAIFilteredTargets(userUnit: BattleUnit, targetUnitList: List<BattleUnit>, skillType: SkillType, gameDirector: GameDirectorBase): List<BattleUnit> {
         let list: BattleUnit[];
         if (this._EffectRange === -1) {
@@ -64,7 +64,7 @@ export class ReActionTurnUnitActAbilityEffect extends AbilityEffectBase {
         list = list.filter(unit => !actReferee.HasUnitTargetActAllTime(ReActionTurnUnitAct, unit._Id)); // b__1
         return [...list];
     }
-    /** @rva 0x18FCF90 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
+    /** @rva 0x192B930 slot 7  public override int SelectTargetInAIAction(BattleUnit userUnit, List<BattleUnit> targetUnitList) { } */
     SelectTargetInAIAction(userUnit: BattleUnit, targetUnitList: List<BattleUnit>): int {
         const candidateUnits = targetUnitList.filter(unit => !unit.get_IsDead()); // <>c.b__4_0
         const funcList = [AISkillTargetSelector.UnitFilterByMainTarget, AISkillTargetSelector.UnitFilterWithMaxAtk];

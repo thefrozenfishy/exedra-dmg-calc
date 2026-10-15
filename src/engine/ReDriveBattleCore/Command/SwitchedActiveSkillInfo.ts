@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -24,23 +24,23 @@ export class SwitchedActiveSkillInfo {
     set VisualEffectNo(v: int) { this.set_VisualEffectNo(v); }
     get VisualEffectElement(): TargetElementType { return this.get_VisualEffectElement(); }
     set VisualEffectElement(v: TargetElementType) { this.set_VisualEffectElement(v); }
-    /** @rva 0x7364F0  public SkillType get_SkillType() { } */
+    /** @rva 0x7354F0  public SkillType get_SkillType() { } */
     get_SkillType(): SkillType { return this._SkillType; /* auto-property */ }
-    /** @rva 0x739D00  public void set_SkillType(SkillType value) { } */
+    /** @rva 0x738D00  public void set_SkillType(SkillType value) { } */
     set_SkillType(value: SkillType): void { this._SkillType = value; /* auto-property */ }
-    /** @rva 0x803350  public int get_ActiveSkillMstId() { } */
+    /** @rva 0x802350  public int get_ActiveSkillMstId() { } */
     get_ActiveSkillMstId(): int { return this._ActiveSkillMstId; /* auto-property */ }
-    /** @rva 0x803540  public void set_ActiveSkillMstId(int value) { } */
+    /** @rva 0x802540  public void set_ActiveSkillMstId(int value) { } */
     set_ActiveSkillMstId(value: int): void { this._ActiveSkillMstId = value; /* auto-property */ }
-    /** @rva 0x763820  public int get_VisualEffectNo() { } */
+    /** @rva 0x762820  public int get_VisualEffectNo() { } */
     get_VisualEffectNo(): int { return this._VisualEffectNo; /* auto-property */ }
-    /** @rva 0x8A2240  public void set_VisualEffectNo(int value) { } */
+    /** @rva 0x8A1240  public void set_VisualEffectNo(int value) { } */
     set_VisualEffectNo(value: int): void { this._VisualEffectNo = value; /* auto-property */ }
-    /** @rva 0x7F9800  public TargetElementType get_VisualEffectElement() { } */
+    /** @rva 0x7F8800  public TargetElementType get_VisualEffectElement() { } */
     get_VisualEffectElement(): TargetElementType { return this._VisualEffectElement; /* auto-property */ }
-    /** @rva 0x7F9820  public void set_VisualEffectElement(TargetElementType value) { } */
+    /** @rva 0x7F8820  public void set_VisualEffectElement(TargetElementType value) { } */
     set_VisualEffectElement(value: TargetElementType): void { this._VisualEffectElement = value; /* auto-property */ }
-    /** @rva 0xBE7F70  public void .ctor(SkillType skillType, int activeSkillMstId, int visualEffectNo, TargetElementType visualEffectElement) { } */
+    /** @rva 0xC05450  public void .ctor(SkillType skillType, int activeSkillMstId, int visualEffectNo, TargetElementType visualEffectElement) { } */
     ctor$SkillType_int_int_TargetElementType(skillType: SkillType, activeSkillMstId: int, visualEffectNo: int, visualEffectElement: TargetElementType): this {
         this._SkillType = skillType;
         this._VisualEffectNo = visualEffectNo;

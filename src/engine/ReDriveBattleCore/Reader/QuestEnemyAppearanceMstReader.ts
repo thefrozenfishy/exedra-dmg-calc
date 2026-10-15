@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { ModeChangeReferee } from "../ModeChangeReferee";
@@ -11,7 +11,7 @@ import type { QuestEnemyAppearanceMstRecord } from "../../Network/Definition/Que
 
 // ---- ReDriveBattleCore.Reader.QuestEnemyAppearanceMstReader  (TypeDefIndex 862, public class) ----
 export class QuestEnemyAppearanceMstReader extends BattleMstReaderBase<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int> {
-    /** @rva 0x16D51C0  public static List<QuestEnemyAppearanceMstModel> GetModelListForBattleStart(int questStageMstId, int wave) { } */
+    /** @rva 0x16FF0A0  public static List<QuestEnemyAppearanceMstModel> GetModelListForBattleStart(int questStageMstId, int wave) { } */
     static GetModelListForBattleStart(questStageMstId: int, wave: int): List<QuestEnemyAppearanceMstModel> {
         const list = [...BattleMstReaderBase.get_Instance<QuestEnemyAppearanceMstModel, QuestEnemyAppearanceMstRecord, int>(QuestEnemyAppearanceMstModel)
             .GetModelList(indexHint(mst => mst.questStageMstId === questStageMstId && mst.wave === wave, "questStageMstId", questStageMstId))] // <GetModelListForBattleStart>b__0
@@ -20,6 +20,6 @@ export class QuestEnemyAppearanceMstReader extends BattleMstReaderBase<QuestEnem
             .map(x => x.m);                                                                      // OrderBy(b__0_2), stable
         return [...QuestEnemyAppearanceMstModel.Sort(ModeChangeReferee.RemoveModeChangeFirstOther(list))];
     }
-    /** @rva 0x16D5520  public void .ctor() { } */
+    /** @rva 0x16FF400  public void .ctor() { } */
     ctor(): this { super.ctor(); return this; }
 }

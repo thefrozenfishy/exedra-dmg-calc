@@ -1,4 +1,4 @@
-// 1:1 port of ReDriveBattleCore (game 3.19.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
+// 1:1 port of ReDriveBattleCore (game 3.21.0). Shell generated from dump.cs by scripts/engine/gen_shells.py;
 // method bodies are ported by hand from the decompile (see src/engine/README.md). Keep names/order as in the game.
 
 import { notPorted } from "../../runtime";
@@ -20,23 +20,23 @@ export class CommandAddEnemy extends CommandBase {
     set QuestEnemyAppearanceMstId(v: int) { this.set_QuestEnemyAppearanceMstId(v); }
     get PositionId(): int { return this.get_PositionId(); }
     set PositionId(v: int) { this.set_PositionId(v); }
-    /** @rva 0xDB7A40 slot 4  public override CommandType GetCommandType() { } */
+    /** @rva 0xDD5EF0 slot 4  public override CommandType GetCommandType() { } */
     GetCommandType(): CommandType { return 6 as CommandType; /* asm: mov eax, 6; ret */ }
-    /** @rva 0x763820  public int get_BattleUnitId() { } */
+    /** @rva 0x762820  public int get_BattleUnitId() { } */
     get_BattleUnitId(): int { return this._BattleUnitId; /* auto-property */ }
-    /** @rva 0x8A2240  public void set_BattleUnitId(int value) { } */
+    /** @rva 0x8A1240  public void set_BattleUnitId(int value) { } */
     set_BattleUnitId(value: int): void { this._BattleUnitId = value; /* auto-property */ }
-    /** @rva 0x7F9800  public int get_QuestEnemyAppearanceMstId() { } */
+    /** @rva 0x7F8800  public int get_QuestEnemyAppearanceMstId() { } */
     get_QuestEnemyAppearanceMstId(): int { return this._QuestEnemyAppearanceMstId; /* auto-property */ }
-    /** @rva 0x7F9820  public void set_QuestEnemyAppearanceMstId(int value) { } */
+    /** @rva 0x7F8820  public void set_QuestEnemyAppearanceMstId(int value) { } */
     set_QuestEnemyAppearanceMstId(value: int): void { this._QuestEnemyAppearanceMstId = value; /* auto-property */ }
-    /** @rva 0x75ED70  public int get_PositionId() { } */
+    /** @rva 0x75DD70  public int get_PositionId() { } */
     get_PositionId(): int { return this._PositionId; /* auto-property */ }
-    /** @rva 0x8A2230  public void set_PositionId(int value) { } */
+    /** @rva 0x8A1230  public void set_PositionId(int value) { } */
     set_PositionId(value: int): void { this._PositionId = value; /* auto-property */ }
-    /** @rva 0x7305E0  public void .ctor() { } */
+    /** @rva 0x72F5E0  public void .ctor() { } */
     ctor(): this { return this; /* asm: xor edx, edx; jmp 0x730170 */ }
-    /** @rva 0x17E8560  public void .ctor(in int battleUnitId, in int questEnemyAppearanceMstId, in int positionId) { } */
+    /** @rva 0x180F6D0  public void .ctor(in int battleUnitId, in int questEnemyAppearanceMstId, in int positionId) { } */
     ctor$int_int_int(battleUnitId: int, questEnemyAppearanceMstId: int, positionId: int): this {
         this._BattleUnitId = battleUnitId;
         this._QuestEnemyAppearanceMstId = questEnemyAppearanceMstId;
