@@ -58,6 +58,9 @@ Read the line for `GameAssembly.unpack.dll`:
 
 ## 2. Only if the code changed
 
+Before the dump exists: `python3 scripts/ai/meta_idents.py $HOME/mnt/unpackedExedra/$OLD/global-metadata.dat $HOME/mnt/unpackedExedra/$NEW/global-metadata.dat --out docs/versions/$NEW --grep 'Skill|Effect|State|Battle'`
+lists new/gone type, method and field names (3.21.0: Step-Up skills, CONSUME_SELF_HP). Put them in the newsletter.
+
 1. The method names come from Il2CppDumper, a Windows .NET exe that cannot run in the VM. Ask the user to run (or
    if unattended, write "BLOCKED: needs Il2CppDumper" in the report and continue with steps 3-6):
    ```

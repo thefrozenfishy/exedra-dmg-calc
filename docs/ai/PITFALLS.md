@@ -242,3 +242,11 @@
 - **App mods are the only allowed exceptions to 1:1** (2026-10-15). A deliberate deviation for an app tool goes behind a
   switch in `runtime.AppMods` (default off = the game), and every line that reads it says "APP MOD (not game code)".
   Current: `expectedCritDamage` (Kioku Grid bench). Never use one in the simulator pages' default path.
+
+## Added 2026-10-15 (3.21.0 session)
+- When the code changed but no Il2CppDumper dump exists yet, `python3 scripts/ai/meta_idents.py OLD/global-metadata.dat
+  NEW/global-metadata.dat --grep <rx>` diffs the metadata identifier strings (type/method/field names). It found
+  Step-Up skills and CONSUME_SELF_HP in 3.21.0 without a dump. Names only: don't port anything from them.
+- A new enum name (STEP_UP_SKILL, CONSUME_SELF_HP) can appear in the code before AbilityEffectTypeMst has a row for
+  it: `verdiff.py mst` then reports "no new effect types". Check the metadata literals too.
+- unpackedExedra no longer keeps every version (3.19.1 was deleted): OLD = the newest folder with version_report/DONE.
