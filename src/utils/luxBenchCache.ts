@@ -5,7 +5,7 @@
 // Bump LUX_BENCH_VERSION whenever the engine or the bench changes the numbers; older entries are then dropped.
 import type { BenchRow } from "../models/LuxBench"
 
-export const LUX_BENCH_VERSION = 18 // 8: expected-crit battles, battle length toggle; 9: Average Damage ailment immunity; 10: A0 Lux fillers; 11: element-identity dealers hit in that element; 12: Average Damage per AV; 13: EX crys, instant effects with a turn count, poison count conditions, kit special cases; 14: A0 Lux dealer in the buff chart; 15: role-identity Lux dealers get the average 5 star stats of that role; 16: Breaker included; 17: attacker chart baseline per role; 18: 1:1 engine (game-data dummies, rolled crits)
+export const LUX_BENCH_VERSION = 19 // 8: expected-crit battles, battle length toggle; 9: Average Damage ailment immunity; 10: A0 Lux fillers; 11: element-identity dealers hit in that element; 12: Average Damage per AV; 13: EX crys, instant effects with a turn count, poison count conditions, kit special cases; 14: A0 Lux dealer in the buff chart; 15: role-identity Lux dealers get the average 5 star stats of that role; 16: Breaker included; 17: attacker chart baseline per role; 18: 1:1 engine (game-data dummies, rolled crits); 19: no filler Lux, adaptive seeds, expected-crit mod
 
 const STORAGE_KEY = "kiokuGridBenchCache"
 const MAX_SETUPS = 24 // most recently used setups kept (chart x enemies x levels mode x battle length ...)
@@ -27,6 +27,7 @@ export interface BenchSetup {
     seeds: number
     av: number
     infiniteSp: boolean
+    expectedCrits: boolean
     lux: BenchUnit
 }
 
@@ -44,7 +45,7 @@ export const benchCharKey = (c: BenchUnit): string =>
     [c.id, c.ascension, c.kiokuLvl, c.magicLvl, c.heartphialLvl, c.specialLvl].join(":")
 
 const setupKey = (s: BenchSetup): string =>
-    JSON.stringify([s.chart, s.enemies, s.seeds, s.av, s.infiniteSp, benchCharKey(s.lux)])
+    JSON.stringify([s.chart, s.enemies, s.seeds, s.av, s.infiniteSp, s.expectedCrits, benchCharKey(s.lux)])
 
 function read(): CacheFile {
     try {

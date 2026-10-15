@@ -63,12 +63,20 @@ export function notPorted(method: string, rva: number): never {
 /** C# `x is IFoo` for interfaces: each class lists the interfaces it declares in `static __interfaces`. */
 export function isImpl(o: unknown, iface: string): boolean {
     if (o == null || typeof o !== "object") return false;
-    for (let c = (o as object).constructor as any; c && c !== Object; c = Object.getPrototypeOf(c)) {
-        const list: readonly string[] | undefined = Object.prototype.hasOwnProperty.call(c, "__interfaces") ? c.__interfaces : undefined;
-        if (list && list.includes(iface)) return true;
+    const ctor = (o as object).constructor as any;
+    let set = interfaceSets.get(ctor);
+    if (set === undefined) {
+        // every interface of the class and its bases (the __interfaces lists never change at run time)
+        set = new Set<string>();
+        for (let c = ctor; c && c !== Object; c = Object.getPrototypeOf(c)) {
+            const list: readonly string[] | undefined = Object.prototype.hasOwnProperty.call(c, "__interfaces") ? c.__interfaces : undefined;
+            if (list) for (const i of list) set.add(i);
+        }
+        interfaceSets.set(ctor, set);
     }
-    return false;
+    return set.has(iface);
 }
+const interfaceSets = new Map<any, Set<string>>();
 
 /** List<T>.RemoveAll(match): removes in place, returns the count (C# semantics, order kept). */
 export function removeAll<T>(list: T[], match: (t: T) => boolean): int {
@@ -360,3 +368,16 @@ export function ifaceProp(o: any, iface: string, member: string): any {
     const explicit = `${iface}$${member}`;
     return explicit in o ? o[explicit] : o[member];
 }
+
+/**
+ * ==== APP MODS: NOT GAME CODE ====
+ * Switches for deliberate exceptions from the 1:1 port, for app tools only. The game's code never sets them and the
+ * defaults reproduce the game exactly; every place that reads one is marked "APP MOD (not game code)".
+ *   expectedCritDamage: every crit-capable hit deals its EXPECTED damage, normal + (crit - normal) x crit chance,
+ *     instead of the rolled one (BattleDamageCalculator.GetAttackDamageResult). The crit roll itself still happens and
+ *     is reported (IsCritical), so effects that react to crits keep their rolled behaviour. Used by the Kioku Grid
+ *     bench ("Average crits"): one battle gives the average damage instead of many seeded ones.
+ */
+export const AppMods = {
+    expectedCritDamage: false,
+};

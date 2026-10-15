@@ -239,3 +239,6 @@
   (RefreshPrevBackup, every request) did it per passive per unit = 55% of a battle. `indexHint(pred, field, value)`
   (runtime.ts) tags a predicate with an equality it implies; the repository then scans only matching records (same
   result, same order). Use it at hot call sites only; the predicate stays the game's.
+- **App mods are the only allowed exceptions to 1:1** (2026-10-15). A deliberate deviation for an app tool goes behind a
+  switch in `runtime.AppMods` (default off = the game), and every line that reads it says "APP MOD (not game code)".
+  Current: `expectedCritDamage` (Kioku Grid bench). Never use one in the simulator pages' default path.

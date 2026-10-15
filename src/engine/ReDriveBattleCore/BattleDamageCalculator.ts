@@ -24,7 +24,7 @@ import { QuestEnemyAppearanceParameter } from "./QuestEnemyAppearanceParameter";
 import { CharacterParameter } from "./CharacterParameter";
 import { CorrelationEffect } from "./CorrelationEffect";
 import { AffectedUnitNotice, AffectedUnitNotice_DamageInfo } from "./AffectedUnitNotice";
-import { dictGet, enumIsDefined, enumToString, f32, isImpl, notPorted, randomChance } from "../runtime";
+import { AppMods, clamp, dictGet, enumIsDefined, enumToString, f32, isImpl, notPorted, randomChance } from "../runtime";
 import type { Dictionary, float, int } from "../runtime";
 import { Decimal } from "../runtime";
 import type { BattleType } from "../Network/Definition/Battle/BattleType";
@@ -68,7 +68,13 @@ export class BattleDamageCalculator {
         let isCritical: boolean;
         if (isNoCritNoBarrier) isCritical = false;
         else isCritical = BattleDamageCalculator.IsCriticalDamage(attackUnit, defenseUnit); // inlined in the game
-        if (isCritical) damage = BattleDamageCalculator.GetAddedCriticalDamage(attackUnit, defenseUnit, damage);
+        if (AppMods.expectedCritDamage && !isNoCritNoBarrier) {
+            // ==== APP MOD (not game code): runtime.AppMods.expectedCritDamage, off in every game battle ====
+            // expected damage = normal + (crit - normal) x crit chance; the roll above still decides IsCritical
+            const chance = clamp(f32(f32(defenseUnit.GetProcessedRcvCtr(attackUnit) + attackUnit.GetProcessedCtr()) / 100), 0, 1);
+            const crit = BattleDamageCalculator.GetAddedCriticalDamage(attackUnit, defenseUnit, damage);
+            damage = damage.add(crit.sub(damage).mul(Decimal.fromFloat(chance)));
+        } else if (isCritical) damage = BattleDamageCalculator.GetAddedCriticalDamage(attackUnit, defenseUnit, damage);
         damage = BattleDamageCalculator.GetDifficultyCorrectedDamage(attackUnit, defenseUnit, damage);
         damage = BattleDamageCalculator.GetProcessedFinalGiveDamage(attackUnit, defenseUnit, damage, attackSkill);
         if (battleType === 2 || battleType === 4) damage = BattleDamageCalculator.DamageCutByPvpOrGvgSuppression(damage);

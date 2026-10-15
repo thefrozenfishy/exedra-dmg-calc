@@ -21,6 +21,7 @@ import { crystalisesByStyle, kiokuData, skillDetailsByMstId } from "../utils/hel
 import { TargetType, TargetTypeLookup, targetTypeToLvl, type BattleEvent, type BattleSnapshot, type KiokuArgs, type SkillDetail } from "../types/KiokuTypes";
 import { Ailment, elementMap, roleMap, KiokuElement, KiokuRole, LuxMagica } from "../types/enums";
 import { computeMaxDamageEngine } from "../battle/EngineMaxDamage";
+import { E } from "../battle/engineBundle";
 import { AILMENT_STATE, BENCH_BROKEN_RATE, BENCH_DEF, BenchRng, benchBattle, benchSkills, benchStage, benchStyle, keepAilment, keepStates, middleEnemy } from "../battle/EngineBench";
 
 export { BENCH_BROKEN_RATE, BENCH_DEF }
@@ -146,6 +147,8 @@ export interface SimOptions {
     infiniteSp?: boolean // the allies' SP is refilled before every turn, see SP_REFILL (bench-only, not a game rule)
     ailment?: Ailment   // every enemy carries this ailment for the whole run
     immune?: Ailment[]  // ailments that never land on the enemies (100% parry on the dummies), see benchImmunities
+    // APP MOD (not game code): every hit deals its expected crit damage (runtime.AppMods.expectedCritDamage)
+    expectedCrits?: boolean
     onAction?: (state: BattleSnapshot, elapsed: number) => void  // every counted action (debugging)
     // Whether anything in the run was random (a real roll). The engine has no "expected crit" damage (a hit crits or
     // not), so a run with crit chances between 0 and 100% is random and is averaged over seeds (LuxBenchCharts.simTotal).
@@ -240,6 +243,10 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     })
     director = battle.director
     let total = 0
+    const mods = E.AppMods // runtime.AppMods (APP MOD switches, not game code)
+    const savedMod = mods.expectedCritDamage
+    mods.expectedCritDamage = !!opts.expectedCrits
+    try {
     // A vortex pops inside the hit that sets it off; the engine reports it with that hit (its attacker), not as its
     // owner's damage [APPROXIMATION vs the old bench, which moved it to the owner].
     const count = (events: BattleEvent[] | undefined) => {
@@ -271,6 +278,9 @@ export function simulatedDealerDamage(allies: PvPKioku[], dealerPos: number, ene
     }
     if (opts.report) opts.report.random = rng.events.length > 0
     return opts.perAv && nextTurn > 0 ? total * opts.av / nextTurn : total
+    } finally {
+        mods.expectedCritDamage = savedMod
+    }
 }
 
 // ── The two Kioku Grid charts ──
@@ -291,21 +301,21 @@ export interface BenchOptions {
     seeds: number   // rolled battles averaged for Average Damage when anything in it is random (see simTotal)
     av: number      // action value per battle
     infiniteSp?: boolean // see SimOptions
+    expectedCrits?: boolean // APP MOD, see SimOptions: then two seeds that agree are enough (crits no longer vary the damage)
 }
 
 type KiokuInput = Omit<KiokuArgs, "crysIDs" | "subCrysIDs"> & Partial<KiokuArgs>
 
 /**
- * Support chart: a Lux dealer with the character in slot 2 and three Lux fillers, compared to five Lux; the dealer
- * has no element or role (the main bar) or one the character's kit is limited to (variant bars). Attacker chart:
- * the character as the dealer (its own element and role) compared to Lux as the dealer in the character's role (with
- * that role's average 5 star stats, see benchKioku), both with four fillers.
- * Lux's baselines are computed once per identity / enemy count and reused. The Lux reference dealer (attacker chart) is A5
- * at max levels; the support chart's Lux dealer and every Lux filler are A0 at max levels, so they have no follow-up.
+ * Support chart: a Lux dealer with the character next to her, compared to Lux alone; the dealer has no element or role
+ * (the main bar) or one the character's kit is limited to (variant bars). Attacker chart: the character alone as the
+ * dealer (its own element and role) compared to Lux alone in the character's role (with that role's average 5 star
+ * stats, see benchKioku). No filler units: the game runs a battle with any number of allies (the old engine needed 5).
+ * Lux's baselines are computed once per identity / enemy count and reused. The support chart's Lux dealer is A0 at max
+ * levels, so she has no follow-up.
  */
 export class LuxBenchCharts {
     private readonly luxArgs: KiokuInput
-    private readonly filler: PvPKioku
     private readonly reference: PvPKioku
     private readonly dealers = new Map<string, PvPKioku>()
     private readonly references = new Map<KiokuRole, PvPKioku>()
@@ -313,13 +323,12 @@ export class LuxBenchCharts {
     private readonly simBase = new Map<string, number>()
     private readonly opts: BenchOptions
 
-    // Lux as given (the page passes A5, max levels) for the attacker chart's reference. In the support chart the dealer and
-    // the fillers are the same Lux at A0: her A1 follow-up charges a Magic from every ally's battle skill, so at A5 a
-    // character casting several battle skills a turn (Tenebrous Arcana's extra actions) showed as a damage buff.
+    // Lux as given (the page passes A5, max levels), at A0 for every bench unit: her A1 follow-up charges a Magic from
+    // every ally's battle skill, so at A5 a character casting several battle skills a turn (Tenebrous Arcana's extra
+    // actions) showed as a damage buff.
     constructor(lux: KiokuInput, opts: BenchOptions) {
         this.luxArgs = { ...lux, ascension: 0 }
         this.opts = opts
-        this.filler = benchKioku(this.luxArgs, { element: undefined, role: undefined })
         this.reference = benchKioku(this.luxArgs)
     }
 
@@ -339,18 +348,25 @@ export class LuxBenchCharts {
     }
 
     private team(dealer: PvPKioku, second?: PvPKioku): PvPKioku[] {
-        return [dealer, second ?? this.filler, this.filler, this.filler, this.filler]
+        return second ? [dealer, second] : [dealer]
     }
 
     // The dealer's average damage over one run: the mean of `seeds` rolled battles (seeds 0..seeds-1), or the one
     // battle when nothing in it was random (no roll between 0 and 100%: e.g. a 0% or 100% crit rate).
     private simTotal(team: PvPKioku[], enemies: number, ailment?: Ailment, immune: Ailment[] = []): number {
-        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, ailment, immune, perAv: true }
+        const base = { av: this.opts.av, infiniteSp: this.opts.infiniteSp, expectedCrits: this.opts.expectedCrits, ailment, immune, perAv: true }
         const report = { random: false }
-        let total = simulatedDealerDamage(team, 0, enemies, { ...base, seed: 0, report })
-        if (!report.random) return total
-        for (let seed = 1; seed < this.opts.seeds; seed++) total += simulatedDealerDamage(team, 0, enemies, { ...base, seed })
-        return total / this.opts.seeds
+        const first = simulatedDealerDamage(team, 0, enemies, { ...base, seed: 0, report })
+        if (!report.random) return first
+        // [BENCH] Seeds 0, 1, 2, ... until the mean is settled: its standard error under SEED_PRECISION of the mean (from
+        // MIN_SEEDS on), at most `seeds`. Deterministic (same seeds, same stopping point). A long battle averages its
+        // crits within itself (100 turns: ~0.3% apart between seeds), so it stops after a few; a short one uses more.
+        const values = [first]
+        while (values.length < this.opts.seeds) {
+            values.push(simulatedDealerDamage(team, 0, enemies, { ...base, seed: values.length }))
+            if (values.length >= (this.opts.expectedCrits ? 2 : MIN_SEEDS) && settled(values)) break
+        }
+        return values.reduce((a, b) => a + b, 0) / values.length
     }
 
     private cachedUlt(key: string, team: () => PvPKioku[], enemies: number, ailment?: Ailment) {
@@ -440,6 +456,16 @@ export class LuxBenchCharts {
             return { ...id, gain: pctGain(this.simTotal(this.team(x), enemies, id.ailment, immune), base) }
         })
     }
+}
+
+const MIN_SEEDS = 3
+const SEED_PRECISION = 0.0025 // standard error of the mean / mean
+function settled(values: number[]): boolean {
+    const n = values.length
+    const mean = values.reduce((a, b) => a + b, 0) / n
+    if (!(mean > 0)) return true
+    const variance = values.reduce((a, v) => a + (v - mean) ** 2, 0) / (n - 1)
+    return Math.sqrt(variance / n) / mean < SEED_PRECISION
 }
 
 const pctGain = (value: number, base: number) => base > 0 ? (value / base - 1) * 100 : 0

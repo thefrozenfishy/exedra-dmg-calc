@@ -2,6 +2,19 @@
 
 _Last updated: 2026-10-14 (Max Damage + Kioku Grid bench on the 1:1 engine); before: 2026-10-10 (1:1 port in src/engine started); before: 2026-10-03 (passive states per giver, UP_HP_FIXED max HP; earlier: duplicate active-skill states); before: 2026-10-02 (game 3.19.1: version diff + newsletter, Magic Seal, break/notice team conditions, IMM_SLIP_DMG burst; branch claude/version-3.19.1)._
 
+## 2026-10-15: Kioku Grid bench speed, expected-crit APP MOD, no filler Lux
+
+- **APP MOD (not game code)** `runtime.AppMods.expectedCritDamage` (off by default, never set by game code): in
+  BattleDamageCalculator.GetAttackDamageResult every crit-capable hit deals normal + (crit - normal) x crit chance;
+  the crit roll still happens and is reported. Kioku Grid "Crits: Average crits (mod) | Rolled crits (1:1)", default
+  the mod. Every reader of an AppMods switch is marked "APP MOD (not game code)".
+- Bench teams without filler Lux: support chart = Lux dealer + the character vs Lux alone; attacker chart = the
+  character alone vs Lux alone (role stats). The game runs battles with any number of allies.
+- Average Damage seeds: adaptive (stop when the mean's standard error < 0.25%, at least 3 seeds; 2 with the mod).
+- Parallel bench workers (cores - 1, max 8); runtime.isImpl caches each class's interface set.
+- Fixed `scripts/engine/bundle.mjs` on Windows (path matching found 0 modules and wrote an empty bundle).
+- Cache version 19.
+
 ## 2026-10-14 (4): Link Raid (Multi-Raid), GvG, GvE directors ported; app options
 
 - Ported MultiRaidGameDirector, MultiRaidJudgeResultReferee, GvgGameDirector, GveGameDirector,

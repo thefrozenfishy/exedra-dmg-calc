@@ -7,7 +7,7 @@ import { kiokuData } from "../../src/utils/helpers";
 const [out, chart = "support", en = "1", av = "500"] = process.argv.slice(2)
 console.debug = () => {}; console.warn = () => {}
 const max = { kiokuLvl: 160, magicLvl: 140, heartphialLvl: 50, specialLvl: 10, ascension: 5, crysIDs: [], subCrysIDs: [] }
-const bench = new LuxBenchCharts({ name: "Lux☆Magica", ...max } as any, { seeds: 10, av: Number(av), infiniteSp: true })
+const bench = new LuxBenchCharts({ name: "Lux☆Magica", ...max } as any, { seeds: 10, av: Number(av), infiniteSp: true, expectedCrits: process.env.EXPECTED === "1" })
 const res: Record<string, any> = fs.existsSync(out) ? JSON.parse(fs.readFileSync(out, "utf8")) : {}
 const e = Number(en)
 for (const name of Object.keys(kiokuData)) {
